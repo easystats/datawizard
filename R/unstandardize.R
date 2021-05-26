@@ -113,11 +113,11 @@ unstandardize.data.frame <- function(x,
 
   # Select and deselect
   cols <- names(i)
-  if(!is.null(select)) cols <- cols[cols %in% select]
-  if(!is.null(exclude)) cols <- cols[!cols %in% exclude]
+  if (!is.null(select)) cols <- cols[cols %in% select]
+  if (!is.null(exclude)) cols <- cols[!cols %in% exclude]
 
   # Apply unstandardization to cols
-  for(col in cols) {
+  for (col in cols) {
     x[col] <- unstandardize(x[[col]], center = center[[col]], scale = scale[[col]])
   }
   x
