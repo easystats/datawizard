@@ -62,7 +62,6 @@
 #' points(adjusted_icpt$V1, adjusted_icpt$V2, pch = 19, col = "red")
 #' abline(lm(V2 ~ V1, data = adjusted_icpt), col = "red")
 #' }
-#' @importFrom stats as.formula
 #' @export
 adjust <- function(data,
                    effect = NULL,
@@ -150,8 +149,6 @@ adjust <- function(data,
 data_adjust <- adjust
 
 
-#' @importFrom stats lm as.formula complete.cases median
-#' @importFrom insight get_intercept get_residuals
 #' @keywords internal
 .model_adjust_for <- function(data,
                               formula,
@@ -189,7 +186,7 @@ data_adjust <- adjust
         check_if_installed("lme4")
         model <- lme4::lmer(paste(formula, formula_random), data = data)
       } else {
-        model <- lm(formula, data = data)
+        model <- stats::lm(formula, data = data)
       }
     }
   }
@@ -206,7 +203,7 @@ data_adjust <- adjust
 
   # Deal with missing data
   out <- rep(NA, nrow(data))
-  out[complete.cases(data)] <- as.vector(adjusted)
+  out[stats::complete.cases(data)] <- as.vector(adjusted)
 
   out
 }
