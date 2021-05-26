@@ -33,6 +33,11 @@ data_adjust(
 \item{effect}{Character vector of column names to be adjusted for (regressed
 out). If `NULL` (the default), all variables will be selected.}
 
+\item{select}{Character vector of column names. If `NULL` (the default), all
+variables will be selected.}
+
+\item{exclude}{Character vector of column names to be excluded from selection.}
+
 \item{multilevel}{If `TRUE`, the factors are included as random factors.
 Else, if `FALSE` (default), they are included as fixed effects in the
 simple regression model.}

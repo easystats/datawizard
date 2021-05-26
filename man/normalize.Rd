@@ -39,6 +39,13 @@ If `FALSE`, the return value is compressed, using Smithson and Verkuilen's
 (2006) formula `(x * (n - 1) + 0.5) / n`, to avoid zeros and ones in the
 normalized variables. This can be useful in case of beta-regression, where
 the response variable is not allowed to include zeros and ones.}
+
+\item{verbose}{Toggle warnings and messages on or off.}
+
+\item{select}{Character vector of column names. If `NULL` (the default), all
+variables will be selected.}
+
+\item{exclude}{Character vector of column names to be excluded from selection.}
 }
 \value{
 A normalized object.
@@ -67,6 +74,8 @@ Regression with Beta-Distributed Dependent Variables. Psychological Methods,
 }
 \seealso{
 Other transform utilities: 
+\code{\link{change_scale}()},
+\code{\link{ranktransform}()},
 \code{\link{standardize}()}
 }
 \concept{transform utilities}
