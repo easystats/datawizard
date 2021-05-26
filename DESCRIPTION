@@ -42,6 +42,7 @@ Imports:
     stats,
     utils
 Suggests: 
+    MASS,
     testthat (>= 3.0.0),
     spelling
 Encoding: UTF-8
