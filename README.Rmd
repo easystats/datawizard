@@ -1,0 +1,17 @@
+---
+output: github_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  dpi = 300,
+  fig.path = "man/figures/",
+  comment = "#>"
+)
+
+set.seed(333)
+library(datawizard)
+```
+
+# datawizard

@@ -1,0 +1,258 @@
+---
+title: "Robust Estimation of Standard Errors, Confidence Intervals, and p-values"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, parameters, variable selection, feature selection]
+vignette: >
+  %\VignetteIndexEntry{Robust Estimation of Standard Errors, Confidence Intervals, and p-values}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: bibliography.bib
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+options(knitr.kable.NA = "")
+options(digits = 2)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "#>",
+  out.width = "100%"
+)
+
+if (!requireNamespace("dplyr", quietly = TRUE) ||
+  !requireNamespace("clubSandwich", quietly = TRUE) ||
+  !requireNamespace("sandwich", quietly = TRUE) ||
+  !requireNamespace("lme4", quietly = TRUE)) {
+  knitr::opts_chunk$set(eval = FALSE)
+} else {
+  library(parameters)
+  library(dplyr)
+}
+
+set.seed(333)
+```
+
+The
+[`model_parameters()`](https://easystats.github.io/parameters/articles/model_parameters.html)
+function also allows the computation of standard errors, confidence intervals,
+and *p*-values based on robust covariance matrix estimation from model
+parameters. Robust estimation is relies on
+[`sandwich`](https://cran.r-project.org/web/packages/sandwich/vignettes/sandwich-CL.pdf)
+and
+[`clubSandwich`](https://cran.r-project.org/web/packages/clubSandwich/index.html)
+package. This means that all models supported by either of these packages will
+with `model_parameters()` when `robust = TRUE`.
+
+## Linear Regression Models
+
+### Robust Covariance Matrix Estimation from Model Parameters
+
+By default, when `model_parameters(robust = TRUE)`, it internally calls
+`sandwich::vcovHC(type = "HC3")`. However, there are three arguments (see
+[`?standard_error_robust`](https://easystats.github.io/parameters/reference/standard_error_robust.html)
+for further details) that allow for choosing different methods and options of
+robust estimation:
+- `vcov_estimation`
+- `vcov_type`
+- `vcov_args`
+
+Let us start with a simple example, which uses a heteroskedasticity-consistent
+covariance matrix estimation with estimation-type "HC3" (i.e.
+`sandwich::vcovHC(type = "HC3")`). 
+
+First let's create a simple linear regression model, which we know violates
+homoscedasticity assumption, and thus robust estimation methods are to be
+considered.
+
+```{r}
+data(cars)
+model <- lm(dist ~ speed, data = cars)
+
+library(performance)
+check_heteroscedasticity(model)
+```
+
+We would extract model parameters both with and without robust estimation to
+highlight difference it makes to standard errors, confidence intervals, and
+*p*-values. Also, note that the coefficient estimate and the *t*-statistic
+associated with it remain unchanged.
+
+```{r}
+# model parameters, where SE, CI, and p-values are *not* based on robust estimation
+model_parameters(model)
+
+# model parameters, where SE, CI, and p-values are based on robust estimation
+mp <- model_parameters(model, robust = TRUE)
+mp
+
+# compare standard errors to result from sandwich-package
+mp$SE
+unname(sqrt(diag(sandwich::vcovHC(model))))
+```
+
+### Cluster-Robust Covariance Matrix Estimation (sandwich)
+
+If a different type of covariance matrix estimation is required, use the
+`vcov_estimation`-argument. This argument needs the suffix for the related
+`vcov*()`-functions as value, i.e. `vcov_estimation = "CL"` would call
+`sandwich::vcovCL()`, or `vcov_estimation = "HAC"` would call
+`sandwich::vcovHAC()`.
+
+The specific estimation type can also be changed with `vcov_type`. For example,
+`sandwich::vcovCL()` accepts estimation types `HC0` to `HC3`. In the next
+example, we use a clustered covariance matrix estimation with `HC1`-estimation
+type.
+
+```{r}
+# let's create a more complicated model
+data(iris)
+model <- lm(Petal.Length ~ Sepal.Length * Species + Sepal.Width, data = iris)
+
+# change estimation-type
+mp <- model_parameters(
+  model,
+  robust = TRUE,
+  vcov_estimation = "CL", # type of covariance matrix
+  vcov_type = "HC1" # type of robust estimation
+)
+
+mp
+
+# compare standard errors to result from sandwich-package
+mp$SE
+unname(sqrt(diag(sandwich::vcovCL(model))))
+```
+
+Usually, clustered covariance matrix estimation is used when there is a
+cluster-structure in the data. The variable indicating the cluster-structure can
+be defined in `sandwich::vcovCL()` with the `cluster`-argument. In
+`model_parameters()`, additional arguments that should be passed down to
+functions from the `sandwich` package can be specified in `vcov_args`:
+
+```{r}
+iris$cluster <- factor(rep(LETTERS[1:8], length.out = nrow(iris)))
+
+# change estimation-type, defining additional arguments
+mp <- model_parameters(
+  model,
+  robust = TRUE,
+  vcov_estimation = "CL",
+  vcov_type = "HC1",
+  vcov_args = list(cluster = iris$cluster)
+)
+
+mp
+
+# compare standard errors to result from sandwich-package
+mp$SE
+unname(sqrt(diag(sandwich::vcovCL(model, cluster = iris$cluster))))
+```
+
+### Cluster-Robust Covariance Matrix Estimation (clubSandwich)
+
+Cluster-robust estimation of the variance-covariance matrix can also be achieved
+using `clubSandwich::vcovCR()`. Thus, when `vcov_estimation = "CR"`, the related
+function from the `clubSandwich` package is called. Note that this function
+_requires_ the specification of the `cluster`-argument.
+
+```{r}
+# create fake-cluster-variable, to demonstrate cluster robust standard errors
+iris$cluster <- factor(rep(LETTERS[1:8], length.out = nrow(iris)))
+
+# cluster-robust estimation
+mp <- model_parameters(
+  model,
+  robust = TRUE,
+  vcov_estimation = "CR",
+  vcov_type = "CR1",
+  vcov_args = list(cluster = iris$cluster)
+)
+mp
+
+# compare standard errors to result from clubSsandwich-package
+mp$SE
+
+unname(sqrt(diag(clubSandwich::vcovCR(model, type = "CR1", cluster = iris$cluster))))
+```
+
+### Robust Covariance Matrix Estimation on Standardized Model Parameters
+
+Finally, robust estimation can be combined with
+[standardization](https://easystats.github.io/parameters/articles/model_parameters_standardized.html).
+However, robust covariance matrix estimation only works for `standardize = "refit"`.
+
+```{r}
+# model parameters, robust estimation on standardized model
+model_parameters(model, standardize = "refit", robust = TRUE)
+```
+
+## Linear Mixed-Effects Regression Models
+
+### Robust Covariance Matrix Estimation for Mixed Models
+
+For linear mixed-effects models, that by definition have a clustered
+(*hierarchical* or *multilevel*) structure in the data, it is also possible to
+estimate a cluster-robust covariance matrix. This is possible due to the
+`clubSandwich` package, thus we need to define the same arguments as in the
+above example.
+
+```{r}
+library(lme4)
+data(iris)
+set.seed(1234)
+iris$grp <- as.factor(sample(1:3, nrow(iris), replace = TRUE))
+
+# fit example model
+model <- lme4::lmer(
+  Sepal.Length ~ Species * Sepal.Width + Petal.Length + (1 | grp),
+  data = iris
+)
+
+# model parameters without robust estimation
+model_parameters(model)
+
+# model parameters with cluster robust estimation
+model_parameters(
+  model,
+  robust = TRUE,
+  vcov_estimation = "CR",
+  vcov_type = "CR1",
+  vcov_args = list(cluster = iris$grp)
+)
+```
+
+Notice that robust estimation returns different standard errors, confidence
+intervals, and *p*-values compared to the standard estimation. Also, note that
+the coefficient estimate and the statistic associated with it remain unchanged.
+
+### Robust Covariance Matrix Estimation on Standardized Mixed Model Parameters
+
+Once again, robust estimation can be combined with standardization for linear
+mixed-effects models as well and works only with `standardize = "refit"`.
+
+```{r}
+# model parameters, cluster robust estimation of standardized mixed model
+model_parameters(
+  model,
+  standardize = "refit",
+  robust = TRUE,
+  vcov_estimation = "CR",
+  vcov_type = "CR1",
+  vcov_args = list(cluster = iris$grp)
+)
+```
+
+Notice how drastically some of the *p*-values change between
+robust-unstandardized model and robust-standardized model.
+
+<!-- TO DO: Maybe provide references to read more? -->
