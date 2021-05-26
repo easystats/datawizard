@@ -24,7 +24,6 @@
 #'   \item For numeric vectors: a numeric vector of weights.
 #' }
 #' @param ... Currently not used.
-#' @inheritParams p_value
 #'
 #' @seealso If centering within-clusters (instead of grand-mean centering)
 #'   is required, see \code{\link{demean}}.
