@@ -14,4 +14,4 @@ set.seed(333)
 library(datawizard)
 ```
 
-# datawizard
+# datawizard <img src='man/figures/logo.png' align="right" height="139" />
