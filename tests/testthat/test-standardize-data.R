@@ -49,9 +49,6 @@ if (require("testthat") && require("effectsize")) {
     expect_equal(mean(x$Sepal.Length), 0, tolerance = 0.01)
     expect_length(levels(x$Species), 3)
     expect_equal(mean(subset(x, Species == "virginica")$Sepal.Length), 0, tolerance = 0.01)
-
-
-
   })
 
 
