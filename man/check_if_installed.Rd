@@ -28,8 +28,7 @@ Checking if needed package is installed
 }
 \examples{
 \dontrun{
-  check_if_installed("inexistent_package")
+check_if_installed("inexistent_package")
 }
-
 
 }
