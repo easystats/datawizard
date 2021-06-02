@@ -15,8 +15,6 @@
 #' @return A character string.
 #'
 #' @examples
-#' library(report)
-#'
 #' # Add full stop if missing
 #' text_fullstop(c("something", "something else."))
 #'

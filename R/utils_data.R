@@ -10,8 +10,6 @@
 #' @return A modified data frame.
 #'
 #' @examples
-#' library(report)
-#'
 #' # Rename columns
 #' data_rename(iris, "Sepal.Length", "length")
 #' # data_rename(iris, "FakeCol", "length", safe=FALSE)  # This fails

@@ -37,8 +37,6 @@ A modified data frame.
 Safe and intuitive functions to manipulate dataframes.
 }
 \examples{
-library(report)
-
 # Rename columns
 data_rename(iris, "Sepal.Length", "length")
 # data_rename(iris, "FakeCol", "length", safe=FALSE)  # This fails
