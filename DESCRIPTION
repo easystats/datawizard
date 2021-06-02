@@ -45,6 +45,7 @@ Suggests:
     EGAnet,
     fastICA,
     gamm4,
+    GPArotation,
     lme4,
     MASS,
     M3C,

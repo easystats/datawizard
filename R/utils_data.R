@@ -116,3 +116,13 @@ data_addsuffix <- function(data, pattern) {
   names(data) <- paste0(names(data), pattern)
   data
 }
+
+
+
+#' help-functions
+#' @keywords internal
+.data_frame <- function(...) {
+  x <- data.frame(..., stringsAsFactors = FALSE)
+  rownames(x) <- NULL
+  x
+}
