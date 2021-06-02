@@ -102,9 +102,8 @@ n_clusters <- function(x,
 
 #' @keywords internal
 .n_clusters_mclust <- function(x, ...) {
-  if (!requireNamespace("mclust", quietly = TRUE)) {
-    stop("Package 'mclust' required for this function to work. Please install it by running `install.packages('mclust')`.")
-  }
+  check_if_installed("mclust")
+
   mclustBIC <- mclust::mclustBIC # this is needed as it is internally required by the following function
   BIC <- mclust::mclustBIC(x, verbose = FALSE)
   out <- data.frame(unclass(BIC))
@@ -115,9 +114,7 @@ n_clusters <- function(x,
 
 #' @keywords internal
 .n_clusters_cluster <- function(x, ...) {
-  if (!requireNamespace("cluster", quietly = TRUE)) {
-    stop("Package 'cluster' required for this function to work. Please install it by running `install.packages('cluster')`.")
-  }
+  check_if_installed("cluster")
 
   # listwise deletion of missing
   x <- stats::na.omit(x)
@@ -140,9 +137,7 @@ n_clusters <- function(x,
 
 #' @keywords internal
 .n_clusters_NbClust <- function(x, fast = TRUE, ...) {
-  if (!requireNamespace("NbClust", quietly = TRUE)) {
-    stop("Package 'NbClust' required for this function to work. Please install it by running `install.packages('NbClust')`.")
-  }
+  check_if_installed("NbCclust")
 
   # Run the function and suppress output and automatic plotting
   ff <- tempfile()

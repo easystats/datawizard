@@ -130,9 +130,8 @@ n_factors <- function(x,
 
   # nFactors -------------------------------------------
   if ("nFactors" %in% package) {
-    if (!requireNamespace("nFactors", quietly = TRUE)) {
-      stop("Package 'nFactors' required for this function to work. Please install it by running `install.packages('nFactors')`.")
-    }
+
+    check_if_installed("nFactors")
 
     # Model
     if (tolower(type) %in% c("fa", "factor", "efa")) {
@@ -215,9 +214,8 @@ n_factors <- function(x,
 
   # EGAnet -------------------------------------------
   if ("EGAnet" %in% c(package)) {
-    if (!requireNamespace("EGAnet", quietly = TRUE)) {
-      stop("Package 'EGAnet' required for this function to work. Please install it by running `install.packages('EGAnet')`.")
-    }
+
+    check_if_installed("EGAnet")
 
     if (safe) {
       out <- rbind(
@@ -238,9 +236,7 @@ n_factors <- function(x,
 
   # psych -------------------------------------------
   if ("psych" %in% c(package)) {
-    if (!requireNamespace("psych", quietly = TRUE)) {
-      stop("Package 'psych' required for this function to work. Please install it by running `install.packages('psych')`.")
-    }
+    check_if_installed("psych")
 
     if (safe) {
       out <- rbind(
@@ -387,7 +383,10 @@ print.n_clusters <- print.n_factors
 
 #' Bartlett, Anderson and Lawley Procedures
 #' @keywords internal
-.n_factors_bartlett <- function(eigen_values = NULL, model = "factors", nobs = NULL) {
+.n_factors_bartlett <- function(eigen_values = NULL,
+                                model = "factors",
+                                nobs = NULL) {
+
   nfac <- nFactors::nBartlett(
     eigen_values,
     N = nobs,
@@ -406,7 +405,9 @@ print.n_clusters <- print.n_factors
 
 #' Bentler and Yuan's Procedure
 #' @keywords internal
-.n_factors_bentler <- function(eigen_values = NULL, model = "factors", nobs = NULL) {
+.n_factors_bentler <- function(eigen_values = NULL,
+                               model = "factors",
+                               nobs = NULL) {
   nfac <- .nBentler(
     x = eigen_values,
     N = nobs,
@@ -460,11 +461,16 @@ print.n_clusters <- print.n_factors
 #' Non Graphical Cattell's Scree Test
 #' @keywords internal
 .n_factors_scree <- function(eigen_values = NULL, model = "factors") {
-  nfac <- unlist(nFactors::nScree(x = eigen_values, cor = TRUE, model = model)$Components)
+  nfac <- unlist(nFactors::nScree(x = eigen_values,
+                                  cor = TRUE,
+                                  model = model)$Components)
 
   data.frame(
     n_Factors = as.numeric(nfac),
-    Method = c("Optimal coordinates", "Acceleration factor", "Parallel analysis", "Kaiser criterion"),
+    Method = c("Optimal coordinates",
+               "Acceleration factor",
+               "Parallel analysis",
+               "Kaiser criterion"),
     Family = "Scree"
   )
 }
@@ -473,7 +479,10 @@ print.n_clusters <- print.n_factors
 #' Standard Error Scree and Coefficient of Determination Procedures
 #' @keywords internal
 .n_factors_sescree <- function(eigen_values = NULL, model = "factors") {
-  nfac <- nFactors::nSeScree(x = eigen_values, cor = TRUE, model = model)$nFactors
+  nfac <- nFactors::nSeScree(x = eigen_values,
+                             cor = TRUE,
+                             model = model)$nFactors
+
   data.frame(
     n_Factors = as.numeric(nfac),
     Method = c("SE Scree", "R2"),
@@ -495,8 +504,6 @@ print.n_clusters <- print.n_factors
   # Replace with own correlation matrix
   junk <- utils::capture.output(suppressWarnings(suppressMessages(nfac_glasso <- EGAnet::EGA(x, model = "glasso", plot.EGA = FALSE)$n.dim)))
   junk <- utils::capture.output(suppressWarnings(suppressMessages(nfac_TMFG <- EGAnet::EGA(x, model = "TMFG", plot.EGA = FALSE)$n.dim)))
-  # junk <- utils::capture.output(suppressWarnings(suppressMessages(nfac_glasso_boot <- EGAnet::bootEGA(x, model = "glasso", n = 500, plot.typicalStructure = FALSE)$n.dim)))
-  # junk <- utils::capture.output(suppressWarnings(suppressMessages(nfac_TMFG_boot <- EGAnet::bootEGA(x, model = "TMFG", n = 500, plot.typicalStructure = FALSE)$n.dim)))
 
   data.frame(
     n_Factors = as.numeric(c(nfac_glasso, nfac_TMFG)),
@@ -647,9 +654,7 @@ print.n_clusters <- print.n_factors
                       cor = TRUE,
                       details = TRUE,
                       ...) {
-  if (!requireNamespace("nFactors", quietly = TRUE)) {
-    stop("Package 'nFactors' required for this function to work. Please install it by running `install.packages('lattice')`.")
-  }
+  check_if_installed("nFactors")
 
   lambda <- nFactors::eigenComputes(x, cor = cor, model = model, ...)
   if (length(which(lambda < 0)) > 0) {

@@ -53,10 +53,13 @@
 #' summary(lm(V1 ~ V0, data = data))
 #' summary(glm(V0 ~ V1, data = data, family = "binomial"))
 #' @export
-simulate_correlation <- function(n = 100, r = 0.5, mean = 0, sd = 1, names = NULL, ...) {
-  if (!requireNamespace("MASS", quietly = TRUE)) {
-    stop("Package 'MASS' required for this function to work. Please install it by running `install.packages('MASS')`.")
-  }
+simulate_correlation <- function(n = 100,
+                                 r = 0.5,
+                                 mean = 0,
+                                 sd = 1,
+                                 names = NULL,
+                                 ...) {
+  check_if_installed("MASS")
 
   # Define matrix
   if (is.matrix(r)) {

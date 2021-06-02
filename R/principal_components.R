@@ -114,7 +114,6 @@
 #' @examples
 #'
 #' library(parameters)
-#'
 #' \donttest{
 #' # Principal Component Analysis (PCA) -------------------
 #' if (require("psych")) {
@@ -150,10 +149,8 @@
 #'   efa <- factor_analysis(mtcars[, 1:5], n = 2)
 #'   summary(efa)
 #'   predict(efa)
-#' \donttest{
 #'   # Automated number of components
 #'   factor_analysis(mtcars[, 1:4], n = "auto")
-#' }
 #' }
 #' @return A data frame of loadings.
 #' @references \itemize{
@@ -381,9 +378,7 @@ principal_components.data.frame <- function(x,
   }
 
   # rotate loadings
-  if (!requireNamespace("psych", quietly = TRUE)) {
-    stop(sprintf("Package `psych` required for `%s`-rotation.", rotation), call. = FALSE)
-  }
+  check_if_installed("psych", "for `%s`-rotation")
 
   pca <- psych::principal(x, nfactors = n, rotate = rotation, ...)
   msa <- psych::KMO(x)
@@ -399,6 +394,11 @@ principal_components.data.frame <- function(x,
 
 
 .closest_component <- function(loadings, loadings_columns, variable_names) {
-  component_columns <- apply(loadings[loadings_columns], 1, function(i) which.max(abs(i)))
+  component_columns <- apply(
+    loadings[loadings_columns],
+    1,
+    function(i) which.max(abs(i))
+  )
+
   stats::setNames(component_columns, variable_names)
 }

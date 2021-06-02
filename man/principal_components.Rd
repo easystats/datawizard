@@ -165,7 +165,6 @@ The functions \code{principal_components()} and \code{factor_analysis()} can be 
 \examples{
 
 library(parameters)
-
 \donttest{
 # Principal Component Analysis (PCA) -------------------
 if (require("psych")) {
@@ -201,10 +200,8 @@ if (require("psych")) {
   efa <- factor_analysis(mtcars[, 1:5], n = 2)
   summary(efa)
   predict(efa)
-\donttest{
   # Automated number of components
   factor_analysis(mtcars[, 1:4], n = "auto")
-}
 }
 }
 \references{
