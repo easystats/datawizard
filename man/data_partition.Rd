@@ -9,17 +9,22 @@ data_partition(x, training_proportion = 0.7, group = NULL, seed = NULL)
 \arguments{
 \item{x}{A data frame, or an object that can be coerced to a data frame.}
 
-\item{training_proportion}{The proportion (between 0 and 1) of the training set. The remaining part will be used for the test set.}
+\item{training_proportion}{The proportion (between 0 and 1) of the training
+set. The remaining part will be used for the test set.}
 
-\item{group}{A character vector indicating the name(s) of the column(s) used for stratified partitioning.}
+\item{group}{A character vector indicating the name(s) of the column(s) used
+for stratified partitioning.}
 
-\item{seed}{A random number generator seed. Enter an integer (e.g., 123) so that the random sampling will be the same each time you run the function.}
+\item{seed}{A random number generator seed. Enter an integer (e.g., 123) so
+that the random sampling will be the same each time you run the function.}
 }
 \value{
 A list of two data frames, named \code{test} and \code{training}.
 }
 \description{
-Creates a training and a test set based on a dataframe. Can also be stratified (i.e., evenly spread a given factor) using the \code{group} argument.
+Creates a training and a test set based on a dataframe. Can also be
+stratified (i.e., evenly spread a given factor) using the \code{group}
+argument.
 }
 \examples{
 df <- iris

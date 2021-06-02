@@ -5,7 +5,8 @@
 #' @param data Dataframe.
 #' @param pattern,replacement,starts_with,ends_with Character strings.
 #' @param cols Vector of column names.
-#' @param safe Do not throw error if for instance the variable to be renamed/removed doesn't exist.
+#' @param safe Do not throw error if for instance the variable to be
+#'   renamed/removed doesn't exist.
 #'
 #' @return A modified data frame.
 #'
@@ -40,6 +41,7 @@ data_rename <- function(data, pattern, replacement, safe = TRUE) {
   for (i in 1:length(pattern)) {
     data <- .data_rename(data, pattern[i], replacement[i], safe)
   }
+
   data
 }
 
@@ -48,7 +50,9 @@ data_rename <- function(data, pattern, replacement, safe = TRUE) {
   if (isFALSE(safe) & !pattern %in% names(data)) {
     stop(paste0("Variable '", pattern, "' is not in your dataframe :/"))
   }
+
   names(data) <- replace(names(data), names(data) == pattern, replacement)
+
   data
 }
 
@@ -56,7 +60,10 @@ data_rename <- function(data, pattern, replacement, safe = TRUE) {
 
 #' @rdname data_rename
 #' @export
-data_findcols <- function(data, pattern = NULL, starts_with = NULL, ends_with = NULL) {
+data_findcols <- function(data,
+                          pattern = NULL,
+                          starts_with = NULL,
+                          ends_with = NULL) {
   n <- names(data)
   if (!is.null(pattern)) {
     match <- c()
@@ -85,12 +92,6 @@ data_remove <- function(data, pattern) {
 }
 
 
-
-
-
-
-
-
 #' @rdname data_rename
 #' @export
 data_reorder <- function(data, cols, safe = TRUE) {
@@ -98,10 +99,6 @@ data_reorder <- function(data, cols, safe = TRUE) {
   if (isTRUE(safe)) cols <- cols[cols %in% names(data)]
   data[, c(cols, remaining_columns)]
 }
-
-
-
-
 
 
 

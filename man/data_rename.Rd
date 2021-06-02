@@ -26,7 +26,8 @@ data_addsuffix(data, pattern)
 
 \item{pattern, replacement, starts_with, ends_with}{Character strings.}
 
-\item{safe}{Do not throw error if for instance the variable to be renamed/removed doesn't exist.}
+\item{safe}{Do not throw error if for instance the variable to be
+renamed/removed doesn't exist.}
 
 \item{cols}{Vector of column names.}
 }

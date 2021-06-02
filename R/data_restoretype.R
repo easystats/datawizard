@@ -42,18 +42,10 @@ data_restoretype <- function(data, reference = NULL) {
 }
 
 
-
-
-
-
-
-
-
-
-
 #' Convert to Numeric (if possible)
 #'
-#' Tries to convert vector to numeric if possible (if no warnings or errors). Otherwise, leaves it as is.
+#' Tries to convert vector to numeric if possible (if no warnings or errors).
+#' Otherwise, leaves it as is.
 #'
 #' @param x A vector to be converted.
 #'
@@ -63,5 +55,8 @@ data_restoretype <- function(data, reference = NULL) {
 #' @return Numeric vector (if possible)
 #' @export
 to_numeric <- function(x) {
-  tryCatch(as.numeric(as.character(x)), error = function(e) x, warning = function(w) x)
+  tryCatch(as.numeric(as.character(x)),
+    error = function(e) x,
+    warning = function(w) x
+  )
 }

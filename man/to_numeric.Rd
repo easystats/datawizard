@@ -13,7 +13,8 @@ to_numeric(x)
 Numeric vector (if possible)
 }
 \description{
-Tries to convert vector to numeric if possible (if no warnings or errors). Otherwise, leaves it as is.
+Tries to convert vector to numeric if possible (if no warnings or errors).
+Otherwise, leaves it as is.
 }
 \examples{
 to_numeric(c("1", "2"))
