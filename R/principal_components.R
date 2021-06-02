@@ -227,7 +227,7 @@ rotated_data <- function(pca_results) {
     out <- merge(original_data, rotated_matrix, by = ".parameters_merge_id", all = TRUE, sort = FALSE)
     out$.parameters_merge_id <- NULL
   } else {
-    warning(insight::format_message("Either the original or the rotated data could not be retrieved."), call. = FALSE)
+    warning(format_message("Either the original or the rotated data could not be retrieved."), call. = FALSE)
     return(NULL)
   }
   out
