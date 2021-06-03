@@ -11,17 +11,24 @@
 #'    also use the mode or median for centering.
 #'
 #' @param x A data frame. For \code{check_heterogeneity()}, may also be a mixed model object.
-#' @param select Character vector (or formula) with names of variables to select that should be group- and de-meaned. For \code{check_heterogeneity()}, if \code{x} is a mixed model object, this argument be ignored.
-#' @param group Character vector (or formula) with the name of the variable that indicates the group- or cluster-ID. For \code{check_heterogeneity()}, if \code{x} is a model object, this argument be ignored.
-#' @param center Method for centering. \code{demean()} always performs mean-centering, while \code{degroup()} can use \code{center = "median"} or \code{center = "mode"} for median- or mode-centering, and also \code{"min"} or \code{"max"}.
-#' @param suffix_demean,suffix_groupmean String value, will be appended to the names of the
-#'   group-meaned and de-meaned variables of \code{x}. By default, de-meaned
-#'   variables will be suffixed with \code{"_within"} and grouped-meaned variables
-#'   with \code{"_between"}.
+#' @param select Character vector (or formula) with names of variables to select
+#'   that should be group- and de-meaned. For \code{check_heterogeneity()}, if
+#'   \code{x} is a mixed model object, this argument be ignored.
+#' @param group Character vector (or formula) with the name of the variable that
+#'   indicates the group- or cluster-ID. For \code{check_heterogeneity()}, if
+#'   \code{x} is a model object, this argument be ignored.
+#' @param center Method for centering. \code{demean()} always performs
+#'   mean-centering, while \code{degroup()} can use \code{center = "median"} or
+#'   \code{center = "mode"} for median- or mode-centering, and also \code{"min"}
+#'   or \code{"max"}.
+#' @param suffix_demean,suffix_groupmean String value, will be appended to the
+#'   names of the group-meaned and de-meaned variables of \code{x}. By default,
+#'   de-meaned variables will be suffixed with \code{"_within"} and
+#'   grouped-meaned variables with \code{"_between"}.
 #' @param add_attributes Logical, if \code{TRUE}, the returned variables gain
-#'   attributes to indicate the within- and between-effects. This is only relevant
-#'   when printing \code{model_parameters()} - in such cases, the within- and
-#'   between-effects are printed in separated blocks.
+#'   attributes to indicate the within- and between-effects. This is only
+#'   relevant when printing \code{model_parameters()} - in such cases, the
+#'   within- and between-effects are printed in separated blocks.
 #' @inheritParams center
 #'
 #' @return A data frame with the group-/de-meaned variables, which get the suffix
@@ -122,12 +129,12 @@
 #'     Packages like \pkg{panelr} internally convert factors to dummies before
 #'     demeaning, so this behaviour can be mimicked here.
 #'   }
-#'   \subsection{De-meaning interaction terms}{
-#'     There are multiple ways to deal with interaction terms of within- and
-#'     between-effects. A classical approach is to simply use the product
-#'     term of the de-meaned variables (i.e. introducing the de-meaned variables
-#'     as interaction term in the model formula, e.g. \code{y ~ x_within * time_within}).
-#'     This approach, however, might be subject to bias (see \cite{Giesselmann & Schmidt-Catran 2020}).
+#'   \subsection{De-meaning interaction terms}{ There are multiple ways to deal
+#'   with interaction terms of within- and between-effects. A classical approach
+#'   is to simply use the product term of the de-meaned variables (i.e.
+#'   introducing the de-meaned variables as interaction term in the model
+#'   formula, e.g. \code{y ~ x_within * time_within}). This approach, however,
+#'   might be subject to bias (see \cite{Giesselmann & Schmidt-Catran 2020}).
 #'     \cr \cr
 #'     Another option is to first calculate the product term and then apply the
 #'     de-meaning to it. This approach produces an estimator \dQuote{that reflects
@@ -151,13 +158,32 @@
 #'   }
 #'
 #' @references \itemize{
-#'   \item Bafumi J, Gelman A. 2006. Fitting Multilevel Models When Predictors and Group Effects Correlate. In. Philadelphia, PA: Annual meeting of the American Political Science Association.
-#'   \item Bell A, Fairbrother M, Jones K. 2019. Fixed and Random Effects Models: Making an Informed Choice. Quality & Quantity (53); 1051-1074
-#'   \item Bell A, Jones K. 2015. Explaining Fixed Effects: Random Effects Modeling of Time-Series Cross-Sectional and Panel Data. Political Science Research and Methods, 3(1), 133–153.
-#'   \item Gelman A, Hill J. 2007. Data Analysis Using Regression and Multilevel/Hierarchical Models. Analytical Methods for Social Research. Cambridge, New York: Cambridge University Press
-#'   \item Giesselmann M, Schmidt-Catran, AW. 2020. Interactions in fixed effects regression models. Sociological Methods & Research, 1–28. https://doi.org/10.1177/0049124120914934
-#'   \item Heisig JP, Schaeffer M, Giesecke J. 2017. The Costs of Simplicity: Why Multilevel Models May Benefit from Accounting for Cross-Cluster Differences in the Effects of Controls. American Sociological Review 82 (4): 796–827.
-#'   \item Hoffman L. 2015. Longitudinal analysis: modeling within-person fluctuation and change. New York: Routledge
+#'   \item Bafumi J, Gelman A. 2006. Fitting Multilevel Models When Predictors
+#'   and Group Effects Correlate. In. Philadelphia, PA: Annual meeting of the
+#'   American Political Science Association.
+#'
+#'   \item Bell A, Fairbrother M, Jones K. 2019. Fixed and Random Effects
+#'   Models: Making an Informed Choice. Quality & Quantity (53); 1051-1074
+#'
+#'   \item Bell A, Jones K. 2015. Explaining Fixed Effects: Random Effects
+#'   Modeling of Time-Series Cross-Sectional and Panel Data. Political Science
+#'   Research and Methods, 3(1), 133–153.
+#'
+#'   \item Gelman A, Hill J. 2007. Data Analysis Using Regression and
+#'   Multilevel/Hierarchical Models. Analytical Methods for Social Research.
+#'   Cambridge, New York: Cambridge University Press
+#'
+#'   \item Giesselmann M, Schmidt-Catran, AW. 2020. Interactions in fixed
+#'   effects regression models. Sociological Methods & Research, 1–28.
+#'   https://doi.org/10.1177/0049124120914934
+#'
+#'   \item Heisig JP, Schaeffer M, Giesecke J. 2017. The Costs of Simplicity:
+#'   Why Multilevel Models May Benefit from Accounting for Cross-Cluster
+#'   Differences in the Effects of Controls. American Sociological Review 82
+#'   (4): 796–827.
+#'
+#'   \item Hoffman L. 2015. Longitudinal analysis: modeling within-person
+#'   fluctuation and change. New York: Routledge
 #' }
 
 #' @examples

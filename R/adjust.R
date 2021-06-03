@@ -161,11 +161,11 @@ data_adjust <- adjust
   if (additive) {
     # Bayesian
     if (bayesian) {
-      check_if_installed("rstanarm")
+      insight::check_if_installed("rstanarm")
       model <- rstanarm::stan_gamm4(stats::as.formula(formula), random = formula_random, data = data, refresh = 0)
       # Frequentist
     } else {
-      check_if_installed("gamm4")
+      insight::check_if_installed("gamm4")
       model <- gamm4::gamm4(stats::as.formula(formula), random = formula_random, data = data)
     }
 
@@ -173,7 +173,7 @@ data_adjust <- adjust
   } else {
     # Bayesian
     if (bayesian) {
-      check_if_installed("rstanarm")
+      insight::check_if_installed("rstanarm")
       if (multilevel) {
         model <- rstanarm::stan_lmer(paste(formula, formula_random), data = data, refresh = 0)
       } else {
@@ -182,7 +182,7 @@ data_adjust <- adjust
       # Frequentist
     } else {
       if (multilevel) {
-        check_if_installed("lme4")
+        insight::check_if_installed("lme4")
         model <- lme4::lmer(paste(formula, formula_random), data = data)
       } else {
         model <- stats::lm(formula, data = data)

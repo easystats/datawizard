@@ -3,24 +3,26 @@
 #' Performs a grand-mean centering of data.
 #'
 #' @param x A data frame, a (numeric or character) vector or a factor.
-#' @param select Character vector of column names. If \code{NULL} (the default), all
-#'   variables will be selected.
+#' @param select Character vector of column names. If \code{NULL} (the default),
+#'   all variables will be selected.
 #' @param exclude Character vector of column names to be excluded from selection.
 #' @param force Logical, if \code{TRUE}, forces centering of factors as
 #'   well. Factors are converted to numerical values, with the lowest level
 #'   being the value \code{1} (unless the factor has numeric levels, which are
 #'   converted to the corresponding numeric value).
-#' @param append Logical, if \code{TRUE} and \code{x} is a data frame, standardized
-#'   variables will be added as additional columns; if \code{FALSE},
-#'   existing variables are overwritten.
+#' @param append Logical, if \code{TRUE} and \code{x} is a data frame,
+#'   standardized variables will be added as additional columns; if
+#'   \code{FALSE}, existing variables are overwritten.
 #' @param suffix Character value, will be appended to variable (column) names of
 #'   \code{x}, if \code{x} is a data frame and \code{append = TRUE}.
 #' @param robust Logical, if \code{TRUE}, centering is done by subtracting the
 #'   median from the variables. If \code{FALSE}, variables are centered by
 #'   subtracting the mean.
+#' @param verbose Toggle warnings and messages.
 #' @param weights Can be \code{NULL} (for no weighting), or:
 #' \itemize{
-#'   \item For data frames: a numeric vector of weights, or a character of the name of a column in the \code{data.frame} that contains the weights.
+#'   \item For data frames: a numeric vector of weights, or a character of the
+#'   name of a column in the \code{data.frame} that contains the weights.
 #'   \item For numeric vectors: a numeric vector of weights.
 #' }
 #' @param ... Currently not used.
@@ -44,7 +46,11 @@ center <- function(x, ...) {
 
 #' @rdname center
 #' @export
-center.numeric <- function(x, weights = NULL, robust = FALSE, verbose = TRUE, ...) {
+center.numeric <- function(x,
+                           weights = NULL,
+                           robust = FALSE,
+                           verbose = TRUE,
+                           ...) {
 
   # Warning if all NaNs
   if (all(is.na(x))) {
@@ -69,9 +75,9 @@ center.numeric <- function(x, weights = NULL, robust = FALSE, verbose = TRUE, ..
   }
 
   if (robust) {
-    center <- .median(x, weights, verbose)
+    center <- .median(x, weights, verbose = verbose)
   } else {
-    center <- .mean(x, weights, verbose)
+    center <- .mean(x, weights, verbose = verbose)
   }
 
   x <- as.vector(x - center)
@@ -143,11 +149,6 @@ center.data.frame <- function(x,
   )
   x
 }
-
-
-
-
-
 
 
 # helper ------------------------
@@ -225,7 +226,7 @@ center.data.frame <- function(x,
 
 
 
-.mean <- function(x, weights = NULL, verbose = TRUE) {
+.mean <- function(x, weights = NULL, verbose = TRUE, ...) {
   if (!.are_weights(weights)) {
     return(mean(x, na.rm = TRUE))
   }
@@ -242,7 +243,7 @@ center.data.frame <- function(x,
 
 
 
-.median <- function(x, weights = NULL, verbose = TRUE) {
+.median <- function(x, weights = NULL, verbose = TRUE, ...) {
   # From spatstat + wiki
   if (!.are_weights(weights)) {
     return(stats::median(x, na.rm = TRUE))

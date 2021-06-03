@@ -55,6 +55,7 @@ Suggests:
     NbClust,
     nFactors,
     psych,
+    rstanarm,
     sjstats,
     spelling,
     testthat (>= 3.0.0)

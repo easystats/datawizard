@@ -64,11 +64,11 @@ factor_analysis.data.frame <- function(x,
   }
 
   # rotate loadings
-  check_if_installed("psych", "for `%s`-rotation")
+  insight::check_if_installed("psych", "for `%s`-rotation")
 
   # Pass cor if available
   if (!is.null(cor)) {
-    out <- model_parameters(
+    out <- parameters::model_parameters(
       psych::fa(
         cor,
         nfactors = n,
@@ -80,7 +80,7 @@ factor_analysis.data.frame <- function(x,
       threshold = threshold
     )
   } else {
-    out <- model_parameters(
+    out <- parameters::model_parameters(
       psych::fa(x, nfactors = n, rotate = rotation, ...),
       sort = sort,
       threshold = threshold

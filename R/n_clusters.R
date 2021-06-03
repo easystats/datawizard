@@ -102,7 +102,7 @@ n_clusters <- function(x,
 
 #' @keywords internal
 .n_clusters_mclust <- function(x, ...) {
-  check_if_installed("mclust")
+  insight::check_if_installed("mclust")
 
   mclustBIC <- mclust::mclustBIC # this is needed as it is internally required by the following function
   BIC <- mclust::mclustBIC(x, verbose = FALSE)
@@ -114,7 +114,7 @@ n_clusters <- function(x,
 
 #' @keywords internal
 .n_clusters_cluster <- function(x, ...) {
-  check_if_installed("cluster")
+  insight::check_if_installed("cluster")
 
   # listwise deletion of missing
   x <- stats::na.omit(x)
@@ -137,7 +137,7 @@ n_clusters <- function(x,
 
 #' @keywords internal
 .n_clusters_NbClust <- function(x, fast = TRUE, ...) {
-  check_if_installed("NbCclust")
+  insight::check_if_installed("NbCclust")
 
   # Run the function and suppress output and automatic plotting
   ff <- tempfile()

@@ -30,7 +30,8 @@ center(x, ...)
 
 \item{weights}{Can be \code{NULL} (for no weighting), or:
 \itemize{
-  \item For data frames: a numeric vector of weights, or a character of the name of a column in the \code{data.frame} that contains the weights.
+  \item For data frames: a numeric vector of weights, or a character of the
+  name of a column in the \code{data.frame} that contains the weights.
   \item For numeric vectors: a numeric vector of weights.
 }}
 
@@ -38,8 +39,10 @@ center(x, ...)
 median from the variables. If \code{FALSE}, variables are centered by
 subtracting the mean.}
 
-\item{select}{Character vector of column names. If \code{NULL} (the default), all
-variables will be selected.}
+\item{verbose}{Toggle warnings and messages.}
+
+\item{select}{Character vector of column names. If \code{NULL} (the default),
+all variables will be selected.}
 
 \item{exclude}{Character vector of column names to be excluded from selection.}
 
@@ -48,9 +51,9 @@ well. Factors are converted to numerical values, with the lowest level
 being the value \code{1} (unless the factor has numeric levels, which are
 converted to the corresponding numeric value).}
 
-\item{append}{Logical, if \code{TRUE} and \code{x} is a data frame, standardized
-variables will be added as additional columns; if \code{FALSE},
-existing variables are overwritten.}
+\item{append}{Logical, if \code{TRUE} and \code{x} is a data frame,
+standardized variables will be added as additional columns; if
+\code{FALSE}, existing variables are overwritten.}
 
 \item{suffix}{Character value, will be appended to variable (column) names of
 \code{x}, if \code{x} is a data frame and \code{append = TRUE}.}

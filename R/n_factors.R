@@ -131,7 +131,7 @@ n_factors <- function(x,
   # nFactors -------------------------------------------
   if ("nFactors" %in% package) {
 
-    check_if_installed("nFactors")
+    insight::check_if_installed("nFactors")
 
     # Model
     if (tolower(type) %in% c("fa", "factor", "efa")) {
@@ -215,7 +215,7 @@ n_factors <- function(x,
   # EGAnet -------------------------------------------
   if ("EGAnet" %in% c(package)) {
 
-    check_if_installed("EGAnet")
+    insight::check_if_installed("EGAnet")
 
     if (safe) {
       out <- rbind(
@@ -236,7 +236,7 @@ n_factors <- function(x,
 
   # psych -------------------------------------------
   if ("psych" %in% c(package)) {
-    check_if_installed("psych")
+    insight::check_if_installed("psych")
 
     if (safe) {
       out <- rbind(
@@ -654,7 +654,7 @@ print.n_clusters <- print.n_factors
                       cor = TRUE,
                       details = TRUE,
                       ...) {
-  check_if_installed("nFactors")
+  insight::check_if_installed("nFactors")
 
   lambda <- nFactors::eigenComputes(x, cor = cor, model = model, ...)
   if (length(which(lambda < 0)) > 0) {

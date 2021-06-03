@@ -59,7 +59,7 @@ simulate_correlation <- function(n = 100,
                                  sd = 1,
                                  names = NULL,
                                  ...) {
-  check_if_installed("MASS")
+  insight::check_if_installed("MASS")
 
   # Define matrix
   if (is.matrix(r)) {

@@ -197,7 +197,7 @@ principal_components.merMod <- principal_components.lm
 .drr <- function(x, n = "all", ...) {
   n <- .get_n_factors(x, n = n, type = "PCA", rotation = "none")
 
-  check_if_installed("DRR")
+  insight::check_if_installed("DRR")
 
   junk <- utils::capture.output(suppressMessages(rez <- DRR::drr(x, n)))
 
@@ -213,7 +213,7 @@ principal_components.merMod <- principal_components.lm
 .ica <- function(x, n = "all", ...) {
   n <- .get_n_factors(x, n = n, type = "PCA", rotation = "none")
 
-  check_if_installed("fastICA")
+  insight::check_if_installed("fastICA")
 
   rez <- fastICA::fastICA(x, n.comp = ncol(x) - 1)
 

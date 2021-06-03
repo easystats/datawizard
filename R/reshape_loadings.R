@@ -7,7 +7,7 @@
 #' library(parameters)
 #' library(psych)
 #'
-#' pca <- model_parameters(psych::fa(attitude, nfactors = 3))
+#' pca <- parameters::model_parameters(psych::fa(attitude, nfactors = 3))
 #' loadings <- reshape_loadings(pca)
 #'
 #' loadings

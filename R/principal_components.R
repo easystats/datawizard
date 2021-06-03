@@ -227,7 +227,7 @@ rotated_data <- function(pca_results) {
     out <- merge(original_data, rotated_matrix, by = ".parameters_merge_id", all = TRUE, sort = FALSE)
     out$.parameters_merge_id <- NULL
   } else {
-    warning(format_message("Either the original or the rotated data could not be retrieved."), call. = FALSE)
+    warning(insight::format_message("Either the original or the rotated data could not be retrieved."), call. = FALSE)
     return(NULL)
   }
   out
@@ -397,13 +397,13 @@ principal_components.data.frame <- function(x,
   }
 
   # rotate loadings
-  check_if_installed("psych", "for `%s`-rotation")
+  insight::check_if_installed("psych", "for `%s`-rotation")
 
   pca <- psych::principal(x, nfactors = n, rotate = rotation, ...)
   msa <- psych::KMO(x)
 
   attr(pca, "MSA") <- msa$MSAi
-  out <- model_parameters(pca, sort = sort, threshold = threshold)
+  out <- parameters::model_parameters(pca, sort = sort, threshold = threshold)
 
   attr(out, "data_set") <- original_data
   attr(out, "complete_cases") <- stats::complete.cases(original_data)
