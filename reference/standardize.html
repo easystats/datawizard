@@ -129,7 +129,7 @@ the 0 - 1 range." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Standardization (Z-scoring)</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/datawizard/blob/master/R/standardize.R'><code>R/standardize.R</code></a>, <a href='https://github.com/easystats/datawizard/blob/master/R/unstandardize.R'><code>R/unstandardize.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/datawizard/blob/master/R/standardize.R'><code>R/standardize.R</code></a>, <a href='https://github.com/easystats/datawizard/blob/master/R/standardize.models.R'><code>R/standardize.models.R</code></a>, <a href='https://github.com/easystats/datawizard/blob/master/R/unstandardize.R'><code>R/unstandardize.R</code></a></small>
     <div class="hidden name"><code>standardize.Rd</code></div>
     </div>
 
@@ -177,6 +177,17 @@ the 0 - 1 range.</p>
   force <span class='op'>=</span> <span class='cn'>FALSE</span>,
   append <span class='op'>=</span> <span class='cn'>FALSE</span>,
   suffix <span class='op'>=</span> <span class='st'>"_z"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>standardize</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  robust <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  two_sd <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  weights <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  include_response <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -231,7 +242,9 @@ outcome) (Gelman, 2008).</p></td>
     </tr>
     <tr>
       <th>reference</th>
-      <td><p>A dataframe or variable from which the centrality and deviation will be computed instead of from the input variable. Useful for standardizing a subset or new data according to another dataframe.</p></td>
+      <td><p>A dataframe or variable from which the centrality and
+deviation will be computed instead of from the input variable. Useful for
+standardizing a subset or new data according to another dataframe.</p></td>
     </tr>
     <tr>
       <th>select</th>
@@ -267,6 +280,15 @@ existing variables are overwritten.</p></td>
       <th>suffix</th>
       <td><p>Character value, will be appended to variable (column) names of
 `x`, if `x` is a data frame and `append = TRUE`.</p></td>
+    </tr>
+    <tr>
+      <th>include_response</th>
+      <td><p>For a model, if `TRUE` (default), the response value
+will also be standardized. If `FALSE`, only the predictors will be
+standardized. Note that for certain models (logistic regression, count
+models, ...), the response value will never be standardized, to make
+re-fitting the model work. (For `mediate` models, only applies to the y
+model; m model's response will always be standardized.)</p></td>
     </tr>
     <tr>
       <th>center, scale</th>
@@ -316,7 +338,9 @@ standardized data is shifted by `Z - min(Z) + 1` or `Z - min(Z)`
     <div class='dont-index'><p>Other transform utilities: 
 <code><a href='change_scale.html'>change_scale</a>()</code>,
 <code><a href='normalize.html'>normalize</a>()</code>,
-<code><a href='ranktransform.html'>ranktransform</a>()</code></p></div>
+<code><a href='ranktransform.html'>ranktransform</a>()</code></p>
+<p>Other standardize: 
+<code><a href='standardize_parameters.html'>standardize_parameters</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># Data frames</span></span>
@@ -339,7 +363,8 @@ standardized data is shifted by `Z - min(Z) + 1` or `Z - min(Z)`
 <span class='r-in'><span class='co'># Models</span></span>
 <span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Infant.Mortality</span> <span class='op'>~</span> <span class='va'>Education</span> <span class='op'>*</span> <span class='va'>Fertility</span>, data <span class='op'>=</span> <span class='va'>swiss</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span><span class='op'>(</span><span class='fu'>standardize</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in UseMethod("standardize")</span> no applicable method for 'standardize' applied to an object of class "lm"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         (Intercept)           Education           Fertility Education:Fertility </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          0.06386069          0.47482848          0.63270919          0.09829777 </span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

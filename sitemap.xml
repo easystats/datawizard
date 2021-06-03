@@ -121,13 +121,10 @@
     <loc>/reference/reshape_loadings.html</loc>
   </url>
   <url>
-    <loc>/reference/simulate_correlation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/simulate_simpson.html</loc>
-  </url>
-  <url>
     <loc>/reference/standardize.html</loc>
+  </url>
+  <url>
+    <loc>/reference/standardize_parameters.html</loc>
   </url>
   <url>
     <loc>/reference/to_numeric.html</loc>
