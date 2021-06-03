@@ -11,7 +11,6 @@
 #'   GLMs the response value will never be standardized (see *Generalized Linear
 #'   Models* section).
 #' @inheritParams standardize
-#' @inheritParams chisq_to_phi
 #' @param ... For `standardize_parameters()`, arguments passed to
 #'   [parameters::model_parameters], such as:
 #' - `ci_method`, `centrality` for Bayesian models...
