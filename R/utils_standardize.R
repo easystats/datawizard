@@ -35,18 +35,6 @@
 # For standardize_info ----------------------------------------------------
 
 #' @keywords internal
-#' @importFrom stats weighted.mean
-.mean <- function(x, weights = NULL) {
-  if (!.are_weights(weights)) {
-    return(mean(x, na.rm = TRUE))
-  }
-
-  stopifnot(all(weights > 0, na.rm = TRUE))
-
-  stats::weighted.mean(x, weights, na.rm = TRUE)
-}
-
-#' @keywords internal
 #' @importFrom stats sd
 .sd <- function(x, weights = NULL) {
   # from cov.wt

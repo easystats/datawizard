@@ -1,4 +1,4 @@
-if (require("testthat") && require("effectsize")) {
+if (require("testthat")) {
   data(iris)
   test_that("adjust multilevel", {
     skip_if_not_installed("lme4")

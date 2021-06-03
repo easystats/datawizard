@@ -30,7 +30,7 @@ Authors@R:
              comment = c(ORCID = "0000-0001-9560-6336", Twitter = "@bmwiernik")))
 Maintainer: Indrajeet Patil <d.luedecke@uke.de>
 Description: Magic potions to clean and transform your data.
-License: GPL-3
+License: GPL-3 | file LICENSE
 URL: https://easystats.github.io/datawizard/
 BugReports: https://github.com/easystats/datawizard/issues
 Depends:
@@ -42,7 +42,9 @@ Imports:
     stats,
     utils
 Suggests: 
+    bayestestR,
     cluster,
+    dplyr,
     DRR,
     EGAnet,
     fastICA,

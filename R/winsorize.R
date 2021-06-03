@@ -16,8 +16,6 @@
 #' @param ... Currently not used.
 #'
 #' @examples
-#' library(correlation)
-#'
 #' winsorize(iris$Sepal.Length, threshold = 0.2)
 #' winsorize(iris, threshold = 0.2)
 #' @export

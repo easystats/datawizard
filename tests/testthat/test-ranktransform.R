@@ -1,4 +1,4 @@
-if (require("testthat") && require("effectsize")) {
+if (require("testthat")) {
   test_that("signed rank", {
     x <- c(-1, 2, -3, 4)
 

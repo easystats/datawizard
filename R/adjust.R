@@ -41,7 +41,7 @@
 #' adjust(attitude, effect = "complaints_LMH", select = "rating", multilevel = TRUE)
 #' }
 #'
-#' if (require("MASS")) {
+#' if (require("MASS") && require("bayestestR")) {
 #'   # Generate data
 #'   data <- simulate_correlation(n = 100, r = 0.7)
 #'   data$V2 <- (5 * data$V2) + 20 # Add intercept

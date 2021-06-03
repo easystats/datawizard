@@ -39,7 +39,8 @@ detrend(
 )
 }
 \arguments{
-\item{x}{A data frame. For \code{check_heterogeneity()}, may also be a mixed model object.}
+\item{x}{A data frame. For \code{check_heterogeneity()}, may also be a mixed
+model object.}
 
 \item{select}{Character vector (or formula) with names of variables to select
 that should be group- and de-meaned. For \code{check_heterogeneity()}, if
@@ -212,7 +213,6 @@ head(x)
 x <- demean(iris, select = c("Sepal.Length", "binary", "Species"), group = "ID")
 head(x)
 
-check_heterogeneity(iris, select = c("Sepal.Length", "Petal.Length"), group = "ID")
 
 # demean interaction term x*y
 dat <- data.frame(

@@ -67,21 +67,6 @@ compute it by running \code{cor()} on the passed data.}
 \item{...}{Arguments passed to or from other methods.}
 
 \item{pca_results}{The output of the \code{principal_components()} function.}
-
-\item{object}{An object of class \code{parameters_pca} or
-\code{parameters_efa}}
-
-\item{newdata}{An optional data frame in which to look for variables with
-which to predict. If omitted, the fitted values are used.}
-
-\item{names}{Optional character vector to name columns of the returned data
-frame.}
-
-\item{keep_na}{Logical, if \code{TRUE}, predictions also return observations
-with missing values from the original data, hence the number of rows of
-predicted data and original data is equal.}
-
-\item{digits, labels}{Arguments for \code{print()}.}
 }
 \value{
 A data frame of loadings.

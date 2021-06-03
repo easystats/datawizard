@@ -167,7 +167,9 @@ standardize.AsIs <- standardize.numeric
 #'   existing variables are overwritten.
 #' @param suffix Character value, will be appended to variable (column) names of
 #'   `x`, if `x` is a data frame and `append = TRUE`.
-#' @param reference A dataframe or variable from which the centrality and deviation will be computed instead of from the input variable. Useful for standardizing a subset or new data according to another dataframe.
+#' @param reference A dataframe or variable from which the centrality and
+#'   deviation will be computed instead of from the input variable. Useful for
+#'   standardizing a subset or new data according to another dataframe.
 #'
 #' @section Model Standardization:
 #' If `x` is a model object, standardization is done by completely refitting the
@@ -384,7 +386,10 @@ standardize.grouped_df <- function(x,
 }
 
 #' @keywords internal
-.check_standardize_numeric <- function(x, name = NULL, verbose = TRUE, reference = NULL) {
+.check_standardize_numeric <- function(x,
+                                       name = NULL,
+                                       verbose = TRUE,
+                                       reference = NULL) {
   # Warning if only one value
   if (length(unique(x)) == 1 && is.null(reference)) {
     if (verbose) {

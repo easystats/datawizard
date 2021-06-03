@@ -1,4 +1,4 @@
-if (require("testthat") && require("effectsize")) {
+if (require("testthat")) {
 
   # standardize.numeric -----------------------------------------------------
   test_that("standardize.numeric", {

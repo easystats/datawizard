@@ -27,18 +27,8 @@
 #' @param standardize A logical value indicating whether the variables should be
 #'   standardized (centered and scaled) to have unit variance before the
 #'   analysis (in general, such scaling is advisable).
-#' @param object An object of class \code{parameters_pca} or
-#'   \code{parameters_efa}
-#' @param newdata An optional data frame in which to look for variables with
-#'   which to predict. If omitted, the fitted values are used.
-#' @param names Optional character vector to name columns of the returned data
-#'   frame.
-#' @param keep_na Logical, if \code{TRUE}, predictions also return observations
-#'   with missing values from the original data, hence the number of rows of
-#'   predicted data and original data is equal.
 #' @param ... Arguments passed to or from other methods.
 #' @param pca_results The output of the \code{principal_components()} function.
-#' @param digits,labels Arguments for \code{print()}.
 #' @inheritParams n_factors
 #'
 #' @details
@@ -429,4 +419,82 @@ principal_components.data.frame <- function(x,
   }
   if (isTRUE(na.rm)) x <- stats::na.omit(x)
   length(unique(x))
+}
+
+
+#' @keywords internal
+.safe_deparse <- function(string) {
+  paste0(sapply(deparse(string, width.cutoff = 500), trimws, simplify = TRUE), collapse = " ")
+}
+
+
+#' @keywords internal
+.sort_loadings <- function(loadings, cols = NULL) {
+  if (is.null(cols)) {
+    cols <- attributes(loadings)$loadings_columns
+  }
+
+  # Remove variable name column
+  x <- loadings[, cols, drop = FALSE]
+  row.names(x) <- NULL
+
+  # Initialize clusters
+  nitems <- nrow(x)
+  loads <- data.frame(item = seq(1:nitems), cluster = rep(0, nitems))
+
+  # first sort them into clusters: Find the maximum for each row and assign it to that cluster
+  loads$cluster <- apply(abs(x), 1, which.max)
+  ord <- sort(loads$cluster, index.return = TRUE)
+  x[1:nitems, ] <- x[ord$ix, ]
+
+  rownames(x)[1:nitems] <- rownames(x)[ord$ix]
+  total.ord <- ord$ix
+
+  # now sort column wise so that the loadings that have their highest loading on each cluster
+  items <- table(loads$cluster) # how many items are in each cluster?
+  first <- 1
+  item <- loads$item
+  for (i in 1:length(items)) {
+    if (items[i] > 0) {
+      last <- first + items[i] - 1
+      ord <- sort(abs(x[first:last, i]), decreasing = TRUE, index.return = TRUE)
+      x[first:last, ] <- x[item[ord$ix + first - 1], ]
+      loads[first:last, 1] <- item[ord$ix + first - 1]
+      rownames(x)[first:last] <- rownames(x)[ord$ix + first - 1]
+
+      total.ord[first:last] <- total.ord[ord$ix + first - 1]
+      first <- first + items[i]
+    }
+  }
+
+  order <- row.names(x)
+  loadings <- loadings[as.numeric(as.character(order)), ] # Arrange by max
+  row.names(loadings) <- NULL
+
+  loadings
+}
+
+#' @keywords internal
+.filter_loadings <- function(loadings, threshold = 0.2, loadings_columns = NULL) {
+  if (is.null(loadings_columns)) {
+    loadings_columns <- attributes(loadings)$loadings_columns
+  }
+
+
+  if (threshold == "max" | threshold >= 1) {
+    if (threshold == "max") {
+      for (row in 1:nrow(loadings)) {
+        maxi <- max(abs(loadings[row, loadings_columns, drop = FALSE]))
+        loadings[row, loadings_columns][abs(loadings[row, loadings_columns]) < maxi] <- NA
+      }
+    } else {
+      for (col in loadings_columns) {
+        loadings[utils::tail(order(abs(loadings[, col]), decreasing = TRUE), -round(threshold)), col] <- NA
+      }
+    }
+  } else {
+    loadings[, loadings_columns][abs(loadings[, loadings_columns]) < threshold] <- NA
+  }
+
+  loadings
 }

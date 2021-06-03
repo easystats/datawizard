@@ -10,7 +10,8 @@
 #'    While \code{demean()} always uses mean-centering, \code{degroup()} can
 #'    also use the mode or median for centering.
 #'
-#' @param x A data frame. For \code{check_heterogeneity()}, may also be a mixed model object.
+#' @param x A data frame. For \code{check_heterogeneity()}, may also be a mixed
+#'   model object.
 #' @param select Character vector (or formula) with names of variables to select
 #'   that should be group- and de-meaned. For \code{check_heterogeneity()}, if
 #'   \code{x} is a mixed model object, this argument be ignored.
@@ -197,7 +198,6 @@
 #' x <- demean(iris, select = c("Sepal.Length", "binary", "Species"), group = "ID")
 #' head(x)
 #'
-#' check_heterogeneity(iris, select = c("Sepal.Length", "Petal.Length"), group = "ID")
 #'
 #' # demean interaction term x*y
 #' dat <- data.frame(
@@ -211,7 +211,13 @@
 #' # or in formula-notation
 #' demean(dat, select = ~ a + x * y, group = ~ID)
 #' @export
-demean <- function(x, select, group, suffix_demean = "_within", suffix_groupmean = "_between", add_attributes = TRUE, verbose = TRUE) {
+demean <- function(x,
+                   select,
+                   group,
+                   suffix_demean = "_within",
+                   suffix_groupmean = "_between",
+                   add_attributes = TRUE,
+                   verbose = TRUE) {
   degroup(
     x = x,
     select = select,
@@ -231,7 +237,15 @@ demean <- function(x, select, group, suffix_demean = "_within", suffix_groupmean
 
 #' @rdname demean
 #' @export
-degroup <- function(x, select, group, center = "mean", suffix_demean = "_within", suffix_groupmean = "_between", add_attributes = TRUE, verbose = TRUE) {
+degroup <- function(x,
+                    select,
+                    group,
+                    center = "mean",
+                    suffix_demean = "_within",
+                    suffix_groupmean = "_between",
+                    add_attributes = TRUE,
+                    verbose = TRUE) {
+
   # ugly tibbles again...
   x <- as.data.frame(x)
 

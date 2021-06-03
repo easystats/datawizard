@@ -30,8 +30,6 @@ percentile. Winsorized estimators are usually more robust to outliers than
 their more standard forms.
 }
 \examples{
-library(correlation)
-
 winsorize(iris$Sepal.Length, threshold = 0.2)
 winsorize(iris, threshold = 0.2)
 }
