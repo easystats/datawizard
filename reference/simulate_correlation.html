@@ -175,25 +175,81 @@
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'></span>
 <span class='r-in'><span class='co'># Correlation --------------------------------</span></span>
 <span class='r-in'><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>simulate_correlation</span><span class='op'>(</span>r <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in check_if_installed("MASS")</span> could not find function "check_if_installed"</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>V1</span>, <span class='va'>data</span><span class='op'>$</span><span class='va'>V2</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in data$V1</span> object of type 'closure' is not subsettable</span>
+<span class='r-plt'><img src='simulate_correlation-1.png' alt='' width='700' height='433' /></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/cor.test.html'>cor.test</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>V1</span>, <span class='va'>data</span><span class='op'>$</span><span class='va'>V2</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in data$V1</span> object of type 'closure' is not subsettable</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> data:  data$V1 and data$V2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> t = 5.7155, df = 98, p-value = 1.18e-07</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 95 percent confidence interval:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  0.3366433 0.6341398</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> sample estimates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> cor </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0.5 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>V2</span> <span class='op'>~</span> <span class='va'>V1</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'object' in selecting a method for function 'summary': 'data' must be a data.frame, environment, or list</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Call:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> lm(formula = V2 ~ V1, data = data)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Residuals:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Min       1Q   Median       3Q      Max </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -2.02882 -0.61049  0.03943  0.48442  2.37198 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Coefficients:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>               Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> (Intercept) -4.996e-17  8.704e-02   0.000        1    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> V1           5.000e-01  8.748e-02   5.715 1.18e-07 ***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Residual standard error: 0.8704 on 98 degrees of freedom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Multiple R-squared:   0.25,	Adjusted R-squared:  0.2423 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> F-statistic: 32.67 on 1 and 98 DF,  p-value: 1.18e-07</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Specify mean and SD</span></span>
 <span class='r-in'><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>simulate_correlation</span><span class='op'>(</span>r <span class='op'>=</span> <span class='fl'>0.5</span>, n <span class='op'>=</span> <span class='fl'>50</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>, sd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.7</span>, <span class='fl'>1.7</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in check_if_installed("MASS")</span> could not find function "check_if_installed"</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/cor.test.html'>cor.test</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>V1</span>, <span class='va'>data</span><span class='op'>$</span><span class='va'>V2</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in data$V1</span> object of type 'closure' is not subsettable</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> data:  data$V1 and data$V2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> t = 4, df = 48, p-value = 0.000218</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 95 percent confidence interval:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  0.2574879 0.6832563</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> sample estimates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> cor </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0.5 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>V1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>V1</span><span class='op'>)</span><span class='op'>)</span>, <span class='fl'>1</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'x' in selecting a method for function 'mean': object of type 'closure' is not subsettable</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.0 0.7</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>V2</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>V2</span><span class='op'>)</span><span class='op'>)</span>, <span class='fl'>1</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'x' in selecting a method for function 'mean': object of type 'closure' is not subsettable</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1.0 1.7</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>V2</span> <span class='op'>~</span> <span class='va'>V1</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'object' in selecting a method for function 'summary': 'data' must be a data.frame, environment, or list</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Call:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> lm(formula = V2 ~ V1, data = data)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Residuals:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Min      1Q  Median      3Q     Max </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -4.8045 -1.0514  0.2121  1.0790  2.6263 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Coefficients:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> (Intercept)   1.0000     0.2104   4.754 1.86e-05 ***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> V1            1.2143     0.3036   4.000 0.000218 ***</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Residual standard error: 1.487 on 48 degrees of freedom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Multiple R-squared:   0.25,	Adjusted R-squared:  0.2344 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> F-statistic:    16 on 1 and 48 DF,  p-value: 0.000218</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Generate multiple variables</span></span>
 <span class='r-in'><span class='va'>cor_matrix</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span></span>
@@ -205,39 +261,70 @@
 <span class='r-in'><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>simulate_correlation</span><span class='op'>(</span>r <span class='op'>=</span> <span class='va'>cor_matrix</span>, names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"y"</span>, <span class='st'>"x1"</span>, <span class='st'>"x2"</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in check_if_installed("MASS")</span> could not find function "check_if_installed"</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in cor(data)</span> supply both 'x' and 'y' or a matrix-like 'x'</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      y  x1  x2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> y  1.0 0.2 0.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> x1 0.2 1.0 0.3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> x2 0.4 0.3 1.0</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x1</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'object' in selecting a method for function 'summary': 'data' must be a data.frame, environment, or list</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Call:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> lm(formula = y ~ x1, data = data)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Residuals:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Min       1Q   Median       3Q      Max </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -2.44479 -0.62085 -0.06829  0.71194  3.02957 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Coefficients:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>               Estimate Std. Error t value Pr(&gt;|t|)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> (Intercept) -1.443e-17  9.848e-02   0.000    1.000  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> x1           2.000e-01  9.897e-02   2.021    0.046 *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Residual standard error: 0.9848 on 98 degrees of freedom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Multiple R-squared:   0.04,	Adjusted R-squared:  0.0302 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> F-statistic: 4.083 on 1 and 98 DF,  p-value: 0.04604</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># t-test --------------------------------</span></span>
 <span class='r-in'><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>simulate_ttest</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>30</span>, d <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span></span>
 <span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in distribution_normal(n, 0, 1)</span> could not find function "distribution_normal"</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>V1</span>, <span class='va'>data</span><span class='op'>$</span><span class='va'>V0</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in data$V1</span> object of type 'closure' is not subsettable</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to min; returning Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to min; returning Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in plot.window(...)</span> need finite 'xlim' values</span>
+<span class='r-plt'><img src='simulate_correlation-2.png' alt='' width='700' height='433' /></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>V1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>V1</span><span class='op'>)</span><span class='op'>)</span>, <span class='fl'>1</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'x' in selecting a method for function 'mean': object of type 'closure' is not subsettable</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>argument is not numeric or logical: returning NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA NA</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/diff.html'>diff</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>V1</span> <span class='op'>~</span> <span class='va'>data</span><span class='op'>$</span><span class='va'>V0</span><span class='op'>)</span><span class='op'>$</span><span class='va'>estimate</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'x' in selecting a method for function 'diff': object of type 'closure' is not subsettable</span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'x' in selecting a method for function 'diff': invalid type (NULL) for variable 'data$V1'</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>V1</span> <span class='op'>~</span> <span class='va'>V0</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'object' in selecting a method for function 'summary': 'data' must be a data.frame, environment, or list</span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'object' in selecting a method for function 'summary': object 'V1' not found</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>V0</span> <span class='op'>~</span> <span class='va'>V1</span>, data <span class='op'>=</span> <span class='va'>data</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'object' in selecting a method for function 'summary': 'data' must be a data.frame, environment, or list</span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'object' in selecting a method for function 'summary': object 'V0' not found</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Difference --------------------------------</span></span>
 <span class='r-in'><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>simulate_difference</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>30</span>, d <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span></span>
 <span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in distribution_normal(round(n/2), -d/2, 1)</span> could not find function "distribution_normal"</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>V1</span>, <span class='va'>data</span><span class='op'>$</span><span class='va'>V0</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in data$V1</span> object of type 'closure' is not subsettable</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to min; returning Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to min; returning Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in plot.window(...)</span> need finite 'xlim' values</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>V1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>V1</span><span class='op'>)</span><span class='op'>)</span>, <span class='fl'>1</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'x' in selecting a method for function 'mean': object of type 'closure' is not subsettable</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>argument is not numeric or logical: returning NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] NA NA</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/diff.html'>diff</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>V1</span> <span class='op'>~</span> <span class='va'>data</span><span class='op'>$</span><span class='va'>V0</span><span class='op'>)</span><span class='op'>$</span><span class='va'>estimate</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'x' in selecting a method for function 'diff': object of type 'closure' is not subsettable</span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'x' in selecting a method for function 'diff': invalid type (NULL) for variable 'data$V1'</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>V1</span> <span class='op'>~</span> <span class='va'>V0</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'object' in selecting a method for function 'summary': 'data' must be a data.frame, environment, or list</span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'object' in selecting a method for function 'summary': object 'V1' not found</span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>V0</span> <span class='op'>~</span> <span class='va'>V1</span>, data <span class='op'>=</span> <span class='va'>data</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'object' in selecting a method for function 'summary': 'data' must be a data.frame, environment, or list</span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in h(simpleError(msg, call))</span> error in evaluating the argument 'object' in selecting a method for function 'summary': object 'V0' not found</span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
