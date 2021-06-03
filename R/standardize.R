@@ -41,10 +41,6 @@
 #' @examples
 #' # Data frames
 #' summary(standardize(swiss))
-#'
-#' # Models
-#' model <- lm(Infant.Mortality ~ Education * Fertility, data = swiss)
-#' coef(standardize(model))
 #' @export
 standardize <- function(x,
                         robust = FALSE,
