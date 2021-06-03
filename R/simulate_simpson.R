@@ -4,7 +4,7 @@
 #' and statistics, in which a trend appears in several different groups of data
 #' but disappears or reverses when these groups are combined.
 #'
-#' @inheritParams bayestestR::simulate_correlation
+#' @inheritParams simulate_correlation
 #' @param n The number of observations for each group to be generated (minimum
 #'   4).
 #' @param groups Number of groups (groups can be participants, clusters,
@@ -35,7 +35,7 @@ simulate_simpson <- function(n = 100,
 
   data <- data.frame()
   for (i in 1:groups) {
-    dat <- bayestestR::simulate_correlation(n = n, r = r)
+    dat <- simulate_correlation(n = n, r = r)
     dat$V1 <- dat$V1 + difference * i # (i * -sign(r))
     dat$V2 <- dat$V2 + difference * (i * -sign(r))
     dat$Group <- sprintf(paste0(group_prefix, "%0", nchar(trunc(abs(groups))), "d"), i)
