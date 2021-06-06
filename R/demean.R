@@ -392,9 +392,6 @@ degroup <- function(x,
 #' @export
 detrend <- degroup
 
-
-
-
 # helper ------------------
 
 .mode <- function(x) {
@@ -402,4 +399,9 @@ detrend <- degroup
   tab <- tabulate(match(x, uniqv))
   idx <- which.max(tab)
   uniqv[idx]
+}
+
+#' @keywords internal
+.safe_deparse <- function(string) {
+  paste0(sapply(deparse(string, width.cutoff = 500), trimws, simplify = TRUE), collapse = " ")
 }
