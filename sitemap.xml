@@ -31,18 +31,6 @@
     <loc>/reference/change_scale.html</loc>
   </url>
   <url>
-    <loc>/reference/check_clusterstructure.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check_factorstructure.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check_kmo.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check_sphericity_bartlett.html</loc>
-  </url>
-  <url>
     <loc>/reference/convert_data_to_numeric.html</loc>
   </url>
   <url>
@@ -70,55 +58,22 @@
     <loc>/reference/dot-data_frame.html</loc>
   </url>
   <url>
-    <loc>/reference/dot-n_factors_bartlett.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dot-n_factors_bentler.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dot-n_factors_cng.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dot-n_factors_mreg.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dot-n_factors_scree.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dot-n_factors_sescree.html</loc>
-  </url>
-  <url>
     <loc>/reference/format_text.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/n_clusters.html</loc>
-  </url>
-  <url>
-    <loc>/reference/n_factors.html</loc>
-  </url>
-  <url>
     <loc>/reference/normalize.html</loc>
   </url>
   <url>
-    <loc>/reference/principal_components.html</loc>
-  </url>
-  <url>
     <loc>/reference/ranktransform.html</loc>
-  </url>
-  <url>
-    <loc>/reference/reduce_parameters.html</loc>
   </url>
   <url>
     <loc>/reference/rescale_weights.html</loc>
   </url>
   <url>
     <loc>/reference/reshape_ci.html</loc>
-  </url>
-  <url>
-    <loc>/reference/reshape_loadings.html</loc>
   </url>
   <url>
     <loc>/reference/standardize.html</loc>
