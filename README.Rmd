@@ -74,12 +74,6 @@ remotes::install_github("easystats/datawizard")
 ### Reshape
 
 
-## Data cleaning
-
-## Data (pre)processing
-
-### Principal Component Analysis (PCA)
-
-### Factor analysis (FA)
+## Data proprties
 
 ## Miscellaneous

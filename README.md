@@ -37,3 +37,21 @@ remotes::install_github("easystats/datawizard")
 ```
 
 # Features
+
+## Datasets
+
+### Included datasets
+
+### Data simulation
+
+## Data wrangling
+
+### Select & filter
+
+### Transform
+
+### Reshape
+
+## Data proprties
+
+## Miscellaneous
