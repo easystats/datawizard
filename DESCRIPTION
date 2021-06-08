@@ -42,10 +42,13 @@ Imports:
     utils
 Suggests: 
     bayestestR,
+    boot,
     dplyr,
     gamm4,
     lme4,
     MASS,
+    mclust,
+    multimode,
     psych,
     rstanarm,
     sjstats,
