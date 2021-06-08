@@ -50,6 +50,7 @@ Suggests:
     mclust,
     multimode,
     psych,
+    purrr,
     rstanarm,
     sjstats,
     spelling,
