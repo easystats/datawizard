@@ -2,7 +2,7 @@
 output: github_document
 ---
 
-# `datawizard`:  Easy Data Wrangling <img src='man/figures/logo.png' align="right" height="139" />
+# `datawizard`: Easy Data Wrangling <img src='man/figures/logo.png' align="right" height="139" />
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 knitr::opts_chunk$set(
@@ -36,11 +36,33 @@ Type | Source | Command
 Release | CRAN | `install.packages("datawizard")`
 Development | GitHub | `remotes::install_github("easystats/datawizard")`
 
+# Citation
+
+To cite the package, run the following command:
+
+```{r, comment=""}
+citation("datawizard")
+```
+
 # Features
 
 ## Data wrangling 
 
 ### Select and filter
+
+The package provides helpers to select columns or filter rows meeting certain conditions:
+
+```{r}
+matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1))
+mtcars[matching_rows, ]
+```
+
+Or do other manipulations:
+
+```{r}
+head(data_addprefix(iris, "NEW_"))
+```
+
 
 ### Transform
 
@@ -66,6 +88,12 @@ anscombe
 winsorize(anscombe)
 ```
 
+To grand-mean center data
+
+```{r}
+center(anscombe)
+```
+
 To rank-transform data:
 
 ```{r}
@@ -76,7 +104,11 @@ head(trees)
 head(ranktransform(trees))
 ```
 
+To rescale a numeric variable to a new range:
 
+```{r}
+change_scale(c(0, 1, 5, -5, -2))
+```
 
 ### Reshape
 
@@ -119,6 +151,12 @@ Or even just a variable
 describe_distribution(mtcars$wt)
 ```
 
+There are also some additional data properties that can be computed using this package.
+
+```{r}
+x <- (-10:10)^3 + rnorm(21, 0, 100)
+smoothness(x, method = "diff")
+```
 
 # Contributing and Support
 

@@ -3,16 +3,16 @@ Package: datawizard
 Title: Easy Data Wrangling
 Version: 0.1.0
 Authors@R: 
-    c(person(given = "Daniel",
-             family = "Lüdecke",
-             role = "aut",
-             email = "d.luedecke@uke.de",
-             comment = c(ORCID = "0000-0002-8895-3206", Twitter = "@strengejacke")),
-      person(given = "Dominique",
+    c(person(given = "Dominique",
              family = "Makowski",
              role = "aut",
              email = "dom.makowski@gmail.com",
              comment = c(ORCID = "0000-0001-5375-9967", Twitter = "@Dom_Makowski")),
+      person(given = "Daniel",
+             family = "Lüdecke",
+             role = "aut",
+             email = "d.luedecke@uke.de",
+             comment = c(ORCID = "0000-0002-8895-3206", Twitter = "@strengejacke")),
       person(given = "Indrajeet",
              family = "Patil",
              role = c("aut", "cre"),
@@ -28,8 +28,10 @@ Authors@R:
              role = "aut",
              email = "brenton@wiernik.org",
              comment = c(ORCID = "0000-0001-9560-6336", Twitter = "@bmwiernik")))
-Maintainer: Indrajeet Patil <d.luedecke@uke.de>
-Description: Magic potions to clean and transform your data.
+Maintainer: Indrajeet Patil <patilindrajeet.science@gmail.com>
+Description: Magic potions to clean and transform your data. These
+    functions form the data wrangling backend for the packages in the
+    'easystats' ecosystem.
 License: GPL-3 | file LICENSE
 URL: https://easystats.github.io/datawizard/
 BugReports: https://github.com/easystats/datawizard/issues

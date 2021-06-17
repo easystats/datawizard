@@ -20,11 +20,64 @@ transform, and prepare your data for analysis.
 | Release     | CRAN   | `install.packages("datawizard")`                  |
 | Development | GitHub | `remotes::install_github("easystats/datawizard")` |
 
+# Citation
+
+To cite the package, run the following command:
+
+``` r
+citation("datawizard")
+
+To cite datawizard in publications use:
+
+  Makowski, Lüdecke, Patil, Ben-Shachar, & Wiernik (2021). datawizard:
+  Easy Data Wrangling. CRAN. Available from
+  https://easystats.github.io/datawizard/
+
+A BibTeX entry for LaTeX users is
+
+  @Article{,
+    title = {datawizard: Easy Data Wrangling},
+    author = {Dominique Makowski and Daniel Lüdecke and Indrajeet Patil and Mattan S. Ben-Shachar and Brenton M. Wiernik},
+    journal = {CRAN},
+    year = {2021},
+    note = {R package},
+    url = {https://easystats.github.io/datawizard/},
+  }
+```
+
 # Features
 
 ## Data wrangling
 
 ### Select and filter
+
+The package provides helpers to select columns or filter rows meeting
+certain conditions:
+
+``` r
+matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1))
+mtcars[matching_rows, ]
+#>                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+#> Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+#> Mazda RX4 Wag  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+#> Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+#> Ford Pantera L 15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+#> Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+#> Maserati Bora  15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+```
+
+Or do other manipulations:
+
+``` r
+head(data_addprefix(iris, "NEW_"))
+#>   NEW_Sepal.Length NEW_Sepal.Width NEW_Petal.Length NEW_Petal.Width NEW_Species
+#> 1              5.1             3.5              1.4             0.2      setosa
+#> 2              4.9             3.0              1.4             0.2      setosa
+#> 3              4.7             3.2              1.3             0.2      setosa
+#> 4              4.6             3.1              1.5             0.2      setosa
+#> 5              5.0             3.6              1.4             0.2      setosa
+#> 6              5.4             3.9              1.7             0.4      setosa
+```
 
 ### Transform
 
@@ -102,6 +155,24 @@ winsorize(anscombe)
 #> [11,]  6  6  6  8 5.68 6.13 6.08 6.89
 ```
 
+To grand-mean center data
+
+``` r
+center(anscombe)
+#>    x1 x2 x3 x4          y1         y2    y3         y4
+#> 1   1  1  1 -1  0.53909091  1.6390909 -0.04 -0.9209091
+#> 2  -1 -1 -1 -1 -0.55090909  0.6390909 -0.73 -1.7409091
+#> 3   4  4  4 -1  0.07909091  1.2390909  5.24  0.2090909
+#> 4   0  0  0 -1  1.30909091  1.2690909 -0.39  1.3390909
+#> 5   2  2  2 -1  0.82909091  1.7590909  0.31  0.9690909
+#> 6   5  5  5 -1  2.45909091  0.5990909  1.34 -0.4609091
+#> 7  -3 -3 -3 -1 -0.26090909 -1.3709091 -1.42 -2.2509091
+#> 8  -5 -5 -5 10 -3.24090909 -4.4009091 -2.11  4.9990909
+#> 9   3  3  3 -1  3.33909091  1.6290909  0.65 -1.9409091
+#> 10 -2 -2 -2 -1 -2.68090909 -0.2409091 -1.08  0.4090909
+#> 11 -4 -4 -4 -1 -1.82090909 -2.7609091 -1.77 -0.6109091
+```
+
 To rank-transform data:
 
 ``` r
@@ -124,6 +195,13 @@ head(ranktransform(trees))
 #> 4     4    8.5    5.0
 #> 5     5   25.5    7.0
 #> 6     6   28.0    9.0
+```
+
+To rescale a numeric variable to a new range:
+
+``` r
+change_scale(c(0, 1, 5, -5, -2))
+#> [1]  50  60 100   0  30
 ```
 
 ### Reshape
@@ -237,6 +315,17 @@ describe_distribution(mtcars$wt)
 #> Mean |   SD | IQR | Min | Max | Skewness | Kurtosis |  n | n_Missing
 #> --------------------------------------------------------------------
 #> 3.2  | 0.98 | 1.2 | 1.5 | 5.4 |     0.47 |     0.42 | 32 |         0
+```
+
+There are also some additional data properties that can be computed
+using this package.
+
+``` r
+x <- (-10:10)^3 + rnorm(21, 0, 100)
+smoothness(x, method = "diff")
+#> [1] 1.821163
+#> attr(,"class")
+#> [1] "parameters_smoothness" "numeric"
 ```
 
 # Contributing and Support

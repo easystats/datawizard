@@ -39,24 +39,24 @@ Safe and intuitive functions to manipulate dataframes.
 }
 \examples{
 # Rename columns
-data_rename(iris, "Sepal.Length", "length")
+head(data_rename(iris, "Sepal.Length", "length"))
 # data_rename(iris, "FakeCol", "length", safe=FALSE)  # This fails
-data_rename(iris, "FakeCol", "length") # This doesn't
-data_rename(iris, c("Sepal.Length", "Sepal.Width"), c("length", "width"))
+head(data_rename(iris, "FakeCol", "length")) # This doesn't
+head(data_rename(iris, c("Sepal.Length", "Sepal.Width"), c("length", "width")))
 
 # Find columns names by pattern
-data_findcols(iris, starts_with = "Sepal")
-data_findcols(iris, ends_with = "Width")
-data_findcols(iris, pattern = "\\\\.")
+head(data_findcols(iris, starts_with = "Sepal"))
+head(data_findcols(iris, ends_with = "Width"))
+head(data_findcols(iris, pattern = "\\\\."))
 
 # Remove columns
-data_remove(iris, "Sepal.Length")
+head(data_remove(iris, "Sepal.Length"))
 
 # Reorder columns
-data_reorder(iris, c("Species", "Sepal.Length"))
-data_reorder(iris, c("Species", "dupa"))
+head(data_reorder(iris, c("Species", "Sepal.Length")))
+head(data_reorder(iris, c("Species", "dupa")))
 
 # Add prefix / suffix
-data_addprefix(iris, "NEW_")
-data_addsuffix(iris, "_OLD")
+head(data_addprefix(iris, "NEW_"))
+head(data_addsuffix(iris, "_OLD"))
 }
