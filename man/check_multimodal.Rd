@@ -19,7 +19,7 @@ it always returns a significant result (suggesting that the distribution is
 multimodal). A better method might be needed here.
 }
 \examples{
-\dontrun{
+\donttest{
 if (require("multimode")) {
   # Univariate
   x <- rnorm(1000)
@@ -46,9 +46,9 @@ if (require("multimode") && require("mclust")) {
   check_multimodal(m)
 }
 }
+
 }
 \references{
-\itemize{
-  \item Ameijeiras-Alonso, J., Crujeiras, R. M., \& Rodríguez-Casal, A. (2019). Mode testing, critical bandwidth and excess mass. Test, 28(3), 900-919.
-}
+Ameijeiras-Alonso, J., Crujeiras, R. M., \& Rodríguez-Casal, A. (2019). Mode
+testing, critical bandwidth and excess mass. Test, 28(3), 900-919.
 }

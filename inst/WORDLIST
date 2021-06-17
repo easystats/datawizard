@@ -32,10 +32,10 @@ Winsorized
 Winsorizing
 al
 behaviour
-codecov
 de
 df
 doi
+easystats
 endogeneity
 et
 https
@@ -65,4 +65,5 @@ unstandardize
 untransformed
 wikipedia
 winsorization
+winsorize
 wockety
