@@ -14,3 +14,40 @@ template:
   params:
     bootswatch: flatly
 
+reference:
+
+  - title: Data wrangling
+  - contents:
+      - starts_with("data_")
+
+  - title: Data transformation
+  - contents:
+      - adjust
+      - center
+      - change_scale
+      - convert_data_to_numeric
+      - normalize
+      - ranktransform
+      - rescale_weights
+      - reshape_ci
+      - standardize
+      - to_numeric
+      - unstandardize
+      - winsorize
+
+  - title: Data properties
+  - contents:
+      - check_multimodal
+      - describe_distribution
+      - kurtosis
+      - skewness
+
+  - title: Text formatting
+  - contents:
+      - starts_with("text_")
+      - starts_with("format_")
+
+  - title: Display helpers
+  - contents:
+      - contains("print")
+      - contains("summary")
