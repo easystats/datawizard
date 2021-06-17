@@ -76,4 +76,11 @@ remotes::install_github("easystats/datawizard")
 
 ## Data proprties
 
+### Describe a Distribution
+
+```{r, warning=FALSE, message=FALSE}
+data(iris)
+describe_distribution(iris)
+```
+
 ## Miscellaneous

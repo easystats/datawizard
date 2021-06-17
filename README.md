@@ -54,4 +54,17 @@ remotes::install_github("easystats/datawizard")
 
 ## Data proprties
 
+### Describe a Distribution
+
+``` r
+data(iris)
+describe_distribution(iris)
+#> Variable     | Mean |   SD |  IQR | Min | Max | Skewness | Kurtosis |   n | n_Missing
+#> -------------------------------------------------------------------------------------
+#> Sepal.Length |  5.8 | 0.83 | 1.30 | 4.3 | 7.9 |     0.31 |    -0.55 | 150 |         0
+#> Sepal.Width  |  3.1 | 0.44 | 0.52 | 2.0 | 4.4 |     0.32 |     0.23 | 150 |         0
+#> Petal.Length |  3.8 | 1.77 | 3.52 | 1.0 | 6.9 |    -0.27 |    -1.40 | 150 |         0
+#> Petal.Width  |  1.2 | 0.76 | 1.50 | 0.1 | 2.5 |    -0.10 |    -1.34 | 150 |         0
+```
+
 ## Miscellaneous
