@@ -44,6 +44,40 @@ Development | GitHub | `remotes::install_github("easystats/datawizard")`
 
 ### Transform
 
+The packages also contains multiple functions to help transform data.
+
+For example, to standardize (*z*-score) data:
+
+```{r}
+# before
+summary(swiss)
+
+# after
+summary(standardize(swiss))
+```
+
+To winsorize data:
+
+```{r}
+# before
+anscombe
+
+# after
+winsorize(anscombe)
+```
+
+To rank-transform data:
+
+```{r}
+# before
+head(trees)
+
+# after
+head(ranktransform(trees))
+```
+
+
+
 ### Reshape
 
 A common data wrangling task is to reshape data.

@@ -28,6 +28,104 @@ transform, and prepare your data for analysis.
 
 ### Transform
 
+The packages also contains multiple functions to help transform data.
+
+For example, to standardize (*z*-score) data:
+
+``` r
+# before
+summary(swiss)
+#>    Fertility      Agriculture     Examination      Education    
+#>  Min.   :35.00   Min.   : 1.20   Min.   : 3.00   Min.   : 1.00  
+#>  1st Qu.:64.70   1st Qu.:35.90   1st Qu.:12.00   1st Qu.: 6.00  
+#>  Median :70.40   Median :54.10   Median :16.00   Median : 8.00  
+#>  Mean   :70.14   Mean   :50.66   Mean   :16.49   Mean   :10.98  
+#>  3rd Qu.:78.45   3rd Qu.:67.65   3rd Qu.:22.00   3rd Qu.:12.00  
+#>  Max.   :92.50   Max.   :89.70   Max.   :37.00   Max.   :53.00  
+#>     Catholic       Infant.Mortality
+#>  Min.   :  2.150   Min.   :10.80   
+#>  1st Qu.:  5.195   1st Qu.:18.15   
+#>  Median : 15.140   Median :20.00   
+#>  Mean   : 41.144   Mean   :19.94   
+#>  3rd Qu.: 93.125   3rd Qu.:21.70   
+#>  Max.   :100.000   Max.   :26.60
+
+# after
+summary(standardize(swiss))
+#>    Fertility         Agriculture       Examination         Education      
+#>  Min.   :-2.81327   Min.   :-2.1778   Min.   :-1.69084   Min.   :-1.0378  
+#>  1st Qu.:-0.43569   1st Qu.:-0.6499   1st Qu.:-0.56273   1st Qu.:-0.5178  
+#>  Median : 0.02061   Median : 0.1515   Median :-0.06134   Median :-0.3098  
+#>  Mean   : 0.00000   Mean   : 0.0000   Mean   : 0.00000   Mean   : 0.0000  
+#>  3rd Qu.: 0.66504   3rd Qu.: 0.7481   3rd Qu.: 0.69074   3rd Qu.: 0.1062  
+#>  Max.   : 1.78978   Max.   : 1.7190   Max.   : 2.57094   Max.   : 4.3702  
+#>     Catholic       Infant.Mortality  
+#>  Min.   :-0.9350   Min.   :-3.13886  
+#>  1st Qu.:-0.8620   1st Qu.:-0.61543  
+#>  Median :-0.6235   Median : 0.01972  
+#>  Mean   : 0.0000   Mean   : 0.00000  
+#>  3rd Qu.: 1.2464   3rd Qu.: 0.60337  
+#>  Max.   : 1.4113   Max.   : 2.28566
+```
+
+To winsorize data:
+
+``` r
+# before
+anscombe
+#>    x1 x2 x3 x4    y1   y2    y3    y4
+#> 1  10 10 10  8  8.04 9.14  7.46  6.58
+#> 2   8  8  8  8  6.95 8.14  6.77  5.76
+#> 3  13 13 13  8  7.58 8.74 12.74  7.71
+#> 4   9  9  9  8  8.81 8.77  7.11  8.84
+#> 5  11 11 11  8  8.33 9.26  7.81  8.47
+#> 6  14 14 14  8  9.96 8.10  8.84  7.04
+#> 7   6  6  6  8  7.24 6.13  6.08  5.25
+#> 8   4  4  4 19  4.26 3.10  5.39 12.50
+#> 9  12 12 12  8 10.84 9.13  8.15  5.56
+#> 10  7  7  7  8  4.82 7.26  6.42  7.91
+#> 11  5  5  5  8  5.68 4.74  5.73  6.89
+
+# after
+winsorize(anscombe)
+#>       x1 x2 x3 x4   y1   y2   y3   y4
+#>  [1,] 10 10 10  8 8.04 9.13 7.46 6.58
+#>  [2,]  8  8  8  8 6.95 8.14 6.77 5.76
+#>  [3,] 12 12 12  8 7.58 8.74 8.15 7.71
+#>  [4,]  9  9  9  8 8.81 8.77 7.11 8.47
+#>  [5,] 11 11 11  8 8.33 9.13 7.81 8.47
+#>  [6,] 12 12 12  8 8.81 8.10 8.15 7.04
+#>  [7,]  6  6  6  8 7.24 6.13 6.08 5.76
+#>  [8,]  6  6  6  8 5.68 6.13 6.08 8.47
+#>  [9,] 12 12 12  8 8.81 9.13 8.15 5.76
+#> [10,]  7  7  7  8 5.68 7.26 6.42 7.91
+#> [11,]  6  6  6  8 5.68 6.13 6.08 6.89
+```
+
+To rank-transform data:
+
+``` r
+# before
+head(trees)
+#>   Girth Height Volume
+#> 1   8.3     70   10.3
+#> 2   8.6     65   10.3
+#> 3   8.8     63   10.2
+#> 4  10.5     72   16.4
+#> 5  10.7     81   18.8
+#> 6  10.8     83   19.7
+
+# after
+head(ranktransform(trees))
+#>   Girth Height Volume
+#> 1     1    6.0    2.5
+#> 2     2    3.0    2.5
+#> 3     3    1.0    1.0
+#> 4     4    8.5    5.0
+#> 5     5   25.5    7.0
+#> 6     6   28.0    9.0
+```
+
 ### Reshape
 
 A common data wrangling task is to reshape data.
