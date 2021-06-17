@@ -118,13 +118,101 @@
 <div id="transform" class="section level3">
 <h3 class="hasAnchor">
 <a href="#transform" class="anchor" aria-hidden="true"></a>Transform</h3>
+<p>The packages also contains multiple functions to help transform data.</p>
+<p>For example, to standardize (<em>z</em>-score) data:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># before</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">swiss</span><span class="op">)</span>
+<span class="co">#&gt;    Fertility      Agriculture     Examination      Education    </span>
+<span class="co">#&gt;  Min.   :35.00   Min.   : 1.20   Min.   : 3.00   Min.   : 1.00  </span>
+<span class="co">#&gt;  1st Qu.:64.70   1st Qu.:35.90   1st Qu.:12.00   1st Qu.: 6.00  </span>
+<span class="co">#&gt;  Median :70.40   Median :54.10   Median :16.00   Median : 8.00  </span>
+<span class="co">#&gt;  Mean   :70.14   Mean   :50.66   Mean   :16.49   Mean   :10.98  </span>
+<span class="co">#&gt;  3rd Qu.:78.45   3rd Qu.:67.65   3rd Qu.:22.00   3rd Qu.:12.00  </span>
+<span class="co">#&gt;  Max.   :92.50   Max.   :89.70   Max.   :37.00   Max.   :53.00  </span>
+<span class="co">#&gt;     Catholic       Infant.Mortality</span>
+<span class="co">#&gt;  Min.   :  2.150   Min.   :10.80   </span>
+<span class="co">#&gt;  1st Qu.:  5.195   1st Qu.:18.15   </span>
+<span class="co">#&gt;  Median : 15.140   Median :20.00   </span>
+<span class="co">#&gt;  Mean   : 41.144   Mean   :19.94   </span>
+<span class="co">#&gt;  3rd Qu.: 93.125   3rd Qu.:21.70   </span>
+<span class="co">#&gt;  Max.   :100.000   Max.   :26.60</span>
+
+<span class="co"># after</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="reference/standardize.html">standardize</a></span><span class="op">(</span><span class="va">swiss</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;    Fertility         Agriculture       Examination         Education      </span>
+<span class="co">#&gt;  Min.   :-2.81327   Min.   :-2.1778   Min.   :-1.69084   Min.   :-1.0378  </span>
+<span class="co">#&gt;  1st Qu.:-0.43569   1st Qu.:-0.6499   1st Qu.:-0.56273   1st Qu.:-0.5178  </span>
+<span class="co">#&gt;  Median : 0.02061   Median : 0.1515   Median :-0.06134   Median :-0.3098  </span>
+<span class="co">#&gt;  Mean   : 0.00000   Mean   : 0.0000   Mean   : 0.00000   Mean   : 0.0000  </span>
+<span class="co">#&gt;  3rd Qu.: 0.66504   3rd Qu.: 0.7481   3rd Qu.: 0.69074   3rd Qu.: 0.1062  </span>
+<span class="co">#&gt;  Max.   : 1.78978   Max.   : 1.7190   Max.   : 2.57094   Max.   : 4.3702  </span>
+<span class="co">#&gt;     Catholic       Infant.Mortality  </span>
+<span class="co">#&gt;  Min.   :-0.9350   Min.   :-3.13886  </span>
+<span class="co">#&gt;  1st Qu.:-0.8620   1st Qu.:-0.61543  </span>
+<span class="co">#&gt;  Median :-0.6235   Median : 0.01972  </span>
+<span class="co">#&gt;  Mean   : 0.0000   Mean   : 0.00000  </span>
+<span class="co">#&gt;  3rd Qu.: 1.2464   3rd Qu.: 0.60337  </span>
+<span class="co">#&gt;  Max.   : 1.4113   Max.   : 2.28566</span></code></pre></div>
+<p>To winsorize data:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># before</span>
+<span class="va">anscombe</span>
+<span class="co">#&gt;    x1 x2 x3 x4    y1   y2    y3    y4</span>
+<span class="co">#&gt; 1  10 10 10  8  8.04 9.14  7.46  6.58</span>
+<span class="co">#&gt; 2   8  8  8  8  6.95 8.14  6.77  5.76</span>
+<span class="co">#&gt; 3  13 13 13  8  7.58 8.74 12.74  7.71</span>
+<span class="co">#&gt; 4   9  9  9  8  8.81 8.77  7.11  8.84</span>
+<span class="co">#&gt; 5  11 11 11  8  8.33 9.26  7.81  8.47</span>
+<span class="co">#&gt; 6  14 14 14  8  9.96 8.10  8.84  7.04</span>
+<span class="co">#&gt; 7   6  6  6  8  7.24 6.13  6.08  5.25</span>
+<span class="co">#&gt; 8   4  4  4 19  4.26 3.10  5.39 12.50</span>
+<span class="co">#&gt; 9  12 12 12  8 10.84 9.13  8.15  5.56</span>
+<span class="co">#&gt; 10  7  7  7  8  4.82 7.26  6.42  7.91</span>
+<span class="co">#&gt; 11  5  5  5  8  5.68 4.74  5.73  6.89</span>
+
+<span class="co"># after</span>
+<span class="fu"><a href="reference/winsorize.html">winsorize</a></span><span class="op">(</span><span class="va">anscombe</span><span class="op">)</span>
+<span class="co">#&gt;       x1 x2 x3 x4   y1   y2   y3   y4</span>
+<span class="co">#&gt;  [1,] 10 10 10  8 8.04 9.13 7.46 6.58</span>
+<span class="co">#&gt;  [2,]  8  8  8  8 6.95 8.14 6.77 5.76</span>
+<span class="co">#&gt;  [3,] 12 12 12  8 7.58 8.74 8.15 7.71</span>
+<span class="co">#&gt;  [4,]  9  9  9  8 8.81 8.77 7.11 8.47</span>
+<span class="co">#&gt;  [5,] 11 11 11  8 8.33 9.13 7.81 8.47</span>
+<span class="co">#&gt;  [6,] 12 12 12  8 8.81 8.10 8.15 7.04</span>
+<span class="co">#&gt;  [7,]  6  6  6  8 7.24 6.13 6.08 5.76</span>
+<span class="co">#&gt;  [8,]  6  6  6  8 5.68 6.13 6.08 8.47</span>
+<span class="co">#&gt;  [9,] 12 12 12  8 8.81 9.13 8.15 5.76</span>
+<span class="co">#&gt; [10,]  7  7  7  8 5.68 7.26 6.42 7.91</span>
+<span class="co">#&gt; [11,]  6  6  6  8 5.68 6.13 6.08 6.89</span></code></pre></div>
+<p>To rank-transform data:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># before</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">trees</span><span class="op">)</span>
+<span class="co">#&gt;   Girth Height Volume</span>
+<span class="co">#&gt; 1   8.3     70   10.3</span>
+<span class="co">#&gt; 2   8.6     65   10.3</span>
+<span class="co">#&gt; 3   8.8     63   10.2</span>
+<span class="co">#&gt; 4  10.5     72   16.4</span>
+<span class="co">#&gt; 5  10.7     81   18.8</span>
+<span class="co">#&gt; 6  10.8     83   19.7</span>
+
+<span class="co"># after</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="reference/ranktransform.html">ranktransform</a></span><span class="op">(</span><span class="va">trees</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;   Girth Height Volume</span>
+<span class="co">#&gt; 1     1    6.0    2.5</span>
+<span class="co">#&gt; 2     2    3.0    2.5</span>
+<span class="co">#&gt; 3     3    1.0    1.0</span>
+<span class="co">#&gt; 4     4    8.5    5.0</span>
+<span class="co">#&gt; 5     5   25.5    7.0</span>
+<span class="co">#&gt; 6     6   28.0    9.0</span></code></pre></div>
 </div>
 <div id="reshape" class="section level3">
 <h3 class="hasAnchor">
 <a href="#reshape" class="anchor" aria-hidden="true"></a>Reshape</h3>
 <p>A common data wrangling task is to reshape data.</p>
 <p>Either to go from wide/Cartesian to long/tidy format</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/datawizard/" class="external-link">datawizard</a></span><span class="op">)</span>
 
 <span class="va">wide_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
@@ -182,7 +270,7 @@
 <span class="co">#&gt; 49   X4 -1.87050006</span>
 <span class="co">#&gt; 50   X5  1.80958455</span></code></pre></div>
 <p>or the other way</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">long_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/data_to_long.html">data_to_long</a></span><span class="op">(</span><span class="va">wide_data</span>, rows_to <span class="op">=</span> <span class="st">"Row_ID"</span><span class="op">)</span> <span class="co"># Save row number</span>
 
 <span class="fu"><a href="reference/data_to_long.html">data_to_wide</a></span><span class="op">(</span><span class="va">long_data</span>,
@@ -207,7 +295,7 @@
 <h2 class="hasAnchor">
 <a href="#data-proprties" class="anchor" aria-hidden="true"></a>Data proprties</h2>
 <p><code>datawizard</code> provides a way to provide comprehensive descriptive summary for all variables in a dataframe:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>
 <span class="fu"><a href="reference/describe_distribution.html">describe_distribution</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>
 <span class="co">#&gt; Variable     | Mean |   SD |  IQR | Min | Max | Skewness | Kurtosis |   n | n_Missing</span>
@@ -217,7 +305,7 @@
 <span class="co">#&gt; Petal.Length |  3.8 | 1.77 | 3.52 | 1.0 | 6.9 |    -0.27 |    -1.40 | 150 |         0</span>
 <span class="co">#&gt; Petal.Width  |  1.2 | 0.76 | 1.50 | 0.1 | 2.5 |    -0.10 |    -1.34 | 150 |         0</span></code></pre></div>
 <p>Or even just a variable</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/describe_distribution.html">describe_distribution</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">wt</span><span class="op">)</span>
 <span class="co">#&gt; Mean |   SD | IQR | Min | Max | Skewness | Kurtosis |  n | n_Missing</span>
 <span class="co">#&gt; --------------------------------------------------------------------</span>
