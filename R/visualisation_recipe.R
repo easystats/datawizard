@@ -1,11 +1,10 @@
 #' Prepare objects for visualisation
 #'
-#' This function prepares objects for visualisation by returning a list of layers with data and geoms that can be easily plotted using for instance \code{ggplot2}. See the documentation for your object's class:
-#' \itemize{
-#'  \item{\link[=modelbased:visualisation_recipe.estimate_predicted]{modelbased} (\code{estimate_means}, \code{estimate_contrasts}, \code{estimate_slopes}, \code{estimate_predicted}, \code{estimate_grouplevel})}
-#' }
+#' This function prepares objects for visualisation by returning a list of
+#' layers with data and geoms that can be easily plotted using for instance
+#' \code{ggplot2}. See the documentation for your object's class:
 #'
-#' @param x An easystats object.
+#' @param x An 'easystats' object.
 #' @param ... Other arguments passed to other functions.
 #'
 #' @export

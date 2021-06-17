@@ -48,6 +48,7 @@ Suggests:
     boot,
     dplyr,
     gamm4,
+    ggplot2,
     lme4,
     MASS,
     mclust,
@@ -55,6 +56,7 @@ Suggests:
     psych,
     purrr,
     rstanarm,
+    see,
     sjstats,
     spelling,
     testthat (>= 3.0.0)

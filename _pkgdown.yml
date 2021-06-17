@@ -49,7 +49,6 @@ reference:
       - starts_with("text_")
       - starts_with("format_")
 
-  - title: Display helpers
+  - title: Visualization helpers
   - contents:
-      - contains("print")
-      - contains("summary")
+      - visualisation_recipe
