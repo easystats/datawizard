@@ -1,7 +1,6 @@
 # function to evaluate dots in a tidyselect-style and return
 # the variable names as character vector
 .get_dot_data <- function(dat, dots, verbose = TRUE) {
-
   if (!is.data.frame(dat) || length(dots) == 0) {
     return(dat)
   }
@@ -36,18 +35,19 @@
 
       # from-to token
     } else if (grepl(":", i, fixed = TRUE)) {
-
       tmp <- unlist(strsplit(i, ":", fixed = TRUE))
 
-      start <- if (.is_num_chr(tmp[1]))
+      start <- if (.is_num_chr(tmp[1])) {
         as.numeric(tmp[1])
-      else
+      } else {
         which(columns == tmp[1])
+      }
 
-      end <- if (.is_num_chr(tmp[2]))
+      end <- if (.is_num_chr(tmp[2])) {
         as.numeric(tmp[2])
-      else
+      } else {
         which(columns == tmp[2])
+      }
 
       columns[start:end]
 
@@ -58,12 +58,13 @@
   }))
 
   x <- unlist(lapply(x, function(i) {
-    if (.is_num_chr(i))
+    if (.is_num_chr(i)) {
       columns[as.numeric(i)]
-    else if (.is_num_fac(i))
+    } else if (.is_num_fac(i)) {
       columns[as.numeric(as.character(i))]
-    else
+    } else {
       i
+    }
   }))
 
   not_found <- setdiff(x, columns)
@@ -74,7 +75,8 @@
       length(not_found),
       paste0(not_found, collapse = ", ")
     ),
-    color = "red")
+    color = "red"
+    )
   }
 
   dat[, intersect(x, columns), drop = FALSE]

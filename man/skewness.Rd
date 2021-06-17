@@ -69,7 +69,8 @@ for the relationship of skewness and distributions are:
 (\cite{https://en.wikipedia.org/wiki/Skewness})
 }
 \subsection{Types of Skewness}{
-\code{skewness()} supports three different methods for estimating skewness, as discussed in \cite{Joanes and Gill (1988)}:
+\code{skewness()} supports three different methods for estimating skewness,
+as discussed in \cite{Joanes and Gill (1988)}:
 \itemize{
 \item Type "1" is the "classical" method, which is \code{g1 = (sum((x -
 mean(x))^3) / n) / (sum((x - mean(x))^2) / n)^1.5}
@@ -83,11 +84,12 @@ usually return
 }
 }
 \subsection{Kurtosis}{
-The \code{kurtosis} is a measure of "tailedness" of a distribution. A distribution
-with a kurtosis values of about zero is called "mesokurtic". A kurtosis value
-larger than zero indicates a "leptokurtic" distribution with \emph{fatter} tails.
-A kurtosis value below zero indicates a "platykurtic" distribution with \emph{thinner}
-tails (\cite{https://en.wikipedia.org/wiki/Kurtosis}).
+The \code{kurtosis} is a measure of "tailedness" of a distribution. A
+distribution with a kurtosis values of about zero is called "mesokurtic". A
+kurtosis value larger than zero indicates a "leptokurtic" distribution with
+\emph{fatter} tails. A kurtosis value below zero indicates a "platykurtic"
+distribution with \emph{thinner} tails
+(\cite{https://en.wikipedia.org/wiki/Kurtosis}).
 }
 \subsection{Types of Kurtosis}{
 \code{kurtosis()} supports three different methods for estimating kurtosis,

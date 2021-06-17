@@ -5,7 +5,7 @@
 \alias{normalize.numeric}
 \alias{normalize.grouped_df}
 \alias{normalize.data.frame}
-\title{Normalize numeric variable to \[0-1\] range}
+\title{Normalize numeric variable to 0-1 range}
 \usage{
 normalize(x, ...)
 
@@ -66,9 +66,10 @@ normalize(c(0, 1, 5, -5, -2))
 normalize(c(0, 1, 5, -5, -2), include_bounds = FALSE)
 
 head(normalize(trees))
+
 }
 \references{
-- Smithson M, Verkuilen J (2006). A Better Lemon Squeezer? Maximum-Likelihood
+Smithson M, Verkuilen J (2006). A Better Lemon Squeezer? Maximum-Likelihood
 Regression with Beta-Distributed Dependent Variables. Psychological Methods,
 11(1), 54–71.
 }

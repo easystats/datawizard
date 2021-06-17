@@ -2,12 +2,13 @@
 output: github_document
 ---
 
-# datawizard <img src='man/figures/logo.png' align="right" height="139" />
+# `datawizard`:  Easy Data Wrangling <img src='man/figures/logo.png' align="right" height="139" />
 
-```{r, echo = FALSE, warning=FALSE, message=FALSE}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   dpi = 300,
+  out.width = "100%",
   fig.path = "man/figures/",
   comment = "#>"
 )
@@ -23,64 +24,73 @@ library(datawizard)
 
 ***Hockety pockety wockety wack, prepare this data forth and back*** :sparkles:
 
-
 `datawizard` is a lightweight package to easily manipulate, clean, transform, and prepare your data for analysis.
 
 <img src='https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif' height="150" />
 
 
-## Installation
+# Installation
 
-[![CRAN](http://www.r-pkg.org/badges/version/datawizard)](https://cran.r-project.org/package=datawizard)
-![Tests](https://github.com/easystats/datawizard/workflows/R-check/badge.svg)
-[![codecov](https://codecov.io/gh/easystats/datawizard/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/datawizard)
-
-
-<!-- Run the following to install the stable release of **modelbased** from CRAN: -->
-
-<!-- ```{r, warning=FALSE, message=FALSE, eval=FALSE} -->
-<!-- install.packages("modelbased") -->
-<!-- ``` -->
-
-<!-- Or this one to install the latest development version: -->
-
-<!-- ```{r, warning=FALSE, message=FALSE, eval=FALSE} -->
-<!-- install.packages("remotes") -->
-<!-- remotes::install_github("easystats/modelbased") -->
-<!-- ``` -->
-
-Run the following to install **datawizard**:
-
-```{r, warning=FALSE, message=FALSE, eval=FALSE}
-install.packages("remotes")
-remotes::install_github("easystats/datawizard")
-```
+Type | Source | Command
+---|---|---
+Release | CRAN | `install.packages("datawizard")`
+Development | GitHub | `remotes::install_github("easystats/datawizard")`
 
 # Features
 
-## Datasets
-
-### Included datasets
-
-### Data simulation
-
-
 ## Data wrangling 
 
-### Select \& filter
+### Select and filter
 
 ### Transform
 
 ### Reshape
 
+A common data wrangling task is to reshape data.
+
+Either to go from wide/Cartesian to long/tidy format
+
+```{r}
+library(datawizard)
+
+wide_data <- data.frame(replicate(5, rnorm(10)))
+
+data_to_long(wide_data)
+```
+
+or the other way
+
+```{r}
+long_data <- data_to_long(wide_data, rows_to = "Row_ID") # Save row number
+
+data_to_wide(long_data,
+  colnames_from = "Name",
+  values_from = "Value",
+  rows_from = "Row_ID"
+)
+```
 
 ## Data proprties
 
-### Describe a Distribution
+`datawizard` provides a way to provide comprehensive descriptive summary for all variables in a dataframe:
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 data(iris)
 describe_distribution(iris)
 ```
 
-## Miscellaneous
+Or even just a variable
+
+```{r}
+describe_distribution(mtcars$wt)
+```
+
+
+# Contributing and Support
+
+In case you want to file an issue or contribute in another way to the package, please follow [this guide](https://github.com/easystats/datawizard/blob/master/.github/CONTRIBUTING.md). For questions about the functionality, you may either contact us via email or also file an issue.
+
+# Code of Conduct
+
+Please note that this project is released with a 
+[Contributor Code of Conduct](https://easystats.github.io/datawizard/CODE_OF_CONDUCT.html). By participating in this project you agree to abide by its terms.

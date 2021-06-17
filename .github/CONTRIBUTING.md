@@ -1,6 +1,6 @@
-# Contributing to parameters
+# Contributing to datawizard
 
-This outlines how to propose a change to **parameters**. 
+This outlines how to propose a change to **datawizard**. 
 
 ## Fixing typos
 
@@ -15,10 +15,10 @@ bug, you may also create an associated issue. If possible, try to illustrate you
 
 *  Please create a Git branch for each pull request (PR).
 *  Your contributed code should roughly follow the [R style guide](http://style.tidyverse.org), but in particular our [**easystats convention of code-style**](https://github.com/easystats/easystats#convention-of-code-style).
-*  parameters uses [roxygen2](https://cran.r-project.org/package=roxygen2), with
+*  datawizard uses [roxygen2](https://cran.r-project.org/package=roxygen2), with
 [Markdown syntax](https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html),
 for documentation.
-*  parameters uses [testthat](https://cran.r-project.org/package=testthat). Adding tests to the PR makes it easier for me to merge your PR into the code base.
+*  datawizard uses [testthat](https://cran.r-project.org/package=testthat). Adding tests to the PR makes it easier for me to merge your PR into the code base.
 *  If your PR is a user-visible change, you may add a bullet to the top of `NEWS.md` describing the changes made. You may optionally add your GitHub username, and links to relevant issue(s)/PR(s).
 
 ## Code of Conduct

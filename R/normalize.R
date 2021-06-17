@@ -1,4 +1,4 @@
-#' Normalize numeric variable to \[0-1\] range
+#' Normalize numeric variable to 0-1 range
 #'
 #' Performs a normalization of data, i.e., it scales variables in the range 0 -
 #' 1. This is a special case of [change_scale()].
@@ -26,7 +26,7 @@
 #'
 #' head(normalize(trees))
 #' @references
-#' - Smithson M, Verkuilen J (2006). A Better Lemon Squeezer? Maximum-Likelihood
+#' Smithson M, Verkuilen J (2006). A Better Lemon Squeezer? Maximum-Likelihood
 #' Regression with Beta-Distributed Dependent Variables. Psychological Methods,
 #' 11(1), 54–71.
 #'
@@ -38,9 +38,6 @@
 normalize <- function(x, ...) {
   UseMethod("normalize")
 }
-
-
-
 
 
 
@@ -89,11 +86,6 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
 
   out
 }
-
-
-
-
-
 
 
 
@@ -176,6 +168,7 @@ normalize.data.frame <- function(x,
   }
 
   x[select] <- lapply(x[select], normalize, include_bounds = include_bounds, verbose = verbose)
+
   x
 }
 
