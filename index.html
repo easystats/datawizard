@@ -73,54 +73,47 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="datawizard-" class="section level1">
+<div id="datawizard-easy-data-wrangling-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#datawizard-" class="anchor" aria-hidden="true"></a>datawizard <img src="reference/figures/logo.png" align="right" height="139">
+<a href="#datawizard-easy-data-wrangling-" class="anchor" aria-hidden="true"></a><code>datawizard</code>: Easy Data Wrangling <img src="reference/figures/logo.png" align="right" height="139">
 </h1></div>
 
 <p><strong><em>Hockety pockety wockety wack, prepare this data forth and back</em></strong> <span class="emoji" data-emoji="sparkles">✨</span></p>
 <p><code>datawizard</code> is a lightweight package to easily manipulate, clean, transform, and prepare your data for analysis.</p>
 <p><img src="https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif" height="150"></p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor" aria-hidden="true"></a>Installation</h2>
-<p><a href="https://cran.r-project.org/package=datawizard" class="external-link"><img src="http://www.r-pkg.org/badges/version/datawizard" alt="CRAN"></a> <img src="https://github.com/easystats/datawizard/workflows/R-check/badge.svg" alt="Tests"><a href="https://codecov.io/gh/easystats/datawizard" class="external-link"><img src="https://codecov.io/gh/easystats/datawizard/branch/master/graph/badge.svg" alt="codecov"></a></p>
-<!-- Run the following to install the stable release of **modelbased** from CRAN: -->
-<!-- ```{r, warning=FALSE, message=FALSE, eval=FALSE} -->
-<!-- install.packages("modelbased") -->
-<!-- ``` -->
-<!-- Or this one to install the latest development version: -->
-<!-- ```{r, warning=FALSE, message=FALSE, eval=FALSE} -->
-<!-- install.packages("remotes") -->
-<!-- remotes::install_github("easystats/modelbased") -->
-<!-- ``` -->
-<p>Run the following to install <strong>datawizard</strong>:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"easystats/datawizard"</span><span class="op">)</span></code></pre></div>
 </div>
+<div id="installation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#installation" class="anchor" aria-hidden="true"></a>Installation</h1>
+<table class="table">
+<thead><tr class="header">
+<th>Type</th>
+<th>Source</th>
+<th>Command</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Release</td>
+<td>CRAN</td>
+<td><code>install.packages("datawizard")</code></td>
+</tr>
+<tr class="even">
+<td>Development</td>
+<td>GitHub</td>
+<td><code>remotes::install_github("easystats/datawizard")</code></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="features" class="section level1">
 <h1 class="hasAnchor">
 <a href="#features" class="anchor" aria-hidden="true"></a>Features</h1>
-<div id="datasets" class="section level2">
-<h2 class="hasAnchor">
-<a href="#datasets" class="anchor" aria-hidden="true"></a>Datasets</h2>
-<div id="included-datasets" class="section level3">
-<h3 class="hasAnchor">
-<a href="#included-datasets" class="anchor" aria-hidden="true"></a>Included datasets</h3>
-</div>
-<div id="data-simulation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#data-simulation" class="anchor" aria-hidden="true"></a>Data simulation</h3>
-</div>
-</div>
 <div id="data-wrangling" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-wrangling" class="anchor" aria-hidden="true"></a>Data wrangling</h2>
-<div id="select--filter" class="section level3">
+<div id="select-and-filter" class="section level3">
 <h3 class="hasAnchor">
-<a href="#select--filter" class="anchor" aria-hidden="true"></a>Select &amp; filter</h3>
+<a href="#select-and-filter" class="anchor" aria-hidden="true"></a>Select and filter</h3>
 </div>
 <div id="transform" class="section level3">
 <h3 class="hasAnchor">
@@ -129,15 +122,92 @@
 <div id="reshape" class="section level3">
 <h3 class="hasAnchor">
 <a href="#reshape" class="anchor" aria-hidden="true"></a>Reshape</h3>
+<p>A common data wrangling task is to reshape data.</p>
+<p>Either to go from wide/Cartesian to long/tidy format</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/datawizard/" class="external-link">datawizard</a></span><span class="op">)</span>
+
+<span class="va">wide_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="reference/data_to_long.html">data_to_long</a></span><span class="op">(</span><span class="va">wide_data</span><span class="op">)</span>
+<span class="co">#&gt;    Name       Value</span>
+<span class="co">#&gt; 1    X1 -0.08281164</span>
+<span class="co">#&gt; 2    X2 -1.12490028</span>
+<span class="co">#&gt; 3    X3 -0.70632036</span>
+<span class="co">#&gt; 4    X4 -0.70278946</span>
+<span class="co">#&gt; 5    X5  0.07633326</span>
+<span class="co">#&gt; 6    X1  1.93468099</span>
+<span class="co">#&gt; 7    X2 -0.87430362</span>
+<span class="co">#&gt; 8    X3  0.96687656</span>
+<span class="co">#&gt; 9    X4  0.29986416</span>
+<span class="co">#&gt; 10   X5 -0.23035595</span>
+<span class="co">#&gt; 11   X1 -2.05128979</span>
+<span class="co">#&gt; 12   X2  0.04386162</span>
+<span class="co">#&gt; 13   X3 -0.71016648</span>
+<span class="co">#&gt; 14   X4  1.14946968</span>
+<span class="co">#&gt; 15   X5  0.31746484</span>
+<span class="co">#&gt; 16   X1  0.27773897</span>
+<span class="co">#&gt; 17   X2 -0.58397514</span>
+<span class="co">#&gt; 18   X3 -0.05917365</span>
+<span class="co">#&gt; 19   X4 -0.30164149</span>
+<span class="co">#&gt; 20   X5 -1.59268440</span>
+<span class="co">#&gt; 21   X1 -1.52596060</span>
+<span class="co">#&gt; 22   X2 -0.82329858</span>
+<span class="co">#&gt; 23   X3 -0.23094342</span>
+<span class="co">#&gt; 24   X4 -0.54733935</span>
+<span class="co">#&gt; 25   X5 -0.18194062</span>
+<span class="co">#&gt; 26   X1 -0.26916362</span>
+<span class="co">#&gt; 27   X2  0.11059280</span>
+<span class="co">#&gt; 28   X3  0.69200045</span>
+<span class="co">#&gt; 29   X4 -0.38540415</span>
+<span class="co">#&gt; 30   X5  1.75614174</span>
+<span class="co">#&gt; 31   X1  1.23305388</span>
+<span class="co">#&gt; 32   X2  0.36472778</span>
+<span class="co">#&gt; 33   X3  1.35682290</span>
+<span class="co">#&gt; 34   X4  0.27637203</span>
+<span class="co">#&gt; 35   X5  0.11394932</span>
+<span class="co">#&gt; 36   X1  0.63360774</span>
+<span class="co">#&gt; 37   X2  0.05370100</span>
+<span class="co">#&gt; 38   X3  1.78872284</span>
+<span class="co">#&gt; 39   X4  0.15186081</span>
+<span class="co">#&gt; 40   X5 -0.29216508</span>
+<span class="co">#&gt; 41   X1  0.35271746</span>
+<span class="co">#&gt; 42   X2  1.36867235</span>
+<span class="co">#&gt; 43   X3  0.41071582</span>
+<span class="co">#&gt; 44   X4 -0.43138079</span>
+<span class="co">#&gt; 45   X5  1.75409316</span>
+<span class="co">#&gt; 46   X1 -0.56048248</span>
+<span class="co">#&gt; 47   X2 -0.38045724</span>
+<span class="co">#&gt; 48   X3 -2.18785470</span>
+<span class="co">#&gt; 49   X4 -1.87050006</span>
+<span class="co">#&gt; 50   X5  1.80958455</span></code></pre></div>
+<p>or the other way</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">long_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/data_to_long.html">data_to_long</a></span><span class="op">(</span><span class="va">wide_data</span>, rows_to <span class="op">=</span> <span class="st">"Row_ID"</span><span class="op">)</span> <span class="co"># Save row number</span>
+
+<span class="fu"><a href="reference/data_to_long.html">data_to_wide</a></span><span class="op">(</span><span class="va">long_data</span>,
+  colnames_from <span class="op">=</span> <span class="st">"Name"</span>,
+  values_from <span class="op">=</span> <span class="st">"Value"</span>,
+  rows_from <span class="op">=</span> <span class="st">"Row_ID"</span>
+<span class="op">)</span>
+<span class="co">#&gt;    Row_ID    Value_X1    Value_X2    Value_X3   Value_X4    Value_X5</span>
+<span class="co">#&gt; 1       1 -0.08281164 -1.12490028 -0.70632036 -0.7027895  0.07633326</span>
+<span class="co">#&gt; 2       2  1.93468099 -0.87430362  0.96687656  0.2998642 -0.23035595</span>
+<span class="co">#&gt; 3       3 -2.05128979  0.04386162 -0.71016648  1.1494697  0.31746484</span>
+<span class="co">#&gt; 4       4  0.27773897 -0.58397514 -0.05917365 -0.3016415 -1.59268440</span>
+<span class="co">#&gt; 5       5 -1.52596060 -0.82329858 -0.23094342 -0.5473394 -0.18194062</span>
+<span class="co">#&gt; 6       6 -0.26916362  0.11059280  0.69200045 -0.3854041  1.75614174</span>
+<span class="co">#&gt; 7       7  1.23305388  0.36472778  1.35682290  0.2763720  0.11394932</span>
+<span class="co">#&gt; 8       8  0.63360774  0.05370100  1.78872284  0.1518608 -0.29216508</span>
+<span class="co">#&gt; 9       9  0.35271746  1.36867235  0.41071582 -0.4313808  1.75409316</span>
+<span class="co">#&gt; 10     10 -0.56048248 -0.38045724 -2.18785470 -1.8705001  1.80958455</span></code></pre></div>
 </div>
 </div>
 <div id="data-proprties" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-proprties" class="anchor" aria-hidden="true"></a>Data proprties</h2>
-<div id="describe-a-distribution" class="section level3">
-<h3 class="hasAnchor">
-<a href="#describe-a-distribution" class="anchor" aria-hidden="true"></a>Describe a Distribution</h3>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<p><code>datawizard</code> provides a way to provide comprehensive descriptive summary for all variables in a dataframe:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>
 <span class="fu"><a href="reference/describe_distribution.html">describe_distribution</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>
 <span class="co">#&gt; Variable     | Mean |   SD |  IQR | Min | Max | Skewness | Kurtosis |   n | n_Missing</span>
@@ -146,12 +216,23 @@
 <span class="co">#&gt; Sepal.Width  |  3.1 | 0.44 | 0.52 | 2.0 | 4.4 |     0.32 |     0.23 | 150 |         0</span>
 <span class="co">#&gt; Petal.Length |  3.8 | 1.77 | 3.52 | 1.0 | 6.9 |    -0.27 |    -1.40 | 150 |         0</span>
 <span class="co">#&gt; Petal.Width  |  1.2 | 0.76 | 1.50 | 0.1 | 2.5 |    -0.10 |    -1.34 | 150 |         0</span></code></pre></div>
+<p>Or even just a variable</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/describe_distribution.html">describe_distribution</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">wt</span><span class="op">)</span>
+<span class="co">#&gt; Mean |   SD | IQR | Min | Max | Skewness | Kurtosis |  n | n_Missing</span>
+<span class="co">#&gt; --------------------------------------------------------------------</span>
+<span class="co">#&gt; 3.2  | 0.98 | 1.2 | 1.5 | 5.4 |     0.47 |     0.42 | 32 |         0</span></code></pre></div>
 </div>
 </div>
-<div id="miscellaneous" class="section level2">
-<h2 class="hasAnchor">
-<a href="#miscellaneous" class="anchor" aria-hidden="true"></a>Miscellaneous</h2>
+<div id="contributing-and-support" class="section level1">
+<h1 class="hasAnchor">
+<a href="#contributing-and-support" class="anchor" aria-hidden="true"></a>Contributing and Support</h1>
+<p>In case you want to file an issue or contribute in another way to the package, please follow <a href="https://github.com/easystats/datawizard/blob/master/.github/CONTRIBUTING.md" class="external-link">this guide</a>. For questions about the functionality, you may either contact us via email or also file an issue.</p>
 </div>
+<div id="code-of-conduct" class="section level1">
+<h1 class="hasAnchor">
+<a href="#code-of-conduct" class="anchor" aria-hidden="true"></a>Code of Conduct</h1>
+<p>Please note that this project is released with a <a href="https://easystats.github.io/datawizard/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
 </div>
 
   </div>
