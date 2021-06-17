@@ -26,6 +26,7 @@ reference:
       - center
       - change_scale
       - convert_data_to_numeric
+      - demean
       - normalize
       - ranktransform
       - rescale_weights
@@ -40,6 +41,7 @@ reference:
       - check_multimodal
       - describe_distribution
       - kurtosis
+      - smoothness
       - skewness
 
   - title: Text formatting
