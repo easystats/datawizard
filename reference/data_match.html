@@ -145,9 +145,13 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A dataframe containing rows that match the specified configuration.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>matching_rows</span> <span class='op'>&lt;-</span> <span class='fu'>data_match</span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>vs <span class='op'>=</span> <span class='fl'>0</span>, am <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'></span>
+<span class='r-in'><span class='va'>matching_rows</span> <span class='op'>&lt;-</span> <span class='fu'>data_match</span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>vs <span class='op'>=</span> <span class='fl'>0</span>, am <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>mtcars</span><span class='op'>[</span><span class='va'>matching_rows</span>, <span class='op'>]</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4</span>

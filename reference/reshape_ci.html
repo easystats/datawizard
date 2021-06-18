@@ -141,6 +141,10 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A dataframe with columns corresponding to confidence intervals reshaped
+either to wide or long format.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span></span>
@@ -150,6 +154,7 @@
 <span class='r-in'>  CI_high <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>, <span class='fl'>.6</span>, <span class='fl'>.8</span>, <span class='fl'>.85</span><span class='op'>)</span>,</span>
 <span class='r-in'>  stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span></span>
 <span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
 <span class='r-in'><span class='fu'>reshape_ci</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   Parameter CI_low_0.8 CI_high_0.8 CI_low_0.9 CI_high_0.9</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 1    Term 1        0.2         0.5       0.10        0.80</span>

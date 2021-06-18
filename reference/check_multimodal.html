@@ -47,11 +47,7 @@
 
 
 <meta property="og:title" content="Check if a distribution is unimodal or multimodal — check_multimodal" />
-<meta property="og:description" content="For univariate distributions (one-dimensional vectors), this functions
-performs a Ameijeiras-Alonso et al. (2018) excess mass test. For multivariate
-distributions (dataframes), it uses mixture modelling. However, it seems that
-it always returns a significant result (suggesting that the distribution is
-multimodal). A better method might be needed here." />
+<meta property="og:description" content="Check if a distribution is unimodal or multimodal" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -131,11 +127,7 @@ multimodal). A better method might be needed here." />
     </div>
 
     <div class="ref-description">
-    <p>For univariate distributions (one-dimensional vectors), this functions
-performs a Ameijeiras-Alonso et al. (2018) excess mass test. For multivariate
-distributions (dataframes), it uses mixture modelling. However, it seems that
-it always returns a significant result (suggesting that the distribution is
-multimodal). A better method might be needed here.</p>
+    <p>Check if a distribution is unimodal or multimodal</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>check_multimodal</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
@@ -153,6 +145,17 @@ multimodal). A better method might be needed here.</p>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Prints a message describing results from test checking if a distribution is
+unimodal or multimodal.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>For univariate distributions (one-dimensional vectors), this functions
+performs a Ameijeiras-Alonso et al. (2018) excess mass test. For multivariate
+distributions (dataframes), it uses mixture modelling. However, it seems that
+it always returns a significant result (suggesting that the distribution is
+multimodal). A better method might be needed here.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Ameijeiras-Alonso, J., Crujeiras, R. M., \&amp; Rodríguez-Casal, A. (2019). Mode
