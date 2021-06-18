@@ -5,13 +5,19 @@
 #' @param x A data frame.
 #' @param to The data frame of which to meet the characteristics.
 #'
+#' @return
+#'
+#' A dataframe containing rows that match the specified configuration.
+#'
 #' @examples
+#'
 #' matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1))
 #' mtcars[matching_rows, ]
 #'
 #' matching_rows <- data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
 #' mtcars[matching_rows, ]
 #' @export
+
 data_match <- function(x, to) {
 
   # Sanity checks

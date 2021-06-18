@@ -121,6 +121,7 @@ data_addsuffix <- function(data, pattern) {
 
 #' help-functions
 #' @keywords internal
+#' @noRd
 .data_frame <- function(...) {
   x <- data.frame(..., stringsAsFactors = FALSE)
   rownames(x) <- NULL

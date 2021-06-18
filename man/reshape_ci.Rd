@@ -9,6 +9,10 @@ reshape_ci(x)
 \arguments{
 \item{x}{A data frame containing columns named \code{CI_low} and \code{CI_high}.}
 }
+\value{
+A dataframe with columns corresponding to confidence intervals reshaped
+either to wide or long format.
+}
 \description{
 Reshape CI between wide/long formats.
 }
@@ -20,6 +24,7 @@ x <- data.frame(
   CI_high = c(.5, .6, .8, .85),
   stringsAsFactors = FALSE
 )
+
 reshape_ci(x)
 reshape_ci(reshape_ci(x))
 }

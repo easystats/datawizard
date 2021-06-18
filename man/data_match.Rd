@@ -11,10 +11,14 @@ data_match(x, to)
 
 \item{to}{The data frame of which to meet the characteristics.}
 }
+\value{
+A dataframe containing rows that match the specified configuration.
+}
 \description{
 Find row indices of a data frame that are matching a specific configuration.
 }
 \examples{
+
 matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1))
 mtcars[matching_rows, ]
 

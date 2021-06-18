@@ -4,6 +4,11 @@
 #' @param reference A reference data frame from which to find the correct
 #'   column types.
 #'
+#' @return
+#'
+#' A dataframe with columns whose types have been restored based on the
+#' reference dataframe.
+#'
 #' @examples
 #' data <- data.frame(
 #'   Sepal.Length = c("1", "3", "2"),
@@ -14,6 +19,7 @@
 #' fixed <- data_restoretype(data, reference = iris)
 #' summary(fixed)
 #' @export
+
 data_restoretype <- function(data, reference = NULL) {
   for (col in names(data)) {
 

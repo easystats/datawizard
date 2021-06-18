@@ -11,7 +11,14 @@ check_multimodal(x, ...)
 
 \item{...}{Additional arguments passed to the methods.}
 }
+\value{
+Prints a message describing results from test checking if a distribution is
+unimodal or multimodal.
+}
 \description{
+Check if a distribution is unimodal or multimodal
+}
+\details{
 For univariate distributions (one-dimensional vectors), this functions
 performs a Ameijeiras-Alonso et al. (2018) excess mass test. For multivariate
 distributions (dataframes), it uses mixture modelling. However, it seems that

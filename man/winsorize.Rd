@@ -18,7 +18,13 @@ winsorize(data, ...)
 
 \item{verbose}{Toggle warnings.}
 }
+\value{
+A dataframe with winsorized columns or a winsorized vector.
+}
 \description{
+Winsorize data
+}
+\details{
 Winsorizing or winsorization is the transformation of statistics by limiting
 extreme values in the statistical data to reduce the effect of possibly
 spurious outliers. The distribution of many statistics can be heavily

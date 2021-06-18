@@ -1,11 +1,17 @@
 #' Check if a distribution is unimodal or multimodal
 #'
+#' @details
+#'
 #' For univariate distributions (one-dimensional vectors), this functions
 #' performs a Ameijeiras-Alonso et al. (2018) excess mass test. For multivariate
 #' distributions (dataframes), it uses mixture modelling. However, it seems that
 #' it always returns a significant result (suggesting that the distribution is
 #' multimodal). A better method might be needed here.
 #'
+#' @return
+#'
+#' Prints a message describing results from test checking if a distribution is
+#' unimodal or multimodal.
 #'
 #' @param x A numeric vector or a data frame.
 #' @param ... Additional arguments passed to the methods.
@@ -65,6 +71,7 @@ check_multimodal.data.frame <- function(x, ...) {
 
   # Text
   text <- "The parametric mixture modelling test suggests that "
+
   if (rez$p < .05) {
     text <- paste0(
       text,

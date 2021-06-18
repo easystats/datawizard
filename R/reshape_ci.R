@@ -4,6 +4,11 @@
 #'
 #' @param x A data frame containing columns named \code{CI_low} and \code{CI_high}.
 #'
+#' @return
+#'
+#' A dataframe with columns corresponding to confidence intervals reshaped
+#' either to wide or long format.
+#'
 #' @examples
 #' x <- data.frame(
 #'   Parameter = c("Term 1", "Term 2", "Term 1", "Term 2"),
@@ -12,9 +17,11 @@
 #'   CI_high = c(.5, .6, .8, .85),
 #'   stringsAsFactors = FALSE
 #' )
+#'
 #' reshape_ci(x)
 #' reshape_ci(reshape_ci(x))
 #' @export
+
 reshape_ci <- function(x) {
 
 
