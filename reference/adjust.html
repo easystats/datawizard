@@ -178,11 +178,11 @@ equivalent to the partial correlation between them.</p>
     <tr>
       <th>effect</th>
       <td><p>Character vector of column names to be adjusted for (regressed
-out). If `NULL` (the default), all variables will be selected.</p></td>
+out). If <code>NULL</code> (the default), all variables will be selected.</p></td>
     </tr>
     <tr>
       <th>select</th>
-      <td><p>Character vector of column names. If `NULL` (the default), all
+      <td><p>Character vector of column names. If <code>NULL</code> (the default), all
 variables will be selected.</p></td>
     </tr>
     <tr>
@@ -191,24 +191,24 @@ variables will be selected.</p></td>
     </tr>
     <tr>
       <th>multilevel</th>
-      <td><p>If `TRUE`, the factors are included as random factors.
-Else, if `FALSE` (default), they are included as fixed effects in the
+      <td><p>If <code>TRUE</code>, the factors are included as random factors.
+Else, if <code>FALSE</code> (default), they are included as fixed effects in the
 simple regression model.</p></td>
     </tr>
     <tr>
       <th>additive</th>
-      <td><p>If `TRUE`, continuous variables as included as smooth terms
+      <td><p>If <code>TRUE</code>, continuous variables as included as smooth terms
 in additive models. The goal is to regress-out potential non-linear
 effects.</p></td>
     </tr>
     <tr>
       <th>bayesian</th>
-      <td><p>If `TRUE`, the models are fitted under the Bayesian framework
-using `rstanarm`.</p></td>
+      <td><p>If <code>TRUE</code>, the models are fitted under the Bayesian framework
+using <code>rstanarm</code>.</p></td>
     </tr>
     <tr>
       <th>keep_intercept</th>
-      <td><p>If `FALSE` (default), the intercept of the model is
+      <td><p>If <code>FALSE</code> (default), the intercept of the model is
 re-added. This avoids the centering around 0 that happens by default
 when regressing out another variable (see the examples below for a
 visual representation of this).</p></td>
@@ -217,7 +217,7 @@ visual representation of this).</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame comparable to `data`, with adjusted variables.</p>
+    <p>A data frame comparable to <code>data</code>, with adjusted variables.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>adjusted_all</span> <span class='op'>&lt;-</span> <span class='fu'>adjust</span><span class='op'>(</span><span class='va'>attitude</span><span class='op'>)</span></span>

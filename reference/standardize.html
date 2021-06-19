@@ -52,7 +52,7 @@ so that the data is expressed in terms of standard deviation (i.e., mean = 0,
 SD = 1) or Median Absolute Deviance (median = 0, MAD = 1). When applied to a
 statistical model, this function extracts the dataset, standardizes it, and
 refits the model with this standardized version of the dataset. The
-[normalize()] function can also be used to scale all numeric variables within
+normalize() function can also be used to scale all numeric variables within
 the 0 - 1 range." />
 <meta property="og:image" content="/logo.png" />
 
@@ -138,7 +138,7 @@ so that the data is expressed in terms of standard deviation (i.e., mean = 0,
 SD = 1) or Median Absolute Deviance (median = 0, MAD = 1). When applied to a
 statistical model, this function extracts the dataset, standardizes it, and
 refits the model with this standardized version of the dataset. The
-[normalize()] function can also be used to scale all numeric variables within
+<code><a href='normalize.html'>normalize()</a></code> function can also be used to scale all numeric variables within
 the 0 - 1 range.</p>
     </div>
 
@@ -194,31 +194,32 @@ the 0 - 1 range.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A data frame, a vector or a statistical model (for `unstandardize()`
+      <td><p>A data frame, a vector or a statistical model (for <code>unstandardize()</code>
 cannot be a model).</p></td>
     </tr>
     <tr>
       <th>robust</th>
-      <td><p>Logical, if `TRUE`, centering is done by subtracting the
+      <td><p>Logical, if <code>TRUE</code>, centering is done by subtracting the
 median from the variables and dividing it by the median absolute deviation
-(MAD). If `FALSE`, variables are standardized by subtracting the
+(MAD). If <code>FALSE</code>, variables are standardized by subtracting the
 mean and dividing it by the standard deviation (SD).</p></td>
     </tr>
     <tr>
       <th>two_sd</th>
-      <td><p>If `TRUE`, the variables are scaled by two times the deviation
-(SD or MAD depending on `robust`). This method can be useful to obtain
+      <td><p>If <code>TRUE</code>, the variables are scaled by two times the deviation
+(SD or MAD depending on <code>robust</code>). This method can be useful to obtain
 model coefficients of continuous parameters comparable to coefficients
-related to binary predictors, when applied to **the predictors** (not the
+related to binary predictors, when applied to <strong>the predictors</strong> (not the
 outcome) (Gelman, 2008).</p></td>
     </tr>
     <tr>
       <th>weights</th>
-      <td><p>Can be `NULL` (for no weighting), or:
-- For model: if `TRUE` (default), a weighted-standardization is carried out.
-- For `data.frame`s: a numeric vector of weights, or a character of the
-  name of a column in the `data.frame` that contains the weights.
-- For numeric vectors: a numeric vector of weights.</p></td>
+      <td><p>Can be <code>NULL</code> (for no weighting), or:</p><ul>
+<li><p>For model: if <code>TRUE</code> (default), a weighted-standardization is carried out.</p></li>
+<li><p>For <code>data.frame</code>s: a numeric vector of weights, or a character of the
+name of a column in the <code>data.frame</code> that contains the weights.</p></li>
+<li><p>For numeric vectors: a numeric vector of weights.</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -236,7 +237,7 @@ standardizing a subset or new data according to another dataframe.</p></td>
     </tr>
     <tr>
       <th>select</th>
-      <td><p>Character vector of column names. If `NULL` (the default), all
+      <td><p>Character vector of column names. If <code>NULL</code> (the default), all
 variables will be selected.</p></td>
     </tr>
     <tr>
@@ -245,40 +246,40 @@ variables will be selected.</p></td>
     </tr>
     <tr>
       <th>remove_na</th>
-      <td><p>How should missing values (`NA`) be treated: if `"none"`
+      <td><p>How should missing values (<code>NA</code>) be treated: if <code>"none"</code>
 (default): each column's standardization is done separately, ignoring
-`NA`s. Else, rows with `NA` in the columns selected with `select` /
-`exclude` (`"selected"`) or in all columns (`"all"`) are dropped before
+<code>NA</code>s. Else, rows with <code>NA</code> in the columns selected with <code>select</code> /
+<code>exclude</code> (<code>"selected"</code>) or in all columns (<code>"all"</code>) are dropped before
 standardization, and the resulting data frame does not include these cases.</p></td>
     </tr>
     <tr>
       <th>force</th>
-      <td><p>Logical, if `TRUE`, forces standardization of factors and dates
+      <td><p>Logical, if <code>TRUE</code>, forces standardization of factors and dates
 as well. Factors are converted to numerical values, with the lowest level
-being the value `1` (unless the factor has numeric levels, which are
+being the value <code>1</code> (unless the factor has numeric levels, which are
 converted to the corresponding numeric value).</p></td>
     </tr>
     <tr>
       <th>append</th>
-      <td><p>Logical, if `TRUE` and `x` is a data frame, standardized
-variables will be added as additional columns; if `FALSE`,
+      <td><p>Logical, if <code>TRUE</code> and <code>x</code> is a data frame, standardized
+variables will be added as additional columns; if <code>FALSE</code>,
 existing variables are overwritten.</p></td>
     </tr>
     <tr>
       <th>suffix</th>
       <td><p>Character value, will be appended to variable (column) names of
-`x`, if `x` is a data frame and `append = TRUE`.</p></td>
+<code>x</code>, if <code>x</code> is a data frame and <code>append = TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>center, scale</th>
-      <td><p>Used by `unstandardize()`; `center` and `scale`
+      <td><p>Used by <code>unstandardize()</code>; <code>center</code> and <code>scale</code>
 correspond to the center (the mean / median) and the scale (SD / MAD) of
 the original non-standardized data (for data frames, should be named, or
 have column order correspond to the numeric column). However, one can also
-directly provide the original data through `reference`, from which the
-center and the scale will be computed (according to `robust` and `two_sd`.
-Alternatively, if the input contains the attributes `center` and `scale`
-(as does the output of `standardize()`), it will take it from there if the
+directly provide the original data through <code>reference</code>, from which the
+center and the scale will be computed (according to <code>robust</code> and <code>two_sd</code>.
+Alternatively, if the input contains the attributes <code>center</code> and <code>scale</code>
+(as does the output of <code>standardize()</code>), it will take it from there if the
 rest of the arguments are absent.</p></td>
     </tr>
     </table>
@@ -286,32 +287,33 @@ rest of the arguments are absent.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The standardized object (either a standardize data frame or a
-  statistical model fitted on standardized data).</p>
+statistical model fitted on standardized data).</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>When `x` is a vector or a data frame with `remove_na = "none")`,
-  missing values are preserved, so the return value has the same length /
-  number of rows as the original input.</p>
+    <p>When <code>x</code> is a vector or a data frame with <code>remove_na = "none")</code>,
+missing values are preserved, so the return value has the same length /
+number of rows as the original input.</p>
     <h2 class="hasAnchor" id="model-standardization"><a class="anchor" href="#model-standardization"></a>Model Standardization</h2>
 
     
 
-<p>If `x` is a model object, standardization is done by completely refitting the
+<p>If <code>x</code> is a model object, standardization is done by completely refitting the
 model on the standardized data. Hence, this approach is equal to
-standardizing the variables *before* fitting the model and will return a new
+standardizing the variables <em>before</em> fitting the model and will return a new
 model object. However, this method is particularly recommended for complex
 models that include interactions or transformations (e.g., polynomial or
-spline terms). The `robust` (default to `FALSE`) argument enables a robust
-standardization of data, i.e., based on the `median` and `MAD` instead of the
-`mean` and `SD`. See [standardize_parameters()] for other methods of
-standardizing model coefficients.</p>
-<p>## Transformed Variables
-When the model's formula contains transformations (e.g. `y ~ exp(X)`) the
+spline terms). The <code>robust</code> (default to <code>FALSE</code>) argument enables a robust
+standardization of data, i.e., based on the <code>median</code> and <code>MAD</code> instead of the
+<code>mean</code> and <code>SD</code>.</p><h3 class='hasAnchor' id='transformed-variables'><a class='anchor' aria-hidden='true' href='#transformed-variables'></a>Transformed Variables</h3>
+
+
+<p>When the model's formula contains transformations (e.g. <code>y ~ exp(X)</code>) the
 transformation effectively takes place after standardization (e.g.,
-`exp(scale(X))`). Some transformations are undefined for negative values,
-such as `log()` and `sqrt()`. To avoid dropping these values, the
-standardized data is shifted by `Z - min(Z) + 1` or `Z - min(Z)`
+<code>exp(scale(X))</code>). Some transformations are undefined for negative values,
+such as <code><a href='https://rdrr.io/r/base/Log.html'>log()</a></code> and <code><a href='https://rdrr.io/r/base/MathFun.html'>sqrt()</a></code>. To avoid dropping these values, the
+standardized data is shifted by <code>Z - min(Z) + 1</code> or <code>Z - min(Z)</code>
 (respectively).</p>
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other transform utilities: 

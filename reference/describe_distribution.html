@@ -190,7 +190,7 @@ centrality, dispersion, range, skewness, kurtosis).</p>
     <tr>
       <th>iqr</th>
       <td><p>Logical, if <code>TRUE</code>, the interquartile range is calculated
-(based on <code><a href='https://rdrr.io/r/stats/IQR.html'>IQR</a></code>, using <code>type = 6</code>).</p></td>
+(based on <code><a href='https://rdrr.io/r/stats/IQR.html'>stats::IQR()</a></code>, using <code>type = 6</code>).</p></td>
     </tr>
     <tr>
       <th>range</th>
@@ -236,9 +236,9 @@ well as n and missing will contain information.</p></td>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>There is also a
-  <a href='https://easystats.github.io/see/articles/parameters.html'><code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code>-method</a>
-  implemented in the
-  <a href='https://easystats.github.io/see/'><span class="pkg">see</span>-package</a>.</p>
+<a href='https://easystats.github.io/see/articles/parameters.html'><code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code>-method</a>
+implemented in the
+<a href='https://easystats.github.io/see/'><span class="pkg">see</span>-package</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'>describe_distribution</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span></span>

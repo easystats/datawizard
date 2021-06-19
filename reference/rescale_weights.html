@@ -48,12 +48,12 @@
 
 <meta property="og:title" content="Rescale design weights for multilevel analysis — rescale_weights" />
 <meta property="og:description" content="Most functions to fit multilevel and mixed effects models only
-  allow to specify frequency weights, but not design (i.e. sampling or
-  probability) weights, which should be used when analyzing complex samples
-  and survey data. rescale_weights() implements an algorithm proposed
-  by Asparouhov (2006) and Carle (2009) to rescale design
-  weights in survey data to account for the grouping structure of multilevel
-  models, which then can be used for multilevel modelling." />
+allow to specify frequency weights, but not design (i.e. sampling or
+probability) weights, which should be used when analyzing complex samples
+and survey data. rescale_weights() implements an algorithm proposed
+by Asparouhov (2006) and Carle (2009) to rescale design
+weights in survey data to account for the grouping structure of multilevel
+models, which then can be used for multilevel modelling." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -134,12 +134,12 @@
 
     <div class="ref-description">
     <p>Most functions to fit multilevel and mixed effects models only
-  allow to specify frequency weights, but not design (i.e. sampling or
-  probability) weights, which should be used when analyzing complex samples
-  and survey data. <code>rescale_weights()</code> implements an algorithm proposed
-  by <cite>Asparouhov (2006)</cite> and <cite>Carle (2009)</cite> to rescale design
-  weights in survey data to account for the grouping structure of multilevel
-  models, which then can be used for multilevel modelling.</p>
+allow to specify frequency weights, but not design (i.e. sampling or
+probability) weights, which should be used when analyzing complex samples
+and survey data. <code>rescale_weights()</code> implements an algorithm proposed
+by <cite>Asparouhov (2006)</cite> and <cite>Carle (2009)</cite> to rescale design
+weights in survey data to account for the grouping structure of multilevel
+models, which then can be used for multilevel modelling.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>rescale_weights</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>group</span>, <span class='va'>probability_weights</span>, nest <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></code></pre></div>
@@ -175,41 +175,41 @@ combination from each group level of the variables in <code>group</code>.</p></t
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>data</code>, including the new weighting variables: <code>pweights_a</code>
-  and <code>pweights_b</code>, which represent the rescaled design weights to use
-  in multilevel models (use these variables for the <code>weights</code> argument).</p>
+and <code>pweights_b</code>, which represent the rescaled design weights to use
+in multilevel models (use these variables for the <code>weights</code> argument).</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Rescaling is based on two methods: For <code>pweights_a</code>, the sample
-  weights <code>probability_weights</code> are adjusted by a factor that represents
-  the proportion of group size divided by the sum of sampling weights within
-  each group. The adjustment factor for <code>pweights_b</code> is the sum of
-  sample weights within each group divided by the sum of squared sample
-  weights within each group (see <cite>Carle (2009)</cite>, Appendix B).
-   <br /> <br />
-   Regarding the choice between scaling methods A and B, Carle suggests
-   that "analysts who wish to discuss point estimates should report results
-   based on weighting method A. For analysts more interested in residual
-   between-group variance, method B may generally provide the least biased
-   estimates". In general, it is recommended to fit a non-weighted model
-   and weighted models with both scaling methods and when comparing the
-   models, see whether the "inferential decisions converge", to gain
-   confidence in the results.
-   <br /> <br />
-   Though the bias of scaled weights decreases with increasing group size,
-   method A is preferred when insufficient or low group size is a concern.
-   <br /> <br />
-   The group ID and probably PSU may be used as random effects (e.g.
-   nested design, or group and PSU as varying intercepts), depending
-   on the survey design that should be mimicked.</p>
+weights <code>probability_weights</code> are adjusted by a factor that represents
+the proportion of group size divided by the sum of sampling weights within
+each group. The adjustment factor for <code>pweights_b</code> is the sum of
+sample weights within each group divided by the sum of squared sample
+weights within each group (see <cite>Carle (2009)</cite>, Appendix B).
+<br /> <br />
+Regarding the choice between scaling methods A and B, Carle suggests
+that "analysts who wish to discuss point estimates should report results
+based on weighting method A. For analysts more interested in residual
+between-group variance, method B may generally provide the least biased
+estimates". In general, it is recommended to fit a non-weighted model
+and weighted models with both scaling methods and when comparing the
+models, see whether the "inferential decisions converge", to gain
+confidence in the results.
+<br /> <br />
+Though the bias of scaled weights decreases with increasing group size,
+method A is preferred when insufficient or low group size is a concern.
+<br /> <br />
+The group ID and probably PSU may be used as random effects (e.g.
+nested design, or group and PSU as varying intercepts), depending
+on the survey design that should be mimicked.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
 <ul>
 <li><p>Carle A.C. (2009). Fitting multilevel models in complex survey data
-  with design weights: Recommendations. BMC Medical Research Methodology
-  9(49): 1-13</p></li>
+with design weights: Recommendations. BMC Medical Research Methodology
+9(49): 1-13</p></li>
 <li><p>Asparouhov T. (2006). General Multi-Level Modeling with Sampling
-  Weights. Communications in Statistics - Theory and Methods 35: 439-460</p></li>
+Weights. Communications in Statistics - Theory and Methods 35: 439-460</p></li>
 </ul>
 
 

@@ -48,7 +48,7 @@
 
 <meta property="og:title" content="(Signed) rank transformation — ranktransform" />
 <meta property="og:description" content="Transform numeric values with the integers of their rank (i.e., 1st smallest,
-2nd smallest, 3rd smallest, etc.). Setting the `sign` argument to `TRUE` will
+2nd smallest, 3rd smallest, etc.). Setting the sign argument to TRUE will
 give you signed ranks, where the ranking is done according to absolute size
 but where the sign is preserved (i.e., 2, 1, -3, 4)." />
 <meta property="og:image" content="/logo.png" />
@@ -131,7 +131,7 @@ but where the sign is preserved (i.e., 2, 1, -3, 4)." />
 
     <div class="ref-description">
     <p>Transform numeric values with the integers of their rank (i.e., 1st smallest,
-2nd smallest, 3rd smallest, etc.). Setting the `sign` argument to `TRUE` will
+2nd smallest, 3rd smallest, etc.). Setting the <code>sign</code> argument to <code>TRUE</code> will
 give you signed ranks, where the ranking is done according to absolute size
 but where the sign is preserved (i.e., 2, 1, -3, 4).</p>
     </div>
@@ -174,12 +174,12 @@ but where the sign is preserved (i.e., 2, 1, -3, 4).</p>
     </tr>
     <tr>
       <th>sign</th>
-      <td><p>Logical, if `TRUE`, return signed ranks.</p></td>
+      <td><p>Logical, if <code>TRUE</code>, return signed ranks.</p></td>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>Treatment of ties. Can be one of `"average"` (default),
-`"first"`, `"last"`, `"random"`, `"max"` or `"min"`. See [rank()] for
+      <td><p>Treatment of ties. Can be one of <code>"average"</code> (default),
+<code>"first"</code>, <code>"last"</code>, <code>"random"</code>, <code>"max"</code> or <code>"min"</code>. See <code><a href='https://rdrr.io/r/base/rank.html'>rank()</a></code> for
 details.</p></td>
     </tr>
     <tr>
@@ -188,7 +188,7 @@ details.</p></td>
     </tr>
     <tr>
       <th>select</th>
-      <td><p>Character vector of column names. If `NULL` (the default), all
+      <td><p>Character vector of column names. If <code>NULL</code> (the default), all
 variables will be selected.</p></td>
     </tr>
     <tr>

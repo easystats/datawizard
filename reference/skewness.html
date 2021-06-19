@@ -205,17 +205,16 @@ a negative skewness values indicates a "left-skewed" distribution, and a
 positive skewness values indicates a "right-skewed" distribution. Examples
 for the relationship of skewness and distributions are:</p><ul>
 <li><p>Normal distribution (and other symmetric distribution) has a skewness
-  of 0</p></li>
+of 0</p></li>
 <li><p>Half-normal distribution has a skewness just below 1</p></li>
 <li><p>Exponential distribution has a skewness of 2</p></li>
 <li><p>Lognormal distribution can have a skewness of any positive value,
-  depending on its parameters</p></li>
+depending on its parameters</p></li>
 </ul><p>(<cite>https://en.wikipedia.org/wiki/Skewness</cite>)</p>
 <h3 class='hasAnchor' id='types-of-skewness'><a class='anchor' aria-hidden='true' href='#types-of-skewness'></a>Types of Skewness</h3>
 <p><code>skewness()</code> supports three different methods for estimating skewness,
 as discussed in <cite>Joanes and Gill (1988)</cite>:</p><ul>
-<li><p>Type "1" is the "classical" method, which is <code>g1 = (sum((x -
-mean(x))^3) / n) / (sum((x - mean(x))^2) / n)^1.5</code></p></li>
+<li><p>Type "1" is the "classical" method, which is <code>g1 = (sum((x - mean(x))^3) / n) / (sum((x - mean(x))^2) / n)^1.5</code></p></li>
 <li><p>Type "2" first calculates the type-1 skewness, then adjusts the result:
 <code>G1 = g1 * sqrt(n * (n - 1)) / (n - 2)</code>. This is what SAS and SPSS
 usually return</p></li>
@@ -233,8 +232,7 @@ distribution with <em>thinner</em> tails
 <h3 class='hasAnchor' id='types-of-kurtosis'><a class='anchor' aria-hidden='true' href='#types-of-kurtosis'></a>Types of Kurtosis</h3>
 <p><code>kurtosis()</code> supports three different methods for estimating kurtosis,
 as discussed in <cite>Joanes and Gill (1988)</cite>:</p><ul>
-<li><p>Type "1" is the "classical" method, which is <code>g2 = n * sum((x -
-mean(x))^4) / (sum((x - mean(x))^2)^2) - 3</code>.</p></li>
+<li><p>Type "1" is the "classical" method, which is <code>g2 = n * sum((x - mean(x))^4) / (sum((x - mean(x))^2)^2) - 3</code>.</p></li>
 <li><p>Type "2" first calculates the type-1 kurtosis, than adjusts the result:
 <code>G2 = ((n + 1) * g2 + 6) * (n - 1)/((n - 2) * (n - 3))</code>. This is what
 SAS and SPSS usually return</p></li>
@@ -253,10 +251,10 @@ the <code>iterations</code> argument) than relying on analytic standard errors
     
 <ul>
 <li><p>D. N. Joanes and C. A. Gill (1998). Comparing measures of sample
-  skewness and kurtosis. The Statistician, 47, 183–189.</p></li>
+skewness and kurtosis. The Statistician, 47, 183–189.</p></li>
 <li><p>Wright, D. B., &amp; Herrington, J. A. (2011). Problematic standard
-  errors and confidence intervals for skewness and kurtosis. Behavior
-  research methods, 43(1), 8-17.</p></li>
+errors and confidence intervals for skewness and kurtosis. Behavior
+research methods, 43(1), 8-17.</p></li>
 </ul>
 
 
