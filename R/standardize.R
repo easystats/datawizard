@@ -175,8 +175,7 @@ standardize.AsIs <- standardize.numeric
 #' models that include interactions or transformations (e.g., polynomial or
 #' spline terms). The `robust` (default to `FALSE`) argument enables a robust
 #' standardization of data, i.e., based on the `median` and `MAD` instead of the
-#' `mean` and `SD`. See [standardize_parameters()] for other methods of
-#' standardizing model coefficients.
+#' `mean` and `SD`.
 #'
 #' ## Transformed Variables
 #' When the model's formula contains transformations (e.g. `y ~ exp(X)`) the

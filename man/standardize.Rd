@@ -143,8 +143,7 @@ model object. However, this method is particularly recommended for complex
 models that include interactions or transformations (e.g., polynomial or
 spline terms). The \code{robust} (default to \code{FALSE}) argument enables a robust
 standardization of data, i.e., based on the \code{median} and \code{MAD} instead of the
-\code{mean} and \code{SD}. See \code{\link[=standardize_parameters]{standardize_parameters()}} for other methods of
-standardizing model coefficients.
+\code{mean} and \code{SD}.
 \subsection{Transformed Variables}{
 
 When the model's formula contains transformations (e.g. \code{y ~ exp(X)}) the
