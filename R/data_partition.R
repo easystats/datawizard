@@ -1,7 +1,7 @@
 #' Partition data into a test and a training set
 #'
 #' Creates a training and a test set based on a dataframe. Can also be
-#' stratified (i.e., evenly spread a given factor) using the \code{group}
+#' stratified (i.e., evenly spread a given factor) using the `group`
 #' argument.
 #'
 #' @param x A data frame, or an object that can be coerced to a data frame.
@@ -12,7 +12,7 @@
 #' @param seed A random number generator seed. Enter an integer (e.g., 123) so
 #'   that the random sampling will be the same each time you run the function.
 #'
-#' @return A list of two data frames, named \code{test} and \code{training}.
+#' @return A list of two data frames, named `test` and `training`.
 #'
 #' @examples
 #' df <- iris

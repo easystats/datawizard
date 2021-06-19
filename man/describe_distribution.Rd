@@ -50,7 +50,7 @@ describe_distribution(x, ...)
 \item{dispersion}{Logical, if \code{TRUE}, computes indices of dispersion related to the estimate(s) (\code{SD} and \code{MAD} for \code{mean} and \code{median}, respectively).}
 
 \item{iqr}{Logical, if \code{TRUE}, the interquartile range is calculated
-(based on \code{\link[stats]{IQR}}, using \code{type = 6}).}
+(based on \code{\link[stats:IQR]{stats::IQR()}}, using \code{type = 6}).}
 
 \item{range}{Return the range (min and max).}
 
@@ -83,9 +83,9 @@ centrality, dispersion, range, skewness, kurtosis).
 }
 \note{
 There is also a
-  \href{https://easystats.github.io/see/articles/parameters.html}{\code{plot()}-method}
-  implemented in the
-  \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+\href{https://easystats.github.io/see/articles/parameters.html}{\code{plot()}-method}
+implemented in the
+\href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
 describe_distribution(rnorm(100))

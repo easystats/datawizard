@@ -30,9 +30,9 @@ center(x, ...)
 
 \item{weights}{Can be \code{NULL} (for no weighting), or:
 \itemize{
-  \item For data frames: a numeric vector of weights, or a character of the
-  name of a column in the \code{data.frame} that contains the weights.
-  \item For numeric vectors: a numeric vector of weights.
+\item For data frames: a numeric vector of weights, or a character of the
+name of a column in the \code{data.frame} that contains the weights.
+\item For numeric vectors: a numeric vector of weights.
 }}
 
 \item{robust}{Logical, if \code{TRUE}, centering is done by subtracting the
@@ -73,5 +73,5 @@ head(center(iris, force = TRUE))
 }
 \seealso{
 If centering within-clusters (instead of grand-mean centering)
-  is required, see \code{\link{demean}}.
+is required, see \code{\link[=demean]{demean()}}.
 }

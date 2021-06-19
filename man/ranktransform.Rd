@@ -34,15 +34,15 @@ ranktransform(x, ...)
 
 \item{...}{Arguments passed to or from other methods.}
 
-\item{sign}{Logical, if `TRUE`, return signed ranks.}
+\item{sign}{Logical, if \code{TRUE}, return signed ranks.}
 
-\item{method}{Treatment of ties. Can be one of `"average"` (default),
-`"first"`, `"last"`, `"random"`, `"max"` or `"min"`. See [rank()] for
+\item{method}{Treatment of ties. Can be one of \code{"average"} (default),
+\code{"first"}, \code{"last"}, \code{"random"}, \code{"max"} or \code{"min"}. See \code{\link[=rank]{rank()}} for
 details.}
 
 \item{verbose}{Toggle warnings and messages on or off.}
 
-\item{select}{Character vector of column names. If `NULL` (the default), all
+\item{select}{Character vector of column names. If \code{NULL} (the default), all
 variables will be selected.}
 
 \item{exclude}{Character vector of column names to be excluded from selection.}
@@ -52,7 +52,7 @@ A rank-transformed object.
 }
 \description{
 Transform numeric values with the integers of their rank (i.e., 1st smallest,
-2nd smallest, 3rd smallest, etc.). Setting the `sign` argument to `TRUE` will
+2nd smallest, 3rd smallest, etc.). Setting the \code{sign} argument to \code{TRUE} will
 give you signed ranks, where the ranking is done according to absolute size
 but where the sign is preserved (i.e., 2, 1, -3, 4).
 }

@@ -1,50 +1,50 @@
 #' Compute group-meaned and de-meaned variables
 #'
-#' \code{demean()} computes group- and de-meaned versions of a
+#' `demean()` computes group- and de-meaned versions of a
 #'    variable that can be used in regression analysis to model the between-
-#'    and within-subject effect. \code{check_heterogeneity()} checks if model
+#'    and within-subject effect. `check_heterogeneity()` checks if model
 #'    predictors or variables may cause a heterogeneity bias, i.e. if variables
 #'    have a within- and/or between-effect.
 #'    \cr \cr
-#'    \code{degroup()} is more generic in terms of the centering-operation.
-#'    While \code{demean()} always uses mean-centering, \code{degroup()} can
+#'    `degroup()` is more generic in terms of the centering-operation.
+#'    While `demean()` always uses mean-centering, `degroup()` can
 #'    also use the mode or median for centering.
 #'
-#' @param x A data frame. For \code{check_heterogeneity()}, may also be a mixed
+#' @param x A data frame. For `check_heterogeneity()`, may also be a mixed
 #'   model object.
 #' @param select Character vector (or formula) with names of variables to select
-#'   that should be group- and de-meaned. For \code{check_heterogeneity()}, if
-#'   \code{x} is a mixed model object, this argument be ignored.
+#'   that should be group- and de-meaned. For `check_heterogeneity()`, if
+#'   `x` is a mixed model object, this argument be ignored.
 #' @param group Character vector (or formula) with the name of the variable that
-#'   indicates the group- or cluster-ID. For \code{check_heterogeneity()}, if
-#'   \code{x} is a model object, this argument be ignored.
-#' @param center Method for centering. \code{demean()} always performs
-#'   mean-centering, while \code{degroup()} can use \code{center = "median"} or
-#'   \code{center = "mode"} for median- or mode-centering, and also \code{"min"}
-#'   or \code{"max"}.
+#'   indicates the group- or cluster-ID. For `check_heterogeneity()`, if
+#'   `x` is a model object, this argument be ignored.
+#' @param center Method for centering. `demean()` always performs
+#'   mean-centering, while `degroup()` can use `center = "median"` or
+#'   `center = "mode"` for median- or mode-centering, and also `"min"`
+#'   or `"max"`.
 #' @param suffix_demean,suffix_groupmean String value, will be appended to the
-#'   names of the group-meaned and de-meaned variables of \code{x}. By default,
-#'   de-meaned variables will be suffixed with \code{"_within"} and
-#'   grouped-meaned variables with \code{"_between"}.
-#' @param add_attributes Logical, if \code{TRUE}, the returned variables gain
+#'   names of the group-meaned and de-meaned variables of `x`. By default,
+#'   de-meaned variables will be suffixed with `"_within"` and
+#'   grouped-meaned variables with `"_between"`.
+#' @param add_attributes Logical, if `TRUE`, the returned variables gain
 #'   attributes to indicate the within- and between-effects. This is only
-#'   relevant when printing \code{model_parameters()} - in such cases, the
+#'   relevant when printing `model_parameters()` - in such cases, the
 #'   within- and between-effects are printed in separated blocks.
 #' @inheritParams center
 #'
 #' @return A data frame with the group-/de-meaned variables, which get the suffix
-#'   \code{"_between"} (for the group-meaned variable) and \code{"_within"} (for
+#'   `"_between"` (for the group-meaned variable) and `"_within"` (for
 #'   the de-meaned variable) by default.
 #'
 #' @seealso If grand-mean centering (instead of centering within-clusters)
-#'   is required, see \code{\link{center}}.
+#'   is required, see [center()].
 #'
 #' @details
 #'   \subsection{Heterogeneity Bias}{
 #'     Mixed models include different levels of sources of variability, i.e.
 #'     error terms at each level. When macro-indicators (or level-2 predictors,
 #'     or higher-level units, or more general: \emph{group-level predictors that
-#'     \strong{vary} within and across groups}) are included as fixed effects (i.e.
+#'     **vary** within and across groups}) are included as fixed effects (i.e.
 #'     treated as covariate at level-1), the variance that is left unaccounted for
 #'     this covariate will be absorbed into the error terms of level-1 and level-2
 #'     (\cite{Bafumi and Gelman 2006; Gelman and Hill 2007, Chapter 12.6.}):
@@ -54,7 +54,7 @@
 #'     (\cite{Bell et al. 2015}). Hence, the error terms will be correlated with
 #'     the covariate, which violates one of the assumptions of mixed models
 #'     (iid, independent and identically distributed error terms). This bias is
-#'     also called the \emph{heterogeneity bias} (\cite{Bell et al. 2015}). To
+#'     also called the *heterogeneity bias* (\cite{Bell et al. 2015}). To
 #'     resolve this problem, level-2 predictors used as (level-1) covariates should
 #'     be separated into their "within" and "between" effects by "de-meaning" and
 #'     "group-meaning": After demeaning time-varying predictors, \dQuote{at the
@@ -63,15 +63,15 @@
 #'     with that variable} (\cite{Bell et al. 2015}).
 #'   }
 #'   \subsection{Panel data and correlating fixed and group effects}{
-#'     \code{demean()} is intended to create group- and de-meaned variables
+#'     `demean()` is intended to create group- and de-meaned variables
 #'     for panel regression models (fixed effects models), or for complex
 #'     random-effect-within-between models (see \cite{Bell et al. 2015, 2018}),
 #'     where group-effects (random effects) and fixed effects correlate (see
 #'     \cite{Bafumi and Gelman 2006}). This can happen, for instance, when
-#'     analyzing panel data, which can lead to \emph{Heterogeneity Bias}. To
+#'     analyzing panel data, which can lead to *Heterogeneity Bias*. To
 #'     control for correlating predictors and group effects, it is recommended
-#'     to include the group-meaned and de-meaned version of \emph{time-varying covariates}
-#'     (and group-meaned version of \emph{time-invariant covariates} that are on
+#'     to include the group-meaned and de-meaned version of *time-varying covariates*
+#'     (and group-meaned version of *time-invariant covariates* that are on
 #'     a higher level, e.g. level-2 predictors) in the model. By this, one can
 #'     fit complex multilevel models for panel data, including time-varying
 #'     predictors, time-invariant predictors and random effects.
@@ -91,13 +91,13 @@
 #'   }
 #'   \subsection{Terminology}{
 #'     The group-meaned variable is simply the mean of an independent variable
-#'     within each group (or id-level or cluster) represented by \code{group}.
+#'     within each group (or id-level or cluster) represented by `group`.
 #'     It represents the cluster-mean of an independent variable. The regression
-#'     coefficient of a group-meaned variable is the \emph{between-subject-effect}.
+#'     coefficient of a group-meaned variable is the *between-subject-effect*.
 #'     The de-meaned variable is then the centered version of the group-meaned
 #'     variable. De-meaning is sometimes also called person-mean centering or
 #'     centering within clusters. The regression coefficient of a de-meaned
-#'     variable represents the \emph{within-subject-effect}.
+#'     variable represents the *within-subject-effect*.
 #'   }
 #'   \subsection{De-meaning with continuous predictors}{
 #'     For continuous time-varying predictors, the recommendation is to include
@@ -111,13 +111,13 @@
 #'   \subsection{De-meaning with binary predictors}{
 #'     For binary time-varying predictors, there are two recommendations. First
 #'     is to include the raw (untransformed) binary predictor as fixed effect
-#'     only and the \emph{de-meaned} variable as random effect (random slope).
+#'     only and the *de-meaned* variable as random effect (random slope).
 #'     The alternative would be to add the de-meaned version(s) of binary
 #'     time-varying covariates as additional fixed effect as well (instead of
 #'     adding it as random slope). Centering time-varying binary variables to
 #'     obtain within-effects (level 1) isn't necessary. They have a sensible
 #'     interpretation when left in the typical 0/1 format (\cite{Hoffmann 2015,
-#'     chapter 8-2.I}). \code{demean()} will thus coerce categorical time-varying
+#'     chapter 8-2.I}). `demean()` will thus coerce categorical time-varying
 #'     predictors to numeric to compute the de- and group-meaned versions for
 #'     these variables, where the raw (untransformed) binary predictor and the
 #'     de-meaned version should be added to the model.
@@ -134,28 +134,28 @@
 #'   with interaction terms of within- and between-effects. A classical approach
 #'   is to simply use the product term of the de-meaned variables (i.e.
 #'   introducing the de-meaned variables as interaction term in the model
-#'   formula, e.g. \code{y ~ x_within * time_within}). This approach, however,
+#'   formula, e.g. `y ~ x_within * time_within`). This approach, however,
 #'   might be subject to bias (see \cite{Giesselmann & Schmidt-Catran 2020}).
 #'     \cr \cr
 #'     Another option is to first calculate the product term and then apply the
 #'     de-meaning to it. This approach produces an estimator \dQuote{that reflects
 #'     unit-level differences of interacted variables whose moderators vary
-#'     within units}, which is desirable if \emph{no} within interaction of
+#'     within units}, which is desirable if *no* within interaction of
 #'     two time-dependent variables is required. \cr \cr
 #'     A third option, when the interaction should result in a genuine within
 #'     estimator, is to "double de-mean" the interaction terms
 #'     (\cite{Giesselmann & Schmidt-Catran 2018}), however, this is currently
-#'     not supported by \code{demean()}. If this is required, the \code{wmb()}
+#'     not supported by `demean()`. If this is required, the `wmb()`
 #'     function from the \pkg{panelr} package should be used. \cr \cr
 #'     To de-mean interaction terms for within-between models, simply specify
-#'     the term as interaction for the \code{select}-argument, e.g.
-#'     \code{select = "a*b"} (see 'Examples').
+#'     the term as interaction for the `select`-argument, e.g.
+#'     `select = "a*b"` (see 'Examples').
 #'   }
 #'   \subsection{Analysing panel data with mixed models using lme4}{
 #'     A description of how to translate the
-#'     formulas described in \emph{Bell et al. 2018} into R using \code{lmer()}
+#'     formulas described in *Bell et al. 2018* into R using `lmer()`
 #'     from \pkg{lme4} can be found in
-#'     \href{https://easystats.github.io/parameters/articles/demean.html}{this vignette}.
+#'     [this vignette](https://easystats.github.io/parameters/articles/demean.html).
 #'   }
 #'
 #' @references \itemize{

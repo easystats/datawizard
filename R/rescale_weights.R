@@ -4,7 +4,7 @@
 #' @description Most functions to fit multilevel and mixed effects models only
 #'   allow to specify frequency weights, but not design (i.e. sampling or
 #'   probability) weights, which should be used when analyzing complex samples
-#'   and survey data. \code{rescale_weights()} implements an algorithm proposed
+#'   and survey data. `rescale_weights()` implements an algorithm proposed
 #'   by \cite{Asparouhov (2006)} and \cite{Carle (2009)} to rescale design
 #'   weights in survey data to account for the grouping structure of multilevel
 #'   models, which then can be used for multilevel modelling.
@@ -17,18 +17,18 @@
 #'   by the name of the group variable.
 #' @param probability_weights Variable indicating the probability (design or
 #'   sampling) weights of the survey data (level-1-weight).
-#' @param nest Logical, if \code{TRUE} and \code{group} indicates at least two
+#' @param nest Logical, if `TRUE` and `group` indicates at least two
 #'   group variables, then groups are "nested", i.e. groups are now a
-#'   combination from each group level of the variables in \code{group}.
+#'   combination from each group level of the variables in `group`.
 #'
-#' @return \code{data}, including the new weighting variables: \code{pweights_a}
-#'   and \code{pweights_b}, which represent the rescaled design weights to use
-#'   in multilevel models (use these variables for the \code{weights} argument).
+#' @return `data`, including the new weighting variables: `pweights_a`
+#'   and `pweights_b`, which represent the rescaled design weights to use
+#'   in multilevel models (use these variables for the `weights` argument).
 #'
-#' @details Rescaling is based on two methods: For \code{pweights_a}, the sample
-#'   weights \code{probability_weights} are adjusted by a factor that represents
+#' @details Rescaling is based on two methods: For `pweights_a`, the sample
+#'   weights `probability_weights` are adjusted by a factor that represents
 #'   the proportion of group size divided by the sum of sampling weights within
-#'   each group. The adjustment factor for \code{pweights_b} is the sum of
+#'   each group. The adjustment factor for `pweights_b` is the sum of
 #'   sample weights within each group divided by the sum of squared sample
 #'   weights within each group (see \cite{Carle (2009)}, Appendix B).
 #'    \cr \cr

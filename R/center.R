@@ -3,32 +3,32 @@
 #' Performs a grand-mean centering of data.
 #'
 #' @param x A data frame, a (numeric or character) vector or a factor.
-#' @param select Character vector of column names. If \code{NULL} (the default),
+#' @param select Character vector of column names. If `NULL` (the default),
 #'   all variables will be selected.
 #' @param exclude Character vector of column names to be excluded from selection.
-#' @param force Logical, if \code{TRUE}, forces centering of factors as
+#' @param force Logical, if `TRUE`, forces centering of factors as
 #'   well. Factors are converted to numerical values, with the lowest level
-#'   being the value \code{1} (unless the factor has numeric levels, which are
+#'   being the value `1` (unless the factor has numeric levels, which are
 #'   converted to the corresponding numeric value).
-#' @param append Logical, if \code{TRUE} and \code{x} is a data frame,
+#' @param append Logical, if `TRUE` and `x` is a data frame,
 #'   standardized variables will be added as additional columns; if
-#'   \code{FALSE}, existing variables are overwritten.
+#'   `FALSE`, existing variables are overwritten.
 #' @param suffix Character value, will be appended to variable (column) names of
-#'   \code{x}, if \code{x} is a data frame and \code{append = TRUE}.
-#' @param robust Logical, if \code{TRUE}, centering is done by subtracting the
-#'   median from the variables. If \code{FALSE}, variables are centered by
+#'   `x`, if `x` is a data frame and `append = TRUE`.
+#' @param robust Logical, if `TRUE`, centering is done by subtracting the
+#'   median from the variables. If `FALSE`, variables are centered by
 #'   subtracting the mean.
 #' @param verbose Toggle warnings and messages.
-#' @param weights Can be \code{NULL} (for no weighting), or:
+#' @param weights Can be `NULL` (for no weighting), or:
 #' \itemize{
 #'   \item For data frames: a numeric vector of weights, or a character of the
-#'   name of a column in the \code{data.frame} that contains the weights.
+#'   name of a column in the `data.frame` that contains the weights.
 #'   \item For numeric vectors: a numeric vector of weights.
 #' }
 #' @param ... Currently not used.
 #'
 #' @seealso If centering within-clusters (instead of grand-mean centering)
-#'   is required, see \code{\link{demean}}.
+#'   is required, see [demean()].
 #'
 #' @return The centered variables.
 #'
