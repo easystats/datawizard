@@ -53,25 +53,27 @@ unstandardize(
 )
 }
 \arguments{
-\item{x}{A data frame, a vector or a statistical model (for `unstandardize()`
+\item{x}{A data frame, a vector or a statistical model (for \code{unstandardize()}
 cannot be a model).}
 
-\item{robust}{Logical, if `TRUE`, centering is done by subtracting the
+\item{robust}{Logical, if \code{TRUE}, centering is done by subtracting the
 median from the variables and dividing it by the median absolute deviation
-(MAD). If `FALSE`, variables are standardized by subtracting the
+(MAD). If \code{FALSE}, variables are standardized by subtracting the
 mean and dividing it by the standard deviation (SD).}
 
-\item{two_sd}{If `TRUE`, the variables are scaled by two times the deviation
-(SD or MAD depending on `robust`). This method can be useful to obtain
+\item{two_sd}{If \code{TRUE}, the variables are scaled by two times the deviation
+(SD or MAD depending on \code{robust}). This method can be useful to obtain
 model coefficients of continuous parameters comparable to coefficients
-related to binary predictors, when applied to **the predictors** (not the
+related to binary predictors, when applied to \strong{the predictors} (not the
 outcome) (Gelman, 2008).}
 
-\item{weights}{Can be `NULL` (for no weighting), or:
-- For model: if `TRUE` (default), a weighted-standardization is carried out.
-- For `data.frame`s: a numeric vector of weights, or a character of the
-  name of a column in the `data.frame` that contains the weights.
-- For numeric vectors: a numeric vector of weights.}
+\item{weights}{Can be \code{NULL} (for no weighting), or:
+\itemize{
+\item For model: if \code{TRUE} (default), a weighted-standardization is carried out.
+\item For \code{data.frame}s: a numeric vector of weights, or a character of the
+name of a column in the \code{data.frame} that contains the weights.
+\item For numeric vectors: a numeric vector of weights.
+}}
 
 \item{verbose}{Toggle warnings and messages on or off.}
 
@@ -81,42 +83,42 @@ outcome) (Gelman, 2008).}
 deviation will be computed instead of from the input variable. Useful for
 standardizing a subset or new data according to another dataframe.}
 
-\item{select}{Character vector of column names. If `NULL` (the default), all
+\item{select}{Character vector of column names. If \code{NULL} (the default), all
 variables will be selected.}
 
 \item{exclude}{Character vector of column names to be excluded from selection.}
 
-\item{remove_na}{How should missing values (`NA`) be treated: if `"none"`
+\item{remove_na}{How should missing values (\code{NA}) be treated: if \code{"none"}
 (default): each column's standardization is done separately, ignoring
-`NA`s. Else, rows with `NA` in the columns selected with `select` /
-`exclude` (`"selected"`) or in all columns (`"all"`) are dropped before
+\code{NA}s. Else, rows with \code{NA} in the columns selected with \code{select} /
+\code{exclude} (\code{"selected"}) or in all columns (\code{"all"}) are dropped before
 standardization, and the resulting data frame does not include these cases.}
 
-\item{force}{Logical, if `TRUE`, forces standardization of factors and dates
+\item{force}{Logical, if \code{TRUE}, forces standardization of factors and dates
 as well. Factors are converted to numerical values, with the lowest level
-being the value `1` (unless the factor has numeric levels, which are
+being the value \code{1} (unless the factor has numeric levels, which are
 converted to the corresponding numeric value).}
 
-\item{append}{Logical, if `TRUE` and `x` is a data frame, standardized
-variables will be added as additional columns; if `FALSE`,
+\item{append}{Logical, if \code{TRUE} and \code{x} is a data frame, standardized
+variables will be added as additional columns; if \code{FALSE},
 existing variables are overwritten.}
 
 \item{suffix}{Character value, will be appended to variable (column) names of
-`x`, if `x` is a data frame and `append = TRUE`.}
+\code{x}, if \code{x} is a data frame and \code{append = TRUE}.}
 
-\item{center, scale}{Used by `unstandardize()`; `center` and `scale`
+\item{center, scale}{Used by \code{unstandardize()}; \code{center} and \code{scale}
 correspond to the center (the mean / median) and the scale (SD / MAD) of
 the original non-standardized data (for data frames, should be named, or
 have column order correspond to the numeric column). However, one can also
-directly provide the original data through `reference`, from which the
-center and the scale will be computed (according to `robust` and `two_sd`.
-Alternatively, if the input contains the attributes `center` and `scale`
-(as does the output of `standardize()`), it will take it from there if the
+directly provide the original data through \code{reference}, from which the
+center and the scale will be computed (according to \code{robust} and \code{two_sd}.
+Alternatively, if the input contains the attributes \code{center} and \code{scale}
+(as does the output of \code{standardize()}), it will take it from there if the
 rest of the arguments are absent.}
 }
 \value{
 The standardized object (either a standardize data frame or a
-  statistical model fitted on standardized data).
+statistical model fitted on standardized data).
 }
 \description{
 Performs a standardization of data (z-scoring), i.e., centering and scaling,
@@ -124,33 +126,33 @@ so that the data is expressed in terms of standard deviation (i.e., mean = 0,
 SD = 1) or Median Absolute Deviance (median = 0, MAD = 1). When applied to a
 statistical model, this function extracts the dataset, standardizes it, and
 refits the model with this standardized version of the dataset. The
-[normalize()] function can also be used to scale all numeric variables within
+\code{\link[=normalize]{normalize()}} function can also be used to scale all numeric variables within
 the 0 - 1 range.
 }
 \note{
-When `x` is a vector or a data frame with `remove_na = "none")`,
-  missing values are preserved, so the return value has the same length /
-  number of rows as the original input.
+When \code{x} is a vector or a data frame with \verb{remove_na = "none")},
+missing values are preserved, so the return value has the same length /
+number of rows as the original input.
 }
 \section{Model Standardization}{
 
-If `x` is a model object, standardization is done by completely refitting the
+If \code{x} is a model object, standardization is done by completely refitting the
 model on the standardized data. Hence, this approach is equal to
-standardizing the variables *before* fitting the model and will return a new
+standardizing the variables \emph{before} fitting the model and will return a new
 model object. However, this method is particularly recommended for complex
 models that include interactions or transformations (e.g., polynomial or
-spline terms). The `robust` (default to `FALSE`) argument enables a robust
-standardization of data, i.e., based on the `median` and `MAD` instead of the
-`mean` and `SD`. See [standardize_parameters()] for other methods of
-standardizing model coefficients.
+spline terms). The \code{robust} (default to \code{FALSE}) argument enables a robust
+standardization of data, i.e., based on the \code{median} and \code{MAD} instead of the
+\code{mean} and \code{SD}.
+\subsection{Transformed Variables}{
 
-## Transformed Variables
-When the model's formula contains transformations (e.g. `y ~ exp(X)`) the
+When the model's formula contains transformations (e.g. \code{y ~ exp(X)}) the
 transformation effectively takes place after standardization (e.g.,
-`exp(scale(X))`). Some transformations are undefined for negative values,
-such as `log()` and `sqrt()`. To avoid dropping these values, the
-standardized data is shifted by `Z - min(Z) + 1` or `Z - min(Z)`
+\code{exp(scale(X))}). Some transformations are undefined for negative values,
+such as \code{log()} and \code{sqrt()}. To avoid dropping these values, the
+standardized data is shifted by \code{Z - min(Z) + 1} or \code{Z - min(Z)}
 (respectively).
+}
 }
 
 \examples{

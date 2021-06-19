@@ -31,31 +31,31 @@ data_adjust(
 \item{data}{A dataframe.}
 
 \item{effect}{Character vector of column names to be adjusted for (regressed
-out). If `NULL` (the default), all variables will be selected.}
+out). If \code{NULL} (the default), all variables will be selected.}
 
-\item{select}{Character vector of column names. If `NULL` (the default), all
+\item{select}{Character vector of column names. If \code{NULL} (the default), all
 variables will be selected.}
 
 \item{exclude}{Character vector of column names to be excluded from selection.}
 
-\item{multilevel}{If `TRUE`, the factors are included as random factors.
-Else, if `FALSE` (default), they are included as fixed effects in the
+\item{multilevel}{If \code{TRUE}, the factors are included as random factors.
+Else, if \code{FALSE} (default), they are included as fixed effects in the
 simple regression model.}
 
-\item{additive}{If `TRUE`, continuous variables as included as smooth terms
+\item{additive}{If \code{TRUE}, continuous variables as included as smooth terms
 in additive models. The goal is to regress-out potential non-linear
 effects.}
 
-\item{bayesian}{If `TRUE`, the models are fitted under the Bayesian framework
-using `rstanarm`.}
+\item{bayesian}{If \code{TRUE}, the models are fitted under the Bayesian framework
+using \code{rstanarm}.}
 
-\item{keep_intercept}{If `FALSE` (default), the intercept of the model is
+\item{keep_intercept}{If \code{FALSE} (default), the intercept of the model is
 re-added. This avoids the centering around 0 that happens by default
 when regressing out another variable (see the examples below for a
 visual representation of this).}
 }
 \value{
-A data frame comparable to `data`, with adjusted variables.
+A data frame comparable to \code{data}, with adjusted variables.
 }
 \description{
 This function can be used to adjust the data for the effect of other

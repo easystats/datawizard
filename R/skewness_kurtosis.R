@@ -2,22 +2,22 @@
 #'
 #' @param x A numeric vector or data.frame.
 #' @param na.rm Remove missing values.
-#' @param type Type of algorithm for computing skewness. May be one of \code{1}
-#'   (or \code{"1"}, \code{"I"} or \code{"classic"}), \code{2} (or \code{"2"},
-#'   \code{"II"} or \code{"SPSS"} or \code{"SAS"}) or \code{3} (or  \code{"3"},
-#'   \code{"III"} or \code{"Minitab"}). See 'Details'.
+#' @param type Type of algorithm for computing skewness. May be one of `1`
+#'   (or `"1"`, `"I"` or `"classic"`), `2` (or `"2"`,
+#'   `"II"` or `"SPSS"` or `"SAS"`) or `3` (or  `"3"`,
+#'   `"III"` or `"Minitab"`). See 'Details'.
 #' @param iterations The number of bootstrap replicates for computing standard
-#'   errors. If \code{NULL} (default), parametric standard errors are computed.
+#'   errors. If `NULL` (default), parametric standard errors are computed.
 #'   See 'Details'.
-#' @param test Logical, if \code{TRUE}, tests if skewness or kurtosis is
+#' @param test Logical, if `TRUE`, tests if skewness or kurtosis is
 #'   significantly different from zero.
 #' @param digits Number of decimal places.
-#' @param object An object returned by \code{skewness()} or \code{kurtosis()}.
+#' @param object An object returned by `skewness()` or `kurtosis()`.
 #' @param verbose Toggle warnings and messages.
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @details \subsection{Skewness}{
-#' Symmetric distributions have a \code{skewness} around zero, while
+#' Symmetric distributions have a `skewness` around zero, while
 #' a negative skewness values indicates a "left-skewed" distribution, and a
 #' positive skewness values indicates a "right-skewed" distribution. Examples
 #' for the relationship of skewness and distributions are:
@@ -32,47 +32,47 @@
 #' (\cite{https://en.wikipedia.org/wiki/Skewness})
 #' }
 #' \subsection{Types of Skewness}{
-#' \code{skewness()} supports three different methods for estimating skewness,
+#' `skewness()` supports three different methods for estimating skewness,
 #' as discussed in \cite{Joanes and Gill (1988)}:
 #' \itemize{
-#' \item Type "1" is the "classical" method, which is \code{g1 = (sum((x -
-#' mean(x))^3) / n) / (sum((x - mean(x))^2) / n)^1.5}
+#' \item Type "1" is the "classical" method, which is `g1 = (sum((x -
+#' mean(x))^3) / n) / (sum((x - mean(x))^2) / n)^1.5`
 #'
 #' \item Type "2" first calculates the type-1 skewness, then adjusts the result:
-#' \code{G1 = g1 * sqrt(n * (n - 1)) / (n - 2)}. This is what SAS and SPSS
+#' `G1 = g1 * sqrt(n * (n - 1)) / (n - 2)`. This is what SAS and SPSS
 #' usually return
 #'
 #' \item Type "3" first calculates the type-1 skewness, then adjusts the result:
-#' \code{b1 = g1 * ((1 - 1 / n))^1.5}. This is what Minitab usually returns.
+#' `b1 = g1 * ((1 - 1 / n))^1.5`. This is what Minitab usually returns.
 #' }
 #' }
 #' \subsection{Kurtosis}{
-#' The \code{kurtosis} is a measure of "tailedness" of a distribution. A
+#' The `kurtosis` is a measure of "tailedness" of a distribution. A
 #' distribution with a kurtosis values of about zero is called "mesokurtic". A
 #' kurtosis value larger than zero indicates a "leptokurtic" distribution with
-#' \emph{fatter} tails. A kurtosis value below zero indicates a "platykurtic"
-#' distribution with \emph{thinner} tails
+#' *fatter* tails. A kurtosis value below zero indicates a "platykurtic"
+#' distribution with *thinner* tails
 #' (\cite{https://en.wikipedia.org/wiki/Kurtosis}).
 #' }
 #' \subsection{Types of Kurtosis}{
-#' \code{kurtosis()} supports three different methods for estimating kurtosis,
+#' `kurtosis()` supports three different methods for estimating kurtosis,
 #' as discussed in \cite{Joanes and Gill (1988)}:
 #' \itemize{
-#' \item Type "1" is the "classical" method, which is \code{g2 = n * sum((x -
-#' mean(x))^4) / (sum((x - mean(x))^2)^2) - 3}.
+#' \item Type "1" is the "classical" method, which is `g2 = n * sum((x -
+#' mean(x))^4) / (sum((x - mean(x))^2)^2) - 3`.
 #'
 #' \item Type "2" first calculates the type-1 kurtosis, than adjusts the result:
-#' \code{G2 = ((n + 1) * g2 + 6) * (n - 1)/((n - 2) * (n - 3))}. This is what
+#' `G2 = ((n + 1) * g2 + 6) * (n - 1)/((n - 2) * (n - 3))`. This is what
 #' SAS and SPSS usually return
 #'
 #' \item Type "3" first calculates the type-1 kurtosis, than adjusts the result:
-#' \code{b2 = (g2 + 3) * (1 - 1 / n)^2 - 3}. This is what Minitab usually
+#' `b2 = (g2 + 3) * (1 - 1 / n)^2 - 3`. This is what Minitab usually
 #' returns.
 #' }
 #' }
 #' \subsection{Standard Errors}{
 #' It is recommended to compute empirical (bootstrapped) standard errors (via
-#' the \code{iterations} argument) than relying on analytic standard errors
+#' the `iterations` argument) than relying on analytic standard errors
 #' (\cite{Wright & Herrington, 2011}).
 #' }
 #'

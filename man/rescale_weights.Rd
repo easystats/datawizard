@@ -24,41 +24,41 @@ combination from each group level of the variables in \code{group}.}
 }
 \value{
 \code{data}, including the new weighting variables: \code{pweights_a}
-  and \code{pweights_b}, which represent the rescaled design weights to use
-  in multilevel models (use these variables for the \code{weights} argument).
+and \code{pweights_b}, which represent the rescaled design weights to use
+in multilevel models (use these variables for the \code{weights} argument).
 }
 \description{
 Most functions to fit multilevel and mixed effects models only
-  allow to specify frequency weights, but not design (i.e. sampling or
-  probability) weights, which should be used when analyzing complex samples
-  and survey data. \code{rescale_weights()} implements an algorithm proposed
-  by \cite{Asparouhov (2006)} and \cite{Carle (2009)} to rescale design
-  weights in survey data to account for the grouping structure of multilevel
-  models, which then can be used for multilevel modelling.
+allow to specify frequency weights, but not design (i.e. sampling or
+probability) weights, which should be used when analyzing complex samples
+and survey data. \code{rescale_weights()} implements an algorithm proposed
+by \cite{Asparouhov (2006)} and \cite{Carle (2009)} to rescale design
+weights in survey data to account for the grouping structure of multilevel
+models, which then can be used for multilevel modelling.
 }
 \details{
 Rescaling is based on two methods: For \code{pweights_a}, the sample
-  weights \code{probability_weights} are adjusted by a factor that represents
-  the proportion of group size divided by the sum of sampling weights within
-  each group. The adjustment factor for \code{pweights_b} is the sum of
-  sample weights within each group divided by the sum of squared sample
-  weights within each group (see \cite{Carle (2009)}, Appendix B).
-   \cr \cr
-   Regarding the choice between scaling methods A and B, Carle suggests
-   that "analysts who wish to discuss point estimates should report results
-   based on weighting method A. For analysts more interested in residual
-   between-group variance, method B may generally provide the least biased
-   estimates". In general, it is recommended to fit a non-weighted model
-   and weighted models with both scaling methods and when comparing the
-   models, see whether the "inferential decisions converge", to gain
-   confidence in the results.
-   \cr \cr
-   Though the bias of scaled weights decreases with increasing group size,
-   method A is preferred when insufficient or low group size is a concern.
-   \cr \cr
-   The group ID and probably PSU may be used as random effects (e.g.
-   nested design, or group and PSU as varying intercepts), depending
-   on the survey design that should be mimicked.
+weights \code{probability_weights} are adjusted by a factor that represents
+the proportion of group size divided by the sum of sampling weights within
+each group. The adjustment factor for \code{pweights_b} is the sum of
+sample weights within each group divided by the sum of squared sample
+weights within each group (see \cite{Carle (2009)}, Appendix B).
+\cr \cr
+Regarding the choice between scaling methods A and B, Carle suggests
+that "analysts who wish to discuss point estimates should report results
+based on weighting method A. For analysts more interested in residual
+between-group variance, method B may generally provide the least biased
+estimates". In general, it is recommended to fit a non-weighted model
+and weighted models with both scaling methods and when comparing the
+models, see whether the "inferential decisions converge", to gain
+confidence in the results.
+\cr \cr
+Though the bias of scaled weights decreases with increasing group size,
+method A is preferred when insufficient or low group size is a concern.
+\cr \cr
+The group ID and probably PSU may be used as random effects (e.g.
+nested design, or group and PSU as varying intercepts), depending
+on the survey design that should be mimicked.
 }
 \examples{
 if (require("sjstats")) {
@@ -91,11 +91,11 @@ if (require("lme4") && require("sjstats")) {
 }
 \references{
 \itemize{
-  \item Carle A.C. (2009). Fitting multilevel models in complex survey data
-  with design weights: Recommendations. BMC Medical Research Methodology
-  9(49): 1-13
+\item Carle A.C. (2009). Fitting multilevel models in complex survey data
+with design weights: Recommendations. BMC Medical Research Methodology
+9(49): 1-13
 
-  \item Asparouhov T. (2006). General Multi-Level Modeling with Sampling
-  Weights. Communications in Statistics - Theory and Methods 35: 439-460
-  }
+\item Asparouhov T. (2006). General Multi-Level Modeling with Sampling
+Weights. Communications in Statistics - Theory and Methods 35: 439-460
+}
 }

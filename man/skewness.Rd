@@ -59,12 +59,12 @@ a negative skewness values indicates a "left-skewed" distribution, and a
 positive skewness values indicates a "right-skewed" distribution. Examples
 for the relationship of skewness and distributions are:
 \itemize{
-  \item Normal distribution (and other symmetric distribution) has a skewness
-  of 0
-  \item Half-normal distribution has a skewness just below 1
-  \item Exponential distribution has a skewness of 2
-  \item Lognormal distribution can have a skewness of any positive value,
-  depending on its parameters
+\item Normal distribution (and other symmetric distribution) has a skewness
+of 0
+\item Half-normal distribution has a skewness just below 1
+\item Exponential distribution has a skewness of 2
+\item Lognormal distribution can have a skewness of any positive value,
+depending on its parameters
 }
 (\cite{https://en.wikipedia.org/wiki/Skewness})
 }
@@ -72,8 +72,7 @@ for the relationship of skewness and distributions are:
 \code{skewness()} supports three different methods for estimating skewness,
 as discussed in \cite{Joanes and Gill (1988)}:
 \itemize{
-\item Type "1" is the "classical" method, which is \code{g1 = (sum((x -
-mean(x))^3) / n) / (sum((x - mean(x))^2) / n)^1.5}
+\item Type "1" is the "classical" method, which is \code{g1 = (sum((x - mean(x))^3) / n) / (sum((x - mean(x))^2) / n)^1.5}
 
 \item Type "2" first calculates the type-1 skewness, then adjusts the result:
 \code{G1 = g1 * sqrt(n * (n - 1)) / (n - 2)}. This is what SAS and SPSS
@@ -95,8 +94,7 @@ distribution with \emph{thinner} tails
 \code{kurtosis()} supports three different methods for estimating kurtosis,
 as discussed in \cite{Joanes and Gill (1988)}:
 \itemize{
-\item Type "1" is the "classical" method, which is \code{g2 = n * sum((x -
-mean(x))^4) / (sum((x - mean(x))^2)^2) - 3}.
+\item Type "1" is the "classical" method, which is \code{g2 = n * sum((x - mean(x))^4) / (sum((x - mean(x))^2)^2) - 3}.
 
 \item Type "2" first calculates the type-1 kurtosis, than adjusts the result:
 \code{G2 = ((n + 1) * g2 + 6) * (n - 1)/((n - 2) * (n - 3))}. This is what
@@ -119,11 +117,11 @@ kurtosis(rnorm(1000))
 }
 \references{
 \itemize{
-  \item D. N. Joanes and C. A. Gill (1998). Comparing measures of sample
-  skewness and kurtosis. The Statistician, 47, 183–189.
+\item D. N. Joanes and C. A. Gill (1998). Comparing measures of sample
+skewness and kurtosis. The Statistician, 47, 183–189.
 
-  \item Wright, D. B., & Herrington, J. A. (2011). Problematic standard
-  errors and confidence intervals for skewness and kurtosis. Behavior
-  research methods, 43(1), 8-17.
+\item Wright, D. B., & Herrington, J. A. (2011). Problematic standard
+errors and confidence intervals for skewness and kurtosis. Behavior
+research methods, 43(1), 8-17.
 }
 }

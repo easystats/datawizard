@@ -7,23 +7,23 @@
 #' @param range Return the range (min and max).
 #' @param quartiles Return the first and third quartiles (25th and 75pth
 #'   percentiles).
-#' @param include_factors Logical, if \code{TRUE}, factors are included in the
+#' @param include_factors Logical, if `TRUE`, factors are included in the
 #'   output, however, only columns for range (first and last factor levels) as
 #'   well as n and missing will contain information.
-#' @param ci Confidence Interval (CI) level. Default is \code{NULL}, i.e. no
-#'   confidence intervals are computed. If not \code{NULL}, confidence intervals
-#'   are based on bootstrap replicates (see \code{iterations}). If
-#'   \code{centrality = "all"}, the bootstrapped confidence interval refers to
+#' @param ci Confidence Interval (CI) level. Default is `NULL`, i.e. no
+#'   confidence intervals are computed. If not `NULL`, confidence intervals
+#'   are based on bootstrap replicates (see `iterations`). If
+#'   `centrality = "all"`, the bootstrapped confidence interval refers to
 #'   the first centrality index (which is typically the median).
 #' @param iterations The number of bootstrap replicates for computing confidence
-#'   intervals. Only applies when \code{ci} is not \code{NULL}.
-#' @param iqr Logical, if \code{TRUE}, the interquartile range is calculated
-#'   (based on \code{\link[stats]{IQR}}, using \code{type = 6}).
+#'   intervals. Only applies when `ci` is not `NULL`.
+#' @param iqr Logical, if `TRUE`, the interquartile range is calculated
+#'   (based on [stats::IQR()], using `type = 6`).
 #' @param verbose Toggle warnings and messages.
 #' @inheritParams bayestestR::point_estimate
 #'
 #' @note There is also a
-#'   \href{https://easystats.github.io/see/articles/parameters.html}{\code{plot()}-method}
+#'   [`plot()`-method](https://easystats.github.io/see/articles/parameters.html)
 #'   implemented in the
 #'   \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'

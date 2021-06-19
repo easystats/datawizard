@@ -36,12 +36,12 @@ change_scale(x, ...)
 
 \item{to}{New range of values of the data after rescaling.}
 
-\item{range}{Initial (old) range of values. If `NULL`, will take the range of
+\item{range}{Initial (old) range of values. If \code{NULL}, will take the range of
 data.}
 
 \item{verbose}{Toggle warnings and messages on or off.}
 
-\item{select}{Character vector of column names. If `NULL` (the default), all
+\item{select}{Character vector of column names. If \code{NULL} (the default), all
 variables will be selected.}
 
 \item{exclude}{Character vector of column names to be excluded from selection.}
@@ -59,7 +59,7 @@ change_scale(c(0, 1, 5, -5, -2), to = c(-5, 5))
 head(change_scale(trees))
 }
 \seealso{
-[normalize()] [standardize()] [ranktransform()]
+\code{\link[=normalize]{normalize()}} \code{\link[=standardize]{standardize()}} \code{\link[=ranktransform]{ranktransform()}}
 
 Other transform utilities: 
 \code{\link{normalize}()},
