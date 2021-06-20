@@ -44,22 +44,29 @@ Imports:
     utils
 Suggests: 
     bayestestR,
+    knitr,
     boot,
     dplyr,
+    effectsize,
     gamm4,
     ggplot2,
     lme4,
     MASS,
     mclust,
     multimode,
+    parameters,
     psych,
+    purrr,
     rstanarm,
     see,
     sjstats,
     spelling,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    tidyr,
+    rmarkdown
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
 RoxygenNote: 7.1.1.9001
 Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr

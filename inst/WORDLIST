@@ -24,6 +24,7 @@ Rescale
 Rescaling
 Rodríguez
 Routledge
+SDs
 Schaeffer
 Verkuilen
 Verkuilen's
@@ -33,7 +34,6 @@ Winsorizing
 al
 behaviour
 de
-df
 doi
 easystats
 endogeneity
@@ -44,7 +44,6 @@ lme
 meaned
 mesokurtic
 modelling
-na
 nd
 partialization
 platykurtic
@@ -52,16 +51,14 @@ pockety
 proprties
 pth
 quartiles
-ranktransform
+reproducibility
 rescale
 rescaled
 rescaling
-rstanarm
-sd
 stackexchange
 tailedness
 th
-unstandardize
+unitless
 untransformed
 wikipedia
 winsorization
