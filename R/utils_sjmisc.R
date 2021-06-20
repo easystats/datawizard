@@ -14,8 +14,7 @@ string_ends_with <- function(pattern, x) {
 }
 
 string_one_of <- function(pattern, x) {
-  insight::check_if_installed("purrr")
-  m <- unlist(purrr::map(pattern, ~ grep(., x, fixed = TRUE, useBytes = TRUE)))
+  m <- unlist(sapply(pattern, grep, x = x, fixed = TRUE, useBytes = TRUE))
   x[m]
 }
 

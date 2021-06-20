@@ -56,7 +56,6 @@ Suggests:
     multimode,
     parameters,
     psych,
-    purrr,
     rstanarm,
     see,
     sjstats,
