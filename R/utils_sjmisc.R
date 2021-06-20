@@ -13,11 +13,11 @@ string_ends_with <- function(pattern, x) {
   grep(pattern, x, perl = TRUE)
 }
 
-string_one_of <- function(pattern, x) {
-  insight::check_if_installed("purrr")
-  m <- unlist(purrr::map(pattern, ~ grep(., x, fixed = TRUE, useBytes = TRUE)))
-  x[m]
-}
+# string_one_of <- function(pattern, x) {
+#   insight::check_if_installed("purrr")
+#   m <- unlist(purrr::map(pattern, ~ grep(., x, fixed = TRUE, useBytes = TRUE)))
+#   x[m]
+# }
 
 rownames_as_column <- function(x, var = "rowname") {
   rn <- data.frame(rn = rownames(x), stringsAsFactors = FALSE)
