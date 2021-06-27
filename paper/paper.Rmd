@@ -1,0 +1,64 @@
+---
+title: "datawizard: An R Package for Easy Data Wrangling"
+tags:
+  - R
+  - easystats
+authors:
+- affiliation: 1
+  name: Dominique Makowski
+  orcid: 0000-0001-5375-9967
+- affiliation: 2
+  name: Indrajeet Patil
+  orcid: 0000-0003-1995-6531
+- affiliation: 3
+  name: Mattan S. Ben-Shachar
+  orcid: 0000-0002-4287-4801
+- affiliation: 4
+  name: Brenton M. Wiernik
+  orcid: 0000-0001-9560-6336
+- affiliation: 5
+  name: Daniel Lüdecke
+  orcid: 0000-0002-8895-3206
+affiliations:
+- index: 1
+  name: Nanyang Technological University, Singapore
+- index: 2
+  name: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany  
+- index: 3
+  name: Ben-Gurion University of the Negev, Israel
+- index: 4
+  name: Department of Psychology, University of South Florida, USA 
+- index: 5
+  name:  University Medical Center Hamburg-Eppendorf, Germany  
+date: "`r Sys.Date()`"
+bibliography: paper.bib
+output: rticles::joss_article
+csl: apa.csl
+journal: JOSS
+link-citations: yes
+---
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  out.width = "100%",
+  dpi = 450,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+# Summary
+
+# Statement of Need
+
+# Licensing and Availability
+
+*see* is licensed under the GNU General Public License (v3.0), with all source code openly developed and stored at GitHub (<https://github.com/easystats/datawizard>), along with a corresponding issue tracker for bug reporting and feature enhancements. In the spirit of honest and open science, we encourage requests, tips for fixes, feature updates, as well as general questions and concerns via direct interaction with contributors and developers.
+
+# Acknowledgments
+
+*see* is part of the collaborative [*easystats*](https://github.com/easystats/easystats) ecosystem. Thus, we thank the [members of easystats](https://github.com/orgs/easystats/people) as well as the users.
+
+# References
