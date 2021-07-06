@@ -39,16 +39,13 @@ detrend(
 )
 }
 \arguments{
-\item{x}{A data frame. For \code{check_heterogeneity()}, may also be a mixed
-model object.}
+\item{x}{A data frame.}
 
 \item{select}{Character vector (or formula) with names of variables to select
-that should be group- and de-meaned. For \code{check_heterogeneity()}, if
-\code{x} is a mixed model object, this argument be ignored.}
+that should be group- and de-meaned.}
 
 \item{group}{Character vector (or formula) with the name of the variable that
-indicates the group- or cluster-ID. For \code{check_heterogeneity()}, if
-\code{x} is a model object, this argument be ignored.}
+indicates the group- or cluster-ID.}
 
 \item{suffix_demean, suffix_groupmean}{String value, will be appended to the
 names of the group-meaned and de-meaned variables of \code{x}. By default,
@@ -73,15 +70,11 @@ A data frame with the group-/de-meaned variables, which get the suffix
 the de-meaned variable) by default.
 }
 \description{
-\code{demean()} computes group- and de-meaned versions of a
-variable that can be used in regression analysis to model the between-
-and within-subject effect. \code{check_heterogeneity()} checks if model
-predictors or variables may cause a heterogeneity bias, i.e. if variables
-have a within- and/or between-effect.
-\cr \cr
-\code{degroup()} is more generic in terms of the centering-operation.
-While \code{demean()} always uses mean-centering, \code{degroup()} can
-also use the mode or median for centering.
+\code{demean()} computes group- and de-meaned versions of a variable that can be
+used in regression analysis to model the between- and within-subject effect.
+\code{degroup()} is more generic in terms of the centering-operation. While
+\code{demean()} always uses mean-centering, \code{degroup()} can also use the mode or
+median for centering.
 }
 \details{
 \subsection{Heterogeneity Bias}{

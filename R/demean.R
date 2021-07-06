@@ -1,23 +1,16 @@
 #' Compute group-meaned and de-meaned variables
 #'
-#' `demean()` computes group- and de-meaned versions of a
-#'    variable that can be used in regression analysis to model the between-
-#'    and within-subject effect. `check_heterogeneity()` checks if model
-#'    predictors or variables may cause a heterogeneity bias, i.e. if variables
-#'    have a within- and/or between-effect.
-#'    \cr \cr
-#'    `degroup()` is more generic in terms of the centering-operation.
-#'    While `demean()` always uses mean-centering, `degroup()` can
-#'    also use the mode or median for centering.
+#' `demean()` computes group- and de-meaned versions of a variable that can be
+#' used in regression analysis to model the between- and within-subject effect.
+#' `degroup()` is more generic in terms of the centering-operation. While
+#' `demean()` always uses mean-centering, `degroup()` can also use the mode or
+#' median for centering.
 #'
-#' @param x A data frame. For `check_heterogeneity()`, may also be a mixed
-#'   model object.
+#' @param x A data frame.
 #' @param select Character vector (or formula) with names of variables to select
-#'   that should be group- and de-meaned. For `check_heterogeneity()`, if
-#'   `x` is a mixed model object, this argument be ignored.
+#'   that should be group- and de-meaned.
 #' @param group Character vector (or formula) with the name of the variable that
-#'   indicates the group- or cluster-ID. For `check_heterogeneity()`, if
-#'   `x` is a model object, this argument be ignored.
+#'   indicates the group- or cluster-ID.
 #' @param center Method for centering. `demean()` always performs
 #'   mean-centering, while `degroup()` can use `center = "median"` or
 #'   `center = "mode"` for median- or mode-centering, and also `"min"`
