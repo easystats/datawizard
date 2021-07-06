@@ -47,15 +47,11 @@
 
 
 <meta property="og:title" content="Compute group-meaned and de-meaned variables — demean" />
-<meta property="og:description" content="demean() computes group- and de-meaned versions of a
-variable that can be used in regression analysis to model the between-
-and within-subject effect. check_heterogeneity() checks if model
-predictors or variables may cause a heterogeneity bias, i.e. if variables
-have a within- and/or between-effect.
- 
-degroup() is more generic in terms of the centering-operation.
-While demean() always uses mean-centering, degroup() can
-also use the mode or median for centering." />
+<meta property="og:description" content="demean() computes group- and de-meaned versions of a variable that can be
+used in regression analysis to model the between- and within-subject effect.
+degroup() is more generic in terms of the centering-operation. While
+demean() always uses mean-centering, degroup() can also use the mode or
+median for centering." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -147,15 +143,11 @@ also use the mode or median for centering." />
     </div>
 
     <div class="ref-description">
-    <p><code>demean()</code> computes group- and de-meaned versions of a
-variable that can be used in regression analysis to model the between-
-and within-subject effect. <code>check_heterogeneity()</code> checks if model
-predictors or variables may cause a heterogeneity bias, i.e. if variables
-have a within- and/or between-effect.
-<br /> <br />
-<code>degroup()</code> is more generic in terms of the centering-operation.
-While <code>demean()</code> always uses mean-centering, <code>degroup()</code> can
-also use the mode or median for centering.</p>
+    <p><code>demean()</code> computes group- and de-meaned versions of a variable that can be
+used in regression analysis to model the between- and within-subject effect.
+<code>degroup()</code> is more generic in terms of the centering-operation. While
+<code>demean()</code> always uses mean-centering, <code>degroup()</code> can also use the mode or
+median for centering.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>demean</span><span class='op'>(</span>
@@ -195,20 +187,17 @@ also use the mode or median for centering.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A data frame. For <code>check_heterogeneity()</code>, may also be a mixed
-model object.</p></td>
+      <td><p>A data frame.</p></td>
     </tr>
     <tr>
       <th>select</th>
       <td><p>Character vector (or formula) with names of variables to select
-that should be group- and de-meaned. For <code>check_heterogeneity()</code>, if
-<code>x</code> is a mixed model object, this argument be ignored.</p></td>
+that should be group- and de-meaned.</p></td>
     </tr>
     <tr>
       <th>group</th>
       <td><p>Character vector (or formula) with the name of the variable that
-indicates the group- or cluster-ID. For <code>check_heterogeneity()</code>, if
-<code>x</code> is a model object, this argument be ignored.</p></td>
+indicates the group- or cluster-ID.</p></td>
     </tr>
     <tr>
       <th>suffix_demean, suffix_groupmean</th>
