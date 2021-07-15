@@ -17,15 +17,18 @@ options(knitr.kable.NA = "")
 knitr::opts_chunk$set(
   comment = ">",
   message = FALSE,
-  warning = FALSE
+  warning = FALSE,
+  dpi = 300
 )
 
-options(digits = 2)
-
 pkgs <- c(
-  "datawizard", "dplyr", "tidyr",
-  "see", "ggplot2",
-  "parameters", "lme4"
+  "datawizard",
+  "dplyr",
+  "tidyr",
+  "see",
+  "ggplot2",
+  "parameters",
+  "lme4"
 )
 
 if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
@@ -49,22 +52,27 @@ The `datawizard` package offers two methods of standardization via the
 - **Normal standardization**: center around the *mean*, with *SD* units
   (default).
 
-- **Robust standardization**: center around the *median*, with *MAD* units
-  (`robust = TRUE`).
+- **Robust standardization**: center around the *median*, with *MAD* (median
+  absolute deviation) units (`robust = TRUE`).
 
 Let's look at the following example:
 
 ```{r}
 library(datawizard)
+library(effectsize) # for data
+
+# let's have a look at what the data look like
 data("hardlyworking", package = "effectsize")
 head(hardlyworking)
+
+# let's use both methods of standardization
 hardlyworking$xtra_hours_z <- standardize(hardlyworking$xtra_hours)
 hardlyworking$xtra_hours_zr <- standardize(hardlyworking$xtra_hours, robust = TRUE)
 ```
 
 We can see that different methods give different central and variation values:
 
-```{r, echo=FALSE}
+```{r}
 library(dplyr)
 library(tidyr)
 
@@ -88,7 +96,7 @@ numeric variable is standardized separately:
 hardlyworking_z <- standardize(hardlyworking)
 ```
 
-```{r, echo=FALSE}
+```{r}
 hardlyworking_z %>%
   select(-xtra_hours_z, -xtra_hours_zr) %>%
   pivot_longer(everything()) %>%
@@ -140,11 +148,13 @@ Let's have a look at the data, averaged by participants:
 ```{r}
 library(dplyr)
 library(tidyr)
+
 # Download the 'emotion' dataset
 load(url("https://raw.github.com/neuropsychology/psycho.R/master/data/emotion.rda"))
+
 # Discard neutral pictures (keep only negative)
-emotion <- emotion %>%
-  filter(Emotion_Condition == "Negative")
+emotion <- emotion %>% filter(Emotion_Condition == "Negative")
+
 # Summary
 emotion %>%
   drop_na(Subjective_Valence, Autobiographical_Link) %>%
@@ -167,9 +177,11 @@ techniques.
 ```{r}
 Z_VariableWise <- emotion %>%
   standardize()
+
 Z_ParticipantWise <- emotion %>%
   group_by(Participant_ID) %>%
   standardize()
+
 Z_Full <- emotion %>%
   group_by(Participant_ID) %>%
   standardize() %>%
@@ -184,7 +196,7 @@ variable.
 
 We can calculate the mean and SD of *Valence* across all participants:
 
-```{r, echo = FALSE}
+```{r}
 # Create a convenient function to print
 summarise_Subjective_Valence <- function(data) {
   df_name <- deparse(substitute(data))
@@ -207,9 +219,10 @@ rbind(
 
 The **means** and the **SD** appear as fairly similar (0 and 1)...
 
-```{r, fig.width=7, fig.height=4.5, results='markup', fig.align='center', echo = FALSE}
+```{r, fig.width=7, fig.height=4.5, results='markup', fig.align='center'}
 library(see)
 library(ggplot2)
+
 ggplot() +
   geom_density(aes(Z_VariableWise$Subjective_Valence,
     color = "Z_VariableWise"
@@ -231,7 +244,7 @@ and so do the marginal distributions...
 However we can also look at what happens in the participant level. Let's look at
 the first 5 participants:
 
-```{r, echo=FALSE}
+```{r}
 # Create convenient function
 print_participants <- function(data) {
   df_name <- deparse(substitute(data))
@@ -245,6 +258,7 @@ print_participants <- function(data) {
     head(5) %>%
     select(DF, everything())
 }
+
 # Check the results
 rbind(
   print_participants(Z_VariableWise),
@@ -262,12 +276,12 @@ but different ones than *variable-wise* standardization.
 Let's do a **correlation** between the **variable-wise and participant-wise
 methods**.
 
-```{r, fig.width=7, fig.height=4.5, results='markup', fig.align='center', echo = FALSE}
-library(ggplot2)
+```{r, fig.width=7, fig.height=4.5, results='markup', fig.align='center'}
 r <- cor.test(
   Z_VariableWise$Subjective_Valence,
   Z_ParticipantWise$Subjective_Valence
 )
+
 data.frame(
   Original = emotion$Subjective_Valence,
   VariableWise = Z_VariableWise$Subjective_Valence,
@@ -301,7 +315,7 @@ m_Full <- update(m_raw, data = Z_Full)
 
 We can extract the parameters of interest from each model, and find:
 
-```{r, echo = FALSE}
+```{r}
 # Convenient function
 get_par <- function(model) {
   mod_name <- deparse(substitute(model))
@@ -311,6 +325,7 @@ get_par <- function(model) {
     select(Model, everything()) %>%
     .[-1, ]
 }
+
 # Run the model on all datasets
 rbind(
   get_par(m_raw),
@@ -345,7 +360,10 @@ the results. To prevent its use for bad practices (e.g., *p*-hacking), we can
 only support the generalization of open-data, open-analysis and
 preregistration**.
 
-*See also the `datawizard::demean()` function, and the
-`standardize_parameters(method = "pseudo")` for more mixed-model tools.*
+# See also 
+
+- `datawizard::demean()`: <https://easystats.github.io/datawizard/reference/demean.html>
+- `standardize_parameters(method = "pseudo")` for mixed-effects models
+<https://easystats.github.io/effectsize/reference/standardize_parameters.html>
 
 # References
