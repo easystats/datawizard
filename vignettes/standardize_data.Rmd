@@ -241,7 +241,7 @@ and so do the marginal distributions...
 
 ### At the Participant Level
 
-However we can also look at what happens in the participant level. Let's look at
+However, we can also look at what happens in the participant level. Let's look at
 the first 5 participants:
 
 ```{r}
@@ -299,13 +299,13 @@ While the three standardization methods roughly present the same characteristics
 at a general level (mean 0 and SD 1) and a similar distribution, their values
 are not exactly the same!
 
-Let's now answer to the original question by investigating the **linear
-relationship between valence and autobiographical link**. We can do this by
-running a mixed model with participants entered as random effects.
+Let's now answer the original question by investigating the **linear relationship between valence and autobiographical link**. We can do this by
+running a mixed-effects model with participants entered as random effects.
 
 ```{r}
 library(lme4)
-m_raw <- lmer(Subjective_Valence ~ Autobiographical_Link + (1 | Participant_ID),
+m_raw <- lmer(
+  formula = Subjective_Valence ~ Autobiographical_Link + (1 | Participant_ID),
   data = emotion
 )
 m_VariableWise <- update(m_raw, data = Z_VariableWise)
@@ -335,30 +335,25 @@ rbind(
 )
 ```
 
-As we can see, **variable-wise** standardization only affects **the
-coefficient** (which is expected, as it changes the unit), but not the test
-statistics or significance. However, using **participant-wise** standardization
-*does* affect the coefficient **and** the significance.. No method is better or
-more justified, and its choice depends on the specific case, context, data and
-goal.
+As we can see, **variable-wise** standardization only affects **the coefficient** (which is expected, as it changes the unit), but not the test
+statistic or statistical significance. However, using **participant-wise**
+standardization *does* affect the coefficient **and** the significance. 
+
+**No method is better or more justified, and the choice depends on the specific case, context, data and goal.**
 
 ### Conclusion
 
-1. **Standardization can be useful in *some* cases and should be justified**
+1. **Standardization can be useful in *some* cases and should be justified**.
 
-2. **Variable and Participant-wise standardization methods produce "in
-   appearance" similar data**
+2. **Variable and Participant-wise standardization methods *appear* to produce similar data**.
 
-3. **Variable and Participant-wise standardization can lead to different
-   results**
+3. **Variable and Participant-wise standardization can lead to different results**.
 
-4. **The choice of the method can strongly influence the results and thus,
-   should be explicitly stated**
+4. **The chosen method can strongly influence the results and should therefore be explicitly stated and justified to enhance reproducibility of results**.
 
 We showed here yet another way of **sneakily tweaking the data** that can change
-the results. To prevent its use for bad practices (e.g., *p*-hacking), we can
-only support the generalization of open-data, open-analysis and
-preregistration**.
+the results. To prevent its use as a bad practice, we can only highlight the
+importance of open data, open analysis/scripts, and preregistration.
 
 # See also 
 
