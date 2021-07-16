@@ -4,15 +4,18 @@
 #'
 #' @inheritParams standardize.data.frame
 #'
-#' @param x Object.
-#' @param to New range of values of the data after rescaling.
+#' @param x A numeric variable.
+#' @param to New range that the variable will have after rescaling.
 #' @param range Initial (old) range of values. If `NULL`, will take the range of
-#'   data.
+#'   the input vector (\code{range(x)}).
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @examples
 #' change_scale(c(0, 1, 5, -5, -2))
 #' change_scale(c(0, 1, 5, -5, -2), to = c(-5, 5))
+#'
+#' # Specify the "theoretical" range of the input vector
+#' change_scale(c(1, 3, 4), to = c(0, 40), range = c(0, 4))
 #'
 #' head(change_scale(trees))
 #' @seealso [normalize()] [standardize()] [ranktransform()]
