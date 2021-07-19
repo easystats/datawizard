@@ -30,14 +30,14 @@ change_scale(x, ...)
 )
 }
 \arguments{
-\item{x}{Object.}
+\item{x}{A numeric variable.}
 
 \item{...}{Arguments passed to or from other methods.}
 
-\item{to}{New range of values of the data after rescaling.}
+\item{to}{New range that the variable will have after rescaling.}
 
 \item{range}{Initial (old) range of values. If \code{NULL}, will take the range of
-data.}
+the input vector (\code{range(x)}).}
 
 \item{verbose}{Toggle warnings and messages on or off.}
 
@@ -55,6 +55,9 @@ Rescale a numeric variable to a new range.
 \examples{
 change_scale(c(0, 1, 5, -5, -2))
 change_scale(c(0, 1, 5, -5, -2), to = c(-5, 5))
+
+# Specify the "theoretical" range of the input vector
+change_scale(c(1, 3, 4), to = c(0, 40), range = c(0, 4))
 
 head(change_scale(trees))
 }

@@ -50,11 +50,11 @@ Suggests:
     effectsize,
     gamm4,
     ggplot2,
+    lfe,
     lme4,
     MASS,
-    mclust,
-    multimode,
     parameters,
+    performance,
     psych,
     rstanarm,
     see,
@@ -63,6 +63,11 @@ Suggests:
     testthat (>= 3.0.0),
     tidyr,
     rmarkdown
+Remotes:
+    easystats/insight,
+    easystats/parameters,
+    easystats/performance,
+    easystats/effectsize    
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
