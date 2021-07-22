@@ -58,8 +58,8 @@
 #'   Weights. Communications in Statistics - Theory and Methods 35: 439-460
 #'
 #' @examples
-#' if (require("lme4") && require("sjstats") && packageVersion("sjstats") > "0.18.2") {
-#'   data(nhanes_sample, package = "sjstats")
+#' if (require("lme4")) {
+#'   data(nhanes_sample)
 #'   head(rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR"))
 #'
 #'   # also works with multiple group-variables
