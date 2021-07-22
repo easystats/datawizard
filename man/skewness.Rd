@@ -32,8 +32,7 @@ kurtosis(x, na.rm = TRUE, type = "2", iterations = NULL, verbose = TRUE, ...)
 \code{"III"} or \code{"Minitab"}). See 'Details'.}
 
 \item{iterations}{The number of bootstrap replicates for computing standard
-errors. If \code{NULL} (default), parametric standard errors are computed.
-See 'Details'.}
+errors. If \code{NULL} (default), parametric standard errors are computed.}
 
 \item{verbose}{Toggle warnings and messages.}
 
@@ -119,7 +118,6 @@ kurtosis(rnorm(1000))
 \itemize{
 \item D. N. Joanes and C. A. Gill (1998). Comparing measures of sample
 skewness and kurtosis. The Statistician, 47, 183–189.
-
 \item Wright, D. B., & Herrington, J. A. (2011). Problematic standard
 errors and confidence intervals for skewness and kurtosis. Behavior
 research methods, 43(1), 8-17.

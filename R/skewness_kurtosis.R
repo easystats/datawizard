@@ -8,7 +8,6 @@
 #'   `"III"` or `"Minitab"`). See 'Details'.
 #' @param iterations The number of bootstrap replicates for computing standard
 #'   errors. If `NULL` (default), parametric standard errors are computed.
-#'   See 'Details'.
 #' @param test Logical, if `TRUE`, tests if skewness or kurtosis is
 #'   significantly different from zero.
 #' @param digits Number of decimal places.
@@ -16,7 +15,9 @@
 #' @param verbose Toggle warnings and messages.
 #' @param ... Arguments passed to or from other methods.
 #'
-#' @details \subsection{Skewness}{
+#' @details
+#'
+#' \subsection{Skewness}{
 #' Symmetric distributions have a `skewness` around zero, while
 #' a negative skewness values indicates a "left-skewed" distribution, and a
 #' positive skewness values indicates a "right-skewed" distribution. Examples
@@ -77,15 +78,12 @@
 #' }
 #'
 #' @references
-#' \itemize{
-#'   \item D. N. Joanes and C. A. Gill (1998). Comparing measures of sample
+#' - D. N. Joanes and C. A. Gill (1998). Comparing measures of sample
 #'   skewness and kurtosis. The Statistician, 47, 183–189.
 #'
-#'   \item Wright, D. B., & Herrington, J. A. (2011). Problematic standard
+#' - Wright, D. B., & Herrington, J. A. (2011). Problematic standard
 #'   errors and confidence intervals for skewness and kurtosis. Behavior
 #'   research methods, 43(1), 8-17.
-#' }
-#'
 #'
 #' @return Values of skewness or kurtosis.
 #'

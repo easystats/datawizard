@@ -16,8 +16,7 @@ differences) or "cor" (default, lag-one autocorrelation).}
 interpreted as expressed in percentage of the length of the vector.}
 
 \item{iterations}{The number of bootstrap replicates for computing standard
-errors. If \code{NULL} (default), parametric standard errors are computed.
-See 'Details'.}
+errors. If \code{NULL} (default), parametric standard errors are computed.}
 
 \item{...}{Arguments passed to or from other methods.}
 }
