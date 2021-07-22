@@ -105,6 +105,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/demean.html">Analysing Longitudinal or Panel Data</a>
+    </li>
+    <li>
       <a href="../articles/standardize_data.html">Data Standardization</a>
     </li>
   </ul>
@@ -172,7 +175,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Object.</p></td>
+      <td><p>A numeric variable.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -180,12 +183,12 @@
     </tr>
     <tr>
       <th>to</th>
-      <td><p>New range of values of the data after rescaling.</p></td>
+      <td><p>New range that the variable will have after rescaling.</p></td>
     </tr>
     <tr>
       <th>range</th>
       <td><p>Initial (old) range of values. If <code>NULL</code>, will take the range of
-data.</p></td>
+the input vector (<code>range(x)</code>).</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -218,6 +221,10 @@ variables will be selected.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1]  50  60 100   0  30</span>
 <span class='r-in'><span class='fu'>change_scale</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>5</span>, <span class='op'>-</span><span class='fl'>5</span>, <span class='op'>-</span><span class='fl'>2</span><span class='op'>)</span>, to <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>5</span>, <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1]  0  1  5 -5 -2</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Specify the "theoretical" range of the input vector</span></span>
+<span class='r-in'><span class='fu'>change_scale</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>4</span><span class='op'>)</span>, to <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>40</span><span class='op'>)</span>, range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 10 30 40</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'>change_scale</span><span class='op'>(</span><span class='va'>trees</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>       Girth    Height     Volume</span>

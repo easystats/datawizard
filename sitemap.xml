@@ -10,6 +10,9 @@
     <loc>/CONTRIBUTING.html</loc>
   </url>
   <url>
+    <loc>/articles/demean.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -32,9 +35,6 @@
   </url>
   <url>
     <loc>/reference/change_scale.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check_multimodal.html</loc>
   </url>
   <url>
     <loc>/reference/convert_data_to_numeric.html</loc>
