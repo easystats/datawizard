@@ -48,6 +48,10 @@ reference:
       - starts_with("text_")
       - starts_with("format_")
 
+  - title: Data
+  - contents:
+      - nhanes_sample
+
   # - title: Visualization helpers
   # - contents:
   #     - visualisation_recipe
@@ -55,6 +59,7 @@ reference:
 articles:
 
   - title: Data transformation
+    navbar: Data transformation
     contents:
     - standardize_data
     - demean

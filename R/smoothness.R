@@ -16,13 +16,21 @@
 #' @references https://stats.stackexchange.com/questions/24607/how-to-measure-smoothness-of-a-time-series-in-r
 #'
 #' @export
-smoothness <- function(x, method = "cor", lag = 1, iterations = NULL, ...) {
+smoothness <- function(x,
+                       method = "cor",
+                       lag = 1,
+                       iterations = NULL,
+                       ...) {
   UseMethod("smoothness")
 }
 
 
 #' @export
-smoothness.numeric <- function(x, method = "cor", lag = 1, iterations = NULL, ...) {
+smoothness.numeric <- function(x,
+                               method = "cor",
+                               lag = 1,
+                               iterations = NULL,
+                               ...) {
   if (lag < 1) {
     lag <- round(lag * length(x))
   }
@@ -58,8 +66,19 @@ smoothness.numeric <- function(x, method = "cor", lag = 1, iterations = NULL, ..
 
 
 #' @export
-smoothness.data.frame <- function(x, method = "cor", lag = 1, iterations = NULL, ...) {
-  .smoothness <- lapply(x, smoothness, method = method, lag = lag, iterations = iterations)
+smoothness.data.frame <- function(x,
+                                  method = "cor",
+                                  lag = 1,
+                                  iterations = NULL,
+                                  ...) {
+  .smoothness <-
+    lapply(
+      x,
+      smoothness,
+      method = method,
+      lag = lag,
+      iterations = iterations
+    )
   .smoothness <- cbind(Parameter = names(.smoothness), do.call(rbind, .smoothness))
   class(.smoothness) <- unique(c("parameters_smoothness", class(.smoothness)))
   .smoothness
@@ -67,8 +86,17 @@ smoothness.data.frame <- function(x, method = "cor", lag = 1, iterations = NULL,
 
 
 #' @export
-smoothness.default <- function(x, method = "cor", lag = 1, iterations = NULL, ...) {
-  smoothness(.factor_to_numeric(x), method = method, lag = lag, iterations = iterations)
+smoothness.default <- function(x,
+                               method = "cor",
+                               lag = 1,
+                               iterations = NULL,
+                               ...) {
+  smoothness(
+    .factor_to_numeric(x),
+    method = method,
+    lag = lag,
+    iterations = iterations
+  )
 }
 
 
@@ -77,7 +105,12 @@ smoothness.default <- function(x, method = "cor", lag = 1, iterations = NULL, ..
 # bootstrapping -----------------------------------
 
 .boot_smoothness <- function(data, indices, method, lag) {
-  datawizard::smoothness(x = data[indices], method = method, lag = lag, iterations = NULL)
+  datawizard::smoothness(
+    x = data[indices],
+    method = method,
+    lag = lag,
+    iterations = NULL
+  )
 }
 
 
