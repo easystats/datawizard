@@ -25,44 +25,44 @@
 #'   and `pweights_b`, which represent the rescaled design weights to use
 #'   in multilevel models (use these variables for the `weights` argument).
 #'
-#' @details Rescaling is based on two methods: For `pweights_a`, the sample
-#'   weights `probability_weights` are adjusted by a factor that represents
-#'   the proportion of group size divided by the sum of sampling weights within
-#'   each group. The adjustment factor for `pweights_b` is the sum of
-#'   sample weights within each group divided by the sum of squared sample
-#'   weights within each group (see \cite{Carle (2009)}, Appendix B).
-#'    \cr \cr
-#'    Regarding the choice between scaling methods A and B, Carle suggests
-#'    that "analysts who wish to discuss point estimates should report results
-#'    based on weighting method A. For analysts more interested in residual
-#'    between-group variance, method B may generally provide the least biased
-#'    estimates". In general, it is recommended to fit a non-weighted model
-#'    and weighted models with both scaling methods and when comparing the
-#'    models, see whether the "inferential decisions converge", to gain
-#'    confidence in the results.
-#'    \cr \cr
-#'    Though the bias of scaled weights decreases with increasing group size,
-#'    method A is preferred when insufficient or low group size is a concern.
-#'    \cr \cr
-#'    The group ID and probably PSU may be used as random effects (e.g.
-#'    nested design, or group and PSU as varying intercepts), depending
-#'    on the survey design that should be mimicked.
+#' @details
 #'
-#' @references \itemize{
-#'   \item Carle A.C. (2009). Fitting multilevel models in complex survey data
+#' Rescaling is based on two methods: For `pweights_a`, the sample weights
+#' `probability_weights` are adjusted by a factor that represents the proportion
+#' of group size divided by the sum of sampling weights within each group. The
+#' adjustment factor for `pweights_b` is the sum of sample weights within each
+#' group divided by the sum of squared sample weights within each group (see
+#' Carle (2009), Appendix B).
+#'
+#' Regarding the choice between scaling methods A and B, Carle suggests that
+#' "analysts who wish to discuss point estimates should report results based on
+#' weighting method A. For analysts more interested in residual between-group
+#' variance, method B may generally provide the least biased estimates". In
+#' general, it is recommended to fit a non-weighted model and weighted models
+#' with both scaling methods and when comparing the models, see whether the
+#' "inferential decisions converge", to gain confidence in the results.
+#'
+#' Though the bias of scaled weights decreases with increasing group size,
+#' method A is preferred when insufficient or low group size is a concern.
+#'
+#' The group ID and probably PSU may be used as random effects (e.g. nested
+#' design, or group and PSU as varying intercepts), depending on the survey
+#' design that should be mimicked.
+#'
+#' @references
+#'   - Carle A.C. (2009). Fitting multilevel models in complex survey data
 #'   with design weights: Recommendations. BMC Medical Research Methodology
 #'   9(49): 1-13
 #'
-#'   \item Asparouhov T. (2006). General Multi-Level Modeling with Sampling
+#'   - Asparouhov T. (2006). General Multi-Level Modeling with Sampling
 #'   Weights. Communications in Statistics - Theory and Methods 35: 439-460
-#'   }
 #'
 #' @examples
-#' if (require("sjstats")) {
+#' if (require("lme4") && require("sjstats") && packageVersion("sjstats") > "0.18.2") {
 #'   data(nhanes_sample, package = "sjstats")
 #'   head(rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR"))
 #'
-#'   # also works with multiple group-variables...
+#'   # also works with multiple group-variables
 #'   head(rescale_weights(nhanes_sample, c("SDMVSTRA", "SDMVPSU"), "WTINT2YR"))
 #'
 #'   # or nested structures.
@@ -73,11 +73,9 @@
 #'     nest = TRUE
 #'   )
 #'   head(x)
-#' }
 #'
-#' if (require("lme4") && require("sjstats")) {
-#'   data(nhanes_sample, package = "sjstats")
 #'   nhanes_sample <- rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR")
+#'
 #'   glmer(
 #'     total ~ factor(RIAGENDR) * (log(age) + factor(RIDRETH1)) + (1 | SDMVPSU),
 #'     family = poisson(),

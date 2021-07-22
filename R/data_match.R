@@ -1,9 +1,9 @@
-#' Find rows of a data frame that are matching a specific subset
+#' Find row indices of a data frame matching a specific condition
 #'
-#' Find row indices of a data frame that are matching a specific configuration.
+#' Find row indices of a data frame that match a specific condition.
 #'
 #' @param x A data frame.
-#' @param to The data frame of which to meet the characteristics.
+#' @param to A data frame matching the specified conditions.
 #'
 #' @return
 #'
@@ -20,10 +20,8 @@
 
 data_match <- function(x, to) {
 
-  # Sanity checks
-  if (!is.data.frame(to)) {
-    to <- as.data.frame(to)
-  }
+  # Input checks
+  if (!is.data.frame(to)) to <- as.data.frame(to)
 
   # Find matching rows
   idx <- 1:nrow(x)
@@ -32,5 +30,6 @@ data_match <- function(x, to) {
       idx <- idx[x[[col]][idx] %in% to[[col]]]
     }
   }
+
   to_numeric(row.names(x)[idx])
 }

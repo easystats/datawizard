@@ -15,7 +15,7 @@ set. The remaining part will be used for the test set.}
 \item{group}{A character vector indicating the name(s) of the column(s) used
 for stratified partitioning.}
 
-\item{seed}{A random number generator seed. Enter an integer (e.g., 123) so
+\item{seed}{A random number generator seed. Enter an integer (e.g. 123) so
 that the random sampling will be the same each time you run the function.}
 }
 \value{
@@ -30,7 +30,7 @@ argument.
 df <- iris
 df$Smell <- rep(c("Strong", "Light"), 75)
 
-head(data_partition(df))
-head(data_partition(df, group = "Species"))
-head(data_partition(df, group = c("Species", "Smell")))
+data_partition(df)
+data_partition(df, group = "Species")
+data_partition(df, group = c("Species", "Smell"))
 }

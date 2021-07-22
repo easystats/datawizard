@@ -51,3 +51,10 @@ reference:
   # - title: Visualization helpers
   # - contents:
   #     - visualisation_recipe
+
+articles:
+
+  - title: Data transformation
+    contents:
+    - standardize_data
+    - demean

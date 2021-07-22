@@ -1,7 +1,9 @@
-# datawizard 0.1.0.9000
+# datawizard 0.2.0
 
 - The following function has now moved to *performance* package:
   `check_multimodal()`.
+
+- Minor updates to documentation, including a new vignette about `demean()`.  
 
 # datawizard 0.1.0
 

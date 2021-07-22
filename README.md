@@ -15,10 +15,11 @@ transform, and prepare your data for analysis.
 
 # Installation
 
-| Type        | Source | Command                                           |
-|-------------|--------|---------------------------------------------------|
-| Release     | CRAN   | `install.packages("datawizard")`                  |
-| Development | GitHub | `remotes::install_github("easystats/datawizard")` |
+| Type        | Source     | Command                                                                      |
+|-------------|------------|------------------------------------------------------------------------------|
+| Release     | CRAN       | `install.packages("datawizard")`                                             |
+| Development | r-universe | `install.packages("datawizard", repos = "https://easystats.r-universe.dev")` |
+| Development | GitHub     | `remotes::install_github("easystats/datawizard")`                            |
 
 # Citation
 

@@ -24,8 +24,8 @@ Relocate (reorder) columns of a data frame
 }
 \examples{
 # Reorder columns
-data_relocate(iris, cols = "Species", before = "Sepal.Length")
-data_relocate(iris, cols = "Species", before = "Sepal.Width")
-data_relocate(iris, cols = "Sepal.Width", after = "Species")
-data_relocate(iris, cols = c("Species", "Petal.Length"), after = "Sepal.Width")
+head(data_relocate(iris, cols = "Species", before = "Sepal.Length"))
+head(data_relocate(iris, cols = "Species", before = "Sepal.Width"))
+head(data_relocate(iris, cols = "Sepal.Width", after = "Species"))
+head(data_relocate(iris, cols = c("Species", "Petal.Length"), after = "Sepal.Width"))
 }
