@@ -43,7 +43,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">datawizard</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -52,20 +52,8 @@
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/demean.html">Analysing Longitudinal or Panel Data</a>
-    </li>
-    <li>
-      <a href="articles/standardize_data.html">Data Standardization</a>
-    </li>
-  </ul>
+  <a href="articles/index.html">Articles</a>
 </li>
 <li>
   <a href="news/index.html">Changelog</a>
@@ -104,6 +92,11 @@
 <h1 class="hasAnchor">
 <a href="#installation" class="anchor" aria-hidden="true"></a>Installation</h1>
 <table class="table">
+<colgroup>
+<col width="12%">
+<col width="11%">
+<col width="75%">
+</colgroup>
 <thead><tr class="header">
 <th>Type</th>
 <th>Source</th>
@@ -116,6 +109,11 @@
 <td><code>install.packages("datawizard")</code></td>
 </tr>
 <tr class="even">
+<td>Development</td>
+<td>r-universe</td>
+<td><code>install.packages("datawizard", repos = "https://easystats.r-universe.dev")</code></td>
+</tr>
+<tr class="odd">
 <td>Development</td>
 <td>GitHub</td>
 <td><code>remotes::install_github("easystats/datawizard")</code></td>
