@@ -4,10 +4,10 @@
 \alias{data_partition}
 \title{Partition data into a test and a training set}
 \usage{
-data_partition(x, training_proportion = 0.7, group = NULL, seed = NULL)
+data_partition(data, training_proportion = 0.7, group = NULL, seed = NULL)
 }
 \arguments{
-\item{x}{A data frame, or an object that can be coerced to a data frame.}
+\item{data}{A data frame, or an object that can be coerced to a data frame.}
 
 \item{training_proportion}{The proportion (between 0 and 1) of the training
 set. The remaining part will be used for the test set.}
