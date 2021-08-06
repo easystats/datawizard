@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convenient dataframe manipulation functionalities — data_rename • datawizard</title>
+<title>Convenient dataframe manipulation functionalities — data_addprefix • datawizard</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Convenient dataframe manipulation functionalities — data_rename" />
+<meta property="og:title" content="Convenient dataframe manipulation functionalities — data_addprefix" />
 <meta property="og:description" content="Safe and intuitive functions to manipulate dataframes." />
 <meta property="og:image" content="/logo.png" />
 
@@ -139,7 +139,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convenient dataframe manipulation functionalities</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/datawizard/blob/master/R/utils_data.R'><code>R/utils_data.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/datawizard/blob/master/R/data_addprefix.R'><code>R/data_addprefix.R</code></a>, <a href='https://github.com/easystats/datawizard/blob/master/R/data_findcols.R'><code>R/data_findcols.R</code></a>, <a href='https://github.com/easystats/datawizard/blob/master/R/data_remove.R'><code>R/data_remove.R</code></a>, and 2 more</small>
     <div class="hidden name"><code>data_rename.Rd</code></div>
     </div>
 
@@ -147,24 +147,26 @@
     <p>Safe and intuitive functions to manipulate dataframes.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>data_rename</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>pattern</span>, <span class='va'>replacement</span>, safe <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>data_addprefix</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>pattern</span><span class='op'>)</span>
+
+<span class='fu'>data_addsuffix</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>pattern</span><span class='op'>)</span>
 
 <span class='fu'>data_findcols</span><span class='op'>(</span><span class='va'>data</span>, pattern <span class='op'>=</span> <span class='cn'>NULL</span>, starts_with <span class='op'>=</span> <span class='cn'>NULL</span>, ends_with <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
 <span class='fu'>data_remove</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>pattern</span><span class='op'>)</span>
 
-<span class='fu'>data_reorder</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>cols</span>, safe <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'>data_rename</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>pattern</span>, <span class='va'>replacement</span>, safe <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='fu'>data_addprefix</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>pattern</span><span class='op'>)</span>
+<span class='fu'>data_rename_rows</span><span class='op'>(</span><span class='va'>data</span>, rows <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
-<span class='fu'>data_addsuffix</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>pattern</span><span class='op'>)</span></code></pre></div>
+<span class='fu'>data_reorder</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>cols</span>, safe <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>Dataframe.</p></td>
+      <td><p>A data frame, or an object that can be coerced to a data frame.</p></td>
     </tr>
     <tr>
       <th>pattern, replacement, starts_with, ends_with</th>
@@ -176,8 +178,8 @@
 renamed/removed doesn't exist.</p></td>
     </tr>
     <tr>
-      <th>cols</th>
-      <td><p>Vector of column names.</p></td>
+      <th>cols, rows</th>
+      <td><p>Vector of column or row names.</p></td>
     </tr>
     </table>
 
