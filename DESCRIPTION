@@ -53,6 +53,7 @@ Suggests:
     lfe,
     lme4,
     MASS,
+    modelbased,
     parameters,
     performance,
     psych,
