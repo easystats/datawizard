@@ -52,7 +52,11 @@ print.visualisation_recipe <- function(x, ...) {
           if (is.character(l[[element]])) {
             cat(paste0("'", l[[element]], "'"))
           } else {
-            cat(l[[element]])
+            if(length(l[[element]]) == 1) {
+              cat(l[[element]])
+            } else {
+              cat(paste0("c(", paste0(l[[element]], collapse = ", "), ")"))
+            }
           }
         } else {
           cat(paste0("class: ", class(l[[element]]), collapse = "/"))
