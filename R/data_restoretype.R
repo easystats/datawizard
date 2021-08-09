@@ -1,6 +1,7 @@
 #' Restore the type of columns according to a reference data frame
 #'
 #' @inheritParams data_to_long
+#' @inheritParams data_rename
 #' @param reference A reference data frame from which to find the correct
 #'   column types.
 #'
@@ -20,7 +21,7 @@
 #' summary(fixed)
 #' @export
 
-data_restoretype <- function(data, reference = NULL) {
+data_restoretype <- function(data, reference = NULL, ...) {
   for (col in names(data)) {
 
     # No reference data (regular fixing) ----------------

@@ -4,7 +4,7 @@
 \alias{data_partition}
 \title{Partition data into a test and a training set}
 \usage{
-data_partition(data, training_proportion = 0.7, group = NULL, seed = NULL)
+data_partition(data, training_proportion = 0.7, group = NULL, seed = NULL, ...)
 }
 \arguments{
 \item{data}{A data frame, or an object that can be coerced to a data frame.}
@@ -17,6 +17,8 @@ for stratified partitioning.}
 
 \item{seed}{A random number generator seed. Enter an integer (e.g. 123) so
 that the random sampling will be the same each time you run the function.}
+
+\item{...}{Other arguments passed to or from other functions.}
 }
 \value{
 A list of two data frames, named \code{test} and \code{training}.

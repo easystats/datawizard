@@ -5,6 +5,7 @@
 #' @param before,after Destination of columns. Supplying neither will move
 #'   columns to the left-hand side; specifying both is an error.
 #' @param safe If `TRUE`, will disregard non-existing columns.
+#' @inheritParams data_rename
 #'
 #' @examples
 #' # Reorder columns
@@ -19,7 +20,8 @@ data_relocate <- function(data,
                           cols,
                           before = NULL,
                           after = NULL,
-                          safe = TRUE) {
+                          safe = TRUE,
+                          ...) {
 
   # Sanitize
   if (!is.null(before) && !is.null(after)) {

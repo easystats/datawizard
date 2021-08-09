@@ -11,24 +11,26 @@
 \alias{data_reorder}
 \title{Convenient dataframe manipulation functionalities}
 \usage{
-data_addprefix(data, pattern)
+data_addprefix(data, pattern, ...)
 
-data_addsuffix(data, pattern)
+data_addsuffix(data, pattern, ...)
 
-data_findcols(data, pattern = NULL, starts_with = NULL, ends_with = NULL)
+data_findcols(data, pattern = NULL, starts_with = NULL, ends_with = NULL, ...)
 
-data_remove(data, pattern)
+data_remove(data, pattern, ...)
 
-data_rename(data, pattern, replacement, safe = TRUE)
+data_rename(data, pattern, replacement, safe = TRUE, ...)
 
 data_rename_rows(data, rows = NULL)
 
-data_reorder(data, cols, safe = TRUE)
+data_reorder(data, cols, safe = TRUE, ...)
 }
 \arguments{
 \item{data}{A data frame, or an object that can be coerced to a data frame.}
 
 \item{pattern, replacement, starts_with, ends_with}{Character strings.}
+
+\item{...}{Other arguments passed to or from other functions.}
 
 \item{safe}{Do not throw error if for instance the variable to be
 renamed/removed doesn't exist.}
@@ -42,25 +44,23 @@ A modified data frame.
 Safe and intuitive functions to manipulate dataframes.
 }
 \examples{
+# Add prefix / suffix to all columns
+head(data_addprefix(iris, "NEW_"))
+head(data_addsuffix(iris, "_OLD"))
+# Find columns names by pattern
+data_findcols(iris, starts_with = "Sepal")
+data_findcols(iris, ends_with = "Width")
+data_findcols(iris, pattern = "\\\\.")
+data_findcols(iris, c("Petal.Width", "Sepal.Length"))
+# Remove columns
+head(data_remove(iris, "Sepal.Length"))
 # Rename columns
 head(data_rename(iris, "Sepal.Length", "length"))
 # data_rename(iris, "FakeCol", "length", safe=FALSE)  # This fails
 head(data_rename(iris, "FakeCol", "length")) # This doesn't
 head(data_rename(iris, c("Sepal.Length", "Sepal.Width"), c("length", "width")))
 
-# Find columns names by pattern
-head(data_findcols(iris, starts_with = "Sepal"))
-head(data_findcols(iris, ends_with = "Width"))
-head(data_findcols(iris, pattern = "\\\\."))
-
-# Remove columns
-head(data_remove(iris, "Sepal.Length"))
-
 # Reorder columns
 head(data_reorder(iris, c("Species", "Sepal.Length")))
-head(data_reorder(iris, c("Species", "dupa")))
-
-# Add prefix / suffix
-head(data_addprefix(iris, "NEW_"))
-head(data_addsuffix(iris, "_OLD"))
+head(data_reorder(iris, c("Species", "dupa"))) # Safe for non-existing cols
 }

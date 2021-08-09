@@ -7,6 +7,7 @@
 #' @param cols,rows Vector of column or row names.
 #' @param safe Do not throw error if for instance the variable to be
 #'   renamed/removed doesn't exist.
+#' @param ... Other arguments passed to or from other functions.
 #'
 #' @return A modified data frame.
 #'
@@ -17,23 +18,8 @@
 #' head(data_rename(iris, "FakeCol", "length")) # This doesn't
 #' head(data_rename(iris, c("Sepal.Length", "Sepal.Width"), c("length", "width")))
 #'
-#' # Find columns names by pattern
-#' head(data_findcols(iris, starts_with = "Sepal"))
-#' head(data_findcols(iris, ends_with = "Width"))
-#' head(data_findcols(iris, pattern = "\\."))
-#'
-#' # Remove columns
-#' head(data_remove(iris, "Sepal.Length"))
-#'
-#' # Reorder columns
-#' head(data_reorder(iris, c("Species", "Sepal.Length")))
-#' head(data_reorder(iris, c("Species", "dupa")))
-#'
-#' # Add prefix / suffix
-#' head(data_addprefix(iris, "NEW_"))
-#' head(data_addsuffix(iris, "_OLD"))
 #' @export
-data_rename <- function(data, pattern, replacement, safe = TRUE) {
+data_rename <- function(data, pattern, replacement, safe = TRUE, ...) {
   if (length(pattern) != length(replacement)) {
     stop("The 'replacement' names must be of the same length than the variable names.")
   }

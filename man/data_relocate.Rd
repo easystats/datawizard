@@ -4,7 +4,7 @@
 \alias{data_relocate}
 \title{Relocate (reorder) columns of a data frame}
 \usage{
-data_relocate(data, cols, before = NULL, after = NULL, safe = TRUE)
+data_relocate(data, cols, before = NULL, after = NULL, safe = TRUE, ...)
 }
 \arguments{
 \item{data}{A data frame to pivot.}
@@ -15,6 +15,8 @@ data_relocate(data, cols, before = NULL, after = NULL, safe = TRUE)
 columns to the left-hand side; specifying both is an error.}
 
 \item{safe}{If \code{TRUE}, will disregard non-existing columns.}
+
+\item{...}{Other arguments passed to or from other functions.}
 }
 \value{
 A data frame with reordered columns.

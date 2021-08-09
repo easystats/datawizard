@@ -25,7 +25,8 @@
 data_partition <- function(data,
                            training_proportion = 0.7,
                            group = NULL,
-                           seed = NULL) {
+                           seed = NULL,
+                           ...) {
   if (!is.data.frame(data)) {
     data <- tryCatch(
       expr = {
