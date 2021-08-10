@@ -53,7 +53,7 @@ A normalized object.
 \description{
 Performs a normalization of data, i.e., it scales variables in the range 0 -
 \enumerate{
-\item This is a special case of \code{\link[=change_scale]{change_scale()}}.
+\item This is a special case of \code{\link[=data_rescale]{data_rescale()}}.
 }
 }
 \details{
@@ -78,7 +78,7 @@ Regression with Beta-Distributed Dependent Variables. Psychological Methods,
 }
 \seealso{
 Other transform utilities: 
-\code{\link{change_scale}()},
+\code{\link{data_rescale}()},
 \code{\link{ranktransform}()},
 \code{\link{standardize}()}
 }

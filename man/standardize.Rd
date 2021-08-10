@@ -161,7 +161,7 @@ summary(standardize(swiss))
 }
 \seealso{
 Other transform utilities: 
-\code{\link{change_scale}()},
+\code{\link{data_rescale}()},
 \code{\link{normalize}()},
 \code{\link{ranktransform}()}
 }
