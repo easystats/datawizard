@@ -18,8 +18,28 @@
 #' head(data_rename(iris, "FakeCol", "length")) # This doesn't
 #' head(data_rename(iris, c("Sepal.Length", "Sepal.Width"), c("length", "width")))
 #'
+#' # Reset names
+#' head(data_rename(iris, NULL))
+#'
+#' # Change all
+#' head(data_rename(iris, paste0("Var", 1:5)))
+#'
 #' @export
-data_rename <- function(data, pattern, replacement, safe = TRUE, ...) {
+data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, ...) {
+
+  # Sanity checks
+  if(is.null(replacement) && is.null(pattern)) {
+    names(data) <- c(1:ncol(data))
+    return(data)
+  } else if(is.null(replacement) && !is.null(pattern)) {
+      names(data) <- pattern
+      return(data)
+  } else if(!is.null(replacement) && is.null(pattern)) {
+    names(data) <- replacement
+    return(data)
+  }
+
+
   if (length(pattern) != length(replacement)) {
     stop("The 'replacement' names must be of the same length than the variable names.")
   }
