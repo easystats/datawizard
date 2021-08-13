@@ -52,9 +52,9 @@ reference:
   - contents:
       - nhanes_sample
 
-  # - title: Visualization helpers
-  # - contents:
-  #     - visualisation_recipe
+  - title: Visualization helpers
+  - contents:
+      - visualisation_recipe
 
 articles:
 
