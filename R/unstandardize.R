@@ -124,6 +124,18 @@ unstandardize.data.frame <- function(x,
 }
 
 #' @export
+unstandardize.factor <- function(x, ...) {
+  x
+}
+
+#' @export
+unstandardize.character <- function(x, ...) {
+  x
+}
+
+
+
+#' @export
 unstandardize.grouped_df <- function(x,
                                      center = NULL,
                                      scale = NULL,
