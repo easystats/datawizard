@@ -147,7 +147,7 @@
     <p>Find row indices of a data frame that match a specific condition.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>data_match</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>to</span><span class='op'>)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>data_match</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>to</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -160,6 +160,10 @@
       <th>to</th>
       <td><p>A data frame matching the specified conditions.</p></td>
     </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Other arguments passed to or from other functions.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -167,8 +171,7 @@
     <p>A dataframe containing rows that match the specified configuration.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'></span>
-<span class='r-in'><span class='va'>matching_rows</span> <span class='op'>&lt;-</span> <span class='fu'>data_match</span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>vs <span class='op'>=</span> <span class='fl'>0</span>, am <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>matching_rows</span> <span class='op'>&lt;-</span> <span class='fu'>data_match</span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>vs <span class='op'>=</span> <span class='fl'>0</span>, am <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>mtcars</span><span class='op'>[</span><span class='va'>matching_rows</span>, <span class='op'>]</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4</span>
@@ -199,6 +202,7 @@
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8</span>
+<span class='r-in'></span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

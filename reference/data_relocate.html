@@ -147,7 +147,7 @@
     <p>Relocate (reorder) columns of a data frame</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>data_relocate</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>cols</span>, before <span class='op'>=</span> <span class='cn'>NULL</span>, after <span class='op'>=</span> <span class='cn'>NULL</span>, safe <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>data_relocate</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>cols</span>, before <span class='op'>=</span> <span class='cn'>NULL</span>, after <span class='op'>=</span> <span class='cn'>NULL</span>, safe <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,6 +168,10 @@ columns to the left-hand side; specifying both is an error.</p></td>
     <tr>
       <th>safe</th>
       <td><p>If <code>TRUE</code>, will disregard non-existing columns.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Other arguments passed to or from other functions.</p></td>
     </tr>
     </table>
 

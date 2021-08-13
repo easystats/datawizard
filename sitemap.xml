@@ -34,9 +34,6 @@
     <loc>/reference/center.html</loc>
   </url>
   <url>
-    <loc>/reference/change_scale.html</loc>
-  </url>
-  <url>
     <loc>/reference/convert_data_to_numeric.html</loc>
   </url>
   <url>
@@ -52,10 +49,16 @@
     <loc>/reference/data_rename.html</loc>
   </url>
   <url>
+    <loc>/reference/data_rescale.html</loc>
+  </url>
+  <url>
     <loc>/reference/data_restoretype.html</loc>
   </url>
   <url>
     <loc>/reference/data_to_long.html</loc>
+  </url>
+  <url>
+    <loc>/reference/data_transpose.html</loc>
   </url>
   <url>
     <loc>/reference/demean.html</loc>
@@ -95,6 +98,9 @@
   </url>
   <url>
     <loc>/reference/to_numeric.html</loc>
+  </url>
+  <url>
+    <loc>/reference/visualisation_recipe.html</loc>
   </url>
   <url>
     <loc>/reference/winsorize.html</loc>

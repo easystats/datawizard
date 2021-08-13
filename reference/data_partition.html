@@ -151,7 +151,7 @@ stratified (i.e., evenly spread a given factor) using the <code>group</code>
 argument.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>data_partition</span><span class='op'>(</span><span class='va'>data</span>, training_proportion <span class='op'>=</span> <span class='fl'>0.7</span>, group <span class='op'>=</span> <span class='cn'>NULL</span>, seed <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>data_partition</span><span class='op'>(</span><span class='va'>data</span>, training_proportion <span class='op'>=</span> <span class='fl'>0.7</span>, group <span class='op'>=</span> <span class='cn'>NULL</span>, seed <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,6 +174,10 @@ for stratified partitioning.</p></td>
       <th>seed</th>
       <td><p>A random number generator seed. Enter an integer (e.g. 123) so
 that the random sampling will be the same each time you run the function.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Other arguments passed to or from other functions.</p></td>
     </tr>
     </table>
 
