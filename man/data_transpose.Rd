@@ -21,5 +21,4 @@ transposed <- data_transpose(iris)
 transposed[1:5]
 
 transposed <- data_transpose(iris[1:4]) # Only numeric = no warning
-
 }

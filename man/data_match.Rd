@@ -25,5 +25,4 @@ mtcars[matching_rows, ]
 
 matching_rows <- data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
 mtcars[matching_rows, ]
-
 }

@@ -19,7 +19,7 @@ data_findcols(data, pattern = NULL, starts_with = NULL, ends_with = NULL, ...)
 
 data_remove(data, pattern, ...)
 
-data_rename(data, pattern, replacement, safe = TRUE, ...)
+data_rename(data, pattern = NULL, replacement = NULL, safe = TRUE, ...)
 
 data_rename_rows(data, rows = NULL)
 
@@ -60,6 +60,11 @@ head(data_rename(iris, "Sepal.Length", "length"))
 head(data_rename(iris, "FakeCol", "length")) # This doesn't
 head(data_rename(iris, c("Sepal.Length", "Sepal.Width"), c("length", "width")))
 
+# Reset names
+head(data_rename(iris, NULL))
+
+# Change all
+head(data_rename(iris, paste0("Var", 1:5)))
 # Reorder columns
 head(data_reorder(iris, c("Species", "Sepal.Length")))
 head(data_reorder(iris, c("Species", "dupa"))) # Safe for non-existing cols

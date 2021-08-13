@@ -22,8 +22,10 @@
 #' head(data_rescale(iris, to = c(0, 1), select = "Sepal.Length"))
 #'
 #' # One can specify a list of ranges
-#' head(data_rescale(iris, to = list("Sepal.Length" = c(0, 1),
-#'                                   "Petal.Length" = c(-1, 0))))
+#' head(data_rescale(iris, to = list(
+#'   "Sepal.Length" = c(0, 1),
+#'   "Petal.Length" = c(-1, 0)
+#' )))
 #' @seealso [normalize()] [standardize()] [ranktransform()]
 #'
 #' @return A rescaled object.
@@ -55,8 +57,7 @@ data_rescale.numeric <- function(x,
                                  range = NULL,
                                  verbose = TRUE,
                                  ...) {
-
-  if(is.null(to)) {
+  if (is.null(to)) {
     return(x)
   }
 
@@ -170,13 +171,13 @@ data_rescale.data.frame <- function(x,
   }
 
   # Transform the range so that it is a list now
-  if(!is.null(range)) {
-    if(!is.list(range)) {
+  if (!is.null(range)) {
+    if (!is.list(range)) {
       range <- setNames(rep(list(range), length(select)), select)
     }
   }
   # Transform the 'to' so that it is a list now
-  if(!is.list(to)) {
+  if (!is.list(to)) {
     to <- setNames(rep(list(to), length(select)), select)
   }
 

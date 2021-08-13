@@ -67,8 +67,10 @@ head(data_rescale(iris, to = c(0, 1)))
 head(data_rescale(iris, to = c(0, 1), select = "Sepal.Length"))
 
 # One can specify a list of ranges
-head(data_rescale(iris, to = list("Sepal.Length" = c(0, 1),
-                                  "Petal.Length" = c(-1, 0))))
+head(data_rescale(iris, to = list(
+  "Sepal.Length" = c(0, 1),
+  "Petal.Length" = c(-1, 0)
+)))
 }
 \seealso{
 \code{\link[=normalize]{normalize()}} \code{\link[=standardize]{standardize()}} \code{\link[=ranktransform]{ranktransform()}}

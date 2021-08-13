@@ -40,7 +40,6 @@ Depends:
     R (>= 3.4)
 Imports:
     insight (>= 0.14.2),
-    see,
     stats,
     utils
 Suggests: 
@@ -68,7 +67,8 @@ Remotes:
     easystats/insight,
     easystats/parameters,
     easystats/performance,
-    easystats/effectsize    
+    easystats/effectsize,
+    easystats/see
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US

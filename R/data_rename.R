@@ -23,18 +23,17 @@
 #'
 #' # Change all
 #' head(data_rename(iris, paste0("Var", 1:5)))
-#'
 #' @export
 data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, ...) {
 
   # Sanity checks
-  if(is.null(replacement) && is.null(pattern)) {
+  if (is.null(replacement) && is.null(pattern)) {
     names(data) <- c(1:ncol(data))
     return(data)
-  } else if(is.null(replacement) && !is.null(pattern)) {
-      names(data) <- pattern
-      return(data)
-  } else if(!is.null(replacement) && is.null(pattern)) {
+  } else if (is.null(replacement) && !is.null(pattern)) {
+    names(data) <- pattern
+    return(data)
+  } else if (!is.null(replacement) && is.null(pattern)) {
     names(data) <- replacement
     return(data)
   }

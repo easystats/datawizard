@@ -10,11 +10,10 @@
 #' transposed[1:5]
 #'
 #' transposed <- data_transpose(iris[1:4]) # Only numeric = no warning
-#'
 #' @export
 data_transpose <- function(data, verbose = TRUE, ...) {
-  if(length(unique(sapply(data, class))) > 1) {
-    if(verbose) {
+  if (length(unique(sapply(data, class))) > 1) {
+    if (verbose) {
       warning("Your data contains mixed types of data. After transposition, all will be transformed into characters.")
     }
   }
