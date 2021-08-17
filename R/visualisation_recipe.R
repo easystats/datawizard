@@ -79,3 +79,11 @@ plot.visualisation_recipe <- function(x, ...) {
   ggplot2::ggplot(data = attributes(x)$data) +
     geoms_from_list(x, ...)
 }
+
+
+# TODO: remove once see 0.6.5 is on CRAN
+utils::globalVariables(
+  names = c("geoms_from_list"),
+  package = "datawizard",
+  add = FALSE
+)
