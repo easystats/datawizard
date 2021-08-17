@@ -77,5 +77,5 @@ plot.visualisation_recipe <- function(x, ...) {
   insight::check_if_installed("ggplot2")
 
   ggplot2::ggplot(data = attributes(x)$data) +
-    see::geoms_from_list(x, ...)
+    geoms_from_list(x, ...)
 }
