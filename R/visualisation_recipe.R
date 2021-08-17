@@ -1,11 +1,13 @@
 #' Prepare objects for visualisation
 #'
-#' This function prepares objects for visualisation by returning a list of layers with data and geoms that can be easily plotted using for instance `ggplot2`. See the documentation for your object's class:
+#' This function prepares objects for visualisation by returning a list of
+#' layers with data and geoms that can be easily plotted using for instance
+#' `ggplot2`. See the documentation for your object's class:
 #' \itemize{
 #'  \item{\link[modelbased:visualisation_recipe.estimate_predicted]{modelbased} (`estimate_means`, `estimate_contrasts`, `estimate_slopes`, `estimate_predicted`, `estimate_grouplevel`)}
 #' }
 #'
-#' @param x An easystats object.
+#' @param x An `easystats` object.
 #' @param ... Other arguments passed to other functions.
 #'
 #' @export
@@ -71,7 +73,7 @@ print.visualisation_recipe <- function(x, ...) {
 #' @importFrom graphics plot
 #' @export
 plot.visualisation_recipe <- function(x, ...) {
-  insight::check_if_installed("see")
+  insight::check_if_installed("see", minimum_version = "0.6.5")
   insight::check_if_installed("ggplot2")
 
   ggplot2::ggplot(data = attributes(x)$data) +
