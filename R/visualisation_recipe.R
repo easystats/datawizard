@@ -71,7 +71,7 @@ print.visualisation_recipe <- function(x, ...) {
 #' @importFrom graphics plot
 #' @export
 plot.visualisation_recipe <- function(x, ...) {
-  insight::check_if_installed("see")
+  insight::check_if_installed("see", minimum_version = "0.6.5")
   insight::check_if_installed("ggplot2")
 
   ggplot2::ggplot(data = attributes(x)$data) +
