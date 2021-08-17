@@ -31,7 +31,8 @@ pkgs <- c(
   "lme4"
 )
 
-if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
+if (!all(sapply(pkgs, requireNamespace, quietly = TRUE)) &&
+    packageVersion("parameters") >= "0.14.1") {
   knitr::opts_chunk$set(eval = FALSE)
 }
 ```
