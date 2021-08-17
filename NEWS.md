@@ -1,5 +1,7 @@
 # datawizard 0.2.0
 
+- New function: `visualisation_recipe()`.
+
 - The following function has now moved to *performance* package:
   `check_multimodal()`.
 
