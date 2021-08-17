@@ -37,8 +37,11 @@ pkgs <- c(
   "lfe"
 )
 
-if (!all(sapply(pkgs, requireNamespace, quietly = TRUE)) &&
-    packageVersion("parameters") >= "0.14.1") {
+if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+
+if (!packageVersion("parameters") >= "0.14.1") {
   knitr::opts_chunk$set(eval = FALSE)
 }
 
