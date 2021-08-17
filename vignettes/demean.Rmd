@@ -48,9 +48,9 @@ if (!packageVersion("parameters") >= "0.14.1") {
 set.seed(333)
 ```
 
-This vignette explains the rational behind the
-[`demean()`](https://easystats.github.io/parameters/reference/datawizard::demean.html)
-function. We give recommendations how to analyze multilevel or hierarchical data
+This vignette explains the rational behind the `demean()` function. 
+
+We give recommendations how to analyze multilevel or hierarchical data
 structures, when macro-indicators (or level-2 predictors, or higher-level units,
 or more general: _group-level predictors_) are used as covariates and the model
 suffers from **heterogeneity bias** [@bell_explaining_2015].
