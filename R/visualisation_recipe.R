@@ -19,7 +19,7 @@ print.visualisation_recipe <- function(x, ...) {
   for (i in 1:length(x)) {
     l <- x[[paste0("l", i)]]
     insight::print_color(paste0("Layer ", i, "\n--------\n"), "blue")
-    insight::print_color(paste0("Geom type: ", l$geom, "\n"), "yellow")
+    insight::print_color(paste0("Geom type: ", ifelse(is.null(l$geom), "[NULL]", l$geom), "\n"), "yellow")
 
     elements <- names(l)[!sapply(l, is.null)]
 
