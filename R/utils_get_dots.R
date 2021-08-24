@@ -82,7 +82,6 @@
   dat[, intersect(x, columns), drop = FALSE]
 }
 
-#' @importFrom stats na.omit
 .is_num_chr <- function(x) {
   is.character(x) && !anyNA(suppressWarnings(as.numeric(stats::na.omit(x))))
 }

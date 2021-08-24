@@ -144,7 +144,6 @@ data_rescale.grouped_df <- function(x,
 }
 
 
-#' @importFrom stats setNames
 #' @rdname data_rescale
 #' @export
 data_rescale.data.frame <- function(x,
@@ -173,12 +172,12 @@ data_rescale.data.frame <- function(x,
   # Transform the range so that it is a list now
   if (!is.null(range)) {
     if (!is.list(range)) {
-      range <- setNames(rep(list(range), length(select)), select)
+      range <- stats::setNames(rep(list(range), length(select)), select)
     }
   }
   # Transform the 'to' so that it is a list now
   if (!is.list(to)) {
-    to <- setNames(rep(list(to), length(select)), select)
+    to <- stats::setNames(rep(list(to), length(select)), select)
   }
 
   x[select] <- as.data.frame(sapply(select, function(n) {

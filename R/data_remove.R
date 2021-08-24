@@ -1,5 +1,4 @@
 #' @rdname data_rename
-#' @importFrom utils modifyList
 #' @examples
 #' # Remove columns
 #' head(data_remove(iris, "Sepal.Length"))

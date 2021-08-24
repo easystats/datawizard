@@ -35,7 +35,6 @@
 # For standardize_info ----------------------------------------------------
 
 #' @keywords internal
-#' @importFrom stats sd
 .sd <- function(x, weights = NULL) {
   # from cov.wt
   if (!.are_weights(weights)) {
@@ -54,7 +53,6 @@
 
 
 #' @keywords internal
-#' @importFrom stats mad
 .mad <- function(x, weights = NULL, constant = 1.4826) {
   # From matrixStats
   if (!.are_weights(weights)) {
