@@ -1,3 +1,8 @@
+# datawizard 0.2.1
+
+- This is mainly a maintenance release that addresses some issues with 
+  conflicting namespaces.
+
 # datawizard 0.2.0
 
 - New function: `visualisation_recipe()`.
