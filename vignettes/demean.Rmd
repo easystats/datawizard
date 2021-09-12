@@ -45,6 +45,10 @@ if (!packageVersion("parameters") >= "0.14.1") {
   knitr::opts_chunk$set(eval = FALSE)
 }
 
+if (!packageVersion("performance") >= "0.7.4") {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+
 set.seed(333)
 ```
 
@@ -94,6 +98,7 @@ You can check if your model may suffer from heterogeneity bias using the
 `check_heterogeneity_bias()` function:
 
 ```{r}
+library(performance)
 check_heterogeneity_bias(qol_cancer, select = c("phq4", "education"), group = "ID")
 ```
 
