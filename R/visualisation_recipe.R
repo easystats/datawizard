@@ -69,3 +69,11 @@ print.visualisation_recipe <- function(x, ...) {
     cat("\n")
   }
 }
+
+
+
+#' @export
+plot.visualisation_recipe <- function(x, ...) {
+  insight::check_if_installed("see")
+  NextMethod()
+}
