@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">datawizard</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -126,10 +126,10 @@
 <h1 class="hasAnchor">
 <a href="#heterogeneity-bias" class="anchor" aria-hidden="true"></a>Heterogeneity bias</h1>
 <p>Heterogeneity bias occurs when group-level predictors vary within and across groups, and hence fixed effects may correlate with group (or random) effects. This is a typical situation when analyzing longitudinal or panel data: Due to the repeated measurements of persons, the “person” (or subject-ID) is now a level-2 variable. Predictors at level-1 (“fixed effects”), e.g. self-rated health or income, now have an effect at level-1 (“within”-effect) and at higher-level units (level-2, the subject-level, which is the “between”-effect) (see also <a href="https://shouldbewriting.netlify.app/posts/2019-10-21-accounting-for-within-and-between-subject-effect/" class="external-link">this posting</a>). This inevitably leads to correlating fixed effects and error terms - which, in turn, results in biased estimates, because both the within- <em>and</em> between-effect are captured in <em>one</em> estimate.</p>
-<p>You can check if your model may suffer from heterogeneity bias using the <code>check_heterogeneity_bias()</code> function:</p>
+<p>You can check if your model may suffer from heterogeneity bias using the <code><a href="https://easystats.github.io/performance/reference/check_heterogeneity_bias.html" class="external-link">check_heterogeneity_bias()</a></code> function:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/performance/" class="external-link">performance</a></span><span class="op">)</span>
-<span class="fu">check_heterogeneity_bias</span><span class="op">(</span><span class="va">qol_cancer</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4"</span>, <span class="st">"education"</span><span class="op">)</span>, group <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://easystats.github.io/performance/reference/check_heterogeneity_bias.html" class="external-link">check_heterogeneity_bias</a></span><span class="op">(</span><span class="va">qol_cancer</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4"</span>, <span class="st">"education"</span><span class="op">)</span>, group <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="adressing-heterogeneity-bias-the-fixed-effects-regression-fe-approach" class="section level1">
 <h1 class="hasAnchor">
@@ -411,7 +411,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.9000.9000.9000.</p>
 </div>
 
       </footer>
