@@ -1,5 +1,9 @@
 # datawizard 0.2.1
 
+- Exports `plot` method for `visualisation_recipe()` objects from `{see}` package.
+
+# datawizard 0.2.0.1
+
 - This is mainly a maintenance release that addresses some issues with 
   conflicting namespaces.
 
