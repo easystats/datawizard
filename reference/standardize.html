@@ -53,7 +53,9 @@ SD = 1) or Median Absolute Deviance (median = 0, MAD = 1). When applied to a
 statistical model, this function extracts the dataset, standardizes it, and
 refits the model with this standardized version of the dataset. The
 normalize() function can also be used to scale all numeric variables within
-the 0 - 1 range." />
+the 0 - 1 range.
+
+For model standardization, see effectsize::standardize.default()" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -156,7 +158,9 @@ SD = 1) or Median Absolute Deviance (median = 0, MAD = 1). When applied to a
 statistical model, this function extracts the dataset, standardizes it, and
 refits the model with this standardized version of the dataset. The
 <code><a href='normalize.html'>normalize()</a></code> function can also be used to scale all numeric variables within
-the 0 - 1 range.</p>
+the 0 - 1 range.
+<br /><br />
+For model standardization, see <code><a href='https://easystats.github.io/effectsize/reference/standardize.html'>effectsize::standardize.default()</a></code></p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>standardize</span><span class='op'>(</span>
@@ -310,27 +314,6 @@ statistical model fitted on standardized data).</p>
     <p>When <code>x</code> is a vector or a data frame with <code>remove_na = "none")</code>,
 missing values are preserved, so the return value has the same length /
 number of rows as the original input.</p>
-    <h2 class="hasAnchor" id="model-standardization"><a class="anchor" href="#model-standardization"></a>Model Standardization</h2>
-
-    
-
-<p>If <code>x</code> is a model object, standardization is done by completely refitting the
-model on the standardized data. Hence, this approach is equal to
-standardizing the variables <em>before</em> fitting the model and will return a new
-model object. However, this method is particularly recommended for complex
-models that include interactions or transformations (e.g., polynomial or
-spline terms). The <code>robust</code> (default to <code>FALSE</code>) argument enables a robust
-standardization of data, i.e., based on the <code>median</code> and <code>MAD</code> instead of the
-<code>mean</code> and <code>SD</code>.</p><h3 class='hasAnchor' id='transformed-variables'><a class='anchor' aria-hidden='true' href='#transformed-variables'></a>Transformed Variables</h3>
-
-
-<p>When the model's formula contains transformations (e.g. <code>y ~ exp(X)</code>) the
-transformation effectively takes place after standardization (e.g.,
-<code>exp(scale(X))</code>). Some transformations are undefined for negative values,
-such as <code><a href='https://rdrr.io/r/base/Log.html'>log()</a></code> and <code><a href='https://rdrr.io/r/base/MathFun.html'>sqrt()</a></code>. To avoid dropping these values, the
-standardized data is shifted by <code>Z - min(Z) + 1</code> or <code>Z - min(Z)</code>
-(respectively).</p>
-
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other transform utilities: 
