@@ -7,6 +7,8 @@
 #' refits the model with this standardized version of the dataset. The
 #' [normalize()] function can also be used to scale all numeric variables within
 #' the 0 - 1 range.
+#' \cr\cr
+#' For model standardization, see [effectsize::standardize.default()]
 #'
 #' @param x A data frame, a vector or a statistical model (for `unstandardize()`
 #'   cannot be a model).
@@ -166,24 +168,6 @@ standardize.AsIs <- standardize.numeric
 #' @param reference A dataframe or variable from which the centrality and
 #'   deviation will be computed instead of from the input variable. Useful for
 #'   standardizing a subset or new data according to another dataframe.
-#'
-#' @section Model Standardization:
-#' If `x` is a model object, standardization is done by completely refitting the
-#' model on the standardized data. Hence, this approach is equal to
-#' standardizing the variables *before* fitting the model and will return a new
-#' model object. However, this method is particularly recommended for complex
-#' models that include interactions or transformations (e.g., polynomial or
-#' spline terms). The `robust` (default to `FALSE`) argument enables a robust
-#' standardization of data, i.e., based on the `median` and `MAD` instead of the
-#' `mean` and `SD`.
-#'
-#' ## Transformed Variables
-#' When the model's formula contains transformations (e.g. `y ~ exp(X)`) the
-#' transformation effectively takes place after standardization (e.g.,
-#' `exp(scale(X))`). Some transformations are undefined for negative values,
-#' such as `log()` and `sqrt()`. To avoid dropping these values, the
-#' standardized data is shifted by `Z - min(Z) + 1` or `Z - min(Z)`
-#' (respectively).
 #'
 #' @export
 standardize.data.frame <- function(x,

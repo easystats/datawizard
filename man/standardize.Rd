@@ -128,33 +128,14 @@ statistical model, this function extracts the dataset, standardizes it, and
 refits the model with this standardized version of the dataset. The
 \code{\link[=normalize]{normalize()}} function can also be used to scale all numeric variables within
 the 0 - 1 range.
+\cr\cr
+For model standardization, see \code{\link[effectsize:standardize.default]{effectsize::standardize.default()}}
 }
 \note{
 When \code{x} is a vector or a data frame with \verb{remove_na = "none")},
 missing values are preserved, so the return value has the same length /
 number of rows as the original input.
 }
-\section{Model Standardization}{
-
-If \code{x} is a model object, standardization is done by completely refitting the
-model on the standardized data. Hence, this approach is equal to
-standardizing the variables \emph{before} fitting the model and will return a new
-model object. However, this method is particularly recommended for complex
-models that include interactions or transformations (e.g., polynomial or
-spline terms). The \code{robust} (default to \code{FALSE}) argument enables a robust
-standardization of data, i.e., based on the \code{median} and \code{MAD} instead of the
-\code{mean} and \code{SD}.
-\subsection{Transformed Variables}{
-
-When the model's formula contains transformations (e.g. \code{y ~ exp(X)}) the
-transformation effectively takes place after standardization (e.g.,
-\code{exp(scale(X))}). Some transformations are undefined for negative values,
-such as \code{log()} and \code{sqrt()}. To avoid dropping these values, the
-standardized data is shifted by \code{Z - min(Z) + 1} or \code{Z - min(Z)}
-(respectively).
-}
-}
-
 \examples{
 # Data frames
 summary(standardize(swiss))
