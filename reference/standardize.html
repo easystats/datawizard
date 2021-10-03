@@ -172,6 +172,15 @@ For model standardization, see <code><a href='https://easystats.github.io/effect
   <span class='va'>...</span>
 <span class='op'>)</span>
 
+<span class='fu'>standardise</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  robust <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  two_sd <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  weights <span class='op'>=</span> <span class='cn'>NULL</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
 <span class='co'># S3 method for numeric</span>
 <span class='fu'>standardize</span><span class='op'>(</span>
   <span class='va'>x</span>,
@@ -201,6 +210,16 @@ For model standardization, see <code><a href='https://easystats.github.io/effect
 <span class='op'>)</span>
 
 <span class='fu'>unstandardize</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  center <span class='op'>=</span> <span class='cn'>NULL</span>,
+  scale <span class='op'>=</span> <span class='cn'>NULL</span>,
+  reference <span class='op'>=</span> <span class='cn'>NULL</span>,
+  robust <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  two_sd <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='fu'>unstandardise</span><span class='op'>(</span>
   <span class='va'>x</span>,
   center <span class='op'>=</span> <span class='cn'>NULL</span>,
   scale <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -350,7 +369,7 @@ number of rows as the original input.</p>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p></p>
+  <p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel LÃ¼decke</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p></p>
 </div>
 
 <div class="pkgdown">

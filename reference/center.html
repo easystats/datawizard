@@ -149,6 +149,8 @@
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>center</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
+<span class='fu'>centre</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
 <span class='co'># S3 method for numeric</span>
 <span class='fu'>center</span><span class='op'>(</span><span class='va'>x</span>, weights <span class='op'>=</span> <span class='cn'>NULL</span>, robust <span class='op'>=</span> <span class='cn'>FALSE</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
@@ -227,6 +229,12 @@ standardized variables will be added as additional columns; if
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The centered variables.</p>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p><strong>Difference between centering and standardizing</strong>: Standardized variables
+are computed by subtracting the mean of the variable and then dividing it by
+the standard deviation, while centering variables involves only the
+subtraction.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>If centering within-clusters (instead of grand-mean centering)
@@ -266,7 +274,7 @@ is required, see <code><a href='demean.html'>demean()</a></code>.</p></div>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p></p>
+  <p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel LÃ¼decke</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p></p>
 </div>
 
 <div class="pkgdown">
