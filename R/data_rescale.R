@@ -7,7 +7,7 @@
 #' @param x A numeric variable.
 #' @param to New range that the variable will have after rescaling.
 #' @param range Initial (old) range of values. If `NULL`, will take the range of
-#'   the input vector (\code{range(x)}).
+#'   the input vector (`range(x)`).
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @examples

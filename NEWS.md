@@ -1,10 +1,14 @@
 # datawizard 0.2.1
 
-- Exports `plot` method for `visualisation_recipe()` objects from `{see}` package.
+- Exports `plot` method for `visualisation_recipe()` objects from `{see}`
+  package.
+
+- `centre()`, `standardise()`, `unstandardise()` are exported as aliases for
+  `center()`, `standardize()`, `unstandardize()`, respectively.
 
 # datawizard 0.2.0.1
 
-- This is mainly a maintenance release that addresses some issues with 
+- This is mainly a maintenance release that addresses some issues with
   conflicting namespaces.
 
 # datawizard 0.2.0

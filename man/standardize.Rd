@@ -2,12 +2,23 @@
 % Please edit documentation in R/standardize.R, R/unstandardize.R
 \name{standardize}
 \alias{standardize}
+\alias{standardise}
 \alias{standardize.numeric}
 \alias{standardize.data.frame}
 \alias{unstandardize}
+\alias{unstandardise}
 \title{Standardization (Z-scoring)}
 \usage{
 standardize(
+  x,
+  robust = FALSE,
+  two_sd = FALSE,
+  weights = NULL,
+  verbose = TRUE,
+  ...
+)
+
+standardise(
   x,
   robust = FALSE,
   two_sd = FALSE,
@@ -43,6 +54,16 @@ standardize(
 )
 
 unstandardize(
+  x,
+  center = NULL,
+  scale = NULL,
+  reference = NULL,
+  robust = FALSE,
+  two_sd = FALSE,
+  ...
+)
+
+unstandardise(
   x,
   center = NULL,
   scale = NULL,

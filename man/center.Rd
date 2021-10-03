@@ -2,11 +2,14 @@
 % Please edit documentation in R/center.R
 \name{center}
 \alias{center}
+\alias{centre}
 \alias{center.numeric}
 \alias{center.data.frame}
 \title{Centering (Grand-Mean Centering)}
 \usage{
 center(x, ...)
+
+centre(x, ...)
 
 \method{center}{numeric}(x, weights = NULL, robust = FALSE, verbose = TRUE, ...)
 
@@ -63,6 +66,12 @@ The centered variables.
 }
 \description{
 Performs a grand-mean centering of data.
+}
+\note{
+\strong{Difference between centering and standardizing}: Standardized variables
+are computed by subtracting the mean of the variable and then dividing it by
+the standard deviation, while centering variables involves only the
+subtraction.
 }
 \examples{
 data(iris)

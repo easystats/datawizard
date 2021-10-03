@@ -1,9 +1,9 @@
 #' Transpose a dataframe
 #'
-#' Transpose a dataframe. It's the equivalent of using \code{t()} but restores the data.frame class, and prints a warning if the data type is modified (see example).
+#' Transpose a dataframe. It's the equivalent of using `t()` but restores the data.frame class, and prints a warning if the data type is modified (see example).
 #'
 #' @inheritParams data_rename
-#' @param verbose Silence warnings and/or messages by setting it to \code{FALSE}.
+#' @param verbose Silence warnings and/or messages by setting it to `FALSE`.
 #'
 #' @examples
 #' transposed <- data_transpose(iris)

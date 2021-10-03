@@ -36,8 +36,8 @@
 #'   \subsection{Heterogeneity Bias}{
 #'     Mixed models include different levels of sources of variability, i.e.
 #'     error terms at each level. When macro-indicators (or level-2 predictors,
-#'     or higher-level units, or more general: \emph{group-level predictors that
-#'     **vary** within and across groups}) are included as fixed effects (i.e.
+#'     or higher-level units, or more general: *group-level predictors that
+#'     **vary** within and across groups*) are included as fixed effects (i.e.
 #'     treated as covariate at level-1), the variance that is left unaccounted for
 #'     this covariate will be absorbed into the error terms of level-1 and level-2
 #'     (\cite{Bafumi and Gelman 2006; Gelman and Hill 2007, Chapter 12.6.}):

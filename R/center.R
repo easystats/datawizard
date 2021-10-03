@@ -20,12 +20,16 @@
 #'   subtracting the mean.
 #' @param verbose Toggle warnings and messages.
 #' @param weights Can be `NULL` (for no weighting), or:
-#' \itemize{
-#'   \item For data frames: a numeric vector of weights, or a character of the
+#'   - For data frames: a numeric vector of weights, or a character of the
 #'   name of a column in the `data.frame` that contains the weights.
-#'   \item For numeric vectors: a numeric vector of weights.
-#' }
+#'   - For numeric vectors: a numeric vector of weights.
 #' @param ... Currently not used.
+#'
+#' @note
+#' **Difference between centering and standardizing**: Standardized variables
+#' are computed by subtracting the mean of the variable and then dividing it by
+#' the standard deviation, while centering variables involves only the
+#' subtraction.
 #'
 #' @seealso If centering within-clusters (instead of grand-mean centering)
 #'   is required, see [demean()].
@@ -43,6 +47,9 @@ center <- function(x, ...) {
   UseMethod("center")
 }
 
+#' @rdname center
+#' @export
+centre <- center
 
 #' @rdname center
 #' @export

@@ -53,6 +53,9 @@ standardize <- function(x,
   UseMethod("standardize")
 }
 
+#' @rdname standardize
+#' @export
+standardise <- standardize
 
 #' @rdname standardize
 #' @export

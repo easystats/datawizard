@@ -19,6 +19,9 @@ unstandardize <- function(x,
   UseMethod("unstandardize")
 }
 
+#' @rdname standardize
+#' @export
+unstandardise <- unstandardize
 
 #' @export
 unstandardize.numeric <- function(x,
