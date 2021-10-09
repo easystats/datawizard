@@ -1,7 +1,7 @@
 Type: Package
 Package: datawizard
 Title: Easy Data Wrangling
-Version: 0.2.1
+Version: 0.2.1.9000
 Authors@R: 
     c(person(given = "Dominique",
              family = "Makowski",
