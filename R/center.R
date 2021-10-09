@@ -38,10 +38,16 @@
 #'
 #' @examples
 #' data(iris)
+#'
+#' # entire dataframe or a vector
 #' head(iris$Sepal.Width)
 #' head(center(iris$Sepal.Width))
 #' head(center(iris))
 #' head(center(iris, force = TRUE))
+#'
+#' # only the selected columns from a dataframe
+#' center(anscombe, select = c("x1", "x3"))
+#' center(anscombe, exclude = c("x1", "x3"))
 #' @export
 center <- function(x, ...) {
   UseMethod("center")
