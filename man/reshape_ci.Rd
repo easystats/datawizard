@@ -4,10 +4,18 @@
 \alias{reshape_ci}
 \title{Reshape CI between wide/long formats}
 \usage{
-reshape_ci(x)
+reshape_ci(x, ci_type = "CI")
 }
 \arguments{
-\item{x}{A data frame containing columns named \code{CI_low} and \code{CI_high}.}
+\item{x}{A data frame containing columns named \code{CI_low} and \code{CI_high} (or
+similar, see \code{ci_type}).}
+
+\item{ci_type}{String indicating the "type" (i.e. prefix) of the interval
+columns. Per \emph{easystats} convention, confidence or credible intervals are
+named \code{CI_low} and \code{CI_high}, and the related \code{ci_type} would be \code{"CI"}.
+If column names for other intervals differ, \code{ci_type} can be used to
+indicate the name, e.g. \code{ci_type = "SI"} can be used for support intervals,
+where the column names in the data frame would be \code{SI_low} and \code{SI_high}.}
 }
 \value{
 A dataframe with columns corresponding to confidence intervals reshaped

@@ -2,7 +2,14 @@
 #'
 #' Reshape CI between wide/long formats.
 #'
-#' @param x A data frame containing columns named `CI_low` and `CI_high`.
+#' @param x A data frame containing columns named `CI_low` and `CI_high` (or
+#'   similar, see `ci_type`).
+#' @param ci_type String indicating the "type" (i.e. prefix) of the interval
+#'   columns. Per *easystats* convention, confidence or credible intervals are
+#'   named `CI_low` and `CI_high`, and the related `ci_type` would be `"CI"`.
+#'   If column names for other intervals differ, `ci_type` can be used to
+#'   indicate the name, e.g. `ci_type = "SI"` can be used for support intervals,
+#'   where the column names in the data frame would be `SI_low` and `SI_high`.
 #'
 #' @return
 #'
@@ -22,11 +29,16 @@
 #' reshape_ci(reshape_ci(x))
 #' @export
 
-reshape_ci <- function(x) {
+reshape_ci <- function(x, ci_type = "CI") {
 
+  # define interval type
+  ci_type <- match.arg(ci_type, choices = c("CI", "SI", "HDI", "ETI"))
+
+  ci_low <- paste0(ci_type, "_low")
+  ci_high <- paste0(ci_type, "_high")
 
   # Long to wide ----------------
-  if ("CI_low" %in% names(x) & "CI_high" %in% names(x) & "CI" %in% names(x)) {
+  if (ci_low %in% names(x) & ci_high %in% names(x) & "CI" %in% names(x)) {
     ci_position <- which(names(x) == "CI")
 
     # Reshape
@@ -43,7 +55,7 @@ reshape_ci <- function(x) {
         idvar = "Parameter",
         timevar = "CI",
         direction = "wide",
-        v.names = c("CI_low", "CI_high"),
+        v.names = c(ci_low, ci_high),
         sep = "_"
       )
       row.names(x) <- NULL
@@ -51,7 +63,7 @@ reshape_ci <- function(x) {
     }
 
     # Replace at the right place
-    ci_colname <- names(x)[c(grepl("CI_low_*", names(x)) | grepl("CI_high_*", names(x)))]
+    ci_colname <- names(x)[c(grepl(paste0(ci_low, "_*"), names(x)) | grepl(paste0(ci_high, "_*"), names(x)))]
     colnames_1 <- names(x)[0:(ci_position - 1)][!names(x)[0:(ci_position - 1)] %in% ci_colname]
     colnames_2 <- names(x)[!names(x) %in% c(ci_colname, colnames_1)]
     x <- x[c(colnames_1, ci_colname, colnames_2)]
@@ -66,10 +78,10 @@ reshape_ci <- function(x) {
       remove_parameter <- FALSE
     }
 
-    lows <- grepl("CI_low_*", names(x))
-    highs <- grepl("CI_high_*", names(x))
-    ci <- as.numeric(gsub("CI_low_", "", names(x)[lows]))
-    if (paste0(ci, collapse = "-") != paste0(gsub("CI_high_", "", names(x)[highs]), collapse = "-")) {
+    lows <- grepl(paste0(ci_low, "_*"), names(x))
+    highs <- grepl(paste0(ci_high, "_*"), names(x))
+    ci <- as.numeric(gsub(paste0(ci_low, "_"), "", names(x)[lows]))
+    if (paste0(ci, collapse = "-") != paste0(gsub(paste0(ci_high, "_"), "", names(x)[highs]), collapse = "-")) {
       stop("Something went wrong in the CIs reshaping.")
       return(x)
     }
@@ -80,7 +92,7 @@ reshape_ci <- function(x) {
         varying = list(names(x)[lows]),
         sep = "_",
         timevar = "CI",
-        v.names = "CI_low",
+        v.names = ci_low,
         times = ci
       )
       high <- stats::reshape(
@@ -89,7 +101,7 @@ reshape_ci <- function(x) {
         varying = list(names(x)[highs]),
         sep = "_",
         timevar = "CI",
-        v.names = "CI_high",
+        v.names = ci_high,
         times = ci
       )
       x <- merge(low, high)
@@ -101,7 +113,7 @@ reshape_ci <- function(x) {
 
     # Replace at the right place
     ci_position <- which(lows)[1]
-    ci_colname <- c("CI", "CI_low", "CI_high")
+    ci_colname <- c("CI", ci_low, ci_high)
     colnames_1 <- names(x)[0:(ci_position - 1)][!names(x)[0:(ci_position - 1)] %in% ci_colname]
     colnames_2 <- names(x)[!names(x) %in% c(ci_colname, colnames_1)]
     x <- x[c(colnames_1, ci_colname, colnames_2)]

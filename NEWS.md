@@ -1,5 +1,8 @@
 # datawizard 0.2.1.9000
 
+- `reshape_ci()` gains a `ci_type` argument, to reshape data frames where 
+  CI-columns have prefixes other than `"CI"`.
+
 # datawizard 0.2.1
 
 - Exports `plot` method for `visualisation_recipe()` objects from `{see}`
