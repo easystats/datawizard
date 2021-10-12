@@ -287,52 +287,52 @@ is required, see <code><a href="center.html">center()</a></code>.</p></div>
 <span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">demean</span><span class="op">(</span><span class="va">iris</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span>, group <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length_between Petal.Length_between Sepal.Length_within</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1             5.821053             3.452632          -0.7210526</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2             5.734146             3.546341          -0.8341463</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3             5.821053             3.452632          -1.1210526</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4             5.980000             4.096667          -1.3800000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5             5.821053             3.452632          -0.8210526</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6             5.873171             4.004878          -0.4731707</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1             5.725581             3.493023          -0.6255814</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2             5.725581             3.493023          -0.8255814</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3             6.058974             4.141026          -1.3589744</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4             5.776316             3.660526          -1.1763158</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5             5.725581             3.493023          -0.7255814</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6             6.058974             4.141026          -0.6589744</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Petal.Length_within</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1           -2.052632</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           -2.146341</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3           -2.152632</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           -2.596667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5           -2.052632</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6           -2.304878</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           -2.093023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           -2.093023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           -2.841026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           -2.160526</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           -2.093023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           -2.441026</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">demean</span><span class="op">(</span><span class="va">iris</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"binary"</span>, <span class="st">"Species"</span><span class="op">)</span>, group <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Categorical predictors (Species, binary) have been coerced to numeric values to compute de- and group-meaned variables.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length_between Species_between binary_between Species_setosa_between</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1             5.821053       0.8157895      0.3421053              0.4473684</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2             5.734146       0.9512195      0.3170732              0.3902439</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3             5.821053       0.8157895      0.3421053              0.4473684</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4             5.980000       1.1333333      0.4333333              0.2333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5             5.821053       0.8157895      0.3421053              0.4473684</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6             5.873171       1.1219512      0.2195122              0.2439024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1             5.725581       0.8604651      0.4883721              0.4186047</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2             5.725581       0.8604651      0.4883721              0.4186047</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3             6.058974       1.1538462      0.1538462              0.2820513</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4             5.776316       1.0000000      0.3684211              0.3157895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5             5.725581       0.8604651      0.4883721              0.4186047</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6             6.058974       1.1538462      0.1538462              0.2820513</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Species_versicolor_between Species_virginica_between Sepal.Length_within</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  0.2894737                 0.2631579          -0.7210526</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                  0.2682927                 0.3414634          -0.8341463</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  0.2894737                 0.2631579          -1.1210526</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                  0.4000000                 0.3666667          -1.3800000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                  0.2894737                 0.2631579          -0.8210526</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                  0.3902439                 0.3658537          -0.4731707</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  0.3023256                 0.2790698          -0.6255814</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                  0.3023256                 0.2790698          -0.8255814</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  0.2820513                 0.4358974          -1.3589744</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                  0.3684211                 0.3157895          -1.1763158</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                  0.3023256                 0.2790698          -0.7255814</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                  0.2820513                 0.4358974          -0.6589744</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Species_within binary_within Species_setosa_within Species_versicolor_within</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     -0.8157895    -0.3421053             0.5526316                -0.2894737</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     -0.9512195    -0.3170732             0.6097561                -0.2682927</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     -0.8157895    -0.3421053             0.5526316                -0.2894737</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     -1.1333333     0.5666667             0.7666667                -0.4000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     -0.8157895    -0.3421053             0.5526316                -0.2894737</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6     -1.1219512    -0.2195122             0.7560976                -0.3902439</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     -0.8604651     0.5116279             0.5813953                -0.3023256</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     -0.8604651     0.5116279             0.5813953                -0.3023256</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     -1.1538462     0.8461538             0.7179487                -0.2820513</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     -1.0000000    -0.3684211             0.6842105                -0.3684211</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     -0.8604651     0.5116279             0.5813953                -0.3023256</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     -1.1538462    -0.1538462             0.7179487                -0.2820513</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Species_virginica_within</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1               -0.2631579</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2               -0.3414634</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3               -0.2631579</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4               -0.3666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5               -0.2631579</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6               -0.3658537</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1               -0.2790698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2               -0.2790698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3               -0.4358974</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4               -0.3157895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5               -0.2790698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6               -0.4358974</span>
 <span class="r-in"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># demean interaction term x*y</span></span>
