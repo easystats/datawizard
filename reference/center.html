@@ -83,7 +83,6 @@
   robust <span class="op">=</span> <span class="cn">FALSE</span>,
   force <span class="op">=</span> <span class="cn">FALSE</span>,
   append <span class="op">=</span> <span class="cn">FALSE</span>,
-  suffix <span class="op">=</span> <span class="st">"_c"</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
@@ -117,12 +116,12 @@ well. Factors are converted to numerical values, with the lowest level
 being the value <code>1</code> (unless the factor has numeric levels, which are
 converted to the corresponding numeric value).</p></dd>
 <dt>append</dt>
-<dd><p>Logical, if <code>TRUE</code> and <code>x</code> is a data frame,
-standardized variables will be added as additional columns; if
-<code>FALSE</code>, existing variables are overwritten.</p></dd>
-<dt>suffix</dt>
-<dd><p>Character value, will be appended to variable (column) names of
-<code>x</code>, if <code>x</code> is a data frame and <code>append = TRUE</code>.</p></dd>
+<dd><p>Logical or string. If <code>TRUE</code>, centered variables get new
+column names (with the suffix <code>"_c"</code>) and are appended (column bind) to <code>x</code>,
+thus returning both the original and the centered variables. If <code>FALSE</code>,
+original variables in <code>x</code> will be overwritten by their centered versions.
+If a character value, centered variables are appended with new column
+names (using the defined suffix) to the original data frame.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
