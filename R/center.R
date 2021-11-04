@@ -68,7 +68,9 @@ center.numeric <- function(x,
 
   args <- .process_std_center(x, weights, robust, verbose)
 
-  if (is.null(args$check)) {
+  if (is.null(args)) { # all NA?
+    return(x)
+  } else if (is.null(args$check)) {
     vals <- rep(0, length(args$vals))  # If only unique value
   } else {
     vals <- as.vector(args$vals - args$center)

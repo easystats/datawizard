@@ -7,7 +7,7 @@
 .process_std_center <- function(x, weights, robust, verbose, reference = NULL) {
   # Warning if all NaNs
   if (all(is.na(x))) {
-    return(x)
+    return(NULL)
   }
 
   if (.are_weights(weights)) {
