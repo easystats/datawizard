@@ -350,7 +350,6 @@ standardize.grouped_df <- function(x,
       verbose = verbose,
       force = force,
       append = FALSE,
-      suffix = NULL,
       ...
     )
   }
