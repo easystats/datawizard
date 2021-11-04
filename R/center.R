@@ -76,6 +76,9 @@ center.numeric <- function(x,
 
   centered_x <- rep(NA, length(args$valid_x))
   centered_x[args$valid_x] <- vals
+  attr(centered_x, "center") <- args$center
+  attr(centered_x, "scale") <- args$scale
+  attr(centered_x, "robust") <- robust
   centered_x
 }
 
@@ -120,5 +123,8 @@ center.data.frame <- function(x,
     verbose = FALSE
   )
 
+  attr(x, "center") <- sapply(x[args$select], function(z) attributes(z)$center)
+  attr(x, "scale") <- sapply(x[args$select], function(z) attributes(z)$scale)
+  attr(x, "robust") <- robust
   x
 }
