@@ -49,7 +49,6 @@ standardise(
   remove_na = c("none", "selected", "all"),
   force = FALSE,
   append = FALSE,
-  suffix = "_z",
   ...
 )
 
@@ -120,12 +119,12 @@ as well. Factors are converted to numerical values, with the lowest level
 being the value \code{1} (unless the factor has numeric levels, which are
 converted to the corresponding numeric value).}
 
-\item{append}{Logical, if \code{TRUE} and \code{x} is a data frame, standardized
-variables will be added as additional columns; if \code{FALSE},
-existing variables are overwritten.}
-
-\item{suffix}{Character value, will be appended to variable (column) names of
-\code{x}, if \code{x} is a data frame and \code{append = TRUE}.}
+\item{append}{Logical or string. If \code{TRUE}, standardized variables get new
+column names (with the suffix \code{"_z"}) and are appended (column bind) to \code{x},
+thus returning both the original and the standardized variables. If \code{FALSE},
+original variables in \code{x} will be overwritten by their standardized versions.
+If a character value, standardized variables are appended with new column
+names (using the defined suffix) to the original data frame.}
 
 \item{center, scale}{Used by \code{unstandardize()}; \code{center} and \code{scale}
 correspond to the center (the mean / median) and the scale (SD / MAD) of
@@ -158,8 +157,21 @@ missing values are preserved, so the return value has the same length /
 number of rows as the original input.
 }
 \examples{
+d <- iris[1:4, ]
+
+# vectors
+standardise(d$Petal.Length)
+
 # Data frames
-summary(standardize(swiss))
+# overwrite
+standardise(d, select = c("Sepal.Length", "Sepal.Width"))
+
+# append
+standardise(d, select = c("Sepal.Length", "Sepal.Width"), append = TRUE)
+
+# append, suffix
+standardise(d, select = c("Sepal.Length", "Sepal.Width"), append = "_std")
+
 }
 \seealso{
 Other transform utilities: 
