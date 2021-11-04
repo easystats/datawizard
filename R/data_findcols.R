@@ -23,10 +23,10 @@ data_findcols <- function(data,
     }
   }
   if (!is.null(starts_with)) {
-    match <- n[grepl(paste0(starts_with, ".*"), n)]
+    match <- n[grepl(paste0("^", starts_with), n)]
   }
   if (!is.null(ends_with)) {
-    match <- n[grepl(paste0(".*", ends_with), n)]
+    match <- n[grepl(paste0(ends_with, "$"), n)]
   }
   match
 }
