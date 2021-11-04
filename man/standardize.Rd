@@ -48,8 +48,7 @@ standardise(
   exclude = NULL,
   remove_na = c("none", "selected", "all"),
   force = FALSE,
-  append = FALSE,
-  suffix = "_z",
+  suffix = NULL,
   ...
 )
 
@@ -120,12 +119,11 @@ as well. Factors are converted to numerical values, with the lowest level
 being the value \code{1} (unless the factor has numeric levels, which are
 converted to the corresponding numeric value).}
 
-\item{append}{Logical, if \code{TRUE} and \code{x} is a data frame, standardized
-variables will be added as additional columns; if \code{FALSE},
-existing variables are overwritten.}
-
 \item{suffix}{Character value, will be appended to variable (column) names of
-\code{x}, if \code{x} is a data frame and \code{append = TRUE}.}
+the standardized variables. If \code{NULL}, original variables in \code{x} will be
+overwritten. If a character value, standardized variables get new column
+names and are appended (column bind) to \code{x}, thus returning both the
+original and the standardized variables.}
 
 \item{center, scale}{Used by \code{unstandardize()}; \code{center} and \code{scale}
 correspond to the center (the mean / median) and the scale (SD / MAD) of

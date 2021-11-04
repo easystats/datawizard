@@ -166,11 +166,11 @@ standardize.AsIs <- standardize.numeric
 #'   as well. Factors are converted to numerical values, with the lowest level
 #'   being the value `1` (unless the factor has numeric levels, which are
 #'   converted to the corresponding numeric value).
-#' @param append Logical, if `TRUE` and `x` is a data frame, standardized
-#'   variables will be added as additional columns; if `FALSE`,
-#'   existing variables are overwritten.
 #' @param suffix Character value, will be appended to variable (column) names of
-#'   `x`, if `x` is a data frame and `append = TRUE`.
+#'   the standardized variables. If `NULL`, original variables in `x` will be
+#'   overwritten. If a character value, standardized variables get new column
+#'   names and are appended (column bind) to `x`, thus returning both the
+#'   original and the standardized variables.
 #' @param reference A data frame or variable from which the centrality and
 #'   deviation will be computed instead of from the input variable. Useful for
 #'   standardizing a subset or new data according to another data frame.
@@ -186,8 +186,7 @@ standardize.data.frame <- function(x,
                                    exclude = NULL,
                                    remove_na = c("none", "selected", "all"),
                                    force = FALSE,
-                                   append = FALSE,
-                                   suffix = "_z",
+                                   suffix = NULL,
                                    ...) {
   if (!is.null(reference) && !all(names(x) %in% names(reference))) {
     stop("The 'reference' must have the same columns as the input.")
@@ -224,11 +223,9 @@ standardize.data.frame <- function(x,
 
   if (!is.null(weights) && is.character(weights)) weights <- x[[weights]]
 
-  if (append) {
+  if (!is.null(suffix) && suffix != "") {
     new_variables <- x[select]
-    if (!is.null(suffix)) {
-      colnames(new_variables) <- paste0(colnames(new_variables), suffix)
-    }
+    colnames(new_variables) <- paste0(colnames(new_variables), suffix)
     x <- cbind(x, new_variables)
     select <- colnames(new_variables)
   }
