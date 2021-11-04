@@ -93,7 +93,7 @@ standardize.numeric <- function(x,
   ref <- .get_center_scale(vals, robust, weights, reference)
 
   # Perform standardization
-  if(is.null(check)) {
+  if (is.null(check)) {
     vals <- rep(0, length(vals))  # If only unique value
   } else {
     if (two_sd) {
@@ -171,9 +171,9 @@ standardize.AsIs <- standardize.numeric
 #'   existing variables are overwritten.
 #' @param suffix Character value, will be appended to variable (column) names of
 #'   `x`, if `x` is a data frame and `append = TRUE`.
-#' @param reference A dataframe or variable from which the centrality and
+#' @param reference A data frame or variable from which the centrality and
 #'   deviation will be computed instead of from the input variable. Useful for
-#'   standardizing a subset or new data according to another dataframe.
+#'   standardizing a subset or new data according to another data frame.
 #'
 #' @export
 standardize.data.frame <- function(x,
