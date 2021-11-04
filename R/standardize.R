@@ -194,13 +194,13 @@ standardize.data.frame <- function(x,
                                    robust = FALSE,
                                    two_sd = FALSE,
                                    weights = NULL,
+                                   verbose = TRUE,
                                    reference = NULL,
                                    select = NULL,
                                    exclude = NULL,
                                    remove_na = c("none", "selected", "all"),
                                    force = FALSE,
                                    append = FALSE,
-                                   verbose = TRUE,
                                    ...) {
   if (!is.null(reference) && !all(names(x) %in% names(reference))) {
     stop("The 'reference' must have the same columns as the input.")

@@ -61,8 +61,8 @@ centre <- center
 #' @rdname center
 #' @export
 center.numeric <- function(x,
-                           weights = NULL,
                            robust = FALSE,
+                           weights = NULL,
                            verbose = TRUE,
                            ...) {
 
@@ -119,12 +119,12 @@ center.character <- center.factor
 center.data.frame <- function(x,
                               robust = FALSE,
                               weights = NULL,
+                              verbose = TRUE,
                               select = NULL,
                               exclude = NULL,
                               remove_na = c("none", "selected", "all"),
                               force = FALSE,
                               append = FALSE,
-                              verbose = TRUE,
                               ...) {
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append,
@@ -136,8 +136,8 @@ center.data.frame <- function(x,
   x[args$select] <- lapply(
     x[args$select],
     center,
-    weights = args$weights,
     robust = robust,
+    weights = args$weights,
     verbose = FALSE
   )
 

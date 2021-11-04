@@ -11,18 +11,18 @@ center(x, ...)
 
 centre(x, ...)
 
-\method{center}{numeric}(x, weights = NULL, robust = FALSE, verbose = TRUE, ...)
+\method{center}{numeric}(x, robust = FALSE, weights = NULL, verbose = TRUE, ...)
 
 \method{center}{data.frame}(
   x,
   robust = FALSE,
   weights = NULL,
+  verbose = TRUE,
   select = NULL,
   exclude = NULL,
   remove_na = c("none", "selected", "all"),
   force = FALSE,
   append = FALSE,
-  verbose = TRUE,
   ...
 )
 }
@@ -31,16 +31,16 @@ centre(x, ...)
 
 \item{...}{Currently not used.}
 
+\item{robust}{Logical, if \code{TRUE}, centering is done by subtracting the
+median from the variables. If \code{FALSE}, variables are centered by
+subtracting the mean.}
+
 \item{weights}{Can be \code{NULL} (for no weighting), or:
 \itemize{
 \item For data frames: a numeric vector of weights, or a character of the
 name of a column in the \code{data.frame} that contains the weights.
 \item For numeric vectors: a numeric vector of weights.
 }}
-
-\item{robust}{Logical, if \code{TRUE}, centering is done by subtracting the
-median from the variables. If \code{FALSE}, variables are centered by
-subtracting the mean.}
 
 \item{verbose}{Toggle warnings and messages.}
 
