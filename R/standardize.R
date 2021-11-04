@@ -230,7 +230,7 @@ standardize.data.frame <- function(x,
     }
   }
 
-  select <- .select_z_variables(x, select, exclude, force)
+  select <- .select_variables(x, select, exclude, force)
 
   # drop NAs
   remove_na <- match.arg(remove_na, c("none", "selected", "all"))
@@ -327,7 +327,7 @@ standardize.grouped_df <- function(x,
   }
 
   x <- as.data.frame(x)
-  select <- .select_z_variables(x, select, exclude, force)
+  select <- .select_variables(x, select, exclude, force)
 
   # append standardized variables
   if (!is.null(append) && append != "") {
@@ -377,22 +377,6 @@ standardize.grouped_df <- function(x,
 }
 
 
-.select_z_variables <- function(x, select, exclude, force) {
-  if (is.null(select)) {
-    select <- names(x)
-  }
-
-  if (!is.null(exclude)) {
-    select <- setdiff(select, exclude)
-  }
-
-  if (!force) {
-    factors <- sapply(x[select], function(i) is.factor(i) | is.character(i))
-    select <- select[!factors]
-  }
-
-  select
-}
 
 #' @keywords internal
 .check_standardize_numeric <- function(x,

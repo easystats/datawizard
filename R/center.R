@@ -10,14 +10,15 @@
 #'   well. Factors are converted to numerical values, with the lowest level
 #'   being the value `1` (unless the factor has numeric levels, which are
 #'   converted to the corresponding numeric value).
-#' @param append Logical, if `TRUE` and `x` is a data frame,
-#'   standardized variables will be added as additional columns; if
-#'   `FALSE`, existing variables are overwritten.
-#' @param suffix Character value, will be appended to variable (column) names of
-#'   `x`, if `x` is a data frame and `append = TRUE`.
 #' @param robust Logical, if `TRUE`, centering is done by subtracting the
 #'   median from the variables. If `FALSE`, variables are centered by
 #'   subtracting the mean.
+#' @param append Logical or string. If `TRUE`, centered variables get new
+#'   column names (with the suffix `"_c"`) and are appended (column bind) to `x`,
+#'   thus returning both the original and the centered variables. If `FALSE`,
+#'   original variables in `x` will be overwritten by their centered versions.
+#'   If a character value, centered variables are appended with new column
+#'   names (using the defined suffix) to the original data frame.
 #' @param verbose Toggle warnings and messages.
 #' @param weights Can be `NULL` (for no weighting), or:
 #'   - For data frames: a numeric vector of weights, or a character of the
@@ -121,7 +122,6 @@ center.data.frame <- function(x,
                               robust = FALSE,
                               force = FALSE,
                               append = FALSE,
-                              suffix = "_c",
                               verbose = TRUE,
                               ...) {
   # check for formula notation, convert to character vector
@@ -130,6 +130,13 @@ center.data.frame <- function(x,
   }
   if (inherits(exclude, "formula")) {
     exclude <- all.vars(exclude)
+  }
+
+  # check append argument, and set default
+  if (isFALSE(append)) {
+    append <- NULL
+  } else if (isTRUE(append)) {
+    append <- "_c"
   }
 
   if (!is.null(weights) && is.character(weights)) {
@@ -141,14 +148,13 @@ center.data.frame <- function(x,
     }
   }
 
-  select <- .select_c_variables(x, select, exclude, force)
+  select <- .select_variables(x, select, exclude, force)
   if (!is.null(weights) && is.character(weights)) weights <- x[[weights]]
 
-  if (append) {
+  # append standardized variables
+  if (!is.null(append) && append != "") {
     new_variables <- x[select]
-    if (!is.null(suffix)) {
-      colnames(new_variables) <- paste0(colnames(new_variables), suffix)
-    }
+    colnames(new_variables) <- paste0(colnames(new_variables), append)
     x <- cbind(x, new_variables)
     select <- colnames(new_variables)
   }
@@ -167,7 +173,7 @@ center.data.frame <- function(x,
 # helper ------------------------
 
 
-.select_c_variables <- function(x, select, exclude, force) {
+.select_variables <- function(x, select, exclude, force) {
   if (is.null(select)) {
     select <- names(x)
   }

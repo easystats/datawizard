@@ -21,7 +21,6 @@ centre(x, ...)
   robust = FALSE,
   force = FALSE,
   append = FALSE,
-  suffix = "_c",
   verbose = TRUE,
   ...
 )
@@ -54,12 +53,12 @@ well. Factors are converted to numerical values, with the lowest level
 being the value \code{1} (unless the factor has numeric levels, which are
 converted to the corresponding numeric value).}
 
-\item{append}{Logical, if \code{TRUE} and \code{x} is a data frame,
-standardized variables will be added as additional columns; if
-\code{FALSE}, existing variables are overwritten.}
-
-\item{suffix}{Character value, will be appended to variable (column) names of
-\code{x}, if \code{x} is a data frame and \code{append = TRUE}.}
+\item{append}{Logical or string. If \code{TRUE}, centered variables get new
+column names (with the suffix \code{"_c"}) and are appended (column bind) to \code{x},
+thus returning both the original and the centered variables. If \code{FALSE},
+original variables in \code{x} will be overwritten by their centered versions.
+If a character value, centered variables are appended with new column
+names (using the defined suffix) to the original data frame.}
 }
 \value{
 The centered variables.
