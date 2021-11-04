@@ -42,13 +42,13 @@ standardise(
   robust = FALSE,
   two_sd = FALSE,
   weights = NULL,
-  verbose = TRUE,
   reference = NULL,
   select = NULL,
   exclude = NULL,
   remove_na = c("none", "selected", "all"),
   force = FALSE,
   append = FALSE,
+  verbose = TRUE,
   ...
 )
 

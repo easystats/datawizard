@@ -194,70 +194,31 @@ standardize.data.frame <- function(x,
                                    robust = FALSE,
                                    two_sd = FALSE,
                                    weights = NULL,
-                                   verbose = TRUE,
                                    reference = NULL,
                                    select = NULL,
                                    exclude = NULL,
                                    remove_na = c("none", "selected", "all"),
                                    force = FALSE,
                                    append = FALSE,
+                                   verbose = TRUE,
                                    ...) {
   if (!is.null(reference) && !all(names(x) %in% names(reference))) {
     stop("The 'reference' must have the same columns as the input.")
   }
 
-  # check append argument, and set default
-  if (isFALSE(append)) {
-    append <- NULL
-  } else if (isTRUE(append)) {
-    append <- "_z"
-  }
+  # process arguments
+  args <- .process_std_args(x, select, exclude, weights, append,
+                            append_suffix = "_z", force, remove_na)
 
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
-
-  if (!is.null(weights) && is.character(weights)) {
-    if (weights %in% colnames(x)) {
-      exclude <- c(exclude, weights)
-    } else {
-      warning("Could not find weighting column '", weights, "'. Weighting not carried out.")
-      weights <- NULL
-    }
-  }
-
-  select <- .select_variables(x, select, exclude, force)
-
-  # drop NAs
-  remove_na <- match.arg(remove_na, c("none", "selected", "all"))
-
-  omit <- switch(remove_na,
-    none = logical(nrow(x)),
-    selected = rowSums(sapply(x[select], is.na)) > 0,
-    all = rowSums(sapply(x, is.na)) > 0
-  )
-  x <- x[!omit, , drop = FALSE]
-
-  if (!is.null(weights) && is.character(weights)) weights <- x[[weights]]
-
-  # append standardized variables
-  if (!is.null(append) && append != "") {
-    new_variables <- x[select]
-    colnames(new_variables) <- paste0(colnames(new_variables), append)
-    x <- cbind(x, new_variables)
-    select <- colnames(new_variables)
-  }
+  # set new values
+  x <- args$x
 
   # Loop through variables and standardize it
-  for (var in select) {
+  for (var in args$select) {
     x[[var]] <- standardize(x[[var]],
       robust = robust,
       two_sd = two_sd,
-      weights = weights,
+      weights = args$weights,
       reference = reference[[var]],
       verbose = FALSE,
       force = force
@@ -265,8 +226,8 @@ standardize.data.frame <- function(x,
   }
 
 
-  attr(x, "center") <- sapply(x[select], function(z) attributes(z)$center)
-  attr(x, "scale") <- sapply(x[select], function(z) attributes(z)$scale)
+  attr(x, "center") <- sapply(x[args$select], function(z) attributes(z)$center)
+  attr(x, "scale") <- sapply(x[args$select], function(z) attributes(z)$scale)
   attr(x, "robust") <- robust
   x
 }
@@ -356,54 +317,5 @@ standardize.grouped_df <- function(x,
   }
   # set back class, so data frame still works with dplyr
   attributes(x) <- info
-  x
-}
-
-
-
-# helper -----------------------------
-
-.get_center_scale <- function(x, robust = FALSE, weights = NULL, reference = NULL) {
-  if (is.null(reference)) reference <- x
-
-  if (robust) {
-    center <- .median(reference, weights)
-    scale <- .mad(reference, weights)
-  } else {
-    center <- .mean(reference, weights)
-    scale <- .sd(reference, weights)
-  }
-  list(center = center, scale = scale)
-}
-
-
-
-#' @keywords internal
-.check_standardize_numeric <- function(x,
-                                       name = NULL,
-                                       verbose = TRUE,
-                                       reference = NULL) {
-  # Warning if only one value
-  if (length(unique(x)) == 1 && is.null(reference)) {
-    if (verbose) {
-      if (is.null(name)) {
-        message("The variable contains only one unique value and will be set to 0.")
-      } else {
-        message(paste0("The variable `", name, "` contains only one unique value and will be set to 0."))
-      }
-    }
-    return(NULL)
-  }
-
-  # Warning if logical vector
-  if (length(unique(x)) == 2 && !is.factor(x) && !is.character(x)) {
-    if (verbose) {
-      if (is.null(name)) {
-        message("The variable contains only two different values. Consider converting it to a factor.")
-      } else {
-        message(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor."))
-      }
-    }
-  }
   x
 }

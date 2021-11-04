@@ -15,10 +15,11 @@ centre(x, ...)
 
 \method{center}{data.frame}(
   x,
+  robust = FALSE,
+  weights = NULL,
   select = NULL,
   exclude = NULL,
-  weights = NULL,
-  robust = FALSE,
+  remove_na = c("none", "selected", "all"),
   force = FALSE,
   append = FALSE,
   verbose = TRUE,
