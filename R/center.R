@@ -66,37 +66,16 @@ center.numeric <- function(x,
                            verbose = TRUE,
                            ...) {
 
-  # Warning if all NaNs
-  if (all(is.na(x))) {
-    return(x)
-  }
+  args <- .process_std_center(x, weights, robust, verbose)
 
-  if (.are_weights(weights)) {
-    valid_x <- !is.na(x) & !is.na(weights)
-    x <- x[valid_x]
-    weights <- weights[valid_x]
+  if (is.null(args$check)) {
+    vals <- rep(0, length(args$vals))  # If only unique value
   } else {
-    valid_x <- !is.na(x)
-    x <- x[valid_x]
-  }
-  centered_x <- rep(NA, length(x))
-
-
-  # Sanity checks
-  check <- .check_center_numeric(x, name = NULL, verbose = verbose)
-  if (is.null(check)) {
-    return(x)
+    vals <- as.vector(args$vals - args$center)
   }
 
-  if (robust) {
-    center <- .median(x, weights, verbose = verbose)
-  } else {
-    center <- .mean(x, weights, verbose = verbose)
-  }
-
-  x <- as.vector(x - center)
-
-  centered_x[valid_x] <- x
+  centered_x <- rep(NA, length(args$valid_x))
+  centered_x[args$valid_x] <- vals
   centered_x
 }
 

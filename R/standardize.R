@@ -80,46 +80,23 @@ standardize.numeric <- function(x,
                                 reference = NULL,
                                 ...) {
 
-  # Warning if all NaNs
-  if (all(is.na(x))) {
-    return(x)
-  }
-
-  if (.are_weights(weights)) {
-    valid_x <- !is.na(x) & !is.na(weights)
-    vals <- x[valid_x]
-    weights <- weights[valid_x]
-  } else {
-    valid_x <- !is.na(x)
-    vals <- x[valid_x]
-  }
-
-  # Sanity checks
-  check <- .check_standardize_numeric(vals, name = NULL, verbose = verbose, reference = reference)
-
-
-  if (is.factor(vals) || is.character(vals)) {
-    vals <- .factor_to_numeric(vals)
-  }
-
-  # Get center and scale
-  ref <- .get_center_scale(vals, robust, weights, reference)
+  args <- .process_std_center(x, weights, robust, verbose)
 
   # Perform standardization
-  if (is.null(check)) {
-    vals <- rep(0, length(vals))  # If only unique value
+  if (is.null(args$check)) {
+    vals <- rep(0, length(args$vals))  # If only unique value
   } else {
     if (two_sd) {
-      vals <- as.vector((vals - ref$center) / (2 * ref$scale))
+      vals <- as.vector((args$vals - args$center) / (2 * args$scale))
     } else {
-      vals <- as.vector((vals - ref$center) / ref$scale)
+      vals <- as.vector((args$vals - args$center) / args$scale)
     }
   }
 
-  scaled_x <- rep(NA, length(valid_x))
-  scaled_x[valid_x] <- vals
-  attr(scaled_x, "center") <- ref$center
-  attr(scaled_x, "scale") <- ref$scale
+  scaled_x <- rep(NA, length(args$valid_x))
+  scaled_x[args$valid_x] <- vals
+  attr(scaled_x, "center") <- args$center
+  attr(scaled_x, "scale") <- args$scale
   attr(scaled_x, "robust") <- robust
   scaled_x
 }

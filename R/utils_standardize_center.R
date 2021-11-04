@@ -2,6 +2,42 @@
 # helper -----------------------------
 
 
+.process_std_center <- function(x, weights, robust, verbose) {
+  # Warning if all NaNs
+  if (all(is.na(x))) {
+    return(x)
+  }
+
+  if (.are_weights(weights)) {
+    valid_x <- !is.na(x) & !is.na(weights)
+    vals <- x[valid_x]
+    weights <- weights[valid_x]
+  } else {
+    valid_x <- !is.na(x)
+    vals <- x[valid_x]
+  }
+
+
+  # Sanity checks
+  check <- .check_standardize_numeric(x, name = NULL, verbose = verbose)
+
+  if (is.factor(vals) || is.character(vals)) {
+    vals <- .factor_to_numeric(vals)
+  }
+
+  # Get center and scale
+  ref <- .get_center_scale(vals, robust, weights, NULL)
+
+  list(
+    vals = vals,
+    valid_x = valid_x,
+    center = ref$center,
+    scale = ref$scale,
+    check = ref$check
+  )
+}
+
+
 .get_center_scale <- function(x, robust = FALSE, weights = NULL, reference = NULL) {
   if (is.null(reference)) reference <- x
 
@@ -17,6 +53,7 @@
 
 
 
+
 #' @keywords internal
 .check_standardize_numeric <- function(x,
                                        name = NULL,
@@ -26,9 +63,9 @@
   if (length(unique(x)) == 1 && is.null(reference)) {
     if (verbose) {
       if (is.null(name)) {
-        message("The variable contains only one unique value and will be set to 0.")
+        message(insight::format_message("The variable contains only one unique value and will be set to 0."))
       } else {
-        message(paste0("The variable `", name, "` contains only one unique value and will be set to 0."))
+        message(insight::format_message(paste0("The variable `", name, "` contains only one unique value and will be set to 0.")))
       }
     }
     return(NULL)
@@ -38,9 +75,9 @@
   if (length(unique(x)) == 2 && !is.factor(x) && !is.character(x)) {
     if (verbose) {
       if (is.null(name)) {
-        message("The variable contains only two different values. Consider converting it to a factor.")
+        message(insight::format_message("The variable contains only two different values. Consider converting it to a factor."))
       } else {
-        message(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor."))
+        message(insight::format_message(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor.")))
       }
     }
   }
@@ -71,38 +108,10 @@
 
 
 
-#' @keywords internal
-.check_center_numeric <- function(x, name = NULL, verbose = TRUE) {
-  # Warning if only one value
-  if (length(unique(x)) == 1) {
-    if (verbose) {
-      if (is.null(name)) {
-        message("The variable contains only one unique value and will not be standardized.")
-      } else {
-        message(paste0("The variable `", name, "` contains only one unique value and will not be standardized."))
-      }
-    }
-    return(NULL)
-  }
-
-  # Warning if logical vector
-  if (length(unique(x)) == 2 && !is.factor(x) && !is.character(x)) {
-    if (verbose) {
-      if (is.null(name)) {
-        message(insight::format_message("The variable contains only two different values. Consider converting it to a factor."))
-      } else {
-        message(insight::format_message(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor.")))
-      }
-    }
-  }
-  x
-}
-
-
-
 .are_weights <- function(w) {
   !is.null(w) && length(w) && !all(w == 1) && !all(w == w[1])
 }
+
 
 
 
@@ -123,6 +132,7 @@
 
 
 
+
 .mean <- function(x, weights = NULL, verbose = TRUE, ...) {
   if (!.are_weights(weights)) {
     return(mean(x, na.rm = TRUE))
@@ -137,6 +147,7 @@
 
   stats::weighted.mean(x, weights, na.rm = TRUE)
 }
+
 
 
 
@@ -176,6 +187,7 @@
 
   result
 }
+
 
 
 
