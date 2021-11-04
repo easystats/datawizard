@@ -19,7 +19,7 @@
 
 
   # Sanity checks
-  check <- .check_standardize_numeric(x, name = NULL, verbose = verbose)
+  check <- .check_standardize_numeric(x, name = NULL, verbose = verbose, reference = reference)
 
   if (is.factor(vals) || is.character(vals)) {
     vals <- .factor_to_numeric(vals)
