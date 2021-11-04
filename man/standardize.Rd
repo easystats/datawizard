@@ -157,8 +157,20 @@ missing values are preserved, so the return value has the same length /
 number of rows as the original input.
 }
 \examples{
+# vectors
+standardise(d$Petal.Length)
+
 # Data frames
-summary(standardize(swiss))
+d <- iris[1:4, ]
+# overwrite
+standardise(d, select = c("Sepal.Length", "Sepal.Width"))
+
+# append
+standardise(d, select = c("Sepal.Length", "Sepal.Width"), append = TRUE)
+
+# append, suffix
+standardise(d, select = c("Sepal.Length", "Sepal.Width"), append = "_std")
+
 }
 \seealso{
 Other transform utilities: 

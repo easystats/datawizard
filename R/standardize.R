@@ -41,8 +41,20 @@
 #' @family standardize
 #'
 #' @examples
+#' # vectors
+#' standardise(d$Petal.Length)
+#'
 #' # Data frames
-#' summary(standardize(swiss))
+#' d <- iris[1:4, ]
+#' # overwrite
+#' standardise(d, select = c("Sepal.Length", "Sepal.Width"))
+#'
+#' # append
+#' standardise(d, select = c("Sepal.Length", "Sepal.Width"), append = TRUE)
+#'
+#' # append, suffix
+#' standardise(d, select = c("Sepal.Length", "Sepal.Width"), append = "_std")
+#'
 #' @export
 standardize <- function(x,
                         robust = FALSE,
@@ -231,6 +243,7 @@ standardize.data.frame <- function(x,
 
   if (!is.null(weights) && is.character(weights)) weights <- x[[weights]]
 
+  # append standardized variables
   if (!is.null(append) && append != "") {
     new_variables <- x[select]
     colnames(new_variables) <- paste0(colnames(new_variables), append)
@@ -271,10 +284,16 @@ standardize.grouped_df <- function(x,
                                    remove_na = c("none", "selected", "all"),
                                    force = FALSE,
                                    append = FALSE,
-                                   suffix = "_z",
                                    ...) {
   if (!is.null(reference)) {
     stop("The `reference` argument cannot be used with grouped standardization for now.")
+  }
+
+  # check append argument, and set default
+  if (isFALSE(append)) {
+    append <- NULL
+  } else if (isTRUE(append)) {
+    append <- "_z"
   }
 
   info <- attributes(x)
@@ -309,15 +328,15 @@ standardize.grouped_df <- function(x,
   x <- as.data.frame(x)
   select <- .select_z_variables(x, select, exclude, force)
 
-  if (append) {
+  # append standardized variables
+  if (!is.null(append) && append != "") {
     new_variables <- x[select]
-    if (!is.null(suffix)) {
-      colnames(new_variables) <- paste0(colnames(new_variables), suffix)
-    }
+    colnames(new_variables) <- paste0(colnames(new_variables), append)
     x <- cbind(x, new_variables)
     select <- colnames(new_variables)
     info$names <- c(info$names, select)
   }
+
 
   for (rows in grps) {
     x[rows, ] <- standardize(
