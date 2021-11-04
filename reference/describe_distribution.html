@@ -45,7 +45,7 @@ centrality, dispersion, range, skewness, kurtosis)."><meta property="og:image" c
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/datawizard/">
+  <a href="https://github.com/easystats/datawizard/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -60,7 +60,7 @@ centrality, dispersion, range, skewness, kurtosis)."><meta property="og:image" c
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Describe a distribution</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/master/R/describe_distribution.R"><code>R/describe_distribution.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/describe_distribution.R" class="external-link"><code>R/describe_distribution.R</code></a></small>
     <div class="hidden name"><code>describe_distribution.Rd</code></div>
     </div>
 
@@ -105,57 +105,64 @@ centrality, dispersion, range, skewness, kurtosis).</p>
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A numeric vector.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Additional arguments to be passed to or from methods.</p></td>
-    </tr><tr><th>centrality</th>
-      <td><p>The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: <code>"median"</code>, <code>"mean"</code>, <code>"MAP"</code> or <code>"all"</code>.</p></td>
-    </tr><tr><th>dispersion</th>
-      <td><p>Logical, if <code>TRUE</code>, computes indices of dispersion related to the estimate(s) (<code>SD</code> and <code>MAD</code> for <code>mean</code> and <code>median</code>, respectively).</p></td>
-    </tr><tr><th>iqr</th>
-      <td><p>Logical, if <code>TRUE</code>, the interquartile range is calculated
-(based on <code><a href="https://rdrr.io/r/stats/IQR.html">stats::IQR()</a></code>, using <code>type = 6</code>).</p></td>
-    </tr><tr><th>range</th>
-      <td><p>Return the range (min and max).</p></td>
-    </tr><tr><th>quartiles</th>
-      <td><p>Return the first and third quartiles (25th and 75pth
-percentiles).</p></td>
-    </tr><tr><th>ci</th>
-      <td><p>Confidence Interval (CI) level. Default is <code>NULL</code>, i.e. no
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>x</dt>
+<dd><p>A numeric vector.</p></dd>
+<dt>...</dt>
+<dd><p>Additional arguments to be passed to or from methods.</p></dd>
+<dt>centrality</dt>
+<dd><p>The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: <code>"median"</code>, <code>"mean"</code>, <code>"MAP"</code> or <code>"all"</code>.</p></dd>
+<dt>dispersion</dt>
+<dd><p>Logical, if <code>TRUE</code>, computes indices of dispersion related to the estimate(s) (<code>SD</code> and <code>MAD</code> for <code>mean</code> and <code>median</code>, respectively).</p></dd>
+<dt>iqr</dt>
+<dd><p>Logical, if <code>TRUE</code>, the interquartile range is calculated
+(based on <code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">stats::IQR()</a></code>, using <code>type = 6</code>).</p></dd>
+<dt>range</dt>
+<dd><p>Return the range (min and max).</p></dd>
+<dt>quartiles</dt>
+<dd><p>Return the first and third quartiles (25th and 75pth
+percentiles).</p></dd>
+<dt>ci</dt>
+<dd><p>Confidence Interval (CI) level. Default is <code>NULL</code>, i.e. no
 confidence intervals are computed. If not <code>NULL</code>, confidence intervals
 are based on bootstrap replicates (see <code>iterations</code>). If
 <code>centrality = "all"</code>, the bootstrapped confidence interval refers to
-the first centrality index (which is typically the median).</p></td>
-    </tr><tr><th>iterations</th>
-      <td><p>The number of bootstrap replicates for computing confidence
-intervals. Only applies when <code>ci</code> is not <code>NULL</code>.</p></td>
-    </tr><tr><th>threshold</th>
-      <td><p>For <code>centrality = "trimmed"</code> (i.e. trimmed mean), indicates the fraction (0 to 0.5) of observations to be trimmed from each end of the vector before the mean is computed.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Toggle warnings and messages.</p></td>
-    </tr><tr><th>include_factors</th>
-      <td><p>Logical, if <code>TRUE</code>, factors are included in the
+the first centrality index (which is typically the median).</p></dd>
+<dt>iterations</dt>
+<dd><p>The number of bootstrap replicates for computing confidence
+intervals. Only applies when <code>ci</code> is not <code>NULL</code>.</p></dd>
+<dt>threshold</dt>
+<dd><p>For <code>centrality = "trimmed"</code> (i.e. trimmed mean), indicates the fraction (0 to 0.5) of observations to be trimmed from each end of the vector before the mean is computed.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle warnings and messages.</p></dd>
+<dt>include_factors</dt>
+<dd><p>Logical, if <code>TRUE</code>, factors are included in the
 output, however, only columns for range (first and last factor levels) as
-well as n and missing will contain information.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+well as n and missing will contain information.</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>A data frame with columns that describe the properties of the variables.</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
+    </div>
+    <div id="note">
+    <h2>Note</h2>
     <p>There is also a
-<a href="https://easystats.github.io/see/articles/parameters.html"><code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>-method</a>
+<a href="https://easystats.github.io/see/articles/parameters.html" class="external-link"><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method</a>
 implemented in the
-<a href="https://easystats.github.io/see/"><span class="pkg">see</span>-package</a>.</p>
+<a href="https://easystats.github.io/see/" class="external-link"><span class="pkg">see</span>-package</a>.</p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">describe_distribution</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
+    <div id="examples">
+    <h2>Examples</h2>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">describe_distribution</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mean |   SD | IQR |  Min | Max | Skewness | Kurtosis |   n | n_Missing</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.11 | 0.91 | 1.3 | -1.7 | 2.4 |    0.048 |    -0.79 | 100 |         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.13 | 0.96 | 1.4 | -1.7 | 2.6 |     0.13 |     -0.5 | 100 |         0</span>
 <span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">describe_distribution</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Variable     | Mean |   SD |  IQR | Min | Max | Skewness | Kurtosis |   n | n_Missing</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------------------------------</span>
@@ -172,6 +179,7 @@ implemented in the
 <span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width  |  1.2 | 0.76 | 1.50 |    0.1 |       2.5 | 0.3 | 1.8 |    -0.10 |    -1.34 | 150 |         0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Species      |   NA |   NA |   NA | setosa | virginica |  NA |  NA |     0.00 |    -1.51 | 150 |         0</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

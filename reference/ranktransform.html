@@ -47,7 +47,7 @@ but where the sign is preserved (i.e., 2, 1, -3, 4)."><meta property="og:image" 
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/datawizard/">
+  <a href="https://github.com/easystats/datawizard/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -62,7 +62,7 @@ but where the sign is preserved (i.e., 2, 1, -3, 4)."><meta property="og:image" 
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>(Signed) rank transformation</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/master/R/ranktransform.R"><code>R/ranktransform.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/ranktransform.R" class="external-link"><code>R/ranktransform.R</code></a></small>
     <div class="hidden name"><code>ranktransform.Rd</code></div>
     </div>
 
@@ -98,42 +98,49 @@ but where the sign is preserved (i.e., 2, 1, -3, 4).</p>
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>Object.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Arguments passed to or from other methods.</p></td>
-    </tr><tr><th>sign</th>
-      <td><p>Logical, if <code>TRUE</code>, return signed ranks.</p></td>
-    </tr><tr><th>method</th>
-      <td><p>Treatment of ties. Can be one of <code>"average"</code> (default),
-<code>"first"</code>, <code>"last"</code>, <code>"random"</code>, <code>"max"</code> or <code>"min"</code>. See <code><a href="https://rdrr.io/r/base/rank.html">rank()</a></code> for
-details.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Toggle warnings and messages on or off.</p></td>
-    </tr><tr><th>select</th>
-      <td><p>Character vector of column names. If <code>NULL</code> (the default), all
-variables will be selected.</p></td>
-    </tr><tr><th>exclude</th>
-      <td><p>Character vector of column names to be excluded from selection.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>x</dt>
+<dd><p>Object.</p></dd>
+<dt>...</dt>
+<dd><p>Arguments passed to or from other methods.</p></dd>
+<dt>sign</dt>
+<dd><p>Logical, if <code>TRUE</code>, return signed ranks.</p></dd>
+<dt>method</dt>
+<dd><p>Treatment of ties. Can be one of <code>"average"</code> (default),
+<code>"first"</code>, <code>"last"</code>, <code>"random"</code>, <code>"max"</code> or <code>"min"</code>. See <code><a href="https://rdrr.io/r/base/rank.html" class="external-link">rank()</a></code> for
+details.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle warnings and messages on or off.</p></dd>
+<dt>select</dt>
+<dd><p>Character vector of column names. If <code>NULL</code> (the default), all
+variables will be selected.</p></dd>
+<dt>exclude</dt>
+<dd><p>Character vector of column names to be excluded from selection.</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>A rank-transformed object.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
     <div class="dont-index"><p>Other transform utilities: 
 <code><a href="data_rescale.html">data_rescale</a>()</code>,
 <code><a href="normalize.html">normalize</a>()</code>,
 <code><a href="standardize.html">standardize</a>()</code></p></div>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">ranktransform</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+    <div id="examples">
+    <h2>Examples</h2>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">ranktransform</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3 4 5 1 2</span>
-<span class="r-in"><span class="fu">ranktransform</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span>, sign <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">ranktransform</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span>, sign <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Zeros detected. These cannot be sign-rank transformed.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]   NA  1.0  3.5 -3.5 -2.0</span>
 <span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">ranktransform</span><span class="op">(</span><span class="va">trees</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">ranktransform</span><span class="op">(</span><span class="va">trees</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Girth Height Volume</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     1    6.0    2.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     2    3.0    2.5</span>
@@ -142,6 +149,7 @@ variables will be selected.</p></td>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5     5   25.5    7.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6     6   28.0    9.0</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

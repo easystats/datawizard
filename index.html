@@ -76,7 +76,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/easystats/datawizard/">
+  <a href="https://github.com/easystats/datawizard/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -94,18 +94,18 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="datawizard-easy-data-wrangling-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#datawizard-easy-data-wrangling-" class="anchor" aria-hidden="true"></a><code>datawizard</code>: Easy Data Wrangling <img src="reference/figures/logo.png" align="right" height="139">
+<div class="section level1">
+<div class="page-header"><h1 id="datawizard-easy-data-wrangling-">
+<code>datawizard</code>: Easy Data Wrangling <img src="reference/figures/logo.png" align="right" height="139"><a class="anchor" aria-label="anchor" href="#datawizard-easy-data-wrangling-"></a>
 </h1></div>
 
 <p><strong><em>Hockety pockety wockety wack, prepare this data forth and back</em></strong> <span class="emoji" data-emoji="sparkles">✨</span></p>
 <p><code>datawizard</code> is a lightweight package to easily manipulate, clean, transform, and prepare your data for analysis.</p>
 <p><img src="https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif" height="150"></p>
 </div>
-<div id="installation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installation" class="anchor" aria-hidden="true"></a>Installation</h1>
+<div class="section level1">
+<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h1>
 <table class="table">
 <colgroup>
 <col width="12%">
@@ -136,9 +136,9 @@
 </tbody>
 </table>
 </div>
-<div id="citation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#citation" class="anchor" aria-hidden="true"></a>Citation</h1>
+<div class="section level1">
+<h1 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h1>
 <p>To cite the package, run the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">citation</span>(<span class="st">"datawizard"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
@@ -159,15 +159,15 @@
 <span id="cb1-17"><a href="#cb1-17"></a>    url =<span class="st"> </span>{https<span class="op">:</span><span class="er">//</span>easystats.github.io<span class="op">/</span>datawizard<span class="op">/</span>},</span>
 <span id="cb1-18"><a href="#cb1-18"></a>  }</span></code></pre></div>
 </div>
-<div id="features" class="section level1">
-<h1 class="hasAnchor">
-<a href="#features" class="anchor" aria-hidden="true"></a>Features</h1>
-<div id="data-wrangling" class="section level2">
-<h2 class="hasAnchor">
-<a href="#data-wrangling" class="anchor" aria-hidden="true"></a>Data wrangling</h2>
-<div id="select-and-filter" class="section level3">
-<h3 class="hasAnchor">
-<a href="#select-and-filter" class="anchor" aria-hidden="true"></a>Select and filter</h3>
+<div class="section level1">
+<h1 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
+</h1>
+<div class="section level2">
+<h2 id="data-wrangling">Data wrangling<a class="anchor" aria-label="anchor" href="#data-wrangling"></a>
+</h2>
+<div class="section level3">
+<h3 id="select-and-filter">Select and filter<a class="anchor" aria-label="anchor" href="#select-and-filter"></a>
+</h3>
 <p>The package provides helpers to select columns or filter rows meeting certain conditions:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">matching_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/data_match.html">data_match</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>vs <span class="op">=</span> <span class="fl">0</span>, am <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
@@ -190,9 +190,9 @@
 <span class="co">#&gt; 5              5.0             3.6              1.4             0.2      setosa</span>
 <span class="co">#&gt; 6              5.4             3.9              1.7             0.4      setosa</span></code></pre></div>
 </div>
-<div id="transform" class="section level3">
-<h3 class="hasAnchor">
-<a href="#transform" class="anchor" aria-hidden="true"></a>Transform</h3>
+<div class="section level3">
+<h3 id="transform">Transform<a class="anchor" aria-label="anchor" href="#transform"></a>
+</h3>
 <p>The packages also contains multiple functions to help transform data.</p>
 <p>For example, to standardize (<em>z</em>-score) data:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -301,9 +301,9 @@
 <code class="sourceCode R"><span class="fu"><a href="reference/data_rescale.html">change_scale</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1]  50  60 100   0  30</span></code></pre></div>
 </div>
-<div id="reshape" class="section level3">
-<h3 class="hasAnchor">
-<a href="#reshape" class="anchor" aria-hidden="true"></a>Reshape</h3>
+<div class="section level3">
+<h3 id="reshape">Reshape<a class="anchor" aria-label="anchor" href="#reshape"></a>
+</h3>
 <p>A common data wrangling task is to reshape data.</p>
 <p>Either to go from wide/Cartesian to long/tidy format</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -385,9 +385,9 @@
 <span class="co">#&gt; 10     10 -0.56048248 -0.38045724 -2.18785470 -1.8705001  1.80958455</span></code></pre></div>
 </div>
 </div>
-<div id="data-proprties" class="section level2">
-<h2 class="hasAnchor">
-<a href="#data-proprties" class="anchor" aria-hidden="true"></a>Data proprties</h2>
+<div class="section level2">
+<h2 id="data-proprties">Data proprties<a class="anchor" aria-label="anchor" href="#data-proprties"></a>
+</h2>
 <p><code>datawizard</code> provides a way to provide comprehensive descriptive summary for all variables in a dataframe:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>
@@ -413,14 +413,14 @@
 <span class="co">#&gt; [1] "parameters_smoothness" "numeric"</span></code></pre></div>
 </div>
 </div>
-<div id="contributing-and-support" class="section level1">
-<h1 class="hasAnchor">
-<a href="#contributing-and-support" class="anchor" aria-hidden="true"></a>Contributing and Support</h1>
+<div class="section level1">
+<h1 id="contributing-and-support">Contributing and Support<a class="anchor" aria-label="anchor" href="#contributing-and-support"></a>
+</h1>
 <p>In case you want to file an issue or contribute in another way to the package, please follow <a href="https://easystats.github.io/datawizard/CONTRIBUTING.html" class="external-link">this guide</a>. For questions about the functionality, you may either contact us via email or also file an issue.</p>
 </div>
-<div id="code-of-conduct" class="section level1">
-<h1 class="hasAnchor">
-<a href="#code-of-conduct" class="anchor" aria-hidden="true"></a>Code of Conduct</h1>
+<div class="section level1">
+<h1 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
+</h1>
 <p>Please note that this project is released with a <a href="https://easystats.github.io/datawizard/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
 </div>
 
@@ -430,19 +430,16 @@
     <div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=datawizard">https://​cloud.r-project.org/​package=datawizard</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/easystats/datawizard/">https://​github.com/​easystats/​datawizard/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/easystats/datawizard/issues">https://​github.com/​easystats/​datawizard/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=datawizard" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/easystats/datawizard/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/easystats/datawizard/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
 <div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
 
@@ -465,16 +462,16 @@
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-5375-9967" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-5375-9967" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>
-<a href="https://github.com/strengejacke">Daniel Lüdecke</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-8895-3206" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-8895-3206" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>
-<a href="https://sites.google.com/site/indrajeetspatilmorality/">Indrajeet Patil</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-1995-6531" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-1995-6531" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>
-<a href="https://github.com/mattansb">Mattan S. Ben-Shachar</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-4287-4801" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-4287-4801" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>
-<a href="https://wiernik.org/">Brenton M. Wiernik</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-9560-6336" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">More on authors...</a></li>
+<a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-9560-6336" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 

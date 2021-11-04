@@ -46,7 +46,7 @@ tidyr::pivot_longer().'><meta property="og:image" content="/logo.png"><!-- mathj
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/datawizard/">
+  <a href="https://github.com/easystats/datawizard/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -61,14 +61,14 @@ tidyr::pivot_longer().'><meta property="og:image" content="/logo.png"><!-- mathj
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Reshape (pivot) data from wide to long</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/master/R/data_reshape.R"><code>R/data_reshape.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/data_reshape.R" class="external-link"><code>R/data_reshape.R</code></a></small>
     <div class="hidden name"><code>data_to_long.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>This function "lengthens" data, increasing the number of rows and decreasing
 the number of columns. This is a dependency-free base-R equivalent of
-<code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">tidyr::pivot_longer()</a></code>.</p>
+<code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">tidyr::pivot_longer()</a></code>.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">data_to_long</span><span class="op">(</span>
@@ -111,128 +111,134 @@ the number of columns. This is a dependency-free base-R equivalent of
   names_from <span class="op">=</span> <span class="va">colnames_from</span>
 <span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>data</th>
-      <td><p>A data frame to pivot.</p></td>
-    </tr><tr><th>cols</th>
-      <td><p>A vector of column names or indices to pivot into longer format.</p></td>
-    </tr><tr><th>colnames_to</th>
-      <td><p>The name of the new column that will contain the column
-names.</p></td>
-    </tr><tr><th>values_to</th>
-      <td><p>The name of the new column that will contain the values of
-the pivoted variables.</p></td>
-    </tr><tr><th>rows_to</th>
-      <td><p>The name of the column that will contain the row-number from
-the original data. If <code>NULL</code>, will be removed.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Additional arguments passed on to methods.</p></td>
-    </tr><tr><th>names_to, names_from</th>
-      <td><p>Same as <code>colnames_to</code>, is there for
-compatibility with <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">tidyr::pivot_longer()</a></code>.</p></td>
-    </tr><tr><th>values_from</th>
-      <td><p>The name of the column that contains the values of the put
-in the columns.</p></td>
-    </tr><tr><th>colnames_from</th>
-      <td><p>The name of the column that contains the levels to be
-used as future columns.</p></td>
-    </tr><tr><th>rows_from</th>
-      <td><p>The name of the column that identifies the rows. If
-<code>NULL</code>, will use all the unique rows.</p></td>
-    </tr><tr><th>sep</th>
-      <td><p>The indicating a separating character in the variable names in the
-wide format.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>data</dt>
+<dd><p>A data frame to pivot.</p></dd>
+<dt>cols</dt>
+<dd><p>A vector of column names or indices to pivot into longer format.</p></dd>
+<dt>colnames_to</dt>
+<dd><p>The name of the new column that will contain the column
+names.</p></dd>
+<dt>values_to</dt>
+<dd><p>The name of the new column that will contain the values of
+the pivoted variables.</p></dd>
+<dt>rows_to</dt>
+<dd><p>The name of the column that will contain the row-number from
+the original data. If <code>NULL</code>, will be removed.</p></dd>
+<dt>...</dt>
+<dd><p>Additional arguments passed on to methods.</p></dd>
+<dt>names_to, names_from</dt>
+<dd><p>Same as <code>colnames_to</code>, is there for
+compatibility with <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">tidyr::pivot_longer()</a></code>.</p></dd>
+<dt>values_from</dt>
+<dd><p>The name of the column that contains the values of the put
+in the columns.</p></dd>
+<dt>colnames_from</dt>
+<dd><p>The name of the column that contains the levels to be
+used as future columns.</p></dd>
+<dt>rows_from</dt>
+<dd><p>The name of the column that identifies the rows. If
+<code>NULL</code>, will use all the unique rows.</p></dd>
+<dt>sep</dt>
+<dd><p>The indicating a separating character in the variable names in the
+wide format.</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>data.frame</p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">wide_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+    <div id="examples">
+    <h2>Examples</h2>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">wide_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># From wide to long</span></span>
 <span class="r-in"><span class="co"># ------------------</span></span>
 <span class="r-in"><span class="co"># Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))</span></span>
 <span class="r-in"><span class="fu">data_to_long</span><span class="op">(</span><span class="va">wide_data</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Name       Value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    X1 -0.76231147</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    X2 -0.71969157</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    X3  0.53050007</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    X4 -0.10965116</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    X5  0.32046114</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6    X1 -0.93564830</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7    X2 -1.95262518</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8    X3 -0.34872598</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9    X4 -1.86922916</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10   X5 -1.02216614</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11   X1  0.36276727</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12   X2  0.48559935</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13   X3  0.56248928</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14   X4  1.16404015</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15   X5  0.33399606</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16   X1  0.87632024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17   X2  0.18186068</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18   X3 -1.34764586</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19   X4  0.54290018</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20   X5 -1.53166287</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21   X1 -1.06830806</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22   X2 -1.29181500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23   X3  0.12315300</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24   X4  0.61185326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25   X5 -0.48338897</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26   X1  0.35924433</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27   X2 -2.12698152</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28   X3 -0.18508314</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29   X4 -0.63895238</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30   X5  1.65607950</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31   X1  0.32781472</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32   X2 -0.87523105</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33   X3 -0.38639025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34   X4 -1.18884518</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35   X5 -1.74686913</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36   X1  0.54188854</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37   X2  0.08715173</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38   X3  0.26479982</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39   X4  0.42188224</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40   X5 -1.04652302</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41   X1  2.16306508</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42   X2 -1.66814312</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43   X3  0.95467370</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44   X4  0.39904493</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45   X5  2.76718288</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46   X1  0.03563977</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47   X2 -0.19802191</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48   X3  0.74276030</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49   X4 -0.52522352</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50   X5  1.12022179</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    X1  1.96466681</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    X2 -0.22427246</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    X3  1.01339863</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    X4  0.45882865</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    X5 -1.01504589</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    X1 -0.27137663</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7    X2 -0.41042481</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8    X3 -0.36535271</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9    X4  0.11004092</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10   X5 -0.01159542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11   X1  0.57507047</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12   X2 -2.35604942</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13   X3 -1.00713415</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14   X4 -1.54383863</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15   X5  0.13841618</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16   X1 -0.94700331</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17   X2 -0.35024782</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18   X3 -0.20454666</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19   X4 -0.08000585</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20   X5  1.59841108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21   X1  0.73214115</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22   X2 -1.34889957</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23   X3  1.38077647</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24   X4  0.15291597</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25   X5 -1.37215238</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26   X1  1.85578394</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27   X2  0.20460469</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28   X3 -1.61521729</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29   X4 -0.35506492</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30   X5  0.17187199</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31   X1  0.33487650</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32   X2  0.49943441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33   X3 -1.00202754</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34   X4  1.03213993</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35   X5  0.29370394</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36   X1  0.91539761</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37   X2  0.26373441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38   X3  0.87904534</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39   X4 -0.21247969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40   X5 -0.04834082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41   X1  0.10814988</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42   X2  0.85012833</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43   X3  0.24821430</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44   X4 -1.92923999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45   X5  0.55378032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46   X1 -1.31566307</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47   X2 -0.45022880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48   X3 -0.45855534</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49   X4 -0.16383079</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50   X5  0.09174726</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Customizing the names</span></span>
 <span class="r-in"><span class="fu">data_to_long</span><span class="op">(</span><span class="va">wide_data</span>,</span>
-<span class="r-in">  cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span class="r-in">  cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span class="r-in">  colnames_to <span class="op">=</span> <span class="st">"Column"</span>,</span>
 <span class="r-in">  values_to <span class="op">=</span> <span class="st">"Numbers"</span>,</span>
 <span class="r-in">  rows_to <span class="op">=</span> <span class="st">"Row"</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            X3         X4         X5 Row Column     Numbers</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   0.5305001 -0.1096512  0.3204611   1     X1 -0.76231147</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   0.5305001 -0.1096512  0.3204611   1     X2 -0.71969157</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  -0.3487260 -1.8692292 -1.0221661   2     X1 -0.93564830</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  -0.3487260 -1.8692292 -1.0221661   2     X2 -1.95262518</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   0.5624893  1.1640402  0.3339961   3     X1  0.36276727</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   0.5624893  1.1640402  0.3339961   3     X2  0.48559935</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  -1.3476459  0.5429002 -1.5316629   4     X1  0.87632024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  -1.3476459  0.5429002 -1.5316629   4     X2  0.18186068</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   0.1231530  0.6118533 -0.4833890   5     X1 -1.06830806</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  0.1231530  0.6118533 -0.4833890   5     X2 -1.29181500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 -0.1850831 -0.6389524  1.6560795   6     X1  0.35924433</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 -0.1850831 -0.6389524  1.6560795   6     X2 -2.12698152</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 -0.3863903 -1.1888452 -1.7468691   7     X1  0.32781472</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 -0.3863903 -1.1888452 -1.7468691   7     X2 -0.87523105</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15  0.2647998  0.4218822 -1.0465230   8     X1  0.54188854</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  0.2647998  0.4218822 -1.0465230   8     X2  0.08715173</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17  0.9546737  0.3990449  2.7671829   9     X1  2.16306508</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18  0.9546737  0.3990449  2.7671829   9     X2 -1.66814312</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19  0.7427603 -0.5252235  1.1202218  10     X1  0.03563977</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20  0.7427603 -0.5252235  1.1202218  10     X2 -0.19802191</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            X3          X4          X5 Row Column    Numbers</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1.0133986  0.45882865 -1.01504589   1     X1  1.9646668</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   1.0133986  0.45882865 -1.01504589   1     X2 -0.2242725</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  -0.3653527  0.11004092 -0.01159542   2     X1 -0.2713766</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  -0.3653527  0.11004092 -0.01159542   2     X2 -0.4104248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  -1.0071341 -1.54383863  0.13841618   3     X1  0.5750705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  -1.0071341 -1.54383863  0.13841618   3     X2 -2.3560494</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  -0.2045467 -0.08000585  1.59841108   4     X1 -0.9470033</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  -0.2045467 -0.08000585  1.59841108   4     X2 -0.3502478</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   1.3807765  0.15291597 -1.37215238   5     X1  0.7321411</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  1.3807765  0.15291597 -1.37215238   5     X2 -1.3488996</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 -1.6152173 -0.35506492  0.17187199   6     X1  1.8557839</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 -1.6152173 -0.35506492  0.17187199   6     X2  0.2046047</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 -1.0020275  1.03213993  0.29370394   7     X1  0.3348765</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 -1.0020275  1.03213993  0.29370394   7     X2  0.4994344</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  0.8790453 -0.21247969 -0.04834082   8     X1  0.9153976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  0.8790453 -0.21247969 -0.04834082   8     X2  0.2637344</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  0.2482143 -1.92923999  0.55378032   9     X1  0.1081499</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  0.2482143 -1.92923999  0.55378032   9     X2  0.8501283</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 -0.4585553 -0.16383079  0.09174726  10     X1 -1.3156631</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 -0.4585553 -0.16383079  0.09174726  10     X2 -0.4502288</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># From long to wide</span></span>
 <span class="r-in"><span class="co"># -----------------</span></span>
@@ -242,22 +248,22 @@ wide format.</p></td>
 <span class="r-in">  values_from <span class="op">=</span> <span class="st">"Value"</span>,</span>
 <span class="r-in">  rows_from <span class="op">=</span> <span class="st">"Row_ID"</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Row_ID    Value_X1    Value_X2   Value_X3   Value_X4   Value_X5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       1 -0.76231147 -0.71969157  0.5305001 -0.1096512  0.3204611</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       2 -0.93564830 -1.95262518 -0.3487260 -1.8692292 -1.0221661</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       3  0.36276727  0.48559935  0.5624893  1.1640402  0.3339961</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       4  0.87632024  0.18186068 -1.3476459  0.5429002 -1.5316629</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       5 -1.06830806 -1.29181500  0.1231530  0.6118533 -0.4833890</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       6  0.35924433 -2.12698152 -0.1850831 -0.6389524  1.6560795</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7       7  0.32781472 -0.87523105 -0.3863903 -1.1888452 -1.7468691</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8       8  0.54188854  0.08715173  0.2647998  0.4218822 -1.0465230</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9       9  2.16306508 -1.66814312  0.9546737  0.3990449  2.7671829</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10     10  0.03563977 -0.19802191  0.7427603 -0.5252235  1.1202218</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Row_ID   Value_X1   Value_X2   Value_X3    Value_X4    Value_X5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       1  1.9646668 -0.2242725  1.0133986  0.45882865 -1.01504589</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       2 -0.2713766 -0.4104248 -0.3653527  0.11004092 -0.01159542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       3  0.5750705 -2.3560494 -1.0071341 -1.54383863  0.13841618</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       4 -0.9470033 -0.3502478 -0.2045467 -0.08000585  1.59841108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       5  0.7321411 -1.3488996  1.3807765  0.15291597 -1.37215238</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       6  1.8557839  0.2046047 -1.6152173 -0.35506492  0.17187199</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7       7  0.3348765  0.4994344 -1.0020275  1.03213993  0.29370394</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8       8  0.9153976  0.2637344  0.8790453 -0.21247969 -0.04834082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       9  0.1081499  0.8501283  0.2482143 -1.92923999  0.55378032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     10 -1.3156631 -0.4502288 -0.4585553 -0.16383079  0.09174726</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Full example</span></span>
 <span class="r-in"><span class="co"># ------------------</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://personality-project.org/r/psych/">"psych"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">psych</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/psych/man/bfi.html">bfi</a></span> <span class="co"># Wide format with one row per participant's personality test</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://personality-project.org/r/psych/" class="external-link">"psych"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">psych</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/psych/man/bfi.html" class="external-link">bfi</a></span> <span class="co"># Wide format with one row per participant's personality test</span></span>
 <span class="r-in"></span>
 <span class="r-in">  <span class="co"># Pivot long format</span></span>
 <span class="r-in">  <span class="va">long</span> <span class="op">&lt;-</span> <span class="fu">data_to_long</span><span class="op">(</span><span class="va">data</span>,</span>
@@ -268,15 +274,15 @@ wide format.</p></td>
 <span class="r-in">  <span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in">  <span class="co"># Separate facet and question number</span></span>
-<span class="r-in">  <span class="va">long</span><span class="op">$</span><span class="va">Facet</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"\\d"</span>, <span class="st">""</span>, <span class="va">long</span><span class="op">$</span><span class="va">Item</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">long</span><span class="op">$</span><span class="va">Item</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"[A-Z]"</span>, <span class="st">""</span>, <span class="va">long</span><span class="op">$</span><span class="va">Item</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">long</span><span class="op">$</span><span class="va">Item</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"I"</span>, <span class="va">long</span><span class="op">$</span><span class="va">Item</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">long</span><span class="op">$</span><span class="va">Facet</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"\\d"</span>, <span class="st">""</span>, <span class="va">long</span><span class="op">$</span><span class="va">Item</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">long</span><span class="op">$</span><span class="va">Item</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"[A-Z]"</span>, <span class="st">""</span>, <span class="va">long</span><span class="op">$</span><span class="va">Item</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">long</span><span class="op">$</span><span class="va">Item</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"I"</span>, <span class="va">long</span><span class="op">$</span><span class="va">Item</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in">  <span class="va">wide</span> <span class="op">&lt;-</span> <span class="fu">data_to_wide</span><span class="op">(</span><span class="va">long</span>,</span>
 <span class="r-in">    colnames_from <span class="op">=</span> <span class="st">"Item"</span>,</span>
 <span class="r-in">    values_from <span class="op">=</span> <span class="st">"Score"</span></span>
 <span class="r-in">  <span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">wide</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">wide</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: psych</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   gender education age Participant Facet Score_I1 Score_I2 Score_I3 Score_I4</span>
@@ -294,6 +300,7 @@ wide format.</p></td>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5        3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6        5</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

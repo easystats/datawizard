@@ -44,7 +44,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/datawizard/">
+  <a href="https://github.com/easystats/datawizard/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -59,7 +59,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Quantify the smoothness of a vector</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/master/R/smoothness.R"><code>R/smoothness.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/smoothness.R" class="external-link"><code>R/smoothness.R</code></a></small>
     <div class="hidden name"><code>smoothness.Rd</code></div>
     </div>
 
@@ -69,40 +69,48 @@
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">smoothness</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"cor"</span>, lag <span class="op">=</span> <span class="fl">1</span>, iterations <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>Numeric vector (similar to a time series).</p></td>
-    </tr><tr><th>method</th>
-      <td><p>Can be "diff" (the standard deviation of the standardized
-differences) or "cor" (default, lag-one autocorrelation).</p></td>
-    </tr><tr><th>lag</th>
-      <td><p>An integer indicating which lag to use. If less than 1, will be
-interpreted as expressed in percentage of the length of the vector.</p></td>
-    </tr><tr><th>iterations</th>
-      <td><p>The number of bootstrap replicates for computing standard
-errors. If <code>NULL</code> (default), parametric standard errors are computed.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Arguments passed to or from other methods.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>x</dt>
+<dd><p>Numeric vector (similar to a time series).</p></dd>
+<dt>method</dt>
+<dd><p>Can be "diff" (the standard deviation of the standardized
+differences) or "cor" (default, lag-one autocorrelation).</p></dd>
+<dt>lag</dt>
+<dd><p>An integer indicating which lag to use. If less than 1, will be
+interpreted as expressed in percentage of the length of the vector.</p></dd>
+<dt>iterations</dt>
+<dd><p>The number of bootstrap replicates for computing standard
+errors. If <code>NULL</code> (default), parametric standard errors are computed.</p></dd>
+<dt>...</dt>
+<dd><p>Arguments passed to or from other methods.</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>Value of smoothness.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
+    </div>
+    <div id="references">
+    <h2>References</h2>
     <p>https://stats.stackexchange.com/questions/24607/how-to-measure-smoothness-of-a-time-series-in-r</p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="op">-</span><span class="fl">10</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">^</span><span class="fl">3</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">0</span>, <span class="fl">100</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span class="r-plt"><img src="smoothness-1.png" alt="" width="700" height="433"></span>
+    <div id="examples">
+    <h2>Examples</h2>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="op">-</span><span class="fl">10</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">^</span><span class="fl">3</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">0</span>, <span class="fl">100</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span class="r-plt img"><img src="smoothness-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span class="fu">smoothness</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"cor"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9198648</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8889616</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "parameters_smoothness" "numeric"              </span>
 <span class="r-in"><span class="fu">smoothness</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"diff"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.797578</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.898438</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "parameters_smoothness" "numeric"              </span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

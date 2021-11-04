@@ -47,7 +47,7 @@ This is a special case of data_rescale().
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/datawizard/">
+  <a href="https://github.com/easystats/datawizard/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -62,7 +62,7 @@ This is a special case of data_rescale().
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Normalize numeric variable to 0-1 range</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/master/R/normalize.R"><code>R/normalize.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/normalize.R" class="external-link"><code>R/normalize.R</code></a></small>
     <div class="hidden name"><code>normalize.Rd</code></div>
     </div>
 
@@ -95,54 +95,63 @@ This is a special case of data_rescale().
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A numeric vector, data frame, or matrix. See details.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Arguments passed to or from other methods.</p></td>
-    </tr><tr><th>include_bounds</th>
-      <td><p>Logical, if <code>TRUE</code>, return value may include 0 and 1.
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>x</dt>
+<dd><p>A numeric vector, data frame, or matrix. See details.</p></dd>
+<dt>...</dt>
+<dd><p>Arguments passed to or from other methods.</p></dd>
+<dt>include_bounds</dt>
+<dd><p>Logical, if <code>TRUE</code>, return value may include 0 and 1.
 If <code>FALSE</code>, the return value is compressed, using Smithson and Verkuilen's
 (2006) formula <code>(x * (n - 1) + 0.5) / n</code>, to avoid zeros and ones in the
 normalized variables. This can be useful in case of beta-regression, where
-the response variable is not allowed to include zeros and ones.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Toggle warnings and messages on or off.</p></td>
-    </tr><tr><th>select</th>
-      <td><p>Character vector of column names. If <code>NULL</code> (the default), all
-variables will be selected.</p></td>
-    </tr><tr><th>exclude</th>
-      <td><p>Character vector of column names to be excluded from selection.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+the response variable is not allowed to include zeros and ones.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle warnings and messages on or off.</p></dd>
+<dt>select</dt>
+<dd><p>Character vector of column names. If <code>NULL</code> (the default), all
+variables will be selected.</p></dd>
+<dt>exclude</dt>
+<dd><p>Character vector of column names to be excluded from selection.</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>A normalized object.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     
 <ul><li><p>If <code>x</code> is a matrix, normalization is performed across all values (not
 column- or row-wise). For column-wise normalization, convert the matrix to a
 data.frame.</p></li>
 <li><p>If <code>x</code> is a grouped data frame (<code>grouped_df</code>), normalization is performed
 separately for each group.</p></li>
-</ul><h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
+</ul></div>
+    <div id="references">
+    <h2>References</h2>
     <p>Smithson M, Verkuilen J (2006). A Better Lemon Squeezer? Maximum-Likelihood
 Regression with Beta-Distributed Dependent Variables. Psychological Methods,
 11(1), 54–71.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
     <div class="dont-index"><p>Other transform utilities: 
 <code><a href="data_rescale.html">data_rescale</a>()</code>,
 <code><a href="ranktransform.html">ranktransform</a>()</code>,
 <code><a href="standardize.html">standardize</a>()</code></p></div>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">normalize</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+    <div id="examples">
+    <h2>Examples</h2>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">normalize</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5 0.6 1.0 0.0 0.3</span>
-<span class="r-in"><span class="fu">normalize</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span>, include_bounds <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">normalize</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span>, include_bounds <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.50 0.58 0.90 0.10 0.34</span>
 <span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">normalize</span><span class="op">(</span><span class="va">trees</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">normalize</span><span class="op">(</span><span class="va">trees</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Girth     Height      Volume</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.00000000 0.29166667 0.001497006</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.02439024 0.08333333 0.001497006</span>
@@ -151,6 +160,7 @@ Regression with Beta-Distributed Dependent Variables. Psychological Methods,
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 0.19512195 0.75000000 0.128742515</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.20325203 0.83333333 0.142215569</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

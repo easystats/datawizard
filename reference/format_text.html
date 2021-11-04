@@ -44,7 +44,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/datawizard/">
+  <a href="https://github.com/easystats/datawizard/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -59,7 +59,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convenient text formatting functionalities</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/master/R/format_text.R"><code>R/format_text.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/format_text.R" class="external-link"><code>R/format_text.R</code></a></small>
     <div class="hidden name"><code>format_text.Rd</code></div>
     </div>
 
@@ -81,48 +81,54 @@
 
 <span class="fu">text_wrap</span><span class="op">(</span><span class="va">text</span>, width <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>text, text2</th>
-      <td><p>A character string.</p></td>
-    </tr><tr><th>sep</th>
-      <td><p>Separator.</p></td>
-    </tr><tr><th>last</th>
-      <td><p>Last separator.</p></td>
-    </tr><tr><th>width</th>
-      <td><p>Positive integer giving the target column width for wrapping
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>text, text2</dt>
+<dd><p>A character string.</p></dd>
+<dt>sep</dt>
+<dd><p>Separator.</p></dd>
+<dt>last</dt>
+<dd><p>Last separator.</p></dd>
+<dt>width</dt>
+<dd><p>Positive integer giving the target column width for wrapping
 lines in the output. Can be "auto", in which case it will select 90\<!-- % of the -->
-default width.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Other arguments to be passed to or from other functions.</p></td>
-    </tr><tr><th>n</th>
-      <td><p>The number of characters to find.</p></td>
-    </tr><tr><th>pattern</th>
-      <td><p>Character strings.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+default width.</p></dd>
+<dt>...</dt>
+<dd><p>Other arguments to be passed to or from other functions.</p></dd>
+<dt>n</dt>
+<dd><p>The number of characters to find.</p></dd>
+<dt>pattern</dt>
+<dd><p>Character strings.</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>A character string.</p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Add full stop if missing</span></span>
-<span class="r-in"><span class="fu">text_fullstop</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"something"</span>, <span class="st">"something else."</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">text_fullstop</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"something"</span>, <span class="st">"something else."</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "something."      "something else."</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Find last characters</span></span>
-<span class="r-in"><span class="fu">text_lastchar</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ABC"</span>, <span class="st">"DEF"</span><span class="op">)</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">text_lastchar</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ABC"</span>, <span class="st">"DEF"</span><span class="op">)</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ABC  DEF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "BC" "EF" </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Smart concatenation</span></span>
-<span class="r-in"><span class="fu">text_concatenate</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"First"</span>, <span class="st">"Second"</span>, <span class="st">"Last"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">text_concatenate</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"First"</span>, <span class="st">"Second"</span>, <span class="st">"Last"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "First, Second and Last"</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Remove parts of string</span></span>
-<span class="r-in"><span class="fu">text_remove</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"one!"</span>, <span class="st">"two"</span>, <span class="st">"three!"</span><span class="op">)</span>, <span class="st">"!"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">text_remove</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"one!"</span>, <span class="st">"two"</span>, <span class="st">"three!"</span><span class="op">)</span>, <span class="st">"!"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "one"   "two"   "three"</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Wrap text</span></span>
-<span class="r-in"><span class="va">long_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"abc "</span>, <span class="fl">100</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu">text_wrap</span><span class="op">(</span><span class="va">long_text</span>, width <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">long_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"abc "</span>, <span class="fl">100</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu">text_wrap</span><span class="op">(</span><span class="va">long_text</span>, width <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  abc abc abc abc abc abc abc abc abc abc abc abc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> abc abc abc abc abc abc abc abc abc abc abc abc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> abc abc abc abc abc abc abc abc abc abc abc abc</span>
@@ -134,9 +140,10 @@ default width.</p></td>
 <span class="r-out co"><span class="r-pr">#&gt;</span> abc abc abc abc</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Paste with optional separator</span></span>
-<span class="r-in"><span class="fu">text_paste</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">""</span>, <span class="st">"B"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"42"</span>, <span class="st">"42"</span>, <span class="st">"42"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">text_paste</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">""</span>, <span class="st">"B"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"42"</span>, <span class="st">"42"</span>, <span class="st">"42"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A, 42" "42"    "B, 42"</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

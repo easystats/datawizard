@@ -44,7 +44,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/datawizard/">
+  <a href="https://github.com/easystats/datawizard/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -59,7 +59,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Reshape CI between wide/long formats</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/master/R/reshape_ci.R"><code>R/reshape_ci.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/reshape_ci.R" class="external-link"><code>R/reshape_ci.R</code></a></small>
     <div class="hidden name"><code>reshape_ci.Rd</code></div>
     </div>
 
@@ -69,28 +69,34 @@
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">reshape_ci</span><span class="op">(</span><span class="va">x</span>, ci_type <span class="op">=</span> <span class="st">"CI"</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A data frame containing columns named <code>CI_low</code> and <code>CI_high</code> (or
-similar, see <code>ci_type</code>).</p></td>
-    </tr><tr><th>ci_type</th>
-      <td><p>String indicating the "type" (i.e. prefix) of the interval
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>x</dt>
+<dd><p>A data frame containing columns named <code>CI_low</code> and <code>CI_high</code> (or
+similar, see <code>ci_type</code>).</p></dd>
+<dt>ci_type</dt>
+<dd><p>String indicating the "type" (i.e. prefix) of the interval
 columns. Per <em>easystats</em> convention, confidence or credible intervals are
 named <code>CI_low</code> and <code>CI_high</code>, and the related <code>ci_type</code> would be <code>"CI"</code>.
 If column names for other intervals differ, <code>ci_type</code> can be used to
 indicate the name, e.g. <code>ci_type = "SI"</code> can be used for support intervals,
-where the column names in the data frame would be <code>SI_low</code> and <code>SI_high</code>.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+where the column names in the data frame would be <code>SI_low</code> and <code>SI_high</code>.</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>A dataframe with columns corresponding to confidence intervals reshaped
 either to wide or long format.</p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">  Parameter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Term 1"</span>, <span class="st">"Term 2"</span>, <span class="st">"Term 1"</span>, <span class="st">"Term 2"</span><span class="op">)</span>,</span>
-<span class="r-in">  CI <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.8</span>, <span class="fl">.8</span>, <span class="fl">.9</span>, <span class="fl">.9</span><span class="op">)</span>,</span>
-<span class="r-in">  CI_low <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.3</span>, <span class="fl">.1</span>, <span class="fl">.15</span><span class="op">)</span>,</span>
-<span class="r-in">  CI_high <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.6</span>, <span class="fl">.8</span>, <span class="fl">.85</span><span class="op">)</span>,</span>
+    <div id="examples">
+    <h2>Examples</h2>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span class="r-in">  Parameter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Term 1"</span>, <span class="st">"Term 2"</span>, <span class="st">"Term 1"</span>, <span class="st">"Term 2"</span><span class="op">)</span>,</span>
+<span class="r-in">  CI <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.8</span>, <span class="fl">.8</span>, <span class="fl">.9</span>, <span class="fl">.9</span><span class="op">)</span>,</span>
+<span class="r-in">  CI_low <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.3</span>, <span class="fl">.1</span>, <span class="fl">.15</span><span class="op">)</span>,</span>
+<span class="r-in">  CI_high <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.6</span>, <span class="fl">.8</span>, <span class="fl">.85</span><span class="op">)</span>,</span>
 <span class="r-in">  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
@@ -105,6 +111,7 @@ either to wide or long format.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3    Term 2 0.8   0.30    0.60</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4    Term 2 0.9   0.15    0.85</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

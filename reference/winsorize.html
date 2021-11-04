@@ -44,7 +44,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/datawizard/">
+  <a href="https://github.com/easystats/datawizard/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -59,7 +59,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Winsorize data</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/master/R/winsorize.R"><code>R/winsorize.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/winsorize.R" class="external-link"><code>R/winsorize.R</code></a></small>
     <div class="hidden name"><code>winsorize.Rd</code></div>
     </div>
 
@@ -72,20 +72,24 @@
 <span class="co"># S3 method for numeric</span>
 <span class="fu">winsorize</span><span class="op">(</span><span class="va">data</span>, threshold <span class="op">=</span> <span class="fl">0.2</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>data</th>
-      <td><p>Dataframe or vector.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr><tr><th>threshold</th>
-      <td><p>The amount of winsorization.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Toggle warnings.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>data</dt>
+<dd><p>Dataframe or vector.</p></dd>
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
+<dt>threshold</dt>
+<dd><p>The amount of winsorization.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle warnings.</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>A dataframe with winsorized columns or a winsorized vector.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     <p>Winsorizing or winsorization is the transformation of statistics by limiting
 extreme values in the statistical data to reduce the effect of possibly
 spurious outliers. The distribution of many statistics can be heavily
@@ -95,8 +99,11 @@ example, a 90\<!-- % winsorization would see all data below the 5th percentile s
 to the 5th percentile, and data above the 95th percentile set to the 95th
 percentile. Winsorized estimators are usually more robust to outliers than
 their more standard forms.</p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">winsorize</span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span>, threshold <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1] 5.1 5.0 5.0 5.0 5.0 5.4 5.0 5.0 5.0 5.0 5.4 5.0 5.0 5.0 5.8 5.7 5.4 5.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [19] 5.7 5.1 5.4 5.1 5.0 5.1 5.0 5.0 5.0 5.2 5.2 5.0 5.0 5.4 5.2 5.5 5.0 5.0</span>
@@ -260,6 +267,7 @@ their more standard forms.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [149,]          6.2         3.4          5.3         1.9       3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [150,]          5.9         3.0          5.1         1.8       3</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

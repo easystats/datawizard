@@ -52,7 +52,7 @@ For model standardization, see effectsize::standardize.default()"><meta property
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/datawizard/">
+  <a href="https://github.com/easystats/datawizard/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -67,7 +67,7 @@ For model standardization, see effectsize::standardize.default()"><meta property
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Standardization (Z-scoring)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/master/R/standardize.R"><code>R/standardize.R</code></a>, <a href="https://github.com/easystats/datawizard/blob/master/R/unstandardize.R"><code>R/unstandardize.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/standardize.R" class="external-link"><code>R/standardize.R</code></a>, <a href="https://github.com/easystats/datawizard/blob/HEAD/R/unstandardize.R" class="external-link"><code>R/unstandardize.R</code></a></small>
     <div class="hidden name"><code>standardize.Rd</code></div>
     </div>
 
@@ -80,7 +80,7 @@ refits the model with this standardized version of the dataset. The
 <code><a href="normalize.html">normalize()</a></code> function can also be used to scale all numeric variables within
 the 0 - 1 range.
 <br><br>
-For model standardization, see <code><a href="https://easystats.github.io/effectsize/reference/standardize.default.html">effectsize::standardize.default()</a></code></p>
+For model standardization, see <code><a href="https://easystats.github.io/effectsize/reference/standardize.default.html" class="external-link">effectsize::standardize.default()</a></code></p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">standardize</span><span class="op">(</span>
@@ -122,7 +122,7 @@ For model standardization, see <code><a href="https://easystats.github.io/effect
   reference <span class="op">=</span> <span class="cn">NULL</span>,
   select <span class="op">=</span> <span class="cn">NULL</span>,
   exclude <span class="op">=</span> <span class="cn">NULL</span>,
-  remove_na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"selected"</span>, <span class="st">"all"</span><span class="op">)</span>,
+  remove_na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"selected"</span>, <span class="st">"all"</span><span class="op">)</span>,
   force <span class="op">=</span> <span class="cn">FALSE</span>,
   append <span class="op">=</span> <span class="cn">FALSE</span>,
   suffix <span class="op">=</span> <span class="st">"_z"</span>,
@@ -149,60 +149,62 @@ For model standardization, see <code><a href="https://easystats.github.io/effect
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A data frame, a vector or a statistical model (for <code>unstandardize()</code>
-cannot be a model).</p></td>
-    </tr><tr><th>robust</th>
-      <td><p>Logical, if <code>TRUE</code>, centering is done by subtracting the
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>x</dt>
+<dd><p>A data frame, a vector or a statistical model (for <code>unstandardize()</code>
+cannot be a model).</p></dd>
+<dt>robust</dt>
+<dd><p>Logical, if <code>TRUE</code>, centering is done by subtracting the
 median from the variables and dividing it by the median absolute deviation
 (MAD). If <code>FALSE</code>, variables are standardized by subtracting the
-mean and dividing it by the standard deviation (SD).</p></td>
-    </tr><tr><th>two_sd</th>
-      <td><p>If <code>TRUE</code>, the variables are scaled by two times the deviation
+mean and dividing it by the standard deviation (SD).</p></dd>
+<dt>two_sd</dt>
+<dd><p>If <code>TRUE</code>, the variables are scaled by two times the deviation
 (SD or MAD depending on <code>robust</code>). This method can be useful to obtain
 model coefficients of continuous parameters comparable to coefficients
 related to binary predictors, when applied to <strong>the predictors</strong> (not the
-outcome) (Gelman, 2008).</p></td>
-    </tr><tr><th>weights</th>
-      <td><p>Can be <code>NULL</code> (for no weighting), or:</p><ul><li><p>For model: if <code>TRUE</code> (default), a weighted-standardization is carried out.</p></li>
+outcome) (Gelman, 2008).</p></dd>
+<dt>weights</dt>
+<dd><p>Can be <code>NULL</code> (for no weighting), or:</p><ul><li><p>For model: if <code>TRUE</code> (default), a weighted-standardization is carried out.</p></li>
 <li><p>For <code>data.frame</code>s: a numeric vector of weights, or a character of the
 name of a column in the <code>data.frame</code> that contains the weights.</p></li>
 <li><p>For numeric vectors: a numeric vector of weights.</p></li>
-</ul></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Toggle warnings and messages on or off.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Arguments passed to or from other methods.</p></td>
-    </tr><tr><th>reference</th>
-      <td><p>A dataframe or variable from which the centrality and
+</ul></dd>
+<dt>verbose</dt>
+<dd><p>Toggle warnings and messages on or off.</p></dd>
+<dt>...</dt>
+<dd><p>Arguments passed to or from other methods.</p></dd>
+<dt>reference</dt>
+<dd><p>A dataframe or variable from which the centrality and
 deviation will be computed instead of from the input variable. Useful for
-standardizing a subset or new data according to another dataframe.</p></td>
-    </tr><tr><th>select</th>
-      <td><p>Character vector of column names. If <code>NULL</code> (the default), all
-variables will be selected.</p></td>
-    </tr><tr><th>exclude</th>
-      <td><p>Character vector of column names to be excluded from selection.</p></td>
-    </tr><tr><th>remove_na</th>
-      <td><p>How should missing values (<code>NA</code>) be treated: if <code>"none"</code>
+standardizing a subset or new data according to another dataframe.</p></dd>
+<dt>select</dt>
+<dd><p>Character vector of column names. If <code>NULL</code> (the default), all
+variables will be selected.</p></dd>
+<dt>exclude</dt>
+<dd><p>Character vector of column names to be excluded from selection.</p></dd>
+<dt>remove_na</dt>
+<dd><p>How should missing values (<code>NA</code>) be treated: if <code>"none"</code>
 (default): each column's standardization is done separately, ignoring
 <code>NA</code>s. Else, rows with <code>NA</code> in the columns selected with <code>select</code> /
 <code>exclude</code> (<code>"selected"</code>) or in all columns (<code>"all"</code>) are dropped before
-standardization, and the resulting data frame does not include these cases.</p></td>
-    </tr><tr><th>force</th>
-      <td><p>Logical, if <code>TRUE</code>, forces standardization of factors and dates
+standardization, and the resulting data frame does not include these cases.</p></dd>
+<dt>force</dt>
+<dd><p>Logical, if <code>TRUE</code>, forces standardization of factors and dates
 as well. Factors are converted to numerical values, with the lowest level
 being the value <code>1</code> (unless the factor has numeric levels, which are
-converted to the corresponding numeric value).</p></td>
-    </tr><tr><th>append</th>
-      <td><p>Logical, if <code>TRUE</code> and <code>x</code> is a data frame, standardized
+converted to the corresponding numeric value).</p></dd>
+<dt>append</dt>
+<dd><p>Logical, if <code>TRUE</code> and <code>x</code> is a data frame, standardized
 variables will be added as additional columns; if <code>FALSE</code>,
-existing variables are overwritten.</p></td>
-    </tr><tr><th>suffix</th>
-      <td><p>Character value, will be appended to variable (column) names of
-<code>x</code>, if <code>x</code> is a data frame and <code>append = TRUE</code>.</p></td>
-    </tr><tr><th>center, scale</th>
-      <td><p>Used by <code>unstandardize()</code>; <code>center</code> and <code>scale</code>
+existing variables are overwritten.</p></dd>
+<dt>suffix</dt>
+<dd><p>Character value, will be appended to variable (column) names of
+<code>x</code>, if <code>x</code> is a data frame and <code>append = TRUE</code>.</p></dd>
+<dt>center, scale</dt>
+<dd><p>Used by <code>unstandardize()</code>; <code>center</code> and <code>scale</code>
 correspond to the center (the mean / median) and the scale (SD / MAD) of
 the original non-standardized data (for data frames, should be named, or
 have column order correspond to the numeric column). However, one can also
@@ -210,26 +212,32 @@ directly provide the original data through <code>reference</code>, from which th
 center and the scale will be computed (according to <code>robust</code> and <code>two_sd</code>.
 Alternatively, if the input contains the attributes <code>center</code> and <code>scale</code>
 (as does the output of <code>standardize()</code>), it will take it from there if the
-rest of the arguments are absent.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+rest of the arguments are absent.</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>The standardized object (either a standardize data frame or a
 statistical model fitted on standardized data).</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
+    </div>
+    <div id="note">
+    <h2>Note</h2>
     <p>When <code>x</code> is a vector or a data frame with <code>remove_na = "none")</code>,
 missing values are preserved, so the return value has the same length /
 number of rows as the original input.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
     <div class="dont-index"><p>Other transform utilities: 
 <code><a href="data_rescale.html">data_rescale</a>()</code>,
 <code><a href="normalize.html">normalize</a>()</code>,
 <code><a href="ranktransform.html">ranktransform</a>()</code></p></div>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Data frames</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu">standardize</span><span class="op">(</span><span class="va">swiss</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">standardize</span><span class="op">(</span><span class="va">swiss</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Fertility         Agriculture       Examination         Education      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Min.   :-2.81327   Min.   :-2.1778   Min.   :-1.69084   Min.   :-1.0378  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1st Qu.:-0.43569   1st Qu.:-0.6499   1st Qu.:-0.56273   1st Qu.:-0.5178  </span>
@@ -245,6 +253,7 @@ number of rows as the original input.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  3rd Qu.: 1.2464   3rd Qu.: 0.60337  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Max.   : 1.4113   Max.   : 2.28566  </span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

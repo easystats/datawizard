@@ -52,7 +52,7 @@ equivalent to the partial correlation between them.'><meta property="og:image" c
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/datawizard/">
+  <a href="https://github.com/easystats/datawizard/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -67,7 +67,7 @@ equivalent to the partial correlation between them.'><meta property="og:image" c
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Adjust data for the effect of other variable(s)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/master/R/adjust.R"><code>R/adjust.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/adjust.R" class="external-link"><code>R/adjust.R</code></a></small>
     <div class="hidden name"><code>adjust.Rd</code></div>
     </div>
 
@@ -105,40 +105,46 @@ equivalent to the partial correlation between them.</p>
   keep_intercept <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>data</th>
-      <td><p>A dataframe.</p></td>
-    </tr><tr><th>effect</th>
-      <td><p>Character vector of column names to be adjusted for (regressed
-out). If <code>NULL</code> (the default), all variables will be selected.</p></td>
-    </tr><tr><th>select</th>
-      <td><p>Character vector of column names. If <code>NULL</code> (the default), all
-variables will be selected.</p></td>
-    </tr><tr><th>exclude</th>
-      <td><p>Character vector of column names to be excluded from selection.</p></td>
-    </tr><tr><th>multilevel</th>
-      <td><p>If <code>TRUE</code>, the factors are included as random factors.
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>data</dt>
+<dd><p>A dataframe.</p></dd>
+<dt>effect</dt>
+<dd><p>Character vector of column names to be adjusted for (regressed
+out). If <code>NULL</code> (the default), all variables will be selected.</p></dd>
+<dt>select</dt>
+<dd><p>Character vector of column names. If <code>NULL</code> (the default), all
+variables will be selected.</p></dd>
+<dt>exclude</dt>
+<dd><p>Character vector of column names to be excluded from selection.</p></dd>
+<dt>multilevel</dt>
+<dd><p>If <code>TRUE</code>, the factors are included as random factors.
 Else, if <code>FALSE</code> (default), they are included as fixed effects in the
-simple regression model.</p></td>
-    </tr><tr><th>additive</th>
-      <td><p>If <code>TRUE</code>, continuous variables as included as smooth terms
+simple regression model.</p></dd>
+<dt>additive</dt>
+<dd><p>If <code>TRUE</code>, continuous variables as included as smooth terms
 in additive models. The goal is to regress-out potential non-linear
-effects.</p></td>
-    </tr><tr><th>bayesian</th>
-      <td><p>If <code>TRUE</code>, the models are fitted under the Bayesian framework
-using <code>rstanarm</code>.</p></td>
-    </tr><tr><th>keep_intercept</th>
-      <td><p>If <code>FALSE</code> (default), the intercept of the model is
+effects.</p></dd>
+<dt>bayesian</dt>
+<dd><p>If <code>TRUE</code>, the models are fitted under the Bayesian framework
+using <code>rstanarm</code>.</p></dd>
+<dt>keep_intercept</dt>
+<dd><p>If <code>FALSE</code> (default), the intercept of the model is
 re-added. This avoids the centering around 0 that happens by default
 when regressing out another variable (see the examples below for a
-visual representation of this).</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+visual representation of this).</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>A data frame comparable to <code>data</code>, with adjusted variables.</p>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">adjusted_all</span> <span class="op">&lt;-</span> <span class="fu">adjust</span><span class="op">(</span><span class="va">attitude</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">adjusted_all</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">adjusted_all</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        rating complaints privileges    learning     raises   critical</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  -8.1102953  5.5583770 -15.848949 -2.75102306  0.5742664  15.605502</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   1.6472337  0.0646564  -1.422592 -3.06207012 -1.5567655  -2.315781</span>
@@ -154,7 +160,7 @@ visual representation of this).</p></td>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  2.1988621</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 -3.1912418</span>
 <span class="r-in"><span class="va">adjusted_one</span> <span class="op">&lt;-</span> <span class="fu">adjust</span><span class="op">(</span><span class="va">attitude</span>, effect <span class="op">=</span> <span class="st">"complaints"</span>, select <span class="op">=</span> <span class="st">"rating"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">adjusted_one</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">adjusted_one</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        rating complaints privileges learning raises critical advance</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  -9.8614202         51         30       39     61       92      45</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   0.3286522         64         51       54     63       73      47</span>
@@ -164,37 +170,37 @@ visual representation of this).</p></td>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 -12.8798594         55         49       44     54       49      34</span>
 <span class="r-in"><span class="co"># \donttest{</span></span>
 <span class="r-in"><span class="fu">adjust</span><span class="op">(</span><span class="va">attitude</span>, effect <span class="op">=</span> <span class="st">"complaints"</span>, select <span class="op">=</span> <span class="st">"rating"</span>, bayesian <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         rating complaints privileges learning raises critical advance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   -9.8484524         51         30       39     61       92      45</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    0.3888162         64         51       54     63       73      47</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    3.8829402         70         68       69     76       86      48</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   -0.8602044         63         45       47     54       84      35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    7.8751056         78         56       66     71       83      47</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  -12.8523698         55         49       44     54       49      34</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   -6.8641218         67         42       56     66       68      35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8    0.1280436         75         50       55     70       66      41</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   -4.1288118         82         72       67     71       83      31</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10   6.6417542         61         45       47     62       80      41</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11   9.6495889         53         53       58     58       67      34</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12   7.3927336         60         47       39     59       74      41</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13   7.8907749         62         57       42     55       63      25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  -8.8797911         83         83       45     59       77      35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15   4.6260849         77         54       72     79       77      46</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  -1.1366464         90         50       72     60       54      36</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17  -4.3817498         85         64       69     79       79      63</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18   5.3927336         60         65       75     55       80      60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19  -2.1170598         70         46       57     75       85      46</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20  -8.1053078         58         68       54     64       78      52</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21   5.4123202         40         33       34     43       64      33</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22   3.6417542         61         52       62     66       80      41</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23 -11.1131424         66         52       50     63       80      37</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24  -2.3347418         37         42       58     50       57      49</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25   7.8986096         54         42       48     66       75      33</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26  -6.3739151         77         66       63     88       76      72</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27   7.1280436         75         58       74     80       78      49</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28  -9.3543284         57         44       45     51       83      38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29   6.6182502         85         71       71     77       74      55</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30   5.8711882         82         39       59     64       78      39</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          rating complaints privileges learning raises critical advance</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   -9.83560326         51         30       39     61       92      45</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    0.35280150         64         51       54     63       73      47</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    3.82437293         70         68       69     76       86      48</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   -0.89246041         63         45       47     54       84      35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    7.78646817         78         56       66     71       83      47</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  -12.85455564         55         49       44     54       49      34</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   -6.91141279         67         42       56     66       68      35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8    0.05068245         75         50       55     70       66      41</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   -4.23248421         82         72       67     71       83      31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10   6.61701578         61         45       47     62       80      41</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11   9.65492055         53         53       58     58       67      34</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12   7.37175388         60         47       39     59       74      41</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13   7.86227769         62         57       42     55       63      25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  -8.98722231         83         83       45     59       77      35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15   4.54120626         77         54       72     79       77      46</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  -1.27038897         90         50       72     60       54      36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  -4.49669850         85         64       69     79       79      63</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18   5.37175388         60         65       75     55       80      60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19  -2.17562707         70         46       57     75       85      46</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  -8.11876993         58         68       54     64       78      52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21   5.46651578         40         33       34     43       64      33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22   3.61701578         61         52       62     66       80      41</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23 -11.15667469         66         52       50     63       80      37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  -2.26926993         37         42       58     50       57      49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25   7.90018245         54         42       48     66       75      33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  -6.45879374         77         66       63     88       76      72</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27   7.05068245         75         58       74     80       78      49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28  -9.36403183         57         44       45     51       83      38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29   6.50330150         85         71       71     77       74      55</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30   5.76751579         82         39       59     64       78      39</span>
 <span class="r-in"><span class="fu">adjust</span><span class="op">(</span><span class="va">attitude</span>, effect <span class="op">=</span> <span class="st">"complaints"</span>, select <span class="op">=</span> <span class="st">"rating"</span>, additive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          rating complaints privileges learning raises critical advance</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   -9.86142016         51         30       39     61       92      45</span>
@@ -227,7 +233,7 @@ visual representation of this).</p></td>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 28  -9.38907907         57         44       45     51       83      38</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 29   6.48184600         85         71       71     77       74      55</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 30   5.74567546         82         39       59     64       78      39</span>
-<span class="r-in"><span class="va">attitude</span><span class="op">$</span><span class="va">complaints_LMH</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span><span class="va">attitude</span><span class="op">$</span><span class="va">complaints</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">attitude</span><span class="op">$</span><span class="va">complaints_LMH</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">attitude</span><span class="op">$</span><span class="va">complaints</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">adjust</span><span class="op">(</span><span class="va">attitude</span>, effect <span class="op">=</span> <span class="st">"complaints_LMH"</span>, select <span class="op">=</span> <span class="st">"rating"</span>, multilevel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         rating complaints privileges learning raises critical advance</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   -9.9809282         51         30       39     61       92      45</span>
@@ -293,9 +299,9 @@ visual representation of this).</p></td>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 30    (72.3,90.1]</span>
 <span class="r-in"><span class="co"># }</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">"MASS"</a></span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/bayestestR/">"bayestestR"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">"MASS"</a></span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/bayestestR/" class="external-link">"bayestestR"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">  <span class="co"># Generate data</span></span>
-<span class="r-in">  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/bayestestR/reference/simulate_correlation.html">simulate_correlation</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, r <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/bayestestR/reference/simulate_correlation.html" class="external-link">simulate_correlation</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, r <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span>
 <span class="r-in">  <span class="va">data</span><span class="op">$</span><span class="va">V2</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">5</span> <span class="op">*</span> <span class="va">data</span><span class="op">$</span><span class="va">V2</span><span class="op">)</span> <span class="op">+</span> <span class="fl">20</span> <span class="co"># Add intercept</span></span>
 <span class="r-in"></span>
 <span class="r-in">  <span class="co"># Adjust</span></span>
@@ -303,21 +309,22 @@ visual representation of this).</p></td>
 <span class="r-in">  <span class="va">adjusted_icpt</span> <span class="op">&lt;-</span> <span class="fu">adjust</span><span class="op">(</span><span class="va">data</span>, effect <span class="op">=</span> <span class="st">"V1"</span>, select <span class="op">=</span> <span class="st">"V2"</span>, keep_intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in">  <span class="co"># Visualize</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">V1</span>, <span class="va">data</span><span class="op">$</span><span class="va">V2</span>,</span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">V1</span>, <span class="va">data</span><span class="op">$</span><span class="va">V2</span>,</span>
 <span class="r-in">    pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"blue"</span>,</span>
-<span class="r-in">    ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">adjusted</span><span class="op">$</span><span class="va">V2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">V2</span><span class="op">)</span><span class="op">)</span>,</span>
+<span class="r-in">    ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">adjusted</span><span class="op">$</span><span class="va">V2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">V2</span><span class="op">)</span><span class="op">)</span>,</span>
 <span class="r-in">    main <span class="op">=</span> <span class="st">"Original (blue), adjusted (green), and adjusted - intercept kept (red) data"</span></span>
 <span class="r-in">  <span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">V2</span> <span class="op">~</span> <span class="va">V1</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">adjusted</span><span class="op">$</span><span class="va">V1</span>, <span class="va">adjusted</span><span class="op">$</span><span class="va">V2</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">V2</span> <span class="op">~</span> <span class="va">V1</span>, data <span class="op">=</span> <span class="va">adjusted</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">adjusted_icpt</span><span class="op">$</span><span class="va">V1</span>, <span class="va">adjusted_icpt</span><span class="op">$</span><span class="va">V2</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">V2</span> <span class="op">~</span> <span class="va">V1</span>, data <span class="op">=</span> <span class="va">adjusted_icpt</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">V2</span> <span class="op">~</span> <span class="va">V1</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">adjusted</span><span class="op">$</span><span class="va">V1</span>, <span class="va">adjusted</span><span class="op">$</span><span class="va">V2</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">V2</span> <span class="op">~</span> <span class="va">V1</span>, data <span class="op">=</span> <span class="va">adjusted</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">adjusted_icpt</span><span class="op">$</span><span class="va">V1</span>, <span class="va">adjusted_icpt</span><span class="op">$</span><span class="va">V2</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">V2</span> <span class="op">~</span> <span class="va">V1</span>, data <span class="op">=</span> <span class="va">adjusted_icpt</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: MASS</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: bayestestR</span>
-<span class="r-plt"><img src="adjust-1.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="adjust-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

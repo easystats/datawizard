@@ -44,7 +44,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/datawizard/">
+  <a href="https://github.com/easystats/datawizard/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -59,24 +59,30 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Transpose a dataframe</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/master/R/data_transpose.R"><code>R/data_transpose.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/data_transpose.R" class="external-link"><code>R/data_transpose.R</code></a></small>
     <div class="hidden name"><code>data_transpose.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Transpose a dataframe. It's the equivalent of using <code><a href="https://rdrr.io/r/base/t.html">t()</a></code> but restores the data.frame class, and prints a warning if the data type is modified (see example).</p>
+    <p>Transpose a dataframe. It's the equivalent of using <code><a href="https://rdrr.io/r/base/t.html" class="external-link">t()</a></code> but restores the data.frame class, and prints a warning if the data type is modified (see example).</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">data_transpose</span><span class="op">(</span><span class="va">data</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>data</th>
-      <td><p>A data frame, or an object that can be coerced to a data frame.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Silence warnings and/or messages by setting it to <code>FALSE</code>.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Other arguments passed to or from other functions.</p></td>
-    </tr></table><h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>data</dt>
+<dd><p>A data frame, or an object that can be coerced to a data frame.</p></dd>
+<dt>verbose</dt>
+<dd><p>Silence warnings and/or messages by setting it to <code>FALSE</code>.</p></dd>
+<dt>...</dt>
+<dd><p>Other arguments passed to or from other functions.</p></dd>
+</dl></div>
+    </div>
+
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">transposed</span> <span class="op">&lt;-</span> <span class="fu">data_transpose</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Your data contains mixed types of data. After transposition, all will be transformed into characters.</span>
 <span class="r-in"><span class="va">transposed</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
@@ -89,6 +95,7 @@
 <span class="r-in"></span>
 <span class="r-in"><span class="va">transposed</span> <span class="op">&lt;-</span> <span class="fu">data_transpose</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span> <span class="co"># Only numeric = no warning</span></span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

@@ -48,7 +48,7 @@ median for centering."><meta property="og:image" content="/logo.png"><!-- mathja
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/datawizard/">
+  <a href="https://github.com/easystats/datawizard/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -63,7 +63,7 @@ median for centering."><meta property="og:image" content="/logo.png"><!-- mathja
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Compute group-meaned and de-meaned variables</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/master/R/demean.R"><code>R/demean.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/demean.R" class="external-link"><code>R/demean.R</code></a></small>
     <div class="hidden name"><code>demean.Rd</code></div>
     </div>
 
@@ -107,41 +107,46 @@ median for centering.</p>
   verbose <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A data frame.</p></td>
-    </tr><tr><th>select</th>
-      <td><p>Character vector (or formula) with names of variables to select
-that should be group- and de-meaned.</p></td>
-    </tr><tr><th>group</th>
-      <td><p>Character vector (or formula) with the name of the variable that
-indicates the group- or cluster-ID.</p></td>
-    </tr><tr><th>suffix_demean, suffix_groupmean</th>
-      <td><p>String value, will be appended to the
+    <div id="ref-sections">
+    <div id="arguments">
+    <h2>Arguments</h2>
+    <dl><dt>x</dt>
+<dd><p>A data frame.</p></dd>
+<dt>select</dt>
+<dd><p>Character vector (or formula) with names of variables to select
+that should be group- and de-meaned.</p></dd>
+<dt>group</dt>
+<dd><p>Character vector (or formula) with the name of the variable that
+indicates the group- or cluster-ID.</p></dd>
+<dt>suffix_demean, suffix_groupmean</dt>
+<dd><p>String value, will be appended to the
 names of the group-meaned and de-meaned variables of <code>x</code>. By default,
 de-meaned variables will be suffixed with <code>"_within"</code> and
-grouped-meaned variables with <code>"_between"</code>.</p></td>
-    </tr><tr><th>add_attributes</th>
-      <td><p>Logical, if <code>TRUE</code>, the returned variables gain
+grouped-meaned variables with <code>"_between"</code>.</p></dd>
+<dt>add_attributes</dt>
+<dd><p>Logical, if <code>TRUE</code>, the returned variables gain
 attributes to indicate the within- and between-effects. This is only
 relevant when printing <code>model_parameters()</code> - in such cases, the
-within- and between-effects are printed in separated blocks.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Toggle warnings and messages.</p></td>
-    </tr><tr><th>center</th>
-      <td><p>Method for centering. <code>demean()</code> always performs
+within- and between-effects are printed in separated blocks.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle warnings and messages.</p></dd>
+<dt>center</dt>
+<dd><p>Method for centering. <code>demean()</code> always performs
 mean-centering, while <code>degroup()</code> can use <code>center = "median"</code> or
 <code>center = "mode"</code> for median- or mode-centering, and also <code>"min"</code>
-or <code>"max"</code>.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
+or <code>"max"</code>.</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
     <p>A data frame with the group-/de-meaned variables, which get the suffix
 <code>"_between"</code> (for the group-meaned variable) and <code>"_within"</code> (for
 the de-meaned variable) by default.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     
-<h3 class="hasAnchor" id="heterogeneity-bias"><a class="anchor" aria-hidden="true" href="#heterogeneity-bias"></a>Heterogeneity Bias</h3>
+<div class="section">
+<h3 id="heterogeneity-bias">Heterogeneity Bias<a class="anchor" aria-label="anchor" href="#heterogeneity-bias"></a></h3>
 <p>Mixed models include different levels of sources of variability, i.e.
 error terms at each level. When macro-indicators (or level-2 predictors,
 or higher-level units, or more general: <em>group-level predictors that
@@ -162,7 +167,9 @@ be separated into their "within" and "between" effects by "de-meaning" and
 higher level, the mean term is no longer constrained by Level 1 effects,
 so it is free to account for all the higher-level variance associated
 with that variable” (<cite>Bell et al. 2015</cite>).</p>
-<h3 class="hasAnchor" id="panel-data-and-correlating-fixed-and-group-effects"><a class="anchor" aria-hidden="true" href="#panel-data-and-correlating-fixed-and-group-effects"></a>Panel data and correlating fixed and group effects</h3>
+</div>
+<div class="section">
+<h3 id="panel-data-and-correlating-fixed-and-group-effects">Panel data and correlating fixed and group effects<a class="anchor" aria-label="anchor" href="#panel-data-and-correlating-fixed-and-group-effects"></a></h3>
 <p><code>demean()</code> is intended to create group- and de-meaned variables
 for panel regression models (fixed effects models), or for complex
 random-effect-within-between models (see <cite>Bell et al. 2015, 2018</cite>),
@@ -175,7 +182,9 @@ to include the group-meaned and de-meaned version of <em>time-varying covariates
 a higher level, e.g. level-2 predictors) in the model. By this, one can
 fit complex multilevel models for panel data, including time-varying
 predictors, time-invariant predictors and random effects.</p>
-<h3 class="hasAnchor" id="why-mixed-models-are-preferred-over-fixed-effects-models"><a class="anchor" aria-hidden="true" href="#why-mixed-models-are-preferred-over-fixed-effects-models"></a>Why mixed models are preferred over fixed effects models</h3>
+</div>
+<div class="section">
+<h3 id="why-mixed-models-are-preferred-over-fixed-effects-models">Why mixed models are preferred over fixed effects models<a class="anchor" aria-label="anchor" href="#why-mixed-models-are-preferred-over-fixed-effects-models"></a></h3>
 <p>A mixed models approach can model the causes of endogeneity explicitly
 by including the (separated) within- and between-effects of time-varying
 fixed effects and including time-constant fixed effects. Furthermore,
@@ -187,7 +196,9 @@ fixed effects regressions are neglecting “cross-cluster differences
 in the effects of lower-level controls (which) reduces the precision of
 estimated context effects, resulting in unnecessarily wide confidence
 intervals and low statistical power” (<cite>Heisig et al. 2017</cite>).</p>
-<h3 class="hasAnchor" id="terminology"><a class="anchor" aria-hidden="true" href="#terminology"></a>Terminology</h3>
+</div>
+<div class="section">
+<h3 id="terminology">Terminology<a class="anchor" aria-label="anchor" href="#terminology"></a></h3>
 <p>The group-meaned variable is simply the mean of an independent variable
 within each group (or id-level or cluster) represented by <code>group</code>.
 It represents the cluster-mean of an independent variable. The regression
@@ -196,7 +207,9 @@ The de-meaned variable is then the centered version of the group-meaned
 variable. De-meaning is sometimes also called person-mean centering or
 centering within clusters. The regression coefficient of a de-meaned
 variable represents the <em>within-subject-effect</em>.</p>
-<h3 class="hasAnchor" id="de-meaning-with-continuous-predictors"><a class="anchor" aria-hidden="true" href="#de-meaning-with-continuous-predictors"></a>De-meaning with continuous predictors</h3>
+</div>
+<div class="section">
+<h3 id="de-meaning-with-continuous-predictors">De-meaning with continuous predictors<a class="anchor" aria-label="anchor" href="#de-meaning-with-continuous-predictors"></a></h3>
 <p>For continuous time-varying predictors, the recommendation is to include
 both their de-meaned and group-meaned versions as fixed effects, but not
 the raw (untransformed) time-varying predictors themselves. The de-meaned
@@ -204,7 +217,9 @@ predictor should also be included as random effect (random slope). In
 regression models, the coefficient of the de-meaned predictors indicates
 the within-subject effect, while the coefficient of the group-meaned
 predictor indicates the between-subject effect.</p>
-<h3 class="hasAnchor" id="de-meaning-with-binary-predictors"><a class="anchor" aria-hidden="true" href="#de-meaning-with-binary-predictors"></a>De-meaning with binary predictors</h3>
+</div>
+<div class="section">
+<h3 id="de-meaning-with-binary-predictors">De-meaning with binary predictors<a class="anchor" aria-label="anchor" href="#de-meaning-with-binary-predictors"></a></h3>
 <p>For binary time-varying predictors, there are two recommendations. First
 is to include the raw (untransformed) binary predictor as fixed effect
 only and the <em>de-meaned</em> variable as random effect (random slope).
@@ -217,14 +232,18 @@ chapter 8-2.I</cite>). <code>demean()</code> will thus coerce categorical time-v
 predictors to numeric to compute the de- and group-meaned versions for
 these variables, where the raw (untransformed) binary predictor and the
 de-meaned version should be added to the model.</p>
-<h3 class="hasAnchor" id="de-meaning-of-factors-with-more-than-levels"><a class="anchor" aria-hidden="true" href="#de-meaning-of-factors-with-more-than-levels"></a>De-meaning of factors with more than 2 levels</h3>
+</div>
+<div class="section">
+<h3 id="de-meaning-of-factors-with-more-than-levels">De-meaning of factors with more than 2 levels<a class="anchor" aria-label="anchor" href="#de-meaning-of-factors-with-more-than-levels"></a></h3>
 <p>Factors with more than two levels are demeaned in two ways: first, these
 are also converted to numeric and de-meaned; second, dummy variables
 are created (binary, with 0/1 coding for each level) and these binary
 dummy-variables are de-meaned in the same way (as described above).
 Packages like <span class="pkg">panelr</span> internally convert factors to dummies before
 demeaning, so this behaviour can be mimicked here.</p>
-<h3 class="hasAnchor" id="de-meaning-interaction-terms"><a class="anchor" aria-hidden="true" href="#de-meaning-interaction-terms"></a>De-meaning interaction terms</h3>
+</div>
+<div class="section">
+<h3 id="de-meaning-interaction-terms">De-meaning interaction terms<a class="anchor" aria-label="anchor" href="#de-meaning-interaction-terms"></a></h3>
 <p>There are multiple ways to deal
 with interaction terms of within- and between-effects. A classical approach
 is to simply use the product term of the de-meaned variables (i.e.
@@ -245,14 +264,18 @@ function from the <span class="pkg">panelr</span> package should be used. <br><b
 To de-mean interaction terms for within-between models, simply specify
 the term as interaction for the <code>select</code>-argument, e.g.
 <code>select = "a*b"</code> (see 'Examples').</p>
-<h3 class="hasAnchor" id="analysing-panel-data-with-mixed-models-using-lme-"><a class="anchor" aria-hidden="true" href="#analysing-panel-data-with-mixed-models-using-lme-"></a>Analysing panel data with mixed models using lme4</h3>
+</div>
+<div class="section">
+<h3 id="analysing-panel-data-with-mixed-models-using-lme-">Analysing panel data with mixed models using lme4<a class="anchor" aria-label="anchor" href="#analysing-panel-data-with-mixed-models-using-lme-"></a></h3>
 <p>A description of how to translate the
 formulas described in <em>Bell et al. 2018</em> into R using <code>lmer()</code>
 from <span class="pkg">lme4</span> can be found in
-<a href="https://easystats.github.io/datawizard/articles/demean.html">this vignette</a>.</p>
+<a href="https://easystats.github.io/datawizard/articles/demean.html" class="external-link">this vignette</a>.</p>
+</div>
 
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
+    </div>
+    <div id="references">
+    <h2>References</h2>
     
 <ul><li><p>Bafumi J, Gelman A. 2006. Fitting Multilevel Models When Predictors
 and Group Effects Correlate. In. Philadelphia, PA: Annual meeting of the
@@ -274,75 +297,79 @@ Differences in the Effects of Controls. American Sociological Review 82
 (4): 796–827.</p></li>
 <li><p>Hoffman L. 2015. Longitudinal analysis: modeling within-person
 fluctuation and change. New York: Routledge</p></li>
-</ul><h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
+</ul></div>
+    <div id="see-also">
+    <h2>See also</h2>
     <div class="dont-index"><p>If grand-mean centering (instead of centering within-clusters)
 is required, see <code><a href="center.html">center()</a></code>.</p></div>
+    </div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">iris</span><span class="op">$</span><span class="va">ID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># fake-ID</span></span>
-<span class="r-in"><span class="va">iris</span><span class="op">$</span><span class="va">binary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span><span class="fl">150</span>, <span class="fl">1</span>, <span class="fl">.35</span><span class="op">)</span><span class="op">)</span> <span class="co"># binary variable</span></span>
+    <div id="examples">
+    <h2>Examples</h2>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">iris</span><span class="op">$</span><span class="va">ID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># fake-ID</span></span>
+<span class="r-in"><span class="va">iris</span><span class="op">$</span><span class="va">binary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="fl">150</span>, <span class="fl">1</span>, <span class="fl">.35</span><span class="op">)</span><span class="op">)</span> <span class="co"># binary variable</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">demean</span><span class="op">(</span><span class="va">iris</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span>, group <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">demean</span><span class="op">(</span><span class="va">iris</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span>, group <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length_between Petal.Length_between Sepal.Length_within</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1             5.725581             3.493023          -0.6255814</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2             5.725581             3.493023          -0.8255814</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3             6.058974             4.141026          -1.3589744</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4             5.776316             3.660526          -1.1763158</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5             5.725581             3.493023          -0.7255814</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6             6.058974             4.141026          -0.6589744</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1             5.914286             3.885714          -0.8142857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2             5.910345             3.937931          -1.0103448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3             5.910345             3.937931          -1.2103448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4             5.914286             3.885714          -1.3142857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5             5.910345             3.937931          -0.9103448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6             5.743243             3.427027          -0.3432432</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Petal.Length_within</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1           -2.093023</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           -2.093023</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3           -2.841026</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           -2.160526</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5           -2.093023</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6           -2.441026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           -2.485714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           -2.537931</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           -2.637931</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           -2.385714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           -2.537931</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           -1.727027</span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">demean</span><span class="op">(</span><span class="va">iris</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"binary"</span>, <span class="st">"Species"</span><span class="op">)</span>, group <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">demean</span><span class="op">(</span><span class="va">iris</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"binary"</span>, <span class="st">"Species"</span><span class="op">)</span>, group <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Categorical predictors (Species, binary) have been coerced to numeric values to compute de- and group-meaned variables.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length_between Species_between binary_between Species_setosa_between</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1             5.725581       0.8604651      0.4883721              0.4186047</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2             5.725581       0.8604651      0.4883721              0.4186047</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3             6.058974       1.1538462      0.1538462              0.2820513</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4             5.776316       1.0000000      0.3684211              0.3157895</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5             5.725581       0.8604651      0.4883721              0.4186047</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6             6.058974       1.1538462      0.1538462              0.2820513</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1             5.914286       1.0612245      0.3265306              0.3061224</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2             5.910345       1.0344828      0.3448276              0.3103448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3             5.910345       1.0344828      0.3448276              0.3103448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4             5.914286       1.0612245      0.3265306              0.3061224</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5             5.910345       1.0344828      0.3448276              0.3103448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6             5.743243       0.8378378      0.3243243              0.4054054</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Species_versicolor_between Species_virginica_between Sepal.Length_within</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  0.3023256                 0.2790698          -0.6255814</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                  0.3023256                 0.2790698          -0.8255814</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  0.2820513                 0.4358974          -1.3589744</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                  0.3684211                 0.3157895          -1.1763158</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                  0.3023256                 0.2790698          -0.7255814</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                  0.2820513                 0.4358974          -0.6589744</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  0.3265306                 0.3673469          -0.8142857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                  0.3448276                 0.3448276          -1.0103448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  0.3448276                 0.3448276          -1.2103448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                  0.3265306                 0.3673469          -1.3142857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                  0.3448276                 0.3448276          -0.9103448</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                  0.3513514                 0.2432432          -0.3432432</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Species_within binary_within Species_setosa_within Species_versicolor_within</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     -0.8604651     0.5116279             0.5813953                -0.3023256</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     -0.8604651     0.5116279             0.5813953                -0.3023256</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     -1.1538462     0.8461538             0.7179487                -0.2820513</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     -1.0000000    -0.3684211             0.6842105                -0.3684211</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     -0.8604651     0.5116279             0.5813953                -0.3023256</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6     -1.1538462    -0.1538462             0.7179487                -0.2820513</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     -1.0612245    -0.3265306             0.6938776                -0.3265306</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     -1.0344828    -0.3448276             0.6896552                -0.3448276</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     -1.0344828     0.6551724             0.6896552                -0.3448276</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     -1.0612245     0.6734694             0.6938776                -0.3265306</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     -1.0344828    -0.3448276             0.6896552                -0.3448276</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     -0.8378378     0.6756757             0.5945946                -0.3513514</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Species_virginica_within</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1               -0.2790698</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2               -0.2790698</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3               -0.4358974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4               -0.3157895</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5               -0.2790698</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6               -0.4358974</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1               -0.3673469</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2               -0.3448276</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3               -0.3448276</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4               -0.3673469</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5               -0.3448276</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6               -0.2432432</span>
 <span class="r-in"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># demean interaction term x*y</span></span>
-<span class="r-in"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">  a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span>,</span>
-<span class="r-in">  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">3</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span class="r-in">  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">3</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span class="r-in">  ID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span class="r-in">  a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span class="r-in">  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">3</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span class="r-in">  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">3</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span class="r-in">  ID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu">demean</span><span class="op">(</span><span class="va">dat</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"x*y"</span><span class="op">)</span>, group <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">demean</span><span class="op">(</span><span class="va">dat</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"x*y"</span><span class="op">)</span>, group <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   a_between x_y_between   a_within x_y_within</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.666667    4.666667 -1.6666667 -0.6666667</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  2.333333    4.000000 -0.3333333  2.0000000</span>
@@ -365,6 +392,7 @@ is required, see <code><a href="center.html">center()</a></code>.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7  2.666667    4.666667  0.3333333 -2.6666667</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8  2.333333    4.000000  1.6666667 -2.0000000</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
