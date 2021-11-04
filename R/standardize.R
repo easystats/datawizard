@@ -41,11 +41,12 @@
 #' @family standardize
 #'
 #' @examples
+#' d <- iris[1:4, ]
+#'
 #' # vectors
 #' standardise(d$Petal.Length)
 #'
 #' # Data frames
-#' d <- iris[1:4, ]
 #' # overwrite
 #' standardise(d, select = c("Sepal.Length", "Sepal.Width"))
 #'
