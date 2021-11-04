@@ -166,11 +166,12 @@ standardize.AsIs <- standardize.numeric
 #'   as well. Factors are converted to numerical values, with the lowest level
 #'   being the value `1` (unless the factor has numeric levels, which are
 #'   converted to the corresponding numeric value).
-#' @param suffix Character value, will be appended to variable (column) names of
-#'   the standardized variables. If `NULL`, original variables in `x` will be
-#'   overwritten. If a character value, standardized variables get new column
-#'   names and are appended (column bind) to `x`, thus returning both the
-#'   original and the standardized variables.
+#' @param append Logical or string. If `TRUE`, standardized variables get new
+#'   column names (with the suffix `"_z"`) and are appended (column bind) to `x`,
+#'   thus returning both the original and the standardized variables. If `FALSE`,
+#'   original variables in `x` will be overwritten by their standardized versions.
+#'   If a character value, standardized variables are appended with new column
+#'   names (using the defined suffix) to the original data frame.
 #' @param reference A data frame or variable from which the centrality and
 #'   deviation will be computed instead of from the input variable. Useful for
 #'   standardizing a subset or new data according to another data frame.
@@ -186,10 +187,17 @@ standardize.data.frame <- function(x,
                                    exclude = NULL,
                                    remove_na = c("none", "selected", "all"),
                                    force = FALSE,
-                                   suffix = NULL,
+                                   append = FALSE,
                                    ...) {
   if (!is.null(reference) && !all(names(x) %in% names(reference))) {
     stop("The 'reference' must have the same columns as the input.")
+  }
+
+  # check append argument, and set default
+  if (isFALSE(append)) {
+    append <- NULL
+  } else if (isTRUE(append)) {
+    append <- "_z"
   }
 
   # check for formula notation, convert to character vector
@@ -223,9 +231,9 @@ standardize.data.frame <- function(x,
 
   if (!is.null(weights) && is.character(weights)) weights <- x[[weights]]
 
-  if (!is.null(suffix) && suffix != "") {
+  if (!is.null(append) && append != "") {
     new_variables <- x[select]
-    colnames(new_variables) <- paste0(colnames(new_variables), suffix)
+    colnames(new_variables) <- paste0(colnames(new_variables), append)
     x <- cbind(x, new_variables)
     select <- colnames(new_variables)
   }
