@@ -1,18 +1,14 @@
-.runThisTest <- Sys.getenv("RunAllparametersTests") == "yes"
-
-if (.runThisTest) {
-  if (require("testthat") && require("parameters")) {
-    data(iris)
-    data(mtcars)
-    z <- center(iris$Sepal.Width)
-    test_that("center", {
-      expect_equal(z, iris$Sepal.Width - mean(iris$Sepal.Width))
-    })
-    z <- center(mtcars$hp, robust = TRUE)
-    test_that("center, robust", {
-      expect_equal(z, mtcars$hp - median(mtcars$hp))
-    })
-  }
+if (require("testthat")) {
+  data(iris)
+  data(mtcars)
+  z <- center(iris$Sepal.Width)
+  test_that("center", {
+    expect_equal(z, iris$Sepal.Width - mean(iris$Sepal.Width))
+  })
+  z <- center(mtcars$hp, robust = TRUE)
+  test_that("center, robust", {
+    expect_equal(z, mtcars$hp - median(mtcars$hp))
+  })
 
   z <- center(iris, select = "Sepal.Width")
   test_that("center, select", {
