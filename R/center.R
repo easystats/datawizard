@@ -114,6 +114,7 @@ center.character <- center.factor
 
 
 #' @rdname center
+#' @inheritParams standardize.data.frame
 #' @export
 center.data.frame <- function(x,
                               robust = FALSE,
