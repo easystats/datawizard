@@ -2,7 +2,7 @@
 # helper -----------------------------
 
 
-.process_std_center <- function(x, weights, robust, verbose) {
+.process_std_center <- function(x, weights, robust, verbose, reference = NULL) {
   # Warning if all NaNs
   if (all(is.na(x))) {
     return(x)
@@ -26,7 +26,7 @@
   }
 
   # Get center and scale
-  ref <- .get_center_scale(vals, robust, weights, NULL)
+  ref <- .get_center_scale(vals, robust, weights, reference)
 
   list(
     vals = vals,

@@ -80,7 +80,7 @@ standardize.numeric <- function(x,
                                 reference = NULL,
                                 ...) {
 
-  args <- .process_std_center(x, weights, robust, verbose)
+  args <- .process_std_center(x, weights, robust, verbose, reference)
 
   # Perform standardization
   if (is.null(args$check)) {
