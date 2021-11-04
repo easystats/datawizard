@@ -33,7 +33,7 @@
     valid_x = valid_x,
     center = ref$center,
     scale = ref$scale,
-    check = ref$check
+    check = check
   )
 }
 
