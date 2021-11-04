@@ -74,34 +74,37 @@ standardize.numeric <- function(x,
 
   if (.are_weights(weights)) {
     valid_x <- !is.na(x) & !is.na(weights)
-    x <- x[valid_x]
+    vals <- x[valid_x]
     weights <- weights[valid_x]
   } else {
     valid_x <- !is.na(x)
-    x <- x[valid_x]
+    vals <- x[valid_x]
   }
-  scaled_x <- rep(NA, length(x))
 
   # Sanity checks
-  check <- .check_standardize_numeric(x, name = NULL, verbose = verbose, reference = reference)
+  check <- .check_standardize_numeric(vals, name = NULL, verbose = verbose, reference = reference)
 
-  if (is.null(check)) {
-    return(x)
+
+  if (is.factor(vals) || is.character(vals)) {
+    vals <- .factor_to_numeric(vals)
   }
 
-  if (is.factor(x) || is.character(x)) {
-    x <- .factor_to_numeric(x)
-  }
+  # Get center and scale
+  ref <- .get_center_scale(vals, robust, weights, reference)
 
-  ref <- .get_center_scale(x, robust, weights, reference)
-
-  if (two_sd) {
-    x <- as.vector((x - ref$center) / (2 * ref$scale))
+  # Perform standardization
+  if(is.null(check)) {
+    vals <- rep(0, length(vals))  # If only unique value
   } else {
-    x <- as.vector((x - ref$center) / ref$scale)
+    if (two_sd) {
+      vals <- as.vector((vals - ref$center) / (2 * ref$scale))
+    } else {
+      vals <- as.vector((vals - ref$center) / ref$scale)
+    }
   }
 
-  scaled_x[valid_x] <- x
+  scaled_x <- rep(NA, length(valid_x))
+  scaled_x[valid_x] <- vals
   attr(scaled_x, "center") <- ref$center
   attr(scaled_x, "scale") <- ref$scale
   attr(scaled_x, "robust") <- robust
@@ -210,7 +213,7 @@ standardize.data.frame <- function(x,
   select <- .select_z_variables(x, select, exclude, force)
 
   # drop NAs
-  remove_na <- match.arg(remove_na)
+  remove_na <- match.arg(remove_na, c("none", "selected", "all"))
 
   omit <- switch(remove_na,
     none = logical(nrow(x)),
@@ -376,9 +379,9 @@ standardize.grouped_df <- function(x,
   if (length(unique(x)) == 1 && is.null(reference)) {
     if (verbose) {
       if (is.null(name)) {
-        message("The variable contains only one unique value and will not be standardized.")
+        message("The variable contains only one unique value and will be set to 0.")
       } else {
-        message(paste0("The variable `", name, "` contains only one unique value and will not be standardized."))
+        message(paste0("The variable `", name, "` contains only one unique value and will be set to 0."))
       }
     }
     return(NULL)
