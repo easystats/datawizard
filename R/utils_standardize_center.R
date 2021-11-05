@@ -72,7 +72,7 @@
     if (weights %in% colnames(x)) {
       exclude <- c(exclude, weights)
     } else {
-      warning("Could not find weighting column '", weights, "'. Weighting not carried out.")
+      warning(insight::format_message("Could not find weighting column '", weights, "'. Weighting not carried out."))
       weights <- NULL
     }
   }
@@ -81,7 +81,7 @@
 
   # check if selected variables are in reference
   if (!is.null(reference) && !all(select %in% names(reference))) {
-    stop("The 'reference' must have the same columns as the input.")
+    stop("The 'reference' must include all variables from 'select'.")
   }
 
   # drop NAs
