@@ -1,4 +1,4 @@
-if (require("testthat")) {
+if (require("testthat") && require("poorman")) {
 
   # standardize.numeric -----------------------------------------------------
   test_that("standardize.numeric", {
@@ -44,8 +44,8 @@ if (require("testthat")) {
     x2 <- standardize(x = iris[1, ], reference = iris)
     expect_true(all(x2[1, ] == x[1, ]))
 
-    skip_if_not_installed("dplyr")
-    x <- standardize(dplyr::group_by(iris, Species))
+    skip_if_not_installed("poorman")
+    x <- standardize(group_by(iris, Species))
     expect_equal(mean(x$Sepal.Length), 0, tolerance = 0.01)
     expect_length(levels(x$Species), 3)
     expect_equal(mean(subset(x, Species == "virginica")$Sepal.Length), 0, tolerance = 0.01)
@@ -67,8 +67,8 @@ if (require("testthat")) {
     expect_equal(head(x$Sepal.Width), c(0.5118, -0.0755, 0.1594, 0.042, 0.6293, 0.9817), tolerance = 0.01)
     expect_equal(mean(x$Sepal.Length), as.numeric(NA))
 
-    skip_if_not_installed("dplyr")
-    x <- standardize(dplyr::group_by(iris, .data$Species))
+    skip_if_not_installed("poorman")
+    x <- standardize(group_by(iris, .data$Species))
     expect_equal(head(x$Sepal.Length), c(0.2547, -0.3057, -0.8661, -1.1463, -0.0255, NA), tolerance = 0.01)
     expect_equal(head(x$Sepal.Width), c(0.2369, -1.0887, -0.5584, -0.8235, 0.502, 1.2974), tolerance = 0.01)
     expect_equal(mean(x$Sepal.Length), as.numeric(NA))
@@ -95,8 +95,8 @@ if (require("testthat")) {
     expect_equal(head(x$Sepal.Width_z), c(0.52, -0.0514, 0.1771, 0.0629, 0.6343, 0.9771), tolerance = 0.01)
     expect_equal(mean(x$Sepal.Length_z), as.numeric(NA))
 
-    skip_if_not_installed("dplyr")
-    x <- standardize(dplyr::group_by(iris, .data$Species), append = TRUE)
+    skip_if_not_installed("poorman")
+    x <- standardize(group_by(iris, .data$Species), append = TRUE)
     expect_equal(head(x$Sepal.Length_z), c(0.2746, -0.2868, -0.8483, -1.129, -0.0061, 1.1168), tolerance = 0.01)
     expect_equal(head(x$Sepal.Width_z), c(0.1766, -1.1051, -0.5924, -0.8487, 0.4329, 1.2019), tolerance = 0.01)
     expect_equal(mean(x$Sepal.Length_z), as.numeric(NA))
@@ -123,8 +123,8 @@ if (require("testthat")) {
       standardize(mtcars, weights = "cyl")
     )
 
-    skip_if_not_installed("dplyr")
-    d <- dplyr::group_by(mtcars, am)
+    skip_if_not_installed("poorman")
+    d <- group_by(mtcars, am)
     expect_warning(standardize(d, weights = d$cyl))
   })
 
@@ -189,8 +189,8 @@ if (require("testthat")) {
     rez <- unstandardize(x, robust = TRUE, two_sd = TRUE)
     expect_equal(rez, iris, tolerance = 0.1, ignore_attr = TRUE)
 
-    skip_if_not_installed("dplyr")
-    d <- dplyr::group_by(mtcars, am)
+    skip_if_not_installed("poorman")
+    d <- group_by(mtcars, am)
     x <- standardize(d)
     expect_error(unstandardize(x))
   })

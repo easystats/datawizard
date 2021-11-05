@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
 
 pkgs <- c(
   "datawizard",
-  "dplyr",
+  "poorman",
   "tidyr",
   "see",
   "ggplot2",
@@ -338,7 +338,7 @@ faster, typists make more mistakes (individual-level pattern).
 
 ```{r}
 library(ggplot2)
-library(dplyr)
+library(poorman)
 library(see)
 
 set.seed(123)
