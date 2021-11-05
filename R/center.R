@@ -123,7 +123,7 @@ center.data.frame <- function(x,
                               ...) {
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append,
-                            append_suffix = "_c", force, remove_na)
+                            append_suffix = "_c", force, remove_na, reference)
 
   # set new values
   x <- args$x

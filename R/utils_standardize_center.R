@@ -43,7 +43,16 @@
 
 ## processing and checking of arguments ----
 
-.process_std_args <- function(x, select, exclude, weights, append, append_suffix = "_z", force, remove_na = "none") {
+.process_std_args <- function(x,
+                              select,
+                              exclude,
+                              weights,
+                              append,
+                              append_suffix = "_z",
+                              force,
+                              remove_na = "none",
+                              reference = NULL) {
+
   # check for formula notation, convert to character vector
   if (inherits(select, "formula")) {
     select <- all.vars(select)
@@ -69,6 +78,11 @@
   }
 
   select <- .select_variables(x, select, exclude, force)
+
+  # check if selected variables are in reference
+  if (!is.null(reference) && !all(select %in% names(reference))) {
+    stop("The 'reference' must have the same columns as the input.")
+  }
 
   # drop NAs
   remove_na <- match.arg(remove_na, c("none", "selected", "all"))

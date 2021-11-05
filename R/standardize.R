@@ -27,6 +27,27 @@
 #'   name of a column in the `data.frame` that contains the weights.
 #' - For numeric vectors: a numeric vector of weights.
 #' @param verbose Toggle warnings and messages on or off.
+#' @param select Character vector of column names. If `NULL` (the default), all
+#'   variables will be selected.
+#' @param exclude Character vector of column names to be excluded from selection.
+#' @param remove_na How should missing values (`NA`) be treated: if `"none"`
+#'   (default): each column's standardization is done separately, ignoring
+#'   `NA`s. Else, rows with `NA` in the columns selected with `select` /
+#'   `exclude` (`"selected"`) or in all columns (`"all"`) are dropped before
+#'   standardization, and the resulting data frame does not include these cases.
+#' @param force Logical, if `TRUE`, forces standardization of factors and dates
+#'   as well. Factors are converted to numerical values, with the lowest level
+#'   being the value `1` (unless the factor has numeric levels, which are
+#'   converted to the corresponding numeric value).
+#' @param append Logical or string. If `TRUE`, standardized variables get new
+#'   column names (with the suffix `"_z"`) and are appended (column bind) to `x`,
+#'   thus returning both the original and the standardized variables. If `FALSE`,
+#'   original variables in `x` will be overwritten by their standardized versions.
+#'   If a character value, standardized variables are appended with new column
+#'   names (using the defined suffix) to the original data frame.
+#' @param reference A data frame or variable from which the centrality and
+#'   deviation will be computed instead of from the input variable. Useful for
+#'   standardizing a subset or new data according to another data frame.
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @return The standardized object (either a standardize data frame or a
@@ -35,7 +56,6 @@
 #' @note When `x` is a vector or a data frame with `remove_na = "none")`,
 #'   missing values are preserved, so the return value has the same length /
 #'   number of rows as the original input.
-#'
 #'
 #' @family transform utilities
 #' @family standardize
@@ -146,28 +166,6 @@ standardize.AsIs <- standardize.numeric
 
 
 #' @rdname standardize
-#' @param select Character vector of column names. If `NULL` (the default), all
-#'   variables will be selected.
-#' @param exclude Character vector of column names to be excluded from selection.
-#' @param remove_na How should missing values (`NA`) be treated: if `"none"`
-#'   (default): each column's standardization is done separately, ignoring
-#'   `NA`s. Else, rows with `NA` in the columns selected with `select` /
-#'   `exclude` (`"selected"`) or in all columns (`"all"`) are dropped before
-#'   standardization, and the resulting data frame does not include these cases.
-#' @param force Logical, if `TRUE`, forces standardization of factors and dates
-#'   as well. Factors are converted to numerical values, with the lowest level
-#'   being the value `1` (unless the factor has numeric levels, which are
-#'   converted to the corresponding numeric value).
-#' @param append Logical or string. If `TRUE`, standardized variables get new
-#'   column names (with the suffix `"_z"`) and are appended (column bind) to `x`,
-#'   thus returning both the original and the standardized variables. If `FALSE`,
-#'   original variables in `x` will be overwritten by their standardized versions.
-#'   If a character value, standardized variables are appended with new column
-#'   names (using the defined suffix) to the original data frame.
-#' @param reference A data frame or variable from which the centrality and
-#'   deviation will be computed instead of from the input variable. Useful for
-#'   standardizing a subset or new data according to another data frame.
-#'
 #' @export
 standardize.data.frame <- function(x,
                                    robust = FALSE,
@@ -181,13 +179,9 @@ standardize.data.frame <- function(x,
                                    force = FALSE,
                                    append = FALSE,
                                    ...) {
-  if (!is.null(reference) && !all(names(x) %in% names(reference))) {
-    stop("The 'reference' must have the same columns as the input.")
-  }
-
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append,
-                            append_suffix = "_z", force, remove_na)
+                            append_suffix = "_z", force, remove_na, reference)
 
   # set new values
   x <- args$x
