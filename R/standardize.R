@@ -123,7 +123,7 @@ standardize.factor <- function(x,
     return(x)
   }
 
-  standardize(as.numeric(x),
+  standardize(.factor_to_numeric(x),
     robust = robust, two_sd = two_sd, weights = weights, verbose = verbose, ...
   )
 }

@@ -25,6 +25,7 @@
 #'   name of a column in the `data.frame` that contains the weights.
 #'   - For numeric vectors: a numeric vector of weights.
 #' @param ... Currently not used.
+#' @inheritParams standardize
 #'
 #' @note
 #' **Difference between centering and standardizing**: Standardized variables
@@ -64,9 +65,10 @@ center.numeric <- function(x,
                            robust = FALSE,
                            weights = NULL,
                            verbose = TRUE,
+                           reference = NULL,
                            ...) {
 
-  args <- .process_std_center(x, weights, robust, verbose)
+  args <- .process_std_center(x, weights, robust, verbose, reference)
 
   if (is.null(args)) { # all NA?
     return(x)
@@ -86,7 +88,15 @@ center.numeric <- function(x,
 
 
 #' @export
-center.factor <- function(x, weights = NULL, robust = FALSE, verbose = TRUE, ...) {
+center.factor <- function(x,
+                          weights = NULL,
+                          robust = FALSE,
+                          verbose = TRUE,
+                          force = FALSE,
+                          ...) {
+  if (!force) {
+    return(x)
+  }
   center(.factor_to_numeric(x), weights = weights, robust = robust, verbose = verbose, ...)
 }
 
@@ -104,6 +114,7 @@ center.data.frame <- function(x,
                               robust = FALSE,
                               weights = NULL,
                               verbose = TRUE,
+                              reference = NULL,
                               select = NULL,
                               exclude = NULL,
                               remove_na = c("none", "selected", "all"),
@@ -117,13 +128,16 @@ center.data.frame <- function(x,
   # set new values
   x <- args$x
 
-  x[args$select] <- lapply(
-    x[args$select],
-    center,
-    robust = robust,
-    weights = args$weights,
-    verbose = FALSE
-  )
+  for (var in args$select) {
+    x[[var]] <- center(
+      x[[var]],
+      robust = robust,
+      weights = args$weights,
+      verbose = FALSE,
+      reference = reference[[var]],
+      force = force
+    )
+  }
 
   attr(x, "center") <- sapply(x[args$select], function(z) attributes(z)$center)
   attr(x, "scale") <- sapply(x[args$select], function(z) attributes(z)$scale)
