@@ -11,17 +11,18 @@ center(x, ...)
 
 centre(x, ...)
 
-\method{center}{numeric}(x, weights = NULL, robust = FALSE, verbose = TRUE, ...)
+\method{center}{numeric}(x, robust = FALSE, weights = NULL, verbose = TRUE, ...)
 
 \method{center}{data.frame}(
   x,
+  robust = FALSE,
+  weights = NULL,
+  verbose = TRUE,
   select = NULL,
   exclude = NULL,
-  weights = NULL,
-  robust = FALSE,
+  remove_na = c("none", "selected", "all"),
   force = FALSE,
   append = FALSE,
-  verbose = TRUE,
   ...
 )
 }
@@ -30,6 +31,10 @@ centre(x, ...)
 
 \item{...}{Currently not used.}
 
+\item{robust}{Logical, if \code{TRUE}, centering is done by subtracting the
+median from the variables. If \code{FALSE}, variables are centered by
+subtracting the mean.}
+
 \item{weights}{Can be \code{NULL} (for no weighting), or:
 \itemize{
 \item For data frames: a numeric vector of weights, or a character of the
@@ -37,16 +42,18 @@ name of a column in the \code{data.frame} that contains the weights.
 \item For numeric vectors: a numeric vector of weights.
 }}
 
-\item{robust}{Logical, if \code{TRUE}, centering is done by subtracting the
-median from the variables. If \code{FALSE}, variables are centered by
-subtracting the mean.}
-
 \item{verbose}{Toggle warnings and messages.}
 
 \item{select}{Character vector of column names. If \code{NULL} (the default),
 all variables will be selected.}
 
 \item{exclude}{Character vector of column names to be excluded from selection.}
+
+\item{remove_na}{How should missing values (\code{NA}) be treated: if \code{"none"}
+(default): each column's standardization is done separately, ignoring
+\code{NA}s. Else, rows with \code{NA} in the columns selected with \code{select} /
+\code{exclude} (\code{"selected"}) or in all columns (\code{"all"}) are dropped before
+standardization, and the resulting data frame does not include these cases.}
 
 \item{force}{Logical, if \code{TRUE}, forces centering of factors as
 well. Factors are converted to numerical values, with the lowest level
