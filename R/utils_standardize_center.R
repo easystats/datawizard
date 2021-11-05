@@ -438,5 +438,5 @@
     info$names <- c(info$names, select)
   }
 
-  list(x = x, info = info, select = select, grps = grps)
+  list(x = x, info = info, select = select, grps = grps, weights = weights)
 }
