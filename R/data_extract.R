@@ -25,6 +25,7 @@
 #'
 #' @examples
 #' extract(mtcars, cyl, name = gear)
+#' extract(mtcars, "cyl", name = gear)
 #' extract(mtcars, -1, name = gear)
 #' extract(mtcars, cyl, name = 0)
 #' extract(mtcars, cyl, name = "row.names")
