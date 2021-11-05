@@ -2,37 +2,22 @@ Type: Package
 Package: datawizard
 Title: Easy Data Wrangling
 Version: 0.2.1.9000
-Authors@R: 
-    c(person(given = "Dominique",
-             family = "Makowski",
-             role = "aut",
-             email = "dom.makowski@gmail.com",
-             comment = c(ORCID = "0000-0001-5375-9967", Twitter = "@Dom_Makowski")),
-      person(given = "Daniel",
-             family = "Lüdecke",
-             role = "aut",
-             email = "d.luedecke@uke.de",
-             comment = c(ORCID = "0000-0002-8895-3206", Twitter = "@strengejacke")),
-      person(given = "Indrajeet",
-             family = "Patil",
-             role = c("aut", "cre"),
-             email = "patilindrajeet.science@gmail.com",
-             comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@patilindrajeets")),
-      person(given = "Mattan S.",
-             family = "Ben-Shachar",
-             role = "aut",
-             email = "matanshm@post.bgu.ac.il",
-             comment = c(ORCID = "0000-0002-4287-4801")),
-      person(given = "Brenton M.",
-             family = "Wiernik",
-             role = "aut",
-             email = "brenton@wiernik.org",
-             comment = c(ORCID = "0000-0001-9560-6336", Twitter = "@bmwiernik")))
+Authors@R: c(
+    person("Dominique", "Makowski", , "dom.makowski@gmail.com", role = "aut",
+           comment = c(ORCID = "0000-0001-5375-9967", Twitter = "@Dom_Makowski")),
+    person("Daniel", "Lüdecke", , "d.luedecke@uke.de", role = "aut",
+           comment = c(ORCID = "0000-0002-8895-3206", Twitter = "@strengejacke")),
+    person("Indrajeet", "Patil", , "patilindrajeet.science@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@patilindrajeets")),
+    person("Mattan S.", "Ben-Shachar", , "matanshm@post.bgu.ac.il", role = "aut",
+           comment = c(ORCID = "0000-0002-4287-4801")),
+    person("Brenton M.", "Wiernik", , "brenton@wiernik.org", role = "aut",
+           comment = c(ORCID = "0000-0001-9560-6336", Twitter = "@bmwiernik"))
+  )
 Maintainer: Indrajeet Patil <patilindrajeet.science@gmail.com>
-Description: A lightweight package to easily manipulate, clean,
-    transform, and prepare your data for analysis. It also forms
-    the data wrangling backend for the packages in the 'easystats'
-    ecosystem.
+Description: A lightweight package to easily manipulate, clean, transform,
+    and prepare your data for analysis. It also forms the data wrangling
+    backend for the packages in the 'easystats' ecosystem.
 License: GPL-3
 URL: https://easystats.github.io/datawizard/
 BugReports: https://github.com/easystats/datawizard/issues
@@ -44,28 +29,30 @@ Imports:
     utils
 Suggests: 
     bayestestR,
-    knitr,
     boot,
     dplyr,
     effectsize,
     gamm4,
     ggplot2,
+    knitr,
     lfe,
     lme4,
     MASS,
     modelbased,
     parameters,
     performance,
+    poorman,
     psych,
+    rmarkdown,
     rstanarm,
     see,
     spelling,
     testthat (>= 3.0.0),
-    tidyr,
-    rmarkdown
+    tidyr
+VignetteBuilder: 
+    knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.1.2.9000
 Roxygen: list(markdown = TRUE)
-VignetteBuilder: knitr
+RoxygenNote: 7.1.2
