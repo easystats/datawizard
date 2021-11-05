@@ -34,6 +34,8 @@ standardise(
   weights = NULL,
   verbose = TRUE,
   reference = NULL,
+  center = NULL,
+  scale = NULL,
   ...
 )
 
@@ -49,6 +51,8 @@ standardise(
   remove_na = c("none", "selected", "all"),
   force = FALSE,
   append = FALSE,
+  center = NULL,
+  scale = NULL,
   ...
 )
 
@@ -103,6 +107,16 @@ name of a column in the \code{data.frame} that contains the weights.
 deviation will be computed instead of from the input variable. Useful for
 standardizing a subset or new data according to another data frame.}
 
+\item{center, scale}{Used by \code{unstandardize()}; \code{center} and \code{scale}
+correspond to the center (the mean / median) and the scale (SD / MAD) of
+the original non-standardized data (for data frames, should be named, or
+have column order correspond to the numeric column). However, one can also
+directly provide the original data through \code{reference}, from which the
+center and the scale will be computed (according to \code{robust} and \code{two_sd}.
+Alternatively, if the input contains the attributes \code{center} and \code{scale}
+(as does the output of \code{standardize()}), it will take it from there if the
+rest of the arguments are absent.}
+
 \item{select}{Character vector of column names. If \code{NULL} (the default), all
 variables will be selected.}
 
@@ -125,16 +139,6 @@ thus returning both the original and the standardized variables. If \code{FALSE}
 original variables in \code{x} will be overwritten by their standardized versions.
 If a character value, standardized variables are appended with new column
 names (using the defined suffix) to the original data frame.}
-
-\item{center, scale}{Used by \code{unstandardize()}; \code{center} and \code{scale}
-correspond to the center (the mean / median) and the scale (SD / MAD) of
-the original non-standardized data (for data frames, should be named, or
-have column order correspond to the numeric column). However, one can also
-directly provide the original data through \code{reference}, from which the
-center and the scale will be computed (according to \code{robust} and \code{two_sd}.
-Alternatively, if the input contains the attributes \code{center} and \code{scale}
-(as does the output of \code{standardize()}), it will take it from there if the
-rest of the arguments are absent.}
 }
 \value{
 The standardized object (either a standardize data frame or a

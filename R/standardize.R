@@ -98,9 +98,11 @@ standardize.numeric <- function(x,
                                 weights = NULL,
                                 verbose = TRUE,
                                 reference = NULL,
+                                center = NULL,
+                                scale = NULL,
                                 ...) {
 
-  args <- .process_std_center(x, weights, robust, verbose, reference)
+  args <- .process_std_center(x, weights, robust, verbose, reference, center, scale)
 
   # Perform standardization
   if (is.null(args)) { # all NA?
@@ -178,10 +180,13 @@ standardize.data.frame <- function(x,
                                    remove_na = c("none", "selected", "all"),
                                    force = FALSE,
                                    append = FALSE,
+                                   center = NULL,
+                                   scale = NULL,
                                    ...) {
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append,
-                            append_suffix = "_z", force, remove_na, reference)
+                            append_suffix = "_z", force, remove_na, reference,
+                            .center = center, .scale = scale)
 
   # set new values
   x <- args$x
@@ -193,6 +198,8 @@ standardize.data.frame <- function(x,
       two_sd = two_sd,
       weights = args$weights,
       reference = reference[[var]],
+      center = center[var],
+      scale = scale[var],
       verbose = FALSE,
       force = force
     )
@@ -219,6 +226,8 @@ standardize.grouped_df <- function(x,
                                    remove_na = c("none", "selected", "all"),
                                    force = FALSE,
                                    append = FALSE,
+                                   center = NULL,
+                                   scale = NULL,
                                    ...) {
 
   args <- .process_grouped_df(x, select, exclude, append, reference, weights, force)
@@ -235,6 +244,8 @@ standardize.grouped_df <- function(x,
       verbose = verbose,
       force = force,
       append = FALSE,
+      center = center,
+      scale = scale,
       ...
     )
   }

@@ -4,7 +4,13 @@
 
 ## preparation for standardize and center ----
 
-.process_std_center <- function(x, weights, robust, verbose, reference = NULL) {
+.process_std_center <- function(x,
+                                weights,
+                                robust,
+                                verbose,
+                                reference = NULL,
+                                center = NULL,
+                                scale = NULL) {
   # Warning if all NaNs
   if (all(is.na(x))) {
     return(NULL)
@@ -28,7 +34,7 @@
   }
 
   # Get center and scale
-  ref <- .get_center_scale(vals, robust, weights, reference)
+  ref <- .get_center_scale(vals, robust, weights, reference, .center = center, .scale = scale)
 
   list(
     vals = vals,
@@ -51,7 +57,9 @@
                               append_suffix = "_z",
                               force,
                               remove_na = "none",
-                              reference = NULL) {
+                              reference = NULL,
+                              .center = NULL,
+                              .scale = NULL) {
 
   # check for formula notation, convert to character vector
   if (inherits(select, "formula")) {
@@ -104,12 +112,47 @@
     select <- colnames(new_variables)
   }
 
+  # check for reference center and scale
+  if (!is.null(.center) && !is.null(.scale)) {
+
+    # center and scale must have same length
+    if (length(.center) != length(.scale)) {
+      stop("'center' and 'scale' must be of same length.")
+    }
+
+    # center and scale must either be of length 1 or of same length as selected variables
+    if (length(.center) > 1 && length(.center) != length(select)) {
+      stop(insight::format_message("'center' and 'scale' must have the same length as the selected variables for standardization or centering."))
+    }
+
+    # if of length 1, recycle
+    if (length(.center) == 1) {
+      .center <- rep(.center, length(select))
+      .scale <- rep(.scale, length(select))
+    }
+
+    # set names
+    if (is.null(names(.center))) {
+      .center <- stats::setNames(.center, select)
+    }
+    if (is.null(names(.scale))) {
+      .scale <- stats::setNames(.scale, select)
+    }
+  } else {
+
+    # use NA if missing, so we can index these as vectors
+    .center <- stats::setNames(rep(NA, length(select)), select)
+    .scale <- stats::setNames(rep(NA, length(select)), select)
+  }
+
   list(
     x = x,
     select = select,
     exclude = exclude,
     weights = weights,
-    append = append
+    append = append,
+    center = .center,
+    scale = .scale
   )
 }
 
@@ -117,10 +160,13 @@
 
 ## retrieve center and scale information ----
 
-.get_center_scale <- function(x, robust = FALSE, weights = NULL, reference = NULL) {
+.get_center_scale <- function(x, robust = FALSE, weights = NULL, reference = NULL, .center = NULL, .scale = NULL) {
   if (is.null(reference)) reference <- x
 
-  if (robust) {
+  if (!is.null(.center) && !is.null(.scale) && !is.na(.center) && !is.na(.scale)) {
+    center <- .center
+    scale <- .scale
+  } else if (robust) {
     center <- .median(reference, weights)
     scale <- .mad(reference, weights)
   } else {
