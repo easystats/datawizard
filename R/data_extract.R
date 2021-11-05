@@ -60,6 +60,6 @@ data_extract.data.frame <- function (data, select, name = NULL, ...) {
   if (length(name) == 1) {
     stats::setNames(data[,select, drop = TRUE], data[,name, drop = TRUE])
   } else {
-    setNames(data[,select, drop = TRUE], name)
+    stats::setNames(data[,select, drop = TRUE], name)
   }
 }
