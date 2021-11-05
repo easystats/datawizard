@@ -72,7 +72,14 @@
 <span class="fu">centre</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for numeric</span>
-<span class="fu">center</span><span class="op">(</span><span class="va">x</span>, robust <span class="op">=</span> <span class="cn">FALSE</span>, weights <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">center</span><span class="op">(</span>
+  <span class="va">x</span>,
+  robust <span class="op">=</span> <span class="cn">FALSE</span>,
+  weights <span class="op">=</span> <span class="cn">NULL</span>,
+  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
+  reference <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">...</span>
+<span class="op">)</span>
 
 <span class="co"># S3 method for data.frame</span>
 <span class="fu">center</span><span class="op">(</span>
@@ -80,6 +87,7 @@
   robust <span class="op">=</span> <span class="cn">FALSE</span>,
   weights <span class="op">=</span> <span class="cn">NULL</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
+  reference <span class="op">=</span> <span class="cn">NULL</span>,
   select <span class="op">=</span> <span class="cn">NULL</span>,
   exclude <span class="op">=</span> <span class="cn">NULL</span>,
   remove_na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"selected"</span>, <span class="st">"all"</span><span class="op">)</span>,
@@ -106,6 +114,10 @@ name of a column in the <code>data.frame</code> that contains the weights.</p></
 </ul></dd>
 <dt>verbose</dt>
 <dd><p>Toggle warnings and messages.</p></dd>
+<dt>reference</dt>
+<dd><p>A data frame or variable from which the centrality and
+deviation will be computed instead of from the input variable. Useful for
+standardizing a subset or new data according to another data frame.</p></dd>
 <dt>select</dt>
 <dd><p>Character vector of column names. If <code>NULL</code> (the default),
 all variables will be selected.</p></dd>
