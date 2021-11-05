@@ -335,3 +335,62 @@
   }
   model
 }
+
+
+# for grouped df ---------------------------
+
+.process_grouped_df <- function(x, select, exclude, append, reference, weights) {
+  if (!is.null(reference)) {
+    stop("The `reference` argument cannot be used with grouped standardization for now.")
+  }
+
+  # check append argument, and set default
+  if (isFALSE(append)) {
+    append <- NULL
+  } else if (isTRUE(append)) {
+    append <- "_z"
+  }
+
+  info <- attributes(x)
+  # dplyr >= 0.8.0 returns attribute "indices"
+  grps <- attr(x, "groups", exact = TRUE)
+
+  # check for formula notation, convert to character vector
+  if (inherits(select, "formula")) {
+    select <- all.vars(select)
+  }
+  if (inherits(exclude, "formula")) {
+    exclude <- all.vars(exclude)
+  }
+
+  if (is.numeric(weights)) {
+    warning(
+      "For grouped data frames, 'weights' must be a character, not a numeric vector.\n",
+      "Ignoring weightings."
+    )
+    weights <- NULL
+  }
+
+
+  # dplyr < 0.8.0?
+  if (is.null(grps)) {
+    grps <- attr(x, "indices", exact = TRUE)
+    grps <- lapply(grps, function(x) x + 1)
+  } else {
+    grps <- grps[[".rows"]]
+  }
+
+  x <- as.data.frame(x)
+  select <- .select_variables(x, select, exclude, force)
+
+  # append standardized variables
+  if (!is.null(append) && append != "") {
+    new_variables <- x[select]
+    colnames(new_variables) <- paste0(colnames(new_variables), append)
+    x <- cbind(x, new_variables)
+    select <- colnames(new_variables)
+    info$names <- c(info$names, select)
+  }
+
+  list(x = x, info = info, select = select, grps = grps)
+}

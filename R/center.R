@@ -144,3 +144,39 @@ center.data.frame <- function(x,
   attr(x, "robust") <- robust
   x
 }
+
+
+
+#' @export
+center.grouped_df <- function(x,
+                              robust = FALSE,
+                              weights = NULL,
+                              verbose = TRUE,
+                              reference = NULL,
+                              select = NULL,
+                              exclude = NULL,
+                              remove_na = c("none", "selected", "all"),
+                              force = FALSE,
+                              append = FALSE,
+                              ...) {
+
+  args <- .process_grouped_df(x, select, exclude, append, reference, weights)
+
+  for (rows in args$grps) {
+    args$x[rows, ] <- center(
+      args$x[rows, ],
+      select = args$select,
+      exclude = NULL,
+      robust = robust,
+      weights = weights,
+      remove_na = remove_na,
+      verbose = verbose,
+      force = force,
+      append = FALSE,
+      ...
+    )
+  }
+  # set back class, so data frame still works with dplyr
+  attributes(args$x) <- args$info
+  args$x
+}
