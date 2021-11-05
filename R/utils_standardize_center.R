@@ -43,7 +43,16 @@
 
 ## processing and checking of arguments ----
 
-.process_std_args <- function(x, select, exclude, weights, append, append_suffix = "_z", force, remove_na = "none") {
+.process_std_args <- function(x,
+                              select,
+                              exclude,
+                              weights,
+                              append,
+                              append_suffix = "_z",
+                              force,
+                              remove_na = "none",
+                              reference = NULL) {
+
   # check for formula notation, convert to character vector
   if (inherits(select, "formula")) {
     select <- all.vars(select)
@@ -63,12 +72,17 @@
     if (weights %in% colnames(x)) {
       exclude <- c(exclude, weights)
     } else {
-      warning("Could not find weighting column '", weights, "'. Weighting not carried out.")
+      warning(insight::format_message("Could not find weighting column '", weights, "'. Weighting not carried out."))
       weights <- NULL
     }
   }
 
   select <- .select_variables(x, select, exclude, force)
+
+  # check if selected variables are in reference
+  if (!is.null(reference) && !all(select %in% names(reference))) {
+    stop("The 'reference' must include all variables from 'select'.")
+  }
 
   # drop NAs
   remove_na <- match.arg(remove_na, c("none", "selected", "all"))
@@ -182,8 +196,14 @@
 
 
 .factor_to_numeric <- function(x) {
+  # no need to change for numeric
   if (is.numeric(x)) {
     return(x)
+  }
+
+  # Dates can be coerced by as.numeric(), w/o as.character()
+  if (inherits(x, "Date")) {
+    return(as.numeric(x))
   }
 
   if (anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {

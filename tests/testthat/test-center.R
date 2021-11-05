@@ -28,6 +28,6 @@ if (require("testthat")) {
 
   test_that("center, all na", {
     z <- center(c(NA, NA, NA))
-    expect_equal(z, as.numeric(c(NA, NA, NA)))
+    expect_equal(z, c(NA, NA, NA))
   })
 }

@@ -11,13 +11,21 @@ center(x, ...)
 
 centre(x, ...)
 
-\method{center}{numeric}(x, robust = FALSE, weights = NULL, verbose = TRUE, ...)
+\method{center}{numeric}(
+  x,
+  robust = FALSE,
+  weights = NULL,
+  verbose = TRUE,
+  reference = NULL,
+  ...
+)
 
 \method{center}{data.frame}(
   x,
   robust = FALSE,
   weights = NULL,
   verbose = TRUE,
+  reference = NULL,
   select = NULL,
   exclude = NULL,
   remove_na = c("none", "selected", "all"),
@@ -43,6 +51,10 @@ name of a column in the \code{data.frame} that contains the weights.
 }}
 
 \item{verbose}{Toggle warnings and messages.}
+
+\item{reference}{A data frame or variable from which the centrality and
+deviation will be computed instead of from the input variable. Useful for
+standardizing a subset or new data according to another data frame.}
 
 \item{select}{Character vector of column names. If \code{NULL} (the default),
 all variables will be selected.}
