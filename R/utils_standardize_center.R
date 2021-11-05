@@ -196,8 +196,14 @@
 
 
 .factor_to_numeric <- function(x) {
+  # no need to change for numeric
   if (is.numeric(x)) {
     return(x)
+  }
+
+  # Dates can be coerced by as.numeric(), w/o as.character()
+  if (inherits(x, "Date")) {
+    return(as.numeric(x))
   }
 
   if (anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
