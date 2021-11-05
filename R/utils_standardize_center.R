@@ -339,7 +339,7 @@
 
 # for grouped df ---------------------------
 
-.process_grouped_df <- function(x, select, exclude, append, reference, weights) {
+.process_grouped_df <- function(x, select, exclude, append, reference, weights, force) {
   if (!is.null(reference)) {
     stop("The `reference` argument cannot be used with grouped standardization for now.")
   }

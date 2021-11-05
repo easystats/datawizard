@@ -160,7 +160,7 @@ center.grouped_df <- function(x,
                               append = FALSE,
                               ...) {
 
-  args <- .process_grouped_df(x, select, exclude, append, reference, weights)
+  args <- .process_grouped_df(x, select, exclude, append, reference, weights, force)
 
   for (rows in args$grps) {
     args$x[rows, ] <- center(
