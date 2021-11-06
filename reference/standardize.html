@@ -184,20 +184,20 @@ name of a column in the <code>data.frame</code> that contains the weights.</p></
 deviation will be computed instead of from the input variable. Useful for
 standardizing a subset or new data according to another data frame.</p></dd>
 <dt>center, scale</dt>
-<dd><ul><li><p>For <code>standardize()</code> and <code><a href="center.html">center()</a></code>: <br>
-Numeric values, which can be used as alternative to
-<code>reference</code> to define a reference centrality and deviation. If <code>scale</code>
-and <code>center</code> are of length 1, they will be recycled to match the length
-of selected variables for centering or standardization. Else, <code>center</code>
-and <code>scale</code> must be of same length as the number of selected variables.
-Values in <code>center</code> and <code>scale</code> will be matched to selected variables in
-the provided order, unless a named vector is given. In this case,
-names are matched against the names of the selected variables.</p></li>
+<dd><ul><li><p>For <code>standardize()</code>: <br>
+Numeric values, which can be used as alternative to <code>reference</code> to define
+a reference centrality and deviation. If <code>scale</code> and <code>center</code> are of
+length 1, they will be recycled to match the length of selected variables
+for standardization. Else, <code>center</code> and <code>scale</code> must be of same length as
+the number of selected variables. Values in <code>center</code> and <code>scale</code> will be
+matched to selected variables in the provided order, unless a named vector
+is given. In this case, names are matched against the names of the selected
+variables.</p></li>
 <li><p>For <code>unstandardize()</code>: <br><code>center</code> and <code>scale</code> correspond to the center (the mean / median) and the scale (SD / MAD) of
 the original non-standardized data (for data frames, should be named, or
 have column order correspond to the numeric column). However, one can also
 directly provide the original data through <code>reference</code>, from which the
-center and the scale will be computed (according to <code>robust</code> and <code>two_sd</code>.
+center and the scale will be computed (according to <code>robust</code> and <code>two_sd</code>).
 Alternatively, if the input contains the attributes <code>center</code> and <code>scale</code>
 (as does the output of <code>standardize()</code>), it will take it from there if the
 rest of the arguments are absent.</p></li>
@@ -239,7 +239,8 @@ number of rows as the original input.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p>Other transform utilities: 
+    <div class="dont-index"><p>See <code><a href="center.html">center()</a></code> for grand-mean centering of variables.</p>
+<p>Other transform utilities: 
 <code><a href="data_rescale.html">data_rescale</a>()</code>,
 <code><a href="normalize.html">normalize</a>()</code>,
 <code><a href="ranktransform.html">ranktransform</a>()</code></p></div>
@@ -295,6 +296,47 @@ number of rows as the original input.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3       0.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4      -0.4629100</span>
 <span class="r-in"></span>
+<span class="r-in"><span class="co"># standardizing with reference center and scale</span></span>
+<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span class="r-in">  a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span class="r-in">  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">7</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># default standardization, based on mean and sd of each variable</span></span>
+<span class="r-in"><span class="fu">standardize</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="co"># means are 0 and 5, sd ~ 1.581139</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            a          b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.2649111 -1.2649111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.6324555 -0.6324555</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.0000000  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.6324555  0.6324555</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.2649111  1.2649111</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># standardization, based on mean and sd set to the same values</span></span>
+<span class="r-in"><span class="fu">standardize</span><span class="op">(</span><span class="va">d</span>, center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span><span class="op">)</span>, scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.581</span>, <span class="fl">1.581</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            a          b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.2650221 -1.2650221</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.6325111 -0.6325111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.0000000  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.6325111  0.6325111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.2650221  1.2650221</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># standardization, mean and sd for each variable newly defined</span></span>
+<span class="r-in"><span class="fu">standardize</span><span class="op">(</span><span class="va">d</span>, center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span>, scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      a     b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -2.5 -0.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -2.0  0.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -1.5  0.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -1.0  0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -0.5  0.75</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># standardization, taking same mean and sd for each variable</span></span>
+<span class="r-in"><span class="fu">standardize</span><span class="op">(</span><span class="va">d</span>, center <span class="op">=</span> <span class="fl">1</span>, scale <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            a         b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.0000000 0.6666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.6666667 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.3333333 1.3333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.0000000 1.6666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.3333333 2.0000000</span>
 </code></pre></div>
     </div>
   </div>

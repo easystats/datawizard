@@ -79,7 +79,6 @@
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
   reference <span class="op">=</span> <span class="cn">NULL</span>,
   center <span class="op">=</span> <span class="cn">NULL</span>,
-  scale <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
@@ -96,7 +95,6 @@
   force <span class="op">=</span> <span class="cn">FALSE</span>,
   append <span class="op">=</span> <span class="cn">FALSE</span>,
   center <span class="op">=</span> <span class="cn">NULL</span>,
-  scale <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 
@@ -123,43 +121,13 @@ name of a column in the <code>data.frame</code> that contains the weights.</p></
 deviation will be computed instead of from the input variable. Useful for
 standardizing a subset or new data according to another data frame.</p></dd>
 <dt>center</dt>
-<dd><ul><li><p>For <code><a href="standardize.html">standardize()</a></code> and <code>center()</code>: <br>
-Numeric values, which can be used as alternative to
-<code>reference</code> to define a reference centrality and deviation. If <code>scale</code>
-and <code>center</code> are of length 1, they will be recycled to match the length
-of selected variables for centering or standardization. Else, <code>center</code>
-and <code>scale</code> must be of same length as the number of selected variables.
-Values in <code>center</code> and <code>scale</code> will be matched to selected variables in
-the provided order, unless a named vector is given. In this case,
-names are matched against the names of the selected variables.</p></li>
-<li><p>For <code><a href="standardize.html">unstandardize()</a></code>: <br><code>center</code> and <code>scale</code> correspond to the center (the mean / median) and the scale (SD / MAD) of
-the original non-standardized data (for data frames, should be named, or
-have column order correspond to the numeric column). However, one can also
-directly provide the original data through <code>reference</code>, from which the
-center and the scale will be computed (according to <code>robust</code> and <code>two_sd</code>.
-Alternatively, if the input contains the attributes <code>center</code> and <code>scale</code>
-(as does the output of <code><a href="standardize.html">standardize()</a></code>), it will take it from there if the
-rest of the arguments are absent.</p></li>
-</ul></dd>
-<dt>scale</dt>
-<dd><ul><li><p>For <code><a href="standardize.html">standardize()</a></code> and <code>center()</code>: <br>
-Numeric values, which can be used as alternative to
-<code>reference</code> to define a reference centrality and deviation. If <code>scale</code>
-and <code>center</code> are of length 1, they will be recycled to match the length
-of selected variables for centering or standardization. Else, <code>center</code>
-and <code>scale</code> must be of same length as the number of selected variables.
-Values in <code>center</code> and <code>scale</code> will be matched to selected variables in
-the provided order, unless a named vector is given. In this case,
-names are matched against the names of the selected variables.</p></li>
-<li><p>For <code><a href="standardize.html">unstandardize()</a></code>: <br><code>center</code> and <code>scale</code> correspond to the center (the mean / median) and the scale (SD / MAD) of
-the original non-standardized data (for data frames, should be named, or
-have column order correspond to the numeric column). However, one can also
-directly provide the original data through <code>reference</code>, from which the
-center and the scale will be computed (according to <code>robust</code> and <code>two_sd</code>.
-Alternatively, if the input contains the attributes <code>center</code> and <code>scale</code>
-(as does the output of <code><a href="standardize.html">standardize()</a></code>), it will take it from there if the
-rest of the arguments are absent.</p></li>
-</ul></dd>
+<dd><p>Numeric value, which can be used as alternative to
+<code>reference</code> to define a reference centrality. If <code>center</code> is of length 1,
+it will be recycled to match the length of selected variables for centering.
+Else, <code>center</code> must be of same length as the number of selected variables.
+Values in <code>center</code> will be matched to selected variables in the provided
+order, unless a named vector is given. In this case, names are matched
+against the names of the selected variables.</p></dd>
 <dt>select</dt>
 <dd><p>Character vector of column names. If <code>NULL</code> (the default),
 all variables will be selected.</p></dd>
@@ -198,7 +166,7 @@ subtraction.</p>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p>If centering within-clusters (instead of grand-mean centering)
-is required, see <code><a href="demean.html">demean()</a></code>.</p></div>
+is required, see <code><a href="demean.html">demean()</a></code>. For standardizing, see <code><a href="standardize.html">standardize()</a></code>.</p></div>
     </div>
     </div>
 
@@ -255,6 +223,39 @@ is required, see <code><a href="demean.html">demean()</a></code>.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9  12  3 12 -1  3.33909091  1.6290909  0.65 -1.9409091</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10  7 -2  7 -1 -2.68090909 -0.2409091 -1.08  0.4090909</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11  5 -4  5 -1 -1.82090909 -2.7609091 -1.77 -0.6109091</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># centering with reference center and scale</span></span>
+<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span class="r-in">  a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span class="r-in">  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">7</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># default centering at mean</span></span>
+<span class="r-in"><span class="fu">center</span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    a  b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -2 -2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -1 -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2  2</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># centering, using 0 as mean</span></span>
+<span class="r-in"><span class="fu">center</span><span class="op">(</span><span class="va">d</span>, center <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    a b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -2 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -1 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2 7</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># centering, using -5 as mean</span></span>
+<span class="r-in"><span class="fu">center</span><span class="op">(</span><span class="va">d</span>, center <span class="op">=</span> <span class="op">-</span><span class="fl">5</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   a  b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 3  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 4  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 5 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 6 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 7 12</span>
 </code></pre></div>
     </div>
   </div>
