@@ -48,6 +48,26 @@
 #' @param reference A data frame or variable from which the centrality and
 #'   deviation will be computed instead of from the input variable. Useful for
 #'   standardizing a subset or new data according to another data frame.
+#' @param center,scale
+#' * For `standardize()` and `center()`: \cr
+#'   Numeric values, which can be used as alternative to
+#'   `reference` to define a reference centrality and deviation. If `scale`
+#'   and `center` are of length 1, they will be recycled to match the length
+#'   of selected variables for centering or standardization. Else, `center`
+#'   and `scale` must be of same length as the number of selected variables.
+#'   Values in `center` and `scale` will be matched to selected variables in
+#'   the provided order, unless a named vector is given. In this case,
+#'   names are matched against the names of the selected variables.
+#'
+#' * For `unstandardize()`: \cr
+#'   `center` and `scale` correspond to the center (the mean / median) and the scale (SD / MAD) of
+#'   the original non-standardized data (for data frames, should be named, or
+#'   have column order correspond to the numeric column). However, one can also
+#'   directly provide the original data through `reference`, from which the
+#'   center and the scale will be computed (according to `robust` and `two_sd`.
+#'   Alternatively, if the input contains the attributes `center` and `scale`
+#'   (as does the output of `standardize()`), it will take it from there if the
+#'   rest of the arguments are absent.
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @return The standardized object (either a standardize data frame or a
@@ -98,9 +118,11 @@ standardize.numeric <- function(x,
                                 weights = NULL,
                                 verbose = TRUE,
                                 reference = NULL,
+                                center = NULL,
+                                scale = NULL,
                                 ...) {
 
-  args <- .process_std_center(x, weights, robust, verbose, reference)
+  args <- .process_std_center(x, weights, robust, verbose, reference, center, scale)
 
   # Perform standardization
   if (is.null(args)) { # all NA?
@@ -178,10 +200,13 @@ standardize.data.frame <- function(x,
                                    remove_na = c("none", "selected", "all"),
                                    force = FALSE,
                                    append = FALSE,
+                                   center = NULL,
+                                   scale = NULL,
                                    ...) {
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append,
-                            append_suffix = "_z", force, remove_na, reference)
+                            append_suffix = "_z", force, remove_na, reference,
+                            .center = center, .scale = scale)
 
   # set new values
   x <- args$x
@@ -193,6 +218,8 @@ standardize.data.frame <- function(x,
       two_sd = two_sd,
       weights = args$weights,
       reference = reference[[var]],
+      center = args$center[var],
+      scale = args$scale[var],
       verbose = FALSE,
       force = force
     )
@@ -219,76 +246,31 @@ standardize.grouped_df <- function(x,
                                    remove_na = c("none", "selected", "all"),
                                    force = FALSE,
                                    append = FALSE,
+                                   center = NULL,
+                                   scale = NULL,
                                    ...) {
-  if (!is.null(reference)) {
-    stop("The `reference` argument cannot be used with grouped standardization for now.")
-  }
 
-  # check append argument, and set default
-  if (isFALSE(append)) {
-    append <- NULL
-  } else if (isTRUE(append)) {
-    append <- "_z"
-  }
+  args <- .process_grouped_df(x, select, exclude, append, append_suffix = "_z",
+                              reference, weights, force)
 
-  info <- attributes(x)
-  # dplyr >= 0.8.0 returns attribute "indices"
-  grps <- attr(x, "groups", exact = TRUE)
-
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
-
-  if (is.numeric(weights)) {
-    warning(
-      "For grouped data frames, 'weights' must be a character, not a numeric vector.\n",
-      "Ignoring weightings."
-    )
-    weights <- NULL
-  }
-
-
-  # dplyr < 0.8.0?
-  if (is.null(grps)) {
-    grps <- attr(x, "indices", exact = TRUE)
-    grps <- lapply(grps, function(x) x + 1)
-  } else {
-    grps <- grps[[".rows"]]
-  }
-
-  x <- as.data.frame(x)
-  select <- .select_variables(x, select, exclude, force)
-
-  # append standardized variables
-  if (!is.null(append) && append != "") {
-    new_variables <- x[select]
-    colnames(new_variables) <- paste0(colnames(new_variables), append)
-    x <- cbind(x, new_variables)
-    select <- colnames(new_variables)
-    info$names <- c(info$names, select)
-  }
-
-
-  for (rows in grps) {
-    x[rows, ] <- standardize(
-      x[rows, ],
-      select = select,
+  for (rows in args$grps) {
+    args$x[rows, ] <- standardize(
+      args$x[rows, ],
+      select = args$select,
       exclude = NULL,
       robust = robust,
       two_sd = two_sd,
-      weights = weights,
+      weights = args$weights,
       remove_na = remove_na,
       verbose = verbose,
       force = force,
       append = FALSE,
+      center = center,
+      scale = scale,
       ...
     )
   }
   # set back class, so data frame still works with dplyr
-  attributes(x) <- info
-  x
+  attributes(args$x) <- args$info
+  args$x
 }

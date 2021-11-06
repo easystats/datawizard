@@ -4,7 +4,13 @@
 
 ## preparation for standardize and center ----
 
-.process_std_center <- function(x, weights, robust, verbose, reference = NULL) {
+.process_std_center <- function(x,
+                                weights,
+                                robust,
+                                verbose,
+                                reference = NULL,
+                                center = NULL,
+                                scale = NULL) {
   # Warning if all NaNs
   if (all(is.na(x))) {
     return(NULL)
@@ -28,7 +34,7 @@
   }
 
   # Get center and scale
-  ref <- .get_center_scale(vals, robust, weights, reference)
+  ref <- .get_center_scale(vals, robust, weights, reference, .center = center, .scale = scale)
 
   list(
     vals = vals,
@@ -51,7 +57,9 @@
                               append_suffix = "_z",
                               force,
                               remove_na = "none",
-                              reference = NULL) {
+                              reference = NULL,
+                              .center = NULL,
+                              .scale = NULL) {
 
   # check for formula notation, convert to character vector
   if (inherits(select, "formula")) {
@@ -104,12 +112,47 @@
     select <- colnames(new_variables)
   }
 
+  # check for reference center and scale
+  if (!is.null(.center) && !is.null(.scale)) {
+
+    # center and scale must have same length
+    if (length(.center) != length(.scale)) {
+      stop("'center' and 'scale' must be of same length.")
+    }
+
+    # center and scale must either be of length 1 or of same length as selected variables
+    if (length(.center) > 1 && length(.center) != length(select)) {
+      stop(insight::format_message("'center' and 'scale' must have the same length as the selected variables for standardization or centering."))
+    }
+
+    # if of length 1, recycle
+    if (length(.center) == 1) {
+      .center <- rep(.center, length(select))
+      .scale <- rep(.scale, length(select))
+    }
+
+    # set names
+    if (is.null(names(.center))) {
+      .center <- stats::setNames(.center, select)
+    }
+    if (is.null(names(.scale))) {
+      .scale <- stats::setNames(.scale, select)
+    }
+  } else {
+
+    # use NA if missing, so we can index these as vectors
+    .center <- stats::setNames(rep(NA, length(select)), select)
+    .scale <- stats::setNames(rep(NA, length(select)), select)
+  }
+
   list(
     x = x,
     select = select,
     exclude = exclude,
     weights = weights,
-    append = append
+    append = append,
+    center = .center,
+    scale = .scale
   )
 }
 
@@ -117,10 +160,13 @@
 
 ## retrieve center and scale information ----
 
-.get_center_scale <- function(x, robust = FALSE, weights = NULL, reference = NULL) {
+.get_center_scale <- function(x, robust = FALSE, weights = NULL, reference = NULL, .center = NULL, .scale = NULL) {
   if (is.null(reference)) reference <- x
 
-  if (robust) {
+  if (!is.null(.center) && !is.null(.scale) && !is.na(.center) && !is.na(.scale)) {
+    center <- .center
+    scale <- .scale
+  } else if (robust) {
     center <- .median(reference, weights)
     scale <- .mad(reference, weights)
   } else {
@@ -334,4 +380,70 @@
     }
   }
   model
+}
+
+
+# for grouped df ---------------------------
+
+.process_grouped_df <- function(x,
+                                select,
+                                exclude,
+                                append,
+                                append_suffix = "_z",
+                                reference,
+                                weights,
+                                force) {
+  if (!is.null(reference)) {
+    stop("The `reference` argument cannot be used with grouped standardization for now.")
+  }
+
+  # check append argument, and set default
+  if (isFALSE(append)) {
+    append <- NULL
+  } else if (isTRUE(append)) {
+    append <- append_suffix
+  }
+
+  info <- attributes(x)
+  # dplyr >= 0.8.0 returns attribute "indices"
+  grps <- attr(x, "groups", exact = TRUE)
+
+  # check for formula notation, convert to character vector
+  if (inherits(select, "formula")) {
+    select <- all.vars(select)
+  }
+  if (inherits(exclude, "formula")) {
+    exclude <- all.vars(exclude)
+  }
+
+  if (is.numeric(weights)) {
+    warning(
+      "For grouped data frames, 'weights' must be a character, not a numeric vector.\n",
+      "Ignoring weightings."
+    )
+    weights <- NULL
+  }
+
+
+  # dplyr < 0.8.0?
+  if (is.null(grps)) {
+    grps <- attr(x, "indices", exact = TRUE)
+    grps <- lapply(grps, function(x) x + 1)
+  } else {
+    grps <- grps[[".rows"]]
+  }
+
+  x <- as.data.frame(x)
+  select <- .select_variables(x, select, exclude, force)
+
+  # append standardized variables
+  if (!is.null(append) && append != "") {
+    new_variables <- x[select]
+    colnames(new_variables) <- paste0(colnames(new_variables), append)
+    x <- cbind(x, new_variables)
+    select <- colnames(new_variables)
+    info$names <- c(info$names, select)
+  }
+
+  list(x = x, info = info, select = select, grps = grps, weights = weights)
 }

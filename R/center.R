@@ -66,9 +66,11 @@ center.numeric <- function(x,
                            weights = NULL,
                            verbose = TRUE,
                            reference = NULL,
+                           center = NULL,
+                           scale = NULL,
                            ...) {
 
-  args <- .process_std_center(x, weights, robust, verbose, reference)
+  args <- .process_std_center(x, weights, robust, verbose, reference, center, scale)
 
   if (is.null(args)) { # all NA?
     return(x)
@@ -120,10 +122,13 @@ center.data.frame <- function(x,
                               remove_na = c("none", "selected", "all"),
                               force = FALSE,
                               append = FALSE,
+                              center = NULL,
+                              scale = NULL,
                               ...) {
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append,
-                            append_suffix = "_c", force, remove_na, reference)
+                            append_suffix = "_c", force, remove_na, reference,
+                            .center = center, .scale = scale)
 
   # set new values
   x <- args$x
@@ -135,6 +140,8 @@ center.data.frame <- function(x,
       weights = args$weights,
       verbose = FALSE,
       reference = reference[[var]],
+      center = args$center[var],
+      scale = args$scale[var],
       force = force
     )
   }
@@ -143,4 +150,45 @@ center.data.frame <- function(x,
   attr(x, "scale") <- sapply(x[args$select], function(z) attributes(z)$scale)
   attr(x, "robust") <- robust
   x
+}
+
+
+
+#' @export
+center.grouped_df <- function(x,
+                              robust = FALSE,
+                              weights = NULL,
+                              verbose = TRUE,
+                              reference = NULL,
+                              select = NULL,
+                              exclude = NULL,
+                              remove_na = c("none", "selected", "all"),
+                              force = FALSE,
+                              append = FALSE,
+                              center = NULL,
+                              scale = NULL,
+                              ...) {
+
+  args <- .process_grouped_df(x, select, exclude, append, append_suffix = "_c",
+                              reference, weights, force)
+
+  for (rows in args$grps) {
+    args$x[rows, ] <- center(
+      args$x[rows, ],
+      select = args$select,
+      exclude = NULL,
+      robust = robust,
+      weights = args$weights,
+      remove_na = remove_na,
+      verbose = verbose,
+      force = force,
+      append = FALSE,
+      center = center,
+      scale = scale,
+      ...
+    )
+  }
+  # set back class, so data frame still works with dplyr
+  attributes(args$x) <- args$info
+  args$x
 }
