@@ -24,6 +24,13 @@
 #'   - For data frames: a numeric vector of weights, or a character of the
 #'   name of a column in the `data.frame` that contains the weights.
 #'   - For numeric vectors: a numeric vector of weights.
+#' @param center Numeric value, which can be used as alternative to
+#'   `reference` to define a reference centrality. If `center` is of length 1,
+#'   it will be recycled to match the length of selected variables for centering.
+#'   Else, `center` must be of same length as the number of selected variables.
+#'   Values in `center` will be matched to selected variables in the provided
+#'   order, unless a named vector is given. In this case, names are matched
+#'   against the names of the selected variables.
 #' @param ... Currently not used.
 #' @inheritParams standardize
 #'
@@ -34,7 +41,7 @@
 #' subtraction.
 #'
 #' @seealso If centering within-clusters (instead of grand-mean centering)
-#'   is required, see [demean()].
+#'   is required, see [demean()]. For standardizing, see [standardize()].
 #'
 #' @return The centered variables.
 #'
@@ -50,6 +57,21 @@
 #' # only the selected columns from a dataframe
 #' center(anscombe, select = c("x1", "x3"))
 #' center(anscombe, exclude = c("x1", "x3"))
+#'
+#' # centering with reference center and scale
+#' d <- data.frame(
+#'   a = c(-2, -1, 0, 1, 2),
+#'   b = c(3, 4, 5, 6, 7)
+#' )
+#'
+#' # default centering at mean
+#' center(d)
+#'
+#' # centering, using 0 as mean
+#' center(d, center = 0)
+#'
+#' # centering, using -5 as mean
+#' center(d, center = -5)
 #' @export
 center <- function(x, ...) {
   UseMethod("center")
@@ -67,10 +89,9 @@ center.numeric <- function(x,
                            verbose = TRUE,
                            reference = NULL,
                            center = NULL,
-                           scale = NULL,
                            ...) {
 
-  args <- .process_std_center(x, weights, robust, verbose, reference, center, scale)
+  args <- .process_std_center(x, weights, robust, verbose, reference, center, scale = NULL)
 
   if (is.null(args)) { # all NA?
     return(x)
@@ -123,12 +144,11 @@ center.data.frame <- function(x,
                               force = FALSE,
                               append = FALSE,
                               center = NULL,
-                              scale = NULL,
                               ...) {
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append,
                             append_suffix = "_c", force, remove_na, reference,
-                            .center = center, .scale = scale)
+                            .center = center, .scale = NULL)
 
   # set new values
   x <- args$x
@@ -141,7 +161,6 @@ center.data.frame <- function(x,
       verbose = FALSE,
       reference = reference[[var]],
       center = args$center[var],
-      scale = args$scale[var],
       force = force
     )
   }
@@ -166,7 +185,6 @@ center.grouped_df <- function(x,
                               force = FALSE,
                               append = FALSE,
                               center = NULL,
-                              scale = NULL,
                               ...) {
 
   args <- .process_grouped_df(x, select, exclude, append, append_suffix = "_c",
@@ -184,7 +202,6 @@ center.grouped_df <- function(x,
       force = force,
       append = FALSE,
       center = center,
-      scale = scale,
       ...
     )
   }

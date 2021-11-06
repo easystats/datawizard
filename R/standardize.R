@@ -49,22 +49,22 @@
 #'   deviation will be computed instead of from the input variable. Useful for
 #'   standardizing a subset or new data according to another data frame.
 #' @param center,scale
-#' * For `standardize()` and `center()`: \cr
-#'   Numeric values, which can be used as alternative to
-#'   `reference` to define a reference centrality and deviation. If `scale`
-#'   and `center` are of length 1, they will be recycled to match the length
-#'   of selected variables for centering or standardization. Else, `center`
-#'   and `scale` must be of same length as the number of selected variables.
-#'   Values in `center` and `scale` will be matched to selected variables in
-#'   the provided order, unless a named vector is given. In this case,
-#'   names are matched against the names of the selected variables.
+#' * For `standardize()`: \cr
+#'   Numeric values, which can be used as alternative to `reference` to define
+#'   a reference centrality and deviation. If `scale` and `center` are of
+#'   length 1, they will be recycled to match the length of selected variables
+#'   for standardization. Else, `center` and `scale` must be of same length as
+#'   the number of selected variables. Values in `center` and `scale` will be
+#'   matched to selected variables in the provided order, unless a named vector
+#'   is given. In this case, names are matched against the names of the selected
+#'   variables.
 #'
 #' * For `unstandardize()`: \cr
 #'   `center` and `scale` correspond to the center (the mean / median) and the scale (SD / MAD) of
 #'   the original non-standardized data (for data frames, should be named, or
 #'   have column order correspond to the numeric column). However, one can also
 #'   directly provide the original data through `reference`, from which the
-#'   center and the scale will be computed (according to `robust` and `two_sd`.
+#'   center and the scale will be computed (according to `robust` and `two_sd`).
 #'   Alternatively, if the input contains the attributes `center` and `scale`
 #'   (as does the output of `standardize()`), it will take it from there if the
 #'   rest of the arguments are absent.
@@ -76,6 +76,8 @@
 #' @note When `x` is a vector or a data frame with `remove_na = "none")`,
 #'   missing values are preserved, so the return value has the same length /
 #'   number of rows as the original input.
+#'
+#' @seealso See [center()] for grand-mean centering of variables.
 #'
 #' @family transform utilities
 #' @family standardize
@@ -96,6 +98,23 @@
 #' # append, suffix
 #' standardise(d, select = c("Sepal.Length", "Sepal.Width"), append = "_std")
 #'
+#' # standardizing with reference center and scale
+#' d <- data.frame(
+#'   a = c(-2, -1, 0, 1, 2),
+#'   b = c(3, 4, 5, 6, 7)
+#' )
+#'
+#' # default standardization, based on mean and sd of each variable
+#' standardize(d) # means are 0 and 5, sd ~ 1.581139
+#'
+#' # standardization, based on mean and sd set to the same values
+#' standardize(d, center = c(0, 5), scale = c(1.581, 1.581))
+#'
+#' # standardization, mean and sd for each variable newly defined
+#' standardize(d, center = c(3, 4), scale = c(2, 4))
+#'
+#' # standardization, taking same mean and sd for each variable
+#' standardize(d, center = 1, scale = 3)
 #' @export
 standardize <- function(x,
                         robust = FALSE,

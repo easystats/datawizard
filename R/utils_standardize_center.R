@@ -112,8 +112,14 @@
     select <- colnames(new_variables)
   }
 
+
   # check for reference center and scale
-  if (!is.null(.center) && !is.null(.scale)) {
+  if (!is.null(.center)) {
+
+    # for center(), we have no scale - set it to default value
+    if (is.null(.scale)) {
+      .scale <- rep(1, length(center))
+    }
 
     # center and scale must have same length
     if (length(.center) != length(.scale)) {
@@ -163,7 +169,12 @@
 .get_center_scale <- function(x, robust = FALSE, weights = NULL, reference = NULL, .center = NULL, .scale = NULL) {
   if (is.null(reference)) reference <- x
 
-  if (!is.null(.center) && !is.null(.scale) && !is.na(.center) && !is.na(.scale)) {
+  # for center(), we have no scale. default to 0
+  if (is.null(.scale) || is.na(.scale)) {
+    .scale <- 1
+  }
+
+  if (!is.null(.center) && !is.na(.center)) {
     center <- .center
     scale <- .scale
   } else if (robust) {
