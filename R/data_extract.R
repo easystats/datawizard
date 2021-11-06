@@ -38,9 +38,10 @@ data_extract <- function(data, select, name = NULL, ...) {
 extract <- data_extract
 
 #' @export
-data_extract.data.frame <- function (data, select, name = NULL, ...) {
+data_extract.data.frame <- function(data, select, name = NULL, ...) {
   nl <- as.list(seq_along(data))
   names(nl) <- names(data)
+
   select <- eval(substitute(select), nl, parent.frame())
   if (is.numeric(select) && select < 0) {
     select <- length(data) + select + 1
@@ -49,6 +50,7 @@ data_extract.data.frame <- function (data, select, name = NULL, ...) {
   } else if (is.character(select) && select == "row.names") {
     select <- rownames(data)
   }
+
   name <- eval(substitute(name), nl, parent.frame())
   if (is.numeric(name) && name < 0) {
     name <- length(data) + name + 1
