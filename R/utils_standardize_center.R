@@ -118,7 +118,7 @@
 
     # for center(), we have no scale - set it to default value
     if (is.null(.scale)) {
-      .scale <- rep(1, length(center))
+      .scale <- rep(1, length(.center))
     }
 
     # center and scale must have same length
