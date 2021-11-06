@@ -109,6 +109,8 @@ For model standardization, see <code><a href="https://easystats.github.io/effect
   weights <span class="op">=</span> <span class="cn">NULL</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
   reference <span class="op">=</span> <span class="cn">NULL</span>,
+  center <span class="op">=</span> <span class="cn">NULL</span>,
+  scale <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
@@ -125,6 +127,8 @@ For model standardization, see <code><a href="https://easystats.github.io/effect
   remove_na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"selected"</span>, <span class="st">"all"</span><span class="op">)</span>,
   force <span class="op">=</span> <span class="cn">FALSE</span>,
   append <span class="op">=</span> <span class="cn">FALSE</span>,
+  center <span class="op">=</span> <span class="cn">NULL</span>,
+  scale <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
@@ -179,6 +183,25 @@ name of a column in the <code>data.frame</code> that contains the weights.</p></
 <dd><p>A data frame or variable from which the centrality and
 deviation will be computed instead of from the input variable. Useful for
 standardizing a subset or new data according to another data frame.</p></dd>
+<dt>center, scale</dt>
+<dd><ul><li><p>For <code>standardize()</code> and <code><a href="center.html">center()</a></code>: <br>
+Numeric values, which can be used as alternative to
+<code>reference</code> to define a reference centrality and deviation. If <code>scale</code>
+and <code>center</code> are of length 1, they will be recycled to match the length
+of selected variables for centering or standardization. Else, <code>center</code>
+and <code>scale</code> must be of same length as the number of selected variables.
+Values in <code>center</code> and <code>scale</code> will be matched to selected variables in
+the provided order, unless a named vector is given. In this case,
+names are matched against the names of the selected variables.</p></li>
+<li><p>For <code>unstandardize()</code>: <br><code>center</code> and <code>scale</code> correspond to the center (the mean / median) and the scale (SD / MAD) of
+the original non-standardized data (for data frames, should be named, or
+have column order correspond to the numeric column). However, one can also
+directly provide the original data through <code>reference</code>, from which the
+center and the scale will be computed (according to <code>robust</code> and <code>two_sd</code>.
+Alternatively, if the input contains the attributes <code>center</code> and <code>scale</code>
+(as does the output of <code>standardize()</code>), it will take it from there if the
+rest of the arguments are absent.</p></li>
+</ul></dd>
 <dt>select</dt>
 <dd><p>Character vector of column names. If <code>NULL</code> (the default), all
 variables will be selected.</p></dd>
@@ -202,16 +225,6 @@ thus returning both the original and the standardized variables. If <code>FALSE<
 original variables in <code>x</code> will be overwritten by their standardized versions.
 If a character value, standardized variables are appended with new column
 names (using the defined suffix) to the original data frame.</p></dd>
-<dt>center, scale</dt>
-<dd><p>Used by <code>unstandardize()</code>; <code>center</code> and <code>scale</code>
-correspond to the center (the mean / median) and the scale (SD / MAD) of
-the original non-standardized data (for data frames, should be named, or
-have column order correspond to the numeric column). However, one can also
-directly provide the original data through <code>reference</code>, from which the
-center and the scale will be computed (according to <code>robust</code> and <code>two_sd</code>.
-Alternatively, if the input contains the attributes <code>center</code> and <code>scale</code>
-(as does the output of <code>standardize()</code>), it will take it from there if the
-rest of the arguments are absent.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
