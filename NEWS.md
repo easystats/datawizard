@@ -1,5 +1,9 @@
 # datawizard 0.2.1.9000
 
+- New function `data_extract()` (or its alias `extract()`) to pull single 
+  variables from a data frame, possibly naming each value by the row names
+  of that data frame.
+
 - `reshape_ci()` gains a `ci_type` argument, to reshape data frames where 
   CI-columns have prefixes other than `"CI"`.
 
