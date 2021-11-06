@@ -385,7 +385,14 @@
 
 # for grouped df ---------------------------
 
-.process_grouped_df <- function(x, select, exclude, append, reference, weights, force) {
+.process_grouped_df <- function(x,
+                                select,
+                                exclude,
+                                append,
+                                append_suffix = "_z",
+                                reference,
+                                weights,
+                                force) {
   if (!is.null(reference)) {
     stop("The `reference` argument cannot be used with grouped standardization for now.")
   }
@@ -394,7 +401,7 @@
   if (isFALSE(append)) {
     append <- NULL
   } else if (isTRUE(append)) {
-    append <- "_z"
+    append <- append_suffix
   }
 
   info <- attributes(x)
