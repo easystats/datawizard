@@ -3,6 +3,10 @@
 - `reshape_ci()` gains a `ci_type` argument, to reshape data frames where 
   CI-columns have prefixes other than `"CI"`.
 
+- `standardize()` and `center()` gain arguments `center` and `scale`, to define
+  references for centrality and deviation that are used when centering or
+  standardizing variables.
+
 - `center()` gains the arguments `force` and `reference`, similar to
   `standardize()`.
 
