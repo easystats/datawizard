@@ -4,6 +4,7 @@
 [![publication](https://img.shields.io/badge/Cite-Unpublished-yellow)](https://github.com/easystats/datawizard/blob/master/inst/CITATION)
 [![downloads](http://cranlogs.r-pkg.org/badges/datawizard)](https://cran.r-project.org/package=datawizard)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/)
+[![status](https://tinyverse.netlify.com/badge/datawizard)](https://CRAN.R-project.org/package=datawizard)
 
 ***Hockety pockety wockety wack, prepare this data forth and back***
 :sparkles:
