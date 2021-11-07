@@ -23,8 +23,9 @@ knitr::opts_chunk$set(
 
 pkgs <- c(
   "datawizard",
-  "dplyr",
-  "tidyr",
+  # "dplyr",
+  # "tidyr",
+  "poorman",
   "see",
   "ggplot2",
   "parameters",
@@ -76,13 +77,28 @@ hardlyworking$xtra_hours_zr <- standardize(hardlyworking$xtra_hours, robust = TR
 
 We can see that different methods give different central and variation values:
 
-```{r}
+```{r, eval=FALSE}
 library(dplyr)
-library(tidyr)
+library(tiyr)
 
 hardlyworking %>%
   select(starts_with("xtra_hours")) %>%
   pivot_longer(everything()) %>%
+  group_by(name) %>%
+  summarise(
+    mean = mean(value),
+    sd = sd(value),
+    median = median(value),
+    mad = mad(value)
+  )
+```
+
+```{r, echo=FALSE}
+library(poorman)
+
+hardlyworking %>%
+  select(starts_with("xtra_hours")) %>%
+  reshape_longer(colnames_to = "name", values_to = "value") %>%
   group_by(name) %>%
   summarise(
     mean = mean(value),
@@ -100,10 +116,23 @@ numeric variable is standardized separately:
 hardlyworking_z <- standardize(hardlyworking)
 ```
 
-```{r}
+```{r, eval=FALSE}
 hardlyworking_z %>%
   select(-xtra_hours_z, -xtra_hours_zr) %>%
   pivot_longer(everything()) %>%
+  group_by(name) %>%
+  summarise(
+    mean = mean(value),
+    sd = sd(value),
+    median = median(value),
+    mad = mad(value)
+  )
+```
+
+```{r, echo=FALSE}
+hardlyworking_z %>%
+  select(-xtra_hours_z, -xtra_hours_zr) %>%
+  reshape_longer(colnames_to = "name", values_to = "value") %>%
   group_by(name) %>%
   summarise(
     mean = mean(value),
@@ -149,10 +178,7 @@ corresponding to less negativity) **and autobiographical link**.
 
 Let's have a look at the data, averaged by participants:
 
-```{r}
-library(dplyr)
-library(tidyr)
-
+```{r, eval=FALSE}
 # Download the 'emotion' dataset
 load(url("https://raw.github.com/neuropsychology/psycho.R/master/data/emotion.rda"))
 
@@ -162,6 +188,23 @@ emotion <- emotion %>% filter(Emotion_Condition == "Negative")
 # Summary
 emotion %>%
   drop_na(Subjective_Valence, Autobiographical_Link) %>%
+  group_by(Participant_ID) %>%
+  summarise(
+    n_Trials = n(),
+    Valence_Mean = mean(Subjective_Valence),
+    Valence_SD = sd(Subjective_Valence)
+  )
+```
+
+```{r, echo=FALSE}
+load(url("https://raw.github.com/neuropsychology/psycho.R/master/data/emotion.rda"))
+
+# Discard neutral pictures (keep only negative)
+emotion <- emotion %>% filter(Emotion_Condition == "Negative")
+
+# Summary
+emotion %>%
+  subset(!(is.na(Subjective_Valence) | is.na(Autobiographical_Link))) |> 
   group_by(Participant_ID) %>%
   summarise(
     n_Trials = n(),
@@ -200,7 +243,7 @@ variable.
 
 We can calculate the mean and SD of *Valence* across all participants:
 
-```{r}
+```{r, eval=FALSE}
 # Create a convenient function to print
 summarise_Subjective_Valence <- function(data) {
   df_name <- deparse(substitute(data))
@@ -217,9 +260,30 @@ rbind(
   summarise_Subjective_Valence(Z_VariableWise),
   summarise_Subjective_Valence(Z_ParticipantWise),
   summarise_Subjective_Valence(Z_Full)
+)
+```
+
+```{r, echo=FALSE}
+# Create a convenient function to print
+summarise_Subjective_Valence <- function(data) {
+  df_name <- deparse(substitute(data))
+  data <- data %>%
+    ungroup() %>%
+    summarise(
+      Mean = mean(Subjective_Valence),
+      SD = sd(Subjective_Valence)
+    )
+  cbind(DF = df_name, data)
+}
+# Check the results
+rbind(
+  summarise_Subjective_Valence(Z_VariableWise),
+  summarise_Subjective_Valence(Z_ParticipantWise),
+  summarise_Subjective_Valence(Z_Full)
 ) %>%
   knitr::kable(digits = 2)
 ```
+
 
 The **means** and the **SD** appear as fairly similar (0 and 1)...
 
@@ -248,7 +312,7 @@ and so do the marginal distributions...
 However, we can also look at what happens in the participant level. Let's look at
 the first 5 participants:
 
-```{r}
+```{r, eval=FALSE}
 # Create convenient function
 print_participants <- function(data) {
   df_name <- deparse(substitute(data))
@@ -259,6 +323,30 @@ print_participants <- function(data) {
       Mean = mean(Subjective_Valence),
       SD = sd(Subjective_Valence)
     ) %>%
+    head(5) %>%
+    select(DF, everything())
+}
+
+# Check the results
+rbind(
+  print_participants(Z_VariableWise),
+  print_participants(Z_ParticipantWise),
+  print_participants(Z_Full)
+)
+```
+
+
+```{r, echo=FALSE}
+# Create convenient function
+print_participants <- function(data) {
+  df_name <- deparse(substitute(data))
+  data %>%
+    group_by(Participant_ID) %>%
+    summarise(
+      Mean = mean(Subjective_Valence),
+      SD = sd(Subjective_Valence)
+    ) %>%
+    cbind(DF = df_name, .) |> 
     head(5) %>%
     select(DF, everything())
 }
