@@ -79,7 +79,7 @@ We can see that different methods give different central and variation values:
 
 ```{r, eval=FALSE}
 library(dplyr)
-library(tiyr)
+library(tidyr)
 
 hardlyworking %>%
   select(starts_with("xtra_hours")) %>%
