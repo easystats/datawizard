@@ -11,6 +11,12 @@ authors:
     href: https://wiernik.org/
 
 template:
+  opengraph:
+    image:
+      src: man/figures/card.png
+    twitter:
+      creator: "@easystats4u"
+      card: summary_large_image
   params:
     bootswatch: flatly
 
