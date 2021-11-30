@@ -170,6 +170,21 @@ standardize.double <- standardize.numeric
 #' @export
 standardize.integer <- standardize.numeric
 
+#' @export
+standardize.matrix <- function(x, ...) {
+  xl <- lapply(seq_len(ncol(x)), function(i) x[,i])
+
+  xz <- lapply(xl, datawizard::standardize, ...)
+
+  x_out <- do.call(cbind, xz)
+  dimnames(x_out) <- dimnames(x)
+
+  attr(x_out, "center") <- sapply(xz, attr, "center")
+  attr(x_out, "scale") <- sapply(xz, attr, "scale")
+  attr(x_out, "robust") <- sapply(xz, attr, "robust")[1]
+
+  x_out
+}
 
 
 #' @export
