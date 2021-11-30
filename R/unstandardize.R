@@ -157,14 +157,21 @@ unstandardize.matrix <- function(x,
       x[, col] <- unstandardize.numeric(x[, col], center = center[col], scale = scale[col])
     }
   } else {
-    x <- unstandardize.numeric(
-      x,
-      center = center,
-      scale = scale,
-      reference = reference,
-      robust = robust,
-      two_sd = two_sd
-    )
+    scales <- attr(x, "scale")
+    centers <- attr(x, "center")
+
+    xl <- lapply(seq_len(ncol(x)), function(i) {
+      tmp <- x[,i]
+      attributes(tmp) <- list(center = centers[i], scale = scales[i])
+      tmp
+
+    })
+
+    xz <- lapply(xl, datawizard::unstandardize, ...)
+    x_out <- do.call(cbind, xz)
+    dimnames(x_out) <- dimnames(x)
+
+    x <- x_out
   }
   x
 }

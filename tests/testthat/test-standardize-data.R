@@ -195,15 +195,15 @@ if (require("testthat") && require("poorman")) {
     expect_error(unstandardize(x))
   })
 
-  test_that("unstandardize, matrix", {
-    data(mtcars)
-    d <- as.matrix(mtcars)
-    x <- standardize(d)
-    rez <- unstandardize(x)
-    expect_equal(rez, d, tolerance = 1e-3, ignore_attr = TRUE)
+  test_that("un/standardize, matrix", {
+    set.seed(4)
+    x <- matrix(sample(8), nrow = 4)
+    colnames(x) <- letters[1:2]
+    rownames(x) <- LETTERS[1:4]
+    x
 
-    x <- scale(d)
-    rez <- unstandardize(x)
-    expect_equal(rez, d, tolerance = 1e-3, ignore_attr = TRUE)
+    expect_equal(z1 <- standardize(x), z2 <- scale(x), ignore_attr = TRUE)
+    expect_equal(unstandardize(z1), x)
+    expect_equal(unstandardize(z2), unstandardize(z1))
   })
 }
