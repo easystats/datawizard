@@ -1,8 +1,8 @@
 pandoc: 2.7.3
-pkgdown: 1.9000.9000.9000
-pkgdown_sha: 38fca24beac66f50d8fa3f35d710b5cc358a8010
+pkgdown: 2.0.1.9000
+pkgdown_sha: 1c2bedc10283fe39c5e539083021cb87f208903a
 articles:
   demean: demean.html
   standardize_data: standardize_data.html
-last_built: 2021-11-30T09:09Z
+last_built: 2021-12-10T02:47Z
 
