@@ -49,9 +49,9 @@ winsorize.data.frame <- function(data, threshold = 0.2, verbose = TRUE, ...) {
 #' @rdname winsorize
 #' @export
 winsorize.numeric <- function(data, threshold = 0.2, verbose = TRUE, ...) {
-  if (threshold < 0 || threshold > 1) {
+  if (threshold < 0 || threshold > 0.5) {
     if (isTRUE(verbose)) {
-      warning("'threshold' for winsorization must be a scalar between 0 and 1. Did not winsorize data.", call. = FALSE)
+      warning("'threshold' for winsorization must be a scalar between 0 and 0.5. Did not winsorize data.", call. = FALSE)
     }
     return(data)
   }
@@ -62,6 +62,9 @@ winsorize.numeric <- function(data, threshold = 0.2, verbose = TRUE, ...) {
   itop <- length(data) - ibot + 1
   xbot <- y[ibot]
   xtop <- y[itop]
-  winval <- ifelse(data <= xbot, xbot, data)
-  ifelse(winval >= xtop, xtop, winval)
+
+  winval <- data
+  winval[winval <= xbot] <- xbot
+  winval[winval >= xtop] <- xtop
+  winval
 }
