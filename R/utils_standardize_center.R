@@ -96,9 +96,9 @@
   remove_na <- match.arg(remove_na, c("none", "selected", "all"))
 
   omit <- switch(remove_na,
-                 none = logical(nrow(x)),
-                 selected = rowSums(sapply(x[select], is.na)) > 0,
-                 all = rowSums(sapply(x, is.na)) > 0
+    none = logical(nrow(x)),
+    selected = rowSums(sapply(x[select], is.na)) > 0,
+    all = rowSums(sapply(x, is.na)) > 0
   )
   x <- x[!omit, , drop = FALSE]
 
@@ -378,8 +378,8 @@
       }
     )
     if (is.null(model) ||
-        # prevent self reference
-        inherits(model, "parameters_model")) {
+      # prevent self reference
+      inherits(model, "parameters_model")) {
       model <- tryCatch(
         {
           get(obj_name, envir = globalenv())

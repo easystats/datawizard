@@ -1,4 +1,4 @@
-# datawizard 0.2.1.9000
+# datawizard 0.2.2
 
 - New function `data_extract()` (or its alias `extract()`) to pull single 
   variables from a data frame, possibly naming each value by the row names

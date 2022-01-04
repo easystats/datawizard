@@ -16,11 +16,6 @@ transform, and prepare your data for analysis.
 
 # Installation
 
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/datawizard)](https://cran.r-project.org/package=datawizard)
-[![datawizard status
-badge](https://easystats.r-universe.dev/badges/datawizard)](https://easystats.r-universe.dev)
-
-
 | Type        | Source     | Command                                                                      |
 |-------------|------------|------------------------------------------------------------------------------|
 | Release     | CRAN       | `install.packages("datawizard")`                                             |

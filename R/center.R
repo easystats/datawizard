@@ -90,13 +90,12 @@ center.numeric <- function(x,
                            reference = NULL,
                            center = NULL,
                            ...) {
-
   args <- .process_std_center(x, weights, robust, verbose, reference, center, scale = NULL)
 
   if (is.null(args)) { # all NA?
     return(x)
   } else if (is.null(args$check)) {
-    vals <- rep(0, length(args$vals))  # If only unique value
+    vals <- rep(0, length(args$vals)) # If only unique value
   } else {
     vals <- as.vector(args$vals - args$center)
   }
@@ -147,8 +146,9 @@ center.data.frame <- function(x,
                               ...) {
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append,
-                            append_suffix = "_c", force, remove_na, reference,
-                            .center = center, .scale = NULL)
+    append_suffix = "_c", force, remove_na, reference,
+    .center = center, .scale = NULL
+  )
 
   # set new values
   x <- args$x
@@ -186,9 +186,10 @@ center.grouped_df <- function(x,
                               append = FALSE,
                               center = NULL,
                               ...) {
-
-  args <- .process_grouped_df(x, select, exclude, append, append_suffix = "_c",
-                              reference, weights, force)
+  args <- .process_grouped_df(x, select, exclude, append,
+    append_suffix = "_c",
+    reference, weights, force
+  )
 
   for (rows in args$grps) {
     args$x[rows, ] <- center(

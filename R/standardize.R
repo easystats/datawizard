@@ -140,14 +140,13 @@ standardize.numeric <- function(x,
                                 center = NULL,
                                 scale = NULL,
                                 ...) {
-
   args <- .process_std_center(x, weights, robust, verbose, reference, center, scale)
 
   # Perform standardization
   if (is.null(args)) { # all NA?
     return(x)
   } else if (is.null(args$check)) {
-    vals <- rep(0, length(args$vals))  # If only unique value
+    vals <- rep(0, length(args$vals)) # If only unique value
   } else {
     if (two_sd) {
       vals <- as.vector((args$vals - args$center) / (2 * args$scale))
@@ -172,7 +171,7 @@ standardize.integer <- standardize.numeric
 
 #' @export
 standardize.matrix <- function(x, ...) {
-  xl <- lapply(seq_len(ncol(x)), function(i) x[,i])
+  xl <- lapply(seq_len(ncol(x)), function(i) x[, i])
 
   xz <- lapply(xl, datawizard::standardize, ...)
 
@@ -239,8 +238,9 @@ standardize.data.frame <- function(x,
                                    ...) {
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append,
-                            append_suffix = "_z", force, remove_na, reference,
-                            .center = center, .scale = scale)
+    append_suffix = "_z", force, remove_na, reference,
+    .center = center, .scale = scale
+  )
 
   # set new values
   x <- args$x
@@ -283,9 +283,10 @@ standardize.grouped_df <- function(x,
                                    center = NULL,
                                    scale = NULL,
                                    ...) {
-
-  args <- .process_grouped_df(x, select, exclude, append, append_suffix = "_z",
-                              reference, weights, force)
+  args <- .process_grouped_df(x, select, exclude, append,
+    append_suffix = "_z",
+    reference, weights, force
+  )
 
   for (rows in args$grps) {
     args$x[rows, ] <- standardize(

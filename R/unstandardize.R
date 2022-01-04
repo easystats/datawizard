@@ -161,10 +161,9 @@ unstandardize.matrix <- function(x,
     centers <- attr(x, "center")
 
     xl <- lapply(seq_len(ncol(x)), function(i) {
-      tmp <- x[,i]
+      tmp <- x[, i]
       attributes(tmp) <- list(center = centers[i], scale = scales[i])
       tmp
-
     })
 
     xz <- lapply(xl, datawizard::unstandardize, ...)
