@@ -66,6 +66,11 @@ reference:
       - starts_with("text_")
       - starts_with("format_")
 
+  - title: List helpers
+  - contents:
+      - compact_list
+      - is_empty_object
+
   - title: Data
   - contents:
       - nhanes_sample
