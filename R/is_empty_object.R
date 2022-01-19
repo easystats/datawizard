@@ -22,7 +22,11 @@ is_empty_object <- function(x) {
     )
   }
 
+  # precaution to take for a tibble
   if (inherits(x, c("tbl_df", "tbl"))) x <- as.data.frame(x)
+
+  # remove missing values
   x <- suppressWarnings(x[!is.na(x)])
+
   length(x) == 0 || is.null(x)
 }

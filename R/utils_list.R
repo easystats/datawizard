@@ -11,8 +11,8 @@
 
 compact_list <- function(x, remove_na = FALSE) {
   if (remove_na) {
-    x[!sapply(x, function(i) length(i) == 0 || is.null(i) || (length(i) == 1 & is.na(i)) || any(i == "NULL", na.rm = TRUE))]
+    x[!sapply(x, function(i) length(i) == 0L || is.null(i) || (length(i) == 1L & is.na(i)) || any(i == "NULL", na.rm = TRUE))]
   } else {
-    x[!sapply(x, function(i) length(i) == 0 || is.null(i) || any(i == "NULL", na.rm = TRUE))]
+    x[!sapply(x, function(i) length(i) == 0L || is.null(i) || any(i == "NULL", na.rm = TRUE))]
   }
 }
