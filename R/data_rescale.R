@@ -37,19 +37,6 @@ data_rescale <- function(x, ...) {
   UseMethod("data_rescale")
 }
 
-
-#' @rdname data_rescale
-#' @export
-change_scale <- function(x, ...) {
-  # TODO: Don't deprecate for now
-  # so we have time to change it accross the verse, but for next round
-  # .Deprecated("data_rescale")
-  data_rescale(x, ...)
-}
-
-
-
-
 #' @rdname data_rescale
 #' @export
 data_rescale.numeric <- function(x,
@@ -88,13 +75,10 @@ data_rescale.numeric <- function(x,
 }
 
 
-
-
 #' @export
 data_rescale.factor <- function(x, ...) {
   x
 }
-
 
 
 
@@ -129,7 +113,7 @@ data_rescale.grouped_df <- function(x,
 
   x <- as.data.frame(x)
   for (rows in grps) {
-    x[rows, ] <- change_scale(
+    x[rows, ] <- data_rescale(
       x[rows, ],
       select = select,
       exclude = exclude,

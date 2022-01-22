@@ -2,15 +2,12 @@
 % Please edit documentation in R/data_rescale.R
 \name{data_rescale}
 \alias{data_rescale}
-\alias{change_scale}
 \alias{data_rescale.numeric}
 \alias{data_rescale.grouped_df}
 \alias{data_rescale.data.frame}
 \title{Rescale Variables to a New Range}
 \usage{
 data_rescale(x, ...)
-
-change_scale(x, ...)
 
 \method{data_rescale}{numeric}(x, to = c(0, 100), range = NULL, verbose = TRUE, ...)
 

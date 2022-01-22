@@ -42,7 +42,7 @@ reference:
   - contents:
       - adjust
       - center
-      - change_scale
+      - data_rescale
       - convert_data_to_numeric
       - demean
       - normalize

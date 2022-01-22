@@ -202,7 +202,7 @@ head(ranktransform(trees))
 To rescale a numeric variable to a new range:
 
 ``` r
-change_scale(c(0, 1, 5, -5, -2))
+data_rescale(c(0, 1, 5, -5, -2))
 #> [1]  50  60 100   0  30
 ```
 
