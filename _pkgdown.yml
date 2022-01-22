@@ -61,6 +61,10 @@ reference:
       - smoothness
       - skewness
 
+  - title: String helpers
+  - contents:
+      - compact_character
+
   - title: Text formatting helpers
   - contents:
       - starts_with("text_")

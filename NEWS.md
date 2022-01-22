@@ -1,6 +1,9 @@
 # datawizard 0.2.2.9000
 
-- New functions to work with lists: `is_empty_object()` and `compact_list()`.
+- New functions:
+
+  + to work with lists: `is_empty_object()` and `compact_list()`
+  + to work with strings: `compact_character()`
 
 # datawizard 0.2.2
 
