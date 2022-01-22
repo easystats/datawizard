@@ -61,7 +61,7 @@ reference:
       - smoothness
       - skewness
 
-  - title: Text formatting
+  - title: Text formatting helpers
   - contents:
       - starts_with("text_")
       - starts_with("format_")
@@ -69,15 +69,18 @@ reference:
   - title: List helpers
   - contents:
       - compact_list
-      - is_empty_object
 
-  - title: Data
+  - title: Miscellaneous helpers
   - contents:
-      - nhanes_sample
+      - is_empty_object
 
   - title: Visualization helpers
   - contents:
       - visualisation_recipe
+
+  - title: Data
+  - contents:
+      - nhanes_sample
 
 articles:
 
