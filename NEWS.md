@@ -1,5 +1,7 @@
 # datawizard 0.2.2.9000
 
+- New functions to work with lists: `is_empty_object()` and `compact_list()`.
+
 # datawizard 0.2.2
 
 - New function `data_extract()` (or its alias `extract()`) to pull single 
