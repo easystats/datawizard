@@ -43,7 +43,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
@@ -83,6 +83,9 @@
     
   </div>
 </nav><div class="container template-article">
+
+
+
 <script src="demean_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Analysing Longitudinal or Panel Data</h1>
@@ -96,9 +99,9 @@
     
 <p>This vignette explains the rational behind the <code><a href="../reference/demean.html">demean()</a></code> function.</p>
 <p>We give recommendations how to analyze multilevel or hierarchical data structures, when macro-indicators (or level-2 predictors, or higher-level units, or more general: <em>group-level predictors</em>) are used as covariates and the model suffers from <strong>heterogeneity bias</strong> <span class="citation">(Bell and Jones 2015)</span>.</p>
-<div class="section level1">
-<h1 id="sample-data-used-in-this-vignette">Sample data used in this vignette<a class="anchor" aria-label="anchor" href="#sample-data-used-in-this-vignette"></a>
-</h1>
+<div class="section level2">
+<h2 id="sample-data-used-in-this-vignette">Sample data used in this vignette<a class="anchor" aria-label="anchor" href="#sample-data-used-in-this-vignette"></a>
+</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/parameters/" class="external-link">parameters</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"qol_cancer"</span><span class="op">)</span></code></pre></div>
@@ -116,9 +119,9 @@
 </li>
 </ul>
 </div>
-<div class="section level1">
-<h1 id="heterogeneity-bias">Heterogeneity bias<a class="anchor" aria-label="anchor" href="#heterogeneity-bias"></a>
-</h1>
+<div class="section level2">
+<h2 id="heterogeneity-bias">Heterogeneity bias<a class="anchor" aria-label="anchor" href="#heterogeneity-bias"></a>
+</h2>
 <p>Heterogeneity bias occurs when group-level predictors vary within and across groups, and hence fixed effects may correlate with group (or random) effects. This is a typical situation when analyzing longitudinal or panel data: Due to the repeated measurements of persons, the “person” (or subject-ID) is now a level-2 variable. Predictors at level-1 (“fixed effects”), e.g. self-rated health or income, now have an effect at level-1 (“within”-effect) and at higher-level units (level-2, the subject-level, which is the “between”-effect) (see also <a href="https://shouldbewriting.netlify.app/posts/2019-10-21-accounting-for-within-and-between-subject-effect/" class="external-link">this posting</a>). This inevitably leads to correlating fixed effects and error terms - which, in turn, results in biased estimates, because both the within- <em>and</em> between-effect are captured in <em>one</em> estimate.</p>
 <p>You can check if your model may suffer from heterogeneity bias using the <code><a href="https://easystats.github.io/performance/reference/check_heterogeneity_bias.html" class="external-link">check_heterogeneity_bias()</a></code> function:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -126,14 +129,14 @@
 <span class="fu"><a href="https://easystats.github.io/performance/reference/check_heterogeneity_bias.html" class="external-link">check_heterogeneity_bias</a></span><span class="op">(</span><span class="va">qol_cancer</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phq4"</span>, <span class="st">"education"</span><span class="op">)</span>, group <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span>
 <span class="co">#&gt; Possible heterogeneity bias due to following predictors: phq4</span></code></pre></div>
 </div>
-<div class="section level1">
-<h1 id="adressing-heterogeneity-bias-the-fixed-effects-regression-fe-approach">Adressing heterogeneity bias: the Fixed Effects Regression (FE) approach<a class="anchor" aria-label="anchor" href="#adressing-heterogeneity-bias-the-fixed-effects-regression-fe-approach"></a>
-</h1>
+<div class="section level2">
+<h2 id="adressing-heterogeneity-bias-the-fixed-effects-regression-fe-approach">Adressing heterogeneity bias: the Fixed Effects Regression (FE) approach<a class="anchor" aria-label="anchor" href="#adressing-heterogeneity-bias-the-fixed-effects-regression-fe-approach"></a>
+</h2>
 <p>Fixed effects regression models (FE) are a popular approach for panel data analysis in particular in econometrics and considered as gold standard. To avoid the problem of heterogeneity bias, in FE all higher-level variance (and thus, any between-effects), “are controlled out using the higher-level entities themselves, included in the model as dummy variables” <span class="citation">(Bell and Jones 2015)</span>. As a consequence, FE models are only able estimate <em>within-effects</em>.</p>
 <p>To remove between-effects and only model within-effects, the data needs some preparation: <em>de-meaning</em>. De-meaning, or <em>person-mean centering</em>, or <em>centering within clusters</em>, takes away the higher-level mean from the regression equation, and as such, FE avoids estimating a parameter for each higher-level unit.</p>
-<div class="section level2">
-<h2 id="computing-the-de-meaned-and-group-meaned-variables">Computing the de-meaned and group-meaned variables<a class="anchor" aria-label="anchor" href="#computing-the-de-meaned-and-group-meaned-variables"></a>
-</h2>
+<div class="section level3">
+<h3 id="computing-the-de-meaned-and-group-meaned-variables">Computing the de-meaned and group-meaned variables<a class="anchor" aria-label="anchor" href="#computing-the-de-meaned-and-group-meaned-variables"></a>
+</h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">qol_cancer</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>
   <span class="va">qol_cancer</span>,
@@ -195,9 +198,9 @@
 <p>This question cannot be answered with FE regression. But: “Can one fit a multilevel model with varying intercepts (or coefficients) when the units and predictors correlate? The answer is yes. And the solution is simple.” <span class="citation">(Bafumi and Gelman 2006)</span></p>
 </div>
 </div>
-<div class="section level1">
-<h1 id="adressing-heterogeneity-bias-the-mixed-model-approach">Adressing heterogeneity bias: the Mixed Model approach<a class="anchor" aria-label="anchor" href="#adressing-heterogeneity-bias-the-mixed-model-approach"></a>
-</h1>
+<div class="section level2">
+<h2 id="adressing-heterogeneity-bias-the-mixed-model-approach">Adressing heterogeneity bias: the Mixed Model approach<a class="anchor" aria-label="anchor" href="#adressing-heterogeneity-bias-the-mixed-model-approach"></a>
+</h2>
 <p>Mixed models include different levels of sources of variability (i.e. error terms at each level). Predictors used at level-1 that are varying across higher-level units will thus have residual errors at both level-1 and higher-level units. “Such covariates contain two parts: one that is specific to the higher-level entity that does not vary between occasions, and one that represents the difference between occasions, within higher-level entities” <span class="citation">(Bell and Jones 2015)</span>. Hence, the error terms will be correlated with the covariate, which violates one of the assumptions of mixed models (iid, independent and identically distributed error terms) - also known and described above as <em>heterogeneity bias</em>.</p>
 <p>But how can this issue be addressed outside the FE framework?</p>
 <p>There are several ways how to address this using a mixed models approach:</p>
@@ -266,9 +269,9 @@
 <span class="co">#&gt; phq4 between |       -6.13 | 0.52 | [-7.14, -5.11] | -11.84 | &lt; .001</span></code></pre></div>
 <p>For more complex models, within-effects will naturally change slightly and are no longer identical to simpler FE models. This is no “bias”, but rather the result of building more complex models: FE models lack information of variation in the group-effects or between-subject effects. Furthermore, FE models cannot include random slopes, which means that fixed effects regressions are neglecting “cross-cluster differences in the effects of lower-level controls (which) reduces the precision of estimated context effects, resulting in (…) low statistical power” <span class="citation">(Heisig, Schaeffer, and Giesecke 2017)</span>.</p>
 </div>
-<div class="section level1">
-<h1 id="conclusion-complex-random-effects-within-between-models">Conclusion: Complex Random Effects Within-Between Models<a class="anchor" aria-label="anchor" href="#conclusion-complex-random-effects-within-between-models"></a>
-</h1>
+<div class="section level2">
+<h2 id="conclusion-complex-random-effects-within-between-models">Conclusion: Complex Random Effects Within-Between Models<a class="anchor" aria-label="anchor" href="#conclusion-complex-random-effects-within-between-models"></a>
+</h2>
 <p>Depending on the structure of the data, the best approach to analyzing panel data would be a so called “complex random effects within-between” model <span class="citation">(Bell, Fairbrother, and Jones 2019)</span>:</p>
 <p>y<sub>it</sub> = β<sub>0</sub> + β<sub>1W</sub> (x<sub>it</sub> - ͞x<sub>i</sub>) + β<sub>2B</sub> ͞x<sub>i</sub> + β<sub>3</sub> z<sub>i</sub> + υ<sub>i0</sub> + υ<sub>i1</sub> (x<sub>it</sub> - ͞x<sub>i</sub>) + ε<sub>it</sub></p>
 <ul>
@@ -339,9 +342,9 @@ x<sub>it</sub> - ͞x<sub>i</sub> is the de-meaned predictor, <em>phq4_within</em
 <p><strong>What about imbalanced groups, i.e. large differences in N per group?</strong></p>
 <p>See little example after this visual example…</p>
 </div>
-<div class="section level1">
-<h1 id="a-visual-example">A visual example<a class="anchor" aria-label="anchor" href="#a-visual-example"></a>
-</h1>
+<div class="section level2">
+<h2 id="a-visual-example">A visual example<a class="anchor" aria-label="anchor" href="#a-visual-example"></a>
+</h2>
 <p>First, we generate some fake data that implies a linear relationship between outcome and independent variable. The objective is that the amount of typing errors depends on how fast (typing speed) you can type, however, the more typing experience you have, the faster you can type. Thus, the outcome measure is “amount of typing errors”, while our predictor is “typing speed”. Furthermore, we have repeated measurements of people with different “typing experience levels”.</p>
 <p>The results show that we will have two sources of variation: Overall, more experienced typists make less mistakes (group-level pattern). When typing faster, typists make more mistakes (individual-level pattern).</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -373,9 +376,9 @@ x<sub>it</sub> - ͞x<sub>i</sub> is the de-meaned predictor, <em>phq4_within</em
 <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu">datawizard</span><span class="fu">::</span><span class="fu"><a href="../reference/demean.html">demean</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, group <span class="op">=</span> <span class="st">"grp"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Let’s look at the raw data…</p>
 <p><img src="demean_files/figure-html/unnamed-chunk-14-1.png" width="100%"></p>
-<div class="section level2">
-<h2 id="model-1-linear-relationship-between-typing-errors-and-typing-speed">Model 1: Linear relationship between typing errors and typing speed<a class="anchor" aria-label="anchor" href="#model-1-linear-relationship-between-typing-errors-and-typing-speed"></a>
-</h2>
+<div class="section level3">
+<h3 id="model-1-linear-relationship-between-typing-errors-and-typing-speed">Model 1: Linear relationship between typing errors and typing speed<a class="anchor" aria-label="anchor" href="#model-1-linear-relationship-between-typing-errors-and-typing-speed"></a>
+</h3>
 <p>We can now assume a (linear) relationship between typing errors and typing speed.</p>
 <p><img src="demean_files/figure-html/unnamed-chunk-15-1.png" width="100%"></p>
 <p>Looking at the coefficients, we have following model with a coefficient of <code>-1.92</code>.</p>
@@ -389,9 +392,9 @@ x<sub>it</sub> - ͞x<sub>i</sub> is the de-meaned predictor, <em>phq4_within</em
 <p>However, we have ignored the clustered structure in our data, in this example due to repeated measurements.</p>
 <p><img src="demean_files/figure-html/unnamed-chunk-17-1.png" width="100%"></p>
 </div>
-<div class="section level2">
-<h2 id="model-2-within-subject-effect-of-typing-speed">Model 2: Within-subject effect of typing speed<a class="anchor" aria-label="anchor" href="#model-2-within-subject-effect-of-typing-speed"></a>
-</h2>
+<div class="section level3">
+<h3 id="model-2-within-subject-effect-of-typing-speed">Model 2: Within-subject effect of typing speed<a class="anchor" aria-label="anchor" href="#model-2-within-subject-effect-of-typing-speed"></a>
+</h3>
 <p>A fixed effects regression (FE-regression) would now remove all between-effects and include only the within-effects as well as the group-level indicator.</p>
 <p><img src="demean_files/figure-html/unnamed-chunk-18-1.png" width="100%"></p>
 <p>This returns the coefficient of the “within”-effect, which is <code>1.2</code>, with a standard error of <code>0.07</code>. Note that the FE-model does <em>not</em> take the variation <em>between</em> subjects into account, thus resulting in (possibly) biased estimates, and biased standard errors.</p>
@@ -402,9 +405,9 @@ x<sub>it</sub> - ͞x<sub>i</sub> is the de-meaned predictor, <em>phq4_within</em
 <span class="co">#&gt; --------------------------------------------------------------</span>
 <span class="co">#&gt; x within  |        1.20 | 0.07 | [1.06, 1.35] | 16.08 | &lt; .001</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="model-3-between-subject-effect-of-typing-speed">Model 3: Between-subject effect of typing speed<a class="anchor" aria-label="anchor" href="#model-3-between-subject-effect-of-typing-speed"></a>
-</h2>
+<div class="section level3">
+<h3 id="model-3-between-subject-effect-of-typing-speed">Model 3: Between-subject effect of typing speed<a class="anchor" aria-label="anchor" href="#model-3-between-subject-effect-of-typing-speed"></a>
+</h3>
 <p>To understand, why the above model 1 (<code>m1</code>) returns a biased estimate, which is a “weighted average” of the within- and between-effects, let us look at the between-effect now.</p>
 <p><img src="demean_files/figure-html/unnamed-chunk-20-1.png" width="100%"></p>
 <p>As we can see, the between-effect is <code>-2.93</code>, which is different from the <code>-1.92</code> estimated in the model <code>m1</code>.</p>
@@ -416,9 +419,9 @@ x<sub>it</sub> - ͞x<sub>i</sub> is the de-meaned predictor, <em>phq4_within</em
 <span class="co">#&gt; (Intercept) |       37.83 | 0.62 | [36.59, 39.06] |  60.79 | &lt; .001</span>
 <span class="co">#&gt; x between   |       -2.93 | 0.08 | [-3.09, -2.78] | -36.76 | &lt; .001</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="model-4-mixed-model-with-within--and-between-subjects">Model 4: Mixed model with within- and between-subjects<a class="anchor" aria-label="anchor" href="#model-4-mixed-model-with-within--and-between-subjects"></a>
-</h2>
+<div class="section level3">
+<h3 id="model-4-mixed-model-with-within--and-between-subjects">Model 4: Mixed model with within- and between-subjects<a class="anchor" aria-label="anchor" href="#model-4-mixed-model-with-within--and-between-subjects"></a>
+</h3>
 <p>Since FE-models can only model within-effects, we now use a mixed model with within- and between-effects.</p>
 <p><img src="demean_files/figure-html/unnamed-chunk-22-1.png" width="100%"></p>
 <p>We see, the estimate for the within-effects is <em>not</em> biased. Furthermore, we get the correct between-effect as well (standard errors differ, because the variance in the grouping structure is more accurately taken into account).</p>
@@ -440,9 +443,9 @@ x<sub>it</sub> - ͞x<sub>i</sub> is the de-meaned predictor, <em>phq4_within</em
 <span class="co">#&gt; SD (Intercept: grp) |        0.00</span>
 <span class="co">#&gt; SD (Residual)       |        0.92</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="model-5-complex-random-effects-within-between-model">Model 5: Complex Random-Effects Within-Between Model<a class="anchor" aria-label="anchor" href="#model-5-complex-random-effects-within-between-model"></a>
-</h2>
+<div class="section level3">
+<h3 id="model-5-complex-random-effects-within-between-model">Model 5: Complex Random-Effects Within-Between Model<a class="anchor" aria-label="anchor" href="#model-5-complex-random-effects-within-between-model"></a>
+</h3>
 <p>Finally, we can also take the variation between subjects into account by adding a random slope. This model can be called a complex “REWB” (random-effects within-between) model. Due to the variation between subjects, we get larger standard errors for the within-effect.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">m5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x_between</span> <span class="op">+</span> <span class="va">x_within</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">x_within</span> <span class="op">|</span> <span class="va">grp</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">d</span><span class="op">)</span>
@@ -465,9 +468,9 @@ x<sub>it</sub> - ͞x<sub>i</sub> is the de-meaned predictor, <em>phq4_within</em
 <span class="co">#&gt; SD (Residual)                 |        0.90</span></code></pre></div>
 </div>
 </div>
-<div class="section level1">
-<h1 id="balanced-versus-imbalanced-groups">Balanced versus imbalanced groups<a class="anchor" aria-label="anchor" href="#balanced-versus-imbalanced-groups"></a>
-</h1>
+<div class="section level2">
+<h2 id="balanced-versus-imbalanced-groups">Balanced versus imbalanced groups<a class="anchor" aria-label="anchor" href="#balanced-versus-imbalanced-groups"></a>
+</h2>
 <p>The “simple” linear slope of the between-effect (and also from the within-effect) is (almost) identical in “classical” linear regression compared to linear mixed models when the groups are balanced, i.e. when the number of observation per group is similar or the same.</p>
 <p>Whenever group size is imbalanced, the “simple” linear slope will be adjusted. This leads to different estimates for between-effects between classical and mixed models regressions due to shrinkage - i.e. for larger variation of group sizes we find stronger regularization of estimates.</p>
 <p>Hence, for mixed models with larger differences in number of observation per random effects group, the between-effect will differ from the between-effect calculated by “classical” regression models. However, this shrinkage is a desired property of mixed models and usually improves the estimates.</p>
@@ -525,9 +528,9 @@ x<sub>it</sub> - ͞x<sub>i</sub> is the de-meaned predictor, <em>phq4_within</em
 <span class="co">#&gt; SD (Intercept: grp) |        1.54</span>
 <span class="co">#&gt; SD (Residual)       |        2.98</span></code></pre></div>
 </div>
-<div class="section level1 unnumbered">
-<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h1>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <div id="refs" class="references">
 <div id="ref-bafumi_fitting_2006">
 <p>Bafumi, Joseph, and Andrew Gelman. 2006. “Fitting Multilevel Models When Predictors and Group Effects Correlate.” In. Philadelphia, PA.</p>
@@ -565,7 +568,7 @@ x<sub>it</sub> - ͞x<sub>i</sub> is the de-meaned predictor, <em>phq4_within</em
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
 </div>
 
     </footer>

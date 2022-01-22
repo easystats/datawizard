@@ -34,6 +34,9 @@
     <loc>/reference/center.html</loc>
   </url>
   <url>
+    <loc>/reference/compact_list.html</loc>
+  </url>
+  <url>
     <loc>/reference/convert_data_to_numeric.html</loc>
   </url>
   <url>
@@ -74,6 +77,9 @@
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/is_empty_object.html</loc>
   </url>
   <url>
     <loc>/reference/nhanes_sample.html</loc>
