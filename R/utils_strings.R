@@ -18,18 +18,3 @@ string_one_of <- function(pattern, x) {
   x[m]
 }
 
-rownames_as_column <- function(x, var = "rowname") {
-  rn <- data.frame(rn = rownames(x), stringsAsFactors = FALSE)
-  x <- cbind(rn, x)
-  colnames(x)[1] <- var
-  rownames(x) <- NULL
-  x
-}
-
-obj_has_name <- function(x, name) {
-  name %in% names(x)
-}
-
-obj_has_rownames <- function(x) {
-  !identical(as.character(1:nrow(x)), rownames(x))
-}
