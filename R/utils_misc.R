@@ -46,3 +46,13 @@ is_empty_object <- function(x) {
     isTRUE(nrow(x) == 0) ||
     isTRUE(ncol(x) == 0)
 }
+
+
+obj_has_name <- function(x, name) {
+  name %in% names(x)
+}
+
+
+obj_has_rownames <- function(x) {
+  !identical(as.character(1:nrow(x)), rownames(x))
+}
