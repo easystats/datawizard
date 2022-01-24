@@ -9,12 +9,10 @@
 #' @examples
 #' compact_character(c("x", "y", NA))
 #' compact_character(c("x", NULL, "", "y"))
-#' compact_character(list("x", "y", NA))
-#' compact_character(list("x", NULL, "", "y"))
 #'
 #' @export
 
 compact_character <- function(x) {
-  x[!sapply(x, function(i) nchar(i) == 0 || is.null(i) || any(i == "NULL", na.rm = TRUE))]
+  x[!sapply(x, function(i) nchar(i) == 0 || all(is.na(i)) || any(i == "NULL", na.rm = TRUE))]
 }
 
