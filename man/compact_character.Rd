@@ -17,8 +17,6 @@ Remove empty strings from character
 }
 \examples{
 compact_character(c("x", "y", NA))
-compact_character(c("x", NULL, "", "y"))
-compact_character(list("x", "y", NA))
-compact_character(list("x", NULL, "", "y"))
+compact_character(c("x", "NULL", "", "y"))
 
 }
