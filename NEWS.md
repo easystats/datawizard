@@ -1,5 +1,8 @@
 # datawizard 0.2.3.9000
 
+- Arguments `cols`, `before` and `after` in `data_relocate()` can now also be
+  numeric values, indicating the position of the destination column.
+
 # datawizard 0.2.3
 
 - New functions:

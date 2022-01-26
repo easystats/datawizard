@@ -12,7 +12,10 @@ data_relocate(data, cols, before = NULL, after = NULL, safe = TRUE, ...)
 \item{cols}{A character vector indicating the names of the columns to move.}
 
 \item{before, after}{Destination of columns. Supplying neither will move
-columns to the left-hand side; specifying both is an error.}
+columns to the left-hand side; specifying both is an error. Can be a
+character vector, indicating the name of the destination column, or a
+numeric value, indicating the index number of the destination column.
+If \code{-1}, will be added before or after the last column.}
 
 \item{safe}{If \code{TRUE}, will disregard non-existing columns.}
 
@@ -29,5 +32,11 @@ Relocate (reorder) columns of a data frame
 head(data_relocate(iris, cols = "Species", before = "Sepal.Length"))
 head(data_relocate(iris, cols = "Species", before = "Sepal.Width"))
 head(data_relocate(iris, cols = "Sepal.Width", after = "Species"))
+# same as
+head(data_relocate(iris, cols = "Sepal.Width", after = -1))
+
+# reorder multiple columns
 head(data_relocate(iris, cols = c("Species", "Petal.Length"), after = "Sepal.Width"))
+# same as
+head(data_relocate(iris, cols = c("Species", "Petal.Length"), after = 2))
 }
