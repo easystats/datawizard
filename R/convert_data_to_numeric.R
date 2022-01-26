@@ -10,7 +10,7 @@
 #' head(convert_data_to_numeric(iris))
 #' @return A data frame of numeric variables.
 #' @export
-convert_data_to_numeric <- function(x, dummy_factors = TRUE, ...) {
+convert_data_to_numeric <- function(x, ...) {
   UseMethod("convert_data_to_numeric")
 }
 
@@ -19,6 +19,7 @@ convert_data_to_numeric <- function(x, dummy_factors = TRUE, ...) {
 data_to_numeric <- convert_data_to_numeric
 
 
+#' @rdname convert_data_to_numeric
 #' @export
 convert_data_to_numeric.data.frame <- function(x, dummy_factors = TRUE, ...) {
   out <- sapply(x, convert_data_to_numeric, dummy_factors = dummy_factors, simplify = FALSE)

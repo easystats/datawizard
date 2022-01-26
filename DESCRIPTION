@@ -1,7 +1,7 @@
 Type: Package
 Package: datawizard
 Title: Easy Data Wrangling
-Version: 0.2.2.9000
+Version: 0.2.3.9000
 Authors@R: c(
     person("Dominique", "Makowski", , "dom.makowski@gmail.com", role = "aut",
            comment = c(ORCID = "0000-0001-5375-9967", Twitter = "@Dom_Makowski")),

@@ -116,12 +116,7 @@
 #' # standardization, taking same mean and sd for each variable
 #' standardize(d, center = 1, scale = 3)
 #' @export
-standardize <- function(x,
-                        robust = FALSE,
-                        two_sd = FALSE,
-                        weights = NULL,
-                        verbose = TRUE,
-                        ...) {
+standardize <- function(x, ...) {
   UseMethod("standardize")
 }
 
@@ -186,6 +181,7 @@ standardize.matrix <- function(x, ...) {
 }
 
 
+#' @rdname standardize
 #' @export
 standardize.factor <- function(x,
                                robust = FALSE,
