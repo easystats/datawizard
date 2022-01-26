@@ -89,23 +89,9 @@ For model standardization, see <code><a href="https://easystats.github.io/effect
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">standardize</span><span class="op">(</span>
-  <span class="va">x</span>,
-  robust <span class="op">=</span> <span class="cn">FALSE</span>,
-  two_sd <span class="op">=</span> <span class="cn">FALSE</span>,
-  weights <span class="op">=</span> <span class="cn">NULL</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">standardize</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
-<span class="fu">standardise</span><span class="op">(</span>
-  <span class="va">x</span>,
-  robust <span class="op">=</span> <span class="cn">FALSE</span>,
-  two_sd <span class="op">=</span> <span class="cn">FALSE</span>,
-  weights <span class="op">=</span> <span class="cn">NULL</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
+<span class="fu">standardise</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for numeric</span>
 <span class="fu">standardize</span><span class="op">(</span>
@@ -117,6 +103,17 @@ For model standardization, see <code><a href="https://easystats.github.io/effect
   reference <span class="op">=</span> <span class="cn">NULL</span>,
   center <span class="op">=</span> <span class="cn">NULL</span>,
   scale <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">...</span>
+<span class="op">)</span>
+
+<span class="co"># S3 method for factor</span>
+<span class="fu">standardize</span><span class="op">(</span>
+  <span class="va">x</span>,
+  robust <span class="op">=</span> <span class="cn">FALSE</span>,
+  two_sd <span class="op">=</span> <span class="cn">FALSE</span>,
+  weights <span class="op">=</span> <span class="cn">NULL</span>,
+  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
+  force <span class="op">=</span> <span class="cn">FALSE</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
@@ -138,6 +135,11 @@ For model standardization, see <code><a href="https://easystats.github.io/effect
   <span class="va">...</span>
 <span class="op">)</span>
 
+<span class="fu">unstandardize</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
+
+<span class="fu">unstandardise</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
+
+<span class="co"># S3 method for numeric</span>
 <span class="fu">unstandardize</span><span class="op">(</span>
   <span class="va">x</span>,
   center <span class="op">=</span> <span class="cn">NULL</span>,
@@ -148,13 +150,16 @@ For model standardization, see <code><a href="https://easystats.github.io/effect
   <span class="va">...</span>
 <span class="op">)</span>
 
-<span class="fu">unstandardise</span><span class="op">(</span>
+<span class="co"># S3 method for data.frame</span>
+<span class="fu">unstandardize</span><span class="op">(</span>
   <span class="va">x</span>,
   center <span class="op">=</span> <span class="cn">NULL</span>,
   scale <span class="op">=</span> <span class="cn">NULL</span>,
   reference <span class="op">=</span> <span class="cn">NULL</span>,
   robust <span class="op">=</span> <span class="cn">FALSE</span>,
   two_sd <span class="op">=</span> <span class="cn">FALSE</span>,
+  select <span class="op">=</span> <span class="cn">NULL</span>,
+  exclude <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -164,6 +169,8 @@ For model standardization, see <code><a href="https://easystats.github.io/effect
     <dl><dt>x</dt>
 <dd><p>A data frame, a vector or a statistical model (for <code>unstandardize()</code>
 cannot be a model).</p></dd>
+<dt>...</dt>
+<dd><p>Arguments passed to or from other methods.</p></dd>
 <dt>robust</dt>
 <dd><p>Logical, if <code>TRUE</code>, centering is done by subtracting the
 median from the variables and dividing it by the median absolute deviation
@@ -183,8 +190,6 @@ name of a column in the <code>data.frame</code> that contains the weights.</p></
 </ul></dd>
 <dt>verbose</dt>
 <dd><p>Toggle warnings and messages on or off.</p></dd>
-<dt>...</dt>
-<dd><p>Arguments passed to or from other methods.</p></dd>
 <dt>reference</dt>
 <dd><p>A data frame or variable from which the centrality and
 deviation will be computed instead of from the input variable. Useful for
@@ -208,6 +213,11 @@ Alternatively, if the input contains the attributes <code>center</code> and <cod
 (as does the output of <code>standardize()</code>), it will take it from there if the
 rest of the arguments are absent.</p></li>
 </ul></dd>
+<dt>force</dt>
+<dd><p>Logical, if <code>TRUE</code>, forces standardization of factors and dates
+as well. Factors are converted to numerical values, with the lowest level
+being the value <code>1</code> (unless the factor has numeric levels, which are
+converted to the corresponding numeric value).</p></dd>
 <dt>select</dt>
 <dd><p>Character vector of column names. If <code>NULL</code> (the default), all
 variables will be selected.</p></dd>
@@ -219,11 +229,6 @@ variables will be selected.</p></dd>
 <code>NA</code>s. Else, rows with <code>NA</code> in the columns selected with <code>select</code> /
 <code>exclude</code> (<code>"selected"</code>) or in all columns (<code>"all"</code>) are dropped before
 standardization, and the resulting data frame does not include these cases.</p></dd>
-<dt>force</dt>
-<dd><p>Logical, if <code>TRUE</code>, forces standardization of factors and dates
-as well. Factors are converted to numerical values, with the lowest level
-being the value <code>1</code> (unless the factor has numeric levels, which are
-converted to the corresponding numeric value).</p></dd>
 <dt>append</dt>
 <dd><p>Logical or string. If <code>TRUE</code>, standardized variables get new
 column names (with the suffix <code>"_z"</code>) and are appended (column bind) to <code>x</code>,
