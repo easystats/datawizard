@@ -1,5 +1,9 @@
 # datawizard 0.2.3.9000
 
+- New functions to find or remove empty rows and columns in a data frame:
+  `empty_rows()`, `empty_columns()`, `remove_empty_rows()` and 
+  `remove_empty_columns()`.
+
 - Arguments `cols`, `before` and `after` in `data_relocate()` can now also be
   numeric values, indicating the position of the destination column.
 

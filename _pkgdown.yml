@@ -37,6 +37,7 @@ reference:
   - title: Data wrangling
   - contents:
       - starts_with("data_")
+      - empty_columns
 
   - title: Data transformation
   - contents:
