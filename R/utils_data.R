@@ -14,4 +14,3 @@ rownames_as_column <- function(x, var = "rowname") {
   rownames(x) <- NULL
   x
 }
-

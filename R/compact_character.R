@@ -15,4 +15,3 @@
 compact_character <- function(x) {
   x[!sapply(x, function(i) nchar(i) == 0 || all(is.na(i)) || any(i == "NULL", na.rm = TRUE))]
 }
-
