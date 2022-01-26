@@ -4,28 +4,17 @@
 \alias{standardize}
 \alias{standardise}
 \alias{standardize.numeric}
+\alias{standardize.factor}
 \alias{standardize.data.frame}
 \alias{unstandardize}
 \alias{unstandardise}
+\alias{unstandardize.numeric}
+\alias{unstandardize.data.frame}
 \title{Standardization (Z-scoring)}
 \usage{
-standardize(
-  x,
-  robust = FALSE,
-  two_sd = FALSE,
-  weights = NULL,
-  verbose = TRUE,
-  ...
-)
+standardize(x, ...)
 
-standardise(
-  x,
-  robust = FALSE,
-  two_sd = FALSE,
-  weights = NULL,
-  verbose = TRUE,
-  ...
-)
+standardise(x, ...)
 
 \method{standardize}{numeric}(
   x,
@@ -36,6 +25,16 @@ standardise(
   reference = NULL,
   center = NULL,
   scale = NULL,
+  ...
+)
+
+\method{standardize}{factor}(
+  x,
+  robust = FALSE,
+  two_sd = FALSE,
+  weights = NULL,
+  verbose = TRUE,
+  force = FALSE,
   ...
 )
 
@@ -56,7 +55,11 @@ standardise(
   ...
 )
 
-unstandardize(
+unstandardize(x, ...)
+
+unstandardise(x, ...)
+
+\method{unstandardize}{numeric}(
   x,
   center = NULL,
   scale = NULL,
@@ -66,19 +69,23 @@ unstandardize(
   ...
 )
 
-unstandardise(
+\method{unstandardize}{data.frame}(
   x,
   center = NULL,
   scale = NULL,
   reference = NULL,
   robust = FALSE,
   two_sd = FALSE,
+  select = NULL,
+  exclude = NULL,
   ...
 )
 }
 \arguments{
 \item{x}{A data frame, a vector or a statistical model (for \code{unstandardize()}
 cannot be a model).}
+
+\item{...}{Arguments passed to or from other methods.}
 
 \item{robust}{Logical, if \code{TRUE}, centering is done by subtracting the
 median from the variables and dividing it by the median absolute deviation
@@ -100,8 +107,6 @@ name of a column in the \code{data.frame} that contains the weights.
 }}
 
 \item{verbose}{Toggle warnings and messages on or off.}
-
-\item{...}{Arguments passed to or from other methods.}
 
 \item{reference}{A data frame or variable from which the centrality and
 deviation will be computed instead of from the input variable. Useful for
@@ -128,6 +133,11 @@ Alternatively, if the input contains the attributes \code{center} and \code{scal
 rest of the arguments are absent.
 }}
 
+\item{force}{Logical, if \code{TRUE}, forces standardization of factors and dates
+as well. Factors are converted to numerical values, with the lowest level
+being the value \code{1} (unless the factor has numeric levels, which are
+converted to the corresponding numeric value).}
+
 \item{select}{Character vector of column names. If \code{NULL} (the default), all
 variables will be selected.}
 
@@ -138,11 +148,6 @@ variables will be selected.}
 \code{NA}s. Else, rows with \code{NA} in the columns selected with \code{select} /
 \code{exclude} (\code{"selected"}) or in all columns (\code{"all"}) are dropped before
 standardization, and the resulting data frame does not include these cases.}
-
-\item{force}{Logical, if \code{TRUE}, forces standardization of factors and dates
-as well. Factors are converted to numerical values, with the lowest level
-being the value \code{1} (unless the factor has numeric levels, which are
-converted to the corresponding numeric value).}
 
 \item{append}{Logical or string. If \code{TRUE}, standardized variables get new
 column names (with the suffix \code{"_z"}) and are appended (column bind) to \code{x},
