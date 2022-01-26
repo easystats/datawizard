@@ -17,4 +17,3 @@ string_one_of <- function(pattern, x) {
   m <- unlist(sapply(pattern, grep, x = x, fixed = TRUE, useBytes = TRUE))
   x[m]
 }
-
