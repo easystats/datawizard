@@ -76,9 +76,6 @@
     <loc>/reference/describe_distribution.html</loc>
   </url>
   <url>
-    <loc>/reference/empty_columns.html</loc>
-  </url>
-  <url>
     <loc>/reference/format_text.html</loc>
   </url>
   <url>
@@ -95,6 +92,9 @@
   </url>
   <url>
     <loc>/reference/ranktransform.html</loc>
+  </url>
+  <url>
+    <loc>/reference/remove_empty.html</loc>
   </url>
   <url>
     <loc>/reference/rescale_weights.html</loc>
