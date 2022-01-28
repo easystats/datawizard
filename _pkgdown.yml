@@ -78,6 +78,7 @@ reference:
   - title: Miscellaneous helpers
   - contents:
       - is_empty_object
+      - starts_with("object_has")
 
   - title: Visualization helpers
   - contents:
