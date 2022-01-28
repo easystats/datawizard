@@ -47,12 +47,42 @@ is_empty_object <- function(x) {
     isTRUE(ncol(x) == 0)
 }
 
-
-obj_has_name <- function(x, name) {
-  name %in% names(x)
+#' Check names and rownames
+#'
+#' @description
+#'
+#' `object_has_names()` checks if specified names are present in the given object.
+#' `object_has_rownames()` checks if rownames are present in a dataframe.
+#'
+#' @param x A named object (an atomic vector, a list, a dataframe, etc.).
+#' @param names A single character or a vector of characters.
+#'
+#' @examples
+#'
+#' # check if specified names are present in the given object
+#' object_has_names(mtcars, "am")
+#' object_has_names(anscombe, c("x1", "z1", "y1"))
+#' object_has_names(list("x" = 1, "y" = 2), c("x", "a"))
+#'
+#' # check if a dataframe has rownames
+#' object_has_rownames(mtcars)
+#'
+#' @return
+#'
+#' A logical or a vector of logicals.
+#'
+#' @rdname object_has_names
+#' @export
+object_has_names <- function(x, names) {
+  names %in% names(x)
 }
 
+#' @rdname object_has_names
+#' @export
+object_has_rownames <- function(x) {
+  if (!is.data.frame(x)) {
+    stop("Only dataframe objects are allowed.", call. = FALSE)
+  }
 
-obj_has_rownames <- function(x) {
   !identical(as.character(1:nrow(x)), rownames(x))
 }
