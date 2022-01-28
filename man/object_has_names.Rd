@@ -19,7 +19,7 @@ A logical or a vector of logicals.
 }
 \description{
 \code{object_has_names()} checks if specified names are present in the given object.
-\code{object_has_rownames()} checks if rowsnames are present in a dataframe.
+\code{object_has_rownames()} checks if rownames are present in a dataframe.
 }
 \examples{
 

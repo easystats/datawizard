@@ -52,7 +52,7 @@ is_empty_object <- function(x) {
 #' @description
 #'
 #' `object_has_names()` checks if specified names are present in the given object.
-#' `object_has_rownames()` checks if rowsnames are present in a dataframe.
+#' `object_has_rownames()` checks if rownames are present in a dataframe.
 #'
 #' @param x A named object (an atomic vector, a list, a dataframe, etc.).
 #' @param names A single character or a vector of characters.
