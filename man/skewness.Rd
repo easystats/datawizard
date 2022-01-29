@@ -65,22 +65,23 @@ of 0
 \item Lognormal distribution can have a skewness of any positive value,
 depending on its parameters
 }
+
 (\cite{https://en.wikipedia.org/wiki/Skewness})
 }
+
 \subsection{Types of Skewness}{
 \code{skewness()} supports three different methods for estimating skewness,
 as discussed in \cite{Joanes and Gill (1988)}:
 \itemize{
 \item Type "1" is the "classical" method, which is \code{g1 = (sum((x - mean(x))^3) / n) / (sum((x - mean(x))^2) / n)^1.5}
-
 \item Type "2" first calculates the type-1 skewness, then adjusts the result:
 \code{G1 = g1 * sqrt(n * (n - 1)) / (n - 2)}. This is what SAS and SPSS
 usually return
-
 \item Type "3" first calculates the type-1 skewness, then adjusts the result:
 \code{b1 = g1 * ((1 - 1 / n))^1.5}. This is what Minitab usually returns.
 }
 }
+
 \subsection{Kurtosis}{
 The \code{kurtosis} is a measure of "tailedness" of a distribution. A
 distribution with a kurtosis values of about zero is called "mesokurtic". A
@@ -89,21 +90,22 @@ kurtosis value larger than zero indicates a "leptokurtic" distribution with
 distribution with \emph{thinner} tails
 (\cite{https://en.wikipedia.org/wiki/Kurtosis}).
 }
+
 \subsection{Types of Kurtosis}{
 \code{kurtosis()} supports three different methods for estimating kurtosis,
 as discussed in \cite{Joanes and Gill (1988)}:
 \itemize{
 \item Type "1" is the "classical" method, which is \code{g2 = n * sum((x - mean(x))^4) / (sum((x - mean(x))^2)^2) - 3}.
-
 \item Type "2" first calculates the type-1 kurtosis, than adjusts the result:
 \code{G2 = ((n + 1) * g2 + 6) * (n - 1)/((n - 2) * (n - 3))}. This is what
 SAS and SPSS usually return
-
 \item Type "3" first calculates the type-1 kurtosis, than adjusts the result:
 \code{b2 = (g2 + 3) * (1 - 1 / n)^2 - 3}. This is what Minitab usually
 returns.
 }
+
 }
+
 \subsection{Standard Errors}{
 It is recommended to compute empirical (bootstrapped) standard errors (via
 the \code{iterations} argument) than relying on analytic standard errors
