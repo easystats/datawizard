@@ -128,6 +128,7 @@ of 0</p></li>
 depending on its parameters</p></li>
 </ul><p>(<cite>https://en.wikipedia.org/wiki/Skewness</cite>)</p>
 </div>
+
 <div class="section">
 <h3 id="types-of-skewness">Types of Skewness<a class="anchor" aria-label="anchor" href="#types-of-skewness"></a></h3>
 <p><code>skewness()</code> supports three different methods for estimating skewness,
@@ -138,6 +139,7 @@ usually return</p></li>
 <li><p>Type "3" first calculates the type-1 skewness, then adjusts the result:
 <code>b1 = g1 * ((1 - 1 / n))^1.5</code>. This is what Minitab usually returns.</p></li>
 </ul></div>
+
 <div class="section">
 <h3 id="kurtosis">Kurtosis<a class="anchor" aria-label="anchor" href="#kurtosis"></a></h3>
 <p>The <code>kurtosis</code> is a measure of "tailedness" of a distribution. A
@@ -147,6 +149,7 @@ kurtosis value larger than zero indicates a "leptokurtic" distribution with
 distribution with <em>thinner</em> tails
 (<cite>https://en.wikipedia.org/wiki/Kurtosis</cite>).</p>
 </div>
+
 <div class="section">
 <h3 id="types-of-kurtosis">Types of Kurtosis<a class="anchor" aria-label="anchor" href="#types-of-kurtosis"></a></h3>
 <p><code>kurtosis()</code> supports three different methods for estimating kurtosis,
@@ -158,6 +161,7 @@ SAS and SPSS usually return</p></li>
 <code>b2 = (g2 + 3) * (1 - 1 / n)^2 - 3</code>. This is what Minitab usually
 returns.</p></li>
 </ul></div>
+
 <div class="section">
 <h3 id="standard-errors">Standard Errors<a class="anchor" aria-label="anchor" href="#standard-errors"></a></h3>
 <p>It is recommended to compute empirical (bootstrapped) standard errors (via
@@ -181,11 +185,11 @@ research methods, 43(1), 8-17.</p></li>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">skewness</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Skewness |    SE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -0.031 | 0.077</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -0.057 | 0.077</span>
 <span class="r-in"><span class="fu">kurtosis</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Kurtosis |    SE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -0.097 | 0.154</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0.070 | 0.154</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
