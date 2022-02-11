@@ -23,8 +23,7 @@
 #' data_rotate(x, rownames = "property", colnames = TRUE)
 #' @export
 data_rotate <- function(data, rownames = NULL, colnames = FALSE) {
-  # check if first column has column names
-  # that should be used for rotated data
+  # check if first column has column names to be used for rotated data
   if (colnames) {
     colnames <- data[[1]]
     data <- data[-1]
@@ -51,16 +50,14 @@ data_rotate <- function(data, rownames = NULL, colnames = FALSE) {
     }
   }
 
-
-  # add rownames as column, if requested
+  # add rownames as a new column, if requested
   if (!is.null(rownames)) data <- rownames_as_column(data, var = rownames)
 
-  # add back attributes. therefore, delete the common attributes, like class etc.
-  # and then add attributes to our final dataframe
-
-  # a[c("names", "row.names", "class", "dim", "dimnames")] <- NULL
+  # delete the common attributes
   a[names(a) %in% names(attributes(data))] <- NULL
-  attributes(data) <- c(attributes(data), a)
+
+  # and then add other attributes to the dataframe
+  attributes(data) <- modifyList(attributes(data), a)
 
   data
 }
