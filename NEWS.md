@@ -4,9 +4,11 @@
 
 + To find or remove empty rows and columns in a data frame: `empty_rows()`,
   `empty_columns()`, `remove_empty_rows()`, `remove_empty_columns()`, and
-  `remove_empty`
+  `remove_empty`.
 
-+ To check for names: `object_has_names()` and `object_has_rownames()`
++ To check for names: `object_has_names()` and `object_has_rownames()`.
+
++ To rotate dataframe: `data_rotate()`.
 
 - Arguments `cols`, `before` and `after` in `data_relocate()` can now also be
   numeric values, indicating the position of the destination column.
