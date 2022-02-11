@@ -57,7 +57,7 @@ data_rotate <- function(data, rownames = NULL, colnames = FALSE) {
   a[names(a) %in% names(attributes(data))] <- NULL
 
   # and then add other attributes to the dataframe
-  attributes(data) <- modifyList(attributes(data), a)
+  attributes(data) <- utils::modifyList(attributes(data), a)
 
   data
 }
