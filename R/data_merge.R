@@ -26,5 +26,15 @@ data_join <- data_merge
 #' @rdname data_merge
 #' @export
 data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ...) {
+  attr_x <- attributes(x)
+  attr_y <- attributes(y)
 
+  # check merge columns
+  if (is.null(by)) {
+    by <- intersect(colnames(x), colnames(y))
+  }
+
+  attributes(out) <- utils::modifyList(attr_y, attributes(out))
+  attributes(out) <- utils::modifyList(attr_x, attributes(out))
+  out
 }
