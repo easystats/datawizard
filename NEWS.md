@@ -2,13 +2,15 @@
 
 - New functions:
 
-+ To find or remove empty rows and columns in a data frame: `empty_rows()`,
-  `empty_columns()`, `remove_empty_rows()`, `remove_empty_columns()`, and
-  `remove_empty`.
+  * To find or remove empty rows and columns in a data frame: `empty_rows()`,
+    `empty_columns()`, `remove_empty_rows()`, `remove_empty_columns()`, and
+    `remove_empty`.
 
-+ To check for names: `object_has_names()` and `object_has_rownames()`.
+  * To check for names: `object_has_names()` and `object_has_rownames()`.
 
-+ To rotate dataframe: `data_rotate()`.
+  * To rotate dataframe: `data_rotate()`.
+
+  * To replace `Inf` and `NaN` values with `NA`s: `replace_nan_inf()`.
 
 - Arguments `cols`, `before` and `after` in `data_relocate()` can now also be
   numeric values, indicating the position of the destination column.
@@ -17,9 +19,9 @@
 
 - New functions:
 
-  + to work with lists: `is_empty_object()` and `compact_list()`
+  * to work with lists: `is_empty_object()` and `compact_list()`
 
-  + to work with strings: `compact_character()`
+  * to work with strings: `compact_character()`
 
 # datawizard 0.2.2
 
