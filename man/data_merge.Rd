@@ -17,11 +17,14 @@ data_join(x, ...)
 
 \item{...}{Not used.}
 
-\item{join}{Character vector, indicating the way of joining the data frames.}
+\item{join}{Character vector, indicating the method of joining the data frames.
+Can be \code{"full"} (default), \code{"left"}, \code{"right"}, \code{"inner"}, \code{"anti"}, \code{"semi"}
+or \code{"bind"}. See details below.}
 
 \item{by}{Specifications of the columns used for merging.}
 
-\item{id}{Optional name for ID column that will be created to indicate the source data frames for appended rows.}
+\item{id}{Optional name for ID column that will be created to indicate the
+source data frames for appended rows.}
 
 \item{verbose}{Toggle warnings.}
 }
