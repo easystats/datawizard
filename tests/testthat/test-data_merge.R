@@ -1,4 +1,4 @@
-if (require("testthat")) {
+if (require("testthat") && require("poorman")) {
   data(mtcars)
   x <- mtcars[3:5, 1:3]
   y <- mtcars[30:32, c(1, 4:5)]
@@ -16,10 +16,13 @@ if (require("testthat")) {
 
     out <- data_merge(x, y, join = "left", by = "id")
     expect_equal(colnames(out), c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y"))
+    expect_equal(out$disp, poorman::left_join(x, y, by = "id")$disp)
     expect_equal(dim(out), c(3, 7))
 
     out <- data_merge(x, y, join = "left", by = "mpg")
     expect_equal(colnames(out), c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y"))
+    expect_equal(out$disp, poorman::left_join(x, y, by = "mpg")$disp)
+    expect_equal(out$mpg, poorman::left_join(x, y, by = "mpg")$mpg)
     expect_equal(dim(out), c(3, 7))
   })
 
