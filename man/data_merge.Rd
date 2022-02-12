@@ -7,7 +7,7 @@
 \usage{
 data_merge(x, ...)
 
-\method{data_merge}{data.frame}(x, y, join = "left", by = NULL, id = NULL, ...)
+\method{data_merge}{data.frame}(x, y, join = "left", by = NULL, id = NULL, verbose = TRUE, ...)
 }
 \arguments{
 \item{x, y}{A data frame to merge}
@@ -19,6 +19,8 @@ data_merge(x, ...)
 \item{by}{Specifications of the columns used for merging.}
 
 \item{id}{Optional name for ID column that will be created to indicate the source data frames for appended rows.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 A merged data frame.
