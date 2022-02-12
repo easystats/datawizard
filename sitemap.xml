@@ -103,6 +103,9 @@
     <loc>/reference/remove_empty.html</loc>
   </url>
   <url>
+    <loc>/reference/replace_nan_inf.html</loc>
+  </url>
+  <url>
     <loc>/reference/rescale_weights.html</loc>
   </url>
   <url>
