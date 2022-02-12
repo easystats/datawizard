@@ -17,15 +17,48 @@
 #' @examples
 #' data(mtcars)
 #' x <- mtcars[1:5, 1:3]
-#' y <- mtcars[28:32, 3:5]
+#' y <- mtcars[28:32, 4:6]
 #'
-#' # left-join, add new variables from y to x
+#' # add ID common column
+#' x$id <- 1:5
+#' y$id <- 3:7
+#'
+#' # left-join, add new variables from y to x, where "id" values match
 #' data_merge(x, y)
+#'
+#' # right-join, add new variables from x to y, where "id" values match
+#' data_merge(x, y, join = "right")
+#'
+#' # full-join
+#' data_merge(x, y, join = "full")
+#'
+#'
+#' data(mtcars)
+#' x <- mtcars[1:5, 1:3]
+#' y <- mtcars[28:32, c(1, 4:5)]
+#'
+#' # add ID common column
+#' x$id <- 1:5
+#' y$id <- 3:7
+#'
+#' # left-join, no matching rows (because columns "id" and "disp" are used)
+#' # new variables get all NA values
+#' data_merge(x, y)
+#'
+#' # one common value in "mpg", so one row from y is copied to x
+#' data_merge(x, y, by = "mpg")
+#'
+#' # only keep rows with matching values in by-column
+#' data_merge(x, y, join = "semi", by = "mpg")
+#'
+#' # only keep rows with non-matching values in by-column
+#' data_merge(x, y, join = "anti", by = "mpg")
 #' @export
 data_merge <- function(x, ...) {
   UseMethod("data_merge")
 }
 
+#' @rdname data_merge
 #' @export
 data_join <- data_merge
 
@@ -64,7 +97,7 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   }
 
 
-  # check valid combination of "join" and "by"
+  # check valid combination of "join" and "by" -----------------------
 
   if (join %in% c("anti", "semi") && (is.null(by) || length(by) > 1)) {
     stop(insight::format_message(sprintf("For `join='%s'`, `by` needs to be a name of only one variable that is present in both data frames.", join)), call. = FALSE)
@@ -74,6 +107,9 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   # merge --------------------
 
   out <- x
+
+  # for later sorting
+  out$.data_merge_id <- 1:nrow(out)
 
   out <- switch(
     join,
@@ -85,6 +121,11 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
     "anti" = out[!out[[by]] %in% y[[by]], , drop = FALSE]
   )
 
+
+  # sort rows, add attributes, and return results -------------------------
+
+  out <- out[order(out$.data_merge_id), ]
+  out$.data_merge_id <- NULL
 
   attributes(out) <- utils::modifyList(attr_y, attributes(out))
   attributes(out) <- utils::modifyList(attr_x, attributes(out))

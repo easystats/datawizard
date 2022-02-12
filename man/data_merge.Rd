@@ -2,10 +2,13 @@
 % Please edit documentation in R/data_merge.R
 \name{data_merge}
 \alias{data_merge}
+\alias{data_join}
 \alias{data_merge.data.frame}
 \title{Merge (join) two data frames, or a list of data frames}
 \usage{
 data_merge(x, ...)
+
+data_join(x, ...)
 
 \method{data_merge}{data.frame}(x, y, join = "left", by = NULL, id = NULL, verbose = TRUE, ...)
 }
@@ -31,8 +34,40 @@ Merge (join) two data frames, or a list of data frames.
 \examples{
 data(mtcars)
 x <- mtcars[1:5, 1:3]
-y <- mtcars[28:32, 3:5]
+y <- mtcars[28:32, 4:6]
 
-# left-join, add new variables from y to x
+# add ID common column
+x$id <- 1:5
+y$id <- 3:7
+
+# left-join, add new variables from y to x, where "id" values match
 data_merge(x, y)
+
+# right-join, add new variables from x to y, where "id" values match
+data_merge(x, y, join = "right")
+
+# full-join
+data_merge(x, y, join = "full")
+
+
+data(mtcars)
+x <- mtcars[1:5, 1:3]
+y <- mtcars[28:32, c(1, 4:5)]
+
+# add ID common column
+x$id <- 1:5
+y$id <- 3:7
+
+# left-join, no matching rows (because columns "id" and "disp" are used)
+# new variables get all NA values
+data_merge(x, y)
+
+# one common value in "mpg", so one row from y is copied to x
+data_merge(x, y, by = "mpg")
+
+# only keep rows with matching values in by-column
+data_merge(x, y, join = "semi", by = "mpg")
+
+# only keep rows with non-matching values in by-column
+data_merge(x, y, join = "anti", by = "mpg")
 }
