@@ -10,14 +10,75 @@
 #'   or `"bind"`. See details below.
 #' @param by Specifications of the columns used for merging.
 #' @param id Optional name for ID column that will be created to indicate the
-#'   source data frames for appended rows.
+#'   source data frames for appended rows. Only applies if `join = "bind"`.
 #' @param verbose Toggle warnings.
 #' @param ... Not used.
 #'
 #' @return
 #' A merged data frame.
 #'
+#' @details
+#'
+#'   \subsection{Merging data frames}{
+#'     Merging data frames is performed by adding rows (cases), columns
+#'     (variables) or both from the source data frame (`y`) to the target
+#'     data frame (`x`). This usually requires one or more variables which
+#'     are included in both data frames and that are used for merging, typically
+#'     indicated with the `by` argument. When `by` contains a variable present
+#'     in both data frames, cases are matched and filtered by identical values
+#'     of `by` in `x` and `y`.
+#'   }
+#'
+#'   \subsection{Left- and right-joins}{
+#'     Left- and right joins usually don't add new rows (cases), but only new
+#'     columns (variables). For `join = "left"` or `join = "right"` to work,
+#'     `by` *must* indicate one or more columns that are included in both
+#'     data frames. For `join = "left"`, if `by` is an identifier variable,
+#'     which is included in both `x` and `y`, all variables from `y` are copied
+#'     to `x`, but only those cases from `y` that have matching values in their
+#'     identifier variable in `x`. If there is no match between identifiers in
+#'     `x` and `y`, the copied variable from `y` will get a `NA` value for this
+#'     particular case. Other variables that occur both in `x` and `y`, but are
+#'     not used as identifiers (with `by`), will be renamed to avoid multiple
+#'     identical variable names. Cases in `y` where values from the identifier
+#'     have no match in `x`'s identifier are removed. `join = "right"` works in
+#'     a similar way as `join = "left"`, just that only cases from `x` that
+#'     have matching values in their identifier variable in `y` are chosen.
+#'   }
+#'
+#'   \subsection{Full joins}{
+#'
+#'   }
+#'
 #' @examples
+#' x <- data.frame(a = 1:3, b = c("a", "b", "c"), c = 5:7, id = 1:3)
+#' y <- data.frame(c = 6:8, d = c("f", "g", "h"), e = 100:102, id = 2:4)
+#'
+#' x
+#' y
+#'
+#' # "by" will default to all shared columns, i.e. "c" and "id". new columns
+#' # "d" and "e" will be copied from "y" to "x", but there are only two cases
+#' # in "x" that have the same values for "c" and "id" in "y". only those cases
+#' # have values in the copied columns, the other case gets "NA".
+#' data_merge(x, y, join = "left")
+#'
+#' # we change the id-value here
+#' x <- data.frame(a = 1:3, b = c("a", "b", "c"), c = 5:7, id = 1:3)
+#' y <- data.frame(c = 6:8, d = c("f", "g", "h"), e = 100:102, id = 3:5)
+#'
+#' x
+#' y
+#'
+#' # no cases in "y" have the same matching "c" and "id" as in "x", thus
+#' # copied variables from "y" to "x" copy no values, all get NA.
+#' data_merge(x, y, join = "left")
+#'
+#' # one case in "y" has a match in "id" with "x", thus values for this
+#' # case from the remaining variables in "y" are copied to "x", all other
+#' # values (cases) in those remaining variables get NA
+#' data_merge(x, y, join = "left", by = "id")
+#'
 #' data(mtcars)
 #' x <- mtcars[1:5, 1:3]
 #' y <- mtcars[28:32, 4:6]
@@ -26,10 +87,12 @@
 #' x$id <- 1:5
 #' y$id <- 3:7
 #'
-#' # left-join, add new variables from y to x, where "id" values match
+#' # left-join, add new variables and copy values from y to x,
+#' # where "id" values match
 #' data_merge(x, y)
 #'
-#' # right-join, add new variables from x to y, where "id" values match
+#' # right-join, add new variables and copy values from x to y,
+#' # where "id" values match
 #' data_merge(x, y, join = "right")
 #'
 #' # full-join
@@ -57,14 +120,14 @@
 #' # only keep rows with non-matching values in by-column
 #' data_merge(x, y, join = "anti", by = "mpg")
 #'
-#' # merge list of data frames
+#' # merge list of data frames. can be of different rows
 #' x <- mtcars[1:5, 1:3]
-#' y <- mtcars[28:32, 3:5]
-#' z <- mtcars[11:15, 6:8]
+#' y <- mtcars[28:31, 3:5]
+#' z <- mtcars[11:18, c(1, 3:4, 6:8)]
 #' x$id <- 1:5
-#' y$id <- 3:7
-#' z$id <- 2:6
-#' data_merge(list(x, y, z), by = "id")
+#' y$id <- 4:7
+#' z$id <- 3:10
+#' data_merge(list(x, y, z), join = "bind", by = "id", id = "source")
 #' @export
 data_merge <- function(x, ...) {
   UseMethod("data_merge")
@@ -79,7 +142,6 @@ data_join <- data_merge
 data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, verbose = TRUE, ...) {
   attr_x <- attributes(x)
   attr_y <- attributes(y)
-
 
   # check join-argument ----------------------
 
@@ -97,10 +159,10 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
         call. = FALSE
       )
     }
-    id <- make.unique(c(all_columns, id))[length(all_columns) + 1]
+    id <- make.unique(c(all_columns, id), sep = "_")[length(all_columns) + 1]
   }
 
-  if (!is.null(id) && join %in% c("full", "bind", "anti", "semi")) {
+  if (!is.null(id) && join == "bind") {
     x[[id]] <- 1
     y[[id]] <- 2
   }
@@ -132,8 +194,8 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
     if (!length(by)) {
       if (isTRUE(verbose)) {
         warning(
-          insight::format_message("Found no matching columns in the data frames. Fully merging both data frames now.",
-                                  "Note that this can lead to unintended results, because rows in `x` are probably duplicated."),
+          insight::format_message("Found no matching columns in the data frames. Fully merging both data frames now. Note that this can lead to unintended results, because rows in `x` and `y` are possibly duplicated.",
+                                  "You probably want to use `data_merge(x, y, join = \"bind\")` instead."),
           call. = FALSE
         )
       }
@@ -203,9 +265,27 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
 #' @export
 data_merge.list <- function(x, join = "left", by = NULL, id = NULL, verbose = TRUE, ...) {
   out <- x[[1]]
+  df_id <- rep(1, times = nrow(out))
+
   for (i in 2:length(x)) {
-    out <- data_merge(out, x[[i]], join = join, by = by, id = id, verbose = verbose, ...)
+    out <- data_merge(out, x[[i]], join = join, by = by, id = NULL, verbose = verbose, ...)
+    df_id <- c(df_id, rep(i, times = nrow(x[[i]])))
   }
+
+  # we need separate handling for list of data frames and id-variable here
+  if (!is.null(id) && join == "bind") {
+    if (id %in% colnames(out)) {
+      if (isTRUE(verbose)) {
+        warning(
+          insight::format_message(sprintf("Value of `id` already exists as column name. ID column was renamed to `%s`.", id)),
+          call. = FALSE
+        )
+      }
+      id <- make.unique(c(colnames(out), id), sep = "_")[length(colnames(out)) + 1]
+    }
+    out[[id]] <- df_id
+  }
+
   out
 }
 

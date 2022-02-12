@@ -153,4 +153,13 @@ if (require("testthat") && require("poorman")) {
   # y2 <- mtcars[30:32, 3:6]
   # data_merge(x2, y2, join = "full")
   # data_merge(x2, y2, join = "bind")
+
+  # x <- mtcars[1:5, 1:3]
+  # y <- mtcars[28:31, 3:5]
+  # z <- mtcars[11:18, c(1, 3:4, 6:8)]
+  # x$id <- 1:5
+  # y$id <- 4:7
+  # z$id <- 3:10
+  # data_merge(list(x, y, z), by = "id", id = "df", join = "bind")
+
 }
