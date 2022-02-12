@@ -101,7 +101,7 @@ if (require("testthat") && require("poorman")) {
     out <- data_merge(x, y, join = "full", by = "id")
     expect_equal(colnames(out), c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y"))
     expect_equal(dim(out), c(4, 7))
-    expect_equal(out$mpg, c(22.8, 21.4, 18.7, NA), tolerance = 1e-2)
+    expect_equal(out$mpg.x, c(22.8, 21.4, 18.7, NA), tolerance = 1e-2)
     expect_equal(out$id, 1:4, tolerance = 1e-2)
 
     out <- data_merge(x, y, join = "full", by = "mpg")
