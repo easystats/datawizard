@@ -178,7 +178,7 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   }
 
   # try to restore original column order as good as possible
-  out <- out[match(c(all_columns, setdiff(all_columns, colnames(out))), colnames(out))]
+  out <- out[match(c(all_columns, setdiff(colnames(out), all_columns)), colnames(out))]
 
   attributes(out) <- utils::modifyList(attr_y, attributes(out))
   attributes(out) <- utils::modifyList(attr_x, attributes(out))
