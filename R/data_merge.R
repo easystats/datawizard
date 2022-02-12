@@ -152,29 +152,34 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
 
   # merge --------------------
 
-  out <- x
-  all_columns <- union(colnames(x), colnames(y))
-
   # for later sorting
-  out$.data_merge_id <- 1:nrow(out)
+  x$.data_merge_id_x <- 1:nrow(x)
+  y$.data_merge_id_y <- (1:nrow(y)) + nrow(x)
+  all_columns <- union(colnames(x), colnames(y))
 
   out <- switch(
     join,
-    "full" = merge(out, y, all = TRUE, sort = FALSE, by = by),
-    "left" = merge(out, y, all.x = TRUE, sort = FALSE, by = by),
-    "right" = merge(out, y, all.y = TRUE, sort = FALSE, by = by),
-    "inner" = merge(out, y, sort = FALSE, by = by),
-    "semi" = out[out[[by]] %in% y[[by]], , drop = FALSE],
-    "anti" = out[!out[[by]] %in% y[[by]], , drop = FALSE],
-    "bind" = .bind_data_frames(out, y)
+    "full" = merge(x, y, all = TRUE, sort = FALSE, by = by),
+    "left" = merge(x, y, all.x = TRUE, sort = FALSE, by = by),
+    "right" = merge(x, y, all.y = TRUE, sort = FALSE, by = by),
+    "inner" = merge(x, y, sort = FALSE, by = by),
+    "semi" = x[x[[by]] %in% y[[by]], , drop = FALSE],
+    "anti" = x[!x[[by]] %in% y[[by]], , drop = FALSE],
+    "bind" = .bind_data_frames(x, y)
   )
 
 
   # sort rows, add attributes, and return results -------------------------
 
-  if (!is.null(out$.data_merge_id)) {
-    out <- out[order(out$.data_merge_id), ]
-    out$.data_merge_id <- NULL
+  if (!is.null(out$.data_merge_id_x)) {
+    # for full joins, we have no complete sorting id, but NAs for each
+    # data frame. we now "merge" the two sorting IDs from each data frame.
+    if (any(is.na(out$.data_merge_id_x)) && !is.null(out$.data_merge_id_y)) {
+      out$.data_merge_id_x[is.na(out$.data_merge_id_x)] <- out$.data_merge_id_y[is.na(out$.data_merge_id_x)]
+    }
+    out <- out[order(out$.data_merge_id_x), ]
+    out$.data_merge_id_x <- NULL
+    out$.data_merge_id_y <- NULL
   }
 
   # try to restore original column order as good as possible. Therefore, we
