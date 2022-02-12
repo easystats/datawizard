@@ -53,6 +53,15 @@
 #'
 #' # only keep rows with non-matching values in by-column
 #' data_merge(x, y, join = "anti", by = "mpg")
+#'
+#' # merge list of data frames
+#' x <- mtcars[1:5, 1:3]
+#' y <- mtcars[28:32, 3:5]
+#' z <- mtcars[11:15, 6:8]
+#' x$id <- 1:5
+#' y$id <- 3:7
+#' z$id <- 2:6
+#' data_merge(list(x, y, z), by = "id")
 #' @export
 data_merge <- function(x, ...) {
   UseMethod("data_merge")
@@ -129,5 +138,16 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
 
   attributes(out) <- utils::modifyList(attr_y, attributes(out))
   attributes(out) <- utils::modifyList(attr_x, attributes(out))
+  out
+}
+
+
+
+#' @export
+data_merge.list <- function(x, join = "left", by = NULL, id = NULL, verbose = TRUE, ...) {
+  out <- x[[1]]
+  for (i in 2:length(x)) {
+    out <- data_merge(out, x[[i]], join = join, by = by, id = id, verbose = verbose, ...)
+  }
   out
 }

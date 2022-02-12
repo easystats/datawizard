@@ -70,4 +70,13 @@ data_merge(x, y, join = "semi", by = "mpg")
 
 # only keep rows with non-matching values in by-column
 data_merge(x, y, join = "anti", by = "mpg")
+
+# merge list of data frames
+x <- mtcars[1:5, 1:3]
+y <- mtcars[28:32, 3:5]
+z <- mtcars[11:15, 6:8]
+x$id <- 1:5
+y$id <- 3:7
+z$id <- 2:6
+data_merge(list(x, y, z), by = "id")
 }
