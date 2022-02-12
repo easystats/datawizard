@@ -26,11 +26,12 @@
 replace_nan_inf <- function(data) {
   if (is.data.frame(data)) {
     # iterate variables of data frame
-    for (i in colnames(data)) {
+    data[] <- lapply(data, function(i) {
       # convert `NaN` and `Inf` to missing
-      data[[i]][is.nan(data[[i]])] <- NA
-      data[[i]][is.infinite(data[[i]])] <- NA
-    }
+      i[is.nan(i)] <- NA
+      i[is.infinite(i)] <- NA
+      i
+    })
   } else {
     data[is.nan(data)] <- NA
     data[is.infinite(data)] <- NA
