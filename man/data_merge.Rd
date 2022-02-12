@@ -29,5 +29,10 @@ A merged data frame.
 Merge (join) two data frames, or a list of data frames.
 }
 \examples{
-data(iris)
+data(mtcars)
+x <- mtcars[1:5, 1:3]
+y <- mtcars[28:32, 3:5]
+
+# left-join, add new variables from y to x
+data_merge(x, y)
 }

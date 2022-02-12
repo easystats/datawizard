@@ -15,7 +15,12 @@
 #' A merged data frame.
 #'
 #' @examples
-#' data(iris)
+#' data(mtcars)
+#' x <- mtcars[1:5, 1:3]
+#' y <- mtcars[28:32, 3:5]
+#'
+#' # left-join, add new variables from y to x
+#' data_merge(x, y)
 #' @export
 data_merge <- function(x, ...) {
   UseMethod("data_merge")
@@ -30,7 +35,14 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   attr_x <- attributes(x)
   attr_y <- attributes(y)
 
-  # check merge columns
+
+  # check join-argument ----------------------
+
+  join <- match.arg(join, choices = c("full", "left", "right", "inner", "semi", "anti"))
+
+
+  # check merge columns ("by"-argument) ----------------------
+
   if (is.null(by)) {
     by <- intersect(colnames(x), colnames(y))
   }
@@ -44,7 +56,35 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   }
 
   if (!length(by)) {
+    if (isTRUE(verbose) && !identical(join, "full")) {
+      warning(insight::format_message("Found no matching columns in the data frames. Fully merging both data frames now."), call. = FALSE)
+    }
+    by <- NULL
+    join <- "full"
   }
+
+
+  # check valid combination of "join" and "by"
+
+  if (join %in% c("anti", "semi") && (is.null(by) || length(by) > 1)) {
+    stop(insight::format_message(sprintf("For `join='%s'`, `by` needs to be a name of only one variable that is present in both data frames.", join)), call. = FALSE)
+  }
+
+
+  # merge --------------------
+
+  out <- x
+
+  out <- switch(
+    join,
+    "full" = merge(out, y, all = TRUE, sort = FALSE, by = by),
+    "left" = merge(out, y, all.x = TRUE, sort = FALSE, by = by),
+    "right" = merge(out, y, all.y = TRUE, sort = FALSE, by = by),
+    "inner" = merge(out, y, sort = FALSE, by = by),
+    "semi" = out[out[[by]] %in% y[[by]], , drop = FALSE],
+    "anti" = out[!out[[by]] %in% y[[by]], , drop = FALSE]
+  )
+
 
   attributes(out) <- utils::modifyList(attr_y, attributes(out))
   attributes(out) <- utils::modifyList(attr_x, attributes(out))
