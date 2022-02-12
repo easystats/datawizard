@@ -177,8 +177,16 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
     out$.data_merge_id <- NULL
   }
 
-  # try to restore original column order as good as possible
-  out <- out[match(c(all_columns, setdiff(colnames(out), all_columns)), colnames(out))]
+  # try to restore original column order as good as possible. Therefore, we
+  # first take all column names of the original input data frames, then
+  # we add all new columns, like duplicated from merging (name.x and name.y,
+  # if "name" was in both data frames, but not used in "by"), and then do a
+  # final check that all column names are present in "out" (e.g., "name" would)
+  # no longer be there if we have "name.x" and "name.y").
+
+  all_columns <- c(all_columns, setdiff(colnames(out), all_columns))
+  all_columns <- all_columns[all_columns %in% colnames(out)]
+  out <- out[all_columns]
 
   attributes(out) <- utils::modifyList(attr_y, attributes(out))
   attributes(out) <- utils::modifyList(attr_x, attributes(out))
