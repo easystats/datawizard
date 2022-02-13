@@ -8,7 +8,10 @@
 
   * To check for names: `object_has_names()` and `object_has_rownames()`.
 
-  * To rotate dataframe: `data_rotate()`.
+  * To rotate data frames: `data_rotate()`.
+  
+  * To merge/join multiple data frames: `data_merge()` (or its alias
+    `data_join()`).
 
   * To replace `Inf` and `NaN` values with `NA`s: `replace_nan_inf()`.
 
