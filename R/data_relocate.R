@@ -55,7 +55,7 @@ data_relocate <- function(data,
     } else if (after >= 1 && after <= ncol(data)) {
       after <- names(data)[after]
     } else {
-      stop("No valid position defined in 'before'.", call. = FALSE)
+      stop("No valid position defined in 'after'.", call. = FALSE)
     }
   }
 
