@@ -220,8 +220,12 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   # merge --------------------
 
   # for later sorting
-  x$.data_merge_id_x <- 1:nrow(x)
-  y$.data_merge_id_y <- (1:nrow(y)) + nrow(x)
+  if (nrow(x) > 0) {
+    x$.data_merge_id_x <- 1:nrow(x)
+  }
+  if (nrow(y) > 0) {
+    y$.data_merge_id_y <- (1:nrow(y)) + nrow(x)
+  }
   all_columns <- union(colnames(x), colnames(y))
 
   out <- switch(join,
@@ -296,13 +300,26 @@ data_merge.list <- function(x, join = "left", by = NULL, id = NULL, verbose = TR
 
 .bind_data_frames <- function(x, y) {
   # add ID for merging
-  x$.data_merge_row <- 1:nrow(x)
-  y$.data_merge_row <- (nrow(x) + 1):(nrow(x) + nrow(y))
+  if (nrow(x) > 0) {
+    x$.data_merge_row <- 1:nrow(x)
+  }
+  if (nrow(y) > 0) {
+    y$.data_merge_row <- (nrow(x) + 1):(nrow(x) + nrow(y))
+  }
 
   # merge and sort
-  by <- c(".data_merge_row", intersect(colnames(x), colnames(y)))
+  by <- intersect(colnames(x), colnames(y))
   out <- merge(x, y, all = TRUE, sort = FALSE, by = by)
-  out <- out[order(out$.data_merge_row), ]
+
+  # for empty df's, merge() may return an empty character vector
+  # make sure it's a data frame object.
+  if (!is.data.frame(out)) {
+    out <- as.data.frame(out)
+  }
+
+  if (!is.null(out$.data_merge_row)) {
+    out <- out[order(out$.data_merge_row), ]
+  }
 
   out$.data_merge_row <- NULL
   out
