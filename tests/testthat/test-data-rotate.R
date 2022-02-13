@@ -1,4 +1,4 @@
-test_that("rotate data", {
+test_that("rotate data works as expected", {
   df <- mtcars[1:3, 1:4]
 
   expect_equal(
