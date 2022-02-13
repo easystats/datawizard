@@ -1,5 +1,4 @@
 if (require("testthat")) {
-
   data(iris)
 
   test_that("convert_to_na-factor", {

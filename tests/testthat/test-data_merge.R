@@ -222,5 +222,4 @@ if (require("testthat") && require("poorman")) {
     expect_equal(dim(data_merge(x, y, join = "bind")), c(0, 1))
     expect_equal(dim(data_merge(x, z, join = "bind")), c(0, 2))
   })
-
 }
