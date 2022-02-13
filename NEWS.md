@@ -13,6 +13,8 @@
   * To merge/join multiple data frames: `data_merge()` (or its alias
     `data_join()`).
 
+  * To replace specific values with `NA`s: `convert_to_na()`.
+  
   * To replace `Inf` and `NaN` values with `NA`s: `replace_nan_inf()`.
 
 - Arguments `cols`, `before` and `after` in `data_relocate()` can now also be
