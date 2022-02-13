@@ -5,7 +5,6 @@ test_that("convert dataframe to numeric", {
 
 test_that("convert character to numeric", {
   expect_equal(convert_data_to_numeric(c("xyz", "ab")), c(1, 1))
-  # convert_data_to_numeric(c("123", "24x"))
 })
 
 test_that("convert factor to numeric", {
