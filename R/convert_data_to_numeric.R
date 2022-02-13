@@ -1,14 +1,19 @@
 #' Convert data to numeric
 #'
-#' Convert data to numeric by converting characters to factors and factors to either numeric levels or dummy variables.
+#' Convert data to numeric by converting characters to factors and factors to
+#' either numeric levels or dummy variables.
 #'
 #' @param x A data frame or a vector.
-#' @param dummy_factors Transform factors to dummy factors (all factor levels as different columns filled with a binary 0-1 value).
+#' @param dummy_factors Transform factors to dummy factors (all factor levels as
+#'   different columns filled with a binary 0-1 value).
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @examples
-#' head(convert_data_to_numeric(iris))
+#' convert_data_to_numeric(head(ToothGrowth))
+#' convert_data_to_numeric(head(ToothGrowth), dummy_factors = FALSE)
+#'
 #' @return A data frame of numeric variables.
+#'
 #' @export
 convert_data_to_numeric <- function(x, ...) {
   UseMethod("convert_data_to_numeric")
