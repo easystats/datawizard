@@ -32,5 +32,13 @@ if (require("testthat")) {
 
     x <- convert_to_na(iris, na = list(5, "versicolor"))
     expect_equal(sum(is.na(x)), 64)
+
+    data(iris)
+    iris$Sepal.Width <- as.character(iris$Sepal.Width)
+    x <- convert_to_na(iris, na = 3)
+    expect_equal(sum(is.na(x)), sum(sapply(iris, function(i) if (is.numeric(i)) sum(i == 3) else 0)))
+
+    x <- convert_to_na(iris, na = list(3, "3"))
+    expect_equal(sum(is.na(x)), 27)
   })
 }
