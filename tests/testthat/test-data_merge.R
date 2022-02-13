@@ -200,4 +200,20 @@ if (require("testthat") && require("poorman")) {
       ignore_attr = TRUE
     )
   })
+
+
+  # join empty dataframes -----------------------
+
+  x <- data.frame("x" = character())
+  y <- data.frame("x" = character())
+  z <- data.frame("y" = character())
+
+  test_that("join empty dataframes", {
+    expect_equal(dim(data_merge(x, y, join = "left")), c(0, 1))
+    expect_equal(dim(data_merge(x, y, join = "full")), c(0, 1))
+    expect_equal(dim(data_merge(x, y, join = "right")), c(0, 1))
+    expect_equal(dim(data_merge(x, y, join = "bind")), c(0, 1))
+    expect_equal(dim(data_merge(x, z, join = "bind")), c(0, 2))
+  })
+
 }
