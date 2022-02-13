@@ -1,6 +1,22 @@
 # data_partition works as expected
 
     Code
+      data_partition(letters, seed = 123)
+    Output
+      $training
+        X.o. X.s. X.n. X.c. X.j. X.r. X.k. X.e. X.x. X.y. X.w. X.t. X.i. X.l. X.u.
+      1    o    s    n    c    j    r    k    e    x    y    w    t    i    l    u
+        X.m. X.p. X.h.
+      1    m    p    h
+      
+      $test
+        X.a. X.b. X.d. X.f. X.g. X.q. X.v. X.z.
+      1    a    b    d    f    g    q    v    z
+      
+
+---
+
+    Code
       str(data_partition(df))
     Output
       List of 2
