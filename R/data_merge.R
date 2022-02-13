@@ -31,17 +31,19 @@
 #'
 #'   \subsection{Left- and right-joins}{
 #'     Left- and right joins usually don't add new rows (cases), but only new
-#'     columns (variables). For `join = "left"` or `join = "right"` to work,
-#'     `by` *must* indicate one or more columns that are included in both
-#'     data frames. For `join = "left"`, if `by` is an identifier variable,
-#'     which is included in both `x` and `y`, all variables from `y` are copied
-#'     to `x`, but only those cases from `y` that have matching values in their
-#'     identifier variable in `x`. If there is no match between identifiers in
-#'     `x` and `y`, the copied variable from `y` will get a `NA` value for this
-#'     particular case. Other variables that occur both in `x` and `y`, but are
-#'     not used as identifiers (with `by`), will be renamed to avoid multiple
-#'     identical variable names. Cases in `y` where values from the identifier
-#'     have no match in `x`'s identifier are removed. `join = "right"` works in
+#'     columns (variables) for existing cased in `x`. For `join = "left"` or
+#'     `join = "right"` to work, `by` *must* indicate one or more columns that
+#'     are included in both data frames. For `join = "left"`, if `by` is an
+#'     identifier variable, which is included in both `x` and `y`, all variables
+#'     from `y` are copied to `x`, but only those cases from `y` that have
+#'     matching values in their identifier variable in `x` (i.e. all cases
+#'     in `x` that are also found in `y` get the related values from the new
+#'     columns in `y`). If there is no match between identifiers in `x` and `y`,
+#'     the copied variable from `y` will get a `NA` value for this particular
+#'     case. Other variables that occur both in `x` and `y`, but are not used
+#'     as identifiers (with `by`), will be renamed to avoid multiple identical
+#'     variable names. Cases in `y` where values from the identifier have no
+#'     match in `x`'s identifier are removed. `join = "right"` works in
 #'     a similar way as `join = "left"`, just that only cases from `x` that
 #'     have matching values in their identifier variable in `y` are chosen.
 #'   }

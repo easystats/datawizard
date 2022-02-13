@@ -47,17 +47,19 @@ of \code{by} in \code{x} and \code{y}.
 
 \subsection{Left- and right-joins}{
 Left- and right joins usually don't add new rows (cases), but only new
-columns (variables). For \code{join = "left"} or \code{join = "right"} to work,
-\code{by} \emph{must} indicate one or more columns that are included in both
-data frames. For \code{join = "left"}, if \code{by} is an identifier variable,
-which is included in both \code{x} and \code{y}, all variables from \code{y} are copied
-to \code{x}, but only those cases from \code{y} that have matching values in their
-identifier variable in \code{x}. If there is no match between identifiers in
-\code{x} and \code{y}, the copied variable from \code{y} will get a \code{NA} value for this
-particular case. Other variables that occur both in \code{x} and \code{y}, but are
-not used as identifiers (with \code{by}), will be renamed to avoid multiple
-identical variable names. Cases in \code{y} where values from the identifier
-have no match in \code{x}'s identifier are removed. \code{join = "right"} works in
+columns (variables) for existing cased in \code{x}. For \code{join = "left"} or
+\code{join = "right"} to work, \code{by} \emph{must} indicate one or more columns that
+are included in both data frames. For \code{join = "left"}, if \code{by} is an
+identifier variable, which is included in both \code{x} and \code{y}, all variables
+from \code{y} are copied to \code{x}, but only those cases from \code{y} that have
+matching values in their identifier variable in \code{x} (i.e. all cases
+in \code{x} that are also found in \code{y} get the related values from the new
+columns in \code{y}). If there is no match between identifiers in \code{x} and \code{y},
+the copied variable from \code{y} will get a \code{NA} value for this particular
+case. Other variables that occur both in \code{x} and \code{y}, but are not used
+as identifiers (with \code{by}), will be renamed to avoid multiple identical
+variable names. Cases in \code{y} where values from the identifier have no
+match in \code{x}'s identifier are removed. \code{join = "right"} works in
 a similar way as \code{join = "left"}, just that only cases from \code{x} that
 have matching values in their identifier variable in \code{y} are chosen.
 }
