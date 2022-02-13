@@ -63,7 +63,7 @@ have matching values in their identifier variable in \code{y} are chosen.
 }
 
 \subsection{Full joins}{
-
+TODO
 }
 }
 \examples{
@@ -144,4 +144,5 @@ x$id <- 1:5
 y$id <- 4:7
 z$id <- 3:10
 data_merge(list(x, y, z), join = "bind", by = "id", id = "source")
+
 }

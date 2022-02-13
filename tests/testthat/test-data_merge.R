@@ -141,25 +141,63 @@ if (require("testthat") && require("poorman")) {
     expect_equal(out, poor_out)
   })
 
-  ## TODO tests needed here
+  # joins without common columns -----------------------
 
-  # x2 <- mtcars[3:5, 1:3]
-  # y2 <- mtcars[30:32, 4:6]
-  # data_merge(x2, y2, join = "full")
-  # data_merge(x2, y2, join = "bind")
-  #
-  #
+  test_that("bind-join", {
+    x2 <- mtcars[3:5, 1:3]
+    y2 <- mtcars[30:32, 4:6]
+
+    expect_warning(
+      data_merge(x2, y2, join = "full"),
+      "Found no matching columns in the data frames."
+    )
+
+    expect_equal(
+      suppressWarnings(data_merge(x2, y2, join = "full")),
+      poorman::full_join(x2, y2),
+      ignore_attr = TRUE
+    )
+
+    expect_equal(
+      data_merge(x2, y2, join = "bind"),
+      poorman::bind_rows(x2, y2),
+      ignore_attr = TRUE
+    )
+  })
+
   # x2 <- mtcars[3:5, 1:3]
   # y2 <- mtcars[30:32, 3:6]
   # data_merge(x2, y2, join = "full")
   # data_merge(x2, y2, join = "bind")
 
-  # x <- mtcars[1:5, 1:3]
-  # y <- mtcars[28:31, 3:5]
-  # z <- mtcars[11:18, c(1, 3:4, 6:8)]
-  # x$id <- 1:5
-  # y$id <- 4:7
-  # z$id <- 3:10
-  # data_merge(list(x, y, z), by = "id", id = "df", join = "bind")
+  # join dataframes in a list -----------------------
 
+  test_that("join dataframes in a list", {
+    x <- mtcars[1:5, 1:3]
+    y <- mtcars[28:31, 3:5]
+    z <- mtcars[11:18, c(1, 3:4, 6:8)]
+    x$id <- 1:5
+    y$id <- 4:7
+    z$id <- 3:10
+
+    dat <- data_merge(list(x, y, z), by = "id", id = "df", join = "bind")
+
+    expect_equal(
+      remove_empty(subset(poorman::filter(dat, df == 1), select = -df)),
+      x,
+      ignore_attr = TRUE
+    )
+
+    expect_equal(
+      remove_empty(subset(poorman::filter(dat, df == 2), select = -c(df, id))),
+      subset(y, select = -id),
+      ignore_attr = TRUE
+    )
+
+    expect_equal(
+      remove_empty(subset(poorman::filter(dat, df == 3), select = -c(df, id))),
+      subset(z, select = -id),
+      ignore_attr = TRUE
+    )
+  })
 }

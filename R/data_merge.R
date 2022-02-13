@@ -47,7 +47,7 @@
 #'   }
 #'
 #'   \subsection{Full joins}{
-#'
+#'     TODO
 #'   }
 #'
 #' @examples
@@ -128,6 +128,7 @@
 #' y$id <- 4:7
 #' z$id <- 3:10
 #' data_merge(list(x, y, z), join = "bind", by = "id", id = "source")
+#'
 #' @export
 data_merge <- function(x, ...) {
   UseMethod("data_merge")
@@ -182,8 +183,10 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
     if (!all(by %in% colnames(x)) || !all(by %in% colnames(y))) {
       if (isTRUE(verbose)) {
         warning(
-          insight::format_message("Not all columns specified in `by` were found in the data frames.",
-                                  "Using all columns that are present in both data frames."),
+          insight::format_message(
+            "Not all columns specified in `by` were found in the data frames.",
+            "Using all columns that are present in both data frames."
+          ),
           call. = FALSE
         )
       }
@@ -194,8 +197,10 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
     if (!length(by)) {
       if (isTRUE(verbose)) {
         warning(
-          insight::format_message("Found no matching columns in the data frames. Fully merging both data frames now. Note that this can lead to unintended results, because rows in `x` and `y` are possibly duplicated.",
-                                  "You probably want to use `data_merge(x, y, join = \"bind\")` instead."),
+          insight::format_message(
+            "Found no matching columns in the data frames. Fully merging both data frames now. Note that this can lead to unintended results, because rows in `x` and `y` are possibly duplicated.",
+            "You probably want to use `data_merge(x, y, join = \"bind\")` instead."
+          ),
           call. = FALSE
         )
       }
@@ -219,8 +224,7 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   y$.data_merge_id_y <- (1:nrow(y)) + nrow(x)
   all_columns <- union(colnames(x), colnames(y))
 
-  out <- switch(
-    join,
+  out <- switch(join,
     "full" = merge(x, y, all = TRUE, sort = FALSE, by = by),
     "left" = merge(x, y, all.x = TRUE, sort = FALSE, by = by),
     "right" = merge(x, y, all.y = TRUE, sort = FALSE, by = by),
