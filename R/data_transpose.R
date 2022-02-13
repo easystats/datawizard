@@ -14,7 +14,7 @@
 data_transpose <- function(data, verbose = TRUE, ...) {
   if (length(unique(sapply(data, class))) > 1) {
     if (verbose) {
-      warning("Your data contains mixed types of data. After transposition, all will be transformed into characters.")
+      warning(insight::format_message("Your data contains mixed types of data. After transposition, all will be transformed into characters."), call. = FALSE)
     }
   }
   new <- as.data.frame(t(data))

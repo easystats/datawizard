@@ -4,7 +4,7 @@
 \alias{data_rotate}
 \title{Rotate a dataframe}
 \usage{
-data_rotate(data, rownames = NULL, colnames = FALSE)
+data_rotate(data, rownames = NULL, colnames = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{data}{A dataframe.}
@@ -15,6 +15,8 @@ being the name of this column.}
 
 \item{colnames}{Logical (optional), if \code{TRUE}, the values of the first column
 in \code{x} will be used as column names in the rotated dataframe.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 A (rotated) dataframe.

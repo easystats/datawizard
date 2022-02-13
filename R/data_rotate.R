@@ -10,6 +10,7 @@
 #'   being the name of this column.
 #' @param colnames Logical (optional), if `TRUE`, the values of the first column
 #'   in `x` will be used as column names in the rotated dataframe.
+#' @param verbose Toggle warnings.
 #'
 #' @return A (rotated) dataframe.
 #'
@@ -22,7 +23,13 @@
 #' data_rotate(x, colnames = TRUE)
 #' data_rotate(x, rownames = "property", colnames = TRUE)
 #' @export
-data_rotate <- function(data, rownames = NULL, colnames = FALSE) {
+data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE) {
+  if (length(unique(sapply(data, class))) > 1) {
+    if (verbose) {
+      warning(insight::format_message("Your data frame contains mixed types of data. After transposition, all will be transformed into characters."), call. = FALSE)
+    }
+  }
+
   # check if first column has column names to be used for rotated data
   if (colnames) {
     colnames <- data[[1]]
