@@ -34,13 +34,9 @@ template:
 
 reference:
 
-  - title: Data wrangling
+  - title: Data wrangling and transformation
   - contents:
       - starts_with("data_")
-      - remove_empty
-
-  - title: Data transformation
-  - contents:
       - adjust
       - center
       - change_scale
@@ -48,6 +44,7 @@ reference:
       - demean
       - normalize
       - ranktransform
+      - remove_empty
       - rescale_weights
       - reshape_ci
       - standardize
@@ -61,6 +58,11 @@ reference:
       - kurtosis
       - smoothness
       - skewness
+
+  - title: Data replacement and conversion
+  - contents:
+      - starts_with("replace_")
+      - starts_with("convert_")
 
   - title: String helpers
   - contents:
@@ -79,8 +81,6 @@ reference:
   - contents:
       - starts_with("is_")
       - starts_with("object_has")
-      - starts_with("replace_")
-      - convert_to_na
 
   - title: Visualization helpers
   - contents:
