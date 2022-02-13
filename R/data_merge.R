@@ -2,14 +2,14 @@
 #' @name data_merge
 #'
 #' @description
-#' Merge (join) two data frames, or a list of data frames. However, unliike
+#' Merge (join) two data frames, or a list of data frames. However, unlike
 #' base R's `merge()`, `data_merge()` offers a few more methods to join data
 #' frames, and it does not drop attributes.
 #'
 #' @param x,y A data frame to merge. `x` may also be a list of data frames
 #'   that will be merged. Note that the list-method has no `y` argument.
 #' @param join Character vector, indicating the method of joining the data frames.
-#'   Can be `"full"` (default), `"left"`, `"right"`, `"inner"`, `"anti"`, `"semi"`
+#'   Can be `"full"`, `"left"` (default), `"right"`, `"inner"`, `"anti"`, `"semi"`
 #'   or `"bind"`. See details below.
 #' @param by Specifications of the columns used for merging.
 #' @param id Optional name for ID column that will be created to indicate the

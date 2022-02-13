@@ -22,7 +22,7 @@ that will be merged. Note that the list-method has no \code{y} argument.}
 \item{...}{Not used.}
 
 \item{join}{Character vector, indicating the method of joining the data frames.
-Can be \code{"full"} (default), \code{"left"}, \code{"right"}, \code{"inner"}, \code{"anti"}, \code{"semi"}
+Can be \code{"full"}, \code{"left"} (default), \code{"right"}, \code{"inner"}, \code{"anti"}, \code{"semi"}
 or \code{"bind"}. See details below.}
 
 \item{by}{Specifications of the columns used for merging.}
@@ -36,7 +36,7 @@ source data frames for appended rows. Only applies if \code{join = "bind"}.}
 A merged data frame.
 }
 \description{
-Merge (join) two data frames, or a list of data frames. However, unliike
+Merge (join) two data frames, or a list of data frames. However, unlike
 base R's \code{merge()}, \code{data_merge()} offers a few more methods to join data
 frames, and it does not drop attributes.
 }
