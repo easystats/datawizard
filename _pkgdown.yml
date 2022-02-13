@@ -80,6 +80,7 @@ reference:
       - starts_with("is_")
       - starts_with("object_has")
       - starts_with("replace_")
+      - convert_to_na
 
   - title: Visualization helpers
   - contents:
