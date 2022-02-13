@@ -4,6 +4,7 @@
 \alias{data_merge}
 \alias{data_join}
 \alias{data_merge.data.frame}
+\alias{data_merge.list}
 \title{Merge (join) two data frames, or a list of data frames}
 \usage{
 data_merge(x, ...)
@@ -11,9 +12,12 @@ data_merge(x, ...)
 data_join(x, ...)
 
 \method{data_merge}{data.frame}(x, y, join = "left", by = NULL, id = NULL, verbose = TRUE, ...)
+
+\method{data_merge}{list}(x, join = "left", by = NULL, id = NULL, verbose = TRUE, ...)
 }
 \arguments{
-\item{x, y}{A data frame to merge}
+\item{x, y}{A data frame to merge. \code{x} may also be a list of data frames
+that will be merged. Note that the list-method has no \code{y} argument.}
 
 \item{...}{Not used.}
 
@@ -32,7 +36,9 @@ source data frames for appended rows. Only applies if \code{join = "bind"}.}
 A merged data frame.
 }
 \description{
-Merge (join) two data frames, or a list of data frames.
+Merge (join) two data frames, or a list of data frames. However, unliike
+base R's \code{merge()}, \code{data_merge()} offers a few more methods to join data
+frames, and it does not drop attributes.
 }
 \details{
 \subsection{Merging data frames}{
@@ -47,7 +53,7 @@ of \code{by} in \code{x} and \code{y}.
 
 \subsection{Left- and right-joins}{
 Left- and right joins usually don't add new rows (cases), but only new
-columns (variables) for existing cased in \code{x}. For \code{join = "left"} or
+columns (variables) for existing cases in \code{x}. For \code{join = "left"} or
 \code{join = "right"} to work, \code{by} \emph{must} indicate one or more columns that
 are included in both data frames. For \code{join = "left"}, if \code{by} is an
 identifier variable, which is included in both \code{x} and \code{y}, all variables
@@ -62,10 +68,35 @@ variable names. Cases in \code{y} where values from the identifier have no
 match in \code{x}'s identifier are removed. \code{join = "right"} works in
 a similar way as \code{join = "left"}, just that only cases from \code{x} that
 have matching values in their identifier variable in \code{y} are chosen.
+\cr \cr
+In base R, these are equivalent to \code{merge(x, y, all.x = TRUE)} and
+\code{merge(x, y, all.y = TRUE)}.
 }
 
 \subsection{Full joins}{
-TODO
+Full joins copy all cases from \code{y} to \code{x}. For matching cases in both
+data frames, values for new variables are copied from \code{y} to \code{x}. For
+cases in \code{y} not present in \code{x}, these will be added as new rows to \code{x}.
+Thus, full joins not only add new columns (variables), but also might
+add new rows (cases).
+\cr \cr
+In base R, this is equivalent to \code{merge(x, y, all = TRUE)}.
+}
+
+\subsection{Inner joins}{
+Inner joins merge two data frames, however, only those rows (cases) are
+kept that are present in both data frames. Thus, inner joins usually
+add new columns (variables), but also remove rows (cases) that only
+occur in one data frame.
+\cr \cr
+In base R, this is equivalent to \code{merge(x, y)}.
+}
+
+\subsection{Binds}{
+\code{join = "bind"} row-binds the complete second data frame \code{y} to \code{x}.
+Unlike simple \code{rbind()}, which requires the same columns for both data
+frames, \code{join = "bind"} will bind shared columns from \code{y} to \code{x}, and
+add new columns from \code{y} to \code{x}.
 }
 }
 \examples{

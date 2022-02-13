@@ -165,10 +165,17 @@ if (require("testthat") && require("poorman")) {
     )
   })
 
-  # x2 <- mtcars[3:5, 1:3]
-  # y2 <- mtcars[30:32, 3:6]
-  # data_merge(x2, y2, join = "full")
-  # data_merge(x2, y2, join = "bind")
+  # joins without common columns -----------------------
+
+  test_that("compare bind and full joins", {
+    x2 <- mtcars[3:5, 1:3]
+    y2 <- mtcars[30:32, 3:6]
+    expect_equal(
+      data_merge(x2, y2, join = "full"),
+      data_merge(x2, y2, join = "bind"),
+      ignore_attr = TRUE
+    )
+  })
 
   # join dataframes in a list -----------------------
 

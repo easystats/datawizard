@@ -2,9 +2,12 @@
 #' @name data_merge
 #'
 #' @description
-#' Merge (join) two data frames, or a list of data frames.
+#' Merge (join) two data frames, or a list of data frames. However, unliike
+#' base R's `merge()`, `data_merge()` offers a few more methods to join data
+#' frames, and it does not drop attributes.
 #'
-#' @param x,y A data frame to merge
+#' @param x,y A data frame to merge. `x` may also be a list of data frames
+#'   that will be merged. Note that the list-method has no `y` argument.
 #' @param join Character vector, indicating the method of joining the data frames.
 #'   Can be `"full"` (default), `"left"`, `"right"`, `"inner"`, `"anti"`, `"semi"`
 #'   or `"bind"`. See details below.
@@ -31,7 +34,7 @@
 #'
 #'   \subsection{Left- and right-joins}{
 #'     Left- and right joins usually don't add new rows (cases), but only new
-#'     columns (variables) for existing cased in `x`. For `join = "left"` or
+#'     columns (variables) for existing cases in `x`. For `join = "left"` or
 #'     `join = "right"` to work, `by` *must* indicate one or more columns that
 #'     are included in both data frames. For `join = "left"`, if `by` is an
 #'     identifier variable, which is included in both `x` and `y`, all variables
@@ -46,10 +49,35 @@
 #'     match in `x`'s identifier are removed. `join = "right"` works in
 #'     a similar way as `join = "left"`, just that only cases from `x` that
 #'     have matching values in their identifier variable in `y` are chosen.
+#'     \cr \cr
+#'     In base R, these are equivalent to `merge(x, y, all.x = TRUE)` and
+#'     `merge(x, y, all.y = TRUE)`.
 #'   }
 #'
 #'   \subsection{Full joins}{
-#'     TODO
+#'     Full joins copy all cases from `y` to `x`. For matching cases in both
+#'     data frames, values for new variables are copied from `y` to `x`. For
+#'     cases in `y` not present in `x`, these will be added as new rows to `x`.
+#'     Thus, full joins not only add new columns (variables), but also might
+#'     add new rows (cases).
+#'     \cr \cr
+#'     In base R, this is equivalent to `merge(x, y, all = TRUE)`.
+#'   }
+#'
+#'   \subsection{Inner joins}{
+#'     Inner joins merge two data frames, however, only those rows (cases) are
+#'     kept that are present in both data frames. Thus, inner joins usually
+#'     add new columns (variables), but also remove rows (cases) that only
+#'     occur in one data frame.
+#'     \cr \cr
+#'     In base R, this is equivalent to `merge(x, y)`.
+#'   }
+#'
+#'   \subsection{Binds}{
+#'     `join = "bind"` row-binds the complete second data frame `y` to `x`.
+#'     Unlike simple `rbind()`, which requires the same columns for both data
+#'     frames, `join = "bind"` will bind shared columns from `y` to `x`, and
+#'     add new columns from `y` to `x`.
 #'   }
 #'
 #' @examples
@@ -200,7 +228,8 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
       if (isTRUE(verbose)) {
         warning(
           insight::format_message(
-            "Found no matching columns in the data frames. Fully merging both data frames now. Note that this can lead to unintended results, because rows in `x` and `y` are possibly duplicated.",
+            "Found no matching columns in the data frames. Fully merging both data frames now.",
+            "Note that this can lead to unintended results, because rows in `x` and `y` are possibly duplicated.",
             "You probably want to use `data_merge(x, y, join = \"bind\")` instead."
           ),
           call. = FALSE
@@ -271,7 +300,7 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
 }
 
 
-
+#' @rdname data_merge
 #' @export
 data_merge.list <- function(x, join = "left", by = NULL, id = NULL, verbose = TRUE, ...) {
   out <- x[[1]]
