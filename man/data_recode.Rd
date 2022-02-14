@@ -7,7 +7,14 @@
 \usage{
 data_recode(x, ...)
 
-\method{data_recode}{numeric}(x, split = "median", n_groups = NULL, lowest = 1, ...)
+\method{data_recode}{numeric}(
+  x,
+  split = "median",
+  n_groups = NULL,
+  size_groups = NULL,
+  lowest = 1,
+  ...
+)
 }
 \arguments{
 \item{x}{A data frame or vector.}
@@ -41,4 +48,13 @@ table(data_recode(x, split = "quantile", n_groups = 3))
 
 # into 3 groups, manual cut offs
 table(data_recode(x, split = c(3, 5)))
+
+set.seed(123)
+x <- sample(1:100, size = 500, replace = TRUE)
+
+# into 5 groups, try to return similar group sizes
+table(data_recode(x, split = "equal_size", n_groups = 5))
+
+# into 5 groups, try to return same range within groups
+table(data_recode(x, split = "equal_range", size_groups = 20))
 }

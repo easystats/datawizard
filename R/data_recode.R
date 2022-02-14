@@ -28,6 +28,16 @@
 #'
 #' # into 3 groups, manual cut offs
 #' table(data_recode(x, split = c(3, 5)))
+#'
+#' set.seed(123)
+#' x <- sample(1:100, size = 500, replace = TRUE)
+#'
+#' # into 5 groups, try to return similar group sizes
+#' table(data_recode(x, split = "equal_size", n_groups = 5))
+#'
+#' # into 5 groups, try to return same range within groups
+#' # i.e. 0-
+#' table(data_recode(x, split = "equal_range", size_groups = 20))
 #' @export
 data_recode <- function(x, ...) {
   UseMethod("data_recode")
@@ -35,7 +45,7 @@ data_recode <- function(x, ...) {
 
 #' @rdname data_recode
 #' @export
-data_recode.numeric <- function(x, split = "median", n_groups = NULL, lowest = 1, ...) {
+data_recode.numeric <- function(x, split = "median", n_groups = NULL, size_groups = NULL, lowest = 1, ...) {
   # evaluate split-function
   split <- substitute(split)
 
@@ -45,10 +55,16 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, lowest = 1
     split <- deparse(split)
   }
 
+
   # handle aliases
   if (identical(split, "equal_size")) {
     split <- "equal"
   }
+
+  if (identical(split, "equal_distance") || identical(split, "range") || identical(split, "equal_range")) {
+    split <- "distance"
+  }
+
 
   # save
   original_x <- x
@@ -71,6 +87,7 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, lowest = 1
       "mean" = mean(x),
       "quantile" = stats::quantile(x, probs = length(x) / (rev(seq(1:n_groups)) * length(x))),
       "equal" = .equal_groups(x, n_groups),
+      "distance" = .equal_distance(x, size_groups),
       NULL
     )
   }
@@ -79,7 +96,12 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, lowest = 1
   cutoffs <- unique(c(min(x), cutoffs, max(x)))
 
   # recode into groups
-  out <- droplevels(cut(x, breaks = cutoffs, include.lowest = TRUE, right = !identical(split, "equal")))
+  out <- droplevels(cut(
+    x,
+    breaks = cutoffs,
+    include.lowest = TRUE,
+    right = !identical(split, "equal") && !identical(split, "distance")
+  ))
   levels(out) <- 1:nlevels(out)
 
   # fix lowest value, add back into original vector
@@ -100,4 +122,13 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, lowest = 1
   denominator <- rep(n_groups, length(nominator))
   qu_prob <- nominator / denominator
   stats::quantile(x, probs = qu_prob)
+}
+
+
+.equal_distance <- function(x, size_groups) {
+  if (is.null(size_groups)) {
+    size <- ceiling((max(x) - min(x)) / size_groups)
+    size_groups <- as.numeric(size)
+  }
+  seq(min(x), max(x), by = size_groups)
 }
