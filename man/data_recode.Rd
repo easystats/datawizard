@@ -32,7 +32,11 @@ table(x)
 # by default, at median
 table(data_recode(x))
 
-# into 3 groups
+# into 3 groups, based on distribution (quantiles)
+table(data_recode(x, split = "quantile", n_groups = 3))
+
+# into 3 groups, try to return similar group sizes
+# (i.e. similar count for each value/level)
 table(data_recode(x, split = "quantile", n_groups = 3))
 
 # into 3 groups, manual cut offs

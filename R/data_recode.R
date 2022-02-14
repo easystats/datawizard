@@ -19,7 +19,11 @@
 #' # by default, at median
 #' table(data_recode(x))
 #'
-#' # into 3 groups
+#' # into 3 groups, based on distribution (quantiles)
+#' table(data_recode(x, split = "quantile", n_groups = 3))
+#'
+#' # into 3 groups, try to return similar group sizes
+#' # (i.e. similar count for each value/level)
 #' table(data_recode(x, split = "quantile", n_groups = 3))
 #'
 #' # into 3 groups, manual cut offs
@@ -39,6 +43,11 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, lowest = 1
     split <- eval(split)
   } else if (!is.character(split)) {
     split <- deparse(split)
+  }
+
+  # handle aliases
+  if (split == "equal_size") {
+    split <- "equal"
   }
 
   # save
@@ -61,6 +70,7 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, lowest = 1
       "median" = stats::median(x),
       "mean" = mean(x),
       "quantile" = stats::quantile(x, probs = length(x) / (rev(seq(1:n_groups)) * length(x))),
+      "equal" = .equal_groups(x, n_groups)
     )
   }
 
@@ -68,7 +78,7 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, lowest = 1
   cutoffs <- unique(c(min(x), cutoffs, max(x)))
 
   # recode into groups
-  out <- droplevels(cut(x, breaks = cutoffs, include.lowest = TRUE, right = TRUE))
+  out <- droplevels(cut(x, breaks = cutoffs, include.lowest = TRUE, right = !identical(split, "equal")))
   levels(out) <- 1:nlevels(out)
 
   # fix lowest value, add back into original vector
@@ -77,4 +87,16 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, lowest = 1
   original_x[!is.na(original_x)] <- out
 
   original_x
+}
+
+
+
+
+# tools --------------------
+
+.equal_groups <- function(x, n_groups) {
+  nominator <- seq_len(n_groups - 1)
+  denominator <- rep(n_groups, length(nominator))
+  qu_prob <- nominator / denominator
+  stats::quantile(x, probs = qu_prob)
 }
