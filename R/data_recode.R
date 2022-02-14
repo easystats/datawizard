@@ -63,14 +63,15 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, lowest = 1
   }
 
   if (is.numeric(split)) {
-    cutoffs <- unique(c(min(x), split, max(x)))
+    cutoffs <- split
   } else {
     cutoffs <- switch(
       split,
       "median" = stats::median(x),
       "mean" = mean(x),
       "quantile" = stats::quantile(x, probs = length(x) / (rev(seq(1:n_groups)) * length(x))),
-      "equal" = .equal_groups(x, n_groups)
+      "equal" = .equal_groups(x, n_groups),
+      split
     )
   }
 
