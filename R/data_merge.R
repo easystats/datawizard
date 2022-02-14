@@ -251,11 +251,13 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   # merge --------------------
 
   # for later sorting
-  if (nrow(x) > 0) {
-    x$.data_merge_id_x <- 1:nrow(x)
-  }
-  if (nrow(y) > 0) {
-    y$.data_merge_id_y <- (1:nrow(y)) + nrow(x)
+  if (join != "bind") {
+    if (nrow(x) > 0) {
+      x$.data_merge_id_x <- 1:nrow(x)
+    }
+    if (nrow(y) > 0) {
+      y$.data_merge_id_y <- (1:nrow(y)) + nrow(x)
+    }
   }
   all_columns <- union(colnames(x), colnames(y))
 
@@ -330,19 +332,18 @@ data_merge.list <- function(x, join = "left", by = NULL, id = NULL, verbose = TR
 
 
 .bind_data_frames <- function(x, y) {
-  # add ID for merging
-  if (nrow(x) > 0) {
-    x$.data_merge_row <- 1:nrow(x)
-  }
-  if (nrow(y) > 0) {
-    y$.data_merge_row <- (nrow(x) + 1):(nrow(x) + nrow(y))
-  }
-
   # merge and sort. "rbind()" is faster than "merge()" if all columns present
   if (all(colnames(x) %in% colnames(y)) && ncol(x) == ncol(y)) {
     # we may have different column order
     out <- rbind(x, y[match(colnames(x), colnames(y))])
   } else {
+    # add ID for merging
+    if (nrow(x) > 0) {
+      x$.data_merge_row <- 1:nrow(x)
+    }
+    if (nrow(y) > 0) {
+      y$.data_merge_row <- (nrow(x) + 1):(nrow(x) + nrow(y))
+    }
     by <- intersect(colnames(x), colnames(y))
     out <- merge(x, y, all = TRUE, sort = FALSE, by = by)
   }
