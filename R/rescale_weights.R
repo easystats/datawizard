@@ -32,7 +32,10 @@
 #' of group size divided by the sum of sampling weights within each group. The
 #' adjustment factor for `pweights_b` is the sum of sample weights within each
 #' group divided by the sum of squared sample weights within each group (see
-#' Carle (2009), Appendix B).
+#' Carle (2009), Appendix B). In other words, `pweights_a` "scales the weights
+#' so that the new weights sum to the cluster sample size" while `pweights_b`
+#' "scales the weights so that the new weights sum to the effective cluster
+#' size".
 #'
 #' Regarding the choice between scaling methods A and B, Carle suggests that
 #' "analysts who wish to discuss point estimates should report results based on
