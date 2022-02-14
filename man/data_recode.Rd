@@ -25,6 +25,8 @@ data_recode(x, ...)
 
 \item{n_groups}{If \code{split = "quantile"}.}
 
+\item{size_groups}{If \code{split = "range"}.}
+
 \item{lowest}{Minimum value if numeric variables are recoded.}
 }
 \description{

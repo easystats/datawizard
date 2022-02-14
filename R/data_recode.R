@@ -7,6 +7,7 @@
 #' @param x A data frame or vector.
 #' @param split Name of a function, or numeric values, indicating cutoffs
 #' @param n_groups If `split = "quantile"`.
+#' @param size_groups If `split = "range"`.
 #' @param lowest Minimum value if numeric variables are recoded.
 #' @param ... not used.
 #'
