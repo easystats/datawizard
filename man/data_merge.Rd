@@ -38,7 +38,7 @@ A merged data frame.
 \description{
 Merge (join) two data frames, or a list of data frames. However, unlike
 base R's \code{merge()}, \code{data_merge()} offers a few more methods to join data
-frames, and it does not drop attributes.
+frames, and it does not drop data frame nor column attributes.
 }
 \details{
 \subsection{Merging data frames}{

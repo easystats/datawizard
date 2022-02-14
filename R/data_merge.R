@@ -4,7 +4,7 @@
 #' @description
 #' Merge (join) two data frames, or a list of data frames. However, unlike
 #' base R's `merge()`, `data_merge()` offers a few more methods to join data
-#' frames, and it does not drop attributes.
+#' frames, and it does not drop data frame nor column attributes.
 #'
 #' @param x,y A data frame to merge. `x` may also be a list of data frames
 #'   that will be merged. Note that the list-method has no `y` argument.
@@ -171,8 +171,15 @@ data_join <- data_merge
 #' @rdname data_merge
 #' @export
 data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, verbose = TRUE, ...) {
+  # save data frame attributes
   attr_x <- attributes(x)
   attr_y <- attributes(y)
+
+  # save variable attributes
+  attr_x_vars <- lapply(x, attributes)
+  attr_y_vars <- lapply(y, attributes)
+  attr_vars <- c(attr_x_vars, attr_y_vars[names(attr_y_vars)[!names(attr_y_vars) %in% names(attr_x_vars)]])
+
 
   # check join-argument ----------------------
 
@@ -296,8 +303,20 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   all_columns <- all_columns[all_columns %in% colnames(out)]
   out <- out[all_columns]
 
+  # add back attributes
   attributes(out) <- utils::modifyList(attr_y, attributes(out))
   attributes(out) <- utils::modifyList(attr_x, attributes(out))
+
+  for (i in colnames(out)) {
+    if (is.list(attr_vars[[i]])) {
+      if (is.list(attributes(out[[i]]))) {
+        attributes(out[[i]]) <- utils::modifyList(attr_vars[[i]], attributes(out[[i]]))
+      } else {
+        attributes(out[[i]]) <- attr_vars[[i]]
+      }
+    }
+  }
+
   out
 }
 
