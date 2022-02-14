@@ -36,7 +36,7 @@
 #' table(data_recode(x, split = "equal_size", n_groups = 5))
 #'
 #' # into 5 groups, try to return same range within groups
-#' # i.e. 0-
+#' # i.e. 1-20, 21-40, 41-60, etc.
 #' table(data_recode(x, split = "equal_range", size_groups = 20))
 #' @export
 data_recode <- function(x, ...) {
