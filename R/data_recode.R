@@ -15,7 +15,7 @@ data_recode <- function(x, ...) {
 
 #' @rdname data_recode
 #' @export
-data_recode.numeric <- function(x, split = "median", n_groups = NULL) {
+data_recode.numeric <- function(x, split = "median", n_groups = NULL, lowest = 1, ...) {
   # evaluate split-function
   split <- substitute(split)
 
@@ -25,12 +25,16 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL) {
     split <- deparse(split)
   }
 
+  # save
+  original_x <- x
+
   # no missings
   x <- stats::na.omit(x)
 
   # stop if all NA
   if (!length(x)) {
-
+    warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
+    return(original_x)
   }
 
   if (is.numeric(split)) {
@@ -47,8 +51,13 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL) {
   # complete ranges, including minimum and maximum
   cutoffs <- c(min(x), cutoffs, max(x))
 
+  # recode into groups
   out <- cut(x, breaks = cutoffs)
   levels(out) <- 1:nlevels(out)
 
-  out
+  # fix lowest value, add back into original vector
+  out <- as.numeric(out) - (min(out) - lowest)
+  original_x[!is.na(original_x)] <- out
+
+  original_x
 }
