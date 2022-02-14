@@ -140,10 +140,20 @@ names.</p></dd>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># use either first column or specific column for column names</span></span>
 <span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, b <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">15</span>, c <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>, d <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">data_rotate</span><span class="op">(</span><span class="va">x</span>, columns <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in data_rotate(x, columns = TRUE):</span> unused argument (columns = TRUE)</span>
-<span class="r-in"><span class="fu">data_rotate</span><span class="op">(</span><span class="va">x</span>, columns <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in data_rotate(x, columns = "c"):</span> unused argument (columns = "c")</span>
+<span class="r-in"><span class="fu">data_rotate</span><span class="op">(</span><span class="va">x</span>, colnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Your data frame contains mixed types of data. After transposition, all variables</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   will be transformed into characters.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            1          2          3          4          5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> b         11         12         13         14         15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> c          a          b          c          d          e</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> d -1.7820571  0.4649418 -1.9510306 -0.5161133  0.4890803</span>
+<span class="r-in"><span class="fu">data_rotate</span><span class="op">(</span><span class="va">x</span>, colnames <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Your data frame contains mixed types of data. After transposition, all variables</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   will be transformed into characters.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           a          b         c          d          e</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a  1.000000  2.0000000  3.000000  4.0000000  5.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> b 11.000000 12.0000000 13.000000 14.0000000 15.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> d -1.782057  0.4649418 -1.951031 -0.5161133  0.4890803</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
