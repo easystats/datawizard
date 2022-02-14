@@ -11,8 +11,10 @@
 #' @param rownames Character vector (optional). If not `NULL`, the data frame's
 #'   rownames will be added as (first) column to the output, with `rownames`
 #'   being the name of this column.
-#' @param colnames Logical (optional), if `TRUE`, the values of the first column
-#'   in `x` will be used as column names in the rotated data frame.
+#' @param colnames Logical or character vector (optional). If `TRUE`, the values
+#'   of the first column in `x` will be used as column names in the rotated data
+#'   frame. If a character vector, values from that column are used as column
+#'   names.
 #' @param verbose Toggle warnings.
 #'
 #' @return A (rotated) data frame.
@@ -28,26 +30,36 @@
 #'
 #' # warn that data types are changed
 #' str(data_rotate(iris[1:4, ]))
+#'
+#' # use either first column or specific column for column names
+#' x <- data.frame(a = 1:5, b = 11:15, c = letters[1:5], d = rnorm(5))
+#' data_rotate(x, columns = TRUE)
+#' data_rotate(x, columns = "c")
 #' @export
 data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE) {
+  # copy attributes
+  a <- attributes(data)
+
+  # check if first column has column names to be used for rotated data
+  if (isTRUE(colnames)) {
+    colnames <- data[[1]]
+    data <- data[-1]
+  } else if (!is.null(colnames) && is.character(colnames) && colnames %in% colnames(data)) {
+    cn_col <- which(colnames(data) == colnames)
+    colnames <- data[[colnames]]
+    data <- data[-cn_col]
+  }else {
+    colnames <- row.names(data)
+  }
+
+  # warning after possible removal of columns
   if (length(unique(sapply(data, class))) > 1) {
     if (verbose) {
       warning(insight::format_message("Your data frame contains mixed types of data. After transposition, all variables will be transformed into characters."), call. = FALSE)
     }
   }
 
-  # check if first column has column names to be used for rotated data
-  if (colnames) {
-    colnames <- data[[1]]
-    data <- data[-1]
-  } else {
-    colnames <- row.names(data)
-  }
-
-  # copy attributes
-  a <- attributes(data)
-
-  # rotate dataframe by 90 degrees
+  # rotate data frame by 90 degrees
   data <- as.data.frame(t(as.data.frame(data)))
 
   # add column names, if requested
@@ -69,7 +81,7 @@ data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE)
   # delete the common attributes
   a[names(a) %in% names(attributes(data))] <- NULL
 
-  # and then add other attributes to the dataframe
+  # and then add other attributes to the data frame
   attributes(data) <- utils::modifyList(attributes(data), a)
 
   data

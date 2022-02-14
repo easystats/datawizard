@@ -16,8 +16,10 @@ data_transpose(data, rownames = NULL, colnames = FALSE, verbose = TRUE)
 rownames will be added as (first) column to the output, with \code{rownames}
 being the name of this column.}
 
-\item{colnames}{Logical (optional), if \code{TRUE}, the values of the first column
-in \code{x} will be used as column names in the rotated data frame.}
+\item{colnames}{Logical or character vector (optional). If \code{TRUE}, the values
+of the first column in \code{x} will be used as column names in the rotated data
+frame. If a character vector, values from that column are used as column
+names.}
 
 \item{verbose}{Toggle warnings.}
 }
@@ -41,4 +43,9 @@ data_rotate(x, rownames = "property", colnames = TRUE)
 
 # warn that data types are changed
 str(data_rotate(iris[1:4, ]))
+
+# use either first column or specific column for column names
+x <- data.frame(a = 1:5, b = 11:15, c = letters[1:5], d = rnorm(5))
+data_rotate(x, columns = TRUE)
+data_rotate(x, columns = "c")
 }
