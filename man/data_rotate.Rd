@@ -2,27 +2,30 @@
 % Please edit documentation in R/data_rotate.R
 \name{data_rotate}
 \alias{data_rotate}
-\title{Rotate a dataframe}
+\title{Rotate a data frame}
 \usage{
 data_rotate(data, rownames = NULL, colnames = FALSE, verbose = TRUE)
 }
 \arguments{
-\item{data}{A dataframe.}
+\item{data}{A data frame.}
 
-\item{rownames}{Character vector (optional). If not \code{NULL}, the dataframe's
+\item{rownames}{Character vector (optional). If not \code{NULL}, the data frame's
 rownames will be added as (first) column to the output, with \code{rownames}
 being the name of this column.}
 
 \item{colnames}{Logical (optional), if \code{TRUE}, the values of the first column
-in \code{x} will be used as column names in the rotated dataframe.}
+in \code{x} will be used as column names in the rotated data frame.}
 
 \item{verbose}{Toggle warnings.}
 }
 \value{
-A (rotated) dataframe.
+A (rotated) data frame.
 }
 \description{
-This function rotates a dataframe, i.e. columns become rows and vice versa.
+This function rotates a data frame, i.e. columns become rows and vice versa.
+It's the equivalent of using \code{t()} but restores the \code{data.frame} class,
+preserves attributes and prints a warning if the data type is
+modified (see example).
 }
 \examples{
 x <- mtcars[1:3, 1:4]
@@ -32,4 +35,7 @@ data_rotate(x, rownames = "property")
 # use values in 1. column as column name
 data_rotate(x, colnames = TRUE)
 data_rotate(x, rownames = "property", colnames = TRUE)
+
+# warn that data types are changed
+head(data_rotate(iris))
 }

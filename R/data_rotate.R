@@ -1,18 +1,21 @@
-#' @title Rotate a dataframe
+#' @title Rotate a data frame
 #' @name data_rotate
 #'
 #' @description
-#' This function rotates a dataframe, i.e. columns become rows and vice versa.
+#' This function rotates a data frame, i.e. columns become rows and vice versa.
+#'   It's the equivalent of using `t()` but restores the `data.frame` class,
+#'   preserves attributes and prints a warning if the data type is
+#'   modified (see example).
 #'
-#' @param data A dataframe.
-#' @param rownames Character vector (optional). If not `NULL`, the dataframe's
+#' @param data A data frame.
+#' @param rownames Character vector (optional). If not `NULL`, the data frame's
 #'   rownames will be added as (first) column to the output, with `rownames`
 #'   being the name of this column.
 #' @param colnames Logical (optional), if `TRUE`, the values of the first column
-#'   in `x` will be used as column names in the rotated dataframe.
+#'   in `x` will be used as column names in the rotated data frame.
 #' @param verbose Toggle warnings.
 #'
-#' @return A (rotated) dataframe.
+#' @return A (rotated) data frame.
 #'
 #' @examples
 #' x <- mtcars[1:3, 1:4]
@@ -22,11 +25,14 @@
 #' # use values in 1. column as column name
 #' data_rotate(x, colnames = TRUE)
 #' data_rotate(x, rownames = "property", colnames = TRUE)
+#'
+#' # warn that data types are changed
+#' str(data_rotate(iris[1:4, ]))
 #' @export
 data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE) {
   if (length(unique(sapply(data, class))) > 1) {
     if (verbose) {
-      warning(insight::format_message("Your data frame contains mixed types of data. After transposition, all will be transformed into characters."), call. = FALSE)
+      warning(insight::format_message("Your data frame contains mixed types of data. After transposition, all variables will be transformed into characters."), call. = FALSE)
     }
   }
 
@@ -35,7 +41,7 @@ data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE)
     colnames <- data[[1]]
     data <- data[-1]
   } else {
-    colnames <- NULL
+    colnames <- row.names(data)
   }
 
   # copy attributes
