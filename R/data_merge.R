@@ -338,9 +338,14 @@ data_merge.list <- function(x, join = "left", by = NULL, id = NULL, verbose = TR
     y$.data_merge_row <- (nrow(x) + 1):(nrow(x) + nrow(y))
   }
 
-  # merge and sort
-  by <- intersect(colnames(x), colnames(y))
-  out <- merge(x, y, all = TRUE, sort = FALSE, by = by)
+  # merge and sort. "rbind()" is faster than "merge()" if all columns present
+  if (all(colnames(x) %in% colnames(y)) && ncol(x) == ncol(y)) {
+    # we may have different column order
+    out <- rbind(x, y[match(colnames(x), colnames(y))])
+  } else {
+    by <- intersect(colnames(x), colnames(y))
+    out <- merge(x, y, all = TRUE, sort = FALSE, by = by)
+  }
 
   # for empty df's, merge() may return an empty character vector
   # make sure it's a data frame object.
