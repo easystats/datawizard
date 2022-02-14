@@ -46,7 +46,7 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, lowest = 1
   }
 
   # handle aliases
-  if (split == "equal_size") {
+  if (identical(split, "equal_size")) {
     split <- "equal"
   }
 
