@@ -46,6 +46,6 @@ str(data_rotate(iris[1:4, ]))
 
 # use either first column or specific column for column names
 x <- data.frame(a = 1:5, b = 11:15, c = letters[1:5], d = rnorm(5))
-data_rotate(x, columns = TRUE)
-data_rotate(x, columns = "c")
+data_rotate(x, colnames = TRUE)
+data_rotate(x, colnames = "c")
 }
