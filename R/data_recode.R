@@ -7,7 +7,23 @@
 #' @param x A data frame or vector.
 #' @param split Name of a function, or numeric values, indicating cutoffs
 #' @param n_groups If `split = "quantile"`.
+#' @param lowest Minimum value if numeric variables are recoded.
+#' @param ... not used.
 #'
+#' @examples
+#' set.seed(123)
+#' x <- sample(1:10, size = 50, replace = TRUE)
+#'
+#' table(x)
+#'
+#' # by default, at median
+#' table(data_recode(x))
+#'
+#' # into 3 groups
+#' table(data_recode(x, split = "quantile", n_groups = 3))
+#'
+#' # into 3 groups, manual cut offs
+#' table(data_recode(x, split = c(3, 5)))
 #' @export
 data_recode <- function(x, ...) {
   UseMethod("data_recode")
@@ -49,14 +65,15 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, lowest = 1
   }
 
   # complete ranges, including minimum and maximum
-  cutoffs <- c(min(x), cutoffs, max(x))
+  cutoffs <- unique(c(min(x), cutoffs, max(x)))
 
   # recode into groups
-  out <- cut(x, breaks = cutoffs)
+  out <- droplevels(cut(x, breaks = cutoffs, include.lowest = TRUE, right = TRUE))
   levels(out) <- 1:nlevels(out)
 
   # fix lowest value, add back into original vector
-  out <- as.numeric(out) - (min(out) - lowest)
+  out <- as.numeric(out)
+  out <- out - (min(out) - lowest)
   original_x[!is.na(original_x)] <- out
 
   original_x

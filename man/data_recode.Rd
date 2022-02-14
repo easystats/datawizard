@@ -7,15 +7,34 @@
 \usage{
 data_recode(x, ...)
 
-\method{data_recode}{numeric}(x, split = "median", n_groups = NULL)
+\method{data_recode}{numeric}(x, split = "median", n_groups = NULL, lowest = 1, ...)
 }
 \arguments{
 \item{x}{A data frame or vector.}
 
+\item{...}{not used.}
+
 \item{split}{Name of a function, or numeric values, indicating cutoffs}
 
 \item{n_groups}{If \code{split = "quantile"}.}
+
+\item{lowest}{Minimum value if numeric variables are recoded.}
 }
 \description{
 Recode data.
+}
+\examples{
+set.seed(123)
+x <- sample(1:10, size = 50, replace = TRUE)
+
+table(x)
+
+# by default, at median
+table(data_recode(x))
+
+# into 3 groups
+table(data_recode(x, split = "quantile", n_groups = 3))
+
+# into 3 groups, manual cut offs
+table(data_recode(x, split = c(3, 5)))
 }
