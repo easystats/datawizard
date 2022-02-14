@@ -2,9 +2,12 @@
 % Please edit documentation in R/data_rotate.R
 \name{data_rotate}
 \alias{data_rotate}
+\alias{data_transpose}
 \title{Rotate a data frame}
 \usage{
 data_rotate(data, rownames = NULL, colnames = FALSE, verbose = TRUE)
+
+data_transpose(data, rownames = NULL, colnames = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{data}{A data frame.}
@@ -37,5 +40,5 @@ data_rotate(x, colnames = TRUE)
 data_rotate(x, rownames = "property", colnames = TRUE)
 
 # warn that data types are changed
-head(data_rotate(iris))
+str(data_rotate(iris[1:4, ]))
 }

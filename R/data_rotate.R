@@ -74,3 +74,8 @@ data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE)
 
   data
 }
+
+
+#' @rdname data_rotate
+#' @export
+data_transpose <- data_rotate
