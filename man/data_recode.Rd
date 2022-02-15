@@ -4,7 +4,7 @@
 \alias{data_recode}
 \alias{data_recode.numeric}
 \alias{data_recode.data.frame}
-\title{Recode data}
+\title{Recode (or "cut") data into groups of values.}
 \usage{
 data_recode(x, ...)
 
@@ -37,12 +37,13 @@ data_recode(x, ...)
 
 \item{split}{Character vector, indicating where to split variables, or
 numeric values, indicating cut-off values. If character, may be one of
-\code{"median"}, \code{"mean"}, \code{"quantile"} (or its alias \code{"equal_size"}) or
-\code{"equal_range"}.}
+\code{"median"}, \code{"mean"}, \code{"quantile"}, \code{"equal_length"}, or \code{"equal_range"}.}
 
-\item{n_groups}{If \code{split} is \code{"quantile"} (or its alias \code{"equal_size"}),
-this defines the number of requested groups (i.e. resulting number of
-levels or values) for the recoded variable(s).}
+\item{n_groups}{If \code{split} is \code{"quantile"} or \code{"equal_length"}, this defines
+the number of requested groups (i.e. resulting number of levels or values)
+for the recoded variable(s). \code{"quantile"} will define intervals based
+on the distribution of the variable, while \code{"equal_length"} tries to
+divide the range of the variable into pieces of equal length.}
 
 \item{range}{If \code{split = "equal_range"}, this defines the range of values
 that are recoded into a new value.}
@@ -67,7 +68,10 @@ If a character value, recoded variables are appended with new column
 names (using the defined suffix) to the original data frame.}
 }
 \description{
-Recode data.
+This functions divides the range of variables into intervals and recodes
+the values inside these intervals according to their related interval.
+It is basically a wrapper around base R's \code{cut()}, providing a simplified
+and more accessible way to define the interval breaks (cut-off values).
 }
 \details{
 \subsection{Splits and cut-off values}{
@@ -83,7 +87,7 @@ are recoded into 1 (because the next group of values to be recoded starts
 at 3.67), 4 to 6 into 2 and 7 to 9 into 3.
 }
 
-\subsection{Recoding into groups with equal range}{
+\subsection{Recoding into groups with equal size or range}{
 }
 }
 \examples{
@@ -104,10 +108,10 @@ table(data_recode(x, split = c(3, 5)))
 set.seed(123)
 x <- sample(1:100, size = 500, replace = TRUE)
 
-# into 5 groups, try to return similar group sizes
-table(data_recode(x, split = "quantile", n_groups = 5))
+# into 5 groups, try to recode into intervals of similar length
+table(data_recode(x, split = "equal_length", n_groups = 5))
 
 # into 5 groups, try to return same range within groups
-# i.e. 1-20, 21-40, 41-60, etc.
+# i.e. 1-20, 21-40, 41-60, etc. This is
 table(data_recode(x, split = "equal_range", range = 20))
 }

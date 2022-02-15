@@ -46,4 +46,16 @@ if (require("testthat")) {
   })
 
 
+  test_that("recode length", {
+    expect_error(data_recode(d, split = "equal_length"))
+    d2 <- d
+    d2[d <= 20] <- 1
+    d2[d > 20 & d <= 40] <- 2
+    d2[d > 40 & d <= 60] <- 3
+    d2[d > 60 & d <= 80] <- 4
+    d2[d > 80] <- 5
+    expect_equal(table(data_recode(d, split = "equal_length", n_groups = 5)), table(d2), ignore_attr = TRUE)
+    expect_equal(table(data_recode(d, split = "equal_length", n_groups = 5, lowest = 1)), table(d2), ignore_attr = TRUE)
+  })
+
 }
