@@ -26,6 +26,7 @@ data_recode(x, ...)
   select = NULL,
   exclude = NULL,
   force = FALSE,
+  append = FALSE,
   ...
 )
 }
@@ -49,6 +50,13 @@ variables will be selected.}
 
 \item{force}{Logical, if \code{TRUE}, forces recoding of factors and dates
 as well.}
+
+\item{append}{Logical or string. If \code{TRUE}, recoded variables get new
+column names (with the suffix \code{"_r"}) and are appended (column bind) to \code{x},
+thus returning both the original and the recoded variables. If \code{FALSE},
+original variables in \code{x} will be overwritten by their recoded versions.
+If a character value, recoded variables are appended with new column
+names (using the defined suffix) to the original data frame.}
 }
 \description{
 Recode data.

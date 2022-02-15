@@ -11,6 +11,12 @@
 #' @param lowest Minimum value if numeric variables are recoded.
 #' @param force Logical, if `TRUE`, forces recoding of factors and dates
 #'   as well.
+#' @param append Logical or string. If `TRUE`, recoded variables get new
+#'   column names (with the suffix `"_r"`) and are appended (column bind) to `x`,
+#'   thus returning both the original and the recoded variables. If `FALSE`,
+#'   original variables in `x` will be overwritten by their recoded versions.
+#'   If a character value, recoded variables are appended with new column
+#'   names (using the defined suffix) to the original data frame.
 #' @inheritParams standardize
 #' @param ... not used.
 #'
@@ -141,7 +147,7 @@ data_recode.factor <- function(x, ...) {
 
 #' @rdname data_recode
 #' @export
-data_recode.data.frame <- function(x, split = "median", n_groups = NULL, size_groups = NULL, lowest = 1, select = NULL, exclude = NULL, force = FALSE, ...) {
+data_recode.data.frame <- function(x, split = "median", n_groups = NULL, size_groups = NULL, lowest = 1, select = NULL, exclude = NULL, force = FALSE, append = FALSE, ...) {
   # check for formula notation, convert to character vector
   if (inherits(select, "formula")) {
     select <- all.vars(select)
@@ -150,7 +156,12 @@ data_recode.data.frame <- function(x, split = "median", n_groups = NULL, size_gr
     exclude <- all.vars(exclude)
   }
 
-  select <- .select_variables(x, select, exclude, force = force)
+  # process arguments
+  args <- .process_std_args(x, select, exclude, weights, append, append_suffix = "_r", force)
+
+  # update processed arguments
+  x <- args$x
+  select <- args$select
 
   x[select] <- lapply(x[select], data_recode, split = split, n_groups = n_groups, size_groups = size_groups, lowest = lowest, ...)
   x
