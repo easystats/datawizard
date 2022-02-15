@@ -12,7 +12,7 @@ data_recode(x, ...)
   x,
   split = "median",
   n_groups = NULL,
-  size_groups = NULL,
+  range = NULL,
   lowest = 1,
   ...
 )
@@ -21,7 +21,7 @@ data_recode(x, ...)
   x,
   split = "median",
   n_groups = NULL,
-  size_groups = NULL,
+  range = NULL,
   lowest = 1,
   select = NULL,
   exclude = NULL,
@@ -43,6 +43,9 @@ numeric values, indicating cut-off values. If character, may be one of
 the number of requested groups (i.e. resulting number of levels or values)
 for the recoded variable(s).}
 
+\item{range}{If \code{split = "equal_range"}, this defines the range of values
+that are recoded into a new value.}
+
 \item{lowest}{Minimum value of the recoded variable.}
 
 \item{select}{Character vector of column names. If \code{NULL} (the default), all
@@ -58,9 +61,6 @@ thus returning both the original and the recoded variables. If \code{FALSE},
 original variables in \code{x} will be overwritten by their recoded versions.
 If a character value, recoded variables are appended with new column
 names (using the defined suffix) to the original data frame.}
-
-\item{range}{If \code{split = "equal_range"}, this defines the range of values
-that are recoded into a new value.}
 }
 \description{
 Recode data.
@@ -92,5 +92,5 @@ table(data_recode(x, split = "equal_size", n_groups = 5))
 
 # into 5 groups, try to return same range within groups
 # i.e. 1-20, 21-40, 41-60, etc.
-table(data_recode(x, split = "equal_range", size_groups = 20))
+table(data_recode(x, split = "equal_range", range = 20))
 }

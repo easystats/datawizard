@@ -51,7 +51,7 @@
 #'
 #' # into 5 groups, try to return same range within groups
 #' # i.e. 1-20, 21-40, 41-60, etc.
-#' table(data_recode(x, split = "equal_range", size_groups = 20))
+#' table(data_recode(x, split = "equal_range", range = 20))
 #' @export
 data_recode <- function(x, ...) {
   UseMethod("data_recode")
@@ -66,7 +66,7 @@ data_recode.default <- function(x, ...) {
 
 #' @rdname data_recode
 #' @export
-data_recode.numeric <- function(x, split = "median", n_groups = NULL, size_groups = NULL, lowest = 1, ...) {
+data_recode.numeric <- function(x, split = "median", n_groups = NULL, range = NULL, lowest = 1, ...) {
   if (is.character(split)) {
     split <- match.arg(split, choices = c("median", "mean", "quantile", "equal_size", "equal_range", "equal", "equal_distance", "range", "distance"))
   }
@@ -102,7 +102,7 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, size_group
       "mean" = mean(x),
       "quantile" = stats::quantile(x, probs = length(x) / (rev(seq(1:n_groups)) * length(x))),
       "size" = .equal_groups(x, n_groups),
-      "range" = .equal_range(x, size_groups),
+      "range" = .equal_range(x, range),
       NULL
     )
   }
@@ -137,7 +137,7 @@ data_recode.factor <- function(x, ...) {
 
 #' @rdname data_recode
 #' @export
-data_recode.data.frame <- function(x, split = "median", n_groups = NULL, size_groups = NULL, lowest = 1, select = NULL, exclude = NULL, force = FALSE, append = FALSE, ...) {
+data_recode.data.frame <- function(x, split = "median", n_groups = NULL, range = NULL, lowest = 1, select = NULL, exclude = NULL, force = FALSE, append = FALSE, ...) {
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append, append_suffix = "_r", force)
 
@@ -145,7 +145,7 @@ data_recode.data.frame <- function(x, split = "median", n_groups = NULL, size_gr
   x <- args$x
   select <- args$select
 
-  x[select] <- lapply(x[select], data_recode, split = split, n_groups = n_groups, size_groups = size_groups, lowest = lowest, ...)
+  x[select] <- lapply(x[select], data_recode, split = split, n_groups = n_groups, range = range, lowest = lowest, ...)
   x
 
 }
@@ -163,10 +163,10 @@ data_recode.data.frame <- function(x, split = "median", n_groups = NULL, size_gr
 }
 
 
-.equal_range <- function(x, size_groups) {
-  if (is.null(size_groups)) {
-    size <- ceiling((max(x) - min(x)) / size_groups)
-    size_groups <- as.numeric(size)
+.equal_range <- function(x, range) {
+  if (is.null(range)) {
+    size <- ceiling((max(x) - min(x)) / range)
+    range <- as.numeric(size)
   }
-  seq(min(x), max(x), by = size_groups)
+  seq(min(x), max(x), by = range)
 }
