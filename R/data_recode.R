@@ -110,7 +110,7 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, range = NU
       split,
       "median" = stats::median(x),
       "mean" = mean(x),
-      "quantile" = stats::quantile(x, probs = length(x) / (rev(seq(1:n_groups)) * length(x))),
+      "quantile" = stats::quantile(x, probs = seq_len(n_groups) / n_groups),
       "size" = .equal_groups(x, n_groups),
       "range" = .equal_range(x, range),
       NULL
