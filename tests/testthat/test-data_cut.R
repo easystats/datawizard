@@ -22,6 +22,7 @@ if (require("testthat")) {
     expect_equal(data_cut(d, split = "quantile", n_groups = 3, lowest = 0),  as.numeric(f) - 1)
   })
 
+
   set.seed(123)
   d <- sample(1:100, size = 1000, replace = TRUE)
 
@@ -45,7 +46,6 @@ if (require("testthat")) {
     expect_equal(table(data_cut(d, split = "equal_range", range = 20, lowest = 0)), table(d2), ignore_attr = TRUE)
   })
 
-
   test_that("recode length", {
     expect_error(data_cut(d, split = "equal_length"))
     d2 <- d
@@ -58,4 +58,15 @@ if (require("testthat")) {
     expect_equal(table(data_cut(d, split = "equal_length", n_groups = 5, lowest = 1)), table(d2), ignore_attr = TRUE)
   })
 
+
+  set.seed(123)
+  x <- sample(1:10, size = 30, replace = TRUE)
+  test_that("recode factor labels", {
+    expect_type(data_cut(x, "equal_length", n_groups = 3), "double")
+    expect_s3_class(data_cut(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high")), "factor")
+    expect_equal(levels(data_cut(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high"))), c("low", "mid", "high"))
+    t1 <- table(data_cut(x, "equal_length", n_groups = 3))
+    t2 <- table(data_cut(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high")))
+    expect_equal(t1, t2, ignore_attr = TRUE)
+  })
 }

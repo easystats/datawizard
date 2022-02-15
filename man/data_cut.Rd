@@ -8,7 +8,16 @@
 \usage{
 data_cut(x, ...)
 
-\method{data_cut}{numeric}(x, split = "median", n_groups = NULL, range = NULL, lowest = 1, ...)
+\method{data_cut}{numeric}(
+  x,
+  split = "median",
+  n_groups = NULL,
+  range = NULL,
+  lowest = 1,
+  labels = NULL,
+  verbose = TRUE,
+  ...
+)
 
 \method{data_cut}{data.frame}(
   x,
@@ -16,10 +25,12 @@ data_cut(x, ...)
   n_groups = NULL,
   range = NULL,
   lowest = 1,
+  labels = NULL,
   select = NULL,
   exclude = NULL,
   force = FALSE,
   append = FALSE,
+  verbose = TRUE,
   ...
 )
 }
@@ -46,6 +57,12 @@ for numeric variables, the minimum of the original input is preserved. For
 factors, the default minimum is \code{1}. For \code{split = "equal_range"}, the
 default minimum is always \code{1}, unless specified otherwise in \code{lowest}.}
 
+\item{labels}{Character vector of value labels. If not \code{NULL}, \code{data_cut()}
+will returns factors instead of numeric variables, with \code{labels} used
+for labelling the factor levels.}
+
+\item{verbose}{Toggle warnings and messages on or off.}
+
 \item{select}{Character vector of column names. If \code{NULL} (the default), all
 variables will be selected.}
 
@@ -59,6 +76,11 @@ thus returning both the original and the recoded variables. If \code{FALSE},
 original variables in \code{x} will be overwritten by their recoded versions.
 If a character value, recoded variables are appended with new column
 names (using the defined suffix) to the original data frame.}
+}
+\value{
+\code{x}, recoded into groups. By default \code{x} is numeric, unless \code{labels}
+is specified. In this case, a factor is returned, where the factor levels
+(i.e. recoded groups are labelled accordingly.
 }
 \description{
 This functions divides the range of variables into intervals and recodes

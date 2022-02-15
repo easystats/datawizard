@@ -22,6 +22,9 @@
 #'   for numeric variables, the minimum of the original input is preserved. For
 #'   factors, the default minimum is `1`. For `split = "equal_range"`, the
 #'   default minimum is always `1`, unless specified otherwise in `lowest`.
+#' @param labels Character vector of value labels. If not `NULL`, `data_cut()`
+#'   will returns factors instead of numeric variables, with `labels` used
+#'   for labelling the factor levels.
 #' @param force Logical, if `TRUE`, forces recoding of factors as well.
 #' @param append Logical or string. If `TRUE`, recoded variables get new
 #'   column names (with the suffix `"_r"`) and are appended (column bind) to `x`,
@@ -31,6 +34,10 @@
 #'   names (using the defined suffix) to the original data frame.
 #' @inheritParams standardize
 #' @param ... not used.
+#'
+#' @return `x`, recoded into groups. By default `x` is numeric, unless `labels`
+#'   is specified. In this case, a factor is returned, where the factor levels
+#'   (i.e. recoded groups are labelled accordingly.
 #'
 #' @details
 #'
@@ -86,6 +93,12 @@
 #' # groups, and thus is for this particular case identical
 #' # to the previous result.
 #' table(data_cut(x, split = "equal_range", range = 20))
+#'
+#' # return factor with value labels instead of numeric value
+#' set.seed(123)
+#' x <- sample(1:10, size = 30, replace = TRUE)
+#' data_cut(x, "equal_length", n_groups = 3)
+#' data_cut(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high"))
 #' @export
 data_cut <- function(x, ...) {
   UseMethod("data_cut")
@@ -100,7 +113,14 @@ data_cut.default <- function(x, ...) {
 
 #' @rdname data_cut
 #' @export
-data_cut.numeric <- function(x, split = "median", n_groups = NULL, range = NULL, lowest = 1, ...) {
+data_cut.numeric <- function(x,
+                             split = "median",
+                             n_groups = NULL,
+                             range = NULL,
+                             lowest = 1,
+                             labels = NULL,
+                             verbose = TRUE,
+                             ...) {
   # check arguments
   if (is.character(split)) {
     split <- match.arg(split, choices = c("median", "mean", "quantile", "equal_length", "equal_range", "equal", "equal_distance", "range", "distance"))
@@ -133,7 +153,9 @@ data_cut.numeric <- function(x, split = "median", n_groups = NULL, range = NULL,
 
   # stop if all NA
   if (!length(x)) {
-    warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
+    if (isTRUE(verbose)) {
+      warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
+    }
     return(original_x)
   }
 
@@ -168,6 +190,17 @@ data_cut.numeric <- function(x, split = "median", n_groups = NULL, range = NULL,
   out <- out - (min(out) - lowest)
   original_x[!is.na(original_x)] <- out
 
+  # turn into factor?
+  if (!is.null(labels)) {
+    if (length(labels) == length(unique(out))) {
+      original_x <- as.factor(original_x)
+      levels(original_x) <- labels
+    } else if (isTRUE(verbose)) {
+      warning(insight::format_message("Argument 'labels' and levels of the recoded variable are not of the same length.",
+                                      "Variable will not be converted to factor."), call. = FALSE)
+    }
+  }
+
   original_x
 }
 
@@ -181,7 +214,18 @@ data_cut.factor <- function(x, ...) {
 
 #' @rdname data_cut
 #' @export
-data_cut.data.frame <- function(x, split = "median", n_groups = NULL, range = NULL, lowest = 1, select = NULL, exclude = NULL, force = FALSE, append = FALSE, ...) {
+data_cut.data.frame <- function(x,
+                                split = "median",
+                                n_groups = NULL,
+                                range = NULL,
+                                lowest = 1,
+                                labels = NULL,
+                                select = NULL,
+                                exclude = NULL,
+                                force = FALSE,
+                                append = FALSE,
+                                verbose = TRUE,
+                                ...) {
   # process arguments
   args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force)
 
@@ -189,9 +233,8 @@ data_cut.data.frame <- function(x, split = "median", n_groups = NULL, range = NU
   x <- args$x
   select <- args$select
 
-  x[select] <- lapply(x[select], data_cut, split = split, n_groups = n_groups, range = range, lowest = lowest, ...)
+  x[select] <- lapply(x[select], data_cut, split = split, n_groups = n_groups, range = range, lowest = lowest, labels = labels, verbose = verbose, ...)
   x
-
 }
 
 
