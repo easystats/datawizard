@@ -88,6 +88,14 @@ at 3.67), 4 to 6 into 2 and 7 to 9 into 3.
 }
 
 \subsection{Recoding into groups with equal size or range}{
+\code{split = "equal_length"} and \code{split = "equal_range"} try to divide the
+range of \code{x} into intervals of similar (or same) length. The difference is
+that \code{split = "equal_length"} will divide the range of \code{x} into \code{n_groups}
+pieces and thereby defining the intervals used as breaks (hence, it is
+equivalent to \code{cut(x, breaks = n_groups)}), while  \code{split = "equal_range"}
+will cut \code{x} into intervals that all have the length of \code{range}, where the
+first interval by defaults starts at \code{1}. The lowest (or starting) value
+of that interval can be defined using the \code{lowest} argument.
 }
 }
 \examples{
@@ -108,10 +116,14 @@ table(data_recode(x, split = c(3, 5)))
 set.seed(123)
 x <- sample(1:100, size = 500, replace = TRUE)
 
-# into 5 groups, try to recode into intervals of similar length
+# into 5 groups, try to recode into intervals of similar length,
+i.e. the range within groups is the same for all groups
 table(data_recode(x, split = "equal_length", n_groups = 5))
 
 # into 5 groups, try to return same range within groups
-# i.e. 1-20, 21-40, 41-60, etc. This is
+# i.e. 1-20, 21-40, 41-60, etc. Since the range of "x" is
+# 1-100, and we have a range of 20, this results into 5
+# groups, and thus is for this particular case identical
+# to the previous result.
 table(data_recode(x, split = "equal_range", range = 20))
 }
