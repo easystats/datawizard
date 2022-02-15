@@ -337,13 +337,15 @@ data_merge.list <- function(x, join = "left", by = NULL, id = NULL, verbose = TR
   # we need separate handling for list of data frames and id-variable here
   if (!is.null(id) && join == "bind") {
     if (id %in% colnames(out)) {
+      # ensure unique ID
+      id <- make.unique(c(colnames(out), id), sep = "_")[length(colnames(out)) + 1]
+      # and also tell user...
       if (isTRUE(verbose)) {
         warning(
           insight::format_message(sprintf("Value of `id` already exists as column name. ID column was renamed to `%s`.", id)),
           call. = FALSE
         )
       }
-      id <- make.unique(c(colnames(out), id), sep = "_")[length(colnames(out)) + 1]
     }
     out[[id]] <- df_id
   }
