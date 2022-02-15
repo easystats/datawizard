@@ -46,7 +46,7 @@ levels or values) for the recoded variable(s).}
 \item{range}{If \code{split = "equal_range"}, this defines the range of values
 that are recoded into a new value.}
 
-\item{lowest}{Minimum value of the recoded variable.}
+\item{lowest}{Minimum value of the recoded variable(s).}
 
 \item{select}{Character vector of column names. If \code{NULL} (the default), all
 variables will be selected.}
@@ -64,6 +64,23 @@ names (using the defined suffix) to the original data frame.}
 }
 \description{
 Recode data.
+}
+\details{
+\subsection{Splits and cut-off values}{
+Cut-off values, which are based on the median, mean or quantile
+functions, are \emph{exclusive}, this means that these values indicate the
+lower bound of the next group to begin. Take a simple example, a numeric
+variable with values from 1 to 9. The median would be 5, thus 1-4 are
+recoded into 1, while 5-9 would turn into 2 (compare
+\code{cbind(1:9, data_recode(1:9))}). The same variable, using \code{split = "quantile"}
+and \code{n_groups = 3} would define cut-off points at 3.67 and 6.33 (see
+\verb{quantile(1:9, probs = c(1/3, 2/3)}), which means that values from 1 to 3
+are recoded into 1 (because the next group of values to be recoded starts
+at 3.67), 4 to 6 into 2 and 7 to 9 into 3.
+}
+
+\subsection{Recoding into groups with equal range}{
+}
 }
 \examples{
 set.seed(123)
