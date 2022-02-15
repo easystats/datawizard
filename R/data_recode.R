@@ -12,7 +12,7 @@
 #'   or numeric values with values indicating breaks. If character, may be one
 #'   of `"median"`, `"mean"`, `"quantile"`, `"equal_length"`, or `"equal_range"`.
 #'   `"median"` or `"mean"` will return dichotomous variables, split at their
-#'   mean or media, respectively. `"quantile"` and `"equal_length"` will split
+#'   mean or median, respectively. `"quantile"` and `"equal_length"` will split
 #'   the variable into `n_groups` groups, where each group refers to an interval
 #'   of a specific range of values. Thus, the length of each interval will be
 #'   based on the number of groups. `"equal_range"` also splits the variable

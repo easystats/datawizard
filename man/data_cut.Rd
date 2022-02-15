@@ -43,7 +43,7 @@ data_cut(x, ...)
 or numeric values with values indicating breaks. If character, may be one
 of \code{"median"}, \code{"mean"}, \code{"quantile"}, \code{"equal_length"}, or \code{"equal_range"}.
 \code{"median"} or \code{"mean"} will return dichotomous variables, split at their
-mean or media, respectively. \code{"quantile"} and \code{"equal_length"} will split
+mean or median, respectively. \code{"quantile"} and \code{"equal_length"} will split
 the variable into \code{n_groups} groups, where each group refers to an interval
 of a specific range of values. Thus, the length of each interval will be
 based on the number of groups. \code{"equal_range"} also splits the variable
