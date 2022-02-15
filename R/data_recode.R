@@ -67,16 +67,26 @@ data_recode.default <- function(x, ...) {
 #' @rdname data_recode
 #' @export
 data_recode.numeric <- function(x, split = "median", n_groups = NULL, range = NULL, lowest = 1, ...) {
+  # check arguments
   if (is.character(split)) {
     split <- match.arg(split, choices = c("median", "mean", "quantile", "equal_size", "equal_range", "equal", "equal_distance", "range", "distance"))
   }
+
+  if (is.character(split) && split %in% c("quantile", "equal_size") && is.null(n_groups)) {
+    stop(insight::format_message("Recoding based on quantiles or equal-sized groups requires the 'n_groups' argument to be specified."), call. = FALSE)
+  }
+
+  if (is.character(split) && split == "equal_range" && is.null(range)) {
+    stop(insight::format_message("Recoding into groups with equal range requires the 'range' argument to be specified."), call. = FALSE)
+  }
+
 
   # handle aliases
   if (identical(split, "equal_size")) {
     split <- "size"
   }
 
-  if (identical(split, "equal_distance") || identical(split, "range") || identical(split, "equal_range")) {
+  if (identical(split, "equal_range")) {
     split <- "range"
   }
 
@@ -115,7 +125,7 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, range = NU
     x,
     breaks = cutoffs,
     include.lowest = TRUE,
-    right = !identical(split, "size") && !identical(split, "range")
+    right = FALSE
   ))
   levels(out) <- 1:nlevels(out)
 
