@@ -8,9 +8,9 @@
 #' @param split Character vector, indicating where to split variables, or
 #'   numeric values, indicating cut-off values. If character, may be one of
 #'   `"median"`, `"mean"`, `"quantile"`, `"equal_size"` or `"equal_range"`.
-#' @param n_groups If `split` is `"quantile"` or `"equal_size"`, this defines
-#'   the number of requested groups (i.e. resulting number of levels or values)
-#'   for the recoded variable(s).
+#' @param n_groups If `split` is `"quantile"` (or its alias `"equal_size"`),
+#'   this defines the number of requested groups (i.e. resulting number of
+#'   levels or values) for the recoded variable(s).
 #' @param range If `split = "equal_range"`, this defines the range of values
 #'   that are recoded into a new value.
 #' @param lowest Minimum value of the recoded variable.
@@ -36,10 +36,6 @@
 #' # into 3 groups, based on distribution (quantiles)
 #' table(data_recode(x, split = "quantile", n_groups = 3))
 #'
-#' # into 3 groups, try to return similar group sizes
-#' # (i.e. similar count for each value/level)
-#' table(data_recode(x, split = "equal_size", n_groups = 3))
-#'
 #' # into 3 groups, manual cut offs
 #' table(data_recode(x, split = c(3, 5)))
 #'
@@ -47,7 +43,7 @@
 #' x <- sample(1:100, size = 500, replace = TRUE)
 #'
 #' # into 5 groups, try to return similar group sizes
-#' table(data_recode(x, split = "equal_size", n_groups = 5))
+#' table(data_recode(x, split = "quantile", n_groups = 5))
 #'
 #' # into 5 groups, try to return same range within groups
 #' # i.e. 1-20, 21-40, 41-60, etc.
@@ -110,8 +106,8 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, range = NU
       split,
       "median" = stats::median(x),
       "mean" = mean(x),
+      "size" = ,
       "quantile" = stats::quantile(x, probs = seq_len(n_groups) / n_groups),
-      "size" = .equal_groups(x, n_groups),
       "range" = .equal_range(x, range),
       NULL
     )
@@ -164,14 +160,6 @@ data_recode.data.frame <- function(x, split = "median", n_groups = NULL, range =
 
 
 # tools --------------------
-
-.equal_groups <- function(x, n_groups) {
-  nominator <- seq_len(n_groups - 1)
-  denominator <- rep(n_groups, length(nominator))
-  qu_prob <- nominator / denominator
-  stats::quantile(x, probs = qu_prob)
-}
-
 
 .equal_range <- function(x, range) {
   if (is.null(range)) {
