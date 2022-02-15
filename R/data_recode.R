@@ -9,6 +9,9 @@
 #' @param n_groups If `split = "quantile"`.
 #' @param size_groups If `split = "range"`.
 #' @param lowest Minimum value if numeric variables are recoded.
+#' @param force Logical, if `TRUE`, forces recoding of factors and dates
+#'   as well.
+#' @inheritParams standardize
 #' @param ... not used.
 #'
 #' @examples
@@ -44,11 +47,26 @@ data_recode <- function(x, ...) {
   UseMethod("data_recode")
 }
 
+
+#' @export
+data_recode.default <- function(x, ...) {
+  return(x)
+}
+
+
 #' @rdname data_recode
 #' @export
 data_recode.numeric <- function(x, split = "median", n_groups = NULL, size_groups = NULL, lowest = 1, ...) {
   # evaluate split-function
-  split <- substitute(split)
+  split_arg <- substitute(split)
+
+  # this is required when the numeric-method is called from another function
+  # then "split" might be a name of a variable
+  if (!deparse(split_arg) %in% c("median", "mean", "quantile", "equal_size", "equal_range", "equal", "equal_distance", "range", "distance")) {
+    split <- eval(split_arg)
+  } else {
+    split <- split_arg
+  }
 
   if (is.numeric(eval(split))) {
     split <- eval(split)
@@ -111,6 +129,32 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, size_group
   original_x[!is.na(original_x)] <- out
 
   original_x
+}
+
+
+#' @export
+data_recode.factor <- function(x, ...) {
+  levels(x) <- 1:nlevels(x)
+  data_recode(as.numeric(x), ...)
+}
+
+
+#' @rdname data_recode
+#' @export
+data_recode.data.frame <- function(x, split = "median", n_groups = NULL, size_groups = NULL, lowest = 1, select = NULL, exclude = NULL, force = FALSE, ...) {
+  # check for formula notation, convert to character vector
+  if (inherits(select, "formula")) {
+    select <- all.vars(select)
+  }
+  if (inherits(exclude, "formula")) {
+    exclude <- all.vars(exclude)
+  }
+
+  select <- .select_variables(x, select, exclude, force = force)
+
+  x[select] <- lapply(x[select], data_recode, split = split, n_groups = n_groups, size_groups = size_groups, lowest = lowest, ...)
+  x
+
 }
 
 

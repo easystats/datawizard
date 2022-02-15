@@ -3,6 +3,7 @@
 \name{data_recode}
 \alias{data_recode}
 \alias{data_recode.numeric}
+\alias{data_recode.data.frame}
 \title{Recode data}
 \usage{
 data_recode(x, ...)
@@ -13,6 +14,18 @@ data_recode(x, ...)
   n_groups = NULL,
   size_groups = NULL,
   lowest = 1,
+  ...
+)
+
+\method{data_recode}{data.frame}(
+  x,
+  split = "median",
+  n_groups = NULL,
+  size_groups = NULL,
+  lowest = 1,
+  select = NULL,
+  exclude = NULL,
+  force = FALSE,
   ...
 )
 }
@@ -28,6 +41,14 @@ data_recode(x, ...)
 \item{size_groups}{If \code{split = "range"}.}
 
 \item{lowest}{Minimum value if numeric variables are recoded.}
+
+\item{select}{Character vector of column names. If \code{NULL} (the default), all
+variables will be selected.}
+
+\item{exclude}{Character vector of column names to be excluded from selection.}
+
+\item{force}{Logical, if \code{TRUE}, forces recoding of factors and dates
+as well.}
 }
 \description{
 Recode data.
