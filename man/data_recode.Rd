@@ -37,7 +37,8 @@ data_recode(x, ...)
 
 \item{split}{Character vector, indicating where to split variables, or
 numeric values, indicating cut-off values. If character, may be one of
-\code{"median"}, \code{"mean"}, \code{"quantile"}, \code{"equal_size"} or \code{"equal_range"}.}
+\code{"median"}, \code{"mean"}, \code{"quantile"} (or its alias \code{"equal_size"}) or
+\code{"equal_range"}.}
 
 \item{n_groups}{If \code{split} is \code{"quantile"} (or its alias \code{"equal_size"}),
 this defines the number of requested groups (i.e. resulting number of
@@ -46,7 +47,10 @@ levels or values) for the recoded variable(s).}
 \item{range}{If \code{split = "equal_range"}, this defines the range of values
 that are recoded into a new value.}
 
-\item{lowest}{Minimum value of the recoded variable(s).}
+\item{lowest}{Minimum value of the recoded variable(s). If \code{NULL} (the default),
+for numeric variables, the minimum of the original input is preserved. For
+factors, the default minimum is \code{1}. For \code{split = "equal_range"}, the
+default minimum is always \code{1}, unless specified otherwise in \code{lowest}.}
 
 \item{select}{Character vector of column names. If \code{NULL} (the default), all
 variables will be selected.}

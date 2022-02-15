@@ -7,13 +7,17 @@
 #' @param x A data frame, numeric vector or factor.
 #' @param split Character vector, indicating where to split variables, or
 #'   numeric values, indicating cut-off values. If character, may be one of
-#'   `"median"`, `"mean"`, `"quantile"`, `"equal_size"` or `"equal_range"`.
+#'   `"median"`, `"mean"`, `"quantile"` (or its alias `"equal_size"`) or
+#'   `"equal_range"`.
 #' @param n_groups If `split` is `"quantile"` (or its alias `"equal_size"`),
 #'   this defines the number of requested groups (i.e. resulting number of
 #'   levels or values) for the recoded variable(s).
 #' @param range If `split = "equal_range"`, this defines the range of values
 #'   that are recoded into a new value.
-#' @param lowest Minimum value of the recoded variable(s).
+#' @param lowest Minimum value of the recoded variable(s). If `NULL` (the default),
+#'   for numeric variables, the minimum of the original input is preserved. For
+#'   factors, the default minimum is `1`. For `split = "equal_range"`, the
+#'   default minimum is always `1`, unless specified otherwise in `lowest`.
 #' @param force Logical, if `TRUE`, forces recoding of factors as well.
 #' @param append Logical or string. If `TRUE`, recoded variables get new
 #'   column names (with the suffix `"_r"`) and are appended (column bind) to `x`,
