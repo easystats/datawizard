@@ -183,7 +183,7 @@ data_recode.factor <- function(x, ...) {
 #' @export
 data_recode.data.frame <- function(x, split = "median", n_groups = NULL, range = NULL, lowest = 1, select = NULL, exclude = NULL, force = FALSE, append = FALSE, ...) {
   # process arguments
-  args <- .process_std_args(x, select, exclude, weights, append, append_suffix = "_r", force)
+  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force)
 
   # update processed arguments
   x <- args$x
