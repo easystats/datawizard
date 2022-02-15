@@ -4,13 +4,17 @@
 #' @description
 #' Recode data.
 #'
-#' @param x A data frame or vector.
-#' @param split Name of a function, or numeric values, indicating cutoffs
-#' @param n_groups If `split = "quantile"`.
-#' @param size_groups If `split = "range"`.
-#' @param lowest Minimum value if numeric variables are recoded.
-#' @param force Logical, if `TRUE`, forces recoding of factors and dates
-#'   as well.
+#' @param x A data frame, numeric vector or factor.
+#' @param split Character vector, indicating where to split variables, or
+#'   numeric values, indicating cut-off values. If character, may be one of
+#'   `"median"`, `"mean"`, `"quantile"`, `"equal_size"` or `"equal_range"`.
+#' @param n_groups If `split` is `"quantile"` or `"equal_size"`, this defines
+#'   the number of requested groups (i.e. resulting number of levels or values)
+#'   for the recoded variable(s).
+#' @param range If `split = "equal_range"`, this defines the range of values
+#'   that are recoded into a new value.
+#' @param lowest Minimum value of the recoded variable.
+#' @param force Logical, if `TRUE`, forces recoding of factors as well.
 #' @param append Logical or string. If `TRUE`, recoded variables get new
 #'   column names (with the suffix `"_r"`) and are appended (column bind) to `x`,
 #'   thus returning both the original and the recoded variables. If `FALSE`,
@@ -34,7 +38,7 @@
 #'
 #' # into 3 groups, try to return similar group sizes
 #' # (i.e. similar count for each value/level)
-#' table(data_recode(x, split = "quantile", n_groups = 3))
+#' table(data_recode(x, split = "equal_size", n_groups = 3))
 #'
 #' # into 3 groups, manual cut offs
 #' table(data_recode(x, split = c(3, 5)))
@@ -63,31 +67,17 @@ data_recode.default <- function(x, ...) {
 #' @rdname data_recode
 #' @export
 data_recode.numeric <- function(x, split = "median", n_groups = NULL, size_groups = NULL, lowest = 1, ...) {
-  # evaluate split-function
-  split_arg <- substitute(split)
-
-  # this is required when the numeric-method is called from another function
-  # then "split" might be a name of a variable
-  if (!deparse(split_arg) %in% c("median", "mean", "quantile", "equal_size", "equal_range", "equal", "equal_distance", "range", "distance")) {
-    split <- eval(split_arg)
-  } else {
-    split <- split_arg
+  if (is.character(split)) {
+    split <- match.arg(split, choices = c("median", "mean", "quantile", "equal_size", "equal_range", "equal", "equal_distance", "range", "distance"))
   }
-
-  if (is.numeric(eval(split))) {
-    split <- eval(split)
-  } else if (!is.character(split)) {
-    split <- deparse(split)
-  }
-
 
   # handle aliases
   if (identical(split, "equal_size")) {
-    split <- "equal"
+    split <- "size"
   }
 
   if (identical(split, "equal_distance") || identical(split, "range") || identical(split, "equal_range")) {
-    split <- "distance"
+    split <- "range"
   }
 
 
@@ -111,8 +101,8 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, size_group
       "median" = stats::median(x),
       "mean" = mean(x),
       "quantile" = stats::quantile(x, probs = length(x) / (rev(seq(1:n_groups)) * length(x))),
-      "equal" = .equal_groups(x, n_groups),
-      "distance" = .equal_distance(x, size_groups),
+      "size" = .equal_groups(x, n_groups),
+      "range" = .equal_range(x, size_groups),
       NULL
     )
   }
@@ -125,7 +115,7 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, size_group
     x,
     breaks = cutoffs,
     include.lowest = TRUE,
-    right = !identical(split, "equal") && !identical(split, "distance")
+    right = !identical(split, "size") && !identical(split, "range")
   ))
   levels(out) <- 1:nlevels(out)
 
@@ -141,7 +131,7 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, size_group
 #' @export
 data_recode.factor <- function(x, ...) {
   levels(x) <- 1:nlevels(x)
-  data_recode(as.numeric(x), ...)
+  as.factor(data_recode(as.numeric(x), ...))
 }
 
 
@@ -173,7 +163,7 @@ data_recode.data.frame <- function(x, split = "median", n_groups = NULL, size_gr
 }
 
 
-.equal_distance <- function(x, size_groups) {
+.equal_range <- function(x, size_groups) {
   if (is.null(size_groups)) {
     size <- ceiling((max(x) - min(x)) / size_groups)
     size_groups <- as.numeric(size)

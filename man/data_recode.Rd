@@ -31,25 +31,26 @@ data_recode(x, ...)
 )
 }
 \arguments{
-\item{x}{A data frame or vector.}
+\item{x}{A data frame, numeric vector or factor.}
 
 \item{...}{not used.}
 
-\item{split}{Name of a function, or numeric values, indicating cutoffs}
+\item{split}{Character vector, indicating where to split variables, or
+numeric values, indicating cut-off values. If character, may be one of
+\code{"median"}, \code{"mean"}, \code{"quantile"}, \code{"equal_size"} or \code{"equal_range"}.}
 
-\item{n_groups}{If \code{split = "quantile"}.}
+\item{n_groups}{If \code{split} is \code{"quantile"} or \code{"equal_size"}, this defines
+the number of requested groups (i.e. resulting number of levels or values)
+for the recoded variable(s).}
 
-\item{size_groups}{If \code{split = "range"}.}
-
-\item{lowest}{Minimum value if numeric variables are recoded.}
+\item{lowest}{Minimum value of the recoded variable.}
 
 \item{select}{Character vector of column names. If \code{NULL} (the default), all
 variables will be selected.}
 
 \item{exclude}{Character vector of column names to be excluded from selection.}
 
-\item{force}{Logical, if \code{TRUE}, forces recoding of factors and dates
-as well.}
+\item{force}{Logical, if \code{TRUE}, forces recoding of factors as well.}
 
 \item{append}{Logical or string. If \code{TRUE}, recoded variables get new
 column names (with the suffix \code{"_r"}) and are appended (column bind) to \code{x},
@@ -57,6 +58,9 @@ thus returning both the original and the recoded variables. If \code{FALSE},
 original variables in \code{x} will be overwritten by their recoded versions.
 If a character value, recoded variables are appended with new column
 names (using the defined suffix) to the original data frame.}
+
+\item{range}{If \code{split = "equal_range"}, this defines the range of values
+that are recoded into a new value.}
 }
 \description{
 Recode data.
@@ -75,7 +79,7 @@ table(data_recode(x, split = "quantile", n_groups = 3))
 
 # into 3 groups, try to return similar group sizes
 # (i.e. similar count for each value/level)
-table(data_recode(x, split = "quantile", n_groups = 3))
+table(data_recode(x, split = "equal_size", n_groups = 3))
 
 # into 3 groups, manual cut offs
 table(data_recode(x, split = c(3, 5)))
