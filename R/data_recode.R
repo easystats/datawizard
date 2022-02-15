@@ -108,7 +108,7 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, range = NU
       "mean" = mean(x),
       "size" = ,
       "quantile" = stats::quantile(x, probs = seq_len(n_groups) / n_groups),
-      "range" = .equal_range(x, range),
+      "range" = .equal_range(x, range, lowest),
       NULL
     )
   }
@@ -161,10 +161,11 @@ data_recode.data.frame <- function(x, split = "median", n_groups = NULL, range =
 
 # tools --------------------
 
-.equal_range <- function(x, range) {
+.equal_range <- function(x, range, lowest = NULL) {
+  if (is.null(lowest)) lowest <- 1
   if (is.null(range)) {
     size <- ceiling((max(x) - min(x)) / range)
     range <- as.numeric(size)
   }
-  seq(min(x), max(x), by = range)
+  seq(lowest, max(x), by = range)
 }

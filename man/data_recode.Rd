@@ -39,9 +39,9 @@ data_recode(x, ...)
 numeric values, indicating cut-off values. If character, may be one of
 \code{"median"}, \code{"mean"}, \code{"quantile"}, \code{"equal_size"} or \code{"equal_range"}.}
 
-\item{n_groups}{If \code{split} is \code{"quantile"} or \code{"equal_size"}, this defines
-the number of requested groups (i.e. resulting number of levels or values)
-for the recoded variable(s).}
+\item{n_groups}{If \code{split} is \code{"quantile"} (or its alias \code{"equal_size"}),
+this defines the number of requested groups (i.e. resulting number of
+levels or values) for the recoded variable(s).}
 
 \item{range}{If \code{split = "equal_range"}, this defines the range of values
 that are recoded into a new value.}
@@ -77,10 +77,6 @@ table(data_recode(x))
 # into 3 groups, based on distribution (quantiles)
 table(data_recode(x, split = "quantile", n_groups = 3))
 
-# into 3 groups, try to return similar group sizes
-# (i.e. similar count for each value/level)
-table(data_recode(x, split = "equal_size", n_groups = 3))
-
 # into 3 groups, manual cut offs
 table(data_recode(x, split = c(3, 5)))
 
@@ -88,7 +84,7 @@ set.seed(123)
 x <- sample(1:100, size = 500, replace = TRUE)
 
 # into 5 groups, try to return similar group sizes
-table(data_recode(x, split = "equal_size", n_groups = 5))
+table(data_recode(x, split = "quantile", n_groups = 5))
 
 # into 5 groups, try to return same range within groups
 # i.e. 1-20, 21-40, 41-60, etc.

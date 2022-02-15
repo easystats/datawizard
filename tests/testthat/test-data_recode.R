@@ -21,4 +21,29 @@ if (require("testthat")) {
     expect_equal(data_recode(d, split = "quantile", n_groups = 3),  as.numeric(f))
     expect_equal(data_recode(d, split = "quantile", n_groups = 3, lowest = 0),  as.numeric(f) - 1)
   })
+
+  set.seed(123)
+  d <- sample(1:100, size = 1000, replace = TRUE)
+
+  test_that("recode range", {
+    expect_error(data_recode(d, split = "range"))
+    d2 <- d
+    d2[d <= 20] <- 1
+    d2[d > 20 & d <= 40] <- 2
+    d2[d > 40 & d <= 60] <- 3
+    d2[d > 60 & d <= 80] <- 4
+    d2[d > 80] <- 5
+    expect_equal(table(data_recode(d, split = "equal_range", range = 20)), table(d2), ignore_attr = TRUE)
+    expect_equal(table(data_recode(d, split = "equal_range", range = 20, lowest = 1)), table(d2), ignore_attr = TRUE)
+
+    d2 <- d
+    d2[d < 20] <- 0
+    d2[d >= 20 & d < 40] <- 1
+    d2[d >= 40 & d < 60] <- 2
+    d2[d >= 60 & d < 80] <- 3
+    d2[d >= 80] <- 4
+    expect_equal(table(data_recode(d, split = "equal_range", range = 20, lowest = 0)), table(d2), ignore_attr = TRUE)
+  })
+
+
 }
