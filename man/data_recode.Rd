@@ -117,7 +117,7 @@ set.seed(123)
 x <- sample(1:100, size = 500, replace = TRUE)
 
 # into 5 groups, try to recode into intervals of similar length,
-i.e. the range within groups is the same for all groups
+# i.e. the range within groups is the same for all groups
 table(data_recode(x, split = "equal_length", n_groups = 5))
 
 # into 5 groups, try to return same range within groups
