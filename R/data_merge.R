@@ -190,7 +190,7 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
 
   all_columns <- union(colnames(x), colnames(y))
 
-  if (!is.null(id) && id %in% all_columns) {
+  if (join == "bind" && !is.null(id) && id %in% all_columns) {
     # ensure unique ID
     id <- make.unique(c(all_columns, id), sep = "_")[length(all_columns) + 1]
     # and also tell user...
