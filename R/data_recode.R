@@ -1,5 +1,5 @@
 #' @title Recode (or "cut") data into groups of values.
-#' @name data_recode
+#' @name data_cut
 #'
 #' @description
 #' This functions divides the range of variables into intervals and recodes
@@ -40,7 +40,7 @@
 #'   lower bound of the next group to begin. Take a simple example, a numeric
 #'   variable with values from 1 to 9. The median would be 5, thus 1-4 are
 #'   recoded into 1, while 5-9 would turn into 2 (compare
-#'   `cbind(1:9, data_recode(1:9))`). The same variable, using `split = "quantile"`
+#'   `cbind(1:9, data_cut(1:9))`). The same variable, using `split = "quantile"`
 #'   and `n_groups = 3` would define cut-off points at 3.67 and 6.33 (see
 #'   `quantile(1:9, probs = c(1/3, 2/3)`), which means that values from 1 to 3
 #'   are recoded into 1 (because the next group of values to be recoded starts
@@ -65,42 +65,42 @@
 #' table(x)
 #'
 #' # by default, at median
-#' table(data_recode(x))
+#' table(data_cut(x))
 #'
 #' # into 3 groups, based on distribution (quantiles)
-#' table(data_recode(x, split = "quantile", n_groups = 3))
+#' table(data_cut(x, split = "quantile", n_groups = 3))
 #'
 #' # into 3 groups, manual cut offs
-#' table(data_recode(x, split = c(3, 5)))
+#' table(data_cut(x, split = c(3, 5)))
 #'
 #' set.seed(123)
 #' x <- sample(1:100, size = 500, replace = TRUE)
 #'
 #' # into 5 groups, try to recode into intervals of similar length,
 #' # i.e. the range within groups is the same for all groups
-#' table(data_recode(x, split = "equal_length", n_groups = 5))
+#' table(data_cut(x, split = "equal_length", n_groups = 5))
 #'
 #' # into 5 groups, try to return same range within groups
 #' # i.e. 1-20, 21-40, 41-60, etc. Since the range of "x" is
 #' # 1-100, and we have a range of 20, this results into 5
 #' # groups, and thus is for this particular case identical
 #' # to the previous result.
-#' table(data_recode(x, split = "equal_range", range = 20))
+#' table(data_cut(x, split = "equal_range", range = 20))
 #' @export
-data_recode <- function(x, ...) {
-  UseMethod("data_recode")
+data_cut <- function(x, ...) {
+  UseMethod("data_cut")
 }
 
 
 #' @export
-data_recode.default <- function(x, ...) {
+data_cut.default <- function(x, ...) {
   return(x)
 }
 
 
-#' @rdname data_recode
+#' @rdname data_cut
 #' @export
-data_recode.numeric <- function(x, split = "median", n_groups = NULL, range = NULL, lowest = 1, ...) {
+data_cut.numeric <- function(x, split = "median", n_groups = NULL, range = NULL, lowest = 1, ...) {
   # check arguments
   if (is.character(split)) {
     split <- match.arg(split, choices = c("median", "mean", "quantile", "equal_length", "equal_range", "equal", "equal_distance", "range", "distance"))
@@ -173,15 +173,15 @@ data_recode.numeric <- function(x, split = "median", n_groups = NULL, range = NU
 
 
 #' @export
-data_recode.factor <- function(x, ...) {
+data_cut.factor <- function(x, ...) {
   levels(x) <- 1:nlevels(x)
-  as.factor(data_recode(as.numeric(x), ...))
+  as.factor(data_cut(as.numeric(x), ...))
 }
 
 
-#' @rdname data_recode
+#' @rdname data_cut
 #' @export
-data_recode.data.frame <- function(x, split = "median", n_groups = NULL, range = NULL, lowest = 1, select = NULL, exclude = NULL, force = FALSE, append = FALSE, ...) {
+data_cut.data.frame <- function(x, split = "median", n_groups = NULL, range = NULL, lowest = 1, select = NULL, exclude = NULL, force = FALSE, append = FALSE, ...) {
   # process arguments
   args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force)
 
@@ -189,7 +189,7 @@ data_recode.data.frame <- function(x, split = "median", n_groups = NULL, range =
   x <- args$x
   select <- args$select
 
-  x[select] <- lapply(x[select], data_recode, split = split, n_groups = n_groups, range = range, lowest = lowest, ...)
+  x[select] <- lapply(x[select], data_cut, split = split, n_groups = n_groups, range = range, lowest = lowest, ...)
   x
 
 }
