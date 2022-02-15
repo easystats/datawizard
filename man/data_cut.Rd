@@ -39,9 +39,18 @@ data_cut(x, ...)
 
 \item{...}{not used.}
 
-\item{split}{Character vector, indicating where to split variables, or
-numeric values, indicating cut-off values. If character, may be one of
-\code{"median"}, \code{"mean"}, \code{"quantile"}, \code{"equal_length"}, or \code{"equal_range"}.}
+\item{split}{Character vector, indicating at which breaks to split variables,
+or numeric values with values indicating breaks. If character, may be one
+of \code{"median"}, \code{"mean"}, \code{"quantile"}, \code{"equal_length"}, or \code{"equal_range"}.
+\code{"median"} or \code{"mean"} will return dichotomous variables, split at their
+mean or media, respectively. \code{"quantile"} and \code{"equal_length"} will split
+the variable into \code{n_groups} groups, where each group refers to an interval
+of a specific range of values. Thus, the length of each interval will be
+based on the number of groups. \code{"equal_range"} also splits the variable
+into multiple groups, however, the length of the interval is given, and
+the number of resulting groups (and hence, the number of breaks) will be
+determined by how many intervals can be generated, based on the full range
+of the variable.}
 
 \item{n_groups}{If \code{split} is \code{"quantile"} or \code{"equal_length"}, this defines
 the number of requested groups (i.e. resulting number of levels or values)
@@ -89,17 +98,16 @@ It is basically a wrapper around base R's \code{cut()}, providing a simplified
 and more accessible way to define the interval breaks (cut-off values).
 }
 \details{
-\subsection{Splits and cut-off values}{
-Cut-off values, which are based on the median, mean or quantile
-functions, are \emph{exclusive}, this means that these values indicate the
-lower bound of the next group to begin. Take a simple example, a numeric
-variable with values from 1 to 9. The median would be 5, thus 1-4 are
-recoded into 1, while 5-9 would turn into 2 (compare
-\code{cbind(1:9, data_cut(1:9))}). The same variable, using \code{split = "quantile"}
-and \code{n_groups = 3} would define cut-off points at 3.67 and 6.33 (see
-\verb{quantile(1:9, probs = c(1/3, 2/3)}), which means that values from 1 to 3
-are recoded into 1 (because the next group of values to be recoded starts
-at 3.67), 4 to 6 into 2 and 7 to 9 into 3.
+\subsection{Splits and breaks (cut-off values)}{
+Breaks are in general \emph{exclusive}, this means that these values indicate
+the lower bound of the next group or interval to begin. Take a simple
+example, a numeric variable with values from 1 to 9. The median would be 5,
+thus the first interval ranges from 1-4 and is recoded into 1, while 5-9
+would turn into 2 (compare \code{cbind(1:9, data_cut(1:9))}). The same variable,
+using \code{split = "quantile"} and \code{n_groups = 3} would define breaks at 3.67
+and 6.33 (see \verb{quantile(1:9, probs = c(1/3, 2/3)}), which means that values
+from 1 to 3 belong to the first interval and are recoded into 1 (because
+the next interval starts at 3.67), 4 to 6 into 2 and 7 to 9 into 3.
 }
 
 \subsection{Recoding into groups with equal size or range}{
@@ -125,7 +133,7 @@ table(data_cut(x))
 # into 3 groups, based on distribution (quantiles)
 table(data_cut(x, split = "quantile", n_groups = 3))
 
-# into 3 groups, manual cut offs
+# into 3 groups, user-defined break
 table(data_cut(x, split = c(3, 5)))
 
 set.seed(123)
@@ -141,4 +149,10 @@ table(data_cut(x, split = "equal_length", n_groups = 5))
 # groups, and thus is for this particular case identical
 # to the previous result.
 table(data_cut(x, split = "equal_range", range = 20))
+
+# return factor with value labels instead of numeric value
+set.seed(123)
+x <- sample(1:10, size = 30, replace = TRUE)
+data_cut(x, "equal_length", n_groups = 3)
+data_cut(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high"))
 }
