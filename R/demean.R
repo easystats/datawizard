@@ -1,5 +1,7 @@
 #' Compute group-meaned and de-meaned variables
 #'
+#' @description
+#'
 #' `demean()` computes group- and de-meaned versions of a variable that can be
 #' used in regression analysis to model the between- and within-subject effect.
 #' `degroup()` is more generic in terms of the centering-operation. While
@@ -25,14 +27,17 @@
 #'   within- and between-effects are printed in separated blocks.
 #' @inheritParams center
 #'
-#' @return A data frame with the group-/de-meaned variables, which get the suffix
-#'   `"_between"` (for the group-meaned variable) and `"_within"` (for
-#'   the de-meaned variable) by default.
+#' @return
+#'
+#' A data frame with the group-/de-meaned variables, which get the suffix
+#' `"_between"` (for the group-meaned variable) and `"_within"` (for the
+#' de-meaned variable) by default.
 #'
 #' @seealso If grand-mean centering (instead of centering within-clusters)
 #'   is required, see [center()].
 #'
 #' @details
+#'
 #'   \subsection{Heterogeneity Bias}{
 #'     Mixed models include different levels of sources of variability, i.e.
 #'     error terms at each level. When macro-indicators (or level-2 predictors,
@@ -55,6 +60,7 @@
 #'     so it is free to account for all the higher-level variance associated
 #'     with that variable} (\cite{Bell et al. 2015}).
 #'   }
+#'
 #'   \subsection{Panel data and correlating fixed and group effects}{
 #'     `demean()` is intended to create group- and de-meaned variables
 #'     for panel regression models (fixed effects models), or for complex
@@ -69,6 +75,7 @@
 #'     fit complex multilevel models for panel data, including time-varying
 #'     predictors, time-invariant predictors and random effects.
 #'    }
+#'
 #'   \subsection{Why mixed models are preferred over fixed effects models}{
 #'     A mixed models approach can model the causes of endogeneity explicitly
 #'     by including the (separated) within- and between-effects of time-varying
@@ -82,6 +89,7 @@
 #'     estimated context effects, resulting in unnecessarily wide confidence
 #'     intervals and low statistical power} (\cite{Heisig et al. 2017}).
 #'   }
+#'
 #'   \subsection{Terminology}{
 #'     The group-meaned variable is simply the mean of an independent variable
 #'     within each group (or id-level or cluster) represented by `group`.
@@ -92,6 +100,7 @@
 #'     centering within clusters. The regression coefficient of a de-meaned
 #'     variable represents the *within-subject-effect*.
 #'   }
+#'
 #'   \subsection{De-meaning with continuous predictors}{
 #'     For continuous time-varying predictors, the recommendation is to include
 #'     both their de-meaned and group-meaned versions as fixed effects, but not
@@ -101,6 +110,7 @@
 #'     the within-subject effect, while the coefficient of the group-meaned
 #'     predictor indicates the between-subject effect.
 #'   }
+#'
 #'   \subsection{De-meaning with binary predictors}{
 #'     For binary time-varying predictors, there are two recommendations. First
 #'     is to include the raw (untransformed) binary predictor as fixed effect
@@ -115,6 +125,7 @@
 #'     these variables, where the raw (untransformed) binary predictor and the
 #'     de-meaned version should be added to the model.
 #'   }
+#'
 #'   \subsection{De-meaning of factors with more than 2 levels}{
 #'     Factors with more than two levels are demeaned in two ways: first, these
 #'     are also converted to numeric and de-meaned; second, dummy variables
@@ -123,6 +134,7 @@
 #'     Packages like \pkg{panelr} internally convert factors to dummies before
 #'     demeaning, so this behaviour can be mimicked here.
 #'   }
+#'
 #'   \subsection{De-meaning interaction terms}{ There are multiple ways to deal
 #'   with interaction terms of within- and between-effects. A classical approach
 #'   is to simply use the product term of the de-meaned variables (i.e.
@@ -144,6 +156,7 @@
 #'     the term as interaction for the `select`-argument, e.g.
 #'     `select = "a*b"` (see 'Examples').
 #'   }
+#'
 #'   \subsection{Analysing panel data with mixed models using lme4}{
 #'     A description of how to translate the
 #'     formulas described in *Bell et al. 2018* into R using `lmer()`
@@ -151,36 +164,37 @@
 #'     [this vignette](https://easystats.github.io/datawizard/articles/demean.html).
 #'   }
 #'
-#' @references \itemize{
-#'   \item Bafumi J, Gelman A. 2006. Fitting Multilevel Models When Predictors
+#' @references
+#'
+#'   - Bafumi J, Gelman A. 2006. Fitting Multilevel Models When Predictors
 #'   and Group Effects Correlate. In. Philadelphia, PA: Annual meeting of the
 #'   American Political Science Association.
 #'
-#'   \item Bell A, Fairbrother M, Jones K. 2019. Fixed and Random Effects
+#'   - Bell A, Fairbrother M, Jones K. 2019. Fixed and Random Effects
 #'   Models: Making an Informed Choice. Quality & Quantity (53); 1051-1074
 #'
-#'   \item Bell A, Jones K. 2015. Explaining Fixed Effects: Random Effects
+#'   - Bell A, Jones K. 2015. Explaining Fixed Effects: Random Effects
 #'   Modeling of Time-Series Cross-Sectional and Panel Data. Political Science
 #'   Research and Methods, 3(1), 133–153.
 #'
-#'   \item Gelman A, Hill J. 2007. Data Analysis Using Regression and
+#'   - Gelman A, Hill J. 2007. Data Analysis Using Regression and
 #'   Multilevel/Hierarchical Models. Analytical Methods for Social Research.
 #'   Cambridge, New York: Cambridge University Press
 #'
-#'   \item Giesselmann M, Schmidt-Catran, AW. 2020. Interactions in fixed
+#'   - Giesselmann M, Schmidt-Catran, AW. 2020. Interactions in fixed
 #'   effects regression models. Sociological Methods & Research, 1–28.
 #'   https://doi.org/10.1177/0049124120914934
 #'
-#'   \item Heisig JP, Schaeffer M, Giesecke J. 2017. The Costs of Simplicity:
+#'   - Heisig JP, Schaeffer M, Giesecke J. 2017. The Costs of Simplicity:
 #'   Why Multilevel Models May Benefit from Accounting for Cross-Cluster
 #'   Differences in the Effects of Controls. American Sociological Review 82
 #'   (4): 796–827.
 #'
-#'   \item Hoffman L. 2015. Longitudinal analysis: modeling within-person
+#'   - Hoffman L. 2015. Longitudinal analysis: modeling within-person
 #'   fluctuation and change. New York: Routledge
-#' }
-
+#'
 #' @examples
+#'
 #' data(iris)
 #' iris$ID <- sample(1:4, nrow(iris), replace = TRUE) # fake-ID
 #' iris$binary <- as.factor(rbinom(150, 1, .35)) # binary variable
@@ -203,6 +217,7 @@
 #'
 #' # or in formula-notation
 #' demean(dat, select = ~ a + x * y, group = ~ID)
+#'
 #' @export
 demean <- function(x,
                    select,

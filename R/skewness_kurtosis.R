@@ -22,31 +22,32 @@
 #' a negative skewness values indicates a "left-skewed" distribution, and a
 #' positive skewness values indicates a "right-skewed" distribution. Examples
 #' for the relationship of skewness and distributions are:
-#' \itemize{
-#'   \item Normal distribution (and other symmetric distribution) has a skewness
+#'
+#'   - Normal distribution (and other symmetric distribution) has a skewness
 #'   of 0
-#'   \item Half-normal distribution has a skewness just below 1
-#'   \item Exponential distribution has a skewness of 2
-#'   \item Lognormal distribution can have a skewness of any positive value,
+#'   - Half-normal distribution has a skewness just below 1
+#'   - Exponential distribution has a skewness of 2
+#'   - Lognormal distribution can have a skewness of any positive value,
 #'   depending on its parameters
-#' }
+#'
 #' (\cite{https://en.wikipedia.org/wiki/Skewness})
 #' }
+#'
 #' \subsection{Types of Skewness}{
 #' `skewness()` supports three different methods for estimating skewness,
 #' as discussed in \cite{Joanes and Gill (1988)}:
-#' \itemize{
-#' \item Type "1" is the "classical" method, which is `g1 = (sum((x -
+#'
+#' - Type "1" is the "classical" method, which is `g1 = (sum((x -
 #' mean(x))^3) / n) / (sum((x - mean(x))^2) / n)^1.5`
 #'
-#' \item Type "2" first calculates the type-1 skewness, then adjusts the result:
+#' - Type "2" first calculates the type-1 skewness, then adjusts the result:
 #' `G1 = g1 * sqrt(n * (n - 1)) / (n - 2)`. This is what SAS and SPSS
 #' usually return
 #'
-#' \item Type "3" first calculates the type-1 skewness, then adjusts the result:
+#' - Type "3" first calculates the type-1 skewness, then adjusts the result:
 #' `b1 = g1 * ((1 - 1 / n))^1.5`. This is what Minitab usually returns.
 #' }
-#' }
+#'
 #' \subsection{Kurtosis}{
 #' The `kurtosis` is a measure of "tailedness" of a distribution. A
 #' distribution with a kurtosis values of about zero is called "mesokurtic". A
@@ -55,22 +56,24 @@
 #' distribution with *thinner* tails
 #' (\cite{https://en.wikipedia.org/wiki/Kurtosis}).
 #' }
+#'
 #' \subsection{Types of Kurtosis}{
 #' `kurtosis()` supports three different methods for estimating kurtosis,
 #' as discussed in \cite{Joanes and Gill (1988)}:
-#' \itemize{
-#' \item Type "1" is the "classical" method, which is `g2 = n * sum((x -
+#'
+#' - Type "1" is the "classical" method, which is `g2 = n * sum((x -
 #' mean(x))^4) / (sum((x - mean(x))^2)^2) - 3`.
 #'
-#' \item Type "2" first calculates the type-1 kurtosis, than adjusts the result:
+#' - Type "2" first calculates the type-1 kurtosis, than adjusts the result:
 #' `G2 = ((n + 1) * g2 + 6) * (n - 1)/((n - 2) * (n - 3))`. This is what
 #' SAS and SPSS usually return
 #'
-#' \item Type "3" first calculates the type-1 kurtosis, than adjusts the result:
+#' - Type "3" first calculates the type-1 kurtosis, than adjusts the result:
 #' `b2 = (g2 + 3) * (1 - 1 / n)^2 - 3`. This is what Minitab usually
 #' returns.
+#'
 #' }
-#' }
+#'
 #' \subsection{Standard Errors}{
 #' It is recommended to compute empirical (bootstrapped) standard errors (via
 #' the `iterations` argument) than relying on analytic standard errors
@@ -78,6 +81,7 @@
 #' }
 #'
 #' @references
+#'
 #' - D. N. Joanes and C. A. Gill (1998). Comparing measures of sample
 #'   skewness and kurtosis. The Statistician, 47, 183–189.
 #'

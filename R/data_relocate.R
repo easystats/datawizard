@@ -3,7 +3,10 @@
 #' @param data A data frame to pivot.
 #' @param cols A character vector indicating the names of the columns to move.
 #' @param before,after Destination of columns. Supplying neither will move
-#'   columns to the left-hand side; specifying both is an error.
+#'   columns to the left-hand side; specifying both is an error. Can be a
+#'   character vector, indicating the name of the destination column, or a
+#'   numeric value, indicating the index number of the destination column.
+#'   If `-1`, will be added before or after the last column.
 #' @param safe If `TRUE`, will disregard non-existing columns.
 #' @inheritParams data_rename
 #'
@@ -12,7 +15,13 @@
 #' head(data_relocate(iris, cols = "Species", before = "Sepal.Length"))
 #' head(data_relocate(iris, cols = "Species", before = "Sepal.Width"))
 #' head(data_relocate(iris, cols = "Sepal.Width", after = "Species"))
+#' # same as
+#' head(data_relocate(iris, cols = "Sepal.Width", after = -1))
+#'
+#' # reorder multiple columns
 #' head(data_relocate(iris, cols = c("Species", "Petal.Length"), after = "Sepal.Width"))
+#' # same as
+#' head(data_relocate(iris, cols = c("Species", "Petal.Length"), after = 2))
 #' @return A data frame with reordered columns.
 #'
 #' @export
@@ -28,7 +37,32 @@ data_relocate <- function(data,
     stop("You must supply only one of `before` or `after`.")
   }
 
+  # allow numeric values
+  if (!is.null(before) && is.numeric(before)) {
+    if (before == -1) {
+      before <- names(data)[ncol(data)]
+    } else if (before >= 1 && before <= ncol(data)) {
+      before <- names(data)[before]
+    } else {
+      stop("No valid position defined in 'before'.", call. = FALSE)
+    }
+  }
+
+  # allow numeric values
+  if (!is.null(after) && is.numeric(after)) {
+    if (after == -1) {
+      after <- names(data)[ncol(data)]
+    } else if (after >= 1 && after <= ncol(data)) {
+      after <- names(data)[after]
+    } else {
+      stop("No valid position defined in 'after'.", call. = FALSE)
+    }
+  }
+
   if (safe) {
+    if (!is.null(cols) && is.numeric(cols)) {
+      cols <- data[intersect(cols, seq_len(ncol(data)))]
+    }
     cols <- cols[cols %in% names(data)]
   }
 

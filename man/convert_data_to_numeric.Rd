@@ -17,14 +17,18 @@ data_to_numeric(x, ...)
 
 \item{...}{Arguments passed to or from other methods.}
 
-\item{dummy_factors}{Transform factors to dummy factors (all factor levels as different columns filled with a binary 0-1 value).}
+\item{dummy_factors}{Transform factors to dummy factors (all factor levels as
+different columns filled with a binary 0-1 value).}
 }
 \value{
 A data frame of numeric variables.
 }
 \description{
-Convert data to numeric by converting characters to factors and factors to either numeric levels or dummy variables.
+Convert data to numeric by converting characters to factors and factors to
+either numeric levels or dummy variables.
 }
 \examples{
-head(convert_data_to_numeric(iris))
+convert_data_to_numeric(head(ToothGrowth))
+convert_data_to_numeric(head(ToothGrowth), dummy_factors = FALSE)
+
 }

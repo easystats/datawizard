@@ -1,19 +1,42 @@
 # datawizard 0.2.3.9000
 
+- New functions:
+
+  * To find or remove empty rows and columns in a data frame: `empty_rows()`,
+    `empty_columns()`, `remove_empty_rows()`, `remove_empty_columns()`, and
+    `remove_empty`.
+
+  * To check for names: `object_has_names()` and `object_has_rownames()`.
+
+  * To rotate data frames: `data_rotate()`.
+  
+  * To merge/join multiple data frames: `data_merge()` (or its alias
+    `data_join()`).
+
+  * To cut (recode) data into groups: `data_cut()`.
+  
+  * To replace specific values with `NA`s: `convert_to_na()`.
+  
+  * To replace `Inf` and `NaN` values with `NA`s: `replace_nan_inf()`.
+
+- Arguments `cols`, `before` and `after` in `data_relocate()` can now also be
+  numeric values, indicating the position of the destination column.
+
 # datawizard 0.2.3
 
 - New functions:
 
-  + to work with lists: `is_empty_object()` and `compact_list()`
-  + to work with strings: `compact_character()`
+  * to work with lists: `is_empty_object()` and `compact_list()`
+
+  * to work with strings: `compact_character()`
 
 # datawizard 0.2.2
 
-- New function `data_extract()` (or its alias `extract()`) to pull single 
-  variables from a data frame, possibly naming each value by the row names
-  of that data frame.
+- New function `data_extract()` (or its alias `extract()`) to pull single
+  variables from a data frame, possibly naming each value by the row names of
+  that data frame.
 
-- `reshape_ci()` gains a `ci_type` argument, to reshape data frames where 
+- `reshape_ci()` gains a `ci_type` argument, to reshape data frames where
   CI-columns have prefixes other than `"CI"`.
 
 - `standardize()` and `center()` gain arguments `center` and `scale`, to define
@@ -23,8 +46,8 @@
 - `center()` gains the arguments `force` and `reference`, similar to
   `standardize()`.
 
-- The functionality of the `append` argument in `center()` and `standardize()` 
-  was revised. This made the `suffix` argument redundant, and thus it was 
+- The functionality of the `append` argument in `center()` and `standardize()`
+  was revised. This made the `suffix` argument redundant, and thus it was
   removed.
 
 - Fixed issue in `standardize()`.
