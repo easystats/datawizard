@@ -80,7 +80,31 @@ data_reverse.numeric <- function(x,
 
 
 #' @export
-data_reverse.factor <- function(x, ...) {
+data_reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
+
+  # Warning if all NaNs
+  if (all(is.na(x))) {
+    return(x)
+  }
+
+  # Warning if only one value
+  if (length(unique(x)) == 1 && is.null(range)) {
+    if (verbose) {
+      warning("A `range` must be provided for data with only one unique value.")
+    }
+    return(x)
+  }
+
+  if (!is.null(range)) {
+    old_levels <- range
+    x <- factor(x, levels = range)
+  } else {
+    old_levels <- levels(x)
+  }
+
+  int_x <- as.integer(x)
+  rev_x <- data_reverse(int_x, range = c(1, length(old_levels)))
+  x <- factor(rev_x, levels = seq_len(length(old_levels)), labels = old_levels)
   x
 }
 
