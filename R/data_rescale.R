@@ -41,9 +41,7 @@ data_rescale <- function(x, ...) {
 #' @rdname data_rescale
 #' @export
 change_scale <- function(x, ...) {
-  # TODO: Don't deprecate for now
-  # so we have time to change it accross the verse, but for next round
-  # .Deprecated("data_rescale")
+  # Alias for data_rescale()
   data_rescale(x, ...)
 }
 
