@@ -21,7 +21,7 @@
 #' data_reverse(factor(c(1, 2, 3, 4, 5)), range = 0:10)
 #'
 #' # Data frames
-#' head(data_reverse(iris)
+#' head(data_reverse(iris))
 #' head(data_reverse(iris, select = "Sepal.Length"))
 #'
 #' @return A reverse-scored object.
