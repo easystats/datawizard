@@ -75,7 +75,7 @@ data_rescale.numeric <- function(x,
   # Warning if only one value
   if (length(unique(x)) == 1 && is.null(range)) {
     if (verbose) {
-      warning(paste0("A `range` must be provided for data with only one observation."))
+      warning("A `range` must be provided for data with only one unique value.")
     }
     return(x)
   }
