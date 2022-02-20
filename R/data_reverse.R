@@ -4,7 +4,7 @@
 #'
 #' @inheritParams standardize.data.frame
 #'
-#' @param x A numeric variable.
+#' @param x A numeric or factor variable.
 #' @param range Initial (old) range of values. If `NULL`, will take the range of
 #'   the input vector (`range(x)`).
 #' @param ... Arguments passed to or from other methods.
@@ -15,6 +15,10 @@
 #'
 #' # Specify the "theoretical" range of the input vector
 #' data_reverse(c(1, 3, 4), range = c(0, 4))
+#'
+#' # Factor variables
+#' data_reverse(factor(c(1, 2, 3, 4, 5)))
+#' data_reverse(factor(c(1, 2, 3, 4, 5)), range = 0:10)
 #'
 #' # Data frames
 #' head(data_reverse(iris)

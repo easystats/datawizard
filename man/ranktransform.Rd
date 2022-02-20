@@ -65,6 +65,7 @@ head(ranktransform(trees))
 \seealso{
 Other transform utilities: 
 \code{\link{data_rescale}()},
+\code{\link{data_reverse}()},
 \code{\link{normalize}()},
 \code{\link{standardize}()}
 }

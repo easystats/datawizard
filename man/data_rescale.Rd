@@ -37,7 +37,9 @@ change_scale(x, ...)
 
 \item{...}{Arguments passed to or from other methods.}
 
-\item{to}{New range that the variable will have after rescaling.}
+\item{to}{Numeric vector of length 2 giving the new range that the variable will have after rescaling.
+To reverse-score a variable, the range should be given with the maximum value first.
+See examples.}
 
 \item{range}{Initial (old) range of values. If \code{NULL}, will take the range of
 the input vector (\code{range(x)}).}
@@ -54,15 +56,21 @@ A rescaled object.
 }
 \description{
 Rescale variables to a new range.
+Can also be used to reverse-score variables (change the keying/scoring direction).
 }
 \examples{
 data_rescale(c(0, 1, 5, -5, -2))
 data_rescale(c(0, 1, 5, -5, -2), to = c(-5, 5))
+data_rescale(c(1, 2, 3, 4, 5), to = c(-2, 2))
 
 # Specify the "theoretical" range of the input vector
 data_rescale(c(1, 3, 4), to = c(0, 40), range = c(0, 4))
 
-# Dataframes
+# Reverse-score a variable
+data_rescale(c(1, 2, 3, 4, 5), to = c(5, 1))
+data_rescale(c(1, 2, 3, 4, 5), to = c(2, -2))
+
+# Data frames
 head(data_rescale(iris, to = c(0, 1)))
 head(data_rescale(iris, to = c(0, 1), select = "Sepal.Length"))
 
@@ -76,6 +84,7 @@ head(data_rescale(iris, to = list(
 \code{\link[=normalize]{normalize()}} \code{\link[=standardize]{standardize()}} \code{\link[=ranktransform]{ranktransform()}}
 
 Other transform utilities: 
+\code{\link{data_reverse}()},
 \code{\link{normalize}()},
 \code{\link{ranktransform}()},
 \code{\link{standardize}()}
