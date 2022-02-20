@@ -1,6 +1,7 @@
 #' Rescale Variables to a New Range
 #'
 #' Rescale variables to a new range.
+#' Can also be used to reverse-score variables (change the keying/scoring direction).
 #'
 #' @inheritParams standardize.data.frame
 #'
@@ -127,7 +128,7 @@ data_rescale.grouped_df <- function(x,
 
   x <- as.data.frame(x)
   for (rows in grps) {
-    x[rows, ] <- change_scale(
+    x[rows, ] <- data_rescale(
       x[rows, ],
       select = select,
       exclude = exclude,
