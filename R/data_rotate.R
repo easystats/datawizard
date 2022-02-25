@@ -21,6 +21,9 @@
 #'
 #' @examples
 #' x <- mtcars[1:3, 1:4]
+#'
+#' x
+#'
 #' data_rotate(x)
 #' data_rotate(x, rownames = "property")
 #'
@@ -48,7 +51,7 @@ data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE)
     cn_col <- which(colnames(data) == colnames)
     colnames <- data[[colnames]]
     data <- data[-cn_col]
-  }else {
+  } else {
     colnames <- row.names(data)
   }
 

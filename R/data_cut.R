@@ -170,8 +170,7 @@ data_cut.numeric <- function(x,
   if (is.numeric(split)) {
     breaks <- split
   } else {
-    breaks <- switch(
-      split,
+    breaks <- switch(split,
       "median" = stats::median(x),
       "mean" = mean(x),
       "length" = n_groups,
@@ -204,8 +203,10 @@ data_cut.numeric <- function(x,
       original_x <- as.factor(original_x)
       levels(original_x) <- labels
     } else if (isTRUE(verbose)) {
-      warning(insight::format_message("Argument 'labels' and levels of the recoded variable are not of the same length.",
-                                      "Variable will not be converted to factor."), call. = FALSE)
+      warning(insight::format_message(
+        "Argument 'labels' and levels of the recoded variable are not of the same length.",
+        "Variable will not be converted to factor."
+      ), call. = FALSE)
     }
   }
 

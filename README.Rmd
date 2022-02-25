@@ -64,51 +64,28 @@ Or do other manipulations:
 head(data_addprefix(iris, "NEW_"))
 ```
 
-
-### Transform
-
-The packages also contains multiple functions to help transform data.
-
-For example, to standardize (*z*-score) data:
+### Merge
 
 ```{r}
-# before
-summary(swiss)
+x <- data.frame(a = 1:3, b = c("a", "b", "c"), c = 5:7, id = 1:3)
+y <- data.frame(c = 6:8, d = c("f", "g", "h"), e = 100:102, id = 2:4)
 
-# after
-summary(standardize(swiss))
-```
+x
+y
 
-To winsorize data:
+data_merge(x, y, join = "full")
 
-```{r}
-# before
-anscombe
+data_merge(x, y, join = "left")
 
-# after
-winsorize(anscombe)
-```
+data_merge(x, y, join = "right")
 
-To grand-mean center data
+data_merge(x, y, join = "semi", by = "c")
 
-```{r}
-center(anscombe)
-```
+data_merge(x, y, join = "anti", by = "c")
 
-To rank-transform data:
+data_merge(x, y, join = "inner")
 
-```{r}
-# before
-head(trees)
-
-# after
-head(ranktransform(trees))
-```
-
-To rescale a numeric variable to a new range:
-
-```{r}
-change_scale(c(0, 1, 5, -5, -2))
+data_merge(x, y, join = "bind")
 ```
 
 ### Reshape
@@ -122,7 +99,7 @@ library(datawizard)
 
 wide_data <- data.frame(replicate(5, rnorm(10)))
 
-data_to_long(wide_data)
+head(data_to_long(wide_data))
 ```
 
 or the other way
@@ -136,6 +113,109 @@ data_to_wide(long_data,
   rows_from = "Row_ID"
 )
 ```
+
+### Empty rows and columns
+
+```{r}
+tmp <- data.frame(
+  a = c(1, 2, 3, NA, 5),
+  b = c(1, NA, 3, NA, 5),
+  c = c(NA, NA, NA, NA, NA),
+  d = c(1, NA, 3, NA, 5)
+)
+
+tmp
+
+# indices of empty columns or rows
+empty_columns(tmp)
+empty_rows(tmp)
+
+# remove empty columns or rows
+remove_empty_columns(tmp)
+remove_empty_rows(tmp)
+
+# remove empty columns and rows
+remove_empty(tmp)
+```
+
+### Recode or cut dataframe
+
+```{r}
+set.seed(123)
+x <- sample(1:10, size = 50, replace = TRUE)
+
+table(x)
+
+# cut into 3 groups, based on distribution (quantiles)
+table(data_cut(x, split = "quantile", n_groups = 3))
+```
+
+## Data Transformations
+
+The packages also contains multiple functions to help transform data.
+
+### Standardize
+
+For example, to standardize (*z*-score) data:
+
+```{r}
+# before
+summary(swiss)
+
+# after
+summary(standardize(swiss))
+```
+
+### Winsorize
+
+To winsorize data:
+
+```{r}
+# before
+anscombe
+
+# after
+winsorize(anscombe)
+```
+
+### Center
+
+To grand-mean center data
+
+```{r}
+center(anscombe)
+```
+
+### Ranktransform
+
+To rank-transform data:
+
+```{r}
+# before
+head(trees)
+
+# after
+head(ranktransform(trees))
+```
+
+### Rescale
+
+To rescale a numeric variable to a new range:
+
+```{r}
+change_scale(c(0, 1, 5, -5, -2))
+```
+
+### Rotate or transpose
+
+```{r}
+x <- mtcars[1:3, 1:4]
+
+x
+
+data_rotate(x)
+```
+
 
 ## Data proprties
 
