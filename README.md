@@ -81,7 +81,178 @@ head(data_addprefix(iris, "NEW_"))
 #> 6              5.4             3.9              1.7             0.4      setosa
 ```
 
-### Transform
+### Merge
+
+``` r
+x <- data.frame(a = 1:3, b = c("a", "b", "c"), c = 5:7, id = 1:3)
+y <- data.frame(c = 6:8, d = c("f", "g", "h"), e = 100:102, id = 2:4)
+
+x
+#>   a b c id
+#> 1 1 a 5  1
+#> 2 2 b 6  2
+#> 3 3 c 7  3
+y
+#>   c d   e id
+#> 1 6 f 100  2
+#> 2 7 g 101  3
+#> 3 8 h 102  4
+
+data_merge(x, y, join = "full")
+#>    a    b c id    d   e
+#> 3  1    a 5  1 <NA>  NA
+#> 1  2    b 6  2    f 100
+#> 2  3    c 7  3    g 101
+#> 4 NA <NA> 8  4    h 102
+
+data_merge(x, y, join = "left")
+#>   a b c id    d   e
+#> 3 1 a 5  1 <NA>  NA
+#> 1 2 b 6  2    f 100
+#> 2 3 c 7  3    g 101
+
+data_merge(x, y, join = "right")
+#>    a    b c id d   e
+#> 1  2    b 6  2 f 100
+#> 2  3    c 7  3 g 101
+#> 3 NA <NA> 8  4 h 102
+
+data_merge(x, y, join = "semi", by = "c")
+#>   a b c id
+#> 2 2 b 6  2
+#> 3 3 c 7  3
+
+data_merge(x, y, join = "anti", by = "c")
+#>   a b c id
+#> 1 1 a 5  1
+
+data_merge(x, y, join = "inner")
+#>   a b c id d   e
+#> 1 2 b 6  2 f 100
+#> 2 3 c 7  3 g 101
+
+data_merge(x, y, join = "bind")
+#>    a    b c id    d   e
+#> 1  1    a 5  1 <NA>  NA
+#> 2  2    b 6  2 <NA>  NA
+#> 3  3    c 7  3 <NA>  NA
+#> 4 NA <NA> 6  2    f 100
+#> 5 NA <NA> 7  3    g 101
+#> 6 NA <NA> 8  4    h 102
+```
+
+### Reshape
+
+A common data wrangling task is to reshape data.
+
+Either to go from wide/Cartesian to long/tidy format
+
+``` r
+library(datawizard)
+
+wide_data <- data.frame(replicate(5, rnorm(10)))
+
+head(data_to_long(wide_data))
+#>   Name       Value
+#> 1   X1 -0.08281164
+#> 2   X2 -1.12490028
+#> 3   X3 -0.70632036
+#> 4   X4 -0.70278946
+#> 5   X5  0.07633326
+#> 6   X1  1.93468099
+```
+
+or the other way
+
+``` r
+long_data <- data_to_long(wide_data, rows_to = "Row_ID") # Save row number
+
+data_to_wide(long_data,
+  colnames_from = "Name",
+  values_from = "Value",
+  rows_from = "Row_ID"
+)
+#>    Row_ID    Value_X1    Value_X2    Value_X3   Value_X4    Value_X5
+#> 1       1 -0.08281164 -1.12490028 -0.70632036 -0.7027895  0.07633326
+#> 2       2  1.93468099 -0.87430362  0.96687656  0.2998642 -0.23035595
+#> 3       3 -2.05128979  0.04386162 -0.71016648  1.1494697  0.31746484
+#> 4       4  0.27773897 -0.58397514 -0.05917365 -0.3016415 -1.59268440
+#> 5       5 -1.52596060 -0.82329858 -0.23094342 -0.5473394 -0.18194062
+#> 6       6 -0.26916362  0.11059280  0.69200045 -0.3854041  1.75614174
+#> 7       7  1.23305388  0.36472778  1.35682290  0.2763720  0.11394932
+#> 8       8  0.63360774  0.05370100  1.78872284  0.1518608 -0.29216508
+#> 9       9  0.35271746  1.36867235  0.41071582 -0.4313808  1.75409316
+#> 10     10 -0.56048248 -0.38045724 -2.18785470 -1.8705001  1.80958455
+```
+
+### Empty rows and columns
+
+``` r
+tmp <- data.frame(
+  a = c(1, 2, 3, NA, 5),
+  b = c(1, NA, 3, NA, 5),
+  c = c(NA, NA, NA, NA, NA),
+  d = c(1, NA, 3, NA, 5)
+)
+
+tmp
+#>    a  b  c  d
+#> 1  1  1 NA  1
+#> 2  2 NA NA NA
+#> 3  3  3 NA  3
+#> 4 NA NA NA NA
+#> 5  5  5 NA  5
+
+# indices of empty columns or rows
+empty_columns(tmp)
+#> c 
+#> 3
+empty_rows(tmp)
+#> [1] 4
+
+# remove empty columns or rows
+remove_empty_columns(tmp)
+#>    a  b  d
+#> 1  1  1  1
+#> 2  2 NA NA
+#> 3  3  3  3
+#> 4 NA NA NA
+#> 5  5  5  5
+remove_empty_rows(tmp)
+#>   a  b  c  d
+#> 1 1  1 NA  1
+#> 2 2 NA NA NA
+#> 3 3  3 NA  3
+#> 5 5  5 NA  5
+
+# remove empty columns and rows
+remove_empty(tmp)
+#>   a  b  d
+#> 1 1  1  1
+#> 2 2 NA NA
+#> 3 3  3  3
+#> 5 5  5  5
+```
+
+### Recode or cut dataframe
+
+``` r
+set.seed(123)
+x <- sample(1:10, size = 50, replace = TRUE)
+
+table(x)
+#> x
+#>  1  2  3  4  5  6  7  8  9 10 
+#>  2  3  5  3  7  5  5  2 11  7
+
+# cut into 3 groups, based on distribution (quantiles)
+table(data_cut(x, split = "quantile", n_groups = 3))
+#> 
+#>  1  2  3 
+#> 13 19 18
+```
+
+## Data Transformations
 
 The packages also contains multiple functions to help transform data.
 
@@ -206,94 +377,6 @@ change_scale(c(0, 1, 5, -5, -2))
 #> [1]  50  60 100   0  30
 ```
 
-### Reshape
-
-A common data wrangling task is to reshape data.
-
-Either to go from wide/Cartesian to long/tidy format
-
-``` r
-library(datawizard)
-
-wide_data <- data.frame(replicate(5, rnorm(10)))
-
-data_to_long(wide_data)
-#>    Name       Value
-#> 1    X1 -0.08281164
-#> 2    X2 -1.12490028
-#> 3    X3 -0.70632036
-#> 4    X4 -0.70278946
-#> 5    X5  0.07633326
-#> 6    X1  1.93468099
-#> 7    X2 -0.87430362
-#> 8    X3  0.96687656
-#> 9    X4  0.29986416
-#> 10   X5 -0.23035595
-#> 11   X1 -2.05128979
-#> 12   X2  0.04386162
-#> 13   X3 -0.71016648
-#> 14   X4  1.14946968
-#> 15   X5  0.31746484
-#> 16   X1  0.27773897
-#> 17   X2 -0.58397514
-#> 18   X3 -0.05917365
-#> 19   X4 -0.30164149
-#> 20   X5 -1.59268440
-#> 21   X1 -1.52596060
-#> 22   X2 -0.82329858
-#> 23   X3 -0.23094342
-#> 24   X4 -0.54733935
-#> 25   X5 -0.18194062
-#> 26   X1 -0.26916362
-#> 27   X2  0.11059280
-#> 28   X3  0.69200045
-#> 29   X4 -0.38540415
-#> 30   X5  1.75614174
-#> 31   X1  1.23305388
-#> 32   X2  0.36472778
-#> 33   X3  1.35682290
-#> 34   X4  0.27637203
-#> 35   X5  0.11394932
-#> 36   X1  0.63360774
-#> 37   X2  0.05370100
-#> 38   X3  1.78872284
-#> 39   X4  0.15186081
-#> 40   X5 -0.29216508
-#> 41   X1  0.35271746
-#> 42   X2  1.36867235
-#> 43   X3  0.41071582
-#> 44   X4 -0.43138079
-#> 45   X5  1.75409316
-#> 46   X1 -0.56048248
-#> 47   X2 -0.38045724
-#> 48   X3 -2.18785470
-#> 49   X4 -1.87050006
-#> 50   X5  1.80958455
-```
-
-or the other way
-
-``` r
-long_data <- data_to_long(wide_data, rows_to = "Row_ID") # Save row number
-
-data_to_wide(long_data,
-  colnames_from = "Name",
-  values_from = "Value",
-  rows_from = "Row_ID"
-)
-#>    Row_ID    Value_X1    Value_X2    Value_X3   Value_X4    Value_X5
-#> 1       1 -0.08281164 -1.12490028 -0.70632036 -0.7027895  0.07633326
-#> 2       2  1.93468099 -0.87430362  0.96687656  0.2998642 -0.23035595
-#> 3       3 -2.05128979  0.04386162 -0.71016648  1.1494697  0.31746484
-#> 4       4  0.27773897 -0.58397514 -0.05917365 -0.3016415 -1.59268440
-#> 5       5 -1.52596060 -0.82329858 -0.23094342 -0.5473394 -0.18194062
-#> 6       6 -0.26916362  0.11059280  0.69200045 -0.3854041  1.75614174
-#> 7       7  1.23305388  0.36472778  1.35682290  0.2763720  0.11394932
-#> 8       8  0.63360774  0.05370100  1.78872284  0.1518608 -0.29216508
-#> 9       9  0.35271746  1.36867235  0.41071582 -0.4313808  1.75409316
-#> 10     10 -0.56048248 -0.38045724 -2.18785470 -1.8705001  1.80958455
-```
-
 ## Data proprties
 
 `datawizard` provides a way to provide comprehensive descriptive summary
@@ -325,7 +408,7 @@ using this package.
 ``` r
 x <- (-10:10)^3 + rnorm(21, 0, 100)
 smoothness(x, method = "diff")
-#> [1] 1.821163
+#> [1] 1.791243
 #> attr(,"class")
 #> [1] "parameters_smoothness" "numeric"
 ```

@@ -66,10 +66,12 @@ separately for each group.
 }
 }
 \examples{
+
 normalize(c(0, 1, 5, -5, -2))
 normalize(c(0, 1, 5, -5, -2), include_bounds = FALSE)
 
 head(normalize(trees))
+
 }
 \references{
 Smithson M, Verkuilen J (2006). A Better Lemon Squeezer? Maximum-Likelihood

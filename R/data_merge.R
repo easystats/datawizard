@@ -81,6 +81,7 @@
 #'   }
 #'
 #' @examples
+#'
 #' x <- data.frame(a = 1:3, b = c("a", "b", "c"), c = 5:7, id = 1:3)
 #' y <- data.frame(c = 6:8, d = c("f", "g", "h"), e = 100:102, id = 2:4)
 #'

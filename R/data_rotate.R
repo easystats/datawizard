@@ -21,6 +21,9 @@
 #'
 #' @examples
 #' x <- mtcars[1:3, 1:4]
+#'
+#' x
+#'
 #' data_rotate(x)
 #' data_rotate(x, rownames = "property")
 #'
