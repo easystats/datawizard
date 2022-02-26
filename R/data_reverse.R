@@ -190,8 +190,8 @@ data_reverse.data.frame <- function(x,
     }
   }
 
-  x[select] <- as.data.frame(sapply(select, function(n) {
+  x[select] <- lapply(select, function(n) {
     data_reverse(x[[n]], range = range[[n]])
-  }, simplify = FALSE))
+  })
   x
 }
