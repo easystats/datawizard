@@ -198,7 +198,7 @@ emotion <- emotion %>% filter(Emotion_Condition == "Negative")
 
 # Summary
 emotion %>%
-  subset(!(is.na(Subjective_Valence) | is.na(Autobiographical_Link))) %>% 
+  subset(!(is.na(Subjective_Valence) | is.na(Autobiographical_Link))) %>%
   group_by(Participant_ID) %>%
   summarise(
     n_Trials = n(),
@@ -340,7 +340,7 @@ print_participants <- function(data) {
       Mean = mean(Subjective_Valence),
       SD = sd(Subjective_Valence)
     ) %>%
-    cbind(DF = df_name, .) %>% 
+    cbind(DF = df_name, .) %>%
     head(5) %>%
     select(DF, everything())
 }

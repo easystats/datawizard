@@ -165,7 +165,7 @@ model_parameters(fe_model2)[2:3, ]
 library(lfe)
 fe_model3 <- felm(
   QoL ~ time + phq4 | ID,
-   data = qol_cancer
+  data = qol_cancer
 )
 model_parameters(fe_model3)
 ```

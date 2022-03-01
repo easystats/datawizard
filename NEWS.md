@@ -1,4 +1,4 @@
-# datawizard 0.2.3.9005
+# datawizard 0.3.0
 
 - New functions:
 
@@ -9,6 +9,8 @@
   * To check for names: `object_has_names()` and `object_has_rownames()`.
 
   * To rotate data frames: `data_rotate()`.
+  
+  * To reverse score variables: `data_reverse()`.
   
   * To merge/join multiple data frames: `data_merge()` (or its alias
     `data_join()`).
