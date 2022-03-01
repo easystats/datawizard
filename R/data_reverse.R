@@ -1,71 +1,90 @@
-#' Rescale Variables to a New Range
+#' Reverse-Score Variables
 #'
-#' Rescale variables to a new range.
-#' Can also be used to reverse-score variables (change the keying/scoring direction).
+#' Reverse-score variables (change the keying/scoring direction).
 #'
 #' @inheritParams standardize.data.frame
 #'
-#' @param x A numeric variable.
-#' @param to Numeric vector of length 2 giving the new range that the variable will have after rescaling.
-#'   To reverse-score a variable, the range should be given with the maximum value first.
-#'   See examples.
+#' @param x A numeric or factor variable.
 #' @param range Initial (old) range of values. If `NULL`, will take the range of
 #'   the input vector (`range(x)`).
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @examples
-#' data_rescale(c(0, 1, 5, -5, -2))
-#' data_rescale(c(0, 1, 5, -5, -2), to = c(-5, 5))
-#' data_rescale(c(1, 2, 3, 4, 5), to = c(-2, 2))
+#' data_reverse(c(1, 2, 3, 4, 5))
+#' data_reverse(c(-2, -1, 0, 2, 1))
 #'
 #' # Specify the "theoretical" range of the input vector
-#' data_rescale(c(1, 3, 4), to = c(0, 40), range = c(0, 4))
+#' data_reverse(c(1, 3, 4), range = c(0, 4))
 #'
-#' # Reverse-score a variable
-#' data_rescale(c(1, 2, 3, 4, 5), to = c(5, 1))
-#' data_rescale(c(1, 2, 3, 4, 5), to = c(2, -2))
+#' # Factor variables
+#' data_reverse(factor(c(1, 2, 3, 4, 5)))
+#' data_reverse(factor(c(1, 2, 3, 4, 5)), range = 0:10)
 #'
 #' # Data frames
-#' head(data_rescale(iris, to = c(0, 1)))
-#' head(data_rescale(iris, to = c(0, 1), select = "Sepal.Length"))
+#' head(data_reverse(iris))
+#' head(data_reverse(iris, select = "Sepal.Length"))
 #'
-#' # One can specify a list of ranges
-#' head(data_rescale(iris, to = list(
-#'   "Sepal.Length" = c(0, 1),
-#'   "Petal.Length" = c(-1, 0)
-#' )))
-#' @seealso [normalize()] [standardize()] [ranktransform()]
-#'
-#' @return A rescaled object.
+#' @return A reverse-scored object.
 #'
 #' @family transform utilities
 #'
+#' @seealso [data_rescale()] to change the score range for variables (potentially while reversing),
+#'   [normalize()] [standardize()] [ranktransform()]
+#'
 #' @export
-data_rescale <- function(x, ...) {
-  UseMethod("data_rescale")
+data_reverse <- function(x, ...) {
+  UseMethod("data_reverse")
 }
 
 
-#' @rdname data_rescale
+#' @rdname data_reverse
 #' @export
-change_scale <- function(x, ...) {
-  # Alias for data_rescale()
-  data_rescale(x, ...)
+reverse_scale <- function(x, ...) {
+  # Alias for data_reverse()
+  data_reverse(x, ...)
 }
 
 
 
 
-#' @rdname data_rescale
+#' @rdname data_reverse
 #' @export
-data_rescale.numeric <- function(x,
-                                 to = c(0, 100),
+data_reverse.numeric <- function(x,
                                  range = NULL,
                                  verbose = TRUE,
                                  ...) {
-  if (is.null(to)) {
+
+  # Warning if all NaNs
+  if (all(is.na(x))) {
     return(x)
   }
+
+  # Warning if only one value
+  if (length(unique(x)) == 1 && is.null(range)) {
+    if (verbose) {
+      warning(paste0("A `range` must be provided for data with only one unique value."))
+    }
+    return(x)
+  }
+
+  if (is.null(range)) {
+    range <- c(min(x, na.rm = TRUE), max(x, na.rm = TRUE))
+  }
+
+  min <- ifelse(is.na(range[1]), min(x, na.rm = TRUE), range[1])
+  max <- ifelse(is.na(range[2]), max(x, na.rm = TRUE), range[2])
+  new_min <- max
+  new_max <- min
+
+  out <- as.vector((new_max - new_min) / (max - min) * (x - min) + new_min)
+  out
+}
+
+
+
+
+#' @export
+data_reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
 
   # Warning if all NaNs
   if (all(is.na(x))) {
@@ -80,34 +99,25 @@ data_rescale.numeric <- function(x,
     return(x)
   }
 
-  if (is.null(range)) {
-    range <- c(min(x, na.rm = TRUE), max(x, na.rm = TRUE))
+  if (!is.null(range)) {
+    old_levels <- range
+    x <- factor(x, levels = range)
+  } else {
+    old_levels <- levels(x)
   }
 
-  min <- ifelse(is.na(range[1]), min(x, na.rm = TRUE), range[1])
-  max <- ifelse(is.na(range[2]), max(x, na.rm = TRUE), range[2])
-  new_min <- ifelse(is.na(to[1]), min, to[1])
-  new_max <- ifelse(is.na(to[2]), max, to[2])
-
-  out <- as.vector((new_max - new_min) / (max - min) * (x - min) + new_min)
-  out
-}
-
-
-
-
-#' @export
-data_rescale.factor <- function(x, ...) {
+  int_x <- as.integer(x)
+  rev_x <- data_reverse(int_x, range = c(1, length(old_levels)))
+  x <- factor(rev_x, levels = seq_len(length(old_levels)), labels = old_levels)
   x
 }
 
 
 
 
-#' @rdname data_rescale
+#' @rdname data_reverse
 #' @export
-data_rescale.grouped_df <- function(x,
-                                    to = c(0, 100),
+data_reverse.grouped_df <- function(x,
                                     range = NULL,
                                     select = NULL,
                                     exclude = NULL,
@@ -135,11 +145,10 @@ data_rescale.grouped_df <- function(x,
 
   x <- as.data.frame(x)
   for (rows in grps) {
-    x[rows, ] <- data_rescale(
+    x[rows, ] <- data_reverse(
       x[rows, ],
       select = select,
       exclude = exclude,
-      to = to,
       range = range,
       ...
     )
@@ -150,10 +159,9 @@ data_rescale.grouped_df <- function(x,
 }
 
 
-#' @rdname data_rescale
+#' @rdname data_reverse
 #' @export
-data_rescale.data.frame <- function(x,
-                                    to = c(0, 100),
+data_reverse.data.frame <- function(x,
                                     range = NULL,
                                     select = NULL,
                                     exclude = NULL,
@@ -181,13 +189,9 @@ data_rescale.data.frame <- function(x,
       range <- stats::setNames(rep(list(range), length(select)), select)
     }
   }
-  # Transform the 'to' so that it is a list now
-  if (!is.list(to)) {
-    to <- stats::setNames(rep(list(to), length(select)), select)
-  }
 
-  x[select] <- as.data.frame(sapply(select, function(n) {
-    data_rescale(x[[n]], to = to[[n]], range = range[[n]])
-  }, simplify = FALSE))
+  x[select] <- lapply(select, function(n) {
+    data_reverse(x[[n]], range = range[[n]])
+  })
   x
 }

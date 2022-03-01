@@ -81,6 +81,7 @@ Regression with Beta-Distributed Dependent Variables. Psychological Methods,
 \seealso{
 Other transform utilities: 
 \code{\link{data_rescale}()},
+\code{\link{data_reverse}()},
 \code{\link{ranktransform}()},
 \code{\link{standardize}()}
 }

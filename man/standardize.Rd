@@ -215,6 +215,7 @@ See \code{\link[=center]{center()}} for grand-mean centering of variables.
 
 Other transform utilities: 
 \code{\link{data_rescale}()},
+\code{\link{data_reverse}()},
 \code{\link{normalize}()},
 \code{\link{ranktransform}()}
 }
