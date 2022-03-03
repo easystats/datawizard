@@ -64,6 +64,10 @@ reference:
       - starts_with("replace_")
       - starts_with("convert_")
 
+  - title: Rowname helpers
+  - contents:
+      - contains("rownames")
+
   - title: String helpers
   - contents:
       - compact_character

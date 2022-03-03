@@ -6,6 +6,10 @@ The following functions are now re-exported from `{insight}` package:
 `object_has_names()`, `object_has_rownames()`, `is_empty_object()`,
 `compact_list()`, `compact_character()`
 
+NEW FUNCTIONS
+
+  * To convert rownames to a column, and vice-versa: `rownames_as_column()` and `column_as_rownames()` (@etiennebacher, #80).
+
 # datawizard 0.3.0
 
 NEW FUNCTIONS
