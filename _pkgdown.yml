@@ -73,15 +73,6 @@ reference:
       - starts_with("text_")
       - starts_with("format_")
 
-  - title: List helpers
-  - contents:
-      - compact_list
-
-  - title: Miscellaneous helpers
-  - contents:
-      - starts_with("is_")
-      - starts_with("object_has")
-
   - title: Visualization helpers
   - contents:
       - visualisation_recipe

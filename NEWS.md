@@ -1,8 +1,14 @@
 # datawizard 0.3.0.9000
 
+MAJOR CHANGES
+
+The following functions are now re-exported from `{insight}` package:
+`object_has_names()`, `object_has_rownames()`, `is_empty_object()`,
+`compact_list()`, `compact_character()`
+
 # datawizard 0.3.0
 
-- New functions:
+NEW FUNCTIONS
 
   * To find or remove empty rows and columns in a data frame: `empty_rows()`,
     `empty_columns()`, `remove_empty_rows()`, `remove_empty_columns()`, and
