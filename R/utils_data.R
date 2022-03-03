@@ -23,6 +23,9 @@
 #' test
 #' head(column_as_rownames(test, var = "car"))
 rownames_as_column <- function(x, var = "rowname") {
+  if (!object_has_rownames(x)) {
+    stop("The dataframe doesn't have rownames.")
+  }
   if (is.null(var)) {
     var <- "rowname"
   }
