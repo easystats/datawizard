@@ -30,7 +30,7 @@ rownames_as_column <- function(x, var = "rowname") {
     var <- "rowname"
   }
   if (!is.character(var)) {
-    stop("Argument 'var' must be a character.")
+    stop("Argument 'var' must be a string.")
   }
   rn <- data.frame(rn = rownames(x), stringsAsFactors = FALSE)
   x <- cbind(rn, x)
@@ -47,7 +47,7 @@ column_as_rownames <- function(x, var = "rowname") {
     var <- "rowname"
   }
   if (!is.character(var)) {
-    stop("Argument 'var' must be a character.")
+    stop("Argument 'var' must be a string.")
   }
   if (!var %in% names(x)) {
     stop(paste0('Variable "', var, '" is not in the dataframe.'))
