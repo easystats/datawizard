@@ -10,9 +10,9 @@
 #' Tools for working with row names
 #'
 #' @param x A data frame.
-#' @param var Name of column to use for rownames. For \code{column_as_rownames()}, this argument can be the variable name or the column number.
+#' @param var Name of column to use for rownames. For `column_as_rownames()`, this argument can be the variable name or the column number.
 #'
-#' @return \code{rownames_as_column} and \code{column_as_rownames} both return a data frame.
+#' @return `rownames_as_column()` and `column_as_rownames()` both return a data frame.
 #' @export
 #'
 #' @rdname rownames
