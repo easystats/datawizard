@@ -59,3 +59,19 @@ test_that("data_extract, labels preserved", {
   labels <- sapply(data_extract(efc, select = c("e42dep", "c172code")), function(i) attr(i, "label", exact = TRUE))
   expect_equal(labels, c("elder's dependency", "carer's level of education"))
 })
+
+
+
+test_that("data_cut, labels preserved", {
+  expect_equal(
+    attr(data_cut(efc$c12hour), "label", exact = TRUE),
+    attr(efc$c12hour, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+
+  expect_equal(
+    attr(data_cut(efc$e42dep), "label", exact = TRUE),
+    attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+})
