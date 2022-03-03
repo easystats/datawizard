@@ -1,12 +1,6 @@
 #' @rdname standardize
 #' @export
-unstandardize <- function(x,
-                          center = NULL,
-                          scale = NULL,
-                          reference = NULL,
-                          robust = FALSE,
-                          two_sd = FALSE,
-                          ...) {
+unstandardize <- function(x, ...) {
   UseMethod("unstandardize")
 }
 
@@ -14,6 +8,7 @@ unstandardize <- function(x,
 #' @export
 unstandardise <- unstandardize
 
+#' @rdname standardize
 #' @export
 unstandardize.numeric <- function(x,
                                   center = NULL,
@@ -51,6 +46,7 @@ unstandardize.numeric <- function(x,
   x * scale + center
 }
 
+#' @rdname standardize
 #' @export
 unstandardize.data.frame <- function(x,
                                      center = NULL,

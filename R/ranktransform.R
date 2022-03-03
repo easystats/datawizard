@@ -30,9 +30,6 @@ ranktransform <- function(x, ...) {
 
 
 
-
-
-
 #' @rdname ranktransform
 #' @export
 ranktransform.numeric <- function(x,
@@ -41,34 +38,35 @@ ranktransform.numeric <- function(x,
                                   verbose = TRUE,
                                   ...) {
 
-
-  # Warning if all NaNs
+  # no change if all values are `NA`s
   if (all(is.na(x))) {
     return(x)
   }
 
-
-  # Warning if only one value
-  if (length(unique(x)) == 1) {
+  # Warning if only one value and return early
+  if (length(unique(x)) == 1L) {
     if (is.null(names(x))) {
       name <- deparse(substitute(x))
     } else {
       name <- names(x)
     }
+
     if (verbose) {
       warning(paste0("Variable `", name, "` contains only one unique value and will not be normalized."))
     }
+
     return(x)
   }
 
 
-  # Warning if logical vector
-  if (length(unique(x)) == 2) {
+  # Warning if only two values present but don't return early
+  if (length(unique(x)) == 2L) {
     if (is.null(names(x))) {
       name <- deparse(substitute(x))
     } else {
       name <- names(x)
     }
+
     if (verbose) {
       warning(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor."))
     }
@@ -86,10 +84,6 @@ ranktransform.numeric <- function(x,
 
   out
 }
-
-
-
-
 
 
 

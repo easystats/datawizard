@@ -92,6 +92,9 @@
     stop("The 'reference' must include all variables from 'select'.")
   }
 
+  # copy label attributes
+  variable_labels <- compact_list(lapply(x, function(i) attributes(i)$label))
+
   # drop NAs
   remove_na <- match.arg(remove_na, c("none", "selected", "all"))
 
@@ -108,6 +111,9 @@
   if (!is.null(append) && append != "") {
     new_variables <- x[select]
     colnames(new_variables) <- paste0(colnames(new_variables), append)
+    if (length(variable_labels)) {
+      variable_labels <- c(variable_labels, stats::setNames(variable_labels[select], colnames(new_variables)))
+    }
     x <- cbind(x, new_variables)
     select <- colnames(new_variables)
   }
@@ -149,6 +155,13 @@
     # use NA if missing, so we can index these as vectors
     .center <- stats::setNames(rep(NA, length(select)), select)
     .scale <- stats::setNames(rep(NA, length(select)), select)
+  }
+
+  # add back variable labels
+  if (length(variable_labels)) {
+    for (i in names(variable_labels)) {
+      attr(x[[i]], "label") <- variable_labels[[i]]
+    }
   }
 
   list(

@@ -1,16 +1,21 @@
 #' Convert data to numeric
 #'
-#' Convert data to numeric by converting characters to factors and factors to either numeric levels or dummy variables.
+#' Convert data to numeric by converting characters to factors and factors to
+#' either numeric levels or dummy variables.
 #'
 #' @param x A data frame or a vector.
-#' @param dummy_factors Transform factors to dummy factors (all factor levels as different columns filled with a binary 0-1 value).
+#' @param dummy_factors Transform factors to dummy factors (all factor levels as
+#'   different columns filled with a binary 0-1 value).
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @examples
-#' head(convert_data_to_numeric(iris))
+#' convert_data_to_numeric(head(ToothGrowth))
+#' convert_data_to_numeric(head(ToothGrowth), dummy_factors = FALSE)
+#'
 #' @return A data frame of numeric variables.
+#'
 #' @export
-convert_data_to_numeric <- function(x, dummy_factors = TRUE, ...) {
+convert_data_to_numeric <- function(x, ...) {
   UseMethod("convert_data_to_numeric")
 }
 
@@ -19,6 +24,7 @@ convert_data_to_numeric <- function(x, dummy_factors = TRUE, ...) {
 data_to_numeric <- convert_data_to_numeric
 
 
+#' @rdname convert_data_to_numeric
 #' @export
 convert_data_to_numeric.data.frame <- function(x, dummy_factors = TRUE, ...) {
   out <- sapply(x, convert_data_to_numeric, dummy_factors = dummy_factors, simplify = FALSE)
@@ -56,11 +62,14 @@ convert_data_to_numeric.factor <- function(x, dummy_factors = TRUE, ...) {
 
 #' @export
 convert_data_to_numeric.character <- function(x, dummy_factors = FALSE, ...) {
-  nums <- grepl("[-]?[0-9]+[.]?[0-9]*|[-]?[0-9]+[L]?|[-]?[0-9]+[.]?[0-9]*[eE][0-9]+", x)
-  if (all(nums)) {
-    out <- as.numeric(nums)
+  numbers <- sapply(x, function(i) {
+    element <- tryCatch(.str2lang(i), error = function(e) NULL)
+    !is.null(element) && is.numeric(element)
+  })
+  if (all(numbers)) {
+    out <- as.numeric(sapply(x, .str2lang))
   } else {
-    out <- convert_data_to_numeric(as.factor(nums), dummy_factors = dummy_factors)
+    out <- convert_data_to_numeric(as.factor(x), dummy_factors = dummy_factors)
   }
   out
 }

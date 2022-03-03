@@ -3,25 +3,32 @@
 \name{convert_data_to_numeric}
 \alias{convert_data_to_numeric}
 \alias{data_to_numeric}
+\alias{convert_data_to_numeric.data.frame}
 \title{Convert data to numeric}
 \usage{
-convert_data_to_numeric(x, dummy_factors = TRUE, ...)
+convert_data_to_numeric(x, ...)
 
-data_to_numeric(x, dummy_factors = TRUE, ...)
+data_to_numeric(x, ...)
+
+\method{convert_data_to_numeric}{data.frame}(x, dummy_factors = TRUE, ...)
 }
 \arguments{
 \item{x}{A data frame or a vector.}
 
-\item{dummy_factors}{Transform factors to dummy factors (all factor levels as different columns filled with a binary 0-1 value).}
-
 \item{...}{Arguments passed to or from other methods.}
+
+\item{dummy_factors}{Transform factors to dummy factors (all factor levels as
+different columns filled with a binary 0-1 value).}
 }
 \value{
 A data frame of numeric variables.
 }
 \description{
-Convert data to numeric by converting characters to factors and factors to either numeric levels or dummy variables.
+Convert data to numeric by converting characters to factors and factors to
+either numeric levels or dummy variables.
 }
 \examples{
-head(convert_data_to_numeric(iris))
+convert_data_to_numeric(head(ToothGrowth))
+convert_data_to_numeric(head(ToothGrowth), dummy_factors = FALSE)
+
 }

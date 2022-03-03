@@ -1,11 +1,14 @@
 #' Rescale Variables to a New Range
 #'
 #' Rescale variables to a new range.
+#' Can also be used to reverse-score variables (change the keying/scoring direction).
 #'
 #' @inheritParams standardize.data.frame
 #'
 #' @param x A numeric variable.
-#' @param to New range that the variable will have after rescaling.
+#' @param to Numeric vector of length 2 giving the new range that the variable will have after rescaling.
+#'   To reverse-score a variable, the range should be given with the maximum value first.
+#'   See examples.
 #' @param range Initial (old) range of values. If `NULL`, will take the range of
 #'   the input vector (`range(x)`).
 #' @param ... Arguments passed to or from other methods.
@@ -13,11 +16,16 @@
 #' @examples
 #' data_rescale(c(0, 1, 5, -5, -2))
 #' data_rescale(c(0, 1, 5, -5, -2), to = c(-5, 5))
+#' data_rescale(c(1, 2, 3, 4, 5), to = c(-2, 2))
 #'
 #' # Specify the "theoretical" range of the input vector
 #' data_rescale(c(1, 3, 4), to = c(0, 40), range = c(0, 4))
 #'
-#' # Dataframes
+#' # Reverse-score a variable
+#' data_rescale(c(1, 2, 3, 4, 5), to = c(5, 1))
+#' data_rescale(c(1, 2, 3, 4, 5), to = c(2, -2))
+#'
+#' # Data frames
 #' head(data_rescale(iris, to = c(0, 1)))
 #' head(data_rescale(iris, to = c(0, 1), select = "Sepal.Length"))
 #'
@@ -41,9 +49,7 @@ data_rescale <- function(x, ...) {
 #' @rdname data_rescale
 #' @export
 change_scale <- function(x, ...) {
-  # TODO: Don't deprecate for now
-  # so we have time to change it accross the verse, but for next round
-  # .Deprecated("data_rescale")
+  # Alias for data_rescale()
   data_rescale(x, ...)
 }
 
@@ -69,7 +75,7 @@ data_rescale.numeric <- function(x,
   # Warning if only one value
   if (length(unique(x)) == 1 && is.null(range)) {
     if (verbose) {
-      warning(paste0("A `range` must be provided for data with only one observation."))
+      warning("A `range` must be provided for data with only one unique value.")
     }
     return(x)
   }
@@ -129,7 +135,7 @@ data_rescale.grouped_df <- function(x,
 
   x <- as.data.frame(x)
   for (rows in grps) {
-    x[rows, ] <- change_scale(
+    x[rows, ] <- data_rescale(
       x[rows, ],
       select = select,
       exclude = exclude,
