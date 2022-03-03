@@ -41,7 +41,6 @@ rownames_as_column <- function(x, var = "rowname") {
 
 #' @rdname rownames
 #' @export
-#' @examples
 column_as_rownames <- function(x, var = "rowname") {
   if (!is.character(var) & !is.numeric(var)) {
     stop("Argument 'var' must be of type character or numeric.")

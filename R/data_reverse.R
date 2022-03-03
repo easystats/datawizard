@@ -77,6 +77,9 @@ data_reverse.numeric <- function(x,
   new_max <- min
 
   out <- as.vector((new_max - new_min) / (max - min) * (x - min) + new_min)
+
+  # labelled data?
+  out <- .set_back_labels(out, x)
   out
 }
 
@@ -99,6 +102,9 @@ data_reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
     return(x)
   }
 
+  # save for later use
+  original_x <- x
+
   if (!is.null(range)) {
     old_levels <- range
     x <- factor(x, levels = range)
@@ -109,6 +115,10 @@ data_reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
   int_x <- as.integer(x)
   rev_x <- data_reverse(int_x, range = c(1, length(old_levels)))
   x <- factor(rev_x, levels = seq_len(length(old_levels)), labels = old_levels)
+
+  # labelled data?
+  x <- .set_back_labels(x, original_x)
+
   x
 }
 
@@ -194,4 +204,18 @@ data_reverse.data.frame <- function(x,
     data_reverse(x[[n]], range = range[[n]])
   })
   x
+}
+
+
+
+# helper -----------------------------
+
+.set_back_labels <- function(new, old) {
+  # labelled data?
+  attr(new, "label") <- attr(old, "label", exact = TRUE)
+  labels <- attr(old, "labels", exact = TRUE)
+  if (!is.null(labels)) {
+    attr(new, "labels") <- stats::setNames(rev(labels), names(labels))
+  }
+  new
 }
