@@ -34,12 +34,6 @@
     <loc>/reference/center.html</loc>
   </url>
   <url>
-    <loc>/reference/compact_character.html</loc>
-  </url>
-  <url>
-    <loc>/reference/compact_list.html</loc>
-  </url>
-  <url>
     <loc>/reference/convert_data_to_numeric.html</loc>
   </url>
   <url>
@@ -94,19 +88,16 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/is_empty_object.html</loc>
-  </url>
-  <url>
     <loc>/reference/nhanes_sample.html</loc>
   </url>
   <url>
     <loc>/reference/normalize.html</loc>
   </url>
   <url>
-    <loc>/reference/object_has_names.html</loc>
+    <loc>/reference/ranktransform.html</loc>
   </url>
   <url>
-    <loc>/reference/ranktransform.html</loc>
+    <loc>/reference/reexports.html</loc>
   </url>
   <url>
     <loc>/reference/remove_empty.html</loc>
