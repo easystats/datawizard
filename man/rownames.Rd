@@ -12,7 +12,7 @@ column_as_rownames(x, var = "rowname")
 \arguments{
 \item{x}{A data frame.}
 
-\item{var}{Name of column to use for rownames.}
+\item{var}{Name of column to use for rownames. For \code{column_as_rownames()}, this argument can be the variable name or the column number.}
 }
 \value{
 \code{rownames_as_column} and \code{column_as_rownames} both return a data frame.

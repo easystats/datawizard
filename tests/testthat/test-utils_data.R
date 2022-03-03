@@ -25,18 +25,23 @@ test_that("column_as_rownames works", {
   test2 <- column_as_rownames(test, "continent")
   expect_identical(rownames(test2), continents)
   expect_true(ncol(test2) == 1)
+
+  test3 <- column_as_rownames(test, 1)
+  expect_identical(rownames(test3), continents)
+  expect_true(ncol(test3) == 1)
 })
 
-test_that("column_as_rownames doesn't work if column doesn't exist", {
+test_that("column_as_rownames sanity checks work", {
   continents <- c("Africa", "Asia", "Europe", "North America", "Oceania", "South America")
   test <- data.frame(
     continent = continents,
     some_value = seq(1, 6, by = 1)
   )
+  expect_error(column_as_rownames(test, TRUE))
   expect_error(column_as_rownames(test, "foo"))
+  expect_error(column_as_rownames(test, 0))
   expect_error(column_as_rownames(test, 3))
 })
-
 
 test_that("rownames_as_column and column_as_rownames cancel each other", {
   test <- rownames_as_column(mtcars)
