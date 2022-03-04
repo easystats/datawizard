@@ -4,7 +4,7 @@
 \alias{data_match}
 \title{Find row indices of a data frame matching a specific condition}
 \usage{
-data_match(x, to, match = "and", ...)
+data_match(x, to, match = "and", as_data_frame = FALSE, ...)
 }
 \arguments{
 \item{x}{A data frame.}
@@ -14,6 +14,9 @@ data_match(x, to, match = "and", ...)
 \item{match}{String, indicating with which logical operation matching
 conditions should be combined. Can be \code{"and"} (or \code{"&"}), \code{"or"} (or \code{"|"})
 or \code{"not"} (or \code{"!"}).}
+
+\item{as_data_frame}{Logical, if \code{TRUE}, returns the filtered data frame
+instead of the row indices.}
 
 \item{...}{Not used.}
 }
