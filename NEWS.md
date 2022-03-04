@@ -10,6 +10,11 @@ NEW FUNCTIONS
 
   * To convert rownames to a column, and vice-versa: `rownames_as_column()` and `column_as_rownames()` (@etiennebacher, #80).
 
+BUG FIXES
+
+  * `data_to_numeric()` produced wrong results for factors when 
+    `dummy_factors = TRUE` and factor contained missing values.
+
 # datawizard 0.3.0
 
 NEW FUNCTIONS
