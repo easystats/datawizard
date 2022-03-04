@@ -70,7 +70,10 @@ test_that("data_extract, labels preserved", {
   )
   # data frame
   labels <- sapply(data_extract(efc, select = c("e42dep", "c172code")), function(i) attr(i, "label", exact = TRUE))
-  expect_equal(labels, c("elder's dependency", "carer's level of education"))
+  expect_equal(
+    labels,
+    c(e42dep = "elder's dependency", c172code = "carer's level of education")
+  )
 })
 
 
@@ -182,17 +185,18 @@ test_that("data_addsuffix, labels preserved", {
 # data_to_numeric -----------------------------------
 
 test_that("data_to_numeric, labels preserved", {
-  x <- data_to_numeric(efc) |> str()
+  x <- data_to_numeric(efc, dummy_factors = FALSE)
   # factor
   expect_equal(
-    attr(x$e42dep_new, "label", exact = TRUE),
+    attr(x$e42dep, "label", exact = TRUE),
     attr(efc$e42dep, "label", exact = TRUE),
     ignore_attr = TRUE
   )
   # numeric
   expect_equal(
-    attr(x$c12hour_new, "label", exact = TRUE),
+    attr(x$c12hour, "label", exact = TRUE),
     attr(efc$c12hour, "label", exact = TRUE),
     ignore_attr = TRUE
   )
 })
+
