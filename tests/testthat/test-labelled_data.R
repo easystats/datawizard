@@ -198,5 +198,13 @@ test_that("data_to_numeric, labels preserved", {
     attr(efc$c12hour, "label", exact = TRUE),
     ignore_attr = TRUE
   )
+
+  x <- data_to_numeric(efc, dummy_factors = TRUE)
+  # numeric
+  expect_equal(
+    attr(x$c12hour, "label", exact = TRUE),
+    attr(efc$c12hour, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
 })
 
