@@ -10,10 +10,17 @@ NEW FUNCTIONS
 
   * To convert rownames to a column, and vice-versa: `rownames_as_column()` and `column_as_rownames()` (@etiennebacher, #80).
 
+CHANGES
+
+  * `data_match()` gains a `match` argument, to indicate with which logical
+    operation matching results should be combined.
+
 BUG FIXES
 
   * `data_to_numeric()` produced wrong results for factors when 
     `dummy_factors = TRUE` and factor contained missing values.
+
+  * `data_match()` produced wrong results for when data contained missing values.
 
 # datawizard 0.3.0
 
