@@ -15,6 +15,13 @@ CHANGES
   * `data_match()` gains a `match` argument, to indicate with which logical
     operation matching results should be combined.
 
+  * `data_match()` gains a `as_data_frame` argument, to return the filtered
+    data frame instead of the indices of filtered rows.
+
+  * Improved support for *labelled data* for many functions, i.e. returned
+    data frame will preserve value and variable label attributes, where
+    possible and applicable.
+
 BUG FIXES
 
   * `data_to_numeric()` produced wrong results for factors when 
