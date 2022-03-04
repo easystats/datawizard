@@ -40,7 +40,7 @@ test_that("data_reverse, labels preserved", {
 # data_merge -----------------------------------
 
 test_that("data_merge, labels preserved", {
-  labels <- sapply(data_merge(efc[c(1:2)], efc[c(3:4)]), function(i) attr(i, "label", exact = TRUE))
+  labels <- sapply(data_merge(efc[c(1:2)], efc[c(3:4)], verbose = FALSE), function(i) attr(i, "label", exact = TRUE))
   expect_equal(
     labels,
     c(c12hour = "average number of hours of care per week",
@@ -104,6 +104,45 @@ test_that("data_remove, labels preserved", {
   expect_equal(
     attr(data_remove(efc, "e42dep")[[1]], "label", exact = TRUE),
     attr(efc$c12hour, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+})
+
+
+
+# data_rename -----------------------------------
+
+test_that("data_rename, labels preserved", {
+  x <- data_rename(efc, "e42dep", "dependency")
+  expect_equal(
+    attr(x$dependency, "label", exact = TRUE),
+    attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+})
+
+
+
+# data_addprefix -----------------------------------
+
+test_that("data_addprefix, labels preserved", {
+  x <- data_addprefix(efc, "new_")
+  expect_equal(
+    attr(x$new_e42dep, "label", exact = TRUE),
+    attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+})
+
+
+
+# data_suffix -----------------------------------
+
+test_that("data_addsuffix, labels preserved", {
+  x <- data_addsuffix(efc, "_new")
+  expect_equal(
+    attr(x$e42dep_new, "label", exact = TRUE),
+    attr(efc$e42dep, "label", exact = TRUE),
     ignore_attr = TRUE
   )
 })

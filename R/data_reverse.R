@@ -210,11 +210,11 @@ data_reverse.data.frame <- function(x,
 
 # helper -----------------------------
 
-.set_back_labels <- function(new, old) {
+.set_back_labels <- function(new, old, include_values = TRUE) {
   # labelled data?
   attr(new, "label") <- attr(old, "label", exact = TRUE)
   labels <- attr(old, "labels", exact = TRUE)
-  if (!is.null(labels)) {
+  if (isTRUE(include_values) && !is.null(labels)) {
     attr(new, "labels") <- stats::setNames(rev(labels), names(labels))
   }
   new
