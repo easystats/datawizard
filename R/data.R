@@ -15,5 +15,7 @@ NULL
 #' @name efc
 #' @keywords data
 #'
-#' @description Selected variables from the EUROFAMCARE survey.
+#' @description Selected variables from the EUROFAMCARE survey. Useful when
+#' testing on "real-life" data sets, including random missing values. This
+#' data set also has value and variable label attributes.
 NULL
