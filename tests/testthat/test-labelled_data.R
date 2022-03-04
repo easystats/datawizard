@@ -1,5 +1,7 @@
 data(efc, package = "datawizard")
 
+# data_reverse -----------------------------------
+
 test_that("data_reverse, labels preserved", {
   expect_equal(
     attr(data_reverse(efc$e42dep), "label", exact = TRUE),
@@ -35,6 +37,8 @@ test_that("data_reverse, labels preserved", {
 
 
 
+# data_merge -----------------------------------
+
 test_that("data_merge, labels preserved", {
   labels <- sapply(data_merge(efc[c(1:2)], efc[c(3:4)]), function(i) attr(i, "label", exact = TRUE))
   expect_equal(
@@ -49,6 +53,8 @@ test_that("data_merge, labels preserved", {
 
 
 
+# data_extract -----------------------------------
+
 test_that("data_extract, labels preserved", {
   expect_equal(
     attr(data_extract(efc, select = "e42dep"), "labels", exact = TRUE),
@@ -62,6 +68,8 @@ test_that("data_extract, labels preserved", {
 
 
 
+# data_cut -----------------------------------
+
 test_that("data_cut, labels preserved", {
   expect_equal(
     attr(data_cut(efc$c12hour), "label", exact = TRUE),
@@ -72,6 +80,30 @@ test_that("data_cut, labels preserved", {
   expect_equal(
     attr(data_cut(efc$e42dep), "label", exact = TRUE),
     attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+})
+
+
+
+# data_reorder -----------------------------------
+
+test_that("data_reorder, labels preserved", {
+  expect_equal(
+    attr(data_reorder(efc, "e42dep")[[1]], "label", exact = TRUE),
+    attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+})
+
+
+
+# data_remove -----------------------------------
+
+test_that("data_remove, labels preserved", {
+  expect_equal(
+    attr(data_remove(efc, "e42dep")[[1]], "label", exact = TRUE),
+    attr(efc$c12hour, "label", exact = TRUE),
     ignore_attr = TRUE
   )
 })
