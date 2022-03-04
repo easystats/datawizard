@@ -208,3 +208,33 @@ test_that("data_to_numeric, labels preserved", {
   )
 })
 
+
+
+# data_match -----------------------------------
+
+test_that("data_match, labels preserved", {
+  x <- data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "or", as_data_frame = TRUE)
+  # factor
+  expect_equal(
+    attr(x$e42dep, "label", exact = TRUE),
+    attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  # numeric
+  expect_equal(
+    attr(x$c12hour, "label", exact = TRUE),
+    attr(efc$c12hour, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  # filtered
+  expect_equal(
+    attr(x$c172code, "label", exact = TRUE),
+    attr(efc$c172code, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    attr(x$c172code, "labels", exact = TRUE),
+    attr(efc$c172code, "labels", exact = TRUE),
+    ignore_attr = TRUE
+  )
+})
