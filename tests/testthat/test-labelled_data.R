@@ -3,27 +3,27 @@ data(efc, package = "datawizard")
 # data_reverse -----------------------------------
 
 test_that("data_reverse, labels preserved", {
+  # factor, label
   expect_equal(
     attr(data_reverse(efc$e42dep), "label", exact = TRUE),
     "elder's dependency"
   )
-
+  # factor, labels
   expect_equal(
     names(attr(data_reverse(efc$e42dep), "labels", exact = TRUE)),
     names(attr(efc$e42dep, "labels", exact = TRUE))
   )
-
   expect_equal(
     attr(data_reverse(efc$e42dep), "labels", exact = TRUE),
     rev(attr(efc$e42dep, "labels", exact = TRUE)),
     ignore_attr = TRUE
   )
-
+  # numeric
   expect_equal(
     names(attr(data_reverse(efc$c12hour), "labels", exact = TRUE)),
     names(attr(efc$c12hour, "labels", exact = TRUE))
   )
-
+  # data frame
   labels <- sapply(data_reverse(efc), function(i) attr(i, "label", exact = TRUE))
   expect_equal(
     labels,
@@ -56,12 +56,19 @@ test_that("data_merge, labels preserved", {
 # data_extract -----------------------------------
 
 test_that("data_extract, labels preserved", {
+  # factor
   expect_equal(
     attr(data_extract(efc, select = "e42dep"), "labels", exact = TRUE),
     attr(efc$e42dep, "labels", exact = TRUE),
     ignore_attr = TRUE
   )
-
+  # numeric
+  expect_equal(
+    attr(data_extract(efc, select = "c172code"), "labels", exact = TRUE),
+    attr(efc$c172code, "labels", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  # data frame
   labels <- sapply(data_extract(efc, select = c("e42dep", "c172code")), function(i) attr(i, "label", exact = TRUE))
   expect_equal(labels, c("elder's dependency", "carer's level of education"))
 })
@@ -71,15 +78,16 @@ test_that("data_extract, labels preserved", {
 # data_cut -----------------------------------
 
 test_that("data_cut, labels preserved", {
-  expect_equal(
-    attr(data_cut(efc$c12hour), "label", exact = TRUE),
-    attr(efc$c12hour, "label", exact = TRUE),
-    ignore_attr = TRUE
-  )
-
+  # factor
   expect_equal(
     attr(data_cut(efc$e42dep), "label", exact = TRUE),
     attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  # numeric
+  expect_equal(
+    attr(data_cut(efc$c12hour), "label", exact = TRUE),
+    attr(efc$c12hour, "label", exact = TRUE),
     ignore_attr = TRUE
   )
 })
@@ -113,10 +121,18 @@ test_that("data_remove, labels preserved", {
 # data_rename -----------------------------------
 
 test_that("data_rename, labels preserved", {
+  # factor
   x <- data_rename(efc, "e42dep", "dependency")
   expect_equal(
     attr(x$dependency, "label", exact = TRUE),
     attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  # numeric
+  x <- data_rename(efc, "c12hour", "careload")
+  expect_equal(
+    attr(x$careload, "label", exact = TRUE),
+    attr(efc$c12hour, "label", exact = TRUE),
     ignore_attr = TRUE
   )
 })
@@ -127,9 +143,16 @@ test_that("data_rename, labels preserved", {
 
 test_that("data_addprefix, labels preserved", {
   x <- data_addprefix(efc, "new_")
+  # factor
   expect_equal(
     attr(x$new_e42dep, "label", exact = TRUE),
     attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  # numeric
+  expect_equal(
+    attr(x$new_c12hour, "label", exact = TRUE),
+    attr(efc$c12hour, "label", exact = TRUE),
     ignore_attr = TRUE
   )
 })
@@ -140,9 +163,16 @@ test_that("data_addprefix, labels preserved", {
 
 test_that("data_addsuffix, labels preserved", {
   x <- data_addsuffix(efc, "_new")
+  # factor
   expect_equal(
     attr(x$e42dep_new, "label", exact = TRUE),
     attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  # numeric
+  expect_equal(
+    attr(x$c12hour_new, "label", exact = TRUE),
+    attr(efc$c12hour, "label", exact = TRUE),
     ignore_attr = TRUE
   )
 })
