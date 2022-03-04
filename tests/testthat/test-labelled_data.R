@@ -176,3 +176,23 @@ test_that("data_addsuffix, labels preserved", {
     ignore_attr = TRUE
   )
 })
+
+
+
+# data_to_numeric -----------------------------------
+
+test_that("data_to_numeric, labels preserved", {
+  x <- data_to_numeric(efc) |> str()
+  # factor
+  expect_equal(
+    attr(x$e42dep_new, "label", exact = TRUE),
+    attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  # numeric
+  expect_equal(
+    attr(x$c12hour_new, "label", exact = TRUE),
+    attr(efc$c12hour, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+})
