@@ -155,7 +155,8 @@ standardize.numeric <- function(x,
   attr(scaled_x, "center") <- args$center
   attr(scaled_x, "scale") <- args$scale
   attr(scaled_x, "robust") <- robust
-  scaled_x
+  # labels
+  .set_back_labels(scaled_x, x, include_values = FALSE)
 }
 
 #' @export
