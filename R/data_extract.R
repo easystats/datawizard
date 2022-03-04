@@ -59,7 +59,7 @@ data_extract.data.frame <- function(data, select, name = NULL, ...) {
   } else if (is.character(name) && name == "row.names") {
     name <- rownames(data)
   }
-  if (length(name) == 1) {
+  if (!is.null(name) && length(name) == 1) {
     stats::setNames(data[, select, drop = TRUE], data[, name, drop = TRUE])
   } else {
     stats::setNames(data[, select, drop = TRUE], name)
