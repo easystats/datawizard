@@ -29,6 +29,9 @@ BUG FIXES
 
   * `data_match()` produced wrong results when data contained missing values.
 
+  * Fixed CRAN check issues in `data_extract()` when more than one variable
+    was extracted from a data frame.
+
 # datawizard 0.3.0
 
 NEW FUNCTIONS
