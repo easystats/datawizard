@@ -27,7 +27,7 @@ BUG FIXES
   * `data_to_numeric()` produced wrong results for factors when 
     `dummy_factors = TRUE` and factor contained missing values.
 
-  * `data_match()` produced wrong results for when data contained missing values.
+  * `data_match()` produced wrong results when data contained missing values.
 
 # datawizard 0.3.0
 
