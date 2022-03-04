@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,6 +64,12 @@
 <p>The following functions are now re-exported from <a href="https://easystats.github.io/insight/" class="external-link">insight</a> package: <code><a href="https://easystats.github.io/insight/reference/object_has_names.html" class="external-link">object_has_names()</a></code>, <code><a href="https://easystats.github.io/insight/reference/object_has_names.html" class="external-link">object_has_rownames()</a></code>, <code><a href="https://easystats.github.io/insight/reference/is_empty_object.html" class="external-link">is_empty_object()</a></code>, <code><a href="https://easystats.github.io/insight/reference/compact_list.html" class="external-link">compact_list()</a></code>, <code><a href="https://easystats.github.io/insight/reference/compact_character.html" class="external-link">compact_character()</a></code></p>
 <p>NEW FUNCTIONS</p>
 <ul><li>To convert rownames to a column, and vice-versa: <code><a href="../reference/rownames.html">rownames_as_column()</a></code> and <code><a href="../reference/rownames.html">column_as_rownames()</a></code> (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/80" class="external-link">#80</a>).</li>
+</ul><p>CHANGES</p>
+<ul><li>
+<code><a href="../reference/data_match.html">data_match()</a></code> gains a <code>match</code> argument, to indicate with which logical operation matching results should be combined.</li>
+</ul><p>BUG FIXES</p>
+<ul><li><p><code><a href="../reference/convert_data_to_numeric.html">data_to_numeric()</a></code> produced wrong results for factors when <code>dummy_factors = TRUE</code> and factor contained missing values.</p></li>
+<li><p><code><a href="../reference/data_match.html">data_match()</a></code> produced wrong results for when data contained missing values.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0" id="datawizard-030">datawizard 0.3.0<a class="anchor" aria-label="anchor" href="#datawizard-030"></a></h2><p class="text-muted">CRAN release: 2022-03-02</p>
