@@ -54,7 +54,7 @@ data_extract.data.frame <- function(data, select, name = NULL, ...) {
   }
 
   name <- eval(substitute(name), nl, parent.frame())
-  if (is.numeric(name) && length(name) == 0) {
+  if (is.numeric(name) && length(name) == 1) {
     if (name < 0) {
       name <- ncol(data) + name + 1
     } else if (name == 0) {
