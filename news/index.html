@@ -65,8 +65,9 @@
 <p>NEW FUNCTIONS</p>
 <ul><li>To convert rownames to a column, and vice-versa: <code><a href="../reference/rownames.html">rownames_as_column()</a></code> and <code><a href="../reference/rownames.html">column_as_rownames()</a></code> (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/80" class="external-link">#80</a>).</li>
 </ul><p>CHANGES</p>
-<ul><li>
-<code><a href="../reference/data_match.html">data_match()</a></code> gains a <code>match</code> argument, to indicate with which logical operation matching results should be combined.</li>
+<ul><li><p><code><a href="../reference/data_match.html">data_match()</a></code> gains a <code>match</code> argument, to indicate with which logical operation matching results should be combined.</p></li>
+<li><p><code><a href="../reference/data_match.html">data_match()</a></code> gains a <code>as_data_frame</code> argument, to return the filtered data frame instead of the indices of filtered rows.</p></li>
+<li><p>Improved support for <em>labelled data</em> for many functions, i.e. returned data frame will preserve value and variable label attributes, where possible and applicable.</p></li>
 </ul><p>BUG FIXES</p>
 <ul><li><p><code><a href="../reference/convert_data_to_numeric.html">data_to_numeric()</a></code> produced wrong results for factors when <code>dummy_factors = TRUE</code> and factor contained missing values.</p></li>
 <li><p><code><a href="../reference/data_match.html">data_match()</a></code> produced wrong results for when data contained missing values.</p></li>
