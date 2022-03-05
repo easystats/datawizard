@@ -61,7 +61,7 @@ if (require("testthat")) {
 
   test_that("data_extract extract, pull", {
     expect_equal(
-      colnames(data_extract(iris, starts_with("Sepal"))),
+      data_extract(iris, starts_with("Sepal")),
       iris[c("Sepal.Length", "Sepal.Width")]
     )
 
