@@ -1,10 +1,10 @@
-#' Convenient dataframe manipulation functionalities
+#' Rename columns and variable names
 #'
-#' Safe and intuitive functions to manipulate dataframes.
+#' Safe and intuitive functions to rename variables or rows in dataframes.
 #'
 #' @param data A data frame, or an object that can be coerced to a data frame.
-#' @param pattern,replacement,starts_with,ends_with Character strings.
-#' @param cols,rows Vector of column or row names.
+#' @param pattern,replacement Character strings.
+#' @param rows Vector of row names.
 #' @param safe Do not throw error if for instance the variable to be
 #'   renamed/removed doesn't exist.
 #' @param ... Other arguments passed to or from other functions.
@@ -23,6 +23,11 @@
 #'
 #' # Change all
 #' head(data_rename(iris, paste0("Var", 1:5)))
+#'
+#' @seealso
+#' - Functions to rename stuff: [data_rename()], [data_rename_rows()], [data_addprefix()], [data_addsufix()]
+#' - Functions to reorder, find and remove columns: [data_findcols()], [data_reorder()], [data_remove()]
+#'
 #' @export
 data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, ...) {
 
