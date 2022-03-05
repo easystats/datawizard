@@ -59,6 +59,11 @@ test_that("data_findcols nse", {
   )
 
   expect_equal(
+    data_findcols(iris, Spec),
+    "Species"
+  )
+
+  expect_equal(
     data_findcols(mtcars, ends_with = "abc"),
     vector("character")
   )
