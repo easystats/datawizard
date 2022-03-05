@@ -78,3 +78,14 @@ test_that("data_findcols nse", {
     c("cyl", "carb")
   )
 })
+
+
+test_that("data_findcols from other functions", {
+  test_fun <- function(data, i) {
+    data_findcols(data, pattern = i)
+  }
+  expect_equal(
+    test_fun(iris, "Sep"),
+    c("Sepal.Length", "Sepal.Width")
+  )
+})

@@ -28,10 +28,16 @@ data_findcols <- function(data,
   # - data_findcols(iris, starts_with("Sepal"))
   # - data_findcols(iris, contains("Sepal"))
 
+
   # init
   n <- names(data)
   match <- c()
-  p <- substitute(pattern)
+
+  # in case pattern is a variable from another function call...
+  p <- try(eval(pattern), silent = TRUE)
+  if (inherits(p, c("try-error", "simpleError"))) {
+    p <- substitute(pattern)
+  }
 
   # evaluate pattern, can be function like "starts_with()"
   pattern <- tryCatch(

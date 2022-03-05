@@ -7,11 +7,14 @@
 #' head(data_remove(iris, starts_with("Sepal")))
 #' @export
 data_remove <- function(data, pattern, fixed = TRUE, ...) {
+  # in case pattern is a variable from another function call...
+  p <- try(eval(pattern), silent = TRUE)
+  if (inherits(p, c("try-error", "simpleError"))) {
+    p <- substitute(pattern)
+  }
+
   # check if pattern is a function like "starts_with()",
   # then override "fixed" argument
-  p <- substitute(pattern)
-
-  # evaluate pattern, can be function like "starts_with()"
   pattern <- tryCatch(eval(p), error = function(e) NULL)
 
   if (is.null(pattern)) {
