@@ -1,7 +1,7 @@
 #' Extract a single column or element from an object
 #'
-#' `extract()` is similar to `$`. It extracts a single column or element from an object
-#' (e.g., a data frame, list, )
+#' `data_extract()` (or its alias `extract()`) is similar to `$`. It extracts a single column or element from an object
+#' (e.g., a data frame, list, ).
 #'
 #' @param data The object to subset. Methods are currently available for data frames
 #'   and data frame extensions (e.g., tibbles).

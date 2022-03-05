@@ -29,7 +29,7 @@
 #' - Functions to reorder, find and remove columns: [data_findcols()], [data_reorder()], [data_remove()]
 #' - Functions to reshape, pivot or rotate dataframes: [data_to_long()], [data_to_wide()], [data_rotate()]
 #' - Functions to rescale and reverse: [data_rescale()], [data_reverse()]
-#' - Functions to standardize, normalize, rank-transform: [standardize()], [normalize()], [ranktransform()]
+#' - Functions to standardize, normalize, rank-transform: [standardize()], [normalize()], [ranktransform()], [winsorize()]
 #' - Split, cut and merge dataframes: [data_partition()], [data_cut()], [data_match()], [data_merge()]
 #'
 #' @export
