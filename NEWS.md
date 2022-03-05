@@ -6,6 +6,32 @@ The following functions are now re-exported from `{insight}` package:
 `object_has_names()`, `object_has_rownames()`, `is_empty_object()`,
 `compact_list()`, `compact_character()`
 
+NEW FUNCTIONS
+
+  * To convert rownames to a column, and vice-versa: `rownames_as_column()` and `column_as_rownames()` (@etiennebacher, #80).
+
+CHANGES
+
+  * `data_match()` gains a `match` argument, to indicate with which logical
+    operation matching results should be combined.
+
+  * `data_match()` gains a `as_data_frame` argument, to return the filtered
+    data frame instead of the indices of filtered rows.
+
+  * Improved support for *labelled data* for many functions, i.e. returned
+    data frame will preserve value and variable label attributes, where
+    possible and applicable.
+
+BUG FIXES
+
+  * `data_to_numeric()` produced wrong results for factors when 
+    `dummy_factors = TRUE` and factor contained missing values.
+
+  * `data_match()` produced wrong results when data contained missing values.
+
+  * Fixed CRAN check issues in `data_extract()` when more than one variable
+    was extracted from a data frame.
+
 # datawizard 0.3.0
 
 NEW FUNCTIONS

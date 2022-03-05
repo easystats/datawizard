@@ -105,7 +105,8 @@ center.numeric <- function(x,
   attr(centered_x, "center") <- args$center
   attr(centered_x, "scale") <- args$scale
   attr(centered_x, "robust") <- robust
-  centered_x
+  # labels
+  .set_back_labels(centered_x, x, include_values = FALSE)
 }
 
 

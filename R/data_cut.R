@@ -216,8 +216,10 @@ data_cut.numeric <- function(x,
 
 #' @export
 data_cut.factor <- function(x, ...) {
+  original_x <- x
   levels(x) <- 1:nlevels(x)
-  as.factor(data_cut(as.numeric(x), ...))
+  out <- as.factor(data_cut(as.numeric(x), ...))
+  .set_back_labels(out, original_x, include_values = FALSE)
 }
 
 

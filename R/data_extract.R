@@ -43,25 +43,37 @@ data_extract.data.frame <- function(data, select, name = NULL, ...) {
   names(nl) <- names(data)
 
   select <- eval(substitute(select), nl, parent.frame())
-  if (is.numeric(select) && select < 0) {
-    select <- length(data) + select + 1
-  } else if (is.numeric(select) && select == 0) {
-    select <- rownames(data)
-  } else if (is.character(select) && select == "row.names") {
+  if (is.numeric(select) && length(select) == 1) {
+    if (select < 0) {
+      select <- ncol(data) + select + 1
+    } else if (select == 0) {
+      select <- rownames(data)
+    }
+  } else if (is.character(select) && identical(select, "row.names")) {
     select <- rownames(data)
   }
 
   name <- eval(substitute(name), nl, parent.frame())
-  if (is.numeric(name) && name < 0) {
-    name <- length(data) + name + 1
-  } else if (is.numeric(name) && name == 0) {
-    name <- rownames(data)
-  } else if (is.character(name) && name == "row.names") {
+  if (is.numeric(name) && length(name) == 1) {
+    if (name < 0) {
+      name <- ncol(data) + name + 1
+    } else if (name == 0) {
+      name <- rownames(data)
+    }
+  } else if (is.character(name) && identical(name, "row.names")) {
     name <- rownames(data)
   }
-  if (length(name) == 1) {
+
+  if (!is.null(name) && length(name) == 1) {
     stats::setNames(data[, select, drop = TRUE], data[, name, drop = TRUE])
   } else {
+    if (is.null(name) && length(select) > 1) {
+      if (is.numeric(select)) {
+        name <- colnames(data)[select]
+      } else {
+        name <- select
+      }
+    }
     stats::setNames(data[, select, drop = TRUE], name)
   }
 }
