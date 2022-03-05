@@ -77,7 +77,7 @@ type safe - \code{data_extract()} either returns a vector or a data frame.
 When \code{select} is the name of a single column, or when select only matches
 one column, a vector is returned. A single variable is also returned when
 \code{pull} is either \verb{"first} or \code{"last"}. Setting \code{as_data_frame} to \code{TRUE}
-overrides this behavious and \emph{always} returns a data frame.
+overrides this behaviour and \emph{always} returns a data frame.
 }
 \subsection{Extracting a data frame of variables}{
 When \code{select} is a character vector containing more than one column name (or

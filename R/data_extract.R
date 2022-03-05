@@ -44,7 +44,7 @@
 #' When `select` is the name of a single column, or when select only matches
 #' one column, a vector is returned. A single variable is also returned when
 #' `pull` is either `"first` or `"last"`. Setting `as_data_frame` to `TRUE`
-#' overrides this behavious and *always* returns a data frame.
+#' overrides this behaviour and *always* returns a data frame.
 #' }
 #' \subsection{Extracting a data frame of variables}{
 #' When `select` is a character vector containing more than one column name (or
