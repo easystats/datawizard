@@ -36,9 +36,9 @@
 #' extract(mtcars, cyl, name = "row.names")
 #'
 #' # selecting multiple variables
-#' head(extract(iris, starts_with("Sepal"))
-#' head(extract(iris, ends_with("Width"))
-#' head(extract(iris, 2:4)
+#' head(extract(iris, starts_with("Sepal")))
+#' head(extract(iris, ends_with("Width")))
+#' head(extract(iris, 2:4))
 data_extract <- function(data, select, name = NULL, ...) {
   UseMethod("data_extract")
 }
@@ -47,6 +47,7 @@ data_extract <- function(data, select, name = NULL, ...) {
 #' @rdname data_extract
 extract <- data_extract
 
+#' @rdname data_extract
 #' @export
 data_extract.data.frame <- function(data, select, name = NULL, verbose = TRUE, ...) {
   fixed <- TRUE

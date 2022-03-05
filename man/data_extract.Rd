@@ -3,11 +3,14 @@
 \name{data_extract}
 \alias{data_extract}
 \alias{extract}
+\alias{data_extract.data.frame}
 \title{Extract one or more columns or elements from an object}
 \usage{
 data_extract(data, select, name = NULL, ...)
 
 extract(data, select, name = NULL, ...)
+
+\method{data_extract}{data.frame}(data, select, name = NULL, verbose = TRUE, ...)
 }
 \arguments{
 \item{data}{The object to subset. Methods are currently available for data frames
@@ -52,7 +55,7 @@ extract(mtcars, cyl, name = 0)
 extract(mtcars, cyl, name = "row.names")
 
 # selecting multiple variables
-head(extract(iris, starts_with("Sepal"))
-head(extract(iris, ends_with("Width"))
-head(extract(iris, 2:4)
+head(extract(iris, starts_with("Sepal")))
+head(extract(iris, ends_with("Width")))
+head(extract(iris, 2:4))
 }
