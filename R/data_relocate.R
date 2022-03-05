@@ -13,9 +13,13 @@
 #'
 #' @inherit data_rename seealso
 #'
-#' @details `data_relocate()` will reorder columns to specific positions,
-#' indicated by `before` or `after`. `data_reorder()` will always move
-#' selected columns to the beginning of the data frame .
+#' @details
+#'
+#' `data_relocate()` will reorder columns to specific positions, indicated by
+#' `before` or `after`.
+#'
+#' `data_reorder()` will instead move selected columns to the beginning of the
+#' data frame .
 #'
 #' @return A data frame with reordered columns.
 #'

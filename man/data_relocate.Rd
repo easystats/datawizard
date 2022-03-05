@@ -45,9 +45,11 @@ A data frame with reordered columns.
 Relocate (reorder) columns of a data frame
 }
 \details{
-\code{data_relocate()} will reorder columns to specific positions,
-indicated by \code{before} or \code{after}. \code{data_reorder()} will always move
-selected columns to the beginning of the data frame .
+\code{data_relocate()} will reorder columns to specific positions, indicated by
+\code{before} or \code{after}.
+
+\code{data_reorder()} will instead move selected columns to the beginning of the
+data frame .
 }
 \examples{
 # Find columns names by pattern
