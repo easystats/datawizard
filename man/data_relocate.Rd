@@ -14,13 +14,15 @@ data_relocate(data, cols, before = NULL, after = NULL, safe = TRUE, ...)
 
 data_reorder(data, cols, safe = TRUE, ...)
 
-data_remove(data, pattern, fixed = FALSE, ...)
+data_remove(data, pattern, fixed = TRUE, ...)
 }
 \arguments{
 \item{data}{A data frame to pivot.}
 
 \item{pattern}{A regular expression (as character string), representing the
-pattern to be matched in the in column names.}
+pattern to be matched in the in column names. Can also be one of the
+following select-helpers: \code{starts_with("")}, \code{end_with("")} or
+\code{contains("")}}
 
 \item{starts_with, ends_with}{Character string, containing the string to be
 matched in the column names. \code{starts_with} finds matches at the beginning
@@ -61,6 +63,10 @@ data_findcols(iris, ends_with = "Width")
 data_findcols(iris, pattern = "\\\\.")
 data_findcols(iris, c("Petal.Width", "Sepal.Length"))
 
+# using select helpers
+data_findcols(iris, starts_with("Sepal"))
+data_findcols(iris, ends_with("Width"))
+
 # Reorder columns
 head(data_relocate(iris, cols = "Species", before = "Sepal.Length"))
 head(data_relocate(iris, cols = "Species", before = "Sepal.Width"))
@@ -79,6 +85,7 @@ head(data_reorder(iris, c("Species", "dupa"))) # Safe for non-existing cols
 
 # Remove columns
 head(data_remove(iris, "Sepal.Length"))
+head(data_remove(iris, starts_with("Sepal")))
 }
 \seealso{
 \itemize{
