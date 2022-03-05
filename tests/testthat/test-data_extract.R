@@ -18,4 +18,43 @@ if (require("testthat")) {
     x <- data_extract(efc, select = "e42dep", name = "c172code")
     expect_equal(names(x), as.character(efc$c172code))
   })
+
+
+  test_that("data_extract works with select-helpers", {
+    expect_equal(
+      data_extract(iris, starts_with("Sepal")),
+      iris[c("Sepal.Length", "Sepal.Width")]
+    )
+
+    expect_equal(
+      data_extract(iris, 1:3),
+      iris[1:3]
+    )
+
+    expect_equal(
+      data_extract(iris, "Species"),
+      iris$Species
+    )
+
+    expect_equal(
+      data_extract(iris, contains("Wid")),
+      iris[c("Sepal.Width", "Petal.Width")]
+    )
+
+    expect_equal(
+      data_extract(iris, Sepal.Width),
+      iris$Sepal.Width
+    )
+  })
 }
+
+
+test_that("data_extract from other functions", {
+  test_fun <- function(data, i) {
+    data_extract(data, select = i)
+  }
+  expect_equal(
+    test_fun(iris, c("Sepal.Length", "Sepal.Width")),
+    iris[c("Sepal.Length", "Sepal.Width")]
+  )
+})

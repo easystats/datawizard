@@ -3,7 +3,7 @@
 \name{data_extract}
 \alias{data_extract}
 \alias{extract}
-\title{Extract a single column or element from an object}
+\title{Extract one or more columns or elements from an object}
 \usage{
 data_extract(data, select, name = NULL, ...)
 
@@ -13,35 +13,46 @@ extract(data, select, name = NULL, ...)
 \item{data}{The object to subset. Methods are currently available for data frames
 and data frame extensions (e.g., tibbles).}
 
-\item{select}{A variable specified as:
+\item{select}{Either a variable specified as:
 \itemize{
 \item a literal variable name (e.g., \code{column_name})
-\item a character vector with the variable name (e.g., \code{"column_name"})
+\item a string vector with the variable name (e.g., \code{"column_name"})
 \item a positive integer, giving the position counting from the left
 \item a negative integer, giving the position counting from the right.
 }
 
-The default returns the last column.
-If the special value \code{0} or \code{"row.names"} is given, the row names of the
-object (if any) are extracted.}
+or one of the following select-helpers: \code{starts_with("")}, \code{end_with("")} or
+\code{contains("")}. Multiple variables can also be extracts using a character
+vector of length > 1. The default returns the last column. If the special
+value \code{0} or \code{"row.names"} is given, the row names of the object (if any)
+are extracted.}
 
 \item{name}{An optional argument that specifies the column to be used as
 names for for the vector after extraction.
 Specified in the same way as \code{select}.}
 
 \item{...}{For use by future methods.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 A vector containing the extracted element.
 }
 \description{
-\code{data_extract()} (or its alias \code{extract()}) is similar to \code{$}. It extracts a single column or element from an object
-(e.g., a data frame, list, ).
+\code{data_extract()} (or its alias \code{extract()}) is similar to \code{$}. It extracts
+either a single column or element from an object (e.g., a data frame, list),
+or multiple columns resp. elements.
 }
 \examples{
+# single variable
 extract(mtcars, cyl, name = gear)
 extract(mtcars, "cyl", name = gear)
 extract(mtcars, -1, name = gear)
 extract(mtcars, cyl, name = 0)
 extract(mtcars, cyl, name = "row.names")
+
+# selecting multiple variables
+head(extract(iris, starts_with("Sepal"))
+head(extract(iris, ends_with("Width"))
+head(extract(iris, 2:4)
 }
