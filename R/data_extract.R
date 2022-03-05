@@ -21,10 +21,40 @@
 #' @param name An optional argument that specifies the column to be used as
 #'   names for for the vector after extraction.
 #'   Specified in the same way as `select`.
+#' @param extract String, indicating which element will be extracted when `select`
+#'   matches multiple variables. Can be `"all"` (the default) to return all
+#'   matched variables, `"first"` or `"last"` to return the first or last match,
+#'   or `"odd"` and `"even"` to return all odd-numbered or even-numbered
+#'   matches. Note that `"first"` or `"last"` return a vector (unless
+#'   `as_data_frame = TRUE`), while `"all"` can return a vector (if only one
+#'   match was found) *or* a data frame (for more than one match). Type safe
+#'   return values are only possible when `extract` is `"first"` or `"last"` (will
+#'   always return a vector) or when `as_data_frame = TRUE` (always returns a
+#'   data frame).
+#' @param as_data_frame Logical, if `TRUE`, will always return a data frame,
+#'   even if only one variable was matched. If `FALSE`, either returns a vector
+#'   or a data frame. See `extract` for details.
 #' @param verbose Toggle warnings.
 #' @param ... For use by future methods.
 #'
-#' @return A vector containing the extracted element.
+#' @details `data_extract()` can be used to select multiple variables or pull a
+#' single variable from a data frame. Thus, the return value is by default not
+#' type safe - `data_extract()` either returns a vector or a data frame.
+#' \subsection{Extracting single variables (vectors)}{
+#' When `select` is the name of a single column, or when select only matches
+#' one column, a vector is returned. A single variable is also returned when
+#' `pull` is either `"first` or `"last"`. Setting `as_data_frame` to `TRUE`
+#' overrides this behavious and *always* returns a data frame.
+#' }
+#' \subsection{Extracting a data frame of variables}{
+#' When `select` is a character vector containing more than one column name (or
+#' a numeric vector with more than one valid column indices), or when `select`
+#' uses one of the supported select-helpers that match multiple columns, a
+#' data frame is returned. Setting `as_data_frame` to `TRUE` *always* returns
+#' a data frame.
+#' }
+#'
+#' @return A vector (or a data frame) containing the extracted element.
 #' @export
 #'
 #' @examples
@@ -39,7 +69,12 @@
 #' head(extract(iris, starts_with("Sepal")))
 #' head(extract(iris, ends_with("Width")))
 #' head(extract(iris, 2:4))
-data_extract <- function(data, select, name = NULL, ...) {
+#'
+#' # select first of multiple variables
+#' extract(iris, starts_with("Sepal"), extract = "first")
+#' # select first of multiple variables, return as data frame
+#' head(extract(iris, starts_with("Sepal"), extract = "first", as_data_frame = TRUE))
+data_extract <- function(data, select, ...) {
   UseMethod("data_extract")
 }
 
@@ -49,8 +84,20 @@ extract <- data_extract
 
 #' @rdname data_extract
 #' @export
-data_extract.data.frame <- function(data, select, name = NULL, verbose = TRUE, ...) {
+data_extract.data.frame <- function(data,
+                                    select,
+                                    name = NULL,
+                                    extract = "all",
+                                    as_data_frame = FALSE,
+                                    verbose = TRUE,
+                                    ...) {
   fixed <- TRUE
+  extract <- match.arg(tolower(extract), choices = c("all", "first", "last", "odd", "even"))
+
+  # make sure as_data_frame is logical
+  if (!is.logical(as_data_frame)) {
+    as_data_frame <- FALSE
+  }
 
   # in case pattern is a variable from another function call...
   p <- try(eval(select), silent = TRUE)
@@ -116,16 +163,21 @@ data_extract.data.frame <- function(data, select, name = NULL, verbose = TRUE, .
     select <- intersect(select, colnames(data))
   }
 
+  # chose which matched variables to extract
+  select <- switch(extract,
+    "first" = select[1],
+    "last" = select[length(select)],
+    "odd" = select[seq(1, length(select), 2)],
+    "even" = select[seq(2, length(select), 2)],
+    select
+  )
+
   if (!is.null(name) && length(name) == 1) {
-    stats::setNames(data[, select, drop = TRUE], data[, name, drop = TRUE])
+    stats::setNames(data[, select, drop = !as_data_frame], data[, name, drop = !as_data_frame])
   } else {
-    if (is.null(name) && length(select) > 1) {
-      if (is.numeric(select)) {
-        name <- colnames(data)[select]
-      } else {
-        name <- select
-      }
+    if (is.null(name) && (length(select) > 1 || isTRUE(as_data_frame))) {
+      name <- select
     }
-    stats::setNames(data[, select, drop = TRUE], name)
+    stats::setNames(data[, select, drop = !as_data_frame], name)
   }
 }

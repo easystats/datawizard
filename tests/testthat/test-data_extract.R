@@ -46,15 +46,54 @@ if (require("testthat")) {
       iris$Sepal.Width
     )
   })
+
+
+  test_that("data_extract from other functions", {
+    test_fun <- function(data, i) {
+      data_extract(data, select = i)
+    }
+    expect_equal(
+      test_fun(iris, c("Sepal.Length", "Sepal.Width")),
+      iris[c("Sepal.Length", "Sepal.Width")]
+    )
+  })
+
+
+  test_that("data_extract extract, pull", {
+    expect_equal(
+      colnames(data_extract(iris, starts_with("Sepal"))),
+      iris[c("Sepal.Length", "Sepal.Width")]
+    )
+
+    expect_equal(
+      data_extract(iris, starts_with("Sepal"), extract = "first"),
+      iris$Sepal.Length
+    )
+
+    expect_equal(
+      data_extract(iris, starts_with("Sepal"), extract = "last"),
+      iris$Sepal.Width
+    )
+
+    expect_equal(
+      data_extract(iris, starts_with("Sepal"), extract = "last", as_data_frame = TRUE),
+      iris["Sepal.Width"]
+    )
+
+    expect_equal(
+      colnames(data_extract(mtcars, contains("a"))),
+      c("drat", "am", "gear", "carb")
+    )
+
+    expect_equal(
+      colnames(data_extract(mtcars, contains("a"), extract = "odd")),
+      c("drat", "gear")
+    )
+
+    expect_equal(
+      colnames(data_extract(mtcars, contains("a"), extract = "even")),
+      c("am", "carb")
+    )
+  })
+
 }
-
-
-test_that("data_extract from other functions", {
-  test_fun <- function(data, i) {
-    data_extract(data, select = i)
-  }
-  expect_equal(
-    test_fun(iris, c("Sepal.Length", "Sepal.Width")),
-    iris[c("Sepal.Length", "Sepal.Width")]
-  )
-})
