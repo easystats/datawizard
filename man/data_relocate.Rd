@@ -14,7 +14,7 @@ data_relocate(data, cols, before = NULL, after = NULL, safe = TRUE, ...)
 
 data_reorder(data, cols, safe = TRUE, ...)
 
-data_remove(data, pattern, ...)
+data_remove(data, pattern, fixed = FALSE, ...)
 }
 \arguments{
 \item{data}{A data frame to pivot.}
@@ -37,6 +37,9 @@ numeric value, indicating the index number of the destination column.
 If \code{-1}, will be added before or after the last column.}
 
 \item{safe}{If \code{TRUE}, will disregard non-existing columns.}
+
+\item{fixed}{Logical, if \code{TRUE}, \code{pattern} is treated as a string to be
+matched as is, else \code{pattern} is treated as regular expression.}
 }
 \value{
 A data frame with reordered columns.
