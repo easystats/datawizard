@@ -21,6 +21,7 @@
 #' data_partition(df)
 #' data_partition(df, group = "Species")
 #' data_partition(df, group = c("Species", "Smell"))
+#' @inherit data_rename seealso
 #' @export
 data_partition <- function(data,
                            training_proportion = 0.7,

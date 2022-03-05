@@ -28,8 +28,7 @@
 #'
 #' @family transform utilities
 #'
-#' @seealso [data_rescale()] to change the score range for variables (potentially while reversing),
-#'   [normalize()] [standardize()] [ranktransform()]
+#' @inherit data_rename seealso
 #'
 #' @export
 data_reverse <- function(x, ...) {
