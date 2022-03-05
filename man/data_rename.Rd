@@ -18,8 +18,10 @@ data_rename_rows(data, rows = NULL)
 \arguments{
 \item{data}{A data frame, or an object that can be coerced to a data frame.}
 
-\item{pattern}{Character vector. Indicates columns that should be selected
-for renaming. Can be \code{NULL} (in which case all columns are selected).}
+\item{pattern}{Character vector. For \code{data_rename()}, indicates columns that
+should be selected for renaming. Can be \code{NULL} (in which case all columns
+are selected). For \code{data_addprefix()} or \code{data_addsuffix()}, a character
+string, which will be added as prefix or suffix to the column names.}
 
 \item{...}{Other arguments passed to or from other functions.}
 
@@ -43,6 +45,7 @@ Safe and intuitive functions to rename variables or rows in dataframes.
 # Add prefix / suffix to all columns
 head(data_addprefix(iris, "NEW_"))
 head(data_addsuffix(iris, "_OLD"))
+
 # Rename columns
 head(data_rename(iris, "Sepal.Length", "length"))
 # data_rename(iris, "FakeCol", "length", safe=FALSE)  # This fails

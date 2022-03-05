@@ -10,6 +10,7 @@
 #' data_findcols(iris, ends_with = "Width")
 #' data_findcols(iris, pattern = "\\.")
 #' data_findcols(iris, c("Petal.Width", "Sepal.Length"))
+#'
 #' @export
 data_findcols <- function(data,
                           pattern = NULL,

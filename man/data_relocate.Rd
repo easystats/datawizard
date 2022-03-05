@@ -55,6 +55,7 @@ data_findcols(iris, starts_with = "Sepal")
 data_findcols(iris, ends_with = "Width")
 data_findcols(iris, pattern = "\\\\.")
 data_findcols(iris, c("Petal.Width", "Sepal.Length"))
+
 # Reorder columns
 head(data_relocate(iris, cols = "Species", before = "Sepal.Length"))
 head(data_relocate(iris, cols = "Species", before = "Sepal.Width"))
