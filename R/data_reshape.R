@@ -74,6 +74,8 @@
 #'   )
 #'   head(wide)
 #' }
+#'
+#' @inherit data_rename seealso
 #' @return data.frame
 #' @export
 data_to_long <- function(data,

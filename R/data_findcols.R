@@ -1,4 +1,4 @@
-#' @rdname data_rename
+#' @rdname data_reorder
 #' @examples
 #' # Find columns names by pattern
 #' data_findcols(iris, starts_with = "Sepal")

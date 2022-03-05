@@ -27,6 +27,7 @@
 #' # observations where EITHER "vs" is 0 OR "am" is 1
 #' matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
 #' mtcars[matching_rows, ]
+#' @inherit data_rename seealso
 #' @export
 data_match <- function(x, to, match = "and", as_data_frame = FALSE, ...) {
 

@@ -35,8 +35,8 @@ Specified in the same way as \code{select}.}
 A vector containing the extracted element.
 }
 \description{
-\code{extract()} is similar to \code{$}. It extracts a single column or element from an object
-(e.g., a data frame, list, )
+\code{data_extract()} (or its alias \code{extract()}) is similar to \code{$}. It extracts a single column or element from an object
+(e.g., a data frame, list, ).
 }
 \examples{
 extract(mtcars, cyl, name = gear)

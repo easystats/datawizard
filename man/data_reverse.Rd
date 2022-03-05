@@ -56,9 +56,6 @@ head(data_reverse(iris, select = "Sepal.Length"))
 
 }
 \seealso{
-\code{\link[=data_rescale]{data_rescale()}} to change the score range for variables (potentially while reversing),
-\code{\link[=normalize]{normalize()}} \code{\link[=standardize]{standardize()}} \code{\link[=ranktransform]{ranktransform()}}
-
 Other transform utilities: 
 \code{\link{data_rescale}()},
 \code{\link{normalize}()},

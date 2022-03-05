@@ -159,7 +159,7 @@
 #' y$id <- 4:7
 #' z$id <- 3:10
 #' data_merge(list(x, y, z), join = "bind", by = "id", id = "source")
-#'
+#' @inherit data_rename seealso
 #' @export
 data_merge <- function(x, ...) {
   UseMethod("data_merge")
