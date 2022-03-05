@@ -22,9 +22,9 @@ data_remove(data, pattern, ...)
 \item{pattern}{A regular expression (as character string), representing the
 pattern to be matched in the in column names.}
 
-\item{starts_with, end_with}{Character string, containing the string to be
+\item{starts_with, ends_with}{Character string, containing the string to be
 matched in the column names. \code{starts_with} finds matches at the beginning
-of column names, \code{end_with} finds matches at the end of column names.}
+of column names, \code{ends_with} finds matches at the end of column names.}
 
 \item{...}{Other arguments passed to or from other functions.}
 
