@@ -18,9 +18,15 @@ data_rename_rows(data, rows = NULL)
 \arguments{
 \item{data}{A data frame, or an object that can be coerced to a data frame.}
 
-\item{pattern, replacement}{Character strings.}
+\item{pattern}{Character vector. Indicates columns that should be selected
+for renaming. Can be \code{NULL} (in which case all columns are selected).}
 
 \item{...}{Other arguments passed to or from other functions.}
+
+\item{replacement}{Character vector. Indicates the new name of the columns
+selected in \code{pattern}. Can be \code{NULL} (in which case column are numbered
+in sequential order). If not \code{NULL}, \code{pattern} and \code{replacement} must be
+of the same length.}
 
 \item{safe}{Do not throw error if for instance the variable to be
 renamed/removed doesn't exist.}
@@ -53,7 +59,7 @@ head(data_rename(iris, paste0("Var", 1:5)))
 \seealso{
 \itemize{
 \item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}}, \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
-\item Functions to reorder, find and remove columns: \code{\link[=data_findcols]{data_findcols()}}, \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_remove]{data_remove()}}
+\item Functions to reorder, find and remove columns: \code{\link[=data_findcols]{data_findcols()}}, \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
 \item Functions to reshape, pivot or rotate dataframes: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
 \item Functions to rescale and reverse: \code{\link[=data_rescale]{data_rescale()}}, \code{\link[=data_reverse]{data_reverse()}}
 \item Functions to standardize, normalize, rank-transform: \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}

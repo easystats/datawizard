@@ -1,4 +1,4 @@
-#' @rdname data_reorder
+#' @rdname data_relocate
 #' @examples
 #' # Remove columns
 #' head(data_remove(iris, "Sepal.Length"))

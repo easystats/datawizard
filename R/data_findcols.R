@@ -1,4 +1,9 @@
-#' @rdname data_reorder
+#' @param pattern A regular expression (as character string), representing the
+#'   pattern to be matched in the in column names.
+#' @param starts_with,end_with Character string, containing the string to be
+#'   matched in the column names. `starts_with` finds matches at the beginning
+#'   of column names, `end_with` finds matches at the end of column names.
+#' @rdname data_relocate
 #' @examples
 #' # Find columns names by pattern
 #' data_findcols(iris, starts_with = "Sepal")
@@ -18,7 +23,7 @@ data_findcols <- function(data,
   n <- names(data)
   if (!is.null(pattern)) {
     match <- c()
-    for (i in c(pattern)) {
+    for (i in pattern) {
       match <- c(match, n[grepl(i, n)])
     }
   }

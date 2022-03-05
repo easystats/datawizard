@@ -39,7 +39,8 @@ default width.}
 
 \item{n}{The number of characters to find.}
 
-\item{pattern}{Character strings.}
+\item{pattern}{Character vector. Indicates columns that should be selected
+for renaming. Can be \code{NULL} (in which case all columns are selected).}
 }
 \value{
 A character string.
