@@ -51,4 +51,15 @@ str(data_rotate(iris[1:4, ]))
 x <- data.frame(a = 1:5, b = 11:15, c = letters[1:5], d = rnorm(5))
 data_rotate(x, colnames = TRUE)
 data_rotate(x, colnames = "c")
+
+}
+\seealso{
+\itemize{
+\item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}}, \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
+\item Functions to reorder, find and remove columns: \code{\link[=data_findcols]{data_findcols()}}, \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
+\item Functions to reshape, pivot or rotate dataframes: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
+\item Functions to rescale and reverse: \code{\link[=data_rescale]{data_rescale()}}, \code{\link[=data_reverse]{data_reverse()}}
+\item Functions to standardize, normalize, rank-transform: \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
+\item Split, cut and merge dataframes: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_cut]{data_cut()}}, \code{\link[=data_match]{data_match()}}, \code{\link[=data_merge]{data_merge()}}
+}
 }

@@ -34,7 +34,7 @@
 #'   "Sepal.Length" = c(0, 1),
 #'   "Petal.Length" = c(-1, 0)
 #' )))
-#' @seealso [normalize()] [standardize()] [ranktransform()]
+#' @inherit data_rename seealso
 #'
 #' @return A rescaled object.
 #'

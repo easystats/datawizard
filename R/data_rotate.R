@@ -38,6 +38,8 @@
 #' x <- data.frame(a = 1:5, b = 11:15, c = letters[1:5], d = rnorm(5))
 #' data_rotate(x, colnames = TRUE)
 #' data_rotate(x, colnames = "c")
+#'
+#' @inherit data_rename seealso
 #' @export
 data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE) {
   # copy attributes

@@ -138,6 +138,13 @@ test_that("data_rename, labels preserved", {
     attr(efc$c12hour, "label", exact = TRUE),
     ignore_attr = TRUE
   )
+  # data frame
+  labels <- sapply(data_remove(efc, starts_with("c1")), function(i) attr(i, "label", exact = TRUE))
+  expect_equal(
+    labels,
+    c(e16sex = "elder's gender", e42dep = "elder's dependency", neg_c_7 = "Negative impact with 7 items")
+  )
+
 })
 
 

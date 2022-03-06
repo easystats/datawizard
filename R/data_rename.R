@@ -1,10 +1,18 @@
-#' Convenient dataframe manipulation functionalities
+#' @title Rename columns and variable names
+#' @name data_rename
 #'
-#' Safe and intuitive functions to manipulate dataframes.
+#' @description Safe and intuitive functions to rename variables or rows in dataframes.
 #'
 #' @param data A data frame, or an object that can be coerced to a data frame.
-#' @param pattern,replacement,starts_with,ends_with Character strings.
-#' @param cols,rows Vector of column or row names.
+#' @param pattern Character vector. For `data_rename()`, indicates columns that
+#'   should be selected for renaming. Can be `NULL` (in which case all columns
+#'   are selected). For `data_addprefix()` or `data_addsuffix()`, a character
+#'   string, which will be added as prefix or suffix to the column names.
+#' @param replacement Character vector. Indicates the new name of the columns
+#'   selected in `pattern`. Can be `NULL` (in which case column are numbered
+#'   in sequential order). If not `NULL`, `pattern` and `replacement` must be
+#'   of the same length.
+#' @param rows Vector of row names.
 #' @param safe Do not throw error if for instance the variable to be
 #'   renamed/removed doesn't exist.
 #' @param ... Other arguments passed to or from other functions.
@@ -23,6 +31,15 @@
 #'
 #' # Change all
 #' head(data_rename(iris, paste0("Var", 1:5)))
+#'
+#' @seealso
+#' - Functions to rename stuff: [data_rename()], [data_rename_rows()], [data_addprefix()], [data_addsuffix()]
+#' - Functions to reorder, find and remove columns: [data_findcols()], [data_reorder()], [data_relocate()], [data_remove()]
+#' - Functions to reshape, pivot or rotate dataframes: [data_to_long()], [data_to_wide()], [data_rotate()]
+#' - Functions to rescale and reverse: [data_rescale()], [data_reverse()]
+#' - Functions to standardize, normalize, rank-transform: [standardize()], [normalize()], [ranktransform()], [winsorize()]
+#' - Split, cut and merge dataframes: [data_partition()], [data_cut()], [data_match()], [data_merge()]
+#'
 #' @export
 data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, ...) {
 

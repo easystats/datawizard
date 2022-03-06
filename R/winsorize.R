@@ -24,6 +24,7 @@
 #' @examples
 #' winsorize(iris$Sepal.Length, threshold = 0.2)
 #' winsorize(iris, threshold = 0.2)
+#' @inherit data_rename seealso
 #' @export
 winsorize <- function(data, ...) {
   UseMethod("winsorize")

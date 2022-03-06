@@ -81,8 +81,6 @@ head(data_rescale(iris, to = list(
 )))
 }
 \seealso{
-\code{\link[=normalize]{normalize()}} \code{\link[=standardize]{standardize()}} \code{\link[=ranktransform]{ranktransform()}}
-
 Other transform utilities: 
 \code{\link{data_reverse}()},
 \code{\link{normalize}()},

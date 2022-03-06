@@ -39,7 +39,10 @@ default width.}
 
 \item{n}{The number of characters to find.}
 
-\item{pattern}{Character strings.}
+\item{pattern}{Character vector. For \code{data_rename()}, indicates columns that
+should be selected for renaming. Can be \code{NULL} (in which case all columns
+are selected). For \code{data_addprefix()} or \code{data_addsuffix()}, a character
+string, which will be added as prefix or suffix to the column names.}
 }
 \value{
 A character string.

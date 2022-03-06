@@ -3,45 +3,111 @@
 \name{data_extract}
 \alias{data_extract}
 \alias{extract}
-\title{Extract a single column or element from an object}
+\alias{data_extract.data.frame}
+\title{Extract one or more columns or elements from an object}
 \usage{
-data_extract(data, select, name = NULL, ...)
+data_extract(data, select, ...)
 
-extract(data, select, name = NULL, ...)
+extract(data, select, ...)
+
+\method{data_extract}{data.frame}(
+  data,
+  select,
+  name = NULL,
+  extract = "all",
+  as_data_frame = FALSE,
+  ignore_case = FALSE,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{data}{The object to subset. Methods are currently available for data frames
 and data frame extensions (e.g., tibbles).}
 
-\item{select}{A variable specified as:
+\item{select}{Either a variable specified as:
 \itemize{
 \item a literal variable name (e.g., \code{column_name})
-\item a character vector with the variable name (e.g., \code{"column_name"})
+\item a string vector with the variable name (e.g., \code{"column_name"})
 \item a positive integer, giving the position counting from the left
 \item a negative integer, giving the position counting from the right.
 }
 
-The default returns the last column.
-If the special value \code{0} or \code{"row.names"} is given, the row names of the
-object (if any) are extracted.}
+or one of the following select-helpers: \code{starts_with("")}, \code{end_with("")} or
+\code{contains("")}. Multiple variables can also be extracts using a character
+vector of length > 1. The default returns the last column. If the special
+value \code{0} or \code{"row.names"} is given, the row names of the object (if any)
+are extracted.}
+
+\item{...}{For use by future methods.}
 
 \item{name}{An optional argument that specifies the column to be used as
 names for for the vector after extraction.
 Specified in the same way as \code{select}.}
 
-\item{...}{For use by future methods.}
+\item{extract}{String, indicating which element will be extracted when \code{select}
+matches multiple variables. Can be \code{"all"} (the default) to return all
+matched variables, \code{"first"} or \code{"last"} to return the first or last match,
+or \code{"odd"} and \code{"even"} to return all odd-numbered or even-numbered
+matches. Note that \code{"first"} or \code{"last"} return a vector (unless
+\code{as_data_frame = TRUE}), while \code{"all"} can return a vector (if only one
+match was found) \emph{or} a data frame (for more than one match). Type safe
+return values are only possible when \code{extract} is \code{"first"} or \code{"last"} (will
+always return a vector) or when \code{as_data_frame = TRUE} (always returns a
+data frame).}
+
+\item{as_data_frame}{Logical, if \code{TRUE}, will always return a data frame,
+even if only one variable was matched. If \code{FALSE}, either returns a vector
+or a data frame. See \code{extract} for details.}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
-A vector containing the extracted element.
+A vector (or a data frame) containing the extracted element, or
+\code{NULL} if no matching variable was found.
 }
 \description{
-\code{extract()} is similar to \code{$}. It extracts a single column or element from an object
-(e.g., a data frame, list, )
+\code{data_extract()} (or its alias \code{extract()}) is similar to \code{$}. It extracts
+either a single column or element from an object (e.g., a data frame, list),
+or multiple columns resp. elements.
+}
+\details{
+\code{data_extract()} can be used to select multiple variables or pull a
+single variable from a data frame. Thus, the return value is by default not
+type safe - \code{data_extract()} either returns a vector or a data frame.
+\subsection{Extracting single variables (vectors)}{
+When \code{select} is the name of a single column, or when select only matches
+one column, a vector is returned. A single variable is also returned when
+\code{pull} is either \verb{"first} or \code{"last"}. Setting \code{as_data_frame} to \code{TRUE}
+overrides this behaviour and \emph{always} returns a data frame.
+}
+\subsection{Extracting a data frame of variables}{
+When \code{select} is a character vector containing more than one column name (or
+a numeric vector with more than one valid column indices), or when \code{select}
+uses one of the supported select-helpers that match multiple columns, a
+data frame is returned. Setting \code{as_data_frame} to \code{TRUE} \emph{always} returns
+a data frame.
+}
 }
 \examples{
+# single variable
 extract(mtcars, cyl, name = gear)
 extract(mtcars, "cyl", name = gear)
 extract(mtcars, -1, name = gear)
 extract(mtcars, cyl, name = 0)
 extract(mtcars, cyl, name = "row.names")
+
+# selecting multiple variables
+head(extract(iris, starts_with("Sepal")))
+head(extract(iris, ends_with("Width")))
+head(extract(iris, 2:4))
+
+# select first of multiple variables
+extract(iris, starts_with("Sepal"), extract = "first")
+# select first of multiple variables, return as data frame
+head(extract(iris, starts_with("Sepal"), extract = "first", as_data_frame = TRUE))
 }
