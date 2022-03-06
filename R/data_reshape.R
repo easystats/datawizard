@@ -23,7 +23,7 @@
 #'   compatibility with `tidyr::pivot_longer()`.
 #' @param sep The indicating a separating character in the variable names in the
 #'   wide format.
-#'
+#' @inheritParams data_extract
 #'
 #' @examples
 #' wide_data <- data.frame(replicate(5, rnorm(10)))
@@ -83,8 +83,10 @@ data_to_long <- function(data,
                          colnames_to = "Name",
                          values_to = "Value",
                          rows_to = NULL,
+                         ignore_case = FALSE,
                          ...,
-                         names_to = colnames_to) {
+                         names_to = colnames_to
+                         ) {
   if (inherits(data, "tbl_df")) {
     tbl_input <- TRUE
     data <- as.data.frame(data)
@@ -92,29 +94,52 @@ data_to_long <- function(data,
     tbl_input <- FALSE
   }
 
+  fixed <- FALSE
+
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
+
+  # in case pattern is a variable from another function call...
+  p <- try(eval(cols), silent = TRUE)
+  if (inherits(p, c("try-error", "simpleError"))) {
+    p <- substitute(cols)
+  }
+
+  # check if pattern is a function like "starts_with()"
+  cols <- tryCatch(eval(p), error = function(e) NULL)
+
+  # if select could not be evaluated (because expression "makes no sense")
+  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
+  # so we can use grepl()
+  if (is.null(cols)) {
+    evaluated_pattern <- .evaluate_pattern(.safe_deparse(p), data, ignore_case)
+    cols <- evaluated_pattern$pattern
+    fixed <- evaluated_pattern$fixed
+  }
+
+  # load again
+  .attach_packages(conflicting_packages)
+
   # Select columns ----------------
   if (is.character(cols) && length(cols) == 1) {
     # If only one name
-
-    if (cols == "all") {
+    if (all(cols == "all")) {
       # If all, take all
       cols <- names(data)
-    } else {
+    } else if (isFALSE(fixed)) {
       # Surely, a regex
-      cols <- grep(cols, names(data), value = TRUE)
+      cols <- grep(cols, names(data), value = TRUE, ignore.case = ignore_case)
     }
   }
 
-  # If numeric, surely the index of the cols
-  if (is.numeric(cols)) {
-    cols <- names(data)[cols]
-  }
-
+  # return valid column names, based on pattern
+  cols <- .evaluated_pattern_to_colnames(cols, data, ignore_case, verbose = FALSE)
 
   # Sanity checks ----------------
-  # Make sure all cols are in data
-  if (!all(cols %in% names(data))) {
-    stop("Some variables as selected by 'cols' are not present in the data.")
+
+  # nothing to select?
+  if (!length(cols)) {
+    stop("No columns found for reshaping data.", call. = FALSE)
   }
 
   # Compatibility with tidyr

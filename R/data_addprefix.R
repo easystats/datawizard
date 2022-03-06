@@ -3,6 +3,7 @@
 #' # Add prefix / suffix to all columns
 #' head(data_addprefix(iris, "NEW_"))
 #' head(data_addsuffix(iris, "_OLD"))
+#'
 #' @export
 data_addprefix <- function(data, pattern, ...) {
   names(data) <- paste0(pattern, names(data))

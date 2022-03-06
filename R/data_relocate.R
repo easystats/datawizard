@@ -1,4 +1,5 @@
-#' Relocate (reorder) columns of a data frame
+#' @title Relocate (reorder) columns of a data frame
+#' @name data_relocate
 #'
 #' @param data A data frame to pivot.
 #' @param cols A character vector indicating the names of the columns to move.
@@ -9,6 +10,18 @@
 #'   If `-1`, will be added before or after the last column.
 #' @param safe If `TRUE`, will disregard non-existing columns.
 #' @inheritParams data_rename
+#'
+#' @inherit data_rename seealso
+#'
+#' @details
+#'
+#' `data_relocate()` will reorder columns to specific positions, indicated by
+#' `before` or `after`.
+#'
+#' `data_reorder()` will instead move selected columns to the beginning of the
+#' data frame .
+#'
+#' @return A data frame with reordered columns.
 #'
 #' @examples
 #' # Reorder columns
@@ -22,7 +35,10 @@
 #' head(data_relocate(iris, cols = c("Species", "Petal.Length"), after = "Sepal.Width"))
 #' # same as
 #' head(data_relocate(iris, cols = c("Species", "Petal.Length"), after = 2))
-#' @return A data frame with reordered columns.
+#'
+#' # Reorder columns
+#' head(data_reorder(iris, c("Species", "Sepal.Length")))
+#' head(data_reorder(iris, c("Species", "dupa"))) # Safe for non-existing cols
 #'
 #' @export
 data_relocate <- function(data,
@@ -106,4 +122,14 @@ data_relocate <- function(data,
   attributes(out) <- utils::modifyList(att, attributes(out))
 
   out
+}
+
+
+
+#' @rdname data_relocate
+#' @export
+data_reorder <- function(data, cols, safe = TRUE, ...) {
+  remaining_columns <- setdiff(colnames(data), cols)
+  if (isTRUE(safe)) cols <- cols[cols %in% names(data)]
+  data[c(cols, remaining_columns)]
 }
