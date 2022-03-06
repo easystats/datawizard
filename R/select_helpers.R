@@ -65,7 +65,7 @@
       loadNamespace(pkg[i])
     }
     if (isTRUE(packages$attached[i])) {
-      require(pkg[i], quietly = TRUE, character.only = TRUE)
+      suppressPackageStartupMessages(suppressWarnings(require(pkg[i], quietly = TRUE, character.only = TRUE)))
     }
   }
 }
