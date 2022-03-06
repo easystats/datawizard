@@ -118,6 +118,10 @@ if (require("testthat")) {
       c("Sepal.Length", "Sepal.Width")
     )
 
+    expect_equal(
+      colnames(data_extract(iris, c(1:2, 5))),
+      c("Sepal.Length", "Sepal.Width", "Species")
+    )
   })
 
 }

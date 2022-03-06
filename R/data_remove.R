@@ -35,6 +35,11 @@ data_remove <- function(data, pattern, ignore_case = FALSE, verbose = TRUE, ...)
     pattern <- colnames(data)[grepl(pattern, colnames(data), ignore.case = ignore_case)]
   }
 
+  # if numeric, make sure we have valid column indices
+  if (is.numeric(pattern)) {
+    pattern <- colnames(data)[intersect(pattern, 1:ncol(data))]
+  }
+
   # check if colnames are in data
   if (!all(pattern %in% colnames(data))) {
     if (isTRUE(verbose)) {

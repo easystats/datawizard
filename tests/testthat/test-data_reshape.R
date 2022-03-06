@@ -112,4 +112,28 @@ test_that("data_reshape works as expected - complex dataset", {
   expect_equal(unique(long1$Score), unique(long2$Score))
   expect_equal(ncol(long1), ncol(long2))
   expect_equal(nrow(long1), nrow(long2))
+
+
+  long1 <- data_to_long(data,
+                        cols = c(1:5, 28),
+                        colnames_to = "Item",
+                        values_to = "Score",
+                        rows_to = "Participant",
+                        ignore_case = TRUE)
+
+  long2 <- data_to_long(data,
+                        cols = c("A1", "A2", "A3", "A4", "A5", "age"),
+                        colnames_to = "Item",
+                        values_to = "Score",
+                        rows_to = "Participant")
+
+  expect_equal(unique(long1$Item), c("A1", "A2", "A3", "A4", "A5", "age"))
+  expect_equal(ncol(long1), 25)
+  expect_equal(nrow(long1), 16800)
+
+  expect_equal(unique(long1$Item), unique(long2$Item))
+  expect_equal(unique(long1$Score), unique(long2$Score))
+  expect_equal(ncol(long1), ncol(long2))
+  expect_equal(nrow(long1), nrow(long2))
+
 })
