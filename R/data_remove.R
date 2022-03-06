@@ -28,6 +28,9 @@ data_remove <- function(data, pattern, fixed = TRUE, ignore_case = FALSE, ...) {
     fixed <- evaluated_pattern$fixed
   }
 
+  # load again
+  .attach_packages(conflicting_packages)
+
   if (isTRUE(fixed)) {
     # we can have multiple patterns here
     new <- data[!names(data) %in% pattern]
@@ -36,9 +39,6 @@ data_remove <- function(data, pattern, fixed = TRUE, ignore_case = FALSE, ...) {
   }
   attributes(new) <- utils::modifyList(attributes(data), attributes(new))
   class(new) <- class(data)
-
-  # load again
-  .attach_packages(conflicting_packages)
 
   new
 }

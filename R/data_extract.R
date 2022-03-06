@@ -129,6 +129,8 @@ data_extract.data.frame <- function(data,
     select <- colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case)]
   }
 
+  # load again
+  .attach_packages(conflicting_packages)
 
   if (is.numeric(select)) {
     if (length(select) == 1) {
@@ -179,9 +181,6 @@ data_extract.data.frame <- function(data,
     "even" = select[seq(2, length(select), 2)],
     select
   )
-
-  # load again
-  .attach_packages(conflicting_packages)
 
   if (!is.null(name) && length(name) == 1) {
     stats::setNames(data[, select, drop = !as_data_frame], data[, name, drop = !as_data_frame])

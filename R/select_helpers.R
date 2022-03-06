@@ -59,13 +59,15 @@
 
 
 .attach_packages <- function(packages = NULL) {
-  pkg <- packages$package
-  for (i in 1:length(pkg)) {
-    if (isTRUE(packages$namespace[i])) {
-      loadNamespace(pkg[i])
-    }
-    if (isTRUE(packages$attached[i])) {
-      suppressPackageStartupMessages(suppressWarnings(require(pkg[i], quietly = TRUE, character.only = TRUE)))
+  if (!is.null(packages)) {
+    pkg <- packages$package
+    for (i in 1:length(pkg)) {
+      if (isTRUE(packages$namespace[i])) {
+        loadNamespace(pkg[i])
+      }
+      if (isTRUE(packages$attached[i])) {
+        suppressPackageStartupMessages(suppressWarnings(require(pkg[i], quietly = TRUE, character.only = TRUE)))
+      }
     }
   }
 }
