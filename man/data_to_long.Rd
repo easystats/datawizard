@@ -13,6 +13,7 @@ data_to_long(
   colnames_to = "Name",
   values_to = "Value",
   rows_to = NULL,
+  ignore_case = FALSE,
   ...,
   names_to = colnames_to
 )
@@ -33,6 +34,7 @@ reshape_longer(
   colnames_to = "Name",
   values_to = "Value",
   rows_to = NULL,
+  ignore_case = FALSE,
   ...,
   names_to = colnames_to
 )
@@ -60,6 +62,10 @@ the pivoted variables.}
 
 \item{rows_to}{The name of the column that will contain the row-number from
 the original data. If \code{NULL}, will be removed.}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
 
 \item{...}{Additional arguments passed on to methods.}
 
