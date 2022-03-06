@@ -33,7 +33,7 @@ and data frame extensions (e.g., tibbles).}
 \item a negative integer, giving the position counting from the right.
 }
 
-or one of the following select-helpers: \code{starts_with("")}, \code{end_with("")},
+or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
 \code{contains("")}, or \code{"regex()"}. Multiple variables can also be extracted
 using a character vector of length > 1, or a numeric vector containing
 column indices. If the special value \code{0} or \code{"row.names"} is given, the
@@ -82,7 +82,7 @@ type safe - \code{data_extract()} either returns a vector or a data frame.
 \subsection{Extracting single variables (vectors)}{
 When \code{select} is the name of a single column, or when select only matches
 one column, a vector is returned. A single variable is also returned when
-\code{pull} is either \verb{"first} or \code{"last"}. Setting \code{as_data_frame} to \code{TRUE}
+\code{extract} is either \verb{"first} or \code{"last"}. Setting \code{as_data_frame} to \code{TRUE}
 overrides this behaviour and \emph{always} returns a data frame.
 }
 \subsection{Extracting a data frame of variables}{
