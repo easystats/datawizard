@@ -94,6 +94,13 @@ if (require("testthat")) {
       colnames(data_extract(mtcars, contains("a"), extract = "even")),
       c("am", "carb")
     )
+
+    expect_equal(
+      colnames(data_extract(mtcars, cyl:drat)),
+      c("cyl", "disp", "hp", "drat")
+    )
+
+
   })
 
 }

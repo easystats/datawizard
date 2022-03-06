@@ -18,8 +18,9 @@ data_remove <- function(data, pattern, fixed = TRUE, ...) {
   pattern <- tryCatch(eval(p), error = function(e) NULL)
 
   if (is.null(pattern)) {
-    fixed <- FALSE
-    pattern <- .evaluate_pattern(.safe_deparse(p))
+    evaluated_pattern <- .evaluate_pattern(.safe_deparse(p), data)
+    pattern <- evaluated_pattern$pattern
+    fixed <- evaluated_pattern$fixed
   }
 
   if (isTRUE(fixed)) {

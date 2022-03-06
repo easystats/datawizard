@@ -112,8 +112,9 @@ data_extract.data.frame <- function(data,
   # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
   # so we can use grepl()
   if (is.null(select)) {
-    fixed <- FALSE
-    select <- .evaluate_pattern(.safe_deparse(p))
+    evaluated_pattern <- .evaluate_pattern(.safe_deparse(p), data)
+    select <- evaluated_pattern$pattern
+    fixed <- evaluated_pattern$fixed
   }
 
   # seems to be no valid column name or index, so try to grep

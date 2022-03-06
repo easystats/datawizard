@@ -45,7 +45,7 @@ data_findcols <- function(data,
       eval(p)
     },
     error = function(e) {
-      .evaluate_pattern(.safe_deparse(p))
+      .evaluate_pattern(.safe_deparse(p))$pattern
     }
   )
 
