@@ -57,7 +57,8 @@
 #' a data frame.
 #' }
 #'
-#' @return A vector (or a data frame) containing the extracted element.
+#' @return A vector (or a data frame) containing the extracted element, or
+#'   `NULL` if no matching variable was found.
 #' @export
 #'
 #' @examples
@@ -171,6 +172,11 @@ data_extract.data.frame <- function(data,
       ))
     }
     select <- intersect(select, colnames(data))
+  }
+
+  # nothing to select?
+  if (!length(select)) {
+    return(NULL)
   }
 
   # chose which matched variables to extract

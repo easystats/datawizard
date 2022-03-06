@@ -1,5 +1,3 @@
-#' @param fixed Logical, if `TRUE`, `pattern` is treated as a string to be
-#'   matched as is, else `pattern` is treated as regular expression.
 #' @inheritParams data_extract
 #' @rdname data_relocate
 #' @examples
@@ -7,8 +5,9 @@
 #' head(data_remove(iris, "Sepal.Length"))
 #' head(data_remove(iris, starts_with("Sepal")))
 #' @export
-data_remove <- function(data, pattern, fixed = TRUE, ignore_case = FALSE, ...) {
+data_remove <- function(data, pattern, ignore_case = FALSE, verbose = TRUE, ...) {
 
+  fixed <- TRUE
   # avoid conflicts
   conflicting_packages <- .conflicting_packages("poorman")
 
@@ -31,12 +30,27 @@ data_remove <- function(data, pattern, fixed = TRUE, ignore_case = FALSE, ...) {
   # load again
   .attach_packages(conflicting_packages)
 
-  if (isTRUE(fixed)) {
-    # we can have multiple patterns here
-    new <- data[!names(data) %in% pattern]
-  } else {
-    new <- data[!grepl(pattern, names(data), ignore.case = ignore_case)]
+  # seems to be no valid column name or index, so try to grep
+  if (isFALSE(fixed)) {
+    pattern <- colnames(data)[grepl(pattern, colnames(data), ignore.case = ignore_case)]
   }
+
+  # check if colnames are in data
+  if (!all(pattern %in% colnames(data))) {
+    if (isTRUE(verbose)) {
+      warning(insight::format_message(
+        paste0("Following variable(s) were not found: ", paste0(setdiff(pattern, colnames(data)), collapse = ", "))
+      ))
+    }
+    pattern <- intersect(pattern, colnames(data))
+  }
+
+  # nothing to remove?
+  if (!length(pattern)) {
+    return(data)
+  }
+
+  new <- data[!colnames(data) %in% pattern]
   attributes(new) <- utils::modifyList(attributes(data), attributes(new))
   class(new) <- class(data)
 

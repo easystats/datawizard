@@ -67,7 +67,8 @@ search pattern when matching against variable names.}
 \item{verbose}{Toggle warnings.}
 }
 \value{
-A vector (or a data frame) containing the extracted element.
+A vector (or a data frame) containing the extracted element, or
+\code{NULL} if no matching variable was found.
 }
 \description{
 \code{data_extract()} (or its alias \code{extract()}) is similar to \code{$}. It extracts
