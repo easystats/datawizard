@@ -49,9 +49,9 @@ citation("datawizard")
 
 ## Data wrangling 
 
-### Select and filter
+### Filter
 
-The package provides helpers to select columns or filter rows meeting certain conditions:
+The package provides helpers to filter rows meeting certain conditions:
 
 ```{r}
 matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1))
