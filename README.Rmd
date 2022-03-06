@@ -49,7 +49,7 @@ citation("datawizard")
 
 ## Data wrangling 
 
-### Filter
+### Select, filter and remove variables
 
 The package provides helpers to filter rows meeting certain conditions:
 
@@ -58,10 +58,30 @@ matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1))
 mtcars[matching_rows, ]
 ```
 
-Or do other manipulations:
+It is also possible to select one or more variables:
 
 ```{r}
-head(data_addprefix(iris, "NEW_"))
+# single variable
+data_extract(mtcars, "gear")
+
+# more variables
+head(data_extract(iris, ends_with("Width")))
+```
+
+Due to the consistent API, removing variables is just as simple:
+
+```{r}
+head(data_remove(iris, starts_with("Sepal")))
+```
+
+### Reorder or rename
+
+```{r}
+head(data_relocate(iris, cols = "Species", before = "Sepal.Length"))
+```
+
+```{r}
+head(data_rename(iris, c("Sepal.Length", "Sepal.Width"), c("length", "width")))
 ```
 
 ### Merge
@@ -95,8 +115,6 @@ A common data wrangling task is to reshape data.
 Either to go from wide/Cartesian to long/tidy format
 
 ```{r}
-library(datawizard)
-
 wide_data <- data.frame(replicate(5, rnorm(10)))
 
 head(data_to_long(wide_data))
