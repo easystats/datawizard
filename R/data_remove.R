@@ -8,6 +8,10 @@
 #' head(data_remove(iris, starts_with("Sepal")))
 #' @export
 data_remove <- function(data, pattern, fixed = TRUE, ignore_case = FALSE, ...) {
+
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
+
   # in case pattern is a variable from another function call...
   p <- try(eval(pattern), silent = TRUE)
   if (inherits(p, c("try-error", "simpleError"))) {
@@ -32,5 +36,9 @@ data_remove <- function(data, pattern, fixed = TRUE, ignore_case = FALSE, ...) {
   }
   attributes(new) <- utils::modifyList(attributes(data), attributes(new))
   class(new) <- class(data)
+
+  # load again
+  .attach_packages(conflicting_packages)
+
   new
 }

@@ -98,6 +98,9 @@ data_extract.data.frame <- function(data,
   fixed <- TRUE
   extract <- match.arg(tolower(extract), choices = c("all", "first", "last", "odd", "even"))
 
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
+
   # make sure as_data_frame is logical
   if (!is.logical(as_data_frame)) {
     as_data_frame <- FALSE
@@ -176,6 +179,9 @@ data_extract.data.frame <- function(data,
     "even" = select[seq(2, length(select), 2)],
     select
   )
+
+  # load again
+  .attach_packages(conflicting_packages)
 
   if (!is.null(name) && length(name) == 1) {
     stats::setNames(data[, select, drop = !as_data_frame], data[, name, drop = !as_data_frame])

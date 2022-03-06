@@ -38,3 +38,34 @@
   }
   list(pattern = gsub("\\\\", "\\", pattern, fixed = TRUE), fixed = fixed)
 }
+
+
+
+.conflicting_packages <- function(packages = NULL) {
+  if (is.null(packages)) {
+    packages <- "poorman"
+  }
+
+  namespace <- sapply(packages, isNamespaceLoaded)
+  attached <- paste0("package:", packages) %in% search()
+  attached <- stats::setNames(attached, packages)
+
+  for (i in packages) {
+    unloadNamespace(i)
+  }
+
+  list(package = packages, namespace = namespace, attached = attached)
+}
+
+
+.attach_packages <- function(packages = NULL) {
+  pkg <- packages$package
+  for (i in 1:length(pkg)) {
+    if (isTRUE(packages$namespace[i])) {
+      loadNamespace(pkg[i])
+    }
+    if (isTRUE(packages$attached[i])) {
+      require(pkg[i], quietly = TRUE, character.only = TRUE)
+    }
+  }
+}

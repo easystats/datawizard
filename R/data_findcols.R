@@ -35,6 +35,9 @@ data_findcols <- function(data,
   n <- names(data)
   match <- c()
 
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
+
   # in case pattern is a variable from another function call...
   p <- try(eval(pattern), silent = TRUE)
   if (inherits(p, c("try-error", "simpleError"))) {
@@ -50,6 +53,9 @@ data_findcols <- function(data,
       .evaluate_pattern(.safe_deparse(p))$pattern
     }
   )
+
+  # load again
+  .attach_packages(conflicting_packages)
 
   if (!is.null(pattern)) {
     for (i in pattern) {
