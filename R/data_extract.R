@@ -34,6 +34,9 @@
 #' @param as_data_frame Logical, if `TRUE`, will always return a data frame,
 #'   even if only one variable was matched. If `FALSE`, either returns a vector
 #'   or a data frame. See `extract` for details.
+#' @param ignore_case Logical, if `TRUE` and when one of the select-helpers or
+#'   a regular expression is used in `select`, ignores lower/upper case in the
+#'   search pattern when matching against variable names.
 #' @param verbose Toggle warnings.
 #' @param ... For use by future methods.
 #'
@@ -89,6 +92,7 @@ data_extract.data.frame <- function(data,
                                     name = NULL,
                                     extract = "all",
                                     as_data_frame = FALSE,
+                                    ignore_case = FALSE,
                                     verbose = TRUE,
                                     ...) {
   fixed <- TRUE
@@ -119,7 +123,7 @@ data_extract.data.frame <- function(data,
 
   # seems to be no valid column name or index, so try to grep
   if (isFALSE(fixed)) {
-    select <- colnames(data)[grepl(select, colnames(data))]
+    select <- colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case)]
   }
 
 

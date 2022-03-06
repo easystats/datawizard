@@ -31,6 +31,21 @@ test_that("data_remove works with NSE", {
     colnames(data_remove(iris, Sepal.Width:Petal.Width)),
     c("Sepal.Length", "Species")
   )
+
+  expect_equal(
+    colnames(data_remove(iris, contains("Sep"))),
+    c("Petal.Length", "Petal.Width", "Species")
+  )
+
+  expect_equal(
+    colnames(data_remove(iris, contains("sep"))),
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "Species")
+  )
+
+  expect_equal(
+    colnames(data_remove(iris, contains("sep"), ignore_case = TRUE)),
+    c("Petal.Length", "Petal.Width", "Species")
+  )
 })
 
 

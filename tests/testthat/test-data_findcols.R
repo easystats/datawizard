@@ -77,6 +77,16 @@ test_that("data_findcols nse", {
     data_findcols(mtcars, "^c"),
     c("cyl", "carb")
   )
+
+  expect_equal(
+    data_findcols(mtcars, "^C"),
+    vector("character")
+  )
+
+  expect_equal(
+    data_findcols(mtcars, "^C", ignore_case = TRUE),
+    c("cyl", "carb")
+  )
 })
 
 

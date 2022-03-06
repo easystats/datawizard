@@ -1,12 +1,13 @@
 #' @param fixed Logical, if `TRUE`, `pattern` is treated as a string to be
 #'   matched as is, else `pattern` is treated as regular expression.
+#' @inheritParams data_extract
 #' @rdname data_relocate
 #' @examples
 #' # Remove columns
 #' head(data_remove(iris, "Sepal.Length"))
 #' head(data_remove(iris, starts_with("Sepal")))
 #' @export
-data_remove <- function(data, pattern, fixed = TRUE, ...) {
+data_remove <- function(data, pattern, fixed = TRUE, ignore_case = FALSE, ...) {
   # in case pattern is a variable from another function call...
   p <- try(eval(pattern), silent = TRUE)
   if (inherits(p, c("try-error", "simpleError"))) {
@@ -27,7 +28,7 @@ data_remove <- function(data, pattern, fixed = TRUE, ...) {
     # we can have multiple patterns here
     new <- data[!names(data) %in% pattern]
   } else {
-    new <- data[!grepl(pattern, names(data))]
+    new <- data[!grepl(pattern, names(data), ignore.case = ignore_case)]
   }
   attributes(new) <- utils::modifyList(attributes(data), attributes(new))
   class(new) <- class(data)

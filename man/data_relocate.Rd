@@ -8,13 +8,20 @@
 \alias{data_remove}
 \title{Relocate (reorder) columns of a data frame}
 \usage{
-data_findcols(data, pattern = NULL, starts_with = NULL, ends_with = NULL, ...)
+data_findcols(
+  data,
+  pattern = NULL,
+  starts_with = NULL,
+  ends_with = NULL,
+  ignore_case = FALSE,
+  ...
+)
 
 data_relocate(data, cols, before = NULL, after = NULL, safe = TRUE, ...)
 
 data_reorder(data, cols, safe = TRUE, ...)
 
-data_remove(data, pattern, fixed = TRUE, ...)
+data_remove(data, pattern, fixed = TRUE, ignore_case = FALSE, ...)
 }
 \arguments{
 \item{data}{A data frame to pivot.}
@@ -28,7 +35,11 @@ following select-helpers: \code{starts_with("")}, \code{end_with("")} or
 matched in the column names. \code{starts_with} finds matches at the beginning
 of column names, \code{ends_with} finds matches at the end of column names.}
 
-\item{...}{Other arguments passed to or from other functions.}
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
+
+\item{...}{For use by future methods.}
 
 \item{cols}{A character vector indicating the names of the columns to move.}
 

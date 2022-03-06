@@ -100,6 +100,17 @@ if (require("testthat")) {
       c("cyl", "disp", "hp", "drat")
     )
 
+    expect_equal(
+      colnames(data_extract(iris, contains("Sep"))),
+      c("Sepal.Length", "Sepal.Width")
+    )
+
+    expect_null(colnames(data_extract(iris, contains("sep"))))
+
+    expect_equal(
+      colnames(data_extract(iris, contains("sep"), ignore_case = TRUE)),
+      c("Sepal.Length", "Sepal.Width")
+    )
 
   })
 

@@ -5,6 +5,7 @@
 #' @param starts_with,ends_with Character string, containing the string to be
 #'   matched in the column names. `starts_with` finds matches at the beginning
 #'   of column names, `ends_with` finds matches at the end of column names.
+#' @inheritParams data_extract
 #' @rdname data_relocate
 #' @examples
 #' # Find columns names by pattern
@@ -22,6 +23,7 @@ data_findcols <- function(data,
                           pattern = NULL,
                           starts_with = NULL,
                           ends_with = NULL,
+                          ignore_case = FALSE,
                           ...) {
   # TODO: Need to extend this to work with NSE so that the following shoud work:
   # - data_findcols(iris, Sepal.Length)
@@ -51,14 +53,14 @@ data_findcols <- function(data,
 
   if (!is.null(pattern)) {
     for (i in pattern) {
-      match <- c(match, n[grepl(i, n)])
+      match <- c(match, n[grepl(i, n, ignore.case = ignore_case)])
     }
   }
   if (!is.null(starts_with)) {
-    match <- c(match, n[grepl(paste0("^", starts_with), n)])
+    match <- c(match, n[grepl(paste0("^", starts_with), n, ignore.case = ignore_case)])
   }
   if (!is.null(ends_with)) {
-    match <- c(match, n[grepl(paste0(ends_with, "$"), n)])
+    match <- c(match, n[grepl(paste0(ends_with, "$"), n, ignore.case = ignore_case)])
   }
   match
 }
