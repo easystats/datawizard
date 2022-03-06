@@ -19,7 +19,7 @@ data_remove <- function(data, pattern, fixed = TRUE, ignore_case = FALSE, ...) {
   pattern <- tryCatch(eval(p), error = function(e) NULL)
 
   if (is.null(pattern)) {
-    evaluated_pattern <- .evaluate_pattern(.safe_deparse(p), data)
+    evaluated_pattern <- .evaluate_pattern(.safe_deparse(p), data, ignore_case)
     pattern <- evaluated_pattern$pattern
     fixed <- evaluated_pattern$fixed
   }

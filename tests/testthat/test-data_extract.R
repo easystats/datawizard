@@ -100,6 +100,12 @@ if (require("testthat")) {
       c("cyl", "disp", "hp", "drat")
     )
 
+    expect_error(colnames(data_extract(mtcars, Cyl:Drat)))
+    expect_equal(
+      colnames(data_extract(mtcars, Cyl:Drat, ignore_case = TRUE)),
+      c("cyl", "disp", "hp", "drat")
+    )
+
     expect_equal(
       colnames(data_extract(iris, contains("Sep"))),
       c("Sepal.Length", "Sepal.Width")

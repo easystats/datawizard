@@ -1,4 +1,4 @@
-.evaluate_pattern <- function(x, data = NULL) {
+.evaluate_pattern <- function(x, data = NULL, ignore_case = FALSE) {
   fixed <- FALSE
   if (grepl("^starts_with\\(\"(.*)\"\\)", x)) {
     pattern <- paste0("^", gsub("starts_with\\(\"(.*)\"\\)", "\\1", x))
@@ -18,8 +18,13 @@
     pattern <- gsub("col_matches\\(\"(.*)\"\\)", "\\1", x)
   } else if (!is.null(data) && grepl(":", x, fixed = TRUE)) {
     from_to <- unlist(strsplit(x, ":", fixed = TRUE))
-    from <- which(colnames(data) == from_to[1])
-    to <- which(colnames(data) == from_to[2])
+    cn <- colnames(data)
+    if (isTRUE(ignore_case)) {
+      from_to <- tolower(from_to)
+      cn <- tolower(cn)
+    }
+    from <- which(cn == from_to[1])
+    to <- which(cn == from_to[2])
     if (!length(from)) {
       stop("Could not find variable '", from_to[1], "' in data.", call. = FALSE)
     }
