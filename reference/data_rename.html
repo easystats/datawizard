@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9005</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,10 +78,18 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>A data frame, or an object that can be coerced to a data frame.</p></dd>
-<dt>pattern, replacement</dt>
-<dd><p>Character strings.</p></dd>
+<dt>pattern</dt>
+<dd><p>Character vector. For <code>data_rename()</code>, indicates columns that
+should be selected for renaming. Can be <code>NULL</code> (in which case all columns
+are selected). For <code>data_addprefix()</code> or <code>data_addsuffix()</code>, a character
+string, which will be added as prefix or suffix to the column names.</p></dd>
 <dt>...</dt>
 <dd><p>Other arguments passed to or from other functions.</p></dd>
+<dt>replacement</dt>
+<dd><p>Character vector. Indicates the new name of the columns
+selected in <code>pattern</code>. Can be <code>NULL</code> (in which case column are numbered
+in sequential order). If not <code>NULL</code>, <code>pattern</code> and <code>replacement</code> must be
+of the same length.</p></dd>
 <dt>safe</dt>
 <dd><p>Do not throw error if for instance the variable to be
 renamed/removed doesn't exist.</p></dd>
@@ -96,7 +104,7 @@ renamed/removed doesn't exist.</p></dd>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index">
 <ul><li><p>Functions to rename stuff: <code>data_rename()</code>, <code>data_rename_rows()</code>, <code>data_addprefix()</code>, <code>data_addsuffix()</code></p></li>
-<li><p>Functions to reorder, find and remove columns: <code><a href="data_reorder.html">data_findcols()</a></code>, <code><a href="data_reorder.html">data_reorder()</a></code>, <code><a href="data_reorder.html">data_remove()</a></code></p></li>
+<li><p>Functions to reorder, find and remove columns: <code><a href="data_relocate.html">data_findcols()</a></code>, <code><a href="data_relocate.html">data_reorder()</a></code>, <code><a href="data_relocate.html">data_relocate()</a></code>, <code><a href="data_relocate.html">data_remove()</a></code></p></li>
 <li><p>Functions to reshape, pivot or rotate dataframes: <code><a href="data_to_long.html">data_to_long()</a></code>, <code><a href="data_to_long.html">data_to_wide()</a></code>, <code><a href="data_rotate.html">data_rotate()</a></code></p></li>
 <li><p>Functions to rescale and reverse: <code><a href="data_rescale.html">data_rescale()</a></code>, <code><a href="data_reverse.html">data_reverse()</a></code></p></li>
 <li><p>Functions to standardize, normalize, rank-transform: <code><a href="standardize.html">standardize()</a></code>, <code><a href="normalize.html">normalize()</a></code>, <code><a href="ranktransform.html">ranktransform()</a></code>, <code><a href="winsorize.html">winsorize()</a></code></p></li>
@@ -123,6 +131,7 @@ renamed/removed doesn't exist.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4              4.6             3.1              1.5             0.2      setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5              5.0             3.6              1.4             0.2      setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6              5.4             3.9              1.7             0.4      setosa</span>
+<span class="r-in"></span>
 <span class="r-in"><span class="co"># Rename columns</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">data_rename</span><span class="op">(</span><span class="va">iris</span>, <span class="st">"Sepal.Length"</span>, <span class="st">"length"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   length Sepal.Width Petal.Length Petal.Width Species</span>

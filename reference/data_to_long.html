@@ -14,7 +14,7 @@ tidyr::pivot_longer().'><meta property="og:image" content="/reference/figures/ca
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9005</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,7 @@ the number of columns. This is a dependency-free base-R equivalent of
   colnames_to <span class="op">=</span> <span class="st">"Name"</span>,
   values_to <span class="op">=</span> <span class="st">"Value"</span>,
   rows_to <span class="op">=</span> <span class="cn">NULL</span>,
+  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
   <span class="va">...</span>,
   names_to <span class="op">=</span> <span class="va">colnames_to</span>
 <span class="op">)</span>
@@ -97,6 +98,7 @@ the number of columns. This is a dependency-free base-R equivalent of
   colnames_to <span class="op">=</span> <span class="st">"Name"</span>,
   values_to <span class="op">=</span> <span class="st">"Value"</span>,
   rows_to <span class="op">=</span> <span class="cn">NULL</span>,
+  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
   <span class="va">...</span>,
   names_to <span class="op">=</span> <span class="va">colnames_to</span>
 <span class="op">)</span>
@@ -127,6 +129,10 @@ the pivoted variables.</p></dd>
 <dt>rows_to</dt>
 <dd><p>The name of the column that will contain the row-number from
 the original data. If <code>NULL</code>, will be removed.</p></dd>
+<dt>ignore_case</dt>
+<dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
+a regular expression is used in <code>select</code>, ignores lower/upper case in the
+search pattern when matching against variable names.</p></dd>
 <dt>...</dt>
 <dd><p>Additional arguments passed on to methods.</p></dd>
 <dt>names_to, names_from</dt>
@@ -153,7 +159,7 @@ wide format.</p></dd>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index">
 <ul><li><p>Functions to rename stuff: <code><a href="data_rename.html">data_rename()</a></code>, <code><a href="data_rename.html">data_rename_rows()</a></code>, <code><a href="data_rename.html">data_addprefix()</a></code>, <code><a href="data_rename.html">data_addsuffix()</a></code></p></li>
-<li><p>Functions to reorder, find and remove columns: <code><a href="data_reorder.html">data_findcols()</a></code>, <code><a href="data_reorder.html">data_reorder()</a></code>, <code><a href="data_reorder.html">data_remove()</a></code></p></li>
+<li><p>Functions to reorder, find and remove columns: <code><a href="data_relocate.html">data_findcols()</a></code>, <code><a href="data_relocate.html">data_reorder()</a></code>, <code><a href="data_relocate.html">data_relocate()</a></code>, <code><a href="data_relocate.html">data_remove()</a></code></p></li>
 <li><p>Functions to reshape, pivot or rotate dataframes: <code>data_to_long()</code>, <code>data_to_wide()</code>, <code><a href="data_rotate.html">data_rotate()</a></code></p></li>
 <li><p>Functions to rescale and reverse: <code><a href="data_rescale.html">data_rescale()</a></code>, <code><a href="data_reverse.html">data_reverse()</a></code></p></li>
 <li><p>Functions to standardize, normalize, rank-transform: <code><a href="standardize.html">standardize()</a></code>, <code><a href="normalize.html">normalize()</a></code>, <code><a href="ranktransform.html">ranktransform()</a></code>, <code><a href="winsorize.html">winsorize()</a></code></p></li>
