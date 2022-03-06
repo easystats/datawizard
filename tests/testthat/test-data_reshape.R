@@ -46,4 +46,60 @@ test_that("data_reshape works as expected - complex dataset", {
   )
 
   expect_snapshot(str(wide))
+
+
+  long1 <- data_to_long(data,
+                        cols = starts_with("A"),
+                        colnames_to = "Item",
+                        values_to = "Score",
+                        rows_to = "Participant")
+
+  long2 <- data_to_long(data,
+                        cols = c("A1", "A2", "A3", "A4", "A5"),
+                        colnames_to = "Item",
+                        values_to = "Score",
+                        rows_to = "Participant")
+
+  expect_equal(unique(long1$Item), c("A1", "A2", "A3", "A4", "A5"))
+  expect_equal(unique(long1$Score), c(2L, 4L, 3L, 5L, 6L, 1L, NA))
+  expect_equal(ncol(long1), 26)
+  expect_equal(nrow(long1), 14000)
+
+  expect_equal(unique(long1$Item), unique(long2$Item))
+  expect_equal(unique(long1$Score), unique(long2$Score))
+  expect_equal(ncol(long1), ncol(long2))
+  expect_equal(nrow(long1), nrow(long2))
+
+
+  long1 <- data_to_long(data,
+                        cols = starts_with("a"),
+                        colnames_to = "Item",
+                        values_to = "Score",
+                        rows_to = "Participant")
+
+  expect_equal(ncol(long1), 30)
+  expect_equal(nrow(long1), nrow(data))
+  expect_equal(colnames(long1)[1:ncol(data)], colnames(data))
+
+  long1 <- data_to_long(data,
+                        cols = starts_with("a"),
+                        colnames_to = "Item",
+                        values_to = "Score",
+                        rows_to = "Participant",
+                        ignore_case = TRUE)
+
+  long2 <- data_to_long(data,
+                        cols = c("A1", "A2", "A3", "A4", "A5", "age"),
+                        colnames_to = "Item",
+                        values_to = "Score",
+                        rows_to = "Participant")
+
+  expect_equal(unique(long1$Item), c("A1", "A2", "A3", "A4", "A5", "age"))
+  expect_equal(ncol(long1), 25)
+  expect_equal(nrow(long1), 16800)
+
+  expect_equal(unique(long1$Item), unique(long2$Item))
+  expect_equal(unique(long1$Score), unique(long2$Score))
+  expect_equal(ncol(long1), ncol(long2))
+  expect_equal(nrow(long1), nrow(long2))
 })
