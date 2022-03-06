@@ -65,7 +65,7 @@
     if (isTRUE(verbose)) {
       warning(insight::format_message(
         paste0("Following variable(s) were not found: ", paste0(setdiff(pattern, colnames(data)), collapse = ", "))
-      ))
+      ), call. = FALSE)
     }
     pattern <- intersect(pattern, colnames(data))
   }
