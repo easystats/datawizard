@@ -31,24 +31,12 @@ data_remove <- function(data, pattern, ignore_case = FALSE, verbose = TRUE, ...)
   .attach_packages(conflicting_packages)
 
   # seems to be no valid column name or index, so try to grep
-  if (isFALSE(fixed)) {
+  if (isFALSE(fixed) && length(pattern) == 1) {
     pattern <- colnames(data)[grepl(pattern, colnames(data), ignore.case = ignore_case)]
   }
 
-  # if numeric, make sure we have valid column indices
-  if (is.numeric(pattern)) {
-    pattern <- colnames(data)[intersect(pattern, 1:ncol(data))]
-  }
-
-  # check if colnames are in data
-  if (!all(pattern %in% colnames(data))) {
-    if (isTRUE(verbose)) {
-      warning(insight::format_message(
-        paste0("Following variable(s) were not found: ", paste0(setdiff(pattern, colnames(data)), collapse = ", "))
-      ))
-    }
-    pattern <- intersect(pattern, colnames(data))
-  }
+  # return valid column names, based on pattern
+  pattern <- .evaluated_pattern_to_colnames(pattern, data, ignore_case, verbose)
 
   # nothing to remove?
   if (!length(pattern)) {

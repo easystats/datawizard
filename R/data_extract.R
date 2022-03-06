@@ -164,15 +164,8 @@ data_extract.data.frame <- function(data,
     name <- rownames(data)
   }
 
-  # check if colnames are in data
-  if (!all(select %in% colnames(data))) {
-    if (isTRUE(verbose)) {
-      warning(insight::format_message(
-        paste0("Following variable(s) were not found: ", paste0(setdiff(select, colnames(data)), collapse = ", "))
-      ))
-    }
-    select <- intersect(select, colnames(data))
-  }
+  # return valid column names, based on pattern
+  select <- .evaluated_pattern_to_colnames(select, data, ignore_case, verbose)
 
   # nothing to select?
   if (!length(select)) {

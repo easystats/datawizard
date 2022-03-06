@@ -132,16 +132,14 @@ data_to_long <- function(data,
     }
   }
 
-  # If numeric, surely the index of the cols
-  if (is.numeric(cols)) {
-    cols <- names(data)[cols]
-  }
-
+  # return valid column names, based on pattern
+  cols <- .evaluated_pattern_to_colnames(cols, data, ignore_case, verbose = FALSE)
 
   # Sanity checks ----------------
-  # Make sure all cols are in data
-  if (!all(cols %in% names(data))) {
-    stop("Some variables as selected by 'cols' are not present in the data.", call. = FALSE)
+
+  # nothing to select?
+  if (!length(cols)) {
+    stop("No columns found for reshaping data.", call. = FALSE)
   }
 
   # Compatibility with tidyr
