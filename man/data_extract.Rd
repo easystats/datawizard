@@ -28,16 +28,16 @@ and data frame extensions (e.g., tibbles).}
 \item{select}{Either a variable specified as:
 \itemize{
 \item a literal variable name (e.g., \code{column_name})
-\item a string vector with the variable name (e.g., \code{"column_name"})
+\item a string with the variable name (e.g., \code{"column_name"})
 \item a positive integer, giving the position counting from the left
 \item a negative integer, giving the position counting from the right.
 }
 
-or one of the following select-helpers: \code{starts_with("")}, \code{end_with("")} or
-\code{contains("")}. Multiple variables can also be extracts using a character
-vector of length > 1. The default returns the last column. If the special
-value \code{0} or \code{"row.names"} is given, the row names of the object (if any)
-are extracted.}
+or one of the following select-helpers: \code{starts_with("")}, \code{end_with("")},
+\code{contains("")}, or \code{"regex()"}. Multiple variables can also be extracted
+using a character vector of length > 1, or a numeric vector containing
+column indices. If the special value \code{0} or \code{"row.names"} is given, the
+row names of the object (if any) are extracted.}
 
 \item{...}{For use by future methods.}
 
