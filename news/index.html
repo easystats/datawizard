@@ -26,7 +26,6 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Data transformation</h6>
     <a class="dropdown-item" href="../articles/standardize_data.html">Data Standardization</a>
-    <a class="dropdown-item" href="../articles/demean.html">Analysing Longitudinal or Panel Data</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -61,10 +60,11 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0.9000" id="datawizard-0309000">datawizard 0.3.0.9000<a class="anchor" aria-label="anchor" href="#datawizard-0309000"></a></h2>
 <p>MAJOR CHANGES</p>
-<p>The following functions are now re-exported from <a href="https://easystats.github.io/insight/" class="external-link">insight</a> package: <code><a href="https://easystats.github.io/insight/reference/object_has_names.html" class="external-link">object_has_names()</a></code>, <code><a href="https://easystats.github.io/insight/reference/object_has_names.html" class="external-link">object_has_rownames()</a></code>, <code><a href="https://easystats.github.io/insight/reference/is_empty_object.html" class="external-link">is_empty_object()</a></code>, <code><a href="https://easystats.github.io/insight/reference/compact_list.html" class="external-link">compact_list()</a></code>, <code><a href="https://easystats.github.io/insight/reference/compact_character.html" class="external-link">compact_character()</a></code></p>
-<p>NEW FUNCTIONS</p>
+<ul><li><p>The following functions are now re-exported from <a href="https://easystats.github.io/insight/" class="external-link">insight</a> package: <code><a href="https://easystats.github.io/insight/reference/object_has_names.html" class="external-link">object_has_names()</a></code>, <code><a href="https://easystats.github.io/insight/reference/object_has_names.html" class="external-link">object_has_rownames()</a></code>, <code><a href="https://easystats.github.io/insight/reference/is_empty_object.html" class="external-link">is_empty_object()</a></code>, <code><a href="https://easystats.github.io/insight/reference/compact_list.html" class="external-link">compact_list()</a></code>, <code><a href="https://easystats.github.io/insight/reference/compact_character.html" class="external-link">compact_character()</a></code></p></li>
+<li><p>The vignette <em>Analysing Longitudinal or Panel Data</em> has now moved to <a href="https://easystats.github.io/parameters/articles/demean.html" class="external-link">parameters package</a>.</p></li>
+</ul><p>NEW FUNCTIONS</p>
 <ul><li>To convert rownames to a column, and vice-versa: <code><a href="../reference/rownames.html">rownames_as_column()</a></code> and <code><a href="../reference/rownames.html">column_as_rownames()</a></code> (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/80" class="external-link">#80</a>).</li>
-</ul><p>CHANGES</p>
+</ul><p>MINOR CHANGES</p>
 <ul><li><p><code><a href="../reference/data_match.html">data_match()</a></code> gains a <code>match</code> argument, to indicate with which logical operation matching results should be combined.</p></li>
 <li><p><code><a href="../reference/data_match.html">data_match()</a></code> gains a <code>as_data_frame</code> argument, to return the filtered data frame instead of the indices of filtered rows.</p></li>
 <li><p>Improved support for <em>labelled data</em> for many functions, i.e. returned data frame will preserve value and variable label attributes, where possible and applicable.</p></li>
@@ -116,7 +116,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="datawizard-020">datawizard 0.2.0<a class="anchor" aria-label="anchor" href="#datawizard-020"></a></h2><p class="text-muted">CRAN release: 2021-08-17</p>
 <ul><li><p>New function: <code><a href="../reference/visualisation_recipe.html">visualisation_recipe()</a></code>.</p></li>
-<li><p>The following function has now moved to <em>performance</em> package: <code><a href="https://easystats.github.io/performance/reference/check_multimodal.html" class="external-link">check_multimodal()</a></code>.</p></li>
+<li><p>The following function has now moved to <em>performance</em> package: <code>check_multimodal()</code>.</p></li>
 <li><p>Minor updates to documentation, including a new vignette about <code><a href="../reference/demean.html">demean()</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
