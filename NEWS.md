@@ -2,15 +2,17 @@
 
 MAJOR CHANGES
 
-The following functions are now re-exported from `{insight}` package:
+* The following functions are now re-exported from `{insight}` package:
 `object_has_names()`, `object_has_rownames()`, `is_empty_object()`,
 `compact_list()`, `compact_character()`
+
+* The vignette *Analysing Longitudinal or Panel Data* has now moved to [parameters package](https://easystats.github.io/parameters/articles/demean.html).
 
 NEW FUNCTIONS
 
   * To convert rownames to a column, and vice-versa: `rownames_as_column()` and `column_as_rownames()` (@etiennebacher, #80).
 
-CHANGES
+MINOR CHANGES
 
   * `data_match()` gains a `match` argument, to indicate with which logical
     operation matching results should be combined.
