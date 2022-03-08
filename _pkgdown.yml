@@ -92,4 +92,3 @@ articles:
     navbar: Data transformation
     contents:
     - standardize_data
-    - demean

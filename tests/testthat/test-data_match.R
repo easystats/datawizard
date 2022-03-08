@@ -1,3 +1,5 @@
+data(efc, package = "datawizard")
+
 test_that("data_match works as expected", {
   matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1))
   df1 <- mtcars[matching_rows, ]
@@ -10,24 +12,21 @@ test_that("data_match works as expected", {
   expect_equal(unique(df2$am), c(1, 0))
 })
 
+test_that("data_match works with missing data", {
+  skip_if_not_installed("poorman")
 
-if (require("poorman")) {
-  data(efc, package = "datawizard")
-  test_that("data_match works with missing data", {
-    # "OR" works
-    x1 <- length(data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "or"))
-    x2 <- nrow(poorman::filter(efc, c172code == 1 | e16sex == 2))
-    expect_equal(x1, x2)
+  # "OR" works
+  x1 <- length(data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "or"))
+  x2 <- nrow(poorman::filter(efc, c172code == 1 | e16sex == 2))
+  expect_equal(x1, x2)
 
-    # "AND" works
-    x1 <- length(data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "and"))
-    x2 <- nrow(poorman::filter(efc, c172code == 1, e16sex == 2))
-    expect_equal(x1, x2)
+  # "AND" works
+  x1 <- length(data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "and"))
+  x2 <- nrow(poorman::filter(efc, c172code == 1, e16sex == 2))
+  expect_equal(x1, x2)
 
-    # "NOT" works
-    x1 <- length(data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "not"))
-    x2 <- nrow(poorman::filter(efc, c172code != 1, e16sex != 2))
-    expect_equal(x1, x2)
-  })
-}
-
+  # "NOT" works
+  x1 <- length(data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "not"))
+  x2 <- nrow(poorman::filter(efc, c172code != 1, e16sex != 2))
+  expect_equal(x1, x2)
+})

@@ -85,8 +85,7 @@ data_to_long <- function(data,
                          rows_to = NULL,
                          ignore_case = FALSE,
                          ...,
-                         names_to = colnames_to
-                         ) {
+                         names_to = colnames_to) {
   if (inherits(data, "tbl_df")) {
     tbl_input <- TRUE
     data <- as.data.frame(data)

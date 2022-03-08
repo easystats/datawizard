@@ -9,15 +9,15 @@
 #' @param select 	Either a variable specified as:
 #'
 #'   - a literal variable name (e.g., `column_name`)
-#'   - a string vector with the variable name (e.g., `"column_name"`)
+#'   - a string with the variable name (e.g., `"column_name"`)
 #'   - a positive integer, giving the position counting from the left
 #'   - a negative integer, giving the position counting from the right.
 #'
-#'  or one of the following select-helpers: `starts_with("")`, `end_with("")` or
-#'  `contains("")`. Multiple variables can also be extracts using a character
-#'  vector of length > 1. The default returns the last column. If the special
-#'  value `0` or `"row.names"` is given, the row names of the object (if any)
-#'  are extracted.
+#'  or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
+#'  `contains("")`, or `"regex()"`. Multiple variables can also be extracted
+#'  using a character vector of length > 1, or a numeric vector containing
+#'  column indices. If the special value `0` or `"row.names"` is given, the
+#'  row names of the object (if any) are extracted.
 #' @param name An optional argument that specifies the column to be used as
 #'   names for for the vector after extraction.
 #'   Specified in the same way as `select`.
@@ -46,7 +46,7 @@
 #' \subsection{Extracting single variables (vectors)}{
 #' When `select` is the name of a single column, or when select only matches
 #' one column, a vector is returned. A single variable is also returned when
-#' `pull` is either `"first` or `"last"`. Setting `as_data_frame` to `TRUE`
+#' `extract` is either `"first` or `"last"`. Setting `as_data_frame` to `TRUE`
 #' overrides this behaviour and *always* returns a data frame.
 #' }
 #' \subsection{Extracting a data frame of variables}{
