@@ -45,9 +45,6 @@ column_as_rownames <- function(x, var = "rowname") {
   if (!is.character(var) & !is.numeric(var)) {
     stop("Argument 'var' must be of type character or numeric.")
   }
-  if (is.null(var)) {
-    var <- "rowname"
-  }
   if (is.character(var)) {
     if (!var %in% names(x)) {
       stop(paste0('Variable "', var, '" is not in the dataframe.'))
