@@ -27,11 +27,13 @@ test_that("data_reverse, labels preserved", {
   labels <- sapply(data_reverse(efc), function(i) attr(i, "label", exact = TRUE))
   expect_equal(
     labels,
-    c(c12hour = "average number of hours of care per week",
+    c(
+      c12hour = "average number of hours of care per week",
       e16sex = "elder's gender",
       e42dep = "elder's dependency",
       c172code = "carer's level of education",
-      neg_c_7 = "Negative impact with 7 items")
+      neg_c_7 = "Negative impact with 7 items"
+    )
   )
 })
 
@@ -43,7 +45,8 @@ test_that("data_merge, labels preserved", {
   labels <- sapply(data_merge(efc[c(1:2)], efc[c(3:4)], verbose = FALSE), function(i) attr(i, "label", exact = TRUE))
   expect_equal(
     labels,
-    c(c12hour = "average number of hours of care per week",
+    c(
+      c12hour = "average number of hours of care per week",
       e16sex = "elder's gender",
       e42dep = "elder's dependency",
       c172code = "carer's level of education"
@@ -144,7 +147,6 @@ test_that("data_rename, labels preserved", {
     labels,
     c(e16sex = "elder's gender", e42dep = "elder's dependency", neg_c_7 = "Negative impact with 7 items")
   )
-
 })
 
 

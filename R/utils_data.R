@@ -62,4 +62,3 @@ column_as_rownames <- function(x, var = "rowname") {
   x[[var]] <- NULL
   x
 }
-
