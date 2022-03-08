@@ -6,7 +6,6 @@
 #' head(data_remove(iris, starts_with("Sepal")))
 #' @export
 data_remove <- function(data, pattern, ignore_case = FALSE, verbose = TRUE, ...) {
-
   fixed <- TRUE
   # avoid conflicts
   conflicting_packages <- .conflicting_packages("poorman")

@@ -49,16 +49,18 @@ test_that("data_reshape works as expected - complex dataset", {
 
 
   long1 <- data_to_long(data,
-                        cols = starts_with("A"),
-                        colnames_to = "Item",
-                        values_to = "Score",
-                        rows_to = "Participant")
+    cols = starts_with("A"),
+    colnames_to = "Item",
+    values_to = "Score",
+    rows_to = "Participant"
+  )
 
   long2 <- data_to_long(data,
-                        cols = c("A1", "A2", "A3", "A4", "A5"),
-                        colnames_to = "Item",
-                        values_to = "Score",
-                        rows_to = "Participant")
+    cols = c("A1", "A2", "A3", "A4", "A5"),
+    colnames_to = "Item",
+    values_to = "Score",
+    rows_to = "Participant"
+  )
 
   expect_equal(unique(long1$Item), c("A1", "A2", "A3", "A4", "A5"))
   expect_equal(unique(long1$Score), c(2L, 4L, 3L, 5L, 6L, 1L, NA))
@@ -72,16 +74,18 @@ test_that("data_reshape works as expected - complex dataset", {
 
 
   long1 <- data_to_long(data,
-                        cols = starts_with("a"),
-                        colnames_to = "Item",
-                        values_to = "Score",
-                        rows_to = "Participant")
+    cols = starts_with("a"),
+    colnames_to = "Item",
+    values_to = "Score",
+    rows_to = "Participant"
+  )
 
   long2 <- data_to_long(data,
-                        cols = "age",
-                        colnames_to = "Item",
-                        values_to = "Score",
-                        rows_to = "Participant")
+    cols = "age",
+    colnames_to = "Item",
+    values_to = "Score",
+    rows_to = "Participant"
+  )
 
   expect_equal(ncol(long1), 30)
   expect_equal(nrow(long1), nrow(data))
@@ -92,17 +96,19 @@ test_that("data_reshape works as expected - complex dataset", {
   expect_equal(nrow(long1), nrow(long2))
 
   long1 <- data_to_long(data,
-                        cols = starts_with("a"),
-                        colnames_to = "Item",
-                        values_to = "Score",
-                        rows_to = "Participant",
-                        ignore_case = TRUE)
+    cols = starts_with("a"),
+    colnames_to = "Item",
+    values_to = "Score",
+    rows_to = "Participant",
+    ignore_case = TRUE
+  )
 
   long2 <- data_to_long(data,
-                        cols = c("A1", "A2", "A3", "A4", "A5", "age"),
-                        colnames_to = "Item",
-                        values_to = "Score",
-                        rows_to = "Participant")
+    cols = c("A1", "A2", "A3", "A4", "A5", "age"),
+    colnames_to = "Item",
+    values_to = "Score",
+    rows_to = "Participant"
+  )
 
   expect_equal(unique(long1$Item), c("A1", "A2", "A3", "A4", "A5", "age"))
   expect_equal(ncol(long1), 25)
@@ -115,17 +121,19 @@ test_that("data_reshape works as expected - complex dataset", {
 
 
   long1 <- data_to_long(data,
-                        cols = c(1:5, 28),
-                        colnames_to = "Item",
-                        values_to = "Score",
-                        rows_to = "Participant",
-                        ignore_case = TRUE)
+    cols = c(1:5, 28),
+    colnames_to = "Item",
+    values_to = "Score",
+    rows_to = "Participant",
+    ignore_case = TRUE
+  )
 
   long2 <- data_to_long(data,
-                        cols = c("A1", "A2", "A3", "A4", "A5", "age"),
-                        colnames_to = "Item",
-                        values_to = "Score",
-                        rows_to = "Participant")
+    cols = c("A1", "A2", "A3", "A4", "A5", "age"),
+    colnames_to = "Item",
+    values_to = "Score",
+    rows_to = "Participant"
+  )
 
   expect_equal(unique(long1$Item), c("A1", "A2", "A3", "A4", "A5", "age"))
   expect_equal(ncol(long1), 25)
@@ -135,5 +143,4 @@ test_that("data_reshape works as expected - complex dataset", {
   expect_equal(unique(long1$Score), unique(long2$Score))
   expect_equal(ncol(long1), ncol(long2))
   expect_equal(nrow(long1), nrow(long2))
-
 })

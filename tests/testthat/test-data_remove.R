@@ -72,7 +72,6 @@ test_that("data_remove works with NSE", {
     colnames(data_remove(iris, "species", ignore_case = TRUE)),
     c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
   )
-
 })
 
 
