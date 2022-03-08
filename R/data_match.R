@@ -37,7 +37,14 @@ data_match <- function(x, to, match = "and", as_data_frame = FALSE, ...) {
 
   # evaluate
   match <- match.arg(tolower(match), c("and", "&", "&&", "or", "|", "||", "!", "not"))
-  match <- switch(match, "&" = , "&&" = , "and" = "and", "!" = , "not" = "not", "or")
+  match <- switch(match,
+    "&" = ,
+    "&&" = ,
+    "and" = "and",
+    "!" = ,
+    "not" = "not",
+    "or"
+  )
 
   # sanity check
   shared_columns <- intersect(colnames(x), colnames(to))
