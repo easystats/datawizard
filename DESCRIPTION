@@ -42,9 +42,9 @@ Suggests:
     psych,
     rmarkdown,
     rstanarm,
+    see,
     spelling,
-    testthat (>= 3.0.0),
-    tidyr
+    testthat (>= 3.0.0)
 Remotes:
     easystats/insight
 VignetteBuilder: 
