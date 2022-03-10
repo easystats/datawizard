@@ -11,6 +11,8 @@ MAJOR CHANGES
 NEW FUNCTIONS
 
   * To convert rownames to a column, and vice-versa: `rownames_as_column()` and `column_as_rownames()` (@etiennebacher, #80).
+  
+  * `weighted_mean()`, `weighted_median()`, `weighted_sd()` and `weighted_mad()` for computing weighted centrality and dispersion.  
 
 MINOR CHANGES
 
