@@ -200,8 +200,10 @@
 
   if (scale == 0) {
     scale <- 1
-    warning(sprintf("%s is 0 - variable not standardized (only scaled).",
-                    if (robust) "MAD" else "SD"))
+    warning(sprintf(
+      "%s is 0 - variable not standardized (only scaled).",
+      if (robust) "MAD" else "SD"
+    ))
   }
 
   list(center = center, scale = scale)

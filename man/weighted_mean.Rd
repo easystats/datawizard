@@ -7,24 +7,24 @@
 \alias{weighted_mad}
 \title{Weighted Mean, Median, SD, and MAD}
 \usage{
-weighted_mean(x, w = NULL, verbose = TRUE, ...)
+weighted_mean(x, weights = NULL, verbose = TRUE, ...)
 
-weighted_median(x, w = NULL, verbose = TRUE, ...)
+weighted_median(x, weights = NULL, verbose = TRUE, ...)
 
-weighted_sd(x, w = NULL, verbose = TRUE, ...)
+weighted_sd(x, weights = NULL, verbose = TRUE, ...)
 
-weighted_mad(x, w = NULL, constant = 1.4826, verbose = TRUE, ...)
+weighted_mad(x, weights = NULL, constant = 1.4826, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{an object containing the values whose weighted mean is to be
     computed.}
 
-\item{w}{a numerical vector of weights the same length as \code{x} giving
-    the weights to use for elements of \code{x}.}
+\item{weights}{A numerical vector of weights the same length as \code{x} giving
+the weights to use for elements of \code{x}.}
 
-\item{verbose}{Show warning when \code{w} are negative?
+\item{verbose}{Show warning when \code{weights} are negative?
 
-If \code{w = NULL}, \code{x} is passed to the non-weighted function.}
+If \code{weights = NULL}, \code{x} is passed to the non-weighted function.}
 
 \item{...}{arguments to be passed to or from methods.}
 
@@ -36,7 +36,7 @@ Weighted Mean, Median, SD, and MAD
 \examples{
 ## GPA from Siegel 1994
 x <- c(3.7, 3.3, 3.5, 2.8)
-wt <- c(5,  5,  4,  1)/15
+wt <- c(5, 5, 4, 1) / 15
 
 weighted_mean(x, wt)
 weighted_median(x, wt)
