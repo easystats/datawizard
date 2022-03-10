@@ -23,6 +23,10 @@ MINOR CHANGES
   * Improved support for *labelled data* for many functions, i.e. returned
     data frame will preserve value and variable label attributes, where
     possible and applicable.
+    
+  * `data_rename()` now throws an error if `pattern = NULL` and if the length 
+  of `replacement` is not equal to the number of columns of `data`
+  (@etiennebacher, #99).
 
 BUG FIXES
 
