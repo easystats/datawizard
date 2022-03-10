@@ -58,6 +58,7 @@ reference:
       - kurtosis
       - smoothness
       - skewness
+      - weighted_mean
 
   - title: Data replacement and conversion
   - contents:
