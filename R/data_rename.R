@@ -48,6 +48,10 @@ data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, .
     pattern <- names(data)
   }
 
+  if (!is.character(pattern)) {
+    stop("Argument 'pattern' must be of type character.")
+  }
+
   # name columns 1, 2, 3 etc. if no replacement
   if (is.null(replacement)) {
     replacement <- paste0(1:length(pattern))

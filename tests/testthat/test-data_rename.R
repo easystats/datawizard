@@ -19,6 +19,17 @@ test_that("data_rename returns a dataframe", {
   expect_true(class(x) == "data.frame")
 })
 
+test_that("data_rename: pattern must be of type character", {
+  expect_error(
+    data_rename(test, pattern = 1),
+    regexp = "Argument 'pattern' must be of type character."
+  )
+  expect_error(
+    data_rename(test, pattern = TRUE),
+    regexp = "Argument 'pattern' must be of type character."
+  )
+})
+
 # replacement -------------
 
 test_that("data_rename uses indices when no replacement", {
