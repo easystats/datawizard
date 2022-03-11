@@ -50,7 +50,7 @@ data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, .
 
   # name columns 1, 2, 3 etc. if no replacement
   if (is.null(replacement)) {
-    replacement <- paste0("col", 1:length(pattern))
+    replacement <- paste0(1:length(pattern))
   }
 
   # if duplicated names in replacement, append ".2", ".3", etc. to duplicates
