@@ -25,10 +25,10 @@ MINOR CHANGES
     possible and applicable.
     
   * `data_rename()` doesn't use `pattern` anymore to rename the columns if
-  `replacement` is not provided (@etiennebacher).
+  `replacement` is not provided (@etiennebacher, #103).
   
   * `data_rename()` now adds a suffix to duplicated names in `replacement` 
-  (@etiennebacher).
+  (@etiennebacher, #103).
 
 BUG FIXES
 
