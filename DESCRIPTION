@@ -1,7 +1,7 @@
 Type: Package
 Package: datawizard
 Title: Easy Data Wrangling
-Version: 0.3.0.9005
+Version: 0.3.0.9006
 Authors@R: c(
     person("Dominique", "Makowski", , "dom.makowski@gmail.com", role = "aut",
            comment = c(ORCID = "0000-0001-5375-9967", Twitter = "@Dom_Makowski")),
@@ -12,7 +12,8 @@ Authors@R: c(
     person("Mattan S.", "Ben-Shachar", , "matanshm@post.bgu.ac.il", role = "aut",
            comment = c(ORCID = "0000-0002-4287-4801")),
     person("Brenton M.", "Wiernik", , "brenton@wiernik.org", role = "aut",
-           comment = c(ORCID = "0000-0001-9560-6336", Twitter = "@bmwiernik"))
+           comment = c(ORCID = "0000-0001-9560-6336", Twitter = "@bmwiernik")),
+    person("Etienne", "Bacher", , "etienne.bacher@protonmail.com", role = "ctb")
   )
 Maintainer: Indrajeet Patil <patilindrajeet.science@gmail.com>
 Description: A lightweight package to easily manipulate, clean, transform,
