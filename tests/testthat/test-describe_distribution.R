@@ -91,6 +91,8 @@ test_that("describe_distribution - list: works with basic list", {
   named <- describe_distribution(list(foo = mtcars$mpg, foo2 = mtcars$cyl))
   mix <- describe_distribution(list(foo = mtcars$mpg, mtcars$cyl))
 
+  expect_equal(dim(stored), c(2, 10))
+  expect_equal(round(stored$Mean), c(20, 6))
   expect_equal(dim(unnamed), c(2, 10))
   expect_equal(round(unnamed$Mean), c(20, 6))
   expect_equal(dim(named), c(2, 10))
@@ -111,7 +113,6 @@ test_that("describe_distribution - list: correctly handles variable names", {
   expect_equal(named$Variable, c("foo", "foo2"))
   expect_equal(mix$Variable, c("foo", "mtcars$cyl"))
 })
-
 
 test_that("describe_distribution - list: correctly handles missing values", {
   no_missing <- describe_distribution(list(mtcars$mpg, mtcars$cyl))
