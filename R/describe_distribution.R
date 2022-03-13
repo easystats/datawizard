@@ -24,7 +24,7 @@
 #'
 #' @details If `x` is a dataframe, only numeric variables are kept and will be displayed in the summary.
 #'
-#' If `x` is a list, the behavior is different whether `x` is a stored list. If `x` is not stored (for example, `describe_distribution(mylist)` where `mylist` was created before), artificial variable names are used in the summary (`Var_1`, `Var_2`, etc.).
+#' If `x` is a list, the behavior is different whether `x` is a stored list. If `x` is stored (for example, `describe_distribution(mylist)` where `mylist` was created before), artificial variable names are used in the summary (`Var_1`, `Var_2`, etc.). If `x` is an unstored list (for example, `describe_distribution(list(mtcars$mpg))`), then `"mtcars$mpg"` is used as variable name.
 #'
 #' @note There is also a
 #'   [`plot()`-method](https://easystats.github.io/see/articles/parameters.html)
@@ -38,6 +38,7 @@
 #' data(iris)
 #' describe_distribution(iris)
 #' describe_distribution(iris, include_factors = TRUE, quartiles = TRUE)
+#' describe_distribution(list(mtcars$mpg, mtcars$cyl))
 #' @export
 describe_distribution <- function(x, ...) {
   UseMethod("describe_distribution")
