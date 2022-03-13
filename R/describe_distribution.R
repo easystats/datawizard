@@ -3,7 +3,7 @@
 #' This function describes a distribution by a set of indices (e.g., measures of
 #' centrality, dispersion, range, skewness, kurtosis).
 #'
-#' @param x A numeric vector, a dataframe, or a list. See `Details`.
+#' @param x A numeric vector, a character vector, a dataframe, or a list. See `Details`.
 #' @param range Return the range (min and max).
 #' @param quartiles Return the first and third quartiles (25th and 75pth
 #'   percentiles).
