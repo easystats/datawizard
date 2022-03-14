@@ -23,6 +23,8 @@ MINOR CHANGES
   * Improved support for *labelled data* for many functions, i.e. returned
     data frame will preserve value and variable label attributes, where
     possible and applicable.
+    
+  * `describe_distribution()` now works with lists (@etiennebacher, #105).
 
 BUG FIXES
 
