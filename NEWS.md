@@ -16,6 +16,15 @@ NEW FUNCTIONS
 
 MINOR CHANGES
 
+  * The `select` argument in several functions (like `data_remove()`, 
+    `data_findcols()`, or  `data_extract()`) now allow the use of select-helpers
+    for selecting variables based on specific patterns.
+
+  * `data_extract()` gains new arguments to allow type-safe return values,
+    i.e. *always* return a vector *or* a data frame. Thus, `data_extract()` 
+    can now be used to select multiple variables or pull a single variable
+    from data frames.
+
   * `data_match()` gains a `match` argument, to indicate with which logical
     operation matching results should be combined.
 
