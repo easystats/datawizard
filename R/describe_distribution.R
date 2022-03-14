@@ -3,7 +3,8 @@
 #' This function describes a distribution by a set of indices (e.g., measures of
 #' centrality, dispersion, range, skewness, kurtosis).
 #'
-#' @param x A numeric vector, a character vector, a dataframe, or a list. See `Details`.
+#' @param x A numeric vector, a character vector, a dataframe, or a list. See
+#' `Details`.
 #' @param range Return the range (min and max).
 #' @param quartiles Return the first and third quartiles (25th and 75pth
 #'   percentiles).
@@ -24,7 +25,12 @@
 #'
 #' @details If `x` is a dataframe, only numeric variables are kept and will be displayed in the summary.
 #'
-#' If `x` is a list, the behavior is different whether `x` is a stored list. If `x` is stored (for example, `describe_distribution(mylist)` where `mylist` was created before), artificial variable names are used in the summary (`Var_1`, `Var_2`, etc.). If `x` is an unstored list (for example, `describe_distribution(list(mtcars$mpg))`), then `"mtcars$mpg"` is used as variable name.
+#' If `x` is a list, the behavior is different whether `x` is a stored list. If
+#' `x` is stored (for example, `describe_distribution(mylist)` where `mylist`
+#' was created before), artificial variable names are used in the summary
+#' (`Var_1`, `Var_2`, etc.). If `x` is an unstored list (for example,
+#' `describe_distribution(list(mtcars$mpg))`), then `"mtcars$mpg"` is used as
+#' variable name.
 #'
 #' @note There is also a
 #'   [`plot()`-method](https://easystats.github.io/see/articles/parameters.html)
