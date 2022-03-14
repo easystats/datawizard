@@ -69,6 +69,8 @@
 <ul><li><p><code><a href="../reference/data_match.html">data_match()</a></code> gains a <code>match</code> argument, to indicate with which logical operation matching results should be combined.</p></li>
 <li><p><code><a href="../reference/data_match.html">data_match()</a></code> gains a <code>as_data_frame</code> argument, to return the filtered data frame instead of the indices of filtered rows.</p></li>
 <li><p>Improved support for <em>labelled data</em> for many functions, i.e. returned data frame will preserve value and variable label attributes, where possible and applicable.</p></li>
+<li><p><code><a href="../reference/data_rename.html">data_rename()</a></code> doesn’t use <code>pattern</code> anymore to rename the columns if <code>replacement</code> is not provided (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/103" class="external-link">#103</a>).</p></li>
+<li><p><code><a href="../reference/data_rename.html">data_rename()</a></code> now adds a suffix to duplicated names in <code>replacement</code> (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/103" class="external-link">#103</a>).</p></li>
 </ul><p>BUG FIXES</p>
 <ul><li><p><code><a href="../reference/convert_data_to_numeric.html">data_to_numeric()</a></code> produced wrong results for factors when <code>dummy_factors = TRUE</code> and factor contained missing values.</p></li>
 <li><p><code><a href="../reference/data_match.html">data_match()</a></code> produced wrong results when data contained missing values.</p></li>
