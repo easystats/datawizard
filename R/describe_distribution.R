@@ -66,16 +66,33 @@ describe_distribution.list <- function(x,
                                        verbose = TRUE,
                                        ...) {
 
+  factor_el <- which(sapply(x, is.factor))
+  num_el <- which(sapply(x, is.numeric))
+
   # get elements names as is
   # ex: list(mtcars$mpg, mtcars$cyl) -> c("mtcars$mpg", "mtcars$cyl")
   nm <- sapply(sys.call()[[2]], deparse)[-1]
 
+  if (!isTRUE(include_factors)) {
+    x <- x[num_el]
+    if (length(nm) != 0) {
+      nm <- nm[num_el]
+    }
+  } else {
+    x <- x[c(num_el, factor_el)]
+    if (length(nm) != 0) {
+      nm <- nm[c(num_el, factor_el)]
+    }
+  }
+
   # Not possible to obtain elements names if they are stored in
   # an object
   if (length(nm) == 0) {
-    nm <- paste0("Var_", 1:length(x))
+    nm <- paste0("Var_", seq_along(x))
   }
 
+  # The function currently doesn't support descriptive summaries for character
+  # or factor types.
   out <- do.call(rbind, lapply(x, function(i) {
     if ((include_factors && is.factor(i)) || (!is.character(i) && !is.factor(i))) {
       describe_distribution(
@@ -352,6 +369,9 @@ describe_distribution.data.frame <- function(x,
                                              threshold = .1,
                                              verbose = TRUE,
                                              ...) {
+
+  # The function currently doesn't support descriptive summaries for character
+  # or factor types.
   out <- do.call(rbind, lapply(x, function(i) {
     if ((include_factors && is.factor(i)) || (!is.character(i) && !is.factor(i))) {
       describe_distribution(

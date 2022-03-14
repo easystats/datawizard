@@ -101,6 +101,28 @@ test_that("describe_distribution - list: works with basic list", {
   expect_equal(round(mix$Mean), c(20, 6))
 })
 
+test_that("describe_distribution - list: works with include_factors", {
+  x1 <- describe_distribution(list(mtcars$mpg, factor(mtcars$cyl)))
+  y <- describe_distribution(list(mtcars$mpg))
+  expect_identical(x1, y)
+
+  x2 <- describe_distribution(list(mtcars$mpg, factor(mtcars$cyl)),
+                              include_factors = TRUE)
+  expect_equal(dim(x2), c(2, 10))
+  expect_equal(x2$Variable, c("mtcars$mpg", "factor(mtcars$cyl)"))
+
+  x3 <- describe_distribution(list(mtcars$mpg, foo = factor(mtcars$cyl)),
+                              include_factors = TRUE)
+  expect_equal(dim(x3), c(2, 10))
+  expect_equal(x3$Variable, c("mtcars$mpg", "foo"))
+})
+
+test_that("describe_distribution - list: correctly removes character elements", {
+  x <- describe_distribution(list(mtcars$mpg, "something"))
+  y <- describe_distribution(list(mtcars$mpg))
+  expect_identical(x, y)
+})
+
 test_that("describe_distribution - list: correctly handles variable names", {
   x <- list(mtcars$mpg, mtcars$cyl)
   stored <- describe_distribution(x)
