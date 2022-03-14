@@ -71,7 +71,7 @@ describe_distribution.list <- function(x,
 
   # get elements names as is
   # ex: list(mtcars$mpg, mtcars$cyl) -> c("mtcars$mpg", "mtcars$cyl")
-  nm <- sapply(sys.call()[[2]], deparse)[-1]
+  nm <- sapply(sys.call()[[2]], .safe_deparse)[-1]
 
   if (!isTRUE(include_factors)) {
     x <- x[num_el]
