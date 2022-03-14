@@ -10,7 +10,9 @@ MAJOR CHANGES
 
 NEW FUNCTIONS
 
-  * To convert rownames to a column, and vice-versa: `rownames_as_column()` and `column_as_rownames()` (@etiennebacher, #80).
+  * To convert rownames to a column, and *vice versa*: `rownames_as_column()` and `column_as_rownames()` (@etiennebacher, #80).
+  
+  * For computing weighted centrality measures and dispersion: `weighted_mean()`, `weighted_median()`, `weighted_sd()` and `weighted_mad()` .
 
 MINOR CHANGES
 
@@ -25,6 +27,12 @@ MINOR CHANGES
     possible and applicable.
     
   * `describe_distribution()` now works with lists (@etiennebacher, #105).
+
+  * `data_rename()` doesn't use `pattern` anymore to rename the columns if
+  `replacement` is not provided (@etiennebacher, #103).
+  
+  * `data_rename()` now adds a suffix to duplicated names in `replacement` 
+  (@etiennebacher, #103).
 
 BUG FIXES
 

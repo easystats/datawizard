@@ -5,7 +5,10 @@
 #' head(data_remove(iris, "Sepal.Length"))
 #' head(data_remove(iris, starts_with("Sepal")))
 #' @export
-data_remove <- function(data, pattern, ignore_case = FALSE, verbose = TRUE, ...) {
+data_remove <- function(data, pattern, ignore_case = FALSE, verbose = FALSE, ...) {
+
+  ## TODO set verbose = TRUE by default in a later update?
+
   fixed <- TRUE
   # avoid conflicts
   conflicting_packages <- .conflicting_packages("poorman")

@@ -43,29 +43,48 @@
 #' @export
 data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, ...) {
 
-  # sanity checks
-  if (is.null(replacement) && is.null(pattern)) {
-    names(data) <- c(1:ncol(data))
-    return(data)
+  # change all names if no pattern specified
+  if (is.null(pattern)) {
+    pattern <- names(data)
   }
 
-  if (is.null(replacement) && !is.null(pattern)) {
-    names(data) <- pattern
-    return(data)
+  if (!is.character(pattern)) {
+    stop("Argument 'pattern' must be of type character.")
   }
 
-  if (!is.null(replacement) && is.null(pattern)) {
-    names(data) <- replacement
-    return(data)
+  # name columns 1, 2, 3 etc. if no replacement
+  if (is.null(replacement)) {
+    replacement <- paste0(1:length(pattern))
   }
 
+  # if duplicated names in replacement, append ".2", ".3", etc. to duplicates
+  # ex: c("foo", "foo") -> c("foo", "foo.2")
+  if (any(duplicated(replacement))) {
+    dup <- as.data.frame(table(replacement))
+    dup <- dup[dup$Freq > 1,]
+    for (i in dup$replacement) {
+      to_replace <- which(replacement == i)[-1]
+      new_replacement <- paste0(i, ".", 1+1:length(to_replace))
+      replacement[to_replace] <- new_replacement
+    }
+  }
 
-  if (length(pattern) != length(replacement)) {
-    stop("The 'replacement' names must be of the same length than the variable names.")
+  if (length(replacement) > length(pattern)) {
+    message(insight::format_message(
+      paste0("There are more names in 'replacement' than in 'pattern'. The last ",
+             length(replacement) - length(pattern), " names of 'replacement' are not used."))
+    )
+  } else if (length(replacement) < length(pattern)) {
+    message(insight::format_message(
+      paste0("There are more names in 'pattern' than in 'replacement'. The last ",
+             length(pattern) - length(replacement), " names of 'pattern' are not modified.")
+    ))
   }
 
   for (i in 1:length(pattern)) {
-    data <- .data_rename(data, pattern[i], replacement[i], safe)
+    if (!is.na(replacement[i])) {
+      data <- .data_rename(data, pattern[i], replacement[i], safe)
+    }
   }
 
   data

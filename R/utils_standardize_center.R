@@ -191,12 +191,21 @@
     center <- .center
     scale <- .scale
   } else if (robust) {
-    center <- .median(reference, weights)
-    scale <- .mad(reference, weights)
+    center <- weighted_median(reference, weights)
+    scale <- weighted_mad(reference, weights)
   } else {
-    center <- .mean(reference, weights)
-    scale <- .sd(reference, weights)
+    center <- weighted_mean(reference, weights)
+    scale <- weighted_sd(reference, weights)
   }
+
+  if (scale == 0) {
+    scale <- 1
+    warning(sprintf(
+      "%s is 0 - variable not standardized (only scaled).",
+      if (robust) "MAD" else "SD"
+    ))
+  }
+
   list(center = center, scale = scale)
 }
 
@@ -284,94 +293,6 @@
   }
 
   as.numeric(as.character(x))
-}
-
-
-
-## own implementation of mean/median/mad/sd ----
-
-.mean <- function(x, weights = NULL, verbose = TRUE, ...) {
-  if (!.are_weights(weights)) {
-    return(mean(x, na.rm = TRUE))
-  }
-
-  if (!all(weights > 0, na.rm = TRUE)) {
-    if (isTRUE(verbose)) {
-      warning("Some weights were negative. Weighting not carried out.", call. = FALSE)
-    }
-    return(mean(x, na.rm = TRUE))
-  }
-
-  stats::weighted.mean(x, weights, na.rm = TRUE)
-}
-
-
-.median <- function(x, weights = NULL, verbose = TRUE, ...) {
-  # From spatstat + wiki
-  if (!.are_weights(weights)) {
-    return(stats::median(x, na.rm = TRUE))
-  }
-
-  if (!all(weights > 0, na.rm = TRUE)) {
-    if (isTRUE(verbose)) {
-      warning("Some weights were negative. Weighting not carried out.", call. = FALSE)
-    }
-    return(stats::median(x, na.rm = TRUE))
-  }
-
-  oo <- order(x)
-  x <- x[oo]
-  weights <- weights[oo]
-  Fx <- cumsum(weights) / sum(weights)
-
-  lefties <- which(Fx <= 0.5)
-  left <- max(lefties)
-  if (length(lefties) == 0) {
-    result <- x[1]
-  } else if (left == length(x)) {
-    result <- x[length(x)]
-  } else {
-    result <- x[left]
-
-    if (!(Fx[left - 1] < 0.5 && 1 - Fx[left] < 0.5)) {
-      right <- left + 1
-      y <- x[left] * Fx[left] + x[right] * Fx[right]
-      if (is.finite(y)) result <- y
-    }
-  }
-
-  result
-}
-
-# For standardize_info ----------------------------------------------------
-
-.sd <- function(x, weights = NULL) {
-  # from cov.wt
-  if (!.are_weights(weights)) {
-    return(stats::sd(x, na.rm = TRUE))
-  }
-
-  stopifnot(all(weights > 0, na.rm = TRUE))
-
-  weights1 <- weights / sum(weights)
-  center <- sum(weights1 * x)
-  xc <- sqrt(weights1) * (x - center)
-  var <- (t(xc) %*% xc) / (1 - sum(weights1^2))
-  sqrt(as.vector(var))
-}
-
-
-.mad <- function(x, weights = NULL, constant = 1.4826) {
-  # From matrixStats
-  if (!.are_weights(weights)) {
-    return(stats::mad(x, na.rm = TRUE))
-  }
-
-  stopifnot(all(weights > 0, na.rm = TRUE))
-
-  center <- .median(x, weights = weights)
-  x <- abs(x - center)
-  constant * .median(x, weights = weights)
 }
 
 
