@@ -2,12 +2,29 @@
 % Please edit documentation in R/describe_distribution.R
 \name{describe_distribution}
 \alias{describe_distribution}
+\alias{describe_distribution.list}
 \alias{describe_distribution.numeric}
 \alias{describe_distribution.factor}
+\alias{describe_distribution.character}
 \alias{describe_distribution.data.frame}
 \title{Describe a distribution}
 \usage{
 describe_distribution(x, ...)
+
+\method{describe_distribution}{list}(
+  x,
+  centrality = "mean",
+  dispersion = TRUE,
+  iqr = TRUE,
+  range = TRUE,
+  quartiles = FALSE,
+  ci = NULL,
+  include_factors = FALSE,
+  iterations = 100,
+  threshold = 0.1,
+  verbose = TRUE,
+  ...
+)
 
 \method{describe_distribution}{numeric}(
   x,
@@ -25,6 +42,8 @@ describe_distribution(x, ...)
 
 \method{describe_distribution}{factor}(x, dispersion = TRUE, range = TRUE, verbose = TRUE, ...)
 
+\method{describe_distribution}{character}(x, dispersion = TRUE, range = TRUE, verbose = TRUE, ...)
+
 \method{describe_distribution}{data.frame}(
   x,
   centrality = "mean",
@@ -41,7 +60,8 @@ describe_distribution(x, ...)
 )
 }
 \arguments{
-\item{x}{A numeric vector.}
+\item{x}{A numeric vector, a character vector, a dataframe, or a list. See
+\code{Details}.}
 
 \item{...}{Additional arguments to be passed to or from methods.}
 
@@ -63,16 +83,16 @@ are based on bootstrap replicates (see \code{iterations}). If
 \code{centrality = "all"}, the bootstrapped confidence interval refers to
 the first centrality index (which is typically the median).}
 
+\item{include_factors}{Logical, if \code{TRUE}, factors are included in the
+output, however, only columns for range (first and last factor levels) as
+well as n and missing will contain information.}
+
 \item{iterations}{The number of bootstrap replicates for computing confidence
 intervals. Only applies when \code{ci} is not \code{NULL}.}
 
 \item{threshold}{For \code{centrality = "trimmed"} (i.e. trimmed mean), indicates the fraction (0 to 0.5) of observations to be trimmed from each end of the vector before the mean is computed.}
 
 \item{verbose}{Toggle warnings and messages.}
-
-\item{include_factors}{Logical, if \code{TRUE}, factors are included in the
-output, however, only columns for range (first and last factor levels) as
-well as n and missing will contain information.}
 }
 \value{
 A data frame with columns that describe the properties of the variables.
@@ -80,6 +100,16 @@ A data frame with columns that describe the properties of the variables.
 \description{
 This function describes a distribution by a set of indices (e.g., measures of
 centrality, dispersion, range, skewness, kurtosis).
+}
+\details{
+If \code{x} is a dataframe, only numeric variables are kept and will be displayed in the summary.
+
+If \code{x} is a list, the behavior is different whether \code{x} is a stored list. If
+\code{x} is stored (for example, \code{describe_distribution(mylist)} where \code{mylist}
+was created before), artificial variable names are used in the summary
+(\code{Var_1}, \code{Var_2}, etc.). If \code{x} is an unstored list (for example,
+\code{describe_distribution(list(mtcars$mpg))}), then \code{"mtcars$mpg"} is used as
+variable name.
 }
 \note{
 There is also a
@@ -93,4 +123,5 @@ describe_distribution(rnorm(100))
 data(iris)
 describe_distribution(iris)
 describe_distribution(iris, include_factors = TRUE, quartiles = TRUE)
+describe_distribution(list(mtcars$mpg, mtcars$cyl))
 }

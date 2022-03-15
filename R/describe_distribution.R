@@ -3,7 +3,8 @@
 #' This function describes a distribution by a set of indices (e.g., measures of
 #' centrality, dispersion, range, skewness, kurtosis).
 #'
-#' @param x A numeric vector.
+#' @param x A numeric vector, a character vector, a dataframe, or a list. See
+#' `Details`.
 #' @param range Return the range (min and max).
 #' @param quartiles Return the first and third quartiles (25th and 75pth
 #'   percentiles).
@@ -22,6 +23,15 @@
 #' @param verbose Toggle warnings and messages.
 #' @inheritParams bayestestR::point_estimate
 #'
+#' @details If `x` is a dataframe, only numeric variables are kept and will be displayed in the summary.
+#'
+#' If `x` is a list, the behavior is different whether `x` is a stored list. If
+#' `x` is stored (for example, `describe_distribution(mylist)` where `mylist`
+#' was created before), artificial variable names are used in the summary
+#' (`Var_1`, `Var_2`, etc.). If `x` is an unstored list (for example,
+#' `describe_distribution(list(mtcars$mpg))`), then `"mtcars$mpg"` is used as
+#' variable name.
+#'
 #' @note There is also a
 #'   [`plot()`-method](https://easystats.github.io/see/articles/parameters.html)
 #'   implemented in the
@@ -34,14 +44,96 @@
 #' data(iris)
 #' describe_distribution(iris)
 #' describe_distribution(iris, include_factors = TRUE, quartiles = TRUE)
+#' describe_distribution(list(mtcars$mpg, mtcars$cyl))
 #' @export
 describe_distribution <- function(x, ...) {
   UseMethod("describe_distribution")
 }
 
+#' @rdname describe_distribution
+#' @export
+
+describe_distribution.list <- function(x,
+                                       centrality = "mean",
+                                       dispersion = TRUE,
+                                       iqr = TRUE,
+                                       range = TRUE,
+                                       quartiles = FALSE,
+                                       ci = NULL,
+                                       include_factors = FALSE,
+                                       iterations = 100,
+                                       threshold = .1,
+                                       verbose = TRUE,
+                                       ...) {
+
+  factor_el <- which(sapply(x, is.factor))
+  num_el <- which(sapply(x, is.numeric))
+
+  # get elements names as is
+  # ex: list(mtcars$mpg, mtcars$cyl) -> c("mtcars$mpg", "mtcars$cyl")
+  nm <- sapply(sys.call()[[2]], insight::safe_deparse)[-1]
+
+  if (!isTRUE(include_factors)) {
+    x <- x[num_el]
+    if (length(nm) != 0) {
+      nm <- nm[num_el]
+    }
+  } else {
+    x <- x[c(num_el, factor_el)]
+    if (length(nm) != 0) {
+      nm <- nm[c(num_el, factor_el)]
+    }
+  }
+
+  # Not possible to obtain elements names if they are stored in
+  # an object
+  if (length(nm) == 0) {
+    nm <- paste0("Var_", seq_along(x))
+  }
+
+  # The function currently doesn't support descriptive summaries for character
+  # or factor types.
+  out <- do.call(rbind, lapply(x, function(i) {
+    if ((include_factors && is.factor(i)) || (!is.character(i) && !is.factor(i))) {
+      describe_distribution(
+        i,
+        centrality = centrality,
+        dispersion = dispersion,
+        iqr = iqr,
+        range = range,
+        quartiles = quartiles,
+        ci = ci,
+        iterations = iterations,
+        threshold = threshold,
+        verbose = verbose
+      )
+    }
+  }))
+
+
+  if (!is.null(names(x))) {
+    empty_names <- which(names(x) == "")
+    new_names <- names(x)
+    new_names[empty_names] <- nm[empty_names]
+  } else {
+    new_names <- nm
+  }
+
+  out$Variable <- new_names
+  row.names(out) <- NULL
+  out <- out[c("Variable", setdiff(colnames(out), "Variable"))]
+
+  class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
+  attr(out, "object_name") <- deparse(substitute(x), width.cutoff = 500)
+  attr(out, "ci") <- ci
+  attr(out, "threshold") <- threshold
+  if (centrality == "all") attr(out, "first_centrality") <- colnames(out)[2]
+  out
+}
 
 #' @rdname describe_distribution
 #' @export
+
 describe_distribution.numeric <- function(x,
                                           centrality = "mean",
                                           dispersion = TRUE,
@@ -53,6 +145,8 @@ describe_distribution.numeric <- function(x,
                                           threshold = .1,
                                           verbose = TRUE,
                                           ...) {
+
+
   out <- data.frame(.temp = 0)
 
   # Missing
@@ -198,7 +292,7 @@ describe_distribution.factor <- function(x,
 }
 
 
-
+#' @rdname describe_distribution
 #' @export
 describe_distribution.character <- function(x,
                                             dispersion = TRUE,
@@ -275,6 +369,9 @@ describe_distribution.data.frame <- function(x,
                                              threshold = .1,
                                              verbose = TRUE,
                                              ...) {
+
+  # The function currently doesn't support descriptive summaries for character
+  # or factor types.
   out <- do.call(rbind, lapply(x, function(i) {
     if ((include_factors && is.factor(i)) || (!is.character(i) && !is.factor(i))) {
       describe_distribution(

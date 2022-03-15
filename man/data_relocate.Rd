@@ -21,7 +21,7 @@ data_relocate(data, cols, before = NULL, after = NULL, safe = TRUE, ...)
 
 data_reorder(data, cols, safe = TRUE, ...)
 
-data_remove(data, pattern, ignore_case = FALSE, verbose = TRUE, ...)
+data_remove(data, pattern, ignore_case = FALSE, verbose = FALSE, ...)
 }
 \arguments{
 \item{data}{A data frame to pivot.}

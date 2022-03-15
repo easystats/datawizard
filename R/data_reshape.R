@@ -111,7 +111,7 @@ data_to_long <- function(data,
   # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
   # so we can use grepl()
   if (is.null(cols)) {
-    evaluated_pattern <- .evaluate_pattern(.safe_deparse(p), data, ignore_case)
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), data, ignore_case)
     cols <- evaluated_pattern$pattern
     fixed <- evaluated_pattern$fixed
   }

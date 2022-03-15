@@ -261,7 +261,7 @@ degroup <- function(x,
 
   if (inherits(select, "formula")) {
     # formula to character, remove "~", split at "+"
-    select <- trimws(unlist(strsplit(gsub("~", "", .safe_deparse(select), fixed = TRUE), "+", fixed = TRUE)))
+    select <- trimws(unlist(strsplit(gsub("~", "", insight::safe_deparse(select), fixed = TRUE), "+", fixed = TRUE)))
   }
 
   if (inherits(group, "formula")) {
@@ -400,19 +400,4 @@ degroup <- function(x,
 #' @export
 detrend <- degroup
 
-# helper ------------------
 
-.mode <- function(x) {
-  uniqv <- unique(x)
-  tab <- tabulate(match(x, uniqv))
-  idx <- which.max(tab)
-  uniqv[idx]
-}
-
-#' @keywords internal
-.trim <- function(x) gsub("^\\s+|\\s+$", "", x)
-
-#' @keywords internal
-.safe_deparse <- function(string) {
-  paste0(sapply(deparse(string, width.cutoff = 500), .trim, simplify = TRUE), collapse = " ")
-}
