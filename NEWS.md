@@ -35,6 +35,8 @@ MINOR CHANGES
     data frame will preserve value and variable label attributes, where
     possible and applicable.
     
+  * `describe_distribution()` now works with lists (@etiennebacher, #105).
+
   * `data_rename()` doesn't use `pattern` anymore to rename the columns if
   `replacement` is not provided (@etiennebacher, #103).
   
