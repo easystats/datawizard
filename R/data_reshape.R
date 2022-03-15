@@ -162,7 +162,18 @@ data_to_long <- function(data,
 
   # Cleaning --------------------------
   # Sort the dataframe (to match pivot_longer's output)
-  long <- long[order(long[["_Row"]], long[[colnames_to]]), ]
+  to_order <- paste(
+    paste0('long[["', colnames_to,'"]]'),
+    collapse = ", "
+  )
+  long <- long[eval(parse(text = paste0(
+    'order(long[["_Row"]],',
+    to_order,
+    ')'
+  ))), ]
+
+
+
 
   # Remove or rename the row index
   if (is.null(rows_to)) {
@@ -172,7 +183,10 @@ data_to_long <- function(data,
   }
 
   # Re-insert col names as levels
-  long[[colnames_to]] <- cols[long[[colnames_to]]]
+  for (i in seq_along(colnames_to)) {
+    long[[colnames_to[i]]] <- cols[long[[colnames_to[i]]]]
+  }
+
 
   # Reset row names
   row.names(long) <- NULL
