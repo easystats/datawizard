@@ -162,15 +162,7 @@ data_to_long <- function(data,
 
   # Cleaning --------------------------
   # Sort the dataframe (to match pivot_longer's output)
-  to_order <- paste(
-    paste0('long[["', colnames_to,'"]]'),
-    collapse = ", "
-  )
-  long <- long[eval(parse(text = paste0(
-    'order(long[["_Row"]],',
-    to_order,
-    ')'
-  ))), ]
+  long <- long[order(long[["_Row"]], long[[colnames_to]]), ]
 
 
 
