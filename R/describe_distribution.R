@@ -65,7 +65,6 @@ describe_distribution.list <- function(x,
                                        threshold = .1,
                                        verbose = TRUE,
                                        ...) {
-
   factor_el <- which(sapply(x, is.factor))
   num_el <- which(sapply(x, is.numeric))
 
@@ -145,8 +144,6 @@ describe_distribution.numeric <- function(x,
                                           threshold = .1,
                                           verbose = TRUE,
                                           ...) {
-
-
   out <- data.frame(.temp = 0)
 
   # Missing

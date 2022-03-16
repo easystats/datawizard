@@ -57,7 +57,7 @@ test_that("data_reverse: arg 'select' works with formula", {
     y = c(3, 8, 2, 5, 1)
   )
   expect_equal(
-    data_reverse(test, select = ~ x),
+    data_reverse(test, select = ~x),
     data.frame(
       x = 5:1,
       y = c(3, 8, 2, 5, 1)
@@ -78,7 +78,7 @@ test_that("data_reverse: arg 'exclude' works with formula", {
     y = c(3, 8, 2, 5, 1)
   )
   expect_equal(
-    data_reverse(test, exclude = ~ x),
+    data_reverse(test, exclude = ~x),
     data.frame(
       x = 1:5,
       y = c(6, 1, 7, 4, 8)
@@ -212,7 +212,7 @@ test_that("reverse_scale: arg 'select' works with formula", {
     y = c(3, 8, 2, 5, 1)
   )
   expect_equal(
-    reverse_scale(test, select = ~ x),
+    reverse_scale(test, select = ~x),
     data.frame(
       x = 5:1,
       y = c(3, 8, 2, 5, 1)
@@ -233,7 +233,7 @@ test_that("reverse_scale: arg 'exclude' works with formula", {
     y = c(3, 8, 2, 5, 1)
   )
   expect_equal(
-    reverse_scale(test, exclude = ~ x),
+    reverse_scale(test, exclude = ~x),
     data.frame(
       x = 1:5,
       y = c(6, 1, 7, 4, 8)

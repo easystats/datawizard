@@ -5,4 +5,3 @@
   idx <- which.max(tab)
   uniqv[idx]
 }
-
