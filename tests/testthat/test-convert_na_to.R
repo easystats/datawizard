@@ -23,6 +23,14 @@ test_that("convert_na_to - numeric: arg 'replacement' can only be numeric", {
   )
 })
 
+test_that("convert_na_to - numeric: arg 'replacement' must be of length one", {
+  expect_warning(
+    convert_na_to(c(1, 2, 3, NA), replacement = c(1, 2)),
+    regexp = "`replacement` needs to be of length one."
+  )
+})
+
+
 test_that("convert_na_to - numeric: returns original vector if 'replacement' not good", {
   expect_equal(
     convert_na_to(c(1, 2, 3, NA), replacement = "a", verbose = FALSE),
@@ -60,6 +68,13 @@ test_that("convert_na_to - character: arg 'replacement' can only be character", 
   )
 })
 
+test_that("convert_na_to - numeric: arg 'replacement' must be of length one", {
+  expect_warning(
+    convert_na_to(c("a", "b", "c", NA), replacement = c("d", "e")),
+    regexp = "`replacement` needs to be of length one."
+  )
+})
+
 test_that("convert_na_to - character: returns original vector if 'replacement' not good", {
   expect_equal(
     convert_na_to(c("a", "b", "c", NA), replacement = 1, verbose = FALSE),
@@ -77,27 +92,27 @@ test_that("convert_na_to - character: returns original vector if 'replacement' n
 
 # factor --------------------------
 
-test_that("convert_na_to - factor: works when 'replacement' is numeric ", {
-  x <- convert_na_to(factor(c(1, 2, 3, NA)), replacement = 4)
-  expect_equal(
-    x,
-    factor(1:4)
-  )
-  expect_equal(levels(x), as.character(1:4))
-  expect_equal(
-    convert_na_to(factor(c(1, 2, 3, NA)), replacement = NULL, verbose = FALSE),
-    factor(c(1, 2, 3, NA))
-  )
-})
-
-test_that("convert_na_to - factor: works when 'replacement' is character", {
-  x <- convert_na_to(factor(c(1, 2, 3, NA)), replacement = "d")
-  expect_equal(
-    x,
-    factor(c(1:3, "d"))
-  )
-  expect_equal(levels(x), as.character(c(1:3, "d")))
-})
+# test_that("convert_na_to - factor: works when 'replacement' is numeric ", {
+#   x <- convert_na_to(factor(c(1, 2, 3, NA)), replacement = 4)
+#   expect_equal(
+#     x,
+#     factor(1:4)
+#   )
+#   expect_equal(levels(x), as.character(1:4))
+#   expect_equal(
+#     convert_na_to(factor(c(1, 2, 3, NA)), replacement = NULL, verbose = FALSE),
+#     factor(c(1, 2, 3, NA))
+#   )
+# })
+#
+# test_that("convert_na_to - factor: works when 'replacement' is character", {
+#   x <- convert_na_to(factor(c(1, 2, 3, NA)), replacement = "d")
+#   expect_equal(
+#     x,
+#     factor(c(1:3, "d"))
+#   )
+#   expect_equal(levels(x), as.character(c(1:3, "d")))
+# })
 
 
 
@@ -110,18 +125,17 @@ test_that("convert_na_to - factor: works when 'replacement' is character", {
 test <- data.frame(
   x = c(1, 2, NA),
   y = c("a", "b", NA),
-  z = factor(c("a", "b", NA)),
+  # z = factor(c("a", "b", NA)),
   x2 = c(4, 5, NA)
 )
 
-test_that("convert_na_to - dataframe: works", {
+test_that("convert_na_to - dataframe: works with replace_* args", {
   expect_equal(
-    convert_na_to(test, replacement_num = 4, replacement_char = "e",
-                  replacement_fac = 8),
+    convert_na_to(test, replace_num = 4, replace_char = "e", replace_fac = 8),
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", "e"),
-      z = factor(c("a", "b", 8)),
+      # z = factor(c("a", "b", 8)),
       x2 = c(4, 5, 4)
     )
   )
@@ -129,11 +143,11 @@ test_that("convert_na_to - dataframe: works", {
 
 test_that("convert_na_to - dataframe: only modifies numeric if only numeric specified", {
   expect_equal(
-    convert_na_to(test, replacement_num = 4),
+    convert_na_to(test, replace_num = 4),
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", NA),
-      z = factor(c("a", "b", NA)),
+      # z = factor(c("a", "b", NA)),
       x2 = c(4, 5, 4)
     )
   )
@@ -141,48 +155,47 @@ test_that("convert_na_to - dataframe: only modifies numeric if only numeric spec
 
 test_that("convert_na_to - dataframe: only modifies character if only character specified", {
   expect_equal(
-    convert_na_to(test, replacement_char = "e"),
+    convert_na_to(test, replace_char = "e"),
     data.frame(
       x = c(1, 2, NA),
       y = c("a", "b", "e"),
-      z = factor(c("a", "b", NA)),
+      # z = factor(c("a", "b", NA)),
       x2 = c(4, 5, NA)
     )
   )
 })
 
-test_that("convert_na_to - dataframe: only modifies factor if only factor specified", {
-  expect_equal(
-    convert_na_to(test, replacement_num = 4, replacement_char = "e",
-                  replacement_fac = 8),
-    data.frame(
-      x = c(1, 2, 4),
-      y = c("a", "b", "e"),
-      z = factor(c("a", "b", 8)),
-      x2 = c(4, 5, 4)
-    )
-  )
-})
+# test_that("convert_na_to - dataframe: only modifies factor if only factor specified", {
+#   expect_equal(
+#     convert_na_to(test, replace_fac = 8),
+#     data.frame(
+#       x = c(1, 2, 4),
+#       y = c("a", "b", "e"),
+#       z = factor(c("a", "b", 8)),
+#       x2 = c(4, 5, 4)
+#     )
+#   )
+# })
 
 test_that("convert_na_to - dataframe: arg 'select' works", {
   expect_equal(
-    convert_na_to(test, replacement_num = 4, replacement_char = "e",
-                  replacement_fac = 8, select = "x"),
+    convert_na_to(test, replace_num = 4, replace_char = "e",
+                  replace_fac = 8, select = "x"),
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", NA),
-      z = factor(c("a", "b", NA)),
+      # z = factor(c("a", "b", NA)),
       x2 = c(4, 5, NA)
     )
   )
 
   expect_equal(
-    convert_na_to(test, replacement_num = 4, replacement_char = "e",
-                  replacement_fac = 8, select = ~ x),
+    convert_na_to(test, replace_num = 4, replace_char = "e",
+                  replace_fac = 8, select = ~ x),
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", NA),
-      z = factor(c("a", "b", NA)),
+      # z = factor(c("a", "b", NA)),
       x2 = c(4, 5, NA)
     )
   )
@@ -191,25 +204,81 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
 
 test_that("convert_na_to - dataframe: arg 'exclude' works", {
   expect_equal(
-    convert_na_to(test, replacement_num = 4, replacement_char = "e",
-                  replacement_fac = 8, exclude = "x"),
+    convert_na_to(test, replace_num = 4, replace_char = "e",
+                  replace_fac = 8, exclude = "x"),
     data.frame(
       x = c(1, 2, NA),
       y = c("a", "b", "e"),
-      z = factor(c("a", "b", 8)),
+      # z = factor(c("a", "b", 8)),
       x2 = c(4, 5, 4)
     )
   )
 
   expect_equal(
-    convert_na_to(test, replacement_num = 4, replacement_char = "e",
-                  replacement_fac = 8, exclude = ~ x),
+    convert_na_to(test, replace_num = 4, replace_char = "e",
+                  replace_fac = 8, exclude = ~ x),
     data.frame(
       x = c(1, 2, NA),
       y = c("a", "b", "e"),
-      z = factor(c("a", "b", 8)),
+      # z = factor(c("a", "b", 8)),
       x2 = c(4, 5, 4)
     )
   )
 })
 
+test_that("convert_na_to - dataframe: works when arg 'select' is a list", {
+
+  # numeric
+  expect_equal(
+    convert_na_to(test, replace_num = 4, select = list(x = 0)),
+    data.frame(
+      x = c(1, 2, 0),
+      y = c("a", "b", NA),
+      # z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4)
+    )
+  )
+
+  # character
+  expect_equal(
+    convert_na_to(test, replace_char = "e", select = list(y = "d")),
+    data.frame(
+      x = c(1, 2, NA),
+      y = c("a", "b", "d"),
+      # z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, NA)
+    )
+  )
+
+  # only named list can override replace_*
+  expect_equal(
+    convert_na_to(test, replace_num = 4, select = list(0)),
+    data.frame(
+      x = c(1, 2, 4),
+      y = c("a", "b", NA),
+      # z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4)
+    )
+  )
+  expect_equal(
+    convert_na_to(test, replace_char = "e", select = list("d")),
+    data.frame(
+      x = c(1, 2, NA),
+      y = c("a", "b", "e"),
+      # z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, NA)
+    )
+  )
+
+  # no problem if put a variable that doesn't exist in list
+  expect_equal(
+    convert_na_to(test, replace_num = 4, select = list(x = 0, foo = 5)),
+    data.frame(
+      x = c(1, 2, 0),
+      y = c("a", "b", NA),
+      # z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4)
+    )
+  )
+
+})

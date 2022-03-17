@@ -3,6 +3,7 @@
 \name{convert_na_to}
 \alias{convert_na_to}
 \alias{convert_na_to.numeric}
+\alias{convert_na_to.character}
 \alias{convert_na_to.data.frame}
 \title{Replace missing values in a variable or a dataframe.}
 \usage{
@@ -10,34 +11,90 @@ convert_na_to(x, ...)
 
 \method{convert_na_to}{numeric}(x, replacement = NULL, verbose = TRUE)
 
+\method{convert_na_to}{character}(x, replacement = NULL, verbose = TRUE)
+
 \method{convert_na_to}{data.frame}(
   x,
-  replacement_num = NULL,
-  replacement_char = NULL,
-  replacement_fac = NULL,
+  replace_num = NULL,
+  replace_char = NULL,
+  replace_fac = NULL,
   select = NULL,
   exclude = NULL,
-  verbose = TRUE,
-  ...
+  verbose = TRUE
 )
 }
 \arguments{
 \item{x}{A numeric, factor, or character vector, or a data frame.}
 
-\item{...}{Not used.}
-
-\item{replacement}{Numeric or character value that will be used to replace \code{NA}.}
+\item{replacement}{Numeric or character value that will be used to
+replace \code{NA}.}
 
 \item{verbose}{Toggle warnings.}
 
-\item{select}{Character vector of column names. If \code{NULL} (the default), all
-variables will be selected.}
+\item{replace_num}{Value to replace \code{NA} when variable is of type numeric.}
 
-\item{exclude}{Character vector of column names to be excluded from selection.}
+\item{replace_char}{Value to replace \code{NA} when variable is of type character.}
+
+\item{replace_fac}{Value to replace \code{NA} when variable is of type factor.}
+
+\item{select}{A vector of variable names in which \code{NA} will be
+replaced by the value of \code{replace_num}, \code{replace_char} or \code{replace_fac}.
+
+It can also be a named list specifying variables and their specific
+replacement. See \code{Examples}.}
+
+\item{exclude}{A vector of variable names in which \code{NA} will not be
+replaced.}
 }
 \value{
 \code{x}, where all \code{NA} values are replaced by \code{replacement}.
 }
 \description{
 Replace missing values in a variable or a dataframe.
+}
+\examples{
+# Convert NA to 0 in a numeric vector
+convert_na_to(
+  c(9, 3, NA, 2, 3, 1, NA, 8),
+  replacement = 0
+)
+
+# Convert NA to "missing" in a character vector
+convert_na_to(
+  c("a", NA, "d", "z", NA, "t"),
+  replacement = "missing"
+)
+
+### For dataframes
+
+test_df <- data.frame(
+  x = c(1, 2, NA),
+  x2 = c(4, 5, NA),
+  y = c("a", "b", NA)
+)
+
+# Convert all NA to 0 in numeric variables, and all NA to "missing" in
+# character variables
+convert_na_to(
+  test_df,
+  replace_num = 0,
+  replace_char = "missing"
+)
+
+# Convert a specific variable in the dataframe
+convert_na_to(
+  test_df,
+  replace_num = 0,
+  replace_char = "missing",
+  select = "x"
+)
+
+# Convert NA to 1 in variable 'x2' and to 0 in all other numeric
+# variables
+convert_na_to(
+  test_df,
+  replace_num = 0,
+  select = list(x2 = 1)
+)
+
 }
