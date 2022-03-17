@@ -38,6 +38,10 @@ also be extracted using a character vector of length > 1, or a numeric
 vector containing column indices.}
 
 \item{exclude}{Character vector of column names to be excluded from selection.}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
 }
 \value{
 \code{x}, where all values in \code{na} are converted to \code{NA}.

@@ -34,7 +34,7 @@ and data frame extensions (e.g., tibbles).}
 }
 
 or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
-\code{contains("")}, a range using \code{:} or \code{"regex()"}. Multiple variables can
+\code{contains("")}, a range using \code{:} or \code{regex("")}. Multiple variables can
 also be extracted using a character vector of length > 1, or a numeric
 vector containing column indices. If the special value \code{0} or \code{"row.names"}
 is given, the row names of the object (if any) are extracted.}

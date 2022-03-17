@@ -13,9 +13,10 @@
 #'   vector containing column indices.
 #' @param na Numeric or character vector (or a list of numeric and character
 #'   vectors) with values that should be converted to `NA`.
-#' @inheritParams standardize
 #' @param verbose Toggle warnings.
 #' @param ... Not used.
+#' @inheritParams standardize
+#' @inheritParams data_extract
 #'
 #' @return
 #' `x`, where all values in `na` are converted to `NA`.
