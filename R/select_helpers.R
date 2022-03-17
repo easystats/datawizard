@@ -3,7 +3,7 @@
 
 .evaluate_pattern <- function(x, data = NULL, ignore_case = FALSE) {
   fixed <- FALSE
-  if (is.null(x)) {
+  if (is.null(x) && !is.null(data)) {
     pattern <- colnames(data)
     fixed <- TRUE
   } else if (grepl("^starts_with\\(\"(.*)\"\\)", x)) {
