@@ -30,14 +30,8 @@ vectors) with values that should be converted to \code{NA}.}
 
 \item{verbose}{Toggle warnings.}
 
-\item{select}{Either a variable specified as:
-\itemize{
-\item a literal variable name (e.g., \code{column_name})
-\item a string with the variable name (e.g., \code{"column_name"})
-\item a positive integer, giving the position counting from the left
-\item a negative integer, giving the position counting from the right.
-}
-
+\item{select}{Either a variable specified as a literal variable name
+(e.g., \code{column_name}), a string with the variable name (e.g., \code{"column_name"})
 or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
 \code{contains("")}, a range using \code{:} or \code{"regex()"}. Multiple variables can
 also be extracted using a character vector of length > 1, or a numeric

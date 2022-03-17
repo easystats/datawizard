@@ -5,17 +5,12 @@
 #' Convert non-missing values in a variable into missing values.
 #'
 #' @param x A vector, factor or a data frame.
-#' @param select 	Either a variable specified as:
-#'
-#'   - a literal variable name (e.g., `column_name`)
-#'   - a string with the variable name (e.g., `"column_name"`)
-#'   - a positive integer, giving the position counting from the left
-#'   - a negative integer, giving the position counting from the right.
-#'
-#'  or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
-#'  `contains("")`, a range using `:` or `"regex()"`. Multiple variables can
-#'  also be extracted using a character vector of length > 1, or a numeric
-#'  vector containing column indices.
+#' @param select 	Either a variable specified as a literal variable name
+#'   (e.g., `column_name`), a string with the variable name (e.g., `"column_name"`)
+#'   or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
+#'   `contains("")`, a range using `:` or `"regex()"`. Multiple variables can
+#'   also be extracted using a character vector of length > 1, or a numeric
+#'   vector containing column indices.
 #' @param na Numeric or character vector (or a list of numeric and character
 #'   vectors) with values that should be converted to `NA`.
 #' @inheritParams standardize
