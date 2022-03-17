@@ -5,6 +5,17 @@
 #' Convert non-missing values in a variable into missing values.
 #'
 #' @param x A vector, factor or a data frame.
+#' @param select 	Either a variable specified as:
+#'
+#'   - a literal variable name (e.g., `column_name`)
+#'   - a string with the variable name (e.g., `"column_name"`)
+#'   - a positive integer, giving the position counting from the left
+#'   - a negative integer, giving the position counting from the right.
+#'
+#'  or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
+#'  `contains("")`, a range using `:` or `"regex()"`. Multiple variables can
+#'  also be extracted using a character vector of length > 1, or a numeric
+#'  vector containing column indices.
 #' @param na Numeric or character vector (or a list of numeric and character
 #'   vectors) with values that should be converted to `NA`.
 #' @inheritParams standardize
@@ -86,11 +97,38 @@ convert_to_na.character <- convert_to_na.factor
 
 #' @rdname convert_to_na
 #' @export
-convert_to_na.data.frame <- function(x, na = NULL, select = NULL, exclude = NULL, verbose = TRUE, ...) {
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
+convert_to_na.data.frame <- function(x, na = NULL, select = NULL, exclude = NULL, ignore_case = FALSE, verbose = TRUE, ...) {
+  fixed <- TRUE
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
+
+  # in case pattern is a variable from another function call...
+  p <- try(eval(select), silent = TRUE)
+  if (inherits(p, c("try-error", "simpleError"))) {
+    p <- substitute(select)
   }
+
+  # check if pattern is a function like "starts_with()"
+  select <- tryCatch(eval(p), error = function(e) NULL)
+
+  # if select could not be evaluated (because expression "makes no sense")
+  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
+  # so we can use grepl()
+  if (is.null(select)) {
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), x, ignore_case = ignore_case)
+    select <- evaluated_pattern$pattern
+    fixed <- evaluated_pattern$fixed
+  }
+
+  # seems to be no valid column name or index, so try to grep
+  if (isFALSE(fixed)) {
+    select <- colnames(x)[grepl(select, colnames(x), ignore.case = ignore_case)]
+  }
+
+  # load again
+  .attach_packages(conflicting_packages)
+
+  # check for formula notation, convert to character vector
   if (inherits(exclude, "formula")) {
     exclude <- all.vars(exclude)
   }
