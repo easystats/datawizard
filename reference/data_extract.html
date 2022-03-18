@@ -108,8 +108,9 @@ are extracted.</p></dd>
 <dd><p>For use by future methods.</p></dd>
 <dt>name</dt>
 <dd><p>An optional argument that specifies the column to be used as
-names for for the vector after extraction.
-Specified in the same way as <code>select</code>.</p></dd>
+names for the vector elements after extraction. Must be specified either
+as literal variable name (e.g., <code>column_name</code>) or as string
+(<code>"column_name"</code>). <code>name</code> will be ignored when a data frame is returned.</p></dd>
 <dt>extract</dt>
 <dd><p>String, indicating which element will be extracted when <code>select</code>
 matches multiple variables. Can be <code>"all"</code> (the default) to return all
