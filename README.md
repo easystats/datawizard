@@ -51,10 +51,9 @@ A BibTeX entry for LaTeX users is
 
 ## Data wrangling
 
-### Select and filter
+### Select, filter and remove variables
 
-The package provides helpers to select columns or filter rows meeting
-certain conditions:
+The package provides helpers to filter rows meeting certain conditions:
 
 ``` r
 matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1))
@@ -68,17 +67,59 @@ mtcars[matching_rows, ]
 #> Maserati Bora  15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
 ```
 
-Or do other manipulations:
+It is also possible to select one or more variables:
 
 ``` r
-head(data_addprefix(iris, "NEW_"))
-#>   NEW_Sepal.Length NEW_Sepal.Width NEW_Petal.Length NEW_Petal.Width NEW_Species
-#> 1              5.1             3.5              1.4             0.2      setosa
-#> 2              4.9             3.0              1.4             0.2      setosa
-#> 3              4.7             3.2              1.3             0.2      setosa
-#> 4              4.6             3.1              1.5             0.2      setosa
-#> 5              5.0             3.6              1.4             0.2      setosa
-#> 6              5.4             3.9              1.7             0.4      setosa
+# single variable
+data_extract(mtcars, "gear")
+#>  [1] 4 4 4 3 3 3 3 4 4 4 4 3 3 3 3 3 3 4 4 4 3 3 3 3 3 4 5 5 5 5 5 4
+
+# more variables
+head(data_extract(iris, ends_with("Width")))
+#>   Sepal.Width Petal.Width
+#> 1         3.5         0.2
+#> 2         3.0         0.2
+#> 3         3.2         0.2
+#> 4         3.1         0.2
+#> 5         3.6         0.2
+#> 6         3.9         0.4
+```
+
+Due to the consistent API, removing variables is just as simple:
+
+``` r
+head(data_remove(iris, starts_with("Sepal")))
+#>   Petal.Length Petal.Width Species
+#> 1          1.4         0.2  setosa
+#> 2          1.4         0.2  setosa
+#> 3          1.3         0.2  setosa
+#> 4          1.5         0.2  setosa
+#> 5          1.4         0.2  setosa
+#> 6          1.7         0.4  setosa
+```
+
+### Reorder or rename
+
+``` r
+head(data_relocate(iris, cols = "Species", before = "Sepal.Length"))
+#>   Species Sepal.Length Sepal.Width Petal.Length Petal.Width
+#> 1  setosa          5.1         3.5          1.4         0.2
+#> 2  setosa          4.9         3.0          1.4         0.2
+#> 3  setosa          4.7         3.2          1.3         0.2
+#> 4  setosa          4.6         3.1          1.5         0.2
+#> 5  setosa          5.0         3.6          1.4         0.2
+#> 6  setosa          5.4         3.9          1.7         0.4
+```
+
+``` r
+head(data_rename(iris, c("Sepal.Length", "Sepal.Width"), c("length", "width")))
+#>   length width Petal.Length Petal.Width Species
+#> 1    5.1   3.5          1.4         0.2  setosa
+#> 2    4.9   3.0          1.4         0.2  setosa
+#> 3    4.7   3.2          1.3         0.2  setosa
+#> 4    4.6   3.1          1.5         0.2  setosa
+#> 5    5.0   3.6          1.4         0.2  setosa
+#> 6    5.4   3.9          1.7         0.4  setosa
 ```
 
 ### Merge
@@ -148,8 +189,6 @@ A common data wrangling task is to reshape data.
 Either to go from wide/Cartesian to long/tidy format
 
 ``` r
-library(datawizard)
-
 wide_data <- data.frame(replicate(5, rnorm(10)))
 
 head(data_to_long(wide_data))
@@ -256,6 +295,8 @@ table(data_cut(x, split = "quantile", n_groups = 3))
 
 The packages also contains multiple functions to help transform data.
 
+### Standardize
+
 For example, to standardize (*z*-score) data:
 
 ``` r
@@ -294,6 +335,8 @@ summary(standardize(swiss))
 #>  Max.   : 1.4113   Max.   : 2.28566
 ```
 
+### Winsorize
+
 To winsorize data:
 
 ``` r
@@ -328,6 +371,8 @@ winsorize(anscombe)
 #> [11,]  6  6  6  8 5.68 6.13 6.08 6.89
 ```
 
+### Center
+
 To grand-mean center data
 
 ``` r
@@ -345,6 +390,8 @@ center(anscombe)
 #> 10 -2 -2 -2 -1 -2.68090909 -0.2409091 -1.08  0.4090909
 #> 11 -4 -4 -4 -1 -1.82090909 -2.7609091 -1.77 -0.6109091
 ```
+
+### Ranktransform
 
 To rank-transform data:
 
@@ -370,11 +417,32 @@ head(ranktransform(trees))
 #> 6     6   28.0    9.0
 ```
 
+### Rescale
+
 To rescale a numeric variable to a new range:
 
 ``` r
 change_scale(c(0, 1, 5, -5, -2))
 #> [1]  50  60 100   0  30
+```
+
+### Rotate or transpose
+
+``` r
+x <- mtcars[1:3, 1:4]
+
+x
+#>                mpg cyl disp  hp
+#> Mazda RX4     21.0   6  160 110
+#> Mazda RX4 Wag 21.0   6  160 110
+#> Datsun 710    22.8   4  108  93
+
+data_rotate(x)
+#>      Mazda RX4 Mazda RX4 Wag Datsun 710
+#> mpg         21            21       22.8
+#> cyl          6             6        4.0
+#> disp       160           160      108.0
+#> hp         110           110       93.0
 ```
 
 ## Data proprties
