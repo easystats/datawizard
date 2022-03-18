@@ -52,7 +52,9 @@ reshape_wider(
 \arguments{
 \item{data}{A data frame to pivot.}
 
-\item{cols}{A vector of column names or indices to pivot into longer format.}
+\item{cols}{A vector of column names or indices to pivot into longer format.
+May also be one of the select-helpers, or a formula (see documentation for
+\code{select} in \code{\link[=convert_to_na]{convert_to_na()}}).}
 
 \item{colnames_to}{The name of the new column that will contain the column
 names.}
