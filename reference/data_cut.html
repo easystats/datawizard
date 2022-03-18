@@ -99,6 +99,7 @@ and more accessible way to define the interval breaks (cut-off values).</p>
   exclude <span class="op">=</span> <span class="cn">NULL</span>,
   force <span class="op">=</span> <span class="cn">FALSE</span>,
   append <span class="op">=</span> <span class="cn">FALSE</span>,
+  ignore_case <span class="op">=</span> <span class="cn">TRUE</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
@@ -142,10 +143,15 @@ default minimum is always <code>1</code>, unless specified otherwise in <code>lo
 will returns factors instead of numeric variables, with <code>labels</code> used
 for labelling the factor levels.</p></dd>
 <dt>verbose</dt>
-<dd><p>Toggle warnings and messages on or off.</p></dd>
+<dd><p>Toggle warnings.</p></dd>
 <dt>select</dt>
-<dd><p>Character vector of column names. If <code>NULL</code> (the default), all
-variables will be selected.</p></dd>
+<dd><p>Either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
+<li><p>a string with the variable name (e.g., <code>"column_name"</code>),</p></li>
+<li><p>a formula with variable names (e.g., <code>~column_1 + column_2</code>),</p></li>
+<li><p>or one of the following select-helpers: <code>starts_with("")</code>, <code>ends_with("")</code>,
+<code>contains("")</code>, a range using <code>:</code> or <code>regex("")</code>.</p></li>
+</ul><p>Multiple variables can also be extracted using a character vector of
+length &gt; 1, or a numeric vector containing column indices.</p></dd>
 <dt>exclude</dt>
 <dd><p>Character vector of column names to be excluded from selection.</p></dd>
 <dt>force</dt>
@@ -157,6 +163,10 @@ thus returning both the original and the recoded variables. If <code>FALSE</code
 original variables in <code>x</code> will be overwritten by their recoded versions.
 If a character value, recoded variables are appended with new column
 names (using the defined suffix) to the original data frame.</p></dd>
+<dt>ignore_case</dt>
+<dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
+a regular expression is used in <code>select</code>, ignores lower/upper case in the
+search pattern when matching against variable names.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
