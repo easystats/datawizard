@@ -154,7 +154,59 @@ convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE, ...) 
 #' @export
 convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL, replace_fac = NULL, select = NULL, exclude = NULL, verbose = TRUE, ignore_case = FALSE, ...) {
 
-  if (is.list(select)) {
+  data <- x
+  fixed <- TRUE
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
+
+  # in case pattern is a variable from another function call...
+  p <- try(eval(select), silent = TRUE)
+  if (inherits(p, c("try-error", "simpleError"))) {
+    p <- substitute(select)
+  }
+
+  # check if pattern is a function like "starts_with()"
+  # name it select2 so that is.list(select) can run
+  select2 <- tryCatch(
+    eval(p),
+    error = function(e)
+      NULL
+  )
+
+  # if select2 could not be evaluated (because expression "makes no sense")
+  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
+  # so we can use grepl()
+  if (is.null(select2)) {
+    evaluated_pattern <-
+      .evaluate_pattern(insight::safe_deparse(p), data, ignore_case = ignore_case)
+    select2 <- evaluated_pattern$pattern
+    fixed <- evaluated_pattern$fixed
+  }
+
+
+  # seems to be no valid column name or index, so try to grep
+  if (isFALSE(fixed)) {
+    select2 <-
+      colnames(data)[grepl(select2, colnames(data), ignore.case = ignore_case)]
+  }
+
+  # load again
+  .attach_packages(conflicting_packages)
+
+  # return valid column names, based on pattern
+  select2 <- .evaluated_pattern_to_colnames(select2, data, ignore_case, verbose = FALSE, exclude)
+
+
+  if (inherits(exclude, "formula")) {
+    exclude <- all.vars(exclude)
+  }
+
+  select_is_list <- is.list(tryCatch(
+    eval(p),
+    error = function(e)
+      NULL
+  ))
+  if (select_is_list) {
 
     names_data <- names(x)
     names_sel <- names(select)
@@ -187,54 +239,9 @@ convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL,
 
   }
 
-  data <- x
-  fixed <- TRUE
-  # avoid conflicts
-  conflicting_packages <- .conflicting_packages("poorman")
+  select2 <- .select_variables(x, select2, exclude, force = TRUE)
 
-  # in case pattern is a variable from another function call...
-  p <- try(eval(select), silent = TRUE)
-  if (inherits(p, c("try-error", "simpleError"))) {
-    p <- substitute(select)
-  }
-
-  # check if pattern is a function like "starts_with()"
-  select <- tryCatch(
-    eval(p),
-    error = function(e)
-      NULL
-  )
-
-  # if select could not be evaluated (because expression "makes no sense")
-  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
-  # so we can use grepl()
-  if (is.null(select)) {
-    evaluated_pattern <-
-      .evaluate_pattern(insight::safe_deparse(p), data, ignore_case = ignore_case)
-    select <- evaluated_pattern$pattern
-    fixed <- evaluated_pattern$fixed
-  }
-
-  # seems to be no valid column name or index, so try to grep
-  if (isFALSE(fixed)) {
-    select <-
-      colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case)]
-  }
-
-  # load again
-  .attach_packages(conflicting_packages)
-
-  # return valid column names, based on pattern
-  select <- .evaluated_pattern_to_colnames(select, data, ignore_case, verbose = FALSE, exclude)
-
-
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
-
-  select <- .select_variables(x, select, exclude, force = TRUE)
-
-  x[select] <- lapply(x[select], function(x) {
+  x[select2] <- lapply(x[select2], function(x) {
     if (is.numeric(x)) {
       repl <- replace_num
     } else if (is.character(x)) {
