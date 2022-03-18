@@ -44,6 +44,9 @@
   if (is.null(x) && !is.null(data)) {
     pattern <- colnames(data)
     fixed <- TRUE
+  } else if (!is.null(x) && all(x == "all")) {
+    pattern <- colnames(data)
+    fixed <- TRUE
   } else if (grepl("^starts_with\\(\"(.*)\"\\)", x)) {
     pattern <- paste0("^", gsub("starts_with\\(\"(.*)\"\\)", "\\1", x))
   } else if (grepl("^ends_with\\(\"(.*)\"\\)", x)) {
