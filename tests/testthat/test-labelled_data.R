@@ -247,3 +247,38 @@ test_that("data_match, labels preserved", {
     ignore_attr = TRUE
   )
 })
+
+
+
+# convert_to_na -----------------------------------
+
+test_that("convert_to_na, labels preserved", {
+  x <- convert_to_na(efc, na = c(2, "2"), select = starts_with("e"))
+  # factor
+  expect_equal(
+    attr(x$e42dep, "label", exact = TRUE),
+    attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  # numeric
+  expect_equal(
+    attr(x$e16sex, "label", exact = TRUE),
+    attr(efc$e16sex, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+
+  # factor
+  x <- convert_to_na(efc$e42dep, na = "2")
+  expect_equal(
+    attr(x, "label", exact = TRUE),
+    attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  # numeric
+  x <- convert_to_na(efc$e16sex, na = 2)
+  expect_equal(
+    attr(x, "label", exact = TRUE),
+    attr(efc$e16sex, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+})
