@@ -3,9 +3,10 @@
 #' Rescale variables to a new range.
 #' Can also be used to reverse-score variables (change the keying/scoring direction).
 #'
+#' @inheritParams data_cut
+#' @inheritParams convert_to_na
 #' @inheritParams standardize.data.frame
 #'
-#' @param x A numeric variable.
 #' @param to Numeric vector of length 2 giving the new range that the variable will have after rescaling.
 #'   To reverse-score a variable, the range should be given with the maximum value first.
 #'   See examples.
@@ -111,19 +112,45 @@ data_rescale.grouped_df <- function(x,
                                     range = NULL,
                                     select = NULL,
                                     exclude = NULL,
+                                    ignore_case = FALSE,
                                     ...) {
   info <- attributes(x)
 
   # dplyr >= 0.8.0 returns attribute "indices"
   grps <- attr(x, "groups", exact = TRUE)
 
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
+  fixed <- TRUE
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
+
+  # in case pattern is a variable from another function call...
+  p <- try(eval(select), silent = TRUE)
+  if (inherits(p, c("try-error", "simpleError"))) {
+    p <- substitute(select)
   }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
+
+  # check if pattern is a function like "starts_with()"
+  select <- tryCatch(eval(p), error = function(e) NULL)
+
+  # if select could not be evaluated (because expression "makes no sense")
+  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
+  # so we can use grepl()
+  if (is.null(select)) {
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), x, ignore_case = ignore_case)
+    select <- evaluated_pattern$pattern
+    fixed <- evaluated_pattern$fixed
   }
+
+  # seems to be no valid column name or index, so try to grep
+  if (isFALSE(fixed)) {
+    select <- colnames(x)[grepl(select, colnames(x), ignore.case = ignore_case)]
+  }
+
+  # load again
+  .attach_packages(conflicting_packages)
+
+  # return valid column names, based on pattern
+  select <- .evaluated_pattern_to_colnames(select, x, ignore_case, verbose = FALSE, exclude)
 
   # dplyr < 0.8.0?
   if (is.null(grps)) {
@@ -157,23 +184,40 @@ data_rescale.data.frame <- function(x,
                                     range = NULL,
                                     select = NULL,
                                     exclude = NULL,
+                                    ignore_case = FALSE,
                                     ...) {
+  fixed <- TRUE
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
 
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
+  # in case pattern is a variable from another function call...
+  p <- try(eval(select), silent = TRUE)
+  if (inherits(p, c("try-error", "simpleError"))) {
+    p <- substitute(select)
   }
 
+  # check if pattern is a function like "starts_with()"
+  select <- tryCatch(eval(p), error = function(e) NULL)
+
+  # if select could not be evaluated (because expression "makes no sense")
+  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
+  # so we can use grepl()
   if (is.null(select)) {
-    select <- names(x)
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), x, ignore_case = ignore_case)
+    select <- evaluated_pattern$pattern
+    fixed <- evaluated_pattern$fixed
   }
 
-  if (!is.null(exclude)) {
-    select <- setdiff(select, exclude)
+  # seems to be no valid column name or index, so try to grep
+  if (isFALSE(fixed)) {
+    select <- colnames(x)[grepl(select, colnames(x), ignore.case = ignore_case)]
   }
+
+  # load again
+  .attach_packages(conflicting_packages)
+
+  # return valid column names, based on pattern
+  select <- .evaluated_pattern_to_colnames(select, x, ignore_case, verbose = FALSE, exclude)
 
   # Transform the range so that it is a list now
   if (!is.null(range)) {
