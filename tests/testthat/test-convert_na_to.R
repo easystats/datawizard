@@ -199,6 +199,61 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
       x2 = c(4, 5, NA)
     )
   )
+
+  expect_equal(
+    convert_na_to(test, replace_num = 4, replace_char = "e",
+                  replace_fac = 8, select = starts_with("x")),
+    data.frame(
+      x = c(1, 2, 4),
+      y = c("a", "b", NA),
+      # z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4)
+    )
+  )
+
+  expect_equal(
+    convert_na_to(test, replace_num = 4, replace_char = "e",
+                  replace_fac = 8, select = ends_with("2")),
+    data.frame(
+      x = c(1, 2, NA),
+      y = c("a", "b", NA),
+      # z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4)
+    )
+  )
+
+  expect_equal(
+    convert_na_to(test, replace_num = 4, replace_char = "e",
+                  replace_fac = 8, select = contains("x")),
+    data.frame(
+      x = c(1, 2, 4),
+      y = c("a", "b", NA),
+      # z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4)
+    )
+  )
+
+  expect_equal(
+    convert_na_to(test, replace_num = 4, replace_char = "e",
+                  replace_fac = 8, select = 1:3),
+    data.frame(
+      x = c(1, 2, 4),
+      y = c("a", "b", "e"),
+      # z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4)
+    )
+  )
+
+  expect_equal(
+    convert_na_to(test, replace_num = 4, replace_char = "e",
+                  replace_fac = 8, select = regex("2$")),
+    data.frame(
+      x = c(1, 2, NA),
+      y = c("a", "b", NA),
+      # z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4)
+    )
+  )
 })
 
 

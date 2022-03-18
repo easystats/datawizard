@@ -21,6 +21,7 @@ convert_na_to(x, ...)
   select = NULL,
   exclude = NULL,
   verbose = TRUE,
+  ignore_case = FALSE,
   ...
 )
 }
@@ -40,17 +41,30 @@ replace \code{NA}.}
 
 \item{replace_fac}{Value to replace \code{NA} when variable is of type factor.}
 
-\item{select}{A vector of variable names in which \code{NA} will be
-replaced by the value of \code{replace_num}, \code{replace_char} or \code{replace_fac}.
+\item{select}{Either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")},
+\item or a named list specifying variables and their specific replacement.
+}
 
-It can also be a named list specifying variables and their specific
-replacement. See \code{Examples}.}
+Multiple variables can also be extracted using a character vector of
+length > 1, or a numeric vector containing column indices.
+
+See \code{Examples} for more details.}
 
 \item{exclude}{A vector of variable names in which \code{NA} will not be
 replaced.}
+
+\item{ignore_case}{Logical. If \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
 }
 \value{
-\code{x}, where all \code{NA} values are replaced by \code{replacement}.
+\code{x}, where \code{NA} values are replaced by \code{replacement}.
 }
 \description{
 Replace missing values in a variable or a dataframe.
@@ -90,6 +104,14 @@ convert_na_to(
   replace_num = 0,
   replace_char = "missing",
   select = "x"
+)
+
+# Convert all variables starting with "x"
+convert_na_to(
+  test_df,
+  replace_num = 0,
+  replace_char = "missing",
+  select = starts_with("x")
 )
 
 # Convert NA to 1 in variable 'x2' and to 0 in all other numeric

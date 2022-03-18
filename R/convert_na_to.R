@@ -11,7 +11,7 @@
 #' @param ... Not used.
 #'
 #' @return
-#' `x`, where all `NA` values are replaced by `replacement`.
+#' `x`, where `NA` values are replaced by `replacement`.
 #'
 #' @examples
 #' # Convert NA to 0 in a numeric vector
@@ -48,6 +48,14 @@
 #'   replace_num = 0,
 #'   replace_char = "missing",
 #'   select = "x"
+#' )
+#'
+#' # Convert all variables starting with "x"
+#' convert_na_to(
+#'   test_df,
+#'   replace_num = 0,
+#'   replace_char = "missing",
+#'   select = starts_with("x")
 #' )
 #'
 #' # Convert NA to 1 in variable 'x2' and to 0 in all other numeric
@@ -122,25 +130,29 @@ convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE, ...) 
 #' @param replace_num Value to replace `NA` when variable is of type numeric.
 #' @param replace_char Value to replace `NA` when variable is of type character.
 #' @param replace_fac Value to replace `NA` when variable is of type factor.
-#' @param select A vector of variable names in which `NA` will be
-#' replaced by the value of `replace_num`, `replace_char` or `replace_fac`.
+#' @param select 	Either
 #'
-#' It can also be a named list specifying variables and their specific
-#' replacement. See `Examples`.
+#'   - a variable specified as a literal variable name (e.g., `column_name`),
+#'   - a string with the variable name (e.g., `"column_name"`),
+#'   - a formula with variable names (e.g., `~column_1 + column_2`),
+#'   - one of the following select-helpers: `starts_with("")`, `ends_with("")`,
+#'   `contains("")`, a range using `:` or `regex("")`,
+#'   - or a named list specifying variables and their specific replacement.
+#'
+#' Multiple variables can also be extracted using a character vector of
+#' length > 1, or a numeric vector containing column indices.
+#'
+#' See `Examples` for more details.
 #'
 #' @param exclude A vector of variable names in which `NA` will not be
 #' replaced.
+#' @param ignore_case Logical. If `TRUE` and when one of the select-helpers or
+#' a regular expression is used in `select`, ignores lower/upper case in the
+#' search pattern when matching against variable names.
 #'
 #' @rdname convert_na_to
 #' @export
-convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL, replace_fac = NULL, select = NULL, exclude = NULL, verbose = TRUE, ...) {
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
+convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL, replace_fac = NULL, select = NULL, exclude = NULL, verbose = TRUE, ignore_case = FALSE, ...) {
 
   if (is.list(select)) {
 
@@ -149,7 +161,7 @@ convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL,
     not_in_sel <- names_data[which(!names_data %in% names_sel)]
 
     for (i in seq_along(names_sel)) {
-      if (!names_sel[i] %in% names(x)) next
+      if (!names_sel[i] %in% names_data) next
       x[[names_sel[i]]] <- convert_na_to(
         x[[names_sel[i]]],
         replacement = select[[i]],
@@ -171,25 +183,69 @@ convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL,
       }
     }
 
-    x
+    return(x)
 
-  } else {
-
-    select <- .select_variables(x, select, exclude, force = TRUE)
-
-    x[select] <- lapply(x[select], function(x) {
-      if (is.numeric(x)) {
-        repl <- replace_num
-      } else if (is.character(x)) {
-        repl <- replace_char
-      } else if (is.factor(x)) {
-        repl <- replace_fac
-      }
-      convert_na_to(x, replacement = repl, verbose = FALSE)
-    })
-
-    x
   }
+
+  data <- x
+  fixed <- TRUE
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
+
+  # in case pattern is a variable from another function call...
+  p <- try(eval(select), silent = TRUE)
+  if (inherits(p, c("try-error", "simpleError"))) {
+    p <- substitute(select)
+  }
+
+  # check if pattern is a function like "starts_with()"
+  select <- tryCatch(
+    eval(p),
+    error = function(e)
+      NULL
+  )
+
+  # if select could not be evaluated (because expression "makes no sense")
+  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
+  # so we can use grepl()
+  if (is.null(select)) {
+    evaluated_pattern <-
+      .evaluate_pattern(insight::safe_deparse(p), data, ignore_case = ignore_case)
+    select <- evaluated_pattern$pattern
+    fixed <- evaluated_pattern$fixed
+  }
+
+  # seems to be no valid column name or index, so try to grep
+  if (isFALSE(fixed)) {
+    select <-
+      colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case)]
+  }
+
+  # load again
+  .attach_packages(conflicting_packages)
+
+  # return valid column names, based on pattern
+  select <- .evaluated_pattern_to_colnames(select, data, ignore_case, verbose = FALSE, exclude)
+
+
+  if (inherits(exclude, "formula")) {
+    exclude <- all.vars(exclude)
+  }
+
+  select <- .select_variables(x, select, exclude, force = TRUE)
+
+  x[select] <- lapply(x[select], function(x) {
+    if (is.numeric(x)) {
+      repl <- replace_num
+    } else if (is.character(x)) {
+      repl <- replace_char
+    } else if (is.factor(x)) {
+      repl <- replace_fac
+    }
+    convert_na_to(x, replacement = repl, verbose = FALSE)
+  })
+
+  x
 
 }
 
