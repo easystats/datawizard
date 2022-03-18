@@ -76,7 +76,7 @@ test_that("data_remove works with NSE", {
 
 test_that("data_remove from other functions", {
   test_fun <- function(data, i) {
-    data_remove(data, pattern = i)
+    data_remove(data, select = i)
   }
   expect_equal(
     colnames(test_fun(iris, c("Sepal.Length", "Sepal.Width"))),
