@@ -5,12 +5,16 @@
 #' Convert non-missing values in a variable into missing values.
 #'
 #' @param x A vector, factor or a data frame.
-#' @param select 	Either a variable specified as a literal variable name
-#'   (e.g., `column_name`), a string with the variable name (e.g., `"column_name"`)
-#'   or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
-#'   `contains("")`, a range using `:` or `"regex()"`. Multiple variables can
-#'   also be extracted using a character vector of length > 1, or a numeric
-#'   vector containing column indices.
+#' @param select 	Either
+#'
+#'   - a variable specified as a literal variable name (e.g., `column_name`),
+#'   - a string with the variable name (e.g., `"column_name"`),
+#'   - a formula with variable names (e.g., `~column_1 + column_2`),
+#'   - or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
+#'   `contains("")`, a range using `:` or `regex("")`.
+#'
+#'   Multiple variables can also be extracted using a character vector of
+#'   length > 1, or a numeric vector containing column indices.
 #' @param na Numeric or character vector (or a list of numeric and character
 #'   vectors) with values that should be converted to `NA`.
 #' @param verbose Toggle warnings.
@@ -124,12 +128,8 @@ convert_to_na.data.frame <- function(x, na = NULL, select = NULL, exclude = NULL
   # load again
   .attach_packages(conflicting_packages)
 
-  # check for formula notation, convert to character vector
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
-
-  select <- .select_variables(x, select, exclude, force = TRUE)
+  # return valid column names, based on pattern
+  select <- .evaluated_pattern_to_colnames(select, x, ignore_case, verbose, exclude)
 
   x[select] <- lapply(x[select], convert_to_na, na = na, verbose = FALSE, ...)
   x

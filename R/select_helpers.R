@@ -52,7 +52,12 @@
 # this function checks if the pattern (which should be valid column names now)
 # is in the column names of the data, and returns the final column names to select
 
-.evaluated_pattern_to_colnames <- function(pattern, data, ignore_case, verbose) {
+.evaluated_pattern_to_colnames <- function(pattern, data, ignore_case, verbose, exclude = NULL) {
+  # if pattern is formula, simply extract all variables
+  if (inherits(pattern, "formula")) {
+    pattern <- all.vars(pattern)
+  }
+
   # if numeric, make sure we have valid column indices
   if (is.numeric(pattern)) {
     pattern <- colnames(data)[intersect(pattern, 1:ncol(data))]
@@ -71,6 +76,22 @@
       ), call. = FALSE)
     }
     pattern <- intersect(pattern, colnames(data))
+  }
+
+  # check if some variables should be excluded...
+  if (!is.null(exclude)) {
+    # check for formula notation, convert to character vector
+    if (inherits(exclude, "formula")) {
+      exclude <- all.vars(exclude)
+    }
+    if (is.numeric(exclude)) {
+      exclude <- colnames(data)[intersect(exclude, 1:ncol(data))]
+    }
+    # check if column names match when all are lowercase
+    if (!all(exclude %in% colnames(data)) && isTRUE(ignore_case)) {
+      exclude <- colnames(data)[tolower(colnames(data)) %in% tolower(exclude)]
+    }
+    pattern <- setdiff(pattern, exclude)
   }
 
   pattern

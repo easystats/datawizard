@@ -30,14 +30,16 @@ and data frame extensions (e.g., tibbles).}
 \item a literal variable name (e.g., \code{column_name})
 \item a string with the variable name (e.g., \code{"column_name"})
 \item a positive integer, giving the position counting from the left
-\item a negative integer, giving the position counting from the right.
+\item a negative integer, giving the position counting from the right,
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")}.
 }
 
-or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
-\code{contains("")}, a range using \code{:} or \code{regex("")}. Multiple variables can
-also be extracted using a character vector of length > 1, or a numeric
-vector containing column indices. If the special value \code{0} or \code{"row.names"}
-is given, the row names of the object (if any) are extracted.}
+Multiple variables can also be extracted using a character vector of
+length > 1, or a numeric vector containing column indices. If the special
+value \code{0} or \code{"row.names"} is given, the row names of the object (if any)
+are extracted.}
 
 \item{...}{For use by future methods.}
 
