@@ -125,7 +125,7 @@ convert_to_na.data.frame <- function(x, na = NULL, select = NULL, exclude = NULL
   .attach_packages(conflicting_packages)
 
   # return valid column names, based on pattern
-  select <- .evaluated_pattern_to_colnames(select, data, ignore_case, verbose, exclude)
+  select <- .evaluated_pattern_to_colnames(select, x, ignore_case, verbose, exclude)
 
   x[select] <- lapply(x[select], convert_to_na, na = na, verbose = FALSE, ...)
   x
