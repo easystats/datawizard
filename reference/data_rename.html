@@ -64,9 +64,23 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">data_addprefix</span><span class="op">(</span><span class="va">data</span>, <span class="va">pattern</span>, <span class="va">...</span><span class="op">)</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">data_addprefix</span><span class="op">(</span>
+  <span class="va">data</span>,
+  <span class="va">pattern</span>,
+  select <span class="op">=</span> <span class="cn">NULL</span>,
+  exclude <span class="op">=</span> <span class="cn">NULL</span>,
+  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
+  <span class="va">...</span>
+<span class="op">)</span>
 
-<span class="fu">data_addsuffix</span><span class="op">(</span><span class="va">data</span>, <span class="va">pattern</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">data_addsuffix</span><span class="op">(</span>
+  <span class="va">data</span>,
+  <span class="va">pattern</span>,
+  select <span class="op">=</span> <span class="cn">NULL</span>,
+  exclude <span class="op">=</span> <span class="cn">NULL</span>,
+  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
+  <span class="va">...</span>
+<span class="op">)</span>
 
 <span class="fu">data_rename</span><span class="op">(</span><span class="va">data</span>, pattern <span class="op">=</span> <span class="cn">NULL</span>, replacement <span class="op">=</span> <span class="cn">NULL</span>, safe <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
 
@@ -82,6 +96,20 @@
 should be selected for renaming. Can be <code>NULL</code> (in which case all columns
 are selected). For <code>data_addprefix()</code> or <code>data_addsuffix()</code>, a character
 string, which will be added as prefix or suffix to the column names.</p></dd>
+<dt>select</dt>
+<dd><p>Either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
+<li><p>a string with the variable name (e.g., <code>"column_name"</code>),</p></li>
+<li><p>a formula with variable names (e.g., <code>~column_1 + column_2</code>),</p></li>
+<li><p>or one of the following select-helpers: <code>starts_with("")</code>, <code>ends_with("")</code>,
+<code>contains("")</code>, a range using <code>:</code> or <code>regex("")</code>.</p></li>
+</ul><p>Multiple variables can also be extracted using a character vector of
+length &gt; 1, or a numeric vector containing column indices.</p></dd>
+<dt>exclude</dt>
+<dd><p>Character vector of column names to be excluded from selection.</p></dd>
+<dt>ignore_case</dt>
+<dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
+a regular expression is used in <code>select</code>, ignores lower/upper case in the
+search pattern when matching against variable names.</p></dd>
 <dt>...</dt>
 <dd><p>Other arguments passed to or from other functions.</p></dd>
 <dt>replacement</dt>
