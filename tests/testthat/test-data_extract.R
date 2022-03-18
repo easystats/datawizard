@@ -48,6 +48,14 @@ test_that("data_extract works with select-helpers", {
 })
 
 
+test_that("data_extract works with formulas", {
+  expect_equal(
+    data_extract(iris, ~Sepal.Width + Species),
+    iris[c("Sepal.Width", "Species")]
+  )
+})
+
+
 test_that("data_extract from other functions", {
   test_fun <- function(data, i) {
     data_extract(data, select = i)
