@@ -6,6 +6,8 @@
 #'
 #' @param data A data frame to pivot.
 #' @param cols A vector of column names or indices to pivot into longer format.
+#'   May also be one of the select-helpers, or a formula (see documentation for
+#'   `select` in [`convert_to_na()`]).
 #' @param colnames_to The name of the new column that will contain the column
 #'   names.
 #' @param values_to The name of the new column that will contain the values of

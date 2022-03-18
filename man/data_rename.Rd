@@ -37,12 +37,17 @@ should be selected for renaming. Can be \code{NULL} (in which case all columns
 are selected). For \code{data_addprefix()} or \code{data_addsuffix()}, a character
 string, which will be added as prefix or suffix to the column names.}
 
-\item{select}{Either a variable specified as a literal variable name
-(e.g., \code{column_name}), a string with the variable name (e.g., \code{"column_name"})
-or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
-\code{contains("")}, a range using \code{:} or \code{"regex()"}. Multiple variables can
-also be extracted using a character vector of length > 1, or a numeric
-vector containing column indices.}
+\item{select}{Either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{"regex()"}.
+}
+
+Multiple variables can also be extracted using a character vector of
+length > 1, or a numeric vector containing column indices.}
 
 \item{exclude}{Character vector of column names to be excluded from selection.}
 
