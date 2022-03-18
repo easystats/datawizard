@@ -306,3 +306,18 @@ standardize.grouped_df <- function(x,
   attributes(args$x) <- args$info
   args$x
 }
+
+
+
+
+
+# Datagrid ----------------------------------------------------------------
+
+#' @export
+standardize.datagrid <- function(x, ...) {
+  x[names(x)] <- standardize(as.data.frame(x), reference = attributes(x)$data, ...)
+  x
+}
+
+#' @export
+standardize.visualisation_matrix <- standardize.datagrid

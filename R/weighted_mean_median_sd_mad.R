@@ -93,7 +93,7 @@ weighted_mad <- function(x, weights = NULL, constant = 1.4826, verbose = TRUE, .
 
 # Utils -------------------------------------------------------------------
 
-.validate_weights <- function(weights, verbode = TRUE) {
+.validate_weights <- function(weights, verbose = TRUE) {
   pos <- all(weights > 0, na.rm = TRUE)
 
   if (isTRUE(!pos) && isTRUE(verbose)) {

@@ -107,12 +107,14 @@ test_that("describe_distribution - list: works with include_factors", {
   expect_identical(x1, y)
 
   x2 <- describe_distribution(list(mtcars$mpg, factor(mtcars$cyl)),
-                              include_factors = TRUE)
+    include_factors = TRUE
+  )
   expect_equal(dim(x2), c(2, 10))
   expect_equal(x2$Variable, c("mtcars$mpg", "factor(mtcars$cyl)"))
 
   x3 <- describe_distribution(list(mtcars$mpg, foo = factor(mtcars$cyl)),
-                              include_factors = TRUE)
+    include_factors = TRUE
+  )
   expect_equal(dim(x3), c(2, 10))
   expect_equal(x3$Variable, c("mtcars$mpg", "foo"))
 })

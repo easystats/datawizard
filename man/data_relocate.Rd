@@ -28,8 +28,8 @@ data_remove(data, pattern, ignore_case = FALSE, verbose = FALSE, ...)
 
 \item{pattern}{A regular expression (as character string), representing the
 pattern to be matched in the in column names. Can also be one of the
-following select-helpers: \code{starts_with("")}, \code{end_with("")} or
-\code{contains("")}}
+following select-helpers: \code{starts_with("")}, \code{end_with("")}, \code{regex("")},
+\code{contains("")}, or a range using \code{:}.}
 
 \item{starts_with, ends_with}{Character string, containing the string to be
 matched in the column names. \code{starts_with} finds matches at the beginning

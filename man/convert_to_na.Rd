@@ -10,7 +10,15 @@ convert_to_na(x, ...)
 
 \method{convert_to_na}{numeric}(x, na = NULL, verbose = TRUE, ...)
 
-\method{convert_to_na}{data.frame}(x, na = NULL, select = NULL, exclude = NULL, verbose = TRUE, ...)
+\method{convert_to_na}{data.frame}(
+  x,
+  na = NULL,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{A vector, factor or a data frame.}
@@ -22,10 +30,18 @@ vectors) with values that should be converted to \code{NA}.}
 
 \item{verbose}{Toggle warnings.}
 
-\item{select}{Character vector of column names. If \code{NULL} (the default), all
-variables will be selected.}
+\item{select}{Either a variable specified as a literal variable name
+(e.g., \code{column_name}), a string with the variable name (e.g., \code{"column_name"})
+or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{"regex()"}. Multiple variables can
+also be extracted using a character vector of length > 1, or a numeric
+vector containing column indices.}
 
 \item{exclude}{Character vector of column names to be excluded from selection.}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
 }
 \value{
 \code{x}, where all values in \code{na} are converted to \code{NA}.

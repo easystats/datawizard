@@ -173,3 +173,16 @@ unstandardize.matrix <- function(x,
 
 #' @export
 unstandardize.array <- unstandardize.matrix
+
+
+
+# Datagrid ----------------------------------------------------------------
+
+#' @export
+unstandardize.datagrid <- function(x, ...) {
+  x[names(x)] <- unstandardize(as.data.frame(x), reference = attributes(x)$data, ...)
+  x
+}
+
+#' @export
+unstandardize.visualisation_matrix <- unstandardize.datagrid
