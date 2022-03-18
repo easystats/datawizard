@@ -17,7 +17,7 @@ test_fun <- function(select, data, exclude, ignore_case) {
   # in case pattern is a variable from another function call...
   p <- try(eval(select), silent = TRUE)
   if (inherits(p, c("try-error", "simpleError"))) {
-    p <- substitute(select)
+    p <- substitute(select, env = parent.frame())
   }
 
   # check if pattern is a function like "starts_with()"
