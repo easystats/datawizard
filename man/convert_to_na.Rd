@@ -36,7 +36,7 @@ vectors) with values that should be converted to \code{NA}.}
 \item a string with the variable name (e.g., \code{"column_name"}),
 \item a formula with variable names (e.g., \code{~column_1 + column_2}),
 \item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
-\code{contains("")}, a range using \code{:} or \code{"regex()"}.
+\code{contains("")}, a range using \code{:} or \code{regex("")}.
 }
 
 Multiple variables can also be extracted using a character vector of

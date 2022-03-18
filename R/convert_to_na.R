@@ -11,7 +11,7 @@
 #'   - a string with the variable name (e.g., `"column_name"`),
 #'   - a formula with variable names (e.g., `~column_1 + column_2`),
 #'   - or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
-#'   `contains("")`, a range using `:` or `"regex()"`.
+#'   `contains("")`, a range using `:` or `regex("")`.
 #'
 #'   Multiple variables can also be extracted using a character vector of
 #'   length > 1, or a numeric vector containing column indices.
