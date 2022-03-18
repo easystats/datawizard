@@ -399,5 +399,3 @@ degroup <- function(x,
 #' @rdname demean
 #' @export
 detrend <- degroup
-
-

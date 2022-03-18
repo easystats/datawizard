@@ -8,8 +8,10 @@ test_that("data_rename works with one or several replacements", {
     c("length", "Sepal.Width", "Petal.Length", "Petal.Width", "Species")
   )
   expect_equal(
-    names(data_rename(test, c("Sepal.Length", "Sepal.Width"),
-                      c("length", "width"))),
+    names(data_rename(
+      test, c("Sepal.Length", "Sepal.Width"),
+      c("length", "width")
+    )),
     c("length", "width", "Petal.Length", "Petal.Width", "Species")
   )
 })
@@ -35,7 +37,7 @@ test_that("data_rename: pattern must be of type character", {
 test_that("data_rename uses indices when no replacement", {
   x <- data_rename(test, pattern = c("Sepal.Length", "Petal.Length"))
   expect_equal(dim(test), dim(x))
-  expect_equal(names(x), c("1", "Sepal.Width",  "2", "Petal.Width", "Species"))
+  expect_equal(names(x), c("1", "Sepal.Width", "2", "Petal.Width", "Species"))
 })
 
 test_that("data_rename works when too many names in 'replacement'", {
@@ -87,8 +89,10 @@ test_that("data_rename: argument 'safe' works", {
 })
 
 test_that("data_rename deals correctly with duplicated replacement", {
-  x <- data_rename(test, pattern = names(test)[1:4],
-                   replacement = c("foo", "bar", "foo", "bar"))
+  x <- data_rename(test,
+    pattern = names(test)[1:4],
+    replacement = c("foo", "bar", "foo", "bar")
+  )
   expect_equal(dim(test), dim(x))
   expect_equal(names(x)[1:4], c("foo", "bar", "foo.2", "bar.2"))
 })

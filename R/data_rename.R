@@ -61,23 +61,27 @@ data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, .
   # ex: c("foo", "foo") -> c("foo", "foo.2")
   if (any(duplicated(replacement))) {
     dup <- as.data.frame(table(replacement))
-    dup <- dup[dup$Freq > 1,]
+    dup <- dup[dup$Freq > 1, ]
     for (i in dup$replacement) {
       to_replace <- which(replacement == i)[-1]
-      new_replacement <- paste0(i, ".", 1+1:length(to_replace))
+      new_replacement <- paste0(i, ".", 1 + 1:length(to_replace))
       replacement[to_replace] <- new_replacement
     }
   }
 
   if (length(replacement) > length(pattern)) {
     message(insight::format_message(
-      paste0("There are more names in 'replacement' than in 'pattern'. The last ",
-             length(replacement) - length(pattern), " names of 'replacement' are not used."))
-    )
+      paste0(
+        "There are more names in 'replacement' than in 'pattern'. The last ",
+        length(replacement) - length(pattern), " names of 'replacement' are not used."
+      )
+    ))
   } else if (length(replacement) < length(pattern)) {
     message(insight::format_message(
-      paste0("There are more names in 'pattern' than in 'replacement'. The last ",
-             length(pattern) - length(replacement), " names of 'pattern' are not modified.")
+      paste0(
+        "There are more names in 'pattern' than in 'replacement'. The last ",
+        length(pattern) - length(replacement), " names of 'pattern' are not modified."
+      )
     ))
   }
 
