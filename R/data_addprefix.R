@@ -1,19 +1,94 @@
 #' @rdname data_rename
+#' @inheritParams convert_to_na
 #' @examples
 #' # Add prefix / suffix to all columns
 #' head(data_addprefix(iris, "NEW_"))
 #' head(data_addsuffix(iris, "_OLD"))
 #'
 #' @export
-data_addprefix <- function(data, pattern, ...) {
-  names(data) <- paste0(pattern, names(data))
+data_addprefix <- function(data, pattern, select = NULL, exclude = NULL, ignore_case = FALSE, ...) {
+  fixed <- TRUE
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
+
+  # in case pattern is a variable from another function call...
+  p <- try(eval(select), silent = TRUE)
+  if (inherits(p, c("try-error", "simpleError"))) {
+    p <- substitute(select)
+  }
+
+  # check if pattern is a function like "starts_with()"
+  select <- tryCatch(eval(p), error = function(e) NULL)
+
+  # if select could not be evaluated (because expression "makes no sense")
+  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
+  # so we can use grepl()
+  if (is.null(select)) {
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), data, ignore_case = ignore_case)
+    select <- evaluated_pattern$pattern
+    fixed <- evaluated_pattern$fixed
+  }
+
+  # seems to be no valid column name or index, so try to grep
+  if (isFALSE(fixed)) {
+    select <- colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case)]
+  }
+
+  # load again
+  .attach_packages(conflicting_packages)
+
+  # check for formula notation, convert to character vector
+  if (inherits(exclude, "formula")) {
+    exclude <- all.vars(exclude)
+  }
+
+  select <- .select_variables(data, select, exclude, force = TRUE)
+
+  names(data[select]) <- paste0(pattern, names(data[select]))
   data
 }
 
 
 #' @rdname data_rename
 #' @export
-data_addsuffix <- function(data, pattern, ...) {
-  names(data) <- paste0(names(data), pattern)
+data_addsuffix <- function(data, pattern, select = NULL, exclude = NULL, ignore_case = FALSE, ...) {
+  fixed <- TRUE
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
+
+  # in case pattern is a variable from another function call...
+  p <- try(eval(select), silent = TRUE)
+  if (inherits(p, c("try-error", "simpleError"))) {
+    p <- substitute(select)
+  }
+
+  # check if pattern is a function like "starts_with()"
+  select <- tryCatch(eval(p), error = function(e) NULL)
+
+  # if select could not be evaluated (because expression "makes no sense")
+  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
+  # so we can use grepl()
+  if (is.null(select)) {
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), data, ignore_case = ignore_case)
+    select <- evaluated_pattern$pattern
+    fixed <- evaluated_pattern$fixed
+  }
+
+  # seems to be no valid column name or index, so try to grep
+  if (isFALSE(fixed)) {
+    select <- colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case)]
+  }
+
+  # load again
+  .attach_packages(conflicting_packages)
+
+  # check for formula notation, convert to character vector
+  if (inherits(exclude, "formula")) {
+    exclude <- all.vars(exclude)
+  }
+
+  select <- .select_variables(data, select, exclude, force = TRUE)
+
+  names(data[select]) <- paste0(names(data[select]), pattern)
   data
 }

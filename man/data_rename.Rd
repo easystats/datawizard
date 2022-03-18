@@ -7,9 +7,23 @@
 \alias{data_rename_rows}
 \title{Rename columns and variable names}
 \usage{
-data_addprefix(data, pattern, ...)
+data_addprefix(
+  data,
+  pattern,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  ...
+)
 
-data_addsuffix(data, pattern, ...)
+data_addsuffix(
+  data,
+  pattern,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  ...
+)
 
 data_rename(data, pattern = NULL, replacement = NULL, safe = TRUE, ...)
 
@@ -22,6 +36,19 @@ data_rename_rows(data, rows = NULL)
 should be selected for renaming. Can be \code{NULL} (in which case all columns
 are selected). For \code{data_addprefix()} or \code{data_addsuffix()}, a character
 string, which will be added as prefix or suffix to the column names.}
+
+\item{select}{Either a variable specified as a literal variable name
+(e.g., \code{column_name}), a string with the variable name (e.g., \code{"column_name"})
+or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{"regex()"}. Multiple variables can
+also be extracted using a character vector of length > 1, or a numeric
+vector containing column indices.}
+
+\item{exclude}{Character vector of column names to be excluded from selection.}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
 
 \item{...}{Other arguments passed to or from other functions.}
 
