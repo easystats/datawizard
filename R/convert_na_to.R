@@ -8,6 +8,7 @@
 #' @param replacement Numeric or character value that will be used to
 #' replace `NA`.
 #' @param verbose Toggle warnings.
+#' @param ... Not used.
 #'
 #' @return
 #' `x`, where all `NA` values are replaced by `replacement`.
@@ -66,7 +67,7 @@ convert_na_to <- function(x, ...) {
 
 #' @rdname convert_na_to
 #' @export
-convert_na_to.numeric <- function(x, replacement = NULL, verbose = TRUE) {
+convert_na_to.numeric <- function(x, replacement = NULL, verbose = TRUE, ...) {
 
   if (is_empty_object(replacement) || !is.numeric(replacement)) {
     if (isTRUE(verbose)) {
@@ -84,7 +85,7 @@ convert_na_to.numeric <- function(x, replacement = NULL, verbose = TRUE) {
 
 
 #' @export
-convert_na_to.factor <- function(x, replacement = NULL, verbose = TRUE) {
+convert_na_to.factor <- function(x, replacement = NULL, verbose = TRUE, ...) {
 
   if (is_empty_object(replacement) || length(replacement) > 1) {
     if (isTRUE(verbose)) {
@@ -101,7 +102,7 @@ convert_na_to.factor <- function(x, replacement = NULL, verbose = TRUE) {
 
 #' @rdname convert_na_to
 #' @export
-convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE) {
+convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE, ...) {
 
   if (is_empty_object(replacement) || !is.character(replacement)) {
     if (isTRUE(verbose)) {
@@ -132,7 +133,7 @@ convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE) {
 #'
 #' @rdname convert_na_to
 #' @export
-convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL, replace_fac = NULL, select = NULL, exclude = NULL, verbose = TRUE) {
+convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL, replace_fac = NULL, select = NULL, exclude = NULL, verbose = TRUE, ...) {
   # check for formula notation, convert to character vector
   if (inherits(select, "formula")) {
     select <- all.vars(select)

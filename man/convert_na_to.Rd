@@ -9,9 +9,9 @@
 \usage{
 convert_na_to(x, ...)
 
-\method{convert_na_to}{numeric}(x, replacement = NULL, verbose = TRUE)
+\method{convert_na_to}{numeric}(x, replacement = NULL, verbose = TRUE, ...)
 
-\method{convert_na_to}{character}(x, replacement = NULL, verbose = TRUE)
+\method{convert_na_to}{character}(x, replacement = NULL, verbose = TRUE, ...)
 
 \method{convert_na_to}{data.frame}(
   x,
@@ -20,11 +20,14 @@ convert_na_to(x, ...)
   replace_fac = NULL,
   select = NULL,
   exclude = NULL,
-  verbose = TRUE
+  verbose = TRUE,
+  ...
 )
 }
 \arguments{
 \item{x}{A numeric, factor, or character vector, or a data frame.}
+
+\item{...}{Not used.}
 
 \item{replacement}{Numeric or character value that will be used to
 replace \code{NA}.}
