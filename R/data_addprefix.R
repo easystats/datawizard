@@ -38,9 +38,10 @@ data_addprefix <- function(data, pattern, select = NULL, exclude = NULL, ignore_
   .attach_packages(conflicting_packages)
 
   # return valid column names, based on pattern
-  select <- .evaluated_pattern_to_colnames(select, data, ignore_case, verbose, exclude)
+  select <- .evaluated_pattern_to_colnames(select, data, ignore_case, verbose = FALSE, exclude)
 
-  names(data[select]) <- paste0(pattern, names(data[select]))
+  selected_columns <- colnames(data) %in% select
+  colnames(data)[selected_columns] <- paste0(pattern, colnames(data)[selected_columns])
   data
 }
 
@@ -79,8 +80,9 @@ data_addsuffix <- function(data, pattern, select = NULL, exclude = NULL, ignore_
   .attach_packages(conflicting_packages)
 
   # return valid column names, based on pattern
-  select <- .evaluated_pattern_to_colnames(select, data, ignore_case, verbose, exclude)
+  select <- .evaluated_pattern_to_colnames(select, data, ignore_case, verbose = FALSE, exclude)
 
-  names(data[select]) <- paste0(names(data[select]), pattern)
+  selected_columns <- colnames(data) %in% select
+  colnames(data)[selected_columns] <- paste0(colnames(data)[selected_columns], pattern)
   data
 }
