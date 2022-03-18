@@ -167,45 +167,38 @@ convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL,
 
   # check if pattern is a function like "starts_with()"
   # name it select2 so that is.list(select) can run
-  select2 <- tryCatch(
-    eval(p),
-    error = function(e)
-      NULL
-  )
+  # check if pattern is a function like "starts_with()"
+  select <- tryCatch(eval(p), error = function(e) NULL)
 
-  # if select2 could not be evaluated (because expression "makes no sense")
+  # if select could not be evaluated (because expression "makes no sense")
   # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
   # so we can use grepl()
-  if (is.null(select2)) {
-    evaluated_pattern <-
-      .evaluate_pattern(insight::safe_deparse(p), data, ignore_case = ignore_case)
-    select2 <- evaluated_pattern$pattern
+  if (is.null(select)) {
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), data, ignore_case = ignore_case)
+    select <- evaluated_pattern$pattern
     fixed <- evaluated_pattern$fixed
   }
 
 
   # seems to be no valid column name or index, so try to grep
   if (isFALSE(fixed)) {
-    select2 <-
-      colnames(data)[grepl(select2, colnames(data), ignore.case = ignore_case)]
+    select <- colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case)]
   }
 
   # load again
   .attach_packages(conflicting_packages)
 
   # return valid column names, based on pattern
-  select2 <- .evaluated_pattern_to_colnames(select2, data, ignore_case, verbose = FALSE, exclude)
-
-
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
+  if (is.list(select)) {
+    select_is_list <- TRUE
+    if (inherits(exclude, "formula")) {
+      exclude <- all.vars(exclude)
+    }
+  } else {
+    select <- .evaluated_pattern_to_colnames(select, data, ignore_case, verbose = FALSE, exclude)
+    select_is_list <- FALSE
   }
 
-  select_is_list <- is.list(tryCatch(
-    eval(p),
-    error = function(e)
-      NULL
-  ))
   if (select_is_list) {
 
     names_data <- names(x)
@@ -239,9 +232,7 @@ convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL,
 
   }
 
-  select2 <- .select_variables(x, select2, exclude, force = TRUE)
-
-  x[select2] <- lapply(x[select2], function(x) {
+  x[select] <- lapply(x[select], function(x) {
     if (is.numeric(x)) {
       repl <- replace_num
     } else if (is.character(x)) {
