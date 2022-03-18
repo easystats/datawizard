@@ -98,10 +98,10 @@ and data frame extensions (e.g., tibbles).</p></dd>
 <li><p>a positive integer, giving the position counting from the left</p></li>
 <li><p>a negative integer, giving the position counting from the right.</p></li>
 </ul><p>or one of the following select-helpers: <code>starts_with("")</code>, <code>ends_with("")</code>,
-<code>contains("")</code>, or <code>"regex()"</code>. Multiple variables can also be extracted
-using a character vector of length &gt; 1, or a numeric vector containing
-column indices. If the special value <code>0</code> or <code>"row.names"</code> is given, the
-row names of the object (if any) are extracted.</p></dd>
+<code>contains("")</code>, a range using <code>:</code> or <code>regex("")</code>. Multiple variables can
+also be extracted using a character vector of length &gt; 1, or a numeric
+vector containing column indices. If the special value <code>0</code> or <code>"row.names"</code>
+is given, the row names of the object (if any) are extracted.</p></dd>
 <dt>...</dt>
 <dd><p>For use by future methods.</p></dd>
 <dt>name</dt>
