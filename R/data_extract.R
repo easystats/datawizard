@@ -6,7 +6,7 @@
 #'
 #' @param data The object to subset. Methods are currently available for data frames
 #'   and data frame extensions (e.g., tibbles).
-#' @param select 	Either a variable specified as:
+#' @param select Either a variable specified as:
 #'
 #'   - a literal variable name (e.g., `column_name`)
 #'   - a string with the variable name (e.g., `"column_name"`)
@@ -19,8 +19,9 @@
 #'  vector containing column indices. If the special value `0` or `"row.names"`
 #'  is given, the row names of the object (if any) are extracted.
 #' @param name An optional argument that specifies the column to be used as
-#'   names for for the vector after extraction.
-#'   Specified in the same way as `select`.
+#'   names for the vector elements after extraction. Must be specified either
+#'   as literal variable name (e.g., `column_name`) or as string
+#'   (`"column_name"`). `name` will be ignored when a data frame is returned.
 #' @param extract String, indicating which element will be extracted when `select`
 #'   matches multiple variables. Can be `"all"` (the default) to return all
 #'   matched variables, `"first"` or `"last"` to return the first or last match,
@@ -181,12 +182,23 @@ data_extract.data.frame <- function(data,
     select
   )
 
-  if (!is.null(name) && length(name) == 1) {
-    stats::setNames(data[, select, drop = !as_data_frame], data[, name, drop = !as_data_frame])
-  } else {
-    if (is.null(name) && (length(select) > 1 || isTRUE(as_data_frame))) {
-      name <- select
+  # "name" only used for naming elements in a vector, not data frame
+  if (isTRUE(as_data_frame) ||
+      # more than one variable means data frame, so no name
+      length(select) > 1 ||
+      # if we have only one variable, but number of observations not equal to
+      # length of names, we have no proper match, so no naming, too.
+      (length(select) == 1 && length(name) > 1 && length(data[[select]]) != length(name))) {
+    name <- NULL
+  }
+  # we definitely should have a vector here when name not NULL
+  if (!is.null(name)) {
+    # if name indicates a variable, extract values for naming now
+    if (length(name) == 1) {
+      name <- data[[name]]
     }
-    stats::setNames(data[, select, drop = !as_data_frame], name)
+    stats::setNames(data[[select]], name)
+  } else {
+    data[, select, drop = !as_data_frame]
   }
 }

@@ -42,8 +42,9 @@ is given, the row names of the object (if any) are extracted.}
 \item{...}{For use by future methods.}
 
 \item{name}{An optional argument that specifies the column to be used as
-names for for the vector after extraction.
-Specified in the same way as \code{select}.}
+names for the vector elements after extraction. Must be specified either
+as literal variable name (e.g., \code{column_name}) or as string
+(\code{"column_name"}). \code{name} will be ignored when a data frame is returned.}
 
 \item{extract}{String, indicating which element will be extracted when \code{select}
 matches multiple variables. Can be \code{"all"} (the default) to return all
