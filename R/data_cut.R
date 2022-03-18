@@ -236,7 +236,7 @@ data_cut.data.frame <- function(x,
                                 exclude = NULL,
                                 force = FALSE,
                                 append = FALSE,
-                                ignore_case = TRUE,
+                                ignore_case = FALSE,
                                 verbose = TRUE,
                                 ...) {
   fixed <- TRUE
