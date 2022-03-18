@@ -3,7 +3,10 @@
 
 .evaluate_pattern <- function(x, data = NULL, ignore_case = FALSE) {
   fixed <- FALSE
-  if (grepl("^starts_with\\(\"(.*)\"\\)", x)) {
+  if (is.null(x) && !is.null(data)) {
+    pattern <- colnames(data)
+    fixed <- TRUE
+  } else if (grepl("^starts_with\\(\"(.*)\"\\)", x)) {
     pattern <- paste0("^", gsub("starts_with\\(\"(.*)\"\\)", "\\1", x))
   } else if (grepl("^ends_with\\(\"(.*)\"\\)", x)) {
     pattern <- paste0(gsub("ends_with\\(\"(.*)\"\\)", "\\1", x), "$")
