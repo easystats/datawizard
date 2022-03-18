@@ -30,6 +30,7 @@ data_cut(x, ...)
   exclude = NULL,
   force = FALSE,
   append = FALSE,
+  ignore_case = TRUE,
   verbose = TRUE,
   ...
 )
@@ -70,10 +71,19 @@ default minimum is always \code{1}, unless specified otherwise in \code{lowest}.
 will returns factors instead of numeric variables, with \code{labels} used
 for labelling the factor levels.}
 
-\item{verbose}{Toggle warnings and messages on or off.}
+\item{verbose}{Toggle warnings.}
 
-\item{select}{Character vector of column names. If \code{NULL} (the default), all
-variables will be selected.}
+\item{select}{Either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")}.
+}
+
+Multiple variables can also be extracted using a character vector of
+length > 1, or a numeric vector containing column indices.}
 
 \item{exclude}{Character vector of column names to be excluded from selection.}
 
@@ -85,6 +95,10 @@ thus returning both the original and the recoded variables. If \code{FALSE},
 original variables in \code{x} will be overwritten by their recoded versions.
 If a character value, recoded variables are appended with new column
 names (using the defined suffix) to the original data frame.}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
 }
 \value{
 \code{x}, recoded into groups. By default \code{x} is numeric, unless \code{labels}
