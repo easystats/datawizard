@@ -274,7 +274,7 @@ data_cut.grouped_df <- function(x,
   grps <- attr(x, "groups", exact = TRUE)
 
   # evaluate arguments
-  select <- .select_nse(select, data, exclude, ignore_case)
+  select <- .select_nse(select, x, exclude, ignore_case)
 
   # process arguments
   args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force)
