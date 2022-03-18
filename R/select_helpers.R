@@ -36,6 +36,42 @@
 }
 
 
+.pattern_nse <- function(pattern, data, exclude, ignore_case, verbose = FALSE) {
+  fixed <- TRUE
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
+
+  # in case pattern is a variable from another function call...
+  p <- try(eval(pattern), silent = TRUE)
+  if (inherits(p, c("try-error", "simpleError"))) {
+    p <- substitute(pattern, env = parent.frame())
+  }
+
+  # check if pattern is a function like "starts_with()"
+  pattern <- tryCatch(eval(p), error = function(e) NULL)
+
+  # if select could not be evaluated (because expression "makes no sense")
+  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
+  # so we can use grepl()
+  if (is.null(pattern)) {
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), data, ignore_case = ignore_case)
+    pattern <- evaluated_pattern$pattern
+    fixed <- evaluated_pattern$fixed
+  }
+
+  # seems to be no valid column name or index, so try to grep
+  if (isFALSE(fixed)) {
+    pattern <- colnames(data)[grepl(pattern, colnames(data), ignore.case = ignore_case)]
+  }
+
+  # load again
+  .attach_packages(conflicting_packages)
+
+  # return valid column names, based on pattern
+  .evaluated_pattern_to_colnames(pattern, data, ignore_case, verbose = verbose, exclude)
+}
+
+
 # this function looks for function-name-patterns (select-helpers) and
 # returns the regular expression that mimics the behaviour of that select-helper
 

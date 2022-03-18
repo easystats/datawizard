@@ -10,10 +10,10 @@ data_remove <- function(data, pattern, ignore_case = FALSE, verbose = FALSE, ...
   ## TODO set verbose = TRUE by default in a later update?
 
   # evaluate arguments
-  pattern <- .select_nse(pattern, data, exclude = NULL, ignore_case)
+  pattern <- .pattern_nse(pattern, data, exclude = NULL, ignore_case)
 
   # nothing to remove?
-  if (!length(pattern) || is.null(pattern)) {
+  if (!length(pattern)) {
     return(data)
   }
 
