@@ -37,12 +37,8 @@ data_addprefix <- function(data, pattern, select = NULL, exclude = NULL, ignore_
   # load again
   .attach_packages(conflicting_packages)
 
-  # check for formula notation, convert to character vector
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
-
-  select <- .select_variables(data, select, exclude, force = TRUE)
+  # return valid column names, based on pattern
+  select <- .evaluated_pattern_to_colnames(select, data, ignore_case, verbose, exclude)
 
   names(data[select]) <- paste0(pattern, names(data[select]))
   data
@@ -82,12 +78,8 @@ data_addsuffix <- function(data, pattern, select = NULL, exclude = NULL, ignore_
   # load again
   .attach_packages(conflicting_packages)
 
-  # check for formula notation, convert to character vector
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
-
-  select <- .select_variables(data, select, exclude, force = TRUE)
+  # return valid column names, based on pattern
+  select <- .evaluated_pattern_to_colnames(select, data, ignore_case, verbose, exclude)
 
   names(data[select]) <- paste0(names(data[select]), pattern)
   data

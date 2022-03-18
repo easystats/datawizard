@@ -124,12 +124,8 @@ convert_to_na.data.frame <- function(x, na = NULL, select = NULL, exclude = NULL
   # load again
   .attach_packages(conflicting_packages)
 
-  # check for formula notation, convert to character vector
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
-
-  select <- .select_variables(x, select, exclude, force = TRUE)
+  # return valid column names, based on pattern
+  select <- .evaluated_pattern_to_colnames(select, data, ignore_case, verbose, exclude)
 
   x[select] <- lapply(x[select], convert_to_na, na = na, verbose = FALSE, ...)
   x
