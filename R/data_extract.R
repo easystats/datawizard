@@ -14,10 +14,10 @@
 #'   - a negative integer, giving the position counting from the right.
 #'
 #'  or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
-#'  `contains("")`, or `"regex()"`. Multiple variables can also be extracted
-#'  using a character vector of length > 1, or a numeric vector containing
-#'  column indices. If the special value `0` or `"row.names"` is given, the
-#'  row names of the object (if any) are extracted.
+#'  `contains("")`, a range using `:` or `regex("")`. Multiple variables can
+#'  also be extracted using a character vector of length > 1, or a numeric
+#'  vector containing column indices. If the special value `0` or `"row.names"`
+#'  is given, the row names of the object (if any) are extracted.
 #' @param name An optional argument that specifies the column to be used as
 #'   names for for the vector after extraction.
 #'   Specified in the same way as `select`.
