@@ -53,6 +53,11 @@
 # is in the column names of the data, and returns the final column names to select
 
 .evaluated_pattern_to_colnames <- function(pattern, data, ignore_case, verbose, exclude = NULL) {
+  # if pattern is formula, simply extract all variables
+  if (inherits(pattern, "formula")) {
+    pattern <- all.vars(pattern)
+  }
+
   # if numeric, make sure we have valid column indices
   if (is.numeric(pattern)) {
     pattern <- colnames(data)[intersect(pattern, 1:ncol(data))]
