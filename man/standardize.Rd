@@ -82,8 +82,8 @@ unstandardise(x, ...)
 )
 }
 \arguments{
-\item{x}{A data frame, a vector or a statistical model (for \code{unstandardize()}
-cannot be a model).}
+\item{x}{A (grouped) data frame, a vector or a statistical model (for
+\code{unstandardize()} cannot be a model).}
 
 \item{...}{Arguments passed to or from other methods.}
 

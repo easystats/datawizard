@@ -36,7 +36,7 @@ data_cut(x, ...)
 )
 }
 \arguments{
-\item{x}{A data frame, numeric vector or factor.}
+\item{x}{A (grouped) data frame, numeric vector or factor.}
 
 \item{...}{not used.}
 
@@ -73,19 +73,23 @@ for labelling the factor levels.}
 
 \item{verbose}{Toggle warnings.}
 
-\item{select}{Either
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
 \itemize{
 \item a variable specified as a literal variable name (e.g., \code{column_name}),
-\item a string with the variable name (e.g., \code{"column_name"}),
+\item a string with the variable name (e.g., \code{"column_name"}), or a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
 \item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item a vector of positive integers, giving the positions counting from the left
+(e.g. \code{1} or \code{c(1, 3, 5)}),
+\item a vector of negative integers, giving the positions counting from the
+right (e.g., \code{-1} or \code{-1:-3}),
 \item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
 \code{contains("")}, a range using \code{:} or \code{regex("")}.
-}
+}}
 
-Multiple variables can also be extracted using a character vector of
-length > 1, or a numeric vector containing column indices.}
-
-\item{exclude}{Character vector of column names to be excluded from selection.}
+\item{exclude}{See \code{select}, however, column names matched by the pattern
+from \code{exclude} will be excluded instead of selected.}
 
 \item{force}{Logical, if \code{TRUE}, forces recoding of factors as well.}
 

@@ -253,7 +253,7 @@ test_that("data_match, labels preserved", {
 # convert_to_na -----------------------------------
 
 test_that("convert_to_na, labels preserved", {
-  x <- convert_to_na(efc, na = c(2, "2"), select = starts_with("e"))
+  expect_warning(x <- convert_to_na(efc, na = c(2, "2"), select = starts_with("e")))
   # factor
   expect_equal(
     attr(x$e42dep, "label", exact = TRUE),

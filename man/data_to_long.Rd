@@ -9,11 +9,12 @@
 \usage{
 data_to_long(
   data,
-  cols = "all",
+  select = "all",
   colnames_to = "Name",
   values_to = "Value",
   rows_to = NULL,
   ignore_case = FALSE,
+  cols = select,
   ...,
   names_to = colnames_to
 )
@@ -30,11 +31,12 @@ data_to_wide(
 
 reshape_longer(
   data,
-  cols = "all",
+  select = "all",
   colnames_to = "Name",
   values_to = "Value",
   rows_to = NULL,
   ignore_case = FALSE,
+  cols = select,
   ...,
   names_to = colnames_to
 )
@@ -52,9 +54,20 @@ reshape_wider(
 \arguments{
 \item{data}{A data frame to pivot.}
 
-\item{cols}{A vector of column names or indices to pivot into longer format.
-May also be one of the select-helpers, or a formula (see documentation for
-\code{select} in \code{\link[=convert_to_na]{convert_to_na()}}).}
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}), or a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item a vector of positive integers, giving the positions counting from the left
+(e.g. \code{1} or \code{c(1, 3, 5)}),
+\item a vector of negative integers, giving the positions counting from the
+right (e.g., \code{-1} or \code{-1:-3}),
+\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")}.
+}}
 
 \item{colnames_to}{The name of the new column that will contain the column
 names.}
@@ -68,6 +81,8 @@ the original data. If \code{NULL}, will be removed.}
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
+
+\item{cols}{Deprecated. Please use \code{select}.}
 
 \item{...}{Additional arguments passed on to methods.}
 
@@ -104,7 +119,7 @@ data_to_long(wide_data)
 
 # Customizing the names
 data_to_long(wide_data,
-  cols = c(1, 2),
+  select = c(1, 2),
   colnames_to = "Column",
   values_to = "Numbers",
   rows_to = "Row"
@@ -126,7 +141,7 @@ if (require("psych")) {
 
   # Pivot long format
   long <- data_to_long(data,
-    cols = "\\\\d", # Select all columns that contain a digit
+    select = regex("\\\\d"), # Select all columns that contain a digit
     colnames_to = "Item",
     values_to = "Score",
     rows_to = "Participant"

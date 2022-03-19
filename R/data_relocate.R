@@ -1,14 +1,13 @@
 #' @title Relocate (reorder) columns of a data frame
 #' @name data_relocate
 #'
-#' @param data A data frame to pivot.
-#' @param cols A character vector indicating the names of the columns to move.
+#' @param data A data frame.
 #' @param before,after Destination of columns. Supplying neither will move
 #'   columns to the left-hand side; specifying both is an error. Can be a
 #'   character vector, indicating the name of the destination column, or a
 #'   numeric value, indicating the index number of the destination column.
 #'   If `-1`, will be added before or after the last column.
-#' @param safe If `TRUE`, will disregard non-existing columns.
+#' @inheritParams convert_to_na
 #' @inheritParams data_rename
 #'
 #' @inherit data_rename seealso
@@ -25,16 +24,16 @@
 #'
 #' @examples
 #' # Reorder columns
-#' head(data_relocate(iris, cols = "Species", before = "Sepal.Length"))
-#' head(data_relocate(iris, cols = "Species", before = "Sepal.Width"))
-#' head(data_relocate(iris, cols = "Sepal.Width", after = "Species"))
+#' head(data_relocate(iris, select = "Species", before = "Sepal.Length"))
+#' head(data_relocate(iris, select = "Species", before = "Sepal.Width"))
+#' head(data_relocate(iris, select = "Sepal.Width", after = "Species"))
 #' # same as
-#' head(data_relocate(iris, cols = "Sepal.Width", after = -1))
+#' head(data_relocate(iris, select = "Sepal.Width", after = -1))
 #'
 #' # reorder multiple columns
-#' head(data_relocate(iris, cols = c("Species", "Petal.Length"), after = "Sepal.Width"))
+#' head(data_relocate(iris, select = c("Species", "Petal.Length"), after = "Sepal.Width"))
 #' # same as
-#' head(data_relocate(iris, cols = c("Species", "Petal.Length"), after = 2))
+#' head(data_relocate(iris, select = c("Species", "Petal.Length"), after = 2))
 #'
 #' # Reorder columns
 #' head(data_reorder(iris, c("Species", "Sepal.Length")))
@@ -42,10 +41,11 @@
 #'
 #' @export
 data_relocate <- function(data,
-                          cols,
+                          select,
                           before = NULL,
                           after = NULL,
-                          safe = TRUE,
+                          ignore_case = FALSE,
+                          verbose = TRUE,
                           ...) {
 
   # Sanitize
@@ -75,12 +75,7 @@ data_relocate <- function(data,
     }
   }
 
-  if (safe) {
-    if (!is.null(cols) && is.numeric(cols)) {
-      cols <- data[intersect(cols, seq_len(ncol(data)))]
-    }
-    cols <- cols[cols %in% names(data)]
-  }
+  cols <- .select_nse(select, data, exclude = NULL, ignore_case = ignore_case, verbose = verbose)
 
   # save attributes
   att <- attributes(data)
@@ -128,8 +123,8 @@ data_relocate <- function(data,
 
 #' @rdname data_relocate
 #' @export
-data_reorder <- function(data, cols, safe = TRUE, ...) {
+data_reorder <- function(data, select, ignore_case = FALSE, verbose = TRUE, ...) {
+  cols <- .select_nse(select, data, exclude = NULL, ignore_case = ignore_case, verbose = verbose)
   remaining_columns <- setdiff(colnames(data), cols)
-  if (isTRUE(safe)) cols <- cols[cols %in% names(data)]
   data[c(cols, remaining_columns)]
 }
