@@ -23,10 +23,11 @@ data_relocate(
   before = NULL,
   after = NULL,
   ignore_case = FALSE,
+  verbose = TRUE,
   ...
 )
 
-data_reorder(data, select, ignore_case = FALSE, ...)
+data_reorder(data, select, ignore_case = FALSE, verbose = TRUE, ...)
 
 data_remove(data, select, ignore_case = FALSE, verbose = FALSE, ...)
 }
@@ -67,8 +68,6 @@ numeric value, indicating the index number of the destination column.
 If \code{-1}, will be added before or after the last column.}
 
 \item{verbose}{Toggle warnings.}
-
-\item{safe}{If \code{TRUE}, will disregard non-existing columns.}
 }
 \value{
 A data frame with reordered columns.

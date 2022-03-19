@@ -7,7 +7,6 @@
 #'   character vector, indicating the name of the destination column, or a
 #'   numeric value, indicating the index number of the destination column.
 #'   If `-1`, will be added before or after the last column.
-#' @param safe If `TRUE`, will disregard non-existing columns.
 #' @inheritParams convert_to_na
 #' @inheritParams data_rename
 #'
@@ -46,6 +45,7 @@ data_relocate <- function(data,
                           before = NULL,
                           after = NULL,
                           ignore_case = FALSE,
+                          verbose = TRUE,
                           ...) {
 
   # Sanitize
@@ -75,7 +75,7 @@ data_relocate <- function(data,
     }
   }
 
-  cols <- .select_nse(select, data, exclude = NULL, ignore_case = ignore_case)
+  cols <- .select_nse(select, data, exclude = NULL, ignore_case = ignore_case, verbose = verbose)
 
   # save attributes
   att <- attributes(data)
@@ -123,8 +123,8 @@ data_relocate <- function(data,
 
 #' @rdname data_relocate
 #' @export
-data_reorder <- function(data, select, ignore_case = FALSE, ...) {
-  cols <- .select_nse(select, data, exclude = NULL, ignore_case = ignore_case)
+data_reorder <- function(data, select, ignore_case = FALSE, verbose = TRUE, ...) {
+  cols <- .select_nse(select, data, exclude = NULL, ignore_case = ignore_case, verbose = verbose)
   remaining_columns <- setdiff(colnames(data), cols)
   data[c(cols, remaining_columns)]
 }

@@ -99,8 +99,8 @@ convert_to_na.character <- convert_to_na.factor
 #' @export
 convert_to_na.data.frame <- function(x, na = NULL, select = NULL, exclude = NULL, ignore_case = FALSE, verbose = TRUE, ...) {
   # evaluate arguments
-  select <- .select_nse(select, x, exclude, ignore_case)
+  select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
 
-  x[select] <- lapply(x[select], convert_to_na, na = na, verbose = FALSE, ...)
+  x[select] <- lapply(x[select], convert_to_na, na = na, verbose = verbose, ...)
   x
 }

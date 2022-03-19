@@ -49,4 +49,20 @@ test_that("data_relocate select-helpers", {
     colnames(data_relocate(iris, select = -1)),
     colnames(iris[c(5, 1:4)])
   )
+  expect_equal(
+    colnames(data_relocate(iris, select = Species, after = 1)),
+    colnames(iris[c(1, 5, 2:4)])
+  )
+  expect_equal(
+    colnames(data_relocate(iris, select = ~Sepal.Width + Species)),
+    colnames(iris[c(2, 5, 1, 3:4)])
+  )
+  expect_equal(
+    colnames(data_relocate(iris, select = starts_with("sepal"), after = 5)),
+    colnames(iris)
+  )
+  expect_equal(
+    colnames(data_relocate(iris, select = starts_with("sepal"), after = 5, ignore_case = TRUE)),
+    colnames(iris[c(3:5, 1:2)])
+  )
 })

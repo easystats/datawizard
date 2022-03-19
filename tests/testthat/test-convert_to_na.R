@@ -26,7 +26,7 @@ test_that("convert_to_na-numeric", {
 })
 
 test_that("convert_to_na-df", {
-  x <- convert_to_na(iris, na = 5)
+  expect_warning(x <- convert_to_na(iris, na = 5))
   expect_equal(sum(is.na(x)), sum(sapply(iris, function(i) sum(i == 5))))
 
   x <- convert_to_na(iris, na = list(5, "versicolor"))
@@ -34,7 +34,7 @@ test_that("convert_to_na-df", {
 
   data(iris)
   iris$Sepal.Width <- as.character(iris$Sepal.Width)
-  x <- convert_to_na(iris, na = 3)
+  expect_warning(expect_warning(x <- convert_to_na(iris, na = 3)))
   expect_equal(sum(is.na(x)), sum(sapply(iris, function(i) if (is.numeric(i)) sum(i == 3) else 0)))
 
   x <- convert_to_na(iris, na = list(3, "3"))
