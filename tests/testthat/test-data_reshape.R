@@ -144,3 +144,22 @@ test_that("data_reshape works as expected - complex dataset", {
   expect_equal(ncol(long1), ncol(long2))
   expect_equal(nrow(long1), nrow(long2))
 })
+
+
+test_that("data_reshape works as expected - simple dataset", {
+  d <- data.frame(age = c(20, 30, 40),
+                  sex = c("Female", "Male", "Male"),
+                  score_t1 = c(30, 35, 32),
+                  score_t2 = c(33, 34, 37),
+                  speed_t1 = c(2, 3, 1),
+                  speed_t2 = c(3, 4, 5),
+                  stringsAsFactors = FALSE)
+
+  out <- data_to_long(d, starts_with("score"))
+  expect_equal(out$Name, c("score_t1", "score_t2", "score_t1", "score_t2", "score_t1", "score_t2"))
+  expect_equal(out$Value, c(d$score_t1, d$score_t2)[c(1, 4, 2, 5, 3, 6)])
+
+  out <- data_to_long(d, contains("t2"), colnames_to = "NewCol", values_to = "Time")
+  expect_equal(out$NewCol, c("score_t2", "speed_t2", "score_t2", "speed_t2", "score_t2", "speed_t2"))
+  expect_equal(out$Time, c(33, 3, 34, 4, 37, 5))
+})
