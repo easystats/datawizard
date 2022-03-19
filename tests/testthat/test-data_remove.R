@@ -63,6 +63,11 @@ test_that("data_remove works with NSE", {
   )
 
   expect_equal(
+    colnames(data_remove(iris, -1:-2)),
+    colnames(iris)[1:3]
+  )
+
+  expect_equal(
     colnames(data_remove(iris, "abc")),
     colnames(iris)
   )
