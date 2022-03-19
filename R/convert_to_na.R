@@ -5,7 +5,8 @@
 #' Convert non-missing values in a variable into missing values.
 #'
 #' @param x A vector, factor or a data frame.
-#' @param select 	Either
+#' @param select Variables that will be included when performing the required
+#'   tasks. Can be either
 #'
 #'   - a variable specified as a literal variable name (e.g., `column_name`),
 #'   - a string with the variable name (e.g., `"column_name"`),
@@ -15,11 +16,13 @@
 #'
 #'   Multiple variables can also be extracted using a character vector of
 #'   length > 1, or a numeric vector containing column indices.
+#' @param exclude See `select`, however, column names matched by the pattern
+#'   from `exclude` will be excluded instead of selected.
 #' @param na Numeric or character vector (or a list of numeric and character
 #'   vectors) with values that should be converted to `NA`.
 #' @param verbose Toggle warnings.
 #' @param ... Not used.
-#' @inheritParams standardize
+
 #' @inheritParams data_extract
 #'
 #' @return
@@ -99,8 +102,8 @@ convert_to_na.character <- convert_to_na.factor
 #' @export
 convert_to_na.data.frame <- function(x, na = NULL, select = NULL, exclude = NULL, ignore_case = FALSE, verbose = TRUE, ...) {
   # evaluate arguments
-  select <- .select_nse(select, x, exclude, ignore_case)
+  select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
 
-  x[select] <- lapply(x[select], convert_to_na, na = na, verbose = FALSE, ...)
+  x[select] <- lapply(x[select], convert_to_na, na = na, verbose = verbose, ...)
   x
 }

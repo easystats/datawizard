@@ -73,7 +73,8 @@ for labelling the factor levels.}
 
 \item{verbose}{Toggle warnings.}
 
-\item{select}{Either
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
 \itemize{
 \item a variable specified as a literal variable name (e.g., \code{column_name}),
 \item a string with the variable name (e.g., \code{"column_name"}),
@@ -85,7 +86,8 @@ for labelling the factor levels.}
 Multiple variables can also be extracted using a character vector of
 length > 1, or a numeric vector containing column indices.}
 
-\item{exclude}{Character vector of column names to be excluded from selection.}
+\item{exclude}{See \code{select}, however, column names matched by the pattern
+from \code{exclude} will be excluded instead of selected.}
 
 \item{force}{Logical, if \code{TRUE}, forces recoding of factors as well.}
 
