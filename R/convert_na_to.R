@@ -130,14 +130,15 @@ convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE, ...) 
 #' @param replace_num Value to replace `NA` when variable is of type numeric.
 #' @param replace_char Value to replace `NA` when variable is of type character.
 #' @param replace_fac Value to replace `NA` when variable is of type factor.
-#' @param select 	Either
+#' @param select 	Either:
 #'
 #'   - a variable specified as a literal variable name (e.g., `column_name`),
 #'   - a string with the variable name (e.g., `"column_name"`),
 #'   - a formula with variable names (e.g., `~column_1 + column_2`),
 #'   - one of the following select-helpers: `starts_with("")`, `ends_with("")`,
 #'   `contains("")`, a range using `:` or `regex("")`,
-#'   - or a named list specifying variables and their specific replacement.
+#'   - or a named list specifying variables and their specific replacement
+#'   (e.g `list(Sepal.Length = 0)`).
 #'
 #' Multiple variables can also be extracted using a character vector of
 #' length > 1, or a numeric vector containing column indices.
@@ -156,83 +157,52 @@ convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL,
 
   data <- x
   fixed <- TRUE
-  # avoid conflicts
-  conflicting_packages <- .conflicting_packages("poorman")
+  select_nse <- .select_nse(select, data, exclude = exclude, ignore_case)
 
-  # in case pattern is a variable from another function call...
-  p <- try(eval(select), silent = TRUE)
-  if (inherits(p, c("try-error", "simpleError"))) {
-    p <- substitute(select)
-  }
-
-  # check if pattern is a function like "starts_with()"
-  # name it select2 so that is.list(select) can run
-  # check if pattern is a function like "starts_with()"
-  select <- tryCatch(eval(p), error = function(e) NULL)
-
-  # if select could not be evaluated (because expression "makes no sense")
-  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
-  # so we can use grepl()
-  if (is.null(select)) {
-    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), data, ignore_case = ignore_case)
-    select <- evaluated_pattern$pattern
-    fixed <- evaluated_pattern$fixed
-  }
-
-
-  # seems to be no valid column name or index, so try to grep
-  if (isFALSE(fixed)) {
-    select <- colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case)]
-  }
-
-  # load again
-  .attach_packages(conflicting_packages)
-
-  # return valid column names, based on pattern
-  if (is.list(select)) {
-    select_is_list <- TRUE
-    if (inherits(exclude, "formula")) {
-      exclude <- all.vars(exclude)
-    }
-  } else {
-    select <- .evaluated_pattern_to_colnames(select, data, ignore_case, verbose = FALSE, exclude)
-    select_is_list <- FALSE
-  }
-
-  if (select_is_list) {
-
-    names_data <- names(x)
-    names_sel <- names(select)
-    not_in_sel <- names_data[which(!names_data %in% names_sel)]
-
-    for (i in seq_along(names_sel)) {
-      if (!names_sel[i] %in% names_data) next
-      x[[names_sel[i]]] <- convert_na_to(
-        x[[names_sel[i]]],
-        replacement = select[[i]],
-        verbose = verbose
-      )
-    }
-
-    for (i in seq_along(not_in_sel)) {
-      to_convert <- x[[not_in_sel[i]]]
-      if (is.numeric(to_convert)) {
-        repl <- replace_num
-      } else if (is.character(to_convert)) {
-        repl <- replace_char
-      } else if (is.factor(to_convert)) {
-        repl <- replace_fac
+  # list are not covered by .select_nse
+  if (length(select_nse) == 0) {
+    if (is.list(select)) {
+      if (inherits(exclude, "formula")) {
+        exclude <- all.vars(exclude)
       }
-      if (!is.null(repl)) {
-        x[[not_in_sel[i]]] <- convert_na_to(to_convert, replacement = repl, verbose = FALSE)
+
+      not_modify <- if (is.character(exclude)) {
+        exclude
+      } else if (is.numeric(exclude)) {
+        colnames(x)[exclude]
       }
+      names_data <- names(x)
+      names_sel <- names(select)
+      apply_default <- names_data[which(!names_data %in% c(names_sel, not_modify))]
+
+      for (i in seq_along(names_sel)) {
+        if (!names_sel[i] %in% names_data) next
+        x[[names_sel[i]]] <- convert_na_to(
+          x[[names_sel[i]]],
+          replacement = select[[i]],
+          verbose = verbose
+        )
+      }
+
+      for (i in seq_along(apply_default)) {
+        to_convert <- x[[apply_default[i]]]
+        if (is.numeric(to_convert)) {
+          repl <- replace_num
+        } else if (is.character(to_convert)) {
+          repl <- replace_char
+        } else if (is.factor(to_convert)) {
+          repl <- replace_fac
+        }
+        if (!is.null(repl)) {
+          x[[apply_default[i]]] <- convert_na_to(to_convert, replacement = repl, verbose = FALSE)
+        }
+      }
+      return(x)
     }
-
-    return(x)
-
   }
 
-  x[select] <- lapply(x[select], function(x) {
+
+  x[select_nse] <- lapply(x[select_nse], function(x) {
     if (is.numeric(x)) {
       repl <- replace_num
     } else if (is.character(x)) {
@@ -242,8 +212,6 @@ convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL,
     }
     convert_na_to(x, replacement = repl, verbose = FALSE)
   })
-
   x
-
 }
 

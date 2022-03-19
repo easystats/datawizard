@@ -41,14 +41,15 @@ replace \code{NA}.}
 
 \item{replace_fac}{Value to replace \code{NA} when variable is of type factor.}
 
-\item{select}{Either
+\item{select}{Either:
 \itemize{
 \item a variable specified as a literal variable name (e.g., \code{column_name}),
 \item a string with the variable name (e.g., \code{"column_name"}),
 \item a formula with variable names (e.g., \code{~column_1 + column_2}),
 \item one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
 \code{contains("")}, a range using \code{:} or \code{regex("")},
-\item or a named list specifying variables and their specific replacement.
+\item or a named list specifying variables and their specific replacement
+(e.g \code{list(Sepal.Length = 0)}).
 }
 
 Multiple variables can also be extracted using a character vector of
