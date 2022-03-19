@@ -39,7 +39,7 @@ of column names, \code{ends_with} finds matches at the end of column names.}
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
 
-\item{...}{For use by future methods.}
+\item{...}{Not used.}
 
 \item{cols}{A character vector indicating the names of the columns to move.}
 
@@ -51,21 +51,17 @@ If \code{-1}, will be added before or after the last column.}
 
 \item{safe}{If \code{TRUE}, will disregard non-existing columns.}
 
-\item{select}{Either a variable specified as:
+\item{select}{Either
 \itemize{
-\item a literal variable name (e.g., \code{column_name})
-\item a string with the variable name (e.g., \code{"column_name"})
-\item a positive integer, giving the position counting from the left
-\item a negative integer, giving the position counting from the right,
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}),
 \item a formula with variable names (e.g., \code{~column_1 + column_2}),
 \item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
 \code{contains("")}, a range using \code{:} or \code{regex("")}.
 }
 
 Multiple variables can also be extracted using a character vector of
-length > 1, or a numeric vector containing column indices. If the special
-value \code{0} or \code{"row.names"} is given, the row names of the object (if any)
-are extracted.}
+length > 1, or a numeric vector containing column indices.}
 
 \item{verbose}{Toggle warnings.}
 }
