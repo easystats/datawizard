@@ -28,8 +28,11 @@
     select <- evaluated_pattern$pattern
     fixed_select <- evaluated_pattern$fixed
   }
-  # don't put the same condition for exclude because if exclude = NULL,
-  # we want to keep all vars, not remove all of them
+  if (is.null(exclude)) {
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p2), data, ignore_case = ignore_case)
+    exclude <- evaluated_pattern$pattern
+    fixed_exclude <- evaluated_pattern$fixed
+  }
 
 
   # seems to be no valid column name or index, so try to grep
@@ -38,6 +41,10 @@
   }
   if (isFALSE(fixed_exclude)) {
     exclude <- colnames(data)[grepl(exclude, colnames(data), ignore.case = ignore_case)]
+  }
+  # if exclude = NULL, we want to exclude 0 variables, not all of them
+  if (length(exclude) == ncol(data)) {
+    exclude <- NULL
   }
 
   # load again
