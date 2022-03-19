@@ -54,7 +54,7 @@ test_that("data_relocate select-helpers", {
     colnames(iris[c(1, 5, 2:4)])
   )
   expect_equal(
-    colnames(data_relocate(iris, select = ~Sepal.Width + Species)),
+    colnames(data_relocate(iris, select = ~ Sepal.Width + Species)),
     colnames(iris[c(2, 5, 1, 3:4)])
   )
   expect_equal(
