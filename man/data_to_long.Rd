@@ -117,7 +117,7 @@ data_to_long(wide_data)
 
 # Customizing the names
 data_to_long(wide_data,
-  cols = c(1, 2),
+  select = c(1, 2),
   colnames_to = "Column",
   values_to = "Numbers",
   rows_to = "Row"
@@ -139,7 +139,7 @@ if (require("psych")) {
 
   # Pivot long format
   long <- data_to_long(data,
-    cols = "\\\\d", # Select all columns that contain a digit
+    select = regex("\\\\d"), # Select all columns that contain a digit
     colnames_to = "Item",
     values_to = "Score",
     rows_to = "Participant"
