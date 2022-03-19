@@ -41,26 +41,25 @@ replace \code{NA}.}
 
 \item{replace_fac}{Value to replace \code{NA} when variable is of type factor.}
 
-\item{select}{Either:
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
 \itemize{
 \item a variable specified as a literal variable name (e.g., \code{column_name}),
-\item a string with the variable name (e.g., \code{"column_name"}),
+\item a string with the variable name (e.g., \code{"column_name"}), or a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
 \item a formula with variable names (e.g., \code{~column_1 + column_2}),
-\item one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
-\code{contains("")}, a range using \code{:} or \code{regex("")},
-\item or a named list specifying variables and their specific replacement
-(e.g \code{list(Sepal.Length = 0)}).
-}
+\item a vector of positive integers, giving the positions counting from the left
+(e.g. \code{1} or \code{c(1, 3, 5)}),
+\item a vector of negative integers, giving the positions counting from the
+right (e.g., \code{-1} or \code{-1:-3}),
+\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")}.
+}}
 
-Multiple variables can also be extracted using a character vector of
-length > 1, or a numeric vector containing column indices.
+\item{exclude}{See \code{select}, however, column names matched by the pattern
+from \code{exclude} will be excluded instead of selected.}
 
-See \code{Examples} for more details.}
-
-\item{exclude}{A vector of variable names in which \code{NA} will not be
-replaced.}
-
-\item{ignore_case}{Logical. If \code{TRUE} and when one of the select-helpers or
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
 }

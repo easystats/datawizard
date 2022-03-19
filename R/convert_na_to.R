@@ -130,33 +130,13 @@ convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE, ...) 
 #' @param replace_num Value to replace `NA` when variable is of type numeric.
 #' @param replace_char Value to replace `NA` when variable is of type character.
 #' @param replace_fac Value to replace `NA` when variable is of type factor.
-#' @param select 	Either:
-#'
-#'   - a variable specified as a literal variable name (e.g., `column_name`),
-#'   - a string with the variable name (e.g., `"column_name"`),
-#'   - a formula with variable names (e.g., `~column_1 + column_2`),
-#'   - one of the following select-helpers: `starts_with("")`, `ends_with("")`,
-#'   `contains("")`, a range using `:` or `regex("")`,
-#'   - or a named list specifying variables and their specific replacement
-#'   (e.g `list(Sepal.Length = 0)`).
-#'
-#' Multiple variables can also be extracted using a character vector of
-#' length > 1, or a numeric vector containing column indices.
-#'
-#' See `Examples` for more details.
-#'
-#' @param exclude A vector of variable names in which `NA` will not be
-#' replaced.
-#' @param ignore_case Logical. If `TRUE` and when one of the select-helpers or
-#' a regular expression is used in `select`, ignores lower/upper case in the
-#' search pattern when matching against variable names.
+#' @inheritParams convert_to_na
 #'
 #' @rdname convert_na_to
 #' @export
 convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL, replace_fac = NULL, select = NULL, exclude = NULL, verbose = TRUE, ignore_case = FALSE, ...) {
 
   data <- x
-  fixed <- TRUE
   select_nse <- .select_nse(select, data, exclude = exclude, ignore_case)
 
   # list are not covered by .select_nse
