@@ -303,3 +303,21 @@ test_that("reverse_scale warns if single value to reverse", {
     regexp = "A `range` must be provided for data with only one unique value."
   )
 })
+
+
+test_that("reverse_scale select helpers", {
+  data(iris)
+  out <- data_rescale(iris, to = list(
+    "Sepal.Length" = c(0, 1),
+    "Petal.Length" = c(-1, 0)
+  ), select = ends_with("length"))
+
+  expect_equal(out$Sepal.Length, iris$Sepal.Length, tolerance = 1e-3)
+
+  out <- data_rescale(iris, to = list(
+    "Sepal.Length" = c(0, 1),
+    "Petal.Length" = c(-1, 0)
+  ), select = ends_with("length"), ignore_case = TRUE)
+
+  expect_equal(head(out$Sepal.Length), c(0.22222, 0.16667, 0.11111, 0.08333, 0.19444, 0.30556), tolerance = 1e-3)
+})
