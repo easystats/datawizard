@@ -72,11 +72,12 @@ the number of columns. This is a dependency-free base-R equivalent of
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">data_to_long</span><span class="op">(</span>
   <span class="va">data</span>,
-  cols <span class="op">=</span> <span class="st">"all"</span>,
+  select <span class="op">=</span> <span class="st">"all"</span>,
   colnames_to <span class="op">=</span> <span class="st">"Name"</span>,
   values_to <span class="op">=</span> <span class="st">"Value"</span>,
   rows_to <span class="op">=</span> <span class="cn">NULL</span>,
   ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
+  cols <span class="op">=</span> <span class="va">select</span>,
   <span class="va">...</span>,
   names_to <span class="op">=</span> <span class="va">colnames_to</span>
 <span class="op">)</span>
@@ -93,11 +94,12 @@ the number of columns. This is a dependency-free base-R equivalent of
 
 <span class="fu">reshape_longer</span><span class="op">(</span>
   <span class="va">data</span>,
-  cols <span class="op">=</span> <span class="st">"all"</span>,
+  select <span class="op">=</span> <span class="st">"all"</span>,
   colnames_to <span class="op">=</span> <span class="st">"Name"</span>,
   values_to <span class="op">=</span> <span class="st">"Value"</span>,
   rows_to <span class="op">=</span> <span class="cn">NULL</span>,
   ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
+  cols <span class="op">=</span> <span class="va">select</span>,
   <span class="va">...</span>,
   names_to <span class="op">=</span> <span class="va">colnames_to</span>
 <span class="op">)</span>
@@ -117,10 +119,19 @@ the number of columns. This is a dependency-free base-R equivalent of
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>A data frame to pivot.</p></dd>
-<dt>cols</dt>
-<dd><p>A vector of column names or indices to pivot into longer format.
-May also be one of the select-helpers, or a formula (see documentation for
-<code>select</code> in <code><a href="convert_to_na.html">convert_to_na()</a></code>).</p></dd>
+<dt>select</dt>
+<dd><p>Variables that will be included when performing the required
+tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
+<li><p>a string with the variable name (e.g., <code>"column_name"</code>), or a character
+vector of variable names (e.g., <code>c("col1", "col2", "col3")</code>),</p></li>
+<li><p>a formula with variable names (e.g., <code>~column_1 + column_2</code>),</p></li>
+<li><p>a vector of positive integers, giving the positions counting from the left
+(e.g. <code>1</code> or <code>c(1, 3, 5)</code>),</p></li>
+<li><p>a vector of negative integers, giving the positions counting from the
+right (e.g., <code>-1</code> or <code>-1:-3</code>),</p></li>
+<li><p>or one of the following select-helpers: <code>starts_with("")</code>, <code>ends_with("")</code>,
+<code>contains("")</code>, a range using <code>:</code> or <code>regex("")</code>.</p></li>
+</ul></dd>
 <dt>colnames_to</dt>
 <dd><p>The name of the new column that will contain the column
 names.</p></dd>
@@ -134,6 +145,8 @@ the original data. If <code>NULL</code>, will be removed.</p></dd>
 <dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
 a regular expression is used in <code>select</code>, ignores lower/upper case in the
 search pattern when matching against variable names.</p></dd>
+<dt>cols</dt>
+<dd><p>Deprecated. Please use <code>select</code>.</p></dd>
 <dt>...</dt>
 <dd><p>Additional arguments passed on to methods.</p></dd>
 <dt>names_to, names_from</dt>
@@ -230,7 +243,7 @@ wide format.</p></dd>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Customizing the names</span></span>
 <span class="r-in"><span class="fu">data_to_long</span><span class="op">(</span><span class="va">wide_data</span>,</span>
-<span class="r-in">  cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span class="r-in">  select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span class="r-in">  colnames_to <span class="op">=</span> <span class="st">"Column"</span>,</span>
 <span class="r-in">  values_to <span class="op">=</span> <span class="st">"Numbers"</span>,</span>
 <span class="r-in">  rows_to <span class="op">=</span> <span class="st">"Row"</span></span>
@@ -284,7 +297,7 @@ wide format.</p></dd>
 <span class="r-in"></span>
 <span class="r-in">  <span class="co"># Pivot long format</span></span>
 <span class="r-in">  <span class="va">long</span> <span class="op">&lt;-</span> <span class="fu">data_to_long</span><span class="op">(</span><span class="va">data</span>,</span>
-<span class="r-in">    cols <span class="op">=</span> <span class="st">"\\d"</span>, <span class="co"># Select all columns that contain a digit</span></span>
+<span class="r-in">    select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/regex.html" class="external-link">regex</a></span><span class="op">(</span><span class="st">"\\d"</span><span class="op">)</span>, <span class="co"># Select all columns that contain a digit</span></span>
 <span class="r-in">    colnames_to <span class="op">=</span> <span class="st">"Item"</span>,</span>
 <span class="r-in">    values_to <span class="op">=</span> <span class="st">"Score"</span>,</span>
 <span class="r-in">    rows_to <span class="op">=</span> <span class="st">"Participant"</span></span>
