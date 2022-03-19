@@ -1,5 +1,4 @@
 #' @inheritParams convert_to_na
-#' @inheritParams data_extract
 #' @rdname data_relocate
 #' @examples
 #' # Remove columns

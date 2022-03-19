@@ -37,7 +37,8 @@ should be selected for renaming. Can be \code{NULL} (in which case all columns
 are selected). For \code{data_addprefix()} or \code{data_addsuffix()}, a character
 string, which will be added as prefix or suffix to the column names.}
 
-\item{select}{Either
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
 \itemize{
 \item a variable specified as a literal variable name (e.g., \code{column_name}),
 \item a string with the variable name (e.g., \code{"column_name"}),
@@ -49,7 +50,8 @@ string, which will be added as prefix or suffix to the column names.}
 Multiple variables can also be extracted using a character vector of
 length > 1, or a numeric vector containing column indices.}
 
-\item{exclude}{Character vector of column names to be excluded from selection.}
+\item{exclude}{See \code{select}, however, column names matched by the pattern
+from \code{exclude} will be excluded instead of selected.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the

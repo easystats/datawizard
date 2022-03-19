@@ -41,9 +41,8 @@
 #'   original variables in `x` will be overwritten by their recoded versions.
 #'   If a character value, recoded variables are appended with new column
 #'   names (using the defined suffix) to the original data frame.
-#' @inheritParams convert_to_na
-#' @inheritParams standardize
 #' @param ... not used.
+#' @inheritParams convert_to_na
 #'
 #' @return `x`, recoded into groups. By default `x` is numeric, unless `labels`
 #'   is specified. In this case, a factor is returned, where the factor levels

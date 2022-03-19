@@ -49,7 +49,8 @@ search pattern when matching against variable names.}
 
 \item{...}{Not used.}
 
-\item{select}{Either
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
 \itemize{
 \item a variable specified as a literal variable name (e.g., \code{column_name}),
 \item a string with the variable name (e.g., \code{"column_name"}),
