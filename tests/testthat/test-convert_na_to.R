@@ -279,6 +279,17 @@ test_that("convert_na_to - dataframe: arg 'exclude' works", {
       x2 = c(4, 5, 4)
     )
   )
+
+  expect_equal(
+    convert_na_to(test, replace_num = 4, replace_char = "e",
+                  replace_fac = 8, select = starts_with("x"), exclude = ~ x),
+    data.frame(
+      x = c(1, 2, NA),
+      y = c("a", "b", NA),
+      # z = factor(c("a", "b", 8)),
+      x2 = c(4, 5, 4)
+    )
+  )
 })
 
 test_that("convert_na_to - dataframe: works when arg 'select' is a list", {
