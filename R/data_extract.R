@@ -6,20 +6,6 @@
 #'
 #' @param data The object to subset. Methods are currently available for data frames
 #'   and data frame extensions (e.g., tibbles).
-#' @param select Either a variable specified as:
-#'
-#'   - a literal variable name (e.g., `column_name`)
-#'   - a string with the variable name (e.g., `"column_name"`)
-#'   - a positive integer, giving the position counting from the left
-#'   - a negative integer, giving the position counting from the right,
-#'   - a formula with variable names (e.g., `~column_1 + column_2`),
-#'   - or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
-#'  `contains("")`, a range using `:` or `regex("")`.
-#'
-#'  Multiple variables can also be extracted using a character vector of
-#'  length > 1, or a numeric vector containing column indices. If the special
-#'  value `0` or `"row.names"` is given, the row names of the object (if any)
-#'  are extracted.
 #' @param name An optional argument that specifies the column to be used as
 #'   names for the vector elements after extraction. Must be specified either
 #'   as literal variable name (e.g., `column_name`) or as string
@@ -42,6 +28,8 @@
 #'   search pattern when matching against variable names.
 #' @param verbose Toggle warnings.
 #' @param ... For use by future methods.
+#'
+#' @inheritParams convert_to_na
 #'
 #' @details `data_extract()` can be used to select multiple variables or pull a
 #' single variable from a data frame. Thus, the return value is by default not

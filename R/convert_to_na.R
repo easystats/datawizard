@@ -9,13 +9,15 @@
 #'   tasks. Can be either
 #'
 #'   - a variable specified as a literal variable name (e.g., `column_name`),
-#'   - a string with the variable name (e.g., `"column_name"`),
+#'   - a string with the variable name (e.g., `"column_name"`), or a character
+#'     vector of variable names (e.g., `c("col1", "col2", "col3")`),
 #'   - a formula with variable names (e.g., `~column_1 + column_2`),
+#'   - a vector of positive integers, giving the positions counting from the left
+#'     (e.g. `1` or `c(1, 3, 5)`),
+#'   - a vector of negative integers, giving the positions counting from the
+#'     right (e.g., `-1` or `-1:-3`),
 #'   - or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
 #'   `contains("")`, a range using `:` or `regex("")`.
-#'
-#'   Multiple variables can also be extracted using a character vector of
-#'   length > 1, or a numeric vector containing column indices.
 #' @param exclude See `select`, however, column names matched by the pattern
 #'   from `exclude` will be excluded instead of selected.
 #' @param na Numeric or character vector (or a list of numeric and character
