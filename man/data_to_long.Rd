@@ -9,11 +9,12 @@
 \usage{
 data_to_long(
   data,
-  cols = "all",
+  select = "all",
   colnames_to = "Name",
   values_to = "Value",
   rows_to = NULL,
   ignore_case = FALSE,
+  cols = select,
   ...,
   names_to = colnames_to
 )
@@ -30,11 +31,12 @@ data_to_wide(
 
 reshape_longer(
   data,
-  cols = "all",
+  select = "all",
   colnames_to = "Name",
   values_to = "Value",
   rows_to = NULL,
   ignore_case = FALSE,
+  cols = select,
   ...,
   names_to = colnames_to
 )
@@ -52,9 +54,18 @@ reshape_wider(
 \arguments{
 \item{data}{A data frame to pivot.}
 
-\item{cols}{A vector of column names or indices to pivot into longer format.
-May also be one of the select-helpers, or a formula (see documentation for
-\code{select} in \code{\link[=convert_to_na]{convert_to_na()}}).}
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")}.
+}
+
+Multiple variables can also be extracted using a character vector of
+length > 1, or a numeric vector containing column indices.}
 
 \item{colnames_to}{The name of the new column that will contain the column
 names.}
@@ -68,6 +79,8 @@ the original data. If \code{NULL}, will be removed.}
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
+
+\item{cols}{Deprecated. Please use \code{select}.}
 
 \item{...}{Additional arguments passed on to methods.}
 

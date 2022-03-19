@@ -28,7 +28,7 @@ test_that("data_reshape works as expected - complex dataset", {
   data <- psych::bfi
 
   long <- data_to_long(data,
-    cols = "\\d",
+    select = regex("\\d"),
     colnames_to = "Item",
     values_to = "Score",
     rows_to = "Participant"
@@ -49,7 +49,7 @@ test_that("data_reshape works as expected - complex dataset", {
 
 
   long1 <- data_to_long(data,
-    cols = starts_with("A"),
+    select = starts_with("A"),
     colnames_to = "Item",
     values_to = "Score",
     rows_to = "Participant"
@@ -74,7 +74,7 @@ test_that("data_reshape works as expected - complex dataset", {
 
 
   long1 <- data_to_long(data,
-    cols = starts_with("a"),
+    select = starts_with("a"),
     colnames_to = "Item",
     values_to = "Score",
     rows_to = "Participant"
@@ -96,7 +96,7 @@ test_that("data_reshape works as expected - complex dataset", {
   expect_equal(nrow(long1), nrow(long2))
 
   long1 <- data_to_long(data,
-    cols = starts_with("a"),
+    select = starts_with("a"),
     colnames_to = "Item",
     values_to = "Score",
     rows_to = "Participant",

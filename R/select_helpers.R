@@ -127,6 +127,11 @@
     pattern <- colnames(data)[intersect(pattern, 1:ncol(data))]
   }
 
+  # special token - select all columns?
+  if (all(pattern == "all")) {
+    pattern <- colnames(data)
+  }
+
   # check if column names match when all are lowercase
   if (!all(pattern %in% colnames(data)) && isTRUE(ignore_case)) {
     pattern <- colnames(data)[tolower(colnames(data)) %in% tolower(pattern)]
