@@ -80,7 +80,7 @@
     if (weights %in% colnames(x)) {
       exclude <- c(exclude, weights)
     } else {
-      warning(insight::format_message("Could not find weighting column '", weights, "'. Weighting not carried out."))
+      warning(insight::format_message("Could not find weighting column '", weights, "'. Weighting not carried out."), call. = FALSE)
       weights <- NULL
     }
   }
@@ -203,7 +203,7 @@
     warning(sprintf(
       "%s is 0 - variable not standardized (only scaled).",
       if (robust) "MAD" else "SD"
-    ))
+    ), call. = FALSE)
   }
 
   list(center = center, scale = scale)
@@ -362,10 +362,10 @@
   }
 
   if (is.numeric(weights)) {
-    warning(
-      "For grouped data frames, 'weights' must be a character, not a numeric vector.\n",
+    warning(insight::format_message(
+      "For grouped data frames, 'weights' must be a character, not a numeric vector.",
       "Ignoring weightings."
-    )
+    ), call. = FALSE)
     weights <- NULL
   }
 

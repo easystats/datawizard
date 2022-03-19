@@ -5,9 +5,7 @@
 #' `tidyr::pivot_longer()`.
 #'
 #' @param data A data frame to pivot.
-#' @param cols A vector of column names or indices to pivot into longer format.
-#'   May also be one of the select-helpers, or a formula (see documentation for
-#'   `select` in [`convert_to_na()`]).
+#' @param cols Deprecated. Please use `select`.
 #' @param colnames_to The name of the new column that will contain the column
 #'   names.
 #' @param values_to The name of the new column that will contain the values of
@@ -25,7 +23,7 @@
 #'   compatibility with `tidyr::pivot_longer()`.
 #' @param sep The indicating a separating character in the variable names in the
 #'   wide format.
-#' @inheritParams data_extract
+#' @inheritParams convert_to_na
 #'
 #' @examples
 #' wide_data <- data.frame(replicate(5, rnorm(10)))
@@ -37,7 +35,7 @@
 #'
 #' # Customizing the names
 #' data_to_long(wide_data,
-#'   cols = c(1, 2),
+#'   select = c(1, 2),
 #'   colnames_to = "Column",
 #'   values_to = "Numbers",
 #'   rows_to = "Row"
@@ -59,7 +57,7 @@
 #'
 #'   # Pivot long format
 #'   long <- data_to_long(data,
-#'     cols = "\\d", # Select all columns that contain a digit
+#'     select = regex("\\d"), # Select all columns that contain a digit
 #'     colnames_to = "Item",
 #'     values_to = "Score",
 #'     rows_to = "Participant"
@@ -81,11 +79,12 @@
 #' @return data.frame
 #' @export
 data_to_long <- function(data,
-                         cols = "all",
+                         select = "all",
                          colnames_to = "Name",
                          values_to = "Value",
                          rows_to = NULL,
                          ignore_case = FALSE,
+                         cols = select,
                          ...,
                          names_to = colnames_to) {
   if (inherits(data, "tbl_df")) {
@@ -95,46 +94,13 @@ data_to_long <- function(data,
     tbl_input <- FALSE
   }
 
-  fixed <- FALSE
-
-  # avoid conflicts
-  conflicting_packages <- .conflicting_packages("poorman")
-
-  # in case pattern is a variable from another function call...
-  p <- try(eval(cols), silent = TRUE)
-  if (inherits(p, c("try-error", "simpleError"))) {
-    p <- substitute(cols)
+  ## TODO deprecate later
+  if (!missing(cols)) {
+    select <- cols
   }
 
-  # check if pattern is a function like "starts_with()"
-  cols <- tryCatch(eval(p), error = function(e) NULL)
-
-  # if select could not be evaluated (because expression "makes no sense")
-  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
-  # so we can use grepl()
-  if (is.null(cols)) {
-    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), data, ignore_case)
-    cols <- evaluated_pattern$pattern
-    fixed <- evaluated_pattern$fixed
-  }
-
-  # load again
-  .attach_packages(conflicting_packages)
-
-  # Select columns ----------------
-  if (is.character(cols) && length(cols) == 1) {
-    # If only one name
-    if (all(cols == "all")) {
-      # If all, take all
-      cols <- names(data)
-    } else if (isFALSE(fixed)) {
-      # Surely, a regex
-      cols <- grep(cols, names(data), value = TRUE, ignore.case = ignore_case)
-    }
-  }
-
-  # return valid column names, based on pattern
-  cols <- .evaluated_pattern_to_colnames(cols, data, ignore_case, verbose = FALSE)
+  # evaluate arguments
+  cols <- .select_nse(select, data, exclude = NULL, ignore_case, verbose = FALSE)
 
   # Sanity checks ----------------
 

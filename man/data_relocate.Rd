@@ -17,14 +17,22 @@ data_findcols(
   ...
 )
 
-data_relocate(data, cols, before = NULL, after = NULL, safe = TRUE, ...)
+data_relocate(
+  data,
+  select,
+  before = NULL,
+  after = NULL,
+  ignore_case = FALSE,
+  verbose = TRUE,
+  ...
+)
 
-data_reorder(data, cols, safe = TRUE, ...)
+data_reorder(data, select, ignore_case = FALSE, verbose = TRUE, ...)
 
-data_remove(data, pattern, ignore_case = FALSE, verbose = FALSE, ...)
+data_remove(data, select, ignore_case = FALSE, verbose = FALSE, ...)
 }
 \arguments{
-\item{data}{A data frame to pivot.}
+\item{data}{A data frame.}
 
 \item{pattern}{A regular expression (as character string), representing the
 pattern to be matched in the in column names. Can also be one of the
@@ -39,17 +47,28 @@ of column names, \code{ends_with} finds matches at the end of column names.}
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
 
-\item{...}{For use by future methods.}
+\item{...}{Not used.}
 
-\item{cols}{A character vector indicating the names of the columns to move.}
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}), or a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item a vector of positive integers, giving the positions counting from the left
+(e.g. \code{1} or \code{c(1, 3, 5)}),
+\item a vector of negative integers, giving the positions counting from the
+right (e.g., \code{-1} or \code{-1:-3}),
+\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")}.
+}}
 
 \item{before, after}{Destination of columns. Supplying neither will move
 columns to the left-hand side; specifying both is an error. Can be a
 character vector, indicating the name of the destination column, or a
 numeric value, indicating the index number of the destination column.
 If \code{-1}, will be added before or after the last column.}
-
-\item{safe}{If \code{TRUE}, will disregard non-existing columns.}
 
 \item{verbose}{Toggle warnings.}
 }
@@ -78,16 +97,16 @@ data_findcols(iris, starts_with("Sepal"))
 data_findcols(iris, ends_with("Width"))
 
 # Reorder columns
-head(data_relocate(iris, cols = "Species", before = "Sepal.Length"))
-head(data_relocate(iris, cols = "Species", before = "Sepal.Width"))
-head(data_relocate(iris, cols = "Sepal.Width", after = "Species"))
+head(data_relocate(iris, select = "Species", before = "Sepal.Length"))
+head(data_relocate(iris, select = "Species", before = "Sepal.Width"))
+head(data_relocate(iris, select = "Sepal.Width", after = "Species"))
 # same as
-head(data_relocate(iris, cols = "Sepal.Width", after = -1))
+head(data_relocate(iris, select = "Sepal.Width", after = -1))
 
 # reorder multiple columns
-head(data_relocate(iris, cols = c("Species", "Petal.Length"), after = "Sepal.Width"))
+head(data_relocate(iris, select = c("Species", "Petal.Length"), after = "Sepal.Width"))
 # same as
-head(data_relocate(iris, cols = c("Species", "Petal.Length"), after = 2))
+head(data_relocate(iris, select = c("Species", "Petal.Length"), after = 2))
 
 # Reorder columns
 head(data_reorder(iris, c("Species", "Sepal.Length")))

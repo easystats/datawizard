@@ -10,8 +10,8 @@
 #' \cr\cr
 #' For model standardization, see [effectsize::standardize.default()]
 #'
-#' @param x A data frame, a vector or a statistical model (for `unstandardize()`
-#'   cannot be a model).
+#' @param x A (grouped) data frame, a vector or a statistical model (for
+#'   `unstandardize()` cannot be a model).
 #' @param robust Logical, if `TRUE`, centering is done by subtracting the
 #'   median from the variables and dividing it by the median absolute deviation
 #'   (MAD). If `FALSE`, variables are standardized by subtracting the

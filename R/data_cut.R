@@ -7,7 +7,7 @@
 #' It is basically a wrapper around base R's `cut()`, providing a simplified
 #' and more accessible way to define the interval breaks (cut-off values).
 #'
-#' @param x A data frame, numeric vector or factor.
+#' @param x A (grouped) data frame, numeric vector or factor.
 #' @param split Character vector, indicating at which breaks to split variables,
 #'   or numeric values with values indicating breaks. If character, may be one
 #'   of `"median"`, `"mean"`, `"quantile"`, `"equal_length"`, or `"equal_range"`.
@@ -41,8 +41,8 @@
 #'   original variables in `x` will be overwritten by their recoded versions.
 #'   If a character value, recoded variables are appended with new column
 #'   names (using the defined suffix) to the original data frame.
-#' @inheritParams standardize
 #' @param ... not used.
+#' @inheritParams convert_to_na
 #'
 #' @return `x`, recoded into groups. By default `x` is numeric, unless `labels`
 #'   is specified. In this case, a factor is returned, where the factor levels
@@ -194,7 +194,9 @@ data_cut.numeric <- function(x,
 
   # fix lowest value, add back into original vector
   out <- as.numeric(out)
-  out <- out - (min(out) - lowest)
+  if (!is.null(lowest)) {
+    out <- out - (min(out) - lowest)
+  }
   original_x[!is.na(original_x)] <- out
 
   # turn into factor?
@@ -235,8 +237,12 @@ data_cut.data.frame <- function(x,
                                 exclude = NULL,
                                 force = FALSE,
                                 append = FALSE,
+                                ignore_case = FALSE,
                                 verbose = TRUE,
                                 ...) {
+  # evaluate arguments
+  select <- .select_nse(select, x, exclude, ignore_case)
+
   # process arguments
   args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force)
 
@@ -248,6 +254,66 @@ data_cut.data.frame <- function(x,
   x
 }
 
+
+#' @export
+data_cut.grouped_df <- function(x,
+                                split = "median",
+                                n_groups = NULL,
+                                range = NULL,
+                                lowest = 1,
+                                labels = NULL,
+                                select = NULL,
+                                exclude = NULL,
+                                force = FALSE,
+                                append = FALSE,
+                                ignore_case = FALSE,
+                                verbose = TRUE,
+                                ...) {
+  info <- attributes(x)
+
+  # dplyr >= 0.8.0 returns attribute "indices"
+  grps <- attr(x, "groups", exact = TRUE)
+
+  # evaluate arguments
+  select <- .select_nse(select, x, exclude, ignore_case)
+
+  # process arguments
+  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force)
+
+  # update processed arguments
+  x <- args$x
+  select <- args$select
+
+  # dplyr < 0.8.0?
+  if (is.null(grps)) {
+    grps <- attr(x, "indices", exact = TRUE)
+    grps <- lapply(grps, function(x) x + 1)
+  } else {
+    grps <- grps[[".rows"]]
+  }
+
+  x <- as.data.frame(x)
+  for (rows in grps) {
+    x[rows, ] <- data_cut(
+      x[rows, ],
+      split = split,
+      n_groups = split,
+      range = range,
+      lowest = lowest,
+      labels = labels,
+      select = select,
+      exclude = exclude,
+      force = force,
+      append = append,
+      ignore_case = ignore_case,
+      verbose = verbose,
+      ...
+    )
+  }
+  # set back class, so data frame still works with dplyr
+  attributes(x) <- info
+  x
+}
 
 
 

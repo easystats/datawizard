@@ -2,12 +2,11 @@
 #'
 #' Reverse-score variables (change the keying/scoring direction).
 #'
-#' @inheritParams standardize.data.frame
-#'
-#' @param x A numeric or factor variable.
 #' @param range Initial (old) range of values. If `NULL`, will take the range of
 #'   the input vector (`range(x)`).
 #' @param ... Arguments passed to or from other methods.
+#' @inheritParams data_cut
+#' @inheritParams convert_to_na
 #'
 #' @examples
 #' data_reverse(c(1, 2, 3, 4, 5))
@@ -38,10 +37,7 @@ data_reverse <- function(x, ...) {
 
 #' @rdname data_reverse
 #' @export
-reverse_scale <- function(x, ...) {
-  # Alias for data_reverse()
-  data_reverse(x, ...)
-}
+reverse_scale <- data_reverse
 
 
 
@@ -61,7 +57,7 @@ data_reverse.numeric <- function(x,
   # Warning if only one value
   if (length(unique(x)) == 1 && is.null(range)) {
     if (verbose) {
-      warning(paste0("A `range` must be provided for data with only one unique value."))
+      warning("A `range` must be provided for data with only one unique value.", call. = FALSE)
     }
     return(x)
   }
@@ -96,7 +92,7 @@ data_reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
   # Warning if only one value
   if (length(unique(x)) == 1 && is.null(range)) {
     if (verbose) {
-      warning("A `range` must be provided for data with only one unique value.")
+      warning("A `range` must be provided for data with only one unique value.", call. = FALSE)
     }
     return(x)
   }
@@ -124,25 +120,20 @@ data_reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
 
 
 
-#' @rdname data_reverse
 #' @export
 data_reverse.grouped_df <- function(x,
                                     range = NULL,
                                     select = NULL,
                                     exclude = NULL,
+                                    ignore_case = FALSE,
                                     ...) {
   info <- attributes(x)
 
   # dplyr >= 0.8.0 returns attribute "indices"
   grps <- attr(x, "groups", exact = TRUE)
 
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
+  # evaluate arguments
+  select <- .select_nse(select, x, exclude, ignore_case)
 
   # dplyr < 0.8.0?
   if (is.null(grps)) {
@@ -174,23 +165,10 @@ data_reverse.data.frame <- function(x,
                                     range = NULL,
                                     select = NULL,
                                     exclude = NULL,
+                                    ignore_case = FALSE,
                                     ...) {
-
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
-
-  if (is.null(select)) {
-    select <- names(x)
-  }
-
-  if (!is.null(exclude)) {
-    select <- setdiff(select, exclude)
-  }
+  # evaluate arguments
+  select <- .select_nse(select, x, exclude, ignore_case)
 
   # Transform the range so that it is a list now
   if (!is.null(range)) {

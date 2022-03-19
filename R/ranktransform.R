@@ -96,7 +96,6 @@ ranktransform.factor <- function(x, ...) {
 
 
 
-#' @rdname ranktransform
 #' @export
 ranktransform.grouped_df <- function(x,
                                      select = NULL,

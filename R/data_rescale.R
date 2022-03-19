@@ -3,9 +3,10 @@
 #' Rescale variables to a new range.
 #' Can also be used to reverse-score variables (change the keying/scoring direction).
 #'
+#' @inheritParams data_cut
+#' @inheritParams convert_to_na
 #' @inheritParams standardize.data.frame
 #'
-#' @param x A numeric variable.
 #' @param to Numeric vector of length 2 giving the new range that the variable will have after rescaling.
 #'   To reverse-score a variable, the range should be given with the maximum value first.
 #'   See examples.
@@ -55,7 +56,6 @@ change_scale <- function(x, ...) {
 
 
 
-
 #' @rdname data_rescale
 #' @export
 data_rescale.numeric <- function(x,
@@ -75,7 +75,7 @@ data_rescale.numeric <- function(x,
   # Warning if only one value
   if (length(unique(x)) == 1 && is.null(range)) {
     if (verbose) {
-      warning("A `range` must be provided for data with only one unique value.")
+      warning(insight::format_message("A `range` must be provided for data with only one unique value."), call. = FALSE)
     }
     return(x)
   }
@@ -95,7 +95,6 @@ data_rescale.numeric <- function(x,
 
 
 
-
 #' @export
 data_rescale.factor <- function(x, ...) {
   x
@@ -103,27 +102,21 @@ data_rescale.factor <- function(x, ...) {
 
 
 
-
-#' @rdname data_rescale
 #' @export
 data_rescale.grouped_df <- function(x,
                                     to = c(0, 100),
                                     range = NULL,
                                     select = NULL,
                                     exclude = NULL,
+                                    ignore_case = FALSE,
                                     ...) {
   info <- attributes(x)
 
   # dplyr >= 0.8.0 returns attribute "indices"
   grps <- attr(x, "groups", exact = TRUE)
 
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
+  # evaluate arguments
+  select <- .select_nse(select, x, exclude, ignore_case)
 
   # dplyr < 0.8.0?
   if (is.null(grps)) {
@@ -150,6 +143,7 @@ data_rescale.grouped_df <- function(x,
 }
 
 
+
 #' @rdname data_rescale
 #' @export
 data_rescale.data.frame <- function(x,
@@ -157,23 +151,10 @@ data_rescale.data.frame <- function(x,
                                     range = NULL,
                                     select = NULL,
                                     exclude = NULL,
+                                    ignore_case = FALSE,
                                     ...) {
-
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
-
-  if (is.null(select)) {
-    select <- names(x)
-  }
-
-  if (!is.null(exclude)) {
-    select <- setdiff(select, exclude)
-  }
+  # evaluate arguments
+  select <- .select_nse(select, x, exclude, ignore_case)
 
   # Transform the range so that it is a list now
   if (!is.null(range)) {

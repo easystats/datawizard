@@ -77,7 +77,7 @@ head(data_remove(iris, starts_with("Sepal")))
 ### Reorder or rename
 
 ```{r}
-head(data_relocate(iris, cols = "Species", before = "Sepal.Length"))
+head(data_relocate(iris, select = "Species", before = "Sepal.Length"))
 ```
 
 ```{r}

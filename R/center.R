@@ -2,7 +2,7 @@
 #'
 #' Performs a grand-mean centering of data.
 #'
-#' @param x A data frame, a (numeric or character) vector or a factor.
+#' @param x A (grouped) data frame, a (numeric or character) vector or a factor.
 #' @param select Character vector of column names. If `NULL` (the default),
 #'   all variables will be selected.
 #' @param exclude Character vector of column names to be excluded from selection.

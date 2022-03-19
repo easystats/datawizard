@@ -5,22 +5,28 @@
 #' Convert non-missing values in a variable into missing values.
 #'
 #' @param x A vector, factor or a data frame.
-#' @param select 	Either
+#' @param select Variables that will be included when performing the required
+#'   tasks. Can be either
 #'
 #'   - a variable specified as a literal variable name (e.g., `column_name`),
-#'   - a string with the variable name (e.g., `"column_name"`),
+#'   - a string with the variable name (e.g., `"column_name"`), or a character
+#'     vector of variable names (e.g., `c("col1", "col2", "col3")`),
 #'   - a formula with variable names (e.g., `~column_1 + column_2`),
+#'   - a vector of positive integers, giving the positions counting from the left
+#'     (e.g. `1` or `c(1, 3, 5)`),
+#'   - a vector of negative integers, giving the positions counting from the
+#'     right (e.g., `-1` or `-1:-3`),
 #'   - or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
 #'   `contains("")`, a range using `:` or `regex("")`.
-#'
-#'   Multiple variables can also be extracted using a character vector of
-#'   length > 1, or a numeric vector containing column indices.
+#' @param exclude See `select`, however, column names matched by the pattern
+#'   from `exclude` will be excluded instead of selected.
 #' @param na Numeric or character vector (or a list of numeric and character
 #'   vectors) with values that should be converted to `NA`.
+#' @param ignore_case Logical, if `TRUE` and when one of the select-helpers or
+#'   a regular expression is used in `select`, ignores lower/upper case in the
+#'   search pattern when matching against variable names.
 #' @param verbose Toggle warnings.
 #' @param ... Not used.
-#' @inheritParams standardize
-#' @inheritParams data_extract
 #'
 #' @return
 #' `x`, where all values in `na` are converted to `NA`.
@@ -98,39 +104,9 @@ convert_to_na.character <- convert_to_na.factor
 #' @rdname convert_to_na
 #' @export
 convert_to_na.data.frame <- function(x, na = NULL, select = NULL, exclude = NULL, ignore_case = FALSE, verbose = TRUE, ...) {
-  fixed <- TRUE
-  # avoid conflicts
-  conflicting_packages <- .conflicting_packages("poorman")
+  # evaluate arguments
+  select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
 
-  # in case pattern is a variable from another function call...
-  p <- try(eval(select), silent = TRUE)
-  if (inherits(p, c("try-error", "simpleError"))) {
-    p <- substitute(select)
-  }
-
-  # check if pattern is a function like "starts_with()"
-  select <- tryCatch(eval(p), error = function(e) NULL)
-
-  # if select could not be evaluated (because expression "makes no sense")
-  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
-  # so we can use grepl()
-  if (is.null(select)) {
-    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), x, ignore_case = ignore_case)
-    select <- evaluated_pattern$pattern
-    fixed <- evaluated_pattern$fixed
-  }
-
-  # seems to be no valid column name or index, so try to grep
-  if (isFALSE(fixed)) {
-    select <- colnames(x)[grepl(select, colnames(x), ignore.case = ignore_case)]
-  }
-
-  # load again
-  .attach_packages(conflicting_packages)
-
-  # return valid column names, based on pattern
-  select <- .evaluated_pattern_to_colnames(select, x, ignore_case, verbose, exclude)
-
-  x[select] <- lapply(x[select], convert_to_na, na = na, verbose = FALSE, ...)
+  x[select] <- lapply(x[select], convert_to_na, na = na, verbose = verbose, ...)
   x
 }
