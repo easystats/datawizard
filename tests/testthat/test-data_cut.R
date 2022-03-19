@@ -1,4 +1,3 @@
-
 set.seed(123)
 d <- sample(1:10, size = 500, replace = TRUE)
 
@@ -21,7 +20,6 @@ test_that("recode quantile", {
   expect_equal(data_cut(d, split = "quantile", n_groups = 3), as.numeric(f))
   expect_equal(data_cut(d, split = "quantile", n_groups = 3, lowest = 0), as.numeric(f) - 1)
 })
-
 
 set.seed(123)
 d <- sample(1:100, size = 1000, replace = TRUE)
@@ -58,7 +56,6 @@ test_that("recode length", {
   expect_equal(table(data_cut(d, split = "equal_length", n_groups = 5, lowest = 1)), table(d2), ignore_attr = TRUE)
 })
 
-
 set.seed(123)
 x <- sample(1:10, size = 30, replace = TRUE)
 test_that("recode factor labels", {
@@ -68,4 +65,66 @@ test_that("recode factor labels", {
   t1 <- table(data_cut(x, "equal_length", n_groups = 3))
   t2 <- table(data_cut(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high")))
   expect_equal(t1, t2, ignore_attr = TRUE)
+})
+
+test_that("recode data frame", {
+  x <- iris
+  out <- data_cut(x, "median", select = c("Sepal.Length", "Sepal.Width"))
+  expect_s3_class(out, "data.frame")
+  expect_equal(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
+  expect_equal(out$Petal.Length, iris$Petal.Length)
+
+  out <- data_cut(x, "median", select = starts_with("Sepal"))
+  expect_s3_class(out, "data.frame")
+  expect_equal(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
+  expect_equal(out$Petal.Length, iris$Petal.Length)
+
+  out <- data_cut(x, "median", select = ~Sepal.Width + Sepal.Length)
+  expect_s3_class(out, "data.frame")
+  expect_equal(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
+  expect_equal(out$Petal.Length, iris$Petal.Length)
+
+  out <- data_cut(x, "median", select = Sepal.Length)
+  expect_s3_class(out, "data.frame")
+  expect_equal(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
+  expect_equal(out$Petal.Length, iris$Petal.Length)
+
+  out <- data_cut(x, "median", select = c("sepal.Length", "sepal.Width"), ignore_case = FALSE)
+  expect_equal(out$Sepal.Length, iris$Sepal.Length)
+
+  out <- data_cut(x, "median", select = starts_with("sepal"), ignore_case = TRUE)
+  expect_s3_class(out, "data.frame")
+  expect_equal(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
+  expect_equal(out$Petal.Length, iris$Petal.Length)
+
+  out <- data_cut(x, "median", select = starts_with("sepal"), ignore_case = FALSE)
+  expect_equal(out$Sepal.Length, iris$Sepal.Length)
+
+  out <- data_cut(x, "median", select = starts_with("sepal"), ignore_case = TRUE, append = "_r")
+  expect_equal(colnames(out), c("Sepal.Length", "Sepal.Width", "Petal.Length",
+                                "Petal.Width", "Species", "Sepal.Length_r", "Sepal.Width_r"))
+
+  if (require("poorman")) {
+    out <- data_cut(iris, "median", select = starts_with("Sepal"))
+    expect_equal(out$Sepal.Length,
+                 c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1,
+                   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                   1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 1, 2,
+                   2, 2, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2,
+                   2, 1, 2, 2, 2, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 1, 1, 2, 2, 2, 2,
+                   2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2,
+                   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+                   2, 2, 2, 2))
+    x <- poorman::group_by(iris, Species)
+    out <- data_cut(x, "median", select = starts_with("Sepal"))
+    expect_equal(out$Sepal.Length,
+                 c(2, 1, 1, 1, 2, 2, 1, 2, 1, 1, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2,
+                   2, 2, 1, 2, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 1, 2, 2, 1, 1, 2, 2,
+                   1, 1, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 1, 2,
+                   2, 2, 1, 2, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1,
+                   2, 1, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1,
+                   2, 2, 1, 2, 2, 2, 2, 1, 2, 1, 1, 1, 2, 2, 2, 1, 2, 1, 2, 1, 2,
+                   2, 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 2, 2, 1, 2, 2, 2,
+                   1, 2, 1, 1))
+  }
 })
