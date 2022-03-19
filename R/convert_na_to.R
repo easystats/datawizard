@@ -1,0 +1,197 @@
+#' @title Replace missing values in a variable or a dataframe.
+#' @name convert_na_to
+#'
+#' @description
+#' Replace missing values in a variable or a dataframe.
+#'
+#' @param x A numeric, factor, or character vector, or a data frame.
+#' @param replacement Numeric or character value that will be used to
+#' replace `NA`.
+#' @param verbose Toggle warnings.
+#' @param ... Not used.
+#'
+#' @return
+#' `x`, where `NA` values are replaced by `replacement`.
+#'
+#' @examples
+#' # Convert NA to 0 in a numeric vector
+#' convert_na_to(
+#'   c(9, 3, NA, 2, 3, 1, NA, 8),
+#'   replacement = 0
+#' )
+#'
+#' # Convert NA to "missing" in a character vector
+#' convert_na_to(
+#'   c("a", NA, "d", "z", NA, "t"),
+#'   replacement = "missing"
+#' )
+#'
+#' ### For dataframes
+#'
+#' test_df <- data.frame(
+#'   x = c(1, 2, NA),
+#'   x2 = c(4, 5, NA),
+#'   y = c("a", "b", NA)
+#' )
+#'
+#' # Convert all NA to 0 in numeric variables, and all NA to "missing" in
+#' # character variables
+#' convert_na_to(
+#'   test_df,
+#'   replace_num = 0,
+#'   replace_char = "missing"
+#' )
+#'
+#' # Convert a specific variable in the dataframe
+#' convert_na_to(
+#'   test_df,
+#'   replace_num = 0,
+#'   replace_char = "missing",
+#'   select = "x"
+#' )
+#'
+#' # Convert all variables starting with "x"
+#' convert_na_to(
+#'   test_df,
+#'   replace_num = 0,
+#'   replace_char = "missing",
+#'   select = starts_with("x")
+#' )
+#'
+#' # Convert NA to 1 in variable 'x2' and to 0 in all other numeric
+#' # variables
+#' convert_na_to(
+#'   test_df,
+#'   replace_num = 0,
+#'   select = list(x2 = 1)
+#' )
+#'
+#' @export
+
+convert_na_to <- function(x, ...) {
+  UseMethod("convert_na_to")
+}
+
+
+#' @rdname convert_na_to
+#' @export
+convert_na_to.numeric <- function(x, replacement = NULL, verbose = TRUE, ...) {
+
+  if (is_empty_object(replacement) || !is.numeric(replacement)) {
+    if (isTRUE(verbose)) {
+      warning(insight::format_message("`replacement` needs to be a numeric vector."), call. = FALSE)
+    }
+  } else if (length(replacement) > 1) {
+    if (isTRUE(verbose)) {
+      warning(insight::format_message("`replacement` needs to be of length one."), call. = FALSE)
+    }
+  } else {
+    x[is.na(x)] <- replacement
+  }
+  x
+}
+
+
+#' @export
+convert_na_to.factor <- function(x, replacement = NULL, verbose = TRUE, ...) {
+
+  if (is_empty_object(replacement) || length(replacement) > 1) {
+    if (isTRUE(verbose)) {
+      warning(insight::format_message("`replacement` needs to be of length one."), call. = FALSE)
+    }
+  } else {
+    x <- addNA(x)
+    levels(x) <- c(levels(x), replacement)
+    x[is.na(x)] <- replacement
+  }
+  x
+}
+
+
+#' @rdname convert_na_to
+#' @export
+convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE, ...) {
+
+  if (is_empty_object(replacement) || !is.character(replacement)) {
+    if (isTRUE(verbose)) {
+      warning(insight::format_message("`replacement` needs to be a character vector."), call. = FALSE)
+    }
+  } else if (length(replacement) > 1) {
+    if (isTRUE(verbose)) {
+      warning(insight::format_message("`replacement` needs to be of length one."), call. = FALSE)
+    }
+  } else {
+    x[is.na(x)] <- replacement
+  }
+  x
+}
+
+
+#' @param replace_num Value to replace `NA` when variable is of type numeric.
+#' @param replace_char Value to replace `NA` when variable is of type character.
+#' @param replace_fac Value to replace `NA` when variable is of type factor.
+#' @inheritParams convert_to_na
+#'
+#' @rdname convert_na_to
+#' @export
+convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL, replace_fac = NULL, select = NULL, exclude = NULL, verbose = TRUE, ignore_case = FALSE, ...) {
+
+  data <- x
+  select_nse <- .select_nse(select, data, exclude = exclude, ignore_case)
+
+  # list are not covered by .select_nse
+  if (length(select_nse) == 0) {
+    if (is.list(select)) {
+      if (inherits(exclude, "formula")) {
+        exclude <- all.vars(exclude)
+      }
+
+      not_modify <- if (is.character(exclude)) {
+        exclude
+      } else if (is.numeric(exclude)) {
+        colnames(x)[exclude]
+      }
+      names_data <- names(x)
+      names_sel <- names(select)
+      apply_default <- names_data[which(!names_data %in% c(names_sel, not_modify))]
+
+      for (i in seq_along(names_sel)) {
+        if (!names_sel[i] %in% names_data) next
+        x[[names_sel[i]]] <- convert_na_to(
+          x[[names_sel[i]]],
+          replacement = select[[i]],
+          verbose = verbose
+        )
+      }
+
+      for (i in seq_along(apply_default)) {
+        to_convert <- x[[apply_default[i]]]
+        if (is.numeric(to_convert)) {
+          repl <- replace_num
+        } else if (is.character(to_convert)) {
+          repl <- replace_char
+        } else if (is.factor(to_convert)) {
+          repl <- replace_fac
+        }
+        if (!is.null(repl)) {
+          x[[apply_default[i]]] <- convert_na_to(to_convert, replacement = repl, verbose = FALSE)
+        }
+      }
+      return(x)
+    }
+  }
+
+
+  x[select_nse] <- lapply(x[select_nse], function(x) {
+    if (is.numeric(x)) {
+      repl <- replace_num
+    } else if (is.character(x)) {
+      repl <- replace_char
+    } else if (is.factor(x)) {
+      repl <- replace_fac
+    }
+    convert_na_to(x, replacement = repl, verbose = FALSE)
+  })
+  x
+}
+
