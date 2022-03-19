@@ -1,18 +1,24 @@
 # this function evaluates the select-expression and allows non-standard evaluation
 
 .select_nse <- function(select, data, exclude, ignore_case, verbose = FALSE) {
-  fixed <- TRUE
+  fixed_select <- TRUE
+  fixed_exclude <- TRUE
   # avoid conflicts
   conflicting_packages <- .conflicting_packages("poorman")
 
   # in case pattern is a variable from another function call...
   p <- try(eval(select), silent = TRUE)
+  p2 <- try(eval(exclude), silent = TRUE)
   if (inherits(p, c("try-error", "simpleError"))) {
     p <- substitute(select, env = parent.frame())
+  }
+  if (inherits(p2, c("try-error", "simpleError"))) {
+    p2 <- substitute(exclude, env = parent.frame())
   }
 
   # check if pattern is a function like "starts_with()"
   select <- tryCatch(eval(p), error = function(e) NULL)
+  exclude <- tryCatch(eval(p2), error = function(e) NULL)
 
   # if select could not be evaluated (because expression "makes no sense")
   # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
@@ -20,12 +26,25 @@
   if (is.null(select)) {
     evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), data, ignore_case = ignore_case)
     select <- evaluated_pattern$pattern
-    fixed <- evaluated_pattern$fixed
+    fixed_select <- evaluated_pattern$fixed
+  }
+  if (is.null(exclude)) {
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p2), data, ignore_case = ignore_case)
+    exclude <- evaluated_pattern$pattern
+    fixed_exclude <- evaluated_pattern$fixed
   }
 
+
   # seems to be no valid column name or index, so try to grep
-  if (isFALSE(fixed)) {
+  if (isFALSE(fixed_select)) {
     select <- colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case)]
+  }
+  if (isFALSE(fixed_exclude)) {
+    exclude <- colnames(data)[grepl(exclude, colnames(data), ignore.case = ignore_case)]
+  }
+  # if exclude = NULL, we want to exclude 0 variables, not all of them
+  if (length(exclude) == ncol(data)) {
+    exclude <- NULL
   }
 
   # load again
