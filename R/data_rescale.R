@@ -56,7 +56,6 @@ change_scale <- function(x, ...) {
 
 
 
-
 #' @rdname data_rescale
 #' @export
 data_rescale.numeric <- function(x,
@@ -76,7 +75,7 @@ data_rescale.numeric <- function(x,
   # Warning if only one value
   if (length(unique(x)) == 1 && is.null(range)) {
     if (verbose) {
-      warning("A `range` must be provided for data with only one unique value.")
+      warning(insight::format_message("A `range` must be provided for data with only one unique value."), call. = FALSE)
     }
     return(x)
   }
@@ -96,7 +95,6 @@ data_rescale.numeric <- function(x,
 
 
 
-
 #' @export
 data_rescale.factor <- function(x, ...) {
   x
@@ -104,8 +102,6 @@ data_rescale.factor <- function(x, ...) {
 
 
 
-
-#' @rdname data_rescale
 #' @export
 data_rescale.grouped_df <- function(x,
                                     to = c(0, 100),
@@ -145,6 +141,7 @@ data_rescale.grouped_df <- function(x,
   attributes(x) <- info
   x
 }
+
 
 
 #' @rdname data_rescale

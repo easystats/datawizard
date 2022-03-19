@@ -5,7 +5,7 @@
 #'
 #' @inheritParams standardize.data.frame
 #'
-#' @param x A numeric vector, data frame, or matrix. See details.
+#' @param x A numeric vector, (grouped) data frame, or matrix. See 'Details'.
 #' @param include_bounds Logical, if `TRUE`, return value may include 0 and 1.
 #'   If `FALSE`, the return value is compressed, using Smithson and Verkuilen's
 #'   (2006) formula `(x * (n - 1) + 0.5) / n`, to avoid zeros and ones in the
@@ -63,7 +63,7 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
       name <- names(x)
     }
     if (verbose) {
-      warning(paste0("Variable `", name, "` contains only one unique value and will not be normalized."))
+      warning(insight::format_message(paste0("Variable `", name, "` contains only one unique value and will not be normalized.")), call. = FALSE)
     }
     return(x)
   }
@@ -77,7 +77,7 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
       name <- names(x)
     }
     if (verbose) {
-      warning(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor."))
+      warning(insight::format_message(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor.")), call. = FALSE)
     }
   }
 

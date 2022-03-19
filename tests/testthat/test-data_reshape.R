@@ -28,7 +28,7 @@ test_that("data_reshape works as expected - complex dataset", {
   data <- psych::bfi
 
   long <- data_to_long(data,
-    cols = "\\d",
+    select = regex("\\d"),
     colnames_to = "Item",
     values_to = "Score",
     rows_to = "Participant"
@@ -49,7 +49,7 @@ test_that("data_reshape works as expected - complex dataset", {
 
 
   long1 <- data_to_long(data,
-    cols = starts_with("A"),
+    select = starts_with("A"),
     colnames_to = "Item",
     values_to = "Score",
     rows_to = "Participant"
@@ -74,7 +74,7 @@ test_that("data_reshape works as expected - complex dataset", {
 
 
   long1 <- data_to_long(data,
-    cols = starts_with("a"),
+    select = starts_with("a"),
     colnames_to = "Item",
     values_to = "Score",
     rows_to = "Participant"
@@ -96,7 +96,7 @@ test_that("data_reshape works as expected - complex dataset", {
   expect_equal(nrow(long1), nrow(long2))
 
   long1 <- data_to_long(data,
-    cols = starts_with("a"),
+    select = starts_with("a"),
     colnames_to = "Item",
     values_to = "Score",
     rows_to = "Participant",
@@ -143,4 +143,23 @@ test_that("data_reshape works as expected - complex dataset", {
   expect_equal(unique(long1$Score), unique(long2$Score))
   expect_equal(ncol(long1), ncol(long2))
   expect_equal(nrow(long1), nrow(long2))
+})
+
+
+test_that("data_reshape works as expected - simple dataset", {
+  d <- data.frame(age = c(20, 30, 40),
+                  sex = c("Female", "Male", "Male"),
+                  score_t1 = c(30, 35, 32),
+                  score_t2 = c(33, 34, 37),
+                  speed_t1 = c(2, 3, 1),
+                  speed_t2 = c(3, 4, 5),
+                  stringsAsFactors = FALSE)
+
+  out <- data_to_long(d, starts_with("score"))
+  expect_equal(out$Name, c("score_t1", "score_t2", "score_t1", "score_t2", "score_t1", "score_t2"))
+  expect_equal(out$Value, c(d$score_t1, d$score_t2)[c(1, 4, 2, 5, 3, 6)])
+
+  out <- data_to_long(d, contains("t2"), colnames_to = "NewCol", values_to = "Time")
+  expect_equal(out$NewCol, c("score_t2", "speed_t2", "score_t2", "speed_t2", "score_t2", "speed_t2"))
+  expect_equal(out$Time, c(33, 3, 34, 4, 37, 5))
 })

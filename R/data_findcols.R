@@ -6,7 +6,6 @@
 #'   matched in the column names. `starts_with` finds matches at the beginning
 #'   of column names, `ends_with` finds matches at the end of column names.
 #' @inheritParams convert_to_na
-#' @inheritParams data_extract
 #' @rdname data_relocate
 #' @examples
 #' # Find columns names by pattern

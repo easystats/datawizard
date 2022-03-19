@@ -37,7 +37,7 @@ centre(x, ...)
 )
 }
 \arguments{
-\item{x}{A data frame, a (numeric or character) vector or a factor.}
+\item{x}{A (grouped) data frame, a (numeric or character) vector or a factor.}
 
 \item{...}{Currently not used.}
 
