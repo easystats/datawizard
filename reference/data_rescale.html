@@ -113,7 +113,8 @@ the input vector (<code>range(x)</code>).</p></dd>
 <dt>verbose</dt>
 <dd><p>Toggle warnings.</p></dd>
 <dt>select</dt>
-<dd><p>Either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
+<dd><p>Variables that will be included when performing the required
+tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
 <li><p>a string with the variable name (e.g., <code>"column_name"</code>),</p></li>
 <li><p>a formula with variable names (e.g., <code>~column_1 + column_2</code>),</p></li>
 <li><p>or one of the following select-helpers: <code>starts_with("")</code>, <code>ends_with("")</code>,
@@ -121,7 +122,8 @@ the input vector (<code>range(x)</code>).</p></dd>
 </ul><p>Multiple variables can also be extracted using a character vector of
 length &gt; 1, or a numeric vector containing column indices.</p></dd>
 <dt>exclude</dt>
-<dd><p>Character vector of column names to be excluded from selection.</p></dd>
+<dd><p>See <code>select</code>, however, column names matched by the pattern
+from <code>exclude</code> will be excluded instead of selected.</p></dd>
 <dt>ignore_case</dt>
 <dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
 a regular expression is used in <code>select</code>, ignores lower/upper case in the
