@@ -101,9 +101,9 @@
 
   # if numeric, make sure we have valid column indices
   if (is.numeric(pattern)) {
-    if (all(pattern < 0)) {
+    if (any(pattern < 0)) {
       # select last column(s)
-      pattern <- sort(ncol(data) + pattern + 1)
+      pattern[pattern < 0] <- sort(ncol(data) + pattern[pattern < 0] + 1)
     }
     pattern <- colnames(data)[intersect(pattern, 1:ncol(data))]
   }
