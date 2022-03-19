@@ -84,58 +84,14 @@ data_extract.data.frame <- function(data,
                                     ignore_case = FALSE,
                                     verbose = TRUE,
                                     ...) {
-  fixed <- TRUE
   extract <- match.arg(tolower(extract), choices = c("all", "first", "last", "odd", "even"))
 
-  # avoid conflicts
-  conflicting_packages <- .conflicting_packages("poorman")
+  # evaluate arguments
+  select <- .select_nse(select, data, exclude = NULL, ignore_case, verbose = verbose)
 
-  # make sure as_data_frame is logical
-  if (!is.logical(as_data_frame)) {
-    as_data_frame <- FALSE
-  }
-
-  # in case pattern is a variable from another function call...
-  p <- try(eval(select), silent = TRUE)
-  if (inherits(p, c("try-error", "simpleError"))) {
-    p <- substitute(select)
-  }
-
-  # check if pattern is a function like "starts_with()"
-  select <- tryCatch(eval(p), error = function(e) NULL)
-
-  # if select could not be evaluated (because expression "makes no sense")
-  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
-  # so we can use grepl()
-  if (is.null(select)) {
-    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), data, ignore_case)
-    select <- evaluated_pattern$pattern
-    fixed <- evaluated_pattern$fixed
-  }
-
-  # seems to be no valid column name or index, so try to grep
-  if (isFALSE(fixed)) {
-    select <- colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case)]
-  }
-
-  # load again
-  .attach_packages(conflicting_packages)
-
-  if (is.numeric(select)) {
-    if (length(select) == 1) {
-      if (select < 0) {
-        # select last column
-        select <- colnames(data)[ncol(data) + select + 1]
-      } else if (select == 0) {
-        # select row names
-        select <- rownames(data)
-      }
-    } else {
-      # make sure we have valid column indices
-      select <- colnames(data)[intersect(select, 1:ncol(data))]
-    }
-  } else if (is.character(select) && identical(select, "row.names")) {
-    select <- rownames(data)
+  # nothing to select?
+  if (!length(select)) {
+    return(NULL)
   }
 
   nl <- as.list(seq_along(data))
@@ -150,14 +106,6 @@ data_extract.data.frame <- function(data,
     }
   } else if (is.character(name) && identical(name, "row.names")) {
     name <- rownames(data)
-  }
-
-  # return valid column names, based on pattern
-  select <- .evaluated_pattern_to_colnames(select, data, ignore_case, verbose)
-
-  # nothing to select?
-  if (!length(select)) {
-    return(NULL)
   }
 
   # chose which matched variables to extract
