@@ -194,7 +194,9 @@ data_cut.numeric <- function(x,
 
   # fix lowest value, add back into original vector
   out <- as.numeric(out)
-  out <- out - (min(out) - lowest)
+  if (!is.null(lowest)) {
+    out <- out - (min(out) - lowest)
+  }
   original_x[!is.na(original_x)] <- out
 
   # turn into factor?

@@ -128,3 +128,30 @@ test_that("recode data frame", {
                    1, 2, 1, 1))
   }
 })
+
+
+test_that("recode all NA", {
+  x <- rep(NA, 10)
+  expect_equal(data_cut(x), x)
+
+  x <- as.numeric(rep(NA, 10))
+  expect_warning(expect_equal(data_cut(x), x))
+})
+
+
+
+test_that("recode numeric", {
+  expect_equal(data_cut(mtcars$hp, split = c(100, 150)),
+               c(2, 2, 1, 2, 3, 2, 3, 1, 1, 2, 2, 3, 3, 3, 3, 3, 3, 1, 1, 1,
+                 1, 3, 3, 3, 3, 1, 1, 2, 3, 3, 3, 2))
+  x <- mtcars$hp
+  x[mtcars$hp < 100] <- 1
+  x[mtcars$hp >= 100 & mtcars$hp < 150] <- 2
+  x[mtcars$hp >= 150] <- 3
+  expect_equal(data_cut(mtcars$hp, split = c(100, 150)),x)
+  expect_equal(data_cut(mtcars$hp, split = c(100, 150), lowest = NULL),x)
+
+  expect_equal(data_cut(mtcars$hp, split = "equal_range", range = 50, lowest = NULL),
+               c(2, 2, 1, 2, 3, 2, 4, 1, 1, 2, 2, 3, 3, 3, 4, 4, 4, 1, 1, 1,
+                 1, 2, 2, 4, 3, 1, 1, 2, 5, 3, 6, 2))
+})
