@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1.9007</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,7 +77,7 @@
 
 <span class="fu">data_reorder</span><span class="op">(</span><span class="va">data</span>, <span class="va">cols</span>, safe <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
 
-<span class="fu">data_remove</span><span class="op">(</span><span class="va">data</span>, <span class="va">pattern</span>, ignore_case <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu">data_remove</span><span class="op">(</span><span class="va">data</span>, <span class="va">select</span>, ignore_case <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -98,7 +98,7 @@ of column names, <code>ends_with</code> finds matches at the end of column names
 a regular expression is used in <code>select</code>, ignores lower/upper case in the
 search pattern when matching against variable names.</p></dd>
 <dt>...</dt>
-<dd><p>For use by future methods.</p></dd>
+<dd><p>Not used.</p></dd>
 <dt>cols</dt>
 <dd><p>A character vector indicating the names of the columns to move.</p></dd>
 <dt>before, after</dt>
@@ -109,6 +109,14 @@ numeric value, indicating the index number of the destination column.
 If <code>-1</code>, will be added before or after the last column.</p></dd>
 <dt>safe</dt>
 <dd><p>If <code>TRUE</code>, will disregard non-existing columns.</p></dd>
+<dt>select</dt>
+<dd><p>Either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
+<li><p>a string with the variable name (e.g., <code>"column_name"</code>),</p></li>
+<li><p>a formula with variable names (e.g., <code>~column_1 + column_2</code>),</p></li>
+<li><p>or one of the following select-helpers: <code>starts_with("")</code>, <code>ends_with("")</code>,
+<code>contains("")</code>, a range using <code>:</code> or <code>regex("")</code>.</p></li>
+</ul><p>Multiple variables can also be extracted using a character vector of
+length &gt; 1, or a numeric vector containing column indices.</p></dd>
 <dt>verbose</dt>
 <dd><p>Toggle warnings.</p></dd>
 </dl></div>
