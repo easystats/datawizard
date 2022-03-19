@@ -24,7 +24,6 @@
 #' @param sep The indicating a separating character in the variable names in the
 #'   wide format.
 #' @inheritParams convert_to_na
-#' @inheritParams data_extract
 #'
 #' @examples
 #' wide_data <- data.frame(replicate(5, rnorm(10)))

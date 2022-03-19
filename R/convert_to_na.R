@@ -22,10 +22,11 @@
 #'   from `exclude` will be excluded instead of selected.
 #' @param na Numeric or character vector (or a list of numeric and character
 #'   vectors) with values that should be converted to `NA`.
+#' @param ignore_case Logical, if `TRUE` and when one of the select-helpers or
+#'   a regular expression is used in `select`, ignores lower/upper case in the
+#'   search pattern when matching against variable names.
 #' @param verbose Toggle warnings.
 #' @param ... Not used.
-
-#' @inheritParams data_extract
 #'
 #' @return
 #' `x`, where all values in `na` are converted to `NA`.
