@@ -236,7 +236,7 @@ data_cut.data.frame <- function(x,
                                 exclude = NULL,
                                 force = FALSE,
                                 append = FALSE,
-                                ignore_case = TRUE,
+                                ignore_case = FALSE,
                                 verbose = TRUE,
                                 ...) {
   fixed <- TRUE
@@ -283,6 +283,96 @@ data_cut.data.frame <- function(x,
   x
 }
 
+
+#' @export
+data_cut.grouped_df <- function(x,
+                                split = "median",
+                                n_groups = NULL,
+                                range = NULL,
+                                lowest = 1,
+                                labels = NULL,
+                                select = NULL,
+                                exclude = NULL,
+                                force = FALSE,
+                                append = FALSE,
+                                ignore_case = FALSE,
+                                verbose = TRUE,
+                                ...) {
+  info <- attributes(x)
+
+  # dplyr >= 0.8.0 returns attribute "indices"
+  grps <- attr(x, "groups", exact = TRUE)
+
+  fixed <- TRUE
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
+
+  # in case pattern is a variable from another function call...
+  p <- try(eval(select), silent = TRUE)
+  if (inherits(p, c("try-error", "simpleError"))) {
+    p <- substitute(select)
+  }
+
+  # check if pattern is a function like "starts_with()"
+  select <- tryCatch(eval(p), error = function(e) NULL)
+
+  # if select could not be evaluated (because expression "makes no sense")
+  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
+  # so we can use grepl()
+  if (is.null(select)) {
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), x, ignore_case = ignore_case)
+    select <- evaluated_pattern$pattern
+    fixed <- evaluated_pattern$fixed
+  }
+
+  # seems to be no valid column name or index, so try to grep
+  if (isFALSE(fixed)) {
+    select <- colnames(x)[grepl(select, colnames(x), ignore.case = ignore_case)]
+  }
+
+  # load again
+  .attach_packages(conflicting_packages)
+
+  # return valid column names, based on pattern
+  select <- .evaluated_pattern_to_colnames(select, x, ignore_case, verbose = FALSE, exclude)
+
+  # process arguments
+  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force)
+
+  # update processed arguments
+  x <- args$x
+  select <- args$select
+
+  # dplyr < 0.8.0?
+  if (is.null(grps)) {
+    grps <- attr(x, "indices", exact = TRUE)
+    grps <- lapply(grps, function(x) x + 1)
+  } else {
+    grps <- grps[[".rows"]]
+  }
+
+  x <- as.data.frame(x)
+  for (rows in grps) {
+    x[rows, ] <- data_cut(
+      x[rows, ],
+      split = split,
+      n_groups = split,
+      range = range,
+      lowest = lowest,
+      labels = labels,
+      select = select,
+      exclude = exclude,
+      force = force,
+      append = append,
+      ignore_case = ignore_case,
+      verbose = verbose,
+      ...
+    )
+  }
+  # set back class, so data frame still works with dplyr
+  attributes(x) <- info
+  x
+}
 
 
 
