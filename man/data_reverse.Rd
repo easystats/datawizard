@@ -4,7 +4,6 @@
 \alias{data_reverse}
 \alias{reverse_scale}
 \alias{data_reverse.numeric}
-\alias{data_reverse.grouped_df}
 \alias{data_reverse.data.frame}
 \title{Reverse-Score Variables}
 \usage{
@@ -13,15 +12,6 @@ data_reverse(x, ...)
 reverse_scale(x, ...)
 
 \method{data_reverse}{numeric}(x, range = NULL, verbose = TRUE, ...)
-
-\method{data_reverse}{grouped_df}(
-  x,
-  range = NULL,
-  select = NULL,
-  exclude = NULL,
-  ignore_case = FALSE,
-  ...
-)
 
 \method{data_reverse}{data.frame}(
   x,
@@ -33,7 +23,7 @@ reverse_scale(x, ...)
 )
 }
 \arguments{
-\item{x}{A numeric or factor variable.}
+\item{x}{A (grouped) data frame, numeric vector or factor.}
 
 \item{...}{Arguments passed to or from other methods.}
 

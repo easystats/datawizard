@@ -2,10 +2,10 @@
 #'
 #' Reverse-score variables (change the keying/scoring direction).
 #'
-#' @param x A numeric or factor variable.
 #' @param range Initial (old) range of values. If `NULL`, will take the range of
 #'   the input vector (`range(x)`).
 #' @param ... Arguments passed to or from other methods.
+#' @inheritParams data_cut
 #' @inheritParams convert_to_na
 #'
 #' @examples
@@ -120,7 +120,6 @@ data_reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
 
 
 
-#' @rdname data_reverse
 #' @export
 data_reverse.grouped_df <- function(x,
                                     range = NULL,

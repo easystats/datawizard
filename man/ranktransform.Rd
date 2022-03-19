@@ -3,22 +3,12 @@
 \name{ranktransform}
 \alias{ranktransform}
 \alias{ranktransform.numeric}
-\alias{ranktransform.grouped_df}
 \alias{ranktransform.data.frame}
 \title{(Signed) rank transformation}
 \usage{
 ranktransform(x, ...)
 
 \method{ranktransform}{numeric}(x, sign = FALSE, method = "average", verbose = TRUE, ...)
-
-\method{ranktransform}{grouped_df}(
-  x,
-  select = NULL,
-  exclude = NULL,
-  sign = FALSE,
-  method = "average",
-  ...
-)
 
 \method{ranktransform}{data.frame}(
   x,

@@ -56,7 +56,6 @@ change_scale <- function(x, ...) {
 
 
 
-
 #' @rdname data_rescale
 #' @export
 data_rescale.numeric <- function(x,
@@ -96,7 +95,6 @@ data_rescale.numeric <- function(x,
 
 
 
-
 #' @export
 data_rescale.factor <- function(x, ...) {
   x
@@ -104,8 +102,6 @@ data_rescale.factor <- function(x, ...) {
 
 
 
-
-#' @rdname data_rescale
 #' @export
 data_rescale.grouped_df <- function(x,
                                     to = c(0, 100),
@@ -145,6 +141,7 @@ data_rescale.grouped_df <- function(x,
   attributes(x) <- info
   x
 }
+
 
 
 #' @rdname data_rescale

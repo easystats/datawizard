@@ -7,7 +7,7 @@
 #' It is basically a wrapper around base R's `cut()`, providing a simplified
 #' and more accessible way to define the interval breaks (cut-off values).
 #'
-#' @param x A data frame, numeric vector or factor.
+#' @param x A (grouped) data frame, numeric vector or factor.
 #' @param split Character vector, indicating at which breaks to split variables,
 #'   or numeric values with values indicating breaks. If character, may be one
 #'   of `"median"`, `"mean"`, `"quantile"`, `"equal_length"`, or `"equal_range"`.

@@ -30,7 +30,7 @@ normalize(x, ...)
 )
 }
 \arguments{
-\item{x}{A numeric vector, data frame, or matrix. See details.}
+\item{x}{A numeric vector, (grouped) data frame, or matrix. See 'Details'.}
 
 \item{...}{Arguments passed to or from other methods.}
 

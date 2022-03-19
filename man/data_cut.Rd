@@ -36,7 +36,7 @@ data_cut(x, ...)
 )
 }
 \arguments{
-\item{x}{A data frame, numeric vector or factor.}
+\item{x}{A (grouped) data frame, numeric vector or factor.}
 
 \item{...}{not used.}
 

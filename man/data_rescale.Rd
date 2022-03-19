@@ -4,7 +4,6 @@
 \alias{data_rescale}
 \alias{change_scale}
 \alias{data_rescale.numeric}
-\alias{data_rescale.grouped_df}
 \alias{data_rescale.data.frame}
 \title{Rescale Variables to a New Range}
 \usage{
@@ -13,16 +12,6 @@ data_rescale(x, ...)
 change_scale(x, ...)
 
 \method{data_rescale}{numeric}(x, to = c(0, 100), range = NULL, verbose = TRUE, ...)
-
-\method{data_rescale}{grouped_df}(
-  x,
-  to = c(0, 100),
-  range = NULL,
-  select = NULL,
-  exclude = NULL,
-  ignore_case = FALSE,
-  ...
-)
 
 \method{data_rescale}{data.frame}(
   x,
@@ -35,7 +24,7 @@ change_scale(x, ...)
 )
 }
 \arguments{
-\item{x}{A data frame, numeric vector or factor.}
+\item{x}{A (grouped) data frame, numeric vector or factor.}
 
 \item{...}{Arguments passed to or from other methods.}
 
