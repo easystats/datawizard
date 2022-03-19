@@ -43,7 +43,7 @@
     exclude <- colnames(data)[grepl(exclude, colnames(data), ignore.case = ignore_case)]
   }
   # if exclude = NULL, we want to exclude 0 variables, not all of them
-  if (length(exclude) == ncol(data)) {
+  if (!inherits(exclude, "formula") && length(exclude) == ncol(data)) {
     exclude <- NULL
   }
 
