@@ -50,7 +50,7 @@ test_that("data_extract works with select-helpers", {
 
 test_that("data_extract works with formulas", {
   expect_equal(
-    data_extract(iris, ~Sepal.Width + Species),
+    data_extract(iris, ~ Sepal.Width + Species),
     iris[c("Sepal.Width", "Species")]
   )
 })

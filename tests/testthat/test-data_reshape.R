@@ -147,13 +147,15 @@ test_that("data_reshape works as expected - complex dataset", {
 
 
 test_that("data_reshape works as expected - simple dataset", {
-  d <- data.frame(age = c(20, 30, 40),
-                  sex = c("Female", "Male", "Male"),
-                  score_t1 = c(30, 35, 32),
-                  score_t2 = c(33, 34, 37),
-                  speed_t1 = c(2, 3, 1),
-                  speed_t2 = c(3, 4, 5),
-                  stringsAsFactors = FALSE)
+  d <- data.frame(
+    age = c(20, 30, 40),
+    sex = c("Female", "Male", "Male"),
+    score_t1 = c(30, 35, 32),
+    score_t2 = c(33, 34, 37),
+    speed_t1 = c(2, 3, 1),
+    speed_t2 = c(3, 4, 5),
+    stringsAsFactors = FALSE
+  )
 
   out <- data_to_long(d, starts_with("score"))
   expect_equal(out$Name, c("score_t1", "score_t2", "score_t1", "score_t2", "score_t1", "score_t2"))

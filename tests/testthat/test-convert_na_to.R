@@ -184,8 +184,10 @@ test_that("convert_na_to - dataframe: only modifies factor if only factor specif
 
 test_that("convert_na_to - dataframe: arg 'select' works", {
   expect_equal(
-    convert_na_to(test, replace_num = 4, replace_char = "e",
-                  replace_fac = 8, select = "x"),
+    convert_na_to(test,
+      replace_num = 4, replace_char = "e",
+      replace_fac = 8, select = "x"
+    ),
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", NA),
@@ -196,8 +198,10 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
   )
 
   expect_equal(
-    convert_na_to(test, replace_num = 4, replace_char = "e",
-                  replace_fac = 8, select = ~ x),
+    convert_na_to(test,
+      replace_num = 4, replace_char = "e",
+      replace_fac = 8, select = ~x
+    ),
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", NA),
@@ -208,8 +212,10 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
   )
 
   expect_equal(
-    convert_na_to(test, replace_num = 4, replace_char = "e",
-                  replace_fac = 8, select = starts_with("x")),
+    convert_na_to(test,
+      replace_num = 4, replace_char = "e",
+      replace_fac = 8, select = starts_with("x")
+    ),
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", NA),
@@ -220,8 +226,10 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
   )
 
   expect_equal(
-    convert_na_to(test, replace_num = 4, replace_char = "e",
-                  replace_fac = 8, select = ends_with("2")),
+    convert_na_to(test,
+      replace_num = 4, replace_char = "e",
+      replace_fac = 8, select = ends_with("2")
+    ),
     data.frame(
       x = c(1, 2, NA),
       y = c("a", "b", NA),
@@ -232,8 +240,10 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
   )
 
   expect_equal(
-    convert_na_to(test, replace_num = 4, replace_char = "e",
-                  replace_fac = 8, select = contains("x")),
+    convert_na_to(test,
+      replace_num = 4, replace_char = "e",
+      replace_fac = 8, select = contains("x")
+    ),
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", NA),
@@ -244,8 +254,10 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
   )
 
   expect_equal(
-    convert_na_to(test, replace_num = 4, replace_char = "e",
-                  replace_fac = 8, select = 1:3),
+    convert_na_to(test,
+      replace_num = 4, replace_char = "e",
+      replace_fac = 8, select = 1:3
+    ),
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", "e"),
@@ -256,8 +268,10 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
   )
 
   expect_equal(
-    convert_na_to(test, replace_num = 4, replace_char = "e",
-                  replace_fac = 8, select = regex("2$")),
+    convert_na_to(test,
+      replace_num = 4, replace_char = "e",
+      replace_fac = 8, select = regex("2$")
+    ),
     data.frame(
       x = c(1, 2, NA),
       y = c("a", "b", NA),
@@ -271,8 +285,10 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
 
 test_that("convert_na_to - dataframe: arg 'exclude' works", {
   expect_equal(
-    convert_na_to(test, replace_num = 4, replace_char = "e",
-                  replace_fac = 8, exclude = "x"),
+    convert_na_to(test,
+      replace_num = 4, replace_char = "e",
+      replace_fac = 8, exclude = "x"
+    ),
     data.frame(
       x = c(1, 2, NA),
       y = c("a", "b", "e"),
@@ -283,8 +299,10 @@ test_that("convert_na_to - dataframe: arg 'exclude' works", {
   )
 
   expect_equal(
-    convert_na_to(test, replace_num = 4, replace_char = "e",
-                  replace_fac = 8, exclude = ~ x),
+    convert_na_to(test,
+      replace_num = 4, replace_char = "e",
+      replace_fac = 8, exclude = ~x
+    ),
     data.frame(
       x = c(1, 2, NA),
       y = c("a", "b", "e"),
@@ -295,8 +313,10 @@ test_that("convert_na_to - dataframe: arg 'exclude' works", {
   )
 
   expect_equal(
-    convert_na_to(test, replace_num = 4, replace_char = "e",
-                  replace_fac = 8, select = starts_with("x"), exclude = ~ x),
+    convert_na_to(test,
+      replace_num = 4, replace_char = "e",
+      replace_fac = 8, select = starts_with("x"), exclude = ~x
+    ),
     data.frame(
       x = c(1, 2, NA),
       y = c("a", "b", NA),
@@ -367,5 +387,4 @@ test_that("convert_na_to - dataframe: works when arg 'select' is a list", {
       stringsAsFactors = FALSE
     )
   )
-
 })

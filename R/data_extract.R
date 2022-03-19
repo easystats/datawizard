@@ -119,11 +119,11 @@ data_extract.data.frame <- function(data,
 
   # "name" only used for naming elements in a vector, not data frame
   if (isTRUE(as_data_frame) ||
-      # more than one variable means data frame, so no name
-      length(select) > 1 ||
-      # if we have only one variable, but number of observations not equal to
-      # length of names, we have no proper match, so no naming, too.
-      (length(select) == 1 && length(name) > 1 && length(data[[select]]) != length(name))) {
+    # more than one variable means data frame, so no name
+    length(select) > 1 ||
+    # if we have only one variable, but number of observations not equal to
+    # length of names, we have no proper match, so no naming, too.
+    (length(select) == 1 && length(name) > 1 && length(data[[select]]) != length(name))) {
     name <- NULL
   }
   # we definitely should have a vector here when name not NULL
