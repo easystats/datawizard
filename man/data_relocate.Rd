@@ -17,14 +17,21 @@ data_findcols(
   ...
 )
 
-data_relocate(data, cols, before = NULL, after = NULL, safe = TRUE, ...)
+data_relocate(
+  data,
+  select,
+  before = NULL,
+  after = NULL,
+  ignore_case = FALSE,
+  ...
+)
 
-data_reorder(data, cols, safe = TRUE, ...)
+data_reorder(data, select, ignore_case = FALSE, ...)
 
 data_remove(data, select, ignore_case = FALSE, verbose = FALSE, ...)
 }
 \arguments{
-\item{data}{A data frame to pivot.}
+\item{data}{A data frame.}
 
 \item{pattern}{A regular expression (as character string), representing the
 pattern to be matched in the in column names. Can also be one of the
@@ -41,16 +48,6 @@ search pattern when matching against variable names.}
 
 \item{...}{Not used.}
 
-\item{cols}{A character vector indicating the names of the columns to move.}
-
-\item{before, after}{Destination of columns. Supplying neither will move
-columns to the left-hand side; specifying both is an error. Can be a
-character vector, indicating the name of the destination column, or a
-numeric value, indicating the index number of the destination column.
-If \code{-1}, will be added before or after the last column.}
-
-\item{safe}{If \code{TRUE}, will disregard non-existing columns.}
-
 \item{select}{Either
 \itemize{
 \item a variable specified as a literal variable name (e.g., \code{column_name}),
@@ -63,7 +60,15 @@ If \code{-1}, will be added before or after the last column.}
 Multiple variables can also be extracted using a character vector of
 length > 1, or a numeric vector containing column indices.}
 
+\item{before, after}{Destination of columns. Supplying neither will move
+columns to the left-hand side; specifying both is an error. Can be a
+character vector, indicating the name of the destination column, or a
+numeric value, indicating the index number of the destination column.
+If \code{-1}, will be added before or after the last column.}
+
 \item{verbose}{Toggle warnings.}
+
+\item{safe}{If \code{TRUE}, will disregard non-existing columns.}
 }
 \value{
 A data frame with reordered columns.
@@ -90,16 +95,16 @@ data_findcols(iris, starts_with("Sepal"))
 data_findcols(iris, ends_with("Width"))
 
 # Reorder columns
-head(data_relocate(iris, cols = "Species", before = "Sepal.Length"))
-head(data_relocate(iris, cols = "Species", before = "Sepal.Width"))
-head(data_relocate(iris, cols = "Sepal.Width", after = "Species"))
+head(data_relocate(iris, select = "Species", before = "Sepal.Length"))
+head(data_relocate(iris, select = "Species", before = "Sepal.Width"))
+head(data_relocate(iris, select = "Sepal.Width", after = "Species"))
 # same as
-head(data_relocate(iris, cols = "Sepal.Width", after = -1))
+head(data_relocate(iris, select = "Sepal.Width", after = -1))
 
 # reorder multiple columns
-head(data_relocate(iris, cols = c("Species", "Petal.Length"), after = "Sepal.Width"))
+head(data_relocate(iris, select = c("Species", "Petal.Length"), after = "Sepal.Width"))
 # same as
-head(data_relocate(iris, cols = c("Species", "Petal.Length"), after = 2))
+head(data_relocate(iris, select = c("Species", "Petal.Length"), after = 2))
 
 # Reorder columns
 head(data_reorder(iris, c("Species", "Sepal.Length")))
