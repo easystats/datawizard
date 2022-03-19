@@ -1,9 +1,50 @@
+# this function evaluates the select-expression and allows non-standard evaluation
+
+.select_nse <- function(select, data, exclude, ignore_case, verbose = FALSE) {
+  fixed <- TRUE
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
+
+  # in case pattern is a variable from another function call...
+  p <- try(eval(select), silent = TRUE)
+  if (inherits(p, c("try-error", "simpleError"))) {
+    p <- substitute(select, env = parent.frame())
+  }
+
+  # check if pattern is a function like "starts_with()"
+  select <- tryCatch(eval(p), error = function(e) NULL)
+
+  # if select could not be evaluated (because expression "makes no sense")
+  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
+  # so we can use grepl()
+  if (is.null(select)) {
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), data, ignore_case = ignore_case)
+    select <- evaluated_pattern$pattern
+    fixed <- evaluated_pattern$fixed
+  }
+
+  # seems to be no valid column name or index, so try to grep
+  if (isFALSE(fixed)) {
+    select <- colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case)]
+  }
+
+  # load again
+  .attach_packages(conflicting_packages)
+
+  # return valid column names, based on pattern
+  .evaluated_pattern_to_colnames(select, data, ignore_case, verbose = verbose, exclude)
+}
+
+
 # this function looks for function-name-patterns (select-helpers) and
 # returns the regular expression that mimics the behaviour of that select-helper
 
 .evaluate_pattern <- function(x, data = NULL, ignore_case = FALSE) {
   fixed <- FALSE
   if (is.null(x) && !is.null(data)) {
+    pattern <- colnames(data)
+    fixed <- TRUE
+  } else if (!is.null(x) && all(x == "all")) {
     pattern <- colnames(data)
     fixed <- TRUE
   } else if (grepl("^starts_with\\(\"(.*)\"\\)", x)) {
@@ -60,6 +101,10 @@
 
   # if numeric, make sure we have valid column indices
   if (is.numeric(pattern)) {
+    if (any(pattern < 0)) {
+      # select last column(s)
+      pattern[pattern < 0] <- sort(ncol(data) + pattern[pattern < 0] + 1)
+    }
     pattern <- colnames(data)[intersect(pattern, 1:ncol(data))]
   }
 

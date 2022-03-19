@@ -58,6 +58,26 @@ test_that("data_remove works with NSE", {
   )
 
   expect_equal(
+    colnames(data_remove(iris, c(1, 5))),
+    colnames(iris)[2:4]
+  )
+
+  expect_equal(
+    colnames(data_remove(iris, -1:-2)),
+    colnames(iris)[1:3]
+  )
+
+  expect_equal(
+    colnames(data_remove(iris, c(1, -1:-2))),
+    colnames(iris)[2:3]
+  )
+
+  expect_equal(
+    colnames(data_remove(iris, "abc")),
+    colnames(iris)
+  )
+
+  expect_equal(
     colnames(data_remove(iris, "Species")),
     c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
   )
@@ -76,7 +96,7 @@ test_that("data_remove works with NSE", {
 
 test_that("data_remove from other functions", {
   test_fun <- function(data, i) {
-    data_remove(data, pattern = i)
+    data_remove(data, select = i)
   }
   expect_equal(
     colnames(test_fun(iris, c("Sepal.Length", "Sepal.Width"))),
