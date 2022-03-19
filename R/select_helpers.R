@@ -113,6 +113,21 @@
 # is in the column names of the data, and returns the final column names to select
 
 .evaluated_pattern_to_colnames <- function(pattern, data, ignore_case, verbose, exclude = NULL) {
+  # check selected variables
+  pattern <- .check_pattern_and_exclude(pattern, data, ignore_case, verbose)
+  # check if some variables should be excluded...
+  if (!is.null(exclude)) {
+    exclude <- .check_pattern_and_exclude(exclude, data, ignore_case, verbose)
+    pattern <- setdiff(pattern, exclude)
+  }
+
+  pattern
+}
+
+
+# workhorse for .evaluated_pattern_to_colnames()
+
+.check_pattern_and_exclude <- function(pattern, data, ignore_case, verbose) {
   # if pattern is formula, simply extract all variables
   if (inherits(pattern, "formula")) {
     pattern <- all.vars(pattern)
@@ -128,7 +143,7 @@
   }
 
   # special token - select all columns?
-  if (all(pattern == "all")) {
+  if (length(pattern) == 1 && identical(pattern, "all")) {
     pattern <- colnames(data)
   }
 
@@ -147,25 +162,8 @@
     pattern <- intersect(pattern, colnames(data))
   }
 
-  # check if some variables should be excluded...
-  if (!is.null(exclude)) {
-    # check for formula notation, convert to character vector
-    if (inherits(exclude, "formula")) {
-      exclude <- all.vars(exclude)
-    }
-    if (is.numeric(exclude)) {
-      exclude <- colnames(data)[intersect(exclude, 1:ncol(data))]
-    }
-    # check if column names match when all are lowercase
-    if (!all(exclude %in% colnames(data)) && isTRUE(ignore_case)) {
-      exclude <- colnames(data)[tolower(colnames(data)) %in% tolower(exclude)]
-    }
-    pattern <- setdiff(pattern, exclude)
-  }
-
   pattern
 }
-
 
 
 

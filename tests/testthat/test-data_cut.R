@@ -68,6 +68,7 @@ test_that("recode factor labels", {
 })
 
 test_that("recode data frame", {
+  data(iris)
   x <- iris
   out <- data_cut(x, "median", select = c("Sepal.Length", "Sepal.Width"))
   expect_s3_class(out, "data.frame")

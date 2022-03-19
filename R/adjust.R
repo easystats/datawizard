@@ -72,9 +72,10 @@ adjust <- function(data,
                    bayesian = FALSE,
                    keep_intercept = FALSE) {
   if (!all(colnames(data) == make.names(colnames(data), unique = TRUE))) {
-    warning("Bad column names (e.g., with spaces) have been detected which might create issues in many functions.\n",
-      "Please fix it (you can run `names(mydata) <- make.names(names(mydata))` for a quick fix).",
-      call. = FALSE
+    warning(insight::format_message(
+      "Bad column names (e.g., with spaces) have been detected which might create issues in many functions.",
+      "Please fix it (you can run `names(mydata) <- make.names(names(mydata))` for a quick fix)."
+      ), call. = FALSE
     )
   }
 

@@ -63,7 +63,7 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
       name <- names(x)
     }
     if (verbose) {
-      warning(paste0("Variable `", name, "` contains only one unique value and will not be normalized."))
+      warning(insight::format_message(paste0("Variable `", name, "` contains only one unique value and will not be normalized.")), call. = FALSE)
     }
     return(x)
   }
@@ -77,7 +77,7 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
       name <- names(x)
     }
     if (verbose) {
-      warning(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor."))
+      warning(insight::format_message(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor.")), call. = FALSE)
     }
   }
 
