@@ -33,8 +33,9 @@
 #' head(data_rename(iris, paste0("Var", 1:5)))
 #'
 #' @seealso
+#' - Functions to find columns: [data_findcols()]
 #' - Functions to rename stuff: [data_rename()], [data_rename_rows()], [data_addprefix()], [data_addsuffix()]
-#' - Functions to reorder, find and remove columns: [data_findcols()], [data_reorder()], [data_relocate()], [data_remove()]
+#' - Functions to reorder or remove columns: [data_reorder()], [data_relocate()], [data_remove()]
 #' - Functions to reshape, pivot or rotate dataframes: [data_to_long()], [data_to_wide()], [data_rotate()]
 #' - Functions to rescale and reverse: [data_rescale()], [data_reverse()]
 #' - Functions to standardize, normalize, rank-transform: [standardize()], [normalize()], [ranktransform()], [winsorize()]

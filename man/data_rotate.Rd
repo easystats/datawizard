@@ -55,8 +55,9 @@ data_rotate(x, colnames = "c")
 }
 \seealso{
 \itemize{
+\item Functions to find columns: \code{\link[=data_findcols]{data_findcols()}}
 \item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}}, \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
-\item Functions to reorder, find and remove columns: \code{\link[=data_findcols]{data_findcols()}}, \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
+\item Functions to reorder or remove columns: \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
 \item Functions to reshape, pivot or rotate dataframes: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
 \item Functions to rescale and reverse: \code{\link[=data_rescale]{data_rescale()}}, \code{\link[=data_reverse]{data_reverse()}}
 \item Functions to standardize, normalize, rank-transform: \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}

@@ -1,10 +1,9 @@
-#' @param pattern A regular expression (as character string), representing the
-#'   pattern to be matched in the in column names. Can also be one of the
-#'   following select-helpers: `starts_with("")`, `end_with("")`, `regex("")`,
-#'   `contains("")`, or a range using `:`.
-#' @param starts_with,ends_with Character string, containing the string to be
-#'   matched in the column names. `starts_with` finds matches at the beginning
-#'   of column names, `ends_with` finds matches at the end of column names.
+#' @title Find columns in a data frame based on search patterns
+#' @name data_findcols
+#'
+#' @param data A data frame.
+#' @param pattern Deprecated. Please use `select`.
+#' @param starts_with,ends_with Deprecated. Please use select-helpers in `select`.
 #' @param select Variables that will be included when performing the required
 #'   tasks. Can be either
 #'
@@ -25,17 +24,17 @@
 #'   search pattern when matching against variable names.
 #' @param verbose Toggle warnings.
 #'
-#' @rdname data_relocate
+#' @inherit data_rename seealso
+#'
+#' @return A character vector with column names that matched the pattern in
+#'   `select` and `exclude`, or `NULL` if no matching column name was found.
+#'
 #' @examples
 #' # Find columns names by pattern
-#' data_findcols(iris, starts_with = "Sepal")
-#' data_findcols(iris, ends_with = "Width")
-#' data_findcols(iris, pattern = "\\.")
-#' data_findcols(iris, c("Petal.Width", "Sepal.Length"))
-#'
-#' # using select helpers
-#' data_findcols(iris, starts_with("Sepal"))
-#' data_findcols(iris, ends_with("Width"))
+#' data_findcols(iris, select = starts_with("Sepal"))
+#' data_findcols(iris, select = ends_with("Width"))
+#' data_findcols(iris, select = regex("\\."))
+#' data_findcols(iris, select = c("Petal.Width", "Sepal.Length"))
 #'
 #' @export
 data_findcols <- function(data,
