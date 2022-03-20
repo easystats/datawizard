@@ -5,28 +5,10 @@
 #' Convert non-missing values in a variable into missing values.
 #'
 #' @param x A vector, factor or a data frame.
-#' @param select Variables that will be included when performing the required
-#'   tasks. Can be either
-#'
-#'   - a variable specified as a literal variable name (e.g., `column_name`),
-#'   - a string with the variable name (e.g., `"column_name"`), or a character
-#'     vector of variable names (e.g., `c("col1", "col2", "col3")`),
-#'   - a formula with variable names (e.g., `~column_1 + column_2`),
-#'   - a vector of positive integers, giving the positions counting from the left
-#'     (e.g. `1` or `c(1, 3, 5)`),
-#'   - a vector of negative integers, giving the positions counting from the
-#'     right (e.g., `-1` or `-1:-3`),
-#'   - or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
-#'   `contains("")`, a range using `:` or `regex("")`.
-#' @param exclude See `select`, however, column names matched by the pattern
-#'   from `exclude` will be excluded instead of selected.
 #' @param na Numeric or character vector (or a list of numeric and character
 #'   vectors) with values that should be converted to `NA`.
-#' @param ignore_case Logical, if `TRUE` and when one of the select-helpers or
-#'   a regular expression is used in `select`, ignores lower/upper case in the
-#'   search pattern when matching against variable names.
-#' @param verbose Toggle warnings.
 #' @param ... Not used.
+#' @inheritParams find_columns
 #'
 #' @return
 #' `x`, where all values in `na` are converted to `NA`.

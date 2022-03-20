@@ -7,7 +7,7 @@
 #'   character vector, indicating the name of the destination column, or a
 #'   numeric value, indicating the index number of the destination column.
 #'   If `-1`, will be added before or after the last column.
-#' @inheritParams convert_to_na
+#' @inheritParams find_columns
 #' @inheritParams data_rename
 #'
 #' @inherit data_rename seealso

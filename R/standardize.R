@@ -27,9 +27,6 @@
 #'   name of a column in the `data.frame` that contains the weights.
 #' - For numeric vectors: a numeric vector of weights.
 #' @param verbose Toggle warnings and messages on or off.
-#' @param select Character vector of column names. If `NULL` (the default), all
-#'   variables will be selected.
-#' @param exclude Character vector of column names to be excluded from selection.
 #' @param remove_na How should missing values (`NA`) be treated: if `"none"`
 #'   (default): each column's standardization is done separately, ignoring
 #'   `NA`s. Else, rows with `NA` in the columns selected with `select` /
@@ -69,6 +66,7 @@
 #'   (as does the output of `standardize()`), it will take it from there if the
 #'   rest of the arguments are absent.
 #' @param ... Arguments passed to or from other methods.
+#' @inheritParams find_columns
 #'
 #' @return The standardized object (either a standardize data frame or a
 #'   statistical model fitted on standardized data).
@@ -232,7 +230,11 @@ standardize.data.frame <- function(x,
                                    append = FALSE,
                                    center = NULL,
                                    scale = NULL,
+                                   ignore_case = FALSE,
                                    ...) {
+  # evaluate select/exclude, may be select-helpers
+  select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
+
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append,
     append_suffix = "_z", force, remove_na, reference,
@@ -279,7 +281,11 @@ standardize.grouped_df <- function(x,
                                    append = FALSE,
                                    center = NULL,
                                    scale = NULL,
+                                   ignore_case = FALSE,
                                    ...) {
+  # evaluate select/exclude, may be select-helpers
+  select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
+
   args <- .process_grouped_df(x, select, exclude, append,
     append_suffix = "_z",
     reference, weights, force

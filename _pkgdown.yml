@@ -65,13 +65,11 @@ reference:
       - starts_with("replace_")
       - starts_with("convert_")
 
-  - title: Rowname helpers
+  - title: Utilities
   - contents:
       - contains("rownames")
-
-  - title: String helpers
-  - contents:
       - compact_character
+      - find_columns
 
   - title: Text formatting helpers
   - contents:
