@@ -222,7 +222,7 @@ test_that("data_to_numeric, labels preserved", {
 # data_match -----------------------------------
 
 test_that("data_match, labels preserved", {
-  x <- data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "or", as_data_frame = TRUE)
+  x <- data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "or")
   # factor
   expect_equal(
     attr(x$e42dep, "label", exact = TRUE),
