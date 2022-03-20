@@ -6,7 +6,8 @@
 #' @param data A data frame, or an object that can be coerced to a data frame.
 #' @param pattern Character vector. For `data_rename()`, indicates columns that
 #'   should be selected for renaming. Can be `NULL` (in which case all columns
-#'   are selected).
+#'   are selected). For `data_addprefix()` or `data_addsuffix()`, a character
+#'   string, which will be added as prefix or suffix to the column names.
 #' @param replacement Character vector. Indicates the new name of the columns
 #'   selected in `pattern`. Can be `NULL` (in which case column are numbered
 #'   in sequential order). If not `NULL`, `pattern` and `replacement` must be

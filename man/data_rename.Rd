@@ -34,7 +34,8 @@ data_rename_rows(data, rows = NULL)
 
 \item{pattern}{Character vector. For \code{data_rename()}, indicates columns that
 should be selected for renaming. Can be \code{NULL} (in which case all columns
-are selected).}
+are selected). For \code{data_addprefix()} or \code{data_addsuffix()}, a character
+string, which will be added as prefix or suffix to the column names.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
