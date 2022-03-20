@@ -7,29 +7,25 @@
 #' @param match String, indicating with which logical operation matching
 #'   conditions should be combined. Can be `"and"` (or `"&"`), `"or"` (or `"|"`)
 #'   or `"not"` (or `"!"`).
-#' @param as_data_frame Logical, if `TRUE`, returns the filtered data frame
+#' @param return_indices Logical, if `FALSE`, return the vector of rows that can be used to filter the original data frame. If `FALSE` (default), returns directly the filtered data frame
 #'   instead of the row indices.
 #' @param ... Not used.
 #'
 #' @return The row indices that match the specified configuration.
 #'
 #' @examples
-#' matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1))
-#' mtcars[matching_rows, ]
-#'
-#' matching_rows <- data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
-#' mtcars[matching_rows, ]
+#' data_match(mtcars, data.frame(vs = 0, am = 1))
+#' data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
 #'
 #' # observations where "vs" is NOT 0 AND "am" is NOT 1
-#' matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
-#' mtcars[matching_rows, ]
+#' data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
 #'
 #' # observations where EITHER "vs" is 0 OR "am" is 1
-#' matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
-#' mtcars[matching_rows, ]
+#' data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
+#'
 #' @inherit data_rename seealso
 #' @export
-data_match <- function(x, to, match = "and", as_data_frame = FALSE, ...) {
+data_match <- function(x, to, match = "and", return_indices = FALSE, ...) {
 
   # Input checks
   if (!is.data.frame(to)) to <- as.data.frame(to)
@@ -77,7 +73,7 @@ data_match <- function(x, to, match = "and", as_data_frame = FALSE, ...) {
   }
 
   # prepare output
-  if (isTRUE(as_data_frame)) {
+  if (isFALSE(return_indices)) {
     out <- original_x[idx, , drop = FALSE]
     # restore value and variable labels
     for (i in colnames(out)) {

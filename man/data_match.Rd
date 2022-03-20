@@ -4,7 +4,7 @@
 \alias{data_match}
 \title{Find row indices of a data frame matching a specific condition}
 \usage{
-data_match(x, to, match = "and", as_data_frame = FALSE, ...)
+data_match(x, to, match = "and", return_indices = FALSE, ...)
 }
 \arguments{
 \item{x}{A data frame.}
@@ -15,7 +15,7 @@ data_match(x, to, match = "and", as_data_frame = FALSE, ...)
 conditions should be combined. Can be \code{"and"} (or \code{"&"}), \code{"or"} (or \code{"|"})
 or \code{"not"} (or \code{"!"}).}
 
-\item{as_data_frame}{Logical, if \code{TRUE}, returns the filtered data frame
+\item{return_indices}{Logical, if \code{FALSE}, return the vector of rows that can be used to filter the original data frame. If \code{FALSE} (default), returns directly the filtered data frame
 instead of the row indices.}
 
 \item{...}{Not used.}
@@ -27,19 +27,15 @@ The row indices that match the specified configuration.
 Find row indices of a data frame that match a specific condition.
 }
 \examples{
-matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1))
-mtcars[matching_rows, ]
-
-matching_rows <- data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
-mtcars[matching_rows, ]
+data_match(mtcars, data.frame(vs = 0, am = 1))
+data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
 
 # observations where "vs" is NOT 0 AND "am" is NOT 1
-matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
-mtcars[matching_rows, ]
+data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
 
 # observations where EITHER "vs" is 0 OR "am" is 1
-matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
-mtcars[matching_rows, ]
+data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
+
 }
 \seealso{
 \itemize{
