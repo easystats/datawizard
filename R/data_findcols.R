@@ -49,7 +49,7 @@ find_columns <- function(data,
   if (!length(columns) || is.null(columns)) {
     columns <- NULL
     if (isTRUE(verbose)) {
-      warning(insight::format_message("No column names that matched the required find pattern were found."), call. = FALSE)
+      warning(insight::format_message("No column names that matched the required search pattern were found."), call. = FALSE)
     }
   }
 
