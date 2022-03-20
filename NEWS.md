@@ -14,7 +14,9 @@ NEW FUNCTIONS
 
   * To convert rownames to a column, and *vice versa*: `rownames_as_column()` and `column_as_rownames()` (@etiennebacher, #80).
 
-  * For computing weighted centrality measures and dispersion: `weighted_mean()`, `weighted_median()`, `weighted_sd()` and `weighted_mad()` .
+  * For computing weighted centrality measures and dispersion: `weighted_mean()`, `weighted_median()`, `weighted_sd()` and `weighted_mad()`.
+  
+  * To replace `NA` in vectors and dataframes: `convert_na_to()` (@etiennebacher, #111).
 
 MINOR CHANGES
 
