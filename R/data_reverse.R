@@ -6,7 +6,7 @@
 #'   the input vector (`range(x)`).
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams data_cut
-#' @inheritParams data_findcols
+#' @inheritParams find_columns
 #'
 #' @examples
 #' data_reverse(c(1, 2, 3, 4, 5))

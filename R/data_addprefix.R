@@ -1,5 +1,5 @@
 #' @rdname data_rename
-#' @inheritParams data_findcols
+#' @inheritParams find_columns
 #' @examples
 #' # Add prefix / suffix to all columns
 #' head(data_addprefix(iris, "NEW_"))

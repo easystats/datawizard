@@ -33,13 +33,13 @@
 #' head(data_rename(iris, paste0("Var", 1:5)))
 #'
 #' @seealso
-#' - Functions to find columns: [data_findcols()]
 #' - Functions to rename stuff: [data_rename()], [data_rename_rows()], [data_addprefix()], [data_addsuffix()]
 #' - Functions to reorder or remove columns: [data_reorder()], [data_relocate()], [data_remove()]
 #' - Functions to reshape, pivot or rotate dataframes: [data_to_long()], [data_to_wide()], [data_rotate()]
 #' - Functions to rescale and reverse: [data_rescale()], [data_reverse()]
 #' - Functions to standardize, normalize, rank-transform: [standardize()], [normalize()], [ranktransform()], [winsorize()]
 #' - Split, cut and merge dataframes: [data_partition()], [data_cut()], [data_match()], [data_merge()]
+#' - Functions to find columns: [find_columns()]
 #'
 #' @export
 data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, ...) {

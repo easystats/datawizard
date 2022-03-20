@@ -1,9 +1,7 @@
 #' @title Find columns in a data frame based on search patterns
-#' @name data_findcols
+#' @name find_columns
 #'
 #' @param data A data frame.
-#' @param pattern Deprecated. Please use `select`.
-#' @param starts_with,ends_with Deprecated. Please use select-helpers in `select`.
 #' @param select Variables that will be included when performing the required
 #'   tasks. Can be either
 #'
@@ -32,36 +30,37 @@
 #'
 #' @examples
 #' # Find columns names by pattern
-#' data_findcols(iris, select = starts_with("Sepal"))
-#' data_findcols(iris, select = ends_with("Width"))
-#' data_findcols(iris, select = regex("\\."))
-#' data_findcols(iris, select = c("Petal.Width", "Sepal.Length"))
+#' find_columns(iris, select = starts_with("Sepal"))
+#' find_columns(iris, select = ends_with("Width"))
+#' find_columns(iris, select = regex("\\."))
+#' find_columns(iris, select = c("Petal.Width", "Sepal.Length"))
 #'
+#' @export
+find_columns <- function(data,
+                         select = NULL,
+                         exclude = NULL,
+                         ignore_case = FALSE,
+                         verbose = TRUE,
+                         ...) {
+  columns <- .select_nse(select, data, exclude, ignore_case = ignore_case, verbose = FALSE)
+
+  if (!length(columns) || is.null(columns)) {
+    columns <- NULL
+    if (isTRUE(verbose)) {
+      warning(insight::format_message("No column names that matched the required find pattern were found."), call. = FALSE)
+    }
+  }
+
+  columns
+}
+
+
 #' @export
 data_findcols <- function(data,
                           pattern = NULL,
                           starts_with = NULL,
                           ends_with = NULL,
-                          select = NULL,
-                          exclude = NULL,
-                          ignore_case = FALSE,
-                          verbose = TRUE,
                           ...) {
-  # TODO: Need to extend this to work with NSE so that the following shoud work:
-  # - data_findcols(iris, Sepal.Length)
-  # - data_findcols(iris, starts_with("Sepal"))
-  # - data_findcols(iris, contains("Sepal"))
-
-  if (!missing(select)) {
-    columns <- .select_nse(select, data, exclude, ignore_case = ignore_case, verbose = FALSE)
-    if (!length(columns) || is.null(columns)) {
-      columns <- NULL
-      if (isTRUE(verbose)) {
-        warning(insight::format_message("No column names that matched the required find pattern were found."), call. = FALSE)
-      }
-    }
-    return(columns)
-  }
 
   # init
   n <- names(data)

@@ -8,7 +8,7 @@
 #' @param na Numeric or character vector (or a list of numeric and character
 #'   vectors) with values that should be converted to `NA`.
 #' @param ... Not used.
-#' @inheritParams data_findcols
+#' @inheritParams find_columns
 #'
 #' @return
 #' `x`, where all values in `na` are converted to `NA`.

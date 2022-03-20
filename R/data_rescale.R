@@ -4,7 +4,7 @@
 #' Can also be used to reverse-score variables (change the keying/scoring direction).
 #'
 #' @inheritParams data_cut
-#' @inheritParams data_findcols
+#' @inheritParams find_columns
 #' @inheritParams standardize.data.frame
 #'
 #' @param to Numeric vector of length 2 giving the new range that the variable will have after rescaling.
