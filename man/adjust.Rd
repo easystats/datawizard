@@ -13,7 +13,8 @@ adjust(
   multilevel = FALSE,
   additive = FALSE,
   bayesian = FALSE,
-  keep_intercept = FALSE
+  keep_intercept = FALSE,
+  ignore_case = FALSE
 )
 
 data_adjust(
@@ -24,7 +25,8 @@ data_adjust(
   multilevel = FALSE,
   additive = FALSE,
   bayesian = FALSE,
-  keep_intercept = FALSE
+  keep_intercept = FALSE,
+  ignore_case = FALSE
 )
 }
 \arguments{
@@ -33,10 +35,26 @@ data_adjust(
 \item{effect}{Character vector of column names to be adjusted for (regressed
 out). If \code{NULL} (the default), all variables will be selected.}
 
-\item{select}{Character vector of column names. If \code{NULL} (the default), all
-variables will be selected.}
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}), or a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item a vector of positive integers, giving the positions counting from the left
+(e.g. \code{1} or \code{c(1, 3, 5)}),
+\item a vector of negative integers, giving the positions counting from the
+right (e.g., \code{-1} or \code{-1:-3}),
+\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")}.
+}
 
-\item{exclude}{Character vector of column names to be excluded from selection.}
+If \code{NULL}, selects all columns.}
+
+\item{exclude}{See \code{select}, however, column names matched by the pattern
+from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
+excludes no columns.}
 
 \item{multilevel}{If \code{TRUE}, the factors are included as random factors.
 Else, if \code{FALSE} (default), they are included as fixed effects in the
@@ -53,6 +71,10 @@ using \code{rstanarm}.}
 re-added. This avoids the centering around 0 that happens by default
 when regressing out another variable (see the examples below for a
 visual representation of this).}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
 }
 \value{
 A data frame comparable to \code{data}, with adjusted variables.

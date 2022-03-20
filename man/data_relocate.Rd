@@ -36,7 +36,9 @@ vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
 right (e.g., \code{-1} or \code{-1:-3}),
 \item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
 \code{contains("")}, a range using \code{:} or \code{regex("")}.
-}}
+}
+
+If \code{NULL}, selects all columns.}
 
 \item{before, after}{Destination of columns. Supplying neither will move
 columns to the left-hand side; specifying both is an error. Can be a

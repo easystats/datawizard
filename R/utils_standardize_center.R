@@ -61,14 +61,6 @@
                               .center = NULL,
                               .scale = NULL) {
 
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
-
   # check append argument, and set default
   if (isFALSE(append)) {
     append <- NULL
@@ -352,14 +344,6 @@
   info <- attributes(x)
   # dplyr >= 0.8.0 returns attribute "indices"
   grps <- attr(x, "groups", exact = TRUE)
-
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
 
   if (is.numeric(weights)) {
     warning(insight::format_message(

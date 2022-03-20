@@ -5,14 +5,14 @@
 #' give you signed ranks, where the ranking is done according to absolute size
 #' but where the sign is preserved (i.e., 2, 1, -3, 4).
 #'
-#' @inheritParams standardize.data.frame
-#'
 #' @param x Object.
 #' @param sign Logical, if `TRUE`, return signed ranks.
 #' @param method Treatment of ties. Can be one of `"average"` (default),
 #'   `"first"`, `"last"`, `"random"`, `"max"` or `"min"`. See [rank()] for
 #'   details.
 #' @param ... Arguments passed to or from other methods.
+#' @inheritParams find_columns
+#' @inheritParams standardize.data.frame
 #'
 #' @examples
 #' ranktransform(c(0, 1, 5, -5, -2))
@@ -102,18 +102,14 @@ ranktransform.grouped_df <- function(x,
                                      exclude = NULL,
                                      sign = FALSE,
                                      method = "average",
+                                     ignore_case = FALSE,
                                      ...) {
   info <- attributes(x)
   # dplyr >= 0.8.0 returns attribute "indices"
   grps <- attr(x, "groups", exact = TRUE)
 
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
+  # evaluate arguments
+  select <- .select_nse(select, x, exclude, ignore_case)
 
   # dplyr < 0.8.0?
   if (is.null(grps)) {
@@ -147,23 +143,11 @@ ranktransform.data.frame <- function(x,
                                      exclude = NULL,
                                      sign = FALSE,
                                      method = "average",
+                                     ignore_case = FALSE,
                                      ...) {
 
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
-
-  if (is.null(select)) {
-    select <- names(x)
-  }
-
-  if (!is.null(exclude)) {
-    select <- setdiff(select, exclude)
-  }
+  # evaluate arguments
+  select <- .select_nse(select, x, exclude, ignore_case)
 
   x[select] <- lapply(x[select], ranktransform, sign = sign, method = method)
   x

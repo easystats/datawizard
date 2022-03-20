@@ -13,7 +13,6 @@
 #' @param data A dataframe.
 #' @param effect Character vector of column names to be adjusted for (regressed
 #'   out). If `NULL` (the default), all variables will be selected.
-#' @inheritParams standardize
 #' @param multilevel If `TRUE`, the factors are included as random factors.
 #'   Else, if `FALSE` (default), they are included as fixed effects in the
 #'   simple regression model.
@@ -26,6 +25,8 @@
 #'   re-added. This avoids the centering around 0 that happens by default
 #'   when regressing out another variable (see the examples below for a
 #'   visual representation of this).
+#' @inheritParams find_columns
+#' @inheritParams standardize
 #'
 #' @return A data frame comparable to `data`, with adjusted variables.
 #'
@@ -70,7 +71,8 @@ adjust <- function(data,
                    multilevel = FALSE,
                    additive = FALSE,
                    bayesian = FALSE,
-                   keep_intercept = FALSE) {
+                   keep_intercept = FALSE,
+                   ignore_case = FALSE) {
   if (!all(colnames(data) == make.names(colnames(data), unique = TRUE))) {
     warning(insight::format_message(
       "Bad column names (e.g., with spaces) have been detected which might create issues in many functions.",
@@ -82,12 +84,9 @@ adjust <- function(data,
   if (inherits(effect, "formula")) {
     effect <- all.vars(effect)
   }
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
+
+  # evaluate select/exclude, may be select-helpers
+  select <- .select_nse(select, data, exclude, ignore_case, verbose = FALSE)
 
   # Find predictors
   if (is.null(effect)) {
@@ -112,9 +111,6 @@ adjust <- function(data,
   # Find outcomes
   if (is.null(select)) {
     select <- names(data[nums])
-  }
-  if (!is.null(exclude)) {
-    select <- select[!select %in% c(exclude)]
   }
 
   # Fit models

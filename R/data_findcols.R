@@ -15,8 +15,11 @@
 #'     right (e.g., `-1` or `-1:-3`),
 #'   - or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
 #'   `contains("")`, a range using `:` or `regex("")`.
+#'
+#'   If `NULL`, selects all columns.
 #' @param exclude See `select`, however, column names matched by the pattern
-#'   from `exclude` will be excluded instead of selected.
+#'   from `exclude` will be excluded instead of selected. If `NULL` (the default),
+#'   excludes no columns.
 #' @param ignore_case Logical, if `TRUE` and when one of the select-helpers or
 #'   a regular expression is used in `select`, ignores lower/upper case in the
 #'   search pattern when matching against variable names.
