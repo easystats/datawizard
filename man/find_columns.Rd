@@ -2,6 +2,7 @@
 % Please edit documentation in R/data_findcols.R
 \name{find_columns}
 \alias{find_columns}
+\alias{data_findcols}
 \title{Find columns in a data frame based on search patterns}
 \usage{
 find_columns(
@@ -10,6 +11,15 @@ find_columns(
   exclude = NULL,
   ignore_case = FALSE,
   verbose = TRUE,
+  ...
+)
+
+data_findcols(
+  data,
+  pattern = NULL,
+  starts_with = NULL,
+  ends_with = NULL,
+  ignore_case = FALSE,
   ...
 )
 }
@@ -41,6 +51,15 @@ search pattern when matching against variable names.}
 \item{verbose}{Toggle warnings.}
 
 \item{...}{Arguments passed down to other functions. Mostly not used yet.}
+
+\item{pattern}{A regular expression (as character string), representing the
+pattern to be matched in the in column names. Can also be one of the
+following select-helpers: \code{starts_with("")}, \code{end_with("")}, \code{regex("")},
+\code{contains("")}, or a range using \code{:}.}
+
+\item{starts_with, ends_with}{Character string, containing the string to be
+matched in the column names. \code{starts_with} finds matches at the beginning
+of column names, \code{ends_with} finds matches at the end of column names.}
 }
 \value{
 A character vector with column names that matched the pattern in
@@ -48,6 +67,10 @@ A character vector with column names that matched the pattern in
 }
 \description{
 Find columns in a data frame based on search patterns
+}
+\note{
+\code{data_findcols()} is deprecated and will be fully replaced by
+\code{find_columns()} in a future update.
 }
 \examples{
 # Find columns names by pattern

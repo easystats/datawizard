@@ -57,6 +57,18 @@ find_columns <- function(data,
 }
 
 
+#' @param pattern A regular expression (as character string), representing the
+#'   pattern to be matched in the in column names. Can also be one of the
+#'   following select-helpers: `starts_with("")`, `end_with("")`, `regex("")`,
+#'   `contains("")`, or a range using `:`.
+#' @param starts_with,ends_with Character string, containing the string to be
+#'   matched in the column names. `starts_with` finds matches at the beginning
+#'   of column names, `ends_with` finds matches at the end of column names.
+#'
+#' @note `data_findcols()` is deprecated and will be fully replaced by
+#'   `find_columns()` in a future update.
+#'
+#' @rdname find_columns
 #' @export
 data_findcols <- function(data,
                           pattern = NULL,
