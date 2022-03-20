@@ -13,7 +13,10 @@ data_findcols(
   pattern = NULL,
   starts_with = NULL,
   ends_with = NULL,
+  select = NULL,
+  exclude = NULL,
   ignore_case = FALSE,
+  verbose = TRUE,
   ...
 )
 
@@ -43,12 +46,6 @@ following select-helpers: \code{starts_with("")}, \code{end_with("")}, \code{reg
 matched in the column names. \code{starts_with} finds matches at the beginning
 of column names, \code{ends_with} finds matches at the end of column names.}
 
-\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
-a regular expression is used in \code{select}, ignores lower/upper case in the
-search pattern when matching against variable names.}
-
-\item{...}{Not used.}
-
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
 \itemize{
@@ -64,13 +61,22 @@ right (e.g., \code{-1} or \code{-1:-3}),
 \code{contains("")}, a range using \code{:} or \code{regex("")}.
 }}
 
+\item{exclude}{See \code{select}, however, column names matched by the pattern
+from \code{exclude} will be excluded instead of selected.}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
+
+\item{verbose}{Toggle warnings.}
+
+\item{...}{Other arguments passed to or from other functions.}
+
 \item{before, after}{Destination of columns. Supplying neither will move
 columns to the left-hand side; specifying both is an error. Can be a
 character vector, indicating the name of the destination column, or a
 numeric value, indicating the index number of the destination column.
 If \code{-1}, will be added before or after the last column.}
-
-\item{verbose}{Toggle warnings.}
 }
 \value{
 A data frame with reordered columns.

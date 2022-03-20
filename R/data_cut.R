@@ -42,7 +42,7 @@
 #'   If a character value, recoded variables are appended with new column
 #'   names (using the defined suffix) to the original data frame.
 #' @param ... not used.
-#' @inheritParams convert_to_na
+#' @inheritParams data_findcols
 #'
 #' @return `x`, recoded into groups. By default `x` is numeric, unless `labels`
 #'   is specified. In this case, a factor is returned, where the factor levels

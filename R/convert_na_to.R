@@ -127,7 +127,7 @@ convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE, ...) 
 #' @param replace_num Value to replace `NA` when variable is of type numeric.
 #' @param replace_char Value to replace `NA` when variable is of type character.
 #' @param replace_fac Value to replace `NA` when variable is of type factor.
-#' @inheritParams convert_to_na
+#' @inheritParams data_findcols
 #'
 #' @rdname convert_na_to
 #' @export
