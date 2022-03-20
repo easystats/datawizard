@@ -46,6 +46,8 @@ a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
 
 \item{verbose}{Toggle warnings.}
+
+\item{...}{Arguments passed down to other functions. Mostly not used yet.}
 }
 \value{
 A character vector with column names that matched the pattern in

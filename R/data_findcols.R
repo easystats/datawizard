@@ -23,6 +23,7 @@
 #'   a regular expression is used in `select`, ignores lower/upper case in the
 #'   search pattern when matching against variable names.
 #' @param verbose Toggle warnings.
+#' @param ... Arguments passed down to other functions. Mostly not used yet.
 #'
 #' @inherit data_rename seealso
 #'

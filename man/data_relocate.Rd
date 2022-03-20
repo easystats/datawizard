@@ -50,7 +50,7 @@ search pattern when matching against variable names.}
 
 \item{verbose}{Toggle warnings.}
 
-\item{...}{Other arguments passed to or from other functions.}
+\item{...}{Arguments passed down to other functions. Mostly not used yet.}
 }
 \value{
 A data frame with reordered columns.
