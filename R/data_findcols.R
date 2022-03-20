@@ -60,6 +60,7 @@ data_findcols <- function(data,
                           pattern = NULL,
                           starts_with = NULL,
                           ends_with = NULL,
+                          ignore_case = FALSE,
                           ...) {
 
   # init
