@@ -109,7 +109,7 @@ adjust <- function(data,
 
   nums <- sapply(data, is.numeric)
   # Find outcomes
-  if (is.null(select)) {
+  if (is.null(select) || all(select %in% colnames(data))) {
     select <- names(data[nums])
   }
 
