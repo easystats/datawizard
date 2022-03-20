@@ -14,21 +14,15 @@
 #' @return The row indices that match the specified configuration.
 #'
 #' @examples
-#' matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1))
-#' mtcars[matching_rows, ]
-#' # Filtered data can be obtained directly using:
-#'
-#'
-#' matching_rows <- data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
-#' mtcars[matching_rows, ]
+#' data_match(mtcars, data.frame(vs = 0, am = 1))
+#' data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
 #'
 #' # observations where "vs" is NOT 0 AND "am" is NOT 1
-#' matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
-#' mtcars[matching_rows, ]
+#' data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
 #'
 #' # observations where EITHER "vs" is 0 OR "am" is 1
-#' matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
-#' mtcars[matching_rows, ]
+#' data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
+#'
 #' @inherit data_rename seealso
 #' @export
 data_match <- function(x, to, match = "and", return_indices = FALSE, ...) {
