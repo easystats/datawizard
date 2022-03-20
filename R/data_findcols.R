@@ -30,11 +30,13 @@
 #'
 #' @examples
 #' # Find columns names by pattern
-#' find_columns(iris, select = starts_with("Sepal"))
-#' find_columns(iris, select = ends_with("Width"))
-#' find_columns(iris, select = regex("\\."))
-#' find_columns(iris, select = c("Petal.Width", "Sepal.Length"))
+#' find_columns(iris, starts_with("Sepal"))
+#' find_columns(iris, ends_with("Width"))
+#' find_columns(iris, regex("\\."))
+#' find_columns(iris, c("Petal.Width", "Sepal.Length"))
 #'
+#' # starts with "Sepal", but not allowed to end with "width"
+#' find_columns(iris, starts_with("Sepal"), exclude = contains("Width"))
 #' @export
 find_columns <- function(data,
                          select = NULL,
