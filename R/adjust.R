@@ -85,12 +85,18 @@ adjust <- function(data,
     effect <- all.vars(effect)
   }
 
-  # evaluate select/exclude, may be select-helpers
-  select <- .select_nse(select, data, exclude, ignore_case, verbose = FALSE)
-
   # Find predictors
   if (is.null(effect)) {
     effect <- names(data)
+  }
+
+  nums <- sapply(data, is.numeric)
+  # Find outcomes
+  if (is.null(select)) {
+    select <- names(data[nums])
+  } else {
+    # evaluate select/exclude, may be select-helpers
+    select <- .select_nse(select, data, exclude, ignore_case, verbose = FALSE)
   }
 
   # Factors
@@ -105,12 +111,6 @@ adjust <- function(data,
       }
       effect <- effect[!effect %in% facs]
     }
-  }
-
-  nums <- sapply(data, is.numeric)
-  # Find outcomes
-  if (is.null(select) || all(select %in% colnames(data))) {
-    select <- names(data[nums])
   }
 
   # Fit models
