@@ -16,7 +16,7 @@ This is a special case of data_rescale().
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1.9008</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1.9010</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,16 +75,6 @@ This is a special case of data_rescale().
 <span class="co"># S3 method for numeric</span>
 <span class="fu">normalize</span><span class="op">(</span><span class="va">x</span>, include_bounds <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
 
-<span class="co"># S3 method for grouped_df</span>
-<span class="fu">normalize</span><span class="op">(</span>
-  <span class="va">x</span>,
-  select <span class="op">=</span> <span class="cn">NULL</span>,
-  exclude <span class="op">=</span> <span class="cn">NULL</span>,
-  include_bounds <span class="op">=</span> <span class="cn">TRUE</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
 <span class="co"># S3 method for data.frame</span>
 <span class="fu">normalize</span><span class="op">(</span>
   <span class="va">x</span>,
@@ -92,6 +82,7 @@ This is a special case of data_rescale().
   exclude <span class="op">=</span> <span class="cn">NULL</span>,
   include_bounds <span class="op">=</span> <span class="cn">TRUE</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
+  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -111,10 +102,26 @@ the response variable is not allowed to include zeros and ones.</p></dd>
 <dt>verbose</dt>
 <dd><p>Toggle warnings and messages on or off.</p></dd>
 <dt>select</dt>
-<dd><p>Character vector of column names. If <code>NULL</code> (the default), all
-variables will be selected.</p></dd>
+<dd><p>Variables that will be included when performing the required
+tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
+<li><p>a string with the variable name (e.g., <code>"column_name"</code>), or a character
+vector of variable names (e.g., <code>c("col1", "col2", "col3")</code>),</p></li>
+<li><p>a formula with variable names (e.g., <code>~column_1 + column_2</code>),</p></li>
+<li><p>a vector of positive integers, giving the positions counting from the left
+(e.g. <code>1</code> or <code>c(1, 3, 5)</code>),</p></li>
+<li><p>a vector of negative integers, giving the positions counting from the
+right (e.g., <code>-1</code> or <code>-1:-3</code>),</p></li>
+<li><p>or one of the following select-helpers: <code>starts_with("")</code>, <code>ends_with("")</code>,
+<code>contains("")</code>, a range using <code>:</code> or <code>regex("")</code>.</p></li>
+</ul><p>If <code>NULL</code>, selects all columns.</p></dd>
 <dt>exclude</dt>
-<dd><p>Character vector of column names to be excluded from selection.</p></dd>
+<dd><p>See <code>select</code>, however, column names matched by the pattern
+from <code>exclude</code> will be excluded instead of selected. If <code>NULL</code> (the default),
+excludes no columns.</p></dd>
+<dt>ignore_case</dt>
+<dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
+a regular expression is used in <code>select</code>, ignores lower/upper case in the
+search pattern when matching against variable names.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

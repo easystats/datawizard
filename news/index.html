@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1.9008</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1.9010</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@
 <ul><li><p>To convert rownames to a column, and <em>vice versa</em>: <code><a href="../reference/rownames.html">rownames_as_column()</a></code> and <code><a href="../reference/rownames.html">column_as_rownames()</a></code> (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/80" class="external-link">#80</a>).</p></li>
 <li><p>For computing weighted centrality measures and dispersion: <code><a href="../reference/weighted_mean.html">weighted_mean()</a></code>, <code><a href="../reference/weighted_mean.html">weighted_median()</a></code>, <code><a href="../reference/weighted_mean.html">weighted_sd()</a></code> and <code><a href="../reference/weighted_mean.html">weighted_mad()</a></code> .</p></li>
 </ul><p>MINOR CHANGES</p>
-<ul><li><p>The <code>select</code> argument in several functions (like <code><a href="../reference/data_relocate.html">data_remove()</a></code>, <code><a href="../reference/data_relocate.html">data_findcols()</a></code>, or <code><a href="../reference/data_extract.html">data_extract()</a></code>) now allow the use of select-helpers for selecting variables based on specific patterns.</p></li>
+<ul><li><p>The <code>select</code> argument in several functions (like <code><a href="../reference/data_relocate.html">data_remove()</a></code>, <code><a href="../reference/find_columns.html">data_findcols()</a></code>, or <code><a href="../reference/data_extract.html">data_extract()</a></code>) now allow the use of select-helpers for selecting variables based on specific patterns.</p></li>
 <li><p><code><a href="../reference/data_extract.html">data_extract()</a></code> gains new arguments to allow type-safe return values, i.e. <em>always</em> return a vector <em>or</em> a data frame. Thus, <code><a href="../reference/data_extract.html">data_extract()</a></code> can now be used to select multiple variables or pull a single variable from data frames.</p></li>
 <li><p><code><a href="../reference/data_match.html">data_match()</a></code> gains a <code>match</code> argument, to indicate with which logical operation matching results should be combined.</p></li>
 <li><p><code><a href="../reference/data_match.html">data_match()</a></code> gains a <code>as_data_frame</code> argument, to return the filtered data frame instead of the indices of filtered rows.</p></li>
@@ -109,7 +109,7 @@
 <li><p><code><a href="../reference/center.html">center()</a></code> gains the arguments <code>force</code> and <code>reference</code>, similar to <code><a href="../reference/standardize.html">standardize()</a></code>.</p></li>
 <li><p>The functionality of the <code>append</code> argument in <code><a href="../reference/center.html">center()</a></code> and <code><a href="../reference/standardize.html">standardize()</a></code> was revised. This made the <code>suffix</code> argument redundant, and thus it was removed.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/standardize.html">standardize()</a></code>.</p></li>
-<li><p>Fixed issue in <code><a href="../reference/data_relocate.html">data_findcols()</a></code>.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/find_columns.html">data_findcols()</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="datawizard-021">datawizard 0.2.1<a class="anchor" aria-label="anchor" href="#datawizard-021"></a></h2><p class="text-muted">CRAN release: 2021-10-04</p>
