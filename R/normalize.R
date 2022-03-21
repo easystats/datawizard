@@ -103,11 +103,11 @@ normalize.factor <- function(x, ...) {
 
 #' @export
 normalize.grouped_df <- function(x,
+                                 include_bounds = TRUE,
                                  select = NULL,
                                  exclude = NULL,
-                                 include_bounds = TRUE,
-                                 verbose = TRUE,
                                  ignore_case = FALSE,
+                                 verbose = TRUE,
                                  ...) {
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
@@ -152,11 +152,11 @@ normalize.grouped_df <- function(x,
 #' @rdname normalize
 #' @export
 normalize.data.frame <- function(x,
+                                 include_bounds = TRUE,
                                  select = NULL,
                                  exclude = NULL,
-                                 include_bounds = TRUE,
-                                 verbose = TRUE,
                                  ignore_case = FALSE,
+                                 verbose = TRUE,
                                  ...) {
 
   # evaluate select/exclude, may be select-helpers
