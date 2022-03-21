@@ -98,10 +98,10 @@ ranktransform.factor <- function(x, ...) {
 
 #' @export
 ranktransform.grouped_df <- function(x,
-                                     select = NULL,
-                                     exclude = NULL,
                                      sign = FALSE,
                                      method = "average",
+                                     select = NULL,
+                                     exclude = NULL,
                                      ignore_case = FALSE,
                                      ...) {
   info <- attributes(x)
@@ -139,10 +139,10 @@ ranktransform.grouped_df <- function(x,
 #' @rdname ranktransform
 #' @export
 ranktransform.data.frame <- function(x,
-                                     select = NULL,
-                                     exclude = NULL,
                                      sign = FALSE,
                                      method = "average",
+                                     select = NULL,
+                                     exclude = NULL,
                                      ignore_case = FALSE,
                                      ...) {
 

@@ -21,10 +21,10 @@ standardise(x, ...)
   robust = FALSE,
   two_sd = FALSE,
   weights = NULL,
-  verbose = TRUE,
   reference = NULL,
   center = NULL,
   scale = NULL,
+  verbose = TRUE,
   ...
 )
 
@@ -33,8 +33,8 @@ standardise(x, ...)
   robust = FALSE,
   two_sd = FALSE,
   weights = NULL,
-  verbose = TRUE,
   force = FALSE,
+  verbose = TRUE,
   ...
 )
 
@@ -43,16 +43,16 @@ standardise(x, ...)
   robust = FALSE,
   two_sd = FALSE,
   weights = NULL,
-  verbose = TRUE,
   reference = NULL,
-  select = NULL,
-  exclude = NULL,
+  center = NULL,
+  scale = NULL,
   remove_na = c("none", "selected", "all"),
   force = FALSE,
   append = FALSE,
-  center = NULL,
-  scale = NULL,
+  select = NULL,
+  exclude = NULL,
   ignore_case = FALSE,
+  verbose = TRUE,
   ...
 )
 
@@ -107,8 +107,6 @@ name of a column in the \code{data.frame} that contains the weights.
 \item For numeric vectors: a numeric vector of weights.
 }}
 
-\item{verbose}{Toggle warnings and messages on or off.}
-
 \item{reference}{A data frame or variable from which the centrality and
 deviation will be computed instead of from the input variable. Useful for
 standardizing a subset or new data according to another data frame.}
@@ -134,10 +132,25 @@ Alternatively, if the input contains the attributes \code{center} and \code{scal
 rest of the arguments are absent.
 }}
 
+\item{verbose}{Toggle warnings and messages on or off.}
+
 \item{force}{Logical, if \code{TRUE}, forces standardization of factors and dates
 as well. Factors are converted to numerical values, with the lowest level
 being the value \code{1} (unless the factor has numeric levels, which are
 converted to the corresponding numeric value).}
+
+\item{remove_na}{How should missing values (\code{NA}) be treated: if \code{"none"}
+(default): each column's standardization is done separately, ignoring
+\code{NA}s. Else, rows with \code{NA} in the columns selected with \code{select} /
+\code{exclude} (\code{"selected"}) or in all columns (\code{"all"}) are dropped before
+standardization, and the resulting data frame does not include these cases.}
+
+\item{append}{Logical or string. If \code{TRUE}, standardized variables get new
+column names (with the suffix \code{"_z"}) and are appended (column bind) to \code{x},
+thus returning both the original and the standardized variables. If \code{FALSE},
+original variables in \code{x} will be overwritten by their standardized versions.
+If a character value, standardized variables are appended with new column
+names (using the defined suffix) to the original data frame.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -159,19 +172,6 @@ If \code{NULL}, selects all columns.}
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
 excludes no columns.}
-
-\item{remove_na}{How should missing values (\code{NA}) be treated: if \code{"none"}
-(default): each column's standardization is done separately, ignoring
-\code{NA}s. Else, rows with \code{NA} in the columns selected with \code{select} /
-\code{exclude} (\code{"selected"}) or in all columns (\code{"all"}) are dropped before
-standardization, and the resulting data frame does not include these cases.}
-
-\item{append}{Logical or string. If \code{TRUE}, standardized variables get new
-column names (with the suffix \code{"_z"}) and are appended (column bind) to \code{x},
-thus returning both the original and the standardized variables. If \code{FALSE},
-original variables in \code{x} will be overwritten by their standardized versions.
-If a character value, standardized variables are appended with new column
-names (using the defined suffix) to the original data frame.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the

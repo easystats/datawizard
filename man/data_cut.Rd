@@ -26,10 +26,10 @@ data_cut(x, ...)
   range = NULL,
   lowest = 1,
   labels = NULL,
-  select = NULL,
-  exclude = NULL,
   force = FALSE,
   append = FALSE,
+  select = NULL,
+  exclude = NULL,
   ignore_case = FALSE,
   verbose = TRUE,
   ...
@@ -73,6 +73,15 @@ for labelling the factor levels.}
 
 \item{verbose}{Toggle warnings.}
 
+\item{force}{Logical, if \code{TRUE}, forces recoding of factors as well.}
+
+\item{append}{Logical or string. If \code{TRUE}, recoded variables get new
+column names (with the suffix \code{"_r"}) and are appended (column bind) to \code{x},
+thus returning both the original and the recoded variables. If \code{FALSE},
+original variables in \code{x} will be overwritten by their recoded versions.
+If a character value, recoded variables are appended with new column
+names (using the defined suffix) to the original data frame.}
+
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
 \itemize{
@@ -93,15 +102,6 @@ If \code{NULL}, selects all columns.}
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
 excludes no columns.}
-
-\item{force}{Logical, if \code{TRUE}, forces recoding of factors as well.}
-
-\item{append}{Logical or string. If \code{TRUE}, recoded variables get new
-column names (with the suffix \code{"_r"}) and are appended (column bind) to \code{x},
-thus returning both the original and the recoded variables. If \code{FALSE},
-original variables in \code{x} will be overwritten by their recoded versions.
-If a character value, recoded variables are appended with new column
-names (using the defined suffix) to the original data frame.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the

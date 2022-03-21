@@ -12,11 +12,11 @@ normalize(x, ...)
 
 \method{normalize}{data.frame}(
   x,
+  include_bounds = TRUE,
   select = NULL,
   exclude = NULL,
-  include_bounds = TRUE,
-  verbose = TRUE,
   ignore_case = FALSE,
+  verbose = TRUE,
   ...
 )
 }
