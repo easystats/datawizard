@@ -84,9 +84,9 @@ centre <- center
 center.numeric <- function(x,
                            robust = FALSE,
                            weights = NULL,
-                           verbose = TRUE,
                            reference = NULL,
                            center = NULL,
+                           verbose = TRUE,
                            ...) {
   args <- .process_std_center(x, weights, robust, verbose, reference, center, scale = NULL)
 
@@ -110,10 +110,10 @@ center.numeric <- function(x,
 
 #' @export
 center.factor <- function(x,
-                          weights = NULL,
                           robust = FALSE,
-                          verbose = TRUE,
+                          weights = NULL,
                           force = FALSE,
+                          verbose = TRUE,
                           ...) {
   if (!force) {
     return(x)
@@ -134,15 +134,15 @@ center.character <- center.factor
 center.data.frame <- function(x,
                               robust = FALSE,
                               weights = NULL,
-                              verbose = TRUE,
                               reference = NULL,
+                              center = NULL,
+                              force = FALSE,
+                              remove_na = c("none", "selected", "all"),
+                              append = FALSE,
                               select = NULL,
                               exclude = NULL,
-                              remove_na = c("none", "selected", "all"),
-                              force = FALSE,
-                              append = FALSE,
-                              center = NULL,
                               ignore_case = FALSE,
+                              verbose = TRUE,
                               ...) {
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
@@ -180,15 +180,15 @@ center.data.frame <- function(x,
 center.grouped_df <- function(x,
                               robust = FALSE,
                               weights = NULL,
-                              verbose = TRUE,
                               reference = NULL,
+                              center = NULL,
+                              force = FALSE,
+                              remove_na = c("none", "selected", "all"),
+                              append = FALSE,
                               select = NULL,
                               exclude = NULL,
-                              remove_na = c("none", "selected", "all"),
-                              force = FALSE,
-                              append = FALSE,
-                              center = NULL,
                               ignore_case = FALSE,
+                              verbose = TRUE,
                               ...) {
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
