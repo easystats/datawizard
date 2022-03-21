@@ -2,10 +2,20 @@
 % Please edit documentation in R/data_findcols.R
 \name{find_columns}
 \alias{find_columns}
+\alias{get_columns}
 \alias{data_findcols}
-\title{Find columns in a data frame based on search patterns}
+\title{Find or get columns in a data frame based on search patterns}
 \usage{
 find_columns(
+  data,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  verbose = TRUE,
+  ...
+)
+
+get_columns(
   data,
   select = NULL,
   exclude = NULL,
@@ -65,11 +75,30 @@ matched in the column names. \code{starts_with} finds matches at the beginning
 of column names, \code{ends_with} finds matches at the end of column names.}
 }
 \value{
-A character vector with column names that matched the pattern in
-\code{select} and \code{exclude}, or \code{NULL} if no matching column name was found.
+\code{find_columns()} returns a character vector with column names that
+matched the pattern in \code{select} and \code{exclude}, or \code{NULL} if no matching
+column name was found. \code{get_columns()} returns a data frame with matching
+columns.
 }
 \description{
-Find columns in a data frame based on search patterns
+\code{find_columns()} returns colum names from a data set that
+match a certain search pattern, while \code{get_columns()} returns the found data.
+}
+\details{
+Note that there are some limitations when calling this from inside
+other functions. The following will work as expected, returning all columns
+that start with \code{"Sep"}:\preformatted{foo <- function(data) \{
+  find_columns(data, select = starts_with("Sep"))
+\}
+foo(iris)
+}
+
+However, this example won't work as expected!\preformatted{foo <- function(data) \{
+  i <- "Sep"
+  find_columns(data, select = starts_with(i))
+\}
+foo(iris)
+}
 }
 \note{
 \code{data_findcols()} is deprecated and will be fully replaced by

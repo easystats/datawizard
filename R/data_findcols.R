@@ -1,5 +1,8 @@
-#' @title Find columns in a data frame based on search patterns
+#' @title Find or get columns in a data frame based on search patterns
 #' @name find_columns
+#'
+#' @description `find_columns()` returns colum names from a data set that
+#' match a certain search pattern, while `get_columns()` returns the found data.
 #'
 #' @param data A data frame.
 #' @param select Variables that will be included when performing the required
@@ -28,8 +31,30 @@
 #'
 #' @inherit data_rename seealso
 #'
-#' @return A character vector with column names that matched the pattern in
-#'   `select` and `exclude`, or `NULL` if no matching column name was found.
+#' @return `find_columns()` returns a character vector with column names that
+#'   matched the pattern in `select` and `exclude`, or `NULL` if no matching
+#'   column name was found. `get_columns()` returns a data frame with matching
+#'   columns.
+#'
+#' @details Note that there are some limitations when calling this from inside
+#' other functions. The following will work as expected, returning all columns
+#' that start with `"Sep"`:
+#'
+#' ```
+#' foo <- function(data) {
+#'   find_columns(data, select = starts_with("Sep"))
+#' }
+#' foo(iris)
+#' ```
+#'
+#' However, this example won't work as expected!
+#' ```
+#' foo <- function(data) {
+#'   i <- "Sep"
+#'   find_columns(data, select = starts_with(i))
+#' }
+#' foo(iris)
+#' ```
 #'
 #' @examples
 #' # Find columns names by pattern
@@ -57,6 +82,27 @@ find_columns <- function(data,
   }
 
   columns
+}
+
+
+#' @rdname find_columns
+#' @export
+get_columns <- function(data,
+                        select = NULL,
+                        exclude = NULL,
+                        ignore_case = FALSE,
+                        verbose = TRUE,
+                         ...) {
+  columns <- .select_nse(select, data, exclude, ignore_case = ignore_case, verbose = FALSE)
+
+  if (!length(columns) || is.null(columns)) {
+    if (isTRUE(verbose)) {
+      warning(insight::format_message("No column names that matched the required search pattern were found."), call. = FALSE)
+    }
+    return(NULL)
+  }
+
+  data[columns]
 }
 
 
