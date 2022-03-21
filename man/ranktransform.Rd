@@ -12,10 +12,10 @@ ranktransform(x, ...)
 
 \method{ranktransform}{data.frame}(
   x,
-  select = NULL,
-  exclude = NULL,
   sign = FALSE,
   method = "average",
+  select = NULL,
+  exclude = NULL,
   ignore_case = FALSE,
   ...
 )
