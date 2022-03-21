@@ -95,10 +95,10 @@ and more accessible way to define the interval breaks (cut-off values).</p>
   range <span class="op">=</span> <span class="cn">NULL</span>,
   lowest <span class="op">=</span> <span class="fl">1</span>,
   labels <span class="op">=</span> <span class="cn">NULL</span>,
-  select <span class="op">=</span> <span class="cn">NULL</span>,
-  exclude <span class="op">=</span> <span class="cn">NULL</span>,
   force <span class="op">=</span> <span class="cn">FALSE</span>,
   append <span class="op">=</span> <span class="cn">FALSE</span>,
+  select <span class="op">=</span> <span class="cn">NULL</span>,
+  exclude <span class="op">=</span> <span class="cn">NULL</span>,
   ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">...</span>
@@ -144,6 +144,15 @@ will returns factors instead of numeric variables, with <code>labels</code> used
 for labelling the factor levels.</p></dd>
 <dt>verbose</dt>
 <dd><p>Toggle warnings.</p></dd>
+<dt>force</dt>
+<dd><p>Logical, if <code>TRUE</code>, forces recoding of factors as well.</p></dd>
+<dt>append</dt>
+<dd><p>Logical or string. If <code>TRUE</code>, recoded variables get new
+column names (with the suffix <code>"_r"</code>) and are appended (column bind) to <code>x</code>,
+thus returning both the original and the recoded variables. If <code>FALSE</code>,
+original variables in <code>x</code> will be overwritten by their recoded versions.
+If a character value, recoded variables are appended with new column
+names (using the defined suffix) to the original data frame.</p></dd>
 <dt>select</dt>
 <dd><p>Variables that will be included when performing the required
 tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
@@ -161,15 +170,6 @@ right (e.g., <code>-1</code> or <code>-1:-3</code>),</p></li>
 <dd><p>See <code>select</code>, however, column names matched by the pattern
 from <code>exclude</code> will be excluded instead of selected. If <code>NULL</code> (the default),
 excludes no columns.</p></dd>
-<dt>force</dt>
-<dd><p>Logical, if <code>TRUE</code>, forces recoding of factors as well.</p></dd>
-<dt>append</dt>
-<dd><p>Logical or string. If <code>TRUE</code>, recoded variables get new
-column names (with the suffix <code>"_r"</code>) and are appended (column bind) to <code>x</code>,
-thus returning both the original and the recoded variables. If <code>FALSE</code>,
-original variables in <code>x</code> will be overwritten by their recoded versions.
-If a character value, recoded variables are appended with new column
-names (using the defined suffix) to the original data frame.</p></dd>
 <dt>ignore_case</dt>
 <dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
 a regular expression is used in <code>select</code>, ignores lower/upper case in the
