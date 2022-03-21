@@ -20,8 +20,8 @@ convert_na_to(x, ...)
   replace_fac = NULL,
   select = NULL,
   exclude = NULL,
-  verbose = TRUE,
   ignore_case = FALSE,
+  verbose = TRUE,
   ...
 )
 }
