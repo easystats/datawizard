@@ -246,20 +246,6 @@ test_that("data_match, labels preserved", {
     attr(efc$c172code, "labels", exact = TRUE),
     ignore_attr = TRUE
   )
-
-  # using subset()
-  x <- data_match(efc, c172code == 1 & c12hour > 40)
-  # factor
-  expect_equal(
-    attr(x$e42dep, "label", exact = TRUE),
-    attr(efc$e42dep, "label", exact = TRUE),
-    ignore_attr = TRUE
-  )
-
-  skip_if_not_installed("poorman")
-  out1 <- poorman::filter(efc, c172code == 1, c12hour > 40)
-  out2 <- data_match(efc, c172code == 1 & c12hour > 40)
-  expect_equal(out1, out2, ignore_attr = TRUE)
 })
 
 
