@@ -1,6 +1,6 @@
 # this function evaluates the select-expression and allows non-standard evaluation
 
-.select_nse <- function(select, data, exclude, ignore_case, partial_match = FALSE, verbose = FALSE) {
+.select_nse <- function(select, data, exclude, ignore_case, regex = FALSE, verbose = FALSE) {
   fixed_select <- TRUE
   fixed_exclude <- TRUE
   # avoid conflicts
@@ -36,7 +36,7 @@
 
 
   # seems to be no valid column name or index, so try to grep
-  if (isFALSE(fixed_select) || isTRUE(partial_match)) {
+  if (isFALSE(fixed_select) || isTRUE(regex)) {
     select <- colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case)]
   }
   if (isFALSE(fixed_exclude)) {

@@ -11,7 +11,7 @@ find_columns(
   select = NULL,
   exclude = NULL,
   ignore_case = FALSE,
-  partial_match = FALSE,
+  regex = FALSE,
   verbose = TRUE,
   ...
 )
@@ -21,7 +21,7 @@ get_columns(
   select = NULL,
   exclude = NULL,
   ignore_case = FALSE,
-  partial_match = FALSE,
+  regex = FALSE,
   verbose = TRUE,
   ...
 )
@@ -63,11 +63,14 @@ excludes no columns.}
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
 
-\item{partial_match}{Logical, if \code{TRUE}, will also find columns from \code{select}
-that do not exactly match column names. It is the same as using the
-\code{contains("")} select-helper, however, since the select-helpers may not
-work when called from inside other functions (see 'Details'), this argument
-may be used as workaround.}
+\item{regex}{Logical, if \code{TRUE}, the search pattern from \code{select} will be
+treated as regular expression. When \code{regex = TRUE}, select \emph{must} be a
+character string (or a variable containing a character string) and is not
+allowed to be one of the supported select-helpers or a character vector
+of length > 1. \code{regex = TRUE} is comparable to using one of the two
+select-helper, \code{select = contains("")} or \code{select = regex("")},however,
+since the select-helpers may not work when called from inside other
+functions (see 'Details'), this argument may be used as workaround.}
 
 \item{verbose}{Toggle warnings.}
 
@@ -108,11 +111,11 @@ However, this example won't work as expected!\preformatted{foo <- function(data)
 foo(iris)
 }
 
-One workaround is to use the \code{partial_match} argument, which provides at
-least a bit more flexibility than exact matching. \code{partial_match} behaves
+One workaround is to use the \code{regex} argument, which provides at
+least a bit more flexibility than exact matching. \code{regex} behaves
 like the \code{contains("")} select-helper:\preformatted{foo <- function(data) \{
   i <- "Sep"
-  find_columns(data, select = i, partial_match = TRUE)
+  find_columns(data, select = i, regex = TRUE)
 \}
 foo(iris)
 }

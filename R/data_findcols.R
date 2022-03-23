@@ -26,11 +26,14 @@
 #' @param ignore_case Logical, if `TRUE` and when one of the select-helpers or
 #'   a regular expression is used in `select`, ignores lower/upper case in the
 #'   search pattern when matching against variable names.
-#' @param partial_match Logical, if `TRUE`, will also find columns from `select`
-#'   that do not exactly match column names. It is the same as using the
-#'   `contains("")` select-helper, however, since the select-helpers may not
-#'   work when called from inside other functions (see 'Details'), this argument
-#'   may be used as workaround.
+#' @param regex Logical, if `TRUE`, the search pattern from `select` will be
+#'   treated as regular expression. When `regex = TRUE`, select *must* be a
+#'   character string (or a variable containing a character string) and is not
+#'   allowed to be one of the supported select-helpers or a character vector
+#'   of length > 1. `regex = TRUE` is comparable to using one of the two
+#'   select-helper, `select = contains("")` or `select = regex("")`,however,
+#'   since the select-helpers may not work when called from inside other
+#'   functions (see 'Details'), this argument may be used as workaround.
 #' @param verbose Toggle warnings.
 #' @param ... Arguments passed down to other functions. Mostly not used yet.
 #'
@@ -62,14 +65,14 @@
 #' foo(iris)
 #' ```
 #'
-#' One workaround is to use the `partial_match` argument, which provides at
-#' least a bit more flexibility than exact matching. `partial_match` behaves
+#' One workaround is to use the `regex` argument, which provides at
+#' least a bit more flexibility than exact matching. `regex` behaves
 #' like the `contains("")` select-helper:
 #'
 #' ```
 #' foo <- function(data) {
 #'   i <- "Sep"
-#'   find_columns(data, select = i, partial_match = TRUE)
+#'   find_columns(data, select = i, regex = TRUE)
 #' }
 #' foo(iris)
 #' ```
@@ -88,7 +91,7 @@ find_columns <- function(data,
                          select = NULL,
                          exclude = NULL,
                          ignore_case = FALSE,
-                         partial_match = FALSE,
+                         regex = FALSE,
                          verbose = TRUE,
                          ...) {
   columns <- .select_nse(
@@ -96,7 +99,7 @@ find_columns <- function(data,
     data,
     exclude,
     ignore_case = ignore_case,
-    partial_match = partial_match,
+    regex = regex,
     verbose = FALSE
   )
 
@@ -117,7 +120,7 @@ get_columns <- function(data,
                         select = NULL,
                         exclude = NULL,
                         ignore_case = FALSE,
-                        partial_match = FALSE,
+                        regex = FALSE,
                         verbose = TRUE,
                          ...) {
   columns <- .select_nse(
@@ -125,7 +128,7 @@ get_columns <- function(data,
     data,
     exclude,
     ignore_case = ignore_case,
-    partial_match = partial_match,
+    regex = regex,
     verbose = FALSE
   )
 
