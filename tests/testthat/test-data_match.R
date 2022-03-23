@@ -41,3 +41,20 @@ test_that("data_match works with logical expressions", {
   out2 <- data_match(mtcars, vs == 0 | am == 1)
   expect_equal(out1[order(out1$vs, out1$am), ], out2[order(out2$vs, out2$am), ], ignore_attr = TRUE)
 })
+
+
+test_that("data_filter works", {
+  out1 <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
+  out2 <- data_match(mtcars, vs != 0 & am != 1)
+  out3 <- data_filter(mtcars, vs != 0 & am != 1)
+  expect_equal(out1, out2, ignore_attr = TRUE)
+  expect_equal(out1, out3, ignore_attr = TRUE)
+  expect_equal(out2, out3, ignore_attr = TRUE)
+
+  out1 <- data_match(mtcars, vs == 0 | am == 1)
+  out2 <- data_filter(mtcars, vs == 0 | am == 1)
+  out3 <- subset(mtcars, subset = vs == 0 | am == 1)
+  expect_equal(out1, out2, ignore_attr = TRUE)
+  expect_equal(out1, out3, ignore_attr = TRUE)
+  expect_equal(out2, out3, ignore_attr = TRUE)
+})

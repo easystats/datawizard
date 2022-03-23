@@ -5,6 +5,10 @@ MAJOR CHANGES
 * `data_match()` now returns filtered data by default. Old behavior (returning 
   rows indices) can be set by setting `return_indices = TRUE`.
 
+* The `to` argument in `data_match()` can now also be a logical expression, 
+  indicating the rows to keep. Furthermore, `data_filter()` was added as a
+  short-cut for `data_match()` when using logical expressions for filtering.
+
 * The following functions are now re-exported from `{insight}` package:
   `object_has_names()`, `object_has_rownames()`, `is_empty_object()`,
   `compact_list()`, `compact_character()`

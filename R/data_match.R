@@ -1,6 +1,8 @@
 #' Return filtered data frame or row indices
 #'
-#' Return a filtered data frame or row indices of a data frame that match a specific condition.
+#' Return a filtered data frame or row indices of a data frame that match a
+#' specific condition. `data_filter()` is a short-cut for `data_match()`, which
+#' only works with logical expressions.
 #'
 #' @param x A data frame.
 #' @param to A data frame matching the specified conditions, or a logical
@@ -8,6 +10,7 @@
 #'   arguments `match` and `return_indices` are ignored. Note that if `to` is
 #'   a data frame, and `match` is a value other than `"and"`, the original row
 #'   order might be changed. See 'Details'.
+#' @param filter A logical expression indicating which rows to keep.
 #' @param match String, indicating with which logical operation matching
 #'   conditions should be combined. Can be `"and"` (or `"&"`), `"or"` (or `"|"`)
 #'   or `"not"` (or `"!"`). Only applies when `to` is a data frame.
@@ -48,6 +51,12 @@
 #' #> Merc 450SE        16.4  0  0
 #' #> Merc 450SL        17.3  0  0
 #' ```
+#'
+#' While `data_match()` either works with data frames or logical expressions
+#' to match against, `data_filter()` is a short-cut that only accepts logical
+#' expressions. Thus, `data_filter()` is basically a wrapper around
+#' `subset(subset = <filter>)`, however, it preserves label attributes and is
+#' useful when working with labelled data.
 #'
 #' @examples
 #' data_match(mtcars, data.frame(vs = 0, am = 1))
@@ -141,5 +150,20 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, ...) {
     out <- idx
   }
 
+  out
+}
+
+
+
+#' @rdname data_match
+#' @export
+data_filter <- function(x, filter, ...) {
+  condition <- substitute(filter)
+  out <- do.call(subset, list(x, subset = condition))
+  # restore value and variable labels
+  for (i in colnames(out)) {
+    attr(out[[i]], "label") <- attr(x[[i]], "label", exact = TRUE)
+    attr(out[[i]], "labels") <- attr(x[[i]], "labels", exact = TRUE)
+  }
   out
 }
