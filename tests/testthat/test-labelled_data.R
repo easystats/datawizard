@@ -288,7 +288,6 @@ test_that("convert_to_na, labels preserved", {
 # get_columns -----------------------------------
 
 test_that("get_columns, labels preserved", {
-  data(efc)
   x <- get_columns(efc, starts_with("c"))
   # numeric
   expect_equal(
