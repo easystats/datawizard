@@ -25,6 +25,9 @@ NEW FUNCTIONS
     select-helpers). These function will supersede `data_findcols()` in the
     future.
 
+* `data_filter()` as complement for `data_match()`, which works with logical 
+  expressions for filtering rows of data frames.
+
   * For computing weighted centrality measures and dispersion: `weighted_mean()`,
     `weighted_median()`, `weighted_sd()` and `weighted_mad()`.
   

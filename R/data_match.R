@@ -1,17 +1,56 @@
-#' Find row indices of a data frame matching a specific condition
+#' Return filtered data frame or row indices
 #'
-#' Find row indices of a data frame that match a specific condition.
+#' Return a filtered data frame or row indices of a data frame that match a
+#' specific condition. `data_filter()` works like `data_match()`, but works
+#' with logical expressions instead of data frame to specify matching conditions.
 #'
 #' @param x A data frame.
-#' @param to A data frame matching the specified conditions.
+#' @param to A data frame matching the specified conditions. Note that if
+#'   `match` is a value other than `"and"`, the original row order might be
+#'   changed. See 'Details'.
+#' @param filter A logical expression indicating which rows to keep.
 #' @param match String, indicating with which logical operation matching
 #'   conditions should be combined. Can be `"and"` (or `"&"`), `"or"` (or `"|"`)
 #'   or `"not"` (or `"!"`).
-#' @param return_indices Logical, if `FALSE`, return the vector of rows that can be used to filter the original data frame. If `FALSE` (default), returns directly the filtered data frame
-#'   instead of the row indices.
+#' @param return_indices Logical, if `FALSE`, return the vector of rows that
+#'   can be used to filter the original data frame. If `FALSE` (default),
+#'   returns directly the filtered data frame instead of the row indices.
 #' @param ... Not used.
 #'
-#' @return The row indices that match the specified configuration.
+#' @return A filtered data frame, or the row indices that match the specified configuration.
+#'
+#' @details For `data_match()`, if `match` is either `"or"` or `"not"`, the
+#' original row order from `x` might be changed. If preserving row order is
+#' required, use `data_filter()` instead.
+#'
+#' ```
+#' # mimics subset() behaviour, preserving original row order
+#' head(data_filter(mtcars[c("mpg", "vs", "am")], vs == 0 | am == 1))
+#' #>                    mpg vs am
+#' #> Mazda RX4         21.0  0  1
+#' #> Mazda RX4 Wag     21.0  0  1
+#' #> Datsun 710        22.8  1  1
+#' #> Hornet Sportabout 18.7  0  0
+#' #> Duster 360        14.3  0  0
+#' #> Merc 450SE        16.4  0  0
+#'
+#' # re-sorting rows
+#' head(data_match(mtcars[c("mpg", "vs", "am")],
+#'                 data.frame(vs = 0, am = 1),
+#'                 match = "or"))
+#' #>                    mpg vs am
+#' #> Mazda RX4         21.0  0  1
+#' #> Mazda RX4 Wag     21.0  0  1
+#' #> Hornet Sportabout 18.7  0  0
+#' #> Duster 360        14.3  0  0
+#' #> Merc 450SE        16.4  0  0
+#' #> Merc 450SL        17.3  0  0
+#' ```
+#'
+#' While `data_match()` works with data frames to match conditions against,
+#' `data_filter()` is basically a wrapper around `subset(subset = <filter>)`.
+#' However, unlike `subset()`, it preserves label attributes and is useful when
+#' working with labelled data.
 #'
 #' @examples
 #' data_match(mtcars, data.frame(vs = 0, am = 1))
@@ -19,16 +58,20 @@
 #'
 #' # observations where "vs" is NOT 0 AND "am" is NOT 1
 #' data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
+#' # equivalent to
+#' data_filter(mtcars, vs != 0 & am != 1)
 #'
 #' # observations where EITHER "vs" is 0 OR "am" is 1
 #' data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
+#' # equivalent to
+#' data_filter(mtcars, vs == 0 | am == 1)
 #'
 #' @inherit data_rename seealso
 #' @export
 data_match <- function(x, to, match = "and", return_indices = FALSE, ...) {
-
-  # Input checks
-  if (!is.data.frame(to)) to <- as.data.frame(to)
+  if (!is.data.frame(to)) {
+    to <- as.data.frame(to)
+  }
   original_x <- x
 
   # evaluate
@@ -84,5 +127,20 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, ...) {
     out <- idx
   }
 
+  out
+}
+
+
+
+#' @rdname data_match
+#' @export
+data_filter <- function(x, filter, ...) {
+  condition <- substitute(filter)
+  out <- do.call(subset, list(x, subset = condition))
+  # restore value and variable labels
+  for (i in colnames(out)) {
+    attr(out[[i]], "label") <- attr(x[[i]], "label", exact = TRUE)
+    attr(out[[i]], "labels") <- attr(x[[i]], "labels", exact = TRUE)
+  }
   out
 }

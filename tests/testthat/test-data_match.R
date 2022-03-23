@@ -30,3 +30,24 @@ test_that("data_match works with missing data", {
   x2 <- nrow(poorman::filter(efc, c172code != 1, e16sex != 2))
   expect_equal(x1, x2)
 })
+
+test_that("data_match and data_filter work similar", {
+  out1 <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
+  out2 <- data_filter(mtcars, vs != 0 & am != 1)
+  expect_equal(out1, out2, ignore_attr = TRUE)
+
+  # using a data frame re-orders rows!
+  out1 <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
+  out2 <- data_filter(mtcars, vs == 0 | am == 1)
+  expect_equal(out1[order(out1$vs, out1$am), ], out2[order(out2$vs, out2$am), ], ignore_attr = TRUE)
+})
+
+
+test_that("data_filter works", {
+  out1 <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
+  out2 <- data_filter(mtcars, vs != 0 & am != 1)
+  out3 <- subset(mtcars, vs != 0 & am != 1)
+  expect_equal(out1, out2, ignore_attr = TRUE)
+  expect_equal(out1, out3, ignore_attr = TRUE)
+  expect_equal(out2, out3, ignore_attr = TRUE)
+})

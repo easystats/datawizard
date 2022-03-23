@@ -2,29 +2,70 @@
 % Please edit documentation in R/data_match.R
 \name{data_match}
 \alias{data_match}
-\title{Find row indices of a data frame matching a specific condition}
+\alias{data_filter}
+\title{Return filtered data frame or row indices}
 \usage{
 data_match(x, to, match = "and", return_indices = FALSE, ...)
+
+data_filter(x, filter, ...)
 }
 \arguments{
 \item{x}{A data frame.}
 
-\item{to}{A data frame matching the specified conditions.}
+\item{to}{A data frame matching the specified conditions. Note that if
+\code{match} is a value other than \code{"and"}, the original row order might be
+changed. See 'Details'.}
 
 \item{match}{String, indicating with which logical operation matching
 conditions should be combined. Can be \code{"and"} (or \code{"&"}), \code{"or"} (or \code{"|"})
 or \code{"not"} (or \code{"!"}).}
 
-\item{return_indices}{Logical, if \code{FALSE}, return the vector of rows that can be used to filter the original data frame. If \code{FALSE} (default), returns directly the filtered data frame
-instead of the row indices.}
+\item{return_indices}{Logical, if \code{FALSE}, return the vector of rows that
+can be used to filter the original data frame. If \code{FALSE} (default),
+returns directly the filtered data frame instead of the row indices.}
 
 \item{...}{Not used.}
+
+\item{filter}{A logical expression indicating which rows to keep.}
 }
 \value{
-The row indices that match the specified configuration.
+A filtered data frame, or the row indices that match the specified configuration.
 }
 \description{
-Find row indices of a data frame that match a specific condition.
+Return a filtered data frame or row indices of a data frame that match a
+specific condition. \code{data_filter()} works like \code{data_match()}, but works
+with logical expressions instead of data frame to specify matching conditions.
+}
+\details{
+For \code{data_match()}, if \code{match} is either \code{"or"} or \code{"not"}, the
+original row order from \code{x} might be changed. If preserving row order is
+required, use \code{data_filter()} instead.\preformatted{# mimics subset() behaviour, preserving original row order
+head(data_filter(mtcars[c("mpg", "vs", "am")], vs == 0 | am == 1))
+#>                    mpg vs am
+#> Mazda RX4         21.0  0  1
+#> Mazda RX4 Wag     21.0  0  1
+#> Datsun 710        22.8  1  1
+#> Hornet Sportabout 18.7  0  0
+#> Duster 360        14.3  0  0
+#> Merc 450SE        16.4  0  0
+
+# re-sorting rows
+head(data_match(mtcars[c("mpg", "vs", "am")],
+                data.frame(vs = 0, am = 1),
+                match = "or"))
+#>                    mpg vs am
+#> Mazda RX4         21.0  0  1
+#> Mazda RX4 Wag     21.0  0  1
+#> Hornet Sportabout 18.7  0  0
+#> Duster 360        14.3  0  0
+#> Merc 450SE        16.4  0  0
+#> Merc 450SL        17.3  0  0
+}
+
+While \code{data_match()} works with data frames to match conditions against,
+\code{data_filter()} is basically a wrapper around \verb{subset(subset = <filter>)}.
+However, unlike \code{subset()}, it preserves label attributes and is useful when
+working with labelled data.
 }
 \examples{
 data_match(mtcars, data.frame(vs = 0, am = 1))
@@ -32,9 +73,13 @@ data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
 
 # observations where "vs" is NOT 0 AND "am" is NOT 1
 data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
+# equivalent to
+data_filter(mtcars, vs != 0 & am != 1)
 
 # observations where EITHER "vs" is 0 OR "am" is 1
 data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
+# equivalent to
+data_filter(mtcars, vs == 0 | am == 1)
 
 }
 \seealso{
@@ -44,7 +89,8 @@ data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
 \item Functions to reshape, pivot or rotate dataframes: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
 \item Functions to rescale and reverse: \code{\link[=data_rescale]{data_rescale()}}, \code{\link[=data_reverse]{data_reverse()}}
 \item Functions to standardize, normalize, rank-transform: \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
-\item Split, cut and merge dataframes: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_cut]{data_cut()}}, \code{\link[=data_match]{data_match()}}, \code{\link[=data_merge]{data_merge()}}
-\item Functions to find columns: \code{\link[=find_columns]{find_columns()}}
+\item Split, cut and merge dataframes: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_cut]{data_cut()}}, \code{\link[=data_merge]{data_merge()}}
+\item Functions to find or select columns: \code{\link[=find_columns]{find_columns()}}
+\item Functions to filter rows: \code{\link[=data_match]{data_match()}}, \code{\link[=data_filter]{data_filter()}}
 }
 }
