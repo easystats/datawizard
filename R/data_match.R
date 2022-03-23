@@ -3,7 +3,8 @@
 #' Find row indices of a data frame that match a specific condition.
 #'
 #' @param x A data frame.
-#' @param to A data frame matching the specified conditions.
+#' @param to A data frame matching the specified conditions, or a logical
+#'   expression indicating which rows to keep.
 #' @param match String, indicating with which logical operation matching
 #'   conditions should be combined. Can be `"and"` (or `"&"`), `"or"` (or `"|"`)
 #'   or `"not"` (or `"!"`).
@@ -19,16 +20,37 @@
 #'
 #' # observations where "vs" is NOT 0 AND "am" is NOT 1
 #' data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
+#' # equivalent to
+#' data_match(mtcars, vs != 0 & am != 1)
 #'
 #' # observations where EITHER "vs" is 0 OR "am" is 1
 #' data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
+#' # equivalent to
+#' data_match(mtcars, vs == 0 | am == 1)
 #'
 #' @inherit data_rename seealso
 #' @export
 data_match <- function(x, to, match = "and", return_indices = FALSE, ...) {
 
   # Input checks
-  if (!is.data.frame(to)) to <- as.data.frame(to)
+  is_data_frame <- try(is.data.frame(to), silent = TRUE)
+
+  # if is.data.frame() errors, we may have a logical condition here that
+  # we can use for subset(), skipping all the remaining part of the function
+  if (inherits(is_data_frame, "try-error")) {
+    condition <- substitute(to)
+    out <- do.call(subset, list(x, subset = condition))
+    # restore value and variable labels
+    for (i in colnames(out)) {
+      attr(out[[i]], "label") <- attr(x[[i]], "label", exact = TRUE)
+      attr(out[[i]], "labels") <- attr(x[[i]], "labels", exact = TRUE)
+    }
+    return(out)
+
+  } else if (isFALSE(is_data_frame)) {
+    to <- as.data.frame(to)
+  }
+
   original_x <- x
 
   # evaluate

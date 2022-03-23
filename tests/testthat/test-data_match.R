@@ -30,3 +30,13 @@ test_that("data_match works with missing data", {
   x2 <- nrow(poorman::filter(efc, c172code != 1, e16sex != 2))
   expect_equal(x1, x2)
 })
+
+test_that("data_match works with logical expressions", {
+  out1 <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
+  out2 <- data_match(mtcars, vs != 0 & am != 1)
+  expect_equal(out1, out2, ignore_attr = TRUE)
+
+  out1 <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
+  out2 <- data_match(mtcars, vs == 0 | am == 1)
+  expect_equal(out1, out2, ignore_attr = TRUE)
+})

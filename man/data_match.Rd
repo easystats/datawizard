@@ -9,7 +9,8 @@ data_match(x, to, match = "and", return_indices = FALSE, ...)
 \arguments{
 \item{x}{A data frame.}
 
-\item{to}{A data frame matching the specified conditions.}
+\item{to}{A data frame matching the specified conditions, or a logical
+expression indicating which rows to keep.}
 
 \item{match}{String, indicating with which logical operation matching
 conditions should be combined. Can be \code{"and"} (or \code{"&"}), \code{"or"} (or \code{"|"})
@@ -32,6 +33,8 @@ data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
 
 # observations where "vs" is NOT 0 AND "am" is NOT 1
 data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
+# equivalent to
+data_match(mtcars, vs == 0 & am != 1))
 
 # observations where EITHER "vs" is 0 OR "am" is 1
 data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
