@@ -36,7 +36,7 @@ to find matching pairs is \emph{not} \code{"and"}, i.e. if \code{to} is a data f
 be changed. If preserving row order is required, use a logical expression
 for \code{to} instead.\preformatted{# mimics subset() behaviour, preserving original row order
 head(data_match(mtcars[c("mpg", "vs", "am")], vs == 0 | am == 1))
-#>                   mpg vs am
+#>                    mpg vs am
 #> Mazda RX4         21.0  0  1
 #> Mazda RX4 Wag     21.0  0  1
 #> Datsun 710        22.8  1  1
