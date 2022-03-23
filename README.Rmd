@@ -282,7 +282,7 @@ The design of the `{datawizard}` functions follows a design principle that makes
 
 E.g., in `data_filter()`, the main arguments after the data-argument are assumed to _filter_ the rows of a data frame. `data_cut()` recodes data into groups of values and hence the main argument following the data-argument are used to define the breaks for grouping variables. Most functions, however, in particular (but not limited to) functions that start with `data_*()`, usually _select_ columns from the provided data frame (and thus also support select-helpers).
 
-Most important, functions that accept data frame usually have this as their first argument, and also return a (modified) data frame again. Thus, `{datawizard}` integrates smoothely into a "pipe-workflow".
+Most important, functions that accept data frame usually have this as their first argument, and also return a (modified) data frame again. Thus, `{datawizard}` integrates smoothly into a "pipe-workflow".
 
 ```{r}
 iris |> 

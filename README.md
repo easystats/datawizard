@@ -535,7 +535,7 @@ frame (and thus also support select-helpers).
 
 Most important, functions that accept data frame usually have this as
 their first argument, and also return a (modified) data frame again.
-Thus, `{datawizard}` integrates smoothely into a “pipe-workflow”.
+Thus, `{datawizard}` integrates smoothly into a “pipe-workflow”.
 
 ``` r
 iris |> 
