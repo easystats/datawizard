@@ -264,6 +264,24 @@ test_that("data_match, labels preserved", {
 
 
 
+# data_filter -----------------------------------
+
+test_that("data_filter, labels preserved", {
+  x <- data_filter(efc, c172code == 1 & c12hour > 40)
+  # factor
+  expect_equal(
+    attr(x$e42dep, "label", exact = TRUE),
+    attr(efc$e42dep, "label", exact = TRUE)
+  )
+  # numeric
+  expect_equal(
+    attr(x$c12hour, "label", exact = TRUE),
+    attr(efc$c12hour, "label", exact = TRUE)
+  )
+})
+
+
+
 # convert_to_na -----------------------------------
 
 test_that("convert_to_na, labels preserved", {
