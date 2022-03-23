@@ -68,7 +68,7 @@ treated as regular expression. When \code{regex = TRUE}, select \emph{must} be a
 character string (or a variable containing a character string) and is not
 allowed to be one of the supported select-helpers or a character vector
 of length > 1. \code{regex = TRUE} is comparable to using one of the two
-select-helper, \code{select = contains("")} or \code{select = regex("")},however,
+select-helpers, \code{select = contains("")} or \code{select = regex("")}, however,
 since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.}
 

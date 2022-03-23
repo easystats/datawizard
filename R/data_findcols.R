@@ -31,7 +31,7 @@
 #'   character string (or a variable containing a character string) and is not
 #'   allowed to be one of the supported select-helpers or a character vector
 #'   of length > 1. `regex = TRUE` is comparable to using one of the two
-#'   select-helper, `select = contains("")` or `select = regex("")`,however,
+#'   select-helpers, `select = contains("")` or `select = regex("")`, however,
 #'   since the select-helpers may not work when called from inside other
 #'   functions (see 'Details'), this argument may be used as workaround.
 #' @param verbose Toggle warnings.
