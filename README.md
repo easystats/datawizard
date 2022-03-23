@@ -53,11 +53,10 @@ A BibTeX entry for LaTeX users is
 
 ### Select, filter and remove variables
 
-The package provides helpers to filter rows meeting certain conditions:
+The package provides helpers to filter rows meeting certain conditions…
 
 ``` r
-matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1))
-mtcars[matching_rows, ]
+data_match(mtcars, data.frame(vs = 0, am = 1))
 #>                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb
 #> Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
 #> Mazda RX4 Wag  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
@@ -67,7 +66,39 @@ mtcars[matching_rows, ]
 #> Maserati Bora  15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
 ```
 
-It is also possible to select one or more variables:
+… or logical expressions:
+
+``` r
+data_filter(mtcars, vs == 0 & am == 1)
+#>                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+#> Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+#> Mazda RX4 Wag  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+#> Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+#> Ford Pantera L 15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+#> Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+#> Maserati Bora  15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+```
+
+Finding columns in a data frame, or retrieving the data of selected
+columns, can be achieved using `find_columns()` or `get_columns()`:
+
+``` r
+# find column names matching a pattern
+find_columns(iris, starts_with("Sepal"))
+#> [1] "Sepal.Length" "Sepal.Width"
+
+# return data columns matching a pattern
+get_columns(iris, starts_with("Sepal")) |> head()
+#>   Sepal.Length Sepal.Width
+#> 1          5.1         3.5
+#> 2          4.9         3.0
+#> 3          4.7         3.2
+#> 4          4.6         3.1
+#> 5          5.0         3.6
+#> 6          5.4         3.9
+```
+
+It is also possible to extract one or more variables:
 
 ``` r
 # single variable
@@ -445,7 +476,7 @@ data_rotate(x)
 #> hp         110           110       93.0
 ```
 
-## Data proprties
+## Data properties
 
 `datawizard` provides a way to provide comprehensive descriptive summary
 for all variables in a dataframe:
@@ -479,6 +510,51 @@ smoothness(x, method = "diff")
 #> [1] 1.791243
 #> attr(,"class")
 #> [1] "parameters_smoothness" "numeric"
+```
+
+## Function design and pipe-workflow
+
+The design of the `{datawizard}` functions follows a design principle
+that makes it easy for user to understand and remember how functions
+work:
+
+1.  the first argument is the data
+2.  the following arguments are main arguments, related to the specific
+    tasks of the functions
+3.  further arguments can be select-helpers, which are offered for
+    convenience reasons (so there is no need for interim calls to
+    `get_columns()`)
+
+E.g., in `data_filter()`, the main arguments after the data-argument are
+assumed to *filter* the rows of a data frame. `data_cut()` recodes data
+into groups of values and hence the main argument following the
+data-argument are used to define the breaks for grouping variables. Most
+functions, however, in particular (but not limited to) functions that
+start with `data_*()`, usually *select* columns from the provided data
+frame (and thus also support select-helpers).
+
+Most important, functions that accept data frame usually have this as
+their first argument, and also return a (modified) data frame again.
+Thus, `{datawizard}` integrates smoothely into a “pipe-workflow”.
+
+``` r
+iris |> 
+  # all rows where Species is "versicolor" or "virginica"
+  data_filter(Species %in% c("versicolor", "virginica")) |> 
+  # select only columns with "." in names (i.e. drop Species)
+  get_columns(contains(".")) |> 
+  # move columns that ends with "Length" to start of data frame
+  data_relocate(ends_with("Length")) |> 
+  # remove fourth column
+  data_remove(4) |> 
+  head()
+#>    Sepal.Length Petal.Length Sepal.Width
+#> 51          7.0          4.7         3.2
+#> 52          6.4          4.5         3.2
+#> 53          6.9          4.9         3.1
+#> 54          5.5          4.0         2.3
+#> 55          6.5          4.6         2.8
+#> 56          5.7          4.5         2.8
 ```
 
 # Contributing and Support
