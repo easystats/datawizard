@@ -72,6 +72,7 @@ match a certain search pattern, while <code>get_columns()</code> returns the fou
   select <span class="op">=</span> <span class="cn">NULL</span>,
   exclude <span class="op">=</span> <span class="cn">NULL</span>,
   ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
+  partial_match <span class="op">=</span> <span class="cn">FALSE</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">...</span>
 <span class="op">)</span>
@@ -81,6 +82,7 @@ match a certain search pattern, while <code>get_columns()</code> returns the fou
   select <span class="op">=</span> <span class="cn">NULL</span>,
   exclude <span class="op">=</span> <span class="cn">NULL</span>,
   ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
+  partial_match <span class="op">=</span> <span class="cn">FALSE</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">...</span>
 <span class="op">)</span>
@@ -120,6 +122,12 @@ excludes no columns.</p></dd>
 <dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
 a regular expression is used in <code>select</code>, ignores lower/upper case in the
 search pattern when matching against variable names.</p></dd>
+<dt>partial_match</dt>
+<dd><p>Logical, if <code>TRUE</code>, will also find columns from <code>select</code>
+that do not exactly match column names. It is the same as using the
+<code>contains("")</code> select-helper, however, since the select-helpers may not
+work when called from inside other functions (see 'Details'), this argument
+may be used as workaround.</p></dd>
 <dt>verbose</dt>
 <dd><p>Toggle warnings.</p></dd>
 <dt>...</dt>
@@ -153,6 +161,14 @@ that start with <code>"Sep"</code>:</p><div class="sourceCode"><pre><code><span 
 <p>However, this example won't work as expected!</p><div class="sourceCode"><pre><code><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">i</span> <span class="op">&lt;-</span> <span class="st">"Sep"</span>
   <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></code></pre></div>
+
+<p>One workaround is to use the <code>partial_match</code> argument, which provides at
+least a bit more flexibility than exact matching. <code>partial_match</code> behaves
+like the <code>contains("")</code> select-helper:</p><div class="sourceCode"><pre><code><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">i</span> <span class="op">&lt;-</span> <span class="st">"Sep"</span>
+  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="va">i</span>, partial_match <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="op">}</span>
 <span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></code></pre></div>
 
