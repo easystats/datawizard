@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_match.R
 \name{data_match}
 \alias{data_match}
-\title{Find row indices of a data frame matching a specific condition}
+\title{Return filtered data frame or row indices}
 \usage{
 data_match(x, to, match = "and", return_indices = FALSE, ...)
 }
@@ -27,7 +27,7 @@ instead of the row indices.}
 The row indices that match the specified configuration.
 }
 \description{
-Find row indices of a data frame that match a specific condition.
+Return a filtered data frame or row indices of a data frame that match a specific condition.
 }
 \details{
 If matching is based on a data frame and the logical condition

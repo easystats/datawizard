@@ -1,6 +1,6 @@
-#' Find row indices of a data frame matching a specific condition
+#' Return filtered data frame or row indices
 #'
-#' Find row indices of a data frame that match a specific condition.
+#' Return a filtered data frame or row indices of a data frame that match a specific condition.
 #'
 #' @param x A data frame.
 #' @param to A data frame matching the specified conditions, or a logical
