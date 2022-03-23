@@ -12,20 +12,17 @@ data_filter(x, filter, ...)
 \arguments{
 \item{x}{A data frame.}
 
-\item{to}{A data frame matching the specified conditions, or a logical
-expression indicating which rows to keep. If a logical expression,
-arguments \code{match} and \code{return_indices} are ignored. Note that if \code{to} is
-a data frame, and \code{match} is a value other than \code{"and"}, the original row
-order might be changed. See 'Details'.}
+\item{to}{A data frame matching the specified conditions. Note that if
+\code{match} is a value other than \code{"and"}, the original row order might be
+changed. See 'Details'.}
 
 \item{match}{String, indicating with which logical operation matching
 conditions should be combined. Can be \code{"and"} (or \code{"&"}), \code{"or"} (or \code{"|"})
-or \code{"not"} (or \code{"!"}). Only applies when \code{to} is a data frame.}
+or \code{"not"} (or \code{"!"}).}
 
 \item{return_indices}{Logical, if \code{FALSE}, return the vector of rows that
 can be used to filter the original data frame. If \code{FALSE} (default),
-returns directly the filtered data frame instead of the row indices.
-Only applies when \code{to} is a data frame.}
+returns directly the filtered data frame instead of the row indices.}
 
 \item{...}{Not used.}
 
@@ -36,16 +33,14 @@ A filtered data frame, or the row indices that match the specified configuration
 }
 \description{
 Return a filtered data frame or row indices of a data frame that match a
-specific condition. \code{data_filter()} is a short-cut for \code{data_match()}, which
-only works with logical expressions.
+specific condition. \code{data_filter()} works like \code{data_match()}, but works
+with logical expressions instead of data frame to specify matching conditions.
 }
 \details{
-If matching is based on a data frame and the logical condition
-to find matching rows is \emph{not} \code{"and"}, i.e. if \code{to} is a data frame and
-\code{match} is either \code{"or"} or \code{"not"}, the original row order from \code{x} might
-be changed. If preserving row order is required, use a logical expression
-for \code{to} instead.\preformatted{# mimics subset() behaviour, preserving original row order
-head(data_match(mtcars[c("mpg", "vs", "am")], vs == 0 | am == 1))
+For \code{data_match()}, if \code{match} is either \code{"or"} or \code{"not"}, the
+original row order from \code{x} might be changed. If preserving row order is
+required, use \code{data_filter()} instead.\preformatted{# mimics subset() behaviour, preserving original row order
+head(data_filter(mtcars[c("mpg", "vs", "am")], vs == 0 | am == 1))
 #>                    mpg vs am
 #> Mazda RX4         21.0  0  1
 #> Mazda RX4 Wag     21.0  0  1
@@ -67,11 +62,10 @@ head(data_match(mtcars[c("mpg", "vs", "am")],
 #> Merc 450SL        17.3  0  0
 }
 
-While \code{data_match()} either works with data frames or logical expressions
-to match against, \code{data_filter()} is a short-cut that only accepts logical
-expressions. Thus, \code{data_filter()} is basically a wrapper around
-\verb{subset(subset = <filter>)}, however, it preserves label attributes and is
-useful when working with labelled data.
+While \code{data_match()} works with data frames to match conditions against,
+\code{data_filter()} is basically a wrapper around \verb{subset(subset = <filter>)}.
+However, unlike \code{subset()}, it preserves label attributes and is useful when
+working with labelled data.
 }
 \examples{
 data_match(mtcars, data.frame(vs = 0, am = 1))
@@ -80,12 +74,12 @@ data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
 # observations where "vs" is NOT 0 AND "am" is NOT 1
 data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
 # equivalent to
-data_match(mtcars, vs != 0 & am != 1)
+data_filter(mtcars, vs != 0 & am != 1)
 
 # observations where EITHER "vs" is 0 OR "am" is 1
 data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
 # equivalent to
-data_match(mtcars, vs == 0 | am == 1)
+data_filter(mtcars, vs == 0 | am == 1)
 
 }
 \seealso{

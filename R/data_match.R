@@ -1,36 +1,31 @@
 #' Return filtered data frame or row indices
 #'
 #' Return a filtered data frame or row indices of a data frame that match a
-#' specific condition. `data_filter()` is a short-cut for `data_match()`, which
-#' only works with logical expressions.
+#' specific condition. `data_filter()` works like `data_match()`, but works
+#' with logical expressions instead of data frame to specify matching conditions.
 #'
 #' @param x A data frame.
-#' @param to A data frame matching the specified conditions, or a logical
-#'   expression indicating which rows to keep. If a logical expression,
-#'   arguments `match` and `return_indices` are ignored. Note that if `to` is
-#'   a data frame, and `match` is a value other than `"and"`, the original row
-#'   order might be changed. See 'Details'.
+#' @param to A data frame matching the specified conditions. Note that if
+#'   `match` is a value other than `"and"`, the original row order might be
+#'   changed. See 'Details'.
 #' @param filter A logical expression indicating which rows to keep.
 #' @param match String, indicating with which logical operation matching
 #'   conditions should be combined. Can be `"and"` (or `"&"`), `"or"` (or `"|"`)
-#'   or `"not"` (or `"!"`). Only applies when `to` is a data frame.
+#'   or `"not"` (or `"!"`).
 #' @param return_indices Logical, if `FALSE`, return the vector of rows that
 #'   can be used to filter the original data frame. If `FALSE` (default),
 #'   returns directly the filtered data frame instead of the row indices.
-#'   Only applies when `to` is a data frame.
 #' @param ... Not used.
 #'
 #' @return A filtered data frame, or the row indices that match the specified configuration.
 #'
-#' @details If matching is based on a data frame and the logical condition
-#' to find matching rows is *not* `"and"`, i.e. if `to` is a data frame and
-#' `match` is either `"or"` or `"not"`, the original row order from `x` might
-#' be changed. If preserving row order is required, use a logical expression
-#' for `to` instead.
+#' @details For `data_match()`, if `match` is either `"or"` or `"not"`, the
+#' original row order from `x` might be changed. If preserving row order is
+#' required, use `data_filter()` instead.
 #'
 #' ```
 #' # mimics subset() behaviour, preserving original row order
-#' head(data_match(mtcars[c("mpg", "vs", "am")], vs == 0 | am == 1))
+#' head(data_filter(mtcars[c("mpg", "vs", "am")], vs == 0 | am == 1))
 #' #>                    mpg vs am
 #' #> Mazda RX4         21.0  0  1
 #' #> Mazda RX4 Wag     21.0  0  1
@@ -52,11 +47,10 @@
 #' #> Merc 450SL        17.3  0  0
 #' ```
 #'
-#' While `data_match()` either works with data frames or logical expressions
-#' to match against, `data_filter()` is a short-cut that only accepts logical
-#' expressions. Thus, `data_filter()` is basically a wrapper around
-#' `subset(subset = <filter>)`, however, it preserves label attributes and is
-#' useful when working with labelled data.
+#' While `data_match()` works with data frames to match conditions against,
+#' `data_filter()` is basically a wrapper around `subset(subset = <filter>)`.
+#' However, unlike `subset()`, it preserves label attributes and is useful when
+#' working with labelled data.
 #'
 #' @examples
 #' data_match(mtcars, data.frame(vs = 0, am = 1))
@@ -65,36 +59,19 @@
 #' # observations where "vs" is NOT 0 AND "am" is NOT 1
 #' data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
 #' # equivalent to
-#' data_match(mtcars, vs != 0 & am != 1)
+#' data_filter(mtcars, vs != 0 & am != 1)
 #'
 #' # observations where EITHER "vs" is 0 OR "am" is 1
 #' data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
 #' # equivalent to
-#' data_match(mtcars, vs == 0 | am == 1)
+#' data_filter(mtcars, vs == 0 | am == 1)
 #'
 #' @inherit data_rename seealso
 #' @export
 data_match <- function(x, to, match = "and", return_indices = FALSE, ...) {
-
-  # Input checks
-  is_data_frame <- try(is.data.frame(to), silent = TRUE)
-
-  # if is.data.frame() errors, we may have a logical condition here that
-  # we can use for subset(), skipping all the remaining part of the function
-  if (inherits(is_data_frame, "try-error")) {
-    condition <- substitute(to)
-    out <- do.call(subset, list(x, subset = condition))
-    # restore value and variable labels
-    for (i in colnames(out)) {
-      attr(out[[i]], "label") <- attr(x[[i]], "label", exact = TRUE)
-      attr(out[[i]], "labels") <- attr(x[[i]], "labels", exact = TRUE)
-    }
-    return(out)
-
-  } else if (isFALSE(is_data_frame)) {
+  if (!is.data.frame(to)) {
     to <- as.data.frame(to)
   }
-
   original_x <- x
 
   # evaluate

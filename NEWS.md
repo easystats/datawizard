@@ -5,10 +5,6 @@ MAJOR CHANGES
 * `data_match()` now returns filtered data by default. Old behavior (returning 
   rows indices) can be set by setting `return_indices = TRUE`.
 
-* The `to` argument in `data_match()` can now also be a logical expression, 
-  indicating the rows to keep. Furthermore, `data_filter()` was added as a
-  short-cut for `data_match()` when using logical expressions for filtering.
-
 * The following functions are now re-exported from `{insight}` package:
   `object_has_names()`, `object_has_rownames()`, `is_empty_object()`,
   `compact_list()`, `compact_character()`
@@ -28,6 +24,9 @@ NEW FUNCTIONS
     subsets of data frames, based on various select-methods (including
     select-helpers). These function will supersede `data_findcols()` in the
     future.
+
+* `data_filter()` as complement for `data_match()`, which works with logical 
+  expressions for filtering rows of data frames.
 
   * For computing weighted centrality measures and dispersion: `weighted_mean()`,
     `weighted_median()`, `weighted_sd()` and `weighted_mad()`.
