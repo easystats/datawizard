@@ -26,6 +26,11 @@
 #' @param ignore_case Logical, if `TRUE` and when one of the select-helpers or
 #'   a regular expression is used in `select`, ignores lower/upper case in the
 #'   search pattern when matching against variable names.
+#' @param partial_match Logical, if `TRUE`, will also find columns from `select`
+#'   that do not exactly match column names. It is the same as using the
+#'   `contains("")` select-helper, however, since the select-helpers may not
+#'   work when called from inside other functions (see 'Details'), this argument
+#'   may be used as workaround.
 #' @param verbose Toggle warnings.
 #' @param ... Arguments passed down to other functions. Mostly not used yet.
 #'
@@ -48,10 +53,23 @@
 #' ```
 #'
 #' However, this example won't work as expected!
+#'
 #' ```
 #' foo <- function(data) {
 #'   i <- "Sep"
 #'   find_columns(data, select = starts_with(i))
+#' }
+#' foo(iris)
+#' ```
+#'
+#' One workaround is to use the `partial_match` argument, which provides at
+#' least a bit more flexibility than exact matching. `partial_match` behaves
+#' like the `contains("")` select-helper:
+#'
+#' ```
+#' foo <- function(data) {
+#'   i <- "Sep"
+#'   find_columns(data, select = i, partial_match = TRUE)
 #' }
 #' foo(iris)
 #' ```
@@ -70,9 +88,17 @@ find_columns <- function(data,
                          select = NULL,
                          exclude = NULL,
                          ignore_case = FALSE,
+                         partial_match = FALSE,
                          verbose = TRUE,
                          ...) {
-  columns <- .select_nse(select, data, exclude, ignore_case = ignore_case, verbose = FALSE)
+  columns <- .select_nse(
+    select,
+    data,
+    exclude,
+    ignore_case = ignore_case,
+    partial_match = partial_match,
+    verbose = FALSE
+  )
 
   if (!length(columns) || is.null(columns)) {
     columns <- NULL
@@ -91,9 +117,17 @@ get_columns <- function(data,
                         select = NULL,
                         exclude = NULL,
                         ignore_case = FALSE,
+                        partial_match = FALSE,
                         verbose = TRUE,
                          ...) {
-  columns <- .select_nse(select, data, exclude, ignore_case = ignore_case, verbose = FALSE)
+  columns <- .select_nse(
+    select,
+    data,
+    exclude,
+    ignore_case = ignore_case,
+    partial_match = partial_match,
+    verbose = FALSE
+  )
 
   if (!length(columns) || is.null(columns)) {
     if (isTRUE(verbose)) {

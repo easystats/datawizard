@@ -11,6 +11,7 @@ find_columns(
   select = NULL,
   exclude = NULL,
   ignore_case = FALSE,
+  partial_match = FALSE,
   verbose = TRUE,
   ...
 )
@@ -20,6 +21,7 @@ get_columns(
   select = NULL,
   exclude = NULL,
   ignore_case = FALSE,
+  partial_match = FALSE,
   verbose = TRUE,
   ...
 )
@@ -61,6 +63,12 @@ excludes no columns.}
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
 
+\item{partial_match}{Logical, if \code{TRUE}, will also find columns from \code{select}
+that do not exactly match column names. It is the same as using the
+\code{contains("")} select-helper, however, since the select-helpers may not
+work when called from inside other functions (see 'Details'), this argument
+may be used as workaround.}
+
 \item{verbose}{Toggle warnings.}
 
 \item{...}{Arguments passed down to other functions. Mostly not used yet.}
@@ -96,6 +104,15 @@ foo(iris)
 However, this example won't work as expected!\preformatted{foo <- function(data) \{
   i <- "Sep"
   find_columns(data, select = starts_with(i))
+\}
+foo(iris)
+}
+
+One workaround is to use the \code{partial_match} argument, which provides at
+least a bit more flexibility than exact matching. \code{partial_match} behaves
+like the \code{contains("")} select-helper:\preformatted{foo <- function(data) \{
+  i <- "Sep"
+  find_columns(data, select = i, partial_match = TRUE)
 \}
 foo(iris)
 }

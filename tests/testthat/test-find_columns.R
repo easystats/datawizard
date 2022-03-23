@@ -78,6 +78,14 @@ test_that("find_columns from other functions", {
     c("Sepal.Width", "Petal.Width", "Species")
   )
 
+  test_fun1 <- function(data, i) {
+    find_columns(data, select = i, partial_match = TRUE)
+  }
+  expect_equal(
+    test_fun1(iris, "Sep"),
+    c("Sepal.Length", "Sepal.Width")
+  )
+
   test_fun2 <- function(data) {
     find_columns(data, select = starts_with("Sep"))
   }
@@ -178,6 +186,15 @@ test_that("get_columns from other functions", {
     test_fun1(iris, starts_with("Sep")),
     iris[c("Sepal.Width", "Petal.Width", "Species")]
   )
+
+  test_fun1 <- function(data, i) {
+    get_columns(data, select = i, partial_match = TRUE)
+  }
+  expect_equal(
+    test_fun1(iris, "Sep"),
+    iris[c("Sepal.Length", "Sepal.Width")]
+  )
+
 
   test_fun2 <- function(data) {
     get_columns(data, select = starts_with("Sep"))
