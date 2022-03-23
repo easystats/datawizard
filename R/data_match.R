@@ -17,7 +17,7 @@
 #' @return The row indices that match the specified configuration.
 #'
 #' @details If matching is based on a data frame and the logical condition
-#' to find matching pairs is *not* `"and"`, i.e. if `to` is a data frame and
+#' to find matching rows is *not* `"and"`, i.e. if `to` is a data frame and
 #' `match` is either `"or"` or `"not"`, the original row order from `x` might
 #' be changed. If preserving row order is required, use a logical expression
 #' for `to` instead.

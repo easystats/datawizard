@@ -31,7 +31,7 @@ Find row indices of a data frame that match a specific condition.
 }
 \details{
 If matching is based on a data frame and the logical condition
-to find matching pairs is \emph{not} \code{"and"}, i.e. if \code{to} is a data frame and
+to find matching rows is \emph{not} \code{"and"}, i.e. if \code{to} is a data frame and
 \code{match} is either \code{"or"} or \code{"not"}, the original row order from \code{x} might
 be changed. If preserving row order is required, use a logical expression
 for \code{to} instead.\preformatted{# mimics subset() behaviour, preserving original row order
