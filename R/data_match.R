@@ -4,17 +4,20 @@
 #'
 #' @param x A data frame.
 #' @param to A data frame matching the specified conditions, or a logical
-#'   expression indicating which rows to keep. Note that if `to` is a data frame,
-#'   and `match` is a value other than `"and"`, the original row order might be
-#'   changed. See 'Details'.
+#'   expression indicating which rows to keep. If a logical expression,
+#'   arguments `match` and `return_indices` are ignored. Note that if `to` is
+#'   a data frame, and `match` is a value other than `"and"`, the original row
+#'   order might be changed. See 'Details'.
 #' @param match String, indicating with which logical operation matching
 #'   conditions should be combined. Can be `"and"` (or `"&"`), `"or"` (or `"|"`)
 #'   or `"not"` (or `"!"`). Only applies when `to` is a data frame.
-#' @param return_indices Logical, if `FALSE`, return the vector of rows that can be used to filter the original data frame. If `FALSE` (default), returns directly the filtered data frame
-#'   instead of the row indices.
+#' @param return_indices Logical, if `FALSE`, return the vector of rows that
+#'   can be used to filter the original data frame. If `FALSE` (default),
+#'   returns directly the filtered data frame instead of the row indices.
+#'   Only applies when `to` is a data frame.
 #' @param ... Not used.
 #'
-#' @return The row indices that match the specified configuration.
+#' @return A filtered data frame, or the row indices that match the specified configuration.
 #'
 #' @details If matching is based on a data frame and the logical condition
 #' to find matching rows is *not* `"and"`, i.e. if `to` is a data frame and

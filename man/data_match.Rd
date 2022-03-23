@@ -10,21 +10,24 @@ data_match(x, to, match = "and", return_indices = FALSE, ...)
 \item{x}{A data frame.}
 
 \item{to}{A data frame matching the specified conditions, or a logical
-expression indicating which rows to keep. Note that if \code{to} is a data frame,
-and \code{match} is a value other than \code{"and"}, the original row order might be
-changed. See 'Details'.}
+expression indicating which rows to keep. If a logical expression,
+arguments \code{match} and \code{return_indices} are ignored. Note that if \code{to} is
+a data frame, and \code{match} is a value other than \code{"and"}, the original row
+order might be changed. See 'Details'.}
 
 \item{match}{String, indicating with which logical operation matching
 conditions should be combined. Can be \code{"and"} (or \code{"&"}), \code{"or"} (or \code{"|"})
 or \code{"not"} (or \code{"!"}). Only applies when \code{to} is a data frame.}
 
-\item{return_indices}{Logical, if \code{FALSE}, return the vector of rows that can be used to filter the original data frame. If \code{FALSE} (default), returns directly the filtered data frame
-instead of the row indices.}
+\item{return_indices}{Logical, if \code{FALSE}, return the vector of rows that
+can be used to filter the original data frame. If \code{FALSE} (default),
+returns directly the filtered data frame instead of the row indices.
+Only applies when \code{to} is a data frame.}
 
 \item{...}{Not used.}
 }
 \value{
-The row indices that match the specified configuration.
+A filtered data frame, or the row indices that match the specified configuration.
 }
 \description{
 Return a filtered data frame or row indices of a data frame that match a specific condition.
