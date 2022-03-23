@@ -4,15 +4,47 @@
 #'
 #' @param x A data frame.
 #' @param to A data frame matching the specified conditions, or a logical
-#'   expression indicating which rows to keep.
+#'   expression indicating which rows to keep. Note that if `to` is a data frame,
+#'   and `match` is a value other than `"and"`, the original row order might be
+#'   changed. See 'Details'.
 #' @param match String, indicating with which logical operation matching
 #'   conditions should be combined. Can be `"and"` (or `"&"`), `"or"` (or `"|"`)
-#'   or `"not"` (or `"!"`).
+#'   or `"not"` (or `"!"`). Only applies when `to` is a data frame.
 #' @param return_indices Logical, if `FALSE`, return the vector of rows that can be used to filter the original data frame. If `FALSE` (default), returns directly the filtered data frame
 #'   instead of the row indices.
 #' @param ... Not used.
 #'
 #' @return The row indices that match the specified configuration.
+#'
+#' @details If matching is based on a data frame and the logical condition
+#' to find matching pairs is *not* `"and"`, i.e. if `to` is a data frame and
+#' `match` is either `"or"` or `"not"`, the original row order from `x` might
+#' be changed. If preserving row order is required, use a logical expression
+#' for `to` instead.
+#'
+#' ```
+#' # mimics subset() behaviour, preserving original row order
+#' head(data_match(mtcars[c("mpg", "vs", "am")], vs == 0 | am == 1))
+#' #>                   mpg vs am
+#' #> Mazda RX4         21.0  0  1
+#' #> Mazda RX4 Wag     21.0  0  1
+#' #> Datsun 710        22.8  1  1
+#' #> Hornet Sportabout 18.7  0  0
+#' #> Duster 360        14.3  0  0
+#' #> Merc 450SE        16.4  0  0
+#'
+#' # re-sorting rows
+#' head(data_match(mtcars[c("mpg", "vs", "am")],
+#'                 data.frame(vs = 0, am = 1),
+#'                 match = "or"))
+#' #>                    mpg vs am
+#' #> Mazda RX4         21.0  0  1
+#' #> Mazda RX4 Wag     21.0  0  1
+#' #> Hornet Sportabout 18.7  0  0
+#' #> Duster 360        14.3  0  0
+#' #> Merc 450SE        16.4  0  0
+#' #> Merc 450SL        17.3  0  0
+#' ```
 #'
 #' @examples
 #' data_match(mtcars, data.frame(vs = 0, am = 1))

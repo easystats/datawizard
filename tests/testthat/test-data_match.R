@@ -36,7 +36,8 @@ test_that("data_match works with logical expressions", {
   out2 <- data_match(mtcars, vs != 0 & am != 1)
   expect_equal(out1, out2, ignore_attr = TRUE)
 
+  # using a data frame re-orders rows!
   out1 <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
   out2 <- data_match(mtcars, vs == 0 | am == 1)
-  expect_equal(out1, out2, ignore_attr = TRUE)
+  expect_equal(out1[order(out1$vs, out1$am), ], out2[order(out2$vs, out2$am), ], ignore_attr = TRUE)
 })
