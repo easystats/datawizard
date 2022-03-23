@@ -34,10 +34,12 @@ data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
 # observations where "vs" is NOT 0 AND "am" is NOT 1
 data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
 # equivalent to
-data_match(mtcars, vs == 0 & am != 1))
+data_match(mtcars, vs != 0 & am != 1)
 
 # observations where EITHER "vs" is 0 OR "am" is 1
 data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
+# equivalent to
+data_match(mtcars, vs == 0 | am == 1)
 
 }
 \seealso{
