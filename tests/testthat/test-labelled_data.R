@@ -282,3 +282,26 @@ test_that("convert_to_na, labels preserved", {
     ignore_attr = TRUE
   )
 })
+
+
+
+# get_columns -----------------------------------
+
+test_that("get_columns, labels preserved", {
+  data(efc)
+  x <- get_columns(efc, starts_with("c"))
+  # numeric
+  expect_equal(
+    attr(x$c12hour, "label", exact = TRUE),
+    attr(efc$c12hour, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+
+  x <- get_columns(efc, starts_with("e"))
+  # factor
+  expect_equal(
+    attr(x$e42dep, "label", exact = TRUE),
+    attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+})
