@@ -22,7 +22,7 @@ NEW FUNCTIONS
 
   * `find_columns()` and `get_columns()` to find column names or retrieve
     subsets of data frames, based on various select-methods (including
-    selecet-helpers). These function will supersede `data_findcols()` in the
+    select-helpers). These function will supersede `data_findcols()` in the
     future.
 
   * For computing weighted centrality measures and dispersion: `weighted_mean()`,
