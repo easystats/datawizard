@@ -126,5 +126,8 @@ data_relocate <- function(data,
 data_reorder <- function(data, select, ignore_case = FALSE, verbose = TRUE, ...) {
   cols <- .select_nse(select, data, exclude = NULL, ignore_case = ignore_case, verbose = verbose)
   remaining_columns <- setdiff(colnames(data), cols)
-  data[c(cols, remaining_columns)]
+
+  out <- data[c(cols, remaining_columns)]
+  attributes(out) <- utils::modifyList(attributes(data), attributes(out))
+  out
 }
