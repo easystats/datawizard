@@ -32,35 +32,35 @@ weighted_mean <- function(x, weights = NULL, verbose = TRUE, ...) {
 #' @export
 #' @rdname weighted_mean
 weighted_median <- function(x, weights = NULL, verbose = TRUE, ...) {
-  # From spatstat + wiki
+
   if (!.are_weights(weights) || !.validate_weights(weights, verbose)) {
     return(stats::median(x, na.rm = TRUE))
   }
 
-  oo <- order(x)
-  x <- x[oo]
-  weights <- weights[oo]
-  Fx <- cumsum(weights) / sum(weights)
+  p <- 0.5 # split probability
 
-  lefties <- which(Fx <= 0.5)
-  left <- max(lefties)
+  # remove missings
+  x[is.na(weights)] <- NA
+  weights[is.na(x)] <- NA
 
-  if (length(lefties) == 0) {
-    result <- x[1]
-  } else if (left == length(x)) {
-    result <- x[length(x)]
-  } else {
-    result <- x[left]
+  weights <- stats::na.omit(weights)
+  x <- stats::na.omit(x)
 
-    if (!(Fx[left - 1] < 0.5 && 1 - Fx[left] < 0.5)) {
-      right <- left + 1
-      y <- x[left] * Fx[left] + x[right] * Fx[right]
-      if (is.finite(y)) result <- y
-    }
-  }
+  order <- order(x)
+  x <- x[order]
+  weights <- weights[order]
 
-  result
+  rw <- cumsum(weights) / sum(weights)
+  md.values <- min(which(rw >= p))
+
+  if (rw[md.values] == p)
+    q <- mean(x[md.values:(md.values + 1)])
+  else
+    q <- x[md.values]
+
+  q
 }
+
 
 #' @export
 #' @rdname weighted_mean
