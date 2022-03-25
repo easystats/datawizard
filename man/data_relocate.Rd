@@ -58,14 +58,12 @@ search pattern when matching against variable names.}
 A data frame with reordered columns.
 }
 \description{
-Relocate (reorder) columns of a data frame
-}
-\details{
 \code{data_relocate()} will reorder columns to specific positions, indicated by
-\code{before} or \code{after}.
-
-\code{data_reorder()} will instead move selected columns to the beginning of the
-data frame .
+\code{before} or \code{after}. \code{data_reorder()} will instead move selected columns to
+the beginning of a data frame. Finally, \code{data_remove()} removes columns
+from a data frame. All functions support select-helpers that allow flexible
+specification of a search pattern to find matching columns, which should
+be reordered or removed.
 }
 \examples{
 # Reorder columns

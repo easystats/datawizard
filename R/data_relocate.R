@@ -1,6 +1,14 @@
 #' @title Relocate (reorder) columns of a data frame
 #' @name data_relocate
 #'
+#' @description
+#' `data_relocate()` will reorder columns to specific positions, indicated by
+#' `before` or `after`. `data_reorder()` will instead move selected columns to
+#' the beginning of a data frame. Finally, `data_remove()` removes columns
+#' from a data frame. All functions support select-helpers that allow flexible
+#' specification of a search pattern to find matching columns, which should
+#' be reordered or removed.
+#'
 #' @param data A data frame.
 #' @param before,after Destination of columns. Supplying neither will move
 #'   columns to the left-hand side; specifying both is an error. Can be a
@@ -11,14 +19,6 @@
 #' @inheritParams data_rename
 #'
 #' @inherit data_rename seealso
-#'
-#' @details
-#'
-#' `data_relocate()` will reorder columns to specific positions, indicated by
-#' `before` or `after`.
-#'
-#' `data_reorder()` will instead move selected columns to the beginning of the
-#' data frame .
 #'
 #' @return A data frame with reordered columns.
 #'
