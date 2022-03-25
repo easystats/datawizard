@@ -1,7 +1,7 @@
 #' @title Find or get columns in a data frame based on search patterns
 #' @name find_columns
 #'
-#' @description `find_columns()` returns colum names from a data set that
+#' @description `find_columns()` returns column names from a data set that
 #' match a certain search pattern, while `get_columns()` returns the found data.
 #' `data_select()` is an alias for `get_columns()`.
 #'

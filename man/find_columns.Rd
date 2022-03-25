@@ -103,7 +103,7 @@ column name was found. \code{get_columns()} returns a data frame with matching
 columns.
 }
 \description{
-\code{find_columns()} returns colum names from a data set that
+\code{find_columns()} returns column names from a data set that
 match a certain search pattern, while \code{get_columns()} returns the found data.
 \code{data_select()} is an alias for \code{get_columns()}.
 }
