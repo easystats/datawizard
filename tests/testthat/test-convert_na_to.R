@@ -388,3 +388,20 @@ test_that("convert_na_to - dataframe: works when arg 'select' is a list", {
     )
   )
 })
+
+
+
+# preserve attributes --------------------------
+
+test_that("data_rename preserves attributes", {
+  skip_if_not_installed("parameters")
+
+  m <- lm(Sepal.Length ~ Species, data = iris)
+  out <- parameters::parameters(m)
+  a1 <- attributes(out)
+
+  out2 <- convert_na_to(out, replace_num = 5)
+  a2 <- attributes(out2)
+
+  expect_equal(names(a1)[1:28], names(a2)[1:28])
+})
