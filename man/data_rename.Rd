@@ -78,7 +78,13 @@ renamed/removed doesn't exist.}
 A modified data frame.
 }
 \description{
-Safe and intuitive functions to rename variables or rows in dataframes.
+Safe and intuitive functions to rename variables or rows in
+data frames. \code{data_rename()} will rename column names, i.e. it facilitates
+renaming variables \code{data_addprefix()} or \code{data_addsuffix()} add prefixes
+or suffixes to column names. \code{data_rename_rows()} is a convenient shortcut
+to add or rename row names of a data frame, but unlike \code{row.names()}, its
+input and output is a data frame, thus, integrating smoothly into a possible
+pipe-workflow.
 }
 \examples{
 # Add prefix / suffix to all columns

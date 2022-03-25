@@ -1,8 +1,9 @@
 #' @title Find or get columns in a data frame based on search patterns
 #' @name find_columns
 #'
-#' @description `find_columns()` returns colum names from a data set that
+#' @description `find_columns()` returns column names from a data set that
 #' match a certain search pattern, while `get_columns()` returns the found data.
+#' `data_select()` is an alias for `get_columns()`.
 #'
 #' @param data A data frame.
 #' @param select Variables that will be included when performing the required
@@ -111,42 +112,6 @@ find_columns <- function(data,
   }
 
   columns
-}
-
-
-#' @rdname find_columns
-#' @export
-get_columns <- function(data,
-                        select = NULL,
-                        exclude = NULL,
-                        ignore_case = FALSE,
-                        regex = FALSE,
-                        verbose = TRUE,
-                         ...) {
-  columns <- .select_nse(
-    select,
-    data,
-    exclude,
-    ignore_case = ignore_case,
-    regex = regex,
-    verbose = FALSE
-  )
-
-  # save attributes
-  a <- attributes(data)
-
-  if (!length(columns) || is.null(columns)) {
-    if (isTRUE(verbose)) {
-      warning(insight::format_message("No column names that matched the required search pattern were found."), call. = FALSE)
-    }
-    return(NULL)
-  }
-
-  out <- data[columns]
-
-  # add back attributes
-  attributes(out) <- utils::modifyList(a, attributes(out))
-  out
 }
 
 
