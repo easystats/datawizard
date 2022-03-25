@@ -70,7 +70,7 @@ test_that("data_relocate select-helpers", {
 
 # preserve attributes --------------------------
 
-test_that("get_columns from other functions", {
+test_that("data_relocate preserves attributes", {
   skip_if_not_installed("parameters")
 
   m <- lm(Sepal.Length ~ Species, data = iris)
