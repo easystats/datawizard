@@ -14,10 +14,17 @@ visualisation_recipe(x, ...)
 \description{
 This function prepares objects for visualisation by returning a list of
 layers with data and geoms that can be easily plotted using for instance
-\code{ggplot2}. See the documentation for your object's class:
-}
-\details{
+\code{ggplot2}.
+
+If the \code{see} package is installed, the call to \code{visualization_recipe()} can be
+replaced by \code{plot()}, which will internally call the former and then plot it
+using \code{ggplot}. The resulting plot can be customized ad-hoc (by adding
+ggplot's geoms, theme or specifications), or via some of the arguments
+of \code{visualisation_recipe()} that control the aesthetic parameters.
+
+See the specific documentation page for your object's class:
 \itemize{
 \item {\link[modelbased:visualisation_recipe.estimate_predicted]{modelbased} (\code{estimate_means}, \code{estimate_contrasts}, \code{estimate_slopes}, \code{estimate_predicted}, \code{estimate_grouplevel})}
+\item {\link[correlation:visualisation_recipe.easycormatrix]{correlation} (\code{correlation}, \code{cor_test})}
 }
 }

@@ -1,10 +1,18 @@
 #' Prepare objects for visualisation
 #'
-#' This function prepares objects for visualisation by returning a list of
+#' @description This function prepares objects for visualisation by returning a list of
 #' layers with data and geoms that can be easily plotted using for instance
-#' `ggplot2`. See the documentation for your object's class:
+#' `ggplot2`.
 #'
+#' If the `see` package is installed, the call to `visualization_recipe()` can be
+#' replaced by `plot()`, which will internally call the former and then plot it
+#' using `ggplot`. The resulting plot can be customized ad-hoc (by adding
+#' ggplot's geoms, theme or specifications), or via some of the arguments
+#' of `visualisation_recipe()` that control the aesthetic parameters.
+#'
+#' See the specific documentation page for your object's class:
 #'  - {[modelbased][modelbased::visualisation_recipe.estimate_predicted] (`estimate_means`, `estimate_contrasts`, `estimate_slopes`, `estimate_predicted`, `estimate_grouplevel`)}
+#'  - {[correlation][correlation::visualisation_recipe.easycor_test] (`correlation`, `cor_test`)}
 #'
 #'
 #' @param x An `easystats` object.
