@@ -132,6 +132,9 @@ get_columns <- function(data,
     verbose = FALSE
   )
 
+  # save attributes
+  a <- attributes(data)
+
   if (!length(columns) || is.null(columns)) {
     if (isTRUE(verbose)) {
       warning(insight::format_message("No column names that matched the required search pattern were found."), call. = FALSE)
@@ -139,7 +142,11 @@ get_columns <- function(data,
     return(NULL)
   }
 
-  data[columns]
+  out <- data[columns]
+
+  # add back attributes
+  attributes(out) <- utils::modifyList(a, attributes(out))
+  out
 }
 
 
