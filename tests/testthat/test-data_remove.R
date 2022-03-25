@@ -103,3 +103,19 @@ test_that("data_remove from other functions", {
     c("Petal.Length", "Petal.Width", "Species")
   )
 })
+
+
+# preserve attributes --------------------------
+
+test_that("data_remove preserves attributes", {
+  skip_if_not_installed("parameters")
+
+  m <- lm(Sepal.Length ~ Species, data = iris)
+  out <- parameters::parameters(m)
+  a1 <- attributes(out)
+
+  out2 <- data_remove(out, "SE")
+  a2 <- attributes(out2)
+
+  expect_equal(names(a1), names(a2))
+})
