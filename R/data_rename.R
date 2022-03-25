@@ -1,7 +1,13 @@
 #' @title Rename columns and variable names
 #' @name data_rename
 #'
-#' @description Safe and intuitive functions to rename variables or rows in dataframes.
+#' @description Safe and intuitive functions to rename variables or rows in
+#'   data frames. `data_rename()` will rename column names, i.e. it facilitates
+#'   renaming variables `data_addprefix()` or `data_addsuffix()` add prefixes
+#'   or suffixes to column names. `data_rename_rows()` is a convenient shortcut
+#'   to add or rename row names of a data frame, but unlike `row.names()`, its
+#'   input and output is a data frame, thus, integrating smoothly into a possible
+#'   pipe-workflow.
 #'
 #' @param data A data frame, or an object that can be coerced to a data frame.
 #' @param pattern Character vector. For `data_rename()`, indicates columns that
