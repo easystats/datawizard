@@ -66,3 +66,19 @@ test_that("data_relocate select-helpers", {
     colnames(iris[c(3:5, 1:2)])
   )
 })
+
+
+# preserve attributes --------------------------
+
+test_that("data_relocate preserves attributes", {
+  skip_if_not_installed("parameters")
+
+  m <- lm(Sepal.Length ~ Species, data = iris)
+  out <- parameters::parameters(m)
+  a1 <- attributes(out)
+
+  out2 <- data_relocate(out, 4:6)
+  a2 <- attributes(out2)
+
+  expect_equal(names(a1), names(a2))
+})
