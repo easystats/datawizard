@@ -108,3 +108,20 @@ test_that("get_columns from other functions", {
   }
   expect_warning(expect_null(test_fun3(iris)))
 })
+
+
+
+# preserve attributes --------------------------
+
+test_that("get_columns from other functions", {
+  skip_if_not_installed("parameters")
+
+  m <- lm(Sepal.Length ~ Species, data = iris)
+  out <- parameters::parameters(m)
+  a1 <- attributes(out)
+
+  out2 <- get_columns(out, 1:3)
+  a2 <- attributes(out2)
+
+  expect_equal(names(a1), names(a2))
+})
