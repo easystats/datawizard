@@ -32,7 +32,6 @@ weighted_mean <- function(x, weights = NULL, verbose = TRUE, ...) {
 #' @export
 #' @rdname weighted_mean
 weighted_median <- function(x, weights = NULL, verbose = TRUE, ...) {
-
   if (!.are_weights(weights) || !.validate_weights(weights, verbose)) {
     return(stats::median(x, na.rm = TRUE))
   }
@@ -53,10 +52,11 @@ weighted_median <- function(x, weights = NULL, verbose = TRUE, ...) {
   rw <- cumsum(weights) / sum(weights)
   md.values <- min(which(rw >= p))
 
-  if (rw[md.values] == p)
+  if (rw[md.values] == p) {
     q <- mean(x[md.values:(md.values + 1)])
-  else
+  } else {
     q <- x[md.values]
+  }
 
   q
 }
