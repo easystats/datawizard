@@ -1,4 +1,4 @@
-# datawizard 0.3.0.9000
+# datawizard 0.4.0
 
 MAJOR CHANGES
 
@@ -17,57 +17,57 @@ MAJOR CHANGES
 
 NEW FUNCTIONS
 
-  * To convert rownames to a column, and *vice versa*: `rownames_as_column()` 
-    and `column_as_rownames()` (@etiennebacher, #80).
+* To convert rownames to a column, and *vice versa*: `rownames_as_column()` 
+  and `column_as_rownames()` (@etiennebacher, #80).
 
-  * `find_columns()` and `get_columns()` to find column names or retrieve
-    subsets of data frames, based on various select-methods (including
-    select-helpers). These function will supersede `data_findcols()` in the
-    future.
+* `find_columns()` and `get_columns()` to find column names or retrieve
+  subsets of data frames, based on various select-methods (including
+  select-helpers). These function will supersede `data_findcols()` in the
+  future.
 
 * `data_filter()` as complement for `data_match()`, which works with logical 
   expressions for filtering rows of data frames.
 
-  * For computing weighted centrality measures and dispersion: `weighted_mean()`,
-    `weighted_median()`, `weighted_sd()` and `weighted_mad()`.
+* For computing weighted centrality measures and dispersion: `weighted_mean()`,
+  `weighted_median()`, `weighted_sd()` and `weighted_mad()`.
   
-  * To replace `NA` in vectors and dataframes: `convert_na_to()` (@etiennebacher, #111).
+* To replace `NA` in vectors and dataframes: `convert_na_to()` (@etiennebacher, #111).
 
 MINOR CHANGES
 
-  * The `select` argument in several functions (like `data_remove()`,
-    `reshape_longer()`, or  `data_extract()`) now allow the use of select-helpers
-    for selecting variables based on specific patterns.
+* The `select` argument in several functions (like `data_remove()`,
+  `reshape_longer()`, or  `data_extract()`) now allows the use of select-helpers
+  for selecting variables based on specific patterns.
 
-  * `data_extract()` gains new arguments to allow type-safe return values,
-    i.e. *always* return a vector *or* a data frame. Thus, `data_extract()`
-    can now be used to select multiple variables or pull a single variable
-    from data frames.
+* `data_extract()` gains new arguments to allow type-safe return values,
+   i.e. *always* return a vector *or* a data frame. Thus, `data_extract()`
+   can now be used to select multiple variables or pull a single variable
+   from data frames.
 
-  * `data_match()` gains a `match` argument, to indicate with which logical
-    operation matching results should be combined.
+* `data_match()` gains a `match` argument, to indicate with which logical
+  operation matching results should be combined.
 
-  * Improved support for *labelled data* for many functions, i.e. returned
-    data frame will preserve value and variable label attributes, where
-    possible and applicable.
+* Improved support for *labelled data* for many functions, i.e. returned
+  data frame will preserve value and variable label attributes, where
+  possible and applicable.
 
-  * `describe_distribution()` now works with lists (@etiennebacher, #105).
+* `describe_distribution()` now works with lists (@etiennebacher, #105).
 
-  * `data_rename()` doesn't use `pattern` anymore to rename the columns if
-    `replacement` is not provided (@etiennebacher, #103).
+* `data_rename()` doesn't use `pattern` anymore to rename the columns if
+  `replacement` is not provided (@etiennebacher, #103).
 
-  * `data_rename()` now adds a suffix to duplicated names in `replacement`
-    (@etiennebacher, #103).
+* `data_rename()` now adds a suffix to duplicated names in `replacement`
+  (@etiennebacher, #103).
 
 BUG FIXES
 
-  * `data_to_numeric()` produced wrong results for factors when
-    `dummy_factors = TRUE` and factor contained missing values.
+* `data_to_numeric()` produced wrong results for factors when
+  `dummy_factors = TRUE` and factor contained missing values.
 
-  * `data_match()` produced wrong results when data contained missing values.
+* `data_match()` produced wrong results when data contained missing values.
 
-  * Fixed CRAN check issues in `data_extract()` when more than one variable
-    was extracted from a data frame.
+* Fixed CRAN check issues in `data_extract()` when more than one variable
+  was extracted from a data frame.
 
 # datawizard 0.3.0
 

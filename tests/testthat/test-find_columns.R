@@ -62,7 +62,6 @@ test_that("find_columns works as expected", {
     find_columns(iris, "Width$", regex = TRUE),
     c("Sepal.Width", "Petal.Width")
   )
-
 })
 
 

@@ -161,7 +161,7 @@
 #'     A description of how to translate the
 #'     formulas described in *Bell et al. 2018* into R using `lmer()`
 #'     from \pkg{lme4} can be found in
-#'     [this vignette](https://easystats.github.io/datawizard/articles/demean.html).
+#'     [this vignette](https://easystats.github.io/parameters/articles/demean.html).
 #'   }
 #'
 #' @references

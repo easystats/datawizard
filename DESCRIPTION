@@ -1,7 +1,7 @@
 Type: Package
 Package: datawizard
 Title: Easy Data Wrangling
-Version: 0.3.1.9010
+Version: 0.4.0
 Authors@R: c(
     person("Dominique", "Makowski", , "dom.makowski@gmail.com", role = "aut",
            comment = c(ORCID = "0000-0001-5375-9967", Twitter = "@Dom_Makowski")),
@@ -25,7 +25,7 @@ BugReports: https://github.com/easystats/datawizard/issues
 Depends:
     R (>= 3.4)
 Imports:
-    insight (>= 0.16.0.5),
+    insight (>= 0.17.0),
     stats,
     utils
 Suggests: 
@@ -46,8 +46,6 @@ Suggests:
     see,
     spelling,
     testthat (>= 3.0.0)
-Remotes:
-    easystats/insight
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
