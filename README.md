@@ -16,6 +16,12 @@ transform, and prepare your data for analysis.
 
 # Installation
 
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/datawizard)](https://cran.r-project.org/package=datawizard)
+[![insight status
+badge](https://easystats.r-universe.dev/badges/datawizard)](https://easystats.r-universe.dev)
+[![R
+check](https://github.com/easystats/datawizard/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/datawizard/actions)
+
 | Type        | Source     | Command                                                                      |
 |-------------|------------|------------------------------------------------------------------------------|
 | Release     | CRAN       | `install.packages("datawizard")`                                             |
@@ -484,21 +490,21 @@ for all variables in a dataframe:
 ``` r
 data(iris)
 describe_distribution(iris)
-#> Variable     | Mean |   SD |  IQR | Min | Max | Skewness | Kurtosis |   n | n_Missing
-#> -------------------------------------------------------------------------------------
-#> Sepal.Length |  5.8 | 0.83 | 1.30 | 4.3 | 7.9 |     0.31 |    -0.55 | 150 |         0
-#> Sepal.Width  |  3.1 | 0.44 | 0.52 | 2.0 | 4.4 |     0.32 |     0.23 | 150 |         0
-#> Petal.Length |  3.8 | 1.77 | 3.52 | 1.0 | 6.9 |    -0.27 |    -1.40 | 150 |         0
-#> Petal.Width  |  1.2 | 0.76 | 1.50 | 0.1 | 2.5 |    -0.10 |    -1.34 | 150 |         0
+#> Variable     | Mean |   SD |  IQR |        Range | Skewness | Kurtosis |   n | n_Missing
+#> ----------------------------------------------------------------------------------------
+#> Sepal.Length | 5.84 | 0.83 | 1.30 | [4.30, 7.90] |     0.31 |    -0.55 | 150 |         0
+#> Sepal.Width  | 3.06 | 0.44 | 0.52 | [2.00, 4.40] |     0.32 |     0.23 | 150 |         0
+#> Petal.Length | 3.76 | 1.77 | 3.52 | [1.00, 6.90] |    -0.27 |    -1.40 | 150 |         0
+#> Petal.Width  | 1.20 | 0.76 | 1.50 | [0.10, 2.50] |    -0.10 |    -1.34 | 150 |         0
 ```
 
 Or even just a variable
 
 ``` r
 describe_distribution(mtcars$wt)
-#> Mean |   SD | IQR | Min | Max | Skewness | Kurtosis |  n | n_Missing
-#> --------------------------------------------------------------------
-#> 3.2  | 0.98 | 1.2 | 1.5 | 5.4 |     0.47 |     0.42 | 32 |         0
+#> Mean |   SD |  IQR |        Range | Skewness | Kurtosis |  n | n_Missing
+#> ------------------------------------------------------------------------
+#> 3.22 | 0.98 | 1.19 | [1.51, 5.42] |     0.47 |     0.42 | 32 |         0
 ```
 
 There are also some additional data properties that can be computed
