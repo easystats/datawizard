@@ -83,6 +83,44 @@ convert_to_na.factor <- function(x, na = NULL, verbose = TRUE, ...) {
 convert_to_na.character <- convert_to_na.factor
 
 
+#' @export
+convert_to_na.Date <- function(x, na = NULL, verbose = TRUE, ...) {
+  # if we have a list, use first valid element
+  if (is.list(na)) {
+    na <- unlist(na[sapply(na, is.character)])
+  }
+
+  if (is_empty_object(na) || !is.character(na)) {
+    if (isTRUE(verbose)) {
+      warning(insight::format_message("`na` needs to be a character vector."), call. = FALSE)
+    }
+  } else {
+    matches <- which(x %in% as.Date(na))
+    x[matches] <- NA
+  }
+  x
+}
+
+
+#' @export
+convert_to_na.logical <- function(x, na = NULL, verbose = TRUE, ...) {
+  # if we have a list, use first valid element
+  if (is.list(na)) {
+    na <- unlist(na[sapply(na, is.logical)])
+  }
+
+  if (is_empty_object(na) || !is.logical(na)) {
+    if (isTRUE(verbose)) {
+      warning(insight::format_message("`na` needs to be a logical."), call. = FALSE)
+    }
+  } else {
+    matches <- which(x == na)
+    x[matches] <- NA
+  }
+  x
+}
+
+
 #' @rdname convert_to_na
 #' @export
 convert_to_na.data.frame <- function(x, na = NULL, select = NULL, exclude = NULL, ignore_case = FALSE, verbose = TRUE, ...) {
