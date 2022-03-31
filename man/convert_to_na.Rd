@@ -25,8 +25,10 @@ convert_to_na(x, ...)
 
 \item{...}{Not used.}
 
-\item{na}{Numeric or character vector (or a list of numeric and character
-vectors) with values that should be converted to \code{NA}.}
+\item{na}{Numeric, character vector or logical (or a list of numeric, character
+vectors or logicals) with values that should be converted to \code{NA}. Numeric
+values applied to numeric vectors, character values are used for factors,
+character vectors or date variables, and logical values for logical vectors.}
 
 \item{verbose}{Toggle warnings.}
 

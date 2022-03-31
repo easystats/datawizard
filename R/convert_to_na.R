@@ -5,8 +5,10 @@
 #' Convert non-missing values in a variable into missing values.
 #'
 #' @param x A vector, factor or a data frame.
-#' @param na Numeric or character vector (or a list of numeric and character
-#'   vectors) with values that should be converted to `NA`.
+#' @param na Numeric, character vector or logical (or a list of numeric, character
+#'   vectors or logicals) with values that should be converted to `NA`. Numeric
+#'   values applied to numeric vectors, character values are used for factors,
+#'   character vectors or date variables, and logical values for logical vectors.
 #' @param ... Not used.
 #' @inheritParams find_columns
 #'
