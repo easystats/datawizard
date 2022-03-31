@@ -1,3 +1,7 @@
+# datawizard 0.4.1
+
+* `convert_to_na()` gets methods for variables of class `logical` and `Date`.
+
 # datawizard 0.4.0
 
 MAJOR CHANGES
