@@ -73,6 +73,15 @@ convert_na_to <- function(x, ...) {
 }
 
 
+#' @export
+convert_na_to.default <- function(x, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    message(insight::format_message(sprintf("Converting missing values (`NA`) into regular values currently not possible for variables of class '%s'.", class(x)[1])))
+  }
+  x
+}
+
+
 #' @rdname convert_na_to
 #' @export
 convert_na_to.numeric <- function(x, replacement = NULL, verbose = TRUE, ...) {

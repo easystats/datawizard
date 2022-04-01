@@ -42,6 +42,15 @@ convert_to_na <- function(x, ...) {
 }
 
 
+#' @export
+convert_to_na.default <- function(x, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    message(insight::format_message(sprintf("Converting values into missing values (`NA`) currently not possible for variables of class '%s'.", class(x)[1])))
+  }
+  x
+}
+
+
 #' @rdname convert_to_na
 #' @export
 convert_to_na.numeric <- function(x, na = NULL, verbose = TRUE, ...) {
@@ -89,7 +98,9 @@ convert_to_na.character <- convert_to_na.factor
 convert_to_na.Date <- function(x, na = NULL, verbose = TRUE, ...) {
   # if we have a list, use first valid element
   if (is.list(na)) {
-    na <- unlist(na[sapply(na, is.character)])
+    na <- unlist(na[sapply(na, function(i) {
+      !is.null(tryCatch(as.Date(i), error = function(e) NULL))
+    })])
   }
 
   if (is_empty_object(na) || !is.character(na)) {

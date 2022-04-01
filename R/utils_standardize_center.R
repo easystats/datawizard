@@ -277,6 +277,11 @@
     return(as.numeric(x))
   }
 
+  # Logicals should be 0/1
+  if (is.logical(x)) {
+    return(as.numeric(x))
+  }
+
   if (anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
     if (is.character(x)) {
       x <- as.factor(x)
