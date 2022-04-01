@@ -123,13 +123,14 @@ standardize <- function(x, ...) {
 standardise <- standardize
 
 
-#' @export
-standardize.default <- function(x, verbose = TRUE, ...) {
-  if (isTRUE(verbose)) {
-    message(insight::format_message(sprintf("Standardizing currently not possible for variables of class '%s'.", class(x)[1])))
-  }
-  x
-}
+# Default method is in effectsize
+
+# standardize.default <- function(x, verbose = TRUE, ...) {
+#   if (isTRUE(verbose)) {
+#     message(insight::format_message(sprintf("Standardizing currently not possible for variables of class '%s'.", class(x)[1])))
+#   }
+#   x
+# }
 
 
 #' @rdname standardize
