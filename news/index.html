@@ -60,7 +60,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.1" id="datawizard-041">datawizard 0.4.1<a class="anchor" aria-label="anchor" href="#datawizard-041"></a></h2>
 <p>MINOR CHANGES</p>
-<ul><li><p><code><a href="../reference/center.html">center()</a></code>, <code><a href="../reference/standardize.html">standardize()</a></code>, <code><a href="../reference/center.html">center()</a></code>, <code><a href="../reference/convert_to_na.html">convert_to_na()</a></code> and <code><a href="../reference/convert_na_to.html">convert_na_to()</a></code> get a <code>.default</code> method, to capture unsupported classes. This now yields a message and returns the original input, and hence, the <code>.data.frame</code> methods won’t stop due to an error.</p></li>
+<ul><li><p><code><a href="../reference/center.html">center()</a></code>, <code><a href="../reference/convert_to_na.html">convert_to_na()</a></code> and <code><a href="../reference/convert_na_to.html">convert_na_to()</a></code> get a <code>.default</code> method, to capture unsupported classes. This now yields a message and returns the original input, and hence, the <code>.data.frame</code> methods won’t stop due to an error.</p></li>
 <li><p><code><a href="../reference/convert_to_na.html">convert_to_na()</a></code> gets methods for variables of class <code>logical</code> and <code>Date</code>.</p></li>
 </ul><p>BUG FIXES</p>
 <ul><li>When logicals were passed to <code><a href="../reference/center.html">center()</a></code> or <code><a href="../reference/standardize.html">standardize()</a></code> and <code>force = TRUE</code>, these were not properly converted to numeric variables.</li>
