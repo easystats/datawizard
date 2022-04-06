@@ -69,22 +69,6 @@ centrality, dispersion, range, skewness, kurtosis).</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">describe_distribution</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
-<span class="co"># S3 method for list</span>
-<span class="fu">describe_distribution</span><span class="op">(</span>
-  <span class="va">x</span>,
-  centrality <span class="op">=</span> <span class="st">"mean"</span>,
-  dispersion <span class="op">=</span> <span class="cn">TRUE</span>,
-  iqr <span class="op">=</span> <span class="cn">TRUE</span>,
-  range <span class="op">=</span> <span class="cn">TRUE</span>,
-  quartiles <span class="op">=</span> <span class="cn">FALSE</span>,
-  ci <span class="op">=</span> <span class="cn">NULL</span>,
-  include_factors <span class="op">=</span> <span class="cn">FALSE</span>,
-  iterations <span class="op">=</span> <span class="fl">100</span>,
-  threshold <span class="op">=</span> <span class="fl">0.1</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
 <span class="co"># S3 method for numeric</span>
 <span class="fu">describe_distribution</span><span class="op">(</span>
   <span class="va">x</span>,
@@ -101,9 +85,6 @@ centrality, dispersion, range, skewness, kurtosis).</p>
 <span class="op">)</span>
 
 <span class="co"># S3 method for factor</span>
-<span class="fu">describe_distribution</span><span class="op">(</span><span class="va">x</span>, dispersion <span class="op">=</span> <span class="cn">TRUE</span>, range <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for character</span>
 <span class="fu">describe_distribution</span><span class="op">(</span><span class="va">x</span>, dispersion <span class="op">=</span> <span class="cn">TRUE</span>, range <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for data.frame</span>
@@ -148,10 +129,6 @@ confidence intervals are computed. If not <code>NULL</code>, confidence interval
 are based on bootstrap replicates (see <code>iterations</code>). If
 <code>centrality = "all"</code>, the bootstrapped confidence interval refers to
 the first centrality index (which is typically the median).</p></dd>
-<dt>include_factors</dt>
-<dd><p>Logical, if <code>TRUE</code>, factors are included in the
-output, however, only columns for range (first and last factor levels) as
-well as n and missing will contain information.</p></dd>
 <dt>iterations</dt>
 <dd><p>The number of bootstrap replicates for computing confidence
 intervals. Only applies when <code>ci</code> is not <code>NULL</code>.</p></dd>
@@ -159,6 +136,10 @@ intervals. Only applies when <code>ci</code> is not <code>NULL</code>.</p></dd>
 <dd><p>For <code>centrality = "trimmed"</code> (i.e. trimmed mean), indicates the fraction (0 to 0.5) of observations to be trimmed from each end of the vector before the mean is computed.</p></dd>
 <dt>verbose</dt>
 <dd><p>Toggle warnings and messages.</p></dd>
+<dt>include_factors</dt>
+<dd><p>Logical, if <code>TRUE</code>, factors are included in the
+output, however, only columns for range (first and last factor levels) as
+well as n and missing will contain information.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
