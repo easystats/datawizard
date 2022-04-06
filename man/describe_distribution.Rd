@@ -2,29 +2,12 @@
 % Please edit documentation in R/describe_distribution.R
 \name{describe_distribution}
 \alias{describe_distribution}
-\alias{describe_distribution.list}
 \alias{describe_distribution.numeric}
 \alias{describe_distribution.factor}
-\alias{describe_distribution.character}
 \alias{describe_distribution.data.frame}
 \title{Describe a distribution}
 \usage{
 describe_distribution(x, ...)
-
-\method{describe_distribution}{list}(
-  x,
-  centrality = "mean",
-  dispersion = TRUE,
-  iqr = TRUE,
-  range = TRUE,
-  quartiles = FALSE,
-  ci = NULL,
-  include_factors = FALSE,
-  iterations = 100,
-  threshold = 0.1,
-  verbose = TRUE,
-  ...
-)
 
 \method{describe_distribution}{numeric}(
   x,
@@ -41,8 +24,6 @@ describe_distribution(x, ...)
 )
 
 \method{describe_distribution}{factor}(x, dispersion = TRUE, range = TRUE, verbose = TRUE, ...)
-
-\method{describe_distribution}{character}(x, dispersion = TRUE, range = TRUE, verbose = TRUE, ...)
 
 \method{describe_distribution}{data.frame}(
   x,
@@ -83,16 +64,16 @@ are based on bootstrap replicates (see \code{iterations}). If
 \code{centrality = "all"}, the bootstrapped confidence interval refers to
 the first centrality index (which is typically the median).}
 
-\item{include_factors}{Logical, if \code{TRUE}, factors are included in the
-output, however, only columns for range (first and last factor levels) as
-well as n and missing will contain information.}
-
 \item{iterations}{The number of bootstrap replicates for computing confidence
 intervals. Only applies when \code{ci} is not \code{NULL}.}
 
 \item{threshold}{For \code{centrality = "trimmed"} (i.e. trimmed mean), indicates the fraction (0 to 0.5) of observations to be trimmed from each end of the vector before the mean is computed.}
 
 \item{verbose}{Toggle warnings and messages.}
+
+\item{include_factors}{Logical, if \code{TRUE}, factors are included in the
+output, however, only columns for range (first and last factor levels) as
+well as n and missing will contain information.}
 }
 \value{
 A data frame with columns that describe the properties of the variables.
