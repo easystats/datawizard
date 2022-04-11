@@ -12,11 +12,7 @@ data_recode(x, ...)
 
 \method{data_recode}{data.frame}(
   x,
-  split = "median",
-  n_groups = NULL,
-  range = NULL,
-  lowest = 1,
-  labels = NULL,
+  recodes = NULL,
   force = FALSE,
   append = FALSE,
   select = NULL,
@@ -27,12 +23,16 @@ data_recode(x, ...)
 )
 }
 \arguments{
-\item{x}{A (grouped) data frame, numeric vector or factor.}
+\item{x}{A data frame, numeric or character vector, or factor.}
 
 \item{...}{not used.}
 
-\item{recodes}{A named vector, or a list of named vectors, which indicate
-the recode pairs.}
+\item{recodes}{A list of named vectors, which indicate the recode pairs.
+The \emph{names} of the list-elements (i.e. the left-hand side) represent the
+old values, while the values of the list-elements indicate the values.
+When recoding numeric vectors, element names have to be surrounded in
+backticks. For example, \verb{recodes = list(\\}1\\verb{ = 0)} would recode all
+\code{1} into \code{0} in a numeric vector.}
 
 \item{verbose}{Toggle warnings.}
 
@@ -67,11 +67,23 @@ is specified. In this case, a factor is returned, where the factor levels
 (i.e. recoded groups are labelled accordingly.
 }
 \description{
-This functions divides the range of variables into intervals and recodes
-the values inside these intervals according to their related interval.
-It is basically a wrapper around base R's \code{cut()}, providing a simplified
-and more accessible way to define the interval breaks (cut-off values).
+This functions recodes old values into new values and can be used to to
+recode numeric or character vectors, or factors.
 }
 \examples{
-data_recode(mtcars$hp, recodes = list(`min:100` = 1, `101:max` = 2))
+set.seed(123)
+x <- sample(c(1:4, NA), 20, TRUE)
+table(x, useNA = "always")
+
+out <- data_recode(x, list(`1` = 0, `2:3` = 1, `4` = 2))
+out
+table(out, useNA = "always")
+
+out <- data_recode(x, list(`1` = 0, `2:3` = 1, `4` = 2, `NA` = 9))
+out
+table(out, useNA = "always")
+
+out <- data_recode(x, list(`1` = 0, `2:3` = 1, `else` = 77))
+out
+table(out, useNA = "always")
 }

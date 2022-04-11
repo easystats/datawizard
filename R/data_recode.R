@@ -2,14 +2,16 @@
 #' @name data_recode
 #'
 #' @description
-#' This functions divides the range of variables into intervals and recodes
-#' the values inside these intervals according to their related interval.
-#' It is basically a wrapper around base R's `cut()`, providing a simplified
-#' and more accessible way to define the interval breaks (cut-off values).
+#' This functions recodes old values into new values and can be used to to
+#' recode numeric or character vectors, or factors.
 #'
-#' @param x A (grouped) data frame, numeric vector or factor.
-#' @param recodes A named vector, or a list of named vectors, which indicate
-#'   the recode pairs.
+#' @param x A data frame, numeric or character vector, or factor.
+#' @param recodes A list of named vectors, which indicate the recode pairs.
+#'   The _names_ of the list-elements (i.e. the left-hand side) represent the
+#'   old values, while the values of the list-elements indicate the values.
+#'   When recoding numeric vectors, element names have to be surrounded in
+#'   backticks. For example, `recodes = list(\`1\` = 0)` would recode all
+#'   `1` into `0` in a numeric vector.
 #' @param ... not used.
 #' @inheritParams find_columns
 #'
@@ -18,7 +20,21 @@
 #'   (i.e. recoded groups are labelled accordingly.
 #'
 #' @examples
-#' data_recode(mtcars$hp, recodes = list(`min:100` = 1, `101:max` = 2))
+#' set.seed(123)
+#' x <- sample(c(1:4, NA), 20, TRUE)
+#' table(x, useNA = "always")
+#'
+#' out <- data_recode(x, list(`1` = 0, `2:3` = 1, `4` = 2))
+#' out
+#' table(out, useNA = "always")
+#'
+#' out <- data_recode(x, list(`1` = 0, `2:3` = 1, `4` = 2, `NA` = 9))
+#' out
+#' table(out, useNA = "always")
+#'
+#' out <- data_recode(x, list(`1` = 0, `2:3` = 1, `else` = 77))
+#' out
+#' table(out, useNA = "always")
 #' @export
 data_recode <- function(x, ...) {
   UseMethod("data_recode")
@@ -47,6 +63,20 @@ data_recode.numeric <- function(x, recodes = NULL, verbose = TRUE, ...) {
       warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
     }
     return(original_x)
+  }
+
+  # check for "else" token
+  if ("else" %in% names(recodes)) {
+    else_token <- recodes[["else"]]
+    recodes["else"] <- NULL
+
+    # set the default value for all values that have no match
+    # (i.e. that should not be recoded)
+    if (else_token == "copy") {
+      x <- original_x
+    } else {
+      x <- rep(as.numeric(else_token), length = length(x))
+    }
   }
 
   for (i in names(recodes)) {
@@ -78,7 +108,7 @@ data_recode.numeric <- function(x, recodes = NULL, verbose = TRUE, ...) {
 
 
 #' @export
-data_recode.factor <- function(x, ...) {
+data_recode.factor <- function(x, recodes = NULL, verbose = TRUE, ...) {
   original_x <- x
   levels(x) <- 1:nlevels(x)
   out <- as.factor(data_recode(as.numeric(x), ...))
@@ -89,18 +119,14 @@ data_recode.factor <- function(x, ...) {
 #' @rdname data_recode
 #' @export
 data_recode.data.frame <- function(x,
-                                split = "median",
-                                n_groups = NULL,
-                                range = NULL,
-                                lowest = 1,
-                                labels = NULL,
-                                force = FALSE,
-                                append = FALSE,
-                                select = NULL,
-                                exclude = NULL,
-                                ignore_case = FALSE,
-                                verbose = TRUE,
-                                ...) {
+                                   recodes = NULL,
+                                   force = FALSE,
+                                   append = FALSE,
+                                   select = NULL,
+                                   exclude = NULL,
+                                   ignore_case = FALSE,
+                                   verbose = TRUE,
+                                   ...) {
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case)
 
@@ -111,7 +137,7 @@ data_recode.data.frame <- function(x,
   x <- args$x
   select <- args$select
 
-  x[select] <- lapply(x[select], data_recode, split = split, n_groups = n_groups, range = range, lowest = lowest, labels = labels, verbose = verbose, ...)
+  x[select] <- lapply(x[select], data_recode, recodes = recodes, verbose = verbose, ...)
   x
 }
 
