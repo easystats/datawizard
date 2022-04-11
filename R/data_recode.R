@@ -27,10 +27,10 @@
 #' - Single values
 #'
 #'   Single values either need to be wrapped in backticks (in case of numeric
-#'   values) or "as is" (for character or factor levels) Example:
+#'   values) or "as is" (for character or factor levels). Example:
 #'   ``recodes=list(`1`=0,`2`=1)`` would recode 1 into 0, and 2 into 1.
 #'   For factors or character vectors, an example is:
-#'   ``recodes=list(a="x",b="y")``.
+#'   `recodes=list(a="x",b="y")`.
 #'
 #' - Multiple values
 #'
