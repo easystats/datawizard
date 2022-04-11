@@ -322,3 +322,17 @@ test_that("get_columns, labels preserved", {
     ignore_attr = TRUE
   )
 })
+
+
+
+# data_recode -----------------------------------
+
+test_that("data_recode, labels preserved", {
+  x <- data_recode(efc$c172code, recodes = list(`1, 2` = 0, `3` = 1))
+  expect_equal(
+    attr(x, "label", exact = TRUE),
+    attr(efc$c12hour, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  expect_null(attr(x, "labels", exact = TRUE))
+})

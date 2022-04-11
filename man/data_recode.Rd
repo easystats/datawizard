@@ -31,10 +31,21 @@ data_recode(x, ...)
 The \emph{names} of the list-elements (i.e. the left-hand side) represent the
 old values, while the values of the list-elements indicate the values.
 When recoding numeric vectors, element names have to be surrounded in
-backticks. For example, \verb{recodes = list(\\}1\\verb{ = 0)} would recode all
-\code{1} into \code{0} in a numeric vector.}
+backticks. For example, \code{recodes = list(`1` = 0)} would recode all
+\code{1} into \code{0} in a numeric vector. For factors, backticks are only required
+when the left-hand side contains multiple, comma separated values, e.g.
+\code{recodes = list(a = "x", `b, c` = "y")}. See also 'Examples'.}
 
 \item{verbose}{Toggle warnings.}
+
+\item{force}{Logical, if \code{TRUE}, forces recoding of factors as well.}
+
+\item{append}{Logical or string. If \code{TRUE}, recoded variables get new
+column names (with the suffix \code{"_r"}) and are appended (column bind) to \code{x},
+thus returning both the original and the recoded variables. If \code{FALSE},
+original variables in \code{x} will be overwritten by their recoded versions.
+If a character value, recoded variables are appended with new column
+names (using the defined suffix) to the original data frame.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -62,17 +73,16 @@ a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
 }
 \value{
-\code{x}, recoded into groups. By default \code{x} is numeric, unless \code{labels}
-is specified. In this case, a factor is returned, where the factor levels
-(i.e. recoded groups are labelled accordingly.
+\code{x}, where old values are replaced by new values.
 }
 \description{
 This functions recodes old values into new values and can be used to to
 recode numeric or character vectors, or factors.
 }
 \examples{
+# numeric
 set.seed(123)
-x <- sample(c(1:4, NA), 20, TRUE)
+x <- sample(c(1:4, NA), 15, TRUE)
 table(x, useNA = "always")
 
 out <- data_recode(x, list(`1` = 0, `2:3` = 1, `4` = 2))
@@ -86,4 +96,36 @@ table(out, useNA = "always")
 out <- data_recode(x, list(`1` = 0, `2:3` = 1, `else` = 77))
 out
 table(out, useNA = "always")
+
+
+# factors
+set.seed(123)
+x <- as.factor(sample(c("a", "b", "c"), 15, TRUE))
+table(x)
+
+out <- data_recode(x, list(a = "x", `b, c` = "y"))
+out
+table(out)
+
+out <- data_recode(x, list(a = "x", b = "y", c = "z"))
+out
+table(out)
+
+out <- data_recode(x, list(`b, c` = "y", `else` = 77))
+out
+table(out)
+
+
+# character
+set.seed(123)
+x <- as.character(sample(c("a", "b", "c"), 15, TRUE))
+table(x)
+
+out <- data_recode(x, list(a = "x", `b, c` = "y"))
+out
+table(out)
+
+out <- data_recode(x, list(a = "x", b = "y", c = "z"))
+out
+table(out)
 }

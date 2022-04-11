@@ -10,18 +10,20 @@
 #'   The _names_ of the list-elements (i.e. the left-hand side) represent the
 #'   old values, while the values of the list-elements indicate the values.
 #'   When recoding numeric vectors, element names have to be surrounded in
-#'   backticks. For example, `recodes = list(\`1\` = 0)` would recode all
-#'   `1` into `0` in a numeric vector.
+#'   backticks. For example, ``recodes = list(`1` = 0)`` would recode all
+#'   `1` into `0` in a numeric vector. For factors, backticks are only required
+#'   when the left-hand side contains multiple, comma separated values, e.g.
+#'   ``recodes = list(a = "x", `b, c` = "y")``. See also 'Examples'.
 #' @param ... not used.
 #' @inheritParams find_columns
+#' @inheritParams data_cut
 #'
-#' @return `x`, recoded into groups. By default `x` is numeric, unless `labels`
-#'   is specified. In this case, a factor is returned, where the factor levels
-#'   (i.e. recoded groups are labelled accordingly.
+#' @return `x`, where old values are replaced by new values.
 #'
 #' @examples
+#' # numeric
 #' set.seed(123)
-#' x <- sample(c(1:4, NA), 20, TRUE)
+#' x <- sample(c(1:4, NA), 15, TRUE)
 #' table(x, useNA = "always")
 #'
 #' out <- data_recode(x, list(`1` = 0, `2:3` = 1, `4` = 2))
@@ -35,6 +37,38 @@
 #' out <- data_recode(x, list(`1` = 0, `2:3` = 1, `else` = 77))
 #' out
 #' table(out, useNA = "always")
+#'
+#'
+#' # factors
+#' set.seed(123)
+#' x <- as.factor(sample(c("a", "b", "c"), 15, TRUE))
+#' table(x)
+#'
+#' out <- data_recode(x, list(a = "x", `b, c` = "y"))
+#' out
+#' table(out)
+#'
+#' out <- data_recode(x, list(a = "x", b = "y", c = "z"))
+#' out
+#' table(out)
+#'
+#' out <- data_recode(x, list(`b, c` = "y", `else` = 77))
+#' out
+#' table(out)
+#'
+#'
+#' # character
+#' set.seed(123)
+#' x <- as.character(sample(c("a", "b", "c"), 15, TRUE))
+#' table(x)
+#'
+#' out <- data_recode(x, list(a = "x", `b, c` = "y"))
+#' out
+#' table(out)
+#'
+#' out <- data_recode(x, list(a = "x", b = "y", c = "z"))
+#' out
+#' table(out)
 #' @export
 data_recode <- function(x, ...) {
   UseMethod("data_recode")
@@ -103,16 +137,128 @@ data_recode.numeric <- function(x, recodes = NULL, verbose = TRUE, ...) {
     }
   }
 
+  # set back variable labels, remove value labels
+  # (these are most likely not matching anymore)
+  attr(x, "label") <- attr(original_x, "label", exact = TRUE)
+  attr(x, "labels") <- NULL
+
   x
 }
 
 
 #' @export
 data_recode.factor <- function(x, recodes = NULL, verbose = TRUE, ...) {
+
+  # save
   original_x <- x
-  levels(x) <- 1:nlevels(x)
-  out <- as.factor(data_recode(as.numeric(x), ...))
-  .set_back_labels(out, original_x, include_values = FALSE)
+
+  # no missings
+  valid <- stats::na.omit(x)
+
+  # stop if all NA
+  if (!length(valid)) {
+    if (isTRUE(verbose)) {
+      warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
+    }
+    return(original_x)
+  }
+
+  # as character, so recoding works
+  x <- as.character(x)
+
+  # check for "else" token
+  if ("else" %in% names(recodes)) {
+    else_token <- recodes[["else"]]
+    recodes["else"] <- NULL
+
+    # set the default value for all values that have no match
+    # (i.e. that should not be recoded)
+    if (else_token == "copy") {
+      x <- as.character(original_x)
+    } else {
+      x <- rep(as.character(else_token), length = length(x))
+    }
+  }
+
+  for (i in names(recodes)) {
+    # name of list element is old value
+    value_string <- paste(deparse(insight::trim_ws(unlist(strsplit(i, ",", fixed = TRUE)))), collapse = ",")
+
+    # parse old values, which are strings (names of element), but which should
+    # contain values, like "a" or "a, b, c". These should now be in the
+    # format "c("a", "b", "c")" and it should be possible to parse
+    # and evaluate these strings into a numeric vector
+    old_values <- tryCatch(eval(parse(text = value_string)), error = function(e) NULL)
+
+    if (!is.null(old_values)) {
+      x[which(original_x %in% old_values)] <- recodes[[i]]
+    }
+  }
+
+  # make sure we have correct new levels
+  x <- droplevels(as.factor(x))
+
+  # set back variable labels, remove value labels
+  # (these are most likely not matching anymore)
+  attr(x, "label") <- attr(original_x, "label", exact = TRUE)
+  attr(x, "labels") <- NULL
+
+  x
+}
+
+
+#' @export
+data_recode.character <- function(x, recodes = NULL, verbose = TRUE, ...) {
+
+  # save
+  original_x <- x
+
+  # no missings
+  valid <- stats::na.omit(x)
+
+  # stop if all NA
+  if (!length(valid)) {
+    if (isTRUE(verbose)) {
+      warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
+    }
+    return(original_x)
+  }
+
+  # check for "else" token
+  if ("else" %in% names(recodes)) {
+    else_token <- recodes[["else"]]
+    recodes["else"] <- NULL
+
+    # set the default value for all values that have no match
+    # (i.e. that should not be recoded)
+    if (else_token == "copy") {
+      x <- original_x
+    } else {
+      x <- rep(as.character(else_token), length = length(x))
+    }
+  }
+
+  for (i in names(recodes)) {
+    # name of list element is old value
+    value_string <- paste(deparse(insight::trim_ws(unlist(strsplit(i, ",", fixed = TRUE)))), collapse = ",")
+
+    # parse old values, which are strings (names of element), but which should
+    # contain values, like "a" or "a, b, c". These should now be in the
+    # format "c("a", "b", "c")" and it should be possible to parse
+    # and evaluate these strings into a numeric vector
+    old_values <- tryCatch(eval(parse(text = value_string)), error = function(e) NULL)
+
+    if (!is.null(old_values)) {
+      x[which(original_x %in% old_values)] <- recodes[[i]]
+    }
+  }
+
+  # set back variable labels, remove value labels
+  # (these are most likely not matching anymore)
+  attr(x, "label") <- attr(original_x, "label", exact = TRUE)
+  attr(x, "labels") <- NULL
+
+  x
 }
 
 
