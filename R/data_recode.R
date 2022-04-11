@@ -18,7 +18,7 @@
 #'   (i.e. recoded groups are labelled accordingly.
 #'
 #' @examples
-#' set.seed(123)
+#' data_recode(mtcars$hp, recodes = list(`min:100` = 1, `101:max` = 2))
 #' @export
 data_recode <- function(x, ...) {
   UseMethod("data_recode")

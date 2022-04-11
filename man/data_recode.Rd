@@ -73,5 +73,5 @@ It is basically a wrapper around base R's \code{cut()}, providing a simplified
 and more accessible way to define the interval breaks (cut-off values).
 }
 \examples{
-set.seed(123)
+data_recode(mtcars$hp, recodes = list(`min:100` = 1, `101:max` = 2))
 }
