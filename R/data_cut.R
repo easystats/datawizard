@@ -42,7 +42,7 @@
 #'   If a character value, recoded variables are appended with new column
 #'   names (using the defined suffix) to the original data frame.
 #' @param ... not used.
-#' @inheritParams convert_to_na
+#' @inheritParams find_columns
 #'
 #' @return `x`, recoded into groups. By default `x` is numeric, unless `labels`
 #'   is specified. In this case, a factor is returned, where the factor levels
@@ -233,10 +233,10 @@ data_cut.data.frame <- function(x,
                                 range = NULL,
                                 lowest = 1,
                                 labels = NULL,
-                                select = NULL,
-                                exclude = NULL,
                                 force = FALSE,
                                 append = FALSE,
+                                select = NULL,
+                                exclude = NULL,
                                 ignore_case = FALSE,
                                 verbose = TRUE,
                                 ...) {
@@ -262,10 +262,10 @@ data_cut.grouped_df <- function(x,
                                 range = NULL,
                                 lowest = 1,
                                 labels = NULL,
-                                select = NULL,
-                                exclude = NULL,
                                 force = FALSE,
                                 append = FALSE,
+                                select = NULL,
+                                exclude = NULL,
                                 ignore_case = FALSE,
                                 verbose = TRUE,
                                 ...) {

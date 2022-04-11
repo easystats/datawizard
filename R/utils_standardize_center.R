@@ -61,14 +61,6 @@
                               .center = NULL,
                               .scale = NULL) {
 
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
-
   # check append argument, and set default
   if (isFALSE(append)) {
     append <- NULL
@@ -285,6 +277,11 @@
     return(as.numeric(x))
   }
 
+  # Logicals should be 0/1
+  if (is.logical(x)) {
+    return(as.numeric(x))
+  }
+
   if (anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
     if (is.character(x)) {
       x <- as.factor(x)
@@ -352,14 +349,6 @@
   info <- attributes(x)
   # dplyr >= 0.8.0 returns attribute "indices"
   grps <- attr(x, "groups", exact = TRUE)
-
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
 
   if (is.numeric(weights)) {
     warning(insight::format_message(

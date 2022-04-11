@@ -50,9 +50,17 @@ describe_distribution <- function(x, ...) {
   UseMethod("describe_distribution")
 }
 
-#' @rdname describe_distribution
-#' @export
 
+#' @export
+describe_distribution.default <- function(x, verbose = TRUE, ...) {
+  if (verbose) {
+    warning(insight::format_message(paste0("Can't describe variables of class '", class(x)[1], "'.")), call. = FALSE)
+  }
+  NULL
+}
+
+
+#' @export
 describe_distribution.list <- function(x,
                                        centrality = "mean",
                                        dispersion = TRUE,
@@ -130,9 +138,9 @@ describe_distribution.list <- function(x,
   out
 }
 
+
 #' @rdname describe_distribution
 #' @export
-
 describe_distribution.numeric <- function(x,
                                           centrality = "mean",
                                           dispersion = TRUE,
@@ -289,7 +297,6 @@ describe_distribution.factor <- function(x,
 }
 
 
-#' @rdname describe_distribution
 #' @export
 describe_distribution.character <- function(x,
                                             dispersion = TRUE,
@@ -351,7 +358,6 @@ describe_distribution.character <- function(x,
 }
 
 
-
 #' @rdname describe_distribution
 #' @export
 describe_distribution.data.frame <- function(x,
@@ -399,8 +405,6 @@ describe_distribution.data.frame <- function(x,
 }
 
 
-
-
 #' @export
 describe_distribution.grouped_df <- function(x,
                                              centrality = "mean",
@@ -446,6 +450,9 @@ describe_distribution.grouped_df <- function(x,
 
 
 
+
+# methods ------------------
+
 #' @export
 print.parameters_distribution <- function(x, digits = 2, ...) {
   formatted_table <- format(
@@ -459,6 +466,8 @@ print.parameters_distribution <- function(x, digits = 2, ...) {
   cat(insight::export_table(formatted_table, format = "text", digits = digits))
   invisible(x)
 }
+
+
 
 
 # bootstrapping CIs ----------------------------------

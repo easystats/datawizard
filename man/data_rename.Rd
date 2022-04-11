@@ -50,10 +50,13 @@ vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
 right (e.g., \code{-1} or \code{-1:-3}),
 \item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
 \code{contains("")}, a range using \code{:} or \code{regex("")}.
-}}
+}
+
+If \code{NULL}, selects all columns.}
 
 \item{exclude}{See \code{select}, however, column names matched by the pattern
-from \code{exclude} will be excluded instead of selected.}
+from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
+excludes no columns.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
@@ -75,7 +78,13 @@ renamed/removed doesn't exist.}
 A modified data frame.
 }
 \description{
-Safe and intuitive functions to rename variables or rows in dataframes.
+Safe and intuitive functions to rename variables or rows in
+data frames. \code{data_rename()} will rename column names, i.e. it facilitates
+renaming variables \code{data_addprefix()} or \code{data_addsuffix()} add prefixes
+or suffixes to column names. \code{data_rename_rows()} is a convenient shortcut
+to add or rename row names of a data frame, but unlike \code{row.names()}, its
+input and output is a data frame, thus, integrating smoothly into a possible
+pipe-workflow.
 }
 \examples{
 # Add prefix / suffix to all columns
@@ -98,10 +107,12 @@ head(data_rename(iris, paste0("Var", 1:5)))
 \seealso{
 \itemize{
 \item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}}, \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
-\item Functions to reorder, find and remove columns: \code{\link[=data_findcols]{data_findcols()}}, \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
+\item Functions to reorder or remove columns: \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
 \item Functions to reshape, pivot or rotate dataframes: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
 \item Functions to rescale and reverse: \code{\link[=data_rescale]{data_rescale()}}, \code{\link[=data_reverse]{data_reverse()}}
 \item Functions to standardize, normalize, rank-transform: \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
-\item Split, cut and merge dataframes: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_cut]{data_cut()}}, \code{\link[=data_match]{data_match()}}, \code{\link[=data_merge]{data_merge()}}
+\item Split, cut and merge dataframes: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_cut]{data_cut()}}, \code{\link[=data_merge]{data_merge()}}
+\item Functions to find or select columns: \code{\link[=find_columns]{find_columns()}}
+\item Functions to filter rows: \code{\link[=data_match]{data_match()}}, \code{\link[=data_filter]{data_filter()}}
 }
 }

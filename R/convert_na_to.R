@@ -73,6 +73,15 @@ convert_na_to <- function(x, ...) {
 }
 
 
+#' @export
+convert_na_to.default <- function(x, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    message(insight::format_message(sprintf("Converting missing values (`NA`) into regular values currently not possible for variables of class '%s'.", class(x)[1])))
+  }
+  x
+}
+
+
 #' @rdname convert_na_to
 #' @export
 convert_na_to.numeric <- function(x, replacement = NULL, verbose = TRUE, ...) {
@@ -127,11 +136,11 @@ convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE, ...) 
 #' @param replace_num Value to replace `NA` when variable is of type numeric.
 #' @param replace_char Value to replace `NA` when variable is of type character.
 #' @param replace_fac Value to replace `NA` when variable is of type factor.
-#' @inheritParams convert_to_na
+#' @inheritParams find_columns
 #'
 #' @rdname convert_na_to
 #' @export
-convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL, replace_fac = NULL, select = NULL, exclude = NULL, verbose = TRUE, ignore_case = FALSE, ...) {
+convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL, replace_fac = NULL, select = NULL, exclude = NULL, ignore_case = FALSE, verbose = TRUE, ...) {
   data <- x
   select_nse <- .select_nse(select, data, exclude = exclude, ignore_case)
 

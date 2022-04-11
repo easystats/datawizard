@@ -1,7 +1,13 @@
 #' @title Rename columns and variable names
 #' @name data_rename
 #'
-#' @description Safe and intuitive functions to rename variables or rows in dataframes.
+#' @description Safe and intuitive functions to rename variables or rows in
+#'   data frames. `data_rename()` will rename column names, i.e. it facilitates
+#'   renaming variables `data_addprefix()` or `data_addsuffix()` add prefixes
+#'   or suffixes to column names. `data_rename_rows()` is a convenient shortcut
+#'   to add or rename row names of a data frame, but unlike `row.names()`, its
+#'   input and output is a data frame, thus, integrating smoothly into a possible
+#'   pipe-workflow.
 #'
 #' @param data A data frame, or an object that can be coerced to a data frame.
 #' @param pattern Character vector. For `data_rename()`, indicates columns that
@@ -34,11 +40,13 @@
 #'
 #' @seealso
 #' - Functions to rename stuff: [data_rename()], [data_rename_rows()], [data_addprefix()], [data_addsuffix()]
-#' - Functions to reorder, find and remove columns: [data_findcols()], [data_reorder()], [data_relocate()], [data_remove()]
+#' - Functions to reorder or remove columns: [data_reorder()], [data_relocate()], [data_remove()]
 #' - Functions to reshape, pivot or rotate dataframes: [data_to_long()], [data_to_wide()], [data_rotate()]
 #' - Functions to rescale and reverse: [data_rescale()], [data_reverse()]
 #' - Functions to standardize, normalize, rank-transform: [standardize()], [normalize()], [ranktransform()], [winsorize()]
-#' - Split, cut and merge dataframes: [data_partition()], [data_cut()], [data_match()], [data_merge()]
+#' - Split, cut and merge dataframes: [data_partition()], [data_cut()], [data_merge()]
+#' - Functions to find or select columns: [find_columns()]
+#' - Functions to filter rows: [data_match()], [data_filter()]
 #'
 #' @export
 data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, ...) {

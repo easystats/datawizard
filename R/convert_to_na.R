@@ -5,28 +5,12 @@
 #' Convert non-missing values in a variable into missing values.
 #'
 #' @param x A vector, factor or a data frame.
-#' @param select Variables that will be included when performing the required
-#'   tasks. Can be either
-#'
-#'   - a variable specified as a literal variable name (e.g., `column_name`),
-#'   - a string with the variable name (e.g., `"column_name"`), or a character
-#'     vector of variable names (e.g., `c("col1", "col2", "col3")`),
-#'   - a formula with variable names (e.g., `~column_1 + column_2`),
-#'   - a vector of positive integers, giving the positions counting from the left
-#'     (e.g. `1` or `c(1, 3, 5)`),
-#'   - a vector of negative integers, giving the positions counting from the
-#'     right (e.g., `-1` or `-1:-3`),
-#'   - or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
-#'   `contains("")`, a range using `:` or `regex("")`.
-#' @param exclude See `select`, however, column names matched by the pattern
-#'   from `exclude` will be excluded instead of selected.
-#' @param na Numeric or character vector (or a list of numeric and character
-#'   vectors) with values that should be converted to `NA`.
-#' @param ignore_case Logical, if `TRUE` and when one of the select-helpers or
-#'   a regular expression is used in `select`, ignores lower/upper case in the
-#'   search pattern when matching against variable names.
-#' @param verbose Toggle warnings.
+#' @param na Numeric, character vector or logical (or a list of numeric, character
+#'   vectors or logicals) with values that should be converted to `NA`. Numeric
+#'   values applied to numeric vectors, character values are used for factors,
+#'   character vectors or date variables, and logical values for logical vectors.
 #' @param ... Not used.
+#' @inheritParams find_columns
 #'
 #' @return
 #' `x`, where all values in `na` are converted to `NA`.
@@ -55,6 +39,15 @@
 #' @export
 convert_to_na <- function(x, ...) {
   UseMethod("convert_to_na")
+}
+
+
+#' @export
+convert_to_na.default <- function(x, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    message(insight::format_message(sprintf("Converting values into missing values (`NA`) currently not possible for variables of class '%s'.", class(x)[1])))
+  }
+  x
 }
 
 
@@ -99,6 +92,46 @@ convert_to_na.factor <- function(x, na = NULL, verbose = TRUE, ...) {
 
 #' @export
 convert_to_na.character <- convert_to_na.factor
+
+
+#' @export
+convert_to_na.Date <- function(x, na = NULL, verbose = TRUE, ...) {
+  # if we have a list, use first valid element
+  if (is.list(na)) {
+    na <- unlist(na[sapply(na, function(i) {
+      !is.null(tryCatch(as.Date(i), error = function(e) NULL))
+    })])
+  }
+
+  if (is_empty_object(na) || !is.character(na)) {
+    if (isTRUE(verbose)) {
+      warning(insight::format_message("`na` needs to be a character vector."), call. = FALSE)
+    }
+  } else {
+    matches <- which(x %in% as.Date(na))
+    x[matches] <- NA
+  }
+  x
+}
+
+
+#' @export
+convert_to_na.logical <- function(x, na = NULL, verbose = TRUE, ...) {
+  # if we have a list, use first valid element
+  if (is.list(na)) {
+    na <- unlist(na[sapply(na, is.logical)])
+  }
+
+  if (is_empty_object(na) || !is.logical(na)) {
+    if (isTRUE(verbose)) {
+      warning(insight::format_message("`na` needs to be a logical."), call. = FALSE)
+    }
+  } else {
+    matches <- which(x == na)
+    x[matches] <- NA
+  }
+  x
+}
 
 
 #' @rdname convert_to_na

@@ -25,8 +25,10 @@ convert_to_na(x, ...)
 
 \item{...}{Not used.}
 
-\item{na}{Numeric or character vector (or a list of numeric and character
-vectors) with values that should be converted to \code{NA}.}
+\item{na}{Numeric, character vector or logical (or a list of numeric, character
+vectors or logicals) with values that should be converted to \code{NA}. Numeric
+values applied to numeric vectors, character values are used for factors,
+character vectors or date variables, and logical values for logical vectors.}
 
 \item{verbose}{Toggle warnings.}
 
@@ -43,10 +45,13 @@ vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
 right (e.g., \code{-1} or \code{-1:-3}),
 \item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
 \code{contains("")}, a range using \code{:} or \code{regex("")}.
-}}
+}
+
+If \code{NULL}, selects all columns.}
 
 \item{exclude}{See \code{select}, however, column names matched by the pattern
-from \code{exclude} will be excluded instead of selected.}
+from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
+excludes no columns.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the

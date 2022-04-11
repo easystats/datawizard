@@ -30,6 +30,11 @@ test_that("describe_distribution - numeric: works with range", {
   expect_false("max" %in% names(x))
 })
 
+test_that("describe_distribution - NULL for date", {
+  v <- as.Date(c("2022-01-01", "2022-01-02"))
+  expect_warning(expect_null(describe_distribution(v)))
+})
+
 
 
 # dataframe ---------------------------------------

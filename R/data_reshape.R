@@ -23,7 +23,7 @@
 #'   compatibility with `tidyr::pivot_longer()`.
 #' @param sep The indicating a separating character in the variable names in the
 #'   wide format.
-#' @inheritParams convert_to_na
+#' @inheritParams find_columns
 #'
 #' @examples
 #' wide_data <- data.frame(replicate(5, rnorm(10)))
@@ -84,6 +84,7 @@ data_to_long <- function(data,
                          values_to = "Value",
                          rows_to = NULL,
                          ignore_case = FALSE,
+                         regex = FALSE,
                          cols = select,
                          ...,
                          names_to = colnames_to) {
@@ -100,7 +101,14 @@ data_to_long <- function(data,
   }
 
   # evaluate arguments
-  cols <- .select_nse(select, data, exclude = NULL, ignore_case, verbose = FALSE)
+  cols <- .select_nse(
+    select,
+    data,
+    exclude = NULL,
+    ignore_case = ignore_case,
+    regex = regex,
+    verbose = FALSE
+  )
 
   # Sanity checks ----------------
 

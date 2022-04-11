@@ -9,3 +9,19 @@ test_that("data_reorder works as expected", {
     c("Species", "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
   ))
 })
+
+
+# preserve attributes --------------------------
+
+test_that("data_reorder preserves attributes", {
+  skip_if_not_installed("parameters")
+
+  m <- lm(Sepal.Length ~ Species, data = iris)
+  out <- parameters::parameters(m)
+  a1 <- attributes(out)
+
+  out2 <- data_reorder(out, 4:6)
+  a2 <- attributes(out2)
+
+  expect_equal(names(a1), names(a2))
+})

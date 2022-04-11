@@ -4,7 +4,7 @@ test_that("weighted centrality and dispersion measures work as expected", {
 
   set.seed(123)
   expect_equal(weighted_mean(x, wt), 3.453333, tolerance = 0.001)
-  expect_equal(weighted_median(x, wt), 3.653333, tolerance = 0.001)
+  expect_equal(weighted_median(x, wt), 3.5, tolerance = 0.001)
   expect_equal(weighted_sd(x, wt), 0.2852935, tolerance = 0.001)
-  expect_equal(weighted_mad(x, wt), 0.1594619, tolerance = 0.001)
+  expect_equal(weighted_mad(x, wt), 0.29652, tolerance = 0.001)
 })

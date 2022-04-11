@@ -1,24 +1,24 @@
 #' @title Relocate (reorder) columns of a data frame
 #' @name data_relocate
 #'
+#' @description
+#' `data_relocate()` will reorder columns to specific positions, indicated by
+#' `before` or `after`. `data_reorder()` will instead move selected columns to
+#' the beginning of a data frame. Finally, `data_remove()` removes columns
+#' from a data frame. All functions support select-helpers that allow flexible
+#' specification of a search pattern to find matching columns, which should
+#' be reordered or removed.
+#'
 #' @param data A data frame.
 #' @param before,after Destination of columns. Supplying neither will move
 #'   columns to the left-hand side; specifying both is an error. Can be a
 #'   character vector, indicating the name of the destination column, or a
 #'   numeric value, indicating the index number of the destination column.
 #'   If `-1`, will be added before or after the last column.
-#' @inheritParams convert_to_na
+#' @inheritParams find_columns
 #' @inheritParams data_rename
 #'
 #' @inherit data_rename seealso
-#'
-#' @details
-#'
-#' `data_relocate()` will reorder columns to specific positions, indicated by
-#' `before` or `after`.
-#'
-#' `data_reorder()` will instead move selected columns to the beginning of the
-#' data frame .
 #'
 #' @return A data frame with reordered columns.
 #'
@@ -126,5 +126,8 @@ data_relocate <- function(data,
 data_reorder <- function(data, select, ignore_case = FALSE, verbose = TRUE, ...) {
   cols <- .select_nse(select, data, exclude = NULL, ignore_case = ignore_case, verbose = verbose)
   remaining_columns <- setdiff(colnames(data), cols)
-  data[c(cols, remaining_columns)]
+
+  out <- data[c(cols, remaining_columns)]
+  attributes(out) <- utils::modifyList(attributes(data), attributes(out))
+  out
 }

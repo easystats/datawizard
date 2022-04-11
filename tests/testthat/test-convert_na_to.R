@@ -92,27 +92,27 @@ test_that("convert_na_to - character: returns original vector if 'replacement' n
 
 # factor --------------------------
 
-# test_that("convert_na_to - factor: works when 'replacement' is numeric ", {
-#   x <- convert_na_to(factor(c(1, 2, 3, NA)), replacement = 4)
-#   expect_equal(
-#     x,
-#     factor(1:4)
-#   )
-#   expect_equal(levels(x), as.character(1:4))
-#   expect_equal(
-#     convert_na_to(factor(c(1, 2, 3, NA)), replacement = NULL, verbose = FALSE),
-#     factor(c(1, 2, 3, NA))
-#   )
-# })
-#
-# test_that("convert_na_to - factor: works when 'replacement' is character", {
-#   x <- convert_na_to(factor(c(1, 2, 3, NA)), replacement = "d")
-#   expect_equal(
-#     x,
-#     factor(c(1:3, "d"))
-#   )
-#   expect_equal(levels(x), as.character(c(1:3, "d")))
-# })
+test_that("convert_na_to - factor: works when 'replacement' is numeric ", {
+  x <- convert_na_to(factor(c(1, 2, 3, NA)), replacement = 4)
+  expect_equal(
+    x,
+    factor(1:4)
+  )
+  expect_equal(levels(x), as.character(1:4))
+  expect_equal(
+    convert_na_to(factor(c(1, 2, 3, NA)), replacement = NULL, verbose = FALSE),
+    factor(c(1, 2, 3, NA))
+  )
+})
+
+test_that("convert_na_to - factor: works when 'replacement' is character", {
+  x <- convert_na_to(factor(c(1, 2, 3, NA)), replacement = "d")
+  expect_equal(
+    x,
+    factor(c(1:3, "d"))
+  )
+  expect_equal(levels(x), as.character(c(1:3, "d")))
+})
 
 
 
@@ -125,8 +125,9 @@ test_that("convert_na_to - character: returns original vector if 'replacement' n
 test <- data.frame(
   x = c(1, 2, NA),
   y = c("a", "b", NA),
-  # z = factor(c("a", "b", NA)),
-  x2 = c(4, 5, NA)
+  z = factor(c("a", "b", NA)),
+  x2 = c(4, 5, NA),
+  stringsAsFactors = FALSE
 )
 
 test_that("convert_na_to - dataframe: works with replace_* args", {
@@ -135,8 +136,9 @@ test_that("convert_na_to - dataframe: works with replace_* args", {
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", "e"),
-      # z = factor(c("a", "b", 8)),
-      x2 = c(4, 5, 4)
+      z = factor(c("a", "b", "8"), levels = c("a", "b", "8")),
+      x2 = c(4, 5, 4),
+      stringsAsFactors = FALSE
     )
   )
 })
@@ -147,8 +149,9 @@ test_that("convert_na_to - dataframe: only modifies numeric if only numeric spec
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", NA),
-      # z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, 4)
+      z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4),
+      stringsAsFactors = FALSE
     )
   )
 })
@@ -159,23 +162,25 @@ test_that("convert_na_to - dataframe: only modifies character if only character 
     data.frame(
       x = c(1, 2, NA),
       y = c("a", "b", "e"),
-      # z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, NA)
+      z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, NA),
+      stringsAsFactors = FALSE
     )
   )
 })
 
-# test_that("convert_na_to - dataframe: only modifies factor if only factor specified", {
-#   expect_equal(
-#     convert_na_to(test, replace_fac = 8),
-#     data.frame(
-#       x = c(1, 2, 4),
-#       y = c("a", "b", "e"),
-#       z = factor(c("a", "b", 8)),
-#       x2 = c(4, 5, 4)
-#     )
-#   )
-# })
+test_that("convert_na_to - dataframe: only modifies factor if only factor specified", {
+  expect_equal(
+    convert_na_to(test, replace_fac = 8),
+    data.frame(
+      x = c(1, 2, NA),
+      y = c("a", "b", NA),
+      z = factor(c("a", "b", "8"), levels = c("a", "b", "8")),
+      x2 = c(4, 5, NA),
+      stringsAsFactors = FALSE
+    )
+  )
+})
 
 test_that("convert_na_to - dataframe: arg 'select' works", {
   expect_equal(
@@ -186,8 +191,9 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", NA),
-      # z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, NA)
+      z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, NA),
+      stringsAsFactors = FALSE
     )
   )
 
@@ -199,8 +205,9 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", NA),
-      # z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, NA)
+      z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, NA),
+      stringsAsFactors = FALSE
     )
   )
 
@@ -212,8 +219,9 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", NA),
-      # z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, 4)
+      z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4),
+      stringsAsFactors = FALSE
     )
   )
 
@@ -225,8 +233,9 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
     data.frame(
       x = c(1, 2, NA),
       y = c("a", "b", NA),
-      # z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, 4)
+      z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4),
+      stringsAsFactors = FALSE
     )
   )
 
@@ -238,8 +247,9 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", NA),
-      # z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, 4)
+      z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4),
+      stringsAsFactors = FALSE
     )
   )
 
@@ -251,8 +261,9 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", "e"),
-      # z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, 4)
+      z = factor(c("a", "b", "8"), levels = c("a", "b", "8")),
+      x2 = c(4, 5, NA),
+      stringsAsFactors = FALSE
     )
   )
 
@@ -264,8 +275,9 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
     data.frame(
       x = c(1, 2, NA),
       y = c("a", "b", NA),
-      # z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, 4)
+      z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4),
+      stringsAsFactors = FALSE
     )
   )
 })
@@ -280,8 +292,9 @@ test_that("convert_na_to - dataframe: arg 'exclude' works", {
     data.frame(
       x = c(1, 2, NA),
       y = c("a", "b", "e"),
-      # z = factor(c("a", "b", 8)),
-      x2 = c(4, 5, 4)
+      z = factor(c("a", "b", "8"), levels = c("a", "b", "8")),
+      x2 = c(4, 5, 4),
+      stringsAsFactors = FALSE
     )
   )
 
@@ -293,8 +306,9 @@ test_that("convert_na_to - dataframe: arg 'exclude' works", {
     data.frame(
       x = c(1, 2, NA),
       y = c("a", "b", "e"),
-      # z = factor(c("a", "b", 8)),
-      x2 = c(4, 5, 4)
+      z = factor(c("a", "b", "8"), levels = c("a", "b", "8")),
+      x2 = c(4, 5, 4),
+      stringsAsFactors = FALSE
     )
   )
 
@@ -306,8 +320,9 @@ test_that("convert_na_to - dataframe: arg 'exclude' works", {
     data.frame(
       x = c(1, 2, NA),
       y = c("a", "b", NA),
-      # z = factor(c("a", "b", 8)),
-      x2 = c(4, 5, 4)
+      z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4),
+      stringsAsFactors = FALSE
     )
   )
 })
@@ -320,8 +335,9 @@ test_that("convert_na_to - dataframe: works when arg 'select' is a list", {
     data.frame(
       x = c(1, 2, 0),
       y = c("a", "b", NA),
-      # z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, 4)
+      z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4),
+      stringsAsFactors = FALSE
     )
   )
 
@@ -331,8 +347,9 @@ test_that("convert_na_to - dataframe: works when arg 'select' is a list", {
     data.frame(
       x = c(1, 2, NA),
       y = c("a", "b", "d"),
-      # z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, NA)
+      z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, NA),
+      stringsAsFactors = FALSE
     )
   )
 
@@ -342,17 +359,20 @@ test_that("convert_na_to - dataframe: works when arg 'select' is a list", {
     data.frame(
       x = c(1, 2, 4),
       y = c("a", "b", NA),
-      # z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, 4)
+      z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4),
+      stringsAsFactors = FALSE
     )
   )
+
   expect_equal(
     convert_na_to(test, replace_char = "e", select = list("d")),
     data.frame(
       x = c(1, 2, NA),
       y = c("a", "b", "e"),
-      # z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, NA)
+      z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, NA),
+      stringsAsFactors = FALSE
     )
   )
 
@@ -362,8 +382,26 @@ test_that("convert_na_to - dataframe: works when arg 'select' is a list", {
     data.frame(
       x = c(1, 2, 0),
       y = c("a", "b", NA),
-      # z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, 4)
+      z = factor(c("a", "b", NA)),
+      x2 = c(4, 5, 4),
+      stringsAsFactors = FALSE
     )
   )
+})
+
+
+
+# preserve attributes --------------------------
+
+test_that("data_rename preserves attributes", {
+  skip_if_not_installed("parameters")
+
+  m <- lm(Sepal.Length ~ Species, data = iris)
+  out <- parameters::parameters(m)
+  a1 <- attributes(out)
+
+  out2 <- convert_na_to(out, replace_num = 5)
+  a2 <- attributes(out2)
+
+  expect_equal(names(a1)[1:28], names(a2)[1:28])
 })

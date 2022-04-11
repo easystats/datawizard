@@ -26,8 +26,6 @@ template:
   bslib:
     primary: "#0054AD"
   opengraph:
-    image:
-      src: man/figures/card.png
     twitter:
       creator: "@easystats4u"
       card: summary_large_image
@@ -65,13 +63,11 @@ reference:
       - starts_with("replace_")
       - starts_with("convert_")
 
-  - title: Rowname helpers
+  - title: Utilities
   - contents:
       - contains("rownames")
-
-  - title: String helpers
-  - contents:
       - compact_character
+      - find_columns
 
   - title: Text formatting helpers
   - contents:

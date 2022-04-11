@@ -31,6 +31,8 @@ library(datawizard)
 
 # Installation
 
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/datawizard)](https://cran.r-project.org/package=datawizard) [![insight status badge](https://easystats.r-universe.dev/badges/datawizard)](https://easystats.r-universe.dev) [![R check](https://github.com/easystats/datawizard/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/datawizard/actions)
+
 Type | Source | Command
 ---|---|---
 Release | CRAN | `install.packages("datawizard")`
@@ -51,14 +53,29 @@ citation("datawizard")
 
 ### Select, filter and remove variables
 
-The package provides helpers to filter rows meeting certain conditions:
+The package provides helpers to filter rows meeting certain conditions...
 
 ```{r}
-matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1))
-mtcars[matching_rows, ]
+data_match(mtcars, data.frame(vs = 0, am = 1))
 ```
 
-It is also possible to select one or more variables:
+... or logical expressions:
+
+```{r}
+data_filter(mtcars, vs == 0 & am == 1)
+```
+
+Finding columns in a data frame, or retrieving the data of selected columns, can be  achieved using `find_columns()` or `get_columns()`:
+
+```{r}
+# find column names matching a pattern
+find_columns(iris, starts_with("Sepal"))
+
+# return data columns matching a pattern
+get_columns(iris, starts_with("Sepal")) |> head()
+```
+
+It is also possible to extract one or more variables:
 
 ```{r}
 # single variable
@@ -235,7 +252,7 @@ data_rotate(x)
 ```
 
 
-## Data proprties
+## Data properties
 
 `datawizard` provides a way to provide comprehensive descriptive summary for all variables in a dataframe:
 
@@ -257,6 +274,31 @@ x <- (-10:10)^3 + rnorm(21, 0, 100)
 smoothness(x, method = "diff")
 ```
 
+## Function design and pipe-workflow
+
+The design of the `{datawizard}` functions follows a design principle that makes it easy for user to understand and remember how functions work:
+
+1. the first argument is the data
+2. the following arguments are main arguments, related to the specific tasks of the functions
+3. further arguments can be select-helpers, which are offered for convenience reasons (so there is no need for interim calls to `get_columns()`)
+
+E.g., in `data_filter()`, the main arguments after the data-argument are assumed to _filter_ the rows of a data frame. `data_cut()` recodes data into groups of values and hence the main argument following the data-argument are used to define the breaks for grouping variables. Most functions, however, in particular (but not limited to) functions that start with `data_*()`, usually _select_ columns from the provided data frame (and thus also support select-helpers).
+
+Most important, functions that accept data frame usually have this as their first argument, and also return a (modified) data frame again. Thus, `{datawizard}` integrates smoothly into a "pipe-workflow".
+
+```{r}
+iris |> 
+  # all rows where Species is "versicolor" or "virginica"
+  data_filter(Species %in% c("versicolor", "virginica")) |> 
+  # select only columns with "." in names (i.e. drop Species)
+  get_columns(contains(".")) |> 
+  # move columns that ends with "Length" to start of data frame
+  data_relocate(ends_with("Length")) |> 
+  # remove fourth column
+  data_remove(4) |> 
+  head()
+```
+  
 # Contributing and Support
 
 In case you want to file an issue or contribute in another way to the package, please follow [this guide](https://easystats.github.io/datawizard/CONTRIBUTING.html). For questions about the functionality, you may either contact us via email or also file an issue.

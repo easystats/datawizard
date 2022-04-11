@@ -26,7 +26,7 @@
 #' @param verbose Toggle warnings.
 #' @param ... For use by future methods.
 #'
-#' @inheritParams convert_to_na
+#' @inheritParams find_columns
 #'
 #' @details `data_extract()` can be used to select multiple variables or pull a
 #' single variable from a data frame. Thus, the return value is by default not

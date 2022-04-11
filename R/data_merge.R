@@ -175,6 +175,7 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   # save data frame attributes
   attr_x <- attributes(x)
   attr_y <- attributes(y)
+  class_x <- class(x)
 
   # save variable attributes
   attr_x_vars <- lapply(x, attributes)
@@ -320,6 +321,7 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
     }
   }
 
+  class(out) <- unique(c(class_x, "data.frame"))
   out
 }
 
