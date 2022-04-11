@@ -1,5 +1,9 @@
 # datawizard 0.4.1
 
+NEW FUNCTIONS
+
+* `data_recode()` to recode old into new values.
+
 MINOR CHANGES
 
 * `center()`, `convert_to_na()` and `convert_na_to()` get a `.default` method, 

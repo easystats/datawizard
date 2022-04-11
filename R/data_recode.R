@@ -39,7 +39,7 @@
 #' table(out, useNA = "always")
 #'
 #'
-#' # factors
+#' # factors (character vectors are similar)
 #' set.seed(123)
 #' x <- as.factor(sample(c("a", "b", "c"), 15, TRUE))
 #' table(x)
@@ -57,18 +57,20 @@
 #' table(out)
 #'
 #'
-#' # character
+#' # data frames
 #' set.seed(123)
-#' x <- as.character(sample(c("a", "b", "c"), 15, TRUE))
-#' table(x)
+#' d <- data.frame(
+#'   x = sample(c(1:4, NA), 12, TRUE),
+#'   y = as.factor(sample(c("a", "b", "c"), 12, TRUE)),
+#'   stringsAsFactors = FALSE
+#' )
 #'
-#' out <- data_recode(x, list(a = "x", `b, c` = "y"))
-#' out
-#' table(out)
-#'
-#' out <- data_recode(x, list(a = "x", b = "y", c = "z"))
-#' out
-#' table(out)
+#' data_recode(
+#'   d,
+#'   recodes = list(`1` = 0, `2:3` = 1, `4` = 2, a = "x", `b, c` = "y"),
+#'   force = TRUE,
+#'   append = TRUE
+#' )
 #' @export
 data_recode <- function(x, ...) {
   UseMethod("data_recode")
