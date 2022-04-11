@@ -41,7 +41,8 @@ describe_distribution(x, ...)
 )
 }
 \arguments{
-\item{x}{A numeric vector.}
+\item{x}{A numeric vector, a character vector, a dataframe, or a list. See
+\code{Details}.}
 
 \item{...}{Additional arguments to be passed to or from methods.}
 
@@ -81,6 +82,16 @@ A data frame with columns that describe the properties of the variables.
 This function describes a distribution by a set of indices (e.g., measures of
 centrality, dispersion, range, skewness, kurtosis).
 }
+\details{
+If \code{x} is a dataframe, only numeric variables are kept and will be displayed in the summary.
+
+If \code{x} is a list, the behavior is different whether \code{x} is a stored list. If
+\code{x} is stored (for example, \code{describe_distribution(mylist)} where \code{mylist}
+was created before), artificial variable names are used in the summary
+(\code{Var_1}, \code{Var_2}, etc.). If \code{x} is an unstored list (for example,
+\code{describe_distribution(list(mtcars$mpg))}), then \code{"mtcars$mpg"} is used as
+variable name.
+}
 \note{
 There is also a
 \href{https://easystats.github.io/see/articles/parameters.html}{\code{plot()}-method}
@@ -93,4 +104,5 @@ describe_distribution(rnorm(100))
 data(iris)
 describe_distribution(iris)
 describe_distribution(iris, include_factors = TRUE, quartiles = TRUE)
+describe_distribution(list(mtcars$mpg, mtcars$cyl))
 }

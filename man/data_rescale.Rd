@@ -4,7 +4,6 @@
 \alias{data_rescale}
 \alias{change_scale}
 \alias{data_rescale.numeric}
-\alias{data_rescale.grouped_df}
 \alias{data_rescale.data.frame}
 \title{Rescale Variables to a New Range}
 \usage{
@@ -14,26 +13,18 @@ change_scale(x, ...)
 
 \method{data_rescale}{numeric}(x, to = c(0, 100), range = NULL, verbose = TRUE, ...)
 
-\method{data_rescale}{grouped_df}(
-  x,
-  to = c(0, 100),
-  range = NULL,
-  select = NULL,
-  exclude = NULL,
-  ...
-)
-
 \method{data_rescale}{data.frame}(
   x,
   to = c(0, 100),
   range = NULL,
   select = NULL,
   exclude = NULL,
+  ignore_case = FALSE,
   ...
 )
 }
 \arguments{
-\item{x}{A numeric variable.}
+\item{x}{A (grouped) data frame, numeric vector or factor.}
 
 \item{...}{Arguments passed to or from other methods.}
 
@@ -44,12 +35,32 @@ See examples.}
 \item{range}{Initial (old) range of values. If \code{NULL}, will take the range of
 the input vector (\code{range(x)}).}
 
-\item{verbose}{Toggle warnings and messages on or off.}
+\item{verbose}{Toggle warnings.}
 
-\item{select}{Character vector of column names. If \code{NULL} (the default), all
-variables will be selected.}
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}), or a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item a vector of positive integers, giving the positions counting from the left
+(e.g. \code{1} or \code{c(1, 3, 5)}),
+\item a vector of negative integers, giving the positions counting from the
+right (e.g., \code{-1} or \code{-1:-3}),
+\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")}.
+}
 
-\item{exclude}{Character vector of column names to be excluded from selection.}
+If \code{NULL}, selects all columns.}
+
+\item{exclude}{See \code{select}, however, column names matched by the pattern
+from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
+excludes no columns.}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
 }
 \value{
 A rescaled object.

@@ -222,7 +222,7 @@ test_that("data_to_numeric, labels preserved", {
 # data_match -----------------------------------
 
 test_that("data_match, labels preserved", {
-  x <- data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "or", as_data_frame = TRUE)
+  x <- data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "or")
   # factor
   expect_equal(
     attr(x$e42dep, "label", exact = TRUE),
@@ -244,6 +244,81 @@ test_that("data_match, labels preserved", {
   expect_equal(
     attr(x$c172code, "labels", exact = TRUE),
     attr(efc$c172code, "labels", exact = TRUE),
+    ignore_attr = TRUE
+  )
+})
+
+
+
+# data_filter -----------------------------------
+
+test_that("data_filter, labels preserved", {
+  x <- data_filter(efc, c172code == 1 & c12hour > 40)
+  # factor
+  expect_equal(
+    attr(x$e42dep, "label", exact = TRUE),
+    attr(efc$e42dep, "label", exact = TRUE)
+  )
+  # numeric
+  expect_equal(
+    attr(x$c12hour, "label", exact = TRUE),
+    attr(efc$c12hour, "label", exact = TRUE)
+  )
+})
+
+
+
+# convert_to_na -----------------------------------
+
+test_that("convert_to_na, labels preserved", {
+  expect_warning(x <- convert_to_na(efc, na = c(2, "2"), select = starts_with("e")))
+  # factor
+  expect_equal(
+    attr(x$e42dep, "label", exact = TRUE),
+    attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  # numeric
+  expect_equal(
+    attr(x$e16sex, "label", exact = TRUE),
+    attr(efc$e16sex, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+
+  # factor
+  x <- convert_to_na(efc$e42dep, na = "2")
+  expect_equal(
+    attr(x, "label", exact = TRUE),
+    attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  # numeric
+  x <- convert_to_na(efc$e16sex, na = 2)
+  expect_equal(
+    attr(x, "label", exact = TRUE),
+    attr(efc$e16sex, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+})
+
+
+
+# get_columns -----------------------------------
+
+test_that("get_columns, labels preserved", {
+  x <- get_columns(efc, starts_with("c"))
+  # numeric
+  expect_equal(
+    attr(x$c12hour, "label", exact = TRUE),
+    attr(efc$c12hour, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+
+  x <- get_columns(efc, starts_with("e"))
+  # factor
+  expect_equal(
+    attr(x$e42dep, "label", exact = TRUE),
+    attr(efc$e42dep, "label", exact = TRUE),
     ignore_attr = TRUE
   )
 })

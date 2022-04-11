@@ -3,6 +3,7 @@ test_that("distributions", {
   skip_if_not_installed("bayestestR")
   skip_if_not_installed("parameters")
 
+  set.seed(123)
   x <- bayestestR::distribution_normal(100)
 
   expect_equal(kurtosis(x)$Kurtosis, -0.3204763, tolerance = 0.01)

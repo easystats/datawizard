@@ -9,11 +9,13 @@
 \usage{
 data_to_long(
   data,
-  cols = "all",
+  select = "all",
   colnames_to = "Name",
   values_to = "Value",
   rows_to = NULL,
   ignore_case = FALSE,
+  regex = FALSE,
+  cols = select,
   ...,
   names_to = colnames_to
 )
@@ -30,11 +32,13 @@ data_to_wide(
 
 reshape_longer(
   data,
-  cols = "all",
+  select = "all",
   colnames_to = "Name",
   values_to = "Value",
   rows_to = NULL,
   ignore_case = FALSE,
+  regex = FALSE,
+  cols = select,
   ...,
   names_to = colnames_to
 )
@@ -52,7 +56,22 @@ reshape_wider(
 \arguments{
 \item{data}{A data frame to pivot.}
 
-\item{cols}{A vector of column names or indices to pivot into longer format.}
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}), or a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item a vector of positive integers, giving the positions counting from the left
+(e.g. \code{1} or \code{c(1, 3, 5)}),
+\item a vector of negative integers, giving the positions counting from the
+right (e.g., \code{-1} or \code{-1:-3}),
+\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")}.
+}
+
+If \code{NULL}, selects all columns.}
 
 \item{colnames_to}{The name of the new column that will contain the column
 names.}
@@ -66,6 +85,17 @@ the original data. If \code{NULL}, will be removed.}
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
+
+\item{regex}{Logical, if \code{TRUE}, the search pattern from \code{select} will be
+treated as regular expression. When \code{regex = TRUE}, select \emph{must} be a
+character string (or a variable containing a character string) and is not
+allowed to be one of the supported select-helpers or a character vector
+of length > 1. \code{regex = TRUE} is comparable to using one of the two
+select-helpers, \code{select = contains("")} or \code{select = regex("")}, however,
+since the select-helpers may not work when called from inside other
+functions (see 'Details'), this argument may be used as workaround.}
+
+\item{cols}{Deprecated. Please use \code{select}.}
 
 \item{...}{Additional arguments passed on to methods.}
 
@@ -102,7 +132,7 @@ data_to_long(wide_data)
 
 # Customizing the names
 data_to_long(wide_data,
-  cols = c(1, 2),
+  select = c(1, 2),
   colnames_to = "Column",
   values_to = "Numbers",
   rows_to = "Row"
@@ -124,7 +154,7 @@ if (require("psych")) {
 
   # Pivot long format
   long <- data_to_long(data,
-    cols = "\\\\d", # Select all columns that contain a digit
+    select = regex("\\\\d"), # Select all columns that contain a digit
     colnames_to = "Item",
     values_to = "Score",
     rows_to = "Participant"
@@ -146,10 +176,12 @@ if (require("psych")) {
 \seealso{
 \itemize{
 \item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}}, \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
-\item Functions to reorder, find and remove columns: \code{\link[=data_findcols]{data_findcols()}}, \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
+\item Functions to reorder or remove columns: \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
 \item Functions to reshape, pivot or rotate dataframes: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
 \item Functions to rescale and reverse: \code{\link[=data_rescale]{data_rescale()}}, \code{\link[=data_reverse]{data_reverse()}}
 \item Functions to standardize, normalize, rank-transform: \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
-\item Split, cut and merge dataframes: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_cut]{data_cut()}}, \code{\link[=data_match]{data_match()}}, \code{\link[=data_merge]{data_merge()}}
+\item Split, cut and merge dataframes: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_cut]{data_cut()}}, \code{\link[=data_merge]{data_merge()}}
+\item Functions to find or select columns: \code{\link[=find_columns]{find_columns()}}
+\item Functions to filter rows: \code{\link[=data_match]{data_match()}}, \code{\link[=data_filter]{data_filter()}}
 }
 }

@@ -6,21 +6,10 @@
 #'
 #' @param data The object to subset. Methods are currently available for data frames
 #'   and data frame extensions (e.g., tibbles).
-#' @param select 	Either a variable specified as:
-#'
-#'   - a literal variable name (e.g., `column_name`)
-#'   - a string with the variable name (e.g., `"column_name"`)
-#'   - a positive integer, giving the position counting from the left
-#'   - a negative integer, giving the position counting from the right.
-#'
-#'  or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
-#'  `contains("")`, or `"regex()"`. Multiple variables can also be extracted
-#'  using a character vector of length > 1, or a numeric vector containing
-#'  column indices. If the special value `0` or `"row.names"` is given, the
-#'  row names of the object (if any) are extracted.
 #' @param name An optional argument that specifies the column to be used as
-#'   names for for the vector after extraction.
-#'   Specified in the same way as `select`.
+#'   names for the vector elements after extraction. Must be specified either
+#'   as literal variable name (e.g., `column_name`) or as string
+#'   (`"column_name"`). `name` will be ignored when a data frame is returned.
 #' @param extract String, indicating which element will be extracted when `select`
 #'   matches multiple variables. Can be `"all"` (the default) to return all
 #'   matched variables, `"first"` or `"last"` to return the first or last match,
@@ -34,11 +23,10 @@
 #' @param as_data_frame Logical, if `TRUE`, will always return a data frame,
 #'   even if only one variable was matched. If `FALSE`, either returns a vector
 #'   or a data frame. See `extract` for details.
-#' @param ignore_case Logical, if `TRUE` and when one of the select-helpers or
-#'   a regular expression is used in `select`, ignores lower/upper case in the
-#'   search pattern when matching against variable names.
 #' @param verbose Toggle warnings.
 #' @param ... For use by future methods.
+#'
+#' @inheritParams find_columns
 #'
 #' @details `data_extract()` can be used to select multiple variables or pull a
 #' single variable from a data frame. Thus, the return value is by default not
@@ -96,58 +84,14 @@ data_extract.data.frame <- function(data,
                                     ignore_case = FALSE,
                                     verbose = TRUE,
                                     ...) {
-  fixed <- TRUE
   extract <- match.arg(tolower(extract), choices = c("all", "first", "last", "odd", "even"))
 
-  # avoid conflicts
-  conflicting_packages <- .conflicting_packages("poorman")
+  # evaluate arguments
+  select <- .select_nse(select, data, exclude = NULL, ignore_case, verbose = verbose)
 
-  # make sure as_data_frame is logical
-  if (!is.logical(as_data_frame)) {
-    as_data_frame <- FALSE
-  }
-
-  # in case pattern is a variable from another function call...
-  p <- try(eval(select), silent = TRUE)
-  if (inherits(p, c("try-error", "simpleError"))) {
-    p <- substitute(select)
-  }
-
-  # check if pattern is a function like "starts_with()"
-  select <- tryCatch(eval(p), error = function(e) NULL)
-
-  # if select could not be evaluated (because expression "makes no sense")
-  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
-  # so we can use grepl()
-  if (is.null(select)) {
-    evaluated_pattern <- .evaluate_pattern(.safe_deparse(p), data, ignore_case)
-    select <- evaluated_pattern$pattern
-    fixed <- evaluated_pattern$fixed
-  }
-
-  # seems to be no valid column name or index, so try to grep
-  if (isFALSE(fixed)) {
-    select <- colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case)]
-  }
-
-  # load again
-  .attach_packages(conflicting_packages)
-
-  if (is.numeric(select)) {
-    if (length(select) == 1) {
-      if (select < 0) {
-        # select last column
-        select <- colnames(data)[ncol(data) + select + 1]
-      } else if (select == 0) {
-        # select row names
-        select <- rownames(data)
-      }
-    } else {
-      # make sure we have valid column indices
-      select <- colnames(data)[intersect(select, 1:ncol(data))]
-    }
-  } else if (is.character(select) && identical(select, "row.names")) {
-    select <- rownames(data)
+  # nothing to select?
+  if (!length(select)) {
+    return(NULL)
   }
 
   nl <- as.list(seq_along(data))
@@ -164,14 +108,6 @@ data_extract.data.frame <- function(data,
     name <- rownames(data)
   }
 
-  # return valid column names, based on pattern
-  select <- .evaluated_pattern_to_colnames(select, data, ignore_case, verbose)
-
-  # nothing to select?
-  if (!length(select)) {
-    return(NULL)
-  }
-
   # chose which matched variables to extract
   select <- switch(extract,
     "first" = select[1],
@@ -181,12 +117,23 @@ data_extract.data.frame <- function(data,
     select
   )
 
-  if (!is.null(name) && length(name) == 1) {
-    stats::setNames(data[, select, drop = !as_data_frame], data[, name, drop = !as_data_frame])
-  } else {
-    if (is.null(name) && (length(select) > 1 || isTRUE(as_data_frame))) {
-      name <- select
+  # "name" only used for naming elements in a vector, not data frame
+  if (isTRUE(as_data_frame) ||
+    # more than one variable means data frame, so no name
+    length(select) > 1 ||
+    # if we have only one variable, but number of observations not equal to
+    # length of names, we have no proper match, so no naming, too.
+    (length(select) == 1 && length(name) > 1 && length(data[[select]]) != length(name))) {
+    name <- NULL
+  }
+  # we definitely should have a vector here when name not NULL
+  if (!is.null(name)) {
+    # if name indicates a variable, extract values for naming now
+    if (length(name) == 1) {
+      name <- data[[name]]
     }
-    stats::setNames(data[, select, drop = !as_data_frame], name)
+    stats::setNames(data[[select]], name)
+  } else {
+    data[, select, drop = !as_data_frame]
   }
 }

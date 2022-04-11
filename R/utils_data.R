@@ -10,10 +10,11 @@
 #' Tools for working with row names
 #'
 #' @param x A data frame.
-#' @param var Name of column to use for rownames. For `column_as_rownames()`, this argument can be the variable name or the column number.
+#' @param var Name of column to use for rownames. For `column_as_rownames()`,
+#'   this argument can be the variable name or the column number.
 #'
-#' @return `rownames_as_column()` and `column_as_rownames()` both return a data frame.
-#' @export
+#' @return
+#' `rownames_as_column()` and `column_as_rownames()` both return a data frame.
 #'
 #' @rdname rownames
 #'
@@ -22,6 +23,8 @@
 #' test <- rownames_as_column(mtcars, var = "car")
 #' test
 #' head(column_as_rownames(test, var = "car"))
+#'
+#' @export
 rownames_as_column <- function(x, var = "rowname") {
   if (!object_has_rownames(x)) {
     stop("The dataframe doesn't have rownames.")
@@ -44,9 +47,6 @@ rownames_as_column <- function(x, var = "rowname") {
 column_as_rownames <- function(x, var = "rowname") {
   if (!is.character(var) & !is.numeric(var)) {
     stop("Argument 'var' must be of type character or numeric.")
-  }
-  if (is.null(var)) {
-    var <- "rowname"
   }
   if (is.character(var)) {
     if (!var %in% names(x)) {

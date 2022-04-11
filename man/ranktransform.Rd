@@ -3,7 +3,6 @@
 \name{ranktransform}
 \alias{ranktransform}
 \alias{ranktransform.numeric}
-\alias{ranktransform.grouped_df}
 \alias{ranktransform.data.frame}
 \title{(Signed) rank transformation}
 \usage{
@@ -11,21 +10,13 @@ ranktransform(x, ...)
 
 \method{ranktransform}{numeric}(x, sign = FALSE, method = "average", verbose = TRUE, ...)
 
-\method{ranktransform}{grouped_df}(
-  x,
-  select = NULL,
-  exclude = NULL,
-  sign = FALSE,
-  method = "average",
-  ...
-)
-
 \method{ranktransform}{data.frame}(
   x,
-  select = NULL,
-  exclude = NULL,
   sign = FALSE,
   method = "average",
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
   ...
 )
 }
@@ -40,12 +31,32 @@ ranktransform(x, ...)
 \code{"first"}, \code{"last"}, \code{"random"}, \code{"max"} or \code{"min"}. See \code{\link[=rank]{rank()}} for
 details.}
 
-\item{verbose}{Toggle warnings and messages on or off.}
+\item{verbose}{Toggle warnings.}
 
-\item{select}{Character vector of column names. If \code{NULL} (the default), all
-variables will be selected.}
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}), or a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item a vector of positive integers, giving the positions counting from the left
+(e.g. \code{1} or \code{c(1, 3, 5)}),
+\item a vector of negative integers, giving the positions counting from the
+right (e.g., \code{-1} or \code{-1:-3}),
+\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")}.
+}
 
-\item{exclude}{Character vector of column names to be excluded from selection.}
+If \code{NULL}, selects all columns.}
+
+\item{exclude}{See \code{select}, however, column names matched by the pattern
+from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
+excludes no columns.}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
 }
 \value{
 A rank-transformed object.

@@ -3,15 +3,15 @@
 #' Performs a normalization of data, i.e., it scales variables in the range 0 -
 #' 1. This is a special case of [data_rescale()].
 #'
-#' @inheritParams standardize.data.frame
-#'
-#' @param x A numeric vector, data frame, or matrix. See details.
+#' @param x A numeric vector, (grouped) data frame, or matrix. See 'Details'.
 #' @param include_bounds Logical, if `TRUE`, return value may include 0 and 1.
 #'   If `FALSE`, the return value is compressed, using Smithson and Verkuilen's
 #'   (2006) formula `(x * (n - 1) + 0.5) / n`, to avoid zeros and ones in the
 #'   normalized variables. This can be useful in case of beta-regression, where
 #'   the response variable is not allowed to include zeros and ones.
 #' @param ... Arguments passed to or from other methods.
+#' @inheritParams standardize.data.frame
+#' @inheritParams find_columns
 #'
 #' @details
 #'
@@ -63,7 +63,7 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
       name <- names(x)
     }
     if (verbose) {
-      warning(paste0("Variable `", name, "` contains only one unique value and will not be normalized."))
+      warning(insight::format_message(paste0("Variable `", name, "` contains only one unique value and will not be normalized.")), call. = FALSE)
     }
     return(x)
   }
@@ -77,7 +77,7 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
       name <- names(x)
     }
     if (verbose) {
-      warning(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor."))
+      warning(insight::format_message(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor.")), call. = FALSE)
     }
   }
 
@@ -101,14 +101,17 @@ normalize.factor <- function(x, ...) {
 
 
 
-#' @rdname normalize
 #' @export
 normalize.grouped_df <- function(x,
+                                 include_bounds = TRUE,
                                  select = NULL,
                                  exclude = NULL,
-                                 include_bounds = TRUE,
+                                 ignore_case = FALSE,
                                  verbose = TRUE,
                                  ...) {
+  # evaluate select/exclude, may be select-helpers
+  select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
+
   info <- attributes(x)
   # dplyr >= 0.8.0 returns attribute "indices"
   grps <- attr(x, "groups", exact = TRUE)
@@ -149,28 +152,15 @@ normalize.grouped_df <- function(x,
 #' @rdname normalize
 #' @export
 normalize.data.frame <- function(x,
+                                 include_bounds = TRUE,
                                  select = NULL,
                                  exclude = NULL,
-                                 include_bounds = TRUE,
+                                 ignore_case = FALSE,
                                  verbose = TRUE,
                                  ...) {
 
-  # check for formula notation, convert to character vector
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
-
-  if (is.null(select)) {
-    select <- names(x)
-  }
-
-  if (!is.null(exclude)) {
-    select <- setdiff(select, exclude)
-  }
-
+  # evaluate select/exclude, may be select-helpers
+  select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
   x[select] <- lapply(x[select], normalize, include_bounds = include_bounds, verbose = verbose)
 
   x

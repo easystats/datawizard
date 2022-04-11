@@ -1,7 +1,13 @@
 #' @title Rename columns and variable names
 #' @name data_rename
 #'
-#' @description Safe and intuitive functions to rename variables or rows in dataframes.
+#' @description Safe and intuitive functions to rename variables or rows in
+#'   data frames. `data_rename()` will rename column names, i.e. it facilitates
+#'   renaming variables `data_addprefix()` or `data_addsuffix()` add prefixes
+#'   or suffixes to column names. `data_rename_rows()` is a convenient shortcut
+#'   to add or rename row names of a data frame, but unlike `row.names()`, its
+#'   input and output is a data frame, thus, integrating smoothly into a possible
+#'   pipe-workflow.
 #'
 #' @param data A data frame, or an object that can be coerced to a data frame.
 #' @param pattern Character vector. For `data_rename()`, indicates columns that
@@ -34,38 +40,63 @@
 #'
 #' @seealso
 #' - Functions to rename stuff: [data_rename()], [data_rename_rows()], [data_addprefix()], [data_addsuffix()]
-#' - Functions to reorder, find and remove columns: [data_findcols()], [data_reorder()], [data_relocate()], [data_remove()]
+#' - Functions to reorder or remove columns: [data_reorder()], [data_relocate()], [data_remove()]
 #' - Functions to reshape, pivot or rotate dataframes: [data_to_long()], [data_to_wide()], [data_rotate()]
 #' - Functions to rescale and reverse: [data_rescale()], [data_reverse()]
 #' - Functions to standardize, normalize, rank-transform: [standardize()], [normalize()], [ranktransform()], [winsorize()]
-#' - Split, cut and merge dataframes: [data_partition()], [data_cut()], [data_match()], [data_merge()]
+#' - Split, cut and merge dataframes: [data_partition()], [data_cut()], [data_merge()]
+#' - Functions to find or select columns: [find_columns()]
+#' - Functions to filter rows: [data_match()], [data_filter()]
 #'
 #' @export
 data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, ...) {
 
-  # sanity checks
-  if (is.null(replacement) && is.null(pattern)) {
-    names(data) <- c(1:ncol(data))
-    return(data)
+  # change all names if no pattern specified
+  if (is.null(pattern)) {
+    pattern <- names(data)
   }
 
-  if (is.null(replacement) && !is.null(pattern)) {
-    names(data) <- pattern
-    return(data)
+  if (!is.character(pattern)) {
+    stop("Argument 'pattern' must be of type character.")
   }
 
-  if (!is.null(replacement) && is.null(pattern)) {
-    names(data) <- replacement
-    return(data)
+  # name columns 1, 2, 3 etc. if no replacement
+  if (is.null(replacement)) {
+    replacement <- paste0(1:length(pattern))
   }
 
+  # if duplicated names in replacement, append ".2", ".3", etc. to duplicates
+  # ex: c("foo", "foo") -> c("foo", "foo.2")
+  if (any(duplicated(replacement))) {
+    dup <- as.data.frame(table(replacement))
+    dup <- dup[dup$Freq > 1, ]
+    for (i in dup$replacement) {
+      to_replace <- which(replacement == i)[-1]
+      new_replacement <- paste0(i, ".", 1 + 1:length(to_replace))
+      replacement[to_replace] <- new_replacement
+    }
+  }
 
-  if (length(pattern) != length(replacement)) {
-    stop("The 'replacement' names must be of the same length than the variable names.")
+  if (length(replacement) > length(pattern)) {
+    message(insight::format_message(
+      paste0(
+        "There are more names in 'replacement' than in 'pattern'. The last ",
+        length(replacement) - length(pattern), " names of 'replacement' are not used."
+      )
+    ))
+  } else if (length(replacement) < length(pattern)) {
+    message(insight::format_message(
+      paste0(
+        "There are more names in 'pattern' than in 'replacement'. The last ",
+        length(pattern) - length(replacement), " names of 'pattern' are not modified."
+      )
+    ))
   }
 
   for (i in 1:length(pattern)) {
-    data <- .data_rename(data, pattern[i], replacement[i], safe)
+    if (!is.na(replacement[i])) {
+      data <- .data_rename(data, pattern[i], replacement[i], safe)
+    }
   }
 
   data

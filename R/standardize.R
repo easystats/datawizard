@@ -10,8 +10,8 @@
 #' \cr\cr
 #' For model standardization, see [effectsize::standardize.default()]
 #'
-#' @param x A data frame, a vector or a statistical model (for `unstandardize()`
-#'   cannot be a model).
+#' @param x A (grouped) data frame, a vector or a statistical model (for
+#'   `unstandardize()` cannot be a model).
 #' @param robust Logical, if `TRUE`, centering is done by subtracting the
 #'   median from the variables and dividing it by the median absolute deviation
 #'   (MAD). If `FALSE`, variables are standardized by subtracting the
@@ -27,9 +27,6 @@
 #'   name of a column in the `data.frame` that contains the weights.
 #' - For numeric vectors: a numeric vector of weights.
 #' @param verbose Toggle warnings and messages on or off.
-#' @param select Character vector of column names. If `NULL` (the default), all
-#'   variables will be selected.
-#' @param exclude Character vector of column names to be excluded from selection.
 #' @param remove_na How should missing values (`NA`) be treated: if `"none"`
 #'   (default): each column's standardization is done separately, ignoring
 #'   `NA`s. Else, rows with `NA` in the columns selected with `select` /
@@ -69,6 +66,7 @@
 #'   (as does the output of `standardize()`), it will take it from there if the
 #'   rest of the arguments are absent.
 #' @param ... Arguments passed to or from other methods.
+#' @inheritParams find_columns
 #'
 #' @return The standardized object (either a standardize data frame or a
 #'   statistical model fitted on standardized data).
@@ -124,16 +122,27 @@ standardize <- function(x, ...) {
 #' @export
 standardise <- standardize
 
+
+# Default method is in effectsize
+
+# standardize.default <- function(x, verbose = TRUE, ...) {
+#   if (isTRUE(verbose)) {
+#     message(insight::format_message(sprintf("Standardizing currently not possible for variables of class '%s'.", class(x)[1])))
+#   }
+#   x
+# }
+
+
 #' @rdname standardize
 #' @export
 standardize.numeric <- function(x,
                                 robust = FALSE,
                                 two_sd = FALSE,
                                 weights = NULL,
-                                verbose = TRUE,
                                 reference = NULL,
                                 center = NULL,
                                 scale = NULL,
+                                verbose = TRUE,
                                 ...) {
   args <- .process_std_center(x, weights, robust, verbose, reference, center, scale)
 
@@ -188,8 +197,8 @@ standardize.factor <- function(x,
                                robust = FALSE,
                                two_sd = FALSE,
                                weights = NULL,
-                               verbose = TRUE,
                                force = FALSE,
+                               verbose = TRUE,
                                ...) {
   if (!force) {
     return(x)
@@ -223,16 +232,20 @@ standardize.data.frame <- function(x,
                                    robust = FALSE,
                                    two_sd = FALSE,
                                    weights = NULL,
-                                   verbose = TRUE,
                                    reference = NULL,
-                                   select = NULL,
-                                   exclude = NULL,
+                                   center = NULL,
+                                   scale = NULL,
                                    remove_na = c("none", "selected", "all"),
                                    force = FALSE,
                                    append = FALSE,
-                                   center = NULL,
-                                   scale = NULL,
+                                   select = NULL,
+                                   exclude = NULL,
+                                   ignore_case = FALSE,
+                                   verbose = TRUE,
                                    ...) {
+  # evaluate select/exclude, may be select-helpers
+  select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
+
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append,
     append_suffix = "_z", force, remove_na, reference,
@@ -270,16 +283,20 @@ standardize.grouped_df <- function(x,
                                    robust = FALSE,
                                    two_sd = FALSE,
                                    weights = NULL,
-                                   verbose = TRUE,
                                    reference = NULL,
-                                   select = NULL,
-                                   exclude = NULL,
+                                   center = NULL,
+                                   scale = NULL,
                                    remove_na = c("none", "selected", "all"),
                                    force = FALSE,
                                    append = FALSE,
-                                   center = NULL,
-                                   scale = NULL,
+                                   select = NULL,
+                                   exclude = NULL,
+                                   ignore_case = FALSE,
+                                   verbose = TRUE,
                                    ...) {
+  # evaluate select/exclude, may be select-helpers
+  select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
+
   args <- .process_grouped_df(x, select, exclude, append,
     append_suffix = "_z",
     reference, weights, force
@@ -306,3 +323,18 @@ standardize.grouped_df <- function(x,
   attributes(args$x) <- args$info
   args$x
 }
+
+
+
+
+
+# Datagrid ----------------------------------------------------------------
+
+#' @export
+standardize.datagrid <- function(x, ...) {
+  x[names(x)] <- standardize(as.data.frame(x), reference = attributes(x)$data, ...)
+  x
+}
+
+#' @export
+standardize.visualisation_matrix <- standardize.datagrid

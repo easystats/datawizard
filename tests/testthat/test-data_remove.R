@@ -17,10 +17,10 @@ test_that("data_remove works with NSE", {
   #   c("Petal.Length", "Petal.Width", "Species")
   # )
 
-  expect_warning(expect_equal(
+  expect_equal(
     colnames(data_remove(iris, "Sepal")),
     c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "Species")
-  ))
+  )
 
   expect_equal(
     colnames(data_remove(iris, c("Sepal.Length", "Sepal.Width"))),
@@ -57,16 +57,35 @@ test_that("data_remove works with NSE", {
     c("Petal.Width", "Species")
   )
 
+  expect_equal(
+    colnames(data_remove(iris, c(1, 5))),
+    colnames(iris)[2:4]
+  )
+
+  expect_equal(
+    colnames(data_remove(iris, -1:-2)),
+    colnames(iris)[1:3]
+  )
+
+  expect_equal(
+    colnames(data_remove(iris, c(1, -1:-2))),
+    colnames(iris)[2:3]
+  )
+
+  expect_equal(
+    colnames(data_remove(iris, "abc")),
+    colnames(iris)
+  )
 
   expect_equal(
     colnames(data_remove(iris, "Species")),
     c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
   )
 
-  expect_warning(expect_equal(
+  expect_equal(
     colnames(data_remove(iris, "species")),
     c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "Species")
-  ))
+  )
 
   expect_equal(
     colnames(data_remove(iris, "species", ignore_case = TRUE)),
@@ -77,10 +96,26 @@ test_that("data_remove works with NSE", {
 
 test_that("data_remove from other functions", {
   test_fun <- function(data, i) {
-    data_remove(data, pattern = i)
+    data_remove(data, select = i)
   }
   expect_equal(
     colnames(test_fun(iris, c("Sepal.Length", "Sepal.Width"))),
     c("Petal.Length", "Petal.Width", "Species")
   )
+})
+
+
+# preserve attributes --------------------------
+
+test_that("data_remove preserves attributes", {
+  skip_if_not_installed("parameters")
+
+  m <- lm(Sepal.Length ~ Species, data = iris)
+  out <- parameters::parameters(m)
+  a1 <- attributes(out)
+
+  out2 <- data_remove(out, "SE")
+  a2 <- attributes(out2)
+
+  expect_equal(names(a1), names(a2))
 })

@@ -2,10 +2,7 @@
 #'
 #' Performs a grand-mean centering of data.
 #'
-#' @param x A data frame, a (numeric or character) vector or a factor.
-#' @param select Character vector of column names. If `NULL` (the default),
-#'   all variables will be selected.
-#' @param exclude Character vector of column names to be excluded from selection.
+#' @param x A (grouped) data frame, a (numeric or character) vector or a factor.
 #' @param force Logical, if `TRUE`, forces centering of factors as
 #'   well. Factors are converted to numerical values, with the lowest level
 #'   being the value `1` (unless the factor has numeric levels, which are
@@ -32,6 +29,7 @@
 #'   order, unless a named vector is given. In this case, names are matched
 #'   against the names of the selected variables.
 #' @param ... Currently not used.
+#' @inheritParams find_columns
 #' @inheritParams standardize
 #'
 #' @note
@@ -81,14 +79,24 @@ center <- function(x, ...) {
 #' @export
 centre <- center
 
+
+#' @export
+center.default <- function(x, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    message(insight::format_message(sprintf("Centering currently not possible for variables of class '%s'.", class(x)[1])))
+  }
+  x
+}
+
+
 #' @rdname center
 #' @export
 center.numeric <- function(x,
                            robust = FALSE,
                            weights = NULL,
-                           verbose = TRUE,
                            reference = NULL,
                            center = NULL,
+                           verbose = TRUE,
                            ...) {
   args <- .process_std_center(x, weights, robust, verbose, reference, center, scale = NULL)
 
@@ -112,10 +120,10 @@ center.numeric <- function(x,
 
 #' @export
 center.factor <- function(x,
-                          weights = NULL,
                           robust = FALSE,
-                          verbose = TRUE,
+                          weights = NULL,
                           force = FALSE,
+                          verbose = TRUE,
                           ...) {
   if (!force) {
     return(x)
@@ -129,6 +137,11 @@ center.logical <- center.factor
 #' @export
 center.character <- center.factor
 
+#' @export
+center.Date <- center.factor
+
+#' @export
+center.AsIs <- center.numeric
 
 #' @rdname center
 #' @inheritParams standardize.data.frame
@@ -136,15 +149,19 @@ center.character <- center.factor
 center.data.frame <- function(x,
                               robust = FALSE,
                               weights = NULL,
-                              verbose = TRUE,
                               reference = NULL,
+                              center = NULL,
+                              force = FALSE,
+                              remove_na = c("none", "selected", "all"),
+                              append = FALSE,
                               select = NULL,
                               exclude = NULL,
-                              remove_na = c("none", "selected", "all"),
-                              force = FALSE,
-                              append = FALSE,
-                              center = NULL,
+                              ignore_case = FALSE,
+                              verbose = TRUE,
                               ...) {
+  # evaluate select/exclude, may be select-helpers
+  select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
+
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append,
     append_suffix = "_c", force, remove_na, reference,
@@ -178,15 +195,19 @@ center.data.frame <- function(x,
 center.grouped_df <- function(x,
                               robust = FALSE,
                               weights = NULL,
-                              verbose = TRUE,
                               reference = NULL,
+                              center = NULL,
+                              force = FALSE,
+                              remove_na = c("none", "selected", "all"),
+                              append = FALSE,
                               select = NULL,
                               exclude = NULL,
-                              remove_na = c("none", "selected", "all"),
-                              force = FALSE,
-                              append = FALSE,
-                              center = NULL,
+                              ignore_case = FALSE,
+                              verbose = TRUE,
                               ...) {
+  # evaluate select/exclude, may be select-helpers
+  select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
+
   args <- .process_grouped_df(x, select, exclude, append,
     append_suffix = "_c",
     reference, weights, force

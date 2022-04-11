@@ -1,9 +1,72 @@
+# this function evaluates the select-expression and allows non-standard evaluation
+
+.select_nse <- function(select, data, exclude, ignore_case, regex = FALSE, verbose = FALSE) {
+  fixed_select <- TRUE
+  fixed_exclude <- TRUE
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
+
+  # in case pattern is a variable from another function call...
+  p <- try(eval(select), silent = TRUE)
+  p2 <- try(eval(exclude), silent = TRUE)
+  if (inherits(p, c("try-error", "simpleError"))) {
+    p <- substitute(select, env = parent.frame())
+  }
+  if (inherits(p2, c("try-error", "simpleError"))) {
+    p2 <- substitute(exclude, env = parent.frame())
+  }
+
+  # check if pattern is a function like "starts_with()"
+  select <- tryCatch(eval(p), error = function(e) NULL)
+  exclude <- tryCatch(eval(p2), error = function(e) NULL)
+
+  # if select could not be evaluated (because expression "makes no sense")
+  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
+  # so we can use grepl()
+  if (is.null(select)) {
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), data, ignore_case = ignore_case)
+    select <- evaluated_pattern$pattern
+    fixed_select <- evaluated_pattern$fixed
+  }
+  if (is.null(exclude)) {
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p2), data, ignore_case = ignore_case)
+    exclude <- evaluated_pattern$pattern
+    fixed_exclude <- evaluated_pattern$fixed
+  }
+
+
+  # seems to be no valid column name or index, so try to grep
+  if (isFALSE(fixed_select) || isTRUE(regex)) {
+    select <- colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case)]
+  }
+  if (isFALSE(fixed_exclude)) {
+    exclude <- colnames(data)[grepl(exclude, colnames(data), ignore.case = ignore_case)]
+  }
+  # if exclude = NULL, we want to exclude 0 variables, not all of them
+  if (!inherits(exclude, "formula") && length(exclude) == ncol(data)) {
+    exclude <- NULL
+  }
+
+  # load again
+  .attach_packages(conflicting_packages)
+
+  # return valid column names, based on pattern
+  .evaluated_pattern_to_colnames(select, data, ignore_case, verbose = verbose, exclude)
+}
+
+
 # this function looks for function-name-patterns (select-helpers) and
 # returns the regular expression that mimics the behaviour of that select-helper
 
 .evaluate_pattern <- function(x, data = NULL, ignore_case = FALSE) {
   fixed <- FALSE
-  if (grepl("^starts_with\\(\"(.*)\"\\)", x)) {
+  if (is.null(x) && !is.null(data)) {
+    pattern <- colnames(data)
+    fixed <- TRUE
+  } else if (!is.null(x) && all(x == "all")) {
+    pattern <- colnames(data)
+    fixed <- TRUE
+  } else if (grepl("^starts_with\\(\"(.*)\"\\)", x)) {
     pattern <- paste0("^", gsub("starts_with\\(\"(.*)\"\\)", "\\1", x))
   } else if (grepl("^ends_with\\(\"(.*)\"\\)", x)) {
     pattern <- paste0(gsub("ends_with\\(\"(.*)\"\\)", "\\1", x), "$")
@@ -49,10 +112,39 @@
 # this function checks if the pattern (which should be valid column names now)
 # is in the column names of the data, and returns the final column names to select
 
-.evaluated_pattern_to_colnames <- function(pattern, data, ignore_case, verbose) {
+.evaluated_pattern_to_colnames <- function(pattern, data, ignore_case, verbose, exclude = NULL) {
+  # check selected variables
+  pattern <- .check_pattern_and_exclude(pattern, data, ignore_case, verbose)
+  # check if some variables should be excluded...
+  if (!is.null(exclude)) {
+    exclude <- .check_pattern_and_exclude(exclude, data, ignore_case, verbose)
+    pattern <- setdiff(pattern, exclude)
+  }
+
+  pattern
+}
+
+
+# workhorse for .evaluated_pattern_to_colnames()
+
+.check_pattern_and_exclude <- function(pattern, data, ignore_case, verbose) {
+  # if pattern is formula, simply extract all variables
+  if (inherits(pattern, "formula")) {
+    pattern <- all.vars(pattern)
+  }
+
   # if numeric, make sure we have valid column indices
   if (is.numeric(pattern)) {
+    if (any(pattern < 0)) {
+      # select last column(s)
+      pattern[pattern < 0] <- sort(ncol(data) + pattern[pattern < 0] + 1)
+    }
     pattern <- colnames(data)[intersect(pattern, 1:ncol(data))]
+  }
+
+  # special token - select all columns?
+  if (length(pattern) == 1 && identical(pattern, "all")) {
+    pattern <- colnames(data)
   }
 
   # check if column names match when all are lowercase
@@ -72,7 +164,6 @@
 
   pattern
 }
-
 
 
 

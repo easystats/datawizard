@@ -161,7 +161,7 @@
 #'     A description of how to translate the
 #'     formulas described in *Bell et al. 2018* into R using `lmer()`
 #'     from \pkg{lme4} can be found in
-#'     [this vignette](https://easystats.github.io/datawizard/articles/demean.html).
+#'     [this vignette](https://easystats.github.io/parameters/articles/demean.html).
 #'   }
 #'
 #' @references
@@ -261,7 +261,7 @@ degroup <- function(x,
 
   if (inherits(select, "formula")) {
     # formula to character, remove "~", split at "+"
-    select <- trimws(unlist(strsplit(gsub("~", "", .safe_deparse(select), fixed = TRUE), "+", fixed = TRUE)))
+    select <- trimws(unlist(strsplit(gsub("~", "", insight::safe_deparse(select), fixed = TRUE), "+", fixed = TRUE)))
   }
 
   if (inherits(group, "formula")) {
@@ -399,20 +399,3 @@ degroup <- function(x,
 #' @rdname demean
 #' @export
 detrend <- degroup
-
-# helper ------------------
-
-.mode <- function(x) {
-  uniqv <- unique(x)
-  tab <- tabulate(match(x, uniqv))
-  idx <- which.max(tab)
-  uniqv[idx]
-}
-
-#' @keywords internal
-.trim <- function(x) gsub("^\\s+|\\s+$", "", x)
-
-#' @keywords internal
-.safe_deparse <- function(string) {
-  paste0(sapply(deparse(string, width.cutoff = 500), .trim, simplify = TRUE), collapse = " ")
-}

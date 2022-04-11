@@ -26,16 +26,17 @@ data_cut(x, ...)
   range = NULL,
   lowest = 1,
   labels = NULL,
-  select = NULL,
-  exclude = NULL,
   force = FALSE,
   append = FALSE,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
   verbose = TRUE,
   ...
 )
 }
 \arguments{
-\item{x}{A data frame, numeric vector or factor.}
+\item{x}{A (grouped) data frame, numeric vector or factor.}
 
 \item{...}{not used.}
 
@@ -70,12 +71,7 @@ default minimum is always \code{1}, unless specified otherwise in \code{lowest}.
 will returns factors instead of numeric variables, with \code{labels} used
 for labelling the factor levels.}
 
-\item{verbose}{Toggle warnings and messages on or off.}
-
-\item{select}{Character vector of column names. If \code{NULL} (the default), all
-variables will be selected.}
-
-\item{exclude}{Character vector of column names to be excluded from selection.}
+\item{verbose}{Toggle warnings.}
 
 \item{force}{Logical, if \code{TRUE}, forces recoding of factors as well.}
 
@@ -85,6 +81,31 @@ thus returning both the original and the recoded variables. If \code{FALSE},
 original variables in \code{x} will be overwritten by their recoded versions.
 If a character value, recoded variables are appended with new column
 names (using the defined suffix) to the original data frame.}
+
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}), or a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item a vector of positive integers, giving the positions counting from the left
+(e.g. \code{1} or \code{c(1, 3, 5)}),
+\item a vector of negative integers, giving the positions counting from the
+right (e.g., \code{-1} or \code{-1:-3}),
+\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")}.
+}
+
+If \code{NULL}, selects all columns.}
+
+\item{exclude}{See \code{select}, however, column names matched by the pattern
+from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
+excludes no columns.}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
 }
 \value{
 \code{x}, recoded into groups. By default \code{x} is numeric, unless \code{labels}

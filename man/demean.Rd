@@ -200,7 +200,7 @@ the term as interaction for the \code{select}-argument, e.g.
 A description of how to translate the
 formulas described in \emph{Bell et al. 2018} into R using \code{lmer()}
 from \pkg{lme4} can be found in
-\href{https://easystats.github.io/datawizard/articles/demean.html}{this vignette}.
+\href{https://easystats.github.io/parameters/articles/demean.html}{this vignette}.
 }
 }
 \examples{

@@ -16,6 +16,12 @@ transform, and prepare your data for analysis.
 
 # Installation
 
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/datawizard)](https://cran.r-project.org/package=datawizard)
+[![insight status
+badge](https://easystats.r-universe.dev/badges/datawizard)](https://easystats.r-universe.dev)
+[![R
+check](https://github.com/easystats/datawizard/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/datawizard/actions)
+
 | Type        | Source     | Command                                                                      |
 |-------------|------------|------------------------------------------------------------------------------|
 | Release     | CRAN       | `install.packages("datawizard")`                                             |
@@ -51,14 +57,12 @@ A BibTeX entry for LaTeX users is
 
 ## Data wrangling
 
-### Select and filter
+### Select, filter and remove variables
 
-The package provides helpers to select columns or filter rows meeting
-certain conditions:
+The package provides helpers to filter rows meeting certain conditions…
 
 ``` r
-matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1))
-mtcars[matching_rows, ]
+data_match(mtcars, data.frame(vs = 0, am = 1))
 #>                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb
 #> Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
 #> Mazda RX4 Wag  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
@@ -68,17 +72,91 @@ mtcars[matching_rows, ]
 #> Maserati Bora  15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
 ```
 
-Or do other manipulations:
+… or logical expressions:
 
 ``` r
-head(data_addprefix(iris, "NEW_"))
-#>   NEW_Sepal.Length NEW_Sepal.Width NEW_Petal.Length NEW_Petal.Width NEW_Species
-#> 1              5.1             3.5              1.4             0.2      setosa
-#> 2              4.9             3.0              1.4             0.2      setosa
-#> 3              4.7             3.2              1.3             0.2      setosa
-#> 4              4.6             3.1              1.5             0.2      setosa
-#> 5              5.0             3.6              1.4             0.2      setosa
-#> 6              5.4             3.9              1.7             0.4      setosa
+data_filter(mtcars, vs == 0 & am == 1)
+#>                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+#> Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+#> Mazda RX4 Wag  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+#> Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+#> Ford Pantera L 15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+#> Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+#> Maserati Bora  15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+```
+
+Finding columns in a data frame, or retrieving the data of selected
+columns, can be achieved using `find_columns()` or `get_columns()`:
+
+``` r
+# find column names matching a pattern
+find_columns(iris, starts_with("Sepal"))
+#> [1] "Sepal.Length" "Sepal.Width"
+
+# return data columns matching a pattern
+get_columns(iris, starts_with("Sepal")) |> head()
+#>   Sepal.Length Sepal.Width
+#> 1          5.1         3.5
+#> 2          4.9         3.0
+#> 3          4.7         3.2
+#> 4          4.6         3.1
+#> 5          5.0         3.6
+#> 6          5.4         3.9
+```
+
+It is also possible to extract one or more variables:
+
+``` r
+# single variable
+data_extract(mtcars, "gear")
+#>  [1] 4 4 4 3 3 3 3 4 4 4 4 3 3 3 3 3 3 4 4 4 3 3 3 3 3 4 5 5 5 5 5 4
+
+# more variables
+head(data_extract(iris, ends_with("Width")))
+#>   Sepal.Width Petal.Width
+#> 1         3.5         0.2
+#> 2         3.0         0.2
+#> 3         3.2         0.2
+#> 4         3.1         0.2
+#> 5         3.6         0.2
+#> 6         3.9         0.4
+```
+
+Due to the consistent API, removing variables is just as simple:
+
+``` r
+head(data_remove(iris, starts_with("Sepal")))
+#>   Petal.Length Petal.Width Species
+#> 1          1.4         0.2  setosa
+#> 2          1.4         0.2  setosa
+#> 3          1.3         0.2  setosa
+#> 4          1.5         0.2  setosa
+#> 5          1.4         0.2  setosa
+#> 6          1.7         0.4  setosa
+```
+
+### Reorder or rename
+
+``` r
+head(data_relocate(iris, select = "Species", before = "Sepal.Length"))
+#>   Species Sepal.Length Sepal.Width Petal.Length Petal.Width
+#> 1  setosa          5.1         3.5          1.4         0.2
+#> 2  setosa          4.9         3.0          1.4         0.2
+#> 3  setosa          4.7         3.2          1.3         0.2
+#> 4  setosa          4.6         3.1          1.5         0.2
+#> 5  setosa          5.0         3.6          1.4         0.2
+#> 6  setosa          5.4         3.9          1.7         0.4
+```
+
+``` r
+head(data_rename(iris, c("Sepal.Length", "Sepal.Width"), c("length", "width")))
+#>   length width Petal.Length Petal.Width Species
+#> 1    5.1   3.5          1.4         0.2  setosa
+#> 2    4.9   3.0          1.4         0.2  setosa
+#> 3    4.7   3.2          1.3         0.2  setosa
+#> 4    4.6   3.1          1.5         0.2  setosa
+#> 5    5.0   3.6          1.4         0.2  setosa
+#> 6    5.4   3.9          1.7         0.4  setosa
 ```
 
 ### Merge
@@ -148,8 +226,6 @@ A common data wrangling task is to reshape data.
 Either to go from wide/Cartesian to long/tidy format
 
 ``` r
-library(datawizard)
-
 wide_data <- data.frame(replicate(5, rnorm(10)))
 
 head(data_to_long(wide_data))
@@ -256,6 +332,8 @@ table(data_cut(x, split = "quantile", n_groups = 3))
 
 The packages also contains multiple functions to help transform data.
 
+### Standardize
+
 For example, to standardize (*z*-score) data:
 
 ``` r
@@ -294,6 +372,8 @@ summary(standardize(swiss))
 #>  Max.   : 1.4113   Max.   : 2.28566
 ```
 
+### Winsorize
+
 To winsorize data:
 
 ``` r
@@ -328,6 +408,8 @@ winsorize(anscombe)
 #> [11,]  6  6  6  8 5.68 6.13 6.08 6.89
 ```
 
+### Center
+
 To grand-mean center data
 
 ``` r
@@ -345,6 +427,8 @@ center(anscombe)
 #> 10 -2 -2 -2 -1 -2.68090909 -0.2409091 -1.08  0.4090909
 #> 11 -4 -4 -4 -1 -1.82090909 -2.7609091 -1.77 -0.6109091
 ```
+
+### Ranktransform
 
 To rank-transform data:
 
@@ -370,6 +454,8 @@ head(ranktransform(trees))
 #> 6     6   28.0    9.0
 ```
 
+### Rescale
+
 To rescale a numeric variable to a new range:
 
 ``` r
@@ -377,7 +463,26 @@ change_scale(c(0, 1, 5, -5, -2))
 #> [1]  50  60 100   0  30
 ```
 
-## Data proprties
+### Rotate or transpose
+
+``` r
+x <- mtcars[1:3, 1:4]
+
+x
+#>                mpg cyl disp  hp
+#> Mazda RX4     21.0   6  160 110
+#> Mazda RX4 Wag 21.0   6  160 110
+#> Datsun 710    22.8   4  108  93
+
+data_rotate(x)
+#>      Mazda RX4 Mazda RX4 Wag Datsun 710
+#> mpg         21            21       22.8
+#> cyl          6             6        4.0
+#> disp       160           160      108.0
+#> hp         110           110       93.0
+```
+
+## Data properties
 
 `datawizard` provides a way to provide comprehensive descriptive summary
 for all variables in a dataframe:
@@ -385,21 +490,21 @@ for all variables in a dataframe:
 ``` r
 data(iris)
 describe_distribution(iris)
-#> Variable     | Mean |   SD |  IQR | Min | Max | Skewness | Kurtosis |   n | n_Missing
-#> -------------------------------------------------------------------------------------
-#> Sepal.Length |  5.8 | 0.83 | 1.30 | 4.3 | 7.9 |     0.31 |    -0.55 | 150 |         0
-#> Sepal.Width  |  3.1 | 0.44 | 0.52 | 2.0 | 4.4 |     0.32 |     0.23 | 150 |         0
-#> Petal.Length |  3.8 | 1.77 | 3.52 | 1.0 | 6.9 |    -0.27 |    -1.40 | 150 |         0
-#> Petal.Width  |  1.2 | 0.76 | 1.50 | 0.1 | 2.5 |    -0.10 |    -1.34 | 150 |         0
+#> Variable     | Mean |   SD |  IQR |        Range | Skewness | Kurtosis |   n | n_Missing
+#> ----------------------------------------------------------------------------------------
+#> Sepal.Length | 5.84 | 0.83 | 1.30 | [4.30, 7.90] |     0.31 |    -0.55 | 150 |         0
+#> Sepal.Width  | 3.06 | 0.44 | 0.52 | [2.00, 4.40] |     0.32 |     0.23 | 150 |         0
+#> Petal.Length | 3.76 | 1.77 | 3.52 | [1.00, 6.90] |    -0.27 |    -1.40 | 150 |         0
+#> Petal.Width  | 1.20 | 0.76 | 1.50 | [0.10, 2.50] |    -0.10 |    -1.34 | 150 |         0
 ```
 
 Or even just a variable
 
 ``` r
 describe_distribution(mtcars$wt)
-#> Mean |   SD | IQR | Min | Max | Skewness | Kurtosis |  n | n_Missing
-#> --------------------------------------------------------------------
-#> 3.2  | 0.98 | 1.2 | 1.5 | 5.4 |     0.47 |     0.42 | 32 |         0
+#> Mean |   SD |  IQR |        Range | Skewness | Kurtosis |  n | n_Missing
+#> ------------------------------------------------------------------------
+#> 3.22 | 0.98 | 1.19 | [1.51, 5.42] |     0.47 |     0.42 | 32 |         0
 ```
 
 There are also some additional data properties that can be computed
@@ -411,6 +516,51 @@ smoothness(x, method = "diff")
 #> [1] 1.791243
 #> attr(,"class")
 #> [1] "parameters_smoothness" "numeric"
+```
+
+## Function design and pipe-workflow
+
+The design of the `{datawizard}` functions follows a design principle
+that makes it easy for user to understand and remember how functions
+work:
+
+1.  the first argument is the data
+2.  the following arguments are main arguments, related to the specific
+    tasks of the functions
+3.  further arguments can be select-helpers, which are offered for
+    convenience reasons (so there is no need for interim calls to
+    `get_columns()`)
+
+E.g., in `data_filter()`, the main arguments after the data-argument are
+assumed to *filter* the rows of a data frame. `data_cut()` recodes data
+into groups of values and hence the main argument following the
+data-argument are used to define the breaks for grouping variables. Most
+functions, however, in particular (but not limited to) functions that
+start with `data_*()`, usually *select* columns from the provided data
+frame (and thus also support select-helpers).
+
+Most important, functions that accept data frame usually have this as
+their first argument, and also return a (modified) data frame again.
+Thus, `{datawizard}` integrates smoothly into a “pipe-workflow”.
+
+``` r
+iris |> 
+  # all rows where Species is "versicolor" or "virginica"
+  data_filter(Species %in% c("versicolor", "virginica")) |> 
+  # select only columns with "." in names (i.e. drop Species)
+  get_columns(contains(".")) |> 
+  # move columns that ends with "Length" to start of data frame
+  data_relocate(ends_with("Length")) |> 
+  # remove fourth column
+  data_remove(4) |> 
+  head()
+#>    Sepal.Length Petal.Length Sepal.Width
+#> 51          7.0          4.7         3.2
+#> 52          6.4          4.5         3.2
+#> 53          6.9          4.9         3.1
+#> 54          5.5          4.0         2.3
+#> 55          6.5          4.6         2.8
+#> 56          5.7          4.5         2.8
 ```
 
 # Contributing and Support

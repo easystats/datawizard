@@ -13,7 +13,6 @@
 #' @param data A dataframe.
 #' @param effect Character vector of column names to be adjusted for (regressed
 #'   out). If `NULL` (the default), all variables will be selected.
-#' @inheritParams standardize
 #' @param multilevel If `TRUE`, the factors are included as random factors.
 #'   Else, if `FALSE` (default), they are included as fixed effects in the
 #'   simple regression model.
@@ -26,6 +25,8 @@
 #'   re-added. This avoids the centering around 0 that happens by default
 #'   when regressing out another variable (see the examples below for a
 #'   visual representation of this).
+#' @inheritParams find_columns
+#' @inheritParams standardize
 #'
 #' @return A data frame comparable to `data`, with adjusted variables.
 #'
@@ -70,28 +71,32 @@ adjust <- function(data,
                    multilevel = FALSE,
                    additive = FALSE,
                    bayesian = FALSE,
-                   keep_intercept = FALSE) {
+                   keep_intercept = FALSE,
+                   ignore_case = FALSE) {
   if (!all(colnames(data) == make.names(colnames(data), unique = TRUE))) {
-    warning("Bad column names (e.g., with spaces) have been detected which might create issues in many functions.\n",
-      "Please fix it (you can run `names(mydata) <- make.names(names(mydata))` for a quick fix).",
-      call. = FALSE
-    )
+    warning(insight::format_message(
+      "Bad column names (e.g., with spaces) have been detected which might create issues in many functions.",
+      "Please fix it (you can run `names(mydata) <- make.names(names(mydata))` for a quick fix)."
+    ), call. = FALSE)
   }
 
   # check for formula notation, convert to character vector
   if (inherits(effect, "formula")) {
     effect <- all.vars(effect)
   }
-  if (inherits(select, "formula")) {
-    select <- all.vars(select)
-  }
-  if (inherits(exclude, "formula")) {
-    exclude <- all.vars(exclude)
-  }
 
   # Find predictors
   if (is.null(effect)) {
     effect <- names(data)
+  }
+
+  nums <- sapply(data, is.numeric)
+  # Find outcomes
+  if (is.null(select)) {
+    select <- names(data[nums])
+  } else {
+    # evaluate select/exclude, may be select-helpers
+    select <- .select_nse(select, data, exclude, ignore_case, verbose = FALSE)
   }
 
   # Factors
@@ -106,15 +111,6 @@ adjust <- function(data,
       }
       effect <- effect[!effect %in% facs]
     }
-  }
-
-  nums <- sapply(data, is.numeric)
-  # Find outcomes
-  if (is.null(select)) {
-    select <- names(data[nums])
-  }
-  if (!is.null(exclude)) {
-    select <- select[!select %in% c(exclude)]
   }
 
   # Fit models

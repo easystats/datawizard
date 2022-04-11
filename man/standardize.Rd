@@ -21,10 +21,10 @@ standardise(x, ...)
   robust = FALSE,
   two_sd = FALSE,
   weights = NULL,
-  verbose = TRUE,
   reference = NULL,
   center = NULL,
   scale = NULL,
+  verbose = TRUE,
   ...
 )
 
@@ -33,8 +33,8 @@ standardise(x, ...)
   robust = FALSE,
   two_sd = FALSE,
   weights = NULL,
-  verbose = TRUE,
   force = FALSE,
+  verbose = TRUE,
   ...
 )
 
@@ -43,15 +43,16 @@ standardise(x, ...)
   robust = FALSE,
   two_sd = FALSE,
   weights = NULL,
-  verbose = TRUE,
   reference = NULL,
-  select = NULL,
-  exclude = NULL,
+  center = NULL,
+  scale = NULL,
   remove_na = c("none", "selected", "all"),
   force = FALSE,
   append = FALSE,
-  center = NULL,
-  scale = NULL,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  verbose = TRUE,
   ...
 )
 
@@ -82,8 +83,8 @@ unstandardise(x, ...)
 )
 }
 \arguments{
-\item{x}{A data frame, a vector or a statistical model (for \code{unstandardize()}
-cannot be a model).}
+\item{x}{A (grouped) data frame, a vector or a statistical model (for
+\code{unstandardize()} cannot be a model).}
 
 \item{...}{Arguments passed to or from other methods.}
 
@@ -105,8 +106,6 @@ outcome) (Gelman, 2008).}
 name of a column in the \code{data.frame} that contains the weights.
 \item For numeric vectors: a numeric vector of weights.
 }}
-
-\item{verbose}{Toggle warnings and messages on or off.}
 
 \item{reference}{A data frame or variable from which the centrality and
 deviation will be computed instead of from the input variable. Useful for
@@ -133,15 +132,12 @@ Alternatively, if the input contains the attributes \code{center} and \code{scal
 rest of the arguments are absent.
 }}
 
+\item{verbose}{Toggle warnings and messages on or off.}
+
 \item{force}{Logical, if \code{TRUE}, forces standardization of factors and dates
 as well. Factors are converted to numerical values, with the lowest level
 being the value \code{1} (unless the factor has numeric levels, which are
 converted to the corresponding numeric value).}
-
-\item{select}{Character vector of column names. If \code{NULL} (the default), all
-variables will be selected.}
-
-\item{exclude}{Character vector of column names to be excluded from selection.}
 
 \item{remove_na}{How should missing values (\code{NA}) be treated: if \code{"none"}
 (default): each column's standardization is done separately, ignoring
@@ -155,6 +151,31 @@ thus returning both the original and the standardized variables. If \code{FALSE}
 original variables in \code{x} will be overwritten by their standardized versions.
 If a character value, standardized variables are appended with new column
 names (using the defined suffix) to the original data frame.}
+
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}), or a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item a vector of positive integers, giving the positions counting from the left
+(e.g. \code{1} or \code{c(1, 3, 5)}),
+\item a vector of negative integers, giving the positions counting from the
+right (e.g., \code{-1} or \code{-1:-3}),
+\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")}.
+}
+
+If \code{NULL}, selects all columns.}
+
+\item{exclude}{See \code{select}, however, column names matched by the pattern
+from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
+excludes no columns.}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
 }
 \value{
 The standardized object (either a standardize data frame or a

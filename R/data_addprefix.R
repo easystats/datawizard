@@ -1,19 +1,28 @@
 #' @rdname data_rename
+#' @inheritParams find_columns
 #' @examples
 #' # Add prefix / suffix to all columns
 #' head(data_addprefix(iris, "NEW_"))
 #' head(data_addsuffix(iris, "_OLD"))
 #'
 #' @export
-data_addprefix <- function(data, pattern, ...) {
-  names(data) <- paste0(pattern, names(data))
+data_addprefix <- function(data, pattern, select = NULL, exclude = NULL, ignore_case = FALSE, ...) {
+  # evaluate arguments
+  select <- .select_nse(select, data, exclude, ignore_case)
+
+  selected_columns <- colnames(data) %in% select
+  colnames(data)[selected_columns] <- paste0(pattern, colnames(data)[selected_columns])
   data
 }
 
 
 #' @rdname data_rename
 #' @export
-data_addsuffix <- function(data, pattern, ...) {
-  names(data) <- paste0(names(data), pattern)
+data_addsuffix <- function(data, pattern, select = NULL, exclude = NULL, ignore_case = FALSE, ...) {
+  # evaluate arguments
+  select <- .select_nse(select, data, exclude, ignore_case)
+
+  selected_columns <- colnames(data) %in% select
+  colnames(data)[selected_columns] <- paste0(colnames(data)[selected_columns], pattern)
   data
 }

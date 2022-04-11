@@ -3,7 +3,6 @@
 \name{normalize}
 \alias{normalize}
 \alias{normalize.numeric}
-\alias{normalize.grouped_df}
 \alias{normalize.data.frame}
 \title{Normalize numeric variable to 0-1 range}
 \usage{
@@ -11,26 +10,18 @@ normalize(x, ...)
 
 \method{normalize}{numeric}(x, include_bounds = TRUE, verbose = TRUE, ...)
 
-\method{normalize}{grouped_df}(
-  x,
-  select = NULL,
-  exclude = NULL,
-  include_bounds = TRUE,
-  verbose = TRUE,
-  ...
-)
-
 \method{normalize}{data.frame}(
   x,
+  include_bounds = TRUE,
   select = NULL,
   exclude = NULL,
-  include_bounds = TRUE,
+  ignore_case = FALSE,
   verbose = TRUE,
   ...
 )
 }
 \arguments{
-\item{x}{A numeric vector, data frame, or matrix. See details.}
+\item{x}{A numeric vector, (grouped) data frame, or matrix. See 'Details'.}
 
 \item{...}{Arguments passed to or from other methods.}
 
@@ -42,10 +33,30 @@ the response variable is not allowed to include zeros and ones.}
 
 \item{verbose}{Toggle warnings and messages on or off.}
 
-\item{select}{Character vector of column names. If \code{NULL} (the default), all
-variables will be selected.}
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}), or a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item a vector of positive integers, giving the positions counting from the left
+(e.g. \code{1} or \code{c(1, 3, 5)}),
+\item a vector of negative integers, giving the positions counting from the
+right (e.g., \code{-1} or \code{-1:-3}),
+\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")}.
+}
 
-\item{exclude}{Character vector of column names to be excluded from selection.}
+If \code{NULL}, selects all columns.}
+
+\item{exclude}{See \code{select}, however, column names matched by the pattern
+from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
+excludes no columns.}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
 }
 \value{
 A normalized object.
