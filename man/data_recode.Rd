@@ -79,6 +79,41 @@ search pattern when matching against variable names.}
 This functions recodes old values into new values and can be used to to
 recode numeric or character vectors, or factors.
 }
+\details{
+The \code{recodes} argument provides some shortcuts, in particular when recoding
+numeric values.
+\itemize{
+\item Single values
+
+Single values either need to be wrapped in backticks (in case of numeric
+values) or "as is" (for character or factor levels) Example:
+\code{recodes=list(`1`=0,`2`=1)} would recode 1 into 0, and 2 into 1.
+For factors or character vectors, an example is:
+\code{recodes=list(a="x",b="y")}.
+\item Multiple values
+
+Multiple values that should be recoded into a new value can be separated
+with comma. Example: \code{recodes=list(`1,4`=1,`2,3`=2)} would recode the
+values 1 and 4 into 1, and 2 and 3 into 2. For factors or character
+vectors, an example is: \code{recodes=list(`a,b`="x",`c,d`="y")}.
+\item Value range
+
+Numeric value ranges can be defined using the \code{:}. Example:
+\code{recodes=list(`1:3`=1,`4:6`=2)} would recode all values from 1 to 3 into
+1, and 4 to 6 into 2.
+\item \code{min} and \code{max}
+
+placeholder to use the minimum or maximum value of the
+(numeric) variable. Useful, e.g., when recoding ranges of values.
+Example: \code{recodes=list(`min:10`=1,`11:max`=2)}.
+\item \verb{else}
+
+defines the default value for all values that have no match in the
+recode-pairs. Example: \code{recodes=list(`1,2`=1,`3:4`=2,`else`=9)} would
+recode values 1 and 2 into 1, 3 and 4 into 2, and all other values (no
+matter if missing or any numeric value other than 1 to 4) into 5.
+}
+}
 \examples{
 # numeric
 set.seed(123)
