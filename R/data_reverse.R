@@ -40,6 +40,13 @@ data_reverse <- function(x, ...) {
 reverse_scale <- data_reverse
 
 
+#' @export
+data_reverse.default <- function(x, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
+  }
+  x
+}
 
 
 #' @rdname data_reverse
@@ -77,7 +84,6 @@ data_reverse.numeric <- function(x,
   out <- .set_back_labels(out, x)
   out
 }
-
 
 
 
@@ -119,7 +125,6 @@ data_reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
 
 
 
-
 #' @export
 data_reverse.grouped_df <- function(x,
                                     range = NULL,
@@ -157,6 +162,7 @@ data_reverse.grouped_df <- function(x,
   attributes(x) <- info
   x
 }
+
 
 
 #' @rdname data_reverse
