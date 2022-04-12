@@ -1,3 +1,5 @@
+# numeric -----------------------
+
 set.seed(123)
 x <- sample(c(1:4, NA), 15, TRUE)
 
@@ -7,6 +9,21 @@ test_that("recode numeric", {
   out <- data_recode(x, list(`0` = 1, `1` = 2:3, `2` = 4, `9` = NA))
   expect_equal(out, c(1, 1, 1, 1, 1, 9, 2, 0, 1, 1, 9, 1, 1, 0, 2), ignore_attr = TRUE)
 })
+
+
+
+# Date -----------------------
+
+set.seed(123)
+x <- as.Date("2022-01-01")
+
+test_that("recode date", {
+  expect_message(data_recode(x))
+})
+
+
+
+# factor -----------------------
 
 set.seed(123)
 x <- as.factor(sample(c("a", "b", "c"), 15, TRUE))
@@ -28,6 +45,31 @@ test_that("recode factor", {
   )
 })
 
+
+
+# character -----------------------
+
+set.seed(123)
+x <- as.character(sample(c("a", "b", "c"), 15, TRUE))
+
+test_that("recode factor", {
+  out <- data_recode(x, list(x = "a", y = "b, c"))
+  expect_equal(
+    out,
+    c("y", "y", "y", "y", "y", "y", "y", "y", "y", "x", "y", "y", "x", "y", "y"),
+    ignore_attr = TRUE
+  )
+  out <- data_recode(x, list(x = "a", y = c("b", "c")))
+  expect_equal(
+    out,
+    c("y", "y", "y", "y", "y", "y", "y", "y", "y", "x", "y", "y", "x", "y", "y"),
+    ignore_attr = TRUE
+  )
+})
+
+
+
+# data frame -----------------------
 
 set.seed(123)
 d <- data.frame(

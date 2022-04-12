@@ -125,7 +125,10 @@ data_recode <- function(x, ...) {
 
 
 #' @export
-data_recode.default <- function(x, ...) {
+data_recode.default <- function(x, recodes = NULL, verbose = TRUE, ...) {
+  if (verbose) {
+    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
+  }
   return(x)
 }
 
