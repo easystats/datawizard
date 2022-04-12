@@ -15,6 +15,10 @@ data_to_numeric(x, ...)
   dummy_factors = TRUE,
   preserve_levels = FALSE,
   lowest = NULL,
+  append = FALSE,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
   ...
 )
 }
@@ -33,6 +37,41 @@ start from 1 to number of levels.}
 
 \item{lowest}{Numeric, indicating the lowest (minimum) value when converting
 factors or character vectors to numeric values.}
+
+\item{append}{Logical or string. If \code{TRUE}, recoded variables get new
+column names (with the suffix \code{"_r"}) and are appended (column bind) to \code{x},
+thus returning both the original and the recoded variables. If \code{FALSE},
+original variables in \code{x} will be overwritten by their recoded versions.
+If a character value, recoded variables are appended with new column
+names (using the defined suffix) to the original data frame.}
+
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}), or a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item a vector of positive integers, giving the positions counting from the left
+(e.g. \code{1} or \code{c(1, 3, 5)}),
+\item a vector of negative integers, giving the positions counting from the
+right (e.g., \code{-1} or \code{-1:-3}),
+\item one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")},
+\item or a function testing for logical conditions, mainly \code{is.numeric()},
+\code{is.factor()}, \code{is.character()} or \code{is.logical()}. These will select
+variables if they are of the related type.
+}
+
+If \code{NULL}, selects all columns.}
+
+\item{exclude}{See \code{select}, however, column names matched by the pattern
+from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
+excludes no columns.}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
 }
 \value{
 A data frame of numeric variables.

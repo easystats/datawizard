@@ -13,6 +13,8 @@
 #' @param lowest Numeric, indicating the lowest (minimum) value when converting
 #' factors or character vectors to numeric values.
 #' @param ... Arguments passed to or from other methods.
+#' @inheritParams find_columns
+#' @inheritParams data_cut
 #'
 #' @examples
 #' convert_data_to_numeric(head(ToothGrowth))
@@ -50,30 +52,47 @@ convert_data_to_numeric.data.frame <- function(x,
                                                dummy_factors = TRUE,
                                                preserve_levels = FALSE,
                                                lowest = NULL,
+                                               append = FALSE,
+                                               select = NULL,
+                                               exclude = NULL,
+                                               ignore_case = FALSE,
                                                ...) {
-  out <- sapply(
-    x,
+  # save original data for attributes
+  original_x <- x
+
+  # evaluate arguments
+  select <- .select_nse(select, x, exclude, ignore_case)
+
+  # process arguments
+  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_n", force = TRUE)
+
+  # update processed arguments
+  x <- args$x
+  select <- args$select
+
+  x[select] <- lapply(
+    x[select],
     convert_data_to_numeric,
     dummy_factors = dummy_factors,
     preserve_levels = preserve_levels,
     lowest = lowest,
-    simplify = FALSE
+    ...
   )
+
   # save variable attributes
-  attr_vars <- lapply(out, attributes)
-  # "out" is currently a list, bind columns and to data frame
-  out <- as.data.frame(do.call(cbind, out))
+  attr_vars <- lapply(original_x, attributes)
   # set back attributes
-  for (i in colnames(out)) {
+  for (i in colnames(x)) {
     if (is.list(attr_vars[[i]])) {
-      if (is.list(attributes(out[[i]]))) {
-        attributes(out[[i]]) <- utils::modifyList(attr_vars[[i]], attributes(out[[i]]))
+      if (is.list(attributes(x[[i]]))) {
+        try(attributes(x[[i]]) <- utils::modifyList(attr_vars[[i]], attributes(x[[i]])), silent = TRUE)
       } else {
-        attributes(out[[i]]) <- attr_vars[[i]]
+        try(attributes(x[[i]]) <- attr_vars[[i]], silent = TRUE)
       }
     }
   }
-  out
+
+  x
 }
 
 
