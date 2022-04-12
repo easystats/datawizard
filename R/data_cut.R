@@ -116,7 +116,10 @@ data_cut <- function(x, ...) {
 
 
 #' @export
-data_cut.default <- function(x, ...) {
+data_cut.default <- function(x, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
+  }
   return(x)
 }
 
