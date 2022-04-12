@@ -7,6 +7,35 @@ test_that("convert character to numeric", {
   expect_equal(convert_data_to_numeric(c("xyz", "ab")), c(2, 1))
 })
 
+test_that("convert character to numeric Date", {
+  expect_equal(convert_data_to_numeric(as.Date("2022-01-01")), 18993)
+})
+
+test_that("convert character to numeric preserve levels", {
+  x <- as.factor(mtcars$gear)
+  expect_equal(
+    data_to_numeric(x, dummy_factors = FALSE),
+    c(2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 2, 3, 3, 3, 3, 3, 2)
+  )
+  expect_equal(
+    data_to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE),
+    c(4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4, 4, 3, 3, 3, 3, 3, 4, 5, 5, 5, 5, 5, 4)
+  )
+})
+
+test_that("convert character to numeric lowest", {
+  mtcars$vs <- as.factor(mtcars$vs)
+  model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+  expect_equal(
+    data_to_numeric(insight::get_response(model), dummy_factors = FALSE),
+    c(1, 1, 2, 2, 1, 2, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2)
+  )
+  expect_equal(
+    data_to_numeric(insight::get_response(model), dummy_factors = FALSE, lowest = 0),
+    c(0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1)
+  )
+})
+
 test_that("convert factor to numeric", {
   f <- factor(substring("statistics", 1:10, 1:10))
   expect_snapshot(convert_data_to_numeric(f))

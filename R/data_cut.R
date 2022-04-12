@@ -44,6 +44,8 @@
 #' @param ... not used.
 #' @inheritParams find_columns
 #'
+#' @inherit data_rename seealso
+#'
 #' @return `x`, recoded into groups. By default `x` is numeric, unless `labels`
 #'   is specified. In this case, a factor is returned, where the factor levels
 #'   (i.e. recoded groups are labelled accordingly.
@@ -114,7 +116,10 @@ data_cut <- function(x, ...) {
 
 
 #' @export
-data_cut.default <- function(x, ...) {
+data_cut.default <- function(x, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
+  }
   return(x)
 }
 

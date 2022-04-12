@@ -56,6 +56,16 @@ change_scale <- function(x, ...) {
 
 
 
+#' @export
+data_rescale.default <- function(x, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be rescaled and remain unchanged.")))
+  }
+  x
+}
+
+
+
 #' @rdname data_rescale
 #' @export
 data_rescale.numeric <- function(x,
@@ -100,6 +110,11 @@ data_rescale.factor <- function(x, ...) {
   x
 }
 
+#' @export
+data_rescale.Date <- data_rescale.factor
+
+#' @export
+data_rescale.logical <- data_rescale.factor
 
 
 #' @export
