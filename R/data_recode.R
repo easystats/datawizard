@@ -82,7 +82,7 @@
 #'   See [data_reverse()] and [data_rescale()].
 #'
 #' @examples
-#' # numeric
+#' # numeric ----------
 #' set.seed(123)
 #' x <- sample(c(1:4, NA), 15, TRUE)
 #' table(x, useNA = "always")
@@ -100,12 +100,12 @@
 #' out
 #' table(out, useNA = "always")
 #'
-#' # preserve na
+#' # preserve na ----------
 #' out <- data_recode(x, list(`0` = 1, `1` = 2:3), default = 77)
 #' out
 #' table(out, useNA = "always")
 #'
-#' # recode na into default
+#' # recode na into default ----------
 #' out <- data_recode(
 #'   x,
 #'   list(`0` = 1, `1` = 2:3),
@@ -116,7 +116,7 @@
 #' table(out, useNA = "always")
 #'
 #'
-#' # factors (character vectors are similar)
+#' # factors (character vectors are similar) ----------
 #' set.seed(123)
 #' x <- as.factor(sample(c("a", "b", "c"), 15, TRUE))
 #' table(x)
@@ -136,7 +136,7 @@
 #' table(out)
 #'
 #'
-#' # data frames
+#' # data frames ----------
 #' set.seed(123)
 #' d <- data.frame(
 #'   x = sample(c(1:4, NA), 12, TRUE),
@@ -150,6 +150,29 @@
 #'   force = TRUE,
 #'   append = TRUE
 #' )
+#'
+#'
+#' # switch recode pattern to "old=new" ----------
+#' options(data_recode_pattern = "old=new")
+#'
+#' # numeric
+#' set.seed(123)
+#' x <- sample(c(1:4, NA), 15, TRUE)
+#' table(x, useNA = "always")
+#'
+#' out <- data_recode(x, list(`1` = 0, `2:3` = 1, `4` = 2))
+#' table(out, useNA = "always")
+#'
+#' # factors (character vectors are similar)
+#' set.seed(123)
+#' x <- as.factor(sample(c("a", "b", "c"), 15, TRUE))
+#' table(x)
+#'
+#' out <- data_recode(x, list(a = "x", `b, c` = "y"))
+#' table(out)
+#'
+#' # reset options
+#' options(data_recode_pattern = NULL)
 #' @export
 data_recode <- function(x, ...) {
   UseMethod("data_recode")
