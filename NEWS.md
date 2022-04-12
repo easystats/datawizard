@@ -6,10 +6,9 @@ NEW FUNCTIONS
 
 MINOR CHANGES
 
-* `center()`, `convert_to_na()` and `convert_na_to()` get a `.default` method, 
-  to capture unsupported classes. This now yields a message and returns the 
-  original input, and hence, the `.data.frame` methods won't stop due to an 
-  error.
+* Many functions now get a `.default` method, to capture unsupported classes. 
+  This now yields a message and returns the original input, and hence, the 
+  `.data.frame` methods won't stop due to an error.
 
 * `convert_to_na()` gets methods for variables of class `logical` and `Date`.
 
