@@ -10,7 +10,7 @@ data_recode(x, ...)
 
 \method{data_recode}{numeric}(
   x,
-  recodes = NULL,
+  recode = NULL,
   default = NULL,
   preserve_na = TRUE,
   verbose = TRUE,
@@ -19,7 +19,7 @@ data_recode(x, ...)
 
 \method{data_recode}{data.frame}(
   x,
-  recodes = NULL,
+  recode = NULL,
   default = NULL,
   preserve_na = TRUE,
   force = FALSE,
@@ -36,12 +36,12 @@ data_recode(x, ...)
 
 \item{...}{not used.}
 
-\item{recodes}{A list of named vectors, which indicate the recode pairs.
+\item{recode}{A list of named vectors, which indicate the recode pairs.
 The \emph{names} of the list-elements (i.e. the left-hand side) represent the
 \emph{new} values, while the values of the list-elements indicate the original
 (old) values that should be replaced. When recoding numeric vectors,
 element names have to be surrounded in backticks. For example,
-\code{recodes=list(`0`=1)} would recode all \code{1} into \code{0} in a numeric
+\code{recode=list(`0`=1)} would recode all \code{1} into \code{0} in a numeric
 vector. See also 'Examples' and 'Details'.}
 
 \item{default}{Defines the default value for all values that have
@@ -98,39 +98,39 @@ This functions recodes old values into new values and can be used to to
 recode numeric or character vectors, or factors.
 }
 \details{
-This section describes the pattern of the \code{recodes} arguments, which also
+This section describes the pattern of the \code{recode} arguments, which also
 provides some shortcuts, in particular when recoding numeric values.
 \itemize{
 \item Single values
 
 Single values either need to be wrapped in backticks (in case of numeric
 values) or "as is" (for character or factor levels). Example:
-\code{recodes=list(`0`=1,`1`=2)} would recode 1 into 0, and 2 into 1.
+\code{recode=list(`0`=1,`1`=2)} would recode 1 into 0, and 2 into 1.
 For factors or character vectors, an example is:
-\code{recodes=list(x="a",y="b")} (recode "a" into "x" and "b" into "y").
+\code{recode=list(x="a",y="b")} (recode "a" into "x" and "b" into "y").
 \item Multiple values
 
 Multiple values that should be recoded into a new value can be separated
-with comma. Example: \code{recodes=list(`1`=c(1,4),`2`=c(2,3))} would recode the
+with comma. Example: \code{recode=list(`1`=c(1,4),`2`=c(2,3))} would recode the
 values 1 and 4 into 1, and 2 and 3 into 2. It is also possible to define  the
-old values as a character string, like:  \code{recodes=list(`1`="1,4",`2`="2,3")}
+old values as a character string, like:  \code{recode=list(`1`="1,4",`2`="2,3")}
 For factors or character vectors, an example is:
-\code{recodes=list(x=c("a","b"),y=c("c","d"))}.
+\code{recode=list(x=c("a","b"),y=c("c","d"))}.
 \item Value range
 
 Numeric value ranges can be defined using the \code{:}. Example:
-\code{recodes=list(`1`=1:3,`2`=4:6)} would recode all values from 1 to 3 into
+\code{recode=list(`1`=1:3,`2`=4:6)} would recode all values from 1 to 3 into
 1, and 4 to 6 into 2.
 \item \code{min} and \code{max}
 
 placeholder to use the minimum or maximum value of the
 (numeric) variable. Useful, e.g., when recoding ranges of values.
-Example: \verb{recodes=list(`1`="min:10",2="11:max")}.
+Example: \verb{recode=list(`1`="min:10",2="11:max")}.
 \item \code{default} values
 
 The \code{default} argument defines the default value for all values that have
 no match in the recode-pairs. For example,
-\verb{recodes=list(`1`=c(1,2),`2`=c(3,4)), default=9} would
+\verb{recode=list(`1`=c(1,2),`2`=c(3,4)), default=9} would
 recode values 1 and 2 into 1, 3 and 4 into 2, and all other values into 5.
 If \code{preserve_na} is set to \code{FALSE}, \code{NA} (missing values) will also be
 recoded into the specified default value.
@@ -143,8 +143,8 @@ See \code{\link[=data_reverse]{data_reverse()}} and \code{\link[=data_rescale]{d
 You can use \code{options(data_recode_pattern = "old=new")} to switch the
 behaviour of the \code{recode}-argument, i.e. recode-pairs are now following the
 pattern \verb{old values = new values}, e.g. if \code{getOption("data_recode_pattern")}
-is set to \code{"old=new"}, then \code{recodes(`1`=0)} would recode all 1 into 0.
-The default for \code{recodes(`1`=0)} is to recode all 0 into 1.
+is set to \code{"old=new"}, then \code{recode(`1`=0)} would recode all 1 into 0.
+The default for \code{recode(`1`=0)} is to recode all 0 into 1.
 }
 \examples{
 # numeric ----------
@@ -211,7 +211,7 @@ d <- data.frame(
 
 data_recode(
   d,
-  recodes = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
+  recode = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
   force = TRUE,
   append = TRUE
 )

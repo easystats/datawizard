@@ -6,12 +6,12 @@
 #' recode numeric or character vectors, or factors.
 #'
 #' @param x A data frame, numeric or character vector, or factor.
-#' @param recodes A list of named vectors, which indicate the recode pairs.
+#' @param recode A list of named vectors, which indicate the recode pairs.
 #'   The _names_ of the list-elements (i.e. the left-hand side) represent the
 #'   _new_ values, while the values of the list-elements indicate the original
 #'   (old) values that should be replaced. When recoding numeric vectors,
 #'   element names have to be surrounded in backticks. For example,
-#'   ``recodes=list(`0`=1)`` would recode all `1` into `0` in a numeric
+#'   ``recode=list(`0`=1)`` would recode all `1` into `0` in a numeric
 #'   vector. See also 'Examples' and 'Details'.
 #' @param default Defines the default value for all values that have
 #'   no match in the recode-pairs. Note that, if `preserve_na=FALSE`, missing
@@ -32,47 +32,47 @@
 #' @note You can use `options(data_recode_pattern = "old=new")` to switch the
 #' behaviour of the `recode`-argument, i.e. recode-pairs are now following the
 #' pattern `old values = new values`, e.g. if `getOption("data_recode_pattern")`
-#' is set to `"old=new"`, then ``recodes(`1`=0)`` would recode all 1 into 0.
-#' The default for ``recodes(`1`=0)`` is to recode all 0 into 1.
+#' is set to `"old=new"`, then ``recode(`1`=0)`` would recode all 1 into 0.
+#' The default for ``recode(`1`=0)`` is to recode all 0 into 1.
 #'
 #' @details
-#' This section describes the pattern of the `recodes` arguments, which also
+#' This section describes the pattern of the `recode` arguments, which also
 #' provides some shortcuts, in particular when recoding numeric values.
 #'
 #' - Single values
 #'
 #'   Single values either need to be wrapped in backticks (in case of numeric
 #'   values) or "as is" (for character or factor levels). Example:
-#'   ``recodes=list(`0`=1,`1`=2)`` would recode 1 into 0, and 2 into 1.
+#'   ``recode=list(`0`=1,`1`=2)`` would recode 1 into 0, and 2 into 1.
 #'   For factors or character vectors, an example is:
-#'   `recodes=list(x="a",y="b")` (recode "a" into "x" and "b" into "y").
+#'   `recode=list(x="a",y="b")` (recode "a" into "x" and "b" into "y").
 #'
 #' - Multiple values
 #'
 #'   Multiple values that should be recoded into a new value can be separated
-#'   with comma. Example: ``recodes=list(`1`=c(1,4),`2`=c(2,3))`` would recode the
+#'   with comma. Example: ``recode=list(`1`=c(1,4),`2`=c(2,3))`` would recode the
 #'   values 1 and 4 into 1, and 2 and 3 into 2. It is also possible to define  the
-#'   old values as a character string, like:  ``recodes=list(`1`="1,4",`2`="2,3")``
+#'   old values as a character string, like:  ``recode=list(`1`="1,4",`2`="2,3")``
 #'   For factors or character vectors, an example is:
-#'   ``recodes=list(x=c("a","b"),y=c("c","d"))``.
+#'   ``recode=list(x=c("a","b"),y=c("c","d"))``.
 #'
 #' - Value range
 #'
 #'   Numeric value ranges can be defined using the `:`. Example:
-#'   ``recodes=list(`1`=1:3,`2`=4:6)`` would recode all values from 1 to 3 into
+#'   ``recode=list(`1`=1:3,`2`=4:6)`` would recode all values from 1 to 3 into
 #'   1, and 4 to 6 into 2.
 #'
 #' - `min` and `max`
 #'
 #'   placeholder to use the minimum or maximum value of the
 #'   (numeric) variable. Useful, e.g., when recoding ranges of values.
-#'   Example: ``recodes=list(`1`="min:10",2="11:max")``.
+#'   Example: ``recode=list(`1`="min:10",2="11:max")``.
 #'
 #' - `default` values
 #'
 #'   The `default` argument defines the default value for all values that have
 #'   no match in the recode-pairs. For example,
-#'   ``recodes=list(`1`=c(1,2),`2`=c(3,4)), default=9`` would
+#'   ``recode=list(`1`=c(1,2),`2`=c(3,4)), default=9`` would
 #'   recode values 1 and 2 into 1, 3 and 4 into 2, and all other values into 5.
 #'   If `preserve_na` is set to `FALSE`, `NA` (missing values) will also be
 #'   recoded into the specified default value.
@@ -146,7 +146,7 @@
 #'
 #' data_recode(
 #'   d,
-#'   recodes = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
+#'   recode = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
 #'   force = TRUE,
 #'   append = TRUE
 #' )
@@ -191,7 +191,7 @@ data_recode.default <- function(x, verbose = TRUE, ...) {
 #' @rdname data_recode
 #' @export
 data_recode.numeric <- function(x,
-                                recodes = NULL,
+                                recode = NULL,
                                 default = NULL,
                                 preserve_na = TRUE,
                                 verbose = TRUE,
@@ -227,17 +227,17 @@ data_recode.numeric <- function(x,
     x <- rep(as.numeric(default), length = length(x))
   }
 
-  for (i in names(recodes)) {
+  for (i in names(recode)) {
     # based on option-settings, the recode-argument can either follow the
     # pattern "new=old", or "old=new"
 
     if (identical(pattern, "old=new")) {
       # pattern: old = new, name of list element is old value
       old_values <- i
-      new_values <- recodes[[i]]
+      new_values <- recode[[i]]
     } else {
       # pattern: new = old, name of list element is new value
-      old_values <- recodes[[i]]
+      old_values <- recode[[i]]
       new_values <- i
     }
 
@@ -279,7 +279,7 @@ data_recode.numeric <- function(x,
 
 #' @export
 data_recode.factor <- function(x,
-                               recodes = NULL,
+                               recode = NULL,
                                default = NULL,
                                preserve_na = TRUE,
                                verbose = TRUE,
@@ -318,7 +318,7 @@ data_recode.factor <- function(x,
     x <- rep(as.character(default), length = length(x))
   }
 
-  for (i in names(recodes)) {
+  for (i in names(recode)) {
     # based on option-settings, the recode-argument can either follow the
     # pattern "new=old", or "old=new"
 
@@ -335,13 +335,13 @@ data_recode.factor <- function(x,
       old_values <- tryCatch(eval(parse(text = old_values)), error = function(e) NULL)
 
       # recode
-      x[which(original_x %in% old_values)] <- recodes[[i]]
+      x[which(original_x %in% old_values)] <- recode[[i]]
 
     } else {
       # pattern: new = old
       # name of list element is new value
 
-      old_values <- as.character(recodes[[i]])
+      old_values <- as.character(recode[[i]])
       # check input style: "a, b, c"
       if (length(old_values) == 1 && grepl(",", old_values, fixed = TRUE)) {
         # split and make character vector
@@ -375,7 +375,7 @@ data_recode.factor <- function(x,
 
 #' @export
 data_recode.character <- function(x,
-                                  recodes = NULL,
+                                  recode = NULL,
                                   default = NULL,
                                   preserve_na = TRUE,
                                   verbose = TRUE,
@@ -411,7 +411,7 @@ data_recode.character <- function(x,
     x <- rep(as.character(default), length = length(x))
   }
 
-  for (i in names(recodes)) {
+  for (i in names(recode)) {
     # based on option-settings, the recode-argument can either follow the
     # pattern "new=old", or "old=new"
 
@@ -429,12 +429,12 @@ data_recode.character <- function(x,
       old_values <- tryCatch(eval(parse(text = value_string)), error = function(e) NULL)
 
       # recode
-      x[which(original_x %in% old_values)] <- recodes[[i]]
+      x[which(original_x %in% old_values)] <- recode[[i]]
     } else {
       # pattern: new = old
       # name of list element is new value
 
-      old_values <- as.character(recodes[[i]])
+      old_values <- as.character(recode[[i]])
       # check input style: "a, b, c"
       if (length(old_values) == 1 && grepl(",", old_values, fixed = TRUE)) {
         # split and make character vector
@@ -466,7 +466,7 @@ data_recode.character <- function(x,
 #' @rdname data_recode
 #' @export
 data_recode.data.frame <- function(x,
-                                   recodes = NULL,
+                                   recode = NULL,
                                    default = NULL,
                                    preserve_na = TRUE,
                                    force = FALSE,
@@ -489,7 +489,7 @@ data_recode.data.frame <- function(x,
   x[select] <- lapply(
     x[select],
     data_recode,
-    recodes = recodes,
+    recode = recode,
     default = default,
     preserve_na = preserve_na,
     verbose = verbose,

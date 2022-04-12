@@ -84,6 +84,21 @@
     pattern <- gsub("col_matches\\(\"(.*)\"\\)", "\\1", x)
   } else if (grepl("^regex\\(\"(.*)\"\\)", x)) {
     pattern <- gsub("regex\\(\"(.*)\"\\)", "\\1", x)
+  } else if (grepl("is.numeric()", x, fixed = TRUE)) {
+    pattern <- colnames(data)[sapply(data, is.numeric)]
+    fixed <- TRUE
+  } else if (grepl("is.integer()", x, fixed = TRUE)) {
+    pattern <- colnames(data)[sapply(data, is.integer)]
+    fixed <- TRUE
+  } else if (grepl("is.factor()", x, fixed = TRUE)) {
+    pattern <- colnames(data)[sapply(data, is.factor)]
+    fixed <- TRUE
+  } else if (grepl("is.character()", x, fixed = TRUE)) {
+    pattern <- colnames(data)[sapply(data, is.character)]
+    fixed <- TRUE
+  } else if (grepl("is.logical()", x, fixed = TRUE)) {
+    pattern <- colnames(data)[sapply(data, is.logical)]
+    fixed <- TRUE
   } else if (!is.null(data) && grepl(":", x, fixed = TRUE)) {
     from_to <- unlist(strsplit(x, ":", fixed = TRUE))
     cn <- colnames(data)
