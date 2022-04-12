@@ -38,16 +38,16 @@ data_recode(x, ...)
 
 \item{recodes}{A list of named vectors, which indicate the recode pairs.
 The \emph{names} of the list-elements (i.e. the left-hand side) represent the
-\emph{new} values, while the values of the list-elements indicate the original
-(old) values that should be replaced. When recoding numeric vectors,
-element names have to be surrounded in backticks. For example,
-\code{recodes=list(`0`=1)} would recode all \code{1} into \code{0} in a numeric
-vector. See also 'Examples' and 'Details'.}
+\emph{old} values that should be replaced, while the values of the list-elements
+indicate the \emph{new} values . When recoding numeric vectors, element names
+have to be surrounded in backticks. For example, \code{recodes=list(`1`=0)}
+would recode all \code{1} into \code{0} in a numeric vector. See also 'Examples' and
+'Details'.}
 
-\item{default}{Defines the default value for all values that have
-no match in the recode-pairs. Note that, if \code{preserve_na=FALSE}, missing
-values (\code{NA}) are also captured by the \code{default} argument, and thus will
-also be recoded into the specified value. See 'Examples' and 'Details'.}
+\item{default}{Defines the default value for all values that have no match
+in the recode-pairs. Note that, if \code{preserve_na=FALSE}, missing values
+(\code{NA}) are also captured by the \code{default} argument, and thus will also be
+recoded into the specified value. See 'Examples' and 'Details'.}
 
 \item{preserve_na}{Logical, if \code{TRUE}, \code{NA} (missing values) are preserved.
 This overrides any other arguments, including \code{default}. Hence, if
@@ -105,35 +105,33 @@ provides some shortcuts, in particular when recoding numeric values.
 
 Single values either need to be wrapped in backticks (in case of numeric
 values) or "as is" (for character or factor levels). Example:
-\code{recodes=list(`0`=1,`1`=2)} would recode 1 into 0, and 2 into 1.
+\code{recodes=list(`1`=0,`2`=1)} would recode 1 into 0, and 2 into 1.
 For factors or character vectors, an example is:
-\code{recodes=list(x="a",y="b")} (recode "a" into "x" and "b" into "y").
+\code{recodes=list(a="x",b="y")} (recode "a" into "x" and "b" into "y").
 \item Multiple values
 
 Multiple values that should be recoded into a new value can be separated
-with comma. Example: \code{recodes=list(`1`=c(1,4),`2`=c(2,3))} would recode the
-values 1 and 4 into 1, and 2 and 3 into 2. It is also possible to define  the
-old values as a character string, like:  \code{recodes=list(`1`="1,4",`2`="2,3")}
-For factors or character vectors, an example is:
-\code{recodes=list(x=c("a","b"),y=c("c","d"))}.
+with comma. Example: \verb{recodes=list(`1,4`=1,`2,3`=2} would recode the
+values 1 and 4 into 1, and 2 and 3 into 2. For factors or character vectors,
+an example is: \code{recodes=list(`a,b`="x",`c,d`="y")}.
 \item Value range
 
 Numeric value ranges can be defined using the \code{:}. Example:
-\code{recodes=list(`1`=1:3,`2`=4:6)} would recode all values from 1 to 3 into
+\code{recodes=list(`1:3`=1,`4:6`=2)} would recode all values from 1 to 3 into
 1, and 4 to 6 into 2.
 \item \code{min} and \code{max}
 
 placeholder to use the minimum or maximum value of the
 (numeric) variable. Useful, e.g., when recoding ranges of values.
-Example: \verb{recodes=list(`1`="min:10",2="11:max")}.
+Example: \code{recodes=list(`min:10`=1,`11:max`=2)}.
 \item \code{default} values
 
 The \code{default} argument defines the default value for all values that have
 no match in the recode-pairs. For example,
-\verb{recodes=list(`1`=c(1,2),`2`=c(3,4)), default=9} would
-recode values 1 and 2 into 1, 3 and 4 into 2, and all other values into 5.
-If \code{preserve_na} is set to \code{FALSE}, \code{NA} (missing values) will also be
-recoded into the specified default value.
+\verb{recodes=list(`1:2`=1,`3:4`=2), default=9} would recode values 1 and 2
+into 1, 3 and 4 into 2, and all other values into 5. If \code{preserve_na} is
+set to \code{FALSE}, \code{NA} (missing values) will also be recoded into the
+specified default value.
 \item Reversing and rescaling
 
 See \code{\link[=data_reverse]{data_reverse()}} and \code{\link[=data_rescale]{data_rescale()}}.
@@ -145,28 +143,28 @@ set.seed(123)
 x <- sample(c(1:4, NA), 15, TRUE)
 table(x, useNA = "always")
 
-out <- data_recode(x, list(`0` = 1, `1` = 2:3, `2` = 4))
+out <- data_recode(x, list(`1` = 0, `2:3` = 1, `4` = 2))
 out
 table(out, useNA = "always")
 
 # to recode NA values, set preserve_na to FALSE
 out <- data_recode(
   x,
-  list(`0` = 1, `1` = 2:3, `2` = 4, `9` = NA),
+  list(`1` = 0, `2:3` = 1, `4` = 2, `NA` = 9),
   preserve_na = FALSE
 )
 out
 table(out, useNA = "always")
 
 # preserve na
-out <- data_recode(x, list(`0` = 1, `1` = 2:3), default = 77)
+out <- data_recode(x, list(`1` = 0, `2:3` = 1), default = 77)
 out
 table(out, useNA = "always")
 
 # recode na into default
 out <- data_recode(
   x,
-  list(`0` = 1, `1` = 2:3),
+  list(`1` = 0, `2:3` = 1),
   default = 77,
   preserve_na = FALSE
 )
@@ -179,17 +177,15 @@ set.seed(123)
 x <- as.factor(sample(c("a", "b", "c"), 15, TRUE))
 table(x)
 
-out <- data_recode(x, list(x = "a", y = c("b", "c")))
+out <- data_recode(x, list(a = "x", `b, c` = "y"))
 out
 table(out)
 
-out <- data_recode(x, list(x = "a", y = "b", z = "c"))
+out <- data_recode(x, list(a = "x", b = "y", c = "z"))
 out
 table(out)
 
-out <- data_recode(x, list(y = "b,c"), default = 77)
-# same as
-# data_recode(x, list(y = c("b", "c")), default = 77)
+out <- data_recode(x, list(`b, c` = "y"), default = 77)
 out
 table(out)
 
@@ -204,7 +200,7 @@ d <- data.frame(
 
 data_recode(
   d,
-  recodes = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
+  recodes = list(`1` = 0, `2:3` = 1, `4` = 2, a = "x", `b, c` = "y"),
   force = TRUE,
   append = TRUE
 )
