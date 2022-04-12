@@ -3,14 +3,23 @@
 #' Convert data to numeric by converting characters to factors and factors to
 #' either numeric levels or dummy variables.
 #'
-#' @param x A data frame or a vector.
+#' @param x A data frame, factor or vector.
 #' @param dummy_factors Transform factors to dummy factors (all factor levels as
 #'   different columns filled with a binary 0-1 value).
+#' @param preserve_levels Logical, only applies if `x` is a factor. If `TRUE`,
+#' and `x` has numeric factor levels, these will be converted into the related
+#' numeric values. If this is not possible, the converted numeric values will
+#' start from 1 to number of levels.
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @examples
 #' convert_data_to_numeric(head(ToothGrowth))
 #' convert_data_to_numeric(head(ToothGrowth), dummy_factors = FALSE)
+#'
+#' # factors
+#' x <- as.factor(mtcars$gear)
+#' data_to_numeric(x, dummy_factors = FALSE)
+#' data_to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE)
 #'
 #' @return A data frame of numeric variables.
 #'
@@ -35,8 +44,8 @@ convert_data_to_numeric.default <- function(x, verbose = TRUE, ...) {
 
 #' @rdname convert_data_to_numeric
 #' @export
-convert_data_to_numeric.data.frame <- function(x, dummy_factors = TRUE, ...) {
-  out <- sapply(x, convert_data_to_numeric, dummy_factors = dummy_factors, simplify = FALSE)
+convert_data_to_numeric.data.frame <- function(x, dummy_factors = TRUE, preserve_levels = FALSE, ...) {
+  out <- sapply(x, convert_data_to_numeric, dummy_factors = dummy_factors, preserve_levels = preserve_levels, simplify = FALSE)
   # save variable attributes
   attr_vars <- lapply(out, attributes)
   # "out" is currently a list, bind columns and to data frame
@@ -68,7 +77,12 @@ convert_data_to_numeric.logical <- convert_data_to_numeric.numeric
 
 
 #' @export
-convert_data_to_numeric.factor <- function(x, dummy_factors = TRUE, ...) {
+convert_data_to_numeric.factor <- function(x, dummy_factors = TRUE, preserve_levels = FALSE, ...) {
+  # preserving levels only works when factor levels are numeric
+  if (isTRUE(preserve_levels) && anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
+    preserve_levels <- FALSE
+  }
+
   if (dummy_factors) {
     out <- as.data.frame(stats::model.matrix(~x, contrasts.arg = list(x = "contr.treatment")))
     out[1] <- as.numeric(rowSums(out[2:ncol(out)]) == 0)
@@ -101,6 +115,8 @@ convert_data_to_numeric.factor <- function(x, dummy_factors = TRUE, ...) {
       rownames(out) <- NULL
     }
     names(out) <- levels(x)
+  } else if (preserve_levels) {
+    out <- .set_back_labels(as.numeric(as.character(x)), x)
   } else {
     out <- .set_back_labels(as.numeric(x), x)
   }

@@ -10,15 +10,20 @@ convert_data_to_numeric(x, ...)
 
 data_to_numeric(x, ...)
 
-\method{convert_data_to_numeric}{data.frame}(x, dummy_factors = TRUE, ...)
+\method{convert_data_to_numeric}{data.frame}(x, dummy_factors = TRUE, preserve_levels = FALSE, ...)
 }
 \arguments{
-\item{x}{A data frame or a vector.}
+\item{x}{A data frame, factor or vector.}
 
 \item{...}{Arguments passed to or from other methods.}
 
 \item{dummy_factors}{Transform factors to dummy factors (all factor levels as
 different columns filled with a binary 0-1 value).}
+
+\item{preserve_levels}{Logical, only applies if \code{x} is a factor. If \code{TRUE},
+and \code{x} has numeric factor levels, these will be converted into the related
+numeric values. If this is not possible, the converted numeric values will
+start from 1 to number of levels.}
 }
 \value{
 A data frame of numeric variables.
@@ -30,5 +35,10 @@ either numeric levels or dummy variables.
 \examples{
 convert_data_to_numeric(head(ToothGrowth))
 convert_data_to_numeric(head(ToothGrowth), dummy_factors = FALSE)
+
+# factors
+x <- as.factor(mtcars$gear)
+data_to_numeric(x, dummy_factors = FALSE)
+data_to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE)
 
 }

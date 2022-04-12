@@ -11,6 +11,19 @@ test_that("convert character to numeric Date", {
   expect_message(convert_data_to_numeric(as.Date("2022-01-01")))
 })
 
+test_that("convert character to numeric preserve levels", {
+  x <- as.factor(mtcars$gear)
+  out1 <- data_to_numeric(x, dummy_factors = FALSE)
+  out2 <- data_to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE)
+  expect_equal(
+    out1,
+    c(2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 2, 3, 3, 3, 3, 3, 2)
+  )
+  expect_equal(
+    out2,
+    c(4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4, 4, 3, 3, 3, 3, 3, 4, 5, 5, 5, 5, 5, 4)
+  )
+})
 
 test_that("convert factor to numeric", {
   f <- factor(substring("statistics", 1:10, 1:10))
