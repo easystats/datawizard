@@ -57,8 +57,18 @@ convert_data_to_numeric.data.frame <- function(x,
                                                exclude = NULL,
                                                ignore_case = FALSE,
                                                ...) {
+  # sanity check, return as is for complete numeric
+  if (all(sapply(x, is.numeric))) {
+    return(x)
+  }
+
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case)
+
+  # drop numerics, when append is not FALSE
+  if (!isFALSE(append)) {
+    select <- colnames(x[select])[!sapply(x[select], is.numeric)]
+  }
 
   # process arguments
   args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_n", force = TRUE)
@@ -89,6 +99,18 @@ convert_data_to_numeric.data.frame <- function(x,
         attributes(out[[i]]) <- attr_vars[[i]]
       }
     }
+  }
+
+  # due to the special handling of dummy factors, we need to take care
+  # of appending the data here again. usually, "args$x" includes the appended
+  # data, which does not work here...
+
+  if (!isFALSE(append)) {
+    common_columns <- intersect(colnames(x), colnames(out))
+    if (length(common_columns)) {
+      x[common_columns] <- NULL
+    }
+    out <- cbind(x, out)
   }
 
   out
