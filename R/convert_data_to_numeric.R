@@ -57,9 +57,6 @@ convert_data_to_numeric.data.frame <- function(x,
                                                exclude = NULL,
                                                ignore_case = FALSE,
                                                ...) {
-  # save original data for attributes
-  original_x <- x
-
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case)
 
@@ -79,18 +76,17 @@ convert_data_to_numeric.data.frame <- function(x,
     simplify = FALSE
   )
 
+  # save variable attributes
+  attr_vars <- lapply(out, attributes)
   # "out" is currently a list, bind columns and to data frame
   out <- as.data.frame(do.call(cbind, out))
-
-  # save variable attributes
-  attr_vars <- lapply(original_x, attributes)
   # set back attributes
-  for (i in colnames(x)) {
+  for (i in colnames(out)) {
     if (is.list(attr_vars[[i]])) {
-      if (is.list(attributes(x[[i]]))) {
-        try(attributes(x[[i]]) <- utils::modifyList(attr_vars[[i]], attributes(x[[i]])), silent = TRUE)
+      if (is.list(attributes(out[[i]]))) {
+        attributes(out[[i]]) <- utils::modifyList(attr_vars[[i]], attributes(out[[i]]))
       } else {
-        try(attributes(x[[i]]) <- attr_vars[[i]], silent = TRUE)
+        attributes(out[[i]]) <- attr_vars[[i]]
       }
     }
   }
