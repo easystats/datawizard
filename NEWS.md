@@ -12,6 +12,9 @@ MINOR CHANGES
 
 * `convert_to_na()` gets methods for variables of class `logical` and `Date`.
 
+* `data_to_numeric()` gains two more arguments, `preserve_levels` and `lowest`,
+  to give better control of conversion of factors.
+
 BUG FIXES
 
 * When logicals were passed to `center()` or `standardize()` and `force = TRUE`,
