@@ -44,6 +44,8 @@
 #' @param ... not used.
 #' @inheritParams find_columns
 #'
+#' @inherit data_rename seealso
+#'
 #' @return `x`, recoded into groups. By default `x` is numeric, unless `labels`
 #'   is specified. In this case, a factor is returned, where the factor levels
 #'   (i.e. recoded groups are labelled accordingly.

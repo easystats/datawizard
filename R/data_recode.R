@@ -8,55 +8,62 @@
 #' @param x A data frame, numeric or character vector, or factor.
 #' @param recodes A list of named vectors, which indicate the recode pairs.
 #'   The _names_ of the list-elements (i.e. the left-hand side) represent the
-#'   old values, while the values of the list-elements indicate the values.
-#'   When recoding numeric vectors, element names have to be surrounded in
-#'   backticks. For example, ``recodes = list(`1` = 0)`` would recode all
-#'   `1` into `0` in a numeric vector. For factors, backticks are only required
-#'   when the left-hand side contains multiple, comma separated values, e.g.
-#'   ``recodes = list(a = "x", `b, c` = "y")``. See also 'Examples'.
+#'   _new_ values, while the values of the list-elements indicate the original
+#'   (old) values that should be replaced. When recoding numeric vectors,
+#'   element names have to be surrounded in backticks. For example,
+#'   ``recodes = list(`0` = 1)`` would recode all `1` into `0` in a numeric
+#'   vector. See also 'Examples' and 'Details'.
 #' @param ... not used.
 #' @inheritParams find_columns
 #' @inheritParams data_cut
 #'
 #' @return `x`, where old values are replaced by new values.
 #'
+#' @inherit data_rename seealso
+#'
 #' @details
-#' The `recodes` argument provides some shortcuts, in particular when recoding
-#' numeric values.
+#' This section describes the pattern of the `recodes` arguments, which also
+#' provides some shortcuts, in particular when recoding numeric values.
 #'
 #' - Single values
 #'
 #'   Single values either need to be wrapped in backticks (in case of numeric
 #'   values) or "as is" (for character or factor levels). Example:
-#'   ``recodes=list(`1`=0,`2`=1)`` would recode 1 into 0, and 2 into 1.
+#'   ``recodes=list(`0`=1,`1`=2)`` would recode 1 into 0, and 2 into 1.
 #'   For factors or character vectors, an example is:
-#'   `recodes=list(a="x",b="y")`.
+#'   `recodes=list(x="a",y="b")` (recode "a" into "x" and "b" into "y").
 #'
 #' - Multiple values
 #'
 #'   Multiple values that should be recoded into a new value can be separated
-#'   with comma. Example: ``recodes=list(`1,4`=1,`2,3`=2)`` would recode the
-#'   values 1 and 4 into 1, and 2 and 3 into 2. For factors or character
-#'   vectors, an example is: ``recodes=list(`a,b`="x",`c,d`="y")``.
+#'   with comma. Example: ``recodes=list(`1`=c(1,4),`2`=c(2,3))`` would recode the
+#'   values 1 and 4 into 1, and 2 and 3 into 2. It is also possible to define  the
+#'   old values as a character string, like:  ``recodes=list(`1`="1,4",`2`="2,3")``
+#'   For factors or character vectors, an example is:
+#'   ``recodes=list(x=c("a","b"),y=c("c","d"))``.
 #'
 #' - Value range
 #'
 #'   Numeric value ranges can be defined using the `:`. Example:
-#'   ``recodes=list(`1:3`=1,`4:6`=2)`` would recode all values from 1 to 3 into
+#'   ``recodes=list(`1`=1:3,`2`=4:6)`` would recode all values from 1 to 3 into
 #'   1, and 4 to 6 into 2.
 #'
 #' - `min` and `max`
 #'
 #'   placeholder to use the minimum or maximum value of the
 #'   (numeric) variable. Useful, e.g., when recoding ranges of values.
-#'   Example: ``recodes=list(`min:10`=1,`11:max`=2)``.
+#'   Example: ``recodes=list(`1`="min:10",2="11:max")``.
 #'
-#' - `else`
+#' - `default` values
 #'
 #'   defines the default value for all values that have no match in the
-#'   recode-pairs. Example: ``recodes=list(`1,2`=1,`3:4`=2,`else`=9)`` would
+#'   recode-pairs. Example: ``recodes=list(`1`=c(1,2),`2`=c(3,4),default=9)`` would
 #'   recode values 1 and 2 into 1, 3 and 4 into 2, and all other values (no
 #'   matter if missing or any numeric value other than 1 to 4) into 5.
+#'
+#' - Reversing and rescaling
+#'
+#'   See [data_reverse()] and [data_rescale()].
 #'
 #' @examples
 #' # numeric
@@ -64,15 +71,15 @@
 #' x <- sample(c(1:4, NA), 15, TRUE)
 #' table(x, useNA = "always")
 #'
-#' out <- data_recode(x, list(`1` = 0, `2:3` = 1, `4` = 2))
+#' out <- data_recode(x, list(`0` = 1, `1` = 2:3, `2` = 4))
 #' out
 #' table(out, useNA = "always")
 #'
-#' out <- data_recode(x, list(`1` = 0, `2:3` = 1, `4` = 2, `NA` = 9))
+#' out <- data_recode(x, list(`0` = 1, `1` = 2:3, `2` = 4, `9` = NA))
 #' out
 #' table(out, useNA = "always")
 #'
-#' out <- data_recode(x, list(`1` = 0, `2:3` = 1, `else` = 77))
+#' out <- data_recode(x, list(`0` = 1, `1` = 2:3, default = 77))
 #' out
 #' table(out, useNA = "always")
 #'
@@ -82,15 +89,17 @@
 #' x <- as.factor(sample(c("a", "b", "c"), 15, TRUE))
 #' table(x)
 #'
-#' out <- data_recode(x, list(a = "x", `b, c` = "y"))
+#' out <- data_recode(x, list(x = "a", y = c("b", "c")))
 #' out
 #' table(out)
 #'
-#' out <- data_recode(x, list(a = "x", b = "y", c = "z"))
+#' out <- data_recode(x, list(x = "a", y = "b", z = "c"))
 #' out
 #' table(out)
 #'
-#' out <- data_recode(x, list(`b, c` = "y", `else` = 77))
+#' out <- data_recode(x, list(y = "b,c", default = 77))
+#' # same as
+#' # data_recode(x, list(y = c("b", "c"), default = 77))
 #' out
 #' table(out)
 #'
@@ -105,7 +114,7 @@
 #'
 #' data_recode(
 #'   d,
-#'   recodes = list(`1` = 0, `2:3` = 1, `4` = 2, a = "x", `b, c` = "y"),
+#'   recodes = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
 #'   force = TRUE,
 #'   append = TRUE
 #' )
@@ -139,41 +148,43 @@ data_recode.numeric <- function(x, recodes = NULL, verbose = TRUE, ...) {
     return(original_x)
   }
 
-  # check for "else" token
-  if ("else" %in% names(recodes)) {
-    else_token <- recodes[["else"]]
-    recodes["else"] <- NULL
+  # check for "default" token
+  if ("default" %in% names(recodes)) {
+    default_token <- recodes[["default"]]
+    recodes["default"] <- NULL
 
     # set the default value for all values that have no match
     # (i.e. that should not be recoded)
-    if (else_token == "copy") {
+    if (default_token == "copy") {
       x <- original_x
     } else {
-      x <- rep(as.numeric(else_token), length = length(x))
+      x <- rep(as.numeric(default_token), length = length(x))
     }
   }
 
   for (i in names(recodes)) {
     # name of list element is old value
-    value_string <- i
+    old_values <- recodes[[i]]
 
-    # replace placeholder
-    value_string <- gsub("min", min(x, na.rm = TRUE), value_string)
-    value_string <- gsub("max", max(x, na.rm = TRUE), value_string)
+    if (is.character(old_values)) {
+      # replace placeholder
+      old_values <- gsub("min", min(x, na.rm = TRUE), old_values)
+      old_values <- gsub("max", max(x, na.rm = TRUE), old_values)
 
-    # mimic vector
-    if (!grepl("c(", value_string, fixed = TRUE)) {
-      value_string <- paste0("c(", value_string, ")")
+      # mimic vector
+      if (length(old_values) == 1 && !grepl("c(", old_values, fixed = TRUE)) {
+        old_values <- paste0("c(", old_values, ")")
+      }
+
+      # parse old values, which can be strings, but which should contain values,
+      # like "1:10" or "1, 2, 3, 4". These should now be in the format
+      # "c(1, 2, 3, 4)" or "c(1:10)", and it should be possible to parse
+      # and evaluate these strings into a numeric vector
+      old_values <- tryCatch(eval(parse(text = old_values)), error = function(e) NULL)
     }
 
-    # parse old values, which are strings (names of element), but which should
-    # contain values, like "1:10" or "1, 2, 3, 4". These should now be in the
-    # format "c(1, 2, 3, 4)" or "c(1:10)", and it should be possible to parse
-    # and evaluate these strings into a numeric vector
-    old_values <- tryCatch(eval(parse(text = value_string)), error = function(e) NULL)
-
-    if (!is.null(old_values)) {
-      x[which(original_x %in% old_values)] <- as.numeric(recodes[[i]])
+    if (!is.null(old_values) && (is.numeric(old_values) || is.na(old_values))) {
+      x[which(original_x %in% old_values)] <- as.numeric(i)
     }
   }
 
@@ -206,33 +217,29 @@ data_recode.factor <- function(x, recodes = NULL, verbose = TRUE, ...) {
   # as character, so recoding works
   x <- as.character(x)
 
-  # check for "else" token
-  if ("else" %in% names(recodes)) {
-    else_token <- recodes[["else"]]
-    recodes["else"] <- NULL
+  # check for "default" token
+  if ("default" %in% names(recodes)) {
+    default_token <- recodes[["default"]]
+    recodes["default"] <- NULL
 
     # set the default value for all values that have no match
     # (i.e. that should not be recoded)
-    if (else_token == "copy") {
+    if (default_token == "copy") {
       x <- as.character(original_x)
     } else {
-      x <- rep(as.character(else_token), length = length(x))
+      x <- rep(as.character(default_token), length = length(x))
     }
   }
 
   for (i in names(recodes)) {
-    # name of list element is old value
-    value_string <- paste(deparse(insight::trim_ws(unlist(strsplit(i, ",", fixed = TRUE)))), collapse = ",")
-
-    # parse old values, which are strings (names of element), but which should
-    # contain values, like "a" or "a, b, c". These should now be in the
-    # format "c("a", "b", "c")" and it should be possible to parse
-    # and evaluate these strings into a numeric vector
-    old_values <- tryCatch(eval(parse(text = value_string)), error = function(e) NULL)
-
-    if (!is.null(old_values)) {
-      x[which(original_x %in% old_values)] <- recodes[[i]]
+    old_values <- as.character(recodes[[i]])
+    # check input style: "a, b, c"
+    if (length(old_values) == 1 && grepl(",", old_values, fixed = TRUE)) {
+      # split and make character vector
+      old_values <- insight::trim_ws(unlist(strsplit(old_values, ",", fixed = TRUE)))
     }
+    # recode
+    x[which(original_x %in% old_values)] <- as.character(i)
   }
 
   # make sure we have correct new levels
@@ -264,33 +271,29 @@ data_recode.character <- function(x, recodes = NULL, verbose = TRUE, ...) {
     return(original_x)
   }
 
-  # check for "else" token
-  if ("else" %in% names(recodes)) {
-    else_token <- recodes[["else"]]
-    recodes["else"] <- NULL
+  # check for "default" token
+  if ("default" %in% names(recodes)) {
+    default_token <- recodes[["default"]]
+    recodes["default"] <- NULL
 
     # set the default value for all values that have no match
     # (i.e. that should not be recoded)
-    if (else_token == "copy") {
-      x <- original_x
+    if (default_token == "copy") {
+      x <- as.character(original_x)
     } else {
-      x <- rep(as.character(else_token), length = length(x))
+      x <- rep(as.character(default_token), length = length(x))
     }
   }
 
   for (i in names(recodes)) {
-    # name of list element is old value
-    value_string <- paste(deparse(insight::trim_ws(unlist(strsplit(i, ",", fixed = TRUE)))), collapse = ",")
-
-    # parse old values, which are strings (names of element), but which should
-    # contain values, like "a" or "a, b, c". These should now be in the
-    # format "c("a", "b", "c")" and it should be possible to parse
-    # and evaluate these strings into a numeric vector
-    old_values <- tryCatch(eval(parse(text = value_string)), error = function(e) NULL)
-
-    if (!is.null(old_values)) {
-      x[which(original_x %in% old_values)] <- recodes[[i]]
+    old_values <- as.character(recodes[[i]])
+    # check input style: "a, b, c"
+    if (length(old_values) == 1 && grepl(",", old_values, fixed = TRUE)) {
+      # split and make character vector
+      old_values <- insight::trim_ws(unlist(strsplit(old_values, ",", fixed = TRUE)))
     }
+    # recode
+    x[which(original_x %in% old_values)] <- as.character(i)
   }
 
   # set back variable labels, remove value labels
