@@ -12,7 +12,7 @@ either numeric levels or dummy variables."><meta property="og:image" content="/l
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,18 +72,32 @@ either numeric levels or dummy variables.</p>
 <span class="fu">data_to_numeric</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for data.frame</span>
-<span class="fu">convert_data_to_numeric</span><span class="op">(</span><span class="va">x</span>, dummy_factors <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu">convert_data_to_numeric</span><span class="op">(</span>
+  <span class="va">x</span>,
+  dummy_factors <span class="op">=</span> <span class="cn">TRUE</span>,
+  preserve_levels <span class="op">=</span> <span class="cn">FALSE</span>,
+  lowest <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">...</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>A data frame or a vector.</p></dd>
+<dd><p>A data frame, factor or vector.</p></dd>
 <dt>...</dt>
 <dd><p>Arguments passed to or from other methods.</p></dd>
 <dt>dummy_factors</dt>
 <dd><p>Transform factors to dummy factors (all factor levels as
 different columns filled with a binary 0-1 value).</p></dd>
+<dt>preserve_levels</dt>
+<dd><p>Logical, only applies if <code>x</code> is a factor. If <code>TRUE</code>,
+and <code>x</code> has numeric factor levels, these will be converted into the related
+numeric values. If this is not possible, the converted numeric values will
+start from 1 to number of levels.</p></dd>
+<dt>lowest</dt>
+<dd><p>Numeric, indicating the lowest (minimum) value when converting
+factors or character vectors to numeric values.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -108,6 +122,13 @@ different columns filled with a binary 0-1 value).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  5.8    2  0.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  6.4    2  0.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 10.0    2  0.5</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># factors</span></span>
+<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">data_to_numeric</span><span class="op">(</span><span class="va">x</span>, dummy_factors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 2 2 2 1 1 1 1 2 2 2 2 1 1 1 1 1 1 2 2 2 1 1 1 1 1 2 3 3 3 3 3 2</span>
+<span class="r-in"><span class="fu">data_to_numeric</span><span class="op">(</span><span class="va">x</span>, dummy_factors <span class="op">=</span> <span class="cn">FALSE</span>, preserve_levels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 4 4 4 3 3 3 3 4 4 4 4 3 3 3 3 3 3 4 4 4 3 3 3 3 3 4 5 5 5 5 5 4</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
