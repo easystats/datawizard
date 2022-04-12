@@ -10,6 +10,8 @@
 #' and `x` has numeric factor levels, these will be converted into the related
 #' numeric values. If this is not possible, the converted numeric values will
 #' start from 1 to number of levels.
+#' @param lowest Numeric, indicating the lowest (minimum) value when converting
+#' factors or character vectors to numeric values.
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @examples
@@ -44,8 +46,19 @@ convert_data_to_numeric.default <- function(x, verbose = TRUE, ...) {
 
 #' @rdname convert_data_to_numeric
 #' @export
-convert_data_to_numeric.data.frame <- function(x, dummy_factors = TRUE, preserve_levels = FALSE, ...) {
-  out <- sapply(x, convert_data_to_numeric, dummy_factors = dummy_factors, preserve_levels = preserve_levels, simplify = FALSE)
+convert_data_to_numeric.data.frame <- function(x,
+                                               dummy_factors = TRUE,
+                                               preserve_levels = FALSE,
+                                               lowest = NULL,
+                                               ...) {
+  out <- sapply(
+    x,
+    convert_data_to_numeric,
+    dummy_factors = dummy_factors,
+    preserve_levels = preserve_levels,
+    lowest = lowest,
+    simplify = FALSE
+  )
   # save variable attributes
   attr_vars <- lapply(out, attributes)
   # "out" is currently a list, bind columns and to data frame
@@ -77,7 +90,11 @@ convert_data_to_numeric.logical <- convert_data_to_numeric.numeric
 
 
 #' @export
-convert_data_to_numeric.factor <- function(x, dummy_factors = TRUE, preserve_levels = FALSE, ...) {
+convert_data_to_numeric.factor <- function(x,
+                                           dummy_factors = TRUE,
+                                           preserve_levels = FALSE,
+                                           lowest = NULL,
+                                           ...) {
   # preserving levels only works when factor levels are numeric
   if (isTRUE(preserve_levels) && anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
     preserve_levels <- FALSE
@@ -120,12 +137,19 @@ convert_data_to_numeric.factor <- function(x, dummy_factors = TRUE, preserve_lev
   } else {
     out <- .set_back_labels(as.numeric(x), x)
   }
+
+  # shift to requested starting value
+  if (!is.null(lowest)) {
+    difference <- min(out) - lowest
+    out <- out - difference
+  }
+
   out
 }
 
 
 #' @export
-convert_data_to_numeric.character <- function(x, dummy_factors = FALSE, ...) {
+convert_data_to_numeric.character <- function(x, dummy_factors = FALSE, lowest = NULL, ...) {
   numbers <- sapply(x, function(i) {
     element <- tryCatch(.str2lang(i), error = function(e) NULL)
     !is.null(element) && is.numeric(element)
@@ -135,5 +159,12 @@ convert_data_to_numeric.character <- function(x, dummy_factors = FALSE, ...) {
   } else {
     out <- convert_data_to_numeric(as.factor(x), dummy_factors = dummy_factors)
   }
+
+  # shift to requested starting value
+  if (!is.null(lowest)) {
+    difference <- min(out) - lowest
+    out <- out - difference
+  }
+
   out
 }

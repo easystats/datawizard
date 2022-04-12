@@ -10,7 +10,13 @@ convert_data_to_numeric(x, ...)
 
 data_to_numeric(x, ...)
 
-\method{convert_data_to_numeric}{data.frame}(x, dummy_factors = TRUE, preserve_levels = FALSE, ...)
+\method{convert_data_to_numeric}{data.frame}(
+  x,
+  dummy_factors = TRUE,
+  preserve_levels = FALSE,
+  lowest = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{A data frame, factor or vector.}
@@ -24,6 +30,9 @@ different columns filled with a binary 0-1 value).}
 and \code{x} has numeric factor levels, these will be converted into the related
 numeric values. If this is not possible, the converted numeric values will
 start from 1 to number of levels.}
+
+\item{lowest}{Numeric, indicating the lowest (minimum) value when converting
+factors or character vectors to numeric values.}
 }
 \value{
 A data frame of numeric variables.
