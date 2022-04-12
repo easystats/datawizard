@@ -32,8 +32,8 @@
 #' @note You can use `options(data_recode_pattern = "old=new")` to switch the
 #' behaviour of the `recode`-argument, i.e. recode-pairs are now following the
 #' pattern `old values = new values`, e.g. if `getOption("data_recode_pattern")`
-#' is set to `"data_recode_pattern"`, then ``recodes(`1`=0)`` would recode all
-#' 1 into 0. The default for ``recodes(`1`=0)`` is to recode all 0 into 1.
+#' is set to `"old=new"`, then ``recodes(`1`=0)`` would recode all 1 into 0.
+#' The default for ``recodes(`1`=0)`` is to recode all 0 into 1.
 #'
 #' @details
 #' This section describes the pattern of the `recodes` arguments, which also

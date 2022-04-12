@@ -143,8 +143,8 @@ See \code{\link[=data_reverse]{data_reverse()}} and \code{\link[=data_rescale]{d
 You can use \code{options(data_recode_pattern = "old=new")} to switch the
 behaviour of the \code{recode}-argument, i.e. recode-pairs are now following the
 pattern \verb{old values = new values}, e.g. if \code{getOption("data_recode_pattern")}
-is set to \code{"data_recode_pattern"}, then \code{recodes(`1`=0)} would recode all
-1 into 0. The default for \code{recodes(`1`=0)} is to recode all 0 into 1.
+is set to \code{"old=new"}, then \code{recodes(`1`=0)} would recode all 1 into 0.
+The default for \code{recodes(`1`=0)} is to recode all 0 into 1.
 }
 \examples{
 # numeric ----------
