@@ -26,7 +26,6 @@ data_cut(x, ...)
   range = NULL,
   lowest = 1,
   labels = NULL,
-  force = FALSE,
   append = FALSE,
   select = NULL,
   exclude = NULL,
@@ -72,8 +71,6 @@ will returns factors instead of numeric variables, with \code{labels} used
 for labelling the factor levels.}
 
 \item{verbose}{Toggle warnings.}
-
-\item{force}{Logical, if \code{TRUE}, forces recoding of factors as well.}
 
 \item{append}{Logical or string. If \code{TRUE}, recoded variables get new
 column names (with the suffix \code{"_r"}) and are appended (column bind) to \code{x},

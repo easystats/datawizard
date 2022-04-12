@@ -134,10 +134,8 @@ rest of the arguments are absent.
 
 \item{verbose}{Toggle warnings and messages on or off.}
 
-\item{force}{Logical, if \code{TRUE}, forces standardization of factors and dates
-as well. Factors are converted to numerical values, with the lowest level
-being the value \code{1} (unless the factor has numeric levels, which are
-converted to the corresponding numeric value).}
+\item{force}{Logical, if \code{TRUE}, forces recoding of factors and character
+vecrors as well.}
 
 \item{remove_na}{How should missing values (\code{NA}) be treated: if \code{"none"}
 (default): each column's standardization is done separately, ignoring

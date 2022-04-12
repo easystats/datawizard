@@ -34,7 +34,6 @@
 #' @param labels Character vector of value labels. If not `NULL`, `data_cut()`
 #'   will returns factors instead of numeric variables, with `labels` used
 #'   for labelling the factor levels.
-#' @param force Logical, if `TRUE`, forces recoding of factors as well.
 #' @param append Logical or string. If `TRUE`, recoded variables get new
 #'   column names (with the suffix `"_r"`) and are appended (column bind) to `x`,
 #'   thus returning both the original and the recoded variables. If `FALSE`,
@@ -238,7 +237,6 @@ data_cut.data.frame <- function(x,
                                 range = NULL,
                                 lowest = 1,
                                 labels = NULL,
-                                force = FALSE,
                                 append = FALSE,
                                 select = NULL,
                                 exclude = NULL,
@@ -249,7 +247,7 @@ data_cut.data.frame <- function(x,
   select <- .select_nse(select, x, exclude, ignore_case)
 
   # process arguments
-  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force)
+  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force = TRUE)
 
   # update processed arguments
   x <- args$x
@@ -267,7 +265,6 @@ data_cut.grouped_df <- function(x,
                                 range = NULL,
                                 lowest = 1,
                                 labels = NULL,
-                                force = FALSE,
                                 append = FALSE,
                                 select = NULL,
                                 exclude = NULL,
@@ -283,7 +280,7 @@ data_cut.grouped_df <- function(x,
   select <- .select_nse(select, x, exclude, ignore_case)
 
   # process arguments
-  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force)
+  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force = TRUE)
 
   # update processed arguments
   x <- args$x
@@ -308,7 +305,6 @@ data_cut.grouped_df <- function(x,
       labels = labels,
       select = select,
       exclude = exclude,
-      force = force,
       append = append,
       ignore_case = ignore_case,
       verbose = verbose,
