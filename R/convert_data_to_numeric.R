@@ -88,6 +88,9 @@ convert_data_to_numeric.double <- convert_data_to_numeric.numeric
 #' @export
 convert_data_to_numeric.logical <- convert_data_to_numeric.numeric
 
+#' @export
+convert_data_to_numeric.Date <- convert_data_to_numeric.numeric
+
 
 #' @export
 convert_data_to_numeric.factor <- function(x,
