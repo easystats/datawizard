@@ -44,8 +44,8 @@
 #' - Functions to reshape, pivot or rotate dataframes: [data_to_long()], [data_to_wide()], [data_rotate()]
 #' - Functions to recode data: [data_rescale()], [data_reverse()], [data_cut()], [data_recode()]
 #' - Functions to standardize, normalize, rank-transform: [standardize()], [normalize()], [ranktransform()], [winsorize()]
-#' - Split, cut and merge dataframes: [data_partition()], [data_merge()]
-#' - Functions to find or select columns: [find_columns()]
+#' - Split and merge dataframes: [data_partition()], [data_merge()]
+#' - Functions to find or select columns: [data_select()], [find_columns()]
 #' - Functions to filter rows: [data_match()], [data_filter()]
 #'
 #' @export

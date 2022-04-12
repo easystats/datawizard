@@ -184,8 +184,8 @@ data_cut(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high"))
 \item Functions to reshape, pivot or rotate dataframes: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
 \item Functions to recode data: \code{\link[=data_rescale]{data_rescale()}}, \code{\link[=data_reverse]{data_reverse()}}, \code{\link[=data_cut]{data_cut()}}, \code{\link[=data_recode]{data_recode()}}
 \item Functions to standardize, normalize, rank-transform: \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
-\item Split, cut and merge dataframes: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_merge]{data_merge()}}
-\item Functions to find or select columns: \code{\link[=find_columns]{find_columns()}}
+\item Split and merge dataframes: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_merge]{data_merge()}}
+\item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=find_columns]{find_columns()}}
 \item Functions to filter rows: \code{\link[=data_match]{data_match()}}, \code{\link[=data_filter]{data_filter()}}
 }
 }
