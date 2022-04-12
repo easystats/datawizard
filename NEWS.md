@@ -6,6 +6,10 @@ NEW FUNCTIONS
 
 MINOR CHANGES
 
+* The `select` argument now accepts following additional select-helpers:
+  `is.numeric()`, `is.factor()`, `is.character()` and `is.logical()`, to
+  select variables of a specific type/class.
+
 * Many functions now get a `.default` method, to capture unsupported classes. 
   This now yields a message and returns the original input, and hence, the 
   `.data.frame` methods won't stop due to an error.
