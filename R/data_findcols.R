@@ -17,8 +17,11 @@
 #'     (e.g. `1` or `c(1, 3, 5)`),
 #'   - a vector of negative integers, giving the positions counting from the
 #'     right (e.g., `-1` or `-1:-3`),
-#'   - or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
-#'   `contains("")`, a range using `:` or `regex("")`.
+#'   - one of the following select-helpers: `starts_with("")`, `ends_with("")`,
+#'     `contains("")`, a range using `:` or `regex("")`,
+#'   - or a function testing for logical conditions, mainly `is.numeric()`,
+#'     `is.factor()`, `is.character()` or `is.logical()`. These will select
+#'     variables if they are of the related type.
 #'
 #'   If `NULL`, selects all columns.
 #' @param exclude See `select`, however, column names matched by the pattern

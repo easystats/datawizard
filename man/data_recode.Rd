@@ -22,7 +22,6 @@ data_recode(x, ...)
   recode = NULL,
   default = NULL,
   preserve_na = TRUE,
-  force = FALSE,
   append = FALSE,
   select = NULL,
   exclude = NULL,
@@ -56,8 +55,6 @@ default value.}
 
 \item{verbose}{Toggle warnings.}
 
-\item{force}{Logical, if \code{TRUE}, forces recoding of factors as well.}
-
 \item{append}{Logical or string. If \code{TRUE}, recoded variables get new
 column names (with the suffix \code{"_r"}) and are appended (column bind) to \code{x},
 thus returning both the original and the recoded variables. If \code{FALSE},
@@ -76,8 +73,11 @@ vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
 (e.g. \code{1} or \code{c(1, 3, 5)}),
 \item a vector of negative integers, giving the positions counting from the
 right (e.g., \code{-1} or \code{-1:-3}),
-\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
-\code{contains("")}, a range using \code{:} or \code{regex("")}.
+\item one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")},
+\item or a function testing for logical conditions, mainly \code{is.numeric()},
+\code{is.factor()}, \code{is.character()} or \code{is.logical()}. These will select
+variables if they are of the related type.
 }
 
 If \code{NULL}, selects all columns.}
@@ -212,7 +212,6 @@ d <- data.frame(
 data_recode(
   d,
   recode = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
-  force = TRUE,
   append = TRUE
 )
 

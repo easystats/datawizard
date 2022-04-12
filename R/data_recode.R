@@ -147,7 +147,6 @@
 #' data_recode(
 #'   d,
 #'   recode = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
-#'   force = TRUE,
 #'   append = TRUE
 #' )
 #'
@@ -469,7 +468,6 @@ data_recode.data.frame <- function(x,
                                    recode = NULL,
                                    default = NULL,
                                    preserve_na = TRUE,
-                                   force = FALSE,
                                    append = FALSE,
                                    select = NULL,
                                    exclude = NULL,
@@ -480,7 +478,7 @@ data_recode.data.frame <- function(x,
   select <- .select_nse(select, x, exclude, ignore_case)
 
   # process arguments
-  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force)
+  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force = TRUE)
 
   # update processed arguments
   x <- args$x
