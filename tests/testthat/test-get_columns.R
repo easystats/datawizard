@@ -10,6 +10,16 @@ test_that("get_columns works as expected", {
   )
 
   expect_equal(
+    get_columns(iris, is.numeric()),
+    iris[sapply(iris, is.numeric)]
+  )
+
+  expect_equal(
+    get_columns(iris, is.factor()),
+    iris[sapply(iris, is.factor)]
+  )
+
+  expect_equal(
     get_columns(iris, regex("\\.")),
     iris[c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")]
   )
