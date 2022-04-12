@@ -70,14 +70,17 @@ convert_data_to_numeric.data.frame <- function(x,
   x <- args$x
   select <- args$select
 
-  x[select] <- lapply(
+  out <- sapply(
     x[select],
     convert_data_to_numeric,
     dummy_factors = dummy_factors,
     preserve_levels = preserve_levels,
     lowest = lowest,
-    ...
+    simplify = FALSE
   )
+
+  # "out" is currently a list, bind columns and to data frame
+  out <- as.data.frame(do.call(cbind, out))
 
   # save variable attributes
   attr_vars <- lapply(original_x, attributes)
@@ -92,7 +95,7 @@ convert_data_to_numeric.data.frame <- function(x,
     }
   }
 
-  x
+  out
 }
 
 
