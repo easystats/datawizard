@@ -11,7 +11,7 @@
 #'   _new_ values, while the values of the list-elements indicate the original
 #'   (old) values that should be replaced. When recoding numeric vectors,
 #'   element names have to be surrounded in backticks. For example,
-#'   ``recodes = list(`0` = 1)`` would recode all `1` into `0` in a numeric
+#'   ``recodes=list(`0`=1)`` would recode all `1` into `0` in a numeric
 #'   vector. See also 'Examples' and 'Details'.
 #' @param ... not used.
 #' @inheritParams find_columns

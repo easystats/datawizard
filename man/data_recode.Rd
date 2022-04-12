@@ -32,7 +32,7 @@ The \emph{names} of the list-elements (i.e. the left-hand side) represent the
 \emph{new} values, while the values of the list-elements indicate the original
 (old) values that should be replaced. When recoding numeric vectors,
 element names have to be surrounded in backticks. For example,
-\code{recodes = list(`0` = 1)} would recode all \code{1} into \code{0} in a numeric
+\code{recodes=list(`0`=1)} would recode all \code{1} into \code{0} in a numeric
 vector. See also 'Examples' and 'Details'.}
 
 \item{verbose}{Toggle warnings.}
