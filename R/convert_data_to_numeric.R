@@ -24,6 +24,15 @@ convert_data_to_numeric <- function(x, ...) {
 data_to_numeric <- convert_data_to_numeric
 
 
+#' @export
+convert_data_to_numeric.default <- function(x, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    message(insight::format_message(sprintf("Converting into numeric values currently not possible for variables of class '%s'.", class(x)[1])))
+  }
+  x
+}
+
+
 #' @rdname convert_data_to_numeric
 #' @export
 convert_data_to_numeric.data.frame <- function(x, dummy_factors = TRUE, ...) {
@@ -97,9 +106,6 @@ convert_data_to_numeric.factor <- function(x, dummy_factors = TRUE, ...) {
   }
   out
 }
-
-
-
 
 
 #' @export

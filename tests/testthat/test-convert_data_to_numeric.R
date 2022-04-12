@@ -7,6 +7,11 @@ test_that("convert character to numeric", {
   expect_equal(convert_data_to_numeric(c("xyz", "ab")), c(2, 1))
 })
 
+test_that("convert character to numeric Date", {
+  expect_message(convert_data_to_numeric(as.Date("2022-01-01")))
+})
+
+
 test_that("convert factor to numeric", {
   f <- factor(substring("statistics", 1:10, 1:10))
   expect_snapshot(convert_data_to_numeric(f))
