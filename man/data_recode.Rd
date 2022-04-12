@@ -8,11 +8,20 @@
 \usage{
 data_recode(x, ...)
 
-\method{data_recode}{numeric}(x, recodes = NULL, verbose = TRUE, ...)
+\method{data_recode}{numeric}(
+  x,
+  recodes = NULL,
+  default = NULL,
+  preserve_na = TRUE,
+  verbose = TRUE,
+  ...
+)
 
 \method{data_recode}{data.frame}(
   x,
   recodes = NULL,
+  default = NULL,
+  preserve_na = TRUE,
   force = FALSE,
   append = FALSE,
   select = NULL,
@@ -34,6 +43,16 @@ The \emph{names} of the list-elements (i.e. the left-hand side) represent the
 element names have to be surrounded in backticks. For example,
 \code{recodes=list(`0`=1)} would recode all \code{1} into \code{0} in a numeric
 vector. See also 'Examples' and 'Details'.}
+
+\item{default}{Defines the default value for all values that have
+no match in the recode-pairs. Note that, if \code{preserve_na=FALSE}, missing
+values (\code{NA}) are also captured by the \code{default} argument, and thus will
+also be recoded into the specified value. See 'Examples' and 'Details'.}
+
+\item{preserve_na}{Logical, if \code{TRUE}, \code{NA} (missing values) are preserved.
+This overrides any other arguments, including \code{default}. Hence, if
+\code{preserve_na=TRUE}, \code{default} will no longer convert \code{NA} into the specified
+default value.}
 
 \item{verbose}{Toggle warnings.}
 
@@ -109,10 +128,12 @@ placeholder to use the minimum or maximum value of the
 Example: \verb{recodes=list(`1`="min:10",2="11:max")}.
 \item \code{default} values
 
-defines the default value for all values that have no match in the
-recode-pairs. Example: \code{recodes=list(`1`=c(1,2),`2`=c(3,4),default=9)} would
-recode values 1 and 2 into 1, 3 and 4 into 2, and all other values (no
-matter if missing or any numeric value other than 1 to 4) into 5.
+The \code{default} argument defines the default value for all values that have
+no match in the recode-pairs. For example,
+\verb{recodes=list(`1`=c(1,2),`2`=c(3,4)), default=9} would
+recode values 1 and 2 into 1, 3 and 4 into 2, and all other values into 5.
+If \code{preserve_na} is set to \code{FALSE}, \code{NA} (missing values) will also be
+recoded into the specified default value.
 \item Reversing and rescaling
 
 See \code{\link[=data_reverse]{data_reverse()}} and \code{\link[=data_rescale]{data_rescale()}}.
@@ -128,11 +149,27 @@ out <- data_recode(x, list(`0` = 1, `1` = 2:3, `2` = 4))
 out
 table(out, useNA = "always")
 
-out <- data_recode(x, list(`0` = 1, `1` = 2:3, `2` = 4, `9` = NA))
+# to recode NA values, set preserve_na to FALSE
+out <- data_recode(
+  x,
+  list(`0` = 1, `1` = 2:3, `2` = 4, `9` = NA),
+  preserve_na = FALSE
+)
 out
 table(out, useNA = "always")
 
-out <- data_recode(x, list(`0` = 1, `1` = 2:3, default = 77))
+# preserve na
+out <- data_recode(x, list(`0` = 1, `1` = 2:3), default = 77)
+out
+table(out, useNA = "always")
+
+# recode na into default
+out <- data_recode(
+  x,
+  list(`0` = 1, `1` = 2:3),
+  default = 77,
+  preserve_na = FALSE
+)
 out
 table(out, useNA = "always")
 
@@ -150,9 +187,9 @@ out <- data_recode(x, list(x = "a", y = "b", z = "c"))
 out
 table(out)
 
-out <- data_recode(x, list(y = "b,c", default = 77))
+out <- data_recode(x, list(y = "b,c"), default = 77)
 # same as
-# data_recode(x, list(y = c("b", "c"), default = 77))
+# data_recode(x, list(y = c("b", "c")), default = 77)
 out
 table(out)
 

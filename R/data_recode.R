@@ -13,6 +13,14 @@
 #'   element names have to be surrounded in backticks. For example,
 #'   ``recodes=list(`0`=1)`` would recode all `1` into `0` in a numeric
 #'   vector. See also 'Examples' and 'Details'.
+#' @param default Defines the default value for all values that have
+#'   no match in the recode-pairs. Note that, if `preserve_na=FALSE`, missing
+#'   values (`NA`) are also captured by the `default` argument, and thus will
+#'   also be recoded into the specified value. See 'Examples' and 'Details'.
+#' @param preserve_na Logical, if `TRUE`, `NA` (missing values) are preserved.
+#'   This overrides any other arguments, including `default`. Hence, if
+#'   `preserve_na=TRUE`, `default` will no longer convert `NA` into the specified
+#'   default value.
 #' @param ... not used.
 #' @inheritParams find_columns
 #' @inheritParams data_cut
@@ -56,10 +64,12 @@
 #'
 #' - `default` values
 #'
-#'   defines the default value for all values that have no match in the
-#'   recode-pairs. Example: ``recodes=list(`1`=c(1,2),`2`=c(3,4),default=9)`` would
-#'   recode values 1 and 2 into 1, 3 and 4 into 2, and all other values (no
-#'   matter if missing or any numeric value other than 1 to 4) into 5.
+#'   The `default` argument defines the default value for all values that have
+#'   no match in the recode-pairs. For example,
+#'   ``recodes=list(`1`=c(1,2),`2`=c(3,4)), default=9`` would
+#'   recode values 1 and 2 into 1, 3 and 4 into 2, and all other values into 5.
+#'   If `preserve_na` is set to `FALSE`, `NA` (missing values) will also be
+#'   recoded into the specified default value.
 #'
 #' - Reversing and rescaling
 #'
@@ -75,11 +85,27 @@
 #' out
 #' table(out, useNA = "always")
 #'
-#' out <- data_recode(x, list(`0` = 1, `1` = 2:3, `2` = 4, `9` = NA))
+#' # to recode NA values, set preserve_na to FALSE
+#' out <- data_recode(
+#'   x,
+#'   list(`0` = 1, `1` = 2:3, `2` = 4, `9` = NA),
+#'   preserve_na = FALSE
+#' )
 #' out
 #' table(out, useNA = "always")
 #'
-#' out <- data_recode(x, list(`0` = 1, `1` = 2:3, default = 77))
+#' # preserve na
+#' out <- data_recode(x, list(`0` = 1, `1` = 2:3), default = 77)
+#' out
+#' table(out, useNA = "always")
+#'
+#' # recode na into default
+#' out <- data_recode(
+#'   x,
+#'   list(`0` = 1, `1` = 2:3),
+#'   default = 77,
+#'   preserve_na = FALSE
+#' )
 #' out
 #' table(out, useNA = "always")
 #'
@@ -97,9 +123,9 @@
 #' out
 #' table(out)
 #'
-#' out <- data_recode(x, list(y = "b,c", default = 77))
+#' out <- data_recode(x, list(y = "b,c"), default = 77)
 #' # same as
-#' # data_recode(x, list(y = c("b", "c"), default = 77))
+#' # data_recode(x, list(y = c("b", "c")), default = 77)
 #' out
 #' table(out)
 #'
@@ -125,8 +151,8 @@ data_recode <- function(x, ...) {
 
 
 #' @export
-data_recode.default <- function(x, recodes = NULL, verbose = TRUE, ...) {
-  if (verbose) {
+data_recode.default <- function(x, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
     message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
   }
   return(x)
@@ -135,7 +161,12 @@ data_recode.default <- function(x, recodes = NULL, verbose = TRUE, ...) {
 
 #' @rdname data_recode
 #' @export
-data_recode.numeric <- function(x, recodes = NULL, verbose = TRUE, ...) {
+data_recode.numeric <- function(x,
+                                recodes = NULL,
+                                default = NULL,
+                                preserve_na = TRUE,
+                                verbose = TRUE,
+                                ...) {
 
   # save
   original_x <- x
@@ -151,18 +182,17 @@ data_recode.numeric <- function(x, recodes = NULL, verbose = TRUE, ...) {
     return(original_x)
   }
 
-  # check for "default" token
-  if ("default" %in% names(recodes)) {
-    default_token <- recodes[["default"]]
-    recodes["default"] <- NULL
+  # make sure NAs are preserved after recoding
+  missing_values <- NULL
+  if (preserve_na) {
+    missing_values <- is.na(x)
+  }
 
+  # check for "default" token
+  if (!is.null(default)) {
     # set the default value for all values that have no match
     # (i.e. that should not be recoded)
-    if (default_token == "copy") {
-      x <- original_x
-    } else {
-      x <- rep(as.numeric(default_token), length = length(x))
-    }
+    x <- rep(as.numeric(default), length = length(x))
   }
 
   for (i in names(recodes)) {
@@ -196,12 +226,22 @@ data_recode.numeric <- function(x, recodes = NULL, verbose = TRUE, ...) {
   attr(x, "label") <- attr(original_x, "label", exact = TRUE)
   attr(x, "labels") <- NULL
 
+  # set back missing values
+  if (!is.null(missing_values)) {
+    x[missing_values] <- NA
+  }
+
   x
 }
 
 
 #' @export
-data_recode.factor <- function(x, recodes = NULL, verbose = TRUE, ...) {
+data_recode.factor <- function(x,
+                               recodes = NULL,
+                               default = NULL,
+                               preserve_na = TRUE,
+                               verbose = TRUE,
+                               ...) {
 
   # save
   original_x <- x
@@ -217,21 +257,20 @@ data_recode.factor <- function(x, recodes = NULL, verbose = TRUE, ...) {
     return(original_x)
   }
 
+  # make sure NAs are preserved after recoding
+  missing_values <- NULL
+  if (preserve_na) {
+    missing_values <- is.na(x)
+  }
+
   # as character, so recoding works
   x <- as.character(x)
 
   # check for "default" token
-  if ("default" %in% names(recodes)) {
-    default_token <- recodes[["default"]]
-    recodes["default"] <- NULL
-
+  if (!is.null(default)) {
     # set the default value for all values that have no match
     # (i.e. that should not be recoded)
-    if (default_token == "copy") {
-      x <- as.character(original_x)
-    } else {
-      x <- rep(as.character(default_token), length = length(x))
-    }
+    x <- rep(as.character(default), length = length(x))
   }
 
   for (i in names(recodes)) {
@@ -242,7 +281,16 @@ data_recode.factor <- function(x, recodes = NULL, verbose = TRUE, ...) {
       old_values <- insight::trim_ws(unlist(strsplit(old_values, ",", fixed = TRUE)))
     }
     # recode
-    x[which(original_x %in% old_values)] <- as.character(i)
+    if (identical(i, "NA")) {
+      x[which(original_x %in% old_values)] <- NA_character_
+    } else {
+      x[which(original_x %in% old_values)] <- as.character(i)
+    }
+  }
+
+  # set back missing values
+  if (!is.null(missing_values)) {
+    x[missing_values] <- NA_character_
   }
 
   # make sure we have correct new levels
@@ -258,7 +306,12 @@ data_recode.factor <- function(x, recodes = NULL, verbose = TRUE, ...) {
 
 
 #' @export
-data_recode.character <- function(x, recodes = NULL, verbose = TRUE, ...) {
+data_recode.character <- function(x,
+                                  recodes = NULL,
+                                  default = NULL,
+                                  preserve_na = TRUE,
+                                  verbose = TRUE,
+                                  ...) {
 
   # save
   original_x <- x
@@ -274,18 +327,17 @@ data_recode.character <- function(x, recodes = NULL, verbose = TRUE, ...) {
     return(original_x)
   }
 
-  # check for "default" token
-  if ("default" %in% names(recodes)) {
-    default_token <- recodes[["default"]]
-    recodes["default"] <- NULL
+  # make sure NAs are preserved after recoding
+  missing_values <- NULL
+  if (preserve_na) {
+    missing_values <- is.na(x)
+  }
 
+  # check for "default" token
+  if (!is.null(default)) {
     # set the default value for all values that have no match
     # (i.e. that should not be recoded)
-    if (default_token == "copy") {
-      x <- as.character(original_x)
-    } else {
-      x <- rep(as.character(default_token), length = length(x))
-    }
+    x <- rep(as.character(default), length = length(x))
   }
 
   for (i in names(recodes)) {
@@ -296,13 +348,22 @@ data_recode.character <- function(x, recodes = NULL, verbose = TRUE, ...) {
       old_values <- insight::trim_ws(unlist(strsplit(old_values, ",", fixed = TRUE)))
     }
     # recode
-    x[which(original_x %in% old_values)] <- as.character(i)
+    if (identical(i, "NA")) {
+      x[which(original_x %in% old_values)] <- NA_character_
+    } else {
+      x[which(original_x %in% old_values)] <- as.character(i)
+    }
   }
 
   # set back variable labels, remove value labels
   # (these are most likely not matching anymore)
   attr(x, "label") <- attr(original_x, "label", exact = TRUE)
   attr(x, "labels") <- NULL
+
+  # set back missing values
+  if (!is.null(missing_values)) {
+    x[missing_values] <- NA_character_
+  }
 
   x
 }
@@ -312,6 +373,8 @@ data_recode.character <- function(x, recodes = NULL, verbose = TRUE, ...) {
 #' @export
 data_recode.data.frame <- function(x,
                                    recodes = NULL,
+                                   default = NULL,
+                                   preserve_na = TRUE,
                                    force = FALSE,
                                    append = FALSE,
                                    select = NULL,
@@ -329,7 +392,16 @@ data_recode.data.frame <- function(x,
   x <- args$x
   select <- args$select
 
-  x[select] <- lapply(x[select], data_recode, recodes = recodes, verbose = verbose, ...)
+  x[select] <- lapply(
+    x[select],
+    data_recode,
+    recodes = recodes,
+    default = default,
+    preserve_na = preserve_na,
+    verbose = verbose,
+    ...
+  )
+
   x
 }
 
