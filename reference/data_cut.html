@@ -95,7 +95,6 @@ and more accessible way to define the interval breaks (cut-off values).</p>
   range <span class="op">=</span> <span class="cn">NULL</span>,
   lowest <span class="op">=</span> <span class="fl">1</span>,
   labels <span class="op">=</span> <span class="cn">NULL</span>,
-  force <span class="op">=</span> <span class="cn">FALSE</span>,
   append <span class="op">=</span> <span class="cn">FALSE</span>,
   select <span class="op">=</span> <span class="cn">NULL</span>,
   exclude <span class="op">=</span> <span class="cn">NULL</span>,
@@ -144,8 +143,6 @@ will returns factors instead of numeric variables, with <code>labels</code> used
 for labelling the factor levels.</p></dd>
 <dt>verbose</dt>
 <dd><p>Toggle warnings.</p></dd>
-<dt>force</dt>
-<dd><p>Logical, if <code>TRUE</code>, forces recoding of factors as well.</p></dd>
 <dt>append</dt>
 <dd><p>Logical or string. If <code>TRUE</code>, recoded variables get new
 column names (with the suffix <code>"_r"</code>) and are appended (column bind) to <code>x</code>,
