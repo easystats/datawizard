@@ -1,13 +1,15 @@
 
-test_that("distributions", {
-  skip_if_not_installed("bayestestR")
-  skip_if_not_installed("parameters")
+if (packageVersion("bayestestR") >= "0.12.0") {
+  test_that("distributions", {
+    skip_if_not_installed("bayestestR")
+    skip_if_not_installed("parameters")
 
-  set.seed(123)
-  x <- bayestestR::distribution_normal(100)
+    set.seed(123)
+    x <- bayestestR::distribution_normal(100)
 
-  expect_equal(kurtosis(x)$Kurtosis, -0.3204763, tolerance = 0.01)
-  expect_equal(skewness(x)$Skewness, -5.050428e-16, tolerance = 0.01)
-  expect_equal(as.numeric(smoothness(x, "diff")), 0.919, tolerance = 0.01)
-  expect_equal(as.numeric(smoothness(x, "cor")), 0.998, tolerance = 0.01)
-})
+    expect_equal(kurtosis(x)$Kurtosis, -0.1119534, tolerance = 0.01)
+    expect_equal(skewness(x)$Skewness, -5.881466e-17, tolerance = 0.01)
+    expect_equal(as.numeric(smoothness(x, "diff")), 1.183699, tolerance = 0.01)
+    expect_equal(as.numeric(smoothness(x, "cor")), 0.9979799, tolerance = 0.01)
+  })
+}
