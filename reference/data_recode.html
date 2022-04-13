@@ -121,12 +121,15 @@ default value.</p></dd>
 <dt>verbose</dt>
 <dd><p>Toggle warnings.</p></dd>
 <dt>append</dt>
-<dd><p>Logical or string. If <code>TRUE</code>, recoded variables get new
-column names (with the suffix <code>"_r"</code>) and are appended (column bind) to <code>x</code>,
-thus returning both the original and the recoded variables. If <code>FALSE</code>,
-original variables in <code>x</code> will be overwritten by their recoded versions.
-If a character value, recoded variables are appended with new column
-names (using the defined suffix) to the original data frame.</p></dd>
+<dd><p>Logical or string. If <code>TRUE</code>, recoded or converted variables
+get new column names and are appended (column bind) to <code>x</code>, thus returning
+both the original and the recoded variables. The new columns get a suffix,
+based on the calling function: <code>"_r"</code> for recode functions, <code>="_n"</code> for
+<code><a href="convert_data_to_numeric.html">data_to_numeric()</a></code>, <code>"_f"</code> for <code><a href="data_to_factor.html">data_to_factor()</a></code>, or <code>"_s"</code> for
+<code><a href="data_shift.html">data_shift()</a></code>. If <code>append=FALSE</code>, original variables in <code>x</code> will be
+overwritten by their recoded versions. If a character value, recoded
+variables are appended with new column names (using the defined suffix) to
+the original data frame.</p></dd>
 <dt>select</dt>
 <dd><p>Variables that will be included when performing the required
 tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
@@ -204,7 +207,7 @@ The default for <code>recode(`1`=0)</code> is to recode all 0 into 1.</p>
 <ul><li><p>Functions to rename stuff: <code><a href="data_rename.html">data_rename()</a></code>, <code><a href="data_rename.html">data_rename_rows()</a></code>, <code><a href="data_rename.html">data_addprefix()</a></code>, <code><a href="data_rename.html">data_addsuffix()</a></code></p></li>
 <li><p>Functions to reorder or remove columns: <code><a href="data_relocate.html">data_reorder()</a></code>, <code><a href="data_relocate.html">data_relocate()</a></code>, <code><a href="data_relocate.html">data_remove()</a></code></p></li>
 <li><p>Functions to reshape, pivot or rotate dataframes: <code><a href="data_to_long.html">data_to_long()</a></code>, <code><a href="data_to_long.html">data_to_wide()</a></code>, <code><a href="data_rotate.html">data_rotate()</a></code></p></li>
-<li><p>Functions to recode data: <code><a href="data_rescale.html">data_rescale()</a></code>, <code><a href="data_reverse.html">data_reverse()</a></code>, <code><a href="data_cut.html">data_cut()</a></code>, <code>data_recode()</code></p></li>
+<li><p>Functions to recode data: <code><a href="data_rescale.html">data_rescale()</a></code>, <code><a href="data_reverse.html">data_reverse()</a></code>, <code><a href="data_cut.html">data_cut()</a></code>, <code>data_recode()</code>, <code><a href="data_shift.html">data_shift()</a></code></p></li>
 <li><p>Functions to standardize, normalize, rank-transform: <code><a href="standardize.html">standardize()</a></code>, <code><a href="normalize.html">normalize()</a></code>, <code><a href="ranktransform.html">ranktransform()</a></code>, <code><a href="winsorize.html">winsorize()</a></code></p></li>
 <li><p>Split and merge dataframes: <code><a href="data_partition.html">data_partition()</a></code>, <code><a href="data_merge.html">data_merge()</a></code></p></li>
 <li><p>Functions to find or select columns: <code><a href="find_columns.html">data_select()</a></code>, <code><a href="find_columns.html">find_columns()</a></code></p></li>
