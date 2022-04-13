@@ -247,7 +247,15 @@ data_cut.data.frame <- function(x,
   select <- .select_nse(select, x, exclude, ignore_case)
 
   # process arguments
-  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force = TRUE)
+  args <- .process_std_args(
+    x,
+    select,
+    exclude,
+    weights = NULL,
+    append,
+    append_suffix = "_r",
+    force = TRUE
+  )
 
   # update processed arguments
   x <- args$x
