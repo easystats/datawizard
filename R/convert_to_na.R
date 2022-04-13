@@ -66,6 +66,9 @@ convert_to_na.numeric <- function(x, na = NULL, verbose = TRUE, ...) {
   } else {
     matches <- which(x %in% na)
     x[matches] <- NA
+    # drop unused labels
+    value_labels <- attr(x, "labels", exact = TRUE)
+    attr(x, "labels") <- value_labels[!value_labels %in% na]
   }
   x
 }
@@ -85,6 +88,9 @@ convert_to_na.factor <- function(x, na = NULL, verbose = TRUE, ...) {
   } else {
     matches <- which(x %in% na)
     x[matches] <- NA
+    # drop unused labels
+    value_labels <- attr(x, "labels", exact = TRUE)
+    attr(x, "labels") <- value_labels[!value_labels %in% na]
   }
   x
 }
