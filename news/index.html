@@ -60,8 +60,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.1" id="datawizard-041">datawizard 0.4.1<a class="anchor" aria-label="anchor" href="#datawizard-041"></a></h2>
 <p>NEW FUNCTIONS</p>
-<ul><li>
-<code><a href="../reference/data_recode.html">data_recode()</a></code> to recode old into new values.</li>
+<ul><li><p><code><a href="../reference/data_shift.html">data_shift()</a></code> to shift the value range of numeric variables.</p></li>
+<li><p><code><a href="../reference/data_recode.html">data_recode()</a></code> to recode old into new values.</p></li>
 </ul><p>MINOR CHANGES</p>
 <ul><li><p>The <code>select</code> argument now accepts following additional select-helpers: <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric()</a></code>, <code><a href="https://rdrr.io/r/base/factor.html" class="external-link">is.factor()</a></code>, <code><a href="https://rdrr.io/r/base/character.html" class="external-link">is.character()</a></code> and <code><a href="https://rdrr.io/r/base/logical.html" class="external-link">is.logical()</a></code>, to select variables of a specific type/class.</p></li>
 <li><p>Many functions now get a <code>.default</code> method, to capture unsupported classes. This now yields a message and returns the original input, and hence, the <code>.data.frame</code> methods won’t stop due to an error.</p></li>
