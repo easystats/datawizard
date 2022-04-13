@@ -1,7 +1,7 @@
 Type: Package
 Package: datawizard
 Title: Easy Data Wrangling
-Version: 0.4.0.6
+Version: 0.4.0.7
 Authors@R: c(
     person("Dominique", "Makowski", , "dom.makowski@gmail.com", role = "aut",
            comment = c(ORCID = "0000-0001-5375-9967", Twitter = "@Dom_Makowski")),
@@ -34,6 +34,7 @@ Suggests:
     effectsize,
     gamm4,
     ggplot2,
+    haven,
     knitr,
     lme4,
     MASS,
@@ -41,6 +42,8 @@ Suggests:
     parameters,
     poorman,
     psych,
+    readxl,
+    readr,
     rmarkdown,
     rstanarm,
     see,

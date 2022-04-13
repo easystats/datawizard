@@ -1,0 +1,145 @@
+#' @title Read (import) data files from various sources
+#' @name data_read
+#'
+#' @description
+#' This functions imports data from various file types. This function is a small
+#' wrapper around `haven::read_spss()`, `haven::read_stata()`, `haven::read_sas()`,
+#' `readxl::read_excel()` and `readr::read_delim()`. Thus, supported file types
+#' for importing data are data files from SPSS, SAS or Stata, Excel files or
+#' text files (like 'csv' files).
+#'
+#' @param path Character string, the file path to the data file.
+#' @param path_catalog Character string, path to the catalog file. Only relevant
+#' for SAS data files.
+#' @param encoding The character encoding used for the file. Usually not needed.
+#' @param verbose Toggle warnings and messages.
+#' @param ... Arguments passed to the related `read_*()` function.
+#'
+#' @return A data frame.
+#'
+#' @details `data_read()` detects the appropriate `read_*()` function based on
+#' the file-extension of the data file. For data files from SPSS, SAS or Stata,
+#' variables are converted into their most appropriate type, i.e. variables
+#' where _all_ values are labelled, will be converted into factors, where imported
+#' value labels will be set as factor levels. Else, if a variable has _no_ value
+#' labels or less value labels than values, the variable is either converted
+#' into numeric or character vector. Value labels are then preserved as `"labels"`
+#' attribute.
+#'
+#' @export
+data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE, ...) {
+  switch(
+    .file_ext(path),
+    "csv" = .read_text(path, encoding, verbose, ...),
+    "xls" = ,
+    "xlsx" = .read_excel(path, encoding, verbose, ...),
+    "sav" = ,
+    "por" = .read_spss(path, encoding, verbose, ...),
+    "dta" = .read_stata(path, encoding, verbose, ...),
+    .read_sas(path, path_catalog, encoding, verbose, ...)
+  )
+}
+
+
+
+# helper -----------------------
+
+.file_ext <- function(x) {
+  pos <- regexpr("\\.([[:alnum:]]+)$", x)
+  ifelse(pos > -1L, substring(x, pos + 1L), "")
+}
+
+
+
+# process imported data from SPSS, SAS or Stata -----------------------
+
+.post_process_imported_data <- function(x, verbose) {
+  if (verbose) {
+    message("Preparing data... Almost there!")
+  }
+  x[] <- lapply(x, function(i) {
+    # save labels
+    value_labels <- attr(i, "labels", exact = TRUE)
+    variable_labels <- attr(i, "label", exact = TRUE)
+
+    # guess variable type
+    if (!is.character(i)) {
+      # if all values are labelled, we assume factor. Use labels as levels
+      if (length(value_labels) >= insight::n_unique(i)) {
+        i <- factor(as.character(i), labels = names(value_labels)[value_labels %in% unique(i)])
+        value_labels <- NULL
+      } else {
+        i <- as.numeric(i)
+      }
+    } else {
+      i <- as.character(i)
+    }
+
+    # drop unused value labels
+    if (length(value_labels)) {
+      attr(i, "labels") <- value_labels[value_labels %in% unique(i)]
+    }
+
+    # add back variable label
+    attr(i, "label") <- variable_labels
+    i
+  })
+
+  class(x) <- "data.frame"
+  x
+}
+
+
+
+# read functions -----------------------
+
+.read_spss <- function(path, encoding, verbose, ...) {
+  if (verbose) {
+    message("Reading data...")
+  }
+  insight::check_if_installed("haven")
+  out <- haven::read_sav(file = path, encoding = encoding, user_na = FALSE)
+  .post_process_imported_data(out, verbose)
+}
+
+
+.read_stata <- function(path, encoding, verbose, ...) {
+  if (verbose) {
+    message("Reading data...")
+  }
+  insight::check_if_installed("haven")
+  out <- haven::read_dta(file = path, encoding = encoding)
+  .post_process_imported_data(out, verbose)
+}
+
+
+.read_sas <- function(path, path_catalog, encoding, verbose, ...) {
+  if (verbose) {
+    message("Reading data...")
+  }
+  insight::check_if_installed("haven")
+  out <- haven::read_sas(data_file = path, catalog_file = path_catalog, encoding = encoding)
+  .post_process_imported_data(out, verbose)
+}
+
+
+.read_excel <- function(path, encoding, verbose, ...) {
+  if (verbose) {
+    message("Reading data...")
+  }
+  insight::check_if_installed("readxl")
+  out <- readxl::read_excel(path, ...)
+  class(out) <- "data.frame"
+  out
+}
+
+
+.read_text <- function(path, encoding, verbose, ...) {
+  if (verbose) {
+    message("Reading data...")
+  }
+  insight::check_if_installed("readr")
+  out <- readr::read_delim(path, ...)
+  class(out) <- "data.frame"
+  out
+}
