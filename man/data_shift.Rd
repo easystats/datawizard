@@ -26,6 +26,9 @@ data_shift(x, ...)
 
 \item{...}{not used.}
 
+\item{lowest}{Numeric, indicating the lowest (minimum) value when converting
+factors or character vectors to numeric values.}
+
 \item{append}{Logical or string. If \code{TRUE}, recoded variables get new
 column names (with the suffix \code{"_r"}) and are appended (column bind) to \code{x},
 thus returning both the original and the recoded variables. If \code{FALSE},

@@ -6,8 +6,9 @@
 #' new range starts at a given value.
 #'
 #' @param x A data frame or numeric vector.
+#' @param verbose Toggle warnings.
 #' @param ... not used.
-#' @inheritParams data_recode
+#' @inheritParams convert_data_to_numeric
 #'
 #' @return `x`, where the range of numeric variables starts at a new value.
 #'
