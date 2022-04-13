@@ -2,6 +2,8 @@
 
 NEW FUNCTIONS
 
+* `data_shift()` to shift the value range of numeric variables.
+
 * `data_recode()` to recode old into new values.
 
 MINOR CHANGES

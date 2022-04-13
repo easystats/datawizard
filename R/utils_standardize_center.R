@@ -87,6 +87,10 @@
 
   # copy label attributes
   variable_labels <- compact_list(lapply(x, function(i) attributes(i)$label))
+  value_labels <- NULL
+  if (preserve_value_labels) {
+    value_labels <- compact_list(lapply(x, function(i) attributes(i)$labels))
+  }
 
   # drop NAs
   remove_na <- match.arg(remove_na, c("none", "selected", "all"))
@@ -106,6 +110,9 @@
     colnames(new_variables) <- paste0(colnames(new_variables), append)
     if (length(variable_labels)) {
       variable_labels <- c(variable_labels, stats::setNames(variable_labels[select], colnames(new_variables)))
+    }
+    if (length(value_labels)) {
+      value_labels <- c(value_labels, stats::setNames(value_labels[select], colnames(new_variables)))
     }
     x <- cbind(x, new_variables)
     select <- colnames(new_variables)
@@ -154,6 +161,12 @@
   if (length(variable_labels)) {
     for (i in names(variable_labels)) {
       attr(x[[i]], "label") <- variable_labels[[i]]
+    }
+  }
+
+  if (preserve_value_labels && length(value_labels)) {
+    for (i in names(value_labels)) {
+      attr(x[[i]], "labels") <- value_labels[[i]]
     }
   }
 
