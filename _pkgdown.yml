@@ -57,6 +57,7 @@ reference:
 
   - title: Select and filter data
   - contents:
+      - data_extract
       - data_filter
       - data_select
 
@@ -73,6 +74,7 @@ reference:
   - contents:
       - data_to_numeric
       - data_to_factor
+      - data_restoretype
       - to_numeric
       - starts_with("replace_")
       - starts_with("convert_")
