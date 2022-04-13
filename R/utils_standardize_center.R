@@ -60,7 +60,8 @@
                               reference = NULL,
                               .center = NULL,
                               .scale = NULL,
-                              keep_character = FALSE) {
+                              keep_character = FALSE,
+                              preserve_value_labels = FALSE) {
 
   # check append argument, and set default
   if (isFALSE(append)) {

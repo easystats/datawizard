@@ -38,12 +38,14 @@ start from 1 to number of levels.}
 \item{lowest}{Numeric, indicating the lowest (minimum) value when converting
 factors or character vectors to numeric values.}
 
-\item{append}{Logical or string. If \code{TRUE}, recoded variables get new
-column names (with the suffix \code{"_r"}) and are appended (column bind) to \code{x},
-thus returning both the original and the recoded variables. If \code{FALSE},
-original variables in \code{x} will be overwritten by their recoded versions.
-If a character value, recoded variables are appended with new column
-names (using the defined suffix) to the original data frame.}
+\item{append}{Logical or string. If \code{TRUE}, recoded or converted variables
+get new column names (based on the calling function, the suffix is \code{"_r"}
+for recodes, \verb{="_n"} for \code{data_to_numeric()} or \code{"_f"} for \code{data_to_factor()})
+and are appended (column bind) to \code{x}, thus returning both the original and
+the recoded variables. If \code{FALSE}, original variables in \code{x} will be
+overwritten by their recoded versions. If a character value, recoded
+variables are appended with new column names (using the defined suffix) to
+the original data frame.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
