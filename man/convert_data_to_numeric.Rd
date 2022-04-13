@@ -81,7 +81,8 @@ A data frame of numeric variables.
 }
 \description{
 Convert data to numeric by converting characters to factors and factors to
-either numeric levels or dummy variables.
+either numeric levels or dummy variables. The "counterpart" to convert
+variables into factors is \code{data_to_factor()}.
 }
 \examples{
 convert_data_to_numeric(head(ToothGrowth))

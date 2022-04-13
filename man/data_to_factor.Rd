@@ -70,7 +70,8 @@ Convert data to factors
 }
 \details{
 Convert data to numeric by converting characters to factors and factors to
-either numeric levels or dummy variables.
+either numeric levels or dummy variables. The "counterpart" to convert
+variables into numeric is \code{data_to_numeric()}.
 }
 \examples{
 str(data_to_factor(iris))
