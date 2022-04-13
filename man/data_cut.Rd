@@ -73,10 +73,11 @@ for labelling the factor levels.}
 \item{verbose}{Toggle warnings.}
 
 \item{append}{Logical or string. If \code{TRUE}, recoded or converted variables
-get new column names (based on the calling function, the suffix is \code{"_r"}
-for recodes, \verb{="_n"} for \code{data_to_numeric()} or \code{"_f"} for \code{data_to_factor()})
-and are appended (column bind) to \code{x}, thus returning both the original and
-the recoded variables. If \code{FALSE}, original variables in \code{x} will be
+get new column names and are appended (column bind) to \code{x}, thus returning
+both the original and the recoded variables. The new columns get a suffix,
+based on the calling function: \code{"_r"} for recode functions, \verb{="_n"} for
+\code{data_to_numeric()}, \code{"_f"} for \code{data_to_factor()}, or \code{"_s"} for
+\code{data_shift()}. If \code{append=FALSE}, original variables in \code{x} will be
 overwritten by their recoded versions. If a character value, recoded
 variables are appended with new column names (using the defined suffix) to
 the original data frame.}
