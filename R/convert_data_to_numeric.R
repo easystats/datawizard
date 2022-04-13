@@ -71,7 +71,15 @@ convert_data_to_numeric.data.frame <- function(x,
   }
 
   # process arguments
-  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_n", force = TRUE)
+  args <- .process_std_args(
+    x,
+    select,
+    exclude,
+    weights = NULL,
+    append,
+    append_suffix = "_n",
+    force = TRUE
+  )
 
   # update processed arguments
   x <- args$x

@@ -338,3 +338,18 @@ test_that("data_recode, labels preserved", {
   )
   expect_null(attr(x, "labels", exact = TRUE))
 })
+
+
+
+# data_shift -----------------------------------
+
+test_that("data_shift, labels preserved", {
+  data(efc)
+  x <- data_shift(efc)
+  expect_equal(
+    attr(x, "label", exact = TRUE),
+    attr(efc$c172code, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  expect_null(attr(x, "labels", exact = TRUE))
+})
