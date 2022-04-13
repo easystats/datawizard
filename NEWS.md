@@ -6,6 +6,8 @@ NEW FUNCTIONS
 
 * `data_recode()` to recode old into new values.
 
+* `data_to_factor()` as counterpart to `data_to_numeric()`.
+
 MINOR CHANGES
 
 * The `select` argument now accepts following additional select-helpers:
