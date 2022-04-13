@@ -8,6 +8,7 @@
 #' @param x A data frame or vector.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams find_columns
+#' @inheritParams data_cut
 #'
 #' @return A factor, or a data frame of factors.
 #'
@@ -52,7 +53,7 @@ data_to_factor.numeric <- function(x, ...) {
 
   # use value labels as levels
   if (!is.null(value_labels)) {
-    levels(x) <- names(value_labels)
+    try(levels(x) <- names(value_labels), silent = TRUE)
   }
 
   # add back variable label
