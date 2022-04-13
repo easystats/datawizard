@@ -347,9 +347,16 @@ test_that("data_shift, labels preserved", {
   data(efc)
   x <- data_shift(efc)
   expect_equal(
+    attr(x$c172code, "label", exact = TRUE),
+    attr(efc$c172code, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  expect_null(attr(x$c172code, "labels", exact = TRUE))
+
+  x <- data_shift(efc$c172code)
+  expect_equal(
     attr(x, "label", exact = TRUE),
     attr(efc$c172code, "label", exact = TRUE),
     ignore_attr = TRUE
   )
-  expect_null(attr(x, "labels", exact = TRUE))
 })
