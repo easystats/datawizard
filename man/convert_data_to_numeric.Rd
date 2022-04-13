@@ -38,12 +38,15 @@ start from 1 to number of levels.}
 \item{lowest}{Numeric, indicating the lowest (minimum) value when converting
 factors or character vectors to numeric values.}
 
-\item{append}{Logical or string. If \code{TRUE}, recoded variables get new
-column names (with the suffix \code{"_r"}) and are appended (column bind) to \code{x},
-thus returning both the original and the recoded variables. If \code{FALSE},
-original variables in \code{x} will be overwritten by their recoded versions.
-If a character value, recoded variables are appended with new column
-names (using the defined suffix) to the original data frame.}
+\item{append}{Logical or string. If \code{TRUE}, recoded or converted variables
+get new column names and are appended (column bind) to \code{x}, thus returning
+both the original and the recoded variables. The new columns get a suffix,
+based on the calling function: \code{"_r"} for recode functions, \verb{="_n"} for
+\code{data_to_numeric()}, \code{"_f"} for \code{data_to_factor()}, or \code{"_s"} for
+\code{data_shift()}. If \code{append=FALSE}, original variables in \code{x} will be
+overwritten by their recoded versions. If a character value, recoded
+variables are appended with new column names (using the defined suffix) to
+the original data frame.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -78,7 +81,8 @@ A data frame of numeric variables.
 }
 \description{
 Convert data to numeric by converting characters to factors and factors to
-either numeric levels or dummy variables.
+either numeric levels or dummy variables. The "counterpart" to convert
+variables into factors is \code{data_to_factor()}.
 }
 \examples{
 convert_data_to_numeric(head(ToothGrowth))

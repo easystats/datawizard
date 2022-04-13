@@ -360,3 +360,25 @@ test_that("data_shift, labels preserved", {
     ignore_attr = TRUE
   )
 })
+
+
+
+# data_to_factor -----------------------------------
+
+test_that("data_to_factor, labels preserved", {
+  data(efc)
+  x <- data_to_factor(efc)
+  expect_equal(
+    attr(x$c172code, "label", exact = TRUE),
+    attr(efc$c172code, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  expect_null(attr(x$c172code, "labels", exact = TRUE))
+
+  x <- data_to_factor(efc$c172code)
+  expect_equal(
+    attr(x, "label", exact = TRUE),
+    attr(efc$c172code, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+})

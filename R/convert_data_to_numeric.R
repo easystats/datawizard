@@ -1,7 +1,8 @@
 #' Convert data to numeric
 #'
 #' Convert data to numeric by converting characters to factors and factors to
-#' either numeric levels or dummy variables.
+#' either numeric levels or dummy variables. The "counterpart" to convert
+#' variables into factors is `data_to_factor()`.
 #'
 #' @param x A data frame, factor or vector.
 #' @param dummy_factors Transform factors to dummy factors (all factor levels as

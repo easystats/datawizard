@@ -60,6 +60,7 @@
                               reference = NULL,
                               .center = NULL,
                               .scale = NULL,
+                              keep_character = FALSE,
                               preserve_value_labels = FALSE) {
 
   # check append argument, and set default
@@ -78,7 +79,7 @@
     }
   }
 
-  select <- .select_variables(x, select, exclude, force)
+  select <- .select_variables(x, select, exclude, force, keep_character)
 
   # check if selected variables are in reference
   if (!is.null(reference) && !all(select %in% names(reference))) {
@@ -253,7 +254,7 @@
 
 ## variables to standardize and center ----
 
-.select_variables <- function(x, select, exclude, force) {
+.select_variables <- function(x, select, exclude, force, keep_character = FALSE) {
   if (is.null(select)) {
     select <- names(x)
   }
@@ -263,7 +264,11 @@
   }
 
   if (!force) {
-    factors <- sapply(x[select], function(i) is.factor(i) | is.character(i))
+    if (!keep_character) {
+      factors <- sapply(x[select], function(i) is.factor(i) | is.character(i))
+    } else {
+      factors <- sapply(x[select], function(i) is.factor(i))
+    }
     select <- select[!factors]
   }
 

@@ -72,12 +72,15 @@ for labelling the factor levels.}
 
 \item{verbose}{Toggle warnings.}
 
-\item{append}{Logical or string. If \code{TRUE}, recoded variables get new
-column names (with the suffix \code{"_r"}) and are appended (column bind) to \code{x},
-thus returning both the original and the recoded variables. If \code{FALSE},
-original variables in \code{x} will be overwritten by their recoded versions.
-If a character value, recoded variables are appended with new column
-names (using the defined suffix) to the original data frame.}
+\item{append}{Logical or string. If \code{TRUE}, recoded or converted variables
+get new column names and are appended (column bind) to \code{x}, thus returning
+both the original and the recoded variables. The new columns get a suffix,
+based on the calling function: \code{"_r"} for recode functions, \verb{="_n"} for
+\code{data_to_numeric()}, \code{"_f"} for \code{data_to_factor()}, or \code{"_s"} for
+\code{data_shift()}. If \code{append=FALSE}, original variables in \code{x} will be
+overwritten by their recoded versions. If a character value, recoded
+variables are appended with new column names (using the defined suffix) to
+the original data frame.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -182,7 +185,7 @@ data_cut(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high"))
 \item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}}, \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
 \item Functions to reorder or remove columns: \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
 \item Functions to reshape, pivot or rotate dataframes: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
-\item Functions to recode data: \code{\link[=data_rescale]{data_rescale()}}, \code{\link[=data_reverse]{data_reverse()}}, \code{\link[=data_cut]{data_cut()}}, \code{\link[=data_recode]{data_recode()}}
+\item Functions to recode data: \code{\link[=data_rescale]{data_rescale()}}, \code{\link[=data_reverse]{data_reverse()}}, \code{\link[=data_cut]{data_cut()}}, \code{\link[=data_recode]{data_recode()}}, \code{\link[=data_shift]{data_shift()}}
 \item Functions to standardize, normalize, rank-transform: \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
 \item Split and merge dataframes: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_merge]{data_merge()}}
 \item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=find_columns]{find_columns()}}
