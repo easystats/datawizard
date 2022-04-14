@@ -85,7 +85,7 @@ data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE
 
 
 .extract_zip <- function(path) {
-  files <- unzip(path, list = TRUE)
+  files <- utils::unzip(path, list = TRUE)
   files_ext <- sapply(files$Name, .file_ext)
 
   supported_filetypes <- c("txt", "csv", "xls", "xlsx", "sav", "por", "dta")
