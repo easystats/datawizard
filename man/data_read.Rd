@@ -41,7 +41,7 @@ files). All other file types are passed to \code{rio::import()}.
 \section{Compressed files (zip) and URLs}{
 
 \code{data_read()} can also read the above mentioned files from URLs or from
-inside zip-compressed files. This, \code{path} can also be a URL to a file like
+inside zip-compressed files. Thus, \code{path} can also be a URL to a file like
 \code{"http://www.url.com/file.csv"}. When \code{path} points to a zip-compressed file,
 and there are multiple files inside the zip-archive, then the first supported
 file is extracted and loaded.

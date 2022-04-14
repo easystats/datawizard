@@ -28,7 +28,7 @@
 #'
 #' @section Compressed files (zip) and URLs:
 #' `data_read()` can also read the above mentioned files from URLs or from
-#' inside zip-compressed files. This, `path` can also be a URL to a file like
+#' inside zip-compressed files. Thus, `path` can also be a URL to a file like
 #' `"http://www.url.com/file.csv"`. When `path` points to a zip-compressed file,
 #' and there are multiple files inside the zip-archive, then the first supported
 #' file is extracted and loaded.
