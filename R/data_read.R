@@ -18,17 +18,45 @@
 #'
 #' @return A data frame.
 #'
-#' @details `data_read()` detects the appropriate `read_*()` function based on
-#' the file-extension of the data file. For data files from SPSS, SAS or Stata,
-#' variables are converted into their most appropriate type, i.e. variables
-#' where _all_ values are labelled, will be converted into factors, where imported
-#' value labels will be set as factor levels. Else, if a variable has _no_ value
-#' labels or less value labels than values, the variable is either converted
-#' into numeric or character vector. Value labels are then preserved as `"labels"`
-#' attribute.
+#' @section Supported file types:
+#' `data_read()` is a wrapper around the **haven**, **data.table**, **readr**
+#'  and **readxl** packages. Currently supported file types are `.txt`, `.csv`,
+#'  `.xls`, `.xlsx`, `.sav`, `.por`, `.dta` and `.sas` (and related files).
+#'
+#' @section Compressed files (zip) and URLs:
+#' `data_read()` can also read the above mentioned files from URLs or from
+#' inside zip-compressed files. This, `path` can also be a URL to a file like
+#' `"http://www.url.com/file.csv"`. When `path` points to a zip-compressed file,
+#' and there are multiple files inside the zip-archive, then the first supported
+#' file is extracted and loaded.
+#'
+#' @section General behaviour:
+#' `data_read()` detects the appropriate `read_*()` function based on the
+#' file-extension of the data file. Thus, in most cases it should be enough to
+#' only specify the `path` argument. However, if more control is needed, all
+#' arguments in `...` are passed down to the related `read_*()` function.
+#'
+#' @section Differences to other packages that read foreign data formats:
+#' `data_read()` is most comparable to `rio::import()`. For data files from
+#' SPSS, SAS or Stata, which support labelled data, variables are converted into
+#' their most appropriate type. The major difference to `rio::import()` is
+#' that `data_read()` automatically converts variables into factors, unless
+#' the variables are only partially labelled, in which case variables are
+#' converted to numerics. Character vectors are preserved. Hence, variables,
+#' where _all_ values are labelled, will be converted into factors, where
+#' imported value labels will be set as factor levels. Else, if a variable
+#' has _no_ value labels or less value labels than values, the variable is
+#' either converted into numeric or character vector. Value labels are then
+#' preserved as `"labels"` attribute.
 #'
 #' @export
 data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE, ...) {
+  # extract first valid file from zip-file
+  if (.file_ext(path) == "zip") {
+    path <- .extract_zip(path)
+  }
+
+  # read data
   switch(
     .file_ext(path),
     "txt" = ,
@@ -49,6 +77,26 @@ data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE
 .file_ext <- function(x) {
   pos <- regexpr("\\.([[:alnum:]]+)$", x)
   ifelse(pos > -1L, substring(x, pos + 1L), "")
+}
+
+
+.extract_zip <- function(path) {
+  files <- unzip(path, list = TRUE)
+  files_ext <- sapply(files$Name, .file_ext)
+
+  supported_filetypes <- c("txt", "csv", "xls", "xlsx", "sav", "por", "dta")
+  dest <- files$Name[which(files_ext %in% supported_filetypes)]
+
+  if (length(dest) > 0) {
+    d <- tempfile()
+    dir.create(d)
+    utils::unzip(path, exdir = d)
+    path <- file.path(path, dest[1])
+  } else {
+    stop("The zip-file does not contain any supported file types.", call. = FALSE)
+  }
+
+  path
 }
 
 

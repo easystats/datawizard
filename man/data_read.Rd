@@ -29,13 +29,42 @@ wrapper around \code{haven::read_spss()}, \code{haven::read_stata()}, \code{have
 types for importing data are data files from SPSS, SAS or Stata, Excel files
 or text files (like '.csv' files).
 }
-\details{
-\code{data_read()} detects the appropriate \verb{read_*()} function based on
-the file-extension of the data file. For data files from SPSS, SAS or Stata,
-variables are converted into their most appropriate type, i.e. variables
-where \emph{all} values are labelled, will be converted into factors, where imported
-value labels will be set as factor levels. Else, if a variable has \emph{no} value
-labels or less value labels than values, the variable is either converted
-into numeric or character vector. Value labels are then preserved as \code{"labels"}
-attribute.
+\section{Supported file types}{
+
+\code{data_read()} is a wrapper around the \strong{haven}, \strong{data.table}, \strong{readr}
+and \strong{readxl} packages. Currently supported file types are \code{.txt}, \code{.csv},
+\code{.xls}, \code{.xlsx}, \code{.sav}, \code{.por}, \code{.dta} and \code{.sas} (and related files).
 }
+
+\section{Compressed files (zip) and URLs}{
+
+\code{data_read()} can also read the above mentioned files from URLs or from
+inside zip-compressed files. This, \code{path} can also be a URL to a file like
+\code{"http://www.url.com/file.csv"}. When \code{path} points to a zip-compressed file,
+and there are multiple files inside the zip-archive, then the first supported
+file is extracted and loaded.
+}
+
+\section{General behaviour}{
+
+\code{data_read()} detects the appropriate \verb{read_*()} function based on the
+file-extension of the data file. Thus, in most cases it should be enough to
+only specify the \code{path} argument. However, if more control is needed, all
+arguments in \code{...} are passed down to the related \verb{read_*()} function.
+}
+
+\section{Differences to other packages that read foreign data formats}{
+
+\code{data_read()} is most comparable to \code{rio::import()}. For data files from
+SPSS, SAS or Stata, which support labelled data, variables are converted into
+their most appropriate type. The major difference to \code{rio::import()} is
+that \code{data_read()} automatically converts variables into factors, unless
+the variables are only partially labelled, in which case variables are
+converted to numerics. Character vectors are preserved. Hence, variables,
+where \emph{all} values are labelled, will be converted into factors, where
+imported value labels will be set as factor levels. Else, if a variable
+has \emph{no} value labels or less value labels than values, the variable is
+either converted into numeric or character vector. Value labels are then
+preserved as \code{"labels"} attribute.
+}
+
