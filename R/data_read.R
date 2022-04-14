@@ -95,7 +95,7 @@ data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE
     d <- tempfile()
     dir.create(d)
     utils::unzip(path, exdir = d)
-    path <- file.path(path, dest[1])
+    path <- file.path(d, dest[1])
   } else {
     stop("The zip-file does not contain any supported file types.", call. = FALSE)
   }
