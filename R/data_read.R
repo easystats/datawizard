@@ -4,9 +4,10 @@
 #' @description
 #' This functions imports data from various file types. This function is a small
 #' wrapper around `haven::read_spss()`, `haven::read_stata()`, `haven::read_sas()`,
-#' `readxl::read_excel()` and `readr::read_delim()`. Thus, supported file types
-#' for importing data are data files from SPSS, SAS or Stata, Excel files or
-#' text files (like 'csv' files).
+#' `readxl::read_excel()` and `data.table::fread()` resp. `readr::read_delim()`
+#' (the latter if package **data.table** is not installed). Thus, supported file
+#' types for importing data are data files from SPSS, SAS or Stata, Excel files
+#' or text files (like '.csv' files).
 #'
 #' @param path Character string, the file path to the data file.
 #' @param path_catalog Character string, path to the catalog file. Only relevant
@@ -139,6 +140,12 @@ data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE
   if (verbose) {
     message("Reading data...")
   }
+  if (insight::check_if_installed("data.table", quietly = TRUE)) {
+    out <- data.table::fread(input = path, ...)
+    class(out) <- "data.frame"
+    return(out)
+  }
+
   insight::check_if_installed("readr")
   out <- readr::read_delim(path, ...)
   class(out) <- "data.frame"

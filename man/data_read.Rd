@@ -24,9 +24,10 @@ A data frame.
 \description{
 This functions imports data from various file types. This function is a small
 wrapper around \code{haven::read_spss()}, \code{haven::read_stata()}, \code{haven::read_sas()},
-\code{readxl::read_excel()} and \code{readr::read_delim()}. Thus, supported file types
-for importing data are data files from SPSS, SAS or Stata, Excel files or
-text files (like 'csv' files).
+\code{readxl::read_excel()} and \code{data.table::fread()} resp. \code{readr::read_delim()}
+(the latter if package \strong{data.table} is not installed). Thus, supported file
+types for importing data are data files from SPSS, SAS or Stata, Excel files
+or text files (like '.csv' files).
 }
 \details{
 \code{data_read()} detects the appropriate \verb{read_*()} function based on
