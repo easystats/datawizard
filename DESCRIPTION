@@ -36,6 +36,7 @@ Suggests:
     gamm4,
     ggplot2,
     haven,
+    httr,
     knitr,
     lme4,
     MASS,
