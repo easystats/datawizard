@@ -30,6 +30,7 @@
 data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE, ...) {
   switch(
     .file_ext(path),
+    "txt" = ,
     "csv" = .read_text(path, encoding, verbose, ...),
     "xls" = ,
     "xlsx" = .read_excel(path, encoding, verbose, ...),
