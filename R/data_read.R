@@ -116,11 +116,14 @@ data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE
     value_labels <- attr(i, "labels", exact = TRUE)
     variable_labels <- attr(i, "label", exact = TRUE)
 
+    # filter, so only matching value labels remain
+    value_labels <- value_labels[value_labels %in% unique(i)]
+
     # guess variable type
     if (!is.character(i)) {
       # if all values are labelled, we assume factor. Use labels as levels
-      if (length(value_labels) >= insight::n_unique(i)) {
-        i <- factor(as.character(i), labels = names(value_labels)[value_labels %in% unique(i)])
+      if (length(value_labels) == insight::n_unique(i)) {
+        i <- factor(as.character(i), labels = names(value_labels))
         value_labels <- NULL
       } else {
         i <- as.numeric(i)
@@ -130,8 +133,8 @@ data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE
     }
 
     # drop unused value labels
-    if (length(value_labels)) {
-      attr(i, "labels") <- value_labels[value_labels %in% unique(i)]
+    if (!is.null(value_labels) && length(value_labels <- value_labels[value_labels %in% unique(i)])) {
+      attr(i, "labels") <- value_labels
     }
 
     # add back variable label
