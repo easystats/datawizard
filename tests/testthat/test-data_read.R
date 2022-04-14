@@ -1,5 +1,12 @@
 skip_on_cran()
+
 skip_if_not_installed("httr")
+skip_if_not_installed("readxl")
+skip_if_not_installed("haven")
+skip_if_not_installed("readr")
+skip_if_not_installed("data.table")
+skip_if_not_installed("rio")
+
 
 # csv -------------------------
 
@@ -7,6 +14,44 @@ test_that("data_read", {
   d <- data_read("https://stats.idre.ucla.edu/stat/data/binary.csv")
   expect_equal(nrow(d), 400)
 })
+
+
+
+# tsv -------------------------
+
+temp_file <- tempfile(fileext = ".tsv")
+request <- httr::GET("https://raw.github.com/easystats/circus/master/data/sample1.tsv")
+httr::stop_for_status(request)
+writeBin(httr::content(request, type = "raw"), temp_file)
+
+test_that("data_read", {
+  d <- data_read(temp_file)
+  expect_equal(nrow(d), 3)
+  expect_equal(colnames(d), c("a", "b", "c"))
+  expect_equal(sum(sapply(d, is.numeric)), 2)
+  expect_equal(sum(sapply(d, is.character)), 1)
+})
+
+unlink(temp_file)
+
+
+
+# excel -------------------------
+
+temp_file <- tempfile(fileext = ".xlsx")
+request <- httr::GET("https://raw.github.com/easystats/circus/master/data/sample1.xlsx")
+httr::stop_for_status(request)
+writeBin(httr::content(request, type = "raw"), temp_file)
+
+test_that("data_read", {
+  d <- data_read(temp_file)
+  expect_equal(nrow(d), 3)
+  expect_equal(colnames(d), c("a", "b", "c"))
+  expect_equal(sum(sapply(d, is.numeric)), 2)
+  expect_equal(sum(sapply(d, is.character)), 1)
+})
+
+unlink(temp_file)
 
 
 
