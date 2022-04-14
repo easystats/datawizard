@@ -1,6 +1,15 @@
 skip_on_cran()
 skip_if_not_installed("httr")
 
+# csv -------------------------
+
+test_that("data_read", {
+  d <- data_read("https://stats.idre.ucla.edu/stat/data/binary.csv")
+  expect_equal(nrow(d), 400)
+})
+
+
+
 # SPSS file -----------------------------------
 
 temp_file <- tempfile(fileext = ".sav")
