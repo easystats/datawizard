@@ -45,6 +45,7 @@ Suggests:
     psych,
     readxl,
     readr,
+    rio,
     rmarkdown,
     rstanarm,
     see,

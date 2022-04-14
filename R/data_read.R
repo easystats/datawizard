@@ -1,13 +1,15 @@
+
 #' @title Read (import) data files from various sources
 #' @name data_read
 #'
 #' @description
-#' This functions imports data from various file types. This function is a small
-#' wrapper around `haven::read_spss()`, `haven::read_stata()`, `haven::read_sas()`,
+#' This functions imports data from various file types. It is a small wrapper
+#' around `haven::read_spss()`, `haven::read_stata()`, `haven::read_sas()`,
 #' `readxl::read_excel()` and `data.table::fread()` resp. `readr::read_delim()`
 #' (the latter if package **data.table** is not installed). Thus, supported file
 #' types for importing data are data files from SPSS, SAS or Stata, Excel files
-#' or text files (like '.csv' files).
+#' or text files (like '.csv' files). All non-supported file types are passed
+#' to `rio::import()`.
 #'
 #' @param path Character string, the file path to the data file.
 #' @param path_catalog Character string, path to the catalog file. Only relevant
@@ -20,8 +22,9 @@
 #'
 #' @section Supported file types:
 #' `data_read()` is a wrapper around the **haven**, **data.table**, **readr**
-#'  and **readxl** packages. Currently supported file types are `.txt`, `.csv`,
-#'  `.xls`, `.xlsx`, `.sav`, `.por`, `.dta` and `.sas` (and related files).
+#'  **readxl** and **rio** packages. Currently supported file types are `.txt`,
+#'  `.csv`, `.xls`, `.xlsx`, `.sav`, `.por`, `.dta` and `.sas` (and related
+#'  files). All other file types are passed to `rio::import()`.
 #'
 #' @section Compressed files (zip) and URLs:
 #' `data_read()` can also read the above mentioned files from URLs or from
@@ -66,7 +69,8 @@ data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE
     "sav" = ,
     "por" = .read_spss(path, encoding, verbose, ...),
     "dta" = .read_stata(path, encoding, verbose, ...),
-    .read_sas(path, path_catalog, encoding, verbose, ...)
+    "sas7bdat" = .read_sas(path, path_catalog, encoding, verbose, ...),
+    .read_unknown(path, verbose, ...)
   )
 }
 
@@ -144,40 +148,40 @@ data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE
 # read functions -----------------------
 
 .read_spss <- function(path, encoding, verbose, ...) {
+  insight::check_if_installed("haven", reason = paste0("to read files of type '", .file_ext(path), "'"))
   if (verbose) {
     message("Reading data...")
   }
-  insight::check_if_installed("haven")
-  out <- haven::read_sav(file = path, encoding = encoding, user_na = FALSE)
+  out <- haven::read_sav(file = path, encoding = encoding, user_na = FALSE, ...)
   .post_process_imported_data(out, verbose)
 }
 
 
 .read_stata <- function(path, encoding, verbose, ...) {
+  insight::check_if_installed("haven", reason = paste0("to read files of type '", .file_ext(path), "'"))
   if (verbose) {
     message("Reading data...")
   }
-  insight::check_if_installed("haven")
-  out <- haven::read_dta(file = path, encoding = encoding)
+  out <- haven::read_dta(file = path, encoding = encoding, ...)
   .post_process_imported_data(out, verbose)
 }
 
 
 .read_sas <- function(path, path_catalog, encoding, verbose, ...) {
+  insight::check_if_installed("haven", reason = paste0("to read files of type '", .file_ext(path), "'"))
   if (verbose) {
     message("Reading data...")
   }
-  insight::check_if_installed("haven")
-  out <- haven::read_sas(data_file = path, catalog_file = path_catalog, encoding = encoding)
+  out <- haven::read_sas(data_file = path, catalog_file = path_catalog, encoding = encoding, ...)
   .post_process_imported_data(out, verbose)
 }
 
 
 .read_excel <- function(path, encoding, verbose, ...) {
+  insight::check_if_installed("readxl", reason = paste0("to read files of type '", .file_ext(path), "'"))
   if (verbose) {
     message("Reading data...")
   }
-  insight::check_if_installed("readxl")
   out <- readxl::read_excel(path, ...)
   class(out) <- "data.frame"
   out
@@ -185,17 +189,27 @@ data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE
 
 
 .read_text <- function(path, encoding, verbose, ...) {
-  if (verbose) {
-    message("Reading data...")
-  }
   if (insight::check_if_installed("data.table", quietly = TRUE)) {
     out <- data.table::fread(input = path, ...)
     class(out) <- "data.frame"
     return(out)
   }
 
-  insight::check_if_installed("readr")
+  insight::check_if_installed("readr", reason = paste0("to read files of type '", .file_ext(path), "'"))
+  if (verbose) {
+    message("Reading data...")
+  }
   out <- readr::read_delim(path, ...)
   class(out) <- "data.frame"
   out
+}
+
+
+.read_unknown <- function(path, verbose, ...) {
+  insight::check_if_installed("rio", reason = paste0("to read files of type '", .file_ext(path), "'"))
+  if (verbose) {
+    message("Reading data...")
+  }
+  out <- rio::import(file = path, ...)
+  .post_process_imported_data(out, verbose)
 }

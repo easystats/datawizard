@@ -22,18 +22,20 @@ for SAS data files.}
 A data frame.
 }
 \description{
-This functions imports data from various file types. This function is a small
-wrapper around \code{haven::read_spss()}, \code{haven::read_stata()}, \code{haven::read_sas()},
+This functions imports data from various file types. It is a small wrapper
+around \code{haven::read_spss()}, \code{haven::read_stata()}, \code{haven::read_sas()},
 \code{readxl::read_excel()} and \code{data.table::fread()} resp. \code{readr::read_delim()}
 (the latter if package \strong{data.table} is not installed). Thus, supported file
 types for importing data are data files from SPSS, SAS or Stata, Excel files
-or text files (like '.csv' files).
+or text files (like '.csv' files). All non-supported file types are passed
+to \code{rio::import()}.
 }
 \section{Supported file types}{
 
 \code{data_read()} is a wrapper around the \strong{haven}, \strong{data.table}, \strong{readr}
-and \strong{readxl} packages. Currently supported file types are \code{.txt}, \code{.csv},
-\code{.xls}, \code{.xlsx}, \code{.sav}, \code{.por}, \code{.dta} and \code{.sas} (and related files).
+\strong{readxl} and \strong{rio} packages. Currently supported file types are \code{.txt},
+\code{.csv}, \code{.xls}, \code{.xlsx}, \code{.sav}, \code{.por}, \code{.dta} and \code{.sas} (and related
+files). All other file types are passed to \code{rio::import()}.
 }
 
 \section{Compressed files (zip) and URLs}{
