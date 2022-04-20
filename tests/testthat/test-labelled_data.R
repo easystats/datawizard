@@ -299,6 +299,12 @@ test_that("convert_to_na, labels preserved", {
     attr(efc$e16sex, "label", exact = TRUE),
     ignore_attr = TRUE
   )
+  # drop unused value labels
+  x <- convert_to_na(efc$c172code, na = 2)
+  expect_equal(
+    attr(x, "labels", exact = TRUE),
+    c(`low level of education` = 1, `high level of education` = 3)
+  )
 })
 
 

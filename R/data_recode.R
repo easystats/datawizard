@@ -66,14 +66,14 @@
 #'
 #'   placeholder to use the minimum or maximum value of the
 #'   (numeric) variable. Useful, e.g., when recoding ranges of values.
-#'   Example: ``recode=list(`1`="min:10",2="11:max")``.
+#'   Example: ``recode=list(`1`="min:10",`2`="11:max")``.
 #'
 #' - `default` values
 #'
 #'   The `default` argument defines the default value for all values that have
 #'   no match in the recode-pairs. For example,
 #'   ``recode=list(`1`=c(1,2),`2`=c(3,4)), default=9`` would
-#'   recode values 1 and 2 into 1, 3 and 4 into 2, and all other values into 5.
+#'   recode values 1 and 2 into 1, 3 and 4 into 2, and all other values into 9.
 #'   If `preserve_na` is set to `FALSE`, `NA` (missing values) will also be
 #'   recoded into the specified default value.
 #'
