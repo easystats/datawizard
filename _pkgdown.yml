@@ -32,23 +32,57 @@ template:
 
 reference:
 
-  - title: Data wrangling and transformation
+  - title: Recode and transform data
   - contents:
-      - starts_with("data_")
+      - data_cut
+      - data_recode
+      - data_rescale
+      - data_reverse
+      - data_shift
       - adjust
       - center
-      - change_scale
-      - convert_data_to_numeric
       - demean
       - normalize
       - ranktransform
-      - remove_empty
       - rescale_weights
-      - reshape_ci
       - standardize
-      - to_numeric
       - unstandardize
       - winsorize
+
+  - title: Reshape data
+  - contents:
+      - data_rotate
+      - data_to_long
+      - reshape_ci
+
+  - title: Select and filter data
+  - contents:
+      - data_extract
+      - data_filter
+      - data_select
+
+  - title: Rename data
+  - contents:
+      - data_addprefix
+
+  - title: Reorder and remove data
+  - contents:
+      - data_reorder
+      - remove_empty
+
+  - title: Convert and replace data
+  - contents:
+      - data_to_numeric
+      - data_to_factor
+      - data_restoretype
+      - to_numeric
+      - starts_with("replace_")
+      - starts_with("convert_")
+
+  - title: Split and merge data
+  - contents:
+      - data_merge
+      - data_partition
 
   - title: Data properties
   - contents:
@@ -57,11 +91,6 @@ reference:
       - smoothness
       - skewness
       - weighted_mean
-
-  - title: Data replacement and conversion
-  - contents:
-      - starts_with("replace_")
-      - starts_with("convert_")
 
   - title: Utilities
   - contents:
