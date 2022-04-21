@@ -8,11 +8,14 @@ NEW FUNCTIONS
 
 * `data_to_factor()` as counterpart to `data_to_numeric()`.
 
-MINOR CHANGES
+CHANGES
 
 * The `select` argument now accepts following additional select-helpers:
   `is.numeric()`, `is.factor()`, `is.character()` and `is.logical()`, to
   select variables of a specific type/class.
+
+* The `select` argument now allows for negation of select-helpers, like 
+  `-ends_with("")`, `-is.numeric()` or `-Sepal.Width:Petal.Length`.
 
 * Many functions now get a `.default` method, to capture unsupported classes. 
   This now yields a message and returns the original input, and hence, the 

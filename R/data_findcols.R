@@ -22,6 +22,10 @@
 #'   - or a function testing for logical conditions, mainly `is.numeric()`,
 #'     `is.factor()`, `is.character()` or `is.logical()`. These will select
 #'     variables if they are of the related type.
+#'   - Ranges specified via literal variable names, select-helpers (except
+#'     `regex()`) and functions can be negated, i.e. return non-matching
+#'     elements, when prefixed with a `-`, e.g. `-ends_with("")`, `-is.numeric()`
+#'     or `-Sepal.Width:Petal.Length`.
 #'
 #'   If `NULL`, selects all columns.
 #' @param exclude See `select`, however, column names matched by the pattern

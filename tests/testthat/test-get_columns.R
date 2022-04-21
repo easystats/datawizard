@@ -5,8 +5,18 @@ test_that("get_columns works as expected", {
   )
 
   expect_equal(
+    get_columns(iris, -starts_with("Sepal")),
+    iris[c("Petal.Length", "Petal.Width", "Species")]
+  )
+
+  expect_equal(
     get_columns(iris, ends_with("Width")),
     iris[c("Sepal.Width", "Petal.Width")]
+  )
+
+  expect_equal(
+    get_columns(iris, -ends_with("Width")),
+    iris[c("Sepal.Length", "Petal.length", "Species")]
   )
 
   expect_equal(
@@ -15,11 +25,36 @@ test_that("get_columns works as expected", {
   )
 
   expect_equal(
+    get_columns(iris, -is.numeric()),
+    iris[sapply(iris, function(i) !is.numeric(i))]
+  )
+
+  expect_equal(
     get_columns(iris, is.factor()),
     iris[sapply(iris, is.factor)]
   )
 
+  expect_equal(
+    get_columns(iris, -is.factor()),
+    iris[sapply(iris, function(i) !is.factor(i))]
+  )
+
   expect_warning(expect_null(get_columns(iris, is.logical())))
+
+  expect_equal(
+    get_columns(iris, 2:3),
+    iris[2:3]
+  )
+
+  expect_equal(
+    get_columns(iris, Sepal.Width:Petal.Length),
+    iris[2:3]
+  )
+
+  expect_equal(
+    get_columns(iris, -Sepal.Width:Petal.Length),
+    iris[c(1, 4, 5)]
+  )
 
   expect_equal(
     get_columns(iris, regex("\\.")),
