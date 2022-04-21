@@ -14,7 +14,7 @@ data_select() is an alias for get_columns()."><meta property="og:image" content=
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.9</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -126,9 +126,13 @@ vector of variable names (e.g., <code>c("col1", "col2", "col3")</code>),</p></li
 right (e.g., <code>-1</code> or <code>-1:-3</code>),</p></li>
 <li><p>one of the following select-helpers: <code>starts_with("")</code>, <code>ends_with("")</code>,
 <code>contains("")</code>, a range using <code>:</code> or <code>regex("")</code>,</p></li>
-<li><p>or a function testing for logical conditions, mainly <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric()</a></code>,
-<code><a href="https://rdrr.io/r/base/factor.html" class="external-link">is.factor()</a></code>, <code><a href="https://rdrr.io/r/base/character.html" class="external-link">is.character()</a></code> or <code><a href="https://rdrr.io/r/base/logical.html" class="external-link">is.logical()</a></code>. These will select
-variables if they are of the related type.</p></li>
+<li><p>or a function testing for logical conditions, e.g. <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric()</a></code> (or
+<code>is.numeric</code>), or any user-defined function that selects the variables
+for which the function returns <code>TRUE</code> (like: <code>foo &lt;- function(x) mean(x) &gt; 3</code>),</p></li>
+<li><p>ranges specified via literal variable names, select-helpers (except
+<code><a href="https://rdrr.io/r/base/regex.html" class="external-link">regex()</a></code>) and (user-defined) functions can be negated, i.e. return
+non-matching elements, when prefixed with a <code>-</code>, e.g. <code>-ends_with("")</code>,
+<code>-is.numeric</code> or <code>-Sepal.Width:Petal.Length</code>.</p></li>
 </ul><p>If <code>NULL</code>, selects all columns.</p></dd>
 <dt>exclude</dt>
 <dd><p>See <code>select</code>, however, column names matched by the pattern
@@ -226,6 +230,11 @@ like the <code>contains("")</code> select-helper:</p><div class="sourceCode"><pr
 <span class="r-in"><span class="co"># starts with "Sepal", but not allowed to end with "width"</span></span>
 <span class="r-in"><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu">starts_with</span><span class="op">(</span><span class="st">"Sepal"</span><span class="op">)</span>, exclude <span class="op">=</span> <span class="fu">contains</span><span class="op">(</span><span class="st">"Width"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sepal.Length"</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># find numeric with mean &gt; 3.5</span></span>
+<span class="r-in"><span class="va">numeric_mean_35</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">3.5</span></span>
+<span class="r-in"><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="va">numeric_mean_35</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sepal.Length" "Petal.Length"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
