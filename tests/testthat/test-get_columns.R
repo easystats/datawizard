@@ -16,7 +16,7 @@ test_that("get_columns works as expected", {
 
   expect_equal(
     get_columns(iris, -ends_with("Width")),
-    iris[c("Sepal.Length", "Petal.length", "Species")]
+    iris[c("Sepal.Length", "Petal.Length", "Species")]
   )
 
   expect_equal(
