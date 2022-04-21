@@ -98,11 +98,26 @@ test_that("get_columns works as expected", {
     iris[c(4, 5)]
   )
 
+  expect_equal(
+    get_columns(iris, exclude = -1:-2),
+    iris[1:3]
+  )
+
   expect_equal(get_columns(iris), iris)
 
   expect_equal(
     get_columns(iris, ~ Sepal.Width + Petal.Length),
     iris[2:3]
+  )
+
+  expect_equal(
+    get_columns(iris, exclude = ~ Sepal.Width + Petal.Length),
+    iris[c(1, 4, 5)]
+  )
+
+  expect_equal(
+    get_columns(iris, exclude = 2:3),
+    iris[c(1, 4, 5)]
   )
 
   expect_equal(
