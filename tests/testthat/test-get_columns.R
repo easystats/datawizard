@@ -15,7 +15,17 @@ test_that("get_columns works as expected", {
   )
 
   expect_equal(
+    get_columns(iris, col_ends_with("Width")),
+    iris[c("Sepal.Width", "Petal.Width")]
+  )
+
+  expect_equal(
     get_columns(iris, -ends_with("Width")),
+    iris[c("Sepal.Length", "Petal.Length", "Species")]
+  )
+
+  expect_equal(
+    get_columns(iris, -col_ends_with("Width")),
     iris[c("Sepal.Length", "Petal.Length", "Species")]
   )
 
@@ -60,6 +70,8 @@ test_that("get_columns works as expected", {
   )
 
   expect_warning(expect_null(get_columns(iris, is.logical())))
+
+  expect_equal(get_columns(iris, -is.logical), iris)
 
   expect_equal(
     get_columns(iris, 2:3),
@@ -129,6 +141,14 @@ test_that("get_columns works as expected", {
     is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
   }
   expect_equal(get_columns(iris, testfun), iris[sapply(iris, testfun)])
+
+  testfun2 <- function(i) {
+    is.numeric(i) && mean(i, na.rm = TRUE) < 5
+  }
+  expect_equal(
+    get_columns(iris, select = testfun, exclude = testfun2),
+    iris["Sepal.Length"]
+  )
 })
 
 
