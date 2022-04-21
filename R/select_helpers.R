@@ -81,6 +81,15 @@
     x <- substring(x, 5)
   }
 
+  # is it a function?
+  user_function <- NULL
+  if (!is.null(x)) {
+    user_function <- try(get(x), silent = TRUE)
+    if (inherits(user_function, c("try-error", "simpleError"))) {
+      user_function <- NULL
+    }
+  }
+
   # create pattern
   if (is.null(x) && !is.null(data)) {
     pattern <- colnames(data)
@@ -144,6 +153,13 @@
       pattern <- colnames(data)[sapply(data, function(i) !is.logical(i))]
     } else {
       pattern <- colnames(data)[sapply(data, is.logical)]
+    }
+    fixed <- TRUE
+  } else if (!is.null(data) && !is.null(user_function)) {
+    if (negate) {
+      pattern <- colnames(data)[sapply(data, function(i) !user_function(i))]
+    } else {
+      pattern <- colnames(data)[sapply(data, user_function)]
     }
     fixed <- TRUE
   } else if (!is.null(data) && grepl(":", x, fixed = TRUE)) {

@@ -52,10 +52,9 @@ right (e.g., \code{-1} or \code{-1:-3}),
 \code{is.numeric}), or any user-defined function that selects the variables
 for which the function returns \code{TRUE} (like: \code{foo <- function(x) mean(x) > 3}),
 \item ranges specified via literal variable names, select-helpers (except
-\code{regex()}) and a small selection of functions (\code{is.numeric}, \code{is.factor},
-\code{is.character}, \code{is.integer} and \code{is.logical}) can be negated, i.e.
-return non-matching elements, when prefixed with a \code{-}, e.g.
-\code{-ends_with("")}, \code{-is.numeric} or \code{-Sepal.Width:Petal.Length}.
+\code{regex()}) and (user-defined) functions can be negated, i.e. return
+non-matching elements, when prefixed with a \code{-}, e.g. \code{-ends_with("")},
+\code{-is.numeric} or \code{-Sepal.Width:Petal.Length}.
 }
 
 If \code{NULL}, selects all columns.}

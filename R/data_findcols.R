@@ -23,10 +23,9 @@
 #'     `is.numeric`), or any user-defined function that selects the variables
 #'     for which the function returns `TRUE` (like: `foo <- function(x) mean(x) > 3`),
 #'   - ranges specified via literal variable names, select-helpers (except
-#'     `regex()`) and a small selection of functions (`is.numeric`, `is.factor`,
-#'     `is.character`, `is.integer` and `is.logical`) can be negated, i.e.
-#'     return non-matching elements, when prefixed with a `-`, e.g.
-#'     `-ends_with("")`, `-is.numeric` or `-Sepal.Width:Petal.Length`.
+#'     `regex()`) and (user-defined) functions can be negated, i.e. return
+#'     non-matching elements, when prefixed with a `-`, e.g. `-ends_with("")`,
+#'     `-is.numeric` or `-Sepal.Width:Petal.Length`.
 #'
 #'   If `NULL`, selects all columns.
 #' @param exclude See `select`, however, column names matched by the pattern
