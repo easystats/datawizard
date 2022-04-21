@@ -50,9 +50,13 @@ vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
 right (e.g., \code{-1} or \code{-1:-3}),
 \item one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
 \code{contains("")}, a range using \code{:} or \code{regex("")},
-\item or a function testing for logical conditions, mainly \code{is.numeric()},
-\code{is.factor()}, \code{is.character()} or \code{is.logical()}. These will select
-variables if they are of the related type.
+\item or a function testing for logical conditions, e.g. \code{is.numeric()} (or
+\code{is.numeric}), or any user-defined function that selects the variables
+for which the function returns \code{TRUE} (like: \code{foo <- function(x) mean(x) > 3}),
+\item ranges specified via literal variable names, select-helpers (except
+\code{regex()}) and (user-defined) functions can be negated, i.e. return
+non-matching elements, when prefixed with a \code{-}, e.g. \code{-ends_with("")},
+\code{-is.numeric} or \code{-Sepal.Width:Petal.Length}.
 }
 
 If \code{NULL}, selects all columns.}

@@ -20,6 +20,14 @@
   select <- tryCatch(eval(p), error = function(e) NULL)
   exclude <- tryCatch(eval(p2), error = function(e) NULL)
 
+  # select and exclude might also be a (user-defined) function
+  if (inherits(select, "function")) {
+    select <- colnames(data)[sapply(data, select)]
+  }
+  if (inherits(exclude, "function")) {
+    exclude <- colnames(data)[sapply(data, exclude)]
+  }
+
   # if select could not be evaluated (because expression "makes no sense")
   # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
   # so we can use grepl()
@@ -37,10 +45,10 @@
 
   # seems to be no valid column name or index, so try to grep
   if (isFALSE(fixed_select) || isTRUE(regex)) {
-    select <- colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case)]
+    select <- colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case, perl = TRUE)]
   }
   if (isFALSE(fixed_exclude)) {
-    exclude <- colnames(data)[grepl(exclude, colnames(data), ignore.case = ignore_case)]
+    exclude <- colnames(data)[grepl(exclude, colnames(data), ignore.case = ignore_case, perl = TRUE)]
   }
   # if exclude = NULL, we want to exclude 0 variables, not all of them
   if (!inherits(exclude, "formula") && length(exclude) == ncol(data)) {
@@ -60,44 +68,71 @@
 
 .evaluate_pattern <- function(x, data = NULL, ignore_case = FALSE) {
   fixed <- FALSE
+
+  # check if negation is requested
+  negate <- !is.null(x) && length(x) == 1 && substr(x, 0, 1) == "-"
+  # and if so, remove -
+  if (negate) {
+    x <- substring(x, 2)
+  }
+
+  # deal with aliases
+  if (!is.null(x) && length(x) == 1 && substr(x, 0, 4) == "col_") {
+    x <- substring(x, 5)
+  }
+
+  # remove parentheses for functions
+  if (!is.null(x) && length(x) == 1 && substr(x, nchar(x) - 1, nchar(x)) == "()") {
+    x <- substr(x, 0, nchar(x) - 2)
+  }
+
+  # is it a function? usually, this is already done in ".select_nse()", unless
+  # the user negates a function with "-", like "-is.numeric". In this case,
+  # we apply the function here again.
+  user_function <- NULL
+  if (!is.null(x)) {
+    user_function <- try(get(x, envir = parent.frame()), silent = TRUE)
+    if (inherits(user_function, c("try-error", "simpleError")) || !inherits(user_function, "function")) {
+      user_function <- NULL
+    }
+  }
+
+  # create pattern
   if (is.null(x) && !is.null(data)) {
     pattern <- colnames(data)
     fixed <- TRUE
-  } else if (!is.null(x) && all(x == "all")) {
+  } else if (!is.null(data) && !is.null(x) && all(x == "all")) {
     pattern <- colnames(data)
     fixed <- TRUE
   } else if (grepl("^starts_with\\(\"(.*)\"\\)", x)) {
-    pattern <- paste0("^", gsub("starts_with\\(\"(.*)\"\\)", "\\1", x))
+    if (negate) {
+      pattern <- paste0("^(?!", gsub("starts_with\\(\"(.*)\"\\)", "\\1", x), ")")
+    } else {
+      pattern <- paste0("^", gsub("starts_with\\(\"(.*)\"\\)", "\\1", x))
+    }
   } else if (grepl("^ends_with\\(\"(.*)\"\\)", x)) {
-    pattern <- paste0(gsub("ends_with\\(\"(.*)\"\\)", "\\1", x), "$")
+    if (negate) {
+      pattern <- paste0("(?<!", gsub("ends_with\\(\"(.*)\"\\)", "\\1", x), ")$")
+    } else {
+      pattern <- paste0(gsub("ends_with\\(\"(.*)\"\\)", "\\1", x), "$")
+    }
   } else if (grepl("^contains\\(\"(.*)\"\\)", x)) {
-    pattern <- paste0("\\Q", gsub("contains\\(\"(.*)\"\\)", "\\1", x), "\\E")
+    if (negate) {
+      pattern <- paste0("^((?!\\Q", gsub("contains\\(\"(.*)\"\\)", "\\1", x), "\\E).)*$")
+    } else {
+      pattern <- paste0("\\Q", gsub("contains\\(\"(.*)\"\\)", "\\1", x), "\\E")
+    }
   } else if (grepl("^matches\\(\"(.*)\"\\)", x)) {
+    # matches is an alias for regex
     pattern <- gsub("matches\\(\"(.*)\"\\)", "\\1", x)
-  } else if (grepl("^col_starts_with\\(\"(.*)\"\\)", x)) {
-    pattern <- paste0("^", gsub("col_starts_with\\(\"(.*)\"\\)", "\\1", x))
-  } else if (grepl("^col_ends_with\\(\"(.*)\"\\)", x)) {
-    pattern <- paste0(gsub("^ends_with\\(\"(.*)\"\\)", "\\1", x), "$")
-  } else if (grepl("^col_contains\\(\"(.*)\"\\)", x)) {
-    pattern <- paste0("\\Q", gsub("col_contains\\(\"(.*)\"\\)", "\\1", x), "\\E")
-  } else if (grepl("^col_matches\\(\"(.*)\"\\)", x)) {
-    pattern <- gsub("col_matches\\(\"(.*)\"\\)", "\\1", x)
   } else if (grepl("^regex\\(\"(.*)\"\\)", x)) {
     pattern <- gsub("regex\\(\"(.*)\"\\)", "\\1", x)
-  } else if (grepl("is.numeric()", x, fixed = TRUE)) {
-    pattern <- colnames(data)[sapply(data, is.numeric)]
-    fixed <- TRUE
-  } else if (grepl("is.integer()", x, fixed = TRUE)) {
-    pattern <- colnames(data)[sapply(data, is.integer)]
-    fixed <- TRUE
-  } else if (grepl("is.factor()", x, fixed = TRUE)) {
-    pattern <- colnames(data)[sapply(data, is.factor)]
-    fixed <- TRUE
-  } else if (grepl("is.character()", x, fixed = TRUE)) {
-    pattern <- colnames(data)[sapply(data, is.character)]
-    fixed <- TRUE
-  } else if (grepl("is.logical()", x, fixed = TRUE)) {
-    pattern <- colnames(data)[sapply(data, is.logical)]
+  } else if (!is.null(data) && !is.null(user_function)) {
+    if (negate) {
+      pattern <- colnames(data)[!sapply(data, function(i) user_function(i))]
+    } else {
+      pattern <- colnames(data)[sapply(data, user_function)]
+    }
     fixed <- TRUE
   } else if (!is.null(data) && grepl(":", x, fixed = TRUE)) {
     from_to <- unlist(strsplit(x, ":", fixed = TRUE))
@@ -114,7 +149,11 @@
     if (!length(to)) {
       stop("Could not find variable '", from_to[2], "' in data.", call. = FALSE)
     }
-    pattern <- colnames(data)[from:to]
+    if (negate) {
+      pattern <- colnames(data)[setdiff(1:ncol(data), from:to)]
+    } else {
+      pattern <- colnames(data)[from:to]
+    }
     fixed <- TRUE
   } else {
     pattern <- x

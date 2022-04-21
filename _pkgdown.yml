@@ -84,6 +84,10 @@ reference:
       - data_merge
       - data_partition
 
+  - title: Read (import) data
+  - contents:
+      - data_read
+
   - title: Data properties
   - contents:
       - describe_distribution

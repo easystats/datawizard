@@ -19,9 +19,13 @@
 #'     right (e.g., `-1` or `-1:-3`),
 #'   - one of the following select-helpers: `starts_with("")`, `ends_with("")`,
 #'     `contains("")`, a range using `:` or `regex("")`,
-#'   - or a function testing for logical conditions, mainly `is.numeric()`,
-#'     `is.factor()`, `is.character()` or `is.logical()`. These will select
-#'     variables if they are of the related type.
+#'   - or a function testing for logical conditions, e.g. `is.numeric()` (or
+#'     `is.numeric`), or any user-defined function that selects the variables
+#'     for which the function returns `TRUE` (like: `foo <- function(x) mean(x) > 3`),
+#'   - ranges specified via literal variable names, select-helpers (except
+#'     `regex()`) and (user-defined) functions can be negated, i.e. return
+#'     non-matching elements, when prefixed with a `-`, e.g. `-ends_with("")`,
+#'     `-is.numeric` or `-Sepal.Width:Petal.Length`.
 #'
 #'   If `NULL`, selects all columns.
 #' @param exclude See `select`, however, column names matched by the pattern
@@ -90,6 +94,10 @@
 #'
 #' # starts with "Sepal", but not allowed to end with "width"
 #' find_columns(iris, starts_with("Sepal"), exclude = contains("Width"))
+#'
+#' # find numeric with mean > 3.5
+#' numeric_mean_35 <- function(x) is.numeric(x) && mean(x, na.rm = TRUE) > 3.5
+#' find_columns(iris, numeric_mean_35)
 #' @export
 find_columns <- function(data,
                          select = NULL,

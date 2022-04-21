@@ -5,8 +5,28 @@ test_that("get_columns works as expected", {
   )
 
   expect_equal(
+    get_columns(iris, -starts_with("Sepal")),
+    iris[c("Petal.Length", "Petal.Width", "Species")]
+  )
+
+  expect_equal(
     get_columns(iris, ends_with("Width")),
     iris[c("Sepal.Width", "Petal.Width")]
+  )
+
+  expect_equal(
+    get_columns(iris, col_ends_with("Width")),
+    iris[c("Sepal.Width", "Petal.Width")]
+  )
+
+  expect_equal(
+    get_columns(iris, -ends_with("Width")),
+    iris[c("Sepal.Length", "Petal.Length", "Species")]
+  )
+
+  expect_equal(
+    get_columns(iris, -col_ends_with("Width")),
+    iris[c("Sepal.Length", "Petal.Length", "Species")]
   )
 
   expect_equal(
@@ -15,11 +35,58 @@ test_that("get_columns works as expected", {
   )
 
   expect_equal(
+    get_columns(iris, is.numeric),
+    iris[sapply(iris, is.numeric)]
+  )
+
+  expect_equal(
+    get_columns(iris, -is.numeric()),
+    iris[sapply(iris, function(i) !is.numeric(i))]
+  )
+
+  expect_equal(
+    get_columns(iris, -is.numeric),
+    iris[sapply(iris, function(i) !is.numeric(i))]
+  )
+
+  expect_equal(
     get_columns(iris, is.factor()),
     iris[sapply(iris, is.factor)]
   )
 
+  expect_equal(
+    get_columns(iris, is.factor),
+    iris[sapply(iris, is.factor)]
+  )
+
+  expect_equal(
+    get_columns(iris, -is.factor()),
+    iris[sapply(iris, function(i) !is.factor(i))]
+  )
+
+  expect_equal(
+    get_columns(iris, -is.factor),
+    iris[sapply(iris, function(i) !is.factor(i))]
+  )
+
   expect_warning(expect_null(get_columns(iris, is.logical())))
+
+  expect_equal(get_columns(iris, -is.logical), iris)
+
+  expect_equal(
+    get_columns(iris, 2:3),
+    iris[2:3]
+  )
+
+  expect_equal(
+    get_columns(iris, Sepal.Width:Petal.Length),
+    iris[2:3]
+  )
+
+  expect_equal(
+    get_columns(iris, -Sepal.Width:Petal.Length),
+    iris[c(1, 4, 5)]
+  )
 
   expect_equal(
     get_columns(iris, regex("\\.")),
@@ -68,6 +135,24 @@ test_that("get_columns works as expected", {
   expect_equal(
     get_columns(mtcars, regex("^C"), ignore_case = TRUE),
     mtcars[c("cyl", "carb")]
+  )
+
+  testfun <<- function(i) {
+    is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
+  }
+  expect_equal(get_columns(iris, testfun), iris[sapply(iris, testfun)])
+  expect_equal(get_columns(iris, -testfun), iris[!sapply(iris, testfun)])
+
+  testfun2 <<- function(i) {
+    is.numeric(i) && mean(i, na.rm = TRUE) < 5
+  }
+  expect_equal(
+    get_columns(iris, select = testfun, exclude = testfun2),
+    iris["Sepal.Length"]
+  )
+  expect_equal(
+    get_columns(iris, select = testfun, exclude = -testfun2),
+    iris["Petal.Length"]
   )
 })
 
@@ -119,6 +204,17 @@ test_that("get_columns from other functions", {
     get_columns(data, select = starts_with(i))
   }
   expect_warning(expect_null(test_fun3(iris)))
+
+  test_top <- function(x) {
+    testfun1 <- function(i) {
+      is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
+    }
+    testfun2 <- function(i) {
+      is.numeric(i) && mean(i, na.rm = TRUE) < 5
+    }
+    get_columns(x, select = testfun, exclude = -testfun2)
+  }
+  expect_equal(test_top(iris), iris["Petal.Length"])
 })
 
 
