@@ -20,6 +20,14 @@
   select <- tryCatch(eval(p), error = function(e) NULL)
   exclude <- tryCatch(eval(p2), error = function(e) NULL)
 
+  # select and exclude might also be a (user-defined) function
+  if (inherits(select, "function")) {
+    select <- colnames(data)[sapply(data, select)]
+  }
+  if (inherits(exclude, "function")) {
+    exclude <- colnames(data)[sapply(data, exclude)]
+  }
+
   # if select could not be evaluated (because expression "makes no sense")
   # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
   # so we can use grepl()
@@ -77,7 +85,7 @@
   if (is.null(x) && !is.null(data)) {
     pattern <- colnames(data)
     fixed <- TRUE
-  } else if (!is.null(x) && all(x == "all")) {
+  } else if (!is.null(data) && !is.null(x) && all(x == "all")) {
     pattern <- colnames(data)
     fixed <- TRUE
   } else if (grepl("^starts_with\\(\"(.*)\"\\)", x)) {
@@ -103,35 +111,35 @@
     pattern <- gsub("matches\\(\"(.*)\"\\)", "\\1", x)
   } else if (grepl("^regex\\(\"(.*)\"\\)", x)) {
     pattern <- gsub("regex\\(\"(.*)\"\\)", "\\1", x)
-  } else if (grepl("is.numeric()", x, fixed = TRUE)) {
+  } else if (!is.null(data) && x %in% c("is.numeric()", "is.numeric")) {
     if (negate) {
       pattern <- colnames(data)[sapply(data, function(i) !is.numeric(i))]
     } else {
       pattern <- colnames(data)[sapply(data, is.numeric)]
     }
     fixed <- TRUE
-  } else if (grepl("is.integer()", x, fixed = TRUE)) {
+  } else if (!is.null(data) && x %in% c("is.integer()", "is.integer")) {
     if (negate) {
       pattern <- colnames(data)[sapply(data, function(i) !is.integer(i))]
     } else {
       pattern <- colnames(data)[sapply(data, is.integer)]
     }
     fixed <- TRUE
-  } else if (grepl("is.factor()", x, fixed = TRUE)) {
+  } else if (!is.null(data) && x %in% c("is.factor()", "is.factor")) {
     if (negate) {
       pattern <- colnames(data)[sapply(data, function(i) !is.factor(i))]
     } else {
       pattern <- colnames(data)[sapply(data, is.factor)]
     }
     fixed <- TRUE
-  } else if (grepl("is.character()", x, fixed = TRUE)) {
+  } else if (!is.null(data) && x %in% c("is.character()", "is.character")) {
     if (negate) {
       pattern <- colnames(data)[sapply(data, function(i) !is.character(i))]
     } else {
       pattern <- colnames(data)[sapply(data, is.character)]
     }
     fixed <- TRUE
-  } else if (grepl("is.logical()", x, fixed = TRUE)) {
+  } else if (!is.null(data) && x %in% c("is.logical()", "is.logical")) {
     if (negate) {
       pattern <- colnames(data)[sapply(data, function(i) !is.logical(i))]
     } else {

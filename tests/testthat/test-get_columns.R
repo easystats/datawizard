@@ -25,7 +25,17 @@ test_that("get_columns works as expected", {
   )
 
   expect_equal(
+    get_columns(iris, is.numeric),
+    iris[sapply(iris, is.numeric)]
+  )
+
+  expect_equal(
     get_columns(iris, -is.numeric()),
+    iris[sapply(iris, function(i) !is.numeric(i))]
+  )
+
+  expect_equal(
+    get_columns(iris, -is.numeric),
     iris[sapply(iris, function(i) !is.numeric(i))]
   )
 
@@ -35,7 +45,17 @@ test_that("get_columns works as expected", {
   )
 
   expect_equal(
+    get_columns(iris, is.factor),
+    iris[sapply(iris, is.factor)]
+  )
+
+  expect_equal(
     get_columns(iris, -is.factor()),
+    iris[sapply(iris, function(i) !is.factor(i))]
+  )
+
+  expect_equal(
+    get_columns(iris, -is.factor),
     iris[sapply(iris, function(i) !is.factor(i))]
   )
 
@@ -104,6 +124,11 @@ test_that("get_columns works as expected", {
     get_columns(mtcars, regex("^C"), ignore_case = TRUE),
     mtcars[c("cyl", "carb")]
   )
+
+  testfun <- function(i) {
+    is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
+  }
+  expect_equal(get_columns(iris, testfun), iris[sapply(iris, testfun)])
 })
 
 
