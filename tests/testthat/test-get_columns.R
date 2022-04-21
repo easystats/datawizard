@@ -204,6 +204,17 @@ test_that("get_columns from other functions", {
     get_columns(data, select = starts_with(i))
   }
   expect_warning(expect_null(test_fun3(iris)))
+
+  test_top <- function(x) {
+    testfun1 <- function(i) {
+      is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
+    }
+    testfun2 <- function(i) {
+      is.numeric(i) && mean(i, na.rm = TRUE) < 5
+    }
+    get_columns(x, select = testfun, exclude = -testfun2)
+  }
+  expect_equal(test_top(iris), iris["Petal.Length"])
 })
 
 
