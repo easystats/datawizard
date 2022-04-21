@@ -84,6 +84,28 @@ test_that("get_columns works as expected", {
   )
 
   expect_equal(
+    get_columns(iris, 2:3),
+    iris[2:3]
+  )
+
+  expect_equal(
+    get_columns(iris, -(1:2)),
+    iris[c(4, 5)]
+  )
+
+  expect_equal(
+    get_columns(iris, -1:-2),
+    iris[c(4, 5)]
+  )
+
+  expect_equal(get_columns(iris), iris)
+
+  expect_equal(
+    get_columns(iris, ~ Sepal.Width + Petal.Length),
+    iris[2:3]
+  )
+
+  expect_equal(
     get_columns(iris, -Sepal.Width:Petal.Length),
     iris[c(1, 4, 5)]
   )
