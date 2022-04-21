@@ -136,6 +136,16 @@ test_that("get_columns works as expected", {
   )
 
   expect_equal(
+    get_columns(iris, -c("Petal.Width", "Sepal.Length")),
+    iris[setdiff(colnames(iris), c("Petal.Width", "Sepal.Length"))]
+  )
+
+  expect_equal(
+    get_columns(iris, -Petal.Width),
+    iris[setdiff(colnames(iris), "Petal.Width")]
+  )
+
+  expect_equal(
     get_columns(iris, contains("Wid")),
     iris[c("Sepal.Width", "Petal.Width")]
   )
