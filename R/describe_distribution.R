@@ -152,6 +152,7 @@ describe_distribution.numeric <- function(x,
                                           threshold = .1,
                                           verbose = TRUE,
                                           ...) {
+  insight::check_if_installed("bayestestR")
   out <- data.frame(.temp = 0)
 
   # Missing
