@@ -86,11 +86,13 @@
     x <- substr(x, 0, nchar(x) - 2)
   }
 
-  # is it a function?
+  # is it a function? usually, this is already done in ".select_nse()", unless
+  # the user negates a function with "-", like "-is.numeric". In this case,
+  # we apply the function here again.
   user_function <- NULL
   if (!is.null(x)) {
     user_function <- try(get(x, envir = parent.frame()), silent = TRUE)
-    if (inherits(user_function, c("try-error", "simpleError"))) {
+    if (inherits(user_function, c("try-error", "simpleError")) || !inherits(user_function, "function")) {
       user_function <- NULL
     }
   }
