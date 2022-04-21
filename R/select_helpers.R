@@ -81,10 +81,15 @@
     x <- substring(x, 5)
   }
 
+  # remove parentheses for functions
+  if (!is.null(x) && length(x) == 1 && substr(x, nchar(x) - 1, nchar(x)) == "()") {
+    x <- substr(x, 0, nchar(x) - 2)
+  }
+
   # is it a function?
   user_function <- NULL
   if (!is.null(x)) {
-    user_function <- try(get(x), silent = TRUE)
+    user_function <- try(get(x, envir = parent.frame()), silent = TRUE)
     if (inherits(user_function, c("try-error", "simpleError"))) {
       user_function <- NULL
     }
@@ -120,44 +125,9 @@
     pattern <- gsub("matches\\(\"(.*)\"\\)", "\\1", x)
   } else if (grepl("^regex\\(\"(.*)\"\\)", x)) {
     pattern <- gsub("regex\\(\"(.*)\"\\)", "\\1", x)
-  } else if (!is.null(data) && x %in% c("is.numeric()", "is.numeric")) {
-    if (negate) {
-      pattern <- colnames(data)[sapply(data, function(i) !is.numeric(i))]
-    } else {
-      pattern <- colnames(data)[sapply(data, is.numeric)]
-    }
-    fixed <- TRUE
-  } else if (!is.null(data) && x %in% c("is.integer()", "is.integer")) {
-    if (negate) {
-      pattern <- colnames(data)[sapply(data, function(i) !is.integer(i))]
-    } else {
-      pattern <- colnames(data)[sapply(data, is.integer)]
-    }
-    fixed <- TRUE
-  } else if (!is.null(data) && x %in% c("is.factor()", "is.factor")) {
-    if (negate) {
-      pattern <- colnames(data)[sapply(data, function(i) !is.factor(i))]
-    } else {
-      pattern <- colnames(data)[sapply(data, is.factor)]
-    }
-    fixed <- TRUE
-  } else if (!is.null(data) && x %in% c("is.character()", "is.character")) {
-    if (negate) {
-      pattern <- colnames(data)[sapply(data, function(i) !is.character(i))]
-    } else {
-      pattern <- colnames(data)[sapply(data, is.character)]
-    }
-    fixed <- TRUE
-  } else if (!is.null(data) && x %in% c("is.logical()", "is.logical")) {
-    if (negate) {
-      pattern <- colnames(data)[sapply(data, function(i) !is.logical(i))]
-    } else {
-      pattern <- colnames(data)[sapply(data, is.logical)]
-    }
-    fixed <- TRUE
   } else if (!is.null(data) && !is.null(user_function)) {
     if (negate) {
-      pattern <- colnames(data)[sapply(data, function(i) !user_function(i))]
+      pattern <- colnames(data)[!sapply(data, function(i) user_function(i))]
     } else {
       pattern <- colnames(data)[sapply(data, user_function)]
     }

@@ -137,13 +137,13 @@ test_that("get_columns works as expected", {
     mtcars[c("cyl", "carb")]
   )
 
-  testfun <- function(i) {
+  testfun <<- function(i) {
     is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
   }
   expect_equal(get_columns(iris, testfun), iris[sapply(iris, testfun)])
   expect_equal(get_columns(iris, -testfun), iris[!sapply(iris, testfun)])
 
-  testfun2 <- function(i) {
+  testfun2 <<- function(i) {
     is.numeric(i) && mean(i, na.rm = TRUE) < 5
   }
   expect_equal(
