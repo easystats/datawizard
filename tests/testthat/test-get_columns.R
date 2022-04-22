@@ -238,6 +238,15 @@ test_that("get_columns from other functions", {
     iris[c("Sepal.Width", "Petal.Width")]
   )
 
+  test_fun1c <- function(data, i) {
+    get_columns(data, select = -i)
+  }
+  expect_equal(
+    test_fun1c(iris, c("Sepal.Length", "Sepal.Width")),
+    iris[c("Sepal.Width", "Petal.Width", "Species")]
+  )
+
+
   test_fun2 <- function(data) {
     get_columns(data, select = starts_with("Sep"))
   }
