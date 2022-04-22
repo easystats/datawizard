@@ -116,8 +116,14 @@ for which the function returns <code>TRUE</code> (like: <code>foo &lt;- function
 <li><p>ranges specified via literal variable names, select-helpers (except
 <code><a href="https://rdrr.io/r/base/regex.html" class="external-link">regex()</a></code>) and (user-defined) functions can be negated, i.e. return
 non-matching elements, when prefixed with a <code>-</code>, e.g. <code>-ends_with("")</code>,
-<code>-is.numeric</code> or <code>-Sepal.Width:Petal.Length</code>.</p></li>
-</ul><p>If <code>NULL</code>, selects all columns.</p></dd>
+<code>-is.numeric</code> or <code>-Sepal.Width:Petal.Length</code>. <strong>Note:</strong> Negation means
+that matches are <em>excluded</em>, and thus, the <code>exclude</code> argument can be
+used alternatively. For instance, <code>select=-ends_with("Length")</code> (with
+<code>-</code>) is equivalent to <code>exclude=ends_with("Length")</code> (no <code>-</code>). In case
+negation should not work as expected, use the <code>exclude</code> argument instead.</p></li>
+</ul><p>If <code>NULL</code>, selects all columns. Patterns that found no matches are silently
+ignored, e.g. <code>find_columns(iris, select = c("Species", "Test"))</code> will just
+return <code>"Species"</code>.</p></dd>
 <dt>before, after</dt>
 <dd><p>Destination of columns. Supplying neither will move
 columns to the left-hand side; specifying both is an error. Can be a
