@@ -77,7 +77,7 @@
   }
 
   # deal with aliases
-  if (!is.null(x) && length(x) == 1 && x %in% c("col_ends_with", "col_starts_with", "col_contains")) {
+  if (!is.null(x) && length(x) == 1 && grepl("^col_(starts|ends|contains)(.*)\\)$", x)) {
     x <- substring(x, 5)
   }
 
