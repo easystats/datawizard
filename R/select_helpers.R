@@ -1,6 +1,19 @@
 # this function evaluates the select-expression and allows non-standard evaluation
 
 .select_nse <- function(select, data, exclude, ignore_case, regex = FALSE, verbose = FALSE) {
+  # check if data argument is valid
+  if (is.null(data)) {
+    stop(insight::format_message("The 'data' argument must be provided."), call. = FALSE)
+  }
+
+  # check data frame input
+  if (!is.null(data) && !is.data.frame(data)) {
+    data <- try(as.data.frame(data), silent = TRUE)
+    if (inherits(data, c("try-error", "simpleError"))) {
+      stop(insight::format_message("The 'data' argument must be a data frame, or an object that can be coerced to a data frame."), call. = FALSE)
+    }
+  }
+
   fixed_select <- TRUE
   fixed_exclude <- TRUE
   # avoid conflicts
@@ -68,6 +81,11 @@
 
 .evaluate_pattern <- function(x, data = NULL, ignore_case = FALSE) {
   fixed <- FALSE
+
+  ## TODO once "data_findcols()" is removed, we can remove the checks
+  # for "is.null(data)" here, because then data is *always* provided and
+  # cannot be NULL. The only place where ".evaluate_pattern()" is called
+  # with no data argument is in "data_findcols()".
 
   # check if negation is requested
   negate <- !is.null(x) && length(x) == 1 && substr(x, 0, 1) == "-"

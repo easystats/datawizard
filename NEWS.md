@@ -13,13 +13,17 @@ NEW FUNCTIONS
 
 CHANGES
 
-* The `select` argument now also accepts functions testing for logical 
-  conditions, e.g. `is.numeric()` (or `is.numeric`), or any user-defined 
-  function that selects the variables for which the function returns `TRUE` 
-  (like: `foo <- function(x) mean(x) > 3`).
+* `data_find()` as added as alias to `find_colums()`, to have consistent
+  name patterns for the **datawizard** functions. `data_findcols()` will be
+  removed in a future update and usage is discouraged.
 
-* The `select` argument now allows for negation of select-helpers, like 
-  `-ends_with("")`, `-is.numeric` or `-Sepal.Width:Petal.Length`.
+* The `select` argument (and thus, also the `exclude` argument) now also 
+  accepts functions testing for logical conditions, e.g. `is.numeric()` (or
+  `is.numeric`), or any user-defined function that selects the variables for 
+  which the function returns `TRUE` (like: `foo <- function(x) mean(x) > 3`).
+
+* Arguments `select` and `exclude` now allow the negation of select-helpers, 
+  like `-ends_with("")`, `-is.numeric` or `-Sepal.Width:Petal.Length`.
 
 * Many functions now get a `.default` method, to capture unsupported classes. 
   This now yields a message and returns the original input, and hence, the 

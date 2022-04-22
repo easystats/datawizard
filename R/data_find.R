@@ -3,7 +3,8 @@
 #'
 #' @description `find_columns()` returns column names from a data set that
 #' match a certain search pattern, while `get_columns()` returns the found data.
-#' `data_select()` is an alias for `get_columns()`.
+#' `data_select()` is an alias for `get_columns()`, and `data_find()` is an alias
+#' for `find_columns()`.
 #'
 #' @param data A data frame.
 #' @param select Variables that will be included when performing the required
@@ -80,8 +81,10 @@
 #' ```
 #'
 #' One workaround is to use the `regex` argument, which provides at
-#' least a bit more flexibility than exact matching. `regex` behaves
-#' like the `contains("")` select-helper:
+#' least a bit more flexibility than exact matching. `regex` in its basic
+#' usage (as seen below) means that `select` behaves like the `contains("")`
+#' select-helper, but can also make the function more flexible by allowing to
+#' define complex regular expression pattern in `select`.
 #'
 #' ```
 #' foo <- function(data) {
@@ -132,6 +135,11 @@ find_columns <- function(data,
 }
 
 
+#' @rdname find_columns
+#' @export
+data_find <- find_columns
+
+
 #' @param pattern A regular expression (as character string), representing the
 #'   pattern to be matched in the in column names. Can also be one of the
 #'   following select-helpers: `starts_with("")`, `end_with("")`, `regex("")`,
@@ -151,6 +159,9 @@ data_findcols <- function(data,
                           ends_with = NULL,
                           ignore_case = FALSE,
                           ...) {
+
+  warning(insight::format_message("'data_findcols()' is deprecated and will be removed in a future update.",
+                                  "Its usage is discouraged. Please use 'data_find()' instead."), call. = FALSE)
 
   # init
   n <- names(data)
