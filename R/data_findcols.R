@@ -25,9 +25,15 @@
 #'   - ranges specified via literal variable names, select-helpers (except
 #'     `regex()`) and (user-defined) functions can be negated, i.e. return
 #'     non-matching elements, when prefixed with a `-`, e.g. `-ends_with("")`,
-#'     `-is.numeric` or `-Sepal.Width:Petal.Length`.
+#'     `-is.numeric` or `-Sepal.Width:Petal.Length`. **Note:** Negation means
+#'     that matches are _excluded_, and thus, the `exclude` argument can be
+#'     used alternatively. For instance, `select=-ends_with("Length")` (with
+#'     `-`) is equivalent to `exclude=ends_with("Length")` (no `-`). In case
+#'     negation should not work as expected, use the `exclude` argument instead.
 #'
-#'   If `NULL`, selects all columns.
+#'   If `NULL`, selects all columns. Patterns that found no matches are silently
+#'   ignored, e.g. `find_columns(iris, select = c("Species", "Test"))` will just
+#'   return `"Species"`.
 #' @param exclude See `select`, however, column names matched by the pattern
 #'   from `exclude` will be excluded instead of selected. If `NULL` (the default),
 #'   excludes no columns.

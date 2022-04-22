@@ -58,10 +58,16 @@ for which the function returns \code{TRUE} (like: \code{foo <- function(x) mean(
 \item ranges specified via literal variable names, select-helpers (except
 \code{regex()}) and (user-defined) functions can be negated, i.e. return
 non-matching elements, when prefixed with a \code{-}, e.g. \code{-ends_with("")},
-\code{-is.numeric} or \code{-Sepal.Width:Petal.Length}.
+\code{-is.numeric} or \code{-Sepal.Width:Petal.Length}. \strong{Note:} Negation means
+that matches are \emph{excluded}, and thus, the \code{exclude} argument can be
+used alternatively. For instance, \code{select=-ends_with("Length")} (with
+\code{-}) is equivalent to \code{exclude=ends_with("Length")} (no \code{-}). In case
+negation should not work as expected, use the \code{exclude} argument instead.
 }
 
-If \code{NULL}, selects all columns.}
+If \code{NULL}, selects all columns. Patterns that found no matches are silently
+ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
+return \code{"Species"}.}
 
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
