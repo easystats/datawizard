@@ -90,6 +90,7 @@ reference:
 
   - title: Data properties
   - contents:
+      - data_table
       - describe_distribution
       - kurtosis
       - smoothness
