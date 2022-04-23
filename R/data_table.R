@@ -146,7 +146,7 @@ print.dw_data_table <- function(x, ...) {
   cat(insight::print_color(sprintf(" <%s>\n", a$type), "blue"))
   cat(insight::print_color(summary_line, "blue"))
 
-  cat(insight::export_table(ftab, missing = "<NA>"))
+  cat(insight::export_table(ftab, cross = "+", missing = "<NA>"))
   invisible(x)
 }
 
