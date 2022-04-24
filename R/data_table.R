@@ -36,13 +36,6 @@ data_table.default <- function(x, name = NULL, verbose = TRUE, ...) {
     return(NULL)
   }
 
-  if (is.null(name)) {
-    name <- attr(x, "label", exact = TRUE)
-    if (is.null(name)) {
-      name <- name <- tryCatch(insight::safe_deparse(substitute(x)), error = function(e) NULL)
-    }
-  }
-
   out <- data_rename(data.frame(freq_table, stringsAsFactors = FALSE),
                      replacement = c("Value", "N"))
 
@@ -50,8 +43,13 @@ data_table.default <- function(x, name = NULL, verbose = TRUE, ...) {
   out$`Valid %` <- c(100 * out$N[1:(nrow(out) - 1)] / sum(out$N[1:(nrow(out) - 1)]), NA)
   out$`Cumulative %` <- cumsum(out$`Valid %`)
 
+  # save information
   attr(out, "type") <- .variable_type(x)
-  attr(out, "name") <- name
+  attr(out, "varname") <- name
+  attr(out, "label") <- attr(x, "label", exact = TRUE)
+  attr(out, "object") <- tryCatch(insight::safe_deparse(substitute(x)), error = function(e) NULL)
+  attr(out, "group_variable") <- list(...)$group_variable
+
   attr(out, "total_n") <- sum(out$N, na.rm = TRUE)
   attr(out, "valid_n") <- sum(out$`Valid %`, na.rm = TRUE)
 
@@ -72,14 +70,10 @@ data_table.data.frame <- function(x,
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case)
   out <- lapply(select, function(i) {
-    name <- attr(x[[i]], "label", exact = TRUE)
-    if (is.null(name)) {
-      name <- i
-    }
-    data_table(x[[i]], name = name, verbose = verbose, ...)
+    data_table(x[[i]], name = i, verbose = verbose, ...)
   })
 
-  class(out) <- unique("dw_data_tables", "list")
+  class(out) <- c("dw_data_tables", "list")
   out
 }
 
@@ -91,10 +85,9 @@ data_table.grouped_df <- function(x,
                                   ignore_case = FALSE,
                                   verbose = TRUE,
                                   ...) {
-  info <- attributes(x)
-
-  # dplyr >= 0.8.0 returns attribute "indices"
+  # dplyr < 0.8.0 returns attribute "indices"
   grps <- attr(x, "groups", exact = TRUE)
+  group_variables <- NULL
 
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case)
@@ -104,23 +97,32 @@ data_table.grouped_df <- function(x,
     grps <- attr(x, "indices", exact = TRUE)
     grps <- lapply(grps, function(x) x + 1)
   } else {
+    group_variables <- data_remove(grps, ".rows")
     grps <- grps[[".rows"]]
   }
 
   x <- as.data.frame(x)
-  for (rows in grps) {
-    x[rows, ] <- data_table(
+  out <- list()
+  for (i in 1:length(grps)) {
+    rows <- grps[[i]]
+    # save information about grouping factors
+    if (!is.null(group_variables)) {
+      group_variable <- group_variables[i, ]
+    } else {
+      group_variable <- NULL
+    }
+    out <- c(out, data_table(
       x[rows, ],
       select = select,
       exclude = exclude,
       ignore_case = ignore_case,
       verbose = verbose,
+      group_variable = group_variable,
       ...
-    )
+    ))
   }
-  # set back class, so data frame still works with dplyr
-  attributes(x) <- info
-  x
+  class(out) <- c("dw_data_tables", "list")
+  out
 }
 
 
@@ -132,9 +134,7 @@ data_table.grouped_df <- function(x,
 print.dw_data_table <- function(x, ...) {
   a <- attributes(x)
 
-  # prepare title
-  summary_line <- sprintf("# total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
-
+  # format data frame
   ftab <- insight::format_table(as.data.frame(x))
   ftab[] <- lapply(ftab, function(i) {
     i[i == ""] <- "<NA>"
@@ -142,10 +142,48 @@ print.dw_data_table <- function(x, ...) {
   })
   ftab$N <- gsub("\\.00$", "", ftab$N)
 
-  cat(insight::print_color(a$name, "red"))
+  # assemble name, based on what information is available
+  name <- NULL
+  # fix object name
+  if (identical(a$object, "x[[i]]")) {
+    a$object <- NULL
+  }
+  if (!is.null(a$label)) {
+    name <- a$label
+    if (!is.null(a$varname)) {
+      name <- paste0(name, " (", a$varname, ")")
+    } else if (!is.null(a$object)) {
+      name <- paste0(name, " (", a$object, ")")
+    }
+  } else if (!is.null(a$varname)) {
+    name <- a$varname
+    if (!is.null(a$object)) {
+      name <- paste0(name, " (", a$object, ")")
+    }
+  }
+
+  if (is.null(name) && !is.null(a$object)) {
+    name <- a$object
+  }
+
+  # "table" header with variable label/name, and type
+  cat(insight::print_color(name, "red"))
   cat(insight::print_color(sprintf(" <%s>\n", a$type), "blue"))
+
+  # grouped data? if yes, add information on grouping factor
+  if (!is.null(a$group_variable)) {
+    group_title <- paste0("Grouped by ", paste0(lapply(colnames(a$group_variable), function(i) {
+      sprintf("%s (%s)", i, a$group_variable[[i]])
+    }), collapse = ", "))
+    cat(insight::print_color(group_title, "blue"))
+    cat("\n")
+  }
+
+  # summary of total and valid N (we may add mean/sd as well?)
+  summary_line <- sprintf("# total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
   cat(insight::print_color(summary_line, "blue"))
 
+  # print table
   cat(insight::export_table(ftab, cross = "+", missing = "<NA>"))
   invisible(x)
 }
@@ -153,9 +191,9 @@ print.dw_data_table <- function(x, ...) {
 
 #' @export
 print.dw_data_tables <- function(x, ...) {
-  for (i in x) {
-    print(i)
-    cat("\n")
+  for (i in 1:length(x)) {
+    print(x[[i]])
+    if (i < length(x)) cat("\n")
   }
 }
 
