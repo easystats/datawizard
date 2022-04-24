@@ -49,7 +49,7 @@ data_table.default <- function(x, name = NULL, verbose = TRUE, ...) {
                      replacement = c("Value", "N"))
 
   out$`Raw %` <- 100 * out$N / sum(out$N)
-  out$`Valid %` <- c(100 * out$N[1:(nrow(out) - 1)] / sum(out$N[1:(nrow(out) - 1)]), NA)
+  out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
   out$`Cumulative %` <- cumsum(out$`Valid %`)
 
   # save information
