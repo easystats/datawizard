@@ -207,7 +207,7 @@ print.dw_data_tables <- function(x, ...) {
     vt <- "ord"
   else if (is.factor(x))
     vt <- "fct"
-  else if (methods::is(x, "Date"))
+  else if (class(x)[1] == "Date")
     vt <- "date"
   else {
     vt <- switch(typeof(x), logical = "lgl", integer = "int",
