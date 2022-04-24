@@ -121,8 +121,8 @@ ranktransform.grouped_df <- function(x,
 
   x <- as.data.frame(x)
   for (rows in grps) {
-    x[rows, ] <- ranktransform(
-      x[rows, ],
+    x[rows, , drop = FALSE] <- ranktransform(
+      x[rows, , drop = FALSE],
       select = select,
       exclude = exclude,
       sign = sign,
