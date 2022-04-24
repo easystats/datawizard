@@ -60,7 +60,7 @@ data_table.default <- function(x, name = NULL, verbose = TRUE, ...) {
   attr(out, "group_variable") <- list(...)$group_variable
 
   attr(out, "total_n") <- sum(out$N, na.rm = TRUE)
-  attr(out, "valid_n") <- sum(out$`Valid %`, na.rm = TRUE)
+  attr(out, "valid_n") <- sum(out$N[-length(out$N)], na.rm = TRUE)
 
   class(out) <- c("dw_data_table", "data.frame")
 
