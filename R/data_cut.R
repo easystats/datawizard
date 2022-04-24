@@ -307,7 +307,7 @@ data_cut.grouped_df <- function(x,
 
   x <- as.data.frame(x)
   for (rows in grps) {
-    x[rows, , drop = FALSE] <- data_cut(
+    x[rows, ] <- data_cut(
       x[rows, , drop = FALSE],
       split = split,
       n_groups = split,

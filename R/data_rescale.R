@@ -143,7 +143,7 @@ data_rescale.grouped_df <- function(x,
 
   x <- as.data.frame(x)
   for (rows in grps) {
-    x[rows, , drop = FALSE] <- data_rescale(
+    x[rows, ] <- data_rescale(
       x[rows, , drop = FALSE],
       select = select,
       exclude = exclude,

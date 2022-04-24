@@ -150,7 +150,7 @@ data_reverse.grouped_df <- function(x,
 
   x <- as.data.frame(x)
   for (rows in grps) {
-    x[rows, , drop = FALSE] <- data_reverse(
+    x[rows, ] <- data_reverse(
       x[rows, , drop = FALSE],
       select = select,
       exclude = exclude,
