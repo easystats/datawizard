@@ -8,6 +8,8 @@ NEW FUNCTIONS
 
 * `data_to_factor()` as counterpart to `data_to_numeric()`.
 
+* `data_table()` to create frequency tables of variables.
+
 * `data_read()` to read (import) data files (from text, or foreign statistical
   packages).
 

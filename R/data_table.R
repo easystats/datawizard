@@ -121,7 +121,7 @@ data_table.grouped_df <- function(x,
       group_variable <- NULL
     }
     out <- c(out, data_table(
-      x[rows, , drop = FALSE],
+      data_filter(x, rows),
       select = select,
       exclude = exclude,
       ignore_case = ignore_case,

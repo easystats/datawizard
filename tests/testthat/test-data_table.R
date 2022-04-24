@@ -63,47 +63,49 @@ test_that("data_table print", {
 
 skip_if_not_installed("poorman")
 
-test_that("data_table grouped data.frame", {
-  x <- data_table(group_by(efc, e16sex), "c172code")
-  expect_s3_class(x, "list")
-  expect_equal(length(x), 2)
-  expect_equal(
-    attributes(x[[1]]),
-    list(names = c("Value", "N", "Raw %", "Valid %", "Cumulative %"),
-         row.names = 1:4, class = c("dw_data_table", "data.frame"),
-         type = "numeric", varname = "c172code", object = "x[[i]]",
-         group_variable = structure(list(e16sex = 1), .drop = TRUE, row.names = 1L, class = "data.frame"),
-         total_n = 46L, valid_n = 41L)
-  )
-  table1 <- x[[1]]
-  expect_equal(as.vector(table1$Value), as.character(c(sort(unique(efc$c172code)), NA)))
-  expect_equal(table1$N, as.vector(table(addNA(efc$c172code[efc$e16sex == 1]))))
-  expect_equal(table1$`Valid %`, as.vector(c(100 * table(efc$c172code[efc$e16sex == 1]) / sum(!is.na(efc$c172code[efc$e16sex == 1])), NA)), ignore_attr = TRUE, tolerance = 1e-3)
-})
+if (requireNamespace("poorman", quietly = TRUE)) {
+  test_that("data_table grouped data.frame", {
+    x <- data_table(poorman::group_by(efc, e16sex), "c172code")
+    expect_s3_class(x, "list")
+    expect_equal(length(x), 2)
+    expect_equal(
+      attributes(x[[1]]),
+      list(names = c("Value", "N", "Raw %", "Valid %", "Cumulative %"),
+           row.names = 1:4, class = c("dw_data_table", "data.frame"),
+           type = "numeric", varname = "c172code", label = "carer's level of education",
+           object = "x[[i]]", group_variable = structure(list(e16sex = 1), .drop = TRUE, row.names = 1L, class = "data.frame"),
+           total_n = 46L, valid_n = 41L)
+    )
+    table1 <- x[[1]]
+    expect_equal(as.vector(table1$Value), as.character(c(sort(unique(efc$c172code)), NA)))
+    expect_equal(table1$N, as.vector(table(addNA(efc$c172code[efc$e16sex == 1]))))
+    expect_equal(table1$`Valid %`, as.vector(c(100 * table(efc$c172code[efc$e16sex == 1]) / sum(!is.na(efc$c172code[efc$e16sex == 1])), NA)), ignore_attr = TRUE, tolerance = 1e-3)
+  })
 
 
-test_that("data_table print", {
-  x <- data_table(group_by(efc, e16sex), "c172code")
-  out <- capture.output(print(x))
-  c("c172code <numeric>",
-    "Grouped by e16sex (1)",
-    "# total N=46 valid N=41",
-    "",
-    "Value |  N | Raw % | Valid % | Cumulative %",
-    "------+----+-------+---------+-------------",
-    "1     |  5 | 10.87 |   12.20 |        12.20",
-    "2     | 32 | 69.57 |   78.05 |        90.24",
-    "3     |  4 |  8.70 |    9.76 |       100.00",
-    "<NA>  |  5 | 10.87 |    <NA> |         <NA>",
-    "",
-    "c172code <numeric>",
-    "Grouped by e16sex (2)",
-    "# total N=54 valid N=49",
-    "", "Value |  N | Raw % | Valid % | Cumulative %",
-    "------+----+-------+---------+-------------",
-    "1     |  3 |  5.56 |    6.12 |         6.12",
-    "2     | 34 | 62.96 |   69.39 |        75.51",
-    "3     | 12 | 22.22 |   24.49 |       100.00",
-    "<NA>  |  5 |  9.26 |    <NA> |         <NA>"
-  )
-})
+  test_that("data_table print", {
+    x <- data_table(poorman::group_by(efc, e16sex), "c172code")
+    out <- capture.output(print(x))
+    c("carer's level of education (c172code) <numeric>",
+      "Grouped by e16sex (1)",
+      "# total N=46 valid N=41",
+      "",
+      "Value |  N | Raw % | Valid % | Cumulative %",
+      "------+----+-------+---------+-------------",
+      "1     |  5 | 10.87 |   12.20 |        12.20",
+      "2     | 32 | 69.57 |   78.05 |        90.24",
+      "3     |  4 |  8.70 |    9.76 |       100.00",
+      "<NA>  |  5 | 10.87 |    <NA> |         <NA>",
+      "",
+      "carer's level of education (c172code) <numeric>",
+      "Grouped by e16sex (2)",
+      "# total N=54 valid N=49",
+      "", "Value |  N | Raw % | Valid % | Cumulative %",
+      "------+----+-------+---------+-------------",
+      "1     |  3 |  5.56 |    6.12 |         6.12",
+      "2     | 34 | 62.96 |   69.39 |        75.51",
+      "3     | 12 | 22.22 |   24.49 |       100.00",
+      "<NA>  |  5 |  9.26 |    <NA> |         <NA>"
+    )
+  })
+}
