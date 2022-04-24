@@ -134,8 +134,8 @@ normalize.grouped_df <- function(x,
 
   x <- as.data.frame(x)
   for (rows in grps) {
-    x[rows, ] <- normalize(
-      x[rows, ],
+    x[rows, , drop = FALSE] <- normalize(
+      x[rows, , drop = FALSE],
       select = select,
       exclude = exclude,
       include_bounds = include_bounds,

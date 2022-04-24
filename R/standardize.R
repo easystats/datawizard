@@ -305,8 +305,8 @@ standardize.grouped_df <- function(x,
   )
 
   for (rows in args$grps) {
-    args$x[rows, ] <- standardize(
-      args$x[rows, ],
+    args$x[rows, , drop = FALSE] <- standardize(
+      args$x[rows, , drop = FALSE],
       select = args$select,
       exclude = NULL,
       robust = robust,
