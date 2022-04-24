@@ -116,12 +116,12 @@ data_table.grouped_df <- function(x,
     rows <- grps[[i]]
     # save information about grouping factors
     if (!is.null(group_variables)) {
-      group_variable <- group_variables[i, ]
+      group_variable <- group_variables[i, , drop = FALSE]
     } else {
       group_variable <- NULL
     }
     out <- c(out, data_table(
-      x[rows, ],
+      x[rows, , drop = FALSE],
       select = select,
       exclude = exclude,
       ignore_case = ignore_case,
