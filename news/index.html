@@ -69,11 +69,11 @@
 <li><p>The <code>select</code> argument (and thus, also the <code>exclude</code> argument) now also accepts functions testing for logical conditions, e.g. <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric()</a></code> (or <code>is.numeric</code>), or any user-defined function that selects the variables for which the function returns <code>TRUE</code> (like: <code>foo &lt;- function(x) mean(x) &gt; 3</code>).</p></li>
 <li><p>Arguments <code>select</code> and <code>exclude</code> now allow the negation of select-helpers, like <code>-ends_with("")</code>, <code>-is.numeric</code> or <code>-Sepal.Width:Petal.Length</code>.</p></li>
 <li><p>Many functions now get a <code>.default</code> method, to capture unsupported classes. This now yields a message and returns the original input, and hence, the <code>.data.frame</code> methods won’t stop due to an error.</p></li>
+<li><p>The <code>filter</code> argument in <code><a href="../reference/data_match.html">data_filter()</a></code> can also be a numeric vector, to indicate row indices of those rows that should be returned.</p></li>
 <li><p><code><a href="../reference/convert_to_na.html">convert_to_na()</a></code> gets methods for variables of class <code>logical</code> and <code>Date</code>.</p></li>
 <li><p><code><a href="../reference/convert_data_to_numeric.html">data_to_numeric()</a></code> gains two more arguments, <code>preserve_levels</code> and <code>lowest</code>, to give better control of conversion of factors.</p></li>
 </ul><p>BUG FIXES</p>
-<ul><li>When logicals were passed to <code><a href="../reference/center.html">center()</a></code> or <code><a href="../reference/standardize.html">standardize()</a></code> and <code>force = TRUE</code>, these were not properly converted to numeric variables.</li>
-</ul></div>
+<ul><li>When logicals were passed to <code><a href="../reference/center.html">center()</a></code> or <code><a href="../reference/standardize.html">standardize()</a></code> and <code>force = TRUE</code>, these were not properly converted to numeric variables.</li></ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.0" id="datawizard-040">datawizard 0.4.0<a class="anchor" aria-label="anchor" href="#datawizard-040"></a></h2><p class="text-muted">CRAN release: 2022-03-30</p>
 <p>MAJOR CHANGES</p>
@@ -119,8 +119,7 @@
 <p>New functions:</p>
 <ul><li><p>to work with lists: <code><a href="https://easystats.github.io/insight/reference/is_empty_object.html" class="external-link">is_empty_object()</a></code> and <code><a href="https://easystats.github.io/insight/reference/compact_list.html" class="external-link">compact_list()</a></code></p></li>
 <li><p>to work with strings: <code><a href="https://easystats.github.io/insight/reference/compact_character.html" class="external-link">compact_character()</a></code></p></li>
-</ul></li>
-</ul></div>
+</ul></li></ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.2" id="datawizard-022">datawizard 0.2.2<a class="anchor" aria-label="anchor" href="#datawizard-022"></a></h2><p class="text-muted">CRAN release: 2022-01-04</p>
 <ul><li><p>New function <code><a href="../reference/data_extract.html">data_extract()</a></code> (or its alias <code><a href="../reference/data_extract.html">extract()</a></code>) to pull single variables from a data frame, possibly naming each value by the row names of that data frame.</p></li>
@@ -138,8 +137,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0.1" id="datawizard-0201">datawizard 0.2.0.1<a class="anchor" aria-label="anchor" href="#datawizard-0201"></a></h2><p class="text-muted">CRAN release: 2021-09-02</p>
-<ul><li>This is mainly a maintenance release that addresses some issues with conflicting namespaces.</li>
-</ul></div>
+<ul><li>This is mainly a maintenance release that addresses some issues with conflicting namespaces.</li></ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="datawizard-020">datawizard 0.2.0<a class="anchor" aria-label="anchor" href="#datawizard-020"></a></h2><p class="text-muted">CRAN release: 2021-08-17</p>
 <ul><li><p>New function: <code><a href="../reference/visualisation_recipe.html">visualisation_recipe()</a></code>.</p></li>
@@ -148,8 +146,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="datawizard-010">datawizard 0.1.0<a class="anchor" aria-label="anchor" href="#datawizard-010"></a></h2><p class="text-muted">CRAN release: 2021-06-18</p>
-<ul><li>First release.</li>
-</ul></div>
+<ul><li>First release.</li></ul></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
