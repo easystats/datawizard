@@ -3,7 +3,7 @@
 \name{data_match}
 \alias{data_match}
 \alias{data_filter}
-\title{Return filtered data frame or row indices}
+\title{Return filtered or sliced data frame, or row indices}
 \usage{
 data_match(x, to, match = "and", return_indices = FALSE, ...)
 
@@ -26,15 +26,17 @@ returns directly the filtered data frame instead of the row indices.}
 
 \item{...}{Not used.}
 
-\item{filter}{A logical expression indicating which rows to keep.}
+\item{filter}{A logical expression indicating which rows to keep, or a numeric
+vector indicating the row indices of rows to keep.}
 }
 \value{
 A filtered data frame, or the row indices that match the specified configuration.
 }
 \description{
-Return a filtered data frame or row indices of a data frame that match a
-specific condition. \code{data_filter()} works like \code{data_match()}, but works
-with logical expressions instead of data frame to specify matching conditions.
+Return a filtered (or sliced) data frame or row indices of a data frame that
+match a specific condition. \code{data_filter()} works like \code{data_match()}, but works
+with logical expressions or row indices of a data frame to specify matching
+conditions.
 }
 \details{
 For \code{data_match()}, if \code{match} is either \code{"or"} or \code{"not"}, the
@@ -81,6 +83,8 @@ data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
 # equivalent to
 data_filter(mtcars, vs == 0 | am == 1)
 
+# slice data frame by row indices
+data_filter(mtcars, 5:10)
 }
 \seealso{
 \itemize{
