@@ -15,7 +15,7 @@ NEW FUNCTIONS
 
 CHANGES
 
-* `data_find()` as added as alias to `find_colums()`, to have consistent
+* `data_find()` was added as alias to `find_colums()`, to have consistent
   name patterns for the **datawizard** functions. `data_findcols()` will be
   removed in a future update and usage is discouraged.
 
