@@ -29,6 +29,9 @@ CHANGES
   This now yields a message and returns the original input, and hence, the 
   `.data.frame` methods won't stop due to an error.
 
+* The `filter` argument in `data_filter()` can also be a numeric vector, to
+  indicate row indices of those rows that should be returned.
+  
 * `convert_to_na()` gets methods for variables of class `logical` and `Date`.
 
 * `data_to_numeric()` gains two more arguments, `preserve_levels` and `lowest`,

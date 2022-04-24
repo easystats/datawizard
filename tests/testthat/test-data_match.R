@@ -51,3 +51,9 @@ test_that("data_filter works", {
   expect_equal(out1, out3, ignore_attr = TRUE)
   expect_equal(out2, out3, ignore_attr = TRUE)
 })
+
+
+test_that("data_filter works like slice", {
+  out <- data_filter(mtcars, 5:10)
+  expect_equal(out, mtcars[5:10, ], ignore_attr = TRUE)
+})
