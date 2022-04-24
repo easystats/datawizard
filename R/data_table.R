@@ -139,17 +139,130 @@ data_table.grouped_df <- function(x,
 
 # methods --------------------
 
+#' @importFrom insight print_html
+#' @export
+insight::print_html
+
+
+#' @importFrom insight print_md
+#' @export
+insight::print_md
+
+
+#' @export
+format.dw_data_table <- function(x, format = "text", ...) {
+  # format data frame
+  ftab <- insight::format_table(as.data.frame(x))
+  ftab[] <- lapply(ftab, function(i) {
+    i[i == ""] <- ifelse(identical(format, "text"), "<NA>", "(NA)")
+    i
+  })
+  ftab$N <- gsub("\\.00$", "", ftab$N)
+  ftab
+}
+
+
 #' @export
 print.dw_data_table <- function(x, ...) {
   a <- attributes(x)
 
-  # format data frame
-  ftab <- insight::format_table(as.data.frame(x))
-  ftab[] <- lapply(ftab, function(i) {
-    i[i == ""] <- "<NA>"
-    i
-  })
-  ftab$N <- gsub("\\.00$", "", ftab$N)
+  # "table" header with variable label/name, and type
+  cat(.table_header(x, "text"))
+
+  # grouped data? if yes, add information on grouping factor
+  if (!is.null(a$group_variable)) {
+    group_title <- paste0("Grouped by ", paste0(lapply(colnames(a$group_variable), function(i) {
+      sprintf("%s (%s)", i, a$group_variable[[i]])
+    }), collapse = ", "))
+    cat(insight::print_color(group_title, "blue"))
+    cat("\n")
+  }
+
+  # summary of total and valid N (we may add mean/sd as well?)
+  summary_line <- sprintf("# total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
+  cat(insight::print_color(summary_line, "blue"))
+
+  # print table
+  cat(insight::export_table(format(x), cross = "+", missing = "<NA>"))
+  invisible(x)
+}
+
+
+#' @export
+print_html.dw_data_table <- function(x, ...) {
+  a <- attributes(x)
+
+  # "table" header with variable label/name, and type
+  caption <- .table_header(x, "html")
+
+  footer <- NULL
+
+  # # grouped data? if yes, add information on grouping factor
+  # if (!is.null(a$group_variable)) {
+  #   footer <- paste0("Grouped by ", paste0(lapply(colnames(a$group_variable), function(i) {
+  #     sprintf("%s (%s)", i, a$group_variable[[i]])
+  #   }), collapse = ", "))
+  # }
+
+  # summary of total and valid N (we may add mean/sd as well?)
+  footer <- sprintf("# total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
+
+  # print table
+  insight::export_table(
+    format(x, format = "html"),
+    title = caption,
+    footer = footer,
+    missing = "(NA)",
+    format = "html"
+  )
+}
+
+
+#' @export
+print_md.dw_data_table <- function(x, ...) {
+  a <- attributes(x)
+
+  # "table" header with variable label/name, and type
+  caption <- .table_header(x, "markdown")
+
+  footer <- NULL
+
+  # # grouped data? if yes, add information on grouping factor
+  # if (!is.null(a$group_variable)) {
+  #   footer <- paste0("Grouped by ", paste0(lapply(colnames(a$group_variable), function(i) {
+  #     sprintf("%s (%s)", i, a$group_variable[[i]])
+  #   }), collapse = ", "))
+  # }
+
+  # summary of total and valid N (we may add mean/sd as well?)
+  footer <- sprintf("# total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
+
+  # print table
+  insight::export_table(
+    format(x, format = "markdown"),
+    title = caption,
+    footer = footer,
+    missing = "(NA)",
+    format = "markdown"
+  )
+}
+
+
+#' @export
+print.dw_data_tables <- function(x, ...) {
+  for (i in 1:length(x)) {
+    print(x[[i]])
+    if (i < length(x)) cat("\n")
+  }
+}
+
+
+
+
+# tools --------------------
+
+.table_header <- function(x, format = "text") {
+  a <- attributes(x)
 
   # assemble name, based on what information is available
   name <- NULL
@@ -176,40 +289,16 @@ print.dw_data_table <- function(x, ...) {
   }
 
   # "table" header with variable label/name, and type
-  cat(insight::print_color(name, "red"))
-  cat(insight::print_color(sprintf(" <%s>\n", a$type), "blue"))
-
-  # grouped data? if yes, add information on grouping factor
-  if (!is.null(a$group_variable)) {
-    group_title <- paste0("Grouped by ", paste0(lapply(colnames(a$group_variable), function(i) {
-      sprintf("%s (%s)", i, a$group_variable[[i]])
-    }), collapse = ", "))
-    cat(insight::print_color(group_title, "blue"))
-    cat("\n")
+  if (identical(format, "text")) {
+    out <- paste(insight::color_text(name, "red"),
+                 insight::color_text(sprintf("<%s>\n", a$type), "blue"))
+  } else {
+    out <- paste0(name, " (", a$type, ")")
   }
 
-  # summary of total and valid N (we may add mean/sd as well?)
-  summary_line <- sprintf("# total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
-  cat(insight::print_color(summary_line, "blue"))
-
-  # print table
-  cat(insight::export_table(ftab, cross = "+", missing = "<NA>"))
-  invisible(x)
+  out
 }
 
-
-#' @export
-print.dw_data_tables <- function(x, ...) {
-  for (i in 1:length(x)) {
-    print(x[[i]])
-    if (i < length(x)) cat("\n")
-  }
-}
-
-
-
-
-# tools --------------------
 
 .variable_type <- function(x) {
   if (is.ordered(x))
