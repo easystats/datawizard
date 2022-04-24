@@ -15,11 +15,20 @@
 #' as data frame per variable.
 #'
 #' @examples
-#' set.seed(123)
-#' out <- ToothGrowth[sample(1:nrow(ToothGrowth), 50), ]
-#' out$supp[sample(1:nrow(out), 9)] <- NA
-#' out$dose[sample(1:nrow(out), 9)] <- NA
-#' data_table(out[2:3])
+#' data(efc)
+#'
+#' # vector/factor
+#' data_table(efc$c172code)
+#'
+#' # data frame
+#' data_table(efc, c("e42dep", "c172code"))
+#'
+#' # grouped data frame
+#' if (require("poorman")) {
+#'   efc %>%
+#'     group_by(c172code) %>%
+#'     data_table("e16sex")
+#' }
 #' @export
 data_table <- function(x, ...) {
   UseMethod("data_table")
