@@ -32,3 +32,19 @@ test_that("data_table data.frame", {
   expect_equal(table1$N, as.vector(table(addNA(efc$e16sex))))
   expect_equal(table1$`Valid %`, as.vector(c(100 * table(efc$e16sex) / sum(!is.na(efc$e16sex)), NA)), ignore_attr = TRUE, tolerance = 1e-3)
 })
+
+
+test_that("data_table print", {
+  x <- data_table(efc$e42dep)
+  out <- capture.output(print(x))
+  c("elder's dependency (efc$e42dep) <categorical>",
+    "# total N=100 valid N=100",
+    "",
+    "Value |  N | Raw % | Valid % | Cumulative %",
+    "------+----+-------+---------+-------------",
+    "1     |  2 |  2.00 |    2.06 |         2.06",
+    "2     |  4 |  4.00 |    4.12 |         6.19",
+    "3     | 28 | 28.00 |   28.87 |        35.05",
+    "4     | 63 | 63.00 |   64.95 |       100.00",
+    "<NA>  |  3 |  3.00 |    <NA> |         <NA>")
+})
