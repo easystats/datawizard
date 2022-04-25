@@ -29,7 +29,8 @@
 #' data_tabulate(efc, c("e42dep", "c172code"))
 #'
 #' # grouped data frame
-#' if (require("poorman")) {
+#' if (requireNamespace("poorman")) {
+#'   suppressPackageStartupMessages(library(poorman, quietly = TRUE))
 #'   efc %>%
 #'     group_by(c172code) %>%
 #'     data_tabulate("e16sex")
