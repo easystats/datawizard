@@ -170,6 +170,7 @@ search pattern when matching against variable names.</p></dd>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Data frames</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">data_rescale</span><span class="op">(</span><span class="va">iris</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Variables of class 'factor' can't be rescaled and remain unchanged.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   0.22222222   0.6250000   0.06779661  0.04166667  setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   0.16666667   0.4166667   0.06779661  0.04166667  setosa</span>
@@ -191,6 +192,7 @@ search pattern when matching against variable names.</p></dd>
 <span class="r-in">  <span class="st">"Sepal.Length"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span class="r-in">  <span class="st">"Petal.Length"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Variables of class 'factor' can't be rescaled and remain unchanged.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   0.22222222         3.5   -0.9322034         0.2  setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   0.16666667         3.0   -0.9322034         0.2  setosa</span>
