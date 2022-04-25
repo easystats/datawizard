@@ -149,6 +149,9 @@ test_that("data_reverse warns if single value to reverse", {
   )
 })
 
+test_that("data_reverse msg for unsupported", {
+  expect_message(data_reverse(as.Date(c("2022-04-24", "2022-04-23"))))
+})
 
 
 
