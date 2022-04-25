@@ -19,6 +19,7 @@ data_to_numeric(x, ...)
   select = NULL,
   exclude = NULL,
   ignore_case = FALSE,
+  verbose = TRUE,
   ...
 )
 }
@@ -85,6 +86,8 @@ excludes no columns.}
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 A data frame of numeric variables.

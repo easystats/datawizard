@@ -3,10 +3,13 @@ test_that("data_rescale works as expected", {
     data_rescale(c(0, 1, 5, -5, -2), to = NULL),
     c(0, 1, 5, -5, -2)
   )
+
   expect_equal(
     data_rescale(rep(NA_real_, 3)),
     rep(NA_real_, 3)
   )
+
+  expect_message(data_rescale(iris$Species))
 
   expect_equal(
     data_rescale(c(0, 1, 5, -5, -2)),

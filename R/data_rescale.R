@@ -104,19 +104,6 @@ data_rescale.numeric <- function(x,
 }
 
 
-
-#' @export
-data_rescale.factor <- function(x, ...) {
-  x
-}
-
-#' @export
-data_rescale.Date <- data_rescale.factor
-
-#' @export
-data_rescale.logical <- data_rescale.factor
-
-
 #' @export
 data_rescale.grouped_df <- function(x,
                                     to = c(0, 100),

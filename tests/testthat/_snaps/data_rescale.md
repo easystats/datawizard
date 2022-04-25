@@ -2,6 +2,8 @@
 
     Code
       head(data_rescale(iris, to = c(0, 1)))
+    Message <simpleMessage>
+      Variables of class 'factor' can't be rescaled and remain unchanged.
     Output
         Sepal.Length Sepal.Width Petal.Length Petal.Width Species
       1   0.22222222   0.6250000   0.06779661  0.04166667  setosa
@@ -29,6 +31,8 @@
     Code
       head(data_rescale(iris, to = list(Sepal.Length = c(0, 1), Petal.Length = c(-1,
         0))))
+    Message <simpleMessage>
+      Variables of class 'factor' can't be rescaled and remain unchanged.
     Output
         Sepal.Length Sepal.Width Petal.Length Petal.Width Species
       1   0.22222222         3.5   -0.9322034         0.2  setosa
