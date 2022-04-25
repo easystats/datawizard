@@ -1,5 +1,5 @@
 #' @title Create frequency tables of variables
-#' @name data_table
+#' @name data_tabulate
 #'
 #' @description This function creates frequency tables of data frame, including
 #' the number of levels/values as well as the distribution of raw, valid and
@@ -23,26 +23,31 @@
 #' data(efc)
 #'
 #' # vector/factor
-#' data_table(efc$c172code)
+#' data_tabulate(efc$c172code)
 #'
 #' # data frame
-#' data_table(efc, c("e42dep", "c172code"))
+#' data_tabulate(efc, c("e42dep", "c172code"))
 #'
 #' # grouped data frame
 #' if (require("poorman")) {
 #'   efc %>%
 #'     group_by(c172code) %>%
-#'     data_table("e16sex")
+#'     data_tabulate("e16sex")
+#'
+#'   # collapse tables
+#'   efc %>%
+#'     group_by(c172code) %>%
+#'     data_tabulate("e16sex", collapse = TRUE)
 #' }
 #' @export
-data_table <- function(x, ...) {
-  UseMethod("data_table")
+data_tabulate <- function(x, ...) {
+  UseMethod("data_tabulate")
 }
 
 
-#' @rdname data_table
+#' @rdname data_tabulate
 #' @export
-data_table.default <- function(x, drop_levels = FALSE, name = NULL, verbose = TRUE, ...) {
+data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose = TRUE, ...) {
   # save label attribute, before it gets lost...
   var_label <- attr(x, "label", exact = TRUE)
 
@@ -99,15 +104,15 @@ data_table.default <- function(x, drop_levels = FALSE, name = NULL, verbose = TR
   attr(out, "total_n") <- sum(out$N, na.rm = TRUE)
   attr(out, "valid_n") <- sum(out$N[-length(out$N)], na.rm = TRUE)
 
-  class(out) <- c("dw_data_table", "data.frame")
+  class(out) <- c("dw_data_tabulate", "data.frame")
 
   out
 }
 
 
-#' @rdname data_table
+#' @rdname data_tabulate
 #' @export
-data_table.data.frame <- function(x,
+data_tabulate.data.frame <- function(x,
                                   select = NULL,
                                   exclude = NULL,
                                   ignore_case = FALSE,
@@ -118,10 +123,10 @@ data_table.data.frame <- function(x,
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case)
   out <- lapply(select, function(i) {
-    data_table(x[[i]], drop_levels = drop_levels, name = i, verbose = verbose, ...)
+    data_tabulate(x[[i]], drop_levels = drop_levels, name = i, verbose = verbose, ...)
   })
 
-  class(out) <- c("dw_data_tables", "list")
+  class(out) <- c("dw_data_tabulates", "list")
   attr(out, "collapse") <- isTRUE(collapse)
 
   out
@@ -129,7 +134,7 @@ data_table.data.frame <- function(x,
 
 
 #' @export
-data_table.grouped_df <- function(x,
+data_tabulate.grouped_df <- function(x,
                                   select = NULL,
                                   exclude = NULL,
                                   ignore_case = FALSE,
@@ -163,7 +168,7 @@ data_table.grouped_df <- function(x,
     } else {
       group_variable <- NULL
     }
-    out <- c(out, data_table(
+    out <- c(out, data_tabulate(
       data_filter(x, rows),
       select = select,
       exclude = exclude,
@@ -174,7 +179,7 @@ data_table.grouped_df <- function(x,
       ...
     ))
   }
-  class(out) <- c("dw_data_tables", "list")
+  class(out) <- c("dw_data_tabulates", "list")
   attr(out, "collapse") <- isTRUE(collapse)
 
   out
@@ -196,7 +201,7 @@ insight::print_md
 
 
 #' @export
-format.dw_data_table <- function(x, format = "text", ...) {
+format.dw_data_tabulate <- function(x, format = "text", ...) {
   # format data frame
   ftab <- insight::format_table(as.data.frame(x))
   ftab[] <- lapply(ftab, function(i) {
@@ -209,7 +214,7 @@ format.dw_data_table <- function(x, format = "text", ...) {
 
 
 #' @export
-print.dw_data_table <- function(x, ...) {
+print.dw_data_tabulate <- function(x, ...) {
   a <- attributes(x)
 
   # "table" header with variable label/name, and type
@@ -243,7 +248,7 @@ print.dw_data_table <- function(x, ...) {
 
 
 #' @export
-print_html.dw_data_table <- function(x, ...) {
+print_html.dw_data_tabulate <- function(x, ...) {
   a <- attributes(x)
 
   # "table" header with variable label/name, and type
@@ -268,7 +273,7 @@ print_html.dw_data_table <- function(x, ...) {
 
 
 #' @export
-print_md.dw_data_table <- function(x, ...) {
+print_md.dw_data_tabulate <- function(x, ...) {
   a <- attributes(x)
 
   # "table" header with variable label/name, and type
@@ -293,7 +298,7 @@ print_md.dw_data_table <- function(x, ...) {
 
 
 #' @export
-print.dw_data_tables <- function(x, ...) {
+print.dw_data_tabulates <- function(x, ...) {
   a <- attributes(x)
   if (!isTRUE(a$collapse) || length(x) == 1) {
     for (i in 1:length(x)) {
@@ -325,7 +330,7 @@ print.dw_data_tables <- function(x, ...) {
 
 
 #' @export
-print_html.dw_data_tables <- function(x, ...) {
+print_html.dw_data_tabulates <- function(x, ...) {
   if (length(x) == 1) {
     print_html(x[[1]])
   } else {
@@ -351,7 +356,7 @@ print_html.dw_data_tables <- function(x, ...) {
 
 
 #' @export
-print_md.dw_data_tables <- function(x, ...) {
+print_md.dw_data_tabulates <- function(x, ...) {
   if (length(x) == 1) {
     print_md(x[[1]])
   } else {
