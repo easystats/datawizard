@@ -81,7 +81,7 @@ A data frame, or a list of data frames, with one frequency table
 as data frame per variable.
 }
 \description{
-This function creates frequency tables of data frame, including
+This function creates frequency tables of variables, including
 the number of levels/values as well as the distribution of raw, valid and
 cumulative percentages.
 }

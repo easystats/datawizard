@@ -1,7 +1,7 @@
 #' @title Create frequency tables of variables
 #' @name data_tabulate
 #'
-#' @description This function creates frequency tables of data frame, including
+#' @description This function creates frequency tables of variables, including
 #' the number of levels/values as well as the distribution of raw, valid and
 #' cumulative percentages.
 #'
