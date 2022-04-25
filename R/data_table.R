@@ -8,6 +8,8 @@
 #' @param x A (grouped) data frame, a vector or factor.
 #' @param name Optional character string, which includes the name that is used
 #' for printing.
+#' @param collapse Logical, if `TRUE` collapses multiple tables into one larger
+#' table for printing. This affects only printing, not the returned object.
 #' @param ... not used.
 #' @inheritParams find_columns
 #'
@@ -45,6 +47,14 @@ data_table.default <- function(x, name = NULL, verbose = TRUE, ...) {
     return(NULL)
   }
 
+  # save and fix variable name, check for grouping variable
+  obj_name <- tryCatch(insight::safe_deparse(substitute(x)), error = function(e) NULL)
+  if (identical(obj_name, "x[[i]]")) {
+    obj_name <- name
+  }
+  group_variable <- list(...)$group_variable
+
+  # create data frame with freq table and cumulativ percentages etc.
   out <- data_rename(data.frame(freq_table, stringsAsFactors = FALSE),
                      replacement = c("Value", "N"))
 
@@ -52,12 +62,27 @@ data_table.default <- function(x, name = NULL, verbose = TRUE, ...) {
   out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
   out$`Cumulative %` <- cumsum(out$`Valid %`)
 
+  # add information about variable/group names
+  if (!is.null(obj_name)) {
+    if (is.null(group_variable)) {
+      var_info <- data.frame(Variable = obj_name, stringsAsFactors = FALSE)
+    } else {
+      var_info <- data.frame(Variable = obj_name,
+                             Group = paste0(lapply(colnames(group_variable), function(i) {
+                               sprintf("%s (%s)", i, group_variable[[i]])
+                             }), collapse = ", "),
+                             stringsAsFactors = FALSE)
+    }
+    out <- cbind(var_info, out)
+  }
+
   # save information
   attr(out, "type") <- .variable_type(x)
   attr(out, "varname") <- name
   attr(out, "label") <- attr(x, "label", exact = TRUE)
-  attr(out, "object") <- tryCatch(insight::safe_deparse(substitute(x)), error = function(e) NULL)
-  attr(out, "group_variable") <- list(...)$group_variable
+  attr(out, "object") <- obj_name
+  attr(out, "group_variable") <- group_variable
+  attr(out, "duplicate_varnames") <- duplicated(out$Variable)
 
   attr(out, "total_n") <- sum(out$N, na.rm = TRUE)
   attr(out, "valid_n") <- sum(out$N[-length(out$N)], na.rm = TRUE)
@@ -75,6 +100,7 @@ data_table.data.frame <- function(x,
                                   exclude = NULL,
                                   ignore_case = FALSE,
                                   verbose = TRUE,
+                                  collapse = FALSE,
                                   ...) {
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case)
@@ -83,6 +109,8 @@ data_table.data.frame <- function(x,
   })
 
   class(out) <- c("dw_data_tables", "list")
+  attr(out, "collapse") <- isTRUE(collapse)
+
   out
 }
 
@@ -93,6 +121,7 @@ data_table.grouped_df <- function(x,
                                   exclude = NULL,
                                   ignore_case = FALSE,
                                   verbose = TRUE,
+                                  collapse = FALSE,
                                   ...) {
   # dplyr < 0.8.0 returns attribute "indices"
   grps <- attr(x, "groups", exact = TRUE)
@@ -131,6 +160,8 @@ data_table.grouped_df <- function(x,
     ))
   }
   class(out) <- c("dw_data_tables", "list")
+  attr(out, "collapse") <- isTRUE(collapse)
+
   out
 }
 
@@ -154,7 +185,7 @@ format.dw_data_table <- function(x, format = "text", ...) {
   # format data frame
   ftab <- insight::format_table(as.data.frame(x))
   ftab[] <- lapply(ftab, function(i) {
-    i[i == ""] <- ifelse(identical(format, "text"), "<NA>", "(NA)")
+    i[i == ""] <- ifelse(identical(format, "html"), "(NA)", "<NA>")
     i
   })
   ftab$N <- gsub("\\.00$", "", ftab$N)
@@ -179,8 +210,12 @@ print.dw_data_table <- function(x, ...) {
   }
 
   # summary of total and valid N (we may add mean/sd as well?)
-  summary_line <- sprintf("# total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
+  summary_line <- sprintf("total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
   cat(insight::print_color(summary_line, "blue"))
+
+  # remove information that goes into the header/footer
+  x$Variable <- NULL
+  x$Group <- NULL
 
   # print table
   cat(insight::export_table(format(x), cross = "+", missing = "<NA>"))
@@ -195,17 +230,12 @@ print_html.dw_data_table <- function(x, ...) {
   # "table" header with variable label/name, and type
   caption <- .table_header(x, "html")
 
-  footer <- NULL
-
-  # # grouped data? if yes, add information on grouping factor
-  # if (!is.null(a$group_variable)) {
-  #   footer <- paste0("Grouped by ", paste0(lapply(colnames(a$group_variable), function(i) {
-  #     sprintf("%s (%s)", i, a$group_variable[[i]])
-  #   }), collapse = ", "))
-  # }
-
   # summary of total and valid N (we may add mean/sd as well?)
-  footer <- sprintf("# total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
+  footer <- sprintf("total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
+
+  # remove information that goes into the header/footer
+  x$Variable <- NULL
+  x$Group <- NULL
 
   # print table
   insight::export_table(
@@ -225,24 +255,19 @@ print_md.dw_data_table <- function(x, ...) {
   # "table" header with variable label/name, and type
   caption <- .table_header(x, "markdown")
 
-  footer <- NULL
-
-  # # grouped data? if yes, add information on grouping factor
-  # if (!is.null(a$group_variable)) {
-  #   footer <- paste0("Grouped by ", paste0(lapply(colnames(a$group_variable), function(i) {
-  #     sprintf("%s (%s)", i, a$group_variable[[i]])
-  #   }), collapse = ", "))
-  # }
-
   # summary of total and valid N (we may add mean/sd as well?)
   footer <- sprintf("# total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
+
+  # remove information that goes into the header/footer
+  x$Variable <- NULL
+  x$Group <- NULL
 
   # print table
   insight::export_table(
     format(x, format = "markdown"),
     title = caption,
     footer = footer,
-    missing = "(NA)",
+    missing = "<NA>",
     format = "markdown"
   )
 }
@@ -250,9 +275,86 @@ print_md.dw_data_table <- function(x, ...) {
 
 #' @export
 print.dw_data_tables <- function(x, ...) {
-  for (i in 1:length(x)) {
-    print(x[[i]])
-    if (i < length(x)) cat("\n")
+  a <- attributes(x)
+  if (!isTRUE(a$collapse) || length(x) == 1) {
+    for (i in 1:length(x)) {
+      print(x[[i]])
+      if (i < length(x)) cat("\n")
+    }
+  } else {
+    x <- lapply(x, function(i) {
+      attr <- attributes(i)
+      i <- format(i, format = "text")
+      i$Variable[attr$duplicate_varnames] <- ""
+      if (!is.null(i$Group)) i$Group[attr$duplicate_varnames] <- ""
+      i[nrow(i) + 1, ] <- ""
+      i
+    })
+
+    out <- do.call(rbind, x)
+    cat(insight::print_color("# Frequency Table\n\n", "blue"))
+
+    # print table
+    cat(insight::export_table(
+      out,
+      missing = "<NA>",
+      cross = "+",
+      empty_line = "-"
+    ))
+  }
+}
+
+
+#' @export
+print_html.dw_data_tables <- function(x, ...) {
+  if (length(x) == 1) {
+    print_html(x[[1]])
+  } else {
+    x <- lapply(x, function(i) {
+      attr <- attributes(i)
+      i <- format(i, format = "html")
+      i$Variable[attr$duplicate_varnames] <- ""
+      i
+    })
+
+    out <- do.call(rbind, x)
+
+    # print table
+    insight::export_table(
+      out,
+      missing = "<NA>",
+      caption = "Frequency Table",
+      format = "html",
+      group_by = "Group"
+    )
+  }
+}
+
+
+#' @export
+print_md.dw_data_tables <- function(x, ...) {
+  if (length(x) == 1) {
+    print_md(x[[1]])
+  } else {
+    x <- lapply(x, function(i) {
+      attr <- attributes(i)
+      i <- format(i, format = "markdown")
+      i$Variable[attr$duplicate_varnames] <- ""
+      if (!is.null(i$Group)) i$Group[attr$duplicate_varnames] <- ""
+      i[nrow(i) + 1, ] <- ""
+      i
+    })
+
+    out <- do.call(rbind, x)
+
+    # print table
+    insight::export_table(
+      out,
+      missing = "<NA>",
+      empty_line = "-",
+      format = "markdown",
+      title = "Frequency Table"
+    )
   }
 }
 

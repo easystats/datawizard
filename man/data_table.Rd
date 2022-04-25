@@ -16,6 +16,7 @@ data_table(x, ...)
   exclude = NULL,
   ignore_case = FALSE,
   verbose = TRUE,
+  collapse = FALSE,
   ...
 )
 }
@@ -66,6 +67,9 @@ excludes no columns.}
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
+
+\item{collapse}{Logical, if \code{TRUE} collapses multiple tables into one larger
+table for printing. This affects only printing, not the returned object.}
 }
 \value{
 A data frame, or a list of data frames, with one frequency table
