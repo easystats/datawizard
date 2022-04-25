@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.13</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,9 +63,10 @@
 <ul><li><p><code><a href="../reference/data_shift.html">data_shift()</a></code> to shift the value range of numeric variables.</p></li>
 <li><p><code><a href="../reference/data_recode.html">data_recode()</a></code> to recode old into new values.</p></li>
 <li><p><code><a href="../reference/data_to_factor.html">data_to_factor()</a></code> as counterpart to <code><a href="../reference/convert_data_to_numeric.html">data_to_numeric()</a></code>.</p></li>
+<li><p><code><a href="../reference/data_tabulate.html">data_tabulate()</a></code> to create frequency tables of variables.</p></li>
 <li><p><code><a href="../reference/data_read.html">data_read()</a></code> to read (import) data files (from text, or foreign statistical packages).</p></li>
 </ul><p>CHANGES</p>
-<ul><li><p><code><a href="../reference/find_columns.html">data_find()</a></code> as added as alias to <code>find_colums()</code>, to have consistent name patterns for the <strong>datawizard</strong> functions. <code><a href="../reference/find_columns.html">data_findcols()</a></code> will be removed in a future update and usage is discouraged.</p></li>
+<ul><li><p><code><a href="../reference/find_columns.html">data_find()</a></code> was added as alias to <code>find_colums()</code>, to have consistent name patterns for the <strong>datawizard</strong> functions. <code><a href="../reference/find_columns.html">data_findcols()</a></code> will be removed in a future update and usage is discouraged.</p></li>
 <li><p>The <code>select</code> argument (and thus, also the <code>exclude</code> argument) now also accepts functions testing for logical conditions, e.g. <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric()</a></code> (or <code>is.numeric</code>), or any user-defined function that selects the variables for which the function returns <code>TRUE</code> (like: <code>foo &lt;- function(x) mean(x) &gt; 3</code>).</p></li>
 <li><p>Arguments <code>select</code> and <code>exclude</code> now allow the negation of select-helpers, like <code>-ends_with("")</code>, <code>-is.numeric</code> or <code>-Sepal.Width:Petal.Length</code>.</p></li>
 <li><p>Many functions now get a <code>.default</code> method, to capture unsupported classes. This now yields a message and returns the original input, and hence, the <code>.data.frame</code> methods won’t stop due to an error.</p></li>
@@ -156,7 +157,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
 </div>
 
     </footer></div>
