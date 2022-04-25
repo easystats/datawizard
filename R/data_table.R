@@ -233,7 +233,6 @@ print.dw_data_table <- function(x, ...) {
   x$Group <- NULL
 
   # print table
-
   cat(insight::export_table(
     format(x),
     cross = "+",
