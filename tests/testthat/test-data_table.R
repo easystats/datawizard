@@ -22,17 +22,19 @@ test_that("data_table data.frame", {
   expect_equal(length(x), 2)
   expect_equal(
     attributes(x[[1]]),
-    list(names = c("Value", "N", "Raw %", "Valid %", "Cumulative %"),
-         row.names = 1:3, class = c("dw_data_table", "data.frame"),
-         type = "numeric", varname = "e16sex", label = "elder's gender",
-         object = "x[[i]]", total_n = 100L, valid_n = 100)
+    list(names = c("Variable", "Value", "N", "Raw %", "Valid %",
+                   "Cumulative %"), class = c("dw_data_table", "data.frame"),
+         row.names = 1:3,  type = "numeric", varname = "e16sex",
+         label = "elder's gender", object = "e16sex",
+         duplicate_varnames = c(FALSE, TRUE, TRUE), total_n = 100L, valid_n = 100L)
   )
   expect_equal(
     attributes(x[[2]]),
-    list(names = c("Value", "N", "Raw %", "Valid %", "Cumulative %"),
-         row.names = 1:4, class = c("dw_data_table", "data.frame"),
-         type = "numeric", varname = "c172code",
-         label = "carer's level of education", object = "x[[i]]",
+    list(names = c("Variable", "Value", "N", "Raw %", "Valid %",
+                   "Cumulative %"), class = c("dw_data_table", "data.frame"),
+         row.names = 1:4, type = "numeric", varname = "c172code",
+         label = "carer's level of education",  object = "c172code",
+         duplicate_varnames = c(FALSE, TRUE, TRUE, TRUE),
          total_n = 100L, valid_n = 90L)
   )
   table1 <- x[[1]]
@@ -61,6 +63,56 @@ test_that("data_table print", {
 })
 
 
+test_that("data_table print multiple", {
+  x <- data_table(efc, c("c172code", "e16sex"))
+  out <- capture.output(print(x))
+  expect_equal(
+    out,
+    c("carer's level of education (c172code) <numeric>",
+      "# total N=100 valid N=90",
+      "",
+      "Value |  N | Raw % | Valid % | Cumulative %",
+      "------+----+-------+---------+-------------",
+      "1     |  8 |  8.00 |    8.89 |         8.89",
+      "2     | 66 | 66.00 |   73.33 |        82.22",
+      "3     | 16 | 16.00 |   17.78 |       100.00",
+      "<NA>  | 10 | 10.00 |    <NA> |         <NA>",
+      "",
+      "elder's gender (e16sex) <numeric>",
+      "# total N=100 valid N=100",
+      "",
+      "Value |  N | Raw % | Valid % | Cumulative %",
+      "------+----+-------+---------+-------------",
+      "1     | 46 | 46.00 |   46.00 |        46.00",
+      "2     | 54 | 54.00 |   54.00 |       100.00",
+      "<NA>  |  0 |  0.00 |    <NA> |         <NA>")
+  )
+})
+
+
+test_that("data_table print multiple, collapse", {
+  x <- data_table(efc, c("c172code", "e16sex"), collapse = TRUE)
+  out <- capture.output(print(x))
+  expect_equal(
+    out,
+    c("# Frequency Table",
+      "",
+      "Variable | Value |  N | Raw % | Valid % | Cumulative %",
+      "---------+-------+----+-------+---------+-------------",
+      "c172code |     1 |  8 |  8.00 |    8.89 |         8.89",
+      "         |     2 | 66 | 66.00 |   73.33 |        82.22",
+      "         |     3 | 16 | 16.00 |   17.78 |       100.00",
+      "         |  <NA> | 10 | 10.00 |    <NA> |         <NA>",
+      "------------------------------------------------------",
+      "e16sex   |     1 | 46 | 46.00 |   46.00 |        46.00",
+      "         |     2 | 54 | 54.00 |   54.00 |       100.00",
+      "         |  <NA> |  0 |  0.00 |    <NA> |         <NA>",
+      "------------------------------------------------------"
+    )
+  )
+})
+
+
 skip_if_not_installed("poorman")
 
 if (requireNamespace("poorman", quietly = TRUE)) {
@@ -70,11 +122,12 @@ if (requireNamespace("poorman", quietly = TRUE)) {
     expect_equal(length(x), 2)
     expect_equal(
       attributes(x[[1]]),
-      list(names = c("Value", "N", "Raw %", "Valid %", "Cumulative %"),
-           row.names = 1:4, class = c("dw_data_table", "data.frame"),
-           type = "numeric", varname = "c172code", label = "carer's level of education",
-           object = "x[[i]]", group_variable = structure(list(e16sex = 1), .drop = TRUE, row.names = 1L, class = "data.frame"),
-           total_n = 46L, valid_n = 41L)
+      list(names = c("Variable", "Group", "Value", "N", "Raw %", "Valid %",
+                     "Cumulative %"), class = c("dw_data_table", "data.frame"),
+           row.names = 1:4, type = "numeric", varname = "c172code",
+           label = "carer's level of education", object = "c172code",
+           group_variable = structure(list(e16sex = 1), .drop = TRUE, row.names = 1L, class = "data.frame"),
+           duplicate_varnames = c(FALSE, TRUE, TRUE, TRUE), total_n = 46L, valid_n = 41L)
     )
     table1 <- x[[1]]
     expect_equal(as.vector(table1$Value), as.character(c(sort(unique(efc$c172code)), NA)))
@@ -86,26 +139,77 @@ if (requireNamespace("poorman", quietly = TRUE)) {
   test_that("data_table print", {
     x <- data_table(poorman::group_by(efc, e16sex), "c172code")
     out <- capture.output(print(x))
-    c("carer's level of education (c172code) <numeric>",
-      "Grouped by e16sex (1)",
-      "# total N=46 valid N=41",
-      "",
-      "Value |  N | Raw % | Valid % | Cumulative %",
-      "------+----+-------+---------+-------------",
-      "1     |  5 | 10.87 |   12.20 |        12.20",
-      "2     | 32 | 69.57 |   78.05 |        90.24",
-      "3     |  4 |  8.70 |    9.76 |       100.00",
-      "<NA>  |  5 | 10.87 |    <NA> |         <NA>",
-      "",
-      "carer's level of education (c172code) <numeric>",
-      "Grouped by e16sex (2)",
-      "# total N=54 valid N=49",
-      "", "Value |  N | Raw % | Valid % | Cumulative %",
-      "------+----+-------+---------+-------------",
-      "1     |  3 |  5.56 |    6.12 |         6.12",
-      "2     | 34 | 62.96 |   69.39 |        75.51",
-      "3     | 12 | 22.22 |   24.49 |       100.00",
-      "<NA>  |  5 |  9.26 |    <NA> |         <NA>"
+    expect_equal(
+      out,
+      c("carer's level of education (c172code) <numeric>",
+        "Grouped by e16sex (1)",
+        "# total N=46 valid N=41",
+        "",
+        "Value |  N | Raw % | Valid % | Cumulative %",
+        "------+----+-------+---------+-------------",
+        "1     |  5 | 10.87 |   12.20 |        12.20",
+        "2     | 32 | 69.57 |   78.05 |        90.24",
+        "3     |  4 |  8.70 |    9.76 |       100.00",
+        "<NA>  |  5 | 10.87 |    <NA> |         <NA>",
+        "",
+        "carer's level of education (c172code) <numeric>",
+        "Grouped by e16sex (2)",
+        "# total N=54 valid N=49",
+        "", "Value |  N | Raw % | Valid % | Cumulative %",
+        "------+----+-------+---------+-------------",
+        "1     |  3 |  5.56 |    6.12 |         6.12",
+        "2     | 34 | 62.96 |   69.39 |        75.51",
+        "3     | 12 | 22.22 |   24.49 |       100.00",
+        "<NA>  |  5 |  9.26 |    <NA> |         <NA>"
+      )
     )
   })
+
+  test_that("data_table print, collapse groups", {
+    x <- data_table(poorman::group_by(efc, e16sex), "c172code", collapse = TRUE)
+    out <- capture.output(print(x))
+    expect_equal(
+      out,
+      c("# Frequency Table",
+        "",
+        "Variable |      Group | Value |  N | Raw % | Valid % | Cumulative %",
+        "---------+------------+-------+----+-------+---------+-------------",
+        "c172code | e16sex (1) |     1 |  5 | 10.87 |   12.20 |        12.20",
+        "         |            |     2 | 32 | 69.57 |   78.05 |        90.24",
+        "         |            |     3 |  4 |  8.70 |    9.76 |       100.00",
+        "         |            |  <NA> |  5 | 10.87 |    <NA> |         <NA>",
+        "-------------------------------------------------------------------",
+        "c172code | e16sex (2) |     1 |  3 |  5.56 |    6.12 |         6.12",
+        "         |            |     2 | 34 | 62.96 |   69.39 |        75.51",
+        "         |            |     3 | 12 | 22.22 |   24.49 |       100.00",
+        "         |            |  <NA> |  5 |  9.26 |    <NA> |         <NA>",
+        "-------------------------------------------------------------------"
+      )
+    )
+  })
+
+  test_that("data_table print, collapse groups, dropl evels", {
+    x <- data_table(poorman::group_by(efc, e16sex), "e42dep", collapse = TRUE, drop_levels = TRUE)
+    out <- capture.output(print(x))
+    expect_equal(
+      out,
+      c("# Frequency Table",
+        "",
+        "Variable |      Group | Value |  N | Raw % | Valid % | Cumulative %",
+        "---------+------------+-------+----+-------+---------+-------------",
+        "e42dep   | e16sex (1) |     1 |  2 |  4.35 |    4.44 |         4.44",
+        "         |            |     2 |  2 |  4.35 |    4.44 |         8.89",
+        "         |            |     3 |  8 | 17.39 |   17.78 |        26.67",
+        "         |            |     4 | 33 | 71.74 |   73.33 |       100.00",
+        "         |            |  <NA> |  1 |  2.17 |    <NA> |         <NA>",
+        "-------------------------------------------------------------------",
+        "e42dep   | e16sex (2) |     2 |  2 |  3.70 |    3.85 |         3.85",
+        "         |            |     3 | 20 | 37.04 |   38.46 |        42.31",
+        "         |            |     4 | 30 | 55.56 |   57.69 |       100.00",
+        "         |            |  <NA> |  2 |  3.70 |    <NA> |         <NA>",
+        "-------------------------------------------------------------------"
+      )
+    )
+  })
+
 }

@@ -225,7 +225,7 @@ print.dw_data_table <- function(x, ...) {
   }
 
   # summary of total and valid N (we may add mean/sd as well?)
-  summary_line <- sprintf("total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
+  summary_line <- sprintf("# total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
   cat(insight::print_color(summary_line, "blue"))
 
   # remove information that goes into the header/footer
@@ -271,7 +271,7 @@ print_md.dw_data_table <- function(x, ...) {
   caption <- .table_header(x, "markdown")
 
   # summary of total and valid N (we may add mean/sd as well?)
-  footer <- sprintf("# total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
+  footer <- sprintf("total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
 
   # remove information that goes into the header/footer
   x$Variable <- NULL
