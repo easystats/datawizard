@@ -6,6 +6,9 @@
 #' cumulative percentages.
 #'
 #' @param x A (grouped) data frame, a vector or factor.
+#' @param drop_levels Logical, if `TRUE`, factor levels that do not occur in
+#' the data are included in the table (with frequency of zero), else unused
+#' factor levels are dropped from the frequency table.
 #' @param name Optional character string, which includes the name that is used
 #' for printing.
 #' @param collapse Logical, if `TRUE` collapses multiple tables into one larger
@@ -39,7 +42,16 @@ data_table <- function(x, ...) {
 
 #' @rdname data_table
 #' @export
-data_table.default <- function(x, name = NULL, verbose = TRUE, ...) {
+data_table.default <- function(x, drop_levels = FALSE, name = NULL, verbose = TRUE, ...) {
+  # save label attribute, before it gets lost...
+  var_label <- attr(x, "label", exact = TRUE)
+
+  # check whether levels not present in data should be shown or not
+  if (is.factor(x) && isTRUE(drop_levels)) {
+    x <- droplevels(x)
+  }
+
+  # frequency table
   freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
 
   if (is.null(freq_table)) {
@@ -54,7 +66,7 @@ data_table.default <- function(x, name = NULL, verbose = TRUE, ...) {
   }
   group_variable <- list(...)$group_variable
 
-  # create data frame with freq table and cumulativ percentages etc.
+  # create data frame with freq table and cumulative percentages etc.
   out <- data_rename(data.frame(freq_table, stringsAsFactors = FALSE),
                      replacement = c("Value", "N"))
 
@@ -79,7 +91,7 @@ data_table.default <- function(x, name = NULL, verbose = TRUE, ...) {
   # save information
   attr(out, "type") <- .variable_type(x)
   attr(out, "varname") <- name
-  attr(out, "label") <- attr(x, "label", exact = TRUE)
+  attr(out, "label") <- var_label
   attr(out, "object") <- obj_name
   attr(out, "group_variable") <- group_variable
   attr(out, "duplicate_varnames") <- duplicated(out$Variable)
@@ -101,6 +113,7 @@ data_table.data.frame <- function(x,
                                   ignore_case = FALSE,
                                   verbose = TRUE,
                                   collapse = FALSE,
+                                  drop_levels = FALSE,
                                   ...) {
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case)
@@ -122,6 +135,7 @@ data_table.grouped_df <- function(x,
                                   ignore_case = FALSE,
                                   verbose = TRUE,
                                   collapse = FALSE,
+                                  drop_levels = FALSE,
                                   ...) {
   # dplyr < 0.8.0 returns attribute "indices"
   grps <- attr(x, "groups", exact = TRUE)

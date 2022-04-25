@@ -8,7 +8,7 @@
 \usage{
 data_table(x, ...)
 
-\method{data_table}{default}(x, name = NULL, verbose = TRUE, ...)
+\method{data_table}{default}(x, drop_levels = FALSE, name = NULL, verbose = TRUE, ...)
 
 \method{data_table}{data.frame}(
   x,
@@ -17,6 +17,7 @@ data_table(x, ...)
   ignore_case = FALSE,
   verbose = TRUE,
   collapse = FALSE,
+  drop_levels = FALSE,
   ...
 )
 }
@@ -24,6 +25,10 @@ data_table(x, ...)
 \item{x}{A (grouped) data frame, a vector or factor.}
 
 \item{...}{not used.}
+
+\item{drop_levels}{Logical, if \code{TRUE}, factor levels that do not occur in
+the data are included in the table (with frequency of zero), else unused
+factor levels are dropped from the frequency table.}
 
 \item{name}{Optional character string, which includes the name that is used
 for printing.}
