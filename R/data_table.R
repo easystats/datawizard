@@ -46,6 +46,13 @@ data_table.default <- function(x, drop_levels = FALSE, name = NULL, verbose = TR
   # save label attribute, before it gets lost...
   var_label <- attr(x, "label", exact = TRUE)
 
+  # save and fix variable name, check for grouping variable
+  obj_name <- tryCatch(insight::safe_deparse(substitute(x)), error = function(e) NULL)
+  if (identical(obj_name, "x[[i]]")) {
+    obj_name <- name
+  }
+  group_variable <- list(...)$group_variable
+
   # check whether levels not present in data should be shown or not
   if (is.factor(x) && isTRUE(drop_levels)) {
     x <- droplevels(x)
@@ -58,13 +65,6 @@ data_table.default <- function(x, drop_levels = FALSE, name = NULL, verbose = TR
     warning(paste0("Can't compute frequency tables for objects of class '", class(x)[1], "'."), call. = FALSE)
     return(NULL)
   }
-
-  # save and fix variable name, check for grouping variable
-  obj_name <- tryCatch(insight::safe_deparse(substitute(x)), error = function(e) NULL)
-  if (identical(obj_name, "x[[i]]")) {
-    obj_name <- name
-  }
-  group_variable <- list(...)$group_variable
 
   # create data frame with freq table and cumulative percentages etc.
   out <- data_rename(data.frame(freq_table, stringsAsFactors = FALSE),
@@ -118,7 +118,7 @@ data_table.data.frame <- function(x,
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case)
   out <- lapply(select, function(i) {
-    data_table(x[[i]], name = i, verbose = verbose, ...)
+    data_table(x[[i]], drop_levels = drop_levels, name = i, verbose = verbose, ...)
   })
 
   class(out) <- c("dw_data_tables", "list")
@@ -169,6 +169,7 @@ data_table.grouped_df <- function(x,
       exclude = exclude,
       ignore_case = ignore_case,
       verbose = verbose,
+      drop_levels = drop_levels,
       group_variable = group_variable,
       ...
     ))
