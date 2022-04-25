@@ -200,7 +200,7 @@ format.dw_data_table <- function(x, format = "text", ...) {
   # format data frame
   ftab <- insight::format_table(as.data.frame(x))
   ftab[] <- lapply(ftab, function(i) {
-    i[i == ""] <- ifelse(identical(format, "html"), "(NA)", "<NA>")
+    i[i == ""] <- ifelse(identical(format, "text"), "<NA>", "(NA)")
     i
   })
   ftab$N <- gsub("\\.00$", "", ftab$N)
@@ -286,7 +286,7 @@ print_md.dw_data_table <- function(x, ...) {
     format(x, format = "markdown"),
     title = caption,
     footer = footer,
-    missing = "<NA>",
+    missing = "(NA)",
     format = "markdown"
   )
 }
@@ -369,7 +369,7 @@ print_md.dw_data_tables <- function(x, ...) {
     # print table
     insight::export_table(
       out,
-      missing = "<NA>",
+      missing = "(NA)",
       empty_line = "-",
       format = "markdown",
       title = "Frequency Table"
