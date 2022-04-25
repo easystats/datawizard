@@ -8,12 +8,14 @@ NEW FUNCTIONS
 
 * `data_to_factor()` as counterpart to `data_to_numeric()`.
 
+* `data_tabulate()` to create frequency tables of variables.
+
 * `data_read()` to read (import) data files (from text, or foreign statistical
   packages).
 
 CHANGES
 
-* `data_find()` as added as alias to `find_colums()`, to have consistent
+* `data_find()` was added as alias to `find_colums()`, to have consistent
   name patterns for the **datawizard** functions. `data_findcols()` will be
   removed in a future update and usage is discouraged.
 
