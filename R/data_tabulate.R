@@ -217,6 +217,9 @@ format.dw_data_tabulate <- function(x, format = "text", big_mark = NULL, ...) {
   ftab$N <- gsub("\\.00$", "", ftab$N)
 
   # insert big marks?
+  if (is.null(big_mark) && any(nchar(ftab$N) > 5)) {
+    big_mark <- ","
+  }
   if (!is.null(big_mark)) {
     ftab$N <- prettyNum(ftab$N, big.mark = big_mark)
   }
