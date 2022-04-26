@@ -90,6 +90,43 @@ test_that("data_tabulate print multiple", {
 })
 
 
+test_that("data_tabulate big numbers", {
+  set.seed(123)
+  x <- sample(1:5, size = 1e7, TRUE)
+  out <- capture.output(print(data_tabulate(x)))
+  expect_equal(
+    out,
+    c("x <integer>",
+      "# total N=10000000 valid N=10000000",
+      "",
+      "Value |       N | Raw % | Valid % | Cumulative %",
+      "------+---------+-------+---------+-------------",
+      "1     | 1998318 | 19.98 |   19.98 |        19.98",
+      "2     | 1998338 | 19.98 |   19.98 |        39.97",
+      "3     | 2001814 | 20.02 |   20.02 |        59.98",
+      "4     | 1999423 | 19.99 |   19.99 |        79.98",
+      "5     | 2002107 | 20.02 |   20.02 |       100.00",
+      "<NA>  |       0 |  0.00 |    <NA> |         <NA>"
+    )
+  )
+  out <- capture.output(print(data_tabulate(x), big_mark = ","))
+  expect_equal(
+    out,
+    c("x <integer>",
+      "# total N=10000000 valid N=10000000",
+      "",
+      "Value |         N | Raw % | Valid % | Cumulative %",
+      "------+-----------+-------+---------+-------------",
+      "1     | 1,998,318 | 19.98 |   19.98 |        19.98",
+      "2     | 1,998,338 | 19.98 |   19.98 |        39.97",
+      "3     | 2,001,814 | 20.02 |   20.02 |        59.98",
+      "4     | 1,999,423 | 19.99 |   19.99 |        79.98",
+      "5     | 2,002,107 | 20.02 |   20.02 |       100.00",
+      "<NA>  |         0 |  0.00 |    <NA> |         <NA>")
+  )
+})
+
+
 if (packageVersion("insight") > "0.17.0") {
   test_that("data_tabulate print multiple, collapse", {
     x <- data_tabulate(efc, c("c172code", "e16sex"), collapse = TRUE)

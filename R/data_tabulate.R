@@ -203,22 +203,22 @@ insight::print_md
 
 #' @export
 format.dw_data_tabulate <- function(x, format = "text", big_mark = NULL, ...) {
+  # convert to character manually, else, for large numbers,
+  # format_table() returns scientific notation
+  x <- as.data.frame(x)
+  x$N <- as.character(x$N)
+
   # format data frame
-  ftab <- insight::format_table(as.data.frame(x))
+  ftab <- insight::format_table(x)
   ftab[] <- lapply(ftab, function(i) {
     i[i == ""] <- ifelse(identical(format, "text"), "<NA>", "(NA)")
     i
   })
   ftab$N <- gsub("\\.00$", "", ftab$N)
 
-  # no scientific notation
-  if (any(grepl("e", ftab$N, fixed = TRUE))) {
-    ftab$N <- as.character(as.numeric(ftab$N))
-  }
-
   # insert big marks?
   if (!is.null(big_mark)) {
-    ftab$N <- prettyNum(as.numeric(ftab$N), big.mark = big_mark)
+    ftab$N <- prettyNum(ftab$N, big.mark = big_mark)
   }
 
   ftab
@@ -242,7 +242,7 @@ print.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
   }
 
   # summary of total and valid N (we may add mean/sd as well?)
-  summary_line <- sprintf("# total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
+  summary_line <- sprintf("# total N=%i valid N=%i\n\n", a$total_n, a$valid_n)
   cat(insight::print_color(summary_line, "blue"))
 
   # remove information that goes into the header/footer
@@ -267,7 +267,7 @@ print_html.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
   caption <- .table_header(x, "html")
 
   # summary of total and valid N (we may add mean/sd as well?)
-  footer <- sprintf("total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
+  footer <- sprintf("total N=%i valid N=%i\n\n", a$total_n, a$valid_n)
 
   # remove information that goes into the header/footer
   x$Variable <- NULL
@@ -292,7 +292,7 @@ print_md.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
   caption <- .table_header(x, "markdown")
 
   # summary of total and valid N (we may add mean/sd as well?)
-  footer <- sprintf("total N=%g valid N=%g\n\n", a$total_n, a$valid_n)
+  footer <- sprintf("total N=%i valid N=%i\n\n", a$total_n, a$valid_n)
 
   # remove information that goes into the header/footer
   x$Variable <- NULL
