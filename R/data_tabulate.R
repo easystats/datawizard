@@ -202,7 +202,7 @@ insight::print_md
 
 
 #' @export
-format.dw_data_tabulate <- function(x, format = "text", ...) {
+format.dw_data_tabulate <- function(x, format = "text", big_mark = NULL, ...) {
   # format data frame
   ftab <- insight::format_table(as.data.frame(x))
   ftab[] <- lapply(ftab, function(i) {
@@ -210,12 +210,23 @@ format.dw_data_tabulate <- function(x, format = "text", ...) {
     i
   })
   ftab$N <- gsub("\\.00$", "", ftab$N)
+
+  # no scientific notation
+  if (any(grepl("e", ftab$N, fixed = TRUE))) {
+    ftab$N <- as.character(as.numeric(ftab$N))
+  }
+
+  # insert big marks?
+  if (!is.null(big_mark)) {
+    ftab$N <- prettyNum(as.numeric(ftab$N), big.mark = big_mark)
+  }
+
   ftab
 }
 
 
 #' @export
-print.dw_data_tabulate <- function(x, ...) {
+print.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
   a <- attributes(x)
 
   # "table" header with variable label/name, and type
@@ -240,7 +251,7 @@ print.dw_data_tabulate <- function(x, ...) {
 
   # print table
   cat(insight::export_table(
-    format(x),
+    format(x, big_mark = big_mark),
     cross = "+",
     missing = "<NA>"
   ))
@@ -249,7 +260,7 @@ print.dw_data_tabulate <- function(x, ...) {
 
 
 #' @export
-print_html.dw_data_tabulate <- function(x, ...) {
+print_html.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
   a <- attributes(x)
 
   # "table" header with variable label/name, and type
@@ -264,7 +275,7 @@ print_html.dw_data_tabulate <- function(x, ...) {
 
   # print table
   insight::export_table(
-    format(x, format = "html"),
+    format(x, format = "html", big_mark = big_mark),
     title = caption,
     footer = footer,
     missing = "(NA)",
@@ -274,7 +285,7 @@ print_html.dw_data_tabulate <- function(x, ...) {
 
 
 #' @export
-print_md.dw_data_tabulate <- function(x, ...) {
+print_md.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
   a <- attributes(x)
 
   # "table" header with variable label/name, and type
@@ -289,7 +300,7 @@ print_md.dw_data_tabulate <- function(x, ...) {
 
   # print table
   insight::export_table(
-    format(x, format = "markdown"),
+    format(x, format = "markdown", big_mark = big_mark),
     title = caption,
     footer = footer,
     missing = "(NA)",
@@ -299,17 +310,17 @@ print_md.dw_data_tabulate <- function(x, ...) {
 
 
 #' @export
-print.dw_data_tabulates <- function(x, ...) {
+print.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
   a <- attributes(x)
   if (!isTRUE(a$collapse) || length(x) == 1) {
     for (i in 1:length(x)) {
-      print(x[[i]])
+      print(x[[i]], big_mark = big_mark, ...)
       if (i < length(x)) cat("\n")
     }
   } else {
     x <- lapply(x, function(i) {
       attr <- attributes(i)
-      i <- format(i, format = "text")
+      i <- format(i, format = "text", big_mark = big_mark)
       i$Variable[attr$duplicate_varnames] <- ""
       if (!is.null(i$Group)) i$Group[attr$duplicate_varnames] <- ""
       i[nrow(i) + 1, ] <- ""
@@ -331,13 +342,13 @@ print.dw_data_tabulates <- function(x, ...) {
 
 
 #' @export
-print_html.dw_data_tabulates <- function(x, ...) {
+print_html.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
   if (length(x) == 1) {
-    print_html(x[[1]])
+    print_html(x[[1]], big_mark = big_mark, ...)
   } else {
     x <- lapply(x, function(i) {
       attr <- attributes(i)
-      i <- format(i, format = "html")
+      i <- format(i, format = "html", big_mark = big_mark)
       i$Variable[attr$duplicate_varnames] <- ""
       i
     })
@@ -357,13 +368,13 @@ print_html.dw_data_tabulates <- function(x, ...) {
 
 
 #' @export
-print_md.dw_data_tabulates <- function(x, ...) {
+print_md.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
   if (length(x) == 1) {
-    print_md(x[[1]])
+    print_md(x[[1]], big_mark = big_mark, ...)
   } else {
     x <- lapply(x, function(i) {
       attr <- attributes(i)
-      i <- format(i, format = "markdown")
+      i <- format(i, format = "markdown", big_mark = big_mark)
       i$Variable[attr$duplicate_varnames] <- ""
       if (!is.null(i$Group)) i$Group[attr$duplicate_varnames] <- ""
       i[nrow(i) + 1, ] <- ""
