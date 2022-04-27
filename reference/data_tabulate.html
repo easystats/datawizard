@@ -219,6 +219,32 @@ as data frame per variable.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          |               |     2 |  5 | 50.00 |   50.00 |       100.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          |               |  &lt;NA&gt; |  0 |  0.00 |    &lt;NA&gt; |         &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------------</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># for larger N's (&gt; 100000), a big mark is automatically added</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1e6</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">data_tabulate</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">x</span> <span style="color: #0000BB;">&lt;integer&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># total N=1000000 valid N=1000000</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Value |       N | Raw % | Valid % | Cumulative %</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------+---------+-------+---------+-------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     | 333,852 | 33.39 |   33.39 |        33.39</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     | 332,910 | 33.29 |   33.29 |        66.68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     | 333,238 | 33.32 |   33.32 |       100.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;NA&gt;  |       0 |  0.00 |    &lt;NA&gt; |         &lt;NA&gt;</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># to remove the big mark, use "print(..., big_mark = "")"</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">data_tabulate</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, big_mark <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">x</span> <span style="color: #0000BB;">&lt;integer&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># total N=1000000 valid N=1000000</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Value |      N | Raw % | Valid % | Cumulative %</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------+--------+-------+---------+-------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     | 333852 | 33.39 |   33.39 |        33.39</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     | 332910 | 33.29 |   33.29 |        66.68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     | 333238 | 33.32 |   33.32 |       100.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;NA&gt;  |      0 |  0.00 |    &lt;NA&gt; |         &lt;NA&gt;</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
