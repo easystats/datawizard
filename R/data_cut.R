@@ -37,7 +37,7 @@
 #' @param append Logical or string. If `TRUE`, recoded or converted variables
 #'   get new column names and are appended (column bind) to `x`, thus returning
 #'   both the original and the recoded variables. The new columns get a suffix,
-#'   based on the calling function: `"_r"` for recode functions, `="_n"` for
+#'   based on the calling function: `"_r"` for recode functions, `"_n"` for
 #'   `data_to_numeric()`, `"_f"` for `data_to_factor()`, or `"_s"` for
 #'   `data_shift()`. If `append=FALSE`, original variables in `x` will be
 #'   overwritten by their recoded versions. If a character value, recoded
