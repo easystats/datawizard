@@ -157,6 +157,18 @@ search pattern when matching against variable names.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A data frame of numeric variables.</p>
     </div>
+    <div class="section level2">
+    <h2 id="selection-of-variables-select-argument">Selection of variables - <code>select</code> argument<a class="anchor" aria-label="anchor" href="#selection-of-variables-select-argument"></a></h2>
+    
+
+<p>For most functions that have a <code>select</code> argument the complete input data
+frame is returned, even when <code>select</code> only selects a range of variables.
+However, for <code>data_to_numeric()</code>, factors might be converted into dummies,
+thus, the number of variables of the returned data frame no longer match
+the input data frame. Hence, when <code>select</code> is used, <em>only</em> those variables
+(or their dummies) specified in <code>select</code> will be returned. Use <code>append=TRUE</code>
+to also include the original variables in the returned data frame.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

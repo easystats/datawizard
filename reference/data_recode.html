@@ -212,6 +212,18 @@ is set to <code>"old=new"</code>, then <code>recode(`1`=0)</code> would recode a
 The default for <code>recode(`1`=0)</code> is to recode all 0 into 1.</p>
     </div>
     <div class="section level2">
+    <h2 id="selection-of-variables-the-select-argument">Selection of variables - the <code>select</code> argument<a class="anchor" aria-label="anchor" href="#selection-of-variables-the-select-argument"></a></h2>
+    
+
+<p>For most functions that have a <code>select</code> argument (including this function),
+the complete input data frame is returned, even when <code>select</code> only selects
+a range of variables. That is, the function is only applied to those variables
+that have a match in <code>select</code>, while all other variables remain unchanged.
+In other words: for this function, <code>select</code> will not omit any non-included
+variables, so that the returned data frame will include all variables
+from the input data frame.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index">
 <ul><li><p>Functions to rename stuff: <code><a href="data_rename.html">data_rename()</a></code>, <code><a href="data_rename.html">data_rename_rows()</a></code>, <code><a href="data_rename.html">data_addprefix()</a></code>, <code><a href="data_rename.html">data_addsuffix()</a></code></p></li>
