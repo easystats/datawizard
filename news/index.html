@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.15</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,7 @@
 <p>NEW FUNCTIONS</p>
 <ul><li><p><code><a href="../reference/data_shift.html">data_shift()</a></code> to shift the value range of numeric variables.</p></li>
 <li><p><code><a href="../reference/data_recode.html">data_recode()</a></code> to recode old into new values.</p></li>
-<li><p><code><a href="../reference/data_to_factor.html">data_to_factor()</a></code> as counterpart to <code><a href="../reference/convert_data_to_numeric.html">data_to_numeric()</a></code>.</p></li>
+<li><p><code><a href="../reference/data_to_factor.html">data_to_factor()</a></code> as counterpart to <code><a href="../reference/data_to_numeric.html">data_to_numeric()</a></code>.</p></li>
 <li><p><code><a href="../reference/data_tabulate.html">data_tabulate()</a></code> to create frequency tables of variables.</p></li>
 <li><p><code><a href="../reference/data_read.html">data_read()</a></code> to read (import) data files (from text, or foreign statistical packages).</p></li>
 </ul><p>CHANGES</p>
@@ -73,7 +73,7 @@
 <li><p>The <code>filter</code> argument in <code><a href="../reference/data_match.html">data_filter()</a></code> can also be a numeric vector, to indicate row indices of those rows that should be returned.</p></li>
 <li><p><code><a href="../reference/convert_to_na.html">convert_to_na()</a></code> gets methods for variables of class <code>logical</code> and <code>Date</code>.</p></li>
 <li><p><code><a href="../reference/convert_to_na.html">convert_to_na()</a></code> for factors (and data frames) gains a <code>drop_levels</code> argument, to drop unused levels that have been replaced by <code>NA</code>.</p></li>
-<li><p><code><a href="../reference/convert_data_to_numeric.html">data_to_numeric()</a></code> gains two more arguments, <code>preserve_levels</code> and <code>lowest</code>, to give better control of conversion of factors.</p></li>
+<li><p><code><a href="../reference/data_to_numeric.html">data_to_numeric()</a></code> gains two more arguments, <code>preserve_levels</code> and <code>lowest</code>, to give better control of conversion of factors.</p></li>
 </ul><p>BUG FIXES</p>
 <ul><li>When logicals were passed to <code><a href="../reference/center.html">center()</a></code> or <code><a href="../reference/standardize.html">standardize()</a></code> and <code>force = TRUE</code>, these were not properly converted to numeric variables.</li></ul></div>
     <div class="section level2">
@@ -98,7 +98,7 @@
 <li><p><code><a href="../reference/data_rename.html">data_rename()</a></code> doesn’t use <code>pattern</code> anymore to rename the columns if <code>replacement</code> is not provided (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/103" class="external-link">#103</a>).</p></li>
 <li><p><code><a href="../reference/data_rename.html">data_rename()</a></code> now adds a suffix to duplicated names in <code>replacement</code> (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/103" class="external-link">#103</a>).</p></li>
 </ul><p>BUG FIXES</p>
-<ul><li><p><code><a href="../reference/convert_data_to_numeric.html">data_to_numeric()</a></code> produced wrong results for factors when <code>dummy_factors = TRUE</code> and factor contained missing values.</p></li>
+<ul><li><p><code><a href="../reference/data_to_numeric.html">data_to_numeric()</a></code> produced wrong results for factors when <code>dummy_factors = TRUE</code> and factor contained missing values.</p></li>
 <li><p><code><a href="../reference/data_match.html">data_match()</a></code> produced wrong results when data contained missing values.</p></li>
 <li><p>Fixed CRAN check issues in <code><a href="../reference/data_extract.html">data_extract()</a></code> when more than one variable was extracted from a data frame.</p></li>
 </ul></div>

@@ -31,9 +31,6 @@
     <loc>/reference/center.html</loc>
   </url>
   <url>
-    <loc>/reference/convert_data_to_numeric.html</loc>
-  </url>
-  <url>
     <loc>/reference/convert_na_to.html</loc>
   </url>
   <url>
@@ -89,6 +86,9 @@
   </url>
   <url>
     <loc>/reference/data_to_long.html</loc>
+  </url>
+  <url>
+    <loc>/reference/data_to_numeric.html</loc>
   </url>
   <url>
     <loc>/reference/demean.html</loc>
