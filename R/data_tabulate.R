@@ -40,6 +40,14 @@
 #'     group_by(c172code) %>%
 #'     data_tabulate("e16sex", collapse = TRUE)
 #' }
+#'
+#' # for larger N's (> 100000), a big mark is automatically added
+#' set.seed(123)
+#' x <- sample(1:3, 1e6, TRUE)
+#' data_tabulate(x, name = "Large Number")
+#'
+#' # to remove the big mark, use "print(..., big_mark = "")"
+#' print(data_tabulate(x), big_mark = "")
 #' @export
 data_tabulate <- function(x, ...) {
   UseMethod("data_tabulate")

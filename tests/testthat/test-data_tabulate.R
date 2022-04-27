@@ -45,6 +45,21 @@ test_that("data_tabulate data.frame", {
 
 
 test_that("data_tabulate print", {
+  set.seed(123)
+  x <- sample(1:3, 1e6, TRUE)
+  out <- data_tabulate(x, name = "Large Number")
+  expect_equal(
+    out,
+    list(names = c("Variable", "Value", "N", "Raw %", "Valid %", "Cumulative %"),
+         class = c("dw_data_tabulate", "data.frame"),
+         row.names = 1:4, type = "integer", varname = "Large Number",
+         object = "x", duplicate_varnames = c(FALSE, TRUE, TRUE, TRUE),
+         total_n = 1000000L, valid_n = 1000000L)
+  )
+})
+
+
+test_that("data_tabulate print", {
   x <- data_tabulate(efc$e42dep)
   out <- capture.output(print(x))
   expect_equal(
