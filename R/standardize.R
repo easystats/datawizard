@@ -70,6 +70,8 @@
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams find_columns
 #'
+#' @inheritSection center Selection of variables - the `select` argument
+#'
 #' @return The standardized object (either a standardize data frame or a
 #'   statistical model fitted on standardized data).
 #'

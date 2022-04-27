@@ -16,6 +16,8 @@
 #' @param ... not used.
 #' @inheritParams find_columns
 #'
+#' @inheritSection center Selection of variables - the `select` argument
+#'
 #' @return A data frame, or a list of data frames, with one frequency table
 #' as data frame per variable.
 #'

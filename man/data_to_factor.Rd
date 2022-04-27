@@ -83,6 +83,17 @@ Convert data to numeric by converting characters to factors and factors to
 either numeric levels or dummy variables. The "counterpart" to convert
 variables into numeric is \code{data_to_numeric()}.
 }
+\section{Selection of variables - the \code{select} argument}{
+
+For most functions that have a \code{select} argument (including this function),
+the complete input data frame is returned, even when \code{select} only selects
+a range of variables. That is, the function is only applied to those variables
+that have a match in \code{select}, while all other variables remain unchanged.
+In other words: for this function, \code{select} will not omit any non-included
+variables, so that the returned data frame will include all variables
+from the input data frame.
+}
+
 \examples{
 str(data_to_factor(iris))
 

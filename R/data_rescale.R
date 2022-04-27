@@ -14,6 +14,8 @@
 #'   the input vector (`range(x)`).
 #' @param ... Arguments passed to or from other methods.
 #'
+#' @inheritSection center Selection of variables - the `select` argument
+#'
 #' @examples
 #' data_rescale(c(0, 1, 5, -5, -2))
 #' data_rescale(c(0, 1, 5, -5, -2), to = c(-5, 5))

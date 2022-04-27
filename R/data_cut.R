@@ -46,6 +46,8 @@
 #' @param ... not used.
 #' @inheritParams find_columns
 #'
+#' @inheritSection center Selection of variables - the `select` argument
+#'
 #' @inherit data_rename seealso
 #'
 #' @return `x`, recoded into groups. By default `x` is numeric, unless `labels`

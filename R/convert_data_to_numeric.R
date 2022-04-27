@@ -17,6 +17,15 @@
 #' @inheritParams find_columns
 #' @inheritParams data_cut
 #'
+#' @section Selection of variables - `select` argument:
+#' For most functions that have a `select` argument the complete input data
+#' frame is returned, even when `select` only selects a range of variables.
+#' However, for `data_to_numeric()`, factors might be converted into dummies,
+#' thus, the number of variables of the returned data frame no longer match
+#' the input data frame. Hence, when `select` is used, *only* those variables
+#' (or their dummies) specified in `select` will be returned. Use `append=TRUE`
+#' to also include the original variables in the returned data frame.
+#'
 #' @examples
 #' convert_data_to_numeric(head(ToothGrowth))
 #' convert_data_to_numeric(head(ToothGrowth), dummy_factors = FALSE)

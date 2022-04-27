@@ -11,6 +11,8 @@
 #' @inheritParams find_columns
 #' @inheritParams data_cut
 #'
+#' @inheritSection center Selection of variables - the `select` argument
+#'
 #' @return A factor, or a data frame of factors.
 #'
 #' @examples

@@ -32,6 +32,15 @@
 #' @inheritParams find_columns
 #' @inheritParams standardize
 #'
+#' @section Selection of variables - the `select` argument:
+#' For most functions that have a `select` argument (including this function),
+#' the complete input data frame is returned, even when `select` only selects
+#' a range of variables. That is, the function is only applied to those variables
+#' that have a match in `select`, while all other variables remain unchanged.
+#' In other words: for this function, `select` will not omit any non-included
+#' variables, so that the returned data frame will include all variables
+#' from the input data frame.
+#'
 #' @note
 #' **Difference between centering and standardizing**: Standardized variables
 #' are computed by subtracting the mean of the variable and then dividing it by

@@ -97,6 +97,17 @@ Convert data to numeric by converting characters to factors and factors to
 either numeric levels or dummy variables. The "counterpart" to convert
 variables into factors is \code{data_to_factor()}.
 }
+\section{Selection of variables - \code{select} argument}{
+
+For most functions that have a \code{select} argument the complete input data
+frame is returned, even when \code{select} only selects a range of variables.
+However, for \code{data_to_numeric()}, factors might be converted into dummies,
+thus, the number of variables of the returned data frame no longer match
+the input data frame. Hence, when \code{select} is used, \emph{only} those variables
+(or their dummies) specified in \code{select} will be returned. Use \code{append=TRUE}
+to also include the original variables in the returned data frame.
+}
+
 \examples{
 convert_data_to_numeric(head(ToothGrowth))
 convert_data_to_numeric(head(ToothGrowth), dummy_factors = FALSE)

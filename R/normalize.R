@@ -13,6 +13,8 @@
 #' @inheritParams standardize.data.frame
 #' @inheritParams find_columns
 #'
+#' @inheritSection center Selection of variables - the `select` argument
+#'
 #' @details
 #'
 #' - If `x` is a matrix, normalization is performed across all values (not

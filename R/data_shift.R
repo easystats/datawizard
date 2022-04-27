@@ -12,6 +12,8 @@
 #'
 #' @return `x`, where the range of numeric variables starts at a new value.
 #'
+#' @inheritSection center Selection of variables - the `select` argument
+#'
 #' @inherit data_rename seealso
 #'
 #' @examples

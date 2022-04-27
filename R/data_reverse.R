@@ -8,6 +8,8 @@
 #' @inheritParams data_cut
 #' @inheritParams find_columns
 #'
+#' @inheritSection center Selection of variables - the `select` argument
+#'
 #' @examples
 #' data_reverse(c(1, 2, 3, 4, 5))
 #' data_reverse(c(-2, -1, 0, 2, 1))

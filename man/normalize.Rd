@@ -89,6 +89,17 @@ data.frame.
 separately for each group.
 }
 }
+\section{Selection of variables - the \code{select} argument}{
+
+For most functions that have a \code{select} argument (including this function),
+the complete input data frame is returned, even when \code{select} only selects
+a range of variables. That is, the function is only applied to those variables
+that have a match in \code{select}, while all other variables remain unchanged.
+In other words: for this function, \code{select} will not omit any non-included
+variables, so that the returned data frame will include all variables
+from the input data frame.
+}
+
 \examples{
 
 normalize(c(0, 1, 5, -5, -2))

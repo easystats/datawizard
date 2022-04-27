@@ -80,6 +80,17 @@ Transform numeric values with the integers of their rank (i.e., 1st smallest,
 give you signed ranks, where the ranking is done according to absolute size
 but where the sign is preserved (i.e., 2, 1, -3, 4).
 }
+\section{Selection of variables - the \code{select} argument}{
+
+For most functions that have a \code{select} argument (including this function),
+the complete input data frame is returned, even when \code{select} only selects
+a range of variables. That is, the function is only applied to those variables
+that have a match in \code{select}, while all other variables remain unchanged.
+In other words: for this function, \code{select} will not omit any non-included
+variables, so that the returned data frame will include all variables
+from the input data frame.
+}
+
 \examples{
 ranktransform(c(0, 1, 5, -5, -2))
 ranktransform(c(0, 1, 5, -5, -2), sign = TRUE)

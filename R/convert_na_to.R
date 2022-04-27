@@ -10,6 +10,8 @@
 #' @param verbose Toggle warnings.
 #' @param ... Not used.
 #'
+#' @inheritSection center Selection of variables - the `select` argument
+#'
 #' @return
 #' `x`, where `NA` values are replaced by `replacement`.
 #'

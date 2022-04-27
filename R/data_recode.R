@@ -27,6 +27,8 @@
 #'
 #' @return `x`, where old values are replaced by new values.
 #'
+#' @inheritSection center Selection of variables - the `select` argument
+#'
 #' @inherit data_rename seealso
 #'
 #' @note You can use `options(data_recode_pattern = "old=new")` to switch the
