@@ -36,6 +36,9 @@ CHANGES
   
 * `convert_to_na()` gets methods for variables of class `logical` and `Date`.
 
+* `convert_to_na()` for factors (and data frames) gains a `drop_levels` argument,
+  to drop unused levels that have been replaced by `NA`.
+
 * `data_to_numeric()` gains two more arguments, `preserve_levels` and `lowest`,
   to give better control of conversion of factors.
 

@@ -3,6 +3,7 @@
 \name{convert_to_na}
 \alias{convert_to_na}
 \alias{convert_to_na.numeric}
+\alias{convert_to_na.factor}
 \alias{convert_to_na.data.frame}
 \title{Convert non-missing values in a variable into missing values.}
 \usage{
@@ -10,9 +11,12 @@ convert_to_na(x, ...)
 
 \method{convert_to_na}{numeric}(x, na = NULL, verbose = TRUE, ...)
 
+\method{convert_to_na}{factor}(x, na = NULL, drop_levels = FALSE, verbose = TRUE, ...)
+
 \method{convert_to_na}{data.frame}(
   x,
   na = NULL,
+  drop_levels = FALSE,
   select = NULL,
   exclude = NULL,
   ignore_case = FALSE,
@@ -31,6 +35,9 @@ values applied to numeric vectors, character values are used for factors,
 character vectors or date variables, and logical values for logical vectors.}
 
 \item{verbose}{Toggle warnings.}
+
+\item{drop_levels}{Logical, for factors, when specific levels are replaced
+by \code{NA}, should unused levels be dropped?}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
