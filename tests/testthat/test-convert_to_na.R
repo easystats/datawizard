@@ -17,7 +17,7 @@ test_that("convert_to_na-factor", {
   expect_equal(as.vector(table(x)), c(50, 50))
 
   x <- suppressWarnings(convert_to_na(iris$Species, na = 2))
-  expect_warning(convert_to_na(iris$Species, na = 2))
+  expect_message(convert_to_na(iris$Species, na = 2))
   expect_equal(sum(is.na(x)), 0)
 })
 
@@ -29,12 +29,12 @@ test_that("convert_to_na-numeric", {
   expect_equal(sum(is.na(x)), 10)
 
   x <- suppressWarnings(convert_to_na(iris$Sepal.Width, na = "a"))
-  expect_warning(convert_to_na(iris$Sepal.Width, na = "a"))
+  expect_message(convert_to_na(iris$Sepal.Width, na = "a"))
   expect_equal(sum(is.na(x)), 0)
 })
 
 test_that("convert_to_na-df", {
-  expect_warning(x <- convert_to_na(iris, na = 5))
+  expect_message(x <- convert_to_na(iris, na = 5))
   expect_equal(sum(is.na(x)), sum(sapply(iris, function(i) sum(i == 5))))
 
   x <- convert_to_na(iris, na = list(5, "versicolor"))
@@ -42,7 +42,7 @@ test_that("convert_to_na-df", {
 
   data(iris)
   iris$Sepal.Width <- as.character(iris$Sepal.Width)
-  expect_warning(expect_warning(x <- convert_to_na(iris, na = 3)))
+  expect_message(expect_message(x <- convert_to_na(iris, na = 3)))
   expect_equal(sum(is.na(x)), sum(sapply(iris, function(i) if (is.numeric(i)) sum(i == 3) else 0)))
 
   x <- convert_to_na(iris, na = list(3, "3"))
@@ -61,7 +61,7 @@ test_that("convert_to_na other classes", {
 
   x <- convert_to_na(d$a, na = 3)
   expect_equal(x, c(1, 2, NA, 4, 5), tolerance = 1e-3, ignore_attr = TRUE)
-  expect_warning(x <- convert_to_na(d$a, na = "c"))
+  expect_message(x <- convert_to_na(d$a, na = "c"))
   expect_equal(x, 1:5, tolerance = 1e-3, ignore_attr = TRUE)
   x <- convert_to_na(d$b, na = "c")
   expect_equal(x, structure(c(1L, 2L, NA, 4L, 5L),
