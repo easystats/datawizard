@@ -13,6 +13,9 @@ NEW FUNCTIONS
 * `data_read()` to read (import) data files (from text, or foreign statistical
   packages).
 
+* `unnormalize()` as counterpart to `normalize()`. This function only works for 
+  variables that have been normalized with `normalize()`.
+
 CHANGES
 
 * `data_find()` was added as alias to `find_colums()`, to have consistent

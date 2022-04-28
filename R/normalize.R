@@ -1,7 +1,9 @@
 #' Normalize numeric variable to 0-1 range
 #'
-#' Performs a normalization of data, i.e., it scales variables in the range 0 -
-#' 1. This is a special case of [data_rescale()].
+#' Performs a normalization of data, i.e., it scales variables in the range
+#' 0 - 1. This is a special case of [data_rescale()]. `unnormalize()` is the
+#' counterpart, but only works for variables that have been normalized with
+#' `normalize()`.
 #'
 #' @param x A numeric vector, (grouped) data frame, or matrix. See 'Details'.
 #' @param include_bounds Logical, if `TRUE`, return value may include 0 and 1.
@@ -89,6 +91,10 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   if (!include_bounds && (any(out == 0) | any(out == 1))) {
     out <- (out * (length(out) - 1) + 0.5) / length(out)
   }
+
+  attr(out, "include_bounds") <- isTRUE(include_bounds)
+  attr(out, "min_value") <- min(x, na.rm = TRUE)
+  attr(out, "range_difference") <- diff(range(x, na.rm = TRUE))
 
   out
 }
