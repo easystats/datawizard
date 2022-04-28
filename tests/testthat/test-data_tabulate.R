@@ -49,7 +49,7 @@ test_that("data_tabulate print", {
   x <- sample(1:3, 1e6, TRUE)
   out <- data_tabulate(x, name = "Large Number")
   expect_equal(
-    out,
+    attributes(out),
     list(names = c("Variable", "Value", "N", "Raw %", "Valid %", "Cumulative %"),
          class = c("dw_data_tabulate", "data.frame"),
          row.names = 1:4, type = "integer", varname = "Large Number",
