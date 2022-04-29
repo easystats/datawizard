@@ -30,6 +30,7 @@ Imports:
     utils
 Suggests: 
     bayestestR,
+    biglm,
     boot,
     data.table,
     effectsize,
