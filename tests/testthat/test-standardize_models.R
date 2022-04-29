@@ -272,12 +272,12 @@ test_that("offsets", {
 
 # BRMS --------------------------------------------------------------------
 
-test_that("brms", {
-  skip_on_cran()
-  skip_if_not_installed("brms")
-
-  mod <- brms::brm(mpg ~ hp, data = mtcars,
-                   refresh = 0, chains = 1)
-
-  expect_error(standardize(mod), regexp = NA)
-})
+# test_that("brms", {
+#   skip_on_cran()
+#   skip_if_not_installed("brms")
+#
+#   mod <- brms::brm(mpg ~ hp, data = mtcars,
+#                    refresh = 0, chains = 1)
+#
+#   expect_warning(standardize(mod))
+# })
