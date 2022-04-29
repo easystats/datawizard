@@ -69,7 +69,8 @@ standardize.default <- function(x,
                                 ...) {
 
   if (!insight::is_model(x)) {
-    stop(paste0("Objects of class '", class(x)[1], "' cannot be standardized."), call. = FALSE)
+    warning(insight::format_mesage(paste0("Objects or variables of class '", class(x)[1], "' cannot be standardized.")), call. = FALSE)
+    return(x)
   }
 
   data_std <- NULL # needed to avoid note
