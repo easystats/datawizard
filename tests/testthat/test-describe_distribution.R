@@ -168,3 +168,33 @@ test_that("describe_distribution - list: works with range", {
   expect_false("min" %in% names(x))
   expect_false("max" %in% names(x))
 })
+
+
+
+# select ----------------------
+
+test_that("describe_distribution - select", {
+  data(iris)
+  out <- describe_distribution(iris, select = starts_with("Petal"))
+
+  expect_equal(out$Variable, c("Petal.Length", "Petal.Width"))
+  expect_equal(out$Mean, c(3.758000, 1.199333), tolerance = 1e-3)
+})
+
+
+
+# select and grouped df ----------------------
+
+test_that("describe_distribution - grouped df", {
+  data(iris)
+  x <- data_group(iris, Species)
+  out <- describe_distribution(x, select = starts_with("Petal"))
+
+  expect_equal(out$.group, c("Species=setosa", "Species=setosa",
+                             "Species=versicolor", "Species=versicolor",
+                             "Species=virginica", "Species=virginica"))
+  expect_equal(out$Variable, c("Petal.Length", "Petal.Width",
+                               "Petal.Length", "Petal.Width",
+                               "Petal.Length", "Petal.Width"))
+  expect_equal(out$Mean, c(1.462, 0.246, 4.26, 1.326, 5.552, 2.026), tolerance = 1e-3)
+})
