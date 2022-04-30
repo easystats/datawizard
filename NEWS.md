@@ -16,6 +16,9 @@ NEW FUNCTIONS
 * `unnormalize()` as counterpart to `normalize()`. This function only works for 
   variables that have been normalized with `normalize()`.
 
+* `data_group()` and `data_ungroup()` to create grouped data frames, or to remove
+  the grouping information from grouped data frames.
+
 CHANGES
 
 * `data_find()` was added as alias to `find_colums()`, to have consistent

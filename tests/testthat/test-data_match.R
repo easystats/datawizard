@@ -29,6 +29,12 @@ test_that("data_match works with missing data", {
   x1 <- length(data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "not", return_indices = TRUE))
   x2 <- nrow(poorman::filter(efc, c172code != 1, e16sex != 2))
   expect_equal(x1, x2)
+
+  # remove NA
+  x1 <- length(data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "not", return_indices = TRUE, drop_na = FALSE))
+  expect_equal(x1, 41)
+  x1 <- length(data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "not", return_indices = TRUE, drop_na = TRUE))
+  expect_equal(x1, 36)
 })
 
 test_that("data_match and data_filter work similar", {
