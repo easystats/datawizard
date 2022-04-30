@@ -2,6 +2,7 @@
 % Please edit documentation in R/data_group.R
 \name{data_group}
 \alias{data_group}
+\alias{data_ungroup}
 \title{Create a grouped data frame}
 \usage{
 data_group(
@@ -12,6 +13,8 @@ data_group(
   verbose = TRUE,
   ...
 )
+
+data_ungroup(x, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A data frame}

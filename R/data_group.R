@@ -61,6 +61,7 @@ data_group <- function(x,
 }
 
 
+#' @rdname data_group
 #' @export
 data_ungroup <- function(x,
                          verbose = TRUE,

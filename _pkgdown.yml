@@ -99,6 +99,7 @@ reference:
 
   - title: Utilities
   - contents:
+      - data_group
       - contains("rownames")
       - compact_character
       - find_columns
