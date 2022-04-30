@@ -3,7 +3,7 @@ data(efc)
 test_that("data_group attributes", {
   x <- data_group(efc, "c172code")
   expect_equal(
-    x,
+    attributes(x)$groups,
     structure(list(
       c172code = c(1, 2, 3, NA),
       .rows = list(c(3L, 14L, 30L, 32L, 36L, 77L, 91L, 99L),
