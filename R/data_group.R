@@ -40,7 +40,13 @@ data_group <- function(x,
   grid <- grid[do.call(order, grid), , drop = FALSE]
 
   .rows <- lapply(1:nrow(grid), function(i) {
-    as.integer(data_match(x, to = grid[i, , drop = FALSE], match = "and", return_indices = TRUE))
+    as.integer(data_match(
+      x,
+      to = grid[i, , drop = FALSE],
+      match = "and",
+      return_indices = TRUE,
+      drop_na = FALSE
+    ))
   })
   grid[[".rows"]] <- .rows
 
