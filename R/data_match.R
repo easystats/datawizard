@@ -103,7 +103,9 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, ...) {
     idx <- c()
   } else {
     # remove missings before matching
-    x <- x[stats::complete.cases(x), , drop = FALSE]
+    if (isFALSE(return_indices)) {
+      x <- x[stats::complete.cases(x), , drop = FALSE]
+    }
     idx <- 1:nrow(x)
   }
 
