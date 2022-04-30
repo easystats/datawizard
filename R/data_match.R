@@ -17,6 +17,11 @@
 #' @param return_indices Logical, if `FALSE`, return the vector of rows that
 #'   can be used to filter the original data frame. If `FALSE` (default),
 #'   returns directly the filtered data frame instead of the row indices.
+#' @param drop_na Logical, if `TRUE`, missing values (`NA`s) are removed before
+#'   filtering the data. This is the default behaviour, however, sometimes when
+#'   row indices are requested (i.e. `return_indices=TRUE`), it might be useful
+#'   to preserve `NA` values, so returned row indices match the row indices of
+#'   the original data frame.
 #' @param ... Not used.
 #'
 #' @return A filtered data frame, or the row indices that match the specified configuration.
@@ -72,7 +77,7 @@
 #' data_filter(mtcars, 5:10)
 #' @inherit data_rename seealso
 #' @export
-data_match <- function(x, to, match = "and", return_indices = FALSE, ...) {
+data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = TRUE, ...) {
   if (!is.data.frame(to)) {
     to <- as.data.frame(to)
   }
@@ -103,7 +108,9 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, ...) {
     idx <- c()
   } else {
     # remove missings before matching
-    x <- x[stats::complete.cases(x), , drop = FALSE]
+    if (isTRUE(drop_na)) {
+      x <- x[stats::complete.cases(x), , drop = FALSE]
+    }
     idx <- 1:nrow(x)
   }
 
