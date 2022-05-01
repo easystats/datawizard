@@ -201,7 +201,7 @@ refits the model with this standardized version of the dataset. The
 \code{\link[=normalize]{normalize()}} function can also be used to scale all numeric variables within
 the 0 - 1 range.
 \cr\cr
-For model standardization, see \code{\link[effectsize:standardize.default]{effectsize::standardize.default()}}
+For model standardization, see \code{\link[=standardize.default]{standardize.default()}}.
 }
 \note{
 When \code{x} is a vector or a data frame with \verb{remove_na = "none")},
@@ -261,6 +261,9 @@ Other transform utilities:
 \code{\link{data_reverse}()},
 \code{\link{normalize}()},
 \code{\link{ranktransform}()}
+
+Other standardize: 
+\code{\link{standardize.default}()}
 }
 \concept{standardize}
 \concept{transform utilities}
