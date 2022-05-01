@@ -104,6 +104,7 @@ data_to_factor.data.frame <- function(x,
     append,
     append_suffix = "_f",
     force = FALSE,
+    preserve_value_labels = TRUE,
     keep_character = TRUE
   )
 
