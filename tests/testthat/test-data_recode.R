@@ -211,7 +211,7 @@ d <- data.frame(
 test_that("recode data.frame", {
   out <- data_recode(
     d,
-    list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = "b, c"),
+    recode = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = "b, c"),
   )
   expect_equal(
     out,
@@ -226,7 +226,7 @@ test_that("recode data.frame", {
 
   out <- data_recode(
     d,
-    list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
+    recode = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
   )
   expect_equal(
     out,
@@ -241,7 +241,7 @@ test_that("recode data.frame", {
 
   out <- data_recode(
     d,
-    list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
+    recode = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
     select = is.numeric()
   )
   expect_equal(
