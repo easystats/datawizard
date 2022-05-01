@@ -161,13 +161,13 @@
   # add back variable labels
   if (length(variable_labels)) {
     for (i in names(variable_labels)) {
-      attr(x[[i]], "label") <- variable_labels[[i]]
+      attr(x[[i]], "label", exact = TRUE) <- variable_labels[[i]]
     }
   }
 
   if (preserve_value_labels && length(value_labels)) {
     for (i in names(value_labels)) {
-      attr(x[[i]], "labels") <- value_labels[[i]]
+      attr(x[[i]], "labels", exact = TRUE) <- value_labels[[i]]
     }
   }
 
