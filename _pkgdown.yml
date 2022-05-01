@@ -91,7 +91,7 @@ reference:
   - title: Data properties
   - contents:
       - data_tabulate
-      - describe_distribution
+      - contains("distribution")
       - kurtosis
       - smoothness
       - skewness
