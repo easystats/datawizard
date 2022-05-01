@@ -1,5 +1,13 @@
 # datawizard 0.4.1
 
+BREAKING
+
+* Added the `standardize.default()` method (moved from package **effectsize**),
+  to be consistent in that the default-method now is in the same package as the
+  generic. `standardize.default()` behaves exactly like in **effectsize** and
+  particularly works for regression model objects. **effectsize** now re-exports
+  `standardize()` from **datawizard**.
+
 NEW FUNCTIONS
 
 * `data_shift()` to shift the value range of numeric variables.
