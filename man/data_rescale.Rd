@@ -15,10 +15,10 @@ change_scale(x, ...)
 
 \method{data_rescale}{data.frame}(
   x,
-  to = c(0, 100),
-  range = NULL,
   select = NULL,
   exclude = NULL,
+  to = c(0, 100),
+  range = NULL,
   ignore_case = FALSE,
   ...
 )

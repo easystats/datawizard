@@ -237,14 +237,14 @@ data_cut.factor <- function(x, ...) {
 #' @rdname data_cut
 #' @export
 data_cut.data.frame <- function(x,
+                                select = NULL,
+                                exclude = NULL,
                                 split = "median",
                                 n_groups = NULL,
                                 range = NULL,
                                 lowest = 1,
                                 labels = NULL,
                                 append = FALSE,
-                                select = NULL,
-                                exclude = NULL,
                                 ignore_case = FALSE,
                                 verbose = TRUE,
                                 ...) {
@@ -273,14 +273,14 @@ data_cut.data.frame <- function(x,
 
 #' @export
 data_cut.grouped_df <- function(x,
+                                select = NULL,
+                                exclude = NULL,
                                 split = "median",
                                 n_groups = NULL,
                                 range = NULL,
                                 lowest = 1,
                                 labels = NULL,
                                 append = FALSE,
-                                select = NULL,
-                                exclude = NULL,
                                 ignore_case = FALSE,
                                 verbose = TRUE,
                                 ...) {

@@ -9,10 +9,10 @@ data_to_factor(x, ...)
 
 \method{data_to_factor}{data.frame}(
   x,
-  append = FALSE,
   select = NULL,
   exclude = NULL,
   ignore_case = FALSE,
+  append = FALSE,
   verbose = TRUE,
   ...
 )
@@ -21,16 +21,6 @@ data_to_factor(x, ...)
 \item{x}{A data frame or vector.}
 
 \item{...}{Arguments passed to or from other methods.}
-
-\item{append}{Logical or string. If \code{TRUE}, recoded or converted variables
-get new column names and are appended (column bind) to \code{x}, thus returning
-both the original and the recoded variables. The new columns get a suffix,
-based on the calling function: \code{"_r"} for recode functions, \code{"_n"} for
-\code{data_to_numeric()}, \code{"_f"} for \code{data_to_factor()}, or \code{"_s"} for
-\code{data_shift()}. If \code{append=FALSE}, original variables in \code{x} will be
-overwritten by their recoded versions. If a character value, recoded
-variables are appended with new column names (using the defined suffix) to
-the original data frame.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -69,6 +59,16 @@ excludes no columns.}
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
+
+\item{append}{Logical or string. If \code{TRUE}, recoded or converted variables
+get new column names and are appended (column bind) to \code{x}, thus returning
+both the original and the recoded variables. The new columns get a suffix,
+based on the calling function: \code{"_r"} for recode functions, \code{"_n"} for
+\code{data_to_numeric()}, \code{"_f"} for \code{data_to_factor()}, or \code{"_s"} for
+\code{data_shift()}. If \code{append=FALSE}, original variables in \code{x} will be
+overwritten by their recoded versions. If a character value, recoded
+variables are appended with new column names (using the defined suffix) to
+the original data frame.}
 
 \item{verbose}{Toggle warnings.}
 }

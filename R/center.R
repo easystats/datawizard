@@ -156,6 +156,8 @@ center.AsIs <- center.numeric
 #' @inheritParams standardize.data.frame
 #' @export
 center.data.frame <- function(x,
+                              select = NULL,
+                              exclude = NULL,
                               robust = FALSE,
                               weights = NULL,
                               reference = NULL,
@@ -163,8 +165,6 @@ center.data.frame <- function(x,
                               force = FALSE,
                               remove_na = c("none", "selected", "all"),
                               append = FALSE,
-                              select = NULL,
-                              exclude = NULL,
                               ignore_case = FALSE,
                               verbose = TRUE,
                               ...) {
@@ -202,6 +202,8 @@ center.data.frame <- function(x,
 
 #' @export
 center.grouped_df <- function(x,
+                              select = NULL,
+                              exclude = NULL,
                               robust = FALSE,
                               weights = NULL,
                               reference = NULL,
@@ -209,8 +211,6 @@ center.grouped_df <- function(x,
                               force = FALSE,
                               remove_na = c("none", "selected", "all"),
                               append = FALSE,
-                              select = NULL,
-                              exclude = NULL,
                               ignore_case = FALSE,
                               verbose = TRUE,
                               ...) {

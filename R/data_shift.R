@@ -55,10 +55,10 @@ data_shift.numeric <- function(x, lowest = 0, ...) {
 #' @rdname data_shift
 #' @export
 data_shift.data.frame <- function(x,
-                                  lowest = 0,
-                                  append = FALSE,
                                   select = NULL,
                                   exclude = NULL,
+                                  lowest = 0,
+                                  append = FALSE,
                                   ignore_case = FALSE,
                                   verbose = TRUE,
                                   ...) {

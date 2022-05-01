@@ -467,12 +467,12 @@ data_recode.character <- function(x,
 #' @rdname data_recode
 #' @export
 data_recode.data.frame <- function(x,
+                                   select = NULL,
+                                   exclude = NULL,
                                    recode = NULL,
                                    default = NULL,
                                    preserve_na = TRUE,
                                    append = FALSE,
-                                   select = NULL,
-                                   exclude = NULL,
                                    ignore_case = FALSE,
                                    verbose = TRUE,
                                    ...) {

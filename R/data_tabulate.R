@@ -127,9 +127,9 @@ data_tabulate.data.frame <- function(x,
                                   select = NULL,
                                   exclude = NULL,
                                   ignore_case = FALSE,
-                                  verbose = TRUE,
                                   collapse = FALSE,
                                   drop_levels = FALSE,
+                                  verbose = TRUE,
                                   ...) {
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case)
