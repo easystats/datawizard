@@ -8,7 +8,7 @@
 #' [normalize()] function can also be used to scale all numeric variables within
 #' the 0 - 1 range.
 #' \cr\cr
-#' For model standardization, see [effectsize::standardize.default()]
+#' For model standardization, see [`standardize.default()`].
 #'
 #' @param x A (grouped) data frame, a vector or a statistical model (for
 #'   `unstandardize()` cannot be a model).

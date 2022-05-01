@@ -46,6 +46,7 @@ reference:
       - ranktransform
       - rescale_weights
       - standardize
+      - standardize.default
       - unstandardize
       - winsorize
 
