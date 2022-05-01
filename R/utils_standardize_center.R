@@ -87,10 +87,10 @@
   }
 
   # copy label attributes
-  variable_labels <- compact_list(lapply(x, function(i) attributes(i)$label))
+  variable_labels <- compact_list(lapply(x, function(i) attr(i, "label", exact = TRUE)))
   value_labels <- NULL
   if (preserve_value_labels) {
-    value_labels <- compact_list(lapply(x, function(i) attributes(i)$labels))
+    value_labels <- compact_list(lapply(x, function(i) attr(i, "labels", exact = TRUE)))
   }
 
   # drop NAs
@@ -161,13 +161,13 @@
   # add back variable labels
   if (length(variable_labels)) {
     for (i in names(variable_labels)) {
-      attr(x[[i]], "label", exact = TRUE) <- variable_labels[[i]]
+      attr(x[[i]], "label") <- variable_labels[[i]]
     }
   }
 
   if (preserve_value_labels && length(value_labels)) {
     for (i in names(value_labels)) {
-      attr(x[[i]], "labels", exact = TRUE) <- value_labels[[i]]
+      attr(x[[i]], "labels") <- value_labels[[i]]
     }
   }
 
