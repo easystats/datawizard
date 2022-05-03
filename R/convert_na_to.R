@@ -142,7 +142,15 @@ convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE, ...) 
 #'
 #' @rdname convert_na_to
 #' @export
-convert_na_to.data.frame <- function(x, replace_num = NULL, replace_char = NULL, replace_fac = NULL, select = NULL, exclude = NULL, ignore_case = FALSE, verbose = TRUE, ...) {
+convert_na_to.data.frame <- function(x,
+                                     select = NULL,
+                                     exclude = NULL,
+                                     replace_num = NULL,
+                                     replace_char = NULL,
+                                     replace_fac = NULL,
+                                     ignore_case = FALSE,
+                                     verbose = TRUE,
+                                     ...) {
   data <- x
   select_nse <- .select_nse(select, data, exclude = exclude, ignore_case)
 

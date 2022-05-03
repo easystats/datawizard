@@ -233,6 +233,8 @@ standardize.AsIs <- standardize.numeric
 #' @rdname standardize
 #' @export
 standardize.data.frame <- function(x,
+                                   select = NULL,
+                                   exclude = NULL,
                                    robust = FALSE,
                                    two_sd = FALSE,
                                    weights = NULL,
@@ -242,8 +244,6 @@ standardize.data.frame <- function(x,
                                    remove_na = c("none", "selected", "all"),
                                    force = FALSE,
                                    append = FALSE,
-                                   select = NULL,
-                                   exclude = NULL,
                                    ignore_case = FALSE,
                                    verbose = TRUE,
                                    ...) {
@@ -284,6 +284,8 @@ standardize.data.frame <- function(x,
 
 #' @export
 standardize.grouped_df <- function(x,
+                                   select = NULL,
+                                   exclude = NULL,
                                    robust = FALSE,
                                    two_sd = FALSE,
                                    weights = NULL,
@@ -293,8 +295,6 @@ standardize.grouped_df <- function(x,
                                    remove_na = c("none", "selected", "all"),
                                    force = FALSE,
                                    append = FALSE,
-                                   select = NULL,
-                                   exclude = NULL,
                                    ignore_case = FALSE,
                                    verbose = TRUE,
                                    ...) {

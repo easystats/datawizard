@@ -160,7 +160,14 @@ convert_to_na.logical <- function(x, na = NULL, verbose = TRUE, ...) {
 
 #' @rdname convert_to_na
 #' @export
-convert_to_na.data.frame <- function(x, na = NULL, drop_levels = FALSE, select = NULL, exclude = NULL, ignore_case = FALSE, verbose = TRUE, ...) {
+convert_to_na.data.frame <- function(x,
+                                     select = NULL,
+                                     exclude = NULL,
+                                     na = NULL,
+                                     drop_levels = FALSE,
+                                     ignore_case = FALSE,
+                                     verbose = TRUE,
+                                     ...) {
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
 

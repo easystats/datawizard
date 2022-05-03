@@ -40,6 +40,8 @@ standardise(x, ...)
 
 \method{standardize}{data.frame}(
   x,
+  select = NULL,
+  exclude = NULL,
   robust = FALSE,
   two_sd = FALSE,
   weights = NULL,
@@ -49,8 +51,6 @@ standardise(x, ...)
   remove_na = c("none", "selected", "all"),
   force = FALSE,
   append = FALSE,
-  select = NULL,
-  exclude = NULL,
   ignore_case = FALSE,
   verbose = TRUE,
   ...
@@ -137,19 +137,6 @@ rest of the arguments are absent.
 \item{force}{Logical, if \code{TRUE}, forces recoding of factors and character
 vecrors as well.}
 
-\item{remove_na}{How should missing values (\code{NA}) be treated: if \code{"none"}
-(default): each column's standardization is done separately, ignoring
-\code{NA}s. Else, rows with \code{NA} in the columns selected with \code{select} /
-\code{exclude} (\code{"selected"}) or in all columns (\code{"all"}) are dropped before
-standardization, and the resulting data frame does not include these cases.}
-
-\item{append}{Logical or string. If \code{TRUE}, standardized variables get new
-column names (with the suffix \code{"_z"}) and are appended (column bind) to \code{x},
-thus returning both the original and the standardized variables. If \code{FALSE},
-original variables in \code{x} will be overwritten by their standardized versions.
-If a character value, standardized variables are appended with new column
-names (using the defined suffix) to the original data frame.}
-
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
 \itemize{
@@ -183,6 +170,19 @@ return \code{"Species"}.}
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
 excludes no columns.}
+
+\item{remove_na}{How should missing values (\code{NA}) be treated: if \code{"none"}
+(default): each column's standardization is done separately, ignoring
+\code{NA}s. Else, rows with \code{NA} in the columns selected with \code{select} /
+\code{exclude} (\code{"selected"}) or in all columns (\code{"all"}) are dropped before
+standardization, and the resulting data frame does not include these cases.}
+
+\item{append}{Logical or string. If \code{TRUE}, standardized variables get new
+column names (with the suffix \code{"_z"}) and are appended (column bind) to \code{x},
+thus returning both the original and the standardized variables. If \code{FALSE},
+original variables in \code{x} will be overwritten by their standardized versions.
+If a character value, standardized variables are appended with new column
+names (using the defined suffix) to the original data frame.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the

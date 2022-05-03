@@ -15,9 +15,9 @@ reverse_scale(x, ...)
 
 \method{data_reverse}{data.frame}(
   x,
-  range = NULL,
   select = NULL,
   exclude = NULL,
+  range = NULL,
   ignore_case = FALSE,
   ...
 )

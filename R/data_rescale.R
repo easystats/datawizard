@@ -108,10 +108,10 @@ data_rescale.numeric <- function(x,
 
 #' @export
 data_rescale.grouped_df <- function(x,
-                                    to = c(0, 100),
-                                    range = NULL,
                                     select = NULL,
                                     exclude = NULL,
+                                    to = c(0, 100),
+                                    range = NULL,
                                     ignore_case = FALSE,
                                     ...) {
   info <- attributes(x)
@@ -151,10 +151,10 @@ data_rescale.grouped_df <- function(x,
 #' @rdname data_rescale
 #' @export
 data_rescale.data.frame <- function(x,
-                                    to = c(0, 100),
-                                    range = NULL,
                                     select = NULL,
                                     exclude = NULL,
+                                    to = c(0, 100),
+                                    range = NULL,
                                     ignore_case = FALSE,
                                     ...) {
   # evaluate arguments

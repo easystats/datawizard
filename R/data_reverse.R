@@ -129,9 +129,9 @@ data_reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
 
 #' @export
 data_reverse.grouped_df <- function(x,
-                                    range = NULL,
                                     select = NULL,
                                     exclude = NULL,
+                                    range = NULL,
                                     ignore_case = FALSE,
                                     ...) {
   info <- attributes(x)
@@ -170,9 +170,9 @@ data_reverse.grouped_df <- function(x,
 #' @rdname data_reverse
 #' @export
 data_reverse.data.frame <- function(x,
-                                    range = NULL,
                                     select = NULL,
                                     exclude = NULL,
+                                    range = NULL,
                                     ignore_case = FALSE,
                                     ...) {
   # evaluate arguments

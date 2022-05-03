@@ -27,6 +27,8 @@ describe_distribution(x, ...)
 
 \method{describe_distribution}{data.frame}(
   x,
+  select = NULL,
+  exclude = NULL,
   centrality = "mean",
   dispersion = TRUE,
   iqr = TRUE,
@@ -36,8 +38,6 @@ describe_distribution(x, ...)
   ci = NULL,
   iterations = 100,
   threshold = 0.1,
-  select = NULL,
-  exclude = NULL,
   ignore_case = FALSE,
   verbose = TRUE,
   ...
@@ -74,10 +74,6 @@ intervals. Only applies when \code{ci} is not \code{NULL}.}
 
 \item{verbose}{Toggle warnings and messages.}
 
-\item{include_factors}{Logical, if \code{TRUE}, factors are included in the
-output, however, only columns for range (first and last factor levels) as
-well as n and missing will contain information.}
-
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
 \itemize{
@@ -111,6 +107,10 @@ return \code{"Species"}.}
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
 excludes no columns.}
+
+\item{include_factors}{Logical, if \code{TRUE}, factors are included in the
+output, however, only columns for range (first and last factor levels) as
+well as n and missing will contain information.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
