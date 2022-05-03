@@ -77,12 +77,12 @@ variables into factors is <code><a href="data_to_factor.html">data_to_factor()</
 <span class="co"># S3 method for data.frame</span>
 <span class="fu">data_to_numeric</span><span class="op">(</span>
   <span class="va">x</span>,
+  select <span class="op">=</span> <span class="cn">NULL</span>,
+  exclude <span class="op">=</span> <span class="cn">NULL</span>,
   dummy_factors <span class="op">=</span> <span class="cn">TRUE</span>,
   preserve_levels <span class="op">=</span> <span class="cn">FALSE</span>,
   lowest <span class="op">=</span> <span class="cn">NULL</span>,
   append <span class="op">=</span> <span class="cn">FALSE</span>,
-  select <span class="op">=</span> <span class="cn">NULL</span>,
-  exclude <span class="op">=</span> <span class="cn">NULL</span>,
   ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">...</span>
@@ -95,27 +95,6 @@ variables into factors is <code><a href="data_to_factor.html">data_to_factor()</
 <dd><p>A data frame, factor or vector.</p></dd>
 <dt>...</dt>
 <dd><p>Arguments passed to or from other methods.</p></dd>
-<dt>dummy_factors</dt>
-<dd><p>Transform factors to dummy factors (all factor levels as
-different columns filled with a binary 0-1 value).</p></dd>
-<dt>preserve_levels</dt>
-<dd><p>Logical, only applies if <code>x</code> is a factor. If <code>TRUE</code>,
-and <code>x</code> has numeric factor levels, these will be converted into the related
-numeric values. If this is not possible, the converted numeric values will
-start from 1 to number of levels.</p></dd>
-<dt>lowest</dt>
-<dd><p>Numeric, indicating the lowest (minimum) value when converting
-factors or character vectors to numeric values.</p></dd>
-<dt>append</dt>
-<dd><p>Logical or string. If <code>TRUE</code>, recoded or converted variables
-get new column names and are appended (column bind) to <code>x</code>, thus returning
-both the original and the recoded variables. The new columns get a suffix,
-based on the calling function: <code>"_r"</code> for recode functions, <code>"_n"</code> for
-<code>data_to_numeric()</code>, <code>"_f"</code> for <code><a href="data_to_factor.html">data_to_factor()</a></code>, or <code>"_s"</code> for
-<code><a href="data_shift.html">data_shift()</a></code>. If <code>append=FALSE</code>, original variables in <code>x</code> will be
-overwritten by their recoded versions. If a character value, recoded
-variables are appended with new column names (using the defined suffix) to
-the original data frame.</p></dd>
 <dt>select</dt>
 <dd><p>Variables that will be included when performing the required
 tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
@@ -146,6 +125,27 @@ return <code>"Species"</code>.</p></dd>
 <dd><p>See <code>select</code>, however, column names matched by the pattern
 from <code>exclude</code> will be excluded instead of selected. If <code>NULL</code> (the default),
 excludes no columns.</p></dd>
+<dt>dummy_factors</dt>
+<dd><p>Transform factors to dummy factors (all factor levels as
+different columns filled with a binary 0-1 value).</p></dd>
+<dt>preserve_levels</dt>
+<dd><p>Logical, only applies if <code>x</code> is a factor. If <code>TRUE</code>,
+and <code>x</code> has numeric factor levels, these will be converted into the related
+numeric values. If this is not possible, the converted numeric values will
+start from 1 to number of levels.</p></dd>
+<dt>lowest</dt>
+<dd><p>Numeric, indicating the lowest (minimum) value when converting
+factors or character vectors to numeric values.</p></dd>
+<dt>append</dt>
+<dd><p>Logical or string. If <code>TRUE</code>, recoded or converted variables
+get new column names and are appended (column bind) to <code>x</code>, thus returning
+both the original and the recoded variables. The new columns get a suffix,
+based on the calling function: <code>"_r"</code> for recode functions, <code>"_n"</code> for
+<code>data_to_numeric()</code>, <code>"_f"</code> for <code><a href="data_to_factor.html">data_to_factor()</a></code>, or <code>"_s"</code> for
+<code><a href="data_shift.html">data_shift()</a></code>. If <code>append=FALSE</code>, original variables in <code>x</code> will be
+overwritten by their recoded versions. If a character value, recoded
+variables are appended with new column names (using the defined suffix) to
+the original data frame.</p></dd>
 <dt>ignore_case</dt>
 <dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
 a regular expression is used in <code>select</code>, ignores lower/upper case in the

@@ -69,10 +69,10 @@
 <span class="co"># S3 method for data.frame</span>
 <span class="fu">data_to_factor</span><span class="op">(</span>
   <span class="va">x</span>,
-  append <span class="op">=</span> <span class="cn">FALSE</span>,
   select <span class="op">=</span> <span class="cn">NULL</span>,
   exclude <span class="op">=</span> <span class="cn">NULL</span>,
   ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
+  append <span class="op">=</span> <span class="cn">FALSE</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
@@ -84,16 +84,6 @@
 <dd><p>A data frame or vector.</p></dd>
 <dt>...</dt>
 <dd><p>Arguments passed to or from other methods.</p></dd>
-<dt>append</dt>
-<dd><p>Logical or string. If <code>TRUE</code>, recoded or converted variables
-get new column names and are appended (column bind) to <code>x</code>, thus returning
-both the original and the recoded variables. The new columns get a suffix,
-based on the calling function: <code>"_r"</code> for recode functions, <code>"_n"</code> for
-<code><a href="data_to_numeric.html">data_to_numeric()</a></code>, <code>"_f"</code> for <code>data_to_factor()</code>, or <code>"_s"</code> for
-<code><a href="data_shift.html">data_shift()</a></code>. If <code>append=FALSE</code>, original variables in <code>x</code> will be
-overwritten by their recoded versions. If a character value, recoded
-variables are appended with new column names (using the defined suffix) to
-the original data frame.</p></dd>
 <dt>select</dt>
 <dd><p>Variables that will be included when performing the required
 tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
@@ -128,6 +118,16 @@ excludes no columns.</p></dd>
 <dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
 a regular expression is used in <code>select</code>, ignores lower/upper case in the
 search pattern when matching against variable names.</p></dd>
+<dt>append</dt>
+<dd><p>Logical or string. If <code>TRUE</code>, recoded or converted variables
+get new column names and are appended (column bind) to <code>x</code>, thus returning
+both the original and the recoded variables. The new columns get a suffix,
+based on the calling function: <code>"_r"</code> for recode functions, <code>"_n"</code> for
+<code><a href="data_to_numeric.html">data_to_numeric()</a></code>, <code>"_f"</code> for <code>data_to_factor()</code>, or <code>"_s"</code> for
+<code><a href="data_shift.html">data_shift()</a></code>. If <code>append=FALSE</code>, original variables in <code>x</code> will be
+overwritten by their recoded versions. If a character value, recoded
+variables are appended with new column names (using the defined suffix) to
+the original data frame.</p></dd>
 <dt>verbose</dt>
 <dd><p>Toggle warnings.</p></dd>
 </dl></div>

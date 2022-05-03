@@ -119,6 +119,8 @@ For model standardization, see <code><a href="standardize.default.html">standard
 <span class="co"># S3 method for data.frame</span>
 <span class="fu">standardize</span><span class="op">(</span>
   <span class="va">x</span>,
+  select <span class="op">=</span> <span class="cn">NULL</span>,
+  exclude <span class="op">=</span> <span class="cn">NULL</span>,
   robust <span class="op">=</span> <span class="cn">FALSE</span>,
   two_sd <span class="op">=</span> <span class="cn">FALSE</span>,
   weights <span class="op">=</span> <span class="cn">NULL</span>,
@@ -128,8 +130,6 @@ For model standardization, see <code><a href="standardize.default.html">standard
   remove_na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"selected"</span>, <span class="st">"all"</span><span class="op">)</span>,
   force <span class="op">=</span> <span class="cn">FALSE</span>,
   append <span class="op">=</span> <span class="cn">FALSE</span>,
-  select <span class="op">=</span> <span class="cn">NULL</span>,
-  exclude <span class="op">=</span> <span class="cn">NULL</span>,
   ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">...</span>
@@ -216,19 +216,6 @@ rest of the arguments are absent.</p></li>
 <dt>force</dt>
 <dd><p>Logical, if <code>TRUE</code>, forces recoding of factors and character
 vecrors as well.</p></dd>
-<dt>remove_na</dt>
-<dd><p>How should missing values (<code>NA</code>) be treated: if <code>"none"</code>
-(default): each column's standardization is done separately, ignoring
-<code>NA</code>s. Else, rows with <code>NA</code> in the columns selected with <code>select</code> /
-<code>exclude</code> (<code>"selected"</code>) or in all columns (<code>"all"</code>) are dropped before
-standardization, and the resulting data frame does not include these cases.</p></dd>
-<dt>append</dt>
-<dd><p>Logical or string. If <code>TRUE</code>, standardized variables get new
-column names (with the suffix <code>"_z"</code>) and are appended (column bind) to <code>x</code>,
-thus returning both the original and the standardized variables. If <code>FALSE</code>,
-original variables in <code>x</code> will be overwritten by their standardized versions.
-If a character value, standardized variables are appended with new column
-names (using the defined suffix) to the original data frame.</p></dd>
 <dt>select</dt>
 <dd><p>Variables that will be included when performing the required
 tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
@@ -259,6 +246,19 @@ return <code>"Species"</code>.</p></dd>
 <dd><p>See <code>select</code>, however, column names matched by the pattern
 from <code>exclude</code> will be excluded instead of selected. If <code>NULL</code> (the default),
 excludes no columns.</p></dd>
+<dt>remove_na</dt>
+<dd><p>How should missing values (<code>NA</code>) be treated: if <code>"none"</code>
+(default): each column's standardization is done separately, ignoring
+<code>NA</code>s. Else, rows with <code>NA</code> in the columns selected with <code>select</code> /
+<code>exclude</code> (<code>"selected"</code>) or in all columns (<code>"all"</code>) are dropped before
+standardization, and the resulting data frame does not include these cases.</p></dd>
+<dt>append</dt>
+<dd><p>Logical or string. If <code>TRUE</code>, standardized variables get new
+column names (with the suffix <code>"_z"</code>) and are appended (column bind) to <code>x</code>,
+thus returning both the original and the standardized variables. If <code>FALSE</code>,
+original variables in <code>x</code> will be overwritten by their standardized versions.
+If a character value, standardized variables are appended with new column
+names (using the defined suffix) to the original data frame.</p></dd>
 <dt>ignore_case</dt>
 <dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
 a regular expression is used in <code>select</code>, ignores lower/upper case in the

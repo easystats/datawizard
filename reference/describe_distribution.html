@@ -90,6 +90,8 @@ centrality, dispersion, range, skewness, kurtosis).</p>
 <span class="co"># S3 method for data.frame</span>
 <span class="fu">describe_distribution</span><span class="op">(</span>
   <span class="va">x</span>,
+  select <span class="op">=</span> <span class="cn">NULL</span>,
+  exclude <span class="op">=</span> <span class="cn">NULL</span>,
   centrality <span class="op">=</span> <span class="st">"mean"</span>,
   dispersion <span class="op">=</span> <span class="cn">TRUE</span>,
   iqr <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -99,8 +101,6 @@ centrality, dispersion, range, skewness, kurtosis).</p>
   ci <span class="op">=</span> <span class="cn">NULL</span>,
   iterations <span class="op">=</span> <span class="fl">100</span>,
   threshold <span class="op">=</span> <span class="fl">0.1</span>,
-  select <span class="op">=</span> <span class="cn">NULL</span>,
-  exclude <span class="op">=</span> <span class="cn">NULL</span>,
   ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">...</span>
@@ -139,10 +139,6 @@ intervals. Only applies when <code>ci</code> is not <code>NULL</code>.</p></dd>
 <dd><p>For <code>centrality = "trimmed"</code> (i.e. trimmed mean), indicates the fraction (0 to 0.5) of observations to be trimmed from each end of the vector before the mean is computed.</p></dd>
 <dt>verbose</dt>
 <dd><p>Toggle warnings and messages.</p></dd>
-<dt>include_factors</dt>
-<dd><p>Logical, if <code>TRUE</code>, factors are included in the
-output, however, only columns for range (first and last factor levels) as
-well as n and missing will contain information.</p></dd>
 <dt>select</dt>
 <dd><p>Variables that will be included when performing the required
 tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
@@ -173,6 +169,10 @@ return <code>"Species"</code>.</p></dd>
 <dd><p>See <code>select</code>, however, column names matched by the pattern
 from <code>exclude</code> will be excluded instead of selected. If <code>NULL</code> (the default),
 excludes no columns.</p></dd>
+<dt>include_factors</dt>
+<dd><p>Logical, if <code>TRUE</code>, factors are included in the
+output, however, only columns for range (first and last factor levels) as
+well as n and missing will contain information.</p></dd>
 <dt>ignore_case</dt>
 <dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
 a regular expression is used in <code>select</code>, ignores lower/upper case in the
