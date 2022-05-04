@@ -595,11 +595,10 @@
 <p>The design of the <a href="https://easystats.github.io/datawizard/" class="external-link">datawizard</a> functions follows a design principle that makes it easy for user to understand and remember how functions work:</p>
 <ol style="list-style-type: decimal">
 <li>the first argument is the data</li>
-<li>the following arguments are main arguments, related to the specific tasks of the functions</li>
-<li>further arguments can be select-helpers, which are offered for convenience reasons (so there is no need for interim calls to <code><a href="reference/find_columns.html">get_columns()</a></code>)</li>
+<li>for methods that work on data frames, two arguments are following to <code>select</code> and <code>exclude</code> variables</li>
+<li>the following arguments are arguments related to the specific tasks of the functions</li>
 </ol>
-<p>E.g., in <code><a href="reference/data_match.html">data_filter()</a></code>, the main arguments after the data-argument are assumed to <em>filter</em> the rows of a data frame. <code><a href="reference/data_cut.html">data_cut()</a></code> recodes data into groups of values and hence the main argument following the data-argument are used to define the breaks for grouping variables. Most functions, however, in particular (but not limited to) functions that start with <code>data_*()</code>, usually <em>select</em> columns from the provided data frame (and thus also support select-helpers).</p>
-<p>Most important, functions that accept data frame usually have this as their first argument, and also return a (modified) data frame again. Thus, <a href="https://easystats.github.io/datawizard/" class="external-link">datawizard</a> integrates smoothly into a “pipe-workflow”.</p>
+<p>Most important, functions that accept data frames usually have this as their first argument, and also return a (modified) data frame again. Thus, <a href="https://easystats.github.io/datawizard/" class="external-link">datawizard</a> integrates smoothly into a “pipe-workflow”.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">iris</span> |&gt; 
   <span class="co"># all rows where Species is "versicolor" or "virginica"</span>
