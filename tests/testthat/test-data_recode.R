@@ -180,6 +180,11 @@ test_that("recode numeric", {
   expect_equal(out, c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2), ignore_attr = TRUE)
 })
 
+test_that("recode, recode-arg is named list", {
+  expect_warning(expect_equal(data_recode(x, recode = c(`0` = 1, `1` = 2:3, `2` = 4)), x))
+})
+
+
 set.seed(123)
 x <- as.factor(sample(c("a", "b", "c"), 15, TRUE))
 
@@ -198,6 +203,10 @@ test_that("recode factor", {
                 2L, 2L), .Label = c("x", "y"), class = "factor"),
     ignore_attr = TRUE
   )
+})
+
+test_that("recode, recode-arg is named list", {
+  expect_warning(expect_equal(data_recode(x, recode = c(x = "a", y = "b, c")), x))
 })
 
 

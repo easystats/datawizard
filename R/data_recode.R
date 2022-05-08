@@ -201,15 +201,9 @@ data_recode.numeric <- function(x,
   # save
   original_x <- x
 
-  # no missings
-  valid <- stats::na.omit(x)
-
-  # stop if all NA
-  if (!length(valid)) {
-    if (isTRUE(verbose)) {
-      warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
-    }
-    return(original_x)
+  # check arguments
+  if (!.recode_args_ok(x, recode, verbose)) {
+    return(x)
   }
 
   # recode-pattern option
@@ -289,15 +283,9 @@ data_recode.factor <- function(x,
   # save
   original_x <- x
 
-  # no missings
-  valid <- stats::na.omit(x)
-
-  # stop if all NA
-  if (!length(valid)) {
-    if (isTRUE(verbose)) {
-      warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
-    }
-    return(original_x)
+  # check arguments
+  if (!.recode_args_ok(x, recode, verbose)) {
+    return(x)
   }
 
   # recode-pattern option
@@ -385,15 +373,9 @@ data_recode.character <- function(x,
   # save
   original_x <- x
 
-  # no missings
-  valid <- stats::na.omit(x)
-
-  # stop if all NA
-  if (!length(valid)) {
-    if (isTRUE(verbose)) {
-      warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
-    }
-    return(original_x)
+  # check arguments
+  if (!.recode_args_ok(x, recode, verbose)) {
+    return(x)
   }
 
   # recode-pattern option
@@ -497,4 +479,33 @@ data_recode.data.frame <- function(x,
   )
 
   x
+}
+
+
+
+
+# utils --------------------------
+
+.recode_args_ok <- function(x, recode, verbose) {
+  ok <- TRUE
+  # no missings
+  valid <- stats::na.omit(x)
+
+  # skip if all NA
+  if (!length(valid)) {
+    if (isTRUE(verbose)) {
+      warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
+    }
+    ok <- FALSE
+  }
+
+  # warn if not a list
+  if (!is.list(recode) || is.null(names(recode))) {
+    if (isTRUE(verbose)) {
+      warning(insight::format_message("'recode' needs to be a (named) list. No recoding carried out."), call. = FALSE)
+    }
+    ok <- FALSE
+  }
+
+  ok
 }
