@@ -12,12 +12,12 @@ convert_data_to_numeric(x, ...)
 
 \method{data_to_numeric}{data.frame}(
   x,
+  select = NULL,
+  exclude = NULL,
   dummy_factors = TRUE,
   preserve_levels = FALSE,
   lowest = NULL,
   append = FALSE,
-  select = NULL,
-  exclude = NULL,
   ignore_case = FALSE,
   verbose = TRUE,
   ...
@@ -27,27 +27,6 @@ convert_data_to_numeric(x, ...)
 \item{x}{A data frame, factor or vector.}
 
 \item{...}{Arguments passed to or from other methods.}
-
-\item{dummy_factors}{Transform factors to dummy factors (all factor levels as
-different columns filled with a binary 0-1 value).}
-
-\item{preserve_levels}{Logical, only applies if \code{x} is a factor. If \code{TRUE},
-and \code{x} has numeric factor levels, these will be converted into the related
-numeric values. If this is not possible, the converted numeric values will
-start from 1 to number of levels.}
-
-\item{lowest}{Numeric, indicating the lowest (minimum) value when converting
-factors or character vectors to numeric values.}
-
-\item{append}{Logical or string. If \code{TRUE}, recoded or converted variables
-get new column names and are appended (column bind) to \code{x}, thus returning
-both the original and the recoded variables. The new columns get a suffix,
-based on the calling function: \code{"_r"} for recode functions, \code{"_n"} for
-\code{data_to_numeric()}, \code{"_f"} for \code{data_to_factor()}, or \code{"_s"} for
-\code{data_shift()}. If \code{append=FALSE}, original variables in \code{x} will be
-overwritten by their recoded versions. If a character value, recoded
-variables are appended with new column names (using the defined suffix) to
-the original data frame.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -82,6 +61,27 @@ return \code{"Species"}.}
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
 excludes no columns.}
+
+\item{dummy_factors}{Transform factors to dummy factors (all factor levels as
+different columns filled with a binary 0-1 value).}
+
+\item{preserve_levels}{Logical, only applies if \code{x} is a factor. If \code{TRUE},
+and \code{x} has numeric factor levels, these will be converted into the related
+numeric values. If this is not possible, the converted numeric values will
+start from 1 to number of levels.}
+
+\item{lowest}{Numeric, indicating the lowest (minimum) value when converting
+factors or character vectors to numeric values.}
+
+\item{append}{Logical or string. If \code{TRUE}, recoded or converted variables
+get new column names and are appended (column bind) to \code{x}, thus returning
+both the original and the recoded variables. The new columns get a suffix,
+based on the calling function: \code{"_r"} for recode functions, \code{"_n"} for
+\code{data_to_numeric()}, \code{"_f"} for \code{data_to_factor()}, or \code{"_s"} for
+\code{data_shift()}. If \code{append=FALSE}, original variables in \code{x} will be
+overwritten by their recoded versions. If a character value, recoded
+variables are appended with new column names (using the defined suffix) to
+the original data frame.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the

@@ -117,7 +117,7 @@ d <- data.frame(
 test_that("recode data.frame", {
   out <- data_recode(
     d,
-    list(`1` = 0, `2:3` = 1, `4` = 2, a = "x", `b, c` = "y"),
+    recode = list(`1` = 0, `2:3` = 1, `4` = 2, a = "x", `b, c` = "y"),
   )
   expect_equal(
     out,
@@ -132,7 +132,7 @@ test_that("recode data.frame", {
 
   out <- data_recode(
     d,
-    list(`1` = 0, `2:3` = 1, `4` = 2, a = "x", `b, c` = "y"),
+    recode = list(`1` = 0, `2:3` = 1, `4` = 2, a = "x", `b, c` = "y"),
   )
   expect_equal(
     out,
@@ -147,7 +147,7 @@ test_that("recode data.frame", {
 
   out <- data_recode(
     d,
-    list(`1` = 0, `2:3` = 1, `4` = 2, a = "x", `b, c` = "y"),
+    recode = list(`1` = 0, `2:3` = 1, `4` = 2, a = "x", `b, c` = "y"),
     select = is.numeric()
   )
   expect_equal(
@@ -180,6 +180,11 @@ test_that("recode numeric", {
   expect_equal(out, c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2), ignore_attr = TRUE)
 })
 
+test_that("recode, recode-arg is named list", {
+  expect_warning(expect_equal(data_recode(x, recode = c(`0` = 1, `1` = 2:3, `2` = 4)), x))
+})
+
+
 set.seed(123)
 x <- as.factor(sample(c("a", "b", "c"), 15, TRUE))
 
@@ -200,6 +205,10 @@ test_that("recode factor", {
   )
 })
 
+test_that("recode, recode-arg is named list", {
+  expect_warning(expect_equal(data_recode(x, recode = c(x = "a", y = "b, c")), x))
+})
+
 
 set.seed(123)
 d <- data.frame(
@@ -211,7 +220,7 @@ d <- data.frame(
 test_that("recode data.frame", {
   out <- data_recode(
     d,
-    list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = "b, c"),
+    recode = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = "b, c"),
   )
   expect_equal(
     out,
@@ -226,7 +235,7 @@ test_that("recode data.frame", {
 
   out <- data_recode(
     d,
-    list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
+    recode = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
   )
   expect_equal(
     out,
@@ -241,7 +250,7 @@ test_that("recode data.frame", {
 
   out <- data_recode(
     d,
-    list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
+    recode = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
     select = is.numeric()
   )
   expect_equal(

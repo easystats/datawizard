@@ -59,12 +59,12 @@ data_to_numeric.default <- function(x, verbose = TRUE, ...) {
 #' @rdname data_to_numeric
 #' @export
 data_to_numeric.data.frame <- function(x,
+                                       select = NULL,
+                                       exclude = NULL,
                                        dummy_factors = TRUE,
                                        preserve_levels = FALSE,
                                        lowest = NULL,
                                        append = FALSE,
-                                       select = NULL,
-                                       exclude = NULL,
                                        ignore_case = FALSE,
                                        verbose = TRUE,
                                        ...) {

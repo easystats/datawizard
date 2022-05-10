@@ -15,10 +15,10 @@ convert_to_na(x, ...)
 
 \method{convert_to_na}{data.frame}(
   x,
-  na = NULL,
-  drop_levels = FALSE,
   select = NULL,
   exclude = NULL,
+  na = NULL,
+  drop_levels = FALSE,
   ignore_case = FALSE,
   verbose = TRUE,
   ...

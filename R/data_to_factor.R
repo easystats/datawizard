@@ -76,10 +76,10 @@ data_to_factor.Date <- data_to_factor.numeric
 #' @rdname data_to_factor
 #' @export
 data_to_factor.data.frame <- function(x,
-                                      append = FALSE,
                                       select = NULL,
                                       exclude = NULL,
                                       ignore_case = FALSE,
+                                      append = FALSE,
                                       verbose = TRUE,
                                       ...) {
   # sanity check, return as is for complete numeric
@@ -104,6 +104,7 @@ data_to_factor.data.frame <- function(x,
     append,
     append_suffix = "_f",
     force = FALSE,
+    preserve_value_labels = TRUE,
     keep_character = TRUE
   )
 

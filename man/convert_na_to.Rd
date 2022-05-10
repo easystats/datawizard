@@ -15,11 +15,11 @@ convert_na_to(x, ...)
 
 \method{convert_na_to}{data.frame}(
   x,
+  select = NULL,
+  exclude = NULL,
   replace_num = NULL,
   replace_char = NULL,
   replace_fac = NULL,
-  select = NULL,
-  exclude = NULL,
   ignore_case = FALSE,
   verbose = TRUE,
   ...
@@ -34,12 +34,6 @@ convert_na_to(x, ...)
 replace \code{NA}.}
 
 \item{verbose}{Toggle warnings.}
-
-\item{replace_num}{Value to replace \code{NA} when variable is of type numeric.}
-
-\item{replace_char}{Value to replace \code{NA} when variable is of type character.}
-
-\item{replace_fac}{Value to replace \code{NA} when variable is of type factor.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -74,6 +68,12 @@ return \code{"Species"}.}
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
 excludes no columns.}
+
+\item{replace_num}{Value to replace \code{NA} when variable is of type numeric.}
+
+\item{replace_char}{Value to replace \code{NA} when variable is of type character.}
+
+\item{replace_fac}{Value to replace \code{NA} when variable is of type factor.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
