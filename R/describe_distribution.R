@@ -479,8 +479,6 @@ print.parameters_distribution <- function(x, digits = 2, ...) {
 }
 
 
-
-
 # bootstrapping CIs ----------------------------------
 
 .boot_distribution <- function(data, indices, centrality) {
@@ -494,4 +492,28 @@ print.parameters_distribution <- function(x, digits = 2, ...) {
     ci = NULL
   )
   out[[1]]
+}
+
+# distribution_mode ----------------------------------
+
+#' Compute mode for a statistical distribution
+#'
+#' @param x An atomic vector, a list, or a data frame.
+#'
+#' @return
+#'
+#' The value that appears most frequently in the provided data.
+#' The returned data structure will be the same as the entered one.
+#'
+#' @examples
+#'
+#' distribution_mode(c(1, 2, 3, 3, 4, 5))
+#' distribution_mode(c(1.5, 2.3, 3.7, 3.7, 4.0, 5))
+#'
+#' @export
+distribution_mode <- function(x) {
+  uniqv <- unique(x)
+  tab <- tabulate(match(x, uniqv))
+  idx <- which.max(tab)
+  uniqv[idx]
 }
