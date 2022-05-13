@@ -285,15 +285,15 @@ The design of the `{datawizard}` functions follows a design principle that makes
 Most important, functions that accept data frames usually have this as their first argument, and also return a (modified) data frame again. Thus, `{datawizard}` integrates smoothly into a "pipe-workflow".
 
 ```{r}
-iris |> 
+iris |>
   # all rows where Species is "versicolor" or "virginica"
-  data_filter(Species %in% c("versicolor", "virginica")) |> 
+  data_filter(Species %in% c("versicolor", "virginica")) |>
   # select only columns with "." in names (i.e. drop Species)
-  get_columns(contains(".")) |> 
+  get_columns(contains(".")) |>
   # move columns that ends with "Length" to start of data frame
-  data_relocate(ends_with("Length")) |> 
+  data_relocate(ends_with("Length")) |>
   # remove fourth column
-  data_remove(4) |> 
+  data_remove(4) |>
   head()
 ```
   

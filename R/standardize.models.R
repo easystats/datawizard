@@ -49,7 +49,7 @@
 #' When the model's formula contains transformations (e.g. `y ~ exp(X)`) the
 #' transformation effectively takes place after standardization (e.g.,
 #' `exp(scale(X))`). Since some transformations are undefined for none positive
-#' values, such as `log()` and `sqrt()`, the releven variables are shifted (post
+#' values, such as `log()` and `sqrt()`, the relevel variables are shifted (post
 #' standardization) by `Z - min(Z) + 1` or `Z - min(Z)` (respectively).
 #'
 #'

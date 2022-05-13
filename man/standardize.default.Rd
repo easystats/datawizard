@@ -84,7 +84,7 @@ model.
 When the model's formula contains transformations (e.g. \code{y ~ exp(X)}) the
 transformation effectively takes place after standardization (e.g.,
 \code{exp(scale(X))}). Since some transformations are undefined for none positive
-values, such as \code{log()} and \code{sqrt()}, the releven variables are shifted (post
+values, such as \code{log()} and \code{sqrt()}, the relevel variables are shifted (post
 standardization) by \code{Z - min(Z) + 1} or \code{Z - min(Z)} (respectively).
 }
 
