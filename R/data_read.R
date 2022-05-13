@@ -60,8 +60,7 @@ data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE
   }
 
   # read data
-  switch(
-    .file_ext(path),
+  switch(.file_ext(path),
     "txt" = ,
     "csv" = .read_text(path, encoding, verbose, ...),
     "xls" = ,

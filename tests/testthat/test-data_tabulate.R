@@ -22,20 +22,28 @@ test_that("data_tabulate data.frame", {
   expect_equal(length(x), 2)
   expect_equal(
     attributes(x[[1]]),
-    list(names = c("Variable", "Value", "N", "Raw %", "Valid %",
-                   "Cumulative %"), class = c("dw_data_tabulate", "data.frame"),
-         row.names = 1:3,  type = "numeric", varname = "e16sex",
-         label = "elder's gender", object = "e16sex",
-         duplicate_varnames = c(FALSE, TRUE, TRUE), total_n = 100L, valid_n = 100L)
+    list(
+      names = c(
+        "Variable", "Value", "N", "Raw %", "Valid %",
+        "Cumulative %"
+      ), class = c("dw_data_tabulate", "data.frame"),
+      row.names = 1:3, type = "numeric", varname = "e16sex",
+      label = "elder's gender", object = "e16sex",
+      duplicate_varnames = c(FALSE, TRUE, TRUE), total_n = 100L, valid_n = 100L
+    )
   )
   expect_equal(
     attributes(x[[2]]),
-    list(names = c("Variable", "Value", "N", "Raw %", "Valid %",
-                   "Cumulative %"), class = c("dw_data_tabulate", "data.frame"),
-         row.names = 1:4, type = "numeric", varname = "c172code",
-         label = "carer's level of education",  object = "c172code",
-         duplicate_varnames = c(FALSE, TRUE, TRUE, TRUE),
-         total_n = 100L, valid_n = 90L)
+    list(
+      names = c(
+        "Variable", "Value", "N", "Raw %", "Valid %",
+        "Cumulative %"
+      ), class = c("dw_data_tabulate", "data.frame"),
+      row.names = 1:4, type = "numeric", varname = "c172code",
+      label = "carer's level of education", object = "c172code",
+      duplicate_varnames = c(FALSE, TRUE, TRUE, TRUE),
+      total_n = 100L, valid_n = 90L
+    )
   )
   table1 <- x[[1]]
   expect_equal(as.vector(table1$Value), as.character(c(sort(unique(efc$e16sex)), NA)))
@@ -50,11 +58,13 @@ test_that("data_tabulate print", {
   out <- data_tabulate(x, name = "Large Number")
   expect_equal(
     attributes(out),
-    list(names = c("Variable", "Value", "N", "Raw %", "Valid %", "Cumulative %"),
-         class = c("dw_data_tabulate", "data.frame"),
-         row.names = 1:4, type = "integer", varname = "Large Number",
-         object = "x", duplicate_varnames = c(FALSE, TRUE, TRUE, TRUE),
-         total_n = 1000000L, valid_n = 1000000L)
+    list(
+      names = c("Variable", "Value", "N", "Raw %", "Valid %", "Cumulative %"),
+      class = c("dw_data_tabulate", "data.frame"),
+      row.names = 1:4, type = "integer", varname = "Large Number",
+      object = "x", duplicate_varnames = c(FALSE, TRUE, TRUE, TRUE),
+      total_n = 1000000L, valid_n = 1000000L
+    )
   )
 })
 
@@ -64,7 +74,8 @@ test_that("data_tabulate print", {
   out <- capture.output(print(x))
   expect_equal(
     out,
-    c("elder's dependency (efc$e42dep) <categorical>",
+    c(
+      "elder's dependency (efc$e42dep) <categorical>",
       "# total N=100 valid N=97",
       "",
       "Value |  N | Raw % | Valid % | Cumulative %",
@@ -73,7 +84,8 @@ test_that("data_tabulate print", {
       "2     |  4 |  4.00 |    4.12 |         6.19",
       "3     | 28 | 28.00 |   28.87 |        35.05",
       "4     | 63 | 63.00 |   64.95 |       100.00",
-      "<NA>  |  3 |  3.00 |    <NA> |         <NA>")
+      "<NA>  |  3 |  3.00 |    <NA> |         <NA>"
+    )
   )
 })
 
@@ -83,7 +95,8 @@ test_that("data_tabulate print multiple", {
   out <- capture.output(print(x))
   expect_equal(
     out,
-    c("carer's level of education (c172code) <numeric>",
+    c(
+      "carer's level of education (c172code) <numeric>",
       "# total N=100 valid N=90",
       "",
       "Value |  N | Raw % | Valid % | Cumulative %",
@@ -100,7 +113,8 @@ test_that("data_tabulate print multiple", {
       "------+----+-------+---------+-------------",
       "1     | 46 | 46.00 |   46.00 |        46.00",
       "2     | 54 | 54.00 |   54.00 |       100.00",
-      "<NA>  |  0 |  0.00 |    <NA> |         <NA>")
+      "<NA>  |  0 |  0.00 |    <NA> |         <NA>"
+    )
   )
 })
 
@@ -111,7 +125,8 @@ test_that("data_tabulate big numbers", {
   out <- capture.output(print(data_tabulate(x)))
   expect_equal(
     out,
-    c("x <integer>",
+    c(
+      "x <integer>",
       "# total N=10000000 valid N=10000000",
       "",
       "Value |         N | Raw % | Valid % | Cumulative %",
@@ -127,7 +142,8 @@ test_that("data_tabulate big numbers", {
   out <- capture.output(print(data_tabulate(x), big_mark = ""))
   expect_equal(
     out,
-    c("x <integer>",
+    c(
+      "x <integer>",
       "# total N=10000000 valid N=10000000",
       "",
       "Value |       N | Raw % | Valid % | Cumulative %",
@@ -143,7 +159,8 @@ test_that("data_tabulate big numbers", {
   out <- capture.output(print(data_tabulate(x), big_mark = "-"))
   expect_equal(
     out,
-    c("x <integer>",
+    c(
+      "x <integer>",
       "# total N=10000000 valid N=10000000",
       "",
       "Value |         N | Raw % | Valid % | Cumulative %",
@@ -153,7 +170,8 @@ test_that("data_tabulate big numbers", {
       "3     | 2-001-814 | 20.02 |   20.02 |        59.98",
       "4     | 1-999-423 | 19.99 |   19.99 |        79.98",
       "5     | 2-002-107 | 20.02 |   20.02 |       100.00",
-      "<NA>  |         0 |  0.00 |    <NA> |         <NA>")
+      "<NA>  |         0 |  0.00 |    <NA> |         <NA>"
+    )
   )
 })
 
@@ -164,7 +182,8 @@ if (packageVersion("insight") > "0.17.0") {
     out <- capture.output(print(x))
     expect_equal(
       out,
-      c("# Frequency Table",
+      c(
+        "# Frequency Table",
         "",
         "Variable | Value |  N | Raw % | Valid % | Cumulative %",
         "---------+-------+----+-------+---------+-------------",
@@ -192,12 +211,16 @@ if (requireNamespace("poorman", quietly = TRUE)) {
     expect_equal(length(x), 2)
     expect_equal(
       attributes(x[[1]]),
-      list(names = c("Variable", "Group", "Value", "N", "Raw %", "Valid %",
-                     "Cumulative %"), class = c("dw_data_tabulate", "data.frame"),
-           row.names = 1:4, type = "numeric", varname = "c172code",
-           label = "carer's level of education", object = "c172code",
-           group_variable = structure(list(e16sex = 1), .drop = TRUE, row.names = 1L, class = "data.frame"),
-           duplicate_varnames = c(FALSE, TRUE, TRUE, TRUE), total_n = 46L, valid_n = 41L)
+      list(
+        names = c(
+          "Variable", "Group", "Value", "N", "Raw %", "Valid %",
+          "Cumulative %"
+        ), class = c("dw_data_tabulate", "data.frame"),
+        row.names = 1:4, type = "numeric", varname = "c172code",
+        label = "carer's level of education", object = "c172code",
+        group_variable = structure(list(e16sex = 1), .drop = TRUE, row.names = 1L, class = "data.frame"),
+        duplicate_varnames = c(FALSE, TRUE, TRUE, TRUE), total_n = 46L, valid_n = 41L
+      )
     )
     table1 <- x[[1]]
     expect_equal(as.vector(table1$Value), as.character(c(sort(unique(efc$c172code)), NA)))
@@ -211,7 +234,8 @@ if (requireNamespace("poorman", quietly = TRUE)) {
     out <- capture.output(print(x))
     expect_equal(
       out,
-      c("carer's level of education (c172code) <numeric>",
+      c(
+        "carer's level of education (c172code) <numeric>",
         "Grouped by e16sex (1)",
         "# total N=46 valid N=41",
         "",
@@ -241,7 +265,8 @@ if (requireNamespace("poorman", quietly = TRUE)) {
       out <- capture.output(print(x))
       expect_equal(
         out,
-        c("# Frequency Table",
+        c(
+          "# Frequency Table",
           "",
           "Variable |      Group | Value |  N | Raw % | Valid % | Cumulative %",
           "---------+------------+-------+----+-------+---------+-------------",
@@ -264,7 +289,8 @@ if (requireNamespace("poorman", quietly = TRUE)) {
       out <- capture.output(print(x))
       expect_equal(
         out,
-        c("# Frequency Table",
+        c(
+          "# Frequency Table",
           "",
           "Variable |      Group | Value |  N | Raw % | Valid % | Cumulative %",
           "---------+------------+-------+----+-------+---------+-------------",

@@ -25,7 +25,7 @@ BugReports: https://github.com/easystats/datawizard/issues
 Depends:
     R (>= 3.4)
 Imports:
-    insight (>= 0.17.0),
+    insight (>= 0.17.1),
     stats,
     utils
 Suggests: 
@@ -61,5 +61,4 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
-remotes: easystats/bayestestR, easystats/insight
+RoxygenNote: 7.2.0

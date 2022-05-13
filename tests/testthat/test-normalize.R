@@ -63,4 +63,3 @@ test_that("normalize: matrix", {
     tolerance = 1e-3
   )
 })
-

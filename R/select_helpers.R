@@ -120,12 +120,10 @@
     # default -----
     pattern <- colnames(data)
     fixed <- TRUE
-
   } else if (!is.null(data) && !is.null(x) && all(x == "all")) {
     # select all columns -----
     pattern <- colnames(data)
     fixed <- TRUE
-
   } else if (grepl("^starts_with\\(\"(.*)\"\\)", x)) {
     # select-helper starts_with -----
     if (negate) {
@@ -133,7 +131,6 @@
     } else {
       pattern <- paste0("^", gsub("starts_with\\(\"(.*)\"\\)", "\\1", x))
     }
-
   } else if (grepl("^ends_with\\(\"(.*)\"\\)", x)) {
     # select-helper end_with -----
     if (negate) {
@@ -141,7 +138,6 @@
     } else {
       pattern <- paste0(gsub("ends_with\\(\"(.*)\"\\)", "\\1", x), "$")
     }
-
   } else if (grepl("^contains\\(\"(.*)\"\\)", x)) {
     # select-helper contains -----
     if (negate) {
@@ -149,15 +145,12 @@
     } else {
       pattern <- paste0("\\Q", gsub("contains\\(\"(.*)\"\\)", "\\1", x), "\\E")
     }
-
   } else if (grepl("^matches\\(\"(.*)\"\\)", x)) {
     # matches is an alias for regex -----
     pattern <- gsub("matches\\(\"(.*)\"\\)", "\\1", x)
-
   } else if (grepl("^regex\\(\"(.*)\"\\)", x)) {
     # regular expression -----
     pattern <- gsub("regex\\(\"(.*)\"\\)", "\\1", x)
-
   } else if (!is.null(data) && !is.null(user_function)) {
     # function -----
     if (negate) {
@@ -166,7 +159,6 @@
       pattern <- colnames(data)[sapply(data, user_function)]
     }
     fixed <- TRUE
-
   } else if (!is.null(data) && grepl("^c\\((.*)\\)$", x)) {
     # here we most likely have a character vector with minus (negate) -----
     cols <- try(eval(parse(text = x)), silent = TRUE)
@@ -180,7 +172,6 @@
     } else {
       pattern <- x
     }
-
   } else if (!is.null(data) && grepl(":", x, fixed = TRUE)) {
     # range -----
     from_to <- unlist(strsplit(x, ":", fixed = TRUE))
@@ -203,7 +194,6 @@
       pattern <- colnames(data)[from:to]
     }
     fixed <- TRUE
-
   } else {
     # everything else
     pattern <- x

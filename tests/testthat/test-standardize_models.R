@@ -18,7 +18,7 @@ test_that("standardize, mlm", {
 })
 
 test_that("standardize | errors", {
-  my_lm_external_formula <- function(.dat, predicted, predictor){
+  my_lm_external_formula <- function(.dat, predicted, predictor) {
     my_formula <- as.formula(paste0(predicted, "~", predictor))
     lm(formula = my_formula, data = .dat)
   }
@@ -26,7 +26,8 @@ test_that("standardize | errors", {
   m <- my_lm_external_formula(mtcars, "mpg", "am")
   ers <- capture_error(standardize(m))
   expect_match(as.character(ers), "Try instead to standardize the data",
-               fixed = TRUE)
+    fixed = TRUE
+  )
 
   skip_if_not_installed("biglm")
   mod <- biglm::biglm(mpg ~ hp, mtcars)
@@ -165,7 +166,7 @@ test_that("weights + NA + na.exclude", {
 
   expect_equal(coef(standardize(m2)), coef(standardize(m1)), tolerance = 1e-3)
   expect_equal(effectsize::standardize_parameters(m1, method = "basic")[[2]],
-               effectsize::standardize_parameters(m2, method = "basic")[[2]],
+    effectsize::standardize_parameters(m2, method = "basic")[[2]],
     tolerance = 1e-3
   )
 })
@@ -174,8 +175,10 @@ test_that("weights + NA + na.exclude", {
 test_that("fail with subset", {
   data("mtcars")
 
-  mod1 <- lm(mpg ~ hp, data = mtcars,
-             subset = cyl > 4)
+  mod1 <- lm(mpg ~ hp,
+    data = mtcars,
+    subset = cyl > 4
+  )
 
   expect_error(standardise(mod1), regexp = "subset")
 })
@@ -266,7 +269,7 @@ test_that("offsets", {
 
   par1 <- parameters::model_parameters(mz)
   par2 <- effectsize::standardize_parameters(m, method = "basic")
-  expect_equal(par2[2,2], par1[2,2], tolerance = 0.05)
+  expect_equal(par2[2, 2], par1[2, 2], tolerance = 0.05)
 })
 
 

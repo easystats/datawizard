@@ -151,8 +151,10 @@ data_to_numeric.logical <- data_to_numeric.numeric
 #' @export
 data_to_numeric.Date <- function(x, verbose = TRUE, ...) {
   if (verbose) {
-    warning(insight::format_message("Converting a date-time variable into numeric.",
-                                    "Please note that this conversion probably not returns meaningful results."), call. = FALSE)
+    warning(insight::format_message(
+      "Converting a date-time variable into numeric.",
+      "Please note that this conversion probably not returns meaningful results."
+    ), call. = FALSE)
   }
   as.numeric(x)
 }

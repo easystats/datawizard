@@ -325,7 +325,6 @@ data_recode.factor <- function(x,
 
       # recode
       x[which(original_x %in% old_values)] <- recode[[i]]
-
     } else {
       # pattern: new = old
       # name of list element is new value
