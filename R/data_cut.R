@@ -312,20 +312,20 @@ data_cut.grouped_df <- function(x,
     x[rows, ] <- data_cut(
       x[rows, , drop = FALSE],
       split = split,
-      n_groups = split,
+      n_groups = n_groups,
       range = range,
       lowest = lowest,
       labels = labels,
       select = select,
       exclude = exclude,
-      append = append,
+      append = FALSE, # need to set to FALSE here, else variable will be doubled
       ignore_case = ignore_case,
       verbose = verbose,
       ...
     )
   }
   # set back class, so data frame still works with dplyr
-  attributes(x) <- info
+  attributes(x) <- utils::modifyList(info, attributes(x))
   x
 }
 
