@@ -16,7 +16,7 @@ for find_columns()."><meta property="og:image" content="/logo.png"><meta name="t
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -195,27 +195,16 @@ columns.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Note that there are some limitations when calling this from inside
 other functions. The following will work as expected, returning all columns
-that start with <code>"Sep"</code>:</p><div class="sourceCode"><pre><code><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sep"</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span>
-<span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></code></pre></div>
-
-<p>However, this example won't work as expected!</p><div class="sourceCode"><pre><code><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">i</span> <span class="op">&lt;-</span> <span class="st">"Sep"</span>
-  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span>
-<span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></code></pre></div>
-
+that start with <code>"Sep"</code>:</p>
+<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
+<p>However, this example won't work as expected!</p>
+<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
 <p>One workaround is to use the <code>regex</code> argument, which provides at
 least a bit more flexibility than exact matching. <code>regex</code> in its basic
 usage (as seen below) means that <code>select</code> behaves like the <code>contains("")</code>
 select-helper, but can also make the function more flexible by allowing to
-define complex regular expression pattern in <code>select</code>.</p><div class="sourceCode"><pre><code><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">i</span> <span class="op">&lt;-</span> <span class="st">"Sep"</span>
-  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="va">i</span>, regex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="op">}</span>
-<span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></code></pre></div>
-
+define complex regular expression pattern in <code>select</code>.</p>
+<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>

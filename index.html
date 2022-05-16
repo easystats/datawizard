@@ -40,7 +40,7 @@
     
     <a class="navbar-brand me-2" href="index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -600,15 +600,15 @@
 </ol>
 <p>Most important, functions that accept data frames usually have this as their first argument, and also return a (modified) data frame again. Thus, <a href="https://easystats.github.io/datawizard/" class="external-link">datawizard</a> integrates smoothly into a “pipe-workflow”.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">iris</span> |&gt; 
+<code class="sourceCode R"><span class="va">iris</span> |&gt;
   <span class="co"># all rows where Species is "versicolor" or "virginica"</span>
-  <span class="fu"><a href="reference/data_match.html">data_filter</a></span><span class="op">(</span><span class="va">Species</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"versicolor"</span>, <span class="st">"virginica"</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="reference/data_match.html">data_filter</a></span><span class="op">(</span><span class="va">Species</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"versicolor"</span>, <span class="st">"virginica"</span><span class="op">)</span><span class="op">)</span> |&gt;
   <span class="co"># select only columns with "." in names (i.e. drop Species)</span>
-  <span class="fu"><a href="reference/find_columns.html">get_columns</a></span><span class="op">(</span><span class="fu">contains</span><span class="op">(</span><span class="st">"."</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="reference/find_columns.html">get_columns</a></span><span class="op">(</span><span class="fu">contains</span><span class="op">(</span><span class="st">"."</span><span class="op">)</span><span class="op">)</span> |&gt;
   <span class="co"># move columns that ends with "Length" to start of data frame</span>
-  <span class="fu"><a href="reference/data_relocate.html">data_relocate</a></span><span class="op">(</span><span class="fu">ends_with</span><span class="op">(</span><span class="st">"Length"</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="reference/data_relocate.html">data_relocate</a></span><span class="op">(</span><span class="fu">ends_with</span><span class="op">(</span><span class="st">"Length"</span><span class="op">)</span><span class="op">)</span> |&gt;
   <span class="co"># remove fourth column</span>
-  <span class="fu"><a href="reference/data_relocate.html">data_remove</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="reference/data_relocate.html">data_remove</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span> |&gt;
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt;    Sepal.Length Petal.Length Sepal.Width</span>
 <span class="co">#&gt; 51          7.0          4.7         3.2</span>

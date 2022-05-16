@@ -16,7 +16,7 @@ modified (see example)."><meta property="og:image" content="/logo.png"><meta nam
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -149,8 +149,8 @@ names.</p></dd>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># warn that data types are changed</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">data_rotate</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Your data frame contains mixed types of data. After transposition, all variables</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   will be transformed into characters.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Your data frame contains mixed types of data. After transposition, all</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   variables will be transformed into characters.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 'data.frame':	5 obs. of  4 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ 1: chr  "5.1" "3.5" "1.4" "0.2" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ 2: chr  "4.9" "3.0" "1.4" "0.2" ...</span>
@@ -160,15 +160,15 @@ names.</p></dd>
 <span class="r-in"><span class="co"># use either first column or specific column for column names</span></span>
 <span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, b <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">15</span>, c <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>, d <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">data_rotate</span><span class="op">(</span><span class="va">x</span>, colnames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Your data frame contains mixed types of data. After transposition, all variables</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   will be transformed into characters.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Your data frame contains mixed types of data. After transposition, all</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   variables will be transformed into characters.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            1          2          3          4          5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> b         11         12         13         14         15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> c          a          b          c          d          e</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> d -0.6868529 -0.4456620  1.2240818  0.3598138  0.4007715</span>
 <span class="r-in"><span class="fu">data_rotate</span><span class="op">(</span><span class="va">x</span>, colnames <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Your data frame contains mixed types of data. After transposition, all variables</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   will be transformed into characters.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Your data frame contains mixed types of data. After transposition, all</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   variables will be transformed into characters.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            a         b         c          d          e</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a  1.0000000  2.000000  3.000000  4.0000000  5.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> b 11.0000000 12.000000 13.000000 14.0000000 15.0000000</span>

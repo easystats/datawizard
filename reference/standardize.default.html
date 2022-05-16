@@ -28,7 +28,7 @@ median and the MAD instead of the mean and the SD."><meta property="og:image" co
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -162,7 +162,7 @@ model.</p>
     <p>When the model's formula contains transformations (e.g. <code>y ~ exp(X)</code>) the
 transformation effectively takes place after standardization (e.g.,
 <code>exp(scale(X))</code>). Since some transformations are undefined for none positive
-values, such as <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log()</a></code> and <code><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt()</a></code>, the releven variables are shifted (post
+values, such as <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log()</a></code> and <code><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt()</a></code>, the relevel variables are shifted (post
 standardization) by <code>Z - min(Z) + 1</code> or <code>Z - min(Z)</code> (respectively).</p>
     </div>
     <div class="section level2">
