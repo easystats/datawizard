@@ -44,15 +44,19 @@ test_that("recode factor", {
   out <- data_recode(x, list(a = "x", `b, c` = "y"))
   expect_equal(
     out,
-    structure(c(2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 1L,
-                2L, 2L), .Label = c("x", "y"), class = "factor"),
+    structure(c(
+      2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 1L,
+      2L, 2L
+    ), .Label = c("x", "y"), class = "factor"),
     ignore_attr = TRUE
   )
   out <- data_recode(x, list(a = "x", `b, c` = "y"))
   expect_equal(
     out,
-    structure(c(2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 1L,
-                2L, 2L), .Label = c("x", "y"), class = "factor"),
+    structure(c(
+      2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 1L,
+      2L, 2L
+    ), .Label = c("x", "y"), class = "factor"),
     ignore_attr = TRUE
   )
 })
@@ -124,9 +128,12 @@ test_that("recode data.frame", {
     structure(list(
       x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
       y = structure(c(1L, 1L, 1L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L),
-                    .Label = c("x", "y"),
-                    class = "factor")),
-      row.names = c(NA, 15L), class = "data.frame"),
+        .Label = c("x", "y"),
+        class = "factor"
+      )
+    ),
+    row.names = c(NA, 15L), class = "data.frame"
+    ),
     ignore_attr = TRUE
   )
 
@@ -139,9 +146,12 @@ test_that("recode data.frame", {
     structure(list(
       x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
       y = structure(c(1L, 1L, 1L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L),
-                    .Label = c("x", "y"),
-                    class = "factor")),
-      row.names = c(NA, 15L), class = "data.frame"),
+        .Label = c("x", "y"),
+        class = "factor"
+      )
+    ),
+    row.names = c(NA, 15L), class = "data.frame"
+    ),
     ignore_attr = TRUE
   )
 
@@ -155,9 +165,12 @@ test_that("recode data.frame", {
     structure(list(
       x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
       y = structure(c(1L, 1L, 1L, 3L, 2L, 3L, 2L, 1L, 2L, 3L, 2L, 1L, 3L, 3L, 1L),
-                    .Label = c("a", "b", "c"),
-                    class = "factor")),
-      row.names = c(NA, 15L), class = "data.frame"),
+        .Label = c("a", "b", "c"),
+        class = "factor"
+      )
+    ),
+    row.names = c(NA, 15L), class = "data.frame"
+    ),
     ignore_attr = TRUE
   )
 })
@@ -192,15 +205,19 @@ test_that("recode factor", {
   out <- data_recode(x, list(x = "a", y = "b, c"))
   expect_equal(
     out,
-    structure(c(2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 1L,
-                2L, 2L), .Label = c("x", "y"), class = "factor"),
+    structure(c(
+      2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 1L,
+      2L, 2L
+    ), .Label = c("x", "y"), class = "factor"),
     ignore_attr = TRUE
   )
   out <- data_recode(x, list(x = "a", y = c("b", "c")))
   expect_equal(
     out,
-    structure(c(2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 1L,
-                2L, 2L), .Label = c("x", "y"), class = "factor"),
+    structure(c(
+      2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 1L,
+      2L, 2L
+    ), .Label = c("x", "y"), class = "factor"),
     ignore_attr = TRUE
   )
 })
@@ -227,9 +244,12 @@ test_that("recode data.frame", {
     structure(list(
       x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
       y = structure(c(1L, 1L, 1L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L),
-                    .Label = c("x", "y"),
-                    class = "factor")),
-      row.names = c(NA, 15L), class = "data.frame"),
+        .Label = c("x", "y"),
+        class = "factor"
+      )
+    ),
+    row.names = c(NA, 15L), class = "data.frame"
+    ),
     ignore_attr = TRUE
   )
 
@@ -242,9 +262,12 @@ test_that("recode data.frame", {
     structure(list(
       x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
       y = structure(c(1L, 1L, 1L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L),
-                    .Label = c("x", "y"),
-                    class = "factor")),
-      row.names = c(NA, 15L), class = "data.frame"),
+        .Label = c("x", "y"),
+        class = "factor"
+      )
+    ),
+    row.names = c(NA, 15L), class = "data.frame"
+    ),
     ignore_attr = TRUE
   )
 
@@ -258,9 +281,12 @@ test_that("recode data.frame", {
     structure(list(
       x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
       y = structure(c(1L, 1L, 1L, 3L, 2L, 3L, 2L, 1L, 2L, 3L, 2L, 1L, 3L, 3L, 1L),
-                    .Label = c("a", "b", "c"),
-                    class = "factor")),
-      row.names = c(NA, 15L), class = "data.frame"),
+        .Label = c("a", "b", "c"),
+        class = "factor"
+      )
+    ),
+    row.names = c(NA, 15L), class = "data.frame"
+    ),
     ignore_attr = TRUE
   )
 })

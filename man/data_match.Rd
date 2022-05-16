@@ -47,7 +47,9 @@ conditions.
 \details{
 For \code{data_match()}, if \code{match} is either \code{"or"} or \code{"not"}, the
 original row order from \code{x} might be changed. If preserving row order is
-required, use \code{data_filter()} instead.\preformatted{# mimics subset() behaviour, preserving original row order
+required, use \code{data_filter()} instead.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{# mimics subset() behaviour, preserving original row order
 head(data_filter(mtcars[c("mpg", "vs", "am")], vs == 0 | am == 1))
 #>                    mpg vs am
 #> Mazda RX4         21.0  0  1
@@ -68,7 +70,7 @@ head(data_match(mtcars[c("mpg", "vs", "am")],
 #> Duster 360        14.3  0  0
 #> Merc 450SE        16.4  0  0
 #> Merc 450SL        17.3  0  0
-}
+}\if{html}{\out{</div>}}
 
 While \code{data_match()} works with data frames to match conditions against,
 \code{data_filter()} is basically a wrapper around \verb{subset(subset = <filter>)}.

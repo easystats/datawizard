@@ -65,12 +65,14 @@ test_that("convert_to_na other classes", {
   expect_equal(x, 1:5, tolerance = 1e-3, ignore_attr = TRUE)
   x <- convert_to_na(d$b, na = "c")
   expect_equal(x, structure(c(1L, 2L, NA, 4L, 5L),
-                            .Label = c("a", "b", "c", "d", "e"),
-                            class = "factor"), tolerance = 1e-3, ignore_attr = TRUE)
+    .Label = c("a", "b", "c", "d", "e"),
+    class = "factor"
+  ), tolerance = 1e-3, ignore_attr = TRUE)
   x <- convert_to_na(d$b, na = "c", drop_levels = TRUE)
   expect_equal(x, structure(c(1L, 2L, NA, 3L, 4L),
-                            .Label = c("a", "b", "d", "e"),
-                            class = "factor"), tolerance = 1e-3, ignore_attr = TRUE)
+    .Label = c("a", "b", "d", "e"),
+    class = "factor"
+  ), tolerance = 1e-3, ignore_attr = TRUE)
   x <- convert_to_na(d$c, na = "2022-03-22")
   expect_equal(x, structure(c(NA, 18994, 19025, 18719, 18280), class = "Date"), tolerance = 1e-3, ignore_attr = TRUE)
   x <- convert_to_na(d$d, na = TRUE)

@@ -66,7 +66,7 @@
 #'   (as does the output of `standardize()`), it will take it from there if the
 #'   rest of the arguments are absent.
 #' @param force Logical, if `TRUE`, forces recoding of factors and character
-#'   vecrors as well.
+#'   vectors as well.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams find_columns
 #'

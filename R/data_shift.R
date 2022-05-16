@@ -34,8 +34,10 @@ data_shift <- function(x, ...) {
 #' @export
 data_shift.default <- function(x, lowest = 0, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message("Shifting non-numeric variables is not possible.",
-                                    "Try using 'data_to_numeric()' and specify the 'lowest' argument."))
+    message(insight::format_message(
+      "Shifting non-numeric variables is not possible.",
+      "Try using 'data_to_numeric()' and specify the 'lowest' argument."
+    ))
   }
   x
 }

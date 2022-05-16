@@ -135,29 +135,35 @@ for \code{find_columns()}.
 \details{
 Note that there are some limitations when calling this from inside
 other functions. The following will work as expected, returning all columns
-that start with \code{"Sep"}:\preformatted{foo <- function(data) \{
+that start with \code{"Sep"}:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{foo <- function(data) \{
   find_columns(data, select = starts_with("Sep"))
 \}
 foo(iris)
-}
+}\if{html}{\out{</div>}}
 
-However, this example won't work as expected!\preformatted{foo <- function(data) \{
+However, this example won't work as expected!
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{foo <- function(data) \{
   i <- "Sep"
   find_columns(data, select = starts_with(i))
 \}
 foo(iris)
-}
+}\if{html}{\out{</div>}}
 
 One workaround is to use the \code{regex} argument, which provides at
 least a bit more flexibility than exact matching. \code{regex} in its basic
 usage (as seen below) means that \code{select} behaves like the \code{contains("")}
 select-helper, but can also make the function more flexible by allowing to
-define complex regular expression pattern in \code{select}.\preformatted{foo <- function(data) \{
+define complex regular expression pattern in \code{select}.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{foo <- function(data) \{
   i <- "Sep"
   find_columns(data, select = i, regex = TRUE)
 \}
 foo(iris)
-}
+}\if{html}{\out{</div>}}
 }
 \note{
 \code{data_findcols()} is deprecated and will be fully replaced by

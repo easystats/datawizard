@@ -84,7 +84,8 @@ data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose =
 
   # create data frame with freq table and cumulative percentages etc.
   out <- data_rename(data.frame(freq_table, stringsAsFactors = FALSE),
-                     replacement = c("Value", "N"))
+    replacement = c("Value", "N")
+  )
 
   out$`Raw %` <- 100 * out$N / sum(out$N)
   out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
@@ -95,11 +96,13 @@ data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose =
     if (is.null(group_variable)) {
       var_info <- data.frame(Variable = obj_name, stringsAsFactors = FALSE)
     } else {
-      var_info <- data.frame(Variable = obj_name,
-                             Group = paste0(lapply(colnames(group_variable), function(i) {
-                               sprintf("%s (%s)", i, group_variable[[i]])
-                             }), collapse = ", "),
-                             stringsAsFactors = FALSE)
+      var_info <- data.frame(
+        Variable = obj_name,
+        Group = paste0(lapply(colnames(group_variable), function(i) {
+          sprintf("%s (%s)", i, group_variable[[i]])
+        }), collapse = ", "),
+        stringsAsFactors = FALSE
+      )
     }
     out <- cbind(var_info, out)
   }
@@ -124,13 +127,13 @@ data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose =
 #' @rdname data_tabulate
 #' @export
 data_tabulate.data.frame <- function(x,
-                                  select = NULL,
-                                  exclude = NULL,
-                                  ignore_case = FALSE,
-                                  collapse = FALSE,
-                                  drop_levels = FALSE,
-                                  verbose = TRUE,
-                                  ...) {
+                                     select = NULL,
+                                     exclude = NULL,
+                                     ignore_case = FALSE,
+                                     collapse = FALSE,
+                                     drop_levels = FALSE,
+                                     verbose = TRUE,
+                                     ...) {
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case)
   out <- lapply(select, function(i) {
@@ -146,13 +149,13 @@ data_tabulate.data.frame <- function(x,
 
 #' @export
 data_tabulate.grouped_df <- function(x,
-                                  select = NULL,
-                                  exclude = NULL,
-                                  ignore_case = FALSE,
-                                  verbose = TRUE,
-                                  collapse = FALSE,
-                                  drop_levels = FALSE,
-                                  ...) {
+                                     select = NULL,
+                                     exclude = NULL,
+                                     ignore_case = FALSE,
+                                     verbose = TRUE,
+                                     collapse = FALSE,
+                                     drop_levels = FALSE,
+                                     ...) {
   # dplyr < 0.8.0 returns attribute "indices"
   grps <- attr(x, "groups", exact = TRUE)
   group_variables <- NULL
@@ -441,8 +444,10 @@ print_md.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
 
   # "table" header with variable label/name, and type
   if (identical(format, "text")) {
-    out <- paste(insight::color_text(name, "red"),
-                 insight::color_text(sprintf("<%s>\n", a$type), "blue"))
+    out <- paste(
+      insight::color_text(name, "red"),
+      insight::color_text(sprintf("<%s>\n", a$type), "blue")
+    )
   } else {
     out <- paste0(name, " (", a$type, ")")
   }
@@ -452,19 +457,33 @@ print_md.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
 
 
 .variable_type <- function(x) {
-  if (is.ordered(x))
+  if (is.ordered(x)) {
     vt <- "ord"
-  else if (is.factor(x))
+  } else if (is.factor(x)) {
     vt <- "fct"
-  else if (class(x)[1] == "Date")
+  } else if (class(x)[1] == "Date") {
     vt <- "date"
-  else {
-    vt <- switch(typeof(x), logical = "lgl", integer = "int",
-                 double = "dbl", character = "chr", complex = "cpl",
-                 closure = "fn", environment = "env", typeof(x))
+  } else {
+    vt <- switch(typeof(x),
+      logical = "lgl",
+      integer = "int",
+      double = "dbl",
+      character = "chr",
+      complex = "cpl",
+      closure = "fn",
+      environment = "env",
+      typeof(x)
+    )
   }
 
-  switch(vt, "ord" = "ordinal", "fct" = "categorical", "dbl" = "numeric",
-         "int" = "integer", "chr" = "character", "lbl" = "labelled",
-         "cpl" = "complex", vt)
+  switch(vt,
+    "ord" = "ordinal",
+    "fct" = "categorical",
+    "dbl" = "numeric",
+    "int" = "integer",
+    "chr" = "character",
+    "lbl" = "labelled",
+    "cpl" = "complex",
+    vt
+  )
 }

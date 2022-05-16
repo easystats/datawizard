@@ -49,7 +49,7 @@
 #' When the model's formula contains transformations (e.g. `y ~ exp(X)`) the
 #' transformation effectively takes place after standardization (e.g.,
 #' `exp(scale(X))`). Since some transformations are undefined for none positive
-#' values, such as `log()` and `sqrt()`, the releven variables are shifted (post
+#' values, such as `log()` and `sqrt()`, the relevel variables are shifted (post
 #' standardization) by `Z - min(Z) + 1` or `Z - min(Z)` (respectively).
 #'
 #'
@@ -67,7 +67,6 @@ standardize.default <- function(x,
                                 verbose = TRUE,
                                 include_response = TRUE,
                                 ...) {
-
   if (!insight::is_model(x)) {
     warning(insight::format_message(paste0("Objects or variables of class '", class(x)[1], "' cannot be standardized.")), call. = FALSE)
     return(x)
@@ -75,12 +74,13 @@ standardize.default <- function(x,
 
   data_std <- NULL # needed to avoid note
   .standardize_models(x,
-                     robust = robust, two_sd = two_sd,
-                     weights = weights,
-                     verbose = verbose,
-                     include_response = include_response,
-                     update_expr = stats::update(x, data = data_std),
-                     ...)
+    robust = robust, two_sd = two_sd,
+    weights = weights,
+    verbose = verbose,
+    include_response = include_response,
+    update_expr = stats::update(x, data = data_std),
+    ...
+  )
 }
 
 
@@ -101,7 +101,7 @@ standardize.default <- function(x,
 
   if (m_info$is_bayesian) {
     warning(insight::format_message("Standardizing variables without adjusting priors may lead to bogus results unless priors are auto-scaled."),
-            call. = FALSE, immediate. = TRUE
+      call. = FALSE, immediate. = TRUE
     )
   }
 
@@ -171,8 +171,9 @@ standardize.default <- function(x,
     warning(insight::format_message(
       "Unable to standardize variables evaluated in the environment (i.e., not in `data`).",
       "The following variables will not be standardizd:",
-      paste0(doller_vars, collapse = ", ")),
-      call. = FALSE
+      paste0(doller_vars, collapse = ", ")
+    ),
+    call. = FALSE
     )
     do_standardize <- setdiff(do_standardize, doller_vars)
     dont_standardize <- c(dont_standardize, doller_vars)
@@ -191,18 +192,20 @@ standardize.default <- function(x,
   w <- insight::get_weights(x, na_rm = TRUE)
 
   data_std <- standardize(data[do_standardize],
-                          robust = robust,
-                          two_sd = two_sd,
-                          weights = if (weights) w,
-                          verbose = verbose)
+    robust = robust,
+    two_sd = two_sd,
+    weights = if (weights) w,
+    verbose = verbose
+  )
 
   # if two_sd, it must not affect the response!
   if (include_response && two_sd) {
     data_std[resp] <- standardize(data[resp],
-                                  robust = robust,
-                                  two_sd = FALSE,
-                                  weights = if (weights) w,
-                                  verbose = verbose)
+      robust = robust,
+      two_sd = FALSE,
+      weights = if (weights) w,
+      verbose = verbose
+    )
 
     dont_standardize <- setdiff(dont_standardize, resp)
   }
@@ -213,15 +216,19 @@ standardize.default <- function(x,
 
   log_terms <- .log_terms(x, data_std)
   if (length(log_terms) > 0) {
-    data_std[log_terms] <- lapply(data_std[log_terms],
-                                  function(i) i - min(i, na.rm = TRUE) + 1)
+    data_std[log_terms] <- lapply(
+      data_std[log_terms],
+      function(i) i - min(i, na.rm = TRUE) + 1
+    )
   }
 
   # same for sqrt
   sqrt_terms <- .sqrt_terms(x, data_std)
   if (length(sqrt_terms) > 0) {
-    data_std[sqrt_terms] <- lapply(data_std[sqrt_terms],
-                                   function(i) i - min(i, na.rm = TRUE))
+    data_std[sqrt_terms] <- lapply(
+      data_std[sqrt_terms],
+      function(i) i - min(i, na.rm = TRUE)
+    )
   }
 
   if (verbose && length(c(log_terms, sqrt_terms))) {
@@ -246,7 +253,7 @@ standardize.default <- function(x,
   on.exit(.update_failed())
 
   if (isTRUE(verbose)) {
-     model_std <- eval(substitute(update_expr))
+    model_std <- eval(substitute(update_expr))
   } else {
     utils::capture.output(model_std <- eval(substitute(update_expr)))
   }
@@ -272,18 +279,20 @@ standardize.brmsfit <- function(x,
   if (insight::is_multivariate(x)) {
     stop(insight::format_message(
       "multivariate brmsfit models not supported.",
-      "As an alternative: you may standardize your data (and adjust your priors), and re-fit the model."),
-      call. = FALSE
+      "As an alternative: you may standardize your data (and adjust your priors), and re-fit the model."
+    ),
+    call. = FALSE
     )
   }
 
   .standardize_models(x,
-                      robust = robust, two_sd = two_sd,
-                      weights = weights,
-                      verbose = verbose,
-                      include_response = include_response,
-                      update_expr = stats::update(x, newdata = data_std),
-                      ...)
+    robust = robust, two_sd = two_sd,
+    weights = weights,
+    verbose = verbose,
+    include_response = include_response,
+    update_expr = stats::update(x, newdata = data_std),
+    ...
+  )
 }
 
 
@@ -297,15 +306,16 @@ standardize.mixor <- function(x,
                               ...) {
   data_std <- random_group_factor <- NULL # needed to avoid note
   .standardize_models(x,
-                      robust = robust, two_sd = two_sd,
-                      weights = weights,
-                      verbose = verbose,
-                      include_response = include_response,
-                      update_expr = {
-                        data_std <- data_std[order(data_std[, random_group_factor, drop = FALSE]), ]
-                        stats::update(x, data = data_std)
-                      },
-                      ...)
+    robust = robust, two_sd = two_sd,
+    weights = weights,
+    verbose = verbose,
+    include_response = include_response,
+    update_expr = {
+      data_std <- data_std[order(data_std[, random_group_factor, drop = FALSE]), ]
+      stats::update(x, data = data_std)
+    },
+    ...
+  )
 }
 
 
@@ -374,8 +384,9 @@ standardize.mediate <- function(x,
   if (verbose && !all(c(control.value, treat.value) %in% c(0, 1))) {
     warning(insight::format_message(
       "Control and treat values are not 0 and 1, and have not been re-scaled.",
-      "Interpret results with caution."),
-      call. = FALSE
+      "Interpret results with caution."
+    ),
+    call. = FALSE
     )
   }
 
@@ -446,8 +457,10 @@ standardize.biglm <- standardize.wbm
     if (verbose) {
       warning(insight::format_message(
         "Unable to verify if response should not be standardized.",
-        "Response will be standardized."),
-        immediate. = TRUE, call. = FALSE)
+        "Response will be standardized."
+      ),
+      immediate. = TRUE, call. = FALSE
+      )
     }
     return(TRUE)
   }
@@ -482,8 +495,8 @@ standardize.biglm <- standardize.wbm
   }
 
   data_rescale(val,
-               to = range(temp_data_std[[cov_nm]]),
-               range = range(temp_data[[cov_nm]])
+    to = range(temp_data_std[[cov_nm]]),
+    range = range(temp_data[[cov_nm]])
   )
 }
 
@@ -498,6 +511,8 @@ standardize.biglm <- standardize.wbm
 
   stop(insight::format_message(
     msg1,
-    "Try instead to standardize the data (standardize(data)) and refit the model manually."),
-    call. = FALSE)
+    "Try instead to standardize the data (standardize(data)) and refit the model manually."
+  ),
+  call. = FALSE
+  )
 }

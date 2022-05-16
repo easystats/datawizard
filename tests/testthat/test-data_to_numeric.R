@@ -73,8 +73,10 @@ test_that("convert factor to numeric, append", {
   )
   expect_equal(
     colnames(data_to_numeric(efc, append = TRUE)),
-    c("c12hour", "e16sex", "e42dep", "c172code", "neg_c_7", "e42dep_n",
-      "e42dep_n.1", "e42dep_n.2", "e42dep_n.3", "e42dep_n.4"),
+    c(
+      "c12hour", "e16sex", "e42dep", "c172code", "neg_c_7", "e42dep_n",
+      "e42dep_n.1", "e42dep_n.2", "e42dep_n.3", "e42dep_n.4"
+    ),
     ignore_attr = TRUE
   )
   expect_equal(

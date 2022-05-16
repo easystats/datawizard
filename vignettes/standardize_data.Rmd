@@ -445,6 +445,6 @@ importance of open data, open analysis/scripts, and preregistration.
 
 - `datawizard::demean()`: <https://easystats.github.io/datawizard/reference/demean.html>
 - `standardize_parameters(method = "pseudo")` for mixed-effects models
-<https://easystats.github.io/effectsize/reference/standardize_parameters.html>
+<https://easystats.github.io/parameters/articles/model_parameters_standardized.html>
 
 # References

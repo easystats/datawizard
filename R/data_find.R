@@ -159,9 +159,10 @@ data_findcols <- function(data,
                           ends_with = NULL,
                           ignore_case = FALSE,
                           ...) {
-
-  warning(insight::format_message("'data_findcols()' is deprecated and will be removed in a future update.",
-                                  "Its usage is discouraged. Please use 'data_find()' instead."), call. = FALSE)
+  warning(insight::format_message(
+    "'data_findcols()' is deprecated and will be removed in a future update.",
+    "Its usage is discouraged. Please use 'data_find()' instead."
+  ), call. = FALSE)
 
   # init
   n <- names(data)

@@ -135,7 +135,7 @@ rest of the arguments are absent.
 \item{verbose}{Toggle warnings and messages on or off.}
 
 \item{force}{Logical, if \code{TRUE}, forces recoding of factors and character
-vecrors as well.}
+vectors as well.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
