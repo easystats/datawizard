@@ -3,7 +3,6 @@
 \name{find_columns}
 \alias{find_columns}
 \alias{data_find}
-\alias{data_findcols}
 \alias{get_columns}
 \alias{data_select}
 \title{Find or get columns in a data frame based on search patterns}
@@ -25,15 +24,6 @@ data_find(
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
-  ...
-)
-
-data_findcols(
-  data,
-  pattern = NULL,
-  starts_with = NULL,
-  ends_with = NULL,
-  ignore_case = FALSE,
   ...
 )
 
@@ -110,15 +100,6 @@ functions (see 'Details'), this argument may be used as workaround.}
 \item{verbose}{Toggle warnings.}
 
 \item{...}{Arguments passed down to other functions. Mostly not used yet.}
-
-\item{pattern}{A regular expression (as character string), representing the
-pattern to be matched in the in column names. Can also be one of the
-following select-helpers: \code{starts_with("")}, \code{end_with("")}, \code{regex("")},
-\code{contains("")}, or a range using \code{:}.}
-
-\item{starts_with, ends_with}{Character string, containing the string to be
-matched in the column names. \code{starts_with} finds matches at the beginning
-of column names, \code{ends_with} finds matches at the end of column names.}
 }
 \value{
 \code{find_columns()} returns a character vector with column names that
@@ -164,10 +145,6 @@ define complex regular expression pattern in \code{select}.
 \}
 foo(iris)
 }\if{html}{\out{</div>}}
-}
-\note{
-\code{data_findcols()} is deprecated and will be fully replaced by
-\code{find_columns()} in a future update.
 }
 \examples{
 # Find columns names by pattern

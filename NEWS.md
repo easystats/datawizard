@@ -1,3 +1,10 @@
+# datawizard 0.4.x
+
+BREAKING
+
+* Removed deprecated function `data_findcols()`. Please use its replacement,
+  `data_find()`.
+
 # datawizard 0.4.1
 
 BREAKING
