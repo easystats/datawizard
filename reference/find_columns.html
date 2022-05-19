@@ -16,7 +16,7 @@ for find_columns()."><meta property="og:image" content="/logo.png"><meta name="t
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,15 +93,6 @@ for <code>find_columns()</code>.</p>
   <span class="va">...</span>
 <span class="op">)</span>
 
-<span class="fu">data_findcols</span><span class="op">(</span>
-  <span class="va">data</span>,
-  pattern <span class="op">=</span> <span class="cn">NULL</span>,
-  starts_with <span class="op">=</span> <span class="cn">NULL</span>,
-  ends_with <span class="op">=</span> <span class="cn">NULL</span>,
-  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
 <span class="fu">get_columns</span><span class="op">(</span>
   <span class="va">data</span>,
   select <span class="op">=</span> <span class="cn">NULL</span>,
@@ -174,15 +165,6 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
 <dd><p>Toggle warnings.</p></dd>
 <dt>...</dt>
 <dd><p>Arguments passed down to other functions. Mostly not used yet.</p></dd>
-<dt>pattern</dt>
-<dd><p>A regular expression (as character string), representing the
-pattern to be matched in the in column names. Can also be one of the
-following select-helpers: <code>starts_with("")</code>, <code>end_with("")</code>, <code>regex("")</code>,
-<code>contains("")</code>, or a range using <code>:</code>.</p></dd>
-<dt>starts_with, ends_with</dt>
-<dd><p>Character string, containing the string to be
-matched in the column names. <code>starts_with</code> finds matches at the beginning
-of column names, <code>ends_with</code> finds matches at the end of column names.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -205,11 +187,6 @@ usage (as seen below) means that <code>select</code> behaves like the <code>cont
 select-helper, but can also make the function more flexible by allowing to
 define complex regular expression pattern in <code>select</code>.</p>
 <p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
-    </div>
-    <div class="section level2">
-    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p><code>data_findcols()</code> is deprecated and will be fully replaced by
-<code>find_columns()</code> in a future update.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

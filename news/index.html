@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,11 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.4.1" id="datawizard-041">datawizard 0.4.1<a class="anchor" aria-label="anchor" href="#datawizard-041"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.4" id="datawizard-04x">datawizard 0.4.x<a class="anchor" aria-label="anchor" href="#datawizard-04x"></a></h2>
+<p>BREAKING</p>
+<ul><li>Removed deprecated function <code>data_findcols()</code>. Please use its replacement, <code><a href="../reference/find_columns.html">data_find()</a></code>.</li></ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.1" id="datawizard-041">datawizard 0.4.1<a class="anchor" aria-label="anchor" href="#datawizard-041"></a></h2><p class="text-muted">CRAN release: 2022-05-16</p>
 <p>BREAKING</p>
 <ul><li>Added the <code><a href="../reference/standardize.default.html">standardize.default()</a></code> method (moved from package <strong>effectsize</strong>), to be consistent in that the default-method now is in the same package as the generic. <code><a href="../reference/standardize.default.html">standardize.default()</a></code> behaves exactly like in <strong>effectsize</strong> and particularly works for regression model objects. <strong>effectsize</strong> now re-exports <code><a href="../reference/standardize.html">standardize()</a></code> from <strong>datawizard</strong>.</li></ul><p>NEW FUNCTIONS</p>
 <ul><li><p><code><a href="../reference/data_shift.html">data_shift()</a></code> to shift the value range of numeric variables.</p></li>
@@ -69,7 +73,7 @@
 <li><p><code><a href="../reference/normalize.html">unnormalize()</a></code> as counterpart to <code><a href="../reference/normalize.html">normalize()</a></code>. This function only works for variables that have been normalized with <code><a href="../reference/normalize.html">normalize()</a></code>.</p></li>
 <li><p><code><a href="../reference/data_group.html">data_group()</a></code> and <code><a href="../reference/data_group.html">data_ungroup()</a></code> to create grouped data frames, or to remove the grouping information from grouped data frames.</p></li>
 </ul><p>CHANGES</p>
-<ul><li><p><code><a href="../reference/find_columns.html">data_find()</a></code> was added as alias to <code>find_colums()</code>, to have consistent name patterns for the <strong>datawizard</strong> functions. <code><a href="../reference/find_columns.html">data_findcols()</a></code> will be removed in a future update and usage is discouraged.</p></li>
+<ul><li><p><code><a href="../reference/find_columns.html">data_find()</a></code> was added as alias to <code>find_colums()</code>, to have consistent name patterns for the <strong>datawizard</strong> functions. <code>data_findcols()</code> will be removed in a future update and usage is discouraged.</p></li>
 <li><p>The <code>select</code> argument (and thus, also the <code>exclude</code> argument) now also accepts functions testing for logical conditions, e.g. <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric()</a></code> (or <code>is.numeric</code>), or any user-defined function that selects the variables for which the function returns <code>TRUE</code> (like: <code>foo &lt;- function(x) mean(x) &gt; 3</code>).</p></li>
 <li><p>Arguments <code>select</code> and <code>exclude</code> now allow the negation of select-helpers, like <code>-ends_with("")</code>, <code>-is.numeric</code> or <code>-Sepal.Width:Petal.Length</code>.</p></li>
 <li><p>Many functions now get a <code>.default</code> method, to capture unsupported classes. This now yields a message and returns the original input, and hence, the <code>.data.frame</code> methods won’t stop due to an error.</p></li>
@@ -84,11 +88,11 @@
 <p>MAJOR CHANGES</p>
 <ul><li><p><code><a href="../reference/data_match.html">data_match()</a></code> now returns filtered data by default. Old behavior (returning rows indices) can be set by setting <code>return_indices = TRUE</code>.</p></li>
 <li><p>The following functions are now re-exported from <a href="https://easystats.github.io/insight/" class="external-link">insight</a> package: <code><a href="https://easystats.github.io/insight/reference/object_has_names.html" class="external-link">object_has_names()</a></code>, <code><a href="https://easystats.github.io/insight/reference/object_has_names.html" class="external-link">object_has_rownames()</a></code>, <code><a href="https://easystats.github.io/insight/reference/is_empty_object.html" class="external-link">is_empty_object()</a></code>, <code><a href="https://easystats.github.io/insight/reference/compact_list.html" class="external-link">compact_list()</a></code>, <code><a href="https://easystats.github.io/insight/reference/compact_character.html" class="external-link">compact_character()</a></code></p></li>
-<li><p><code><a href="../reference/find_columns.html">data_findcols()</a></code> will become deprecated in future updates. Please use the new replacements <code><a href="../reference/find_columns.html">find_columns()</a></code> and <code><a href="../reference/find_columns.html">get_columns()</a></code>.</p></li>
+<li><p><code>data_findcols()</code> will become deprecated in future updates. Please use the new replacements <code><a href="../reference/find_columns.html">find_columns()</a></code> and <code><a href="../reference/find_columns.html">get_columns()</a></code>.</p></li>
 <li><p>The vignette <em>Analysing Longitudinal or Panel Data</em> has now moved to <a href="https://easystats.github.io/parameters/articles/demean.html" class="external-link">parameters package</a>.</p></li>
 </ul><p>NEW FUNCTIONS</p>
 <ul><li><p>To convert rownames to a column, and <em>vice versa</em>: <code><a href="../reference/rownames.html">rownames_as_column()</a></code> and <code><a href="../reference/rownames.html">column_as_rownames()</a></code> (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/80" class="external-link">#80</a>).</p></li>
-<li><p><code><a href="../reference/find_columns.html">find_columns()</a></code> and <code><a href="../reference/find_columns.html">get_columns()</a></code> to find column names or retrieve subsets of data frames, based on various select-methods (including select-helpers). These function will supersede <code><a href="../reference/find_columns.html">data_findcols()</a></code> in the future.</p></li>
+<li><p><code><a href="../reference/find_columns.html">find_columns()</a></code> and <code><a href="../reference/find_columns.html">get_columns()</a></code> to find column names or retrieve subsets of data frames, based on various select-methods (including select-helpers). These function will supersede <code>data_findcols()</code> in the future.</p></li>
 <li><p><code><a href="../reference/data_match.html">data_filter()</a></code> as complement for <code><a href="../reference/data_match.html">data_match()</a></code>, which works with logical expressions for filtering rows of data frames.</p></li>
 <li><p>For computing weighted centrality measures and dispersion: <code><a href="../reference/weighted_mean.html">weighted_mean()</a></code>, <code><a href="../reference/weighted_mean.html">weighted_median()</a></code>, <code><a href="../reference/weighted_mean.html">weighted_sd()</a></code> and <code><a href="../reference/weighted_mean.html">weighted_mad()</a></code>.</p></li>
 <li><p>To replace <code>NA</code> in vectors and dataframes: <code><a href="../reference/convert_na_to.html">convert_na_to()</a></code> (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/111" class="external-link">#111</a>).</p></li>
@@ -133,7 +137,7 @@
 <li><p><code><a href="../reference/center.html">center()</a></code> gains the arguments <code>force</code> and <code>reference</code>, similar to <code><a href="../reference/standardize.html">standardize()</a></code>.</p></li>
 <li><p>The functionality of the <code>append</code> argument in <code><a href="../reference/center.html">center()</a></code> and <code><a href="../reference/standardize.html">standardize()</a></code> was revised. This made the <code>suffix</code> argument redundant, and thus it was removed.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/standardize.html">standardize()</a></code>.</p></li>
-<li><p>Fixed issue in <code><a href="../reference/find_columns.html">data_findcols()</a></code>.</p></li>
+<li><p>Fixed issue in <code>data_findcols()</code>.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="datawizard-021">datawizard 0.2.1<a class="anchor" aria-label="anchor" href="#datawizard-021"></a></h2><p class="text-muted">CRAN release: 2021-10-04</p>
