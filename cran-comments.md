@@ -11,6 +11,3 @@
 
 ## revdepcheck results
 
-There are expected to be test failures for some of the reverse dependencies (e.g. *statsExpressions*), especially due to the *insight* package update.
-
-The respective maintainers have been informed and will be submitting revised versions of their packages to CRAN soon.

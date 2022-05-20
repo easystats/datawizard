@@ -54,16 +54,19 @@
 #'
 #' @inherit data_rename seealso
 #'
-#' @return `find_columns()` returns a character vector with column names that
-#'   matched the pattern in `select` and `exclude`, or `NULL` if no matching
-#'   column name was found. `get_columns()` returns a data frame with matching
-#'   columns.
+#' @return
 #'
-#' @details Note that there are some limitations when calling this from inside
-#' other functions. The following will work as expected, returning all columns
-#' that start with `"Sep"`:
+#' `find_columns()` returns a character vector with column names that matched
+#' the pattern in `select` and `exclude`, or `NULL` if no matching column name
+#' was found. `get_columns()` returns a data frame with matching columns.
 #'
-#' ```
+#' @details
+#'
+#' Note that there are some limitations when calling this from inside other
+#' functions. The following will work as expected, returning all columns that
+#' start with `"Sep"`:
+#'
+#' ```r
 #' foo <- function(data) {
 #'   find_columns(data, select = starts_with("Sep"))
 #' }
@@ -72,7 +75,7 @@
 #'
 #' However, this example won't work as expected!
 #'
-#' ```
+#' ```r
 #' foo <- function(data) {
 #'   i <- "Sep"
 #'   find_columns(data, select = starts_with(i))
@@ -80,13 +83,13 @@
 #' foo(iris)
 #' ```
 #'
-#' One workaround is to use the `regex` argument, which provides at
-#' least a bit more flexibility than exact matching. `regex` in its basic
-#' usage (as seen below) means that `select` behaves like the `contains("")`
-#' select-helper, but can also make the function more flexible by allowing to
-#' define complex regular expression pattern in `select`.
+#' One workaround is to use the `regex` argument, which provides at least a bit
+#' more flexibility than exact matching. `regex` in its basic usage (as seen
+#' below) means that `select` behaves like the `contains("")` select-helper, but
+#' can also make the function more flexible by allowing to define complex
+#' regular expression pattern in `select`.
 #'
-#' ```
+#' ```r
 #' foo <- function(data) {
 #'   i <- "Sep"
 #'   find_columns(data, select = i, regex = TRUE)
