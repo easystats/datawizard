@@ -3,7 +3,8 @@
 #'
 #' @description `find_columns()` returns column names from a data set that
 #' match a certain search pattern, while `get_columns()` returns the found data.
-#' `data_select()` is an alias for `get_columns()`.
+#' `data_select()` is an alias for `get_columns()`, and `data_find()` is an alias
+#' for `find_columns()`.
 #'
 #' @param data A data frame.
 #' @param select Variables that will be included when performing the required
@@ -17,10 +18,23 @@
 #'     (e.g. `1` or `c(1, 3, 5)`),
 #'   - a vector of negative integers, giving the positions counting from the
 #'     right (e.g., `-1` or `-1:-3`),
-#'   - or one of the following select-helpers: `starts_with("")`, `ends_with("")`,
-#'   `contains("")`, a range using `:` or `regex("")`.
+#'   - one of the following select-helpers: `starts_with("")`, `ends_with("")`,
+#'     `contains("")`, a range using `:` or `regex("")`,
+#'   - or a function testing for logical conditions, e.g. `is.numeric()` (or
+#'     `is.numeric`), or any user-defined function that selects the variables
+#'     for which the function returns `TRUE` (like: `foo <- function(x) mean(x) > 3`),
+#'   - ranges specified via literal variable names, select-helpers (except
+#'     `regex()`) and (user-defined) functions can be negated, i.e. return
+#'     non-matching elements, when prefixed with a `-`, e.g. `-ends_with("")`,
+#'     `-is.numeric` or `-Sepal.Width:Petal.Length`. **Note:** Negation means
+#'     that matches are _excluded_, and thus, the `exclude` argument can be
+#'     used alternatively. For instance, `select=-ends_with("Length")` (with
+#'     `-`) is equivalent to `exclude=ends_with("Length")` (no `-`). In case
+#'     negation should not work as expected, use the `exclude` argument instead.
 #'
-#'   If `NULL`, selects all columns.
+#'   If `NULL`, selects all columns. Patterns that found no matches are silently
+#'   ignored, e.g. `find_columns(iris, select = c("Species", "Test"))` will just
+#'   return `"Species"`.
 #' @param exclude See `select`, however, column names matched by the pattern
 #'   from `exclude` will be excluded instead of selected. If `NULL` (the default),
 #'   excludes no columns.
@@ -40,16 +54,19 @@
 #'
 #' @inherit data_rename seealso
 #'
-#' @return `find_columns()` returns a character vector with column names that
-#'   matched the pattern in `select` and `exclude`, or `NULL` if no matching
-#'   column name was found. `get_columns()` returns a data frame with matching
-#'   columns.
+#' @return
 #'
-#' @details Note that there are some limitations when calling this from inside
-#' other functions. The following will work as expected, returning all columns
-#' that start with `"Sep"`:
+#' `find_columns()` returns a character vector with column names that matched
+#' the pattern in `select` and `exclude`, or `NULL` if no matching column name
+#' was found. `get_columns()` returns a data frame with matching columns.
 #'
-#' ```
+#' @details
+#'
+#' Note that there are some limitations when calling this from inside other
+#' functions. The following will work as expected, returning all columns that
+#' start with `"Sep"`:
+#'
+#' ```r
 #' foo <- function(data) {
 #'   find_columns(data, select = starts_with("Sep"))
 #' }
@@ -58,7 +75,7 @@
 #'
 #' However, this example won't work as expected!
 #'
-#' ```
+#' ```r
 #' foo <- function(data) {
 #'   i <- "Sep"
 #'   find_columns(data, select = starts_with(i))
@@ -66,11 +83,13 @@
 #' foo(iris)
 #' ```
 #'
-#' One workaround is to use the `regex` argument, which provides at
-#' least a bit more flexibility than exact matching. `regex` behaves
-#' like the `contains("")` select-helper:
+#' One workaround is to use the `regex` argument, which provides at least a bit
+#' more flexibility than exact matching. `regex` in its basic usage (as seen
+#' below) means that `select` behaves like the `contains("")` select-helper, but
+#' can also make the function more flexible by allowing to define complex
+#' regular expression pattern in `select`.
 #'
-#' ```
+#' ```r
 #' foo <- function(data) {
 #'   i <- "Sep"
 #'   find_columns(data, select = i, regex = TRUE)
@@ -87,6 +106,10 @@
 #'
 #' # starts with "Sepal", but not allowed to end with "width"
 #' find_columns(iris, starts_with("Sepal"), exclude = contains("Width"))
+#'
+#' # find numeric with mean > 3.5
+#' numeric_mean_35 <- function(x) is.numeric(x) && mean(x, na.rm = TRUE) > 3.5
+#' find_columns(iris, numeric_mean_35)
 #' @export
 find_columns <- function(data,
                          select = NULL,
@@ -115,62 +138,6 @@ find_columns <- function(data,
 }
 
 
-#' @param pattern A regular expression (as character string), representing the
-#'   pattern to be matched in the in column names. Can also be one of the
-#'   following select-helpers: `starts_with("")`, `end_with("")`, `regex("")`,
-#'   `contains("")`, or a range using `:`.
-#' @param starts_with,ends_with Character string, containing the string to be
-#'   matched in the column names. `starts_with` finds matches at the beginning
-#'   of column names, `ends_with` finds matches at the end of column names.
-#'
-#' @note `data_findcols()` is deprecated and will be fully replaced by
-#'   `find_columns()` in a future update.
-#'
 #' @rdname find_columns
 #' @export
-data_findcols <- function(data,
-                          pattern = NULL,
-                          starts_with = NULL,
-                          ends_with = NULL,
-                          ignore_case = FALSE,
-                          ...) {
-
-  # init
-  n <- names(data)
-  match <- c()
-
-  # avoid conflicts
-  conflicting_packages <- .conflicting_packages("poorman")
-
-  # in case pattern is a variable from another function call...
-  p <- try(eval(pattern), silent = TRUE)
-  if (inherits(p, c("try-error", "simpleError"))) {
-    p <- substitute(pattern)
-  }
-
-  # evaluate pattern, can be function like "starts_with()"
-  pattern <- tryCatch(
-    {
-      eval(p)
-    },
-    error = function(e) {
-      .evaluate_pattern(insight::safe_deparse(p))$pattern
-    }
-  )
-
-  # load again
-  .attach_packages(conflicting_packages)
-
-  if (!is.null(pattern)) {
-    for (i in pattern) {
-      match <- c(match, n[grepl(i, n, ignore.case = ignore_case)])
-    }
-  }
-  if (!is.null(starts_with)) {
-    match <- c(match, n[grepl(paste0("^", starts_with), n, ignore.case = ignore_case)])
-  }
-  if (!is.null(ends_with)) {
-    match <- c(match, n[grepl(paste0(ends_with, "$"), n, ignore.case = ignore_case)])
-  }
-  match
-}
+data_find <- find_columns

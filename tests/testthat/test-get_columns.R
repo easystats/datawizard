@@ -1,4 +1,16 @@
-test_that("get_columns works as expected", {
+# input check ---------------------
+
+test_that("get_columns checks for data frame", {
+  expect_error(get_columns(NULL), regexp = "provided")
+  x <- list(a = 1:2, b = letters[1:3])
+  expect_error(get_columns(x), regexp = "coerced")
+})
+
+
+
+# select helpers ---------------------
+
+test_that("get_columns works with select helpers", {
   expect_equal(
     get_columns(iris, starts_with("Sepal")),
     iris[c("Sepal.Length", "Sepal.Width")]
@@ -10,9 +22,191 @@ test_that("get_columns works as expected", {
   )
 
   expect_equal(
+    get_columns(iris, col_ends_with("Width")),
+    iris[c("Sepal.Width", "Petal.Width")]
+  )
+
+  expect_equal(
     get_columns(iris, regex("\\.")),
     iris[c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")]
   )
+
+  expect_equal(
+    get_columns(iris, contains("Wid")),
+    iris[c("Sepal.Width", "Petal.Width")]
+  )
+})
+
+
+
+# select helpers, negation ---------------------
+
+test_that("get_columns works with negation of select helpers", {
+  expect_equal(
+    get_columns(iris, -starts_with("Sepal")),
+    iris[c("Petal.Length", "Petal.Width", "Species")]
+  )
+
+  expect_equal(
+    get_columns(iris, -ends_with("Width")),
+    iris[c("Sepal.Length", "Petal.Length", "Species")]
+  )
+
+  expect_equal(
+    get_columns(iris, -col_ends_with("Width")),
+    iris[c("Sepal.Length", "Petal.Length", "Species")]
+  )
+})
+
+
+
+# select-nse with function  ---------------------
+
+test_that("get_columns works with select-functions", {
+  expect_equal(
+    get_columns(iris, is.numeric()),
+    iris[sapply(iris, is.numeric)]
+  )
+
+  expect_equal(
+    get_columns(iris, is.numeric),
+    iris[sapply(iris, is.numeric)]
+  )
+
+  expect_equal(
+    get_columns(iris, is.factor()),
+    iris[sapply(iris, is.factor)]
+  )
+
+  expect_equal(
+    get_columns(iris, is.factor),
+    iris[sapply(iris, is.factor)]
+  )
+
+  expect_warning(expect_null(get_columns(iris, is.logical())))
+})
+
+
+
+# select-nse with user-function  ---------------------
+
+test_that("get_columns works with user-defined select-functions", {
+  testfun <<- function(i) {
+    is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
+  }
+  expect_equal(get_columns(iris, testfun), iris[sapply(iris, testfun)])
+  expect_equal(get_columns(iris, -testfun), iris[!sapply(iris, testfun)])
+
+  testfun2 <<- function(i) {
+    is.numeric(i) && mean(i, na.rm = TRUE) < 5
+  }
+  expect_equal(
+    get_columns(iris, select = testfun, exclude = testfun2),
+    iris["Sepal.Length"]
+  )
+  expect_equal(
+    get_columns(iris, select = testfun, exclude = -testfun2),
+    iris["Petal.Length"]
+  )
+})
+
+
+
+# select-nse with negation of functions  ---------------------
+
+test_that("get_columns works with negated select-functions", {
+  expect_equal(
+    get_columns(iris, -is.numeric()),
+    iris[sapply(iris, function(i) !is.numeric(i))]
+  )
+
+  expect_equal(
+    get_columns(iris, -is.numeric),
+    iris[sapply(iris, function(i) !is.numeric(i))]
+  )
+
+  expect_equal(
+    get_columns(iris, -is.factor()),
+    iris[sapply(iris, function(i) !is.factor(i))]
+  )
+
+  expect_equal(
+    get_columns(iris, -is.factor),
+    iris[sapply(iris, function(i) !is.factor(i))]
+  )
+
+  expect_equal(get_columns(iris, -is.logical), iris)
+})
+
+
+
+# select-nse with ranges  ---------------------
+
+test_that("get_columns works with ranges", {
+  expect_equal(
+    get_columns(iris, 2:3),
+    iris[2:3]
+  )
+
+  expect_equal(
+    get_columns(iris, Sepal.Width:Petal.Length),
+    iris[2:3]
+  )
+})
+
+
+
+# select-nse with negated ranges  ---------------------
+
+test_that("get_columns works with negated ranges", {
+  expect_equal(
+    get_columns(iris, -(1:2)),
+    iris[c(4, 5)]
+  )
+
+  expect_equal(
+    get_columns(iris, -1:-2),
+    iris[c(4, 5)]
+  )
+
+  expect_equal(
+    get_columns(iris, exclude = -1:-2),
+    iris[1:3]
+  )
+
+  expect_equal(
+    get_columns(iris, exclude = 2:3),
+    iris[c(1, 4, 5)]
+  )
+
+  expect_equal(
+    get_columns(iris, -Sepal.Width:Petal.Length),
+    iris[c(1, 4, 5)]
+  )
+})
+
+
+
+# select-nse with formulas  ---------------------
+
+test_that("get_columns works with formulas", {
+  expect_equal(
+    get_columns(iris, ~ Sepal.Width + Petal.Length),
+    iris[2:3]
+  )
+
+  expect_equal(
+    get_columns(iris, exclude = ~ Sepal.Width + Petal.Length),
+    iris[c(1, 4, 5)]
+  )
+})
+
+
+
+# select-nse, other cases ---------------------
+
+test_that("get_columns works, other cases", {
+  expect_equal(get_columns(iris), iris)
 
   expect_equal(
     get_columns(iris, c("Petal.Width", "Sepal.Length")),
@@ -20,8 +214,13 @@ test_that("get_columns works as expected", {
   )
 
   expect_equal(
-    get_columns(iris, contains("Wid")),
-    iris[c("Sepal.Width", "Petal.Width")]
+    get_columns(iris, -c("Petal.Width", "Sepal.Length")),
+    iris[setdiff(colnames(iris), c("Petal.Width", "Sepal.Length"))]
+  )
+
+  expect_equal(
+    get_columns(iris, -Petal.Width),
+    iris[setdiff(colnames(iris), "Petal.Width")]
   )
 
   expect_equal(
@@ -60,6 +259,9 @@ test_that("get_columns works as expected", {
 })
 
 
+
+# select-nse works when called from other function  ---------------------
+
 test_that("get_columns from other functions", {
   test_fun1 <- function(data, i) {
     get_columns(data, select = i)
@@ -94,6 +296,15 @@ test_that("get_columns from other functions", {
     iris[c("Sepal.Width", "Petal.Width")]
   )
 
+  test_fun1c <- function(data, i) {
+    get_columns(data, select = -i)
+  }
+  expect_equal(
+    test_fun1c(iris, c("Sepal.Length", "Sepal.Width")),
+    iris[c("Sepal.Width", "Petal.Width", "Species")]
+  )
+
+
   test_fun2 <- function(data) {
     get_columns(data, select = starts_with("Sep"))
   }
@@ -107,6 +318,17 @@ test_that("get_columns from other functions", {
     get_columns(data, select = starts_with(i))
   }
   expect_warning(expect_null(test_fun3(iris)))
+
+  test_top <- function(x) {
+    testfun1 <- function(i) {
+      is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
+    }
+    testfun2 <- function(i) {
+      is.numeric(i) && mean(i, na.rm = TRUE) < 5
+    }
+    get_columns(x, select = testfun, exclude = -testfun2)
+  }
+  expect_equal(test_top(iris), iris["Petal.Length"])
 })
 
 

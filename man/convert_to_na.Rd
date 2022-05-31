@@ -3,6 +3,7 @@
 \name{convert_to_na}
 \alias{convert_to_na}
 \alias{convert_to_na.numeric}
+\alias{convert_to_na.factor}
 \alias{convert_to_na.data.frame}
 \title{Convert non-missing values in a variable into missing values.}
 \usage{
@@ -10,11 +11,14 @@ convert_to_na(x, ...)
 
 \method{convert_to_na}{numeric}(x, na = NULL, verbose = TRUE, ...)
 
+\method{convert_to_na}{factor}(x, na = NULL, drop_levels = FALSE, verbose = TRUE, ...)
+
 \method{convert_to_na}{data.frame}(
   x,
-  na = NULL,
   select = NULL,
   exclude = NULL,
+  na = NULL,
+  drop_levels = FALSE,
   ignore_case = FALSE,
   verbose = TRUE,
   ...
@@ -32,6 +36,9 @@ character vectors or date variables, and logical values for logical vectors.}
 
 \item{verbose}{Toggle warnings.}
 
+\item{drop_levels}{Logical, for factors, when specific levels are replaced
+by \code{NA}, should unused levels be dropped?}
+
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
 \itemize{
@@ -43,11 +50,24 @@ vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
 (e.g. \code{1} or \code{c(1, 3, 5)}),
 \item a vector of negative integers, giving the positions counting from the
 right (e.g., \code{-1} or \code{-1:-3}),
-\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
-\code{contains("")}, a range using \code{:} or \code{regex("")}.
+\item one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")},
+\item or a function testing for logical conditions, e.g. \code{is.numeric()} (or
+\code{is.numeric}), or any user-defined function that selects the variables
+for which the function returns \code{TRUE} (like: \code{foo <- function(x) mean(x) > 3}),
+\item ranges specified via literal variable names, select-helpers (except
+\code{regex()}) and (user-defined) functions can be negated, i.e. return
+non-matching elements, when prefixed with a \code{-}, e.g. \code{-ends_with("")},
+\code{-is.numeric} or \code{-Sepal.Width:Petal.Length}. \strong{Note:} Negation means
+that matches are \emph{excluded}, and thus, the \code{exclude} argument can be
+used alternatively. For instance, \code{select=-ends_with("Length")} (with
+\code{-}) is equivalent to \code{exclude=ends_with("Length")} (no \code{-}). In case
+negation should not work as expected, use the \code{exclude} argument instead.
 }
 
-If \code{NULL}, selects all columns.}
+If \code{NULL}, selects all columns. Patterns that found no matches are silently
+ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
+return \code{"Species"}.}
 
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),

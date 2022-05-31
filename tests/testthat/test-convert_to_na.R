@@ -8,8 +8,16 @@ test_that("convert_to_na-factor", {
   x <- convert_to_na(iris$Species, na = list(2, "versicolor"))
   expect_equal(sum(is.na(x)), 50)
 
+  x <- convert_to_na(iris$Species, na = list(2, "versicolor"), drop_levels = FALSE)
+  expect_equal(levels(x), c("setosa", "versicolor", "virginica"))
+  expect_equal(as.vector(table(x)), c(50, 0, 50))
+
+  x <- convert_to_na(iris$Species, na = list(2, "versicolor"), drop_levels = TRUE)
+  expect_equal(levels(x), c("setosa", "virginica"))
+  expect_equal(as.vector(table(x)), c(50, 50))
+
   x <- suppressWarnings(convert_to_na(iris$Species, na = 2))
-  expect_warning(convert_to_na(iris$Species, na = 2))
+  expect_message(convert_to_na(iris$Species, na = 2))
   expect_equal(sum(is.na(x)), 0)
 })
 
@@ -21,12 +29,12 @@ test_that("convert_to_na-numeric", {
   expect_equal(sum(is.na(x)), 10)
 
   x <- suppressWarnings(convert_to_na(iris$Sepal.Width, na = "a"))
-  expect_warning(convert_to_na(iris$Sepal.Width, na = "a"))
+  expect_message(convert_to_na(iris$Sepal.Width, na = "a"))
   expect_equal(sum(is.na(x)), 0)
 })
 
 test_that("convert_to_na-df", {
-  expect_warning(x <- convert_to_na(iris, na = 5))
+  expect_message(x <- convert_to_na(iris, na = 5))
   expect_equal(sum(is.na(x)), sum(sapply(iris, function(i) sum(i == 5))))
 
   x <- convert_to_na(iris, na = list(5, "versicolor"))
@@ -34,7 +42,7 @@ test_that("convert_to_na-df", {
 
   data(iris)
   iris$Sepal.Width <- as.character(iris$Sepal.Width)
-  expect_warning(expect_warning(x <- convert_to_na(iris, na = 3)))
+  expect_message(expect_message(x <- convert_to_na(iris, na = 3)))
   expect_equal(sum(is.na(x)), sum(sapply(iris, function(i) if (is.numeric(i)) sum(i == 3) else 0)))
 
   x <- convert_to_na(iris, na = list(3, "3"))
@@ -53,12 +61,18 @@ test_that("convert_to_na other classes", {
 
   x <- convert_to_na(d$a, na = 3)
   expect_equal(x, c(1, 2, NA, 4, 5), tolerance = 1e-3, ignore_attr = TRUE)
-  expect_warning(x <- convert_to_na(d$a, na = "c"))
+  expect_message(x <- convert_to_na(d$a, na = "c"))
   expect_equal(x, 1:5, tolerance = 1e-3, ignore_attr = TRUE)
   x <- convert_to_na(d$b, na = "c")
   expect_equal(x, structure(c(1L, 2L, NA, 4L, 5L),
-                            .Label = c("a", "b", "c", "d", "e"),
-                            class = "factor"), tolerance = 1e-3, ignore_attr = TRUE)
+    .Label = c("a", "b", "c", "d", "e"),
+    class = "factor"
+  ), tolerance = 1e-3, ignore_attr = TRUE)
+  x <- convert_to_na(d$b, na = "c", drop_levels = TRUE)
+  expect_equal(x, structure(c(1L, 2L, NA, 3L, 4L),
+    .Label = c("a", "b", "d", "e"),
+    class = "factor"
+  ), tolerance = 1e-3, ignore_attr = TRUE)
   x <- convert_to_na(d$c, na = "2022-03-22")
   expect_equal(x, structure(c(NA, 18994, 19025, 18719, 18280), class = "Date"), tolerance = 1e-3, ignore_attr = TRUE)
   x <- convert_to_na(d$d, na = TRUE)

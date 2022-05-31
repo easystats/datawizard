@@ -9,6 +9,8 @@
 #'   vectors or logicals) with values that should be converted to `NA`. Numeric
 #'   values applied to numeric vectors, character values are used for factors,
 #'   character vectors or date variables, and logical values for logical vectors.
+#' @param drop_levels Logical, for factors, when specific levels are replaced
+#'   by `NA`, should unused levels be dropped?
 #' @param ... Not used.
 #' @inheritParams find_columns
 #'
@@ -61,18 +63,25 @@ convert_to_na.numeric <- function(x, na = NULL, verbose = TRUE, ...) {
 
   if (is_empty_object(na) || !is.numeric(na)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("`na` needs to be a numeric vector."), call. = FALSE)
+      message(insight::format_message(
+        "Could not convert values into `NA` for a numeric variable.",
+        "To do this, `na` needs to be a numeric vector, or a list that contains numeric vector elements."
+      ))
     }
   } else {
     matches <- which(x %in% na)
     x[matches] <- NA
+    # drop unused labels
+    value_labels <- attr(x, "labels", exact = TRUE)
+    attr(x, "labels") <- value_labels[!value_labels %in% na]
   }
   x
 }
 
 
+#' @rdname convert_to_na
 #' @export
-convert_to_na.factor <- function(x, na = NULL, verbose = TRUE, ...) {
+convert_to_na.factor <- function(x, na = NULL, drop_levels = FALSE, verbose = TRUE, ...) {
   # if we have a list, use first valid element
   if (is.list(na)) {
     na <- unlist(na[sapply(na, is.character)])
@@ -80,11 +89,20 @@ convert_to_na.factor <- function(x, na = NULL, verbose = TRUE, ...) {
 
   if (is_empty_object(na) || (!is.factor(na) && !is.character(na))) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("`na` needs to be a character vector."), call. = FALSE)
+      message(insight::format_message(
+        "Could not convert values into `NA` for a factor or character variable.",
+        "To do this, `na` needs to be a character vector, or a list that contains character vector elements."
+      ))
     }
   } else {
     matches <- which(x %in% na)
     x[matches] <- NA
+    # drop unused labels
+    value_labels <- attr(x, "labels", exact = TRUE)
+    if (is.factor(x) && isTRUE(drop_levels)) {
+      x <- droplevels(x)
+    }
+    attr(x, "labels") <- value_labels[!value_labels %in% na]
   }
   x
 }
@@ -105,7 +123,10 @@ convert_to_na.Date <- function(x, na = NULL, verbose = TRUE, ...) {
 
   if (is_empty_object(na) || !is.character(na)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("`na` needs to be a character vector."), call. = FALSE)
+      message(insight::format_message(
+        "Could not convert values into `NA` for a date/time variable.",
+        "To do this, `na` needs to be a character vector, or a list that contains character vector elements."
+      ))
     }
   } else {
     matches <- which(x %in% as.Date(na))
@@ -124,7 +145,10 @@ convert_to_na.logical <- function(x, na = NULL, verbose = TRUE, ...) {
 
   if (is_empty_object(na) || !is.logical(na)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("`na` needs to be a logical."), call. = FALSE)
+      message(insight::format_message(
+        "Could not convert values into `NA` for a logical variable.",
+        "To do this, `na` needs to be a logical vector, or a list that contains logical vector elements."
+      ))
     }
   } else {
     matches <- which(x == na)
@@ -136,10 +160,17 @@ convert_to_na.logical <- function(x, na = NULL, verbose = TRUE, ...) {
 
 #' @rdname convert_to_na
 #' @export
-convert_to_na.data.frame <- function(x, na = NULL, select = NULL, exclude = NULL, ignore_case = FALSE, verbose = TRUE, ...) {
+convert_to_na.data.frame <- function(x,
+                                     select = NULL,
+                                     exclude = NULL,
+                                     na = NULL,
+                                     drop_levels = FALSE,
+                                     ignore_case = FALSE,
+                                     verbose = TRUE,
+                                     ...) {
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
 
-  x[select] <- lapply(x[select], convert_to_na, na = na, verbose = verbose, ...)
+  x[select] <- lapply(x[select], convert_to_na, na = na, drop_levels = drop_levels, verbose = verbose, ...)
   x
 }

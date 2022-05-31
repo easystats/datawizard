@@ -8,7 +8,7 @@
 #' [normalize()] function can also be used to scale all numeric variables within
 #' the 0 - 1 range.
 #' \cr\cr
-#' For model standardization, see [effectsize::standardize.default()]
+#' For model standardization, see [`standardize.default()`].
 #'
 #' @param x A (grouped) data frame, a vector or a statistical model (for
 #'   `unstandardize()` cannot be a model).
@@ -65,8 +65,12 @@
 #'   Alternatively, if the input contains the attributes `center` and `scale`
 #'   (as does the output of `standardize()`), it will take it from there if the
 #'   rest of the arguments are absent.
+#' @param force Logical, if `TRUE`, forces recoding of factors and character
+#'   vectors as well.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams find_columns
+#'
+#' @inheritSection center Selection of variables - the `select` argument
 #'
 #' @return The standardized object (either a standardize data frame or a
 #'   statistical model fitted on standardized data).
@@ -229,6 +233,8 @@ standardize.AsIs <- standardize.numeric
 #' @rdname standardize
 #' @export
 standardize.data.frame <- function(x,
+                                   select = NULL,
+                                   exclude = NULL,
                                    robust = FALSE,
                                    two_sd = FALSE,
                                    weights = NULL,
@@ -238,8 +244,6 @@ standardize.data.frame <- function(x,
                                    remove_na = c("none", "selected", "all"),
                                    force = FALSE,
                                    append = FALSE,
-                                   select = NULL,
-                                   exclude = NULL,
                                    ignore_case = FALSE,
                                    verbose = TRUE,
                                    ...) {
@@ -280,6 +284,8 @@ standardize.data.frame <- function(x,
 
 #' @export
 standardize.grouped_df <- function(x,
+                                   select = NULL,
+                                   exclude = NULL,
                                    robust = FALSE,
                                    two_sd = FALSE,
                                    weights = NULL,
@@ -289,8 +295,6 @@ standardize.grouped_df <- function(x,
                                    remove_na = c("none", "selected", "all"),
                                    force = FALSE,
                                    append = FALSE,
-                                   select = NULL,
-                                   exclude = NULL,
                                    ignore_case = FALSE,
                                    verbose = TRUE,
                                    ...) {
@@ -304,7 +308,7 @@ standardize.grouped_df <- function(x,
 
   for (rows in args$grps) {
     args$x[rows, ] <- standardize(
-      args$x[rows, ],
+      args$x[rows, , drop = FALSE],
       select = args$select,
       exclude = NULL,
       robust = robust,

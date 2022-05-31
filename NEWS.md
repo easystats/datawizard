@@ -1,13 +1,67 @@
+# datawizard 0.4.x
+
+BREAKING
+
+* Removed deprecated function `data_findcols()`. Please use its replacement,
+  `data_find()`.
+
 # datawizard 0.4.1
 
-MINOR CHANGES
+BREAKING
 
-* `center()`, `convert_to_na()` and `convert_na_to()` get a `.default` method, 
-  to capture unsupported classes. This now yields a message and returns the 
-  original input, and hence, the `.data.frame` methods won't stop due to an 
-  error.
+* Added the `standardize.default()` method (moved from package **effectsize**),
+  to be consistent in that the default-method now is in the same package as the
+  generic. `standardize.default()` behaves exactly like in **effectsize** and
+  particularly works for regression model objects. **effectsize** now re-exports
+  `standardize()` from **datawizard**.
 
+NEW FUNCTIONS
+
+* `data_shift()` to shift the value range of numeric variables.
+
+* `data_recode()` to recode old into new values.
+
+* `data_to_factor()` as counterpart to `data_to_numeric()`.
+
+* `data_tabulate()` to create frequency tables of variables.
+
+* `data_read()` to read (import) data files (from text, or foreign statistical
+  packages).
+
+* `unnormalize()` as counterpart to `normalize()`. This function only works for 
+  variables that have been normalized with `normalize()`.
+
+* `data_group()` and `data_ungroup()` to create grouped data frames, or to remove
+  the grouping information from grouped data frames.
+
+CHANGES
+
+* `data_find()` was added as alias to `find_colums()`, to have consistent
+  name patterns for the **datawizard** functions. `data_findcols()` will be
+  removed in a future update and usage is discouraged.
+
+* The `select` argument (and thus, also the `exclude` argument) now also 
+  accepts functions testing for logical conditions, e.g. `is.numeric()` (or
+  `is.numeric`), or any user-defined function that selects the variables for 
+  which the function returns `TRUE` (like: `foo <- function(x) mean(x) > 3`).
+
+* Arguments `select` and `exclude` now allow the negation of select-helpers, 
+  like `-ends_with("")`, `-is.numeric` or `-Sepal.Width:Petal.Length`.
+
+* Many functions now get a `.default` method, to capture unsupported classes. 
+  This now yields a message and returns the original input, and hence, the 
+  `.data.frame` methods won't stop due to an error.
+
+* The `filter` argument in `data_filter()` can also be a numeric vector, to
+  indicate row indices of those rows that should be returned.
+  
 * `convert_to_na()` gets methods for variables of class `logical` and `Date`.
+
+* `convert_to_na()` for factors (and data frames) gains a `drop_levels` argument,
+  to drop unused levels that have been replaced by `NA`.
+
+* `data_to_numeric()` gains two more arguments, `preserve_levels` and `lowest`,
+  to give better control of conversion of factors.
 
 BUG FIXES
 

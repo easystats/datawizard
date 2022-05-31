@@ -23,6 +23,8 @@ centre(x, ...)
 
 \method{center}{data.frame}(
   x,
+  select = NULL,
+  exclude = NULL,
   robust = FALSE,
   weights = NULL,
   reference = NULL,
@@ -30,8 +32,6 @@ centre(x, ...)
   force = FALSE,
   remove_na = c("none", "selected", "all"),
   append = FALSE,
-  select = NULL,
-  exclude = NULL,
   ignore_case = FALSE,
   verbose = TRUE,
   ...
@@ -67,6 +67,40 @@ against the names of the selected variables.}
 
 \item{verbose}{Toggle warnings and messages.}
 
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}), or a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item a vector of positive integers, giving the positions counting from the left
+(e.g. \code{1} or \code{c(1, 3, 5)}),
+\item a vector of negative integers, giving the positions counting from the
+right (e.g., \code{-1} or \code{-1:-3}),
+\item one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")},
+\item or a function testing for logical conditions, e.g. \code{is.numeric()} (or
+\code{is.numeric}), or any user-defined function that selects the variables
+for which the function returns \code{TRUE} (like: \code{foo <- function(x) mean(x) > 3}),
+\item ranges specified via literal variable names, select-helpers (except
+\code{regex()}) and (user-defined) functions can be negated, i.e. return
+non-matching elements, when prefixed with a \code{-}, e.g. \code{-ends_with("")},
+\code{-is.numeric} or \code{-Sepal.Width:Petal.Length}. \strong{Note:} Negation means
+that matches are \emph{excluded}, and thus, the \code{exclude} argument can be
+used alternatively. For instance, \code{select=-ends_with("Length")} (with
+\code{-}) is equivalent to \code{exclude=ends_with("Length")} (no \code{-}). In case
+negation should not work as expected, use the \code{exclude} argument instead.
+}
+
+If \code{NULL}, selects all columns. Patterns that found no matches are silently
+ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
+return \code{"Species"}.}
+
+\item{exclude}{See \code{select}, however, column names matched by the pattern
+from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
+excludes no columns.}
+
 \item{force}{Logical, if \code{TRUE}, forces centering of factors as
 well. Factors are converted to numerical values, with the lowest level
 being the value \code{1} (unless the factor has numeric levels, which are
@@ -85,27 +119,6 @@ original variables in \code{x} will be overwritten by their centered versions.
 If a character value, centered variables are appended with new column
 names (using the defined suffix) to the original data frame.}
 
-\item{select}{Variables that will be included when performing the required
-tasks. Can be either
-\itemize{
-\item a variable specified as a literal variable name (e.g., \code{column_name}),
-\item a string with the variable name (e.g., \code{"column_name"}), or a character
-vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
-\item a formula with variable names (e.g., \code{~column_1 + column_2}),
-\item a vector of positive integers, giving the positions counting from the left
-(e.g. \code{1} or \code{c(1, 3, 5)}),
-\item a vector of negative integers, giving the positions counting from the
-right (e.g., \code{-1} or \code{-1:-3}),
-\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
-\code{contains("")}, a range using \code{:} or \code{regex("")}.
-}
-
-If \code{NULL}, selects all columns.}
-
-\item{exclude}{See \code{select}, however, column names matched by the pattern
-from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
-excludes no columns.}
-
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
@@ -122,6 +135,17 @@ are computed by subtracting the mean of the variable and then dividing it by
 the standard deviation, while centering variables involves only the
 subtraction.
 }
+\section{Selection of variables - the \code{select} argument}{
+
+For most functions that have a \code{select} argument (including this function),
+the complete input data frame is returned, even when \code{select} only selects
+a range of variables. That is, the function is only applied to those variables
+that have a match in \code{select}, while all other variables remain unchanged.
+In other words: for this function, \code{select} will not omit any non-included
+variables, so that the returned data frame will include all variables
+from the input data frame.
+}
+
 \examples{
 data(iris)
 

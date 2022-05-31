@@ -168,3 +168,56 @@ test_that("describe_distribution - list: works with range", {
   expect_false("min" %in% names(x))
   expect_false("max" %in% names(x))
 })
+
+
+
+# select ----------------------
+
+test_that("describe_distribution - select", {
+  data(iris)
+  out <- describe_distribution(iris, select = starts_with("Petal"))
+
+  expect_equal(out$Variable, c("Petal.Length", "Petal.Width"))
+  expect_equal(out$Mean, c(3.758000, 1.199333), tolerance = 1e-3)
+})
+
+
+
+# select and grouped df ----------------------
+
+test_that("describe_distribution - grouped df", {
+  data(iris)
+  x <- data_group(iris, Species)
+  out <- describe_distribution(x, select = starts_with("Petal"))
+
+  expect_equal(out$.group, c(
+    "Species=setosa", "Species=setosa",
+    "Species=versicolor", "Species=versicolor",
+    "Species=virginica", "Species=virginica"
+  ))
+  expect_equal(out$Variable, c(
+    "Petal.Length", "Petal.Width",
+    "Petal.Length", "Petal.Width",
+    "Petal.Length", "Petal.Width"
+  ))
+  expect_equal(out$Mean, c(1.462, 0.246, 4.26, 1.326, 5.552, 2.026), tolerance = 1e-3)
+})
+
+
+# distribution_mode --------------------------
+
+test_that("distribution_mode works as expected", {
+  # atomic vector
+  expect_equal(distribution_mode(c(1, 2, 3, 3, 4, 5)), 3)
+  expect_equal(distribution_mode(c(1, 2, 3, 3, 4, 4, 5)), 3)
+  expect_equal(distribution_mode(c(1.5, 2.3, 3.7, 3.7, 4.0, 5)), 3.7)
+
+  # list
+  expect_equal(distribution_mode(list(1, 2, 3, 3, 4, 5)), list(3))
+
+  # scalar
+  expect_equal(distribution_mode("a"), "a")
+
+  # empty
+  expect_null(distribution_mode(c()))
+})

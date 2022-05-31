@@ -1,7 +1,9 @@
 #' Normalize numeric variable to 0-1 range
 #'
-#' Performs a normalization of data, i.e., it scales variables in the range 0 -
-#' 1. This is a special case of [data_rescale()].
+#' Performs a normalization of data, i.e., it scales variables in the range
+#' 0 - 1. This is a special case of [data_rescale()]. `unnormalize()` is the
+#' counterpart, but only works for variables that have been normalized with
+#' `normalize()`.
 #'
 #' @param x A numeric vector, (grouped) data frame, or matrix. See 'Details'.
 #' @param include_bounds Logical, if `TRUE`, return value may include 0 and 1.
@@ -12,6 +14,8 @@
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams standardize.data.frame
 #' @inheritParams find_columns
+#'
+#' @inheritSection center Selection of variables - the `select` argument
 #'
 #' @details
 #'
@@ -88,6 +92,10 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
     out <- (out * (length(out) - 1) + 0.5) / length(out)
   }
 
+  attr(out, "include_bounds") <- isTRUE(include_bounds)
+  attr(out, "min_value") <- min(x, na.rm = TRUE)
+  attr(out, "range_difference") <- diff(range(x, na.rm = TRUE))
+
   out
 }
 
@@ -103,9 +111,9 @@ normalize.factor <- function(x, ...) {
 
 #' @export
 normalize.grouped_df <- function(x,
-                                 include_bounds = TRUE,
                                  select = NULL,
                                  exclude = NULL,
+                                 include_bounds = TRUE,
                                  ignore_case = FALSE,
                                  verbose = TRUE,
                                  ...) {
@@ -135,7 +143,7 @@ normalize.grouped_df <- function(x,
   x <- as.data.frame(x)
   for (rows in grps) {
     x[rows, ] <- normalize(
-      x[rows, ],
+      x[rows, , drop = FALSE],
       select = select,
       exclude = exclude,
       include_bounds = include_bounds,
@@ -152,9 +160,9 @@ normalize.grouped_df <- function(x,
 #' @rdname normalize
 #' @export
 normalize.data.frame <- function(x,
-                                 include_bounds = TRUE,
                                  select = NULL,
                                  exclude = NULL,
+                                 include_bounds = TRUE,
                                  ignore_case = FALSE,
                                  verbose = TRUE,
                                  ...) {

@@ -43,8 +43,7 @@ test_that("data_rename uses indices when no replacement", {
 test_that("data_rename works when too many names in 'replacement'", {
   expect_message(
     x <- data_rename(test, replacement = paste0("foo", 1:6)),
-    "There are more names in 'replacement' than in 'pattern'. The last 1 names of
-  'replacement' are not used."
+    "There are more names in"
   )
   expect_equal(dim(test), dim(x))
   expect_equal(names(x), paste0("foo", 1:5))
@@ -53,8 +52,7 @@ test_that("data_rename works when too many names in 'replacement'", {
 test_that("data_rename works when not enough names in 'replacement'", {
   expect_message(
     x <- data_rename(test, replacement = paste0("foo", 1:2)),
-    "There are more names in 'pattern' than in 'replacement'. The last 3 names of
-  'pattern' are not modified."
+    "There are more names in"
   )
   expect_equal(dim(test), dim(x))
   expect_equal(names(x), c("foo1", "foo2", "Petal.Length", "Petal.Width", "Species"))
