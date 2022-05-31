@@ -68,11 +68,11 @@ column_as_rownames <- function(x, var = "rowname") {
 #'
 #' @param x A data frame.
 #' @param row Row to use as column names.
-#' @param na_prefix Prefix to give to the column name if the row has an NA.
-#' Default is 'x', and it will be incremented at each NA (x1, x2, etc.).
+#' @param na_prefix Prefix to give to the column name if the row has an `NA`.
+#' Default is 'x', and it will be incremented at each `NA` (`x1`, `x2`, etc.).
 #' @param verbose Toggle warnings.
 #' @param prefix Prefix to give to the column name. Default is 'x', and it will
-#' be incremented at each column (x1, x2, etc.).
+#' be incremented at each column (`x1`, `x2`, etc.).
 #'
 #' @return
 #' `row_to_colnames()` and `colnames_to_row()` both return a data frame.
@@ -99,7 +99,7 @@ column_as_rownames <- function(x, var = "rowname") {
 #' )
 #' test
 #' colnames_to_row(test)
-
+#'
 row_to_colnames <- function(x, row = 1, na_prefix = "x", verbose = TRUE) {
   if (!is.numeric(row)) {
     stop(
@@ -113,8 +113,10 @@ row_to_colnames <- function(x, row = 1, na_prefix = "x", verbose = TRUE) {
   }
   if (nrow(x) < row) {
     stop(
-      insight::format_message(paste0("You used row = ", row,
-                              " but the dataset only has ", nrow(x), " rows."))
+      insight::format_message(paste0(
+        "You used row = ", row,
+        " but the dataset only has ", nrow(x), " rows."
+      ))
     )
   }
 
@@ -157,5 +159,3 @@ colnames_to_row <- function(x, prefix = "x") {
   colnames(x2) <- paste0(prefix, 1:ncol(x2))
   x2
 }
-
-

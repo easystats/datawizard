@@ -14,13 +14,13 @@ colnames_to_row(x, prefix = "x")
 
 \item{row}{Row to use as column names.}
 
-\item{na_prefix}{Prefix to give to the column name if the row has an NA.
-Default is 'x', and it will be incremented at each NA (x1, x2, etc.).}
+\item{na_prefix}{Prefix to give to the column name if the row has an \code{NA}.
+Default is 'x', and it will be incremented at each \code{NA} (\code{x1}, \code{x2}, etc.).}
 
 \item{verbose}{Toggle warnings.}
 
 \item{prefix}{Prefix to give to the column name. Default is 'x', and it will
-be incremented at each column (x1, x2, etc.).}
+be incremented at each column (\code{x1}, \code{x2}, etc.).}
 }
 \value{
 \code{row_to_colnames()} and \code{colnames_to_row()} both return a data frame.
@@ -46,4 +46,5 @@ test <- data.frame(
 )
 test
 colnames_to_row(test)
+
 }
