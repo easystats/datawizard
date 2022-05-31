@@ -4,6 +4,12 @@ BREAKING
 
 * Removed deprecated function `data_findcols()`. Please use its replacement,
   `data_find()`.
+  
+NEW FUNCTIONS
+
+* `row_to_colnames()` and `colnames_to_row()` to move a row to column names,
+  and column names to row (@etiennebacher, #169).
+
 
 # datawizard 0.4.1
 
