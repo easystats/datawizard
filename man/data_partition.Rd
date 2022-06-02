@@ -2,14 +2,21 @@
 % Please edit documentation in R/data_partition.R
 \name{data_partition}
 \alias{data_partition}
-\title{Partition data into a test and a training set}
+\title{Partition data}
 \usage{
-data_partition(data, training_proportion = 0.7, group = NULL, seed = NULL, ...)
+data_partition(
+  data,
+  prob = 0.7,
+  group = NULL,
+  seed = NULL,
+  training_proportion = prob,
+  ...
+)
 }
 \arguments{
 \item{data}{A data frame, or an object that can be coerced to a data frame.}
 
-\item{training_proportion}{The proportion (between 0 and 1) of the training
+\item{prob}{The proportion (between 0 and 1) of the training
 set. The remaining part will be used for the test set.}
 
 \item{group}{A character vector indicating the name(s) of the column(s) used
@@ -18,23 +25,38 @@ for stratified partitioning.}
 \item{seed}{A random number generator seed. Enter an integer (e.g. 123) so
 that the random sampling will be the same each time you run the function.}
 
+\item{training_proportion}{This argument is the old name of the \code{prob} argument.
+It got renamed to \code{prob} as it can now handle more than one value and split
+the data into multiple partitions.}
+
 \item{...}{Other arguments passed to or from other functions.}
 }
 \value{
 A list of two data frames, named \code{test} and \code{training}.
 }
 \description{
-Creates a training and a test set based on a dataframe. Can also be
-stratified (i.e., evenly spread a given factor) using the \code{group}
-argument.
+Creates data partitions (for instance, a training and a test set) based on a
+dataframe that can also be stratified (i.e., evenly spread a given factor)
+using the \code{group} argument.
 }
 \examples{
-df <- iris
-df$Smell <- rep(c("Strong", "Light"), 75)
+data <- iris
+data$Smell <- rep(c("Strong", "Strong", "Light"), 50)
 
-data_partition(df)
-data_partition(df, group = "Species")
-data_partition(df, group = c("Species", "Smell"))
+out <- data_partition(data, prob = 0.9)
+out$test
+nrow(out$training)
+
+# Stratify by group (equal proportions of each species)
+out <- data_partition(data, prob = 0.9, group = "Species")
+out$test
+
+out <- data_partition(data, prob = 0.9, group = c("Species", "Smell"))
+out$test
+
+# Create multiple partitions (this currrently doesn't work!)
+out <- data_partition(data, prob = c(0.3, 0.3))
+
 }
 \seealso{
 \itemize{

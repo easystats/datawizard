@@ -1,12 +1,15 @@
-#' Partition data into a test and a training set
+#' Partition data
 #'
-#' Creates a training and a test set based on a dataframe. Can also be
-#' stratified (i.e., evenly spread a given factor) using the `group`
-#' argument.
+#' Creates data partitions (for instance, a training and a test set) based on a
+#' dataframe that can also be stratified (i.e., evenly spread a given factor)
+#' using the `group` argument.
 #'
 #' @inheritParams data_rename
-#' @param training_proportion The proportion (between 0 and 1) of the training
+#' @param prob The proportion (between 0 and 1) of the training
 #'   set. The remaining part will be used for the test set.
+#' @param training_proportion This argument is the old name of the `prob` argument.
+#'   It got renamed to `prob` as it can now handle more than one value and split
+#'   the data into multiple partitions.
 #' @param group A character vector indicating the name(s) of the column(s) used
 #'   for stratified partitioning.
 #' @param seed A random number generator seed. Enter an integer (e.g. 123) so
@@ -15,19 +18,33 @@
 #' @return A list of two data frames, named `test` and `training`.
 #'
 #' @examples
-#' df <- iris
-#' df$Smell <- rep(c("Strong", "Light"), 75)
+#' data <- iris
+#' data$Smell <- rep(c("Strong", "Strong", "Light"), 50)
 #'
-#' data_partition(df)
-#' data_partition(df, group = "Species")
-#' data_partition(df, group = c("Species", "Smell"))
+#' out <- data_partition(data, prob = 0.9)
+#' out$test
+#' nrow(out$training)
+#'
+#' # Stratify by group (equal proportions of each species)
+#' out <- data_partition(data, prob = 0.9, group = "Species")
+#' out$test
+#'
+#' out <- data_partition(data, prob = 0.9, group = c("Species", "Smell"))
+#' out$test
+#'
+#' # Create multiple partitions (this currrently doesn't work!)
+#' out <- data_partition(data, prob = c(0.3, 0.3))
+#'
 #' @inherit data_rename seealso
 #' @export
 data_partition <- function(data,
-                           training_proportion = 0.7,
+                           prob = 0.7,
                            group = NULL,
                            seed = NULL,
+                           training_proportion = prob,
                            ...) {
+
+  # Sanity check
   if (!is.data.frame(data)) {
     data <- tryCatch(
       expr = {
@@ -47,35 +64,47 @@ data_partition <- function(data,
     set.seed(seed)
   }
 
-  training <- data.frame()
-  test <- data.frame()
-
-  if (!is.null(group)) {
-    for (i in split(data, data[group])) {
-      out <- .data_partition(i, training_proportion)
-      training <- rbind(training, i[out$training, ])
-      test <- rbind(test, i[out$test, ])
-    }
-  } else {
-    out <- .data_partition(data, training_proportion)
-    training <- rbind(training, data[out$training, ])
-    test <- rbind(test, data[out$test, ])
+  if(sum(prob) > 1) {
+    stop("`prob` cannot be higher than 1.")
   }
 
-  list(
-    training = training,
-    test = test
-  )
-}
+  # Initialize out list
+  out <- list()
+  data_copy <- data
+  partitions <- rep(0, nrow(data))
 
+  # Assign to same group if no groups
+  if(is.null(group)) {
+    data_copy$.temp <- "TEMP"
+    group <- ".temp"
+  }
 
-#' @keywords internal
-.data_partition <- function(data, training_proportion = 0.8) {
-  training_indices <- sample(1:nrow(data), size = training_proportion * nrow(data))
-  test_indices <- (1:nrow(data))[-training_indices]
+  # Store row index
+  data_copy$.rowid <- 1:nrow(data_copy)
 
-  list(
-    training = training_indices,
-    test = test_indices
-  )
+  # Iterate through probabilities (in case there is more than 1)
+  for(i in 1:length(prob)) {
+    out[i] <- c(NA) # Initialize empty value (will be dropped later)
+    # Split into groups, and for each group, get the desired proportion
+    for (dat in split(data_copy, data_copy[group])) {
+      out[[i]] <- c(out[[i]], dat$.rowid[sample(1:nrow(dat), size = prob[i] * nrow(dat))])
+    }
+    # Drop NA
+    out[[i]] <- as.numeric(na.omit(out[[i]]))
+    # Store partition result
+    partitions[out[[i]]] <- i
+    # Delete used rows from pool
+    data_copy <- data_copy[-out[[i]], ]
+  }
+
+  # Split according to partitions
+  out <- split(data, partitions)
+
+  # Rename if only 2, or drop "remaining" pool if more than 2
+  if(length(out) == 2){
+    names(out) <- c("test", "training")
+  } else{
+    out[["0"]] <- NULL
+  }
+  out
 }
