@@ -44,7 +44,8 @@ winsorize.logical <- winsorize.factor
 
 #' @export
 winsorize.data.frame <- function(data, threshold = 0.2, verbose = TRUE, ...) {
-  sapply(data, winsorize, threshold = threshold, verbose = verbose)
+  out <- sapply(data, winsorize, threshold = threshold, verbose = verbose)
+  as.data.frame(out)
 }
 
 #' @rdname winsorize

@@ -1,3 +1,5 @@
+library(poorman)
+
 # explanation of how data_reverse works:
 # https://github.com/easystats/datawizard/issues/106#issuecomment-1066628399
 
@@ -323,4 +325,62 @@ test_that("reverse_scale select helpers", {
   ), select = ends_with("length"), ignore_case = TRUE)
 
   expect_equal(head(out$Sepal.Length), c(0.22222, 0.16667, 0.11111, 0.08333, 0.19444, 0.30556), tolerance = 1e-3)
+})
+
+
+
+
+# with grouped data -------------------------------------------
+
+set.seed(123)
+value1 <- sample(1:10, 6, replace = TRUE)
+set.seed(456)
+value2 <- sample(1:10, 6, replace = TRUE)
+
+test_df <- data.frame(
+  id = rep(c("A", "B"), each = 3),
+  value1 = value1,
+  value2 = value2
+)
+
+test_that("data_reverse works with dataframes (grouped data)", {
+  expect_equal(
+    test_df |>
+      group_by(id) |>
+      data_reverse(exclude = "id") |>
+      ungroup(),
+
+    data.frame(
+      id = rep(c("A", "B"), each = 3),
+      value1 = c(10, 10, 3, 6, 2, 3),
+      value2 = c(4, 6, 3, 10, 6, 5)
+    )
+  )
+})
+
+
+set.seed(789)
+value1 <- sample(c(1:10, NA), 6, replace = TRUE)
+set.seed(10)
+value2 <- sample(c(1:10, NA), 6, replace = TRUE)
+
+test_df <- data.frame(
+  id = rep(c("A", "B"), each = 3),
+  value1 = value1,
+  value2 = value2
+)
+
+test_that("data_reverse works with dataframes containing NAs (grouped data)", {
+  expect_equal(
+    test_df |>
+      group_by(id) |>
+      data_reverse(exclude = "id") |>
+      ungroup(),
+
+    data.frame(
+      id = rep(c("A", "B"), each = 3),
+      value1 = c(10, 4, 4, 5, 3, 4),
+      value2 = c(NA, 10, 9, 7, 6, 8)
+    )
+  )
 })
