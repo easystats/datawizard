@@ -96,78 +96,22 @@ recode numeric or character vectors, or factors.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
-<dd><p>A data frame, numeric or character vector, or factor.</p></dd>
-<dt>...</dt>
-<dd><p>not used.</p></dd>
-<dt>recode</dt>
-<dd><p>A list of named vectors, which indicate the recode pairs.
-The <em>names</em> of the list-elements (i.e. the left-hand side) represent the
-<em>new</em> values, while the values of the list-elements indicate the original
-(old) values that should be replaced. When recoding numeric vectors,
-element names have to be surrounded in backticks. For example,
-<code>recode=list(`0`=1)</code> would recode all <code>1</code> into <code>0</code> in a numeric
-vector. See also 'Examples' and 'Details'.</p></dd>
-<dt>default</dt>
-<dd><p>Defines the default value for all values that have
-no match in the recode-pairs. Note that, if <code>preserve_na=FALSE</code>, missing
-values (<code>NA</code>) are also captured by the <code>default</code> argument, and thus will
-also be recoded into the specified value. See 'Examples' and 'Details'.</p></dd>
-<dt>preserve_na</dt>
-<dd><p>Logical, if <code>TRUE</code>, <code>NA</code> (missing values) are preserved.
-This overrides any other arguments, including <code>default</code>. Hence, if
-<code>preserve_na=TRUE</code>, <code>default</code> will no longer convert <code>NA</code> into the specified
-default value.</p></dd>
-<dt>verbose</dt>
-<dd><p>Toggle warnings.</p></dd>
-<dt>select</dt>
-<dd><p>Variables that will be included when performing the required
-tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
-<li><p>a string with the variable name (e.g., <code>"column_name"</code>), or a character
-vector of variable names (e.g., <code>c("col1", "col2", "col3")</code>),</p></li>
-<li><p>a formula with variable names (e.g., <code>~column_1 + column_2</code>),</p></li>
-<li><p>a vector of positive integers, giving the positions counting from the left
-(e.g. <code>1</code> or <code>c(1, 3, 5)</code>),</p></li>
-<li><p>a vector of negative integers, giving the positions counting from the
-right (e.g., <code>-1</code> or <code>-1:-3</code>),</p></li>
-<li><p>one of the following select-helpers: <code>starts_with("")</code>, <code>ends_with("")</code>,
-<code>contains("")</code>, a range using <code>:</code> or <code>regex("")</code>,</p></li>
-<li><p>or a function testing for logical conditions, e.g. <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric()</a></code> (or
-<code>is.numeric</code>), or any user-defined function that selects the variables
-for which the function returns <code>TRUE</code> (like: <code>foo &lt;- function(x) mean(x) &gt; 3</code>),</p></li>
-<li><p>ranges specified via literal variable names, select-helpers (except
-<code><a href="https://rdrr.io/r/base/regex.html" class="external-link">regex()</a></code>) and (user-defined) functions can be negated, i.e. return
-non-matching elements, when prefixed with a <code>-</code>, e.g. <code>-ends_with("")</code>,
-<code>-is.numeric</code> or <code>-Sepal.Width:Petal.Length</code>. <strong>Note:</strong> Negation means
-that matches are <em>excluded</em>, and thus, the <code>exclude</code> argument can be
-used alternatively. For instance, <code>select=-ends_with("Length")</code> (with
-<code>-</code>) is equivalent to <code>exclude=ends_with("Length")</code> (no <code>-</code>). In case
-negation should not work as expected, use the <code>exclude</code> argument instead.</p></li>
-</ul><p>If <code>NULL</code>, selects all columns. Patterns that found no matches are silently
-ignored, e.g. <code>find_columns(iris, select = c("Species", "Test"))</code> will just
-return <code>"Species"</code>.</p></dd>
-<dt>exclude</dt>
-<dd><p>See <code>select</code>, however, column names matched by the pattern
-from <code>exclude</code> will be excluded instead of selected. If <code>NULL</code> (the default),
-excludes no columns.</p></dd>
-<dt>append</dt>
-<dd><p>Logical or string. If <code>TRUE</code>, recoded or converted variables
-get new column names and are appended (column bind) to <code>x</code>, thus returning
-both the original and the recoded variables. The new columns get a suffix,
-based on the calling function: <code>"_r"</code> for recode functions, <code>"_n"</code> for
-<code><a href="data_to_numeric.html">data_to_numeric()</a></code>, <code>"_f"</code> for <code><a href="data_to_factor.html">data_to_factor()</a></code>, or <code>"_s"</code> for
-<code><a href="data_shift.html">data_shift()</a></code>. If <code>append=FALSE</code>, original variables in <code>x</code> will be
-overwritten by their recoded versions. If a character value, recoded
-variables are appended with new column names (using the defined suffix) to
-the original data frame.</p></dd>
-<dt>ignore_case</dt>
-<dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
-a regular expression is used in <code>select</code>, ignores lower/upper case in the
-search pattern when matching against variable names.</p></dd>
-</dl></div>
+    <p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+    </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>x</code>, where old values are replaced by new values.</p>
+    
+
+<p><code>x</code>, where old values are replaced by new values.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

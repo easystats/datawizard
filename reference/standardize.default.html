@@ -105,39 +105,19 @@ transformations (e.g., polynomial or spline terms). The <code>robust</code> (def
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
-<dd><p>A statistical model.</p></dd>
-<dt>robust</dt>
-<dd><p>Logical, if <code>TRUE</code>, centering is done by subtracting the
-median from the variables and dividing it by the median absolute deviation
-(MAD). If <code>FALSE</code>, variables are standardized by subtracting the
-mean and dividing it by the standard deviation (SD).</p></dd>
-<dt>two_sd</dt>
-<dd><p>If <code>TRUE</code>, the variables are scaled by two times the deviation
-(SD or MAD depending on <code>robust</code>). This method can be useful to obtain
-model coefficients of continuous parameters comparable to coefficients
-related to binary predictors, when applied to <strong>the predictors</strong> (not the
-outcome) (Gelman, 2008).</p></dd>
-<dt>weights</dt>
-<dd><p>If <code>TRUE</code> (default), a weighted-standardization is carried out.</p></dd>
-<dt>verbose</dt>
-<dd><p>Toggle warnings and messages on or off.</p></dd>
-<dt>include_response</dt>
-<dd><p>If <code>TRUE</code> (default), the response value will also be
-standardized. If <code>FALSE</code>, only the predictors will be standardized.</p><ul><li><p>Note that for GLMs and models with non-linear link functions, the
-response value will not be standardized, to make re-fitting the model work.</p></li>
-<li><p>If the model contains an <code><a href="https://rdrr.io/r/stats/offset.html" class="external-link">stats::offset()</a></code>, the offset variable(s) will
-be standardized only if the response is standardized. If <code>two_sd = TRUE</code>,
-offsets are standardized by one-sd (similar to the response).</p></li>
-<li><p>(For <code>mediate</code> models, the <code>include_response</code> refers to the outcome in
-the y model; m model's response will always be standardized when possible).</p></li>
-</ul></dd>
-<dt>...</dt>
-<dd><p>Arguments passed to or from other methods.</p></dd>
-</dl></div>
+    <p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+    </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A statistical model fitted on standardized data</p>
+    
+
+<p>A statistical model fitted on standardized data</p>
     </div>
     <div class="section level2">
     <h2 id="generalized-linear-models">Generalized Linear Models<a class="anchor" aria-label="anchor" href="#generalized-linear-models"></a></h2>

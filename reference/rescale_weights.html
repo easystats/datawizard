@@ -87,25 +87,19 @@ models, which then can be used for multilevel modelling.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>data</dt>
-<dd><p>A data frame.</p></dd>
-<dt>group</dt>
-<dd><p>Variable names (as character vector, or as formula), indicating
-the grouping structure (strata) of the survey data (level-2-cluster
-variable). It is also possible to create weights for multiple group
-variables; in such cases, each created weighting variable will be suffixed
-by the name of the group variable.</p></dd>
-<dt>probability_weights</dt>
-<dd><p>Variable indicating the probability (design or
-sampling) weights of the survey data (level-1-weight).</p></dd>
-<dt>nest</dt>
-<dd><p>Logical, if <code>TRUE</code> and <code>group</code> indicates at least two
-group variables, then groups are "nested", i.e. groups are now a
-combination from each group level of the variables in <code>group</code>.</p></dd>
-</dl></div>
+    <p></p>
+<p></p>
+<p></p>
+<p></p>
+    </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>data</code>, including the new weighting variables: <code>pweights_a</code>and <code>pweights_b</code>, which represent the rescaled design weights to use
+    
+
+<p><code>data</code>, including the new weighting variables: <code>pweights_a</code></p>
+
+
+<p>and <code>pweights_b</code>, which represent the rescaled design weights to use
 in multilevel models (use these variables for the <code>weights</code> argument).</p>
     </div>
     <div class="section level2">

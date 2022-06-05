@@ -88,57 +88,20 @@ Can also be used to reverse-score variables (change the keying/scoring direction
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
-<dd><p>A (grouped) data frame, numeric vector or factor.</p></dd>
-<dt>...</dt>
-<dd><p>Arguments passed to or from other methods.</p></dd>
-<dt>to</dt>
-<dd><p>Numeric vector of length 2 giving the new range that the variable will have after rescaling.
-To reverse-score a variable, the range should be given with the maximum value first.
-See examples.</p></dd>
-<dt>range</dt>
-<dd><p>Initial (old) range of values. If <code>NULL</code>, will take the range of
-the input vector (<code>range(x)</code>).</p></dd>
-<dt>verbose</dt>
-<dd><p>Toggle warnings.</p></dd>
-<dt>select</dt>
-<dd><p>Variables that will be included when performing the required
-tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
-<li><p>a string with the variable name (e.g., <code>"column_name"</code>), or a character
-vector of variable names (e.g., <code>c("col1", "col2", "col3")</code>),</p></li>
-<li><p>a formula with variable names (e.g., <code>~column_1 + column_2</code>),</p></li>
-<li><p>a vector of positive integers, giving the positions counting from the left
-(e.g. <code>1</code> or <code>c(1, 3, 5)</code>),</p></li>
-<li><p>a vector of negative integers, giving the positions counting from the
-right (e.g., <code>-1</code> or <code>-1:-3</code>),</p></li>
-<li><p>one of the following select-helpers: <code>starts_with("")</code>, <code>ends_with("")</code>,
-<code>contains("")</code>, a range using <code>:</code> or <code>regex("")</code>,</p></li>
-<li><p>or a function testing for logical conditions, e.g. <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric()</a></code> (or
-<code>is.numeric</code>), or any user-defined function that selects the variables
-for which the function returns <code>TRUE</code> (like: <code>foo &lt;- function(x) mean(x) &gt; 3</code>),</p></li>
-<li><p>ranges specified via literal variable names, select-helpers (except
-<code><a href="https://rdrr.io/r/base/regex.html" class="external-link">regex()</a></code>) and (user-defined) functions can be negated, i.e. return
-non-matching elements, when prefixed with a <code>-</code>, e.g. <code>-ends_with("")</code>,
-<code>-is.numeric</code> or <code>-Sepal.Width:Petal.Length</code>. <strong>Note:</strong> Negation means
-that matches are <em>excluded</em>, and thus, the <code>exclude</code> argument can be
-used alternatively. For instance, <code>select=-ends_with("Length")</code> (with
-<code>-</code>) is equivalent to <code>exclude=ends_with("Length")</code> (no <code>-</code>). In case
-negation should not work as expected, use the <code>exclude</code> argument instead.</p></li>
-</ul><p>If <code>NULL</code>, selects all columns. Patterns that found no matches are silently
-ignored, e.g. <code>find_columns(iris, select = c("Species", "Test"))</code> will just
-return <code>"Species"</code>.</p></dd>
-<dt>exclude</dt>
-<dd><p>See <code>select</code>, however, column names matched by the pattern
-from <code>exclude</code> will be excluded instead of selected. If <code>NULL</code> (the default),
-excludes no columns.</p></dd>
-<dt>ignore_case</dt>
-<dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
-a regular expression is used in <code>select</code>, ignores lower/upper case in the
-search pattern when matching against variable names.</p></dd>
-</dl></div>
+    <p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+    </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A rescaled object.</p>
+    
+
+<p>A rescaled object.</p>
     </div>
     <div class="section level2">
     <h2 id="selection-of-variables-the-select-argument">Selection of variables - the <code>select</code> argument<a class="anchor" aria-label="anchor" href="#selection-of-variables-the-select-argument"></a></h2>
