@@ -1,3 +1,5 @@
+library(poorman)
+
 test_that("normalize work as expected", {
   expect_equal(
     normalize(c(0, 1, 5, -5, -2)),
@@ -62,4 +64,72 @@ test_that("normalize: matrix", {
     matrix(seq(0, 1, by = 0.3333), ncol = 2),
     tolerance = 1e-3
   )
+})
+
+test_that("normalize: select", {
+  expect_equal(
+    normalize(
+      iris, select = starts_with("Petal\\.L")
+    ) |>
+      pull(Petal.Length),
+    normalize(iris$Petal.Length)
+  )
+})
+
+test_that("normalize: exclude", {
+  expect_equal(
+    normalize(
+      iris, exclude = ends_with("ecies")
+    ),
+    iris |>
+      normalize(select = 1:4)
+  )
+})
+
+
+# with grouped data -------------------------------------------
+
+test_that("normalize (grouped data)", {
+  datawizard <- iris |>
+    group_by(Species) |>
+    normalize(Sepal.Width) |>
+    ungroup() |>
+    pull(Sepal.Width)
+
+  manual <- iris |>
+    group_by(Species) |>
+    mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width))/diff(range(Sepal.Width))) |>
+    ungroup() |>
+    pull(Sepal.Width)
+
+  expect_equal(datawizard, manual)
+})
+
+test_that("normalize, include bounds (grouped data)", {
+  datawizard <- iris |>
+    group_by(Species) |>
+    normalize(Sepal.Width, include_bounds = TRUE) |>
+    ungroup() |>
+    pull(Sepal.Width)
+
+  manual <- iris |>
+    group_by(Species) |>
+    mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width))/diff(range(Sepal.Width))) |>
+    ungroup() |>
+    pull(Sepal.Width)
+
+  expect_equal(datawizard, manual)
+})
+
+
+test_that("normalize, factor (grouped data)", {
+  datawizard <- iris |>
+    group_by(Species) |>
+    normalize(Species) |>
+    ungroup() |>
+    pull(Species)
+
+  manual <- iris$Species
+
+  expect_equal(datawizard, manual)
 })
