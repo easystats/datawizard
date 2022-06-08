@@ -2,13 +2,10 @@
 % Please edit documentation in R/data_extract.R
 \name{data_extract}
 \alias{data_extract}
-\alias{extract}
 \alias{data_extract.data.frame}
 \title{Extract one or more columns or elements from an object}
 \usage{
 data_extract(data, select, ...)
-
-extract(data, select, ...)
 
 \method{data_extract}{data.frame}(
   data,
