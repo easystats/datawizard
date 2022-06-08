@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,9 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4" id="datawizard-04x">datawizard 0.4.x<a class="anchor" aria-label="anchor" href="#datawizard-04x"></a></h2>
 <p>BREAKING</p>
-<ul><li>Removed deprecated function <code>data_findcols()</code>. Please use its replacement, <code><a href="../reference/find_columns.html">data_find()</a></code>.</li></ul><p>NEW FUNCTIONS</p>
+<ul><li><p>Removed deprecated function <code>data_findcols()</code>. Please use its replacement, <code><a href="../reference/find_columns.html">data_find()</a></code>.</p></li>
+<li><p>Removed alias <code>extract()</code> for <code><a href="../reference/data_extract.html">data_extract()</a></code> function since it collided with <code>tidyr::extract()</code>.</p></li>
+</ul><p>NEW FUNCTIONS</p>
 <ul><li>
 <code><a href="../reference/colnames.html">row_to_colnames()</a></code> and <code><a href="../reference/colnames.html">colnames_to_row()</a></code> to move a row to column names, and column names to row (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/169" class="external-link">#169</a>).</li></ul></div>
     <div class="section level2">
@@ -133,7 +135,7 @@
 </ul></li></ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.2" id="datawizard-022">datawizard 0.2.2<a class="anchor" aria-label="anchor" href="#datawizard-022"></a></h2><p class="text-muted">CRAN release: 2022-01-04</p>
-<ul><li><p>New function <code><a href="../reference/data_extract.html">data_extract()</a></code> (or its alias <code><a href="../reference/data_extract.html">extract()</a></code>) to pull single variables from a data frame, possibly naming each value by the row names of that data frame.</p></li>
+<ul><li><p>New function <code><a href="../reference/data_extract.html">data_extract()</a></code> (or its alias <code>extract()</code>) to pull single variables from a data frame, possibly naming each value by the row names of that data frame.</p></li>
 <li><p><code><a href="../reference/reshape_ci.html">reshape_ci()</a></code> gains a <code>ci_type</code> argument, to reshape data frames where CI-columns have prefixes other than <code>"CI"</code>.</p></li>
 <li><p><code><a href="../reference/standardize.html">standardize()</a></code> and <code><a href="../reference/center.html">center()</a></code> gain arguments <code>center</code> and <code>scale</code>, to define references for centrality and deviation that are used when centering or standardizing variables.</p></li>
 <li><p><code><a href="../reference/center.html">center()</a></code> gains the arguments <code>force</code> and <code>reference</code>, similar to <code><a href="../reference/standardize.html">standardize()</a></code>.</p></li>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,16 +83,47 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-    </div>
+    <dl><dt>x</dt>
+<dd><p>A numeric vector or data.frame.</p></dd>
+
+
+<dt>na.rm</dt>
+<dd><p>Remove missing values.</p></dd>
+
+
+<dt>type</dt>
+<dd><p>Type of algorithm for computing skewness. May be one of <code>1</code>
+(or <code>"1"</code>, <code>"I"</code> or <code>"classic"</code>), <code>2</code> (or <code>"2"</code>,
+<code>"II"</code> or <code>"SPSS"</code> or <code>"SAS"</code>) or <code>3</code> (or  <code>"3"</code>,
+<code>"III"</code> or <code>"Minitab"</code>). See 'Details'.</p></dd>
+
+
+<dt>iterations</dt>
+<dd><p>The number of bootstrap replicates for computing standard
+errors. If <code>NULL</code> (default), parametric standard errors are computed.</p></dd>
+
+
+<dt>verbose</dt>
+<dd><p>Toggle warnings and messages.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Arguments passed to or from other methods.</p></dd>
+
+
+<dt>digits</dt>
+<dd><p>Number of decimal places.</p></dd>
+
+
+<dt>test</dt>
+<dd><p>Logical, if <code>TRUE</code>, tests if skewness or kurtosis is
+significantly different from zero.</p></dd>
+
+
+<dt>object</dt>
+<dd><p>An object returned by <code>skewness()</code> or <code>kurtosis()</code>.</p></dd>
+
+</dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     

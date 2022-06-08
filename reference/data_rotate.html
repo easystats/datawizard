@@ -16,7 +16,7 @@ modified (see example)."><meta property="og:image" content="/logo.png"><meta nam
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,11 +80,27 @@ modified (see example).</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <p></p>
-<p></p>
-<p></p>
-<p></p>
-    </div>
+    <dl><dt>data</dt>
+<dd><p>A data frame.</p></dd>
+
+
+<dt>rownames</dt>
+<dd><p>Character vector (optional). If not <code>NULL</code>, the data frame's
+rownames will be added as (first) column to the output, with <code>rownames</code>
+being the name of this column.</p></dd>
+
+
+<dt>colnames</dt>
+<dd><p>Logical or character vector (optional). If <code>TRUE</code>, the values
+of the first column in <code>x</code> will be used as column names in the rotated data
+frame. If a character vector, values from that column are used as column
+names.</p></dd>
+
+
+<dt>verbose</dt>
+<dd><p>Toggle warnings.</p></dd>
+
+</dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     

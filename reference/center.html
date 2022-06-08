@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,20 +99,111 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-    </div>
+    <dl><dt>x</dt>
+<dd><p>A (grouped) data frame, a (numeric or character) vector or a factor.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
+
+
+<dt>robust</dt>
+<dd><p>Logical, if <code>TRUE</code>, centering is done by subtracting the
+median from the variables. If <code>FALSE</code>, variables are centered by
+subtracting the mean.</p></dd>
+
+
+<dt>weights</dt>
+<dd><p>Can be <code>NULL</code> (for no weighting), or:</p><ul><li><p>For data frames: a numeric vector of weights, or a character of the
+name of a column in the <code>data.frame</code> that contains the weights.</p></li>
+<li><p>For numeric vectors: a numeric vector of weights.</p></li>
+</ul></dd>
+
+
+<dt>reference</dt>
+<dd><p>A data frame or variable from which the centrality and
+deviation will be computed instead of from the input variable. Useful for
+standardizing a subset or new data according to another data frame.</p></dd>
+
+
+<dt>center</dt>
+<dd><p>Numeric value, which can be used as alternative to
+<code>reference</code> to define a reference centrality. If <code>center</code> is of length 1,
+it will be recycled to match the length of selected variables for centering.
+Else, <code>center</code> must be of same length as the number of selected variables.
+Values in <code>center</code> will be matched to selected variables in the provided
+order, unless a named vector is given. In this case, names are matched
+against the names of the selected variables.</p></dd>
+
+
+<dt>verbose</dt>
+<dd><p>Toggle warnings and messages.</p></dd>
+
+
+<dt>select</dt>
+<dd><p>Variables that will be included when performing the required
+tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
+<li><p>a string with the variable name (e.g., <code>"column_name"</code>), or a character
+vector of variable names (e.g., <code>c("col1", "col2", "col3")</code>),</p></li>
+<li><p>a formula with variable names (e.g., <code>~column_1 + column_2</code>),</p></li>
+<li><p>a vector of positive integers, giving the positions counting from the left
+(e.g. <code>1</code> or <code>c(1, 3, 5)</code>),</p></li>
+<li><p>a vector of negative integers, giving the positions counting from the
+right (e.g., <code>-1</code> or <code>-1:-3</code>),</p></li>
+<li><p>one of the following select-helpers: <code>starts_with("")</code>, <code>ends_with("")</code>,
+<code>contains("")</code>, a range using <code>:</code> or <code>regex("")</code>,</p></li>
+<li><p>or a function testing for logical conditions, e.g. <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric()</a></code> (or
+<code>is.numeric</code>), or any user-defined function that selects the variables
+for which the function returns <code>TRUE</code> (like: <code>foo &lt;- function(x) mean(x) &gt; 3</code>),</p></li>
+<li><p>ranges specified via literal variable names, select-helpers (except
+<code><a href="https://rdrr.io/r/base/regex.html" class="external-link">regex()</a></code>) and (user-defined) functions can be negated, i.e. return
+non-matching elements, when prefixed with a <code>-</code>, e.g. <code>-ends_with("")</code>,
+<code>-is.numeric</code> or <code>-Sepal.Width:Petal.Length</code>. <strong>Note:</strong> Negation means
+that matches are <em>excluded</em>, and thus, the <code>exclude</code> argument can be
+used alternatively. For instance, <code>select=-ends_with("Length")</code> (with
+<code>-</code>) is equivalent to <code>exclude=ends_with("Length")</code> (no <code>-</code>). In case
+negation should not work as expected, use the <code>exclude</code> argument instead.</p></li>
+</ul><p>If <code>NULL</code>, selects all columns. Patterns that found no matches are silently
+ignored, e.g. <code>find_columns(iris, select = c("Species", "Test"))</code> will just
+return <code>"Species"</code>.</p></dd>
+
+
+<dt>exclude</dt>
+<dd><p>See <code>select</code>, however, column names matched by the pattern
+from <code>exclude</code> will be excluded instead of selected. If <code>NULL</code> (the default),
+excludes no columns.</p></dd>
+
+
+<dt>force</dt>
+<dd><p>Logical, if <code>TRUE</code>, forces centering of factors as
+well. Factors are converted to numerical values, with the lowest level
+being the value <code>1</code> (unless the factor has numeric levels, which are
+converted to the corresponding numeric value).</p></dd>
+
+
+<dt>remove_na</dt>
+<dd><p>How should missing values (<code>NA</code>) be treated: if <code>"none"</code>
+(default): each column's standardization is done separately, ignoring
+<code>NA</code>s. Else, rows with <code>NA</code> in the columns selected with <code>select</code> /
+<code>exclude</code> (<code>"selected"</code>) or in all columns (<code>"all"</code>) are dropped before
+standardization, and the resulting data frame does not include these cases.</p></dd>
+
+
+<dt>append</dt>
+<dd><p>Logical or string. If <code>TRUE</code>, centered variables get new
+column names (with the suffix <code>"_c"</code>) and are appended (column bind) to <code>x</code>,
+thus returning both the original and the centered variables. If <code>FALSE</code>,
+original variables in <code>x</code> will be overwritten by their centered versions.
+If a character value, centered variables are appended with new column
+names (using the defined suffix) to the original data frame.</p></dd>
+
+
+<dt>ignore_case</dt>
+<dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
+a regular expression is used in <code>select</code>, ignores lower/upper case in the
+search pattern when matching against variable names.</p></dd>
+
+</dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
