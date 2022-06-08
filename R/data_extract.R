@@ -70,10 +70,6 @@ data_extract <- function(data, select, ...) {
   UseMethod("data_extract")
 }
 
-#' @export
-#' @rdname data_extract
-extract <- data_extract
-
 #' @rdname data_extract
 #' @export
 data_extract.data.frame <- function(data,

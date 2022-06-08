@@ -4,12 +4,14 @@ BREAKING
 
 * Removed deprecated function `data_findcols()`. Please use its replacement,
   `data_find()`.
+
+* Removed alias `extract()` for `data_extract()` function since it collided
+  with `tidyr::extract()`.
   
 NEW FUNCTIONS
 
 * `row_to_colnames()` and `colnames_to_row()` to move a row to column names,
   and column names to row (@etiennebacher, #169).
-
 
 # datawizard 0.4.1
 
