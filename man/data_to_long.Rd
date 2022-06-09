@@ -27,7 +27,8 @@ data_to_wide(
   rows_from = NULL,
   sep = "_",
   ...,
-  names_from = colnames_from
+  names_from = colnames_from,
+  verbose = TRUE
 )
 
 reshape_longer(
@@ -50,7 +51,8 @@ reshape_wider(
   rows_from = NULL,
   sep = "_",
   ...,
-  names_from = colnames_from
+  names_from = colnames_from,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -92,8 +94,8 @@ names.}
 \item{values_to}{The name of the new column that will contain the values of
 the pivoted variables.}
 
-\item{rows_to}{The name of the column that will contain the row-number from
-the original data. If \code{NULL}, will be removed.}
+\item{rows_to}{The name of the column that will contain the row names or row
+numbers from the original data. If \code{NULL}, will be removed.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
@@ -126,6 +128,8 @@ used as future column names.}
 
 \item{sep}{The indicating a separating character in the variable names in the
 wide format.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 data.frame

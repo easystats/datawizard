@@ -10,8 +10,8 @@
 #'   names.
 #' @param values_to The name of the new column that will contain the values of
 #'   the pivoted variables.
-#' @param rows_to The name of the column that will contain the row-number from
-#'   the original data. If `NULL`, will be removed.
+#' @param rows_to The name of the column that will contain the row names or row
+#'   numbers from the original data. If `NULL`, will be removed.
 #' @param colnames_from The name of the column that contains the levels to be
 #'   used as future column names.
 #' @param values_from The name of the column that contains the values to be used
