@@ -112,7 +112,7 @@ functions (see 'Details'), this argument may be used as workaround.}
 
 \item{cols}{Deprecated. Please use \code{select}.}
 
-\item{...}{Additional arguments passed on to methods.}
+\item{...}{Currently not used.}
 
 \item{names_to, names_from}{Same as \code{colnames_to}, is there for
 compatibility with \code{tidyr::pivot_longer()}.}

@@ -18,7 +18,7 @@
 #'   as future variable values.
 #' @param rows_from The name of the column that identifies the rows. If
 #'   `NULL`, will use all the unique rows.
-#' @param ... Additional arguments passed on to methods.
+#' @param ... Currently not used.
 #' @param names_to,names_from Same as `colnames_to`, is there for
 #'   compatibility with `tidyr::pivot_longer()`.
 #' @param sep The indicating a separating character in the variable names in the
