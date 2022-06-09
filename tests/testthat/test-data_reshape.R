@@ -53,6 +53,28 @@ test_that("data_reshape works as expected - long to wide", {
     tolerance = 1e-3
   )
 
+  # warning for column name collision
+  long_data$X1 <- 5
+  expect_warning(
+    data_to_wide(
+      long_data,
+      colnames_from = "Name",
+      values_from = "Value",
+      rows_from = "Row_ID"
+    )
+  )
+
+  out <- suppressWarnings(data_to_wide(
+    long_data,
+    colnames_from = "Name",
+    values_from = "Value",
+    rows_from = "Row_ID"
+  ))
+
+  expect_equal(
+    colnames(out),
+    c("Row_ID", "X1", "Value_X1", "Value_X2", "Value_X3")
+  )
 
   # colnames
   long_data <- data_to_long(wide_data, select = c("X2", "X3"))

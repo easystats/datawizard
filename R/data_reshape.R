@@ -179,7 +179,8 @@ data_to_wide <- function(data,
                          rows_from = NULL,
                          sep = "_",
                          ...,
-                         names_from = colnames_from) {
+                         names_from = colnames_from,
+                         verbose = TRUE) {
   if (inherits(data, "tbl_df")) {
     tbl_input <- TRUE
     data <- as.data.frame(data)
@@ -220,8 +221,19 @@ data_to_wide <- function(data,
   if ("_Rows" %in% names(wide)) wide[["_Rows"]] <- NULL
   row.names(wide) <- NULL # Reset row names
 
-  # restore proper column names
-  colnames(wide) <- replace(colnames(wide), colnames(wide) %in% old_colnames, new_colnames)
+  # check if values can be used as column names,
+  # or if there are conflicts due to duplicates
+  if (any(new_colnames %in% colnames(wide))) {
+    if (verbose) {
+      warning(insight::format_message(
+        "Some values of the column specified in 'colnames_from' are already present as column names.",
+        sprintf("To avoid duplicated column names, the names of new columns follow the pattern '%s' etc.", old_colnames[1])
+      ), call. = FALSE)
+    }
+  } else {
+    # restore proper column names
+    colnames(wide) <- replace(colnames(wide), colnames(wide) %in% old_colnames, new_colnames)
+  }
 
   # Remove reshape attributes
   attributes(wide)$reshapeWide <- NULL
