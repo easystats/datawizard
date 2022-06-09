@@ -125,12 +125,13 @@ data_to_long <- function(data,
 
   # Reshaping ---------------------
   # Create Index column as needed by reshape
-  data[["_Row"]] <- to_numeric(row.names(data))
+  data[["_RowID"]] <- 1:nrow(data)
+  data[["_RowNames"]] <- row.names(data)
 
   # Reshape
   long <- stats::reshape(data,
     varying = cols,
-    idvar = "_Row",
+    idvar = "_RowID",
     v.names = values_to,
     timevar = colnames_to,
     direction = "long"
@@ -138,14 +139,15 @@ data_to_long <- function(data,
 
   # Cleaning --------------------------
   # Sort the dataframe (to match pivot_longer's output)
-  long <- long[order(long[["_Row"]], long[[colnames_to]]), ]
+  long <- long[order(long[["_RowID"]], long[[colnames_to]]), ]
 
   # Remove or rename the row index
   if (is.null(rows_to)) {
-    long[["_Row"]] <- NULL
+    long[["_RowNames"]] <- NULL
   } else {
-    names(long)[names(long) == "_Row"] <- rows_to
+    colnames(long)[colnames(long) == "_RowNames"] <- rows_to
   }
+  long[["_RowID"]] <- NULL
 
   # Re-insert col names as levels
   long[[colnames_to]] <- cols[long[[colnames_to]]]
