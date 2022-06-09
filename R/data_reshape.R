@@ -13,9 +13,9 @@
 #' @param rows_to The name of the column that will contain the row-number from
 #'   the original data. If `NULL`, will be removed.
 #' @param colnames_from The name of the column that contains the levels to be
-#'   used as future columns.
-#' @param values_from The name of the column that contains the values of the put
-#'   in the columns.
+#'   used as future column names.
+#' @param values_from The name of the column that contains the values to be used
+#'   as future variable values.
 #' @param rows_from The name of the column that identifies the rows. If
 #'   `NULL`, will use all the unique rows.
 #' @param ... Additional arguments passed on to methods.
@@ -201,6 +201,11 @@ data_to_wide <- function(data,
     rows_from <- "_Rows"
   }
 
+  # create pattern of column names - stats::reshape renames columns that
+  # concatenates "v.names" + values - we only want values
+  old_colnames <- paste0(values_from, "_", unique(data[[colnames_from]]))
+  new_colnames <- unique(data[[colnames_from]])
+
   # Reshape
   wide <- stats::reshape(data,
     v.names = values_from,
@@ -213,6 +218,9 @@ data_to_wide <- function(data,
   # Clean
   if ("_Rows" %in% names(wide)) wide[["_Rows"]] <- NULL
   row.names(wide) <- NULL # Reset row names
+
+  # restore proper column names
+  colnames(wide) <- replace(colnames(wide), colnames(wide) %in% old_colnames, new_colnames)
 
   # Remove reshape attributes
   attributes(wide)$reshapeWide <- NULL

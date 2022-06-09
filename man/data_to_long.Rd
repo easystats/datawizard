@@ -115,11 +115,11 @@ functions (see 'Details'), this argument may be used as workaround.}
 \item{names_to, names_from}{Same as \code{colnames_to}, is there for
 compatibility with \code{tidyr::pivot_longer()}.}
 
-\item{values_from}{The name of the column that contains the values of the put
-in the columns.}
+\item{values_from}{The name of the column that contains the values to be used
+as future variable values.}
 
 \item{colnames_from}{The name of the column that contains the levels to be
-used as future columns.}
+used as future column names.}
 
 \item{rows_from}{The name of the column that identifies the rows. If
 \code{NULL}, will use all the unique rows.}
