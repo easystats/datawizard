@@ -52,7 +52,14 @@ test_that("data_reshape works as expected - long to wide", {
     ignore_attr = TRUE,
     tolerance = 1e-3
   )
+
+
+  # colnames
+  long_data <- data_to_long(wide_data, select = c("X2", "X3"))
+  wide <- data_to_wide(long_data, colnames_from = "Name", values_from = "Value")
+  expect_equal(colnames(wide), colnames(wide_data))
 })
+
 
 test_that("data_reshape works as expected - complex dataset", {
   skip_if_not_installed("psych")
