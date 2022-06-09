@@ -125,8 +125,9 @@ data_to_long <- function(data,
 
   # Reshaping ---------------------
   # Create Index column as needed by reshape
+  rn <- row.names(data)
   data[["_RowID"]] <- 1:nrow(data)
-  data[["_RowNames"]] <- row.names(data)
+  data[["_RowNames"]] <- rn
 
   # Reshape
   long <- stats::reshape(data,
@@ -146,6 +147,7 @@ data_to_long <- function(data,
     long[["_RowNames"]] <- NULL
   } else {
     colnames(long)[colnames(long) == "_RowNames"] <- rows_to
+    long[[rows_to]] <- to_numeric(rn)
   }
   long[["_RowID"]] <- NULL
 
