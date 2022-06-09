@@ -128,12 +128,13 @@ data_to_long <- function(data,
   data[["_Row"]] <- to_numeric(row.names(data))
 
   # Reshape
-  long <- stats::reshape(data,
-                         varying = cols,
-                         idvar = "_Row",
-                         v.names = values_to,
-                         timevar = colnames_to,
-                         direction = "long"
+  long <- stats::reshape(
+    data,
+    varying = cols,
+    idvar = "_Row",
+    v.names = values_to,
+    timevar = colnames_to,
+    direction = "long"
   )
 
   # Cleaning --------------------------
