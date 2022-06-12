@@ -2,13 +2,10 @@
 % Please edit documentation in R/data_extract.R
 \name{data_extract}
 \alias{data_extract}
-\alias{extract}
 \alias{data_extract.data.frame}
 \title{Extract one or more columns or elements from an object}
 \usage{
 data_extract(data, select, ...)
-
-extract(data, select, ...)
 
 \method{data_extract}{data.frame}(
   data,
@@ -112,19 +109,20 @@ a data frame.
 }
 \examples{
 # single variable
-extract(mtcars, cyl, name = gear)
-extract(mtcars, "cyl", name = gear)
-extract(mtcars, -1, name = gear)
-extract(mtcars, cyl, name = 0)
-extract(mtcars, cyl, name = "row.names")
+data_extract(mtcars, cyl, name = gear)
+data_extract(mtcars, "cyl", name = gear)
+data_extract(mtcars, -1, name = gear)
+data_extract(mtcars, cyl, name = 0)
+data_extract(mtcars, cyl, name = "row.names")
 
 # selecting multiple variables
-head(extract(iris, starts_with("Sepal")))
-head(extract(iris, ends_with("Width")))
-head(extract(iris, 2:4))
+head(data_extract(iris, starts_with("Sepal")))
+head(data_extract(iris, ends_with("Width")))
+head(data_extract(iris, 2:4))
 
 # select first of multiple variables
-extract(iris, starts_with("Sepal"), extract = "first")
+data_extract(iris, starts_with("Sepal"), extract = "first")
+
 # select first of multiple variables, return as data frame
-head(extract(iris, starts_with("Sepal"), extract = "first", as_data_frame = TRUE))
+head(data_extract(iris, starts_with("Sepal"), extract = "first", as_data_frame = TRUE))
 }

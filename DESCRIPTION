@@ -1,7 +1,7 @@
 Type: Package
 Package: datawizard
 Title: Easy Data Wrangling
-Version: 0.4.1.1
+Version: 0.4.1.3
 Authors@R: c(
     person("Dominique", "Makowski", , "dom.makowski@gmail.com", role = "aut",
            comment = c(ORCID = "0000-0001-5375-9967", Twitter = "@Dom_Makowski")),
@@ -30,7 +30,6 @@ Imports:
     utils
 Suggests: 
     bayestestR,
-    biglm,
     boot,
     brms,
     data.table,
@@ -41,9 +40,7 @@ Suggests:
     httr,
     knitr,
     lme4,
-    MASS,
     mediation,
-    modelbased,
     parameters,
     poorman,
     psych,
@@ -53,7 +50,6 @@ Suggests:
     rmarkdown,
     rstanarm,
     see,
-    spelling,
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
