@@ -1,26 +1,87 @@
 set.seed(123)
-wide_data <- data.frame(replicate(3, rnorm(5)))
+wide_data <- data.frame(replicate(3, sample(1:5)))
 
 test_that("data_reshape works as expected - wide to long", {
-  expect_snapshot(data_to_long(wide_data))
 
-  expect_snapshot(data_to_long(wide_data,
-    cols = c(1, 2),
-    colnames_to = "Column",
-    values_to = "Numbers",
-    rows_to = "Row"
-  ))
+  expect_equal(
+    head(data_to_long(wide_data)),
+    data.frame(Name = c("X1", "X2", "X3", "X1", "X2", "X3"),
+               Value = c(3L, 3L, 2L, 2L, 1L, 3L),
+               stringsAsFactors = FALSE),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+
+  expect_equal(
+    head(data_to_long(wide_data,
+      cols = c(1, 2),
+      colnames_to = "Column",
+      values_to = "Numbers",
+      rows_to = "Row"
+    )),
+    data.frame(
+      X3 = c(2L, 2L, 3L, 3L, 1L, 1L),
+      Row = c(1, 1, 2, 2, 3, 3),
+      Column = c("X1", "X2", "X1", "X2", "X1", "X2"),
+      Numbers = c(3L, 3L, 2L, 1L, 5L, 2L),
+      stringsAsFactors = FALSE
+    ),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
 })
+
 
 test_that("data_reshape works as expected - long to wide", {
   long_data <- data_to_long(wide_data, rows_to = "Row_ID")
 
-  expect_snapshot(data_to_wide(long_data,
+  expect_equal(
+    data_to_wide(
+      long_data,
+      colnames_from = "Name",
+      values_from = "Value",
+      rows_from = "Row_ID"
+    ),
+    data.frame(
+      Row_ID = c(1, 2, 3, 4, 5),
+      X1 = c(3L, 2L, 5L, 4L, 1L),
+      X2 = c(3L, 1L, 2L, 5L, 4L),
+      X3 = c(2L, 3L, 1L, 4L, 5L),
+      stringsAsFactors = FALSE
+    ),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+
+  # warning for column name collision
+  long_data$X1 <- 5
+  expect_warning(
+    data_to_wide(
+      long_data,
+      colnames_from = "Name",
+      values_from = "Value",
+      rows_from = "Row_ID"
+    )
+  )
+
+  out <- suppressWarnings(data_to_wide(
+    long_data,
     colnames_from = "Name",
     values_from = "Value",
     rows_from = "Row_ID"
   ))
+
+  expect_equal(
+    colnames(out),
+    c("Row_ID", "X1", "Value_X1", "Value_X2", "Value_X3")
+  )
+
+  # colnames
+  long_data <- data_to_long(wide_data, select = c("X2", "X3"))
+  wide <- data_to_wide(long_data, colnames_from = "Name", values_from = "Value")
+  expect_equal(colnames(wide), colnames(wide_data))
 })
+
 
 test_that("data_reshape works as expected - complex dataset", {
   skip_if_not_installed("psych")
