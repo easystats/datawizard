@@ -13,6 +13,10 @@ NEW FUNCTIONS
 * `row_to_colnames()` and `colnames_to_row()` to move a row to column names,
   and column names to row (@etiennebacher, #169).
 
+BUG FIXES
+
+* Fixed wrong column names in `data_to_wide()` (#173).
+
 # datawizard 0.4.1
 
 BREAKING

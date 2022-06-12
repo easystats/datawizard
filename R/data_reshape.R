@@ -10,15 +10,15 @@
 #'   names.
 #' @param values_to The name of the new column that will contain the values of
 #'   the pivoted variables.
-#' @param rows_to The name of the column that will contain the row-number from
-#'   the original data. If `NULL`, will be removed.
+#' @param rows_to The name of the column that will contain the row names or row
+#'   numbers from the original data. If `NULL`, will be removed.
 #' @param colnames_from The name of the column that contains the levels to be
-#'   used as future columns.
-#' @param values_from The name of the column that contains the values of the put
-#'   in the columns.
+#'   used as future column names.
+#' @param values_from The name of the column that contains the values to be used
+#'   as future variable values.
 #' @param rows_from The name of the column that identifies the rows. If
 #'   `NULL`, will use all the unique rows.
-#' @param ... Additional arguments passed on to methods.
+#' @param ... Currently not used.
 #' @param names_to,names_from Same as `colnames_to`, is there for
 #'   compatibility with `tidyr::pivot_longer()`.
 #' @param sep The indicating a separating character in the variable names in the
@@ -128,7 +128,8 @@ data_to_long <- function(data,
   data[["_Row"]] <- to_numeric(row.names(data))
 
   # Reshape
-  long <- stats::reshape(data,
+  long <- stats::reshape(
+    data,
     varying = cols,
     idvar = "_Row",
     v.names = values_to,
@@ -178,7 +179,8 @@ data_to_wide <- function(data,
                          rows_from = NULL,
                          sep = "_",
                          ...,
-                         names_from = colnames_from) {
+                         names_from = colnames_from,
+                         verbose = TRUE) {
   if (inherits(data, "tbl_df")) {
     tbl_input <- TRUE
     data <- as.data.frame(data)
@@ -201,6 +203,11 @@ data_to_wide <- function(data,
     rows_from <- "_Rows"
   }
 
+  # create pattern of column names - stats::reshape renames columns that
+  # concatenates "v.names" + values - we only want values
+  old_colnames <- paste0(values_from, "_", unique(data[[colnames_from]]))
+  new_colnames <- unique(data[[colnames_from]])
+
   # Reshape
   wide <- stats::reshape(data,
     v.names = values_from,
@@ -213,6 +220,20 @@ data_to_wide <- function(data,
   # Clean
   if ("_Rows" %in% names(wide)) wide[["_Rows"]] <- NULL
   row.names(wide) <- NULL # Reset row names
+
+  # check if values can be used as column names,
+  # or if there are conflicts due to duplicates
+  if (any(new_colnames %in% colnames(wide))) {
+    if (verbose) {
+      warning(insight::format_message(
+        "Some values of the column specified in 'colnames_from' are already present as column names.",
+        sprintf("To avoid duplicated column names, the names of new columns follow the pattern '%s' etc.", old_colnames[1])
+      ), call. = FALSE)
+    }
+  } else {
+    # restore proper column names
+    colnames(wide) <- replace(colnames(wide), colnames(wide) %in% old_colnames, new_colnames)
+  }
 
   # Remove reshape attributes
   attributes(wide)$reshapeWide <- NULL

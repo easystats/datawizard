@@ -27,7 +27,8 @@ data_to_wide(
   rows_from = NULL,
   sep = "_",
   ...,
-  names_from = colnames_from
+  names_from = colnames_from,
+  verbose = TRUE
 )
 
 reshape_longer(
@@ -50,7 +51,8 @@ reshape_wider(
   rows_from = NULL,
   sep = "_",
   ...,
-  names_from = colnames_from
+  names_from = colnames_from,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -92,8 +94,8 @@ names.}
 \item{values_to}{The name of the new column that will contain the values of
 the pivoted variables.}
 
-\item{rows_to}{The name of the column that will contain the row-number from
-the original data. If \code{NULL}, will be removed.}
+\item{rows_to}{The name of the column that will contain the row names or row
+numbers from the original data. If \code{NULL}, will be removed.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
@@ -110,22 +112,24 @@ functions (see 'Details'), this argument may be used as workaround.}
 
 \item{cols}{Deprecated. Please use \code{select}.}
 
-\item{...}{Additional arguments passed on to methods.}
+\item{...}{Currently not used.}
 
 \item{names_to, names_from}{Same as \code{colnames_to}, is there for
 compatibility with \code{tidyr::pivot_longer()}.}
 
-\item{values_from}{The name of the column that contains the values of the put
-in the columns.}
+\item{values_from}{The name of the column that contains the values to be used
+as future variable values.}
 
 \item{colnames_from}{The name of the column that contains the levels to be
-used as future columns.}
+used as future column names.}
 
 \item{rows_from}{The name of the column that identifies the rows. If
 \code{NULL}, will use all the unique rows.}
 
 \item{sep}{The indicating a separating character in the variable names in the
 wide format.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 data.frame
