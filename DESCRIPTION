@@ -35,6 +35,7 @@ Suggests:
     data.table,
     effectsize,
     gamm4,
+    ggplot2,
     haven,
     httr,
     knitr,
