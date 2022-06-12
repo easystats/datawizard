@@ -55,61 +55,61 @@ test_that("center, all na", {
 # with grouped data -------------------------------------------
 
 test_that("center (grouped data)", {
-  datawizard <- iris |>
-    group_by(Species) |>
-    center(Sepal.Width) |>
-    ungroup() |>
+  datawizard <- iris %>%
+    group_by(Species) %>%
+    center(Sepal.Width) %>%
+    ungroup() %>%
     pull(Sepal.Width)
 
-  manual <- iris |>
-    group_by(Species) |>
-    mutate(Sepal.Width = Sepal.Width - mean(Sepal.Width)) |>
-    ungroup() |>
+  manual <- iris %>%
+    group_by(Species) %>%
+    mutate(Sepal.Width = Sepal.Width - mean(Sepal.Width)) %>%
+    ungroup() %>%
     pull(Sepal.Width)
 
   expect_equal(datawizard, manual)
 })
 
 test_that("center, robust (grouped data)", {
-  datawizard <- iris |>
-    group_by(Species) |>
-    center(Sepal.Width, robust = TRUE) |>
-    ungroup() |>
+  datawizard <- iris %>%
+    group_by(Species) %>%
+    center(Sepal.Width, robust = TRUE) %>%
+    ungroup() %>%
     pull(Sepal.Width)
 
-  manual <- iris |>
-    group_by(Species) |>
-    mutate(Sepal.Width = Sepal.Width - median(Sepal.Width)) |>
-    ungroup() |>
+  manual <- iris %>%
+    group_by(Species) %>%
+    mutate(Sepal.Width = Sepal.Width - median(Sepal.Width)) %>%
+    ungroup() %>%
     pull(Sepal.Width)
 
   expect_equal(datawizard, manual)
 })
 
 test_that("center, select (grouped data)", {
-  datawizard <- iris |>
-    group_by(Species) |>
-    center(select = starts_with("Sepal\\.W")) |>
-    ungroup() |>
+  datawizard <- iris %>%
+    group_by(Species) %>%
+    center(select = starts_with("Sepal\\.W")) %>%
+    ungroup() %>%
     pull(Sepal.Width)
 
-  manual <- iris |>
-    group_by(Species) |>
-    mutate(Sepal.Width = Sepal.Width - mean(Sepal.Width)) |>
-    ungroup() |>
+  manual <- iris %>%
+    group_by(Species) %>%
+    mutate(Sepal.Width = Sepal.Width - mean(Sepal.Width)) %>%
+    ungroup() %>%
     pull(Sepal.Width)
 
   expect_equal(datawizard, manual)
 })
 
 test_that("center, factors (grouped data)", {
-  datawizard <- iris |>
-    group_by(Species) |>
-    center(select = "Species") |>
-    ungroup() |>
+  datawizard <- iris %>%
+    group_by(Species) %>%
+    center(select = "Species") %>%
+    ungroup() %>%
     pull(Species)
 
-  manual <- iris |>
+  manual <- iris %>%
     pull(Species)
 
   expect_equal(datawizard, manual)
