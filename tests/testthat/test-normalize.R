@@ -70,7 +70,7 @@ test_that("normalize: select", {
   expect_equal(
     normalize(
       iris, select = starts_with("Petal\\.L")
-    ) |>
+    ) %>%
       pull(Petal.Length),
     normalize(iris$Petal.Length)
   )
@@ -81,7 +81,7 @@ test_that("normalize: exclude", {
     normalize(
       iris, exclude = ends_with("ecies")
     ),
-    iris |>
+    iris %>%
       normalize(select = 1:4)
   )
 })
@@ -90,32 +90,32 @@ test_that("normalize: exclude", {
 # with grouped data -------------------------------------------
 
 test_that("normalize (grouped data)", {
-  datawizard <- iris |>
-    group_by(Species) |>
-    normalize(Sepal.Width) |>
-    ungroup() |>
+  datawizard <- iris %>%
+    group_by(Species) %>%
+    normalize(Sepal.Width) %>%
+    ungroup() %>%
     pull(Sepal.Width)
 
-  manual <- iris |>
-    group_by(Species) |>
-    mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width))/diff(range(Sepal.Width))) |>
-    ungroup() |>
+  manual <- iris %>%
+    group_by(Species) %>%
+    mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width))/diff(range(Sepal.Width))) %>%
+    ungroup() %>%
     pull(Sepal.Width)
 
   expect_equal(datawizard, manual)
 })
 
 test_that("normalize, include bounds (grouped data)", {
-  datawizard <- iris |>
-    group_by(Species) |>
-    normalize(Sepal.Width, include_bounds = TRUE) |>
-    ungroup() |>
+  datawizard <- iris %>%
+    group_by(Species) %>%
+    normalize(Sepal.Width, include_bounds = TRUE) %>%
+    ungroup() %>%
     pull(Sepal.Width)
 
-  manual <- iris |>
-    group_by(Species) |>
-    mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width))/diff(range(Sepal.Width))) |>
-    ungroup() |>
+  manual <- iris %>%
+    group_by(Species) %>%
+    mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width))/diff(range(Sepal.Width))) %>%
+    ungroup() %>%
     pull(Sepal.Width)
 
   expect_equal(datawizard, manual)
@@ -123,10 +123,10 @@ test_that("normalize, include bounds (grouped data)", {
 
 
 test_that("normalize, factor (grouped data)", {
-  datawizard <- iris |>
-    group_by(Species) |>
-    normalize(Species) |>
-    ungroup() |>
+  datawizard <- iris %>%
+    group_by(Species) %>%
+    normalize(Species) %>%
+    ungroup() %>%
     pull(Species)
 
   manual <- iris$Species

@@ -2,6 +2,8 @@
 
 BREAKING
 
+* Bumps the needed minimum R version to `3.5`.
+
 * Removed deprecated function `data_findcols()`. Please use its replacement,
   `data_find()`.
 

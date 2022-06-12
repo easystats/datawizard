@@ -345,9 +345,9 @@ test_df <- data.frame(
 
 test_that("data_reverse works with dataframes (grouped data)", {
   expect_equal(
-    test_df |>
-      group_by(id) |>
-      data_reverse(exclude = "id") |>
+    test_df %>%
+      group_by(id) %>%
+      data_reverse(exclude = "id") %>%
       ungroup(),
 
     data.frame(
@@ -372,9 +372,9 @@ test_df <- data.frame(
 
 test_that("data_reverse works with dataframes containing NAs (grouped data)", {
   expect_equal(
-    test_df |>
-      group_by(id) |>
-      data_reverse(exclude = "id") |>
+    test_df %>%
+      group_by(id) %>%
+      data_reverse(exclude = "id") %>%
       ungroup(),
 
     data.frame(
