@@ -28,10 +28,6 @@ test_that("standardize | errors", {
   expect_match(as.character(ers), "Try instead to standardize the data",
     fixed = TRUE
   )
-
-  skip_if_not_installed("biglm")
-  mod <- biglm::biglm(mpg ~ hp, mtcars)
-  expect_error(standardize(mod), "not possible")
 })
 
 

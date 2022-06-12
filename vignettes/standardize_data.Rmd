@@ -174,7 +174,7 @@ Let's have a look at the data, averaged by participants:
 
 ```{r, eval=FALSE}
 # Download the 'emotion' dataset
-load(url("https://raw.github.com/neuropsychology/psycho.R/master/data/emotion.rda"))
+load(url("https://raw.githubusercontent.com/neuropsychology/psycho.R/master/data/emotion.rda"))
 
 # Discard neutral pictures (keep only negative)
 emotion <- emotion %>% filter(Emotion_Condition == "Negative")
@@ -191,7 +191,7 @@ emotion %>%
 ```
 
 ```{r, echo=FALSE}
-load(url("https://raw.github.com/neuropsychology/psycho.R/master/data/emotion.rda"))
+load(url("https://raw.githubusercontent.com/neuropsychology/psycho.R/master/data/emotion.rda"))
 
 # Discard neutral pictures (keep only negative)
 emotion <- emotion %>% filter(Emotion_Condition == "Negative")

@@ -24,7 +24,7 @@ of \code{visualisation_recipe()} that control the aesthetic parameters.
 
 See the specific documentation page for your object's class:
 \itemize{
-\item {\link[modelbased:visualisation_recipe.estimate_predicted]{modelbased} (\code{estimate_means}, \code{estimate_contrasts}, \code{estimate_slopes}, \code{estimate_predicted}, \code{estimate_grouplevel})}
-\item {\link[correlation:visualisation_recipe.easycormatrix]{correlation} (\code{correlation}, \code{cor_test})}
+\item {modelbased}: \url{https://easystats.github.io/modelbased/reference/visualisation_recipe.estimate_predicted.html}
+\item {correlation}: \url{https://easystats.github.io/correlation/reference/visualisation_recipe.easycormatrix.html}
 }
 }

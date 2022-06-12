@@ -30,7 +30,6 @@ Imports:
     utils
 Suggests: 
     bayestestR,
-    biglm,
     boot,
     brms,
     data.table,
@@ -41,9 +40,7 @@ Suggests:
     httr,
     knitr,
     lme4,
-    MASS,
     mediation,
-    modelbased,
     parameters,
     poorman,
     psych,
