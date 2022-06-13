@@ -9,7 +9,12 @@ BREAKING
 
 * Removed alias `extract()` for `data_extract()` function since it collided
   with `tidyr::extract()`.
-  
+
+MAJOR CHANGES
+
+* Given his continued and significant contributions to the package, 
+  Etienne Bacher (@etiennebacher) is now included as an author.
+
 NEW FUNCTIONS
 
 * `row_to_colnames()` and `colnames_to_row()` to move a row to column names,
