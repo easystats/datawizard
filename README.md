@@ -94,7 +94,7 @@ find_columns(iris, starts_with("Sepal"))
 #> [1] "Sepal.Length" "Sepal.Width"
 
 # return data columns matching a pattern
-get_columns(iris, starts_with("Sepal")) |> head()
+get_columns(iris, starts_with("Sepal")) %>% head()
 #>   Sepal.Length Sepal.Width
 #> 1          5.1         3.5
 #> 2          4.9         3.0
@@ -535,15 +535,15 @@ their first argument, and also return a (modified) data frame again.
 Thus, `{datawizard}` integrates smoothly into a “pipe-workflow”.
 
 ``` r
-iris |>
+iris %>%
   # all rows where Species is "versicolor" or "virginica"
-  data_filter(Species %in% c("versicolor", "virginica")) |>
+  data_filter(Species %in% c("versicolor", "virginica")) %>%
   # select only columns with "." in names (i.e. drop Species)
-  get_columns(contains(".")) |>
+  get_columns(contains(".")) %>%
   # move columns that ends with "Length" to start of data frame
-  data_relocate(ends_with("Length")) |>
+  data_relocate(ends_with("Length")) %>%
   # remove fourth column
-  data_remove(4) |>
+  data_remove(4) %>%
   head()
 #>    Sepal.Length Petal.Length Sepal.Width
 #> 51          7.0          4.7         3.2

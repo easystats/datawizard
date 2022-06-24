@@ -1,5 +1,15 @@
 test_that("text formatting helpers work as expected", {
   expect_equal(
+    format_text(c("A very long First", "Some similar long Second", "Shorter Third", "More or less long Fourth", "And finally the Last"), width = 20),
+    "A very long First,\nSome similar long\nSecond, Shorter\nThird, More or less\nlong Fourth and And\nfinally the Last\n"
+  )
+
+  expect_equal(
+    format_text(c("A very long First", "Some similar long Second", "Shorter Third", "More or less long Fourth", "And finally the Last"), last = " or ", enclose = "`", width = 20),
+    "`A very long\nFirst`, `Some\nsimilar long\nSecond`, `Shorter\nThird`, `More or\nless long Fourth`\nor `And finally the\nLast`\n"
+  )
+
+  expect_equal(
     text_fullstop(c("something", "something else.")),
     c("something.", "something else.")
   )
@@ -16,6 +26,11 @@ test_that("text formatting helpers work as expected", {
   )
 
   expect_equal(
+    text_concatenate(c("First", "Second", "Last"), last = " or ", enclose = "`"),
+    "`First`, `Second` or `Last`"
+  )
+
+  expect_equal(
     text_remove(c("one!", "two", "three!"), "!"),
     c("one", "two", "three")
   )
@@ -26,5 +41,10 @@ test_that("text formatting helpers work as expected", {
   expect_equal(
     text_paste(c("A", "", "B"), c("42", "42", "42")),
     c("A, 42", "42", "B, 42")
+  )
+
+  expect_equal(
+    text_paste(c("A", "", "B"), c("42", "42", "42"), enclose = "`"),
+    c("`A`, `42`", "`42`", "`B`, `42`")
   )
 })

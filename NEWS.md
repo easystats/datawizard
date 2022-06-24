@@ -2,16 +2,32 @@
 
 BREAKING
 
+* Bumps the needed minimum R version to `3.5`.
+
 * Removed deprecated function `data_findcols()`. Please use its replacement,
   `data_find()`.
 
 * Removed alias `extract()` for `data_extract()` function since it collided
   with `tidyr::extract()`.
-  
+
+MAJOR CHANGES
+
+* Given his continued and significant contributions to the package, 
+  Etienne Bacher (@etiennebacher) is now included as an author.
+
+CHANGES
+
+* Some of the text formatting helpers (like `text_concatenate()`) gain an
+  `enclose` argument, to wrap text elements with surrounding characters.
+
 NEW FUNCTIONS
 
 * `row_to_colnames()` and `colnames_to_row()` to move a row to column names,
   and column names to row (@etiennebacher, #169).
+
+BUG FIXES
+
+* Fixed wrong column names in `data_to_wide()` (#173).
 
 # datawizard 0.4.1
 
