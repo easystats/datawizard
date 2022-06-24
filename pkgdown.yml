@@ -1,7 +1,7 @@
 pandoc: 2.14.2
-pkgdown: 2.0.4.9000
-pkgdown_sha: 76325978ef43af520ebe52dc52cadd0040d085b8
+pkgdown: 2.0.5.9000
+pkgdown_sha: b4096aa376773d7dee98a267fd0b5a025975a3dc
 articles:
   standardize_data: standardize_data.html
-last_built: 2022-06-14T20:00Z
+last_built: 2022-06-24T09:26Z
 
