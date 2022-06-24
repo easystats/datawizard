@@ -15,6 +15,11 @@ MAJOR CHANGES
 * Given his continued and significant contributions to the package, 
   Etienne Bacher (@etiennebacher) is now included as an author.
 
+CHANGES
+
+* Some of the text formatting helpers (like `text_concatenate()`) gain an
+  `enclose` argument, to wrap text elements with surrounding characters.
+
 NEW FUNCTIONS
 
 * `row_to_colnames()` and `colnames_to_row()` to move a row to column names,
