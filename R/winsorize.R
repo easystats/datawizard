@@ -19,10 +19,12 @@
 #' @param data Dataframe or vector.
 #' @param threshold The amount of winsorization.
 #' @param verbose Toggle warnings.
+#' @param robust Logical, if TRUE, winsorizing is done via the median absolute deviation (MAD).
 #' @param ... Currently not used.
 #'
 #' @examples
 #' winsorize(iris$Sepal.Length, threshold = 0.2)
+#' winsorize(iris$Sepal.Length, threshold = 3, robust = TRUE)
 #' winsorize(iris, threshold = 0.2)
 #' @inherit data_rename seealso
 #' @export
@@ -43,27 +45,50 @@ winsorize.character <- winsorize.factor
 winsorize.logical <- winsorize.factor
 
 #' @export
-winsorize.data.frame <- function(data, threshold = 0.2, verbose = TRUE, ...) {
-  out <- sapply(data, winsorize, threshold = threshold, verbose = verbose)
+winsorize.data.frame <- function(data, threshold = 0.2, verbose = TRUE, robust = FALSE, ...) {
+  out <- sapply(data, winsorize, threshold = threshold, verbose = verbose, robust = robust)
   as.data.frame(out)
 }
 
 #' @rdname winsorize
 #' @export
-winsorize.numeric <- function(data, threshold = 0.2, verbose = TRUE, ...) {
-  if (threshold < 0 || threshold > 1) {
-    if (isTRUE(verbose)) {
-      warning("'threshold' for winsorization must be a scalar between 0 and 1. Did not winsorize data.", call. = FALSE)
-    }
-    return(data)
+winsorize.numeric <- function(data, threshold = 0.2, verbose = TRUE, robust = FALSE, ...) {
+  if(robust == FALSE) {
+
+    if (threshold < 0 || threshold > 0.5) {
+      if (isTRUE(verbose)) {
+        warning("'threshold' for winsorization must be a scalar between 0 and 0.5. Did not winsorize data.", call. = FALSE)
+        }
+      return(data)
+      }
+
+    y <- sort(data)
+    n <- length(data)
+    ibot <- floor(threshold * n) + 1
+    itop <- length(data) - ibot + 1
+    xbot <- y[ibot]
+    xtop <- y[itop]
+
+    winval <- data
+    winval[winval <= xbot] <- xbot
+    winval[winval >= xtop] <- xtop
+    return(winval)
   }
 
-  y <- sort(data)
-  n <- length(data)
-  ibot <- floor(threshold * n) + 1
-  itop <- length(data) - ibot + 1
-  xbot <- y[ibot]
-  xtop <- y[itop]
-  winval <- ifelse(data <= xbot, xbot, data)
-  ifelse(winval >= xtop, xtop, winval)
+  if(robust == TRUE) {
+
+    if (threshold <= 0) {
+      if (isTRUE(verbose)) {
+        warning("'threshold' for winsorization must be a scalar greater than 1. Did not winsorize data.", call. = FALSE)
+      }
+      return(data)
+    }
+
+    med <- median(data, na.rm = TRUE)
+    y <- data - med
+    sc <- mad(y, center = 0, na.rm = TRUE) * threshold
+    y[y > sc] <- sc
+    y[y < -sc] <- -sc
+    y + med
+  }
 }
