@@ -79,14 +79,14 @@ winsorize.numeric <- function(data, threshold = 0.2, verbose = TRUE, robust = FA
 
     if (threshold <= 0) {
       if (isTRUE(verbose)) {
-        warning("'threshold' for winsorization must be a scalar greater than 1. Did not winsorize data.", call. = FALSE)
+        warning("'threshold' for winsorization must be a scalar greater than 0. Did not winsorize data.", call. = FALSE)
       }
       return(data)
     }
 
-    med <- median(data, na.rm = TRUE)
+    med <- stats::median(data, na.rm = TRUE)
     y <- data - med
-    sc <- mad(y, center = 0, na.rm = TRUE) * threshold
+    sc <- stats::mad(y, center = 0, na.rm = TRUE) * threshold
     y[y > sc] <- sc
     y[y < -sc] <- -sc
     y + med

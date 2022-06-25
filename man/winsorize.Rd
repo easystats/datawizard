@@ -7,7 +7,7 @@
 \usage{
 winsorize(data, ...)
 
-\method{winsorize}{numeric}(data, threshold = 0.2, verbose = TRUE, ...)
+\method{winsorize}{numeric}(data, threshold = 0.2, verbose = TRUE, robust = FALSE, ...)
 }
 \arguments{
 \item{data}{Dataframe or vector.}
@@ -17,6 +17,8 @@ winsorize(data, ...)
 \item{threshold}{The amount of winsorization.}
 
 \item{verbose}{Toggle warnings.}
+
+\item{robust}{Logical, if TRUE, winsorizing is done via the median absolute deviation (MAD).}
 }
 \value{
 A dataframe with winsorized columns or a winsorized vector.
@@ -37,6 +39,7 @@ their more standard forms.
 }
 \examples{
 winsorize(iris$Sepal.Length, threshold = 0.2)
+winsorize(iris$Sepal.Length, threshold = 3, robust = TRUE)
 winsorize(iris, threshold = 0.2)
 }
 \seealso{
