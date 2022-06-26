@@ -17,17 +17,33 @@
 #' A dataframe with winsorized columns or a winsorized vector.
 #'
 #' @param data Dataframe or vector.
-#' @param threshold The amount of winsorization.
+#' @param threshold The amount of winsorization, depends on the value of `method`:
+#' - For `method = "percentile"`: the amount to windzorize from *each* tail.
+#' - For `method = "zscore"`: the number of *SD*/*MAD*-deviations from the *mean*/*median* (see `robust`)
+#' - For `method = "raw"`: a vector of length 2 with the lower and upper bound for winsorization.
 #' @param verbose Toggle warnings.
-#' @param method One of "percentile" or "zscore".
+#' @param method One of "percentile" (default), "zscore" or "raw".
 #' @param robust Logical, if TRUE, winsorizing through the "zscore" method is done via the median and the median absolute deviation (MAD); if FALSE, via the mean and the standard deviation.
 #' @param ... Currently not used.
 #'
 #' @examples
-#' winsorize(iris$Sepal.Length, threshold = 0.2)
-#' winsorize(iris$Sepal.Length, threshold = 2, method = "zscore")
-#' winsorize(iris$Sepal.Length, threshold = 2, method = "zscore", robust = TRUE)
+#' hist(iris$Sepal.Length, main = "Original data")
+#'
+#' hist(winsorize(iris$Sepal.Length, threshold = 0.2),
+#'      xlim = c(4, 8), main = "Percentile Winz")
+#'
+#' hist(winsorize(iris$Sepal.Length, threshold = 1.5, method = "zscore"),
+#'      xlim = c(4, 8), main = "Mean+-SD Winz")
+#'
+#' hist(winsorize(iris$Sepal.Length, threshold = 1.5, method = "zscore", robust = TRUE),
+#'      xlim = c(4, 8), main = "Median+-MAD Winz")
+#'
+#' hist(winsorize(iris$Sepal.Length, threshold = c(5, 7.5), method = "raw"),
+#'      xlim = c(4, 8), main = "Raw Thresholds")
+#'
+#' # Also works on a data frame:
 #' winsorize(iris, threshold = 0.2)
+#'
 #' @inherit data_rename seealso
 #' @export
 winsorize <- function(data, ...) {
@@ -47,34 +63,41 @@ winsorize.character <- winsorize.factor
 winsorize.logical <- winsorize.factor
 
 #' @export
-winsorize.data.frame <- function(data, threshold = 0.2, verbose = TRUE, robust = FALSE, ...) {
-  out <- sapply(data, winsorize, threshold = threshold, verbose = verbose, robust = robust)
-  as.data.frame(out)
+winsorize.data.frame <- function(data, threshold = 0.2, method = "percentile", robust = FALSE,
+                                 verbose = TRUE, ...) {
+  data <- lapply(data, winsorize, threshold = threshold, method = method, robust = robust, verbose = verbose)
+  as.data.frame(data)
 }
 
 #' @rdname winsorize
 #' @export
-winsorize.numeric <- function(data, threshold = 0.2, verbose = TRUE, method = "percentile", robust = FALSE, ...) {
-  if(method == "percentile") {
+winsorize.numeric <- function(data, threshold = 0.2, method = "percentile", robust = FALSE,
+                              verbose = TRUE, ...) {
+  method <- match.arg(method, choices = c("percentile", "zscore", "raw"))
 
+  if (method == "raw") {
+    if (length(threshold) != 2L) {
+      if (isTRUE(verbose)) {
+        warning("threshold must be of length 2 for lower and upper bound. Did not winsorize data.", call. = FALSE)
+      }
+      return(data)
+    }
+  }
+
+  if(method == "percentile") {
     if (threshold < 0 || threshold > 0.5) {
       if (isTRUE(verbose)) {
         warning("'threshold' for winsorization must be a scalar between 0 and 0.5. Did not winsorize data.", call. = FALSE)
-        }
-      return(data)
       }
+      return(data)
+    }
 
     y <- sort(data)
     n <- length(data)
     ibot <- floor(threshold * n) + 1
     itop <- length(data) - ibot + 1
-    xbot <- y[ibot]
-    xtop <- y[itop]
 
-    winval <- data
-    winval[winval <= xbot] <- xbot
-    winval[winval >= xtop] <- xtop
-    return(winval)
+    threshold <- c(y[ibot], y[itop])
   }
 
   if(method == "zscore") {
@@ -87,21 +110,18 @@ winsorize.numeric <- function(data, threshold = 0.2, verbose = TRUE, method = "p
     }
 
     if(isTRUE(robust)) {
-      med <- stats::median(data, na.rm = TRUE)
-      y <- data - med
-      winval <- stats::mad(y, center = 0, na.rm = TRUE) * threshold
-      y[y > winval] <- winval
-      y[y < -winval] <- -winval
-      return(y + med)
+      centeral <- stats::median(data, na.rm = TRUE)
+      deviation <- stats::mad(data, center = centeral, na.rm = TRUE)
+    } else {
+      centeral <- mean(data, na.rm = TRUE)
+      deviation <- stats::sd(data, na.rm = TRUE)
     }
 
-    if(isFALSE(robust)) {
-      m <- mean(data, na.rm = TRUE)
-      y <- data - m
-      winval <- stats::sd(y, na.rm = TRUE) * threshold
-      y[y > winval] <- winval
-      y[y < -winval] <- -winval
-      y + m
-    }
+    threshold <- centeral + c(-1, 1) * deviation * threshold
   }
+
+
+  data[data < threshold[1]] <- threshold[1]
+  data[data > threshold[2]] <- threshold[2]
+  return(data)
 }
