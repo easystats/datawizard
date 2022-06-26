@@ -17,6 +17,18 @@ test_that("winsorize: threshold must be between 0 and 1", {
     winsorize(sample(1:10, 5), threshold = 1.1),
     regexp = "must be a scalar between 0 and 0.5"
   )
+  expect_warning(
+    winsorize(sample(1:10, 5), method = "zscore", threshold = -3),
+    regexp = "must be a scalar greater than 0"
+  )
+  expect_warning(
+    winsorize(sample(1:10, 5), method = "zscore", threshold = -3, robust = TRUE),
+    regexp = "must be a scalar greater than 0"
+  )
+  expect_warning(
+    winsorize(sample(1:10, 5), method = "raw", threshold = 1.1),
+    regexp = "must be of length 2 for lower and upper bound"
+  )
   x <- sample(1:10, 5)
   suppressWarnings({
     y <- winsorize(x, threshold = -0.1)

@@ -65,8 +65,8 @@ winsorize.logical <- winsorize.factor
 #' @export
 winsorize.data.frame <- function(data, threshold = 0.2, method = "percentile", robust = FALSE,
                                  verbose = TRUE, ...) {
-  data <- lapply(data, winsorize, threshold = threshold, method = method, robust = robust, verbose = verbose)
-  as.data.frame(data)
+  data[] <- lapply(data, winsorize, threshold = threshold, method = method, robust = robust, verbose = verbose)
+  data
 }
 
 #' @rdname winsorize
@@ -78,7 +78,7 @@ winsorize.numeric <- function(data, threshold = 0.2, method = "percentile", robu
   if (method == "raw") {
     if (length(threshold) != 2L) {
       if (isTRUE(verbose)) {
-        warning("threshold must be of length 2 for lower and upper bound. Did not winsorize data.", call. = FALSE)
+        warning(insight::format_message("threshold must be of length 2 for lower and upper bound. Did not winsorize data."), call. = FALSE)
       }
       return(data)
     }
@@ -87,7 +87,7 @@ winsorize.numeric <- function(data, threshold = 0.2, method = "percentile", robu
   if(method == "percentile") {
     if (threshold < 0 || threshold > 0.5) {
       if (isTRUE(verbose)) {
-        warning("'threshold' for winsorization must be a scalar between 0 and 0.5. Did not winsorize data.", call. = FALSE)
+        warning(insight::format_message("'threshold' for winsorization must be a scalar between 0 and 0.5. Did not winsorize data."), call. = FALSE)
       }
       return(data)
     }
@@ -104,7 +104,7 @@ winsorize.numeric <- function(data, threshold = 0.2, method = "percentile", robu
 
     if (threshold <= 0) {
       if (isTRUE(verbose)) {
-        warning("'threshold' for winsorization must be a scalar greater than 0. Did not winsorize data.", call. = FALSE)
+        warning(insight::format_message("'threshold' for winsorization must be a scalar greater than 0. Did not winsorize data."), call. = FALSE)
       }
       return(data)
     }
