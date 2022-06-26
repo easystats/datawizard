@@ -11,11 +11,11 @@ test_that("with missing values", {
 test_that("winsorize: threshold must be between 0 and 1", {
   expect_warning(
     winsorize(sample(1:10, 5), threshold = -0.1),
-    regexp = "must be a scalar between 0 and 1"
+    regexp = "must be a scalar between 0 and 0.5"
   )
   expect_warning(
     winsorize(sample(1:10, 5), threshold = 1.1),
-    regexp = "must be a scalar between 0 and 1"
+    regexp = "must be a scalar between 0 and 0.5"
   )
   x <- sample(1:10, 5)
   suppressWarnings({
@@ -38,3 +38,4 @@ test_that("winsorize on data.frame", {
   )
   expect_equal(names(iris2), names(iris))
 })
+

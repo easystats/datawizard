@@ -19,12 +19,14 @@
 #' @param data Dataframe or vector.
 #' @param threshold The amount of winsorization.
 #' @param verbose Toggle warnings.
-#' @param robust Logical, if TRUE, winsorizing is done via the median absolute deviation (MAD).
+#' @param method One of "percentile" or "zscore".
+#' @param robust Logical, if TRUE, winsorizing through the "zscore" method is done via the median and the median absolute deviation (MAD); if FALSE, via the mean and the standard deviation.
 #' @param ... Currently not used.
 #'
 #' @examples
 #' winsorize(iris$Sepal.Length, threshold = 0.2)
-#' winsorize(iris$Sepal.Length, threshold = 3, robust = TRUE)
+#' winsorize(iris$Sepal.Length, threshold = 2, method = "zscore")
+#' winsorize(iris$Sepal.Length, threshold = 2, method = "zscore", robust = TRUE)
 #' winsorize(iris, threshold = 0.2)
 #' @inherit data_rename seealso
 #' @export
@@ -52,8 +54,8 @@ winsorize.data.frame <- function(data, threshold = 0.2, verbose = TRUE, robust =
 
 #' @rdname winsorize
 #' @export
-winsorize.numeric <- function(data, threshold = 0.2, verbose = TRUE, robust = FALSE, ...) {
-  if(robust == FALSE) {
+winsorize.numeric <- function(data, threshold = 0.2, verbose = TRUE, method = "percentile", robust = FALSE, ...) {
+  if(method == "percentile") {
 
     if (threshold < 0 || threshold > 0.5) {
       if (isTRUE(verbose)) {
@@ -75,7 +77,7 @@ winsorize.numeric <- function(data, threshold = 0.2, verbose = TRUE, robust = FA
     return(winval)
   }
 
-  if(robust == TRUE) {
+  if(method == "zscore") {
 
     if (threshold <= 0) {
       if (isTRUE(verbose)) {
@@ -84,11 +86,22 @@ winsorize.numeric <- function(data, threshold = 0.2, verbose = TRUE, robust = FA
       return(data)
     }
 
-    med <- stats::median(data, na.rm = TRUE)
-    y <- data - med
-    sc <- stats::mad(y, center = 0, na.rm = TRUE) * threshold
-    y[y > sc] <- sc
-    y[y < -sc] <- -sc
-    y + med
+    if(isTRUE(robust)) {
+      med <- stats::median(data, na.rm = TRUE)
+      y <- data - med
+      winval <- stats::mad(y, center = 0, na.rm = TRUE) * threshold
+      y[y > winval] <- winval
+      y[y < -winval] <- -winval
+      return(y + med)
+    }
+
+    if(isFALSE(robust)) {
+      m <- mean(data, na.rm = TRUE)
+      y <- data - m
+      winval <- stats::sd(y, na.rm = TRUE) * threshold
+      y[y > winval] <- winval
+      y[y < -winval] <- -winval
+      y + m
+    }
   }
 }

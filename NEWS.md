@@ -19,6 +19,7 @@ CHANGES
 
 * Some of the text formatting helpers (like `text_concatenate()`) gain an
   `enclose` argument, to wrap text elements with surrounding characters.
+* `winsorize` now accepts "zscore" method (in addition to "percentile"). Additionally, when `robust` is also set to `TRUE`, winsorizes via the median and median absolute deviation (MAD); else via the mean and standard deviation. (@rempsyc, #177, #49, #47).
 
 NEW FUNCTIONS
 
