@@ -50,6 +50,7 @@ Suggests:
     rmarkdown,
     rstanarm,
     see,
+    tidyr,
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr

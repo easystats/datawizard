@@ -18,11 +18,11 @@
 #'
 #' @param data Dataframe or vector.
 #' @param threshold The amount of winsorization, depends on the value of `method`:
-#' - For `method = "percentile"`: the amount to windzorize from *each* tail.
+#' - For `method = "percentile"`: the amount to winsorize from *each* tail.
 #' - For `method = "zscore"`: the number of *SD*/*MAD*-deviations from the *mean*/*median* (see `robust`)
 #' - For `method = "raw"`: a vector of length 2 with the lower and upper bound for winsorization.
 #' @param verbose Toggle warnings.
-#' @param method One of "percentile" (default), "zscore" or "raw".
+#' @param method One of "percentile" (default), "zscore", or "raw".
 #' @param robust Logical, if TRUE, winsorizing through the "zscore" method is done via the median and the median absolute deviation (MAD); if FALSE, via the mean and the standard deviation.
 #' @param ... Currently not used.
 #'
@@ -30,13 +30,13 @@
 #' hist(iris$Sepal.Length, main = "Original data")
 #'
 #' hist(winsorize(iris$Sepal.Length, threshold = 0.2),
-#'      xlim = c(4, 8), main = "Percentile Winz")
+#'      xlim = c(4, 8), main = "Percentile Winsorization")
 #'
 #' hist(winsorize(iris$Sepal.Length, threshold = 1.5, method = "zscore"),
-#'      xlim = c(4, 8), main = "Mean+-SD Winz")
+#'      xlim = c(4, 8), main = "Mean (+/- SD) Winsorization")
 #'
 #' hist(winsorize(iris$Sepal.Length, threshold = 1.5, method = "zscore", robust = TRUE),
-#'      xlim = c(4, 8), main = "Median+-MAD Winz")
+#'      xlim = c(4, 8), main = "Median (+/- MAD) Winsorization")
 #'
 #' hist(winsorize(iris$Sepal.Length, threshold = c(5, 7.5), method = "raw"),
 #'      xlim = c(4, 8), main = "Raw Thresholds")
