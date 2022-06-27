@@ -73,17 +73,16 @@ We can see that different methods give different central and variation values:
 
 ```{r, eval=FALSE}
 library(dplyr)
-library(tidyr)
 
 hardlyworking %>%
   select(starts_with("xtra_hours")) %>%
-  pivot_longer(everything()) %>%
-  group_by(name) %>%
+  data_to_long() %>%
+  group_by(Name) %>%
   summarise(
-    mean = mean(value),
-    sd = sd(value),
-    median = median(value),
-    mad = mad(value)
+    mean = mean(Value),
+    sd = sd(Value),
+    median = median(Value),
+    mad = mad(Value)
   )
 ```
 
@@ -113,13 +112,13 @@ hardlyworking_z <- standardize(hardlyworking)
 ```{r, eval=FALSE}
 hardlyworking_z %>%
   select(-xtra_hours_z, -xtra_hours_zr) %>%
-  pivot_longer(everything()) %>%
-  group_by(name) %>%
+  data_to_long() %>%
+  group_by(Name) %>%
   summarise(
-    mean = mean(value),
-    sd = sd(value),
-    median = median(value),
-    mad = mad(value)
+    mean = mean(Value),
+    sd = sd(Value),
+    median = median(Value),
+    mad = mad(Value)
   )
 ```
 

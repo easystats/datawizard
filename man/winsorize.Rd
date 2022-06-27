@@ -7,14 +7,30 @@
 \usage{
 winsorize(data, ...)
 
-\method{winsorize}{numeric}(data, threshold = 0.2, verbose = TRUE, ...)
+\method{winsorize}{numeric}(
+  data,
+  threshold = 0.2,
+  method = "percentile",
+  robust = FALSE,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{data}{Dataframe or vector.}
 
 \item{...}{Currently not used.}
 
-\item{threshold}{The amount of winsorization.}
+\item{threshold}{The amount of winsorization, depends on the value of \code{method}:
+\itemize{
+\item For \code{method = "percentile"}: the amount to winsorize from \emph{each} tail.
+\item For \code{method = "zscore"}: the number of \emph{SD}/\emph{MAD}-deviations from the \emph{mean}/\emph{median} (see \code{robust})
+\item For \code{method = "raw"}: a vector of length 2 with the lower and upper bound for winsorization.
+}}
+
+\item{method}{One of "percentile" (default), "zscore", or "raw".}
+
+\item{robust}{Logical, if TRUE, winsorizing through the "zscore" method is done via the median and the median absolute deviation (MAD); if FALSE, via the mean and the standard deviation.}
 
 \item{verbose}{Toggle warnings.}
 }
@@ -36,8 +52,23 @@ percentile. Winsorized estimators are usually more robust to outliers than
 their more standard forms.
 }
 \examples{
-winsorize(iris$Sepal.Length, threshold = 0.2)
+hist(iris$Sepal.Length, main = "Original data")
+
+hist(winsorize(iris$Sepal.Length, threshold = 0.2),
+     xlim = c(4, 8), main = "Percentile Winsorization")
+
+hist(winsorize(iris$Sepal.Length, threshold = 1.5, method = "zscore"),
+     xlim = c(4, 8), main = "Mean (+/- SD) Winsorization")
+
+hist(winsorize(iris$Sepal.Length, threshold = 1.5, method = "zscore", robust = TRUE),
+     xlim = c(4, 8), main = "Median (+/- MAD) Winsorization")
+
+hist(winsorize(iris$Sepal.Length, threshold = c(5, 7.5), method = "raw"),
+     xlim = c(4, 8), main = "Raw Thresholds")
+
+# Also works on a data frame:
 winsorize(iris, threshold = 0.2)
+
 }
 \seealso{
 \itemize{
