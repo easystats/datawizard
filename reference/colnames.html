@@ -64,9 +64,9 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">row_to_colnames</span><span class="op">(</span><span class="va">x</span>, row <span class="op">=</span> <span class="fl">1</span>, na_prefix <span class="op">=</span> <span class="st">"x"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">colnames_to_row</span><span class="op">(</span><span class="va">x</span>, prefix <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">row_to_colnames</span><span class="op">(</span><span class="va">x</span>, row <span class="op">=</span> <span class="fl">1</span>, na_prefix <span class="op">=</span> <span class="st">"x"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">colnames_to_row</span><span class="op">(</span><span class="va">x</span>, prefix <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -102,40 +102,40 @@ be incremented at each column (<code>x1</code>, <code>x2</code>, etc.).</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Convert a row to column names --------------------------------</span></span>
-<span class="r-in"><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">  a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iso"</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span>,</span>
-<span class="r-in">  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="fl">3</span>, <span class="fl">6</span><span class="op">)</span>,</span>
-<span class="r-in">  c <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">5</span>, <span class="fl">7</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">test</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Convert a row to column names --------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iso"</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="fl">3</span>, <span class="fl">6</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  c <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">5</span>, <span class="fl">7</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">test</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     a    b  c</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 iso year NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   2    3  5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3   5    6  7</span>
-<span class="r-in"><span class="fu">row_to_colnames</span><span class="op">(</span><span class="va">test</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">row_to_colnames</span><span class="op">(</span><span class="va">test</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Some values of row 1 were NAs. The corresponding column names are</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   prefixed with 'x'.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   iso year x1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   2    3  5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3   5    6  7</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Convert column names to row --------------------------------</span></span>
-<span class="r-in"><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">  ARG <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BRA"</span>, <span class="st">"FRA"</span><span class="op">)</span>,</span>
-<span class="r-in">  `1960` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1960</span>, <span class="fl">1960</span><span class="op">)</span>,</span>
-<span class="r-in">  `2000` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fl">2000</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">test</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Convert column names to row --------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  ARG <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BRA"</span>, <span class="st">"FRA"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  `1960` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1960</span>, <span class="fl">1960</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  `2000` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fl">2000</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">test</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ARG X1960 X2000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 BRA  1960  2000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 FRA  1960  2000</span>
-<span class="r-in"><span class="fu">colnames_to_row</span><span class="op">(</span><span class="va">test</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">colnames_to_row</span><span class="op">(</span><span class="va">test</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    x1    x2    x3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 ARG X1960 X2000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 BRA  1960  2000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 FRA  1960  2000</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

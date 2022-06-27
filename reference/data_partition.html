@@ -70,7 +70,7 @@ argument.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">data_partition</span><span class="op">(</span><span class="va">data</span>, training_proportion <span class="op">=</span> <span class="fl">0.7</span>, group <span class="op">=</span> <span class="cn">NULL</span>, seed <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">data_partition</span><span class="op">(</span><span class="va">data</span>, training_proportion <span class="op">=</span> <span class="fl">0.7</span>, group <span class="op">=</span> <span class="cn">NULL</span>, seed <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -120,10 +120,10 @@ that the random sampling will be the same each time you run the function.</p></d
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">iris</span></span>
-<span class="r-in"><span class="va">df</span><span class="op">$</span><span class="va">Smell</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Strong"</span>, <span class="st">"Light"</span><span class="op">)</span>, <span class="fl">75</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">data_partition</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">iris</span></span></span>
+<span class="r-in"><span><span class="va">df</span><span class="op">$</span><span class="va">Smell</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Strong"</span>, <span class="st">"Light"</span><span class="op">)</span>, <span class="fl">75</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">data_partition</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $training</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Sepal.Length Sepal.Width Petal.Length Petal.Width    Species  Smell</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 74           6.1         2.8          4.7         1.2 versicolor  Light</span>
@@ -280,7 +280,7 @@ that the random sampling will be the same each time you run the function.</p></d
 <span class="r-out co"><span class="r-pr">#&gt;</span> 146          6.7         3.0          5.2         2.3  virginica  Light</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 147          6.3         2.5          5.0         1.9  virginica Strong</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">data_partition</span><span class="op">(</span><span class="va">df</span>, group <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">data_partition</span><span class="op">(</span><span class="va">df</span>, group <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $training</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Sepal.Length Sepal.Width Petal.Length Petal.Width    Species  Smell</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1            5.1         3.5          1.4         0.2     setosa Strong</span>
@@ -437,7 +437,7 @@ that the random sampling will be the same each time you run the function.</p></d
 <span class="r-out co"><span class="r-pr">#&gt;</span> 139          6.0         3.0          4.8         1.8  virginica Strong</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 144          6.8         3.2          5.9         2.3  virginica  Light</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">data_partition</span><span class="op">(</span><span class="va">df</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Smell"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">data_partition</span><span class="op">(</span><span class="va">df</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Smell"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $training</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Sepal.Length Sepal.Width Petal.Length Petal.Width    Species  Smell</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 34           5.5         4.2          1.4         0.2     setosa  Light</span>

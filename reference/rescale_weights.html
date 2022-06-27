@@ -82,7 +82,7 @@ models, which then can be used for multilevel modelling.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">rescale_weights</span><span class="op">(</span><span class="va">data</span>, <span class="va">group</span>, <span class="va">probability_weights</span>, nest <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rescale_weights</span><span class="op">(</span><span class="va">data</span>, <span class="va">group</span>, <span class="va">probability_weights</span>, nest <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -156,31 +156,31 @@ Weights. Communications in Statistics - Theory and Methods 35: 439-460</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">nhanes_sample</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">rescale_weights</span><span class="op">(</span><span class="va">nhanes_sample</span>, <span class="st">"SDMVSTRA"</span>, <span class="st">"WTINT2YR"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># also works with multiple group-variables</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">rescale_weights</span><span class="op">(</span><span class="va">nhanes_sample</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SDMVSTRA"</span>, <span class="st">"SDMVPSU"</span><span class="op">)</span>, <span class="st">"WTINT2YR"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># or nested structures.</span></span>
-<span class="r-in">  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">rescale_weights</span><span class="op">(</span></span>
-<span class="r-in">    data <span class="op">=</span> <span class="va">nhanes_sample</span>,</span>
-<span class="r-in">    group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SDMVSTRA"</span>, <span class="st">"SDMVPSU"</span><span class="op">)</span>,</span>
-<span class="r-in">    probability_weights <span class="op">=</span> <span class="st">"WTINT2YR"</span>,</span>
-<span class="r-in">    nest <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="va">nhanes_sample</span> <span class="op">&lt;-</span> <span class="fu">rescale_weights</span><span class="op">(</span><span class="va">nhanes_sample</span>, <span class="st">"SDMVSTRA"</span>, <span class="st">"WTINT2YR"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="va">total</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">RIAGENDR</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">RIDRETH1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">SDMVPSU</span><span class="op">)</span>,</span>
-<span class="r-in">    family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">poisson</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">    data <span class="op">=</span> <span class="va">nhanes_sample</span>,</span>
-<span class="r-in">    weights <span class="op">=</span> <span class="va">pweights_a</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">nhanes_sample</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">rescale_weights</span><span class="op">(</span><span class="va">nhanes_sample</span>, <span class="st">"SDMVSTRA"</span>, <span class="st">"WTINT2YR"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># also works with multiple group-variables</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">rescale_weights</span><span class="op">(</span><span class="va">nhanes_sample</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SDMVSTRA"</span>, <span class="st">"SDMVPSU"</span><span class="op">)</span>, <span class="st">"WTINT2YR"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># or nested structures.</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">rescale_weights</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    data <span class="op">=</span> <span class="va">nhanes_sample</span>,</span></span>
+<span class="r-in"><span>    group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SDMVSTRA"</span>, <span class="st">"SDMVPSU"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    probability_weights <span class="op">=</span> <span class="st">"WTINT2YR"</span>,</span></span>
+<span class="r-in"><span>    nest <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">nhanes_sample</span> <span class="op">&lt;-</span> <span class="fu">rescale_weights</span><span class="op">(</span><span class="va">nhanes_sample</span>, <span class="st">"SDMVSTRA"</span>, <span class="st">"WTINT2YR"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">total</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">RIAGENDR</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">RIDRETH1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">SDMVPSU</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">poisson</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    data <span class="op">=</span> <span class="va">nhanes_sample</span>,</span></span>
+<span class="r-in"><span>    weights <span class="op">=</span> <span class="va">pweights_a</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: lme4</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: Matrix</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Generalized linear mixed model fit by maximum likelihood (Laplace</span>
@@ -198,17 +198,17 @@ Weights. Communications in Statistics - Theory and Methods 35: 439-460</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of obs: 2595, groups:  SDMVPSU, 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fixed Effects:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                         (Intercept)                    factor(RIAGENDR)2  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                            2.491802                            -1.021306  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            2.491801                            -1.021308  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                            log(age)                    factor(RIDRETH1)2  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                            0.838725                            -0.088629  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            0.838726                            -0.088627  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   factor(RIDRETH1)3                    factor(RIDRETH1)4  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           -0.013332                             0.722511  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                           -0.013333                             0.722511  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   factor(RIDRETH1)5           factor(RIAGENDR)2:log(age)  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                           -0.106521                            -1.012695  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> factor(RIAGENDR)2:factor(RIDRETH1)2  factor(RIAGENDR)2:factor(RIDRETH1)3  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           -0.009089                             0.732983  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                           -0.009086                             0.732985  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> factor(RIAGENDR)2:factor(RIDRETH1)4  factor(RIAGENDR)2:factor(RIDRETH1)5  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                            0.275963                             0.542073  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            0.275967                             0.542074  </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

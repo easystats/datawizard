@@ -64,26 +64,26 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">format_text</span><span class="op">(</span>
-  <span class="va">text</span>,
-  sep <span class="op">=</span> <span class="st">", "</span>,
-  last <span class="op">=</span> <span class="st">" and "</span>,
-  width <span class="op">=</span> <span class="cn">NULL</span>,
-  enclose <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">text_fullstop</span><span class="op">(</span><span class="va">text</span><span class="op">)</span>
-
-<span class="fu">text_lastchar</span><span class="op">(</span><span class="va">text</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-
-<span class="fu">text_concatenate</span><span class="op">(</span><span class="va">text</span>, sep <span class="op">=</span> <span class="st">", "</span>, last <span class="op">=</span> <span class="st">" and "</span>, enclose <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="fu">text_paste</span><span class="op">(</span><span class="va">text</span>, text2 <span class="op">=</span> <span class="cn">NULL</span>, sep <span class="op">=</span> <span class="st">", "</span>, enclose <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">text_remove</span><span class="op">(</span><span class="va">text</span>, pattern <span class="op">=</span> <span class="st">""</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">text_wrap</span><span class="op">(</span><span class="va">text</span>, width <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_text</span><span class="op">(</span></span>
+<span>  <span class="va">text</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">", "</span>,</span>
+<span>  last <span class="op">=</span> <span class="st">" and "</span>,</span>
+<span>  width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  enclose <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">text_fullstop</span><span class="op">(</span><span class="va">text</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">text_lastchar</span><span class="op">(</span><span class="va">text</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">text_concatenate</span><span class="op">(</span><span class="va">text</span>, sep <span class="op">=</span> <span class="st">", "</span>, last <span class="op">=</span> <span class="st">" and "</span>, enclose <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">text_paste</span><span class="op">(</span><span class="va">text</span>, text2 <span class="op">=</span> <span class="cn">NULL</span>, sep <span class="op">=</span> <span class="st">", "</span>, enclose <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">text_remove</span><span class="op">(</span><span class="va">text</span>, pattern <span class="op">=</span> <span class="st">""</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">text_wrap</span><span class="op">(</span><span class="va">text</span>, width <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -136,28 +136,28 @@ string, which will be added as prefix or suffix to the column names.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Add full stop if missing</span></span>
-<span class="r-in"><span class="fu">text_fullstop</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"something"</span>, <span class="st">"something else."</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Add full stop if missing</span></span></span>
+<span class="r-in"><span><span class="fu">text_fullstop</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"something"</span>, <span class="st">"something else."</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "something."      "something else."</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Find last characters</span></span>
-<span class="r-in"><span class="fu">text_lastchar</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ABC"</span>, <span class="st">"DEF"</span><span class="op">)</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Find last characters</span></span></span>
+<span class="r-in"><span><span class="fu">text_lastchar</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ABC"</span>, <span class="st">"DEF"</span><span class="op">)</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ABC  DEF </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "BC" "EF" </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Smart concatenation</span></span>
-<span class="r-in"><span class="fu">text_concatenate</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"First"</span>, <span class="st">"Second"</span>, <span class="st">"Last"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Smart concatenation</span></span></span>
+<span class="r-in"><span><span class="fu">text_concatenate</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"First"</span>, <span class="st">"Second"</span>, <span class="st">"Last"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "First, Second and Last"</span>
-<span class="r-in"><span class="fu">text_concatenate</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"First"</span>, <span class="st">"Second"</span>, <span class="st">"Last"</span><span class="op">)</span>, last <span class="op">=</span> <span class="st">" or "</span>, enclose <span class="op">=</span> <span class="st">"`"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">text_concatenate</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"First"</span>, <span class="st">"Second"</span>, <span class="st">"Last"</span><span class="op">)</span>, last <span class="op">=</span> <span class="st">" or "</span>, enclose <span class="op">=</span> <span class="st">"`"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "`First`, `Second` or `Last`"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Remove parts of string</span></span>
-<span class="r-in"><span class="fu">text_remove</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"one!"</span>, <span class="st">"two"</span>, <span class="st">"three!"</span><span class="op">)</span>, <span class="st">"!"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Remove parts of string</span></span></span>
+<span class="r-in"><span><span class="fu">text_remove</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"one!"</span>, <span class="st">"two"</span>, <span class="st">"three!"</span><span class="op">)</span>, <span class="st">"!"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "one"   "two"   "three"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Wrap text</span></span>
-<span class="r-in"><span class="va">long_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"abc "</span>, <span class="fl">100</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu">text_wrap</span><span class="op">(</span><span class="va">long_text</span>, width <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Wrap text</span></span></span>
+<span class="r-in"><span><span class="va">long_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"abc "</span>, <span class="fl">100</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu">text_wrap</span><span class="op">(</span><span class="va">long_text</span>, width <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  abc abc abc abc abc abc abc abc abc abc abc abc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> abc abc abc abc abc abc abc abc abc abc abc abc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> abc abc abc abc abc abc abc abc abc abc abc abc</span>
@@ -167,9 +167,9 @@ string, which will be added as prefix or suffix to the column names.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> abc abc abc abc abc abc abc abc abc abc abc abc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> abc abc abc abc abc abc abc abc abc abc abc abc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> abc abc abc abc</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Paste with optional separator</span></span>
-<span class="r-in"><span class="fu">text_paste</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">""</span>, <span class="st">"B"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"42"</span>, <span class="st">"42"</span>, <span class="st">"42"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Paste with optional separator</span></span></span>
+<span class="r-in"><span><span class="fu">text_paste</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">""</span>, <span class="st">"B"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"42"</span>, <span class="st">"42"</span>, <span class="st">"42"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A, 42" "42"    "B, 42"</span>
 </code></pre></div>
     </div>

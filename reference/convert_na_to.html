@@ -64,26 +64,26 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">convert_na_to</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for numeric</span>
-<span class="fu">convert_na_to</span><span class="op">(</span><span class="va">x</span>, replacement <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for character</span>
-<span class="fu">convert_na_to</span><span class="op">(</span><span class="va">x</span>, replacement <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for data.frame</span>
-<span class="fu">convert_na_to</span><span class="op">(</span>
-  <span class="va">x</span>,
-  select <span class="op">=</span> <span class="cn">NULL</span>,
-  exclude <span class="op">=</span> <span class="cn">NULL</span>,
-  replace_num <span class="op">=</span> <span class="cn">NULL</span>,
-  replace_char <span class="op">=</span> <span class="cn">NULL</span>,
-  replace_fac <span class="op">=</span> <span class="cn">NULL</span>,
-  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">convert_na_to</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for numeric</span></span>
+<span><span class="fu">convert_na_to</span><span class="op">(</span><span class="va">x</span>, replacement <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for character</span></span>
+<span><span class="fu">convert_na_to</span><span class="op">(</span><span class="va">x</span>, replacement <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for data.frame</span></span>
+<span><span class="fu">convert_na_to</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  select <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exclude <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  replace_num <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  replace_char <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  replace_fac <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -121,7 +121,7 @@ right (e.g., <code>-1</code> or <code>-1:-3</code>),</p></li>
 <code>is.numeric</code>), or any user-defined function that selects the variables
 for which the function returns <code>TRUE</code> (like: <code>foo &lt;- function(x) mean(x) &gt; 3</code>),</p></li>
 <li><p>ranges specified via literal variable names, select-helpers (except
-<code><a href="https://rdrr.io/r/base/regex.html" class="external-link">regex()</a></code>) and (user-defined) functions can be negated, i.e. return
+<code>regex()</code>) and (user-defined) functions can be negated, i.e. return
 non-matching elements, when prefixed with a <code>-</code>, e.g. <code>-ends_with("")</code>,
 <code>-is.numeric</code> or <code>-Sepal.Width:Petal.Length</code>. <strong>Note:</strong> Negation means
 that matches are <em>excluded</em>, and thus, the <code>exclude</code> argument can be
@@ -178,76 +178,76 @@ from the input data frame.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Convert NA to 0 in a numeric vector</span></span>
-<span class="r-in"><span class="fu">convert_na_to</span><span class="op">(</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">9</span>, <span class="fl">3</span>, <span class="cn">NA</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">1</span>, <span class="cn">NA</span>, <span class="fl">8</span><span class="op">)</span>,</span>
-<span class="r-in">  replacement <span class="op">=</span> <span class="fl">0</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Convert NA to 0 in a numeric vector</span></span></span>
+<span class="r-in"><span><span class="fu">convert_na_to</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">9</span>, <span class="fl">3</span>, <span class="cn">NA</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">1</span>, <span class="cn">NA</span>, <span class="fl">8</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  replacement <span class="op">=</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 9 3 0 2 3 1 0 8</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Convert NA to "missing" in a character vector</span></span>
-<span class="r-in"><span class="fu">convert_na_to</span><span class="op">(</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="cn">NA</span>, <span class="st">"d"</span>, <span class="st">"z"</span>, <span class="cn">NA</span>, <span class="st">"t"</span><span class="op">)</span>,</span>
-<span class="r-in">  replacement <span class="op">=</span> <span class="st">"missing"</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Convert NA to "missing" in a character vector</span></span></span>
+<span class="r-in"><span><span class="fu">convert_na_to</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="cn">NA</span>, <span class="st">"d"</span>, <span class="st">"z"</span>, <span class="cn">NA</span>, <span class="st">"t"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  replacement <span class="op">=</span> <span class="st">"missing"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a"       "missing" "d"       "z"       "missing" "t"      </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">### For dataframes</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">test_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
-<span class="r-in">  x2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
-<span class="r-in">  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="cn">NA</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Convert all NA to 0 in numeric variables, and all NA to "missing" in</span></span>
-<span class="r-in"><span class="co"># character variables</span></span>
-<span class="r-in"><span class="fu">convert_na_to</span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">test_df</span>,</span>
-<span class="r-in">  replace_num <span class="op">=</span> <span class="fl">0</span>,</span>
-<span class="r-in">  replace_char <span class="op">=</span> <span class="st">"missing"</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">### For dataframes</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">test_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="cn">NA</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  x2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span>, <span class="cn">NA</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="cn">NA</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Convert all NA to 0 in numeric variables, and all NA to "missing" in</span></span></span>
+<span class="r-in"><span><span class="co"># character variables</span></span></span>
+<span class="r-in"><span><span class="fu">convert_na_to</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">test_df</span>,</span></span>
+<span class="r-in"><span>  replace_num <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  replace_char <span class="op">=</span> <span class="st">"missing"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   x x2       y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1  4       a</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2  5       b</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 0  0 missing</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Convert a specific variable in the dataframe</span></span>
-<span class="r-in"><span class="fu">convert_na_to</span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">test_df</span>,</span>
-<span class="r-in">  replace_num <span class="op">=</span> <span class="fl">0</span>,</span>
-<span class="r-in">  replace_char <span class="op">=</span> <span class="st">"missing"</span>,</span>
-<span class="r-in">  select <span class="op">=</span> <span class="st">"x"</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Convert a specific variable in the dataframe</span></span></span>
+<span class="r-in"><span><span class="fu">convert_na_to</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">test_df</span>,</span></span>
+<span class="r-in"><span>  replace_num <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  replace_char <span class="op">=</span> <span class="st">"missing"</span>,</span></span>
+<span class="r-in"><span>  select <span class="op">=</span> <span class="st">"x"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   x x2    y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1  4    a</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2  5    b</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 0 NA &lt;NA&gt;</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Convert all variables starting with "x"</span></span>
-<span class="r-in"><span class="fu">convert_na_to</span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">test_df</span>,</span>
-<span class="r-in">  replace_num <span class="op">=</span> <span class="fl">0</span>,</span>
-<span class="r-in">  replace_char <span class="op">=</span> <span class="st">"missing"</span>,</span>
-<span class="r-in">  select <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"x"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Convert all variables starting with "x"</span></span></span>
+<span class="r-in"><span><span class="fu">convert_na_to</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">test_df</span>,</span></span>
+<span class="r-in"><span>  replace_num <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  replace_char <span class="op">=</span> <span class="st">"missing"</span>,</span></span>
+<span class="r-in"><span>  select <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"x"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   x x2    y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1  4    a</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2  5    b</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 0  0 &lt;NA&gt;</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Convert NA to 1 in variable 'x2' and to 0 in all other numeric</span></span>
-<span class="r-in"><span class="co"># variables</span></span>
-<span class="r-in"><span class="fu">convert_na_to</span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">test_df</span>,</span>
-<span class="r-in">  replace_num <span class="op">=</span> <span class="fl">0</span>,</span>
-<span class="r-in">  select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Convert NA to 1 in variable 'x2' and to 0 in all other numeric</span></span></span>
+<span class="r-in"><span><span class="co"># variables</span></span></span>
+<span class="r-in"><span><span class="fu">convert_na_to</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">test_df</span>,</span></span>
+<span class="r-in"><span>  replace_num <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   x x2    y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1  4    a</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2  5    b</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 0  1 &lt;NA&gt;</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

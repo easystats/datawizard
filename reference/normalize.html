@@ -73,36 +73,36 @@ counterpart, but only works for variables that have been normalized with
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">normalize</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for numeric</span>
-<span class="fu">normalize</span><span class="op">(</span><span class="va">x</span>, include_bounds <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for data.frame</span>
-<span class="fu">normalize</span><span class="op">(</span>
-  <span class="va">x</span>,
-  select <span class="op">=</span> <span class="cn">NULL</span>,
-  exclude <span class="op">=</span> <span class="cn">NULL</span>,
-  include_bounds <span class="op">=</span> <span class="cn">TRUE</span>,
-  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">unnormalize</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for numeric</span>
-<span class="fu">unnormalize</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for data.frame</span>
-<span class="fu">unnormalize</span><span class="op">(</span>
-  <span class="va">x</span>,
-  select <span class="op">=</span> <span class="cn">NULL</span>,
-  exclude <span class="op">=</span> <span class="cn">NULL</span>,
-  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">normalize</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for numeric</span></span>
+<span><span class="fu">normalize</span><span class="op">(</span><span class="va">x</span>, include_bounds <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for data.frame</span></span>
+<span><span class="fu">normalize</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  select <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exclude <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  include_bounds <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">unnormalize</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for numeric</span></span>
+<span><span class="fu">unnormalize</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for data.frame</span></span>
+<span><span class="fu">unnormalize</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  select <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exclude <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -143,7 +143,7 @@ right (e.g., <code>-1</code> or <code>-1:-3</code>),</p></li>
 <code>is.numeric</code>), or any user-defined function that selects the variables
 for which the function returns <code>TRUE</code> (like: <code>foo &lt;- function(x) mean(x) &gt; 3</code>),</p></li>
 <li><p>ranges specified via literal variable names, select-helpers (except
-<code><a href="https://rdrr.io/r/base/regex.html" class="external-link">regex()</a></code>) and (user-defined) functions can be negated, i.e. return
+<code>regex()</code>) and (user-defined) functions can be negated, i.e. return
 non-matching elements, when prefixed with a <code>-</code>, e.g. <code>-ends_with("")</code>,
 <code>-is.numeric</code> or <code>-Sepal.Width:Petal.Length</code>. <strong>Note:</strong> Negation means
 that matches are <em>excluded</em>, and thus, the <code>exclude</code> argument can be
@@ -211,8 +211,8 @@ Regression with Beta-Distributed Dependent Variables. Psychological Methods,
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu">normalize</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">normalize</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5 0.6 1.0 0.0 0.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"include_bounds")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
@@ -220,7 +220,7 @@ Regression with Beta-Distributed Dependent Variables. Psychological Methods,
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"range_difference")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
-<span class="r-in"><span class="fu">normalize</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span>, include_bounds <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">normalize</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span>, include_bounds <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.50 0.58 0.90 0.10 0.34</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"include_bounds")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
@@ -228,8 +228,8 @@ Regression with Beta-Distributed Dependent Variables. Psychological Methods,
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"range_difference")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">normalize</span><span class="op">(</span><span class="va">trees</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">normalize</span><span class="op">(</span><span class="va">trees</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Girth     Height      Volume</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.00000000 0.29166667 0.001497006</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.02439024 0.08333333 0.001497006</span>
@@ -237,7 +237,7 @@ Regression with Beta-Distributed Dependent Variables. Psychological Methods,
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 0.17886179 0.37500000 0.092814371</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 0.19512195 0.75000000 0.128742515</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.20325203 0.83333333 0.142215569</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

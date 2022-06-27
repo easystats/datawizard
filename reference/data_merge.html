@@ -70,15 +70,15 @@ frames, and it does not drop data frame nor column attributes.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">data_join</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for data.frame</span>
-<span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"left"</span>, by <span class="op">=</span> <span class="cn">NULL</span>, id <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for list</span>
-<span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, join <span class="op">=</span> <span class="st">"left"</span>, by <span class="op">=</span> <span class="cn">NULL</span>, id <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">data_join</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for data.frame</span></span>
+<span><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"left"</span>, by <span class="op">=</span> <span class="cn">NULL</span>, id <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for list</span></span>
+<span><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, join <span class="op">=</span> <span class="st">"left"</span>, by <span class="op">=</span> <span class="cn">NULL</span>, id <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -200,93 +200,93 @@ add new columns from <code>y</code> to <code>x</code>.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span><span class="op">)</span>, c <span class="op">=</span> <span class="fl">5</span><span class="op">:</span><span class="fl">7</span>, id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>c <span class="op">=</span> <span class="fl">6</span><span class="op">:</span><span class="fl">8</span>, d <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"f"</span>, <span class="st">"g"</span>, <span class="st">"h"</span><span class="op">)</span>, e <span class="op">=</span> <span class="fl">100</span><span class="op">:</span><span class="fl">102</span>, id <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">x</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span><span class="op">)</span>, c <span class="op">=</span> <span class="fl">5</span><span class="op">:</span><span class="fl">7</span>, id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>c <span class="op">=</span> <span class="fl">6</span><span class="op">:</span><span class="fl">8</span>, d <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"f"</span>, <span class="st">"g"</span>, <span class="st">"h"</span><span class="op">)</span>, e <span class="op">=</span> <span class="fl">100</span><span class="op">:</span><span class="fl">102</span>, id <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   a b c id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1 a 5  1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2 b 6  2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 3 c 7  3</span>
-<span class="r-in"><span class="va">y</span></span>
+<span class="r-in"><span><span class="va">y</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   c d   e id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 6 f 100  2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 7 g 101  3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 8 h 102  4</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># "by" will default to all shared columns, i.e. "c" and "id". new columns</span></span>
-<span class="r-in"><span class="co"># "d" and "e" will be copied from "y" to "x", but there are only two cases</span></span>
-<span class="r-in"><span class="co"># in "x" that have the same values for "c" and "id" in "y". only those cases</span></span>
-<span class="r-in"><span class="co"># have values in the copied columns, the other case gets "NA".</span></span>
-<span class="r-in"><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"left"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># "by" will default to all shared columns, i.e. "c" and "id". new columns</span></span></span>
+<span class="r-in"><span><span class="co"># "d" and "e" will be copied from "y" to "x", but there are only two cases</span></span></span>
+<span class="r-in"><span><span class="co"># in "x" that have the same values for "c" and "id" in "y". only those cases</span></span></span>
+<span class="r-in"><span><span class="co"># have values in the copied columns, the other case gets "NA".</span></span></span>
+<span class="r-in"><span><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"left"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   a b c id    d   e</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 1 a 5  1 &lt;NA&gt;  NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 2 b 6  2    f 100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 3 c 7  3    g 101</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># we change the id-value here</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span><span class="op">)</span>, c <span class="op">=</span> <span class="fl">5</span><span class="op">:</span><span class="fl">7</span>, id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>c <span class="op">=</span> <span class="fl">6</span><span class="op">:</span><span class="fl">8</span>, d <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"f"</span>, <span class="st">"g"</span>, <span class="st">"h"</span><span class="op">)</span>, e <span class="op">=</span> <span class="fl">100</span><span class="op">:</span><span class="fl">102</span>, id <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">x</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># we change the id-value here</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span><span class="op">)</span>, c <span class="op">=</span> <span class="fl">5</span><span class="op">:</span><span class="fl">7</span>, id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>c <span class="op">=</span> <span class="fl">6</span><span class="op">:</span><span class="fl">8</span>, d <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"f"</span>, <span class="st">"g"</span>, <span class="st">"h"</span><span class="op">)</span>, e <span class="op">=</span> <span class="fl">100</span><span class="op">:</span><span class="fl">102</span>, id <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   a b c id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1 a 5  1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2 b 6  2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 3 c 7  3</span>
-<span class="r-in"><span class="va">y</span></span>
+<span class="r-in"><span><span class="va">y</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   c d   e id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 6 f 100  3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 7 g 101  4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 8 h 102  5</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># no cases in "y" have the same matching "c" and "id" as in "x", thus</span></span>
-<span class="r-in"><span class="co"># copied variables from "y" to "x" copy no values, all get NA.</span></span>
-<span class="r-in"><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"left"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># no cases in "y" have the same matching "c" and "id" as in "x", thus</span></span></span>
+<span class="r-in"><span><span class="co"># copied variables from "y" to "x" copy no values, all get NA.</span></span></span>
+<span class="r-in"><span><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"left"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   a b c id    d  e</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1 a 5  1 &lt;NA&gt; NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2 b 6  2 &lt;NA&gt; NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 3 c 7  3 &lt;NA&gt; NA</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># one case in "y" has a match in "id" with "x", thus values for this</span></span>
-<span class="r-in"><span class="co"># case from the remaining variables in "y" are copied to "x", all other</span></span>
-<span class="r-in"><span class="co"># values (cases) in those remaining variables get NA</span></span>
-<span class="r-in"><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"left"</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># one case in "y" has a match in "id" with "x", thus values for this</span></span></span>
+<span class="r-in"><span><span class="co"># case from the remaining variables in "y" are copied to "x", all other</span></span></span>
+<span class="r-in"><span><span class="co"># values (cases) in those remaining variables get NA</span></span></span>
+<span class="r-in"><span><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"left"</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   a b id    d   e c.x c.y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 1 a  1 &lt;NA&gt;  NA   5  NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 2 b  2 &lt;NA&gt;  NA   6  NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 3 c  3    f 100   7   6</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">28</span><span class="op">:</span><span class="fl">32</span>, <span class="fl">4</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># add ID common column</span></span>
-<span class="r-in"><span class="va">x</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span></span>
-<span class="r-in"><span class="va">y</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">3</span><span class="op">:</span><span class="fl">7</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># left-join, add new variables and copy values from y to x,</span></span>
-<span class="r-in"><span class="co"># where "id" values match</span></span>
-<span class="r-in"><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">28</span><span class="op">:</span><span class="fl">32</span>, <span class="fl">4</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># add ID common column</span></span></span>
+<span class="r-in"><span><span class="va">x</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span></span></span>
+<span class="r-in"><span><span class="va">y</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">3</span><span class="op">:</span><span class="fl">7</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># left-join, add new variables and copy values from y to x,</span></span></span>
+<span class="r-in"><span><span class="co"># where "id" values match</span></span></span>
+<span class="r-in"><span><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    mpg cyl disp id  hp drat    wt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 21.0   6  160  1  NA   NA    NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 21.0   6  160  2  NA   NA    NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 22.8   4  108  3 113 3.77 1.513</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 21.4   6  258  4 264 4.22 3.170</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 18.7   8  360  5 175 3.62 2.770</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># right-join, add new variables and copy values from x to y,</span></span>
-<span class="r-in"><span class="co"># where "id" values match</span></span>
-<span class="r-in"><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># right-join, add new variables and copy values from x to y,</span></span></span>
+<span class="r-in"><span><span class="co"># where "id" values match</span></span></span>
+<span class="r-in"><span><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    mpg cyl disp id  hp drat    wt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 22.8   4  108  3 113 3.77 1.513</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 21.4   6  258  4 264 4.22 3.170</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 18.7   8  360  5 175 3.62 2.770</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4   NA  NA   NA  6 335 3.54 3.570</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5   NA  NA   NA  7 109 4.11 2.780</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># full-join</span></span>
-<span class="r-in"><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># full-join</span></span></span>
+<span class="r-in"><span><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    mpg cyl disp id  hp drat    wt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 21.0   6  160  1  NA   NA    NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 21.0   6  160  2  NA   NA    NA</span>
@@ -295,56 +295,56 @@ add new columns from <code>y</code> to <code>x</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 18.7   8  360  5 175 3.62 2.770</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6   NA  NA   NA  6 335 3.54 3.570</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7   NA  NA   NA  7 109 4.11 2.780</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">28</span><span class="op">:</span><span class="fl">32</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># add ID common column</span></span>
-<span class="r-in"><span class="va">x</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span></span>
-<span class="r-in"><span class="va">y</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">3</span><span class="op">:</span><span class="fl">7</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># left-join, no matching rows (because columns "id" and "disp" are used)</span></span>
-<span class="r-in"><span class="co"># new variables get all NA values</span></span>
-<span class="r-in"><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">28</span><span class="op">:</span><span class="fl">32</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># add ID common column</span></span></span>
+<span class="r-in"><span><span class="va">x</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span></span></span>
+<span class="r-in"><span><span class="va">y</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">3</span><span class="op">:</span><span class="fl">7</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># left-join, no matching rows (because columns "id" and "disp" are used)</span></span></span>
+<span class="r-in"><span><span class="co"># new variables get all NA values</span></span></span>
+<span class="r-in"><span><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    mpg cyl disp id hp drat</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 21.0   6  160  1 NA   NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 21.0   6  160  2 NA   NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 22.8   4  108  3 NA   NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 21.4   6  258  4 NA   NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 18.7   8  360  5 NA   NA</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># one common value in "mpg", so one row from y is copied to x</span></span>
-<span class="r-in"><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, by <span class="op">=</span> <span class="st">"mpg"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># one common value in "mpg", so one row from y is copied to x</span></span></span>
+<span class="r-in"><span><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, by <span class="op">=</span> <span class="st">"mpg"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    mpg cyl disp  hp drat id.x id.y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 21.0   6  160  NA   NA    1   NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 21.0   6  160  NA   NA    2   NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 22.8   4  108  NA   NA    3   NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 21.4   6  258 109 4.11    4    7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 18.7   8  360  NA   NA    5   NA</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># only keep rows with matching values in by-column</span></span>
-<span class="r-in"><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"semi"</span>, by <span class="op">=</span> <span class="st">"mpg"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># only keep rows with matching values in by-column</span></span></span>
+<span class="r-in"><span><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"semi"</span>, by <span class="op">=</span> <span class="st">"mpg"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 mpg cyl disp id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Hornet 4 Drive 21.4   6  258  4</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># only keep rows with non-matching values in by-column</span></span>
-<span class="r-in"><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"anti"</span>, by <span class="op">=</span> <span class="st">"mpg"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># only keep rows with non-matching values in by-column</span></span></span>
+<span class="r-in"><span><span class="fu">data_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"anti"</span>, by <span class="op">=</span> <span class="st">"mpg"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    mpg cyl disp id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4         21.0   6  160  1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag     21.0   6  160  2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710        22.8   4  108  3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Hornet Sportabout 18.7   8  360  5</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># merge list of data frames. can be of different rows</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">28</span><span class="op">:</span><span class="fl">31</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">z</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">11</span><span class="op">:</span><span class="fl">18</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">x</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span></span>
-<span class="r-in"><span class="va">y</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">4</span><span class="op">:</span><span class="fl">7</span></span>
-<span class="r-in"><span class="va">z</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">3</span><span class="op">:</span><span class="fl">10</span></span>
-<span class="r-in"><span class="fu">data_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">z</span><span class="op">)</span>, join <span class="op">=</span> <span class="st">"bind"</span>, by <span class="op">=</span> <span class="st">"id"</span>, id <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># merge list of data frames. can be of different rows</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">28</span><span class="op">:</span><span class="fl">31</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">11</span><span class="op">:</span><span class="fl">18</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">x</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span></span></span>
+<span class="r-in"><span><span class="va">y</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">4</span><span class="op">:</span><span class="fl">7</span></span></span>
+<span class="r-in"><span><span class="va">z</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fl">3</span><span class="op">:</span><span class="fl">10</span></span></span>
+<span class="r-in"><span><span class="fu">data_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">z</span><span class="op">)</span>, join <span class="op">=</span> <span class="st">"bind"</span>, by <span class="op">=</span> <span class="st">"id"</span>, id <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     mpg cyl  disp id  hp drat    wt  qsec vs source</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  21.0   6 160.0  1  NA   NA    NA    NA NA      1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  21.0   6 160.0  2  NA   NA    NA    NA NA      1</span>

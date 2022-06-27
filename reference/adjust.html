@@ -88,29 +88,29 @@ equivalent to the partial correlation between them.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">adjust</span><span class="op">(</span>
-  <span class="va">data</span>,
-  effect <span class="op">=</span> <span class="cn">NULL</span>,
-  select <span class="op">=</span> <span class="cn">NULL</span>,
-  exclude <span class="op">=</span> <span class="cn">NULL</span>,
-  multilevel <span class="op">=</span> <span class="cn">FALSE</span>,
-  additive <span class="op">=</span> <span class="cn">FALSE</span>,
-  bayesian <span class="op">=</span> <span class="cn">FALSE</span>,
-  keep_intercept <span class="op">=</span> <span class="cn">FALSE</span>,
-  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="fu">data_adjust</span><span class="op">(</span>
-  <span class="va">data</span>,
-  effect <span class="op">=</span> <span class="cn">NULL</span>,
-  select <span class="op">=</span> <span class="cn">NULL</span>,
-  exclude <span class="op">=</span> <span class="cn">NULL</span>,
-  multilevel <span class="op">=</span> <span class="cn">FALSE</span>,
-  additive <span class="op">=</span> <span class="cn">FALSE</span>,
-  bayesian <span class="op">=</span> <span class="cn">FALSE</span>,
-  keep_intercept <span class="op">=</span> <span class="cn">FALSE</span>,
-  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">adjust</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  effect <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  select <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exclude <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  multilevel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  additive <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  bayesian <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  keep_intercept <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">data_adjust</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  effect <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  select <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exclude <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  multilevel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  additive <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  bayesian <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  keep_intercept <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -140,7 +140,7 @@ right (e.g., <code>-1</code> or <code>-1:-3</code>),</p></li>
 <code>is.numeric</code>), or any user-defined function that selects the variables
 for which the function returns <code>TRUE</code> (like: <code>foo &lt;- function(x) mean(x) &gt; 3</code>),</p></li>
 <li><p>ranges specified via literal variable names, select-helpers (except
-<code><a href="https://rdrr.io/r/base/regex.html" class="external-link">regex()</a></code>) and (user-defined) functions can be negated, i.e. return
+<code>regex()</code>) and (user-defined) functions can be negated, i.e. return
 non-matching elements, when prefixed with a <code>-</code>, e.g. <code>-ends_with("")</code>,
 <code>-is.numeric</code> or <code>-Sepal.Width:Petal.Length</code>. <strong>Note:</strong> Negation means
 that matches are <em>excluded</em>, and thus, the <code>exclude</code> argument can be
@@ -197,8 +197,8 @@ search pattern when matching against variable names.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">adjusted_all</span> <span class="op">&lt;-</span> <span class="fu">adjust</span><span class="op">(</span><span class="va">attitude</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">adjusted_all</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">adjusted_all</span> <span class="op">&lt;-</span> <span class="fu">adjust</span><span class="op">(</span><span class="va">attitude</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">adjusted_all</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        rating complaints privileges    learning     raises   critical</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  -8.1102953  5.5583770 -15.848949 -2.75102306  0.5742664  15.605502</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   1.6472337  0.0646564  -1.422592 -3.06207012 -1.5567655  -2.315781</span>
@@ -213,8 +213,8 @@ search pattern when matching against variable names.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.3951046</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  2.1988621</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 -3.1912418</span>
-<span class="r-in"><span class="va">adjusted_one</span> <span class="op">&lt;-</span> <span class="fu">adjust</span><span class="op">(</span><span class="va">attitude</span>, effect <span class="op">=</span> <span class="st">"complaints"</span>, select <span class="op">=</span> <span class="st">"rating"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">adjusted_one</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">adjusted_one</span> <span class="op">&lt;-</span> <span class="fu">adjust</span><span class="op">(</span><span class="va">attitude</span>, effect <span class="op">=</span> <span class="st">"complaints"</span>, select <span class="op">=</span> <span class="st">"rating"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">adjusted_one</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        rating complaints privileges learning raises critical advance</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  -9.8614202         51         30       39     61       92      45</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   0.3286522         64         51       54     63       73      47</span>
@@ -222,40 +222,40 @@ search pattern when matching against variable names.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  -0.9167380         63         45       47     54       84      35</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5   7.7641147         78         56       66     71       83      47</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 -12.8798594         55         49       44     54       49      34</span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="fu">adjust</span><span class="op">(</span><span class="va">attitude</span>, effect <span class="op">=</span> <span class="st">"complaints"</span>, select <span class="op">=</span> <span class="st">"rating"</span>, bayesian <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           rating complaints privileges learning raises critical advance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   -9.846256105         51         30       39     61       92      45</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    0.323620094         64         51       54     63       73      47</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    3.786639877         70         68       69     76       86      48</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   -0.920216537         63         45       47     54       84      35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    7.737332923         78         56       66     71       83      47</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  -12.870909582         55         49       44     54       49      34</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   -6.944870014         67         42       56     66       68      35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8    0.005823031         75         50       55     70       66      41</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   -4.287320555         82         72       67     71       83      31</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10   6.592110202         61         45       47     62       80      41</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11   9.641417156         53         53       58     58       67      34</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12   7.348273571         60         47       39     59       74      41</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13   7.835946832         62         57       42     55       63      25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  -9.043483924         83         83       45     59       77      35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15   4.493496292         77         54       72     79       77      46</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  -1.336627510         90         50       72     60       54      36</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17  -4.555810663         85         64       69     79       79      63</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18   5.348273571         60         65       75     55       80      60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19  -2.213360123         70         46       57     75       85      46</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20  -8.139399690         58         68       54     64       78      52</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21   5.471540958         40         33       34     43       64      33</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22   3.592110202         61         52       62     66       80      41</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23 -11.188706645         66         52       50     63       80      37</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24  -2.259968934         37         42       58     50       57      49</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25   7.885253787         54         42       48     66       75      33</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26  -6.506503708         77         66       63     88       76      72</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27   7.005823031         75         58       74     80       78      49</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28  -9.383236321         57         44       45     51       83      38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29   6.444189337         85         71       71     77       74      55</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30   5.712679445         82         39       59     64       78      39</span>
-<span class="r-in"><span class="fu">adjust</span><span class="op">(</span><span class="va">attitude</span>, effect <span class="op">=</span> <span class="st">"complaints"</span>, select <span class="op">=</span> <span class="st">"rating"</span>, additive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="fu">adjust</span><span class="op">(</span><span class="va">attitude</span>, effect <span class="op">=</span> <span class="st">"complaints"</span>, select <span class="op">=</span> <span class="st">"rating"</span>, bayesian <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          rating complaints privileges learning raises critical advance</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   -9.86411484         51         30       39     61       92      45</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    0.34338736         64         51       54     63       73      47</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    3.82377299         70         68       69     76       86      48</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   -0.90334358         63         45       47     54       84      35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    7.79762050         78         56       66     71       83      47</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  -12.87719109         55         49       44     54       49      34</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   -6.91641983         67         42       56     66       68      35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8    0.05742768         75         50       55     70       66      41</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   -4.21545575         82         72       67     71       83      31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10   6.60319454         61         45       47     62       80      41</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11   9.62934704         53         53       58     58       67      34</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12   7.35646360         60         47       39     59       74      41</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13   7.84992548         62         57       42     55       63      25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  -8.96872481         83         83       45     59       77      35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15   4.55088956         77         54       72     79       77      46</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  -1.24160824         90         50       72     60       54      36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  -4.47526294         85         64       69     79       79      63</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18   5.35646360         60         65       75     55       80      60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19  -2.17622701         70         46       57     75       85      46</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  -8.13699827         58         68       54     64       78      52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21   5.42184484         40         33       34     43       64      33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22   3.60319454         61         52       62     66       80      41</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23 -11.16315077         66         52       50     63       80      37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  -2.31834798         37         42       58     50       57      49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25   7.87607797         54         42       48     66       75      33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  -6.44911044         77         66       63     88       76      72</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27   7.05742768         75         58       74     80       78      49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28  -9.38372921         57         44       45     51       83      38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29   6.52473706         85         71       71     77       74      55</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30   5.78454425         82         39       59     64       78      39</span>
+<span class="r-in"><span><span class="fu">adjust</span><span class="op">(</span><span class="va">attitude</span>, effect <span class="op">=</span> <span class="st">"complaints"</span>, select <span class="op">=</span> <span class="st">"rating"</span>, additive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          rating complaints privileges learning raises critical advance</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   -9.86142016         51         30       39     61       92      45</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    0.32865220         64         51       54     63       73      47</span>
@@ -287,8 +287,8 @@ search pattern when matching against variable names.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 28  -9.38907907         57         44       45     51       83      38</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 29   6.48184600         85         71       71     77       74      55</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 30   5.74567546         82         39       59     64       78      39</span>
-<span class="r-in"><span class="va">attitude</span><span class="op">$</span><span class="va">complaints_LMH</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">attitude</span><span class="op">$</span><span class="va">complaints</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">adjust</span><span class="op">(</span><span class="va">attitude</span>, effect <span class="op">=</span> <span class="st">"complaints_LMH"</span>, select <span class="op">=</span> <span class="st">"rating"</span>, multilevel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">attitude</span><span class="op">$</span><span class="va">complaints_LMH</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">attitude</span><span class="op">$</span><span class="va">complaints</span>, <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">adjust</span><span class="op">(</span><span class="va">attitude</span>, effect <span class="op">=</span> <span class="st">"complaints_LMH"</span>, select <span class="op">=</span> <span class="st">"rating"</span>, multilevel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         rating complaints privileges learning raises critical advance</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   -9.9809282         51         30       39     61       92      45</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    2.6250549         64         51       54     63       73      47</span>
@@ -351,29 +351,29 @@ search pattern when matching against variable names.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 28    (54.7,72.3]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 29    (72.3,90.1]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 30    (72.3,90.1]</span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/bayestestR/" class="external-link">"bayestestR"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="co"># Generate data</span></span>
-<span class="r-in">  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/bayestestR/reference/simulate_correlation.html" class="external-link">simulate_correlation</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, r <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">data</span><span class="op">$</span><span class="va">V2</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">5</span> <span class="op">*</span> <span class="va">data</span><span class="op">$</span><span class="va">V2</span><span class="op">)</span> <span class="op">+</span> <span class="fl">20</span> <span class="co"># Add intercept</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># Adjust</span></span>
-<span class="r-in">  <span class="va">adjusted</span> <span class="op">&lt;-</span> <span class="fu">adjust</span><span class="op">(</span><span class="va">data</span>, effect <span class="op">=</span> <span class="st">"V1"</span>, select <span class="op">=</span> <span class="st">"V2"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">adjusted_icpt</span> <span class="op">&lt;-</span> <span class="fu">adjust</span><span class="op">(</span><span class="va">data</span>, effect <span class="op">=</span> <span class="st">"V1"</span>, select <span class="op">=</span> <span class="st">"V2"</span>, keep_intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># Visualize</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">V1</span>, <span class="va">data</span><span class="op">$</span><span class="va">V2</span>,</span>
-<span class="r-in">    pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"blue"</span>,</span>
-<span class="r-in">    ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">adjusted</span><span class="op">$</span><span class="va">V2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">V2</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">    main <span class="op">=</span> <span class="st">"Original (blue), adjusted (green), and adjusted - intercept kept (red) data"</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">V2</span> <span class="op">~</span> <span class="va">V1</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">adjusted</span><span class="op">$</span><span class="va">V1</span>, <span class="va">adjusted</span><span class="op">$</span><span class="va">V2</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">V2</span> <span class="op">~</span> <span class="va">V1</span>, data <span class="op">=</span> <span class="va">adjusted</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">adjusted_icpt</span><span class="op">$</span><span class="va">V1</span>, <span class="va">adjusted_icpt</span><span class="op">$</span><span class="va">V2</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">V2</span> <span class="op">~</span> <span class="va">V1</span>, data <span class="op">=</span> <span class="va">adjusted_icpt</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/bayestestR/" class="external-link">"bayestestR"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="co"># Generate data</span></span></span>
+<span class="r-in"><span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/bayestestR/reference/simulate_correlation.html" class="external-link">simulate_correlation</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, r <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">data</span><span class="op">$</span><span class="va">V2</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">5</span> <span class="op">*</span> <span class="va">data</span><span class="op">$</span><span class="va">V2</span><span class="op">)</span> <span class="op">+</span> <span class="fl">20</span> <span class="co"># Add intercept</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># Adjust</span></span></span>
+<span class="r-in"><span>  <span class="va">adjusted</span> <span class="op">&lt;-</span> <span class="fu">adjust</span><span class="op">(</span><span class="va">data</span>, effect <span class="op">=</span> <span class="st">"V1"</span>, select <span class="op">=</span> <span class="st">"V2"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">adjusted_icpt</span> <span class="op">&lt;-</span> <span class="fu">adjust</span><span class="op">(</span><span class="va">data</span>, effect <span class="op">=</span> <span class="st">"V1"</span>, select <span class="op">=</span> <span class="st">"V2"</span>, keep_intercept <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># Visualize</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">V1</span>, <span class="va">data</span><span class="op">$</span><span class="va">V2</span>,</span></span>
+<span class="r-in"><span>    pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"blue"</span>,</span></span>
+<span class="r-in"><span>    ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">adjusted</span><span class="op">$</span><span class="va">V2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">V2</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    main <span class="op">=</span> <span class="st">"Original (blue), adjusted (green), and adjusted - intercept kept (red) data"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">V2</span> <span class="op">~</span> <span class="va">V1</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">adjusted</span><span class="op">$</span><span class="va">V1</span>, <span class="va">adjusted</span><span class="op">$</span><span class="va">V2</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">V2</span> <span class="op">~</span> <span class="va">V1</span>, data <span class="op">=</span> <span class="va">adjusted</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">adjusted_icpt</span><span class="op">$</span><span class="va">V1</span>, <span class="va">adjusted_icpt</span><span class="op">$</span><span class="va">V2</span>, pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">V2</span> <span class="op">~</span> <span class="va">V1</span>, data <span class="op">=</span> <span class="va">adjusted_icpt</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: bayestestR</span>
 <span class="r-plt img"><img src="adjust-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>

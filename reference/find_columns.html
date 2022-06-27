@@ -73,45 +73,45 @@ for <code>find_columns()</code>.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">find_columns</span><span class="op">(</span>
-  <span class="va">data</span>,
-  select <span class="op">=</span> <span class="cn">NULL</span>,
-  exclude <span class="op">=</span> <span class="cn">NULL</span>,
-  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
-  regex <span class="op">=</span> <span class="cn">FALSE</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">data_find</span><span class="op">(</span>
-  <span class="va">data</span>,
-  select <span class="op">=</span> <span class="cn">NULL</span>,
-  exclude <span class="op">=</span> <span class="cn">NULL</span>,
-  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
-  regex <span class="op">=</span> <span class="cn">FALSE</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">get_columns</span><span class="op">(</span>
-  <span class="va">data</span>,
-  select <span class="op">=</span> <span class="cn">NULL</span>,
-  exclude <span class="op">=</span> <span class="cn">NULL</span>,
-  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
-  regex <span class="op">=</span> <span class="cn">FALSE</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">data_select</span><span class="op">(</span>
-  <span class="va">data</span>,
-  select <span class="op">=</span> <span class="cn">NULL</span>,
-  exclude <span class="op">=</span> <span class="cn">NULL</span>,
-  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,
-  regex <span class="op">=</span> <span class="cn">FALSE</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_columns</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  select <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exclude <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  regex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">data_find</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  select <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exclude <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  regex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_columns</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  select <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exclude <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  regex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">data_select</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  select <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exclude <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  regex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -136,7 +136,7 @@ right (e.g., <code>-1</code> or <code>-1:-3</code>),</p></li>
 <code>is.numeric</code>), or any user-defined function that selects the variables
 for which the function returns <code>TRUE</code> (like: <code>foo &lt;- function(x) mean(x) &gt; 3</code>),</p></li>
 <li><p>ranges specified via literal variable names, select-helpers (except
-<code><a href="https://rdrr.io/r/base/regex.html" class="external-link">regex()</a></code>) and (user-defined) functions can be negated, i.e. return
+<code>regex()</code>) and (user-defined) functions can be negated, i.e. return
 non-matching elements, when prefixed with a <code>-</code>, e.g. <code>-ends_with("")</code>,
 <code>-is.numeric</code> or <code>-Sepal.Width:Petal.Length</code>. <strong>Note:</strong> Negation means
 that matches are <em>excluded</em>, and thus, the <code>exclude</code> argument can be
@@ -192,26 +192,26 @@ was found. <code>get_columns()</code> returns a data frame with matching columns
     <p>Note that there are some limitations when calling this from inside other
 functions. The following will work as expected, returning all columns that
 start with <code>"Sep"</code>:</p>
-<p></p><div class="sourceCode r"><pre><code><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sep"</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span>
-<span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></code></pre><p></p></div>
+<p></p><div class="sourceCode r"><pre><code><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sep"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></code></pre><p></p></div>
 <p>However, this example won't work as expected!</p>
-<p></p><div class="sourceCode r"><pre><code><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">i</span> <span class="op">&lt;-</span> <span class="st">"Sep"</span>
-  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span>
-<span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></code></pre><p></p></div>
+<p></p><div class="sourceCode r"><pre><code><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">i</span> <span class="op">&lt;-</span> <span class="st">"Sep"</span></span>
+<span>  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></code></pre><p></p></div>
 <p>One workaround is to use the <code>regex</code> argument, which provides at least a bit
 more flexibility than exact matching. <code>regex</code> in its basic usage (as seen
 below) means that <code>select</code> behaves like the <code>contains("")</code> select-helper, but
 can also make the function more flexible by allowing to define complex
 regular expression pattern in <code>select</code>.</p>
-<p></p><div class="sourceCode r"><pre><code><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">i</span> <span class="op">&lt;-</span> <span class="st">"Sep"</span>
-  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="va">i</span>, regex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="op">}</span>
-<span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></code></pre><p></p></div>
+<p></p><div class="sourceCode r"><pre><code><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">i</span> <span class="op">&lt;-</span> <span class="st">"Sep"</span></span>
+<span>  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="va">i</span>, regex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -229,23 +229,23 @@ regular expression pattern in <code>select</code>.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Find columns names by pattern</span></span>
-<span class="r-in"><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sepal"</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Find columns names by pattern</span></span></span>
+<span class="r-in"><span><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sepal"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sepal.Length" "Sepal.Width" </span>
-<span class="r-in"><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">ends_with</a></span><span class="op">(</span><span class="st">"Width"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">ends_with</a></span><span class="op">(</span><span class="st">"Width"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sepal.Width" "Petal.Width"</span>
-<span class="r-in"><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://rdrr.io/r/base/regex.html" class="external-link">regex</a></span><span class="op">(</span><span class="st">"\\."</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu">regex</span><span class="op">(</span><span class="st">"\\."</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width" </span>
-<span class="r-in"><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Width"</span>, <span class="st">"Sepal.Length"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Width"</span>, <span class="st">"Sepal.Length"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Width"  "Sepal.Length"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># starts with "Sepal", but not allowed to end with "width"</span></span>
-<span class="r-in"><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sepal"</span><span class="op">)</span>, exclude <span class="op">=</span> <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"Width"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># starts with "Sepal", but not allowed to end with "width"</span></span></span>
+<span class="r-in"><span><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sepal"</span><span class="op">)</span>, exclude <span class="op">=</span> <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"Width"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sepal.Length"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># find numeric with mean &gt; 3.5</span></span>
-<span class="r-in"><span class="va">numeric_mean_35</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">3.5</span></span>
-<span class="r-in"><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="va">numeric_mean_35</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># find numeric with mean &gt; 3.5</span></span></span>
+<span class="r-in"><span><span class="va">numeric_mean_35</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">3.5</span></span></span>
+<span class="r-in"><span><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="va">numeric_mean_35</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sepal.Length" "Petal.Length"</span>
 </code></pre></div>
     </div>

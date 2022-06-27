@@ -111,12 +111,12 @@
 </ul>
 <p>Let’s look at the following example:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/datawizard/" class="external-link">datawizard</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/effectsize/" class="external-link">effectsize</a></span><span class="op">)</span> <span class="co"># for data</span>
-
-<span class="co"># let's have a look at what the data look like</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"hardlyworking"</span>, package <span class="op">=</span> <span class="st">"effectsize"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">hardlyworking</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/datawizard/" class="external-link">datawizard</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/effectsize/" class="external-link">effectsize</a></span><span class="op">)</span> <span class="co"># for data</span></span>
+<span></span>
+<span><span class="co"># let's have a look at what the data look like</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"hardlyworking"</span>, package <span class="op">=</span> <span class="st">"effectsize"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">hardlyworking</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt;     salary xtra_hours n_comps age seniority
 &gt; 1 19744.65   4.161812       1  32         3
 &gt; 2 11301.95   1.621868       0  34         3
@@ -125,24 +125,23 @@
 &gt; 5 27342.15  11.261399       0  33         4
 &gt; 6 25656.63   3.633346       2  30         5</code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># let's use both methods of standardization</span>
-<span class="va">hardlyworking</span><span class="op">$</span><span class="va">xtra_hours_z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="va">hardlyworking</span><span class="op">$</span><span class="va">xtra_hours</span><span class="op">)</span>
-<span class="va">hardlyworking</span><span class="op">$</span><span class="va">xtra_hours_zr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="va">hardlyworking</span><span class="op">$</span><span class="va">xtra_hours</span>, robust <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># let's use both methods of standardization</span></span>
+<span><span class="va">hardlyworking</span><span class="op">$</span><span class="va">xtra_hours_z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="va">hardlyworking</span><span class="op">$</span><span class="va">xtra_hours</span><span class="op">)</span></span>
+<span><span class="va">hardlyworking</span><span class="op">$</span><span class="va">xtra_hours_zr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="va">hardlyworking</span><span class="op">$</span><span class="va">xtra_hours</span>, robust <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>We can see that different methods give different central and variation values:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span>
-
-<span class="va">hardlyworking</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"xtra_hours"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">pivot_longer</span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>
-    mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>,
-    sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>,
-    median <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>,
-    mad <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/mad.html" class="external-link">mad</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>
-  <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">hardlyworking</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"xtra_hours"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/data_to_long.html">data_to_long</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
+<span>    mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Value</span><span class="op">)</span>,</span>
+<span>    sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">Value</span><span class="op">)</span>,</span>
+<span>    median <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">Value</span><span class="op">)</span>,</span>
+<span>    mad <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/mad.html" class="external-link">mad</a></span><span class="op">(</span><span class="va">Value</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">name</th>
@@ -177,18 +176,18 @@
 </table>
 <p><code><a href="../reference/standardize.html">standardize()</a></code> can also be used to standardize a full data frame - where each numeric variable is standardized separately:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">hardlyworking_z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="va">hardlyworking</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">hardlyworking_z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="va">hardlyworking</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">hardlyworking_z</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">xtra_hours_z</span>, <span class="op">-</span><span class="va">xtra_hours_zr</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">pivot_longer</span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>
-    mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>,
-    sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>,
-    median <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>,
-    mad <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/mad.html" class="external-link">mad</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>
-  <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">hardlyworking_z</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">xtra_hours_z</span>, <span class="op">-</span><span class="va">xtra_hours_zr</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/data_to_long.html">data_to_long</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
+<span>    mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Value</span><span class="op">)</span>,</span>
+<span>    sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">Value</span><span class="op">)</span>,</span>
+<span>    median <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">Value</span><span class="op">)</span>,</span>
+<span>    mad <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/mad.html" class="external-link">mad</a></span><span class="op">(</span><span class="va">Value</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">name</th>
@@ -253,21 +252,21 @@
 <p>We will take the <code>emotion</code> dataset in which participants were exposed to negative pictures and had to rate their emotions (<strong>valence</strong>) and the amount of memories associated with the picture (<strong>autobiographical link</strong>). One could make the hypothesis that for young participants with no context of war or violence, the most negative pictures (mutilations) are less related to memories than less negative pictures (involving for example car crashes or sick people). In other words, <strong>we expect a positive relationship between valence</strong> (with high values corresponding to less negativity) <strong>and autobiographical link</strong>.</p>
 <p>Let’s have a look at the data, averaged by participants:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Download the 'emotion' dataset</span>
-<span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html" class="external-link">url</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/neuropsychology/psycho.R/master/data/emotion.rda"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Discard neutral pictures (keep only negative)</span>
-<span class="va">emotion</span> <span class="op">&lt;-</span> <span class="va">emotion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Emotion_Condition</span> <span class="op">==</span> <span class="st">"Negative"</span><span class="op">)</span>
-
-<span class="co"># Summary</span>
-<span class="va">emotion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">drop_na</span><span class="op">(</span><span class="va">Subjective_Valence</span>, <span class="va">Autobiographical_Link</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Participant_ID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>
-    n_Trials <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,
-    Valence_Mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Subjective_Valence</span><span class="op">)</span>,
-    Valence_SD <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">Subjective_Valence</span><span class="op">)</span>
-  <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Download the 'emotion' dataset</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html" class="external-link">url</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/neuropsychology/psycho.R/master/data/emotion.rda"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Discard neutral pictures (keep only negative)</span></span>
+<span><span class="va">emotion</span> <span class="op">&lt;-</span> <span class="va">emotion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Emotion_Condition</span> <span class="op">==</span> <span class="st">"Negative"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Summary</span></span>
+<span><span class="va">emotion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">drop_na</span><span class="op">(</span><span class="va">Subjective_Valence</span>, <span class="va">Autobiographical_Link</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Participant_ID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
+<span>    n_Trials <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    Valence_Mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Subjective_Valence</span><span class="op">)</span>,</span>
+<span>    Valence_SD <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">Subjective_Valence</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <pre><code>&gt;  [38;5;246m# A tibble: 19 × 4 [39m
 &gt;  [38;5;246m# Groups:   Participant_ID [19] [39m
 &gt;    Participant_ID n_Trials Valence_Mean Valence_SD
@@ -298,18 +297,18 @@
 </h4>
 <p>We will create three data frames standardized with each of the three techniques.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Z_VariableWise</span> <span class="op">&lt;-</span> <span class="va">emotion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">Z_ParticipantWise</span> <span class="op">&lt;-</span> <span class="va">emotion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Participant_ID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">Z_Full</span> <span class="op">&lt;-</span> <span class="va">emotion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Participant_ID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Z_VariableWise</span> <span class="op">&lt;-</span> <span class="va">emotion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">Z_ParticipantWise</span> <span class="op">&lt;-</span> <span class="va">emotion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Participant_ID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">Z_Full</span> <span class="op">&lt;-</span> <span class="va">emotion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Participant_ID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Let’s see how these three standardization techniques affected the <strong>Valence</strong> variable.</p>
 </div>
 <div class="section level4">
@@ -317,23 +316,23 @@
 </h4>
 <p>We can calculate the mean and SD of <em>Valence</em> across all participants:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Create a convenient function to print</span>
-<span class="va">summarise_Subjective_Valence</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">df_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/deparse.html" class="external-link">deparse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">substitute</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>
-      DF <span class="op">=</span> <span class="va">df_name</span>,
-      Mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Subjective_Valence</span><span class="op">)</span>,
-      SD <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">Subjective_Valence</span><span class="op">)</span>
-    <span class="op">)</span>
-<span class="op">}</span>
-<span class="co"># Check the results</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span>
-  <span class="fu">summarise_Subjective_Valence</span><span class="op">(</span><span class="va">Z_VariableWise</span><span class="op">)</span>,
-  <span class="fu">summarise_Subjective_Valence</span><span class="op">(</span><span class="va">Z_ParticipantWise</span><span class="op">)</span>,
-  <span class="fu">summarise_Subjective_Valence</span><span class="op">(</span><span class="va">Z_Full</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Create a convenient function to print</span></span>
+<span><span class="va">summarise_Subjective_Valence</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">df_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/deparse.html" class="external-link">deparse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">substitute</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
+<span>      DF <span class="op">=</span> <span class="va">df_name</span>,</span>
+<span>      Mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Subjective_Valence</span><span class="op">)</span>,</span>
+<span>      SD <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">Subjective_Valence</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co"># Check the results</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
+<span>  <span class="fu">summarise_Subjective_Valence</span><span class="op">(</span><span class="va">Z_VariableWise</span><span class="op">)</span>,</span>
+<span>  <span class="fu">summarise_Subjective_Valence</span><span class="op">(</span><span class="va">Z_ParticipantWise</span><span class="op">)</span>,</span>
+<span>  <span class="fu">summarise_Subjective_Valence</span><span class="op">(</span><span class="va">Z_Full</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">DF</th>
@@ -360,21 +359,21 @@
 </table>
 <p>The <strong>means</strong> and the <strong>SD</strong> appear as fairly similar (0 and 1)…</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/see/" class="external-link">see</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
-
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Z_VariableWise</span><span class="op">$</span><span class="va">Subjective_Valence</span>,
-    color <span class="op">=</span> <span class="st">"Z_VariableWise"</span>
-  <span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Z_ParticipantWise</span><span class="op">$</span><span class="va">Subjective_Valence</span>,
-    color <span class="op">=</span> <span class="st">"Z_ParticipantWise"</span>
-  <span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Z_Full</span><span class="op">$</span><span class="va">Subjective_Valence</span>,
-    color <span class="op">=</span> <span class="st">"Z_Full"</span>
-  <span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">see</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">""</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/see/" class="external-link">see</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Z_VariableWise</span><span class="op">$</span><span class="va">Subjective_Valence</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"Z_VariableWise"</span></span>
+<span>  <span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Z_ParticipantWise</span><span class="op">$</span><span class="va">Subjective_Valence</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"Z_ParticipantWise"</span></span>
+<span>  <span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Z_Full</span><span class="op">$</span><span class="va">Subjective_Valence</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"Z_Full"</span></span>
+<span>  <span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">see</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code></pre></div>
 <p><img src="standardize_data_files/figure-html/unnamed-chunk-13-1.png" width="2100" style="display: block; margin: auto;"></p>
 <p>and so do the marginal distributions…</p>
 </div>
@@ -383,26 +382,26 @@
 </h4>
 <p>However, we can also look at what happens in the participant level. Let’s look at the first 5 participants:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Create convenient function</span>
-<span class="va">print_participants</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">df_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/deparse.html" class="external-link">deparse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">substitute</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Participant_ID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>
-      DF <span class="op">=</span> <span class="va">df_name</span>,
-      Mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Subjective_Valence</span><span class="op">)</span>,
-      SD <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">Subjective_Valence</span><span class="op">)</span>
-    <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">DF</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="co"># Check the results</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span>
-  <span class="fu">print_participants</span><span class="op">(</span><span class="va">Z_VariableWise</span><span class="op">)</span>,
-  <span class="fu">print_participants</span><span class="op">(</span><span class="va">Z_ParticipantWise</span><span class="op">)</span>,
-  <span class="fu">print_participants</span><span class="op">(</span><span class="va">Z_Full</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Create convenient function</span></span>
+<span><span class="va">print_participants</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">df_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/deparse.html" class="external-link">deparse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">substitute</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Participant_ID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
+<span>      DF <span class="op">=</span> <span class="va">df_name</span>,</span>
+<span>      Mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Subjective_Valence</span><span class="op">)</span>,</span>
+<span>      SD <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">Subjective_Valence</span><span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">DF</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Check the results</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
+<span>  <span class="fu">print_participants</span><span class="op">(</span><span class="va">Z_VariableWise</span><span class="op">)</span>,</span>
+<span>  <span class="fu">print_participants</span><span class="op">(</span><span class="va">Z_ParticipantWise</span><span class="op">)</span>,</span>
+<span>  <span class="fu">print_participants</span><span class="op">(</span><span class="va">Z_Full</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">DF</th>
@@ -510,53 +509,53 @@
 </h4>
 <p>Let’s do a <strong>correlation</strong> between the <strong>variable-wise and participant-wise methods</strong>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">cor.test</a></span><span class="op">(</span>
-  <span class="va">Z_VariableWise</span><span class="op">$</span><span class="va">Subjective_Valence</span>,
-  <span class="va">Z_ParticipantWise</span><span class="op">$</span><span class="va">Subjective_Valence</span>
-<span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
-  Original <span class="op">=</span> <span class="va">emotion</span><span class="op">$</span><span class="va">Subjective_Valence</span>,
-  VariableWise <span class="op">=</span> <span class="va">Z_VariableWise</span><span class="op">$</span><span class="va">Subjective_Valence</span>,
-  ParticipantWise <span class="op">=</span> <span class="va">Z_ParticipantWise</span><span class="op">$</span><span class="va">Subjective_Valence</span>
-<span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">VariableWise</span>, y <span class="op">=</span> <span class="va">ParticipantWise</span>, colour <span class="op">=</span> <span class="va">Original</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.75</span>, shape <span class="op">=</span> <span class="fl">16</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"r = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">r</span><span class="op">$</span><span class="va">estimate</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">see</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">cor.test</a></span><span class="op">(</span></span>
+<span>  <span class="va">Z_VariableWise</span><span class="op">$</span><span class="va">Subjective_Valence</span>,</span>
+<span>  <span class="va">Z_ParticipantWise</span><span class="op">$</span><span class="va">Subjective_Valence</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Original <span class="op">=</span> <span class="va">emotion</span><span class="op">$</span><span class="va">Subjective_Valence</span>,</span>
+<span>  VariableWise <span class="op">=</span> <span class="va">Z_VariableWise</span><span class="op">$</span><span class="va">Subjective_Valence</span>,</span>
+<span>  ParticipantWise <span class="op">=</span> <span class="va">Z_ParticipantWise</span><span class="op">$</span><span class="va">Subjective_Valence</span></span>
+<span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">VariableWise</span>, y <span class="op">=</span> <span class="va">ParticipantWise</span>, colour <span class="op">=</span> <span class="va">Original</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.75</span>, shape <span class="op">=</span> <span class="fl">16</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"r = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">r</span><span class="op">$</span><span class="va">estimate</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">see</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="standardize_data_files/figure-html/unnamed-chunk-16-1.png" width="2100" style="display: block; margin: auto;"></p>
 <p>While the three standardization methods roughly present the same characteristics at a general level (mean 0 and SD 1) and a similar distribution, their values are not exactly the same!</p>
 <p>Let’s now answer the original question by investigating the <strong>linear relationship between valence and autobiographical link</strong>. We can do this by running a mixed-effects model with participants entered as random effects.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span>
-<span class="va">m_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span>
-  formula <span class="op">=</span> <span class="va">Subjective_Valence</span> <span class="op">~</span> <span class="va">Autobiographical_Link</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Participant_ID</span><span class="op">)</span>,
-  data <span class="op">=</span> <span class="va">emotion</span>
-<span class="op">)</span>
-<span class="va">m_VariableWise</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">m_raw</span>, data <span class="op">=</span> <span class="va">Z_VariableWise</span><span class="op">)</span>
-<span class="va">m_ParticipantWise</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">m_raw</span>, data <span class="op">=</span> <span class="va">Z_ParticipantWise</span><span class="op">)</span>
-<span class="va">m_Full</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">m_raw</span>, data <span class="op">=</span> <span class="va">Z_Full</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span></span>
+<span><span class="va">m_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span></span>
+<span>  formula <span class="op">=</span> <span class="va">Subjective_Valence</span> <span class="op">~</span> <span class="va">Autobiographical_Link</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Participant_ID</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">emotion</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">m_VariableWise</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">m_raw</span>, data <span class="op">=</span> <span class="va">Z_VariableWise</span><span class="op">)</span></span>
+<span><span class="va">m_ParticipantWise</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">m_raw</span>, data <span class="op">=</span> <span class="va">Z_ParticipantWise</span><span class="op">)</span></span>
+<span><span class="va">m_Full</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">m_raw</span>, data <span class="op">=</span> <span class="va">Z_Full</span><span class="op">)</span></span></code></pre></div>
 <p>We can extract the parameters of interest from each model, and find:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Convenient function</span>
-<span class="va">get_par</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">mod_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/deparse.html" class="external-link">deparse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">substitute</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span>
-  <span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Model <span class="op">=</span> <span class="va">mod_name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">Parameter</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Model</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="va">.</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span>, <span class="op">]</span>
-<span class="op">}</span>
-
-<span class="co"># Run the model on all datasets</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span>
-  <span class="fu">get_par</span><span class="op">(</span><span class="va">m_raw</span><span class="op">)</span>,
-  <span class="fu">get_par</span><span class="op">(</span><span class="va">m_VariableWise</span><span class="op">)</span>,
-  <span class="fu">get_par</span><span class="op">(</span><span class="va">m_ParticipantWise</span><span class="op">)</span>,
-  <span class="fu">get_par</span><span class="op">(</span><span class="va">m_Full</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Convenient function</span></span>
+<span><span class="va">get_par</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">mod_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/deparse.html" class="external-link">deparse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">substitute</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Model <span class="op">=</span> <span class="va">mod_name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">Parameter</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Model</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="va">.</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span>, <span class="op">]</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Run the model on all datasets</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
+<span>  <span class="fu">get_par</span><span class="op">(</span><span class="va">m_raw</span><span class="op">)</span>,</span>
+<span>  <span class="fu">get_par</span><span class="op">(</span><span class="va">m_VariableWise</span><span class="op">)</span>,</span>
+<span>  <span class="fu">get_par</span><span class="op">(</span><span class="va">m_ParticipantWise</span><span class="op">)</span>,</span>
+<span>  <span class="fu">get_par</span><span class="op">(</span><span class="va">m_Full</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; # Fixed Effects
 &gt; 
 &gt; Model             | Coefficient |   SE |        95% CI | t(451) |     p
