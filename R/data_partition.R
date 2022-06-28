@@ -61,10 +61,10 @@ data_partition <- function(data,
   }
 
   # Create list of data groups
+  data$.row_id <- 1:nrow(data)
   if (is.null(group)) {
     indices_list <- list(1:nrow(data))
   } else {
-    data$.row_id <- 1:nrow(data)
     indices_list <- lapply(
       split(data, data[group]),
       data_extract,
