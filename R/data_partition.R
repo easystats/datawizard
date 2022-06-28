@@ -5,17 +5,23 @@
 #' using the `group` argument.
 #'
 #' @inheritParams data_rename
-#' @param prob The proportion (between 0 and 1) of the training
-#'   set. The remaining part will be used for the test set.
-#' @param training_proportion This argument is the old name of the `prob` argument.
-#'   It got renamed to `prob` as it can now handle more than one value and split
-#'   the data into multiple partitions.
+#' @param prob Scalar (between 0 and 1) or numeric vector, indicating the
+#'   proportion(s) of the training set(s). The sum of `prob` must not be greater
+#'   than 1. The remaining part will be used for the test set.
+#' @param training_proportion Deprecated, please use `prob` argument. It got
+#'   renamed to `prob` as it can now handle more than one value and split the
+#'   data into multiple partitions.
 #' @param group A character vector indicating the name(s) of the column(s) used
 #'   for stratified partitioning.
 #' @param seed A random number generator seed. Enter an integer (e.g. 123) so
 #'   that the random sampling will be the same each time you run the function.
+#' @param row_id Character string, indicating the name of the column that
+#'   contains the row-id's.
 #'
-#' @return A list of two data frames, named `test` and `training`.
+#' @return A list of data frames. The list includes one training set per given
+#'   probability (`prob`) and the remaining data as test set. List elements of
+#'   training sets are named after the given probabilities (e.g., `$p=0.7`),
+#'   the test set is names `$test`.
 #'
 #' @examples
 #' data <- iris
@@ -23,7 +29,7 @@
 #'
 #' out <- data_partition(data, prob = 0.9)
 #' out$test
-#' nrow(out$training)
+#' nrow(out$[["p=0.9"]])
 #'
 #' # Stratify by group (equal proportions of each species)
 #' out <- data_partition(data, prob = 0.9, group = "Species")
@@ -32,7 +38,7 @@
 #' out <- data_partition(data, prob = 0.9, group = c("Species", "Smell"))
 #' out$test
 #'
-#' # Create multiple partitions (this currrently doesn't work!)
+#' # Create multiple partitions
 #' out <- data_partition(data, prob = c(0.3, 0.3))
 #'
 #' @inherit data_rename seealso
@@ -42,6 +48,7 @@ data_partition <- function(data,
                            group = NULL,
                            seed = NULL,
                            training_proportion = prob,
+                           row_id = ".row_id",
                            ...) {
 
   # Sanity check
@@ -60,46 +67,74 @@ data_partition <- function(data,
     stop("`prob` cannot be higher than 1.")
   }
 
-  # Create list of data groups
-  data$.row_id <- 1:nrow(data)
+  # add row-id column
+  data[[row_id]] <- 1:nrow(data)
+
+  # Create list of data groups. We generally lapply over list of
+  # sampled row-id's by group, thus, we even create a list if not grouped.
   if (is.null(group)) {
     indices_list <- list(1:nrow(data))
   } else {
+    # else, split by group(s) and extract row-ids per group
     indices_list <- lapply(
       split(data, data[group]),
       data_extract,
-      select = ".row_id"
+      select = row_id
     )
   }
 
+  # initalize
   total_n <- nrow(data)
   out <- c()
   training_ids <- c()
 
+  # iterate over (grouped) row-id's
   training_sets <- lapply(indices_list, function(i) {
+
+    # return value, list of data frames
     d <- list()
+
+    # row-id's by groups
     indices <- i
+
+    # check length of group (= data)
     n <- length(indices)
+
+    # iterate probabilities. we use for/next, so we can change
+    # the "indices" variable, where we remove already sampled id's
     for (p in prob) {
+
+      # training-id's, sampled from id's per group - n is % within each group
       training <- sort(sample(indices, round(n * p), FALSE))
+
+      # remove already sampled id's from group-indices
       indices <- setdiff(indices, training)
+
+      # remember all sampled id's from training sets
       out <- c(out, training)
+
+      # each training set data frame as one list element
       d[[length(d) + 1]] <- data[training, ]
     }
     training_ids <- c(training_ids, out)
     d
   })
 
+  # we need to move all list elements one level higher.
   if (!is.null(group)) {
+    # for grouped training sets, we need to row-bind
+    # all sampled training sets from each group
     training_sets <- lapply(1:length(prob), function(p) {
       do.call(rbind, lapply(training_sets, function(i) i[[p]]))
     })
   } else {
+    # else, just move first list element one level higher
     training_sets <- training_sets[[1]]
   }
 
+  # use probabilies as element names
   names(training_sets) <- sprintf("p=%g", prob)
-  training_sets <- c(training_sets, list(test = data[-unlist(lapply(training_sets, data_extract, select = ".row_id")), ]))
 
-  training_sets
+  # remove all training set id's from data, add remaining data (= test set)
+  c(training_sets, list(test = data[-unlist(lapply(training_sets, data_extract, select = row_id)), ]))
 }

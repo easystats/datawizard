@@ -10,14 +10,16 @@ data_partition(
   group = NULL,
   seed = NULL,
   training_proportion = prob,
+  row_id = ".row_id",
   ...
 )
 }
 \arguments{
 \item{data}{A data frame, or an object that can be coerced to a data frame.}
 
-\item{prob}{The proportion (between 0 and 1) of the training
-set. The remaining part will be used for the test set.}
+\item{prob}{Scalar (between 0 and 1) or numeric vector, indicating the
+proportion(s) of the training set(s). The sum of \code{prob} must not be greater
+than 1. The remaining part will be used for the test set.}
 
 \item{group}{A character vector indicating the name(s) of the column(s) used
 for stratified partitioning.}
@@ -25,14 +27,20 @@ for stratified partitioning.}
 \item{seed}{A random number generator seed. Enter an integer (e.g. 123) so
 that the random sampling will be the same each time you run the function.}
 
-\item{training_proportion}{This argument is the old name of the \code{prob} argument.
-It got renamed to \code{prob} as it can now handle more than one value and split
-the data into multiple partitions.}
+\item{training_proportion}{Deprecated, please use \code{prob} argument. It got
+renamed to \code{prob} as it can now handle more than one value and split the
+data into multiple partitions.}
+
+\item{row_id}{Character string, indicating the name of the column that
+contains the row-id's.}
 
 \item{...}{Other arguments passed to or from other functions.}
 }
 \value{
-A list of two data frames, named \code{test} and \code{training}.
+A list of data frames. The list includes one training set per given
+probability (\code{prob}) and the remaining data as test set. List elements of
+training sets are named after the given probabilities (e.g., \verb{$p=0.7}),
+the test set is names \verb{$test}.
 }
 \description{
 Creates data partitions (for instance, a training and a test set) based on a
@@ -45,7 +53,7 @@ data$Smell <- rep(c("Strong", "Strong", "Light"), 50)
 
 out <- data_partition(data, prob = 0.9)
 out$test
-nrow(out$training)
+nrow(out$[["p=0.9"]])
 
 # Stratify by group (equal proportions of each species)
 out <- data_partition(data, prob = 0.9, group = "Species")
@@ -54,7 +62,7 @@ out$test
 out <- data_partition(data, prob = 0.9, group = c("Species", "Smell"))
 out$test
 
-# Create multiple partitions (this currrently doesn't work!)
+# Create multiple partitions
 out <- data_partition(data, prob = c(0.3, 0.3))
 
 }
