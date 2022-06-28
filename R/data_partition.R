@@ -52,20 +52,37 @@ data_partition <- function(data,
                            row_id = ".row_id",
                            ...) {
 
-  # Sanity check
+  # Sanity checks
   if (!is.data.frame(data)) {
     data <- tryCatch(as.data.frame(data), error = function(e) NULL)
     if (is.null(data)) {
-      stop(insight::format_message("`data` needs to be a data frame, or an object that can be coerced to a data frame."))
+      stop(insight::format_message("`data` needs to be a data frame, or an object that can be coerced to a data frame."), call. = FALSE)
     }
+  }
+
+  if (sum(prob) > 1) {
+    stop("`prob` cannot be higher than 1.", call. = FALSE)
+  }
+
+  if (is.null(row_id)) {
+    row_id <- ".row_id"
+  }
+
+  # check that name of row-id doesn't exist to prevent existing data
+  # from overwriting. create new unique name for row-id then...
+  if (row_id %in% colnames(data)) {
+    warning(
+      insight::format_message(
+        paste0("A variable named `", row_id, "` already exists."),
+        "Change the value of 'row_id' to a unique variable name."),
+      call. = FALSE
+    )
+    unique_names <- make.unique(c(colnames(data), row_id), sep = "_")
+    row_id <- unique_names[length(unique_names)]
   }
 
   if (!is.null(seed)) {
     set.seed(seed)
-  }
-
-  if (sum(prob) > 1) {
-    stop("`prob` cannot be higher than 1.")
   }
 
   # add row-id column
