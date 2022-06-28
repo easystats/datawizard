@@ -39,7 +39,7 @@ contains the row-id's.}
 \value{
 A list of data frames. The list includes one training set per given
 probability (\code{prob}) and the remaining data as test set. List elements of
-training sets are named after the given probabilities (e.g., \verb{$p=0.7}),
+training sets are named after the given probabilities (e.g., \verb{$p_0.7}),
 the test set is names \verb{$test}.
 }
 \description{
@@ -53,7 +53,7 @@ data$Smell <- rep(c("Strong", "Strong", "Light"), 50)
 
 out <- data_partition(data, prob = 0.9)
 out$test
-nrow(out[["p=0.9"]])
+nrow(out$p_0.9)
 
 # Stratify by group (equal proportions of each species)
 out <- data_partition(data, prob = 0.9, group = "Species")
@@ -64,6 +64,7 @@ out$test
 
 # Create multiple partitions
 out <- data_partition(data, prob = c(0.3, 0.3))
+lapply(out, head)
 
 }
 \seealso{

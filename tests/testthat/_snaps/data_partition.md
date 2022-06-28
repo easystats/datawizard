@@ -3,37 +3,37 @@
     Code
       data_partition(letters, seed = 123)
     Output
-      $`p=0.7`
+      $p_0.7
          data .row_id
-      3     c       3
-      5     e       5
-      8     h       8
-      9     i       9
-      10    j      10
-      11    k      11
-      12    l      12
-      13    m      13
-      14    n      14
-      15    o      15
-      16    p      16
-      18    r      18
-      19    s      19
-      20    t      20
-      21    u      21
-      23    w      23
-      24    x      24
-      25    y      25
+      1     c       3
+      2     e       5
+      3     h       8
+      4     i       9
+      5     j      10
+      6     k      11
+      7     l      12
+      8     m      13
+      9     n      14
+      10    o      15
+      11    p      16
+      12    r      18
+      13    s      19
+      14    t      20
+      15    u      21
+      16    w      23
+      17    x      24
+      18    y      25
       
       $test
-         data .row_id
-      1     a       1
-      2     b       2
-      4     d       4
-      6     f       6
-      7     g       7
-      17    q      17
-      22    v      22
-      26    z      26
+        data .row_id
+      1    a       1
+      2    b       2
+      3    d       4
+      4    f       6
+      5    g       7
+      6    q      17
+      7    v      22
+      8    z      26
       
 
 ---
@@ -42,7 +42,7 @@
       str(data_partition(iris, prob = 0.7, seed = 123))
     Output
       List of 2
-       $ p=0.7:'data.frame':	105 obs. of  6 variables:
+       $ p_0.7:'data.frame':	105 obs. of  6 variables:
         ..$ Sepal.Length: num [1:105] 4.6 5.4 4.6 5 4.4 4.9 4.8 4.8 4.3 5.8 ...
         ..$ Sepal.Width : num [1:105] 3.1 3.9 3.4 3.4 2.9 3.1 3.4 3 3 4 ...
         ..$ Petal.Length: num [1:105] 1.5 1.7 1.4 1.5 1.4 1.5 1.6 1.4 1.1 1.2 ...
@@ -63,14 +63,14 @@
       str(data_partition(iris, prob = c(0.2, 0.5), seed = 123))
     Output
       List of 3
-       $ p=0.2:'data.frame':	30 obs. of  6 variables:
+       $ p_0.2:'data.frame':	30 obs. of  6 variables:
         ..$ Sepal.Length: num [1:30] 4.6 4.4 4.3 4.6 5 5 5.4 5 4.4 5 ...
         ..$ Sepal.Width : num [1:30] 3.4 2.9 3 3.6 3 3.4 3.4 3.5 3.2 3.3 ...
         ..$ Petal.Length: num [1:30] 1.4 1.4 1.1 1 1.6 1.6 1.5 1.3 1.3 1.4 ...
         ..$ Petal.Width : num [1:30] 0.3 0.2 0.1 0.2 0.2 0.4 0.4 0.3 0.2 0.2 ...
         ..$ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
         ..$ .row_id     : int [1:30] 7 9 14 23 26 27 32 41 43 50 ...
-       $ p=0.5:'data.frame':	75 obs. of  6 variables:
+       $ p_0.5:'data.frame':	75 obs. of  6 variables:
         ..$ Sepal.Length: num [1:75] 4.6 5.4 5 4.9 4.8 5.8 5.7 5.4 5.1 5.7 ...
         ..$ Sepal.Width : num [1:75] 3.1 3.9 3.4 3.1 3.4 4 4.4 3.9 3.5 3.8 ...
         ..$ Petal.Length: num [1:75] 1.5 1.7 1.5 1.5 1.6 1.2 1.5 1.3 1.4 1.7 ...
@@ -91,7 +91,7 @@
       str(data_partition(iris, prob = 0.7, group = "Species", seed = 123))
     Output
       List of 2
-       $ p=0.7:'data.frame':	105 obs. of  6 variables:
+       $ p_0.7:'data.frame':	105 obs. of  6 variables:
         ..$ Sepal.Length: num [1:105] 4.7 4.6 5 4.6 5 4.4 4.9 5.4 4.8 4.8 ...
         ..$ Sepal.Width : num [1:105] 3.2 3.1 3.6 3.4 3.4 2.9 3.1 3.7 3.4 3 ...
         ..$ Petal.Length: num [1:105] 1.3 1.5 1.4 1.4 1.5 1.4 1.5 1.5 1.6 1.4 ...
@@ -112,14 +112,14 @@
       str(data_partition(iris, prob = c(0.2, 0.5), group = "Species", seed = 123))
     Output
       List of 3
-       $ p=0.2:'data.frame':	30 obs. of  6 variables:
+       $ p_0.2:'data.frame':	30 obs. of  6 variables:
         ..$ Sepal.Length: num [1:30] 4.7 4.3 5.8 4.8 5 4.8 5.5 4.5 4.4 4.6 ...
         ..$ Sepal.Width : num [1:30] 3.2 3 4 3.4 3 3.1 3.5 2.3 3.2 3.2 ...
         ..$ Petal.Length: num [1:30] 1.3 1.1 1.2 1.9 1.6 1.6 1.3 1.3 1.3 1.4 ...
         ..$ Petal.Width : num [1:30] 0.2 0.1 0.2 0.2 0.2 0.2 0.2 0.3 0.2 0.2 ...
         ..$ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
         ..$ .row_id     : int [1:30] 3 14 15 25 26 31 37 42 43 48 ...
-       $ p=0.5:'data.frame':	75 obs. of  6 variables:
+       $ p_0.5:'data.frame':	75 obs. of  6 variables:
         ..$ Sepal.Length: num [1:75] 5 5.4 5 4.4 4.9 5.4 4.8 4.8 5.7 5.4 ...
         ..$ Sepal.Width : num [1:75] 3.6 3.9 3.4 2.9 3.1 3.7 3.4 3 4.4 3.9 ...
         ..$ Petal.Length: num [1:75] 1.4 1.7 1.5 1.4 1.5 1.5 1.6 1.4 1.5 1.3 ...
