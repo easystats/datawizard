@@ -53,7 +53,7 @@ data$Smell <- rep(c("Strong", "Strong", "Light"), 50)
 
 out <- data_partition(data, prob = 0.9)
 out$test
-nrow(out$[["p=0.9"]])
+nrow(out[["p=0.9"]])
 
 # Stratify by group (equal proportions of each species)
 out <- data_partition(data, prob = 0.9, group = "Species")
