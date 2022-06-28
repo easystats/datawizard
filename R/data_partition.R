@@ -73,8 +73,8 @@ data_partition <- function(data,
   if (row_id %in% colnames(data)) {
     warning(
       insight::format_message(
-        paste0("A variable named `", row_id, "` already exists."),
-        "Changing the value of 'row_id' to a unique variable name."),
+        paste0("A variable named \"", row_id, "\" already exists."),
+        "Changing the value of `row_id` to a unique variable name now."),
       call. = FALSE
     )
     unique_names <- make.unique(c(colnames(data), row_id), sep = "_")
