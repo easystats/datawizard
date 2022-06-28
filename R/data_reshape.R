@@ -176,11 +176,14 @@ data_to_long <- function(data,
 data_to_wide <- function(data,
                          values_from = "Value",
                          colnames_from = "Name",
-                         rows_from = NULL,
                          sep = "_",
                          ...,
                          names_from = colnames_from,
-                         verbose = TRUE) {
+                         verbose = TRUE,
+                         values_fill = NULL) {
+
+  old_names <- names(data)
+
   if (inherits(data, "tbl_df")) {
     tbl_input <- TRUE
     data <- as.data.frame(data)
@@ -189,51 +192,99 @@ data_to_wide <- function(data,
   }
 
   # Compatibility with tidyr
-  if (names_from != colnames_from) colnames_from <- names_from
+  if (!identical(colnames_from, names_from)) colnames_from <- names_from
+
+  # New column names
+  combs <- data[, colnames_from]
+  if (length(colnames_from) > 1) {
+    combs <- combs[!duplicated(combs), ]
+    new_names <- apply(combs, 1, function(x) paste(x, collapse = sep))
+    names(new_names) <- NULL
+  } else {
+    new_names <- unique(combs)
+  }
+
+  if (any(new_names %in% colnames(data))) {
+    if (verbose) {
+      warning(insight::format_message(
+        "Some values of the column specified in 'colnames_from' are already present as column names."
+      ), call. = FALSE)
+    }
+  }
+
+  if (all(names(data) %in% c(values_from, colnames_from))) {
+    data[["_Rows"]] <- row.names(data)
+  } else {
+    data[["_Rows"]] <- apply(data[, !names(data) %in% c(values_from, colnames_from), drop = FALSE], 1, paste, collapse = "_")
+  }
+  rows_from <- "_Rows"
+
 
   # save attribute of each variable
   variable_attr <- lapply(data, attributes)
 
-  # If no other row identifier, create one
-  if (is.null(rows_from)) {
-    if (all(names(data) %in% c(values_from, colnames_from))) {
-      data[["_Rows"]] <- row.names(data)
-    }
-    data[["_Rows"]] <- apply(data[, !names(data) %in% c(values_from, colnames_from), drop = FALSE], 1, paste, collapse = "_")
-    rows_from <- "_Rows"
-  }
+  data$new_time <- apply(data, 1, function(x) paste(x[colnames_from], collapse = "_"))
+  data[, colnames_from] <- NULL
 
-  # create pattern of column names - stats::reshape renames columns that
-  # concatenates "v.names" + values - we only want values
-  old_colnames <- paste0(values_from, "_", unique(data[[colnames_from]]))
-  new_colnames <- unique(data[[colnames_from]])
-
-  # Reshape
-  wide <- stats::reshape(data,
+  wide <- stats::reshape(
+    data,
     v.names = values_from,
     idvar = rows_from,
-    timevar = colnames_from,
+    timevar = "new_time",
     sep = sep,
     direction = "wide"
   )
+
+  if (length(values_from) == 1) {
+    names(wide) <- gsub(paste0(values_from, sep), "", names(wide))
+  }
+
+  # Order columns
+  for (i in values_from) {
+    wide <- data_relocate(
+      wide,
+      select = grep(paste0("^", i), names(wide), value = TRUE),
+      after = -1
+    )
+  }
 
   # Clean
   if ("_Rows" %in% names(wide)) wide[["_Rows"]] <- NULL
   row.names(wide) <- NULL # Reset row names
 
-  # check if values can be used as column names,
-  # or if there are conflicts due to duplicates
-  if (any(new_colnames %in% colnames(wide))) {
-    if (verbose) {
-      warning(insight::format_message(
-        "Some values of the column specified in 'colnames_from' are already present as column names.",
-        sprintf("To avoid duplicated column names, the names of new columns follow the pattern '%s' etc.", old_colnames[1])
-      ), call. = FALSE)
+  # Fill missing values
+  if (!is.null(values_fill)) {
+
+    if (length(values_fill) == 1) {
+      new_cols <- setdiff(names(wide), old_names)
+
+      if (is.numeric(wide[[new_cols[1]]])) {
+        if (!is.numeric(values_fill)) {
+          stop(insight::format_message(paste0("`values_fill` must be of type numeric.")), call. = FALSE)
+        } else {
+          wide <- convert_na_to(wide, replace_num = values_fill)
+        }
+      } else if (is.character(wide[[new_cols[1]]])) {
+        if (!is.character(values_fill)) {
+          stop(insight::format_message(paste0("`values_fill` must be of type character.")), call. = FALSE)
+        } else {
+          wide <- convert_na_to(wide, replace_char = values_fill)
+        }
+      } else if (is.factor(wide[[new_cols[1]]])) {
+        if (!is.factor(values_fill)) {
+          stop(insight::format_message(paste0("`values_fill` must be of type factor.")), call. = FALSE)
+        } else {
+          wide <- convert_na_to(wide, replace_fac = values_fill)
+        }
+      }
+    } else {
+      if (verbose) {
+        stop(insight::format_message("`values_fill` must be of length 1."), call. = FALSE)
+      }
     }
-  } else {
-    # restore proper column names
-    colnames(wide) <- replace(colnames(wide), colnames(wide) %in% old_colnames, new_colnames)
+
   }
+
 
   # Remove reshape attributes
   attributes(wide)$reshapeWide <- NULL
@@ -249,7 +300,6 @@ data_to_wide <- function(data,
 
   wide
 }
-
 
 
 # Aliases -----------------------------------------------------------------
