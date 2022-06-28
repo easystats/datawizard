@@ -46,17 +46,9 @@ data_partition <- function(data,
 
   # Sanity check
   if (!is.data.frame(data)) {
-    data <- tryCatch(
-      expr = {
-        as.data.frame(data)
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-
+    data <- tryCatch(as.data.frame(data), error = function(e) NULL)
     if (is.null(data)) {
-      stop("`data` needs to be a data frame, or an object that can be coerced to a data frame.")
+      stop(insight::format_message("`data` needs to be a data frame, or an object that can be coerced to a data frame."))
     }
   }
 
@@ -64,7 +56,7 @@ data_partition <- function(data,
     set.seed(seed)
   }
 
-  if(sum(prob) > 1) {
+  if (sum(prob) > 1) {
     stop("`prob` cannot be higher than 1.")
   }
 
@@ -74,7 +66,7 @@ data_partition <- function(data,
   partitions <- rep(0, nrow(data))
 
   # Assign to same group if no groups
-  if(is.null(group)) {
+  if (is.null(group)) {
     data_copy$.temp <- "TEMP"
     group <- ".temp"
   }
@@ -83,7 +75,7 @@ data_partition <- function(data,
   data_copy$.rowid <- 1:nrow(data_copy)
 
   # Iterate through probabilities (in case there is more than 1)
-  for(i in 1:length(prob)) {
+  for (i in 1:length(prob)) {
     out[i] <- c(NA) # Initialize empty value (will be dropped later)
     # Split into groups, and for each group, get the desired proportion
     for (dat in split(data_copy, data_copy[group])) {
