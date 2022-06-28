@@ -123,12 +123,7 @@ reference:
 
 articles:
 
-  - title: Basic Data Wrangling
-    navbar: ~
-    contents:
-    - basic_data_wrangling
   - title: Data transformation
     navbar: Data transformation
     contents:
     - standardize_data
-
