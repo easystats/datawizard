@@ -60,43 +60,46 @@ data_partition <- function(data,
     stop("`prob` cannot be higher than 1.")
   }
 
-  # Initialize out list
-  out <- list()
-  data_copy <- data
-  partitions <- rep(0, nrow(data))
-
-  # Assign to same group if no groups
+  # Create list of data groups
   if (is.null(group)) {
-    data_copy$.temp <- "TEMP"
-    group <- ".temp"
+    indices_list <- list(1:nrow(data))
+  } else {
+    data$.row_id <- 1:nrow(data)
+    indices_list <- lapply(
+      split(data, data[group]),
+      data_extract,
+      select = ".row_id"
+    )
   }
 
-  # Store row index
-  data_copy$.rowid <- 1:nrow(data_copy)
+  total_n <- nrow(data)
+  out <- c()
+  training_ids <- c()
 
-  # Iterate through probabilities (in case there is more than 1)
-  for (i in 1:length(prob)) {
-    out[i] <- c(NA) # Initialize empty value (will be dropped later)
-    # Split into groups, and for each group, get the desired proportion
-    for (dat in split(data_copy, data_copy[group])) {
-      out[[i]] <- c(out[[i]], dat$.rowid[sample(1:nrow(dat), size = prob[i] * nrow(dat))])
+  training_sets <- lapply(indices_list, function(i) {
+    d <- list()
+    indices <- i
+    n <- length(indices)
+    for (p in prob) {
+      training <- sort(sample(indices, round(n * p), FALSE))
+      indices <- setdiff(indices, training)
+      out <- c(out, training)
+      d[[length(d) + 1]] <- data[training, ]
     }
-    # Drop NA
-    out[[i]] <- as.numeric(na.omit(out[[i]]))
-    # Store partition result
-    partitions[out[[i]]] <- i
-    # Delete used rows from pool
-    data_copy <- data_copy[-out[[i]], ]
+    training_ids <- c(training_ids, out)
+    d
+  })
+
+  if (!is.null(group)) {
+    training_sets <- lapply(1:length(prob), function(p) {
+      do.call(rbind, lapply(training_sets, function(i) i[[p]]))
+    })
+  } else {
+    training_sets <- training_sets[[1]]
   }
 
-  # Split according to partitions
-  out <- split(data, partitions)
+  names(training_sets) <- sprintf("p=%g", prob)
+  training_sets <- c(training_sets, list(test = data[-unlist(lapply(training_sets, data_extract, select = ".row_id")), ]))
 
-  # Rename if only 2, or drop "remaining" pool if more than 2
-  if(length(out) == 2){
-    names(out) <- c("test", "training")
-  } else{
-    out[["0"]] <- NULL
-  }
-  out
+  training_sets
 }
