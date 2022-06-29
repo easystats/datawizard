@@ -174,6 +174,7 @@ data_to_long <- function(data,
 #' @rdname data_to_long
 #' @export
 data_to_wide <- function(data,
+                         rows_from = NULL,
                          values_from = "Value",
                          names_from = "Name",
                          names_sep = "_",
@@ -203,12 +204,14 @@ data_to_wide <- function(data,
 
 
   # Create an id for stats::reshape
-  if (all(names(data) %in% c(values_from, names_from))) {
-    data[["_Rows"]] <- row.names(data)
-  } else {
-    data[["_Rows"]] <- apply(data[, !names(data) %in% c(values_from, names_from), drop = FALSE], 1, paste, collapse = "_")
+  if (is.null(rows_from)) {
+    if (all(names(data) %in% c(values_from, names_from))) {
+      data[["_Rows"]] <- row.names(data)
+    } else {
+      data[["_Rows"]] <- apply(data[, !names(data) %in% c(values_from, names_from), drop = FALSE], 1, paste, collapse = "_")
+    }
+    rows_from <- "_Rows"
   }
-  rows_from <- "_Rows"
 
 
   # create pattern of column names - stats::reshape renames columns that

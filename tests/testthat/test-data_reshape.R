@@ -41,7 +41,8 @@ test_that("data_reshape works as expected - long to wide", {
     data_to_wide(
       long_data,
       names_from = "Name",
-      values_from = "Value"
+      values_from = "Value",
+      rows_from = "Row_ID"
     ),
     data.frame(
       Row_ID = c(1, 2, 3, 4, 5),
@@ -342,5 +343,3 @@ test_that("reshape_wider equivalent to pivot_wider: ex 5", {
 
   expect_identical(x, y)
 })
-
-
