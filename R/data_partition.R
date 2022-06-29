@@ -142,8 +142,10 @@ data_partition <- function(data,
 
   # we need to move all list elements one level higher.
   if (!is.null(group)) {
-    # for grouped training sets, we need to row-bind
-    # all sampled training sets from each group
+    # for grouped training sets, we need to row-bind all sampled training
+    # sets from each group. currently, we have a list of data frames,
+    # grouped by "group"; but we want one data frame per proportion that
+    # contains sampled rows from all groups.
     training_sets <- lapply(1:length(prob), function(p) {
       do.call(rbind, lapply(training_sets, function(i) i[[p]]))
     })
