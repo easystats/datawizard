@@ -11,7 +11,7 @@ BREAKING
   with `tidyr::extract()`.
 
 * Argument `training_proportion` in `data_partition()` is deprecated. Please
-  use `prob` now.
+  use `proportion` now.
 
 MAJOR CHANGES
 
