@@ -17,6 +17,7 @@
 #'   that the random sampling will be the same each time you run the function.
 #' @param row_id Character string, indicating the name of the column that
 #'   contains the row-id's.
+#' @param verbose Toggle messages and warnings.
 #'
 #' @return A list of data frames. The list includes one training set per given
 #'   probability (`prob`) and the remaining data as test set. List elements of
@@ -50,6 +51,7 @@ data_partition <- function(data,
                            seed = NULL,
                            training_proportion = prob,
                            row_id = ".row_id",
+                           verbose = TRUE,
                            ...) {
 
   # Sanity checks
@@ -64,6 +66,10 @@ data_partition <- function(data,
     stop("`prob` cannot be higher than 1.", call. = FALSE)
   }
 
+  if (sum(prob) == 1 && isTRUE(verbose)) {
+    warning(insight::format_message("Proportions of sampled training sets (`prob`) sums up to 1, so no test set will be generated."), call. = FALSE)
+  }
+
   if (is.null(row_id)) {
     row_id <- ".row_id"
   }
@@ -71,12 +77,15 @@ data_partition <- function(data,
   # check that name of row-id doesn't exist to prevent existing data
   # from overwriting. create new unique name for row-id then...
   if (row_id %in% colnames(data)) {
-    warning(
-      insight::format_message(
-        paste0("A variable named \"", row_id, "\" already exists."),
-        "Changing the value of `row_id` to a unique variable name now."),
-      call. = FALSE
-    )
+    if (isTRUE(verbose)) {
+      warning(
+        insight::format_message(
+          paste0("A variable named \"", row_id, "\" already exists."),
+          "Changing the value of `row_id` to a unique variable name now."),
+        call. = FALSE
+      )
+
+    }
     unique_names <- make.unique(c(colnames(data), row_id), sep = "_")
     row_id <- unique_names[length(unique_names)]
   }
@@ -97,14 +106,10 @@ data_partition <- function(data,
     indices_list <- lapply(
       split(data, data[group]),
       data_extract,
-      select = row_id
+      select = row_id,
+      as_data_frame = FALSE
     )
   }
-
-  # initalize
-  total_n <- nrow(data)
-  out <- c()
-  training_ids <- c()
 
   # iterate over (grouped) row-id's
   training_sets <- lapply(indices_list, function(i) {
@@ -128,13 +133,9 @@ data_partition <- function(data,
       # remove already sampled id's from group-indices
       indices <- setdiff(indices, training)
 
-      # remember all sampled id's from training sets
-      out <- c(out, training)
-
       # each training set data frame as one list element
       d[[length(d) + 1]] <- data[training, ]
     }
-    training_ids <- c(training_ids, out)
     d
   })
 
@@ -156,7 +157,7 @@ data_partition <- function(data,
   # remove all training set id's from data, add remaining data (= test set)
   out <- c(
     training_sets,
-    list(test = data[-unlist(lapply(training_sets, data_extract, select = row_id)), ])
+    list(test = data[-unlist(lapply(training_sets, data_extract, select = row_id, as_data_frame = FALSE)), ])
   )
 
   lapply(out, `row.names<-`, NULL)

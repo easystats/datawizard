@@ -11,6 +11,7 @@ data_partition(
   seed = NULL,
   training_proportion = prob,
   row_id = ".row_id",
+  verbose = TRUE,
   ...
 )
 }
@@ -33,6 +34,8 @@ data into multiple partitions.}
 
 \item{row_id}{Character string, indicating the name of the column that
 contains the row-id's.}
+
+\item{verbose}{Toggle messages and warnings.}
 
 \item{...}{Other arguments passed to or from other functions.}
 }
