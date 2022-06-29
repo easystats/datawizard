@@ -177,6 +177,7 @@ data_to_wide <- function(data,
                          values_from = "Value",
                          names_from = "Name",
                          names_sep = "_",
+                         names_prefix = "",
                          values_fill = NULL,
                          verbose = TRUE,
                          ...,
@@ -261,12 +262,16 @@ data_to_wide <- function(data,
     }
   }
 
+
+  new_cols <- setdiff(names(wide), old_names)
+
+  # Add prefix
+  wide <- data_rename(wide, new_cols, paste0(names_prefix, new_cols))
+
   # Fill missing values
   if (!is.null(values_fill)) {
 
     if (length(values_fill) == 1) {
-      new_cols <- setdiff(names(wide), old_names)
-
       if (is.numeric(wide[[new_cols[1]]])) {
         if (!is.numeric(values_fill)) {
           stop(insight::format_message(paste0("`values_fill` must be of type numeric.")), call. = FALSE)

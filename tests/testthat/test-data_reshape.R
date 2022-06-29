@@ -1,3 +1,6 @@
+library(tidyr)
+library(dplyr)
+
 set.seed(123)
 wide_data <- data.frame(replicate(3, sample(1:5)))
 
@@ -226,12 +229,26 @@ test_that("data_reshape works as expected - select-helper inside functions, usin
 })
 
 
+test_that("reshape_wider, names_prefix works", {
+  out <- fish_encounters %>%
+    reshape_wider(
+      names_from = "station",
+      values_from = "seen",
+      names_prefix = "foo_"
+    )
+
+  expect_equal(
+    names(out),
+    c("fish", "foo_Release", "foo_I80_1", "foo_Lisbon", "foo_Rstr", "foo_Base_TD",
+      "foo_BCE", "foo_BCW", "foo_BCE2", "foo_BCW2", "foo_MAE", "foo_MAW")
+  )
+})
+
+
+
 # EQUIVALENCE WITH TIDYR ----------------------------------------------------
 
 # Examples coming from: https://tidyr.tidyverse.org/articles/pivot.html#wider
-
-library(tidyr)
-library(dplyr)
 
 test_that("reshape_wider equivalent to pivot_wider: ex 1", {
   x <- fish_encounters |>
