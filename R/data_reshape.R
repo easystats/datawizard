@@ -18,6 +18,9 @@
 #'   compatibility with `tidyr::pivot_longer()`.
 #' @inheritParams find_columns
 #'
+#' @return If a tibble was provided as input, `reshape_longer()` also returns a
+#' tibble. Otherwise, it returns a dataframe.
+#'
 #' @examples
 #' wide_data <- data.frame(replicate(5, rnorm(10)))
 
@@ -48,8 +51,8 @@
 #' }
 #'
 #' @inherit data_rename seealso
-#' @return data.frame
 #' @export
+
 data_to_long <- function(data,
                          select = "all",
                          colnames_to = "Name",
@@ -149,13 +152,13 @@ data_to_long <- function(data,
 #'  the number of rows. This is a dependency-free base-R equivalent of
 #' `tidyr::pivot_wider()`.
 #'
-#' @param data A data frame to pivot
-#' @param id_cols The name of the column that identifies the rows. If`NULL`,
+#' @param data A data frame to pivot.
+#' @param id_cols The name of the column that identifies the rows. If `NULL`,
 #' it will use all the unique rows.
 #' @param names_from The name of the column that contains the levels to be
 #' used as future column names.
 #' @param names_prefix String added to the start of every variable name. This is
-#'  particularly useful if names_from is a numeric vector and you want to create
+#'  particularly useful if `names_from` is a numeric vector and you want to create
 #'  syntactic variable names.
 #' @param names_sep If `names_from` or `values_from` contains multiple variables,
 #' this will be used to join their values together into a single string to use

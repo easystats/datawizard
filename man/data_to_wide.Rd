@@ -36,9 +36,9 @@ reshape_wider(
 )
 }
 \arguments{
-\item{data}{A data frame to pivot}
+\item{data}{A data frame to pivot.}
 
-\item{id_cols}{The name of the column that identifies the rows. If\code{NULL},
+\item{id_cols}{The name of the column that identifies the rows. If \code{NULL},
 it will use all the unique rows.}
 
 \item{values_from}{The name of the column that contains the values to be used
@@ -52,7 +52,7 @@ this will be used to join their values together into a single string to use
 as a column name.}
 
 \item{names_prefix}{String added to the start of every variable name. This is
-particularly useful if names_from is a numeric vector and you want to create
+particularly useful if \code{names_from} is a numeric vector and you want to create
 syntactic variable names.}
 
 \item{values_fill}{Optionally, a (scalar) value that will be used to replace

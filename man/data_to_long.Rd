@@ -94,7 +94,8 @@ functions (see 'Details'), this argument may be used as workaround.}
 compatibility with \code{tidyr::pivot_longer()}.}
 }
 \value{
-data.frame
+If a tibble was provided as input, \code{reshape_longer()} also returns a
+tibble. Otherwise, it returns a dataframe.
 }
 \description{
 This function "lengthens" data, increasing the number of rows and decreasing
