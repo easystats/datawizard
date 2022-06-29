@@ -38,9 +38,8 @@ test_that("data_reshape works as expected - long to wide", {
   expect_equal(
     data_to_wide(
       long_data,
-      colnames_from = "Name",
-      values_from = "Value",
-      rows_from = "Row_ID"
+      names_from = "Name",
+      values_from = "Value"
     ),
     data.frame(
       Row_ID = c(1, 2, 3, 4, 5),
@@ -55,30 +54,19 @@ test_that("data_reshape works as expected - long to wide", {
 
   # warning for column name collision
   long_data$X1 <- 5
-  expect_warning(
+  expect_error(
     data_to_wide(
       long_data,
-      colnames_from = "Name",
+      names_from = "Name",
       values_from = "Value",
       rows_from = "Row_ID"
-    )
-  )
-
-  out <- suppressWarnings(data_to_wide(
-    long_data,
-    colnames_from = "Name",
-    values_from = "Value",
-    rows_from = "Row_ID"
-  ))
-
-  expect_equal(
-    colnames(out),
-    c("Row_ID", "X1", "Value_X1", "Value_X2", "Value_X3")
+    ),
+    regexp = "Some values of the columns specified in 'names_from'"
   )
 
   # colnames
   long_data <- data_to_long(wide_data, select = c("X2", "X3"))
-  wide <- data_to_wide(long_data, colnames_from = "Name", values_from = "Value")
+  wide <- data_to_wide(long_data, names_from = "Name", values_from = "Value")
   expect_equal(colnames(wide), colnames(wide_data))
 })
 
@@ -102,7 +90,7 @@ test_that("data_reshape works as expected - complex dataset", {
   long$Item <- paste0("I", long$Item)
 
   wide <- data_to_wide(long,
-    colnames_from = "Item",
+    names_from = "Item",
     values_from = "Score"
   )
 
@@ -236,3 +224,108 @@ test_that("data_reshape works as expected - select-helper inside functions, usin
   expect_equal(out$Name, c("score_t1", "score_t2", "score_t1", "score_t2", "score_t1", "score_t2"))
   expect_equal(out$Value, c(d$score_t1, d$score_t2)[c(1, 4, 2, 5, 3, 6)])
 })
+
+
+# EQUIVALENCE WITH TIDYR ----------------------------------------------------
+
+# Examples coming from: https://tidyr.tidyverse.org/articles/pivot.html#wider
+
+library(tidyr)
+library(dplyr)
+
+test_that("reshape_wider equivalent to pivot_wider: ex 1", {
+  x <- fish_encounters |>
+    pivot_wider(names_from = "station", values_from = "seen", values_fill = 0)
+
+  y <- fish_encounters %>%
+    reshape_wider(
+      names_from = "station",
+      values_from = "seen",
+      values_fill = 0
+    )
+
+  expect_equal(x, y, ignore_attr = TRUE)
+})
+
+test_that("reshape_wider equivalent to pivot_wider: ex 2", {
+  production <- expand_grid(
+    product = c("A", "B"),
+    country = c("AI", "EI"),
+    year = 2000:2014
+  ) %>%
+    filter((product == "A" & country == "AI") | product == "B") %>%
+    mutate(production = rnorm(nrow(.)))
+
+  x <- production %>%
+    pivot_wider(
+      names_from = c(product, country),
+      values_from = production
+    )
+
+  y <- production %>%
+    reshape_wider(
+      names_from = c("product", "country"),
+      values_from = "production"
+    )
+
+  expect_identical(x, y)
+})
+
+test_that("reshape_wider equivalent to pivot_wider: ex 3", {
+  x <- us_rent_income %>%
+    pivot_wider(
+      names_from = variable,
+      values_from = c(estimate, moe)
+    )
+
+  y <- us_rent_income %>%
+    reshape_wider(
+      names_from = "variable",
+      values_from = c("estimate", "moe")
+    )
+
+  expect_identical(x, y)
+})
+
+test_that("reshape_wider equivalent to pivot_wider: ex 4", {
+  x <- us_rent_income %>%
+    pivot_wider(
+      names_from = variable,
+      names_sep = ".",
+      values_from = c(estimate, moe)
+    )
+
+  y <- us_rent_income %>%
+    reshape_wider(
+      names_from = "variable",
+      names_sep = ".",
+      values_from = c("estimate", "moe")
+    )
+
+  expect_identical(x, y)
+})
+
+test_that("reshape_wider equivalent to pivot_wider: ex 5", {
+  contacts <- tribble(
+    ~field, ~value,
+    "name", "Jiena McLellan",
+    "company", "Toyota",
+    "name", "John Smith",
+    "company", "google",
+    "email", "john@google.com",
+    "name", "Huxley Ratcliffe"
+  ) %>%
+    mutate(
+      person_id = cumsum(field == "name")
+    )
+
+  x <- contacts %>%
+    pivot_wider(names_from = field, values_from = value)
+
+  y <- contacts %>%
+    reshape_wider(names_from = "field", values_from = "value")
+
+  expect_identical(x, y)
+})
+
+

@@ -23,12 +23,13 @@ data_to_long(
 data_to_wide(
   data,
   values_from = "Value",
-  colnames_from = "Name",
-  rows_from = NULL,
-  sep = "_",
+  names_from = "Name",
+  names_sep = "_",
+  values_fill = NULL,
+  verbose = TRUE,
   ...,
-  names_from = colnames_from,
-  verbose = TRUE
+  colnames_from,
+  sep
 )
 
 reshape_longer(
@@ -47,12 +48,13 @@ reshape_longer(
 reshape_wider(
   data,
   values_from = "Value",
-  colnames_from = "Name",
-  rows_from = NULL,
-  sep = "_",
+  names_from = "Name",
+  names_sep = "_",
+  values_fill = NULL,
+  verbose = TRUE,
   ...,
-  names_from = colnames_from,
-  verbose = TRUE
+  colnames_from,
+  sep
 )
 }
 \arguments{
@@ -120,16 +122,16 @@ compatibility with \code{tidyr::pivot_longer()}.}
 \item{values_from}{The name of the column that contains the values to be used
 as future variable values.}
 
-\item{colnames_from}{The name of the column that contains the levels to be
+\item{names_from}{The name of the column that contains the levels to be
 used as future column names.}
 
-\item{rows_from}{The name of the column that identifies the rows. If
-\code{NULL}, will use all the unique rows.}
+\item{verbose}{Toggle warnings.}
 
 \item{sep}{The indicating a separating character in the variable names in the
 wide format.}
 
-\item{verbose}{Toggle warnings.}
+\item{rows_from}{The name of the column that identifies the rows. If
+\code{NULL}, will use all the unique rows.}
 }
 \value{
 data.frame
@@ -159,7 +161,7 @@ data_to_long(wide_data,
 # -----------------
 long_data <- data_to_long(wide_data, rows_to = "Row_ID") # Save row number
 data_to_wide(long_data,
-  colnames_from = "Name",
+  names_from = "Name",
   values_from = "Value",
   rows_from = "Row_ID"
 )
@@ -183,7 +185,7 @@ if (require("psych")) {
   long$Item <- paste0("I", long$Item)
 
   wide <- data_to_wide(long,
-    colnames_from = "Item",
+    names_from = "Item",
     values_from = "Score"
   )
   head(wide)

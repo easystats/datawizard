@@ -12,7 +12,7 @@
 #'   the pivoted variables.
 #' @param rows_to The name of the column that will contain the row names or row
 #'   numbers from the original data. If `NULL`, will be removed.
-#' @param colnames_from The name of the column that contains the levels to be
+#' @param names_from The name of the column that contains the levels to be
 #'   used as future column names.
 #' @param values_from The name of the column that contains the values to be used
 #'   as future variable values.
@@ -45,7 +45,7 @@
 #' # -----------------
 #' long_data <- data_to_long(wide_data, rows_to = "Row_ID") # Save row number
 #' data_to_wide(long_data,
-#'   colnames_from = "Name",
+#'   names_from = "Name",
 #'   values_from = "Value",
 #'   rows_from = "Row_ID"
 #' )
@@ -69,7 +69,7 @@
 #'   long$Item <- paste0("I", long$Item)
 #'
 #'   wide <- data_to_wide(long,
-#'     colnames_from = "Item",
+#'     names_from = "Item",
 #'     values_from = "Score"
 #'   )
 #'   head(wide)
@@ -175,82 +175,91 @@ data_to_long <- function(data,
 #' @export
 data_to_wide <- function(data,
                          values_from = "Value",
-                         colnames_from = "Name",
-                         sep = "_",
-                         ...,
-                         names_from = colnames_from,
+                         names_from = "Name",
+                         names_sep = "_",
+                         values_fill = NULL,
                          verbose = TRUE,
-                         values_fill = NULL) {
+                         ...,
+                         colnames_from,
+                         sep) {
+
+  .is_deprecated(colnames_from, "names_from")
+  .is_deprecated(sep, "names_sep")
+
+  if (!missing(colnames_from) && is.null(names_from)) names_from <- colnames_from
+  if (!missing(sep) && is.null(names_sep)) names_sep <- sep
 
   old_names <- names(data)
 
+  # Preserve attributes
   if (inherits(data, "tbl_df")) {
     tbl_input <- TRUE
     data <- as.data.frame(data)
   } else {
     tbl_input <- FALSE
   }
+  variable_attr <- lapply(data, attributes)
 
-  # Compatibility with tidyr
-  if (!identical(colnames_from, names_from)) colnames_from <- names_from
 
-  # New column names
-  combs <- data[, colnames_from]
-  if (length(colnames_from) > 1) {
-    combs <- combs[!duplicated(combs), ]
-    new_names <- apply(combs, 1, function(x) paste(x, collapse = sep))
-    names(new_names) <- NULL
-  } else {
-    new_names <- unique(combs)
-  }
-
-  if (any(new_names %in% colnames(data))) {
-    if (verbose) {
-      warning(insight::format_message(
-        "Some values of the column specified in 'colnames_from' are already present as column names."
-      ), call. = FALSE)
-    }
-  }
-
-  if (all(names(data) %in% c(values_from, colnames_from))) {
+  # Create an id for stats::reshape
+  if (all(names(data) %in% c(values_from, names_from))) {
     data[["_Rows"]] <- row.names(data)
   } else {
-    data[["_Rows"]] <- apply(data[, !names(data) %in% c(values_from, colnames_from), drop = FALSE], 1, paste, collapse = "_")
+    data[["_Rows"]] <- apply(data[, !names(data) %in% c(values_from, names_from), drop = FALSE], 1, paste, collapse = "_")
   }
   rows_from <- "_Rows"
 
 
-  # save attribute of each variable
-  variable_attr <- lapply(data, attributes)
+  # create pattern of column names - stats::reshape renames columns that
+  # concatenates "v.names" + values - we only want values
+  current_colnames <- colnames(data)
+  current_colnames <- current_colnames[current_colnames != "_Rows"]
+  future_colnames <- unique(apply(data, 1, function(x) paste(x[c(names_from)], collapse = names_sep)))
 
-  data$new_time <- apply(data, 1, function(x) paste(x[colnames_from], collapse = "_"))
-  data[, colnames_from] <- NULL
+  # stop if some column names would be duplicated (follow tidyr workflow)
+  if (any(future_colnames %in% current_colnames)) {
+    stop(insight::format_message(
+      "Some values of the columns specified in 'names_from' are already present as column names.",
+      paste0("Either use `name_prefix` or rename the following columns: ",
+             paste(current_colnames[which(current_colnames %in% future_colnames)],
+                   collapse = ", "))
+    ), call. = FALSE)
+  }
+
+  # stats::reshape works strangely when several variables are in idvar/timevar
+  # so we unite all ids in a single temporary column that will be used by
+  # stats::reshape
+  data$new_time <- apply(data, 1, function(x) paste(x[names_from], collapse = "_"))
+  data[, names_from] <- NULL
 
   wide <- stats::reshape(
     data,
     v.names = values_from,
     idvar = rows_from,
     timevar = "new_time",
-    sep = sep,
+    sep = names_sep,
     direction = "wide"
   )
-
-  if (length(values_from) == 1) {
-    names(wide) <- gsub(paste0(values_from, sep), "", names(wide))
-  }
-
-  # Order columns
-  for (i in values_from) {
-    wide <- data_relocate(
-      wide,
-      select = grep(paste0("^", i), names(wide), value = TRUE),
-      after = -1
-    )
-  }
 
   # Clean
   if ("_Rows" %in% names(wide)) wide[["_Rows"]] <- NULL
   row.names(wide) <- NULL # Reset row names
+
+  if (length(values_from) == 1) {
+    to_rename <- which(startsWith(names(wide), paste0(values_from, names_sep)))
+    names(wide)[to_rename] <- gsub(paste0(values_from, names_sep), "", names(wide)[to_rename])
+  }
+
+  # Order columns as in tidyr
+  if (length(values_from) > 1) {
+    for (i in values_from) {
+      wide <- data_relocate(
+        wide,
+        select = grep(paste0("^", i), names(wide), value = TRUE),
+        after = -1
+      )
+    }
+  }
 
   # Fill missing values
   if (!is.null(values_fill)) {

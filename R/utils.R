@@ -4,3 +4,21 @@
 
   model_info
 }
+
+#' Print a message saying that an argument is deprecated and that the user
+#' should use its replacement instead.
+#'
+#' @param arg Argument that is deprecated
+#' @param replacement Argument that replaces the deprecated argument
+#' @keywords internal
+.is_deprecated <- function(arg, replacement) {
+
+  old <- sys.call(sys.parent(n = 2))[2]
+
+  if (!missing(arg)) {
+    warning(insight::format_message(
+      paste0("Argument `", old, "` is deprecated. Please use `", replacement, "` instead.")
+    ), call. = FALSE)
+  }
+
+}
