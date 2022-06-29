@@ -1,5 +1,4 @@
 library(tidyr)
-library(dplyr)
 
 set.seed(123)
 wide_data <- data.frame(replicate(3, sample(1:5)))
@@ -270,8 +269,9 @@ test_that("reshape_wider equivalent to pivot_wider: ex 2", {
     country = c("AI", "EI"),
     year = 2000:2014
   ) %>%
-    filter((product == "A" & country == "AI") | product == "B") %>%
-    mutate(production = rnorm(nrow(.)))
+    data_filter((product == "A" & country == "AI") | product == "B")
+
+  production$production <- rnorm(nrow(production))
 
   x <- production %>%
     pivot_wider(
@@ -331,10 +331,8 @@ test_that("reshape_wider equivalent to pivot_wider: ex 5", {
     "company", "google",
     "email", "john@google.com",
     "name", "Huxley Ratcliffe"
-  ) %>%
-    mutate(
-      person_id = cumsum(field == "name")
-    )
+  )
+  contacts$person_id = cumsum(contacts$field == "name")
 
   x <- contacts %>%
     pivot_wider(names_from = field, values_from = value)
