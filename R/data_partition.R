@@ -5,12 +5,12 @@
 #' using the `group` argument.
 #'
 #' @inheritParams data_rename
-#' @param prob Scalar (between 0 and 1) or numeric vector, indicating the
-#'   proportion(s) of the training set(s). The sum of `prob` must not be greater
-#'   than 1. The remaining part will be used for the test set.
-#' @param training_proportion Deprecated, please use `prob` argument. It got
-#'   renamed to `prob` as it can now handle more than one value and split the
-#'   data into multiple partitions.
+#' @param proportions Scalar (between 0 and 1) or numeric vector, indicating the
+#'   proportion(s) of the training set(s). The sum of `proportions` must not be
+#'   greater than 1. The remaining part will be used for the test set.
+#' @param training_proportion Deprecated, please use `proportions`. It got
+#'   renamed to `proportions` as it can now handle more than one value and
+#'   split the data into multiple partitions.
 #' @param group A character vector indicating the name(s) of the column(s) used
 #'   for stratified partitioning.
 #' @param seed A random number generator seed. Enter an integer (e.g. 123) so
@@ -20,39 +20,39 @@
 #' @param verbose Toggle messages and warnings.
 #'
 #' @return A list of data frames. The list includes one training set per given
-#'   probability (`prob`) and the remaining data as test set. List elements of
-#'   training sets are named after the given probabilities (e.g., `$p_0.7`),
-#'   the test set is names `$test`.
+#'   proportion and the remaining data as test set. List elements of training
+#'   sets are named after the given proportions (e.g., `$p_0.7`), the test set
+#'   is named `$test`.
 #'
 #' @examples
 #' data(iris)
-#' out <- data_partition(iris, prob = 0.9)
+#' out <- data_partition(iris, proportions = 0.9)
 #' out$test
 #' nrow(out$p_0.9)
 #'
 #' # Stratify by group (equal proportions of each species)
-#' out <- data_partition(iris, prob = 0.9, group = "Species")
+#' out <- data_partition(iris, proportions = 0.9, group = "Species")
 #' out$test
 #'
 #' # Create multiple partitions
-#' out <- data_partition(iris, prob = c(0.3, 0.3))
+#' out <- data_partition(iris, proportions = c(0.3, 0.3))
 #' lapply(out, head)
 #'
 #' # Create multiple partitions, stratified by group - 30% equally sampled
 #' # from species in first training set, 50% in second training set and
 #' # remaining 20% equally sampled from each species in test set.
-#' out <- data_partition(iris, prob = c(0.3, 0.5), group = "Species")
+#' out <- data_partition(iris, proportions = c(0.3, 0.5), group = "Species")
 #' lapply(out, function(i) table(i$Species))
 #'
 #' @inherit data_rename seealso
 #' @export
 data_partition <- function(data,
-                           prob = 0.7,
+                           proportions = 0.7,
                            group = NULL,
                            seed = NULL,
-                           training_proportion = prob,
                            row_id = ".row_id",
                            verbose = TRUE,
+                           training_proportion = proportions,
                            ...) {
 
   # Sanity checks
@@ -63,12 +63,12 @@ data_partition <- function(data,
     }
   }
 
-  if (sum(prob) > 1) {
-    stop("`prob` cannot be higher than 1.", call. = FALSE)
+  if (sum(proportions) > 1) {
+    stop("`proportions` cannot be higher than 1.", call. = FALSE)
   }
 
-  if (sum(prob) == 1 && isTRUE(verbose)) {
-    warning(insight::format_message("Proportions of sampled training sets (`prob`) sums up to 1, so no test set will be generated."), call. = FALSE)
+  if (sum(proportions) == 1 && isTRUE(verbose)) {
+    warning(insight::format_message("Proportions of sampled training sets (`proportions`) sums up to 1, so no test set will be generated."), call. = FALSE)
   }
 
   if (is.null(row_id)) {
@@ -126,10 +126,10 @@ data_partition <- function(data,
 
     # iterate probabilities. we use for/next, so we can change
     # the "indices" variable, where we remove already sampled id's
-    for (p in prob) {
+    for (p in proportions) {
 
-      # training-id's, sampled from id's per group - n is % within each group
-      training <- sort(sample(indices, round(n * p), FALSE))
+      # training-id's, sampled from id's per group - size is % within each group
+      training <- sort(sample(indices, round(n * p)))
 
       # remove already sampled id's from group-indices
       indices <- setdiff(indices, training)
@@ -146,7 +146,7 @@ data_partition <- function(data,
     # sets from each group. currently, we have a list of data frames,
     # grouped by "group"; but we want one data frame per proportion that
     # contains sampled rows from all groups.
-    training_sets <- lapply(1:length(prob), function(p) {
+    training_sets <- lapply(1:length(proportions), function(p) {
       do.call(rbind, lapply(training_sets, function(i) i[[p]]))
     })
   } else {
@@ -155,7 +155,7 @@ data_partition <- function(data,
   }
 
   # use probabilies as element names
-  names(training_sets) <- sprintf("p_%g", prob)
+  names(training_sets) <- sprintf("p_%g", proportions)
 
   # remove all training set id's from data, add remaining data (= test set)
   out <- c(

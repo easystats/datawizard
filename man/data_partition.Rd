@@ -6,21 +6,21 @@
 \usage{
 data_partition(
   data,
-  prob = 0.7,
+  proportions = 0.7,
   group = NULL,
   seed = NULL,
-  training_proportion = prob,
   row_id = ".row_id",
   verbose = TRUE,
+  training_proportion = proportions,
   ...
 )
 }
 \arguments{
 \item{data}{A data frame, or an object that can be coerced to a data frame.}
 
-\item{prob}{Scalar (between 0 and 1) or numeric vector, indicating the
-proportion(s) of the training set(s). The sum of \code{prob} must not be greater
-than 1. The remaining part will be used for the test set.}
+\item{proportions}{Scalar (between 0 and 1) or numeric vector, indicating the
+proportion(s) of the training set(s). The sum of \code{proportions} must not be
+greater than 1. The remaining part will be used for the test set.}
 
 \item{group}{A character vector indicating the name(s) of the column(s) used
 for stratified partitioning.}
@@ -28,22 +28,22 @@ for stratified partitioning.}
 \item{seed}{A random number generator seed. Enter an integer (e.g. 123) so
 that the random sampling will be the same each time you run the function.}
 
-\item{training_proportion}{Deprecated, please use \code{prob} argument. It got
-renamed to \code{prob} as it can now handle more than one value and split the
-data into multiple partitions.}
-
 \item{row_id}{Character string, indicating the name of the column that
 contains the row-id's.}
 
 \item{verbose}{Toggle messages and warnings.}
 
+\item{training_proportion}{Deprecated, please use \code{proportions}. It got
+renamed to \code{proportions} as it can now handle more than one value and
+split the data into multiple partitions.}
+
 \item{...}{Other arguments passed to or from other functions.}
 }
 \value{
 A list of data frames. The list includes one training set per given
-probability (\code{prob}) and the remaining data as test set. List elements of
-training sets are named after the given probabilities (e.g., \verb{$p_0.7}),
-the test set is names \verb{$test}.
+proportion and the remaining data as test set. List elements of training
+sets are named after the given proportions (e.g., \verb{$p_0.7}), the test set
+is named \verb{$test}.
 }
 \description{
 Creates data partitions (for instance, a training and a test set) based on a
@@ -52,22 +52,22 @@ using the \code{group} argument.
 }
 \examples{
 data(iris)
-out <- data_partition(iris, prob = 0.9)
+out <- data_partition(iris, proportions = 0.9)
 out$test
 nrow(out$p_0.9)
 
 # Stratify by group (equal proportions of each species)
-out <- data_partition(iris, prob = 0.9, group = "Species")
+out <- data_partition(iris, proportions = 0.9, group = "Species")
 out$test
 
 # Create multiple partitions
-out <- data_partition(iris, prob = c(0.3, 0.3))
+out <- data_partition(iris, proportions = c(0.3, 0.3))
 lapply(out, head)
 
 # Create multiple partitions, stratified by group - 30\% equally sampled
 # from species in first training set, 50\% in second training set and
 # remaining 20\% equally sampled from each species in test set.
-out <- data_partition(iris, prob = c(0.3, 0.5), group = "Species")
+out <- data_partition(iris, proportions = c(0.3, 0.5), group = "Species")
 lapply(out, function(i) table(i$Species))
 
 }

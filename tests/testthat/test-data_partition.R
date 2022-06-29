@@ -24,7 +24,7 @@ test_that("data_partition works as expected", {
 
   # values
 
-  out <- data_partition(mtcars, prob = .8, seed = 123)
+  out <- data_partition(mtcars, proportions = .8, seed = 123)
 
   expect_equal(
     out$p_0.8$.row_id,
@@ -47,8 +47,8 @@ test_that("data_partition works as expected", {
   # dataframes
 
   data(iris)
-  expect_snapshot(str(data_partition(iris, prob = .7, seed = 123)))
-  expect_snapshot(str(data_partition(iris, prob = c(.2, .5), seed = 123)))
-  expect_snapshot(str(data_partition(iris, prob = .7, group = "Species", seed = 123)))
-  expect_snapshot(str(data_partition(iris, prob = c(.2, .5), group = "Species", seed = 123)))
+  expect_snapshot(str(data_partition(iris, proportions = .7, seed = 123)))
+  expect_snapshot(str(data_partition(iris, proportions = c(.2, .5), seed = 123)))
+  expect_snapshot(str(data_partition(iris, proportions = .7, group = "Species", seed = 123)))
+  expect_snapshot(str(data_partition(iris, proportions = c(.2, .5), group = "Species", seed = 123)))
 })
