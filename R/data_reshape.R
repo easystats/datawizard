@@ -225,8 +225,8 @@ data_to_wide <- function(data,
     stop(insight::format_message(
       "Some values of the columns specified in 'names_from' are already present as column names.",
       paste0("Either use `name_prefix` or rename the following columns: ",
-             paste(current_colnames[which(current_colnames %in% future_colnames)],
-                   collapse = ", "))
+             text_concatenate(current_colnames[which(current_colnames %in% future_colnames)])
+      )
     ), call. = FALSE)
   }
 

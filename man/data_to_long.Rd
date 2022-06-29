@@ -22,9 +22,11 @@ data_to_long(
 
 data_to_wide(
   data,
+  rows_from = NULL,
   values_from = "Value",
   names_from = "Name",
   names_sep = "_",
+  names_prefix = "",
   values_fill = NULL,
   verbose = TRUE,
   ...,
@@ -47,9 +49,11 @@ reshape_longer(
 
 reshape_wider(
   data,
+  rows_from = NULL,
   values_from = "Value",
   names_from = "Name",
   names_sep = "_",
+  names_prefix = "",
   values_fill = NULL,
   verbose = TRUE,
   ...,
@@ -119,6 +123,9 @@ functions (see 'Details'), this argument may be used as workaround.}
 \item{names_to, names_from}{Same as \code{colnames_to}, is there for
 compatibility with \code{tidyr::pivot_longer()}.}
 
+\item{rows_from}{The name of the column that identifies the rows. If
+\code{NULL}, will use all the unique rows.}
+
 \item{values_from}{The name of the column that contains the values to be used
 as future variable values.}
 
@@ -129,9 +136,6 @@ used as future column names.}
 
 \item{sep}{The indicating a separating character in the variable names in the
 wide format.}
-
-\item{rows_from}{The name of the column that identifies the rows. If
-\code{NULL}, will use all the unique rows.}
 }
 \value{
 data.frame
