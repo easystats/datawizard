@@ -42,7 +42,7 @@ test_that("data_reshape works as expected - long to wide", {
       long_data,
       names_from = "Name",
       values_from = "Value",
-      rows_from = "Row_ID"
+      id_cols = "Row_ID"
     ),
     data.frame(
       Row_ID = c(1, 2, 3, 4, 5),
@@ -62,7 +62,7 @@ test_that("data_reshape works as expected - long to wide", {
       long_data,
       names_from = "Name",
       values_from = "Value",
-      rows_from = "Row_ID"
+      id_cols = "Row_ID"
     ),
     regexp = "Some values of the columns specified in 'names_from'"
   )

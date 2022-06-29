@@ -12,13 +12,7 @@
 #' @param replacement Argument that replaces the deprecated argument
 #' @keywords internal
 .is_deprecated <- function(arg, replacement) {
-
-  old <- sys.call(sys.parent(n = 2))[2]
-
-  if (!missing(arg)) {
-    warning(insight::format_message(
-      paste0("Argument `", old, "` is deprecated. Please use `", replacement, "` instead.")
-    ), call. = FALSE)
-  }
-
+  warning(insight::format_message(
+    paste0("Argument `", arg, "` is deprecated. Please use `", replacement, "` instead.")
+  ), call. = FALSE)
 }
