@@ -51,23 +51,24 @@ dataframe that can also be stratified (i.e., evenly spread a given factor)
 using the \code{group} argument.
 }
 \examples{
-data <- iris
-data$Smell <- rep(c("Strong", "Strong", "Light"), 50)
-
-out <- data_partition(data, prob = 0.9)
+data(iris)
+out <- data_partition(iris, prob = 0.9)
 out$test
 nrow(out$p_0.9)
 
 # Stratify by group (equal proportions of each species)
-out <- data_partition(data, prob = 0.9, group = "Species")
-out$test
-
-out <- data_partition(data, prob = 0.9, group = c("Species", "Smell"))
+out <- data_partition(iris, prob = 0.9, group = "Species")
 out$test
 
 # Create multiple partitions
-out <- data_partition(data, prob = c(0.3, 0.3))
+out <- data_partition(iris, prob = c(0.3, 0.3))
 lapply(out, head)
+
+# Create multiple partitions, stratified by group - 30\% equally sampled
+# from species in first training set, 50\% in second training set and
+# remaining 20\% equally sampled from each species in test set.
+out <- data_partition(iris, prob = c(0.3, 0.5), group = "Species")
+lapply(out, function(i) table(i$Species))
 
 }
 \seealso{
