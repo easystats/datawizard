@@ -6,20 +6,20 @@
 \usage{
 data_partition(
   data,
-  proportions = 0.7,
+  proportion = 0.7,
   group = NULL,
   seed = NULL,
   row_id = ".row_id",
   verbose = TRUE,
-  training_proportion = proportions,
+  training_proportion = proportion,
   ...
 )
 }
 \arguments{
 \item{data}{A data frame, or an object that can be coerced to a data frame.}
 
-\item{proportions}{Scalar (between 0 and 1) or numeric vector, indicating the
-proportion(s) of the training set(s). The sum of \code{proportions} must not be
+\item{proportion}{Scalar (between 0 and 1) or numeric vector, indicating the
+proportion(s) of the training set(s). The sum of \code{proportion} must not be
 greater than 1. The remaining part will be used for the test set.}
 
 \item{group}{A character vector indicating the name(s) of the column(s) used
@@ -33,9 +33,7 @@ contains the row-id's.}
 
 \item{verbose}{Toggle messages and warnings.}
 
-\item{training_proportion}{Deprecated, please use \code{proportions}. It got
-renamed to \code{proportions} as it can now handle more than one value and
-split the data into multiple partitions.}
+\item{training_proportion}{Deprecated, please use \code{proportion}.}
 
 \item{...}{Other arguments passed to or from other functions.}
 }
@@ -52,22 +50,22 @@ using the \code{group} argument.
 }
 \examples{
 data(iris)
-out <- data_partition(iris, proportions = 0.9)
+out <- data_partition(iris, proportion = 0.9)
 out$test
 nrow(out$p_0.9)
 
 # Stratify by group (equal proportions of each species)
-out <- data_partition(iris, proportions = 0.9, group = "Species")
+out <- data_partition(iris, proportion = 0.9, group = "Species")
 out$test
 
 # Create multiple partitions
-out <- data_partition(iris, proportions = c(0.3, 0.3))
+out <- data_partition(iris, proportion = c(0.3, 0.3))
 lapply(out, head)
 
 # Create multiple partitions, stratified by group - 30\% equally sampled
 # from species in first training set, 50\% in second training set and
 # remaining 20\% equally sampled from each species in test set.
-out <- data_partition(iris, proportions = c(0.3, 0.5), group = "Species")
+out <- data_partition(iris, proportion = c(0.3, 0.5), group = "Species")
 lapply(out, function(i) table(i$Species))
 
 }
