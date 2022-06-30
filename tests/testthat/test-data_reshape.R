@@ -249,6 +249,7 @@ test_that("reshape_wider, names_prefix works", {
 # EQUIVALENCE WITH TIDYR ----------------------------------------------------
 
 # Examples coming from: https://tidyr.tidyverse.org/articles/pivot.html#wider
+# and from https://github.com/tidyverse/tidyr/blob/main/tests/testthat/test-pivot-wide.R
 
 test_that("reshape_wider equivalent to pivot_wider: ex 1", {
   x <- fish_encounters |>
@@ -342,4 +343,13 @@ test_that("reshape_wider equivalent to pivot_wider: ex 5", {
     reshape_wider(names_from = "field", values_from = "value")
 
   expect_identical(x, y)
+})
+
+
+test_that("can pivot all cols to wide", {
+  df <- tibble(key = c("x", "y", "z"), val = 1:3)
+  pv <- reshape_wider(df, names_from = "key", values_from = "val")
+
+  expect_named(pv, c("x", "y", "z"))
+  expect_equal(nrow(pv), 1)
 })

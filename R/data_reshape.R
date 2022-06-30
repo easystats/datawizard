@@ -285,11 +285,7 @@ data_to_wide <- function(data,
 
   # Create an id for stats::reshape
   if (is.null(id_cols)) {
-    if (all(names(data) %in% c(values_from, names_from))) {
-      data[["_Rows"]] <- row.names(data)
-    } else {
-      data[["_Rows"]] <- apply(data[, !names(data) %in% c(values_from, names_from), drop = FALSE], 1, paste, collapse = "_")
-    }
+    data[["_Rows"]] <- apply(data[, !names(data) %in% c(values_from, names_from), drop = FALSE], 1, paste, collapse = "_")
     id_cols <- "_Rows"
   }
 
