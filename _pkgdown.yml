@@ -54,7 +54,8 @@ reference:
   - title: Reshape data
   - contents:
       - data_rotate
-      - data_to_long
+      - reshape_wider
+      - reshape_longer
       - reshape_ci
 
   - title: Select and filter data
