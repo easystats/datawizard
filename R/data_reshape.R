@@ -148,8 +148,8 @@ data_to_long <- function(data,
 
 #' Reshape (pivot) data from long to wide
 #'
-#'  This function "widens" data, increasing the number of columns and decreasing
-#'  the number of rows. This is a dependency-free base-R equivalent of
+#' This function "widens" data, increasing the number of columns and decreasing
+#' the number of rows. This is a dependency-free base-R equivalent of
 #' `tidyr::pivot_wider()`.
 #'
 #' @param data A data frame to pivot.
@@ -237,7 +237,6 @@ data_to_long <- function(data,
 #' }
 #'
 #' @inherit data_rename seealso
-#' @rdname data_to_wide
 #' @export
 
 data_to_wide <- function(data,

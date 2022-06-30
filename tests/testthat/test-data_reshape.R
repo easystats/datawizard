@@ -251,8 +251,51 @@ test_that("reshape_wider, names_prefix works", {
 # Examples coming from: https://tidyr.tidyverse.org/articles/pivot.html#wider
 # and from https://github.com/tidyverse/tidyr/blob/main/tests/testthat/test-pivot-wide.R
 
+### From tidyr tests
+
+test_that("can pivot all cols to wide", {
+  df <- tibble(key = c("x", "y", "z"), val = 1:3)
+  pv <- reshape_wider(df, names_from = "key", values_from = "val")
+
+  expect_named(pv, c("x", "y", "z"))
+  expect_equal(nrow(pv), 1)
+})
+
+test_that("non-pivoted cols are preserved", {
+  df <- tibble(a = 1, key = c("x", "y"), val = 1:2)
+  pv <- reshape_wider(df, names_from = "key", values_from = "val")
+
+  expect_named(pv, c("a", "x", "y"))
+  expect_equal(nrow(pv), 1)
+})
+
+test_that("implicit missings turn into explicit missings", {
+  df <- tibble(a = 1:2, key = c("x", "y"), val = 1:2)
+  pv <- reshape_wider(df, names_from = "key", values_from = "val")
+
+  expect_equal(pv$a, c(1, 2))
+  expect_equal(pv$x, c(1, NA))
+  expect_equal(pv$y, c(NA, 2))
+})
+
+test_that("error when overwriting existing column", {
+  df <- tibble(
+    a = c(1, 1),
+    key = c("a", "b"),
+    val = c(1, 2)
+  )
+
+  expect_error(
+    reshape_wider(df, names_from = "key", values_from = "val"),
+    regexp = "Some values of the columns specified"
+  )
+})
+
+
+### Examples from tidyr website
+
 test_that("reshape_wider equivalent to pivot_wider: ex 1", {
-  x <- fish_encounters |>
+  x <- fish_encounters %>%
     pivot_wider(names_from = "station", values_from = "seen", values_fill = 0)
 
   y <- fish_encounters %>%
@@ -346,10 +389,3 @@ test_that("reshape_wider equivalent to pivot_wider: ex 5", {
 })
 
 
-test_that("can pivot all cols to wide", {
-  df <- tibble(key = c("x", "y", "z"), val = 1:3)
-  pv <- reshape_wider(df, names_from = "key", values_from = "val")
-
-  expect_named(pv, c("x", "y", "z"))
-  expect_equal(nrow(pv), 1)
-})
