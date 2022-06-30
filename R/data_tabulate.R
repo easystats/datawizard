@@ -222,7 +222,7 @@ format.dw_data_tabulate <- function(x, format = "text", big_mark = NULL, ...) {
   x$N <- as.character(x$N)
 
   # format data frame
-  ftab <- insight::format_table(x)
+  ftab <- insight::format_table(x, ...)
   ftab[] <- lapply(ftab, function(i) {
     i[i == ""] <- ifelse(identical(format, "text"), "<NA>", "(NA)")
     i
@@ -267,7 +267,7 @@ print.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
 
   # print table
   cat(insight::export_table(
-    format(x, big_mark = big_mark),
+    format(x, big_mark = big_mark, ...),
     cross = "+",
     missing = "<NA>"
   ))
@@ -291,7 +291,7 @@ print_html.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
 
   # print table
   insight::export_table(
-    format(x, format = "html", big_mark = big_mark),
+    format(x, format = "html", big_mark = big_mark, ...),
     title = caption,
     footer = footer,
     missing = "(NA)",
@@ -316,7 +316,7 @@ print_md.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
 
   # print table
   insight::export_table(
-    format(x, format = "markdown", big_mark = big_mark),
+    format(x, format = "markdown", big_mark = big_mark, ...),
     title = caption,
     footer = footer,
     missing = "(NA)",
@@ -336,7 +336,7 @@ print.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
   } else {
     x <- lapply(x, function(i) {
       attr <- attributes(i)
-      i <- format(i, format = "text", big_mark = big_mark)
+      i <- format(i, format = "text", big_mark = big_mark, ...)
       i$Variable[attr$duplicate_varnames] <- ""
       if (!is.null(i$Group)) i$Group[attr$duplicate_varnames] <- ""
       i[nrow(i) + 1, ] <- ""
@@ -364,7 +364,7 @@ print_html.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
   } else {
     x <- lapply(x, function(i) {
       attr <- attributes(i)
-      i <- format(i, format = "html", big_mark = big_mark)
+      i <- format(i, format = "html", big_mark = big_mark, ...)
       i$Variable[attr$duplicate_varnames] <- ""
       i
     })
@@ -390,7 +390,7 @@ print_md.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
   } else {
     x <- lapply(x, function(i) {
       attr <- attributes(i)
-      i <- format(i, format = "markdown", big_mark = big_mark)
+      i <- format(i, format = "markdown", big_mark = big_mark, ...)
       i$Variable[attr$duplicate_varnames] <- ""
       if (!is.null(i$Group)) i$Group[attr$duplicate_varnames] <- ""
       i[nrow(i) + 1, ] <- ""

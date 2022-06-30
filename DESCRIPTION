@@ -1,7 +1,7 @@
 Type: Package
 Package: datawizard
 Title: Easy Data Wrangling
-Version: 0.4.1.4
+Version: 0.4.1.6
 Authors@R: c(
     person("Dominique", "Makowski", , "dom.makowski@gmail.com", role = "aut",
            comment = c(ORCID = "0000-0001-5375-9967", Twitter = "@Dom_Makowski")),
@@ -50,7 +50,8 @@ Suggests:
     rmarkdown,
     rstanarm,
     see,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    tidyr
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3

@@ -10,15 +10,30 @@ BREAKING
 * Removed alias `extract()` for `data_extract()` function since it collided
   with `tidyr::extract()`.
 
+* Argument `training_proportion` in `data_partition()` is deprecated. Please
+  use `proportion` now.
+
 MAJOR CHANGES
 
 * Given his continued and significant contributions to the package, 
   Etienne Bacher (@etiennebacher) is now included as an author.
+  
+* `reshape_wider()` now follows more consistently `tidyr::pivot_wider()` syntax. 
+  Arguments `colnames_from`, `sep`, and `rows_from` are deprecated and should be
+  replaced by `names_from`, `names_sep`, and `id_cols` respectively (#182). 
 
 CHANGES
 
 * Some of the text formatting helpers (like `text_concatenate()`) gain an
   `enclose` argument, to wrap text elements with surrounding characters.
+  
+* `winsorize` now accepts "raw" and "zscore" methods (in addition to 
+  "percentile"). Additionally, when `robust` is set to `TRUE` together with 
+  `method = "zscore"`, winsorizes via the median and median absolute deviation 
+  (MAD); else via the mean and standard deviation. (@rempsyc, #177, #49, #47).
+
+* `data_partition()` now allows to create multiple partitions from the data,
+  returning multiple training and a remaining test set.
 
 NEW FUNCTIONS
 
