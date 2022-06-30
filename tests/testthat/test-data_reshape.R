@@ -244,6 +244,93 @@ test_that("reshape_wider, names_prefix works", {
   )
 })
 
+test_that("reshape_wider, values_fill errors when wrong type", {
+  ### Should be numeric
+  expect_error(
+    fish_encounters %>%
+      reshape_wider(
+        names_from = "station",
+        values_from = "seen",
+        values_fill = "a"
+      ),
+    regexp = "must be of type numeric"
+  )
+  expect_error(
+    fish_encounters %>%
+      reshape_wider(
+        names_from = "station",
+        values_from = "seen",
+        values_fill = factor("a")
+      ),
+    regexp = "must be of type numeric"
+  )
+
+  ### Should be character
+  contacts <- tribble(
+    ~field, ~value,
+    "name", "Jiena McLellan",
+    "company", "Toyota",
+    "name", "John Smith",
+    "company", "google",
+    "email", "john@google.com",
+    "name", "Huxley Ratcliffe"
+  )
+  contacts$person_id = cumsum(contacts$field == "name")
+
+  expect_error(
+    contacts %>%
+      reshape_wider(
+        names_from = "field",
+        values_from = "value",
+        values_fill = 1
+      ),
+    regexp = "must be of type character"
+  )
+  expect_error(
+    contacts %>%
+      reshape_wider(
+        names_from = "field",
+        values_from = "value",
+        values_fill = factor("a")
+      ),
+    regexp = "must be of type character"
+  )
+
+  ### Should be factor
+  contacts$value <- as.factor(contacts$value)
+  expect_error(
+    contacts %>%
+      reshape_wider(
+        names_from = "field",
+        values_from = "value",
+        values_fill = "a"
+      ),
+    regexp = "must be of type factor"
+  )
+  expect_error(
+    contacts %>%
+      reshape_wider(
+        names_from = "field",
+        values_from = "value",
+        values_fill = 1
+      ),
+    regexp = "must be of type factor"
+  )
+
+})
+
+test_that("reshape_wider, values_fill errors when length > 1", {
+  expect_error(
+    fish_encounters %>%
+      reshape_wider(
+        names_from = "station",
+        values_from = "seen",
+        values_fill = c(1, 2)
+      ),
+    regexp = "must be of length 1"
+  )
+})
+
 
 
 # EQUIVALENCE WITH TIDYR ----------------------------------------------------
