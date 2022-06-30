@@ -126,13 +126,6 @@ reshape_wider(
   values_from = "production"
 )
 
-reshape_wider(
-  fish_encounters,
-  names_from = "station",
-  values_from = "seen",
-  values_fill = 0
-)
-
 }
 \seealso{
 \itemize{
