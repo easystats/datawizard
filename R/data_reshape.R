@@ -210,31 +210,27 @@ data_to_long <- function(data,
 #'   names_sep = "."
 #' )
 #'
-#' if (require("tidyr")) {
+#' production <- expand.grid(
+#'   product = c("A", "B"),
+#'   country = c("AI", "EI"),
+#'   year = 2000:2014
+#' )
+#' production <- data_filter(production, (product == "A" & country == "AI") | product == "B")
 #'
-#'   production <- expand_grid(
-#'     product = c("A", "B"),
-#'     country = c("AI", "EI"),
-#'     year = 2000:2014
-#'   ) %>%
-#'     data_filter((product == "A" & country == "AI") | product == "B")
+#' production$production <- rnorm(nrow(production))
 #'
-#'   production$production <- rnorm(nrow(production))
+#' reshape_wider(
+#'   production,
+#'   names_from = c("product", "country"),
+#'   values_from = "production"
+#' )
 #'
-#'   reshape_wider(
-#'     production,
-#'     names_from = c("product", "country"),
-#'     values_from = "production"
-#'   )
-#'
-#'   reshape_wider(
-#'     fish_encounters,
-#'     names_from = "station",
-#'     values_from = "seen",
-#'     values_fill = 0
-#'   )
-#'
-#' }
+#' reshape_wider(
+#'   fish_encounters,
+#'   names_from = "station",
+#'   values_from = "seen",
+#'   values_fill = 0
+#' )
 #'
 #' @inherit data_rename seealso
 #' @export
