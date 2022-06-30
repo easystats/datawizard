@@ -50,19 +50,16 @@ if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
 with base R. Although it is inspired by the tidyverse combo `dplyr` + `tidyr`, 
 one of its main features is that it has very few dependencies: `stats` and `utils`
 (included in base R) and `insight`, which is the core package of the easystats 
-ecosystem. One drawback of this approach is that some important features of the 
+ecosystem. One drawback of this approach is that not all features of the 
 `tidyverse` packages are not supported and we will have to rely on base R, or on 
 the package [`poorman`](https://github.com/nathaneastwood/poorman/). It is also
 important to note that `datawizard` was designed so that it avoids namespace 
 conflicts with `tidyverse` packages.
 
 In this vignette, we will see how to go through basic data wrangling steps with 
-`datawizard` (code with a <span style = "background-color: #e6e6ff;">light purple
-background</span>). We will also compare the `dplyr` + `tidyr` syntax (code with
-a <span style = "background-color: #d9f2e5;">light green background</span>), 
-so that you can easily see how to translate the `tidyverse` syntax if you decide
-to make the switch. This vignette is largely inspired from `dplyr`'s [Getting 
-started vignette](https://dplyr.tidyverse.org/articles/dplyr.html).
+`datawizard`. We will also compare it to the `dplyr` + `tidyr` syntax, so that 
+you can easily see how to translate the `tidyverse` syntax if you decide to make
+the switch. This vignette is largely inspired from `dplyr`'s [Getting started vignette](https://dplyr.tidyverse.org/articles/dplyr.html).
 
 ```{r eval = TRUE}
 library(dplyr)
@@ -85,6 +82,7 @@ with a comma as in `dplyr::filter()` will only apply the first condition.
 ::: {}
 
 ```{r filter, class.source = "datawizard"}
+# ---------- datawizard -----------
 starwars |>
   data_filter(skin_color == "light" & eye_color == "brown")
 ```
@@ -93,6 +91,7 @@ starwars |>
 ::: {}
 
 ```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
 starwars |> 
   filter(skin_color == "light", eye_color == "brown")
 ```
@@ -124,6 +123,7 @@ any unquoted column names.
 ::: {}
 
 ```{r select1, class.source = "datawizard"}
+# ---------- datawizard -----------
 starwars |> 
   data_select(select = c("hair_color", "skin_color", "eye_color")) 
 ```
@@ -132,6 +132,7 @@ starwars |>
 ::: {}
 
 ```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
 starwars |> 
   select(hair_color, skin_color, eye_color)
 ```
@@ -147,6 +148,7 @@ starwars |>
 ::: {}
 
 ```{r select2, class.source = "datawizard"}
+# ---------- datawizard -----------
 starwars |> 
   data_select(select = -ends_with("color")) 
 ```
@@ -155,6 +157,7 @@ starwars |>
 ::: {}
 
 ```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
 starwars |> 
   select(-ends_with("color")) 
 ```
@@ -170,6 +173,7 @@ starwars |>
 ::: {}
 
 ```{r select3, class.source = "datawizard"}
+# ---------- datawizard -----------
 starwars |> 
   data_select(select = -hair_color:eye_color)
 ```
@@ -178,6 +182,7 @@ starwars |>
 ::: {}
 
 ```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
 starwars |> 
   select(!(hair_color:eye_color))
 ```
@@ -194,6 +199,7 @@ starwars |>
 ::: {}
 
 ```{r select4, class.source = "datawizard"}
+# ---------- datawizard -----------
 starwars |> 
   data_select(exclude = regex("color$")) 
 ```
@@ -202,6 +208,7 @@ starwars |>
 ::: {}
 
 ```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
 starwars |> 
   select(-contains("color$")) 
 ```
@@ -218,6 +225,7 @@ starwars |>
 ::: {}
 
 ```{r select5, class.source = "datawizard"}
+# ---------- datawizard -----------
 starwars |> 
   data_select(select = is.numeric) 
 ```
@@ -226,6 +234,7 @@ starwars |>
 ::: {}
 
 ```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
 starwars |> 
   select(where(is.numeric)) 
 ```
@@ -242,8 +251,8 @@ You can find a list of all the select helpers with `?data_select`.
 
 ## Renaming
 
-`data_rename()` is the equivalent of `dplyr::rename()`. The syntax between the 
-two is different though. While `dplyr::rename()` takes each new-old pair of column
+`data_rename()` is the equivalent of `dplyr::rename()` but the syntax between the 
+two is different. While `dplyr::rename()` takes each new-old pair of column
 names, `data_rename()` takes first the list of columns to rename, and then takes 
 a vector of new names that must be of the same length.
 
@@ -252,6 +261,7 @@ a vector of new names that must be of the same length.
 ::: {}
 
 ```{r rename1, class.source = "datawizard"}
+# ---------- datawizard -----------
 starwars |> 
   data_rename(
     pattern = c("sex", "hair_color", "eye_color"),
@@ -263,6 +273,7 @@ starwars |>
 ::: {}
 
 ```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
 starwars |>
   rename(
     Sex = sex,
@@ -319,9 +330,12 @@ starwars |>
 ### Longer
 
 Reshaping data from wide to long or from long to wide format can be done with
-`reshape_longer()` and `reshape_wider()`, which are largely inspired from 
-`tidyr::pivot_longer()` and `tidyr::pivot_wider()`. We will use the `relig_income`
-dataset, as in the [`tidyr` vignette](https://tidyr.tidyverse.org/articles/pivot.html).
+`reshape_longer()` and `reshape_wider()`. These functions were designed to match 
+`tidyr::pivot_longer()` and `tidyr::pivot_wider()` arguments, so that the only 
+thing to do is to change the function name. However, not all of 
+`tidyr::pivot_longer()` and `tidyr::pivot_wider()` features are available yet. 
+
+We will use the `relig_income` dataset, as in the [`tidyr` vignette](https://tidyr.tidyverse.org/articles/pivot.html).
 
 ```{r eval = TRUE}
 relig_income
@@ -340,6 +354,7 @@ reshaped to be in a single new column, called "count".
 ::: {}
 
 ```{r pivot1, class.source = "datawizard"}
+# ---------- datawizard -----------
 relig_income %>% 
   reshape_longer(
     select = -religion, 
@@ -352,6 +367,7 @@ relig_income %>%
 ::: {}
 
 ```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
 relig_income %>% 
   pivot_longer(
     !religion, 
@@ -378,6 +394,7 @@ billboard
 ::: {}
 
 ```{r pivot2, class.source = "datawizard"}
+# ---------- datawizard -----------
 billboard %>% 
   reshape_longer(
     select = starts_with("wk"), 
@@ -391,6 +408,7 @@ billboard %>%
 ::: {}
 
 ```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
 billboard %>% 
   pivot_longer(
     cols = starts_with("wk"), 
@@ -424,18 +442,20 @@ fish_encounters
 ::: {}
 
 ```{r pivot3, class.source = "datawizard"}
+# ---------- datawizard -----------
 fish_encounters %>% 
   reshape_wider(
-    colnames_from = "station", 
-    values_from = "seen"
-  ) %>% 
-  convert_na_to(replace_num = 0)
+    names_from = "station", 
+    values_from = "seen",
+    values_fill = 0
+  ) 
 ```
 :::
 
 ::: {}
 
 ```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
 fish_encounters %>% 
   pivot_wider(
     names_from = station, 
