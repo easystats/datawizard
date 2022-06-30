@@ -97,6 +97,9 @@
     <loc>/reference/data_to_numeric.html</loc>
   </url>
   <url>
+    <loc>/reference/data_to_wide.html</loc>
+  </url>
+  <url>
     <loc>/reference/demean.html</loc>
   </url>
   <url>
@@ -104,6 +107,9 @@
   </url>
   <url>
     <loc>/reference/distribution_mode.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dot-is_deprecated.html</loc>
   </url>
   <url>
     <loc>/reference/efc.html</loc>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,17 +62,19 @@
 <p>BREAKING</p>
 <ul><li><p>Bumps the needed minimum R version to <code>3.5</code>.</p></li>
 <li><p>Removed deprecated function <code>data_findcols()</code>. Please use its replacement, <code><a href="../reference/find_columns.html">data_find()</a></code>.</p></li>
-<li><p>Removed alias <code>extract()</code> for <code><a href="../reference/data_extract.html">data_extract()</a></code> function since it collided with <code>tidyr::extract()</code>.</p></li>
+<li><p>Removed alias <code>extract()</code> for <code><a href="../reference/data_extract.html">data_extract()</a></code> function since it collided with <code><a href="https://tidyr.tidyverse.org/reference/extract.html" class="external-link">tidyr::extract()</a></code>.</p></li>
 <li><p>Argument <code>training_proportion</code> in <code><a href="../reference/data_partition.html">data_partition()</a></code> is deprecated. Please use <code>proportion</code> now.</p></li>
 </ul><p>MAJOR CHANGES</p>
-<ul><li>Given his continued and significant contributions to the package, Etienne Bacher (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>) is now included as an author.</li></ul><p>CHANGES</p>
+<ul><li><p>Given his continued and significant contributions to the package, Etienne Bacher (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>) is now included as an author.</p></li>
+<li><p><code><a href="../reference/data_to_wide.html">reshape_wider()</a></code> now follows more consistently <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">tidyr::pivot_wider()</a></code> syntax. Arguments <code>colnames_from</code>, <code>sep</code>, and <code>rows_from</code> are deprecated and should be replaced by <code>names_from</code>, <code>names_sep</code>, and <code>id_cols</code> respectively (<a href="https://github.com/easystats/datawizard/issues/182" class="external-link">#182</a>).</p></li>
+</ul><p>CHANGES</p>
 <ul><li><p>Some of the text formatting helpers (like <code><a href="../reference/format_text.html">text_concatenate()</a></code>) gain an <code>enclose</code> argument, to wrap text elements with surrounding characters.</p></li>
 <li><p><code>winsorize</code> now accepts “raw” and “zscore” methods (in addition to “percentile”). Additionally, when <code>robust</code> is set to <code>TRUE</code> together with <code>method = "zscore"</code>, winsorizes via the median and median absolute deviation (MAD); else via the mean and standard deviation. (<a href="https://github.com/rempsyc" class="external-link">@rempsyc</a>, <a href="https://github.com/easystats/datawizard/issues/177" class="external-link">#177</a>, <a href="https://github.com/easystats/datawizard/issues/49" class="external-link">#49</a>, <a href="https://github.com/easystats/datawizard/issues/47" class="external-link">#47</a>).</p></li>
 <li><p><code><a href="../reference/data_partition.html">data_partition()</a></code> now allows to create multiple partitions from the data, returning multiple training and a remaining test set.</p></li>
 </ul><p>NEW FUNCTIONS</p>
 <ul><li>
 <code><a href="../reference/colnames.html">row_to_colnames()</a></code> and <code><a href="../reference/colnames.html">colnames_to_row()</a></code> to move a row to column names, and column names to row (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/169" class="external-link">#169</a>).</li></ul><p>BUG FIXES</p>
-<ul><li>Fixed wrong column names in <code><a href="../reference/data_to_long.html">data_to_wide()</a></code> (<a href="https://github.com/easystats/datawizard/issues/173" class="external-link">#173</a>).</li></ul></div>
+<ul><li>Fixed wrong column names in <code><a href="../reference/data_to_wide.html">data_to_wide()</a></code> (<a href="https://github.com/easystats/datawizard/issues/173" class="external-link">#173</a>).</li></ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.1" id="datawizard-041">datawizard 0.4.1<a class="anchor" aria-label="anchor" href="#datawizard-041"></a></h2><p class="text-muted">CRAN release: 2022-05-16</p>
 <p>BREAKING</p>

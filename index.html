@@ -40,7 +40,7 @@
     
     <a class="navbar-brand me-2" href="index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -327,8 +327,8 @@
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">long_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/data_to_long.html">data_to_long</a></span><span class="op">(</span><span class="va">wide_data</span>, rows_to <span class="op">=</span> <span class="st">"Row_ID"</span><span class="op">)</span> <span class="co"># Save row number</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/data_to_long.html">data_to_wide</a></span><span class="op">(</span><span class="va">long_data</span>,</span>
-<span>  colnames_from <span class="op">=</span> <span class="st">"Name"</span>,</span>
+<span><span class="fu"><a href="reference/data_to_wide.html">data_to_wide</a></span><span class="op">(</span><span class="va">long_data</span>,</span>
+<span>  names_from <span class="op">=</span> <span class="st">"Name"</span>,</span>
 <span>  values_from <span class="op">=</span> <span class="st">"Value"</span>,</span>
 <span>  rows_from <span class="op">=</span> <span class="st">"Row_ID"</span></span>
 <span><span class="op">)</span></span>
