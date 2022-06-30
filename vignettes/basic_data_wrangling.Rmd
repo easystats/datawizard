@@ -51,7 +51,7 @@ with base R. Although it is inspired by the tidyverse combo `dplyr` + `tidyr`,
 one of its main features is that it has very few dependencies: `stats` and `utils`
 (included in base R) and `insight`, which is the core package of the easystats 
 ecosystem. One drawback of this approach is that not all features of the 
-`tidyverse` packages are not supported and we will have to rely on base R, or on 
+`tidyverse` packages are supported and we will have to rely on base R, or on 
 the package [`poorman`](https://github.com/nathaneastwood/poorman/). It is also
 important to note that `datawizard` was designed so that it avoids namespace 
 conflicts with `tidyverse` packages.
