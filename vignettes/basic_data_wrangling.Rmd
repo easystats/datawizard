@@ -83,7 +83,7 @@ with a comma as in `dplyr::filter()` will only apply the first condition.
 
 ```{r filter, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars |>
+starwars %>%
   data_filter(skin_color == "light" & eye_color == "brown")
 ```
 :::
@@ -92,7 +92,7 @@ starwars |>
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars |> 
+starwars %>% 
   filter(skin_color == "light", eye_color == "brown")
 ```
 :::
@@ -124,7 +124,7 @@ any unquoted column names.
 
 ```{r select1, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars |> 
+starwars %>% 
   data_select(select = c("hair_color", "skin_color", "eye_color")) 
 ```
 :::
@@ -133,7 +133,7 @@ starwars |>
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars |> 
+starwars %>% 
   select(hair_color, skin_color, eye_color)
 ```
 :::
@@ -149,7 +149,7 @@ starwars |>
 
 ```{r select2, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars |> 
+starwars %>% 
   data_select(select = -ends_with("color")) 
 ```
 :::
@@ -158,7 +158,7 @@ starwars |>
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars |> 
+starwars %>% 
   select(-ends_with("color")) 
 ```
 :::
@@ -174,7 +174,7 @@ starwars |>
 
 ```{r select3, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars |> 
+starwars %>% 
   data_select(select = -hair_color:eye_color)
 ```
 :::
@@ -183,7 +183,7 @@ starwars |>
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars |> 
+starwars %>% 
   select(!(hair_color:eye_color))
 ```
 :::
@@ -200,7 +200,7 @@ starwars |>
 
 ```{r select4, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars |> 
+starwars %>% 
   data_select(exclude = regex("color$")) 
 ```
 :::
@@ -209,7 +209,7 @@ starwars |>
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars |> 
+starwars %>% 
   select(-contains("color$")) 
 ```
 :::
@@ -226,7 +226,7 @@ starwars |>
 
 ```{r select5, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars |> 
+starwars %>% 
   data_select(select = is.numeric) 
 ```
 :::
@@ -235,7 +235,7 @@ starwars |>
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars |> 
+starwars %>% 
   select(where(is.numeric)) 
 ```
 :::
@@ -262,7 +262,7 @@ a vector of new names that must be of the same length.
 
 ```{r rename1, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars |> 
+starwars %>% 
   data_rename(
     pattern = c("sex", "hair_color", "eye_color"),
     replacement = c("Sex", "Hair Color", "Eye Color")
@@ -274,7 +274,7 @@ starwars |>
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars |>
+starwars %>%
   rename(
     Sex = sex,
     "Hair Color" = hair_color,
@@ -295,7 +295,7 @@ TitleCase with the following code:
 ```{r rename2}
 to_rename <- names(starwars)
 
-starwars |> 
+starwars %>% 
   data_rename(
     pattern = to_rename,
     replacement = tools::toTitleCase(gsub("_", " ", to_rename))
@@ -310,11 +310,11 @@ with `data_addprefix()` and `data_addsuffix()`. The argument `select` accepts
 all select helpers that we saw above with `data_select()`:
 
 ```{r rename3}
-starwars |> 
+starwars %>% 
   data_addprefix(
     pattern = "OLD.",
     select = contains("color")
-  ) |> 
+  ) %>% 
   data_addsuffix(
     pattern = ".NEW",
     select = -contains("color")
