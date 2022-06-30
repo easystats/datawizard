@@ -244,7 +244,7 @@ or the other way
 long_data <- data_to_long(wide_data, rows_to = "Row_ID") # Save row number
 
 data_to_wide(long_data,
-  colnames_from = "Name",
+  names_from = "Name",
   values_from = "Value",
   rows_from = "Row_ID"
 )

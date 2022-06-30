@@ -12,42 +12,27 @@
 #'   the pivoted variables.
 #' @param rows_to The name of the column that will contain the row names or row
 #'   numbers from the original data. If `NULL`, will be removed.
-#' @param colnames_from The name of the column that contains the levels to be
-#'   used as future column names.
-#' @param values_from The name of the column that contains the values to be used
-#'   as future variable values.
-#' @param rows_from The name of the column that identifies the rows. If
-#'   `NULL`, will use all the unique rows.
+
 #' @param ... Currently not used.
-#' @param names_to,names_from Same as `colnames_to`, is there for
+#' @param names_to Same as `colnames_to`, is there for
 #'   compatibility with `tidyr::pivot_longer()`.
-#' @param sep The indicating a separating character in the variable names in the
-#'   wide format.
 #' @inheritParams find_columns
+#'
+#' @return If a tibble was provided as input, `reshape_longer()` also returns a
+#' tibble. Otherwise, it returns a dataframe.
 #'
 #' @examples
 #' wide_data <- data.frame(replicate(5, rnorm(10)))
-#'
-#' # From wide to long
-#' # ------------------
+
 #' # Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))
 #' data_to_long(wide_data)
 #'
 #' # Customizing the names
 #' data_to_long(wide_data,
 #'   select = c(1, 2),
-#'   colnames_to = "Column",
+#'   names_to = "Column",
 #'   values_to = "Numbers",
 #'   rows_to = "Row"
-#' )
-#'
-#' # From long to wide
-#' # -----------------
-#' long_data <- data_to_long(wide_data, rows_to = "Row_ID") # Save row number
-#' data_to_wide(long_data,
-#'   colnames_from = "Name",
-#'   values_from = "Value",
-#'   rows_from = "Row_ID"
 #' )
 #'
 #' # Full example
@@ -56,28 +41,18 @@
 #'   data <- psych::bfi # Wide format with one row per participant's personality test
 #'
 #'   # Pivot long format
-#'   long <- data_to_long(data,
+#'   data_to_long(data,
 #'     select = regex("\\d"), # Select all columns that contain a digit
 #'     colnames_to = "Item",
 #'     values_to = "Score",
 #'     rows_to = "Participant"
 #'   )
 #'
-#'   # Separate facet and question number
-#'   long$Facet <- gsub("\\d", "", long$Item)
-#'   long$Item <- gsub("[A-Z]", "", long$Item)
-#'   long$Item <- paste0("I", long$Item)
-#'
-#'   wide <- data_to_wide(long,
-#'     colnames_from = "Item",
-#'     values_from = "Score"
-#'   )
-#'   head(wide)
 #' }
 #'
 #' @inherit data_rename seealso
-#' @return data.frame
 #' @export
+
 data_to_long <- function(data,
                          select = "all",
                          colnames_to = "Name",
@@ -171,49 +146,166 @@ data_to_long <- function(data,
 
 
 
-#' @rdname data_to_long
+#' Reshape (pivot) data from long to wide
+#'
+#' This function "widens" data, increasing the number of columns and decreasing
+#' the number of rows. This is a dependency-free base-R equivalent of
+#' `tidyr::pivot_wider()`.
+#'
+#' @param data A data frame to pivot.
+#' @param id_cols The name of the column that identifies the rows. If `NULL`,
+#' it will use all the unique rows.
+#' @param names_from The name of the column that contains the levels to be
+#' used as future column names.
+#' @param names_prefix String added to the start of every variable name. This is
+#'  particularly useful if `names_from` is a numeric vector and you want to create
+#'  syntactic variable names.
+#' @param names_sep If `names_from` or `values_from` contains multiple variables,
+#' this will be used to join their values together into a single string to use
+#' as a column name.
+#' @param values_from The name of the column that contains the values to be used
+#' as future variable values.
+#' @param values_fill Optionally, a (scalar) value that will be used to replace
+#' missing values in the new columns created.
+#' @param verbose Toggle warnings.
+#' @param ... Not used for now.
+#' @param colnames_from Deprecated. Use `names_from` instead.
+#' @param rows_from Deprecated. Use `id_cols` instead.
+#' @param sep Deprecated. Use `names_sep` instead.
+#'
+#' @return If a tibble was provided as input, `reshape_wider()` also returns a
+#' tibble. Otherwise, it returns a dataframe.
+#'
+#' @examples
+#' data_long <- read.table(header=TRUE, text='
+#'  subject sex condition measurement
+#'        1   M   control         7.9
+#'        1   M     cond1        12.3
+#'        1   M     cond2        10.7
+#'        2   F   control         6.3
+#'        2   F     cond1        10.6
+#'        2   F     cond2        11.1
+#'        3   F   control         9.5
+#'        3   F     cond1        13.1
+#'        3   F     cond2        13.8
+#'        4   M   control        11.5
+#'        4   M     cond1        13.4
+#'        4   M     cond2        12.9'
+#' )
+#'
+#'
+#' reshape_wider(
+#'   data_long,
+#'   id_cols = "subject",
+#'   names_from = "condition",
+#'   values_from = "measurement"
+#' )
+#'
+#' reshape_wider(
+#'   data_long,
+#'   id_cols = "subject",
+#'   names_from = "condition",
+#'   values_from = "measurement",
+#'   names_prefix = "Var.",
+#'   names_sep = "."
+#' )
+#'
+#' production <- expand.grid(
+#'   product = c("A", "B"),
+#'   country = c("AI", "EI"),
+#'   year = 2000:2014
+#' )
+#' production <- data_filter(production, (product == "A" & country == "AI") | product == "B")
+#'
+#' production$production <- rnorm(nrow(production))
+#'
+#' reshape_wider(
+#'   production,
+#'   names_from = c("product", "country"),
+#'   values_from = "production"
+#' )
+#'
+#' @inherit data_rename seealso
 #' @export
+
 data_to_wide <- function(data,
+                         id_cols = NULL,
                          values_from = "Value",
-                         colnames_from = "Name",
-                         rows_from = NULL,
-                         sep = "_",
+                         names_from = "Name",
+                         names_sep = "_",
+                         names_prefix = "",
+                         values_fill = NULL,
+                         verbose = TRUE,
                          ...,
-                         names_from = colnames_from,
-                         verbose = TRUE) {
+                         colnames_from,
+                         rows_from,
+                         sep) {
+
+  if (!missing(colnames_from)) {
+    .is_deprecated("colnames_from", "names_from")
+    if (is.null(names_from)) {
+      names_from <- colnames_from
+    }
+  }
+  if (!missing(rows_from)) {
+    .is_deprecated("rows_from", "id_cols")
+    if (is.null(id_cols)) {
+      id_cols <- rows_from
+    }
+  }
+  if (!missing(sep)) {
+    .is_deprecated("sep", "names_sep")
+    if (is.null(names_sep)) {
+      names_sep <- sep
+    }
+  }
+  old_names <- names(data)
+
+  # Preserve attributes
   if (inherits(data, "tbl_df")) {
     tbl_input <- TRUE
     data <- as.data.frame(data)
   } else {
     tbl_input <- FALSE
   }
-
-  # Compatibility with tidyr
-  if (names_from != colnames_from) colnames_from <- names_from
-
-  # save attribute of each variable
   variable_attr <- lapply(data, attributes)
 
-  # If no other row identifier, create one
-  if (is.null(rows_from)) {
-    if (all(names(data) %in% c(values_from, colnames_from))) {
-      data[["_Rows"]] <- row.names(data)
-    }
-    data[["_Rows"]] <- apply(data[, !names(data) %in% c(values_from, colnames_from), drop = FALSE], 1, paste, collapse = "_")
-    rows_from <- "_Rows"
+
+  # Create an id for stats::reshape
+  if (is.null(id_cols)) {
+    data[["_Rows"]] <- apply(data[, !names(data) %in% c(values_from, names_from), drop = FALSE], 1, paste, collapse = "_")
+    id_cols <- "_Rows"
   }
+
 
   # create pattern of column names - stats::reshape renames columns that
   # concatenates "v.names" + values - we only want values
-  old_colnames <- paste0(values_from, "_", unique(data[[colnames_from]]))
-  new_colnames <- unique(data[[colnames_from]])
+  current_colnames <- colnames(data)
+  current_colnames <- current_colnames[current_colnames != "_Rows"]
+  future_colnames <- unique(apply(data, 1, function(x) paste(x[c(names_from)], collapse = names_sep)))
 
-  # Reshape
-  wide <- stats::reshape(data,
+  # stop if some column names would be duplicated (follow tidyr workflow)
+  if (any(future_colnames %in% current_colnames)) {
+    stop(insight::format_message(
+      "Some values of the columns specified in 'names_from' are already present as column names.",
+      paste0("Either use `name_prefix` or rename the following columns: ",
+             text_concatenate(current_colnames[which(current_colnames %in% future_colnames)])
+      )
+    ), call. = FALSE)
+  }
+
+  # stats::reshape works strangely when several variables are in idvar/timevar
+  # so we unite all ids in a single temporary column that will be used by
+  # stats::reshape
+  data$new_time <- apply(data, 1, function(x) paste(x[names_from], collapse = "_"))
+  data[, names_from] <- NULL
+
+  wide <- stats::reshape(
+    data,
     v.names = values_from,
-    idvar = rows_from,
-    timevar = colnames_from,
-    sep = sep,
+    idvar = id_cols,
+    timevar = "new_time",
+    sep = names_sep,
     direction = "wide"
   )
 
@@ -221,19 +313,59 @@ data_to_wide <- function(data,
   if ("_Rows" %in% names(wide)) wide[["_Rows"]] <- NULL
   row.names(wide) <- NULL # Reset row names
 
-  # check if values can be used as column names,
-  # or if there are conflicts due to duplicates
-  if (any(new_colnames %in% colnames(wide))) {
-    if (verbose) {
-      warning(insight::format_message(
-        "Some values of the column specified in 'colnames_from' are already present as column names.",
-        sprintf("To avoid duplicated column names, the names of new columns follow the pattern '%s' etc.", old_colnames[1])
-      ), call. = FALSE)
-    }
-  } else {
-    # restore proper column names
-    colnames(wide) <- replace(colnames(wide), colnames(wide) %in% old_colnames, new_colnames)
+  if (length(values_from) == 1) {
+    to_rename <- which(startsWith(names(wide), paste0(values_from, names_sep)))
+    names(wide)[to_rename] <- gsub(paste0(values_from, names_sep), "", names(wide)[to_rename])
   }
+
+  # Order columns as in tidyr
+  if (length(values_from) > 1) {
+    for (i in values_from) {
+      wide <- data_relocate(
+        wide,
+        select = grep(paste0("^", i), names(wide), value = TRUE),
+        after = -1
+      )
+    }
+  }
+
+
+  new_cols <- setdiff(names(wide), old_names)
+
+  # Add prefix
+  wide <- data_rename(wide, new_cols, paste0(names_prefix, new_cols))
+
+  # Fill missing values
+  if (!is.null(values_fill)) {
+
+    if (length(values_fill) == 1) {
+      if (is.numeric(wide[[new_cols[1]]])) {
+        if (!is.numeric(values_fill)) {
+          stop(insight::format_message(paste0("`values_fill` must be of type numeric.")), call. = FALSE)
+        } else {
+          wide <- convert_na_to(wide, replace_num = values_fill)
+        }
+      } else if (is.character(wide[[new_cols[1]]])) {
+        if (!is.character(values_fill)) {
+          stop(insight::format_message(paste0("`values_fill` must be of type character.")), call. = FALSE)
+        } else {
+          wide <- convert_na_to(wide, replace_char = values_fill)
+        }
+      } else if (is.factor(wide[[new_cols[1]]])) {
+        if (!is.factor(values_fill)) {
+          stop(insight::format_message(paste0("`values_fill` must be of type factor.")), call. = FALSE)
+        } else {
+          wide <- convert_na_to(wide, replace_fac = values_fill)
+        }
+      }
+    } else {
+      if (verbose) {
+        stop(insight::format_message("`values_fill` must be of length 1."), call. = FALSE)
+      }
+    }
+
+  }
+
 
   # Remove reshape attributes
   attributes(wide)$reshapeWide <- NULL
@@ -251,13 +383,12 @@ data_to_wide <- function(data,
 }
 
 
-
 # Aliases -----------------------------------------------------------------
 
 #' @rdname data_to_long
 #' @export
 reshape_longer <- data_to_long
 
-#' @rdname data_to_long
+#' @rdname data_to_wide
 #' @export
 reshape_wider <- data_to_wide

@@ -17,6 +17,10 @@ MAJOR CHANGES
 
 * Given his continued and significant contributions to the package, 
   Etienne Bacher (@etiennebacher) is now included as an author.
+  
+* `reshape_wider()` now follows more consistently `tidyr::pivot_wider()` syntax. 
+  Arguments `colnames_from`, `sep`, and `rows_from` are deprecated and should be
+  replaced by `names_from`, `names_sep`, and `id_cols` respectively (#182). 
 
 CHANGES
 

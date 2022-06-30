@@ -2,9 +2,7 @@
 % Please edit documentation in R/data_reshape.R
 \name{data_to_long}
 \alias{data_to_long}
-\alias{data_to_wide}
 \alias{reshape_longer}
-\alias{reshape_wider}
 \title{Reshape (pivot) data from wide to long}
 \usage{
 data_to_long(
@@ -20,17 +18,6 @@ data_to_long(
   names_to = colnames_to
 )
 
-data_to_wide(
-  data,
-  values_from = "Value",
-  colnames_from = "Name",
-  rows_from = NULL,
-  sep = "_",
-  ...,
-  names_from = colnames_from,
-  verbose = TRUE
-)
-
 reshape_longer(
   data,
   select = "all",
@@ -42,17 +29,6 @@ reshape_longer(
   cols = select,
   ...,
   names_to = colnames_to
-)
-
-reshape_wider(
-  data,
-  values_from = "Value",
-  colnames_from = "Name",
-  rows_from = NULL,
-  sep = "_",
-  ...,
-  names_from = colnames_from,
-  verbose = TRUE
 )
 }
 \arguments{
@@ -114,25 +90,12 @@ functions (see 'Details'), this argument may be used as workaround.}
 
 \item{...}{Currently not used.}
 
-\item{names_to, names_from}{Same as \code{colnames_to}, is there for
+\item{names_to}{Same as \code{colnames_to}, is there for
 compatibility with \code{tidyr::pivot_longer()}.}
-
-\item{values_from}{The name of the column that contains the values to be used
-as future variable values.}
-
-\item{colnames_from}{The name of the column that contains the levels to be
-used as future column names.}
-
-\item{rows_from}{The name of the column that identifies the rows. If
-\code{NULL}, will use all the unique rows.}
-
-\item{sep}{The indicating a separating character in the variable names in the
-wide format.}
-
-\item{verbose}{Toggle warnings.}
 }
 \value{
-data.frame
+If a tibble was provided as input, \code{reshape_longer()} also returns a
+tibble. Otherwise, it returns a dataframe.
 }
 \description{
 This function "lengthens" data, increasing the number of rows and decreasing
@@ -141,27 +104,15 @@ the number of columns. This is a dependency-free base-R equivalent of
 }
 \examples{
 wide_data <- data.frame(replicate(5, rnorm(10)))
-
-# From wide to long
-# ------------------
 # Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))
 data_to_long(wide_data)
 
 # Customizing the names
 data_to_long(wide_data,
   select = c(1, 2),
-  colnames_to = "Column",
+  names_to = "Column",
   values_to = "Numbers",
   rows_to = "Row"
-)
-
-# From long to wide
-# -----------------
-long_data <- data_to_long(wide_data, rows_to = "Row_ID") # Save row number
-data_to_wide(long_data,
-  colnames_from = "Name",
-  values_from = "Value",
-  rows_from = "Row_ID"
 )
 
 # Full example
@@ -170,23 +121,13 @@ if (require("psych")) {
   data <- psych::bfi # Wide format with one row per participant's personality test
 
   # Pivot long format
-  long <- data_to_long(data,
+  data_to_long(data,
     select = regex("\\\\d"), # Select all columns that contain a digit
     colnames_to = "Item",
     values_to = "Score",
     rows_to = "Participant"
   )
 
-  # Separate facet and question number
-  long$Facet <- gsub("\\\\d", "", long$Item)
-  long$Item <- gsub("[A-Z]", "", long$Item)
-  long$Item <- paste0("I", long$Item)
-
-  wide <- data_to_wide(long,
-    colnames_from = "Item",
-    values_from = "Score"
-  )
-  head(wide)
 }
 
 }
