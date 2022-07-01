@@ -1,11 +1,11 @@
 ---
-title: "Basic Data Wrangling"
+title: "Translating to 'tidyverse'"
 output: 
   rmarkdown::html_vignette:
     toc: true
 vignette: >
   \usepackage[utf8]{inputenc}
-  %\VignetteIndexEntry{Basic Data Wrangling}
+  %\VignetteIndexEntry{Translating to 'tidyverse'}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 

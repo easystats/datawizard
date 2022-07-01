@@ -124,12 +124,12 @@ reference:
 
 articles:
 
-  - title: Basic Data Wrangling
+  - title: Data Wrangling
     navbar: ~
     contents:
-    - basic_data_wrangling
+    - tidyverse_translation
   - title: Data transformation
-    navbar: Data transformation
+    navbar: ~
     contents:
     - standardize_data
 
