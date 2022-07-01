@@ -3,8 +3,6 @@ title: "Basic Data Wrangling"
 output: 
   rmarkdown::html_vignette:
     toc: true
-    fig_width: 10.08
-    fig_height: 6
 vignette: >
   \usepackage[utf8]{inputenc}
   %\VignetteIndexEntry{Basic Data Wrangling}
@@ -46,10 +44,10 @@ if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
 }
 ```
 
-`datawizard` is a package whose aim is to make basic data wrangling easier than 
+`datawizard` package aims to make basic data wrangling easier than 
 with base R. Although it is inspired by the tidyverse combo `dplyr` + `tidyr`, 
 one of its main features is that it has very few dependencies: `stats` and `utils`
-(included in base R) and `insight`, which is the core package of the easystats 
+(included in base R) and `insight`, which is the core package of the _easystats_ 
 ecosystem. One drawback of this approach is that not all features of the 
 `tidyverse` packages are supported and we will have to rely on base R, or on 
 the package [`poorman`](https://github.com/nathaneastwood/poorman/). It is also
