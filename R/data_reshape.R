@@ -324,7 +324,7 @@ data_to_wide <- function(data,
       wide <- data_relocate(
         wide,
         select = grep(paste0("^", i), names(wide), value = TRUE),
-        after = -1
+        .after = -1
       )
     }
   }

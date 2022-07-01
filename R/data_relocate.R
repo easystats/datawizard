@@ -10,13 +10,14 @@
 #' be reordered or removed.
 #'
 #' @param data A data frame.
-#' @param before,after Destination of columns. Supplying neither will move
+#' @param .before,.after Destination of columns. Supplying neither will move
 #'   columns to the left-hand side; specifying both is an error. Can be a
 #'   character vector, indicating the name of the destination column, or a
 #'   numeric value, indicating the index number of the destination column.
 #'   If `-1`, will be added before or after the last column.
 #' @inheritParams find_columns
 #' @inheritParams data_rename
+#' @param before,after Deprecated. Please use `.before` and `.after` instead.
 #'
 #' @inherit data_rename seealso
 #'
@@ -42,36 +43,51 @@
 #' @export
 data_relocate <- function(data,
                           select,
-                          before = NULL,
-                          after = NULL,
+                          .before = NULL,
+                          .after = NULL,
                           ignore_case = FALSE,
                           verbose = TRUE,
-                          ...) {
+                          ...,
+                          before,
+                          after) {
+
+  if (!missing(before)) {
+    .is_deprecated("before", ".before")
+    if (is.null(.before)) {
+      .before <- before
+    }
+  }
+  if (!missing(after)) {
+    .is_deprecated("after", ".after")
+    if (is.null(.after)) {
+      .after <- after
+    }
+  }
 
   # Sanitize
-  if (!is.null(before) && !is.null(after)) {
-    stop("You must supply only one of `before` or `after`.")
+  if (!is.null(.before) && !is.null(.after)) {
+    stop("You must supply only one of `.before` or `.after`.")
   }
 
   # allow numeric values
-  if (!is.null(before) && is.numeric(before)) {
-    if (before == -1) {
-      before <- names(data)[ncol(data)]
-    } else if (before >= 1 && before <= ncol(data)) {
-      before <- names(data)[before]
+  if (!is.null(.before) && is.numeric(.before)) {
+    if (.before == -1) {
+      .before <- names(data)[ncol(data)]
+    } else if (.before >= 1 && .before <= ncol(data)) {
+      .before <- names(data)[.before]
     } else {
-      stop("No valid position defined in 'before'.", call. = FALSE)
+      stop("No valid position defined in '.before'.", call. = FALSE)
     }
   }
 
   # allow numeric values
-  if (!is.null(after) && is.numeric(after)) {
-    if (after == -1) {
-      after <- names(data)[ncol(data)]
-    } else if (after >= 1 && after <= ncol(data)) {
-      after <- names(data)[after]
+  if (!is.null(.after) && is.numeric(.after)) {
+    if (.after == -1) {
+      .after <- names(data)[ncol(data)]
+    } else if (.after >= 1 && .after <= ncol(data)) {
+      .after <- names(data)[.after]
     } else {
-      stop("No valid position defined in 'after'.", call. = FALSE)
+      stop("No valid position defined in '.after'.", call. = FALSE)
     }
   }
 
@@ -88,19 +104,19 @@ data_relocate <- function(data,
   position <- which(data_cols %in% cols)
 
   # Find new positions
-  if (!is.null(before)) {
-    before <- before[before %in% data_cols][1] # Take first that exists (if vector is supplied)
-    if (length(before) != 1) {
-      stop("The column passed to 'before' wasn't found. Possibly mispelled.")
+  if (!is.null(.before)) {
+    .before <- .before[.before %in% data_cols][1] # Take first that exists (if vector is supplied)
+    if (length(.before) != 1) {
+      stop("The column passed to '.before' wasn't found. Possibly mispelled.")
     }
-    where <- min(match(before, data_cols))
+    where <- min(match(.before, data_cols))
     position <- c(setdiff(position, where), where)
-  } else if (!is.null(after)) {
-    after <- after[after %in% data_cols][1] # Take first that exists (if vector is supplied)
-    if (length(after) != 1) {
-      stop("The column passed to 'after' wasn't found. Possibly mispelled.")
+  } else if (!is.null(.after)) {
+    .after <- .after[.after %in% data_cols][1] # Take first that exists (if vector is supplied)
+    if (length(.after) != 1) {
+      stop("The column passed to '.after' wasn't found. Possibly mispelled.")
     }
-    where <- max(match(after, data_cols))
+    where <- max(match(.after, data_cols))
     position <- c(where, setdiff(position, where))
   } else {
     where <- 1

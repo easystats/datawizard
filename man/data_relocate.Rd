@@ -9,11 +9,13 @@
 data_relocate(
   data,
   select,
-  before = NULL,
-  after = NULL,
+  .before = NULL,
+  .after = NULL,
   ignore_case = FALSE,
   verbose = TRUE,
-  ...
+  ...,
+  before,
+  after
 )
 
 data_reorder(data, select, ignore_case = FALSE, verbose = TRUE, ...)
@@ -53,7 +55,7 @@ If \code{NULL}, selects all columns. Patterns that found no matches are silently
 ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
 return \code{"Species"}.}
 
-\item{before, after}{Destination of columns. Supplying neither will move
+\item{.before, .after}{Destination of columns. Supplying neither will move
 columns to the left-hand side; specifying both is an error. Can be a
 character vector, indicating the name of the destination column, or a
 numeric value, indicating the index number of the destination column.
@@ -66,6 +68,8 @@ search pattern when matching against variable names.}
 \item{verbose}{Toggle warnings.}
 
 \item{...}{Arguments passed down to other functions. Mostly not used yet.}
+
+\item{before, after}{Deprecated. Please use \code{.before} and \code{.after} instead.}
 }
 \value{
 A data frame with reordered columns.
