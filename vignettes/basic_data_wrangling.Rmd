@@ -177,6 +177,9 @@ starwars %>%
 
 ::: {}
 
+<!-- TODO: Although we say the column names need to be quoted, they are unquoted
+here and quoting them won't work. Should we comment on that? -->
+
 ```{r select3, class.source = "datawizard"}
 # ---------- datawizard -----------
 starwars %>% 
@@ -257,9 +260,9 @@ You can find a list of all the select helpers with `?data_select`.
 ## Renaming
 
 `data_rename()` is the equivalent of `dplyr::rename()` but the syntax between the 
-two is different. While `dplyr::rename()` takes each new-old pair of column
-names, `data_rename()` takes first the list of columns to rename, and then takes 
-a vector of new names that must be of the same length.
+two is different. While `dplyr::rename()` takes new-old pairs of column
+names, `data_rename()` requires a vector of column names to rename, and then 
+a vector of new names for these columns that must be of the same length.
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
 
@@ -269,8 +272,8 @@ a vector of new names that must be of the same length.
 # ---------- datawizard -----------
 starwars %>% 
   data_rename(
-    pattern = c("sex", "hair_color", "eye_color"),
-    replacement = c("Sex", "Hair Color", "Eye Color")
+    pattern = c("sex", "hair_color"),
+    replacement = c("Sex", "Hair Color")
   )
 ```
 :::
@@ -282,8 +285,7 @@ starwars %>%
 starwars %>%
   rename(
     Sex = sex,
-    "Hair Color" = hair_color,
-    "Eye Color" = eye_color
+    "Hair Color" = hair_color
   )
 ```
 :::
