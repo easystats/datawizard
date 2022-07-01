@@ -81,18 +81,26 @@ Function           | Operation                                           |
 ------------------ | --------------------------------------------------- |
 `data_filter()`    | [to select only certain *observations*](#filtering) |
 `data_select()`    | [to select only a few *attributes*](#selecting)     |
+`data_extract()`   | [to extract a single *attribute*](#extracting)      |
 `data_rename()`    | [to rename attributes](#renaming)                   |
+`data_relocate()`  | [to reorder a data frame](#relocating)              |
+`data_rotate()`    | to rotate (or transpose) a data frame               |
 `reshape_longer()` | [to convert data from wide to long](#reshaping)     |
 `reshape_wider()`  | [to convert data from long to wide](#reshaping)     |
+
+Note that there are a few functions in *datawizard* that have no strict equivalent
+in dplyr or tidyr, and so we won't be discussing them in the next section.
+
+`data_rotate()`, 
 
 # Equivalence with dplyr / tidyr
 
 ## Filtering {#filtering}
 
-`data_filter()` is a wrapper 
-around `subset()`. Therefore, if you want to have several filtering conditions, 
-you need to use `&`. Separating the conditions with a comma (as in `dplyr::filter()`) 
-will **not** work; it will only apply the first condition.
+`data_filter()` is a wrapper around `subset()`. Therefore, if you want to have
+several filtering conditions, you need to use `&`. Separating the conditions
+with a comma (as in `dplyr::filter()`) will **not** work; it will only apply the
+first condition.
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
 
@@ -266,6 +274,10 @@ starwars %>%
 
 You can find a list of all the select helpers with `?data_select`.
 
+## Extracting {#extracting}
+
+<!-- TODO: data_extract and dplyr::pull -->
+
 ## Renaming {#renaming}
 
 `data_rename()` is the equivalent of `dplyr::rename()` but the syntax between the 
@@ -340,6 +352,9 @@ starwars %>%
 ```{r rename3, eval = TRUE, echo = FALSE}
 ```
 
+## Relocating {#relocating}
+
+<!-- TODO: data_relocate and dplyr::relocate ->
 
 ## Reshaping {#reshaping}
 
