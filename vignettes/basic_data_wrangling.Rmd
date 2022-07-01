@@ -55,7 +55,7 @@ of the constituent packages in this ecosystem.
 One drawback of this genesis is that not all features of the 
 `tidyverse` packages are supported since only those features have been implemented 
 that were necessary for _easystats_ ecosystem. When needed, we will thus rely on base R,
-or on [`{poorman}`](https://github.com/nathaneastwood/poorman/) package. It is also
+or on [`{poorman}`](https://github.com/nathaneastwood/poorman/) package (e.g. for the pipe operator aka `%>%`). It is also
 important to note that `datawizard` was designed so that it avoids namespace 
 collisions with `tidyverse` packages.
 
@@ -75,9 +75,12 @@ library(datawizard)
 
 ## Filtering
 
+A common routine during data analysis is to select only parts of the data meeting
+certain requirements. The `data_filter()` is designed to achieve this.
 `data_filter()` is a wrapper around `subset()`. Therefore, if you want to have
 several filtering conditions, you need to use `&`. Separating the conditions
-with a comma as in `dplyr::filter()` will only apply the first condition.
+with a comma (as in `dplyr::filter()`) will **not** work; it will only apply the 
+first condition.
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
 
