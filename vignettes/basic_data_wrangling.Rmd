@@ -45,26 +45,30 @@ if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
 ```
 
 `datawizard` package aims to make basic data wrangling easier than 
-with base R. Although it is inspired by the tidyverse combo `dplyr` + `tidyr`, 
-one of its main features is that it has very few dependencies: `stats` and `utils`
+with base R. The data wrangling workflow it supports is similar to the one
+supported by the tidyverse package combination of `dplyr` and `tidyr`. But,
+one of its main features is that it has a very few dependencies: `stats` and `utils`
 (included in base R) and `insight`, which is the core package of the _easystats_ 
-ecosystem. One drawback of this approach is that not all features of the 
-`tidyverse` packages are supported and we will have to rely on base R, or on 
-the package [`poorman`](https://github.com/nathaneastwood/poorman/). It is also
+ecosystem. This package grew organically to simultaneously satisfy the 
+"0 non-base hard dependency" principle of _easystats_ and the data wrangling needs
+of the constituent packages in this ecosystem.
+One drawback of this genesis is that not all features of the 
+`tidyverse` packages are supported since only those features have been implemented 
+that were necessary for _easystats_ ecosystem. When needed, we will thus rely on base R,
+or on [`{poorman}`](https://github.com/nathaneastwood/poorman/) package. It is also
 important to note that `datawizard` was designed so that it avoids namespace 
-conflicts with `tidyverse` packages.
+collisions with `tidyverse` packages.
 
-In this vignette, we will see how to go through basic data wrangling steps with 
-`datawizard`. We will also compare it to the `dplyr` + `tidyr` syntax, so that 
-you can easily see how to translate the `tidyverse` syntax if you decide to make
-the switch. This vignette is largely inspired from `dplyr`'s [Getting started vignette](https://dplyr.tidyverse.org/articles/dplyr.html).
+In this article, we will see how to go through basic data wrangling steps with 
+`datawizard`. We will also compare it to the `tidyverse` syntax for achieving the same. 
+This way, if you decide to make the switch, you can easily find the translations here.
+This vignette is largely inspired from `dplyr`'s [Getting started vignette](https://dplyr.tidyverse.org/articles/dplyr.html).
 
 ```{r eval = TRUE}
 library(dplyr)
 library(tidyr)
 library(datawizard)
 ```
-
 
 
 # Equivalence with dplyr / tidyr
