@@ -75,12 +75,11 @@ library(datawizard)
 
 ## Filtering
 
-A common routine during data analysis is to select only parts of the data meeting
-certain requirements. The `data_filter()` is designed to achieve this.
-`data_filter()` is a wrapper around `subset()`. Therefore, if you want to have
-several filtering conditions, you need to use `&`. Separating the conditions
-with a comma (as in `dplyr::filter()`) will **not** work; it will only apply the 
-first condition.
+A common routine during data analysis is to select only certain *observations*. 
+The `data_filter()` is designed to achieve this. `data_filter()` is a wrapper 
+around `subset()`. Therefore, if you want to have several filtering conditions, 
+you need to use `&`. Separating the conditions with a comma (as in `dplyr::filter()`) 
+will **not** work; it will only apply the first condition.
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
 
@@ -89,7 +88,8 @@ first condition.
 ```{r filter, class.source = "datawizard"}
 # ---------- datawizard -----------
 starwars %>%
-  data_filter(skin_color == "light" & eye_color == "brown")
+  data_filter(skin_color == "light" & 
+                eye_color == "brown")
 ```
 :::
 
@@ -98,7 +98,8 @@ starwars %>%
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
 starwars %>% 
-  filter(skin_color == "light", eye_color == "brown")
+  filter(skin_color == "light", 
+         eye_color == "brown")
 ```
 :::
 
@@ -114,14 +115,13 @@ starwars <- head(starwars)
 ```
 
 
-
-
 ## Selecting
 
-`data_select()` is the equivalent of `dplyr::select()`. The main difference 
-between these two functions is that `data_select()` uses two arguments (`select`
-and `exclude`) and requires quoted column names, while `dplyr::select()` accepts
-any unquoted column names.  
+Additionally, one often need to select only a few attributes/columns for further analysis.
+To this end, `data_select()` can be useful; it is the equivalent of `dplyr::select()`. 
+The main difference between these two functions is that `data_select()` uses two
+arguments (`select` and `exclude`) and requires quoted column names, while
+`dplyr::select()` accepts any unquoted column names.
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
 
