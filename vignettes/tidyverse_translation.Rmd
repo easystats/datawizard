@@ -91,7 +91,6 @@ Function           | Operation                                           |
 Note that there are a few functions in *datawizard* that have no strict equivalent
 in `{dplyr}` or `{tidyr}`, and so we won't be discussing them in the next section.
 
-`data_rotate()`, 
 
 # Equivalence with dplyr / tidyr
 
