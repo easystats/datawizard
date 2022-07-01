@@ -34,6 +34,9 @@ CHANGES
 
 * `data_partition()` now allows to create multiple partitions from the data,
   returning multiple training and a remaining test set.
+  
+* Arguments `before` and `after` are deprecated in `data_relocate()` for 
+  consistency with `dplyr::relocate()`. Use `.before` and `.after` instead.
 
 NEW FUNCTIONS
 
