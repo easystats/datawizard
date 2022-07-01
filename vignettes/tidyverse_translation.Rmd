@@ -46,25 +46,25 @@ if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
 
 # Introduction
 
-`datawizard` package aims to make basic data wrangling easier than 
+`{datawizard}` package aims to make basic data wrangling easier than 
 with base R. The data wrangling workflow it supports is similar to the one
-supported by the tidyverse package combination of `dplyr` and `tidyr`. But,
-one of its main features is that it has a very few dependencies: `stats` and `utils`
-(included in base R) and `insight`, which is the core package of the _easystats_ 
+supported by the tidyverse package combination of `{dplyr}` and `{tidyr}`. But,
+one of its main features is that it has a very few dependencies: `{stats}` and `{utils}`
+(included in base R) and `{insight}`, which is the core package of the _easystats_ 
 ecosystem. This package grew organically to simultaneously satisfy the 
 "0 non-base hard dependency" principle of _easystats_ and the data wrangling needs
 of the constituent packages in this ecosystem.
 One drawback of this genesis is that not all features of the 
-`tidyverse` packages are supported since only those features have been implemented 
+`{tidyverse}` packages are supported since only those features have been implemented 
 that were necessary for _easystats_ ecosystem. When needed, we will thus rely on base R,
 or on [`{poorman}`](https://github.com/nathaneastwood/poorman/) package (e.g. for the pipe operator aka `%>%`). It is also
-important to note that `datawizard` was designed so that it avoids namespace 
-collisions with `tidyverse` packages.
+important to note that `{datawizard}` was designed so that it avoids namespace 
+collisions with `{tidyverse}` packages.
 
 In this article, we will see how to go through basic data wrangling steps with 
-`datawizard`. We will also compare it to the `tidyverse` syntax for achieving the same. 
+`{datawizard}`. We will also compare it to the `{tidyverse}` syntax for achieving the same. 
 This way, if you decide to make the switch, you can easily find the translations here.
-This vignette is largely inspired from `dplyr`'s [Getting started vignette](https://dplyr.tidyverse.org/articles/dplyr.html).
+This vignette is largely inspired from `{dplyr}`'s [Getting started vignette](https://dplyr.tidyverse.org/articles/dplyr.html).
 
 ```{r eval = TRUE}
 library(dplyr)
@@ -89,7 +89,7 @@ Function           | Operation                                           |
 `reshape_wider()`  | [to convert data from long to wide](#reshaping)     |
 
 Note that there are a few functions in *datawizard* that have no strict equivalent
-in dplyr or tidyr, and so we won't be discussing them in the next section.
+in `{dplyr}` or `{tidyr}`, and so we won't be discussing them in the next section.
 
 `data_rotate()`, 
 
@@ -366,7 +366,7 @@ Reshaping data from wide to long or from long to wide format can be done with
 thing to do is to change the function name. However, not all of 
 `tidyr::pivot_longer()` and `tidyr::pivot_wider()` features are available yet. 
 
-We will use the `relig_income` dataset, as in the [`tidyr` vignette](https://tidyr.tidyverse.org/articles/pivot.html).
+We will use the `relig_income` dataset, as in the [`{tidyr}` vignette](https://tidyr.tidyverse.org/articles/pivot.html).
 
 ```{r eval = TRUE}
 relig_income
@@ -461,7 +461,7 @@ This can be simply done in an additional step with `data_filter()`.
 
 ### Wider
 
-Once again, we use an example in the `tidyr` vignette to show how close `reshape_wider()`
+Once again, we use an example in the `{tidyr}` vignette to show how close `reshape_wider()`
 and `pivot_wider()` are:
 ```{r eval=TRUE}
 fish_encounters
@@ -506,8 +506,8 @@ fish_encounters %>%
 
 # Other useful functions
 
-`datawizard` contains other functions that are not necessarily included in 
-`dplyr` or `tidyr`. Some of them are inspired from the package `janitor`. 
+`{datawizard}` contains other functions that are not necessarily included in 
+`{dplyr}` or `{tidyr}`. Some of them are inspired from the package `janitor`. 
 
 ## Work with rownames
 
