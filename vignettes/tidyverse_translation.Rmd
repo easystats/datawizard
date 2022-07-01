@@ -275,7 +275,45 @@ You can find a list of all the select helpers with `?data_select`.
 
 ## Extracting {#extracting}
 
-<!-- TODO: data_extract and dplyr::pull -->
+<!-- TODO: improve motivation for data_extract -->
+
+Although we mostly work on dataframes, it is sometimes useful to extract a single 
+column as a vector. This can be done with `data_extract()`, which reproduces the 
+behavior of `dplyr::pull()`:
+
+:::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
+:::{}
+```{r extract1, class.source = "datawizard"}
+# ---------- datawizard -----------
+starwars %>% 
+  data_extract(gender) 
+```
+:::
+
+::: {}
+
+```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
+starwars %>% 
+  pull(gender)
+```
+:::
+
+::::
+
+```{r extract1, eval = TRUE, echo = FALSE}
+```
+
+We can also specify several variables in `select`. In this case, `data_extract()`
+is equivalent to `data_select()`:
+
+```{r eval = TRUE}
+starwars %>% 
+  data_extract(select = contains("color"))
+```
+
+
+
 
 ## Renaming {#renaming}
 
