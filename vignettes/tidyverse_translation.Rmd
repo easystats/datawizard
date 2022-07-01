@@ -354,7 +354,48 @@ starwars %>%
 
 ## Relocating {#relocating}
 
-<!-- TODO: data_relocate and dplyr::relocate ->
+Sometimes, we want to relocate one or a small subset of columns in the dataset.
+Rather than typing many names in `data_select()`, we can use `data_relocate()`,
+which is the equivalent of `dplyr::relocate()`. Just like `data_select()`, we can
+specify a list of variables we want to relocate with `select` and `exclude`.
+Then, the arguments `before` and `after` specify where the selected columns should
+be relocated:
+
+:::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
+
+::: {}
+
+```{r relocate1, class.source = "datawizard"}
+# ---------- datawizard -----------
+starwars %>% 
+  data_relocate(sex:homeworld, before = "height")
+```
+:::
+  
+::: {}
+
+```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
+starwars %>% 
+  relocate(sex:homeworld, .before = height)
+```
+:::
+  
+::::
+
+```{r relocate1, eval = TRUE, echo = FALSE}
+```
+
+In addition to column names, `before` and `after` accept column indices. Finally,
+one can use `before = -1` to relocate the selected columns just before the last 
+column, or `after = -1` to relocate them after the last column.
+
+```{r eval = TRUE}
+# ---------- datawizard -----------
+starwars %>% 
+  data_relocate(sex:homeworld, after = -1)
+```
+
 
 ## Reshaping {#reshaping}
 
