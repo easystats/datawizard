@@ -1,4 +1,4 @@
-library(poorman)
+suppressPackageStartupMessages(library(poorman, warn.conflicts = FALSE))
 
 data(iris)
 data(mtcars)

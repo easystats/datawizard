@@ -1,4 +1,4 @@
-library(poorman)
+suppressPackageStartupMessages(library(poorman, warn.conflicts = FALSE))
 
 test_that("ranktransform works with NAs", {
   x <- c(NA_real_, NA_real_)

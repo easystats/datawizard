@@ -1,4 +1,4 @@
-library(poorman)
+suppressPackageStartupMessages(library(poorman, warn.conflicts = FALSE))
 
 test_that("normalize work as expected", {
   expect_equal(

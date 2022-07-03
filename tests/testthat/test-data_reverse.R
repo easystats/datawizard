@@ -1,4 +1,4 @@
-library(poorman)
+suppressPackageStartupMessages(library(poorman, warn.conflicts = FALSE))
 
 # explanation of how data_reverse works:
 # https://github.com/easystats/datawizard/issues/106#issuecomment-1066628399
