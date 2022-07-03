@@ -247,3 +247,22 @@ data_to_numeric.character <- function(x,
 
   out
 }
+
+#' Convert to Numeric (if possible)
+#'
+#' Tries to convert vector to numeric if possible (if no warnings or errors).
+#' Otherwise, leaves it as is.
+#'
+#' @param x A vector to be converted.
+#'
+#' @examples
+#' to_numeric(c("1", "2"))
+#' to_numeric(c("1", "2", "A"))
+#' @return Numeric vector (if possible)
+#' @export
+to_numeric <- function(x) {
+  tryCatch(as.numeric(as.character(x)),
+           error = function(e) x,
+           warning = function(w) x
+  )
+}

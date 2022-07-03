@@ -75,10 +75,9 @@ reference:
 
   - title: Convert and replace data
   - contents:
-      - data_to_numeric
+      - contains("to_numeric")
       - data_to_factor
       - data_restoretype
-      - to_numeric
       - starts_with("replace_")
       - starts_with("convert_")
 
