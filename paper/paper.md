@@ -49,7 +49,15 @@ link-citations: yes
 
 # Summary
 
+The `{datawizard}` package in the R programming language [@base2021] provides a
+
 # Statement of Need
+
+The `{datawizard}` package makes basic data wrangling easier than with base R. Its workflow and syntax are designed to be similar to `{tidyverse}` (@Wickham2019), which is a widely used ecosystem of packages, and, therefore, users familiar with this ecosystem can translate their knowledge and use this package. Naturally, one might wonder why recreate data wrangling functionality already present in `{tidyverse}`.
+
+We believe the following points justify its *raison d’être*
+
+- The `easystats` (@Ben-Shachar2020; @Lüdecke2020parameters; @Lüdecke2020performance; @Lüdecke2021see; @Lüdecke2019; @Makowski2019; @Makowski2020) is an ecosystem of packages designed to make statistical analysis easier in R
 
 # Data wrangling
 
@@ -59,16 +67,25 @@ Function           | Operation                             |
 `data_select()`    | to select only a few *attributes*     |
 `data_extract()`   | to extract a single *attribute*       |
 `data_rename()`    | to rename attributes                  |
-`data_relocate()`  | to reorder a data frame               |
-`data_rotate()`    | to rotate (or transpose) a data frame |
 `reshape_longer()` | to convert data from wide to long     |
 `reshape_wider()`  | to convert data from long to wide     |
 `data_join()`      | to join two data frames               |
+    ...            |        ...                            |
 
-Table: The table below lists a few key functions for data wrangling. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
+Table: The table below lists a few key functions offered by *datawizard* for data wrangling. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
 
 # Data transformations
 
+Function           | Operation                                     |
+------------------ | ----------------------------------------------|
+`standardize()`    | to center and scale data                      |
+`normalize()`      | to scale variables to 0-1 range               |
+`adjust()`         | to adjust data for effect of other variables  |
+`data_shift()`     | to shift numeric value range                  |
+`ranktransform()`  | to convert numeric values to integer ranks    |
+    ...            |        ...                                    |
+
+Table: The table below lists a few key functions offered by *datawizard* for data transformations. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
 
 # Licensing and Availability
 
