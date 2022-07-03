@@ -37,7 +37,7 @@ affiliations:
 - index: 6
   name: esqLABS GmbH
   
-date: "`r Sys.Date()`"
+date: "2022-07-03"
 bibliography: paper.bib
 output: rticles::joss_article
 csl: apa.csl
@@ -45,16 +45,7 @@ journal: JOSS
 link-citations: yes
 ---
 
-```{r, warning=FALSE, message=FALSE, echo=FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  out.width = "100%",
-  dpi = 450,
-  comment = "#>",
-  message = FALSE,
-  warning = FALSE
-)
-```
+
 
 # Summary
 
