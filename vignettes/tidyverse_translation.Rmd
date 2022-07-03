@@ -87,6 +87,7 @@ Function           | Operation                                           |
 `data_rotate()`    | to rotate (or transpose) a data frame               |
 `reshape_longer()` | [to convert data from wide to long](#reshaping)     |
 `reshape_wider()`  | [to convert data from long to wide](#reshaping)     |
+`data_join()`      | [to join two data frames](#joining)                 |
 
 Note that there are a few functions in *datawizard* that have no strict equivalent
 in `{dplyr}` or `{tidyr}`, and so we won't be discussing them in the next section.
@@ -579,8 +580,9 @@ fish_encounters %>%
 ```{r pivot3, eval = TRUE, echo = FALSE}
 ```
 
+## Joining {#joining}
 
-
+<!-- TODO: dplyr::*_join() functions and data_join() -->
 
 # Other useful functions
 
