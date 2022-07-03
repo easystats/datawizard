@@ -51,6 +51,25 @@ link-citations: yes
 
 # Statement of Need
 
+# Data wrangling
+
+Function           | Operation                             |
+------------------ | --------------------------------------|
+`data_filter()`    | to select only certain *observations* |
+`data_select()`    | to select only a few *attributes*     |
+`data_extract()`   | to extract a single *attribute*       |
+`data_rename()`    | to rename attributes                  |
+`data_relocate()`  | to reorder a data frame               |
+`data_rotate()`    | to rotate (or transpose) a data frame |
+`reshape_longer()` | to convert data from wide to long     |
+`reshape_wider()`  | to convert data from long to wide     |
+`data_join()`      | to join two data frames               |
+
+Table: The table below lists a few key functions for data wrangling. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
+
+# Data transformations
+
+
 # Licensing and Availability
 
 *datawizard* is licensed under the GNU General Public License (v3.0), with all source code openly developed and stored at GitHub (<https://github.com/easystats/datawizard>), along with a corresponding issue tracker for bug reporting and feature enhancements. In the spirit of honest and open science, we encourage requests, tips for fixes, feature updates, as well as general questions and concerns via direct interaction with contributors and developers.
