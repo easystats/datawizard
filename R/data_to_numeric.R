@@ -171,7 +171,7 @@ data_to_numeric.factor <- function(x,
                                    verbose = TRUE,
                                    ...) {
   # preserving levels only works when factor levels are numeric
-  if (isTRUE(preserve_levels) && anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
+  if (isTRUE(preserve_levels) && anyNA(suppressWarnings(to_numeric(stats::na.omit(x))))) {
     preserve_levels <- FALSE
   }
 
@@ -246,4 +246,23 @@ data_to_numeric.character <- function(x,
   }
 
   out
+}
+
+#' Convert to Numeric (if possible)
+#'
+#' Tries to convert vector to numeric if possible (if no warnings or errors).
+#' Otherwise, leaves it as is.
+#'
+#' @param x A vector to be converted.
+#'
+#' @examples
+#' to_numeric(c("1", "2"))
+#' to_numeric(c("1", "2", "A"))
+#' @return Numeric vector (if possible)
+#' @export
+to_numeric <- function(x) {
+  tryCatch(as.numeric(as.character(x)),
+           error = function(e) x,
+           warning = function(w) x
+  )
 }
