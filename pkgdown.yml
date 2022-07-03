@@ -1,0 +1,10 @@
+pandoc: 2.14.2
+pkgdown: 2.0.5.9000
+pkgdown_sha: b4096aa376773d7dee98a267fd0b5a025975a3dc
+articles:
+  standardize_data: standardize_data.html
+last_built: 2022-07-03T10:08Z
+urls:
+  reference: https://easystats.github.io/datawizard/reference
+  article: https://easystats.github.io/datawizard/articles
+
