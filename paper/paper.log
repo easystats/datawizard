@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.7.3)  3 JUL 2022 23:47
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.7.3)  4 JUL 2022 19:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -818,93 +818,108 @@ Package hyperref Info: Option `breaklinks' set `true' on input line 151.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/grffile/grffile.sty
 Package: grffile 2019/11/11 v2.1 Extended file name support for graphics (legacy)
 Package grffile Info: This package is an empty stub for compatibility on input line 40.
+) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
+Package: fancyvrb 2022/06/06 4.5 verbatim text (tvz,hv)
+\FV@CodeLineNo=\count463
+\FV@InFile=\read5
+\FV@TabBox=\box75
+\c@FancyVerbLine=\count464
+\FV@StepNumber=\count465
+\FV@OutFile=\write5
+) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/framed/framed.sty
+Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
+\OuterFrameSep=\skip91
+\fb@frw=\dimen286
+\fb@frh=\dimen287
+\FrameRule=\dimen288
+\FrameSep=\dimen289
 ) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/tools/longtable.sty
 Package: longtable 2021-09-01 v4.17 Multi-page Table package (DPC)
-\LTleft=\skip91
-\LTright=\skip92
-\LTpre=\skip93
-\LTpost=\skip94
-\LTchunksize=\count463
-\LTcapwidth=\dimen286
-\LT@head=\box75
-\LT@firsthead=\box76
-\LT@foot=\box77
-\LT@lastfoot=\box78
-\LT@gbox=\box79
-\LT@cols=\count464
-\LT@rows=\count465
-\c@LT@tables=\count466
-\c@LT@chunks=\count467
+\LTleft=\skip92
+\LTright=\skip93
+\LTpre=\skip94
+\LTpost=\skip95
+\LTchunksize=\count466
+\LTcapwidth=\dimen290
+\LT@head=\box76
+\LT@firsthead=\box77
+\LT@foot=\box78
+\LT@lastfoot=\box79
+\LT@gbox=\box80
+\LT@cols=\count467
+\LT@rows=\count468
+\c@LT@tables=\count469
+\c@LT@chunks=\count470
 \LT@p@ftn=\toks42
 ) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
-\heavyrulewidth=\dimen287
-\lightrulewidth=\dimen288
-\cmidrulewidth=\dimen289
-\belowrulesep=\dimen290
-\belowbottomsep=\dimen291
-\aboverulesep=\dimen292
-\abovetopsep=\dimen293
-\cmidrulesep=\dimen294
-\cmidrulekern=\dimen295
-\defaultaddspace=\dimen296
-\@cmidla=\count468
-\@cmidlb=\count469
-\@aboverulesep=\dimen297
-\@belowrulesep=\dimen298
-\@thisruleclass=\count470
-\@lastruleclass=\count471
-\@thisrulewidth=\dimen299
+\heavyrulewidth=\dimen291
+\lightrulewidth=\dimen292
+\cmidrulewidth=\dimen293
+\belowrulesep=\dimen294
+\belowbottomsep=\dimen295
+\aboverulesep=\dimen296
+\abovetopsep=\dimen297
+\cmidrulesep=\dimen298
+\cmidrulekern=\dimen299
+\defaultaddspace=\dimen300
+\@cmidla=\count471
+\@cmidlb=\count472
+\@aboverulesep=\dimen301
+\@belowrulesep=\dimen302
+\@thisruleclass=\count473
+\@lastruleclass=\count474
+\@thisrulewidth=\dimen303
 ) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/tools/array.sty
 Package: array 2022/03/10 v2.5f Tabular extension package (FMi)
-\col@sep=\dimen300
-\ar@mcellbox=\box80
-\extrarowheight=\dimen301
+\col@sep=\dimen304
+\ar@mcellbox=\box81
+\extrarowheight=\dimen305
 \NC@list=\toks43
-\extratabsurround=\skip95
-\backup@length=\skip96
-\ar@cellbox=\box81
+\extratabsurround=\skip96
+\backup@length=\skip97
+\ar@cellbox=\box82
 ) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/mdwtools/footnote.sty
 Package: footnote 1997/01/28 1.13 Save footnotes around boxes
-\fn@notes=\box82
-\fn@width=\dimen302
+\fn@notes=\box83
+\fn@width=\dimen306
 )
-\cslhangindent=\skip97
-\csllabelwidth=\skip98
-\cslentryspacingunit=\skip99
-\@quotelevel=\count472
-\@quotereset=\count473
+\cslhangindent=\skip98
+\csllabelwidth=\skip99
+\cslentryspacingunit=\skip100
+\@quotelevel=\count475
+\@quotereset=\count476
 (./paper.aux)
 \openout1 = `paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 247.
-LaTeX Font Info:    ... okay on input line 247.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 247.
-LaTeX Font Info:    ... okay on input line 247.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 247.
-LaTeX Font Info:    ... okay on input line 247.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 247.
-LaTeX Font Info:    ... okay on input line 247.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 247.
-LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 247.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 288.
+LaTeX Font Info:    ... okay on input line 288.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 288.
+LaTeX Font Info:    ... okay on input line 288.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 288.
+LaTeX Font Info:    ... okay on input line 288.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 288.
+LaTeX Font Info:    ... okay on input line 288.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 288.
+LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 288.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 247.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 247.
-LaTeX Font Info:    ... okay on input line 247.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 247.
-LaTeX Font Info:    ... okay on input line 247.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 247.
-LaTeX Font Info:    ... okay on input line 247.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 247.
-LaTeX Font Info:    ... okay on input line 247.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 247.
-LaTeX Font Info:    ... okay on input line 247.
-Package hyperref Info: Link coloring ON on input line 247.
+LaTeX Font Info:    ... okay on input line 288.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 288.
+LaTeX Font Info:    ... okay on input line 288.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 288.
+LaTeX Font Info:    ... okay on input line 288.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 288.
+LaTeX Font Info:    ... okay on input line 288.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 288.
+LaTeX Font Info:    ... okay on input line 288.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 288.
+LaTeX Font Info:    ... okay on input line 288.
+Package hyperref Info: Link coloring ON on input line 288.
 (./paper.out) (./paper.out)
-\@outlinefile=\write5
-\openout5 = `paper.out'.
+\@outlinefile=\write6
+\openout6 = `paper.out'.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: longtable package is loaded.
@@ -926,8 +941,8 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'paper.bbl' not found.
 No file paper.bbl.
-Package biblatex Info: Reference section=0 on input line 247.
-Package biblatex Info: Reference segment=0 on input line 247.
+Package biblatex Info: Reference section=0 on input line 288.
+Package biblatex Info: Reference segment=0 on input line 288.
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
 *geometry* verbose mode - [ preamble ] result:
@@ -962,25 +977,25 @@ Package biblatex Info: Reference segment=0 on input line 247.
 * \@reversemargintrue
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 248.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 289.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 248.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 289.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 
-Package hyperref Warning: Suppressing link with empty target on input line 274.
+Package hyperref Warning: Suppressing link with empty target on input line 315.
 
 
-Package hyperref Warning: Suppressing link with empty target on input line 274.
+Package hyperref Warning: Suppressing link with empty target on input line 315.
 
 
-Package hyperref Warning: Suppressing link with empty target on input line 274.
+Package hyperref Warning: Suppressing link with empty target on input line 315.
 
 LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <9> not available
-(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 318.
+(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 376.
 File: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
 </Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
 
@@ -991,10 +1006,14 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
 LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <8> not available
-(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 336.
+(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 394.
 [1
 
 ]
+Underfull \hbox (badness 1448) in paragraph at lines 424--428
+\TU/lmr/m/n/10 The workhorse function to get a comprehensive summary of data properties is
+ []
+
 File: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
 </Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
 
@@ -1016,17 +1035,17 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 
 [3] (./paper.aux)
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: B1DB7F7AAA8ADB21B56E7EBC53BBF7EE;871.
+(rerunfilecheck)             Checksum: 204FAF4806FBD38F868DDE1C04ACC6C4;1116.
 Package logreq Info: Writing requests to 'paper.run.xml'.
 \openout1 = `paper.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 34758 strings out of 477881
- 719541 string characters out of 5845921
- 1476039 words of memory out of 5000000
- 55148 multiletter control sequences out of 15000+600000
- 477668 words of font info for 81 fonts, out of 8000000 for 9000
+ 35266 strings out of 477881
+ 727765 string characters out of 5845921
+ 1488313 words of memory out of 5000000
+ 55646 multiletter control sequences out of 15000+600000
+ 477676 words of font info for 82 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  84i,12n,81p,678b,846s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
