@@ -112,10 +112,13 @@ data_to_long(
   colnames_to = "stock",
   values_to = "price"
 )
-
 ```
 
 ## Data transformations
+
+Even after getting the raw data in the needed format, we may further need to transform certain variables further to meet requirements imposed by the statistical model.
+
+`{datawizard}` provides a rich collection of such functions for transforming variables (see Table 2).
 
 Function           | Operation                                     |
 ------------------ | ----------------------------------------------|
@@ -128,6 +131,17 @@ Function           | Operation                                     |
 
 Table: The table below lists a few key functions offered by *datawizard* for data transformations. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
 
+We will look at one example function that standardizes (i.e. centers and scales) data so that it can be expressed in terms of standard deviation:
+
+```{r}
+d <- data.frame(
+  a = c(-2, -1, 0, 1, 2),
+  b = c(3, 4, 5, 6, 7)
+)
+
+standardize(d, center = c(3, 4), scale = c(2, 4))
+```
+
 ## Data properties
 
 The workhorse function to get a comprehensive summary of data properties is `describe_distribution()`, which combines a set of indices (e.g., measures of centrality, dispersion, range, skewness, kurtosis, etc.) computed by other functions in `{datawizard}`.
@@ -135,7 +149,6 @@ The workhorse function to get a comprehensive summary of data properties is `des
 ```{r}
 describe_distribution(mtcars$wt)
 ```
-
 
 # Licensing and Availability
 

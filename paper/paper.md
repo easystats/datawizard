@@ -69,7 +69,7 @@ Lastly, `{datawizard}` also provides a toolbox to create a detailed profile of d
 
 The raw data is rarely in a state that it can be directly fed into a statistical model. It often needs to be modified in various ways. For example, columns need to be renamed and/or reordered, data scattered across multiple tables needs to be joined, certain parts of the data need to be left out, etc. 
 
-`{datawizard}` provides various functions for cleaning and preparing data.
+`{datawizard}` provides various functions for cleaning and preparing data (see Table 1).
 
 Function           | Operation                             |
 ------------------ | --------------------------------------|
@@ -95,12 +95,12 @@ stocks <- data.frame(
 )
 
 stocks
-#>         time          X          Y
-#> 1 2009-01-01 -0.4569720 -1.5189319
-#> 2 2009-01-02  0.9008223  2.5497473
-#> 3 2009-01-03  1.4222528  0.3329737
-#> 4 2009-01-04  0.0703170 -0.7296473
-#> 5 2009-01-05 -0.4584452  2.5482316
+#>         time           X          Y
+#> 1 2009-01-01  0.02070326  0.2257037
+#> 2 2009-01-02 -1.02253159 -0.2053774
+#> 3 2009-01-03 -0.11898878 -0.6537273
+#> 4 2009-01-04  0.39853267 -0.6421833
+#> 5 2009-01-05  1.41953388  1.3981855
 
 data_to_long(
   stocks,
@@ -108,20 +108,24 @@ data_to_long(
   colnames_to = "stock",
   values_to = "price"
 )
-#>          time stock      price
-#> 1  2009-01-01     X -0.4569720
-#> 2  2009-01-01     Y -1.5189319
-#> 3  2009-01-02     X  0.9008223
-#> 4  2009-01-02     Y  2.5497473
-#> 5  2009-01-03     X  1.4222528
-#> 6  2009-01-03     Y  0.3329737
-#> 7  2009-01-04     X  0.0703170
-#> 8  2009-01-04     Y -0.7296473
-#> 9  2009-01-05     X -0.4584452
-#> 10 2009-01-05     Y  2.5482316
+#>          time stock       price
+#> 1  2009-01-01     X  0.02070326
+#> 2  2009-01-01     Y  0.22570375
+#> 3  2009-01-02     X -1.02253159
+#> 4  2009-01-02     Y -0.20537735
+#> 5  2009-01-03     X -0.11898878
+#> 6  2009-01-03     Y -0.65372730
+#> 7  2009-01-04     X  0.39853267
+#> 8  2009-01-04     Y -0.64218327
+#> 9  2009-01-05     X  1.41953388
+#> 10 2009-01-05     Y  1.39818553
 ```
 
 ## Data transformations
+
+Even after getting the raw data in the needed format, we may further need to transform certain variables further to meet requirements imposed by the statistical model.
+
+`{datawizard}` provides a rich collection of such functions for transforming variables (see Table 2).
 
 Function           | Operation                                     |
 ------------------ | ----------------------------------------------|
@@ -134,6 +138,24 @@ Function           | Operation                                     |
 
 Table: The table below lists a few key functions offered by *datawizard* for data transformations. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
 
+We will look at one example function that standardizes (i.e. centers and scales) data so that it can be expressed in terms of standard deviation:
+
+
+```r
+d <- data.frame(
+  a = c(-2, -1, 0, 1, 2),
+  b = c(3, 4, 5, 6, 7)
+)
+
+standardize(d, center = c(3, 4), scale = c(2, 4))
+#>      a     b
+#> 1 -2.5 -0.25
+#> 2 -2.0  0.00
+#> 3 -1.5  0.25
+#> 4 -1.0  0.50
+#> 5 -0.5  0.75
+```
+
 ## Data properties
 
 The workhorse function to get a comprehensive summary of data properties is `describe_distribution()`, which combines a set of indices (e.g., measures of centrality, dispersion, range, skewness, kurtosis, etc.) computed by other functions in `{datawizard}`.
@@ -145,7 +167,6 @@ describe_distribution(mtcars$wt)
 #> ------------------------------------------------------------------------
 #> 3.22 | 0.98 | 1.19 | [1.51, 5.42] |     0.47 |     0.42 | 32 |         0
 ```
-
 
 # Licensing and Availability
 
