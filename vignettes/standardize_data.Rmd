@@ -15,6 +15,7 @@ vignette: >
 library(knitr)
 options(knitr.kable.NA = "")
 knitr::opts_chunk$set(
+  comment = "#>",
   message = FALSE,
   warning = FALSE,
   dpi = 300
