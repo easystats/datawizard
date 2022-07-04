@@ -49,7 +49,7 @@ link-citations: yes
 
 # Summary
 
-The `{datawizard}` package in the R programming language [@base2021] provides a
+The `{datawizard}` package in the R programming language [@base2021] provides a lightweight toolbox to assist the following keys steps in any data analysis workflow: (*i*) to get the data in the right form, (*ii*) to modify data for statistical modeling, and (*iii*) to provide sanity checks for transformed data. Therefore, it can be a valuable tool for R users and developers looking for a lightweight option for data preprocessing.
 
 # Statement of Need
 
@@ -67,6 +67,10 @@ Lastly, `{datawizard}` also provides a toolbox to create a detailed profile of d
 
 ## Data wrangling
 
+The raw data is rarely in a state that it can be directly fed into a statistical model. It often needs to be modified in various ways. For example, columns need to be renamed and/or reordered, data scattered across multiple tables needs to be joined, certain parts of the data need to be left out, etc. 
+
+`{datawizard}` provides various functions for cleaning and preparing data.
+
 Function           | Operation                             |
 ------------------ | --------------------------------------|
 `data_filter()`    | to select only certain *observations* |
@@ -79,6 +83,43 @@ Function           | Operation                             |
     ...            |        ...                            |
 
 Table: The table below lists a few key functions offered by *datawizard* for data wrangling. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
+
+We will look at one example function that converts data in wide format to tidy/long format:
+
+
+```r
+stocks <- data.frame(
+  time = as.Date('2009-01-01') + 0:4,
+  X = rnorm(5, 0, 1),
+  Y = rnorm(5, 0, 2)
+)
+
+stocks
+#>         time          X          Y
+#> 1 2009-01-01 -0.4569720 -1.5189319
+#> 2 2009-01-02  0.9008223  2.5497473
+#> 3 2009-01-03  1.4222528  0.3329737
+#> 4 2009-01-04  0.0703170 -0.7296473
+#> 5 2009-01-05 -0.4584452  2.5482316
+
+data_to_long(
+  stocks,
+  select = -c("time"),
+  colnames_to = "stock",
+  values_to = "price"
+)
+#>          time stock      price
+#> 1  2009-01-01     X -0.4569720
+#> 2  2009-01-01     Y -1.5189319
+#> 3  2009-01-02     X  0.9008223
+#> 4  2009-01-02     Y  2.5497473
+#> 5  2009-01-03     X  1.4222528
+#> 6  2009-01-03     Y  0.3329737
+#> 7  2009-01-04     X  0.0703170
+#> 8  2009-01-04     Y -0.7296473
+#> 9  2009-01-05     X -0.4584452
+#> 10 2009-01-05     Y  2.5482316
+```
 
 ## Data transformations
 

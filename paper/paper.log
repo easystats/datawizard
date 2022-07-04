@@ -1,11 +1,11 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.7.3)  4 JUL 2022 19:20
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.7.4)  4 JUL 2022 19:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **paper.tex
 (./paper.tex
-LaTeX2e <2022-06-01> patch level 3
-L3 programming layer <2022-06-16> (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/base/article.cls
+LaTeX2e <2022-06-01> patch level 4
+L3 programming layer <2022-07-01> (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/base/size10.clo
 File: size10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
@@ -516,7 +516,7 @@ Package fixltx2e Warning: fixltx2e is not required with releases after 2015
 
 Already applied: [0000/00/00] Old fixltx2e package on input line 53.
 ) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/biblatex/biblatex.sty
-Package: biblatex 2022/06/22 v3.18 programmable bibliographies (PK/MW)
+Package: biblatex 2022/07/02 v3.18a programmable bibliographies (PK/MW)
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/logreq/logreq.sty
 Package: logreq 2010/08/04 v1.0 xml request logger
 \lrq@indent=\count315
@@ -585,7 +585,7 @@ Package: ifthen 2022/04/13 v1.1d Standard LaTeX ifthen package (DPC)
 Package biblatex Info: Trying to load biblatex default data model...
 Package biblatex Info: ... file 'blx-dm.def' found.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/biblatex/blx-dm.def
-File: blx-dm.def 2022/06/22 v3.18 biblatex localization (PK/MW)
+File: blx-dm.def 2022/07/02 v3.18a biblatex localization (PK/MW)
 )
 Package biblatex Info: Trying to load biblatex custom data model...
 Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
@@ -677,12 +677,12 @@ Package biblatex Info: ... file 'blx-unicode.def' found.
 Package biblatex Info: Trying to load compatibility code...
 Package biblatex Info: ... file 'blx-compat.def' found.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/biblatex/blx-compat.def
-File: blx-compat.def 2022/06/22 v3.18 biblatex compatibility (PK/MW)
+File: blx-compat.def 2022/07/02 v3.18a biblatex compatibility (PK/MW)
 )
 Package biblatex Info: Trying to load generic definitions...
 Package biblatex Info: ... file 'biblatex.def' found.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/biblatex/biblatex.def
-File: biblatex.def 2022/06/22 v3.18 biblatex compatibility (PK/MW)
+File: biblatex.def 2022/07/02 v3.18a biblatex compatibility (PK/MW)
 \c@textcitecount=\count430
 \c@textcitetotal=\count431
 \c@textcitemaxnames=\count432
@@ -700,18 +700,18 @@ File: biblatex.def 2022/06/22 v3.18 biblatex compatibility (PK/MW)
 Package biblatex Info: Trying to load bibliography style 'numeric'...
 Package biblatex Info: ... file 'numeric.bbx' found.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/biblatex/bbx/numeric.bbx
-File: numeric.bbx 2022/06/22 v3.18 biblatex bibliography style (PK/MW)
+File: numeric.bbx 2022/07/02 v3.18a biblatex bibliography style (PK/MW)
 Package biblatex Info: Trying to load bibliography style 'standard'...
 Package biblatex Info: ... file 'standard.bbx' found.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/biblatex/bbx/standard.bbx
-File: standard.bbx 2022/06/22 v3.18 biblatex bibliography style (PK/MW)
+File: standard.bbx 2022/07/02 v3.18a biblatex bibliography style (PK/MW)
 \c@bbx:relatedcount=\count439
 \c@bbx:relatedtotal=\count440
 ))
 Package biblatex Info: Trying to load citation style 'numeric'...
 Package biblatex Info: ... file 'numeric.cbx' found.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/biblatex/cbx/numeric.cbx
-File: numeric.cbx 2022/06/22 v3.18 biblatex citation style (PK/MW)
+File: numeric.cbx 2022/07/02 v3.18a biblatex citation style (PK/MW)
 Package biblatex Info: Redefining '\cite'.
 Package biblatex Info: Redefining '\parencite'.
 Package biblatex Info: Redefining '\footcite'.
@@ -733,9 +733,9 @@ Package biblatex Info: XeTeX detected.
 (biblatex)             Assuming input encoding 'utf8'.
 Package biblatex Info: Document encoding is UTF8 ....
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2022-06-16 L3 programming layer (loader) 
+Package: expl3 2022-07-01 L3 programming layer (loader) 
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-xetex.def
-File: l3backend-xetex.def 2022-04-20 L3 backend support: XeTeX
+File: l3backend-xetex.def 2022-07-01 L3 backend support: XeTeX
 \g__graphics_track_int=\count441
 \l__pdf_internal_box=\box74
 \g__pdf_backend_object_int=\count442
@@ -743,13 +743,13 @@ File: l3backend-xetex.def 2022-04-20 L3 backend support: XeTeX
 \g__pdf_backend_link_int=\count444
 ))
 Package biblatex Info: ... and expl3
-(biblatex)             2022-06-16 L3 programming layer (loader) 
+(biblatex)             2022-07-01 L3 programming layer (loader) 
 (biblatex)             is new enough (at least 2020/04/06),
 (biblatex)             setting 'casechanger=expl3'.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/biblatex/blx-case-expl3.sty (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
 Package: xparse 2022-06-22 L3 Experimental document command parser
 )
-Package: blx-case-expl3 2022/06/22 v3.18 expl3 case changing code for biblatex
+Package: blx-case-expl3 2022/07/02 v3.18a expl3 case changing code for biblatex
 )) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/generic/iftex/ifvtex.sty
@@ -930,7 +930,7 @@ Package caption Info: End \AtBeginDocument code.
 Package biblatex Info: Trying to load language 'english'...
 Package biblatex Info: ... file 'english.lbx' found.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/biblatex/lbx/english.lbx
-File: english.lbx 2022/06/22 v3.18 biblatex localization (PK/MW)
+File: english.lbx 2022/07/02 v3.18a biblatex localization (PK/MW)
 )
 Package biblatex Info: XeTeX detected.
 (biblatex)             Assuming input encoding 'utf8'.
@@ -994,8 +994,6 @@ Package hyperref Warning: Suppressing link with empty target on input line 315.
 
 Package hyperref Warning: Suppressing link with empty target on input line 315.
 
-LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <9> not available
-(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 376.
 File: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
 </Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
 
@@ -1006,11 +1004,23 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
 LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <8> not available
-(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 394.
+(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 383.
 [1
 
 ]
-Underfull \hbox (badness 1448) in paragraph at lines 424--428
+LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <9> not available
+(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 391.
+File: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
+</Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
+
+Package fancyhdr Warning: \headheight is too small (62.59596pt): 
+(fancyhdr)                Make it at least 63.55022pt, for example:
+(fancyhdr)                \setlength{\headheight}{63.55022pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
+
+[2]
+Underfull \hbox (badness 1448) in paragraph at lines 478--482
 \TU/lmr/m/n/10 The workhorse function to get a comprehensive summary of data properties is
  []
 
@@ -1023,7 +1033,7 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
-[2]
+[3]
 File: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
 </Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
 
@@ -1033,7 +1043,7 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
-[3] (./paper.aux)
+[4] (./paper.aux)
 Package rerunfilecheck Info: File `paper.out' has not changed.
 (rerunfilecheck)             Checksum: 204FAF4806FBD38F868DDE1C04ACC6C4;1116.
 Package logreq Info: Writing requests to 'paper.run.xml'.
@@ -1041,12 +1051,12 @@ Package logreq Info: Writing requests to 'paper.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 35266 strings out of 477881
- 727765 string characters out of 5845921
- 1488313 words of memory out of 5000000
- 55646 multiletter control sequences out of 15000+600000
+ 35261 strings out of 477877
+ 727680 string characters out of 5845844
+ 1488388 words of memory out of 5000000
+ 55645 multiletter control sequences out of 15000+600000
  477676 words of font info for 82 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  84i,12n,81p,678b,846s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on paper.pdf (3 pages).
+Output written on paper.pdf (4 pages).
