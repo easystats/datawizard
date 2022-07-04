@@ -8,27 +8,35 @@
 data_to_long(
   data,
   select = "all",
-  colnames_to = "Name",
+  names_to = "Name",
+  names_prefix = NULL,
+  names_sep = NULL,
+  names_pattern = NULL,
   values_to = "Value",
+  values_drop_na = FALSE,
   rows_to = NULL,
   ignore_case = FALSE,
   regex = FALSE,
-  cols = select,
   ...,
-  names_to = colnames_to
+  cols,
+  colnames_to
 )
 
 reshape_longer(
   data,
   select = "all",
-  colnames_to = "Name",
+  names_to = "Name",
+  names_prefix = NULL,
+  names_sep = NULL,
+  names_pattern = NULL,
   values_to = "Value",
+  values_drop_na = FALSE,
   rows_to = NULL,
   ignore_case = FALSE,
   regex = FALSE,
-  cols = select,
   ...,
-  names_to = colnames_to
+  cols,
+  colnames_to
 )
 }
 \arguments{
@@ -64,11 +72,23 @@ If \code{NULL}, selects all columns. Patterns that found no matches are silently
 ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
 return \code{"Species"}.}
 
-\item{colnames_to}{The name of the new column that will contain the column
+\item{names_to}{The name of the new column that will contain the column
 names.}
+
+\item{names_prefix}{A regular expression used to remove matching text from
+the start of each variable name.}
+
+\item{names_sep, names_pattern}{If \code{names_to} contains multiple values, this
+argument controls how the column name is broken up.
+\code{names_pattern} takes a regular expression containing matching groups (\verb{()}⁠).}
 
 \item{values_to}{The name of the new column that will contain the values of
 the pivoted variables.}
+
+\item{values_drop_na}{If \code{TRUE}, will drop rows that contain only \code{NA} in the
+\code{values_to} column. This effectively converts explicit missing values to
+implicit missing values, and should generally be used only when missing values
+in data were created by its structure.}
 
 \item{rows_to}{The name of the column that will contain the row names or row
 numbers from the original data. If \code{NULL}, will be removed.}
@@ -86,12 +106,11 @@ select-helpers, \code{select = contains("")} or \code{select = regex("")}, howev
 since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.}
 
-\item{cols}{Deprecated. Please use \code{select}.}
-
 \item{...}{Currently not used.}
 
-\item{names_to}{Same as \code{colnames_to}, is there for
-compatibility with \code{tidyr::pivot_longer()}.}
+\item{cols}{Deprecated. Please use \code{select}.}
+
+\item{colnames_to}{Deprecated. Use \code{names_to} instead.}
 }
 \value{
 If a tibble was provided as input, \code{reshape_longer()} also returns a

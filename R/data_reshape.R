@@ -9,8 +9,9 @@
 #'   names.
 #' @param names_prefix A regular expression used to remove matching text from
 #' the start of each variable name.
-#' @param names_sep If `names_to` contains multiple values, this argument
-#' controls how the column name is broken up.
+#' @param names_sep,names_pattern If `names_to` contains multiple values, this
+#' argument controls how the column name is broken up.
+#' `names_pattern` takes a regular expression containing matching groups (`()`⁠).
 #' @param values_to The name of the new column that will contain the values of
 #'   the pivoted variables.
 #' @param values_drop_na If `TRUE`, will drop rows that contain only `NA` in the
@@ -64,6 +65,7 @@ data_to_long <- function(data,
                          names_to = "Name",
                          names_prefix = NULL,
                          names_sep = NULL,
+                         names_pattern = NULL,
                          values_to = "Value",
                          values_drop_na = FALSE,
                          rows_to = NULL,
@@ -117,9 +119,8 @@ data_to_long <- function(data,
   # Create Index column as needed by reshape
   data[["_Row"]] <- to_numeric(row.names(data))
 
-  if (length(names_to) > 1) {
-    names_to <- paste(names_to, collapse = names_sep)
-  }
+  # Create a new index for cases with length(names_to) > 1
+  names_to_2 <- paste(names_to, collapse = "_")
 
   # Reshape
   long <- stats::reshape(
@@ -127,14 +128,14 @@ data_to_long <- function(data,
     varying = cols,
     idvar = "_Row",
     v.names = values_to,
-    timevar = names_to,
+    timevar = names_to_2,
     direction = "long"
   )
 
   # Cleaning --------------------------
 
   # Sort the dataframe (to match pivot_longer's output)
-  long <- long[do.call(order, long[, c("_Row", names_to)]), ]
+  long <- long[do.call(order, long[, c("_Row", names_to_2)]), ]
 
   # Remove or rename the row index
   if (is.null(rows_to)) {
@@ -144,21 +145,33 @@ data_to_long <- function(data,
   }
 
   # Re-insert col names as levels
-  long[[names_to]] <- cols[long[[names_to]]]
+  long[[names_to_2]] <- cols[long[[names_to_2]]]
 
-  future_cols <- strsplit(names_to, names_sep)[[1]]
-
-  for (i in seq_along(future_cols)) {
-    new_vals <- unlist(lapply(
-      strsplit(long[[names_to]], names_sep, fixed = TRUE),
-      function(x) x[i])
-    )
-    long[[future_cols[i]]] <- new_vals
+  # if several variable in names_to, split the names either with names_sep
+  # or with names_pattern
+  if (length(names_to) > 1) {
+    for (i in seq_along(names_to)) {
+      if (is.null(names_pattern)) {
+        new_vals <- unlist(lapply(
+          strsplit(long[[names_to_2]], names_sep, fixed = TRUE),
+          function(x) x[i])
+        )
+      } else {
+        new_vals <- regmatches(
+          long[[names_to_2]],
+          regexec(names_pattern, long[[names_to_2]])
+        )
+        new_vals <- unlist(lapply(
+          new_vals,
+          function(x) x[[i + 1]]
+        ))
+      }
+      long[[names_to[i]]] <- new_vals
+    }
+    long[[names_to_2]] <- NULL
   }
-  long[[names_to]] <- NULL
 
-  names_to <- future_cols
-
+  # reorder
   long <- data_relocate(long, select = values_to, after = -1)
 
   # remove names prefix if specified
