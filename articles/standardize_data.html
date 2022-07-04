@@ -147,13 +147,13 @@
 <span><span class="co"># let's have a look at what the data look like</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"hardlyworking"</span>, package <span class="op">=</span> <span class="st">"effectsize"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">hardlyworking</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt;     salary xtra_hours n_comps age seniority
-&gt; 1 19744.65   4.161812       1  32         3
-&gt; 2 11301.95   1.621868       0  34         3
-&gt; 3 20635.62   1.190859       3  33         5
-&gt; 4 23047.16   7.190997       1  35         3
-&gt; 5 27342.15  11.261399       0  33         4
-&gt; 6 25656.63   3.633346       2  30         5</code></pre>
+<pre><code><span><span class="co">#&gt;     salary xtra_hours n_comps age seniority</span></span>
+<span><span class="co">#&gt; 1 19744.65   4.161812       1  32         3</span></span>
+<span><span class="co">#&gt; 2 11301.95   1.621868       0  34         3</span></span>
+<span><span class="co">#&gt; 3 20635.62   1.190859       3  33         5</span></span>
+<span><span class="co">#&gt; 4 23047.16   7.190997       1  35         3</span></span>
+<span><span class="co">#&gt; 5 27342.15  11.261399       0  33         4</span></span>
+<span><span class="co">#&gt; 6 25656.63   3.633346       2  30         5</span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># let's use both methods of standardization</span></span>
 <span><span class="va">hardlyworking</span><span class="op">$</span><span class="va">xtra_hours_z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="va">hardlyworking</span><span class="op">$</span><span class="va">xtra_hours</span><span class="op">)</span></span>
@@ -297,29 +297,29 @@
 <span>    Valence_Mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Subjective_Valence</span><span class="op">)</span>,</span>
 <span>    Valence_SD <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">Subjective_Valence</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<pre><code>&gt;  [38;5;246m# A tibble: 19 × 4 [39m
-&gt;  [38;5;246m# Groups:   Participant_ID [19] [39m
-&gt;    Participant_ID n_Trials Valence_Mean Valence_SD
-&gt;     [3m [38;5;246m&lt;fct&gt; [39m [23m              [3m [38;5;246m&lt;int&gt; [39m [23m         [3m [38;5;246m&lt;dbl&gt; [39m [23m       [3m [38;5;246m&lt;dbl&gt; [39m [23m
-&gt;  [38;5;250m 1 [39m 10S                  24       - [31m58 [39m [31m. [39m [31m1 [39m       42.6 
-&gt;  [38;5;250m 2 [39m 11S                  24       - [31m73 [39m [31m. [39m [31m2 [39m       37.0 
-&gt;  [38;5;250m 3 [39m 12S                  24       - [31m57 [39m [31m. [39m [31m5 [39m       26.6 
-&gt;  [38;5;250m 4 [39m 13S                  24       - [31m63 [39m [31m. [39m [31m2 [39m       23.7 
-&gt;  [38;5;250m 5 [39m 14S                  24       - [31m56 [39m [31m. [39m [31m6 [39m       26.5 
-&gt;  [38;5;250m 6 [39m 15S                  24       - [31m60 [39m [31m. [39m [31m6 [39m       33.7 
-&gt;  [38;5;250m 7 [39m 16S                  24       - [31m46 [39m [31m. [39m [31m1 [39m       24.9 
-&gt;  [38;5;250m 8 [39m 17S                  24        - [31m1 [39m [31m. [39m [31m54 [39m       4.98
-&gt;  [38;5;250m 9 [39m 18S                  24       - [31m67 [39m [31m. [39m [31m2 [39m       35.0 
-&gt;  [38;5;250m10 [39m 19S                  24       - [31m59 [39m [31m. [39m [31m6 [39m       33.2 
-&gt;  [38;5;250m11 [39m 1S                   24       - [31m53 [39m [31m. [39m [31m0 [39m       42.9 
-&gt;  [38;5;250m12 [39m 2S                   23       - [31m43 [39m [31m. [39m [31m0 [39m       39.2 
-&gt;  [38;5;250m13 [39m 3S                   24       - [31m64 [39m [31m. [39m [31m3 [39m       34.4 
-&gt;  [38;5;250m14 [39m 4S                   24       - [31m81 [39m [31m. [39m [31m6 [39m       27.6 
-&gt;  [38;5;250m15 [39m 5S                   24       - [31m58 [39m [31m. [39m [31m1 [39m       25.3 
-&gt;  [38;5;250m16 [39m 6S                   24       - [31m74 [39m [31m. [39m [31m7 [39m       29.2 
-&gt;  [38;5;250m17 [39m 7S                   24       - [31m62 [39m [31m. [39m [31m3 [39m       39.7 
-&gt;  [38;5;250m18 [39m 8S                   24       - [31m56 [39m [31m. [39m [31m9 [39m       32.7 
-&gt;  [38;5;250m19 [39m 9S                   24       - [31m31 [39m [31m. [39m [31m5 [39m       52.7</code></pre>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 19 × 4</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Groups:   Participant_ID [19]</span></span></span>
+<span><span class="co">#&gt;    Participant_ID n_Trials Valence_Mean Valence_SD</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 10S                  24       -<span style="color: #BB0000;">58.1</span>       42.6 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 11S                  24       -<span style="color: #BB0000;">73.2</span>       37.0 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 12S                  24       -<span style="color: #BB0000;">57.5</span>       26.6 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 13S                  24       -<span style="color: #BB0000;">63.2</span>       23.7 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 14S                  24       -<span style="color: #BB0000;">56.6</span>       26.5 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 15S                  24       -<span style="color: #BB0000;">60.6</span>       33.7 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 16S                  24       -<span style="color: #BB0000;">46.1</span>       24.9 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 17S                  24        -<span style="color: #BB0000;">1.54</span>       4.98</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 18S                  24       -<span style="color: #BB0000;">67.2</span>       35.0 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 19S                  24       -<span style="color: #BB0000;">59.6</span>       33.2 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 1S                   24       -<span style="color: #BB0000;">53.0</span>       42.9 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2S                   23       -<span style="color: #BB0000;">43.0</span>       39.2 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> 3S                   24       -<span style="color: #BB0000;">64.3</span>       34.4 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 4S                   24       -<span style="color: #BB0000;">81.6</span>       27.6 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 5S                   24       -<span style="color: #BB0000;">58.1</span>       25.3 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 6S                   24       -<span style="color: #BB0000;">74.7</span>       29.2 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 7S                   24       -<span style="color: #BB0000;">62.3</span>       39.7 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> 8S                   24       -<span style="color: #BB0000;">56.9</span>       32.7 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> 9S                   24       -<span style="color: #BB0000;">31.5</span>       52.7</span></span></code></pre>
 <p>As we can see from the means and SDs, there is a lot of variability <strong>between</strong> participants both in their means and their individual <em>within</em>-participant SD.</p>
 </div>
 <div class="section level4">
@@ -586,32 +586,32 @@
 <span>  <span class="fu">get_par</span><span class="op">(</span><span class="va">m_ParticipantWise</span><span class="op">)</span>,</span>
 <span>  <span class="fu">get_par</span><span class="op">(</span><span class="va">m_Full</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt; # Fixed Effects
-&gt; 
-&gt; Model             | Coefficient |   SE |        95% CI | t(451) |     p
-&gt; -----------------------------------------------------------------------
-&gt; m_raw             |        0.09 | 0.07 | [-0.04, 0.22] |   1.36 | 0.174
-&gt; m_VariableWise    |        0.07 | 0.05 | [-0.03, 0.17] |   1.36 | 0.174
-&gt; m_ParticipantWise |        0.08 | 0.05 | [-0.01, 0.17] |   1.75 | 0.080
-&gt; m_Full            |        0.08 | 0.05 | [-0.01, 0.17] |   1.75 | 0.080
-&gt; 
-&gt; # Random Effects: Participant_ID
-&gt; 
-&gt; Model             | Coefficient
-&gt; -------------------------------
-&gt; m_raw             |       16.49
-&gt; m_VariableWise    |        0.45
-&gt; m_ParticipantWise |        0.00
-&gt; m_Full            |        0.00
-&gt; 
-&gt; # Random Effects: Residual
-&gt; 
-&gt; Model             | Coefficient
-&gt; -------------------------------
-&gt; m_raw             |       33.56
-&gt; m_VariableWise    |        0.91
-&gt; m_ParticipantWise |        0.98
-&gt; m_Full            |        1.00</code></pre>
+<pre><code><span><span class="co">#&gt; # Fixed Effects</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model             | Coefficient |   SE |        95% CI | t(451) |     p</span></span>
+<span><span class="co">#&gt; -----------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; m_raw             |        0.09 | 0.07 | [-0.04, 0.22] |   1.36 | 0.174</span></span>
+<span><span class="co">#&gt; m_VariableWise    |        0.07 | 0.05 | [-0.03, 0.17] |   1.36 | 0.174</span></span>
+<span><span class="co">#&gt; m_ParticipantWise |        0.08 | 0.05 | [-0.01, 0.17] |   1.75 | 0.080</span></span>
+<span><span class="co">#&gt; m_Full            |        0.08 | 0.05 | [-0.01, 0.17] |   1.75 | 0.080</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; # Random Effects: Participant_ID</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model             | Coefficient</span></span>
+<span><span class="co">#&gt; -------------------------------</span></span>
+<span><span class="co">#&gt; m_raw             |       16.49</span></span>
+<span><span class="co">#&gt; m_VariableWise    |        0.45</span></span>
+<span><span class="co">#&gt; m_ParticipantWise |        0.00</span></span>
+<span><span class="co">#&gt; m_Full            |        0.00</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; # Random Effects: Residual</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model             | Coefficient</span></span>
+<span><span class="co">#&gt; -------------------------------</span></span>
+<span><span class="co">#&gt; m_raw             |       33.56</span></span>
+<span><span class="co">#&gt; m_VariableWise    |        0.91</span></span>
+<span><span class="co">#&gt; m_ParticipantWise |        0.98</span></span>
+<span><span class="co">#&gt; m_Full            |        1.00</span></span></code></pre>
 <p>As we can see, <strong>variable-wise</strong> standardization only affects <strong>the coefficient</strong> (which is expected, as it changes the unit), but not the test statistic or statistical significance. However, using <strong>participant-wise</strong> standardization <em>does</em> affect the coefficient <strong>and</strong> the significance.</p>
 <p><strong>No method is better or more justified, and the choice depends on the specific case, context, data and goal.</strong></p>
 </div>
