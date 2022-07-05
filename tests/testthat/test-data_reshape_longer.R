@@ -80,7 +80,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 4", {
 
 test_that("reshape_longer equivalent to pivot_longer: ex 5", {
   suppressWarnings({
-    x <- who |>
+    x <- who %>%
       pivot_longer(
         cols = 5:60,
         names_to = c("diagnosis", "gender", "age"),
@@ -101,7 +101,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 5", {
 })
 
 test_that("reshape_longer equivalent to pivot_longer: ex 6", {
-  x <- who |>
+  x <- who %>%
     pivot_longer(
       cols = new_sp_m014:newrel_f65,
       names_to = c("diagnosis", "gender", "age"),
