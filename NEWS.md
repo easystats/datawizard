@@ -37,6 +37,10 @@ CHANGES
 
 NEW FUNCTIONS
 
+* `unstandardise()` now works for `center(x)`
+
+* `unnormalize()` now works for `change_scale(x)`
+
 * `row_to_colnames()` and `colnames_to_row()` to move a row to column names,
   and column names to row (@etiennebacher, #169).
 
