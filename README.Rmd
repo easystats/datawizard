@@ -22,11 +22,18 @@ library(datawizard)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/) [![status](https://tinyverse.netlify.com/badge/datawizard)](https://CRAN.R-project.org/package=datawizard)
 
 
-***Hockety pockety wockety wack, prepare this data forth and back*** :sparkles:
+<img src='https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif' width="200" align = "right"/>
+
+***:sparkles: Hockety pockety wockety wack, prepare this data forth and back***
+
+***Hockety pockety wockety wock, messy data is in shock***
+
+***Hockety pockety wockety woss, you can cite i-it from JOSS*** <sup>(soon)</sup>
+
+***Hockety pockety wockety wass, datawizard saves your ass! :sparkles:***
+
 
 `datawizard` is a lightweight package to easily manipulate, clean, transform, and prepare your data for analysis.
-
-<img src='https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif' height="150" />
 
 
 # Installation
@@ -145,7 +152,7 @@ long_data <- data_to_long(wide_data, rows_to = "Row_ID") # Save row number
 data_to_wide(long_data,
   names_from = "Name",
   values_from = "Value",
-  rows_from = "Row_ID"
+  id_cols = "Row_ID"
 )
 ```
 

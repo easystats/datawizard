@@ -6,13 +6,21 @@
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/)
 [![status](https://tinyverse.netlify.com/badge/datawizard)](https://CRAN.R-project.org/package=datawizard)
 
-***Hockety pockety wockety wack, prepare this data forth and back***
-:sparkles:
+<img src='https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif' width="200" align = "right"/>
+
+***:sparkles: Hockety pockety wockety wack, prepare this data forth and
+back***
+
+***Hockety pockety wockety wock, messy data is in shock***
+
+***Hockety pockety wockety woss, you can cite i-it from JOSS***
+<sup>(soon)</sup>
+
+***Hockety pockety wockety wass, datawizard saves your ass!
+:sparkles:***
 
 `datawizard` is a lightweight package to easily manipulate, clean,
 transform, and prepare your data for analysis.
-
-<img src='https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif' height="150" />
 
 # Installation
 
@@ -94,7 +102,7 @@ find_columns(iris, starts_with("Sepal"))
 #> [1] "Sepal.Length" "Sepal.Width"
 
 # return data columns matching a pattern
-get_columns(iris, starts_with("Sepal")) %>% head()
+get_columns(iris, starts_with("Sepal")) |> head()
 #>   Sepal.Length Sepal.Width
 #> 1          5.1         3.5
 #> 2          4.9         3.0
@@ -246,9 +254,9 @@ long_data <- data_to_long(wide_data, rows_to = "Row_ID") # Save row number
 data_to_wide(long_data,
   names_from = "Name",
   values_from = "Value",
-  rows_from = "Row_ID"
+  id_cols = "Row_ID"
 )
-#>    Row_ID    Value_X1    Value_X2    Value_X3   Value_X4    Value_X5
+#>    Row_ID          X1          X2          X3         X4          X5
 #> 1       1 -0.08281164 -1.12490028 -0.70632036 -0.7027895  0.07633326
 #> 2       2  1.93468099 -0.87430362  0.96687656  0.2998642 -0.23035595
 #> 3       3 -2.05128979  0.04386162 -0.71016648  1.1494697  0.31746484
@@ -394,18 +402,18 @@ anscombe
 
 # after
 winsorize(anscombe)
-#>       x1 x2 x3 x4   y1   y2   y3   y4
-#>  [1,] 10 10 10  8 8.04 9.13 7.46 6.58
-#>  [2,]  8  8  8  8 6.95 8.14 6.77 5.76
-#>  [3,] 12 12 12  8 7.58 8.74 8.15 7.71
-#>  [4,]  9  9  9  8 8.81 8.77 7.11 8.47
-#>  [5,] 11 11 11  8 8.33 9.13 7.81 8.47
-#>  [6,] 12 12 12  8 8.81 8.10 8.15 7.04
-#>  [7,]  6  6  6  8 7.24 6.13 6.08 5.76
-#>  [8,]  6  6  6  8 5.68 6.13 6.08 8.47
-#>  [9,] 12 12 12  8 8.81 9.13 8.15 5.76
-#> [10,]  7  7  7  8 5.68 7.26 6.42 7.91
-#> [11,]  6  6  6  8 5.68 6.13 6.08 6.89
+#>    x1 x2 x3 x4   y1   y2   y3   y4
+#> 1  10 10 10  8 8.04 9.13 7.46 6.58
+#> 2   8  8  8  8 6.95 8.14 6.77 5.76
+#> 3  12 12 12  8 7.58 8.74 8.15 7.71
+#> 4   9  9  9  8 8.81 8.77 7.11 8.47
+#> 5  11 11 11  8 8.33 9.13 7.81 8.47
+#> 6  12 12 12  8 8.81 8.10 8.15 7.04
+#> 7   6  6  6  8 7.24 6.13 6.08 5.76
+#> 8   6  6  6  8 5.68 6.13 6.08 8.47
+#> 9  12 12 12  8 8.81 9.13 8.15 5.76
+#> 10  7  7  7  8 5.68 7.26 6.42 7.91
+#> 11  6  6  6  8 5.68 6.13 6.08 6.89
 ```
 
 ### Center
@@ -535,15 +543,15 @@ their first argument, and also return a (modified) data frame again.
 Thus, `{datawizard}` integrates smoothly into a “pipe-workflow”.
 
 ``` r
-iris %>%
+iris |>
   # all rows where Species is "versicolor" or "virginica"
-  data_filter(Species %in% c("versicolor", "virginica")) %>%
+  data_filter(Species %in% c("versicolor", "virginica")) |>
   # select only columns with "." in names (i.e. drop Species)
-  get_columns(contains(".")) %>%
+  get_columns(contains(".")) |>
   # move columns that ends with "Length" to start of data frame
-  data_relocate(ends_with("Length")) %>%
+  data_relocate(ends_with("Length")) |>
   # remove fourth column
-  data_remove(4) %>%
+  data_remove(4) |>
   head()
 #>    Sepal.Length Petal.Length Sepal.Width
 #> 51          7.0          4.7         3.2
