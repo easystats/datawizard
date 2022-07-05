@@ -18,7 +18,7 @@ authors:
   orcid: 0000-0001-9560-6336
 - affiliation: 5
   name: Etienne Bacher
-  # orcid: 
+  orcid: 0000-0002-9271-5075 
 - affiliation: 6
   name: Indrajeet Patil
   orcid: 0000-0003-1995-6531
