@@ -52,7 +52,6 @@ normalize <- function(x, ...) {
 #' @rdname normalize
 #' @export
 normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
-
   # Warning if all NaNs
   if (all(is.na(x))) {
     return(x)
@@ -166,7 +165,6 @@ normalize.data.frame <- function(x,
                                  ignore_case = FALSE,
                                  verbose = TRUE,
                                  ...) {
-
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
   x[select] <- lapply(x[select], normalize, include_bounds = include_bounds, verbose = verbose)

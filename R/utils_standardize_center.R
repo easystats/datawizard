@@ -62,7 +62,6 @@
                               .scale = NULL,
                               keep_character = FALSE,
                               preserve_value_labels = FALSE) {
-
   # check append argument, and set default
   if (isFALSE(append)) {
     append <- NULL
@@ -122,7 +121,6 @@
 
   # check for reference center and scale
   if (!is.null(.center)) {
-
     # for center(), we have no scale - set it to default value
     if (is.null(.scale)) {
       .scale <- rep(1, length(.center))
@@ -152,7 +150,6 @@
       .scale <- stats::setNames(.scale, select)
     }
   } else {
-
     # use NA if missing, so we can index these as vectors
     .center <- stats::setNames(rep(NA, length(select)), select)
     .scale <- stats::setNames(rep(NA, length(select)), select)

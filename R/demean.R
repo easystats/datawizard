@@ -253,7 +253,6 @@ degroup <- function(x,
                     suffix_groupmean = "_between",
                     add_attributes = TRUE,
                     verbose = TRUE) {
-
   # ugly tibbles again...
   x <- as.data.frame(x)
 

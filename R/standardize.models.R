@@ -327,8 +327,6 @@ standardize.mediate <- function(x,
                                 verbose = TRUE,
                                 include_response = TRUE,
                                 ...) {
-
-
   # models and data
   y <- x$model.y
   m <- x$model.m
