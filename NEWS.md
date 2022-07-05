@@ -21,6 +21,11 @@ MAJOR CHANGES
 * `reshape_wider()` now follows more consistently `tidyr::pivot_wider()` syntax. 
   Arguments `colnames_from`, `sep`, and `rows_from` are deprecated and should be
   replaced by `names_from`, `names_sep`, and `id_cols` respectively (#182). 
+  
+* Similarly, `reshape_longer()` now follows more consistently 
+  `tidyr::pivot_longer()` syntax.  Argument `colnames_to` is deprecated and 
+  should be replaced by `names_to`. `reshape_longer()` also gains new arguments:
+  `names_prefix`, `names_sep`, `names_pattern`, and `values_drop_na` (#189).  
 
 CHANGES
 
