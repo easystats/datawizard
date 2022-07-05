@@ -35,7 +35,7 @@ affiliations:
 - index: 5
   name: Luxembourg Institute of Socio-Economic Research, Luxembourg
 - index: 6
-  name:  University Medical Center Hamburg-Eppendorf, Germany
+  name: University Medical Center Hamburg-Eppendorf, Germany
     
 date: "2022-07-05"
 bibliography: paper.bib
@@ -49,17 +49,17 @@ link-citations: yes
 
 # Summary
 
-The `{datawizard}` package in the R programming language [@base2021] provides a lightweight toolbox to assist the following keys steps in any data analysis workflow: (*i*) to get the data in the right form, (*ii*) to modify data for statistical modeling, and (*iii*) to provide sanity checks for transformed data. Therefore, it can be a valuable tool for R users and developers looking for a lightweight option for data preprocessing.
+The `{datawizard}` package in the R programming language [@base2021] provides a lightweight toolbox to assist in keys steps involved in any data analysis workflow: (*i*) wrangling the raw data to get it in the needed form, (*ii*) applying statistical transformations, and (*iii*) carrying out sanity checks for transformed data. Therefore, it can be a valuable tool for R users and developers looking for a lightweight option for data preprocessing.
 
 # Statement of Need
 
 The `{datawizard}` package makes basic data wrangling easier than with base R. Its workflow and syntax are designed to be similar to `{tidyverse}` (@Wickham2019), which is a widely used ecosystem of packages for data analysis, and, therefore, users familiar with this ecosystem can easily translate their knowledge. Naturally, one might wonder why recreate data wrangling functionality already present in `{tidyverse}`.
 
 The `{easystats}` (@Ben-Shachar2020, @Lüdecke2020parameters, @Lüdecke2020performance, @Lüdecke2021see, @Lüdecke2019, @Makowski2019, @Makowski2020) is an ecosystem of packages designed to make statistical analysis easier in R. Importantly, in order to be lightweight, it follows a "0-external-hard-dependency" policy. Thus, while building this ecosystem, a new data wrangling package that relies only on base R needed to be created.
-In effect, this package provides the data processing backend for this entire ecosystem.
+In effect, the `{datawizard}` package provides data processing backend for this entire ecosystem.
 In addition to its usefulness to the `{easystats}` ecosystem, it also provides *an* option for R users and package developers if they wish to keep their (recursive) dependency weight to a minimum (for other options, see @Dowle2021, @Eastwood2021, etc.).
 
-In addition to providing functions to clean messy data, `{datawizard}` also provides helpers for the other important step of data analysis: transforming the cleaned data further for setting up statistical models. For example, one may need to standardize certain variables, normalize range of some variables, adjust the data for effect of some variables, etc.
+In addition to providing functions to clean messy data, `{datawizard}` also provides helpers for the other important step of data analysis: applying statistical transformations to the cleaned data while setting up statistical models. For example, one may need to standardize variables, normalize range of variables, adjust the data for effect of some variables, etc.
 
 Lastly, `{datawizard}` also provides a toolbox to create a detailed profile of data properties.
 
@@ -67,16 +67,16 @@ Lastly, `{datawizard}` also provides a toolbox to create a detailed profile of d
 
 ## Data wrangling
 
-The raw data is rarely in a state that it can be directly fed into a statistical model. It often needs to be modified in various ways. For example, columns need to be renamed and/or reordered, data scattered across multiple tables needs to be joined, certain parts of the data need to be left out, etc. 
+The raw data is rarely in a state that it can be directly fed into a statistical model. It often needs to be modified in various ways. For example, columns need to be renamed, certain portions of the data need to be filtered out, data scattered across multiple tables needs to be joined, etc. 
 
 `{datawizard}` provides various functions for cleaning and preparing data (see Table 1).
 
 Function           | Operation                             |
 ------------------ | --------------------------------------|
 `data_filter()`    | to select only certain *observations* |
-`data_select()`    | to select only a few *attributes*     |
-`data_extract()`   | to extract a single *attribute*       |
-`data_rename()`    | to rename attributes                  |
+`data_select()`    | to select only a few *variables*      |
+`data_extract()`   | to extract a single *variable*        |
+`data_rename()`    | to rename variables                   |
 `reshape_longer()` | to convert data from wide to long     |
 `reshape_wider()`  | to convert data from long to wide     |
 `data_join()`      | to join two data frames               |
@@ -95,12 +95,12 @@ stocks <- data.frame(
 )
 
 stocks
-#>         time          X          Y
-#> 1 2009-01-01 -0.9803102  0.3879404
-#> 2 2009-01-02 -1.0518387  0.3173859
-#> 3 2009-01-03  1.3891458 -1.2397131
-#> 4 2009-01-04 -0.5247569 -3.7735505
-#> 5 2009-01-05  0.7724189 -0.5662019
+#>         time         X          Y
+#> 1 2009-01-01 0.7400882  0.1440974
+#> 2 2009-01-02 0.0959548  2.4185563
+#> 3 2009-01-03 1.1164848  1.9091325
+#> 4 2009-01-04 0.4758022  1.8966163
+#> 5 2009-01-05 0.5961267 -0.2619180
 
 data_to_long(
   stocks,
@@ -109,16 +109,16 @@ data_to_long(
   values_to = "price"
 )
 #>          time stock      price
-#> 1  2009-01-01     X -0.9803102
-#> 2  2009-01-01     Y  0.3879404
-#> 3  2009-01-02     X -1.0518387
-#> 4  2009-01-02     Y  0.3173859
-#> 5  2009-01-03     X  1.3891458
-#> 6  2009-01-03     Y -1.2397131
-#> 7  2009-01-04     X -0.5247569
-#> 8  2009-01-04     Y -3.7735505
-#> 9  2009-01-05     X  0.7724189
-#> 10 2009-01-05     Y -0.5662019
+#> 1  2009-01-01     X  0.7400882
+#> 2  2009-01-01     Y  0.1440974
+#> 3  2009-01-02     X  0.0959548
+#> 4  2009-01-02     Y  2.4185563
+#> 5  2009-01-03     X  1.1164848
+#> 6  2009-01-03     Y  1.9091325
+#> 7  2009-01-04     X  0.4758022
+#> 8  2009-01-04     Y  1.8966163
+#> 9  2009-01-05     X  0.5961267
+#> 10 2009-01-05     Y -0.2619180
 ```
 
 ## Statistical transformations
@@ -162,10 +162,11 @@ The workhorse function to get a comprehensive summary of data properties is `des
 
 
 ```r
-describe_distribution(mtcars$wt)
-#> Mean |   SD |  IQR |        Range | Skewness | Kurtosis |  n | n_Missing
-#> ------------------------------------------------------------------------
-#> 3.22 | 0.98 | 1.19 | [1.51, 5.42] |     0.47 |     0.42 | 32 |         0
+describe_distribution(cars)
+#> Variable |  Mean |    SD |   IQR |          Range | Skewness | Kurtosis |  n | n_Missing
+#> ----------------------------------------------------------------------------------------
+#> speed    | 15.40 |  5.29 |  7.25 |  [4.00, 25.00] |    -0.12 |    -0.51 | 50 |         0
+#> dist     | 42.98 | 25.77 | 31.50 | [2.00, 120.00] |     0.81 |     0.41 | 50 |         0
 ```
 
 # Licensing and Availability
