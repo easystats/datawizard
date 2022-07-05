@@ -109,7 +109,8 @@ center.numeric <- function(x,
                            ...) {
   args <- .process_std_center(x, weights, robust, verbose, reference, center, scale = NULL)
 
-  if (is.null(args)) { # all NA?
+  if (is.null(args)) {
+    # all NA?
     return(x)
   } else if (is.null(args$check)) {
     vals <- rep(0, length(args$vals)) # If only unique value
@@ -120,7 +121,7 @@ center.numeric <- function(x,
   centered_x <- rep(NA, length(args$valid_x))
   centered_x[args$valid_x] <- vals
   attr(centered_x, "center") <- args$center
-  attr(centered_x, "scale") <- args$scale
+  attr(centered_x, "scale") <- 1
   attr(centered_x, "robust") <- robust
   # labels
   .set_back_labels(centered_x, x, include_values = FALSE)

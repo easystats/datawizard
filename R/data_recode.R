@@ -197,7 +197,6 @@ data_recode.numeric <- function(x,
                                 preserve_na = TRUE,
                                 verbose = TRUE,
                                 ...) {
-
   # save
   original_x <- x
 
@@ -279,7 +278,6 @@ data_recode.factor <- function(x,
                                preserve_na = TRUE,
                                verbose = TRUE,
                                ...) {
-
   # save
   original_x <- x
 
@@ -368,7 +366,6 @@ data_recode.character <- function(x,
                                   preserve_na = TRUE,
                                   verbose = TRUE,
                                   ...) {
-
   # save
   original_x <- x
 

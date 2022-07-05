@@ -18,6 +18,7 @@ unnormalize.numeric <- function(x, verbose = TRUE, ...) {
   include_bounds <- attr(x, "include_bounds")
   min_value <- attr(x, "min_value")
   range_difference <- attr(x, "range_difference")
+  to_range <- attr(x, "to_range")
 
   if (is.null(min_value) || is.null(range_difference)) {
     if (verbose) {
@@ -26,7 +27,11 @@ unnormalize.numeric <- function(x, verbose = TRUE, ...) {
     return(x)
   }
 
-  x * range_difference + min_value
+  if (is.null(to_range)) {
+    x * range_difference + min_value
+  } else {
+    (x - to_range[1]) * (range_difference / diff(to_range)) + min_value
+  }
 }
 
 
@@ -38,7 +43,6 @@ unnormalize.data.frame <- function(x,
                                    ignore_case = FALSE,
                                    verbose = TRUE,
                                    ...) {
-
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
   x[select] <- lapply(x[select], unnormalize, verbose = verbose)

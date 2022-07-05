@@ -262,7 +262,7 @@ data_to_numeric.character <- function(x,
 #' @export
 to_numeric <- function(x) {
   tryCatch(as.numeric(as.character(x)),
-           error = function(e) x,
-           warning = function(w) x
+    error = function(e) x,
+    warning = function(w) x
   )
 }

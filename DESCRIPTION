@@ -51,7 +51,8 @@ Suggests:
     rstanarm,
     see,
     testthat (>= 3.0.0),
-    tidyr
+    tidyr,
+    withr
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3

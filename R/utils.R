@@ -16,3 +16,11 @@
     paste0("Argument `", arg, "` is deprecated. Please use `", replacement, "` instead.")
   ), call. = FALSE)
 }
+
+#' `NULL` coalescing operator
+#'
+#' @keywords internal
+#' @noRd
+`%||%` <- function(x, y) {
+  if (is.null(x)) y else x
+}
