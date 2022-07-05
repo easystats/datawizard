@@ -50,7 +50,6 @@
 #'
 #' @export
 data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, ...) {
-
   # change all names if no pattern specified
   if (is.null(pattern)) {
     pattern <- names(data)

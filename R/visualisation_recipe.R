@@ -35,7 +35,6 @@ print.visualisation_recipe <- function(x, ...) {
 
     # Loop through all elements of list
     for (element in elements[elements != "geom"]) {
-
       # Print element name
       if (element == "aes") {
         cat("aes_string(\n")

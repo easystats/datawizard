@@ -52,7 +52,6 @@ data_partition <- function(data,
                            verbose = TRUE,
                            training_proportion = proportion,
                            ...) {
-
   # Sanity checks
   if (!is.data.frame(data)) {
     data <- tryCatch(as.data.frame(data), error = function(e) NULL)
@@ -80,10 +79,10 @@ data_partition <- function(data,
       warning(
         insight::format_message(
           paste0("A variable named \"", row_id, "\" already exists."),
-          "Changing the value of `row_id` to a unique variable name now."),
+          "Changing the value of `row_id` to a unique variable name now."
+        ),
         call. = FALSE
       )
-
     }
     unique_names <- make.unique(c(colnames(data), row_id), sep = "_")
     row_id <- unique_names[length(unique_names)]
@@ -112,7 +111,6 @@ data_partition <- function(data,
 
   # iterate over (grouped) row-id's
   training_sets <- lapply(indices_list, function(i) {
-
     # return value, list of data frames
     d <- list()
 
@@ -125,7 +123,6 @@ data_partition <- function(data,
     # iterate probabilities. we use for/next, so we can change
     # the "indices" variable, where we remove already sampled id's
     for (p in proportion) {
-
       # training-id's, sampled from id's per group - size is % within each group
       training <- sort(sample(indices, round(n * p)))
 

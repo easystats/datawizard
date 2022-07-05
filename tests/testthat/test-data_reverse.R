@@ -349,7 +349,6 @@ test_that("data_reverse works with dataframes (grouped data)", {
       group_by(id) %>%
       data_reverse(exclude = "id") %>%
       ungroup(),
-
     data.frame(
       id = rep(c("A", "B"), each = 3),
       value1 = c(10, 10, 3, 6, 2, 3),
@@ -376,7 +375,6 @@ test_that("data_reverse works with dataframes containing NAs (grouped data)", {
       group_by(id) %>%
       data_reverse(exclude = "id") %>%
       ungroup(),
-
     data.frame(
       id = rep(c("A", "B"), each = 3),
       value1 = c(10, 4, 4, 5, 3, 4),

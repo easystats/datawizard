@@ -4,12 +4,13 @@ set.seed(123)
 wide_data <- data.frame(replicate(3, sample(1:5)))
 
 test_that("data_reshape works as expected - wide to long", {
-
   expect_equal(
     head(data_to_long(wide_data)),
-    data.frame(Name = c("X1", "X2", "X3", "X1", "X2", "X3"),
-               Value = c(3L, 3L, 2L, 2L, 1L, 3L),
-               stringsAsFactors = FALSE),
+    data.frame(
+      Name = c("X1", "X2", "X3", "X1", "X2", "X3"),
+      Value = c(3L, 3L, 2L, 2L, 1L, 3L),
+      stringsAsFactors = FALSE
+    ),
     ignore_attr = TRUE,
     tolerance = 1e-3
   )
@@ -239,8 +240,10 @@ test_that("reshape_wider, names_prefix works", {
 
   expect_equal(
     names(out),
-    c("fish", "foo_Release", "foo_I80_1", "foo_Lisbon", "foo_Rstr", "foo_Base_TD",
-      "foo_BCE", "foo_BCW", "foo_BCE2", "foo_BCW2", "foo_MAE", "foo_MAW")
+    c(
+      "fish", "foo_Release", "foo_I80_1", "foo_Lisbon", "foo_Rstr", "foo_Base_TD",
+      "foo_BCE", "foo_BCW", "foo_BCE2", "foo_BCW2", "foo_MAE", "foo_MAW"
+    )
   )
 })
 
@@ -275,7 +278,7 @@ test_that("reshape_wider, values_fill errors when wrong type", {
     "email", "john@google.com",
     "name", "Huxley Ratcliffe"
   )
-  contacts$person_id = cumsum(contacts$field == "name")
+  contacts$person_id <- cumsum(contacts$field == "name")
 
   expect_error(
     contacts %>%
@@ -316,7 +319,6 @@ test_that("reshape_wider, values_fill errors when wrong type", {
       ),
     regexp = "must be of type factor"
   )
-
 })
 
 test_that("reshape_wider, values_fill errors when length > 1", {
@@ -464,7 +466,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 5", {
     "email", "john@google.com",
     "name", "Huxley Ratcliffe"
   )
-  contacts$person_id = cumsum(contacts$field == "name")
+  contacts$person_id <- cumsum(contacts$field == "name")
 
   x <- contacts %>%
     pivot_wider(names_from = field, values_from = value)
