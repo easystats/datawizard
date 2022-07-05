@@ -1,12 +1,12 @@
 ---
-title: "datawizard: An R Package for Easy Data Wrangling and Transformations"
+title: "datawizard: An R Package for Easy Data Wrangling and Statistical Transformations"
 tags:
   - R
   - easystats
 authors:
 - affiliation: 1
-  name: Daniel Lüdecke
-  orcid: 0000-0002-8895-3206
+  name: Indrajeet Patil
+  orcid: 0000-0003-1995-6531
 - affiliation: 2
   name: Dominique Makowski
   orcid: 0000-0001-5375-9967
@@ -18,14 +18,14 @@ authors:
   orcid: 0000-0001-9560-6336
 - affiliation: 5
   name: Etienne Bacher
-  # orcid: 
+  orcid: 0000-0002-9271-5075 
 - affiliation: 6
-  name: Indrajeet Patil
-  orcid: 0000-0003-1995-6531
+  name: Daniel Lüdecke
+  orcid: 0000-0002-8895-3206
   
 affiliations:
 - index: 1
-  name:  University Medical Center Hamburg-Eppendorf, Germany
+  name: esqLABS GmbH, Germany
 - index: 2
   name: Nanyang Technological University, Singapore
 - index: 3
@@ -35,9 +35,9 @@ affiliations:
 - index: 5
   name: Luxembourg Institute of Socio-Economic Research, Luxembourg
 - index: 6
-  name: esqLABS GmbH
-  
-date: "2022-07-04"
+  name:  University Medical Center Hamburg-Eppendorf, Germany
+    
+date: "2022-07-05"
 bibliography: paper.bib
 output: rticles::joss_article
 csl: apa.csl
@@ -95,12 +95,12 @@ stocks <- data.frame(
 )
 
 stocks
-#>         time           X          Y
-#> 1 2009-01-01  0.02070326  0.2257037
-#> 2 2009-01-02 -1.02253159 -0.2053774
-#> 3 2009-01-03 -0.11898878 -0.6537273
-#> 4 2009-01-04  0.39853267 -0.6421833
-#> 5 2009-01-05  1.41953388  1.3981855
+#>         time          X          Y
+#> 1 2009-01-01 -0.9803102  0.3879404
+#> 2 2009-01-02 -1.0518387  0.3173859
+#> 3 2009-01-03  1.3891458 -1.2397131
+#> 4 2009-01-04 -0.5247569 -3.7735505
+#> 5 2009-01-05  0.7724189 -0.5662019
 
 data_to_long(
   stocks,
@@ -108,20 +108,20 @@ data_to_long(
   colnames_to = "stock",
   values_to = "price"
 )
-#>          time stock       price
-#> 1  2009-01-01     X  0.02070326
-#> 2  2009-01-01     Y  0.22570375
-#> 3  2009-01-02     X -1.02253159
-#> 4  2009-01-02     Y -0.20537735
-#> 5  2009-01-03     X -0.11898878
-#> 6  2009-01-03     Y -0.65372730
-#> 7  2009-01-04     X  0.39853267
-#> 8  2009-01-04     Y -0.64218327
-#> 9  2009-01-05     X  1.41953388
-#> 10 2009-01-05     Y  1.39818553
+#>          time stock      price
+#> 1  2009-01-01     X -0.9803102
+#> 2  2009-01-01     Y  0.3879404
+#> 3  2009-01-02     X -1.0518387
+#> 4  2009-01-02     Y  0.3173859
+#> 5  2009-01-03     X  1.3891458
+#> 6  2009-01-03     Y -1.2397131
+#> 7  2009-01-04     X -0.5247569
+#> 8  2009-01-04     Y -3.7735505
+#> 9  2009-01-05     X  0.7724189
+#> 10 2009-01-05     Y -0.5662019
 ```
 
-## Data transformations
+## Statistical transformations
 
 Even after getting the raw data in the needed format, we may further need to transform certain variables further to meet requirements imposed by the statistical model.
 

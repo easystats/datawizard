@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.7.4)  4 JUL 2022 20:04
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.7.4)  5 JUL 2022 17:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1020,7 +1020,7 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
 [2]
-Underfull \hbox (badness 1448) in paragraph at lines 505--509
+Underfull \hbox (badness 1448) in paragraph at lines 506--510
 \TU/lmr/m/n/10 The workhorse function to get a comprehensive summary of data properties is
  []
 
@@ -1045,15 +1045,15 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 
 [4] (./paper.aux)
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 204FAF4806FBD38F868DDE1C04ACC6C4;1116.
+(rerunfilecheck)             Checksum: C019A0DB6766731360A86C122CE2D9F2;1151.
 Package logreq Info: Writing requests to 'paper.run.xml'.
 \openout1 = `paper.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
  35261 strings out of 477877
- 727680 string characters out of 5845844
- 1488388 words of memory out of 5000000
+ 727687 string characters out of 5845844
+ 1488634 words of memory out of 5000000
  55645 multiletter control sequences out of 15000+600000
  477676 words of font info for 82 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
