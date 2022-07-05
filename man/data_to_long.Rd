@@ -8,11 +8,11 @@
 data_to_long(
   data,
   select = "all",
-  names_to = "Name",
+  names_to = "name",
   names_prefix = NULL,
   names_sep = NULL,
   names_pattern = NULL,
-  values_to = "Value",
+  values_to = "value",
   values_drop_na = FALSE,
   rows_to = NULL,
   ignore_case = FALSE,
@@ -25,11 +25,11 @@ data_to_long(
 reshape_longer(
   data,
   select = "all",
-  names_to = "Name",
+  names_to = "name",
   names_prefix = NULL,
   names_sep = NULL,
   names_pattern = NULL,
-  values_to = "Value",
+  values_to = "value",
   values_drop_na = FALSE,
   rows_to = NULL,
   ignore_case = FALSE,
@@ -146,6 +146,16 @@ if (require("psych")) {
     values_to = "Score",
     rows_to = "Participant"
   )
+
+if(require("tidyr")) {
+  reshape_longer(
+    tidyr::who,
+    select = new_sp_m014:newrel_f65,
+    names_to = c("diagnosis", "gender", "age"),
+    names_pattern = "new_?(.*)_(.)(.*)",
+    values_to = "count"
+  )
+}
 
 }
 
