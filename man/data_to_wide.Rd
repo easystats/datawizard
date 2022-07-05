@@ -78,7 +78,7 @@ the number of rows. This is a dependency-free base-R equivalent of
 \code{tidyr::pivot_wider()}.
 }
 \examples{
-data_long <- read.table(header=TRUE, text='
+data_long <- read.table(header = TRUE, text = "
  subject sex condition measurement
        1   M   control         7.9
        1   M     cond1        12.3
@@ -91,8 +91,7 @@ data_long <- read.table(header=TRUE, text='
        3   F     cond2        13.8
        4   M   control        11.5
        4   M     cond1        13.4
-       4   M     cond2        12.9'
-)
+       4   M     cond2        12.9")
 
 
 reshape_wider(

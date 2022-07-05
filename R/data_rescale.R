@@ -102,6 +102,9 @@ data_rescale.numeric <- function(x,
   new_max <- ifelse(is.na(to[2]), max, to[2])
 
   out <- as.vector((new_max - new_min) / (max - min) * (x - min) + new_min)
+  attr(out, "min_value") <- min
+  attr(out, "range_difference") <- max - min
+  attr(out, "to_range") <- c(new_min, new_max)
   out
 }
 
