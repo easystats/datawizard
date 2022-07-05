@@ -30,6 +30,6 @@ test_that("unnormalize and unstandardized x 4", {
   expect_equal(unnormalize(z), x, ignore_attr = TRUE)
 
   z <- change_scale(x, range = c(-100, 100))
-  attributes(z)
+  # attributes(z)
   expect_equal(unnormalize(z), x, ignore_attr = TRUE)
 })
