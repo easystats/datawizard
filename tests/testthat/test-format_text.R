@@ -37,6 +37,7 @@ test_that("text formatting helpers work as expected", {
 
   long_text <- paste(rep("abc ", 100), collapse = "")
   expect_snapshot(cat(text_wrap(long_text, width = 50)))
+  expect_snapshot(cat(text_wrap(long_text, width = 80)))
 
   expect_equal(
     text_paste(c("A", "", "B"), c("42", "42", "42")),

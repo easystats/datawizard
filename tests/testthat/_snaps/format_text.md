@@ -13,3 +13,14 @@
       abc abc abc abc abc abc abc abc abc abc abc abc
       abc abc abc abc
 
+---
+
+    Code
+      cat(text_wrap(long_text, width = 80))
+    Output
+       abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+      abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc
+
