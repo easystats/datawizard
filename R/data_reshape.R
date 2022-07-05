@@ -62,11 +62,11 @@
 
 data_to_long <- function(data,
                          select = "all",
-                         names_to = "Name",
+                         names_to = "name",
                          names_prefix = NULL,
                          names_sep = NULL,
                          names_pattern = NULL,
-                         values_to = "Value",
+                         values_to = "value",
                          values_drop_na = FALSE,
                          rows_to = NULL,
                          ignore_case = FALSE,
@@ -105,15 +105,21 @@ data_to_long <- function(data,
     verbose = FALSE
   )
 
+  if (any(names_to %in% setdiff(names(data), cols))) {
+    stop(insight::format_message(
+      "Some values of the columns specified in 'names_to' are already present as column names.",
+      paste0("Either use another value in `names_to` or rename the following columns: ",
+             text_concatenate(names_to[which(names_to %in% setdiff(names(data), cols))])
+      )
+    ), call. = FALSE)
+  }
+
   # Sanity checks ----------------
 
   # nothing to select?
   if (!length(cols)) {
     stop("No columns found for reshaping data.", call. = FALSE)
   }
-
-  # save attribute of each variable
-  variable_attr <- lapply(data, attributes)
 
   # Reshaping ---------------------
   # Create Index column as needed by reshape
@@ -192,11 +198,6 @@ data_to_long <- function(data,
 
   # Remove reshape attributes
   attributes(long)$reshapeLong <- NULL
-
-  # add back attributes where possible
-  for (i in colnames(long)) {
-    attributes(long[[i]]) <- variable_attr[[i]]
-  }
 
   if (isTRUE(tbl_input)) {
     class(long) <- c("tbl_df", "tbl", "data.frame")
@@ -349,7 +350,7 @@ data_to_wide <- function(data,
   if (any(future_colnames %in% current_colnames)) {
     stop(insight::format_message(
       "Some values of the columns specified in 'names_from' are already present as column names.",
-      paste0("Either use `name_prefix` or rename the following columns: ",
+      paste0("Either use `names_prefix` or rename the following columns: ",
              text_concatenate(current_colnames[which(current_colnames %in% future_colnames)])
       )
     ), call. = FALSE)

@@ -40,8 +40,8 @@ test_that("data_reshape works as expected - long to wide", {
   expect_equal(
     data_to_wide(
       long_data,
-      names_from = "Name",
-      values_from = "Value",
+      names_from = "name",
+      values_from = "value",
       id_select = "Row_ID"
     ),
     data.frame(
@@ -60,8 +60,8 @@ test_that("data_reshape works as expected - long to wide", {
   expect_error(
     data_to_wide(
       long_data,
-      names_from = "Name",
-      values_from = "Value",
+      names_from = "name",
+      values_from = "value",
       id_select = "Row_ID"
     ),
     regexp = "Some values of the columns specified in 'names_from'"
@@ -69,7 +69,7 @@ test_that("data_reshape works as expected - long to wide", {
 
   # colnames
   long_data <- data_to_long(wide_data, select = c("X2", "X3"))
-  wide <- data_to_wide(long_data, names_from = "Name", values_from = "Value")
+  wide <- data_to_wide(long_data, names_from = "name", values_from = "value")
   expect_equal(colnames(wide), colnames(wide_data))
 })
 
@@ -210,8 +210,8 @@ d <- data.frame(
 
 test_that("data_reshape works as expected - simple dataset", {
   out <- data_to_long(d, starts_with("score"))
-  expect_equal(out$Name, c("score_t1", "score_t2", "score_t1", "score_t2", "score_t1", "score_t2"))
-  expect_equal(out$Value, c(d$score_t1, d$score_t2)[c(1, 4, 2, 5, 3, 6)])
+  expect_equal(out$name, c("score_t1", "score_t2", "score_t1", "score_t2", "score_t1", "score_t2"))
+  expect_equal(out$value, c(d$score_t1, d$score_t2)[c(1, 4, 2, 5, 3, 6)])
 
   out <- data_to_long(d, contains("t2"), names_to = "NewCol", values_to = "Time")
   expect_equal(out$NewCol, c("score_t2", "speed_t2", "score_t2", "speed_t2", "score_t2", "speed_t2"))
@@ -224,8 +224,8 @@ test_that("data_reshape works as expected - select-helper inside functions, usin
     data_to_long(data, select = i, regex = TRUE)
   }
   out <- test_fun(d, "^score")
-  expect_equal(out$Name, c("score_t1", "score_t2", "score_t1", "score_t2", "score_t1", "score_t2"))
-  expect_equal(out$Value, c(d$score_t1, d$score_t2)[c(1, 4, 2, 5, 3, 6)])
+  expect_equal(out$name, c("score_t1", "score_t2", "score_t1", "score_t2", "score_t1", "score_t2"))
+  expect_equal(out$value, c(d$score_t1, d$score_t2)[c(1, 4, 2, 5, 3, 6)])
 })
 
 
@@ -333,7 +333,7 @@ test_that("reshape_wider, values_fill errors when length > 1", {
 
 
 
-# EQUIVALENCE WITH TIDYR ----------------------------------------------------
+# EQUIVALENCE WITH TIDYR - PIVOT_WIDER -----------------------------------------------
 
 # Examples coming from: https://tidyr.tidyverse.org/articles/pivot.html#wider
 # and from https://github.com/tidyverse/tidyr/blob/main/tests/testthat/test-pivot-wide.R
@@ -476,3 +476,180 @@ test_that("reshape_wider equivalent to pivot_wider: ex 5", {
 })
 
 
+
+# EQUIVALENCE WITH TIDYR - PIVOT_LONGER -------------------------------------------
+
+# Examples coming from: https://tidyr.tidyverse.org/articles/pivot.html#longer
+
+test_that("reshape_longer equivalent to pivot_longer: ex 1", {
+  x <- relig_income %>%
+    pivot_longer(!religion, names_to = "income", values_to = "count")
+
+  y <- relig_income %>%
+    reshape_longer(select = -religion, names_to = "income", values_to = "count")
+
+  expect_equal(x, y, ignore_attr = TRUE)
+})
+
+
+test_that("reshape_longer equivalent to pivot_longer: ex 2", {
+  x <- billboard %>%
+    pivot_longer(
+      cols = starts_with("wk"),
+      names_to = "week",
+      values_to = "rank"
+    )
+
+  y <- billboard %>%
+    reshape_longer(
+      select = starts_with("wk"),
+      names_to = "week",
+      values_to = "rank"
+    )
+
+  expect_equal(x, y, ignore_attr = TRUE)
+})
+
+
+test_that("reshape_longer equivalent to pivot_longer: ex 3", {
+  x <- billboard %>%
+    pivot_longer(
+      cols = starts_with("wk"),
+      names_to = "week",
+      values_to = "rank",
+      values_drop_na = TRUE
+    )
+
+  y <- billboard %>%
+    reshape_longer(
+      select = starts_with("wk"),
+      names_to = "week",
+      values_to = "rank",
+      values_drop_na = TRUE
+    )
+
+  expect_equal(x, y, ignore_attr = TRUE)
+})
+
+
+test_that("reshape_longer equivalent to pivot_longer: ex 4", {
+  x <- billboard %>%
+    pivot_longer(
+      cols = starts_with("wk"),
+      names_to = "week",
+      names_prefix = "wk",
+      values_to = "rank",
+      values_drop_na = TRUE
+    )
+
+  y <- billboard %>%
+    reshape_longer(
+      select = starts_with("wk"),
+      names_to = "week",
+      names_prefix = "wk",
+      values_to = "rank",
+      values_drop_na = TRUE
+    )
+
+  expect_equal(x, y, ignore_attr = TRUE)
+})
+
+
+test_that("reshape_longer equivalent to pivot_longer: ex 5", {
+  suppressWarnings({
+    x <- who %>%
+      pivot_longer(
+        cols = 5:60,
+        names_to = c("diagnosis", "gender", "age"),
+        names_sep = "_",
+        values_to = "count"
+      )
+  })
+
+  y <- who %>%
+    reshape_longer(
+      select = 5:60,
+      names_to = c("diagnosis", "gender", "age"),
+      names_sep = "_",
+      values_to = "count"
+    )
+
+  expect_equal(x, y, ignore_attr = TRUE)
+})
+
+test_that("reshape_longer equivalent to pivot_longer: ex 6", {
+  x <- who %>%
+    pivot_longer(
+      cols = new_sp_m014:newrel_f65,
+      names_to = c("diagnosis", "gender", "age"),
+      names_pattern = "new_?(.*)_(.)(.*)",
+      values_to = "count"
+    )
+
+  y <- who %>%
+    reshape_longer(
+      select = 5:60,
+      names_to = c("diagnosis", "gender", "age"),
+      names_pattern = "new_?(.*)_(.)(.*)",
+      values_to = "count"
+    )
+
+  expect_equal(x, y, ignore_attr = TRUE)
+})
+
+
+
+# tests coming from tidyr's repo
+# https://github.com/tidyverse/tidyr/blob/main/tests/testthat/test-pivot-long.R
+
+test_that("can reshape all cols to long", {
+  df <- tibble(x = 1:2, y = 3:4)
+  pv <- reshape_longer(df, x:y)
+
+  expect_named(pv, c("name", "value"))
+  expect_equal(pv$name, rep(names(df), 2))
+  expect_equal(pv$value, c(1, 3, 2, 4))
+})
+
+test_that("values interleaved correctly", {
+  df <- tibble(
+    x = c(1, 2),
+    y = c(10, 20),
+    z = c(100, 200),
+  )
+  pv <- reshape_longer(df, 1:3)
+
+  expect_equal(pv$value, c(1, 10, 100, 2, 20, 200))
+})
+
+test_that("preserves original keys", {
+  df <- tibble(x = 1:2, y = 2, z = 1:2)
+  pv <- reshape_longer(df, y:z)
+
+  expect_named(pv, c("x", "name", "value"))
+  expect_equal(pv$x, rep(df$x, each = 2))
+})
+
+test_that("can drop missing values", {
+  df <- data.frame(x = c(1, NA), y = c(NA, 2))
+  pv <- reshape_longer(df, x:y, values_drop_na = TRUE)
+
+  expect_equal(pv$name, c("x", "y"))
+  expect_equal(pv$value, c(1, 2))
+})
+
+test_that("mixed columns are automatically coerced", {
+  df <- data.frame(x = factor("a"), y = factor("b"))
+  pv <- reshape_longer(df, x:y)
+
+  expect_equal(pv$value, factor(c("a", "b")))
+})
+
+test_that("error when overwriting existing column", {
+  df <- tibble(x = 1, y = 2)
+
+  expect_error(
+    reshape_longer(df, y, names_to = "x"),
+    regexp = "Some values of the columns specified in 'names_to' are already present"
+  )
+})
