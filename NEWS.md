@@ -18,6 +18,10 @@ MAJOR CHANGES
 * Given his continued and significant contributions to the package, 
   Etienne Bacher (@etiennebacher) is now included as an author.
   
+* `unstandardise()` now works for `center(x)`
+
+* `unnormalize()` now works for `change_scale(x)`
+  
 * `reshape_wider()` now follows more consistently `tidyr::pivot_wider()` syntax. 
   Arguments `colnames_from`, `sep`, and `rows_from` are deprecated and should be
   replaced by `names_from`, `names_sep`, and `id_cols` respectively (#182). 
@@ -36,10 +40,6 @@ CHANGES
   returning multiple training and a remaining test set.
 
 NEW FUNCTIONS
-
-* `unstandardise()` now works for `center(x)`
-
-* `unnormalize()` now works for `change_scale(x)`
 
 * `row_to_colnames()` and `colnames_to_row()` to move a row to column names,
   and column names to row (@etiennebacher, #169).
