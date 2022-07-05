@@ -156,17 +156,16 @@ data_to_long <- function(data,
           strsplit(long[[names_to_2]], names_sep, fixed = TRUE),
           function(x) x[i])
         )
+        long[[names_to[i]]] <- new_vals
       } else {
-        new_vals <- regmatches(
-          long[[names_to_2]],
-          regexec(names_pattern, long[[names_to_2]])
+        tmp <- regmatches(
+          unique(long[[names_to_2]]),
+          regexec(names_pattern, unique(long[[names_to_2]]))
         )
-        new_vals <- unlist(lapply(
-          new_vals,
-          function(x) x[[i + 1]]
-        ))
+        tmp <- as.data.frame(do.call(rbind, tmp))[, c(1, i + 1)]
+        names(tmp) <- c(names_to_2, names_to[i])
+        long <- data_join(long, tmp)
       }
-      long[[names_to[i]]] <- new_vals
     }
     long[[names_to_2]] <- NULL
   }
