@@ -39,7 +39,6 @@ ranktransform.numeric <- function(x,
                                   method = "average",
                                   verbose = TRUE,
                                   ...) {
-
   # no change if all values are `NA`s
   if (all(is.na(x))) {
     return(x)
@@ -147,7 +146,6 @@ ranktransform.data.frame <- function(x,
                                      method = "average",
                                      ignore_case = FALSE,
                                      ...) {
-
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case)
 

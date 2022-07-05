@@ -111,18 +111,13 @@ text_remove <- function(text, pattern = "", ...) {
 #' @rdname format_text
 #' @export
 text_wrap <- function(text, width = NULL, ...) {
-  if (is.null(width)) {
-    return(text)
-  }
+  width <- width %||% getOption("width")
 
   text <- strsplit(text, "\n", perl = TRUE)
   text <- unlist(text)
 
-  if (width == "auto") {
-    width <- 0.9 * getOption("width")
-  }
-
   wrapped <- ""
+
   for (s in text) {
     if (nchar(s) > width) {
       leading_spaces <- nchar(s) - nchar(trimws(s))
@@ -132,5 +127,6 @@ text_wrap <- function(text, width = NULL, ...) {
     }
     wrapped <- paste0(wrapped, s, "\n")
   }
+
   wrapped
 }

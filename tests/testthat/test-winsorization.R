@@ -50,4 +50,3 @@ test_that("winsorize on data.frame", {
   )
   expect_equal(names(iris2), names(iris))
 })
-

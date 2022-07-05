@@ -328,7 +328,6 @@ test_that("convert_na_to - dataframe: arg 'exclude' works", {
 })
 
 test_that("convert_na_to - dataframe: works when arg 'select' is a list", {
-
   # numeric
   expect_equal(
     convert_na_to(test, replace_num = 4, select = list(x = 0)),

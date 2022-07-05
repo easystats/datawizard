@@ -177,7 +177,7 @@ data_to_long <- function(data,
 #' tibble. Otherwise, it returns a dataframe.
 #'
 #' @examples
-#' data_long <- read.table(header=TRUE, text='
+#' data_long <- read.table(header = TRUE, text = "
 #'  subject sex condition measurement
 #'        1   M   control         7.9
 #'        1   M     cond1        12.3
@@ -190,8 +190,7 @@ data_to_long <- function(data,
 #'        3   F     cond2        13.8
 #'        4   M   control        11.5
 #'        4   M     cond1        13.4
-#'        4   M     cond2        12.9'
-#' )
+#'        4   M     cond2        12.9")
 #'
 #'
 #' reshape_wider(
@@ -240,7 +239,6 @@ data_to_wide <- function(data,
                          colnames_from,
                          rows_from,
                          sep) {
-
   if (!missing(colnames_from)) {
     .is_deprecated("colnames_from", "names_from")
     if (is.null(names_from)) {
@@ -288,8 +286,9 @@ data_to_wide <- function(data,
   if (any(future_colnames %in% current_colnames)) {
     stop(insight::format_message(
       "Some values of the columns specified in 'names_from' are already present as column names.",
-      paste0("Either use `name_prefix` or rename the following columns: ",
-             text_concatenate(current_colnames[which(current_colnames %in% future_colnames)])
+      paste0(
+        "Either use `name_prefix` or rename the following columns: ",
+        text_concatenate(current_colnames[which(current_colnames %in% future_colnames)])
       )
     ), call. = FALSE)
   }
@@ -337,7 +336,6 @@ data_to_wide <- function(data,
 
   # Fill missing values
   if (!is.null(values_fill)) {
-
     if (length(values_fill) == 1) {
       if (is.numeric(wide[[new_cols[1]]])) {
         if (!is.numeric(values_fill)) {
@@ -363,7 +361,6 @@ data_to_wide <- function(data,
         stop(insight::format_message("`values_fill` must be of length 1."), call. = FALSE)
       }
     }
-
   }
 
 

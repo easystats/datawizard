@@ -69,7 +69,8 @@ test_that("normalize: matrix", {
 test_that("normalize: select", {
   expect_equal(
     normalize(
-      iris, select = starts_with("Petal\\.L")
+      iris,
+      select = starts_with("Petal\\.L")
     ) %>%
       pull(Petal.Length),
     normalize(iris$Petal.Length)
@@ -79,7 +80,8 @@ test_that("normalize: select", {
 test_that("normalize: exclude", {
   expect_equal(
     normalize(
-      iris, exclude = ends_with("ecies")
+      iris,
+      exclude = ends_with("ecies")
     ),
     iris %>%
       normalize(select = 1:4)
@@ -98,7 +100,7 @@ test_that("normalize (grouped data)", {
 
   manual <- iris %>%
     group_by(Species) %>%
-    mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width))/diff(range(Sepal.Width))) %>%
+    mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width)) / diff(range(Sepal.Width))) %>%
     ungroup() %>%
     pull(Sepal.Width)
 
@@ -114,7 +116,7 @@ test_that("normalize, include bounds (grouped data)", {
 
   manual <- iris %>%
     group_by(Species) %>%
-    mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width))/diff(range(Sepal.Width))) %>%
+    mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width)) / diff(range(Sepal.Width))) %>%
     ungroup() %>%
     pull(Sepal.Width)
 

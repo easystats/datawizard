@@ -23,7 +23,6 @@
 
 data_restoretype <- function(data, reference = NULL, ...) {
   for (col in names(data)) {
-
     # No reference data (regular fixing) ----------------
     if (is.null(reference)) {
       if (is.character(data[[col]])) {

@@ -38,7 +38,6 @@ unnormalize.data.frame <- function(x,
                                    ignore_case = FALSE,
                                    verbose = TRUE,
                                    ...) {
-
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
   x[select] <- lapply(x[select], unnormalize, verbose = verbose)
