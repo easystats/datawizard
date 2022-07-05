@@ -74,7 +74,6 @@ test_that("ranktransform works with dataframes (grouped data)", {
       group_by(id) %>%
       ranktransform(exclude = "id") %>%
       ungroup(),
-
     data.frame(
       id = rep(c("A", "B", "C"), each = 3),
       value1 = c(2, 3, 1, 1, 2, 3, 2, 1, 3),
@@ -102,7 +101,6 @@ test_that("ranktransform works with dataframes containing NAs (grouped data)", {
       group_by(id) %>%
       ranktransform(exclude = "id") %>%
       ungroup(),
-
     data.frame(
       id = rep(c("A", "B", "C"), each = 3),
       value1 = c(2, NA, 1, 1, 3, 2, 2, NA, 1),

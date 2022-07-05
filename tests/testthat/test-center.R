@@ -41,9 +41,10 @@ z <- center(iris, select = "Species", force = TRUE)
 v <- as.numeric(iris$Species)
 test_that("center, force factors", {
   expect_equal(as.vector(z$Species),
-               v - median(v),
-               tolerance = 1e-4,
-               ignore_attr = TRUE)
+    v - median(v),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
 })
 
 test_that("center, all na", {

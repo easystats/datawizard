@@ -57,7 +57,6 @@ data_reverse.numeric <- function(x,
                                  range = NULL,
                                  verbose = TRUE,
                                  ...) {
-
   # Warning if all NaNs
   if (all(is.na(x))) {
     return(x)
@@ -91,7 +90,6 @@ data_reverse.numeric <- function(x,
 
 #' @export
 data_reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
-
   # Warning if all NaNs
   if (all(is.na(x))) {
     return(x)

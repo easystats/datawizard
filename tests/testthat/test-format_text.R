@@ -35,10 +35,6 @@ test_that("text formatting helpers work as expected", {
     c("one", "two", "three")
   )
 
-  long_text <- paste(rep("abc ", 100), collapse = "")
-  expect_snapshot(cat(text_wrap(long_text, width = 50)))
-  expect_snapshot(cat(text_wrap(long_text, width = 80)))
-
   expect_equal(
     text_paste(c("A", "", "B"), c("42", "42", "42")),
     c("A, 42", "42", "B, 42")
@@ -48,4 +44,16 @@ test_that("text formatting helpers work as expected", {
     text_paste(c("A", "", "B"), c("42", "42", "42"), enclose = "`"),
     c("`A`, `42`", "`42`", "`B`, `42`")
   )
+})
+
+test_that("text formatters respect `width` argument", {
+  expect_snapshot({
+    long_text <- paste(rep("abc ", 100), collapse = "")
+    cat(format_text(long_text, width = 50))
+    cat(format_text(long_text, width = 80))
+
+    withr::with_options(list(width = 50), code = {
+      cat(format_text(long_text))
+    })
+  })
 })

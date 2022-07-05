@@ -30,16 +30,20 @@
 #' hist(iris$Sepal.Length, main = "Original data")
 #'
 #' hist(winsorize(iris$Sepal.Length, threshold = 0.2),
-#'      xlim = c(4, 8), main = "Percentile Winsorization")
+#'   xlim = c(4, 8), main = "Percentile Winsorization"
+#' )
 #'
 #' hist(winsorize(iris$Sepal.Length, threshold = 1.5, method = "zscore"),
-#'      xlim = c(4, 8), main = "Mean (+/- SD) Winsorization")
+#'   xlim = c(4, 8), main = "Mean (+/- SD) Winsorization"
+#' )
 #'
 #' hist(winsorize(iris$Sepal.Length, threshold = 1.5, method = "zscore", robust = TRUE),
-#'      xlim = c(4, 8), main = "Median (+/- MAD) Winsorization")
+#'   xlim = c(4, 8), main = "Median (+/- MAD) Winsorization"
+#' )
 #'
 #' hist(winsorize(iris$Sepal.Length, threshold = c(5, 7.5), method = "raw"),
-#'      xlim = c(4, 8), main = "Raw Thresholds")
+#'   xlim = c(4, 8), main = "Raw Thresholds"
+#' )
 #'
 #' # Also works on a data frame:
 #' winsorize(iris, threshold = 0.2)
@@ -84,7 +88,7 @@ winsorize.numeric <- function(data, threshold = 0.2, method = "percentile", robu
     }
   }
 
-  if(method == "percentile") {
+  if (method == "percentile") {
     if (threshold < 0 || threshold > 0.5) {
       if (isTRUE(verbose)) {
         warning(insight::format_message("'threshold' for winsorization must be a scalar between 0 and 0.5. Did not winsorize data."), call. = FALSE)
@@ -100,8 +104,7 @@ winsorize.numeric <- function(data, threshold = 0.2, method = "percentile", robu
     threshold <- c(y[ibot], y[itop])
   }
 
-  if(method == "zscore") {
-
+  if (method == "zscore") {
     if (threshold <= 0) {
       if (isTRUE(verbose)) {
         warning(insight::format_message("'threshold' for winsorization must be a scalar greater than 0. Did not winsorize data."), call. = FALSE)
@@ -109,7 +112,7 @@ winsorize.numeric <- function(data, threshold = 0.2, method = "percentile", robu
       return(data)
     }
 
-    if(isTRUE(robust)) {
+    if (isTRUE(robust)) {
       centeral <- stats::median(data, na.rm = TRUE)
       deviation <- stats::mad(data, center = centeral, na.rm = TRUE)
     } else {

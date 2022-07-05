@@ -246,7 +246,6 @@ describe_distribution.factor <- function(x,
                                          range = TRUE,
                                          verbose = TRUE,
                                          ...) {
-
   # Missing
   n_missing <- sum(is.na(x))
   x <- stats::na.omit(x)
@@ -307,7 +306,6 @@ describe_distribution.character <- function(x,
                                             range = TRUE,
                                             verbose = TRUE,
                                             ...) {
-
   # Missing
   n_missing <- sum(is.na(x))
   x <- stats::na.omit(x)

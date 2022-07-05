@@ -152,7 +152,6 @@ data_adjust <- adjust
                               bayesian = FALSE,
                               formula_random = NULL,
                               keep_intercept = FALSE) {
-
   # Additive -----------------------
   if (additive) {
     # Bayesian
