@@ -23,6 +23,7 @@ A data frame.
 columns.
 }
 \examples{
+\dontrun{
 # Arrange using several variables
 data_arrange(head(mtcars), "gear", "carb")
 
@@ -31,5 +32,5 @@ data_arrange(head(mtcars), "-carb")
 
 # Throw an error if one of the variables specified doesn't exist
 data_arrange(head(mtcars), "gear", "foo", safe = FALSE)
-
+}
 }
