@@ -580,9 +580,151 @@ fish_encounters %>%
 ```{r pivot3, eval = TRUE, echo = FALSE}
 ```
 
+
+
 ## Joining {#joining}
 
-<!-- TODO: dplyr::*_join() functions and data_join() -->
+<!-- explain a bit more the args of data_join -->
+
+In `{datawizard}`, joining datasets is done with `data_join()` (or its alias 
+`data_merge()`). Contrary to `{dplyr}`, this unique function takes care of all 
+types of join, which are then specified inside the function with the argument
+`join` (by default, `join = "left"`).
+
+Below, we show how to perform the four most common joins: full, left, right and 
+inner. We will use the datasets `band_members`and `band_instruments` provided by `{dplyr}`:
+
+:::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
+
+::: {}
+
+```{r eval = TRUE}
+band_members 
+```
+:::
+
+::: {}
+
+```{r eval = TRUE}
+band_instruments 
+```
+:::
+
+::::
+
+
+### Full join
+
+:::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
+
+::: {}
+
+```{r join1, class.source = "datawizard"}
+# ---------- datawizard -----------
+band_members %>% 
+  data_join(band_instruments, join = "full")
+```
+:::
+
+::: {}
+
+```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
+band_members %>% 
+  full_join(band_instruments)
+```
+:::
+
+::::
+
+```{r join1, eval = TRUE, echo = FALSE}
+```
+
+
+
+### Left and right joins
+
+:::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
+
+::: {}
+
+```{r join2, class.source = "datawizard"}
+# ---------- datawizard -----------
+band_members %>% 
+  data_join(band_instruments, join = "left")
+```
+:::
+
+::: {}
+
+```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
+band_members %>% 
+  left_join(band_instruments)
+```
+:::
+
+::::
+
+```{r join2, eval = TRUE, echo = FALSE}
+```
+
+
+:::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
+
+::: {}
+
+```{r join3, class.source = "datawizard"}
+# ---------- datawizard -----------
+band_members %>% 
+  data_join(band_instruments, join = "right")
+```
+:::
+
+::: {}
+
+```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
+band_members %>% 
+  right_join(band_instruments)
+```
+:::
+
+::::
+
+```{r join3, eval = TRUE, echo = FALSE}
+```
+
+
+
+### Inner join
+
+:::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
+
+::: {}
+
+```{r join4, class.source = "datawizard"}
+# ---------- datawizard -----------
+band_members %>% 
+  data_join(band_instruments, join = "inner")
+```
+:::
+
+::: {}
+
+```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
+band_members %>% 
+  inner_join(band_instruments)
+```
+:::
+
+::::
+
+```{r join4, eval = TRUE, echo = FALSE}
+```
+
+
 
 # Other useful functions
 
