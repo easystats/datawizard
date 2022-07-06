@@ -39,6 +39,9 @@ CHANGES
 * `data_partition()` now allows to create multiple partitions from the data,
   returning multiple training and a remaining test set.
 
+* Functions like `center()`, `normalize()` or `standardize()` no longer fail
+  when data contains infinite values (`Inf`).
+
 NEW FUNCTIONS
 
 * `row_to_colnames()` and `colnames_to_row()` to move a row to column names,
