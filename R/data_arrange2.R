@@ -4,22 +4,26 @@
 #' columns.
 #'
 #' @param data A data frame, or an object that can be coerced to a data frame.
-#' @param ... Quoted column names. Use a dash just before column name to arrange
-#'   in decreasing order, for example "-x1".
-#' @param safe Do not throw an error if one of the variables specified doesn't
-#'   exist.
+#' @param descending Vector of logicals. Can be of length 1, or of same length
+#'   as selected variables in `select`. Indicates for each variable whether it
+#'   should be sorted in descending order or not. By default, if `descending = NULL`,
+#'   all selected variables will be sorted in ascending order. If `descending`
+#'   is of length one and `TRUE`, all variables will be sorted in descending
+#'   order. Else, variables indicated with a `TRUE` will be sorted in descending
+#'   order.
+#' @inheritParams find_columns
 #'
 #' @return A data frame.
 #'
 #' @examples
 #' # Arrange using several variables
-#' data_arrange(head(mtcars), "gear", "carb")
+#' data_arrange2(head(mtcars), select = c("gear", "carb"))
 #'
-#' # Arrange in decreasing order
-#' data_arrange(head(mtcars), "-carb")
+#' # Arrange all in decreasing order
+#' data_arrange2(head(mtcars), c("gear", "carb"), descending = TRUE)
 #'
-#' # Throw an error if one of the variables specified doesn't exist
-#' data_arrange(head(mtcars), "gear", "foo", safe = FALSE)
+#' # Arrange 2nd in decreasing order
+#' data_arrange2(head(mtcars), c("gear", "carb"), descending = c(FALSE, TRUE))
 #'
 #' @export
 
@@ -38,7 +42,7 @@ data_arrange2 <- function(data,
   if (!is.null(descending) && length(descending) > 0) {
     # must be a vector of logicals
     if (!all(is.logical(descending))) {
-      stop(insight::format_message("`descending` must a a vector of logicals, either of length 1 or of same length as `select`."), call. = FALSE)
+      stop(insight::format_message("`descending` must a a vector of logicals, either of length 1 or of same length as variables selected by `select`."), call. = FALSE)
     }
     for (i in select[descending]) {
       out[[i]] <- -xtfrm(out[[i]])

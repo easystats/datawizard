@@ -8,7 +8,6 @@ data_arrange2(
   data,
   select = NULL,
   exclude = NULL,
-  ascending = NULL,
   descending = NULL,
   ignore_case = FALSE,
   ...
@@ -17,11 +16,53 @@ data_arrange2(
 \arguments{
 \item{data}{A data frame, or an object that can be coerced to a data frame.}
 
-\item{...}{Quoted column names. Use a dash just before column name to arrange
-in decreasing order, for example "-x1".}
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}), or a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item a vector of positive integers, giving the positions counting from the left
+(e.g. \code{1} or \code{c(1, 3, 5)}),
+\item a vector of negative integers, giving the positions counting from the
+right (e.g., \code{-1} or \code{-1:-3}),
+\item one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")},
+\item or a function testing for logical conditions, e.g. \code{is.numeric()} (or
+\code{is.numeric}), or any user-defined function that selects the variables
+for which the function returns \code{TRUE} (like: \code{foo <- function(x) mean(x) > 3}),
+\item ranges specified via literal variable names, select-helpers (except
+\code{regex()}) and (user-defined) functions can be negated, i.e. return
+non-matching elements, when prefixed with a \code{-}, e.g. \code{-ends_with("")},
+\code{-is.numeric} or \code{-Sepal.Width:Petal.Length}. \strong{Note:} Negation means
+that matches are \emph{excluded}, and thus, the \code{exclude} argument can be
+used alternatively. For instance, \code{select=-ends_with("Length")} (with
+\code{-}) is equivalent to \code{exclude=ends_with("Length")} (no \code{-}). In case
+negation should not work as expected, use the \code{exclude} argument instead.
+}
 
-\item{safe}{Do not throw an error if one of the variables specified doesn't
-exist.}
+If \code{NULL}, selects all columns. Patterns that found no matches are silently
+ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
+return \code{"Species"}.}
+
+\item{exclude}{See \code{select}, however, column names matched by the pattern
+from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
+excludes no columns.}
+
+\item{descending}{Vector of logicals. Can be of length 1, or of same length
+as selected variables in \code{select}. Indicates for each variable whether it
+should be sorted in descending order or not. By default, if \code{descending = NULL},
+all selected variables will be sorted in ascending order. If \code{descending}
+is of length one and \code{TRUE}, all variables will be sorted in descending
+order. Else, variables indicated with a \code{TRUE} will be sorted in descending
+order.}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
+
+\item{...}{Arguments passed down to other functions. Mostly not used yet.}
 }
 \value{
 A data frame.
@@ -32,12 +73,12 @@ columns.
 }
 \examples{
 # Arrange using several variables
-data_arrange(head(mtcars), "gear", "carb")
+data_arrange2(head(mtcars), select = c("gear", "carb"))
 
-# Arrange in decreasing order
-data_arrange(head(mtcars), "-carb")
+# Arrange all in decreasing order
+data_arrange2(head(mtcars), c("gear", "carb"), descending = TRUE)
 
-# Throw an error if one of the variables specified doesn't exist
-data_arrange(head(mtcars), "gear", "foo", safe = FALSE)
+# Arrange 2nd in decreasing order
+data_arrange2(head(mtcars), c("gear", "carb"), descending = c(FALSE, TRUE))
 
 }
