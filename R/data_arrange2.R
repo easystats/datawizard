@@ -26,21 +26,21 @@
 data_arrange2 <- function(data,
                           select = NULL,
                           exclude = NULL,
-                          ascending = NULL,
                           descending = NULL,
                           ignore_case = FALSE,
                           ...) {
 
   # evaluate arguments
   select <- .select_nse(select, data, exclude, ignore_case)
-  ascending <- .select_nse(ascending, data, descending, ignore_case)
-  descending <- setdiff(select, ascending)
-
   out <- data
 
   # reverse order for variables that should be decreasing
   if (!is.null(descending) && length(descending) > 0) {
-    for (i in descending) {
+    # must be a vector of logicals
+    if (!all(is.logical(descending))) {
+      stop(insight::format_message("`descending` must a a vector of logicals, either of length 1 or of same length as `select`."), call. = FALSE)
+    }
+    for (i in select[descending]) {
       out[[i]] <- -xtfrm(out[[i]])
     }
   }
