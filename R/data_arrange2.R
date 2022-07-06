@@ -36,6 +36,11 @@ data_arrange2 <- function(data,
 
   # evaluate arguments
   select <- .select_nse(select, data, exclude, ignore_case)
+
+  # old code, from character-vector-approach
+  # ascending <- .select_nse(ascending, data, descending, ignore_case)
+  # descending <- setdiff(select, ascending)
+
   out <- data
 
   # reverse order for variables that should be decreasing
@@ -47,6 +52,11 @@ data_arrange2 <- function(data,
     for (i in select[descending]) {
       out[[i]] <- -xtfrm(out[[i]])
     }
+
+    # old code, from character-vector-approach
+    # for (i in descending) {
+    #   out[[i]] <- -xtfrm(out[[i]])
+    # }
   }
 
   # apply ordering
