@@ -84,12 +84,18 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
     }
   }
 
+  # Get infinite and replace by NA (so that the normalization doesn't fail)
+  infinite_idx <- is.infinite(x)
+  infinite_vals <- x[infinite_idx]
 
   out <- as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE), na.rm = TRUE))
 
   if (!include_bounds && (any(out == 0) | any(out == 1))) {
     out <- (out * (length(out) - 1) + 0.5) / length(out)
   }
+
+  # Re-insert infinite values
+  out[infinite_idx] <- infinite_vals
 
   attr(out, "include_bounds") <- isTRUE(include_bounds)
   attr(out, "min_value") <- min(x, na.rm = TRUE)
