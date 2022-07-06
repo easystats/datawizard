@@ -55,16 +55,20 @@ their more standard forms.
 hist(iris$Sepal.Length, main = "Original data")
 
 hist(winsorize(iris$Sepal.Length, threshold = 0.2),
-     xlim = c(4, 8), main = "Percentile Winsorization")
+  xlim = c(4, 8), main = "Percentile Winsorization"
+)
 
 hist(winsorize(iris$Sepal.Length, threshold = 1.5, method = "zscore"),
-     xlim = c(4, 8), main = "Mean (+/- SD) Winsorization")
+  xlim = c(4, 8), main = "Mean (+/- SD) Winsorization"
+)
 
 hist(winsorize(iris$Sepal.Length, threshold = 1.5, method = "zscore", robust = TRUE),
-     xlim = c(4, 8), main = "Median (+/- MAD) Winsorization")
+  xlim = c(4, 8), main = "Median (+/- MAD) Winsorization"
+)
 
 hist(winsorize(iris$Sepal.Length, threshold = c(5, 7.5), method = "raw"),
-     xlim = c(4, 8), main = "Raw Thresholds")
+  xlim = c(4, 8), main = "Raw Thresholds"
+)
 
 # Also works on a data frame:
 winsorize(iris, threshold = 0.2)

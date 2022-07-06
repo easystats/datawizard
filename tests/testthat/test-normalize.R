@@ -25,6 +25,43 @@ test_that("normalize: only NAs", {
   )
 })
 
+
+test_that("normalize: with Inf", {
+  expect_equal(
+    normalize(c(1, 2, 3, NA, Inf)),
+    c(0, 0.5, 1, NA, Inf),
+    ignore_attr = TRUE
+  )
+})
+
+
+test_that("normalize: with Inf", {
+  expect_equal(
+    normalize(c(1, 2, 3, -Inf, Inf)),
+    c(0, 0.5, 1, -Inf, Inf),
+    ignore_attr = TRUE
+  )
+})
+
+
+test_that("normalize: all Inf", {
+  expect_equal(
+    normalize(c(-Inf, Inf)),
+    c(-Inf, Inf),
+    ignore_attr = TRUE
+  )
+})
+
+
+test_that("normalize: all Na or Inf", {
+  expect_equal(
+    normalize(c(NA, -Inf, NA, Inf)),
+    c(NA, -Inf, NA, Inf),
+    ignore_attr = TRUE
+  )
+})
+
+
 test_that("normalize: only one value", {
   foo <- c(1)
   expect_warning(

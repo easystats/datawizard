@@ -52,19 +52,26 @@ normalize <- function(x, ...) {
 #' @rdname normalize
 #' @export
 normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
-  # Warning if all NaNs
-  if (all(is.na(x))) {
+  # Warning if all NaNs or infinite
+  if (all(is.infinite(x) | is.na(x))) {
     return(x)
   }
 
+  # safe name, for later use
+  if (is.null(names(x))) {
+    name <- deparse(substitute(x))
+  } else {
+    name <- names(x)
+  }
+
+  # Get infinite and replace by NA (so that the normalization doesn't fail)
+  infinite_idx <- is.infinite(x)
+  infinite_vals <- x[infinite_idx]
+  x[infinite_idx] <- NA
+
 
   # Warning if only one value
-  if (length(unique(x)) == 1) {
-    if (is.null(names(x))) {
-      name <- deparse(substitute(x))
-    } else {
-      name <- names(x)
-    }
+  if (insight::n_unique(x) == 1) {
     if (verbose) {
       warning(insight::format_message(paste0("Variable `", name, "` contains only one unique value and will not be normalized.")), call. = FALSE)
     }
@@ -73,12 +80,7 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
 
 
   # Warning if logical vector
-  if (length(unique(x)) == 2) {
-    if (is.null(names(x))) {
-      name <- deparse(substitute(x))
-    } else {
-      name <- names(x)
-    }
+  if (insight::n_unique(x) == 2) {
     if (verbose) {
       warning(insight::format_message(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor.")), call. = FALSE)
     }
@@ -90,6 +92,9 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   if (!include_bounds && (any(out == 0) | any(out == 1))) {
     out <- (out * (length(out) - 1) + 0.5) / length(out)
   }
+
+  # Re-insert infinite values
+  out[infinite_idx] <- infinite_vals
 
   attr(out, "include_bounds") <- isTRUE(include_bounds)
   attr(out, "min_value") <- min(x, na.rm = TRUE)

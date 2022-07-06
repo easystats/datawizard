@@ -1,7 +1,7 @@
 Type: Package
 Package: datawizard
-Title: Easy Data Wrangling
-Version: 0.4.1.6
+Title: Easy Data Wrangling and Statistical Transformations
+Version: 0.4.1.7
 Authors@R: c(
     person("Dominique", "Makowski", , "dom.makowski@gmail.com", role = "aut",
            comment = c(ORCID = "0000-0001-5375-9967", Twitter = "@Dom_Makowski")),
@@ -19,13 +19,13 @@ Maintainer: Indrajeet Patil <patilindrajeet.science@gmail.com>
 Description: A lightweight package to easily manipulate, clean, transform,
     and prepare your data for analysis. It also forms the data wrangling
     backend for the packages in the 'easystats' ecosystem.
-License: GPL-3
+License: GPL (>= 3) + file LICENSE
 URL: https://easystats.github.io/datawizard/
 BugReports: https://github.com/easystats/datawizard/issues
 Depends:
     R (>= 3.5)
 Imports:
-    insight (>= 0.17.1),
+    insight (>= 0.18.0),
     stats,
     utils
 Suggests: 

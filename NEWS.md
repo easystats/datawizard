@@ -18,6 +18,10 @@ MAJOR CHANGES
 * Given his continued and significant contributions to the package, 
   Etienne Bacher (@etiennebacher) is now included as an author.
   
+* `unstandardise()` now works for `center(x)`
+
+* `unnormalize()` now works for `change_scale(x)`
+  
 * `reshape_wider()` now follows more consistently `tidyr::pivot_wider()` syntax. 
   Arguments `colnames_from`, `sep`, and `rows_from` are deprecated and should be
   replaced by `names_from`, `names_sep`, and `id_cols` respectively (#182). 
@@ -34,6 +38,9 @@ CHANGES
 
 * `data_partition()` now allows to create multiple partitions from the data,
   returning multiple training and a remaining test set.
+
+* Functions like `center()`, `normalize()` or `standardize()` no longer fail
+  when data contains infinite values (`Inf`).
 
 NEW FUNCTIONS
 
