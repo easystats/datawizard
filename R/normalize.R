@@ -57,6 +57,13 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
     return(x)
   }
 
+  # safe name, for later use
+  if (is.null(names(x))) {
+    name <- deparse(substitute(x))
+  } else {
+    name <- names(x)
+  }
+
   # Get infinite and replace by NA (so that the normalization doesn't fail)
   infinite_idx <- is.infinite(x)
   infinite_vals <- x[infinite_idx]
@@ -65,11 +72,6 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
 
   # Warning if only one value
   if (insight::n_unique(x) == 1) {
-    if (is.null(names(x))) {
-      name <- deparse(substitute(x))
-    } else {
-      name <- names(x)
-    }
     if (verbose) {
       warning(insight::format_message(paste0("Variable `", name, "` contains only one unique value and will not be normalized.")), call. = FALSE)
     }
@@ -79,11 +81,6 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
 
   # Warning if logical vector
   if (insight::n_unique(x) == 2) {
-    if (is.null(names(x))) {
-      name <- deparse(substitute(x))
-    } else {
-      name <- names(x)
-    }
     if (verbose) {
       warning(insight::format_message(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor.")), call. = FALSE)
     }
