@@ -40,6 +40,9 @@ NEW FUNCTIONS
 * `row_to_colnames()` and `colnames_to_row()` to move a row to column names,
   and column names to row (@etiennebacher, #169).
 
+* `data_arrange()` to sort the rows of a dataframe according to the values of
+  the selected columns.
+
 BUG FIXES
 
 * Fixed wrong column names in `data_to_wide()` (#173).
