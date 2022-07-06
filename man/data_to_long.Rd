@@ -108,7 +108,7 @@ functions (see 'Details'), this argument may be used as workaround.}
 
 \item{...}{Currently not used.}
 
-\item{cols}{Deprecated. Please use \code{select}.}
+\item{cols}{Deprecated. Use \code{select} instead.}
 
 \item{colnames_to}{Deprecated. Use \code{names_to} instead.}
 }

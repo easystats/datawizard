@@ -22,7 +22,7 @@
 #'   numbers from the original data. If `NULL`, will be removed.
 #' @param ... Currently not used.
 #' @inheritParams find_columns
-#' @param cols Deprecated. Please use `select`.
+#' @param cols Deprecated. Use `select` instead.
 #' @param colnames_to Deprecated. Use `names_to` instead.
 #'
 #' @return If a tibble was provided as input, `reshape_longer()` also returns a
