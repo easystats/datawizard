@@ -37,7 +37,7 @@ affiliations:
 - index: 6
   name: University Medical Center Hamburg-Eppendorf, Germany
     
-date: "2022-07-05"
+date: "2022-07-06"
 bibliography: paper.bib
 output: rticles::joss_article
 csl: apa.csl
@@ -49,25 +49,24 @@ link-citations: yes
 
 # Summary
 
-The `{datawizard}` package in the R programming language [@base2021] provides a lightweight toolbox to assist in keys steps involved in any data analysis workflow: (*i*) wrangling the raw data to get it in the needed form, (*ii*) applying statistical transformations, and (*iii*) carrying out sanity checks for transformed data. Therefore, it can be a valuable tool for R users and developers looking for a lightweight option for data preprocessing.
+The `{datawizard}` package for the R programming language [@base2021] provides a lightweight toolbox to assist in keys steps involved in any data analysis workflow: (1) wrangling the raw data to get it in the needed form, (2) applying preprocessing steps and statistical transformations, and (3) carrying out sanity checks for transformed data. Therefore, it can be a valuable tool for R users and developers looking for a lightweight option for data preparation.
 
 # Statement of Need
 
-The `{datawizard}` package makes basic data wrangling easier than with base R. Its workflow and syntax are designed to be similar to `{tidyverse}` (@Wickham2019), which is a widely used ecosystem of packages for data analysis, and, therefore, users familiar with this ecosystem can easily translate their knowledge. Naturally, one might wonder why recreate data wrangling functionality already present in `{tidyverse}`.
-
-The `{easystats}` (@Ben-Shachar2020, @Lüdecke2020parameters, @Lüdecke2020performance, @Lüdecke2021see, @Lüdecke2019, @Makowski2019, @Makowski2020) is an ecosystem of packages designed to make statistical analysis easier in R. Importantly, in order to be lightweight, it follows a "0-external-hard-dependency" policy. Thus, while building this ecosystem, a new data wrangling package that relies only on base R needed to be created.
-In effect, the `{datawizard}` package provides data processing backend for this entire ecosystem.
+The `{datawizard}` package is part of `{easystats}`, a collection of R packages designed to make statistical analysis easier (@Ben-Shachar2020, @Lüdecke2020parameters, @Lüdecke2020performance, @Lüdecke2021see, @Lüdecke2019, @Makowski2019, @Makowski2020). As this ecosystem follows a "0-external-hard-dependency" policy, a base R data manipulation package that relies only on base R needed to be created. In effect, `{datawizard}` provides data processing backend for this entire ecosystem. 
 In addition to its usefulness to the `{easystats}` ecosystem, it also provides *an* option for R users and package developers if they wish to keep their (recursive) dependency weight to a minimum (for other options, see @Dowle2021, @Eastwood2021, etc.).
 
-In addition to providing functions to clean messy data, `{datawizard}` also provides helpers for the other important step of data analysis: applying statistical transformations to the cleaned data while setting up statistical models. For example, one may need to standardize variables, normalize range of variables, adjust the data for effect of some variables, etc.
+Because `{datawizard}` is also meant to be used and adopted easily by a wide range of users, its workflow and syntax are designed to be similar to `{tidyverse}` (@Wickham2019), a widely used ecosystem of R packages. Thus, users familiar with the `{tidyverse}` can easily translate their knowledge and make full usage of `{datawizard}`.
+
+In addition to being a lightweight solution to clean messy data, `{datawizard}` also provides helpers for the other important step of data analysis: applying statistical transformations to the cleaned data while setting up statistical models. This includes various types of data standardization, normalization, rank-transformation, and adjustment.
 
 Lastly, `{datawizard}` also provides a toolbox to create a detailed profile of data properties.
 
 # Features
 
-## Data wrangling
+## Data Manipulation
 
-The raw data is rarely in a state that it can be directly fed into a statistical model. It often needs to be modified in various ways. For example, columns need to be renamed, certain portions of the data need to be filtered out, data scattered across multiple tables needs to be joined, etc. 
+The raw data is rarely in a state that it can be directly fed into a statistical model. It often needs to be modified in various ways. For example, columns need to be renamed, certain portions of the data need to be filtered out, reshape data, data scattered across multiple tables needs to be joined, etc. 
 
 `{datawizard}` provides various functions for cleaning and preparing data (see Table 1).
 
@@ -95,12 +94,12 @@ stocks <- data.frame(
 )
 
 stocks
-#>         time         X          Y
-#> 1 2009-01-01 0.7400882  0.1440974
-#> 2 2009-01-02 0.0959548  2.4185563
-#> 3 2009-01-03 1.1164848  1.9091325
-#> 4 2009-01-04 0.4758022  1.8966163
-#> 5 2009-01-05 0.5961267 -0.2619180
+#>         time          X           Y
+#> 1 2009-01-01 -0.1024603  0.53871711
+#> 2 2009-01-02  2.3092367 -0.61636862
+#> 3 2009-01-03  1.5933258 -0.04934983
+#> 4 2009-01-04  1.1786538  0.24527390
+#> 5 2009-01-05  1.1808358  1.58668237
 
 data_to_long(
   stocks,
@@ -108,22 +107,22 @@ data_to_long(
   colnames_to = "stock",
   values_to = "price"
 )
-#>          time stock      price
-#> 1  2009-01-01     X  0.7400882
-#> 2  2009-01-01     Y  0.1440974
-#> 3  2009-01-02     X  0.0959548
-#> 4  2009-01-02     Y  2.4185563
-#> 5  2009-01-03     X  1.1164848
-#> 6  2009-01-03     Y  1.9091325
-#> 7  2009-01-04     X  0.4758022
-#> 8  2009-01-04     Y  1.8966163
-#> 9  2009-01-05     X  0.5961267
-#> 10 2009-01-05     Y -0.2619180
+#>          time stock       price
+#> 1  2009-01-01     X -0.10246027
+#> 2  2009-01-01     Y  0.53871711
+#> 3  2009-01-02     X  2.30923666
+#> 4  2009-01-02     Y -0.61636862
+#> 5  2009-01-03     X  1.59332579
+#> 6  2009-01-03     Y -0.04934983
+#> 7  2009-01-04     X  1.17865378
+#> 8  2009-01-04     Y  0.24527390
+#> 9  2009-01-05     X  1.18083585
+#> 10 2009-01-05     Y  1.58668237
 ```
 
-## Statistical transformations
+## Statistical Transformations
 
-Even after getting the raw data in the needed format, we may further need to transform certain variables further to meet requirements imposed by the statistical model.
+Even after getting the raw data in the needed format, we may need to transform certain variables further to meet requirements imposed by a statistical test.
 
 `{datawizard}` provides a rich collection of such functions for transforming variables (see Table 2).
 
@@ -156,7 +155,7 @@ standardize(d, center = c(3, 4), scale = c(2, 4))
 #> 5 -0.5  0.75
 ```
 
-## Data properties
+## Data Properties
 
 The workhorse function to get a comprehensive summary of data properties is `describe_distribution()`, which combines a set of indices (e.g., measures of centrality, dispersion, range, skewness, kurtosis, etc.) computed by other functions in `{datawizard}`.
 
@@ -171,10 +170,10 @@ describe_distribution(cars)
 
 # Licensing and Availability
 
-*datawizard* is licensed under the GNU General Public License (v3.0), with all source code openly developed and stored at GitHub (<https://github.com/easystats/datawizard>), along with a corresponding issue tracker for bug reporting and feature enhancements. In the spirit of honest and open science, we encourage requests, tips for fixes, feature updates, as well as general questions and concerns via direct interaction with contributors and developers.
+`{datawizard}` is licensed under the GNU General Public License (v3.0), with all source code openly developed and stored at GitHub (<https://github.com/easystats/datawizard>), along with a corresponding issue tracker for bug reporting and feature enhancements. In the spirit of honest and open science, we encourage requests, tips for fixes, feature updates, as well as general questions and concerns via direct interaction with contributors and developers.
 
 # Acknowledgments
 
-*datawizard* is part of the collaborative [*easystats*](https://github.com/easystats/easystats) ecosystem. Thus, we thank the [members of easystats](https://github.com/orgs/easystats/people) as well as the users.
+`{datawizard}` is part of the collaborative [*easystats*](https://github.com/easystats/easystats) ecosystem. Thus, we thank the [members of easystats](https://github.com/orgs/easystats/people) as well as the users.
 
 # References
