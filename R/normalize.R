@@ -52,14 +52,19 @@ normalize <- function(x, ...) {
 #' @rdname normalize
 #' @export
 normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
-  # Warning if all NaNs
-  if (all(is.na(x))) {
+  # Warning if all NaNs or infinite
+  if (all(is.infinite(x) | is.na(x))) {
     return(x)
   }
 
+  # Get infinite and replace by NA (so that the normalization doesn't fail)
+  infinite_idx <- is.infinite(x)
+  infinite_vals <- x[infinite_idx]
+  x[infinite_idx] <- NA
+
 
   # Warning if only one value
-  if (length(unique(x)) == 1) {
+  if (insight::n_unique(x) == 1) {
     if (is.null(names(x))) {
       name <- deparse(substitute(x))
     } else {
@@ -73,7 +78,7 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
 
 
   # Warning if logical vector
-  if (length(unique(x)) == 2) {
+  if (insight::n_unique(x) == 2) {
     if (is.null(names(x))) {
       name <- deparse(substitute(x))
     } else {
@@ -84,9 +89,6 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
     }
   }
 
-  # Get infinite and replace by NA (so that the normalization doesn't fail)
-  infinite_idx <- is.infinite(x)
-  infinite_vals <- x[infinite_idx]
 
   out <- as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE), na.rm = TRUE))
 
