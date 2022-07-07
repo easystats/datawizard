@@ -8,16 +8,10 @@
 
 <img src='https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif' width="200" align = "right"/>
 
-***:sparkles: Hockety pockety wockety wack, prepare this data forth and
-back***
-
-***Hockety pockety wockety wock, messy data is in shock***
-
-***Hockety pockety wockety woss, you can cite i-it from JOSS***
-<sup>(soon)</sup>
-
-***Hockety pockety wockety wass, datawizard saves your ass!
-:sparkles:***
+<!-- ***:sparkles: Hockety pockety wockety wack, prepare this data forth and back*** -->
+<!-- ***Hockety pockety wockety wock, messy data is in shock*** -->
+<!-- ***Hockety pockety wockety woss, you can cite i-it from JOSS*** <sup>(soon)</sup> -->
+<!-- ***Hockety pockety wockety wass, datawizard saves your ass! :sparkles:*** -->
 
 `datawizard` is a lightweight package to easily manipulate, clean,
 transform, and prepare your data for analysis.
@@ -469,6 +463,12 @@ To rescale a numeric variable to a new range:
 ``` r
 change_scale(c(0, 1, 5, -5, -2))
 #> [1]  50  60 100   0  30
+#> attr(,"min_value")
+#> [1] -5
+#> attr(,"range_difference")
+#> [1] 10
+#> attr(,"to_range")
+#> [1]   0 100
 ```
 
 ### Rotate or transpose
