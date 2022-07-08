@@ -13,18 +13,18 @@
 <!-- ***Hockety pockety wockety woss, you can cite i-it from JOSS*** <sup>(soon)</sup> -->
 <!-- ***Hockety pockety wockety wass, datawizard saves your ass! :sparkles:*** -->
 
-`datawizard` is a lightweight package to easily manipulate, clean,
+`{datawizard}` is a lightweight package to easily manipulate, clean,
 transform, and prepare your data for analysis. It is part of the
-[easystats ecosystem](https://easystats.github.io/blog/), a suite of R
-packages to deal with your entire statistical analysis, from cleaning
-the data to reporting the results.
+[easystats ecosystem](https://easystats.github.io/easystats/), a suite
+of R packages to deal with your entire statistical analysis, from
+cleaning the data to reporting the results.
 
 Most courses and tutorials about statistical modeling assume that you
 are working with a clean and tidy dataset. In practice, however, a major
 part of doing statistical modeling is preparing your data–cleaning up
 values, creating new columns, reshaping the dataset, or transforming
-some variables. `datawizard` provides easy to use tools to perform these
-common, critical, and sometimes tedious data preparation tasks.
+some variables. `{datawizard}` provides easy to use tools to perform
+these common, critical, and sometimes tedious data preparation tasks.
 
 # Installation
 
