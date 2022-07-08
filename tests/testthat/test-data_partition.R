@@ -17,10 +17,10 @@ test_that("data_partition works as expected", {
     "exists"
   )
 
-  expect_warning(
+  expect_warning(expect_warning(
     data_partition(iris, c(0.7, 0.3), row_id = "Species"),
     "generated"
-  )
+  ))
 
   # values
 
