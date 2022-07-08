@@ -48,18 +48,20 @@ if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
 
 `{datawizard}` package aims to make basic data wrangling easier than 
 with base R. The data wrangling workflow it supports is similar to the one
-supported by the tidyverse package combination of `{dplyr}` and `{tidyr}`. But,
+supported by the tidyverse package combination of `{dplyr}` and `{tidyr}`. However,
 one of its main features is that it has a very few dependencies: `{stats}` and `{utils}`
 (included in base R) and `{insight}`, which is the core package of the _easystats_ 
 ecosystem. This package grew organically to simultaneously satisfy the 
 "0 non-base hard dependency" principle of _easystats_ and the data wrangling needs
 of the constituent packages in this ecosystem.
-One drawback of this genesis is that not all features of the 
-`{tidyverse}` packages are supported since only those features have been implemented 
-that were necessary for _easystats_ ecosystem. When needed, we will thus rely on base R,
-or on [`{poorman}`](https://github.com/nathaneastwood/poorman/) package (e.g. for the pipe operator aka `%>%`). It is also
-important to note that `{datawizard}` was designed so that it avoids namespace 
-collisions with `{tidyverse}` packages.
+
+One drawback of this genesis is that not all features of the `{tidyverse}` 
+packages are supported since only features that were necessary for _easystats_ 
+ecosystem have been implemented. Some of these missing features (such as `summarize`
+or the pipe operator `%>%`) are made available in other dependency-free packages, 
+such as [`{poorman}`](https://github.com/nathaneastwood/poorman/). It is also 
+important to note that `{datawizard}` was designed to avoid namespace collisions 
+with `{tidyverse}` packages.
 
 In this article, we will see how to go through basic data wrangling steps with 
 `{datawizard}`. We will also compare it to the `{tidyverse}` syntax for achieving the same. 
@@ -74,23 +76,24 @@ library(datawizard)
 
 # Workhorses
 
-Before we look at their *tidyverse* equivalents, we can first have a look at the 
-key functions in *datawizard* for data wrangling:
+Before we look at their *tidyverse* equivalents, we can first have a look at 
+`{datawizard}`'s key functions for data wrangling:
 
 Function           | Operation                                           |
 ------------------ | --------------------------------------------------- |
-`data_filter()`    | [to select only certain *observations*](#filtering) |
-`data_select()`    | [to select only a few *attributes*](#selecting)     |
-`data_extract()`   | [to extract a single *attribute*](#extracting)      |
-`data_rename()`    | [to rename attributes](#renaming)                   |
+`data_filter()`    | [to select only certain observations](#filtering) |
+`data_select()`    | [to select only a few variables](#selecting)     |
+`data_extract()`   | [to extract a single variable](#extracting)      |
+`data_rename()`    | [to rename variables](#renaming)                   |
 `data_relocate()`  | [to reorder a data frame](#relocating)              |
 `data_rotate()`    | to rotate (or transpose) a data frame               |
 `reshape_longer()` | [to convert data from wide to long](#reshaping)     |
 `reshape_wider()`  | [to convert data from long to wide](#reshaping)     |
 `data_join()`      | [to join two data frames](#joining)                 |
 
-Note that there are a few functions in *datawizard* that have no strict equivalent
-in `{dplyr}` or `{tidyr}`, and so we won't be discussing them in the next section.
+Note that there are a few functions in `{datawizard}` that have no strict equivalent
+in `{dplyr}` or `{tidyr}` (e.g `data_rotate()`), and so we won't discuss them in
+the next section.
 
 
 # Equivalence with dplyr / tidyr
@@ -139,8 +142,8 @@ starwars <- head(starwars)
 
 `data_select()` is the equivalent of `dplyr::select()`. 
 The main difference between these two functions is that `data_select()` uses two
-arguments (`select` and `exclude`) and requires quoted column names, while
-`dplyr::select()` accepts any unquoted column names.
+arguments (`select` and `exclude`) and requires quoted column names if we want to 
+select several variables, while `dplyr::select()` accepts any unquoted column names.
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
 
@@ -276,8 +279,6 @@ You can find a list of all the select helpers with `?data_select`.
 
 ## Extracting {#extracting}
 
-<!-- TODO: improve motivation for data_extract -->
-
 Although we mostly work on dataframes, it is sometimes useful to extract a single 
 column as a vector. This can be done with `data_extract()`, which reproduces the 
 behavior of `dplyr::pull()`:
@@ -396,7 +397,8 @@ Sometimes, we want to relocate one or a small subset of columns in the dataset.
 Rather than typing many names in `data_select()`, we can use `data_relocate()`,
 which is the equivalent of `dplyr::relocate()`. Just like `data_select()`, we can
 specify a list of variables we want to relocate with `select` and `exclude`.
-Then, the arguments `before` and `after` specify where the selected columns should
+Then, the arguments `before` and `after`^[Note that we use `before` and `after` 
+whereas `dplyr::relocate()` uses `.before` and `.after`.] specify where the selected columns should
 be relocated:
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
@@ -468,7 +470,7 @@ reshaped to be in a single new column, called "count".
 relig_income %>% 
   reshape_longer(
     select = -religion, 
-    colnames_to = "income", 
+    names_to = "income", 
     values_to = "count"
   )
 ```
@@ -508,10 +510,10 @@ billboard
 billboard %>% 
   reshape_longer(
     select = starts_with("wk"), 
-    colnames_to = "week", 
-    values_to = "rank"
-  ) %>% 
-  data_filter(!is.na(rank))
+    names_to = "week", 
+    values_to = "rank",
+    values_drop_na = TRUE
+  ) 
 ```
 :::
 
@@ -533,9 +535,6 @@ billboard %>%
 
 ```{r pivot2, eval = TRUE, echo = FALSE}
 ```
-
-Note that `pivot_longer()` has an argument that is not supported by `reshape_longer()`.
-This can be simply done in an additional step with `data_filter()`.
 
 
 ### Wider
@@ -738,7 +737,6 @@ We can convert a column in rownames and move rownames to a new column with
 
 ```{r eval = TRUE}
 mtcars <- head(mtcars)
-
 mtcars
 
 mtcars2 <- mtcars %>% 
