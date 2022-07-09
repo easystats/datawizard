@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.7.4)  6 JUL 2022 07:27
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.7.4)  9 JUL 2022 11:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1055,15 +1055,15 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 
 [5] (./paper.aux)
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 623D787B99997040A7C080EAFC3BE461;1166.
+(rerunfilecheck)             Checksum: 7AC9F0F4B50AD7A337A509EAACFB68DE;1161.
 Package logreq Info: Writing requests to 'paper.run.xml'.
 \openout1 = `paper.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
  35261 strings out of 477877
- 727690 string characters out of 5845844
- 1487651 words of memory out of 5000000
+ 727689 string characters out of 5845844
+ 1487670 words of memory out of 5000000
  55645 multiletter control sequences out of 15000+600000
  477676 words of font info for 82 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191

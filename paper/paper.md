@@ -1,5 +1,5 @@
 ---
-title: "datawizard: An R Package for Easy Data Wrangling and Statistical Transformations"
+title: "datawizard: An R Package for Easy Data Preparation and Statistical Transformations"
 tags:
   - R
   - easystats
@@ -37,7 +37,7 @@ affiliations:
 - index: 6
   name: University Medical Center Hamburg-Eppendorf, Germany
     
-date: "2022-07-06"
+date: "2022-07-09"
 bibliography: paper.bib
 output: rticles::joss_article
 csl: apa.csl
@@ -64,7 +64,7 @@ Lastly, `{datawizard}` also provides a toolbox to create a detailed profile of d
 
 # Features
 
-## Data Manipulation
+## Data Preparation
 
 The raw data is rarely in a state that it can be directly fed into a statistical model. It often needs to be modified in various ways. For example, columns need to be renamed, certain portions of the data need to be filtered out, reshape data, data scattered across multiple tables needs to be joined, etc. 
 
@@ -94,12 +94,12 @@ stocks <- data.frame(
 )
 
 stocks
-#>         time          X           Y
-#> 1 2009-01-01 -0.1024603  0.53871711
-#> 2 2009-01-02  2.3092367 -0.61636862
-#> 3 2009-01-03  1.5933258 -0.04934983
-#> 4 2009-01-04  1.1786538  0.24527390
-#> 5 2009-01-05  1.1808358  1.58668237
+#>         time          X          Y
+#> 1 2009-01-01  0.5129735  0.3511767
+#> 2 2009-01-02 -1.0809331 -0.9643569
+#> 3 2009-01-03  1.5248162 -1.1648023
+#> 4 2009-01-04  1.1942810  0.5119190
+#> 5 2009-01-05 -1.1210023  0.8332655
 
 data_to_long(
   stocks,
@@ -107,17 +107,17 @@ data_to_long(
   colnames_to = "stock",
   values_to = "price"
 )
-#>          time stock       price
-#> 1  2009-01-01     X -0.10246027
-#> 2  2009-01-01     Y  0.53871711
-#> 3  2009-01-02     X  2.30923666
-#> 4  2009-01-02     Y -0.61636862
-#> 5  2009-01-03     X  1.59332579
-#> 6  2009-01-03     Y -0.04934983
-#> 7  2009-01-04     X  1.17865378
-#> 8  2009-01-04     Y  0.24527390
-#> 9  2009-01-05     X  1.18083585
-#> 10 2009-01-05     Y  1.58668237
+#>          time stock      price
+#> 1  2009-01-01     X  0.5129735
+#> 2  2009-01-01     Y  0.3511767
+#> 3  2009-01-02     X -1.0809331
+#> 4  2009-01-02     Y -0.9643569
+#> 5  2009-01-03     X  1.5248162
+#> 6  2009-01-03     Y -1.1648023
+#> 7  2009-01-04     X  1.1942810
+#> 8  2009-01-04     Y  0.5119190
+#> 9  2009-01-05     X -1.1210023
+#> 10 2009-01-05     Y  0.8332655
 ```
 
 ## Statistical Transformations

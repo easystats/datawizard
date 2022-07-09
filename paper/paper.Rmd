@@ -1,5 +1,5 @@
 ---
-title: "datawizard: An R Package for Easy Data Wrangling and Statistical Transformations"
+title: "datawizard: An R Package for Easy Data Preparation and Statistical Transformations"
 tags:
   - R
   - easystats
@@ -75,7 +75,7 @@ Lastly, `{datawizard}` also provides a toolbox to create a detailed profile of d
 
 # Features
 
-## Data Manipulation
+## Data Preparation
 
 The raw data is rarely in a state that it can be directly fed into a statistical model. It often needs to be modified in various ways. For example, columns need to be renamed, certain portions of the data need to be filtered out, reshape data, data scattered across multiple tables needs to be joined, etc. 
 
