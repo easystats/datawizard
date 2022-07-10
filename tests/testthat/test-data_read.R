@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_offline()
 
 skip_if_not_installed("httr")
 skip_if_not_installed("readxl")
@@ -11,8 +12,8 @@ skip_if_not_installed("rio")
 # csv -------------------------
 
 test_that("data_read", {
-  d <- data_read("https://stats.idre.ucla.edu/stat/data/binary.csv")
-  expect_equal(nrow(d), 400)
+  d <- data_read("https://raw.githubusercontent.com/easystats/circus/master/data/bootstrapped.csv")
+  expect_equal(dim(d), c(10000, 4))
 })
 
 

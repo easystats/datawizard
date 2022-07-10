@@ -52,6 +52,17 @@ test_that("center, all na", {
   expect_equal(z, c(NA, NA, NA))
 })
 
+test_that("center, with Inf", {
+  z <- center(c(2, 4, Inf))
+  expect_equal(z, c(-1, 1, NA), ignore_attr = TRUE)
+})
+
+test_that("center, all NA or Inf", {
+  z <- center(c(NA, -Inf, Inf))
+  expect_equal(z, c(NA, -Inf, Inf), ignore_attr = TRUE)
+})
+
+
 
 # with grouped data -------------------------------------------
 
