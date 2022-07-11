@@ -76,8 +76,8 @@ Function           | Operation                             |
 `data_select()`    | to select only a few *variables*      |
 `data_extract()`   | to extract a single *variable*        |
 `data_rename()`    | to rename variables                   |
-`reshape_longer()` | to convert data from wide to long     |
-`reshape_wider()`  | to convert data from long to wide     |
+`data_to_long()` | to convert data from wide to long     |
+`data_to_wide()`  | to convert data from long to wide     |
 `data_join()`      | to join two data frames               |
     ...            |        ...                            |
 
@@ -94,12 +94,12 @@ stocks <- data.frame(
 )
 
 stocks
-#>         time          X          Y
-#> 1 2009-01-01 -0.5286321 -3.3399106
-#> 2 2009-01-02 -2.5970577 -0.4214296
-#> 3 2009-01-03  0.7577631  2.0283686
-#> 4 2009-01-04  0.3187828 -2.4260454
-#> 5 2009-01-05  2.2927804  0.6690921
+#>         time           X          Y
+#> 1 2009-01-01 -0.49521476 -1.3931344
+#> 2 2009-01-02  0.09366926  0.6346995
+#> 3 2009-01-03 -0.10835379  1.9640863
+#> 4 2009-01-04 -0.56356014  1.1384006
+#> 5 2009-01-05  0.63747897  0.1655771
 
 data_to_long(
   stocks,
@@ -107,17 +107,17 @@ data_to_long(
   colnames_to = "stock",
   values_to = "price"
 )
-#>          time stock      price
-#> 1  2009-01-01     X -0.5286321
-#> 2  2009-01-01     Y -3.3399106
-#> 3  2009-01-02     X -2.5970577
-#> 4  2009-01-02     Y -0.4214296
-#> 5  2009-01-03     X  0.7577631
-#> 6  2009-01-03     Y  2.0283686
-#> 7  2009-01-04     X  0.3187828
-#> 8  2009-01-04     Y -2.4260454
-#> 9  2009-01-05     X  2.2927804
-#> 10 2009-01-05     Y  0.6690921
+#>          time stock       price
+#> 1  2009-01-01     X -0.49521476
+#> 2  2009-01-01     Y -1.39313443
+#> 3  2009-01-02     X  0.09366926
+#> 4  2009-01-02     Y  0.63469945
+#> 5  2009-01-03     X -0.10835379
+#> 6  2009-01-03     Y  1.96408634
+#> 7  2009-01-04     X -0.56356014
+#> 8  2009-01-04     Y  1.13840060
+#> 9  2009-01-05     X  0.63747897
+#> 10 2009-01-05     Y  0.16557708
 ```
 
 ## Statistical Transformations
