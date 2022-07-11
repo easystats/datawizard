@@ -1,11 +1,11 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.7.4)  9 JUL 2022 11:21
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.7.11)  11 JUL 2022 14:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **paper.tex
 (./paper.tex
-LaTeX2e <2022-06-01> patch level 4
-L3 programming layer <2022-07-01> (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/base/article.cls
+LaTeX2e <2022-06-01> patch level 5
+L3 programming layer <2022-07-04> (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/base/size10.clo
 File: size10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
@@ -372,14 +372,14 @@ Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO)
 \Fld@listcount=\count296
 \c@bookmark@seq@number=\count297
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
-Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
+Package: rerunfilecheck 2022-07-10 v1.10 Rerun checks for auxiliary files (HO)
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/base/atveryend-ltx.sty
 Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend package
 with kernel methods
 ) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
 Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 )
-Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 286.
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 285.
 )
 \Hy@SectionHShift=\skip56
 )
@@ -733,7 +733,7 @@ Package biblatex Info: XeTeX detected.
 (biblatex)             Assuming input encoding 'utf8'.
 Package biblatex Info: Document encoding is UTF8 ....
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2022-07-01 L3 programming layer (loader) 
+Package: expl3 2022-07-04 L3 programming layer (loader) 
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-xetex.def
 File: l3backend-xetex.def 2022-07-01 L3 backend support: XeTeX
 \g__graphics_track_int=\count441
@@ -743,7 +743,7 @@ File: l3backend-xetex.def 2022-07-01 L3 backend support: XeTeX
 \g__pdf_backend_link_int=\count444
 ))
 Package biblatex Info: ... and expl3
-(biblatex)             2022-07-01 L3 programming layer (loader) 
+(biblatex)             2022-07-04 L3 programming layer (loader) 
 (biblatex)             is new enough (at least 2020/04/06),
 (biblatex)             setting 'casechanger=expl3'.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/biblatex/blx-case-expl3.sty (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
@@ -887,45 +887,132 @@ Package: footnote 1997/01/28 1.13 Save footnotes around boxes
 \cslhangindent=\skip98
 \csllabelwidth=\skip99
 \cslentryspacingunit=\skip100
-\@quotelevel=\count475
-\@quotereset=\count476
+(/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/multirow/multirow.sty
+Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
+\multirow@colwidth=\skip101
+\multirow@cntb=\count475
+\multirow@dima=\skip102
+\bigstrutjot=\dimen307
+) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/wrapfig/wrapfig.sty
+\wrapoverhang=\dimen308
+\WF@size=\dimen309
+\c@WF@wrappedlines=\count476
+\WF@box=\box84
+\WF@everypar=\toks44
+Package: wrapfig 2003/01/31  v 3.6
+) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count477
+\float@exts=\toks45
+\float@box=\box85
+\@float@everytoks=\toks46
+\@floatcapt=\box86
+) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/colortbl/colortbl.sty
+Package: colortbl 2020/01/04 v1.0e Color table columns (DPC)
+\everycr=\toks47
+\minrowclearance=\skip103
+) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/pdflscape/pdflscape.sty
+Package: pdflscape 2019/12/05 v0.12 Display of landscape pages in PDF (HO)
+(/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/graphics/lscape.sty
+Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
+)
+Package pdflscape Info: Auto-detected driver: dvipdfm (xetex) on input line 98.
+) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/tabu/tabu.sty
+Package: tabu 2019/01/11 v2.9 - flexible LaTeX tabulars (FC+tabu-fixed)
+(/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/varwidth/varwidth.sty
+Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
+\@vwid@box=\box87
+\sift@deathcycles=\count478
+\@vwid@loff=\dimen310
+\@vwid@roff=\dimen311
+)
+\c@taburow=\count479
+\tabu@nbcols=\count480
+\tabu@cnt=\count481
+\tabu@Xcol=\count482
+\tabu@alloc=\count483
+\tabu@nested=\count484
+\tabu@target=\dimen312
+\tabu@spreadtarget=\dimen313
+\tabu@naturalX=\dimen314
+\tabucolX=\dimen315
+\tabu@Xsum=\dimen316
+\extrarowdepth=\dimen317
+\abovetabulinesep=\dimen318
+\belowtabulinesep=\dimen319
+\tabustrutrule=\dimen320
+\tabu@thebody=\toks48
+\tabu@footnotes=\toks49
+\tabu@box=\box88
+\tabu@arstrutbox=\box89
+\tabu@hleads=\box90
+\tabu@vleads=\box91
+\tabu@cellskip=\skip104
+) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/threeparttable/threeparttable.sty
+Package: threeparttable 2003/06/13  v 3.0
+\@tempboxb=\box92
+) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/threeparttablex/threeparttablex.sty
+Package: threeparttablex 2013/07/23 v0.3 by daleif
+\TPTL@width=\skip105
+) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/generic/ulem/ulem.sty
+\UL@box=\box93
+\UL@hyphenbox=\box94
+\UL@skip=\skip106
+\UL@hook=\toks50
+\UL@height=\dimen321
+\UL@pe=\count485
+\UL@pixel=\dimen322
+\ULC@box=\box95
+Package: ulem 2019/11/18
+\ULdepth=\dimen323
+) (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/makecell/makecell.sty
+Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
+\rotheadsize=\dimen324
+\c@nlinenum=\count486
+\TeXr@lab=\toks51
+)
+\@quotelevel=\count487
+\@quotereset=\count488
 (./paper.aux)
 \openout1 = `paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 288.
-LaTeX Font Info:    ... okay on input line 288.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 288.
-LaTeX Font Info:    ... okay on input line 288.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 288.
-LaTeX Font Info:    ... okay on input line 288.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 288.
-LaTeX Font Info:    ... okay on input line 288.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 288.
-LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 288.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 302.
+LaTeX Font Info:    ... okay on input line 302.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 302.
+LaTeX Font Info:    ... okay on input line 302.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 302.
+LaTeX Font Info:    ... okay on input line 302.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 302.
+LaTeX Font Info:    ... okay on input line 302.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 302.
+LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 302.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 288.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 288.
-LaTeX Font Info:    ... okay on input line 288.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 288.
-LaTeX Font Info:    ... okay on input line 288.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 288.
-LaTeX Font Info:    ... okay on input line 288.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 288.
-LaTeX Font Info:    ... okay on input line 288.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 288.
-LaTeX Font Info:    ... okay on input line 288.
-Package hyperref Info: Link coloring ON on input line 288.
+LaTeX Font Info:    ... okay on input line 302.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 302.
+LaTeX Font Info:    ... okay on input line 302.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 302.
+LaTeX Font Info:    ... okay on input line 302.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 302.
+LaTeX Font Info:    ... okay on input line 302.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 302.
+LaTeX Font Info:    ... okay on input line 302.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 302.
+LaTeX Font Info:    ... okay on input line 302.
+Package hyperref Info: Link coloring ON on input line 302.
 (./paper.out) (./paper.out)
 \@outlinefile=\write6
 \openout6 = `paper.out'.
 
 Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: float package is loaded.
 Package caption Info: longtable package is loaded.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/caption/ltcaption.sty
 Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 )
+Package caption Info: threeparttable package is loaded.
+Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
 Package biblatex Info: Trying to load language 'english'...
 Package biblatex Info: ... file 'english.lbx' found.
@@ -941,8 +1028,8 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'paper.bbl' not found.
 No file paper.bbl.
-Package biblatex Info: Reference section=0 on input line 288.
-Package biblatex Info: Reference segment=0 on input line 288.
+Package biblatex Info: Reference section=0 on input line 302.
+Package biblatex Info: Reference segment=0 on input line 302.
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
 *geometry* verbose mode - [ preamble ] result:
@@ -977,22 +1064,22 @@ Package biblatex Info: Reference segment=0 on input line 288.
 * \@reversemargintrue
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 289.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 303.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 289.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 303.
 (/Users/indrajeetpatil/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 
-Package hyperref Warning: Suppressing link with empty target on input line 315.
+Package hyperref Warning: Suppressing link with empty target on input line 329.
 
 
-Package hyperref Warning: Suppressing link with empty target on input line 315.
+Package hyperref Warning: Suppressing link with empty target on input line 329.
 
 
-Package hyperref Warning: Suppressing link with empty target on input line 315.
+Package hyperref Warning: Suppressing link with empty target on input line 329.
 
 File: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
 </Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
@@ -1004,12 +1091,12 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
 LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <8> not available
-(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 381.
+(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 395.
 [1
 
 ]
 LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <9> not available
-(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 389.
+(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 403.
 File: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
 </Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
 
@@ -1020,7 +1107,7 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
 [2]
-Underfull \hbox (badness 1448) in paragraph at lines 504--508
+Underfull \hbox (badness 1448) in paragraph at lines 518--522
 \TU/lmr/m/n/10 The workhorse function to get a comprehensive summary of data properties is
  []
 
@@ -1055,18 +1142,18 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 
 [5] (./paper.aux)
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 7AC9F0F4B50AD7A337A509EAACFB68DE;1161.
+(rerunfilecheck)             Checksum: 0850A7CB475E98F840117F25595A96C0;1161.
 Package logreq Info: Writing requests to 'paper.run.xml'.
 \openout1 = `paper.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 35261 strings out of 477877
- 727689 string characters out of 5845844
- 1487670 words of memory out of 5000000
- 55645 multiletter control sequences out of 15000+600000
- 477676 words of font info for 82 fonts, out of 8000000 for 9000
+ 36638 strings out of 477865
+ 750842 string characters out of 5845511
+ 1519250 words of memory out of 5000000
+ 56987 multiletter control sequences out of 15000+600000
+ 477782 words of font info for 83 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,12n,81p,678b,846s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,12n,81p,678b,848s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on paper.pdf (5 pages).

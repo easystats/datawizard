@@ -151,6 +151,7 @@ describe_distribution(mtcars)
 
 ```{r echo=FALSE, eval=TRUE, results="asis"}
 library(kableExtra)
+options(digits = 3)
 kbl(describe_distribution(mtcars), format = "latex", booktabs = TRUE, linesep = "") |>
   kable_styling(latex_options = "scale_down")
 ```
