@@ -108,7 +108,7 @@ stocks
 data_to_long(
   stocks,
   select = -c("time"),
-  colnames_to = "stock",
+  names_to = "stock",
   values_to = "price"
 )
 ```
