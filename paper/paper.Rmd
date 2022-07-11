@@ -145,8 +145,14 @@ standardize(d, center = c(3, 4), scale = c(2, 4))
 
 The workhorse function to get a comprehensive summary of data properties is `describe_distribution()`, which combines a set of indices (e.g., measures of centrality, dispersion, range, skewness, kurtosis, etc.) computed by other functions in `{datawizard}`.
 
-```{r}
-describe_distribution(cars)
+```{r eval=FALSE}
+describe_distribution(mtcars)
+```
+
+```{r echo=FALSE, eval=TRUE, results="asis"}
+library(kableExtra)
+kbl(describe_distribution(mtcars), format = "latex", booktabs = TRUE, linesep = "") |>
+  kable_styling(latex_options = "scale_down")
 ```
 
 # Licensing and Availability
