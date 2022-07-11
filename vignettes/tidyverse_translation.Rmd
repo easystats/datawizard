@@ -87,8 +87,8 @@ Function           | Operation                                           |
 `data_rename()`    | [to rename variables](#renaming)                   |
 `data_relocate()`  | [to reorder a data frame](#relocating)              |
 `data_rotate()`    | to rotate (or transpose) a data frame               |
-`reshape_longer()` | [to convert data from wide to long](#reshaping)     |
-`reshape_wider()`  | [to convert data from long to wide](#reshaping)     |
+`data_to_long()` | [to convert data from wide to long](#reshaping)     |
+`data_to_wide()`  | [to convert data from long to wide](#reshaping)     |
 `data_join()`      | [to join two data frames](#joining)                 |
 
 Note that there are a few functions in `{datawizard}` that have no strict equivalent
@@ -442,7 +442,7 @@ starwars %>%
 ### Longer
 
 Reshaping data from wide to long or from long to wide format can be done with
-`reshape_longer()` and `reshape_wider()`. These functions were designed to match 
+`data_to_long()` and `data_to_wide()`. These functions were designed to match 
 `tidyr::pivot_longer()` and `tidyr::pivot_wider()` arguments, so that the only 
 thing to do is to change the function name. However, not all of 
 `tidyr::pivot_longer()` and `tidyr::pivot_wider()` features are available yet. 
@@ -468,7 +468,7 @@ reshaped to be in a single new column, called "count".
 ```{r pivot1, class.source = "datawizard"}
 # ---------- datawizard -----------
 relig_income %>% 
-  reshape_longer(
+  data_to_long(
     select = -religion, 
     names_to = "income", 
     values_to = "count"
@@ -495,7 +495,7 @@ relig_income %>%
 ```
 
 
-To explore a bit more the arguments of `reshape_longer()`, we will use another
+To explore a bit more the arguments of `data_to_long()`, we will use another
 dataset: the `billboard` dataset.
 ```{r eval = TRUE}
 billboard
@@ -508,7 +508,7 @@ billboard
 ```{r pivot2, class.source = "datawizard"}
 # ---------- datawizard -----------
 billboard %>% 
-  reshape_longer(
+  data_to_long(
     select = starts_with("wk"), 
     names_to = "week", 
     values_to = "rank",
@@ -539,7 +539,7 @@ billboard %>%
 
 ### Wider
 
-Once again, we use an example in the `{tidyr}` vignette to show how close `reshape_wider()`
+Once again, we use an example in the `{tidyr}` vignette to show how close `data_to_wide()`
 and `pivot_wider()` are:
 ```{r eval=TRUE}
 fish_encounters
@@ -553,7 +553,7 @@ fish_encounters
 ```{r pivot3, class.source = "datawizard"}
 # ---------- datawizard -----------
 fish_encounters %>% 
-  reshape_wider(
+  data_to_wide(
     names_from = "station", 
     values_from = "seen",
     values_fill = 0
