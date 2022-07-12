@@ -12,6 +12,7 @@ data_to_wide(
   names_from = "Name",
   names_sep = "_",
   names_prefix = "",
+  names_glue = NULL,
   values_fill = NULL,
   verbose = TRUE,
   ...,
@@ -27,6 +28,7 @@ reshape_wider(
   names_from = "Name",
   names_sep = "_",
   names_prefix = "",
+  names_glue = NULL,
   values_fill = NULL,
   verbose = TRUE,
   ...,
@@ -54,6 +56,9 @@ as a column name.}
 \item{names_prefix}{String added to the start of every variable name. This is
 particularly useful if \code{names_from} is a numeric vector and you want to create
 syntactic variable names.}
+
+\item{names_glue}{Instead of \code{names_sep} and \code{names_prefix}, you can supply a glue
+specification that uses the \code{names_from} columns to create custom column names.}
 
 \item{values_fill}{Optionally, a (scalar) value that will be used to replace
 missing values in the new columns created.}
