@@ -334,7 +334,6 @@ test_that("reshape_wider, values_fill errors when length > 1", {
 })
 
 
-
 # EQUIVALENCE WITH TIDYR ----------------------------------------------------
 
 # Examples coming from: https://tidyr.tidyverse.org/articles/pivot.html#wider
@@ -475,4 +474,60 @@ test_that("reshape_wider equivalent to pivot_wider: ex 5", {
     reshape_wider(names_from = "field", values_from = "value")
 
   expect_identical(x, y)
+})
+
+
+test_that("reshape_wider equivalent to pivot_wider: ex 6", {
+  production <- expand_grid(
+    product = c("A", "B"),
+    country = c("AI", "EI"),
+    year = 2000:2014
+  ) %>%
+    data_filter((product == "A" & country == "AI") | product == "B")
+
+  production$production <- rnorm(nrow(production))
+
+  x <- production %>%
+    pivot_wider(
+      names_from = c(product, country),
+      values_from = production,
+      names_glue = "prod_{product}_{country}"
+    )
+
+  y <- production %>%
+    data_to_wide(
+      names_from = c("product", "country"),
+      values_from = "production",
+      names_glue = "prod_{product}_{country}"
+    )
+
+  expect_identical(x, y)
+})
+
+test_that("reshape_wider, names_glue works", {
+  df <- data.frame(
+    food = c('banana','banana','banana','banana','cheese','cheese','cheese','cheese'),
+    binary = c(rep(c('yes','no'), 4)),
+    car = c('toyota','subaru','mazda','skoda','toyota','subaru','mazda','skoda'),
+    fun = c(2,4,3,6,2,4,2,3)
+  )
+
+  x <- df %>%
+    pivot_wider(
+      id_cols = food,
+      names_from = c(car, binary),
+      names_glue = "{binary}_{car}",
+      values_from = fun
+    )
+
+  y <- df %>%
+    data_to_wide(
+      id_cols = "food",
+      names_from = c("car", "binary"),
+      names_glue = "{binary}_{car}",
+      values_from = "fun"
+    )
+
+  expect_identical(x, y, ignore_attr = TRUE)
+
 })
