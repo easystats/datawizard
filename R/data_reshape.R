@@ -163,6 +163,8 @@ data_to_long <- function(data,
 #' @param names_sep If `names_from` or `values_from` contains multiple variables,
 #' this will be used to join their values together into a single string to use
 #' as a column name.
+#' @param names_glue Instead of `names_sep` and `names_prefix`, you can supply a glue
+#' specification that uses the `names_from` columns to create custom column names.
 #' @param values_from The name of the column that contains the values to be used
 #' as future variable values.
 #' @param values_fill Optionally, a (scalar) value that will be used to replace
@@ -233,6 +235,7 @@ data_to_wide <- function(data,
                          names_from = "Name",
                          names_sep = "_",
                          names_prefix = "",
+                         names_glue = NULL,
                          values_fill = NULL,
                          verbose = TRUE,
                          ...,
@@ -280,7 +283,24 @@ data_to_wide <- function(data,
   # concatenates "v.names" + values - we only want values
   current_colnames <- colnames(data)
   current_colnames <- current_colnames[current_colnames != "_Rows"]
-  future_colnames <- unique(apply(data, 1, function(x) paste(x[c(names_from)], collapse = names_sep)))
+  if (is.null(names_glue)) {
+    future_colnames <- unique(apply(data, 1, function(x) paste(x[c(names_from)], collapse = names_sep)))
+  } else {
+    vars <- regmatches(names_glue, gregexpr("\\{\\K[^{}]+(?=\\})", names_glue, perl = TRUE))[[1]]
+    tmp_data <- unique(data[, vars])
+    future_colnames <- unique(apply(tmp_data, 1, function(x) {
+      tmp_vars <- list()
+      for (i in seq_along(vars)) {
+        tmp_vars[[i]] <- x[vars[i]]
+      }
+
+      tmp_colname <- gsub("\\{\\K[^{}]+(?=\\})", "", names_glue, perl = TRUE)
+      tmp_colname <- gsub("\\{\\}", "%s", tmp_colname)
+      do.call(sprintf, c(fmt = tmp_colname, tmp_vars))
+    }))
+
+  }
+
 
   # stop if some column names would be duplicated (follow tidyr workflow)
   if (any(future_colnames %in% current_colnames)) {
@@ -314,7 +334,7 @@ data_to_wide <- function(data,
 
   if (length(values_from) == 1) {
     to_rename <- which(startsWith(names(wide), paste0(values_from, names_sep)))
-    names(wide)[to_rename] <- gsub(paste0(values_from, names_sep), "", names(wide)[to_rename])
+    names(wide)[to_rename] <- future_colnames
   }
 
   # Order columns as in tidyr
