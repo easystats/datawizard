@@ -213,7 +213,6 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   # check merge columns ("by"-argument) ----------------------
 
   if (join != "bind") {
-
     # we need a value for "by". If not provided, use all shared column names
     if (is.null(by)) {
       by <- intersect(colnames(x), colnames(y))

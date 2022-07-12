@@ -14,6 +14,8 @@
 #' @inheritParams find_columns
 #' @inheritParams standardize.data.frame
 #'
+#' @inheritSection center Selection of variables - the `select` argument
+#'
 #' @examples
 #' ranktransform(c(0, 1, 5, -5, -2))
 #' ranktransform(c(0, 1, 5, -5, -2), sign = TRUE)
@@ -37,7 +39,6 @@ ranktransform.numeric <- function(x,
                                   method = "average",
                                   verbose = TRUE,
                                   ...) {
-
   # no change if all values are `NA`s
   if (all(is.na(x))) {
     return(x)
@@ -98,10 +99,10 @@ ranktransform.factor <- function(x, ...) {
 
 #' @export
 ranktransform.grouped_df <- function(x,
-                                     sign = FALSE,
-                                     method = "average",
                                      select = NULL,
                                      exclude = NULL,
+                                     sign = FALSE,
+                                     method = "average",
                                      ignore_case = FALSE,
                                      ...) {
   info <- attributes(x)
@@ -122,7 +123,7 @@ ranktransform.grouped_df <- function(x,
   x <- as.data.frame(x)
   for (rows in grps) {
     x[rows, ] <- ranktransform(
-      x[rows, ],
+      x[rows, , drop = FALSE],
       select = select,
       exclude = exclude,
       sign = sign,
@@ -139,13 +140,12 @@ ranktransform.grouped_df <- function(x,
 #' @rdname ranktransform
 #' @export
 ranktransform.data.frame <- function(x,
-                                     sign = FALSE,
-                                     method = "average",
                                      select = NULL,
                                      exclude = NULL,
+                                     sign = FALSE,
+                                     method = "average",
                                      ignore_case = FALSE,
                                      ...) {
-
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case)
 

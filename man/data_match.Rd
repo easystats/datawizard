@@ -3,9 +3,9 @@
 \name{data_match}
 \alias{data_match}
 \alias{data_filter}
-\title{Return filtered data frame or row indices}
+\title{Return filtered or sliced data frame, or row indices}
 \usage{
-data_match(x, to, match = "and", return_indices = FALSE, ...)
+data_match(x, to, match = "and", return_indices = FALSE, drop_na = TRUE, ...)
 
 data_filter(x, filter, ...)
 }
@@ -24,22 +24,32 @@ or \code{"not"} (or \code{"!"}).}
 can be used to filter the original data frame. If \code{FALSE} (default),
 returns directly the filtered data frame instead of the row indices.}
 
+\item{drop_na}{Logical, if \code{TRUE}, missing values (\code{NA}s) are removed before
+filtering the data. This is the default behaviour, however, sometimes when
+row indices are requested (i.e. \code{return_indices=TRUE}), it might be useful
+to preserve \code{NA} values, so returned row indices match the row indices of
+the original data frame.}
+
 \item{...}{Not used.}
 
-\item{filter}{A logical expression indicating which rows to keep.}
+\item{filter}{A logical expression indicating which rows to keep, or a numeric
+vector indicating the row indices of rows to keep.}
 }
 \value{
 A filtered data frame, or the row indices that match the specified configuration.
 }
 \description{
-Return a filtered data frame or row indices of a data frame that match a
-specific condition. \code{data_filter()} works like \code{data_match()}, but works
-with logical expressions instead of data frame to specify matching conditions.
+Return a filtered (or sliced) data frame or row indices of a data frame that
+match a specific condition. \code{data_filter()} works like \code{data_match()}, but works
+with logical expressions or row indices of a data frame to specify matching
+conditions.
 }
 \details{
 For \code{data_match()}, if \code{match} is either \code{"or"} or \code{"not"}, the
 original row order from \code{x} might be changed. If preserving row order is
-required, use \code{data_filter()} instead.\preformatted{# mimics subset() behaviour, preserving original row order
+required, use \code{data_filter()} instead.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{# mimics subset() behaviour, preserving original row order
 head(data_filter(mtcars[c("mpg", "vs", "am")], vs == 0 | am == 1))
 #>                    mpg vs am
 #> Mazda RX4         21.0  0  1
@@ -60,7 +70,7 @@ head(data_match(mtcars[c("mpg", "vs", "am")],
 #> Duster 360        14.3  0  0
 #> Merc 450SE        16.4  0  0
 #> Merc 450SL        17.3  0  0
-}
+}\if{html}{\out{</div>}}
 
 While \code{data_match()} works with data frames to match conditions against,
 \code{data_filter()} is basically a wrapper around \verb{subset(subset = <filter>)}.
@@ -81,16 +91,18 @@ data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
 # equivalent to
 data_filter(mtcars, vs == 0 | am == 1)
 
+# slice data frame by row indices
+data_filter(mtcars, 5:10)
 }
 \seealso{
 \itemize{
 \item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}}, \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
 \item Functions to reorder or remove columns: \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
 \item Functions to reshape, pivot or rotate dataframes: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
-\item Functions to rescale and reverse: \code{\link[=data_rescale]{data_rescale()}}, \code{\link[=data_reverse]{data_reverse()}}
-\item Functions to standardize, normalize, rank-transform: \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
-\item Split, cut and merge dataframes: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_cut]{data_cut()}}, \code{\link[=data_merge]{data_merge()}}
-\item Functions to find or select columns: \code{\link[=find_columns]{find_columns()}}
+\item Functions to recode data: \code{\link[=data_rescale]{data_rescale()}}, \code{\link[=data_reverse]{data_reverse()}}, \code{\link[=data_cut]{data_cut()}}, \code{\link[=data_recode]{data_recode()}}, \code{\link[=data_shift]{data_shift()}}
+\item Functions to standardize, normalize, rank-transform: \code{\link[=center]{center()}}, \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
+\item Split and merge dataframes: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_merge]{data_merge()}}
+\item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=data_find]{data_find()}}
 \item Functions to filter rows: \code{\link[=data_match]{data_match()}}, \code{\link[=data_filter]{data_filter()}}
 }
 }

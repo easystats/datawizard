@@ -1,26 +1,34 @@
 test_that("data_rescale works as expected", {
   expect_equal(
     data_rescale(c(0, 1, 5, -5, -2), to = NULL),
-    c(0, 1, 5, -5, -2)
-  )
-  expect_equal(
-    data_rescale(rep(NA_real_, 3)),
-    rep(NA_real_, 3)
+    c(0, 1, 5, -5, -2),
+    ignore_attr = TRUE
   )
 
   expect_equal(
+    data_rescale(rep(NA_real_, 3)),
+    rep(NA_real_, 3),
+    ignore_attr = TRUE
+  )
+
+  expect_message(data_rescale(iris$Species))
+
+  expect_equal(
     data_rescale(c(0, 1, 5, -5, -2)),
-    c(50, 60, 100, 0, 30)
+    c(50, 60, 100, 0, 30),
+    ignore_attr = TRUE
   )
 
   expect_equal(
     data_rescale(c(0, 1, 5, -5, -2), to = c(-5, 5)),
-    c(0, 1, 5, -5, -2)
+    c(0, 1, 5, -5, -2),
+    ignore_attr = TRUE
   )
 
   expect_equal(
     data_rescale(c(1, 3, 4), to = c(0, 40), range = c(0, 4)),
-    c(10, 30, 40)
+    c(10, 30, 40),
+    ignore_attr = TRUE
   )
 
   expect_snapshot(head(data_rescale(iris, to = c(0, 1))))

@@ -216,3 +216,24 @@ test_that("un/standardize, matrix", {
   expect_equal(unstandardize(z1), x)
   expect_equal(unstandardize(z2), unstandardize(z1))
 })
+
+test_that("unstandardize with reference (dataframe)", {
+  x <- standardize(x = iris, reference = iris)
+  x2 <- unstandardize(x, reference = iris)
+  expect_equal(x2, iris, ignore_attr = TRUE)
+
+  x <- standardize(x = iris, reference = iris, robust = TRUE)
+  x2 <- unstandardize(x, reference = iris, robust = TRUE)
+  expect_equal(x2, iris, ignore_attr = TRUE)
+})
+
+test_that("unstandardize does nothing with characters and factors", {
+  expect_equal(
+    unstandardise(c("a", "b")),
+    c("a", "b")
+  )
+  expect_equal(
+    unstandardise(factor(c(1, 2))),
+    factor(c(1, 2))
+  )
+})

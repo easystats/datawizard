@@ -1,20 +1,27 @@
-#' Return filtered data frame or row indices
+#' Return filtered or sliced data frame, or row indices
 #'
-#' Return a filtered data frame or row indices of a data frame that match a
-#' specific condition. `data_filter()` works like `data_match()`, but works
-#' with logical expressions instead of data frame to specify matching conditions.
+#' Return a filtered (or sliced) data frame or row indices of a data frame that
+#' match a specific condition. `data_filter()` works like `data_match()`, but works
+#' with logical expressions or row indices of a data frame to specify matching
+#' conditions.
 #'
 #' @param x A data frame.
 #' @param to A data frame matching the specified conditions. Note that if
 #'   `match` is a value other than `"and"`, the original row order might be
 #'   changed. See 'Details'.
-#' @param filter A logical expression indicating which rows to keep.
+#' @param filter A logical expression indicating which rows to keep, or a numeric
+#'   vector indicating the row indices of rows to keep.
 #' @param match String, indicating with which logical operation matching
 #'   conditions should be combined. Can be `"and"` (or `"&"`), `"or"` (or `"|"`)
 #'   or `"not"` (or `"!"`).
 #' @param return_indices Logical, if `FALSE`, return the vector of rows that
 #'   can be used to filter the original data frame. If `FALSE` (default),
 #'   returns directly the filtered data frame instead of the row indices.
+#' @param drop_na Logical, if `TRUE`, missing values (`NA`s) are removed before
+#'   filtering the data. This is the default behaviour, however, sometimes when
+#'   row indices are requested (i.e. `return_indices=TRUE`), it might be useful
+#'   to preserve `NA` values, so returned row indices match the row indices of
+#'   the original data frame.
 #' @param ... Not used.
 #'
 #' @return A filtered data frame, or the row indices that match the specified configuration.
@@ -66,9 +73,11 @@
 #' # equivalent to
 #' data_filter(mtcars, vs == 0 | am == 1)
 #'
+#' # slice data frame by row indices
+#' data_filter(mtcars, 5:10)
 #' @inherit data_rename seealso
 #' @export
-data_match <- function(x, to, match = "and", return_indices = FALSE, ...) {
+data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = TRUE, ...) {
   if (!is.data.frame(to)) {
     to <- as.data.frame(to)
   }
@@ -99,7 +108,9 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, ...) {
     idx <- c()
   } else {
     # remove missings before matching
-    x <- x[stats::complete.cases(x), , drop = FALSE]
+    if (isTRUE(drop_na)) {
+      x <- x[stats::complete.cases(x), , drop = FALSE]
+    }
     idx <- 1:nrow(x)
   }
 
@@ -136,7 +147,13 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, ...) {
 #' @export
 data_filter <- function(x, filter, ...) {
   condition <- substitute(filter)
-  out <- do.call(subset, list(x, subset = condition))
+  # numeric vector to slice data frame?
+  rows <- try(eval(condition, envir = parent.frame()), silent = TRUE)
+  if (is.numeric(rows)) {
+    out <- x[rows, , drop = FALSE]
+  } else {
+    out <- do.call(subset, list(x, subset = condition))
+  }
   # restore value and variable labels
   for (i in colnames(out)) {
     attr(out[[i]], "label") <- attr(x[[i]], "label", exact = TRUE)

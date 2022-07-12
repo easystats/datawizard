@@ -8,6 +8,8 @@
 #' @inheritParams data_cut
 #' @inheritParams find_columns
 #'
+#' @inheritSection center Selection of variables - the `select` argument
+#'
 #' @examples
 #' data_reverse(c(1, 2, 3, 4, 5))
 #' data_reverse(c(-2, -1, 0, 2, 1))
@@ -40,6 +42,13 @@ data_reverse <- function(x, ...) {
 reverse_scale <- data_reverse
 
 
+#' @export
+data_reverse.default <- function(x, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
+  }
+  x
+}
 
 
 #' @rdname data_reverse
@@ -48,7 +57,6 @@ data_reverse.numeric <- function(x,
                                  range = NULL,
                                  verbose = TRUE,
                                  ...) {
-
   # Warning if all NaNs
   if (all(is.na(x))) {
     return(x)
@@ -80,10 +88,8 @@ data_reverse.numeric <- function(x,
 
 
 
-
 #' @export
 data_reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
-
   # Warning if all NaNs
   if (all(is.na(x))) {
     return(x)
@@ -119,12 +125,11 @@ data_reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
 
 
 
-
 #' @export
 data_reverse.grouped_df <- function(x,
-                                    range = NULL,
                                     select = NULL,
                                     exclude = NULL,
+                                    range = NULL,
                                     ignore_case = FALSE,
                                     ...) {
   info <- attributes(x)
@@ -146,7 +151,7 @@ data_reverse.grouped_df <- function(x,
   x <- as.data.frame(x)
   for (rows in grps) {
     x[rows, ] <- data_reverse(
-      x[rows, ],
+      x[rows, , drop = FALSE],
       select = select,
       exclude = exclude,
       range = range,
@@ -159,12 +164,13 @@ data_reverse.grouped_df <- function(x,
 }
 
 
+
 #' @rdname data_reverse
 #' @export
 data_reverse.data.frame <- function(x,
-                                    range = NULL,
                                     select = NULL,
                                     exclude = NULL,
+                                    range = NULL,
                                     ignore_case = FALSE,
                                     ...) {
   # evaluate arguments

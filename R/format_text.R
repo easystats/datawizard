@@ -10,6 +10,9 @@
 #' @param sep Separator.
 #' @param last Last separator.
 #' @param n The number of characters to find.
+#' @param enclose Character that will be used to wrap elements of `text`, so
+#'   these can be, e.g., enclosed with quotes or backticks. If `NULL` (default),
+#'   text elements will not be enclosed.
 #' @param ... Other arguments to be passed to or from other functions.
 #'
 #' @return A character string.
@@ -23,6 +26,7 @@
 #'
 #' # Smart concatenation
 #' text_concatenate(c("First", "Second", "Last"))
+#' text_concatenate(c("First", "Second", "Last"), last = " or ", enclose = "`")
 #'
 #' # Remove parts of string
 #' text_remove(c("one!", "two", "three!"), "!")
@@ -34,8 +38,8 @@
 #' # Paste with optional separator
 #' text_paste(c("A", "", "B"), c("42", "42", "42"))
 #' @export
-format_text <- function(text, sep = ", ", last = " and ", width = NULL, ...) {
-  text_wrap(text_concatenate(text, sep = sep, last = last), width = width)
+format_text <- function(text, sep = ", ", last = " and ", width = NULL, enclose = NULL, ...) {
+  text_wrap(text_concatenate(text, sep = sep, last = last, enclose = enclose), width = width)
 }
 
 
@@ -58,22 +62,39 @@ text_lastchar <- function(text, n = 1) {
 
 #' @rdname format_text
 #' @export
-text_concatenate <- function(text, sep = ", ", last = " and ") {
+text_concatenate <- function(text, sep = ", ", last = " and ", enclose = NULL) {
   text <- text[text != ""]
+  if (length(text) && !is.null(enclose) && length(enclose) == 1 && nchar(enclose) > 0) {
+    text <- paste0(enclose, text, enclose)
+  }
   if (length(text) == 1) {
-    text
+    s <- text
   } else {
     s <- paste0(utils::head(text, -1), collapse = sep)
     s <- paste0(c(s, utils::tail(text, 1)), collapse = last)
-    s
   }
+  s
 }
 
 
 #' @rdname format_text
 #' @export
-text_paste <- function(text, text2 = NULL, sep = ", ", ...) {
+text_paste <- function(text, text2 = NULL, sep = ", ", enclose = NULL, ...) {
   if (!is.null(text2)) {
+    if (!is.null(enclose) && length(enclose) == 1 && nchar(enclose) > 0) {
+      text <- sapply(text, function(i) {
+        if (i != "") {
+          i <- paste0(enclose, i, enclose)
+        }
+        i
+      })
+      text2 <- sapply(text2, function(i) {
+        if (i != "") {
+          i <- paste0(enclose, i, enclose)
+        }
+        i
+      })
+    }
     paste0(text, ifelse(text == "" | text2 == "", "", sep), text2)
   }
 }
@@ -90,18 +111,13 @@ text_remove <- function(text, pattern = "", ...) {
 #' @rdname format_text
 #' @export
 text_wrap <- function(text, width = NULL, ...) {
-  if (is.null(width)) {
-    return(text)
-  }
+  width <- width %||% getOption("width")
 
   text <- strsplit(text, "\n", perl = TRUE)
   text <- unlist(text)
 
-  if (width == "auto") {
-    width <- 0.9 * getOption("width")
-  }
-
   wrapped <- ""
+
   for (s in text) {
     if (nchar(s) > width) {
       leading_spaces <- nchar(s) - nchar(trimws(s))
@@ -111,5 +127,6 @@ text_wrap <- function(text, width = NULL, ...) {
     }
     wrapped <- paste0(wrapped, s, "\n")
   }
+
   wrapped
 }

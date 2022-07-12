@@ -22,6 +22,7 @@
 #'   (based on [stats::IQR()], using `type = 6`).
 #' @param verbose Toggle warnings and messages.
 #' @inheritParams bayestestR::point_estimate
+#' @inheritParams find_columns
 #'
 #' @details If `x` is a dataframe, only numeric variables are kept and will be displayed in the summary.
 #'
@@ -32,6 +33,8 @@
 #' `describe_distribution(list(mtcars$mpg))`), then `"mtcars$mpg"` is used as
 #' variable name.
 #'
+#' @inheritSection center Selection of variables - the `select` argument
+
 #' @note There is also a
 #'   [`plot()`-method](https://easystats.github.io/see/articles/parameters.html)
 #'   implemented in the
@@ -152,6 +155,7 @@ describe_distribution.numeric <- function(x,
                                           threshold = .1,
                                           verbose = TRUE,
                                           ...) {
+  insight::check_if_installed("bayestestR")
   out <- data.frame(.temp = 0)
 
   # Missing
@@ -242,7 +246,6 @@ describe_distribution.factor <- function(x,
                                          range = TRUE,
                                          verbose = TRUE,
                                          ...) {
-
   # Missing
   n_missing <- sum(is.na(x))
   x <- stats::na.omit(x)
@@ -303,7 +306,6 @@ describe_distribution.character <- function(x,
                                             range = TRUE,
                                             verbose = TRUE,
                                             ...) {
-
   # Missing
   n_missing <- sum(is.na(x))
   x <- stats::na.omit(x)
@@ -361,6 +363,8 @@ describe_distribution.character <- function(x,
 #' @rdname describe_distribution
 #' @export
 describe_distribution.data.frame <- function(x,
+                                             select = NULL,
+                                             exclude = NULL,
                                              centrality = "mean",
                                              dispersion = TRUE,
                                              iqr = TRUE,
@@ -370,12 +374,13 @@ describe_distribution.data.frame <- function(x,
                                              ci = NULL,
                                              iterations = 100,
                                              threshold = .1,
+                                             ignore_case = FALSE,
                                              verbose = TRUE,
                                              ...) {
-
+  select <- .select_nse(select, x, exclude, ignore_case)
   # The function currently doesn't support descriptive summaries for character
   # or factor types.
-  out <- do.call(rbind, lapply(x, function(i) {
+  out <- do.call(rbind, lapply(x[select], function(i) {
     if ((include_factors && is.factor(i)) || (!is.character(i) && !is.factor(i))) {
       describe_distribution(
         i,
@@ -407,6 +412,8 @@ describe_distribution.data.frame <- function(x,
 
 #' @export
 describe_distribution.grouped_df <- function(x,
+                                             select = NULL,
+                                             exclude = NULL,
                                              centrality = "mean",
                                              dispersion = TRUE,
                                              iqr = TRUE,
@@ -416,15 +423,17 @@ describe_distribution.grouped_df <- function(x,
                                              ci = NULL,
                                              iterations = 100,
                                              threshold = .1,
+                                             ignore_case = FALSE,
                                              verbose = TRUE,
                                              ...) {
   group_vars <- setdiff(colnames(attributes(x)$groups), ".rows")
   group_data <- expand.grid(lapply(x[group_vars], function(i) unique(sort(i))))
   groups <- split(x, x[group_vars])
+  select <- .select_nse(select, x, exclude, ignore_case)
 
   out <- do.call(rbind, lapply(1:length(groups), function(i) {
     d <- describe_distribution.data.frame(
-      groups[[i]],
+      groups[[i]][select],
       centrality = centrality,
       dispersion = dispersion,
       iqr = iqr,
@@ -468,8 +477,6 @@ print.parameters_distribution <- function(x, digits = 2, ...) {
 }
 
 
-
-
 # bootstrapping CIs ----------------------------------
 
 .boot_distribution <- function(data, indices, centrality) {
@@ -483,4 +490,28 @@ print.parameters_distribution <- function(x, digits = 2, ...) {
     ci = NULL
   )
   out[[1]]
+}
+
+# distribution_mode ----------------------------------
+
+#' Compute mode for a statistical distribution
+#'
+#' @param x An atomic vector, a list, or a data frame.
+#'
+#' @return
+#'
+#' The value that appears most frequently in the provided data.
+#' The returned data structure will be the same as the entered one.
+#'
+#' @examples
+#'
+#' distribution_mode(c(1, 2, 3, 3, 4, 5))
+#' distribution_mode(c(1.5, 2.3, 3.7, 3.7, 4.0, 5))
+#'
+#' @export
+distribution_mode <- function(x) {
+  uniqv <- unique(x)
+  tab <- tabulate(match(x, uniqv))
+  idx <- which.max(tab)
+  uniqv[idx]
 }

@@ -15,7 +15,7 @@ vignette: >
 library(knitr)
 options(knitr.kable.NA = "")
 knitr::opts_chunk$set(
-  comment = ">",
+  comment = "#>",
   message = FALSE,
   warning = FALSE,
   dpi = 300
@@ -73,17 +73,16 @@ We can see that different methods give different central and variation values:
 
 ```{r, eval=FALSE}
 library(dplyr)
-library(tidyr)
 
 hardlyworking %>%
   select(starts_with("xtra_hours")) %>%
-  pivot_longer(everything()) %>%
-  group_by(name) %>%
+  data_to_long() %>%
+  group_by(Name) %>%
   summarise(
-    mean = mean(value),
-    sd = sd(value),
-    median = median(value),
-    mad = mad(value)
+    mean = mean(Value),
+    sd = sd(Value),
+    median = median(Value),
+    mad = mad(Value)
   )
 ```
 
@@ -113,13 +112,13 @@ hardlyworking_z <- standardize(hardlyworking)
 ```{r, eval=FALSE}
 hardlyworking_z %>%
   select(-xtra_hours_z, -xtra_hours_zr) %>%
-  pivot_longer(everything()) %>%
-  group_by(name) %>%
+  data_to_long() %>%
+  group_by(Name) %>%
   summarise(
-    mean = mean(value),
-    sd = sd(value),
-    median = median(value),
-    mad = mad(value)
+    mean = mean(Value),
+    sd = sd(Value),
+    median = median(Value),
+    mad = mad(Value)
   )
 ```
 
@@ -174,7 +173,7 @@ Let's have a look at the data, averaged by participants:
 
 ```{r, eval=FALSE}
 # Download the 'emotion' dataset
-load(url("https://raw.github.com/neuropsychology/psycho.R/master/data/emotion.rda"))
+load(url("https://raw.githubusercontent.com/neuropsychology/psycho.R/master/data/emotion.rda"))
 
 # Discard neutral pictures (keep only negative)
 emotion <- emotion %>% filter(Emotion_Condition == "Negative")
@@ -191,7 +190,7 @@ emotion %>%
 ```
 
 ```{r, echo=FALSE}
-load(url("https://raw.github.com/neuropsychology/psycho.R/master/data/emotion.rda"))
+load(url("https://raw.githubusercontent.com/neuropsychology/psycho.R/master/data/emotion.rda"))
 
 # Discard neutral pictures (keep only negative)
 emotion <- emotion %>% filter(Emotion_Condition == "Negative")
@@ -445,6 +444,6 @@ importance of open data, open analysis/scripts, and preregistration.
 
 - `datawizard::demean()`: <https://easystats.github.io/datawizard/reference/demean.html>
 - `standardize_parameters(method = "pseudo")` for mixed-effects models
-<https://easystats.github.io/effectsize/reference/standardize_parameters.html>
+<https://easystats.github.io/parameters/articles/model_parameters_standardized.html>
 
 # References

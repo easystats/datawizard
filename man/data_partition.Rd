@@ -2,15 +2,25 @@
 % Please edit documentation in R/data_partition.R
 \name{data_partition}
 \alias{data_partition}
-\title{Partition data into a test and a training set}
+\title{Partition data}
 \usage{
-data_partition(data, training_proportion = 0.7, group = NULL, seed = NULL, ...)
+data_partition(
+  data,
+  proportion = 0.7,
+  group = NULL,
+  seed = NULL,
+  row_id = ".row_id",
+  verbose = TRUE,
+  training_proportion = proportion,
+  ...
+)
 }
 \arguments{
 \item{data}{A data frame, or an object that can be coerced to a data frame.}
 
-\item{training_proportion}{The proportion (between 0 and 1) of the training
-set. The remaining part will be used for the test set.}
+\item{proportion}{Scalar (between 0 and 1) or numeric vector, indicating the
+proportion(s) of the training set(s). The sum of \code{proportion} must not be
+greater than 1. The remaining part will be used for the test set.}
 
 \item{group}{A character vector indicating the name(s) of the column(s) used
 for stratified partitioning.}
@@ -18,33 +28,56 @@ for stratified partitioning.}
 \item{seed}{A random number generator seed. Enter an integer (e.g. 123) so
 that the random sampling will be the same each time you run the function.}
 
+\item{row_id}{Character string, indicating the name of the column that
+contains the row-id's.}
+
+\item{verbose}{Toggle messages and warnings.}
+
+\item{training_proportion}{Deprecated, please use \code{proportion}.}
+
 \item{...}{Other arguments passed to or from other functions.}
 }
 \value{
-A list of two data frames, named \code{test} and \code{training}.
+A list of data frames. The list includes one training set per given
+proportion and the remaining data as test set. List elements of training
+sets are named after the given proportions (e.g., \verb{$p_0.7}), the test set
+is named \verb{$test}.
 }
 \description{
-Creates a training and a test set based on a dataframe. Can also be
-stratified (i.e., evenly spread a given factor) using the \code{group}
-argument.
+Creates data partitions (for instance, a training and a test set) based on a
+dataframe that can also be stratified (i.e., evenly spread a given factor)
+using the \code{group} argument.
 }
 \examples{
-df <- iris
-df$Smell <- rep(c("Strong", "Light"), 75)
+data(iris)
+out <- data_partition(iris, proportion = 0.9)
+out$test
+nrow(out$p_0.9)
 
-data_partition(df)
-data_partition(df, group = "Species")
-data_partition(df, group = c("Species", "Smell"))
+# Stratify by group (equal proportions of each species)
+out <- data_partition(iris, proportion = 0.9, group = "Species")
+out$test
+
+# Create multiple partitions
+out <- data_partition(iris, proportion = c(0.3, 0.3))
+lapply(out, head)
+
+# Create multiple partitions, stratified by group - 30\% equally sampled
+# from species in first training set, 50\% in second training set and
+# remaining 20\% equally sampled from each species in test set.
+out <- data_partition(iris, proportion = c(0.3, 0.5), group = "Species")
+lapply(out, function(i) table(i$Species))
+
 }
 \seealso{
 \itemize{
 \item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}}, \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
 \item Functions to reorder or remove columns: \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
 \item Functions to reshape, pivot or rotate dataframes: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
-\item Functions to rescale and reverse: \code{\link[=data_rescale]{data_rescale()}}, \code{\link[=data_reverse]{data_reverse()}}
-\item Functions to standardize, normalize, rank-transform: \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
-\item Split, cut and merge dataframes: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_cut]{data_cut()}}, \code{\link[=data_merge]{data_merge()}}
-\item Functions to find or select columns: \code{\link[=find_columns]{find_columns()}}
+\item Functions to recode data: \code{\link[=data_rescale]{data_rescale()}}, \code{\link[=data_reverse]{data_reverse()}}, \code{\link[=data_cut]{data_cut()}}, \code{\link[=data_recode]{data_recode()}}, \code{\link[=data_shift]{data_shift()}}
+\item Functions to standardize, normalize, rank-transform: \code{\link[=center]{center()}}, \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
+\item Split and merge dataframes: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_merge]{data_merge()}}
+\item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=data_find]{data_find()}}
 \item Functions to filter rows: \code{\link[=data_match]{data_match()}}, \code{\link[=data_filter]{data_filter()}}
 }
 }

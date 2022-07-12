@@ -30,7 +30,6 @@
 #' @export
 
 reshape_ci <- function(x, ci_type = "CI") {
-
   # define interval type
   ci_type <- match.arg(ci_type, choices = c("CI", "SI", "HDI", "ETI"))
 

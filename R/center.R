@@ -32,6 +32,15 @@
 #' @inheritParams find_columns
 #' @inheritParams standardize
 #'
+#' @section Selection of variables - the `select` argument:
+#' For most functions that have a `select` argument (including this function),
+#' the complete input data frame is returned, even when `select` only selects
+#' a range of variables. That is, the function is only applied to those variables
+#' that have a match in `select`, while all other variables remain unchanged.
+#' In other words: for this function, `select` will not omit any non-included
+#' variables, so that the returned data frame will include all variables
+#' from the input data frame.
+#'
 #' @note
 #' **Difference between centering and standardizing**: Standardized variables
 #' are computed by subtracting the mean of the variable and then dividing it by
@@ -100,7 +109,8 @@ center.numeric <- function(x,
                            ...) {
   args <- .process_std_center(x, weights, robust, verbose, reference, center, scale = NULL)
 
-  if (is.null(args)) { # all NA?
+  if (is.null(args)) {
+    # all NA?
     return(x)
   } else if (is.null(args$check)) {
     vals <- rep(0, length(args$vals)) # If only unique value
@@ -111,7 +121,7 @@ center.numeric <- function(x,
   centered_x <- rep(NA, length(args$valid_x))
   centered_x[args$valid_x] <- vals
   attr(centered_x, "center") <- args$center
-  attr(centered_x, "scale") <- args$scale
+  attr(centered_x, "scale") <- 1
   attr(centered_x, "robust") <- robust
   # labels
   .set_back_labels(centered_x, x, include_values = FALSE)
@@ -147,6 +157,8 @@ center.AsIs <- center.numeric
 #' @inheritParams standardize.data.frame
 #' @export
 center.data.frame <- function(x,
+                              select = NULL,
+                              exclude = NULL,
                               robust = FALSE,
                               weights = NULL,
                               reference = NULL,
@@ -154,8 +166,6 @@ center.data.frame <- function(x,
                               force = FALSE,
                               remove_na = c("none", "selected", "all"),
                               append = FALSE,
-                              select = NULL,
-                              exclude = NULL,
                               ignore_case = FALSE,
                               verbose = TRUE,
                               ...) {
@@ -193,6 +203,8 @@ center.data.frame <- function(x,
 
 #' @export
 center.grouped_df <- function(x,
+                              select = NULL,
+                              exclude = NULL,
                               robust = FALSE,
                               weights = NULL,
                               reference = NULL,
@@ -200,8 +212,6 @@ center.grouped_df <- function(x,
                               force = FALSE,
                               remove_na = c("none", "selected", "all"),
                               append = FALSE,
-                              select = NULL,
-                              exclude = NULL,
                               ignore_case = FALSE,
                               verbose = TRUE,
                               ...) {
@@ -215,7 +225,7 @@ center.grouped_df <- function(x,
 
   for (rows in args$grps) {
     args$x[rows, ] <- center(
-      args$x[rows, ],
+      args$x[rows, , drop = FALSE],
       select = args$select,
       exclude = NULL,
       robust = robust,

@@ -15,10 +15,10 @@ change_scale(x, ...)
 
 \method{data_rescale}{data.frame}(
   x,
-  to = c(0, 100),
-  range = NULL,
   select = NULL,
   exclude = NULL,
+  to = c(0, 100),
+  range = NULL,
   ignore_case = FALSE,
   ...
 )
@@ -48,11 +48,24 @@ vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
 (e.g. \code{1} or \code{c(1, 3, 5)}),
 \item a vector of negative integers, giving the positions counting from the
 right (e.g., \code{-1} or \code{-1:-3}),
-\item or one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
-\code{contains("")}, a range using \code{:} or \code{regex("")}.
+\item one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
+\code{contains("")}, a range using \code{:} or \code{regex("")},
+\item or a function testing for logical conditions, e.g. \code{is.numeric()} (or
+\code{is.numeric}), or any user-defined function that selects the variables
+for which the function returns \code{TRUE} (like: \code{foo <- function(x) mean(x) > 3}),
+\item ranges specified via literal variable names, select-helpers (except
+\code{regex()}) and (user-defined) functions can be negated, i.e. return
+non-matching elements, when prefixed with a \code{-}, e.g. \code{-ends_with("")},
+\code{-is.numeric} or \code{-Sepal.Width:Petal.Length}. \strong{Note:} Negation means
+that matches are \emph{excluded}, and thus, the \code{exclude} argument can be
+used alternatively. For instance, \code{select=-ends_with("Length")} (with
+\code{-}) is equivalent to \code{exclude=ends_with("Length")} (no \code{-}). In case
+negation should not work as expected, use the \code{exclude} argument instead.
 }
 
-If \code{NULL}, selects all columns.}
+If \code{NULL}, selects all columns. Patterns that found no matches are silently
+ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
+return \code{"Species"}.}
 
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
@@ -69,6 +82,17 @@ A rescaled object.
 Rescale variables to a new range.
 Can also be used to reverse-score variables (change the keying/scoring direction).
 }
+\section{Selection of variables - the \code{select} argument}{
+
+For most functions that have a \code{select} argument (including this function),
+the complete input data frame is returned, even when \code{select} only selects
+a range of variables. That is, the function is only applied to those variables
+that have a match in \code{select}, while all other variables remain unchanged.
+In other words: for this function, \code{select} will not omit any non-included
+variables, so that the returned data frame will include all variables
+from the input data frame.
+}
+
 \examples{
 data_rescale(c(0, 1, 5, -5, -2))
 data_rescale(c(0, 1, 5, -5, -2), to = c(-5, 5))

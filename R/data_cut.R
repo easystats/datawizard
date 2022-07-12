@@ -34,15 +34,21 @@
 #' @param labels Character vector of value labels. If not `NULL`, `data_cut()`
 #'   will returns factors instead of numeric variables, with `labels` used
 #'   for labelling the factor levels.
-#' @param force Logical, if `TRUE`, forces recoding of factors as well.
-#' @param append Logical or string. If `TRUE`, recoded variables get new
-#'   column names (with the suffix `"_r"`) and are appended (column bind) to `x`,
-#'   thus returning both the original and the recoded variables. If `FALSE`,
-#'   original variables in `x` will be overwritten by their recoded versions.
-#'   If a character value, recoded variables are appended with new column
-#'   names (using the defined suffix) to the original data frame.
+#' @param append Logical or string. If `TRUE`, recoded or converted variables
+#'   get new column names and are appended (column bind) to `x`, thus returning
+#'   both the original and the recoded variables. The new columns get a suffix,
+#'   based on the calling function: `"_r"` for recode functions, `"_n"` for
+#'   `data_to_numeric()`, `"_f"` for `data_to_factor()`, or `"_s"` for
+#'   `data_shift()`. If `append=FALSE`, original variables in `x` will be
+#'   overwritten by their recoded versions. If a character value, recoded
+#'   variables are appended with new column names (using the defined suffix) to
+#'   the original data frame.
 #' @param ... not used.
 #' @inheritParams find_columns
+#'
+#' @inheritSection center Selection of variables - the `select` argument
+#'
+#' @inherit data_rename seealso
 #'
 #' @return `x`, recoded into groups. By default `x` is numeric, unless `labels`
 #'   is specified. In this case, a factor is returned, where the factor levels
@@ -114,7 +120,10 @@ data_cut <- function(x, ...) {
 
 
 #' @export
-data_cut.default <- function(x, ...) {
+data_cut.default <- function(x, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
+  }
   return(x)
 }
 
@@ -228,15 +237,14 @@ data_cut.factor <- function(x, ...) {
 #' @rdname data_cut
 #' @export
 data_cut.data.frame <- function(x,
+                                select = NULL,
+                                exclude = NULL,
                                 split = "median",
                                 n_groups = NULL,
                                 range = NULL,
                                 lowest = 1,
                                 labels = NULL,
-                                force = FALSE,
                                 append = FALSE,
-                                select = NULL,
-                                exclude = NULL,
                                 ignore_case = FALSE,
                                 verbose = TRUE,
                                 ...) {
@@ -244,7 +252,15 @@ data_cut.data.frame <- function(x,
   select <- .select_nse(select, x, exclude, ignore_case)
 
   # process arguments
-  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force)
+  args <- .process_std_args(
+    x,
+    select,
+    exclude,
+    weights = NULL,
+    append,
+    append_suffix = "_r",
+    force = TRUE
+  )
 
   # update processed arguments
   x <- args$x
@@ -257,15 +273,14 @@ data_cut.data.frame <- function(x,
 
 #' @export
 data_cut.grouped_df <- function(x,
+                                select = NULL,
+                                exclude = NULL,
                                 split = "median",
                                 n_groups = NULL,
                                 range = NULL,
                                 lowest = 1,
                                 labels = NULL,
-                                force = FALSE,
                                 append = FALSE,
-                                select = NULL,
-                                exclude = NULL,
                                 ignore_case = FALSE,
                                 verbose = TRUE,
                                 ...) {
@@ -278,7 +293,7 @@ data_cut.grouped_df <- function(x,
   select <- .select_nse(select, x, exclude, ignore_case)
 
   # process arguments
-  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force)
+  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force = TRUE)
 
   # update processed arguments
   x <- args$x
@@ -295,23 +310,22 @@ data_cut.grouped_df <- function(x,
   x <- as.data.frame(x)
   for (rows in grps) {
     x[rows, ] <- data_cut(
-      x[rows, ],
+      x[rows, , drop = FALSE],
       split = split,
-      n_groups = split,
+      n_groups = n_groups,
       range = range,
       lowest = lowest,
       labels = labels,
       select = select,
       exclude = exclude,
-      force = force,
-      append = append,
+      append = FALSE, # need to set to FALSE here, else variable will be doubled
       ignore_case = ignore_case,
       verbose = verbose,
       ...
     )
   }
   # set back class, so data frame still works with dplyr
-  attributes(x) <- info
+  attributes(x) <- utils::modifyList(info, attributes(x))
   x
 }
 

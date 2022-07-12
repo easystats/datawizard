@@ -11,9 +11,9 @@
 #' of `visualisation_recipe()` that control the aesthetic parameters.
 #'
 #' See the specific documentation page for your object's class:
-#'  - {[modelbased][modelbased::visualisation_recipe.estimate_predicted] (`estimate_means`, `estimate_contrasts`, `estimate_slopes`, `estimate_predicted`, `estimate_grouplevel`)}
-#'  - {[correlation][correlation::visualisation_recipe.easycor_test] (`correlation`, `cor_test`)}
 #'
+#'  - {modelbased}: <https://easystats.github.io/modelbased/reference/visualisation_recipe.estimate_predicted.html>
+#'  - {correlation}: <https://easystats.github.io/correlation/reference/visualisation_recipe.easycormatrix.html>
 #'
 #' @param x An `easystats` object.
 #' @param ... Other arguments passed to other functions.
@@ -35,7 +35,6 @@ print.visualisation_recipe <- function(x, ...) {
 
     # Loop through all elements of list
     for (element in elements[elements != "geom"]) {
-
       # Print element name
       if (element == "aes") {
         cat("aes_string(\n")

@@ -14,6 +14,8 @@
 #'   the input vector (`range(x)`).
 #' @param ... Arguments passed to or from other methods.
 #'
+#' @inheritSection center Selection of variables - the `select` argument
+#'
 #' @examples
 #' data_rescale(c(0, 1, 5, -5, -2))
 #' data_rescale(c(0, 1, 5, -5, -2), to = c(-5, 5))
@@ -56,6 +58,16 @@ change_scale <- function(x, ...) {
 
 
 
+#' @export
+data_rescale.default <- function(x, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be rescaled and remain unchanged.")))
+  }
+  x
+}
+
+
+
 #' @rdname data_rescale
 #' @export
 data_rescale.numeric <- function(x,
@@ -90,24 +102,19 @@ data_rescale.numeric <- function(x,
   new_max <- ifelse(is.na(to[2]), max, to[2])
 
   out <- as.vector((new_max - new_min) / (max - min) * (x - min) + new_min)
+  attr(out, "min_value") <- min
+  attr(out, "range_difference") <- max - min
+  attr(out, "to_range") <- c(new_min, new_max)
   out
 }
 
 
-
-#' @export
-data_rescale.factor <- function(x, ...) {
-  x
-}
-
-
-
 #' @export
 data_rescale.grouped_df <- function(x,
-                                    to = c(0, 100),
-                                    range = NULL,
                                     select = NULL,
                                     exclude = NULL,
+                                    to = c(0, 100),
+                                    range = NULL,
                                     ignore_case = FALSE,
                                     ...) {
   info <- attributes(x)
@@ -129,7 +136,7 @@ data_rescale.grouped_df <- function(x,
   x <- as.data.frame(x)
   for (rows in grps) {
     x[rows, ] <- data_rescale(
-      x[rows, ],
+      x[rows, , drop = FALSE],
       select = select,
       exclude = exclude,
       to = to,
@@ -147,10 +154,10 @@ data_rescale.grouped_df <- function(x,
 #' @rdname data_rescale
 #' @export
 data_rescale.data.frame <- function(x,
-                                    to = c(0, 100),
-                                    range = NULL,
                                     select = NULL,
                                     exclude = NULL,
+                                    to = c(0, 100),
+                                    range = NULL,
                                     ignore_case = FALSE,
                                     ...) {
   # evaluate arguments

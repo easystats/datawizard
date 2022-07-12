@@ -6,13 +6,25 @@
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/)
 [![status](https://tinyverse.netlify.com/badge/datawizard)](https://CRAN.R-project.org/package=datawizard)
 
-***Hockety pockety wockety wack, prepare this data forth and back***
-:sparkles:
+<img src='https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif' width="200" align = "right"/>
 
-`datawizard` is a lightweight package to easily manipulate, clean,
-transform, and prepare your data for analysis.
+<!-- ***:sparkles: Hockety pockety wockety wack, prepare this data forth and back*** -->
+<!-- ***Hockety pockety wockety wock, messy data is in shock*** -->
+<!-- ***Hockety pockety wockety woss, you can cite i-it from JOSS*** <sup>(soon)</sup> -->
+<!-- ***Hockety pockety wockety wass, datawizard saves your ass! :sparkles:*** -->
 
-<img src='https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif' height="150" />
+`{datawizard}` is a lightweight package to easily manipulate, clean,
+transform, and prepare your data for analysis. It is part of the
+[easystats ecosystem](https://easystats.github.io/easystats/), a suite
+of R packages to deal with your entire statistical analysis, from
+cleaning the data to reporting the results.
+
+Most courses and tutorials about statistical modeling assume that you
+are working with a clean and tidy dataset. In practice, however, a major
+part of doing statistical modeling is preparing your data–cleaning up
+values, creating new columns, reshaping the dataset, or transforming
+some variables. `{datawizard}` provides easy to use tools to perform
+these common, critical, and sometimes tedious data preparation tasks.
 
 # Installation
 
@@ -244,11 +256,11 @@ or the other way
 long_data <- data_to_long(wide_data, rows_to = "Row_ID") # Save row number
 
 data_to_wide(long_data,
-  colnames_from = "Name",
+  names_from = "Name",
   values_from = "Value",
-  rows_from = "Row_ID"
+  id_cols = "Row_ID"
 )
-#>    Row_ID    Value_X1    Value_X2    Value_X3   Value_X4    Value_X5
+#>    Row_ID          X1          X2          X3         X4          X5
 #> 1       1 -0.08281164 -1.12490028 -0.70632036 -0.7027895  0.07633326
 #> 2       2  1.93468099 -0.87430362  0.96687656  0.2998642 -0.23035595
 #> 3       3 -2.05128979  0.04386162 -0.71016648  1.1494697  0.31746484
@@ -394,18 +406,18 @@ anscombe
 
 # after
 winsorize(anscombe)
-#>       x1 x2 x3 x4   y1   y2   y3   y4
-#>  [1,] 10 10 10  8 8.04 9.13 7.46 6.58
-#>  [2,]  8  8  8  8 6.95 8.14 6.77 5.76
-#>  [3,] 12 12 12  8 7.58 8.74 8.15 7.71
-#>  [4,]  9  9  9  8 8.81 8.77 7.11 8.47
-#>  [5,] 11 11 11  8 8.33 9.13 7.81 8.47
-#>  [6,] 12 12 12  8 8.81 8.10 8.15 7.04
-#>  [7,]  6  6  6  8 7.24 6.13 6.08 5.76
-#>  [8,]  6  6  6  8 5.68 6.13 6.08 8.47
-#>  [9,] 12 12 12  8 8.81 9.13 8.15 5.76
-#> [10,]  7  7  7  8 5.68 7.26 6.42 7.91
-#> [11,]  6  6  6  8 5.68 6.13 6.08 6.89
+#>    x1 x2 x3 x4   y1   y2   y3   y4
+#> 1  10 10 10  8 8.04 9.13 7.46 6.58
+#> 2   8  8  8  8 6.95 8.14 6.77 5.76
+#> 3  12 12 12  8 7.58 8.74 8.15 7.71
+#> 4   9  9  9  8 8.81 8.77 7.11 8.47
+#> 5  11 11 11  8 8.33 9.13 7.81 8.47
+#> 6  12 12 12  8 8.81 8.10 8.15 7.04
+#> 7   6  6  6  8 7.24 6.13 6.08 5.76
+#> 8   6  6  6  8 5.68 6.13 6.08 8.47
+#> 9  12 12 12  8 8.81 9.13 8.15 5.76
+#> 10  7  7  7  8 5.68 7.26 6.42 7.91
+#> 11  6  6  6  8 5.68 6.13 6.08 6.89
 ```
 
 ### Center
@@ -461,6 +473,12 @@ To rescale a numeric variable to a new range:
 ``` r
 change_scale(c(0, 1, 5, -5, -2))
 #> [1]  50  60 100   0  30
+#> attr(,"min_value")
+#> [1] -5
+#> attr(,"range_difference")
+#> [1] 10
+#> attr(,"to_range")
+#> [1]   0 100
 ```
 
 ### Rotate or transpose
@@ -525,34 +543,25 @@ that makes it easy for user to understand and remember how functions
 work:
 
 1.  the first argument is the data
-2.  the following arguments are main arguments, related to the specific
-    tasks of the functions
-3.  further arguments can be select-helpers, which are offered for
-    convenience reasons (so there is no need for interim calls to
-    `get_columns()`)
+2.  for methods that work on data frames, two arguments are following to
+    `select` and `exclude` variables
+3.  the following arguments are arguments related to the specific tasks
+    of the functions
 
-E.g., in `data_filter()`, the main arguments after the data-argument are
-assumed to *filter* the rows of a data frame. `data_cut()` recodes data
-into groups of values and hence the main argument following the
-data-argument are used to define the breaks for grouping variables. Most
-functions, however, in particular (but not limited to) functions that
-start with `data_*()`, usually *select* columns from the provided data
-frame (and thus also support select-helpers).
-
-Most important, functions that accept data frame usually have this as
+Most important, functions that accept data frames usually have this as
 their first argument, and also return a (modified) data frame again.
 Thus, `{datawizard}` integrates smoothly into a “pipe-workflow”.
 
 ``` r
-iris |> 
+iris |>
   # all rows where Species is "versicolor" or "virginica"
-  data_filter(Species %in% c("versicolor", "virginica")) |> 
+  data_filter(Species %in% c("versicolor", "virginica")) |>
   # select only columns with "." in names (i.e. drop Species)
-  get_columns(contains(".")) |> 
+  get_columns(contains(".")) |>
   # move columns that ends with "Length" to start of data frame
-  data_relocate(ends_with("Length")) |> 
+  data_relocate(ends_with("Length")) |>
   # remove fourth column
-  data_remove(4) |> 
+  data_remove(4) |>
   head()
 #>    Sepal.Length Petal.Length Sepal.Width
 #> 51          7.0          4.7         3.2

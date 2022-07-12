@@ -10,15 +10,22 @@
 \alias{text_wrap}
 \title{Convenient text formatting functionalities}
 \usage{
-format_text(text, sep = ", ", last = " and ", width = NULL, ...)
+format_text(
+  text,
+  sep = ", ",
+  last = " and ",
+  width = NULL,
+  enclose = NULL,
+  ...
+)
 
 text_fullstop(text)
 
 text_lastchar(text, n = 1)
 
-text_concatenate(text, sep = ", ", last = " and ")
+text_concatenate(text, sep = ", ", last = " and ", enclose = NULL)
 
-text_paste(text, text2 = NULL, sep = ", ", ...)
+text_paste(text, text2 = NULL, sep = ", ", enclose = NULL, ...)
 
 text_remove(text, pattern = "", ...)
 
@@ -34,6 +41,10 @@ text_wrap(text, width = NULL, ...)
 \item{width}{Positive integer giving the target column width for wrapping
 lines in the output. Can be "auto", in which case it will select 90\\% of the
 default width.}
+
+\item{enclose}{Character that will be used to wrap elements of \code{text}, so
+these can be, e.g., enclosed with quotes or backticks. If \code{NULL} (default),
+text elements will not be enclosed.}
 
 \item{...}{Other arguments to be passed to or from other functions.}
 
@@ -59,6 +70,7 @@ text_lastchar(c("ABC", "DEF"), n = 2)
 
 # Smart concatenation
 text_concatenate(c("First", "Second", "Last"))
+text_concatenate(c("First", "Second", "Last"), last = " or ", enclose = "`")
 
 # Remove parts of string
 text_remove(c("one!", "two", "three!"), "!")

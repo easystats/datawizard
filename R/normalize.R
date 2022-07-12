@@ -1,7 +1,9 @@
 #' Normalize numeric variable to 0-1 range
 #'
-#' Performs a normalization of data, i.e., it scales variables in the range 0 -
-#' 1. This is a special case of [data_rescale()].
+#' Performs a normalization of data, i.e., it scales variables in the range
+#' 0 - 1. This is a special case of [data_rescale()]. `unnormalize()` is the
+#' counterpart, but only works for variables that have been normalized with
+#' `normalize()`.
 #'
 #' @param x A numeric vector, (grouped) data frame, or matrix. See 'Details'.
 #' @param include_bounds Logical, if `TRUE`, return value may include 0 and 1.
@@ -12,6 +14,8 @@
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams standardize.data.frame
 #' @inheritParams find_columns
+#'
+#' @inheritSection center Selection of variables - the `select` argument
 #'
 #' @details
 #'
@@ -48,20 +52,26 @@ normalize <- function(x, ...) {
 #' @rdname normalize
 #' @export
 normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
-
-  # Warning if all NaNs
-  if (all(is.na(x))) {
+  # Warning if all NaNs or infinite
+  if (all(is.infinite(x) | is.na(x))) {
     return(x)
   }
 
+  # safe name, for later use
+  if (is.null(names(x))) {
+    name <- deparse(substitute(x))
+  } else {
+    name <- names(x)
+  }
+
+  # Get infinite and replace by NA (so that the normalization doesn't fail)
+  infinite_idx <- is.infinite(x)
+  infinite_vals <- x[infinite_idx]
+  x[infinite_idx] <- NA
+
 
   # Warning if only one value
-  if (length(unique(x)) == 1) {
-    if (is.null(names(x))) {
-      name <- deparse(substitute(x))
-    } else {
-      name <- names(x)
-    }
+  if (insight::n_unique(x) == 1) {
     if (verbose) {
       warning(insight::format_message(paste0("Variable `", name, "` contains only one unique value and will not be normalized.")), call. = FALSE)
     }
@@ -70,12 +80,7 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
 
 
   # Warning if logical vector
-  if (length(unique(x)) == 2) {
-    if (is.null(names(x))) {
-      name <- deparse(substitute(x))
-    } else {
-      name <- names(x)
-    }
+  if (insight::n_unique(x) == 2) {
     if (verbose) {
       warning(insight::format_message(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor.")), call. = FALSE)
     }
@@ -87,6 +92,13 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   if (!include_bounds && (any(out == 0) | any(out == 1))) {
     out <- (out * (length(out) - 1) + 0.5) / length(out)
   }
+
+  # Re-insert infinite values
+  out[infinite_idx] <- infinite_vals
+
+  attr(out, "include_bounds") <- isTRUE(include_bounds)
+  attr(out, "min_value") <- min(x, na.rm = TRUE)
+  attr(out, "range_difference") <- diff(range(x, na.rm = TRUE))
 
   out
 }
@@ -103,9 +115,9 @@ normalize.factor <- function(x, ...) {
 
 #' @export
 normalize.grouped_df <- function(x,
-                                 include_bounds = TRUE,
                                  select = NULL,
                                  exclude = NULL,
+                                 include_bounds = TRUE,
                                  ignore_case = FALSE,
                                  verbose = TRUE,
                                  ...) {
@@ -135,7 +147,7 @@ normalize.grouped_df <- function(x,
   x <- as.data.frame(x)
   for (rows in grps) {
     x[rows, ] <- normalize(
-      x[rows, ],
+      x[rows, , drop = FALSE],
       select = select,
       exclude = exclude,
       include_bounds = include_bounds,
@@ -152,13 +164,12 @@ normalize.grouped_df <- function(x,
 #' @rdname normalize
 #' @export
 normalize.data.frame <- function(x,
-                                 include_bounds = TRUE,
                                  select = NULL,
                                  exclude = NULL,
+                                 include_bounds = TRUE,
                                  ignore_case = FALSE,
                                  verbose = TRUE,
                                  ...) {
-
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
   x[select] <- lapply(x[select], normalize, include_bounds = include_bounds, verbose = verbose)

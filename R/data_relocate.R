@@ -47,7 +47,6 @@ data_relocate <- function(data,
                           ignore_case = FALSE,
                           verbose = TRUE,
                           ...) {
-
   # Sanitize
   if (!is.null(before) && !is.null(after)) {
     stop("You must supply only one of `before` or `after`.")

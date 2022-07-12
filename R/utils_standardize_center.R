@@ -12,16 +12,20 @@
                                 center = NULL,
                                 scale = NULL) {
   # Warning if all NaNs
-  if (all(is.na(x))) {
+  if (all(is.na(x) | is.infinite(x))) {
     return(NULL)
   }
 
   if (.are_weights(weights)) {
-    valid_x <- !is.na(x) & !is.na(weights)
+    valid_x <- !is.na(x) & !is.na(weights) & !is.infinite(x) & !is.infinite(weights)
+    na_values <- is.na(x) | is.na(weights)
+    inf_values <- is.infinite(x) | is.infinite(weights)
     vals <- x[valid_x]
     weights <- weights[valid_x]
   } else {
-    valid_x <- !is.na(x)
+    valid_x <- !is.na(x) & !is.infinite(x)
+    na_values <- is.na(x)
+    inf_values <- is.infinite(x)
     vals <- x[valid_x]
   }
 
@@ -41,7 +45,9 @@
     valid_x = valid_x,
     center = ref$center,
     scale = ref$scale,
-    check = check
+    check = check,
+    na_values = na_values,
+    inf_values = inf_values
   )
 }
 
@@ -59,8 +65,9 @@
                               remove_na = "none",
                               reference = NULL,
                               .center = NULL,
-                              .scale = NULL) {
-
+                              .scale = NULL,
+                              keep_character = FALSE,
+                              preserve_value_labels = FALSE) {
   # check append argument, and set default
   if (isFALSE(append)) {
     append <- NULL
@@ -77,7 +84,7 @@
     }
   }
 
-  select <- .select_variables(x, select, exclude, force)
+  select <- .select_variables(x, select, exclude, force, keep_character)
 
   # check if selected variables are in reference
   if (!is.null(reference) && !all(select %in% names(reference))) {
@@ -85,7 +92,11 @@
   }
 
   # copy label attributes
-  variable_labels <- compact_list(lapply(x, function(i) attributes(i)$label))
+  variable_labels <- compact_list(lapply(x, function(i) attr(i, "label", exact = TRUE)))
+  value_labels <- NULL
+  if (preserve_value_labels) {
+    value_labels <- compact_list(lapply(x, function(i) attr(i, "labels", exact = TRUE)))
+  }
 
   # drop NAs
   remove_na <- match.arg(remove_na, c("none", "selected", "all"))
@@ -106,6 +117,9 @@
     if (length(variable_labels)) {
       variable_labels <- c(variable_labels, stats::setNames(variable_labels[select], colnames(new_variables)))
     }
+    if (length(value_labels)) {
+      value_labels <- c(value_labels, stats::setNames(value_labels[select], colnames(new_variables)))
+    }
     x <- cbind(x, new_variables)
     select <- colnames(new_variables)
   }
@@ -113,7 +127,6 @@
 
   # check for reference center and scale
   if (!is.null(.center)) {
-
     # for center(), we have no scale - set it to default value
     if (is.null(.scale)) {
       .scale <- rep(1, length(.center))
@@ -143,7 +156,6 @@
       .scale <- stats::setNames(.scale, select)
     }
   } else {
-
     # use NA if missing, so we can index these as vectors
     .center <- stats::setNames(rep(NA, length(select)), select)
     .scale <- stats::setNames(rep(NA, length(select)), select)
@@ -153,6 +165,12 @@
   if (length(variable_labels)) {
     for (i in names(variable_labels)) {
       attr(x[[i]], "label") <- variable_labels[[i]]
+    }
+  }
+
+  if (preserve_value_labels && length(value_labels)) {
+    for (i in names(value_labels)) {
+      attr(x[[i]], "labels") <- value_labels[[i]]
     }
   }
 
@@ -239,7 +257,7 @@
 
 ## variables to standardize and center ----
 
-.select_variables <- function(x, select, exclude, force) {
+.select_variables <- function(x, select, exclude, force, keep_character = FALSE) {
   if (is.null(select)) {
     select <- names(x)
   }
@@ -249,7 +267,11 @@
   }
 
   if (!force) {
-    factors <- sapply(x[select], function(i) is.factor(i) | is.character(i))
+    if (!keep_character) {
+      factors <- sapply(x[select], function(i) is.factor(i) | is.character(i))
+    } else {
+      factors <- sapply(x[select], function(i) is.factor(i))
+    }
     select <- select[!factors]
   }
 

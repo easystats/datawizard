@@ -271,7 +271,7 @@ test_that("data_filter, labels preserved", {
 # convert_to_na -----------------------------------
 
 test_that("convert_to_na, labels preserved", {
-  expect_warning(x <- convert_to_na(efc, na = c(2, "2"), select = starts_with("e")))
+  expect_message(x <- convert_to_na(efc, na = c(2, "2"), select = starts_with("e")))
   # factor
   expect_equal(
     attr(x$e42dep, "label", exact = TRUE),
@@ -299,6 +299,12 @@ test_that("convert_to_na, labels preserved", {
     attr(efc$e16sex, "label", exact = TRUE),
     ignore_attr = TRUE
   )
+  # drop unused value labels
+  x <- convert_to_na(efc$c172code, na = 2)
+  expect_equal(
+    attr(x, "labels", exact = TRUE),
+    c(`low level of education` = 1, `high level of education` = 3)
+  )
 })
 
 
@@ -319,6 +325,66 @@ test_that("get_columns, labels preserved", {
   expect_equal(
     attr(x$e42dep, "label", exact = TRUE),
     attr(efc$e42dep, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+})
+
+
+
+# data_recode -----------------------------------
+
+test_that("data_recode, labels preserved", {
+  options(data_recode_pattern = NULL)
+  data(efc)
+  x <- data_recode(efc$c172code, recode = list(`0` = 1:2, `1` = 3))
+  expect_equal(
+    attr(x, "label", exact = TRUE),
+    attr(efc$c172code, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  expect_null(attr(x, "labels", exact = TRUE))
+})
+
+
+
+# data_shift -----------------------------------
+
+test_that("data_shift, labels preserved", {
+  data(efc)
+  x <- data_shift(efc)
+  expect_equal(
+    attr(x$c172code, "label", exact = TRUE),
+    attr(efc$c172code, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  expect_null(attr(x$c172code, "labels", exact = TRUE))
+
+  x <- data_shift(efc$c172code)
+  expect_equal(
+    attr(x, "label", exact = TRUE),
+    attr(efc$c172code, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+})
+
+
+
+# data_to_factor -----------------------------------
+
+test_that("data_to_factor, labels preserved", {
+  data(efc)
+  x <- data_to_factor(efc)
+  expect_equal(
+    attr(x$c172code, "label", exact = TRUE),
+    attr(efc$c172code, "label", exact = TRUE),
+    ignore_attr = TRUE
+  )
+  expect_null(attr(x$c172code, "labels", exact = TRUE))
+
+  x <- data_to_factor(efc$c172code)
+  expect_equal(
+    attr(x, "label", exact = TRUE),
+    attr(efc$c172code, "label", exact = TRUE),
     ignore_attr = TRUE
   )
 })

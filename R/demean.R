@@ -253,7 +253,6 @@ degroup <- function(x,
                     suffix_groupmean = "_between",
                     add_attributes = TRUE,
                     verbose = TRUE) {
-
   # ugly tibbles again...
   x <- as.data.frame(x)
 
@@ -344,7 +343,7 @@ degroup <- function(x,
 
   if (center == "mode") {
     x_gm_list <- lapply(select, function(i) {
-      stats::ave(dat[[i]], dat[[group]], FUN = function(.gm) .mode(stats::na.omit(.gm)))
+      stats::ave(dat[[i]], dat[[group]], FUN = function(.gm) distribution_mode(stats::na.omit(.gm)))
     })
   } else if (center == "median") {
     x_gm_list <- lapply(select, function(i) {
