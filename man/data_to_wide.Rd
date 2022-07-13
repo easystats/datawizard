@@ -59,7 +59,7 @@ syntactic variable names.}
 
 \item{names_glue}{Instead of \code{names_sep} and \code{names_prefix}, you can supply a
 \href{https://glue.tidyverse.org/index.html}{glue specification} that uses the
-\code{names_from} columns to create custom column names. Note that that the only
+\code{names_from} columns to create custom column names. Note that the only
 delimiters supported by \code{names_glue} are curly brackets, \verb{\{} and \verb{\}}.}
 
 \item{values_fill}{Optionally, a (scalar) value that will be used to replace

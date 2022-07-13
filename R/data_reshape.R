@@ -165,7 +165,7 @@ data_to_long <- function(data,
 #' as a column name.
 #' @param names_glue Instead of `names_sep` and `names_prefix`, you can supply a
 #' [glue specification](https://glue.tidyverse.org/index.html) that uses the
-#' `names_from` columns to create custom column names. Note that that the only
+#' `names_from` columns to create custom column names. Note that the only
 #' delimiters supported by `names_glue` are curly brackets, `{` and `}`.
 #' @param values_from The name of the column that contains the values to be used
 #' as future variable values.
