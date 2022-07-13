@@ -24,7 +24,8 @@ MAJOR CHANGES
   
 * `reshape_wider()` now follows more consistently `tidyr::pivot_wider()` syntax. 
   Arguments `colnames_from`, `sep`, and `rows_from` are deprecated and should be
-  replaced by `names_from`, `names_sep`, and `id_cols` respectively (#182). 
+  replaced by `names_from`, `names_sep`, and `id_cols` respectively.
+  `reshape_wider()` also gains an argument `names_glue` (#182, #198). 
   
 * Similarly, `reshape_longer()` now follows more consistently 
   `tidyr::pivot_longer()` syntax.  Argument `colnames_to` is deprecated and 
@@ -43,6 +44,9 @@ CHANGES
 
 * `data_partition()` now allows to create multiple partitions from the data,
   returning multiple training and a remaining test set.
+
+* Functions like `center()`, `normalize()` or `standardize()` no longer fail
+  when data contains infinite values (`Inf`).
 
 NEW FUNCTIONS
 

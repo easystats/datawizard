@@ -6,13 +6,25 @@
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/)
 [![status](https://tinyverse.netlify.com/badge/datawizard)](https://CRAN.R-project.org/package=datawizard)
 
-***Hockety pockety wockety wack, prepare this data forth and back***
-:sparkles:
+<img src='https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif' width="200" align = "right"/>
 
-`datawizard` is a lightweight package to easily manipulate, clean,
-transform, and prepare your data for analysis.
+<!-- ***:sparkles: Hockety pockety wockety wack, prepare this data forth and back*** -->
+<!-- ***Hockety pockety wockety wock, messy data is in shock*** -->
+<!-- ***Hockety pockety wockety woss, you can cite i-it from JOSS*** <sup>(soon)</sup> -->
+<!-- ***Hockety pockety wockety wass, datawizard saves your ass! :sparkles:*** -->
 
-<img src='https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif' height="150" />
+`{datawizard}` is a lightweight package to easily manipulate, clean,
+transform, and prepare your data for analysis. It is part of the
+[easystats ecosystem](https://easystats.github.io/easystats/), a suite
+of R packages to deal with your entire statistical analysis, from
+cleaning the data to reporting the results.
+
+Most courses and tutorials about statistical modeling assume that you
+are working with a clean and tidy dataset. In practice, however, a major
+part of doing statistical modeling is preparing your data–cleaning up
+values, creating new columns, reshaping the dataset, or transforming
+some variables. `{datawizard}` provides easy to use tools to perform
+these common, critical, and sometimes tedious data preparation tasks.
 
 # Installation
 
@@ -461,6 +473,12 @@ To rescale a numeric variable to a new range:
 ``` r
 change_scale(c(0, 1, 5, -5, -2))
 #> [1]  50  60 100   0  30
+#> attr(,"min_value")
+#> [1] -5
+#> attr(,"range_difference")
+#> [1] 10
+#> attr(,"to_range")
+#> [1]   0 100
 ```
 
 ### Rotate or transpose

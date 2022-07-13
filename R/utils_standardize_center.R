@@ -12,16 +12,20 @@
                                 center = NULL,
                                 scale = NULL) {
   # Warning if all NaNs
-  if (all(is.na(x))) {
+  if (all(is.na(x) | is.infinite(x))) {
     return(NULL)
   }
 
   if (.are_weights(weights)) {
-    valid_x <- !is.na(x) & !is.na(weights)
+    valid_x <- !is.na(x) & !is.na(weights) & !is.infinite(x) & !is.infinite(weights)
+    na_values <- is.na(x) | is.na(weights)
+    inf_values <- is.infinite(x) | is.infinite(weights)
     vals <- x[valid_x]
     weights <- weights[valid_x]
   } else {
-    valid_x <- !is.na(x)
+    valid_x <- !is.na(x) & !is.infinite(x)
+    na_values <- is.na(x)
+    inf_values <- is.infinite(x)
     vals <- x[valid_x]
   }
 
@@ -41,7 +45,9 @@
     valid_x = valid_x,
     center = ref$center,
     scale = ref$scale,
-    check = check
+    check = check,
+    na_values = na_values,
+    inf_values = inf_values
   )
 }
 
