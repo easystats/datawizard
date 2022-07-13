@@ -57,8 +57,9 @@ as a column name.}
 particularly useful if \code{names_from} is a numeric vector and you want to create
 syntactic variable names.}
 
-\item{names_glue}{Instead of \code{names_sep} and \code{names_prefix}, you can supply a glue
-specification that uses the \code{names_from} columns to create custom column names.}
+\item{names_glue}{Instead of \code{names_sep} and \code{names_prefix}, you can supply a
+glue specification that uses the \code{names_from} columns to create custom column
+names. See Details.}
 
 \item{values_fill}{Optionally, a (scalar) value that will be used to replace
 missing values in the new columns created.}
@@ -81,6 +82,12 @@ tibble. Otherwise, it returns a dataframe.
 This function "widens" data, increasing the number of columns and decreasing
 the number of rows. This is a dependency-free base-R equivalent of
 \code{tidyr::pivot_wider()}.
+}
+\details{
+Argument \code{names_glue} works similarly as the package \code{glue}
+(\url{https://glue.tidyverse.org/index.html}). One difference is that the only
+delimiters supported by \code{names_glue} are curly brackets, \verb{\{} and \verb{\}}. See
+the examples below.
 }
 \examples{
 data_long <- read.table(header = TRUE, text = "
@@ -127,7 +134,8 @@ production$production <- rnorm(nrow(production))
 reshape_wider(
   production,
   names_from = c("product", "country"),
-  values_from = "production"
+  values_from = "production",
+  names_glue = "prod_{product}_{country}"
 )
 
 }
