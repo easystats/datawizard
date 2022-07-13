@@ -506,10 +506,10 @@ test_that("reshape_wider equivalent to pivot_wider: ex 6", {
 
 test_that("reshape_wider, names_glue works", {
   df <- data.frame(
-    food = c('banana','banana','banana','banana','cheese','cheese','cheese','cheese'),
-    binary = c(rep(c('yes','no'), 4)),
-    car = c('toyota','subaru','mazda','skoda','toyota','subaru','mazda','skoda'),
-    fun = c(2,4,3,6,2,4,2,3)
+    food = c("banana", "banana", "banana", "banana", "cheese", "cheese", "cheese", "cheese"),
+    binary = c(rep(c("yes", "no"), 4)),
+    car = c("toyota", "subaru", "mazda", "skoda", "toyota", "subaru", "mazda", "skoda"),
+    fun = c(2, 4, 3, 6, 2, 4, 2, 3)
   )
 
   x <- df %>%
@@ -529,5 +529,4 @@ test_that("reshape_wider, names_glue works", {
     )
 
   expect_identical(x, y, ignore_attr = TRUE)
-
 })

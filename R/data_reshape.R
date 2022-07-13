@@ -301,7 +301,6 @@ data_to_wide <- function(data,
       tmp_colname <- gsub("\\{\\}", "%s", tmp_colname)
       do.call(sprintf, c(fmt = tmp_colname, tmp_vars))
     }))
-
   }
 
 
