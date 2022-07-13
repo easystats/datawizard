@@ -164,8 +164,9 @@ data_to_long <- function(data,
 #' this will be used to join their values together into a single string to use
 #' as a column name.
 #' @param names_glue Instead of `names_sep` and `names_prefix`, you can supply a
-#' glue specification that uses the `names_from` columns to create custom column
-#' names. See Details.
+#' [glue specification](https://glue.tidyverse.org/index.html) that uses the
+#' `names_from` columns to create custom column names. Note that that the only
+#' delimiters supported by `names_glue` are curly brackets, `{` and `}`.
 #' @param values_from The name of the column that contains the values to be used
 #' as future variable values.
 #' @param values_fill Optionally, a (scalar) value that will be used to replace
@@ -175,13 +176,6 @@ data_to_long <- function(data,
 #' @param colnames_from Deprecated. Use `names_from` instead.
 #' @param rows_from Deprecated. Use `id_cols` instead.
 #' @param sep Deprecated. Use `names_sep` instead.
-#'
-#'
-#' @details
-#' Argument `names_glue` works similarly as the package `glue`
-#' (<https://glue.tidyverse.org/index.html>). One difference is that the only
-#' delimiters supported by `names_glue` are curly brackets, `{` and `}`. See
-#' the examples below.
 #'
 #' @return If a tibble was provided as input, `reshape_wider()` also returns a
 #' tibble. Otherwise, it returns a dataframe.
