@@ -163,8 +163,10 @@ data_to_long <- function(data,
 #' @param names_sep If `names_from` or `values_from` contains multiple variables,
 #' this will be used to join their values together into a single string to use
 #' as a column name.
-#' @param names_glue Instead of `names_sep` and `names_prefix`, you can supply a glue
-#' specification that uses the `names_from` columns to create custom column names.
+#' @param names_glue Instead of `names_sep` and `names_prefix`, you can supply a
+#' [glue specification](https://glue.tidyverse.org/index.html) that uses the
+#' `names_from` columns to create custom column names. Note that the only
+#' delimiters supported by `names_glue` are curly brackets, `{` and `}`.
 #' @param values_from The name of the column that contains the values to be used
 #' as future variable values.
 #' @param values_fill Optionally, a (scalar) value that will be used to replace
@@ -223,7 +225,8 @@ data_to_long <- function(data,
 #' reshape_wider(
 #'   production,
 #'   names_from = c("product", "country"),
-#'   values_from = "production"
+#'   values_from = "production",
+#'   names_glue = "prod_{product}_{country}"
 #' )
 #'
 #' @inherit data_rename seealso
@@ -298,7 +301,6 @@ data_to_wide <- function(data,
       tmp_colname <- gsub("\\{\\}", "%s", tmp_colname)
       do.call(sprintf, c(fmt = tmp_colname, tmp_vars))
     }))
-
   }
 
 

@@ -171,7 +171,7 @@ data_to_numeric.factor <- function(x,
                                    verbose = TRUE,
                                    ...) {
   # preserving levels only works when factor levels are numeric
-  if (isTRUE(preserve_levels) && anyNA(suppressWarnings(to_numeric(stats::na.omit(x))))) {
+  if (isTRUE(preserve_levels) && anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
     preserve_levels <- FALSE
   }
 
