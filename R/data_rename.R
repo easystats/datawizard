@@ -41,10 +41,10 @@
 #' @seealso
 #' - Functions to rename stuff: [data_rename()], [data_rename_rows()], [data_addprefix()], [data_addsuffix()]
 #' - Functions to reorder or remove columns: [data_reorder()], [data_relocate()], [data_remove()]
-#' - Functions to reshape, pivot or rotate dataframes: [data_to_long()], [data_to_wide()], [data_rotate()]
+#' - Functions to reshape, pivot or rotate data frames: [data_to_long()], [data_to_wide()], [data_rotate()]
 #' - Functions to recode data: [data_rescale()], [data_reverse()], [data_cut()], [data_recode()], [data_shift()]
 #' - Functions to standardize, normalize, rank-transform: [center()], [standardize()], [normalize()], [ranktransform()], [winsorize()]
-#' - Split and merge dataframes: [data_partition()], [data_merge()]
+#' - Split and merge data frames: [data_partition()], [data_merge()]
 #' - Functions to find or select columns: [data_select()], [data_find()]
 #' - Functions to filter rows: [data_match()], [data_filter()]
 #'
@@ -104,7 +104,7 @@ data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, .
 #' @keywords internal
 .data_rename <- function(data, pattern, replacement, safe = TRUE) {
   if (isFALSE(safe) & !pattern %in% names(data)) {
-    stop(paste0("Variable '", pattern, "' is not in your dataframe :/"))
+    stop(paste0("Variable '", pattern, "' is not in your data frame :/"))
   }
 
   names(data) <- replace(names(data), names(data) == pattern, replacement)

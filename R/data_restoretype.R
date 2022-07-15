@@ -7,8 +7,8 @@
 #'
 #' @return
 #'
-#' A dataframe with columns whose types have been restored based on the
-#' reference dataframe.
+#' A data frame with columns whose types have been restored based on the
+#' reference data frame.
 #'
 #' @examples
 #' data <- data.frame(

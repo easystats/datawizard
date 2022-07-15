@@ -1,4 +1,4 @@
-# skewness works with dataframes
+# skewness works with data frames
 
     Code
       skewness(iris[, 1:4])
@@ -22,7 +22,7 @@
       Petal.Length |   -0.275 | 0.137
       Petal.Width  |   -0.103 | 0.134
 
-# kurtosis works with dataframes
+# kurtosis works with data frames
 
     Code
       kurtosis(iris[, 1:4])

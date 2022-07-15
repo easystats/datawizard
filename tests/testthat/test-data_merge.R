@@ -187,9 +187,9 @@ test_that("compare bind and full joins", {
   )
 })
 
-# join dataframes in a list -----------------------
+# join data frames in a list -----------------------
 
-test_that("join dataframes in a list", {
+test_that("join data frames in a list", {
   skip_if_not_installed("poorman")
 
   x <- mtcars[1:5, 1:3]
@@ -221,13 +221,13 @@ test_that("join dataframes in a list", {
 })
 
 
-# join empty dataframes -----------------------
+# join empty data frames -----------------------
 
 x <- data.frame("x" = character())
 y <- data.frame("x" = character())
 z <- data.frame("y" = character())
 
-test_that("join empty dataframes", {
+test_that("join empty data frames", {
   expect_equal(dim(data_merge(x, y, join = "left")), c(0, 1))
   expect_equal(dim(data_merge(x, y, join = "full")), c(0, 1))
   expect_equal(dim(data_merge(x, y, join = "right")), c(0, 1))

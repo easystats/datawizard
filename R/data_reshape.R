@@ -19,7 +19,7 @@
 #' @inheritParams find_columns
 #'
 #' @return If a tibble was provided as input, `reshape_longer()` also returns a
-#' tibble. Otherwise, it returns a dataframe.
+#' tibble. Otherwise, it returns a data frame.
 #'
 #' @examples
 #' wide_data <- data.frame(replicate(5, rnorm(10)))
@@ -113,7 +113,7 @@ data_to_long <- function(data,
   )
 
   # Cleaning --------------------------
-  # Sort the dataframe (to match pivot_longer's output)
+  # Sort the data frame (to match pivot_longer's output)
   long <- long[order(long[["_Row"]], long[[colnames_to]]), ]
 
   # Remove or rename the row index
@@ -178,7 +178,7 @@ data_to_long <- function(data,
 #' @param sep Deprecated. Use `names_sep` instead.
 #'
 #' @return If a tibble was provided as input, `reshape_wider()` also returns a
-#' tibble. Otherwise, it returns a dataframe.
+#' tibble. Otherwise, it returns a data frame.
 #'
 #' @examples
 #' data_long <- read.table(header = TRUE, text = "
