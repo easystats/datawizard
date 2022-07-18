@@ -16,7 +16,7 @@ test_that("data_rename works with one or several replacements", {
   )
 })
 
-test_that("data_rename returns a dataframe", {
+test_that("data_rename returns a data frame", {
   x <- data_rename(test, "Sepal.Length", "length")
   expect_true(class(x) == "data.frame")
 })
@@ -82,7 +82,7 @@ test_that("data_rename: argument 'safe' works", {
   )
   expect_error(
     data_rename(iris, "FakeCol", "length", safe = FALSE),
-    "Variable 'FakeCol' is not in your dataframe"
+    "Variable 'FakeCol' is not in your data frame"
   )
 })
 

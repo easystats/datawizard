@@ -1,4 +1,4 @@
-test_that("convert dataframe to numeric", {
+test_that("convert data frame to numeric", {
   expect_snapshot(data_to_numeric(head(ToothGrowth)))
   expect_snapshot(data_to_numeric(head(ToothGrowth), dummy_factors = FALSE))
 })

@@ -45,7 +45,7 @@ test_that("column_as_rownames sanity checks work", {
     regexp = "Argument 'var' must be of type character or numeric"
   )
   expect_error(column_as_rownames(test, "foo"),
-    regexp = "not in the dataframe"
+    regexp = "not in the data frame"
   )
   expect_error(column_as_rownames(test, 0),
     regexp = "does not exist"

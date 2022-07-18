@@ -1,7 +1,7 @@
 #' Partition data
 #'
 #' Creates data partitions (for instance, a training and a test set) based on a
-#' dataframe that can also be stratified (i.e., evenly spread a given factor)
+#' data frame that can also be stratified (i.e., evenly spread a given factor)
 #' using the `group` argument.
 #'
 #' @inheritParams data_rename

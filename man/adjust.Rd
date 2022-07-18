@@ -30,7 +30,7 @@ data_adjust(
 )
 }
 \arguments{
-\item{data}{A dataframe.}
+\item{data}{A data frame.}
 
 \item{effect}{Character vector of column names to be adjusted for (regressed
 out). If \code{NULL} (the default), all variables will be selected.}

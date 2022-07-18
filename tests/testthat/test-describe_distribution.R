@@ -37,15 +37,15 @@ test_that("describe_distribution - NULL for date", {
 
 
 
-# dataframe ---------------------------------------
+# data frame ---------------------------------------
 
-test_that("describe_distribution - dataframe: works with basic dataframe", {
+test_that("describe_distribution - data frame: works with basic data frame", {
   x <- describe_distribution(mtcars)
   expect_equal(dim(x), c(11, 10))
   expect_equal(round(x[1, "Mean"]), 20)
 })
 
-test_that("describe_distribution - dataframe: correctly handles missing values", {
+test_that("describe_distribution - data frame: correctly handles missing values", {
   no_missing <- describe_distribution(mtcars)
   test <- mtcars
   test[1, ] <- NA
@@ -55,14 +55,14 @@ test_that("describe_distribution - dataframe: correctly handles missing values",
   expect_false(unique(with_missing$Mean == no_missing$Mean))
 })
 
-test_that("describe_distribution - dataframe: works with quartiles", {
+test_that("describe_distribution - data frame: works with quartiles", {
   x <- describe_distribution(mtcars, quartiles = TRUE)
   expect_equal(dim(x), c(11, 12))
   expect_true("Q1" %in% names(x))
   expect_true("Q3" %in% names(x))
 })
 
-test_that("describe_distribution - dataframe: works with range", {
+test_that("describe_distribution - data frame: works with range", {
   x <- describe_distribution(mtcars, range = FALSE)
   expect_equal(dim(x), c(11, 8))
   expect_false("min" %in% names(x))

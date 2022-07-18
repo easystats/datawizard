@@ -6,7 +6,7 @@ test_that("extract from data frame", {
     c(1, 2, NA, 3, NA, 4, NA, 5, NA, NA, 6, 7)
   )
 
-  # a dataframe
+  # a data frame
   df <- data.frame(
     x = c(1, NA, 5, Inf, 2, NA),
     y = c(3, NaN, 4, -Inf, 6, 7),

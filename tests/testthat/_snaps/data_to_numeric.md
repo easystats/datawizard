@@ -1,4 +1,4 @@
-# convert dataframe to numeric
+# convert data frame to numeric
 
     Code
       data_to_numeric(head(ToothGrowth))

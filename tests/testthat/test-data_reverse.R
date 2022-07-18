@@ -25,7 +25,7 @@ test_that("data_reverse works with factor", {
   )
 })
 
-test_that("data_reverse works with dataframe", {
+test_that("data_reverse works with data frame", {
   test <- data.frame(
     x = 1:5,
     y = c(3, 8, 2, 5, 1)
@@ -183,7 +183,7 @@ test_that("reverse_scale works with factor", {
   )
 })
 
-test_that("reverse_scale works with dataframe", {
+test_that("reverse_scale works with data frame", {
   test <- data.frame(
     x = 1:5,
     y = c(3, 8, 2, 5, 1)
@@ -343,7 +343,7 @@ test_df <- data.frame(
   value2 = value2
 )
 
-test_that("data_reverse works with dataframes (grouped data)", {
+test_that("data_reverse works with data frames (grouped data)", {
   expect_equal(
     test_df %>%
       group_by(id) %>%
@@ -369,7 +369,7 @@ test_df <- data.frame(
   value2 = value2
 )
 
-test_that("data_reverse works with dataframes containing NAs (grouped data)", {
+test_that("data_reverse works with data frames containing NAs (grouped data)", {
   expect_equal(
     test_df %>%
       group_by(id) %>%

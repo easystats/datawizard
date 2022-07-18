@@ -18,7 +18,7 @@ indicate the name, e.g. \code{ci_type = "SI"} can be used for support intervals,
 where the column names in the data frame would be \code{SI_low} and \code{SI_high}.}
 }
 \value{
-A dataframe with columns corresponding to confidence intervals reshaped
+A data frame with columns corresponding to confidence intervals reshaped
 either to wide or long format.
 }
 \description{
