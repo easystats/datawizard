@@ -42,11 +42,6 @@ to_numeric <- function(x, ...) {
   UseMethod("to_numeric")
 }
 
-#' @rdname to_numeric
-#' @export
-convert_data_to_numeric <- to_numeric
-
-
 #' @export
 to_numeric.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {

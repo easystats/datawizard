@@ -2,13 +2,10 @@
 % Please edit documentation in R/to_numeric.R
 \name{to_numeric}
 \alias{to_numeric}
-\alias{convert_data_to_numeric}
 \alias{to_numeric.data.frame}
 \title{Convert data to numeric}
 \usage{
 to_numeric(x)
-
-convert_data_to_numeric(x, ...)
 
 to_numeric.data.frame(
   x,
@@ -27,8 +24,6 @@ to_numeric(x)
 }
 \arguments{
 \item{x}{A vector to be converted.}
-
-\item{...}{Arguments passed to or from other methods.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -90,6 +85,8 @@ a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
 
 \item{verbose}{Toggle warnings.}
+
+\item{...}{Arguments passed to or from other methods.}
 }
 \value{
 A data frame of numeric variables.
