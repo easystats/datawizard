@@ -3,7 +3,7 @@
 BREAKING
 
 * Following statistical transformation functions have been renamed to not have
-  `data_*()` prefix, since they do not work with data frames and were therefore
+  `data_*()` prefix, since they do not work with data frames and therefore
   had misleading names:
 
   - `data_cut()` -> `categorize()`
