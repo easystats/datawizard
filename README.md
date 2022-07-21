@@ -334,7 +334,7 @@ table(x)
 #>  2  3  5  3  7  5  5  2 11  7
 
 # cut into 3 groups, based on distribution (quantiles)
-table(data_cut(x, split = "quantile", n_groups = 3))
+table(categorize(x, split = "quantile", n_groups = 3))
 #> 
 #>  1  2  3 
 #> 13 19 18

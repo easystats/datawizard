@@ -1,40 +1,52 @@
-# datawizard 0.4.x
+# datawizard 0.5.0
 
 BREAKING
+
+* Following statistical transformation functions have been renamed to not have
+  `data_*()` prefix, since they do not work with data frames and were therefore
+  had misleading names:
+
+  - `data_cut()` -> `categorize()`
+  - `data_recode()` -> `change_code()`
+  - `data_shift()` -> `slide()`
+  - `data_reverse()` -> `reverse()`
+  - `data_rescale()` -> `rescale()`
+  - `data_to_factor()` -> `to_factor()`
+  - `data_to_numeric()` -> `to_numeric()`
 
 * Bumps the needed minimum R version to `3.5`.
 
 * Removed deprecated function `data_findcols()`. Please use its replacement,
   `data_find()`.
 
-* Removed alias `extract()` for `data_extract()` function since it collided
-  with `tidyr::extract()`.
+* Removed alias `extract()` for `data_extract()` function since it collided with
+  `tidyr::extract()`.
 
-* Argument `training_proportion` in `data_partition()` is deprecated. Please
-  use `proportion` now.
+* Argument `training_proportion` in `data_partition()` is deprecated. Please use
+  `proportion` now.
 
 MAJOR CHANGES
 
-* Given his continued and significant contributions to the package, 
-  Etienne Bacher (@etiennebacher) is now included as an author.
-  
+* Given his continued and significant contributions to the package, Etienne
+  Bacher (@etiennebacher) is now included as an author.
+
 * `unstandardise()` now works for `center(x)`
 
 * `unnormalize()` now works for `change_scale(x)`
-  
-* `reshape_wider()` now follows more consistently `tidyr::pivot_wider()` syntax. 
+
+* `reshape_wider()` now follows more consistently `tidyr::pivot_wider()` syntax.
   Arguments `colnames_from`, `sep`, and `rows_from` are deprecated and should be
-  replaced by `names_from`, `names_sep`, and `id_cols` respectively. 
-  `reshape_wider()` also gains an argument `names_glue` (#182, #198). 
+  replaced by `names_from`, `names_sep`, and `id_cols` respectively.
+  `reshape_wider()` also gains an argument `names_glue` (#182, #198).
 
 CHANGES
 
 * Some of the text formatting helpers (like `text_concatenate()`) gain an
   `enclose` argument, to wrap text elements with surrounding characters.
-  
-* `winsorize` now accepts "raw" and "zscore" methods (in addition to 
-  "percentile"). Additionally, when `robust` is set to `TRUE` together with 
-  `method = "zscore"`, winsorizes via the median and median absolute deviation 
+
+* `winsorize` now accepts "raw" and "zscore" methods (in addition to
+  "percentile"). Additionally, when `robust` is set to `TRUE` together with
+  `method = "zscore"`, winsorizes via the median and median absolute deviation
   (MAD); else via the mean and standard deviation. (@rempsyc, #177, #49, #47).
 
 * `data_partition()` now allows to create multiple partitions from the data,
@@ -45,8 +57,8 @@ CHANGES
 
 NEW FUNCTIONS
 
-* `row_to_colnames()` and `colnames_to_row()` to move a row to column names,
-  and column names to row (@etiennebacher, #169).
+* `row_to_colnames()` and `colnames_to_row()` to move a row to column names, and
+  column names to row (@etiennebacher, #169).
 
 BUG FIXES
 
@@ -75,37 +87,37 @@ NEW FUNCTIONS
 * `data_read()` to read (import) data files (from text, or foreign statistical
   packages).
 
-* `unnormalize()` as counterpart to `normalize()`. This function only works for 
+* `unnormalize()` as counterpart to `normalize()`. This function only works for
   variables that have been normalized with `normalize()`.
 
-* `data_group()` and `data_ungroup()` to create grouped data frames, or to remove
-  the grouping information from grouped data frames.
+* `data_group()` and `data_ungroup()` to create grouped data frames, or to
+  remove the grouping information from grouped data frames.
 
 CHANGES
 
-* `data_find()` was added as alias to `find_colums()`, to have consistent
-  name patterns for the **datawizard** functions. `data_findcols()` will be
-  removed in a future update and usage is discouraged.
+* `data_find()` was added as alias to `find_colums()`, to have consistent name
+  patterns for the **datawizard** functions. `data_findcols()` will be removed
+  in a future update and usage is discouraged.
 
-* The `select` argument (and thus, also the `exclude` argument) now also 
-  accepts functions testing for logical conditions, e.g. `is.numeric()` (or
-  `is.numeric`), or any user-defined function that selects the variables for 
+* The `select` argument (and thus, also the `exclude` argument) now also accepts
+  functions testing for logical conditions, e.g. `is.numeric()` (or
+  `is.numeric`), or any user-defined function that selects the variables for
   which the function returns `TRUE` (like: `foo <- function(x) mean(x) > 3`).
 
-* Arguments `select` and `exclude` now allow the negation of select-helpers, 
+* Arguments `select` and `exclude` now allow the negation of select-helpers,
   like `-ends_with("")`, `-is.numeric` or `-Sepal.Width:Petal.Length`.
 
-* Many functions now get a `.default` method, to capture unsupported classes. 
-  This now yields a message and returns the original input, and hence, the 
+* Many functions now get a `.default` method, to capture unsupported classes.
+  This now yields a message and returns the original input, and hence, the
   `.data.frame` methods won't stop due to an error.
 
 * The `filter` argument in `data_filter()` can also be a numeric vector, to
   indicate row indices of those rows that should be returned.
-  
+
 * `convert_to_na()` gets methods for variables of class `logical` and `Date`.
 
-* `convert_to_na()` for factors (and data frames) gains a `drop_levels` argument,
-  to drop unused levels that have been replaced by `NA`.
+* `convert_to_na()` for factors (and data frames) gains a `drop_levels`
+  argument, to drop unused levels that have been replaced by `NA`.
 
 * `data_to_numeric()` gains two more arguments, `preserve_levels` and `lowest`,
   to give better control of conversion of factors.
@@ -119,54 +131,56 @@ BUG FIXES
 
 MAJOR CHANGES
 
-* `data_match()` now returns filtered data by default. Old behavior (returning 
+* `data_match()` now returns filtered data by default. Old behavior (returning
   rows indices) can be set by setting `return_indices = TRUE`.
 
 * The following functions are now re-exported from `{insight}` package:
   `object_has_names()`, `object_has_rownames()`, `is_empty_object()`,
   `compact_list()`, `compact_character()`
 
-* `data_findcols()` will become deprecated in future updates. Please use the
-  new replacements `find_columns()` and `get_columns()`.
+* `data_findcols()` will become deprecated in future updates. Please use the new
+  replacements `find_columns()` and `get_columns()`.
 
-* The vignette *Analysing Longitudinal or Panel Data* has now moved to 
-  [parameters package](https://easystats.github.io/parameters/articles/demean.html).
+* The vignette *Analysing Longitudinal or Panel Data* has now moved to
+  [parameters
+  package](https://easystats.github.io/parameters/articles/demean.html).
 
 NEW FUNCTIONS
 
-* To convert rownames to a column, and *vice versa*: `rownames_as_column()` 
-  and `column_as_rownames()` (@etiennebacher, #80).
+* To convert rownames to a column, and *vice versa*: `rownames_as_column()` and
+  `column_as_rownames()` (@etiennebacher, #80).
 
-* `find_columns()` and `get_columns()` to find column names or retrieve
-  subsets of data frames, based on various select-methods (including
-  select-helpers). These function will supersede `data_findcols()` in the
-  future.
+* `find_columns()` and `get_columns()` to find column names or retrieve subsets
+  of data frames, based on various select-methods (including select-helpers).
+  These function will supersede `data_findcols()` in the future.
 
-* `data_filter()` as complement for `data_match()`, which works with logical 
+* `data_filter()` as complement for `data_match()`, which works with logical
   expressions for filtering rows of data frames.
 
 * For computing weighted centrality measures and dispersion: `weighted_mean()`,
   `weighted_median()`, `weighted_sd()` and `weighted_mad()`.
-  
-* To replace `NA` in vectors and dataframes: `convert_na_to()` (@etiennebacher, #111).
+
+* To replace `NA` in vectors and dataframes: `convert_na_to()` (@etiennebacher,
+  #111).
 
 MINOR CHANGES
 
 * The `select` argument in several functions (like `data_remove()`,
-  `reshape_longer()`, or  `data_extract()`) now allows the use of select-helpers
+  `reshape_longer()`, or `data_extract()`) now allows the use of select-helpers
   for selecting variables based on specific patterns.
 
 * `data_extract()` gains new arguments to allow type-safe return values,
-   i.e. *always* return a vector *or* a data frame. Thus, `data_extract()`
-   can now be used to select multiple variables or pull a single variable
-   from data frames.
+
+i.e. *always* return a vector *or* a data frame. Thus, `data_extract()` can now
+be used to select multiple variables or pull a single variable from data
+frames.
 
 * `data_match()` gains a `match` argument, to indicate with which logical
   operation matching results should be combined.
 
-* Improved support for *labelled data* for many functions, i.e. returned
-  data frame will preserve value and variable label attributes, where
-  possible and applicable.
+* Improved support for *labelled data* for many functions, i.e. returned data
+  frame will preserve value and variable label attributes, where possible and
+  applicable.
 
 * `describe_distribution()` now works with lists (@etiennebacher, #105).
 
@@ -178,13 +192,13 @@ MINOR CHANGES
 
 BUG FIXES
 
-* `data_to_numeric()` produced wrong results for factors when
-  `dummy_factors = TRUE` and factor contained missing values.
+* `data_to_numeric()` produced wrong results for factors when `dummy_factors =
+  TRUE` and factor contained missing values.
 
 * `data_match()` produced wrong results when data contained missing values.
 
-* Fixed CRAN check issues in `data_extract()` when more than one variable
-  was extracted from a data frame.
+* Fixed CRAN check issues in `data_extract()` when more than one variable was
+  extracted from a data frame.
 
 # datawizard 0.3.0
 

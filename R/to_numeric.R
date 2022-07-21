@@ -2,7 +2,7 @@
 #'
 #' Convert data to numeric by converting characters to factors and factors to
 #' either numeric levels or dummy variables. The "counterpart" to convert
-#' variables into factors is `data_to_factor()`.
+#' variables into factors is `to_factor()`.
 #'
 #' @param x A data frame, factor or vector.
 #' @param dummy_factors Transform factors to dummy factors (all factor levels as
@@ -15,40 +15,40 @@
 #' factors or character vectors to numeric values.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams find_columns
-#' @inheritParams data_cut
+#' @inheritParams categorize
 #'
 #' @section Selection of variables - `select` argument:
 #' For most functions that have a `select` argument the complete input data
 #' frame is returned, even when `select` only selects a range of variables.
-#' However, for `data_to_numeric()`, factors might be converted into dummies,
+#' However, for `to_numeric()`, factors might be converted into dummies,
 #' thus, the number of variables of the returned data frame no longer match
 #' the input data frame. Hence, when `select` is used, *only* those variables
 #' (or their dummies) specified in `select` will be returned. Use `append=TRUE`
 #' to also include the original variables in the returned data frame.
 #'
 #' @examples
-#' data_to_numeric(head(ToothGrowth))
-#' data_to_numeric(head(ToothGrowth), dummy_factors = FALSE)
+#' to_numeric(head(ToothGrowth))
+#' to_numeric(head(ToothGrowth), dummy_factors = FALSE)
 #'
 #' # factors
 #' x <- as.factor(mtcars$gear)
-#' data_to_numeric(x, dummy_factors = FALSE)
-#' data_to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE)
+#' to_numeric(x, dummy_factors = FALSE)
+#' to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE)
 #'
 #' @return A data frame of numeric variables.
 #'
 #' @export
-data_to_numeric <- function(x, ...) {
-  UseMethod("data_to_numeric")
+to_numeric <- function(x, ...) {
+  UseMethod("to_numeric")
 }
 
-#' @rdname data_to_numeric
+#' @rdname to_numeric
 #' @export
-convert_data_to_numeric <- data_to_numeric
+convert_data_to_numeric <- to_numeric
 
 
 #' @export
-data_to_numeric.default <- function(x, verbose = TRUE, ...) {
+to_numeric.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     message(insight::format_message(sprintf("Converting into numeric values currently not possible for variables of class '%s'.", class(x)[1])))
   }
@@ -56,18 +56,18 @@ data_to_numeric.default <- function(x, verbose = TRUE, ...) {
 }
 
 
-#' @rdname data_to_numeric
+#' @rdname to_numeric
 #' @export
-data_to_numeric.data.frame <- function(x,
-                                       select = NULL,
-                                       exclude = NULL,
-                                       dummy_factors = TRUE,
-                                       preserve_levels = FALSE,
-                                       lowest = NULL,
-                                       append = FALSE,
-                                       ignore_case = FALSE,
-                                       verbose = TRUE,
-                                       ...) {
+to_numeric.data.frame <- function(x,
+                                  select = NULL,
+                                  exclude = NULL,
+                                  dummy_factors = TRUE,
+                                  preserve_levels = FALSE,
+                                  lowest = NULL,
+                                  append = FALSE,
+                                  ignore_case = FALSE,
+                                  verbose = TRUE,
+                                  ...) {
   # sanity check, return as is for complete numeric
   if (all(sapply(x, is.numeric))) {
     return(x)
@@ -98,7 +98,7 @@ data_to_numeric.data.frame <- function(x,
 
   out <- sapply(
     x[select],
-    data_to_numeric,
+    to_numeric,
     dummy_factors = dummy_factors,
     preserve_levels = preserve_levels,
     lowest = lowest,
@@ -138,18 +138,18 @@ data_to_numeric.data.frame <- function(x,
 
 
 #' @export
-data_to_numeric.numeric <- function(x, verbose = TRUE, ...) {
+to_numeric.numeric <- function(x, verbose = TRUE, ...) {
   .set_back_labels(as.numeric(x), x)
 }
 
 #' @export
-data_to_numeric.double <- data_to_numeric.numeric
+to_numeric.double <- to_numeric.numeric
 
 #' @export
-data_to_numeric.logical <- data_to_numeric.numeric
+to_numeric.logical <- to_numeric.numeric
 
 #' @export
-data_to_numeric.Date <- function(x, verbose = TRUE, ...) {
+to_numeric.Date <- function(x, verbose = TRUE, ...) {
   if (verbose) {
     warning(insight::format_message(
       "Converting a date-time variable into numeric.",
@@ -160,16 +160,16 @@ data_to_numeric.Date <- function(x, verbose = TRUE, ...) {
 }
 
 #' @export
-data_to_numeric.POSIXt <- data_to_numeric.Date
+to_numeric.POSIXt <- to_numeric.Date
 
 
 #' @export
-data_to_numeric.factor <- function(x,
-                                   dummy_factors = TRUE,
-                                   preserve_levels = FALSE,
-                                   lowest = NULL,
-                                   verbose = TRUE,
-                                   ...) {
+to_numeric.factor <- function(x,
+                              dummy_factors = TRUE,
+                              preserve_levels = FALSE,
+                              lowest = NULL,
+                              verbose = TRUE,
+                              ...) {
   # preserving levels only works when factor levels are numeric
   if (isTRUE(preserve_levels) && anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
     preserve_levels <- FALSE
@@ -224,11 +224,11 @@ data_to_numeric.factor <- function(x,
 
 
 #' @export
-data_to_numeric.character <- function(x,
-                                      dummy_factors = FALSE,
-                                      lowest = NULL,
-                                      verbose = TRUE,
-                                      ...) {
+to_numeric.character <- function(x,
+                                 dummy_factors = FALSE,
+                                 lowest = NULL,
+                                 verbose = TRUE,
+                                 ...) {
   numbers <- sapply(x, function(i) {
     element <- tryCatch(.str2lang(i), error = function(e) NULL)
     !is.null(element) && is.numeric(element)
@@ -236,7 +236,7 @@ data_to_numeric.character <- function(x,
   if (all(numbers)) {
     out <- as.numeric(sapply(x, .str2lang))
   } else {
-    out <- data_to_numeric(as.factor(x), dummy_factors = dummy_factors)
+    out <- to_numeric(as.factor(x), dummy_factors = dummy_factors)
   }
 
   # shift to requested starting value

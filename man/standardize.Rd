@@ -257,10 +257,10 @@ standardize(d, center = 1, scale = 3)
 See \code{\link[=center]{center()}} for grand-mean centering of variables.
 
 Other transform utilities: 
-\code{\link{data_rescale}()},
-\code{\link{data_reverse}()},
 \code{\link{normalize}()},
-\code{\link{ranktransform}()}
+\code{\link{ranktransform}()},
+\code{\link{rescale}()},
+\code{\link{reverse}()}
 
 Other standardize: 
 \code{\link{standardize.default}()}

@@ -1,13 +1,13 @@
 # numeric
-test_that("data_to_factor", {
+test_that("to_factor", {
   x <- c(10, 11, 12)
   expect_equal(
-    data_to_factor(x),
+    to_factor(x),
     structure(1:3, .Label = c("10", "11", "12"), class = "factor")
   )
 
   data(efc)
-  x <- data_to_factor(efc$c172code)
+  x <- to_factor(efc$c172code)
   expect_equal(
     levels(x),
     c(
@@ -18,15 +18,15 @@ test_that("data_to_factor", {
 })
 
 # factor
-test_that("data_to_factor", {
+test_that("to_factor", {
   data(efc)
-  expect_equal(data_to_factor(efc$e42dep), efc$e42dep)
+  expect_equal(to_factor(efc$e42dep), efc$e42dep)
 })
 
 # data frame
-test_that("data_to_factor", {
+test_that("to_factor", {
   data(iris)
-  out <- data_to_factor(iris)
+  out <- to_factor(iris)
   expect_equal(out$Species, iris$Species)
   expect_true(all(sapply(out, is.factor)))
   expect_equal(
@@ -39,7 +39,7 @@ test_that("data_to_factor", {
     )
   )
 
-  out <- data_to_factor(iris, select = starts_with("Sep"), append = TRUE)
+  out <- to_factor(iris, select = starts_with("Sep"), append = TRUE)
   expect_equal(
     colnames(out),
     c(
