@@ -30,9 +30,6 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           cache: true
-          # extra-packages: |
-          #   deps::.
-          #   any::datawizard
 
       - name: Render README
         run: Rscript -e 'rmarkdown::render("README.Rmd")'
