@@ -29,8 +29,7 @@
 ---
 
     Code
-      head(rescale(iris, to = list(Sepal.Length = c(0, 1), Petal.Length = c(-1,
-        0))))
+      head(rescale(iris, to = list(Sepal.Length = c(0, 1), Petal.Length = c(-1, 0))))
     Message <simpleMessage>
       Variables of class 'factor' can't be rescaled and remain unchanged.
     Output
