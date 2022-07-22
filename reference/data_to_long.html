@@ -14,7 +14,7 @@ tidyr::pivot_longer().'><meta property="og:image" content="https://easystats.git
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.10</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -217,7 +217,7 @@ tibble. Otherwise, it returns a data frame.</p>
 <ul><li><p>Functions to rename stuff: <code><a href="data_rename.html">data_rename()</a></code>, <code><a href="data_rename.html">data_rename_rows()</a></code>, <code><a href="data_rename.html">data_addprefix()</a></code>, <code><a href="data_rename.html">data_addsuffix()</a></code></p></li>
 <li><p>Functions to reorder or remove columns: <code><a href="data_relocate.html">data_reorder()</a></code>, <code><a href="data_relocate.html">data_relocate()</a></code>, <code><a href="data_relocate.html">data_remove()</a></code></p></li>
 <li><p>Functions to reshape, pivot or rotate data frames: <code>data_to_long()</code>, <code><a href="data_to_wide.html">data_to_wide()</a></code>, <code><a href="data_rotate.html">data_rotate()</a></code></p></li>
-<li><p>Functions to recode data: <code><a href="data_rescale.html">data_rescale()</a></code>, <code><a href="data_reverse.html">data_reverse()</a></code>, <code><a href="data_cut.html">data_cut()</a></code>, <code><a href="data_recode.html">data_recode()</a></code>, <code><a href="data_shift.html">data_shift()</a></code></p></li>
+<li><p>Functions to recode data: <code><a href="rescale.html">rescale()</a></code>, <code><a href="reverse.html">reverse()</a></code>, <code><a href="categorize.html">categorize()</a></code>, <code><a href="change_code.html">change_code()</a></code>, <code><a href="slide.html">slide()</a></code></p></li>
 <li><p>Functions to standardize, normalize, rank-transform: <code><a href="center.html">center()</a></code>, <code><a href="standardize.html">standardize()</a></code>, <code><a href="normalize.html">normalize()</a></code>, <code><a href="ranktransform.html">ranktransform()</a></code>, <code><a href="winsorize.html">winsorize()</a></code></p></li>
 <li><p>Split and merge data frames: <code><a href="data_partition.html">data_partition()</a></code>, <code><a href="data_merge.html">data_merge()</a></code></p></li>
 <li><p>Functions to find or select columns: <code><a href="find_columns.html">data_select()</a></code>, <code><a href="find_columns.html">data_find()</a></code></p></li>
@@ -326,6 +326,11 @@ tibble. Otherwise, it returns a data frame.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: psych</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘psych’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:datawizard’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     rescale</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       gender education age Participant Item Score</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1          1        NA  16       61617   A1     2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2          1        NA  16       61617   A2     4</span>

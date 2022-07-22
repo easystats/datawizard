@@ -34,7 +34,13 @@
     <loc>https://easystats.github.io/datawizard/reference/adjust.html</loc>
   </url>
   <url>
+    <loc>https://easystats.github.io/datawizard/reference/categorize.html</loc>
+  </url>
+  <url>
     <loc>https://easystats.github.io/datawizard/reference/center.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/datawizard/reference/change_code.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/coerce_to_numeric.html</loc>
@@ -47,9 +53,6 @@
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/convert_to_na.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/datawizard/reference/data_cut.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/data_extract.html</loc>
@@ -70,40 +73,22 @@
     <loc>https://easystats.github.io/datawizard/reference/data_read.html</loc>
   </url>
   <url>
-    <loc>https://easystats.github.io/datawizard/reference/data_recode.html</loc>
-  </url>
-  <url>
     <loc>https://easystats.github.io/datawizard/reference/data_relocate.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/data_rename.html</loc>
   </url>
   <url>
-    <loc>https://easystats.github.io/datawizard/reference/data_rescale.html</loc>
-  </url>
-  <url>
     <loc>https://easystats.github.io/datawizard/reference/data_restoretype.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/datawizard/reference/data_reverse.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/data_rotate.html</loc>
   </url>
   <url>
-    <loc>https://easystats.github.io/datawizard/reference/data_shift.html</loc>
-  </url>
-  <url>
     <loc>https://easystats.github.io/datawizard/reference/data_tabulate.html</loc>
   </url>
   <url>
-    <loc>https://easystats.github.io/datawizard/reference/data_to_factor.html</loc>
-  </url>
-  <url>
     <loc>https://easystats.github.io/datawizard/reference/data_to_long.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/datawizard/reference/data_to_numeric.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/data_to_wide.html</loc>
@@ -151,16 +136,25 @@
     <loc>https://easystats.github.io/datawizard/reference/replace_nan_inf.html</loc>
   </url>
   <url>
+    <loc>https://easystats.github.io/datawizard/reference/rescale.html</loc>
+  </url>
+  <url>
     <loc>https://easystats.github.io/datawizard/reference/rescale_weights.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/reshape_ci.html</loc>
   </url>
   <url>
+    <loc>https://easystats.github.io/datawizard/reference/reverse.html</loc>
+  </url>
+  <url>
     <loc>https://easystats.github.io/datawizard/reference/rownames.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/skewness.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/datawizard/reference/slide.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/smoothness.html</loc>
@@ -170,6 +164,12 @@
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/standardize.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/datawizard/reference/to_factor.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/datawizard/reference/to_numeric.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/visualisation_recipe.html</loc>

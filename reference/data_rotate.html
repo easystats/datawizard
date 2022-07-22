@@ -16,7 +16,7 @@ modified (see example)."><meta property="og:image" content="https://easystats.gi
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1.10</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -141,7 +141,7 @@ names.</p></dd>
 <ul><li><p>Functions to rename stuff: <code><a href="data_rename.html">data_rename()</a></code>, <code><a href="data_rename.html">data_rename_rows()</a></code>, <code><a href="data_rename.html">data_addprefix()</a></code>, <code><a href="data_rename.html">data_addsuffix()</a></code></p></li>
 <li><p>Functions to reorder or remove columns: <code><a href="data_relocate.html">data_reorder()</a></code>, <code><a href="data_relocate.html">data_relocate()</a></code>, <code><a href="data_relocate.html">data_remove()</a></code></p></li>
 <li><p>Functions to reshape, pivot or rotate data frames: <code><a href="data_to_long.html">data_to_long()</a></code>, <code><a href="data_to_wide.html">data_to_wide()</a></code>, <code>data_rotate()</code></p></li>
-<li><p>Functions to recode data: <code><a href="data_rescale.html">data_rescale()</a></code>, <code><a href="data_reverse.html">data_reverse()</a></code>, <code><a href="data_cut.html">data_cut()</a></code>, <code><a href="data_recode.html">data_recode()</a></code>, <code><a href="data_shift.html">data_shift()</a></code></p></li>
+<li><p>Functions to recode data: <code><a href="rescale.html">rescale()</a></code>, <code><a href="reverse.html">reverse()</a></code>, <code><a href="categorize.html">categorize()</a></code>, <code><a href="change_code.html">change_code()</a></code>, <code><a href="slide.html">slide()</a></code></p></li>
 <li><p>Functions to standardize, normalize, rank-transform: <code><a href="center.html">center()</a></code>, <code><a href="standardize.html">standardize()</a></code>, <code><a href="normalize.html">normalize()</a></code>, <code><a href="ranktransform.html">ranktransform()</a></code>, <code><a href="winsorize.html">winsorize()</a></code></p></li>
 <li><p>Split and merge data frames: <code><a href="data_partition.html">data_partition()</a></code>, <code><a href="data_merge.html">data_merge()</a></code></p></li>
 <li><p>Functions to find or select columns: <code><a href="find_columns.html">data_select()</a></code>, <code><a href="find_columns.html">data_find()</a></code></p></li>
@@ -202,14 +202,14 @@ names.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            1          2          3          4          5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> b         11         12         13         14         15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> c          a          b          c          d          e</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> d -0.6868529 -0.4456620  1.2240818  0.3598138  0.4007715</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> d  0.3461036 -0.6470456 -2.1576463  0.8842508 -0.8294776</span>
 <span class="r-in"><span><span class="fu">data_rotate</span><span class="op">(</span><span class="va">x</span>, colnames <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Your data frame contains mixed types of data. After transposition, all</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   variables will be transformed into characters.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            a         b         c          d          e</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a  1.0000000  2.000000  3.000000  4.0000000  5.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> b 11.0000000 12.000000 13.000000 14.0000000 15.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> d -0.6868529 -0.445662  1.224082  0.3598138  0.4007715</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            a          b         c          d          e</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a  1.0000000  2.0000000  3.000000  4.0000000  5.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> b 11.0000000 12.0000000 13.000000 14.0000000 15.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> d  0.3461036 -0.6470456 -2.157646  0.8842508 -0.8294776</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
