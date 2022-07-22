@@ -1,5 +1,5 @@
 #' @title Recode old values of variables into new values
-#' @name data_recode
+#' @name change_code
 #'
 #' @description
 #' This functions recodes old values into new values and can be used to to
@@ -23,7 +23,7 @@
 #'   default value.
 #' @param ... not used.
 #' @inheritParams find_columns
-#' @inheritParams data_cut
+#' @inheritParams categorize
 #'
 #' @return `x`, where old values are replaced by new values.
 #'
@@ -71,7 +71,7 @@
 #'
 #' - Reversing and rescaling
 #'
-#'   See [data_reverse()] and [data_rescale()].
+#'   See [reverse()] and [rescale()].
 #'
 #' @examples
 #' # numeric
@@ -79,12 +79,12 @@
 #' x <- sample(c(1:4, NA), 15, TRUE)
 #' table(x, useNA = "always")
 #'
-#' out <- data_recode(x, list(`1` = 0, `2:3` = 1, `4` = 2))
+#' out <- change_code(x, list(`1` = 0, `2:3` = 1, `4` = 2))
 #' out
 #' table(out, useNA = "always")
 #'
 #' # to recode NA values, set preserve_na to FALSE
-#' out <- data_recode(
+#' out <- change_code(
 #'   x,
 #'   list(`1` = 0, `2:3` = 1, `4` = 2, `NA` = 9),
 #'   preserve_na = FALSE
@@ -93,12 +93,12 @@
 #' table(out, useNA = "always")
 #'
 #' # preserve na
-#' out <- data_recode(x, list(`1` = 0, `2:3` = 1), default = 77)
+#' out <- change_code(x, list(`1` = 0, `2:3` = 1), default = 77)
 #' out
 #' table(out, useNA = "always")
 #'
 #' # recode na into default
-#' out <- data_recode(
+#' out <- change_code(
 #'   x,
 #'   list(`1` = 0, `2:3` = 1),
 #'   default = 77,
@@ -113,15 +113,15 @@
 #' x <- as.factor(sample(c("a", "b", "c"), 15, TRUE))
 #' table(x)
 #'
-#' out <- data_recode(x, list(a = "x", `b, c` = "y"))
+#' out <- change_code(x, list(a = "x", `b, c` = "y"))
 #' out
 #' table(out)
 #'
-#' out <- data_recode(x, list(a = "x", b = "y", c = "z"))
+#' out <- change_code(x, list(a = "x", b = "y", c = "z"))
 #' out
 #' table(out)
 #'
-#' out <- data_recode(x, list(`b, c` = "y"), default = 77)
+#' out <- change_code(x, list(`b, c` = "y"), default = 77)
 #' out
 #' table(out)
 #'
@@ -134,20 +134,20 @@
 #'   stringsAsFactors = FALSE
 #' )
 #'
-#' data_recode(
+#' change_code(
 #'   d,
 #'   recodes = list(`1` = 0, `2:3` = 1, `4` = 2, a = "x", `b, c` = "y"),
 #'   force = TRUE,
 #'   append = TRUE
 #' )
 #' @export
-data_recode <- function(x, ...) {
-  UseMethod("data_recode")
+change_code <- function(x, ...) {
+  UseMethod("change_code")
 }
 
 
 #' @export
-data_recode.default <- function(x, verbose = TRUE, ...) {
+change_code.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
   }
@@ -155,9 +155,9 @@ data_recode.default <- function(x, verbose = TRUE, ...) {
 }
 
 
-#' @rdname data_recode
+#' @rdname change_code
 #' @export
-data_recode.numeric <- function(x,
+change_code.numeric <- function(x,
                                 recodes = NULL,
                                 default = NULL,
                                 preserve_na = TRUE,
@@ -229,7 +229,7 @@ data_recode.numeric <- function(x,
 
 
 #' @export
-data_recode.factor <- function(x,
+change_code.factor <- function(x,
                                recodes = NULL,
                                default = NULL,
                                preserve_na = TRUE,
@@ -297,7 +297,7 @@ data_recode.factor <- function(x,
 
 
 #' @export
-data_recode.character <- function(x,
+change_code.character <- function(x,
                                   recodes = NULL,
                                   default = NULL,
                                   preserve_na = TRUE,
@@ -358,9 +358,9 @@ data_recode.character <- function(x,
 }
 
 
-#' @rdname data_recode
+#' @rdname change_code
 #' @export
-data_recode.data.frame <- function(x,
+change_code.data.frame <- function(x,
                                    recodes = NULL,
                                    default = NULL,
                                    preserve_na = TRUE,
@@ -383,7 +383,7 @@ data_recode.data.frame <- function(x,
 
   x[select] <- lapply(
     x[select],
-    data_recode,
+    change_code,
     recodes = recodes,
     default = default,
     preserve_na = preserve_na,

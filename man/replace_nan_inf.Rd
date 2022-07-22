@@ -20,7 +20,7 @@ Replaces all infinite (\code{Inf} and \code{-Inf}) or \code{NaN} values with \co
 x <- c(1, 2, NA, 3, NaN, 4, NA, 5, Inf, -Inf, 6, 7)
 replace_nan_inf(x)
 
-# a dataframe
+# a data frame
 df <- data.frame(
   x = c(1, NA, 5, Inf, 2, NA),
   y = c(3, NaN, 4, -Inf, 6, 7),

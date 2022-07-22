@@ -22,11 +22,11 @@ reference:
 
   - title: Recode and transform data
   - contents:
-      - data_cut
-      - data_recode
-      - data_rescale
-      - data_reverse
-      - data_shift
+      - categorize
+      - change_code
+      - rescale
+      - reverse
+      - slide
       - adjust
       - center
       - demean
@@ -63,7 +63,7 @@ reference:
   - title: Convert and replace data
   - contents:
       - contains("to_numeric")
-      - data_to_factor
+      - to_factor
       - data_restoretype
       - starts_with("replace_")
       - starts_with("convert_")

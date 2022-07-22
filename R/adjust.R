@@ -10,7 +10,7 @@
 #' Note that a regular correlation between two "adjusted" variables is
 #' equivalent to the partial correlation between them.
 #'
-#' @param data A dataframe.
+#' @param data A data frame.
 #' @param effect Character vector of column names to be adjusted for (regressed
 #'   out). If `NULL` (the default), all variables will be selected.
 #' @param multilevel If `TRUE`, the factors are included as random factors.

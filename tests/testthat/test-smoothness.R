@@ -22,7 +22,7 @@ test_that("smoothness with lag works", {
   expect_error(smoothness(x, lag = 0), "lag cannot be that small.")
 })
 
-test_that("smoothness works with dataframes", {
+test_that("smoothness works with data frames", {
   set.seed(123)
   expect_snapshot(smoothness(BOD))
 })

@@ -48,7 +48,7 @@ test_that("signed rank works as expected", {
   ))))
 })
 
-test_that("ranktransform works with dataframes", {
+test_that("ranktransform works with data frames", {
   set.seed(123)
   expect_snapshot(ranktransform(BOD))
 })
@@ -68,7 +68,7 @@ test_df <- data.frame(
   value2 = value2
 )
 
-test_that("ranktransform works with dataframes (grouped data)", {
+test_that("ranktransform works with data frames (grouped data)", {
   expect_equal(
     test_df %>%
       group_by(id) %>%
@@ -95,7 +95,7 @@ test_df <- data.frame(
   value2 = value2
 )
 
-test_that("ranktransform works with dataframes containing NAs (grouped data)", {
+test_that("ranktransform works with data frames containing NAs (grouped data)", {
   expect_equal(
     test_df %>%
       group_by(id) %>%
