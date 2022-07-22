@@ -31,6 +31,10 @@ jobs:
 
       - name: Render README
         run: Rscript -e 'rmarkdown::render("README.Rmd")'
+        with:
+          extra-packages: |
+            deps::.
+            easystats/datawizard
 
       - name: Commit Results
         run: |
