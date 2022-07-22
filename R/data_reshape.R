@@ -100,7 +100,7 @@ data_to_long <- function(data,
 
   # Reshaping ---------------------
   # Create Index column as needed by reshape
-  data[["_Row"]] <- to_numeric(row.names(data))
+  data[["_Row"]] <- coerce_to_numeric(row.names(data))
 
   # Reshape
   long <- stats::reshape(
