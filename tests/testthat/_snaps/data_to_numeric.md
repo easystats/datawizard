@@ -1,7 +1,7 @@
 # convert data frame to numeric
 
     Code
-      data_to_numeric(head(ToothGrowth))
+      to_numeric(head(ToothGrowth))
     Output
          len supp.OJ supp.VC dose
       1  4.2       0       1  0.5
@@ -14,7 +14,7 @@
 ---
 
     Code
-      data_to_numeric(head(ToothGrowth), dummy_factors = FALSE)
+      to_numeric(head(ToothGrowth), dummy_factors = FALSE)
     Output
          len supp dose
       1  4.2    2  0.5
@@ -27,7 +27,7 @@
 # convert factor to numeric
 
     Code
-      data_to_numeric(f)
+      to_numeric(f)
     Output
          a c i s t
       1  0 0 0 1 0

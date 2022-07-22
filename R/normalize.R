@@ -1,7 +1,7 @@
 #' Normalize numeric variable to 0-1 range
 #'
 #' Performs a normalization of data, i.e., it scales variables in the range
-#' 0 - 1. This is a special case of [data_rescale()]. `unnormalize()` is the
+#' 0 - 1. This is a special case of [rescale()]. `unnormalize()` is the
 #' counterpart, but only works for variables that have been normalized with
 #' `normalize()`.
 #'
