@@ -124,7 +124,7 @@ Function           | Operation                                     |
 `standardize()`    | to center and scale data                      |
 `normalize()`      | to scale variables to 0-1 range               |
 `adjust()`         | to adjust data for effect of other variables  |
-`data_shift()`     | to shift numeric value range                  |
+`slide()`          | to shift numeric value range                  |
 `ranktransform()`  | to convert numeric values to integer ranks    |
     ...            |        ...                                    |
 

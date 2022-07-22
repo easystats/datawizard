@@ -37,7 +37,7 @@ affiliations:
 - index: 6
   name: University Medical Center Hamburg-Eppendorf, Germany
     
-date: "2022-07-11"
+date: "2022-07-23"
 bibliography: paper.bib
 output: rticles::joss_article
 csl: apa.csl
@@ -95,11 +95,11 @@ stocks <- data.frame(
 
 stocks
 #>         time          X          Y
-#> 1 2009-01-01  1.5082440  1.1852568
-#> 2 2009-01-02  0.1140895  0.9622197
-#> 3 2009-01-03  0.4126466 -0.1188770
-#> 4 2009-01-04  0.2332099 -1.3791623
-#> 5 2009-01-05 -0.5290504  3.2051557
+#> 1 2009-01-01 -0.2260690 -2.8138612
+#> 2 2009-01-02 -1.1493683  0.6943494
+#> 3 2009-01-03  0.5735460 -4.9631826
+#> 4 2009-01-04 -0.7158624  1.3653417
+#> 5 2009-01-05  0.8908393  1.1989796
 
 data_to_long(
   stocks,
@@ -108,16 +108,16 @@ data_to_long(
   values_to = "price"
 )
 #>          time stock      price
-#> 1  2009-01-01     X  1.5082440
-#> 2  2009-01-01     Y  1.1852568
-#> 3  2009-01-02     X  0.1140895
-#> 4  2009-01-02     Y  0.9622197
-#> 5  2009-01-03     X  0.4126466
-#> 6  2009-01-03     Y -0.1188770
-#> 7  2009-01-04     X  0.2332099
-#> 8  2009-01-04     Y -1.3791623
-#> 9  2009-01-05     X -0.5290504
-#> 10 2009-01-05     Y  3.2051557
+#> 1  2009-01-01     X -0.2260690
+#> 2  2009-01-01     Y -2.8138612
+#> 3  2009-01-02     X -1.1493683
+#> 4  2009-01-02     Y  0.6943494
+#> 5  2009-01-03     X  0.5735460
+#> 6  2009-01-03     Y -4.9631826
+#> 7  2009-01-04     X -0.7158624
+#> 8  2009-01-04     Y  1.3653417
+#> 9  2009-01-05     X  0.8908393
+#> 10 2009-01-05     Y  1.1989796
 ```
 
 ## Statistical Transformations
@@ -131,7 +131,7 @@ Function           | Operation                                     |
 `standardize()`    | to center and scale data                      |
 `normalize()`      | to scale variables to 0-1 range               |
 `adjust()`         | to adjust data for effect of other variables  |
-`data_shift()`     | to shift numeric value range                  |
+`slide()`          | to shift numeric value range                  |
 `ranktransform()`  | to convert numeric values to integer ranks    |
     ...            |        ...                                    |
 
