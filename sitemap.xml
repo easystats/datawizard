@@ -37,6 +37,9 @@
     <loc>https://easystats.github.io/datawizard/reference/center.html</loc>
   </url>
   <url>
+    <loc>https://easystats.github.io/datawizard/reference/coerce_to_numeric.html</loc>
+  </url>
+  <url>
     <loc>https://easystats.github.io/datawizard/reference/colnames.html</loc>
   </url>
   <url>
@@ -167,9 +170,6 @@
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/standardize.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/datawizard/reference/to_numeric.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/visualisation_recipe.html</loc>
