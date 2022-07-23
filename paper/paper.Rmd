@@ -81,16 +81,16 @@ The raw data is rarely in a state that it can be directly fed into a statistical
 
 `{datawizard}` provides various functions for cleaning and preparing data (see Table 1).
 
-Function           | Operation                             |
------------------- | --------------------------------------|
-`data_filter()`    | to select only certain *observations* |
-`data_select()`    | to select only a few *variables*      |
-`data_extract()`   | to extract a single *variable*        |
-`data_rename()`    | to rename variables                   |
-`data_to_long()` | to convert data from wide to long     |
-`data_to_wide()`  | to convert data from long to wide     |
-`data_join()`      | to join two data frames               |
-    ...            |        ...                            |
+| Function         | Operation                             |
+| :--------------- | :------------------------------------ |
+| `data_filter()`  | to select only certain *observations* |
+| `data_select()`  | to select only a few *variables*      |
+| `data_extract()` | to extract a single *variable*        |
+| `data_rename()`  | to rename variables                   |
+| `data_to_long()` | to convert data from wide to long     |
+| `data_to_wide()` | to convert data from long to wide     |
+| `data_join()`    | to join two data frames               |
+| ...              | ...                                   |
 
 Table: The table below lists a few key functions offered by *datawizard* for data wrangling. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
 
@@ -119,14 +119,14 @@ Even after getting the raw data in the needed format, we may need to transform c
 
 `{datawizard}` provides a rich collection of such functions for transforming variables (see Table 2).
 
-Function           | Operation                                     |
------------------- | ----------------------------------------------|
-`standardize()`    | to center and scale data                      |
-`normalize()`      | to scale variables to 0-1 range               |
-`adjust()`         | to adjust data for effect of other variables  |
-`slide()`          | to shift numeric value range                  |
-`ranktransform()`  | to convert numeric values to integer ranks    |
-    ...            |        ...                                    |
+| Function          | Operation                                    |
+| :---------------- | :------------------------------------------- |
+| `standardize()`   | to center and scale data                     |
+| `normalize()`     | to scale variables to 0-1 range              |
+| `adjust()`        | to adjust data for effect of other variables |
+| `slide()`         | to shift numeric value range                 |
+| `ranktransform()` | to convert numeric values to integer ranks   |
+| ...               | ...                                          |
 
 Table: The table below lists a few key functions offered by *datawizard* for data transformations. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
 
