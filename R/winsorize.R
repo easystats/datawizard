@@ -14,9 +14,9 @@
 #'
 #' @return
 #'
-#' A dataframe with winsorized columns or a winsorized vector.
+#' A data frame with winsorized columns or a winsorized vector.
 #'
-#' @param data Dataframe or vector.
+#' @param data data frame or vector.
 #' @param threshold The amount of winsorization, depends on the value of `method`:
 #' - For `method = "percentile"`: the amount to winsorize from *each* tail.
 #' - For `method = "zscore"`: the number of *SD*/*MAD*-deviations from the *mean*/*median* (see `robust`)

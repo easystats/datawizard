@@ -1,8 +1,8 @@
-#' @title Replace missing values in a variable or a dataframe.
+#' @title Replace missing values in a variable or a data frame.
 #' @name convert_na_to
 #'
 #' @description
-#' Replace missing values in a variable or a dataframe.
+#' Replace missing values in a variable or a data frame.
 #'
 #' @param x A numeric, factor, or character vector, or a data frame.
 #' @param replacement Numeric or character value that will be used to
@@ -28,7 +28,7 @@
 #'   replacement = "missing"
 #' )
 #'
-#' ### For dataframes
+#' ### For data frames
 #'
 #' test_df <- data.frame(
 #'   x = c(1, 2, NA),
@@ -44,7 +44,7 @@
 #'   replace_char = "missing"
 #' )
 #'
-#' # Convert a specific variable in the dataframe
+#' # Convert a specific variable in the data frame
 #' convert_na_to(
 #'   test_df,
 #'   replace_num = 0,

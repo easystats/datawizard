@@ -11,7 +11,7 @@ name: render-readme
 
 jobs:
   render-readme:
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
@@ -31,6 +31,10 @@ jobs:
 
       - name: Render README
         run: Rscript -e 'rmarkdown::render("README.Rmd")'
+        with:
+          extra-packages: |
+            deps::.
+            easystats/datawizard
 
       - name: Commit Results
         run: |

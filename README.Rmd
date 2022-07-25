@@ -190,7 +190,7 @@ x <- sample(1:10, size = 50, replace = TRUE)
 table(x)
 
 # cut into 3 groups, based on distribution (quantiles)
-table(data_cut(x, split = "quantile", n_groups = 3))
+table(categorize(x, split = "quantile", n_groups = 3))
 ```
 
 ## Data Transformations

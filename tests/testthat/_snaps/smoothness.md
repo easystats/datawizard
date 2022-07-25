@@ -1,4 +1,4 @@
-# smoothness works with dataframes
+# smoothness works with data frames
 
     Code
       smoothness(BOD)

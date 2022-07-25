@@ -1,4 +1,4 @@
-# ranktransform works with dataframes
+# ranktransform works with data frames
 
     Code
       ranktransform(BOD)

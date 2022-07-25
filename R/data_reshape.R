@@ -26,7 +26,7 @@
 #' @param colnames_to Deprecated. Use `names_to` instead.
 #'
 #' @return If a tibble was provided as input, `reshape_longer()` also returns a
-#' tibble. Otherwise, it returns a dataframe.
+#' tibble. Otherwise, it returns a data frame.
 #'
 #' @examples
 #' wide_data <- data.frame(replicate(5, rnorm(10)))
@@ -133,7 +133,7 @@ data_to_long <- function(data,
 
   # Reshaping ---------------------
   # Create Index column as needed by reshape
-  data[["_Row"]] <- to_numeric(row.names(data))
+  data[["_Row"]] <- coerce_to_numeric(row.names(data))
 
   # Create a new index for cases with length(names_to) > 1
   names_to_2 <- paste(names_to, collapse = "_")
@@ -149,7 +149,6 @@ data_to_long <- function(data,
   )
 
   # Cleaning --------------------------
-
   # Sort the dataframe (to match pivot_longer's output)
   long <- long[do.call(order, long[, c("_Row", names_to_2)]), ]
 
@@ -250,7 +249,7 @@ data_to_long <- function(data,
 #' @param sep Deprecated. Use `names_sep` instead.
 #'
 #' @return If a tibble was provided as input, `reshape_wider()` also returns a
-#' tibble. Otherwise, it returns a dataframe.
+#' tibble. Otherwise, it returns a data frame.
 #'
 #' @examples
 #' data_long <- read.table(header = TRUE, text = "
@@ -373,7 +372,6 @@ data_to_wide <- function(data,
       tmp_colname <- gsub("\\{\\}", "%s", tmp_colname)
       do.call(sprintf, c(fmt = tmp_colname, tmp_vars))
     }))
-
   }
 
 

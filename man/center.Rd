@@ -149,13 +149,13 @@ from the input data frame.
 \examples{
 data(iris)
 
-# entire dataframe or a vector
+# entire data frame or a vector
 head(iris$Sepal.Width)
 head(center(iris$Sepal.Width))
 head(center(iris))
 head(center(iris, force = TRUE))
 
-# only the selected columns from a dataframe
+# only the selected columns from a data frame
 center(anscombe, select = c("x1", "x3"))
 center(anscombe, exclude = c("x1", "x3"))
 
