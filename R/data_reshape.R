@@ -19,7 +19,7 @@
 #' @inheritParams find_columns
 #'
 #' @return If a tibble was provided as input, `reshape_longer()` also returns a
-#' tibble. Otherwise, it returns a dataframe.
+#' tibble. Otherwise, it returns a data frame.
 #'
 #' @examples
 #' wide_data <- data.frame(replicate(5, rnorm(10)))
@@ -100,7 +100,7 @@ data_to_long <- function(data,
 
   # Reshaping ---------------------
   # Create Index column as needed by reshape
-  data[["_Row"]] <- to_numeric(row.names(data))
+  data[["_Row"]] <- coerce_to_numeric(row.names(data))
 
   # Reshape
   long <- stats::reshape(
@@ -113,7 +113,7 @@ data_to_long <- function(data,
   )
 
   # Cleaning --------------------------
-  # Sort the dataframe (to match pivot_longer's output)
+  # Sort the data frame (to match pivot_longer's output)
   long <- long[order(long[["_Row"]], long[[colnames_to]]), ]
 
   # Remove or rename the row index
@@ -163,8 +163,10 @@ data_to_long <- function(data,
 #' @param names_sep If `names_from` or `values_from` contains multiple variables,
 #' this will be used to join their values together into a single string to use
 #' as a column name.
-#' @param names_glue Instead of `names_sep` and `names_prefix`, you can supply a glue
-#' specification that uses the `names_from` columns to create custom column names.
+#' @param names_glue Instead of `names_sep` and `names_prefix`, you can supply a
+#' [glue specification](https://glue.tidyverse.org/index.html) that uses the
+#' `names_from` columns to create custom column names. Note that the only
+#' delimiters supported by `names_glue` are curly brackets, `{` and `}`.
 #' @param values_from The name of the column that contains the values to be used
 #' as future variable values.
 #' @param values_fill Optionally, a (scalar) value that will be used to replace
@@ -176,7 +178,7 @@ data_to_long <- function(data,
 #' @param sep Deprecated. Use `names_sep` instead.
 #'
 #' @return If a tibble was provided as input, `reshape_wider()` also returns a
-#' tibble. Otherwise, it returns a dataframe.
+#' tibble. Otherwise, it returns a data frame.
 #'
 #' @examples
 #' data_long <- read.table(header = TRUE, text = "
@@ -223,7 +225,8 @@ data_to_long <- function(data,
 #' reshape_wider(
 #'   production,
 #'   names_from = c("product", "country"),
-#'   values_from = "production"
+#'   values_from = "production",
+#'   names_glue = "prod_{product}_{country}"
 #' )
 #'
 #' @inherit data_rename seealso
@@ -298,7 +301,6 @@ data_to_wide <- function(data,
       tmp_colname <- gsub("\\{\\}", "%s", tmp_colname)
       do.call(sprintf, c(fmt = tmp_colname, tmp_vars))
     }))
-
   }
 
 

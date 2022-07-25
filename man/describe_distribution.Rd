@@ -44,7 +44,7 @@ describe_distribution(x, ...)
 )
 }
 \arguments{
-\item{x}{A numeric vector, a character vector, a dataframe, or a list. See
+\item{x}{A numeric vector, a character vector, a data frame, or a list. See
 \code{Details}.}
 
 \item{...}{Additional arguments to be passed to or from methods.}
@@ -124,7 +124,7 @@ This function describes a distribution by a set of indices (e.g., measures of
 centrality, dispersion, range, skewness, kurtosis).
 }
 \details{
-If \code{x} is a dataframe, only numeric variables are kept and will be displayed in the summary.
+If \code{x} is a data frame, only numeric variables are kept and will be displayed in the summary.
 
 If \code{x} is a list, the behavior is different whether \code{x} is a stored list. If
 \code{x} is stored (for example, \code{describe_distribution(mylist)} where \code{mylist}

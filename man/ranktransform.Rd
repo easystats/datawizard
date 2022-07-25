@@ -99,9 +99,9 @@ head(ranktransform(trees))
 }
 \seealso{
 Other transform utilities: 
-\code{\link{data_rescale}()},
-\code{\link{data_reverse}()},
 \code{\link{normalize}()},
+\code{\link{rescale}()},
+\code{\link{reverse}()},
 \code{\link{standardize}()}
 }
 \concept{transform utilities}

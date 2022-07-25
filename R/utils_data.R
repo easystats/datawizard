@@ -27,7 +27,7 @@
 #' @export
 rownames_as_column <- function(x, var = "rowname") {
   if (!object_has_rownames(x)) {
-    stop("The dataframe doesn't have rownames.")
+    stop("The data frame doesn't have rownames.")
   }
   if (is.null(var)) {
     var <- "rowname"
@@ -50,12 +50,12 @@ column_as_rownames <- function(x, var = "rowname") {
   }
   if (is.character(var)) {
     if (!var %in% names(x)) {
-      stop(paste0('Variable "', var, '" is not in the dataframe.'))
+      stop(paste0('Variable "', var, '" is not in the data frame.'))
     }
   }
   if (is.numeric(var)) {
     if (var > ncol(x) | var <= 0) {
-      stop("Column ", var, " does not exist. There are ", ncol(x), " columns in the dataframe.")
+      stop("Column ", var, " does not exist. There are ", ncol(x), " columns in the data frame.")
     }
   }
   rownames(x) <- x[[var]]

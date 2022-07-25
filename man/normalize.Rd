@@ -92,7 +92,7 @@ A normalized object.
 }
 \description{
 Performs a normalization of data, i.e., it scales variables in the range
-0 - 1. This is a special case of \code{\link[=data_rescale]{data_rescale()}}. \code{unnormalize()} is the
+0 - 1. This is a special case of \code{\link[=rescale]{rescale()}}. \code{unnormalize()} is the
 counterpart, but only works for variables that have been normalized with
 \code{normalize()}.
 }
@@ -131,9 +131,9 @@ Regression with Beta-Distributed Dependent Variables. Psychological Methods,
 }
 \seealso{
 Other transform utilities: 
-\code{\link{data_rescale}()},
-\code{\link{data_reverse}()},
 \code{\link{ranktransform}()},
+\code{\link{rescale}()},
+\code{\link{reverse}()},
 \code{\link{standardize}()}
 }
 \concept{transform utilities}
