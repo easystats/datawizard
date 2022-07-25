@@ -108,7 +108,9 @@ functions (see 'Details'), this argument may be used as workaround.}
 
 \item{...}{Currently not used.}
 
-\item{cols}{Deprecated. Use \code{select} instead.}
+\item{cols}{Identical to \code{select}. This argument is here to ensure compatibility
+with \code{tidyr::pivot_longer()}. If both \code{select} and \code{cols} are provided, \code{cols}
+is used.}
 
 \item{colnames_to}{Deprecated. Use \code{names_to} instead.}
 }

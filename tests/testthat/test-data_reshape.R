@@ -199,6 +199,65 @@ test_that("data_reshape works as expected - complex dataset", {
 })
 
 
+test_that("data_to_long: arg 'cols' overrides 'select'", {
+  skip_if_not_installed("psych")
+
+  data <- psych::bfi
+
+  expect_identical(
+    data_to_long(
+      wide_data,
+      select = c(1, 2),
+      names_to = "Column",
+      values_to = "Numbers",
+      rows_to = "Row"
+    ),
+    data_to_long(
+      wide_data,
+      cols = c(1, 2),
+      names_to = "Column",
+      values_to = "Numbers",
+      rows_to = "Row"
+    )
+  )
+
+  expect_identical(
+    data_to_long(
+      data,
+      cols = regex("\\d"),
+      names_to = "Item",
+      values_to = "Score",
+      rows_to = "Participant"
+    ),
+    data_to_long(
+      data,
+      select = regex("\\d"),
+      names_to = "Item",
+      values_to = "Score",
+      rows_to = "Participant"
+    )
+  )
+
+  expect_identical(
+    data_to_long(
+      data,
+      cols = starts_with("A"),
+      names_to = "Item",
+      values_to = "Score",
+      rows_to = "Participant"
+    ),
+    data_to_long(
+      data,
+      select = starts_with("A"),
+      names_to = "Item",
+      values_to = "Score",
+      rows_to = "Participant"
+    )
+  )
+
+})
+
+
 d <- data.frame(
   age = c(20, 30, 40),
   sex = c("Female", "Male", "Male"),

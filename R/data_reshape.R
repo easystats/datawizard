@@ -22,7 +22,9 @@
 #'   numbers from the original data. If `NULL`, will be removed.
 #' @param ... Currently not used.
 #' @inheritParams find_columns
-#' @param cols Deprecated. Use `select` instead.
+#' @param cols Identical to `select`. This argument is here to ensure compatibility
+#'   with `tidyr::pivot_longer()`. If both `select` and `cols` are provided, `cols`
+#'   is used.
 #' @param colnames_to Deprecated. Use `names_to` instead.
 #'
 #' @return If a tibble was provided as input, `reshape_longer()` also returns a
@@ -91,12 +93,6 @@ data_to_long <- function(data,
       names_to <- colnames_to
     }
   }
-  if (!missing(cols)) {
-    .is_deprecated("cols", "select")
-    if (is.null(select)) {
-      select <- cols
-    }
-  }
 
   if (inherits(data, "tbl_df")) {
     tbl_input <- TRUE
@@ -105,15 +101,34 @@ data_to_long <- function(data,
     tbl_input <- FALSE
   }
 
-  # evaluate arguments
-  cols <- .select_nse(
-    select,
-    data,
-    exclude = NULL,
-    ignore_case = ignore_case,
-    regex = regex,
-    verbose = FALSE
-  )
+  ### Prefer "cols" over "select" for compat with tidyr::pivot_longer
+  if (!missing(cols)) {
+    select <- substitute(cols)
+    cols <- .select_nse(
+      select,
+      data,
+      exclude = NULL,
+      ignore_case = ignore_case,
+      regex = regex,
+      verbose = FALSE
+    )
+  } else {
+    if (!missing(select) || !is.null(select)) {
+      cols <- .select_nse(
+        select,
+        data,
+        exclude = NULL,
+        ignore_case = ignore_case,
+        regex = regex,
+        verbose = FALSE
+      )
+    } else {
+      stop(insight::format_message(
+        "You need to specify columns to pivot, either with `select` or `cols`."
+      ), call. = FALSE)
+    }
+  }
+
 
   if (any(names_to %in% setdiff(names(data), cols))) {
     stop(insight::format_message(
