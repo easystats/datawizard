@@ -49,7 +49,7 @@ link-citations: yes
 
 # Summary
 
-The `{datawizard}` package for the R programming language [@base2021] provides a lightweight toolbox to assist in keys steps involved in any data analysis workflow: (1) wrangling the raw data to get it in the needed form, (2) applying preprocessing steps and statistical transformations, and (3) carrying out sanity checks for transformed data. Therefore, it can be a valuable tool for R users and developers looking for a lightweight option for data preparation.
+The `{datawizard}` package for the R programming language [@base2021] provides a lightweight toolbox to assist in keys steps involved in any data analysis workflow: (1) wrangling the raw data to get it in the needed form, (2) applying preprocessing steps and statistical transformations, and (3) conducting reasonableness checks to ensure transformed data are high quality. Therefore, it can be a valuable tool for R users and developers looking for a lightweight option for data preparation.
 
 # Statement of Need
 
