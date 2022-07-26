@@ -221,13 +221,13 @@ was found. <code>get_columns()</code> returns a data frame with matching columns
 functions. The following will work as expected, returning all columns that
 start with <code>"Sep"</code>:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sep"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sep"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></code></pre><p></p></div>
 <p>However, this example won't work as expected!</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">i</span> <span class="op">&lt;-</span> <span class="st">"Sep"</span></span>
-<span>  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></code></pre><p></p></div>
 <p>One workaround is to use the <code>regex</code> argument, which provides at least a bit
@@ -258,9 +258,9 @@ regular expression pattern in <code>select</code>.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Find columns names by pattern</span></span></span>
-<span class="r-in"><span><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sepal"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sepal"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sepal.Length" "Sepal.Width" </span>
-<span class="r-in"><span><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">ends_with</a></span><span class="op">(</span><span class="st">"Width"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span><span class="op">(</span><span class="st">"Width"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sepal.Width" "Petal.Width"</span>
 <span class="r-in"><span><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu">regex</span><span class="op">(</span><span class="st">"\\."</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width" </span>
@@ -268,7 +268,7 @@ regular expression pattern in <code>select</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Petal.Width"  "Sepal.Length"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># starts with "Sepal", but not allowed to end with "width"</span></span></span>
-<span class="r-in"><span><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sepal"</span><span class="op">)</span>, exclude <span class="op">=</span> <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"Width"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">find_columns</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sepal"</span><span class="op">)</span>, exclude <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"Width"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sepal.Length"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># find numeric with mean &gt; 3.5</span></span></span>

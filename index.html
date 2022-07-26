@@ -347,7 +347,7 @@
 <code class="sourceCode R"><span><span class="va">wide_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="reference/data_to_long.html">data_to_long</a></span><span class="op">(</span><span class="va">wide_data</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Name       Value</span></span>
+<span><span class="co">#&gt;   name       value</span></span>
 <span><span class="co">#&gt; 1   X1 -0.08281164</span></span>
 <span><span class="co">#&gt; 2   X2 -1.12490028</span></span>
 <span><span class="co">#&gt; 3   X3 -0.70632036</span></span>
@@ -359,8 +359,8 @@
 <code class="sourceCode R"><span><span class="va">long_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/data_to_long.html">data_to_long</a></span><span class="op">(</span><span class="va">wide_data</span>, rows_to <span class="op">=</span> <span class="st">"Row_ID"</span><span class="op">)</span> <span class="co"># Save row number</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/data_to_wide.html">data_to_wide</a></span><span class="op">(</span><span class="va">long_data</span>,</span>
-<span>  names_from <span class="op">=</span> <span class="st">"Name"</span>,</span>
-<span>  values_from <span class="op">=</span> <span class="st">"Value"</span>,</span>
+<span>  names_from <span class="op">=</span> <span class="st">"name"</span>,</span>
+<span>  values_from <span class="op">=</span> <span class="st">"value"</span>,</span>
 <span>  id_cols <span class="op">=</span> <span class="st">"Row_ID"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;    Row_ID          X1          X2          X3         X4          X5</span></span>
