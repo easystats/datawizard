@@ -469,7 +469,7 @@ reshaped to be in a single new column, called "count".
 # ---------- datawizard -----------
 relig_income %>% 
   data_to_long(
-    select = -religion, 
+    -religion, 
     names_to = "income", 
     values_to = "count"
   )
@@ -509,7 +509,7 @@ billboard
 # ---------- datawizard -----------
 billboard %>% 
   data_to_long(
-    select = starts_with("wk"), 
+    cols = starts_with("wk"), 
     names_to = "week", 
     values_to = "rank",
     values_drop_na = TRUE
