@@ -14,7 +14,7 @@ authors:
   name: Mattan S. Ben-Shachar
   orcid: 0000-0002-4287-4801
 - affiliation: 4
-  name: Brenton M. Wiernik
+  name: Brenton M. Wiernik^[Brenton Wiernik is currently an independent researcher and Research Scientist at Meta, Demography and Survey Science. The current work was done in an independent capacity.]
   orcid: 0000-0001-9560-6336
 - affiliation: 5
   name: Etienne Bacher
@@ -31,13 +31,13 @@ affiliations:
 - index: 3
   name: Ben-Gurion University of the Negev, Israel
 - index: 4
-  name: Facebook
+  name: Independent Researcher
 - index: 5
   name: Luxembourg Institute of Socio-Economic Research, Luxembourg
 - index: 6
   name: University Medical Center Hamburg-Eppendorf, Germany
     
-date: "2022-07-23"
+date: "2022-07-26"
 bibliography: paper.bib
 output: rticles::joss_article
 csl: apa.csl
@@ -49,7 +49,7 @@ link-citations: yes
 
 # Summary
 
-The `{datawizard}` package for the R programming language [@base2021] provides a lightweight toolbox to assist in keys steps involved in any data analysis workflow: (1) wrangling the raw data to get it in the needed form, (2) applying preprocessing steps and statistical transformations, and (3) conducting reasonableness checks to ensure transformed data are high quality. Therefore, it can be a valuable tool for R users and developers looking for a lightweight option for data preparation.
+The `{datawizard}` package for the R programming language [@base2021] provides a lightweight toolbox to assist in keys steps involved in any data analysis workflow: (1) wrangling the raw data to get it in the needed form, (2) applying preprocessing steps and statistical transformations, and (3) carrying out sanity checks for transformed data. Therefore, it can be a valuable tool for R users and developers looking for a lightweight option for data preparation.
 
 # Statement of Need
 
@@ -58,9 +58,9 @@ In addition to its usefulness to the `{easystats}` ecosystem, it also provides *
 
 Because `{datawizard}` is also meant to be used and adopted easily by a wide range of users, its workflow and syntax are designed to be similar to `{tidyverse}` (@Wickham2019), a widely used ecosystem of R packages. Thus, users familiar with the `{tidyverse}` can easily translate their knowledge and make full usage of `{datawizard}`.
 
-In addition to being a lightweight solution to clean messy data, `{datawizard}` also provides helpers for the other important step of data analysis: applying statistical transformations to the cleaned data while setting up statistical models. This includes various types of data standardization, normalization, rank-transformation, and adjustment.
+In addition to being a lightweight solution to clean messy data, `{datawizard}` also provides helpers for the other important step of data analysis: applying statistical transformations to the cleaned data while setting up statistical models. This includes various types of data standardization, normalization, rank-transformation, and adjustment. These transformations, although widely used, are not currently collectively implemented in a package in the R ecosystem, so `{datawizard}` can help new R users in finding the transformation they need.
 
-Lastly, `{datawizard}` also provides a toolbox to create a detailed profile of data properties.
+Lastly, `{datawizard}` also provides a toolbox to create a detailed profile of data properties. This is a common step in data analysis, but it is not available in base R or many modeling packages, so its inclusion makes `{datawizard}` a one-stop-shop for data preparation tasks.
 
 # Features
 
@@ -70,16 +70,16 @@ The raw data is rarely in a state that it can be directly fed into a statistical
 
 `{datawizard}` provides various functions for cleaning and preparing data (see Table 1).
 
-Function           | Operation                             |
------------------- | --------------------------------------|
-`data_filter()`    | to select only certain *observations* |
-`data_select()`    | to select only a few *variables*      |
-`data_extract()`   | to extract a single *variable*        |
-`data_rename()`    | to rename variables                   |
-`data_to_long()` | to convert data from wide to long     |
-`data_to_wide()`  | to convert data from long to wide     |
-`data_join()`      | to join two data frames               |
-    ...            |        ...                            |
+| Function         | Operation                             |
+| :--------------- | :------------------------------------ |
+| `data_filter()`  | to select only certain *observations* |
+| `data_select()`  | to select only a few *variables*      |
+| `data_extract()` | to extract a single *variable*        |
+| `data_rename()`  | to rename variables                   |
+| `data_to_long()` | to convert data from wide to long     |
+| `data_to_wide()` | to convert data from long to wide     |
+| `data_join()`    | to join two data frames               |
+| ...              | ...                                   |
 
 Table: The table below lists a few key functions offered by *datawizard* for data wrangling. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
 
@@ -95,11 +95,11 @@ stocks <- data.frame(
 
 stocks
 #>         time          X          Y
-#> 1 2009-01-01 -0.2260690 -2.8138612
-#> 2 2009-01-02 -1.1493683  0.6943494
-#> 3 2009-01-03  0.5735460 -4.9631826
-#> 4 2009-01-04 -0.7158624  1.3653417
-#> 5 2009-01-05  0.8908393  1.1989796
+#> 1 2009-01-01 -0.7974012  1.0132534
+#> 2 2009-01-02 -0.1527603  3.2487633
+#> 3 2009-01-03 -0.3048279  0.2620989
+#> 4 2009-01-04 -0.3805275 -0.6002322
+#> 5 2009-01-05 -0.9159339 -1.0150980
 
 data_to_long(
   stocks,
@@ -108,16 +108,16 @@ data_to_long(
   values_to = "price"
 )
 #>          time stock      price
-#> 1  2009-01-01     X -0.2260690
-#> 2  2009-01-01     Y -2.8138612
-#> 3  2009-01-02     X -1.1493683
-#> 4  2009-01-02     Y  0.6943494
-#> 5  2009-01-03     X  0.5735460
-#> 6  2009-01-03     Y -4.9631826
-#> 7  2009-01-04     X -0.7158624
-#> 8  2009-01-04     Y  1.3653417
-#> 9  2009-01-05     X  0.8908393
-#> 10 2009-01-05     Y  1.1989796
+#> 1  2009-01-01     X -0.7974012
+#> 2  2009-01-01     Y  1.0132534
+#> 3  2009-01-02     X -0.1527603
+#> 4  2009-01-02     Y  3.2487633
+#> 5  2009-01-03     X -0.3048279
+#> 6  2009-01-03     Y  0.2620989
+#> 7  2009-01-04     X -0.3805275
+#> 8  2009-01-04     Y -0.6002322
+#> 9  2009-01-05     X -0.9159339
+#> 10 2009-01-05     Y -1.0150980
 ```
 
 ## Statistical Transformations
@@ -126,14 +126,14 @@ Even after getting the raw data in the needed format, we may need to transform c
 
 `{datawizard}` provides a rich collection of such functions for transforming variables (see Table 2).
 
-Function           | Operation                                     |
------------------- | ----------------------------------------------|
-`standardize()`    | to center and scale data                      |
-`normalize()`      | to scale variables to 0-1 range               |
-`adjust()`         | to adjust data for effect of other variables  |
-`slide()`          | to shift numeric value range                  |
-`ranktransform()`  | to convert numeric values to integer ranks    |
-    ...            |        ...                                    |
+| Function          | Operation                                    |
+| :---------------- | :------------------------------------------- |
+| `standardize()`   | to center and scale data                     |
+| `normalize()`     | to scale variables to 0-1 range              |
+| `adjust()`        | to adjust data for effect of other variables |
+| `slide()`         | to shift numeric value range                 |
+| `ranktransform()` | to convert numeric values to integer ranks   |
+| ...               | ...                                          |
 
 Table: The table below lists a few key functions offered by *datawizard* for data transformations. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
 

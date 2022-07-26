@@ -14,7 +14,7 @@ authors:
   name: Mattan S. Ben-Shachar
   orcid: 0000-0002-4287-4801
 - affiliation: 4
-  name: Brenton M. Wiernik
+  name: Brenton M. Wiernik^[Brenton Wiernik is currently an independent researcher and Research Scientist at Meta, Demography and Survey Science. The current work was done in an independent capacity.]
   orcid: 0000-0001-9560-6336
 - affiliation: 5
   name: Etienne Bacher
@@ -31,7 +31,7 @@ affiliations:
 - index: 3
   name: Ben-Gurion University of the Negev, Israel
 - index: 4
-  name: Facebook
+  name: Independent Researcher
 - index: 5
   name: Luxembourg Institute of Socio-Economic Research, Luxembourg
 - index: 6
@@ -69,9 +69,9 @@ In addition to its usefulness to the `{easystats}` ecosystem, it also provides *
 
 Because `{datawizard}` is also meant to be used and adopted easily by a wide range of users, its workflow and syntax are designed to be similar to `{tidyverse}` (@Wickham2019), a widely used ecosystem of R packages. Thus, users familiar with the `{tidyverse}` can easily translate their knowledge and make full usage of `{datawizard}`.
 
-In addition to being a lightweight solution to clean messy data, `{datawizard}` also provides helpers for the other important step of data analysis: applying statistical transformations to the cleaned data while setting up statistical models. This includes various types of data standardization, normalization, rank-transformation, and adjustment.
+In addition to being a lightweight solution to clean messy data, `{datawizard}` also provides helpers for the other important step of data analysis: applying statistical transformations to the cleaned data while setting up statistical models. This includes various types of data standardization, normalization, rank-transformation, and adjustment. These transformations, although widely used, are not currently collectively implemented in a package in the R ecosystem, so `{datawizard}` can help new R users in finding the transformation they need.
 
-Lastly, `{datawizard}` also provides a toolbox to create a detailed profile of data properties.
+Lastly, `{datawizard}` also provides a toolbox to create a detailed profile of data properties. This is a common step in data analysis, but it is not available in base R or many modeling packages, so its inclusion makes `{datawizard}` a one-stop-shop for data preparation tasks.
 
 # Features
 
