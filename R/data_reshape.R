@@ -5,18 +5,27 @@
 #' `tidyr::pivot_longer()`.
 #'
 #' @param data A data frame to pivot.
-#' @param cols Deprecated. Please use `select`.
-#' @param colnames_to The name of the new column that will contain the column
+#' @param names_to The name of the new column that will contain the column
 #'   names.
+#' @param names_prefix A regular expression used to remove matching text from
+#' the start of each variable name.
+#' @param names_sep,names_pattern If `names_to` contains multiple values, this
+#' argument controls how the column name is broken up.
+#' `names_pattern` takes a regular expression containing matching groups (`()`⁠).
 #' @param values_to The name of the new column that will contain the values of
 #'   the pivoted variables.
+#' @param values_drop_na If `TRUE`, will drop rows that contain only `NA` in the
+#'   `values_to` column. This effectively converts explicit missing values to
+#'   implicit missing values, and should generally be used only when missing values
+#'   in data were created by its structure.
 #' @param rows_to The name of the column that will contain the row names or row
 #'   numbers from the original data. If `NULL`, will be removed.
-
 #' @param ... Currently not used.
-#' @param names_to Same as `colnames_to`, is there for
-#'   compatibility with `tidyr::pivot_longer()`.
 #' @inheritParams find_columns
+#' @param cols Identical to `select`. This argument is here to ensure compatibility
+#'   with `tidyr::pivot_longer()`. If both `select` and `cols` are provided, `cols`
+#'   is used.
+#' @param colnames_to Deprecated. Use `names_to` instead.
 #'
 #' @return If a tibble was provided as input, `reshape_longer()` also returns a
 #' tibble. Otherwise, it returns a data frame.
@@ -48,6 +57,16 @@
 #'     rows_to = "Participant"
 #'   )
 #'
+#' if(require("tidyr")) {
+#'   reshape_longer(
+#'     tidyr::who,
+#'     select = new_sp_m014:newrel_f65,
+#'     names_to = c("diagnosis", "gender", "age"),
+#'     names_pattern = "new_?(.*)_(.)(.*)",
+#'     values_to = "count"
+#'   )
+#' }
+#'
 #' }
 #'
 #' @inherit data_rename seealso
@@ -55,14 +74,26 @@
 
 data_to_long <- function(data,
                          select = "all",
-                         colnames_to = "Name",
-                         values_to = "Value",
+                         names_to = "name",
+                         names_prefix = NULL,
+                         names_sep = NULL,
+                         names_pattern = NULL,
+                         values_to = "value",
+                         values_drop_na = FALSE,
                          rows_to = NULL,
                          ignore_case = FALSE,
                          regex = FALSE,
-                         cols = select,
                          ...,
-                         names_to = colnames_to) {
+                         cols,
+                         colnames_to) {
+
+  if (!missing(colnames_to)) {
+    .is_deprecated("colnames_to", "names_to")
+    if (is.null(names_to)) {
+      names_to <- colnames_to
+    }
+  }
+
   if (inherits(data, "tbl_df")) {
     tbl_input <- TRUE
     data <- as.data.frame(data)
@@ -70,20 +101,43 @@ data_to_long <- function(data,
     tbl_input <- FALSE
   }
 
-  ## TODO deprecate later
+  ### Prefer "cols" over "select" for compat with tidyr::pivot_longer
   if (!missing(cols)) {
-    select <- cols
+    select <- substitute(cols)
+    cols <- .select_nse(
+      select,
+      data,
+      exclude = NULL,
+      ignore_case = ignore_case,
+      regex = regex,
+      verbose = FALSE
+    )
+  } else {
+    if (!missing(select) || !is.null(select)) {
+      cols <- .select_nse(
+        select,
+        data,
+        exclude = NULL,
+        ignore_case = ignore_case,
+        regex = regex,
+        verbose = FALSE
+      )
+    } else {
+      stop(insight::format_message(
+        "You need to specify columns to pivot, either with `select` or `cols`."
+      ), call. = FALSE)
+    }
   }
 
-  # evaluate arguments
-  cols <- .select_nse(
-    select,
-    data,
-    exclude = NULL,
-    ignore_case = ignore_case,
-    regex = regex,
-    verbose = FALSE
-  )
+
+  if (any(names_to %in% setdiff(names(data), cols))) {
+    stop(insight::format_message(
+      "Some values of the columns specified in 'names_to' are already present as column names.",
+      paste0("Either use another value in `names_to` or rename the following columns: ",
+             text_concatenate(names_to[which(names_to %in% setdiff(names(data), cols))])
+      )
+    ), call. = FALSE)
+  }
 
   # Sanity checks ----------------
 
@@ -92,15 +146,12 @@ data_to_long <- function(data,
     stop("No columns found for reshaping data.", call. = FALSE)
   }
 
-  # Compatibility with tidyr
-  if (names_to != colnames_to) colnames_to <- names_to
-
-  # save attribute of each variable
-  variable_attr <- lapply(data, attributes)
-
   # Reshaping ---------------------
   # Create Index column as needed by reshape
   data[["_Row"]] <- coerce_to_numeric(row.names(data))
+
+  # Create a new index for cases with length(names_to) > 1
+  names_to_2 <- paste(names_to, collapse = "_")
 
   # Reshape
   long <- stats::reshape(
@@ -108,13 +159,13 @@ data_to_long <- function(data,
     varying = cols,
     idvar = "_Row",
     v.names = values_to,
-    timevar = colnames_to,
+    timevar = names_to_2,
     direction = "long"
   )
 
   # Cleaning --------------------------
-  # Sort the data frame (to match pivot_longer's output)
-  long <- long[order(long[["_Row"]], long[[colnames_to]]), ]
+  # Sort the dataframe (to match pivot_longer's output)
+  long <- long[do.call(order, long[, c("_Row", names_to_2)]), ]
 
   # Remove or rename the row index
   if (is.null(rows_to)) {
@@ -124,18 +175,53 @@ data_to_long <- function(data,
   }
 
   # Re-insert col names as levels
-  long[[colnames_to]] <- cols[long[[colnames_to]]]
+  long[[names_to_2]] <- cols[long[[names_to_2]]]
+
+  # if several variable in names_to, split the names either with names_sep
+  # or with names_pattern
+  if (length(names_to) > 1) {
+    for (i in seq_along(names_to)) {
+      if (is.null(names_pattern)) {
+        new_vals <- unlist(lapply(
+          strsplit(long[[names_to_2]], names_sep, fixed = TRUE),
+          function(x) x[i])
+        )
+        long[[names_to[i]]] <- new_vals
+      } else {
+        tmp <- regmatches(
+          unique(long[[names_to_2]]),
+          regexec(names_pattern, unique(long[[names_to_2]]))
+        )
+        tmp <- as.data.frame(do.call(rbind, tmp))[, c(1, i + 1)]
+        names(tmp) <- c(names_to_2, names_to[i])
+        long <- data_join(long, tmp)
+      }
+    }
+    long[[names_to_2]] <- NULL
+  }
+
+  # reorder
+  long <- data_relocate(long, select = values_to, after = -1)
+
+  # remove names prefix if specified
+  if (!is.null(names_prefix)) {
+    if (length(names_to) > 1) {
+      stop(insight::format_message(
+        "`names_prefix` only works when `names_to` is of length 1."
+      ), call. = FALSE)
+    }
+    long[[names_to]] <- gsub(paste0("^", names_prefix), "", long[[names_to]])
+  }
+
+  if (values_drop_na) {
+    long <- long[!is.na(long[, values_to]), ]
+  }
 
   # Reset row names
   row.names(long) <- NULL
 
   # Remove reshape attributes
   attributes(long)$reshapeLong <- NULL
-
-  # add back attributes where possible
-  for (i in colnames(long)) {
-    attributes(long[[i]]) <- variable_attr[[i]]
-  }
 
   if (isTRUE(tbl_input)) {
     class(long) <- c("tbl_df", "tbl", "data.frame")

@@ -91,7 +91,7 @@ library(poorman)
 
 hardlyworking %>%
   select(starts_with("xtra_hours")) %>%
-  reshape_longer(colnames_to = "name", values_to = "value") %>%
+  reshape_longer(names_to = "name", values_to = "value") %>%
   group_by(name) %>%
   summarise(
     mean = mean(value),
@@ -125,7 +125,7 @@ hardlyworking_z %>%
 ```{r, echo=FALSE}
 hardlyworking_z %>%
   select(-xtra_hours_z, -xtra_hours_zr) %>%
-  reshape_longer(colnames_to = "name", values_to = "value") %>%
+  reshape_longer(names_to = "name", values_to = "value") %>%
   group_by(name) %>%
   summarise(
     mean = mean(value),
