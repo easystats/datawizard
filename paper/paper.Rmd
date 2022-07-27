@@ -33,7 +33,7 @@ affiliations:
 - index: 4
   name: Independent Researcher
 - index: 5
-  name: Luxembourg Institute of Socio-Economic Research, Luxembourg
+  name: Luxembourg Institute of Socio-Economic Research (LISER), Luxembourg
 - index: 6
   name: University Medical Center Hamburg-Eppendorf, Germany
     

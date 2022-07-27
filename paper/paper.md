@@ -33,11 +33,11 @@ affiliations:
 - index: 4
   name: Independent Researcher
 - index: 5
-  name: Luxembourg Institute of Socio-Economic Research, Luxembourg
+  name: Luxembourg Institute of Socio-Economic Research (LISER), Luxembourg
 - index: 6
   name: University Medical Center Hamburg-Eppendorf, Germany
     
-date: "2022-07-26"
+date: "2022-07-27"
 bibliography: paper.bib
 output: rticles::joss_article
 csl: apa.csl
@@ -94,12 +94,12 @@ stocks <- data.frame(
 )
 
 stocks
-#>         time          X          Y
-#> 1 2009-01-01 -0.8241643  0.3273435
-#> 2 2009-01-02  2.4231339  0.7256282
-#> 3 2009-01-03 -1.9723676  2.8757429
-#> 4 2009-01-04 -0.9454215  2.7597578
-#> 5 2009-01-05 -1.8934643 -0.5031082
+#>         time            X          Y
+#> 1 2009-01-01  0.129726039  0.3877105
+#> 2 2009-01-02  0.007121257  2.4642473
+#> 3 2009-01-03 -1.208297157 -0.2287426
+#> 4 2009-01-04  0.965780713 -0.1783209
+#> 5 2009-01-05 -0.940626593 -2.7937661
 
 data_to_long(
   stocks,
@@ -107,17 +107,17 @@ data_to_long(
   names_to = "stock",
   values_to = "price"
 )
-#>          time stock      price
-#> 1  2009-01-01     X -0.8241643
-#> 2  2009-01-01     Y  0.3273435
-#> 3  2009-01-02     X  2.4231339
-#> 4  2009-01-02     Y  0.7256282
-#> 5  2009-01-03     X -1.9723676
-#> 6  2009-01-03     Y  2.8757429
-#> 7  2009-01-04     X -0.9454215
-#> 8  2009-01-04     Y  2.7597578
-#> 9  2009-01-05     X -1.8934643
-#> 10 2009-01-05     Y -0.5031082
+#>          time stock        price
+#> 1  2009-01-01     X  0.129726039
+#> 2  2009-01-01     Y  0.387710522
+#> 3  2009-01-02     X  0.007121257
+#> 4  2009-01-02     Y  2.464247305
+#> 5  2009-01-03     X -1.208297157
+#> 6  2009-01-03     Y -0.228742591
+#> 7  2009-01-04     X  0.965780713
+#> 8  2009-01-04     Y -0.178320881
+#> 9  2009-01-05     X -0.940626593
+#> 10 2009-01-05     Y -2.793766068
 ```
 
 ## Statistical Transformations
