@@ -111,7 +111,12 @@ reference:
 
 articles:
 
+  - title: Data Wrangling
+    navbar: ~
+    contents:
+    - tidyverse_translation
   - title: Data transformation
-    navbar: Data transformation
+    navbar: ~
     contents:
     - standardize_data
+
