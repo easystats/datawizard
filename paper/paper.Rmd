@@ -71,7 +71,7 @@ Because `{datawizard}` is also meant to be used and adopted easily by a wide ran
 
 In addition to being a lightweight solution to clean messy data, `{datawizard}` also provides helpers for the other important step of data analysis: applying statistical transformations to the cleaned data while setting up statistical models. This includes various types of data standardization, normalization, rank-transformation, and adjustment. These transformations, although widely used, are not currently collectively implemented in a package in the R ecosystem, so `{datawizard}` can help new R users in finding the transformation they need.
 
-Lastly, `{datawizard}` also provides a toolbox to create a detailed profile of data properties. This is a common step in data analysis, but it is not available in base R or many modeling packages, so its inclusion makes `{datawizard}` a one-stop-shop for data preparation tasks.
+Lastly, `{datawizard}` also provides a toolbox to create a detailed profile of data properties. This is a common step in data analysis, but it is not readily available in base R or many modeling packages, so its inclusion makes `{datawizard}` a one-stop-shop for data preparation tasks.
 
 # Features
 
