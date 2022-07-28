@@ -183,7 +183,7 @@ data_to_long <- function(data,
     for (i in seq_along(names_to)) {
       if (is.null(names_pattern)) {
         new_vals <- unlist(lapply(
-          strsplit(long[[names_to_2]], names_sep, fixed = TRUE),
+          strsplit(unique(long[[names_to_2]]), names_sep, fixed = TRUE),
           function(x) x[i])
         )
         long[[names_to[i]]] <- new_vals
