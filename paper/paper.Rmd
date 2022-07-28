@@ -56,6 +56,7 @@ knitr::opts_chunk$set(
 )
 
 library(datawizard)
+set.seed(2016)
 ```
 
 # Summary
