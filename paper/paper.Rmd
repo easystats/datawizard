@@ -141,7 +141,7 @@ d <- data.frame(
 standardize(d, center = c(3, 4), scale = c(2, 4))
 ```
 
-## Data Properties
+## Summaries of Data Properties and Distributions
 
 The workhorse function to get a comprehensive summary of data properties is `describe_distribution()`, which combines a set of indices (e.g., measures of centrality, dispersion, range, skewness, kurtosis, etc.) computed by other functions in `{datawizard}`.
 
