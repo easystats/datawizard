@@ -153,53 +153,97 @@
 <p>Before we look at their <em>tidyverse</em> equivalents, we can first have a look at <a href="https://easystats.github.io/datawizard/">datawizard</a>’s key functions for data wrangling:</p>
 <table class="table">
 <thead><tr class="header">
-<th>Function</th>
-<th>Operation</th>
+<th align="left">Function</th>
+<th align="left">Operation</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><code><a href="../reference/data_match.html">data_filter()</a></code></td>
-<td><a href="#filtering">to select only certain observations</a></td>
+<td align="left"><code><a href="../reference/data_match.html">data_filter()</a></code></td>
+<td align="left"><a href="#filtering">to select only certain observations</a></td>
 </tr>
 <tr class="even">
-<td><code><a href="../reference/find_columns.html">data_select()</a></code></td>
-<td><a href="#selecting">to select only a few variables</a></td>
+<td align="left"><code><a href="../reference/find_columns.html">data_select()</a></code></td>
+<td align="left"><a href="#selecting">to select only a few variables</a></td>
 </tr>
 <tr class="odd">
-<td><code><a href="../reference/data_extract.html">data_extract()</a></code></td>
-<td><a href="#extracting">to extract a single variable</a></td>
+<td align="left"><code><a href="../reference/data_extract.html">data_extract()</a></code></td>
+<td align="left"><a href="#extracting">to extract a single variable</a></td>
 </tr>
 <tr class="even">
-<td><code><a href="../reference/data_rename.html">data_rename()</a></code></td>
-<td><a href="#renaming">to rename variables</a></td>
+<td align="left"><code><a href="../reference/data_rename.html">data_rename()</a></code></td>
+<td align="left"><a href="#renaming">to rename variables</a></td>
 </tr>
 <tr class="odd">
-<td><code><a href="../reference/data_relocate.html">data_relocate()</a></code></td>
-<td><a href="#relocating">to reorder a data frame</a></td>
+<td align="left"><code><a href="../reference/data_relocate.html">data_relocate()</a></code></td>
+<td align="left"><a href="#relocating">to reorder a data frame</a></td>
 </tr>
 <tr class="even">
-<td><code><a href="../reference/data_rotate.html">data_rotate()</a></code></td>
-<td>to rotate (or transpose) a data frame</td>
+<td align="left"><code><a href="../reference/data_to_long.html">data_to_long()</a></code></td>
+<td align="left"><a href="#reshaping">to convert data from wide to long</a></td>
 </tr>
 <tr class="odd">
-<td><code><a href="../reference/data_to_long.html">data_to_long()</a></code></td>
-<td><a href="#reshaping">to convert data from wide to long</a></td>
+<td align="left"><code><a href="../reference/data_to_wide.html">data_to_wide()</a></code></td>
+<td align="left"><a href="#reshaping">to convert data from long to wide</a></td>
 </tr>
 <tr class="even">
-<td><code><a href="../reference/data_to_wide.html">data_to_wide()</a></code></td>
-<td><a href="#reshaping">to convert data from long to wide</a></td>
-</tr>
-<tr class="odd">
-<td><code><a href="../reference/data_merge.html">data_join()</a></code></td>
-<td><a href="#joining">to join two data frames</a></td>
+<td align="left"><code><a href="../reference/data_merge.html">data_join()</a></code></td>
+<td align="left"><a href="#joining">to join two data frames</a></td>
 </tr>
 </tbody>
 </table>
 <p>Note that there are a few functions in <a href="https://easystats.github.io/datawizard/">datawizard</a> that have no strict equivalent in <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> or <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a> (e.g <code><a href="../reference/data_rotate.html">data_rotate()</a></code>), and so we won’t discuss them in the next section.</p>
 </div>
 <div class="section level2">
-<h2 id="equivalence-with-dplyr-tidyr">Equivalence with dplyr / tidyr<a class="anchor" aria-label="anchor" href="#equivalence-with-dplyr-tidyr"></a>
+<h2 id="equivalence-with-dplyr-tidyr">Equivalence with <code>{dplyr}</code> / <code>{tidyr}</code><a class="anchor" aria-label="anchor" href="#equivalence-with-dplyr-tidyr"></a>
 </h2>
+<p>Before we look at them individually, let’s first have a look at the summary table of this equivalence.</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">Function</th>
+<th align="left">Tidyverse equivalent(s)</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code><a href="../reference/data_match.html">data_filter()</a></code></td>
+<td align="left"><code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter()</a></code></td>
+</tr>
+<tr class="even">
+<td align="left"><code><a href="../reference/find_columns.html">data_select()</a></code></td>
+<td align="left"><code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">dplyr::select()</a></code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code><a href="../reference/data_extract.html">data_extract()</a></code></td>
+<td align="left"><code><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">dplyr::pull()</a></code></td>
+</tr>
+<tr class="even">
+<td align="left"><code><a href="../reference/data_rename.html">data_rename()</a></code></td>
+<td align="left"><code><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">dplyr::rename()</a></code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code><a href="../reference/data_relocate.html">data_relocate()</a></code></td>
+<td align="left"><code><a href="https://dplyr.tidyverse.org/reference/relocate.html" class="external-link">dplyr::relocate()</a></code></td>
+</tr>
+<tr class="even">
+<td align="left"><code><a href="../reference/data_to_long.html">data_to_long()</a></code></td>
+<td align="left"><code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">tidyr::pivot_longer()</a></code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code><a href="../reference/data_to_wide.html">data_to_wide()</a></code></td>
+<td align="left"><code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">tidyr::pivot_wider()</a></code></td>
+</tr>
+<tr class="even">
+<td align="left"><code><a href="../reference/data_merge.html">data_join()</a></code></td>
+<td align="left">
+<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::inner_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::right_join()</a></code>,</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">
+<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::full_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html" class="external-link">dplyr::anti_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html" class="external-link">dplyr::semi_join()</a></code>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="section level3">
 <h3 id="filtering">Filtering<a class="anchor" aria-label="anchor" href="#filtering"></a>
 </h3>
