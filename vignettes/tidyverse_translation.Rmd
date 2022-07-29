@@ -79,24 +79,36 @@ library(datawizard)
 Before we look at their *tidyverse* equivalents, we can first have a look at 
 `{datawizard}`'s key functions for data wrangling:
 
-Function           | Operation                                           |
------------------- | --------------------------------------------------- |
-`data_filter()`    | [to select only certain observations](#filtering) |
-`data_select()`    | [to select only a few variables](#selecting)     |
-`data_extract()`   | [to extract a single variable](#extracting)      |
-`data_rename()`    | [to rename variables](#renaming)                   |
-`data_relocate()`  | [to reorder a data frame](#relocating)              |
-`data_rotate()`    | to rotate (or transpose) a data frame               |
-`data_to_long()` | [to convert data from wide to long](#reshaping)     |
-`data_to_wide()`  | [to convert data from long to wide](#reshaping)     |
-`data_join()`      | [to join two data frames](#joining)                 |
+| Function          | Operation                                         |
+| :---------------- | :------------------------------------------------ |
+| `data_filter()`   | [to select only certain observations](#filtering) |
+| `data_select()`   | [to select only a few variables](#selecting)      |
+| `data_extract()`  | [to extract a single variable](#extracting)       |
+| `data_rename()`   | [to rename variables](#renaming)                  |
+| `data_relocate()` | [to reorder a data frame](#relocating)            |
+| `data_to_long()`  | [to convert data from wide to long](#reshaping)   |
+| `data_to_wide()`  | [to convert data from long to wide](#reshaping)   |
+| `data_join()`     | [to join two data frames](#joining)               |
 
 Note that there are a few functions in `{datawizard}` that have no strict equivalent
 in `{dplyr}` or `{tidyr}` (e.g `data_rotate()`), and so we won't discuss them in
 the next section.
 
+# Equivalence with `{dplyr}` / `{tidyr}`
 
-# Equivalence with dplyr / tidyr
+Before we look at them individually, let's first have a look at the summary table of this equivalence.
+
+| Function          | Tidyverse equivalent(s)                                             |
+| :---------------- | :------------------------------------------------------------------ |
+| `data_filter()`   | `dplyr::filter()`                                                   |
+| `data_select()`   | `dplyr::select()`                                                   |
+| `data_extract()`  | `dplyr::pull()`                                                     |
+| `data_rename()`   | `dplyr::rename()`                                                   |
+| `data_relocate()` | `dplyr::relocate()`                                                 |
+| `data_to_long()`  | `tidyr::pivot_longer()`                                             |
+| `data_to_wide()`  | `tidyr::pivot_wider()`                                              |
+| `data_join()`     | `dplyr::inner_join()`, `dplyr::left_join()`, `dplyr::right_join()`, |
+|                   | `dplyr::full_join()`, `dplyr::anti_join()`, `dplyr::semi_join()`    |
 
 ## Filtering {#filtering}
 
