@@ -254,7 +254,6 @@ test_that("data_to_long: arg 'cols' overrides 'select'", {
       rows_to = "Participant"
     )
   )
-
 })
 
 

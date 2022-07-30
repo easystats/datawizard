@@ -124,8 +124,8 @@ first condition.
 ```{r filter, class.source = "datawizard"}
 # ---------- datawizard -----------
 starwars %>%
-  data_filter(skin_color == "light" & 
-                eye_color == "brown")
+  data_filter(skin_color == "light" &
+    eye_color == "brown")
 ```
 :::
 
@@ -133,9 +133,11 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>% 
-  filter(skin_color == "light", 
-         eye_color == "brown")
+starwars %>%
+  filter(
+    skin_color == "light",
+    eye_color == "brown"
+  )
 ```
 :::
 
@@ -163,8 +165,8 @@ select several variables, while `dplyr::select()` accepts any unquoted column na
 
 ```{r select1, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>% 
-  data_select(select = c("hair_color", "skin_color", "eye_color")) 
+starwars %>%
+  data_select(select = c("hair_color", "skin_color", "eye_color"))
 ```
 :::
 
@@ -172,7 +174,7 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>% 
+starwars %>%
   select(hair_color, skin_color, eye_color)
 ```
 :::
@@ -188,8 +190,8 @@ starwars %>%
 
 ```{r select2, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>% 
-  data_select(select = -ends_with("color")) 
+starwars %>%
+  data_select(select = -ends_with("color"))
 ```
 :::
 
@@ -197,8 +199,8 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>% 
-  select(-ends_with("color")) 
+starwars %>%
+  select(-ends_with("color"))
 ```
 :::
 
@@ -216,7 +218,7 @@ here and quoting them won't work. Should we comment on that? -->
 
 ```{r select3, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>% 
+starwars %>%
   data_select(select = -hair_color:eye_color)
 ```
 :::
@@ -225,7 +227,7 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>% 
+starwars %>%
   select(!(hair_color:eye_color))
 ```
 :::
@@ -242,8 +244,8 @@ starwars %>%
 
 ```{r select4, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>% 
-  data_select(exclude = regex("color$")) 
+starwars %>%
+  data_select(exclude = regex("color$"))
 ```
 :::
 
@@ -251,8 +253,8 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>% 
-  select(-contains("color$")) 
+starwars %>%
+  select(-contains("color$"))
 ```
 :::
 
@@ -268,8 +270,8 @@ starwars %>%
 
 ```{r select5, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>% 
-  data_select(select = is.numeric) 
+starwars %>%
+  data_select(select = is.numeric)
 ```
 :::
 
@@ -277,8 +279,8 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>% 
-  select(where(is.numeric)) 
+starwars %>%
+  select(where(is.numeric))
 ```
 :::
 
@@ -299,8 +301,8 @@ behavior of `dplyr::pull()`:
 :::{}
 ```{r extract1, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>% 
-  data_extract(gender) 
+starwars %>%
+  data_extract(gender)
 ```
 :::
 
@@ -308,7 +310,7 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>% 
+starwars %>%
   pull(gender)
 ```
 :::
@@ -322,7 +324,7 @@ We can also specify several variables in `select`. In this case, `data_extract()
 is equivalent to `data_select()`:
 
 ```{r eval = TRUE}
-starwars %>% 
+starwars %>%
   data_extract(select = contains("color"))
 ```
 
@@ -342,7 +344,7 @@ a vector of new names for these columns that must be of the same length.
 
 ```{r rename1, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>% 
+starwars %>%
   data_rename(
     pattern = c("sex", "hair_color"),
     replacement = c("Sex", "Hair Color")
@@ -374,7 +376,7 @@ TitleCase with the following code:
 ```{r rename2}
 to_rename <- names(starwars)
 
-starwars %>% 
+starwars %>%
   data_rename(
     pattern = to_rename,
     replacement = tools::toTitleCase(gsub("_", " ", to_rename))
@@ -389,11 +391,11 @@ with `data_addprefix()` and `data_addsuffix()`. The argument `select` accepts
 all select helpers that we saw above with `data_select()`:
 
 ```{r rename3}
-starwars %>% 
+starwars %>%
   data_addprefix(
     pattern = "OLD.",
     select = contains("color")
-  ) %>% 
+  ) %>%
   data_addsuffix(
     pattern = ".NEW",
     select = -contains("color")
@@ -419,7 +421,7 @@ be relocated:
 
 ```{r relocate1, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>% 
+starwars %>%
   data_relocate(sex:homeworld, before = "height")
 ```
 :::
@@ -428,7 +430,7 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>% 
+starwars %>%
   relocate(sex:homeworld, .before = height)
 ```
 :::
@@ -444,7 +446,7 @@ column, or `after = -1` to relocate them after the last column.
 
 ```{r eval = TRUE}
 # ---------- datawizard -----------
-starwars %>% 
+starwars %>%
   data_relocate(sex:homeworld, after = -1)
 ```
 
@@ -479,10 +481,10 @@ reshaped to be in a single new column, called "count".
 
 ```{r pivot1, class.source = "datawizard"}
 # ---------- datawizard -----------
-relig_income %>% 
+relig_income %>%
   data_to_long(
-    -religion, 
-    names_to = "income", 
+    -religion,
+    names_to = "income",
     values_to = "count"
   )
 ```
@@ -492,10 +494,10 @@ relig_income %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-relig_income %>% 
+relig_income %>%
   pivot_longer(
-    !religion, 
-    names_to = "income", 
+    !religion,
+    names_to = "income",
     values_to = "count"
   )
 ```
@@ -519,13 +521,13 @@ billboard
 
 ```{r pivot2, class.source = "datawizard"}
 # ---------- datawizard -----------
-billboard %>% 
+billboard %>%
   data_to_long(
-    cols = starts_with("wk"), 
-    names_to = "week", 
+    cols = starts_with("wk"),
+    names_to = "week",
     values_to = "rank",
     values_drop_na = TRUE
-  ) 
+  )
 ```
 :::
 
@@ -533,10 +535,10 @@ billboard %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-billboard %>% 
+billboard %>%
   pivot_longer(
-    cols = starts_with("wk"), 
-    names_to = "week", 
+    cols = starts_with("wk"),
+    names_to = "week",
     values_to = "rank",
     values_drop_na = TRUE
   )
@@ -564,12 +566,12 @@ fish_encounters
 
 ```{r pivot3, class.source = "datawizard"}
 # ---------- datawizard -----------
-fish_encounters %>% 
+fish_encounters %>%
   data_to_wide(
-    names_from = "station", 
+    names_from = "station",
     values_from = "seen",
     values_fill = 0
-  ) 
+  )
 ```
 :::
 
@@ -577,9 +579,9 @@ fish_encounters %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-fish_encounters %>% 
+fish_encounters %>%
   pivot_wider(
-    names_from = station, 
+    names_from = station,
     values_from = seen,
     values_fill = 0
   )
@@ -610,14 +612,14 @@ inner. We will use the datasets `band_members`and `band_instruments` provided by
 ::: {}
 
 ```{r eval = TRUE}
-band_members 
+band_members
 ```
 :::
 
 ::: {}
 
 ```{r eval = TRUE}
-band_instruments 
+band_instruments
 ```
 :::
 
@@ -632,7 +634,7 @@ band_instruments
 
 ```{r join1, class.source = "datawizard"}
 # ---------- datawizard -----------
-band_members %>% 
+band_members %>%
   data_join(band_instruments, join = "full")
 ```
 :::
@@ -641,7 +643,7 @@ band_members %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-band_members %>% 
+band_members %>%
   full_join(band_instruments)
 ```
 :::
@@ -661,7 +663,7 @@ band_members %>%
 
 ```{r join2, class.source = "datawizard"}
 # ---------- datawizard -----------
-band_members %>% 
+band_members %>%
   data_join(band_instruments, join = "left")
 ```
 :::
@@ -670,7 +672,7 @@ band_members %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-band_members %>% 
+band_members %>%
   left_join(band_instruments)
 ```
 :::
@@ -687,7 +689,7 @@ band_members %>%
 
 ```{r join3, class.source = "datawizard"}
 # ---------- datawizard -----------
-band_members %>% 
+band_members %>%
   data_join(band_instruments, join = "right")
 ```
 :::
@@ -696,7 +698,7 @@ band_members %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-band_members %>% 
+band_members %>%
   right_join(band_instruments)
 ```
 :::
@@ -716,7 +718,7 @@ band_members %>%
 
 ```{r join4, class.source = "datawizard"}
 # ---------- datawizard -----------
-band_members %>% 
+band_members %>%
   data_join(band_instruments, join = "inner")
 ```
 :::
@@ -725,7 +727,7 @@ band_members %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-band_members %>% 
+band_members %>%
   inner_join(band_instruments)
 ```
 :::
@@ -751,12 +753,12 @@ We can convert a column in rownames and move rownames to a new column with
 mtcars <- head(mtcars)
 mtcars
 
-mtcars2 <- mtcars %>% 
+mtcars2 <- mtcars %>%
   rownames_as_column(var = "model")
 
 mtcars2
 
-mtcars2 %>% 
+mtcars2 %>%
   column_as_rownames(var = "model")
 ```
 
@@ -768,14 +770,16 @@ names, and vice versa. This can be done with `row_to_colnames()` and
 `colnames_to_row()`.
 
 ```{r eval = TRUE}
-x <- data.frame(X_1 = c(NA, "Title", 1:3),
-                X_2 = c(NA, "Title2", 4:6))
+x <- data.frame(
+  X_1 = c(NA, "Title", 1:3),
+  X_2 = c(NA, "Title2", 4:6)
+)
 x
 x2 <- x %>%
   row_to_colnames(row = 2)
 x2
 
-x2 %>% 
+x2 %>%
   colnames_to_row()
 ```
 
