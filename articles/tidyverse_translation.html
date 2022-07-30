@@ -253,15 +253,17 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/data_match.html">data_filter</a></span><span class="op">(</span><span class="va">skin_color</span> <span class="op">==</span> <span class="st">"light"</span> <span class="op">&amp;</span> </span>
-<span>                <span class="va">eye_color</span> <span class="op">==</span> <span class="st">"brown"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/data_match.html">data_filter</a></span><span class="op">(</span><span class="va">skin_color</span> <span class="op">==</span> <span class="st">"light"</span> <span class="op">&amp;</span></span>
+<span>    <span class="va">eye_color</span> <span class="op">==</span> <span class="st">"brown"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">skin_color</span> <span class="op">==</span> <span class="st">"light"</span>, </span>
-<span>         <span class="va">eye_color</span> <span class="op">==</span> <span class="st">"brown"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">skin_color</span> <span class="op">==</span> <span class="st">"light"</span>,</span>
+<span>    <span class="va">eye_color</span> <span class="op">==</span> <span class="st">"brown"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 7 × 14</span></span></span>
@@ -288,13 +290,13 @@
 <div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span>select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hair_color"</span>, <span class="st">"skin_color"</span>, <span class="st">"eye_color"</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span>select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hair_color"</span>, <span class="st">"skin_color"</span>, <span class="st">"eye_color"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hair_color</span>, <span class="va">skin_color</span>, <span class="va">eye_color</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -311,14 +313,14 @@
 <div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span>select <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span><span class="op">(</span><span class="st">"color"</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span>select <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span><span class="op">(</span><span class="st">"color"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span><span class="op">(</span><span class="st">"color"</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span><span class="op">(</span><span class="st">"color"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 11</span></span></span>
@@ -338,13 +340,13 @@
 here and quoting them won't work. Should we comment on that? -->
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span>select <span class="op">=</span> <span class="op">-</span><span class="va">hair_color</span><span class="op">:</span><span class="va">eye_color</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">!</span><span class="op">(</span><span class="va">hair_color</span><span class="op">:</span><span class="va">eye_color</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -363,14 +365,14 @@ here and quoting them won't work. Should we comment on that? -->
 <div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span>exclude <span class="op">=</span> <span class="fu">regex</span><span class="op">(</span><span class="st">"color$"</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span>exclude <span class="op">=</span> <span class="fu">regex</span><span class="op">(</span><span class="st">"color$"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"color$"</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"color$"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 11</span></span></span>
@@ -388,14 +390,14 @@ here and quoting them won't work. Should we comment on that? -->
 <div>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span>select <span class="op">=</span> <span class="va">is.numeric</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span>select <span class="op">=</span> <span class="va">is.numeric</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/where.html" class="external-link">where</a></span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/where.html" class="external-link">where</a></span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
@@ -417,20 +419,20 @@ here and quoting them won't work. Should we comment on that? -->
 <div>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="../reference/data_extract.html">data_extract</a></span><span class="op">(</span><span class="va">gender</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/data_extract.html">data_extract</a></span><span class="op">(</span><span class="va">gender</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">gender</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <pre><code><span><span class="co">## [1] "masculine" "masculine" "masculine" "masculine" "feminine"  "masculine"</span></span></code></pre>
 <p>We can also specify several variables in <code>select</code>. In this case, <code><a href="../reference/data_extract.html">data_extract()</a></code> is equivalent to <code><a href="../reference/find_columns.html">data_select()</a></code>:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_extract.html">data_extract</a></span><span class="op">(</span>select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"color"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
 <span><span class="co">##   hair_color  skin_color  eye_color</span></span>
@@ -450,7 +452,7 @@ here and quoting them won't work. Should we comment on that? -->
 <div>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_rename.html">data_rename</a></span><span class="op">(</span></span>
 <span>    pattern <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sex"</span>, <span class="st">"hair_color"</span><span class="op">)</span>,</span>
 <span>    replacement <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sex"</span>, <span class="st">"Hair Color"</span><span class="op">)</span></span>
@@ -483,7 +485,7 @@ here and quoting them won't work. Should we comment on that? -->
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">to_rename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">starwars</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_rename.html">data_rename</a></span><span class="op">(</span></span>
 <span>    pattern <span class="op">=</span> <span class="va">to_rename</span>,</span>
 <span>    replacement <span class="op">=</span> <span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/toTitleCase.html" class="external-link">toTitleCase</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"_"</span>, <span class="st">" "</span>, <span class="va">to_rename</span><span class="op">)</span><span class="op">)</span></span>
@@ -503,11 +505,11 @@ here and quoting them won't work. Should we comment on that? -->
 <span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
 <p>It is also possible to add a prefix or a suffix to all or a subset of variables with <code><a href="../reference/data_rename.html">data_addprefix()</a></code> and <code><a href="../reference/data_rename.html">data_addsuffix()</a></code>. The argument <code>select</code> accepts all select helpers that we saw above with <code><a href="../reference/find_columns.html">data_select()</a></code>:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_rename.html">data_addprefix</a></span><span class="op">(</span></span>
 <span>    pattern <span class="op">=</span> <span class="st">"OLD."</span>,</span>
 <span>    select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"color"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_rename.html">data_addsuffix</a></span><span class="op">(</span></span>
 <span>    pattern <span class="op">=</span> <span class="st">".NEW"</span>,</span>
 <span>    select <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"color"</span><span class="op">)</span></span>
@@ -535,13 +537,13 @@ here and quoting them won't work. Should we comment on that? -->
 <div>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_relocate.html">data_relocate</a></span><span class="op">(</span><span class="va">sex</span><span class="op">:</span><span class="va">homeworld</span>, before <span class="op">=</span> <span class="st">"height"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html" class="external-link">relocate</a></span><span class="op">(</span><span class="va">sex</span><span class="op">:</span><span class="va">homeworld</span>, .before <span class="op">=</span> <span class="va">height</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -561,7 +563,7 @@ here and quoting them won't work. Should we comment on that? -->
 <p>In addition to column names, <code>before</code> and <code>after</code> accept column indices. Finally, one can use <code>before = -1</code> to relocate the selected columns just before the last column, or <code>after = -1</code> to relocate them after the last column.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
-<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_relocate.html">data_relocate</a></span><span class="op">(</span><span class="va">sex</span><span class="op">:</span><span class="va">homeworld</span>, after <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 14</span></span></span>
 <span><span class="co">##   name        height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ species films vehic…⁵</span></span>
@@ -617,20 +619,20 @@ here and quoting them won't work. Should we comment on that? -->
 <div>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
-<span><span class="va">relig_income</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">relig_income</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_to_long.html">data_to_long</a></span><span class="op">(</span></span>
-<span>    <span class="op">-</span><span class="va">religion</span>, </span>
-<span>    names_to <span class="op">=</span> <span class="st">"income"</span>, </span>
+<span>    <span class="op">-</span><span class="va">religion</span>,</span>
+<span>    names_to <span class="op">=</span> <span class="st">"income"</span>,</span>
 <span>    values_to <span class="op">=</span> <span class="st">"count"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
-<span><span class="va">relig_income</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">relig_income</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span></span>
-<span>    <span class="op">!</span><span class="va">religion</span>, </span>
-<span>    names_to <span class="op">=</span> <span class="st">"income"</span>, </span>
+<span>    <span class="op">!</span><span class="va">religion</span>,</span>
+<span>    names_to <span class="op">=</span> <span class="st">"income"</span>,</span>
 <span>    values_to <span class="op">=</span> <span class="st">"count"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
@@ -678,21 +680,21 @@ here and quoting them won't work. Should we comment on that? -->
 <div>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
-<span><span class="va">billboard</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">billboard</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_to_long.html">data_to_long</a></span><span class="op">(</span></span>
-<span>    cols <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"wk"</span><span class="op">)</span>, </span>
-<span>    names_to <span class="op">=</span> <span class="st">"week"</span>, </span>
+<span>    cols <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"wk"</span><span class="op">)</span>,</span>
+<span>    names_to <span class="op">=</span> <span class="st">"week"</span>,</span>
 <span>    values_to <span class="op">=</span> <span class="st">"rank"</span>,</span>
 <span>    values_drop_na <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span>  <span class="op">)</span> </span></code></pre></div>
+<span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
-<span><span class="va">billboard</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">billboard</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span></span>
-<span>    cols <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"wk"</span><span class="op">)</span>, </span>
-<span>    names_to <span class="op">=</span> <span class="st">"week"</span>, </span>
+<span>    cols <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"wk"</span><span class="op">)</span>,</span>
+<span>    names_to <span class="op">=</span> <span class="st">"week"</span>,</span>
 <span>    values_to <span class="op">=</span> <span class="st">"rank"</span>,</span>
 <span>    values_drop_na <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
@@ -739,19 +741,19 @@ here and quoting them won't work. Should we comment on that? -->
 <div>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
-<span><span class="va">fish_encounters</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">fish_encounters</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_to_wide.html">data_to_wide</a></span><span class="op">(</span></span>
-<span>    names_from <span class="op">=</span> <span class="st">"station"</span>, </span>
+<span>    names_from <span class="op">=</span> <span class="st">"station"</span>,</span>
 <span>    values_from <span class="op">=</span> <span class="st">"seen"</span>,</span>
 <span>    values_fill <span class="op">=</span> <span class="fl">0</span></span>
-<span>  <span class="op">)</span> </span></code></pre></div>
+<span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
-<span><span class="va">fish_encounters</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">fish_encounters</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span></span>
-<span>    names_from <span class="op">=</span> <span class="va">station</span>, </span>
+<span>    names_from <span class="op">=</span> <span class="va">station</span>,</span>
 <span>    values_from <span class="op">=</span> <span class="va">seen</span>,</span>
 <span>    values_fill <span class="op">=</span> <span class="fl">0</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
@@ -790,7 +792,7 @@ here and quoting them won't work. Should we comment on that? -->
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">band_members</span> </span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">band_members</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
 <span><span class="co">##   name  band   </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
@@ -800,7 +802,7 @@ here and quoting them won't work. Should we comment on that? -->
 </div>
 <div>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">band_instruments</span> </span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">band_instruments</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
 <span><span class="co">##   name  plays </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
@@ -816,13 +818,13 @@ here and quoting them won't work. Should we comment on that? -->
 <div>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
-<span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_merge.html">data_join</a></span><span class="op">(</span><span class="va">band_instruments</span>, join <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
 <div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
-<span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">full_join</a></span><span class="op">(</span><span class="va">band_instruments</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -841,13 +843,13 @@ here and quoting them won't work. Should we comment on that? -->
 <div>
 <div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
-<span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_merge.html">data_join</a></span><span class="op">(</span><span class="va">band_instruments</span>, join <span class="op">=</span> <span class="st">"left"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
-<span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">band_instruments</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -861,13 +863,13 @@ here and quoting them won't work. Should we comment on that? -->
 <div>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
-<span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_merge.html">data_join</a></span><span class="op">(</span><span class="va">band_instruments</span>, join <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
 <div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
-<span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">right_join</a></span><span class="op">(</span><span class="va">band_instruments</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -885,13 +887,13 @@ here and quoting them won't work. Should we comment on that? -->
 <div>
 <div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
-<span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_merge.html">data_join</a></span><span class="op">(</span><span class="va">band_instruments</span>, join <span class="op">=</span> <span class="st">"inner"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
 <div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
-<span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span><span class="va">band_instruments</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -922,7 +924,7 @@ here and quoting them won't work. Should we comment on that? -->
 <span><span class="co">## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2</span></span>
 <span><span class="co">## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</span></span></code></pre>
 <div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mtcars2</span> <span class="op">&lt;-</span> <span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">mtcars2</span> <span class="op">&lt;-</span> <span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/rownames.html">rownames_as_column</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">mtcars2</span></span></code></pre></div>
@@ -934,7 +936,7 @@ here and quoting them won't work. Should we comment on that? -->
 <span><span class="co">## 5 Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2</span></span>
 <span><span class="co">## 6           Valiant 18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</span></span></code></pre>
 <div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mtcars2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">mtcars2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/rownames.html">column_as_rownames</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb</span></span>
 <span><span class="co">## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4</span></span>
@@ -949,8 +951,10 @@ here and quoting them won't work. Should we comment on that? -->
 </h3>
 <p>When dealing with messy data, it is sometimes useful to use a row as column names, and vice versa. This can be done with <code><a href="../reference/colnames.html">row_to_colnames()</a></code> and <code><a href="../reference/colnames.html">colnames_to_row()</a></code>.</p>
 <div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>X_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="st">"Title"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>,</span>
-<span>                X_2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="st">"Title2"</span>, <span class="fl">4</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  X_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="st">"Title"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>,</span>
+<span>  X_2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="st">"Title2"</span>, <span class="fl">4</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="va">x</span></span></code></pre></div>
 <pre><code><span><span class="co">##     X_1    X_2</span></span>
 <span><span class="co">## 1  &lt;NA&gt;   &lt;NA&gt;</span></span>
@@ -968,7 +972,7 @@ here and quoting them won't work. Should we comment on that? -->
 <span><span class="co">## 4     2      5</span></span>
 <span><span class="co">## 5     3      6</span></span></code></pre>
 <div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">x2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/colnames.html">colnames_to_row</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##       x1     x2</span></span>
 <span><span class="co">## 1  Title Title2</span></span>
