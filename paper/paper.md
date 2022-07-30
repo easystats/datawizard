@@ -37,7 +37,7 @@ affiliations:
 - index: 6
   name: University Medical Center Hamburg-Eppendorf, Germany
     
-date: "`r Sys.Date()`"
+date: "2022-07-27"
 bibliography: paper.bib
 output: rticles::joss_article
 csl: apa.csl
@@ -45,40 +45,28 @@ journal: JOSS
 link-citations: yes
 ---
 
-```{r, warning=FALSE, message=FALSE, echo=FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  out.width = "100%",
-  dpi = 300,
-  comment = "#>",
-  message = FALSE,
-  warning = FALSE
-)
 
-library(datawizard)
-set.seed(2016)
-```
 
 # Summary
 
-The `{datawizard}` package for the R programming language [@base2021] provides a lightweight toolbox to assist in keys steps involved in any data analysis workflow: (1) wrangling the raw data to get it in the needed form, (2) applying preprocessing steps and statistical transformations, and (3) compute statistical summaries of data properties and distributions. Therefore, it can be a valuable tool for R users and developers looking for a lightweight option for data preparation.
+The `{datawizard}` package for the R programming language [@base2021] provides a lightweight toolbox to assist in keys steps involved in any data analysis workflow: (1) wrangling the raw data to get it in the needed form, (2) applying preprocessing steps and statistical transformations, and (3) conducting reasonableness checks to ensure transformed data are high quality. Therefore, it can be a valuable tool for R users and developers looking for a lightweight option for data preparation.
 
 # Statement of Need
 
 The `{datawizard}` package is part of `{easystats}`, a collection of R packages designed to make statistical analysis easier (@Ben-Shachar2020, @Lüdecke2020parameters, @Lüdecke2020performance, @Lüdecke2021see, @Lüdecke2019, @Makowski2019, @Makowski2020). As this ecosystem follows a "0-external-hard-dependency" policy, a base R data manipulation package that relies only on base R needed to be created. In effect, `{datawizard}` provides data processing backend for this entire ecosystem. 
 In addition to its usefulness to the `{easystats}` ecosystem, it also provides *an* option for R users and package developers if they wish to keep their (recursive) dependency weight to a minimum (for other options, see @Dowle2021, @Eastwood2021, etc.).
 
-Because `{datawizard}` is also meant to be used and adopted easily by a wide range of users, its workflow and syntax are designed to be similar to `{tidyverse}` (@Wickham2019), a widely used ecosystem of R packages. Thus, users familiar with the `{tidyverse}` can easily translate their knowledge and make full use of `{datawizard}`.
+Because `{datawizard}` is also meant to be used and adopted easily by a wide range of users, its workflow and syntax are designed to be similar to `{tidyverse}` (@Wickham2019), a widely used ecosystem of R packages. Thus, users familiar with the `{tidyverse}` can easily translate their knowledge and make full usage of `{datawizard}`.
 
 In addition to being a lightweight solution to clean messy data, `{datawizard}` also provides helpers for the other important step of data analysis: applying statistical transformations to the cleaned data while setting up statistical models. This includes various types of data standardization, normalization, rank-transformation, and adjustment. These transformations, although widely used, are not currently collectively implemented in a package in the R ecosystem, so `{datawizard}` can help new R users in finding the transformation they need.
 
-Lastly, `{datawizard}` also provides a toolbox to create detailed summaries of data properties and distributions (e.g., tables of descriptive statistics for each variable). This is a common step in data analysis, but it is not available in base R or many modeling packages, so its inclusion makes `{datawizard}` a one-stop-shop for data preparation tasks.
+Lastly, `{datawizard}` also provides a toolbox to create a detailed profile of data properties. This is a common step in data analysis, but it is not available in base R or many modeling packages, so its inclusion makes `{datawizard}` a one-stop-shop for data preparation tasks.
 
 # Features
 
 ## Data Preparation
 
-The raw data is rarely in a state that it can be directly fed into a statistical model. It often needs to be modified in various ways. For example, columns need to be renamed, certain portions of the data need to be filtered out, some columns need to be reshaped, data scattered across multiple tables needs to be joined, etc. 
+The raw data is rarely in a state that it can be directly fed into a statistical model. It often needs to be modified in various ways. For example, columns need to be renamed, certain portions of the data need to be filtered out, reshape data, data scattered across multiple tables needs to be joined, etc. 
 
 `{datawizard}` provides various functions for cleaning and preparing data (see Table 1).
 
@@ -97,7 +85,8 @@ Table: The table below lists a few key functions offered by *datawizard* for dat
 
 We will look at one example function that converts data in wide format to tidy/long format:
 
-```{r}
+
+```r
 stocks <- data.frame(
   time = as.Date('2009-01-01') + 0:4,
   X = rnorm(5, 0, 1),
@@ -105,6 +94,12 @@ stocks <- data.frame(
 )
 
 stocks
+#>         time            X          Y
+#> 1 2009-01-01  0.129726039  0.3877105
+#> 2 2009-01-02  0.007121257  2.4642473
+#> 3 2009-01-03 -1.208297157 -0.2287426
+#> 4 2009-01-04  0.965780713 -0.1783209
+#> 5 2009-01-05 -0.940626593 -2.7937661
 
 data_to_long(
   stocks,
@@ -112,6 +107,17 @@ data_to_long(
   names_to = "stock",
   values_to = "price"
 )
+#>          time stock        price
+#> 1  2009-01-01     X  0.129726039
+#> 2  2009-01-01     Y  0.387710522
+#> 3  2009-01-02     X  0.007121257
+#> 4  2009-01-02     Y  2.464247305
+#> 5  2009-01-03     X -1.208297157
+#> 6  2009-01-03     Y -0.228742591
+#> 7  2009-01-04     X  0.965780713
+#> 8  2009-01-04     Y -0.178320881
+#> 9  2009-01-05     X -0.940626593
+#> 10 2009-01-05     Y -2.793766068
 ```
 
 ## Statistical Transformations
@@ -133,36 +139,59 @@ Table: The table below lists a few key functions offered by *datawizard* for dat
 
 We will look at one example function that standardizes (i.e. centers and scales) data so that it can be expressed in terms of standard deviation:
 
-```{r}
+
+```r
 d <- data.frame(
   a = c(-2, -1, 0, 1, 2),
   b = c(3, 4, 5, 6, 7)
 )
 
 standardize(d, center = c(3, 4), scale = c(2, 4))
+#>      a     b
+#> 1 -2.5 -0.25
+#> 2 -2.0  0.00
+#> 3 -1.5  0.25
+#> 4 -1.0  0.50
+#> 5 -0.5  0.75
 ```
 
-## Summaries of Data Properties and Distributions
+## Data Properties
 
 The workhorse function to get a comprehensive summary of data properties is `describe_distribution()`, which combines a set of indices (e.g., measures of centrality, dispersion, range, skewness, kurtosis, etc.) computed by other functions in `{datawizard}`.
 
-```{r eval=FALSE}
+
+```r
 describe_distribution(mtcars)
 ```
 
-```{r echo=FALSE, eval=TRUE, results="asis"}
-library(kableExtra)
-options(digits = 3)
-kbl(describe_distribution(mtcars), format = "latex", booktabs = TRUE, linesep = "") |>
-  kable_styling(latex_options = "scale_down")
-```
+\begin{table}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{lrrrrrrrrr}
+\toprule
+Variable & Mean & SD & IQR & Min & Max & Skewness & Kurtosis & n & n\_Missing\\
+\midrule
+mpg & 20.091 & 6.027 & 7.53 & 10.40 & 33.90 & 0.672 & -0.022 & 32 & 0\\
+cyl & 6.188 & 1.786 & 4.00 & 4.00 & 8.00 & -0.192 & -1.763 & 32 & 0\\
+disp & 230.722 & 123.939 & 221.53 & 71.10 & 472.00 & 0.420 & -1.068 & 32 & 0\\
+hp & 146.688 & 68.563 & 84.50 & 52.00 & 335.00 & 0.799 & 0.275 & 32 & 0\\
+drat & 3.597 & 0.535 & 0.84 & 2.76 & 4.93 & 0.293 & -0.450 & 32 & 0\\
+wt & 3.217 & 0.978 & 1.19 & 1.51 & 5.42 & 0.466 & 0.417 & 32 & 0\\
+qsec & 17.849 & 1.787 & 2.02 & 14.50 & 22.90 & 0.406 & 0.865 & 32 & 0\\
+vs & 0.438 & 0.504 & 1.00 & 0.00 & 1.00 & 0.265 & -2.063 & 32 & 0\\
+am & 0.406 & 0.499 & 1.00 & 0.00 & 1.00 & 0.401 & -1.967 & 32 & 0\\
+gear & 3.688 & 0.738 & 1.00 & 3.00 & 5.00 & 0.582 & -0.895 & 32 & 0\\
+carb & 2.812 & 1.615 & 2.00 & 1.00 & 8.00 & 1.157 & 2.020 & 32 & 0\\
+\bottomrule
+\end{tabular}}
+\end{table}
 
 # Licensing and Availability
 
-`{datawizard}` is licensed under the GNU General Public License (v3.0), with all source code openly developed and stored on GitHub (<https://github.com/easystats/datawizard>), along with a corresponding issue tracker for bug reporting and feature enhancements. In the spirit of honest and open science, we encourage requests, tips for fixes, feature updates, as well as general questions and concerns via direct interaction with contributors and developers.
+`{datawizard}` is licensed under the GNU General Public License (v3.0), with all source code openly developed and stored at GitHub (<https://github.com/easystats/datawizard>), along with a corresponding issue tracker for bug reporting and feature enhancements. In the spirit of honest and open science, we encourage requests, tips for fixes, feature updates, as well as general questions and concerns via direct interaction with contributors and developers.
 
 # Acknowledgments
 
-`{datawizard}` is part of the collaborative [*easystats*](https://easystats.github.io/easystats/) ecosystem. Thus, we thank the [members of easystats](https://github.com/orgs/easystats/people) as well as the users.
+`{datawizard}` is part of the collaborative [*easystats*](https://github.com/easystats/easystats) ecosystem. Thus, we thank the [members of easystats](https://github.com/orgs/easystats/people) as well as the users.
 
 # References
