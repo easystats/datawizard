@@ -34,6 +34,7 @@ Suggests:
     boot,
     brms,
     data.table,
+    dplyr,
     effectsize,
     gamm4,
     ggplot2,

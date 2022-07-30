@@ -57,6 +57,7 @@ reference:
 
   - title: Reorder and remove data
   - contents:
+      - data_arrange
       - data_reorder
       - remove_empty
 
