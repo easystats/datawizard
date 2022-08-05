@@ -89,7 +89,7 @@
 <h2 class="pkg-version" data-toc-text="0.5.0" id="datawizard-050">datawizard 0.5.0<a class="anchor" aria-label="anchor" href="#datawizard-050"></a></h2>
 <p>BREAKING</p>
 <ul><li>
-<p>Following statistical transformation functions have been renamed to not have <code>data_*()</code> prefix, since they do not work with data frames and therefore had misleading names:</p>
+<p>Following statistical transformation functions have been renamed to not have <code>data_*()</code> prefix, since they do not work exclusively with data frames, but are typically first of all used with vectors, and therefore had misleading names:</p>
 <ul><li>
 <code>data_cut()</code> -&gt; <code><a href="../reference/categorize.html">categorize()</a></code>
 </li>
@@ -111,7 +111,8 @@
 <li>
 <code>data_to_numeric()</code> -&gt; <code><a href="../reference/to_numeric.html">to_numeric()</a></code>
 </li>
-</ul></li>
+</ul><p>Note that these functions also have <code>.data.frame()</code> methods and still work for data frames as well. Former function names are still available as aliases, but will be deprecated and removed in a future release.</p>
+</li>
 <li><p>Bumps the needed minimum R version to <code>3.5</code>.</p></li>
 <li><p>Removed deprecated function <code>data_findcols()</code>. Please use its replacement, <code><a href="../reference/find_columns.html">data_find()</a></code>.</p></li>
 <li><p>Removed alias <code><a href="https://tidyr.tidyverse.org/reference/extract.html" class="external-link">extract()</a></code> for <code><a href="../reference/data_extract.html">data_extract()</a></code> function since it collided with <code><a href="https://tidyr.tidyverse.org/reference/extract.html" class="external-link">tidyr::extract()</a></code>.</p></li>
