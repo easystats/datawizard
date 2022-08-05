@@ -91,13 +91,13 @@
 <ul><li>
 <p>Following statistical transformation functions have been renamed to not have <code>data_*()</code> prefix, since they do not work exclusively with data frames, but are typically first of all used with vectors, and therefore had misleading names:</p>
 <ul><li>
-<code>data_cut()</code> -&gt; <code><a href="../reference/categorize.html">categorize()</a></code>
+<code><a href="../reference/categorize.html">data_cut()</a></code> -&gt; <code><a href="../reference/categorize.html">categorize()</a></code>
 </li>
 <li>
-<code>data_recode()</code> -&gt; <code><a href="../reference/change_code.html">change_code()</a></code>
+<code><a href="../reference/change_code.html">data_recode()</a></code> -&gt; <code><a href="../reference/change_code.html">change_code()</a></code>
 </li>
 <li>
-<code>data_shift()</code> -&gt; <code><a href="../reference/slide.html">slide()</a></code>
+<code><a href="../reference/slide.html">data_shift()</a></code> -&gt; <code><a href="../reference/slide.html">slide()</a></code>
 </li>
 <li>
 <code>data_reverse()</code> -&gt; <code><a href="../reference/reverse.html">reverse()</a></code>
@@ -106,10 +106,10 @@
 <code>data_rescale()</code> -&gt; <code><a href="../reference/rescale.html">rescale()</a></code>
 </li>
 <li>
-<code>data_to_factor()</code> -&gt; <code><a href="../reference/to_factor.html">to_factor()</a></code>
+<code><a href="../reference/to_factor.html">data_to_factor()</a></code> -&gt; <code><a href="../reference/to_factor.html">to_factor()</a></code>
 </li>
 <li>
-<code>data_to_numeric()</code> -&gt; <code><a href="../reference/to_numeric.html">to_numeric()</a></code>
+<code><a href="../reference/to_numeric.html">data_to_numeric()</a></code> -&gt; <code><a href="../reference/to_numeric.html">to_numeric()</a></code>
 </li>
 </ul><p>Note that these functions also have <code>.data.frame()</code> methods and still work for data frames as well. Former function names are still available as aliases, but will be deprecated and removed in a future release.</p>
 </li>
@@ -136,9 +136,9 @@
 <h2 class="pkg-version" data-toc-text="0.4.1" id="datawizard-041">datawizard 0.4.1<a class="anchor" aria-label="anchor" href="#datawizard-041"></a></h2><p class="text-muted">CRAN release: 2022-05-16</p>
 <p>BREAKING</p>
 <ul><li>Added the <code><a href="../reference/standardize.default.html">standardize.default()</a></code> method (moved from package <strong>effectsize</strong>), to be consistent in that the default-method now is in the same package as the generic. <code><a href="../reference/standardize.default.html">standardize.default()</a></code> behaves exactly like in <strong>effectsize</strong> and particularly works for regression model objects. <strong>effectsize</strong> now re-exports <code><a href="../reference/standardize.html">standardize()</a></code> from <strong>datawizard</strong>.</li></ul><p>NEW FUNCTIONS</p>
-<ul><li><p><code>data_shift()</code> to shift the value range of numeric variables.</p></li>
-<li><p><code>data_recode()</code> to recode old into new values.</p></li>
-<li><p><code>data_to_factor()</code> as counterpart to <code>data_to_numeric()</code>.</p></li>
+<ul><li><p><code><a href="../reference/slide.html">data_shift()</a></code> to shift the value range of numeric variables.</p></li>
+<li><p><code><a href="../reference/change_code.html">data_recode()</a></code> to recode old into new values.</p></li>
+<li><p><code><a href="../reference/to_factor.html">data_to_factor()</a></code> as counterpart to <code><a href="../reference/to_numeric.html">data_to_numeric()</a></code>.</p></li>
 <li><p><code><a href="../reference/data_tabulate.html">data_tabulate()</a></code> to create frequency tables of variables.</p></li>
 <li><p><code><a href="../reference/data_read.html">data_read()</a></code> to read (import) data files (from text, or foreign statistical packages).</p></li>
 <li><p><code><a href="../reference/normalize.html">unnormalize()</a></code> as counterpart to <code><a href="../reference/normalize.html">normalize()</a></code>. This function only works for variables that have been normalized with <code><a href="../reference/normalize.html">normalize()</a></code>.</p></li>
@@ -151,7 +151,7 @@
 <li><p>The <code>filter</code> argument in <code><a href="../reference/data_match.html">data_filter()</a></code> can also be a numeric vector, to indicate row indices of those rows that should be returned.</p></li>
 <li><p><code><a href="../reference/convert_to_na.html">convert_to_na()</a></code> gets methods for variables of class <code>logical</code> and <code>Date</code>.</p></li>
 <li><p><code><a href="../reference/convert_to_na.html">convert_to_na()</a></code> for factors (and data frames) gains a <code>drop_levels</code> argument, to drop unused levels that have been replaced by <code>NA</code>.</p></li>
-<li><p><code>data_to_numeric()</code> gains two more arguments, <code>preserve_levels</code> and <code>lowest</code>, to give better control of conversion of factors.</p></li>
+<li><p><code><a href="../reference/to_numeric.html">data_to_numeric()</a></code> gains two more arguments, <code>preserve_levels</code> and <code>lowest</code>, to give better control of conversion of factors.</p></li>
 </ul><p>BUG FIXES</p>
 <ul><li>When logicals were passed to <code><a href="../reference/center.html">center()</a></code> or <code><a href="../reference/standardize.html">standardize()</a></code> and <code>force = TRUE</code>, these were not properly converted to numeric variables.</li></ul></div>
     <div class="section level2">
@@ -177,7 +177,7 @@
 <li><p><code><a href="../reference/data_rename.html">data_rename()</a></code> doesn’t use <code>pattern</code> anymore to rename the columns if <code>replacement</code> is not provided (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/103" class="external-link">#103</a>).</p></li>
 <li><p><code><a href="../reference/data_rename.html">data_rename()</a></code> now adds a suffix to duplicated names in <code>replacement</code> (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/103" class="external-link">#103</a>).</p></li>
 </ul><p>BUG FIXES</p>
-<ul><li><p><code>data_to_numeric()</code> produced wrong results for factors when <code>dummy_factors =   TRUE</code> and factor contained missing values.</p></li>
+<ul><li><p><code><a href="../reference/to_numeric.html">data_to_numeric()</a></code> produced wrong results for factors when <code>dummy_factors =   TRUE</code> and factor contained missing values.</p></li>
 <li><p><code><a href="../reference/data_match.html">data_match()</a></code> produced wrong results when data contained missing values.</p></li>
 <li><p>Fixed CRAN check issues in <code><a href="../reference/data_extract.html">data_extract()</a></code> when more than one variable was extracted from a data frame.</p></li>
 </ul></div>
@@ -189,7 +189,7 @@
 <li><p>To rotate data frames: <code><a href="../reference/data_rotate.html">data_rotate()</a></code>.</p></li>
 <li><p>To reverse score variables: <code>data_reverse()</code>.</p></li>
 <li><p>To merge/join multiple data frames: <code><a href="../reference/data_merge.html">data_merge()</a></code> (or its alias <code><a href="../reference/data_merge.html">data_join()</a></code>).</p></li>
-<li><p>To cut (recode) data into groups: <code>data_cut()</code>.</p></li>
+<li><p>To cut (recode) data into groups: <code><a href="../reference/categorize.html">data_cut()</a></code>.</p></li>
 <li><p>To replace specific values with <code>NA</code>s: <code><a href="../reference/convert_to_na.html">convert_to_na()</a></code>.</p></li>
 <li><p>To replace <code>Inf</code> and <code>NaN</code> values with <code>NA</code>s: <code><a href="../reference/replace_nan_inf.html">replace_nan_inf()</a></code>.</p></li>
 <li><p>Arguments <code>cols</code>, <code>before</code> and <code>after</code> in <code><a href="../reference/data_relocate.html">data_relocate()</a></code> can now also be numeric values, indicating the position of the destination column.</p></li>
