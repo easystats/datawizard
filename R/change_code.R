@@ -180,6 +180,12 @@ change_code <- function(x, ...) {
 }
 
 
+## TODO Deprecate and remove alias later
+
+#' @export
+data_recode <- change_code
+
+
 #' @export
 change_code.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {

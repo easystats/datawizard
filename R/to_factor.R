@@ -27,6 +27,13 @@ to_factor <- function(x, ...) {
   UseMethod("to_factor")
 }
 
+
+## TODO Deprecate and remove alias later
+
+#' @export
+data_to_factor <- to_factor
+
+
 #' @export
 to_factor.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {

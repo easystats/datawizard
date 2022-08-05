@@ -42,6 +42,13 @@ to_numeric <- function(x, ...) {
   UseMethod("to_numeric")
 }
 
+
+## TODO Deprecate and remove alias later
+
+#' @export
+data_to_numeric <- to_numeric
+
+
 #' @export
 to_numeric.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
@@ -184,7 +191,7 @@ to_numeric.factor <- function(x,
 
     if (any(na_values)) {
       # iterate all missing values that have
-      for (i in 1:length(na_values)) {
+      for (i in seq_along(na_values)) {
         # if the first observation was missing, add NA row and bind data frame
         if (i == 1 && na_values[i] == 1) {
           out <- rbind(NA, out)
@@ -242,6 +249,8 @@ to_numeric.character <- function(x,
 
   out
 }
+
+
 
 #' Convert to Numeric (if possible)
 #'

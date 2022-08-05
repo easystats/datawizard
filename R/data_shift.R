@@ -31,6 +31,12 @@ slide <- function(x, ...) {
 }
 
 
+## TODO Deprecate and remove alias later
+
+#' @export
+data_shift <- slide
+
+
 #' @export
 slide.default <- function(x, lowest = 0, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
