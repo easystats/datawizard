@@ -121,6 +121,7 @@ categorize <- function(x, ...) {
 
 ## TODO Deprecate and remove alias later
 
+#' @rdname categorize
 #' @export
 data_cut <- categorize
 

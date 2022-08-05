@@ -182,6 +182,7 @@ change_code <- function(x, ...) {
 
 ## TODO Deprecate and remove alias later
 
+#' @rdname change_code
 #' @export
 data_recode <- change_code
 

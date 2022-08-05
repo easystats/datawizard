@@ -2,10 +2,13 @@
 % Please edit documentation in R/to_numeric.R
 \name{to_numeric}
 \alias{to_numeric}
+\alias{data_to_numeric}
 \alias{to_numeric.data.frame}
 \title{Convert data to numeric}
 \usage{
 to_numeric(x, ...)
+
+data_to_numeric(x, ...)
 
 \method{to_numeric}{data.frame}(
   x,

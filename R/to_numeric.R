@@ -45,6 +45,7 @@ to_numeric <- function(x, ...) {
 
 ## TODO Deprecate and remove alias later
 
+#' @rdname to_numeric
 #' @export
 data_to_numeric <- to_numeric
 

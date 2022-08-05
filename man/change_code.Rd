@@ -2,11 +2,14 @@
 % Please edit documentation in R/change_code.R
 \name{change_code}
 \alias{change_code}
+\alias{data_recode}
 \alias{change_code.numeric}
 \alias{change_code.data.frame}
 \title{Recode old values of variables into new values}
 \usage{
 change_code(x, ...)
+
+data_recode(x, ...)
 
 \method{change_code}{numeric}(
   x,
