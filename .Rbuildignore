@@ -30,6 +30,7 @@ publication/*
 tests\^spelling
 ^LICENSE\.md$
 ^\.lintr$
+\.code-workspace$
 ^\.circleci$
 ^tests/manual$
 ^revdep$

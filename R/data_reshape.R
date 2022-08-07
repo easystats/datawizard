@@ -86,7 +86,6 @@ data_to_long <- function(data,
                          ...,
                          cols,
                          colnames_to) {
-
   if (!missing(colnames_to)) {
     .is_deprecated("colnames_to", "names_to")
     if (is.null(names_to)) {
@@ -133,8 +132,9 @@ data_to_long <- function(data,
   if (any(names_to %in% setdiff(names(data), cols))) {
     stop(insight::format_message(
       "Some values of the columns specified in 'names_to' are already present as column names.",
-      paste0("Either use another value in `names_to` or rename the following columns: ",
-             text_concatenate(names_to[which(names_to %in% setdiff(names(data), cols))])
+      paste0(
+        "Either use another value in `names_to` or rename the following columns: ",
+        text_concatenate(names_to[which(names_to %in% setdiff(names(data), cols))])
       )
     ), call. = FALSE)
   }
@@ -184,8 +184,8 @@ data_to_long <- function(data,
       if (is.null(names_pattern)) {
         new_vals <- unlist(lapply(
           strsplit(unique(long[[names_to_2]]), names_sep, fixed = TRUE),
-          function(x) x[i])
-        )
+          function(x) x[i]
+        ))
         long[[names_to[i]]] <- new_vals
       } else {
         tmp <- regmatches(

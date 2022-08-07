@@ -4,19 +4,6 @@ template:
   bootstrap: 5
   package: easystatstemplate
 
-authors:
-  Dominique Makowski:
-    href: https://dominiquemakowski.github.io/
-  Daniel Lüdecke:
-    href: https://github.com/strengejacke
-  Indrajeet Patil:
-    href: https://sites.google.com/site/indrajeetspatilmorality/
-  Mattan S. Ben-Shachar:
-    href: https://github.com/mattansb
-  Brenton M. Wiernik:
-    href: https://wiernik.org/
-  Etienne Bacher:
-    href: https://www.etiennebacher.com/
 
 reference:
 

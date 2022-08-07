@@ -3,8 +3,9 @@
 BREAKING
 
 * Following statistical transformation functions have been renamed to not have
-  `data_*()` prefix, since they do not work with data frames and therefore
-  had misleading names:
+  `data_*()` prefix, since they do not work exclusively with data frames, but
+  are typically first of all used with vectors, and therefore had misleading 
+  names:
 
   - `data_cut()` -> `categorize()`
   - `data_recode()` -> `change_code()`
@@ -13,6 +14,10 @@ BREAKING
   - `data_rescale()` -> `rescale()`
   - `data_to_factor()` -> `to_factor()`
   - `data_to_numeric()` -> `to_numeric()`
+
+  Note that these functions also have `.data.frame()` methods and still work
+  for data frames as well. Former function names are still available as aliases,
+  but will be deprecated and removed in a future release.
 
 * Bumps the needed minimum R version to `3.5`.
 
