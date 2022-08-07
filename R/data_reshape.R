@@ -31,8 +31,9 @@
 #' tibble. Otherwise, it returns a data frame.
 #'
 #' @examples
+#' \donttest{
 #' wide_data <- data.frame(replicate(5, rnorm(10)))
-
+#'
 #' # Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))
 #' data_to_long(wide_data)
 #'
@@ -68,10 +69,10 @@
 #' }
 #'
 #' }
+#' }
 #'
 #' @inherit data_rename seealso
 #' @export
-
 data_to_long <- function(data,
                          select = "all",
                          names_to = "name",

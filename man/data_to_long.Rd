@@ -124,7 +124,9 @@ the number of columns. This is a dependency-free base-R equivalent of
 \code{tidyr::pivot_longer()}.
 }
 \examples{
+\donttest{
 wide_data <- data.frame(replicate(5, rnorm(10)))
+
 # Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))
 data_to_long(wide_data)
 
@@ -159,6 +161,7 @@ if(require("tidyr")) {
   )
 }
 
+}
 }
 
 }
