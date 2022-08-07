@@ -1,6 +1,6 @@
 # datawizard 0.5.0
 
-BREAKING
+MAJOR CHANGES
 
 * Following statistical transformation functions have been renamed to not have
   `data_*()` prefix, since they do not work exclusively with data frames, but
@@ -29,8 +29,6 @@ BREAKING
 
 * Argument `training_proportion` in `data_partition()` is deprecated. Please use
   `proportion` now.
-
-MAJOR CHANGES
 
 * Given his continued and significant contributions to the package, Etienne
   Bacher (@etiennebacher) is now included as an author.
