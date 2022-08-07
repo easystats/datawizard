@@ -87,7 +87,7 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.0" id="datawizard-050">datawizard 0.5.0<a class="anchor" aria-label="anchor" href="#datawizard-050"></a></h2>
-<p>BREAKING</p>
+<p>MAJOR CHANGES</p>
 <ul><li>
 <p>Following statistical transformation functions have been renamed to not have <code>data_*()</code> prefix, since they do not work exclusively with data frames, but are typically first of all used with vectors, and therefore had misleading names:</p>
 <ul><li>
@@ -117,8 +117,7 @@
 <li><p>Removed deprecated function <code>data_findcols()</code>. Please use its replacement, <code><a href="../reference/find_columns.html">data_find()</a></code>.</p></li>
 <li><p>Removed alias <code><a href="https://tidyr.tidyverse.org/reference/extract.html" class="external-link">extract()</a></code> for <code><a href="../reference/data_extract.html">data_extract()</a></code> function since it collided with <code><a href="https://tidyr.tidyverse.org/reference/extract.html" class="external-link">tidyr::extract()</a></code>.</p></li>
 <li><p>Argument <code>training_proportion</code> in <code><a href="../reference/data_partition.html">data_partition()</a></code> is deprecated. Please use <code>proportion</code> now.</p></li>
-</ul><p>MAJOR CHANGES</p>
-<ul><li><p>Given his continued and significant contributions to the package, Etienne Bacher (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>) is now included as an author.</p></li>
+<li><p>Given his continued and significant contributions to the package, Etienne Bacher (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>) is now included as an author.</p></li>
 <li><p><code><a href="../reference/standardize.html">unstandardise()</a></code> now works for <code>center(x)</code></p></li>
 <li><p><code><a href="../reference/normalize.html">unnormalize()</a></code> now works for <code>change_scale(x)</code></p></li>
 <li><p><code><a href="../reference/data_to_wide.html">reshape_wider()</a></code> now follows more consistently <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">tidyr::pivot_wider()</a></code> syntax. Arguments <code>colnames_from</code>, <code>sep</code>, and <code>rows_from</code> are deprecated and should be replaced by <code>names_from</code>, <code>names_sep</code>, and <code>id_cols</code> respectively. <code><a href="../reference/data_to_wide.html">reshape_wider()</a></code> also gains an argument <code>names_glue</code> (<a href="https://github.com/easystats/datawizard/issues/182" class="external-link">#182</a>, <a href="https://github.com/easystats/datawizard/issues/198" class="external-link">#198</a>).</p></li>
