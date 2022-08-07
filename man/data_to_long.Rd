@@ -80,7 +80,7 @@ the start of each variable name.}
 
 \item{names_sep, names_pattern}{If \code{names_to} contains multiple values, this
 argument controls how the column name is broken up.
-\code{names_pattern} takes a regular expression containing matching groups (\verb{()}⁠).}
+\code{names_pattern} takes a regular expression containing matching groups, i.e. "()".}
 
 \item{values_to}{The name of the new column that will contain the values of
 the pivoted variables.}

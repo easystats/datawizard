@@ -11,7 +11,7 @@
 #' the start of each variable name.
 #' @param names_sep,names_pattern If `names_to` contains multiple values, this
 #' argument controls how the column name is broken up.
-#' `names_pattern` takes a regular expression containing matching groups (`()`⁠).
+#' `names_pattern` takes a regular expression containing matching groups, i.e. "()".
 #' @param values_to The name of the new column that will contain the values of
 #'   the pivoted variables.
 #' @param values_drop_na If `TRUE`, will drop rows that contain only `NA` in the
