@@ -9,3 +9,6 @@
 
 ## revdepcheck results
 
+Expect test failures in a few of the reverse dependencies. The authors of these
+packages have already been informed and they will be submitting revised versions
+soon.
