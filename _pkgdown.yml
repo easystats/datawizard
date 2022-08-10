@@ -1,6 +1,7 @@
 url: https://easystats.github.io/datawizard/
 
 template:
+  bootstrap: 5
   package: easystatstemplate
 
 
