@@ -17,9 +17,10 @@ convert_na_to(x, ...)
   x,
   select = NULL,
   exclude = NULL,
-  replace_num = NULL,
-  replace_char = NULL,
-  replace_fac = NULL,
+  replacement = NULL,
+  replace_num = replacement,
+  replace_char = replacement,
+  replace_fac = replacement,
   ignore_case = FALSE,
   verbose = TRUE,
   ...
