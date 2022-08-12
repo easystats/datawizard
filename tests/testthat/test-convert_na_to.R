@@ -77,6 +77,10 @@ test_that("convert_na_to - numeric: arg 'replacement' must be of length one", {
 
 test_that("convert_na_to - character: returns original vector if 'replacement' not good", {
   expect_equal(
+    convert_na_to(c("a", "b", "c", NA), replacement = 1, verbose = FALSE),
+    c("a", "b", "c", 1)
+  )
+  expect_equal(
     convert_na_to(c("a", "b", "c", NA), replacement = mtcars, verbose = FALSE),
     c("a", "b", "c", NA)
   )

@@ -120,7 +120,7 @@ convert_na_to.factor <- function(x, replacement = NULL, verbose = TRUE, ...) {
 #' @rdname convert_na_to
 #' @export
 convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE, ...) {
-  if (is_empty_object(replacement) || !is.character(replacement) & !is.numeric(replacement)) {
+  if (is_empty_object(replacement) || !is.character(replacement) && !is.numeric(replacement)) {
     if (isTRUE(verbose)) {
       warning(insight::format_message(
         "`replacement` needs to be a character or numeric vector."), call. = FALSE)
