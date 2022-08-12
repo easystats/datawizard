@@ -16,7 +16,7 @@ Authors@R: c(
     person("Etienne", "Bacher", , "etienne.bacher@protonmail.com", role = "aut",
            comment = c(ORCID = "0000-0002-9271-5075")),
     person("Rémi", "Thériault", , "remi.theriault@mail.mcgill.ca", role = "ctb",
-           comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc")),
+           comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc"))
   )
 Maintainer: Indrajeet Patil <patilindrajeet.science@gmail.com>
 Description: A lightweight package to easily manipulate, clean, transform,
