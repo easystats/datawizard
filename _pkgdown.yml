@@ -4,6 +4,10 @@ template:
   bootstrap: 5
   package: easystatstemplate
 
+development:
+  mode: auto
+  version_label: default
+  version_tooltip: "Version"
 
 reference:
 
