@@ -154,7 +154,7 @@ data_filter <- function(x, filter, ...) {
   } else {
 
     # check for curley tags, like "{var} == 1"
-    has_curley <- tryCatch(grepl("{", eval(condition), fixed = TRUE),
+    has_curley <- tryCatch(grepl("{", deparse(filter), fixed = TRUE),
                            error = function(e) FALSE)
     if (isTRUE(has_curley)) {
       # evaluate condition, to get a string
