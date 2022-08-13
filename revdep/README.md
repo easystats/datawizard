@@ -1,25 +1,36 @@
 # Platform
 
-|field    |value                                                               |
-|:--------|:-------------------------------------------------------------------|
-|version  |R version 4.1.2 (2021-11-01)                                        |
-|os       |Windows 10 x64 (build 22000)                                        |
-|system   |x86_64, mingw32                                                     |
-|ui       |RStudio                                                             |
-|language |(EN)                                                                |
-|collate  |English_United Kingdom.1252                                         |
-|ctype    |English_United Kingdom.1252                                         |
-|tz       |Europe/Berlin                                                       |
-|date     |2022-02-25                                                          |
-|rstudio  |2022.06.0-daily+135 Spotted Wakerobin (desktop)                     |
-|pandoc   |2.17.1.1 @ C:/Program Files/RStudio/bin/quarto/bin/ (via rmarkdown) |
+|field    |value                                     |
+|:--------|:-----------------------------------------|
+|version  |R version 4.2.1 (2022-06-23)              |
+|os       |macOS Monterey 12.4                       |
+|system   |aarch64, darwin20                         |
+|ui       |RStudio                                   |
+|language |(EN)                                      |
+|collate  |en_US.UTF-8                               |
+|ctype    |en_US.UTF-8                               |
+|tz       |Europe/Berlin                             |
+|date     |2022-08-06                                |
+|rstudio  |2022.07.0+548 Spotted Wakerobin (desktop) |
+|pandoc   |2.19 @ /usr/local/bin/ (via rmarkdown)    |
 
 # Dependencies
 
-|package    |old    |new    |<U+0394>  |
-|:----------|:------|:------|:--|
-|datawizard |0.2.3  |0.3.0  |*  |
-|insight    |0.16.0 |0.16.0 |   |
+|package    |old   |new      |Δ  |
+|:----------|:-----|:--------|:--|
+|datawizard |0.4.1 |0.4.1.10 |*  |
 
 # Revdeps
+
+## New problems (7)
+
+|package                                          |version |error  |warning |note   |
+|:------------------------------------------------|:-------|:------|:-------|:------|
+|[correlation](problems.md#correlation)           |0.8.1   |__+1__ |        |       |
+|[effectsize](problems.md#effectsize)             |0.7.0   |__+1__ |        |       |
+|[parameters](problems.md#parameters)             |0.18.1  |__+2__ |__+1__  |       |
+|[report](problems.md#report)                     |0.5.1   |__+1__ |        |__+1__ |
+|[see](problems.md#see)                           |0.7.1   |__+1__ |__+1__  |       |
+|[sjPlot](problems.md#sjplot)                     |2.8.10  |__+1__ |        |       |
+|[statsExpressions](problems.md#statsexpressions) |1.3.2   |__+1__ |        |       |
 

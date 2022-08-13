@@ -1,34 +1,42 @@
 #' @title Convert data to factors
-#' @name data_to_factor
+#' @name to_factor
 #'
 #' @details
 #' Convert data to numeric by converting characters to factors and factors to
 #' either numeric levels or dummy variables. The "counterpart" to convert
-#' variables into numeric is `data_to_numeric()`.
+#' variables into numeric is `to_numeric()`.
 #'
 #' @param x A data frame or vector.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams find_columns
-#' @inheritParams data_cut
+#' @inheritParams categorize
 #'
 #' @inheritSection center Selection of variables - the `select` argument
 #'
 #' @return A factor, or a data frame of factors.
 #'
 #' @examples
-#' str(data_to_factor(iris))
+#' str(to_factor(iris))
 #'
 #' # use labels as levels
 #' data(efc)
 #' str(efc$c172code)
-#' head(data_to_factor(efc$c172code))
+#' head(to_factor(efc$c172code))
 #' @export
-data_to_factor <- function(x, ...) {
-  UseMethod("data_to_factor")
+to_factor <- function(x, ...) {
+  UseMethod("to_factor")
 }
 
+
+## TODO Deprecate and remove alias later
+
+#' @rdname to_factor
 #' @export
-data_to_factor.default <- function(x, verbose = TRUE, ...) {
+data_to_factor <- to_factor
+
+
+#' @export
+to_factor.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     message(insight::format_message(sprintf("Converting into factors values currently not possible for variables of class '%s'.", class(x)[1])))
   }
@@ -36,12 +44,12 @@ data_to_factor.default <- function(x, verbose = TRUE, ...) {
 }
 
 #' @export
-data_to_factor.factor <- function(x, ...) {
+to_factor.factor <- function(x, ...) {
   x
 }
 
 #' @export
-data_to_factor.numeric <- function(x, ...) {
+to_factor.numeric <- function(x, ...) {
   # preserve labels
   variable_label <- attr(x, "label", exact = TRUE)
   value_labels <- attr(x, "labels", exact = TRUE)
@@ -65,23 +73,23 @@ data_to_factor.numeric <- function(x, ...) {
 }
 
 #' @export
-data_to_factor.logical <- data_to_factor.numeric
+to_factor.logical <- to_factor.numeric
 
 #' @export
-data_to_factor.character <- data_to_factor.numeric
+to_factor.character <- to_factor.numeric
 
 #' @export
-data_to_factor.Date <- data_to_factor.numeric
+to_factor.Date <- to_factor.numeric
 
-#' @rdname data_to_factor
+#' @rdname to_factor
 #' @export
-data_to_factor.data.frame <- function(x,
-                                      select = NULL,
-                                      exclude = NULL,
-                                      ignore_case = FALSE,
-                                      append = FALSE,
-                                      verbose = TRUE,
-                                      ...) {
+to_factor.data.frame <- function(x,
+                                 select = NULL,
+                                 exclude = NULL,
+                                 ignore_case = FALSE,
+                                 append = FALSE,
+                                 verbose = TRUE,
+                                 ...) {
   # sanity check, return as is for complete numeric
   if (all(sapply(x, is.factor))) {
     return(x)
@@ -112,6 +120,6 @@ data_to_factor.data.frame <- function(x,
   x <- args$x
   select <- args$select
 
-  x[select] <- lapply(x[select], data_to_factor, verbose = verbose, ...)
+  x[select] <- lapply(x[select], to_factor, verbose = verbose, ...)
   x
 }

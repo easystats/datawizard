@@ -4,29 +4,20 @@ template:
   bootstrap: 5
   package: easystatstemplate
 
-authors:
-  Dominique Makowski:
-    href: https://dominiquemakowski.github.io/
-  Daniel Lüdecke:
-    href: https://github.com/strengejacke
-  Indrajeet Patil:
-    href: https://sites.google.com/site/indrajeetspatilmorality/
-  Mattan S. Ben-Shachar:
-    href: https://github.com/mattansb
-  Brenton M. Wiernik:
-    href: https://wiernik.org/
-  Etienne Bacher:
-    href: https://www.etiennebacher.com/
+development:
+  mode: auto
+  version_label: default
+  version_tooltip: "Version"
 
 reference:
 
   - title: Recode and transform data
   - contents:
-      - data_cut
-      - data_recode
-      - data_rescale
-      - data_reverse
-      - data_shift
+      - categorize
+      - change_code
+      - rescale
+      - reverse
+      - slide
       - adjust
       - center
       - demean
@@ -63,7 +54,7 @@ reference:
   - title: Convert and replace data
   - contents:
       - contains("to_numeric")
-      - data_to_factor
+      - to_factor
       - data_restoretype
       - starts_with("replace_")
       - starts_with("convert_")
@@ -110,7 +101,12 @@ reference:
 
 articles:
 
+  - title: Data Wrangling
+    navbar: ~
+    contents:
+    - tidyverse_translation
   - title: Data transformation
-    navbar: Data transformation
+    navbar: ~
     contents:
     - standardize_data
+

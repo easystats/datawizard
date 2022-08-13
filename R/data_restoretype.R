@@ -7,8 +7,8 @@
 #'
 #' @return
 #'
-#' A dataframe with columns whose types have been restored based on the
-#' reference dataframe.
+#' A data frame with columns whose types have been restored based on the
+#' reference data frame.
 #'
 #' @examples
 #' data <- data.frame(
@@ -26,7 +26,7 @@ data_restoretype <- function(data, reference = NULL, ...) {
     # No reference data (regular fixing) ----------------
     if (is.null(reference)) {
       if (is.character(data[[col]])) {
-        data[[col]] <- to_numeric(data[[col]])
+        data[[col]] <- coerce_to_numeric(data[[col]])
       }
     } else {
       if (is.factor(reference[[col]]) && !is.factor(data[[col]])) {
@@ -35,7 +35,7 @@ data_restoretype <- function(data, reference = NULL, ...) {
       }
 
       if (is.numeric(reference[[col]]) && !is.numeric(data[[col]])) {
-        data[[col]] <- to_numeric(as.character(data[[col]]))
+        data[[col]] <- coerce_to_numeric(as.character(data[[col]]))
       }
 
       if (is.character(reference[[col]]) && !is.character(data[[col]])) {

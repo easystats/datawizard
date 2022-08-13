@@ -241,7 +241,7 @@ Either to go from wide/Cartesian to long/tidy format
 wide_data <- data.frame(replicate(5, rnorm(10)))
 
 head(data_to_long(wide_data))
-#>   Name       Value
+#>   name       value
 #> 1   X1 -0.08281164
 #> 2   X2 -1.12490028
 #> 3   X3 -0.70632036
@@ -256,8 +256,8 @@ or the other way
 long_data <- data_to_long(wide_data, rows_to = "Row_ID") # Save row number
 
 data_to_wide(long_data,
-  names_from = "Name",
-  values_from = "Value",
+  names_from = "name",
+  values_from = "value",
   id_cols = "Row_ID"
 )
 #>    Row_ID          X1          X2          X3         X4          X5
@@ -334,7 +334,7 @@ table(x)
 #>  2  3  5  3  7  5  5  2 11  7
 
 # cut into 3 groups, based on distribution (quantiles)
-table(data_cut(x, split = "quantile", n_groups = 3))
+table(categorize(x, split = "quantile", n_groups = 3))
 #> 
 #>  1  2  3 
 #> 13 19 18

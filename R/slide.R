@@ -1,5 +1,5 @@
 #' @title Shift numeric value range
-#' @name data_shift
+#' @name slide
 #'
 #' @description
 #' This functions shifts the value range of a numeric variable, so that the
@@ -8,7 +8,7 @@
 #' @param x A data frame or numeric vector.
 #' @param verbose Toggle warnings.
 #' @param ... not used.
-#' @inheritParams data_to_numeric
+#' @inheritParams to_numeric
 #'
 #' @return `x`, where the range of numeric variables starts at a new value.
 #'
@@ -19,33 +19,40 @@
 #' @examples
 #' # numeric
 #' head(mtcars$gear)
-#' head(data_shift(mtcars$gear))
-#' head(data_shift(mtcars$gear, lowest = 10))
+#' head(slide(mtcars$gear))
+#' head(slide(mtcars$gear, lowest = 10))
 #'
 #' # data frame
-#' sapply(data_shift(mtcars, lowest = 1), min)
+#' sapply(slide(mtcars, lowest = 1), min)
 #' sapply(mtcars, min)
 #' @export
-data_shift <- function(x, ...) {
-  UseMethod("data_shift")
+slide <- function(x, ...) {
+  UseMethod("slide")
 }
 
 
+## TODO Deprecate and remove alias later
+
+#' @rdname slide
 #' @export
-data_shift.default <- function(x, lowest = 0, verbose = TRUE, ...) {
+data_shift <- slide
+
+
+#' @export
+slide.default <- function(x, lowest = 0, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     message(insight::format_message(
       "Shifting non-numeric variables is not possible.",
-      "Try using 'data_to_numeric()' and specify the 'lowest' argument."
+      "Try using 'to_numeric()' and specify the 'lowest' argument."
     ))
   }
   x
 }
 
 
-#' @rdname data_shift
+#' @rdname slide
 #' @export
-data_shift.numeric <- function(x, lowest = 0, ...) {
+slide.numeric <- function(x, lowest = 0, ...) {
   original_x <- x
   minval <- min(x, na.rm = TRUE)
   difference <- minval - lowest
@@ -54,16 +61,16 @@ data_shift.numeric <- function(x, lowest = 0, ...) {
 }
 
 
-#' @rdname data_shift
+#' @rdname slide
 #' @export
-data_shift.data.frame <- function(x,
-                                  select = NULL,
-                                  exclude = NULL,
-                                  lowest = 0,
-                                  append = FALSE,
-                                  ignore_case = FALSE,
-                                  verbose = TRUE,
-                                  ...) {
+slide.data.frame <- function(x,
+                             select = NULL,
+                             exclude = NULL,
+                             lowest = 0,
+                             append = FALSE,
+                             ignore_case = FALSE,
+                             verbose = TRUE,
+                             ...) {
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case)
 
@@ -84,7 +91,7 @@ data_shift.data.frame <- function(x,
 
   x[select] <- lapply(
     x[select],
-    data_shift,
+    slide,
     lowest = lowest,
     verbose = verbose,
     ...

@@ -20,7 +20,7 @@ test_that("kurtosis and skewness with bootstrapping", {
   expect_equal(kurtosis(iris$Sepal.Length, iterations = 100)[[2]], 0.1878741, tolerance = 1e-3)
 })
 
-test_that("skewness works with dataframes", {
+test_that("skewness works with data frames", {
   skip_if_not_installed("boot")
 
   set.seed(123)
@@ -30,7 +30,7 @@ test_that("skewness works with dataframes", {
   expect_snapshot(skewness(iris[, 1:4], iterations = 100))
 })
 
-test_that("kurtosis works with dataframes", {
+test_that("kurtosis works with data frames", {
   skip_if_not_installed("boot")
 
   set.seed(123)

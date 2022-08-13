@@ -59,12 +59,12 @@ test_that("convert_na_to - character: works", {
 
 test_that("convert_na_to - character: arg 'replacement' can only be character", {
   expect_warning(
-    convert_na_to(c("a", "b", "c", NA), replacement = 1),
-    regexp = "`replacement` needs to be a character vector."
+    convert_na_to(c("a", "b", "c", NA), replacement = mtcars),
+    regexp = "`replacement` needs to be a character or numeric vector."
   )
   expect_warning(
     convert_na_to(c("a", "b", "c", NA), replacement = factor(8)),
-    regexp = "`replacement` needs to be a character vector."
+    regexp = "`replacement` needs to be a character or numeric vector."
   )
 })
 
@@ -78,6 +78,10 @@ test_that("convert_na_to - numeric: arg 'replacement' must be of length one", {
 test_that("convert_na_to - character: returns original vector if 'replacement' not good", {
   expect_equal(
     convert_na_to(c("a", "b", "c", NA), replacement = 1, verbose = FALSE),
+    c("a", "b", "c", 1)
+  )
+  expect_equal(
+    convert_na_to(c("a", "b", "c", NA), replacement = mtcars, verbose = FALSE),
     c("a", "b", "c", NA)
   )
   expect_equal(
@@ -120,7 +124,7 @@ test_that("convert_na_to - factor: works when 'replacement' is character", {
 
 
 
-# dataframe --------------------------
+# data frame --------------------------
 
 test <- data.frame(
   x = c(1, 2, NA),
@@ -130,7 +134,7 @@ test <- data.frame(
   stringsAsFactors = FALSE
 )
 
-test_that("convert_na_to - dataframe: works with replace_* args", {
+test_that("convert_na_to - data frame: works with replace_* args", {
   expect_equal(
     convert_na_to(test, replace_num = 4, replace_char = "e", replace_fac = 8),
     data.frame(
@@ -143,7 +147,7 @@ test_that("convert_na_to - dataframe: works with replace_* args", {
   )
 })
 
-test_that("convert_na_to - dataframe: only modifies numeric if only numeric specified", {
+test_that("convert_na_to - data frame: only modifies numeric if only numeric specified", {
   expect_equal(
     convert_na_to(test, replace_num = 4),
     data.frame(
@@ -156,7 +160,7 @@ test_that("convert_na_to - dataframe: only modifies numeric if only numeric spec
   )
 })
 
-test_that("convert_na_to - dataframe: only modifies character if only character specified", {
+test_that("convert_na_to - data frame: only modifies character if only character specified", {
   expect_equal(
     convert_na_to(test, replace_char = "e"),
     data.frame(
@@ -169,7 +173,7 @@ test_that("convert_na_to - dataframe: only modifies character if only character 
   )
 })
 
-test_that("convert_na_to - dataframe: only modifies factor if only factor specified", {
+test_that("convert_na_to - data frame: only modifies factor if only factor specified", {
   expect_equal(
     convert_na_to(test, replace_fac = 8),
     data.frame(
@@ -182,7 +186,7 @@ test_that("convert_na_to - dataframe: only modifies factor if only factor specif
   )
 })
 
-test_that("convert_na_to - dataframe: arg 'select' works", {
+test_that("convert_na_to - data frame: arg 'select' works", {
   expect_equal(
     convert_na_to(test,
       replace_num = 4, replace_char = "e",
@@ -283,7 +287,7 @@ test_that("convert_na_to - dataframe: arg 'select' works", {
 })
 
 
-test_that("convert_na_to - dataframe: arg 'exclude' works", {
+test_that("convert_na_to - data frame: arg 'exclude' works", {
   expect_equal(
     convert_na_to(test,
       replace_num = 4, replace_char = "e",
@@ -327,7 +331,7 @@ test_that("convert_na_to - dataframe: arg 'exclude' works", {
   )
 })
 
-test_that("convert_na_to - dataframe: works when arg 'select' is a list", {
+test_that("convert_na_to - data frame: works when arg 'select' is a list", {
   # numeric
   expect_equal(
     convert_na_to(test, replace_num = 4, select = list(x = 0)),

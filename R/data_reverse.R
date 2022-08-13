@@ -5,25 +5,25 @@
 #' @param range Initial (old) range of values. If `NULL`, will take the range of
 #'   the input vector (`range(x)`).
 #' @param ... Arguments passed to or from other methods.
-#' @inheritParams data_cut
+#' @inheritParams categorize
 #' @inheritParams find_columns
 #'
 #' @inheritSection center Selection of variables - the `select` argument
 #'
 #' @examples
-#' data_reverse(c(1, 2, 3, 4, 5))
-#' data_reverse(c(-2, -1, 0, 2, 1))
+#' reverse(c(1, 2, 3, 4, 5))
+#' reverse(c(-2, -1, 0, 2, 1))
 #'
 #' # Specify the "theoretical" range of the input vector
-#' data_reverse(c(1, 3, 4), range = c(0, 4))
+#' reverse(c(1, 3, 4), range = c(0, 4))
 #'
 #' # Factor variables
-#' data_reverse(factor(c(1, 2, 3, 4, 5)))
-#' data_reverse(factor(c(1, 2, 3, 4, 5)), range = 0:10)
+#' reverse(factor(c(1, 2, 3, 4, 5)))
+#' reverse(factor(c(1, 2, 3, 4, 5)), range = 0:10)
 #'
 #' # Data frames
-#' head(data_reverse(iris))
-#' head(data_reverse(iris, select = "Sepal.Length"))
+#' head(reverse(iris))
+#' head(reverse(iris, select = "Sepal.Length"))
 #'
 #' @return A reverse-scored object.
 #'
@@ -32,18 +32,18 @@
 #' @inherit data_rename seealso
 #'
 #' @export
-data_reverse <- function(x, ...) {
-  UseMethod("data_reverse")
+reverse <- function(x, ...) {
+  UseMethod("reverse")
 }
 
 
-#' @rdname data_reverse
+#' @rdname reverse
 #' @export
-reverse_scale <- data_reverse
+reverse_scale <- reverse
 
 
 #' @export
-data_reverse.default <- function(x, verbose = TRUE, ...) {
+reverse.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
   }
@@ -51,12 +51,12 @@ data_reverse.default <- function(x, verbose = TRUE, ...) {
 }
 
 
-#' @rdname data_reverse
+#' @rdname reverse
 #' @export
-data_reverse.numeric <- function(x,
-                                 range = NULL,
-                                 verbose = TRUE,
-                                 ...) {
+reverse.numeric <- function(x,
+                            range = NULL,
+                            verbose = TRUE,
+                            ...) {
   # Warning if all NaNs
   if (all(is.na(x))) {
     return(x)
@@ -89,7 +89,7 @@ data_reverse.numeric <- function(x,
 
 
 #' @export
-data_reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
+reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
   # Warning if all NaNs
   if (all(is.na(x))) {
     return(x)
@@ -114,7 +114,7 @@ data_reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
   }
 
   int_x <- as.integer(x)
-  rev_x <- data_reverse(int_x, range = c(1, length(old_levels)))
+  rev_x <- reverse(int_x, range = c(1, length(old_levels)))
   x <- factor(rev_x, levels = seq_len(length(old_levels)), labels = old_levels)
 
   # labelled data?
@@ -126,12 +126,12 @@ data_reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
 
 
 #' @export
-data_reverse.grouped_df <- function(x,
-                                    select = NULL,
-                                    exclude = NULL,
-                                    range = NULL,
-                                    ignore_case = FALSE,
-                                    ...) {
+reverse.grouped_df <- function(x,
+                               select = NULL,
+                               exclude = NULL,
+                               range = NULL,
+                               ignore_case = FALSE,
+                               ...) {
   info <- attributes(x)
 
   # dplyr >= 0.8.0 returns attribute "indices"
@@ -150,7 +150,7 @@ data_reverse.grouped_df <- function(x,
 
   x <- as.data.frame(x)
   for (rows in grps) {
-    x[rows, ] <- data_reverse(
+    x[rows, ] <- reverse(
       x[rows, , drop = FALSE],
       select = select,
       exclude = exclude,
@@ -165,14 +165,14 @@ data_reverse.grouped_df <- function(x,
 
 
 
-#' @rdname data_reverse
+#' @rdname reverse
 #' @export
-data_reverse.data.frame <- function(x,
-                                    select = NULL,
-                                    exclude = NULL,
-                                    range = NULL,
-                                    ignore_case = FALSE,
-                                    ...) {
+reverse.data.frame <- function(x,
+                               select = NULL,
+                               exclude = NULL,
+                               range = NULL,
+                               ignore_case = FALSE,
+                               ...) {
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case)
 
@@ -184,7 +184,7 @@ data_reverse.data.frame <- function(x,
   }
 
   x[select] <- lapply(select, function(n) {
-    data_reverse(x[[n]], range = range[[n]])
+    reverse(x[[n]], range = range[[n]])
   })
   x
 }

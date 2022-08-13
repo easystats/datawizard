@@ -5,7 +5,7 @@
 \alias{convert_na_to.numeric}
 \alias{convert_na_to.character}
 \alias{convert_na_to.data.frame}
-\title{Replace missing values in a variable or a dataframe.}
+\title{Replace missing values in a variable or a data frame.}
 \usage{
 convert_na_to(x, ...)
 
@@ -17,9 +17,10 @@ convert_na_to(x, ...)
   x,
   select = NULL,
   exclude = NULL,
-  replace_num = NULL,
-  replace_char = NULL,
-  replace_fac = NULL,
+  replacement = NULL,
+  replace_num = replacement,
+  replace_char = replacement,
+  replace_fac = replacement,
   ignore_case = FALSE,
   verbose = TRUE,
   ...
@@ -83,7 +84,7 @@ search pattern when matching against variable names.}
 \code{x}, where \code{NA} values are replaced by \code{replacement}.
 }
 \description{
-Replace missing values in a variable or a dataframe.
+Replace missing values in a variable or a data frame.
 }
 \section{Selection of variables - the \code{select} argument}{
 
@@ -109,7 +110,7 @@ convert_na_to(
   replacement = "missing"
 )
 
-### For dataframes
+### For data frames
 
 test_df <- data.frame(
   x = c(1, 2, NA),
@@ -125,7 +126,7 @@ convert_na_to(
   replace_char = "missing"
 )
 
-# Convert a specific variable in the dataframe
+# Convert a specific variable in the data frame
 convert_na_to(
   test_df,
   replace_num = 0,

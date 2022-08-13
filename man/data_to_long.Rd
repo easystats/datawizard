@@ -8,27 +8,35 @@
 data_to_long(
   data,
   select = "all",
-  colnames_to = "Name",
-  values_to = "Value",
+  names_to = "name",
+  names_prefix = NULL,
+  names_sep = NULL,
+  names_pattern = NULL,
+  values_to = "value",
+  values_drop_na = FALSE,
   rows_to = NULL,
   ignore_case = FALSE,
   regex = FALSE,
-  cols = select,
   ...,
-  names_to = colnames_to
+  cols,
+  colnames_to
 )
 
 reshape_longer(
   data,
   select = "all",
-  colnames_to = "Name",
-  values_to = "Value",
+  names_to = "name",
+  names_prefix = NULL,
+  names_sep = NULL,
+  names_pattern = NULL,
+  values_to = "value",
+  values_drop_na = FALSE,
   rows_to = NULL,
   ignore_case = FALSE,
   regex = FALSE,
-  cols = select,
   ...,
-  names_to = colnames_to
+  cols,
+  colnames_to
 )
 }
 \arguments{
@@ -64,11 +72,23 @@ If \code{NULL}, selects all columns. Patterns that found no matches are silently
 ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
 return \code{"Species"}.}
 
-\item{colnames_to}{The name of the new column that will contain the column
+\item{names_to}{The name of the new column that will contain the column
 names.}
+
+\item{names_prefix}{A regular expression used to remove matching text from
+the start of each variable name.}
+
+\item{names_sep, names_pattern}{If \code{names_to} contains multiple values, this
+argument controls how the column name is broken up.
+\code{names_pattern} takes a regular expression containing matching groups, i.e. "()".}
 
 \item{values_to}{The name of the new column that will contain the values of
 the pivoted variables.}
+
+\item{values_drop_na}{If \code{TRUE}, will drop rows that contain only \code{NA} in the
+\code{values_to} column. This effectively converts explicit missing values to
+implicit missing values, and should generally be used only when missing values
+in data were created by its structure.}
 
 \item{rows_to}{The name of the column that will contain the row names or row
 numbers from the original data. If \code{NULL}, will be removed.}
@@ -86,16 +106,17 @@ select-helpers, \code{select = contains("")} or \code{select = regex("")}, howev
 since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.}
 
-\item{cols}{Deprecated. Please use \code{select}.}
-
 \item{...}{Currently not used.}
 
-\item{names_to}{Same as \code{colnames_to}, is there for
-compatibility with \code{tidyr::pivot_longer()}.}
+\item{cols}{Identical to \code{select}. This argument is here to ensure compatibility
+with \code{tidyr::pivot_longer()}. If both \code{select} and \code{cols} are provided, \code{cols}
+is used.}
+
+\item{colnames_to}{Deprecated. Use \code{names_to} instead.}
 }
 \value{
 If a tibble was provided as input, \code{reshape_longer()} also returns a
-tibble. Otherwise, it returns a dataframe.
+tibble. Otherwise, it returns a data frame.
 }
 \description{
 This function "lengthens" data, increasing the number of rows and decreasing
@@ -103,7 +124,9 @@ the number of columns. This is a dependency-free base-R equivalent of
 \code{tidyr::pivot_longer()}.
 }
 \examples{
+\donttest{
 wide_data <- data.frame(replicate(5, rnorm(10)))
+
 # Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))
 data_to_long(wide_data)
 
@@ -128,6 +151,17 @@ if (require("psych")) {
     rows_to = "Participant"
   )
 
+if(require("tidyr")) {
+  reshape_longer(
+    tidyr::who,
+    select = new_sp_m014:newrel_f65,
+    names_to = c("diagnosis", "gender", "age"),
+    names_pattern = "new_?(.*)_(.)(.*)",
+    values_to = "count"
+  )
+}
+
+}
 }
 
 }
@@ -135,10 +169,10 @@ if (require("psych")) {
 \itemize{
 \item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}}, \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
 \item Functions to reorder or remove columns: \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
-\item Functions to reshape, pivot or rotate dataframes: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
-\item Functions to recode data: \code{\link[=data_rescale]{data_rescale()}}, \code{\link[=data_reverse]{data_reverse()}}, \code{\link[=data_cut]{data_cut()}}, \code{\link[=data_recode]{data_recode()}}, \code{\link[=data_shift]{data_shift()}}
+\item Functions to reshape, pivot or rotate data frames: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
+\item Functions to recode data: \code{\link[=rescale]{rescale()}}, \code{\link[=reverse]{reverse()}}, \code{\link[=categorize]{categorize()}}, \code{\link[=change_code]{change_code()}}, \code{\link[=slide]{slide()}}
 \item Functions to standardize, normalize, rank-transform: \code{\link[=center]{center()}}, \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
-\item Split and merge dataframes: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_merge]{data_merge()}}
+\item Split and merge data frames: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_merge]{data_merge()}}
 \item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=data_find]{data_find()}}
 \item Functions to filter rows: \code{\link[=data_match]{data_match()}}, \code{\link[=data_filter]{data_filter()}}
 }

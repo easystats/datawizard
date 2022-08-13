@@ -1,8 +1,8 @@
-#' @title Replace missing values in a variable or a dataframe.
+#' @title Replace missing values in a variable or a data frame.
 #' @name convert_na_to
 #'
 #' @description
-#' Replace missing values in a variable or a dataframe.
+#' Replace missing values in a variable or a data frame.
 #'
 #' @param x A numeric, factor, or character vector, or a data frame.
 #' @param replacement Numeric or character value that will be used to
@@ -28,7 +28,7 @@
 #'   replacement = "missing"
 #' )
 #'
-#' ### For dataframes
+#' ### For data frames
 #'
 #' test_df <- data.frame(
 #'   x = c(1, 2, NA),
@@ -44,7 +44,7 @@
 #'   replace_char = "missing"
 #' )
 #'
-#' # Convert a specific variable in the dataframe
+#' # Convert a specific variable in the data frame
 #' convert_na_to(
 #'   test_df,
 #'   replace_num = 0,
@@ -120,16 +120,17 @@ convert_na_to.factor <- function(x, replacement = NULL, verbose = TRUE, ...) {
 #' @rdname convert_na_to
 #' @export
 convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE, ...) {
-  if (is_empty_object(replacement) || !is.character(replacement)) {
+  if (is_empty_object(replacement) || !is.character(replacement) && !is.numeric(replacement)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("`replacement` needs to be a character vector."), call. = FALSE)
+      warning(insight::format_message(
+        "`replacement` needs to be a character or numeric vector."), call. = FALSE)
     }
   } else if (length(replacement) > 1) {
     if (isTRUE(verbose)) {
       warning(insight::format_message("`replacement` needs to be of length one."), call. = FALSE)
     }
   } else {
-    x[is.na(x)] <- replacement
+    x[is.na(x)] <- as.character(replacement)
   }
   x
 }
@@ -145,9 +146,10 @@ convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE, ...) 
 convert_na_to.data.frame <- function(x,
                                      select = NULL,
                                      exclude = NULL,
-                                     replace_num = NULL,
-                                     replace_char = NULL,
-                                     replace_fac = NULL,
+                                     replacement = NULL,
+                                     replace_num = replacement,
+                                     replace_char = replacement,
+                                     replace_fac = replacement,
                                      ignore_case = FALSE,
                                      verbose = TRUE,
                                      ...) {
@@ -201,7 +203,7 @@ convert_na_to.data.frame <- function(x,
     if (is.numeric(x)) {
       repl <- replace_num
     } else if (is.character(x)) {
-      repl <- replace_char
+      repl <- as.character(replace_char)
     } else if (is.factor(x)) {
       repl <- replace_fac
     }

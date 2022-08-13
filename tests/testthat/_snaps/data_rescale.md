@@ -1,7 +1,7 @@
-# data_rescale works as expected
+# rescale works as expected
 
     Code
-      head(data_rescale(iris, to = c(0, 1)))
+      head(rescale(iris, to = c(0, 1)))
     Message <simpleMessage>
       Variables of class 'factor' can't be rescaled and remain unchanged.
     Output
@@ -16,7 +16,7 @@
 ---
 
     Code
-      head(data_rescale(iris, to = c(0, 1), select = "Sepal.Length"))
+      head(rescale(iris, to = c(0, 1), select = "Sepal.Length"))
     Output
         Sepal.Length Sepal.Width Petal.Length Petal.Width Species
       1   0.22222222         3.5          1.4         0.2  setosa
@@ -29,8 +29,7 @@
 ---
 
     Code
-      head(data_rescale(iris, to = list(Sepal.Length = c(0, 1), Petal.Length = c(-1,
-        0))))
+      head(rescale(iris, to = list(Sepal.Length = c(0, 1), Petal.Length = c(-1, 0))))
     Message <simpleMessage>
       Variables of class 'factor' can't be rescaled and remain unchanged.
     Output

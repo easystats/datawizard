@@ -13,7 +13,7 @@
 #'
 #' @return
 #'
-#' A dataframe with columns corresponding to confidence intervals reshaped
+#' A data frame with columns corresponding to confidence intervals reshaped
 #' either to wide or long format.
 #'
 #' @examples

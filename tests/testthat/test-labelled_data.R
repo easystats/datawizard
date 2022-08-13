@@ -1,30 +1,30 @@
 data(efc, package = "datawizard")
 
-# data_reverse -----------------------------------
+# reverse -----------------------------------
 
-test_that("data_reverse, labels preserved", {
+test_that("reverse, labels preserved", {
   # factor, label
   expect_equal(
-    attr(data_reverse(efc$e42dep), "label", exact = TRUE),
+    attr(reverse(efc$e42dep), "label", exact = TRUE),
     "elder's dependency"
   )
   # factor, labels
   expect_equal(
-    names(attr(data_reverse(efc$e42dep), "labels", exact = TRUE)),
+    names(attr(reverse(efc$e42dep), "labels", exact = TRUE)),
     names(attr(efc$e42dep, "labels", exact = TRUE))
   )
   expect_equal(
-    attr(data_reverse(efc$e42dep), "labels", exact = TRUE),
+    attr(reverse(efc$e42dep), "labels", exact = TRUE),
     rev(attr(efc$e42dep, "labels", exact = TRUE)),
     ignore_attr = TRUE
   )
   # numeric
   expect_equal(
-    names(attr(data_reverse(efc$c12hour), "labels", exact = TRUE)),
+    names(attr(reverse(efc$c12hour), "labels", exact = TRUE)),
     names(attr(efc$c12hour, "labels", exact = TRUE))
   )
   # data frame
-  labels <- sapply(data_reverse(efc), function(i) attr(i, "label", exact = TRUE))
+  labels <- sapply(reverse(efc), function(i) attr(i, "label", exact = TRUE))
   expect_equal(
     labels,
     c(
@@ -81,18 +81,18 @@ test_that("data_extract, labels preserved", {
 
 
 
-# data_cut -----------------------------------
+# categorize -----------------------------------
 
-test_that("data_cut, labels preserved", {
+test_that("categorize, labels preserved", {
   # factor
   expect_equal(
-    attr(data_cut(efc$e42dep), "label", exact = TRUE),
+    attr(categorize(efc$e42dep), "label", exact = TRUE),
     attr(efc$e42dep, "label", exact = TRUE),
     ignore_attr = TRUE
   )
   # numeric
   expect_equal(
-    attr(data_cut(efc$c12hour), "label", exact = TRUE),
+    attr(categorize(efc$c12hour), "label", exact = TRUE),
     attr(efc$c12hour, "label", exact = TRUE),
     ignore_attr = TRUE
   )
@@ -191,10 +191,10 @@ test_that("data_addsuffix, labels preserved", {
 
 
 
-# data_to_numeric -----------------------------------
+# to_numeric -----------------------------------
 
-test_that("data_to_numeric, labels preserved", {
-  x <- data_to_numeric(efc, dummy_factors = FALSE)
+test_that("to_numeric, labels preserved", {
+  x <- to_numeric(efc, dummy_factors = FALSE)
   # factor
   expect_equal(
     attr(x$e42dep, "label", exact = TRUE),
@@ -208,7 +208,7 @@ test_that("data_to_numeric, labels preserved", {
     ignore_attr = TRUE
   )
 
-  x <- data_to_numeric(efc, dummy_factors = TRUE)
+  x <- to_numeric(efc, dummy_factors = TRUE)
   # numeric
   expect_equal(
     attr(x$c12hour, "label", exact = TRUE),
@@ -331,12 +331,12 @@ test_that("get_columns, labels preserved", {
 
 
 
-# data_recode -----------------------------------
+# change_code -----------------------------------
 
-test_that("data_recode, labels preserved", {
+test_that("change_code, labels preserved", {
   options(data_recode_pattern = NULL)
   data(efc)
-  x <- data_recode(efc$c172code, recode = list(`0` = 1:2, `1` = 3))
+  x <- change_code(efc$c172code, recode = list(`0` = 1:2, `1` = 3))
   expect_equal(
     attr(x, "label", exact = TRUE),
     attr(efc$c172code, "label", exact = TRUE),
@@ -347,11 +347,11 @@ test_that("data_recode, labels preserved", {
 
 
 
-# data_shift -----------------------------------
+# slide -----------------------------------
 
-test_that("data_shift, labels preserved", {
+test_that("slide, labels preserved", {
   data(efc)
-  x <- data_shift(efc)
+  x <- slide(efc)
   expect_equal(
     attr(x$c172code, "label", exact = TRUE),
     attr(efc$c172code, "label", exact = TRUE),
@@ -359,7 +359,7 @@ test_that("data_shift, labels preserved", {
   )
   expect_null(attr(x$c172code, "labels", exact = TRUE))
 
-  x <- data_shift(efc$c172code)
+  x <- slide(efc$c172code)
   expect_equal(
     attr(x, "label", exact = TRUE),
     attr(efc$c172code, "label", exact = TRUE),
@@ -369,11 +369,11 @@ test_that("data_shift, labels preserved", {
 
 
 
-# data_to_factor -----------------------------------
+# to_factor -----------------------------------
 
-test_that("data_to_factor, labels preserved", {
+test_that("to_factor, labels preserved", {
   data(efc)
-  x <- data_to_factor(efc)
+  x <- to_factor(efc)
   expect_equal(
     attr(x$c172code, "label", exact = TRUE),
     attr(efc$c172code, "label", exact = TRUE),
@@ -381,7 +381,7 @@ test_that("data_to_factor, labels preserved", {
   )
   expect_null(attr(x$c172code, "labels", exact = TRUE))
 
-  x <- data_to_factor(efc$c172code)
+  x <- to_factor(efc$c172code)
   expect_equal(
     attr(x, "label", exact = TRUE),
     attr(efc$c172code, "label", exact = TRUE),
