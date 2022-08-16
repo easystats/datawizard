@@ -444,7 +444,7 @@ test_that("error when overwriting existing column", {
 
 test_that("reshape_wider equivalent to pivot_wider: ex 1", {
   x <- fish_encounters %>%
-    pivot_wider(names_from = "station", values_from = "seen", values_fill = 0)
+    tidyr::pivot_wider(names_from = "station", values_from = "seen", values_fill = 0)
 
   y <- fish_encounters %>%
     reshape_wider(
@@ -467,7 +467,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 2", {
   production$production <- rnorm(nrow(production))
 
   x <- production %>%
-    pivot_wider(
+    tidyr::pivot_wider(
       names_from = c(product, country),
       values_from = production
     )
@@ -483,7 +483,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 2", {
 
 test_that("reshape_wider equivalent to pivot_wider: ex 3", {
   x <- us_rent_income %>%
-    pivot_wider(
+    tidyr::pivot_wider(
       names_from = variable,
       values_from = c(estimate, moe)
     )
@@ -499,7 +499,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 3", {
 
 test_that("reshape_wider equivalent to pivot_wider: ex 4", {
   x <- us_rent_income %>%
-    pivot_wider(
+    tidyr::pivot_wider(
       names_from = variable,
       names_sep = ".",
       values_from = c(estimate, moe)
@@ -528,7 +528,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 5", {
   contacts$person_id <- cumsum(contacts$field == "name")
 
   x <- contacts %>%
-    pivot_wider(names_from = field, values_from = value)
+    tidyr::pivot_wider(names_from = field, values_from = value)
 
   y <- contacts %>%
     reshape_wider(names_from = "field", values_from = "value")
@@ -548,7 +548,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 6", {
   production$production <- rnorm(nrow(production))
 
   x <- production %>%
-    pivot_wider(
+    tidyr::pivot_wider(
       names_from = c(product, country),
       values_from = production,
       names_glue = "prod_{product}_{country}"
@@ -573,7 +573,7 @@ test_that("reshape_wider, names_glue works", {
   )
 
   x <- df %>%
-    pivot_wider(
+    tidyr::pivot_wider(
       id_cols = food,
       names_from = c(car, binary),
       names_glue = "{binary}_{car}",
@@ -598,7 +598,7 @@ test_that("reshape_wider, names_glue works", {
 
 test_that("reshape_longer equivalent to pivot_longer: ex 1", {
   x <- relig_income %>%
-    pivot_longer(!religion, names_to = "income", values_to = "count")
+    tidyr::pivot_longer(!religion, names_to = "income", values_to = "count")
 
   y <- relig_income %>%
     reshape_longer(select = -religion, names_to = "income", values_to = "count")
@@ -609,7 +609,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 1", {
 
 test_that("reshape_longer equivalent to pivot_longer: ex 2", {
   x <- billboard %>%
-    pivot_longer(
+    tidyr::pivot_longer(
       cols = starts_with("wk"),
       names_to = "week",
       values_to = "rank"
@@ -628,7 +628,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 2", {
 
 test_that("reshape_longer equivalent to pivot_longer: ex 3", {
   x <- billboard %>%
-    pivot_longer(
+    tidyr::pivot_longer(
       cols = starts_with("wk"),
       names_to = "week",
       values_to = "rank",
@@ -649,7 +649,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 3", {
 
 test_that("reshape_longer equivalent to pivot_longer: ex 4", {
   x <- billboard %>%
-    pivot_longer(
+    tidyr::pivot_longer(
       cols = starts_with("wk"),
       names_to = "week",
       names_prefix = "wk",
@@ -673,7 +673,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 4", {
 test_that("reshape_longer equivalent to pivot_longer: ex 5", {
   suppressWarnings({
     x <- who %>%
-      pivot_longer(
+      tidyr::pivot_longer(
         cols = 5:60,
         names_to = c("diagnosis", "gender", "age"),
         names_sep = "_",
@@ -694,7 +694,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 5", {
 
 test_that("reshape_longer equivalent to pivot_longer: ex 6", {
   x <- who %>%
-    pivot_longer(
+    tidyr::pivot_longer(
       cols = new_sp_m014:newrel_f65,
       names_to = c("diagnosis", "gender", "age"),
       names_pattern = "new_?(.*)_(.)(.*)",
