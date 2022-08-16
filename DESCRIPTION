@@ -31,6 +31,8 @@ Imports:
     insight (>= 0.18.2),
     stats,
     utils
+Remotes:
+    nathaneastwood/poorman
 Suggests: 
     bayestestR,
     boot,
