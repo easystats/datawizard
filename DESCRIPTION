@@ -31,8 +31,6 @@ Imports:
     insight (>= 0.18.2),
     stats,
     utils
-Remotes:
-    nathaneastwood/poorman
 Suggests: 
     bayestestR,
     boot,
@@ -48,7 +46,7 @@ Suggests:
     lme4,
     mediation,
     parameters,
-    poorman,
+    poorman (>= 0.2.6),
     psych,
     readxl,
     readr,
