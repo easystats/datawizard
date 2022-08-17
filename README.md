@@ -1,12 +1,10 @@
 
-# `datawizard`: Easy Data Wrangling <img src='man/figures/logo.png' align="right" height="139" />
+# `datawizard`: Easy Data Wrangling and Statistical Transformations <img src='man/figures/logo.png' align="right" height="139" />
 
 [![publication](https://img.shields.io/badge/Cite-Unpublished-yellow)](https://github.com/easystats/datawizard/blob/master/inst/CITATION)
 [![downloads](http://cranlogs.r-pkg.org/badges/datawizard)](https://cran.r-project.org/package=datawizard)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/)
 [![status](https://tinyverse.netlify.com/badge/datawizard)](https://CRAN.R-project.org/package=datawizard)
-
-<img src='https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif' width="200" align = "right"/>
 
 <!-- ***:sparkles: Hockety pockety wockety wack, prepare this data forth and back*** -->
 <!-- ***Hockety pockety wockety wock, messy data is in shock*** -->
@@ -26,13 +24,19 @@ values, creating new columns, reshaping the dataset, or transforming
 some variables. `{datawizard}` provides easy to use tools to perform
 these common, critical, and sometimes tedious data preparation tasks.
 
+</br>
+
+<img src='https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif' width="300"/>
+
+</br>
+
 # Installation
 
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/datawizard)](https://cran.r-project.org/package=datawizard)
 [![insight status
 badge](https://easystats.r-universe.dev/badges/datawizard)](https://easystats.r-universe.dev)
 [![R
-check](https://github.com/easystats/datawizard/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/datawizard/actions)
+check](https://github.com/easystats/datawizard/workflows/R-check/badge.svg?branch=main)](https://github.com/easystats/datawizard/actions)
 
 | Type        | Source     | Command                                                                      |
 |-------------|------------|------------------------------------------------------------------------------|
@@ -49,17 +53,18 @@ citation("datawizard")
 
 To cite datawizard in publications use:
 
-  Makowski, Lüdecke, Patil, Ben-Shachar, & Wiernik (2021). datawizard:
-  Easy Data Wrangling. CRAN. Available from
+  Patil, Makowski, Ben-Shachar, Wiernik, Bacher, & Lüdecke (2022).
+  datawizard: An R Package for Easy Data Preparation and Statistical
+  Transformations. CRAN. Available from
   https://easystats.github.io/datawizard/
 
 A BibTeX entry for LaTeX users is
 
   @Article{,
-    title = {datawizard: Easy Data Wrangling},
-    author = {Dominique Makowski and Daniel Lüdecke and Indrajeet Patil and Mattan S. Ben-Shachar and Brenton M. Wiernik},
+    title = {datawizard: An R Package for Easy Data Preparation and Statistical Transformations},
+    author = {Indrajeet Patil and Dominique Makowski and Mattan S. Ben-Shachar and Brenton M. Wiernik and Etienne Bacher and Daniel Lüdecke},
     journal = {CRAN},
-    year = {2021},
+    year = {2022},
     note = {R package},
     url = {https://easystats.github.io/datawizard/},
   }
