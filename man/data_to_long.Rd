@@ -151,16 +151,15 @@ if (require("psych")) {
     rows_to = "Participant"
   )
 
-if(require("tidyr")) {
-  reshape_longer(
-    tidyr::who,
-    select = new_sp_m014:newrel_f65,
-    names_to = c("diagnosis", "gender", "age"),
-    names_pattern = "new_?(.*)_(.)(.*)",
-    values_to = "count"
-  )
-}
-
+  if (require("tidyr")) {
+    reshape_longer(
+      tidyr::who,
+      select = new_sp_m014:newrel_f65,
+      names_to = c("diagnosis", "gender", "age"),
+      names_pattern = "new_?(.*)_(.)(.*)",
+      values_to = "count"
+    )
+  }
 }
 }
 
