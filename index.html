@@ -120,19 +120,21 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header">
-<img src="logo.png" class="logo" alt=""><h1 id="datawizard-easy-data-wrangling-">
-<code>datawizard</code>: Easy Data Wrangling <a class="anchor" aria-label="anchor" href="#datawizard-easy-data-wrangling-"></a>
+<img src="logo.png" class="logo" alt=""><h1 id="datawizard-easy-data-wrangling-and-statistical-transformations-">
+<code>datawizard</code>: Easy Data Wrangling and Statistical Transformations <a class="anchor" aria-label="anchor" href="#datawizard-easy-data-wrangling-and-statistical-transformations-"></a>
 </h1>
 </div>
 
-<p><img src="https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif" width="200" align="right"></p>
 <!-- ***:sparkles: Hockety pockety wockety wack, prepare this data forth and back*** --><!-- ***Hockety pockety wockety wock, messy data is in shock*** --><!-- ***Hockety pockety wockety woss, you can cite i-it from JOSS*** <sup>(soon)</sup> --><!-- ***Hockety pockety wockety wass, datawizard saves your ass! :sparkles:*** --><p><a href="https://easystats.github.io/datawizard/">datawizard</a> is a lightweight package to easily manipulate, clean, transform, and prepare your data for analysis. It is part of the <a href="https://easystats.github.io/easystats/" class="external-link">easystats ecosystem</a>, a suite of R packages to deal with your entire statistical analysis, from cleaning the data to reporting the results.</p>
 <p>Most courses and tutorials about statistical modeling assume that you are working with a clean and tidy dataset. In practice, however, a major part of doing statistical modeling is preparing your data–cleaning up values, creating new columns, reshaping the dataset, or transforming some variables. <a href="https://easystats.github.io/datawizard/">datawizard</a> provides easy to use tools to perform these common, critical, and sometimes tedious data preparation tasks.</p>
+<p></p>
+<p><img src="https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif" width="300"></p>
+<p></p>
 </div>
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
-<p><a href="https://cran.r-project.org/package=datawizard" class="external-link"><img src="https://www.r-pkg.org/badges/version/datawizard" alt="CRAN_Status_Badge"></a> <a href="https://easystats.r-universe.dev" class="external-link"><img src="https://easystats.r-universe.dev/badges/datawizard" alt="insight status badge"></a> <a href="https://github.com/easystats/datawizard/actions" class="external-link"><img src="https://github.com/easystats/datawizard/workflows/R-check/badge.svg?branch=master" alt="R check"></a></p>
+<p><a href="https://cran.r-project.org/package=datawizard" class="external-link"><img src="https://www.r-pkg.org/badges/version/datawizard" alt="CRAN_Status_Badge"></a> <a href="https://easystats.r-universe.dev" class="external-link"><img src="https://easystats.r-universe.dev/badges/datawizard" alt="insight status badge"></a> <a href="https://github.com/easystats/datawizard/actions" class="external-link"><img src="https://github.com/easystats/datawizard/workflows/R-check/badge.svg?branch=main" alt="R check"></a></p>
 <table class="table">
 <colgroup>
 <col width="12%">
@@ -171,20 +173,21 @@
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>To cite datawizard <span class="cf">in</span> publications use<span class="sc">:</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  Makowski, Lüdecke, Patil, Ben<span class="sc">-</span>Shachar, <span class="sc">&amp;</span> <span class="fu">Wiernik</span> (<span class="dv">2021</span>). datawizard<span class="sc">:</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  Easy Data Wrangling. CRAN. Available from</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  https<span class="sc">:</span><span class="er">//</span>easystats.github.io<span class="sc">/</span>datawizard<span class="sc">/</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>A BibTeX entry <span class="cf">for</span> LaTeX users is</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="sc">@</span>Article{,</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    title <span class="ot">=</span> {datawizard<span class="sc">:</span> Easy Data Wrangling},</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    author <span class="ot">=</span> {Dominique Makowski and Daniel Lüdecke and Indrajeet Patil and Mattan S. Ben<span class="sc">-</span>Shachar and Brenton M. Wiernik},</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    journal <span class="ot">=</span> {CRAN},</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    year <span class="ot">=</span> {<span class="dv">2021</span>},</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    note <span class="ot">=</span> {R package},</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>easystats.github.io<span class="sc">/</span>datawizard<span class="sc">/</span>},</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  Patil, Makowski, Ben<span class="sc">-</span>Shachar, Wiernik, Bacher, <span class="sc">&amp;</span> Lüdecke (<span class="dv">2022</span>).</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  datawizard<span class="sc">:</span> An R Package <span class="cf">for</span> Easy Data Preparation and Statistical</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  Transformations. CRAN. Available from</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  https<span class="sc">:</span><span class="er">//</span>easystats.github.io<span class="sc">/</span>datawizard<span class="sc">/</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>A BibTeX entry <span class="cf">for</span> LaTeX users is</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="sc">@</span>Article{,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    title <span class="ot">=</span> {datawizard<span class="sc">:</span> An R Package <span class="cf">for</span> Easy Data Preparation and Statistical Transformations},</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    author <span class="ot">=</span> {Indrajeet Patil and Dominique Makowski and Mattan S. Ben<span class="sc">-</span>Shachar and Brenton M. Wiernik and Etienne Bacher and Daniel Lüdecke},</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    journal <span class="ot">=</span> {CRAN},</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    year <span class="ot">=</span> {<span class="dv">2022</span>},</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    note <span class="ot">=</span> {R package},</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>easystats.github.io<span class="sc">/</span>datawizard<span class="sc">/</span>},</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
