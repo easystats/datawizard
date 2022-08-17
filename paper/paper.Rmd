@@ -99,7 +99,7 @@ We will look at one example function that converts data in wide format to tidy/l
 
 ```{r}
 stocks <- data.frame(
-  time = as.Date('2009-01-01') + 0:4,
+  time = as.Date("2009-01-01") + 0:4,
   X = rnorm(5, 0, 1),
   Y = rnorm(5, 0, 2)
 )

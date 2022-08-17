@@ -1,14 +1,14 @@
 bibentry(
   bibtype="Article",
-  title="datawizard: Easy Data Wrangling",
-  author=c(person("Dominique", "Makowski"), person("Daniel", "Lüdecke"), person("Indrajeet", "Patil"), person("Mattan S.", "Ben-Shachar"), person("Brenton M.", "Wiernik")),
+  title="datawizard: An R Package for Easy Data Preparation and Statistical Transformations",
+  author=c(person("Indrajeet", "Patil"), person("Dominique", "Makowski"), person("Mattan S.", "Ben-Shachar"), person("Brenton M.", "Wiernik"), person("Etienne", "Bacher"), person("Daniel", "Lüdecke")),
   journal="CRAN",
-  year="2021",
+  year="2022",
   note="R package",
   url="https://easystats.github.io/datawizard/",
 
   textVersion =
-    paste("Makowski, Lüdecke, Patil, Ben-Shachar, & Wiernik (2021). datawizard: Easy Data Wrangling. CRAN.",
+    paste("Patil, Makowski, Ben-Shachar, Wiernik, Bacher, & Lüdecke (2022). datawizard: An R Package for Easy Data Preparation and Statistical Transformations. CRAN.",
           "Available from https://easystats.github.io/datawizard/"
     ),
   mheader = "To cite datawizard in publications use:"

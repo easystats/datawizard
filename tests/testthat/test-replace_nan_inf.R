@@ -15,12 +15,13 @@ test_that("extract from data frame", {
 
   expect_equal(
     replace_nan_inf(df),
-    structure(list(
-      x = c(1, NA, 5, NA, 2, NA),
-      y = c(3, NA, 4, NA, 6, 7)
-    ),
-    row.names = c(NA, -6L),
-    class = "data.frame"
+    structure(
+      list(
+        x = c(1, NA, 5, NA, 2, NA),
+        y = c(3, NA, 4, NA, 6, 7)
+      ),
+      row.names = c(NA, -6L),
+      class = "data.frame"
     )
   )
 })

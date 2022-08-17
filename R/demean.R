@@ -281,12 +281,13 @@ degroup <- function(x,
   not_found <- setdiff(select, colnames(x))
 
   if (length(not_found) && isTRUE(verbose)) {
-    insight::print_color(sprintf(
-      "%i variables were not found in the dataset: %s\n",
-      length(not_found),
-      paste0(not_found, collapse = ", ")
-    ),
-    color = "red"
+    insight::print_color(
+      sprintf(
+        "%i variables were not found in the dataset: %s\n",
+        length(not_found),
+        paste0(not_found, collapse = ", ")
+      ),
+      color = "red"
     )
   }
 
