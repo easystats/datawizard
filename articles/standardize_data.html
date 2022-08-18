@@ -131,14 +131,23 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>To make sense of their data and effects, scientists might want to standardize (Z-score) their variables. This makes the data unitless, expressed only in terms of deviation from an index of centrality (e.g., the mean or the median). However, aside from some benefits, standardization also comes with challenges and issues, that the scientist should be aware of.</p>
+<p>To make sense of their data and effects, scientists might want to
+standardize (Z-score) their variables. This makes the data unitless,
+expressed only in terms of deviation from an index of centrality (e.g.,
+the mean or the median). However, aside from some benefits,
+standardization also comes with challenges and issues, that the
+scientist should be aware of.</p>
 <div class="section level3">
 <h3 id="methods-of-standardization">Methods of Standardization<a class="anchor" aria-label="anchor" href="#methods-of-standardization"></a>
 </h3>
-<p>The <code>datawizard</code> package offers two methods of standardization via the <code><a href="../reference/standardize.html">standardize()</a></code> function:</p>
+<p>The <code>datawizard</code> package offers two methods of
+standardization via the <code><a href="../reference/standardize.html">standardize()</a></code> function:</p>
 <ul>
-<li><p><strong>Normal standardization</strong>: center around the <em>mean</em>, with <em>SD</em> units (default).</p></li>
-<li><p><strong>Robust standardization</strong>: center around the <em>median</em>, with <em>MAD</em> (median absolute deviation) units (<code>robust = TRUE</code>).</p></li>
+<li><p><strong>Normal standardization</strong>: center around the
+<em>mean</em>, with <em>SD</em> units (default).</p></li>
+<li><p><strong>Robust standardization</strong>: center around the
+<em>median</em>, with <em>MAD</em> (median absolute deviation) units
+(<code>robust = TRUE</code>).</p></li>
 </ul>
 <p>Let’s look at the following example:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -159,7 +168,8 @@
 <code class="sourceCode R"><span><span class="co"># let's use both methods of standardization</span></span>
 <span><span class="va">hardlyworking</span><span class="op">$</span><span class="va">xtra_hours_z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="va">hardlyworking</span><span class="op">$</span><span class="va">xtra_hours</span><span class="op">)</span></span>
 <span><span class="va">hardlyworking</span><span class="op">$</span><span class="va">xtra_hours_zr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="va">hardlyworking</span><span class="op">$</span><span class="va">xtra_hours</span>, robust <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>We can see that different methods give different central and variation values:</p>
+<p>We can see that different methods give different central and
+variation values:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
@@ -205,7 +215,8 @@
 </tr>
 </tbody>
 </table>
-<p><code><a href="../reference/standardize.html">standardize()</a></code> can also be used to standardize a full data frame - where each numeric variable is standardized separately:</p>
+<p><code><a href="../reference/standardize.html">standardize()</a></code> can also be used to standardize a full
+data frame - where each numeric variable is standardized separately:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hardlyworking_z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="va">hardlyworking</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -265,22 +276,44 @@
 </tr>
 </tbody>
 </table>
-<p>Weighted standardization is also supported via the <code>weights</code> argument, and factors can also be standardized (if you’re into that kind of thing) by setting <code>force = TRUE</code>, which converts factors to treatment-coded dummy variables before standardizing.</p>
+<p>Weighted standardization is also supported via the
+<code>weights</code> argument, and factors can also be standardized (if
+you’re into that kind of thing) by setting <code>force = TRUE</code>,
+which converts factors to treatment-coded dummy variables before
+standardizing.</p>
 </div>
 <div class="section level3">
 <h3 id="variable-wise-vs--participant-wise">Variable-wise <em>vs.</em> Participant-wise<a class="anchor" aria-label="anchor" href="#variable-wise-vs--participant-wise"></a>
 </h3>
-<p>Standardization is an important step and extra caution is required in <strong>repeated-measures designs</strong>, in which there are three ways of standardizing data:</p>
+<p>Standardization is an important step and extra caution is required in
+<strong>repeated-measures designs</strong>, in which there are three
+ways of standardizing data:</p>
 <ul>
-<li><p><strong>Variable-wise</strong>: The most common method. A simple scaling of each column.</p></li>
-<li><p><strong>Participant-wise</strong>: Variables are standardized “within” each participant, <em>i.e.</em>, for each participant, by the participant’s mean and SD.</p></li>
-<li><p><strong>Full</strong>: Participant-wise first and then re-standardizing variable-wise.</p></li>
+<li><p><strong>Variable-wise</strong>: The most common method. A simple
+scaling of each column.</p></li>
+<li><p><strong>Participant-wise</strong>: Variables are standardized
+“within” each participant, <em>i.e.</em>, for each participant, by the
+participant’s mean and SD.</p></li>
+<li><p><strong>Full</strong>: Participant-wise first and then
+re-standardizing variable-wise.</p></li>
 </ul>
-<p>Unfortunately, the method used is often not explicitly stated. This is an issue as these methods can generate important discrepancies (that can in turn contribute to the reproducibility crisis). Let’s investigate these 3 methods.</p>
+<p>Unfortunately, the method used is often not explicitly stated. This
+is an issue as these methods can generate important discrepancies (that
+can in turn contribute to the reproducibility crisis). Let’s investigate
+these 3 methods.</p>
 <div class="section level4">
 <h4 id="the-data">The Data<a class="anchor" aria-label="anchor" href="#the-data"></a>
 </h4>
-<p>We will take the <code>emotion</code> dataset in which participants were exposed to negative pictures and had to rate their emotions (<strong>valence</strong>) and the amount of memories associated with the picture (<strong>autobiographical link</strong>). One could make the hypothesis that for young participants with no context of war or violence, the most negative pictures (mutilations) are less related to memories than less negative pictures (involving for example car crashes or sick people). In other words, <strong>we expect a positive relationship between valence</strong> (with high values corresponding to less negativity) <strong>and autobiographical link</strong>.</p>
+<p>We will take the <code>emotion</code> dataset in which participants
+were exposed to negative pictures and had to rate their emotions
+(<strong>valence</strong>) and the amount of memories associated with
+the picture (<strong>autobiographical link</strong>). One could make the
+hypothesis that for young participants with no context of war or
+violence, the most negative pictures (mutilations) are less related to
+memories than less negative pictures (involving for example car crashes
+or sick people). In other words, <strong>we expect a positive
+relationship between valence</strong> (with high values corresponding to
+less negativity) <strong>and autobiographical link</strong>.</p>
 <p>Let’s have a look at the data, averaged by participants:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Download the 'emotion' dataset</span></span>
@@ -321,12 +354,15 @@
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 7S                   24       -<span style="color: #BB0000;">62.3</span>       39.7 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> 8S                   24       -<span style="color: #BB0000;">56.9</span>       32.7 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> 9S                   24       -<span style="color: #BB0000;">31.5</span>       52.7</span></span></code></pre>
-<p>As we can see from the means and SDs, there is a lot of variability <strong>between</strong> participants both in their means and their individual <em>within</em>-participant SD.</p>
+<p>As we can see from the means and SDs, there is a lot of variability
+<strong>between</strong> participants both in their means and their
+individual <em>within</em>-participant SD.</p>
 </div>
 <div class="section level4">
 <h4 id="effect-of-standardization">Effect of Standardization<a class="anchor" aria-label="anchor" href="#effect-of-standardization"></a>
 </h4>
-<p>We will create three data frames standardized with each of the three techniques.</p>
+<p>We will create three data frames standardized with each of the three
+techniques.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Z_VariableWise</span> <span class="op">&lt;-</span> <span class="va">emotion</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -340,12 +376,14 @@
 <span>  <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/standardize.html">standardize</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>Let’s see how these three standardization techniques affected the <strong>Valence</strong> variable.</p>
+<p>Let’s see how these three standardization techniques affected the
+<strong>Valence</strong> variable.</p>
 </div>
 <div class="section level4">
 <h4 id="across-participants">Across Participants<a class="anchor" aria-label="anchor" href="#across-participants"></a>
 </h4>
-<p>We can calculate the mean and SD of <em>Valence</em> across all participants:</p>
+<p>We can calculate the mean and SD of <em>Valence</em> across all
+participants:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a convenient function to print</span></span>
 <span><span class="va">summarise_Subjective_Valence</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
@@ -388,7 +426,8 @@
 </tr>
 </tbody>
 </table>
-<p>The <strong>means</strong> and the <strong>SD</strong> appear as fairly similar (0 and 1)…</p>
+<p>The <strong>means</strong> and the <strong>SD</strong> appear as
+fairly similar (0 and 1)…</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/see/" class="external-link">see</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
@@ -411,7 +450,8 @@
 <div class="section level4">
 <h4 id="at-the-participant-level">At the Participant Level<a class="anchor" aria-label="anchor" href="#at-the-participant-level"></a>
 </h4>
-<p>However, we can also look at what happens in the participant level. Let’s look at the first 5 participants:</p>
+<p>However, we can also look at what happens in the participant level.
+Let’s look at the first 5 participants:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create convenient function</span></span>
 <span><span class="va">print_participants</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
@@ -533,12 +573,15 @@
 </tr>
 </tbody>
 </table>
-<p>Seems like <em>full</em> and <em>participant-wise</em> standardization give similar results, but different ones than <em>variable-wise</em> standardization.</p>
+<p>Seems like <em>full</em> and <em>participant-wise</em>
+standardization give similar results, but different ones than
+<em>variable-wise</em> standardization.</p>
 </div>
 <div class="section level4">
 <h4 id="compare">Compare<a class="anchor" aria-label="anchor" href="#compare"></a>
 </h4>
-<p>Let’s do a <strong>correlation</strong> between the <strong>variable-wise and participant-wise methods</strong>.</p>
+<p>Let’s do a <strong>correlation</strong> between the
+<strong>variable-wise and participant-wise methods</strong>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">cor.test</a></span><span class="op">(</span></span>
 <span>  <span class="va">Z_VariableWise</span><span class="op">$</span><span class="va">Subjective_Valence</span>,</span>
@@ -557,8 +600,13 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"r = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">r</span><span class="op">$</span><span class="va">estimate</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">see</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="standardize_data_files/figure-html/unnamed-chunk-16-1.png" width="2100" style="display: block; margin: auto;"></p>
-<p>While the three standardization methods roughly present the same characteristics at a general level (mean 0 and SD 1) and a similar distribution, their values are not exactly the same!</p>
-<p>Let’s now answer the original question by investigating the <strong>linear relationship between valence and autobiographical link</strong>. We can do this by running a mixed-effects model with participants entered as random effects.</p>
+<p>While the three standardization methods roughly present the same
+characteristics at a general level (mean 0 and SD 1) and a similar
+distribution, their values are not exactly the same!</p>
+<p>Let’s now answer the original question by investigating the
+<strong>linear relationship between valence and autobiographical
+link</strong>. We can do this by running a mixed-effects model with
+participants entered as random effects.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span></span>
 <span><span class="va">m_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span></span>
@@ -568,7 +616,8 @@
 <span><span class="va">m_VariableWise</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">m_raw</span>, data <span class="op">=</span> <span class="va">Z_VariableWise</span><span class="op">)</span></span>
 <span><span class="va">m_ParticipantWise</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">m_raw</span>, data <span class="op">=</span> <span class="va">Z_ParticipantWise</span><span class="op">)</span></span>
 <span><span class="va">m_Full</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html" class="external-link">update</a></span><span class="op">(</span><span class="va">m_raw</span>, data <span class="op">=</span> <span class="va">Z_Full</span><span class="op">)</span></span></code></pre></div>
-<p>We can extract the parameters of interest from each model, and find:</p>
+<p>We can extract the parameters of interest from each model, and
+find:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Convenient function</span></span>
 <span><span class="va">get_par</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">{</span></span>
@@ -613,19 +662,33 @@
 <span><span class="co">#&gt; m_VariableWise    |        0.91</span></span>
 <span><span class="co">#&gt; m_ParticipantWise |        0.98</span></span>
 <span><span class="co">#&gt; m_Full            |        1.00</span></span></code></pre>
-<p>As we can see, <strong>variable-wise</strong> standardization only affects <strong>the coefficient</strong> (which is expected, as it changes the unit), but not the test statistic or statistical significance. However, using <strong>participant-wise</strong> standardization <em>does</em> affect the coefficient <strong>and</strong> the significance.</p>
-<p><strong>No method is better or more justified, and the choice depends on the specific case, context, data and goal.</strong></p>
+<p>As we can see, <strong>variable-wise</strong> standardization only
+affects <strong>the coefficient</strong> (which is expected, as it
+changes the unit), but not the test statistic or statistical
+significance. However, using <strong>participant-wise</strong>
+standardization <em>does</em> affect the coefficient
+<strong>and</strong> the significance.</p>
+<p><strong>No method is better or more justified, and the choice depends
+on the specific case, context, data and goal.</strong></p>
 </div>
 <div class="section level4">
 <h4 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h4>
 <ol style="list-style-type: decimal">
-<li><p><strong>Standardization can be useful in <em>some</em> cases and should be justified</strong>.</p></li>
-<li><p><strong>Variable and Participant-wise standardization methods <em>appear</em> to produce similar data</strong>.</p></li>
-<li><p><strong>Variable and Participant-wise standardization can lead to different results</strong>.</p></li>
-<li><p><strong>The chosen method can strongly influence the results and should therefore be explicitly stated and justified to enhance reproducibility of results</strong>.</p></li>
+<li><p><strong>Standardization can be useful in <em>some</em> cases and
+should be justified</strong>.</p></li>
+<li><p><strong>Variable and Participant-wise standardization methods
+<em>appear</em> to produce similar data</strong>.</p></li>
+<li><p><strong>Variable and Participant-wise standardization can lead to
+different results</strong>.</p></li>
+<li><p><strong>The chosen method can strongly influence the results and
+should therefore be explicitly stated and justified to enhance
+reproducibility of results</strong>.</p></li>
 </ol>
-<p>We showed here yet another way of <strong>sneakily tweaking the data</strong> that can change the results. To prevent its use as a bad practice, we can only highlight the importance of open data, open analysis/scripts, and preregistration.</p>
+<p>We showed here yet another way of <strong>sneakily tweaking the
+data</strong> that can change the results. To prevent its use as a bad
+practice, we can only highlight the importance of open data, open
+analysis/scripts, and preregistration.</p>
 </div>
 </div>
 </div>
@@ -637,7 +700,8 @@
 <code><a href="../reference/demean.html">datawizard::demean()</a></code>: <a href="https://easystats.github.io/datawizard/reference/demean.html" class="uri">https://easystats.github.io/datawizard/reference/demean.html</a>
 </li>
 <li>
-<code>standardize_parameters(method = "pseudo")</code> for mixed-effects models <a href="https://easystats.github.io/parameters/articles/model_parameters_standardized.html" class="external-link uri">https://easystats.github.io/parameters/articles/model_parameters_standardized.html</a>
+<code>standardize_parameters(method = "pseudo")</code> for
+mixed-effects models <a href="https://easystats.github.io/parameters/articles/model_parameters_standardized.html" class="external-link uri">https://easystats.github.io/parameters/articles/model_parameters_standardized.html</a>
 </li>
 </ul>
 </div>

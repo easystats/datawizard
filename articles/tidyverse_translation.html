@@ -139,9 +139,32 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p><a href="https://easystats.github.io/datawizard/">datawizard</a> package aims to make basic data wrangling easier than with base R. The data wrangling workflow it supports is similar to the one supported by the tidyverse package combination of <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> and <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a>. However, one of its main features is that it has a very few dependencies: <code>{stats}</code> and <code>{utils}</code> (included in base R) and <a href="https://easystats.github.io/insight/" class="external-link">insight</a>, which is the core package of the <em>easystats</em> ecosystem. This package grew organically to simultaneously satisfy the “0 non-base hard dependency” principle of <em>easystats</em> and the data wrangling needs of the constituent packages in this ecosystem.</p>
-<p>One drawback of this genesis is that not all features of the <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a> packages are supported since only features that were necessary for <em>easystats</em> ecosystem have been implemented. Some of these missing features (such as <code>summarize</code> or the pipe operator <code>%&gt;%</code>) are made available in other dependency-free packages, such as <a href="https://github.com/nathaneastwood/poorman/" class="external-link"><code>{poorman}</code></a>. It is also important to note that <a href="https://easystats.github.io/datawizard/">datawizard</a> was designed to avoid namespace collisions with <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a> packages.</p>
-<p>In this article, we will see how to go through basic data wrangling steps with <a href="https://easystats.github.io/datawizard/">datawizard</a>. We will also compare it to the <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a> syntax for achieving the same. This way, if you decide to make the switch, you can easily find the translations here. This vignette is largely inspired from <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a>’s <a href="https://dplyr.tidyverse.org/articles/dplyr.html" class="external-link">Getting started vignette</a>.</p>
+<p><a href="https://easystats.github.io/datawizard/">datawizard</a> package aims to make basic data wrangling
+easier than with base R. The data wrangling workflow it supports is
+similar to the one supported by the tidyverse package combination of
+<a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> and <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a>. However, one of its main
+features is that it has a very few dependencies: <code>{stats}</code>
+and <code>{utils}</code> (included in base R) and
+<a href="https://easystats.github.io/insight/" class="external-link">insight</a>, which is the core package of the
+<em>easystats</em> ecosystem. This package grew organically to
+simultaneously satisfy the “0 non-base hard dependency” principle of
+<em>easystats</em> and the data wrangling needs of the constituent
+packages in this ecosystem.</p>
+<p>One drawback of this genesis is that not all features of the
+<a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a> packages are supported since only features that
+were necessary for <em>easystats</em> ecosystem have been implemented.
+Some of these missing features (such as <code>summarize</code> or the
+pipe operator <code>%&gt;%</code>) are made available in other
+dependency-free packages, such as <a href="https://github.com/nathaneastwood/poorman/" class="external-link"><code>{poorman}</code></a>.
+It is also important to note that <a href="https://easystats.github.io/datawizard/">datawizard</a> was designed
+to avoid namespace collisions with <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a>
+packages.</p>
+<p>In this article, we will see how to go through basic data wrangling
+steps with <a href="https://easystats.github.io/datawizard/">datawizard</a>. We will also compare it to the
+<a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a> syntax for achieving the same. This way, if you
+decide to make the switch, you can easily find the translations here.
+This vignette is largely inspired from <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a>’s <a href="https://dplyr.tidyverse.org/articles/dplyr.html" class="external-link">Getting started
+vignette</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
@@ -150,8 +173,14 @@
 <div class="section level2">
 <h2 id="workhorses">Workhorses<a class="anchor" aria-label="anchor" href="#workhorses"></a>
 </h2>
-<p>Before we look at their <em>tidyverse</em> equivalents, we can first have a look at <a href="https://easystats.github.io/datawizard/">datawizard</a>’s key functions for data wrangling:</p>
+<p>Before we look at their <em>tidyverse</em> equivalents, we can first
+have a look at <a href="https://easystats.github.io/datawizard/">datawizard</a>’s key functions for data
+wrangling:</p>
 <table class="table">
+<colgroup>
+<col width="25%">
+<col width="74%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">Function</th>
 <th align="left">Operation</th>
@@ -159,15 +188,18 @@
 <tbody>
 <tr class="odd">
 <td align="left"><code><a href="../reference/data_match.html">data_filter()</a></code></td>
-<td align="left"><a href="#filtering">to select only certain observations</a></td>
+<td align="left"><a href="#filtering">to select only certain
+observations</a></td>
 </tr>
 <tr class="even">
 <td align="left"><code><a href="../reference/find_columns.html">data_select()</a></code></td>
-<td align="left"><a href="#selecting">to select only a few variables</a></td>
+<td align="left"><a href="#selecting">to select only a few
+variables</a></td>
 </tr>
 <tr class="odd">
 <td align="left"><code><a href="../reference/data_extract.html">data_extract()</a></code></td>
-<td align="left"><a href="#extracting">to extract a single variable</a></td>
+<td align="left"><a href="#extracting">to extract a single
+variable</a></td>
 </tr>
 <tr class="even">
 <td align="left"><code><a href="../reference/data_rename.html">data_rename()</a></code></td>
@@ -179,11 +211,13 @@
 </tr>
 <tr class="even">
 <td align="left"><code><a href="../reference/data_to_long.html">data_to_long()</a></code></td>
-<td align="left"><a href="#reshaping">to convert data from wide to long</a></td>
+<td align="left"><a href="#reshaping">to convert data from wide to
+long</a></td>
 </tr>
 <tr class="odd">
 <td align="left"><code><a href="../reference/data_to_wide.html">data_to_wide()</a></code></td>
-<td align="left"><a href="#reshaping">to convert data from long to wide</a></td>
+<td align="left"><a href="#reshaping">to convert data from long to
+wide</a></td>
 </tr>
 <tr class="even">
 <td align="left"><code><a href="../reference/data_merge.html">data_join()</a></code></td>
@@ -191,13 +225,21 @@
 </tr>
 </tbody>
 </table>
-<p>Note that there are a few functions in <a href="https://easystats.github.io/datawizard/">datawizard</a> that have no strict equivalent in <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> or <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a> (e.g <code><a href="../reference/data_rotate.html">data_rotate()</a></code>), and so we won’t discuss them in the next section.</p>
+<p>Note that there are a few functions in <a href="https://easystats.github.io/datawizard/">datawizard</a> that
+have no strict equivalent in <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> or
+<a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a> (e.g <code><a href="../reference/data_rotate.html">data_rotate()</a></code>), and so we won’t
+discuss them in the next section.</p>
 </div>
 <div class="section level2">
 <h2 id="equivalence-with-dplyr-tidyr">Equivalence with <code>{dplyr}</code> / <code>{tidyr}</code><a class="anchor" aria-label="anchor" href="#equivalence-with-dplyr-tidyr"></a>
 </h2>
-<p>Before we look at them individually, let’s first have a look at the summary table of this equivalence.</p>
+<p>Before we look at them individually, let’s first have a look at the
+summary table of this equivalence.</p>
 <table class="table">
+<colgroup>
+<col width="20%">
+<col width="79%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">Function</th>
 <th align="left">Tidyverse equivalent(s)</th>
@@ -234,12 +276,14 @@
 <tr class="even">
 <td align="left"><code><a href="../reference/data_merge.html">data_join()</a></code></td>
 <td align="left">
-<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::inner_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::right_join()</a></code>,</td>
+<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::inner_join()</a></code>,
+<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::left_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::right_join()</a></code>,</td>
 </tr>
 <tr class="odd">
 <td align="left"></td>
 <td align="left">
-<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::full_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html" class="external-link">dplyr::anti_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html" class="external-link">dplyr::semi_join()</a></code>
+<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr::full_join()</a></code>,
+<code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html" class="external-link">dplyr::anti_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html" class="external-link">dplyr::semi_join()</a></code>
 </td>
 </tr>
 </tbody>
@@ -247,7 +291,11 @@
 <div class="section level3">
 <h3 id="filtering">Filtering<a class="anchor" aria-label="anchor" href="#filtering"></a>
 </h3>
-<p><code><a href="../reference/data_match.html">data_filter()</a></code> is a wrapper around <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code>. Therefore, if you want to have several filtering conditions, you need to use <code>&amp;</code>. Separating the conditions with a comma (as in <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter()</a></code>) will <strong>not</strong> work; it will only apply the first condition.</p>
+<p><code><a href="../reference/data_match.html">data_filter()</a></code> is a wrapper around <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code>.
+Therefore, if you want to have several filtering conditions, you need to
+use <code>&amp;</code>. Separating the conditions with a comma (as in
+<code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter()</a></code>) will <strong>not</strong> work; it will
+only apply the first condition.</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -285,7 +333,12 @@
 <div class="section level3">
 <h3 id="selecting">Selecting<a class="anchor" aria-label="anchor" href="#selecting"></a>
 </h3>
-<p><code><a href="../reference/find_columns.html">data_select()</a></code> is the equivalent of <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">dplyr::select()</a></code>. The main difference between these two functions is that <code><a href="../reference/find_columns.html">data_select()</a></code> uses two arguments (<code>select</code> and <code>exclude</code>) and requires quoted column names if we want to select several variables, while <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">dplyr::select()</a></code> accepts any unquoted column names.</p>
+<p><code><a href="../reference/find_columns.html">data_select()</a></code> is the equivalent of
+<code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">dplyr::select()</a></code>. The main difference between these two
+functions is that <code><a href="../reference/find_columns.html">data_select()</a></code> uses two arguments
+(<code>select</code> and <code>exclude</code>) and requires quoted
+column names if we want to select several variables, while
+<code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">dplyr::select()</a></code> accepts any unquoted column names.</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -409,12 +462,16 @@ here and quoting them won't work. Should we comment on that? -->
 <span><span class="co">## <span style="color: #BCBCBC;">4</span>    202   136       41.9</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">5</span>    150    49       19  </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">6</span>    178   120       52</span></span></code></pre>
-<p>You can find a list of all the select helpers with <code><a href="../reference/find_columns.html">?data_select</a></code>.</p>
+<p>You can find a list of all the select helpers with
+<code><a href="../reference/find_columns.html">?data_select</a></code>.</p>
 </div>
 <div class="section level3">
 <h3 id="extracting">Extracting<a class="anchor" aria-label="anchor" href="#extracting"></a>
 </h3>
-<p>Although we mostly work on dataframes, it is sometimes useful to extract a single column as a vector. This can be done with <code><a href="../reference/data_extract.html">data_extract()</a></code>, which reproduces the behavior of <code><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">dplyr::pull()</a></code>:</p>
+<p>Although we mostly work on dataframes, it is sometimes useful to
+extract a single column as a vector. This can be done with
+<code><a href="../reference/data_extract.html">data_extract()</a></code>, which reproduces the behavior of
+<code><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">dplyr::pull()</a></code>:</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
@@ -430,7 +487,9 @@ here and quoting them won't work. Should we comment on that? -->
 </div>
 </div>
 <pre><code><span><span class="co">## [1] "masculine" "masculine" "masculine" "masculine" "feminine"  "masculine"</span></span></code></pre>
-<p>We can also specify several variables in <code>select</code>. In this case, <code><a href="../reference/data_extract.html">data_extract()</a></code> is equivalent to <code><a href="../reference/find_columns.html">data_select()</a></code>:</p>
+<p>We can also specify several variables in <code>select</code>. In this
+case, <code><a href="../reference/data_extract.html">data_extract()</a></code> is equivalent to
+<code><a href="../reference/find_columns.html">data_select()</a></code>:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_extract.html">data_extract</a></span><span class="op">(</span>select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"color"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -447,7 +506,12 @@ here and quoting them won't work. Should we comment on that? -->
 <div class="section level3">
 <h3 id="renaming">Renaming<a class="anchor" aria-label="anchor" href="#renaming"></a>
 </h3>
-<p><code><a href="../reference/data_rename.html">data_rename()</a></code> is the equivalent of <code><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">dplyr::rename()</a></code> but the syntax between the two is different. While <code><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">dplyr::rename()</a></code> takes new-old pairs of column names, <code><a href="../reference/data_rename.html">data_rename()</a></code> requires a vector of column names to rename, and then a vector of new names for these columns that must be of the same length.</p>
+<p><code><a href="../reference/data_rename.html">data_rename()</a></code> is the equivalent of
+<code><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">dplyr::rename()</a></code> but the syntax between the two is
+different. While <code><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">dplyr::rename()</a></code> takes new-old pairs of
+column names, <code><a href="../reference/data_rename.html">data_rename()</a></code> requires a vector of column
+names to rename, and then a vector of new names for these columns that
+must be of the same length.</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
@@ -481,7 +545,9 @@ here and quoting them won't work. Should we comment on that? -->
 <span><span class="co">## <span style="color: #949494;">#   starships &lt;list&gt;, and abbreviated variable names ¹​`Hair Color`,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
-<p>The way <code><a href="../reference/data_rename.html">data_rename()</a></code> is designed makes it easy to apply the same modifications to a vector of column names. For example, we can remove underscores and use TitleCase with the following code:</p>
+<p>The way <code><a href="../reference/data_rename.html">data_rename()</a></code> is designed makes it easy to apply
+the same modifications to a vector of column names. For example, we can
+remove underscores and use TitleCase with the following code:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">to_rename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">starwars</span><span class="op">)</span></span>
 <span></span>
@@ -503,7 +569,11 @@ here and quoting them won't work. Should we comment on that? -->
 <span><span class="co">## <span style="color: #949494;">#   Starships &lt;list&gt;, and abbreviated variable names ¹​`Hair Color`,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   ²​`Skin Color`, ³​`Eye Color`, ⁴​`Birth Year`, ⁵​Homeworld</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
-<p>It is also possible to add a prefix or a suffix to all or a subset of variables with <code><a href="../reference/data_rename.html">data_addprefix()</a></code> and <code><a href="../reference/data_rename.html">data_addsuffix()</a></code>. The argument <code>select</code> accepts all select helpers that we saw above with <code><a href="../reference/find_columns.html">data_select()</a></code>:</p>
+<p>It is also possible to add a prefix or a suffix to all or a subset of
+variables with <code><a href="../reference/data_rename.html">data_addprefix()</a></code> and
+<code><a href="../reference/data_rename.html">data_addsuffix()</a></code>. The argument <code>select</code> accepts
+all select helpers that we saw above with
+<code><a href="../reference/find_columns.html">data_select()</a></code>:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_rename.html">data_addprefix</a></span><span class="op">(</span></span>
@@ -532,7 +602,16 @@ here and quoting them won't work. Should we comment on that? -->
 <div class="section level3">
 <h3 id="relocating">Relocating<a class="anchor" aria-label="anchor" href="#relocating"></a>
 </h3>
-<p>Sometimes, we want to relocate one or a small subset of columns in the dataset. Rather than typing many names in <code><a href="../reference/find_columns.html">data_select()</a></code>, we can use <code><a href="../reference/data_relocate.html">data_relocate()</a></code>, which is the equivalent of <code><a href="https://dplyr.tidyverse.org/reference/relocate.html" class="external-link">dplyr::relocate()</a></code>. Just like <code><a href="../reference/find_columns.html">data_select()</a></code>, we can specify a list of variables we want to relocate with <code>select</code> and <code>exclude</code>. Then, the arguments <code>before</code> and <code>after</code><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;Note that we use &lt;code&gt;before&lt;/code&gt; and &lt;code&gt;after&lt;/code&gt; whereas &lt;code&gt;&lt;a href="https://dplyr.tidyverse.org/reference/relocate.html" class="external-link"&gt;dplyr::relocate()&lt;/a&gt;&lt;/code&gt; uses &lt;code&gt;.before&lt;/code&gt; and &lt;code&gt;.after&lt;/code&gt;.&lt;/p&gt;'><sup>1</sup></a> specify where the selected columns should be relocated:</p>
+<p>Sometimes, we want to relocate one or a small subset of columns in
+the dataset. Rather than typing many names in
+<code><a href="../reference/find_columns.html">data_select()</a></code>, we can use <code><a href="../reference/data_relocate.html">data_relocate()</a></code>,
+which is the equivalent of <code><a href="https://dplyr.tidyverse.org/reference/relocate.html" class="external-link">dplyr::relocate()</a></code>. Just like
+<code><a href="../reference/find_columns.html">data_select()</a></code>, we can specify a list of variables we want
+to relocate with <code>select</code> and <code>exclude</code>. Then, the
+arguments <code>before</code> and <code>after</code><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;Note that we use &lt;code&gt;before&lt;/code&gt; and
+&lt;code&gt;after&lt;/code&gt; whereas &lt;code&gt;&lt;a href="https://dplyr.tidyverse.org/reference/relocate.html" class="external-link"&gt;dplyr::relocate()&lt;/a&gt;&lt;/code&gt; uses
+&lt;code&gt;.before&lt;/code&gt; and &lt;code&gt;.after&lt;/code&gt;.&lt;/p&gt;'><sup>1</sup></a> specify where the
+selected columns should be relocated:</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
@@ -560,7 +639,11 @@ here and quoting them won't work. Should we comment on that? -->
 <span><span class="co">## <span style="color: #949494;">#   starships &lt;list&gt;, and abbreviated variable names ¹​homeworld, ²​hair_color,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   ³​skin_color, ⁴​eye_color, ⁵​birth_year</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
-<p>In addition to column names, <code>before</code> and <code>after</code> accept column indices. Finally, one can use <code>before = -1</code> to relocate the selected columns just before the last column, or <code>after = -1</code> to relocate them after the last column.</p>
+<p>In addition to column names, <code>before</code> and
+<code>after</code> accept column indices. Finally, one can use
+<code>before = -1</code> to relocate the selected columns just before
+the last column, or <code>after = -1</code> to relocate them after the
+last column.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -585,8 +668,15 @@ here and quoting them won't work. Should we comment on that? -->
 <div class="section level4">
 <h4 id="longer">Longer<a class="anchor" aria-label="anchor" href="#longer"></a>
 </h4>
-<p>Reshaping data from wide to long or from long to wide format can be done with <code><a href="../reference/data_to_long.html">data_to_long()</a></code> and <code><a href="../reference/data_to_wide.html">data_to_wide()</a></code>. These functions were designed to match <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">tidyr::pivot_longer()</a></code> and <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">tidyr::pivot_wider()</a></code> arguments, so that the only thing to do is to change the function name. However, not all of <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">tidyr::pivot_longer()</a></code> and <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">tidyr::pivot_wider()</a></code> features are available yet.</p>
-<p>We will use the <code>relig_income</code> dataset, as in the <a href="https://tidyr.tidyverse.org/articles/pivot.html" class="external-link"><code>{tidyr}</code> vignette</a>.</p>
+<p>Reshaping data from wide to long or from long to wide format can be
+done with <code><a href="../reference/data_to_long.html">data_to_long()</a></code> and <code><a href="../reference/data_to_wide.html">data_to_wide()</a></code>.
+These functions were designed to match
+<code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">tidyr::pivot_longer()</a></code> and <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">tidyr::pivot_wider()</a></code>
+arguments, so that the only thing to do is to change the function name.
+However, not all of <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">tidyr::pivot_longer()</a></code> and
+<code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">tidyr::pivot_wider()</a></code> features are available yet.</p>
+<p>We will use the <code>relig_income</code> dataset, as in the <a href="https://tidyr.tidyverse.org/articles/pivot.html" class="external-link"><code>{tidyr}</code>
+vignette</a>.</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">relig_income</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 18 × 11</span></span></span>
@@ -614,7 +704,13 @@ here and quoting them won't work. Should we comment on that? -->
 <span><span class="co">## <span style="color: #949494;">#   abbreviated variable names ¹​`$10-20k`, ²​`$20-30k`, ³​`$30-40k`, ⁴​`$40-50k`,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   ⁵​`$50-75k`, ⁶​`$75-100k`, ⁷​`$100-150k`</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
-<p>We would like to reshape this dataset to have 3 columns: religion, count, and income. The column “religion” doesn’t need to change, so we exclude it with <code>-religion</code>. Then, each remaining column corresponds to an income category. Therefore, we want to move all these column names to a single column called “income”. Finally, the values corresponding to each of these columns will be reshaped to be in a single new column, called “count”.</p>
+<p>We would like to reshape this dataset to have 3 columns: religion,
+count, and income. The column “religion” doesn’t need to change, so we
+exclude it with <code>-religion</code>. Then, each remaining column
+corresponds to an income category. Therefore, we want to move all these
+column names to a single column called “income”. Finally, the values
+corresponding to each of these columns will be reshaped to be in a
+single new column, called “count”.</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
@@ -652,7 +748,8 @@ here and quoting them won't work. Should we comment on that? -->
 <span><span class="co">## <span style="color: #BCBCBC;">10</span> Agnostic Don't know/refused    96</span></span>
 <span><span class="co">## <span style="color: #949494;"># … with 170 more rows</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows</span></span></span></code></pre>
-<p>To explore a bit more the arguments of <code><a href="../reference/data_to_long.html">data_to_long()</a></code>, we will use another dataset: the <code>billboard</code> dataset.</p>
+<p>To explore a bit more the arguments of <code><a href="../reference/data_to_long.html">data_to_long()</a></code>,
+we will use another dataset: the <code>billboard</code> dataset.</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">billboard</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 317 × 79</span></span></span>
@@ -719,7 +816,9 @@ here and quoting them won't work. Should we comment on that? -->
 <div class="section level4">
 <h4 id="wider">Wider<a class="anchor" aria-label="anchor" href="#wider"></a>
 </h4>
-<p>Once again, we use an example in the <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a> vignette to show how close <code><a href="../reference/data_to_wide.html">data_to_wide()</a></code> and <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider()</a></code> are:</p>
+<p>Once again, we use an example in the <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a> vignette to
+show how close <code><a href="../reference/data_to_wide.html">data_to_wide()</a></code> and
+<code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider()</a></code> are:</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fish_encounters</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 114 × 3</span></span></span>
@@ -787,8 +886,14 @@ here and quoting them won't work. Should we comment on that? -->
 <h3 id="joining">Joining<a class="anchor" aria-label="anchor" href="#joining"></a>
 </h3>
 <!-- explain a bit more the args of data_join -->
-<p>In <a href="https://easystats.github.io/datawizard/">datawizard</a>, joining datasets is done with <code><a href="../reference/data_merge.html">data_join()</a></code> (or its alias <code><a href="../reference/data_merge.html">data_merge()</a></code>). Contrary to <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a>, this unique function takes care of all types of join, which are then specified inside the function with the argument <code>join</code> (by default, <code>join = "left"</code>).</p>
-<p>Below, we show how to perform the four most common joins: full, left, right and inner. We will use the datasets <code>band_members</code>and <code>band_instruments</code> provided by <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a>:</p>
+<p>In <a href="https://easystats.github.io/datawizard/">datawizard</a>, joining datasets is done with
+<code><a href="../reference/data_merge.html">data_join()</a></code> (or its alias <code><a href="../reference/data_merge.html">data_merge()</a></code>).
+Contrary to <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a>, this unique function takes care of all
+types of join, which are then specified inside the function with the
+argument <code>join</code> (by default, <code>join = "left"</code>).</p>
+<p>Below, we show how to perform the four most common joins: full, left,
+right and inner. We will use the datasets <code>band_members</code>and
+<code>band_instruments</code> provided by <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a>:</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
@@ -908,11 +1013,15 @@ here and quoting them won't work. Should we comment on that? -->
 <div class="section level2">
 <h2 id="other-useful-functions">Other useful functions<a class="anchor" aria-label="anchor" href="#other-useful-functions"></a>
 </h2>
-<p><a href="https://easystats.github.io/datawizard/">datawizard</a> contains other functions that are not necessarily included in <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> or <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a>. Some of them are inspired from the package <code>janitor</code>.</p>
+<p><a href="https://easystats.github.io/datawizard/">datawizard</a> contains other functions that are not
+necessarily included in <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> or <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a>.
+Some of them are inspired from the package <code>janitor</code>.</p>
 <div class="section level3">
 <h3 id="work-with-rownames">Work with rownames<a class="anchor" aria-label="anchor" href="#work-with-rownames"></a>
 </h3>
-<p>We can convert a column in rownames and move rownames to a new column with <code><a href="../reference/rownames.html">rownames_as_column()</a></code> and <code><a href="../reference/rownames.html">column_as_rownames()</a></code>:</p>
+<p>We can convert a column in rownames and move rownames to a new column
+with <code><a href="../reference/rownames.html">rownames_as_column()</a></code> and
+<code><a href="../reference/rownames.html">column_as_rownames()</a></code>:</p>
 <div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
 <span><span class="va">mtcars</span></span></code></pre></div>
@@ -949,7 +1058,9 @@ here and quoting them won't work. Should we comment on that? -->
 <div class="section level3">
 <h3 id="work-with-column-names">Work with column names<a class="anchor" aria-label="anchor" href="#work-with-column-names"></a>
 </h3>
-<p>When dealing with messy data, it is sometimes useful to use a row as column names, and vice versa. This can be done with <code><a href="../reference/colnames.html">row_to_colnames()</a></code> and <code><a href="../reference/colnames.html">colnames_to_row()</a></code>.</p>
+<p>When dealing with messy data, it is sometimes useful to use a row as
+column names, and vice versa. This can be done with
+<code><a href="../reference/colnames.html">row_to_colnames()</a></code> and <code><a href="../reference/colnames.html">colnames_to_row()</a></code>.</p>
 <div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  X_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="st">"Title"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>,</span>

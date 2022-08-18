@@ -87,7 +87,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.1" id="datawizard-051">datawizard 0.5.1<a class="anchor" aria-label="anchor" href="#datawizard-051"></a></h2><p class="text-muted">CRAN release: 2022-08-17</p>
-<ul><li>Fixes failing tests due to <a href="https://nathaneastwood.github.io/poorman/" class="external-link">poorman</a> update.</li></ul></div>
+<ul><li>Fixes failing tests due to <a href="https://nathaneastwood.github.io/poorman/" class="external-link">poorman</a> update.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.0" id="datawizard-050">datawizard 0.5.0<a class="anchor" aria-label="anchor" href="#datawizard-050"></a></h2><p class="text-muted">CRAN release: 2022-08-07</p>
 <p>MAJOR CHANGES</p>
@@ -133,12 +134,15 @@
 <li><p>Functions like <code><a href="../reference/center.html">center()</a></code>, <code><a href="../reference/normalize.html">normalize()</a></code> or <code><a href="../reference/standardize.html">standardize()</a></code> no longer fail when data contains infinite values (<code>Inf</code>).</p></li>
 </ul><p>NEW FUNCTIONS</p>
 <ul><li>
-<code><a href="../reference/colnames.html">row_to_colnames()</a></code> and <code><a href="../reference/colnames.html">colnames_to_row()</a></code> to move a row to column names, and column names to row (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/169" class="external-link">#169</a>).</li></ul><p>BUG FIXES</p>
-<ul><li>Fixed wrong column names in <code><a href="../reference/data_to_wide.html">data_to_wide()</a></code> (<a href="https://github.com/easystats/datawizard/issues/173" class="external-link">#173</a>).</li></ul></div>
+<code><a href="../reference/colnames.html">row_to_colnames()</a></code> and <code><a href="../reference/colnames.html">colnames_to_row()</a></code> to move a row to column names, and column names to row (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/169" class="external-link">#169</a>).</li>
+</ul><p>BUG FIXES</p>
+<ul><li>Fixed wrong column names in <code><a href="../reference/data_to_wide.html">data_to_wide()</a></code> (<a href="https://github.com/easystats/datawizard/issues/173" class="external-link">#173</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.1" id="datawizard-041">datawizard 0.4.1<a class="anchor" aria-label="anchor" href="#datawizard-041"></a></h2><p class="text-muted">CRAN release: 2022-05-16</p>
 <p>BREAKING</p>
-<ul><li>Added the <code><a href="../reference/standardize.default.html">standardize.default()</a></code> method (moved from package <strong>effectsize</strong>), to be consistent in that the default-method now is in the same package as the generic. <code><a href="../reference/standardize.default.html">standardize.default()</a></code> behaves exactly like in <strong>effectsize</strong> and particularly works for regression model objects. <strong>effectsize</strong> now re-exports <code><a href="../reference/standardize.html">standardize()</a></code> from <strong>datawizard</strong>.</li></ul><p>NEW FUNCTIONS</p>
+<ul><li>Added the <code><a href="../reference/standardize.default.html">standardize.default()</a></code> method (moved from package <strong>effectsize</strong>), to be consistent in that the default-method now is in the same package as the generic. <code><a href="../reference/standardize.default.html">standardize.default()</a></code> behaves exactly like in <strong>effectsize</strong> and particularly works for regression model objects. <strong>effectsize</strong> now re-exports <code><a href="../reference/standardize.html">standardize()</a></code> from <strong>datawizard</strong>.</li>
+</ul><p>NEW FUNCTIONS</p>
 <ul><li><p><code><a href="../reference/slide.html">data_shift()</a></code> to shift the value range of numeric variables.</p></li>
 <li><p><code><a href="../reference/change_code.html">data_recode()</a></code> to recode old into new values.</p></li>
 <li><p><code><a href="../reference/to_factor.html">data_to_factor()</a></code> as counterpart to <code><a href="../reference/to_numeric.html">data_to_numeric()</a></code>.</p></li>
@@ -156,7 +160,8 @@
 <li><p><code><a href="../reference/convert_to_na.html">convert_to_na()</a></code> for factors (and data frames) gains a <code>drop_levels</code> argument, to drop unused levels that have been replaced by <code>NA</code>.</p></li>
 <li><p><code><a href="../reference/to_numeric.html">data_to_numeric()</a></code> gains two more arguments, <code>preserve_levels</code> and <code>lowest</code>, to give better control of conversion of factors.</p></li>
 </ul><p>BUG FIXES</p>
-<ul><li>When logicals were passed to <code><a href="../reference/center.html">center()</a></code> or <code><a href="../reference/standardize.html">standardize()</a></code> and <code>force = TRUE</code>, these were not properly converted to numeric variables.</li></ul></div>
+<ul><li>When logicals were passed to <code><a href="../reference/center.html">center()</a></code> or <code><a href="../reference/standardize.html">standardize()</a></code> and <code>force = TRUE</code>, these were not properly converted to numeric variables.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.0" id="datawizard-040">datawizard 0.4.0<a class="anchor" aria-label="anchor" href="#datawizard-040"></a></h2><p class="text-muted">CRAN release: 2022-03-30</p>
 <p>MAJOR CHANGES</p>
@@ -203,7 +208,8 @@
 <p>New functions:</p>
 <ul><li><p>to work with lists: <code><a href="https://easystats.github.io/insight/reference/is_empty_object.html" class="external-link">is_empty_object()</a></code> and <code><a href="https://easystats.github.io/insight/reference/compact_list.html" class="external-link">compact_list()</a></code></p></li>
 <li><p>to work with strings: <code><a href="https://easystats.github.io/insight/reference/compact_character.html" class="external-link">compact_character()</a></code></p></li>
-</ul></li></ul></div>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.2" id="datawizard-022">datawizard 0.2.2<a class="anchor" aria-label="anchor" href="#datawizard-022"></a></h2><p class="text-muted">CRAN release: 2022-01-04</p>
 <ul><li><p>New function <code><a href="../reference/data_extract.html">data_extract()</a></code> (or its alias <code><a href="https://tidyr.tidyverse.org/reference/extract.html" class="external-link">extract()</a></code>) to pull single variables from a data frame, possibly naming each value by the row names of that data frame.</p></li>
@@ -221,7 +227,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0.1" id="datawizard-0201">datawizard 0.2.0.1<a class="anchor" aria-label="anchor" href="#datawizard-0201"></a></h2><p class="text-muted">CRAN release: 2021-09-02</p>
-<ul><li>This is mainly a maintenance release that addresses some issues with conflicting namespaces.</li></ul></div>
+<ul><li>This is mainly a maintenance release that addresses some issues with conflicting namespaces.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="datawizard-020">datawizard 0.2.0<a class="anchor" aria-label="anchor" href="#datawizard-020"></a></h2><p class="text-muted">CRAN release: 2021-08-17</p>
 <ul><li><p>New function: <code><a href="../reference/visualisation_recipe.html">visualisation_recipe()</a></code>.</p></li>
@@ -230,7 +237,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="datawizard-010">datawizard 0.1.0<a class="anchor" aria-label="anchor" href="#datawizard-010"></a></h2><p class="text-muted">CRAN release: 2021-06-18</p>
-<ul><li>First release.</li></ul></div>
+<ul><li>First release.</li>
+</ul></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
