@@ -1,3 +1,7 @@
+# datawizard 0.5.1
+
+* Fixes failing tests due to `{poorman}` update.
+
 # datawizard 0.5.0
 
 MAJOR CHANGES
