@@ -63,7 +63,7 @@
 #'   thus the first interval ranges from 1-4 and is recoded into 1, while 5-9
 #'   would turn into 2 (compare `cbind(1:9, categorize(1:9))`). The same variable,
 #'   using `split = "quantile"` and `n_groups = 3` would define breaks at 3.67
-#'   and 6.33 (see `quantile(1:9, probs = c(1/3, 2/3)`), which means that values
+#'   and 6.33 (see `quantile(1:9, probs = c(1/3, 2/3))`), which means that values
 #'   from 1 to 3 belong to the first interval and are recoded into 1 (because
 #'   the next interval starts at 3.67), 4 to 6 into 2 and 7 to 9 into 3.
 #'   }
@@ -117,6 +117,13 @@
 categorize <- function(x, ...) {
   UseMethod("categorize")
 }
+
+
+## TODO Deprecate and remove alias later
+
+#' @rdname categorize
+#' @export
+data_cut <- categorize
 
 
 #' @export

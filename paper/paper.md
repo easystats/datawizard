@@ -37,7 +37,7 @@ affiliations:
 - index: 6
   name: University Medical Center Hamburg-Eppendorf, Germany
     
-date: "`r Sys.Date()`"
+date: "2022-08-07"
 bibliography: paper.bib
 output: rticles::joss_article
 csl: apa.csl
@@ -45,19 +45,7 @@ journal: JOSS
 link-citations: yes
 ---
 
-```{r, warning=FALSE, message=FALSE, echo=FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  out.width = "100%",
-  dpi = 300,
-  comment = "#>",
-  message = FALSE,
-  warning = FALSE
-)
 
-library(datawizard)
-set.seed(2016)
-```
 
 # Summary
 
@@ -97,14 +85,21 @@ Table: The table below lists a few key functions offered by *datawizard* for dat
 
 We will look at one example function that converts data in wide format to tidy/long format:
 
-```{r}
+
+```r
 stocks <- data.frame(
-  time = as.Date("2009-01-01") + 0:4,
+  time = as.Date('2009-01-01') + 0:4,
   X = rnorm(5, 0, 1),
   Y = rnorm(5, 0, 2)
 )
 
 stocks
+#>         time           X          Y
+#> 1 2009-01-01 -0.91474184 -0.5654808
+#> 2 2009-01-02  1.00124785 -1.5270177
+#> 3 2009-01-03 -0.05642291 -1.3700199
+#> 4 2009-01-04  0.29664516  0.7341479
+#> 5 2009-01-05 -2.79147086  0.3659937
 
 data_to_long(
   stocks,
@@ -112,6 +107,17 @@ data_to_long(
   names_to = "stock",
   values_to = "price"
 )
+#>          time stock       price
+#> 1  2009-01-01     X -0.91474184
+#> 2  2009-01-01     Y -0.56548082
+#> 3  2009-01-02     X  1.00124785
+#> 4  2009-01-02     Y -1.52701766
+#> 5  2009-01-03     X -0.05642291
+#> 6  2009-01-03     Y -1.37001987
+#> 7  2009-01-04     X  0.29664516
+#> 8  2009-01-04     Y  0.73414790
+#> 9  2009-01-05     X -2.79147086
+#> 10 2009-01-05     Y  0.36599370
 ```
 
 ## Statistical Transformations
@@ -133,29 +139,52 @@ Table: The table below lists a few key functions offered by *datawizard* for dat
 
 We will look at one example function that standardizes (i.e. centers and scales) data so that it can be expressed in terms of standard deviation:
 
-```{r}
+
+```r
 d <- data.frame(
   a = c(-2, -1, 0, 1, 2),
   b = c(3, 4, 5, 6, 7)
 )
 
 standardize(d, center = c(3, 4), scale = c(2, 4))
+#>      a     b
+#> 1 -2.5 -0.25
+#> 2 -2.0  0.00
+#> 3 -1.5  0.25
+#> 4 -1.0  0.50
+#> 5 -0.5  0.75
 ```
 
 ## Summaries of Data Properties and Distributions
 
 The workhorse function to get a comprehensive summary of data properties is `describe_distribution()`, which combines a set of indices (e.g., measures of centrality, dispersion, range, skewness, kurtosis, etc.) computed by other functions in `{datawizard}`.
 
-```{r eval=FALSE}
+
+```r
 describe_distribution(mtcars)
 ```
 
-```{r echo=FALSE, eval=TRUE, results="asis"}
-library(kableExtra)
-options(digits = 3)
-kbl(describe_distribution(mtcars), format = "latex", booktabs = TRUE, linesep = "") |>
-  kable_styling(latex_options = "scale_down")
-```
+\begin{table}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{lrrrrrrrrr}
+\toprule
+Variable & Mean & SD & IQR & Min & Max & Skewness & Kurtosis & n & n\_Missing\\
+\midrule
+mpg & 20.091 & 6.027 & 7.53 & 10.40 & 33.90 & 0.672 & -0.022 & 32 & 0\\
+cyl & 6.188 & 1.786 & 4.00 & 4.00 & 8.00 & -0.192 & -1.763 & 32 & 0\\
+disp & 230.722 & 123.939 & 221.53 & 71.10 & 472.00 & 0.420 & -1.068 & 32 & 0\\
+hp & 146.688 & 68.563 & 84.50 & 52.00 & 335.00 & 0.799 & 0.275 & 32 & 0\\
+drat & 3.597 & 0.535 & 0.84 & 2.76 & 4.93 & 0.293 & -0.450 & 32 & 0\\
+wt & 3.217 & 0.978 & 1.19 & 1.51 & 5.42 & 0.466 & 0.417 & 32 & 0\\
+qsec & 17.849 & 1.787 & 2.02 & 14.50 & 22.90 & 0.406 & 0.865 & 32 & 0\\
+vs & 0.438 & 0.504 & 1.00 & 0.00 & 1.00 & 0.265 & -2.063 & 32 & 0\\
+am & 0.406 & 0.499 & 1.00 & 0.00 & 1.00 & 0.401 & -1.967 & 32 & 0\\
+gear & 3.688 & 0.738 & 1.00 & 3.00 & 5.00 & 0.582 & -0.895 & 32 & 0\\
+carb & 2.812 & 1.615 & 2.00 & 1.00 & 8.00 & 1.157 & 2.020 & 32 & 0\\
+\bottomrule
+\end{tabular}}
+\end{table}
 
 # Licensing and Availability
 

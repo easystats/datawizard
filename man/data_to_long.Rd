@@ -80,7 +80,7 @@ the start of each variable name.}
 
 \item{names_sep, names_pattern}{If \code{names_to} contains multiple values, this
 argument controls how the column name is broken up.
-\code{names_pattern} takes a regular expression containing matching groups (\verb{()}⁠).}
+\code{names_pattern} takes a regular expression containing matching groups, i.e. "()".}
 
 \item{values_to}{The name of the new column that will contain the values of
 the pivoted variables.}
@@ -124,7 +124,9 @@ the number of columns. This is a dependency-free base-R equivalent of
 \code{tidyr::pivot_longer()}.
 }
 \examples{
+\donttest{
 wide_data <- data.frame(replicate(5, rnorm(10)))
+
 # Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))
 data_to_long(wide_data)
 
@@ -149,16 +151,16 @@ if (require("psych")) {
     rows_to = "Participant"
   )
 
-if(require("tidyr")) {
-  reshape_longer(
-    tidyr::who,
-    select = new_sp_m014:newrel_f65,
-    names_to = c("diagnosis", "gender", "age"),
-    names_pattern = "new_?(.*)_(.)(.*)",
-    values_to = "count"
-  )
+  if (require("tidyr")) {
+    reshape_longer(
+      tidyr::who,
+      select = new_sp_m014:newrel_f65,
+      names_to = c("diagnosis", "gender", "age"),
+      names_pattern = "new_?(.*)_(.)(.*)",
+      values_to = "count"
+    )
+  }
 }
-
 }
 
 }

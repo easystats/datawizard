@@ -1,10 +1,15 @@
+# datawizard 0.5.1
+
+* Fixes failing tests due to `{poorman}` update.
+
 # datawizard 0.5.0
 
-BREAKING
+MAJOR CHANGES
 
 * Following statistical transformation functions have been renamed to not have
-  `data_*()` prefix, since they do not work with data frames and therefore
-  had misleading names:
+  `data_*()` prefix, since they do not work exclusively with data frames, but
+  are typically first of all used with vectors, and therefore had misleading 
+  names:
 
   - `data_cut()` -> `categorize()`
   - `data_recode()` -> `change_code()`
@@ -13,6 +18,10 @@ BREAKING
   - `data_rescale()` -> `rescale()`
   - `data_to_factor()` -> `to_factor()`
   - `data_to_numeric()` -> `to_numeric()`
+
+  Note that these functions also have `.data.frame()` methods and still work
+  for data frames as well. Former function names are still available as aliases,
+  but will be deprecated and removed in a future release.
 
 * Bumps the needed minimum R version to `3.5`.
 
@@ -24,8 +33,6 @@ BREAKING
 
 * Argument `training_proportion` in `data_partition()` is deprecated. Please use
   `proportion` now.
-
-MAJOR CHANGES
 
 * Given his continued and significant contributions to the package, Etienne
   Bacher (@etiennebacher) is now included as an author.
@@ -55,6 +62,9 @@ CHANGES
   `method = "zscore"`, winsorizes via the median and median absolute deviation
   (MAD); else via the mean and standard deviation. (@rempsyc, #177, #49, #47).
 
+* `convert_na_to` now accepts numeric replacements on character vectors and
+  single replacement for multiple vector classes. (@rempsyc, #214).
+  
 * `data_partition()` now allows to create multiple partitions from the data,
   returning multiple training and a remaining test set.
 

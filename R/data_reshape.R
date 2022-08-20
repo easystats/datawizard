@@ -11,7 +11,7 @@
 #' the start of each variable name.
 #' @param names_sep,names_pattern If `names_to` contains multiple values, this
 #' argument controls how the column name is broken up.
-#' `names_pattern` takes a regular expression containing matching groups (`()`⁠).
+#' `names_pattern` takes a regular expression containing matching groups, i.e. "()".
 #' @param values_to The name of the new column that will contain the values of
 #'   the pivoted variables.
 #' @param values_drop_na If `TRUE`, will drop rows that contain only `NA` in the
@@ -31,8 +31,9 @@
 #' tibble. Otherwise, it returns a data frame.
 #'
 #' @examples
+#' \donttest{
 #' wide_data <- data.frame(replicate(5, rnorm(10)))
-
+#'
 #' # Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))
 #' data_to_long(wide_data)
 #'
@@ -57,21 +58,20 @@
 #'     rows_to = "Participant"
 #'   )
 #'
-#' if(require("tidyr")) {
-#'   reshape_longer(
-#'     tidyr::who,
-#'     select = new_sp_m014:newrel_f65,
-#'     names_to = c("diagnosis", "gender", "age"),
-#'     names_pattern = "new_?(.*)_(.)(.*)",
-#'     values_to = "count"
-#'   )
+#'   if (require("tidyr")) {
+#'     reshape_longer(
+#'       tidyr::who,
+#'       select = new_sp_m014:newrel_f65,
+#'       names_to = c("diagnosis", "gender", "age"),
+#'       names_pattern = "new_?(.*)_(.)(.*)",
+#'       values_to = "count"
+#'     )
+#'   }
 #' }
-#'
 #' }
 #'
 #' @inherit data_rename seealso
 #' @export
-
 data_to_long <- function(data,
                          select = "all",
                          names_to = "name",
@@ -86,7 +86,6 @@ data_to_long <- function(data,
                          ...,
                          cols,
                          colnames_to) {
-
   if (!missing(colnames_to)) {
     .is_deprecated("colnames_to", "names_to")
     if (is.null(names_to)) {
@@ -133,8 +132,9 @@ data_to_long <- function(data,
   if (any(names_to %in% setdiff(names(data), cols))) {
     stop(insight::format_message(
       "Some values of the columns specified in 'names_to' are already present as column names.",
-      paste0("Either use another value in `names_to` or rename the following columns: ",
-             text_concatenate(names_to[which(names_to %in% setdiff(names(data), cols))])
+      paste0(
+        "Either use another value in `names_to` or rename the following columns: ",
+        text_concatenate(names_to[which(names_to %in% setdiff(names(data), cols))])
       )
     ), call. = FALSE)
   }
@@ -183,9 +183,9 @@ data_to_long <- function(data,
     for (i in seq_along(names_to)) {
       if (is.null(names_pattern)) {
         new_vals <- unlist(lapply(
-          strsplit(long[[names_to_2]], names_sep, fixed = TRUE),
-          function(x) x[i])
-        )
+          strsplit(unique(long[[names_to_2]]), names_sep, fixed = TRUE),
+          function(x) x[i]
+        ))
         long[[names_to[i]]] <- new_vals
       } else {
         tmp <- regmatches(

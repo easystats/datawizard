@@ -30,6 +30,7 @@ publication/*
 tests\^spelling
 ^LICENSE\.md$
 ^\.lintr$
+\.code-workspace$
 ^\.circleci$
 ^tests/manual$
 ^revdep$
@@ -44,3 +45,4 @@ references.bib
 ^hextools/.
 ^WIP/.
 ^CRAN-SUBMISSION$
+^LICENSE$
