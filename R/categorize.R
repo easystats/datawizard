@@ -118,14 +118,6 @@ categorize <- function(x, ...) {
   UseMethod("categorize")
 }
 
-
-## TODO Deprecate and remove alias later
-
-#' @rdname categorize
-#' @export
-data_cut <- categorize
-
-
 #' @export
 categorize.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
