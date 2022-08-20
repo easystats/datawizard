@@ -3,15 +3,21 @@
 BREAKING
 
 * Following statistical transformation functions have been renamed to not have
-  `data_*()` prefix, since they do not work with data frames and therefore
-  had misleading names:
+  `data_*()` prefix, since they do not work with data frames and therefore had
+  misleading names:
 
   - `data_cut()` -> `categorize()`
+
   - `data_recode()` -> `change_code()`
+
   - `data_shift()` -> `slide()`
+
   - `data_reverse()` -> `reverse()`
+
   - `data_rescale()` -> `rescale()`
+
   - `data_to_factor()` -> `to_factor()`
+
   - `data_to_numeric()` -> `to_numeric()`
 
 * Bumps the needed minimum R version to `3.5`.
@@ -37,13 +43,12 @@ MAJOR CHANGES
 * `reshape_wider()` now follows more consistently `tidyr::pivot_wider()` syntax.
   Arguments `colnames_from`, `sep`, and `rows_from` are deprecated and should be
   replaced by `names_from`, `names_sep`, and `id_cols` respectively.
-  `reshape_wider()` also gains an argument `names_glue` (#182, #198). 
-  
-* Similarly, `reshape_longer()` now follows more consistently 
-  `tidyr::pivot_longer()` syntax.  Argument `colnames_to` is deprecated and 
-  should be replaced by `names_to`. `reshape_longer()` also gains new arguments:
-  `names_prefix`, `names_sep`, `names_pattern`, and `values_drop_na` (#189).  
+  `reshape_wider()` also gains an argument `names_glue` (#182, #198).
 
+* Similarly, `reshape_longer()` now follows more consistently
+  `tidyr::pivot_longer()` syntax. Argument `colnames_to` is deprecated and
+  should be replaced by `names_to`. `reshape_longer()` also gains new arguments:
+  `names_prefix`, `names_sep`, `names_pattern`, and `values_drop_na` (#189).
 
 CHANGES
 
