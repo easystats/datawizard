@@ -148,7 +148,7 @@ data_to_long <- function(data,
 
   # Reshaping ---------------------
   # Create Index column as needed by reshape
-  data[["_Row"]] <- coerce_to_numeric(row.names(data))
+  data[["_Row"]] <- as.numeric(row.names(data))
 
   # Create a new index for cases with length(names_to) > 1
   names_to_2 <- paste(names_to, collapse = "_")
