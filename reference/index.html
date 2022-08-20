@@ -85,9 +85,70 @@
     </div>
 
     <div class="section level2">
-      <h2 id="recode-and-transform-data">Recode and transform data<a class="anchor" aria-label="anchor" href="#recode-and-transform-data"></a></h2>
+      <h2 id="data-preparation">Data Preparation<a class="anchor" aria-label="anchor" href="#data-preparation"></a></h2>
+      
+      <p class="section-desc"></p><p>Main functions for cleaning and preparing data</p>
+
+      
+    </div><div id="" class="section level2">
       
       
+      
+
+      <dl><dt>
+          
+          <code><a href="data_to_long.html">data_to_long()</a></code> <code><a href="data_to_long.html">reshape_longer()</a></code> 
+        </dt>
+        <dd>Reshape (pivot) data from wide to long</dd>
+      </dl><dl><dt>
+          
+          <code><a href="data_to_wide.html">data_to_wide()</a></code> <code><a href="data_to_wide.html">reshape_wider()</a></code> 
+        </dt>
+        <dd>Reshape (pivot) data from long to wide</dd>
+      </dl><dl><dt>
+          
+          <code><a href="data_extract.html">data_extract()</a></code> 
+        </dt>
+        <dd>Extract one or more columns or elements from an object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="data_match.html">data_match()</a></code> <code><a href="data_match.html">data_filter()</a></code> 
+        </dt>
+        <dd>Return filtered or sliced data frame, or row indices</dd>
+      </dl><dl><dt>
+          
+          <code><a href="find_columns.html">find_columns()</a></code> <code><a href="find_columns.html">data_find()</a></code> <code><a href="find_columns.html">get_columns()</a></code> <code><a href="find_columns.html">data_select()</a></code> 
+        </dt>
+        <dd>Find or get columns in a data frame based on search patterns</dd>
+      </dl><dl><dt>
+          
+          <code><a href="data_relocate.html">data_relocate()</a></code> <code><a href="data_relocate.html">data_reorder()</a></code> <code><a href="data_relocate.html">data_remove()</a></code> 
+        </dt>
+        <dd>Relocate (reorder) columns of a data frame</dd>
+      </dl><dl><dt>
+          
+          <code><a href="data_merge.html">data_merge()</a></code> <code><a href="data_merge.html">data_join()</a></code> 
+        </dt>
+        <dd>Merge (join) two data frames, or a list of data frames</dd>
+      </dl><dl><dt>
+          
+          <code><a href="data_partition.html">data_partition()</a></code> 
+        </dt>
+        <dd>Partition data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="data_rotate.html">data_rotate()</a></code> <code><a href="data_rotate.html">data_transpose()</a></code> 
+        </dt>
+        <dd>Rotate a data frame</dd>
+      </dl><dl><dt>
+          
+          <code><a href="data_group.html">data_group()</a></code> <code><a href="data_group.html">data_ungroup()</a></code> 
+        </dt>
+        <dd>Create a grouped data frame</dd>
+      </dl></div><div class="section level2">
+      <h2 id="statistical-transformations">Statistical Transformations<a class="anchor" aria-label="anchor" href="#statistical-transformations"></a></h2>
+      
+      <p class="section-desc"></p><p>Functions for transforming variables</p>
 
       
     </div><div id="" class="section level2">
@@ -166,186 +227,9 @@
         </dt>
         <dd>Winsorize data</dd>
       </dl></div><div class="section level2">
-      <h2 id="reshape-data">Reshape data<a class="anchor" aria-label="anchor" href="#reshape-data"></a></h2>
+      <h2 id="data-properties">Data Properties<a class="anchor" aria-label="anchor" href="#data-properties"></a></h2>
       
-      
-
-      
-    </div><div id="" class="section level2">
-      
-      
-      
-
-      <dl><dt>
-          
-          <code><a href="data_rotate.html">data_rotate()</a></code> <code><a href="data_rotate.html">data_transpose()</a></code> 
-        </dt>
-        <dd>Rotate a data frame</dd>
-      </dl><dl><dt>
-          
-          <code><a href="data_to_wide.html">data_to_wide()</a></code> <code><a href="data_to_wide.html">reshape_wider()</a></code> 
-        </dt>
-        <dd>Reshape (pivot) data from long to wide</dd>
-      </dl><dl><dt>
-          
-          <code><a href="data_to_long.html">data_to_long()</a></code> <code><a href="data_to_long.html">reshape_longer()</a></code> 
-        </dt>
-        <dd>Reshape (pivot) data from wide to long</dd>
-      </dl><dl><dt>
-          
-          <code><a href="reshape_ci.html">reshape_ci()</a></code> 
-        </dt>
-        <dd>Reshape CI between wide/long formats</dd>
-      </dl></div><div class="section level2">
-      <h2 id="select-and-filter-data">Select and filter data<a class="anchor" aria-label="anchor" href="#select-and-filter-data"></a></h2>
-      
-      
-
-      
-    </div><div id="" class="section level2">
-      
-      
-      
-
-      <dl><dt>
-          
-          <code><a href="data_extract.html">data_extract()</a></code> 
-        </dt>
-        <dd>Extract one or more columns or elements from an object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="data_match.html">data_match()</a></code> <code><a href="data_match.html">data_filter()</a></code> 
-        </dt>
-        <dd>Return filtered or sliced data frame, or row indices</dd>
-      </dl><dl><dt>
-          
-          <code><a href="find_columns.html">find_columns()</a></code> <code><a href="find_columns.html">data_find()</a></code> <code><a href="find_columns.html">get_columns()</a></code> <code><a href="find_columns.html">data_select()</a></code> 
-        </dt>
-        <dd>Find or get columns in a data frame based on search patterns</dd>
-      </dl></div><div class="section level2">
-      <h2 id="rename-data">Rename data<a class="anchor" aria-label="anchor" href="#rename-data"></a></h2>
-      
-      
-
-      
-    </div><div id="" class="section level2">
-      
-      
-      
-
-      <dl><dt>
-          
-          <code><a href="data_rename.html">data_addprefix()</a></code> <code><a href="data_rename.html">data_addsuffix()</a></code> <code><a href="data_rename.html">data_rename()</a></code> <code><a href="data_rename.html">data_rename_rows()</a></code> 
-        </dt>
-        <dd>Rename columns and variable names</dd>
-      </dl></div><div class="section level2">
-      <h2 id="reorder-and-remove-data">Reorder and remove data<a class="anchor" aria-label="anchor" href="#reorder-and-remove-data"></a></h2>
-      
-      
-
-      
-    </div><div id="" class="section level2">
-      
-      
-      
-
-      <dl><dt>
-          
-          <code><a href="data_relocate.html">data_relocate()</a></code> <code><a href="data_relocate.html">data_reorder()</a></code> <code><a href="data_relocate.html">data_remove()</a></code> 
-        </dt>
-        <dd>Relocate (reorder) columns of a data frame</dd>
-      </dl><dl><dt>
-          
-          <code><a href="remove_empty.html">empty_columns()</a></code> <code><a href="remove_empty.html">empty_rows()</a></code> <code><a href="remove_empty.html">remove_empty_columns()</a></code> <code><a href="remove_empty.html">remove_empty_rows()</a></code> <code><a href="remove_empty.html">remove_empty()</a></code> 
-        </dt>
-        <dd>Return or remove variables or observations that are completely missing</dd>
-      </dl></div><div class="section level2">
-      <h2 id="convert-and-replace-data">Convert and replace data<a class="anchor" aria-label="anchor" href="#convert-and-replace-data"></a></h2>
-      
-      
-
-      
-    </div><div id="" class="section level2">
-      
-      
-      
-
-      <dl><dt>
-          
-          <code><a href="coerce_to_numeric.html">coerce_to_numeric()</a></code> 
-        </dt>
-        <dd>Convert to Numeric (if possible)</dd>
-      </dl><dl><dt>
-          
-          <code><a href="to_numeric.html">to_numeric()</a></code> <code><a href="to_numeric.html">data_to_numeric()</a></code> 
-        </dt>
-        <dd>Convert data to numeric</dd>
-      </dl><dl><dt>
-          
-          <code><a href="to_factor.html">to_factor()</a></code> <code><a href="to_factor.html">data_to_factor()</a></code> 
-        </dt>
-        <dd>Convert data to factors</dd>
-      </dl><dl><dt>
-          
-          <code><a href="data_restoretype.html">data_restoretype()</a></code> 
-        </dt>
-        <dd>Restore the type of columns according to a reference data frame</dd>
-      </dl><dl><dt>
-          
-          <code><a href="replace_nan_inf.html">replace_nan_inf()</a></code> 
-        </dt>
-        <dd>Convert infinite or <code>NaN</code> values into <code>NA</code></dd>
-      </dl><dl><dt>
-          
-          <code><a href="convert_na_to.html">convert_na_to()</a></code> 
-        </dt>
-        <dd>Replace missing values in a variable or a data frame.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="convert_to_na.html">convert_to_na()</a></code> 
-        </dt>
-        <dd>Convert non-missing values in a variable into missing values.</dd>
-      </dl></div><div class="section level2">
-      <h2 id="split-and-merge-data">Split and merge data<a class="anchor" aria-label="anchor" href="#split-and-merge-data"></a></h2>
-      
-      
-
-      
-    </div><div id="" class="section level2">
-      
-      
-      
-
-      <dl><dt>
-          
-          <code><a href="data_merge.html">data_merge()</a></code> <code><a href="data_merge.html">data_join()</a></code> 
-        </dt>
-        <dd>Merge (join) two data frames, or a list of data frames</dd>
-      </dl><dl><dt>
-          
-          <code><a href="data_partition.html">data_partition()</a></code> 
-        </dt>
-        <dd>Partition data</dd>
-      </dl></div><div class="section level2">
-      <h2 id="read-import-data">Read (import) data<a class="anchor" aria-label="anchor" href="#read-import-data"></a></h2>
-      
-      
-
-      
-    </div><div id="" class="section level2">
-      
-      
-      
-
-      <dl><dt>
-          
-          <code><a href="data_read.html">data_read()</a></code> 
-        </dt>
-        <dd>Read (import) data files from various sources</dd>
-      </dl></div><div class="section level2">
-      <h2 id="data-properties">Data properties<a class="anchor" aria-label="anchor" href="#data-properties"></a></h2>
-      
-      
+      <p class="section-desc"></p><p>Functions to compute statistical summaries of data properties and distributions</p>
 
       
     </div><div id="" class="section level2">
@@ -384,7 +268,7 @@
         </dt>
         <dd>Weighted Mean, Median, SD, and MAD</dd>
       </dl></div><div class="section level2">
-      <h2 id="utilities">Utilities<a class="anchor" aria-label="anchor" href="#utilities"></a></h2>
+      <h2 id="convert-and-replace-data">Convert and Replace Data<a class="anchor" aria-label="anchor" href="#convert-and-replace-data"></a></h2>
       
       
 
@@ -396,9 +280,76 @@
 
       <dl><dt>
           
-          <code><a href="data_group.html">data_group()</a></code> <code><a href="data_group.html">data_ungroup()</a></code> 
+          <code><a href="coerce_to_numeric.html">coerce_to_numeric()</a></code> 
         </dt>
-        <dd>Create a grouped data frame</dd>
+        <dd>Convert to Numeric (if possible)</dd>
+      </dl><dl><dt>
+          
+          <code><a href="to_numeric.html">to_numeric()</a></code> <code><a href="to_numeric.html">data_to_numeric()</a></code> 
+        </dt>
+        <dd>Convert data to numeric</dd>
+      </dl><dl><dt>
+          
+          <code><a href="to_factor.html">to_factor()</a></code> <code><a href="to_factor.html">data_to_factor()</a></code> 
+        </dt>
+        <dd>Convert data to factors</dd>
+      </dl><dl><dt>
+          
+          <code><a href="replace_nan_inf.html">replace_nan_inf()</a></code> 
+        </dt>
+        <dd>Convert infinite or <code>NaN</code> values into <code>NA</code></dd>
+      </dl><dl><dt>
+          
+          <code><a href="convert_na_to.html">convert_na_to()</a></code> 
+        </dt>
+        <dd>Replace missing values in a variable or a data frame.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="convert_to_na.html">convert_to_na()</a></code> 
+        </dt>
+        <dd>Convert non-missing values in a variable into missing values.</dd>
+      </dl></div><div class="section level2">
+      <h2 id="import-data">Import data<a class="anchor" aria-label="anchor" href="#import-data"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="data_read.html">data_read()</a></code> 
+        </dt>
+        <dd>Read (import) data files from various sources</dd>
+      </dl></div><div class="section level2">
+      <h2 id="helpers-for-data-preparation">Helpers for Data Preparation<a class="anchor" aria-label="anchor" href="#helpers-for-data-preparation"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="reshape_ci.html">reshape_ci()</a></code> 
+        </dt>
+        <dd>Reshape CI between wide/long formats</dd>
+      </dl><dl><dt>
+          
+          <code><a href="data_rename.html">data_addprefix()</a></code> <code><a href="data_rename.html">data_addsuffix()</a></code> <code><a href="data_rename.html">data_rename()</a></code> <code><a href="data_rename.html">data_rename_rows()</a></code> 
+        </dt>
+        <dd>Rename columns and variable names</dd>
+      </dl><dl><dt>
+          
+          <code><a href="remove_empty.html">empty_columns()</a></code> <code><a href="remove_empty.html">empty_rows()</a></code> <code><a href="remove_empty.html">remove_empty_columns()</a></code> <code><a href="remove_empty.html">remove_empty_rows()</a></code> <code><a href="remove_empty.html">remove_empty()</a></code> 
+        </dt>
+        <dd>Return or remove variables or observations that are completely missing</dd>
       </dl><dl><dt>
           
           <code><a href="rownames.html">rownames_as_column()</a></code> <code><a href="rownames.html">column_as_rownames()</a></code> 
@@ -411,16 +362,16 @@
         <dd>Tools for working with column names</dd>
       </dl><dl><dt>
           
-          <code><a href="reexports.html">reexports</a></code> <code><a href="reexports.html">print_html</a></code> <code><a href="reexports.html">print_md</a></code> <code><a href="reexports.html">is_empty_object</a></code> <code><a href="reexports.html">object_has_names</a></code> <code><a href="reexports.html">object_has_rownames</a></code> <code><a href="reexports.html">compact_list</a></code> <code><a href="reexports.html">compact_character</a></code> 
-        </dt>
-        <dd>Objects exported from other packages</dd>
-      </dl><dl><dt>
-          
           <code><a href="find_columns.html">find_columns()</a></code> <code><a href="find_columns.html">data_find()</a></code> <code><a href="find_columns.html">get_columns()</a></code> <code><a href="find_columns.html">data_select()</a></code> 
         </dt>
         <dd>Find or get columns in a data frame based on search patterns</dd>
+      </dl><dl><dt>
+          
+          <code><a href="data_restoretype.html">data_restoretype()</a></code> 
+        </dt>
+        <dd>Restore the type of columns according to a reference data frame</dd>
       </dl></div><div class="section level2">
-      <h2 id="text-formatting-helpers">Text formatting helpers<a class="anchor" aria-label="anchor" href="#text-formatting-helpers"></a></h2>
+      <h2 id="helpers-for-text-formatting">Helpers for Text Formatting<a class="anchor" aria-label="anchor" href="#helpers-for-text-formatting"></a></h2>
       
       
 
@@ -438,7 +389,7 @@
       </dl></div><div class="section level2">
       <h2 id="visualization-helpers">Visualization helpers<a class="anchor" aria-label="anchor" href="#visualization-helpers"></a></h2>
       
-      
+      <p class="section-desc"></p><p>This function is relevant only within ‘easystats’ packages</p>
 
       
     </div><div id="" class="section level2">
@@ -451,6 +402,22 @@
           <code><a href="visualisation_recipe.html">visualisation_recipe()</a></code> 
         </dt>
         <dd>Prepare objects for visualisation</dd>
+      </dl></div><div class="section level2">
+      <h2 id="reexports">Reexports<a class="anchor" aria-label="anchor" href="#reexports"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="reexports.html">reexports</a></code> <code><a href="reexports.html">print_html</a></code> <code><a href="reexports.html">print_md</a></code> <code><a href="reexports.html">is_empty_object</a></code> <code><a href="reexports.html">object_has_names</a></code> <code><a href="reexports.html">object_has_rownames</a></code> <code><a href="reexports.html">compact_list</a></code> <code><a href="reexports.html">compact_character</a></code> 
+        </dt>
+        <dd>Objects exported from other packages</dd>
       </dl></div><div class="section level2">
       <h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a></h2>
       
