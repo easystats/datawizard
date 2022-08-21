@@ -73,7 +73,6 @@ reference:
   - title: Helpers for Text Formatting
     contents:
       - starts_with("text_")
-      - starts_with("format_")
 
   - title: Visualization helpers
     desc: |
