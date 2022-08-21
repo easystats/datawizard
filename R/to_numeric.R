@@ -42,14 +42,6 @@ to_numeric <- function(x, ...) {
   UseMethod("to_numeric")
 }
 
-
-## TODO Deprecate and remove alias later
-
-#' @rdname to_numeric
-#' @export
-data_to_numeric <- to_numeric
-
-
 #' @export
 to_numeric.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
