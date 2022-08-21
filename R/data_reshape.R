@@ -148,7 +148,7 @@ data_to_long <- function(data,
 
   # Reshaping ---------------------
   # Create Index column as needed by reshape
-  data[["_Row"]] <- as.numeric(row.names(data))
+  data[["_Row"]] <- .coerce_to_numeric(row.names(data))
 
   # Create a new index for cases with length(names_to) > 1
   names_to_2 <- paste(names_to, collapse = "_")
@@ -363,7 +363,12 @@ data_to_wide <- function(data,
 
   # Create an id for stats::reshape
   if (is.null(id_cols)) {
-    data[["_Rows"]] <- apply(data[, !names(data) %in% c(values_from, names_from), drop = FALSE], 1, paste, collapse = "_")
+    data[["_Rows"]] <- apply(
+      data[, !names(data) %in% c(values_from, names_from), drop = FALSE],
+      MARGIN = 1,
+      paste,
+      collapse = "_"
+    )
     id_cols <- "_Rows"
   }
 

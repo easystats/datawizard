@@ -45,7 +45,9 @@ to_numeric <- function(x, ...) {
 #' @export
 to_numeric.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(sprintf("Converting into numeric values currently not possible for variables of class '%s'.", class(x)[1])))
+    message(insight::format_message(
+      sprintf("Converting into numeric values currently not possible for variables of class '%s'.", class(x)[1])
+    ))
   }
   x
 }
@@ -243,3 +245,11 @@ to_numeric.character <- function(x,
   out
 }
 
+
+#' @keywords internal
+.coerce_to_numeric <- function(x) {
+  tryCatch(as.numeric(as.character(x)),
+    error = function(e) x,
+    warning = function(w) x
+  )
+}
