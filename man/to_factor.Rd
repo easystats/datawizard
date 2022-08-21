@@ -2,13 +2,10 @@
 % Please edit documentation in R/to_factor.R
 \name{to_factor}
 \alias{to_factor}
-\alias{data_to_factor}
 \alias{to_factor.data.frame}
 \title{Convert data to factors}
 \usage{
 to_factor(x, ...)
-
-data_to_factor(x, ...)
 
 \method{to_factor}{data.frame}(
   x,

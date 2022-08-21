@@ -2,14 +2,11 @@
 % Please edit documentation in R/categorize.R
 \name{categorize}
 \alias{categorize}
-\alias{data_cut}
 \alias{categorize.numeric}
 \alias{categorize.data.frame}
 \title{Recode (or "cut") data into groups of values.}
 \usage{
 categorize(x, ...)
-
-data_cut(x, ...)
 
 \method{categorize}{numeric}(
   x,

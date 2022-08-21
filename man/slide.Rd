@@ -2,14 +2,11 @@
 % Please edit documentation in R/slide.R
 \name{slide}
 \alias{slide}
-\alias{data_shift}
 \alias{slide.numeric}
 \alias{slide.data.frame}
 \title{Shift numeric value range}
 \usage{
 slide(x, ...)
-
-data_shift(x, ...)
 
 \method{slide}{numeric}(x, lowest = 0, ...)
 
