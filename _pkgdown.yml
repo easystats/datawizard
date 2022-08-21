@@ -6,8 +6,23 @@ template:
 
 reference:
 
-  - title: Recode and transform data
-  - contents:
+  - title: Data Preparation
+    desc: Main functions for cleaning and preparing data
+    contents:
+      - data_to_long
+      - data_to_wide
+      - data_extract
+      - data_filter
+      - data_select
+      - data_reorder
+      - data_merge
+      - data_partition
+      - data_rotate
+      - data_group
+
+  - title: Statistical Transformations
+    desc: Functions for transforming variables
+    contents:
       - categorize
       - change_code
       - rescale
@@ -24,48 +39,9 @@ reference:
       - unstandardize
       - winsorize
 
-  - title: Reshape data
-  - contents:
-      - data_rotate
-      - reshape_wider
-      - reshape_longer
-      - reshape_ci
-
-  - title: Select and filter data
-  - contents:
-      - data_extract
-      - data_filter
-      - data_select
-
-  - title: Rename data
-  - contents:
-      - data_addprefix
-
-  - title: Reorder and remove data
-  - contents:
-      - data_arrange
-      - data_reorder
-      - remove_empty
-
-  - title: Convert and replace data
-  - contents:
-      - contains("to_numeric")
-      - to_factor
-      - data_restoretype
-      - starts_with("replace_")
-      - starts_with("convert_")
-
-  - title: Split and merge data
-  - contents:
-      - data_merge
-      - data_partition
-
-  - title: Read (import) data
-  - contents:
-      - data_read
-
-  - title: Data properties
-  - contents:
+  - title: Data Properties
+    desc: Functions to compute statistical summaries of data properties and distributions
+    contents:
       - data_tabulate
       - contains("distribution")
       - kurtosis
@@ -73,36 +49,55 @@ reference:
       - skewness
       - weighted_mean
 
-  - title: Utilities
-  - contents:
-      - data_group
+  - title: Convert and Replace Data
+    contents:
+      - contains("to_numeric")
+      - to_factor
+      - starts_with("replace_")
+      - starts_with("convert_")
+
+  - title: Import data
+    contents:
+      - data_read
+
+  - title: Helpers for Data Preparation
+    contents:
+      - reshape_ci
+      - data_addprefix
+      - remove_empty
       - contains("rownames")
       - contains("colnames")
-      - compact_character
       - find_columns
+      - data_restoretype
 
-  - title: Text formatting helpers
-  - contents:
+  - title: Helpers for Text Formatting
+    contents:
       - starts_with("text_")
       - starts_with("format_")
 
   - title: Visualization helpers
-  - contents:
+    desc: |
+      This function is relevant only within 'easystats' packages
+    contents:
       - visualisation_recipe
 
+  - title: Reexports
+    contents:
+      - reexports
+
   - title: Data
-  - contents:
+    contents:
       - efc
       - nhanes_sample
 
 articles:
 
-  - title: Data Wrangling
+  - title: Data Preparation
     navbar: ~
     contents:
-    - tidyverse_translation
-  - title: Data transformation
+      - tidyverse_translation
+  - title: Statistical Transformations
     navbar: ~
     contents:
-    - standardize_data
+      - standardize_data
 
