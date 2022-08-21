@@ -35,6 +35,30 @@ test_that("data_reshape works as expected - wide to long", {
 })
 
 
+test_that("data_reshape works as expected - using row names as idvar", {
+  data(mtcars)
+  out <- data_to_long(mtcars, select = 2:4)
+  expect_equal(
+    dim(out),
+    c(96, 10),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+  expect_equal(
+    colnames(out),
+    c("mpg", "drat", "wt", "qsec", "vs", "am", "gear", "carb", "name", "value"),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+  expect_equal(
+    head(out$value),
+    c(8, 304, 150, 8, 472, 205),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+})
+
+
 test_that("data_reshape works as expected - long to wide", {
   long_data <- data_to_long(wide_data, rows_to = "Row_ID")
 
