@@ -111,7 +111,7 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
     if (isTRUE(drop_na)) {
       x <- x[stats::complete.cases(x), , drop = FALSE]
     }
-    idx <- 1:nrow(x)
+    idx <- seq_len(nrow(x))
   }
 
   # Find matching rows
