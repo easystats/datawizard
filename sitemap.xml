@@ -112,9 +112,6 @@
     <loc>https://easystats.github.io/datawizard/reference/find_columns.html</loc>
   </url>
   <url>
-    <loc>https://easystats.github.io/datawizard/reference/format_text.html</loc>
-  </url>
-  <url>
     <loc>https://easystats.github.io/datawizard/reference/index.html</loc>
   </url>
   <url>
@@ -164,6 +161,9 @@
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/standardize.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/datawizard/reference/text_format.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/to_factor.html</loc>
