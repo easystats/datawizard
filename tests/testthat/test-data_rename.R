@@ -82,7 +82,7 @@ test_that("data_rename: argument 'safe' works", {
   )
   expect_error(
     data_rename(iris, "FakeCol", "length", safe = FALSE),
-    "Variable 'FakeCol' is not in your data frame"
+    "Variable `FakeCol` is not in your data frame"
   )
 })
 
