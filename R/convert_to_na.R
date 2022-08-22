@@ -47,7 +47,9 @@ convert_to_na <- function(x, ...) {
 #' @export
 convert_to_na.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(sprintf("Converting values into missing values (`NA`) currently not possible for variables of class '%s'.", class(x)[1])))
+    message(insight::format_message(
+      sprintf("Converting values into missing values (`NA`) currently not possible for variables of class `%s`.", class(x)[1])
+    ))
   }
   x
 }
