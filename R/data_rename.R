@@ -56,12 +56,12 @@ data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, .
   }
 
   if (!is.character(pattern)) {
-    stop("Argument 'pattern' must be of type character.")
+    stop("Argument `pattern` must be of type character.", call. = FALSE)
   }
 
   # name columns 1, 2, 3 etc. if no replacement
   if (is.null(replacement)) {
-    replacement <- paste0(1:length(pattern))
+    replacement <- paste0(seq_along(pattern))
   }
 
   # if duplicated names in replacement, append ".2", ".3", etc. to duplicates
@@ -71,7 +71,7 @@ data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, .
     dup <- dup[dup$Freq > 1, ]
     for (i in dup$replacement) {
       to_replace <- which(replacement == i)[-1]
-      new_replacement <- paste0(i, ".", 1 + 1:length(to_replace))
+      new_replacement <- paste0(i, ".", 1 + seq_along(to_replace))
       replacement[to_replace] <- new_replacement
     }
   }
@@ -79,20 +79,20 @@ data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, .
   if (length(replacement) > length(pattern)) {
     message(insight::format_message(
       paste0(
-        "There are more names in 'replacement' than in 'pattern'. The last ",
-        length(replacement) - length(pattern), " names of 'replacement' are not used."
+        "There are more names in `replacement` than in `pattern`. The last ",
+        length(replacement) - length(pattern), " names of `replacement` are not used."
       )
     ))
   } else if (length(replacement) < length(pattern)) {
     message(insight::format_message(
       paste0(
-        "There are more names in 'pattern' than in 'replacement'. The last ",
-        length(pattern) - length(replacement), " names of 'pattern' are not modified."
+        "There are more names in `pattern` than in `replacement`. The last ",
+        length(pattern) - length(replacement), " names of `pattern` are not modified."
       )
     ))
   }
 
-  for (i in 1:length(pattern)) {
+  for (i in seq_along(pattern)) {
     if (!is.na(replacement[i])) {
       data <- .data_rename(data, pattern[i], replacement[i], safe)
     }
@@ -103,8 +103,8 @@ data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, .
 
 #' @keywords internal
 .data_rename <- function(data, pattern, replacement, safe = TRUE) {
-  if (isFALSE(safe) & !pattern %in% names(data)) {
-    stop(paste0("Variable '", pattern, "' is not in your data frame :/"))
+  if (isFALSE(safe) && !pattern %in% names(data)) {
+    stop(paste0("Variable `", pattern, "` is not in your data frame :/"))
   }
 
   names(data) <- replace(names(data), names(data) == pattern, replacement)

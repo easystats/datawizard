@@ -31,7 +31,9 @@ to_factor <- function(x, ...) {
 #' @export
 to_factor.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(sprintf("Converting into factors values currently not possible for variables of class '%s'.", class(x)[1])))
+    message(insight::format_message(
+      sprintf("Converting into factors values currently not possible for variables of class `%s`.", class(x)[1])
+    ))
   }
   x
 }

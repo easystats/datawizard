@@ -79,7 +79,9 @@
     if (weights %in% colnames(x)) {
       exclude <- c(exclude, weights)
     } else {
-      warning(insight::format_message("Could not find weighting column '", weights, "'. Weighting not carried out."), call. = FALSE)
+      warning(insight::format_message(
+        paste0("Could not find weighting column `", weights, "`. Weighting not carried out.")
+      ), call. = FALSE)
       weights <- NULL
     }
   }
@@ -88,7 +90,7 @@
 
   # check if selected variables are in reference
   if (!is.null(reference) && !all(select %in% names(reference))) {
-    stop("The 'reference' must include all variables from 'select'.")
+    stop("The `reference` must include all variables from `select`.", call. = FALSE)
   }
 
   # copy label attributes
@@ -134,12 +136,14 @@
 
     # center and scale must have same length
     if (length(.center) != length(.scale)) {
-      stop("'center' and 'scale' must be of same length.")
+      stop("`center` and `scale` must be of same length.", call. = FALSE)
     }
 
     # center and scale must either be of length 1 or of same length as selected variables
     if (length(.center) > 1 && length(.center) != length(select)) {
-      stop(insight::format_message("'center' and 'scale' must have the same length as the selected variables for standardization or centering."))
+      stop(insight::format_message(
+        "`center` and `scale` must have the same length as the selected variables for standardization or centering."
+      ), call. = FALSE)
     }
 
     # if of length 1, recycle
@@ -232,9 +236,13 @@
   if (length(unique(x)) == 1 && is.null(reference)) {
     if (verbose) {
       if (is.null(name)) {
-        message(insight::format_message("The variable contains only one unique value and will be set to 0."))
+        message(insight::format_message(
+          "The variable contains only one unique value and will be set to 0."
+        ))
       } else {
-        message(insight::format_message(paste0("The variable `", name, "` contains only one unique value and will be set to 0.")))
+        message(insight::format_message(
+          paste0("The variable `", name, "` contains only one unique value and will be set to 0.")
+        ))
       }
     }
     return(NULL)
@@ -244,9 +252,13 @@
   if (length(unique(x)) == 2 && !is.factor(x) && !is.character(x)) {
     if (verbose) {
       if (is.null(name)) {
-        message(insight::format_message("The variable contains only two different values. Consider converting it to a factor."))
+        message(insight::format_message(
+          "The variable contains only two different values. Consider converting it to a factor."
+        ))
       } else {
-        message(insight::format_message(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor.")))
+        message(insight::format_message(
+          paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor.")
+        ))
       }
     }
   }
@@ -358,7 +370,7 @@
                                 weights,
                                 force) {
   if (!is.null(reference)) {
-    stop("The `reference` argument cannot be used with grouped standardization for now.")
+    stop("The `reference` argument cannot be used with grouped standardization for now.", call. = FALSE)
   }
 
   # check append argument, and set default
@@ -374,7 +386,7 @@
 
   if (is.numeric(weights)) {
     warning(insight::format_message(
-      "For grouped data frames, 'weights' must be a character, not a numeric vector.",
+      "For grouped data frames, `weights` must be a character, not a numeric vector.",
       "Ignoring weightings."
     ), call. = FALSE)
     weights <- NULL

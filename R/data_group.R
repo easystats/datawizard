@@ -39,7 +39,7 @@ data_group <- function(x,
   # sort grid
   grid <- grid[do.call(order, grid), , drop = FALSE]
 
-  .rows <- lapply(1:nrow(grid), function(i) {
+  .rows <- lapply(seq_len(nrow(grid)), function(i) {
     as.integer(data_match(
       x,
       to = grid[i, , drop = FALSE],

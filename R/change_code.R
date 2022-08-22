@@ -183,7 +183,9 @@ change_code <- function(x, ...) {
 #' @export
 change_code.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
+    message(insight::format_message(
+      paste0("Variables of class `", class(x)[1], "` can't be recoded and remain unchanged.")
+    ))
   }
   return(x)
 }
@@ -496,7 +498,7 @@ change_code.data.frame <- function(x,
   # warn if not a list
   if (!is.list(recode) || is.null(names(recode))) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("'recode' needs to be a (named) list. No recoding carried out."), call. = FALSE)
+      warning(insight::format_message("`recode` needs to be a (named) list. No recoding carried out."), call. = FALSE)
     }
     ok <- FALSE
   }

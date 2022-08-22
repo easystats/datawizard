@@ -56,7 +56,9 @@ data_partition <- function(data,
   if (!is.data.frame(data)) {
     data <- tryCatch(as.data.frame(data), error = function(e) NULL)
     if (is.null(data)) {
-      stop(insight::format_message("`data` needs to be a data frame, or an object that can be coerced to a data frame."), call. = FALSE)
+      stop(insight::format_message(
+        "`data` needs to be a data frame, or an object that can be coerced to a data frame."
+      ), call. = FALSE)
     }
   }
 
@@ -65,7 +67,9 @@ data_partition <- function(data,
   }
 
   if (sum(proportion) == 1 && isTRUE(verbose)) {
-    warning(insight::format_message("Proportions of sampled training sets (`proportion`) sums up to 1, so no test set will be generated."), call. = FALSE)
+    warning(insight::format_message(
+      "Proportions of sampled training sets (`proportion`) sums up to 1, so no test set will be generated."
+    ), call. = FALSE)
   }
 
   if (is.null(row_id)) {
@@ -93,12 +97,12 @@ data_partition <- function(data,
   }
 
   # add row-id column
-  data[[row_id]] <- 1:nrow(data)
+  data[[row_id]] <- seq_len(nrow(data))
 
   # Create list of data groups. We generally lapply over list of
   # sampled row-id's by group, thus, we even create a list if not grouped.
   if (is.null(group)) {
-    indices_list <- list(1:nrow(data))
+    indices_list <- list(seq_len(nrow(data)))
   } else {
     # else, split by group(s) and extract row-ids per group
     indices_list <- lapply(
@@ -141,7 +145,7 @@ data_partition <- function(data,
     # sets from each group. currently, we have a list of data frames,
     # grouped by "group"; but we want one data frame per proportion that
     # contains sampled rows from all groups.
-    training_sets <- lapply(1:length(proportion), function(p) {
+    training_sets <- lapply(seq_along(proportion), function(p) {
       do.call(rbind, lapply(training_sets, function(i) i[[p]]))
     })
   } else {
