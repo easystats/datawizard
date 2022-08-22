@@ -6,12 +6,12 @@ test_that("data_relocate works as expected", {
 
   expect_error(
     data_relocate(iris, select = "Species", before = 10),
-    "No valid position defined in 'before'."
+    "No valid position defined in `before`."
   )
 
   expect_error(
     data_relocate(iris, select = "Species", after = 10),
-    "No valid position defined in 'after'."
+    "No valid position defined in `after`."
   )
 
   expect_equal(
