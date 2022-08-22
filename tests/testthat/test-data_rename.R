@@ -24,11 +24,11 @@ test_that("data_rename returns a data frame", {
 test_that("data_rename: pattern must be of type character", {
   expect_error(
     data_rename(test, pattern = 1),
-    regexp = "Argument 'pattern' must be of type character."
+    regexp = "Argument `pattern` must be of type character."
   )
   expect_error(
     data_rename(test, pattern = TRUE),
-    regexp = "Argument 'pattern' must be of type character."
+    regexp = "Argument `pattern` must be of type character."
   )
 })
 
