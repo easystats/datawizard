@@ -96,5 +96,8 @@ test_that("convert_to_na regex", {
   expect_equal(
     convert_to_na(mtcars, na = 4, select = "arb", regex = TRUE),
     convert_to_na(mtcars, na = 4, select = "carb"))
+  expect_equal(
+    convert_to_na(mtcars, na = 4, select = "arb$", regex = TRUE),
+    convert_to_na(mtcars, na = 4, select = "carb")
+  )
 })
-

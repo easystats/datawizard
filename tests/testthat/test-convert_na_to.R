@@ -414,5 +414,8 @@ test_that("convert_na_to regex", {
   expect_equal(
     convert_na_to(airquality, replacement = 0, select = "zone", regex = TRUE),
     convert_na_to(airquality, replacement = 0, select = "Ozone"))
+  expect_equal(
+    convert_na_to(airquality, replacement = 0, select = "zone$", regex = TRUE),
+    convert_na_to(airquality, replacement = 0, select = "Ozone")
+  )
 })
-

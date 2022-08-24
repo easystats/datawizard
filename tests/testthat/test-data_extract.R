@@ -137,5 +137,7 @@ test_that("data_extract regex", {
   expect_equal(
     data_extract(mtcars, select = "pg", regex = TRUE),
     data_extract(mtcars, select = "mpg"))
+  expect_equal(
+    data_extract(mtcars, select = "pg$", regex = TRUE),
+    data_extract(mtcars, select = "mpg"))
 })
-

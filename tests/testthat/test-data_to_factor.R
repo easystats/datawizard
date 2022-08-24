@@ -56,5 +56,8 @@ test_that("to_factor regex", {
   expect_equal(
     to_factor(mtcars, select = "yl", regex = TRUE),
     to_factor(mtcars, select = "cyl"))
+  expect_equal(
+    to_factor(mtcars, select = "yl$", regex = TRUE),
+    to_factor(mtcars, select = "cyl")
+  )
 })
-
