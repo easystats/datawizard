@@ -101,6 +101,7 @@
 <span>  exclude <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  append <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  regex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -166,6 +167,17 @@ based on the calling function: <code>"_r"</code> for recode functions, <code>"_n
 overwritten by their recoded versions. If a character value, recoded
 variables are appended with new column names (using the defined suffix) to
 the original data frame.</p></dd>
+
+
+<dt>regex</dt>
+<dd><p>Logical, if <code>TRUE</code>, the search pattern from <code>select</code> will be
+treated as regular expression. When <code>regex = TRUE</code>, select <em>must</em> be a
+character string (or a variable containing a character string) and is not
+allowed to be one of the supported select-helpers or a character vector
+of length &gt; 1. <code>regex = TRUE</code> is comparable to using one of the two
+select-helpers, <code>select = contains("")</code> or <code>select = regex("")</code>, however,
+since the select-helpers may not work when called from inside other
+functions (see 'Details'), this argument may be used as workaround.</p></dd>
 
 
 <dt>verbose</dt>

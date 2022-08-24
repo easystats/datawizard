@@ -110,6 +110,7 @@
 <span>  replace_char <span class="op">=</span> <span class="va">replacement</span>,</span>
 <span>  replace_fac <span class="op">=</span> <span class="va">replacement</span>,</span>
 <span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  regex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -184,6 +185,17 @@ excludes no columns.</p></dd>
 <dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
 a regular expression is used in <code>select</code>, ignores lower/upper case in the
 search pattern when matching against variable names.</p></dd>
+
+
+<dt>regex</dt>
+<dd><p>Logical, if <code>TRUE</code>, the search pattern from <code>select</code> will be
+treated as regular expression. When <code>regex = TRUE</code>, select <em>must</em> be a
+character string (or a variable containing a character string) and is not
+allowed to be one of the supported select-helpers or a character vector
+of length &gt; 1. <code>regex = TRUE</code> is comparable to using one of the two
+select-helpers, <code>select = contains("")</code> or <code>select = regex("")</code>, however,
+since the select-helpers may not work when called from inside other
+functions (see 'Details'), this argument may be used as workaround.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -272,6 +284,7 @@ from the input data frame.</p>
 <span class="r-in"><span>  replace_num <span class="op">=</span> <span class="fl">0</span>,</span></span>
 <span class="r-in"><span>  select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Following variable(s) were not found: 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   x x2    y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1  4    a</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2  5    b</span>
