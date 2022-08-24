@@ -26,6 +26,14 @@
 data_arrange <- function(data, select = NULL, safe = TRUE) {
   if (is.null(select) || length(select) == 0) return(data)
 
+  # coerce to data frame?
+  if (!is.data.frame(data)) {
+    data <- tryCatch(as.data.frame(data),
+    error = function(e) {
+      stop("Could not coerce `data` into a data frame.", call. = FALSE)
+    })
+  }
+
   # find which vars should be decreasing
   desc <- select[grepl("^-", select)]
   desc <- gsub("^-", "", desc)

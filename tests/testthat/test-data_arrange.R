@@ -55,3 +55,11 @@ test_that("data_arrange errors if safe = FALSE", {
   expect_error(data_arrange(df, "foo", safe = FALSE))
 })
 
+test_that("data_arrange errors if not coercable to data frame", {
+  expect_error(data_arrange(list(a = 1:5, b = letters[1:3]), select = "b"))
+  expect_equal(
+    data_arrange(list(a = 1:5, b = letters[5:1]), select = "b"),
+    structure(list(a = 5:1, b = c("a", "b", "c", "d", "e")), row.names = 5:1, class = "data.frame"),
+    ignore_attr = TRUE
+  )
+})
