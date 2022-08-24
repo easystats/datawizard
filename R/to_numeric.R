@@ -61,6 +61,7 @@ to_numeric.data.frame <- function(x,
                                   lowest = NULL,
                                   append = FALSE,
                                   ignore_case = FALSE,
+                                  regex = FALSE,
                                   verbose = TRUE,
                                   ...) {
   # sanity check, return as is for complete numeric
@@ -69,7 +70,12 @@ to_numeric.data.frame <- function(x,
   }
 
   # evaluate arguments
-  select <- .select_nse(select, x, exclude, ignore_case)
+  select <- .select_nse(select,
+                        x,
+                        exclude,
+                        ignore_case,
+                        regex = regex,
+                        verbose = verbose)
 
   # drop numerics, when append is not FALSE
   if (!isFALSE(append)) {
