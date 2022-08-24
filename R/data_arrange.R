@@ -4,7 +4,7 @@
 #' columns.
 #'
 #' @param data A data frame, or an object that can be coerced to a data frame.
-#' @param Select Character vector of column names. Use a dash just before column
+#' @param select Character vector of column names. Use a dash just before column
 #'   name to arrange in decreasing order, for example `"-x1"`.
 #' @param safe Do not throw an error if one of the variables specified doesn't
 #'   exist.
