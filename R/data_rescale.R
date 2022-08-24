@@ -134,7 +134,7 @@ rescale.grouped_df <- function(x,
                         exclude,
                         ignore_case,
                         regex = regex,
-                        verbose = FALSE)
+                        verbose = verbose)
 
   # dplyr < 0.8.0?
   if (is.null(grps)) {
@@ -179,7 +179,7 @@ rescale.data.frame <- function(x,
                         exclude,
                         ignore_case,
                         regex = regex,
-                        verbose = FALSE)
+                        verbose = verbose)
 
   # Transform the range so that it is a list now
   if (!is.null(range)) {

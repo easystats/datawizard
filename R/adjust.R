@@ -103,7 +103,7 @@ adjust <- function(data,
                           exclude,
                           ignore_case,
                           regex = regex,
-                          verbose = FALSE)
+                          verbose = verbose)
   }
 
   # Factors

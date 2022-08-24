@@ -262,7 +262,7 @@ categorize.data.frame <- function(x,
                         exclude,
                         ignore_case,
                         regex = regex,
-                        verbose = FALSE)
+                        verbose = verbose)
 
   # process arguments
   args <- .process_std_args(
@@ -319,7 +319,7 @@ categorize.grouped_df <- function(x,
                         exclude,
                         ignore_case,
                         regex = regex,
-                        verbose = FALSE)
+                        verbose = verbose)
 
   # process arguments
   args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force = TRUE)
