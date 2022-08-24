@@ -144,7 +144,9 @@ the original data frame.</p></dd>
 
 <dt>filter</dt>
 <dd><p>A logical expression indicating which rows to keep, or a numeric
-vector indicating the row indices of rows to keep.</p></dd>
+vector indicating the row indices of rows to keep. Can also be a string
+representation of a logical expression. e.g. <code>filter = "x &gt; 4"</code>. This might
+be useful when used in packages to avoid defining undefined global variables.</p></dd>
 
 </dl></div>
     <div class="section level2">
