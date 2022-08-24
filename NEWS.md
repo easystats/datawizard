@@ -10,6 +10,11 @@ BREAKING CHANGES
 * New `text_format()` alias is introduced for `format_text()`, latter of which
   will be removed in the next release.
 
+CHANGES
+
+* The `regex` argument was added to functions that use select-helpers and did
+  not already have this argument.
+
 # datawizard 0.5.1
 
 * Fixes failing tests due to `{poorman}` update.

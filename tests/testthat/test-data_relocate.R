@@ -82,3 +82,11 @@ test_that("data_relocate preserves attributes", {
 
   expect_equal(names(a1), names(a2))
 })
+
+# select helpers ------------------------------
+test_that("data_relocate regex", {
+  expect_equal(
+    names(data_relocate(mtcars, select = "pg", regex = TRUE, after = "carb"))[11],
+    "mpg")
+})
+

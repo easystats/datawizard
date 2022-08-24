@@ -45,6 +45,7 @@ data_relocate <- function(data,
                           before = NULL,
                           after = NULL,
                           ignore_case = FALSE,
+                          regex = FALSE,
                           verbose = TRUE,
                           ...) {
   # Sanitize
@@ -74,7 +75,12 @@ data_relocate <- function(data,
     }
   }
 
-  cols <- .select_nse(select, data, exclude = NULL, ignore_case = ignore_case, verbose = verbose)
+  cols <- .select_nse(select,
+                      data,
+                      exclude = NULL,
+                      ignore_case = ignore_case,
+                      regex = regex,
+                      verbose = verbose)
 
   # save attributes
   att <- attributes(data)
@@ -122,8 +128,19 @@ data_relocate <- function(data,
 
 #' @rdname data_relocate
 #' @export
-data_reorder <- function(data, select, ignore_case = FALSE, verbose = TRUE, ...) {
-  cols <- .select_nse(select, data, exclude = NULL, ignore_case = ignore_case, verbose = verbose)
+data_reorder <- function(data,
+                         select,
+                         exclude = NULL,
+                         ignore_case = FALSE,
+                         regex = FALSE,
+                         verbose = TRUE,
+                         ...) {
+  cols <- .select_nse(select,
+                      data,
+                      exclude = NULL,
+                      ignore_case = ignore_case,
+                      regex = regex,
+                      verbose = verbose)
   remaining_columns <- setdiff(colnames(data), cols)
 
   out <- data[c(cols, remaining_columns)]

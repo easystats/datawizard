@@ -454,10 +454,16 @@ change_code.data.frame <- function(x,
                                    preserve_na = TRUE,
                                    append = FALSE,
                                    ignore_case = FALSE,
+                                   regex = FALSE,
                                    verbose = TRUE,
                                    ...) {
   # evaluate arguments
-  select <- .select_nse(select, x, exclude, ignore_case)
+  select <- .select_nse(select,
+                        x,
+                        exclude,
+                        ignore_case,
+                        regex = regex,
+                        verbose = verbose)
 
   # process arguments
   args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force = TRUE)

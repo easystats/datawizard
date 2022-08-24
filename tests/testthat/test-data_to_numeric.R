@@ -146,3 +146,11 @@ test_that("convert factor to numeric, dummy factors, with NA", {
   expect_equal(nrow(to_numeric(x6, dummy_factors = TRUE)), length(x6))
   expect_equal(nrow(to_numeric(x7, dummy_factors = TRUE)), length(x7))
 })
+
+# select helpers ------------------------------
+test_that("to_numeric regex", {
+  expect_equal(
+    to_numeric(mtcars, select = "pg", regex = TRUE),
+    to_numeric(mtcars, select = "mpg"))
+})
+
