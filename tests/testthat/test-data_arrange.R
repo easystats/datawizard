@@ -27,15 +27,15 @@ test_that("data_arrange works with one character column", {
 test_that("data_arrange works with several columns", {
   expect_equal(
     arrange(df, carb, gear),
-    data_arrange(df, "carb", "gear")
+    data_arrange(df, c("carb", "gear"))
   )
   expect_equal(
     arrange(df, -carb, gear),
-    data_arrange(df, "-carb", "gear")
+    data_arrange(df, c("-carb", "gear"))
   )
   expect_equal(
     arrange(df, -carb, desc(character)),
-    data_arrange(df, "-carb", "-character")
+    data_arrange(df, c("-carb", "-character"))
   )
 })
 
@@ -46,7 +46,7 @@ test_that("data_arrange works without columns", {
 test_that("data_arrange ignores wrong names if safe = TRUE", {
   expect_equal(data_arrange(df, "foo"), df)
   expect_equal(
-    data_arrange(df, "gear", "foo"),
+    data_arrange(df, c("gear", "foo")),
     data_arrange(df, "gear")
   )
 })
