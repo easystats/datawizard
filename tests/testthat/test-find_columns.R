@@ -113,3 +113,11 @@ test_that("find_columns from other functions", {
   }
   expect_warning(expect_null(test_fun3(iris)))
 })
+
+# select helpers ------------------------------
+test_that("find_columns regex", {
+  expect_equal(
+    find_columns(mtcars, select = "pg", regex = TRUE),
+    find_columns(mtcars, select = "mpg"))
+})
+

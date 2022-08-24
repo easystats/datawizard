@@ -253,10 +253,16 @@ categorize.data.frame <- function(x,
                                   labels = NULL,
                                   append = FALSE,
                                   ignore_case = FALSE,
+                                  regex = FALSE,
                                   verbose = TRUE,
                                   ...) {
   # evaluate arguments
-  select <- .select_nse(select, x, exclude, ignore_case)
+  select <- .select_nse(select,
+                        x,
+                        exclude,
+                        ignore_case,
+                        regex = regex,
+                        verbose = FALSE)
 
   # process arguments
   args <- .process_std_args(
@@ -299,6 +305,7 @@ categorize.grouped_df <- function(x,
                                   labels = NULL,
                                   append = FALSE,
                                   ignore_case = FALSE,
+                                  regex = FALSE,
                                   verbose = TRUE,
                                   ...) {
   info <- attributes(x)
@@ -307,7 +314,12 @@ categorize.grouped_df <- function(x,
   grps <- attr(x, "groups", exact = TRUE)
 
   # evaluate arguments
-  select <- .select_nse(select, x, exclude, ignore_case)
+  select <- .select_nse(select,
+                        x,
+                        exclude,
+                        ignore_case,
+                        regex = regex,
+                        verbose = FALSE)
 
   # process arguments
   args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force = TRUE)

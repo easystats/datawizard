@@ -72,7 +72,9 @@ adjust <- function(data,
                    additive = FALSE,
                    bayesian = FALSE,
                    keep_intercept = FALSE,
-                   ignore_case = FALSE) {
+                   ignore_case = FALSE,
+                   regex = FALSE,
+                   verbose = FALSE) {
   if (!all(colnames(data) == make.names(colnames(data), unique = TRUE))) {
     warning(insight::format_message(
       "Bad column names (e.g., with spaces) have been detected which might create issues in many functions.",
@@ -96,7 +98,12 @@ adjust <- function(data,
     select <- names(data[nums])
   } else {
     # evaluate select/exclude, may be select-helpers
-    select <- .select_nse(select, data, exclude, ignore_case, verbose = FALSE)
+    select <- .select_nse(select,
+                          data,
+                          exclude,
+                          ignore_case,
+                          regex = regex,
+                          verbose = FALSE)
   }
 
   # Factors

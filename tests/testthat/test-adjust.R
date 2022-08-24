@@ -16,3 +16,11 @@ test_that("adjust", {
     tolerance = 1e-3
   )
 })
+
+# select helpers ------------------------------
+test_that("adjust regex", {
+  expect_equal(
+    adjust(mtcars, select = "pg", regex = TRUE),
+    adjust(mtcars, select = "mpg"))
+})
+
