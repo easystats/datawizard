@@ -83,7 +83,7 @@ Before we look at their *tidyverse* equivalents, we can first have a look at
 | :---------------- | :------------------------------------------------ |
 | `data_filter()`   | [to select only certain observations](#filtering) |
 | `data_select()`   | [to select only a few variables](#selecting)      |
-| `data_arrange()`  | [to order observations](#ordering)      |
+| `data_arrange()`  | [to sort observations](#sorting)      |
 | `data_extract()`  | [to extract a single variable](#extracting)       |
 | `data_rename()`   | [to rename variables](#renaming)                  |
 | `data_relocate()` | [to reorder a data frame](#relocating)            |
@@ -295,17 +295,19 @@ You can find a list of all the select helpers with `?data_select`.
 
 
 
-## Ordering {#ordering}
+## Sorting {#sorting}
 
 `data_arrange()` is the equivalent of `dplyr::arrange()`. It takes two arguments:
-a dataframe, and a vector of column names used to order the rows. 
+a dataframe, and a vector of column names used to sort the rows. Note that contrary
+to most other functions in `{datawizard}`, it is not possible to use select helpers
+such as `starts_with()` in `data_arrange()`.
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
 :::{}
 ```{r arrange1, class.source = "datawizard"}
 # ---------- datawizard -----------
 starwars %>%
-  data_arrange(c("hair", "height"))
+  data_arrange(c("hair_color", "height"))
 ```
 :::
 
@@ -314,7 +316,33 @@ starwars %>%
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
 starwars %>%
-  pull(gender)
+  arrange(hair_color, height)
+```
+:::
+
+::::
+
+```{r arrange1, eval = TRUE, echo = FALSE}
+```
+
+You can also sort variables in descending order by putting a `"-"` in front of 
+their name, like below:
+
+:::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
+:::{}
+```{r arrange2, class.source = "datawizard"}
+# ---------- datawizard -----------
+starwars %>%
+  data_arrange(c("-hair_color", "-height"))
+```
+:::
+
+::: {}
+
+```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
+starwars %>%
+  arrange(desc(hair_color), -height)
 ```
 :::
 
@@ -322,7 +350,6 @@ starwars %>%
 
 ```{r arrange2, eval = TRUE, echo = FALSE}
 ```
-
 
 
 ## Extracting {#extracting}
