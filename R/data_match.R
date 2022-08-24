@@ -10,7 +10,9 @@
 #'   `match` is a value other than `"and"`, the original row order might be
 #'   changed. See 'Details'.
 #' @param filter A logical expression indicating which rows to keep, or a numeric
-#'   vector indicating the row indices of rows to keep.
+#'   vector indicating the row indices of rows to keep. Can also be a string
+#'   representation of a logical expression. e.g. `filter = "x > 4"`. This might
+#'   be useful when used in packages to avoid defining undefined global variables.
 #' @param match String, indicating with which logical operation matching
 #'   conditions should be combined. Can be `"and"` (or `"&"`), `"or"` (or `"|"`)
 #'   or `"not"` (or `"!"`).
@@ -152,6 +154,10 @@ data_filter <- function(x, filter, ...) {
   if (is.numeric(rows)) {
     out <- x[rows, , drop = FALSE]
   } else {
+    # "filter" is no expression, but a string?
+    if (is.character(condition)) {
+      condition <- .str2lang(condition)
+    }
     out <- do.call(subset, list(x, subset = condition))
   }
   # restore value and variable labels

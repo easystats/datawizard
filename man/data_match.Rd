@@ -33,7 +33,9 @@ the original data frame.}
 \item{...}{Not used.}
 
 \item{filter}{A logical expression indicating which rows to keep, or a numeric
-vector indicating the row indices of rows to keep.}
+vector indicating the row indices of rows to keep. Can also be a string
+representation of a logical expression. e.g. \code{filter = "x > 4"}. This might
+be useful when used in packages to avoid defining undefined global variables.}
 }
 \value{
 A filtered data frame, or the row indices that match the specified configuration.
