@@ -298,7 +298,7 @@ You can find a list of all the select helpers with `?data_select`.
 ## Sorting {#sorting}
 
 `data_arrange()` is the equivalent of `dplyr::arrange()`. It takes two arguments:
-a dataframe, and a vector of column names used to sort the rows. Note that contrary
+a data frame, and a vector of column names used to sort the rows. Note that contrary
 to most other functions in `{datawizard}`, it is not possible to use select helpers
 such as `starts_with()` in `data_arrange()`.
 
@@ -354,7 +354,7 @@ starwars %>%
 
 ## Extracting {#extracting}
 
-Although we mostly work on dataframes, it is sometimes useful to extract a single 
+Although we mostly work on data frames, it is sometimes useful to extract a single 
 column as a vector. This can be done with `data_extract()`, which reproduces the 
 behavior of `dplyr::pull()`:
 
