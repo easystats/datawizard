@@ -174,3 +174,11 @@ test_that("recode numeric", {
     )
   )
 })
+
+# select helpers ------------------------------
+test_that("categorize regex", {
+  expect_equal(
+    categorize(mtcars, select = "pg", regex = TRUE),
+    categorize(mtcars, select = "mpg"))
+})
+

@@ -35,8 +35,7 @@ these common, critical, and sometimes tedious data preparation tasks.
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/datawizard)](https://cran.r-project.org/package=datawizard)
 [![insight status
 badge](https://easystats.r-universe.dev/badges/datawizard)](https://easystats.r-universe.dev)
-[![R
-check](https://github.com/easystats/datawizard/workflows/R-check/badge.svg?branch=main)](https://github.com/easystats/datawizard/actions)
+[![R-CMD-check](https://github.com/easystats/datawizard/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/easystats/datawizard/actions)
 
 | Type        | Source     | Command                                                                      |
 |-------------|------------|------------------------------------------------------------------------------|

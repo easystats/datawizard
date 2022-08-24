@@ -47,7 +47,9 @@ convert_to_na <- function(x, ...) {
 #' @export
 convert_to_na.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(sprintf("Converting values into missing values (`NA`) currently not possible for variables of class '%s'.", class(x)[1])))
+    message(insight::format_message(
+      sprintf("Converting values into missing values (`NA`) currently not possible for variables of class `%s`.", class(x)[1])
+    ))
   }
   x
 }
@@ -166,10 +168,16 @@ convert_to_na.data.frame <- function(x,
                                      na = NULL,
                                      drop_levels = FALSE,
                                      ignore_case = FALSE,
+                                     regex = FALSE,
                                      verbose = TRUE,
                                      ...) {
   # evaluate arguments
-  select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
+  select <- .select_nse(select,
+                        x,
+                        exclude,
+                        ignore_case,
+                        regex = regex,
+                        verbose = verbose)
 
   x[select] <- lapply(x[select], convert_to_na, na = na, drop_levels = drop_levels, verbose = verbose, ...)
   x
