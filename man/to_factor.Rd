@@ -2,13 +2,10 @@
 % Please edit documentation in R/to_factor.R
 \name{to_factor}
 \alias{to_factor}
-\alias{data_to_factor}
 \alias{to_factor.data.frame}
 \title{Convert data to factors}
 \usage{
 to_factor(x, ...)
-
-data_to_factor(x, ...)
 
 \method{to_factor}{data.frame}(
   x,
@@ -16,6 +13,7 @@ data_to_factor(x, ...)
   exclude = NULL,
   ignore_case = FALSE,
   append = FALSE,
+  regex = FALSE,
   verbose = TRUE,
   ...
 )
@@ -72,6 +70,15 @@ based on the calling function: \code{"_r"} for recode functions, \code{"_n"} for
 overwritten by their recoded versions. If a character value, recoded
 variables are appended with new column names (using the defined suffix) to
 the original data frame.}
+
+\item{regex}{Logical, if \code{TRUE}, the search pattern from \code{select} will be
+treated as regular expression. When \code{regex = TRUE}, select \emph{must} be a
+character string (or a variable containing a character string) and is not
+allowed to be one of the supported select-helpers or a character vector
+of length > 1. \code{regex = TRUE} is comparable to using one of the two
+select-helpers, \code{select = contains("")} or \code{select = regex("")}, however,
+since the select-helpers may not work when called from inside other
+functions (see 'Details'), this argument may be used as workaround.}
 
 \item{verbose}{Toggle warnings.}
 }

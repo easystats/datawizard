@@ -38,12 +38,17 @@
 #' # Paste with optional separator
 #' text_paste(c("A", "", "B"), c("42", "42", "42"))
 #' @export
-format_text <- function(text, sep = ", ", last = " and ", width = NULL, enclose = NULL, ...) {
+text_format <- function(text, sep = ", ", last = " and ", width = NULL, enclose = NULL, ...) {
   text_wrap(text_concatenate(text, sep = sep, last = last, enclose = enclose), width = width)
 }
 
+## TODO Deprecate and remove alias later
 
-#' @rdname format_text
+#' @rdname text_format
+#' @export
+format_text <- text_format
+
+#' @rdname text_format
 #' @export
 text_fullstop <- function(text) {
   text[!text_lastchar(text) %in% c(".", ":", ",", ";", "!", "?")] <- paste0(text[text_lastchar(text) != "."], ".")
@@ -51,7 +56,7 @@ text_fullstop <- function(text) {
 }
 
 
-#' @rdname format_text
+#' @rdname text_format
 #' @export
 text_lastchar <- function(text, n = 1) {
   sapply(text, function(xx) {
@@ -60,7 +65,7 @@ text_lastchar <- function(text, n = 1) {
 }
 
 
-#' @rdname format_text
+#' @rdname text_format
 #' @export
 text_concatenate <- function(text, sep = ", ", last = " and ", enclose = NULL) {
   text <- text[text != ""]
@@ -77,7 +82,7 @@ text_concatenate <- function(text, sep = ", ", last = " and ", enclose = NULL) {
 }
 
 
-#' @rdname format_text
+#' @rdname text_format
 #' @export
 text_paste <- function(text, text2 = NULL, sep = ", ", enclose = NULL, ...) {
   if (!is.null(text2)) {
@@ -101,14 +106,14 @@ text_paste <- function(text, text2 = NULL, sep = ", ", enclose = NULL, ...) {
 
 
 
-#' @rdname format_text
+#' @rdname text_format
 #' @export
 text_remove <- function(text, pattern = "", ...) {
   gsub(pattern, "", text, ...)
 }
 
 
-#' @rdname format_text
+#' @rdname text_format
 #' @export
 text_wrap <- function(text, width = NULL, ...) {
   width <- width %||% getOption("width")

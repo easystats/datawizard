@@ -5,7 +5,7 @@ output:
     toc: true
 vignette: >
   \usepackage[utf8]{inputenc}
-  %\VignetteIndexEntry{Translating to 'tidyverse'}
+  %\VignetteIndexEntry{Coming from 'tidyverse'}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 

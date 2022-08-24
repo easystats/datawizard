@@ -180,17 +180,12 @@ change_code <- function(x, ...) {
 }
 
 
-## TODO Deprecate and remove alias later
-
-#' @rdname change_code
-#' @export
-data_recode <- change_code
-
-
 #' @export
 change_code.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
+    message(insight::format_message(
+      paste0("Variables of class `", class(x)[1], "` can't be recoded and remain unchanged.")
+    ))
   }
   return(x)
 }
@@ -459,10 +454,16 @@ change_code.data.frame <- function(x,
                                    preserve_na = TRUE,
                                    append = FALSE,
                                    ignore_case = FALSE,
+                                   regex = FALSE,
                                    verbose = TRUE,
                                    ...) {
   # evaluate arguments
-  select <- .select_nse(select, x, exclude, ignore_case)
+  select <- .select_nse(select,
+                        x,
+                        exclude,
+                        ignore_case,
+                        regex = regex,
+                        verbose = verbose)
 
   # process arguments
   args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force = TRUE)
@@ -485,8 +486,6 @@ change_code.data.frame <- function(x,
 }
 
 
-
-
 # utils --------------------------
 
 .recode_args_ok <- function(x, recode, verbose) {
@@ -505,7 +504,7 @@ change_code.data.frame <- function(x,
   # warn if not a list
   if (!is.list(recode) || is.null(names(recode))) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("'recode' needs to be a (named) list. No recoding carried out."), call. = FALSE)
+      warning(insight::format_message("`recode` needs to be a (named) list. No recoding carried out."), call. = FALSE)
     }
     ok <- FALSE
   }

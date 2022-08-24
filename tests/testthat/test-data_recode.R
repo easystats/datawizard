@@ -296,3 +296,12 @@ test_that("recode data.frame", {
     ignore_attr = TRUE
   )
 })
+
+# select helpers ------------------------------
+test_that("change_code regex", {
+  expect_equal(
+    change_code(iris, select = "ies", regex = TRUE, recode = list(
+      Group1 = "setosa", Group2 = "versicolor", Group3 = "virginica")),
+    change_code(iris, select = "Species", recode = list(
+      Group1 = "setosa", Group2 = "versicolor", Group3 = "virginica")))
+})
