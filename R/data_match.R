@@ -152,31 +152,10 @@ data_filter <- function(x, filter, ...) {
   if (is.numeric(rows)) {
     out <- x[rows, , drop = FALSE]
   } else {
-
-    # check for curley tags, like "{var} == 1"
-    has_curley <- tryCatch(grepl("{", deparse(filter), fixed = TRUE),
-                           error = function(e) FALSE)
-    if (isTRUE(has_curley)) {
-      # evaluate condition, to get a string
-      condition <- eval(condition, envir = parent.frame())
-      # find variables inside curleys
-      curley_vars <- gregexpr("[^{\\}]+(?=\\})", condition, perl = TRUE)
-      l <- attributes(curley_vars[[1]])$match.length
-      curley_vars <- unlist(curley_vars)
-
-      curley_vars <- sapply(seq_along(curley_vars), function(i) {
-        substr(condition, curley_vars[i], curley_vars[i] + l[i] - 1)
-      })
-
-      for (i in eval(curley_vars)) {
-        token <- eval(str2lang(i))
-        condition <- gsub(paste0("{", i, "}"), token, condition, fixed = TRUE)
-      }
-
-      condition <- str2lang(condition)
-
+    # "filter" is no expression, but a string?
+    if (is.character(condition)) {
+      condition <- .str2lang(condition)
     }
-    
     out <- do.call(subset, list(x, subset = condition))
   }
   # restore value and variable labels
