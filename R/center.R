@@ -171,9 +171,15 @@ center.data.frame <- function(x,
                               append = FALSE,
                               ignore_case = FALSE,
                               verbose = TRUE,
+                              regex = FALSE,
                               ...) {
   # evaluate select/exclude, may be select-helpers
-  select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
+  select <- .select_nse(select,
+                        x,
+                        exclude,
+                        ignore_case,
+                        regex = regex,
+                        verbose = verbose)
 
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append,
@@ -217,9 +223,15 @@ center.grouped_df <- function(x,
                               append = FALSE,
                               ignore_case = FALSE,
                               verbose = TRUE,
+                              regex = FALSE,
                               ...) {
   # evaluate select/exclude, may be select-helpers
-  select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
+  select <- .select_nse(select,
+                        x,
+                        exclude,
+                        ignore_case,
+                        regex = regex,
+                        verbose = verbose)
 
   args <- .process_grouped_df(x, select, exclude, append,
     append_suffix = "_c",
