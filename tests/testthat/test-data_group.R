@@ -43,6 +43,6 @@ test_that("data_group attributes", {
 test_that("data_group regex", {
   expect_equal(
     attributes(data_group(mtcars, select = "yl", regex = TRUE))$groups[[1]],
-    sort(unique(mtcars$cyl)))
+    sort(unique(mtcars$cyl))
+  )
 })
-

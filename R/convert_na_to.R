@@ -159,11 +159,12 @@ convert_na_to.data.frame <- function(x,
                                      ...) {
   data <- x
   select_nse <- .select_nse(select,
-                            data,
-                            exclude = exclude,
-                            ignore_case,
-                            regex = regex,
-                            verbose = verbose)
+    data,
+    exclude = exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # list are not covered by .select_nse
   if (length(select_nse) == 0) {

@@ -66,6 +66,6 @@ test_that("rescale works with select helpers", {
 test_that("data_rescale regex", {
   expect_equal(
     rescale(mtcars, select = "pg", regex = TRUE)$mpg,
-    rescale(mtcars, select = "mpg")$mpg)
+    rescale(mtcars, select = "mpg")$mpg
+  )
 })
-

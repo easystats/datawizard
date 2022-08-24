@@ -40,7 +40,8 @@ data_group <- function(data,
     exclude,
     ignore_case = ignore_case,
     regex = regex,
-    verbose = verbose)
+    verbose = verbose
+  )
   # create grid with combinations of all levels
   grid <- as.data.frame(expand.grid(lapply(data[select], unique)))
   # sort grid

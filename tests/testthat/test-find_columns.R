@@ -118,6 +118,6 @@ test_that("find_columns from other functions", {
 test_that("find_columns regex", {
   expect_equal(
     find_columns(mtcars, select = "pg", regex = TRUE),
-    find_columns(mtcars, select = "mpg"))
+    find_columns(mtcars, select = "mpg")
+  )
 })
-

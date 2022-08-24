@@ -124,8 +124,6 @@ test_that("data_remove preserves attributes", {
 test_that("data_remove regex", {
   expect_equal(
     names(data_remove(mtcars, select = "pg", regex = TRUE)),
-    names(mtcars[-(1)]))
+    names(mtcars[-(1)])
+  )
 })
-
-
-

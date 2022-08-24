@@ -141,8 +141,10 @@ categorize.numeric <- function(x,
   if (is.character(split)) {
     split <- match.arg(
       split,
-      choices = c("median", "mean", "quantile", "equal_length", "equal_range",
-                  "equal", "equal_distance", "range", "distance")
+      choices = c(
+        "median", "mean", "quantile", "equal_length", "equal_range",
+        "equal", "equal_distance", "range", "distance"
+      )
     )
   }
 
@@ -258,11 +260,12 @@ categorize.data.frame <- function(x,
                                   ...) {
   # evaluate arguments
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # process arguments
   args <- .process_std_args(
@@ -315,11 +318,12 @@ categorize.grouped_df <- function(x,
 
   # evaluate arguments
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # process arguments
   args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force = TRUE)

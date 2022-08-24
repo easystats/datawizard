@@ -141,11 +141,12 @@ reverse.grouped_df <- function(x,
 
   # evaluate arguments
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # dplyr < 0.8.0?
   if (is.null(grps)) {
@@ -184,11 +185,12 @@ reverse.data.frame <- function(x,
                                ...) {
   # evaluate arguments
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # Transform the range so that it is a list now
   if (!is.null(range)) {

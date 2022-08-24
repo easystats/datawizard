@@ -177,6 +177,6 @@ test_that("normalize, factor (grouped data)", {
 test_that("normalize regex", {
   expect_equal(
     normalize(mtcars, select = "pg", regex = TRUE),
-    normalize(mtcars, select = "mpg"))
+    normalize(mtcars, select = "mpg")
+  )
 })
-

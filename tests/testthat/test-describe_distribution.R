@@ -226,6 +226,6 @@ test_that("distribution_mode works as expected", {
 test_that("describe_distribution regex", {
   expect_equal(
     describe_distribution(mtcars, select = "pg", regex = TRUE),
-    describe_distribution(mtcars, select = "mpg"))
+    describe_distribution(mtcars, select = "mpg")
+  )
 })
-

@@ -86,11 +86,12 @@ data_extract.data.frame <- function(data,
 
   # evaluate arguments
   select <- .select_nse(select,
-                        data,
-                        exclude = NULL,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    data,
+    exclude = NULL,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # nothing to select?
   if (!length(select)) {
