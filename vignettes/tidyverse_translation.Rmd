@@ -83,6 +83,7 @@ Before we look at their *tidyverse* equivalents, we can first have a look at
 | :---------------- | :------------------------------------------------ |
 | `data_filter()`   | [to select only certain observations](#filtering) |
 | `data_select()`   | [to select only a few variables](#selecting)      |
+| `data_arrange()`  | [to order observations](#ordering)      |
 | `data_extract()`  | [to extract a single variable](#extracting)       |
 | `data_rename()`   | [to rename variables](#renaming)                  |
 | `data_relocate()` | [to reorder a data frame](#relocating)            |
@@ -102,6 +103,7 @@ Before we look at them individually, let's first have a look at the summary tabl
 | :---------------- | :------------------------------------------------------------------ |
 | `data_filter()`   | `dplyr::filter()`                                                   |
 | `data_select()`   | `dplyr::select()`                                                   |
+| `data_arrange()`  | `dplyr::arrange()`                                                  |
 | `data_extract()`  | `dplyr::pull()`                                                     |
 | `data_rename()`   | `dplyr::rename()`                                                   |
 | `data_relocate()` | `dplyr::relocate()`                                                 |
@@ -290,6 +292,38 @@ starwars %>%
 ```
 
 You can find a list of all the select helpers with `?data_select`.
+
+
+
+## Ordering {#ordering}
+
+`data_arrange()` is the equivalent of `dplyr::arrange()`. It takes two arguments:
+a dataframe, and a vector of column names used to order the rows. 
+
+:::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
+:::{}
+```{r arrange1, class.source = "datawizard"}
+# ---------- datawizard -----------
+starwars %>%
+  data_arrange(c("hair", "height"))
+```
+:::
+
+::: {}
+
+```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
+starwars %>%
+  pull(gender)
+```
+:::
+
+::::
+
+```{r arrange2, eval = TRUE, echo = FALSE}
+```
+
+
 
 ## Extracting {#extracting}
 
