@@ -4,16 +4,16 @@
 \alias{data_arrange}
 \title{Arrange rows by column values}
 \usage{
-data_arrange(data, ..., safe = TRUE)
+data_arrange(data, select = NULL, safe = TRUE)
 }
 \arguments{
 \item{data}{A data frame, or an object that can be coerced to a data frame.}
 
-\item{...}{Quoted column names. Use a dash just before column name to arrange
-in decreasing order, for example "-x1".}
-
 \item{safe}{Do not throw an error if one of the variables specified doesn't
 exist.}
+
+\item{Select}{Character vector of column names. Use a dash just before column
+name to arrange in decreasing order, for example \code{"-x1"}.}
 }
 \value{
 A data frame.

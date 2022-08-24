@@ -4,8 +4,8 @@
 #' columns.
 #'
 #' @param data A data frame, or an object that can be coerced to a data frame.
-#' @param ... Quoted column names. Use a dash just before column name to arrange
-#'   in decreasing order, for example "-x1".
+#' @param Select Character vector of column names. Use a dash just before column
+#'   name to arrange in decreasing order, for example `"-x1"`.
 #' @param safe Do not throw an error if one of the variables specified doesn't
 #'   exist.
 #'
@@ -23,19 +23,16 @@
 #' data_arrange(head(mtcars), "gear", "foo", safe = FALSE)
 #' }
 #' @export
-
-data_arrange <- function(data, ..., safe = TRUE) {
-
-  el <- c(...)
-  if (length(el) == 0) return(data)
+data_arrange <- function(data, select = NULL, safe = TRUE) {
+  if (is.null(select) || length(select) == 0) return(data)
 
   # find which vars should be decreasing
-  desc <- el[startsWith(el, "-")]
+  desc <- select[grepl("^-", select)]
   desc <- gsub("^-", "", desc)
-  el <- gsub("^-", "", el)
+  select <- gsub("^-", "", select)
 
   # check for variables that are not in data
-  dont_exist <- el[which(!el %in% names(data))]
+  dont_exist <- select[which(!select %in% names(data))]
   if (length(dont_exist) > 0) {
     if (!safe) {
       stop(insight::format_message(
@@ -45,10 +42,10 @@ data_arrange <- function(data, ..., safe = TRUE) {
         )
       ), call. = FALSE)
     }
-    el <- el[-which(el %in% dont_exist)]
+    select <- select[-which(select %in% dont_exist)]
   }
 
-  if (length(el) == 0) return(data)
+  if (length(select) == 0) return(data)
 
   out <- data
 
@@ -60,11 +57,9 @@ data_arrange <- function(data, ..., safe = TRUE) {
   }
 
   # apply ordering
-  if (length(el) == 1) {
-    data[order(out[[el]]), ]
+  if (length(select) == 1) {
+    data[order(out[[select]]), ]
   } else {
-    data[do.call(order, out[, el]), ]
+    data[do.call(order, out[, select]), ]
   }
 }
-
-
