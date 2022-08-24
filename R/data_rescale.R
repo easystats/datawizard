@@ -61,7 +61,9 @@ change_scale <- function(x, ...) {
 #' @export
 rescale.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be rescaled and remain unchanged.")))
+    message(insight::format_message(
+      paste0("Variables of class `", class(x)[1], "` can't be rescaled and remain unchanged.")
+    ))
   }
   x
 }
@@ -87,7 +89,9 @@ rescale.numeric <- function(x,
   # Warning if only one value
   if (length(unique(x)) == 1 && is.null(range)) {
     if (verbose) {
-      warning(insight::format_message("A `range` must be provided for data with only one unique value."), call. = FALSE)
+      warning(insight::format_message(
+        "A `range` must be provided for data with only one unique value."
+      ), call. = FALSE)
     }
     return(x)
   }

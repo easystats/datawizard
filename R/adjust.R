@@ -114,7 +114,7 @@ adjust <- function(data,
   }
 
   # Fit models
-  out <- data.frame(.ID = 1:nrow(data))
+  out <- data.frame(.ID = seq_len(nrow(data)))
   for (var in select) {
     predictors <- effect[effect != var]
     if (additive) {

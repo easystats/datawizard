@@ -92,7 +92,10 @@ centre <- center
 #' @export
 center.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(sprintf("Centering currently not possible for variables of class '%s'.", class(x)[1])))
+    message(insight::format_message(
+      sprintf("Centering currently not possible for variables of class `%s`.", class(x)[1]),
+      "You may open an issue at https://github.com/easystats/datawizard/issues."
+    ))
   }
   x
 }

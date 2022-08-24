@@ -139,15 +139,23 @@ categorize.numeric <- function(x,
                                ...) {
   # check arguments
   if (is.character(split)) {
-    split <- match.arg(split, choices = c("median", "mean", "quantile", "equal_length", "equal_range", "equal", "equal_distance", "range", "distance"))
+    split <- match.arg(
+      split,
+      choices = c("median", "mean", "quantile", "equal_length", "equal_range",
+                  "equal", "equal_distance", "range", "distance")
+    )
   }
 
   if (is.character(split) && split %in% c("quantile", "equal_length") && is.null(n_groups)) {
-    stop(insight::format_message("Recoding based on quantiles or equal-sized groups requires the 'n_groups' argument to be specified."), call. = FALSE)
+    stop(insight::format_message(
+      "Recoding based on quantiles or equal-sized groups requires the `n_groups` argument to be specified."
+    ), call. = FALSE)
   }
 
   if (is.character(split) && split == "equal_range" && is.null(n_groups) && is.null(range)) {
-    stop(insight::format_message("Recoding into groups with equal range requires either the 'range' or 'n_groups' argument to be specified."), call. = FALSE)
+    stop(insight::format_message(
+      "Recoding into groups with equal range requires either the `range` or `n_groups` argument to be specified."
+    ), call. = FALSE)
   }
 
 
@@ -214,7 +222,7 @@ categorize.numeric <- function(x,
       levels(original_x) <- labels
     } else if (isTRUE(verbose)) {
       warning(insight::format_message(
-        "Argument 'labels' and levels of the recoded variable are not of the same length.",
+        "Argument `labels` and levels of the recoded variable are not of the same length.",
         "Variable will not be converted to factor."
       ), call. = FALSE)
     }
@@ -265,7 +273,17 @@ categorize.data.frame <- function(x,
   x <- args$x
   select <- args$select
 
-  x[select] <- lapply(x[select], categorize, split = split, n_groups = n_groups, range = range, lowest = lowest, labels = labels, verbose = verbose, ...)
+  x[select] <- lapply(
+    x[select],
+    categorize,
+    split = split,
+    n_groups = n_groups,
+    range = range,
+    lowest = lowest,
+    labels = labels,
+    verbose = verbose,
+    ...
+  )
   x
 }
 
