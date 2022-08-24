@@ -83,6 +83,7 @@ Before we look at their *tidyverse* equivalents, we can first have a look at
 | :---------------- | :------------------------------------------------ |
 | `data_filter()`   | [to select only certain observations](#filtering) |
 | `data_select()`   | [to select only a few variables](#selecting)      |
+| `data_arrange()`  | [to sort observations](#sorting)      |
 | `data_extract()`  | [to extract a single variable](#extracting)       |
 | `data_rename()`   | [to rename variables](#renaming)                  |
 | `data_relocate()` | [to reorder a data frame](#relocating)            |
@@ -102,6 +103,7 @@ Before we look at them individually, let's first have a look at the summary tabl
 | :---------------- | :------------------------------------------------------------------ |
 | `data_filter()`   | `dplyr::filter()`                                                   |
 | `data_select()`   | `dplyr::select()`                                                   |
+| `data_arrange()`  | `dplyr::arrange()`                                                  |
 | `data_extract()`  | `dplyr::pull()`                                                     |
 | `data_rename()`   | `dplyr::rename()`                                                   |
 | `data_relocate()` | `dplyr::relocate()`                                                 |
@@ -291,9 +293,68 @@ starwars %>%
 
 You can find a list of all the select helpers with `?data_select`.
 
+
+
+## Sorting {#sorting}
+
+`data_arrange()` is the equivalent of `dplyr::arrange()`. It takes two arguments:
+a data frame, and a vector of column names used to sort the rows. Note that contrary
+to most other functions in `{datawizard}`, it is not possible to use select helpers
+such as `starts_with()` in `data_arrange()`.
+
+:::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
+:::{}
+```{r arrange1, class.source = "datawizard"}
+# ---------- datawizard -----------
+starwars %>%
+  data_arrange(c("hair_color", "height"))
+```
+:::
+
+::: {}
+
+```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
+starwars %>%
+  arrange(hair_color, height)
+```
+:::
+
+::::
+
+```{r arrange1, eval = TRUE, echo = FALSE}
+```
+
+You can also sort variables in descending order by putting a `"-"` in front of 
+their name, like below:
+
+:::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
+:::{}
+```{r arrange2, class.source = "datawizard"}
+# ---------- datawizard -----------
+starwars %>%
+  data_arrange(c("-hair_color", "-height"))
+```
+:::
+
+::: {}
+
+```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
+starwars %>%
+  arrange(desc(hair_color), -height)
+```
+:::
+
+::::
+
+```{r arrange2, eval = TRUE, echo = FALSE}
+```
+
+
 ## Extracting {#extracting}
 
-Although we mostly work on dataframes, it is sometimes useful to extract a single 
+Although we mostly work on data frames, it is sometimes useful to extract a single 
 column as a vector. This can be done with `data_extract()`, which reproduces the 
 behavior of `dplyr::pull()`:
 
