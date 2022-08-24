@@ -152,10 +152,6 @@ data_filter <- function(x, filter, ...) {
   if (is.numeric(rows)) {
     out <- x[rows, , drop = FALSE]
   } else {
-    # "filter" is no expression, but a string?
-    if (is.character(condition)) {
-      condition <- .str2lang(condition)
-    }
     out <- do.call(subset, list(x, subset = condition))
   }
   # restore value and variable labels
