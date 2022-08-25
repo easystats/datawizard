@@ -119,3 +119,11 @@ test_that("data_remove preserves attributes", {
 
   expect_equal(names(a1), names(a2))
 })
+
+# select helpers ------------------------------
+test_that("data_remove regex", {
+  expect_equal(
+    names(data_remove(mtcars, select = "pg", regex = TRUE)),
+    names(mtcars[-(1)])
+  )
+})

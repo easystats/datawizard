@@ -61,3 +61,11 @@ test_that("rescale works with select helpers", {
     expect_equal(head(out$Petal.Length), head(iris$Petal.Length), tolerance = 1e-3)
   }
 })
+
+# select helpers ------------------------------
+test_that("data_rescale regex", {
+  expect_equal(
+    rescale(mtcars, select = "pg", regex = TRUE)$mpg,
+    rescale(mtcars, select = "mpg")$mpg
+  )
+})

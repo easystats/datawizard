@@ -14,7 +14,9 @@ adjust(
   additive = FALSE,
   bayesian = FALSE,
   keep_intercept = FALSE,
-  ignore_case = FALSE
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = FALSE
 )
 
 data_adjust(
@@ -26,7 +28,9 @@ data_adjust(
   additive = FALSE,
   bayesian = FALSE,
   keep_intercept = FALSE,
-  ignore_case = FALSE
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -88,6 +92,17 @@ visual representation of this).}
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
+
+\item{regex}{Logical, if \code{TRUE}, the search pattern from \code{select} will be
+treated as regular expression. When \code{regex = TRUE}, select \emph{must} be a
+character string (or a variable containing a character string) and is not
+allowed to be one of the supported select-helpers or a character vector
+of length > 1. \code{regex = TRUE} is comparable to using one of the two
+select-helpers, \code{select = contains("")} or \code{select = regex("")}, however,
+since the select-helpers may not work when called from inside other
+functions (see 'Details'), this argument may be used as workaround.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 A data frame comparable to \code{data}, with adjusted variables.

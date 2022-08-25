@@ -26,3 +26,11 @@ test_that("slide", {
   expect_equal(out$Species, iris$Species)
   expect_equal(range(out$Sepal.Length), c(0, 3.6), tolerance = 1e-2)
 })
+
+# select helpers ------------------------------
+test_that("slide regex", {
+  expect_equal(
+    slide(mtcars, select = "pg", regex = TRUE),
+    slide(mtcars, select = "mpg")
+  )
+})

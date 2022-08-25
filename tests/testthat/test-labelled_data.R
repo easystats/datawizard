@@ -331,12 +331,12 @@ test_that("get_columns, labels preserved", {
 
 
 
-# change_code -----------------------------------
+# recode_values -----------------------------------
 
-test_that("change_code, labels preserved", {
+test_that("recode_values, labels preserved", {
   options(data_recode_pattern = NULL)
   data(efc)
-  x <- change_code(efc$c172code, recode = list(`0` = 1:2, `1` = 3))
+  x <- recode_values(efc$c172code, recode = list(`0` = 1:2, `1` = 3))
   expect_equal(
     attr(x, "label", exact = TRUE),
     attr(efc$c172code, "label", exact = TRUE),

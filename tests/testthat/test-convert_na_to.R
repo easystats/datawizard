@@ -408,3 +408,15 @@ test_that("data_rename preserves attributes", {
 
   expect_equal(names(a1)[1:28], names(a2)[1:28])
 })
+
+# select helpers ------------------------------
+test_that("convert_na_to regex", {
+  expect_equal(
+    convert_na_to(airquality, replacement = 0, select = "zone", regex = TRUE),
+    convert_na_to(airquality, replacement = 0, select = "Ozone")
+  )
+  expect_equal(
+    convert_na_to(airquality, replacement = 0, select = "zone$", regex = TRUE),
+    convert_na_to(airquality, replacement = 0, select = "Ozone")
+  )
+})

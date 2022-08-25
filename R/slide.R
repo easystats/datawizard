@@ -31,13 +31,6 @@ slide <- function(x, ...) {
 }
 
 
-## TODO Deprecate and remove alias later
-
-#' @rdname slide
-#' @export
-data_shift <- slide
-
-
 #' @export
 slide.default <- function(x, lowest = 0, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
@@ -69,10 +62,17 @@ slide.data.frame <- function(x,
                              lowest = 0,
                              append = FALSE,
                              ignore_case = FALSE,
+                             regex = FALSE,
                              verbose = TRUE,
                              ...) {
   # evaluate arguments
-  select <- .select_nse(select, x, exclude, ignore_case)
+  select <- .select_nse(select,
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # process arguments
   args <- .process_std_args(

@@ -2,14 +2,11 @@
 % Please edit documentation in R/categorize.R
 \name{categorize}
 \alias{categorize}
-\alias{data_cut}
 \alias{categorize.numeric}
 \alias{categorize.data.frame}
 \title{Recode (or "cut") data into groups of values.}
 \usage{
 categorize(x, ...)
-
-data_cut(x, ...)
 
 \method{categorize}{numeric}(
   x,
@@ -33,6 +30,7 @@ data_cut(x, ...)
   labels = NULL,
   append = FALSE,
   ignore_case = FALSE,
+  regex = FALSE,
   verbose = TRUE,
   ...
 )
@@ -122,6 +120,15 @@ the original data frame.}
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
+
+\item{regex}{Logical, if \code{TRUE}, the search pattern from \code{select} will be
+treated as regular expression. When \code{regex = TRUE}, select \emph{must} be a
+character string (or a variable containing a character string) and is not
+allowed to be one of the supported select-helpers or a character vector
+of length > 1. \code{regex = TRUE} is comparable to using one of the two
+select-helpers, \code{select = contains("")} or \code{select = regex("")}, however,
+since the select-helpers may not work when called from inside other
+functions (see 'Details'), this argument may be used as workaround.}
 }
 \value{
 \code{x}, recoded into groups. By default \code{x} is numeric, unless \code{labels}
@@ -209,7 +216,7 @@ categorize(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high"))
 \item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}}, \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
 \item Functions to reorder or remove columns: \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
 \item Functions to reshape, pivot or rotate data frames: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
-\item Functions to recode data: \code{\link[=rescale]{rescale()}}, \code{\link[=reverse]{reverse()}}, \code{\link[=categorize]{categorize()}}, \code{\link[=change_code]{change_code()}}, \code{\link[=slide]{slide()}}
+\item Functions to recode data: \code{\link[=rescale]{rescale()}}, \code{\link[=reverse]{reverse()}}, \code{\link[=categorize]{categorize()}}, \code{\link[=recode_values]{recode_values()}}, \code{\link[=slide]{slide()}}
 \item Functions to standardize, normalize, rank-transform: \code{\link[=center]{center()}}, \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
 \item Split and merge data frames: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_merge]{data_merge()}}
 \item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=data_find]{data_find()}}

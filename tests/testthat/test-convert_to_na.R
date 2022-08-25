@@ -90,3 +90,15 @@ test_that("convert_to_na other classes", {
   expect_message(x <- convert_to_na(d, na = list(3, "c", TRUE, "2022-01-02")))
   expect_equal(x, out, ignore_attr = TRUE, tolerance = 1e-3)
 })
+
+# select helpers ------------------------------
+test_that("convert_to_na regex", {
+  expect_equal(
+    convert_to_na(mtcars, na = 4, select = "arb", regex = TRUE),
+    convert_to_na(mtcars, na = 4, select = "carb")
+  )
+  expect_equal(
+    convert_to_na(mtcars, na = 4, select = "arb$", regex = TRUE),
+    convert_to_na(mtcars, na = 4, select = "carb")
+  )
+})

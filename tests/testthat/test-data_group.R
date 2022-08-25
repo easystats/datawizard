@@ -38,3 +38,11 @@ test_that("data_group attributes", {
     expect_equal(out$mw, c(87.125, 94.046875, 75), tolerance = 1e-3)
   }
 })
+
+# select helpers ------------------------------
+test_that("data_group regex", {
+  expect_equal(
+    attributes(data_group(mtcars, select = "yl", regex = TRUE))$groups[[1]],
+    sort(unique(mtcars$cyl))
+  )
+})

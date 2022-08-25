@@ -1,5 +1,5 @@
 #' @title Recode old values of variables into new values
-#' @name change_code
+#' @name recode_values
 #'
 #' @description
 #' This functions recodes old values into new values and can be used to to
@@ -79,12 +79,12 @@
 #' x <- sample(c(1:4, NA), 15, TRUE)
 #' table(x, useNA = "always")
 #'
-#' out <- change_code(x, list(`1` = 0, `2:3` = 1, `4` = 2))
+#' out <- recode_values(x, list(`1` = 0, `2:3` = 1, `4` = 2))
 #' out
 #' table(out, useNA = "always")
 #'
 #' # to recode NA values, set preserve_na to FALSE
-#' out <- change_code(
+#' out <- recode_values(
 #'   x,
 #'   list(`1` = 0, `2:3` = 1, `4` = 2, `NA` = 9),
 #'   preserve_na = FALSE
@@ -93,12 +93,12 @@
 #' table(out, useNA = "always")
 #'
 #' # preserve na
-#' out <- change_code(x, list(`1` = 0, `2:3` = 1), default = 77)
+#' out <- recode_values(x, list(`1` = 0, `2:3` = 1), default = 77)
 #' out
 #' table(out, useNA = "always")
 #'
 #' # recode na into default
-#' out <- change_code(
+#' out <- recode_values(
 #'   x,
 #'   list(`1` = 0, `2:3` = 1),
 #'   default = 77,
@@ -113,15 +113,15 @@
 #' x <- as.factor(sample(c("a", "b", "c"), 15, TRUE))
 #' table(x)
 #'
-#' out <- change_code(x, list(a = "x", `b, c` = "y"))
+#' out <- recode_values(x, list(a = "x", `b, c` = "y"))
 #' out
 #' table(out)
 #'
-#' out <- change_code(x, list(a = "x", b = "y", c = "z"))
+#' out <- recode_values(x, list(a = "x", b = "y", c = "z"))
 #' out
 #' table(out)
 #'
-#' out <- change_code(x, list(`b, c` = "y"), default = 77)
+#' out <- recode_values(x, list(`b, c` = "y"), default = 77)
 #' out
 #' table(out)
 #'
@@ -134,20 +134,20 @@
 #'   stringsAsFactors = FALSE
 #' )
 #'
-#' change_code(
+#' recode_values(
 #'   d,
 #'   recodes = list(`1` = 0, `2:3` = 1, `4` = 2, a = "x", `b, c` = "y"),
 #'   force = TRUE,
 #'   append = TRUE
 #' )
 #' @export
-change_code <- function(x, ...) {
-  UseMethod("change_code")
+recode_values <- function(x, ...) {
+  UseMethod("recode_values")
 }
 
 
 #' @export
-change_code.default <- function(x, verbose = TRUE, ...) {
+recode_values.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
   }
@@ -155,14 +155,14 @@ change_code.default <- function(x, verbose = TRUE, ...) {
 }
 
 
-#' @rdname change_code
+#' @rdname recode_values
 #' @export
-change_code.numeric <- function(x,
-                                recodes = NULL,
-                                default = NULL,
-                                preserve_na = TRUE,
-                                verbose = TRUE,
-                                ...) {
+recode_values.numeric <- function(x,
+                                  recodes = NULL,
+                                  default = NULL,
+                                  preserve_na = TRUE,
+                                  verbose = TRUE,
+                                  ...) {
   # save
   original_x <- x
 
@@ -229,12 +229,12 @@ change_code.numeric <- function(x,
 
 
 #' @export
-change_code.factor <- function(x,
-                               recodes = NULL,
-                               default = NULL,
-                               preserve_na = TRUE,
-                               verbose = TRUE,
-                               ...) {
+recode_values.factor <- function(x,
+                                 recodes = NULL,
+                                 default = NULL,
+                                 preserve_na = TRUE,
+                                 verbose = TRUE,
+                                 ...) {
   # save
   original_x <- x
 
@@ -297,12 +297,12 @@ change_code.factor <- function(x,
 
 
 #' @export
-change_code.character <- function(x,
-                                  recodes = NULL,
-                                  default = NULL,
-                                  preserve_na = TRUE,
-                                  verbose = TRUE,
-                                  ...) {
+recode_values.character <- function(x,
+                                    recodes = NULL,
+                                    default = NULL,
+                                    preserve_na = TRUE,
+                                    verbose = TRUE,
+                                    ...) {
   # save
   original_x <- x
 
@@ -358,19 +358,19 @@ change_code.character <- function(x,
 }
 
 
-#' @rdname change_code
+#' @rdname recode_values
 #' @export
-change_code.data.frame <- function(x,
-                                   recodes = NULL,
-                                   default = NULL,
-                                   preserve_na = TRUE,
-                                   force = FALSE,
-                                   append = FALSE,
-                                   select = NULL,
-                                   exclude = NULL,
-                                   ignore_case = FALSE,
-                                   verbose = TRUE,
-                                   ...) {
+recode_values.data.frame <- function(x,
+                                     recodes = NULL,
+                                     default = NULL,
+                                     preserve_na = TRUE,
+                                     force = FALSE,
+                                     append = FALSE,
+                                     select = NULL,
+                                     exclude = NULL,
+                                     ignore_case = FALSE,
+                                     verbose = TRUE,
+                                     ...) {
   # evaluate arguments
   select <- .select_nse(select, x, exclude, ignore_case)
 
@@ -383,7 +383,7 @@ change_code.data.frame <- function(x,
 
   x[select] <- lapply(
     x[select],
-    change_code,
+    recode_values,
     recodes = recodes,
     default = default,
     preserve_na = preserve_na,

@@ -126,3 +126,15 @@ test_that("center, factors (grouped data)", {
 
   expect_equal(datawizard, manual)
 })
+
+# select helpers ------------------------------
+test_that("center regex", {
+  expect_equal(
+    center(mtcars, select = "pg", regex = TRUE)$mpg,
+    center(mtcars$mpg)
+  )
+  expect_equal(
+    center(mtcars, select = "pg$", regex = TRUE)$mpg,
+    center(mtcars$mpg)
+  )
+})

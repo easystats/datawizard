@@ -15,6 +15,7 @@ reference:
       - data_filter
       - data_select
       - data_reorder
+      - data_arrange
       - data_merge
       - data_partition
       - data_rotate
@@ -24,7 +25,7 @@ reference:
     desc: Functions for transforming variables
     contents:
       - categorize
-      - change_code
+      - recode_values
       - rescale
       - reverse
       - slide
@@ -73,7 +74,6 @@ reference:
   - title: Helpers for Text Formatting
     contents:
       - starts_with("text_")
-      - starts_with("format_")
 
   - title: Visualization helpers
     desc: |
@@ -100,4 +100,3 @@ articles:
     navbar: ~
     contents:
       - standardize_data
-

@@ -45,11 +45,12 @@ data_relocate <- function(data,
                           before = NULL,
                           after = NULL,
                           ignore_case = FALSE,
+                          regex = FALSE,
                           verbose = TRUE,
                           ...) {
   # Sanitize
   if (!is.null(before) && !is.null(after)) {
-    stop("You must supply only one of `before` or `after`.")
+    stop("You must supply only one of `before` or `after`.", call. = FALSE)
   }
 
   # allow numeric values
@@ -59,7 +60,7 @@ data_relocate <- function(data,
     } else if (before >= 1 && before <= ncol(data)) {
       before <- names(data)[before]
     } else {
-      stop("No valid position defined in 'before'.", call. = FALSE)
+      stop("No valid position defined in `before`.", call. = FALSE)
     }
   }
 
@@ -70,11 +71,17 @@ data_relocate <- function(data,
     } else if (after >= 1 && after <= ncol(data)) {
       after <- names(data)[after]
     } else {
-      stop("No valid position defined in 'after'.", call. = FALSE)
+      stop("No valid position defined in `after`.", call. = FALSE)
     }
   }
 
-  cols <- .select_nse(select, data, exclude = NULL, ignore_case = ignore_case, verbose = verbose)
+  cols <- .select_nse(select,
+    data,
+    exclude = NULL,
+    ignore_case = ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # save attributes
   att <- attributes(data)
@@ -90,14 +97,14 @@ data_relocate <- function(data,
   if (!is.null(before)) {
     before <- before[before %in% data_cols][1] # Take first that exists (if vector is supplied)
     if (length(before) != 1) {
-      stop("The column passed to 'before' wasn't found. Possibly mispelled.")
+      stop("The column passed to `before` wasn't found. Possibly mispelled.", call. = FALSE)
     }
     where <- min(match(before, data_cols))
     position <- c(setdiff(position, where), where)
   } else if (!is.null(after)) {
     after <- after[after %in% data_cols][1] # Take first that exists (if vector is supplied)
     if (length(after) != 1) {
-      stop("The column passed to 'after' wasn't found. Possibly mispelled.")
+      stop("The column passed to `after` wasn't found. Possibly mispelled.", call. = FALSE)
     }
     where <- max(match(after, data_cols))
     position <- c(where, setdiff(position, where))
@@ -122,8 +129,20 @@ data_relocate <- function(data,
 
 #' @rdname data_relocate
 #' @export
-data_reorder <- function(data, select, ignore_case = FALSE, verbose = TRUE, ...) {
-  cols <- .select_nse(select, data, exclude = NULL, ignore_case = ignore_case, verbose = verbose)
+data_reorder <- function(data,
+                         select,
+                         exclude = NULL,
+                         ignore_case = FALSE,
+                         regex = FALSE,
+                         verbose = TRUE,
+                         ...) {
+  cols <- .select_nse(select,
+    data,
+    exclude = NULL,
+    ignore_case = ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
   remaining_columns <- setdiff(colnames(data), cols)
 
   out <- data[c(cols, remaining_columns)]
