@@ -67,11 +67,12 @@ slide.data.frame <- function(x,
                              ...) {
   # evaluate arguments
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # process arguments
   args <- .process_std_args(

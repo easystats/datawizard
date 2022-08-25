@@ -9,6 +9,9 @@ BREAKING CHANGES
 
 * New `text_format()` alias is introduced for `format_text()`, latter of which
   will be removed in the next release.
+  
+* New `recode_values()` alias is introduced for `change_code()`, latter of which
+  will be removed in the next release.
 
 CHANGES
 

@@ -124,11 +124,12 @@ normalize.grouped_df <- function(x,
                                  ...) {
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   info <- attributes(x)
   # dplyr >= 0.8.0 returns attribute "indices"
@@ -179,11 +180,12 @@ normalize.data.frame <- function(x,
                                  ...) {
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
   x[select] <- lapply(x[select], normalize, include_bounds = include_bounds, verbose = verbose)
 
   x

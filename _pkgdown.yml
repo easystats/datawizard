@@ -25,7 +25,7 @@ reference:
     desc: Functions for transforming variables
     contents:
       - categorize
-      - change_code
+      - recode_values
       - rescale
       - reverse
       - slide

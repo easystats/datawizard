@@ -251,11 +251,12 @@ standardize.data.frame <- function(x,
                                    ...) {
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append,
@@ -308,11 +309,12 @@ standardize.grouped_df <- function(x,
                                    ...) {
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   args <- .process_grouped_df(x, select, exclude, append,
     append_suffix = "_z",

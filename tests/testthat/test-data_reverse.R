@@ -387,6 +387,6 @@ test_that("reverse works with data frames containing NAs (grouped data)", {
 test_that("reverse regex", {
   expect_equal(
     reverse(mtcars, select = "arb", regex = TRUE),
-    reverse(mtcars, select = "carb"))
+    reverse(mtcars, select = "carb")
+  )
 })
-

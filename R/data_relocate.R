@@ -76,11 +76,12 @@ data_relocate <- function(data,
   }
 
   cols <- .select_nse(select,
-                      data,
-                      exclude = NULL,
-                      ignore_case = ignore_case,
-                      regex = regex,
-                      verbose = verbose)
+    data,
+    exclude = NULL,
+    ignore_case = ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # save attributes
   att <- attributes(data)
@@ -136,11 +137,12 @@ data_reorder <- function(data,
                          verbose = TRUE,
                          ...) {
   cols <- .select_nse(select,
-                      data,
-                      exclude = NULL,
-                      ignore_case = ignore_case,
-                      regex = regex,
-                      verbose = verbose)
+    data,
+    exclude = NULL,
+    ignore_case = ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
   remaining_columns <- setdiff(colnames(data), cols)
 
   out <- data[c(cols, remaining_columns)]

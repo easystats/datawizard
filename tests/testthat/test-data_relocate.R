@@ -87,6 +87,6 @@ test_that("data_relocate preserves attributes", {
 test_that("data_relocate regex", {
   expect_equal(
     names(data_relocate(mtcars, select = "pg", regex = TRUE, after = "carb"))[11],
-    "mpg")
+    "mpg"
+  )
 })
-

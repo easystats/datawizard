@@ -173,11 +173,12 @@ convert_to_na.data.frame <- function(x,
                                      ...) {
   # evaluate arguments
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   x[select] <- lapply(x[select], convert_to_na, na = na, drop_levels = drop_levels, verbose = verbose, ...)
   x

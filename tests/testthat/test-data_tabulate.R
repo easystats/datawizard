@@ -315,6 +315,6 @@ if (requireNamespace("poorman", quietly = TRUE)) {
 test_that("data_tabulate regex", {
   expect_equal(
     data_tabulate(mtcars, select = "arb", regex = TRUE),
-    data_tabulate(mtcars, select = "carb"))
+    data_tabulate(mtcars, select = "carb")
+  )
 })
-

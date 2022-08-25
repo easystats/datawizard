@@ -31,6 +31,6 @@ test_that("slide", {
 test_that("slide regex", {
   expect_equal(
     slide(mtcars, select = "pg", regex = TRUE),
-    slide(mtcars, select = "mpg"))
+    slide(mtcars, select = "mpg")
+  )
 })
-

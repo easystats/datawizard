@@ -242,6 +242,6 @@ test_that("unstandardize does nothing with characters and factors", {
 test_that("standardize regex", {
   expect_equal(
     standardize(mtcars, select = "pg", regex = TRUE),
-    standardize(mtcars, select = "mpg"))
+    standardize(mtcars, select = "mpg")
+  )
 })
-
