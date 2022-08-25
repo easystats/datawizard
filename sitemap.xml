@@ -40,9 +40,6 @@
     <loc>https://easystats.github.io/datawizard/reference/center.html</loc>
   </url>
   <url>
-    <loc>https://easystats.github.io/datawizard/reference/change_code.html</loc>
-  </url>
-  <url>
     <loc>https://easystats.github.io/datawizard/reference/coerce_to_numeric.html</loc>
   </url>
   <url>
@@ -125,6 +122,9 @@
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/ranktransform.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/datawizard/reference/recode_values.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/reexports.html</loc>

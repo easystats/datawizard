@@ -334,8 +334,7 @@ only apply the first condition.</p>
 <span><span class="co">## <span style="color: #BCBCBC;">7</span> Padmé Amida…    165    45 brown   light   brown        46 fema… femin… Naboo  </span></span>
 <span><span class="co">## <span style="color: #949494;"># … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ³​eye_color, ⁴​birth_year, ⁵​homeworld</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   ³​eye_color, ⁴​birth_year, ⁵​homeworld</span></span></span></code></pre>
 <!-- Shorten output to make it easier to read: -->
 </div>
 <div class="section level3">
@@ -507,8 +506,7 @@ use select helpers such as <code><a href="https://tidyselect.r-lib.org/reference
 <span><span class="co">## <span style="color: #BCBCBC;">6</span> C-3PO           167    75 <span style="color: #BB0000;">NA</span>      gold    yellow    112   none  mascu… Tatooi…</span></span>
 <span><span class="co">## <span style="color: #949494;"># … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ³​eye_color, ⁴​birth_year, ⁵​homeworld</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   ³​eye_color, ⁴​birth_year, ⁵​homeworld</span></span></span></code></pre>
 <p>You can also sort variables in descending order by putting a
 <code>"-"</code> in front of their name, like below:</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
@@ -536,8 +534,7 @@ use select helpers such as <code><a href="https://tidyselect.r-lib.org/reference
 <span><span class="co">## <span style="color: #BCBCBC;">6</span> R2-D2            96    32 <span style="color: #BB0000;">NA</span>      white,… red        33   none  mascu… Naboo  </span></span>
 <span><span class="co">## <span style="color: #949494;"># … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ³​eye_color, ⁴​birth_year, ⁵​homeworld</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   ³​eye_color, ⁴​birth_year, ⁵​homeworld</span></span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="extracting">Extracting<a class="anchor" aria-label="anchor" href="#extracting"></a>
@@ -617,8 +614,7 @@ must be of the same length.</p>
 <span><span class="co">## <span style="color: #BCBCBC;">6</span> Owen Lars       178   120 brown,… light   blue       52   male  mascu… Tatooi…</span></span>
 <span><span class="co">## <span style="color: #949494;"># … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   starships &lt;list&gt;, and abbreviated variable names ¹​`Hair Color`,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   ²​skin_color, ³​eye_color, ⁴​birth_year, ⁵​homeworld</span></span></span></code></pre>
 <p>The way <code><a href="../reference/data_rename.html">data_rename()</a></code> is designed makes it easy to apply
 the same modifications to a vector of column names. For example, we can
 remove underscores and use TitleCase with the following code:</p>
@@ -641,8 +637,7 @@ remove underscores and use TitleCase with the following code:</p>
 <span><span class="co">## <span style="color: #BCBCBC;">6</span> Owen Lars       178   120 brown,… light   blue       52   male  mascu… Tatooi…</span></span>
 <span><span class="co">## <span style="color: #949494;"># … with 4 more variables: Species &lt;chr&gt;, Films &lt;list&gt;, Vehicles &lt;list&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   Starships &lt;list&gt;, and abbreviated variable names ¹​`Hair Color`,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ²​`Skin Color`, ³​`Eye Color`, ⁴​`Birth Year`, ⁵​Homeworld</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   ²​`Skin Color`, ³​`Eye Color`, ⁴​`Birth Year`, ⁵​Homeworld</span></span></span></code></pre>
 <p>It is also possible to add a prefix or a suffix to all or a subset of
 variables with <code><a href="../reference/data_rename.html">data_addprefix()</a></code> and
 <code><a href="../reference/data_rename.html">data_addsuffix()</a></code>. The argument <code>select</code> accepts
@@ -670,8 +665,7 @@ all select helpers that we saw above with
 <span><span class="co">## <span style="color: #949494;"># … with 5 more variables: homeworld.NEW &lt;chr&gt;, species.NEW &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   films.NEW &lt;list&gt;, vehicles.NEW &lt;list&gt;, starships.NEW &lt;list&gt;, and</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   abbreviated variable names ¹​height.NEW, ²​mass.NEW, ³​OLD.hair_color,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ⁴​OLD.skin_color, ⁵​OLD.eye_color, ⁶​birth_year.NEW, ⁷​gender.NEW</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   ⁴​OLD.skin_color, ⁵​OLD.eye_color, ⁶​birth_year.NEW, ⁷​gender.NEW</span></span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="relocating">Relocating<a class="anchor" aria-label="anchor" href="#relocating"></a>
@@ -711,8 +705,7 @@ selected columns should be relocated:</p>
 <span><span class="co">## <span style="color: #BCBCBC;">6</span> Owen Lars    male  mascu… Tatooi…    178   120 brown,… light   blue       52  </span></span>
 <span><span class="co">## <span style="color: #949494;"># … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   starships &lt;list&gt;, and abbreviated variable names ¹​homeworld, ²​hair_color,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ³​skin_color, ⁴​eye_color, ⁵​birth_year</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   ³​skin_color, ⁴​eye_color, ⁵​birth_year</span></span></span></code></pre>
 <p>In addition to column names, <code>before</code> and
 <code>after</code> accept column indices. Finally, one can use
 <code>before = -1</code> to relocate the selected columns just before
@@ -733,8 +726,7 @@ last column.</p>
 <span><span class="co">## <span style="color: #BCBCBC;">6</span> Owen Lars      178   120 brown,… light   blue       52   Human   &lt;chr&gt; &lt;chr&gt;  </span></span>
 <span><span class="co">## <span style="color: #949494;"># … with 4 more variables: starships &lt;list&gt;, sex &lt;chr&gt;, gender &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   homeworld &lt;chr&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ³​eye_color, ⁴​birth_year, ⁵​vehicles</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   ³​eye_color, ⁴​birth_year, ⁵​vehicles</span></span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="reshaping">Reshaping<a class="anchor" aria-label="anchor" href="#reshaping"></a>
@@ -776,8 +768,7 @@ vignette</a>.</p>
 <span><span class="co">## <span style="color: #BCBCBC;">18</span> Unaffiliated      217     299     374     365     341     528     407     321</span></span>
 <span><span class="co">## <span style="color: #949494;"># … with 2 more variables: `&gt;150k` &lt;dbl&gt;, `Don't know/refused` &lt;dbl&gt;, and</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   abbreviated variable names ¹​`$10-20k`, ²​`$20-30k`, ³​`$30-40k`, ⁴​`$40-50k`,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ⁵​`$50-75k`, ⁶​`$75-100k`, ⁷​`$100-150k`</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   ⁵​`$50-75k`, ⁶​`$75-100k`, ⁷​`$100-150k`</span></span></span></code></pre>
 <p>We would like to reshape this dataset to have 3 columns: religion,
 count, and income. The column “religion” doesn’t need to change, so we
 exclude it with <code>-religion</code>. Then, each remaining column
@@ -820,8 +811,7 @@ single new column, called “count”.</p>
 <span><span class="co">## <span style="color: #BCBCBC;"> 8</span> Agnostic $100-150k            109</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 9</span> Agnostic &gt;150k                 84</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">10</span> Agnostic Don't know/refused    96</span></span>
-<span><span class="co">## <span style="color: #949494;"># … with 170 more rows</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;"># … with 170 more rows</span></span></span></code></pre>
 <p>To explore a bit more the arguments of <code><a href="../reference/data_to_long.html">data_to_long()</a></code>,
 we will use another dataset: the <code>billboard</code> dataset.</p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
@@ -845,8 +835,7 @@ we will use another dataset: the <code>billboard</code> dataset.</p>
 <span><span class="co">## <span style="color: #949494;">#   wk25 &lt;dbl&gt;, wk26 &lt;dbl&gt;, wk27 &lt;dbl&gt;, wk28 &lt;dbl&gt;, wk29 &lt;dbl&gt;, wk30 &lt;dbl&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   wk31 &lt;dbl&gt;, wk32 &lt;dbl&gt;, wk33 &lt;dbl&gt;, wk34 &lt;dbl&gt;, wk35 &lt;dbl&gt;, wk36 &lt;dbl&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   wk37 &lt;dbl&gt;, wk38 &lt;dbl&gt;, wk39 &lt;dbl&gt;, wk40 &lt;dbl&gt;, wk41 &lt;dbl&gt;, wk42 &lt;dbl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   wk43 &lt;dbl&gt;, wk44 &lt;dbl&gt;, wk45 &lt;dbl&gt;, wk46 &lt;dbl&gt;, wk47 &lt;dbl&gt;, wk48 &lt;dbl&gt;, …</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   wk43 &lt;dbl&gt;, wk44 &lt;dbl&gt;, wk45 &lt;dbl&gt;, wk46 &lt;dbl&gt;, wk47 &lt;dbl&gt;, wk48 &lt;dbl&gt;, …</span></span></span></code></pre>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
@@ -884,8 +873,7 @@ we will use another dataset: the <code>billboard</code> dataset.</p>
 <span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 2Ge+her The Hardest Part Of ... 2000-09-02   wk1      91</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 2Ge+her The Hardest Part Of ... 2000-09-02   wk2      87</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">10</span> 2Ge+her The Hardest Part Of ... 2000-09-02   wk3      92</span></span>
-<span><span class="co">## <span style="color: #949494;"># … with 5,297 more rows</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;"># … with 5,297 more rows</span></span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="wider">Wider<a class="anchor" aria-label="anchor" href="#wider"></a>
@@ -908,8 +896,7 @@ show how close <code><a href="../reference/data_to_wide.html">data_to_wide()</a>
 <span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 4842  BCE2        1</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 4842  BCW2        1</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">10</span> 4842  MAE         1</span></span>
-<span><span class="co">## <span style="color: #949494;"># … with 104 more rows</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;"># … with 104 more rows</span></span></span></code></pre>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
 <div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
