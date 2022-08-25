@@ -24,14 +24,17 @@
 #' }
 #' @export
 data_arrange <- function(data, select = NULL, safe = TRUE) {
-  if (is.null(select) || length(select) == 0) return(data)
+  if (is.null(select) || length(select) == 0) {
+    return(data)
+  }
 
   # coerce to data frame?
   if (!is.data.frame(data)) {
     data <- tryCatch(as.data.frame(data),
-    error = function(e) {
-      stop("Could not coerce `data` into a data frame.", call. = FALSE)
-    })
+      error = function(e) {
+        stop("Could not coerce `data` into a data frame.", call. = FALSE)
+      }
+    )
   }
 
   # find which vars should be decreasing
@@ -53,7 +56,9 @@ data_arrange <- function(data, select = NULL, safe = TRUE) {
     select <- select[-which(select %in% dont_exist)]
   }
 
-  if (length(select) == 0) return(data)
+  if (length(select) == 0) {
+    return(data)
+  }
 
   out <- data
 

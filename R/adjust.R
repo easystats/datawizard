@@ -99,11 +99,12 @@ adjust <- function(data,
   } else {
     # evaluate select/exclude, may be select-helpers
     select <- .select_nse(select,
-                          data,
-                          exclude,
-                          ignore_case,
-                          regex = regex,
-                          verbose = verbose)
+      data,
+      exclude,
+      ignore_case,
+      regex = regex,
+      verbose = verbose
+    )
   }
 
   # Factors

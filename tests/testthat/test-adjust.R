@@ -21,7 +21,8 @@ test_that("adjust", {
 test_that("adjust regex", {
   expect_equal(
     adjust(mtcars, select = "pg", regex = TRUE),
-    adjust(mtcars, select = "mpg"))
+    adjust(mtcars, select = "mpg")
+  )
   expect_equal(
     adjust(mtcars, select = "pg$", regex = TRUE),
     adjust(mtcars, select = "mpg")

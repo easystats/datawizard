@@ -33,7 +33,6 @@ data_arrange2 <- function(data,
                           descending = NULL,
                           ignore_case = FALSE,
                           ...) {
-
   # evaluate arguments
   select <- .select_nse(select, data, exclude, ignore_case)
 

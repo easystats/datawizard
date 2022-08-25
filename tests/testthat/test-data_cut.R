@@ -179,6 +179,6 @@ test_that("recode numeric", {
 test_that("categorize regex", {
   expect_equal(
     categorize(mtcars, select = "pg", regex = TRUE),
-    categorize(mtcars, select = "mpg"))
+    categorize(mtcars, select = "mpg")
+  )
 })
-

@@ -21,7 +21,8 @@ data_remove <- function(data,
     exclude = NULL,
     ignore_case = ignore_case,
     regex = regex,
-    verbose = verbose)
+    verbose = verbose
+  )
 
   # nothing to remove?
   if (!length(select)) {

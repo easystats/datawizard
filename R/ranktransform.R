@@ -113,11 +113,12 @@ ranktransform.grouped_df <- function(x,
 
   # evaluate arguments
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # dplyr < 0.8.0?
   if (is.null(grps)) {
@@ -157,11 +158,12 @@ ranktransform.data.frame <- function(x,
                                      ...) {
   # evaluate arguments
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   x[select] <- lapply(x[select], ranktransform, sign = sign, method = method)
   x

@@ -137,11 +137,12 @@ data_tabulate.data.frame <- function(x,
                                      ...) {
   # evaluate arguments
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
   out <- lapply(select, function(i) {
     data_tabulate(x[[i]], drop_levels = drop_levels, name = i, verbose = verbose, ...)
   })
@@ -169,11 +170,12 @@ data_tabulate.grouped_df <- function(x,
 
   # evaluate arguments
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # dplyr < 0.8.0?
   if (is.null(grps)) {

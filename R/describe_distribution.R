@@ -379,11 +379,12 @@ describe_distribution.data.frame <- function(x,
                                              verbose = TRUE,
                                              ...) {
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
   # The function currently doesn't support descriptive summaries for character
   # or factor types.
   out <- do.call(rbind, lapply(x[select], function(i) {
@@ -437,11 +438,12 @@ describe_distribution.grouped_df <- function(x,
   group_data <- expand.grid(lapply(x[group_vars], function(i) unique(sort(i))))
   groups <- split(x, x[group_vars])
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   out <- do.call(rbind, lapply(1:length(groups), function(i) {
     d <- describe_distribution.data.frame(
