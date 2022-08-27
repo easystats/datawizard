@@ -121,7 +121,9 @@ categorize <- function(x, ...) {
 #' @export
 categorize.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
+    message(insight::format_message(
+      paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")
+    ))
   }
   return(x)
 }
@@ -180,7 +182,9 @@ categorize.numeric <- function(x,
   # stop if all NA
   if (!length(x)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
+      warning(insight::format_message(
+        "Variable contains only missing values. No recoding carried out."
+      ), call. = FALSE)
     }
     return(original_x)
   }
