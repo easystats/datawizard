@@ -26,7 +26,7 @@ distribution_cv(x, ...)
 )
 }
 \arguments{
-\item{x}{A numeric vector, or a model of a supported class.}
+\item{x}{A numeric vector, or vector of values than can be converted to numeric.}
 
 \item{...}{Further arguments based to other methods.}
 
@@ -60,8 +60,7 @@ The computed coefficient of variation for \code{x}.
 }
 \description{
 Compute the coefficient of variation (CV, ratio of the standard deviation to
-the mean, $\frac{\sigma}{\mu}$) for a set of numeric values. Can also be
-used to compute the CV for a fitted model.
+the mean, $\frac{\sigma}{\mu}$) for a set of numeric values.
 }
 \examples{
 coef_var(1:10)
