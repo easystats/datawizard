@@ -22,3 +22,9 @@ distribution_mode(c(1, 2, 3, 3, 4, 5))
 distribution_mode(c(1.5, 2.3, 3.7, 3.7, 4.0, 5))
 
 }
+\seealso{
+For continuous variables, the
+\strong{Highest Maximum a Posteriori probability estimate (MAP)} may be
+more a more useful way to estimate the most commonly-observed value
+than the mode. See \code{\link[bayestestR:map_estimate]{bayestestR::map_estimate()}}.
+}
