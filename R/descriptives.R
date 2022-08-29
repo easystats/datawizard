@@ -31,10 +31,7 @@ distribution_mode <- function(x) {
 #' Compute the coefficient of variation
 #'
 #' Compute the coefficient of variation (CV, ratio of the standard deviation to
-#' the mean, $\frac{\sigma}{\mu}$) for a set of numeric values.
-#'
-#' @param x A numeric vector, or vector of values than can be converted to numeric.
-#' @param ... Further arguments based to other methods.
+#' the mean, \eqn{\sigma/\mu}) for a set of numeric values.
 #'
 #' @return The computed coefficient of variation for `x`.
 #' @export
@@ -70,6 +67,7 @@ coef_var.default <- function(x, verbose = TRUE, ...) {
   NULL
 }
 
+#' @param x A numeric vector, or vector of values than can be converted to numeric.
 #' @param mu A numeric vector of mean values to use to compute the coefficient
 #'   of variation. If supplied, `x` is not used to compute the mean.
 #' @param sigma A numeric vector of standard deviation values to use to compute the coefficient
@@ -79,7 +77,7 @@ coef_var.default <- function(x, verbose = TRUE, ...) {
 #'   unbiased estimator for normally distributed data, or one of two robust
 #'   alternatives: `"median_mad"` to divide the median by the [stats::mad()],
 #'   or `"qcd"` (quartile coefficient of dispersion, interquartile range divided
-#'   by the sum of the quartiles [twice the midhinge]: $\frac{Q_3 - Q_1}{Q_3 + Q_1}$).
+#'   by the sum of the quartiles \[twice the midhinge\]: \eqn{(Q_3 - Q_1)/(Q_3 + Q_1)}.
 #' @param trim the fraction (0 to 0.5) of values to be trimmed from
 #'   each end of `x` before the mean and standard deviation (or alternatvies)
 #'   are computed. Values of `trim` outside the range of (0 to 0.5) are taken
@@ -89,6 +87,7 @@ coef_var.default <- function(x, verbose = TRUE, ...) {
 #' @param n If `method = "unbiased"` and both `mu` and `sigma` are provided (not
 #'   computed from `x`), what sample size to use to adjust the computed CV
 #'   for small-sample bias?
+#' @param ... Further arguments passed to computation functions.
 #'
 #' @rdname coef_var
 #'
