@@ -41,7 +41,8 @@ distribution_mode <- function(x) {
 #'
 #' @examples
 #' coef_var(1:10)
-#' coef_var(1:10, method = "qcd")
+#' coef_var(c(1:10, 100), method = "median_mad")
+#' coef_var(c(1:10, 100), method = "qcd")
 #' coef_var(mu = 10, sigma = 20)
 #' coef_var(mu = 10, sigma = 20, method = "unbiased", n = 30)
 #' cv(1:10)
@@ -118,7 +119,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
       method,
       standard = , unbiased = mean(x, ...),
       median_mad = stats::median(x, ...),
-      qcd = diff(stats::quantile(x, probs = c(.25, .75), ...))
+      qcd = unname(sum(stats::quantile(x, probs = c(.25, .75), ...)))
     )
   }
   if (is.null(sigma)) {
@@ -126,7 +127,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
       method,
       standard = , unbiased = stats::sd(x, ...),
       median_mad = stats::mad(x, center = mu, ...),
-      qcd = sum(stats::quantile(x, probs = c(.25, .75), ...))
+      qcd = unname(diff(stats::quantile(x, probs = c(.25, .75), ...)))
     )
   }
   out <- sigma / mu
