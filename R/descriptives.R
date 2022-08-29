@@ -100,19 +100,10 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
   method <- match.arg(method, choices = c("standard", "unbiased", "median_mad", "qcd"))
   if (is.null(mu) || is.null(sigma)) {
     if (isTRUE(na.rm)) {
-      x <- x[!is.na(x)]
-    }
-    if (!is.numeric(trim) || length(trim) != 1L) {
-      stop("`trim` must be a single numeric value.", call. = FALSE)
+      x <- .drop_na(x)
     }
     n <- length(x)
-    if (trim > 0 && n) {
-      if (anyNA(x)) return(NA_real_)
-      if (trim >= 0.5) return(stats::median(x, na.rm = FALSE))
-      lo <- floor(n * trim) + 1
-      hi <- n + 1 - lo
-      x <- sort.int(x, partial = unique(c(lo, hi)))[lo:hi]
-    }
+    x <- .trim_values(x, trim = trim, n = n)
   }
   if (is.null(mu)) {
     mu <- switch(
@@ -141,4 +132,31 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
     out <- out * (1 - 1 / (4 * (n - 1)) + 1 / n * out^2 + 1 / (2 * (n - 1)^2))
   }
   return(out)
+}
+
+
+
+
+# descriptives helpers
+
+.drop_na <- function(x) {
+  x[!is.na(x)]
+}
+
+.trim_values <- function(x, trim = 0, n = NULL, weights = NULL) {
+  # TODO: Support weights
+  if (!is.numeric(trim) || length(trim) != 1L) {
+    stop("`trim` must be a single numeric value.", call. = FALSE)
+  }
+  if (is.null(NULL)) {
+    n <- length(x)
+  }
+  if (trim > 0 && n) {
+    if (anyNA(x)) return(NA_real_)
+    if (trim >= 0.5) return(stats::median(x, na.rm = FALSE))
+    lo <- floor(n * trim) + 1
+    hi <- n + 1 - lo
+    x <- sort.int(x, partial = unique(c(lo, hi)))[lo:hi]
+  }
+  x
 }
