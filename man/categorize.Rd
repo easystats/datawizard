@@ -141,8 +141,7 @@ the values inside these intervals according to their related interval.
 It is basically a wrapper around base R's \code{cut()}, providing a simplified
 and more accessible way to define the interval breaks (cut-off values).
 }
-\details{
-\subsection{Splits and breaks (cut-off values)}{
+\section{Splits and breaks (cut-off values)}{
 Breaks are in general \emph{exclusive}, this means that these values indicate
 the lower bound of the next group or interval to begin. Take a simple
 example, a numeric variable with values from 1 to 9. The median would be 5,
@@ -154,7 +153,7 @@ from 1 to 3 belong to the first interval and are recoded into 1 (because
 the next interval starts at 3.67), 4 to 6 into 2 and 7 to 9 into 3.
 }
 
-\subsection{Recoding into groups with equal size or range}{
+\section{Recoding into groups with equal size or range}{
 \code{split = "equal_length"} and \code{split = "equal_range"} try to divide the
 range of \code{x} into intervals of similar (or same) length. The difference is
 that \code{split = "equal_length"} will divide the range of \code{x} into \code{n_groups}
@@ -164,7 +163,7 @@ will cut \code{x} into intervals that all have the length of \code{range}, where
 first interval by defaults starts at \code{1}. The lowest (or starting) value
 of that interval can be defined using the \code{lowest} argument.
 }
-}
+
 \section{Selection of variables - the \code{select} argument}{
 
 For most functions that have a \code{select} argument (including this function),
