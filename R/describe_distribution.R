@@ -445,7 +445,7 @@ describe_distribution.grouped_df <- function(x,
     verbose = verbose
   )
 
-  out <- do.call(rbind, lapply(1:length(groups), function(i) {
+  out <- do.call(rbind, lapply(seq_along(groups), function(i) {
     d <- describe_distribution.data.frame(
       groups[[i]][select],
       centrality = centrality,
@@ -569,7 +569,9 @@ distribution_cv <- coef_var
 #' @export
 coef_var.default <- function(x, verbose = TRUE, ...) {
   if (verbose) {
-    warning(insight::format_message(paste0("Can't compute the coefficient of variation objects of class '", class(x)[1], "'.")), call. = FALSE)
+    warning(insight::format_message(
+      paste0("Can't compute the coefficient of variation objects of class '", class(x)[1], "'.")
+    ), call. = FALSE)
   }
   NULL
 }
@@ -629,7 +631,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL, unbiased = TRUE,
   if (! is.null(sigma)) {
     sigma <- switch(
       method,
-      standard, unbiased = sd(x, ...),
+      standard, unbiased = stats::sd(x, ...),
       median_mad = stats::mad(x, center = mu, ...),
       qcd = sum(stats::quantile(x, probs = c(.25, .75), ...))
     )
@@ -637,8 +639,9 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL, unbiased = TRUE,
   out <- sigma / mu
   if (method == "unbiased") {
     if (is.null(n)) {
-      stop(insight::format_message("A value for `n` must be provided when `method = 'unbiased'` and both `mu` and `sigma` are provided"),
-           call. = FALSE)
+      stop(insight::format_message(
+        "A value for `n` must be provided when `method = 'unbiased'` and both `mu` and `sigma` are provided."
+      ), call. = FALSE)
     }
     # from DescTools::CoefVar
     out <- out * (1 - 1 / (4 * (n - 1)) + 1 / n * out^2 + 1 / (2 * (n - 1)^2))
