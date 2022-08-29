@@ -262,11 +262,8 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
 (i.e. recoded groups are labelled accordingly.</p>
     </div>
     <div class="section level2">
-    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    
-<div class="section">
-<h3 id="splits-and-breaks-cut-off-values-">Splits and breaks (cut-off values)<a class="anchor" aria-label="anchor" href="#splits-and-breaks-cut-off-values-"></a></h3>
-<p>Breaks are in general <em>exclusive</em>, this means that these values indicate
+    <h2 id="splits-and-breaks-cut-off-values-">Splits and breaks (cut-off values)<a class="anchor" aria-label="anchor" href="#splits-and-breaks-cut-off-values-"></a></h2>
+    <p>Breaks are in general <em>exclusive</em>, this means that these values indicate
 the lower bound of the next group or interval to begin. Take a simple
 example, a numeric variable with values from 1 to 9. The median would be 5,
 thus the first interval ranges from 1-4 and is recoded into 1, while 5-9
@@ -275,11 +272,10 @@ using <code>split = "quantile"</code> and <code>n_groups = 3</code> would define
 and 6.33 (see <code>quantile(1:9, probs = c(1/3, 2/3))</code>), which means that values
 from 1 to 3 belong to the first interval and are recoded into 1 (because
 the next interval starts at 3.67), 4 to 6 into 2 and 7 to 9 into 3.</p>
-</div>
-
-<div class="section">
-<h3 id="recoding-into-groups-with-equal-size-or-range">Recoding into groups with equal size or range<a class="anchor" aria-label="anchor" href="#recoding-into-groups-with-equal-size-or-range"></a></h3>
-<p><code>split = "equal_length"</code> and <code>split = "equal_range"</code> try to divide the
+    </div>
+    <div class="section level2">
+    <h2 id="recoding-into-groups-with-equal-size-or-range">Recoding into groups with equal size or range<a class="anchor" aria-label="anchor" href="#recoding-into-groups-with-equal-size-or-range"></a></h2>
+    <p><code>split = "equal_length"</code> and <code>split = "equal_range"</code> try to divide the
 range of <code>x</code> into intervals of similar (or same) length. The difference is
 that <code>split = "equal_length"</code> will divide the range of <code>x</code> into <code>n_groups</code>
 pieces and thereby defining the intervals used as breaks (hence, it is
@@ -287,8 +283,6 @@ equivalent to <code>cut(x, breaks = n_groups)</code>), while  <code>split = "equ
 will cut <code>x</code> into intervals that all have the length of <code>range</code>, where the
 first interval by defaults starts at <code>1</code>. The lowest (or starting) value
 of that interval can be defined using the <code>lowest</code> argument.</p>
-</div>
-
     </div>
     <div class="section level2">
     <h2 id="selection-of-variables-the-select-argument">Selection of variables - the <code>select</code> argument<a class="anchor" aria-label="anchor" href="#selection-of-variables-the-select-argument"></a></h2>
