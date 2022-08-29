@@ -604,7 +604,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
                              trim = 0, na.rm = FALSE, n = NULL, ...) {
   # TODO: Support weights
   method <- match.arg(method, choices = c("standard", "unbiased", "median_mad", "qcd"))
-  if (!(is.null(mu) && is.null(sigma))) {
+  if (is.null(mu) || is.null(sigma)) {
     if (isTRUE(na.rm)) {
       x <- x[!is.na(x)]
     }
@@ -620,7 +620,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
       x <- sort.int(x, partial = unique(c(lo, hi)))[lo:hi]
     }
   }
-  if (!is.null(mu)) {
+  if (is.null(mu)) {
     mu <- switch(
       method,
       standard, unbiased = mean(x, ...),
@@ -628,7 +628,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
       qcd = diff(stats::quantile(x, probs = c(.25, .75), ...))
     )
   }
-  if (!is.null(sigma)) {
+  if (is.null(sigma)) {
     sigma <- switch(
       method,
       standard, unbiased = stats::sd(x, ...),
