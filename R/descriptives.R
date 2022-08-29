@@ -116,7 +116,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
   if (is.null(mu)) {
     mu <- switch(
       method,
-      standard, unbiased = mean(x, ...),
+      standard = , unbiased = mean(x, ...),
       median_mad = stats::median(x, ...),
       qcd = diff(stats::quantile(x, probs = c(.25, .75), ...))
     )
@@ -124,7 +124,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
   if (is.null(sigma)) {
     sigma <- switch(
       method,
-      standard, unbiased = stats::sd(x, ...),
+      standard = , unbiased = stats::sd(x, ...),
       median_mad = stats::mad(x, center = mu, ...),
       qcd = sum(stats::quantile(x, probs = c(.25, .75), ...))
     )
