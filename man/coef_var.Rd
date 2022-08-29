@@ -17,7 +17,6 @@ distribution_cv(x, ...)
   x,
   mu = NULL,
   sigma = NULL,
-  unbiased = TRUE,
   method = c("standard", "unbiased", "median_mad", "qcd"),
   trim = 0,
   na.rm = FALSE,

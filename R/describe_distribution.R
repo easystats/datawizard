@@ -599,7 +599,7 @@ coef_var.default <- function(x, verbose = TRUE, ...) {
 #' @rdname coef_var
 #'
 #' @export
-coef_var.numeric <- function(x, mu = NULL, sigma = NULL, unbiased = TRUE,
+coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
                              method = c("standard", "unbiased", "median_mad", "qcd"),
                              trim = 0, na.rm = FALSE, n = NULL, ...) {
   # TODO: Support weights
@@ -620,7 +620,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL, unbiased = TRUE,
       x <- sort.int(x, partial = unique(c(lo, hi)))[lo:hi]
     }
   }
-  if (! is.null(mu)) {
+  if (!is.null(mu)) {
     mu <- switch(
       method,
       standard, unbiased = mean(x, ...),
@@ -628,7 +628,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL, unbiased = TRUE,
       qcd = diff(stats::quantile(x, probs = c(.25, .75), ...))
     )
   }
-  if (! is.null(sigma)) {
+  if (!is.null(sigma)) {
     sigma <- switch(
       method,
       standard, unbiased = stats::sd(x, ...),
@@ -640,7 +640,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL, unbiased = TRUE,
   if (method == "unbiased") {
     if (is.null(n)) {
       stop(insight::format_message(
-        "A value for `n` must be provided when `method = 'unbiased'` and both `mu` and `sigma` are provided."
+        "A value for `n` must be provided when `method = \"unbiased\"` and both `mu` and `sigma` are provided."
       ), call. = FALSE)
     }
     # from DescTools::CoefVar
