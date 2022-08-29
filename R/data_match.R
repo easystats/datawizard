@@ -202,6 +202,9 @@ data_filter <- function(x, filter, ...) {
           )
         ), call. = FALSE)
       }
+      stop(insight::format_message(
+        "Filtering did not work. Please check the syntax of your `filter` argument."
+      ), call. = FALSE)
     }
   }
   # restore value and variable labels
