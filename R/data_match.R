@@ -149,6 +149,13 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
 #' @export
 data_filter <- function(x, filter, ...) {
   condition <- substitute(filter)
+
+  # condition can be a numeric vector, to slice rows by indices,
+  # or a logical condition to filter observations. first, we check
+  # for numeric vector. the logical condition can also be passed
+  # as character vector, which allows to use data_filer() from inside
+  # other function w/o the need to define "globalVariables".
+
   # numeric vector to slice data frame?
   rows <- try(eval(condition, envir = parent.frame()), silent = TRUE)
   if (is.numeric(rows)) {
@@ -158,7 +165,44 @@ data_filter <- function(x, filter, ...) {
     if (is.character(condition)) {
       condition <- .str2lang(condition)
     }
-    out <- do.call(subset, list(x, subset = condition))
+    out <- tryCatch(
+      do.call(subset, list(x, subset = condition)),
+      warning = function(e) NULL,
+      error = function(e) NULL
+    )
+    # any errors? Give more informative message to users
+    # about possible misspelled comparisons / logical conditions
+    if (is.null(out)) {
+      condition <- as.character(condition)
+      # check if "=" instead of "==" was used?
+      # NOTE: We cannot check for `=` when "filter" is not a character vector
+      # because the function will then fail in general. I.e.,
+      # "data_filter(mtcars, filter = mpg > 10 & cyl = 4)" will not start
+      # running this function and never reaches the first code line,
+      # but immediately stops...
+      if (any(grepl("=", gsub("==", "", condition, fixed = TRUE), fixed = TRUE))) {
+        stop(insight::format_message(
+          "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
+        ), call. = FALSE)
+      }
+      # check if "&&" etc instead of "&" was used?
+      logical_operator <- NULL
+      if (any(grepl("&&", condition, fixed = TRUE))) {
+        logical_operator <- "&&"
+      }
+      if (any(grepl("||", condition, fixed = TRUE))) {
+        logical_operator <- "||"
+      }
+      if (!is.null(logical_operator)) {
+        stop(insight::format_message(
+          paste0(
+            "Filtering did not work. Please check if you need `",
+            substr(logical_operator, 0, 1),
+            "` (instead of `", logical_operator, "`) as logical operator."
+          )
+        ), call. = FALSE)
+      }
+    }
   }
   # restore value and variable labels
   for (i in colnames(out)) {
