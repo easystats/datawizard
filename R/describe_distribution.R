@@ -519,7 +519,7 @@ print.parameters_distribution <- function(x, digits = 2, ...) {
 #'
 #' @seealso For continuous variables, the
 #'   **Highest Maximum a Posteriori probability estimate (MAP)** may be
-#'   more a more useful way to estimate the most commonly-observed value
+#'   a more useful way to estimate the most commonly-observed value
 #'   than the mode. See [bayestestR::map_estimate()].
 #'
 #' @examples
