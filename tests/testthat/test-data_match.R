@@ -82,15 +82,19 @@ test_that("data_filter works like slice", {
 test_that("data_filter gives informative message on errors", {
   data(mtcars)
   expect_error(
-    data_filter(mtcars, "mpg > 10 || cyl = 4")
+    data_filter(mtcars, "mpg > 10 || cyl = 4"),
+    "`==`"
   )
   expect_error(
-    data_filter(mtcars, filter = mpg > 10 || cyl == 4)
+    data_filter(mtcars, filter = mpg > 10 || cyl == 4),
+    "`||`"
   )
   expect_error(
-    data_filter(mtcars, filter = mpg > 10 && cyl == 4)
+    data_filter(mtcars, filter = mpg > 10 && cyl == 4),
+    "`&&`"
   )
   expect_error(
-    data_filter(mtcars, filter = mpg > 10 ? cyl == 4)
+    data_filter(mtcars, filter = mpg > 10 ? cyl == 4),
+    "syntax"
   )
 })

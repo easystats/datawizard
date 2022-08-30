@@ -173,7 +173,7 @@ data_filter <- function(x, filter, ...) {
     # any errors? Give more informative message to users
     # about possible misspelled comparisons / logical conditions
     if (is.null(out)) {
-      condition <- as.character(condition)
+      condition <- insight::safe_deparse(condition)
       # check if "=" instead of "==" was used?
       # NOTE: We cannot check for `=` when "filter" is not a character vector
       # because the function will then fail in general. I.e.,
