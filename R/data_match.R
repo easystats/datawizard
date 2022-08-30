@@ -158,6 +158,7 @@ data_filter <- function(x, filter, ...) {
 
   # numeric vector to slice data frame?
   rows <- try(eval(condition, envir = parent.frame()), silent = TRUE)
+  print(rows)
   if (is.numeric(rows)) {
     out <- x[rows, , drop = FALSE]
   } else {
@@ -165,6 +166,7 @@ data_filter <- function(x, filter, ...) {
     if (is.character(condition)) {
       condition <- .str2lang(condition)
     }
+    print(condition)
     out <- tryCatch(
       do.call(subset, list(x, subset = condition)),
       warning = function(e) NULL,
