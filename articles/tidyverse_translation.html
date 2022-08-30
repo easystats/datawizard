@@ -322,12 +322,6 @@ only apply the first condition.</p>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<pre><code><span><span class="co">## [1] "Error in eval(condition, envir = parent.frame()) : \n  object 'skin_color' not found\n"</span></span>
-<span><span class="co">## attr(,"class")</span></span>
-<span><span class="co">## [1] "try-error"</span></span>
-<span><span class="co">## attr(,"condition")</span></span>
-<span><span class="co">## &lt;simpleError in eval(condition, envir = parent.frame()): object 'skin_color' not found&gt;</span></span>
-<span><span class="co">## skin_color == "light" &amp; eye_color == "brown"</span></span></code></pre>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 7 × 14</span></span></span>
 <span><span class="co">##   name         height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
@@ -354,13 +348,13 @@ column names if we want to select several variables, while
 <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">dplyr::select()</a></code> accepts any unquoted column names.</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span>select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hair_color"</span>, <span class="st">"skin_color"</span>, <span class="st">"eye_color"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hair_color</span>, <span class="va">skin_color</span>, <span class="va">eye_color</span><span class="op">)</span></span></code></pre></div>
@@ -377,13 +371,13 @@ column names if we want to select several variables, while
 <span><span class="co">## <span style="color: #BCBCBC;">6</span> brown, grey light       blue</span></span></code></pre>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span>select <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span><span class="op">(</span><span class="st">"color"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span><span class="op">(</span><span class="st">"color"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -404,13 +398,13 @@ column names if we want to select several variables, while
 <div>
 <!-- TODO: Although we say the column names need to be quoted, they are unquoted
 here and quoting them won't work. Should we comment on that? -->
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span>select <span class="op">=</span> <span class="op">-</span><span class="va">hair_color</span><span class="op">:</span><span class="va">eye_color</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">!</span><span class="op">(</span><span class="va">hair_color</span><span class="op">:</span><span class="va">eye_color</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -429,13 +423,13 @@ here and quoting them won't work. Should we comment on that? -->
 <span><span class="co">## <span style="color: #949494;">#   ⁴​starships</span></span></span></code></pre>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span>exclude <span class="op">=</span> <span class="fu">regex</span><span class="op">(</span><span class="st">"color$"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"color$"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -454,13 +448,13 @@ here and quoting them won't work. Should we comment on that? -->
 <span><span class="co">## <span style="color: #949494;">#   ⁴​starships</span></span></span></code></pre>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span>select <span class="op">=</span> <span class="va">is.numeric</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/where.html" class="external-link">where</a></span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -489,13 +483,13 @@ use select helpers such as <code><a href="https://tidyselect.r-lib.org/reference
 <code><a href="../reference/data_arrange.html">data_arrange()</a></code>.</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_arrange.html">data_arrange</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hair_color"</span>, <span class="st">"height"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">hair_color</span>, <span class="va">height</span><span class="op">)</span></span></code></pre></div>
@@ -517,13 +511,13 @@ use select helpers such as <code><a href="https://tidyselect.r-lib.org/reference
 <code>"-"</code> in front of their name, like below:</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_arrange.html">data_arrange</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"-hair_color"</span>, <span class="st">"-height"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">hair_color</span><span class="op">)</span>, <span class="op">-</span><span class="va">height</span><span class="op">)</span></span></code></pre></div>
@@ -551,13 +545,13 @@ extract a single column as a vector. This can be done with
 <code><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">dplyr::pull()</a></code>:</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_extract.html">data_extract</a></span><span class="op">(</span><span class="va">gender</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">gender</span><span class="op">)</span></span></code></pre></div>
@@ -567,7 +561,7 @@ extract a single column as a vector. This can be done with
 <p>We can also specify several variables in <code>select</code>. In this
 case, <code><a href="../reference/data_extract.html">data_extract()</a></code> is equivalent to
 <code><a href="../reference/find_columns.html">data_select()</a></code>:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_extract.html">data_extract</a></span><span class="op">(</span>select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"color"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
@@ -591,7 +585,7 @@ names to rename, and then a vector of new names for these columns that
 must be of the same length.</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_rename.html">data_rename</a></span><span class="op">(</span></span>
@@ -600,7 +594,7 @@ must be of the same length.</p>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span></span>
@@ -624,7 +618,7 @@ must be of the same length.</p>
 <p>The way <code><a href="../reference/data_rename.html">data_rename()</a></code> is designed makes it easy to apply
 the same modifications to a vector of column names. For example, we can
 remove underscores and use TitleCase with the following code:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">to_rename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">starwars</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -649,7 +643,7 @@ variables with <code><a href="../reference/data_rename.html">data_addprefix()</a
 <code><a href="../reference/data_rename.html">data_addsuffix()</a></code>. The argument <code>select</code> accepts
 all select helpers that we saw above with
 <code><a href="../reference/find_columns.html">data_select()</a></code>:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_rename.html">data_addprefix</a></span><span class="op">(</span></span>
 <span>    pattern <span class="op">=</span> <span class="st">"OLD."</span>,</span>
@@ -688,13 +682,13 @@ arguments <code>before</code> and <code>after</code><a class="footnote-ref" tabi
 selected columns should be relocated:</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_relocate.html">data_relocate</a></span><span class="op">(</span><span class="va">sex</span><span class="op">:</span><span class="va">homeworld</span>, before <span class="op">=</span> <span class="st">"height"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html" class="external-link">relocate</a></span><span class="op">(</span><span class="va">sex</span><span class="op">:</span><span class="va">homeworld</span>, .before <span class="op">=</span> <span class="va">height</span><span class="op">)</span></span></code></pre></div>
@@ -717,7 +711,7 @@ selected columns should be relocated:</p>
 <code>before = -1</code> to relocate the selected columns just before
 the last column, or <code>after = -1</code> to relocate them after the
 last column.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_relocate.html">data_relocate</a></span><span class="op">(</span><span class="va">sex</span><span class="op">:</span><span class="va">homeworld</span>, after <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
@@ -749,7 +743,7 @@ However, not all of <code><a href="https://tidyr.tidyverse.org/reference/pivot_l
 <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">tidyr::pivot_wider()</a></code> features are available yet.</p>
 <p>We will use the <code>relig_income</code> dataset, as in the <a href="https://tidyr.tidyverse.org/articles/pivot.html" class="external-link"><code>{tidyr}</code>
 vignette</a>.</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">relig_income</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 18 × 11</span></span></span>
 <span><span class="co">##    religion      `&lt;$10k` $10-2…¹ $20-3…² $30-4…³ $40-5…⁴ $50-7…⁵ $75-1…⁶ $100-…⁷</span></span>
@@ -784,7 +778,7 @@ corresponding to each of these columns will be reshaped to be in a
 single new column, called “count”.</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">relig_income</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_to_long.html">data_to_long</a></span><span class="op">(</span></span>
@@ -794,7 +788,7 @@ single new column, called “count”.</p>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">relig_income</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span></span>
@@ -820,7 +814,7 @@ single new column, called “count”.</p>
 <span><span class="co">## <span style="color: #949494;"># … with 170 more rows</span></span></span></code></pre>
 <p>To explore a bit more the arguments of <code><a href="../reference/data_to_long.html">data_to_long()</a></code>,
 we will use another dataset: the <code>billboard</code> dataset.</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">billboard</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 317 × 79</span></span></span>
 <span><span class="co">##    artist track date.ent…¹   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8   wk9</span></span>
@@ -844,7 +838,7 @@ we will use another dataset: the <code>billboard</code> dataset.</p>
 <span><span class="co">## <span style="color: #949494;">#   wk43 &lt;dbl&gt;, wk44 &lt;dbl&gt;, wk45 &lt;dbl&gt;, wk46 &lt;dbl&gt;, wk47 &lt;dbl&gt;, wk48 &lt;dbl&gt;, …</span></span></span></code></pre>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">billboard</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_to_long.html">data_to_long</a></span><span class="op">(</span></span>
@@ -855,7 +849,7 @@ we will use another dataset: the <code>billboard</code> dataset.</p>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">billboard</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span></span>
@@ -887,7 +881,7 @@ we will use another dataset: the <code>billboard</code> dataset.</p>
 <p>Once again, we use an example in the <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a> vignette to
 show how close <code><a href="../reference/data_to_wide.html">data_to_wide()</a></code> and
 <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider()</a></code> are:</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fish_encounters</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 114 × 3</span></span></span>
 <span><span class="co">##    fish  station  seen</span></span>
@@ -905,7 +899,7 @@ show how close <code><a href="../reference/data_to_wide.html">data_to_wide()</a>
 <span><span class="co">## <span style="color: #949494;"># … with 104 more rows</span></span></span></code></pre>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">fish_encounters</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_to_wide.html">data_to_wide</a></span><span class="op">(</span></span>
@@ -915,7 +909,7 @@ show how close <code><a href="../reference/data_to_wide.html">data_to_wide()</a>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">fish_encounters</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span></span>
@@ -963,7 +957,7 @@ right and inner. We will use the datasets <code>band_members</code>and
 <code>band_instruments</code> provided by <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a>:</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">band_members</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
 <span><span class="co">##   name  band   </span></span>
@@ -973,7 +967,7 @@ right and inner. We will use the datasets <code>band_members</code>and
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> Paul  Beatles</span></span></code></pre>
 </div>
 <div>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">band_instruments</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
 <span><span class="co">##   name  plays </span></span>
@@ -988,13 +982,13 @@ right and inner. We will use the datasets <code>band_members</code>and
 </h4>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_merge.html">data_join</a></span><span class="op">(</span><span class="va">band_instruments</span>, join <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">full_join</a></span><span class="op">(</span><span class="va">band_instruments</span><span class="op">)</span></span></code></pre></div>
@@ -1013,13 +1007,13 @@ right and inner. We will use the datasets <code>band_members</code>and
 </h4>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_merge.html">data_join</a></span><span class="op">(</span><span class="va">band_instruments</span>, join <span class="op">=</span> <span class="st">"left"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">band_instruments</span><span class="op">)</span></span></code></pre></div>
@@ -1033,13 +1027,13 @@ right and inner. We will use the datasets <code>band_members</code>and
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> Paul  Beatles bass</span></span></code></pre>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_merge.html">data_join</a></span><span class="op">(</span><span class="va">band_instruments</span>, join <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">right_join</a></span><span class="op">(</span><span class="va">band_instruments</span><span class="op">)</span></span></code></pre></div>
@@ -1057,13 +1051,13 @@ right and inner. We will use the datasets <code>band_members</code>and
 </h4>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_merge.html">data_join</a></span><span class="op">(</span><span class="va">band_instruments</span>, join <span class="op">=</span> <span class="st">"inner"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="va">band_members</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span><span class="va">band_instruments</span><span class="op">)</span></span></code></pre></div>
@@ -1089,7 +1083,7 @@ Some of them are inspired from the package <code>janitor</code>.</p>
 <p>We can convert a column in rownames and move rownames to a new column
 with <code><a href="../reference/rownames.html">rownames_as_column()</a></code> and
 <code><a href="../reference/rownames.html">column_as_rownames()</a></code>:</p>
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
 <span><span class="va">mtcars</span></span></code></pre></div>
 <pre><code><span><span class="co">##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb</span></span>
@@ -1099,7 +1093,7 @@ with <code><a href="../reference/rownames.html">rownames_as_column()</a></code> 
 <span><span class="co">## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1</span></span>
 <span><span class="co">## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2</span></span>
 <span><span class="co">## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</span></span></code></pre>
-<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars2</span> <span class="op">&lt;-</span> <span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/rownames.html">rownames_as_column</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span>
 <span></span>
@@ -1111,7 +1105,7 @@ with <code><a href="../reference/rownames.html">rownames_as_column()</a></code> 
 <span><span class="co">## 4    Hornet 4 Drive 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1</span></span>
 <span><span class="co">## 5 Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2</span></span>
 <span><span class="co">## 6           Valiant 18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</span></span></code></pre>
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/rownames.html">column_as_rownames</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb</span></span>
@@ -1128,7 +1122,7 @@ with <code><a href="../reference/rownames.html">rownames_as_column()</a></code> 
 <p>When dealing with messy data, it is sometimes useful to use a row as
 column names, and vice versa. This can be done with
 <code><a href="../reference/colnames.html">row_to_colnames()</a></code> and <code><a href="../reference/colnames.html">colnames_to_row()</a></code>.</p>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  X_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="st">"Title"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>,</span>
 <span>  X_2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="st">"Title2"</span>, <span class="fl">4</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span></span>
@@ -1140,7 +1134,7 @@ column names, and vice versa. This can be done with
 <span><span class="co">## 3     1      4</span></span>
 <span><span class="co">## 4     2      5</span></span>
 <span><span class="co">## 5     3      6</span></span></code></pre>
-<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/colnames.html">row_to_colnames</a></span><span class="op">(</span>row <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">x2</span></span></code></pre></div>
@@ -1149,7 +1143,7 @@ column names, and vice versa. This can be done with
 <span><span class="co">## 3     1      4</span></span>
 <span><span class="co">## 4     2      5</span></span>
 <span><span class="co">## 5     3      6</span></span></code></pre>
-<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/colnames.html">colnames_to_row</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##       x1     x2</span></span>

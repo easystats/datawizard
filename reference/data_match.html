@@ -243,12 +243,6 @@ working with labelled data.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona  21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1</span>
 <span class="r-in"><span><span class="co"># equivalent to</span></span></span>
 <span class="r-in"><span><span class="fu">data_filter</span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">vs</span> <span class="op">!=</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">am</span> <span class="op">!=</span> <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Error in eval(condition, envir = parent.frame()) : object 'vs' not found\n"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "try-error"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"condition")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;simpleError in eval(condition, envir = parent.frame()): object 'vs' not found&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> vs != 0 &amp; am != 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Hornet 4 Drive 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Valiant        18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1</span>
@@ -288,12 +282,6 @@ working with labelled data.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</span>
 <span class="r-in"><span><span class="co"># equivalent to</span></span></span>
 <span class="r-in"><span><span class="fu">data_filter</span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">vs</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">|</span> <span class="va">am</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Error in eval(condition, envir = parent.frame()) : object 'vs' not found\n"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "try-error"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"condition")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;simpleError in eval(condition, envir = parent.frame()): object 'vs' not found&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> vs == 0 | am == 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4</span>
@@ -323,7 +311,6 @@ working with labelled data.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># slice data frame by row indices</span></span></span>
 <span class="r-in"><span><span class="fu">data_filter</span><span class="op">(</span><span class="va">mtcars</span>, <span class="fl">5</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  5  6  7  8  9 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    mpg cyl  disp  hp drat   wt  qsec vs am gear carb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Hornet Sportabout 18.7   8 360.0 175 3.15 3.44 17.02  0  0    3    2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Valiant           18.1   6 225.0 105 2.76 3.46 20.22  1  0    3    1</span>
