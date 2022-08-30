@@ -79,8 +79,6 @@ test_that("data_filter works like slice", {
   expect_equal(out, mtcars[5:10, ], ignore_attr = TRUE)
 })
 
-## TODO These tests doesn't work from test-environment
-
 test_that("data_filter gives informative message on errors", {
   expect_error(
     data_filter(mtcars, "mpg > 10 || cyl = 4"),
