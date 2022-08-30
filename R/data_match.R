@@ -165,11 +165,11 @@ data_filter <- function(x, filter, ...) {
     if (is.character(condition)) {
       condition <- .str2lang(condition)
     }
-    out <- tryCatch(
-      do.call(subset, list(x, subset = condition)),
-      warning = function(e) NULL,
-      error = function(e) NULL
-    )
+    out <- try(do.call(subset, list(x, subset = condition)), silent = TRUE)
+    if (inherits(out, "try-error")) {
+      out <- NULL
+    }
+
     # any errors? Give more informative message to users
     # about possible misspelled comparisons / logical conditions
     if (is.null(out)) {
