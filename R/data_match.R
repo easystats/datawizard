@@ -203,7 +203,6 @@ data_filter <- function(x, filter, ...) {
       warning = function(e) NULL,
       error = function(e) NULL
     )
-
     if (is.null(out)) {
       stop(insight::format_message(
         "Filtering did not work. Please check the syntax of your `filter` argument."
