@@ -161,47 +161,50 @@ data_filter <- function(x, filter, ...) {
   if (is.numeric(rows)) {
     out <- x[rows, , drop = FALSE]
   } else {
-    # "filter" is no expression, but a string?
-    if (is.character(condition)) {
-      condition <- .str2lang(condition)
-    }
-    out <- try(do.call(subset, list(x, subset = condition)), silent = TRUE)
-    if (inherits(out, "try-error")) {
-      out <- NULL
-    }
-
-    # any errors? Give more informative message to users
-    # about possible misspelled comparisons / logical conditions
-    if (is.null(out)) {
+    if (!is.character(condition)) {
       condition <- insight::safe_deparse(condition)
-      # check if "=" instead of "==" was used?
-      # NOTE: We cannot check for `=` when "filter" is not a character vector
-      # because the function will then fail in general. I.e.,
-      # "data_filter(mtcars, filter = mpg > 10 & cyl = 4)" will not start
-      # running this function and never reaches the first code line,
-      # but immediately stops...
-      if (any(grepl("=", gsub("==", "", condition, fixed = TRUE), fixed = TRUE))) {
-        stop(insight::format_message(
-          "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
-        ), call. = FALSE)
-      }
-      # check if "&&" etc instead of "&" was used?
-      logical_operator <- NULL
-      if (any(grepl("&&", condition, fixed = TRUE))) {
-        logical_operator <- "&&"
-      }
-      if (any(grepl("||", condition, fixed = TRUE))) {
-        logical_operator <- "||"
-      }
-      if (!is.null(logical_operator)) {
-        stop(insight::format_message(
-          paste0(
-            "Filtering did not work. Please check if you need `",
-            substr(logical_operator, 0, 1),
-            "` (instead of `", logical_operator, "`) as logical operator."
-          )
-        ), call. = FALSE)
-      }
+    }
+    # Check syntax of the filter. Must be done *before* calling subset() (cf
+    # easystats/datawizard#237)
+    # Give more informative message to users
+    # about possible misspelled comparisons / logical conditions
+    # check if "=" instead of "==" was used?
+    # NOTE: We cannot check for `=` when "filter" is not a character vector
+    # because the function will then fail in general. I.e.,
+    # "data_filter(mtcars, filter = mpg > 10 & cyl = 4)" will not start
+    # running this function and never reaches the first code line,
+    # but immediately stops...
+    tmp <- gsub("==", "", condition, fixed = TRUE)
+    tmp <- gsub("!=", "", tmp, fixed = TRUE)
+    if (any(grepl("=", tmp, fixed = TRUE))) {
+      stop(insight::format_message(
+        "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
+      ), call. = FALSE)
+    }
+    # check if "&&" etc instead of "&" was used?
+    logical_operator <- NULL
+    if (any(grepl("&&", condition, fixed = TRUE))) {
+      logical_operator <- "&&"
+    }
+    if (any(grepl("||", condition, fixed = TRUE))) {
+      logical_operator <- "||"
+    }
+    if (!is.null(logical_operator)) {
+      stop(insight::format_message(
+        paste0(
+          "Filtering did not work. Please check if you need `",
+          substr(logical_operator, 0, 1),
+          "` (instead of `", logical_operator, "`) as logical operator."
+        )
+      ), call. = FALSE)
+    }
+    out <- tryCatch(
+      subset(x, subset = eval(parse(text = condition), envir = new.env())),
+      warning = function(e) NULL,
+      error = function(e) NULL
+    )
+
+    if (is.null(out)) {
       stop(insight::format_message(
         "Filtering did not work. Please check the syntax of your `filter` argument."
       ), call. = FALSE)
