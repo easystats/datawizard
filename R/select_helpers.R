@@ -3,14 +3,16 @@
 .select_nse <- function(select, data, exclude, ignore_case, regex = FALSE, verbose = FALSE) {
   # check if data argument is valid
   if (is.null(data)) {
-    stop(insight::format_message("The 'data' argument must be provided."), call. = FALSE)
+    stop(insight::format_message("The `data` argument must be provided."), call. = FALSE)
   }
 
   # check data frame input
   if (!is.null(data) && !is.data.frame(data)) {
     data <- try(as.data.frame(data), silent = TRUE)
     if (inherits(data, c("try-error", "simpleError"))) {
-      stop(insight::format_message("The 'data' argument must be a data frame, or an object that can be coerced to a data frame."), call. = FALSE)
+      stop(insight::format_message(
+        "The `data` argument must be a data frame, or an object that can be coerced to a data frame."
+      ), call. = FALSE)
     }
   }
 
@@ -189,7 +191,7 @@
       stop("Could not find variable '", from_to[2], "' in data.", call. = FALSE)
     }
     if (negate) {
-      pattern <- colnames(data)[setdiff(1:ncol(data), from:to)]
+      pattern <- colnames(data)[setdiff(seq_len(ncol(data)), from:to)]
     } else {
       pattern <- colnames(data)[from:to]
     }
@@ -240,7 +242,7 @@
       # select last column(s)
       pattern[pattern < 0] <- sort(ncol(data) + pattern[pattern < 0] + 1)
     }
-    pattern <- colnames(data)[intersect(pattern, 1:ncol(data))]
+    pattern <- colnames(data)[intersect(pattern, seq_len(ncol(data)))]
   }
 
   # special token - select all columns?
@@ -288,7 +290,7 @@
 .attach_packages <- function(packages = NULL) {
   if (!is.null(packages)) {
     pkg <- packages$package
-    for (i in 1:length(pkg)) {
+    for (i in seq_along(pkg)) {
       if (isTRUE(packages$namespace[i])) {
         loadNamespace(pkg[i])
       }

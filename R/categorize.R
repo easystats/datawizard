@@ -46,38 +46,38 @@
 #' @param ... not used.
 #' @inheritParams find_columns
 #'
-#' @inheritSection center Selection of variables - the `select` argument
-#'
 #' @inherit data_rename seealso
+#'
+#' @details
+#'
+#' # Splits and breaks (cut-off values)
+#'
+#' Breaks are in general _exclusive_, this means that these values indicate
+#' the lower bound of the next group or interval to begin. Take a simple
+#' example, a numeric variable with values from 1 to 9. The median would be 5,
+#' thus the first interval ranges from 1-4 and is recoded into 1, while 5-9
+#' would turn into 2 (compare `cbind(1:9, categorize(1:9))`). The same variable,
+#' using `split = "quantile"` and `n_groups = 3` would define breaks at 3.67
+#' and 6.33 (see `quantile(1:9, probs = c(1/3, 2/3))`), which means that values
+#' from 1 to 3 belong to the first interval and are recoded into 1 (because
+#' the next interval starts at 3.67), 4 to 6 into 2 and 7 to 9 into 3.
+#'
+#' # Recoding into groups with equal size or range
+#'
+#' `split = "equal_length"` and `split = "equal_range"` try to divide the
+#' range of `x` into intervals of similar (or same) length. The difference is
+#' that `split = "equal_length"` will divide the range of `x` into `n_groups`
+#' pieces and thereby defining the intervals used as breaks (hence, it is
+#' equivalent to `cut(x, breaks = n_groups)`), while  `split = "equal_range"`
+#' will cut `x` into intervals that all have the length of `range`, where the
+#' first interval by defaults starts at `1`. The lowest (or starting) value
+#' of that interval can be defined using the `lowest` argument.
+#'
+#' @inheritSection center Selection of variables - the `select` argument
 #'
 #' @return `x`, recoded into groups. By default `x` is numeric, unless `labels`
 #'   is specified. In this case, a factor is returned, where the factor levels
 #'   (i.e. recoded groups are labelled accordingly.
-#'
-#' @details
-#'
-#'   \subsection{Splits and breaks (cut-off values)}{
-#'   Breaks are in general _exclusive_, this means that these values indicate
-#'   the lower bound of the next group or interval to begin. Take a simple
-#'   example, a numeric variable with values from 1 to 9. The median would be 5,
-#'   thus the first interval ranges from 1-4 and is recoded into 1, while 5-9
-#'   would turn into 2 (compare `cbind(1:9, categorize(1:9))`). The same variable,
-#'   using `split = "quantile"` and `n_groups = 3` would define breaks at 3.67
-#'   and 6.33 (see `quantile(1:9, probs = c(1/3, 2/3))`), which means that values
-#'   from 1 to 3 belong to the first interval and are recoded into 1 (because
-#'   the next interval starts at 3.67), 4 to 6 into 2 and 7 to 9 into 3.
-#'   }
-#'
-#'   \subsection{Recoding into groups with equal size or range}{
-#'   `split = "equal_length"` and `split = "equal_range"` try to divide the
-#'   range of `x` into intervals of similar (or same) length. The difference is
-#'   that `split = "equal_length"` will divide the range of `x` into `n_groups`
-#'   pieces and thereby defining the intervals used as breaks (hence, it is
-#'   equivalent to `cut(x, breaks = n_groups)`), while  `split = "equal_range"`
-#'   will cut `x` into intervals that all have the length of `range`, where the
-#'   first interval by defaults starts at `1`. The lowest (or starting) value
-#'   of that interval can be defined using the `lowest` argument.
-#'   }
 #'
 #' @examples
 #' set.seed(123)
@@ -121,7 +121,9 @@ categorize <- function(x, ...) {
 #' @export
 categorize.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
+    message(insight::format_message(
+      paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")
+    ))
   }
   return(x)
 }
@@ -180,7 +182,9 @@ categorize.numeric <- function(x,
   # stop if all NA
   if (!length(x)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
+      warning(insight::format_message(
+        "Variable contains only missing values. No recoding carried out."
+      ), call. = FALSE)
     }
     return(original_x)
   }
