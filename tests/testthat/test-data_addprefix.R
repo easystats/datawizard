@@ -29,11 +29,12 @@ test_that("data_addprefix works as expected", {
 # select helpers ------------------------------
 test_that("data_addprefix regex", {
   expect_equal(
-    data_extract(mtcars, select = "pg", "regex", regex = TRUE),
-    data_extract(mtcars, select = "mpg", "regex")
+    data_addsuffix(mtcars, "_regex", select = "pg", regex = TRUE),
+    data_addsuffix(mtcars, "_regex", select = "mpg")
   )
   expect_equal(
-    data_extract(mtcars, select = "pg$", "regex", regex = TRUE),
-    data_extract(mtcars, select = "mpg", "regex")
+    data_addsuffix(mtcars, select = "pg$", "_regex", regex = TRUE),
+    data_addsuffix(mtcars, select = "mpg", "_regex")
   )
 })
+

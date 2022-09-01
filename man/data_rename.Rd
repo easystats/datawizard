@@ -24,6 +24,8 @@ data_addsuffix(
   select = NULL,
   exclude = NULL,
   ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
   ...
 )
 
