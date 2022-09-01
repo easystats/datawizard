@@ -178,7 +178,7 @@ data_filter <- function(x, filter, ...) {
     tmp <- gsub("<=", "", tmp, fixed = TRUE)
     tmp <- gsub(">=", "", tmp, fixed = TRUE)
     tmp <- gsub("!=", "", tmp, fixed = TRUE)
-    if (any(grepl("\\b=\\b", tmp, fixed = TRUE))) {
+    if (any(grepl("=", tmp, fixed = TRUE))) {
       stop(insight::format_message(
         "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
       ), call. = FALSE)
