@@ -175,6 +175,8 @@ data_filter <- function(x, filter, ...) {
     # running this function and never reaches the first code line,
     # but immediately stops...
     tmp <- gsub("==", "", condition, fixed = TRUE)
+    tmp <- gsub("<=", "", tmp, fixed = TRUE)
+    tmp <- gsub(">=", "", tmp, fixed = TRUE)
     tmp <- gsub("!=", "", tmp, fixed = TRUE)
     if (any(grepl("=", tmp, fixed = TRUE))) {
       stop(insight::format_message(
