@@ -115,4 +115,13 @@ test_that("data_filter works with >= or <=", {
     data_filter(mtcars, mpg <= 30.4),
     subset(mtcars, mpg <= 30.4)
   )
+
+  expect_equal(
+    data_filter(mtcars, "mpg >= 30.4 & hp == 66"),
+    subset(mtcars, mpg >= 30.4 & hp == 66)
+  )
+  expect_equal(
+    data_filter(mtcars, mpg <= 30.4 & hp == 66),
+    subset(mtcars, mpg <= 30.4 & hp == 66)
+  )
 })
