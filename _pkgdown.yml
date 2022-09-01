@@ -7,7 +7,8 @@ template:
 reference:
 
   - title: Data Preparation
-    desc: Main functions for cleaning and preparing data
+    desc: |
+        Main functions for cleaning and preparing data
     contents:
       - data_to_long
       - data_to_wide
@@ -22,7 +23,8 @@ reference:
       - data_group
 
   - title: Statistical Transformations
-    desc: Functions for transforming variables
+    desc: |
+        Functions for transforming variables
     contents:
       - categorize
       - recode_values
@@ -41,7 +43,8 @@ reference:
       - winsorize
 
   - title: Data Properties
-    desc: Functions to compute statistical summaries of data properties and distributions
+    desc: |
+        Functions to compute statistical summaries of data properties and distributions
     contents:
       - data_tabulate
       - contains("distribution")
@@ -51,6 +54,8 @@ reference:
       - weighted_mean
 
   - title: Convert and Replace Data
+    desc: |
+        Helpers for data replacements
     contents:
       - contains("to_numeric")
       - to_factor
@@ -58,10 +63,14 @@ reference:
       - starts_with("convert_")
 
   - title: Import data
+    desc: |
+        Helpers for importing data
     contents:
       - data_read
 
   - title: Helpers for Data Preparation
+    desc: |
+        Primarily useful in the context of other 'easystats' packages
     contents:
       - reshape_ci
       - data_addprefix
@@ -72,20 +81,26 @@ reference:
       - data_restoretype
 
   - title: Helpers for Text Formatting
+    desc: |
+        Primarily useful for 'report' package
     contents:
       - starts_with("text_")
 
   - title: Visualization helpers
     desc: |
-      This function is relevant only within 'easystats' packages
+        Primarily useful in the context of other 'easystats' packages
     contents:
       - visualisation_recipe
 
   - title: Reexports
+    desc: |
+        Functions from other packages re-exported for convenience
     contents:
       - reexports
 
   - title: Data
+    desc: |
+        Datasets useful for examples and tests
     contents:
       - efc
       - nhanes_sample
@@ -93,10 +108,16 @@ reference:
 articles:
 
   - title: Data Preparation
+    desc: |
+        Articles explaining utility of 'datawizard' for data wrangling
     navbar: ~
     contents:
       - tidyverse_translation
+
   - title: Statistical Transformations
+    desc: |
+        Articles describing use of 'datawizard' functions for tranforming data
+        to use in regression models
     navbar: ~
     contents:
       - standardize_data
