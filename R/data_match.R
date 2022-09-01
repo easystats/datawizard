@@ -175,8 +175,10 @@ data_filter <- function(x, filter, ...) {
     # running this function and never reaches the first code line,
     # but immediately stops...
     tmp <- gsub("==", "", condition, fixed = TRUE)
+    tmp <- gsub("<=", "", condition, fixed = TRUE)
+    tmp <- gsub(">=", "", condition, fixed = TRUE)
     tmp <- gsub("!=", "", tmp, fixed = TRUE)
-    if (any(grepl("=", tmp, fixed = TRUE))) {
+    if (any(grepl("\\b=\\b", tmp, fixed = TRUE))) {
       stop(insight::format_message(
         "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
       ), call. = FALSE)
