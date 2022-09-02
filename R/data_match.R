@@ -88,12 +88,12 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
   # evaluate
   match <- match.arg(tolower(match), c("and", "&", "&&", "or", "|", "||", "!", "not"))
   match <- switch(match,
-    "&" = ,
-    "&&" = ,
-    "and" = "and",
-    "!" = ,
-    "not" = "not",
-    "or"
+                  "&" = ,
+                  "&&" = ,
+                  "and" = "and",
+                  "!" = ,
+                  "not" = "not",
+                  "or"
   )
 
   # sanity check
@@ -167,6 +167,21 @@ data_filter <- function(x, filter, ...) {
     # Check syntax of the filter. Must be done *before* calling subset()
     # (cf easystats/datawizard#237)
     .check_filter_syntax(condition)
+
+    has_curley <- grepl("\\{", condition)
+
+    if (has_curley) {
+      condition <- gsub("\\{ ", "\\{", condition)
+      condition <- gsub(" \\}", "\\}", condition)
+
+      curley_vars <- regmatches(condition, gregexpr("[^{\\}]+(?=\\})", condition, perl = TRUE))
+      curley_vars <- unlist(curley_vars)
+
+      for (i in curley_vars) {
+        token <- get(i, envir = parent.frame())
+        condition <- gsub(paste0("{", i, "}"), token, condition, fixed = TRUE)
+      }
+    }
 
     out <- tryCatch(
       subset(x, subset = eval(parse(text = condition), envir = new.env())),
