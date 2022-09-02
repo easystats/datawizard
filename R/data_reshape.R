@@ -53,7 +53,7 @@
 #'   # Pivot long format
 #'   data_to_long(data,
 #'     select = regex("\\d"), # Select all columns that contain a digit
-#'     colnames_to = "Item",
+#'     names_to = "Item",
 #'     values_to = "Score",
 #'     rows_to = "Participant"
 #'   )

@@ -16,11 +16,12 @@ data_addprefix <- function(data,
                            ...) {
   # evaluate arguments
   select <- .select_nse(select,
-                        data,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    data,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   selected_columns <- colnames(data) %in% select
   colnames(data)[selected_columns] <- paste0(pattern, colnames(data)[selected_columns])
@@ -40,11 +41,12 @@ data_addsuffix <- function(data,
                            ...) {
   # evaluate arguments
   select <- .select_nse(select,
-                        data,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        verbose = verbose)
+    data,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   selected_columns <- colnames(data) %in% select
   colnames(data)[selected_columns] <- paste0(colnames(data)[selected_columns], pattern)

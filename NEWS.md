@@ -13,7 +13,14 @@ BREAKING CHANGES
 * New `recode_values()` alias is introduced for `change_code()`, latter of which
   will be removed in the next release.
 
+NEW FUNCTIONS
+
+* `data_peek()`, to peek at values and type of variables in a data frame.
+
 CHANGES
+
+* `data_filter()` will give more informative messages on malformed syntax of
+  the `filter` argument.
 
 * The `regex` argument was added to functions that use select-helpers and did
   not already have this argument.

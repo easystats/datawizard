@@ -78,7 +78,7 @@ data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose =
   freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
 
   if (is.null(freq_table)) {
-    warning(paste0("Can't compute frequency tables for objects of class '", class(x)[1], "'."), call. = FALSE)
+    warning(paste0("Can't compute frequency tables for objects of class `", class(x)[1], "`."), call. = FALSE)
     return(NULL)
   }
 
@@ -188,7 +188,7 @@ data_tabulate.grouped_df <- function(x,
 
   x <- as.data.frame(x)
   out <- list()
-  for (i in 1:length(grps)) {
+  for (i in seq_along(grps)) {
     rows <- grps[[i]]
     # save information about grouping factors
     if (!is.null(group_variables)) {
@@ -343,7 +343,7 @@ print_md.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
 print.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
   a <- attributes(x)
   if (!isTRUE(a$collapse) || length(x) == 1) {
-    for (i in 1:length(x)) {
+    for (i in seq_along(x)) {
       print(x[[i]], big_mark = big_mark, ...)
       if (i < length(x)) cat("\n")
     }
