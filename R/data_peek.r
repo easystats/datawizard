@@ -66,6 +66,18 @@ print.dw_data_peek <- function(x, n = NULL, ...) {
 }
 
 #' @export
+print_md.dw_data_peek <- function(x, n = NULL, ...) {
+  x <- format(x, n = n, ...)
+  insight::export_table(x, align = "lll", format = "markdown", ...)
+}
+
+#' @export
+print_html.dw_data_peek <- function(x, n = NULL, ...) {
+  x <- format(x, n = n, ...)
+  insight::export_table(x, align = "lll", format = "html", ...)
+}
+
+#' @export
 format.dw_data_peek <- function(x, n = NULL, ...) {
   width_col1 <- max(nchar(x$Variable))
   width_col2 <- max(nchar(x$Type))
