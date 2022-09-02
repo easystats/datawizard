@@ -15,6 +15,9 @@ BREAKING CHANGES
 
 CHANGES
 
+* `data_find()` will give more informative messages on malformed synrax of
+  the `filter` argument.
+
 * The `regex` argument was added to functions that use select-helpers and did
   not already have this argument.
 
