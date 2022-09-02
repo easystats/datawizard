@@ -56,7 +56,9 @@ data_peek.data.frame <- function(x,
   }
 
   class(out) <- c("dw_data_peek", class(out))
-  attr(out, "n_rows") <- n
+  attr(out, "n_vars") <- n
+  attr(out, "n_cols") <- ncol(x)
+  attr(out, "n_rows") <- nrow(x)
   attr(out, "max_width") <- ifelse(is.null(width), 0.9 * options()$width, width)
 
   out
@@ -68,19 +70,34 @@ data_peek.data.frame <- function(x,
 #' @export
 print.dw_data_peek <- function(x, n = NULL, ...) {
   x <- format(x, n = n, ...)
-  cat(insight::export_table(x, align = "lll", ...))
+  caption <- sprintf(
+    "Data frame with %i rows and %i columns",
+    attributes(x)$n_rows,
+    attributes(x)$n_cols
+  )
+  cat(insight::export_table(x, align = "lll", caption = caption, ...))
 }
 
 #' @export
 print_md.dw_data_peek <- function(x, n = NULL, ...) {
   x <- format(x, n = n, ...)
-  insight::export_table(x, align = "lll", format = "markdown", ...)
+  caption <- sprintf(
+    "Data frame with %i rows and %i columns",
+    attributes(x)$n_rows,
+    attributes(x)$n_cols
+  )
+  insight::export_table(x, align = "lll", format = "markdown", caption = caption, ...)
 }
 
 #' @export
 print_html.dw_data_peek <- function(x, n = NULL, ...) {
   x <- format(x, n = n, ...)
-  insight::export_table(x, align = "lll", format = "html", ...)
+  caption <- sprintf(
+    "Data frame with %i rows and %i columns",
+    attributes(x)$n_rows,
+    attributes(x)$n_cols
+  )
+  insight::export_table(x, align = "lll", format = "html", caption = caption, ...)
 }
 
 #' @export
@@ -102,7 +119,7 @@ format.dw_data_peek <- function(x, n = NULL, ...) {
 
   # row-limit?
   if (is.null(n)) {
-    n <- attributes(x)$n_rows
+    n <- attributes(x)$n_vars
   }
   if (!is.null(n)) {
     x <- x[1:n, ]
