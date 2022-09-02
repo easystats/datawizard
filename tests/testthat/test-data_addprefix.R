@@ -37,4 +37,3 @@ test_that("data_addprefix regex", {
     data_addsuffix(mtcars, select = "mpg", "_regex")
   )
 })
-
