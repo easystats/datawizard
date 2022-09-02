@@ -20,3 +20,83 @@
 data_peek <- function(x, ...) {
   UseMethod("data_peek")
 }
+
+
+#' @rdname data_peek
+#' @export
+data_peek.data.frame <- function(x,
+                                 select = NULL,
+                                 exclude = NULL,
+                                 ignore_case = FALSE,
+                                 regex = FALSE,
+                                 n = NULL,
+                                 verbose = TRUE,
+                                 ...) {
+  # evaluate arguments
+  select <- .select_nse(select,
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
+  out <- do.call(rbind, lapply(select, function(i) {
+    .data_peek(x, i, verbose = verbose, ...)
+  }))
+
+  class(out) <- c("dw_data_peek", class(out))
+  attr(out, "n_rows") <- n
+  attr(out, "max_width") <- 0.9 * options()$width
+
+  out
+}
+
+
+# methods -----------------
+
+#' @export
+print.dw_data_peek <- function(x, n = NULL, ...) {
+  x <- format(x, n = n, ...)
+  cat(insight::export_table(x, align = "lll", ...))
+}
+
+#' @export
+format.dw_data_peek <- function(x, n = NULL, ...) {
+  width_col1 <- max(nchar(x$Variable))
+  width_col2 <- max(nchar(x$Type))
+  max_width <- attributes(x)$max_width
+  if (is.null(max_width)) {
+    max_width <- 0.9 * options()$width
+  }
+  width_col3 <- max_width - (width_col1 + width_col2 + 10) # 10 = separator chars in table
+
+  # shorten value-string
+  x$Values <- substr(x$Values, 0, width_col3)
+  # make sure we have a clear truncation, at last "comma"
+  x$Values <- gsub("(.+)(,.+)$", "\\1", x$Values)
+  # add "..."
+  x$Values <- paste0(x$Values, ", ...")
+
+  # row-limit?
+  if (is.null(n)) {
+    n <- attributes(x)$n_rows
+  }
+  if (!is.null(n)) {
+    x <- x[1:n, ]
+  }
+
+  x
+}
+
+
+# helper -----------------
+
+.data_peek <- function(x, variable, verbose = TRUE, ...) {
+  v_name <- variable
+  v_type <- .variable_type(x[[variable]])
+
+  max_width <- 0.9 * options()$width
+  v_values <- paste0(x[[variable]][1:max_width], collapse = ", ")
+
+  data.frame(Variable = v_name, Type = v_type, Values = v_values, stringsAsFactors = FALSE)
+}
