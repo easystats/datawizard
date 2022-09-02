@@ -28,17 +28,12 @@ to_factor <- function(x, ...) {
 }
 
 
-## TODO Deprecate and remove alias later
-
-#' @rdname to_factor
-#' @export
-data_to_factor <- to_factor
-
-
 #' @export
 to_factor.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(sprintf("Converting into factors values currently not possible for variables of class '%s'.", class(x)[1])))
+    message(insight::format_message(
+      sprintf("Converting into factors values currently not possible for variables of class `%s`.", class(x)[1])
+    ))
   }
   x
 }
@@ -88,6 +83,7 @@ to_factor.data.frame <- function(x,
                                  exclude = NULL,
                                  ignore_case = FALSE,
                                  append = FALSE,
+                                 regex = FALSE,
                                  verbose = TRUE,
                                  ...) {
   # sanity check, return as is for complete numeric
@@ -96,7 +92,13 @@ to_factor.data.frame <- function(x,
   }
 
   # evaluate arguments
-  select <- .select_nse(select, x, exclude, ignore_case)
+  select <- .select_nse(select,
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # drop factors, when append is not FALSE
   if (!isFALSE(append)) {

@@ -33,3 +33,12 @@ test_that("unnormalize and unstandardized x 4", {
   # attributes(z)
   expect_equal(unnormalize(z), x, ignore_attr = TRUE)
 })
+
+# select helpers ------------------------------
+test_that("unnormalize regex", {
+  x <- normalize(mtcars, select = "mpg")
+  expect_equal(
+    unnormalize(x, select = "pg", regex = TRUE),
+    unnormalize(x, select = "mpg")
+  )
+})

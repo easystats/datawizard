@@ -25,3 +25,15 @@ test_that("data_addprefix works as expected", {
     c("Sepal.Length", "Sepal.Width", "Petal.Length_OLD", "Petal.Width_OLD", "Species")
   )
 })
+
+# select helpers ------------------------------
+test_that("data_addprefix regex", {
+  expect_equal(
+    data_addsuffix(mtcars, "_regex", select = "pg", regex = TRUE),
+    data_addsuffix(mtcars, "_regex", select = "mpg")
+  )
+  expect_equal(
+    data_addsuffix(mtcars, select = "pg$", "_regex", regex = TRUE),
+    data_addsuffix(mtcars, select = "mpg", "_regex")
+  )
+})

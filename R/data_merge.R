@@ -197,10 +197,9 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
     id <- make.unique(c(all_columns, id), sep = "_")[length(all_columns) + 1]
     # and also tell user...
     if (isTRUE(verbose)) {
-      warning(
-        insight::format_message(sprintf("Value of `id` already exists as column name. ID column was renamed to `%s`.", id)),
-        call. = FALSE
-      )
+      warning(insight::format_message(
+        sprintf("Value of `id` already exists as column name. ID column was renamed to `%s`.", id)
+      ), call. = FALSE)
     }
   }
 
@@ -254,7 +253,9 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   # check valid combination of "join" and "by" -----------------------
 
   if (join %in% c("anti", "semi") && (is.null(by) || length(by) != 1)) {
-    stop(insight::format_message(sprintf("For `join = \"%s\"`, `by` needs to be a name of only one variable that is present in both data frames.", join)), call. = FALSE)
+    stop(insight::format_message(
+      sprintf("For `join = \"%s\"`, `by` needs to be a name of only one variable that is present in both data frames.", join)
+    ), call. = FALSE)
   }
 
 
@@ -263,10 +264,10 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   # for later sorting
   if (join != "bind") {
     if (nrow(x) > 0) {
-      x$.data_merge_id_x <- 1:nrow(x)
+      x$.data_merge_id_x <- seq_len(nrow(x))
     }
     if (nrow(y) > 0) {
-      y$.data_merge_id_y <- (1:nrow(y)) + nrow(x)
+      y$.data_merge_id_y <- (seq_len(nrow(y))) + nrow(x)
     }
   }
   all_columns <- union(colnames(x), colnames(y))
@@ -343,10 +344,9 @@ data_merge.list <- function(x, join = "left", by = NULL, id = NULL, verbose = TR
       id <- make.unique(c(colnames(out), id), sep = "_")[length(colnames(out)) + 1]
       # and also tell user...
       if (isTRUE(verbose)) {
-        warning(
-          insight::format_message(sprintf("Value of `id` already exists as column name. ID column was renamed to `%s`.", id)),
-          call. = FALSE
-        )
+        warning(insight::format_message(
+          sprintf("Value of `id` already exists as column name. ID column was renamed to `%s`.", id)
+        ), call. = FALSE)
       }
     }
     out[[id]] <- df_id
@@ -364,7 +364,7 @@ data_merge.list <- function(x, join = "left", by = NULL, id = NULL, verbose = TR
   } else {
     # add ID for merging
     if (nrow(x) > 0) {
-      x$.data_merge_row <- 1:nrow(x)
+      x$.data_merge_row <- seq_len(nrow(x))
     }
     if (nrow(y) > 0) {
       y$.data_merge_row <- (nrow(x) + 1):(nrow(x) + nrow(y))

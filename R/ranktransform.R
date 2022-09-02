@@ -104,13 +104,21 @@ ranktransform.grouped_df <- function(x,
                                      sign = FALSE,
                                      method = "average",
                                      ignore_case = FALSE,
+                                     regex = FALSE,
+                                     verbose = TRUE,
                                      ...) {
   info <- attributes(x)
   # dplyr >= 0.8.0 returns attribute "indices"
   grps <- attr(x, "groups", exact = TRUE)
 
   # evaluate arguments
-  select <- .select_nse(select, x, exclude, ignore_case)
+  select <- .select_nse(select,
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # dplyr < 0.8.0?
   if (is.null(grps)) {
@@ -145,9 +153,17 @@ ranktransform.data.frame <- function(x,
                                      sign = FALSE,
                                      method = "average",
                                      ignore_case = FALSE,
+                                     regex = FALSE,
+                                     verbose = TRUE,
                                      ...) {
   # evaluate arguments
-  select <- .select_nse(select, x, exclude, ignore_case)
+  select <- .select_nse(select,
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   x[select] <- lapply(x[select], ranktransform, sign = sign, method = method)
   x

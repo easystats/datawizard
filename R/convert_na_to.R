@@ -78,7 +78,9 @@ convert_na_to <- function(x, ...) {
 #' @export
 convert_na_to.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(sprintf("Converting missing values (`NA`) into regular values currently not possible for variables of class '%s'.", class(x)[1])))
+    message(insight::format_message(
+      sprintf("Converting missing values (`NA`) into regular values currently not possible for variables of class `%s`.", class(x)[1])
+    ))
   }
   x
 }
@@ -152,10 +154,17 @@ convert_na_to.data.frame <- function(x,
                                      replace_char = replacement,
                                      replace_fac = replacement,
                                      ignore_case = FALSE,
+                                     regex = FALSE,
                                      verbose = TRUE,
                                      ...) {
   data <- x
-  select_nse <- .select_nse(select, data, exclude = exclude, ignore_case)
+  select_nse <- .select_nse(select,
+    data,
+    exclude = exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # list are not covered by .select_nse
   if (length(select_nse) == 0) {

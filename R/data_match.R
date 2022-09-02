@@ -10,7 +10,9 @@
 #'   `match` is a value other than `"and"`, the original row order might be
 #'   changed. See 'Details'.
 #' @param filter A logical expression indicating which rows to keep, or a numeric
-#'   vector indicating the row indices of rows to keep.
+#'   vector indicating the row indices of rows to keep. Can also be a string
+#'   representation of a logical expression. e.g. `filter = "x > 4"`. This might
+#'   be useful when used in packages to avoid defining undefined global variables.
 #' @param match String, indicating with which logical operation matching
 #'   conditions should be combined. Can be `"and"` (or `"&"`), `"or"` (or `"|"`)
 #'   or `"not"` (or `"!"`).
@@ -111,7 +113,7 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
     if (isTRUE(drop_na)) {
       x <- x[stats::complete.cases(x), , drop = FALSE]
     }
-    idx <- 1:nrow(x)
+    idx <- seq_len(nrow(x))
   }
 
   # Find matching rows
@@ -147,37 +149,35 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
 #' @export
 data_filter <- function(x, filter, ...) {
   condition <- substitute(filter)
+
+  # condition can be a numeric vector, to slice rows by indices,
+  # or a logical condition to filter observations. first, we check
+  # for numeric vector. the logical condition can also be passed
+  # as character vector, which allows to use data_filer() from inside
+  # other function w/o the need to define "globalVariables".
+
   # numeric vector to slice data frame?
   rows <- try(eval(condition, envir = parent.frame()), silent = TRUE)
   if (is.numeric(rows)) {
     out <- x[rows, , drop = FALSE]
   } else {
-
-    # check for curley tags, like "{var} == 1"
-    has_curley <- tryCatch(grepl("{", deparse(filter), fixed = TRUE),
-                           error = function(e) FALSE)
-    if (isTRUE(has_curley)) {
-      # evaluate condition, to get a string
-      condition <- eval(condition, envir = parent.frame())
-      # find variables inside curleys
-      curley_vars <- gregexpr("[^{\\}]+(?=\\})", condition, perl = TRUE)
-      l <- attributes(curley_vars[[1]])$match.length
-      curley_vars <- unlist(curley_vars)
-
-      curley_vars <- sapply(seq_along(curley_vars), function(i) {
-        substr(condition, curley_vars[i], curley_vars[i] + l[i] - 1)
-      })
-
-      for (i in eval(curley_vars)) {
-        token <- eval(str2lang(i))
-        condition <- gsub(paste0("{", i, "}"), token, condition, fixed = TRUE)
-      }
-
-      condition <- str2lang(condition)
-
+    if (!is.character(condition)) {
+      condition <- insight::safe_deparse(condition)
     }
-    
-    out <- do.call(subset, list(x, subset = condition))
+    # Check syntax of the filter. Must be done *before* calling subset()
+    # (cf easystats/datawizard#237)
+    .check_filter_syntax(condition)
+
+    out <- tryCatch(
+      subset(x, subset = eval(parse(text = condition), envir = new.env())),
+      warning = function(e) NULL,
+      error = function(e) NULL
+    )
+    if (is.null(out)) {
+      stop(insight::format_message(
+        "Filtering did not work. Please check the syntax of your `filter` argument."
+      ), call. = FALSE)
+    }
   }
   # restore value and variable labels
   for (i in colnames(out)) {
@@ -185,4 +185,45 @@ data_filter <- function(x, filter, ...) {
     attr(out[[i]], "labels") <- attr(x[[i]], "labels", exact = TRUE)
   }
   out
+}
+
+
+# helper -------------------
+
+.check_filter_syntax <- function(condition) {
+  # NOTE: We cannot check for `=` when "filter" is not a character vector
+  # because the function will then fail in general. I.e.,
+  # "data_filter(mtcars, filter = mpg > 10 & cyl = 4)" will not start
+  # running this function and never reaches the first code line,
+  # but immediately stops...
+  tmp <- gsub("==", "", condition, fixed = TRUE)
+  tmp <- gsub("<=", "", tmp, fixed = TRUE)
+  tmp <- gsub(">=", "", tmp, fixed = TRUE)
+  tmp <- gsub("!=", "", tmp, fixed = TRUE)
+
+  # Give more informative message to users
+  # about possible misspelled comparisons / logical conditions
+  # check if "=" instead of "==" was used?
+  if (any(grepl("=", tmp, fixed = TRUE))) {
+    stop(insight::format_message(
+      "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
+    ), call. = FALSE)
+  }
+  # check if "&&" etc instead of "&" was used?
+  logical_operator <- NULL
+  if (any(grepl("&&", condition, fixed = TRUE))) {
+    logical_operator <- "&&"
+  }
+  if (any(grepl("||", condition, fixed = TRUE))) {
+    logical_operator <- "||"
+  }
+  if (!is.null(logical_operator)) {
+    stop(insight::format_message(
+      paste0(
+        "Filtering did not work. Please check if you need `",
+        substr(logical_operator, 0, 1),
+        "` (instead of `", logical_operator, "`) as logical operator."
+      )
+    ), call. = FALSE)
+  }
 }

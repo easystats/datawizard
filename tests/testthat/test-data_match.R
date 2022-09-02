@@ -46,6 +46,11 @@ test_that("data_match and data_filter work similar", {
   out1 <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
   out2 <- data_filter(mtcars, vs == 0 | am == 1)
   expect_equal(out1[order(out1$vs, out1$am), ], out2[order(out2$vs, out2$am), ], ignore_attr = TRUE)
+
+  # string representation is working
+  out1 <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
+  out2 <- data_filter(mtcars, "vs == 0 | am == 1")
+  expect_equal(out1[order(out1$vs, out1$am), ], out2[order(out2$vs, out2$am), ], ignore_attr = TRUE)
 })
 
 
@@ -59,7 +64,64 @@ test_that("data_filter works", {
 })
 
 
+test_that("data_filter works with string representation", {
+  out1 <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
+  out2 <- data_filter(mtcars, "vs != 0 & am != 1")
+  out3 <- subset(mtcars, vs != 0 & am != 1)
+  expect_equal(out1, out2, ignore_attr = TRUE)
+  expect_equal(out1, out3, ignore_attr = TRUE)
+  expect_equal(out2, out3, ignore_attr = TRUE)
+})
+
+
 test_that("data_filter works like slice", {
   out <- data_filter(mtcars, 5:10)
   expect_equal(out, mtcars[5:10, ], ignore_attr = TRUE)
+})
+
+test_that("data_filter gives informative message on errors", {
+  expect_error(
+    data_filter(mtcars, "mpg > 10 || cyl = 4"),
+    "`==`"
+  )
+  expect_error(
+    data_filter(mtcars, filter = mpg > 10 || cyl == 4),
+    "`||`"
+  )
+  expect_error(
+    data_filter(mtcars, filter = mpg > 10 && cyl == 4),
+    "`&&`"
+  )
+  expect_error(
+    data_filter(mtcars, filter = mpg > 10 ? cyl == 4),
+    "syntax"
+  )
+})
+
+test_that("data_filter works with >= or <=", {
+  expect_equal(
+    data_filter(mtcars, "mpg >= 30.4"),
+    subset(mtcars, mpg >= 30.4)
+  )
+  expect_equal(
+    data_filter(mtcars, mpg >= 30.4),
+    subset(mtcars, mpg >= 30.4)
+  )
+  expect_equal(
+    data_filter(mtcars, "mpg <= 30.4"),
+    subset(mtcars, mpg <= 30.4)
+  )
+  expect_equal(
+    data_filter(mtcars, mpg <= 30.4),
+    subset(mtcars, mpg <= 30.4)
+  )
+
+  expect_equal(
+    data_filter(mtcars, "mpg >= 30.4 & hp == 66"),
+    subset(mtcars, mpg >= 30.4 & hp == 66)
+  )
+  expect_equal(
+    data_filter(mtcars, mpg <= 30.4 & hp == 66),
+    subset(mtcars, mpg <= 30.4 & hp == 66)
+  )
 })

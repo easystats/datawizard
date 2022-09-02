@@ -5,6 +5,7 @@
 [![downloads](http://cranlogs.r-pkg.org/badges/datawizard)](https://cran.r-project.org/package=datawizard)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/)
 [![status](https://tinyverse.netlify.com/badge/datawizard)](https://CRAN.R-project.org/package=datawizard)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 
 <!-- ***:sparkles: Hockety pockety wockety wack, prepare this data forth and back*** -->
 <!-- ***Hockety pockety wockety wock, messy data is in shock*** -->
@@ -35,8 +36,7 @@ these common, critical, and sometimes tedious data preparation tasks.
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/datawizard)](https://cran.r-project.org/package=datawizard)
 [![insight status
 badge](https://easystats.r-universe.dev/badges/datawizard)](https://easystats.r-universe.dev)
-[![R
-check](https://github.com/easystats/datawizard/workflows/R-check/badge.svg?branch=main)](https://github.com/easystats/datawizard/actions)
+[![R-CMD-check](https://github.com/easystats/datawizard/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/easystats/datawizard/actions)
 
 | Type        | Source     | Command                                                                      |
 |-------------|------------|------------------------------------------------------------------------------|

@@ -221,3 +221,11 @@ test_that("distribution_mode works as expected", {
   # empty
   expect_null(distribution_mode(c()))
 })
+
+# select helpers ------------------------------
+test_that("describe_distribution regex", {
+  expect_equal(
+    describe_distribution(mtcars, select = "pg", regex = TRUE),
+    describe_distribution(mtcars, select = "mpg")
+  )
+})

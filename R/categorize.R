@@ -46,38 +46,38 @@
 #' @param ... not used.
 #' @inheritParams find_columns
 #'
-#' @inheritSection center Selection of variables - the `select` argument
-#'
 #' @inherit data_rename seealso
+#'
+#' @details
+#'
+#' # Splits and breaks (cut-off values)
+#'
+#' Breaks are in general _exclusive_, this means that these values indicate
+#' the lower bound of the next group or interval to begin. Take a simple
+#' example, a numeric variable with values from 1 to 9. The median would be 5,
+#' thus the first interval ranges from 1-4 and is recoded into 1, while 5-9
+#' would turn into 2 (compare `cbind(1:9, categorize(1:9))`). The same variable,
+#' using `split = "quantile"` and `n_groups = 3` would define breaks at 3.67
+#' and 6.33 (see `quantile(1:9, probs = c(1/3, 2/3))`), which means that values
+#' from 1 to 3 belong to the first interval and are recoded into 1 (because
+#' the next interval starts at 3.67), 4 to 6 into 2 and 7 to 9 into 3.
+#'
+#' # Recoding into groups with equal size or range
+#'
+#' `split = "equal_length"` and `split = "equal_range"` try to divide the
+#' range of `x` into intervals of similar (or same) length. The difference is
+#' that `split = "equal_length"` will divide the range of `x` into `n_groups`
+#' pieces and thereby defining the intervals used as breaks (hence, it is
+#' equivalent to `cut(x, breaks = n_groups)`), while  `split = "equal_range"`
+#' will cut `x` into intervals that all have the length of `range`, where the
+#' first interval by defaults starts at `1`. The lowest (or starting) value
+#' of that interval can be defined using the `lowest` argument.
+#'
+#' @inheritSection center Selection of variables - the `select` argument
 #'
 #' @return `x`, recoded into groups. By default `x` is numeric, unless `labels`
 #'   is specified. In this case, a factor is returned, where the factor levels
 #'   (i.e. recoded groups are labelled accordingly.
-#'
-#' @details
-#'
-#'   \subsection{Splits and breaks (cut-off values)}{
-#'   Breaks are in general _exclusive_, this means that these values indicate
-#'   the lower bound of the next group or interval to begin. Take a simple
-#'   example, a numeric variable with values from 1 to 9. The median would be 5,
-#'   thus the first interval ranges from 1-4 and is recoded into 1, while 5-9
-#'   would turn into 2 (compare `cbind(1:9, categorize(1:9))`). The same variable,
-#'   using `split = "quantile"` and `n_groups = 3` would define breaks at 3.67
-#'   and 6.33 (see `quantile(1:9, probs = c(1/3, 2/3))`), which means that values
-#'   from 1 to 3 belong to the first interval and are recoded into 1 (because
-#'   the next interval starts at 3.67), 4 to 6 into 2 and 7 to 9 into 3.
-#'   }
-#'
-#'   \subsection{Recoding into groups with equal size or range}{
-#'   `split = "equal_length"` and `split = "equal_range"` try to divide the
-#'   range of `x` into intervals of similar (or same) length. The difference is
-#'   that `split = "equal_length"` will divide the range of `x` into `n_groups`
-#'   pieces and thereby defining the intervals used as breaks (hence, it is
-#'   equivalent to `cut(x, breaks = n_groups)`), while  `split = "equal_range"`
-#'   will cut `x` into intervals that all have the length of `range`, where the
-#'   first interval by defaults starts at `1`. The lowest (or starting) value
-#'   of that interval can be defined using the `lowest` argument.
-#'   }
 #'
 #' @examples
 #' set.seed(123)
@@ -118,18 +118,12 @@ categorize <- function(x, ...) {
   UseMethod("categorize")
 }
 
-
-## TODO Deprecate and remove alias later
-
-#' @rdname categorize
-#' @export
-data_cut <- categorize
-
-
 #' @export
 categorize.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
+    message(insight::format_message(
+      paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")
+    ))
   }
   return(x)
 }
@@ -147,15 +141,25 @@ categorize.numeric <- function(x,
                                ...) {
   # check arguments
   if (is.character(split)) {
-    split <- match.arg(split, choices = c("median", "mean", "quantile", "equal_length", "equal_range", "equal", "equal_distance", "range", "distance"))
+    split <- match.arg(
+      split,
+      choices = c(
+        "median", "mean", "quantile", "equal_length", "equal_range",
+        "equal", "equal_distance", "range", "distance"
+      )
+    )
   }
 
   if (is.character(split) && split %in% c("quantile", "equal_length") && is.null(n_groups)) {
-    stop(insight::format_message("Recoding based on quantiles or equal-sized groups requires the 'n_groups' argument to be specified."), call. = FALSE)
+    stop(insight::format_message(
+      "Recoding based on quantiles or equal-sized groups requires the `n_groups` argument to be specified."
+    ), call. = FALSE)
   }
 
   if (is.character(split) && split == "equal_range" && is.null(n_groups) && is.null(range)) {
-    stop(insight::format_message("Recoding into groups with equal range requires either the 'range' or 'n_groups' argument to be specified."), call. = FALSE)
+    stop(insight::format_message(
+      "Recoding into groups with equal range requires either the `range` or `n_groups` argument to be specified."
+    ), call. = FALSE)
   }
 
 
@@ -178,7 +182,9 @@ categorize.numeric <- function(x,
   # stop if all NA
   if (!length(x)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
+      warning(insight::format_message(
+        "Variable contains only missing values. No recoding carried out."
+      ), call. = FALSE)
     }
     return(original_x)
   }
@@ -222,7 +228,7 @@ categorize.numeric <- function(x,
       levels(original_x) <- labels
     } else if (isTRUE(verbose)) {
       warning(insight::format_message(
-        "Argument 'labels' and levels of the recoded variable are not of the same length.",
+        "Argument `labels` and levels of the recoded variable are not of the same length.",
         "Variable will not be converted to factor."
       ), call. = FALSE)
     }
@@ -253,10 +259,17 @@ categorize.data.frame <- function(x,
                                   labels = NULL,
                                   append = FALSE,
                                   ignore_case = FALSE,
+                                  regex = FALSE,
                                   verbose = TRUE,
                                   ...) {
   # evaluate arguments
-  select <- .select_nse(select, x, exclude, ignore_case)
+  select <- .select_nse(select,
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # process arguments
   args <- .process_std_args(
@@ -273,7 +286,17 @@ categorize.data.frame <- function(x,
   x <- args$x
   select <- args$select
 
-  x[select] <- lapply(x[select], categorize, split = split, n_groups = n_groups, range = range, lowest = lowest, labels = labels, verbose = verbose, ...)
+  x[select] <- lapply(
+    x[select],
+    categorize,
+    split = split,
+    n_groups = n_groups,
+    range = range,
+    lowest = lowest,
+    labels = labels,
+    verbose = verbose,
+    ...
+  )
   x
 }
 
@@ -289,6 +312,7 @@ categorize.grouped_df <- function(x,
                                   labels = NULL,
                                   append = FALSE,
                                   ignore_case = FALSE,
+                                  regex = FALSE,
                                   verbose = TRUE,
                                   ...) {
   info <- attributes(x)
@@ -297,7 +321,13 @@ categorize.grouped_df <- function(x,
   grps <- attr(x, "groups", exact = TRUE)
 
   # evaluate arguments
-  select <- .select_nse(select, x, exclude, ignore_case)
+  select <- .select_nse(select,
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # process arguments
   args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force = TRUE)

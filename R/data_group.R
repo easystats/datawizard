@@ -5,7 +5,7 @@
 #' following the **datawizard** function design. `data_ungroup()` removes the
 #' grouping information from a grouped data frame.
 #'
-#' @param x A data frame
+#' @param data A data frame
 #' @inheritParams find_columns
 #'
 #' @return A grouped data frame, i.e. a data frame with additional information
@@ -26,22 +26,30 @@
 #'     summarize(mean_hours = mean(c12hour, na.rm = TRUE))
 #' }
 #' @export
-data_group <- function(x,
+data_group <- function(data,
                        select = NULL,
                        exclude = NULL,
                        ignore_case = FALSE,
+                       regex = FALSE,
                        verbose = TRUE,
                        ...) {
   # variables for grouping
-  select <- .select_nse(select, x, exclude, ignore_case)
+  select <- .select_nse(
+    select,
+    data,
+    exclude,
+    ignore_case = ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
   # create grid with combinations of all levels
-  grid <- as.data.frame(expand.grid(lapply(x[select], unique)))
+  grid <- as.data.frame(expand.grid(lapply(data[select], unique)))
   # sort grid
   grid <- grid[do.call(order, grid), , drop = FALSE]
 
-  .rows <- lapply(1:nrow(grid), function(i) {
+  .rows <- lapply(seq_len(nrow(grid)), function(i) {
     as.integer(data_match(
-      x,
+      data,
       to = grid[i, , drop = FALSE],
       match = "and",
       return_indices = TRUE,
@@ -54,20 +62,20 @@ data_group <- function(x,
   attr(grid, "out.attrs") <- NULL
   attr(grid, ".drop") <- TRUE
 
-  attr(x, "groups") <- grid
-  class(x) <- unique(c("grouped_df", "data.frame"), class(x))
+  attr(data, "groups") <- grid
+  class(data) <- unique(c("grouped_df", "data.frame"), class(data))
 
-  x
+  data
 }
 
 
 #' @rdname data_group
 #' @export
-data_ungroup <- function(x,
+data_ungroup <- function(data,
                          verbose = TRUE,
                          ...) {
-  attr(x, "groups") <- NULL
-  class(x) <- unique(setdiff(class(x), "grouped_df"))
+  attr(data, "groups") <- NULL
+  class(data) <- unique(setdiff(class(data), "grouped_df"))
 
-  x
+  data
 }

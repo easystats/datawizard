@@ -79,12 +79,19 @@ data_extract.data.frame <- function(data,
                                     extract = "all",
                                     as_data_frame = FALSE,
                                     ignore_case = FALSE,
+                                    regex = FALSE,
                                     verbose = TRUE,
                                     ...) {
   extract <- match.arg(tolower(extract), choices = c("all", "first", "last", "odd", "even"))
 
   # evaluate arguments
-  select <- .select_nse(select, data, exclude = NULL, ignore_case, verbose = verbose)
+  select <- .select_nse(select,
+    data,
+    exclude = NULL,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # nothing to select?
   if (!length(select)) {

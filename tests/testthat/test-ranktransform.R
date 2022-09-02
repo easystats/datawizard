@@ -108,3 +108,11 @@ test_that("ranktransform works with data frames containing NAs (grouped data)", 
     )
   )
 })
+
+# select helpers ------------------------------
+test_that("ranktransform regex", {
+  expect_equal(
+    ranktransform(mtcars, select = "pg", regex = TRUE),
+    ranktransform(mtcars, select = "mpg")
+  )
+})

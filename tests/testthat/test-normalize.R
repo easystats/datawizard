@@ -172,3 +172,11 @@ test_that("normalize, factor (grouped data)", {
 
   expect_equal(datawizard, manual)
 })
+
+# select helpers ------------------------------
+test_that("normalize regex", {
+  expect_equal(
+    normalize(mtcars, select = "pg", regex = TRUE),
+    normalize(mtcars, select = "mpg")
+  )
+})

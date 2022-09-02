@@ -41,10 +41,17 @@ unnormalize.data.frame <- function(x,
                                    select = NULL,
                                    exclude = NULL,
                                    ignore_case = FALSE,
+                                   regex = FALSE,
                                    verbose = TRUE,
                                    ...) {
   # evaluate select/exclude, may be select-helpers
-  select <- .select_nse(select, x, exclude, ignore_case, verbose = verbose)
+  select <- .select_nse(select,
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
   x[select] <- lapply(x[select], unnormalize, verbose = verbose)
 
   x

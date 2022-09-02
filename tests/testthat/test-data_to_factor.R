@@ -49,3 +49,16 @@ test_that("to_factor", {
   )
   expect_equal(sum(sapply(out, is.factor)), 3)
 })
+
+
+# select helpers ------------------------------
+test_that("to_factor regex", {
+  expect_equal(
+    to_factor(mtcars, select = "yl", regex = TRUE),
+    to_factor(mtcars, select = "cyl")
+  )
+  expect_equal(
+    to_factor(mtcars, select = "yl$", regex = TRUE),
+    to_factor(mtcars, select = "cyl")
+  )
+})

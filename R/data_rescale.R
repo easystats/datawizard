@@ -61,7 +61,9 @@ change_scale <- function(x, ...) {
 #' @export
 rescale.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be rescaled and remain unchanged.")))
+    message(insight::format_message(
+      paste0("Variables of class `", class(x)[1], "` can't be rescaled and remain unchanged.")
+    ))
   }
   x
 }
@@ -87,7 +89,9 @@ rescale.numeric <- function(x,
   # Warning if only one value
   if (length(unique(x)) == 1 && is.null(range)) {
     if (verbose) {
-      warning(insight::format_message("A `range` must be provided for data with only one unique value."), call. = FALSE)
+      warning(insight::format_message(
+        "A `range` must be provided for data with only one unique value."
+      ), call. = FALSE)
     }
     return(x)
   }
@@ -116,6 +120,8 @@ rescale.grouped_df <- function(x,
                                to = c(0, 100),
                                range = NULL,
                                ignore_case = FALSE,
+                               regex = FALSE,
+                               verbose = FALSE,
                                ...) {
   info <- attributes(x)
 
@@ -123,7 +129,13 @@ rescale.grouped_df <- function(x,
   grps <- attr(x, "groups", exact = TRUE)
 
   # evaluate arguments
-  select <- .select_nse(select, x, exclude, ignore_case)
+  select <- .select_nse(select,
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # dplyr < 0.8.0?
   if (is.null(grps)) {
@@ -159,9 +171,17 @@ rescale.data.frame <- function(x,
                                to = c(0, 100),
                                range = NULL,
                                ignore_case = FALSE,
+                               regex = FALSE,
+                               verbose = FALSE,
                                ...) {
   # evaluate arguments
-  select <- .select_nse(select, x, exclude, ignore_case)
+  select <- .select_nse(select,
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # Transform the range so that it is a list now
   if (!is.null(range)) {
