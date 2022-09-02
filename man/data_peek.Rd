@@ -80,7 +80,8 @@ shown.}
 \item{verbose}{Toggle warnings.}
 }
 \value{
-fds
+A data frame with three columns, containing information about
+the name, type and first values of the input data frame.
 }
 \description{
 This function creates a table a data frame, showing all

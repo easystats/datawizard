@@ -15,7 +15,8 @@
 #'
 #' @inheritSection center Selection of variables - the `select` argument
 #'
-#' @return fds
+#' @return A data frame with three columns, containing information about
+#' the name, type and first values of the input data frame.
 #'
 #' @examples
 #' data(efc)
