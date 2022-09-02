@@ -49,6 +49,11 @@ data_peek.data.frame <- function(x,
     .data_peek(x, i, width, verbose = verbose, ...)
   }))
 
+  # shorten?
+  if (!is.null(n)) {
+    out <- out[1:n, ]
+  }
+
   class(out) <- c("dw_data_peek", class(out))
   attr(out, "n_rows") <- n
   attr(out, "max_width") <- ifelse(is.null(width), 0.9 * options()$width, width)
