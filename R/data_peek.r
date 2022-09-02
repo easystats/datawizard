@@ -134,6 +134,7 @@ format.dw_data_peek <- function(x, n = NULL, ...) {
 .data_peek <- function(x, variable, width = NULL, verbose = TRUE, ...) {
   v_name <- variable
   v_type <- .variable_type(x[[variable]])
+  v_type[v_type == "categorical"] <- "factor"
 
   max_width <- ifelse(is.null(width), 0.9 * options()$width, width)
   v_values <- paste0(x[[variable]][1:max_width], collapse = ", ")
