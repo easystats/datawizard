@@ -6,6 +6,10 @@
 #' the screen).
 #'
 #' @param x A data frame.
+#' @param width Maximum width of line length to display. If `NULL`, width will
+#' be determined using `options()$width`.
+#' @param n Number of variables to display. If `NULL`, all variables will be
+#' shown.
 #' @param ... not used.
 #' @inheritParams find_columns
 #'
@@ -29,6 +33,7 @@ data_peek.data.frame <- function(x,
                                  exclude = NULL,
                                  ignore_case = FALSE,
                                  regex = FALSE,
+                                 width = NULL,
                                  n = NULL,
                                  verbose = TRUE,
                                  ...) {
@@ -41,12 +46,12 @@ data_peek.data.frame <- function(x,
     verbose = verbose
   )
   out <- do.call(rbind, lapply(select, function(i) {
-    .data_peek(x, i, verbose = verbose, ...)
+    .data_peek(x, i, width, verbose = verbose, ...)
   }))
 
   class(out) <- c("dw_data_peek", class(out))
   attr(out, "n_rows") <- n
-  attr(out, "max_width") <- 0.9 * options()$width
+  attr(out, "max_width") <- ifelse(is.null(width), 0.9 * options()$width, width)
 
   out
 }
@@ -91,11 +96,11 @@ format.dw_data_peek <- function(x, n = NULL, ...) {
 
 # helper -----------------
 
-.data_peek <- function(x, variable, verbose = TRUE, ...) {
+.data_peek <- function(x, variable, width = NULL, verbose = TRUE, ...) {
   v_name <- variable
   v_type <- .variable_type(x[[variable]])
 
-  max_width <- 0.9 * options()$width
+  max_width <- ifelse(is.null(width), 0.9 * options()$width, width)
   v_values <- paste0(x[[variable]][1:max_width], collapse = ", ")
 
   data.frame(Variable = v_name, Type = v_type, Values = v_values, stringsAsFactors = FALSE)

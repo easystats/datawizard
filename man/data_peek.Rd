@@ -13,6 +13,7 @@ data_peek(x, ...)
   exclude = NULL,
   ignore_case = FALSE,
   regex = FALSE,
+  width = NULL,
   n = NULL,
   verbose = TRUE,
   ...
@@ -69,6 +70,12 @@ of length > 1. \code{regex = TRUE} is comparable to using one of the two
 select-helpers, \code{select = contains("")} or \code{select = regex("")}, however,
 since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.}
+
+\item{width}{Maximum width of line length to display. If \code{NULL}, width will
+be determined using \code{options()$width}.}
+
+\item{n}{Number of variables to display. If \code{NULL}, all variables will be
+shown.}
 
 \item{verbose}{Toggle warnings.}
 }
