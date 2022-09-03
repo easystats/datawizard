@@ -6,8 +6,8 @@ on:
   pull_request:
     branches: [main, master]
 
-# name: HTML5 check
+# name: lint
 
 jobs:
-  HTML5-check:
-    uses: easystats/workflows/.github/workflows/html-5-check.yaml@main
+  lint:
+    uses: easystats/workflows/.github/workflows/lint.yaml@main
