@@ -77,6 +77,13 @@
 #'
 #' # slice data frame by row indices
 #' data_filter(mtcars, 5:10)
+#'
+#' # Define a custom function containing data_filter() and pass variable names
+#' # to it using curly brackets
+#' my_filter <- function(data, variable) {
+#'   data_filter(data, {variable} <= 20)
+#' }
+#' my_filter(mtcars, "mpg")
 #' @inherit data_rename seealso
 #' @export
 data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = TRUE, ...) {

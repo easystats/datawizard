@@ -21,6 +21,11 @@ CHANGES
 
 * `data_filter()` will give more informative messages on malformed syntax of
   the `filter` argument.
+  
+* It is now possible to use curly brackets to pass variable names to `data_filter()`,
+  like the following example. See examples section in the documentation of 
+  `data_filter()`.
+
 
 * The `regex` argument was added to functions that use select-helpers and did
   not already have this argument.
