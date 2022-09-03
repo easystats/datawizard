@@ -95,6 +95,13 @@ data_filter(mtcars, vs == 0 | am == 1)
 
 # slice data frame by row indices
 data_filter(mtcars, 5:10)
+
+# Define a custom function containing data_filter() and pass variable names
+# to it using curly brackets
+my_filter <- function(data, variable) {
+  data_filter(data, {variable} <= 20)
+}
+my_filter(mtcars, "mpg")
 }
 \seealso{
 \itemize{
