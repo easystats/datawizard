@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main, master]
 
-# name: HTML5 check
+name: HTML5 check
 
 jobs:
   HTML5-check:
