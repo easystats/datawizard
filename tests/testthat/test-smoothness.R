@@ -23,6 +23,7 @@ test_that("smoothness with lag works", {
 })
 
 test_that("smoothness works with data frames", {
+  skip_if(grepl("3\\.6\\.3", R.version.string))
   set.seed(123)
   expect_snapshot(smoothness(BOD))
 })
