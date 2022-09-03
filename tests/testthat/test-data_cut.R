@@ -123,7 +123,7 @@ test_that("recode data frame", {
       )
     )
     x <- poorman::group_by(iris, Species)
-    out <- categorize(x, "median", select = starts_with("Sepal"))
+    out <- categorize(x, split = "median", select = starts_with("Sepal"))
     expect_equal(
       out$Sepal.Length,
       c(

@@ -95,7 +95,7 @@ data_to_long <- function(data,
 
   if (inherits(data, "tbl_df")) {
     tbl_input <- TRUE
-    data <- as.data.frame(data)
+    data <- as.data.frame(data, stringsAsFactors = FALSE)
   } else {
     tbl_input <- FALSE
   }
@@ -192,7 +192,7 @@ data_to_long <- function(data,
           unique(long[[names_to_2]]),
           regexec(names_pattern, unique(long[[names_to_2]]))
         )
-        tmp <- as.data.frame(do.call(rbind, tmp))[, c(1, i + 1)]
+        tmp <- as.data.frame(do.call(rbind, tmp), stringsAsFactors = FALSE)[, c(1, i + 1)]
         names(tmp) <- c(names_to_2, names_to[i])
         long <- data_join(long, tmp)
       }
@@ -354,7 +354,7 @@ data_to_wide <- function(data,
   # Preserve attributes
   if (inherits(data, "tbl_df")) {
     tbl_input <- TRUE
-    data <- as.data.frame(data)
+    data <- as.data.frame(data, stringsAsFactors = FALSE)
   } else {
     tbl_input <- FALSE
   }
