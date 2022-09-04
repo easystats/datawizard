@@ -1,3 +1,4 @@
+# styler: off
 #' Return filtered or sliced data frame, or row indices
 #'
 #' Return a filtered (or sliced) data frame or row indices of a data frame that
@@ -86,6 +87,7 @@
 #' my_filter(mtcars, "mpg")
 #' @inherit data_rename seealso
 #' @export
+# styler: on
 data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = TRUE, ...) {
   if (!is.data.frame(to)) {
     to <- as.data.frame(to)
