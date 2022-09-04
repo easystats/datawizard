@@ -108,7 +108,9 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
   # sanity check
   shared_columns <- intersect(colnames(x), colnames(to))
   if (is.null(shared_columns) || length(shared_columns) == 0) {
-    stop(insight::format_message("None of the columns from the data frame with matching conditions were found in `x`."))
+    stop(insight::format_message(
+      "None of the columns from the data frame with matching conditions were found in `x`."
+    ), call. = FALSE)
   }
 
   # only select common columns
