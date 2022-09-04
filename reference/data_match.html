@@ -322,9 +322,7 @@ working with labelled data.</p>
 <span class="r-in"><span><span class="co"># Define a custom function containing data_filter() and pass variable names</span></span></span>
 <span class="r-in"><span><span class="co"># to it using curly brackets</span></span></span>
 <span class="r-in"><span><span class="va">my_filter</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">variable</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="fu">data_filter</span><span class="op">(</span><span class="va">data</span>, <span class="op">{</span></span></span>
-<span class="r-in"><span>    <span class="va">variable</span></span></span>
-<span class="r-in"><span>  <span class="op">}</span> <span class="op">&lt;=</span> <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">data_filter</span><span class="op">(</span><span class="va">data</span>, <span class="op">{</span><span class="va">variable</span><span class="op">}</span> <span class="op">&lt;=</span> <span class="fl">20</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span><span class="fu">my_filter</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"mpg"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>

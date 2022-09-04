@@ -4,7 +4,7 @@ pkgdown_sha: 956f076f661eb2de9413f64ea24a580cf444466d
 articles:
   standardize_data: standardize_data.html
   tidyverse_translation: tidyverse_translation.html
-last_built: 2022-09-04T08:53Z
+last_built: 2022-09-04T08:58Z
 urls:
   reference: https://easystats.github.io/datawizard/reference
   article: https://easystats.github.io/datawizard/articles
