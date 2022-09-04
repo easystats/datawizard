@@ -100,7 +100,10 @@ winsorize.numeric <- function(data,
     if (length(threshold) != 2L) {
       if (isTRUE(verbose)) {
         warning(
-          insight::format_message("threshold must be of length 2 for lower and upper bound. Did not winsorize data."),
+          insight::format_message(
+            "`threshold` must be of length 2 for lower and upper bound.",
+            "Did not winsorize data."
+          ),
           call. = FALSE
         )
       }
@@ -112,7 +115,10 @@ winsorize.numeric <- function(data,
     if (threshold < 0 || threshold > 0.5) {
       if (isTRUE(verbose)) {
         warning(
-          insight::format_message("'threshold' for winsorization must be a scalar between 0 and 0.5. Did not winsorize data."),
+          insight::format_message(
+            "`threshold` for winsorization must be a scalar between 0 and 0.5.",
+            "Did not winsorize data."
+          ),
           call. = FALSE
         )
       }
