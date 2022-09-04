@@ -10,5 +10,5 @@ on:
 
 jobs:
   lint:
-    #name: lint
+    name: lint
     uses: easystats/workflows/.github/workflows/lint.yaml@main
