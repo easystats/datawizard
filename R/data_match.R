@@ -1,3 +1,4 @@
+# styler: off
 #' Return filtered or sliced data frame, or row indices
 #'
 #' Return a filtered (or sliced) data frame or row indices of a data frame that
@@ -95,12 +96,12 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
   # evaluate
   match <- match.arg(tolower(match), c("and", "&", "&&", "or", "|", "||", "!", "not"))
   match <- switch(match,
-                  "&" = ,
-                  "&&" = ,
-                  "and" = "and",
-                  "!" = ,
-                  "not" = "not",
-                  "or"
+    "&" = ,
+    "&&" = ,
+    "and" = "and",
+    "!" = ,
+    "not" = "not",
+    "or"
   )
 
   # sanity check
@@ -251,3 +252,4 @@ data_filter <- function(x, filter, ...) {
     ), call. = FALSE)
   }
 }
+# styler: on

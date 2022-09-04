@@ -45,8 +45,15 @@ reverse_scale <- reverse
 #' @export
 reverse.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
+    message(insight::format_message(
+      paste0(
+        "Variables of class '",
+        class(x)[1],
+        "' can't be recoded and remain unchanged."
+      )
+    ))
   }
+
   x
 }
 

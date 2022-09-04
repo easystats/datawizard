@@ -108,7 +108,15 @@ rescale_weights <- function(data, group, probability_weights, nest = FALSE) {
   data_tmp$.bamboozled <- 1:nrow(data_tmp)
 
   if (nest && length(group) < 2) {
-    warning(insight::format_message(sprintf("Only one group variable selected, no nested structure possible. Rescaling weights for grout '%s' now.", group)), call. = FALSE)
+    warning(
+      insight::format_message(
+        sprintf(
+          "Only one group variable selected, no nested structure possible. Rescaling weights for grout '%s' now.",
+          group
+        )
+      ),
+      call. = FALSE
+    )
     nest <- FALSE
   }
 
@@ -168,8 +176,6 @@ rescale_weights <- function(data, group, probability_weights, nest = FALSE) {
 
 
 
-
-
 # rescale weights, for nested groups ----------------------------
 
 .rescale_weights_nested <- function(x, group, probability_weights, n, weight_non_na) {
@@ -180,8 +186,16 @@ rescale_weights <- function(data, group, probability_weights, nest = FALSE) {
   design_weights <- cbind(
     groups,
     .data_frame(
-      sum_weights_by_group = unlist(as.list(tapply(x[[probability_weights]], lapply(group, function(i) as.factor(x[[i]])), sum))),
-      sum_squared_weights_by_group = unlist(as.list(tapply(x[[probability_weights]]^2, lapply(group, function(i) as.factor(x[[i]])), sum))),
+      sum_weights_by_group = unlist(as.list(tapply(
+        x[[probability_weights]], lapply(group, function(i) {
+          as.factor(x[[i]])
+        }), sum
+      ))),
+      sum_squared_weights_by_group = unlist(as.list(tapply(
+        x[[probability_weights]]^2, lapply(group, function(i) {
+          as.factor(x[[i]])
+        }), sum
+      ))),
       n_per_group = unlist(as.list(table(x[, group])))
     )
   )

@@ -1,3 +1,4 @@
+# styler: off
 data(efc, package = "datawizard")
 
 test_that("data_match works as expected", {
@@ -165,8 +166,8 @@ test_that("programming with data_filter", {
 })
 
 test_that("programming with data_filter in global env", {
-  var = "mpg"
-  var2 = "hp"
+  var <- "mpg"
+  var2 <- "hp"
   expect_equal(
     data_filter(mtcars, "{var} > 30 & {var2} <= 66"),
     data_filter(mtcars, "mpg >= 30 & hp <= 66")
@@ -176,3 +177,4 @@ test_that("programming with data_filter in global env", {
     data_filter(mtcars, "mpg >= 30 & hp <= 66")
   )
 })
+# styler: on

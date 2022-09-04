@@ -317,7 +317,6 @@ data_to_long <- function(data,
 #'
 #' @inherit data_rename seealso
 #' @export
-
 data_to_wide <- function(data,
                          id_cols = NULL,
                          values_from = "Value",
@@ -363,7 +362,8 @@ data_to_wide <- function(data,
 
   # Create an id for stats::reshape
   if (is.null(id_cols)) {
-    data[["_Rows"]] <- apply(data[, !names(data) %in% c(values_from, names_from), drop = FALSE], 1, paste, collapse = "_")
+    data[["_Rows"]] <-
+      apply(data[, !names(data) %in% c(values_from, names_from), drop = FALSE], 1, paste, collapse = "_")
     id_cols <- "_Rows"
   }
 
