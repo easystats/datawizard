@@ -130,9 +130,7 @@ test_that("programming with data_filter", {
   # One arg ------------
 
   foo <- function(var) {
-    data_filter(mtcars, filter = {
-      var
-    } > 30)
+    data_filter(mtcars, filter = {var} > 30)
   }
   expect_equal(
     foo("mpg"),
@@ -150,11 +148,7 @@ test_that("programming with data_filter", {
   # Two args -----------
 
   foo <- function(var, var2) {
-    data_filter(mtcars, filter = {
-      var
-    } > 30 & {
-      var2
-    } <= 66)
+    data_filter(mtcars, filter = {var} > 30 & {var2} <= 66)
   }
   expect_equal(
     foo("mpg", "hp"),
@@ -171,18 +165,14 @@ test_that("programming with data_filter", {
 })
 
 test_that("programming with data_filter in global env", {
-  var <- "mpg"
-  var2 <- "hp"
+  var = "mpg"
+  var2 = "hp"
   expect_equal(
     data_filter(mtcars, "{var} > 30 & {var2} <= 66"),
     data_filter(mtcars, "mpg >= 30 & hp <= 66")
   )
   expect_equal(
-    data_filter(mtcars, {
-      var
-    } > 30 & {
-      var2
-    } <= 66),
+    data_filter(mtcars, {var} > 30 & {var2} <= 66),
     data_filter(mtcars, "mpg >= 30 & hp <= 66")
   )
 })

@@ -99,9 +99,7 @@ data_filter(mtcars, 5:10)
 # Define a custom function containing data_filter() and pass variable names
 # to it using curly brackets
 my_filter <- function(data, variable) {
-  data_filter(data, {
-    variable
-  } <= 20)
+  data_filter(data, {variable} <= 20)
 }
 my_filter(mtcars, "mpg")
 }
