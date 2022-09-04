@@ -6,8 +6,9 @@ on:
   pull_request:
     branches: [main, master]
 
-name: lint
+#name: lint
 
 jobs:
   lint:
+    #name: lint
     uses: easystats/workflows/.github/workflows/lint.yaml@main

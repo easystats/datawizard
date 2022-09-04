@@ -1,5 +1,7 @@
 on: [push]
 
+name: Paper Draft
+
 jobs:
   paper:
     runs-on: ubuntu-latest
