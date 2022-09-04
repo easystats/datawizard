@@ -177,7 +177,7 @@ data_filter <- function(x, filter, ...) {
     # (cf easystats/datawizard#237)
     .check_filter_syntax(condition)
 
-    has_curley <- grepl("\\{", condition)
+    has_curley <- grepl("{", condition, fixed = TRUE)
 
     if (has_curley) {
       condition <- gsub("\\{ ", "\\{", condition)
