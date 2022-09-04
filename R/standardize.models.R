@@ -244,7 +244,12 @@ standardize.default <- function(x,
   }
 
   if (verbose && length(c(log_terms, sqrt_terms))) {
-    message(insight::format_message("Formula contains log- or sqrt-terms. See help(\"standardize\") for how such terms are standardized."))
+    message(
+      insight::format_message(
+        "Formula contains log- or sqrt-terms.",
+        "See help(\"standardize\") for how such terms are standardized."
+      )
+    )
   }
 
 
@@ -374,7 +379,13 @@ standardize.mediate <- function(x,
         y_data_std = y_data_std, m_data_std = m_data_std
       )
     )
-    if (verbose) message(insight::format_message("Covariates' values have been rescaled to their standardized scales."))
+    if (verbose) {
+      message(
+        insight::format_message(
+          "Covariates' values have been rescaled to their standardized scales."
+        )
+      )
+    }
   }
 
   # if (is.numeric(y_data[[x$treat]]) || is.numeric(m_data[[x$treat]])) {

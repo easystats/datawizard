@@ -17,24 +17,51 @@ test_that("data_match works with missing data", {
   skip_if_not_installed("poorman")
 
   # "OR" works
-  x1 <- length(data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "or", return_indices = TRUE))
+  x1 <- length(data_match(
+    efc,
+    data.frame(c172code = 1, e16sex = 2),
+    match = "or",
+    return_indices = TRUE
+  ))
   x2 <- nrow(poorman::filter(efc, c172code == 1 | e16sex == 2))
   expect_equal(x1, x2)
 
   # "AND" works
-  x1 <- length(data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "and", return_indices = TRUE))
+  x1 <- length(data_match(
+    efc,
+    data.frame(c172code = 1, e16sex = 2),
+    match = "and",
+    return_indices = TRUE
+  ))
   x2 <- nrow(poorman::filter(efc, c172code == 1, e16sex == 2))
   expect_equal(x1, x2)
 
   # "NOT" works
-  x1 <- length(data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "not", return_indices = TRUE))
+  x1 <- length(data_match(
+    efc,
+    data.frame(c172code = 1, e16sex = 2),
+    match = "not",
+    return_indices = TRUE
+  ))
   x2 <- nrow(poorman::filter(efc, c172code != 1, e16sex != 2))
   expect_equal(x1, x2)
 
   # remove NA
-  x1 <- length(data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "not", return_indices = TRUE, drop_na = FALSE))
+  x1 <- length(data_match(
+    efc,
+    data.frame(c172code = 1, e16sex = 2),
+    match = "not",
+    return_indices = TRUE,
+    drop_na = FALSE
+  ))
   expect_equal(x1, 41)
-  x1 <- length(data_match(efc, data.frame(c172code = 1, e16sex = 2), match = "not", return_indices = TRUE, drop_na = TRUE))
+  x1 <- length(data_match(
+    efc,
+    data.frame(c172code = 1, e16sex = 2),
+    match = "not",
+    return_indices = TRUE,
+    drop_na = TRUE
+  ))
   expect_equal(x1, 36)
 })
 
