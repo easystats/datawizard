@@ -87,7 +87,6 @@
 #' my_filter(mtcars, "mpg")
 #' @inherit data_rename seealso
 #' @export
-# styler: on
 data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = TRUE, ...) {
   if (!is.data.frame(to)) {
     to <- as.data.frame(to)
@@ -97,12 +96,12 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
   # evaluate
   match <- match.arg(tolower(match), c("and", "&", "&&", "or", "|", "||", "!", "not"))
   match <- switch(match,
-                  "&" = ,
-                  "&&" = ,
-                  "and" = "and",
-                  "!" = ,
-                  "not" = "not",
-                  "or"
+    "&" = ,
+    "&&" = ,
+    "and" = "and",
+    "!" = ,
+    "not" = "not",
+    "or"
   )
 
   # sanity check
@@ -253,3 +252,4 @@ data_filter <- function(x, filter, ...) {
     ), call. = FALSE)
   }
 }
+# styler: on
