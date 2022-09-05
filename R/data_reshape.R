@@ -165,7 +165,7 @@ data_to_long <- function(data,
 
   # Cleaning --------------------------
   # Sort the dataframe (to match pivot_longer's output)
-  long <- long[do.call(order, long[, c("_Row", names_to_2)]), ]
+  long <- data_arrange(long, c("_Row", names_to_2))
 
   # Remove or rename the row index
   if (is.null(rows_to)) {
@@ -180,22 +180,23 @@ data_to_long <- function(data,
   # if several variable in names_to, split the names either with names_sep
   # or with names_pattern
   if (length(names_to) > 1) {
-    for (i in seq_along(names_to)) {
-      if (is.null(names_pattern)) {
+    if (is.null(names_pattern)) {
+      for (i in seq_along(names_to)) {
         new_vals <- unlist(lapply(
           strsplit(unique(long[[names_to_2]]), names_sep, fixed = TRUE),
           function(x) x[i]
         ))
         long[[names_to[i]]] <- new_vals
-      } else {
-        tmp <- regmatches(
-          unique(long[[names_to_2]]),
-          regexec(names_pattern, unique(long[[names_to_2]]))
-        )
-        tmp <- as.data.frame(do.call(rbind, tmp), stringsAsFactors = FALSE)[, c(1, i + 1)]
-        names(tmp) <- c(names_to_2, names_to[i])
-        long <- data_join(long, tmp)
       }
+    } else {
+      tmp <- regmatches(
+        unique(long[[names_to_2]]),
+        regexec(names_pattern, unique(long[[names_to_2]]))
+      )
+      tmp <- as.data.frame(do.call(rbind, tmp), stringsAsFactors = FALSE)
+      names(tmp) <- c(names_to_2, names_to)
+      # faster than merge
+      long <- cbind(long, tmp[match(long[[names_to_2]], tmp[[names_to_2]]), -1])
     }
     long[[names_to_2]] <- NULL
   }
