@@ -12,6 +12,8 @@ BREAKING CHANGES
   
 * New `recode_values()` alias is introduced for `change_code()`, latter of which
   will be removed in the next release.
+  
+* `data_merge()` now errors if columns specified in `by` are not in both datasets.
 
 NEW FUNCTIONS
 
