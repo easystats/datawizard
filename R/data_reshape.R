@@ -165,7 +165,7 @@ data_to_long <- function(data,
 
   # Cleaning --------------------------
   # Sort the dataframe (to match pivot_longer's output)
-  long <- data_arrange(long, c("_Row", names_to_2))
+  long <- long[do.call(order, long[, c("_Row", names_to_2)]), ]
 
   # Remove or rename the row index
   if (is.null(rows_to)) {
