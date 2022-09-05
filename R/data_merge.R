@@ -254,7 +254,10 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
 
   if (join %in% c("anti", "semi") && (is.null(by) || length(by) != 1)) {
     stop(insight::format_message(
-      sprintf("For `join = \"%s\"`, `by` needs to be a name of only one variable that is present in both data frames.", join)
+      sprintf(
+        "For `join = \"%s\"`, `by` needs to be a name of only one variable that is present in both data frames.",
+        join
+      )
     ), call. = FALSE)
   }
 

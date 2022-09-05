@@ -67,8 +67,23 @@ test_that("data_read", {
   d <- data_read(temp_file)
   expect_equal(sum(sapply(d, is.factor)), 15)
   expect_equal(sum(sapply(d, is.numeric)), 11)
-  expect_equal(levels(d$c172code), c("low level of education", "intermediate level of education", "high level of education"))
-  expect_equal(attr(d$n4pstu, "labels"), c(`spouse/partner` = 1, child = 2, sibling = 3, `daughter or son -in-law` = 4))
+  expect_equal(
+    levels(d$c172code),
+    c(
+      "low level of education",
+      "intermediate level of education",
+      "high level of education"
+    )
+  )
+  expect_equal(
+    attr(d$n4pstu, "labels"),
+    c(
+      `spouse/partner` = 1,
+      child = 2,
+      sibling = 3,
+      `daughter or son -in-law` = 4
+    )
+  )
 })
 
 unlink(temp_file)

@@ -105,7 +105,10 @@ test_that("convert factor to numeric, dummy factors, with NA", {
   x4 <- factor(c("a", "b", "a", "b", "a", NA_character_))
   x5 <- factor(c(NA_character_, "b", "a", "b", "a", NA_character_))
   x6 <- factor(c(NA_character_, "b", NA_character_, "b", "a", NA_character_))
-  x7 <- factor(c(NA_character_, "b", "a", "b", "a", "b", NA_character_, "b", "a", NA_character_, "a", "b", "a", "b", "a", NA_character_))
+  x7 <- factor(c(
+    NA_character_, "b", "a", "b", "a", "b", NA_character_, "b",
+    "a", NA_character_, "a", "b", "a", "b", "a", NA_character_
+  ))
 
   # same observations are missing
   expect_equal(

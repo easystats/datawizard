@@ -1,3 +1,4 @@
+# styler: off
 #' Return filtered or sliced data frame, or row indices
 #'
 #' Return a filtered (or sliced) data frame or row indices of a data frame that
@@ -81,11 +82,18 @@
 #' # Define a custom function containing data_filter() and pass variable names
 #' # to it using curly brackets
 #' my_filter <- function(data, variable) {
-#'   data_filter(data, {
-#'     variable
-#'   } <= 20)
+#'   data_filter(data, {variable} <= 20)
 #' }
 #' my_filter(mtcars, "mpg")
+#'
+#' # Pass complete filter-condition as string
+#' my_filter <- function(data, condition) {
+#'   data_filter(data, {condition})
+#' }
+#' my_filter(mtcars, "am != 0")
+#'
+#' # string can also be used directly as argument
+#' data_filter(mtcars, "am != 0")
 #' @inherit data_rename seealso
 #' @export
 data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = TRUE, ...) {
@@ -253,3 +261,4 @@ data_filter <- function(x, filter, ...) {
     ), call. = FALSE)
   }
 }
+# styler: on

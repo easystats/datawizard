@@ -7,7 +7,7 @@
 #' spurious outliers. The distribution of many statistics can be heavily
 #' influenced by outliers. A typical strategy is to set all outliers (values
 #' beyond a certain threshold) to a specified percentile of the data; for
-#' example, a 90\% winsorization would see all data below the 5th percentile set
+#' example, a `90%` winsorization would see all data below the 5th percentile set
 #' to the 5th percentile, and data above the 95th percentile set to the 95th
 #' percentile. Winsorized estimators are usually more robust to outliers than
 #' their more standard forms.
@@ -23,7 +23,9 @@
 #' - For `method = "raw"`: a vector of length 2 with the lower and upper bound for winsorization.
 #' @param verbose Toggle warnings.
 #' @param method One of "percentile" (default), "zscore", or "raw".
-#' @param robust Logical, if TRUE, winsorizing through the "zscore" method is done via the median and the median absolute deviation (MAD); if FALSE, via the mean and the standard deviation.
+#' @param robust Logical, if TRUE, winsorizing through the "zscore" method is
+#'   done via the median and the median absolute deviation (MAD); if FALSE, via
+#'   the mean and the standard deviation.
 #' @param ... Currently not used.
 #'
 #' @examples
@@ -67,22 +69,43 @@ winsorize.character <- winsorize.factor
 winsorize.logical <- winsorize.factor
 
 #' @export
-winsorize.data.frame <- function(data, threshold = 0.2, method = "percentile", robust = FALSE,
-                                 verbose = TRUE, ...) {
-  data[] <- lapply(data, winsorize, threshold = threshold, method = method, robust = robust, verbose = verbose)
+winsorize.data.frame <- function(data,
+                                 threshold = 0.2,
+                                 method = "percentile",
+                                 robust = FALSE,
+                                 verbose = TRUE,
+                                 ...) {
+  data[] <- lapply(
+    data,
+    winsorize,
+    threshold = threshold,
+    method = method,
+    robust = robust,
+    verbose = verbose
+  )
   data
 }
 
 #' @rdname winsorize
 #' @export
-winsorize.numeric <- function(data, threshold = 0.2, method = "percentile", robust = FALSE,
-                              verbose = TRUE, ...) {
+winsorize.numeric <- function(data,
+                              threshold = 0.2,
+                              method = "percentile",
+                              robust = FALSE,
+                              verbose = TRUE,
+                              ...) {
   method <- match.arg(method, choices = c("percentile", "zscore", "raw"))
 
   if (method == "raw") {
     if (length(threshold) != 2L) {
       if (isTRUE(verbose)) {
-        warning(insight::format_message("threshold must be of length 2 for lower and upper bound. Did not winsorize data."), call. = FALSE)
+        warning(
+          insight::format_message(
+            "`threshold` must be of length 2 for lower and upper bound.",
+            "Did not winsorize data."
+          ),
+          call. = FALSE
+        )
       }
       return(data)
     }
@@ -91,7 +114,13 @@ winsorize.numeric <- function(data, threshold = 0.2, method = "percentile", robu
   if (method == "percentile") {
     if (threshold < 0 || threshold > 0.5) {
       if (isTRUE(verbose)) {
-        warning(insight::format_message("'threshold' for winsorization must be a scalar between 0 and 0.5. Did not winsorize data."), call. = FALSE)
+        warning(
+          insight::format_message(
+            "`threshold` for winsorization must be a scalar between 0 and 0.5.",
+            "Did not winsorize data."
+          ),
+          call. = FALSE
+        )
       }
       return(data)
     }
@@ -107,7 +136,10 @@ winsorize.numeric <- function(data, threshold = 0.2, method = "percentile", robu
   if (method == "zscore") {
     if (threshold <= 0) {
       if (isTRUE(verbose)) {
-        warning(insight::format_message("'threshold' for winsorization must be a scalar greater than 0. Did not winsorize data."), call. = FALSE)
+        warning(
+          insight::format_message("'threshold' for winsorization must be a scalar greater than 0. Did not winsorize data."),
+          call. = FALSE
+        )
       }
       return(data)
     }

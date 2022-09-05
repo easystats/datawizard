@@ -57,7 +57,10 @@ describe_distribution <- function(x, ...) {
 #' @export
 describe_distribution.default <- function(x, verbose = TRUE, ...) {
   if (verbose) {
-    warning(insight::format_message(paste0("Can't describe variables of class '", class(x)[1], "'.")), call. = FALSE)
+    warning(
+      insight::format_message(paste0("Can't describe variables of class '", class(x)[1], "'.")),
+      call. = FALSE
+    )
   }
   NULL
 }
@@ -459,7 +462,10 @@ describe_distribution.grouped_df <- function(x,
       threshold = threshold,
       ...
     )
-    d[[".group"]] <- paste(sprintf("%s=%s", group_vars, sapply(group_data[i, ], as.character)), collapse = " | ")
+
+    d[[".group"]] <-
+      paste(sprintf("%s=%s", group_vars, sapply(group_data[i, ], as.character)), collapse = " | ")
+
     d
   }))
 
