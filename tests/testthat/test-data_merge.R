@@ -266,12 +266,8 @@ test_that("join when all 'by' are not present", {
   x <- mtcars[, c("mpg", "drat", "cyl", "qsec")]
   y <- mtcars[, c("mpg", "hp", "cyl", "wt")]
 
-  expect_warning(
-    out <- data_merge(x, y, by = c("mpg", "drat")),
+  expect_error(
+    out <- data_merge(x, y, by = c("mpg", "drat", "qsec")),
     regexp = "Not all columns"
-  )
-  expect_equal(
-    out,
-    data_merge(x, y, by = c("mpg", "cyl"))
   )
 })

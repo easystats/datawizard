@@ -220,16 +220,23 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
     # If not all column names specified in "by" are present, yield warning
     # and use all shared column names
     if (!all(by %in% colnames(x)) || !all(by %in% colnames(y))) {
+      missing_in_x <- setdiff(by, colnames(x))
+      missing_in_y <- setdiff(by, colnames(y))
+      stop_message <- c("Not all columns specified in `by` were found in the data frames.",
+      if (length(missing_in_x) > 0) {
+        paste0("Following columns are in `by` but absent in `x`: ", text_concatenate(missing_in_x))
+      },
+      if (length(missing_in_y) > 0) {
+        paste0("Following columns are in `by` but absent in `y`: ", text_concatenate(missing_in_y))
+      })
       if (isTRUE(verbose)) {
-        warning(
+        stop(
           insight::format_message(
-            "Not all columns specified in `by` were found in the data frames.",
-            "Using all columns that are present in both data frames."
+            stop_message
           ),
           call. = FALSE
         )
       }
-      by <- intersect(colnames(x), colnames(y))
     }
 
     # if still both data frames have no common columns, do a full join
