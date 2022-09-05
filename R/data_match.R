@@ -91,6 +91,9 @@
 #'   data_filter(data, {condition})
 #' }
 #' my_filter(mtcars, "am != 0")
+#'
+#' # string can also be used directly as argument
+#' data_filter(mtcars, "am != 0")
 #' @inherit data_rename seealso
 #' @export
 data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = TRUE, ...) {

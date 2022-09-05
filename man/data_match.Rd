@@ -108,6 +108,9 @@ my_filter <- function(data, condition) {
   data_filter(data, {condition})
 }
 my_filter(mtcars, "am != 0")
+
+# string can also be used directly as argument
+data_filter(mtcars, "am != 0")
 }
 \seealso{
 \itemize{
