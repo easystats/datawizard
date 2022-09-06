@@ -34,11 +34,6 @@ test_that("find_columns works as expected", {
     c("gear", "cyl")
   )
 
-  expect_equal(
-    find_columns(iris, Spec),
-    "Species"
-  )
-
   expect_warning(expect_null(find_columns(mtcars, ends_with("abc"))))
 
   expect_equal(
@@ -74,13 +69,9 @@ test_that("find_columns from other functions", {
     c("Sepal.Length", "Sepal.Width")
   )
 
-  # This turns out to be that the variable name "i" in test_fun1
-  # becomes the search string "i" after evaluation, so all columns
-  # containing an "i" will be returned.
-
   expect_equal(
     test_fun1(iris, starts_with("Sep")),
-    c("Sepal.Width", "Petal.Width", "Species")
+    c("Sepal.Length", "Sepal.Width")
   )
 
   test_fun1a <- function(data, i) {
@@ -111,7 +102,10 @@ test_that("find_columns from other functions", {
     i <- "Sep"
     find_columns(data, select = starts_with(i))
   }
-  expect_warning(expect_null(test_fun3(iris)))
+  expect_equal(
+    test_fun3(iris),
+    c("Sepal.Length", "Sepal.Width")
+  )
 })
 
 # select helpers ------------------------------
