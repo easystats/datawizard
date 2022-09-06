@@ -132,9 +132,14 @@
         error = function(e) {
           fn <- insight::safe_deparse(e$call)
           # deal with rlang-type of errors (coming from tidyselect)
-          # no choice but to hardcode this
           if (is.null(fn) && grepl("tidyselect", e$message)) {
-            fn <- insight::safe_deparse(e$trace$call[[13]])
+            trace <- lapply(e$trace$call, function(x) {
+              tmp <- insight::safe_deparse(x)
+              if (grepl(paste0("^", .regex_select_helper()), tmp)) {
+                tmp
+              }
+            })
+            fn <- Filter(Negate(is.null), trace)[1]
           }
 
           if (length(fn) > 0 && grepl(.regex_select_helper(), fn)) {
