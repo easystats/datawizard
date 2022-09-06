@@ -42,20 +42,13 @@ distribution_mode <- function(x) {
 #' coef_var(c(1:10, 100), method = "qcd")
 #' coef_var(mu = 10, sigma = 20)
 #' coef_var(mu = 10, sigma = 20, method = "unbiased", n = 30)
-#' cv(1:10)
 coef_var <- function(x, ...) {
   UseMethod("coef_var")
 }
-
-#' @name cv
-#' @rdname coef_var
-#' @export
-cv <- coef_var
-
 #' @name distribution_cv
 #' @rdname coef_var
 #' @export
-distribution_cv <- coef_var
+distribution_coef_var <- coef_var
 
 #' @export
 coef_var.default <- function(x, verbose = TRUE, ...) {

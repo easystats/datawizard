@@ -2,16 +2,14 @@
 % Please edit documentation in R/descriptives.R
 \name{coef_var}
 \alias{coef_var}
-\alias{cv}
 \alias{distribution_cv}
+\alias{distribution_coef_var}
 \alias{coef_var.numeric}
 \title{Compute the coefficient of variation}
 \usage{
 coef_var(x, ...)
 
-cv(x, ...)
-
-distribution_cv(x, ...)
+distribution_coef_var(x, ...)
 
 \method{coef_var}{numeric}(
   x,
@@ -67,5 +65,4 @@ coef_var(c(1:10, 100), method = "median_mad")
 coef_var(c(1:10, 100), method = "qcd")
 coef_var(mu = 10, sigma = 20)
 coef_var(mu = 10, sigma = 20, method = "unbiased", n = 30)
-cv(1:10)
 }
