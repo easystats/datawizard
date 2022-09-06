@@ -117,6 +117,13 @@
     }
   }
 
+  # if x is an object that was called through a function or a loop, e.g select = i
+  # where i = starts_with("Sep"), then we need to find the value of i. This can be
+  # done with dynGet() but evaluating starts_with("Sep") errors, either because
+  # this function doesn't exist, or because it was already imported via a tidyselect
+  # related package and cannot be evaluated outside of a select environment.
+  # However, the expression starts_with("Sep") is part of the error message, so
+  # we can use this to retrieve "i".
   suppressWarnings({
     y_is_evaluable <- !inherits(try(eval(y), silent = TRUE), "try-error")
     if (!is.null(x) && !y_is_evaluable) {
