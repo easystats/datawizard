@@ -1,409 +1,317 @@
 # this function evaluates the select-expression and allows non-standard evaluation
 
 .select_nse <- function(select, data, exclude, ignore_case, regex = FALSE, verbose = FALSE) {
-
-  .check_data(data)
-  cols <- names(data)
-
-  # avoid conflicts for starts_with(), etc.
-  # (has to be in this order, otherwise error because e.g tidyselect is imported
-  # in tidyr)
-  conflicting_packages <- .conflicting_packages(c("poorman", "tidyr", "dplyr", "tidyselect"))
-
-  # Selected vars ---------------------------------------------
-
-  select_deparsed <- insight::safe_deparse(substitute(select, env = parent.frame(1L)))
-  select_is_negated <- FALSE
-  selected <- NULL
-
-  if (!.is_numeric(select_deparsed) &&
-      !.is_object_in_env(select_deparsed) &&
-      .is_negated(select_deparsed)) {
-    select_deparsed <- gsub("^-", "", select_deparsed)
-    select_is_negated <- TRUE
-    tmp <- try(eval(parse(text = select_deparsed)), silent = TRUE)
-    if (!inherits(tmp, "try-error")) {
-      select <- tmp
-    } else if(!.is_select_helper(select_deparsed)) {
-      select <- select_deparsed
-    }
+  # check if data argument is valid
+  if (is.null(data)) {
+    stop(insight::format_message("The `data` argument must be provided."), call. = FALSE)
   }
 
-  if (.is_object_in_env(select_deparsed)) {
-    tmp <- try(get(select_deparsed, envir = parent.frame(2L)), silent = TRUE)
-    if (!inherits(tmp, "try-error")) {
-      select <- tmp
-    }
-  }
-
-  # Deal with range of variable names, e.g var1:var2
-  if (.is_range_character(select_deparsed)) {
-    from_to <- unlist(strsplit(select_deparsed, ":", fixed = TRUE))
-    bound1 <- grep(paste0("^", from_to[1], "$"), cols, ignore.case = ignore_case)
-    bound2 <- grep(paste0("^", from_to[2], "$"), cols, ignore.case = ignore_case)
-    select_deparsed <- cols[bound1:bound2]
-    select <- select_deparsed
-  }
-
-  # Deal with functions with parenthesis, e.g is.numeric()
-  if (length(select_deparsed) == 1 && .is_function(select_deparsed)) {
-    select_deparsed <- gsub("\\(\\)$", "", select_deparsed)
-    select <- get(select_deparsed, envir = parent.frame())
-  }
-
-  # NSE e.g input is Petal.Length
-  if (all(select_deparsed %in% cols)) {
-    selected <- select_deparsed
-    select <- select_deparsed # avoid evaluation below because it would return
-                              # non-evaluable
-  }
-
-  select_is_evaluable <- !inherits(try(eval(select), silent = TRUE), "try-error")
-
-  if (select_is_evaluable) {
-    if (is.null(select)) {
-      selected <- names(data)
-    } else if (is.character(select)) {
-      if (regex) {
-        selected <- cols[which(grepl(select, cols, ignore.case = ignore_case))]
-      } else {
-        selected <- vector(length = length(select))
-        for (i in seq_along(select)) {
-          tmp <- cols[grep(paste0("^", select[i], "$"), cols, ignore.case = ignore_case)]
-          if (length(tmp) > 0) {
-            selected[i] <- tmp
-          }
-        }
-      }
-    } else if (is.numeric(select)) {
-      original_select <- select
-      # negative values in "select" mean "start from the right"
-      tmp_cols <- cols
-      selected <- vector(length = length(select))
-      for (i in seq_along(select)) {
-        selected[i] <- if (select[i] > 0) {
-          tmp_cols[select[i]]
-        } else if (select[i] < 0) {
-          select[i] <- select[i] * -1
-          tmp_cols <- rev(tmp_cols)
-          to_return <- tmp_cols[select[i]]
-          tmp_cols <- rev(tmp_cols) # back in the original order
-          to_return
-        }
-      }
-      if (all(original_select < 0)) selected <- rev(selected)
-    } else if (inherits(select, "formula")) {
-      selected <- all.vars(select)
-    } else if (inherits(select, "function")) {
-      selected <- cols[sapply(data, select)]
-    } else if (inherits(select, "call")) {
-      tmp <- try(cols[eval(select)], silent = TRUE)
-      if (!inherits(tmp, "try-error")) {
-        selected <- tmp
-      }
-    }
-  }
-
-  if (!select_is_evaluable) {
-    match_info <- .get_match(select_deparsed)
-    match <- match_info$out
-    if (match_info$accessed_via_envir) {
-      select_deparsed <- match_info$deparsed
-    }
-    # each backslash in the original expression gets duplicated because
-    # of insight::safe_deparse, so we de-duplicate them.
-    # Hardcoded workaround so not ideal but I don't know how to have a more
-    # general solution
-    match <- gsub("\\\\\\\\", "\\\\", match)
-    if (grepl("^starts_with\\(", select_deparsed)) {
-      selected <- .starts_with(match, data, ignore_case = ignore_case)
-    }
-    if (grepl("^ends_with\\(|^col_ends_with\\(", select_deparsed, perl = TRUE)) {
-      selected <- .ends_with(match, data, ignore_case = ignore_case)
-    }
-    if (grepl("^contains\\(", select_deparsed)) {
-      selected <- .contains(match, data, ignore_case = ignore_case)
-    }
-    if (grepl("^regex\\(", select_deparsed)) {
-      selected <- .contains(match, data, ignore_case = ignore_case)
-    }
-  }
-
-  if (select_is_negated) {
-    selected <- setdiff(cols, selected)
-  }
-
-  # excluded vars ---------------------------------------------
-
-  exclude_deparsed <- insight::safe_deparse(substitute(exclude, env = parent.frame()))
-  exclude_is_negated <- FALSE
-
-  if (!.is_numeric(exclude_deparsed) && .is_negated(exclude_deparsed)) {
-    exclude_deparsed <- gsub("^-", "", exclude_deparsed)
-    exclude_is_negated <- TRUE
-  }
-
-  if (.is_object_in_env(exclude_deparsed)) {
-    tmp <- try(get(exclude_deparsed, envir = parent.frame(2L)), silent = TRUE)
-    if (!inherits(tmp, "try-error")) {
-      exclude <- tmp
-    }
-  }
-
-  # Deal with range of variable names, e.g var1:var2
-  if (.is_range_character(exclude_deparsed)) {
-    from_to <- unlist(strsplit(exclude_deparsed, ":", fixed = TRUE))
-    bound1 <- grep(paste0("^", from_to[1], "$"), cols, ignore.case = ignore_case)
-    bound2 <- grep(paste0("^", from_to[2], "$"), cols, ignore.case = ignore_case)
-    exclude_deparsed <- cols[bound1:bound2]
-    exclude <- exclude_deparsed
-  }
-
-  # Deal with functions with parenthesis, e.g is.numeric()
-  if (length(exclude_deparsed) == 1 && .is_function(exclude_deparsed)) {
-    exclude_deparsed <- gsub("\\(\\)$", "", exclude_deparsed)
-    exclude <- get(exclude_deparsed, envir = parent.frame())
-  }
-
-  # NSE e.g input is Petal.Length
-  if (all(exclude_deparsed %in% cols)) {
-    excluded <- exclude_deparsed
-    exclude <- exclude_deparsed # avoid evaluation below because it would return
-    # non-evaluable
-  }
-
-
-  exclude_is_evaluable <- !inherits(try(eval(exclude), silent = TRUE), "try-error")
-
-  if (exclude_is_evaluable) {
-    if (is.null(exclude)) {
-      excluded <- NULL
-    } else if (is.character(exclude)) {
-      if (regex) {
-        excluded <- cols[which(grepl(exclude, cols))]
-      } else {
-        excluded <- vector(length = length(exclude))
-        for (i in seq_along(exclude)) {
-          tmp <- cols[grep(paste0("^", exclude[i], "$"), cols, ignore.case = ignore_case)]
-          if (length(tmp) > 0) {
-            excluded[i] <- tmp
-          }
-        }
-      }
-    } else if (is.numeric(exclude)) {
-      # negative values in "select" mean "start from the right" so if all values
-      # are negative, I reverse the ordering of colnames, which is why I need
-      # a tmp vector
-      tmp_cols <- cols
-      from_the_left <- exclude[exclude > 0]
-      from_the_right <- exclude[exclude < 0]
-      if (length(from_the_right) > 0) {
-        from_the_right <- from_the_right * -1
-        tmp_cols <- rev(tmp_cols)
-        from_the_right <- tmp_cols[from_the_right]
-        tmp_cols <- rev(tmp_cols) # back in the original order
-      }
-      from_the_left <- tmp_cols[from_the_left]
-      excluded <- sort(c(from_the_left, from_the_right))
-    } else if (inherits(exclude, "formula")) {
-      excluded <- all.vars(exclude)
-    } else if (inherits(exclude, "function")) {
-      excluded <- cols[sapply(data, exclude)]
-    } else if (inherits(exclude, "call")) {
-      tmp <- try(cols[eval(exclude)], silent = TRUE)
-      if (!inherits(tmp, "try-error")) {
-        excluded <- tmp
-      }
-    }
-  }
-
-  if (!exclude_is_evaluable) {
-    match_info <- .get_match(exclude_deparsed)
-    match <- match_info$out
-    if (match_info$accessed_via_envir) {
-      exclude_deparsed <- match_info$deparsed
-    }
-    if (grepl("^starts_with\\(", exclude_deparsed)) {
-      excluded <- .starts_with(match, data, ignore_case = ignore_case)
-    }
-    if (grepl("^ends_with\\(|^col_ends_with\\(", exclude_deparsed, perl = TRUE)) {
-      excluded <- .ends_with(match, data, ignore_case = ignore_case)
-    }
-    if (grepl("^contains\\(", exclude_deparsed)) {
-      excluded <- .contains(match, data, ignore_case = ignore_case)
-    }
-    if (grepl("^regex\\(", exclude_deparsed)) {
-      excluded <- .contains(match, data, ignore_case = ignore_case)
-    }
-  }
-
-  if (exclude_is_negated) {
-    excluded <- setdiff(cols, excluded)
-  }
-
-  # Summarize selected and excluded vars -----------------------------
-
-  selected <- Filter(is.character, selected)
-  excluded <- Filter(is.character, excluded)
-
-  if (any(!c(selected, excluded) %in% cols)) {
-    if (isTRUE(verbose)) {
-      warning(insight::format_message(
-        paste0("Following variable(s) were not found: ",
-               paste0(setdiff(c(selected, excluded), cols), collapse = ", "))
+  # check data frame input
+  if (!is.null(data) && !is.data.frame(data)) {
+    data <- try(as.data.frame(data), silent = TRUE)
+    if (inherits(data, c("try-error", "simpleError"))) {
+      stop(insight::format_message(
+        "The `data` argument must be a data frame, or an object that can be coerced to a data frame."
       ), call. = FALSE)
     }
   }
 
+  fixed_select <- TRUE
+  fixed_exclude <- TRUE
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
 
-  # only keep cols that actually exist
-  if (!is.null(selected) && length(selected) > 0) {
-    selected <- selected[selected %in% cols]
+  # in case pattern is a variable from another function call...
+  p <- try(eval(select), silent = TRUE)
+  p2 <- try(eval(exclude), silent = TRUE)
+  if (inherits(p, c("try-error", "simpleError"))) {
+    p <- substitute(select, env = parent.frame())
   }
-  if (!is.null(excluded) && length(excluded) > 0) {
-    excluded <- excluded[excluded %in% cols]
-  }
-
-  out <- selected
-  if (!is.null(excluded) && length(excluded) > 0) {
-    to_exclude <- which(out %in% excluded)
-    if (length(to_exclude) > 0) {
-      out <- out[-to_exclude]
-    }
+  if (inherits(p2, c("try-error", "simpleError"))) {
+    p2 <- substitute(exclude, env = parent.frame())
   }
 
-  if (is.null(out)) {
-    insight::format_message(
-      warning(
-        "No column names that matched the required search pattern were found.",
-        call. = FALSE
-      )
-    )
+  # check if pattern is a function like "starts_with()"
+  select <- tryCatch(eval(p), error = function(e) NULL)
+  exclude <- tryCatch(eval(p2), error = function(e) NULL)
+
+  # select and exclude might also be a (user-defined) function
+  if (inherits(select, "function")) {
+    select <- colnames(data)[sapply(data, select)]
+  }
+  if (inherits(exclude, "function")) {
+    exclude <- colnames(data)[sapply(data, exclude)]
+  }
+
+  # if select could not be evaluated (because expression "makes no sense")
+  # try to evaluate and find select-helpers. In this case, set fixed = FALSE,
+  # so we can use grepl()
+  if (is.null(select)) {
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p), data, ignore_case = ignore_case, y = p)
+    select <- evaluated_pattern$pattern
+    fixed_select <- evaluated_pattern$fixed
+  }
+  if (is.null(exclude)) {
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p2), data, ignore_case = ignore_case, y = p)
+    exclude <- evaluated_pattern$pattern
+    fixed_exclude <- evaluated_pattern$fixed
+  }
+
+
+  # seems to be no valid column name or index, so try to grep
+  if (isFALSE(fixed_select) || isTRUE(regex)) {
+    select <- colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case, perl = TRUE)]
+  }
+  if (isFALSE(fixed_exclude)) {
+    exclude <- colnames(data)[grepl(exclude, colnames(data), ignore.case = ignore_case, perl = TRUE)]
+  }
+  # if exclude = NULL, we want to exclude 0 variables, not all of them
+  if (!inherits(exclude, "formula") && length(exclude) == ncol(data)) {
+    exclude <- NULL
   }
 
   # load again
   .attach_packages(conflicting_packages)
 
-  out
+  # return valid column names, based on pattern
+  .evaluated_pattern_to_colnames(select, data, ignore_case, verbose = verbose, exclude)
 }
 
-# Extract the match that is used by starts_with, ends_with, etc.
-# What they use is not always a character because they can use a variable
-# that was defined previously or in a loop.
-# See e.g datawizard#180
 
-.get_match <- function(x) {
+# this function looks for function-name-patterns (select-helpers) and
+# returns the regular expression that mimics the behaviour of that select-helper
 
-  # is it an object that is present in the environment (ex: "i" which is
-  # called via a function or a loop)
-  # The tryCatch below will capture the select helper, e.g if "i" = starts_with("foo")
-  accessed_via_envir <- FALSE
-  tmp_orig <- invisible(tryCatch(
-    {
-      dynGet(x, inherits = TRUE)
-      return(x)
-    },
-    error = function(e) {
-      fn <- insight::safe_deparse(e$call)
+.evaluate_pattern <- function(x, data = NULL, ignore_case = FALSE, y) {
+  fixed <- FALSE
 
-      if (grepl(regex_select_helper, fn)) {
-        accessed_via_envir <<- TRUE
-        return(fn)
+  ## TODO once "data_findcols()" is removed, we can remove the checks
+  # for "is.null(data)" here, because then data is *always* provided and
+  # cannot be NULL. The only place where ".evaluate_pattern()" is called
+  # with no data argument is in "data_findcols()".
+
+  # check if negation is requested
+  negate <- !is.null(x) && length(x) == 1 && substr(x, 0, 1) == "-"
+  # and if so, remove -
+  if (negate) {
+    x <- substring(x, 2)
+  }
+
+  # deal with aliases
+  if (!is.null(x) && length(x) == 1 && grepl("^col_(starts|ends|contains)(.*)\\)$", x)) {
+    x <- substring(x, 5)
+  }
+
+  # remove parentheses for functions
+  if (!is.null(x) && length(x) == 1 && substr(x, nchar(x) - 1, nchar(x)) == "()") {
+    x <- substr(x, 0, nchar(x) - 2)
+  }
+
+  # is it a function? usually, this is already done in ".select_nse()", unless
+  # the user negates a function with "-", like "-is.numeric". In this case,
+  # we apply the function here again.
+  user_function <- NULL
+  if (!is.null(x)) {
+    user_function <- try(get(x, envir = parent.frame()), silent = TRUE)
+    if (inherits(user_function, c("try-error", "simpleError")) || !inherits(user_function, "function")) {
+      user_function <- NULL
+    }
+  }
+
+  suppressWarnings({
+    y_is_evaluable <- !inherits(try(eval(y), silent = TRUE), "try-error")
+    if (!is.null(x) && !y_is_evaluable) {
+      x <- tryCatch(
+        dynGet(x, inherits = FALSE),
+        error = function(e) {
+          fn <- insight::safe_deparse(e$call)
+          # deal with rlang-type of errors (coming from tidyselect)
+          # no choice but to hardcode this
+          if (is.null(fn) && grepl("tidyselect", e$message)) {
+            fn <- insight::safe_deparse(e$trace$call[[13]])
+          }
+
+          if (length(fn) > 0 && grepl(.regex_select_helper(), fn)) {
+            return(fn)
+          } else if (!is.null(x)) {
+            return(x)
+          } else {
+            NULL
+          }
+        }
+      )
+    }
+  })
+
+  # if element is a select helper but the arg in the select helper is not a
+  # character, e.g starts_with(i), then we need to find the value of this object
+  # by going up all parent.frame() gradually with dynGet()
+  if (!is.null(x) && length(x) == 1 && grepl(.regex_select_helper(), x) && !grepl(paste0(.regex_select_helper(), "\\(\"(.*)\"\\)"), x)) {
+    obj <- gsub(.regex_select_helper(), "", x)
+    obj <- gsub("^\\(", "", obj)
+    obj <- gsub("\\)$", "", obj)
+    obj_eval <- try(dynGet(obj, inherits = TRUE), silent = TRUE)
+    x <- gsub(paste0("\\(", obj, "\\)"), paste0("\\(\"", obj_eval, "\"\\)"), x)
+  }
+
+  # create pattern
+  if (is.null(x) && !is.null(data)) {
+    # default -----
+    pattern <- colnames(data)
+    fixed <- TRUE
+  } else if (!is.null(data) && !is.null(x) && all(x == "all")) {
+    # select all columns -----
+    pattern <- colnames(data)
+    fixed <- TRUE
+  } else if (all(x %in% names(data))) {
+    if (negate) {
+      pattern <- setdiff(names(data), x)
+    } else {
+      pattern <- x
+    }
+    fixed <- TRUE
+  } else if (grepl("^starts_with\\(\"(.*)\"\\)", x)) {
+    # select-helper starts_with -----
+    if (negate) {
+      pattern <- paste0("^(?!", gsub("starts_with\\(\"(.*)\"\\)", "\\1", x), ")")
+    } else {
+      pattern <- paste0("^", gsub("starts_with\\(\"(.*)\"\\)", "\\1", x))
+    }
+  } else if (grepl("^ends_with\\(\"(.*)\"\\)", x)) {
+    # select-helper end_with -----
+    if (negate) {
+      pattern <- paste0("(?<!", gsub("ends_with\\(\"(.*)\"\\)", "\\1", x), ")$")
+    } else {
+      pattern <- paste0(gsub("ends_with\\(\"(.*)\"\\)", "\\1", x), "$")
+    }
+  } else if (grepl("^contains\\(\"(.*)\"\\)", x)) {
+    # select-helper contains -----
+    if (negate) {
+      pattern <- paste0("^((?!\\Q", gsub("contains\\(\"(.*)\"\\)", "\\1", x), "\\E).)*$")
+    } else {
+      pattern <- paste0("\\Q", gsub("contains\\(\"(.*)\"\\)", "\\1", x), "\\E")
+    }
+  } else if (grepl("^matches\\(\"(.*)\"\\)", x)) {
+    # matches is an alias for regex -----
+    pattern <- gsub("matches\\(\"(.*)\"\\)", "\\1", x)
+  } else if (grepl("^regex\\(\"(.*)\"\\)", x)) {
+    # regular expression -----
+    pattern <- gsub("regex\\(\"(.*)\"\\)", "\\1", x)
+  } else if (!is.null(data) && !is.null(user_function)) {
+    # function -----
+    if (negate) {
+      pattern <- colnames(data)[!sapply(data, function(i) user_function(i))]
+    } else {
+      pattern <- colnames(data)[sapply(data, user_function)]
+    }
+    fixed <- TRUE
+  } else if (!is.null(data) && grepl("^c\\((.*)\\)$", x)) {
+    # here we most likely have a character vector with minus (negate) -----
+    cols <- try(eval(parse(text = x)), silent = TRUE)
+    if (!inherits(cols, c("try-error", "simpleError")) && !is.null(data)) {
+      if (negate) {
+        pattern <- setdiff(colnames(data), cols)
+      } else {
+        pattern <- cols
       }
-      else
-        return(x)
+      fixed <- TRUE
+    } else {
+      pattern <- x
     }
-  ))
+  } else if (!is.null(data) && grepl(":", x, fixed = TRUE)) {
+    # range -----
+    from_to <- unlist(strsplit(x, ":", fixed = TRUE))
+    cn <- colnames(data)
+    if (isTRUE(ignore_case)) {
+      from_to <- tolower(from_to)
+      cn <- tolower(cn)
+    }
+    from <- which(cn == from_to[1])
+    to <- which(cn == from_to[2])
+    if (!length(from)) {
+      stop("Could not find variable '", from_to[1], "' in data.", call. = FALSE)
+    }
+    if (!length(to)) {
+      stop("Could not find variable '", from_to[2], "' in data.", call. = FALSE)
+    }
+    if (negate) {
+      pattern <- colnames(data)[setdiff(seq_len(ncol(data)), from:to)]
+    } else {
+      pattern <- colnames(data)[from:to]
+    }
+    fixed <- TRUE
+  } else {
+    # everything else
+    pattern <- x
 
-  # if we use a select helper, check that its argument is a character. If it's
-  # not, maybe its argument is a variable called in a loop or a function, so
-  # need to grab its value.
-
-  tmp <- gsub(regex_select_helper, "", tmp_orig)
-  tmp <- gsub("^\\(", "", tmp)
-  tmp <- gsub("\\)$", "", tmp)
-  is_quoted <- grepl("^\\\"|^\\\'", tmp, perl = TRUE) &&
-    grepl("\\\"$|\\\'$", tmp, perl = TRUE)
-  if (!is_quoted) {
-    tmp <- insight::safe_deparse(get(tmp, env = parent.frame(3L)))
-  }
-  out <- gsub("^\"", "", tmp)
-  out <- gsub("\"$", "", out)
-  return(
-    list(
-      out = out,
-      accessed_via_envir = accessed_via_envir,
-      deparsed = tmp_orig
-    )
-  )
-  return(out)
-}
-
-# used for e.g select = as.numeric() (can't evaluate it because missing arg)
-.is_function <- function(x) {
-  if (is.null(x)) return(FALSE)
-  out <- grepl("\\(\\)$", x)
-  if (isFALSE(out)) {
-    out <- try(is.function(eval(parse(text = x))), silent = TRUE)
-    if (inherits(out, "try-error")) {
-      out <- FALSE
+    # sanity check - we might have negate with literal variable name
+    if (negate && length(pattern) == 1 && !is.null(data) && pattern %in% colnames(data)) {
+      pattern <- setdiff(colnames(data), pattern)
+      fixed <- TRUE
     }
   }
-  out
+
+  list(pattern = gsub("\\\\", "\\", pattern, fixed = TRUE), fixed = fixed)
 }
 
-.is_negated <- function(x) {
-  if (is.null(x)) return(FALSE)
-  grepl("^-", x)
+
+
+# this function checks if the pattern (which should be valid column names now)
+# is in the column names of the data, and returns the final column names to select
+
+.evaluated_pattern_to_colnames <- function(pattern, data, ignore_case, verbose, exclude = NULL) {
+  # check selected variables
+  pattern <- .check_pattern_and_exclude(pattern, data, ignore_case, verbose)
+  # check if some variables should be excluded...
+  if (!is.null(exclude)) {
+    exclude <- .check_pattern_and_exclude(exclude, data, ignore_case, verbose)
+    pattern <- setdiff(pattern, exclude)
+  }
+
+  pattern
 }
 
-# returns TRUE if input is a range with characters, e.g abc:def, and returns
-# FALSE if input is made only of numbers, e.g 1:4
-.is_range_character <- function(x) {
-  if (is.null(x)) return(FALSE)
-  if (.is_numeric(x)) return(FALSE)
-  # clean string to avoid (1:2) being considered as range of vars
-  x <- gsub("^\\(", "", x)
-  x <- gsub("\\)$", "", x)
-  split <- unlist(strsplit(x, ":"))
-  if (length(split) != 2) return(FALSE)
-  !all(.numbers_only(split[1]), .numbers_only(split[2]))
-}
 
-# is a character vector made only of numbers ?
-.numbers_only <- function(x) {
-  !grepl("\\D", x)
-}
+# workhorse for .evaluated_pattern_to_colnames()
 
-# check if a character vector is numeric, e.g "1:10"
-.is_numeric <- function(x) {
-  if (is.null(x)) return(FALSE)
-  out <- try(eval(parse(text = x)), silent = TRUE)
-  if (inherits(out, "try-error")) return(FALSE)
-  is.numeric(out)
-}
+.check_pattern_and_exclude <- function(pattern, data, ignore_case, verbose) {
+  # if pattern is formula, simply extract all variables
+  if (inherits(pattern, "formula")) {
+    pattern <- all.vars(pattern)
+  }
 
-# check if a string starts with a select helper
-.is_select_helper <- function(x) {
-  if (is.null(x)) return(FALSE)
-  grepl(regex_select_helper, x)
-}
-
-# dynGet (depends on R >= 3.2) makes a dynamyc search of an object through all
-# the call stack, so it finds an object no matter the number of parent.frame()
-.is_object_in_env <- function(x) {
-  suppressMessages(tryCatch(
-    {
-      dynGet(x, inherits = TRUE)
-      TRUE
-    },
-    error = function(e) {
-      FALSE
+  # if numeric, make sure we have valid column indices
+  if (is.numeric(pattern)) {
+    if (any(pattern < 0)) {
+      # select last column(s)
+      pattern[pattern < 0] <- sort(ncol(data) + pattern[pattern < 0] + 1)
     }
-  ))
+    pattern <- colnames(data)[intersect(pattern, seq_len(ncol(data)))]
+  }
+
+  # special token - select all columns?
+  if (length(pattern) == 1 && identical(pattern, "all")) {
+    pattern <- colnames(data)
+  }
+
+  # check if column names match when all are lowercase
+  if (!all(pattern %in% colnames(data)) && isTRUE(ignore_case)) {
+    pattern <- colnames(data)[tolower(colnames(data)) %in% tolower(pattern)]
+  }
+
+  # check if colnames are in data
+  if (!all(pattern %in% colnames(data))) {
+    if (isTRUE(verbose)) {
+      warning(insight::format_message(
+        paste0("Following variable(s) were not found: ", paste0(setdiff(pattern, colnames(data)), collapse = ", "))
+      ), call. = FALSE)
+    }
+    pattern <- intersect(pattern, colnames(data))
+  }
+
+  pattern
 }
 
-regex_select_helper <- "^(starts\\_with|ends\\_with|col\\_ends\\_with|contains|regex)"
+
 
 .conflicting_packages <- function(packages = NULL) {
   if (is.null(packages)) {
@@ -435,3 +343,5 @@ regex_select_helper <- "^(starts\\_with|ends\\_with|col\\_ends\\_with|contains|r
     }
   }
 }
+
+.regex_select_helper <- function() "(starts\\_with|ends\\_with|col\\_ends\\_with|contains|regex)"

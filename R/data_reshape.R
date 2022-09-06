@@ -113,10 +113,6 @@ data_to_long <- function(data,
     )
   } else {
     if (!missing(select) || !is.null(select)) {
-      select_deparsed <- insight::safe_deparse(substitute(select))
-      if (length(select_deparsed) == 1 && select_deparsed == "\"all\"") {
-        select <- names(data)
-      }
       cols <- .select_nse(
         select,
         data,
@@ -131,7 +127,6 @@ data_to_long <- function(data,
       ), call. = FALSE)
     }
   }
-
 
   if (any(names_to %in% setdiff(names(data), cols))) {
     stop(insight::format_message(
