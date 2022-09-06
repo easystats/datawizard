@@ -161,7 +161,7 @@
     obj <- gsub(.regex_select_helper(), "", x)
     obj <- gsub("^\\(", "", obj)
     obj <- gsub("\\)$", "", obj)
-    obj_eval <- try(dynGet(obj, inherits = TRUE), silent = TRUE)
+    obj_eval <- try(dynGet(obj, inherits = FALSE), silent = TRUE)
     x <- gsub(paste0("\\(", obj, "\\)"), paste0("\\(\"", obj_eval, "\"\\)"), x)
   }
 
