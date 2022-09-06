@@ -128,6 +128,7 @@ data_to_long <- function(data,
     }
   }
 
+
   if (any(names_to %in% setdiff(names(data), cols))) {
     stop(insight::format_message(
       "Some values of the columns specified in 'names_to' are already present as column names.",
