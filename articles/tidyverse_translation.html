@@ -294,6 +294,10 @@ summary table of this equivalence.</p>
 <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html" class="external-link">dplyr::anti_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/filter-joins.html" class="external-link">dplyr::semi_join()</a></code>
 </td>
 </tr>
+<tr class="odd">
+<td align="left"><code><a href="../reference/data_peek.html">data_peek()</a></code></td>
+<td align="left"><code><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">dplyr::glimpse()</a></code></td>
+</tr>
 </tbody>
 </table>
 <div class="section level3">
@@ -1075,8 +1079,9 @@ right and inner. We will use the datasets <code>band_members</code>and
 <h2 id="other-useful-functions">Other useful functions<a class="anchor" aria-label="anchor" href="#other-useful-functions"></a>
 </h2>
 <p><a href="https://easystats.github.io/datawizard/">datawizard</a> contains other functions that are not
-necessarily included in <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> or <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a>.
-Some of them are inspired from the package <code>janitor</code>.</p>
+necessarily included in <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> or <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a> or
+do not directly modify the data. Some of them are inspired from the
+package <code>janitor</code>.</p>
 <div class="section level3">
 <h3 id="work-with-rownames">Work with rownames<a class="anchor" aria-label="anchor" href="#work-with-rownames"></a>
 </h3>
@@ -1152,6 +1157,31 @@ column names, and vice versa. This can be done with
 <span><span class="co">## 3      1      4</span></span>
 <span><span class="co">## 4      2      5</span></span>
 <span><span class="co">## 5      3      6</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="take-a-quick-look-at-the-data">Take a quick look at the data<a class="anchor" aria-label="anchor" href="#take-a-quick-look-at-the-data"></a>
+</h3>
+<div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
+<div>
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
+<span><span class="fu"><a href="../reference/data_peek.html">data_peek</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div>
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
+<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<pre><code><span><span class="co">## Data frame with 150 rows and 5 columns</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Variable     | Type    | Values                                        </span></span>
+<span><span class="co">## -----------------------------------------------------------------------</span></span>
+<span><span class="co">## Sepal.Length | numeric | 5.1, 4.9, 4.7, 4.6, 5, 5.4, 4.6, 5, 4.4, ...  </span></span>
+<span><span class="co">## Sepal.Width  | numeric | 3.5, 3, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, ...</span></span>
+<span><span class="co">## Petal.Length | numeric | 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, ...   </span></span>
+<span><span class="co">## Petal.Width  | numeric | 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, ...   </span></span>
+<span><span class="co">## Species      | factor  | setosa, setosa, setosa, setosa, setosa, ...</span></span></code></pre>
 </div>
 </div>
 
