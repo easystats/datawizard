@@ -16,6 +16,11 @@
     }
   }
 
+  if (is.null(substitute(select, env = parent.frame())) &
+      is.null(substitute(exclude, env = parent.frame()))) {
+    return(names(data))
+  }
+
   fixed_select <- TRUE
   fixed_exclude <- TRUE
   # avoid conflicts
@@ -32,7 +37,11 @@
   }
 
   # check if pattern is a function like "starts_with()"
-  select <- tryCatch(eval(p), error = function(e) NULL)
+  if (!is.null(p) && !insight::safe_deparse(p) %in% ls(globalenv())) {
+    select <- tryCatch(eval(p), error = function(e) NULL)
+  } else {
+    select <- NULL
+  }
   exclude <- tryCatch(eval(p2), error = function(e) NULL)
 
   # select and exclude might also be a (user-defined) function
@@ -125,7 +134,14 @@
   # However, the expression starts_with("Sep") is part of the error message, so
   # we can use this to retrieve "i".
   suppressWarnings({
-    y_is_evaluable <- !inherits(try(eval(y), silent = TRUE), "try-error")
+    # if y is in global environment, then evaluation works so we consider that we
+    # need to reevaluate y in this case
+    y_is_in_globenv <- insight::safe_deparse(y) %in% ls(globalenv())
+    y_is_evaluable <- if (isTRUE(y_is_in_globenv)) {
+      FALSE
+    } else {
+      !inherits(try(eval(y), silent = TRUE), "try-error")
+    }
     if (!is.null(x) && !y_is_evaluable) {
       x <- tryCatch(
         dynGet(x, inherits = FALSE),
