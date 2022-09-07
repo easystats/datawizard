@@ -8,12 +8,11 @@
 #' @param x A data frame.
 #' @param width Maximum width of line length to display. If `NULL`, width will
 #' be determined using `options()$width`.
-#' @param n Number of variables to display. If `NULL`, all variables will be
-#' shown.
 #' @param ... not used.
 #' @inheritParams find_columns
 #'
-#' @inheritSection center Selection of variables - the `select` argument
+#' @note To show only specific or a limited number of variables, use the
+#' `select` argument, e.g. `select = 1:5` to show only the first five variables.
 #'
 #' @return A data frame with three columns, containing information about
 #' the name, type and first values of the input data frame.
@@ -21,6 +20,8 @@
 #' @examples
 #' data(efc)
 #' data_peek(efc)
+#' # show variables two to four
+#' data_peek(efc, select = 2:4)
 #' @export
 data_peek <- function(x, ...) {
   UseMethod("data_peek")
@@ -35,7 +36,6 @@ data_peek.data.frame <- function(x,
                                  ignore_case = FALSE,
                                  regex = FALSE,
                                  width = NULL,
-                                 n = NULL,
                                  verbose = TRUE,
                                  ...) {
   # evaluate arguments
@@ -50,13 +50,7 @@ data_peek.data.frame <- function(x,
     .data_peek(x, i, width, verbose = verbose, ...)
   }))
 
-  # shorten?
-  if (!is.null(n)) {
-    out <- out[1:n, ]
-  }
-
   class(out) <- c("dw_data_peek", class(out))
-  attr(out, "n_vars") <- n
   attr(out, "n_cols") <- ncol(x)
   attr(out, "n_rows") <- nrow(x)
   attr(out, "max_width") <- ifelse(is.null(width), 0.9 * options()$width, width)
@@ -68,10 +62,10 @@ data_peek.data.frame <- function(x,
 # methods -----------------
 
 #' @export
-print.dw_data_peek <- function(x, n = NULL, ...) {
-  x <- format(x, n = n, ...)
+print.dw_data_peek <- function(x, ...) {
+  x <- format(x, ...)
   caption <- sprintf(
-    "Data frame with %i rows and %i columns",
+    "Data frame with %i rows and %i variables",
     attributes(x)$n_rows,
     attributes(x)$n_cols
   )
@@ -79,10 +73,10 @@ print.dw_data_peek <- function(x, n = NULL, ...) {
 }
 
 #' @export
-print_md.dw_data_peek <- function(x, n = NULL, ...) {
-  x <- format(x, n = n, ...)
+print_md.dw_data_peek <- function(x, ...) {
+  x <- format(x, ...)
   caption <- sprintf(
-    "Data frame with %i rows and %i columns",
+    "Data frame with %i rows and %i variables",
     attributes(x)$n_rows,
     attributes(x)$n_cols
   )
@@ -90,10 +84,10 @@ print_md.dw_data_peek <- function(x, n = NULL, ...) {
 }
 
 #' @export
-print_html.dw_data_peek <- function(x, n = NULL, ...) {
-  x <- format(x, n = n, ...)
+print_html.dw_data_peek <- function(x, ...) {
+  x <- format(x, ...)
   caption <- sprintf(
-    "Data frame with %i rows and %i columns",
+    "Data frame with %i rows and %i variables",
     attributes(x)$n_rows,
     attributes(x)$n_cols
   )
@@ -101,7 +95,7 @@ print_html.dw_data_peek <- function(x, n = NULL, ...) {
 }
 
 #' @export
-format.dw_data_peek <- function(x, n = NULL, ...) {
+format.dw_data_peek <- function(x, ...) {
   width_col1 <- max(nchar(x$Variable))
   width_col2 <- max(nchar(x$Type))
   max_width <- attributes(x)$max_width
@@ -116,14 +110,6 @@ format.dw_data_peek <- function(x, n = NULL, ...) {
   x$Values <- gsub("(.+)(,.+)$", "\\1", x$Values)
   # add "..."
   x$Values <- paste0(x$Values, ", ...")
-
-  # row-limit?
-  if (is.null(n)) {
-    n <- attributes(x)$n_vars
-  }
-  if (!is.null(n)) {
-    x <- x[1:n, ]
-  }
 
   x
 }
