@@ -61,7 +61,7 @@
     fixed_select <- evaluated_pattern$fixed
   }
   if (is.null(exclude)) {
-    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p2), data, ignore_case = ignore_case, y = p)
+    evaluated_pattern <- .evaluate_pattern(insight::safe_deparse(p2), data, ignore_case = ignore_case, y = p2)
     exclude <- evaluated_pattern$pattern
     fixed_exclude <- evaluated_pattern$fixed
   }
