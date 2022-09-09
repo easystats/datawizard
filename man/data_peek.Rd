@@ -14,7 +14,6 @@ data_peek(x, ...)
   ignore_case = FALSE,
   regex = FALSE,
   width = NULL,
-  n = NULL,
   verbose = TRUE,
   ...
 )
@@ -74,9 +73,6 @@ functions (see 'Details'), this argument may be used as workaround.}
 \item{width}{Maximum width of line length to display. If \code{NULL}, width will
 be determined using \code{options()$width}.}
 
-\item{n}{Number of variables to display. If \code{NULL}, all variables will be
-shown.}
-
 \item{verbose}{Toggle warnings.}
 }
 \value{
@@ -88,18 +84,13 @@ This function creates a table a data frame, showing all
 column names, variable types and the first values (as many as fit into
 the screen).
 }
-\section{Selection of variables - the \code{select} argument}{
-
-For most functions that have a \code{select} argument (including this function),
-the complete input data frame is returned, even when \code{select} only selects
-a range of variables. That is, the function is only applied to those variables
-that have a match in \code{select}, while all other variables remain unchanged.
-In other words: for this function, \code{select} will not omit any non-included
-variables, so that the returned data frame will include all variables
-from the input data frame.
+\note{
+To show only specific or a limited number of variables, use the
+\code{select} argument, e.g. \code{select = 1:5} to show only the first five variables.
 }
-
 \examples{
 data(efc)
 data_peek(efc)
+# show variables two to four
+data_peek(efc, select = 2:4)
 }
