@@ -62,39 +62,50 @@
 #'
 #' @details
 #'
-#' Note that there are some limitations when calling this from inside other
-#' functions. The following will work as expected, returning all columns that
-#' start with `"Sep"`:
+#' Note that it is possible to either pass an entire select helper or only the
+#' pattern inside a select helper as a function argument:
 #'
 #' ```r
-#' foo <- function(data) {
-#'   find_columns(data, select = starts_with("Sep"))
+#' foo <- function(data, pattern) {
+#'   find_columns(data, select = starts_with(pattern))
 #' }
-#' foo(iris)
+#' foo(iris, pattern = "Sep")
+#'
+#' foo2 <- function(data, pattern) {
+#'   find_columns(data, select = pattern)
+#' }
+#' foo2(iris, pattern = starts_with("Sep"))
 #' ```
 #'
-#' However, this example won't work as expected!
+#' This means that it is also possible to use loop values as arguments or patterns:
 #'
 #' ```r
-#' foo <- function(data) {
-#'   i <- "Sep"
-#'   find_columns(data, select = starts_with(i))
+#' for (i in c("Sepal", "Sp")) {
+#'   head(iris) |>
+#'     find_columns(select = starts_with(i)) |>
+#'     print()
 #' }
-#' foo(iris)
 #' ```
 #'
-#' One workaround is to use the `regex` argument, which provides at least a bit
-#' more flexibility than exact matching. `regex` in its basic usage (as seen
-#' below) means that `select` behaves like the `contains("")` select-helper, but
-#' can also make the function more flexible by allowing to define complex
-#' regular expression pattern in `select`.
-#'
+#' However, this behavior is limited to a "single-level function". It will not
+#' work in nested functions, like below:
 #' ```r
-#' foo <- function(data) {
-#'   i <- "Sep"
-#'   find_columns(data, select = i, regex = TRUE)
+#' inner <- function(data, arg) {
+#'   find_columns(data, select = arg)
 #' }
-#' foo(iris)
+#' outer <- function(data, arg) {
+#'   inner(data, starts_with(arg))
+#' }
+#' outer(iris, "Sep")
+#' ```
+#'
+#' In this case, it is better to pass the whole select helper as the argument of
+#' `outer()`:
+#' ```r
+#' outer <- function(data, arg) {
+#'   inner(data, arg)
+#' }
+#' outer(iris, starts_with("Sep"))
 #' ```
 #'
 #' @examples
