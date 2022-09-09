@@ -198,24 +198,27 @@
     fixed <- TRUE
   } else if (grepl("^starts_with\\(\"(.*)\"\\)", x)) {
     # select-helper starts_with -----
+    x <- .extract_vars_from(x, "starts_with")
     if (negate) {
-      pattern <- paste0("^(?!", gsub("starts_with\\(\"(.*)\"\\)", "\\1", x), ")")
+      pattern <- paste0("^(?!", x, ")")
     } else {
-      pattern <- paste0("^", gsub("starts_with\\(\"(.*)\"\\)", "\\1", x))
+      pattern <- paste0("^(", x, ")")
     }
   } else if (grepl("^ends_with\\(\"(.*)\"\\)", x)) {
     # select-helper end_with -----
+    x <- .extract_vars_from(x, "ends_with")
     if (negate) {
-      pattern <- paste0("(?<!", gsub("ends_with\\(\"(.*)\"\\)", "\\1", x), ")$")
+      pattern <- paste0("(?<!", x, ")$")
     } else {
-      pattern <- paste0(gsub("ends_with\\(\"(.*)\"\\)", "\\1", x), "$")
+      pattern <- paste0(x, "$")
     }
   } else if (grepl("^contains\\(\"(.*)\"\\)", x)) {
     # select-helper contains -----
+    x <- .extract_vars_from(x, "contains")
     if (negate) {
-      pattern <- paste0("^((?!\\Q", gsub("contains\\(\"(.*)\"\\)", "\\1", x), "\\E).)*$")
+      pattern <- paste0("^((?!", x, ").)*$")
     } else {
-      pattern <- paste0("\\Q", gsub("contains\\(\"(.*)\"\\)", "\\1", x), "\\E")
+      pattern <- x
     }
   } else if (grepl("^matches\\(\"(.*)\"\\)", x)) {
     # matches is an alias for regex -----
@@ -389,4 +392,18 @@
       ), call. = FALSE)
     }
   }
+}
+
+# extract variable names from deparsed select helpers
+# e.g "starts_with(\"Sep\", \"Petal\")" -> c("Sep", "Petal")
+.extract_vars_from <- function(x, select_helper) {
+  tmp <- gsub(paste0(select_helper, "\\(\"(.*)\"\\)"), "\\1", x)
+  tmp <- gsub("'", "", tmp, fixed = TRUE)
+  tmp <- gsub('"', "", tmp, fixed = TRUE)
+  tmp <- strsplit(tmp, ",")[[1]]
+  tmp <- insight::trim_ws(tmp)
+  if (select_helper == "contains") {
+    tmp <- paste0("\\Q", tmp, "\\E")
+  }
+  paste(tmp, collapse = "|")
 }

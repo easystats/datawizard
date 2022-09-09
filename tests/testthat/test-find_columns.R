@@ -5,8 +5,28 @@ test_that("find_columns works as expected", {
   )
 
   expect_equal(
+    find_columns(iris, starts_with("Sepal", "Petal")),
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+  )
+
+  expect_equal(
+    find_columns(iris, -starts_with("Sepal", "Petal")),
+    "Species"
+  )
+
+  expect_equal(
     find_columns(iris, ends_with("Width")),
     c("Sepal.Width", "Petal.Width")
+  )
+
+  expect_equal(
+    find_columns(iris, ends_with("Length", "Width")),
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+  )
+
+  expect_equal(
+    find_columns(iris, -ends_with("Length", "Width")),
+    "Species"
   )
 
   expect_equal(
@@ -22,6 +42,16 @@ test_that("find_columns works as expected", {
   expect_equal(
     find_columns(iris, contains("Wid")),
     c("Sepal.Width", "Petal.Width")
+  )
+
+  expect_equal(
+    find_columns(iris, contains("en", "idt")),
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+  )
+
+  expect_equal(
+    find_columns(iris, -contains("en", "idt")),
+    "Species"
   )
 
   expect_equal(
