@@ -381,15 +381,21 @@
 
 .check_data <- function(data) {
   if (is.null(data)) {
-    stop(insight::format_message("The `data` argument must be provided."), call. = FALSE)
+    stop(
+      insight::format_message("The `data` argument must be provided."),
+      call. = FALSE
+    )
   }
   # check data frame input
   if (!is.null(data) && !is.data.frame(data)) {
     data <- try(as.data.frame(data), silent = TRUE)
     if (inherits(data, c("try-error", "simpleError"))) {
-      stop(insight::format_message(
-        "The `data` argument must be a data frame, or an object that can be coerced to a data frame."
-      ), call. = FALSE)
+      stop(
+        insight::format_message(
+          "The `data` argument must be a data frame, or an object that can be coerced to a data frame."
+        ),
+        call. = FALSE
+      )
     }
   }
 }
