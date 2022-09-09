@@ -144,7 +144,8 @@
     y_is_evaluable <- if (isTRUE(y_is_in_globenv)) {
       FALSE
     } else {
-      !inherits(try(eval(y), silent = TRUE), "try-error")
+      # remove minus sign if this is a custom function, e.g -testfun -> testfun
+      !inherits(try(eval(str2lang(gsub("^-", "", insight::safe_deparse(y)))), silent = TRUE), "try-error")
     }
     if (!is.null(x) && !y_is_evaluable) {
       x <- tryCatch(
