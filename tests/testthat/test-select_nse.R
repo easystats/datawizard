@@ -3,7 +3,7 @@ foo <- function(data, select = NULL, exclude = NULL, regex = FALSE) {
 }
 
 test_that(".select_nse needs data", {
-  expect_error(.select_nse(select = "Sepal.Length"))
+  expect_error(.select_nse(select = "Sepal.Length", data = NULL), regexp = "must be provided")
 })
 
 test_that(".select_nse needs a data frame or something coercible to a dataframe", {
@@ -12,7 +12,8 @@ test_that(".select_nse needs a data frame or something coercible to a dataframe"
     "Sepal.Length"
   )
   expect_error(
-    .select_nse(select = "Sepal.Length", data = list(iris$Sepal.Length, iris$Sepal.Width)),
+    .select_nse(select = "Sepal.Length", data = list(1:3, 1:2)),
+    regexp = "must be a data frame"
   )
 })
 
