@@ -53,8 +53,10 @@ vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
 (e.g. \code{1} or \code{c(1, 3, 5)}),
 \item a vector of negative integers, giving the positions counting from the
 right (e.g., \code{-1} or \code{-1:-3}),
-\item one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
-\code{contains("")}, a range using \code{:} or \code{regex("")},
+\item one of the following select-helpers: \code{starts_with()}, \code{ends_with()},
+\code{contains()}, a range using \code{:} or \code{regex("")}. \code{starts_with()},
+\code{ends_with()}, and  \code{contains()} accept several patterns, e.g
+\code{starts_with("Sep", "Petal")}.
 \item or a function testing for logical conditions, e.g. \code{is.numeric()} (or
 \code{is.numeric}), or any user-defined function that selects the variables
 for which the function returns \code{TRUE} (like: \code{foo <- function(x) mean(x) > 3}),
