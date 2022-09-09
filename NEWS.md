@@ -28,9 +28,25 @@ CHANGES
   like the following example. See examples section in the documentation of 
   `data_filter()`.
 
-
 * The `regex` argument was added to functions that use select-helpers and did
   not already have this argument.
+  
+* Arguments `select` and `exclude` in most functions have been improved to work
+  in loops and in custom functions. For example, the following code now works:
+  
+```r
+foo <- function(data) {
+  i <- "Sep"
+  find_columns(data, select = starts_with(i))
+}
+foo(iris)
+
+for (i in c("Sepal", "Sp")) {
+  head(iris) |>
+    find_columns(select = starts_with(i)) |>
+    print()
+}
+```
 
 # datawizard 0.5.1
 
