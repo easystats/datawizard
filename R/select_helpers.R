@@ -309,10 +309,10 @@
 # e.g "starts_with(\"Sep\", \"Petal\")" -> c("Sep", "Petal")
 .extract_vars_from <- function(x, select_helper) {
   tmp <- gsub(paste0(select_helper, "\\(\"(.*)\"\\)"), "\\1", x)
-  tmp <- gsub("'", "", tmp)
-  tmp <- gsub('"', "", tmp)
+  tmp <- gsub("'", "", tmp, fixed = TRUE)
+  tmp <- gsub('"', "", tmp, fixed = TRUE)
   tmp <- strsplit(tmp, ",")[[1]]
-  tmp <- trimws(tmp)
+  tmp <- insight::trim_ws(tmp)
   if (select_helper == "contains") {
     tmp <- paste0("\\Q", tmp, "\\E")
   }
