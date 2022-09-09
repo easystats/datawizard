@@ -31,8 +31,9 @@ CHANGES
 * The `regex` argument was added to functions that use select-helpers and did
   not already have this argument.
   
-* Arguments `select` and `exclude` in most functions have been improved to work
-  in loops and in custom functions. For example, the following code now works:
+* Arguments `select` and `exclude` that are present in most functions have been
+  improved to work in loops and in custom functions. For example, the following 
+  code now works:
   
 ```r
 foo <- function(data) {

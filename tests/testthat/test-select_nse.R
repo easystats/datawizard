@@ -2,6 +2,20 @@ foo <- function(data, select = NULL, exclude = NULL, regex = FALSE) {
   .select_nse(select, data, exclude = exclude, regex = regex, ignore_case = FALSE)
 }
 
+test_that(".select_nse needs data", {
+  expect_error(.select_nse(select = "Sepal.Length"))
+})
+
+test_that(".select_nse needs a data frame or something coercible to a dataframe", {
+  expect_equal(
+    .select_nse(select = "Sepal.Length", data = as.matrix(head(iris))),
+    "Sepal.Length"
+  )
+  expect_error(
+    .select_nse(select = "Sepal.Length", data = list(iris$Sepal.Length, iris$Sepal.Width)),
+  )
+})
+
 test_that(".select_nse: arg 'select' works", {
   expect_equal(
     foo(iris, select = NULL),

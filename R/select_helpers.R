@@ -1,24 +1,15 @@
 # this function evaluates the select-expression and allows non-standard evaluation
 
 .select_nse <- function(select, data, exclude, ignore_case, regex = FALSE, verbose = FALSE) {
-  # check if data argument is valid
-  if (is.null(data)) {
-    stop(insight::format_message("The `data` argument must be provided."), call. = FALSE)
-  }
 
-  # check data frame input
-  if (!is.null(data) && !is.data.frame(data)) {
-    data <- try(as.data.frame(data), silent = TRUE)
-    if (inherits(data, c("try-error", "simpleError"))) {
-      stop(insight::format_message(
-        "The `data` argument must be a data frame, or an object that can be coerced to a data frame."
-      ), call. = FALSE)
-    }
-  }
+  .check_data(data)
 
+  columns <- colnames(data)
+
+  # directly return all names if select == exclude == NULL
   if (is.null(substitute(select, env = parent.frame())) &
       is.null(substitute(exclude, env = parent.frame()))) {
-    return(names(data))
+    return(columns)
   }
 
   fixed_select <- TRUE
@@ -50,10 +41,10 @@
 
   # select and exclude might also be a (user-defined) function
   if (inherits(select, "function")) {
-    select <- colnames(data)[sapply(data, select)]
+    select <- columns[sapply(data, select)]
   }
   if (inherits(exclude, "function")) {
-    exclude <- colnames(data)[sapply(data, exclude)]
+    exclude <- columns[sapply(data, exclude)]
   }
 
   # if select could not be evaluated (because expression "makes no sense")
@@ -73,10 +64,10 @@
 
   # seems to be no valid column name or index, so try to grep
   if (isFALSE(fixed_select) || isTRUE(regex)) {
-    select <- colnames(data)[grepl(select, colnames(data), ignore.case = ignore_case, perl = TRUE)]
+    select <- columns[grepl(select, columns, ignore.case = ignore_case, perl = TRUE)]
   }
   if (isFALSE(fixed_exclude)) {
-    exclude <- colnames(data)[grepl(exclude, colnames(data), ignore.case = ignore_case, perl = TRUE)]
+    exclude <- columns[grepl(exclude, columns, ignore.case = ignore_case, perl = TRUE)]
   }
   # if exclude = NULL, we want to exclude 0 variables, not all of them
   if (!inherits(exclude, "formula") && length(exclude) == ncol(data)) {
@@ -96,11 +87,7 @@
 
 .evaluate_pattern <- function(x, data = NULL, ignore_case = FALSE, y) {
   fixed <- FALSE
-
-  ## TODO once "data_findcols()" is removed, we can remove the checks
-  # for "is.null(data)" here, because then data is *always* provided and
-  # cannot be NULL. The only place where ".evaluate_pattern()" is called
-  # with no data argument is in "data_findcols()".
+  columns <- colnames(data)
 
   # check if negation is requested
   negate <- !is.null(x) && length(x) == 1 && substr(x, 0, 1) == "-"
@@ -138,8 +125,9 @@
   # However, the expression starts_with("Sep") is part of the error message, so
   # we can use this to retrieve "i".
   suppressWarnings({
-    # if y is in global environment, then evaluation works so we consider that we
-    # need to reevaluate y in this case
+    # if y is in global environment (e.g i = "Petal" in globenv but i = starts_with("Sep")
+    # in the function environment), then evaluation works and we never go through
+    # dynGet() whereas it's needed. So we force y to go in the tryCatch().
     y_is_in_globenv <- insight::safe_deparse(y) %in% ls(globalenv())
     y_is_evaluable <- if (isTRUE(y_is_in_globenv)) {
       FALSE
@@ -151,8 +139,12 @@
       x <- tryCatch(
         dynGet(x, inherits = FALSE, minframe = 0L),
         error = function(e) {
+
+          # if starts_with() et al. don't exist
           fn <- insight::safe_deparse(e$call)
-          # deal with rlang-type of errors (coming from tidyselect)
+
+          # if starts_with() et al. come from tidyselect but need to be used in
+          # a select environment, then the error doesn't have the same structure.
           if (is.null(fn) && grepl("tidyselect", e$message)) {
             trace <- lapply(e$trace$call, function(x) {
               tmp <- insight::safe_deparse(x)
@@ -163,6 +155,8 @@
             fn <- Filter(Negate(is.null), trace)[1]
           }
 
+          # if we actually obtain the select helper call, return it, else return
+          # what we already had
           if (length(fn) > 0 && grepl(.regex_select_helper(), fn)) {
             return(fn)
           } else if (!is.null(x)) {
@@ -189,15 +183,15 @@
   # create pattern
   if (is.null(x) && !is.null(data)) {
     # default -----
-    pattern <- colnames(data)
+    pattern <- columns
     fixed <- TRUE
   } else if (!is.null(data) && !is.null(x) && all(x == "all")) {
     # select all columns -----
-    pattern <- colnames(data)
+    pattern <- columns
     fixed <- TRUE
-  } else if (all(x %in% names(data))) {
+  } else if (all(x %in% columns)) {
     if (negate) {
-      pattern <- setdiff(names(data), x)
+      pattern <- setdiff(columns, x)
     } else {
       pattern <- x
     }
@@ -232,9 +226,9 @@
   } else if (!is.null(data) && !is.null(user_function)) {
     # function -----
     if (negate) {
-      pattern <- colnames(data)[!sapply(data, function(i) user_function(i))]
+      pattern <- columns[!sapply(data, function(i) user_function(i))]
     } else {
-      pattern <- colnames(data)[sapply(data, user_function)]
+      pattern <- columns[sapply(data, user_function)]
     }
     fixed <- TRUE
   } else if (!is.null(data) && grepl("^c\\((.*)\\)$", x)) {
@@ -242,7 +236,7 @@
     cols <- try(eval(parse(text = x)), silent = TRUE)
     if (!inherits(cols, c("try-error", "simpleError")) && !is.null(data)) {
       if (negate) {
-        pattern <- setdiff(colnames(data), cols)
+        pattern <- setdiff(columns, cols)
       } else {
         pattern <- cols
       }
@@ -253,7 +247,7 @@
   } else if (!is.null(data) && grepl(":", x, fixed = TRUE)) {
     # range -----
     from_to <- unlist(strsplit(x, ":", fixed = TRUE))
-    cn <- colnames(data)
+    cn <- columns
     if (isTRUE(ignore_case)) {
       from_to <- tolower(from_to)
       cn <- tolower(cn)
@@ -267,9 +261,9 @@
       stop("Could not find variable '", from_to[2], "' in data.", call. = FALSE)
     }
     if (negate) {
-      pattern <- colnames(data)[setdiff(seq_len(ncol(data)), from:to)]
+      pattern <- columns[setdiff(seq_len(ncol(data)), from:to)]
     } else {
-      pattern <- colnames(data)[from:to]
+      pattern <- columns[from:to]
     }
     fixed <- TRUE
   } else {
@@ -277,8 +271,8 @@
     pattern <- x
 
     # sanity check - we might have negate with literal variable name
-    if (negate && length(pattern) == 1 && !is.null(data) && pattern %in% colnames(data)) {
-      pattern <- setdiff(colnames(data), pattern)
+    if (negate && length(pattern) == 1 && !is.null(data) && pattern %in% columns) {
+      pattern <- setdiff(columns, pattern)
       fixed <- TRUE
     }
   }
@@ -307,6 +301,9 @@
 # workhorse for .evaluated_pattern_to_colnames()
 
 .check_pattern_and_exclude <- function(pattern, data, ignore_case, verbose) {
+
+  columns <- colnames(data)
+
   # if pattern is formula, simply extract all variables
   if (inherits(pattern, "formula")) {
     pattern <- all.vars(pattern)
@@ -318,27 +315,27 @@
       # select last column(s)
       pattern[pattern < 0] <- sort(ncol(data) + pattern[pattern < 0] + 1)
     }
-    pattern <- colnames(data)[intersect(pattern, seq_len(ncol(data)))]
+    pattern <- columns[intersect(pattern, seq_len(ncol(data)))]
   }
 
   # special token - select all columns?
   if (length(pattern) == 1 && identical(pattern, "all")) {
-    pattern <- colnames(data)
+    pattern <- columns
   }
 
   # check if column names match when all are lowercase
-  if (!all(pattern %in% colnames(data)) && isTRUE(ignore_case)) {
-    pattern <- colnames(data)[tolower(colnames(data)) %in% tolower(pattern)]
+  if (!all(pattern %in% columns) && isTRUE(ignore_case)) {
+    pattern <- columns[tolower(columns) %in% tolower(pattern)]
   }
 
   # check if colnames are in data
-  if (!all(pattern %in% colnames(data))) {
+  if (!all(pattern %in% columns)) {
     if (isTRUE(verbose)) {
       warning(insight::format_message(
-        paste0("Following variable(s) were not found: ", paste0(setdiff(pattern, colnames(data)), collapse = ", "))
+        paste0("Following variable(s) were not found: ", paste0(setdiff(pattern, columns), collapse = ", "))
       ), call. = FALSE)
     }
-    pattern <- intersect(pattern, colnames(data))
+    pattern <- intersect(pattern, columns)
   }
 
   pattern
@@ -378,3 +375,18 @@
 }
 
 .regex_select_helper <- function() "(starts\\_with|ends\\_with|col\\_ends\\_with|contains|regex)"
+
+.check_data <- function(data) {
+  if (is.null(data)) {
+    stop(insight::format_message("The `data` argument must be provided."), call. = FALSE)
+  }
+  # check data frame input
+  if (!is.null(data) && !is.data.frame(data)) {
+    data <- try(as.data.frame(data), silent = TRUE)
+    if (inherits(data, c("try-error", "simpleError"))) {
+      stop(insight::format_message(
+        "The `data` argument must be a data frame, or an object that can be coerced to a data frame."
+      ), call. = FALSE)
+    }
+  }
+}
