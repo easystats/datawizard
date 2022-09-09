@@ -42,7 +42,11 @@
   } else {
     select <- NULL
   }
-  exclude <- tryCatch(eval(p2), error = function(e) NULL)
+  if (!is.null(p2) && !insight::safe_deparse(p2) %in% ls(globalenv())) {
+    exclude <- tryCatch(eval(p2), error = function(e) NULL)
+  } else {
+    exclude <- NULL
+  }
 
   # select and exclude might also be a (user-defined) function
   if (inherits(select, "function")) {
@@ -144,7 +148,7 @@
     }
     if (!is.null(x) && !y_is_evaluable) {
       x <- tryCatch(
-        dynGet(x, inherits = FALSE),
+        dynGet(x, inherits = FALSE, minframe = 0L),
         error = function(e) {
           fn <- insight::safe_deparse(e$call)
           # deal with rlang-type of errors (coming from tidyselect)
@@ -177,7 +181,7 @@
     obj <- gsub(.regex_select_helper(), "", x)
     obj <- gsub("^\\(", "", obj)
     obj <- gsub("\\)$", "", obj)
-    obj_eval <- try(dynGet(obj, inherits = FALSE), silent = TRUE)
+    obj_eval <- try(dynGet(obj, inherits = FALSE, minframe = 0L), silent = TRUE)
     x <- gsub(paste0("\\(", obj, "\\)"), paste0("\\(\"", obj_eval, "\"\\)"), x)
   }
 
