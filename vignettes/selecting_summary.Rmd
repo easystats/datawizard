@@ -1,0 +1,185 @@
+---
+title: "A quick summary of selecting possibilities in `datawizard`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{A quick summary of selecting possibilities in `datawizard`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo=FALSE, message=FALSE}
+library(datawizard)
+library(poorman)
+library(htmltools)
+
+set.seed(123)
+iris <- iris[sample(nrow(iris), 10), ]
+row.names(iris) <- NULL
+
+row <- function(...) {
+  div(
+    class = "custom_note",
+    ...
+  )
+}
+```
+
+```{css, echo=FALSE}
+.custom_note {
+  border-left: solid 5px hsl(220, 100%, 30%);
+  background-color: hsl(220, 100%, 95%);
+  padding: 5px;
+  margin-bottom: 10px
+}
+```
+
+# Selecting variables
+
+## Quoted names
+
+This is the most simple way to select one or several variables. Just use a character
+vector containing variables names, like in base R.
+
+```{r}
+get_columns(iris, c("Sepal.Length", "Petal.Width"))
+```
+
+## Unquoted names
+
+It is also possible to use unquoted names. This is useful if you use the `tidyverse`
+and want to be consistent about the way variable names are passed.
+
+```{r}
+iris |> 
+  group_by(Species) |> 
+  standardise(Petal.Length) |> 
+  ungroup()
+```
+
+
+## Formulas
+
+[FIND USE CASE]
+
+```{r}
+get_columns(iris, ~ Sepal.Length + Petal.Width)
+```
+
+
+
+## Positions
+
+In addition to variable names, `select` can also take a numeric vector that indicates
+the position of the variables to select in the dataframe.
+
+```{r}
+get_columns(iris, c(1, 2, 5))
+```
+
+
+## Functions
+
+You can pass a function to `select`. This function will be applied to all columns
+and has to return `TRUE` or `FALSE`. For example, if you want to keep only numeric
+columns, you can use `is.numeric`.
+
+```{r}
+get_columns(iris, is.numeric)
+```
+
+Note that you can also define your own functions and pass them in `select`, 
+*as long as they return `TRUE` or `FALSE`* when applied to a column.
+
+```{r}
+my_function <- function(i) {
+  is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
+}
+
+get_columns(iris, my_function)
+```
+
+
+## Patterns
+
+Most of the time, our data will be quite bigger than `iris`. It would be tedious
+to write the names of variables we want to select, and it would be fragile to rely
+on variable positions in the dataset as they may change later. In this case, you
+can use four select helpers: `starts_with()`, `ends_with()`, `contains()`, and
+`regex()`. The former three can take several patterns, while the latter takes
+a single regular expression.
+
+```{r}
+get_columns(iris, starts_with("Sep", "Peta"))
+
+get_columns(iris, ends_with("dth", "ies"))
+
+get_columns(iris, contains("pal", "ec"))
+
+get_columns(iris, regex("^Sep|ies"))
+```
+
+```{r echo=FALSE}
+row("Note: these functions are not exported by `datawizard` but are detected and
+applied internally. This means that they won't be detected by autocompletion
+when you write them.")
+```
+
+```{r echo=FALSE}
+row("Note #2: because these functions are not exported, they will not create conflicts
+with the ones that come from the `tidyverse` and that have the same name. So you
+can still use `dplyr` and its friends, it won't change anything for selection in 
+`datawizard` functions!")
+```
+
+
+# Excluding variables
+
+What if you want to keep all variables except for a few ones? There are two ways
+you can invert your selection.
+
+The first way is to put a minus sign `"-"` in front of the `select` argument.
+
+```{r}
+get_columns(iris, -c("Sepal.Length", "Petal.Width"))
+
+get_columns(iris, -starts_with("Sep", "Peta"))
+```
+
+The second way is to use the argument `exclude`. This argument has the same 
+possibilities as `select`. Note that you can use both `select` and `exclude` at 
+the same time.
+
+```{r}
+get_columns(iris, exclude = c("Sepal.Length", "Petal.Width"))
+
+get_columns(iris, exclude = starts_with("Sep", "Peta"))
+```
+
+
+
+# Programming with selections
+
+TODO
+
+# Useful to know
+
+## Ignore the case
+
+In every selection that uses variable names, you can ignore the case in the 
+selection by applying `ignore_case = TRUE`.
+
+```{r}
+get_columns(iris, c("sepal.length", "petal.width"), ignore_case = TRUE)
+
+get_columns(iris, ~ Sepal.length + petal.Width, ignore_case = TRUE)
+
+get_columns(iris, starts_with("sep", "peta"), ignore_case = TRUE)
+```
+
