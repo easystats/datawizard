@@ -57,9 +57,9 @@ It is also possible to use unquoted names. This is useful if you use the `tidyve
 and want to be consistent about the way variable names are passed.
 
 ```{r}
-iris %>% 
-  group_by(Species) %>% 
-  standardise(Petal.Length) %>% 
+iris %>%
+  group_by(Species) %>%
+  standardise(Petal.Length) %>%
   ungroup()
 ```
 
@@ -114,7 +114,7 @@ on variable positions in the dataset as they may change later. In this case, you
 can use four select helpers: `starts_with()`, `ends_with()`, `contains()`, and
 `regex()`. The former three can take several patterns, while the latter takes
 a single regular expression.
-
+ 
 ```{r}
 get_columns(iris, starts_with("Sep", "Peta"))
 
