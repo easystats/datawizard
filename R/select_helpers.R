@@ -28,14 +28,14 @@
   }
 
   # check if pattern is a function like "starts_with()"
-  p_is_expr_not_in_globenv <- !is.null(p) && !(insight::safe_deparse(p) %in% ls(globalenv()))
-  p2_is_expr_not_in_globenv <- !is.null(p2) && !insight::safe_deparse(p2) %in% ls(globalenv())
-  if (p_is_expr_not_in_globenv) {
+  is_p_expr_not_in_globenv <- !is.null(p) && !(insight::safe_deparse(p) %in% ls(globalenv()))
+  is_p2_expr_not_in_globenv <- !is.null(p2) && !insight::safe_deparse(p2) %in% ls(globalenv())
+  if (is_p_expr_not_in_globenv) {
     select <- tryCatch(eval(p), error = function(e) NULL)
   } else {
     select <- NULL
   }
-  if (p2_is_expr_not_in_globenv) {
+  if (is_p2_expr_not_in_globenv) {
     exclude <- tryCatch(eval(p2), error = function(e) NULL)
   } else {
     exclude <- NULL
