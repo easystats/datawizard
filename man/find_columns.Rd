@@ -115,36 +115,48 @@ match a certain search pattern, while \code{get_columns()} returns the found dat
 for \code{find_columns()}.
 }
 \details{
-Note that there are some limitations when calling this from inside other
-functions. The following will work as expected, returning all columns that
-start with \code{"Sep"}:
+Note that it is possible to either pass an entire select helper or only the
+pattern inside a select helper as a function argument:
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{foo <- function(data) \{
-  find_columns(data, select = starts_with("Sep"))
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{foo <- function(data, pattern) \{
+  find_columns(data, select = starts_with(pattern))
 \}
-foo(iris)
+foo(iris, pattern = "Sep")
+
+foo2 <- function(data, pattern) \{
+  find_columns(data, select = pattern)
+\}
+foo2(iris, pattern = starts_with("Sep"))
 }\if{html}{\out{</div>}}
 
-However, this example won't work as expected!
+This means that it is also possible to use loop values as arguments or patterns:
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{foo <- function(data) \{
-  i <- "Sep"
-  find_columns(data, select = starts_with(i))
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{for (i in c("Sepal", "Sp")) \{
+  head(iris) |>
+    find_columns(select = starts_with(i)) |>
+    print()
 \}
-foo(iris)
 }\if{html}{\out{</div>}}
 
-One workaround is to use the \code{regex} argument, which provides at least a bit
-more flexibility than exact matching. \code{regex} in its basic usage (as seen
-below) means that \code{select} behaves like the \code{contains("")} select-helper, but
-can also make the function more flexible by allowing to define complex
-regular expression pattern in \code{select}.
+However, this behavior is limited to a "single-level function". It will not
+work in nested functions, like below:
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{foo <- function(data) \{
-  i <- "Sep"
-  find_columns(data, select = i, regex = TRUE)
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{inner <- function(data, arg) \{
+  find_columns(data, select = arg)
 \}
-foo(iris)
+outer <- function(data, arg) \{
+  inner(data, starts_with(arg))
+\}
+outer(iris, "Sep")
+}\if{html}{\out{</div>}}
+
+In this case, it is better to pass the whole select helper as the argument of
+\code{outer()}:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{outer <- function(data, arg) \{
+  inner(data, arg)
+\}
+outer(iris, starts_with("Sep"))
 }\if{html}{\out{</div>}}
 }
 \examples{
