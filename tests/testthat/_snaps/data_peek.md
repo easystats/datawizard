@@ -3,7 +3,7 @@
     Code
       data_peek(iris)
     Output
-      Data frame with 150 rows and 5 columns
+      Data frame with 150 rows and 5 variables
       
       Variable     | Type    | Values                                        
       -----------------------------------------------------------------------
@@ -16,9 +16,9 @@
 ---
 
     Code
-      data_peek(iris, n = 3)
+      data_peek(iris, select = 1:3)
     Output
-      Data frame with 150 rows and 5 columns
+      Data frame with 150 rows and 5 variables
       
       Variable     | Type    | Values                                        
       -----------------------------------------------------------------------
@@ -31,7 +31,7 @@
     Code
       data_peek(iris, width = 130)
     Output
-      Data frame with 150 rows and 5 columns
+      Data frame with 150 rows and 5 variables
       
       Variable     | Type    | Values                                                                                                  
       ---------------------------------------------------------------------------------------------------------------------------------
