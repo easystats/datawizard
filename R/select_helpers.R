@@ -28,12 +28,14 @@
   }
 
   # check if pattern is a function like "starts_with()"
-  if (!is.null(p) && !insight::safe_deparse(p) %in% ls(globalenv())) {
+  p_is_expr_not_in_globenv <- !is.null(p) && !(insight::safe_deparse(p) %in% ls(globalenv()))
+  p2_is_expr_not_in_globenv <- !is.null(p2) && !insight::safe_deparse(p2) %in% ls(globalenv())
+  if (p_is_expr_not_in_globenv) {
     select <- tryCatch(eval(p), error = function(e) NULL)
   } else {
     select <- NULL
   }
-  if (!is.null(p2) && !insight::safe_deparse(p2) %in% ls(globalenv())) {
+  if (p2_is_expr_not_in_globenv) {
     exclude <- tryCatch(eval(p2), error = function(e) NULL)
   } else {
     exclude <- NULL
@@ -172,7 +174,9 @@
   # if element is a select helper but the arg in the select helper is not a
   # character, e.g starts_with(i), then we need to find the value of this object
   # by going up all parent.frame() gradually with dynGet()
-  if (!is.null(x) && length(x) == 1 && grepl(.regex_select_helper(), x) && !grepl(paste0(.regex_select_helper(), "\\(\"(.*)\"\\)"), x)) {
+  if (!is.null(x) && length(x) == 1 &&
+      grepl(.regex_select_helper(), x) &&
+      !grepl(paste0(.regex_select_helper(), "\\(\"(.*)\"\\)"), x)) {
     obj <- gsub(.regex_select_helper(), "", x)
     obj <- gsub("^\\(", "", obj)
     obj <- gsub("\\)$", "", obj)

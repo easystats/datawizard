@@ -91,6 +91,7 @@
 #'
 #' However, this behavior is limited to a "single-level function". It will not
 #' work in nested functions, like below:
+#'
 #' ```r
 #' inner <- function(data, arg) {
 #'   find_columns(data, select = arg)
@@ -103,6 +104,7 @@
 #'
 #' In this case, it is better to pass the whole select helper as the argument of
 #' `outer()`:
+#'
 #' ```r
 #' outer <- function(data, arg) {
 #'   inner(data, arg)
