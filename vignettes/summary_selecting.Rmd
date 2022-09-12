@@ -57,9 +57,9 @@ It is also possible to use unquoted names. This is useful if you use the `tidyve
 and want to be consistent about the way variable names are passed.
 
 ```{r}
-iris |> 
-  group_by(Species) |> 
-  standardise(Petal.Length) |> 
+iris %>% 
+  group_by(Species) %>% 
+  standardise(Petal.Length) %>% 
   ungroup()
 ```
 
