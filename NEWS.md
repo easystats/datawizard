@@ -15,6 +15,11 @@ BREAKING CHANGES
   
 * `data_merge()` now errors if columns specified in `by` are not in both datasets.
 
+* Using negative values in arguments `select` and `exclude` now removes the columns
+  from the selection/exclusion. The previous behavior was to start the 
+  selection/exclusion from the end of the dataset, which was inconsistent with
+  the use of "-" with other selecting possibilities.
+
 NEW FUNCTIONS
 
 * `data_peek()`, to peek at values and type of variables in a data frame.

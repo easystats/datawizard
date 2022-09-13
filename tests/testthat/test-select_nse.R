@@ -3,16 +3,16 @@ foo <- function(data, select = NULL, exclude = NULL, regex = FALSE) {
 }
 
 test_that(".select_nse needs data", {
-  expect_error(.select_nse(select = "Sepal.Length", data = NULL), regexp = "must be provided")
+  expect_error(foo(select = "Sepal.Length", data = NULL), regexp = "must be provided")
 })
 
 test_that(".select_nse needs a data frame or something coercible to a dataframe", {
   expect_equal(
-    .select_nse(select = "Sepal.Length", data = as.matrix(head(iris))),
+    foo(select = "Sepal.Length", data = as.matrix(head(iris))),
     "Sepal.Length"
   )
   expect_error(
-    .select_nse(select = "Sepal.Length", data = list(1:3, 1:2)),
+    foo(select = "Sepal.Length", data = list(1:3, 1:2)),
     regexp = "must be a data frame"
   )
 })
@@ -98,3 +98,4 @@ test_that(".select_nse: args 'select' and 'exclude' at the same time", {
     character(0)
   )
 })
+
