@@ -92,10 +92,10 @@
   columns <- colnames(data)
 
   # check if negation is requested
-  negate <- !is.null(x) && length(x) == 1 && substr(x, 0, 1) == "-"
+  negate <- !is.null(x) && length(x) == 1 && .is_negated(x)
   # and if so, remove -
   if (negate) {
-    x <- substring(x, 2)
+    x <- .remove_minus(x)
   }
 
   # deal with aliases
@@ -318,11 +318,14 @@
 
   # if numeric, make sure we have valid column indices
   if (is.numeric(pattern)) {
-    if (any(pattern < 0)) {
-      # select last column(s)
-      pattern[pattern < 0] <- sort(ncol(data) + pattern[pattern < 0] + 1)
+    if (any(pattern < 0) && any(pattern > 0)) {
+      if (isTRUE(verbose)) {
+        stop(insight::format_message(
+          paste0("You can't mix negative and positive numeric indices in `select` or `exclude`.")
+        ), call. = FALSE)
+      }
     }
-    pattern <- columns[intersect(pattern, seq_len(ncol(data)))]
+    pattern <- columns[pattern]
   }
 
   # special token - select all columns?
@@ -416,4 +419,19 @@
     tmp <- paste0("\\Q", tmp, "\\E")
   }
   paste(tmp, collapse = "|")
+}
+
+.is_negated <- function(x) {
+  grepl("^(-|\"-|\'-)", x)
+}
+
+.remove_minus <- function(x) {
+  y <- gsub("^-", "", x)
+  y <- gsub("^\'-", "\'", y)
+  y <- gsub("^\"-", "\"", y)
+  y <- gsub("^\"", "", y)
+  y <- gsub("^\'", "", y)
+  y <- gsub("\"$", "", y)
+  y <- gsub("\'$", "", y)
+  y
 }
