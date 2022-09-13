@@ -16,7 +16,7 @@ for find_columns()."><meta property="og:image" content="https://easystats.github
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1.7</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1.8</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -219,29 +219,38 @@ was found. <code>get_columns()</code> returns a data frame with matching columns
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Note that there are some limitations when calling this from inside other
-functions. The following will work as expected, returning all columns that
-start with <code>"Sep"</code>:</p>
-<p></p><div class="sourceCode r"><pre><code><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sep"</span><span class="op">)</span><span class="op">)</span></span>
+    <p>Note that it is possible to either pass an entire select helper or only the
+pattern inside a select helper as a function argument:</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">pattern</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="va">pattern</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></code></pre><p></p></div>
-<p>However, this example won't work as expected!</p>
-<p></p><div class="sourceCode r"><pre><code><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">i</span> <span class="op">&lt;-</span> <span class="st">"Sep"</span></span>
-<span>  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">foo</span><span class="op">(</span><span class="va">iris</span>, pattern <span class="op">=</span> <span class="st">"Sep"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">foo2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">pattern</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="va">pattern</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></code></pre><p></p></div>
-<p>One workaround is to use the <code>regex</code> argument, which provides at least a bit
-more flexibility than exact matching. <code>regex</code> in its basic usage (as seen
-below) means that <code>select</code> behaves like the <code>contains("")</code> select-helper, but
-can also make the function more flexible by allowing to define complex
-regular expression pattern in <code>select</code>.</p>
-<p></p><div class="sourceCode r"><pre><code><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">i</span> <span class="op">&lt;-</span> <span class="st">"Sep"</span></span>
-<span>  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="va">i</span>, regex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">foo2</span><span class="op">(</span><span class="va">iris</span>, pattern <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sep"</span><span class="op">)</span><span class="op">)</span></span></code></pre><p></p></div>
+<p>This means that it is also possible to use loop values as arguments or patterns:</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal"</span>, <span class="st">"Sp"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span>select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre><p></p></div>
+<p>However, this behavior is limited to a "single-level function". It will not
+work in nested functions, like below:</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="va">inner</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">arg</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="va">arg</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></code></pre><p></p></div>
+<span><span class="va">outer</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">arg</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">inner</span><span class="op">(</span><span class="va">data</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="va">arg</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/outer.html" class="external-link">outer</a></span><span class="op">(</span><span class="va">iris</span>, <span class="st">"Sep"</span><span class="op">)</span></span></code></pre><p></p></div>
+<p>In this case, it is better to pass the whole select helper as the argument of
+<code><a href="https://rdrr.io/r/base/outer.html" class="external-link">outer()</a></code>:</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="va">outer</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">arg</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">inner</span><span class="op">(</span><span class="va">data</span>, <span class="va">arg</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/outer.html" class="external-link">outer</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sep"</span><span class="op">)</span><span class="op">)</span></span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

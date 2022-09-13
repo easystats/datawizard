@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1.7</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1.8</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,6 +95,7 @@
 <li><p>New <code><a href="../reference/text_format.html">text_format()</a></code> alias is introduced for <code><a href="../reference/text_format.html">format_text()</a></code>, latter of which will be removed in the next release.</p></li>
 <li><p>New <code><a href="../reference/recode_values.html">recode_values()</a></code> alias is introduced for <code><a href="../reference/recode_values.html">change_code()</a></code>, latter of which will be removed in the next release.</p></li>
 <li><p><code><a href="../reference/data_merge.html">data_merge()</a></code> now errors if columns specified in <code>by</code> are not in both datasets.</p></li>
+<li><p>Using negative values in arguments <code>select</code> and <code>exclude</code> now removes the columns from the selection/exclusion. The previous behavior was to start the selection/exclusion from the end of the dataset, which was inconsistent with the use of “-” with other selecting possibilities.</p></li>
 </ul><p>NEW FUNCTIONS</p>
 <ul><li>
 <code><a href="../reference/data_peek.html">data_peek()</a></code>, to peek at values and type of variables in a data frame.</li>
@@ -103,7 +104,21 @@
 <li><p>It is now possible to use curly brackets to pass variable names to <code><a href="../reference/data_match.html">data_filter()</a></code>, like the following example. See examples section in the documentation of <code><a href="../reference/data_match.html">data_filter()</a></code>.</p></li>
 <li><p>The <code>regex</code> argument was added to functions that use select-helpers and did not already have this argument.</p></li>
 <li><p>Select helpers <code><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with()</a></code>, <code><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with()</a></code>, and <code><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains()</a></code> now accept several patterns, e.g <code>starts_with("Sep", "Petal")</code>.</p></li>
-</ul></div>
+<li><p>Arguments <code>select</code> and <code>exclude</code> that are present in most functions have been improved to work in loops and in custom functions. For example, the following code now works:</p></li>
+</ul><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">i</span> <span class="op">&lt;-</span> <span class="st">"Sep"</span></span>
+<span>  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu">foo</span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal"</span>, <span class="st">"Sp"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span>select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.1" id="datawizard-051">datawizard 0.5.1<a class="anchor" aria-label="anchor" href="#datawizard-051"></a></h2><p class="text-muted">CRAN release: 2022-08-17</p>
 <ul><li>Fixes failing tests due to <a href="https://nathaneastwood.github.io/poorman/" class="external-link">poorman</a> update.</li>
