@@ -149,7 +149,7 @@ test_that("find_columns works correctly with minus sign", {
 
   expect_error(
     find_columns(iris, -1:2),
-    regexp = "may be mixed"
+    regexp = "can't mix negative"
   )
 
   expect_equal(

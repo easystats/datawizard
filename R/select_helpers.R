@@ -319,11 +319,9 @@
   # if numeric, make sure we have valid column indices
   if (is.numeric(pattern)) {
     if (any(pattern < 0) && any(pattern > 0)) {
-      if (isTRUE(verbose)) {
-        stop(insight::format_message(
+      stop(insight::format_message(
           paste0("You can't mix negative and positive numeric indices in `select` or `exclude`.")
-        ), call. = FALSE)
-      }
+      ), call. = FALSE)
     }
     pattern <- columns[pattern]
   }
