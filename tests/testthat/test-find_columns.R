@@ -131,7 +131,6 @@ test_that("find_columns regex", {
 })
 
 test_that("find_columns works correctly with minus sign", {
-
   expect_equal(
     find_columns(iris, -"Sepal.Length"),
     c("Sepal.Width", "Petal.Length", "Petal.Width", "Species")

@@ -1,14 +1,13 @@
 # this function evaluates the select-expression and allows non-standard evaluation
 
 .select_nse <- function(select, data, exclude, ignore_case, regex = FALSE, verbose = FALSE) {
-
   .check_data(data)
 
   columns <- colnames(data)
 
   # directly return all names if select == exclude == NULL
   if (is.null(substitute(select, env = parent.frame())) &
-      is.null(substitute(exclude, env = parent.frame()))) {
+    is.null(substitute(exclude, env = parent.frame()))) {
     return(columns)
   }
 
@@ -141,7 +140,6 @@
       x <- tryCatch(
         dynGet(x, inherits = FALSE, minframe = 0L),
         error = function(e) {
-
           # if starts_with() et al. don't exist
           fn <- insight::safe_deparse(e$call)
 
@@ -175,8 +173,8 @@
   # character, e.g starts_with(i), then we need to find the value of this object
   # by going up all parent.frame() gradually with dynGet()
   if (!is.null(x) && length(x) == 1 &&
-      grepl(.regex_select_helper(), x) &&
-      !grepl(paste0(.regex_select_helper(), "\\(\"(.*)\"\\)"), x)) {
+    grepl(.regex_select_helper(), x) &&
+    !grepl(paste0(.regex_select_helper(), "\\(\"(.*)\"\\)"), x)) {
     obj <- gsub(.regex_select_helper(), "", x)
     obj <- gsub("^\\(", "", obj)
     obj <- gsub("\\)$", "", obj)
@@ -308,7 +306,6 @@
 # workhorse for .evaluated_pattern_to_colnames()
 
 .check_pattern_and_exclude <- function(pattern, data, ignore_case, verbose) {
-
   columns <- colnames(data)
 
   # if pattern is formula, simply extract all variables
@@ -320,7 +317,7 @@
   if (is.numeric(pattern)) {
     if (any(pattern < 0) && any(pattern > 0)) {
       stop(insight::format_message(
-          paste0("You can't mix negative and positive numeric indices in `select` or `exclude`.")
+        paste0("You can't mix negative and positive numeric indices in `select` or `exclude`.")
       ), call. = FALSE)
     }
     pattern <- columns[pattern]

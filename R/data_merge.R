@@ -222,13 +222,15 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
     if (!all(by %in% colnames(x)) || !all(by %in% colnames(y))) {
       missing_in_x <- setdiff(by, colnames(x))
       missing_in_y <- setdiff(by, colnames(y))
-      stop_message <- c("Not all columns specified in `by` were found in the data frames.",
-      if (length(missing_in_x) > 0) {
-        paste0("Following columns are in `by` but absent in `x`: ", text_concatenate(missing_in_x))
-      },
-      if (length(missing_in_y) > 0) {
-        paste0("Following columns are in `by` but absent in `y`: ", text_concatenate(missing_in_y))
-      })
+      stop_message <- c(
+        "Not all columns specified in `by` were found in the data frames.",
+        if (length(missing_in_x) > 0) {
+          paste0("Following columns are in `by` but absent in `x`: ", text_concatenate(missing_in_x))
+        },
+        if (length(missing_in_y) > 0) {
+          paste0("Following columns are in `by` but absent in `y`: ", text_concatenate(missing_in_y))
+        }
+      )
       if (isTRUE(verbose)) {
         stop(
           insight::format_message(

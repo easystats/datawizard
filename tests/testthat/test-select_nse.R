@@ -98,4 +98,3 @@ test_that(".select_nse: args 'select' and 'exclude' at the same time", {
     character(0)
   )
 })
-

@@ -159,7 +159,6 @@ test_that("bind-join", {
     c(names(mtcars), "mpg_1")
   )
   expect_equal(out$mpg_1, c(1, 2))
-
 })
 
 # joins without common columns -----------------------

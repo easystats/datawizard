@@ -17,10 +17,9 @@ test_that("demean works", {
 
   set.seed(123)
   expect_equal(
-    demean(df, select = ~ Sepal.Length + binary + Species, group = ~ ID),
+    demean(df, select = ~ Sepal.Length + binary + Species, group = ~ID),
     demean(df, select = c("Sepal.Length", "binary", "Species"), group = "ID")
   )
-
 })
 
 test_that("demean interaction term", {
