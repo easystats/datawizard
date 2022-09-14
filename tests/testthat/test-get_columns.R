@@ -161,17 +161,17 @@ test_that("get_columns works with ranges", {
 test_that("get_columns works with negated ranges", {
   expect_equal(
     get_columns(iris, -(1:2)),
-    iris[c(4, 5)]
+    iris[c(3, 4, 5)]
   )
 
   expect_equal(
     get_columns(iris, -1:-2),
-    iris[c(4, 5)]
+    iris[c(3, 4, 5)]
   )
 
   expect_equal(
     get_columns(iris, exclude = -1:-2),
-    iris[1:3]
+    iris[1:2]
   )
 
   expect_equal(
@@ -413,4 +413,3 @@ test_that("old solution still works", {
     c("Sepal.Length", "Sepal.Width")
   )
 })
-
