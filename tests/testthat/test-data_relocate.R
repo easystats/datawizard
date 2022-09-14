@@ -47,7 +47,7 @@ test_that("data_relocate select-helpers", {
   )
   expect_equal(
     colnames(data_relocate(iris, select = -1)),
-    colnames(iris[c(5, 1:4)])
+    colnames(iris[c(2:5, 1)])
   )
   expect_equal(
     colnames(data_relocate(iris, select = Species, after = 1)),
