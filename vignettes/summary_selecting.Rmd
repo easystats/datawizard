@@ -66,11 +66,14 @@ iris %>%
 
 ## Formulas
 
-[FIND USE CASE]
+You can also use formulas to select variables:
 
 ```{r}
 get_columns(iris, ~ Sepal.Length + Petal.Width)
 ```
+
+This was mostly useful to use selection more easily in custom functions before
+`datawizard` 0.6.0, and is kept available for backward compatibility. 
 
 
 
