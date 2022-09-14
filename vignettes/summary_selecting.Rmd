@@ -53,7 +53,7 @@ get_columns(iris, c("Sepal.Length", "Petal.Width"))
 
 ## Unquoted names
 
-It is also possible to use unquoted names. This is useful if you use the `tidyverse`
+It is also possible to use unquoted names. This is useful if we use the `tidyverse`
 and want to be consistent about the way variable names are passed.
 
 ```{r}
@@ -86,15 +86,15 @@ get_columns(iris, c(1, 2, 5))
 
 ## Functions
 
-You can pass a function to `select`. This function will be applied to all columns
-and has to return `TRUE` or `FALSE`. For example, if you want to keep only numeric
-columns, you can use `is.numeric`.
+We can pass a function to `select`. This function will be applied to all columns
+and has to return `TRUE` or `FALSE`. For example, if we want to keep only numeric
+columns, we can use `is.numeric`.
 
 ```{r}
 get_columns(iris, is.numeric)
 ```
 
-Note that you can also define your own functions and pass them in `select`, 
+Note that we can also define our own functions and pass them in `select`, 
 *as long as they return `TRUE` or `FALSE`* when applied to a column.
 
 ```{r}
@@ -110,7 +110,7 @@ get_columns(iris, my_function)
 
 Most of the time, our data will be quite bigger than `iris`. It would be tedious
 to write the names of variables we want to select, and it would be fragile to rely
-on variable positions in the dataset as they may change later. In this case, you
+on variable positions in the dataset as they may change later. In this case, we
 can use four select helpers: `starts_with()`, `ends_with()`, `contains()`, and
 `regex()`. The former three can take several patterns, while the latter takes
 a single regular expression.
@@ -128,21 +128,21 @@ get_columns(iris, regex("^Sep|ies"))
 ```{r echo=FALSE}
 row("Note: these functions are not exported by `datawizard` but are detected and
 applied internally. This means that they won't be detected by autocompletion
-when you write them.")
+when we write them.")
 ```
 
 ```{r echo=FALSE}
-row("Note #2: because these functions are not exported, they will not create conflicts
-with the ones that come from the `tidyverse` and that have the same name. So you
-can still use `dplyr` and its friends, it won't change anything for selection in 
-`datawizard` functions!")
+row("Note #2: because these functions are not exported, they will not create 
+conflicts with the ones that come from the `tidyverse` and that have the same name.
+So we can still use `dplyr` and its friends, it won't change anything for selection
+in `datawizard` functions!")
 ```
 
 
 # Excluding variables
 
-What if you want to keep all variables except for a few ones? There are two ways
-you can invert your selection.
+What if we want to keep all variables except for a few ones? There are two ways
+we can invert our selection.
 
 The first way is to put a minus sign `"-"` in front of the `select` argument.
 
@@ -152,8 +152,16 @@ get_columns(iris, -c("Sepal.Length", "Petal.Width"))
 get_columns(iris, -starts_with("Sep", "Peta"))
 ```
 
+Note that if we use numeric indices, we can't mix negative and positive values. 
+This means that we have to use `select = -(1:2)` if we want to exclude the first
+two columns, `select = -1:2` will not work:
+
+```{r}
+get_columns(iris, -(1:2))
+```
+
 The second way is to use the argument `exclude`. This argument has the same 
-possibilities as `select`. Note that you can use both `select` and `exclude` at 
+possibilities as `select`. Note that we can use both `select` and `exclude` at 
 the same time.
 
 ```{r}
@@ -166,13 +174,46 @@ get_columns(iris, exclude = starts_with("Sep", "Peta"))
 
 # Programming with selections
 
-TODO
+Since `datawizard` 0.6.0, it is possible to pass function arguments and loop indices
+in `select` and `exclude` arguments. This makes it easier to program with
+`datawizard`.
+
+For example, if we want to let the user decide the selection they want to use:
+
+```{r}
+my_function <- function(data, selection) {
+  find_columns(data, select = selection)
+}
+my_function(iris, c("Sepal.Length"))
+my_function(iris, starts_with("Sep"))
+
+my_function_2 <- function(data, pattern) {
+  find_columns(data, select = starts_with(pattern))
+}
+my_function_2(iris, "Sep")
+```
+
+It is also possible to pass these values in loops, for example if we have a list 
+of patterns and we want to relocate columns based on these pattern, one by one:
+
+```{r}
+new_iris <- iris
+for (i in c("Sep", "Pet")) {
+  new_iris <- new_iris %>%
+    data_relocate(select = starts_with(i), after = -1)
+}
+new_iris
+```
+
+In the loop above, all columns starting with `"Sep"` were moved at the end of the data frame, and the same thing was made with all columns starting with `"Pet"`.
+
+
 
 # Useful to know
 
 ## Ignore the case
 
-In every selection that uses variable names, you can ignore the case in the 
+In every selection that uses variable names, we can ignore the case in the 
 selection by applying `ignore_case = TRUE`.
 
 ```{r}
