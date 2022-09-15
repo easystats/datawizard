@@ -2,6 +2,8 @@
 
 BREAKING CHANGES
 
+* The minimum needed R version has been bumped to `3.6`.
+
 * Following deprecated functions have been removed:
 
   `data_cut()`, `data_recode()`, `data_shift()`, `data_reverse()`, `data_rescale()`,
