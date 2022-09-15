@@ -101,7 +101,7 @@ Before we look at them individually, let's first have a look at the summary tabl
 
 | Function          | Tidyverse equivalent(s)                                             |
 | :---------------- | :------------------------------------------------------------------ |
-| `data_filter()`   | `dplyr::filter()`                                                   |
+| `data_filter()`   | `dplyr::filter()`, `dplyr::slice()`                                 |
 | `data_select()`   | `dplyr::select()`                                                   |
 | `data_arrange()`  | `dplyr::arrange()`                                                  |
 | `data_extract()`  | `dplyr::pull()`                                                     |
