@@ -111,7 +111,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
                              method = c("standard", "unbiased", "median_mad", "qcd"),
                              trim = 0, na.rm = FALSE, n = NULL, ...) {
   # TODO: Support weights
-  if (all(c(-1, 1) %in% sign(x))){
+  if (!missing(x) && all(c(-1, 1) %in% sign(x))){
     stop("CV only applicable for ratio scale variables")
   }
   method <- match.arg(method, choices = c("standard", "unbiased", "median_mad", "qcd"))
