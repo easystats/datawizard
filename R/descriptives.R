@@ -95,6 +95,7 @@ coef_var.default <- function(x, verbose = TRUE, ...) {
 #' "none", and 20 half-sandwiches is still 4 times more than 5 half-sandwiches.
 #'
 #' This means that CV is **NOT** invariance to shifting, but it is to scaling:
+
 #' ```{r}
 #' sandwiches <- c(0, 4, 15, 0, 0, 5, 2, 7)
 #' coef_var(sandwiches)
