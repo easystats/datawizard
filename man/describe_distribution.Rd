@@ -136,7 +136,8 @@ This function describes a distribution by a set of indices (e.g., measures of
 centrality, dispersion, range, skewness, kurtosis).
 }
 \details{
-If \code{x} is a data frame, only numeric variables are kept and will be displayed in the summary.
+If \code{x} is a data frame, only numeric variables are kept and will be
+displayed in the summary.
 
 If \code{x} is a list, the behavior is different whether \code{x} is a stored list. If
 \code{x} is stored (for example, \code{describe_distribution(mylist)} where \code{mylist}
