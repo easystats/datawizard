@@ -24,7 +24,8 @@
 #' @inheritParams bayestestR::point_estimate
 #' @inheritParams find_columns
 #'
-#' @details If `x` is a data frame, only numeric variables are kept and will be displayed in the summary.
+#' @details If `x` is a data frame, only numeric variables are kept and will be
+#' displayed in the summary.
 #'
 #' If `x` is a list, the behavior is different whether `x` is a stored list. If
 #' `x` is stored (for example, `describe_distribution(mylist)` where `mylist`
@@ -58,7 +59,7 @@ describe_distribution <- function(x, ...) {
 describe_distribution.default <- function(x, verbose = TRUE, ...) {
   if (verbose) {
     warning(
-      insight::format_message(paste0("Can't describe variables of class '", class(x)[1], "'.")),
+      insight::format_message(paste0("Can't describe variables of class `", class(x)[1], "`.")),
       call. = FALSE
     )
   }
