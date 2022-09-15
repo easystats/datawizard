@@ -24,7 +24,9 @@ BREAKING CHANGES
 
 NEW FUNCTIONS
 
-* `data_peek()`, to peek at values and type of variables in a data frame.
+* `data_peek()`: to peek at values and type of variables in a data frame.
+
+* `coef_var()`: to compute the coefficient of variation.
 
 CHANGES
 
