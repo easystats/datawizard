@@ -1,8 +1,8 @@
 ---
-title: "A quick summary of selecting possibilities in `datawizard`"
+title: "A quick summary of selecting syntax in `{datawizard}`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{A quick summary of selecting possibilities in `datawizard`}
+  %\VignetteIndexEntry{A quick summary of selecting syntax in `{datawizard}`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -79,8 +79,8 @@ This was mostly useful to use selection more easily in custom functions before
 
 ## Positions
 
-In addition to variable names, `select` can also take a numeric vector that indicates
-the position of the variables to select in the dataframe.
+In addition to variable names, `select` can also take indices for the variables 
+to select in the dataframe.
 
 ```{r}
 get_columns(iris, c(1, 2, 5))
@@ -89,16 +89,16 @@ get_columns(iris, c(1, 2, 5))
 
 ## Functions
 
-We can pass a function to `select`. This function will be applied to all columns
-and has to return `TRUE` or `FALSE`. For example, if we want to keep only numeric
-columns, we can use `is.numeric`.
+We can also pass a function to the `select` argument. This function will be applied
+to all columns and should return `TRUE` or `FALSE`. For example, if we want to 
+keep only numeric columns, we can use `is.numeric`.
 
 ```{r}
 get_columns(iris, is.numeric)
 ```
 
-Note that we can also define our own functions and pass them in `select`, 
-*as long as they return `TRUE` or `FALSE`* when applied to a column.
+Note that we can provide any custom function to `select`,  
+*provided it returns `TRUE` or `FALSE`* when applied to a column.
 
 ```{r}
 my_function <- function(i) {
@@ -111,12 +111,11 @@ get_columns(iris, my_function)
 
 ## Patterns
 
-Most of the time, our data will be quite bigger than `iris`. It would be tedious
-to write the names of variables we want to select, and it would be fragile to rely
-on variable positions in the dataset as they may change later. In this case, we
-can use four select helpers: `starts_with()`, `ends_with()`, `contains()`, and
-`regex()`. The former three can take several patterns, while the latter takes
-a single regular expression.
+With larger datasets, it would be tedious to write the names of variables to select,
+and it would be fragile to rely on variable positions as they may change later. 
+To this end, we can use four select helpers: `starts_with()`, `ends_with()`,
+`contains()`, and `regex()`. The first three can take several patterns, while
+`regex()` takes a single regular expression.
  
 ```{r}
 get_columns(iris, starts_with("Sep", "Peta"))
@@ -157,15 +156,16 @@ get_columns(iris, -starts_with("Sep", "Peta"))
 
 Note that if we use numeric indices, we can't mix negative and positive values. 
 This means that we have to use `select = -(1:2)` if we want to exclude the first
-two columns, `select = -1:2` will not work:
+two columns; `select = -1:2` will *not* work:
 
 ```{r}
 get_columns(iris, -(1:2))
 ```
 
 The second way is to use the argument `exclude`. This argument has the same 
-possibilities as `select`. Note that we can use both `select` and `exclude` at 
-the same time.
+possibilities as `select`. Although this may not be required in most contexts, 
+if we wanted to, we can use both `select` and `exclude` arguments at the same 
+time.
 
 ```{r}
 get_columns(iris, exclude = c("Sepal.Length", "Petal.Width"))
