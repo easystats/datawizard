@@ -114,6 +114,7 @@ articles:
     navbar: ~
     contents:
       - tidyverse_translation
+      - selection_syntax
 
   - title: Statistical Transformations
     desc: |
