@@ -54,7 +54,7 @@ distribution_coef_var <- coef_var
 coef_var.default <- function(x, verbose = TRUE, ...) {
   if (verbose) {
     warning(insight::format_message(
-      paste0("Can't compute the coefficient of variation objects of class '", class(x)[1], "'.")
+      paste0("Can't compute the coefficient of variation objects of class `", class(x)[1], "`.")
     ), call. = FALSE)
   }
   NULL
@@ -113,7 +113,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
                              trim = 0, na.rm = FALSE, n = NULL, ...) {
   # TODO: Support weights
   if (!missing(x) && all(c(-1, 1) %in% sign(x))){
-    stop("CV only applicable for ratio scale variables")
+    stop("Coefficient of variation only applicable for ratio scale variables.", call. = FALSE)
   }
   method <- match.arg(method, choices = c("standard", "unbiased", "median_mad", "qcd"))
   if (is.null(mu) || is.null(sigma)) {
