@@ -64,19 +64,6 @@ iris %>%
 ```
 
 
-## Formulas
-
-You can also use formulas to select variables:
-
-```{r}
-data_select(iris, ~ Sepal.Length + Petal.Width)
-```
-
-This was mostly useful to use selection more easily in custom functions before
-`datawizard` 0.6.0, and is kept available for backward compatibility. 
-
-
-
 ## Positions
 
 In addition to variable names, `select` can also take indices for the variables 
@@ -228,4 +215,15 @@ data_select(iris, ~ Sepal.length + petal.Width, ignore_case = TRUE)
 
 data_select(iris, starts_with("sep", "peta"), ignore_case = TRUE)
 ```
+
+## Formulas
+
+It is also possible to use formulas to select variables:
+
+```{r}
+data_select(iris, ~ Sepal.Length + Petal.Width)
+```
+
+This made it easier to use selection in custom functions before `datawizard` 
+0.6.0, and is kept available for backward compatibility. 
 
