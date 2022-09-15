@@ -25,7 +25,7 @@ authors:
   
 affiliations:
 - index: 1
-  name: esqLABS GmbH, Germany
+  name: cynkra GmbH, Germany
 - index: 2
   name: Nanyang Technological University, Singapore
 - index: 3
