@@ -48,7 +48,7 @@ This is the most simple way to select one or several variables. Just use a chara
 vector containing variables names, like in base R.
 
 ```{r}
-get_columns(iris, c("Sepal.Length", "Petal.Width"))
+data_select(iris, c("Sepal.Length", "Petal.Width"))
 ```
 
 ## Unquoted names
@@ -69,7 +69,7 @@ iris %>%
 You can also use formulas to select variables:
 
 ```{r}
-get_columns(iris, ~ Sepal.Length + Petal.Width)
+data_select(iris, ~ Sepal.Length + Petal.Width)
 ```
 
 This was mostly useful to use selection more easily in custom functions before
@@ -83,7 +83,7 @@ In addition to variable names, `select` can also take indices for the variables
 to select in the dataframe.
 
 ```{r}
-get_columns(iris, c(1, 2, 5))
+data_select(iris, c(1, 2, 5))
 ```
 
 
@@ -94,18 +94,17 @@ to all columns and should return `TRUE` or `FALSE`. For example, if we want to
 keep only numeric columns, we can use `is.numeric`.
 
 ```{r}
-get_columns(iris, is.numeric)
+data_select(iris, is.numeric)
 ```
 
-Note that we can provide any custom function to `select`,  
-*provided it returns `TRUE` or `FALSE`* when applied to a column.
+Note that we can provide any custom function to `select`, *provided it returns `TRUE` or `FALSE`* when applied to a column.
 
 ```{r}
 my_function <- function(i) {
   is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
 }
 
-get_columns(iris, my_function)
+data_select(iris, my_function)
 ```
 
 
@@ -118,13 +117,13 @@ To this end, we can use four select helpers: `starts_with()`, `ends_with()`,
 `regex()` takes a single regular expression.
  
 ```{r}
-get_columns(iris, starts_with("Sep", "Peta"))
+data_select(iris, starts_with("Sep", "Peta"))
 
-get_columns(iris, ends_with("dth", "ies"))
+data_select(iris, ends_with("dth", "ies"))
 
-get_columns(iris, contains("pal", "ec"))
+data_select(iris, contains("pal", "ec"))
 
-get_columns(iris, regex("^Sep|ies"))
+data_select(iris, regex("^Sep|ies"))
 ```
 
 ```{r echo=FALSE}
@@ -149,11 +148,11 @@ we can invert our selection.
 The first way is to put a minus sign `"-"` in front of the `select` argument.
 
 ```{r}
-get_columns(iris, -c("Sepal.Length", "Petal.Width"))
+data_select(iris, -c("Sepal.Length", "Petal.Width"))
 
-get_columns(iris, -starts_with("Sep", "Peta"))
+data_select(iris, -starts_with("Sep", "Peta"))
 
-get_columns(iris, -is.numeric)
+data_select(iris, -is.numeric)
 ```
 
 Note that if we use numeric indices, we can't mix negative and positive values. 
@@ -161,18 +160,18 @@ This means that we have to use `select = -(1:2)` if we want to exclude the first
 two columns; `select = -1:2` will *not* work:
 
 ```{r}
-get_columns(iris, -(1:2))
+data_select(iris, -(1:2))
 ```
 
 The second way is to use the argument `exclude`. This argument has the same 
 possibilities as `select`. Although this may not be required in most contexts, 
-if we wanted to, we can use both `select` and `exclude` arguments at the same 
+if we wanted to, we could use both `select` and `exclude` arguments at the same 
 time.
 
 ```{r}
-get_columns(iris, exclude = c("Sepal.Length", "Petal.Width"))
+data_select(iris, exclude = c("Sepal.Length", "Petal.Width"))
 
-get_columns(iris, exclude = starts_with("Sep", "Peta"))
+data_select(iris, exclude = starts_with("Sep", "Peta"))
 ```
 
 
@@ -199,7 +198,7 @@ my_function_2(iris, "Sep")
 ```
 
 It is also possible to pass these values in loops, for example if we have a list 
-of patterns and we want to relocate columns based on these pattern, one by one:
+of patterns and we want to relocate columns based on these patterns, one by one:
 
 ```{r}
 new_iris <- iris
@@ -210,7 +209,8 @@ for (i in c("Sep", "Pet")) {
 new_iris
 ```
 
-In the loop above, all columns starting with `"Sep"` were moved at the end of the data frame, and the same thing was made with all columns starting with `"Pet"`.
+In the loop above, all columns starting with `"Sep"` are moved at the end of the
+data frame, and the same thing was made with all columns starting with `"Pet"`.
 
 
 
@@ -222,10 +222,10 @@ In every selection that uses variable names, we can ignore the case in the
 selection by applying `ignore_case = TRUE`.
 
 ```{r}
-get_columns(iris, c("sepal.length", "petal.width"), ignore_case = TRUE)
+data_select(iris, c("sepal.length", "petal.width"), ignore_case = TRUE)
 
-get_columns(iris, ~ Sepal.length + petal.Width, ignore_case = TRUE)
+data_select(iris, ~ Sepal.length + petal.Width, ignore_case = TRUE)
 
-get_columns(iris, starts_with("sep", "peta"), ignore_case = TRUE)
+data_select(iris, starts_with("sep", "peta"), ignore_case = TRUE)
 ```
 
