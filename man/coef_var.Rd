@@ -71,7 +71,7 @@ scale still results in a ratio scale. So I can re define "how many half
 sandwiches did I eat this week ( = sandwiches * 0.5) and 0 would still mean
 "none", and 20 half-sandwiches is still 4 times more than 5 half-sandwiches.
 
-This means that CV is \strong{NOT} invariance to shifting, but it is to scaling:
+This means that CV is \strong{NOT} invariant to shifting, but it is to scaling:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{sandwiches <- c(0, 4, 15, 0, 0, 5, 2, 7)
 coef_var(sandwiches)
