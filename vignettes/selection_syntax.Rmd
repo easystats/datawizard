@@ -152,6 +152,8 @@ The first way is to put a minus sign `"-"` in front of the `select` argument.
 get_columns(iris, -c("Sepal.Length", "Petal.Width"))
 
 get_columns(iris, -starts_with("Sep", "Peta"))
+
+get_columns(iris, -is.numeric)
 ```
 
 Note that if we use numeric indices, we can't mix negative and positive values. 
