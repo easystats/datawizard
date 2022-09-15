@@ -60,7 +60,7 @@ coef_var.default <- function(x, verbose = TRUE, ...) {
   NULL
 }
 
-#' @param x A numeric vector, or vector of values than can be converted to numeric.
+#' @param x A numeric vector of ratio scale (see details), or vector of values than can be coerced to one.
 #' @param mu A numeric vector of mean values to use to compute the coefficient
 #'   of variation. If supplied, `x` is not used to compute the mean.
 #' @param sigma A numeric vector of standard deviation values to use to compute the coefficient
@@ -82,6 +82,28 @@ coef_var.default <- function(x, verbose = TRUE, ...) {
 #'   for small-sample bias?
 #' @param ... Further arguments passed to computation functions.
 #'
+#' @details
+#' CV is only applicable of values taken on a ratio scale: values that have a
+#' *fixed* meaningfully defined 0 (which is either the lowest or highest
+#' possible value), and that ratios between them are interpretable For example,
+#' how many sandwiches have I eaten this week? 0 means "none" and 20 sandwiches
+#' is 4 times more than 5 sandwiches. If I were to center the number of
+#' sandwiches, it will no longer be on a ratio scale (0 is no "none" it is the
+#' mean, and the ratio between 4 and -2 is not meaningful). Scaling a ratio
+#' scale still results in a ratio scale. So I can re define "how many half
+#' sandwiches did I eat this week ( = sandwiches * 0.5) and 0 would still mean
+#' "none", and 20 half-sandwiches is still 4 times more than 5 half-sandwiches.
+#'
+#' This means that CV is **NOT** invariance to shifting, but it is to scaling:
+#' ```{r}
+#' sandwiches <- c(0, 4, 15, 0, 0, 5, 2, 7)
+#' coef_var(sandwiches)
+#'
+#' coef_var(sandwiches / 2) # same
+#'
+#' coef_var(sandwiches + 4) # different! 0 is no longer meaningful!
+#' ````
+#'
 #' @rdname coef_var
 #'
 #' @export
@@ -89,6 +111,9 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
                              method = c("standard", "unbiased", "median_mad", "qcd"),
                              trim = 0, na.rm = FALSE, n = NULL, ...) {
   # TODO: Support weights
+  if (all(c(-1, 1) %in% sign(x))){
+    stop("CV only applicable for ratio scale variables")
+  }
   method <- match.arg(method, choices = c("standard", "unbiased", "median_mad", "qcd"))
   if (is.null(mu) || is.null(sigma)) {
     if (isTRUE(na.rm)) {

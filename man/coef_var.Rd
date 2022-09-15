@@ -23,7 +23,7 @@ distribution_coef_var(x, ...)
 )
 }
 \arguments{
-\item{x}{A numeric vector, or vector of values than can be converted to numeric.}
+\item{x}{A numeric vector of ratio scale (see details), or vector of values than can be coerced to one.}
 
 \item{...}{Further arguments passed to computation functions.}
 
@@ -58,6 +58,31 @@ The computed coefficient of variation for \code{x}.
 \description{
 Compute the coefficient of variation (CV, ratio of the standard deviation to
 the mean, \eqn{\sigma/\mu}) for a set of numeric values.
+}
+\details{
+CV is only applicable of values taken on a ratio scale: values that have a
+\emph{fixed} meaningfully defined 0 (which is either the lowest or highest
+possible value), and that ratios between them are interpretable For example,
+how many sandwiches have I eaten this week? 0 means "none" and 20 sandwiches
+is 4 times more than 5 sandwiches. If I were to center the number of
+sandwiches, it will no longer be on a ratio scale (0 is no "none" it is the
+mean, and the ratio between 4 and -2 is not meaningful). Scaling a ratio
+scale still results in a ratio scale. So I can re define "how many half
+sandwiches did I eat this week ( = sandwiches * 0.5) and 0 would still mean
+"none", and 20 half-sandwiches is still 4 times more than 5 half-sandwiches.
+
+This means that CV is \strong{NOT} invariance to shifting, but it is to scaling:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{sandwiches <- c(0, 4, 15, 0, 0, 5, 2, 7)
+coef_var(sandwiches)
+#> [1] 1.239094
+
+coef_var(sandwiches / 2) # same
+#> [1] 1.239094
+
+coef_var(sandwiches + 4) # different! 0 is no longer meaningful!
+#> [1] 0.6290784
+}\if{html}{\out{</div>}}
 }
 \examples{
 coef_var(1:10)
