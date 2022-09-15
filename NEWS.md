@@ -57,6 +57,10 @@ for (i in c("Sepal", "Sp")) {
 }
 ```
 
+* There is now a vignette summarizing the various ways to select or exclude
+  variables in most `{datawizard}` functions.
+
+
 # datawizard 0.5.1
 
 * Fixes failing tests due to `{poorman}` update.
