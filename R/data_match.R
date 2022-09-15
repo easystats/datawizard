@@ -1,3 +1,4 @@
+# styler: off
 #' Return filtered or sliced data frame, or row indices
 #'
 #' Return a filtered (or sliced) data frame or row indices of a data frame that
@@ -77,6 +78,22 @@
 #'
 #' # slice data frame by row indices
 #' data_filter(mtcars, 5:10)
+#'
+#' # Define a custom function containing data_filter() and pass variable names
+#' # to it using curly brackets
+#' my_filter <- function(data, variable) {
+#'   data_filter(data, {variable} <= 20)
+#' }
+#' my_filter(mtcars, "mpg")
+#'
+#' # Pass complete filter-condition as string
+#' my_filter <- function(data, condition) {
+#'   data_filter(data, {condition})
+#' }
+#' my_filter(mtcars, "am != 0")
+#'
+#' # string can also be used directly as argument
+#' data_filter(mtcars, "am != 0")
 #' @inherit data_rename seealso
 #' @export
 data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = TRUE, ...) {
@@ -99,7 +116,9 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
   # sanity check
   shared_columns <- intersect(colnames(x), colnames(to))
   if (is.null(shared_columns) || length(shared_columns) == 0) {
-    stop(insight::format_message("None of the columns from the data frame with matching conditions were found in `x`."))
+    stop(insight::format_message(
+      "None of the columns from the data frame with matching conditions were found in `x`."
+    ), call. = FALSE)
   }
 
   # only select common columns
@@ -168,6 +187,21 @@ data_filter <- function(x, filter, ...) {
     # (cf easystats/datawizard#237)
     .check_filter_syntax(condition)
 
+    has_curley <- grepl("{", condition, fixed = TRUE)
+
+    if (has_curley) {
+      condition <- gsub("\\{ ", "\\{", condition)
+      condition <- gsub(" \\}", "\\}", condition)
+
+      curley_vars <- regmatches(condition, gregexpr("[^{\\}]+(?=\\})", condition, perl = TRUE))
+      curley_vars <- unlist(curley_vars)
+
+      for (i in curley_vars) {
+        token <- get(i, envir = parent.frame())
+        condition <- gsub(paste0("{", i, "}"), token, condition, fixed = TRUE)
+      }
+    }
+
     out <- tryCatch(
       subset(x, subset = eval(parse(text = condition), envir = new.env())),
       warning = function(e) NULL,
@@ -227,3 +261,4 @@ data_filter <- function(x, filter, ...) {
     ), call. = FALSE)
   }
 }
+# styler: on

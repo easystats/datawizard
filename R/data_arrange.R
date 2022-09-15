@@ -30,7 +30,7 @@ data_arrange <- function(data, select = NULL, safe = TRUE) {
 
   # coerce to data frame?
   if (!is.data.frame(data)) {
-    data <- tryCatch(as.data.frame(data),
+    data <- tryCatch(as.data.frame(data, stringsAsFactors = FALSE),
       error = function(e) {
         stop("Could not coerce `data` into a data frame.", call. = FALSE)
       }

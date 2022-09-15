@@ -70,45 +70,48 @@ test_that("recode factor labels", {
 test_that("recode data frame", {
   data(iris)
   x <- iris
-  out <- categorize(x, "median", select = c("Sepal.Length", "Sepal.Width"))
+  out <- categorize(x, split = "median", select = c("Sepal.Length", "Sepal.Width"))
   expect_s3_class(out, "data.frame")
   expect_equal(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
   expect_equal(out$Petal.Length, iris$Petal.Length)
 
-  out <- categorize(x, "median", select = starts_with("Sepal"))
+  out <- categorize(x, split = "median", select = starts_with("Sepal"))
   expect_s3_class(out, "data.frame")
   expect_equal(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
   expect_equal(out$Petal.Length, iris$Petal.Length)
 
-  out <- categorize(x, "median", select = ~ Sepal.Width + Sepal.Length)
+  out <- categorize(x, split = "median", select = ~ Sepal.Width + Sepal.Length)
   expect_s3_class(out, "data.frame")
   expect_equal(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
   expect_equal(out$Petal.Length, iris$Petal.Length)
 
-  out <- categorize(x, "median", select = Sepal.Length)
+  out <- categorize(x, split = "median", select = Sepal.Length)
   expect_s3_class(out, "data.frame")
   expect_equal(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
   expect_equal(out$Petal.Length, iris$Petal.Length)
 
-  out <- categorize(x, "median", select = c("sepal.Length", "sepal.Width"), ignore_case = FALSE)
+  expect_warning(
+    out <- categorize(x, split = "median", select = c("sepal.Length", "sepal.Width"), ignore_case = FALSE),
+    "not found"
+  )
   expect_equal(out$Sepal.Length, iris$Sepal.Length)
 
-  out <- categorize(x, "median", select = starts_with("sepal"), ignore_case = TRUE)
+  out <- categorize(x, split = "median", select = starts_with("sepal"), ignore_case = TRUE)
   expect_s3_class(out, "data.frame")
   expect_equal(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
   expect_equal(out$Petal.Length, iris$Petal.Length)
 
-  out <- categorize(x, "median", select = starts_with("sepal"), ignore_case = FALSE)
+  out <- categorize(x, split = "median", select = starts_with("sepal"), ignore_case = FALSE)
   expect_equal(out$Sepal.Length, iris$Sepal.Length)
 
-  out <- categorize(x, "median", select = starts_with("sepal"), ignore_case = TRUE, append = "_r")
+  out <- categorize(x, split = "median", select = starts_with("sepal"), ignore_case = TRUE, append = "_r")
   expect_equal(colnames(out), c(
     "Sepal.Length", "Sepal.Width", "Petal.Length",
     "Petal.Width", "Species", "Sepal.Length_r", "Sepal.Width_r"
   ))
 
   if (require("poorman")) {
-    out <- categorize(iris, "median", select = starts_with("Sepal"))
+    out <- categorize(iris, split = "median", select = starts_with("Sepal"))
     expect_equal(
       out$Sepal.Length,
       c(
@@ -123,7 +126,7 @@ test_that("recode data frame", {
       )
     )
     x <- poorman::group_by(iris, Species)
-    out <- categorize(x, "median", select = starts_with("Sepal"))
+    out <- categorize(x, split = "median", select = starts_with("Sepal"))
     expect_equal(
       out$Sepal.Length,
       c(

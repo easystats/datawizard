@@ -47,8 +47,10 @@ vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
 (e.g. \code{1} or \code{c(1, 3, 5)}),
 \item a vector of negative integers, giving the positions counting from the
 right (e.g., \code{-1} or \code{-1:-3}),
-\item one of the following select-helpers: \code{starts_with("")}, \code{ends_with("")},
-\code{contains("")}, a range using \code{:} or \code{regex("")},
+\item one of the following select-helpers: \code{starts_with()}, \code{ends_with()},
+\code{contains()}, a range using \code{:} or \code{regex("")}. \code{starts_with()},
+\code{ends_with()}, and  \code{contains()} accept several patterns, e.g
+\code{starts_with("Sep", "Petal")}.
 \item or a function testing for logical conditions, e.g. \code{is.numeric()} (or
 \code{is.numeric}), or any user-defined function that selects the variables
 for which the function returns \code{TRUE} (like: \code{foo <- function(x) mean(x) > 3}),
@@ -95,17 +97,6 @@ This function creates frequency tables of variables, including
 the number of levels/values as well as the distribution of raw, valid and
 cumulative percentages.
 }
-\section{Selection of variables - the \code{select} argument}{
-
-For most functions that have a \code{select} argument (including this function),
-the complete input data frame is returned, even when \code{select} only selects
-a range of variables. That is, the function is only applied to those variables
-that have a match in \code{select}, while all other variables remain unchanged.
-In other words: for this function, \code{select} will not omit any non-included
-variables, so that the returned data frame will include all variables
-from the input data frame.
-}
-
 \examples{
 data(efc)
 

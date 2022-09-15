@@ -161,17 +161,17 @@ test_that("get_columns works with ranges", {
 test_that("get_columns works with negated ranges", {
   expect_equal(
     get_columns(iris, -(1:2)),
-    iris[c(4, 5)]
+    iris[c(3, 4, 5)]
   )
 
   expect_equal(
     get_columns(iris, -1:-2),
-    iris[c(4, 5)]
+    iris[c(3, 4, 5)]
   )
 
   expect_equal(
     get_columns(iris, exclude = -1:-2),
-    iris[1:3]
+    iris[1:2]
   )
 
   expect_equal(
@@ -233,11 +233,6 @@ test_that("get_columns works, other cases", {
     mtcars[c("gear", "cyl")]
   )
 
-  expect_equal(
-    get_columns(iris, Spec),
-    iris["Species"]
-  )
-
   expect_warning(expect_null(get_columns(mtcars, ends_with("abc"))))
 
   expect_equal(
@@ -277,7 +272,7 @@ test_that("get_columns from other functions", {
 
   expect_equal(
     test_fun1(iris, starts_with("Sep")),
-    iris[c("Sepal.Width", "Petal.Width", "Species")]
+    iris[c("Sepal.Length", "Sepal.Width")]
   )
 
   test_fun1a <- function(data, i) {
@@ -301,7 +296,7 @@ test_that("get_columns from other functions", {
   }
   expect_equal(
     test_fun1c(iris, c("Sepal.Length", "Sepal.Width")),
-    iris[c("Sepal.Width", "Petal.Width", "Species")]
+    iris[c("Petal.Length", "Petal.Width", "Species")]
   )
 
 
@@ -317,7 +312,10 @@ test_that("get_columns from other functions", {
     i <- "Sep"
     get_columns(data, select = starts_with(i))
   }
-  expect_warning(expect_null(test_fun3(iris)))
+  expect_equal(
+    test_fun3(iris),
+    iris[, c("Sepal.Length", "Sepal.Width")]
+  )
 
   test_top <- function(x) {
     testfun1 <- function(i) {
@@ -346,4 +344,72 @@ test_that("get_columns preserves attributes", {
   a2 <- attributes(out2)
 
   expect_equal(names(a1), names(a2))
+})
+
+# Select helpers work in functions and loops
+
+test_that("select helpers work in functions and loops", {
+  foo <- function(data, i) {
+    find_columns(data, select = starts_with(i))
+  }
+  expect_equal(
+    foo(iris, "Sep"),
+    c("Sepal.Length", "Sepal.Width")
+  )
+
+  for (i in "Sepal") {
+    x <- find_columns(iris, select = starts_with(i))
+  }
+  expect_equal(
+    x,
+    c("Sepal.Length", "Sepal.Width")
+  )
+
+  for (i in "Length") {
+    x <- find_columns(iris, select = ends_with(i))
+  }
+  expect_equal(
+    x,
+    c("Sepal.Length", "Petal.Length")
+  )
+})
+
+test_that("select helpers work in functions and loops even if there's an object with the same name in the environment above", {
+  i <- "Petal"
+  foo <- function(data, i) {
+    find_columns(data, select = starts_with(i))
+  }
+  expect_equal(
+    foo(iris, "Sep"),
+    c("Sepal.Length", "Sepal.Width")
+  )
+
+  for (i in "Sepal") {
+    x <- find_columns(iris, select = starts_with(i))
+  }
+  expect_equal(
+    x,
+    c("Sepal.Length", "Sepal.Width")
+  )
+
+  i <- "Width"
+
+  for (i in "Length") {
+    x <- find_columns(iris, select = ends_with(i))
+  }
+  expect_equal(
+    x,
+    c("Sepal.Length", "Petal.Length")
+  )
+})
+
+test_that("old solution still works", {
+  foo <- function(data) {
+    i <- "Sep"
+    find_columns(data, select = i, regex = TRUE)
+  }
+  expect_equal(
+    foo(iris),
+    c("Sepal.Length", "Sepal.Width")
+  )
 })

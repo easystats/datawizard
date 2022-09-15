@@ -101,7 +101,7 @@ Before we look at them individually, let's first have a look at the summary tabl
 
 | Function          | Tidyverse equivalent(s)                                             |
 | :---------------- | :------------------------------------------------------------------ |
-| `data_filter()`   | `dplyr::filter()`                                                   |
+| `data_filter()`   | `dplyr::filter()`, `dplyr::slice()`                                 |
 | `data_select()`   | `dplyr::select()`                                                   |
 | `data_arrange()`  | `dplyr::arrange()`                                                  |
 | `data_extract()`  | `dplyr::pull()`                                                     |
@@ -111,6 +111,7 @@ Before we look at them individually, let's first have a look at the summary tabl
 | `data_to_wide()`  | `tidyr::pivot_wider()`                                              |
 | `data_join()`     | `dplyr::inner_join()`, `dplyr::left_join()`, `dplyr::right_join()`, |
 |                   | `dplyr::full_join()`, `dplyr::anti_join()`, `dplyr::semi_join()`    |
+| `data_peek()`     | `dplyr::glimpse()`                                                  |
 
 ## Filtering {#filtering}
 
@@ -803,7 +804,8 @@ band_members %>%
 # Other useful functions
 
 `{datawizard}` contains other functions that are not necessarily included in 
-`{dplyr}` or `{tidyr}`. Some of them are inspired from the package `janitor`. 
+`{dplyr}` or `{tidyr}` or do not directly modify the data. Some of them are 
+inspired from the package `janitor`. 
 
 ## Work with rownames
 
@@ -844,3 +846,27 @@ x2 %>%
   colnames_to_row()
 ```
 
+## Take a quick look at the data
+
+:::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
+
+::: {}
+
+```{r glimpse, class.source = "datawizard"}
+# ---------- datawizard -----------
+data_peek(iris)
+```
+:::
+
+::: {}
+
+```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
+glimpse(iris)
+```
+:::
+
+::::
+
+```{r glimpse, eval = TRUE, echo = FALSE}
+```

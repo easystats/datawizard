@@ -1,13 +1,27 @@
 test_that("text formatting helpers work as expected", {
-  expect_equal(
-    format_text(c("A very long First", "Some similar long Second", "Shorter Third", "More or less long Fourth", "And finally the Last"), width = 20),
-    "A very long First,\nSome similar long\nSecond, Shorter\nThird, More or less\nlong Fourth and And\nfinally the Last\n"
-  )
+  expect_snapshot(format_text(
+    c(
+      "A very long First",
+      "Some similar long Second",
+      "Shorter Third",
+      "More or less long Fourth",
+      "And finally the Last"
+    ),
+    width = 20
+  ))
 
-  expect_equal(
-    format_text(c("A very long First", "Some similar long Second", "Shorter Third", "More or less long Fourth", "And finally the Last"), last = " or ", enclose = "`", width = 20),
-    "`A very long\nFirst`, `Some\nsimilar long\nSecond`, `Shorter\nThird`, `More or\nless long Fourth`\nor `And finally the\nLast`\n"
-  )
+  expect_snapshot(format_text(
+    c(
+      "A very long First",
+      "Some similar long Second",
+      "Shorter Third",
+      "More or less long Fourth",
+      "And finally the Last"
+    ),
+    last = " or ",
+    enclose = "`",
+    width = 20
+  ))
 
   expect_equal(
     text_fullstop(c("something", "something else.")),

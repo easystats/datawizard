@@ -68,7 +68,13 @@ standardize.default <- function(x,
                                 include_response = TRUE,
                                 ...) {
   if (!insight::is_model(x)) {
-    warning(insight::format_message(paste0("Objects or variables of class '", class(x)[1], "' cannot be standardized.")), call. = FALSE)
+    warning(insight::format_message(
+      paste0(
+        "Objects or variables of class '",
+        class(x)[1],
+        "' cannot be standardized."
+      )
+    ), call. = FALSE)
     return(x)
   }
 
@@ -100,8 +106,12 @@ standardize.default <- function(x,
   }
 
   if (m_info$is_bayesian) {
-    warning(insight::format_message("Standardizing variables without adjusting priors may lead to bogus results unless priors are auto-scaled."),
-      call. = FALSE, immediate. = TRUE
+    warning(
+      insight::format_message(
+        "Standardizing variables without adjusting priors may lead to bogus results unless priors are auto-scaled."
+      ),
+      call. = FALSE,
+      immediate. = TRUE
     )
   }
 
@@ -149,7 +159,9 @@ standardize.default <- function(x,
   # because negative weights will cause errors in "update()"
   weight_variable <- insight::find_weights(x)
 
-  if (!is.null(weight_variable) && !weight_variable %in% colnames(data) && "(weights)" %in% colnames(data)) {
+  if (!is.null(weight_variable) &&
+    !weight_variable %in% colnames(data) &&
+    "(weights)" %in% colnames(data)) {
     data$.missing_weight <- data[["(weights)"]]
     colnames(data)[ncol(data)] <- weight_variable
     weight_variable <- c(weight_variable, "(weights)")
@@ -159,9 +171,8 @@ standardize.default <- function(x,
   random_group_factor <- insight::find_random(x, flatten = TRUE, split_nested = TRUE)
 
 
-
-
   ## ---- SUMMARY: TO Z OR NOT TO Z? ----
+
   dont_standardize <- c(resp, weight_variable, random_group_factor)
   do_standardize <- setdiff(colnames(data), dont_standardize)
 
@@ -233,7 +244,12 @@ standardize.default <- function(x,
   }
 
   if (verbose && length(c(log_terms, sqrt_terms))) {
-    message(insight::format_message("Formula contains log- or sqrt-terms. See help(\"standardize\") for how such terms are standardized."))
+    message(
+      insight::format_message(
+        "Formula contains log- or sqrt-terms.",
+        "See help(\"standardize\") for how such terms are standardized."
+      )
+    )
   }
 
 
@@ -363,7 +379,13 @@ standardize.mediate <- function(x,
         y_data_std = y_data_std, m_data_std = m_data_std
       )
     )
-    if (verbose) message(insight::format_message("Covariates' values have been rescaled to their standardized scales."))
+    if (verbose) {
+      message(
+        insight::format_message(
+          "Covariates' values have been rescaled to their standardized scales."
+        )
+      )
+    }
   }
 
   # if (is.numeric(y_data[[x$treat]]) || is.numeric(m_data[[x$treat]])) {
@@ -486,8 +508,12 @@ standardize.biglm <- standardize.wbm
 }
 
 #' @keywords internal
-.rescale_fixed_values <- function(val, cov_nm,
-                                  y_data, m_data, y_data_std, m_data_std) {
+.rescale_fixed_values <- function(val,
+                                  cov_nm,
+                                  y_data,
+                                  m_data,
+                                  y_data_std,
+                                  m_data_std) {
   if (cov_nm %in% colnames(y_data)) {
     temp_data <- y_data
     temp_data_std <- y_data_std

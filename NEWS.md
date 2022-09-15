@@ -1,6 +1,10 @@
+# datawizard (development version)
+
 # datawizard 0.6.0
 
 BREAKING CHANGES
+
+* The minimum needed R version has been bumped to `3.6`.
 
 * Following deprecated functions have been removed:
 
@@ -12,18 +16,56 @@ BREAKING CHANGES
   
 * New `recode_values()` alias is introduced for `change_code()`, latter of which
   will be removed in the next release.
+  
+* `data_merge()` now errors if columns specified in `by` are not in both datasets.
+
+* Using negative values in arguments `select` and `exclude` now removes the columns
+  from the selection/exclusion. The previous behavior was to start the 
+  selection/exclusion from the end of the dataset, which was inconsistent with
+  the use of "-" with other selecting possibilities.
 
 NEW FUNCTIONS
 
-* `data_peek()`, to peek at values and type of variables in a data frame.
+* `data_peek()`: to peek at values and type of variables in a data frame.
+
+* `coef_var()`: to compute the coefficient of variation.
 
 CHANGES
 
 * `data_filter()` will give more informative messages on malformed syntax of
   the `filter` argument.
+  
+* It is now possible to use curly brackets to pass variable names to `data_filter()`,
+  like the following example. See examples section in the documentation of 
+  `data_filter()`.
 
 * The `regex` argument was added to functions that use select-helpers and did
   not already have this argument.
+  
+* Select helpers `starts_with()`, `ends_with()`, and  `contains()` now accept
+  several patterns, e.g `starts_with("Sep", "Petal")`.
+  
+* Arguments `select` and `exclude` that are present in most functions have been
+  improved to work in loops and in custom functions. For example, the following 
+  code now works:
+  
+```r
+foo <- function(data) {
+  i <- "Sep"
+  find_columns(data, select = starts_with(i))
+}
+foo(iris)
+
+for (i in c("Sepal", "Sp")) {
+  head(iris) |>
+    find_columns(select = starts_with(i)) |>
+    print()
+}
+```
+
+* There is now a vignette summarizing the various ways to select or exclude
+  variables in most `{datawizard}` functions.
+
 
 # datawizard 0.5.1
 

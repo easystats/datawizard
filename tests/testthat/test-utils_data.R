@@ -67,7 +67,8 @@ test_that("rownames_as_column and column_as_rownames cancel each other", {
 test_char <- data.frame(
   a = c("iso", 2, 5),
   b = c("year", 3, 6),
-  c = c(NA, 5, 7)
+  c = c(NA, 5, 7),
+  stringsAsFactors = FALSE
 )
 
 test_num <- data.frame(
@@ -140,7 +141,8 @@ test_that("row_to_colnames: check arg 'na_prefix'", {
 foo <- data.frame(
   ARG = c("BRA", "FRA"),
   `1960` = c(1960, 1960),
-  `2000` = c(2000, 2000)
+  `2000` = c(2000, 2000),
+  stringsAsFactors = FALSE
 )
 
 test_that("colnames_to_row works", {

@@ -5,8 +5,18 @@ test_that("find_columns works as expected", {
   )
 
   expect_equal(
+    find_columns(iris, starts_with("Sepal", "Petal")),
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+  )
+
+  expect_equal(
     find_columns(iris, ends_with("Width")),
     c("Sepal.Width", "Petal.Width")
+  )
+
+  expect_equal(
+    find_columns(iris, ends_with("Length", "Width")),
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
   )
 
   expect_equal(
@@ -25,6 +35,11 @@ test_that("find_columns works as expected", {
   )
 
   expect_equal(
+    find_columns(iris, contains("en", "idt")),
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+  )
+
+  expect_equal(
     find_columns(mtcars, c("am", "gear", "cyl")),
     c("am", "gear", "cyl")
   )
@@ -32,11 +47,6 @@ test_that("find_columns works as expected", {
   expect_equal(
     find_columns(mtcars, c("vam", "gear", "cyl")),
     c("gear", "cyl")
-  )
-
-  expect_equal(
-    find_columns(iris, Spec),
-    "Species"
   )
 
   expect_warning(expect_null(find_columns(mtcars, ends_with("abc"))))
@@ -74,13 +84,9 @@ test_that("find_columns from other functions", {
     c("Sepal.Length", "Sepal.Width")
   )
 
-  # This turns out to be that the variable name "i" in test_fun1
-  # becomes the search string "i" after evaluation, so all columns
-  # containing an "i" will be returned.
-
   expect_equal(
     test_fun1(iris, starts_with("Sep")),
-    c("Sepal.Width", "Petal.Width", "Species")
+    c("Sepal.Length", "Sepal.Width")
   )
 
   test_fun1a <- function(data, i) {
@@ -111,13 +117,67 @@ test_that("find_columns from other functions", {
     i <- "Sep"
     find_columns(data, select = starts_with(i))
   }
-  expect_warning(expect_null(test_fun3(iris)))
+  expect_equal(
+    test_fun3(iris),
+    c("Sepal.Length", "Sepal.Width")
+  )
 })
 
-# select helpers ------------------------------
 test_that("find_columns regex", {
   expect_equal(
     find_columns(mtcars, select = "pg", regex = TRUE),
     find_columns(mtcars, select = "mpg")
+  )
+})
+
+test_that("find_columns works correctly with minus sign", {
+  expect_equal(
+    find_columns(iris, -"Sepal.Length"),
+    c("Sepal.Width", "Petal.Length", "Petal.Width", "Species")
+  )
+
+  expect_equal(
+    find_columns(iris, -c("Sepal.Length", "Petal.Width")),
+    c("Sepal.Width", "Petal.Length", "Species")
+  )
+
+  expect_equal(
+    find_columns(iris, -1),
+    c("Sepal.Width", "Petal.Length", "Petal.Width", "Species")
+  )
+
+  expect_error(
+    find_columns(iris, -1:2),
+    regexp = "can't mix negative"
+  )
+
+  expect_equal(
+    find_columns(iris, -(1:2)),
+    c("Petal.Length", "Petal.Width", "Species")
+  )
+
+  expect_equal(
+    find_columns(iris, -c(1, 3)),
+    c("Sepal.Width", "Petal.Width", "Species")
+  )
+
+  expect_equal(
+    find_columns(iris, -starts_with("Sepal", "Petal")),
+    "Species"
+  )
+
+  expect_equal(
+    find_columns(iris, -ends_with("Length", "Width")),
+    "Species"
+  )
+
+  expect_equal(
+    find_columns(iris, -contains("en", "idt")),
+    "Species"
+  )
+
+  expect_equal(
+    find_columns(iris, -c("Sepal.Length", "Petal.Width"), exclude = "Species"),
+    c("Sepal.Width", "Petal.Length")
   )
 })

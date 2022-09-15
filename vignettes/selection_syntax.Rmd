@@ -1,0 +1,229 @@
+---
+title: "A quick summary of selecting syntax in `{datawizard}`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{A quick summary of selecting syntax in `{datawizard}`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo=FALSE, message=FALSE}
+library(datawizard)
+library(poorman)
+library(htmltools)
+
+set.seed(123)
+iris <- iris[sample(nrow(iris), 10), ]
+row.names(iris) <- NULL
+
+row <- function(...) {
+  div(
+    class = "custom_note",
+    ...
+  )
+}
+```
+
+```{css, echo=FALSE}
+.custom_note {
+  border-left: solid 5px hsl(220, 100%, 30%);
+  background-color: hsl(220, 100%, 95%);
+  padding: 5px;
+  margin-bottom: 10px
+}
+```
+
+# Selecting variables
+
+## Quoted names
+
+This is the most simple way to select one or several variables. Just use a character
+vector containing variables names, like in base R.
+
+```{r}
+data_select(iris, c("Sepal.Length", "Petal.Width"))
+```
+
+## Unquoted names
+
+It is also possible to use unquoted names. This is useful if we use the `tidyverse`
+and want to be consistent about the way variable names are passed.
+
+```{r}
+iris %>%
+  group_by(Species) %>%
+  standardise(Petal.Length) %>%
+  ungroup()
+```
+
+
+## Positions
+
+In addition to variable names, `select` can also take indices for the variables 
+to select in the dataframe.
+
+```{r}
+data_select(iris, c(1, 2, 5))
+```
+
+
+## Functions
+
+We can also pass a function to the `select` argument. This function will be applied
+to all columns and should return `TRUE` or `FALSE`. For example, if we want to 
+keep only numeric columns, we can use `is.numeric`.
+
+```{r}
+data_select(iris, is.numeric)
+```
+
+Note that we can provide any custom function to `select`, *provided it returns `TRUE` or `FALSE`* when applied to a column.
+
+```{r}
+my_function <- function(i) {
+  is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
+}
+
+data_select(iris, my_function)
+```
+
+
+## Patterns
+
+With larger datasets, it would be tedious to write the names of variables to select,
+and it would be fragile to rely on variable positions as they may change later. 
+To this end, we can use four select helpers: `starts_with()`, `ends_with()`,
+`contains()`, and `regex()`. The first three can take several patterns, while
+`regex()` takes a single regular expression.
+ 
+```{r}
+data_select(iris, starts_with("Sep", "Peta"))
+
+data_select(iris, ends_with("dth", "ies"))
+
+data_select(iris, contains("pal", "ec"))
+
+data_select(iris, regex("^Sep|ies"))
+```
+
+```{r echo=FALSE}
+row("Note: these functions are not exported by `datawizard` but are detected and
+applied internally. This means that they won't be detected by autocompletion
+when we write them.")
+```
+
+```{r echo=FALSE}
+row("Note #2: because these functions are not exported, they will not create 
+conflicts with the ones that come from the `tidyverse` and that have the same name.
+So we can still use `dplyr` and its friends, it won't change anything for selection
+in `datawizard` functions!")
+```
+
+
+# Excluding variables
+
+What if we want to keep all variables except for a few ones? There are two ways
+we can invert our selection.
+
+The first way is to put a minus sign `"-"` in front of the `select` argument.
+
+```{r}
+data_select(iris, -c("Sepal.Length", "Petal.Width"))
+
+data_select(iris, -starts_with("Sep", "Peta"))
+
+data_select(iris, -is.numeric)
+```
+
+Note that if we use numeric indices, we can't mix negative and positive values. 
+This means that we have to use `select = -(1:2)` if we want to exclude the first
+two columns; `select = -1:2` will *not* work:
+
+```{r}
+data_select(iris, -(1:2))
+```
+
+The second way is to use the argument `exclude`. This argument has the same 
+possibilities as `select`. Although this may not be required in most contexts, 
+if we wanted to, we could use both `select` and `exclude` arguments at the same 
+time.
+
+```{r}
+data_select(iris, exclude = c("Sepal.Length", "Petal.Width"))
+
+data_select(iris, exclude = starts_with("Sep", "Peta"))
+```
+
+
+
+# Programming with selections
+
+Since `datawizard` 0.6.0, it is possible to pass function arguments and loop indices
+in `select` and `exclude` arguments. This makes it easier to program with
+`datawizard`.
+
+For example, if we want to let the user decide the selection they want to use:
+
+```{r}
+my_function <- function(data, selection) {
+  find_columns(data, select = selection)
+}
+my_function(iris, c("Sepal.Length"))
+my_function(iris, starts_with("Sep"))
+
+my_function_2 <- function(data, pattern) {
+  find_columns(data, select = starts_with(pattern))
+}
+my_function_2(iris, "Sep")
+```
+
+It is also possible to pass these values in loops, for example if we have a list 
+of patterns and we want to relocate columns based on these patterns, one by one:
+
+```{r}
+new_iris <- iris
+for (i in c("Sep", "Pet")) {
+  new_iris <- new_iris %>%
+    data_relocate(select = starts_with(i), after = -1)
+}
+new_iris
+```
+
+In the loop above, all columns starting with `"Sep"` are moved at the end of the
+data frame, and the same thing was made with all columns starting with `"Pet"`.
+
+
+
+# Useful to know
+
+## Ignore the case
+
+In every selection that uses variable names, we can ignore the case in the 
+selection by applying `ignore_case = TRUE`.
+
+```{r}
+data_select(iris, c("sepal.length", "petal.width"), ignore_case = TRUE)
+
+data_select(iris, ~ Sepal.length + petal.Width, ignore_case = TRUE)
+
+data_select(iris, starts_with("sep", "peta"), ignore_case = TRUE)
+```
+
+## Formulas
+
+It is also possible to use formulas to select variables:
+
+```{r}
+data_select(iris, ~ Sepal.Length + Petal.Width)
+```
+
+This made it easier to use selection in custom functions before `datawizard` 
+0.6.0, and is kept available for backward compatibility. 
+

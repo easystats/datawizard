@@ -147,6 +147,18 @@ test_that("bind-join", {
   # by will be ignored
   out <- data_merge(x, y, join = "bind", by = c("id", "mpg"))
   expect_equal(out, poor_out)
+
+  x <- mtcars[1, ]
+  y <- mtcars[2, ]
+  expect_warning(
+    out <- data_merge(x, y, join = "bind", id = "mpg"),
+    regexp = "already exists"
+  )
+  expect_equal(
+    names(out),
+    c(names(mtcars), "mpg_1")
+  )
+  expect_equal(out$mpg_1, c(1, 2))
 })
 
 # joins without common columns -----------------------
@@ -218,6 +230,18 @@ test_that("join data frames in a list", {
     subset(z, select = -id),
     ignore_attr = TRUE
   )
+
+  x <- mtcars[1, ]
+  y <- mtcars[2, ]
+  expect_warning(
+    out <- data_merge(list(x, y), join = "bind", id = "mpg"),
+    regexp = "already exists"
+  )
+  expect_equal(
+    names(out),
+    c(names(mtcars), "mpg_1")
+  )
+  expect_equal(out$mpg_1, c(1, 2))
 })
 
 
@@ -233,4 +257,16 @@ test_that("join empty data frames", {
   expect_equal(dim(data_merge(x, y, join = "right")), c(0, 1))
   expect_equal(dim(data_merge(x, y, join = "bind")), c(0, 1))
   expect_equal(dim(data_merge(x, z, join = "bind")), c(0, 2))
+})
+
+# join when all "by" are not present ---------------------
+
+test_that("join when all 'by' are not present", {
+  x <- mtcars[, c("mpg", "drat", "cyl", "qsec")]
+  y <- mtcars[, c("mpg", "hp", "cyl", "wt")]
+
+  expect_error(
+    out <- data_merge(x, y, by = c("mpg", "drat", "qsec")),
+    regexp = "Not all columns"
+  )
 })
