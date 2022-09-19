@@ -45,9 +45,12 @@ to_numeric <- function(x, ...) {
 #' @export
 to_numeric.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(
-      sprintf("Converting into numeric values currently not possible for variables of class '%s'.", class(x)[1])
-    ))
+    insight::format_alert(
+      sprintf(
+        "Converting into numeric values currently not possible for variables of class '%s'.",
+        class(x)[1]
+      )
+    )
   }
   x
 }
@@ -155,10 +158,10 @@ to_numeric.logical <- to_numeric.numeric
 #' @export
 to_numeric.Date <- function(x, verbose = TRUE, ...) {
   if (verbose) {
-    warning(insight::format_message(
+    insight::format_warning(
       "Converting a date-time variable into numeric.",
       "Please note that this conversion probably not returns meaningful results."
-    ), call. = FALSE)
+    )
   }
   as.numeric(x)
 }

@@ -73,13 +73,13 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   # Warning if only one value
   if (insight::n_unique(x) == 1) {
     if (verbose) {
-      warning(insight::format_message(
+      insight::format_warning(
         paste0(
           "Variable `",
           name,
           "` contains only one unique value and will not be normalized."
         )
-      ), call. = FALSE)
+      )
     }
     return(x)
   }
@@ -88,13 +88,13 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   # Warning if logical vector
   if (insight::n_unique(x) == 2) {
     if (verbose) {
-      warning(insight::format_message(
+      insight::format_warning(
         paste0(
           "Variable `",
           name,
           "` contains only two different values. Consider converting it to a factor."
         )
-      ), call. = FALSE)
+      )
     }
   }
 

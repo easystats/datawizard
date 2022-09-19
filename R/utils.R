@@ -12,9 +12,9 @@
 #' @param replacement Argument that replaces the deprecated argument
 #' @keywords internal
 .is_deprecated <- function(arg, replacement) {
-  warning(insight::format_message(
+  insight::format_warning(
     paste0("Argument `", arg, "` is deprecated. Please use `", replacement, "` instead.")
-  ), call. = FALSE)
+  )
 }
 
 #' `NULL` coalescing operator

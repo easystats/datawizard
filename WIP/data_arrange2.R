@@ -46,7 +46,7 @@ data_arrange2 <- function(data,
   if (!is.null(descending) && length(descending) > 0) {
     # must be a vector of logicals
     if (!all(is.logical(descending))) {
-      stop(insight::format_message("`descending` must a a vector of logicals, either of length 1 or of same length as variables selected by `select`."), call. = FALSE)
+      insight::format_error("`descending` must a a vector of logicals, either of length 1 or of same length as variables selected by `select`.")
     }
     for (i in select[descending]) {
       out[[i]] <- -xtfrm(out[[i]])

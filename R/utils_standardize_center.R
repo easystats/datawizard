@@ -79,9 +79,9 @@
     if (weights %in% colnames(x)) {
       exclude <- c(exclude, weights)
     } else {
-      warning(insight::format_message(
+      insight::format_warning(
         paste0("Could not find weighting column `", weights, "`. Weighting not carried out.")
-      ), call. = FALSE)
+      )
       weights <- NULL
     }
   }
@@ -141,9 +141,9 @@
 
     # center and scale must either be of length 1 or of same length as selected variables
     if (length(.center) > 1 && length(.center) != length(select)) {
-      stop(insight::format_message(
+      insight::format_error(
         "`center` and `scale` must have the same length as the selected variables for standardization or centering."
-      ), call. = FALSE)
+      )
     }
 
     # if of length 1, recycle
@@ -236,13 +236,13 @@
   if (length(unique(x)) == 1 && is.null(reference)) {
     if (verbose) {
       if (is.null(name)) {
-        message(insight::format_message(
+        insight::format_alert(
           "The variable contains only one unique value and will be set to 0."
-        ))
+        )
       } else {
-        message(insight::format_message(
+        insight::format_alert(
           paste0("The variable `", name, "` contains only one unique value and will be set to 0.")
-        ))
+        )
       }
     }
     return(NULL)
@@ -252,13 +252,13 @@
   if (length(unique(x)) == 2 && !is.factor(x) && !is.character(x)) {
     if (verbose) {
       if (is.null(name)) {
-        message(insight::format_message(
+        insight::format_alert(
           "The variable contains only two different values. Consider converting it to a factor."
-        ))
+        )
       } else {
-        message(insight::format_message(
+        insight::format_alert(
           paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor.")
-        ))
+        )
       }
     }
   }
@@ -385,10 +385,10 @@
   grps <- attr(x, "groups", exact = TRUE)
 
   if (is.numeric(weights)) {
-    warning(insight::format_message(
+    insight::format_warning(
       "For grouped data frames, `weights` must be a character, not a numeric vector.",
       "Ignoring weightings."
-    ), call. = FALSE)
+    )
     weights <- NULL
   }
 

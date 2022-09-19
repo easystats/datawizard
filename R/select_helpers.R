@@ -145,7 +145,7 @@
 
           # if starts_with() et al. come from tidyselect but need to be used in
           # a select environment, then the error doesn't have the same structure.
-          if (is.null(fn) && grepl("tidyselect", e$message)) {
+          if (is.null(fn) && grepl("must be used within a", e$message)) {
             trace <- lapply(e$trace$call, function(x) {
               tmp <- insight::safe_deparse(x)
               if (grepl(paste0("^", .regex_select_helper()), tmp)) {
@@ -316,9 +316,9 @@
   # if numeric, make sure we have valid column indices
   if (is.numeric(pattern)) {
     if (any(pattern < 0) && any(pattern > 0)) {
-      stop(insight::format_message(
+      insight::format_error(
         paste0("You can't mix negative and positive numeric indices in `select` or `exclude`.")
-      ), call. = FALSE)
+      )
     }
     pattern <- columns[pattern]
   }
@@ -336,9 +336,9 @@
   # check if colnames are in data
   if (!all(pattern %in% columns)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message(
+      insight::format_warning(
         paste0("Following variable(s) were not found: ", paste0(setdiff(pattern, columns), collapse = ", "))
-      ), call. = FALSE)
+      )
     }
     pattern <- intersect(pattern, columns)
   }
@@ -383,21 +383,13 @@
 
 .check_data <- function(data) {
   if (is.null(data)) {
-    stop(
-      insight::format_message("The `data` argument must be provided."),
-      call. = FALSE
-    )
+    insight::format_error("The `data` argument must be provided.")
   }
   # check data frame input
   if (!is.null(data) && !is.data.frame(data)) {
     data <- try(as.data.frame(data), silent = TRUE)
     if (inherits(data, c("try-error", "simpleError"))) {
-      stop(
-        insight::format_message(
-          "The `data` argument must be a data frame, or an object that can be coerced to a data frame."
-        ),
-        call. = FALSE
-      )
+      insight::format_error("The `data` argument must be a data frame, or an object that can be coerced to a data frame.")
     }
   }
 }

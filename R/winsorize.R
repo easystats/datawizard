@@ -99,12 +99,9 @@ winsorize.numeric <- function(data,
   if (method == "raw") {
     if (length(threshold) != 2L) {
       if (isTRUE(verbose)) {
-        warning(
-          insight::format_message(
-            "`threshold` must be of length 2 for lower and upper bound.",
-            "Did not winsorize data."
-          ),
-          call. = FALSE
+        insight::format_warning(
+          "`threshold` must be of length 2 for lower and upper bound.",
+          "Did not winsorize data."
         )
       }
       return(data)
@@ -114,12 +111,9 @@ winsorize.numeric <- function(data,
   if (method == "percentile") {
     if (threshold < 0 || threshold > 0.5) {
       if (isTRUE(verbose)) {
-        warning(
-          insight::format_message(
-            "`threshold` for winsorization must be a scalar between 0 and 0.5.",
-            "Did not winsorize data."
-          ),
-          call. = FALSE
+        insight::format_warning(
+          "`threshold` for winsorization must be a scalar between 0 and 0.5.",
+          "Did not winsorize data."
         )
       }
       return(data)
@@ -136,9 +130,8 @@ winsorize.numeric <- function(data,
   if (method == "zscore") {
     if (threshold <= 0) {
       if (isTRUE(verbose)) {
-        warning(
-          insight::format_message("'threshold' for winsorization must be a scalar greater than 0. Did not winsorize data."),
-          call. = FALSE
+        insight::format_warning(
+          "'threshold' for winsorization must be a scalar greater than 0. Did not winsorize data."
         )
       }
       return(data)

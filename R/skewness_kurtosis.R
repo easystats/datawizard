@@ -123,11 +123,8 @@ skewness.numeric <- function(x,
 
   if (type == "2" && n < 3) {
     if (verbose) {
-      warning(
-        insight::format_message(
-          "Need at least 3 complete observations for type-2-skewness. Using 'type=\"1\"' now."
-        ),
-        call. = FALSE
+      insight::format_warning(
+        "Need at least 3 complete observations for type-2-skewness. Using 'type=\"1\"' now."
       )
     }
     type <- "1"
@@ -268,11 +265,8 @@ kurtosis.numeric <- function(x,
 
   if (type == "2" && n < 4) {
     if (verbose) {
-      warning(
-        insight::format_message(
-          "Need at least 4 complete observations for type-2-kurtosis Using 'type=\"1\"' now."
-        ),
-        call. = FALSE
+      insight::format_warning(
+        "Need at least 4 complete observations for type-2-kurtosis Using 'type=\"1\"' now."
       )
     }
     type <- "1"
@@ -432,11 +426,8 @@ summary.parameters_kurtosis <- function(object, test = FALSE, ...) {
   if (is.null(type) ||
     is.na(type) ||
     !(type %in% c("1", "2", "3", "I", "II", "III", "classic", "SPSS", "SAS", "Minitab"))) {
-    warning(
-      insight::format_message(
-        "'type' must be a character value from \"1\" to \"3\". Using 'type=\"2\"' now."
-      ),
-      call. = FALSE
+    insight::format_warning(
+      "'type' must be a character value from \"1\" to \"3\". Using 'type=\"2\"' now."
     )
     type <- "2"
   }

@@ -21,7 +21,7 @@ get_columns <- function(data,
 
   if (!length(columns) || is.null(columns)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("No column names that matched the required search pattern were found."), call. = FALSE)
+      insight::format_warning("No column names that matched the required search pattern were found.")
     }
     return(NULL)
   }
