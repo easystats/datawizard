@@ -122,21 +122,21 @@ data_to_long <- function(data,
         verbose = FALSE
       )
     } else {
-      stop(insight::format_message(
+      insight::format_error(
         "You need to specify columns to pivot, either with `select` or `cols`."
-      ), call. = FALSE)
+      )
     }
   }
 
 
   if (any(names_to %in% setdiff(names(data), cols))) {
-    stop(insight::format_message(
+    insight::format_error(
       "Some values of the columns specified in 'names_to' are already present as column names.",
       paste0(
         "Either use another value in `names_to` or rename the following columns: ",
         text_concatenate(names_to[which(names_to %in% setdiff(names(data), cols))])
       )
-    ), call. = FALSE)
+    )
   }
 
   # Sanity checks ----------------
@@ -207,9 +207,9 @@ data_to_long <- function(data,
   # remove names prefix if specified
   if (!is.null(names_prefix)) {
     if (length(names_to) > 1) {
-      stop(insight::format_message(
+      insight::format_error(
         "`names_prefix` only works when `names_to` is of length 1."
-      ), call. = FALSE)
+      )
     }
     long[[names_to]] <- gsub(paste0("^", names_prefix), "", long[[names_to]])
   }
@@ -394,13 +394,13 @@ data_to_wide <- function(data,
 
   # stop if some column names would be duplicated (follow tidyr workflow)
   if (any(future_colnames %in% current_colnames)) {
-    stop(insight::format_message(
+    insight::format_error(
       "Some values of the columns specified in 'names_from' are already present as column names.",
       paste0(
         "Either use `name_prefix` or rename the following columns: ",
         text_concatenate(current_colnames[which(current_colnames %in% future_colnames)])
       )
-    ), call. = FALSE)
+    )
   }
 
   # stats::reshape works strangely when several variables are in idvar/timevar
@@ -449,26 +449,26 @@ data_to_wide <- function(data,
     if (length(values_fill) == 1) {
       if (is.numeric(wide[[new_cols[1]]])) {
         if (!is.numeric(values_fill)) {
-          stop(insight::format_message(paste0("`values_fill` must be of type numeric.")), call. = FALSE)
+          insight::format_error(paste0("`values_fill` must be of type numeric."))
         } else {
           wide <- convert_na_to(wide, replace_num = values_fill)
         }
       } else if (is.character(wide[[new_cols[1]]])) {
         if (!is.character(values_fill)) {
-          stop(insight::format_message(paste0("`values_fill` must be of type character.")), call. = FALSE)
+          insight::format_error(paste0("`values_fill` must be of type character."))
         } else {
           wide <- convert_na_to(wide, replace_char = values_fill)
         }
       } else if (is.factor(wide[[new_cols[1]]])) {
         if (!is.factor(values_fill)) {
-          stop(insight::format_message(paste0("`values_fill` must be of type factor.")), call. = FALSE)
+          insight::format_error(paste0("`values_fill` must be of type factor."))
         } else {
           wide <- convert_na_to(wide, replace_fac = values_fill)
         }
       }
     } else {
       if (verbose) {
-        stop(insight::format_message("`values_fill` must be of length 1."), call. = FALSE)
+        insight::format_error("`values_fill` must be of length 1.")
       }
     }
   }

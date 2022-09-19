@@ -77,19 +77,19 @@ data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, .
   }
 
   if (length(replacement) > length(pattern)) {
-    message(insight::format_message(
+    insight::format_alert(
       paste0(
         "There are more names in `replacement` than in `pattern`. The last ",
         length(replacement) - length(pattern), " names of `replacement` are not used."
       )
-    ))
+    )
   } else if (length(replacement) < length(pattern)) {
-    message(insight::format_message(
+    insight::format_alert(
       paste0(
         "There are more names in `pattern` than in `replacement`. The last ",
         length(pattern) - length(replacement), " names of `pattern` are not modified."
       )
-    ))
+    )
   }
 
   for (i in seq_along(pattern)) {

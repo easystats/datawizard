@@ -78,9 +78,9 @@ convert_na_to <- function(x, ...) {
 #' @export
 convert_na_to.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(
+    insight::format_alert(
       sprintf("Converting missing values (`NA`) into regular values currently not possible for variables of class `%s`.", class(x)[1])
-    ))
+    )
   }
   x
 }
@@ -91,11 +91,11 @@ convert_na_to.default <- function(x, verbose = TRUE, ...) {
 convert_na_to.numeric <- function(x, replacement = NULL, verbose = TRUE, ...) {
   if (is_empty_object(replacement) || !is.numeric(replacement)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("`replacement` needs to be a numeric vector."), call. = FALSE)
+      insight::format_warning("`replacement` needs to be a numeric vector.")
     }
   } else if (length(replacement) > 1) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("`replacement` needs to be of length one."), call. = FALSE)
+      insight::format_warning("`replacement` needs to be of length one.")
     }
   } else {
     x[is.na(x)] <- replacement
@@ -108,7 +108,7 @@ convert_na_to.numeric <- function(x, replacement = NULL, verbose = TRUE, ...) {
 convert_na_to.factor <- function(x, replacement = NULL, verbose = TRUE, ...) {
   if (is_empty_object(replacement) || length(replacement) > 1) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("`replacement` needs to be of length one."), call. = FALSE)
+      insight::format_warning("`replacement` needs to be of length one.")
     }
   } else {
     x <- addNA(x)
@@ -124,13 +124,13 @@ convert_na_to.factor <- function(x, replacement = NULL, verbose = TRUE, ...) {
 convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE, ...) {
   if (is_empty_object(replacement) || !is.character(replacement) && !is.numeric(replacement)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message(
+      insight::format_warning(
         "`replacement` needs to be a character or numeric vector."
-      ), call. = FALSE)
+      )
     }
   } else if (length(replacement) > 1) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("`replacement` needs to be of length one."), call. = FALSE)
+      insight::format_warning("`replacement` needs to be of length one.")
     }
   } else {
     x[is.na(x)] <- as.character(replacement)

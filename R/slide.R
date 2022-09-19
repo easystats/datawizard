@@ -34,10 +34,10 @@ slide <- function(x, ...) {
 #' @export
 slide.default <- function(x, lowest = 0, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(
+    insight::format_alert(
       "Shifting non-numeric variables is not possible.",
       "Try using 'to_numeric()' and specify the 'lowest' argument."
-    ))
+    )
   }
   x
 }

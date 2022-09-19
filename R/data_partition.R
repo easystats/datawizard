@@ -56,9 +56,9 @@ data_partition <- function(data,
   if (!is.data.frame(data)) {
     data <- tryCatch(as.data.frame(data), error = function(e) NULL)
     if (is.null(data)) {
-      stop(insight::format_message(
+      insight::format_error(
         "`data` needs to be a data frame, or an object that can be coerced to a data frame."
-      ), call. = FALSE)
+      )
     }
   }
 
@@ -67,9 +67,9 @@ data_partition <- function(data,
   }
 
   if (sum(proportion) == 1 && isTRUE(verbose)) {
-    warning(insight::format_message(
+    insight::format_warning(
       "Proportions of sampled training sets (`proportion`) sums up to 1, so no test set will be generated."
-    ), call. = FALSE)
+    )
   }
 
   if (is.null(row_id)) {
@@ -80,12 +80,9 @@ data_partition <- function(data,
   # from overwriting. create new unique name for row-id then...
   if (row_id %in% colnames(data)) {
     if (isTRUE(verbose)) {
-      warning(
-        insight::format_message(
-          paste0("A variable named \"", row_id, "\" already exists."),
-          "Changing the value of `row_id` to a unique variable name now."
-        ),
-        call. = FALSE
+      insight::format_warning(
+        paste0("A variable named \"", row_id, "\" already exists."),
+        "Changing the value of `row_id` to a unique variable name now."
       )
     }
     unique_names <- make.unique(c(colnames(data), row_id), sep = "_")

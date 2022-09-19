@@ -149,7 +149,7 @@ recode_values <- function(x, ...) {
 #' @export
 recode_values.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged.")))
+    insight::format_alert(paste0("Variables of class '", class(x)[1], "' can't be recoded and remain unchanged."))
   }
   return(x)
 }
@@ -172,7 +172,7 @@ recode_values.numeric <- function(x,
   # stop if all NA
   if (!length(valid)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
+      insight::format_warning("Variable contains only missing values. No recoding carried out.")
     }
     return(original_x)
   }
@@ -244,7 +244,7 @@ recode_values.factor <- function(x,
   # stop if all NA
   if (!length(valid)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
+      insight::format_warning("Variable contains only missing values. No recoding carried out.")
     }
     return(original_x)
   }
@@ -312,7 +312,7 @@ recode_values.character <- function(x,
   # stop if all NA
   if (!length(valid)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
+      insight::format_warning("Variable contains only missing values. No recoding carried out.")
     }
     return(original_x)
   }

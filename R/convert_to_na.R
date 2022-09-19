@@ -47,12 +47,12 @@ convert_to_na <- function(x, ...) {
 #' @export
 convert_to_na.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(
+    insight::format_alert(
       sprintf(
         "Converting values into missing values (`NA`) currently not possible for variables of class `%s`.",
         class(x)[1]
       )
-    ))
+    )
   }
   x
 }
@@ -68,10 +68,10 @@ convert_to_na.numeric <- function(x, na = NULL, verbose = TRUE, ...) {
 
   if (is_empty_object(na) || !is.numeric(na)) {
     if (isTRUE(verbose)) {
-      message(insight::format_message(
+      insight::format_alert(
         "Could not convert values into `NA` for a numeric variable.",
         "To do this, `na` needs to be a numeric vector, or a list that contains numeric vector elements."
-      ))
+      )
     }
   } else {
     matches <- which(x %in% na)
@@ -94,10 +94,10 @@ convert_to_na.factor <- function(x, na = NULL, drop_levels = FALSE, verbose = TR
 
   if (is_empty_object(na) || (!is.factor(na) && !is.character(na))) {
     if (isTRUE(verbose)) {
-      message(insight::format_message(
+      insight::format_alert(
         "Could not convert values into `NA` for a factor or character variable.",
         "To do this, `na` needs to be a character vector, or a list that contains character vector elements."
-      ))
+      )
     }
   } else {
     matches <- which(x %in% na)
@@ -128,10 +128,10 @@ convert_to_na.Date <- function(x, na = NULL, verbose = TRUE, ...) {
 
   if (is_empty_object(na) || !is.character(na)) {
     if (isTRUE(verbose)) {
-      message(insight::format_message(
+      insight::format_alert(
         "Could not convert values into `NA` for a date/time variable.",
         "To do this, `na` needs to be a character vector, or a list that contains character vector elements."
-      ))
+      )
     }
   } else {
     matches <- which(x %in% as.Date(na))
@@ -150,10 +150,10 @@ convert_to_na.logical <- function(x, na = NULL, verbose = TRUE, ...) {
 
   if (is_empty_object(na) || !is.logical(na)) {
     if (isTRUE(verbose)) {
-      message(insight::format_message(
+      insight::format_alert(
         "Could not convert values into `NA` for a logical variable.",
         "To do this, `na` needs to be a logical vector, or a list that contains logical vector elements."
-      ))
+      )
     }
   } else {
     matches <- which(x == na)

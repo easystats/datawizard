@@ -46,12 +46,12 @@ data_arrange <- function(data, select = NULL, safe = TRUE) {
   dont_exist <- select[which(!select %in% names(data))]
   if (length(dont_exist) > 0) {
     if (!safe) {
-      stop(insight::format_message(
+      insight::format_error(
         paste0(
           "The following column(s) don't exist in the dataset: ",
           text_concatenate(dont_exist), "."
         )
-      ), call. = FALSE)
+      )
     }
     select <- select[-which(select %in% dont_exist)]
   }
