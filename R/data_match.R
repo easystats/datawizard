@@ -116,9 +116,9 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
   # sanity check
   shared_columns <- intersect(colnames(x), colnames(to))
   if (is.null(shared_columns) || length(shared_columns) == 0) {
-    stop(insight::format_message(
+    insight::format_error(
       "None of the columns from the data frame with matching conditions were found in `x`."
-    ), call. = FALSE)
+    )
   }
 
   # only select common columns
@@ -208,9 +208,9 @@ data_filter <- function(x, filter, ...) {
       error = function(e) NULL
     )
     if (is.null(out)) {
-      stop(insight::format_message(
+      insight::format_error(
         "Filtering did not work. Please check the syntax of your `filter` argument."
-      ), call. = FALSE)
+      )
     }
   }
   # restore value and variable labels
@@ -239,9 +239,9 @@ data_filter <- function(x, filter, ...) {
   # about possible misspelled comparisons / logical conditions
   # check if "=" instead of "==" was used?
   if (any(grepl("=", tmp, fixed = TRUE))) {
-    stop(insight::format_message(
+    insight::format_error(
       "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
-    ), call. = FALSE)
+    )
   }
   # check if "&&" etc instead of "&" was used?
   logical_operator <- NULL
@@ -252,13 +252,13 @@ data_filter <- function(x, filter, ...) {
     logical_operator <- "||"
   }
   if (!is.null(logical_operator)) {
-    stop(insight::format_message(
+    insight::format_error(
       paste0(
         "Filtering did not work. Please check if you need `",
         substr(logical_operator, 0, 1),
         "` (instead of `", logical_operator, "`) as logical operator."
       )
-    ), call. = FALSE)
+    )
   }
 }
 # styler: on

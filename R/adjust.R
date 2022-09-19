@@ -76,10 +76,10 @@ adjust <- function(data,
                    regex = FALSE,
                    verbose = FALSE) {
   if (!all(colnames(data) == make.names(colnames(data), unique = TRUE))) {
-    warning(insight::format_message(
+    insight::format_warning(
       "Bad column names (e.g., with spaces) have been detected which might create issues in many functions.",
       "Please fix it (you can run `names(mydata) <- make.names(names(mydata))` for a quick fix)."
-    ), call. = FALSE)
+    )
   }
 
   # check for formula notation, convert to character vector

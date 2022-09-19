@@ -183,9 +183,9 @@ recode_values <- function(x, ...) {
 #' @export
 recode_values.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(
+    insight::format_alert(
       paste0("Variables of class `", class(x)[1], "` can't be recoded and remain unchanged.")
-    ))
+    )
   }
   return(x)
 }
@@ -497,7 +497,7 @@ recode_values.data.frame <- function(x,
   # skip if all NA
   if (!length(valid)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("Variable contains only missing values. No recoding carried out."), call. = FALSE)
+      insight::format_warning("Variable contains only missing values. No recoding carried out.")
     }
     ok <- FALSE
   }
@@ -505,7 +505,7 @@ recode_values.data.frame <- function(x,
   # warn if not a list
   if (!is.list(recode) || is.null(names(recode))) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("`recode` needs to be a (named) list. No recoding carried out."), call. = FALSE)
+      insight::format_warning("`recode` needs to be a (named) list. No recoding carried out.")
     }
     ok <- FALSE
   }

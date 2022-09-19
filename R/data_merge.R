@@ -197,9 +197,9 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
     id <- make.unique(c(all_columns, id), sep = "_")[length(all_columns) + 1]
     # and also tell user...
     if (isTRUE(verbose)) {
-      warning(insight::format_message(
+      insight::format_warning(
         sprintf("Value of `id` already exists as column name. ID column was renamed to `%s`.", id)
-      ), call. = FALSE)
+      )
     }
   }
 
@@ -232,25 +232,17 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
         }
       )
       if (isTRUE(verbose)) {
-        stop(
-          insight::format_message(
-            stop_message
-          ),
-          call. = FALSE
-        )
+        insight::format_error(stop_message)
       }
     }
 
     # if still both data frames have no common columns, do a full join
     if (!length(by)) {
       if (isTRUE(verbose)) {
-        warning(
-          insight::format_message(
-            "Found no matching columns in the data frames. Fully merging both data frames now.",
-            "Note that this can lead to unintended results, because rows in `x` and `y` are possibly duplicated.",
-            "You probably want to use `data_merge(x, y, join = \"bind\")` instead."
-          ),
-          call. = FALSE
+        insight::format_warning(
+          "Found no matching columns in the data frames. Fully merging both data frames now.",
+          "Note that this can lead to unintended results, because rows in `x` and `y` are possibly duplicated.",
+          "You probably want to use `data_merge(x, y, join = \"bind\")` instead."
         )
       }
       by <- NULL
@@ -262,12 +254,12 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   # check valid combination of "join" and "by" -----------------------
 
   if (join %in% c("anti", "semi") && (is.null(by) || length(by) != 1)) {
-    stop(insight::format_message(
+    insight::format_error(
       sprintf(
         "For `join = \"%s\"`, `by` needs to be a name of only one variable that is present in both data frames.",
         join
       )
-    ), call. = FALSE)
+    )
   }
 
 
@@ -356,9 +348,9 @@ data_merge.list <- function(x, join = "left", by = NULL, id = NULL, verbose = TR
       id <- make.unique(c(colnames(out), id), sep = "_")[length(colnames(out)) + 1]
       # and also tell user...
       if (isTRUE(verbose)) {
-        warning(insight::format_message(
+        insight::format_warning(
           sprintf("Value of `id` already exists as column name. ID column was renamed to `%s`.", id)
-        ), call. = FALSE)
+        )
       }
     }
     out[[id]] <- df_id

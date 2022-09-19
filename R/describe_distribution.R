@@ -58,9 +58,8 @@ describe_distribution <- function(x, ...) {
 #' @export
 describe_distribution.default <- function(x, verbose = TRUE, ...) {
   if (verbose) {
-    warning(
-      insight::format_message(paste0("Can't describe variables of class `", class(x)[1], "`.")),
-      call. = FALSE
+    insight::format_warning(
+      paste0("Can't describe variables of class `", class(x)[1], "`.")
     )
   }
   NULL

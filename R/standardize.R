@@ -131,7 +131,7 @@ standardise <- standardize
 
 # standardize.default <- function(x, verbose = TRUE, ...) {
 #   if (isTRUE(verbose)) {
-#     message(insight::format_message(sprintf("Standardizing currently not possible for variables of class '%s'.", class(x)[1])))
+#     insight::format_alert(sprintf("Standardizing currently not possible for variables of class '%s'.", class(x)[1])))
 #   }
 #   x
 # }

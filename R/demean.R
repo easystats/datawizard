@@ -281,13 +281,11 @@ degroup <- function(x,
   not_found <- setdiff(select, colnames(x))
 
   if (length(not_found) && isTRUE(verbose)) {
-    message(
-      insight::format_message(
-        sprintf(
-          "%i variables were not found in the dataset: %s\n",
-          length(not_found),
-          paste0(not_found, collapse = ", ")
-        )
+    insight::format_alert(
+      sprintf(
+        "%i variables were not found in the dataset: %s\n",
+        length(not_found),
+        paste0(not_found, collapse = ", ")
       )
     )
   }

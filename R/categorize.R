@@ -121,9 +121,9 @@ categorize <- function(x, ...) {
 #' @export
 categorize.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    message(insight::format_message(
+    insight::format_alert(
       paste0("Variables of class `", class(x)[1], "` can't be recoded and remain unchanged.")
-    ))
+    )
   }
   return(x)
 }
@@ -151,15 +151,15 @@ categorize.numeric <- function(x,
   }
 
   if (is.character(split) && split %in% c("quantile", "equal_length") && is.null(n_groups)) {
-    stop(insight::format_message(
+    insight::format_error(
       "Recoding based on quantiles or equal-sized groups requires the `n_groups` argument to be specified."
-    ), call. = FALSE)
+    )
   }
 
   if (is.character(split) && split == "equal_range" && is.null(n_groups) && is.null(range)) {
-    stop(insight::format_message(
+    insight::format_error(
       "Recoding into groups with equal range requires either the `range` or `n_groups` argument to be specified."
-    ), call. = FALSE)
+    )
   }
 
 
@@ -182,9 +182,9 @@ categorize.numeric <- function(x,
   # stop if all NA
   if (!length(x)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message(
+      insight::format_warning(
         "Variable contains only missing values. No recoding carried out."
-      ), call. = FALSE)
+      )
     }
     return(original_x)
   }
@@ -227,10 +227,10 @@ categorize.numeric <- function(x,
       original_x <- as.factor(original_x)
       levels(original_x) <- labels
     } else if (isTRUE(verbose)) {
-      warning(insight::format_message(
+      insight::format_warning(
         "Argument `labels` and levels of the recoded variable are not of the same length.",
         "Variable will not be converted to factor."
-      ), call. = FALSE)
+      )
     }
   }
 

@@ -108,14 +108,11 @@ rescale_weights <- function(data, group, probability_weights, nest = FALSE) {
   data_tmp$.bamboozled <- 1:nrow(data_tmp)
 
   if (nest && length(group) < 2) {
-    warning(
-      insight::format_message(
-        sprintf(
-          "Only one group variable selected, no nested structure possible. Rescaling weights for grout '%s' now.",
-          group
-        )
-      ),
-      call. = FALSE
+    insight::format_warning(
+      sprintf(
+        "Only one group variable selected, no nested structure possible. Rescaling weights for grout '%s' now.",
+        group
+      )
     )
     nest <- FALSE
   }
