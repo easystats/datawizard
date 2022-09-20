@@ -44,6 +44,13 @@ badge](https://easystats.r-universe.dev/badges/datawizard)](https://easystats.r-
 | Development | r-universe | `install.packages("datawizard", repos = "https://easystats.r-universe.dev")` |
 | Development | GitHub     | `remotes::install_github("easystats/datawizard")`                            |
 
+> **Tip**
+>
+> **Instead of `library(datawizard)`, use `library(easystats)`.** **This
+> will make all features of the easystats-ecosystem available.**
+>
+> **To stay updated, use `easystats::install_latest()`.**
+
 # Citation
 
 To cite the package, run the following command:
