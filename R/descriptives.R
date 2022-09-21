@@ -112,7 +112,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
                              method = c("standard", "unbiased", "median_mad", "qcd"),
                              trim = 0, na.rm = FALSE, n = NULL, ...) {
   # TODO: Support weights
-  if (!missing(x) && all(c(-1, 1) %in% sign(x))){
+  if (!missing(x) && all(c(-1, 1) %in% sign(x))) {
     stop("Coefficient of variation only applicable for ratio scale variables.", call. = FALSE)
   }
   method <- match.arg(method, choices = c("standard", "unbiased", "median_mad", "qcd"))
@@ -124,17 +124,17 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
     x <- .trim_values(x, trim = trim, n = n)
   }
   if (is.null(mu)) {
-    mu <- switch(
-      method,
-      standard = , unbiased = mean(x, ...),
+    mu <- switch(method,
+      standard = ,
+      unbiased = mean(x, ...),
       median_mad = stats::median(x, ...),
       qcd = unname(sum(stats::quantile(x, probs = c(.25, .75), ...)))
     )
   }
   if (is.null(sigma)) {
-    sigma <- switch(
-      method,
-      standard = , unbiased = stats::sd(x, ...),
+    sigma <- switch(method,
+      standard = ,
+      unbiased = stats::sd(x, ...),
       median_mad = stats::mad(x, center = mu, ...),
       qcd = unname(diff(stats::quantile(x, probs = c(.25, .75), ...)))
     )
@@ -170,8 +170,12 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
     n <- length(x)
   }
   if (trim > 0 && n) {
-    if (anyNA(x)) return(NA_real_)
-    if (trim >= 0.5) return(stats::median(x, na.rm = FALSE))
+    if (anyNA(x)) {
+      return(NA_real_)
+    }
+    if (trim >= 0.5) {
+      return(stats::median(x, na.rm = FALSE))
+    }
     lo <- floor(n * trim) + 1
     hi <- n + 1 - lo
     x <- sort.int(x, partial = unique(c(lo, hi)))[lo:hi]

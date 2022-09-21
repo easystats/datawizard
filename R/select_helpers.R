@@ -7,7 +7,7 @@
 
   # directly return all names if select == exclude == NULL
   if (is.null(substitute(select, env = parent.frame())) &&
-      is.null(substitute(exclude, env = parent.frame()))) {
+    is.null(substitute(exclude, env = parent.frame()))) {
     return(columns)
   }
 
