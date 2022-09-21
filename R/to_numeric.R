@@ -160,7 +160,7 @@ to_numeric.Date <- function(x, verbose = TRUE, ...) {
   if (verbose) {
     insight::format_warning(
       "Converting a date-time variable into numeric.",
-      "Please note that this conversion probably not returns meaningful results."
+      "Please note that this conversion probably does not return meaningful results."
     )
   }
   as.numeric(x)
