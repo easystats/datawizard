@@ -237,11 +237,11 @@ to_numeric.character <- function(x,
                                  verbose = TRUE,
                                  ...) {
   numbers <- sapply(x, function(i) {
-    element <- tryCatch(.str2lang(i), error = function(e) NULL)
+    element <- tryCatch(str2lang(i), error = function(e) NULL)
     !is.null(element) && is.numeric(element)
   })
   if (all(numbers)) {
-    out <- as.numeric(sapply(x, .str2lang))
+    out <- as.numeric(sapply(x, str2lang))
   } else {
     out <- to_numeric(as.factor(x), dummy_factors = dummy_factors)
   }
