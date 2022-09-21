@@ -169,6 +169,12 @@ to_numeric.Date <- function(x, verbose = TRUE, ...) {
 #' @export
 to_numeric.POSIXt <- to_numeric.Date
 
+#' @export
+to_numeric.POSIXct <- to_numeric.Date
+
+#' @export
+to_numeric.POSIXlt <- to_numeric.Date
+
 
 #' @export
 to_numeric.factor <- function(x,
