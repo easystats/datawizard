@@ -1,4 +1,6 @@
-# datawizard (development version)
+# datawizard 0.6.1
+
+* Updates tests for upcoming changes in the `{tidyselect}` package (#267).
 
 # datawizard 0.6.0
 

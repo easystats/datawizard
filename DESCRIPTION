@@ -1,7 +1,7 @@
 Type: Package
 Package: datawizard
 Title: Easy Data Wrangling and Statistical Transformations
-Version: 0.6.0.1
+Version: 0.6.1
 Authors@R: c(
     person("Indrajeet", "Patil", , "patilindrajeet.science@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@patilindrajeets")),
@@ -28,7 +28,7 @@ BugReports: https://github.com/easystats/datawizard/issues
 Depends:
     R (>= 3.6)
 Imports:
-    insight (>= 0.18.3),
+    insight (>= 0.18.4),
     stats,
     utils
 Suggests: 
