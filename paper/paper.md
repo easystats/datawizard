@@ -25,7 +25,7 @@ authors:
   
 affiliations:
 - index: 1
-  name: esqLABS GmbH, Germany
+  name: cynkra Analytics GmbH, Germany
 - index: 2
   name: Nanyang Technological University, Singapore
 - index: 3
@@ -37,7 +37,7 @@ affiliations:
 - index: 6
   name: University Medical Center Hamburg-Eppendorf, Germany
     
-date: "2022-08-07"
+date: "2022-09-27"
 bibliography: paper.bib
 output: rticles::joss_article
 csl: apa.csl
@@ -88,7 +88,7 @@ We will look at one example function that converts data in wide format to tidy/l
 
 ```r
 stocks <- data.frame(
-  time = as.Date('2009-01-01') + 0:4,
+  time = as.Date("2009-01-01") + 0:4,
   X = rnorm(5, 0, 1),
   Y = rnorm(5, 0, 2)
 )
