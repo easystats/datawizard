@@ -23,7 +23,8 @@
 #'
 #' @details For character vectors, empty string values (i.e. `""`) are also
 #' considered as missing value. Thus, if a character vector only contains `NA`
-#' and `""``, it is considered as empty variable and will be removed.
+#' and `""``, it is considered as empty variable and will be removed. Same
+#' applies to observations (rows) that only contain `NA` or `""`.
 #'
 #' @examples
 #' tmp <- data.frame(
@@ -62,7 +63,7 @@ empty_columns <- function(x) {
   } else {
     all_na <- colSums(is.na(x)) == nrow(x)
     all_empty <- vapply(x, function(i) {
-      is.character(i) && max(nchar(i), na.rm = TRUE) == 0
+      (is.character(i) || is.factor(i)) && max(nchar(as.character(i)), na.rm = TRUE) == 0
     }, FUN.VALUE = logical(1))
 
     which(all_na | all_empty)
@@ -76,7 +77,7 @@ empty_rows <- function(x) {
   if ((!is.matrix(x) && !is.data.frame(x)) || nrow(x) < 2) {
     vector("numeric")
   } else {
-    which(rowSums(is.na(x)) == ncol(x))
+    which(rowSums(is.na(x) | apply(x, c(1, 2), function(i) nchar(as.character(i)) == 0)) == ncol(x))
   }
 }
 
