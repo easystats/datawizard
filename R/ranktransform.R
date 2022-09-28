@@ -108,8 +108,8 @@ ranktransform.grouped_df <- function(x,
                                      verbose = TRUE,
                                      ...) {
   info <- attributes(x)
-  # dplyr >= 0.8.0 returns attribute "indices"
-  grps <- attr(x, "groups", exact = TRUE)
+  # works only for dplyr >= 0.8.0
+  grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
   # evaluate arguments
   select <- .select_nse(select,
@@ -119,14 +119,6 @@ ranktransform.grouped_df <- function(x,
     regex = regex,
     verbose = verbose
   )
-
-  # dplyr < 0.8.0?
-  if (is.null(grps)) {
-    grps <- attr(x, "indices", exact = TRUE)
-    grps <- lapply(grps, function(x) x + 1)
-  } else {
-    grps <- grps[[".rows"]]
-  }
 
   x <- as.data.frame(x)
   for (rows in grps) {
