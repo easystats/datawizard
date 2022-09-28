@@ -87,20 +87,7 @@ data_read <- function(path,
 
   # remove empty variables
   if (skip_empty) {
-    # find empty variables
-    empty <- sapply(out, function(x) {
-      all(is.na(x)) || (is.character(x) && max(nchar(x), na.rm = TRUE) == 0)
-    })
-    # if any, tell user and remove
-    if (any(empty)) {
-      out <- out[!empty]
-      if (verbose) {
-        insight::format_alert(
-          sprintf("Following %i variables were empty and have been removed:", sum(empty)),
-          text_concatenate(names(empty[empty]))
-        )
-      }
-    }
+    .skip_empty_columns(out, verbose)
   }
 
   out
@@ -135,6 +122,24 @@ data_read <- function(path,
   path
 }
 
+
+.skip_empty_columns <- function(out, verbose) {
+  # find empty variables
+  empty <- sapply(out, function(x) {
+    all(is.na(x)) || (is.character(x) && max(nchar(x), na.rm = TRUE) == 0)
+  })
+  # if any, tell user and remove
+  if (any(empty)) {
+    out <- out[!empty]
+    if (verbose) {
+      insight::format_alert(
+        sprintf("Following %i variables were empty and have been removed:", sum(empty)),
+        text_concatenate(names(empty[empty]))
+      )
+    }
+  }
+  out
+}
 
 
 # process imported data from SPSS, SAS or Stata -----------------------
