@@ -10,8 +10,6 @@
 #' from the data frame.
 #'
 #' @param x A data frame.
-#' @param include_empty_string If `TRUE` also removes character vectors that
-#' completely have empty elements (i.e. where `nchar() == 0`).
 #'
 #' @return
 #'
@@ -44,19 +42,21 @@
 #' # remove empty columns and rows
 #' remove_empty(tmp)
 #' @export
-empty_columns <- function(x, include_empty_string = TRUE) {
+empty_columns <- function(x) {
   if ((!is.matrix(x) && !is.data.frame(x)) || ncol(x) < 2) {
     vector("numeric")
   } else {
     all_na <- colSums(is.na(x)) == nrow(x)
-    if (include_empty_string) {
-      all_empty <- sapply(x, function(i) {
-        is.character(i) && max(nchar(i), na.rm = TRUE) == 0
-      })
-      which(all_na | all_empty)
-    } else {
-      which(all_na)
-    }
+    all_empty <- sapply(x, function(i) {
+      is.character(i) && max(nchar(i), na.rm = TRUE) == 0
+    })
+
+    ## TODO: needs conformation if "FUN.VALUE" is used correctly, then can replace sapply above
+    # all_empty <- vapply(x, function(i) {
+    #   is.character(i) && max(nchar(i), na.rm = TRUE) == 0
+    # }, FUN.VALUE = TRUE)
+
+    which(all_na | all_empty)
   }
 }
 
@@ -74,9 +74,9 @@ empty_rows <- function(x) {
 
 #' @rdname remove_empty
 #' @export
-remove_empty_columns <- function(x, include_empty_string = TRUE) {
+remove_empty_columns <- function(x) {
   # check if we have any empty columns at all
-  ec <- empty_columns(x, include_empty_string)
+  ec <- empty_columns(x)
 
   # if yes, removing works, else an empty df would be returned
   if (length(ec)) {

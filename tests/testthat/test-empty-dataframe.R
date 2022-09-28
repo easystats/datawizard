@@ -33,7 +33,4 @@ test_that("remove empty with character", {
   expect_equal(empty_columns(tmp), c(b = 2L, c = 3L, e = 5L))
   expect_equal(dim(remove_empty_columns(tmp)), c(5L, 3L))
   expect_equal(dim(remove_empty(tmp)), c(5L, 3L))
-
-  expect_equal(empty_columns(tmp, include_empty_string = FALSE), c(c = 3L))
-  expect_equal(dim(remove_empty_columns(tmp, include_empty_string = FALSE)), c(5L, 5L))
 })
