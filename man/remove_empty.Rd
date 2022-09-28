@@ -8,11 +8,11 @@
 \alias{remove_empty_rows}
 \title{Return or remove variables or observations that are completely missing}
 \usage{
-empty_columns(x)
+empty_columns(x, include_empty_string = TRUE)
 
 empty_rows(x)
 
-remove_empty_columns(x)
+remove_empty_columns(x, include_empty_string = TRUE)
 
 remove_empty_rows(x)
 
@@ -20,6 +20,9 @@ remove_empty(x)
 }
 \arguments{
 \item{x}{A data frame.}
+
+\item{include_empty_string}{If \code{TRUE} also removes character vectors that
+completely have empty elements (i.e. where \code{nchar() == 0}).}
 }
 \value{
 \itemize{
