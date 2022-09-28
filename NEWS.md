@@ -3,6 +3,9 @@
 * `empty_columns()` and `remove_empty_columns()` now also columns that contain
   only empty characters.
 
+* `data_read()` gains a `convert_factors` argument, to turn off automatic
+  conversion from numeric variables into factors.
+
 # datawizard 0.6.1
 
 * Updates tests for upcoming changes in the `{tidyselect}` package (#267).

@@ -18,6 +18,16 @@ test_that("data_read", {
 
 
 
+# csv -------------------------
+
+test_that("data_read, skip_empty", {
+  d <- data_read("https://raw.githubusercontent.com/easystats/circus/master/data/test_skip_empty.csv")
+  expect_equal(ncol(d), 3)
+  expect_equal(colnames(d), c("Var1", "Var2", "Var3"))
+})
+
+
+
 # tsv -------------------------
 
 temp_file <- tempfile(fileext = ".tsv")
@@ -133,6 +143,12 @@ test_that("data_read", {
   d <- data_read(temp_file)
   expect_equal(sum(sapply(d, is.factor)), 15)
   expect_equal(sum(sapply(d, is.numeric)), 11)
+})
+
+test_that("data_read, convert_factors", {
+  d <- data_read(temp_file, convert_factors = FALSE)
+  expect_equal(sum(sapply(d, is.factor)), 0)
+  expect_equal(sum(sapply(d, is.numeric)), 26)
 })
 
 unlink(temp_file)
