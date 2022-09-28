@@ -9,6 +9,7 @@ data_read(
   path_catalog = NULL,
   encoding = NULL,
   convert_factors = TRUE,
+  skip_empty = FALSE,
   verbose = TRUE,
   ...
 )
@@ -26,6 +27,10 @@ values have a value label, are assumed to be categorical and converted
 into factors. If \code{FALSE}, no variable types are guessed and no conversion
 of numeric variables into factors will be performed. See also section
 'Differences to other packages'.}
+
+\item{skip_empty}{If \code{TRUE}, "empty" variables (that have completely missing
+values, or character vectors that completely have empty character elements)
+will be removed from the data frame after import.}
 
 \item{verbose}{Toggle warnings and messages.}
 
