@@ -19,7 +19,7 @@ test_that(".coerce_to_dataframe works for vectors and list", {
 
   expect_equal(
     .coerce_to_dataframe(c("a", "b", "c")),
-    data.frame(data = c("a", "b", "c"))
+    data.frame(data = c("a", "b", "c"), stringsAsFactors = FALSE)
   )
 
   expect_equal(

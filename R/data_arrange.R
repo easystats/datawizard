@@ -28,7 +28,7 @@ data_arrange <- function(data, select = NULL, safe = TRUE) {
     return(data)
   }
 
-  # Sanity check
+  # Input validation check
   data <- .coerce_to_dataframe(data)
 
   # find which vars should be decreasing
