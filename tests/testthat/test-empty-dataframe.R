@@ -26,14 +26,12 @@ test_that("remove empty columns with character", {
     c = c(NA, NA, NA, NA, NA),
     d = c(1, NA, 3, NA, 5),
     e = c("", "", "", "", ""),
-    f = factor(c("", "", "", "", "")),
-    g = factor(c("", NA, "", NA, "")),
     stringsAsFactors = FALSE
   )
 
   expect_equal(empty_columns(tmp), c(b = 2L, c = 3L, e = 5L))
   expect_equal(dim(remove_empty_columns(tmp)), c(5L, 2L))
-  expect_equal(dim(remove_empty(tmp)), c(5L, 2L))
+  expect_equal(dim(remove_empty(tmp)), c(4L, 2L))
 })
 
 
@@ -49,7 +47,7 @@ test_that("remove empty rows with character", {
     stringsAsFactors = FALSE
   )
 
-  expect_equal(empty_rows(tmp), c(b = 2L, c = 3L, e = 5L))
+  expect_equal(empty_rows(tmp), c(2L, 4L))
   expect_equal(dim(remove_empty_rows(tmp)), c(3L, 7L))
   expect_equal(dim(remove_empty(tmp)), c(3L, 2L))
 })
