@@ -1,7 +1,5 @@
 # datawizard (development version)
 
-* Improved automatic detection of variable type and value labels in `data_read()`.
-
 * `data_read()` gains a `convert_factors` argument, to turn off automatic
   conversion from numeric variables into factors.
 

@@ -135,23 +135,8 @@ data_read <- function(path,
         if (!is.character(i)) {
           # if all values are labelled, we assume factor. Use labels as levels
           if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
-            # convert into factor - this usually preserves numeric levels
-            # when input variable was numeric, i.e. we have levels "1", "2" etc.
-            i <- factor(as.character(i))
-            # we need to be careful here - do we still have matching labels and
-            # values? "value_labels" is a named vector, where elements should
-            # equal the factor levels. check if there are any edge cases where
-            # order of labelled values differs from order of levels
-            lvl_order <- match(as.numeric(levels(i)), value_labels)
-            if (!anyNA(lvl_order)) {
-              # make sure order factor levels matches value labels
-              try(levels(i) <- names(value_labels[lvl_order]), silent = TRUE)
-              value_labels <- NULL
-            } else {
-              # fall back to numeric if we're not sure that value labels and
-              # levels match - better to have numeric than incorrect factor levels
-              i <- as.numeric(i)
-            }
+            i <- factor(as.character(i), labels = names(value_labels))
+            value_labels <- NULL
           } else {
             i <- as.numeric(i)
           }
