@@ -19,7 +19,11 @@
 #' - For `remove_empty_columns()` and `remove_empty_rows()`, a data frame with
 #' "empty" columns or rows removed, respectively.
 #'
-#' - For `remove_empty`, **both** empty rows and columns will be removed.
+#' - For `remove_empty()`, **both** empty rows and columns will be removed.
+#'
+#' @details For character vectors, empty string values (i.e. `""`) are also
+#' considered as missing value. Thus, if a character vector only contains `NA`
+#' and `""``, it is considered as empty variable and will be removed.
 #'
 #' @examples
 #' tmp <- data.frame(
@@ -41,6 +45,16 @@
 #'
 #' # remove empty columns and rows
 #' remove_empty(tmp)
+#'
+#' # also remove "empty" character vectors
+#' tmp <- data.frame(
+#'   a = c(1, 2, 3, NA, 5),
+#'   b = c(1, NA, 3, NA, 5),
+#'   c = c("", "", "", "", ""),
+#'   stringsAsFactors = FALSE
+#' )
+#' empty_columns(tmp)
+#'
 #' @export
 empty_columns <- function(x) {
   if ((!is.matrix(x) && !is.data.frame(x)) || ncol(x) < 2) {
