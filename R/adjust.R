@@ -92,20 +92,17 @@ adjust <- function(data,
     effect <- names(data)
   }
 
-  nums <- sapply(data, is.numeric)
-  # Find outcomes
   if (is.null(select)) {
-    select <- names(data[nums])
-  } else {
-    # evaluate select/exclude, may be select-helpers
-    select <- .select_nse(select,
-      data,
-      exclude,
-      ignore_case,
-      regex = regex,
-      verbose = verbose
-    )
+    select <- is.numeric
   }
+
+  select <- .select_nse(select,
+    data,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # Factors
   formula_random <- NULL
