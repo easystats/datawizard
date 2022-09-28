@@ -138,9 +138,11 @@ data_read <- function(path,
             i <- factor(as.character(i), labels = names(value_labels))
             value_labels <- NULL
           } else {
+            # else, fall back to numeric
             i <- as.numeric(i)
           }
         } else {
+          # we need this to drop haven-specific class attributes
           i <- as.character(i)
         }
 
