@@ -24,9 +24,6 @@ test_that("data_read, skip_empty", {
   d <- data_read("https://raw.githubusercontent.com/easystats/circus/master/data/test_skip_empty.csv")
   expect_equal(ncol(d), 3)
   expect_equal(colnames(d), c("Var1", "Var2", "Var3"))
-  d <- data_read("https://raw.githubusercontent.com/easystats/circus/master/data/test_skip_empty.csv", skip_empty = TRUE)
-  expect_equal(ncol(d), 2)
-  expect_equal(colnames(d), c("Var1", "Var3"))
 })
 
 
