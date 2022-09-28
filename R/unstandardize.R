@@ -35,7 +35,7 @@ unstandardize.numeric <- function(x,
       scale <- attr(x, "scaled:scale", exact = TRUE)
       attr(x, "scaled:scale") <- attr(x, "scaled:center") <- NULL
     } else {
-      stop("You must provide the arguments `center`, `scale` or `reference`.")
+      insight::format_error("You must provide the arguments `center`, `scale` or `reference`.")
     }
   }
 
@@ -84,7 +84,7 @@ unstandardize.data.frame <- function(x,
       i <- names(x) %in% names(scale)
       i <- i[i]
     } else {
-      stop("You must provide the arguments `center`, `scale` or `reference`.")
+      insight::format_error("You must provide the arguments `center`, `scale` or `reference`.")
     }
   } else {
     if (is.null(names(center))) {
@@ -133,7 +133,7 @@ unstandardize.grouped_df <- function(x,
                                      robust = FALSE,
                                      two_sd = FALSE,
                                      ...) {
-  stop("Cannot (yet) unstandardize a grouped_df.")
+  insight::format_error("Cannot (yet) unstandardize a `grouped_df`.")
 }
 
 #' @export
