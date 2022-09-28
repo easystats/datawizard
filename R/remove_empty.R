@@ -50,7 +50,9 @@ empty_columns <- function(x, include_empty_string = TRUE) {
   } else {
     all_na <- colSums(is.na(x)) == nrow(x)
     if (include_empty_string) {
-      all_empty <- is.character(x) & max(nchar(x), na.rm = TRUE) == 0
+      all_empty <- sapply(x, function(i) {
+        is.character(i) && max(nchar(i), na.rm = TRUE) == 0
+      })
       which(all_na | all_empty)
     } else {
       which(all_na)
