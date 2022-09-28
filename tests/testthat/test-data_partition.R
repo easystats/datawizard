@@ -3,7 +3,7 @@ test_that("data_partition works as expected", {
 
   expect_error(
     data_partition(new.env()),
-    "`data` needs to be a data frame"
+    "`data` must be a data frame"
   )
 
   # to be coerced to data frames

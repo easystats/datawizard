@@ -386,11 +386,8 @@
     insight::format_error("The `data` argument must be provided.")
   }
   # check data frame input
-  if (!is.null(data) && !is.data.frame(data)) {
-    data <- try(as.data.frame(data), silent = TRUE)
-    if (inherits(data, c("try-error", "simpleError"))) {
-      insight::format_error("The `data` argument must be a data frame, or an object that can be coerced to a data frame.")
-    }
+  if (!is.null(data)) {
+    data <- .coerce_to_dataframe(data)
   }
 }
 
