@@ -23,7 +23,13 @@
 #' data_arrange(head(mtcars), "gear", "foo", safe = FALSE)
 #' }
 #' @export
+
 data_arrange <- function(data, select = NULL, safe = TRUE) {
+  UseMethod("data_arrange")
+}
+
+#' @export
+data_arrange.default <- function(data, select = NULL, safe = TRUE) {
   if (is.null(select) || length(select) == 0) {
     return(data)
   }
@@ -77,4 +83,23 @@ data_arrange <- function(data, select = NULL, safe = TRUE) {
   } else {
     data[do.call(order, out[, select]), ]
   }
+}
+
+#' @export
+data_arrange.grouped_df <- function(data, select = NULL, safe = TRUE) {
+
+  data_attr <- attributes(data)
+
+  group_vars <- setdiff(colnames(data_attr$groups), ".rows")
+  groups <- split(data, data[group_vars])
+
+  out <- do.call(rbind, lapply(seq_along(groups), function(i) {
+    data_arrange.default(groups[[i]], select = select, safe = safe)
+  }))
+
+  rownames_before <- rownames(out)
+  attributes(out) <- data_attr
+  row.names(out) <- rownames_before
+
+  out
 }

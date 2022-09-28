@@ -1,5 +1,8 @@
 # datawizard (development version)
 
+* `data_arrange()` now works with dataframes that were grouped using `data_group()`
+  (#274).
+
 # datawizard 0.6.1
 
 * Updates tests for upcoming changes in the `{tidyselect}` package (#267).
