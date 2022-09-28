@@ -28,14 +28,8 @@ data_arrange <- function(data, select = NULL, safe = TRUE) {
     return(data)
   }
 
-  # coerce to data frame?
-  if (!is.data.frame(data)) {
-    data <- tryCatch(as.data.frame(data, stringsAsFactors = FALSE),
-      error = function(e) {
-        stop("Could not coerce `data` into a data frame.", call. = FALSE)
-      }
-    )
-  }
+  # Input validation check
+  data <- .coerce_to_dataframe(data)
 
   # find which vars should be decreasing
   desc <- select[grepl("^-", select)]
@@ -44,9 +38,17 @@ data_arrange <- function(data, select = NULL, safe = TRUE) {
 
   # check for variables that are not in data
   dont_exist <- select[which(!select %in% names(data))]
+
   if (length(dont_exist) > 0) {
     if (!safe) {
       insight::format_error(
+        paste0(
+          "The following column(s) don't exist in the dataset: ",
+          text_concatenate(dont_exist), "."
+        )
+      )
+    } else {
+      insight::format_warning(
         paste0(
           "The following column(s) don't exist in the dataset: ",
           text_concatenate(dont_exist), "."
