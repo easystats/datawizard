@@ -4,7 +4,14 @@
 \alias{data_read}
 \title{Read (import) data files from various sources}
 \usage{
-data_read(path, path_catalog = NULL, encoding = NULL, verbose = TRUE, ...)
+data_read(
+  path,
+  path_catalog = NULL,
+  encoding = NULL,
+  convert_factors = TRUE,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{path}{Character string, the file path to the data file.}
@@ -13,6 +20,12 @@ data_read(path, path_catalog = NULL, encoding = NULL, verbose = TRUE, ...)
 for SAS data files.}
 
 \item{encoding}{The character encoding used for the file. Usually not needed.}
+
+\item{convert_factors}{Logical, if \code{TRUE} (default), numeric variables, where
+all values have a value label, are assumed to be categorical and converted
+into factors. If \code{FALSE}, no variable types are guessed and no conversion
+of numeric variables into factors will be performed. See also section
+'Differences to other packages'.}
 
 \item{verbose}{Toggle warnings and messages.}
 
@@ -67,6 +80,8 @@ where \emph{all} values are labelled, will be converted into factors, where
 imported value labels will be set as factor levels. Else, if a variable
 has \emph{no} value labels or less value labels than values, the variable is
 either converted into numeric or character vector. Value labels are then
-preserved as \code{"labels"} attribute.
+preserved as \code{"labels"} attribute. Use \code{convert_factors = FALSE} to suppress
+automatic detection of factors; numeric variables then will not be converted
+to factors.
 }
 
