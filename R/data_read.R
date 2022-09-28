@@ -151,6 +151,8 @@ data_read <- function(path,
               try(levels(i) <- names(value_labels[lvl_order]), silent = TRUE)
               value_labels <- NULL
             } else {
+              # fall back to numeric if we're not sure that value labels and
+              # levels match - better to have numeric than incorrect factor levels
               i <- as.numeric(i)
             }
           } else {
