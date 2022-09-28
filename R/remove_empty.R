@@ -47,14 +47,9 @@ empty_columns <- function(x) {
     vector("numeric")
   } else {
     all_na <- colSums(is.na(x)) == nrow(x)
-    all_empty <- sapply(x, function(i) {
+    all_empty <- vapply(x, function(i) {
       is.character(i) && max(nchar(i), na.rm = TRUE) == 0
-    })
-
-    ## TODO: needs conformation if "FUN.VALUE" is used correctly, then can replace sapply above
-    # all_empty <- vapply(x, function(i) {
-    #   is.character(i) && max(nchar(i), na.rm = TRUE) == 0
-    # }, FUN.VALUE = TRUE)
+    }, FUN.VALUE = logical(1))
 
     which(all_na | all_empty)
   }
