@@ -15,6 +15,11 @@
 #' @param path_catalog Character string, path to the catalog file. Only relevant
 #' for SAS data files.
 #' @param encoding The character encoding used for the file. Usually not needed.
+#' @param convert_factors If `TRUE` (default), numeric variables, where all
+#' values have a value label, are assumed to be categorical and converted
+#' into factors. If `FALSE`, no variable types are guessed and no conversion
+#' of numeric variables into factors will be performed. See also section
+#' 'Differences to other packages'.
 #' @param verbose Toggle warnings and messages.
 #' @param ... Arguments passed to the related `read_*()` function.
 #'
@@ -42,35 +47,51 @@
 #' @section Differences to other packages that read foreign data formats:
 #' `data_read()` is most comparable to `rio::import()`. For data files from
 #' SPSS, SAS or Stata, which support labelled data, variables are converted into
-#' their most appropriate type. The major difference to `rio::import()` is
-#' that `data_read()` automatically converts variables into factors, unless
-#' the variables are only partially labelled, in which case variables are
-#' converted to numerics. Character vectors are preserved. Hence, variables,
-#' where _all_ values are labelled, will be converted into factors, where
-#' imported value labels will be set as factor levels. Else, if a variable
-#' has _no_ value labels or less value labels than values, the variable is
-#' either converted into numeric or character vector. Value labels are then
-#' preserved as `"labels"` attribute.
+#' their most appropriate type. The major difference to `rio::import()` is that
+#' `data_read()` automatically converts fully labelled numeric variables into
+#' factors, where imported value labels will be set as factor levels. If a
+#' numeric variable has _no_ value labels or less value labels than values, it
+#' is not converted to factor. In this case, value labels are preserved as
+#' `"labels"` attribute. Character vectors are preserved.  Use
+#' `convert_factors = FALSE` to remove the automatic conversion of numeric
+#' variables to factors.
 #'
 #' @export
-data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE, ...) {
+data_read <- function(path,
+                      path_catalog = NULL,
+                      encoding = NULL,
+                      convert_factors = TRUE,
+                      verbose = TRUE,
+                      ...) {
   # extract first valid file from zip-file
   if (.file_ext(path) == "zip") {
     path <- .extract_zip(path)
   }
 
   # read data
-  switch(.file_ext(path),
+  out <- switch(.file_ext(path),
     "txt" = ,
     "csv" = .read_text(path, encoding, verbose, ...),
     "xls" = ,
     "xlsx" = .read_excel(path, encoding, verbose, ...),
     "sav" = ,
-    "por" = .read_spss(path, encoding, verbose, ...),
-    "dta" = .read_stata(path, encoding, verbose, ...),
-    "sas7bdat" = .read_sas(path, path_catalog, encoding, verbose, ...),
-    .read_unknown(path, verbose, ...)
+    "por" = .read_spss(path, encoding, convert_factors, verbose, ...),
+    "dta" = .read_stata(path, encoding, convert_factors, verbose, ...),
+    "sas7bdat" = .read_sas(path, path_catalog, encoding, convert_factors, verbose, ...),
+    .read_unknown(path, convert_factors, verbose, ...)
   )
+
+  # tell user about empty columns
+  if (verbose) {
+    empty_cols <- empty_columns(out)
+    insight::format_alert(
+      sprintf("Following %i variables are empty:", length(empty_cols)),
+      text_concatenate(names(empty_cols)),
+      "\nUse `remove_empty_columns()` to remove them from the data frame."
+    )
+  }
+
+  out
 }
 
 
@@ -96,7 +117,7 @@ data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE
     utils::unzip(path, exdir = d)
     path <- file.path(d, dest[1])
   } else {
-    stop("The zip-file does not contain any supported file types.", call. = FALSE)
+    insight::format_error("The zip-file does not contain any supported file types.")
   }
 
   path
@@ -106,40 +127,48 @@ data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE
 
 # process imported data from SPSS, SAS or Stata -----------------------
 
-.post_process_imported_data <- function(x, verbose) {
-  if (verbose) {
-    message("Preparing data... Almost there!")
-  }
-  x[] <- lapply(x, function(i) {
-    # save labels
-    value_labels <- attr(i, "labels", exact = TRUE)
-    variable_labels <- attr(i, "label", exact = TRUE)
+.post_process_imported_data <- function(x, convert_factors, verbose) {
+  # user may decide whether we automatically detect variable type or not
+  if (isTRUE(convert_factors)) {
+    if (verbose) {
+      message("Preparing data... Almost there!")
+    }
+    x[] <- lapply(x, function(i) {
+      # only proceed if not all missing
+      if (!all(is.na(i))) {
+        # save labels
+        value_labels <- attr(i, "labels", exact = TRUE)
+        variable_labels <- attr(i, "label", exact = TRUE)
 
-    # filter, so only matching value labels remain
-    value_labels <- value_labels[value_labels %in% unique(i)]
+        # filter, so only matching value labels remain
+        value_labels <- value_labels[value_labels %in% unique(i)]
 
-    # guess variable type
-    if (!is.character(i)) {
-      # if all values are labelled, we assume factor. Use labels as levels
-      if (length(value_labels) == insight::n_unique(i)) {
-        i <- factor(as.character(i), labels = names(value_labels))
-        value_labels <- NULL
-      } else {
-        i <- as.numeric(i)
+        # guess variable type
+        if (!is.character(i)) {
+          # if all values are labelled, we assume factor. Use labels as levels
+          if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
+            i <- factor(as.character(i), labels = names(value_labels))
+            value_labels <- NULL
+          } else {
+            # else, fall back to numeric
+            i <- as.numeric(i)
+          }
+        } else {
+          # we need this to drop haven-specific class attributes
+          i <- as.character(i)
+        }
+
+        # drop unused value labels
+        if (!is.null(value_labels) && length(value_labels <- value_labels[value_labels %in% unique(i)])) {
+          attr(i, "labels") <- value_labels
+        }
+
+        # add back variable label
+        attr(i, "label") <- variable_labels
       }
-    } else {
-      i <- as.character(i)
-    }
-
-    # drop unused value labels
-    if (!is.null(value_labels) && length(value_labels <- value_labels[value_labels %in% unique(i)])) {
-      attr(i, "labels") <- value_labels
-    }
-
-    # add back variable label
-    attr(i, "label") <- variable_labels
-    i
-  })
+      i
+    })
+  }
 
   class(x) <- "data.frame"
   x
@@ -149,33 +178,33 @@ data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE
 
 # read functions -----------------------
 
-.read_spss <- function(path, encoding, verbose, ...) {
+.read_spss <- function(path, encoding, convert_factors, verbose, ...) {
   insight::check_if_installed("haven", reason = paste0("to read files of type '", .file_ext(path), "'"))
   if (verbose) {
     message("Reading data...")
   }
   out <- haven::read_sav(file = path, encoding = encoding, user_na = FALSE, ...)
-  .post_process_imported_data(out, verbose)
+  .post_process_imported_data(out, convert_factors, verbose)
 }
 
 
-.read_stata <- function(path, encoding, verbose, ...) {
+.read_stata <- function(path, encoding, convert_factors, verbose, ...) {
   insight::check_if_installed("haven", reason = paste0("to read files of type '", .file_ext(path), "'"))
   if (verbose) {
     message("Reading data...")
   }
   out <- haven::read_dta(file = path, encoding = encoding, ...)
-  .post_process_imported_data(out, verbose)
+  .post_process_imported_data(out, convert_factors, verbose)
 }
 
 
-.read_sas <- function(path, path_catalog, encoding, verbose, ...) {
+.read_sas <- function(path, path_catalog, encoding, convert_factors, verbose, ...) {
   insight::check_if_installed("haven", reason = paste0("to read files of type '", .file_ext(path), "'"))
   if (verbose) {
     message("Reading data...")
   }
   out <- haven::read_sas(data_file = path, catalog_file = path_catalog, encoding = encoding, ...)
-  .post_process_imported_data(out, verbose)
+  .post_process_imported_data(out, convert_factors, verbose)
 }
 
 
@@ -207,11 +236,11 @@ data_read <- function(path, path_catalog = NULL, encoding = NULL, verbose = TRUE
 }
 
 
-.read_unknown <- function(path, verbose, ...) {
+.read_unknown <- function(path, convert_factors, verbose, ...) {
   insight::check_if_installed("rio", reason = paste0("to read files of type '", .file_ext(path), "'"))
   if (verbose) {
     message("Reading data...")
   }
   out <- rio::import(file = path, ...)
-  .post_process_imported_data(out, verbose)
+  .post_process_imported_data(out, convert_factors, verbose)
 }
