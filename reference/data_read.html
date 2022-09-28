@@ -22,7 +22,7 @@ to rio::import()."><meta property="og:image" content="https://easystats.github.i
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,7 +110,14 @@ to <code><a href="https://rdrr.io/pkg/rio/man/import.html" class="external-link"
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">data_read</span><span class="op">(</span><span class="va">path</span>, path_catalog <span class="op">=</span> <span class="cn">NULL</span>, encoding <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">data_read</span><span class="op">(</span></span>
+<span>  <span class="va">path</span>,</span>
+<span>  path_catalog <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  encoding <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  convert_factors <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -126,6 +133,14 @@ for SAS data files.</p></dd>
 
 <dt>encoding</dt>
 <dd><p>The character encoding used for the file. Usually not needed.</p></dd>
+
+
+<dt>convert_factors</dt>
+<dd><p>If <code>TRUE</code> (default), numeric variables, where all
+values have a value label, are assumed to be categorical and converted
+into factors. If <code>FALSE</code>, no variable types are guessed and no conversion
+of numeric variables into factors will be performed. See also section
+'Differences to other packages'.</p></dd>
 
 
 <dt>verbose</dt>
@@ -176,15 +191,14 @@ arguments in <code>...</code> are passed down to the related <code>read_*()</cod
 
 <p><code>data_read()</code> is most comparable to <code><a href="https://rdrr.io/pkg/rio/man/import.html" class="external-link">rio::import()</a></code>. For data files from
 SPSS, SAS or Stata, which support labelled data, variables are converted into
-their most appropriate type. The major difference to <code><a href="https://rdrr.io/pkg/rio/man/import.html" class="external-link">rio::import()</a></code> is
-that <code>data_read()</code> automatically converts variables into factors, unless
-the variables are only partially labelled, in which case variables are
-converted to numerics. Character vectors are preserved. Hence, variables,
-where <em>all</em> values are labelled, will be converted into factors, where
-imported value labels will be set as factor levels. Else, if a variable
-has <em>no</em> value labels or less value labels than values, the variable is
-either converted into numeric or character vector. Value labels are then
-preserved as <code>"labels"</code> attribute.</p>
+their most appropriate type. The major difference to <code><a href="https://rdrr.io/pkg/rio/man/import.html" class="external-link">rio::import()</a></code> is that
+<code>data_read()</code> automatically converts fully labelled numeric variables into
+factors, where imported value labels will be set as factor levels. If a
+numeric variable has <em>no</em> value labels or less value labels than values, it
+is not converted to factor. In this case, value labels are preserved as
+<code>"labels"</code> attribute. Character vectors are preserved.  Use
+<code>convert_factors = FALSE</code> to remove the automatic conversion of numeric
+variables to factors.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
