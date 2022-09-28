@@ -47,17 +47,14 @@
 #' @section Differences to other packages that read foreign data formats:
 #' `data_read()` is most comparable to `rio::import()`. For data files from
 #' SPSS, SAS or Stata, which support labelled data, variables are converted into
-#' their most appropriate type. The major difference to `rio::import()` is
-#' that `data_read()` automatically converts variables into factors, unless
-#' the variables are only partially labelled, in which case variables are
-#' converted to numerics. Character vectors are preserved. Hence, variables,
-#' where _all_ values are labelled, will be converted into factors, where
-#' imported value labels will be set as factor levels. Else, if a variable
-#' has _no_ value labels or less value labels than values, the variable is
-#' either converted into numeric or character vector. Value labels are then
-#' preserved as `"labels"` attribute. Use `convert_factors = FALSE` to suppress
-#' automatic detection of factors; numeric variables then will not be converted
-#' to factors.
+#' their most appropriate type. The major difference to `rio::import()` is that
+#' `data_read()` automatically converts fully labelled numeric variables into
+#' factors, where imported value labels will be set as factor levels. If a
+#' numeric variable has _no_ value labels or less value labels than values, it
+#' is not converted to factor. In this case, value labels are preserved as
+#' `"labels"` attribute. Character vectors are preserved.  Use
+#' `convert_factors = FALSE` to remove the automatic conversion of numeric
+#' variables to factors.
 #'
 #' @export
 data_read <- function(path,

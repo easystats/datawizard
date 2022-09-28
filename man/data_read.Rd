@@ -72,16 +72,13 @@ arguments in \code{...} are passed down to the related \verb{read_*()} function.
 
 \code{data_read()} is most comparable to \code{rio::import()}. For data files from
 SPSS, SAS or Stata, which support labelled data, variables are converted into
-their most appropriate type. The major difference to \code{rio::import()} is
-that \code{data_read()} automatically converts variables into factors, unless
-the variables are only partially labelled, in which case variables are
-converted to numerics. Character vectors are preserved. Hence, variables,
-where \emph{all} values are labelled, will be converted into factors, where
-imported value labels will be set as factor levels. Else, if a variable
-has \emph{no} value labels or less value labels than values, the variable is
-either converted into numeric or character vector. Value labels are then
-preserved as \code{"labels"} attribute. Use \code{convert_factors = FALSE} to suppress
-automatic detection of factors; numeric variables then will not be converted
-to factors.
+their most appropriate type. The major difference to \code{rio::import()} is that
+\code{data_read()} automatically converts fully labelled numeric variables into
+factors, where imported value labels will be set as factor levels. If a
+numeric variable has \emph{no} value labels or less value labels than values, it
+is not converted to factor. In this case, value labels are preserved as
+\code{"labels"} attribute. Character vectors are preserved.  Use
+\code{convert_factors = FALSE} to remove the automatic conversion of numeric
+variables to factors.
 }
 
