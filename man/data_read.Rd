@@ -21,8 +21,8 @@ for SAS data files.}
 
 \item{encoding}{The character encoding used for the file. Usually not needed.}
 
-\item{convert_factors}{Logical, if \code{TRUE} (default), numeric variables, where
-all values have a value label, are assumed to be categorical and converted
+\item{convert_factors}{If \code{TRUE} (default), numeric variables, where all
+values have a value label, are assumed to be categorical and converted
 into factors. If \code{FALSE}, no variable types are guessed and no conversion
 of numeric variables into factors will be performed. See also section
 'Differences to other packages'.}

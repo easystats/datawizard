@@ -15,8 +15,8 @@
 #' @param path_catalog Character string, path to the catalog file. Only relevant
 #' for SAS data files.
 #' @param encoding The character encoding used for the file. Usually not needed.
-#' @param convert_factors Logical, if `TRUE` (default), numeric variables, where
-#' all values have a value label, are assumed to be categorical and converted
+#' @param convert_factors If `TRUE` (default), numeric variables, where all
+#' values have a value label, are assumed to be categorical and converted
 #' into factors. If `FALSE`, no variable types are guessed and no conversion
 #' of numeric variables into factors will be performed. See also section
 #' 'Differences to other packages'.
