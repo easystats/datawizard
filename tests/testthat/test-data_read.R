@@ -103,4 +103,10 @@ test_that("data_read", {
   expect_equal(sum(sapply(d, is.numeric)), 11)
 })
 
+test_that("data_read, convert_factors", {
+  d <- data_read(temp_file, convert_factors = FALSE)
+  expect_equal(sum(sapply(d, is.factor)), 0)
+  expect_equal(sum(sapply(d, is.numeric)), 26)
+})
+
 unlink(temp_file)
