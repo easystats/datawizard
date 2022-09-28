@@ -20,9 +20,6 @@
 #' into factors. If `FALSE`, no variable types are guessed and no conversion
 #' of numeric variables into factors will be performed. See also section
 #' 'Differences to other packages'.
-#' @param skip_empty If `TRUE`, "empty" variables (that have completely missing
-#' values, or character vectors that completely have empty character elements)
-#' will be removed from the data frame after import.
 #' @param verbose Toggle warnings and messages.
 #' @param ... Arguments passed to the related `read_*()` function.
 #'
@@ -64,7 +61,6 @@ data_read <- function(path,
                       path_catalog = NULL,
                       encoding = NULL,
                       convert_factors = TRUE,
-                      skip_empty = FALSE,
                       verbose = TRUE,
                       ...) {
   # extract first valid file from zip-file
@@ -85,9 +81,14 @@ data_read <- function(path,
     .read_unknown(path, convert_factors, verbose, ...)
   )
 
-  # remove empty variables
-  if (skip_empty) {
-    .skip_empty_columns(out, verbose)
+  # tell user about empty columns
+  if (verbose) {
+    empty_cols <- empty_columns(out)
+    insight::format_alert(
+      sprintf("Following %i variables are empty:", length(empty_cols)),
+      text_concatenate(names(empty_cols)),
+      "\nUse `remove_empty_columns()` to remove them from the data frame."
+    )
   }
 
   out
@@ -122,24 +123,6 @@ data_read <- function(path,
   path
 }
 
-
-.skip_empty_columns <- function(out, verbose) {
-  # find empty variables
-  empty <- sapply(out, function(x) {
-    all(is.na(x)) || (is.character(x) && max(nchar(x), na.rm = TRUE) == 0)
-  })
-  # if any, tell user and remove
-  if (any(empty)) {
-    out <- out[!empty]
-    if (verbose) {
-      insight::format_alert(
-        sprintf("Following %i variables were empty and have been removed:", sum(empty)),
-        text_concatenate(names(empty[empty]))
-      )
-    }
-  }
-  out
-}
 
 
 # process imported data from SPSS, SAS or Stata -----------------------
