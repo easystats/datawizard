@@ -1,13 +1,13 @@
 # datawizard (development version)
 
-# datawizard 0.6.1
-
-* Updates tests for upcoming changes in the `{tidyselect}` package (#267).
-
 * Improved automatic detection of variable type and value labels in `data_read()`.
 
 * `data_read()` gains a `convert_factors` argument, to turn off automatic
   conversion from numeric variables into factors.
+
+# datawizard 0.6.1
+
+* Updates tests for upcoming changes in the `{tidyselect}` package (#267).
 
 # datawizard 0.6.0
 
