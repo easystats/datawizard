@@ -1,5 +1,12 @@
 # datawizard (development version)
 
+BREAKING CHANGES
+
+* Methods for grouped data frames ( `.grouped_df`) no longer support
+  `dplyr::group_by()` for {dplyr} before version 0.8.0.
+
+CHANGES
+
 * `data_arrange()` now works with dataframes that were grouped using `data_group()`
   (#274).
 
