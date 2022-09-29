@@ -73,13 +73,12 @@ test_that("data_arrange errors if not coercable to data frame", {
 
 test_that("data_arrange works with grouped df", {
   set.seed(123)
-  x <- mtcars[sample(1:nrow(mtcars), 10, replace = TRUE), c("cyl", "mpg", "drat")]
+  x <- mtcars[sample(1:nrow(mtcars), 10, replace = TRUE), c("cyl", "mpg")]
   g <- data_group(x, cyl)
 
   expected <- data.frame(
     cyl = c(4, 4, 4, 6, 6, 8, 8, 8, 8, 8),
-    mpg = c(22.8, 30.4, 32.4, 17.8, 19.2, 10.4, 15, 15.2, 15.5, 18.7),
-    drat = c(3.85, 4.93, 4.08, 3.92, 3.92, 2.93, 3.54, 3.07, 2.76, 3.15)
+    mpg = c(22.8, 30.4, 32.4, 17.8, 19.2, 10.4, 15, 15.2, 15.5, 18.7)
   )
   class(expected) <- c("grouped_df", "data.frame")
   rownames(expected) <- c(
@@ -93,4 +92,39 @@ test_that("data_arrange works with grouped df", {
     data_arrange(g, "mpg"),
     expected
   )
+})
+
+test_that("data_arrange works with NA", {
+
+  # without groups
+
+  tmp <- data.frame(
+    a = c(1, 2, 2, 8, 1, 3),
+    b = c(1, NA, 3, 3, NA, 5)
+  )
+
+  expect_equal(
+    data_arrange(tmp, "a"),
+    data.frame(
+      a = c(1, 1, 2, 2, 3, 8),
+      b = c(1, NA, NA, 3, 5, 3)
+    )
+  )
+
+  # with groups
+
+  g <- data_group(tmp, "b")
+
+  expected <- data.frame(
+    a = c(1, 2, 8, 3, 1, 2),
+    b = c(1, 3, 3, 5, NA, NA)
+  )
+  class(expected) <- c("grouped_df", "data.frame")
+  attributes(expected)$groups <- attributes(g)$groups
+
+  expect_equal(
+    data_arrange(g, "a"),
+    expected
+  )
+
 })

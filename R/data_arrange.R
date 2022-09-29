@@ -28,7 +28,10 @@ data_arrange <- function(data, select = NULL, safe = TRUE) {
   UseMethod("data_arrange")
 }
 
+
+
 #' @export
+
 data_arrange.default <- function(data, select = NULL, safe = TRUE) {
   if (is.null(select) || length(select) == 0) {
     return(data)
@@ -79,27 +82,37 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
 
   # apply ordering
   if (length(select) == 1) {
-    data[order(out[[select]]), ]
+    out <- data[order(out[[select]]), ]
   } else {
-    data[do.call(order, out[, select]), ]
+    out <- data[do.call(order, out[, select]), ]
   }
+
+  if (.has_numeric_rownames(data)) {
+    rownames(out) <- NULL
+  }
+
+  out
 }
 
+
+
 #' @export
+
 data_arrange.grouped_df <- function(data, select = NULL, safe = TRUE) {
 
-  data_attr <- attributes(data)
+  # works only for dplyr >= 0.8.0
+  grps <- attr(data, "groups", exact = TRUE)
+  grps <- grps[[".rows"]]
 
-  group_vars <- setdiff(colnames(data_attr$groups), ".rows")
-  groups <- split(data, data[group_vars])
+  out <- lapply(grps, function(x) {
+    data_arrange.default(data[x, ], select = select, safe = safe)
+  })
 
-  out <- do.call(rbind, lapply(seq_along(groups), function(i) {
-    data_arrange.default(groups[[i]], select = select, safe = safe)
-  }))
+  out <- do.call(rbind, out)
 
-  rownames_before <- rownames(out)
-  attributes(out) <- data_attr
-  row.names(out) <- rownames_before
+  if (.has_numeric_rownames(data)) {
+    rownames(out) <- NULL
+  }
 
   out
 }
