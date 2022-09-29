@@ -43,3 +43,12 @@
   }
   data
 }
+
+
+#' Data only has numbers as rownames
+#'
+#' @keywords internal
+#' @noRd
+.has_numeric_rownames <- function(data) {
+  all(grepl("^[[:digit:]]$", row.names(data)))
+}

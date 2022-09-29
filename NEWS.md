@@ -7,6 +7,9 @@ BREAKING CHANGES
 
 CHANGES
 
+* `data_arrange()` now works with dataframes that were grouped using `data_group()`
+  (#274).
+
 * `data_read()` gains a `convert_factors` argument, to turn off automatic
   conversion from numeric variables into factors.
 
