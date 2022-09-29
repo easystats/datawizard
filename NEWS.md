@@ -3,7 +3,7 @@
 BREAKING CHANGES
 
 * Methods for grouped data frames ( `.grouped_df`) no longer support
-  `dplyr::group_by()` for {dplyr} before version 0.8.0.
+  `dplyr::group_by()` for `{dplyr}` before version 0.8.0.
 
 CHANGES
 
