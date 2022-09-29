@@ -50,5 +50,5 @@
 #' @keywords internal
 #' @noRd
 .has_numeric_rownames <- function(data) {
-  all(grepl("^[[:digit:]]$", row.names(data)))
+  all(is.numeric(attributes(data)$row.names))
 }
