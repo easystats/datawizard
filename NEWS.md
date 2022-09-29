@@ -1,7 +1,19 @@
 # datawizard (development version)
 
-* `empty_columns()` and `remove_empty_columns()` now also columns that contain
-  only empty characters.
+BREAKING CHANGES
+
+* Methods for grouped data frames ( `.grouped_df`) no longer support
+  `dplyr::group_by()` for `{dplyr}` before version 0.8.0.
+
+* `empty_columns()` and `remove_empty_columns()` now also remove columns
+  that contain only empty characters. Likewise, `empty_rows()` and
+  `remove_empty_rows()` remove observations that completely have
+  missing or empty character values.
+
+CHANGES
+
+* `data_arrange()` now works with dataframes that were grouped using `data_group()`
+  (#274).
 
 * `data_read()` gains a `convert_factors` argument, to turn off automatic
   conversion from numeric variables into factors.

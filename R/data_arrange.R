@@ -23,7 +23,16 @@
 #' data_arrange(head(mtcars), "gear", "foo", safe = FALSE)
 #' }
 #' @export
+
 data_arrange <- function(data, select = NULL, safe = TRUE) {
+  UseMethod("data_arrange")
+}
+
+
+
+#' @export
+
+data_arrange.default <- function(data, select = NULL, safe = TRUE) {
   if (is.null(select) || length(select) == 0) {
     return(data)
   }
@@ -73,8 +82,37 @@ data_arrange <- function(data, select = NULL, safe = TRUE) {
 
   # apply ordering
   if (length(select) == 1) {
-    data[order(out[[select]]), ]
+    out <- data[order(out[[select]]), ]
   } else {
-    data[do.call(order, out[, select]), ]
+    out <- data[do.call(order, out[, select]), ]
   }
+
+  if (.has_numeric_rownames(data)) {
+    rownames(out) <- NULL
+  }
+
+  out
+}
+
+
+
+#' @export
+
+data_arrange.grouped_df <- function(data, select = NULL, safe = TRUE) {
+
+  # works only for dplyr >= 0.8.0
+  grps <- attr(data, "groups", exact = TRUE)
+  grps <- grps[[".rows"]]
+
+  out <- lapply(grps, function(x) {
+    data_arrange.default(data[x, ], select = select, safe = safe)
+  })
+
+  out <- do.call(rbind, out)
+
+  if (.has_numeric_rownames(data)) {
+    rownames(out) <- NULL
+  }
+
+  out
 }
