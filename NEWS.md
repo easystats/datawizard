@@ -1,5 +1,12 @@
 # datawizard (development version)
 
+BREAKING CHANGES
+
+* Methods for grouped data frames ( `.grouped_df`) no longer support
+  `dplyr::group_by()` for {dplyr} before version 0.8.0.
+
+CHANGES
+
 * `data_read()` gains a `convert_factors` argument, to turn off automatic
   conversion from numeric variables into factors.
 
