@@ -16,4 +16,5 @@
 #' @docType package
 #' @aliases datawizard datawizard-package
 #' @name datawizard-package
+#' @keywords internal
 "_PACKAGE"
