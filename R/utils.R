@@ -49,6 +49,8 @@
 #'
 #' @keywords internal
 #' @noRd
+
+# TODO replace by insight::object_has_rownames() once insight 0.18.5 is out
 .has_numeric_rownames <- function(data) {
-  all(is.numeric(attributes(data)$row.names))
+  identical(attributes(data)$row.names, seq_len(nrow(data)))
 }
