@@ -2,7 +2,7 @@
 
 0 errors | 0 warnings | 0 note
 
-* Updates tests for upcoming changes in the `{tidyselect}` package
+* Maintenance release.
 
 ## revdepcheck results
 

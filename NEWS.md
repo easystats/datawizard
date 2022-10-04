@@ -1,4 +1,4 @@
-# datawizard (development version)
+# datawizard 0.6.2
 
 BREAKING CHANGES
 

@@ -1,8 +1,8 @@
 ---
-title: "A quick summary of selecting syntax in `{datawizard}`"
+title: "A quick summary of selection syntax in `{datawizard}`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{A quick summary of selecting syntax in `{datawizard}`}
+  %\VignetteIndexEntry{A quick summary of selection syntax in `{datawizard}`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
