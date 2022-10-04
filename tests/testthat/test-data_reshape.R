@@ -52,7 +52,7 @@ test_that("data_reshape works as expected - using row names as idvar", {
   )
   expect_equal(
     head(out$value),
-    c(6, 160, 110, 6, 160, 110),
+    c(8, 304, 150, 8, 472, 205),
     ignore_attr = TRUE,
     tolerance = 1e-3
   )

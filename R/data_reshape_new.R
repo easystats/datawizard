@@ -59,7 +59,6 @@ new_data_to_long <- function(
     tbl_input <- FALSE
   }
 
-
   if (any(names_to %in% setdiff(names(data), cols))) {
     insight::format_error(
       "Some values of the columns specified in 'names_to' are already present as column names.",
@@ -75,21 +74,20 @@ new_data_to_long <- function(
     stop("No columns found for reshaping data.", call. = FALSE)
   }
 
-
   not_selected <- setdiff(names(data), cols)
 
   # create a temp id so that we know how to rearrange the rows once the data is
   # stacked
   not_stacked <- data[, not_selected, drop = FALSE]
-  not_stacked[["_Rows"]] <- 1:nrow(not_stacked)
+  not_stacked[["_Rows"]] <- coerce_to_numeric(row.names(data))
   if (insight::is_empty_object(not_stacked)) {
-    not_stacked <- data.frame("_Rows" = 1:nrow(not_stacked))
+    not_stacked[["_Rows"]] <- coerce_to_numeric(row.names(data))
   }
 
   if (length(not_selected) == 0) {
-    stacked_data <- .stack(data[, cols], rearrange = TRUE)[, 2:1]
+    stacked_data <- .stack(data[, cols], rearrange = is.null(rows_to))[, 2:1]
   } else  {
-    stacked_data <- .stack(data[, cols])[, 2:1]
+    stacked_data <- .stack(data[, cols, drop = FALSE])[, 2:1]
   }
 
   stacked_data <- data_rename(stacked_data, "values", values_to)
@@ -98,16 +96,14 @@ new_data_to_long <- function(
   if (length(names_to) > 1) {
 
     if (is.null(names_pattern)) {
-      split_data <- strsplit(stacked_data$ind, names_sep, perl = TRUE)
-      n_elements <- max(lengths(split_data))
-      tmp <- list()
-
-      for (i in seq_len(n_elements)) {
-        tmp[[i]] <- sapply(split_data, "[", i)
-      }
-
-      tmp <- as.data.frame(tmp)
-      names(tmp) <- paste0("V", seq_len(n_elements))
+      tmp <- read.csv(
+        text = stacked_data$ind,
+        sep = "_",
+        stringsAsFactors = FALSE,
+        header = FALSE,
+        col.names = paste0("V", seq_len(n_elements))
+      )
+      tmp[tmp == ""] <- NA
 
       stacked_data$ind <- NULL
       stacked_data <- cbind(tmp, stacked_data)
@@ -143,10 +139,10 @@ new_data_to_long <- function(
     out[[names_to]] <- gsub(paste0("^", names_prefix), "", out[[names_to]])
   }
 
-  rownames(out) <- 1:nrow(out)
-
   # rearrange the rows with the temp id
-  out <- data_arrange(out, "_Rows")
+  if (length(not_selected) > 0) {
+    out <- data_arrange(out, "_Rows")
+  }
 
   # Remove or rename the row index
   if (is.null(rows_to)) {
@@ -164,7 +160,9 @@ new_data_to_long <- function(
     class(out) <- c("tbl_df", "tbl", "data.frame")
   }
 
-  row.names(out) <- NULL
+  if (.has_numeric_rownames(data)) {
+    row.names(out) <- NULL
+  }
 
   out
 }
