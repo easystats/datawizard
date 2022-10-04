@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.9.27)  27 SEP 2022 17:32
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.9.27)  4 OCT 2022 17:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1098,8 +1098,6 @@ LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <8> not available
 [1
 
 ]
-LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <9> not available
-(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 413.
 File: /Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
 </Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
 
@@ -1151,10 +1149,10 @@ Package logreq Info: Writing requests to 'paper.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 36662 strings out of 477747
- 751545 string characters out of 5842604
- 1543570 words of memory out of 5000000
- 57126 multiletter control sequences out of 15000+600000
+ 36661 strings out of 477747
+ 751496 string characters out of 5842604
+ 1544570 words of memory out of 5000000
+ 57125 multiletter control sequences out of 15000+600000
  477790 words of font info for 84 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  84i,13n,81p,678b,848s stack positions out of 10000i,1000n,20000p,200000b,200000s

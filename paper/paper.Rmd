@@ -65,7 +65,7 @@ The `{datawizard}` package for the R programming language [@base2021] provides a
 
 # Statement of Need
 
-The `{datawizard}` package is part of `{easystats}`, a collection of R packages designed to make statistical analysis easier (@Ben-Shachar2020, @Lüdecke2020parameters, @Lüdecke2020performance, @Lüdecke2021see, @Lüdecke2019, @Makowski2019, @Makowski2020). As this ecosystem follows a "0-external-hard-dependency" policy, a base R data manipulation package that relies only on base R needed to be created. In effect, `{datawizard}` provides data processing backend for this entire ecosystem. 
+The `{datawizard}` package is part of `{easystats}`, a collection of R packages designed to make statistical analysis easier (@Ben-Shachar2020, @Lüdecke2020parameters, @Lüdecke2020performance, @Lüdecke2021see, @Lüdecke2019, @Makowski2019, @Makowski2020). As this ecosystem follows a "0-external-hard-dependency" policy, a data manipulation package that relies only on base R needed to be created. In effect, `{datawizard}` provides data processing backend for this entire ecosystem. 
 In addition to its usefulness to the `{easystats}` ecosystem, it also provides *an* option for R users and package developers if they wish to keep their (recursive) dependency weight to a minimum (for other options, see @Dowle2021, @Eastwood2021, etc.).
 
 Because `{datawizard}` is also meant to be used and adopted easily by a wide range of users, its workflow and syntax are designed to be similar to `{tidyverse}` (@Wickham2019), a widely used ecosystem of R packages. Thus, users familiar with the `{tidyverse}` can easily translate their knowledge and make full use of `{datawizard}`.
@@ -78,14 +78,14 @@ Lastly, `{datawizard}` also provides a toolbox to create detailed summaries of d
 
 ## Data Preparation
 
-The raw data is rarely in a state that it can be directly fed into a statistical model. It often needs to be modified in various ways. For example, columns need to be renamed, certain portions of the data need to be filtered out, some columns need to be reshaped, data scattered across multiple tables needs to be joined, etc. 
+The raw data is rarely in a state that it can be directly fed into a statistical model. It often needs to be modified in various ways. For example, columns need to be renamed or reshaped, certain portions of the data need to be filtered out, data scattered across multiple tables needs to be joined, etc. 
 
 `{datawizard}` provides various functions for cleaning and preparing data (see Table 1).
 
 | Function         | Operation                             |
 | :--------------- | :------------------------------------ |
 | `data_filter()`  | to select only certain *observations* |
-| `data_select()`  | to select only a few *variables*      |
+| `data_select()`  | to select only certain *variables*    |
 | `data_extract()` | to extract a single *variable*        |
 | `data_rename()`  | to rename variables                   |
 | `data_to_long()` | to convert data from wide to long     |
@@ -93,7 +93,7 @@ The raw data is rarely in a state that it can be directly fed into a statistical
 | `data_join()`    | to join two data frames               |
 | ...              | ...                                   |
 
-Table: The table below lists a few key functions offered by *datawizard* for data wrangling. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
+Table: The table below lists a few key functions offered by `{datawizard}` for data wrangling. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
 
 We will look at one example function that converts data in wide format to tidy/long format:
 
@@ -129,7 +129,7 @@ Even after getting the raw data in the needed format, we may need to transform c
 | `ranktransform()` | to convert numeric values to integer ranks   |
 | ...               | ...                                          |
 
-Table: The table below lists a few key functions offered by *datawizard* for data transformations. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
+Table: The table below lists a few key functions offered by `{datawizard}` for data transformations. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
 
 We will look at one example function that standardizes (i.e. centers and scales) data so that it can be expressed in terms of standard deviation:
 
