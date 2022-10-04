@@ -95,7 +95,6 @@ test_that("data_arrange works with grouped df", {
 })
 
 test_that("data_arrange works with NA", {
-
   # without groups
 
   tmp <- data.frame(
@@ -126,5 +125,4 @@ test_that("data_arrange works with NA", {
     data_arrange(g, "a"),
     expected
   )
-
 })

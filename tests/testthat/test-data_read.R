@@ -111,20 +111,26 @@ test_that("data_read", {
   d <- data_read(temp_file)
   expect_equal(
     d,
-    structure(list(
-      V1 = structure(
-        1:4, levels = c("Eins", "Zwei", "Drei", "Vier"),
-        class = "factor", label = "Variable 1"
+    structure(
+      list(
+        V1 = structure(
+          1:4,
+          levels = c("Eins", "Zwei", "Drei", "Vier"),
+          class = "factor", label = "Variable 1"
+        ),
+        V2 = structure(
+          c(2, 3, 4, 1),
+          labels = c(Eins = 1, Zwei = 2, Drei = 3),
+          label = "Variable 2"
+        ),
+        V3 = structure(
+          c(3L, 2L, 1L, 4L),
+          levels = c("Eins", "Zwei", "Drei", "Vier"),
+          class = "factor", label = "Variable 3"
+        )
       ),
-      V2 = structure(
-        c(2, 3, 4, 1), labels = c(Eins = 1, Zwei = 2, Drei = 3),
-        label = "Variable 2"
-      ),
-      V3 = structure(
-        c(3L, 2L, 1L, 4L), levels = c("Eins", "Zwei", "Drei", "Vier"),
-        class = "factor", label = "Variable 3"
-      )),
-      row.names = c(NA, -4L), class = "data.frame")
+      row.names = c(NA, -4L), class = "data.frame"
+    )
   )
 })
 
