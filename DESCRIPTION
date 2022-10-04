@@ -19,7 +19,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc"))
   )
 Maintainer: Indrajeet Patil <patilindrajeet.science@gmail.com>
-Description: A lightweight package to assist in keys steps involved in any data 
+Description: A lightweight package to assist in key steps involved in any data 
     analysis workflow: (1) wrangling the raw data to get it in the needed form, 
     (2) applying preprocessing steps and statistical transformations, and 
     (3) compute statistical summaries of data properties and distributions. 
