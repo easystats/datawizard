@@ -5,7 +5,7 @@ wide_data <- data.frame(replicate(3, sample(1:5)))
 
 test_that("data_reshape works as expected - wide to long", {
   expect_equal(
-    head(data_to_long(wide_data)),
+    head(new_data_to_long(wide_data)),
     data.frame(
       Name = c("X1", "X2", "X3", "X1", "X2", "X3"),
       Value = c(3L, 3L, 2L, 2L, 1L, 3L),
@@ -16,7 +16,7 @@ test_that("data_reshape works as expected - wide to long", {
   )
 
   expect_equal(
-    head(data_to_long(wide_data,
+    head(new_data_to_long(wide_data,
       select = c(1, 2),
       names_to = "Column",
       values_to = "Numbers",
@@ -37,7 +37,7 @@ test_that("data_reshape works as expected - wide to long", {
 
 test_that("data_reshape works as expected - using row names as idvar", {
   data(mtcars)
-  out <- data_to_long(mtcars, select = 2:4)
+  out <- new_data_to_long(mtcars, select = 2:4)
   expect_equal(
     dim(out),
     c(96, 10),
@@ -52,7 +52,7 @@ test_that("data_reshape works as expected - using row names as idvar", {
   )
   expect_equal(
     head(out$value),
-    c(8, 304, 150, 8, 472, 205),
+    c(6, 160, 110, 6, 160, 110),
     ignore_attr = TRUE,
     tolerance = 1e-3
   )
@@ -60,7 +60,7 @@ test_that("data_reshape works as expected - using row names as idvar", {
 
 
 test_that("data_reshape works as expected - long to wide", {
-  long_data <- data_to_long(wide_data, rows_to = "Row_ID")
+  long_data <- new_data_to_long(wide_data, rows_to = "Row_ID")
 
   expect_equal(
     data_to_wide(
@@ -93,7 +93,7 @@ test_that("data_reshape works as expected - long to wide", {
   )
 
   # colnames
-  long_data <- data_to_long(wide_data, select = c("X2", "X3"))
+  long_data <- new_data_to_long(wide_data, select = c("X2", "X3"))
   wide <- data_to_wide(long_data, names_from = "name", values_from = "value")
   expect_equal(colnames(wide), colnames(wide_data))
 })
@@ -104,7 +104,7 @@ test_that("data_reshape works as expected - complex dataset", {
 
   data <- psych::bfi
 
-  long <- data_to_long(data,
+  long <- new_data_to_long(data,
     select = regex("\\d"),
     names_to = "Item",
     values_to = "Score",
@@ -125,14 +125,14 @@ test_that("data_reshape works as expected - complex dataset", {
   expect_snapshot(str(wide))
 
 
-  long1 <- data_to_long(data,
+  long1 <- new_data_to_long(data,
     select = starts_with("A"),
     names_to = "Item",
     values_to = "Score",
     rows_to = "Participant"
   )
 
-  long2 <- data_to_long(data,
+  long2 <- new_data_to_long(data,
     select = c("A1", "A2", "A3", "A4", "A5"),
     names_to = "Item",
     values_to = "Score",
@@ -150,14 +150,14 @@ test_that("data_reshape works as expected - complex dataset", {
   expect_equal(nrow(long1), nrow(long2))
 
 
-  long1 <- data_to_long(data,
+  long1 <- new_data_to_long(data,
     select = starts_with("a"),
     names_to = "Item",
     values_to = "Score",
     rows_to = "Participant"
   )
 
-  long2 <- data_to_long(data,
+  long2 <- new_data_to_long(data,
     select = "age",
     names_to = "Item",
     values_to = "Score",
@@ -172,7 +172,7 @@ test_that("data_reshape works as expected - complex dataset", {
   expect_equal(ncol(long1), ncol(long2))
   expect_equal(nrow(long1), nrow(long2))
 
-  long1 <- data_to_long(data,
+  long1 <- new_data_to_long(data,
     select = starts_with("a"),
     names_to = "Item",
     values_to = "Score",
@@ -180,7 +180,7 @@ test_that("data_reshape works as expected - complex dataset", {
     ignore_case = TRUE
   )
 
-  long2 <- data_to_long(data,
+  long2 <- new_data_to_long(data,
     select = c("A1", "A2", "A3", "A4", "A5", "age"),
     names_to = "Item",
     values_to = "Score",
@@ -197,7 +197,7 @@ test_that("data_reshape works as expected - complex dataset", {
   expect_equal(nrow(long1), nrow(long2))
 
 
-  long1 <- data_to_long(data,
+  long1 <- new_data_to_long(data,
     select = c(1:5, 28),
     names_to = "Item",
     values_to = "Score",
@@ -205,7 +205,7 @@ test_that("data_reshape works as expected - complex dataset", {
     ignore_case = TRUE
   )
 
-  long2 <- data_to_long(data,
+  long2 <- new_data_to_long(data,
     select = c("A1", "A2", "A3", "A4", "A5", "age"),
     names_to = "Item",
     values_to = "Score",
@@ -223,20 +223,20 @@ test_that("data_reshape works as expected - complex dataset", {
 })
 
 
-test_that("data_to_long: arg 'cols' overrides 'select'", {
+test_that("new_data_to_long: arg 'cols' overrides 'select'", {
   skip_if_not_installed("psych")
 
   data <- psych::bfi
 
   expect_identical(
-    data_to_long(
+    new_data_to_long(
       wide_data,
       select = c(1, 2),
       names_to = "Column",
       values_to = "Numbers",
       rows_to = "Row"
     ),
-    data_to_long(
+    new_data_to_long(
       wide_data,
       cols = c(1, 2),
       names_to = "Column",
@@ -246,14 +246,14 @@ test_that("data_to_long: arg 'cols' overrides 'select'", {
   )
 
   expect_identical(
-    data_to_long(
+    new_data_to_long(
       data,
       cols = regex("\\d"),
       names_to = "Item",
       values_to = "Score",
       rows_to = "Participant"
     ),
-    data_to_long(
+    new_data_to_long(
       data,
       select = regex("\\d"),
       names_to = "Item",
@@ -263,14 +263,14 @@ test_that("data_to_long: arg 'cols' overrides 'select'", {
   )
 
   expect_identical(
-    data_to_long(
+    new_data_to_long(
       data,
       cols = starts_with("A"),
       names_to = "Item",
       values_to = "Score",
       rows_to = "Participant"
     ),
-    data_to_long(
+    new_data_to_long(
       data,
       select = starts_with("A"),
       names_to = "Item",
@@ -292,11 +292,11 @@ d <- data.frame(
 )
 
 test_that("data_reshape works as expected - simple dataset", {
-  out <- data_to_long(d, starts_with("score"))
+  out <- new_data_to_long(d, starts_with("score"))
   expect_equal(out$name, c("score_t1", "score_t2", "score_t1", "score_t2", "score_t1", "score_t2"))
   expect_equal(out$value, c(d$score_t1, d$score_t2)[c(1, 4, 2, 5, 3, 6)])
 
-  out <- data_to_long(d, contains("t2"), names_to = "NewCol", values_to = "Time")
+  out <- new_data_to_long(d, contains("t2"), names_to = "NewCol", values_to = "Time")
   expect_equal(out$NewCol, c("score_t2", "speed_t2", "score_t2", "speed_t2", "score_t2", "speed_t2"))
   expect_equal(out$Time, c(33, 3, 34, 4, 37, 5))
 })
@@ -304,7 +304,7 @@ test_that("data_reshape works as expected - simple dataset", {
 
 test_that("data_reshape works as expected - select-helper inside functions, using regex", {
   test_fun <- function(data, i) {
-    data_to_long(data, select = i, regex = TRUE)
+    new_data_to_long(data, select = i, regex = TRUE)
   }
   out <- test_fun(d, "^score")
   expect_equal(out$name, c("score_t1", "score_t2", "score_t1", "score_t2", "score_t1", "score_t2"))

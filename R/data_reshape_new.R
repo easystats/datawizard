@@ -82,24 +82,78 @@ new_data_to_long <- function(
   # stacked
   not_stacked <- data[, not_selected, drop = FALSE]
   not_stacked[["_Rows"]] <- 1:nrow(not_stacked)
+  if (insight::is_empty_object(not_stacked)) {
+    not_stacked <- data.frame("_Rows" = 1:nrow(not_stacked))
+  }
 
   if (length(not_selected) == 0) {
     stacked_data <- .stack(data[, cols], rearrange = TRUE)[, 2:1]
-    out <- setNames(stacked_data, c(names_to, values_to))
   } else  {
     stacked_data <- .stack(data[, cols])[, 2:1]
-    out <- cbind(not_stacked, setNames(stacked_data, c(names_to, values_to)))
   }
 
+  stacked_data <- data_rename(stacked_data, "values", values_to)
+
+  # split columns if several names in names_to or names_pattern is specified
+  if (length(names_to) > 1) {
+
+    if (is.null(names_pattern)) {
+      split_data <- strsplit(stacked_data$ind, names_sep, perl = TRUE)
+      n_elements <- max(lengths(split_data))
+      tmp <- list()
+
+      for (i in seq_len(n_elements)) {
+        tmp[[i]] <- sapply(split_data, "[", i)
+      }
+
+      tmp <- as.data.frame(tmp)
+      names(tmp) <- paste0("V", seq_len(n_elements))
+
+      stacked_data$ind <- NULL
+      stacked_data <- cbind(tmp, stacked_data)
+
+    } else {
+      tmp <- regmatches(
+        unique(stacked_data$ind),
+        regexec(names_pattern, unique(stacked_data$ind))
+      )
+      tmp <- as.data.frame(do.call(rbind, tmp), stringsAsFactors = FALSE)
+      names(tmp) <- c("ind", names_to)
+      stacked_data <- data_merge(stacked_data, tmp, by = "ind")
+      stacked_data$ind <- NULL
+
+    }
+
+  }
+
+  stacked_data <- data_relocate(stacked_data, select = values_to, after = -1)
+
+  out <- cbind(
+    not_stacked, setNames(stacked_data, c(names_to, values_to)),
+    row.names = NULL
+  )
+
+
   if (!is.null(names_prefix)) {
+    if (length(names_to) > 1) {
+      insight::format_error(
+        "`names_prefix` only works when `names_to` is of length 1."
+      )
+    }
     out[[names_to]] <- gsub(paste0("^", names_prefix), "", out[[names_to]])
   }
 
   rownames(out) <- 1:nrow(out)
 
-  # rearrange the rows with the temp id and remove it
+  # rearrange the rows with the temp id
   out <- data_arrange(out, "_Rows")
-  out <- data_remove(out, "_Rows")
+
+  # Remove or rename the row index
+  if (is.null(rows_to)) {
+    out[["_Rows"]] <- NULL
+  } else {
+    out <- data_rename(out, "_Rows", rows_to)
+  }
 
   if (values_drop_na) {
     out <- out[!is.na(out[, values_to]), ]
@@ -161,4 +215,40 @@ new_data_to_long <- function(
   }
 
   out
+}
+
+
+.split_col <- function(x, col, pattern, sep = FALSE) {
+
+  if (isTRUE(sep)) {
+
+    split_data <- strsplit(x[[col]], pattern, perl = TRUE)
+    n_elements <- max(lengths(split_data))
+    tmp <- list()
+
+    for (i in seq_len(n_elements)) {
+      tmp[[i]] <- sapply(split_data, "[", i)
+    }
+
+    tmp <- as.data.frame(tmp)
+    names(tmp) <- paste0("V", seq_len(n_elements))
+
+    x[[col]] <- NULL
+
+    out <- cbind(tmp, x)
+
+  } else {
+
+    tmp <- regmatches(
+      unique(x[[col]]),
+      regexec(names_pattern, unique(x[[col]]))
+    )
+    tmp <- as.data.frame(do.call(rbind, tmp), stringsAsFactors = FALSE)
+    names(tmp)[1] <- col
+    out <- cbind(x, tmp[match(x[[col]], tmp[[col]]), -1])
+
+  }
+
+  return(out)
+
 }
