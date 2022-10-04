@@ -216,39 +216,3 @@ new_data_to_long <- function(
 
   out
 }
-
-
-.split_col <- function(x, col, pattern, sep = FALSE) {
-
-  if (isTRUE(sep)) {
-
-    split_data <- strsplit(x[[col]], pattern, perl = TRUE)
-    n_elements <- max(lengths(split_data))
-    tmp <- list()
-
-    for (i in seq_len(n_elements)) {
-      tmp[[i]] <- sapply(split_data, "[", i)
-    }
-
-    tmp <- as.data.frame(tmp)
-    names(tmp) <- paste0("V", seq_len(n_elements))
-
-    x[[col]] <- NULL
-
-    out <- cbind(tmp, x)
-
-  } else {
-
-    tmp <- regmatches(
-      unique(x[[col]]),
-      regexec(names_pattern, unique(x[[col]]))
-    )
-    tmp <- as.data.frame(do.call(rbind, tmp), stringsAsFactors = FALSE)
-    names(tmp)[1] <- col
-    out <- cbind(x, tmp[match(x[[col]], tmp[[col]]), -1])
-
-  }
-
-  return(out)
-
-}
