@@ -2,18 +2,18 @@
 
 BREAKING CHANGES
 
-* Methods for grouped data frames ( `.grouped_df`) no longer support
-  `dplyr::group_by()` for `{dplyr}` before version 0.8.0.
+* Methods for grouped data frames (`.grouped_df`) no longer support
+  `dplyr::group_by()` for `{dplyr}` before version `0.8.0`.
 
-* `empty_columns()` and `remove_empty_columns()` now also remove columns
-  that contain only empty characters. Likewise, `empty_rows()` and
-  `remove_empty_rows()` remove observations that completely have
-  missing or empty character values.
+* `empty_columns()` and `remove_empty_columns()` now also remove columns that
+  contain only empty characters. Likewise, `empty_rows()` and
+  `remove_empty_rows()` remove observations that completely have missing or
+  empty character values.
 
 CHANGES
 
-* `data_arrange()` now works with dataframes that were grouped using `data_group()`
-  (#274).
+* `data_arrange()` now works with data frames that were grouped using
+  `data_group()` (#274).
 
 * `data_read()` gains a `convert_factors` argument, to turn off automatic
   conversion from numeric variables into factors.
@@ -30,19 +30,20 @@ BREAKING CHANGES
 
 * Following deprecated functions have been removed:
 
-  `data_cut()`, `data_recode()`, `data_shift()`, `data_reverse()`, `data_rescale()`,
-  `data_to_factor()`, `data_to_numeric()`
+`data_cut()`, `data_recode()`, `data_shift()`, `data_reverse()`,
+`data_rescale()`, `data_to_factor()`, `data_to_numeric()`
 
 * New `text_format()` alias is introduced for `format_text()`, latter of which
   will be removed in the next release.
-  
+
 * New `recode_values()` alias is introduced for `change_code()`, latter of which
   will be removed in the next release.
-  
-* `data_merge()` now errors if columns specified in `by` are not in both datasets.
 
-* Using negative values in arguments `select` and `exclude` now removes the columns
-  from the selection/exclusion. The previous behavior was to start the 
+* `data_merge()` now errors if columns specified in `by` are not in both
+  datasets.
+
+* Using negative values in arguments `select` and `exclude` now removes the
+  columns from the selection/exclusion. The previous behavior was to start the
   selection/exclusion from the end of the dataset, which was inconsistent with
   the use of "-" with other selecting possibilities.
 
@@ -54,23 +55,23 @@ NEW FUNCTIONS
 
 CHANGES
 
-* `data_filter()` will give more informative messages on malformed syntax of
-  the `filter` argument.
-  
-* It is now possible to use curly brackets to pass variable names to `data_filter()`,
-  like the following example. See examples section in the documentation of 
-  `data_filter()`.
+* `data_filter()` will give more informative messages on malformed syntax of the
+  `filter` argument.
+
+* It is now possible to use curly brackets to pass variable names to
+  `data_filter()`, like the following example. See examples section in the
+  documentation of `data_filter()`.
 
 * The `regex` argument was added to functions that use select-helpers and did
   not already have this argument.
-  
-* Select helpers `starts_with()`, `ends_with()`, and  `contains()` now accept
+
+* Select helpers `starts_with()`, `ends_with()`, and `contains()` now accept
   several patterns, e.g `starts_with("Sep", "Petal")`.
-  
+
 * Arguments `select` and `exclude` that are present in most functions have been
-  improved to work in loops and in custom functions. For example, the following 
+  improved to work in loops and in custom functions. For example, the following
   code now works:
-  
+
 ```r
 foo <- function(data) {
   i <- "Sep"
@@ -88,7 +89,6 @@ for (i in c("Sepal", "Sp")) {
 * There is now a vignette summarizing the various ways to select or exclude
   variables in most `{datawizard}` functions.
 
-
 # datawizard 0.5.1
 
 * Fixes failing tests due to `{poorman}` update.
@@ -103,11 +103,17 @@ MAJOR CHANGES
   names:
 
   - `data_cut()` -> `categorize()`
+
   - `data_recode()` -> `change_code()`
+
   - `data_shift()` -> `slide()`
+
   - `data_reverse()` -> `reverse()`
+
   - `data_rescale()` -> `rescale()`
+
   - `data_to_factor()` -> `to_factor()`
+
   - `data_to_numeric()` -> `to_numeric()`
 
 Note that these functions also have `.data.frame()` methods and still work for
