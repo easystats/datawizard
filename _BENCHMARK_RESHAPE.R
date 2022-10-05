@@ -184,8 +184,6 @@ ex3 <- bench::mark(
 )
 
 
-# SLOW ============
-
 tmp <- list()
 for (i in 1:1000) {
   tmp[[i]] <- us_rent_income
@@ -215,6 +213,7 @@ ex4 <- bench::mark(
   iterations = 10
 )
 
+# SLOW ============
 
 set.seed(123)
 contacts <- tibble(

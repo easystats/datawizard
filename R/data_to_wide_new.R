@@ -1,16 +1,18 @@
-new_data_to_wide <- function(data,
-                             id_cols = NULL,
-                             values_from = "Value",
-                             names_from = "Name",
-                             names_sep = "_",
-                             names_prefix = "",
-                             names_glue = NULL,
-                             values_fill = NULL,
-                             verbose = TRUE,
-                             ...,
-                             colnames_from,
-                             rows_from,
-                             sep) {
+new_data_to_wide <- function(
+    data,
+    id_cols = NULL,
+    values_from = "Value",
+    names_from = "Name",
+    names_sep = "_",
+    names_prefix = "",
+    names_glue = NULL,
+    values_fill = NULL,
+    verbose = TRUE,
+    ...,
+    colnames_from,
+    rows_from,
+    sep
+  ) {
 
   if (!missing(colnames_from)) {
     .is_deprecated("colnames_from", "names_from")
@@ -172,7 +174,6 @@ new_data_to_wide <- function(data,
       ),
       stringsAsFactors = FALSE
     )
-
   } else {
     res <- unlist(res, recursive = FALSE)
   }
@@ -187,6 +188,7 @@ new_data_to_wide <- function(data,
 
 
 #' Taken from https://github.com/coolbutuseless/gluestick
+#' @noRd
 
 .gluestick <- function(fmt, src = parent.frame(), open = "{", close = "}", eval = TRUE) {
 
