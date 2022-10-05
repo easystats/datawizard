@@ -1,6 +1,9 @@
 library(tidyr)
 library(dplyr)
 
+
+### DATA_TO_LONG ==========================================
+
 wide_data <- data.frame(replicate(5, rnorm(10)))
 tmp <- list()
 for (i in 1:10000) {
@@ -99,5 +102,137 @@ ex5 <- bench::mark(
     ),
   iterations = 10
 )
+
+
+
+
+### DATA_TO_WIDE ==========================================
+
+ex1 <- bench::mark(
+  old = fish_encounters %>%
+    data_to_wide(
+      names_from = "station",
+      values_from = "seen",
+      values_fill = 0
+    ),
+  new = fish_encounters %>%
+    new_data_to_wide(
+      names_from = "station",
+      values_from = "seen",
+      values_fill = 0
+    ),
+  tidyr = fish_encounters %>%
+    pivot_wider(
+      names_from = "station",
+      values_from = "seen",
+      values_fill = 0
+    ),
+  iterations = 100
+)
+
+
+
+
+production <- expand_grid(
+  product = letters,
+  country = paste0(letters, "I"),
+  year = 2000:2025
+) %>%
+  mutate(production = rnorm(nrow(.)))
+
+
+ex2 <- bench::mark(
+  old = production %>%
+    data_to_wide(
+      names_from = c("product", "country"),
+      values_from = "production"
+    ),
+  new = production %>%
+    new_data_to_wide(
+      names_from = c("product", "country"),
+      values_from = "production"
+    ),
+  tidyr = production %>%
+    pivot_wider(
+      names_from = c(product, country),
+      values_from = production
+    ),
+  iterations = 10
+)
+
+
+ex3 <- bench::mark(
+  old = production %>%
+    data_to_wide(
+      names_from = c("product", "country"),
+      values_from = "production",
+      names_glue = "prod_{product}_{country}"
+    ),
+  new = production %>%
+    new_data_to_wide(
+      names_from = c("product", "country"),
+      values_from = "production",
+      names_glue = "prod_{product}_{country}"
+    ),
+  tidyr = production %>%
+    pivot_wider(
+      names_from = c(product, country),
+      values_from = production,
+      names_glue = "prod_{product}_{country}"
+    ),
+  iterations = 10
+)
+
+
+# SLOW ============
+
+tmp <- list()
+for (i in 1:1000) {
+  tmp[[i]] <- us_rent_income
+}
+
+tmp <- data.table::rbindlist(tmp) |>
+  as_tibble()
+tmp$GEOID <- rep(1:52000, each = 2)
+tmp$NAME <- as.character(rep(1:52000, each = 2))
+
+ex4 <- bench::mark(
+  old = tmp %>%
+    data_to_wide(
+      names_from = "variable",
+      values_from = c("estimate", "moe")
+    ),
+  new = tmp %>%
+    new_data_to_wide(
+      names_from = "variable",
+      values_from = c("estimate", "moe")
+    ),
+  tidyr = tmp %>%
+    pivot_wider(
+      names_from = "variable",
+      values_from = c("estimate", "moe")
+    ),
+  iterations = 10
+)
+
+
+set.seed(123)
+contacts <- tibble(
+  id = rep(1:500000, each = 2),
+  field = rep(c("a", "b"), 500000),
+  value = sample(letters, 1000000, replace = TRUE)
+)
+# 1M rows
+
+ex5 <- bench::mark(
+  old = contacts %>%
+    data_to_wide(names_from = "field", values_from = "value"),
+  new = contacts %>%
+    new_data_to_wide(names_from = "field", values_from = "value"),
+  tidyr = contacts %>%
+    tidyr::pivot_wider(names_from = field, values_from = value),
+  iterations = 10
+)
+
 
 
