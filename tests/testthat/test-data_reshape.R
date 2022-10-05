@@ -63,7 +63,7 @@ test_that("data_reshape works as expected - long to wide", {
   long_data <- new_data_to_long(wide_data, rows_to = "Row_ID")
 
   expect_equal(
-    data_to_wide(
+    new_data_to_wide(
       long_data,
       names_from = "name",
       values_from = "value",
@@ -83,7 +83,7 @@ test_that("data_reshape works as expected - long to wide", {
   # warning for column name collision
   long_data$X1 <- 5
   expect_error(
-    data_to_wide(
+    new_data_to_wide(
       long_data,
       names_from = "name",
       values_from = "value",
@@ -94,7 +94,7 @@ test_that("data_reshape works as expected - long to wide", {
 
   # colnames
   long_data <- new_data_to_long(wide_data, select = c("X2", "X3"))
-  wide <- data_to_wide(long_data, names_from = "name", values_from = "value")
+  wide <- new_data_to_wide(long_data, names_from = "name", values_from = "value")
   expect_equal(colnames(wide), colnames(wide_data))
 })
 
@@ -117,7 +117,7 @@ test_that("data_reshape works as expected - complex dataset", {
   long$Item <- gsub("[A-Z]", "", long$Item)
   long$Item <- paste0("I", long$Item)
 
-  wide <- data_to_wide(long,
+  wide <- new_data_to_wide(long,
     names_from = "Item",
     values_from = "Score"
   )
@@ -312,9 +312,9 @@ test_that("data_reshape works as expected - select-helper inside functions, usin
 })
 
 
-test_that("reshape_wider, names_prefix works", {
+test_that("new_data_to_wide, names_prefix works", {
   out <- fish_encounters %>%
-    reshape_wider(
+    new_data_to_wide(
       names_from = "station",
       values_from = "seen",
       names_prefix = "foo_"
@@ -329,11 +329,11 @@ test_that("reshape_wider, names_prefix works", {
   )
 })
 
-test_that("reshape_wider, values_fill errors when wrong type", {
+test_that("new_data_to_wide, values_fill errors when wrong type", {
   ### Should be numeric
   expect_error(
     fish_encounters %>%
-      reshape_wider(
+      new_data_to_wide(
         names_from = "station",
         values_from = "seen",
         values_fill = "a"
@@ -342,7 +342,7 @@ test_that("reshape_wider, values_fill errors when wrong type", {
   )
   expect_error(
     fish_encounters %>%
-      reshape_wider(
+      new_data_to_wide(
         names_from = "station",
         values_from = "seen",
         values_fill = factor("a")
@@ -364,7 +364,7 @@ test_that("reshape_wider, values_fill errors when wrong type", {
 
   expect_error(
     contacts %>%
-      reshape_wider(
+      new_data_to_wide(
         names_from = "field",
         values_from = "value",
         values_fill = 1
@@ -373,7 +373,7 @@ test_that("reshape_wider, values_fill errors when wrong type", {
   )
   expect_error(
     contacts %>%
-      reshape_wider(
+      new_data_to_wide(
         names_from = "field",
         values_from = "value",
         values_fill = factor("a")
@@ -385,7 +385,7 @@ test_that("reshape_wider, values_fill errors when wrong type", {
   contacts$value <- as.factor(contacts$value)
   expect_error(
     contacts %>%
-      reshape_wider(
+      new_data_to_wide(
         names_from = "field",
         values_from = "value",
         values_fill = "a"
@@ -394,7 +394,7 @@ test_that("reshape_wider, values_fill errors when wrong type", {
   )
   expect_error(
     contacts %>%
-      reshape_wider(
+      new_data_to_wide(
         names_from = "field",
         values_from = "value",
         values_fill = 1
@@ -403,10 +403,10 @@ test_that("reshape_wider, values_fill errors when wrong type", {
   )
 })
 
-test_that("reshape_wider, values_fill errors when length > 1", {
+test_that("new_data_to_wide, values_fill errors when length > 1", {
   expect_error(
     fish_encounters %>%
-      reshape_wider(
+      new_data_to_wide(
         names_from = "station",
         values_from = "seen",
         values_fill = c(1, 2)
@@ -427,7 +427,7 @@ test_that("reshape_wider, values_fill errors when length > 1", {
 
 test_that("can pivot all cols to wide", {
   df <- tibble(key = c("x", "y", "z"), val = 1:3)
-  pv <- reshape_wider(df, names_from = "key", values_from = "val")
+  pv <- new_data_to_wide(df, names_from = "key", values_from = "val")
 
   expect_named(pv, c("x", "y", "z"))
   expect_equal(nrow(pv), 1)
@@ -435,7 +435,7 @@ test_that("can pivot all cols to wide", {
 
 test_that("non-pivoted cols are preserved", {
   df <- tibble(a = 1, key = c("x", "y"), val = 1:2)
-  pv <- reshape_wider(df, names_from = "key", values_from = "val")
+  pv <- new_data_to_wide(df, names_from = "key", values_from = "val")
 
   expect_named(pv, c("a", "x", "y"))
   expect_equal(nrow(pv), 1)
@@ -443,7 +443,7 @@ test_that("non-pivoted cols are preserved", {
 
 test_that("implicit missings turn into explicit missings", {
   df <- tibble(a = 1:2, key = c("x", "y"), val = 1:2)
-  pv <- reshape_wider(df, names_from = "key", values_from = "val")
+  pv <- new_data_to_wide(df, names_from = "key", values_from = "val")
 
   expect_equal(pv$a, c(1, 2))
   expect_equal(pv$x, c(1, NA))
@@ -458,7 +458,7 @@ test_that("error when overwriting existing column", {
   )
 
   expect_error(
-    reshape_wider(df, names_from = "key", values_from = "val"),
+    new_data_to_wide(df, names_from = "key", values_from = "val"),
     regexp = "Some values of the columns specified"
   )
 })
@@ -466,12 +466,12 @@ test_that("error when overwriting existing column", {
 
 ### Examples from tidyr website
 
-test_that("reshape_wider equivalent to pivot_wider: ex 1", {
+test_that("new_data_to_wide equivalent to pivot_wider: ex 1", {
   x <- fish_encounters %>%
     tidyr::pivot_wider(names_from = "station", values_from = "seen", values_fill = 0)
 
   y <- fish_encounters %>%
-    reshape_wider(
+    new_data_to_wide(
       names_from = "station",
       values_from = "seen",
       values_fill = 0
@@ -480,7 +480,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 1", {
   expect_equal(x, y, ignore_attr = TRUE)
 })
 
-test_that("reshape_wider equivalent to pivot_wider: ex 2", {
+test_that("new_data_to_wide equivalent to pivot_wider: ex 2", {
   production <- expand_grid(
     product = c("A", "B"),
     country = c("AI", "EI"),
@@ -497,7 +497,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 2", {
     )
 
   y <- production %>%
-    reshape_wider(
+    new_data_to_wide(
       names_from = c("product", "country"),
       values_from = "production"
     )
@@ -505,7 +505,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 2", {
   expect_identical(x, y)
 })
 
-test_that("reshape_wider equivalent to pivot_wider: ex 3", {
+test_that("new_data_to_wide equivalent to pivot_wider: ex 3", {
   x <- us_rent_income %>%
     tidyr::pivot_wider(
       names_from = variable,
@@ -513,7 +513,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 3", {
     )
 
   y <- us_rent_income %>%
-    reshape_wider(
+    new_data_to_wide(
       names_from = "variable",
       values_from = c("estimate", "moe")
     )
@@ -521,7 +521,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 3", {
   expect_identical(x, y)
 })
 
-test_that("reshape_wider equivalent to pivot_wider: ex 4", {
+test_that("new_data_to_wide equivalent to pivot_wider: ex 4", {
   x <- us_rent_income %>%
     tidyr::pivot_wider(
       names_from = variable,
@@ -530,7 +530,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 4", {
     )
 
   y <- us_rent_income %>%
-    reshape_wider(
+    new_data_to_wide(
       names_from = "variable",
       names_sep = ".",
       values_from = c("estimate", "moe")
@@ -539,7 +539,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 4", {
   expect_identical(x, y)
 })
 
-test_that("reshape_wider equivalent to pivot_wider: ex 5", {
+test_that("new_data_to_wide equivalent to pivot_wider: ex 5", {
   contacts <- tribble(
     ~field, ~value,
     "name", "Jiena McLellan",
@@ -555,13 +555,13 @@ test_that("reshape_wider equivalent to pivot_wider: ex 5", {
     tidyr::pivot_wider(names_from = field, values_from = value)
 
   y <- contacts %>%
-    reshape_wider(names_from = "field", values_from = "value")
+    new_data_to_wide(names_from = "field", values_from = "value")
 
   expect_identical(x, y)
 })
 
 
-test_that("reshape_wider equivalent to pivot_wider: ex 6", {
+test_that("new_data_to_wide equivalent to pivot_wider: ex 6", {
   production <- expand_grid(
     product = c("A", "B"),
     country = c("AI", "EI"),
@@ -579,7 +579,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 6", {
     )
 
   y <- production %>%
-    data_to_wide(
+    new_data_to_wide(
       names_from = c("product", "country"),
       values_from = "production",
       names_glue = "prod_{product}_{country}"
@@ -588,7 +588,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 6", {
   expect_identical(x, y)
 })
 
-test_that("reshape_wider, names_glue works", {
+test_that("new_data_to_wide, names_glue works", {
   df <- data.frame(
     food = c("banana", "banana", "banana", "banana", "cheese", "cheese", "cheese", "cheese"),
     binary = c(rep(c("yes", "no"), 4)),
@@ -605,7 +605,7 @@ test_that("reshape_wider, names_glue works", {
     )
 
   y <- df %>%
-    data_to_wide(
+    new_data_to_wide(
       id_cols = "food",
       names_from = c("car", "binary"),
       names_glue = "{binary}_{car}",
@@ -620,18 +620,18 @@ test_that("reshape_wider, names_glue works", {
 
 # Examples coming from: https://tidyr.tidyverse.org/articles/pivot.html#longer
 
-test_that("reshape_longer equivalent to pivot_longer: ex 1", {
+test_that("new_data_to_long equivalent to pivot_longer: ex 1", {
   x <- relig_income %>%
     tidyr::pivot_longer(!religion, names_to = "income", values_to = "count")
 
   y <- relig_income %>%
-    reshape_longer(select = -religion, names_to = "income", values_to = "count")
+    new_data_to_long(select = -religion, names_to = "income", values_to = "count")
 
   expect_equal(x, y, ignore_attr = TRUE)
 })
 
 
-test_that("reshape_longer equivalent to pivot_longer: ex 2", {
+test_that("new_data_to_long equivalent to pivot_longer: ex 2", {
   x <- billboard %>%
     tidyr::pivot_longer(
       cols = starts_with("wk"),
@@ -640,7 +640,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 2", {
     )
 
   y <- billboard %>%
-    reshape_longer(
+    new_data_to_long(
       select = starts_with("wk"),
       names_to = "week",
       values_to = "rank"
@@ -650,7 +650,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 2", {
 })
 
 
-test_that("reshape_longer equivalent to pivot_longer: ex 3", {
+test_that("new_data_to_long equivalent to pivot_longer: ex 3", {
   x <- billboard %>%
     tidyr::pivot_longer(
       cols = starts_with("wk"),
@@ -660,7 +660,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 3", {
     )
 
   y <- billboard %>%
-    reshape_longer(
+    new_data_to_long(
       select = starts_with("wk"),
       names_to = "week",
       values_to = "rank",
@@ -671,7 +671,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 3", {
 })
 
 
-test_that("reshape_longer equivalent to pivot_longer: ex 4", {
+test_that("new_data_to_long equivalent to pivot_longer: ex 4", {
   x <- billboard %>%
     tidyr::pivot_longer(
       cols = starts_with("wk"),
@@ -682,7 +682,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 4", {
     )
 
   y <- billboard %>%
-    reshape_longer(
+    new_data_to_long(
       select = starts_with("wk"),
       names_to = "week",
       names_prefix = "wk",
@@ -694,7 +694,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 4", {
 })
 
 
-test_that("reshape_longer equivalent to pivot_longer: ex 5", {
+test_that("new_data_to_long equivalent to pivot_longer: ex 5", {
   suppressWarnings({
     x <- who %>%
       tidyr::pivot_longer(
@@ -706,7 +706,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 5", {
   })
 
   y <- who %>%
-    reshape_longer(
+    new_data_to_long(
       select = 5:60,
       names_to = c("diagnosis", "gender", "age"),
       names_sep = "_",
@@ -716,7 +716,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 5", {
   expect_equal(x, y, ignore_attr = TRUE)
 })
 
-test_that("reshape_longer equivalent to pivot_longer: ex 6", {
+test_that("new_data_to_long equivalent to pivot_longer: ex 6", {
   x <- who %>%
     tidyr::pivot_longer(
       cols = new_sp_m014:newrel_f65,
@@ -726,7 +726,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 6", {
     )
 
   y <- who %>%
-    reshape_longer(
+    new_data_to_long(
       select = 5:60,
       names_to = c("diagnosis", "gender", "age"),
       names_pattern = "new_?(.*)_(.)(.*)",
@@ -743,7 +743,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 6", {
 
 test_that("can reshape all cols to long", {
   df <- tibble(x = 1:2, y = 3:4)
-  pv <- reshape_longer(df, x:y)
+  pv <- new_data_to_long(df, x:y)
 
   expect_named(pv, c("name", "value"))
   expect_equal(pv$name, rep(names(df), 2))
@@ -756,14 +756,14 @@ test_that("values interleaved correctly", {
     y = c(10, 20),
     z = c(100, 200),
   )
-  pv <- reshape_longer(df, 1:3)
+  pv <- new_data_to_long(df, 1:3)
 
   expect_equal(pv$value, c(1, 10, 100, 2, 20, 200))
 })
 
 test_that("preserves original keys", {
   df <- tibble(x = 1:2, y = 2, z = 1:2)
-  pv <- reshape_longer(df, y:z)
+  pv <- new_data_to_long(df, y:z)
 
   expect_named(pv, c("x", "name", "value"))
   expect_equal(pv$x, rep(df$x, each = 2))
@@ -771,7 +771,7 @@ test_that("preserves original keys", {
 
 test_that("can drop missing values", {
   df <- data.frame(x = c(1, NA), y = c(NA, 2))
-  pv <- reshape_longer(df, x:y, values_drop_na = TRUE)
+  pv <- new_data_to_long(df, x:y, values_drop_na = TRUE)
 
   expect_equal(pv$name, c("x", "y"))
   expect_equal(pv$value, c(1, 2))
@@ -779,7 +779,7 @@ test_that("can drop missing values", {
 
 test_that("mixed columns are automatically coerced", {
   df <- data.frame(x = factor("a"), y = factor("b"))
-  pv <- reshape_longer(df, x:y)
+  pv <- new_data_to_long(df, x:y)
 
   expect_equal(pv$value, factor(c("a", "b")))
 })
@@ -788,7 +788,7 @@ test_that("error when overwriting existing column", {
   df <- tibble(x = 1, y = 2)
 
   expect_error(
-    reshape_longer(df, y, names_to = "x"),
+    new_data_to_long(df, y, names_to = "x"),
     regexp = "Some values of the columns specified in 'names_to' are already present"
   )
 })

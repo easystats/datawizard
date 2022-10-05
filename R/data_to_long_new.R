@@ -183,19 +183,8 @@ new_data_to_long <- function(
 #'
 #' @noRd
 
-.stack <- function(x, select, drop = FALSE, rearrange = FALSE, ...) {
-  if (!missing(select)) {
-    nl <- as.list(1L:ncol(x))
-    names(nl) <- names(x)
-    vars <- eval(substitute(select), nl, parent.frame())
-    x <- x[, vars, drop = FALSE]
-  }
-  keep <- vapply(x, is.vector, NA)
-  if (!any(keep))
-    stop("no vector columns were selected")
-  if (!all(keep))
-    warning("non-vector columns will be ignored")
-  x <- x[, keep, drop = FALSE]
+.stack <- function(x, drop = FALSE, rearrange = FALSE, ...) {
+
   ind <- rep(names(x), times = lengths(x))
   if (drop) {
     ind <- droplevels(ind)
