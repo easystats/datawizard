@@ -100,9 +100,9 @@ new_data_to_long <- function(
         text = stacked_data$ind,
         sep = "_",
         stringsAsFactors = FALSE,
-        header = FALSE,
-        col.names = paste0("V", seq_len(n_elements))
+        header = FALSE
       )
+      names(tmp) <- paste0("V", seq_len(ncol(tmp)))
       tmp[tmp == ""] <- NA
 
       stacked_data$ind <- NULL
@@ -172,11 +172,16 @@ new_data_to_long <- function(
 
 
 
-# code taken from utils::stack
-# Added an argument `rearrange` to reorder the rows to have a repeated sequence
-# when all vars are selected to pivot
+#' Code taken from utils::stack
+#' Added an argument `rearrange` to reorder the rows to have a repeated sequence
+#' when all vars are selected to pivot
 #
-# See with first example in the docs of data_to_long
+#' See with following example:
+#'
+#' wide_data <- data.frame(replicate(5, rnorm(10)))
+#' data_to_long(wide_data)
+#'
+#' @noRd
 
 .stack <- function(x, select, drop = FALSE, rearrange = FALSE, ...) {
   if (!missing(select)) {

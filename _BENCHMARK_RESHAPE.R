@@ -1,13 +1,16 @@
+library(tidyr)
+library(dplyr)
+
 wide_data <- data.frame(replicate(5, rnorm(10)))
 tmp <- list()
 for (i in 1:10000) {
   tmp[[i]] <- wide_data
 }
 
-tmp <- rbindlist(tmp) |>
+tmp <- data.table::rbindlist(tmp) |>
   as_tibble()
 
-bench::mark(
+ex1 <- bench::mark(
   old = data_to_long(tmp),
   new = new_data_to_long(tmp),
   tidyr = pivot_longer(tmp, cols = everything()),
@@ -15,9 +18,7 @@ bench::mark(
 )
 
 
-
-# 1.3x faster
-bench::mark(
+ex2 <- bench::mark(
   old = relig_income %>%
     data_to_long(-"religion", names_to = "income", values_to = "count"),
   new = relig_income %>%
@@ -27,34 +28,29 @@ bench::mark(
   iterations = 100
 )
 
-# 3x faster
-bench::mark(
+ex3 <- bench::mark(
   old = billboard %>%
     data_to_long(
       cols = starts_with("wk"),
-      names_prefix = "wk",
       names_to = "week",
       values_to = "rank"
     ),
   new = billboard %>%
     new_data_to_long(
       cols = starts_with("wk"),
-      names_prefix = "wk",
       names_to = "week",
       values_to = "rank"
     ),
   tidyr = billboard %>%
     pivot_longer(
       cols = starts_with("wk"),
-      names_prefix = "wk",
       names_to = "week",
       values_to = "rank"
     ),
   iterations = 50
 )
 
-# 3x faster
-bench::mark(
+ex4 <- bench::mark(
   old = who |>
     data_to_long(
       cols = 5:60,
@@ -79,8 +75,7 @@ bench::mark(
   iterations = 10
 )
 
-# 2.3x faster
-bench::mark(
+ex5 <- bench::mark(
   old = who |>
     data_to_long(
       cols = 5:60,
@@ -104,3 +99,5 @@ bench::mark(
     ),
   iterations = 10
 )
+
+
