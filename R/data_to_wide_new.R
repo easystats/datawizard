@@ -49,47 +49,59 @@ new_data_to_wide <- function(
   not_unstacked <- unique(not_unstacked)
 
   # unstack doesn't create NAs for combinations that don't exist (contrary to
-  # reshape), so it makes a list of unequal length and not a dataframe.
-  # Solution: complete the dataset before unstacking, but it takes some time.
+  # reshape), so we need to complete the dataset before unstacking.
 
   new_data <- data
+
+  # create an id with all variables that are not in names_from or values_from
+  # so that we can create missing combinations between this id and names_from
   if (length(not_selected) > 1) {
-    new_data$abcdefgh <- do.call(paste, c(new_data[, not_selected, drop = FALSE], sep = "_"))
+    new_data$temporary_id <- do.call(paste, c(new_data[, not_selected, drop = FALSE], sep = "_"))
   } else if (length(not_selected) == 1) {
-    new_data$abcdefgh <- new_data[[not_selected]]
+    new_data$temporary_id <- new_data[[not_selected]]
   } else {
-    new_data$abcdefgh <- seq_len(nrow(new_data))
+    new_data$temporary_id <- seq_len(nrow(new_data))
   }
 
   # check that all_groups have all possible values for names_from
   # If not, need to complete the dataset with NA for values_from where names_from
   # didn't exist
-  n_row_per_group <- table(new_data$abcdefgh)
+  n_rows_per_group <- table(new_data$temporary_id)
+  n_values_per_group <- insight::n_unique(n_rows_per_group)
 
-  not_all_cols_selected <- length(not_selected) > 0
+  not_all_cols_are_selected <- length(not_selected) > 0
 
-  incomplete_groups <- (insight::n_unique(n_row_per_group) > 1 &&
-    !all(unique(n_row_per_group) %in% insight::n_unique(new_data[, names_from]))) ||
-    (insight::n_unique(n_row_per_group) == 1 &&
-    unique(n_row_per_group) < length(unique(new_data[, names_from])))
+  incomplete_groups <-
+    (n_values_per_group > 1 &&
+       !all(unique(n_rows_per_group) %in% insight::n_unique(new_data[, names_from]))
+     ) ||
+    (n_values_per_group == 1 &&
+       unique(n_rows_per_group) < length(unique(new_data[, names_from]))
+    )
 
-  if (not_all_cols_selected && incomplete_groups) {
+  # create missing combinations
 
-    expanded <- expand.grid(unique(new_data[["abcdefgh"]]), unique(new_data[[names_from]]))
-    names(expanded) <- c("abcdefgh", names_from)
-    new_data <- data_merge(new_data, expanded, join = "full", by = c("abcdefgh", names_from), sort = FALSE)
+  if (not_all_cols_are_selected && incomplete_groups) {
 
+    expanded <- expand.grid(unique(new_data[["temporary_id"]]), unique(new_data[[names_from]]))
+    names(expanded) <- c("temporary_id", names_from)
+    new_data <- data_merge(new_data, expanded,
+                           join = "full", by = c("temporary_id", names_from),
+                           sort = FALSE)
+
+    # creation of missing combinations was done with a temporary id, so need
+    # to fill columns that are not selected in names_from or values_from
     new_data[, not_selected] <- lapply(not_selected, function(x) {
-      ave(new_data[[x]], new_data$abcdefgh, FUN = function(y) {
+      ave(new_data[[x]], new_data$temporary_id, FUN = function(y) {
         replace(y, is.na(y), y[!is.na(y)][1L])
       })
     })
 
-    new_data <- data_arrange(new_data, "abcdefgh")
-
+    new_data <- data_arrange(new_data, "temporary_id")
   }
 
-  new_data$abcdefgh <- NULL
+  # don't need a temporary id anymore
+  new_data$temporary_id <- NULL
 
   # Fill missing values (before converting to wide)
   if (!is.null(values_fill)) {
@@ -120,12 +132,8 @@ new_data_to_wide <- function(
     }
   }
 
-  for (i in names_from) {
-    if (is.factor(new_data[[i]])) {
-      new_data[[i]] <- as.character(new_data[[i]])
-    }
-  }
-
+  # convert to wide format (returns the data and the order in which columns
+  # should be ordered)
   unstacked <- .unstack(new_data, names_from, values_from, names_sep, names_prefix, names_glue)
 
   out <- unstacked$out
@@ -150,15 +158,16 @@ new_data_to_wide <- function(
     )
   }
 
+  # reorder columns
   out <- out[, unstacked$col_order]
 
+  # need to add the wide data to the original data
   if (!insight::is_empty_object(not_unstacked)) {
     out <- cbind(not_unstacked, out)
   }
   row.names(out) <- NULL
 
   out <- remove_empty_columns(out)
-
 
   # add back attributes where possible
   for (i in colnames(out)) {
@@ -180,18 +189,18 @@ new_data_to_wide <- function(
 .unstack <- function(x, names_from, values_from, names_sep, names_prefix, names_glue = NULL) {
 
   if (is.null(names_glue)) {
-    x$tmp <- do.call(paste, c(x[, names_from, drop = FALSE], sep = names_sep))
+    x$future_colnames <- do.call(paste, c(x[, names_from, drop = FALSE], sep = names_sep))
   } else {
     vars <- regmatches(names_glue, gregexpr("\\{\\K[^{}]+(?=\\})", names_glue, perl = TRUE))[[1]]
     tmp_data <- x[, vars]
-    x$tmp <- .gluestick(names_glue, src = tmp_data)
+    x$future_colnames <- .gluestick(names_glue, src = tmp_data)
   }
 
-  x$tmp <- paste0(names_prefix, x$tmp)
+  x$future_colnames <- paste0(names_prefix, x$future_colnames)
 
   res <- list()
   for (i in seq_along(values_from)) {
-    res[[i]] <- c(tapply(x[[values_from[i]]], x$tmp, as.vector))
+    res[[i]] <- c(tapply(x[[values_from[i]]], x$future_colnames, as.vector))
     if (length(values_from) > 1) {
       names(res[[i]]) <- paste0(values_from[i], names_sep, names(res[[i]]))
     }
@@ -200,7 +209,7 @@ new_data_to_wide <- function(
   if (length(res) == 1 && !is.list(res[[1]])) {
     res <- data.frame(
       matrix(
-        res[[1]], nrow = 1, dimnames = list(c(), unique(x$tmp))
+        res[[1]], nrow = 1, dimnames = list(c(), unique(x$future_colnames))
       ),
       stringsAsFactors = FALSE
     )
@@ -210,7 +219,7 @@ new_data_to_wide <- function(
 
   list(
     out = data.frame(res, stringsAsFactors = FALSE),
-    col_order = unique(x$tmp)
+    col_order = unique(x$future_colnames)
   )
 
 }
@@ -218,6 +227,8 @@ new_data_to_wide <- function(
 
 
 #' Taken from https://github.com/coolbutuseless/gluestick
+#' Same functionality as `{glue}`
+#'
 #' @noRd
 
 .gluestick <- function(fmt, src = parent.frame(), open = "{", close = "}", eval = TRUE) {
