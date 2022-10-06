@@ -52,14 +52,44 @@ new_data_to_wide <- function(
   # reshape), so it makes a list of unequal length and not a dataframe.
   # Solution: complete the dataset before unstacking, but it takes some time.
 
-  foo <- as.data.frame(table(data[, names_from]))
-  if (insight::n_unique(foo$Freq) == 1 ||
-      (insight::n_unique(foo$Freq) == 2 && 0 %in% unique(foo$Freq))) {
-    new_data <- data
+  new_data <- data
+  if (length(not_selected) > 1) {
+    new_data$abcdefgh <- do.call(paste, c(new_data[, not_selected, drop = FALSE], sep = "_"))
+  } else if (length(not_selected) == 1) {
+    new_data$abcdefgh <- new_data[[not_selected]]
   } else {
-    new_data <- unique(expand.grid(data[, c(not_selected, names_from)]))
-    new_data <- data_merge(new_data, data, by = c(not_selected, names_from))
+    new_data$abcdefgh <- seq_len(nrow(new_data))
   }
+
+  # check that all_groups have all possible values for names_from
+  # If not, need to complete the dataset with NA for values_from where names_from
+  # didn't exist
+  n_row_per_group <- table(new_data$abcdefgh)
+
+  not_all_cols_selected <- length(not_selected) > 0
+
+  incomplete_groups <- (insight::n_unique(n_row_per_group) > 1 &&
+    !all(unique(n_row_per_group) %in% insight::n_unique(new_data[, names_from]))) ||
+    (insight::n_unique(n_row_per_group) == 1 &&
+    unique(n_row_per_group) < length(unique(new_data[, names_from])))
+
+  if (not_all_cols_selected && incomplete_groups) {
+
+    expanded <- expand.grid(unique(new_data[["abcdefgh"]]), unique(new_data[[names_from]]))
+    names(expanded) <- c("abcdefgh", names_from)
+    new_data <- data_merge(new_data, expanded, join = "full", by = c("abcdefgh", names_from), sort = FALSE)
+
+    new_data[, not_selected] <- lapply(not_selected, function(x) {
+      ave(new_data[[x]], new_data$abcdefgh, FUN = function(y) {
+        replace(y, is.na(y), y[!is.na(y)][1L])
+      })
+    })
+
+    new_data <- data_arrange(new_data, "abcdefgh")
+
+  }
+
+  new_data$abcdefgh <- NULL
 
   # Fill missing values (before converting to wide)
   if (!is.null(values_fill)) {

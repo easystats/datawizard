@@ -13,7 +13,7 @@ for (i in 1:10000) {
 tmp <- data.table::rbindlist(tmp) |>
   as_tibble()
 
-ex1 <- bench::mark(
+ex1_l <- bench::mark(
   old = data_to_long(tmp),
   new = new_data_to_long(tmp),
   tidyr = pivot_longer(tmp, cols = everything()),
@@ -21,7 +21,7 @@ ex1 <- bench::mark(
 )
 
 
-ex2 <- bench::mark(
+ex2_l <- bench::mark(
   old = relig_income %>%
     data_to_long(-"religion", names_to = "income", values_to = "count"),
   new = relig_income %>%
@@ -31,7 +31,7 @@ ex2 <- bench::mark(
   iterations = 100
 )
 
-ex3 <- bench::mark(
+ex3_l <- bench::mark(
   old = billboard %>%
     data_to_long(
       cols = starts_with("wk"),
@@ -53,7 +53,7 @@ ex3 <- bench::mark(
   iterations = 50
 )
 
-ex4 <- bench::mark(
+ex4_l <- bench::mark(
   old = who |>
     data_to_long(
       cols = 5:60,
@@ -78,7 +78,7 @@ ex4 <- bench::mark(
   iterations = 10
 )
 
-ex5 <- bench::mark(
+ex5_l <- bench::mark(
   old = who |>
     data_to_long(
       cols = 5:60,
@@ -108,7 +108,7 @@ ex5 <- bench::mark(
 
 ### DATA_TO_WIDE ==========================================
 
-ex1 <- bench::mark(
+ex1_w <- bench::mark(
   old = fish_encounters %>%
     data_to_wide(
       names_from = "station",
@@ -141,7 +141,7 @@ production <- expand_grid(
   mutate(production = rnorm(nrow(.)))
 
 
-ex2 <- bench::mark(
+ex2_w <- bench::mark(
   old = production %>%
     data_to_wide(
       names_from = c("product", "country"),
@@ -161,7 +161,7 @@ ex2 <- bench::mark(
 )
 
 
-ex3 <- bench::mark(
+ex3_w <- bench::mark(
   old = production %>%
     data_to_wide(
       names_from = c("product", "country"),
@@ -194,7 +194,7 @@ tmp <- data.table::rbindlist(tmp) |>
 tmp$GEOID <- rep(1:52000, each = 2)
 tmp$NAME <- as.character(rep(1:52000, each = 2))
 
-ex4 <- bench::mark(
+ex4_w <- bench::mark(
   old = tmp %>%
     data_to_wide(
       names_from = "variable",
@@ -213,7 +213,7 @@ ex4 <- bench::mark(
   iterations = 10
 )
 
-# SLOW ============
+# SLOW (1M rows) ============
 
 set.seed(123)
 contacts <- tibble(
@@ -221,17 +221,33 @@ contacts <- tibble(
   field = rep(c("a", "b"), 500000),
   value = sample(letters, 1000000, replace = TRUE)
 )
-# 1M rows
 
-ex5 <- bench::mark(
+ex5_w <- bench::mark(
   old = contacts %>%
     data_to_wide(names_from = "field", values_from = "value"),
   new = contacts %>%
     new_data_to_wide(names_from = "field", values_from = "value"),
   tidyr = contacts %>%
     tidyr::pivot_wider(names_from = field, values_from = value),
-  iterations = 10
+  iterations = 1
 )
 
 
+# SLOWER (10M rows) ============
 
+set.seed(123)
+contacts <- tibble(
+  id = rep(1:5000000, each = 2),
+  field = rep(c("a", "b"), 5000000),
+  value = sample(letters, 10000000, replace = TRUE)
+)
+
+ex6_w <- bench::mark(
+  old = contacts %>%
+    data_to_wide(names_from = "field", values_from = "value"),
+  new = contacts %>%
+    new_data_to_wide(names_from = "field", values_from = "value"),
+  tidyr = contacts %>%
+    tidyr::pivot_wider(names_from = field, values_from = value),
+  iterations = 1
+)
