@@ -4,9 +4,12 @@ library(dplyr)
 
 ### DATA_TO_LONG ==========================================
 
+
+# SLOW (5M rows)
+
 wide_data <- data.frame(replicate(5, rnorm(10)))
 tmp <- list()
-for (i in 1:10000) {
+for (i in 1:100000) {
   tmp[[i]] <- wide_data
 }
 
@@ -102,7 +105,6 @@ ex5_l <- bench::mark(
     ),
   iterations = 10
 )
-
 
 
 

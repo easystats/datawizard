@@ -51,6 +51,12 @@ new_data_to_long <- function(
     }
   }
 
+  if (length(names_to) > 1 && is.null(names_sep) && is.null(names_pattern)) {
+    insight::format_error(
+      "If you supply multiple names in `names_to`, you must also supply one of `names_sep` or `names_pattern`."
+    )
+  }
+
   # Remove tidyverse attributes, will add them back at the end
   if (inherits(data, "tbl_df")) {
     tbl_input <- TRUE
@@ -80,14 +86,30 @@ new_data_to_long <- function(
   # stacked
   not_stacked <- data[, not_selected, drop = FALSE]
   not_stacked[["_Rows"]] <- coerce_to_numeric(row.names(data))
-  if (insight::is_empty_object(not_stacked)) {
-    not_stacked[["_Rows"]] <- coerce_to_numeric(row.names(data))
-  }
 
-  if (length(not_selected) == 0) {
-    stacked_data <- .stack(data[, cols], rearrange = is.null(rows_to))[, 2:1]
-  } else  {
-    stacked_data <- .stack(data[, cols, drop = FALSE])[, 2:1]
+  # stack the selected columns
+  stacked_data <- .stack(data[, cols, drop = FALSE])[, 2:1]
+
+  # reorder the rows to have a repeated sequence when all vars are selected to
+  # pivot
+  #
+  # See with following example:
+  # wide_data <- data.frame(replicate(5, rnorm(10)))
+  # data_to_long(wide_data)
+
+  needs_to_rearrange <- length(not_selected) == 0 && is.null(rows_to)
+  if (isTRUE(needs_to_rearrange)) {
+    split_data <- split(stacked_data, ~ ind)
+
+    list_data <- lapply(seq_along(split_data), function(x) {
+      new_id <- x + (1:nrow(split_data[[x]]) - 1) * length(split_data)
+      split_data[[x]]$id2 <- new_id
+      return(split_data[[x]])
+    })
+
+    stacked_data <- do.call(rbind, list_data)
+    stacked_data <- data_arrange(stacked_data, "id2")
+    stacked_data <- data_remove(stacked_data, "id2")
   }
 
   stacked_data <- data_rename(stacked_data, "values", values_to)
@@ -96,9 +118,10 @@ new_data_to_long <- function(
   if (length(names_to) > 1) {
 
     if (is.null(names_pattern)) {
+      # faster than strsplit
       tmp <- read.csv(
         text = stacked_data$ind,
-        sep = "_",
+        sep = names_sep,
         stringsAsFactors = FALSE,
         header = FALSE
       )
@@ -115,7 +138,8 @@ new_data_to_long <- function(
       )
       tmp <- as.data.frame(do.call(rbind, tmp), stringsAsFactors = FALSE)
       names(tmp) <- c("ind", names_to)
-      stacked_data <- data_merge(stacked_data, tmp, by = "ind")
+      # faster than merge
+      stacked_data <- cbind(stacked_data, tmp[match(stacked_data[["ind"]], tmp[["ind"]]), -1])
       stacked_data$ind <- NULL
 
     }
@@ -124,6 +148,7 @@ new_data_to_long <- function(
 
   stacked_data <- data_relocate(stacked_data, select = values_to, after = -1)
 
+  # reunite unselected data with stacked data
   out <- cbind(
     not_stacked, setNames(stacked_data, c(names_to, values_to)),
     row.names = NULL
@@ -160,6 +185,7 @@ new_data_to_long <- function(
     class(out) <- c("tbl_df", "tbl", "data.frame")
   }
 
+  # reset row names
   if (.has_numeric_rownames(data)) {
     row.names(out) <- NULL
   }
@@ -183,28 +209,7 @@ new_data_to_long <- function(
 #'
 #' @noRd
 
-.stack <- function(x, drop = FALSE, rearrange = FALSE, ...) {
-
+.stack <- function(x) {
   ind <- rep(names(x), times = lengths(x))
-  if (drop) {
-    ind <- droplevels(ind)
-  }
-  out <- data.frame(values = unlist(unname(x)), ind, stringsAsFactors = FALSE)
-
-  if (isTRUE(rearrange)) {
-
-    split_data <- split(out, ~ ind)
-
-    list_data <- lapply(seq_along(split_data), function(x) {
-      new_id <- x + (1:nrow(split_data[[x]]) - 1) * length(split_data)
-      split_data[[x]]$id2 <- new_id
-      return(split_data[[x]])
-    })
-
-    out <- do.call(rbind, list_data)
-    out <- data_arrange(out, "id2")
-    out <- data_remove(out, "id2")
-  }
-
-  out
+  data.frame(values = unlist(unname(x)), ind, stringsAsFactors = FALSE)
 }

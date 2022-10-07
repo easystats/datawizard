@@ -188,6 +188,8 @@ new_data_to_wide <- function(
 
 .unstack <- function(x, names_from, values_from, names_sep, names_prefix, names_glue = NULL) {
 
+  # get values from names_from (future colnames)
+
   if (is.null(names_glue)) {
     x$future_colnames <- do.call(paste, c(x[, names_from, drop = FALSE], sep = names_sep))
   } else {
@@ -198,6 +200,7 @@ new_data_to_wide <- function(
 
   x$future_colnames <- paste0(names_prefix, x$future_colnames)
 
+  # expand the values for each variable in "values_from"
   res <- list()
   for (i in seq_along(values_from)) {
     res[[i]] <- c(tapply(x[[values_from[i]]], x$future_colnames, as.vector))
@@ -205,6 +208,9 @@ new_data_to_wide <- function(
       names(res[[i]]) <- paste0(values_from[i], names_sep, names(res[[i]]))
     }
   }
+
+  # if there's a single variable in "values_from" and this variable only has
+  # one value, need to make it a dataframe
 
   if (length(res) == 1 && !is.list(res[[1]])) {
     res <- data.frame(
@@ -216,6 +222,8 @@ new_data_to_wide <- function(
   } else {
     res <- unlist(res, recursive = FALSE)
   }
+
+  # return the wide data and the order in which the new columns should be
 
   list(
     out = data.frame(res, stringsAsFactors = FALSE),
@@ -236,9 +244,7 @@ new_data_to_wide <- function(
   nchar_open  <- nchar(open)
   nchar_close <- nchar(close)
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Sanity checks
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   stopifnot(exprs = {
     is.character(fmt)
     length(fmt) == 1L
@@ -250,47 +256,35 @@ new_data_to_wide <- function(
     nchar_close > 0
   })
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Brute force the open/close characters into a regular expression for
   # extracting the expressions from the format string
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   open  <- gsub("(.)", "\\\\\\1", open ) # Escape everything!!
   close <- gsub("(.)", "\\\\\\1", close) # Escape everything!!
   re    <- paste0(open, ".*?", close)
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Extract the delimited expressions
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   matches  <- gregexpr(re, fmt)
   exprs    <- regmatches(fmt, matches)[[1]]
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Remove the delimiters
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   exprs <- substr(exprs, nchar_open + 1L, nchar(exprs) - nchar_close)
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # create a valid sprintf fmt string.
   #  - replace all "{expr}" strings with "%s"
   #  - escape any '%' so sprintf() doesn't try and use them for formatting
   #    but only if the '%' is NOT followed by an 's'
   #
   # gluestick() doesn't deal with any pathological cases
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   fmt_sprintf <- gsub(re      , "%s", fmt)
   fmt_sprintf <- gsub("%(?!s)", "%%", fmt_sprintf, perl=TRUE)
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Evaluate
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (eval) {
     args <- lapply(exprs, function(expr) {eval(parse(text = expr), envir = src)})
   } else {
     args <- unname(mget(exprs, envir = as.environment(src)))
   }
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Create the string(s)
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   do.call(sprintf, c(list(fmt_sprintf), args))
 }
