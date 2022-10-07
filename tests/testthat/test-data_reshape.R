@@ -789,6 +789,6 @@ test_that("error when overwriting existing column", {
 
   expect_error(
     data_to_long(df, y, names_to = "x"),
-    regexp = "Some values of the columns specified in 'names_to' are already present"
+    regexp = "are already present"
   )
 })
