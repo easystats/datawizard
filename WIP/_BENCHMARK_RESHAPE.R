@@ -1,6 +1,6 @@
 library(tidyr)
 library(dplyr)
-
+library(datawizard)
 
 ### DATA_TO_LONG ==========================================
 
@@ -9,7 +9,7 @@ library(dplyr)
 
 wide_data <- data.frame(replicate(5, rnorm(10)))
 tmp <- list()
-for (i in 1:100000) {
+for (i in 1:500000) {
   tmp[[i]] <- wide_data
 }
 
@@ -253,3 +253,25 @@ ex6_w <- bench::mark(
     tidyr::pivot_wider(names_from = field, values_from = value),
   iterations = 1
 )
+
+
+
+
+reprex:::prex({
+  ### DATA_TO_LONG ==========================================
+
+  ex1_l
+  ex2_l
+  ex3_l
+  ex4_l
+  ex5_l
+
+  ### DATA_TO_WIDE ==========================================
+
+  ex1_w
+  ex2_w
+  ex3_w
+  ex4_w
+  ex5_w
+  ex6_w
+})
