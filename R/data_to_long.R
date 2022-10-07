@@ -272,14 +272,7 @@ data_to_long <- function(
 
 
 
-#' Code taken from utils::stack
-#' Added an argument `rearrange` to reorder the rows to have a repeated sequence
-#' when all vars are selected to pivot
-#
-#' See with following example:
-#'
-#' wide_data <- data.frame(replicate(5, rnorm(10)))
-#' data_to_long(wide_data)
+#' Code adapted from utils::stack (but largely modified)
 #'
 #' @noRd
 
