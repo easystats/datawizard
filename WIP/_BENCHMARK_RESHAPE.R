@@ -17,8 +17,8 @@ tmp <- data.table::rbindlist(tmp) |>
   as_tibble()
 
 ex1_l <- bench::mark(
-  old = data_to_long(tmp),
-  new = new_data_to_long(tmp),
+  old = old_data_to_long(tmp),
+  new = data_to_long(tmp),
   tidyr = pivot_longer(tmp, cols = everything()),
   iterations = 10
 )
@@ -26,9 +26,9 @@ ex1_l <- bench::mark(
 
 ex2_l <- bench::mark(
   old = relig_income %>%
-    data_to_long(-"religion", names_to = "income", values_to = "count"),
+    old_data_to_long(-"religion", names_to = "income", values_to = "count"),
   new = relig_income %>%
-    new_data_to_long(-"religion", names_to = "income", values_to = "count"),
+    data_to_long(-"religion", names_to = "income", values_to = "count"),
   tidyr = relig_income %>%
     pivot_longer(!religion, names_to = "income", values_to = "count"),
   iterations = 100
@@ -36,13 +36,13 @@ ex2_l <- bench::mark(
 
 ex3_l <- bench::mark(
   old = billboard %>%
-    data_to_long(
+    old_data_to_long(
       cols = starts_with("wk"),
       names_to = "week",
       values_to = "rank"
     ),
   new = billboard %>%
-    new_data_to_long(
+    data_to_long(
       cols = starts_with("wk"),
       names_to = "week",
       values_to = "rank"
@@ -58,14 +58,14 @@ ex3_l <- bench::mark(
 
 ex4_l <- bench::mark(
   old = who |>
-    data_to_long(
+    old_data_to_long(
       cols = 5:60,
       names_to = c("diagnosis", "gender", "age"),
       names_sep = "_",
       values_to = "count"
     ),
   new = who |>
-    new_data_to_long(
+    data_to_long(
       cols = 5:60,
       names_to = c("diagnosis", "gender", "age"),
       names_sep = "_",
@@ -83,14 +83,14 @@ ex4_l <- bench::mark(
 
 ex5_l <- bench::mark(
   old = who |>
-    data_to_long(
+    old_data_to_long(
       cols = 5:60,
       names_to = c("diagnosis", "gender", "age"),
       names_pattern = "new_?(.*)_(.)(.*)",
       values_to = "count"
     ),
   new = who |>
-    new_data_to_long(
+    data_to_long(
       cols = 5:60,
       names_to = c("diagnosis", "gender", "age"),
       names_pattern = "new_?(.*)_(.)(.*)",
@@ -112,13 +112,13 @@ ex5_l <- bench::mark(
 
 ex1_w <- bench::mark(
   old = fish_encounters %>%
-    data_to_wide(
+    old_data_to_wide(
       names_from = "station",
       values_from = "seen",
       values_fill = 0
     ),
   new = fish_encounters %>%
-    new_data_to_wide(
+     data_to_wide(
       names_from = "station",
       values_from = "seen",
       values_fill = 0
@@ -145,12 +145,12 @@ production <- expand_grid(
 
 ex2_w <- bench::mark(
   old = production %>%
-    data_to_wide(
+    old_data_to_wide(
       names_from = c("product", "country"),
       values_from = "production"
     ),
   new = production %>%
-    new_data_to_wide(
+     data_to_wide(
       names_from = c("product", "country"),
       values_from = "production"
     ),
@@ -165,13 +165,13 @@ ex2_w <- bench::mark(
 
 ex3_w <- bench::mark(
   old = production %>%
-    data_to_wide(
+    old_data_to_wide(
       names_from = c("product", "country"),
       values_from = "production",
       names_glue = "prod_{product}_{country}"
     ),
   new = production %>%
-    new_data_to_wide(
+     data_to_wide(
       names_from = c("product", "country"),
       values_from = "production",
       names_glue = "prod_{product}_{country}"
@@ -198,12 +198,12 @@ tmp$NAME <- as.character(rep(1:52000, each = 2))
 
 ex4_w <- bench::mark(
   old = tmp %>%
-    data_to_wide(
+    old_data_to_wide(
       names_from = "variable",
       values_from = c("estimate", "moe")
     ),
   new = tmp %>%
-    new_data_to_wide(
+     data_to_wide(
       names_from = "variable",
       values_from = c("estimate", "moe")
     ),
@@ -226,9 +226,9 @@ contacts <- tibble(
 
 ex5_w <- bench::mark(
   old = contacts %>%
-    data_to_wide(names_from = "field", values_from = "value"),
+    old_data_to_wide(names_from = "field", values_from = "value"),
   new = contacts %>%
-    new_data_to_wide(names_from = "field", values_from = "value"),
+     data_to_wide(names_from = "field", values_from = "value"),
   tidyr = contacts %>%
     tidyr::pivot_wider(names_from = field, values_from = value),
   iterations = 1
@@ -246,9 +246,9 @@ contacts <- tibble(
 
 ex6_w <- bench::mark(
   old = contacts %>%
-    data_to_wide(names_from = "field", values_from = "value"),
+    old_data_to_wide(names_from = "field", values_from = "value"),
   new = contacts %>%
-    new_data_to_wide(names_from = "field", values_from = "value"),
+     data_to_wide(names_from = "field", values_from = "value"),
   tidyr = contacts %>%
     tidyr::pivot_wider(names_from = field, values_from = value),
   iterations = 1

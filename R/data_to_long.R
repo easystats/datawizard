@@ -1,4 +1,79 @@
-new_data_to_long <- function(
+#' Reshape (pivot) data from wide to long
+#'
+#' This function "lengthens" data, increasing the number of rows and decreasing
+#' the number of columns. This is a dependency-free base-R equivalent of
+#' `tidyr::pivot_longer()`.
+#'
+#' @param data A data frame to pivot.
+#' @param names_to The name of the new column that will contain the column
+#'   names.
+#' @param names_prefix A regular expression used to remove matching text from
+#' the start of each variable name.
+#' @param names_sep,names_pattern If `names_to` contains multiple values, this
+#' argument controls how the column name is broken up.
+#' `names_pattern` takes a regular expression containing matching groups, i.e. "()".
+#' @param values_to The name of the new column that will contain the values of
+#'   the pivoted variables.
+#' @param values_drop_na If `TRUE`, will drop rows that contain only `NA` in the
+#'   `values_to` column. This effectively converts explicit missing values to
+#'   implicit missing values, and should generally be used only when missing values
+#'   in data were created by its structure.
+#' @param rows_to The name of the column that will contain the row names or row
+#'   numbers from the original data. If `NULL`, will be removed.
+#' @param ... Currently not used.
+#' @inheritParams find_columns
+#' @param cols Identical to `select`. This argument is here to ensure compatibility
+#'   with `tidyr::pivot_longer()`. If both `select` and `cols` are provided, `cols`
+#'   is used.
+#' @param colnames_to Deprecated. Use `names_to` instead.
+#'
+#' @return If a tibble was provided as input, `reshape_longer()` also returns a
+#' tibble. Otherwise, it returns a data frame.
+#'
+#' @examples
+#' \donttest{
+#' wide_data <- data.frame(replicate(5, rnorm(10)))
+#'
+#' # Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))
+#' data_to_long(wide_data)
+#'
+#' # Customizing the names
+#' data_to_long(wide_data,
+#'   select = c(1, 2),
+#'   names_to = "Column",
+#'   values_to = "Numbers",
+#'   rows_to = "Row"
+#' )
+#'
+#' # Full example
+#' # ------------------
+#' if (require("psych")) {
+#'   data <- psych::bfi # Wide format with one row per participant's personality test
+#'
+#'   # Pivot long format
+#'   data_to_long(data,
+#'     select = regex("\\d"), # Select all columns that contain a digit
+#'     names_to = "Item",
+#'     values_to = "Score",
+#'     rows_to = "Participant"
+#'   )
+#'
+#'   if (require("tidyr")) {
+#'     reshape_longer(
+#'       tidyr::who,
+#'       select = new_sp_m014:newrel_f65,
+#'       names_to = c("diagnosis", "gender", "age"),
+#'       names_pattern = "new_?(.*)_(.)(.*)",
+#'       values_to = "count"
+#'     )
+#'   }
+#' }
+#' }
+#'
+#' @inherit data_rename seealso
+#' @export
+
+data_to_long <- function(
     data,
     select = "all",
     names_to = "name",
@@ -99,17 +174,16 @@ new_data_to_long <- function(
 
   needs_to_rearrange <- length(not_selected) == 0 && is.null(rows_to)
   if (isTRUE(needs_to_rearrange)) {
-    split_data <- split(stacked_data, ~ ind)
+    # https://stackoverflow.com/questions/73984957/efficient-way-to-reorder-rows-to-have-a-repeated-sequence
+    stacked_data <- stacked_data[c(
+      matrix(
+        seq_len(nrow(stacked_data)),
+        nrow = length(unique(stacked_data$ind)),
+        byrow = TRUE
+      )
+    ), ]
 
-    list_data <- lapply(seq_along(split_data), function(x) {
-      new_id <- x + (1:nrow(split_data[[x]]) - 1) * length(split_data)
-      split_data[[x]]$id2 <- new_id
-      return(split_data[[x]])
-    })
-
-    stacked_data <- do.call(rbind, list_data)
-    stacked_data <- data_arrange(stacked_data, "id2")
-    stacked_data <- data_remove(stacked_data, "id2")
+    row.names(stacked_data) <- NULL
   }
 
   stacked_data <- data_rename(stacked_data, "values", values_to)
@@ -119,7 +193,7 @@ new_data_to_long <- function(
 
     if (is.null(names_pattern)) {
       # faster than strsplit
-      tmp <- read.csv(
+      tmp <- utils::read.csv(
         text = stacked_data$ind,
         sep = names_sep,
         stringsAsFactors = FALSE,
@@ -150,7 +224,7 @@ new_data_to_long <- function(
 
   # reunite unselected data with stacked data
   out <- cbind(
-    not_stacked, setNames(stacked_data, c(names_to, values_to)),
+    not_stacked, stats::setNames(stacked_data, c(names_to, values_to)),
     row.names = NULL
   )
 
@@ -213,3 +287,7 @@ new_data_to_long <- function(
   ind <- rep(names(x), times = lengths(x))
   data.frame(values = unlist(unname(x)), ind, stringsAsFactors = FALSE)
 }
+
+#' @rdname data_to_long
+#' @export
+reshape_longer <- data_to_long

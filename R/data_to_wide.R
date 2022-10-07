@@ -1,4 +1,90 @@
-new_data_to_wide <- function(
+#' Reshape (pivot) data from long to wide
+#'
+#' This function "widens" data, increasing the number of columns and decreasing
+#' the number of rows. This is a dependency-free base-R equivalent of
+#' `tidyr::pivot_wider()`.
+#'
+#' @param data A data frame to pivot.
+#' @param id_cols The name of the column that identifies the rows. If `NULL`,
+#' it will use all the unique rows.
+#' @param names_from The name of the column that contains the levels to be
+#' used as future column names.
+#' @param names_prefix String added to the start of every variable name. This is
+#'  particularly useful if `names_from` is a numeric vector and you want to create
+#'  syntactic variable names.
+#' @param names_sep If `names_from` or `values_from` contains multiple variables,
+#' this will be used to join their values together into a single string to use
+#' as a column name.
+#' @param names_glue Instead of `names_sep` and `names_prefix`, you can supply a
+#' [glue specification](https://glue.tidyverse.org/index.html) that uses the
+#' `names_from` columns to create custom column names. Note that the only
+#' delimiters supported by `names_glue` are curly brackets, `{` and `}`.
+#' @param values_from The name of the column that contains the values to be used
+#' as future variable values.
+#' @param values_fill Optionally, a (scalar) value that will be used to replace
+#' missing values in the new columns created.
+#' @param verbose Toggle warnings.
+#' @param ... Not used for now.
+#' @param colnames_from Deprecated. Use `names_from` instead.
+#' @param rows_from Deprecated. Use `id_cols` instead.
+#' @param sep Deprecated. Use `names_sep` instead.
+#'
+#' @return If a tibble was provided as input, `reshape_wider()` also returns a
+#' tibble. Otherwise, it returns a data frame.
+#'
+#' @examples
+#' data_long <- read.table(header = TRUE, text = "
+#'  subject sex condition measurement
+#'        1   M   control         7.9
+#'        1   M     cond1        12.3
+#'        1   M     cond2        10.7
+#'        2   F   control         6.3
+#'        2   F     cond1        10.6
+#'        2   F     cond2        11.1
+#'        3   F   control         9.5
+#'        3   F     cond1        13.1
+#'        3   F     cond2        13.8
+#'        4   M   control        11.5
+#'        4   M     cond1        13.4
+#'        4   M     cond2        12.9")
+#'
+#'
+#' reshape_wider(
+#'   data_long,
+#'   id_cols = "subject",
+#'   names_from = "condition",
+#'   values_from = "measurement"
+#' )
+#'
+#' reshape_wider(
+#'   data_long,
+#'   id_cols = "subject",
+#'   names_from = "condition",
+#'   values_from = "measurement",
+#'   names_prefix = "Var.",
+#'   names_sep = "."
+#' )
+#'
+#' production <- expand.grid(
+#'   product = c("A", "B"),
+#'   country = c("AI", "EI"),
+#'   year = 2000:2014
+#' )
+#' production <- data_filter(production, (product == "A" & country == "AI") | product == "B")
+#'
+#' production$production <- rnorm(nrow(production))
+#'
+#' reshape_wider(
+#'   production,
+#'   names_from = c("product", "country"),
+#'   values_from = "production",
+#'   names_glue = "prod_{product}_{country}"
+#' )
+#'
+#' @inherit data_rename seealso
+#' @export
+
+data_to_wide <- function(
     data,
     id_cols = NULL,
     values_from = "Value",
@@ -92,7 +178,7 @@ new_data_to_wide <- function(
     # creation of missing combinations was done with a temporary id, so need
     # to fill columns that are not selected in names_from or values_from
     new_data[, not_selected] <- lapply(not_selected, function(x) {
-      ave(new_data[[x]], new_data$temporary_id, FUN = function(y) {
+      stats::ave(new_data[[x]], new_data$temporary_id, FUN = function(y) {
         replace(y, is.na(y), y[!is.na(y)][1L])
       })
     })
@@ -288,3 +374,8 @@ new_data_to_wide <- function(
   # Create the string(s)
   do.call(sprintf, c(list(fmt_sprintf), args))
 }
+
+
+#' @rdname data_to_wide
+#' @export
+reshape_wider <- data_to_wide
