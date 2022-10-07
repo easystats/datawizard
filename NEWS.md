@@ -1,3 +1,10 @@
+# datawizard (development version)
+
+MISC
+
+* `data_to_long()` and `data_to_wide()` have had significant performance improvements,
+  sometimes as high as a ten-fold speedup.
+
 # datawizard 0.6.2
 
 BREAKING CHANGES
