@@ -7,7 +7,7 @@
 \alias{datawizard}
 \title{datawizard: Easy Data Wrangling and Statistical Transformations}
 \description{
-A lightweight package to assist in keys steps involved in any data analysis
+A lightweight package to assist in key steps involved in any data analysis
 workflow:
 \itemize{
 \item wrangling the raw data to get it in the needed form,

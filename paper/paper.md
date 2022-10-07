@@ -37,7 +37,7 @@ affiliations:
 - index: 6
   name: University Medical Center Hamburg-Eppendorf, Germany
     
-date: "2022-09-27"
+date: "2022-10-04"
 bibliography: paper.bib
 output: rticles::joss_article
 csl: apa.csl
@@ -49,14 +49,14 @@ link-citations: yes
 
 # Summary
 
-The `{datawizard}` package for the R programming language [@base2021] provides a lightweight toolbox to assist in keys steps involved in any data analysis workflow: (1) wrangling the raw data to get it in the needed form, (2) applying preprocessing steps and statistical transformations, and (3) compute statistical summaries of data properties and distributions. Therefore, it can be a valuable tool for R users and developers looking for a lightweight option for data preparation.
+The `{datawizard}` package for the R programming language [@base2021] provides a lightweight toolbox to assist in key steps involved in any data analysis workflow: (1) wrangling the raw data to get it in the needed form, (2) applying preprocessing steps and statistical transformations, and (3) compute statistical summaries of data properties and distributions. Therefore, it can be a valuable tool for R users and developers looking for a lightweight option for data preparation.
 
 # Statement of Need
 
-The `{datawizard}` package is part of `{easystats}`, a collection of R packages designed to make statistical analysis easier (@Ben-Shachar2020, @Lüdecke2020parameters, @Lüdecke2020performance, @Lüdecke2021see, @Lüdecke2019, @Makowski2019, @Makowski2020). As this ecosystem follows a "0-external-hard-dependency" policy, a base R data manipulation package that relies only on base R needed to be created. In effect, `{datawizard}` provides data processing backend for this entire ecosystem. 
-In addition to its usefulness to the `{easystats}` ecosystem, it also provides *an* option for R users and package developers if they wish to keep their (recursive) dependency weight to a minimum (for other options, see @Dowle2021, @Eastwood2021, etc.).
+The `{datawizard}` package is part of `{easystats}`, a collection of R packages designed to make statistical analysis easier (@Ben-Shachar2020, @Lüdecke2020parameters, @Lüdecke2020performance, @Lüdecke2021see, @Lüdecke2019, @Makowski2019, @Makowski2020). As this ecosystem follows a "0-external-hard-dependency" policy, a data manipulation package that relies only on base R needed to be created. In effect, `{datawizard}` provides a data processing backend for this entire ecosystem. 
+In addition to its usefulness to the `{easystats}` ecosystem, it also provides *an* option for R users and package developers if they wish to keep their (recursive) dependency weight to a minimum (for other options, see @Dowle2021, @Eastwood2021).
 
-Because `{datawizard}` is also meant to be used and adopted easily by a wide range of users, its workflow and syntax are designed to be similar to `{tidyverse}` (@Wickham2019), a widely used ecosystem of R packages. Thus, users familiar with the `{tidyverse}` can easily translate their knowledge and make full use of `{datawizard}`.
+Because `{datawizard}` is also meant to be used and adopted easily by a wide range of users, its workflow and syntax are designed to be similar to `{tidyverse}` [@Wickham2019], a widely used ecosystem of R packages. Thus, users familiar with the `{tidyverse}` can easily translate their knowledge and make full use of `{datawizard}`.
 
 In addition to being a lightweight solution to clean messy data, `{datawizard}` also provides helpers for the other important step of data analysis: applying statistical transformations to the cleaned data while setting up statistical models. This includes various types of data standardization, normalization, rank-transformation, and adjustment. These transformations, although widely used, are not currently collectively implemented in a package in the R ecosystem, so `{datawizard}` can help new R users in finding the transformation they need.
 
@@ -66,14 +66,14 @@ Lastly, `{datawizard}` also provides a toolbox to create detailed summaries of d
 
 ## Data Preparation
 
-The raw data is rarely in a state that it can be directly fed into a statistical model. It often needs to be modified in various ways. For example, columns need to be renamed, certain portions of the data need to be filtered out, some columns need to be reshaped, data scattered across multiple tables needs to be joined, etc. 
+The raw data is rarely in a state that it can be directly fed into a statistical model. It often needs to be modified in various ways. For example, columns need to be renamed or reshaped, certain portions of the data need to be filtered out, data scattered across multiple tables needs to be joined, etc. 
 
 `{datawizard}` provides various functions for cleaning and preparing data (see Table 1).
 
 | Function         | Operation                             |
 | :--------------- | :------------------------------------ |
 | `data_filter()`  | to select only certain *observations* |
-| `data_select()`  | to select only a few *variables*      |
+| `data_select()`  | to select only certain *variables*    |
 | `data_extract()` | to extract a single *variable*        |
 | `data_rename()`  | to rename variables                   |
 | `data_to_long()` | to convert data from wide to long     |
@@ -81,7 +81,7 @@ The raw data is rarely in a state that it can be directly fed into a statistical
 | `data_join()`    | to join two data frames               |
 | ...              | ...                                   |
 
-Table: The table below lists a few key functions offered by *datawizard* for data wrangling. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
+Table: The table below lists a few key functions offered by `{datawizard}` for data wrangling. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
 
 We will look at one example function that converts data in wide format to tidy/long format:
 
@@ -135,7 +135,7 @@ Even after getting the raw data in the needed format, we may need to transform c
 | `ranktransform()` | to convert numeric values to integer ranks   |
 | ...               | ...                                          |
 
-Table: The table below lists a few key functions offered by *datawizard* for data transformations. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
+Table: The table below lists a few key functions offered by `{datawizard}` for data transformations. To see the full list, see the package website: <https://easystats.github.io/datawizard/>
 
 We will look at one example function that standardizes (i.e. centers and scales) data so that it can be expressed in terms of standard deviation:
 
@@ -164,27 +164,24 @@ The workhorse function to get a comprehensive summary of data properties is `des
 describe_distribution(mtcars)
 ```
 
-\begin{table}
-\centering
-\resizebox{\linewidth}{!}{
+
 \begin{tabular}[t]{lrrrrrrrrr}
 \toprule
 Variable & Mean & SD & IQR & Min & Max & Skewness & Kurtosis & n & n\_Missing\\
 \midrule
-mpg & 20.091 & 6.027 & 7.53 & 10.40 & 33.90 & 0.672 & -0.022 & 32 & 0\\
-cyl & 6.188 & 1.786 & 4.00 & 4.00 & 8.00 & -0.192 & -1.763 & 32 & 0\\
-disp & 230.722 & 123.939 & 221.53 & 71.10 & 472.00 & 0.420 & -1.068 & 32 & 0\\
-hp & 146.688 & 68.563 & 84.50 & 52.00 & 335.00 & 0.799 & 0.275 & 32 & 0\\
-drat & 3.597 & 0.535 & 0.84 & 2.76 & 4.93 & 0.293 & -0.450 & 32 & 0\\
-wt & 3.217 & 0.978 & 1.19 & 1.51 & 5.42 & 0.466 & 0.417 & 32 & 0\\
-qsec & 17.849 & 1.787 & 2.02 & 14.50 & 22.90 & 0.406 & 0.865 & 32 & 0\\
-vs & 0.438 & 0.504 & 1.00 & 0.00 & 1.00 & 0.265 & -2.063 & 32 & 0\\
-am & 0.406 & 0.499 & 1.00 & 0.00 & 1.00 & 0.401 & -1.967 & 32 & 0\\
-gear & 3.688 & 0.738 & 1.00 & 3.00 & 5.00 & 0.582 & -0.895 & 32 & 0\\
-carb & 2.812 & 1.615 & 2.00 & 1.00 & 8.00 & 1.157 & 2.020 & 32 & 0\\
+mpg & 20.09 & 6.03 & 7.53 & 10.4 & 33.9 & 0.67 & -0.02 & 32 & 0\\
+cyl & 6.19 & 1.79 & 4.00 & 4.0 & 8.0 & -0.19 & -1.76 & 32 & 0\\
+disp & 230.72 & 123.94 & 221.52 & 71.1 & 472.0 & 0.42 & -1.07 & 32 & 0\\
+hp & 146.69 & 68.56 & 84.50 & 52.0 & 335.0 & 0.80 & 0.28 & 32 & 0\\
+drat & 3.60 & 0.53 & 0.84 & 2.8 & 4.9 & 0.29 & -0.45 & 32 & 0\\
+wt & 3.22 & 0.98 & 1.19 & 1.5 & 5.4 & 0.47 & 0.42 & 32 & 0\\
+qsec & 17.85 & 1.79 & 2.02 & 14.5 & 22.9 & 0.41 & 0.86 & 32 & 0\\
+vs & 0.44 & 0.50 & 1.00 & 0.0 & 1.0 & 0.26 & -2.06 & 32 & 0\\
+am & 0.41 & 0.50 & 1.00 & 0.0 & 1.0 & 0.40 & -1.97 & 32 & 0\\
+gear & 3.69 & 0.74 & 1.00 & 3.0 & 5.0 & 0.58 & -0.90 & 32 & 0\\
+carb & 2.81 & 1.62 & 2.00 & 1.0 & 8.0 & 1.16 & 2.02 & 32 & 0\\
 \bottomrule
-\end{tabular}}
-\end{table}
+\end{tabular}
 
 # Licensing and Availability
 
