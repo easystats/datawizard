@@ -142,7 +142,7 @@ data_to_long <- function(
 
   if (any(names_to %in% setdiff(names(data), cols))) {
     insight::format_error(
-      "Some values of the columns specified in 'names_to' are already present as column names.",
+      "Some values of the columns specified in `names_to` are already present as column names.",
       paste0(
         "Either use another value in `names_to` or rename the following columns: ",
         text_concatenate(names_to[which(names_to %in% setdiff(names(data), cols))])
