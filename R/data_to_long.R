@@ -212,7 +212,9 @@ data_to_long <- function(
       )
       tmp <- as.data.frame(do.call(rbind, tmp), stringsAsFactors = FALSE)
       names(tmp) <- c("ind", names_to)
-      # faster than merge
+      # cbind + match is faster than merge
+      # cbind doesn't remove identical columns so we need to manually remove "ind"
+      # which is in both datasets
       stacked_data <- cbind(stacked_data, tmp[match(stacked_data[["ind"]], tmp[["ind"]]), -1])
       stacked_data$ind <- NULL
 
