@@ -268,10 +268,6 @@ data_to_long <- function(
 }
 
 
-
-
-
-
 #' Code adapted from utils::stack (but largely modified)
 #'
 #' @noRd
