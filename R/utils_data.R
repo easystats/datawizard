@@ -45,17 +45,17 @@ rownames_as_column <- function(x, var = "rowname") {
 #' @rdname rownames
 #' @export
 column_as_rownames <- function(x, var = "rowname") {
-  if (!is.character(var) & !is.numeric(var)) {
-    stop("Argument 'var' must be of type character or numeric.")
+  if (!is.character(var) && !is.numeric(var)) {
+    insight::format_error("Argument `var` must be of type character or numeric.")
   }
   if (is.character(var)) {
     if (!var %in% names(x)) {
-      stop(paste0('Variable "', var, '" is not in the data frame.'))
+      insight::format_error(paste0("Variable \"", var, "\" is not in the data frame."))
     }
   }
   if (is.numeric(var)) {
-    if (var > ncol(x) | var <= 0) {
-      stop("Column ", var, " does not exist. There are ", ncol(x), " columns in the data frame.")
+    if (var > ncol(x) || var <= 0) {
+      insight::format_error("Column ", var, " does not exist. There are ", ncol(x), " columns in the data frame.")
     }
   }
   rownames(x) <- x[[var]]
@@ -152,6 +152,6 @@ colnames_to_row <- function(x, prefix = "x") {
     insight::format_error("Argument 'prefix' must be of type character.")
   }
   x2 <- rbind(colnames(x), x)
-  colnames(x2) <- paste0(prefix, 1:ncol(x2))
+  colnames(x2) <- paste0(prefix, seq_len(ncol(x2)))
   x2
 }
