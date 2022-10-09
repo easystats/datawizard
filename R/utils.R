@@ -114,5 +114,5 @@
     msg <- default_message
   }
   # no double white space
-  gsub("  ", " ", paste0(" ", msg), fixed = TRUE)
+  insight::trim_ws(msg)
 }

@@ -261,13 +261,17 @@
     to <- which(cn == from_to[2])
     if (!length(from)) {
       # guess the misspelled column
-      msg <- .misspelled_string(cn, from_to[1], default_message = "Possibly misspelled?")
-      insight::format_error(paste0("Could not find variable \"", from_to[1], "\" in data.", msg))
+      insight::format_error(
+        paste0("Could not find variable \"", from_to[1], "\" in data."),
+        .misspelled_string(cn, from_to[1], default_message = "Possibly misspelled?")
+      )
     }
     if (!length(to)) {
       # guess the misspelled column
-      msg <- .misspelled_string(cn, from_to[2], default_message = "Possibly misspelled?")
-      insight::format_error(paste0("Could not find variable \"", from_to[2], "\" in data.", msg))
+      insight::format_error(
+        paste0("Could not find variable \"", from_to[2], "\" in data."),
+        .misspelled_string(cn, from_to[2], default_message = "Possibly misspelled?")
+      )
     }
     if (negate) {
       pattern <- columns[setdiff(seq_len(ncol(data)), from:to)]

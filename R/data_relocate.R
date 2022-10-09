@@ -102,8 +102,10 @@ data_relocate <- function(data,
     before <- before[before %in% data_cols][1] # Take first that exists (if vector is supplied)
     if (length(before) != 1 || is.na(before)) {
       # guess the misspelled column
-      msg <- .misspelled_string(data_cols, original_before[1], default_message = "Possibly misspelled?")
-      insight::format_error(paste0("The column passed to `before` wasn't found.", msg))
+      insight::format_error(
+        "The column passed to `before` wasn't found.",
+        .misspelled_string(data_cols, original_before[1], default_message = "Possibly misspelled?")
+      )
     }
     where <- min(match(before, data_cols))
     position <- c(setdiff(position, where), where)
@@ -111,8 +113,10 @@ data_relocate <- function(data,
     after <- after[after %in% data_cols][1] # Take first that exists (if vector is supplied)
     if (length(after) != 1 || is.na(after)) {
       # guess the misspelled column
-      msg <- .misspelled_string(data_cols, original_after[1], default_message = "Possibly misspelled?")
-      insight::format_error(paste0("The column passed to `after` wasn't found.", msg))
+      insight::format_error(
+        "The column passed to `after` wasn't found.",
+        .misspelled_string(data_cols, original_after[1], default_message = "Possibly misspelled?")
+      )
     }
     where <- max(match(after, data_cols))
     position <- c(where, setdiff(position, where))
