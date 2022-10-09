@@ -295,23 +295,12 @@
 # is in the column names of the data, and returns the final column names to select
 
 .evaluated_pattern_to_colnames <- function(pattern, data, ignore_case, verbose, exclude = NULL) {
-  # save "valid" column names for now
-  cols <- pattern
   # check selected variables
   pattern <- .check_pattern_and_exclude(pattern, data, ignore_case, verbose)
   # check if some variables should be excluded...
   if (!is.null(exclude)) {
     exclude <- .check_pattern_and_exclude(exclude, data, ignore_case, verbose)
     pattern <- setdiff(pattern, exclude)
-  }
-
-  # no pattern found? Tell user about misspellings...
-  if (verbose && (is.null(pattern) || !length(pattern))) {
-    # guess the misspelled column
-    insight::format_warning(paste0(
-      "No column names that matched the required search pattern were found.",
-      .misspelled_string(colnames(data), cols, default_message = "Possibly mispelled?")
-    ))
   }
   pattern
 }
@@ -351,7 +340,8 @@
   if (!all(pattern %in% columns)) {
     if (isTRUE(verbose)) {
       insight::format_warning(
-        paste0("Following variable(s) were not found: ", paste0(setdiff(pattern, columns), collapse = ", "))
+        paste0("Following variable(s) were not found: ", paste0(setdiff(pattern, columns), collapse = ", ")),
+        .misspelled_string(columns, setdiff(pattern, columns), default_message = "Possibly mispelled?")
       )
     }
     pattern <- intersect(pattern, columns)

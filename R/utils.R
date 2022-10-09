@@ -83,7 +83,7 @@
 #' @noRd
 
 .misspelled_string <- function(source, searchterm, default_message = NULL) {
-  if (is.null(searchterm) || length(searchterm) != 1) {
+  if (is.null(searchterm) || length(searchterm) < 1) {
     return(default_message)
   }
   # used for many matches
@@ -91,7 +91,9 @@
   # init default
   msg <- ""
   # guess the misspelled string
-  possible_strings <- source[.fuzzy_grep(source, searchterm)]
+  possible_strings <- unlist(lapply(searchterm, function(s) {
+    source[.fuzzy_grep(source, s)]
+  }))
   if (length(possible_strings)) {
     msg <- "Did you mean "
     if (length(possible_strings) > 1) {
