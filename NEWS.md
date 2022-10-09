@@ -5,6 +5,11 @@ MAJOR CHANGES
 * There is new a publication about the `{datawizard}` package: 
   Patil et al. (2022) <doi:10.21105/joss.04684>.
 
+MINOR CHANGES
+
+* When column names were misspelled, most functions now suggest which
+  exisiting columns possibly could be meant.
+
 # datawizard 0.6.2
 
 BREAKING CHANGES

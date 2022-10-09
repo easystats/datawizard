@@ -260,10 +260,18 @@
     from <- which(cn == from_to[1])
     to <- which(cn == from_to[2])
     if (!length(from)) {
-      stop("Could not find variable '", from_to[1], "' in data.", call. = FALSE)
+      # guess the misspelled column
+      insight::format_error(
+        paste0("Could not find variable \"", from_to[1], "\" in data."),
+        .misspelled_string(cn, from_to[1], default_message = "Possibly misspelled?")
+      )
     }
     if (!length(to)) {
-      stop("Could not find variable '", from_to[2], "' in data.", call. = FALSE)
+      # guess the misspelled column
+      insight::format_error(
+        paste0("Could not find variable \"", from_to[2], "\" in data."),
+        .misspelled_string(cn, from_to[2], default_message = "Possibly misspelled?")
+      )
     }
     if (negate) {
       pattern <- columns[setdiff(seq_len(ncol(data)), from:to)]
@@ -298,7 +306,6 @@
     exclude <- .check_pattern_and_exclude(exclude, data, ignore_case, verbose)
     pattern <- setdiff(pattern, exclude)
   }
-
   pattern
 }
 
@@ -337,7 +344,8 @@
   if (!all(pattern %in% columns)) {
     if (isTRUE(verbose)) {
       insight::format_warning(
-        paste0("Following variable(s) were not found: ", paste0(setdiff(pattern, columns), collapse = ", "))
+        paste0("Following variable(s) were not found: ", paste0(setdiff(pattern, columns), collapse = ", ")),
+        .misspelled_string(columns, setdiff(pattern, columns), default_message = "Possibly misspelled?")
       )
     }
     pattern <- intersect(pattern, columns)
