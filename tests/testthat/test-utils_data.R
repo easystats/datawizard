@@ -42,7 +42,7 @@ test_that("column_as_rownames sanity checks work", {
     some_value = seq(1, 6, by = 1)
   )
   expect_error(column_as_rownames(test, TRUE),
-    regexp = "Argument 'var' must be of type character or numeric"
+    regexp = "Argument `var`"
   )
   expect_error(column_as_rownames(test, "foo"),
     regexp = "not in the data frame"
@@ -106,7 +106,7 @@ test_that("row_to_colnames works", {
 test_that("row_to_colnames: check arg 'row'", {
   expect_error(
     row_to_colnames(test_num, row = "hi", verbose = FALSE),
-    regexp = "Argument 'row' must be of type numeric"
+    regexp = "Argument `row`"
   )
   expect_error(
     row_to_colnames(test_num, row = 6),
@@ -114,7 +114,7 @@ test_that("row_to_colnames: check arg 'row'", {
   )
   expect_error(
     row_to_colnames(test_num, row = c(3, 5), verbose = FALSE),
-    regexp = "Argument 'row' must be of length 1"
+    regexp = "Argument `row`"
   )
   expect_equal(
     row_to_colnames(test_num, verbose = FALSE),
@@ -169,11 +169,11 @@ test_that("colnames_to_row: check arg 'prefix'", {
   )
   expect_error(
     colnames_to_row(test_num, prefix = 6),
-    regexp = "Argument 'prefix' must be of type character"
+    regexp = "Argument `prefix`"
   )
   expect_error(
     colnames_to_row(test_num, prefix = c("A", "B")),
-    regexp = "Argument 'prefix' must be of length 1"
+    regexp = "Argument `prefix`"
   )
   expect_equal(
     colnames_to_row(test),
