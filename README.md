@@ -1,7 +1,7 @@
 
 # `datawizard`: Easy Data Wrangling and Statistical Transformations <img src='man/figures/logo.png' align="right" height="139" />
 
-[![publication](https://img.shields.io/badge/Cite-Unpublished-yellow)](https://github.com/easystats/datawizard/blob/master/inst/CITATION)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.04684/status.svg)](https://doi.org/10.21105/joss.04684)
 [![downloads](http://cranlogs.r-pkg.org/badges/datawizard)](https://cran.r-project.org/package=datawizard)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/)
 [![status](https://tinyverse.netlify.com/badge/datawizard)](https://CRAN.R-project.org/package=datawizard)
@@ -58,22 +58,23 @@ To cite the package, run the following command:
 ``` r
 citation("datawizard")
 
-To cite datawizard in publications use:
+To cite package 'datawizard' in publications use:
 
-  Patil, Makowski, Ben-Shachar, Wiernik, Bacher, & Lüdecke (2022).
-  datawizard: An R Package for Easy Data Preparation and Statistical
-  Transformations. CRAN. Available from
-  https://easystats.github.io/datawizard/
+  Patil et al., (2022). datawizard: An R Package for Easy Data
+  Preparation and Statistical Transformations. Journal of Open Source
+  Software, 7(78), 4684, https://doi.org/10.21105/joss.04684
 
 A BibTeX entry for LaTeX users is
 
   @Article{,
-    title = {datawizard: An R Package for Easy Data Preparation and Statistical Transformations},
+    title = {{datawizard}: An {R} Package for Easy Data Preparation and Statistical Transformations},
     author = {Indrajeet Patil and Dominique Makowski and Mattan S. Ben-Shachar and Brenton M. Wiernik and Etienne Bacher and Daniel Lüdecke},
-    journal = {CRAN},
+    journal = {Journal of Open Source Software},
     year = {2022},
-    note = {R package},
-    url = {https://easystats.github.io/datawizard/},
+    volume = {7},
+    number = {78},
+    pages = {4684},
+    doi = {10.21105/joss.04684},
   }
 ```
 
