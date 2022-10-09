@@ -42,7 +42,7 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
   data <- .coerce_to_dataframe(data)
 
   # find which vars should be decreasing
-  desc <- select[grepl("^-", select)]
+  desc <- select[startsWith(select, "-")]
   desc <- gsub("^-", "", desc)
   select <- gsub("^-", "", select)
 
