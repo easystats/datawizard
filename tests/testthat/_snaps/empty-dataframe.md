@@ -1,4 +1,4 @@
-# adjust multilevel
+# remove empty with character
 
     Code
       remove_empty_columns(tmp)
