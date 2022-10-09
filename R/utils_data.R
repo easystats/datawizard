@@ -102,10 +102,10 @@ column_as_rownames <- function(x, var = "rowname") {
 #'
 row_to_colnames <- function(x, row = 1, na_prefix = "x", verbose = TRUE) {
   if (!is.numeric(row)) {
-    insight::format_error("Argument 'row' must be of type numeric.")
+    insight::format_error("Argument `row` must be of type numeric.")
   }
   if (length(row) != 1) {
-    insight::format_error("Argument 'row' must be of length 1.")
+    insight::format_error("Argument `row` must be of length 1.")
   }
   if (nrow(x) < row) {
     insight::format_error(
@@ -129,8 +129,8 @@ row_to_colnames <- function(x, row = 1, na_prefix = "x", verbose = TRUE) {
       insight::format_warning(
         paste0(
           "Some values of row ", row,
-          " were NAs. The corresponding column names are prefixed with '",
-          na_prefix, "'."
+          " were NAs. The corresponding column names are prefixed with `",
+          na_prefix, "`."
         )
       )
     }
@@ -146,10 +146,10 @@ row_to_colnames <- function(x, row = 1, na_prefix = "x", verbose = TRUE) {
 #' @export
 colnames_to_row <- function(x, prefix = "x") {
   if (length(prefix) != 1) {
-    insight::format_error("Argument 'prefix' must be of length 1.")
+    insight::format_error("Argument `prefix` must be of length 1.")
   }
   if (!is.character(prefix)) {
-    insight::format_error("Argument 'prefix' must be of type character.")
+    insight::format_error("Argument `prefix` must be of type character.")
   }
   x2 <- rbind(colnames(x), x)
   colnames(x2) <- paste0(prefix, seq_len(ncol(x2)))
