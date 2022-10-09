@@ -261,12 +261,12 @@
     to <- which(cn == from_to[2])
     if (!length(from)) {
       # guess the misspelled column
-      msg <- .misspelled_string(cn, from_to[1], default_message = "Possibly mispelled?")
+      msg <- .misspelled_string(cn, from_to[1], default_message = "Possibly misspelled?")
       insight::format_error(paste0("Could not find variable \"", from_to[1], "\" in data.", msg))
     }
     if (!length(to)) {
       # guess the misspelled column
-      msg <- .misspelled_string(cn, from_to[2], default_message = "Possibly mispelled?")
+      msg <- .misspelled_string(cn, from_to[2], default_message = "Possibly misspelled?")
       insight::format_error(paste0("Could not find variable \"", from_to[2], "\" in data.", msg))
     }
     if (negate) {
@@ -341,7 +341,7 @@
     if (isTRUE(verbose)) {
       insight::format_warning(
         paste0("Following variable(s) were not found: ", paste0(setdiff(pattern, columns), collapse = ", ")),
-        .misspelled_string(columns, setdiff(pattern, columns), default_message = "Possibly mispelled?")
+        .misspelled_string(columns, setdiff(pattern, columns), default_message = "Possibly misspelled?")
       )
     }
     pattern <- intersect(pattern, columns)

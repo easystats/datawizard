@@ -105,7 +105,7 @@ out <- data.frame(
   log_BF = 3
 )
 
-test_that("data_relocate regex", {
+test_that("data_relocate misspelled", {
   # close match
   expect_error(
     data_relocate(out, "pd", before = "BF"),
