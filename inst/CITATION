@@ -1,16 +1,12 @@
 bibentry(
   bibtype="Article",
-  title="datawizard: An R Package for Easy Data Preparation and Statistical Transformations",
+  title="{datawizard}: An {R} Package for Easy Data Preparation and Statistical Transformations",
   author=c(person("Indrajeet", "Patil"), person("Dominique", "Makowski"), person("Mattan S.", "Ben-Shachar"), person("Brenton M.", "Wiernik"), person("Etienne", "Bacher"), person("Daniel", "Lüdecke")),
-  journal="CRAN",
-  year="2022",
-  note="R package",
-  url="https://easystats.github.io/datawizard/",
-
-  textVersion =
-    paste("Patil, Makowski, Ben-Shachar, Wiernik, Bacher, & Lüdecke (2022). datawizard: An R Package for Easy Data Preparation and Statistical Transformations. CRAN.",
-          "Available from https://easystats.github.io/datawizard/"
-    ),
-  mheader = "To cite datawizard in publications use:"
+  journal="Journal of Open Source Software",
+  year = 2022,
+  volume = 7,
+  number = 78,
+  pages = 4684,
+  doi = "10.21105/joss.04684",
+  textVersion = "Patil et al., (2022). datawizard: An R Package for Easy Data Preparation and Statistical Transformations. Journal of Open Source Software, 7(78), 4684, https://doi.org/10.21105/joss.04684"
 )
-
