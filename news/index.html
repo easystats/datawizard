@@ -86,13 +86,21 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.2.1" id="datawizard-0621">datawizard 0.6.2.1<a class="anchor" aria-label="anchor" href="#datawizard-0621"></a></h2>
+<p>MAJOR CHANGES</p>
+<ul><li>There is new a publication about the <a href="https://easystats.github.io/datawizard/">datawizard</a> package: Patil et al. (2022) <a href="doi:10.21105/joss.04684" class="uri">doi:10.21105/joss.04684</a>.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.2" id="datawizard-062">datawizard 0.6.2<a class="anchor" aria-label="anchor" href="#datawizard-062"></a></h2><p class="text-muted">CRAN release: 2022-10-04</p>
 <p>BREAKING CHANGES</p>
 <ul><li><p>Methods for grouped data frames (<code>.grouped_df</code>) no longer support <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">dplyr::group_by()</a></code> for <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> before version <code>0.8.0</code>.</p></li>
 <li><p><code><a href="../reference/remove_empty.html">empty_columns()</a></code> and <code><a href="../reference/remove_empty.html">remove_empty_columns()</a></code> now also remove columns that contain only empty characters. Likewise, <code><a href="../reference/remove_empty.html">empty_rows()</a></code> and <code><a href="../reference/remove_empty.html">remove_empty_rows()</a></code> remove observations that completely have missing or empty character values.</p></li>
-</ul><p>CHANGES</p>
-<ul><li><p><code><a href="../reference/data_arrange.html">data_arrange()</a></code> now works with data frames that were grouped using <code><a href="../reference/data_group.html">data_group()</a></code> (<a href="https://github.com/easystats/datawizard/issues/274" class="external-link">#274</a>).</p></li>
-<li><p><code><a href="../reference/data_read.html">data_read()</a></code> gains a <code>convert_factors</code> argument, to turn off automatic conversion from numeric variables into factors.</p></li>
+</ul><p>MINOR CHANGES</p>
+<ul><li>
+<code><a href="../reference/data_read.html">data_read()</a></code> gains a <code>convert_factors</code> argument, to turn off automatic conversion from numeric variables into factors.</li>
+</ul><p>BUG FIXES</p>
+<ul><li>
+<code><a href="../reference/data_arrange.html">data_arrange()</a></code> now works with data frames that were grouped using <code><a href="../reference/data_group.html">data_group()</a></code> (<a href="https://github.com/easystats/datawizard/issues/274" class="external-link">#274</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.1" id="datawizard-061">datawizard 0.6.1<a class="anchor" aria-label="anchor" href="#datawizard-061"></a></h2><p class="text-muted">CRAN release: 2022-09-25</p>
