@@ -54,3 +54,23 @@
 .has_numeric_rownames <- function(data) {
   identical(attributes(data)$row.names, seq_len(nrow(data)))
 }
+
+
+#' Fuzzy grep, matches pattern that are close, but not identical
+#' Example:
+#' colnames(iris)
+#' p <- sprintf("(%s){~%i}", "Spela", 2)
+#' grep(pattern = p, x = colnames(iris), ignore.case = FALSE)
+#' @keywords internal
+#' @noRd
+
+.fuzzy_grep <- function(x, pattern, precision = NULL) {
+  if (is.null(precision)) {
+    precision <- round(nchar(pattern) / 3)
+  }
+  if (precision > nchar(pattern)) {
+    return(NULL)
+  }
+  p <- sprintf("(%s){~%i}", pattern, precision)
+  grep(pattern = p, x = x, ignore.case = FALSE)
+}
