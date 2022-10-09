@@ -142,5 +142,5 @@ test_that("center regex", {
 # no matches ------------------------------
 test_that("center no match", {
   data(iris)
-  expect_warning(expect_warning(center(iris, "Sepla.Length")))
+  expect_warning(center(iris, "Sepla.Length"))
 })
