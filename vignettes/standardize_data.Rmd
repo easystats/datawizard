@@ -35,6 +35,10 @@ if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
 }
 ```
 
+This vignette can be referred to by citing the following:
+
+Patil et al., (2022). datawizard: An R Package for Easy Data Preparation and Statistical Transformations. *Journal of Open Source Software*, *7*(78), 4684, https://doi.org/10.21105/joss.04684
+
 # Introduction
 
 To make sense of their data and effects, scientists might want to standardize
