@@ -102,8 +102,8 @@ data_relocate <- function(data,
     before <- before[before %in% data_cols][1] # Take first that exists (if vector is supplied)
     if (length(before) != 1 || is.na(before)) {
       # guess the misspelled column
-      msg <- .misspelled_string(data_cols, original_before[1], default_message = "Possibly mispelled.")
-      insight::format_error(paste0("The column passed to `before` wasn't found. ", msg))
+      msg <- .misspelled_string(data_cols, original_before[1], default_message = "Possibly mispelled?")
+      insight::format_error(paste0("The column passed to `before` wasn't found.", msg))
     }
     where <- min(match(before, data_cols))
     position <- c(setdiff(position, where), where)
@@ -111,8 +111,8 @@ data_relocate <- function(data,
     after <- after[after %in% data_cols][1] # Take first that exists (if vector is supplied)
     if (length(after) != 1 || is.na(after)) {
       # guess the misspelled column
-      msg <- .misspelled_string(data_cols, original_after[1], default_message = "Possibly mispelled.")
-      insight::format_error(paste0("The column passed to `after` wasn't found. ", msg))
+      msg <- .misspelled_string(data_cols, original_after[1], default_message = "Possibly mispelled?")
+      insight::format_error(paste0("The column passed to `after` wasn't found.", msg))
     }
     where <- max(match(after, data_cols))
     position <- c(where, setdiff(position, where))
@@ -156,26 +156,4 @@ data_reorder <- function(data,
   out <- data[c(cols, remaining_columns)]
   attributes(out) <- utils::modifyList(attributes(data), attributes(out))
   out
-}
-
-
-
-.misspelled_string <- function(source, searchterm, default_message = NULL) {
-  if (is.null(searchterm) || length(searchterm) != 1) {
-    return(default_message)
-  }
-  # guess the misspelled string
-  possible_strings <- source[.fuzzy_grep(source, searchterm)]
-  if (length(possible_strings)) {
-    msg <- "Did you mean "
-    if (length(possible_strings) > 1) {
-      msg <- paste0(msg, "one of ", text_concatenate(possible_strings, enclose = "\"", last = " or "))
-    } else {
-      msg <- paste0(msg, "\"", possible_strings, "\"")
-    }
-    msg <- paste0(msg, "?")
-  } else {
-    msg <- default_message
-  }
-  msg
 }

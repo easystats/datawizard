@@ -260,10 +260,14 @@
     from <- which(cn == from_to[1])
     to <- which(cn == from_to[2])
     if (!length(from)) {
-      stop("Could not find variable '", from_to[1], "' in data.", call. = FALSE)
+      # guess the misspelled column
+      msg <- .misspelled_string(cn, from_to[1], default_message = "Possibly mispelled?")
+      insight::format_error(paste0("Could not find variable \"", from_to[1], "\" in data.", msg))
     }
     if (!length(to)) {
-      stop("Could not find variable '", from_to[2], "' in data.", call. = FALSE)
+      # guess the misspelled column
+      msg <- .misspelled_string(cn, from_to[2], default_message = "Possibly mispelled?")
+      insight::format_error(paste0("Could not find variable \"", from_to[2], "\" in data.", msg))
     }
     if (negate) {
       pattern <- columns[setdiff(seq_len(ncol(data)), from:to)]
@@ -291,6 +295,8 @@
 # is in the column names of the data, and returns the final column names to select
 
 .evaluated_pattern_to_colnames <- function(pattern, data, ignore_case, verbose, exclude = NULL) {
+  # save "valid" column names for now
+  cols <- pattern
   # check selected variables
   pattern <- .check_pattern_and_exclude(pattern, data, ignore_case, verbose)
   # check if some variables should be excluded...
@@ -299,6 +305,14 @@
     pattern <- setdiff(pattern, exclude)
   }
 
+  # no pattern found? Tell user about misspellings...
+  if (verbose && (is.null(pattern) || !length(pattern))) {
+    # guess the misspelled column
+    insight::format_warning(paste0(
+      "No column names that matched the required search pattern were found.",
+      .misspelled_string(colnames(data), cols, default_message = "Possibly mispelled?")
+    ))
+  }
   pattern
 }
 
