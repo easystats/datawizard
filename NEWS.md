@@ -1,4 +1,4 @@
-# datawizard 0.6.2.1
+# datawizard (development version)
 
 MAJOR CHANGES
 

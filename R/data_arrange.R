@@ -74,6 +74,12 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
     return(data)
   }
 
+  already_sorted <- all(unlist(lapply(data[, select, drop = FALSE], .is_sorted)))
+
+  if (already_sorted) {
+    return(data)
+  }
+
   out <- data
 
   # reverse order for variables that should be decreasing

@@ -34,3 +34,13 @@ test_that(".coerce_to_dataframe errors correctly if can't coerce", {
     regexp = "object that can be coerced"
   )
 })
+
+test_that(".is_sorted works", {
+  expect_true(.is_sorted(1:3))
+  expect_true(.is_sorted(c("a", "b", "c")))
+  expect_true(.is_sorted(factor(c("a", "b", "c"))))
+
+  expect_false(.is_sorted(c(1, 3, 2)))
+  expect_false(.is_sorted(c("b", "a", "c")))
+  expect_false(.is_sorted(factor(c("b", "a", "c"))))
+})
