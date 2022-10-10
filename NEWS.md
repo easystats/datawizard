@@ -1,9 +1,18 @@
-# datawizard (development version)
+=======
+# datawizard 0.6.2.1
 
 MAJOR CHANGES
 
+* There is new a publication about the `{datawizard}` package: 
+  Patil et al. (2022) <doi:10.21105/joss.04684>.
+  
 * `data_to_long()` and `data_to_wide()` have had significant performance improvements,
   sometimes as high as a ten-fold speedup.
+
+MINOR CHANGES
+
+* When column names are misspelled, most functions now suggest which
+  existing columns possibly could be meant.
 
 # datawizard 0.6.2
 
@@ -17,13 +26,15 @@ BREAKING CHANGES
   `remove_empty_rows()` remove observations that completely have missing or
   empty character values.
 
-CHANGES
-
-* `data_arrange()` now works with data frames that were grouped using
-  `data_group()` (#274).
+MINOR CHANGES
 
 * `data_read()` gains a `convert_factors` argument, to turn off automatic
   conversion from numeric variables into factors.
+
+BUG FIXES
+
+* `data_arrange()` now works with data frames that were grouped using
+  `data_group()` (#274).
 
 # datawizard 0.6.1
 

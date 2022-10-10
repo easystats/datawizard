@@ -16,6 +16,7 @@ workflow:
 }
 
 It is also the data wrangling backend for packages in 'easystats' ecosystem.
+References: Patil et al. (2022) \url{doi:10.21105/joss.04684}.
 }
 \details{
 \code{datawizard}
@@ -43,6 +44,8 @@ Authors:
 Other contributors:
 \itemize{
   \item Rémi Thériault \email{remi.theriault@mail.mcgill.ca} (\href{https://orcid.org/0000-0003-4315-6788}{ORCID}) (@rempsyc) [contributor]
+  \item Thomas J. Faulkenberry \email{faulkenberry@tarleton.edu} [reviewer]
+  \item Robert Garrett \email{rcg4@illinois.edu} [reviewer]
 }
 
 }

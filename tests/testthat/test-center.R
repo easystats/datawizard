@@ -138,3 +138,9 @@ test_that("center regex", {
     center(mtcars$mpg)
   )
 })
+
+# no matches ------------------------------
+test_that("center no match", {
+  data(iris)
+  expect_warning(center(iris, "Sepla.Length"))
+})
