@@ -116,3 +116,8 @@
   # no double white space
   insight::trim_ws(msg)
 }
+
+#' Check that a vector is sorted
+#' @noRd
+
+.is_sorted <- Negate(is.unsorted)
