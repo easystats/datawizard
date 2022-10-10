@@ -7,7 +7,7 @@ MAJOR CHANGES
   Patil et al. (2022) <doi:10.21105/joss.04684>.
   
 * `data_to_long()` and `data_to_wide()` have had significant performance improvements,
-  sometimes as high as a ten-fold speedup.
+  sometimes as high as a ten-fold speedup. 
 
 MINOR CHANGES
 
