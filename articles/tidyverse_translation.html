@@ -811,7 +811,7 @@ single new column, called “count”.</p>
 </div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 180 × 3</span></span></span>
 <span><span class="co">##    religion income             count</span></span>
-<span><span class="co">##  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 1</span> Agnostic &lt;$10k                 27</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 2</span> Agnostic $10-20k               34</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 3</span> Agnostic $20-30k               60</span></span>
@@ -873,7 +873,7 @@ we will use another dataset: the <code>billboard</code> dataset.</p>
 </div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5,307 × 5</span></span></span>
 <span><span class="co">##    artist  track                   date.entered week   rank</span></span>
-<span><span class="co">##  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 2 Pac   Baby Don't Cry (Keep... 2000-02-26   wk1      87</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 2 Pac   Baby Don't Cry (Keep... 2000-02-26   wk2      82</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 2 Pac   Baby Don't Cry (Keep... 2000-02-26   wk3      72</span></span>
@@ -932,7 +932,7 @@ show how close <code><a href="../reference/data_to_wide.html">data_to_wide()</a>
 </div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 19 × 12</span></span></span>
 <span><span class="co">##    fish  Release I80_1 Lisbon  Rstr Base_TD   BCE   BCW  BCE2  BCW2   MAE   MAW</span></span>
-<span><span class="co">##  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 4842        1     1      1     1       1     1     1     1     1     1     1</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 4843        1     1      1     1       1     1     1     1     1     1     1</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 4844        1     1      1     1       1     1     1     1     1     1     1</span></span>
