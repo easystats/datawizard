@@ -3,7 +3,7 @@
 
 MAJOR CHANGES
 
-* There is new a publication about the `{datawizard}` package: 
+* There is a new publication about the `{datawizard}` package: 
   Patil et al. (2022) <doi:10.21105/joss.04684>.
   
 * `data_to_long()` and `data_to_wide()` have had significant performance improvements,
