@@ -55,14 +55,16 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
         paste0(
           "The following column(s) don't exist in the dataset: ",
           text_concatenate(dont_exist), "."
-        )
+        ),
+        .misspelled_string(names(data), dont_exist, "Possibly misspelled?")
       )
     } else {
       insight::format_warning(
         paste0(
           "The following column(s) don't exist in the dataset: ",
           text_concatenate(dont_exist), "."
-        )
+        ),
+        .misspelled_string(names(data), dont_exist, "Possibly misspelled?")
       )
     }
     select <- select[-which(select %in% dont_exist)]
