@@ -1,14 +1,18 @@
+=======
 # datawizard 0.6.2.1
 
 MAJOR CHANGES
 
-* There is new a publication about the `{datawizard}` package: 
+* There is a new publication about the `{datawizard}` package: 
   Patil et al. (2022) <doi:10.21105/joss.04684>.
+  
+* `data_to_long()` and `data_to_wide()` have had significant performance improvements,
+  sometimes as high as a ten-fold speedup.
 
 MINOR CHANGES
 
-* When column names were misspelled, most functions now suggest which
-  exisiting columns possibly could be meant.
+* When column names are misspelled, most functions now suggest which
+  existing columns possibly could be meant.
 
 # datawizard 0.6.2
 
