@@ -37,7 +37,7 @@ reshape_ci <- function(x, ci_type = "CI") {
   ci_high <- paste0(ci_type, "_high")
 
   # Long to wide ----------------
-  if (ci_low %in% names(x) & ci_high %in% names(x) & "CI" %in% names(x)) {
+  if (ci_low %in% names(x) && ci_high %in% names(x) && "CI" %in% names(x)) {
     ci_position <- which(names(x) == "CI")
 
     # Reshape
@@ -71,7 +71,7 @@ reshape_ci <- function(x, ci_type = "CI") {
     # Wide to long --------------
   } else {
     if (!"Parameter" %in% names(x)) {
-      x$Parameter <- 1:nrow(x)
+      x$Parameter <- seq_len(nrow(x))
       remove_parameter <- TRUE
     } else {
       remove_parameter <- FALSE
@@ -84,7 +84,7 @@ reshape_ci <- function(x, ci_type = "CI") {
       stop("Something went wrong in the CIs reshaping.")
       return(x)
     }
-    if (sum(lows) > 1 & sum(highs) > 1) {
+    if (sum(lows) > 1 && sum(highs) > 1) {
       low <- stats::reshape(
         x[!highs],
         direction = "long",
