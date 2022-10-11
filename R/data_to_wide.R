@@ -178,9 +178,10 @@ data_to_wide <- function(
     # creation of missing combinations was done with a temporary id, so need
     # to fill columns that are not selected in names_from or values_from
     new_data[, not_selected] <- lapply(not_selected, function(x) {
-      stats::ave(new_data[[x]], new_data$temporary_id, FUN = function(y) {
-        replace(y, is.na(y), y[!is.na(y)][1L])
-      })
+      data <- data_arrange(new_data, c("temporary_id", x))
+      ind <- which(!is.na(data[[x]]))
+      rep_times <- diff(c(ind, length(data[[x]]) + 1))
+      rep(data[[x]][ind], times = rep_times)
     })
 
     new_data <- data_arrange(new_data, "temporary_id")
