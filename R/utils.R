@@ -121,3 +121,19 @@
 #' @noRd
 
 .is_sorted <- Negate(is.unsorted)
+
+
+#' Replace only custom attributes
+#'
+#' Using "attributes(out) <- attributes(data)" or similar doesn't work so well
+#' for big datasets because it takes some time to attribute the row names.
+#'
+#' This function gives only custom attributes to the new dataset.
+#' @noRd
+
+.replace_attrs <- function(data, custom_attr) {
+  for(nm in setdiff(names(custom_attr), names(attributes(data.frame())))) {
+    attr(data, which = nm) <- custom_attr[[nm]]
+  }
+  return(data)
+}

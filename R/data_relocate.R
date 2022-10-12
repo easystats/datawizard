@@ -84,7 +84,7 @@ data_relocate <- function(data,
   )
 
   # save attributes
-  att <- attributes(data)
+  attr_data <- attributes(data)
 
   # Move columns to the right hand side
   data <- data[c(setdiff(names(data), cols), cols)]
@@ -132,7 +132,7 @@ data_relocate <- function(data,
   position <- position[position <= length(data_cols)]
 
   out <- data[position]
-  attributes(out) <- utils::modifyList(att, attributes(out))
+  out <- .replace_attrs(out, attr_data)
 
   out
 }
@@ -158,6 +158,6 @@ data_reorder <- function(data,
   remaining_columns <- setdiff(colnames(data), cols)
 
   out <- data[c(cols, remaining_columns)]
-  attributes(out) <- utils::modifyList(attributes(data), attributes(out))
+  out <- .replace_attrs(out, attributes(data))
   out
 }

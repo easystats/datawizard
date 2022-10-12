@@ -172,9 +172,7 @@ data_join <- data_merge
 #' @rdname data_merge
 #' @export
 data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, verbose = TRUE, ...) {
-  # save data frame attributes
-  attr_x <- attributes(x)
-  attr_y <- attributes(y)
+
   class_x <- class(x)
 
   # save variable attributes
@@ -312,8 +310,8 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   out <- out[all_columns]
 
   # add back attributes
-  attributes(out) <- utils::modifyList(attr_y, attributes(out))
-  attributes(out) <- utils::modifyList(attr_x, attributes(out))
+  out <- .replace_attrs(out, attributes(y))
+  out <- .replace_attrs(out, attributes(x))
 
   for (i in colnames(out)) {
     if (is.list(attr_vars[[i]])) {
