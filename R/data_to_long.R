@@ -73,23 +73,20 @@
 #' @inherit data_rename seealso
 #' @export
 
-data_to_long <- function(
-    data,
-    select = "all",
-    names_to = "name",
-    names_prefix = NULL,
-    names_sep = NULL,
-    names_pattern = NULL,
-    values_to = "value",
-    values_drop_na = FALSE,
-    rows_to = NULL,
-    ignore_case = FALSE,
-    regex = FALSE,
-    ...,
-    cols,
-    colnames_to
-  ){
-
+data_to_long <- function(data,
+                         select = "all",
+                         names_to = "name",
+                         names_prefix = NULL,
+                         names_sep = NULL,
+                         names_pattern = NULL,
+                         values_to = "value",
+                         values_drop_na = FALSE,
+                         rows_to = NULL,
+                         ignore_case = FALSE,
+                         regex = FALSE,
+                         ...,
+                         cols,
+                         colnames_to) {
   # Check args
   if (!missing(colnames_to)) {
     .is_deprecated("colnames_to", "names_to")
@@ -190,7 +187,6 @@ data_to_long <- function(
 
   # split columns if several names in names_to or names_pattern is specified
   if (length(names_to) > 1) {
-
     if (is.null(names_pattern)) {
       # faster than strsplit
       tmp <- utils::read.csv(
@@ -204,7 +200,6 @@ data_to_long <- function(
 
       stacked_data$ind <- NULL
       stacked_data <- cbind(tmp, stacked_data)
-
     } else {
       tmp <- regmatches(
         unique(stacked_data$ind),
@@ -217,9 +212,7 @@ data_to_long <- function(
       # which is in both datasets
       stacked_data <- cbind(stacked_data, tmp[match(stacked_data[["ind"]], tmp[["ind"]]), -1])
       stacked_data$ind <- NULL
-
     }
-
   }
 
   stacked_data <- data_relocate(stacked_data, select = values_to, after = -1)

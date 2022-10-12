@@ -172,7 +172,6 @@ data_join <- data_merge
 #' @rdname data_merge
 #' @export
 data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, verbose = TRUE, ...) {
-
   class_x <- class(x)
 
   # save variable attributes

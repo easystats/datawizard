@@ -315,7 +315,6 @@ categorize.grouped_df <- function(x,
                                   regex = FALSE,
                                   verbose = TRUE,
                                   ...) {
-
   # works only for dplyr >= 0.8.0
   grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 

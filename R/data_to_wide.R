@@ -84,22 +84,19 @@
 #' @inherit data_rename seealso
 #' @export
 
-data_to_wide <- function(
-    data,
-    id_cols = NULL,
-    values_from = "Value",
-    names_from = "Name",
-    names_sep = "_",
-    names_prefix = "",
-    names_glue = NULL,
-    values_fill = NULL,
-    verbose = TRUE,
-    ...,
-    colnames_from,
-    rows_from,
-    sep
-  ) {
-
+data_to_wide <- function(data,
+                         id_cols = NULL,
+                         values_from = "Value",
+                         names_from = "Name",
+                         names_sep = "_",
+                         names_prefix = "",
+                         names_glue = NULL,
+                         values_fill = NULL,
+                         verbose = TRUE,
+                         ...,
+                         colnames_from,
+                         rows_from,
+                         sep) {
   if (!missing(colnames_from)) {
     .is_deprecated("colnames_from", "names_from")
     if (is.null(names_from)) {
@@ -159,21 +156,21 @@ data_to_wide <- function(
 
   incomplete_groups <-
     (n_values_per_group > 1 &&
-       !all(unique(n_rows_per_group) %in% insight::n_unique(new_data[, names_from]))
-     ) ||
-    (n_values_per_group == 1 &&
-       unique(n_rows_per_group) < length(unique(new_data[, names_from]))
-    )
+      !all(unique(n_rows_per_group) %in% insight::n_unique(new_data[, names_from]))
+    ) ||
+      (n_values_per_group == 1 &&
+        unique(n_rows_per_group) < length(unique(new_data[, names_from]))
+      )
 
   # create missing combinations
 
   if (not_all_cols_are_selected && incomplete_groups) {
-
     expanded <- expand.grid(unique(new_data[["temporary_id"]]), unique(new_data[[names_from]]))
     names(expanded) <- c("temporary_id", names_from)
     new_data <- data_merge(new_data, expanded,
-                           join = "full", by = c("temporary_id", names_from),
-                           sort = FALSE)
+      join = "full", by = c("temporary_id", names_from),
+      sort = FALSE
+    )
 
     # creation of missing combinations was done with a temporary id, so need
     # to fill columns that are not selected in names_from or values_from
@@ -274,7 +271,6 @@ data_to_wide <- function(
 #' @noRd
 
 .unstack <- function(x, names_from, values_from, names_sep, names_prefix, names_glue = NULL) {
-
   # get values from names_from (future colnames)
 
   if (is.null(names_glue)) {
@@ -302,7 +298,8 @@ data_to_wide <- function(
   if (length(res) == 1 && !is.list(res[[1]])) {
     res <- data.frame(
       matrix(
-        res[[1]], nrow = 1, dimnames = list(c(), unique(x$future_colnames))
+        res[[1]],
+        nrow = 1, dimnames = list(c(), unique(x$future_colnames))
       ),
       stringsAsFactors = FALSE
     )
@@ -316,7 +313,6 @@ data_to_wide <- function(
     out = data.frame(res, stringsAsFactors = FALSE),
     col_order = unique(x$future_colnames)
   )
-
 }
 
 
@@ -327,8 +323,7 @@ data_to_wide <- function(
 #' @noRd
 
 .gluestick <- function(fmt, src = parent.frame(), open = "{", close = "}", eval = TRUE) {
-
-  nchar_open  <- nchar(open)
+  nchar_open <- nchar(open)
   nchar_close <- nchar(close)
 
   # Sanity checks
@@ -345,13 +340,13 @@ data_to_wide <- function(
 
   # Brute force the open/close characters into a regular expression for
   # extracting the expressions from the format string
-  open  <- gsub("(.)", "\\\\\\1", open ) # Escape everything!!
+  open <- gsub("(.)", "\\\\\\1", open) # Escape everything!!
   close <- gsub("(.)", "\\\\\\1", close) # Escape everything!!
-  re    <- paste0(open, ".*?", close)
+  re <- paste0(open, ".*?", close)
 
   # Extract the delimited expressions
-  matches  <- gregexpr(re, fmt)
-  exprs    <- regmatches(fmt, matches)[[1]]
+  matches <- gregexpr(re, fmt)
+  exprs <- regmatches(fmt, matches)[[1]]
 
   # Remove the delimiters
   exprs <- substr(exprs, nchar_open + 1L, nchar(exprs) - nchar_close)
@@ -362,12 +357,14 @@ data_to_wide <- function(
   #    but only if the '%' is NOT followed by an 's'
   #
   # gluestick() doesn't deal with any pathological cases
-  fmt_sprintf <- gsub(re      , "%s", fmt)
-  fmt_sprintf <- gsub("%(?!s)", "%%", fmt_sprintf, perl=TRUE)
+  fmt_sprintf <- gsub(re, "%s", fmt)
+  fmt_sprintf <- gsub("%(?!s)", "%%", fmt_sprintf, perl = TRUE)
 
   # Evaluate
   if (eval) {
-    args <- lapply(exprs, function(expr) {eval(parse(text = expr), envir = src)})
+    args <- lapply(exprs, function(expr) {
+      eval(parse(text = expr), envir = src)
+    })
   } else {
     args <- unname(mget(exprs, envir = as.environment(src)))
   }
