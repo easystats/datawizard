@@ -315,7 +315,6 @@ categorize.grouped_df <- function(x,
                                   regex = FALSE,
                                   verbose = TRUE,
                                   ...) {
-  info <- attributes(x)
 
   # works only for dplyr >= 0.8.0
   grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
@@ -354,7 +353,7 @@ categorize.grouped_df <- function(x,
     )
   }
   # set back class, so data frame still works with dplyr
-  attributes(x) <- utils::modifyList(info, attributes(x))
+  x <- .replace_attrs(x, attributes(x))
   x
 }
 

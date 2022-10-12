@@ -105,9 +105,9 @@ remove_empty_rows <- function(x) {
 
   # if yes, removing works, else an empty df would be returned
   if (length(er)) {
-    att <- attributes(x)
+    attr_data <- attributes(x)
     x <- x[-er, ]
-    attributes(x) <- utils::modifyList(att, attributes(x))
+    x <- .replace_attrs(x, attr_data)
   }
 
   x
