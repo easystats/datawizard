@@ -50,7 +50,7 @@ data_relocate <- function(data,
                           ...) {
   # Sanitize
   if (!is.null(before) && !is.null(after)) {
-    stop("You must supply only one of `before` or `after`.", call. = FALSE)
+    insight::format_error("You must supply only one of `before` or `after`.")
   }
 
   # allow numeric values
@@ -60,7 +60,7 @@ data_relocate <- function(data,
     } else if (before >= 1 && before <= ncol(data)) {
       before <- names(data)[before]
     } else {
-      stop("No valid position defined in `before`.", call. = FALSE)
+      insight::format_error("No valid position defined in `before`.")
     }
   }
 
@@ -71,7 +71,7 @@ data_relocate <- function(data,
     } else if (after >= 1 && after <= ncol(data)) {
       after <- names(data)[after]
     } else {
-      stop("No valid position defined in `after`.", call. = FALSE)
+      insight::format_error("No valid position defined in `after`.")
     }
   }
 

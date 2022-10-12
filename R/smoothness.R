@@ -35,7 +35,7 @@ smoothness.numeric <- function(x,
     lag <- round(lag * length(x))
   }
   if (lag <= 0) {
-    stop("lag cannot be that small.")
+    insight::format_error("'lag' cannot be that small.")
   }
 
   if (method == "cor") {
@@ -46,7 +46,7 @@ smoothness.numeric <- function(x,
 
   if (!is.null(iterations)) {
     if (!requireNamespace("boot", quietly = TRUE)) {
-      warning("Package 'boot' needed for bootstrapping SEs.", call. = FALSE)
+      insight::format_warning("Package 'boot' needed for bootstrapping SEs.")
     } else {
       results <- boot::boot(
         data = x,

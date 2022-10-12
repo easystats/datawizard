@@ -72,7 +72,7 @@ reverse.numeric <- function(x,
   # Warning if only one value
   if (length(unique(x)) == 1 && is.null(range)) {
     if (verbose) {
-      warning("A `range` must be provided for data with only one unique value.", call. = FALSE)
+      insight::format_warning("A `range` must be provided for data with only one unique value.")
     }
     return(x)
   }
@@ -105,7 +105,7 @@ reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
   # Warning if only one value
   if (length(unique(x)) == 1 && is.null(range)) {
     if (verbose) {
-      warning("A `range` must be provided for data with only one unique value.", call. = FALSE)
+      insight::format_warning("A `range` must be provided for data with only one unique value.")
     }
     return(x)
   }

@@ -28,7 +28,7 @@ test_that("ranktransform works with two unique value vectors", {
 
   expect_warning(
     ranktransform(x),
-    "Variable `x` contains only two different values. Consider converting it to a factor."
+    "Consider converting it"
   )
 })
 

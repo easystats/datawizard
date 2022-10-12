@@ -76,7 +76,7 @@ data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose =
   freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
 
   if (is.null(freq_table)) {
-    warning(paste0("Can't compute frequency tables for objects of class `", class(x)[1], "`."), call. = FALSE)
+    insight::format_warning(paste0("Can't compute frequency tables for objects of class `", class(x)[1], "`."))
     return(NULL)
   }
 

@@ -53,7 +53,7 @@ ranktransform.numeric <- function(x,
     }
 
     if (verbose) {
-      warning(paste0("Variable `", name, "` contains only one unique value and will not be normalized."))
+      insight::format_warning(paste0("Variable `", name, "` contains only one unique value and will not be normalized."))
     }
 
     return(x)
@@ -69,14 +69,14 @@ ranktransform.numeric <- function(x,
     }
 
     if (verbose) {
-      warning(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor."))
+      insight::format_warning(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor."))
     }
   }
 
 
   if (sign) {
     ZEROES <- x == 0
-    if (any(ZEROES) && verbose) warning("Zeros detected. These cannot be sign-rank transformed.")
+    if (any(ZEROES) && verbose) insight::format_warning("Zeros detected. These cannot be sign-rank transformed.")
     out <- rep(NA, length(x))
     out[!ZEROES] <- sign(x[!ZEROES]) * rank(abs(x[!ZEROES]), ties.method = method, na.last = "keep")
   } else {

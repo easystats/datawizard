@@ -113,7 +113,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
                              trim = 0, na.rm = FALSE, n = NULL, ...) {
   # TODO: Support weights
   if (!missing(x) && all(c(-1, 1) %in% sign(x))) {
-    stop("Coefficient of variation only applicable for ratio scale variables.", call. = FALSE)
+    insight::format_error("Coefficient of variation only applicable for ratio scale variables.")
   }
   method <- match.arg(method, choices = c("standard", "unbiased", "median_mad", "qcd"))
   if (is.null(mu) || is.null(sigma)) {
@@ -164,7 +164,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
 .trim_values <- function(x, trim = 0, n = NULL, weights = NULL) {
   # TODO: Support weights
   if (!is.numeric(trim) || length(trim) != 1L) {
-    stop("`trim` must be a single numeric value.", call. = FALSE)
+    insight::format_error("`trim` must be a single numeric value.")
   }
   if (is.null(NULL)) {
     n <- length(x)

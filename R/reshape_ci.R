@@ -81,7 +81,7 @@ reshape_ci <- function(x, ci_type = "CI") {
     highs <- grepl(paste0(ci_high, "_*"), names(x))
     ci <- as.numeric(gsub(paste0(ci_low, "_"), "", names(x)[lows]))
     if (paste0(ci, collapse = "-") != paste0(gsub(paste0(ci_high, "_"), "", names(x)[highs]), collapse = "-")) {
-      stop("Something went wrong in the CIs reshaping.")
+      insight::format_error("Something went wrong in the CIs reshaping.")
       return(x)
     }
     if (sum(lows) > 1 && sum(highs) > 1) {

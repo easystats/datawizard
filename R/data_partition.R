@@ -56,7 +56,7 @@ data_partition <- function(data,
   data <- .coerce_to_dataframe(data)
 
   if (sum(proportion) > 1) {
-    stop("`proportion` cannot be higher than 1.", call. = FALSE)
+    insight::format_error("`proportion` cannot be higher than 1.")
   }
 
   if (sum(proportion) == 1 && isTRUE(verbose)) {

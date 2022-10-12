@@ -149,7 +149,7 @@ data_to_long <- function(data,
 
   # nothing to select?
   if (!length(cols)) {
-    stop("No columns found for reshaping data.", call. = FALSE)
+    insight::format_error("No columns found for reshaping data.")
   }
 
   not_selected <- setdiff(names(data), cols)

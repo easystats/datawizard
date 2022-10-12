@@ -71,9 +71,8 @@ data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE)
   if (!is.null(colnames)) {
     # check if we have correct length of column names
     if (length(colnames) != ncol(out)) {
-      warning(
-        "Length of provided column names does not match number of columns. No column names changed.",
-        call. = FALSE
+      insight::format_warning(
+        "Length of provided column names does not match number of columns. No column names changed."
       )
     } else {
       colnames(out) <- colnames

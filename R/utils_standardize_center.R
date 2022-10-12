@@ -90,7 +90,7 @@
 
   # check if selected variables are in reference
   if (!is.null(reference) && !all(select %in% names(reference))) {
-    stop("The `reference` must include all variables from `select`.", call. = FALSE)
+    insight::format_error("The `reference` must include all variables from `select`.")
   }
 
   # copy label attributes
@@ -136,7 +136,7 @@
 
     # center and scale must have same length
     if (length(.center) != length(.scale)) {
-      stop("`center` and `scale` must be of same length.", call. = FALSE)
+      insight::format_error("`center` and `scale` must be of same length.")
     }
 
     # center and scale must either be of length 1 or of same length as selected variables
@@ -214,10 +214,10 @@
 
   if (scale == 0) {
     scale <- 1
-    warning(sprintf(
+    insight::format_warning(sprintf(
       "%s is 0 - variable not standardized (only scaled).",
       if (robust) "MAD" else "SD"
-    ), call. = FALSE)
+    ))
   }
 
   list(center = center, scale = scale)
@@ -370,7 +370,7 @@
                                 weights,
                                 force) {
   if (!is.null(reference)) {
-    stop("The `reference` argument cannot be used with grouped standardization for now.", call. = FALSE)
+    insight::format_error("The `reference` argument cannot be used with grouped standardization for now.")
   }
 
   # check append argument, and set default

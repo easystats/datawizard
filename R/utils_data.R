@@ -27,13 +27,13 @@
 #' @export
 rownames_as_column <- function(x, var = "rowname") {
   if (!object_has_rownames(x)) {
-    stop("The data frame doesn't have rownames.")
+    insight::format_error("The data frame doesn't have rownames.")
   }
   if (is.null(var)) {
     var <- "rowname"
   }
   if (!is.character(var)) {
-    stop("Argument 'var' must be of type character.")
+    insight::format_error("Argument 'var' must be of type character.")
   }
   rn <- data.frame(rn = rownames(x), stringsAsFactors = FALSE)
   x <- cbind(rn, x)

@@ -102,7 +102,7 @@ standardize.default <- function(x,
   data <- insight::get_data(x)
 
   if (isTRUE(attr(data, "is_subset"))) {
-    stop("Cannot standardize a model fit with a 'subset = '.", call. = FALSE)
+    insight::format_error("Cannot standardize a model fit with a 'subset = '.")
   }
 
   if (m_info$is_bayesian) {
@@ -133,7 +133,7 @@ standardize.default <- function(x,
   if (length(offsets)) {
     if (include_response) {
       if (verbose) {
-        warning("Offset detected and will be standardized.", call. = FALSE)
+        insight::format_warning("Offset detected and will be standardized.")
       }
 
       if (two_sd) {
@@ -186,7 +186,7 @@ standardize.default <- function(x,
 
 
   if (!length(do_standardize)) {
-    warning("No variables could be standardized.", call. = FALSE)
+    insight::format_warning("No variables could be standardized.")
     return(x)
   }
 
