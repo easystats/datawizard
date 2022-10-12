@@ -12,6 +12,8 @@ MINOR CHANGES
 
 * When column names are misspelled, most functions now suggest which
   existing columns possibly could be meant.
+  
+* Miscellaneous performance gains.
 
 # datawizard 0.6.2
 
