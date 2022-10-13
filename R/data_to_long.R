@@ -129,19 +129,6 @@ data_to_long <- function(data,
     )
   }
 
-  if (length(names_to) == 1L) {
-    if (!is.null(names_sep)) {
-      insight::format_error(
-        "You can't use `names_sep` when `names_to` is of length 1."
-      )
-    }
-    if (!is.null(names_pattern)) {
-      insight::format_error(
-        "You can't use `names_pattern` when `names_to` is of length 1."
-      )
-    }
-  }
-
   # Remove tidyverse attributes, will add them back at the end
   if (inherits(data, "tbl_df")) {
     tbl_input <- TRUE
@@ -282,9 +269,7 @@ data_to_long <- function(data,
 
 .stack <- function(x) {
   ind <- rep(names(x), times = lengths(x))
-  # use do.call("c", ...) instead of unlist to preserve the date format (but a
-  # bit slower)
-  data.frame(values = do.call("c", unname(x)), ind, stringsAsFactors = FALSE)
+  data.frame(values = unlist(unname(x)), ind, stringsAsFactors = FALSE)
 }
 
 #' @rdname data_to_long

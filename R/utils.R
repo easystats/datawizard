@@ -137,8 +137,3 @@
   }
   return(data)
 }
-
-
-.is_date <- function(x) {
-  inherits(x, "Date")
-}
