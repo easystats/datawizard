@@ -258,6 +258,16 @@ data_to_wide <- function(data,
     attributes(out[[i]]) <- variable_attr[[i]]
   }
 
+  # convert back to date if original values were dates
+  values_are_dates <- all(
+    vapply(data[, values_from, drop = FALSE], .is_date, FUN.VALUE = logical(1))
+  )
+  if (values_are_dates) {
+    for (i in unstacked$col_order) {
+      out[[i]] <- as.Date.numeric(out[[i]], origin = "1970-01-01")
+    }
+  }
+
   if (isTRUE(tbl_input)) {
     class(out) <- c("tbl_df", "tbl", "data.frame")
   }
