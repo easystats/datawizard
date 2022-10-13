@@ -15,6 +15,11 @@ MINOR CHANGES
   
 * Miscellaneous performance gains.
 
+BUG FIXES
+
+* `data_to_long()` and `data_to_wide()` now correctly keep the `date` format.
+
+
 # datawizard 0.6.2
 
 BREAKING CHANGES

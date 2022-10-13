@@ -792,3 +792,21 @@ test_that("error when overwriting existing column", {
     regexp = "are already present"
   )
 })
+
+test_that("preserve date format", {
+  family <- tidyr::tibble(
+    family = 1:3,
+    dob_child1 = as.Date(c("1998-11-26", "2004-10-10", "2000-12-05")),
+    dob_child2 = as.Date(c("2000-01-29", NA, "2004-04-05"))
+  )
+
+  tidyr <-  tidyr::pivot_longer(family, !family, names_to = "child")
+  datawiz <- data_to_long(family, -c("family"), names_to = "child")
+
+  expect_identical(tidyr, datawiz)
+
+  tidyr2 <- tidyr::pivot_wider(datawiz, names_from = "child", values_from = "value")
+  datawiz2 <- data_to_wide(datawiz, names_from = "child", values_from = "value")
+
+  expect_identical(tidyr2, datawiz2)
+})
