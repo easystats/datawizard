@@ -259,9 +259,9 @@ data_to_wide <- function(data,
   }
 
   # convert back to date if original values were dates
-  values_are_dates <- all(vapply(data[, values_from, drop = FALSE], function(x) {
-    inherits(x, "Date")
-  }, FUN.VALUE = logical(1)))
+  values_are_dates <- all(
+    vapply(data[, values_from, drop = FALSE], .is_date, FUN.VALUE = logical(1))
+  )
   if (values_are_dates) {
     for (i in unstacked$col_order) {
       out[[i]] <- as.Date.numeric(out[[i]], origin = "1970-01-01")

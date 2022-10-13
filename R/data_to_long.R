@@ -129,7 +129,7 @@ data_to_long <- function(data,
     )
   }
 
-  if (length(names_to) == 1) {
+  if (length(names_to) == 1L) {
     if (!is.null(names_sep)) {
       insight::format_error(
         "You can't use `names_sep` when `names_to` is of length 1."
