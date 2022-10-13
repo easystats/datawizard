@@ -284,7 +284,17 @@ data_to_long <- function(data,
   ind <- rep(names(x), times = lengths(x))
   # use do.call("c", ...) instead of unlist to preserve the date format (but a
   # bit slower)
-  data.frame(values = do.call("c", unname(x)), ind, stringsAsFactors = FALSE)
+  # can't use do.call("c", ...) all the time because its behavior changed with
+  # factors in 4.1.0
+  values_are_dates <- all(
+    vapply(x, .is_date, FUN.VALUE = logical(1))
+  )
+  if (values_are_dates) {
+    data.frame(values = do.call("c", unname(x)), ind, stringsAsFactors = FALSE)
+  } else {
+    data.frame(values = unlist(unname(x)), ind, stringsAsFactors = FALSE)
+  }
+
 }
 
 #' @rdname data_to_long
