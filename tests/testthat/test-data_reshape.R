@@ -824,3 +824,24 @@ test_that("#293", {
     data_to_wide(daily, names_from = "day", values_from = "value")
   )
 })
+
+
+test_that("new names starting with digits are not corrected automatically", {
+  percentages <- tibble(
+    year = c(2018, 2019, 2020, 2020),
+    type = factor(c("A", "B", "A", "B"), levels = c("A", "B")),
+    percentage = c(100, 100, 40, 60)
+  )
+
+  tidyr <- tidyr::pivot_wider(
+    percentages,
+    names_from = c(year, type),
+    values_from = percentage,
+  )
+  datawiz <- data_to_wide(
+    percentages,
+    names_from = c("year", "type"),
+    values_from = "percentage",
+  )
+  expect_identical(tidyr, datawiz)
+})
