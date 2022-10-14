@@ -309,7 +309,7 @@ data_to_wide <- function(data,
     res <- data.frame(
       matrix(
         res[[1]],
-        nrow = 1, dimnames = list(c(), unique(x$future_colnames))
+        nrow = 1, dimnames = list(c(), names(res[[1]]))
       ),
       stringsAsFactors = FALSE
     )

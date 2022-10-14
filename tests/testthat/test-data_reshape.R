@@ -810,3 +810,17 @@ test_that("preserve date format", {
 
   expect_identical(tidyr2, datawiz2)
 })
+
+test_that("#293", {
+  weekdays <- c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+
+  daily <- tibble(
+    day = factor(c("Tue", "Thu", "Fri", "Mon"), levels = weekdays),
+    value = c(2, 3, 1, 5)
+  )
+
+  expect_identical(
+    tidyr::pivot_wider(daily, names_from = day, values_from = value),
+    data_to_wide(daily, names_from = "day", values_from = "value")
+  )
+})
