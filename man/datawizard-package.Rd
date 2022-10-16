@@ -16,7 +16,7 @@ workflow:
 }
 
 It is also the data wrangling backend for packages in 'easystats' ecosystem.
-References: Patil et al. (2022) \url{doi:10.21105/joss.04684}.
+References: Patil et al. (2022) \doi{10.21105/joss.04684}.
 }
 \details{
 \code{datawizard}
