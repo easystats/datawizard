@@ -96,7 +96,7 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
     out <- data[do.call(order, out[, select]), ]
   }
 
-  if (.has_numeric_rownames(data)) {
+  if (!insight::object_has_rownames(data)) {
     rownames(out) <- NULL
   }
 
@@ -118,7 +118,7 @@ data_arrange.grouped_df <- function(data, select = NULL, safe = TRUE) {
 
   out <- do.call(rbind, out)
 
-  if (.has_numeric_rownames(data)) {
+  if (!insight::object_has_rownames(data)) {
     rownames(out) <- NULL
   }
 
