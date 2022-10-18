@@ -268,7 +268,7 @@ data_to_long <- function(data,
   }
 
   # reset row names
-  if (.has_numeric_rownames(data)) {
+  if (!insight::object_has_rownames(data)) {
     row.names(out) <- NULL
   }
 
