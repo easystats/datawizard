@@ -76,7 +76,11 @@ test_that("convert_to_na other classes", {
     class = "factor"
   ), tolerance = 1e-3, ignore_attr = TRUE)
 
-  x <- convert_to_na(d$c, na = "2022-03-22")
+  expect_message(
+    convert_to_na(d$c, na = "2022-03-22"),
+    "of class 'Date'"
+  )
+  x <- convert_to_na(d$c, na = as.Date("2022-03-22"))
   expect_equal(x, structure(c(NA, 18994, 19025, 18719, 18280), class = "Date"), tolerance = 1e-3, ignore_attr = TRUE)
 
   x <- convert_to_na(d$d, na = TRUE)
@@ -91,7 +95,11 @@ test_that("convert_to_na other classes", {
     d = c(NA, NA, FALSE, FALSE, NA),
     e = as.complex(1:5)
   )
-  expect_message(x <- convert_to_na(d, na = list(3, "c", TRUE, "2022-01-02")))
+  expect_message(
+    convert_to_na(d, na = list(3, "c", TRUE, "2022-01-02")),
+    "must be of class 'Date'"
+  )
+  expect_message(x <- convert_to_na(d, na = list(3, "c", TRUE, as.Date("2022-01-02"))))
   expect_equal(x, out, ignore_attr = TRUE, tolerance = 1e-3)
 })
 
