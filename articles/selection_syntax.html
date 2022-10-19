@@ -173,17 +173,19 @@ variable names are passed.</p>
 <span>  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/standardize.html">standardise</a></span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width    Species</span></span>
-<span><span class="co">#&gt; 1           4.3         3.0   -1.0910895         0.1     setosa</span></span>
-<span><span class="co">#&gt; 2           5.0         3.3    0.8728716         0.2     setosa</span></span>
-<span><span class="co">#&gt; 3           7.7         3.8    1.4972912         2.2  virginica</span></span>
-<span><span class="co">#&gt; 4           4.4         3.2    0.2182179         0.2     setosa</span></span>
-<span><span class="co">#&gt; 5           5.9         3.0   -0.5415734         1.8  virginica</span></span>
-<span><span class="co">#&gt; 6           6.5         3.0   -0.4141444         2.0  virginica</span></span>
-<span><span class="co">#&gt; 7           5.5         2.5   -1.0910895         1.3 versicolor</span></span>
-<span><span class="co">#&gt; 8           5.5         2.6    0.2182179         1.2 versicolor</span></span>
-<span><span class="co">#&gt; 9           5.8         2.7   -0.5415734         1.9  virginica</span></span>
-<span><span class="co">#&gt; 10          6.1         3.0    0.8728716         1.4 versicolor</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 5</span></span></span>
+<span><span class="co">#&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width Species   </span></span>
+<span><span class="co">#&gt;           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>          4.3         3         -<span style="color: #BB0000;">1.09</span>          0.1 setosa    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>          5           3.3        0.873         0.2 setosa    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>          7.7         3.8        1.50          2.2 virginica </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>          4.4         3.2        0.218         0.2 setosa    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>          5.9         3         -<span style="color: #BB0000;">0.542</span>         1.8 virginica </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>          6.5         3         -<span style="color: #BB0000;">0.414</span>         2   virginica </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>          5.5         2.5       -<span style="color: #BB0000;">1.09</span>          1.3 versicolor</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>          5.5         2.6        0.218         1.2 versicolor</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>          5.8         2.7       -<span style="color: #BB0000;">0.542</span>         1.9 virginica </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>          6.1         3          0.873         1.4 versicolor</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="positions">Positions<a class="anchor" aria-label="anchor" href="#positions"></a>
