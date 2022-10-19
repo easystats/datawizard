@@ -15,6 +15,9 @@ MINOR CHANGES
   
 * Miscellaneous performance gains.
 
+* `convert_to_na()` now requires argument `na` to be of class 'Date' to
+  convert specific dates to `NA`. For example, `convert_to_na(x, na = "2022-10-17")` must be changed to `convert_to_na(x, na = as.Date("2022-10-17"))`.
+
 BUG FIXES
 
 * `data_to_long()` and `data_to_wide()` now correctly keep the `date` format.
