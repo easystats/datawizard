@@ -6,8 +6,6 @@
 # installed, with the exception of testthat, knitr, and rmarkdown. The cache is
 # never used to avoid accidentally restoring a cache containing a suggested
 # dependency.
-name: R-CMD-check-hard
-
 on:
   push:
     branches: [main, master]
