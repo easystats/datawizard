@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE, eval=TRUE}
 library(knitr)
 options(knitr.kable.NA = "")
 knitr::opts_chunk$set(
