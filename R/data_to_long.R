@@ -294,7 +294,6 @@ data_to_long <- function(data,
   } else {
     data.frame(values = unlist(unname(x)), ind, stringsAsFactors = FALSE)
   }
-
 }
 
 #' @rdname data_to_long

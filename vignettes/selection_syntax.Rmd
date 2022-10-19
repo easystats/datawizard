@@ -7,18 +7,24 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+pkgs <- c(
+  "datawizard",
+  "poorman",
+  "htmltools"
+)
+
+if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
 ```
 
-```{r setup, echo=FALSE, message=FALSE}
-library(datawizard)
-library(poorman)
-library(htmltools)
-
+```{r load, echo=FALSE, message=FALSE}
 set.seed(123)
 iris <- iris[sample(nrow(iris), 10), ]
 row.names(iris) <- NULL
