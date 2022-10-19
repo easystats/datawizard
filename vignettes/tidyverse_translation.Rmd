@@ -67,7 +67,7 @@ In this article, we will see how to go through basic data wrangling steps with
 This way, if you decide to make the switch, you can easily find the translations here.
 This vignette is largely inspired from `{dplyr}`'s [Getting started vignette](https://dplyr.tidyverse.org/articles/dplyr.html).
 
-```{r}
+```{r, eval=TRUE}
 library(dplyr)
 library(tidyr)
 library(datawizard)
@@ -82,7 +82,7 @@ Before we look at their *tidyverse* equivalents, we can first have a look at
 | :---------------- | :------------------------------------------------ |
 | `data_filter()`   | [to select only certain observations](#filtering) |
 | `data_select()`   | [to select only a few variables](#selecting)      |
-| `data_arrange()`  | [to sort observations](#sorting)      |
+| `data_arrange()`  | [to sort observations](#sorting)                  |
 | `data_extract()`  | [to extract a single variable](#extracting)       |
 | `data_rename()`   | [to rename variables](#renaming)                  |
 | `data_relocate()` | [to reorder a data frame](#relocating)            |
