@@ -99,7 +99,7 @@ test_that("convert_to_na other classes", {
     convert_to_na(d, na = list(3, "c", TRUE, "2022-01-02")),
     "must be of class 'Date'"
   )
-  expect_message(x <- convert_to_na(d, na = list(3, "c", TRUE, as.Date("2022-01-02"))))
+  x <- convert_to_na(d, na = list(3, "c", TRUE, as.Date("2022-01-02")))
   expect_equal(x, out, ignore_attr = TRUE, tolerance = 1e-3)
 })
 
