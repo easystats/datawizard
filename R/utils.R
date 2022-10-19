@@ -121,7 +121,7 @@
 #' @noRd
 
 .replace_attrs <- function(data, custom_attr) {
-  for(nm in setdiff(names(custom_attr), names(attributes(data.frame())))) {
+  for (nm in setdiff(names(custom_attr), names(attributes(data.frame())))) {
     attr(data, which = nm) <- custom_attr[[nm]]
   }
   return(data)

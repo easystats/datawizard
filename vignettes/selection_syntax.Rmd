@@ -25,6 +25,10 @@ if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
 ```
 
 ```{r load, echo=FALSE, message=FALSE}
+library(datawizard)
+library(poorman)
+library(htmltools)
+
 set.seed(123)
 iris <- iris[sample(nrow(iris), 10), ]
 row.names(iris) <- NULL

@@ -800,7 +800,7 @@ test_that("preserve date format", {
     dob_child2 = as.Date(c("2000-01-29", NA, "2004-04-05"))
   )
 
-  tidyr <-  tidyr::pivot_longer(family, !family, names_to = "child")
+  tidyr <- tidyr::pivot_longer(family, !family, names_to = "child")
   datawiz <- data_to_long(family, -c("family"), names_to = "child")
 
   expect_identical(tidyr, datawiz)
