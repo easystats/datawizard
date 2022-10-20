@@ -5,7 +5,7 @@ articles:
   selection_syntax: selection_syntax.html
   standardize_data: standardize_data.html
   tidyverse_translation: tidyverse_translation.html
-last_built: 2022-10-20T07:18Z
+last_built: 2022-10-20T09:04Z
 urls:
   reference: https://easystats.github.io/datawizard/reference
   article: https://easystats.github.io/datawizard/articles
