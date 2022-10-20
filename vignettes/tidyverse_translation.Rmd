@@ -25,7 +25,7 @@ pkgs <- c(
   "tidyr"
 )
 
-# since we explicitely put eval = TRUE for some chunks, we can't rely on 
+# since we explicitely put eval = TRUE for some chunks, we can't rely on
 # knitr::opts_chunk$set(eval = FALSE) at the beginning of the script. So we make
 # a logical that is FALSE only if deps are not installed (cf easystats/easystats#317)
 evaluate_chunk <- TRUE
