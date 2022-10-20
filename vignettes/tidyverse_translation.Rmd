@@ -72,7 +72,7 @@ In this article, we will see how to go through basic data wrangling steps with
 This way, if you decide to make the switch, you can easily find the translations here.
 This vignette is largely inspired from `{dplyr}`'s [Getting started vignette](https://dplyr.tidyverse.org/articles/dplyr.html).
 
-```{r, eval=TRUE}
+```{r, eval = evaluate_chunk}
 library(dplyr)
 library(tidyr)
 library(datawizard)
