@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-```{r message=FALSE, warning=FALSE, include=FALSE, eval=TRUE}
+```{r message=FALSE, warning=FALSE, include=FALSE, eval = TRUE}
 library(knitr)
 options(knitr.kable.NA = "")
 knitr::opts_chunk$set(
@@ -25,7 +25,7 @@ pkgs <- c(
   "tidyr"
 )
 
-# since we explicitely put eval=TRUE for some chunks, we can't rely on 
+# since we explicitely put eval = TRUE for some chunks, we can't rely on 
 # knitr::opts_chunk$set(eval = FALSE) at the beginning of the script. So we make
 # a logical that is FALSE only if deps are not installed (cf easystats/easystats#317)
 evaluate_chunk <- TRUE
@@ -621,7 +621,7 @@ billboard %>%
 
 Once again, we use an example in the `{tidyr}` vignette to show how close `data_to_wide()`
 and `pivot_wider()` are:
-```{r eval=TRUE}
+```{r eval = evaluate_chunk}
 fish_encounters
 ```
 
