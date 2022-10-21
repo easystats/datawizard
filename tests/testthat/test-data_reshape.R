@@ -1,5 +1,3 @@
-library(tidyr)
-
 set.seed(123)
 wide_data <- data.frame(replicate(3, sample(1:5)))
 
@@ -313,6 +311,9 @@ test_that("data_reshape works as expected - select-helper inside functions, usin
 
 
 test_that("data_to_wide, names_prefix works", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   out <- fish_encounters %>%
     data_to_wide(
       names_from = "station",
@@ -330,6 +331,9 @@ test_that("data_to_wide, names_prefix works", {
 })
 
 test_that("data_to_wide, values_fill errors when wrong type", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   ### Should be numeric
   expect_error(
     fish_encounters %>%
@@ -404,6 +408,9 @@ test_that("data_to_wide, values_fill errors when wrong type", {
 })
 
 test_that("data_to_wide, values_fill errors when length > 1", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   expect_error(
     fish_encounters %>%
       data_to_wide(
@@ -426,6 +433,9 @@ test_that("data_to_wide, values_fill errors when length > 1", {
 ### From tidyr tests
 
 test_that("can pivot all cols to wide", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- tibble(key = c("x", "y", "z"), val = 1:3)
   pv <- data_to_wide(df, names_from = "key", values_from = "val")
 
@@ -434,6 +444,9 @@ test_that("can pivot all cols to wide", {
 })
 
 test_that("non-pivoted cols are preserved", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- tibble(a = 1, key = c("x", "y"), val = 1:2)
   pv <- data_to_wide(df, names_from = "key", values_from = "val")
 
@@ -442,6 +455,9 @@ test_that("non-pivoted cols are preserved", {
 })
 
 test_that("implicit missings turn into explicit missings", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- tibble(a = 1:2, key = c("x", "y"), val = 1:2)
   pv <- data_to_wide(df, names_from = "key", values_from = "val")
 
@@ -451,6 +467,9 @@ test_that("implicit missings turn into explicit missings", {
 })
 
 test_that("error when overwriting existing column", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- tibble(
     a = c(1, 1),
     key = c("a", "b"),
@@ -467,6 +486,9 @@ test_that("error when overwriting existing column", {
 ### Examples from tidyr website
 
 test_that("data_to_wide equivalent to pivot_wider: ex 1", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   x <- fish_encounters %>%
     tidyr::pivot_wider(names_from = "station", values_from = "seen", values_fill = 0)
 
@@ -481,6 +503,9 @@ test_that("data_to_wide equivalent to pivot_wider: ex 1", {
 })
 
 test_that("data_to_wide equivalent to pivot_wider: ex 2", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   production <- expand_grid(
     product = c("A", "B"),
     country = c("AI", "EI"),
@@ -506,6 +531,9 @@ test_that("data_to_wide equivalent to pivot_wider: ex 2", {
 })
 
 test_that("data_to_wide equivalent to pivot_wider: ex 3", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   x <- us_rent_income %>%
     tidyr::pivot_wider(
       names_from = variable,
@@ -522,6 +550,9 @@ test_that("data_to_wide equivalent to pivot_wider: ex 3", {
 })
 
 test_that("data_to_wide equivalent to pivot_wider: ex 4", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   x <- us_rent_income %>%
     tidyr::pivot_wider(
       names_from = variable,
@@ -540,6 +571,9 @@ test_that("data_to_wide equivalent to pivot_wider: ex 4", {
 })
 
 test_that("data_to_wide equivalent to pivot_wider: ex 5", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   contacts <- tribble(
     ~field, ~value,
     "name", "Jiena McLellan",
@@ -562,6 +596,9 @@ test_that("data_to_wide equivalent to pivot_wider: ex 5", {
 
 
 test_that("data_to_wide equivalent to pivot_wider: ex 6", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   production <- expand_grid(
     product = c("A", "B"),
     country = c("AI", "EI"),
@@ -589,6 +626,9 @@ test_that("data_to_wide equivalent to pivot_wider: ex 6", {
 })
 
 test_that("data_to_wide, names_glue works", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- data.frame(
     food = c("banana", "banana", "banana", "banana", "cheese", "cheese", "cheese", "cheese"),
     binary = c(rep(c("yes", "no"), 4)),
@@ -621,6 +661,9 @@ test_that("data_to_wide, names_glue works", {
 # Examples coming from: https://tidyr.tidyverse.org/articles/pivot.html#longer
 
 test_that("data_to_long equivalent to pivot_longer: ex 1", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   x <- relig_income %>%
     tidyr::pivot_longer(!religion, names_to = "income", values_to = "count")
 
@@ -632,6 +675,9 @@ test_that("data_to_long equivalent to pivot_longer: ex 1", {
 
 
 test_that("data_to_long equivalent to pivot_longer: ex 2", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   x <- billboard %>%
     tidyr::pivot_longer(
       cols = starts_with("wk"),
@@ -651,6 +697,9 @@ test_that("data_to_long equivalent to pivot_longer: ex 2", {
 
 
 test_that("data_to_long equivalent to pivot_longer: ex 3", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   x <- billboard %>%
     tidyr::pivot_longer(
       cols = starts_with("wk"),
@@ -672,6 +721,9 @@ test_that("data_to_long equivalent to pivot_longer: ex 3", {
 
 
 test_that("data_to_long equivalent to pivot_longer: ex 4", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   x <- billboard %>%
     tidyr::pivot_longer(
       cols = starts_with("wk"),
@@ -695,6 +747,9 @@ test_that("data_to_long equivalent to pivot_longer: ex 4", {
 
 
 test_that("data_to_long equivalent to pivot_longer: ex 5", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   suppressWarnings({
     x <- who %>%
       tidyr::pivot_longer(
@@ -717,6 +772,9 @@ test_that("data_to_long equivalent to pivot_longer: ex 5", {
 })
 
 test_that("data_to_long equivalent to pivot_longer: ex 6", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   x <- who %>%
     tidyr::pivot_longer(
       cols = new_sp_m014:newrel_f65,
@@ -742,6 +800,9 @@ test_that("data_to_long equivalent to pivot_longer: ex 6", {
 # https://github.com/tidyverse/tidyr/blob/main/tests/testthat/test-pivot-long.R
 
 test_that("can reshape all cols to long", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- tibble(x = 1:2, y = 3:4)
   pv <- data_to_long(df, x:y)
 
@@ -751,6 +812,9 @@ test_that("can reshape all cols to long", {
 })
 
 test_that("values interleaved correctly", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- tibble(
     x = c(1, 2),
     y = c(10, 20),
@@ -762,6 +826,9 @@ test_that("values interleaved correctly", {
 })
 
 test_that("preserves original keys", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- tibble(x = 1:2, y = 2, z = 1:2)
   pv <- data_to_long(df, y:z)
 
@@ -770,6 +837,9 @@ test_that("preserves original keys", {
 })
 
 test_that("can drop missing values", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- data.frame(x = c(1, NA), y = c(NA, 2))
   pv <- data_to_long(df, x:y, values_drop_na = TRUE)
 
@@ -778,6 +848,9 @@ test_that("can drop missing values", {
 })
 
 test_that("mixed columns are automatically coerced", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- data.frame(x = factor("a"), y = factor("b"))
   pv <- data_to_long(df, x:y)
 
@@ -785,6 +858,9 @@ test_that("mixed columns are automatically coerced", {
 })
 
 test_that("error when overwriting existing column", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- tibble(x = 1, y = 2)
 
   expect_error(
@@ -794,6 +870,9 @@ test_that("error when overwriting existing column", {
 })
 
 test_that("preserve date format", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   family <- tidyr::tibble(
     family = 1:3,
     dob_child1 = as.Date(c("1998-11-26", "2004-10-10", "2000-12-05")),
@@ -812,6 +891,9 @@ test_that("preserve date format", {
 })
 
 test_that("#293", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   weekdays <- c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 
   daily <- tibble(
@@ -827,6 +909,9 @@ test_that("#293", {
 
 
 test_that("new names starting with digits are not corrected automatically", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   percentages <- tibble(
     year = c(2018, 2019, 2020, 2020),
     type = factor(c("A", "B", "A", "B"), levels = c("A", "B")),

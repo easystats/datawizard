@@ -1,5 +1,3 @@
-suppressPackageStartupMessages(library(poorman, warn.conflicts = FALSE))
-
 # explanation of how reverse works:
 # https://github.com/easystats/datawizard/issues/106#issuecomment-1066628399
 
@@ -344,6 +342,9 @@ test_df <- data.frame(
 )
 
 test_that("reverse works with data frames (grouped data)", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   expect_equal(
     test_df %>%
       group_by(id) %>%
@@ -370,6 +371,9 @@ test_df <- data.frame(
 )
 
 test_that("reverse works with data frames containing NAs (grouped data)", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   expect_equal(
     test_df %>%
       group_by(id) %>%

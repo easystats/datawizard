@@ -1,5 +1,3 @@
-suppressPackageStartupMessages(library(poorman, warn.conflicts = FALSE))
-
 test_that("normalize work as expected", {
   expect_equal(
     normalize(c(0, 1, 5, -5, -2)),
@@ -104,6 +102,9 @@ test_that("normalize: matrix", {
 })
 
 test_that("normalize: select", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   expect_equal(
     normalize(
       iris,
@@ -115,6 +116,9 @@ test_that("normalize: select", {
 })
 
 test_that("normalize: exclude", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   expect_equal(
     normalize(
       iris,
@@ -129,6 +133,9 @@ test_that("normalize: exclude", {
 # with grouped data -------------------------------------------
 
 test_that("normalize (grouped data)", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   datawizard <- iris %>%
     group_by(Species) %>%
     normalize(Sepal.Width) %>%
@@ -145,6 +152,9 @@ test_that("normalize (grouped data)", {
 })
 
 test_that("normalize, include bounds (grouped data)", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   datawizard <- iris %>%
     group_by(Species) %>%
     normalize(Sepal.Width, include_bounds = TRUE) %>%
@@ -162,6 +172,9 @@ test_that("normalize, include bounds (grouped data)", {
 
 
 test_that("normalize, factor (grouped data)", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   datawizard <- iris %>%
     group_by(Species) %>%
     normalize(Species) %>%

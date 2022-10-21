@@ -1,40 +1,42 @@
-library(poorman)
 df <- head(mtcars)
 df$character <- c("a", "b", "b", "c", "c", "a")
 
 test_that("data_arrange works with one numeric column", {
+  skip_if_not_installed("poorman")
   expect_equal(
-    arrange(df, carb),
+    poorman::arrange(df, carb),
     data_arrange(df, "carb")
   )
   expect_equal(
-    arrange(df, -carb),
+    poorman::arrange(df, -carb),
     data_arrange(df, "-carb")
   )
 })
 
 test_that("data_arrange works with one character column", {
+  skip_if_not_installed("poorman")
   expect_equal(
-    arrange(df, character),
+    poorman::arrange(df, character),
     data_arrange(df, "character")
   )
   expect_equal(
-    arrange(df, desc(character)),
+    poorman::arrange(df, desc(character)),
     data_arrange(df, "-character")
   )
 })
 
 test_that("data_arrange works with several columns", {
+  skip_if_not_installed("poorman")
   expect_equal(
-    arrange(df, carb, gear),
+    poorman::arrange(df, carb, gear),
     data_arrange(df, c("carb", "gear"))
   )
   expect_equal(
-    arrange(df, -carb, gear),
+    poorman::arrange(df, -carb, gear),
     data_arrange(df, c("-carb", "gear"))
   )
   expect_equal(
-    arrange(df, -carb, desc(character)),
+    poorman::arrange(df, -carb, desc(character)),
     data_arrange(df, c("-carb", "-character"))
   )
 })
