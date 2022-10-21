@@ -248,17 +248,54 @@ as data frame per variable.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;NA&gt;  | 10 | 10.00 |    &lt;NA&gt; |         &lt;NA&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># grouped data frame</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"poorman"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nathaneastwood.github.io/poorman/" class="external-link">poorman</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">efc</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">c172code</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu">data_tabulate</span><span class="op">(</span><span class="st">"e16sex"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nathaneastwood.github.io/poorman/" class="external-link">poorman</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">efc</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">c172code</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">data_tabulate</span><span class="op">(</span><span class="st">"e16sex"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> elder's gender (e16sex) &lt;numeric&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Grouped by c172code (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # total N=8 valid N=8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Value | N | Raw % | Valid % | Cumulative %</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------+---+-------+---------+-------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     | 5 | 62.50 |   62.50 |        62.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     | 3 | 37.50 |   37.50 |       100.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;NA&gt;  | 0 |  0.00 |    &lt;NA&gt; |         &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> elder's gender (e16sex) &lt;numeric&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Grouped by c172code (2)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # total N=66 valid N=66</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Value |  N | Raw % | Valid % | Cumulative %</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------+----+-------+---------+-------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     | 32 | 48.48 |   48.48 |        48.48</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     | 34 | 51.52 |   51.52 |       100.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;NA&gt;  |  0 |  0.00 |    &lt;NA&gt; |         &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> elder's gender (e16sex) &lt;numeric&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Grouped by c172code (3)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # total N=16 valid N=16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Value |  N | Raw % | Valid % | Cumulative %</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------+----+-------+---------+-------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     |  4 | 25.00 |   25.00 |        25.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     | 12 | 75.00 |   75.00 |       100.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;NA&gt;  |  0 |  0.00 |    &lt;NA&gt; |         &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> elder's gender (e16sex) &lt;numeric&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Grouped by c172code (NA)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # total N=10 valid N=10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Value | N | Raw % | Valid % | Cumulative %</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------+---+-------+---------+-------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     | 5 | 50.00 |   50.00 |        50.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     | 5 | 50.00 |   50.00 |       100.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;NA&gt;  | 0 |  0.00 |    &lt;NA&gt; |         &lt;NA&gt;</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co"># collapse tables</span></span></span>
-<span class="r-in"><span>  <span class="va">efc</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">c172code</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu">data_tabulate</span><span class="op">(</span><span class="st">"e16sex"</span>, collapse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="co"># collapse tables</span></span></span>
+<span class="r-in"><span><span class="va">efc</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">c172code</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">data_tabulate</span><span class="op">(</span><span class="st">"e16sex"</span>, collapse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # Frequency Table</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Variable |         Group | Value |  N | Raw % | Valid % | Cumulative %</span>

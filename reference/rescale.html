@@ -151,9 +151,9 @@ vector of variable names (e.g., <code>c("col1", "col2", "col3")</code>),</p></li
 (e.g. <code>1</code> or <code>c(1, 3, 5)</code>),</p></li>
 <li><p>a vector of negative integers, giving the positions counting from the
 right (e.g., <code>-1</code> or <code>-1:-3</code>),</p></li>
-<li><p>one of the following select-helpers: <code><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with()</a></code>, <code><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with()</a></code>,
-<code><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains()</a></code>, a range using <code>:</code> or <code>regex("")</code>. <code><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with()</a></code>,
-<code><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with()</a></code>, and  <code><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains()</a></code> accept several patterns, e.g
+<li><p>one of the following select-helpers: <code><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with()</a></code>, <code><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">ends_with()</a></code>,
+<code><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">contains()</a></code>, a range using <code>:</code> or <code>regex("")</code>. <code><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with()</a></code>,
+<code><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">ends_with()</a></code>, and  <code><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">contains()</a></code> accept several patterns, e.g
 <code>starts_with("Sep", "Petal")</code>.</p></li>
 <li><p>or a function testing for logical conditions, e.g. <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric()</a></code> (or
 <code>is.numeric</code>), or any user-defined function that selects the variables
@@ -224,39 +224,90 @@ from the input data frame.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">rescale</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   t.t.scale.x.....sd...mean.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  100.81051</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                  104.86309</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  121.07339</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                   80.54764</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                   92.70537</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  50  60 100   0  30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"min_value")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"range_difference")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"to_range")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]   0 100</span>
 <span class="r-in"><span><span class="fu">rescale</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in rescale(c(0, 1, 5, -5, -2), to = c(-5, 5)):</span> unused argument (to = c(-5, 5))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0  1  5 -5 -2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"min_value")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"range_difference")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"to_range")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -5  5</span>
 <span class="r-in"><span><span class="fu">rescale</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span><span class="op">)</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in rescale(c(1, 2, 3, 4, 5), to = c(-2, 2)):</span> unused argument (to = c(-2, 2))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -2 -1  0  1  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"min_value")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"range_difference")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"to_range")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -2  2</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Specify the "theoretical" range of the input vector</span></span></span>
 <span class="r-in"><span><span class="fu">rescale</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">40</span><span class="op">)</span>, range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in rescale(c(1, 3, 4), to = c(0, 40), range = c(0, 4)):</span> unused arguments (to = c(0, 40), range = c(0, 4))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10 30 40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"min_value")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"range_difference")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"to_range")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0 40</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Reverse-score a variable</span></span></span>
 <span class="r-in"><span><span class="fu">rescale</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span><span class="op">)</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in rescale(c(1, 2, 3, 4, 5), to = c(5, 1)):</span> unused argument (to = c(5, 1))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5 4 3 2 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"min_value")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"range_difference")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"to_range")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5 1</span>
 <span class="r-in"><span><span class="fu">rescale</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span><span class="op">)</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in rescale(c(1, 2, 3, 4, 5), to = c(2, -2)):</span> unused argument (to = c(2, -2))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  2  1  0 -1 -2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"min_value")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"range_difference")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"to_range")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  2 -2</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Data frames</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">rescale</span><span class="op">(</span><span class="va">iris</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in rescale(iris, to = c(0, 1)):</span> unused argument (to = c(0, 1))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Variables of class `factor` can't be rescaled and remain unchanged.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   0.22222222   0.6250000   0.06779661  0.04166667  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   0.16666667   0.4166667   0.06779661  0.04166667  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   0.11111111   0.5000000   0.05084746  0.04166667  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   0.08333333   0.4583333   0.08474576  0.04166667  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   0.19444444   0.6666667   0.06779661  0.04166667  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   0.30555556   0.7916667   0.11864407  0.12500000  setosa</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">rescale</span><span class="op">(</span><span class="va">iris</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, select <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in rescale(iris, to = c(0, 1), select = "Sepal.Length"):</span> unused arguments (to = c(0, 1), select = "Sepal.Length")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   0.22222222         3.5          1.4         0.2  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   0.16666667         3.0          1.4         0.2  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   0.11111111         3.2          1.3         0.2  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   0.08333333         3.1          1.5         0.2  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   0.19444444         3.6          1.4         0.2  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   0.30555556         3.9          1.7         0.4  setosa</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># One can specify a list of ranges</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">rescale</span><span class="op">(</span><span class="va">iris</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="st">"Sepal.Length"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"Petal.Length"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in rescale(iris, to = list(Sepal.Length = c(0, 1), Petal.Length = c(-1,     0))):</span> unused argument (to = list(Sepal.Length = c(0, 1), Petal.Length = c(-1, 0)))</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Variables of class `factor` can't be rescaled and remain unchanged.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   0.22222222         3.5   -0.9322034         0.2  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   0.16666667         3.0   -0.9322034         0.2  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   0.11111111         3.2   -0.9491525         0.2  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   0.08333333         3.1   -0.9152542         0.2  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   0.19444444         3.6   -0.9322034         0.2  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   0.30555556         3.9   -0.8813559         0.4  setosa</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
