@@ -98,6 +98,7 @@ the number of levels/values as well as the distribution of raw, valid and
 cumulative percentages.
 }
 \examples{
+\dontshow{if (requireNamespace("poorman")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(efc)
 
 # vector/factor
@@ -107,17 +108,15 @@ data_tabulate(efc$c172code)
 data_tabulate(efc, c("e42dep", "c172code"))
 
 # grouped data frame
-if (requireNamespace("poorman")) {
-  suppressPackageStartupMessages(library(poorman, quietly = TRUE))
-  efc \%>\%
-    group_by(c172code) \%>\%
-    data_tabulate("e16sex")
+suppressPackageStartupMessages(library(poorman, quietly = TRUE))
+efc \%>\%
+  group_by(c172code) \%>\%
+  data_tabulate("e16sex")
 
-  # collapse tables
-  efc \%>\%
-    group_by(c172code) \%>\%
-    data_tabulate("e16sex", collapse = TRUE)
-}
+# collapse tables
+efc \%>\%
+  group_by(c172code) \%>\%
+  data_tabulate("e16sex", collapse = TRUE)
 
 # for larger N's (> 100000), a big mark is automatically added
 set.seed(123)
@@ -126,4 +125,5 @@ data_tabulate(x, name = "Large Number")
 
 # to remove the big mark, use "print(..., big_mark = "")"
 print(data_tabulate(x), big_mark = "")
+\dontshow{\}) # examplesIf}
 }

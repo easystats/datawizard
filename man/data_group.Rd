@@ -83,17 +83,17 @@ following the \strong{datawizard} function design. \code{data_ungroup()} removes
 grouping information from a grouped data frame.
 }
 \examples{
+\dontshow{if (requireNamespace("poorman")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(efc)
-if (requireNamespace("poorman")) {
-  suppressPackageStartupMessages(library(poorman, quietly = TRUE))
+suppressPackageStartupMessages(library(poorman, quietly = TRUE))
 
-  # total mean
-  efc \%>\%
-    summarize(mean_hours = mean(c12hour, na.rm = TRUE))
+# total mean
+efc \%>\%
+  summarize(mean_hours = mean(c12hour, na.rm = TRUE))
 
-  # mean by educational level
-  efc \%>\%
-    data_group(c172code) \%>\%
-    summarize(mean_hours = mean(c12hour, na.rm = TRUE))
-}
+# mean by educational level
+efc \%>\%
+  data_group(c172code) \%>\%
+  summarize(mean_hours = mean(c12hour, na.rm = TRUE))
+\dontshow{\}) # examplesIf}
 }

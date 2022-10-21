@@ -30,7 +30,7 @@
 #' @return If a tibble was provided as input, `reshape_longer()` also returns a
 #' tibble. Otherwise, it returns a data frame.
 #'
-#' @examples
+#' @examplesIf requireNamespace("psych") && requireNamespace("tidyr")
 #' \donttest{
 #' wide_data <- data.frame(replicate(5, rnorm(10)))
 #'
@@ -47,27 +47,23 @@
 #'
 #' # Full example
 #' # ------------------
-#' if (require("psych")) {
-#'   data <- psych::bfi # Wide format with one row per participant's personality test
+#' data <- psych::bfi # Wide format with one row per participant's personality test
 #'
-#'   # Pivot long format
-#'   data_to_long(data,
-#'     select = regex("\\d"), # Select all columns that contain a digit
-#'     names_to = "Item",
-#'     values_to = "Score",
-#'     rows_to = "Participant"
-#'   )
+#' # Pivot long format
+#' data_to_long(data,
+#'   select = regex("\\d"), # Select all columns that contain a digit
+#'   names_to = "Item",
+#'   values_to = "Score",
+#'   rows_to = "Participant"
+#' )
 #'
-#'   if (require("tidyr")) {
-#'     reshape_longer(
-#'       tidyr::who,
-#'       select = new_sp_m014:newrel_f65,
-#'       names_to = c("diagnosis", "gender", "age"),
-#'       names_pattern = "new_?(.*)_(.)(.*)",
-#'       values_to = "count"
-#'     )
-#'   }
-#' }
+#' reshape_longer(
+#'   tidyr::who,
+#'   select = new_sp_m014:newrel_f65,
+#'   names_to = c("diagnosis", "gender", "age"),
+#'   names_pattern = "new_?(.*)_(.)(.*)",
+#'   values_to = "count"
+#' )
 #' }
 #'
 #' @inherit data_rename seealso

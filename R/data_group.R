@@ -11,20 +11,18 @@
 #' @return A grouped data frame, i.e. a data frame with additional information
 #' about the grouping structure saved as attributes.
 #'
-#' @examples
+#' @examplesIf requireNamespace("poorman")
 #' data(efc)
-#' if (requireNamespace("poorman")) {
-#'   suppressPackageStartupMessages(library(poorman, quietly = TRUE))
+#' suppressPackageStartupMessages(library(poorman, quietly = TRUE))
 #'
-#'   # total mean
-#'   efc %>%
-#'     summarize(mean_hours = mean(c12hour, na.rm = TRUE))
+#' # total mean
+#' efc %>%
+#'   summarize(mean_hours = mean(c12hour, na.rm = TRUE))
 #'
-#'   # mean by educational level
-#'   efc %>%
-#'     data_group(c172code) %>%
-#'     summarize(mean_hours = mean(c12hour, na.rm = TRUE))
-#' }
+#' # mean by educational level
+#' efc %>%
+#'   data_group(c172code) %>%
+#'   summarize(mean_hours = mean(c12hour, na.rm = TRUE))
 #' @export
 data_group <- function(data,
                        select = NULL,

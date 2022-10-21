@@ -19,7 +19,7 @@
 #' @return A data frame, or a list of data frames, with one frequency table
 #' as data frame per variable.
 #'
-#' @examples
+#' @examplesIf requireNamespace("poorman")
 #' data(efc)
 #'
 #' # vector/factor
@@ -29,17 +29,15 @@
 #' data_tabulate(efc, c("e42dep", "c172code"))
 #'
 #' # grouped data frame
-#' if (requireNamespace("poorman")) {
-#'   suppressPackageStartupMessages(library(poorman, quietly = TRUE))
-#'   efc %>%
-#'     group_by(c172code) %>%
-#'     data_tabulate("e16sex")
+#' suppressPackageStartupMessages(library(poorman, quietly = TRUE))
+#' efc %>%
+#'   group_by(c172code) %>%
+#'   data_tabulate("e16sex")
 #'
-#'   # collapse tables
-#'   efc %>%
-#'     group_by(c172code) %>%
-#'     data_tabulate("e16sex", collapse = TRUE)
-#' }
+#' # collapse tables
+#' efc %>%
+#'   group_by(c172code) %>%
+#'   data_tabulate("e16sex", collapse = TRUE)
 #'
 #' # for larger N's (> 100000), a big mark is automatically added
 #' set.seed(123)
