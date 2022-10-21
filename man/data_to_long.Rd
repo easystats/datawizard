@@ -127,7 +127,6 @@ the number of columns. This is a dependency-free base-R equivalent of
 }
 \examples{
 \dontshow{if (requireNamespace("psych") && requireNamespace("tidyr")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
 wide_data <- data.frame(replicate(5, rnorm(10)))
 
 # Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))
@@ -160,7 +159,6 @@ reshape_longer(
   names_pattern = "new_?(.*)_(.)(.*)",
   values_to = "count"
 )
-}
 \dontshow{\}) # examplesIf}
 }
 \seealso{

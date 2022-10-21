@@ -31,7 +31,6 @@
 #' tibble. Otherwise, it returns a data frame.
 #'
 #' @examplesIf requireNamespace("psych") && requireNamespace("tidyr")
-#' \donttest{
 #' wide_data <- data.frame(replicate(5, rnorm(10)))
 #'
 #' # Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))
@@ -64,11 +63,9 @@
 #'   names_pattern = "new_?(.*)_(.)(.*)",
 #'   values_to = "count"
 #' )
-#' }
 #'
-#' @inherit data_rename seealso
+#' @inherit data_rename
 #' @export
-
 data_to_long <- function(data,
                          select = "all",
                          names_to = "name",
