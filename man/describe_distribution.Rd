@@ -164,10 +164,12 @@ from the input data frame.
 }
 
 \examples{
+\dontshow{if (require("bayestestR", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 describe_distribution(rnorm(100))
 
 data(iris)
 describe_distribution(iris)
 describe_distribution(iris, include_factors = TRUE, quartiles = TRUE)
 describe_distribution(list(mtcars$mpg, mtcars$cyl))
+\dontshow{\}) # examplesIf}
 }
