@@ -4,6 +4,8 @@ test_that("testing Winsorization of factors", {
 })
 
 test_that("with missing values", {
+  skip_if_not_installed("ggplot2")
+
   expect_snapshot(suppressWarnings(head(winsorize(na.omit(ggplot2::msleep$brainwt)))))
   expect_equal(length(winsorize(as.factor(ggplot2::msleep$vore))), 83)
 })
