@@ -1,12 +1,18 @@
 # numeric ---------------------------------------
 
 test_that("describe_distribution - numeric: works with basic numeric vector", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   x <- describe_distribution(mtcars$mpg)
   expect_equal(dim(x), c(1, 9))
   expect_equal(round(x$Mean), 20)
 })
 
 test_that("describe_distribution - numeric: correctly handles missing values", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   no_missing <- describe_distribution(mtcars$mpg)
   test <- mtcars$mpg
   test[1] <- NA
@@ -17,6 +23,9 @@ test_that("describe_distribution - numeric: correctly handles missing values", {
 })
 
 test_that("describe_distribution - numeric: works with quartiles", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   x <- describe_distribution(mtcars$mpg, quartiles = TRUE)
   expect_equal(dim(x), c(1, 11))
   expect_true("Q1" %in% names(x))
@@ -24,6 +33,9 @@ test_that("describe_distribution - numeric: works with quartiles", {
 })
 
 test_that("describe_distribution - numeric: works with range", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   x <- describe_distribution(mtcars$mpg, range = FALSE)
   expect_equal(dim(x), c(1, 7))
   expect_false("min" %in% names(x))
@@ -31,6 +43,9 @@ test_that("describe_distribution - numeric: works with range", {
 })
 
 test_that("describe_distribution - NULL for date", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   v <- as.Date(c("2022-01-01", "2022-01-02"))
   expect_warning(expect_null(describe_distribution(v)))
 })
@@ -40,12 +55,18 @@ test_that("describe_distribution - NULL for date", {
 # data frame ---------------------------------------
 
 test_that("describe_distribution - data frame: works with basic data frame", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   x <- describe_distribution(mtcars)
   expect_equal(dim(x), c(11, 10))
   expect_equal(round(x[1, "Mean"]), 20)
 })
 
 test_that("describe_distribution - data frame: correctly handles missing values", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   no_missing <- describe_distribution(mtcars)
   test <- mtcars
   test[1, ] <- NA
@@ -56,6 +77,9 @@ test_that("describe_distribution - data frame: correctly handles missing values"
 })
 
 test_that("describe_distribution - data frame: works with quartiles", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   x <- describe_distribution(mtcars, quartiles = TRUE)
   expect_equal(dim(x), c(11, 12))
   expect_true("Q1" %in% names(x))
@@ -63,6 +87,9 @@ test_that("describe_distribution - data frame: works with quartiles", {
 })
 
 test_that("describe_distribution - data frame: works with range", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   x <- describe_distribution(mtcars, range = FALSE)
   expect_equal(dim(x), c(11, 8))
   expect_false("min" %in% names(x))
@@ -74,6 +101,9 @@ test_that("describe_distribution - data frame: works with range", {
 # factor ---------------------------------------
 
 test_that("describe_distribution - factor", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   expect_snapshot(describe_distribution(factor(substring("statistics", 1:10, 1:10))))
 })
 
@@ -82,6 +112,9 @@ test_that("describe_distribution - factor", {
 # character ---------------------------------------
 
 test_that("describe_distribution - character", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   expect_snapshot(describe_distribution(as.character(ToothGrowth$supp)))
 })
 
@@ -90,6 +123,9 @@ test_that("describe_distribution - character", {
 # list ---------------------------------------
 
 test_that("describe_distribution - list: works with basic list", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   x <- list(mtcars$mpg, mtcars$cyl)
   stored <- describe_distribution(x)
   unnamed <- describe_distribution(list(mtcars$mpg, mtcars$cyl))
@@ -107,6 +143,9 @@ test_that("describe_distribution - list: works with basic list", {
 })
 
 test_that("describe_distribution - list: works with include_factors", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   x1 <- describe_distribution(list(mtcars$mpg, factor(mtcars$cyl)))
   y <- describe_distribution(list(mtcars$mpg))
   expect_identical(x1, y)
@@ -125,12 +164,18 @@ test_that("describe_distribution - list: works with include_factors", {
 })
 
 test_that("describe_distribution - list: correctly removes character elements", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   x <- describe_distribution(list(mtcars$mpg, "something"))
   y <- describe_distribution(list(mtcars$mpg))
   expect_identical(x, y)
 })
 
 test_that("describe_distribution - list: correctly handles variable names", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   x <- list(mtcars$mpg, mtcars$cyl)
   stored <- describe_distribution(x)
   unnamed <- describe_distribution(list(mtcars$mpg, mtcars$cyl))
@@ -144,6 +189,9 @@ test_that("describe_distribution - list: correctly handles variable names", {
 })
 
 test_that("describe_distribution - list: correctly handles missing values", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   no_missing <- describe_distribution(list(mtcars$mpg, mtcars$cyl))
   test <- mtcars$mpg
   test2 <- mtcars$cyl
@@ -156,6 +204,9 @@ test_that("describe_distribution - list: correctly handles missing values", {
 })
 
 test_that("describe_distribution - list: works with quartiles", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   x <- describe_distribution(list(mtcars$mpg, mtcars$cyl), quartiles = TRUE)
   expect_equal(dim(x), c(2, 12))
   expect_true("Q1" %in% names(x))
@@ -163,6 +214,9 @@ test_that("describe_distribution - list: works with quartiles", {
 })
 
 test_that("describe_distribution - list: works with range", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   x <- describe_distribution(list(mtcars$mpg, mtcars$cyl), range = FALSE)
   expect_equal(dim(x), c(2, 8))
   expect_false("min" %in% names(x))
@@ -174,6 +228,9 @@ test_that("describe_distribution - list: works with range", {
 # select ----------------------
 
 test_that("describe_distribution - select", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   data(iris)
   out <- describe_distribution(iris, select = starts_with("Petal"))
 
@@ -186,6 +243,9 @@ test_that("describe_distribution - select", {
 # select and grouped df ----------------------
 
 test_that("describe_distribution - grouped df", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   data(iris)
   x <- data_group(iris, Species)
   out <- describe_distribution(x, select = starts_with("Petal"))
@@ -207,6 +267,9 @@ test_that("describe_distribution - grouped df", {
 # distribution_mode --------------------------
 
 test_that("distribution_mode works as expected", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   # atomic vector
   expect_equal(distribution_mode(c(1, 2, 3, 3, 4, 5)), 3)
   expect_equal(distribution_mode(c(1, 2, 3, 3, 4, 4, 5)), 3)
@@ -224,6 +287,9 @@ test_that("distribution_mode works as expected", {
 
 # select helpers ------------------------------
 test_that("describe_distribution regex", {
+  skip_if_not_installed("bayestestR")
+  library(bayestestR)
+
   expect_equal(
     describe_distribution(mtcars, select = "pg", regex = TRUE),
     describe_distribution(mtcars, select = "mpg")
