@@ -165,6 +165,7 @@ data_to_wide <- function(data,
   # create missing combinations
 
   if (not_all_cols_are_selected && incomplete_groups) {
+
     expanded <- expand.grid(unique(new_data[["temporary_id"]]), unique(new_data[[names_from]]))
     names(expanded) <- c("temporary_id", names_from)
     new_data <- data_merge(new_data, expanded,
@@ -172,20 +173,40 @@ data_to_wide <- function(data,
       sort = FALSE
     )
 
+    # need to make a second temporary id to keep arrange values *without*
+    # rearranging the whole dataset
+    # Ex:
+    # "B"   1
+    # "A"   3
+    # "A"   NA
+    # "B"   NA
+    #
+    # must be rearranged as "B" "B" "A" "A" and not "A" "A" "B" "B"
+    lookup <- data.frame(
+      temporary_id = unique(
+        new_data[!is.na(new_data[[values_from]]), "temporary_id"]
+      )
+    )
+    lookup$temporary_id_2 <- seq_len(nrow(lookup))
+    new_data <- data_merge(
+      new_data, lookup, by = "temporary_id", join = "left"
+    )
+
     # creation of missing combinations was done with a temporary id, so need
     # to fill columns that are not selected in names_from or values_from
     new_data[, not_selected] <- lapply(not_selected, function(x) {
-      data <- data_arrange(new_data, c("temporary_id", x))
+      data <- data_arrange(new_data, c("temporary_id_2", x))
       ind <- which(!is.na(data[[x]]))
       rep_times <- diff(c(ind, length(data[[x]]) + 1))
       rep(data[[x]][ind], times = rep_times)
     })
 
-    new_data <- data_arrange(new_data, "temporary_id")
+    new_data <- data_arrange(new_data, c("temporary_id_2"))
   }
 
-  # don't need a temporary id anymore
+  # don't need temporary ids anymore
   new_data$temporary_id <- NULL
+  new_data$temporary_id_2 <- NULL
 
   # Fill missing values (before converting to wide)
   if (!is.null(values_fill)) {
@@ -218,7 +239,8 @@ data_to_wide <- function(data,
 
   # convert to wide format (returns the data and the order in which columns
   # should be ordered)
-  unstacked <- .unstack(new_data, names_from, values_from, names_sep, names_prefix, names_glue)
+  unstacked <- .unstack(new_data, names_from, values_from,
+                        names_sep, names_prefix, names_glue)
 
   out <- unstacked$out
 
