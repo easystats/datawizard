@@ -1,27 +1,29 @@
-# datawizard (development version)
+# datawizard 0.6.3
 
 MAJOR CHANGES
 
-* There is a new publication about the `{datawizard}` package: 
-  Patil et al. (2022) <doi:10.21105/joss.04684>.
-  
-* `data_to_long()` and `data_to_wide()` have had significant performance improvements,
-  sometimes as high as a ten-fold speedup. 
+* There is a new publication about the `{datawizard}` package:
+  <https://joss.theoj.org/papers/10.21105/joss.04684>
+
+* Fixes failing tests due to changes in `R-devel`.
+
+* `data_to_long()` and `data_to_wide()` have had significant performance
+  improvements, sometimes as high as a ten-fold speedup.
 
 MINOR CHANGES
 
-* When column names are misspelled, most functions now suggest which
-  existing columns possibly could be meant.
-  
+* When column names are misspelled, most functions now suggest which existing
+  columns possibly could be meant.
+
 * Miscellaneous performance gains.
 
-* `convert_to_na()` now requires argument `na` to be of class 'Date' to
-  convert specific dates to `NA`. For example, `convert_to_na(x, na = "2022-10-17")` must be changed to `convert_to_na(x, na = as.Date("2022-10-17"))`.
+* `convert_to_na()` now requires argument `na` to be of class 'Date' to convert
+  specific dates to `NA`. For example, `convert_to_na(x, na = "2022-10-17")`
+  must be changed to `convert_to_na(x, na = as.Date("2022-10-17"))`.
 
 BUG FIXES
 
 * `data_to_long()` and `data_to_wide()` now correctly keep the `date` format.
-
 
 # datawizard 0.6.2
 
