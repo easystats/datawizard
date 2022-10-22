@@ -482,6 +482,34 @@ test_that("error when overwriting existing column", {
   )
 })
 
+test_that("data_to_wide: fill values, #293", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
+  weekdays <- c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+
+  daily <- tibble(
+    day = factor(c("Tue", "Thu", "Fri", "Mon"), levels = weekdays),
+    value = c(2, 3, 1, 5),
+    type = factor(c("A", "B", "B", "A"))
+  )
+
+  expect_identical(
+    pivot_wider(
+      daily,
+      names_from = type,
+      values_from = value,
+      values_fill = 0
+    ),
+    data_to_wide(
+      daily,
+      names_from = "type",
+      values_from = "value",
+      values_fill = 0
+    )
+  )
+})
+
 
 ### Examples from tidyr website
 
