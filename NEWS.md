@@ -1,10 +1,12 @@
 # datawizard (devel)
 
-BUG FIXES 
+BUG FIXES
 
-* `data_to_wide()` now drops columns that are not in `id_cols` (if specified), 
-  `names_from`, or `values_from`. This is the behaviour observed in `tidyr::pivot_wider()`.
+* `data_read()` no longer prints message for empty columns when the data
+  actually had no empty columns.
   
+ * `data_to_wide()` now drops columns that are not in `id_cols` (if specified), 
+  `names_from`, or `values_from`. This is the behaviour observed in `tidyr::pivot_wider()`.
 
 # datawizard 0.6.3
 

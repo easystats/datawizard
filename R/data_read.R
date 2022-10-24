@@ -84,11 +84,14 @@ data_read <- function(path,
   # tell user about empty columns
   if (verbose) {
     empty_cols <- empty_columns(out)
-    insight::format_alert(
-      sprintf("Following %i variables are empty:", length(empty_cols)),
-      text_concatenate(names(empty_cols)),
-      "\nUse `remove_empty_columns()` to remove them from the data frame."
-    )
+    # only message if we actually have empty columns
+    if (length(empty_cols)) {
+      insight::format_alert(
+        sprintf("Following %i variables are empty:", length(empty_cols)),
+        text_concatenate(names(empty_cols)),
+        "\nUse `remove_empty_columns()` to remove them from the data frame."
+      )
+    }
   }
 
   out
