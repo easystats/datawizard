@@ -142,9 +142,9 @@ data_to_wide <- function(data,
 
   # create an id with all variables that are not in names_from or values_from
   # so that we can create missing combinations between this id and names_from
-  if (length(id_cols) > 1) {
+  if (length(id_cols) > 1L) {
     new_data$temporary_id <- do.call(paste, c(new_data[, id_cols, drop = FALSE], sep = "_"))
-  } else if (length(id_cols) == 1) {
+  } else if (length(id_cols) == 1L) {
     new_data$temporary_id <- new_data[[id_cols]]
   } else {
     new_data$temporary_id <- seq_len(nrow(new_data))
@@ -156,7 +156,7 @@ data_to_wide <- function(data,
   n_rows_per_group <- table(new_data$temporary_id)
   n_values_per_group <- insight::n_unique(n_rows_per_group)
 
-  not_all_cols_are_selected <- length(id_cols) > 0
+  not_all_cols_are_selected <- length(id_cols) > 0L
 
   incomplete_groups <-
     (n_values_per_group > 1 &&
