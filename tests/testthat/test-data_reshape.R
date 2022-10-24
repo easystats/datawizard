@@ -510,6 +510,33 @@ test_that("data_to_wide: fill values, #293", {
   )
 })
 
+test_that("data_to_wide, id_cols works correctly, #293", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
+  updates <- tibble(
+    county = c("Wake", "Wake", "Wake", "Guilford", "Guilford"),
+    date = c(as.Date("2020-01-01") + 0:2, as.Date("2020-01-03") + 0:1),
+    system = c("A", "B", "C", "A", "C"),
+    value = c(3.2, 4, 5.5, 2, 1.2)
+  )
+
+  expect_identical(
+    pivot_wider(
+      updates,
+      id_cols = county,
+      names_from = system,
+      values_from = value
+    ),
+    data_to_wide(
+      updates,
+      id_cols = "county",
+      names_from = "system",
+      values_from = "value"
+    )
+  )
+})
+
 
 ### Examples from tidyr website
 
