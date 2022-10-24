@@ -1,3 +1,10 @@
+# datawizard 0.6.3.x
+
+BUG FIXES
+
+* `data_read()` no longer prints message for empty columns when the data
+  actually had no empty columns.
+
 # datawizard 0.6.3
 
 MAJOR CHANGES
