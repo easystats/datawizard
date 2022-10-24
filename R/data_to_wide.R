@@ -115,6 +115,11 @@ data_to_wide <- function(data,
       names_sep <- sep
     }
   }
+  if (is.null(id_cols)) {
+    id_cols <- setdiff(names(data), c(names_from, values_from))
+  }
+
+
   current_colnames <- names(data)
 
   # Preserve attributes
@@ -127,8 +132,7 @@ data_to_wide <- function(data,
 
   variable_attr <- lapply(data, attributes)
 
-  not_selected <- setdiff(names(data), c(names_from, values_from))
-  not_unstacked <- data[, not_selected, drop = FALSE]
+  not_unstacked <- data[, id_cols, drop = FALSE]
   not_unstacked <- unique(not_unstacked)
 
   # unstack doesn't create NAs for combinations that don't exist (contrary to
@@ -138,10 +142,10 @@ data_to_wide <- function(data,
 
   # create an id with all variables that are not in names_from or values_from
   # so that we can create missing combinations between this id and names_from
-  if (length(not_selected) > 1) {
-    new_data$temporary_id <- do.call(paste, c(new_data[, not_selected, drop = FALSE], sep = "_"))
-  } else if (length(not_selected) == 1) {
-    new_data$temporary_id <- new_data[[not_selected]]
+  if (length(id_cols) > 1L) {
+    new_data$temporary_id <- do.call(paste, c(new_data[, id_cols, drop = FALSE], sep = "_"))
+  } else if (length(id_cols) == 1L) {
+    new_data$temporary_id <- new_data[[id_cols]]
   } else {
     new_data$temporary_id <- seq_len(nrow(new_data))
   }
@@ -152,7 +156,7 @@ data_to_wide <- function(data,
   n_rows_per_group <- table(new_data$temporary_id)
   n_values_per_group <- insight::n_unique(n_rows_per_group)
 
-  not_all_cols_are_selected <- length(not_selected) > 0
+  not_all_cols_are_selected <- length(id_cols) > 0L
 
   incomplete_groups <-
     (n_values_per_group > 1 &&
@@ -194,7 +198,7 @@ data_to_wide <- function(data,
 
     # creation of missing combinations was done with a temporary id, so need
     # to fill columns that are not selected in names_from or values_from
-    new_data[, not_selected] <- lapply(not_selected, function(x) {
+    new_data[, id_cols] <- lapply(id_cols, function(x) {
       data <- data_arrange(new_data, c("temporary_id_2", x))
       ind <- which(!is.na(data[[x]]))
       rep_times <- diff(c(ind, length(data[[x]]) + 1))
