@@ -101,8 +101,17 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
 
   out <- as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE), na.rm = TRUE))
 
-  if (!include_bounds && (any(out == 0) || any(out == 1))) {
-    out <- (out * (length(out) - 1) + 0.5) / length(out)
+  if (!isTRUE(include_bounds) && (any(out == 0) || any(out == 1))) {
+    if (isFALSE(include_bounds)) {
+      out <- (out * (length(out) - 1) + 0.5) / length(out)
+    } else if (is.numeric(include_bounds)) {
+      out <- rescale(out, to = c(0 + include_bounds, 1 - include_bounds))
+    } else if (verbose) {
+      insight::format_warning(
+        "`include_bounds` must be either logical or numeric.",
+        "Bounds (zeros and ones) are included in the returned value."
+      )
+    }
   }
 
   # Re-insert infinite values
