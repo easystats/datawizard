@@ -6,11 +6,14 @@
 #' `normalize()`.
 #'
 #' @param x A numeric vector, (grouped) data frame, or matrix. See 'Details'.
-#' @param include_bounds Logical, if `TRUE`, return value may include 0 and 1.
-#'   If `FALSE`, the return value is compressed, using Smithson and Verkuilen's
-#'   (2006) formula `(x * (n - 1) + 0.5) / n`, to avoid zeros and ones in the
-#'   normalized variables. This can be useful in case of beta-regression, where
-#'   the response variable is not allowed to include zeros and ones.
+#' @param include_bounds Numeric or logical. If logical and `TRUE`, return value
+#'   may include 0 and 1; if `FALSE`, the return value is compressed, using
+#'   Smithson and Verkuilen's (2006) formula `(x * (n - 1) + 0.5) / n`, to avoid
+#'   zeros and ones in the normalized variables. Else, if numeric, the normalized
+#'   vectors are rescaled to a range from `0 + include_bounds` to
+#'   `1 - include_bounds`. These approaches can be useful in case of
+#'   beta-regression, where the response variable is not allowed to include
+#'   zeros and ones.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams standardize.data.frame
 #' @inheritParams find_columns
@@ -29,6 +32,8 @@
 #'
 #' normalize(c(0, 1, 5, -5, -2))
 #' normalize(c(0, 1, 5, -5, -2), include_bounds = FALSE)
+#' # use a value defining the bounds
+#' normalize(c(0, 1, 5, -5, -2), include_bounds = .001)
 #'
 #' head(normalize(trees))
 #'
