@@ -65,7 +65,7 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
 
   # safe name, for later use
   if (is.null(names(x))) {
-    name <- insight::safe_deparse(x)
+    name <- insight::safe_deparse(substitute(x))
   } else {
     name <- names(x)
   }
