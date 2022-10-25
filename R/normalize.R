@@ -65,7 +65,7 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
 
   # safe name, for later use
   if (is.null(names(x))) {
-    name <- deparse(substitute(x))
+    name <- insight::safe_deparse(x)
   } else {
     name <- names(x)
   }
@@ -107,11 +107,11 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   if (!isTRUE(include_bounds) && (any(out == 0) || any(out == 1))) {
     if (isFALSE(include_bounds)) {
       out <- (out * (length(out) - 1) + 0.5) / length(out)
-    } else if (is.numeric(include_bounds)) {
+    } else if (is.numeric(include_bounds) && include_bounds > 0 && include_bounds < 1) {
       out <- rescale(out, to = c(0 + include_bounds, 1 - include_bounds))
     } else if (verbose) {
       insight::format_warning(
-        "`include_bounds` must be either logical or numeric.",
+        "`include_bounds` must be either logical or numeric (between 0 and 1).",
         "Bounds (zeros and ones) are included in the returned value."
       )
     }
@@ -128,13 +128,10 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 normalize.factor <- function(x, ...) {
   x
 }
-
-
 
 
 #' @export
@@ -203,7 +200,12 @@ normalize.data.frame <- function(x,
     verbose = verbose
   )
 
-  x[select] <- lapply(x[select], normalize, include_bounds = include_bounds, verbose = verbose)
+  x[select] <- lapply(
+    x[select],
+    normalize,
+    include_bounds = include_bounds,
+    verbose = verbose
+  )
 
   x
 }
