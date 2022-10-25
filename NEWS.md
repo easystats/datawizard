@@ -1,5 +1,11 @@
 # datawizard (devel)
 
+MINOR CHANGES
+
+* The `include_bounds` argument in `normalize()` can now also be a numeric
+  value, defining the limit to the upper and lower bound (i.e. the distance
+  to 1 and 0).
+
 BUG FIXES
 
 * `data_read()` no longer prints message for empty columns when the data

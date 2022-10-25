@@ -46,8 +46,9 @@ unnormalize(x, ...)
 \item{include_bounds}{Numeric or logical. If logical and \code{TRUE}, return value
 may include 0 and 1; if \code{FALSE}, the return value is compressed, using
 Smithson and Verkuilen's (2006) formula \code{(x * (n - 1) + 0.5) / n}, to avoid
-zeros and ones in the normalized variables. Else, if numeric, the normalized
-vectors are rescaled to a range from \code{0 + include_bounds} to
+zeros and ones in the normalized variables. Else, if numeric,
+\code{include_bounds} defines the "distance" to the lower and upper bound, i.e.
+the normalized vectors are rescaled to a range from \code{0 + include_bounds} to
 \code{1 - include_bounds}. These approaches can be useful in case of
 beta-regression, where the response variable is not allowed to include
 zeros and ones.}

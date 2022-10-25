@@ -9,8 +9,9 @@
 #' @param include_bounds Numeric or logical. If logical and `TRUE`, return value
 #'   may include 0 and 1; if `FALSE`, the return value is compressed, using
 #'   Smithson and Verkuilen's (2006) formula `(x * (n - 1) + 0.5) / n`, to avoid
-#'   zeros and ones in the normalized variables. Else, if numeric, the normalized
-#'   vectors are rescaled to a range from `0 + include_bounds` to
+#'   zeros and ones in the normalized variables. Else, if numeric,
+#'   `include_bounds` defines the "distance" to the lower and upper bound, i.e.
+#'   the normalized vectors are rescaled to a range from `0 + include_bounds` to
 #'   `1 - include_bounds`. These approaches can be useful in case of
 #'   beta-regression, where the response variable is not allowed to include
 #'   zeros and ones.
@@ -91,20 +92,17 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
 
 
   # Warning if logical vector
-  if (insight::n_unique(x) == 2) {
-    if (verbose) {
-      insight::format_warning(
-        paste0(
-          "Variable `",
-          name,
-          "` contains only two different values. Consider converting it to a factor."
-        )
+  if (insight::n_unique(x) == 2 && verbose) {
+    insight::format_warning(
+      paste0(
+        "Variable `",
+        name,
+        "` contains only two unique values. Consider converting it to a factor."
       )
-    }
+    )
   }
 
-
-  out <- as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE), na.rm = TRUE))
+  out <- as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE)))
 
   if (!isTRUE(include_bounds) && (any(out == 0) || any(out == 1))) {
     if (isFALSE(include_bounds)) {
