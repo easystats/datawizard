@@ -60,15 +60,17 @@ test_that("data_rotate, arg 'colnames' works", {
   df <- mtcars[1:3, 1:4]
   df <- rownames_as_column(df)
 
+  expected <- data.frame(
+    `Mazda RX4` = c(21, 6, 160, 110),
+    `Mazda RX4 Wag` = c(21, 6, 160, 110),
+    `Datsun 710` = c(22.8, 4, 108, 93),
+    check.names = FALSE
+  )
+  row.names(expected) <- c("mpg", "cyl", "disp", "hp")
+
   expect_identical(
     data_rotate(df, colnames = "rowname"),
-    data.frame(
-      `Mazda RX4` = c(21, 6, 160, 110),
-      `Mazda RX4 Wag` = c(21, 6, 160, 110),
-      `Datsun 710` = c(22.8, 4, 108, 93),
-      check.names = FALSE
-    ) |>
-      structure(row.names = c("mpg", "cyl", "disp", "hp"))
+    expected
   )
 })
 
