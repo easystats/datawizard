@@ -56,3 +56,57 @@ test_that("data_partition works as expected", {
   expect_snapshot(str(data_partition(iris, proportion = .7, group = "Species", seed = 123)))
   expect_snapshot(str(data_partition(iris, proportion = c(.2, .5), group = "Species", seed = 123)))
 })
+
+test_that("data_partition warns if no testing set", {
+  expect_warning(
+    data_partition(iris, proportion = 1),
+    "sums up to 1"
+  )
+  expect_warning(
+    data_partition(iris, proportion = c(0.5, 0.5)),
+    "sums up to 1"
+  )
+})
+
+test_that("data_partition errors if values in proportion not between 0 and 1", {
+  expect_error(
+    data_partition(iris, proportion = 1.3),
+    "cannot be higher"
+  )
+  expect_error(
+    data_partition(iris, proportion = c(0.5, 0.6)),
+    "cannot be higher"
+  )
+  expect_error(
+    data_partition(iris, proportion = c(1.3, -1)),
+    "cannot be negative"
+  )
+  expect_error(
+    data_partition(iris, proportion = -1),
+    "cannot be negative"
+  )
+})
+
+test_that("data_partition warns if row_id already exists", {
+  iris2 <- iris
+
+  iris2[[".row_id"]] <- "A"
+  expect_warning(
+    data_partition(iris2, proportion = 0.5),
+    "already exists"
+  )
+
+  iris2[["foo"]] <- "A"
+  expect_warning(
+    data_partition(iris2, proportion = 0.5, row_id = "foo"),
+    "already exists"
+  )
+
+  part1 <- data_partition(iris, proportion = 0.5, seed = 123)
+  part2 <- suppressWarnings(data_partition(iris2, proportion = 0.5, seed = 123))
+
+  expect_identical(
+    part1$p_0.5[1:5],
+    part2$p_0.5[1:5]
+  )
+})
