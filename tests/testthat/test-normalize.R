@@ -11,6 +11,22 @@ test_that("normalize work as expected", {
     ignore_attr = TRUE
   )
 
+  expect_equal(
+    normalize(c(0, 1, 5, -5, -2), include_bounds = .01),
+    c(0.5, 0.598, 0.99, 0.01, 0.304),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+
+  expect_equal(
+    normalize(c(0, 1, 5, -5, -2), include_bounds = "a", verbose = FALSE),
+    c(0.5, 0.6, 1, 0, 0.3),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+
+  expect_warning(normalize(c(0, 1, 5, -5, -2), include_bounds = "a", verbose = TRUE))
+
   expect_snapshot(head(normalize(trees)))
 })
 

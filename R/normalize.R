@@ -6,11 +6,15 @@
 #' `normalize()`.
 #'
 #' @param x A numeric vector, (grouped) data frame, or matrix. See 'Details'.
-#' @param include_bounds Logical, if `TRUE`, return value may include 0 and 1.
-#'   If `FALSE`, the return value is compressed, using Smithson and Verkuilen's
-#'   (2006) formula `(x * (n - 1) + 0.5) / n`, to avoid zeros and ones in the
-#'   normalized variables. This can be useful in case of beta-regression, where
-#'   the response variable is not allowed to include zeros and ones.
+#' @param include_bounds Numeric or logical. Using this can be useful in case of
+#'   beta-regression, where the response variable is not allowed to include
+#'   zeros and ones. If `TRUE`, the input is normalized to a range that includes
+#'   zero and one. If `FALSE`, the return value is compressed, using
+#'   Smithson and Verkuilen's (2006) formula `(x * (n - 1) + 0.5) / n`, to avoid
+#'   zeros and ones in the normalized variables. Else, if numeric (e.g., `0.001`),
+#'   `include_bounds` defines the "distance" to the lower and upper bound, i.e.
+#'   the normalized vectors are rescaled to a range from `0 + include_bounds` to
+#'   `1 - include_bounds`.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams standardize.data.frame
 #' @inheritParams find_columns
@@ -29,6 +33,8 @@
 #'
 #' normalize(c(0, 1, 5, -5, -2))
 #' normalize(c(0, 1, 5, -5, -2), include_bounds = FALSE)
+#' # use a value defining the bounds
+#' normalize(c(0, 1, 5, -5, -2), include_bounds = .001)
 #'
 #' head(normalize(trees))
 #'
@@ -59,7 +65,7 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
 
   # safe name, for later use
   if (is.null(names(x))) {
-    name <- deparse(substitute(x))
+    name <- insight::safe_deparse(substitute(x))
   } else {
     name <- names(x)
   }
@@ -86,23 +92,29 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
 
 
   # Warning if logical vector
-  if (insight::n_unique(x) == 2) {
-    if (verbose) {
-      insight::format_warning(
-        paste0(
-          "Variable `",
-          name,
-          "` contains only two different values. Consider converting it to a factor."
-        )
+  if (insight::n_unique(x) == 2 && verbose) {
+    insight::format_warning(
+      paste0(
+        "Variable `",
+        name,
+        "` contains only two unique values. Consider converting it to a factor."
       )
-    }
+    )
   }
 
+  out <- as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE)))
 
-  out <- as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE), na.rm = TRUE))
-
-  if (!include_bounds && (any(out == 0) || any(out == 1))) {
-    out <- (out * (length(out) - 1) + 0.5) / length(out)
+  if (!isTRUE(include_bounds) && (any(out == 0) || any(out == 1))) {
+    if (isFALSE(include_bounds)) {
+      out <- (out * (length(out) - 1) + 0.5) / length(out)
+    } else if (is.numeric(include_bounds) && include_bounds > 0 && include_bounds < 1) {
+      out <- rescale(out, to = c(0 + include_bounds, 1 - include_bounds))
+    } else if (verbose) {
+      insight::format_warning(
+        "`include_bounds` must be either logical or numeric (between 0 and 1).",
+        "Bounds (zeros and ones) are included in the returned value."
+      )
+    }
   }
 
   # Re-insert infinite values
@@ -116,13 +128,10 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 normalize.factor <- function(x, ...) {
   x
 }
-
-
 
 
 #' @export
@@ -191,7 +200,12 @@ normalize.data.frame <- function(x,
     verbose = verbose
   )
 
-  x[select] <- lapply(x[select], normalize, include_bounds = include_bounds, verbose = verbose)
+  x[select] <- lapply(
+    x[select],
+    normalize,
+    include_bounds = include_bounds,
+    verbose = verbose
+  )
 
   x
 }
