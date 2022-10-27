@@ -55,3 +55,31 @@ test_that("rotate data works as expected", {
     )
   )
 })
+
+test_that("data_rotate, arg 'colnames' works", {
+  df <- mtcars[1:3, 1:4]
+  df <- rownames_as_column(df)
+
+  expected <- data.frame(
+    `Mazda RX4` = c(21, 6, 160, 110),
+    `Mazda RX4 Wag` = c(21, 6, 160, 110),
+    `Datsun 710` = c(22.8, 4, 108, 93),
+    check.names = FALSE
+  )
+  row.names(expected) <- c("mpg", "cyl", "disp", "hp")
+
+  expect_identical(
+    data_rotate(df, colnames = "rowname"),
+    expected
+  )
+})
+
+test_that("data_rotate warns if mixed types of data", {
+  df <- mtcars[1:3, 1:4]
+  df <- rownames_as_column(df)
+
+  expect_warning(
+    data_rotate(df),
+    "mixed types of data"
+  )
+})
