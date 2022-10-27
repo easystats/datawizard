@@ -27,7 +27,7 @@ remove_empty(x)
 or column indices of those variables that completely have missing values.
 \item For \code{remove_empty_columns()} and \code{remove_empty_rows()}, a data frame with
 "empty" columns or rows removed, respectively.
-\item For \code{remove_empty}, \strong{both} empty rows and columns will be removed.
+\item For \code{remove_empty()}, \strong{both} empty rows and columns will be removed.
 }
 }
 \description{
@@ -35,6 +35,11 @@ These functions check which rows or columns of a data frame completely
 contain missing values, i.e. which observations or variables completely have
 missing values, and either (1) returns their indices; or (2) removes them
 from the data frame.
+}
+\details{
+For character vectors, empty string values (i.e. \code{""}) are also
+considered as missing value. Thus, if a character vector only contains \code{NA}
+and \verb{""``, it is considered as empty variable and will be removed. Same applies to observations (rows) that only contain }NA\code{or}""`.
 }
 \examples{
 tmp <- data.frame(
@@ -56,4 +61,14 @@ remove_empty_rows(tmp)
 
 # remove empty columns and rows
 remove_empty(tmp)
+
+# also remove "empty" character vectors
+tmp <- data.frame(
+  a = c(1, 2, 3, NA, 5),
+  b = c(1, NA, 3, NA, 5),
+  c = c("", "", "", "", ""),
+  stringsAsFactors = FALSE
+)
+empty_columns(tmp)
+
 }

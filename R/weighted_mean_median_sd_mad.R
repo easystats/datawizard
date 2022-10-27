@@ -97,7 +97,7 @@ weighted_mad <- function(x, weights = NULL, constant = 1.4826, verbose = TRUE, .
   pos <- all(weights > 0, na.rm = TRUE)
 
   if (isTRUE(!pos) && isTRUE(verbose)) {
-    warning("Some `weights` were negative. Weighting not carried out.", call. = FALSE)
+    insight::format_warning("Some `weights` were negative. Weighting not carried out.")
   }
 
   pos

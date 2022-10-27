@@ -121,20 +121,21 @@ convert_to_na.character <- convert_to_na.factor
 convert_to_na.Date <- function(x, na = NULL, verbose = TRUE, ...) {
   # if we have a list, use first valid element
   if (is.list(na)) {
-    na <- unlist(na[sapply(na, function(i) {
-      !is.null(tryCatch(as.Date(i), error = function(e) NULL))
-    })])
+    na <- na[vapply(na, .is_date, FUN.VALUE = logical(1))]
+    if (length(na) > 1) {
+      na <- na[[1]]
+    }
   }
 
-  if (is_empty_object(na) || !is.character(na)) {
+  if (is_empty_object(na) || !.is_date(na)) {
     if (isTRUE(verbose)) {
       insight::format_alert(
         "Could not convert values into `NA` for a date/time variable.",
-        "To do this, `na` needs to be a character vector, or a list that contains character vector elements."
+        "To do this, `na` must be of class 'Date'."
       )
     }
   } else {
-    matches <- which(x %in% as.Date(na))
+    matches <- which(x == na)
     x[matches] <- NA
   }
   x

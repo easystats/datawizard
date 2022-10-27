@@ -146,7 +146,7 @@ skewness.numeric <- function(x,
 
   if (!is.null(iterations)) {
     if (!requireNamespace("boot", quietly = TRUE)) {
-      warning("Package 'boot' needed for bootstrapping SEs.", call. = FALSE)
+      insight::format_warning("Package 'boot' needed for bootstrapping SEs.")
     } else {
       results <- boot::boot(
         data = x,

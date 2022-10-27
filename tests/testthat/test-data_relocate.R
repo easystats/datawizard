@@ -80,13 +80,46 @@ test_that("data_relocate preserves attributes", {
   out2 <- data_relocate(out, 4:6)
   a2 <- attributes(out2)
 
-  expect_equal(names(a1), names(a2))
+  # attributes may not be in the same order
+  expect_true(all(names(a1) %in% names(a2)) && length(a1) == length(a2))
 })
+
 
 # select helpers ------------------------------
 test_that("data_relocate regex", {
   expect_equal(
     names(data_relocate(mtcars, select = "pg", regex = TRUE, after = "carb"))[11],
     "mpg"
+  )
+})
+
+
+# fuzzy matching ------------------------------
+out <- data.frame(
+  Parameter = "Test",
+  Median = 0.5,
+  CI_low = 0.4,
+  CI_high = 0.6,
+  pd = .97,
+  Rhat = .99,
+  ESS = 1000,
+  log_BF = 3
+)
+
+test_that("data_relocate misspelled", {
+  # close match
+  expect_error(
+    data_relocate(out, "pd", before = "BF"),
+    "log_BF"
+  )
+  # close multiple matches
+  expect_error(
+    data_relocate(out, "pd", before = "CIl"),
+    "CI_low"
+  )
+  # not even close
+  expect_error(
+    data_relocate(out, "pd", before = "xyz"),
+    "misspelled"
   )
 })

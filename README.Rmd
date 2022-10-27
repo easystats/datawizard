@@ -17,7 +17,7 @@ set.seed(333)
 library(datawizard)
 ```
 
-[![publication](https://img.shields.io/badge/Cite-Unpublished-yellow)](https://github.com/easystats/datawizard/blob/master/inst/CITATION)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.04684/status.svg)](https://doi.org/10.21105/joss.04684)
 [![downloads](http://cranlogs.r-pkg.org/badges/datawizard)](https://cran.r-project.org/package=datawizard)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/) [![status](https://tinyverse.netlify.com/badge/datawizard)](https://CRAN.R-project.org/package=datawizard) [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 
@@ -48,6 +48,13 @@ Type | Source | Command
 Release | CRAN | `install.packages("datawizard")`
 Development | r-universe | `install.packages("datawizard", repos = "https://easystats.r-universe.dev")`
 Development | GitHub | `remotes::install_github("easystats/datawizard")`
+
+> **Tip**
+>
+> **Instead of `library(datawizard)`, use `library(easystats)`.**
+> **This will make all features of the  easystats-ecosystem available.**
+>
+> **To stay updated, use `easystats::install_latest()`.**
 
 # Citation
 

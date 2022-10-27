@@ -1,5 +1,3 @@
-suppressPackageStartupMessages(library(poorman, warn.conflicts = FALSE))
-
 test_that("ranktransform works with NAs", {
   x <- c(NA_real_, NA_real_)
   expect_equal(ranktransform(x), x)
@@ -28,7 +26,7 @@ test_that("ranktransform works with two unique value vectors", {
 
   expect_warning(
     ranktransform(x),
-    "Variable `x` contains only two different values. Consider converting it to a factor."
+    "Consider converting it"
   )
 })
 
@@ -69,6 +67,9 @@ test_df <- data.frame(
 )
 
 test_that("ranktransform works with data frames (grouped data)", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   expect_equal(
     test_df %>%
       group_by(id) %>%
@@ -96,6 +97,9 @@ test_df <- data.frame(
 )
 
 test_that("ranktransform works with data frames containing NAs (grouped data)", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   expect_equal(
     test_df %>%
       group_by(id) %>%

@@ -12,7 +12,6 @@ vignette: >
 ---
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
-library(knitr)
 options(knitr.kable.NA = "")
 knitr::opts_chunk$set(
   comment = "#>",
@@ -34,6 +33,10 @@ if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 ```
+
+This vignette can be referred to by citing the following:
+
+> Patil et al., (2022). datawizard: An R Package for Easy Data Preparation and Statistical Transformations. *Journal of Open Source Software*, *7*(78), 4684, https://doi.org/10.21105/joss.04684
 
 # Introduction
 
@@ -444,6 +447,6 @@ importance of open data, open analysis/scripts, and preregistration.
 
 - `datawizard::demean()`: <https://easystats.github.io/datawizard/reference/demean.html>
 - `standardize_parameters(method = "pseudo")` for mixed-effects models
-<https://easystats.github.io/parameters/articles/model_parameters_standardized.html>
+<https://easystats.github.io/parameters/articles/standardize_parameters_effsize.html>
 
 # References

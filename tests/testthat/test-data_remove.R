@@ -117,7 +117,8 @@ test_that("data_remove preserves attributes", {
   out2 <- data_remove(out, "SE")
   a2 <- attributes(out2)
 
-  expect_equal(names(a1), names(a2))
+  # attributes may not be in the same order
+  expect_true(all(names(a1) %in% names(a2)) && length(a1) == length(a2))
 })
 
 # select helpers ------------------------------

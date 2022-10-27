@@ -121,6 +121,7 @@ Note that a regular correlation between two "adjusted" variables is
 equivalent to the partial correlation between them.
 }
 \examples{
+\dontshow{if (require("bayestestR", quietly = TRUE) && require("rstanarm", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 adjusted_all <- adjust(attitude)
 head(adjusted_all)
 adjusted_one <- adjust(attitude, effect = "complaints", select = "rating")
@@ -132,25 +133,24 @@ attitude$complaints_LMH <- cut(attitude$complaints, 3)
 adjust(attitude, effect = "complaints_LMH", select = "rating", multilevel = TRUE)
 }
 
-if (require("bayestestR")) {
-  # Generate data
-  data <- simulate_correlation(n = 100, r = 0.7)
-  data$V2 <- (5 * data$V2) + 20 # Add intercept
+# Generate data
+data <- simulate_correlation(n = 100, r = 0.7)
+data$V2 <- (5 * data$V2) + 20 # Add intercept
 
-  # Adjust
-  adjusted <- adjust(data, effect = "V1", select = "V2")
-  adjusted_icpt <- adjust(data, effect = "V1", select = "V2", keep_intercept = TRUE)
+# Adjust
+adjusted <- adjust(data, effect = "V1", select = "V2")
+adjusted_icpt <- adjust(data, effect = "V1", select = "V2", keep_intercept = TRUE)
 
-  # Visualize
-  plot(data$V1, data$V2,
-    pch = 19, col = "blue",
-    ylim = c(min(adjusted$V2), max(data$V2)),
-    main = "Original (blue), adjusted (green), and adjusted - intercept kept (red) data"
-  )
-  abline(lm(V2 ~ V1, data = data), col = "blue")
-  points(adjusted$V1, adjusted$V2, pch = 19, col = "green")
-  abline(lm(V2 ~ V1, data = adjusted), col = "green")
-  points(adjusted_icpt$V1, adjusted_icpt$V2, pch = 19, col = "red")
-  abline(lm(V2 ~ V1, data = adjusted_icpt), col = "red")
-}
+# Visualize
+plot(data$V1, data$V2,
+  pch = 19, col = "blue",
+  ylim = c(min(adjusted$V2), max(data$V2)),
+  main = "Original (blue), adjusted (green), and adjusted - intercept kept (red) data"
+)
+abline(lm(V2 ~ V1, data = data), col = "blue")
+points(adjusted$V1, adjusted$V2, pch = 19, col = "green")
+abline(lm(V2 ~ V1, data = adjusted), col = "green")
+points(adjusted_icpt$V1, adjusted_icpt$V2, pch = 19, col = "red")
+abline(lm(V2 ~ V1, data = adjusted_icpt), col = "red")
+\dontshow{\}) # examplesIf}
 }

@@ -19,7 +19,7 @@ test_that("smoothness with lag works", {
   set.seed(123)
   x <- (-10:10)^3 + rnorm(21, 0, 100)
   expect_equal(smoothness(x, lag = 0.5)[[1]], 0.5859015, tolerance = 0.001)
-  expect_error(smoothness(x, lag = 0), "lag cannot be that small.")
+  expect_error(smoothness(x, lag = 0), "'lag' cannot be that small.")
 })
 
 test_that("smoothness works with data frames", {

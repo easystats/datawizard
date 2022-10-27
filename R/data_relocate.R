@@ -50,7 +50,7 @@ data_relocate <- function(data,
                           ...) {
   # Sanitize
   if (!is.null(before) && !is.null(after)) {
-    stop("You must supply only one of `before` or `after`.", call. = FALSE)
+    insight::format_error("You must supply only one of `before` or `after`.")
   }
 
   # allow numeric values
@@ -60,7 +60,7 @@ data_relocate <- function(data,
     } else if (before >= 1 && before <= ncol(data)) {
       before <- names(data)[before]
     } else {
-      stop("No valid position defined in `before`.", call. = FALSE)
+      insight::format_error("No valid position defined in `before`.")
     }
   }
 
@@ -71,7 +71,7 @@ data_relocate <- function(data,
     } else if (after >= 1 && after <= ncol(data)) {
       after <- names(data)[after]
     } else {
-      stop("No valid position defined in `after`.", call. = FALSE)
+      insight::format_error("No valid position defined in `after`.")
     }
   }
 
@@ -84,7 +84,7 @@ data_relocate <- function(data,
   )
 
   # save attributes
-  att <- attributes(data)
+  attr_data <- attributes(data)
 
   # Move columns to the right hand side
   data <- data[c(setdiff(names(data), cols), cols)]
@@ -93,18 +93,30 @@ data_relocate <- function(data,
   data_cols <- names(data)
   position <- which(data_cols %in% cols)
 
+  # remember original values, for more informative messages
+  original_before <- before
+  original_after <- after
+
   # Find new positions
   if (!is.null(before)) {
     before <- before[before %in% data_cols][1] # Take first that exists (if vector is supplied)
-    if (length(before) != 1) {
-      stop("The column passed to `before` wasn't found. Possibly mispelled.", call. = FALSE)
+    if (length(before) != 1 || is.na(before)) {
+      # guess the misspelled column
+      insight::format_error(
+        "The column passed to `before` wasn't found.",
+        .misspelled_string(data_cols, original_before[1], default_message = "Possibly misspelled?")
+      )
     }
     where <- min(match(before, data_cols))
     position <- c(setdiff(position, where), where)
   } else if (!is.null(after)) {
     after <- after[after %in% data_cols][1] # Take first that exists (if vector is supplied)
-    if (length(after) != 1) {
-      stop("The column passed to `after` wasn't found. Possibly mispelled.", call. = FALSE)
+    if (length(after) != 1 || is.na(after)) {
+      # guess the misspelled column
+      insight::format_error(
+        "The column passed to `after` wasn't found.",
+        .misspelled_string(data_cols, original_after[1], default_message = "Possibly misspelled?")
+      )
     }
     where <- max(match(after, data_cols))
     position <- c(where, setdiff(position, where))
@@ -120,7 +132,7 @@ data_relocate <- function(data,
   position <- position[position <= length(data_cols)]
 
   out <- data[position]
-  attributes(out) <- utils::modifyList(att, attributes(out))
+  out <- .replace_attrs(out, attr_data)
 
   out
 }
@@ -146,6 +158,6 @@ data_reorder <- function(data,
   remaining_columns <- setdiff(colnames(data), cols)
 
   out <- data[c(cols, remaining_columns)]
-  attributes(out) <- utils::modifyList(attributes(data), attributes(out))
+  out <- .replace_attrs(out, attributes(data))
   out
 }

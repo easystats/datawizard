@@ -315,10 +315,10 @@ categorize.grouped_df <- function(x,
                                   regex = FALSE,
                                   verbose = TRUE,
                                   ...) {
-  info <- attributes(x)
+  # works only for dplyr >= 0.8.0
+  grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
-  # dplyr >= 0.8.0 returns attribute "indices"
-  grps <- attr(x, "groups", exact = TRUE)
+  attr_data <- attributes(x)
 
   # evaluate arguments
   select <- .select_nse(select,
@@ -335,14 +335,6 @@ categorize.grouped_df <- function(x,
   # update processed arguments
   x <- args$x
   select <- args$select
-
-  # dplyr < 0.8.0?
-  if (is.null(grps)) {
-    grps <- attr(x, "indices", exact = TRUE)
-    grps <- lapply(grps, function(x) x + 1)
-  } else {
-    grps <- grps[[".rows"]]
-  }
 
   x <- as.data.frame(x)
   for (rows in grps) {
@@ -362,7 +354,7 @@ categorize.grouped_df <- function(x,
     )
   }
   # set back class, so data frame still works with dplyr
-  attributes(x) <- utils::modifyList(info, attributes(x))
+  x <- .replace_attrs(x, attr_data)
   x
 }
 

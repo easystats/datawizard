@@ -4,7 +4,14 @@
 \alias{data_read}
 \title{Read (import) data files from various sources}
 \usage{
-data_read(path, path_catalog = NULL, encoding = NULL, verbose = TRUE, ...)
+data_read(
+  path,
+  path_catalog = NULL,
+  encoding = NULL,
+  convert_factors = TRUE,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{path}{Character string, the file path to the data file.}
@@ -13,6 +20,12 @@ data_read(path, path_catalog = NULL, encoding = NULL, verbose = TRUE, ...)
 for SAS data files.}
 
 \item{encoding}{The character encoding used for the file. Usually not needed.}
+
+\item{convert_factors}{If \code{TRUE} (default), numeric variables, where all
+values have a value label, are assumed to be categorical and converted
+into factors. If \code{FALSE}, no variable types are guessed and no conversion
+of numeric variables into factors will be performed. See also section
+'Differences to other packages'.}
 
 \item{verbose}{Toggle warnings and messages.}
 
@@ -59,14 +72,13 @@ arguments in \code{...} are passed down to the related \verb{read_*()} function.
 
 \code{data_read()} is most comparable to \code{rio::import()}. For data files from
 SPSS, SAS or Stata, which support labelled data, variables are converted into
-their most appropriate type. The major difference to \code{rio::import()} is
-that \code{data_read()} automatically converts variables into factors, unless
-the variables are only partially labelled, in which case variables are
-converted to numerics. Character vectors are preserved. Hence, variables,
-where \emph{all} values are labelled, will be converted into factors, where
-imported value labels will be set as factor levels. Else, if a variable
-has \emph{no} value labels or less value labels than values, the variable is
-either converted into numeric or character vector. Value labels are then
-preserved as \code{"labels"} attribute.
+their most appropriate type. The major difference to \code{rio::import()} is that
+\code{data_read()} automatically converts fully labelled numeric variables into
+factors, where imported value labels will be set as factor levels. If a
+numeric variable has \emph{no} value labels or less value labels than values, it
+is not converted to factor. In this case, value labels are preserved as
+\code{"labels"} attribute. Character vectors are preserved.  Use
+\code{convert_factors = FALSE} to remove the automatic conversion of numeric
+variables to factors.
 }
 

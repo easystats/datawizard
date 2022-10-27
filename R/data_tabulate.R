@@ -19,7 +19,7 @@
 #' @return A data frame, or a list of data frames, with one frequency table
 #' as data frame per variable.
 #'
-#' @examples
+#' @examplesIf requireNamespace("poorman")
 #' data(efc)
 #'
 #' # vector/factor
@@ -29,17 +29,15 @@
 #' data_tabulate(efc, c("e42dep", "c172code"))
 #'
 #' # grouped data frame
-#' if (requireNamespace("poorman")) {
-#'   suppressPackageStartupMessages(library(poorman, quietly = TRUE))
-#'   efc %>%
-#'     group_by(c172code) %>%
-#'     data_tabulate("e16sex")
+#' suppressPackageStartupMessages(library(poorman, quietly = TRUE))
+#' efc %>%
+#'   group_by(c172code) %>%
+#'   data_tabulate("e16sex")
 #'
-#'   # collapse tables
-#'   efc %>%
-#'     group_by(c172code) %>%
-#'     data_tabulate("e16sex", collapse = TRUE)
-#' }
+#' # collapse tables
+#' efc %>%
+#'   group_by(c172code) %>%
+#'   data_tabulate("e16sex", collapse = TRUE)
 #'
 #' # for larger N's (> 100000), a big mark is automatically added
 #' set.seed(123)
@@ -76,7 +74,7 @@ data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose =
   freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
 
   if (is.null(freq_table)) {
-    warning(paste0("Can't compute frequency tables for objects of class `", class(x)[1], "`."), call. = FALSE)
+    insight::format_warning(paste0("Can't compute frequency tables for objects of class `", class(x)[1], "`."))
     return(NULL)
   }
 
@@ -162,9 +160,10 @@ data_tabulate.grouped_df <- function(x,
                                      collapse = FALSE,
                                      drop_levels = FALSE,
                                      ...) {
-  # dplyr < 0.8.0 returns attribute "indices"
+  # works only for dplyr >= 0.8.0
   grps <- attr(x, "groups", exact = TRUE)
-  group_variables <- NULL
+  group_variables <- data_remove(grps, ".rows")
+  grps <- grps[[".rows"]]
 
   # evaluate arguments
   select <- .select_nse(select,
@@ -174,15 +173,6 @@ data_tabulate.grouped_df <- function(x,
     regex = regex,
     verbose = verbose
   )
-
-  # dplyr < 0.8.0?
-  if (is.null(grps)) {
-    grps <- attr(x, "indices", exact = TRUE)
-    grps <- lapply(grps, function(x) x + 1)
-  } else {
-    group_variables <- data_remove(grps, ".rows")
-    grps <- grps[[".rows"]]
-  }
 
   x <- as.data.frame(x)
   out <- list()

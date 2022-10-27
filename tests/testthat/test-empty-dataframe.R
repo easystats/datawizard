@@ -1,4 +1,4 @@
-test_that("adjust multilevel", {
+test_that("remove empty with character", {
   tmp <- data.frame(
     a = c(1, 2, 3, NA, 5),
     b = c(1, NA, 3, NA, 5),
@@ -16,4 +16,38 @@ test_that("adjust multilevel", {
   expect_snapshot(remove_empty_columns(tmp))
   expect_snapshot(remove_empty_rows(tmp))
   expect_snapshot(remove_empty(tmp))
+})
+
+
+test_that("remove empty columns with character", {
+  tmp <- data.frame(
+    a = c(1, 2, 3, NA, 5),
+    b = c("", NA, "", NA, ""),
+    c = c(NA, NA, NA, NA, NA),
+    d = c(1, NA, 3, NA, 5),
+    e = c("", "", "", "", ""),
+    stringsAsFactors = FALSE
+  )
+
+  expect_equal(empty_columns(tmp), c(b = 2L, c = 3L, e = 5L))
+  expect_equal(dim(remove_empty_columns(tmp)), c(5L, 2L))
+  expect_equal(dim(remove_empty(tmp)), c(4L, 2L))
+})
+
+
+test_that("remove empty rows with character", {
+  tmp <- data.frame(
+    a = c(1, "", 3, NA, 5),
+    b = c("", NA, "", NA, ""),
+    c = c(NA, NA, NA, NA, NA),
+    d = c(1, NA, 3, NA, 5),
+    e = c("", "", "", "", ""),
+    f = factor(c("", "", "", "", "")),
+    g = factor(c("", NA, "", NA, "")),
+    stringsAsFactors = FALSE
+  )
+
+  expect_equal(empty_rows(tmp), c(2L, 4L))
+  expect_equal(dim(remove_empty_rows(tmp)), c(3L, 7L))
+  expect_equal(dim(remove_empty(tmp)), c(3L, 2L))
 })

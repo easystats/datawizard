@@ -29,9 +29,8 @@ data_remove <- function(data,
     return(data)
   }
 
-  new <- data[!colnames(data) %in% select]
-  attributes(new) <- utils::modifyList(attributes(data), attributes(new))
-  class(new) <- class(data)
+  out <- data[!colnames(data) %in% select]
+  out <- .replace_attrs(out, attributes(data))
 
-  new
+  out
 }

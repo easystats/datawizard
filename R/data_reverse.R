@@ -72,7 +72,7 @@ reverse.numeric <- function(x,
   # Warning if only one value
   if (length(unique(x)) == 1 && is.null(range)) {
     if (verbose) {
-      warning("A `range` must be provided for data with only one unique value.", call. = FALSE)
+      insight::format_warning("A `range` must be provided for data with only one unique value.")
     }
     return(x)
   }
@@ -105,7 +105,7 @@ reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
   # Warning if only one value
   if (length(unique(x)) == 1 && is.null(range)) {
     if (verbose) {
-      warning("A `range` must be provided for data with only one unique value.", call. = FALSE)
+      insight::format_warning("A `range` must be provided for data with only one unique value.")
     }
     return(x)
   }
@@ -143,8 +143,8 @@ reverse.grouped_df <- function(x,
                                ...) {
   info <- attributes(x)
 
-  # dplyr >= 0.8.0 returns attribute "indices"
-  grps <- attr(x, "groups", exact = TRUE)
+  # works only for dplyr >= 0.8.0
+  grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
   # evaluate arguments
   select <- .select_nse(select,
@@ -154,14 +154,6 @@ reverse.grouped_df <- function(x,
     regex = regex,
     verbose = verbose
   )
-
-  # dplyr < 0.8.0?
-  if (is.null(grps)) {
-    grps <- attr(x, "indices", exact = TRUE)
-    grps <- lapply(grps, function(x) x + 1)
-  } else {
-    grps <- grps[[".rows"]]
-  }
 
   x <- as.data.frame(x)
   for (rows in grps) {

@@ -1,5 +1,3 @@
-library(tidyr)
-
 set.seed(123)
 wide_data <- data.frame(replicate(3, sample(1:5)))
 
@@ -312,9 +310,12 @@ test_that("data_reshape works as expected - select-helper inside functions, usin
 })
 
 
-test_that("reshape_wider, names_prefix works", {
+test_that("data_to_wide, names_prefix works", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   out <- fish_encounters %>%
-    reshape_wider(
+    data_to_wide(
       names_from = "station",
       values_from = "seen",
       names_prefix = "foo_"
@@ -329,11 +330,14 @@ test_that("reshape_wider, names_prefix works", {
   )
 })
 
-test_that("reshape_wider, values_fill errors when wrong type", {
+test_that("data_to_wide, values_fill errors when wrong type", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   ### Should be numeric
   expect_error(
     fish_encounters %>%
-      reshape_wider(
+      data_to_wide(
         names_from = "station",
         values_from = "seen",
         values_fill = "a"
@@ -342,7 +346,7 @@ test_that("reshape_wider, values_fill errors when wrong type", {
   )
   expect_error(
     fish_encounters %>%
-      reshape_wider(
+      data_to_wide(
         names_from = "station",
         values_from = "seen",
         values_fill = factor("a")
@@ -364,7 +368,7 @@ test_that("reshape_wider, values_fill errors when wrong type", {
 
   expect_error(
     contacts %>%
-      reshape_wider(
+      data_to_wide(
         names_from = "field",
         values_from = "value",
         values_fill = 1
@@ -373,7 +377,7 @@ test_that("reshape_wider, values_fill errors when wrong type", {
   )
   expect_error(
     contacts %>%
-      reshape_wider(
+      data_to_wide(
         names_from = "field",
         values_from = "value",
         values_fill = factor("a")
@@ -385,7 +389,7 @@ test_that("reshape_wider, values_fill errors when wrong type", {
   contacts$value <- as.factor(contacts$value)
   expect_error(
     contacts %>%
-      reshape_wider(
+      data_to_wide(
         names_from = "field",
         values_from = "value",
         values_fill = "a"
@@ -394,7 +398,7 @@ test_that("reshape_wider, values_fill errors when wrong type", {
   )
   expect_error(
     contacts %>%
-      reshape_wider(
+      data_to_wide(
         names_from = "field",
         values_from = "value",
         values_fill = 1
@@ -403,10 +407,13 @@ test_that("reshape_wider, values_fill errors when wrong type", {
   )
 })
 
-test_that("reshape_wider, values_fill errors when length > 1", {
+test_that("data_to_wide, values_fill errors when length > 1", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   expect_error(
     fish_encounters %>%
-      reshape_wider(
+      data_to_wide(
         names_from = "station",
         values_from = "seen",
         values_fill = c(1, 2)
@@ -426,24 +433,33 @@ test_that("reshape_wider, values_fill errors when length > 1", {
 ### From tidyr tests
 
 test_that("can pivot all cols to wide", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- tibble(key = c("x", "y", "z"), val = 1:3)
-  pv <- reshape_wider(df, names_from = "key", values_from = "val")
+  pv <- data_to_wide(df, names_from = "key", values_from = "val")
 
   expect_named(pv, c("x", "y", "z"))
   expect_equal(nrow(pv), 1)
 })
 
 test_that("non-pivoted cols are preserved", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- tibble(a = 1, key = c("x", "y"), val = 1:2)
-  pv <- reshape_wider(df, names_from = "key", values_from = "val")
+  pv <- data_to_wide(df, names_from = "key", values_from = "val")
 
   expect_named(pv, c("a", "x", "y"))
   expect_equal(nrow(pv), 1)
 })
 
 test_that("implicit missings turn into explicit missings", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- tibble(a = 1:2, key = c("x", "y"), val = 1:2)
-  pv <- reshape_wider(df, names_from = "key", values_from = "val")
+  pv <- data_to_wide(df, names_from = "key", values_from = "val")
 
   expect_equal(pv$a, c(1, 2))
   expect_equal(pv$x, c(1, NA))
@@ -451,6 +467,9 @@ test_that("implicit missings turn into explicit missings", {
 })
 
 test_that("error when overwriting existing column", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- tibble(
     a = c(1, 1),
     key = c("a", "b"),
@@ -458,20 +477,78 @@ test_that("error when overwriting existing column", {
   )
 
   expect_error(
-    reshape_wider(df, names_from = "key", values_from = "val"),
+    data_to_wide(df, names_from = "key", values_from = "val"),
     regexp = "Some values of the columns specified"
+  )
+})
+
+test_that("data_to_wide: fill values, #293", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
+  weekdays <- c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+
+  daily <- tibble(
+    day = factor(c("Tue", "Thu", "Fri", "Mon"), levels = weekdays),
+    value = c(2, 3, 1, 5),
+    type = factor(c("A", "B", "B", "A"))
+  )
+
+  expect_identical(
+    pivot_wider(
+      daily,
+      names_from = type,
+      values_from = value,
+      values_fill = 0
+    ),
+    data_to_wide(
+      daily,
+      names_from = "type",
+      values_from = "value",
+      values_fill = 0
+    )
+  )
+})
+
+test_that("data_to_wide, id_cols works correctly, #293", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
+  updates <- tibble(
+    county = c("Wake", "Wake", "Wake", "Guilford", "Guilford"),
+    date = c(as.Date("2020-01-01") + 0:2, as.Date("2020-01-03") + 0:1),
+    system = c("A", "B", "C", "A", "C"),
+    value = c(3.2, 4, 5.5, 2, 1.2)
+  )
+
+  expect_identical(
+    pivot_wider(
+      updates,
+      id_cols = county,
+      names_from = system,
+      values_from = value
+    ),
+    data_to_wide(
+      updates,
+      id_cols = "county",
+      names_from = "system",
+      values_from = "value"
+    )
   )
 })
 
 
 ### Examples from tidyr website
 
-test_that("reshape_wider equivalent to pivot_wider: ex 1", {
+test_that("data_to_wide equivalent to pivot_wider: ex 1", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   x <- fish_encounters %>%
     tidyr::pivot_wider(names_from = "station", values_from = "seen", values_fill = 0)
 
   y <- fish_encounters %>%
-    reshape_wider(
+    data_to_wide(
       names_from = "station",
       values_from = "seen",
       values_fill = 0
@@ -480,7 +557,10 @@ test_that("reshape_wider equivalent to pivot_wider: ex 1", {
   expect_equal(x, y, ignore_attr = TRUE)
 })
 
-test_that("reshape_wider equivalent to pivot_wider: ex 2", {
+test_that("data_to_wide equivalent to pivot_wider: ex 2", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   production <- expand_grid(
     product = c("A", "B"),
     country = c("AI", "EI"),
@@ -497,7 +577,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 2", {
     )
 
   y <- production %>%
-    reshape_wider(
+    data_to_wide(
       names_from = c("product", "country"),
       values_from = "production"
     )
@@ -505,7 +585,10 @@ test_that("reshape_wider equivalent to pivot_wider: ex 2", {
   expect_identical(x, y)
 })
 
-test_that("reshape_wider equivalent to pivot_wider: ex 3", {
+test_that("data_to_wide equivalent to pivot_wider: ex 3", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   x <- us_rent_income %>%
     tidyr::pivot_wider(
       names_from = variable,
@@ -513,7 +596,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 3", {
     )
 
   y <- us_rent_income %>%
-    reshape_wider(
+    data_to_wide(
       names_from = "variable",
       values_from = c("estimate", "moe")
     )
@@ -521,7 +604,10 @@ test_that("reshape_wider equivalent to pivot_wider: ex 3", {
   expect_identical(x, y)
 })
 
-test_that("reshape_wider equivalent to pivot_wider: ex 4", {
+test_that("data_to_wide equivalent to pivot_wider: ex 4", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   x <- us_rent_income %>%
     tidyr::pivot_wider(
       names_from = variable,
@@ -530,7 +616,7 @@ test_that("reshape_wider equivalent to pivot_wider: ex 4", {
     )
 
   y <- us_rent_income %>%
-    reshape_wider(
+    data_to_wide(
       names_from = "variable",
       names_sep = ".",
       values_from = c("estimate", "moe")
@@ -539,7 +625,10 @@ test_that("reshape_wider equivalent to pivot_wider: ex 4", {
   expect_identical(x, y)
 })
 
-test_that("reshape_wider equivalent to pivot_wider: ex 5", {
+test_that("data_to_wide equivalent to pivot_wider: ex 5", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   contacts <- tribble(
     ~field, ~value,
     "name", "Jiena McLellan",
@@ -555,13 +644,16 @@ test_that("reshape_wider equivalent to pivot_wider: ex 5", {
     tidyr::pivot_wider(names_from = field, values_from = value)
 
   y <- contacts %>%
-    reshape_wider(names_from = "field", values_from = "value")
+    data_to_wide(names_from = "field", values_from = "value")
 
   expect_identical(x, y)
 })
 
 
-test_that("reshape_wider equivalent to pivot_wider: ex 6", {
+test_that("data_to_wide equivalent to pivot_wider: ex 6", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   production <- expand_grid(
     product = c("A", "B"),
     country = c("AI", "EI"),
@@ -588,7 +680,10 @@ test_that("reshape_wider equivalent to pivot_wider: ex 6", {
   expect_identical(x, y)
 })
 
-test_that("reshape_wider, names_glue works", {
+test_that("data_to_wide, names_glue works", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- data.frame(
     food = c("banana", "banana", "banana", "banana", "cheese", "cheese", "cheese", "cheese"),
     binary = c(rep(c("yes", "no"), 4)),
@@ -620,18 +715,24 @@ test_that("reshape_wider, names_glue works", {
 
 # Examples coming from: https://tidyr.tidyverse.org/articles/pivot.html#longer
 
-test_that("reshape_longer equivalent to pivot_longer: ex 1", {
+test_that("data_to_long equivalent to pivot_longer: ex 1", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   x <- relig_income %>%
     tidyr::pivot_longer(!religion, names_to = "income", values_to = "count")
 
   y <- relig_income %>%
-    reshape_longer(select = -religion, names_to = "income", values_to = "count")
+    data_to_long(select = -religion, names_to = "income", values_to = "count")
 
   expect_equal(x, y, ignore_attr = TRUE)
 })
 
 
-test_that("reshape_longer equivalent to pivot_longer: ex 2", {
+test_that("data_to_long equivalent to pivot_longer: ex 2", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   x <- billboard %>%
     tidyr::pivot_longer(
       cols = starts_with("wk"),
@@ -640,7 +741,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 2", {
     )
 
   y <- billboard %>%
-    reshape_longer(
+    data_to_long(
       select = starts_with("wk"),
       names_to = "week",
       values_to = "rank"
@@ -650,7 +751,10 @@ test_that("reshape_longer equivalent to pivot_longer: ex 2", {
 })
 
 
-test_that("reshape_longer equivalent to pivot_longer: ex 3", {
+test_that("data_to_long equivalent to pivot_longer: ex 3", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   x <- billboard %>%
     tidyr::pivot_longer(
       cols = starts_with("wk"),
@@ -660,7 +764,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 3", {
     )
 
   y <- billboard %>%
-    reshape_longer(
+    data_to_long(
       select = starts_with("wk"),
       names_to = "week",
       values_to = "rank",
@@ -671,7 +775,10 @@ test_that("reshape_longer equivalent to pivot_longer: ex 3", {
 })
 
 
-test_that("reshape_longer equivalent to pivot_longer: ex 4", {
+test_that("data_to_long equivalent to pivot_longer: ex 4", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   x <- billboard %>%
     tidyr::pivot_longer(
       cols = starts_with("wk"),
@@ -682,7 +789,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 4", {
     )
 
   y <- billboard %>%
-    reshape_longer(
+    data_to_long(
       select = starts_with("wk"),
       names_to = "week",
       names_prefix = "wk",
@@ -694,7 +801,10 @@ test_that("reshape_longer equivalent to pivot_longer: ex 4", {
 })
 
 
-test_that("reshape_longer equivalent to pivot_longer: ex 5", {
+test_that("data_to_long equivalent to pivot_longer: ex 5", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   suppressWarnings({
     x <- who %>%
       tidyr::pivot_longer(
@@ -706,7 +816,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 5", {
   })
 
   y <- who %>%
-    reshape_longer(
+    data_to_long(
       select = 5:60,
       names_to = c("diagnosis", "gender", "age"),
       names_sep = "_",
@@ -716,7 +826,10 @@ test_that("reshape_longer equivalent to pivot_longer: ex 5", {
   expect_equal(x, y, ignore_attr = TRUE)
 })
 
-test_that("reshape_longer equivalent to pivot_longer: ex 6", {
+test_that("data_to_long equivalent to pivot_longer: ex 6", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   x <- who %>%
     tidyr::pivot_longer(
       cols = new_sp_m014:newrel_f65,
@@ -726,7 +839,7 @@ test_that("reshape_longer equivalent to pivot_longer: ex 6", {
     )
 
   y <- who %>%
-    reshape_longer(
+    data_to_long(
       select = 5:60,
       names_to = c("diagnosis", "gender", "age"),
       names_pattern = "new_?(.*)_(.)(.*)",
@@ -742,8 +855,11 @@ test_that("reshape_longer equivalent to pivot_longer: ex 6", {
 # https://github.com/tidyverse/tidyr/blob/main/tests/testthat/test-pivot-long.R
 
 test_that("can reshape all cols to long", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- tibble(x = 1:2, y = 3:4)
-  pv <- reshape_longer(df, x:y)
+  pv <- data_to_long(df, x:y)
 
   expect_named(pv, c("name", "value"))
   expect_equal(pv$name, rep(names(df), 2))
@@ -751,44 +867,121 @@ test_that("can reshape all cols to long", {
 })
 
 test_that("values interleaved correctly", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- tibble(
     x = c(1, 2),
     y = c(10, 20),
     z = c(100, 200),
   )
-  pv <- reshape_longer(df, 1:3)
+  pv <- data_to_long(df, 1:3)
 
   expect_equal(pv$value, c(1, 10, 100, 2, 20, 200))
 })
 
 test_that("preserves original keys", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- tibble(x = 1:2, y = 2, z = 1:2)
-  pv <- reshape_longer(df, y:z)
+  pv <- data_to_long(df, y:z)
 
   expect_named(pv, c("x", "name", "value"))
   expect_equal(pv$x, rep(df$x, each = 2))
 })
 
 test_that("can drop missing values", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- data.frame(x = c(1, NA), y = c(NA, 2))
-  pv <- reshape_longer(df, x:y, values_drop_na = TRUE)
+  pv <- data_to_long(df, x:y, values_drop_na = TRUE)
 
   expect_equal(pv$name, c("x", "y"))
   expect_equal(pv$value, c(1, 2))
 })
 
 test_that("mixed columns are automatically coerced", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- data.frame(x = factor("a"), y = factor("b"))
-  pv <- reshape_longer(df, x:y)
+  pv <- data_to_long(df, x:y)
 
   expect_equal(pv$value, factor(c("a", "b")))
 })
 
 test_that("error when overwriting existing column", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
   df <- tibble(x = 1, y = 2)
 
   expect_error(
-    reshape_longer(df, y, names_to = "x"),
-    regexp = "Some values of the columns specified in 'names_to' are already present"
+    data_to_long(df, y, names_to = "x"),
+    regexp = "are already present"
   )
+})
+
+test_that("preserve date format", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
+  family <- tidyr::tibble(
+    family = 1:3,
+    dob_child1 = as.Date(c("1998-11-26", "2004-10-10", "2000-12-05")),
+    dob_child2 = as.Date(c("2000-01-29", NA, "2004-04-05"))
+  )
+
+  tidyr <- tidyr::pivot_longer(family, !family, names_to = "child")
+  datawiz <- data_to_long(family, -c("family"), names_to = "child")
+
+  expect_identical(tidyr, datawiz)
+
+  tidyr2 <- tidyr::pivot_wider(datawiz, names_from = "child", values_from = "value")
+  datawiz2 <- data_to_wide(datawiz, names_from = "child", values_from = "value")
+
+  expect_identical(tidyr2, datawiz2)
+})
+
+test_that("#293", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
+  weekdays <- c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+
+  daily <- tibble(
+    day = factor(c("Tue", "Thu", "Fri", "Mon"), levels = weekdays),
+    value = c(2, 3, 1, 5)
+  )
+
+  expect_identical(
+    tidyr::pivot_wider(daily, names_from = day, values_from = value),
+    data_to_wide(daily, names_from = "day", values_from = "value")
+  )
+})
+
+
+test_that("new names starting with digits are not corrected automatically", {
+  skip_if_not_installed("tidyr")
+  library(tidyr)
+
+  percentages <- tibble(
+    year = c(2018, 2019, 2020, 2020),
+    type = factor(c("A", "B", "A", "B"), levels = c("A", "B")),
+    percentage = c(100, 100, 40, 60)
+  )
+
+  tidyr <- tidyr::pivot_wider(
+    percentages,
+    names_from = c(year, type),
+    values_from = percentage,
+  )
+  datawiz <- data_to_wide(
+    percentages,
+    names_from = c("year", "type"),
+    values_from = "percentage",
+  )
+  expect_identical(tidyr, datawiz)
 })

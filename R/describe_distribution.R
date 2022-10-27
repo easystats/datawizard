@@ -42,7 +42,8 @@
 #'   \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
 #' @return A data frame with columns that describe the properties of the variables.
-#' @examples
+#'
+#' @examplesIf require("bayestestR", quietly = TRUE)
 #' describe_distribution(rnorm(100))
 #'
 #' data(iris)

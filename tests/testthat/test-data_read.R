@@ -18,6 +18,16 @@ test_that("data_read", {
 
 
 
+# csv -------------------------
+
+test_that("data_read, skip_empty", {
+  d <- data_read("https://raw.githubusercontent.com/easystats/circus/master/data/test_skip_empty.csv")
+  expect_equal(ncol(d), 3)
+  expect_equal(colnames(d), c("Var1", "Var2", "Var3"))
+})
+
+
+
 # tsv -------------------------
 
 temp_file <- tempfile(fileext = ".tsv")
@@ -90,6 +100,44 @@ unlink(temp_file)
 
 
 
+# SPSS file. 2 ---------------------------------
+
+temp_file <- tempfile(fileext = ".sav")
+request <- httr::GET("https://raw.github.com/easystats/circus/master/data/spss_test.sav")
+httr::stop_for_status(request)
+writeBin(httr::content(request, type = "raw"), temp_file)
+
+test_that("data_read", {
+  d <- data_read(temp_file)
+  expect_equal(
+    d,
+    structure(
+      list(
+        V1 = structure(
+          1:4,
+          levels = c("Eins", "Zwei", "Drei", "Vier"),
+          class = "factor", label = "Variable 1"
+        ),
+        V2 = structure(
+          c(2, 3, 4, 1),
+          labels = c(Eins = 1, Zwei = 2, Drei = 3),
+          label = "Variable 2"
+        ),
+        V3 = structure(
+          c(3L, 2L, 1L, 4L),
+          levels = c("Eins", "Zwei", "Drei", "Vier"),
+          class = "factor", label = "Variable 3"
+        )
+      ),
+      row.names = c(NA, -4L), class = "data.frame"
+    )
+  )
+})
+
+unlink(temp_file)
+
+
+
 # zipped SPSS file -----------------------------------
 
 temp_file <- tempfile(fileext = ".zip")
@@ -101,6 +149,12 @@ test_that("data_read", {
   d <- data_read(temp_file)
   expect_equal(sum(sapply(d, is.factor)), 15)
   expect_equal(sum(sapply(d, is.numeric)), 11)
+})
+
+test_that("data_read, convert_factors", {
+  d <- data_read(temp_file, convert_factors = FALSE)
+  expect_equal(sum(sapply(d, is.factor)), 0)
+  expect_equal(sum(sapply(d, is.numeric)), 26)
 })
 
 unlink(temp_file)

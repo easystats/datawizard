@@ -1,10 +1,8 @@
-suppressPackageStartupMessages(library(poorman, warn.conflicts = FALSE))
-
 data(iris)
 data(mtcars)
-z <- center(iris$Sepal.Width)
 
 test_that("center", {
+  z <- center(iris$Sepal.Width)
   expect_equal(
     as.vector(z),
     iris$Sepal.Width - mean(iris$Sepal.Width),
@@ -12,8 +10,9 @@ test_that("center", {
     ignore_attr = TRUE
   )
 })
-z <- center(mtcars$hp, robust = TRUE)
+
 test_that("center, robust", {
+  z <- center(mtcars$hp, robust = TRUE)
   expect_equal(
     as.vector(z),
     mtcars$hp - median(mtcars$hp),
@@ -22,8 +21,8 @@ test_that("center, robust", {
   )
 })
 
-z <- center(iris, select = "Sepal.Width")
 test_that("center, select", {
+  z  <- center(iris, select = "Sepal.Width")
   expect_equal(
     as.vector(z$Sepal.Width),
     iris$Sepal.Width - mean(iris$Sepal.Width),
@@ -32,14 +31,14 @@ test_that("center, select", {
   )
 })
 
-z <- center(iris, select = "Species")
 test_that("center, factors", {
+  z <- center(iris, select = "Species")
   expect_equal(z$Species, iris$Species)
 })
 
-z <- center(iris, select = "Species", force = TRUE)
-v <- as.numeric(iris$Species)
 test_that("center, force factors", {
+  z <- center(iris, select = "Species", force = TRUE)
+  v <- as.numeric(iris$Species)
   expect_equal(as.vector(z$Species),
     v - median(v),
     tolerance = 1e-4,
@@ -67,6 +66,9 @@ test_that("center, all NA or Inf", {
 # with grouped data -------------------------------------------
 
 test_that("center (grouped data)", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   datawizard <- iris %>%
     group_by(Species) %>%
     center(Sepal.Width) %>%
@@ -83,6 +85,9 @@ test_that("center (grouped data)", {
 })
 
 test_that("center, robust (grouped data)", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   datawizard <- iris %>%
     group_by(Species) %>%
     center(Sepal.Width, robust = TRUE) %>%
@@ -99,6 +104,9 @@ test_that("center, robust (grouped data)", {
 })
 
 test_that("center, select (grouped data)", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   datawizard <- iris %>%
     group_by(Species) %>%
     center(select = starts_with("Sepal\\.W")) %>%
@@ -115,6 +123,9 @@ test_that("center, select (grouped data)", {
 })
 
 test_that("center, factors (grouped data)", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   datawizard <- iris %>%
     group_by(Species) %>%
     center(select = "Species") %>%
@@ -137,4 +148,10 @@ test_that("center regex", {
     center(mtcars, select = "pg$", regex = TRUE)$mpg,
     center(mtcars$mpg)
   )
+})
+
+# no matches ------------------------------
+test_that("center no match", {
+  data(iris)
+  expect_warning(center(iris, "Sepla.Length"))
 })

@@ -53,19 +53,14 @@ data_partition <- function(data,
                            training_proportion = proportion,
                            ...) {
   # Sanity checks
-  if (!is.data.frame(data)) {
-    data <- tryCatch(as.data.frame(data), error = function(e) NULL)
-    if (is.null(data)) {
-      insight::format_error(
-        "`data` needs to be a data frame, or an object that can be coerced to a data frame."
-      )
-    }
-  }
+  data <- .coerce_to_dataframe(data)
 
   if (sum(proportion) > 1) {
-    stop("`proportion` cannot be higher than 1.", call. = FALSE)
+    insight::format_error("Sum of `proportion` cannot be higher than 1.")
   }
-
+  if (any(proportion < 0)) {
+    insight::format_error("Values in `proportion` cannot be negative.")
+  }
   if (sum(proportion) == 1 && isTRUE(verbose)) {
     insight::format_warning(
       "Proportions of sampled training sets (`proportion`) sums up to 1, so no test set will be generated."

@@ -56,7 +56,7 @@ data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, .
   }
 
   if (!is.character(pattern)) {
-    stop("Argument `pattern` must be of type character.", call. = FALSE)
+    insight::format_error("Argument `pattern` must be of type character.")
   }
 
   # name columns 1, 2, 3 etc. if no replacement
@@ -104,7 +104,7 @@ data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, .
 #' @keywords internal
 .data_rename <- function(data, pattern, replacement, safe = TRUE) {
   if (isFALSE(safe) && !pattern %in% names(data)) {
-    stop(paste0("Variable `", pattern, "` is not in your data frame :/"))
+    insight::format_error(paste0("Variable `", pattern, "` is not in your data frame :/"))
   }
 
   names(data) <- replace(names(data), names(data) == pattern, replacement)

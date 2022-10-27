@@ -43,7 +43,7 @@
 #' @export
 data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE) {
   # copy attributes
-  a <- attributes(data)
+  attr_data <- attributes(data)
 
   # check if first column has column names to be used for rotated data
   if (isTRUE(colnames)) {
@@ -65,31 +65,26 @@ data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE)
   }
 
   # rotate data frame by 90 degrees
-  data <- as.data.frame(t(as.data.frame(data)))
+  out <- as.data.frame(t(as.data.frame(data)))
 
   # add column names, if requested
   if (!is.null(colnames)) {
     # check if we have correct length of column names
-    if (length(colnames) != ncol(data)) {
-      warning(
-        "Length of provided column names does not match number of columns. No column names changed.",
-        call. = FALSE
+    if (length(colnames) != ncol(out)) {
+      insight::format_warning(
+        "Length of provided column names does not match number of columns. No column names changed."
       )
     } else {
-      colnames(data) <- colnames
+      colnames(out) <- colnames
     }
   }
 
   # add rownames as a new column, if requested
-  if (!is.null(rownames)) data <- rownames_as_column(data, var = rownames)
+  if (!is.null(rownames)) out <- rownames_as_column(out, var = rownames)
 
-  # delete the common attributes
-  a[names(a) %in% names(attributes(data))] <- NULL
+  out <- .replace_attrs(out, attr_data)
 
-  # and then add other attributes to the data frame
-  attributes(data) <- utils::modifyList(attributes(data), a)
-
-  data
+  out
 }
 
 

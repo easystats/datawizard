@@ -2,7 +2,7 @@
 
 0 errors | 0 warnings | 0 note
 
-* Adds new functionality and maintenance updates.
+* Fixes failing tests.
 
 ## revdepcheck results
 

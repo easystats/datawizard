@@ -1,5 +1,3 @@
-suppressPackageStartupMessages(library(poorman, warn.conflicts = FALSE))
-
 test_that("normalize work as expected", {
   expect_equal(
     normalize(c(0, 1, 5, -5, -2)),
@@ -12,6 +10,22 @@ test_that("normalize work as expected", {
     c(0.5, 0.58, 0.9, 0.1, 0.34),
     ignore_attr = TRUE
   )
+
+  expect_equal(
+    normalize(c(0, 1, 5, -5, -2), include_bounds = .01),
+    c(0.5, 0.598, 0.99, 0.01, 0.304),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+
+  expect_equal(
+    normalize(c(0, 1, 5, -5, -2), include_bounds = "a", verbose = FALSE),
+    c(0.5, 0.6, 1, 0, 0.3),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+
+  expect_warning(normalize(c(0, 1, 5, -5, -2), include_bounds = "a", verbose = TRUE))
 
   expect_snapshot(head(normalize(trees)))
 })
@@ -104,6 +118,9 @@ test_that("normalize: matrix", {
 })
 
 test_that("normalize: select", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   expect_equal(
     normalize(
       iris,
@@ -115,6 +132,9 @@ test_that("normalize: select", {
 })
 
 test_that("normalize: exclude", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   expect_equal(
     normalize(
       iris,
@@ -129,6 +149,9 @@ test_that("normalize: exclude", {
 # with grouped data -------------------------------------------
 
 test_that("normalize (grouped data)", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   datawizard <- iris %>%
     group_by(Species) %>%
     normalize(Sepal.Width) %>%
@@ -145,6 +168,9 @@ test_that("normalize (grouped data)", {
 })
 
 test_that("normalize, include bounds (grouped data)", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   datawizard <- iris %>%
     group_by(Species) %>%
     normalize(Sepal.Width, include_bounds = TRUE) %>%
@@ -162,6 +188,9 @@ test_that("normalize, include bounds (grouped data)", {
 
 
 test_that("normalize, factor (grouped data)", {
+  skip_if_not_installed("poorman")
+  library(poorman)
+
   datawizard <- iris %>%
     group_by(Species) %>%
     normalize(Species) %>%
