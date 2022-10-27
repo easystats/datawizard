@@ -119,6 +119,8 @@ data_to_wide <- function(data,
     id_cols <- setdiff(names(data), c(names_from, values_from))
   }
 
+  # save custom attributes
+  custom_attr <- attributes(data)
 
   current_colnames <- names(data)
 
@@ -293,6 +295,9 @@ data_to_wide <- function(data,
       out[[i]] <- as.Date.numeric(out[[i]], origin = "1970-01-01")
     }
   }
+
+  # add back attributes
+  out <- .replace_attrs(out, custom_attr)
 
   if (isTRUE(tbl_input)) {
     class(out) <- c("tbl_df", "tbl", "data.frame")

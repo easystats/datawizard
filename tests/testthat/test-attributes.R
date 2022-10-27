@@ -59,3 +59,14 @@ test_that("rescale, attributes preserved", {
   x2 <- datawizard::rescale(x, 1:3)
   expect_equal(attr(x2$myattri, "label", exact = TRUE), "I'm here")
 })
+
+
+
+# data_to_long -----------------------------------
+
+test_that("data_to_long, attributes preserved", {
+  wide_data <- data.frame(replicate(5, rnorm(10)))
+  attr(wide_data, "myattri") <- "I'm here"
+  x2 <- data_to_long(wide_data)
+  expect_equal(attr(x2$myattri, "label", exact = TRUE), "I'm here")
+})
