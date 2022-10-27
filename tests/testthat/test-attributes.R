@@ -117,6 +117,28 @@ test_that("to_numeric, attributes preserved", {
 
 
 
+# convert_to_na -----------------------------------
+
+test_that("convert_to_na, attributes preserved", {
+  x <- iris
+  attr(x, "myattri") <- "I'm here"
+  x2 <- datawizard::convert_to_na(x, na = 2)
+  expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
+})
+
+
+
+# data_rename -----------------------------------
+
+test_that("data_rename, attributes preserved", {
+  x <- iris
+  attr(x, "myattri") <- "I'm here"
+  x2 <- data_rename(x, pattern = "hp", replacement = "horsepower")
+  expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
+})
+
+
+
 # rescale -----------------------------------
 
 test_that("rescale, attributes preserved", {
