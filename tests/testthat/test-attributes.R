@@ -34,7 +34,7 @@ test_that("data_arrange, attributes preserved", {
 test_that("data_match, attributes preserved", {
   x <- mtcars
   attr(x, "myattri") <- "I'm here"
-  x2 <- data_match(mtcars, data.frame(vs = 0, am = 1))
+  x2 <- data_match(x, data.frame(vs = 0, am = 1))
   expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
@@ -68,6 +68,17 @@ test_that("data_relocate, attributes preserved", {
   x <- mtcars
   attr(x, "myattri") <- "I'm here"
   x2 <- data_relocate(x, "am", "mpg")
+  expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
+})
+
+
+
+# data_remove -----------------------------------
+
+test_that("data_remove, attributes preserved", {
+  x <- mtcars
+  attr(x, "myattri") <- "I'm here"
+  x2 <- data_remove(x, "am")
   expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
