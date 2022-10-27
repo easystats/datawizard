@@ -29,7 +29,7 @@ get_columns <- function(data,
   out <- data[columns]
 
   # add back attributes
-  attributes(out) <- utils::modifyList(a, attributes(out))
+  out <- .replace_attrs(out, a)
   out
 }
 
