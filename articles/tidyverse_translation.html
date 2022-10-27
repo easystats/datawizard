@@ -39,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.3.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.3.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -373,7 +373,7 @@ column names if we want to select several variables, while
 </div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
 <span><span class="co">##   hair_color  skin_color  eye_color</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> blond       fair        blue     </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> <span style="color: #BB0000;">NA</span>          gold        yellow   </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> <span style="color: #BB0000;">NA</span>          white, blue red      </span></span>
@@ -396,7 +396,7 @@ column names if we want to select several variables, while
 </div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 11</span></span></span>
 <span><span class="co">##   name   height  mass birth…¹ sex   gender homew…² species films vehic…³ stars…⁴</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lis&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lis&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> Luke …    172    77    19   male  mascu… Tatooi… Human   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> C-3PO     167    75   112   none  mascu… Tatooi… Droid   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> R2-D2      96    32    33   none  mascu… Naboo   Droid   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  </span></span>
@@ -423,7 +423,7 @@ here and quoting them won't work. Should we comment on that? -->
 </div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 11</span></span></span>
 <span><span class="co">##   name   height  mass birth…¹ sex   gender homew…² species films vehic…³ stars…⁴</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lis&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lis&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> Luke …    172    77    19   male  mascu… Tatooi… Human   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> C-3PO     167    75   112   none  mascu… Tatooi… Droid   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> R2-D2      96    32    33   none  mascu… Naboo   Droid   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  </span></span>
@@ -448,7 +448,7 @@ here and quoting them won't work. Should we comment on that? -->
 </div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 11</span></span></span>
 <span><span class="co">##   name   height  mass birth…¹ sex   gender homew…² species films vehic…³ stars…⁴</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lis&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lis&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> Luke …    172    77    19   male  mascu… Tatooi… Human   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> C-3PO     167    75   112   none  mascu… Tatooi… Droid   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> R2-D2      96    32    33   none  mascu… Naboo   Droid   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  </span></span>
@@ -473,7 +473,7 @@ here and quoting them won't work. Should we comment on that? -->
 </div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
 <span><span class="co">##   height  mass birth_year</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">*</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span>    172    77       19  </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span>    167    75      112  </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span>     96    32       33  </span></span>

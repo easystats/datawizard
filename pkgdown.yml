@@ -1,11 +1,11 @@
 pandoc: 2.19.2
 pkgdown: 2.0.6.9000
-pkgdown_sha: 738974f38c28945cd465b756889cfce6793617b4
+pkgdown_sha: 5bb671b1a8bac8e926479868681936f7c9ee41b3
 articles:
   selection_syntax: selection_syntax.html
   standardize_data: standardize_data.html
   tidyverse_translation: tidyverse_translation.html
-last_built: 2022-10-27T11:19Z
+last_built: 2022-10-27T18:13Z
 urls:
   reference: https://easystats.github.io/datawizard/reference
   article: https://easystats.github.io/datawizard/articles
