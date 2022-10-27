@@ -159,6 +159,8 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
     out <- idx
   }
 
+  # add back custom attributes
+  out <- .replace_attrs(out, attributes(original_x))
   out
 }
 

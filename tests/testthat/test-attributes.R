@@ -29,6 +29,17 @@ test_that("data_arrange, attributes preserved", {
 
 
 
+# data_match -----------------------------------
+
+test_that("data_match, attributes preserved", {
+  x <- mtcars
+  attr(x, "myattri") <- "I'm here"
+  x2 <- data_match(mtcars, data.frame(vs = 0, am = 1))
+  expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
+})
+
+
+
 # data_select -----------------------------------
 
 test_that("data_select, attributes preserved", {
