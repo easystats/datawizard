@@ -159,6 +159,8 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
     out <- idx
   }
 
+  # add back custom attributes
+  out <- .replace_attrs(out, attributes(original_x))
   out
 }
 
@@ -218,6 +220,9 @@ data_filter <- function(x, filter, ...) {
     attr(out[[i]], "label") <- attr(x[[i]], "label", exact = TRUE)
     attr(out[[i]], "labels") <- attr(x[[i]], "labels", exact = TRUE)
   }
+
+  # add back custom attributes
+  out <- .replace_attrs(out, attributes(x))
   out
 }
 

@@ -135,6 +135,9 @@ data_to_long <- function(data,
     }
   }
 
+  # save custom attributes
+  custom_attr <- attributes(data)
+
   # Remove tidyverse attributes, will add them back at the end
   if (inherits(data, "tbl_df")) {
     tbl_input <- TRUE
@@ -254,6 +257,9 @@ data_to_long <- function(data,
   if (values_drop_na) {
     out <- out[!is.na(out[, values_to]), ]
   }
+
+  # add back attributes
+  out <- .replace_attrs(out, custom_attr)
 
   # add back tidyverse attributes
   if (isTRUE(tbl_input)) {

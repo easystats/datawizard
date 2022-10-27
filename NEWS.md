@@ -2,6 +2,8 @@
 
 MINOR CHANGES
 
+* `.data.frame` methods should now preserve custom attributes.
+
 * The `include_bounds` argument in `normalize()` can now also be a numeric
   value, defining the limit to the upper and lower bound (i.e. the distance
   to 1 and 0).

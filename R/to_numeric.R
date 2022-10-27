@@ -74,6 +74,8 @@ to_numeric.data.frame <- function(x,
     return(x)
   }
 
+  attr <- attributes(x)
+
   # evaluate arguments
   select <- .select_nse(select,
     x,
@@ -140,6 +142,8 @@ to_numeric.data.frame <- function(x,
     out <- cbind(x, out)
   }
 
+  # add back custom attributes
+  out <- .replace_attrs(out, attr)
   out
 }
 

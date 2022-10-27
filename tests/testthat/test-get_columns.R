@@ -343,7 +343,7 @@ test_that("get_columns preserves attributes", {
   out2 <- get_columns(out, 1:3)
   a2 <- attributes(out2)
 
-  expect_equal(names(a1), names(a2))
+  expect_equal(sort(names(a1)), sort(names(a2)))
 })
 
 # Select helpers work in functions and loops
