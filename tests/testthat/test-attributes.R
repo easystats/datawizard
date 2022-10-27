@@ -40,6 +40,50 @@ test_that("data_select, attributes preserved", {
 
 
 
+# data_group -----------------------------------
+
+test_that("data_group, attributes preserved", {
+  x <- mtcars
+  attr(x, "myattri") <- "I'm here"
+  x2 <- data_group(x, "cyl")
+  expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
+})
+
+
+
+# data_relocate -----------------------------------
+
+test_that("data_relocate, attributes preserved", {
+  x <- mtcars
+  attr(x, "myattri") <- "I'm here"
+  x2 <- data_relocate(x, "am", "mpg")
+  expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
+})
+
+
+
+# data_reorder -----------------------------------
+
+test_that("data_reorder, attributes preserved", {
+  x <- mtcars
+  attr(x, "myattri") <- "I'm here"
+  x2 <- data_reorder(x, c("hp", "vs", "wt"))
+  expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
+})
+
+
+
+# data_to_long -----------------------------------
+
+test_that("data_to_long, attributes preserved", {
+  wide_data <- data.frame(replicate(5, rnorm(10)))
+  attr(wide_data, "myattri") <- "I'm here"
+  x2 <- data_to_long(wide_data)
+  expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
+})
+
+
+
 # to_numeric -----------------------------------
 
 test_that("to_numeric, attributes preserved", {
@@ -62,11 +106,44 @@ test_that("rescale, attributes preserved", {
 
 
 
-# data_to_long -----------------------------------
+# center -----------------------------------
 
-test_that("data_to_long, attributes preserved", {
-  wide_data <- data.frame(replicate(5, rnorm(10)))
-  attr(wide_data, "myattri") <- "I'm here"
-  x2 <- data_to_long(wide_data)
+test_that("center, attributes preserved", {
+  x <- iris
+  attr(x, "myattri") <- "I'm here"
+  x2 <- datawizard::center(x, "Sepal.Width")
+  expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
+})
+
+
+
+# categorize -----------------------------------
+
+test_that("categorize, attributes preserved", {
+  x <- iris
+  attr(x, "myattri") <- "I'm here"
+  x2 <- datawizard::categorize(x, "Sepal.Width")
+  expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
+})
+
+
+
+# change_code -----------------------------------
+
+test_that("change_code, attributes preserved", {
+  x <- iris
+  attr(x, "myattri") <- "I'm here"
+  x2 <- datawizard::change_code(x, select = "am", recode = list(`5` = 0, `10` = 1))
+  expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
+})
+
+
+
+# standardize -----------------------------------
+
+test_that("standardize, attributes preserved", {
+  x <- iris
+  attr(x, "myattri") <- "I'm here"
+  x2 <- datawizard::standardize(x, "Sepal.Width")
   expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
