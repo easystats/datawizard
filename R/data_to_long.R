@@ -163,7 +163,7 @@ data_to_long <- function(data,
   # create a temp id so that we know how to rearrange the rows once the data is
   # stacked
   not_stacked <- data[, not_selected, drop = FALSE]
-  not_stacked[["_Rows"]] <- coerce_to_numeric(row.names(data))
+  not_stacked[["_Rows"]] <- .coerce_to_numeric(row.names(data))
 
   # stack the selected columns
   stacked_data <- .stack(data[, cols, drop = FALSE])[, 2:1]
