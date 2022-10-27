@@ -218,6 +218,9 @@ data_filter <- function(x, filter, ...) {
     attr(out[[i]], "label") <- attr(x[[i]], "label", exact = TRUE)
     attr(out[[i]], "labels") <- attr(x[[i]], "labels", exact = TRUE)
   }
+
+  # add back custom attributes
+  out <- .replace_attrs(out, attributes(x))
   out
 }
 
