@@ -11,7 +11,7 @@ test_that("data_filter, attributes preserved", {
     attr(efc$e42dep, "label", exact = TRUE)
   )
   expect_equal(
-    attr(x$myattri, "label", exact = TRUE),
+    attr(x, "myattri", exact = TRUE),
     "I'm here"
   )
 })
@@ -24,7 +24,7 @@ test_that("data_arrange, attributes preserved", {
   x <- mtcars
   attr(x, "myattri") <- "I'm here"
   x2 <- data_arrange(x, "hp")
-  expect_equal(attr(x2$myattri, "label", exact = TRUE), "I'm here")
+  expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
 
@@ -35,7 +35,7 @@ test_that("data_select, attributes preserved", {
   x <- mtcars
   attr(x, "myattri") <- "I'm here"
   x2 <- data_select(x, "hp")
-  expect_equal(attr(x2$myattri, "label", exact = TRUE), "I'm here")
+  expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
 
@@ -46,7 +46,7 @@ test_that("to_numeric, attributes preserved", {
   x <- iris
   attr(x, "myattri") <- "I'm here"
   x2 <- datawizard::to_numeric(x, "Species")
-  expect_equal(attr(x2$myattri, "label", exact = TRUE), "I'm here")
+  expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
 
@@ -57,7 +57,7 @@ test_that("rescale, attributes preserved", {
   x <- iris
   attr(x, "myattri") <- "I'm here"
   x2 <- datawizard::rescale(x, 1:3)
-  expect_equal(attr(x2$myattri, "label", exact = TRUE), "I'm here")
+  expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
 
@@ -68,5 +68,5 @@ test_that("data_to_long, attributes preserved", {
   wide_data <- data.frame(replicate(5, rnorm(10)))
   attr(wide_data, "myattri") <- "I'm here"
   x2 <- data_to_long(wide_data)
-  expect_equal(attr(x2$myattri, "label", exact = TRUE), "I'm here")
+  expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
