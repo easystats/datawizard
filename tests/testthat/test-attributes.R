@@ -48,3 +48,14 @@ test_that("to_numeric, attributes preserved", {
   x2 <- datawizard::to_numeric(x, "Species")
   expect_equal(attr(x2$myattri, "label", exact = TRUE), "I'm here")
 })
+
+
+
+# rescale -----------------------------------
+
+test_that("rescale, attributes preserved", {
+  x <- iris
+  attr(x, "myattri") <- "I'm here"
+  x2 <- datawizard::rescale(x, 1:3)
+  expect_equal(attr(x2$myattri, "label", exact = TRUE), "I'm here")
+})
