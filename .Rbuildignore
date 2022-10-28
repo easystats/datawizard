@@ -47,4 +47,4 @@ references.bib
 ^CRAN-SUBMISSION$
 ^LICENSE$
 docs
-^dev$
+^.dev$
