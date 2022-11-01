@@ -3,8 +3,9 @@
 #' @inheritParams data_to_long
 #' @inheritParams data_rename
 #' @param reference A reference data frame from which to find the correct
-#'   column types.
-#'
+#'   column types. If `NULL`, each column is converted to numeric if it doesn't
+#'   generate `NA`s. For example, `c("1", "2")` can be converted to numeric but not
+#'   `c("Sepal.Length")`.
 #' @return
 #'
 #' A data frame with columns whose types have been restored based on the
