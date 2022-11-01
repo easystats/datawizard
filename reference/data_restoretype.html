@@ -103,7 +103,9 @@
 
 <dt>reference</dt>
 <dd><p>A reference data frame from which to find the correct
-column types.</p></dd>
+column types. If <code>NULL</code>, each column is converted to numeric if it doesn't
+generate <code>NA</code>s. For example, <code>c("1", "2")</code> can be converted to numeric but not
+<code>c("Sepal.Length")</code>.</p></dd>
 
 
 <dt>...</dt>
