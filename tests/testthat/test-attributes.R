@@ -175,7 +175,7 @@ test_that("categorize, attributes preserved", {
 # change_code -----------------------------------
 
 test_that("change_code, attributes preserved", {
-  x <- iris
+  x <- mtcars
   attr(x, "myattri") <- "I'm here"
   x2 <- datawizard::change_code(x, select = "am", recode = list(`5` = 0, `10` = 1))
   expect_equal(attr(x2, "myattri", exact = TRUE), "I'm here")
