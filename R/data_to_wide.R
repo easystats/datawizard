@@ -264,7 +264,7 @@ data_to_wide <- function(data,
     insight::format_error(
       "Some values of the columns specified in 'names_from' are already present as column names.",
       paste0(
-        "Either use `name_prefix` or rename the following columns: ",
+        "Either use `names_prefix` or rename the following columns: ",
         text_concatenate(current_colnames[which(current_colnames %in% unstacked$col_order)])
       )
     )

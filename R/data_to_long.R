@@ -116,6 +116,11 @@ data_to_long <- function(data,
     }
   }
 
+  # nothing to select?
+  if (!length(cols)) {
+    insight::format_error("No columns found for reshaping data.")
+  }
+
   if (length(names_to) > 1 && is.null(names_sep) && is.null(names_pattern)) {
     insight::format_error(
       "If you supply multiple names in `names_to`, you must also supply one of `names_sep` or `names_pattern`."
@@ -154,11 +159,6 @@ data_to_long <- function(data,
         text_concatenate(names_to[which(names_to %in% setdiff(names(data), cols))])
       )
     )
-  }
-
-  # nothing to select?
-  if (!length(cols)) {
-    insight::format_error("No columns found for reshaping data.")
   }
 
   not_selected <- setdiff(names(data), cols)
