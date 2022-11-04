@@ -117,7 +117,7 @@ data_to_long <- function(data,
   }
 
   # nothing to select?
-  if (length(cols) > 0L) {
+  if (length(cols) == 0L) {
     insight::format_error("No columns found for reshaping data.")
   }
 
