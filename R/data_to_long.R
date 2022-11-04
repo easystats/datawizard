@@ -117,11 +117,11 @@ data_to_long <- function(data,
   }
 
   # nothing to select?
-  if (!length(cols)) {
+  if (length(cols) > 0L) {
     insight::format_error("No columns found for reshaping data.")
   }
 
-  if (length(names_to) > 1 && is.null(names_sep) && is.null(names_pattern)) {
+  if (length(names_to) > 1L && is.null(names_sep) && is.null(names_pattern)) {
     insight::format_error(
       "If you supply multiple names in `names_to`, you must also supply one of `names_sep` or `names_pattern`."
     )
@@ -178,7 +178,7 @@ data_to_long <- function(data,
   # wide_data <- data.frame(replicate(5, rnorm(10)))
   # data_to_long(wide_data)
 
-  needs_to_rearrange <- length(not_selected) == 0 && is.null(rows_to)
+  needs_to_rearrange <- length(not_selected) == 0L && is.null(rows_to)
   if (isTRUE(needs_to_rearrange)) {
     # https://stackoverflow.com/questions/73984957/efficient-way-to-reorder-rows-to-have-a-repeated-sequence
     stacked_data <- stacked_data[c(
@@ -195,7 +195,7 @@ data_to_long <- function(data,
   stacked_data <- data_rename(stacked_data, "values", values_to)
 
   # split columns if several names in names_to or names_pattern is specified
-  if (length(names_to) > 1) {
+  if (length(names_to) > 1L) {
     if (is.null(names_pattern)) {
       # faster than strsplit
       tmp <- utils::read.csv(
@@ -234,7 +234,7 @@ data_to_long <- function(data,
 
 
   if (!is.null(names_prefix)) {
-    if (length(names_to) > 1) {
+    if (length(names_to) > 1L) {
       insight::format_error(
         "`names_prefix` only works when `names_to` is of length 1."
       )
@@ -243,7 +243,7 @@ data_to_long <- function(data,
   }
 
   # rearrange the rows with the temp id
-  if (length(not_selected) > 0) {
+  if (length(not_selected) > 0L) {
     out <- data_arrange(out, "_Rows")
   }
 
