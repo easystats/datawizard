@@ -19,11 +19,11 @@ test_that("adjust", {
 
 # select helpers ------------------------------
 test_that("adjust regex", {
-  expect_equal(
+  expect_identical(
     adjust(mtcars, select = "pg", regex = TRUE),
     adjust(mtcars, select = "mpg")
   )
-  expect_equal(
+  expect_identical(
     adjust(mtcars, select = "pg$", regex = TRUE),
     adjust(mtcars, select = "mpg")
   )
