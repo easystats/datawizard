@@ -210,8 +210,8 @@ test_that("data_filter works with groups", {
     id = c(1, 1, 2, 2),
     x = c(0, 1, 3, 4),
     y = c(1, 2, 3, 4)
-  ) |>
-    data_group("id")
+  )
+  test <- data_group(test, "id")
 
   expected <- data.frame(id = c(1, 2), x = c(0, 3), y = c(1, 3))
   class(expected) <- c("grouped_df", "data.frame")
@@ -228,8 +228,8 @@ test_that("data_filter programming works with groups", {
     id = c(1, 1, 2, 2),
     x = c(0, 1, 3, 4),
     y = c(1, 2, 3, 4)
-  ) |>
-    data_group("id")
+  )
+  test <- data_group(test, "id")
 
   expected <- data.frame(id = c(1, 2), x = c(0, 3), y = c(1, 3))
   class(expected) <- c("grouped_df", "data.frame")
