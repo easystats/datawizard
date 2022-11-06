@@ -52,3 +52,15 @@ test_that("standardize, attributes preserved", {
   x2 <- datawizard::standardize(data_group(x, "Species"), "Sepal.Width")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
+
+# filter -----------------------------------
+
+test_that("filter, attributes preserved", {
+  test <- data.frame(
+    id = c(1, 1, 2, 2),
+    x = c(0, 1, 3, 4)
+  )
+  attr(test, "myattri") <- "I'm here"
+  test2 <- data_filter(data_group(test, "id"), x == min(x))
+  expect_identical(attr(test2, "myattri", exact = TRUE), "I'm here")
+})
