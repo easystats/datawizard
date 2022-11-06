@@ -32,6 +32,18 @@ data_codebook <- function(data,
     verbose = verbose
   )
 
+  # check for emtpy columns, and remove
+  empty <- empty_columns(data[select])
+  if (length(empty)) {
+    if (verbose) {
+      insight::format_warning(
+        sprintf("Following %i columns were empty and have been removed:", length(empty)),
+        text_concatenate(names(empty))
+      )
+      select <- select[-empty]
+    }
+  }
+
   out <- lapply(seq_along(select), function(id) {
 
     # variable
