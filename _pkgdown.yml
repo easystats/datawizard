@@ -46,6 +46,7 @@ reference:
     desc: |
         Functions to compute statistical summaries of data properties and distributions
     contents:
+      - data_codebook
       - data_tabulate
       - data_peek
       - contains("distribution")
