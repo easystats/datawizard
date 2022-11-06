@@ -52,6 +52,7 @@ data_codebook <- function(data,
     }
   }
 
+  rows <- nrow(data)
   out <- lapply(seq_along(select), function(id) {
 
     # variable
@@ -62,15 +63,16 @@ data_codebook <- function(data,
     d <- data.frame(
       ID = id,
       Name = select[id],
-      missings = sprintf("%g (%.1f%%)", sum(x_na), sum(x_na) / length(x_na)),
+      missings = sprintf("%g (%.1f%%)", sum(x_na), 100 * (sum(x_na) / rows)),
       stringsAsFactors = FALSE,
       row.names = NULL,
       check.names = FALSE
     )
 
     # check if there are variable labels
-    if (!is.null(attr(x, "label", exact = TRUE))) {
-      variable_label <- attr(x, "label", exact = TRUE)
+    varlab <- attr(x, "label", exact = TRUE)
+    if (!is.null(varlab) && length(varlab)) {
+      variable_label <- varlab
       if (!is.null(label_width) && nchar(variable_label) > label_width) {
         variable_label <- insight::trim_ws(unlist(strsplit(
           text_wrap(variable_label, width = label_width),
@@ -85,27 +87,47 @@ data_codebook <- function(data,
     # we may need to remove duplicated value range elements
     flag_range <- FALSE
 
+    # save value labels
+    vallab <- attr(x, "labels", exact = TRUE)
+
+    # coerce to factor, for tabulate
+    if (!is.numeric(x) && !is.factor(x)) {
+      x <- as.factor(x)
+    }
+
+    # get unique values, to remove non labelled data
+    unique_values <- unique(x)
+    unique_values <- unique_values[!is.na(unique_values)]
+
     # check if there are value labels or factor levels, and extract values and N
-    if (!is.null(attr(x, "labels", exact = TRUE))) {
-      value_labels <- names(attr(x, "labels", exact = TRUE))
-      values <- attr(x, "labels", exact = TRUE)
-      frq <- as.vector(table(x))
+    if (!is.null(vallab) && length(vallab)) {
+      # if not all values are labelled, fill in value labels
+      if (!all(unique_values %in% vallab)) {
+        new_vals <- setdiff(unique_values, vallab)
+        vallab <- c(vallab, stats::setNames(new_vals, new_vals))
+      }
+      # if not all value labels are present in the data, remove unused value labels
+      if (!all(vallab %in% unique_values)) {
+        not_needed <- setdiff(vallab, unique_values)
+        vallab <- vallab[-not_needed]
+      }
+      value_labels <- names(vallab)[order(unname(vallab))]
+      values <- sort(unname(vallab))
+      frq <- tabulate(x)
     } else if (is.factor(x)) {
       values <- levels(x)
       value_labels <- NA
-      frq <- as.vector(table(x))
+      frq <- tabulate(x)
     } else {
       value_labels <- NA
-      if (is.numeric(x)) {
-        r <- range(x, na.rm = TRUE)
-        values <- sprintf("[%g, %g]", r[1], r[2])
-        frq <- sum(!x_na)
-        flag_range <- length(variable_label) > 1
-      } else {
-        values <- stats::na.omit(unique(x))
-        frq <- as.vector(table(x))
-      }
+      r <- range(x, na.rm = TRUE)
+      values <- sprintf("[%g, %g]", r[1], r[2])
+      frq <- sum(!x_na)
+      flag_range <- length(variable_label) > 1
     }
+
+    # tabulate fills 0 for non-existend values, remove those
+    frq <- frq[frq != 0]
 
     # make sure we have not too long rows, e.g. for variables that
     # have dozens of unique values
@@ -139,7 +161,10 @@ data_codebook <- function(data,
       d[[i]][duplicated(d[[i]])] <- ""
     }
 
-    # add empty row
+    # remove empty rows
+    d <- remove_empty_rows(d)
+
+    # add empty row at the end, as separator
     d[nrow(d) + 1, ] <- rep("", ncol(d))
     d
   })
