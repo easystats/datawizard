@@ -8,7 +8,7 @@ data_codebook(
   data,
   select = NULL,
   exclude = NULL,
-  columns = NULL,
+  label_width = NULL,
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
@@ -53,6 +53,10 @@ return \code{"Species"}.}
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
 excludes no columns.}
+
+\item{label_width}{Length of variable labels. Longer labels will be wrapped
+at \code{label_width} chars. If \code{NULL}, longer labels will not be split into
+multiple lines.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the

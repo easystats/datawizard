@@ -3,6 +3,9 @@
 #' `data_codebook()` does...
 #'
 #' @param data A data frame, or an object that can be coerced to a data frame.
+#' @param label_width Length of variable labels. Longer labels will be wrapped
+#' at `label_width` chars. If `NULL`, longer labels will not be split into
+#' multiple lines.
 #' @inheritParams standardize.data.frame
 #' @inheritParams find_columns
 #'
@@ -23,6 +26,8 @@ data_codebook <- function(data,
                           regex = FALSE,
                           verbose = TRUE,
                           ...) {
+  data_name <- insight::safe_deparse_symbol(substitute(data))
+
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select,
     data,
@@ -56,7 +61,8 @@ data_codebook <- function(data,
       Name = select[id],
       missings = sprintf("%g (%.1f%%)", sum(x_na), sum(x_na) / length(x_na)),
       stringsAsFactors = FALSE,
-      row.names = NULL
+      row.names = NULL,
+      check.names = FALSE
     )
 
     # check if there are variable labels
@@ -109,7 +115,7 @@ data_codebook <- function(data,
       # the range value is duplicated, so we need to fix this here.
       duplicates <- c(duplicates, c("values", "frq"))
     }
-  
+
     # clear duplicates due to recycling
     for (i in duplicates) {
       d[[i]][duplicated(d[[i]])] <- ""
@@ -132,7 +138,10 @@ data_codebook <- function(data,
   # remove all empty columns
   out <- remove_empty_columns(out)
 
+  attr(out, "data_name") <- data_name
+  attr(out, "total_n") <- nrow(data)
   class(out) <- c("data_cookbook", "data.frame")
+
   out
 }
 
@@ -142,15 +151,32 @@ data_codebook <- function(data,
 
 #' @export
 print.data_cookbook <- function(x, ...) {
-  cat(insight::export_table(x, empty_line = "-", cross = "+"))
+  caption <- c(sprintf(
+    "%s (total N=%i)",
+    attributes(x)$data_name,
+    attributes(x)$total_n
+  ), "blue")
+  cat(insight::export_table(x, title = caption, empty_line = "-", cross = "+"))
 }
 
 #' @export
 print_html.data_cookbook <- function(x, ...) {
-  insight::export_table(x, format = "html")
+  caption <- sprintf(
+    "%s (total N=%i)",
+    attributes(x)$data_name,
+    attributes(x)$total_n
+  )
+  attr(x, "table_caption") <- caption
+  insight::export_table(x, title = caption, format = "html")
 }
 
 #' @export
 print_md.data_cookbook <- function(x, ...) {
-  insight::export_table(x, empty_line = "-", format = "markdown")
+  caption <- sprintf(
+    "%s (total N=%i)",
+    attributes(x)$data_name,
+    attributes(x)$total_n
+  )
+  attr(x, "table_caption") <- caption
+  insight::export_table(x, title = caption, format = "markdown")
 }
