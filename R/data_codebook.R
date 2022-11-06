@@ -65,6 +65,7 @@ data_codebook <- function(data,
     d <- data.frame(
       ID = id,
       Name = select[id],
+      Type = .variable_type(x),
       missings = sprintf("%g (%.1f%%)", sum(x_na), 100 * (sum(x_na) / rows)),
       stringsAsFactors = FALSE,
       row.names = NULL,
@@ -146,11 +147,16 @@ data_codebook <- function(data,
       values[max_values] <- "(...)"
     }
 
+    # make sure length recycling doesn't fail
+    if (length(variable_label) > 1 && !flag_range) {
+      variable_label <- variable_label[seq_along(frq)]
+    }
+
     # add values, value labels and frequencies to data frame
     d <- cbind(d, data.frame(variable_label, values, value_labels, frq, stringsAsFactors = FALSE))
 
     # which columns need to be checked for duplicates?
-    duplicates <- c("ID", "Name", "missings", "variable_label")
+    duplicates <- c("ID", "Name", "Type", "missings", "variable_label")
     if (isTRUE(flag_range)) {
       # when we have numeric variables with value range as values, and when
       # these variables had long variable labels that have been wrapped,
