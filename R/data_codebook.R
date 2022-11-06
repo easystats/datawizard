@@ -73,6 +73,9 @@ data_codebook <- function(data,
       variable_label <- NA
     }
 
+    # we may need to remove duplicated value range elements
+    flag_range <- FALSE
+
     # check if there are value labels or factor levels, and extract values and N
     if (!is.null(attr(x, "labels", exact = TRUE))) {
       value_labels <- names(attr(x, "labels", exact = TRUE))
@@ -88,6 +91,7 @@ data_codebook <- function(data,
         r <- range(x, na.rm = TRUE)
         values <- sprintf("[%g, %g]", r[1], r[2])
         frq <- sum(!x_na)
+        flag_range <- length(variable_label) > 1
       } else {
         values <- stats::na.omit(unique(x))
         frq <- as.vector(table(x))
@@ -97,8 +101,17 @@ data_codebook <- function(data,
     # add values, value labels and frequencies to data frame
     d <- cbind(d, data.frame(variable_label, values, value_labels, frq, stringsAsFactors = FALSE))
 
+    # which columns need to be checked for duplicates?
+    duplicates <- c("ID", "Name", "missings", "variable_label")
+    if (isTRUE(flag_range)) {
+      # when we have numeric variables with value range as values, and when
+      # these variables had long variable labels that have been wrapped,
+      # the range value is duplicated, so we need to fix this here.
+      duplicates <- c(duplicates, c("values", "frq"))
+    }
+  
     # clear duplicates due to recycling
-    for (i in c("ID", "Name", "missings", "variable_label")) {
+    for (i in duplicates) {
       d[[i]][duplicated(d[[i]])] <- ""
     }
 
