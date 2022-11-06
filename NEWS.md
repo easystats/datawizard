@@ -1,5 +1,9 @@
 # datawizard (devel)
 
+MAJOR CHANGES
+
+* New functions to deal with duplicates: `data_unique` and `data_duplicated`.
+
 MINOR CHANGES
 
 * `.data.frame` methods should now preserve custom attributes.
