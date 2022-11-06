@@ -11,6 +11,8 @@
 #' @param select The id variable for which to check for duplicates.
 #' @keywords duplicates
 #' @export
+#' @seealso
+#' [data_unique()]
 #' @return A dataframe, containing all duplicates.
 #' @examples
 #' df1 <- data.frame(

@@ -13,6 +13,8 @@
 #' @param keep The method to be used for duplicate selection,
 #' either "best" (the default), "first", or "last".
 #' @return A dataframe, containing only the chosen duplicates.
+#' @seealso
+#' [data_duplicated()]
 #' @export
 #' @examples
 #' df1 <- data.frame(
