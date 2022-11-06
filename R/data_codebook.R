@@ -6,6 +6,8 @@
 #' @param label_width Length of variable labels. Longer labels will be wrapped
 #' at `label_width` chars. If `NULL`, longer labels will not be split into
 #' multiple lines.
+#' @param max_values Number of maximum values that should be displayed. Can be
+#' used to avoid too many when variables have lots of unique values.
 #' @inheritParams standardize.data.frame
 #' @inheritParams find_columns
 #'
@@ -22,6 +24,7 @@ data_codebook <- function(data,
                           select = NULL,
                           exclude = NULL,
                           label_width = NULL,
+                          max_values = 10,
                           ignore_case = FALSE,
                           regex = FALSE,
                           verbose = TRUE,
@@ -102,6 +105,21 @@ data_codebook <- function(data,
         values <- stats::na.omit(unique(x))
         frq <- as.vector(table(x))
       }
+    }
+
+    # make sure we have not too long rows, e.g. for variables that
+    # have dozens of unique values
+    if (length(value_labels) > max_values) {
+      value_labels <- value_labels[1:max_values]
+      value_labels[max_values] <- "... (truncated)"
+    }
+    if (length(frq) > max_values) {
+      frq <- frq[1:max_values]
+      frq[max_values] <- NA
+    }
+    if (length(values) > max_values) {
+      values <- values[1:max_values]
+      values[max_values] <- "... (truncated)"
     }
 
     # add values, value labels and frequencies to data frame

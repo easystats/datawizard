@@ -9,6 +9,7 @@ data_codebook(
   select = NULL,
   exclude = NULL,
   label_width = NULL,
+  max_values = 10,
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
@@ -57,6 +58,9 @@ excludes no columns.}
 \item{label_width}{Length of variable labels. Longer labels will be wrapped
 at \code{label_width} chars. If \code{NULL}, longer labels will not be split into
 multiple lines.}
+
+\item{max_values}{Number of maximum values that should be displayed. Can be
+used to avoid too many when variables have lots of unique values.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
