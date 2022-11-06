@@ -162,3 +162,57 @@ test_that("data_codebook logicals", {
   x <- data_codebook(d)
   expect_equal(x$Values, c("[1, 15]", "", "a", "b", "c", "", "FALSE", "TRUE", ""))
 })
+
+
+test_that("data_codebook labelled data exceptions", {
+  set.seed(123)
+
+  f1 <- sample(1:5, 100, TRUE)
+  f1[f1 == 4] <- NA
+  attr(f1, "labels") <- setNames(1:5, c("One", "Two", "Three", "Four", "Five"))
+
+  f2 <- sample(1:5, 100, TRUE)
+  attr(f2, "labels") <- setNames(c(1:3, 5), c("One", "Two", "Three", "Five"))
+
+  f3 <- sample(1:5, 100, TRUE)
+  attr(f3, "labels") <- setNames(1:5, c("One", "Two", "Three", "Four", "Five"))
+
+  d <- data.frame(f1, f2, f3)
+  x <- data_codebook(d)
+
+  expect_equal(
+    x$Values,
+    c(names(table(f1)), "", names(table(f2)), "", names(table(f3)), "")
+  )
+  expect_equal(
+    x$N,
+    as.character(c(table(f1), "", table(f2), "", table(f3), ""))
+  )
+  out <- capture.output(x)
+  expect_equal(
+    out,
+    c(
+      "d (total N=100)",
+      "",
+      "ID | Name |   missings | Values | Value Labels |  N",
+      "---+------+------------+--------+--------------+---",
+      "1  |   f1 | 17 (17.0%) |      1 |          One | 21",
+      "   |      |            |      2 |          Two | 20",
+      "   |      |            |      3 |        Three | 23",
+      "   |      |            |      5 |         Five | 19",
+      "---+------+------------+--------+--------------+---",
+      "2  |   f2 |   0 (0.0%) |      1 |          One | 25",
+      "   |      |            |      2 |          Two | 20",
+      "   |      |            |      3 |        Three | 14",
+      "   |      |            |      4 |            4 | 17",
+      "   |      |            |      5 |         Five | 24",
+      "---+------+------------+--------+--------------+---",
+      "3  |   f3 |   0 (0.0%) |      1 |          One | 21",
+      "   |      |            |      2 |          Two | 24",
+      "   |      |            |      3 |        Three | 16",
+      "   |      |            |      4 |         Four | 14",
+      "   |      |            |      5 |         Five | 25",
+      "---------------------------------------------------"
+    )
+  )
+})
