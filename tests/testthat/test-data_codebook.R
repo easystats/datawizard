@@ -88,7 +88,7 @@ test_that("data_codebook efc", {
 
 test_that("data_codebook efc, label_width", {
   x <- data_codebook(efc, label_width = 30)
-  expect_equal(dim(x), c(16, 7))
+  expect_equal(dim(x), c(17, 7))
   out <- capture.output(x)
   expect_equal(
     out,
