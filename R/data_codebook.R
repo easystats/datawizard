@@ -53,6 +53,8 @@ data_codebook <- function(data,
   }
 
   rows <- nrow(data)
+  max_values <- max_values + 1
+
   out <- lapply(seq_along(select), function(id) {
 
     # variable
@@ -133,7 +135,7 @@ data_codebook <- function(data,
     # have dozens of unique values
     if (length(value_labels) > max_values) {
       value_labels <- value_labels[1:max_values]
-      value_labels[max_values] <- "... (truncated)"
+      value_labels[max_values] <- "(...)"
     }
     if (length(frq) > max_values) {
       frq <- frq[1:max_values]
@@ -141,7 +143,7 @@ data_codebook <- function(data,
     }
     if (length(values) > max_values) {
       values <- values[1:max_values]
-      values[max_values] <- "... (truncated)"
+      values[max_values] <- "(...)"
     }
 
     # add values, value labels and frequencies to data frame

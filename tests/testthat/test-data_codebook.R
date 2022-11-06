@@ -117,3 +117,48 @@ test_that("data_codebook efc, label_width", {
     )
   )
 })
+
+
+test_that("data_codebook truncated data", {
+  set.seed(123)
+  d <- data.frame(
+    a = sample(1:15, 100, TRUE),
+    b = sample(letters[1:18], 100, TRUE),
+    stringsAsFactors = FALSE
+  )
+  x <- data_codebook(d, max_values = 5)
+  expect_equal(colnames(x), c("ID", "Name", "missings", "Values", "N"))
+  expect_equal(dim(x), c(9, 5))
+  out <- capture.output(x)
+  expect_equal(
+    out,
+    c(
+      "d (total N=100)",
+      "",
+      "ID | Name | missings |  Values |   N",
+      "---+------+----------+---------+----",
+      "1  |    a | 0 (0.0%) | [1, 15] | 100",
+      "---+------+----------+---------+----",
+      "2  |    b | 0 (0.0%) |       a |   4",
+      "   |      |          |       b |   3",
+      "   |      |          |       c |   5",
+      "   |      |          |       d |   4",
+      "   |      |          |       e |   3",
+      "   |      |          |   (...) |    ",
+      "------------------------------------"
+    )
+  )
+})
+
+
+test_that("data_codebook logicals", {
+  set.seed(123)
+  d <- data.frame(
+    a = sample(1:15, 100, TRUE),
+    b = sample(letters[1:3], 100, TRUE),
+    c = sample(c(TRUE, FALSE), 100, TRUE),
+    stringsAsFactors = FALSE
+  )
+  x <- data_codebook(d)
+  expect_equal(x$Values, c("[1, 15]", "", "a", "b", "c", "", "FALSE", "TRUE", ""))
+})
