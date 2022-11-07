@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.3.5</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.3.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,6 +99,7 @@
 <span>  variable_label_width <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  value_label_width <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  max_values <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  range_at <span class="op">=</span> <span class="fl">6</span>,</span>
 <span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  regex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -162,6 +163,14 @@ shortened, where the remaining part is truncated.</p></dd>
 <dt>max_values</dt>
 <dd><p>Number of maximum values that should be displayed. Can be
 used to avoid too many rows when variables have lots of unique values.</p></dd>
+
+
+<dt>range_at</dt>
+<dd><p>Indicates how many unique values in a numeric vector are
+needed in order to print a range for that variable instead of a frequency
+table for all numeric values. Can be useful if the data contains numeric
+variables with only a few unique values and where full frequency tables
+instead of value ranges should be displayed.</p></dd>
 
 
 <dt>ignore_case</dt>
@@ -231,6 +240,64 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+-------------+------------+----------+---------------------------------+---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  |  neg_c_7 |             Negative impact with 7 items |     numeric |   3 (3.0%) |  [7, 28] |                                 | 97</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># shorten labels</span></span></span>
+<span class="r-in"><span><span class="fu">data_codebook</span><span class="op">(</span><span class="va">efc</span>, variable_label_width <span class="op">=</span> <span class="fl">20</span>, value_label_width <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> efc (total N=100)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ID |     Name |              Label |        Type |   Missings |   Values |     Value Labels |  N</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+--------------------+-------------+------------+----------+------------------+---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  |  c12hour |  average number of |     numeric |   2 (2.0%) | [5, 168] |                  | 98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |  hours of care per |             |            |          |                  |   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |               week |             |            |          |                  |   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+--------------------+-------------+------------+----------+------------------+---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  |   e16sex |     elder's gender |     numeric |   0 (0.0%) |        1 |             male | 46</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                    |             |            |        2 |           female | 54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+--------------------+-------------+------------+----------+------------------+---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  |   e42dep | elder's dependency | categorical |   3 (3.0%) |        1 |      independent |  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                    |             |            |        2 |      slightly... |  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                    |             |            |        3 |    moderately... | 28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                    |             |            |        4 |      severely... | 63</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+--------------------+-------------+------------+----------+------------------+---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  | c172code |   carer's level of |     numeric | 10 (10.0%) |        1 |  low level of... |  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |          education |             |            |        2 |  intermediate... | 66</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                    |             |            |        3 | high level of... | 16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+--------------------+-------------+------------+----------+------------------+---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  |  neg_c_7 |    Negative impact |     numeric |   3 (3.0%) |  [7, 28] |                  | 97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |       with 7 items |             |            |          |                  |   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------------------------------------</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># automatic range for numerics at more than 5 unique values</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">data_codebook</span><span class="op">(</span><span class="va">mtcars</span>, select <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"c"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mtcars (total N=32)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ID | Name |    Type | Missings | Values |  N</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------+---------+----------+--------+---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  |  cyl | numeric | 0 (0.0%) |      4 | 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |      |         |          |      6 |  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |      |         |          |      8 | 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------+---------+----------+--------+---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 | carb | numeric | 0 (0.0%) | [1, 8] | 32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># force all values to be displayed</span></span></span>
+<span class="r-in"><span><span class="fu">data_codebook</span><span class="op">(</span><span class="va">mtcars</span>, select <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"c"</span><span class="op">)</span>, range_at <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mtcars (total N=32)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ID | Name |    Type | Missings | Values |  N</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------+---------+----------+--------+---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  |  cyl | numeric | 0 (0.0%) |      4 | 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |      |         |          |      6 |  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |      |         |          |      8 | 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------+---------+----------+--------+---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 | carb | numeric | 0 (0.0%) |      1 |  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |      |         |          |      2 | 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |      |         |          |      3 |  3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |      |         |          |      4 | 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |      |         |          |      6 |  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |      |         |          |      8 |  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
