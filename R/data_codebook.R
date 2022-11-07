@@ -1,6 +1,8 @@
 #' Generate a codebook of a data frame.
 #'
-#' `data_codebook()` does...
+#' `data_codebook()` generates codebooks from data frames, i.e. overviews
+#' of all variables and some more information about each variable (like
+#' labels, values or value range, frequencies, amount of missing values).
 #'
 #' @param data A data frame, or an object that can be coerced to a data frame.
 #' @param variable_label_width Length of variable labels. Longer labels will be
@@ -16,6 +18,9 @@
 #' instead of value ranges should be displayed.
 #' @param max_values Number of maximum values that should be displayed. Can be
 #' used to avoid too many rows when variables have lots of unique values.
+#' @param font_size For HTML tables, the font size.
+#' @param line_padding For HTML tables, the distance (in pixel) between lines.
+#' @param row_color For HTML tables, the fill color for odd rows.
 #' @inheritParams standardize.data.frame
 #' @inheritParams find_columns
 #'
@@ -58,7 +63,7 @@ data_codebook <- function(data,
                           regex = FALSE,
                           verbose = TRUE,
                           ...) {
-  data_name <- insight::safe_deparse_symbol(substitute(data))
+  data_name <- insight::safe_deparse(substitute(data))
 
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select,
@@ -152,7 +157,7 @@ data_codebook <- function(data,
       # we need to make sure that labels are also in sorted order.
       value_labels <- names(vallab)[order(unname(vallab))]
       values <- sort(unname(vallab))
-      frq <- tabulate(x)
+      frq <- tabulate(as.factor(x))
 
     # handle factors
     } else if (is.factor(x)) {
@@ -172,7 +177,7 @@ data_codebook <- function(data,
       # if we have few values, we can print whole freq. table
       } else {
         values <- sort(unique_values)
-        frq <- tabulate(x)
+        frq <- tabulate(as.factor(x))
       }
     }
 
@@ -230,6 +235,9 @@ data_codebook <- function(data,
 
     # add empty row at the end, as separator
     d[nrow(d) + 1, ] <- rep("", ncol(d))
+
+    # add row ID
+    d$.row_id <- id
     d
   })
 
@@ -246,14 +254,14 @@ data_codebook <- function(data,
   out <- remove_empty_columns(out)
 
   # reorder
-  column_order <- c("ID", "Name", "Label", "Type", "Missings", "Values", "Value Labels", "N")
+  column_order <- c("ID", "Name", "Label", "Type", "Missings", "Values", "Value Labels", "N", ".row_id")
   out <- out[union(intersect(column_order, names(out)), names(out))]
 
   attr(out, "data_name") <- data_name
   attr(out, "n_rows") <- nrow(data)
   attr(out, "n_cols") <- ncol(data)
   attr(out, "n_shown") <- length(select)
-  class(out) <- c("data_cookbook", "data.frame")
+  class(out) <- c("data_codebook", "data.frame")
 
   out
 }
@@ -263,34 +271,119 @@ data_codebook <- function(data,
 
 
 #' @export
-print.data_cookbook <- function(x, ...) {
+format.data_codebook <- function(x, ...) {
+  # use [["N"]] to avoid partial matching
+  if (any(stats::na.omit(nchar(x[["N"]]) > 5))) {
+    x[["N"]] <- insight::trim_ws(prettyNum(x[["N"]], big.mark = ","))
+    x[["N"]][x[["N"]] == "NA"] <- ""
+  }
+  x
+}
+
+
+#' @export
+print.data_codebook <- function(x, ...) {
   caption <- c(.get_codebook_caption(x), "blue")
-  cat(insight::export_table(x, title = caption, empty_line = "-", cross = "+"))
+  x$.row_id <- NULL
+  cat(insight::export_table(format(x),
+    title = caption,
+    empty_line = "-",
+    cross = "+",
+    align = .get_codebook_align(x)
+  ))
 }
 
+
+#' @rdname data_codebook
 #' @export
-print_html.data_cookbook <- function(x, ...) {
+print_html.data_codebook <- function(x,
+                                     font_size = "100%",
+                                     line_padding = 3,
+                                     row_color = "#eeeeee",
+                                     ...) {
+  insight::check_if_installed("gt")
   caption <- .get_codebook_caption(x)
   attr(x, "table_caption") <- caption
-  insight::export_table(x, title = caption, format = "html")
+  # since we have each value at its own row, the HTML table contains
+  # horizontal borders for each cell/row. We want to remove those borders
+  # from rows that actually belong to one variable
+  separator_lines <- NULL
+  # x$ID contains a single "" for separator lines (i.e. where a new variable
+  # starts), but multiple consecutive "" for one variable with multiple values
+  # (i.e. multiple rows). We want to know which ones are just separator lines...
+  for (i in 1:(length(x$ID) - 1)) {
+    if (x$ID[i] == "" && x$ID[i + 1] != "") {
+      separator_lines <- c(separator_lines, i)
+    }
+  }
+  # remove separator lines, as we don't need these for HTML tables
+  x <- x[-separator_lines, ]
+  # check row IDs, and find odd rows
+  odd_rows <- (x$.row_id %% 2 == 1)
+  x$.row_id <- NULL
+  # create basic table
+  out <- insight::export_table(
+    format(x),
+    title = caption,
+    format = "html",
+    align = .get_codebook_align(x)
+  )
+  # no border for rows which are not separator lines
+  out <- gt::tab_style(
+    out,
+    style = list(gt::cell_borders(sides = "top", style = "hidden")),
+    locations = gt::cells_body(rows = which(x$ID == ""))
+  )
+  # highlight odd rows
+  if (!is.null(row_color)) {
+    out <- gt::tab_style(
+      out,
+      style = list(gt::cell_fill(color = row_color)),
+      locations = gt::cells_body(rows = odd_rows)
+    )
+  }
+  # set up additonal HTML options
+  gt::tab_options(out,
+    table.font.size = font_size,
+    data_row.padding = gt::px(line_padding)
+  )
 }
 
+
 #' @export
-print_md.data_cookbook <- function(x, ...) {
+print_md.data_codebook <- function(x, ...) {
   caption <- .get_codebook_caption(x)
+  x$.row_id <- NULL
   attr(x, "table_caption") <- caption
-  insight::export_table(x, title = caption, format = "markdown")
+  insight::export_table(format(x),
+    title = caption,
+    align = .get_codebook_align(x),
+    format = "markdown"
+  )
 }
 
 
 # helper ---------
 
 .get_codebook_caption <- function(x) {
+  n_rows <- as.character(attributes(x)$n_rows)
+  if (nchar(n_rows) > 5) {
+    n_rows <- prettyNum(n_rows, big.mark = ",")
+  }
   sprintf(
-    "%s (%i rows and %i variables, %i shown)",
+    "%s (%s rows and %i variables, %i shown)",
     attributes(x)$data_name,
-    attributes(x)$n_rows,
+    n_rows,
     attributes(x)$n_cols,
     attributes(x)$n_shown
   )
+}
+
+.get_codebook_align <- function(x) {
+  align <- c(
+    "ID" = "l", "Name" = "l", "Label" = "l", "Type" = "l", "Missings" = "r",
+    "Values" = "r", "Value Labels" = "l", "N" = "r"
+  )
+  align <- align[colnames(x)]
+  paste0(unname(align), collapse = "")
 }
