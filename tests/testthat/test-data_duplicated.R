@@ -36,14 +36,13 @@ test_that("data_duplicated basic", {
     expected1)
 })
 
-# Unquoting not working... 🤔
-# test_that("data_duplicated unquoted", {
-#   x <- data_duplicated(df1, select = id)
-#   rownames(x) <- NULL
-#   expect_equal(
-#     x,
-#     expected1)
-# })
+test_that("data_duplicated unquoted", {
+  x <- data_duplicated(df1, select = id)
+  rownames(x) <- NULL
+  expect_equal(
+    x,
+    expected1)
+})
 
 test_that("data_duplicated vector", {
   x <- data_duplicated(df1, select = 1)
@@ -53,14 +52,13 @@ test_that("data_duplicated vector", {
     expected1)
 })
 
-# Select helper not working... 🤔
-# test_that("data_duplicated select-helper", {
-#   x <- data_duplicated(df1, select = contains("id"))
-#   rownames(x) <- NULL
-#   expect_equal(
-#     x,
-#     expected1)
-# })
+test_that("data_duplicated select-helper", {
+  x <- data_duplicated(df1, select = contains("id"))
+  rownames(x) <- NULL
+  expect_equal(
+    x,
+    expected1)
+})
 
 test_that("data_duplicated multiple IDs", {
   x <- data_duplicated(df1, select = c("id", "year"))

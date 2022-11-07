@@ -33,16 +33,20 @@
 
 data_duplicated <- function(data, select) {
 
+  select <- .select_nse(select,
+    data,
+    exclude = NULL,
+    ignore_case = TRUE
+  )
+
   data$temporary_id <- do.call(paste, c(data_select(data, select), sep = "_"))
 
-  Row <- seq_len(nrow(data))
-  data <- cbind(Row, data)
+  data <- cbind(Row = seq_len(nrow(data)), data)
   dups.index <- data$temporary_id %in% data$temporary_id[duplicated(data$temporary_id)]
   dups <- data[dups.index, ]
-  dups.n <- sum(duplicated(dups$temporary_id))
   dups$count_na <- rowSums(is.na(dups))
   dups <- data_arrange(dups, "temporary_id")
-  dups <- data_select(dups, exclude = "temporary_id")
+  dups <- data_remove(dups, "temporary_id")
   dups
 
 }
