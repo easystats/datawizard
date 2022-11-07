@@ -216,3 +216,51 @@ test_that("data_codebook labelled data exceptions", {
     )
   )
 })
+
+
+test_that("data_codebook labelled data factors", {
+  set.seed(123)
+
+  f1 <- factor(sample(c("c", "b", "a"), 100, TRUE))
+  attr(f1, "labels") <- setNames(c("c", "b", "a"), c("Cee", "Bee", "A"))
+
+  f2 <- factor(sample(c("a", "b", "c"), 100, TRUE))
+  attr(f2, "labels") <- setNames(c("c", "b", "a"), c("Cee", "Bee", "A"))
+
+  f3 <- factor(sample(c("c", "b", "a"), 100, TRUE))
+  attr(f3, "labels") <- setNames(c("a", "c", "b"), c("A", "Cee", "Bee"))
+
+  d <- data.frame(f1, f2, f3)
+  x <- data_codebook(d)
+
+  expect_equal(
+    x$Values,
+    c(names(table(f1)), "", names(table(f2)), "", names(table(f3)), "")
+  )
+  expect_equal(
+    x$N,
+    as.character(c(table(f1), "", table(f2), "", table(f3), ""))
+  )
+  out <- capture.output(x)
+  expect_equal(
+    out,
+    c(
+      "d (total N=100)",
+      "",
+      "ID | Name |        Type | missings | Values | Value Labels |  N",
+      "---+------+-------------+----------+--------+--------------+---",
+      "1  |   f1 | categorical | 0 (0.0%) |      a |            A | 35",
+      "   |      |             |          |      b |          Bee | 32",
+      "   |      |             |          |      c |          Cee | 33",
+      "---+------+-------------+----------+--------+--------------+---",
+      "2  |   f2 | categorical | 0 (0.0%) |      a |            A | 30",
+      "   |      |             |          |      b |          Bee | 38",
+      "   |      |             |          |      c |          Cee | 32",
+      "---+------+-------------+----------+--------+--------------+---",
+      "3  |   f3 | categorical | 0 (0.0%) |      a |            A | 23",
+      "   |      |             |          |      b |          Bee | 28",
+      "   |      |             |          |      c |          Cee | 49",
+      "---------------------------------------------------------------"
+    )
+  )
+})
