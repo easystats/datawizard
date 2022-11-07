@@ -52,6 +52,7 @@ data_codebook <- function(data,
     }
   }
 
+  # needed for % NA
   rows <- nrow(data)
   max_values <- max_values + 1
 
@@ -103,7 +104,8 @@ data_codebook <- function(data,
     unique_values <- unique(x)
     unique_values <- unique_values[!is.na(unique_values)]
 
-    # check if there are value labels or factor levels, and extract values and N
+    # handle labelled data - check if there are value labels or factor levels,
+    # and extract values and N
     if (!is.null(vallab) && length(vallab)) {
       # if not all values are labelled, fill in value labels
       if (!all(unique_values %in% vallab)) {
@@ -122,10 +124,14 @@ data_codebook <- function(data,
       value_labels <- names(vallab)[order(unname(vallab))]
       values <- sort(unname(vallab))
       frq <- tabulate(x)
+
+    # handle factors
     } else if (is.factor(x)) {
       values <- levels(x)
       value_labels <- NA
       frq <- tabulate(x)
+
+    # handle numerics
     } else {
       value_labels <- NA
       r <- range(x, na.rm = TRUE)
