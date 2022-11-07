@@ -8,7 +8,8 @@ data_codebook(
   data,
   select = NULL,
   exclude = NULL,
-  label_width = NULL,
+  variable_label_width = NULL,
+  value_label_width = NULL,
   max_values = 10,
   ignore_case = FALSE,
   regex = FALSE,
@@ -55,9 +56,12 @@ return \code{"Species"}.}
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
 excludes no columns.}
 
-\item{label_width}{Length of variable labels. Longer labels will be wrapped
-at \code{label_width} chars. If \code{NULL}, longer labels will not be split into
-multiple lines.}
+\item{variable_label_width}{Length of variable labels. Longer labels will be
+wrapped at \code{variable_label_width} chars. If \code{NULL}, longer labels will not
+be split into multiple lines.}
+
+\item{value_label_width}{Length of value labels. Longer labels will be
+shortened, where the remaining part is truncated.}
 
 \item{max_values}{Number of maximum values that should be displayed. Can be
 used to avoid too many rows when variables have lots of unique values.}

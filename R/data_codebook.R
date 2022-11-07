@@ -3,9 +3,11 @@
 #' `data_codebook()` does...
 #'
 #' @param data A data frame, or an object that can be coerced to a data frame.
-#' @param label_width Length of variable labels. Longer labels will be wrapped
-#' at `label_width` chars. If `NULL`, longer labels will not be split into
-#' multiple lines.
+#' @param variable_label_width Length of variable labels. Longer labels will be
+#' wrapped at `variable_label_width` chars. If `NULL`, longer labels will not
+#' be split into multiple lines.
+#' @param value_label_width Length of value labels. Longer labels will be
+#' shortened, where the remaining part is truncated.
 #' @param max_values Number of maximum values that should be displayed. Can be
 #' used to avoid too many rows when variables have lots of unique values.
 #' @inheritParams standardize.data.frame
@@ -23,7 +25,8 @@
 data_codebook <- function(data,
                           select = NULL,
                           exclude = NULL,
-                          label_width = NULL,
+                          variable_label_width = NULL,
+                          value_label_width = NULL,
                           max_values = 10,
                           ignore_case = FALSE,
                           regex = FALSE,
@@ -64,10 +67,10 @@ data_codebook <- function(data,
 
     # inital data frame for codebook
     d <- data.frame(
-      ID = id,
+      ID = which(colnames(data) == select[id]),
       Name = select[id],
       Type = .variable_type(x),
-      missings = sprintf("%g (%.1f%%)", sum(x_na), 100 * (sum(x_na) / rows)),
+      Missings = sprintf("%g (%.1f%%)", sum(x_na), 100 * (sum(x_na) / rows)),
       stringsAsFactors = FALSE,
       row.names = NULL,
       check.names = FALSE
@@ -78,9 +81,9 @@ data_codebook <- function(data,
     if (!is.null(varlab) && length(varlab)) {
       variable_label <- varlab
       # if variable labels are too long, split into multiple elements
-      if (!is.null(label_width) && nchar(variable_label) > label_width) {
+      if (!is.null(variable_label_width) && nchar(variable_label) > variable_label_width) {
         variable_label <- insight::trim_ws(unlist(strsplit(
-          text_wrap(variable_label, width = label_width),
+          text_wrap(variable_label, width = variable_label_width),
           "\n",
           fixed = TRUE
         )))
@@ -166,11 +169,16 @@ data_codebook <- function(data,
       variable_label <- variable_label[seq_along(frq)]
     }
 
+    # shorten value labels
+    if (!is.null(value_label_width)) {
+      value_labels <- insight::format_string(value_labels, length = value_label_width)
+    }
+
     # add values, value labels and frequencies to data frame
     d <- cbind(d, data.frame(variable_label, values, value_labels, frq, stringsAsFactors = FALSE))
 
     # which columns need to be checked for duplicates?
-    duplicates <- c("ID", "Name", "Type", "missings", "variable_label")
+    duplicates <- c("ID", "Name", "Type", "Missings", "variable_label")
     if (isTRUE(flag_range)) {
       # when we have numeric variables with value range as values, and when
       # these variables had long variable labels that have been wrapped,
@@ -203,6 +211,10 @@ data_codebook <- function(data,
 
   # remove all empty columns
   out <- remove_empty_columns(out)
+
+  # reorder
+  column_order <- c("ID", "Name", "Label", "Type", "Missings", "Values", "Value Labels", "N")
+  out <- out[union(intersect(column_order, names(out)), names(out))]
 
   attr(out, "data_name") <- data_name
   attr(out, "total_n") <- nrow(data)
