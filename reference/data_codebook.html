@@ -203,14 +203,25 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A data frame.</p>
+<p>A formatted data frame, summarizing the content of the data frame.
+Returned columns include the column index of the variables in the original
+data frame (<code>ID</code>), column name, variable label (if data is labelled), type
+of variable, number of missing values, unique values (or value range),
+value labels (for labelled data), and a frequency table (N for each value).
+Most columns are formatted as character vectors.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>There are methods to <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> the data frame in a nicer output, as
+well methods for printing in markdown or HTML format (<code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md()</a></code> and
+<code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_html()</a></code>).</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">data_codebook</span><span class="op">(</span><span class="va">iris</span>, select <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"Sepal"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iris (total N=150)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iris (150 rows and 5 variables, 2 shown)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ID |         Name |    Type | Missings |     Values |   N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---+--------------+---------+----------+------------+----</span>
@@ -221,7 +232,7 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">efc</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">data_codebook</span><span class="op">(</span><span class="va">efc</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> efc (total N=100)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> efc (100 rows and 5 variables, 5 shown)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ID |     Name |                                    Label |        Type |   Missings |   Values |                    Value Labels |  N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+-------------+------------+----------+---------------------------------+---</span>
@@ -244,7 +255,7 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># shorten labels</span></span></span>
 <span class="r-in"><span><span class="fu">data_codebook</span><span class="op">(</span><span class="va">efc</span>, variable_label_width <span class="op">=</span> <span class="fl">20</span>, value_label_width <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> efc (total N=100)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> efc (100 rows and 5 variables, 5 shown)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ID |     Name |              Label |        Type |   Missings |   Values |     Value Labels |  N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+--------------------+-------------+------------+----------+------------------+---</span>
@@ -271,7 +282,7 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
 <span class="r-in"><span><span class="co"># automatic range for numerics at more than 5 unique values</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">data_codebook</span><span class="op">(</span><span class="va">mtcars</span>, select <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"c"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mtcars (total N=32)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mtcars (32 rows and 11 variables, 2 shown)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ID | Name |    Type | Missings | Values |  N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---+------+---------+----------+--------+---</span>
@@ -284,7 +295,7 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># force all values to be displayed</span></span></span>
 <span class="r-in"><span><span class="fu">data_codebook</span><span class="op">(</span><span class="va">mtcars</span>, select <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"c"</span><span class="op">)</span>, range_at <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mtcars (total N=32)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mtcars (32 rows and 11 variables, 2 shown)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ID | Name |    Type | Missings | Values |  N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---+------+---------+----------+--------+---</span>
