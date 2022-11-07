@@ -272,6 +272,7 @@ data_codebook <- function(data,
 
 #' @export
 format.data_codebook <- function(x, ...) {
+  # use [["N"]] to avoid partial matching
   if (any(stats::na.omit(nchar(x[["N"]]) > 5))) {
     x[["N"]] <- insight::trim_ws(prettyNum(x[["N"]], big.mark = ","))
     x[["N"]][x[["N"]] == "NA"] <- ""
