@@ -45,6 +45,7 @@ Suggests:
     effectsize,
     gamm4,
     ggplot2,
+    gt,
     haven,
     htmltools,
     httr,
