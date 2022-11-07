@@ -11,6 +11,7 @@ data_codebook(
   variable_label_width = NULL,
   value_label_width = NULL,
   max_values = 10,
+  range_at = 6,
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
@@ -66,6 +67,12 @@ shortened, where the remaining part is truncated.}
 \item{max_values}{Number of maximum values that should be displayed. Can be
 used to avoid too many rows when variables have lots of unique values.}
 
+\item{range_at}{Indicates how many unique values in a numeric vector are
+needed in order to print a range for that variable instead of a frequency
+table for all numeric values. Can be useful if the data contains numeric
+variables with only a few unique values and where full frequency tables
+instead of value ranges should be displayed.}
+
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
@@ -95,4 +102,14 @@ data_codebook(iris, select = starts_with("Sepal"))
 
 data(efc)
 data_codebook(efc)
+
+# shorten labels
+data_codebook(efc, variable_label_width = 20, value_label_width = 15)
+
+# automatic range for numerics at more than 5 unique values
+data(mtcars)
+data_codebook(mtcars, select = starts_with("c"))
+
+# force all values to be displayed
+data_codebook(mtcars, select = starts_with("c"), range_at = 100)
 }

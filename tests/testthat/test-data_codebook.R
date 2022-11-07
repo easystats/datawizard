@@ -184,6 +184,60 @@ test_that("data_codebook truncated data", {
 })
 
 
+test_that("data_codebook mixed numeric lengths", {
+  set.seed(123)
+  d <- data.frame(
+    a = sample(1:4, 100, TRUE),
+    b = sample(5:15, 100, TRUE),
+    stringsAsFactors = FALSE
+  )
+  x <- data_codebook(d)
+  expect_equal(dim(x), c(7, 6))
+  out <- capture.output(x)
+  expect_equal(
+    out,
+    c(
+      "d (total N=100)",
+      "",
+      "ID | Name |    Type | Missings |  Values |   N",
+      "---+------+---------+----------+---------+----",
+      "1  |    a | integer | 0 (0.0%) |       1 |  28",
+      "   |      |         |          |       2 |  26",
+      "   |      |         |          |       3 |  29",
+      "   |      |         |          |       4 |  17",
+      "---+------+---------+----------+---------+----",
+      "2  |    b | integer | 0 (0.0%) | [5, 15] | 100",
+      "----------------------------------------------"
+    )
+  )
+})
+
+test_that("data_codebook mixed range_at", {
+  set.seed(123)
+  d <- data.frame(
+    a = sample(1:4, 100, TRUE),
+    b = sample(5:15, 100, TRUE),
+    stringsAsFactors = FALSE
+  )
+  x <- data_codebook(d, range_at = 3)
+  expect_equal(dim(x), c(4, 6))
+  out <- capture.output(x)
+  expect_equal(
+    out,
+    c(
+      "d (total N=100)",
+      "",
+      "ID | Name |    Type | Missings |  Values |   N",
+      "---+------+---------+----------+---------+----",
+      "1  |    a | integer | 0 (0.0%) |  [1, 4] | 100",
+      "---+------+---------+----------+---------+----",
+      "2  |    b | integer | 0 (0.0%) | [5, 15] | 100",
+      "----------------------------------------------"
+    )
+  )
+})
+
+
 test_that("data_codebook logicals", {
   set.seed(123)
   d <- data.frame(
