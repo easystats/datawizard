@@ -2,6 +2,7 @@
 % Please edit documentation in R/data_codebook.R
 \name{data_codebook}
 \alias{data_codebook}
+\alias{print_html.data_codebook}
 \title{Generate a codebook of a data frame.}
 \usage{
 data_codebook(
@@ -15,6 +16,14 @@ data_codebook(
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
+  ...
+)
+
+\method{print_html}{data_codebook}(
+  x,
+  font_size = "100\%",
+  line_padding = 3,
+  row_color = "#eeeeee",
   ...
 )
 }
@@ -90,6 +99,15 @@ functions (see 'Details'), this argument may be used as workaround.}
 \item{verbose}{Toggle warnings and messages on or off.}
 
 \item{...}{Arguments passed to or from other methods.}
+
+\item{x}{A (grouped) data frame, a vector or a statistical model (for
+\code{unstandardize()} cannot be a model).}
+
+\item{font_size}{For HTML tables, the font size.}
+
+\item{line_padding}{For HTML tables, the distance (in pixel) between lines.}
+
+\item{row_color}{For HTML tables, the fill color for odd rows.}
 }
 \value{
 A formatted data frame, summarizing the content of the data frame.

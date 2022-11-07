@@ -18,6 +18,9 @@
 #' instead of value ranges should be displayed.
 #' @param max_values Number of maximum values that should be displayed. Can be
 #' used to avoid too many rows when variables have lots of unique values.
+#' @param font_size For HTML tables, the font size.
+#' @param line_padding For HTML tables, the distance (in pixel) between lines.
+#' @param row_color For HTML tables, the fill color for odd rows.
 #' @inheritParams standardize.data.frame
 #' @inheritParams find_columns
 #'
@@ -232,6 +235,9 @@ data_codebook <- function(data,
 
     # add empty row at the end, as separator
     d[nrow(d) + 1, ] <- rep("", ncol(d))
+
+    # add row ID
+    d$.row_id <- id
     d
   })
 
@@ -248,7 +254,7 @@ data_codebook <- function(data,
   out <- remove_empty_columns(out)
 
   # reorder
-  column_order <- c("ID", "Name", "Label", "Type", "Missings", "Values", "Value Labels", "N")
+  column_order <- c("ID", "Name", "Label", "Type", "Missings", "Values", "Value Labels", "N", ".row_id")
   out <- out[union(intersect(column_order, names(out)), names(out))]
 
   attr(out, "data_name") <- data_name
@@ -267,6 +273,7 @@ data_codebook <- function(data,
 #' @export
 print.data_codebook <- function(x, ...) {
   caption <- c(.get_codebook_caption(x), "blue")
+  x$.row_id <- NULL
   cat(insight::export_table(x,
     title = caption,
     empty_line = "-",
@@ -275,8 +282,13 @@ print.data_codebook <- function(x, ...) {
   ))
 }
 
+#' @rdname data_codebook
 #' @export
-print_html.data_codebook <- function(x, ...) {
+print_html.data_codebook <- function(x,
+                                     font_size = "100%",
+                                     line_padding = 3,
+                                     row_color = "#eeeeee",
+                                     ...) {
   insight::check_if_installed("gt")
   caption <- .get_codebook_caption(x)
   attr(x, "table_caption") <- caption
@@ -294,6 +306,10 @@ print_html.data_codebook <- function(x, ...) {
   }
   # remove separator lines, as we don't need these for HTML tables
   x <- x[-separator_lines, ]
+  # check row IDs, and find odd rows
+  odd_rows <- (x$.row_id %% 2 == 1)
+  x$.row_id <- NULL
+  # create basic table
   out <- insight::export_table(
     x,
     title = caption,
@@ -301,16 +317,30 @@ print_html.data_codebook <- function(x, ...) {
     align = .get_codebook_align(x)
   )
   # no border for rows which are not separator lines
-  gt::tab_style(
+  out <- gt::tab_style(
     out,
     style = list(gt::cell_borders(sides = "top", style = "hidden")),
     locations = gt::cells_body(rows = which(x$ID == ""))
+  )
+  # highlight odd rows
+  if (!is.null(row_color)) {
+    out <- gt::tab_style(
+      out,
+      style = list(gt::cell_fill(color = row_color)),
+      locations = gt::cells_body(rows = odd_rows)
+    )
+  }
+  # set up additonal HTML options
+  gt::tab_options(out,
+    table.font.size = font_size,
+    data_row.padding = gt::px(line_padding)
   )
 }
 
 #' @export
 print_md.data_codebook <- function(x, ...) {
   caption <- .get_codebook_caption(x)
+  x$.row_id <- NULL
   attr(x, "table_caption") <- caption
   insight::export_table(x,
     title = caption,

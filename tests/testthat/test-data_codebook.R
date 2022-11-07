@@ -3,8 +3,8 @@ data(iris)
 
 test_that("data_codebook iris", {
   x <- data_codebook(iris)
-  expect_equal(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N"))
-  expect_equal(dim(x), c(12, 6))
+  expect_equal(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N", ".row_id"))
+  expect_equal(dim(x), c(12, 7))
   out <- capture.output(x)
   expect_equal(
     out,
@@ -39,8 +39,8 @@ test_that("data_codebook iris, reordered", {
 
 test_that("data_codebook iris, select", {
   x <- data_codebook(iris, select = starts_with("Sepal"))
-  expect_equal(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N"))
-  expect_equal(dim(x), c(4, 6))
+  expect_equal(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N", ".row_id"))
+  expect_equal(dim(x), c(4, 7))
   out <- capture.output(x)
   expect_equal(
     out,
@@ -60,8 +60,8 @@ test_that("data_codebook iris, select", {
 
 test_that("data_codebook iris, select, ID", {
   x <- data_codebook(iris, select = starts_with("Petal"))
-  expect_equal(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N"))
-  expect_equal(dim(x), c(4, 6))
+  expect_equal(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N", ".row_id"))
+  expect_equal(dim(x), c(4, 7))
   out <- capture.output(x)
   expect_equal(
     out,
@@ -82,9 +82,9 @@ test_that("data_codebook iris, select, ID", {
 test_that("data_codebook efc", {
   x <- data_codebook(efc)
   expect_equal(colnames(x), c(
-    "ID", "Name", "Label", "Type", "Missings", "Values", "Value Labels", "N"
+    "ID", "Name", "Label", "Type", "Missings", "Values", "Value Labels", "N", ".row_id"
   ))
-  expect_equal(dim(x), c(16, 8))
+  expect_equal(dim(x), c(16, 9))
   out <- capture.output(x)
   expect_equal(
     out,
@@ -116,7 +116,7 @@ test_that("data_codebook efc", {
 
 test_that("data_codebook efc, variable_label_width", {
   x <- data_codebook(efc, variable_label_width = 30)
-  expect_equal(dim(x), c(17, 8))
+  expect_equal(dim(x), c(17, 9))
   out <- capture.output(x)
   expect_equal(
     out,
@@ -149,7 +149,7 @@ test_that("data_codebook efc, variable_label_width", {
 
 test_that("data_codebook efc, value_label_width", {
   x <- data_codebook(efc, variable_label_width = 30, value_label_width = 15)
-  expect_equal(dim(x), c(17, 8))
+  expect_equal(dim(x), c(17, 9))
   out <- capture.output(x)
   expect_equal(
     out,
@@ -188,8 +188,8 @@ test_that("data_codebook truncated data", {
     stringsAsFactors = FALSE
   )
   x <- data_codebook(d, max_values = 5)
-  expect_equal(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N"))
-  expect_equal(dim(x), c(9, 6))
+  expect_equal(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N", ".row_id"))
+  expect_equal(dim(x), c(9, 7))
   out <- capture.output(x)
   expect_equal(
     out,
@@ -220,7 +220,7 @@ test_that("data_codebook mixed numeric lengths", {
     stringsAsFactors = FALSE
   )
   x <- data_codebook(d)
-  expect_equal(dim(x), c(7, 6))
+  expect_equal(dim(x), c(7, 7))
   out <- capture.output(x)
   expect_equal(
     out,
@@ -248,7 +248,7 @@ test_that("data_codebook mixed range_at", {
     stringsAsFactors = FALSE
   )
   x <- data_codebook(d, range_at = 3)
-  expect_equal(dim(x), c(4, 6))
+  expect_equal(dim(x), c(4, 7))
   out <- capture.output(x)
   expect_equal(
     out,
