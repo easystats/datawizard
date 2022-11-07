@@ -8,8 +8,10 @@ data_codebook(
   data,
   select = NULL,
   exclude = NULL,
-  label_width = NULL,
+  variable_label_width = NULL,
+  value_label_width = NULL,
   max_values = 10,
+  range_at = 6,
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
@@ -55,12 +57,22 @@ return \code{"Species"}.}
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
 excludes no columns.}
 
-\item{label_width}{Length of variable labels. Longer labels will be wrapped
-at \code{label_width} chars. If \code{NULL}, longer labels will not be split into
-multiple lines.}
+\item{variable_label_width}{Length of variable labels. Longer labels will be
+wrapped at \code{variable_label_width} chars. If \code{NULL}, longer labels will not
+be split into multiple lines. Only applies to \emph{labelled data}.}
+
+\item{value_label_width}{Length of value labels. Longer labels will be
+shortened, where the remaining part is truncated. Only applies to
+\emph{labelled data} or factor levels.}
 
 \item{max_values}{Number of maximum values that should be displayed. Can be
 used to avoid too many rows when variables have lots of unique values.}
+
+\item{range_at}{Indicates how many unique values in a numeric vector are
+needed in order to print a range for that variable instead of a frequency
+table for all numeric values. Can be useful if the data contains numeric
+variables with only a few unique values and where full frequency tables
+instead of value ranges should be displayed.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
@@ -80,10 +92,20 @@ functions (see 'Details'), this argument may be used as workaround.}
 \item{...}{Arguments passed to or from other methods.}
 }
 \value{
-A data frame.
+A formatted data frame, summarizing the content of the data frame.
+Returned columns include the column index of the variables in the original
+data frame (\code{ID}), column name, variable label (if data is labelled), type
+of variable, number of missing values, unique values (or value range),
+value labels (for labelled data), and a frequency table (N for each value).
+Most columns are formatted as character vectors.
 }
 \description{
 \code{data_codebook()} does...
+}
+\note{
+There are methods to \code{print()} the data frame in a nicer output, as
+well methods for printing in markdown or HTML format (\code{print_md()} and
+\code{print_html()}).
 }
 \examples{
 data(iris)
@@ -91,4 +113,14 @@ data_codebook(iris, select = starts_with("Sepal"))
 
 data(efc)
 data_codebook(efc)
+
+# shorten labels
+data_codebook(efc, variable_label_width = 20, value_label_width = 15)
+
+# automatic range for numerics at more than 5 unique values
+data(mtcars)
+data_codebook(mtcars, select = starts_with("c"))
+
+# force all values to be displayed
+data_codebook(mtcars, select = starts_with("c"), range_at = 100)
 }

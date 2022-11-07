@@ -3,15 +3,32 @@
 #' `data_codebook()` does...
 #'
 #' @param data A data frame, or an object that can be coerced to a data frame.
-#' @param label_width Length of variable labels. Longer labels will be wrapped
-#' at `label_width` chars. If `NULL`, longer labels will not be split into
-#' multiple lines.
+#' @param variable_label_width Length of variable labels. Longer labels will be
+#' wrapped at `variable_label_width` chars. If `NULL`, longer labels will not
+#' be split into multiple lines. Only applies to _labelled data_.
+#' @param value_label_width Length of value labels. Longer labels will be
+#' shortened, where the remaining part is truncated. Only applies to
+#' _labelled data_ or factor levels.
+#' @param range_at Indicates how many unique values in a numeric vector are
+#' needed in order to print a range for that variable instead of a frequency
+#' table for all numeric values. Can be useful if the data contains numeric
+#' variables with only a few unique values and where full frequency tables
+#' instead of value ranges should be displayed.
 #' @param max_values Number of maximum values that should be displayed. Can be
 #' used to avoid too many rows when variables have lots of unique values.
 #' @inheritParams standardize.data.frame
 #' @inheritParams find_columns
 #'
-#' @return A data frame.
+#' @return A formatted data frame, summarizing the content of the data frame.
+#' Returned columns include the column index of the variables in the original
+#' data frame (`ID`), column name, variable label (if data is labelled), type
+#' of variable, number of missing values, unique values (or value range),
+#' value labels (for labelled data), and a frequency table (N for each value).
+#' Most columns are formatted as character vectors.
+#'
+#' @note There are methods to `print()` the data frame in a nicer output, as
+#' well methods for printing in markdown or HTML format (`print_md()` and
+#' `print_html()`).
 #'
 #' @examples
 #' data(iris)
@@ -19,12 +36,24 @@
 #'
 #' data(efc)
 #' data_codebook(efc)
+#'
+#' # shorten labels
+#' data_codebook(efc, variable_label_width = 20, value_label_width = 15)
+#'
+#' # automatic range for numerics at more than 5 unique values
+#' data(mtcars)
+#' data_codebook(mtcars, select = starts_with("c"))
+#'
+#' # force all values to be displayed
+#' data_codebook(mtcars, select = starts_with("c"), range_at = 100)
 #' @export
 data_codebook <- function(data,
                           select = NULL,
                           exclude = NULL,
-                          label_width = NULL,
+                          variable_label_width = NULL,
+                          value_label_width = NULL,
                           max_values = 10,
+                          range_at = 6,
                           ignore_case = FALSE,
                           regex = FALSE,
                           verbose = TRUE,
@@ -64,10 +93,10 @@ data_codebook <- function(data,
 
     # inital data frame for codebook
     d <- data.frame(
-      ID = id,
+      ID = which(colnames(data) == select[id]),
       Name = select[id],
       Type = .variable_type(x),
-      missings = sprintf("%g (%.1f%%)", sum(x_na), 100 * (sum(x_na) / rows)),
+      Missings = sprintf("%g (%.1f%%)", sum(x_na), 100 * (sum(x_na) / rows)),
       stringsAsFactors = FALSE,
       row.names = NULL,
       check.names = FALSE
@@ -78,9 +107,9 @@ data_codebook <- function(data,
     if (!is.null(varlab) && length(varlab)) {
       variable_label <- varlab
       # if variable labels are too long, split into multiple elements
-      if (!is.null(label_width) && nchar(variable_label) > label_width) {
+      if (!is.null(variable_label_width) && nchar(variable_label) > variable_label_width) {
         variable_label <- insight::trim_ws(unlist(strsplit(
-          text_wrap(variable_label, width = label_width),
+          text_wrap(variable_label, width = variable_label_width),
           "\n",
           fixed = TRUE
         )))
@@ -134,10 +163,17 @@ data_codebook <- function(data,
     # handle numerics
     } else {
       value_labels <- NA
-      r <- range(x, na.rm = TRUE)
-      values <- sprintf("[%g, %g]", r[1], r[2])
-      frq <- sum(!x_na)
-      flag_range <- length(variable_label) > 1
+      # only range for too many unique values
+      if (length(unique_values) >= range_at) {
+        r <- range(x, na.rm = TRUE)
+        values <- sprintf("[%g, %g]", r[1], r[2])
+        frq <- sum(!x_na)
+        flag_range <- length(variable_label) > 1
+      # if we have few values, we can print whole freq. table
+      } else {
+        values <- sort(unique_values)
+        frq <- tabulate(x)
+      }
     }
 
     # tabulate fills 0 for non-existend values, remove those
@@ -166,11 +202,16 @@ data_codebook <- function(data,
       variable_label <- variable_label[seq_along(frq)]
     }
 
+    # shorten value labels
+    if (!is.null(value_label_width)) {
+      value_labels <- insight::format_string(value_labels, length = value_label_width)
+    }
+
     # add values, value labels and frequencies to data frame
     d <- cbind(d, data.frame(variable_label, values, value_labels, frq, stringsAsFactors = FALSE))
 
     # which columns need to be checked for duplicates?
-    duplicates <- c("ID", "Name", "Type", "missings", "variable_label")
+    duplicates <- c("ID", "Name", "Type", "Missings", "variable_label")
     if (isTRUE(flag_range)) {
       # when we have numeric variables with value range as values, and when
       # these variables had long variable labels that have been wrapped,
@@ -204,8 +245,14 @@ data_codebook <- function(data,
   # remove all empty columns
   out <- remove_empty_columns(out)
 
+  # reorder
+  column_order <- c("ID", "Name", "Label", "Type", "Missings", "Values", "Value Labels", "N")
+  out <- out[union(intersect(column_order, names(out)), names(out))]
+
   attr(out, "data_name") <- data_name
-  attr(out, "total_n") <- nrow(data)
+  attr(out, "n_rows") <- nrow(data)
+  attr(out, "n_cols") <- ncol(data)
+  attr(out, "n_shown") <- length(select)
   class(out) <- c("data_cookbook", "data.frame")
 
   out
@@ -217,32 +264,33 @@ data_codebook <- function(data,
 
 #' @export
 print.data_cookbook <- function(x, ...) {
-  caption <- c(sprintf(
-    "%s (total N=%i)",
-    attributes(x)$data_name,
-    attributes(x)$total_n
-  ), "blue")
+  caption <- c(.get_codebook_caption(x), "blue")
   cat(insight::export_table(x, title = caption, empty_line = "-", cross = "+"))
 }
 
 #' @export
 print_html.data_cookbook <- function(x, ...) {
-  caption <- sprintf(
-    "%s (total N=%i)",
-    attributes(x)$data_name,
-    attributes(x)$total_n
-  )
+  caption <- .get_codebook_caption(x)
   attr(x, "table_caption") <- caption
   insight::export_table(x, title = caption, format = "html")
 }
 
 #' @export
 print_md.data_cookbook <- function(x, ...) {
-  caption <- sprintf(
-    "%s (total N=%i)",
-    attributes(x)$data_name,
-    attributes(x)$total_n
-  )
+  caption <- .get_codebook_caption(x)
   attr(x, "table_caption") <- caption
   insight::export_table(x, title = caption, format = "markdown")
+}
+
+
+# helper ---------
+
+.get_codebook_caption <- function(x) {
+  sprintf(
+    "%s (%i rows and %i variables, %i shown)",
+    attributes(x)$data_name,
+    attributes(x)$n_rows,
+    attributes(x)$n_cols,
+    attributes(x)$n_shown
+  )
 }
