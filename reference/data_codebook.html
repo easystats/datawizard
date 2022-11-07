@@ -110,6 +110,15 @@ labels, values or value range, frequencies, amount of missing values).</p>
 <span>  regex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for data_codebook</span></span>
+<span><span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_html</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  font_size <span class="op">=</span> <span class="st">"100%"</span>,</span>
+<span>  line_padding <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  row_color <span class="op">=</span> <span class="st">"#eeeeee"</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -203,6 +212,23 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
 
 <dt>...</dt>
 <dd><p>Arguments passed to or from other methods.</p></dd>
+
+
+<dt>x</dt>
+<dd><p>A (grouped) data frame, a vector or a statistical model (for
+<code><a href="standardize.html">unstandardize()</a></code> cannot be a model).</p></dd>
+
+
+<dt>font_size</dt>
+<dd><p>For HTML tables, the font size.</p></dd>
+
+
+<dt>line_padding</dt>
+<dd><p>For HTML tables, the distance (in pixel) between lines.</p></dd>
+
+
+<dt>row_color</dt>
+<dd><p>For HTML tables, the fill color for odd rows.</p></dd>
 
 </dl></div>
     <div class="section level2">
