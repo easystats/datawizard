@@ -7,7 +7,7 @@
 #' at `label_width` chars. If `NULL`, longer labels will not be split into
 #' multiple lines.
 #' @param max_values Number of maximum values that should be displayed. Can be
-#' used to avoid too many when variables have lots of unique values.
+#' used to avoid too many rows when variables have lots of unique values.
 #' @inheritParams standardize.data.frame
 #' @inheritParams find_columns
 #'
@@ -76,6 +76,7 @@ data_codebook <- function(data,
     varlab <- attr(x, "label", exact = TRUE)
     if (!is.null(varlab) && length(varlab)) {
       variable_label <- varlab
+      # if variable labels are too long, split into multiple elements
       if (!is.null(label_width) && nchar(variable_label) > label_width) {
         variable_label <- insight::trim_ws(unlist(strsplit(
           text_wrap(variable_label, width = label_width),
@@ -114,6 +115,10 @@ data_codebook <- function(data,
         not_needed <- setdiff(vallab, unique_values)
         vallab <- vallab[-not_needed]
       }
+      # we now should have the same length of value labels and labelled values
+      # which should also match the numberof unique values in the vector.
+      # "tabulate" creates frequency tables by sorting by values/levels, so
+      # we need to make sure that labels are also in sorted order.
       value_labels <- names(vallab)[order(unname(vallab))]
       values <- sort(unname(vallab))
       frq <- tabulate(x)
@@ -147,7 +152,10 @@ data_codebook <- function(data,
       values[max_values] <- "(...)"
     }
 
-    # make sure length recycling doesn't fail
+    # make sure length recycling doesn't fail, e.g. if we have split
+    # variable_label into two lines (i.e. vector of length 2), but we have
+    # 7 values in "frq", creating the data frame will fail. In this case,
+    # we have to make sure that recycling shorter vectors works.
     if (length(variable_label) > 1 && !flag_range) {
       variable_label <- variable_label[seq_along(frq)]
     }
@@ -160,7 +168,8 @@ data_codebook <- function(data,
     if (isTRUE(flag_range)) {
       # when we have numeric variables with value range as values, and when
       # these variables had long variable labels that have been wrapped,
-      # the range value is duplicated, so we need to fix this here.
+      # the range value is duplicated (due to recycling), so we need to fix
+      # this here.
       duplicates <- c(duplicates, c("values", "frq"))
     }
 

@@ -60,7 +60,7 @@ at \code{label_width} chars. If \code{NULL}, longer labels will not be split int
 multiple lines.}
 
 \item{max_values}{Number of maximum values that should be displayed. Can be
-used to avoid too many when variables have lots of unique values.}
+used to avoid too many rows when variables have lots of unique values.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
