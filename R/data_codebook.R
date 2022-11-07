@@ -270,9 +270,30 @@ print.data_cookbook <- function(x, ...) {
 
 #' @export
 print_html.data_cookbook <- function(x, ...) {
+  insight::check_if_installed("gt")
   caption <- .get_codebook_caption(x)
   attr(x, "table_caption") <- caption
-  insight::export_table(x, title = caption, format = "html")
+  out <- insight::export_table(x, title = caption, format = "html")
+  # since we have each value at its own row, the HTML table contains
+  # horizontal borders for each cell/row. We want to remove those borders
+  # from rows that actually belong to one variable
+  separator_lines <- NULL
+  # x$ID contains a single "" for separator lines (i.e. where a new variable
+  # starts), but multiple consecutive "" for one variable with multiple values
+  # (i.e. multiple rows). We want to know which one are just separator lines...
+  for (i in 2:(length(x$ID) - 1)) {
+    if (x$ID[i] == "" && x$ID[i - 1] != "" && x$ID[i + 1] != "") {
+      separator_lines <- c(separator_lines, i)
+    }
+  }
+  # no border for rows which are not separator lines
+  no_border <- setdiff(which(x$ID == ""), separator_lines)
+  # print nicer table
+  gt::tab_style(
+    out,
+    style = list(gt::cell_borders(sides = "top", style = "hidden")),
+    locations = gt::cells_body(rows = no_border)
+  )
 }
 
 #' @export
