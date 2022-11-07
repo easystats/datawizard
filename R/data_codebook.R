@@ -271,16 +271,27 @@ data_codebook <- function(data,
 
 
 #' @export
+format.data_codebook <- function(x, ...) {
+  if (any(nchar(x[["N"]]) > 5)) {
+    x[["N"]] <- insight::trim_ws(prettyNum(x[["N"]], big.mark = ","))
+    x[["N"]][x[["N"]] == "NA"] <- ""
+  }
+  x
+}
+
+
+#' @export
 print.data_codebook <- function(x, ...) {
   caption <- c(.get_codebook_caption(x), "blue")
   x$.row_id <- NULL
-  cat(insight::export_table(x,
+  cat(insight::export_table(format(x),
     title = caption,
     empty_line = "-",
     cross = "+",
     align = .get_codebook_align(x)
   ))
 }
+
 
 #' @rdname data_codebook
 #' @export
@@ -311,7 +322,7 @@ print_html.data_codebook <- function(x,
   x$.row_id <- NULL
   # create basic table
   out <- insight::export_table(
-    x,
+    format(x),
     title = caption,
     format = "html",
     align = .get_codebook_align(x)
@@ -337,12 +348,13 @@ print_html.data_codebook <- function(x,
   )
 }
 
+
 #' @export
 print_md.data_codebook <- function(x, ...) {
   caption <- .get_codebook_caption(x)
   x$.row_id <- NULL
   attr(x, "table_caption") <- caption
-  insight::export_table(x,
+  insight::export_table(format(x),
     title = caption,
     align = .get_codebook_align(x),
     format = "markdown"
@@ -353,10 +365,14 @@ print_md.data_codebook <- function(x, ...) {
 # helper ---------
 
 .get_codebook_caption <- function(x) {
+  n_rows <- as.character(attributes(x)$n_rows)
+  if (nchar(n_rows) > 5) {
+    n_rows <- prettyNum(n_rows, big.mark = ",")
+  }
   sprintf(
-    "%s (%i rows and %i variables, %i shown)",
+    "%s (%s rows and %i variables, %i shown)",
     attributes(x)$data_name,
-    attributes(x)$n_rows,
+    n_rows,
     attributes(x)$n_cols,
     attributes(x)$n_shown
   )

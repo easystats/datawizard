@@ -402,3 +402,30 @@ test_that("data_codebook works with numbers < 1", {
     c("2", "2", "2", "", "1", "2", "2", "1", "")
   )
 })
+
+
+test_that("data_codebook, big marks", {
+  set.seed(123)
+  f1 <- factor(sample(c("c", "b", "a"), 1e6, TRUE))
+  f2 <- factor(sample(1:3, 1e6, TRUE))
+  d <- data.frame(f1, f2)
+  x <- data_codebook(d)
+  out <- capture.output(x)
+  expect_equal(
+    out,
+    c(
+      "d (1,000,000 rows and 2 variables, 2 shown)",
+      "",
+      "ID | Name | Type        | Missings | Values |       N",
+      "---+------+-------------+----------+--------+--------",
+      "1  | f1   | categorical | 0 (0.0%) |      a | 333,238",
+      "   |      |             |          |      b | 332,910",
+      "   |      |             |          |      c | 333,852",
+      "---+------+-------------+----------+--------+--------",
+      "2  | f2   | categorical | 0 (0.0%) |      1 | 333,285",
+      "   |      |             |          |      2 | 333,358",
+      "   |      |             |          |      3 | 333,357",
+      "-----------------------------------------------------"
+    )
+  )
+})
