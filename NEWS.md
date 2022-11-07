@@ -1,5 +1,9 @@
 # datawizard (devel)
 
+NEW FUNCTIONS
+
+* `data_codebook()`: to generate codebooks of data frames.
+
 MINOR CHANGES
 
 * `.data.frame` methods should now preserve custom attributes.
