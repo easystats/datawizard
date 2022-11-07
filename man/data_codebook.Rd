@@ -59,10 +59,11 @@ excludes no columns.}
 
 \item{variable_label_width}{Length of variable labels. Longer labels will be
 wrapped at \code{variable_label_width} chars. If \code{NULL}, longer labels will not
-be split into multiple lines.}
+be split into multiple lines. Only applies to \emph{labelled data}.}
 
 \item{value_label_width}{Length of value labels. Longer labels will be
-shortened, where the remaining part is truncated.}
+shortened, where the remaining part is truncated. Only applies to
+\emph{labelled data} or factor levels.}
 
 \item{max_values}{Number of maximum values that should be displayed. Can be
 used to avoid too many rows when variables have lots of unique values.}

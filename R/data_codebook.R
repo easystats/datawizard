@@ -5,9 +5,10 @@
 #' @param data A data frame, or an object that can be coerced to a data frame.
 #' @param variable_label_width Length of variable labels. Longer labels will be
 #' wrapped at `variable_label_width` chars. If `NULL`, longer labels will not
-#' be split into multiple lines.
+#' be split into multiple lines. Only applies to _labelled data_.
 #' @param value_label_width Length of value labels. Longer labels will be
-#' shortened, where the remaining part is truncated.
+#' shortened, where the remaining part is truncated. Only applies to
+#' _labelled data_ or factor levels.
 #' @param range_at Indicates how many unique values in a numeric vector are
 #' needed in order to print a range for that variable instead of a frequency
 #' table for all numeric values. Can be useful if the data contains numeric
