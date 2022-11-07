@@ -16,7 +16,7 @@ normalize()."><meta property="og:image" content="https://easystats.github.io/dat
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.3.4</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.3.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -146,15 +146,15 @@ counterpart, but only works for variables that have been normalized with
 
 
 <dt>include_bounds</dt>
-<dd><p>Numeric or logical. If logical and <code>TRUE</code>, return value
-may include 0 and 1; if <code>FALSE</code>, the return value is compressed, using
+<dd><p>Numeric or logical. Using this can be useful in case of
+beta-regression, where the response variable is not allowed to include
+zeros and ones. If <code>TRUE</code>, the input is normalized to a range that includes
+zero and one. If <code>FALSE</code>, the return value is compressed, using
 Smithson and Verkuilen's (2006) formula <code>(x * (n - 1) + 0.5) / n</code>, to avoid
-zeros and ones in the normalized variables. Else, if numeric,
+zeros and ones in the normalized variables. Else, if numeric (e.g., <code>0.001</code>),
 <code>include_bounds</code> defines the "distance" to the lower and upper bound, i.e.
 the normalized vectors are rescaled to a range from <code>0 + include_bounds</code> to
-<code>1 - include_bounds</code>. These approaches can be useful in case of
-beta-regression, where the response variable is not allowed to include
-zeros and ones.</p></dd>
+<code>1 - include_bounds</code>.</p></dd>
 
 
 <dt>verbose</dt>
