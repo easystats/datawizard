@@ -39,4 +39,7 @@ data_duplicated(df1, select = c("id", "year"))
 df2 <- df1[-c(1, 5),]
 df2
 }
+\seealso{
+\code{\link[=data_unique]{data_unique()}}
+}
 \keyword{duplicates}
