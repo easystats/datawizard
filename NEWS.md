@@ -4,7 +4,9 @@ NEW FUNCTIONS
 
 * `data_codebook()`: to generate codebooks of data frames.
 
-* New functions to deal with duplicates: `data_duplicated()` (keep all duplicates, including the first occurrence) and `data_unique()` (returns the data, excluding all duplicates except one instance of each, based on the selected method).
+* New functions to deal with duplicates: `data_duplicated()` (keep all duplicates,
+  including the first occurrence) and `data_unique()` (returns the data, excluding 
+  all duplicates except one instance of each, based on the selected method).
 
 MINOR CHANGES
 
