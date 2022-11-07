@@ -379,3 +379,26 @@ test_that("data_codebook labelled data factors", {
     )
   )
 })
+
+
+test_that("data_codebook works with numbers < 1", {
+  d <- data.frame(
+    a = c(1, 1, 2, 2, 3, 3),
+    b = c(0, 0, 0, 1, 1, 2)
+  )
+  out <- data_codebook(d)
+  expect_equal(
+    out$N,
+    c("2", "2", "2", "", "3", "2", "1", "")
+  )
+
+  d <- data.frame(
+    a = c(1, 1, 2, 2, 3, 3),
+    b = c(-1.3, 0.2, 0.2, 1, 1, 2)
+  )
+  out <- data_codebook(d)
+  expect_equal(
+    out$N,
+    c("2", "2", "2", "", "1", "2", "2", "1", "")
+  )
+})

@@ -157,7 +157,7 @@ data_codebook <- function(data,
       # we need to make sure that labels are also in sorted order.
       value_labels <- names(vallab)[order(unname(vallab))]
       values <- sort(unname(vallab))
-      frq <- tabulate(x)
+      frq <- tabulate(as.factor(x))
 
     # handle factors
     } else if (is.factor(x)) {
@@ -177,7 +177,7 @@ data_codebook <- function(data,
       # if we have few values, we can print whole freq. table
       } else {
         values <- sort(unique_values)
-        frq <- tabulate(x)
+        frq <- tabulate(as.factor(x))
       }
     }
 
