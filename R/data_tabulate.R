@@ -486,6 +486,7 @@ print_md.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
     "chr" = "character",
     "lbl" = "labelled",
     "cpl" = "complex",
+    "lgl" = "logical",
     vt
   )
 }
