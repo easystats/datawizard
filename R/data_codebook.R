@@ -19,7 +19,16 @@
 #' @inheritParams standardize.data.frame
 #' @inheritParams find_columns
 #'
-#' @return A data frame.
+#' @return A formatted data frame, summarizing the content of the data frame.
+#' Returned columns include the column index of the variables in the original
+#' data frame (`ID`), column name, variable label (if data is labelled), type
+#' of variable, number of missing values, unique values (or value range),
+#' value labels (for labelled data), and a frequency table (N for each value).
+#' Most columns are formatted as character vectors.
+#'
+#' @note There are methods to `print()` the data frame in a nicer output, as
+#' well methods for printing in markdown or HTML format (`print_md()` and
+#' `print_html()`).
 #'
 #' @examples
 #' data(iris)
@@ -241,7 +250,9 @@ data_codebook <- function(data,
   out <- out[union(intersect(column_order, names(out)), names(out))]
 
   attr(out, "data_name") <- data_name
-  attr(out, "total_n") <- nrow(data)
+  attr(out, "n_rows") <- nrow(data)
+  attr(out, "n_cols") <- ncol(data)
+  attr(out, "n_shown") <- length(select)
   class(out) <- c("data_cookbook", "data.frame")
 
   out
@@ -253,32 +264,33 @@ data_codebook <- function(data,
 
 #' @export
 print.data_cookbook <- function(x, ...) {
-  caption <- c(sprintf(
-    "%s (total N=%i)",
-    attributes(x)$data_name,
-    attributes(x)$total_n
-  ), "blue")
+  caption <- c(.get_codebook_caption(x), "blue")
   cat(insight::export_table(x, title = caption, empty_line = "-", cross = "+"))
 }
 
 #' @export
 print_html.data_cookbook <- function(x, ...) {
-  caption <- sprintf(
-    "%s (total N=%i)",
-    attributes(x)$data_name,
-    attributes(x)$total_n
-  )
+  caption <- .get_codebook_caption(x)
   attr(x, "table_caption") <- caption
   insight::export_table(x, title = caption, format = "html")
 }
 
 #' @export
 print_md.data_cookbook <- function(x, ...) {
-  caption <- sprintf(
-    "%s (total N=%i)",
-    attributes(x)$data_name,
-    attributes(x)$total_n
-  )
+  caption <- .get_codebook_caption(x)
   attr(x, "table_caption") <- caption
   insight::export_table(x, title = caption, format = "markdown")
+}
+
+
+# helper ---------
+
+.get_codebook_caption <- function(x) {
+  sprintf(
+    "%s (%i rows and %i variables, %i shown)",
+    attributes(x)$data_name,
+    attributes(x)$n_rows,
+    attributes(x)$n_cols,
+    attributes(x)$n_shown
+  )
 }

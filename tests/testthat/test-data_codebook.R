@@ -9,7 +9,7 @@ test_that("data_codebook iris", {
   expect_equal(
     out,
     c(
-      "iris (total N=150)",
+      "iris (150 rows and 5 variables, 5 shown)",
       "",
       "ID |         Name |        Type | Missings |     Values |   N",
       "---+--------------+-------------+----------+------------+----",
@@ -38,13 +38,34 @@ test_that("data_codebook iris, select", {
   expect_equal(
     out,
     c(
-      "iris (total N=150)",
+      "iris (150 rows and 5 variables, 2 shown)",
       "",
       "ID |         Name |    Type | Missings |     Values |   N",
       "---+--------------+---------+----------+------------+----",
       "1  | Sepal.Length | numeric | 0 (0.0%) | [4.3, 7.9] | 150",
       "---+--------------+---------+----------+------------+----",
       "2  |  Sepal.Width | numeric | 0 (0.0%) |   [2, 4.4] | 150",
+      "---------------------------------------------------------"
+    )
+  )
+})
+
+
+test_that("data_codebook iris, select, ID", {
+  x <- data_codebook(iris, select = starts_with("Petal"))
+  expect_equal(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N"))
+  expect_equal(dim(x), c(4, 6))
+  out <- capture.output(x)
+  expect_equal(
+    out,
+    c(
+      "iris (150 rows and 5 variables, 2 shown)",
+      "",
+      "ID |         Name |    Type | Missings |     Values |   N",
+      "---+--------------+---------+----------+------------+----",
+      "3  | Petal.Length | numeric | 0 (0.0%) |   [1, 6.9] | 150",
+      "---+--------------+---------+----------+------------+----",
+      "4  |  Petal.Width | numeric | 0 (0.0%) | [0.1, 2.5] | 150",
       "---------------------------------------------------------"
     )
   )
@@ -61,7 +82,7 @@ test_that("data_codebook efc", {
   expect_equal(
     out,
     c(
-      "efc (total N=100)",
+      "efc (100 rows and 5 variables, 5 shown)",
       "",
       "ID |     Name |                                    Label |        Type |   Missings |   Values |                    Value Labels |  N",
       "---+----------+------------------------------------------+-------------+------------+----------+---------------------------------+---",
@@ -93,7 +114,7 @@ test_that("data_codebook efc, variable_label_width", {
   expect_equal(
     out,
     c(
-      "efc (total N=100)",
+      "efc (100 rows and 5 variables, 5 shown)",
       "",
       "ID |     Name |                        Label |        Type |   Missings |   Values |                    Value Labels |  N",
       "---+----------+------------------------------+-------------+------------+----------+---------------------------------+---",
@@ -126,7 +147,7 @@ test_that("data_codebook efc, value_label_width", {
   expect_equal(
     out,
     c(
-      "efc (total N=100)",
+      "efc (100 rows and 5 variables, 5 shown)",
       "",
       "ID |     Name |                        Label |        Type |   Missings |   Values |     Value Labels |  N",
       "---+----------+------------------------------+-------------+------------+----------+------------------+---",
@@ -166,7 +187,7 @@ test_that("data_codebook truncated data", {
   expect_equal(
     out,
     c(
-      "d (total N=100)",
+       "d (100 rows and 2 variables, 2 shown)",
       "",
       "ID | Name |      Type | Missings |  Values |   N",
       "---+------+-----------+----------+---------+----",
@@ -197,7 +218,7 @@ test_that("data_codebook mixed numeric lengths", {
   expect_equal(
     out,
     c(
-      "d (total N=100)",
+       "d (100 rows and 2 variables, 2 shown)",
       "",
       "ID | Name |    Type | Missings |  Values |   N",
       "---+------+---------+----------+---------+----",
@@ -225,7 +246,7 @@ test_that("data_codebook mixed range_at", {
   expect_equal(
     out,
     c(
-      "d (total N=100)",
+       "d (100 rows and 2 variables, 2 shown)",
       "",
       "ID | Name |    Type | Missings |  Values |   N",
       "---+------+---------+----------+---------+----",
@@ -279,7 +300,7 @@ test_that("data_codebook labelled data exceptions", {
   expect_equal(
     out,
     c(
-      "d (total N=100)",
+      "d (100 rows and 3 variables, 3 shown)",
       "",
       "ID | Name |    Type |   Missings | Values | Value Labels |  N",
       "---+------+---------+------------+--------+--------------+---",
@@ -332,7 +353,7 @@ test_that("data_codebook labelled data factors", {
   expect_equal(
     out,
     c(
-      "d (total N=100)",
+      "d (100 rows and 3 variables, 3 shown)",
       "",
       "ID | Name |        Type | Missings | Values | Value Labels |  N",
       "---+------+-------------+----------+--------+--------------+---",

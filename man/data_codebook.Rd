@@ -92,10 +92,20 @@ functions (see 'Details'), this argument may be used as workaround.}
 \item{...}{Arguments passed to or from other methods.}
 }
 \value{
-A data frame.
+A formatted data frame, summarizing the content of the data frame.
+Returned columns include the column index of the variables in the original
+data frame (\code{ID}), column name, variable label (if data is labelled), type
+of variable, number of missing values, unique values (or value range),
+value labels (for labelled data), and a frequency table (N for each value).
+Most columns are formatted as character vectors.
 }
 \description{
 \code{data_codebook()} does...
+}
+\note{
+There are methods to \code{print()} the data frame in a nicer output, as
+well methods for printing in markdown or HTML format (\code{print_md()} and
+\code{print_html()}).
 }
 \examples{
 data(iris)
