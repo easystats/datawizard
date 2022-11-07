@@ -28,6 +28,12 @@
 
 data_unique <- function(data, select, keep = "best") {
 
+  select <- .select_nse(select,
+    data,
+    exclude = NULL,
+    ignore_case = TRUE
+  )
+
   # temporary_id <- paste0(sample(letters), collapse = "")
   data$temporary_id2 <- do.call(paste, c(data_select(data, select), sep = "_"))
 
@@ -36,17 +42,8 @@ data_unique <- function(data, select, keep = "best") {
   dups.n <- sum(duplicated(dups$temporary_id2))
   good.dups <- data_group(dups, "temporary_id2")
 
-  # Attempt at grouped dplyr::slice_min
   if (keep == "best") {
-    min.index <- NULL
-    for (i in unique(good.dups$temporary_id2)) {
-      index1 <- which(dups$temporary_id2 == i)
-      temp.data <- data_filter(dups, index1)
-      min.index[i] <- min(temp.data$count_na)
-      index2 <- which(dups$count_na == min.index[i])
-      temp.data <- data_filter(dups, index2)
-    }
-    good.dups <- temp.data
+    good.dups <- data_filter(good.dups, count_na == min(count_na))
   }
 
   if (keep != "last") {
@@ -64,7 +61,7 @@ data_unique <- function(data, select, keep = "best") {
 
   dup.msg <- sprintf("(%s duplicates removed, with method '%s')", dups.n, keep)
   dup.msg <- paste0(dup.msg, ifelse(dups.n != 69, "", " 69... nice"))
-  message(insight::format_message(dup.msg))
+  insight::format_alert(dup.msg)
   good.data
 
 }

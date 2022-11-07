@@ -63,11 +63,11 @@ test_that("data_unique basic method last", {
 })
 
 # Unquoting not working... 🤔
-# test_that("data_unique unquoted", {
-#   expect_equal(
-#     data_unique(df1, select = id),
-#     expected1)
-# })
+test_that("data_unique unquoted", {
+  expect_equal(
+    data_unique(df1, select = id),
+    expected1)
+})
 
 test_that("data_unique vector", {
   expect_equal(
@@ -76,11 +76,11 @@ test_that("data_unique vector", {
 })
 
 # Select helper not working... 🤔
-# test_that("data_unique select-helper", {
-#   expect_equal(
-#     data_unique(df1, select = contains("id")),
-#     expected1)
-# })
+test_that("data_unique select-helper", {
+  expect_equal(
+    data_unique(df1, select = contains("id")),
+    expected1)
+})
 
 test_that("data_unique multiple IDs", {
   x <- data_unique(df1, select = c("id", "year"))
