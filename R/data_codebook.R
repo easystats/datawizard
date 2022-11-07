@@ -1,6 +1,8 @@
 #' Generate a codebook of a data frame.
 #'
-#' `data_codebook()` does...
+#' `data_codebook()` generates codebooks from data frames, i.e. overviews
+#' of all variables and some more information about each variable (like
+#' labels, values or value range, frequencies, amount of missing values).
 #'
 #' @param data A data frame, or an object that can be coerced to a data frame.
 #' @param variable_label_width Length of variable labels. Longer labels will be
@@ -253,7 +255,7 @@ data_codebook <- function(data,
   attr(out, "n_rows") <- nrow(data)
   attr(out, "n_cols") <- ncol(data)
   attr(out, "n_shown") <- length(select)
-  class(out) <- c("data_cookbook", "data.frame")
+  class(out) <- c("data_codebook", "data.frame")
 
   out
 }
@@ -263,13 +265,13 @@ data_codebook <- function(data,
 
 
 #' @export
-print.data_cookbook <- function(x, ...) {
+print.data_codebook <- function(x, ...) {
   caption <- c(.get_codebook_caption(x), "blue")
   cat(insight::export_table(x, title = caption, empty_line = "-", cross = "+"))
 }
 
 #' @export
-print_html.data_cookbook <- function(x, ...) {
+print_html.data_codebook <- function(x, ...) {
   insight::check_if_installed("gt")
   caption <- .get_codebook_caption(x)
   attr(x, "table_caption") <- caption
@@ -297,7 +299,7 @@ print_html.data_cookbook <- function(x, ...) {
 }
 
 #' @export
-print_md.data_cookbook <- function(x, ...) {
+print_md.data_codebook <- function(x, ...) {
   caption <- .get_codebook_caption(x)
   attr(x, "table_caption") <- caption
   insight::export_table(x, title = caption, format = "markdown")

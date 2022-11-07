@@ -100,7 +100,9 @@ value labels (for labelled data), and a frequency table (N for each value).
 Most columns are formatted as character vectors.
 }
 \description{
-\code{data_codebook()} does...
+\code{data_codebook()} generates codebooks from data frames, i.e. overviews
+of all variables and some more information about each variable (like
+labels, values or value range, frequencies, amount of missing values).
 }
 \note{
 There are methods to \code{print()} the data frame in a nicer output, as
