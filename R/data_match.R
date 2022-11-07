@@ -169,7 +169,20 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
 #' @rdname data_match
 #' @export
 data_filter <- function(x, filter, ...) {
+  UseMethod("data_filter")
+}
+
+#' @export
+data_filter.data.frame <- function(x, filter, ...) {
   condition <- substitute(filter)
+
+  dots <- list(...)
+
+  # if called from data_filter.grouped_df, the substitute above just gets
+  # "filter" whereas it needs to pass the condition
+  if ("called_from_group" %in% names(dots) && dots$called_from_group) {
+    condition <- substitute(filter, env = parent.frame(3L))
+  }
 
   # condition can be a numeric vector, to slice rows by indices,
   # or a logical condition to filter observations. first, we check
@@ -196,10 +209,15 @@ data_filter <- function(x, filter, ...) {
       condition <- gsub(" \\}", "\\}", condition)
 
       curley_vars <- regmatches(condition, gregexpr("[^{\\}]+(?=\\})", condition, perl = TRUE))
-      curley_vars <- unlist(curley_vars)
+      curley_vars <- unique(unlist(curley_vars))
 
       for (i in curley_vars) {
-        token <- get(i, envir = parent.frame())
+        if (isTRUE(dots$called_from_group)) {
+          token <- get(i, envir = parent.frame(4L))
+        } else {
+          token <- get(i, envir = parent.frame())
+        }
+
         condition <- gsub(paste0("{", i, "}"), token, condition, fixed = TRUE)
       }
     }
@@ -223,6 +241,27 @@ data_filter <- function(x, filter, ...) {
 
   # add back custom attributes
   out <- .replace_attrs(out, attributes(x))
+  out
+}
+
+
+#' @export
+data_filter.grouped_df <- function(x, filter, ...) {
+
+  # works only for dplyr >= 0.8.0
+  grps <- attr(x, "groups", exact = TRUE)
+  grps <- grps[[".rows"]]
+
+  out <- lapply(grps, function(grp) {
+    data_filter.data.frame(x[grp, ], filter, called_from_group = TRUE, ...)
+  })
+
+  out <- do.call(rbind, out)
+
+  if (!insight::object_has_rownames(x)) {
+    rownames(out) <- NULL
+  }
+
   out
 }
 
