@@ -40,9 +40,8 @@ data_duplicated <- function(data, select) {
   dups.index <- data$temporary_id %in% data$temporary_id[duplicated(data$temporary_id)]
   dups <- data[dups.index, ]
   dups.n <- sum(duplicated(dups$temporary_id))
-  count_na <- function(x) sum(is.na(x))
-  dups$count_na <- apply(dups, 1, count_na)
-  dups <- dups[order(dups$temporary_id), ]
+  dups$count_na <- rowSums(is.na(dups))
+  dups <- data_arrange(dups, "temporary_id")
   dups <- data_select(dups, exclude = "temporary_id")
   dups
 
