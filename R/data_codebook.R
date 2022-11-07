@@ -60,7 +60,7 @@ data_codebook <- function(data,
                           regex = FALSE,
                           verbose = TRUE,
                           ...) {
-  data_name <- insight::safe_deparse_symbol(substitute(data))
+  data_name <- insight::safe_deparse(substitute(data))
 
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select,
@@ -267,7 +267,12 @@ data_codebook <- function(data,
 #' @export
 print.data_codebook <- function(x, ...) {
   caption <- c(.get_codebook_caption(x), "blue")
-  cat(insight::export_table(x, title = caption, empty_line = "-", cross = "+"))
+  cat(insight::export_table(x,
+    title = caption,
+    empty_line = "-",
+    cross = "+",
+    align = .get_codebook_align(x)
+  ))
 }
 
 #' @export
@@ -289,7 +294,12 @@ print_html.data_codebook <- function(x, ...) {
   }
   # remove separator lines, as we don't need these for HTML tables
   x <- x[-separator_lines, ]
-  out <- insight::export_table(x, title = caption, format = "html")
+  out <- insight::export_table(
+    x,
+    title = caption,
+    format = "html",
+    align = .get_codebook_align(x)
+  )
   # no border for rows which are not separator lines
   gt::tab_style(
     out,
@@ -302,7 +312,11 @@ print_html.data_codebook <- function(x, ...) {
 print_md.data_codebook <- function(x, ...) {
   caption <- .get_codebook_caption(x)
   attr(x, "table_caption") <- caption
-  insight::export_table(x, title = caption, format = "markdown")
+  insight::export_table(x,
+    title = caption,
+    align = .get_codebook_align(x),
+    format = "markdown"
+  )
 }
 
 
@@ -316,4 +330,13 @@ print_md.data_codebook <- function(x, ...) {
     attributes(x)$n_cols,
     attributes(x)$n_shown
   )
+}
+
+.get_codebook_align <- function(x) {
+  align <- c(
+    "ID" = "l", "Name" = "l", "Label" = "l", "Type" = "l", "Missings" = "r",
+    "Values" = "r", "Value Labels" = "l", "N" = "r"
+  )
+  align <- align[colnames(x)]
+  paste0(unname(align), collapse = "")
 }
