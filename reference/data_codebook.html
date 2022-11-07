@@ -152,12 +152,13 @@ excludes no columns.</p></dd>
 <dt>variable_label_width</dt>
 <dd><p>Length of variable labels. Longer labels will be
 wrapped at <code>variable_label_width</code> chars. If <code>NULL</code>, longer labels will not
-be split into multiple lines.</p></dd>
+be split into multiple lines. Only applies to <em>labelled data</em>.</p></dd>
 
 
 <dt>value_label_width</dt>
 <dd><p>Length of value labels. Longer labels will be
-shortened, where the remaining part is truncated.</p></dd>
+shortened, where the remaining part is truncated. Only applies to
+<em>labelled data</em> or factor levels.</p></dd>
 
 
 <dt>max_values</dt>
