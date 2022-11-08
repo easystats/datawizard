@@ -104,3 +104,12 @@ test_that("data_unique multiple IDs vector", {
     expected4)
 })
 
+test_that("data_unique preserve attributes", {
+  attr(df1, "testing") <- "custom.attribute"
+  x <- attributes(data_unique(df1, id))
+  expect_equal(
+    x$testing,
+    "custom.attribute")
+})
+
+
