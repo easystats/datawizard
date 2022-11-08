@@ -37,6 +37,28 @@ test_that("data_codebook iris, reordered", {
 })
 
 
+test_that("data_codebook NaN and Inf", {
+  d <- data.frame(
+    x = c(1, 4, NA, Inf, 4, NaN, 2, 1, 1)
+  )
+  x <- data_codebook(d)
+  out <- capture.output(x)
+  expect_equal(
+    out,
+    c(
+      "d (9 rows and 1 variables, 1 shown)",
+      "",
+      "ID | Name | Type    |  Missings | Values | N",
+      "---+------+---------+-----------+--------+--",
+      "1  | x    | numeric | 2 (22.2%) |      1 | 3",
+      "   |      |         |           |      2 | 1",
+      "   |      |         |           |      4 | 2",
+      "--------------------------------------------"
+    )
+  )
+})
+
+
 test_that("data_codebook iris, select", {
   x <- data_codebook(iris, select = starts_with("Sepal"))
   expect_equal(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N", ".row_id"))

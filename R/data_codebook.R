@@ -95,6 +95,7 @@ data_codebook <- function(data,
     # variable
     x <- data[[select[id]]]
     x_na <- is.na(x)
+    x_inf <- is.infinite(x)
 
     # inital data frame for codebook
     d <- data.frame(
@@ -129,14 +130,17 @@ data_codebook <- function(data,
     # save value labels
     vallab <- attr(x, "labels", exact = TRUE)
 
+    # remove NA and missings, for tabulate. as.factor() will convert NaN
+    # to "NaN", which we don't want here
+    x <- x[!(x_na | x_inf)]
+
+    # get unique values, to remove non labelled data
+    unique_values <- unique(x)
+
     # coerce to factor, for tabulate
     if (!is.numeric(x) && !is.factor(x)) {
       x <- as.factor(x)
     }
-
-    # get unique values, to remove non labelled data
-    unique_values <- unique(x)
-    unique_values <- unique_values[!is.na(unique_values)]
 
     # handle labelled data - check if there are value labels or factor levels,
     # and extract values and N
