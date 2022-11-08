@@ -178,7 +178,7 @@ data_codebook <- function(data,
       # only range for too many unique values
       if (length(unique_values) >= range_at) {
         r <- range(x, na.rm = TRUE)
-        values <- sprintf("[%g, %g]", r[1], r[2])
+        values <- sprintf("[%g, %g]", round(r[1], 2), round(r[2], 2))
         frq <- sum(!x_na)
         flag_range <- length(variable_label) > 1
       # if we have few values, we can print whole freq. table
@@ -261,7 +261,8 @@ data_codebook <- function(data,
   out <- remove_empty_columns(out)
 
   # reorder
-  column_order <- c("ID", "Name", "Label", "Type", "Missings", "Values", "Value Labels", "N", ".row_id")
+  column_order <- c("ID", "Name", "Label", "Type", "Missings", "Values",
+                    "Value Labels", "N", ".row_id")
   out <- out[union(intersect(column_order, names(out)), names(out))]
 
   attr(out, "data_name") <- data_name
@@ -314,15 +315,7 @@ print_html.data_codebook <- function(x,
   # since we have each value at its own row, the HTML table contains
   # horizontal borders for each cell/row. We want to remove those borders
   # from rows that actually belong to one variable
-  separator_lines <- NULL
-  # x$ID contains a single "" for separator lines (i.e. where a new variable
-  # starts), but multiple consecutive "" for one variable with multiple values
-  # (i.e. multiple rows). We want to know which ones are just separator lines...
-  for (i in 1:(length(x$ID) - 1)) {
-    if (x$ID[i] == "" && x$ID[i + 1] != "") {
-      separator_lines <- c(separator_lines, i)
-    }
-  }
+  separator_lines <- which(duplicated(x$.row_id) & x$N == "")
   # remove separator lines, as we don't need these for HTML tables
   x <- x[-separator_lines, ]
   # check row IDs, and find odd rows
