@@ -130,14 +130,17 @@ data_codebook <- function(data,
     # save value labels
     vallab <- attr(x, "labels", exact = TRUE)
 
-    # remove NA and missings, for tabulate. as.factor() will convert NaN
-    # to "NaN", which we don't want here
+    # remove NA and Inf, for tabulate(). as.factor() will convert NaN
+    # to a factor level "NaN", which we don't want here (same for Inf),
+    # because tabulate() will then return frequencies for that level, too
     x <- x[!(x_na | x_inf)]
 
     # get unique values, to remove non labelled data
     unique_values <- unique(x)
 
-    # coerce to factor, for tabulate
+    # coerce to factor, for tabulate(). We will coerce numerics to factor later
+    # which is required because tabulate() doesn't return frequencies for values
+    # lower than 1
     if (!is.numeric(x) && !is.factor(x)) {
       x <- as.factor(x)
     }
@@ -185,7 +188,7 @@ data_codebook <- function(data,
       }
     }
 
-    # tabulate fills 0 for non-existend values, remove those
+    # tabulate fills 0 for non-existing values, remove those
     frq <- frq[frq != 0]
 
     # make sure we have not too long rows, e.g. for variables that
