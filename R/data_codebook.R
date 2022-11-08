@@ -191,6 +191,15 @@ data_codebook <- function(data,
     # tabulate fills 0 for non-existing values, remove those
     frq <- frq[frq != 0]
 
+    # add Inf values?
+    if (any(x_inf) && length(frq) <= max_values) {
+      values <- c(values, Inf)
+      if (!is.na(value_labels)) {
+        value_labels <- c(value_labels, "infinite")
+      }
+      frq <- c(frq, sum(x_inf))
+    }
+
     # make sure we have not too long rows, e.g. for variables that
     # have dozens of unique values
     if (length(value_labels) > max_values) {
