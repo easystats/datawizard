@@ -46,11 +46,8 @@ data_unique <- function(data, select, keep = "best") {
     good.dups <- data_filter(good.dups, "count_na == min(count_na)")
   }
 
-  if (keep != "last") {
-    good.dups <- good.dups[!duplicated(good.dups$temporary_id2), ]
-  } else {
-    good.dups <- good.dups[duplicated(good.dups$temporary_id2), ]
-  }
+  good.dups <- good.dups[!duplicated(good.dups$temporary_id2,
+                                     fromLast = keep == "last"), ]
 
   good.dups <- data_select(good.dups, og.names)
   good.data <- data[!duplicated(data$temporary_id2), ]
