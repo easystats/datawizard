@@ -2,14 +2,14 @@
 % Please edit documentation in R/data_unique.R
 \name{data_unique}
 \alias{data_unique}
-\title{Keep only one row from all with duplicated temporary_id2s}
+\title{Keep only one row from all with duplicated IDs}
 \usage{
 data_unique(data, select, keep = "best")
 }
 \arguments{
 \item{data}{The data frame.}
 
-\item{select}{The id variable(s) for which to check for duplicates.}
+\item{select}{The ID variable(s) for which to check for duplicates.}
 
 \item{keep}{The method to be used for duplicate selection,
 either "best" (the default), "first", or "last".}
@@ -18,11 +18,11 @@ either "best" (the default), "first", or "last".}
 A dataframe, containing only the chosen duplicates.
 }
 \description{
-From all rows with at least one duplicated id,
-keep only one. keeps for selecting the duplicated row are
+From all rows with at least one duplicated ID,
+keep only one. Methods for selecting the duplicated row are
 either the first duplicate, the last duplicate, or the "best"
 duplicate (default), based on the duplicate with the smallest
-number of \code{NA} In case of ties, it picks the first
+number of \code{NA}. In case of ties, it picks the first
 duplicate, as it is the one most likely to be valid and
 authentic, given practice effects.
 }
@@ -35,4 +35,7 @@ df1 <- data.frame(
 )
 
 data_unique(df1, select = "id")
+}
+\seealso{
+\code{\link[=data_duplicated]{data_duplicated()}}
 }

@@ -43,7 +43,7 @@ data_unique <- function(data, select, keep = "best") {
   good.dups <- data_group(dups, "temporary_id2")
 
   if (keep == "best") {
-    good.dups <- data_filter(good.dups, count_na == min(count_na))
+    good.dups <- data_filter(good.dups, "count_na == min(count_na)")
   }
 
   if (keep != "last") {
