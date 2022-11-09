@@ -12,8 +12,7 @@ MINOR CHANGES
   value, defining the limit to the upper and lower bound (i.e. the distance
   to 1 and 0).
   
-* `data_filter()` now works with groups. For example, use `data_filter(data, x == min(x))` 
-  to keep the minimum value of `x` in each group.
+* `data_filter()` now works with grouped data. 
 
 BUG FIXES
 
