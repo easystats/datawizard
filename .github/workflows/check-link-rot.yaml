@@ -1,0 +1,14 @@
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+name: check-lint-rot
+
+jobs:
+  check-lint-rot:
+    uses: easystats/workflows/.github/workflows/check-link-rot.yaml@main
