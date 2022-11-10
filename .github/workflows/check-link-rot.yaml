@@ -7,5 +7,5 @@ on:
 name: check-lint-rot
 
 jobs:
-  # check-lint-rot:
+  check-lint-rot:
     uses: easystats/workflows/.github/workflows/check-link-rot.yaml@main
