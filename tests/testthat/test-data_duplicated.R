@@ -84,3 +84,21 @@ test_that("data_duplicated multiple IDs vector", {
     expected2)
 })
 
+test_that("data_unique works with groups", {
+  df <- data.frame(
+    g = c(1, 1, 2, 2),
+    x = c(1, 1, 2, 1)
+  )
+  df <- data_group(df, "g")
+
+  expected <- data.frame(
+    Row = 1:2,
+    g = c(1, 1),
+    x = c(1, 1),
+    count_na = c(0, 0)
+  )
+  expected <- data_group(expected, "g")
+
+  expect_identical(data_duplicated(df, "x"), expected, ignore_attr = TRUE)
+})
+

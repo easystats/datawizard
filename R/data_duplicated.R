@@ -31,7 +31,12 @@
 #' df2 <- df1[-c(1, 5),]
 #' df2
 
-data_duplicated <- function(data, select) {
+data_duplicated <- function(data, select = NULL) {
+  UseMethod("data_duplicated")
+}
+
+#' @export
+data_duplicated.data.frame <- function(data, select) {
 
   select <- .select_nse(select,
     data,
@@ -51,3 +56,24 @@ data_duplicated <- function(data, select) {
 
 }
 
+#' @export
+data_duplicated.grouped_df <- function(data, select = NULL) {
+
+  select <- .select_nse(select,
+                        data,
+                        exclude = NULL,
+                        ignore_case = TRUE
+  )
+
+  # works only for dplyr >= 0.8.0
+  grps <- attr(data, "groups", exact = TRUE)
+  grps <- grps[[".rows"]]
+
+  out <- lapply(grps, function(x) {
+    data_duplicated.data.frame(data[x, ], select = select)
+  })
+
+  out <- do.call(rbind, out)
+
+  out
+}

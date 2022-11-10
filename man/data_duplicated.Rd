@@ -4,7 +4,7 @@
 \alias{data_duplicated}
 \title{Extract all duplicates}
 \usage{
-data_duplicated(data, select)
+data_duplicated(data, select = NULL)
 }
 \arguments{
 \item{data}{The data frame.}
