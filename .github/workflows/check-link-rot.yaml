@@ -4,8 +4,8 @@ on:
   pull_request:
     branches: [main, master]
 
-name: check-lint-rot
+name: check-link-rot
 
 jobs:
-  check-lint-rot:
+  check-link-rot:
     uses: easystats/workflows/.github/workflows/check-link-rot.yaml@main
