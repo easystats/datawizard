@@ -12,6 +12,7 @@
 #' @param select The ID variable(s) for which to check for duplicates.
 #' @param keep The method to be used for duplicate selection,
 #' either "best" (the default), "first", or "last".
+#' @param verbose Toggle messages and warnings.
 #' @return A dataframe, containing only the chosen duplicates.
 #' @seealso
 #' [data_duplicated()]
@@ -26,7 +27,13 @@
 #'
 #' data_unique(df1, select = "id")
 
-data_unique <- function(data, select, keep = "best") {
+data_unique <- function(data, select = NULL, keep = "best", verbose = TRUE) {
+  UseMethod("data_unique")
+}
+
+
+#' @export
+data_unique.data.frame <- function(data, select, keep = "best", verbose = TRUE) {
 
   select <- .select_nse(select,
     data,
@@ -39,9 +46,18 @@ data_unique <- function(data, select, keep = "best") {
 
   og.names <- names(data)
   dups <- data_duplicated(data, "temporary_id2")
+
+  # if no duplicates, return the original data
+  if (nrow(dups) == 0L) {
+    data <- data_remove(data, "temporary_id2")
+    return(data)
+  }
+
+  # count number of duplicates
   dups.n <- sum(duplicated(dups$temporary_id2))
   good.dups <- data_group(dups, "temporary_id2")
 
+  # keep row that has the least duplicates
   if (keep == "best") {
     good.dups <- data_filter(good.dups, "count_na == min(count_na)")
   }
@@ -50,15 +66,43 @@ data_unique <- function(data, select, keep = "best") {
                                      fromLast = keep == "last"), ]
 
   good.dups <- data_select(good.dups, og.names)
-  good.data <- data[!duplicated(data$temporary_id2), ]
-  match.index <- good.data$temporary_id2 %in% good.dups$temporary_id2
-  good.data[match.index, ] <- good.dups
+  out <- data[!duplicated(data$temporary_id2), ]
+  match.index <- out$temporary_id2 %in% good.dups$temporary_id2
+  out[match.index, ] <- good.dups
 
-  good.data <- data_select(good.data, exclude = "temporary_id2")
+  # id is not useful anymore
+  out <- data_remove(out, "temporary_id2")
 
-  dup.msg <- sprintf("(%s duplicates removed, with method '%s')", dups.n, keep)
-  dup.msg <- paste0(dup.msg, ifelse(dups.n != 69, "", " 69... nice"))
-  insight::format_alert(dup.msg)
-  good.data
+  if (verbose) {
+    dup.msg <- sprintf("(%s duplicates removed, with method '%s')", dups.n, keep)
+    dup.msg <- paste0(dup.msg, ifelse(dups.n != 69, "", " 69... nice"))
+    insight::format_alert(dup.msg)
+  }
 
+  out
+
+}
+
+
+
+#' @export
+data_unique.grouped_df <- function(data, select = NULL, keep = "best", verbose = TRUE) {
+
+  select <- .select_nse(select,
+    data,
+    exclude = NULL,
+    ignore_case = TRUE
+  )
+
+  # works only for dplyr >= 0.8.0
+  grps <- attr(data, "groups", exact = TRUE)
+  grps <- grps[[".rows"]]
+
+  out <- lapply(grps, function(x) {
+    data_unique.data.frame(data[x, ], select = select, keep = keep, verbose = verbose)
+  })
+
+  out <- do.call(rbind, out)
+
+  out
 }

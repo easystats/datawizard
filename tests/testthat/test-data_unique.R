@@ -38,6 +38,18 @@ expected4 <- data.frame(
 
 # Testing
 
+test_that("data_unique returns original data if no duplicates", {
+  test <- data.frame(x = c(1, 2), y = c(3, 4))
+  expect_identical(
+    data_unique(test, c("x", "y")),
+    test
+  )
+  expect_identical(
+    data_unique(test, "x"),
+    test
+  )
+})
+
 test_that("data_unique basic", {
   expect_equal(
     data_unique(df1, select = "id"),
@@ -112,4 +124,24 @@ test_that("data_unique preserve attributes", {
     "custom.attribute")
 })
 
+test_that("data_unique, arg 'verbose' works", {
+  expect_silent(
+    data_unique(df1, select = ~ id + year, verbose = FALSE)
+  )
+})
 
+test_that("data_unique works with groups", {
+  df <- data.frame(
+    g = c(1, 1, 2, 2),
+    x = c(1, 1, 2, 1)
+  )
+  df <- data_group(df, "g")
+
+  expected <- data.frame(
+    g = c(1, 2, 2),
+    x = c(1, 2, 1)
+  )
+  expected <- data_group(expected, "g")
+
+  expect_identical(data_unique(df, "x"), expected, ignore_attr = TRUE)
+})

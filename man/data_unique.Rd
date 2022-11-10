@@ -4,7 +4,7 @@
 \alias{data_unique}
 \title{Keep only one row from all with duplicated IDs}
 \usage{
-data_unique(data, select, keep = "best")
+data_unique(data, select = NULL, keep = "best", verbose = TRUE)
 }
 \arguments{
 \item{data}{The data frame.}
@@ -13,6 +13,8 @@ data_unique(data, select, keep = "best")
 
 \item{keep}{The method to be used for duplicate selection,
 either "best" (the default), "first", or "last".}
+
+\item{verbose}{Toggle messages and warnings.}
 }
 \value{
 A dataframe, containing only the chosen duplicates.
