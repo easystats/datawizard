@@ -98,11 +98,16 @@ data_unique.grouped_df <- function(data, select = NULL, keep = "best", verbose =
   grps <- attr(data, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 
+  data2 <- data_ungroup(data)
+
   out <- lapply(grps, function(x) {
-    data_unique.data.frame(data[x, ], select = select, keep = keep, verbose = verbose)
+    data_unique.data.frame(data2[x, ], select = select, keep = keep, verbose = verbose)
   })
 
   out <- do.call(rbind, out)
+
+  class(out) <- class(data)
+  attr(out, "groups") <- attr(data, "groups")
 
   out
 }

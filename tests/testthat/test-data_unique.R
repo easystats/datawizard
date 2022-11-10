@@ -143,5 +143,12 @@ test_that("data_unique works with groups", {
   )
   expected <- data_group(expected, "g")
 
-  expect_identical(data_unique(df, "x"), expected, ignore_attr = TRUE)
+  x <- data_unique(df, "x")
+  expect_identical(x, expected, ignore_attr = TRUE)
+
+  y <- attributes(x)
+
+  expect_identical(attributes(df)$class, y$class)
+  expect_identical(attributes(df)$groups, y$groups)
 })
+
