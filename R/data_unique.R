@@ -8,6 +8,8 @@
 #' duplicate, as it is the one most likely to be valid and
 #' authentic, given practice effects.
 #'
+#' Contrarily to `dplyr::distinct()`, `data_unique()` keeps all columns.
+#'
 #' @param keep The method to be used for duplicate selection, either "best"
 #'   (the default), "first", or "last".
 #' @inheritParams find_columns
@@ -81,8 +83,12 @@ data_unique.data.frame <- function(data,
 
   good.dups <- data_select(good.dups, og.names)
   out <- data[!duplicated(data$temporary_id2), ]
-  match.index <- out$temporary_id2 %in% good.dups$temporary_id2
-  out[match.index, ] <- good.dups
+
+
+  if (keep != "first") {
+    match.index <- out$temporary_id2 %in% good.dups$temporary_id2
+    out[match.index, ] <- good.dups
+  }
 
   # id is not useful anymore
   out <- data_remove(out, "temporary_id2")
@@ -127,6 +133,10 @@ data_unique.grouped_df <- function(data,
   })
 
   out <- do.call(rbind, out)
+
+  if (!insight::object_has_rownames(data)) {
+    rownames(out) <- NULL
+  }
 
   class(out) <- class(data)
   attr(out, "groups") <- attr(data, "groups")
