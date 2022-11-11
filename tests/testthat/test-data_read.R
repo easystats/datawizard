@@ -77,9 +77,11 @@ test_that("data_read", {
   d <- data_read(temp_file)
   expect_identical(
     d,
-    data.frame(mpg = c(21, 21, 22.8),
-               cyl = c(6, 6, 4),
-               disp = c(160, 160, 108))
+    data.frame(
+      mpg = c(21, 21, 22.8),
+      cyl = c(6, 6, 4),
+      disp = c(160, 160, 108)
+    )
   )
 })
 
@@ -98,9 +100,11 @@ test_that("data_read", {
   d <- data_read(temp_file)
   expect_identical(
     d,
-    data.frame(mpg = c(21, 21, 22.8),
-               cyl = c(6, 6, 4),
-               disp = c(160, 160, 108))
+    data.frame(
+      mpg = c(21, 21, 22.8),
+      cyl = c(6, 6, 4),
+      disp = c(160, 160, 108)
+    )
   )
 })
 

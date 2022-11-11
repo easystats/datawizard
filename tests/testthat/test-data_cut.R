@@ -142,7 +142,6 @@ test_that("recode data frame", {
       1, 2, 1, 1
     )
   )
-
 })
 
 

@@ -91,7 +91,6 @@ data_codebook <- function(data,
   max_values <- max_values + 1
 
   out <- lapply(seq_along(select), function(id) {
-
     # variable
     x <- data[[select[id]]]
     x_na <- is.na(x)
@@ -166,13 +165,13 @@ data_codebook <- function(data,
       values <- sort(unname(vallab))
       frq <- tabulate(as.factor(x))
 
-    # handle factors
+      # handle factors
     } else if (is.factor(x)) {
       values <- levels(x)
       value_labels <- NA
       frq <- tabulate(x)
 
-    # handle numerics
+      # handle numerics
     } else {
       value_labels <- NA
       # only range for too many unique values
@@ -181,7 +180,7 @@ data_codebook <- function(data,
         values <- sprintf("[%g, %g]", round(r[1], 2), round(r[2], 2))
         frq <- sum(!x_na)
         flag_range <- length(variable_label) > 1
-      # if we have few values, we can print whole freq. table
+        # if we have few values, we can print whole freq. table
       } else {
         values <- sort(unique_values)
         frq <- tabulate(as.factor(x))
@@ -270,8 +269,10 @@ data_codebook <- function(data,
   out <- remove_empty_columns(out)
 
   # reorder
-  column_order <- c("ID", "Name", "Label", "Type", "Missings", "Values",
-                    "Value Labels", "N", ".row_id")
+  column_order <- c(
+    "ID", "Name", "Label", "Type", "Missings", "Values",
+    "Value Labels", "N", ".row_id"
+  )
   out <- out[union(intersect(column_order, names(out)), names(out))]
 
   attr(out, "data_name") <- data_name

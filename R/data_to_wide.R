@@ -171,7 +171,6 @@ data_to_wide <- function(data,
   # create missing combinations
 
   if (not_all_cols_are_selected && incomplete_groups) {
-
     expanded <- expand.grid(unique(new_data[["temporary_id"]]), unique(new_data[[names_from]]))
     names(expanded) <- c("temporary_id", names_from)
     new_data <- data_merge(new_data, expanded,
@@ -195,7 +194,8 @@ data_to_wide <- function(data,
     )
     lookup$temporary_id_2 <- seq_len(nrow(lookup))
     new_data <- data_merge(
-      new_data, lookup, by = "temporary_id", join = "left"
+      new_data, lookup,
+      by = "temporary_id", join = "left"
     )
 
     # creation of missing combinations was done with a temporary id, so need
@@ -245,8 +245,10 @@ data_to_wide <- function(data,
 
   # convert to wide format (returns the data and the order in which columns
   # should be ordered)
-  unstacked <- .unstack(new_data, names_from, values_from,
-                        names_sep, names_prefix, names_glue)
+  unstacked <- .unstack(
+    new_data, names_from, values_from,
+    names_sep, names_prefix, names_glue
+  )
 
   out <- unstacked$out
 
