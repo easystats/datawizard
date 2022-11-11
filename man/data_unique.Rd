@@ -15,7 +15,7 @@ data_unique(
 )
 }
 \arguments{
-\item{data}{The data frame.}
+\item{data}{A data frame.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -69,7 +69,7 @@ select-helpers, \code{select = contains("")} or \code{select = regex("")}, howev
 since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.}
 
-\item{verbose}{Toggle messages and warnings.}
+\item{verbose}{Toggle warnings.}
 }
 \value{
 A dataframe, containing only the chosen duplicates.
