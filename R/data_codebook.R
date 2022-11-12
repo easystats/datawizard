@@ -91,10 +91,10 @@ data_codebook <- function(data,
   max_values <- max_values + 1
 
   out <- lapply(seq_along(select), function(id) {
-
     # variable
     x <- data[[select[id]]]
     x_na <- is.na(x)
+    x_inf <- is.infinite(x)
 
     # inital data frame for codebook
     d <- data.frame(
@@ -129,14 +129,20 @@ data_codebook <- function(data,
     # save value labels
     vallab <- attr(x, "labels", exact = TRUE)
 
-    # coerce to factor, for tabulate
-    if (!is.numeric(x) && !is.factor(x)) {
-      x <- as.factor(x)
-    }
+    # remove NA and Inf, for tabulate(). as.factor() will convert NaN
+    # to a factor level "NaN", which we don't want here (same for Inf),
+    # because tabulate() will then return frequencies for that level, too
+    x <- x[!(x_na | x_inf)]
 
     # get unique values, to remove non labelled data
     unique_values <- unique(x)
-    unique_values <- unique_values[!is.na(unique_values)]
+
+    # coerce to factor, for tabulate(). We will coerce numerics to factor later
+    # which is required because tabulate() doesn't return frequencies for values
+    # lower than 1
+    if (!is.numeric(x) && !is.factor(x)) {
+      x <- as.factor(x)
+    }
 
     # handle labelled data - check if there are value labels or factor levels,
     # and extract values and N
@@ -159,30 +165,39 @@ data_codebook <- function(data,
       values <- sort(unname(vallab))
       frq <- tabulate(as.factor(x))
 
-    # handle factors
+      # handle factors
     } else if (is.factor(x)) {
       values <- levels(x)
       value_labels <- NA
       frq <- tabulate(x)
 
-    # handle numerics
+      # handle numerics
     } else {
       value_labels <- NA
       # only range for too many unique values
       if (length(unique_values) >= range_at) {
         r <- range(x, na.rm = TRUE)
-        values <- sprintf("[%g, %g]", r[1], r[2])
+        values <- sprintf("[%g, %g]", round(r[1], 2), round(r[2], 2))
         frq <- sum(!x_na)
         flag_range <- length(variable_label) > 1
-      # if we have few values, we can print whole freq. table
+        # if we have few values, we can print whole freq. table
       } else {
         values <- sort(unique_values)
         frq <- tabulate(as.factor(x))
       }
     }
 
-    # tabulate fills 0 for non-existend values, remove those
+    # tabulate fills 0 for non-existing values, remove those
     frq <- frq[frq != 0]
+
+    # add Inf values?
+    if (any(x_inf) && length(frq) <= max_values) {
+      values <- c(values, Inf)
+      if (!is.na(value_labels)) {
+        value_labels <- c(value_labels, "infinite")
+      }
+      frq <- c(frq, sum(x_inf))
+    }
 
     # make sure we have not too long rows, e.g. for variables that
     # have dozens of unique values
@@ -254,7 +269,10 @@ data_codebook <- function(data,
   out <- remove_empty_columns(out)
 
   # reorder
-  column_order <- c("ID", "Name", "Label", "Type", "Missings", "Values", "Value Labels", "N", ".row_id")
+  column_order <- c(
+    "ID", "Name", "Label", "Type", "Missings", "Values",
+    "Value Labels", "N", ".row_id"
+  )
   out <- out[union(intersect(column_order, names(out)), names(out))]
 
   attr(out, "data_name") <- data_name
@@ -307,15 +325,7 @@ print_html.data_codebook <- function(x,
   # since we have each value at its own row, the HTML table contains
   # horizontal borders for each cell/row. We want to remove those borders
   # from rows that actually belong to one variable
-  separator_lines <- NULL
-  # x$ID contains a single "" for separator lines (i.e. where a new variable
-  # starts), but multiple consecutive "" for one variable with multiple values
-  # (i.e. multiple rows). We want to know which ones are just separator lines...
-  for (i in 1:(length(x$ID) - 1)) {
-    if (x$ID[i] == "" && x$ID[i + 1] != "") {
-      separator_lines <- c(separator_lines, i)
-    }
-  }
+  separator_lines <- which(duplicated(x$.row_id) & x$N == "")
   # remove separator lines, as we don't need these for HTML tables
   x <- x[-separator_lines, ]
   # check row IDs, and find odd rows

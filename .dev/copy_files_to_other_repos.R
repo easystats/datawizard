@@ -14,14 +14,10 @@ pkg_without_change <- easystats:::.packages_on_cran() %>% setdiff(pkg_with_chang
 copy_from_folder <- map_chr(pkg_with_change, ~here::here(common_root, .x, ".github", "workflows"))
 copy_to_folders <- map_chr(pkg_without_change, ~here::here(common_root, .x, ".github", "workflows"))
 
-
-fs::file_copy(
-  here::here(copy_from_folder, "R-CMD-check-hard.yaml"),
-  here::here(copy_to_folders, "R-CMD-check-hard.yaml")
-)
+file_name <- "check-link-rot.yaml"
 
 purrr::walk2(
-  .x = here::here(copy_from_folder, "R-CMD-check-hard.yaml"),
-  .y = here::here(copy_to_folders, "R-CMD-check-hard.yaml"),
+  .x = here::here(copy_from_folder, file_name),
+  .y = here::here(copy_to_folders, file_name),
   .f = ~ fs::file_copy(.x, .y, overwrite = TRUE),
 )

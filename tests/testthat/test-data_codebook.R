@@ -37,6 +37,90 @@ test_that("data_codebook iris, reordered", {
 })
 
 
+test_that("data_codebook NaN and Inf", {
+  d <- data.frame(
+    x = c(1, 4, NA, Inf, 4, NaN, 2, 1, 1)
+  )
+  x <- data_codebook(d)
+  out <- capture.output(x)
+  expect_equal(
+    out,
+    c(
+      "d (9 rows and 1 variables, 1 shown)",
+      "",
+      "ID | Name | Type    |  Missings | Values | N",
+      "---+------+---------+-----------+--------+--",
+      "1  | x    | numeric | 2 (22.2%) |      1 | 3",
+      "   |      |         |           |      2 | 1",
+      "   |      |         |           |      4 | 2",
+      "   |      |         |           |    Inf | 1",
+      "--------------------------------------------"
+    )
+  )
+
+  set.seed(123)
+  d <- data.frame(
+    x = c(sample(1:15, 100, TRUE), Inf, Inf)
+  )
+  x <- data_codebook(d)
+  out <- capture.output(x)
+  expect_equal(
+    out,
+    c(
+      "d (102 rows and 1 variables, 1 shown)",
+      "",
+      "ID | Name | Type    | Missings |  Values |   N",
+      "---+------+---------+----------+---------+----",
+      "1  | x    | numeric | 0 (0.0%) | [1, 15] | 102",
+      "   |      |         |          |     Inf |   2",
+      "----------------------------------------------"
+    )
+  )
+
+  x <- data_codebook(d, range_at = 100)
+  out <- capture.output(x)
+  expect_equal(
+    out,
+    c(
+      "d (102 rows and 1 variables, 1 shown)",
+      "",
+      "ID | Name | Type    | Missings | Values |  N",
+      "---+------+---------+----------+--------+---",
+      "1  | x    | numeric | 0 (0.0%) |      1 |  4",
+      "   |      |         |          |      2 |  5",
+      "   |      |         |          |      3 |  6",
+      "   |      |         |          |      4 |  5",
+      "   |      |         |          |      5 |  8",
+      "   |      |         |          |      6 | 10",
+      "   |      |         |          |      7 |  6",
+      "   |      |         |          |      8 |  3",
+      "   |      |         |          |      9 | 13",
+      "   |      |         |          |     10 |  7",
+      "   |      |         |          |  (...) |   ",
+      "--------------------------------------------"
+    )
+  )
+
+  x <- data_codebook(d, range_at = 100, max_values = 4)
+  out <- capture.output(x)
+  expect_equal(
+    out,
+    c(
+      "d (102 rows and 1 variables, 1 shown)",
+      "",
+      "ID | Name | Type    | Missings | Values | N",
+      "---+------+---------+----------+--------+--",
+      "1  | x    | numeric | 0 (0.0%) |      1 | 4",
+      "   |      |         |          |      2 | 5",
+      "   |      |         |          |      3 | 6",
+      "   |      |         |          |      4 | 5",
+      "   |      |         |          |  (...) |  ",
+      "-------------------------------------------"
+    )
+  )
+})
+
+
 test_that("data_codebook iris, select", {
   x <- data_codebook(iris, select = starts_with("Sepal"))
   expect_equal(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N", ".row_id"))

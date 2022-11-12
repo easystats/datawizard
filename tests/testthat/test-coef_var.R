@@ -19,7 +19,6 @@ test_that("coef_var returns NULL if can't compute", {
 
 
 test_that("coef_var: argument 'na.rm' works", {
-
   expect_equal(coef_var(c(1:10, NA)), NA_real_)
 
   expect_equal(
