@@ -63,7 +63,7 @@ data_duplicated.data.frame <- function(data,
   dups.index <- data$temporary_id %in% data$temporary_id[duplicated(data$temporary_id)]
   dups <- data[dups.index, ]
   dups$count_na <- rowSums(is.na(dups))
-  dups <- data_arrange(dups, "temporary_id")
+  dups <- data_arrange(dups, select)
   dups <- data_remove(dups, "temporary_id")
   dups
 

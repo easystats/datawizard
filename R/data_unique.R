@@ -61,7 +61,7 @@ data_unique.data.frame <- function(data,
   data$temporary_id2 <- do.call(paste, c(data_select(data, select), sep = "_"))
 
   og.names <- names(data)
-  dups <- data_duplicated(data, "temporary_id2")
+  dups <- data_duplicated(data, select)
 
   # if no duplicates, return the original data
   if (nrow(dups) == 0L) {
