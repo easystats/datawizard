@@ -21,6 +21,8 @@ reference:
       - data_partition
       - data_rotate
       - data_group
+      - data_duplicated
+      - data_unique
 
   - title: Statistical Transformations
     desc: |
