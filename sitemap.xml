@@ -67,6 +67,9 @@
     <loc>https://easystats.github.io/datawizard/reference/data_codebook.html</loc>
   </url>
   <url>
+    <loc>https://easystats.github.io/datawizard/reference/data_duplicated.html</loc>
+  </url>
+  <url>
     <loc>https://easystats.github.io/datawizard/reference/data_extract.html</loc>
   </url>
   <url>
@@ -107,6 +110,9 @@
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/data_to_wide.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/datawizard/reference/data_unique.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/datawizard-package.html</loc>
