@@ -166,7 +166,7 @@ test_that("data_tabulate big numbers", {
     out,
     c(
       "x <integer>",
-      "# total N=10000000 valid N=10000000",
+      "# total N=10,000,000 valid N=10,000,000",
       "",
       "Value |         N | Raw % | Valid % | Cumulative %",
       "------+-----------+-------+---------+-------------",
@@ -200,7 +200,7 @@ test_that("data_tabulate big numbers", {
     out,
     c(
       "x <integer>",
-      "# total N=10000000 valid N=10000000",
+      "# total N=10-000-000 valid N=10-000-000",
       "",
       "Value |         N | Raw % | Valid % | Cumulative %",
       "------+-----------+-------+---------+-------------",
