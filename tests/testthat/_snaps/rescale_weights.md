@@ -31,3 +31,17 @@
       5          0.3119698         0.3060151         0.2152722
       6          0.5155503         0.5858662         0.4121388
 
+# rescale_weights nested works as expected
+
+    Code
+      rescale_weights(data = head(nhanes_sample), group = c("SDMVSTRA", "SDMVPSU"),
+      probability_weights = "WTINT2YR", nest = TRUE)
+    Output
+        total  age RIAGENDR RIDRETH1 SDMVPSU SDMVSTRA WTINT2YR pweights_a pweights_b
+      1     1 2.20        1        3       2       31 97593.68          1          1
+      2     7 2.08        2        3       1       29 39599.36          1          1
+      3     3 1.48        2        1       2       42 26619.83          1          1
+      4     4 1.32        2        4       2       33 34998.53          1          1
+      5     1 2.00        2        1       1       41 14746.45          1          1
+      6     6 2.20        2        4       1       38 28232.10          1          1
+
