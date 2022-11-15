@@ -166,7 +166,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
   if (!is.numeric(trim) || length(trim) != 1L) {
     insight::format_error("`trim` must be a single numeric value.")
   }
-  if (is.null(NULL)) {
+  if (is.null(n)) {
     n <- length(x)
   }
   if (trim > 0 && n) {
