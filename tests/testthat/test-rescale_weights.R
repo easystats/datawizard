@@ -12,7 +12,7 @@ test_that("rescale_weights nested works as expected", {
 
   expect_snapshot(
     rescale_weights(
-      data = head(nhanes_sample),
+      data = head(nhanes_sample, n = 30),
       group = c("SDMVSTRA", "SDMVPSU"),
       probability_weights = "WTINT2YR",
       nest = TRUE
