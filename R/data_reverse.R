@@ -71,7 +71,6 @@ reverse.numeric <- function(x,
 
   # Warning if only one value
   if (.has_one_value(x) && is.null(range)) {
-    print("here")
     if (verbose) {
       insight::format_warning("A `range` must be provided for data with only one unique value.")
     }
