@@ -195,5 +195,5 @@
 #' @noRd
 
 .has_one_value <- function(x) {
-  isTRUE(all(x == x[1]))
+  !is.null(x) &&  isTRUE(all(x == x[1]))
 }
