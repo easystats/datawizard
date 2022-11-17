@@ -69,7 +69,8 @@ default minimum is always \code{1}, unless specified otherwise in \code{lowest}.
 
 \item{labels}{Character vector of value labels. If not \code{NULL}, \code{categorize()}
 will returns factors instead of numeric variables, with \code{labels} used
-for labelling the factor levels.}
+for labelling the factor levels. Can also be \code{"mean"} or \code{"median"} for a
+factor with labels as the mean/median of each groups.}
 
 \item{verbose}{Toggle warnings.}
 
@@ -211,6 +212,11 @@ set.seed(123)
 x <- sample(1:10, size = 30, replace = TRUE)
 categorize(x, "equal_length", n_groups = 3)
 categorize(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high"))
+
+# cut numeric into groups with the mean or median as a label name
+x <- sample(1:10, size = 30, replace = TRUE)
+categorize(x, "equal_length", n_groups = 3, labels="mean")
+categorize(x, "equal_length", n_groups = 3, labels="median")
 }
 \seealso{
 \itemize{

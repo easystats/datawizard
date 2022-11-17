@@ -33,7 +33,8 @@
 #'   default minimum is always `1`, unless specified otherwise in `lowest`.
 #' @param labels Character vector of value labels. If not `NULL`, `categorize()`
 #'   will returns factors instead of numeric variables, with `labels` used
-#'   for labelling the factor levels.
+#'   for labelling the factor levels. Can also be `"mean"` or `"median"` for a
+#'   factor with labels as the mean/median of each groups.
 #' @param append Logical or string. If `TRUE`, recoded or converted variables
 #'   get new column names and are appended (column bind) to `x`, thus returning
 #'   both the original and the recoded variables. The new columns get a suffix,
@@ -113,6 +114,11 @@
 #' x <- sample(1:10, size = 30, replace = TRUE)
 #' categorize(x, "equal_length", n_groups = 3)
 #' categorize(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high"))
+#'
+#' # cut numeric into groups with the mean or median as a label name
+#' x <- sample(1:10, size = 30, replace = TRUE)
+#' categorize(x, "equal_length", n_groups = 3, labels="mean")
+#' categorize(x, "equal_length", n_groups = 3, labels="median")
 #' @export
 categorize <- function(x, ...) {
   UseMethod("categorize")
@@ -226,6 +232,14 @@ categorize.numeric <- function(x,
     if (length(labels) == length(unique(out))) {
       original_x <- as.factor(original_x)
       levels(original_x) <- labels
+    } else if (length(labels) == 1 && labels %in% c("mean", "median")) {
+      original_x <- as.factor(original_x)
+      if(labels == "mean") {
+        labels <- aggregate(x, list(original_x), FUN=mean)$x
+      } else {
+        labels <- aggregate(x, list(original_x), FUN=median)$x
+      }
+      levels(original_x) <- insight::format_value(labels, ...)
     } else if (isTRUE(verbose)) {
       insight::format_warning(
         "Argument `labels` and levels of the recoded variable are not of the same length.",
