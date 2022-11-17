@@ -215,8 +215,8 @@ categorize(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high"))
 
 # cut numeric into groups with the mean or median as a label name
 x <- sample(1:10, size = 30, replace = TRUE)
-categorize(x, "equal_length", n_groups = 3, labels="mean")
-categorize(x, "equal_length", n_groups = 3, labels="median")
+categorize(x, "equal_length", n_groups = 3, labels = "mean")
+categorize(x, "equal_length", n_groups = 3, labels = "median")
 }
 \seealso{
 \itemize{

@@ -117,8 +117,8 @@
 #'
 #' # cut numeric into groups with the mean or median as a label name
 #' x <- sample(1:10, size = 30, replace = TRUE)
-#' categorize(x, "equal_length", n_groups = 3, labels="mean")
-#' categorize(x, "equal_length", n_groups = 3, labels="median")
+#' categorize(x, "equal_length", n_groups = 3, labels = "mean")
+#' categorize(x, "equal_length", n_groups = 3, labels = "median")
 #' @export
 categorize <- function(x, ...) {
   UseMethod("categorize")
@@ -234,10 +234,11 @@ categorize.numeric <- function(x,
       levels(original_x) <- labels
     } else if (length(labels) == 1 && labels %in% c("mean", "median")) {
       original_x <- as.factor(original_x)
-      if(labels == "mean") {
-        labels <- aggregate(x, list(original_x), FUN=mean)$x
+      no_na_x <- original_x[!is.na(original_x)]
+      if (labels == "mean") {
+        labels <- stats::aggregate(x, list(no_na_x), FUN = mean, na.rm = TRUE)$x
       } else {
-        labels <- aggregate(x, list(original_x), FUN=median)$x
+        labels <- stats::aggregate(x, list(no_na_x), FUN = stats::median, na.rm = TRUE)$x
       }
       levels(original_x) <- insight::format_value(labels, ...)
     } else if (isTRUE(verbose)) {
