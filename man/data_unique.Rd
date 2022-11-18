@@ -72,7 +72,7 @@ functions (see 'Details'), this argument may be used as workaround.}
 \item{verbose}{Toggle warnings.}
 }
 \value{
-A dataframe, containing only the chosen duplicates.
+A data frame, containing only the chosen duplicates.
 }
 \description{
 From all rows with at least one duplicated ID,
@@ -87,10 +87,10 @@ Contrarily to \code{dplyr::distinct()}, \code{data_unique()} keeps all columns.
 }
 \examples{
 df1 <- data.frame(
-   id = c(1, 2, 3, 1, 3),
-   item1 = c(NA, 1, 1, 2, 3),
-   item2 = c(NA, 1, 1, 2, 3),
-   item3 = c(NA, 1, 1, 2, 3)
+  id = c(1, 2, 3, 1, 3),
+  item1 = c(NA, 1, 1, 2, 3),
+  item2 = c(NA, 1, 1, 2, 3),
+  item3 = c(NA, 1, 1, 2, 3)
 )
 
 data_unique(df1, select = "id")

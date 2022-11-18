@@ -15,7 +15,8 @@ expected1 <- data.frame(
   item1 = c(NA, 2, 1, 3),
   item2 = c(NA, 2, 1, 3),
   item3 = c(NA, 2, 1, 3),
-  count_na = c(3, 0, 0, 0))
+  count_na = c(3, 0, 0, 0)
+)
 
 expected2 <- data.frame(
   Row = c(1, 4),
@@ -24,7 +25,8 @@ expected2 <- data.frame(
   item1 = c(NA, 2),
   item2 = c(NA, 2),
   item3 = c(NA, 2),
-  count_na = c(3, 0))
+  count_na = c(3, 0)
+)
 
 # Testing
 
@@ -33,7 +35,8 @@ test_that("data_duplicated basic", {
   rownames(x) <- NULL
   expect_equal(
     x,
-    expected1)
+    expected1
+  )
 })
 
 test_that("data_duplicated unquoted", {
@@ -41,7 +44,8 @@ test_that("data_duplicated unquoted", {
   rownames(x) <- NULL
   expect_equal(
     x,
-    expected1)
+    expected1
+  )
 })
 
 test_that("data_duplicated vector", {
@@ -49,7 +53,8 @@ test_that("data_duplicated vector", {
   rownames(x) <- NULL
   expect_equal(
     x,
-    expected1)
+    expected1
+  )
 })
 
 test_that("data_duplicated select-helper", {
@@ -57,7 +62,8 @@ test_that("data_duplicated select-helper", {
   rownames(x) <- NULL
   expect_equal(
     x,
-    expected1)
+    expected1
+  )
 })
 
 test_that("data_duplicated multiple IDs", {
@@ -65,7 +71,8 @@ test_that("data_duplicated multiple IDs", {
   rownames(x) <- NULL
   expect_equal(
     x,
-    expected2)
+    expected2
+  )
 })
 
 test_that("data_duplicated multiple IDs formula", {
@@ -73,7 +80,8 @@ test_that("data_duplicated multiple IDs formula", {
   rownames(x) <- NULL
   expect_equal(
     x,
-    expected2)
+    expected2
+  )
 })
 
 test_that("data_duplicated multiple IDs vector", {
@@ -81,7 +89,8 @@ test_that("data_duplicated multiple IDs vector", {
   rownames(x) <- NULL
   expect_equal(
     x,
-    expected2)
+    expected2
+  )
 })
 
 test_that("data_unique works with groups", {
@@ -101,4 +110,3 @@ test_that("data_unique works with groups", {
 
   expect_identical(data_duplicated(df, "x"), expected, ignore_attr = TRUE)
 })
-
