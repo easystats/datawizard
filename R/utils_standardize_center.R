@@ -233,7 +233,7 @@
                                        verbose = TRUE,
                                        reference = NULL) {
   # Warning if only one value
-  if (length(unique(x)) == 1 && is.null(reference)) {
+  if (insight::has_single_value(x) && is.null(reference)) {
     if (verbose) {
       if (is.null(name)) {
         insight::format_alert(
