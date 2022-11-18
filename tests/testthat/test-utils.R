@@ -44,29 +44,3 @@ test_that(".is_sorted works", {
   expect_false(.is_sorted(c("b", "a", "c")))
   expect_false(.is_sorted(factor(c("b", "a", "c"))))
 })
-
-test_that(".has_one_value works", {
-  x <- c(1, 1)
-  expect_identical(
-    length(unique(x)) == 1,
-    .has_one_value(x)
-  )
-
-  x <- c(NA, 1)
-  expect_identical(
-    length(unique(x)) == 1,
-    .has_one_value(x)
-  )
-
-  x <- c(2, 1)
-  expect_identical(
-    length(unique(x)) == 1,
-    .has_one_value(x)
-  )
-
-  x <- c(NULL)
-  expect_identical(
-    length(unique(x)) == 1,
-    .has_one_value(x)
-  )
-})

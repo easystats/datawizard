@@ -188,12 +188,3 @@
   # Create the string(s)
   do.call(sprintf, c(list(fmt_sprintf), args))
 }
-
-
-#' Equivalent to length(unique(x)) == 1 but faster.
-#' Only works for numeric vectors
-#' @noRd
-
-.has_one_value <- function(x) {
-  !is.null(x) &&  isTRUE(all(x == x[1]))
-}
