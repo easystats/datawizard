@@ -214,8 +214,8 @@ as data frame per variable.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># vector/factor</span></span></span>
 <span class="r-in"><span><span class="fu">data_tabulate</span><span class="op">(</span><span class="va">efc</span><span class="op">$</span><span class="va">c172code</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carer's level of education (efc$c172code) &lt;numeric&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # total N=100 valid N=90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">carer's level of education (efc$c172code)</span> <span style="color: #0000BB;">&lt;numeric&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># total N=100 valid N=90</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Value |  N | Raw % | Valid % | Cumulative %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------+----+-------+---------+-------------</span>
@@ -226,8 +226,8 @@ as data frame per variable.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># data frame</span></span></span>
 <span class="r-in"><span><span class="fu">data_tabulate</span><span class="op">(</span><span class="va">efc</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"e42dep"</span>, <span class="st">"c172code"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> elder's dependency (e42dep) &lt;categorical&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # total N=100 valid N=97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">elder's dependency (e42dep)</span> <span style="color: #0000BB;">&lt;categorical&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># total N=100 valid N=97</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Value |  N | Raw % | Valid % | Cumulative %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------+----+-------+---------+-------------</span>
@@ -237,8 +237,8 @@ as data frame per variable.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4     | 63 | 63.00 |   64.95 |       100.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;NA&gt;  |  3 |  3.00 |    &lt;NA&gt; |         &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carer's level of education (c172code) &lt;numeric&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # total N=100 valid N=90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">carer's level of education (c172code)</span> <span style="color: #0000BB;">&lt;numeric&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># total N=100 valid N=90</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Value |  N | Raw % | Valid % | Cumulative %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------+----+-------+---------+-------------</span>
@@ -252,9 +252,9 @@ as data frame per variable.</p>
 <span class="r-in"><span><span class="va">efc</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">c172code</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">data_tabulate</span><span class="op">(</span><span class="st">"e16sex"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> elder's gender (e16sex) &lt;numeric&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Grouped by c172code (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # total N=8 valid N=8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">elder's gender (e16sex)</span> <span style="color: #0000BB;">&lt;numeric&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Grouped by c172code (1)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># total N=8 valid N=8</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Value | N | Raw % | Valid % | Cumulative %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------+---+-------+---------+-------------</span>
@@ -262,9 +262,9 @@ as data frame per variable.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     | 3 | 37.50 |   37.50 |       100.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;NA&gt;  | 0 |  0.00 |    &lt;NA&gt; |         &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> elder's gender (e16sex) &lt;numeric&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Grouped by c172code (2)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # total N=66 valid N=66</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">elder's gender (e16sex)</span> <span style="color: #0000BB;">&lt;numeric&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Grouped by c172code (2)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># total N=66 valid N=66</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Value |  N | Raw % | Valid % | Cumulative %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------+----+-------+---------+-------------</span>
@@ -272,9 +272,9 @@ as data frame per variable.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     | 34 | 51.52 |   51.52 |       100.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;NA&gt;  |  0 |  0.00 |    &lt;NA&gt; |         &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> elder's gender (e16sex) &lt;numeric&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Grouped by c172code (3)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # total N=16 valid N=16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">elder's gender (e16sex)</span> <span style="color: #0000BB;">&lt;numeric&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Grouped by c172code (3)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># total N=16 valid N=16</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Value |  N | Raw % | Valid % | Cumulative %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------+----+-------+---------+-------------</span>
@@ -282,9 +282,9 @@ as data frame per variable.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     | 12 | 75.00 |   75.00 |       100.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;NA&gt;  |  0 |  0.00 |    &lt;NA&gt; |         &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> elder's gender (e16sex) &lt;numeric&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Grouped by c172code (NA)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # total N=10 valid N=10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">elder's gender (e16sex)</span> <span style="color: #0000BB;">&lt;numeric&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Grouped by c172code (NA)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># total N=10 valid N=10</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Value | N | Raw % | Valid % | Cumulative %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------+---+-------+---------+-------------</span>
@@ -296,7 +296,7 @@ as data frame per variable.</p>
 <span class="r-in"><span><span class="va">efc</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">c172code</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">data_tabulate</span><span class="op">(</span><span class="st">"e16sex"</span>, collapse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # Frequency Table</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Frequency Table</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Variable |         Group | Value |  N | Raw % | Valid % | Cumulative %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---------+---------------+-------+----+-------+---------+-------------</span>
@@ -321,8 +321,8 @@ as data frame per variable.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1e6</span>, <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">data_tabulate</span><span class="op">(</span><span class="va">x</span>, name <span class="op">=</span> <span class="st">"Large Number"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Large Number (x) &lt;integer&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # total N=1,000,000 valid N=1,000,000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Large Number (x)</span> <span style="color: #0000BB;">&lt;integer&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># total N=1,000,000 valid N=1,000,000</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Value |       N | Raw % | Valid % | Cumulative %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------+---------+-------+---------+-------------</span>
@@ -333,8 +333,8 @@ as data frame per variable.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># to remove the big mark, use "print(..., big_mark = "")"</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">data_tabulate</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, big_mark <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x &lt;integer&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # total N=1000000 valid N=1000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">x</span> <span style="color: #0000BB;">&lt;integer&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># total N=1000000 valid N=1000000</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Value |      N | Raw % | Valid % | Cumulative %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------+--------+-------+---------+-------------</span>
