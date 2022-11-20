@@ -5,10 +5,9 @@ template:
   package: easystatstemplate
 
 reference:
-
   - title: Data Preparation
     desc: |
-        Main functions for cleaning and preparing data
+      Main functions for cleaning and preparing data
     contents:
       - data_to_long
       - data_to_wide
@@ -26,7 +25,7 @@ reference:
 
   - title: Statistical Transformations
     desc: |
-        Functions for transforming variables
+      Functions for transforming variables
     contents:
       - categorize
       - recode_values
@@ -46,7 +45,7 @@ reference:
 
   - title: Data Properties
     desc: |
-        Functions to compute statistical summaries of data properties and distributions
+      Functions to compute statistical summaries of data properties and distributions
     contents:
       - data_codebook
       - data_tabulate
@@ -59,7 +58,7 @@ reference:
 
   - title: Convert and Replace Data
     desc: |
-        Helpers for data replacements
+      Helpers for data replacements
     contents:
       - contains("to_numeric")
       - to_factor
@@ -68,13 +67,13 @@ reference:
 
   - title: Import data
     desc: |
-        Helpers for importing data
+      Helpers for importing data
     contents:
       - data_read
 
   - title: Helpers for Data Preparation
     desc: |
-        Primarily useful in the context of other 'easystats' packages
+      Primarily useful in the context of other 'easystats' packages
     contents:
       - reshape_ci
       - data_addprefix
@@ -86,34 +85,33 @@ reference:
 
   - title: Helpers for Text Formatting
     desc: |
-        Primarily useful for 'report' package
+      Primarily useful for 'report' package
     contents:
       - starts_with("text_")
 
   - title: Visualization helpers
     desc: |
-        Primarily useful in the context of other 'easystats' packages
+      Primarily useful in the context of other 'easystats' packages
     contents:
       - visualisation_recipe
 
   - title: Reexports
     desc: |
-        Functions from other packages re-exported for convenience
+      Functions from other packages re-exported for convenience
     contents:
       - reexports
 
   - title: Data
     desc: |
-        Datasets useful for examples and tests
+      Datasets useful for examples and tests
     contents:
       - efc
       - nhanes_sample
 
 articles:
-
   - title: Data Preparation
     desc: |
-        Articles explaining utility of 'datawizard' for data wrangling
+      Articles explaining utility of 'datawizard' for data wrangling
     navbar: ~
     contents:
       - tidyverse_translation
@@ -121,8 +119,8 @@ articles:
 
   - title: Statistical Transformations
     desc: |
-        Articles describing use of 'datawizard' functions for tranforming data
-        to use in regression models
+      Articles describing use of 'datawizard' functions for tranforming data
+      to use in regression models
     navbar: ~
     contents:
       - standardize_data
