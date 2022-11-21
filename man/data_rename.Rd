@@ -131,7 +131,7 @@ head(data_rename(iris, c("Sepal.Length", "Sepal.Width"), c("length", "width")))
 head(data_rename(iris, NULL))
 
 # Change all
-head(data_rename(iris, paste0("Var", 1:5)))
+head(data_rename(iris, replacement = paste0("Var", 1:5)))
 
 }
 \seealso{
