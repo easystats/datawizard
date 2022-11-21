@@ -1,0 +1,11 @@
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+name: test-all-examples
+
+jobs:
+  test-all-examples:
+    uses: easystats/workflows/.github/workflows/test-all-examples.yaml@main
