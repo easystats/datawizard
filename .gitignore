@@ -1,6 +1,6 @@
 # History files
-.Rhistory
 .Rapp.history
+.Rhistory
 
 # Session Data files
 .RData
@@ -29,17 +29,16 @@ vignettes/*.pdf
 /cache/
 
 # Temporary files created by R markdown
-*.utf8.md
 *.knit.md
+*.utf8.md
 
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
-rsconnect/
-
 =========================
+rsconnect/
 # Operating System Files
 # OSX
-.DS_Store
 .AppleDouble
+.DS_Store
 .LSOverride
 
 # Thumbnails
@@ -47,18 +46,18 @@ rsconnect/
 
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100
-.fseventsd
 .Spotlight-V100
 .TemporaryItems
 .Trashes
 .VolumeIcon.icns
+.fseventsd
 
 # Directories potentially created on remote AFP share
 .AppleDB
 .AppleDesktop
+.apdisk
+CRAN-SUBMISSION
 Network Trash Folder
 Temporary Items
-.apdisk
 docs
 inst/doc
-CRAN-SUBMISSION

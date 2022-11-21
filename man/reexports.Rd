@@ -19,4 +19,3 @@ below to see their documentation.
 \describe{
   \item{insight}{\code{\link[insight]{compact_character}}, \code{\link[insight]{compact_list}}, \code{\link[insight]{is_empty_object}}, \code{\link[insight]{object_has_names}}, \code{\link[insight:object_has_names]{object_has_rownames}}, \code{\link[insight:display]{print_html}}, \code{\link[insight:display]{print_md}}}
 }}
-

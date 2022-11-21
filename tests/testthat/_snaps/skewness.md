@@ -93,4 +93,3 @@
       Sepal.Width  |    0.228 | 0.351
       Petal.Length |   -1.402 | 0.167
       Petal.Width  |   -1.341 | 0.115
-

@@ -81,4 +81,3 @@ is not converted to factor. In this case, value labels are preserved as
 \code{convert_factors = FALSE} to remove the automatic conversion of numeric
 variables to factors.
 }
-

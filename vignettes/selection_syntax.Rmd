@@ -238,4 +238,3 @@ data_select(iris, ~ Sepal.Length + Petal.Width)
 
 This made it easier to use selection in custom functions before `datawizard` 
 0.6.0, and is kept available for backward compatibility. 
-

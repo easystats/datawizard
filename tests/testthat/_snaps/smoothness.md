@@ -8,4 +8,3 @@
       demand "demand"  "0.406270770677043"
       attr(,"class")
       [1] "parameters_smoothness" "matrix"                "array"                
-

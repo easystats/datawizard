@@ -118,7 +118,7 @@ ex1_w <- bench::mark(
       values_fill = 0
     ),
   new = fish_encounters %>%
-     data_to_wide(
+    data_to_wide(
       names_from = "station",
       values_from = "seen",
       values_fill = 0
@@ -150,7 +150,7 @@ ex2_w <- bench::mark(
       values_from = "production"
     ),
   new = production %>%
-     data_to_wide(
+    data_to_wide(
       names_from = c("product", "country"),
       values_from = "production"
     ),
@@ -171,7 +171,7 @@ ex3_w <- bench::mark(
       names_glue = "prod_{product}_{country}"
     ),
   new = production %>%
-     data_to_wide(
+    data_to_wide(
       names_from = c("product", "country"),
       values_from = "production",
       names_glue = "prod_{product}_{country}"
@@ -203,7 +203,7 @@ ex4_w <- bench::mark(
       values_from = c("estimate", "moe")
     ),
   new = tmp %>%
-     data_to_wide(
+    data_to_wide(
       names_from = "variable",
       values_from = c("estimate", "moe")
     ),
@@ -228,7 +228,7 @@ ex5_w <- bench::mark(
   old = contacts %>%
     old_data_to_wide(names_from = "field", values_from = "value"),
   new = contacts %>%
-     data_to_wide(names_from = "field", values_from = "value"),
+    data_to_wide(names_from = "field", values_from = "value"),
   tidyr = contacts %>%
     tidyr::pivot_wider(names_from = field, values_from = value),
   iterations = 1
@@ -248,7 +248,7 @@ ex6_w <- bench::mark(
   old = contacts %>%
     old_data_to_wide(names_from = "field", values_from = "value"),
   new = contacts %>%
-     data_to_wide(names_from = "field", values_from = "value"),
+    data_to_wide(names_from = "field", values_from = "value"),
   tidyr = contacts %>%
     tidyr::pivot_wider(names_from = field, values_from = value),
   iterations = 1

@@ -153,7 +153,7 @@ describe_distribution(mtcars)
 ```{r echo=FALSE, eval=TRUE, results="asis"}
 library(kableExtra)
 options(digits = 2)
-kbl(describe_distribution(mtcars), format = "latex", booktabs = TRUE, linesep = "") 
+kbl(describe_distribution(mtcars), format = "latex", booktabs = TRUE, linesep = "")
 ```
 
 # Licensing and Availability
