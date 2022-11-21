@@ -1,3 +1,11 @@
+# Make sure all examples run successfully, even the ones that are not supposed
+# to be run or tested on CRAN machines by default.
+#
+# The examples that fail should use
+#  - `if (FALSE) { ... }` (if example is included only for illustrative purposes)
+#  - `try({ ... })` (if the intent is to show the error).
+#
+#  This workflow helps find such examples.
 on:
   push:
     branches: [main, master]
