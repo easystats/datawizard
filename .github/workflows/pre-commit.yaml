@@ -1,0 +1,11 @@
+on:
+  push:
+    branches-ignore: [main, master]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+name: pre-commit
+
+jobs:
+  pre-commit:
+    uses: easystats/workflows/.github/workflows/pre-commit.yaml@main
