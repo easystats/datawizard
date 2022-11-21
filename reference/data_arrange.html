@@ -144,10 +144,10 @@ exist.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># Throw an error if one of the variables specified doesn't exist</span></span></span>
-<span class="r-in"><span><span class="fu">data_arrange</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gear"</span>, <span class="st">"foo"</span><span class="op">)</span>, safe <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">data_arrange</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gear"</span>, <span class="st">"foo"</span><span class="op">)</span>, safe <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error : The following column(s) don't exist in the dataset: foo.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Possibly misspelled?</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
