@@ -68,7 +68,7 @@
 #' `G2 = ((n + 1) * g2 + 6) * (n - 1)/((n - 2) * (n - 3))`. This is what
 #' SAS and SPSS usually return
 #'
-#' - Type "3" first calculates the type-1 kurtosis, thae adjusts the result:
+#' - Type "3" first calculates the type-1 kurtosis, then adjusts the result:
 #' `b2 = (g2 + 3) * (1 - 1 / n)^2 - 3`. This is what Minitab usually
 #' returns.
 #'
