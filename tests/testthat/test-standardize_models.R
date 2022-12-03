@@ -81,7 +81,7 @@ test_that("weights", {
 
   m <- lm(mpg ~ wt + hp, weights = cyl, mtcars)
 
-  sm <- standardize(m, weights = TRUE)
+  sm <<- standardize(m, weights = TRUE)
   sm_data <- insight::get_data(sm)
   sm_data2 <- standardize(mtcars, select = c("mpg", "wt", "hp"), weights = "cyl")
   expect_equal(sm_data[, c("mpg", "wt", "hp")], sm_data2[, c("mpg", "wt", "hp")])
@@ -89,7 +89,7 @@ test_that("weights", {
   expect_error(standardize(m, weights = TRUE, robust = TRUE), NA)
 
   # no weights in stding
-  sm_xw <- standardize(m, weights = FALSE)
+  sm_xw <<- standardize(m, weights = FALSE)
   sm_data_xw <- insight::get_data(sm_xw)
   expect_false(isTRUE(all.equal(coef(sm)[-1], coef(sm_xw)[-1])))
 
