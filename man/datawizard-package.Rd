@@ -30,15 +30,15 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Indrajeet Patil \email{patilindrajeet.science@gmail.com} (\href{https://orcid.org/0000-0003-1995-6531}{ORCID}) (@patilindrajeets)
+\strong{Maintainer}: Etienne Bacher \email{etienne.bacher@protonmail.com} (\href{https://orcid.org/0000-0002-9271-5075}{ORCID})
 
 Authors:
 \itemize{
+  \item Indrajeet Patil \email{patilindrajeet.science@gmail.com} (\href{https://orcid.org/0000-0003-1995-6531}{ORCID}) (@patilindrajeets)
   \item Dominique Makowski \email{dom.makowski@gmail.com} (\href{https://orcid.org/0000-0001-5375-9967}{ORCID}) (@Dom_Makowski)
   \item Daniel Lüdecke \email{d.luedecke@uke.de} (\href{https://orcid.org/0000-0002-8895-3206}{ORCID}) (@strengejacke)
   \item Mattan S. Ben-Shachar \email{matanshm@post.bgu.ac.il} (\href{https://orcid.org/0000-0002-4287-4801}{ORCID})
   \item Brenton M. Wiernik \email{brenton@wiernik.org} (\href{https://orcid.org/0000-0001-9560-6336}{ORCID}) (@bmwiernik)
-  \item Etienne Bacher \email{etienne.bacher@protonmail.com} (\href{https://orcid.org/0000-0002-9271-5075}{ORCID})
 }
 
 Other contributors:

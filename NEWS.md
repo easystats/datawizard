@@ -1,5 +1,7 @@
 # datawizard (development version)
 
+* Etienne Bacher is the new maintainer.
+
 # datawizard 0.6.4
 
 NEW FUNCTIONS
