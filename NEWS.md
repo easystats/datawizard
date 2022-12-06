@@ -8,6 +8,11 @@ NEW FUNCTIONS
 
 * `standardize()` and `center()` can be used in model formulas, similar to `base::scale()`.
 
+BUG FIXES
+
+* `center(x)` now works correctly when `x` is a single value and either
+  `reference` or `center` is specified (#324).
+
 # datawizard 0.6.4
 
 NEW FUNCTIONS
