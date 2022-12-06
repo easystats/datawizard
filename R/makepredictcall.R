@@ -33,15 +33,20 @@ makepredictcall.dw_transformer <- function(var, call) {
     stop("datawizard scalers in model formulas are not supported for matrices.", call. = FALSE)
 
   switch (as.character(call)[1L],
+
     centre = ,
     center =  {
       call$center <- attr(var, "center")
     },
+
     standardise = ,
     standardize = {
       call$center <- attr(var, "center")
       call$scale <- attr(var, "scale")
-    }
+    },
+
+    # ELSE:
+    {return(call)}
   )
 
   call$verbose <- FALSE
