@@ -127,7 +127,9 @@ center.numeric <- function(x,
   attr(centered_x, "scale") <- 1
   attr(centered_x, "robust") <- robust
   # labels
-  .set_back_labels(centered_x, x, include_values = FALSE)
+  z <- .set_back_labels(centered_x, x, include_values = FALSE)
+  class(z) <- c("dw_scaler", class(z))
+  z
 }
 
 

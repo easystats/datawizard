@@ -170,7 +170,9 @@ standardize.numeric <- function(x,
   attr(scaled_x, "scale") <- args$scale
   attr(scaled_x, "robust") <- robust
   # labels
-  .set_back_labels(scaled_x, x, include_values = FALSE)
+  z <- .set_back_labels(scaled_x, x, include_values = FALSE)
+  class(z) <- c("dw_scaler", class(z))
+  z
 }
 
 #' @export

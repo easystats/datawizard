@@ -1,5 +1,9 @@
 # datawizard (development version)
 
+NEW FUNCTIONS
+
+* `standardize()` and `center()` can be used in model formulas, similar to `base::scale()`.
+
 # datawizard 0.6.4
 
 NEW FUNCTIONS
