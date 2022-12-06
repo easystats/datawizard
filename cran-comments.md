@@ -2,7 +2,7 @@
 
 0 errors | 0 warnings | 1 note
 
-* 1 expected note is about change of maintainership: Etienner Bacher is the new maintainer.
+* 1 expected note is about change of maintainership: Etienne Bacher is the new maintainer.
 
 ## revdepcheck results
 
