@@ -188,5 +188,6 @@ center(d, center = -5)
 }
 \seealso{
 If centering within-clusters (instead of grand-mean centering)
-is required, see \code{\link[=demean]{demean()}}. For standardizing, see \code{\link[=standardize]{standardize()}}.
+is required, see \code{\link[=demean]{demean()}}. For standardizing, see \code{\link[=standardize]{standardize()}}, and
+\code{\link[=makepredictcall.dw_transformer]{makepredictcall.dw_transformer()}} for use in model formulas.
 }

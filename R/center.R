@@ -48,7 +48,8 @@
 #' subtraction.
 #'
 #' @seealso If centering within-clusters (instead of grand-mean centering)
-#'   is required, see [demean()]. For standardizing, see [standardize()].
+#'   is required, see [demean()]. For standardizing, see [standardize()], and
+#'   [makepredictcall.dw_transformer()] for use in model formulas.
 #'
 #' @return The centered variables.
 #'
@@ -128,7 +129,7 @@ center.numeric <- function(x,
   attr(centered_x, "robust") <- robust
   # labels
   z <- .set_back_labels(centered_x, x, include_values = FALSE)
-  class(z) <- c("dw_scaler", class(z))
+  class(z) <- c("dw_transformer", class(z))
   z
 }
 
