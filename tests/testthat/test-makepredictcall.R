@@ -1,3 +1,4 @@
+# library(testthat)
 
 test_that("makepredictcall", {
   data("mtcars")
@@ -13,4 +14,8 @@ test_that("makepredictcall", {
   expect_equal(p1, predict(m2, nd))
   expect_equal(p1, predict(m3, nd))
   expect_equal(p1, predict(m4, nd))
+
+  X <- matrix(rnorm(100), ncol = 2)
+  Y <- rnorm(50)
+  expect_error(lm(Y ~ standardize(X)), "matrices")
 })

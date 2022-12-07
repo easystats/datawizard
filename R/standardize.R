@@ -194,6 +194,7 @@ standardize.matrix <- function(x, ...) {
   attr(x_out, "center") <- sapply(xz, attr, "center")
   attr(x_out, "scale") <- sapply(xz, attr, "scale")
   attr(x_out, "robust") <- sapply(xz, attr, "robust")[1]
+  class(x_out) <- c("dw_transformer", class(x_out))
 
   x_out
 }
