@@ -8,6 +8,7 @@
 #' @inheritParams stats::makepredictcall
 #'
 #' @inherit stats::makepredictcall return
+#' @importFrom stats makepredictcall
 #'
 #' @seealso [stats::makepredictcall()], [center()], [standardize()]
 #'
