@@ -7,7 +7,7 @@
 .process_std_center <- function(x,
                                 weights,
                                 robust,
-                                verbose,
+                                verbose = TRUE,
                                 reference = NULL,
                                 center = NULL,
                                 scale = NULL) {
@@ -38,7 +38,7 @@
   }
 
   # Get center and scale
-  ref <- .get_center_scale(vals, robust, weights, reference, .center = center, .scale = scale)
+  ref <- .get_center_scale(vals, robust, weights, reference, .center = center, .scale = scale, verbose = verbose)
 
   list(
     vals = vals,
@@ -193,7 +193,7 @@
 
 ## retrieve center and scale information ----
 
-.get_center_scale <- function(x, robust = FALSE, weights = NULL, reference = NULL, .center = NULL, .scale = NULL) {
+.get_center_scale <- function(x, robust = FALSE, weights = NULL, reference = NULL, .center = NULL, .scale = NULL, verbose = TRUE) {
   if (is.null(reference)) reference <- x
 
   # for center(), we have no scale. default to 0
@@ -215,10 +215,12 @@
 
   if (scale == 0) {
     scale <- 1
-    insight::format_warning(sprintf(
-      "%s is 0 - variable not standardized (only scaled).",
-      if (robust) "MAD" else "SD"
-    ))
+    if (verbose) {
+      insight::format_warning(sprintf(
+        "%s is 0 - variable not standardized (only scaled).",
+        if (robust) "MAD" else "SD"
+      ))
+    }
   }
 
   list(center = center, scale = scale)
