@@ -132,7 +132,7 @@ test_that("standardize.data.frame, weights", {
   )
 
   d <- poorman::group_by(mtcars, am)
-  expect_warning(expect_warning(expect_warning(standardize(d, weights = d$cyl))))
+  expect_warning(standardize(d, weights = d$cyl))
 })
 
 
