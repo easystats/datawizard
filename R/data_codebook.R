@@ -129,6 +129,25 @@ data_codebook <- function(data,
     # save value labels
     vallab <- attr(x, "labels", exact = TRUE)
 
+    # do we have labelled NA values? If so, include labelled NAs in count table
+    # we do this by converting NA values into character strings
+    if (anyNA(vallab) && insight::check_if_installed("haven", quietly = TRUE)) {
+      # get na-tags, i.e. the value labels for the different NA values
+      na_labels <- haven::na_tag(vallab)
+      # replace NA in labels with NA tags
+      vallab[!is.na(na_labels)] <- stats::setNames(
+        paste0("NA(", na_labels[!is.na(na_labels)], ")"),
+        names(vallab[!is.na(na_labels)])
+      )
+      # replace tagged NAs in variable with their values, tagged as NA(value)
+      na_values <- haven::na_tag(x)
+      # need to convert, we still have haven-class, which cannot coerce
+      x <- as.character(x)
+      x[!is.na(na_values)] <- paste0("NA(", na_values[!is.na(na_values)], ")")
+      # update information on NA - we still might have non-labelled (regular) NA
+      x_na <- is.na(x)
+    }
+
     # remove NA and Inf, for tabulate(). as.factor() will convert NaN
     # to a factor level "NaN", which we don't want here (same for Inf),
     # because tabulate() will then return frequencies for that level, too
@@ -321,6 +340,7 @@ format.data_codebook <- function(x, ...) {
   # merge N and %
   if (!is.null(x$Prop)) {
     x$Prop[x$Prop == "NA" | is.na(x$Prop)] <- ""
+    x$Prop[x$Prop != ""] <- format(x$Prop[x$Prop != ""], justify = "right")
     x[["N"]][x$Prop != ""] <- sprintf(
       "%s (%s)",
       as.character(x[["N"]][x$Prop != ""]),
