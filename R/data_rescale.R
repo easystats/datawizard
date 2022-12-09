@@ -87,7 +87,7 @@ rescale.numeric <- function(x,
   }
 
   # Warning if only one value
-  if (length(unique(x)) == 1 && is.null(range)) {
+  if (insight::has_single_value(x) && is.null(range)) {
     if (verbose) {
       insight::format_warning(
         "A `range` must be provided for data with only one unique value."

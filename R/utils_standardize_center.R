@@ -31,7 +31,7 @@
 
 
   # Sanity checks
-  check <- .check_standardize_numeric(x, name = NULL, verbose = verbose, reference = reference)
+  check <- .check_standardize_numeric(x, name = NULL, verbose = verbose, reference = reference, center = center)
 
   if (is.factor(vals) || is.character(vals)) {
     vals <- .factor_to_numeric(vals)
@@ -210,6 +210,7 @@
   } else {
     center <- weighted_mean(reference, weights)
     scale <- weighted_sd(reference, weights)
+    if (is.na(scale)) scale <- 1
   }
 
   if (scale == 0) {
@@ -231,9 +232,10 @@
 .check_standardize_numeric <- function(x,
                                        name = NULL,
                                        verbose = TRUE,
-                                       reference = NULL) {
+                                       reference = NULL,
+                                       center) {
   # Warning if only one value
-  if (length(unique(x)) == 1 && is.null(reference)) {
+  if (insight::has_single_value(x) && is.null(reference) && is.null(center)) {
     if (verbose) {
       if (is.null(name)) {
         insight::format_alert(

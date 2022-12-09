@@ -13,28 +13,32 @@ expected1 <- data.frame(
   year = c(2022, 2022, 2022),
   item1 = c(2, 1, 1),
   item2 = c(2, 1, 1),
-  item3 = c(2, 1, 1))
+  item3 = c(2, 1, 1)
+)
 
 expected2 <- data.frame(
   id = c(1, 2, 3),
   year = c(2022, 2022, 2022),
   item1 = c(NA, 1, 1),
   item2 = c(NA, 1, 1),
-  item3 = c(NA, 1, 1))
+  item3 = c(NA, 1, 1)
+)
 
 expected3 <- data.frame(
   id = c(1, 2, 3),
   year = c(2022, 2022, 2000),
   item1 = c(2, 1, 3),
   item2 = c(2, 1, 3),
-  item3 = c(2, 1, 3))
+  item3 = c(2, 1, 3)
+)
 
 expected4 <- data.frame(
   id = c(1, 2, 3, 3),
   year = c(2022, 2022, 2022, 2000),
   item1 = c(2, 1, 1, 3),
   item2 = c(2, 1, 1, 3),
-  item3 = c(2, 1, 1, 3))
+  item3 = c(2, 1, 1, 3)
+)
 
 # Testing
 
@@ -53,43 +57,50 @@ test_that("data_unique returns original data if no duplicates", {
 test_that("data_unique basic", {
   expect_equal(
     data_unique(df1, select = "id"),
-    expected1)
+    expected1
+  )
 })
 
 test_that("data_unique basic method best", {
   expect_equal(
     data_unique(df1, select = "id", keep = "best"),
-    expected1)
+    expected1
+  )
 })
 
 test_that("data_unique basic method first", {
   expect_equal(
     data_unique(df1, select = "id", keep = "first"),
-    expected2)
+    expected2
+  )
 })
 
 test_that("data_unique basic method last", {
   expect_equal(
     data_unique(df1, select = "id", keep = "last"),
-    expected3)
+    expected3
+  )
 })
 
 test_that("data_unique unquoted", {
   expect_equal(
     data_unique(df1, select = id),
-    expected1)
+    expected1
+  )
 })
 
 test_that("data_unique vector", {
   expect_equal(
     data_unique(df1, select = 1),
-    expected1)
+    expected1
+  )
 })
 
 test_that("data_unique select-helper", {
   expect_equal(
     data_unique(df1, select = contains("id")),
-    expected1)
+    expected1
+  )
 })
 
 test_that("data_unique multiple IDs", {
@@ -97,7 +108,8 @@ test_that("data_unique multiple IDs", {
   rownames(x) <- NULL
   expect_equal(
     x,
-    expected4)
+    expected4
+  )
 })
 
 test_that("data_unique multiple IDs formula", {
@@ -105,7 +117,8 @@ test_that("data_unique multiple IDs formula", {
   rownames(x) <- NULL
   expect_equal(
     x,
-    expected4)
+    expected4
+  )
 })
 
 test_that("data_unique multiple IDs vector", {
@@ -113,7 +126,8 @@ test_that("data_unique multiple IDs vector", {
   rownames(x) <- NULL
   expect_equal(
     x,
-    expected4)
+    expected4
+  )
 })
 
 test_that("data_unique preserve attributes", {
@@ -121,7 +135,8 @@ test_that("data_unique preserve attributes", {
   x <- attributes(data_unique(df1, id))
   expect_equal(
     x$testing,
-    "custom.attribute")
+    "custom.attribute"
+  )
 })
 
 test_that("data_unique, arg 'verbose' works", {
@@ -151,4 +166,3 @@ test_that("data_unique works with groups", {
   expect_identical(attributes(df)$class, y$class)
   expect_identical(attributes(df)$groups, y$groups)
 })
-

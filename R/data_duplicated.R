@@ -16,11 +16,11 @@
 #' @return A dataframe, containing all duplicates.
 #' @examples
 #' df1 <- data.frame(
-#'    id = c(1, 2, 3, 1, 3),
-#'    year = c(2022, 2022, 2022, 2022, 2000),
-#'    item1 = c(NA, 1, 1, 2, 3),
-#'    item2 = c(NA, 1, 1, 2, 3),
-#'    item3 = c(NA, 1, 1, 2, 3)
+#'   id = c(1, 2, 3, 1, 3),
+#'   year = c(2022, 2022, 2022, 2022, 2000),
+#'   item1 = c(NA, 1, 1, 2, 3),
+#'   item2 = c(NA, 1, 1, 2, 3),
+#'   item3 = c(NA, 1, 1, 2, 3)
 #' )
 #'
 #' data_duplicated(df1, select = "id")
@@ -28,9 +28,9 @@
 #' data_duplicated(df1, select = c("id", "year"))
 #'
 #' # Filter to exclude duplicates
-#' df2 <- df1[-c(1, 5),]
+#' df2 <- df1[-c(1, 5), ]
 #' df2
-
+#'
 data_duplicated <- function(data,
                             select = NULL,
                             exclude = NULL,
@@ -47,7 +47,6 @@ data_duplicated.data.frame <- function(data,
                                        ignore_case = FALSE,
                                        regex = FALSE,
                                        verbose = TRUE) {
-
   select <- .select_nse(
     select,
     data,
@@ -66,7 +65,6 @@ data_duplicated.data.frame <- function(data,
   dups <- data_arrange(dups, select)
   dups <- data_remove(dups, "temporary_id")
   dups
-
 }
 
 #' @export
@@ -76,13 +74,12 @@ data_duplicated.grouped_df <- function(data,
                                        ignore_case = FALSE,
                                        regex = FALSE,
                                        verbose = TRUE) {
-
   select <- .select_nse(select,
-                        data,
-                        exclude = exclude,
-                        ignore_case = ignore_case,
-                        regex = regex,
-                        verbose = verbose
+    data,
+    exclude = exclude,
+    ignore_case = ignore_case,
+    regex = regex,
+    verbose = verbose
   )
 
   # works only for dplyr >= 0.8.0

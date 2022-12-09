@@ -14,20 +14,18 @@
 #'   (the default), "first", or "last".
 #' @inheritParams find_columns
 #'
-#' @return A dataframe, containing only the chosen duplicates.
-#' @seealso
-#' [data_duplicated()]
-#' @export
+#' @return A data frame, containing only the chosen duplicates.
+#' @seealso [data_duplicated()]
 #' @examples
 #' df1 <- data.frame(
-#'    id = c(1, 2, 3, 1, 3),
-#'    item1 = c(NA, 1, 1, 2, 3),
-#'    item2 = c(NA, 1, 1, 2, 3),
-#'    item3 = c(NA, 1, 1, 2, 3)
+#'   id = c(1, 2, 3, 1, 3),
+#'   item1 = c(NA, 1, 1, 2, 3),
+#'   item2 = c(NA, 1, 1, 2, 3),
+#'   item3 = c(NA, 1, 1, 2, 3)
 #' )
 #'
 #' data_unique(df1, select = "id")
-
+#' @export
 data_unique <- function(data,
                         select = NULL,
                         keep = "best",
@@ -47,7 +45,6 @@ data_unique.data.frame <- function(data,
                                    ignore_case = FALSE,
                                    regex = FALSE,
                                    verbose = TRUE) {
-
   select <- .select_nse(
     select,
     data,
@@ -79,7 +76,8 @@ data_unique.data.frame <- function(data,
   }
 
   good.dups <- good.dups[!duplicated(good.dups$temporary_id2,
-                                     fromLast = keep == "last"), ]
+    fromLast = keep == "last"
+  ), ]
 
   good.dups <- data_select(good.dups, og.names)
   out <- data[!duplicated(data$temporary_id2), ]
@@ -100,7 +98,6 @@ data_unique.data.frame <- function(data,
   }
 
   out
-
 }
 
 
@@ -112,7 +109,6 @@ data_unique.grouped_df <- function(data,
                                    ignore_case = FALSE,
                                    regex = FALSE,
                                    verbose = TRUE) {
-
   select <- .select_nse(
     select,
     data,

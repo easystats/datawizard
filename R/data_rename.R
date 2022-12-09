@@ -36,7 +36,7 @@
 #' head(data_rename(iris, NULL))
 #'
 #' # Change all
-#' head(data_rename(iris, paste0("Var", 1:5)))
+#' head(data_rename(iris, replacement = paste0("Var", 1:5)))
 #'
 #' @seealso
 #' - Functions to rename stuff: [data_rename()], [data_rename_rows()], [data_addprefix()], [data_addsuffix()]
@@ -103,8 +103,13 @@ data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, .
 
 #' @keywords internal
 .data_rename <- function(data, pattern, replacement, safe = TRUE) {
-  if (isFALSE(safe) && !pattern %in% names(data)) {
-    insight::format_error(paste0("Variable `", pattern, "` is not in your data frame :/"))
+  if (!pattern %in% names(data)) {
+    if (isTRUE(safe)) {
+      insight::format_alert(paste0("Variable `", pattern, "` is not in your data frame :/"))
+    } else {
+      insight::format_error(paste0("Variable `", pattern, "` is not in your data frame :/"))
+    }
+
   }
 
   names(data) <- replace(names(data), names(data) == pattern, replacement)

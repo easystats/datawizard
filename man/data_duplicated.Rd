@@ -80,11 +80,11 @@ selecting which duplicates to keep.
 }
 \examples{
 df1 <- data.frame(
-   id = c(1, 2, 3, 1, 3),
-   year = c(2022, 2022, 2022, 2022, 2000),
-   item1 = c(NA, 1, 1, 2, 3),
-   item2 = c(NA, 1, 1, 2, 3),
-   item3 = c(NA, 1, 1, 2, 3)
+  id = c(1, 2, 3, 1, 3),
+  year = c(2022, 2022, 2022, 2022, 2000),
+  item1 = c(NA, 1, 1, 2, 3),
+  item2 = c(NA, 1, 1, 2, 3),
+  item3 = c(NA, 1, 1, 2, 3)
 )
 
 data_duplicated(df1, select = "id")
@@ -92,8 +92,9 @@ data_duplicated(df1, select = "id")
 data_duplicated(df1, select = c("id", "year"))
 
 # Filter to exclude duplicates
-df2 <- df1[-c(1, 5),]
+df2 <- df1[-c(1, 5), ]
 df2
+
 }
 \seealso{
 \code{\link[=data_unique]{data_unique()}}

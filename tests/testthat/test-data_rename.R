@@ -77,8 +77,9 @@ test_that("data_rename uses the whole dataset when pattern = NULL", {
 # other --------------
 
 test_that("data_rename: argument 'safe' works", {
-  expect_silent(
-    data_rename(iris, "FakeCol", "length", safe = TRUE)
+  expect_message(
+    data_rename(iris, "FakeCol", "length", safe = TRUE),
+    "Variable `FakeCol` is not in your data frame"
   )
   expect_error(
     data_rename(iris, "FakeCol", "length", safe = FALSE),
