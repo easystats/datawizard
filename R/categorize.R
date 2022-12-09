@@ -206,12 +206,21 @@ categorize.numeric <- function(x,
   if (!identical(split, "length")) breaks <- unique(c(min(x), breaks, max(x)))
 
   # recode into groups
-  out <- droplevels(cut(
-    x,
-    breaks = breaks,
-    include.lowest = TRUE,
-    right = FALSE
-  ))
+  # out <- droplevels(cut(
+  #   x,
+  #   breaks = breaks,
+  #   include.lowest = TRUE,
+  #   right = FALSE
+  # ))
+
+  out <- x |>
+    cut(
+      breaks = breaks,
+      include.lowest = TRUE,
+      right = FALSE
+    ) |>
+    droplevels()
+
   levels(out) <- 1:nlevels(out)
 
   # fix lowest value, add back into original vector
