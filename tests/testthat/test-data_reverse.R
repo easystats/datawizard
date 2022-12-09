@@ -346,9 +346,9 @@ test_that("reverse works with data frames (grouped data)", {
   library(poorman)
 
   expect_equal(
-    test_df %>%
-      group_by(id) %>%
-      reverse(exclude = "id") %>%
+    test_df |>
+      group_by(id) |>
+      reverse(exclude = "id") |>
       ungroup(),
     data.frame(
       id = rep(c("A", "B"), each = 3),
