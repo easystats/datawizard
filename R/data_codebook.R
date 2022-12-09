@@ -190,9 +190,6 @@ data_codebook <- function(data,
     # tabulate fills 0 for non-existing values, remove those
     frq <- frq[frq != 0]
 
-    # add proportions
-    proportions <- round(100 * (frq / sum(frq)), 1)
-
     # add Inf values?
     if (any(x_inf) && length(frq) <= max_values) {
       values <- c(values, Inf)
@@ -202,6 +199,9 @@ data_codebook <- function(data,
       frq <- c(frq, sum(x_inf))
     }
 
+    # add proportions
+    proportions <- round(100 * (frq / sum(frq)), 1)
+
     # make sure we have not too long rows, e.g. for variables that
     # have dozens of unique values
     if (length(value_labels) > max_values) {
@@ -210,7 +210,9 @@ data_codebook <- function(data,
     }
     if (length(frq) > max_values) {
       frq <- frq[1:max_values]
+      proportions <- proportions[1:max_values]
       frq[max_values] <- NA
+      proportions[max_values] <- NA
     }
     if (length(values) > max_values) {
       values <- values[1:max_values]
