@@ -190,6 +190,9 @@ data_codebook <- function(data,
     # tabulate fills 0 for non-existing values, remove those
     frq <- frq[frq != 0]
 
+    # add proportions
+    proportions <- round(100 * (frq / sum(frq)), 1)
+
     # add Inf values?
     if (any(x_inf) && length(frq) <= max_values) {
       values <- c(values, Inf)
@@ -228,7 +231,14 @@ data_codebook <- function(data,
     }
 
     # add values, value labels and frequencies to data frame
-    d <- cbind(d, data.frame(variable_label, values, value_labels, frq, stringsAsFactors = FALSE))
+    d <- cbind(d, data.frame(
+      variable_label,
+      values,
+      value_labels,
+      frq,
+      proportions,
+      stringsAsFactors = FALSE
+    ))
 
     # which columns need to be checked for duplicates?
     duplicates <- c("ID", "Name", "Type", "Missings", "variable_label")
@@ -237,7 +247,7 @@ data_codebook <- function(data,
       # these variables had long variable labels that have been wrapped,
       # the range value is duplicated (due to recycling), so we need to fix
       # this here.
-      duplicates <- c(duplicates, c("values", "frq"))
+      duplicates <- c(duplicates, c("values", "frq", "proportions"))
     }
 
     # clear duplicates due to recycling
@@ -259,8 +269,8 @@ data_codebook <- function(data,
   out <- do.call(rbind, out)
 
   # rename
-  pattern <- c("variable_label", "values", "value_labels", "frq")
-  replacement <- c("Label", "Values", "Value Labels", "N")
+  pattern <- c("variable_label", "values", "value_labels", "frq", "proportions")
+  replacement <- c("Label", "Values", "Value Labels", "N", "Prop")
   for (i in seq_along(pattern)) {
     names(out) <- replace(names(out), names(out) == pattern[i], replacement[i])
   }
@@ -271,7 +281,7 @@ data_codebook <- function(data,
   # reorder
   column_order <- c(
     "ID", "Name", "Label", "Type", "Missings", "Values",
-    "Value Labels", "N", ".row_id"
+    "Value Labels", "N", "Prop", ".row_id"
   )
   out <- out[union(intersect(column_order, names(out)), names(out))]
 
@@ -295,6 +305,14 @@ format.data_codebook <- function(x, ...) {
     x[["N"]] <- insight::trim_ws(prettyNum(x[["N"]], big.mark = ","))
     x[["N"]][x[["N"]] == "NA"] <- ""
   }
+  # merge N and %
+  x[["N"]][x$Prop != ""] <- sprintf(
+    "%s (%s%%)",
+    as.character(x[["N"]][x$Prop != ""]),
+    x$Prop[x$Prop != ""]
+  )
+  x$Prop <- NULL
+  colnames(x)[colnames(x) == "N"] <- "N (%)"
   x
 }
 
