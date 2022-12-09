@@ -8,6 +8,12 @@ NEW FUNCTIONS
 
 * `standardize()` and `center()` can be used in model formulas, similar to `base::scale()`.
 
+MINOR CHANGES
+
+* `data_codebook()` now includes the proportion for each category/value, in
+  addition to the counts. Furthermore, if data contains tagged NA values,
+  these are included in the frequency table.
+
 BUG FIXES
 
 * `center(x)` now works correctly when `x` is a single value and either

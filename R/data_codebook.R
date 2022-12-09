@@ -129,6 +129,25 @@ data_codebook <- function(data,
     # save value labels
     vallab <- attr(x, "labels", exact = TRUE)
 
+    # do we have labelled NA values? If so, include labelled NAs in count table
+    # we do this by converting NA values into character strings
+    if (anyNA(vallab) && insight::check_if_installed("haven", quietly = TRUE)) {
+      # get na-tags, i.e. the value labels for the different NA values
+      na_labels <- haven::na_tag(vallab)
+      # replace NA in labels with NA tags
+      vallab[!is.na(na_labels)] <- stats::setNames(
+        paste0("NA(", na_labels[!is.na(na_labels)], ")"),
+        names(vallab[!is.na(na_labels)])
+      )
+      # replace tagged NAs in variable with their values, tagged as NA(value)
+      na_values <- haven::na_tag(x)
+      # need to convert, we still have haven-class, which cannot coerce
+      x <- as.character(x)
+      x[!is.na(na_values)] <- paste0("NA(", na_values[!is.na(na_values)], ")")
+      # update information on NA - we still might have non-labelled (regular) NA
+      x_na <- is.na(x)
+    }
+
     # remove NA and Inf, for tabulate(). as.factor() will convert NaN
     # to a factor level "NaN", which we don't want here (same for Inf),
     # because tabulate() will then return frequencies for that level, too
@@ -143,6 +162,9 @@ data_codebook <- function(data,
     if (!is.numeric(x) && !is.factor(x)) {
       x <- as.factor(x)
     }
+
+    # for ranges, we don't want the N% value, so use this to flag range-values
+    is_range <- FALSE
 
     # handle labelled data - check if there are value labels or factor levels,
     # and extract values and N
@@ -180,6 +202,7 @@ data_codebook <- function(data,
         values <- sprintf("[%g, %g]", round(r[1], 2), round(r[2], 2))
         frq <- sum(!x_na)
         flag_range <- length(variable_label) > 1
+        is_range <- TRUE
         # if we have few values, we can print whole freq. table
       } else {
         values <- sort(unique_values)
@@ -197,6 +220,16 @@ data_codebook <- function(data,
         value_labels <- c(value_labels, "infinite")
       }
       frq <- c(frq, sum(x_inf))
+      # Inf are added as value, so don't flag range any more,
+      # since we now have proportions for the range and the inf values.
+      is_range <- FALSE
+    }
+
+    # add proportions, but not for ranges, since these are always 100%
+    if (is_range) {
+      proportions <- ""
+    } else {
+      proportions <- sprintf("%.1f%%", round(100 * (frq / sum(frq)), 1))
     }
 
     # make sure we have not too long rows, e.g. for variables that
@@ -207,7 +240,9 @@ data_codebook <- function(data,
     }
     if (length(frq) > max_values) {
       frq <- frq[1:max_values]
+      proportions <- proportions[1:max_values]
       frq[max_values] <- NA
+      proportions[max_values] <- NA
     }
     if (length(values) > max_values) {
       values <- values[1:max_values]
@@ -228,7 +263,14 @@ data_codebook <- function(data,
     }
 
     # add values, value labels and frequencies to data frame
-    d <- cbind(d, data.frame(variable_label, values, value_labels, frq, stringsAsFactors = FALSE))
+    d <- cbind(d, data.frame(
+      variable_label,
+      values,
+      value_labels,
+      frq,
+      proportions,
+      stringsAsFactors = FALSE
+    ))
 
     # which columns need to be checked for duplicates?
     duplicates <- c("ID", "Name", "Type", "Missings", "variable_label")
@@ -237,7 +279,7 @@ data_codebook <- function(data,
       # these variables had long variable labels that have been wrapped,
       # the range value is duplicated (due to recycling), so we need to fix
       # this here.
-      duplicates <- c(duplicates, c("values", "frq"))
+      duplicates <- c(duplicates, c("values", "frq", "proportions"))
     }
 
     # clear duplicates due to recycling
@@ -259,8 +301,8 @@ data_codebook <- function(data,
   out <- do.call(rbind, out)
 
   # rename
-  pattern <- c("variable_label", "values", "value_labels", "frq")
-  replacement <- c("Label", "Values", "Value Labels", "N")
+  pattern <- c("variable_label", "values", "value_labels", "frq", "proportions")
+  replacement <- c("Label", "Values", "Value Labels", "N", "Prop")
   for (i in seq_along(pattern)) {
     names(out) <- replace(names(out), names(out) == pattern[i], replacement[i])
   }
@@ -271,7 +313,7 @@ data_codebook <- function(data,
   # reorder
   column_order <- c(
     "ID", "Name", "Label", "Type", "Missings", "Values",
-    "Value Labels", "N", ".row_id"
+    "Value Labels", "N", "Prop", ".row_id"
   )
   out <- out[union(intersect(column_order, names(out)), names(out))]
 
@@ -289,11 +331,25 @@ data_codebook <- function(data,
 
 
 #' @export
-format.data_codebook <- function(x, ...) {
+format.data_codebook <- function(x, format = "text", ...) {
   # use [["N"]] to avoid partial matching
   if (any(stats::na.omit(nchar(x[["N"]]) > 5))) {
     x[["N"]] <- insight::trim_ws(prettyNum(x[["N"]], big.mark = ","))
-    x[["N"]][x[["N"]] == "NA"] <- ""
+    x[["N"]][x[["N"]] == "NA" | is.na(x[["N"]])] <- ""
+  }
+  # merge N and %
+  if (!is.null(x$Prop)) {
+    x$Prop[x$Prop == "NA" | is.na(x$Prop)] <- ""
+    # align only for text format
+    if (identical(format, "text")) {
+      x$Prop[x$Prop != ""] <- format(x$Prop[x$Prop != ""], justify = "right")
+    }
+    x[["N"]][x$Prop != ""] <- sprintf(
+      "%s (%s)",
+      as.character(x[["N"]][x$Prop != ""]),
+      x$Prop[x$Prop != ""]
+    )
+    x$Prop <- NULL
   }
   x
 }
@@ -333,7 +389,7 @@ print_html.data_codebook <- function(x,
   x$.row_id <- NULL
   # create basic table
   out <- insight::export_table(
-    format(x),
+    format(x, format = "html"),
     title = caption,
     format = "html",
     align = .get_codebook_align(x)
@@ -365,7 +421,7 @@ print_md.data_codebook <- function(x, ...) {
   caption <- .get_codebook_caption(x)
   x$.row_id <- NULL
   attr(x, "table_caption") <- caption
-  insight::export_table(format(x),
+  insight::export_table(format(x, format = "markdown"),
     title = caption,
     align = .get_codebook_align(x),
     format = "markdown"
@@ -390,6 +446,8 @@ print_md.data_codebook <- function(x, ...) {
 }
 
 .get_codebook_align <- function(x) {
+  # need to remove this one
+  x$Prop <- NULL
   align <- c(
     "ID" = "l", "Name" = "l", "Label" = "l", "Type" = "l", "Missings" = "r",
     "Values" = "r", "Value Labels" = "l", "N" = "r"
