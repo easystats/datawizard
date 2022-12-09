@@ -144,6 +144,9 @@ data_codebook <- function(data,
       x <- as.factor(x)
     }
 
+    # for ranges, we don't want the N% value, so use this to flag range-values
+    is_range <- FALSE
+
     # handle labelled data - check if there are value labels or factor levels,
     # and extract values and N
     if (!is.null(vallab) && length(vallab)) {
@@ -180,6 +183,7 @@ data_codebook <- function(data,
         values <- sprintf("[%g, %g]", round(r[1], 2), round(r[2], 2))
         frq <- sum(!x_na)
         flag_range <- length(variable_label) > 1
+        is_range <- TRUE
         # if we have few values, we can print whole freq. table
       } else {
         values <- sort(unique_values)
@@ -197,10 +201,17 @@ data_codebook <- function(data,
         value_labels <- c(value_labels, "infinite")
       }
       frq <- c(frq, sum(x_inf))
+      # Inf are added as value, so don't flag range any more,
+      # since we now have proportions for the range and the inf values.
+      is_range <- FALSE
     }
 
-    # add proportions
-    proportions <- round(100 * (frq / sum(frq)), 1)
+    # add proportions, but not for ranges, since these are always 100%
+    if (is_range) {
+      proportions <- ""
+    } else {
+      proportions <- sprintf("%.1f%%", round(100 * (frq / sum(frq)), 1))
+    }
 
     # make sure we have not too long rows, e.g. for variables that
     # have dozens of unique values
@@ -310,7 +321,7 @@ format.data_codebook <- function(x, ...) {
   # merge N and %
   x$Prop[x$Prop == "NA" | is.na(x$Prop)] <- ""
   x[["N"]][x$Prop != ""] <- sprintf(
-    "%s (%s%%)",
+    "%s (%s)",
     as.character(x[["N"]][x$Prop != ""]),
     x$Prop[x$Prop != ""]
   )
