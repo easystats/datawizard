@@ -11,7 +11,7 @@ test_that("data_codebook iris", {
     c(
       "iris (150 rows and 5 variables, 5 shown)",
       "",
-      "ID | Name         | Type        | Missings |     Values |      N (%)",
+      "ID | Name         | Type        | Missings |     Values |          N",
       "---+--------------+-------------+----------+------------+-----------",
       "1  | Sepal.Length | numeric     | 0 (0.0%) | [4.3, 7.9] |        150",
       "---+--------------+-------------+----------+------------+-----------",
@@ -48,7 +48,7 @@ test_that("data_codebook NaN and Inf", {
     c(
       "d (9 rows and 1 variables, 1 shown)",
       "",
-      "ID | Name | Type    |  Missings | Values |     N (%)",
+      "ID | Name | Type    |  Missings | Values |         N",
       "---+------+---------+-----------+--------+----------",
       "1  | x    | numeric | 2 (22.2%) |      1 | 3 (42.9%)",
       "   |      |         |           |      2 | 1 (14.3%)",
@@ -69,10 +69,10 @@ test_that("data_codebook NaN and Inf", {
     c(
       "d (102 rows and 1 variables, 1 shown)",
       "",
-      "ID | Name | Type    | Missings |  Values |       N (%)",
+      "ID | Name | Type    | Missings |  Values |           N",
       "---+------+---------+----------+---------+------------",
       "1  | x    | numeric | 0 (0.0%) | [1, 15] | 102 (98.1%)",
-      "   |      |         |          |     Inf |    2 (1.9%)",
+      "   |      |         |          |     Inf |   2 ( 1.9%)",
       "------------------------------------------------------"
     )
   )
@@ -84,18 +84,18 @@ test_that("data_codebook NaN and Inf", {
     c(
       "d (102 rows and 1 variables, 1 shown)",
       "",
-      "ID | Name | Type    | Missings | Values |      N (%)",
+      "ID | Name | Type    | Missings | Values |          N",
       "---+------+---------+----------+--------+-----------",
-      "1  | x    | numeric | 0 (0.0%) |      1 |   4 (4.0%)",
-      "   |      |         |          |      2 |   5 (5.0%)",
-      "   |      |         |          |      3 |   6 (6.0%)",
-      "   |      |         |          |      4 |   5 (5.0%)",
-      "   |      |         |          |      5 |   8 (8.0%)",
+      "1  | x    | numeric | 0 (0.0%) |      1 |  4 ( 4.0%)",
+      "   |      |         |          |      2 |  5 ( 5.0%)",
+      "   |      |         |          |      3 |  6 ( 6.0%)",
+      "   |      |         |          |      4 |  5 ( 5.0%)",
+      "   |      |         |          |      5 |  8 ( 8.0%)",
       "   |      |         |          |      6 | 10 (10.0%)",
-      "   |      |         |          |      7 |   6 (6.0%)",
-      "   |      |         |          |      8 |   3 (3.0%)",
+      "   |      |         |          |      7 |  6 ( 6.0%)",
+      "   |      |         |          |      8 |  3 ( 3.0%)",
       "   |      |         |          |      9 | 13 (13.0%)",
-      "   |      |         |          |     10 |   7 (7.0%)",
+      "   |      |         |          |     10 |  7 ( 7.0%)",
       "   |      |         |          |  (...) |           ",
       "----------------------------------------------------"
     )
@@ -108,7 +108,7 @@ test_that("data_codebook NaN and Inf", {
     c(
       "d (102 rows and 1 variables, 1 shown)",
       "",
-      "ID | Name | Type    | Missings | Values |    N (%)",
+      "ID | Name | Type    | Missings | Values |        N",
       "---+------+---------+----------+--------+---------",
       "1  | x    | numeric | 0 (0.0%) |      1 | 4 (4.0%)",
       "   |      |         |          |      2 | 5 (5.0%)",
@@ -175,19 +175,19 @@ test_that("data_codebook efc", {
     c(
       "efc (100 rows and 5 variables, 5 shown)",
       "",
-      "ID | Name     | Label                                    | Type        |   Missings |   Values | Value Labels                    |      N (%)",
+      "ID | Name     | Label                                    | Type        |   Missings |   Values | Value Labels                    |          N",
       "---+----------+------------------------------------------+-------------+------------+----------+---------------------------------+-----------",
       "1  | c12hour  | average number of hours of care per week | numeric     |   2 (2.0%) | [5, 168] |                                 |         98",
       "---+----------+------------------------------------------+-------------+------------+----------+---------------------------------+-----------",
       "2  | e16sex   | elder's gender                           | numeric     |   0 (0.0%) |        1 | male                            | 46 (46.0%)", 
       "   |          |                                          |             |            |        2 | female                          | 54 (54.0%)", 
       "---+----------+------------------------------------------+-------------+------------+----------+---------------------------------+-----------", 
-      "3  | e42dep   | elder's dependency                       | categorical |   3 (3.0%) |        1 | independent                     |   2 (2.1%)", 
-      "   |          |                                          |             |            |        2 | slightly dependent              |   4 (4.1%)", 
+      "3  | e42dep   | elder's dependency                       | categorical |   3 (3.0%) |        1 | independent                     |  2 ( 2.1%)", 
+      "   |          |                                          |             |            |        2 | slightly dependent              |  4 ( 4.1%)", 
       "   |          |                                          |             |            |        3 | moderately dependent            | 28 (28.9%)", 
       "   |          |                                          |             |            |        4 | severely dependent              | 63 (64.9%)", 
       "---+----------+------------------------------------------+-------------+------------+----------+---------------------------------+-----------", 
-      "4  | c172code | carer's level of education               | numeric     | 10 (10.0%) |        1 | low level of education          |   8 (8.9%)", 
+      "4  | c172code | carer's level of education               | numeric     | 10 (10.0%) |        1 | low level of education          |  8 ( 8.9%)", 
       "   |          |                                          |             |            |        2 | intermediate level of education | 66 (73.3%)", 
       "   |          |                                          |             |            |        3 | high level of education         | 16 (17.8%)", 
       "---+----------+------------------------------------------+-------------+------------+----------+---------------------------------+-----------", 
@@ -207,7 +207,7 @@ test_that("data_codebook efc, variable_label_width", {
     c(
       "efc (100 rows and 5 variables, 5 shown)",
       "",
-      "ID | Name     | Label                        | Type        |   Missings |   Values | Value Labels                    |      N (%)",
+      "ID | Name     | Label                        | Type        |   Missings |   Values | Value Labels                    |          N",
       "---+----------+------------------------------+-------------+------------+----------+---------------------------------+-----------",
       "1  | c12hour  | average number of hours of   | numeric     |   2 (2.0%) | [5, 168] |                                 |         98",
       "   |          | care per week                |             |            |          |                                 |           ",
@@ -215,12 +215,12 @@ test_that("data_codebook efc, variable_label_width", {
       "2  | e16sex   | elder's gender               | numeric     |   0 (0.0%) |        1 | male                            | 46 (46.0%)",
       "   |          |                              |             |            |        2 | female                          | 54 (54.0%)",
       "---+----------+------------------------------+-------------+------------+----------+---------------------------------+-----------",
-      "3  | e42dep   | elder's dependency           | categorical |   3 (3.0%) |        1 | independent                     |   2 (2.1%)",
-      "   |          |                              |             |            |        2 | slightly dependent              |   4 (4.1%)",
+      "3  | e42dep   | elder's dependency           | categorical |   3 (3.0%) |        1 | independent                     |  2 ( 2.1%)",
+      "   |          |                              |             |            |        2 | slightly dependent              |  4 ( 4.1%)",
       "   |          |                              |             |            |        3 | moderately dependent            | 28 (28.9%)",
       "   |          |                              |             |            |        4 | severely dependent              | 63 (64.9%)",
       "---+----------+------------------------------+-------------+------------+----------+---------------------------------+-----------",
-      "4  | c172code | carer's level of education   | numeric     | 10 (10.0%) |        1 | low level of education          |   8 (8.9%)",
+      "4  | c172code | carer's level of education   | numeric     | 10 (10.0%) |        1 | low level of education          |  8 ( 8.9%)",
       "   |          |                              |             |            |        2 | intermediate level of education | 66 (73.3%)",
       "   |          |                              |             |            |        3 | high level of education         | 16 (17.8%)",
       "---+----------+------------------------------+-------------+------------+----------+---------------------------------+-----------",
@@ -240,7 +240,7 @@ test_that("data_codebook efc, value_label_width", {
     c(
       "efc (100 rows and 5 variables, 5 shown)",
       "",
-      "ID | Name     | Label                        | Type        |   Missings |   Values | Value Labels     |      N (%)",
+      "ID | Name     | Label                        | Type        |   Missings |   Values | Value Labels     |          N",
       "---+----------+------------------------------+-------------+------------+----------+------------------+-----------",
       "1  | c12hour  | average number of hours of   | numeric     |   2 (2.0%) | [5, 168] |                  |         98",
       "   |          | care per week                |             |            |          |                  |           ",
@@ -248,12 +248,12 @@ test_that("data_codebook efc, value_label_width", {
       "2  | e16sex   | elder's gender               | numeric     |   0 (0.0%) |        1 | male             | 46 (46.0%)",
       "   |          |                              |             |            |        2 | female           | 54 (54.0%)",
       "---+----------+------------------------------+-------------+------------+----------+------------------+-----------",
-      "3  | e42dep   | elder's dependency           | categorical |   3 (3.0%) |        1 | independent      |   2 (2.1%)",
-      "   |          |                              |             |            |        2 | slightly...      |   4 (4.1%)",
+      "3  | e42dep   | elder's dependency           | categorical |   3 (3.0%) |        1 | independent      |  2 ( 2.1%)",
+      "   |          |                              |             |            |        2 | slightly...      |  4 ( 4.1%)",
       "   |          |                              |             |            |        3 | moderately...    | 28 (28.9%)",
       "   |          |                              |             |            |        4 | severely...      | 63 (64.9%)",
       "---+----------+------------------------------+-------------+------------+----------+------------------+-----------",
-      "4  | c172code | carer's level of education   | numeric     | 10 (10.0%) |        1 | low level of...  |   8 (8.9%)",
+      "4  | c172code | carer's level of education   | numeric     | 10 (10.0%) |        1 | low level of...  |  8 ( 8.9%)",
       "   |          |                              |             |            |        2 | intermediate...  | 66 (73.3%)",
       "   |          |                              |             |            |        3 | high level of... | 16 (17.8%)",
       "---+----------+------------------------------+-------------+------------+----------+------------------+-----------",
@@ -280,7 +280,7 @@ test_that("data_codebook truncated data", {
     c(
       "d (100 rows and 2 variables, 2 shown)",
       "",
-      "ID | Name | Type      | Missings |  Values |    N (%)",
+      "ID | Name | Type      | Missings |  Values |        N",
       "---+------+-----------+----------+---------+---------",
       "1  | a    | integer   | 0 (0.0%) | [1, 15] |      100",
       "---+------+-----------+----------+---------+---------",
@@ -311,7 +311,7 @@ test_that("data_codebook mixed numeric lengths", {
     c(
       "d (100 rows and 2 variables, 2 shown)",
        "",
-       "ID | Name | Type    | Missings |  Values |      N (%)",
+       "ID | Name | Type    | Missings |  Values |          N",
        "---+------+---------+----------+---------+-----------",
        "1  | a    | integer | 0 (0.0%) |       1 | 28 (28.0%)",
        "   |      |         |          |       2 | 26 (26.0%)",
@@ -393,7 +393,7 @@ test_that("data_codebook labelled data exceptions", {
     c(
       "d (100 rows and 3 variables, 3 shown)",
       "",
-      "ID | Name | Type    |   Missings | Values | Value Labels |      N (%)",
+      "ID | Name | Type    |   Missings | Values | Value Labels |          N",
       "---+------+---------+------------+--------+--------------+-----------",
       "1  | f1   | integer | 17 (17.0%) |      1 | One          | 21 (25.3%)",
       "   |      |         |            |      2 | Two          | 20 (24.1%)",
@@ -446,7 +446,7 @@ test_that("data_codebook labelled data factors", {
     c(
       "d (100 rows and 3 variables, 3 shown)",
       "",
-      "ID | Name | Type        | Missings | Values | Value Labels |      N (%)",
+      "ID | Name | Type        | Missings | Values | Value Labels |          N",
       "---+------+-------------+----------+--------+--------------+-----------",
       "1  | f1   | categorical | 0 (0.0%) |      a | A            | 35 (35.0%)",
       "   |      |             |          |      b | Bee          | 32 (32.0%)",
@@ -500,7 +500,7 @@ test_that("data_codebook, big marks", {
     c(
       "d (1,000,000 rows and 2 variables, 2 shown)",
       "",
-      "ID | Name | Type        | Missings | Values |           N (%)",
+      "ID | Name | Type        | Missings | Values |               N",
       "---+------+-------------+----------+--------+----------------",
       "1  | f1   | categorical | 0 (0.0%) |      a | 333,238 (33.3%)",
       "   |      |             |          |      b | 332,910 (33.3%)",
@@ -510,6 +510,43 @@ test_that("data_codebook, big marks", {
       "   |      |             |          |      2 | 333,358 (33.3%)",
       "   |      |             |          |      3 | 333,357 (33.3%)",
       "-------------------------------------------------------------"
+    )
+  )
+})
+
+
+test_that("data_codebook, tagged NA", {
+  skip_if_not_installed("haven")
+  library(haven)
+  x <- labelled(
+    x = c(
+      1:3, tagged_na("a", "c", "z"),
+      4:1, tagged_na("a", "a", "c"),
+      1:3, tagged_na("z", "c", "c"),
+      1:4, tagged_na("a", "c", "z")
+    ),
+    labels = c(
+      "Agreement" = 1, "Disagreement" = 4,
+      "First" = tagged_na("c"), "Refused" = tagged_na("a"),
+      "Not home" = tagged_na("z")
+    )
+  )
+  out <- capture.output(data_codebook(data.frame(x)))
+  expect_equal(
+    out,
+    c(
+      "data.frame(x) (26 rows and 1 variables, 1 shown)",
+      "",
+      "ID | Name | Type    |   Missings | Values | Value Labels |         N",
+      "---+------+---------+------------+--------+--------------+----------",
+      "1  | x    | numeric | 12 (46.2%) |      1 | Agreement    | 4 (15.4%)",
+      "   |      |         |            |      2 | 2            | 4 (15.4%)",
+      "   |      |         |            |      3 | 3            | 4 (15.4%)",
+      "   |      |         |            |      4 | Disagreement | 2 ( 7.7%)",
+      "   |      |         |            |  NA(a) | Refused      | 4 (15.4%)",
+      "   |      |         |            |  NA(c) | First        | 5 (19.2%)",
+      "   |      |         |            |  NA(z) | Not home     | 3 (11.5%)",
+      "--------------------------------------------------------------------"
     )
   )
 })

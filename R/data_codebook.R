@@ -331,7 +331,7 @@ data_codebook <- function(data,
 
 
 #' @export
-format.data_codebook <- function(x, ...) {
+format.data_codebook <- function(x, format = "text", ...) {
   # use [["N"]] to avoid partial matching
   if (any(stats::na.omit(nchar(x[["N"]]) > 5))) {
     x[["N"]] <- insight::trim_ws(prettyNum(x[["N"]], big.mark = ","))
@@ -340,14 +340,16 @@ format.data_codebook <- function(x, ...) {
   # merge N and %
   if (!is.null(x$Prop)) {
     x$Prop[x$Prop == "NA" | is.na(x$Prop)] <- ""
-    x$Prop[x$Prop != ""] <- format(x$Prop[x$Prop != ""], justify = "right")
+    # align only for text format
+    if (identical(format, "text")) {
+      x$Prop[x$Prop != ""] <- format(x$Prop[x$Prop != ""], justify = "right")
+    }
     x[["N"]][x$Prop != ""] <- sprintf(
       "%s (%s)",
       as.character(x[["N"]][x$Prop != ""]),
       x$Prop[x$Prop != ""]
     )
     x$Prop <- NULL
-    colnames(x)[colnames(x) == "N"] <- "N (%)"
   }
   x
 }
@@ -387,7 +389,7 @@ print_html.data_codebook <- function(x,
   x$.row_id <- NULL
   # create basic table
   out <- insight::export_table(
-    format(x),
+    format(x, format = "html"),
     title = caption,
     format = "html",
     align = .get_codebook_align(x)
@@ -419,7 +421,7 @@ print_md.data_codebook <- function(x, ...) {
   caption <- .get_codebook_caption(x)
   x$.row_id <- NULL
   attr(x, "table_caption") <- caption
-  insight::export_table(format(x),
+  insight::export_table(format(x, format = "markdown"),
     title = caption,
     align = .get_codebook_align(x),
     format = "markdown"
@@ -444,6 +446,8 @@ print_md.data_codebook <- function(x, ...) {
 }
 
 .get_codebook_align <- function(x) {
+  # need to remove this one
+  x$Prop <- NULL
   align <- c(
     "ID" = "l", "Name" = "l", "Label" = "l", "Type" = "l", "Missings" = "r",
     "Values" = "r", "Value Labels" = "l", "N" = "r"
