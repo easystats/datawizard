@@ -319,14 +319,16 @@ format.data_codebook <- function(x, ...) {
     x[["N"]][x[["N"]] == "NA" | is.na(x[["N"]])] <- ""
   }
   # merge N and %
-  x$Prop[x$Prop == "NA" | is.na(x$Prop)] <- ""
-  x[["N"]][x$Prop != ""] <- sprintf(
-    "%s (%s)",
-    as.character(x[["N"]][x$Prop != ""]),
-    x$Prop[x$Prop != ""]
-  )
-  x$Prop <- NULL
-  colnames(x)[colnames(x) == "N"] <- "N (%)"
+  if (!is.null(x$Prop)) {
+    x$Prop[x$Prop == "NA" | is.na(x$Prop)] <- ""
+    x[["N"]][x$Prop != ""] <- sprintf(
+      "%s (%s)",
+      as.character(x[["N"]][x$Prop != ""]),
+      x$Prop[x$Prop != ""]
+    )
+    x$Prop <- NULL
+    colnames(x)[colnames(x) == "N"] <- "N (%)"
+  }
   x
 }
 
