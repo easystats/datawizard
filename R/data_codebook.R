@@ -305,9 +305,10 @@ format.data_codebook <- function(x, ...) {
   # use [["N"]] to avoid partial matching
   if (any(stats::na.omit(nchar(x[["N"]]) > 5))) {
     x[["N"]] <- insight::trim_ws(prettyNum(x[["N"]], big.mark = ","))
-    x[["N"]][x[["N"]] == "NA"] <- ""
+    x[["N"]][x[["N"]] == "NA" | is.na(x[["N"]])] <- ""
   }
   # merge N and %
+  x$Prop[x$Prop == "NA" | is.na(x$Prop)] <- ""
   x[["N"]][x$Prop != ""] <- sprintf(
     "%s (%s%%)",
     as.character(x[["N"]][x$Prop != ""]),
