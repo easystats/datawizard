@@ -1,5 +1,18 @@
 # datawizard (development version)
 
+* Etienne Bacher is the new maintainer.
+
+MINOR CHANGES
+
+* `data_codebook()` now includes the proportion for each category/value, in
+  addition to the counts. Furthermore, if data contains tagged NA values,
+  these are included in the frequency table.
+
+BUG FIXES
+
+* `center(x)` now works correctly when `x` is a single value and either
+  `reference` or `center` is specified (#324).
+
 # datawizard 0.6.4
 
 NEW FUNCTIONS
