@@ -132,8 +132,8 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   out[infinite_idx] <- infinite_vals
 
   attr(out, "include_bounds") <- isTRUE(include_bounds)
-  attr(out, "min_value") <- min(x, na.rm = TRUE)
-  attr(out, "range_difference") <- diff(range(x, na.rm = TRUE))
+  attr(out, "min_value") <- min_value
+  attr(out, "range_difference") <- range_difference
   class(out) <- c("dw_transformer", class(out))
 
   out
