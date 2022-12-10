@@ -63,14 +63,6 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
     return(x)
   }
 
-  # called from "makepredictcal()"? Then we have additional arguments
-  dot_args <- list(...)
-  if (all(c("range_difference", "min_value") %in% names(dot_args))) {
-    attr(x, "range_difference") <- dot_args$range_difference
-    attr(x, "min_value") <- dot_args$min_value
-    x <- unnormalize(x)
-  }
-
   # safe name, for later use
   if (is.null(names(x))) {
     name <- insight::safe_deparse(substitute(x))
@@ -99,6 +91,17 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   }
 
 
+  # called from "makepredictcal()"? Then we have additional arguments
+  dot_args <- list(...)
+  if (all(c("range_difference", "min_value") %in% names(dot_args))) {
+    range_difference <- dot_args$range_difference
+    min_value <- dot_args$min_value
+  } else {
+    range_difference <- diff(range(x, na.rm = TRUE))
+    min_value <- min(x, na.rm = TRUE)
+  }
+
+
   # Warning if logical vector
   if (insight::n_unique(x) == 2 && verbose) {
     insight::format_warning(
@@ -110,7 +113,7 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
     )
   }
 
-  out <- as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE)))
+  out <- as.vector((x - min_value) / range_difference)
 
   if (!isTRUE(include_bounds) && (any(out == 0) || any(out == 1))) {
     if (isFALSE(include_bounds)) {
