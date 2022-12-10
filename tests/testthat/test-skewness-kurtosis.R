@@ -60,3 +60,19 @@ test_that("kurtosis works with matrices", {
   set.seed(123)
   expect_snapshot(kurtosis(as.matrix(iris[, 1:4]), iterations = 100))
 })
+
+test_that("skewness uses type 1 if not enough obs for type 2", {
+  expect_warning(
+    test <- skewness(c(1, 2), type = "2"),
+    "Need at least 3 complete obs"
+  )
+  expect_equal(test, skewness(c(1, 2), type = "1"))
+})
+
+test_that("kurtosis uses type 1 if not enough obs for type 2", {
+  expect_warning(
+    test <- kurtosis(c(1, 2, 3), type = "2"),
+    "Need at least 4 complete obs"
+  )
+  expect_equal(test, kurtosis(c(1, 2, 3), type = "1"))
+})

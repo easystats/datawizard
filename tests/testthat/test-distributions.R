@@ -10,4 +10,3 @@ test_that("distributions", {
   expect_equal(as.numeric(smoothness(x, "diff")), 1.183699, tolerance = 0.01)
   expect_equal(as.numeric(smoothness(x, "cor")), 0.9979799, tolerance = 0.01)
 })
-

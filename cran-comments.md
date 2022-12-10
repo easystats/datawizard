@@ -1,8 +1,8 @@
 ## R CMD check results
 
-0 errors | 0 warnings | 0 note
+0 errors | 0 warnings | 1 note
 
-* Fixes failing tests.
+* 1 expected note is about change of maintainership: Etienne Bacher is the new maintainer.
 
 ## revdepcheck results
 

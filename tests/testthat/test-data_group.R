@@ -46,3 +46,13 @@ test_that("data_group regex", {
     sort(unique(mtcars$cyl))
   )
 })
+
+
+test_that("data_ungroup works", {
+  x <- data_group(efc, "c172code")
+  attr(x, "foo") <- TRUE
+
+  ungrouped <- data_ungroup(x)
+  expect_false(inherits(ungrouped, "grouped_df"))
+  expect_true(attributes(x)$foo == TRUE)
+})

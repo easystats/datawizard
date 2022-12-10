@@ -66,6 +66,52 @@ unlink(temp_file)
 
 
 
+# Stata file -----------------------------------
+
+temp_file <- tempfile(fileext = ".dta")
+request <- httr::GET("https://raw.github.com/easystats/circus/master/data/stata_test.dta")
+httr::stop_for_status(request)
+writeBin(httr::content(request, type = "raw"), temp_file)
+
+test_that("data_read", {
+  d <- data_read(temp_file)
+  expect_identical(
+    d,
+    data.frame(
+      mpg = c(21, 21, 22.8),
+      cyl = c(6, 6, 4),
+      disp = c(160, 160, 108)
+    )
+  )
+})
+
+unlink(temp_file)
+
+
+
+# SAS file -----------------------------------
+
+temp_file <- tempfile(fileext = ".sas7bdat")
+request <- httr::GET("https://raw.github.com/easystats/circus/master/data/sas_test.sas7bdat")
+httr::stop_for_status(request)
+writeBin(httr::content(request, type = "raw"), temp_file)
+
+test_that("data_read", {
+  d <- data_read(temp_file)
+  expect_identical(
+    d,
+    data.frame(
+      mpg = c(21, 21, 22.8),
+      cyl = c(6, 6, 4),
+      disp = c(160, 160, 108)
+    )
+  )
+})
+
+unlink(temp_file)
+
+
+
 # SPSS file -----------------------------------
 
 temp_file <- tempfile(fileext = ".sav")

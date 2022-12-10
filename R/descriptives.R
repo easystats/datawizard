@@ -72,7 +72,7 @@ coef_var.default <- function(x, verbose = TRUE, ...) {
 #'   or `"qcd"` (quartile coefficient of dispersion, interquartile range divided
 #'   by the sum of the quartiles \[twice the midhinge\]: \eqn{(Q_3 - Q_1)/(Q_3 + Q_1)}.
 #' @param trim the fraction (0 to 0.5) of values to be trimmed from
-#'   each end of `x` before the mean and standard deviation (or alternatvies)
+#'   each end of `x` before the mean and standard deviation (or other measures)
 #'   are computed. Values of `trim` outside the range of (0 to 0.5) are taken
 #'   as the nearest endpoint.
 #' @param na.rm Logical. Should `NA` values be removed before computing (`TRUE`)
@@ -166,7 +166,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
   if (!is.numeric(trim) || length(trim) != 1L) {
     insight::format_error("`trim` must be a single numeric value.")
   }
-  if (is.null(NULL)) {
+  if (is.null(n)) {
     n <- length(x)
   }
   if (trim > 0 && n) {

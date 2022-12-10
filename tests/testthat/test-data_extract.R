@@ -143,3 +143,19 @@ test_that("data_extract regex", {
     data_extract(mtcars, select = "mpg")
   )
 })
+
+
+test_that("data_extract: 'name' is numeric", {
+  expect_identical(
+    data_extract(mtcars, "gear", 1),
+    data_extract(mtcars, "gear", "mpg")
+  )
+  expect_identical(
+    data_extract(mtcars, "gear", -2),
+    data_extract(mtcars, "gear", "gear")
+  )
+  expect_identical(
+    data_extract(mtcars, "gear", 0),
+    data_extract(mtcars, "gear", "row.names")
+  )
+})

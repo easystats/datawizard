@@ -19,12 +19,9 @@
 #' # Arrange in decreasing order
 #' data_arrange(head(mtcars), "-carb")
 #'
-#' \dontrun{
 #' # Throw an error if one of the variables specified doesn't exist
-#' data_arrange(head(mtcars), c("gear", "foo"), safe = FALSE)
-#' }
+#' try(data_arrange(head(mtcars), c("gear", "foo"), safe = FALSE))
 #' @export
-
 data_arrange <- function(data, select = NULL, safe = TRUE) {
   UseMethod("data_arrange")
 }
@@ -32,7 +29,6 @@ data_arrange <- function(data, select = NULL, safe = TRUE) {
 
 
 #' @export
-
 data_arrange.default <- function(data, select = NULL, safe = TRUE) {
   if (is.null(select) || length(select) == 0) {
     return(data)
@@ -106,7 +102,6 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
 
 
 #' @export
-
 data_arrange.grouped_df <- function(data, select = NULL, safe = TRUE) {
   # works only for dplyr >= 0.8.0
   grps <- attr(data, "groups", exact = TRUE)

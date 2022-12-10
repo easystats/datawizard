@@ -1,6 +1,3 @@
-data(iris)
-data(mtcars)
-
 test_that("center", {
   z <- center(iris$Sepal.Width)
   expect_equal(
@@ -22,7 +19,7 @@ test_that("center, robust", {
 })
 
 test_that("center, select", {
-  z  <- center(iris, select = "Sepal.Width")
+  z <- center(iris, select = "Sepal.Width")
   expect_equal(
     as.vector(z$Sepal.Width),
     iris$Sepal.Width - mean(iris$Sepal.Width),
@@ -61,13 +58,24 @@ test_that("center, all NA or Inf", {
   expect_equal(z, c(NA, -Inf, Inf), ignore_attr = TRUE)
 })
 
+test_that("center works correctly with only one value", {
+  expect_equal(center(100), 0, ignore_attr = TRUE)
+  expect_message(center(100), "will be set to 0")
+  expect_equal(center(100, center = 1), 99, ignore_attr = TRUE)
+  expect_equal(
+    center(100, reference = mtcars$mpg),
+    100 - mean(mtcars$mpg),
+    ignore_attr = TRUE
+  )
+})
+
 
 
 # with grouped data -------------------------------------------
 
 test_that("center (grouped data)", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
   datawizard <- iris %>%
     group_by(Species) %>%
@@ -86,7 +94,7 @@ test_that("center (grouped data)", {
 
 test_that("center, robust (grouped data)", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
   datawizard <- iris %>%
     group_by(Species) %>%
@@ -105,7 +113,7 @@ test_that("center, robust (grouped data)", {
 
 test_that("center, select (grouped data)", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
   datawizard <- iris %>%
     group_by(Species) %>%
@@ -124,7 +132,7 @@ test_that("center, select (grouped data)", {
 
 test_that("center, factors (grouped data)", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
   datawizard <- iris %>%
     group_by(Species) %>%

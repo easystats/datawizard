@@ -204,4 +204,42 @@ test_that("programming with data_filter in global env", {
     data_filter(mtcars, "mpg >= 30 & hp <= 66")
   )
 })
+
+test_that("data_filter works with groups", {
+  test <- data.frame(
+    id = c(1, 1, 2, 2),
+    x = c(0, 1, 3, 4),
+    y = c(1, 2, 3, 4)
+  )
+  test <- data_group(test, "id")
+
+  expected <- data.frame(id = c(1, 2), x = c(0, 3), y = c(1, 3))
+  class(expected) <- c("grouped_df", "data.frame")
+  attributes(expected)$groups <- attributes(test)$groups
+
+  expect_identical(
+    data_filter(test, x == min(x)),
+    expected
+  )
+})
+
+test_that("data_filter programming works with groups", {
+  test <- data.frame(
+    id = c(1, 1, 2, 2),
+    x = c(0, 1, 3, 4),
+    y = c(1, 2, 3, 4)
+  )
+  test <- data_group(test, "id")
+
+  expected <- data.frame(id = c(1, 2), x = c(0, 3), y = c(1, 3))
+  class(expected) <- c("grouped_df", "data.frame")
+  attributes(expected)$groups <- attributes(test)$groups
+
+  var = "x"
+
+  expect_identical(
+    data_filter(test, "{var} == min({var})"),
+    expected
+  )
+})
 # styler: on

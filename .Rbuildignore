@@ -21,6 +21,7 @@ publication/*
 ^\.coveralls\.yml$
 ^\.travis\.yml$
 ^_pkgdown\.yml$
+^_pkgdown\.yaml$
 ^appveyor\.yml$
 ^.gitlab-ci\.yml$
 ^data-raw$
@@ -47,4 +48,4 @@ references.bib
 ^CRAN-SUBMISSION$
 ^LICENSE$
 docs
-^dev$
+^.dev$

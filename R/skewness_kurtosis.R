@@ -42,7 +42,7 @@
 #'
 #' - Type "2" first calculates the type-1 skewness, then adjusts the result:
 #' `G1 = g1 * sqrt(n * (n - 1)) / (n - 2)`. This is what SAS and SPSS
-#' usually return
+#' usually return.
 #'
 #' - Type "3" first calculates the type-1 skewness, then adjusts the result:
 #' `b1 = g1 * ((1 - 1 / n))^1.5`. This is what Minitab usually returns.
@@ -64,11 +64,11 @@
 #' - Type "1" is the "classical" method, which is `g2 = n * sum((x -
 #' mean(x))^4) / (sum((x - mean(x))^2)^2) - 3`.
 #'
-#' - Type "2" first calculates the type-1 kurtosis, than adjusts the result:
+#' - Type "2" first calculates the type-1 kurtosis, then adjusts the result:
 #' `G2 = ((n + 1) * g2 + 6) * (n - 1)/((n - 2) * (n - 3))`. This is what
 #' SAS and SPSS usually return
 #'
-#' - Type "3" first calculates the type-1 kurtosis, than adjusts the result:
+#' - Type "3" first calculates the type-1 kurtosis, then adjusts the result:
 #' `b2 = (g2 + 3) * (1 - 1 / n)^2 - 3`. This is what Minitab usually
 #' returns.
 #'

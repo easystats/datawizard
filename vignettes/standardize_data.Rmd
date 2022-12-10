@@ -290,13 +290,13 @@ library(ggplot2)
 ggplot() +
   geom_density(aes(Z_VariableWise$Subjective_Valence,
     color = "Z_VariableWise"
-  ), size = 1) +
+  ), linewidth = 1) +
   geom_density(aes(Z_ParticipantWise$Subjective_Valence,
     color = "Z_ParticipantWise"
-  ), size = 1) +
+  ), linewidth = 1) +
   geom_density(aes(Z_Full$Subjective_Valence,
     color = "Z_Full"
-  ), size = 1) +
+  ), linewidth = 1) +
   see::theme_modern() +
   labs(color = "")
 ```

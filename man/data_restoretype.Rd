@@ -10,7 +10,9 @@ data_restoretype(data, reference = NULL, ...)
 \item{data}{A data frame to pivot.}
 
 \item{reference}{A reference data frame from which to find the correct
-column types.}
+column types. If \code{NULL}, each column is converted to numeric if it doesn't
+generate \code{NA}s. For example, \code{c("1", "2")} can be converted to numeric but not
+\code{c("Sepal.Length")}.}
 
 \item{...}{Currently not used.}
 }

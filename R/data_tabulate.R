@@ -232,15 +232,22 @@ format.dw_data_tabulate <- function(x, format = "text", big_mark = NULL, ...) {
   ftab$N <- gsub("\\.00$", "", ftab$N)
 
   # insert big marks?
-  if (is.null(big_mark) && any(nchar(ftab$N) > 5)) {
-    big_mark <- ","
-  }
-  if (!is.null(big_mark)) {
-    ftab$N <- prettyNum(ftab$N, big.mark = big_mark)
-  }
+  ftab$N <- .add_commas_in_numbers(ftab$N, big_mark)
 
   ftab
 }
+
+.add_commas_in_numbers <- function(x, big_mark = NULL) {
+  if (is.null(big_mark) && any(nchar(x) > 5)) {
+    big_mark <- ","
+  }
+  if (!is.null(big_mark)) {
+    x <- prettyNum(x, big.mark = big_mark)
+  }
+
+  x
+}
+
 
 
 #' @export
@@ -259,8 +266,11 @@ print.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
     cat("\n")
   }
 
+  a$total_n <- .add_commas_in_numbers(a$total_n, big_mark)
+  a$valid_n <- .add_commas_in_numbers(a$valid_n, big_mark)
+
   # summary of total and valid N (we may add mean/sd as well?)
-  summary_line <- sprintf("# total N=%i valid N=%i\n\n", a$total_n, a$valid_n)
+  summary_line <- sprintf("# total N=%s valid N=%s\n\n", a$total_n, a$valid_n)
   cat(insight::print_color(summary_line, "blue"))
 
   # remove information that goes into the header/footer
@@ -486,6 +496,7 @@ print_md.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
     "chr" = "character",
     "lbl" = "labelled",
     "cpl" = "complex",
+    "lgl" = "logical",
     vt
   )
 }

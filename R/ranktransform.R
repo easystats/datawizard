@@ -45,7 +45,7 @@ ranktransform.numeric <- function(x,
   }
 
   # Warning if only one value and return early
-  if (length(unique(x)) == 1L) {
+  if (insight::has_single_value(x)) {
     if (is.null(names(x))) {
       name <- deparse(substitute(x))
     } else {
