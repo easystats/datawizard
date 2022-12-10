@@ -28,13 +28,13 @@ train <- mtcars[1:30, ]
 test <- mtcars[31:32, ]
 
 m1 <- lm(mpg ~ center(hp), data = train)
-predict(m1, newdata = test) # Data in "centered" before the prediction is made,
+predict(m1, newdata = test) # Data is "centered" before the prediction is made,
                             # according to the center of the old data
 
 m2 <- lm(mpg ~ standardize(hp), data = train)
-m3 <- lm(mpg ~ scale(hp), data = train) # same as
+m3 <- lm(mpg ~ scale(hp), data = train) # same as above
 predict(m2, newdata = test) # Data is "standardized" before the prediction is made.
-predict(m3, newdata = test) # Data in "standardized" before the prediction is made.
+predict(m3, newdata = test) # Data is "standardized" before the prediction is made.
 
 
 }

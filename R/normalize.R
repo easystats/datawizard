@@ -63,6 +63,14 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
     return(x)
   }
 
+  # called from "makepredictcal()"? Then we have additional arguments
+  dot_args <- list(...)
+  if (all(c("range_difference", "min_value") %in% names(dot_args))) {
+    attr(x, "range_difference") <- dot_args$range_difference
+    attr(x, "min_value") <- dot_args$min_value
+    x <- unnormalize(x)
+  }
+
   # safe name, for later use
   if (is.null(names(x))) {
     name <- insight::safe_deparse(substitute(x))
@@ -123,6 +131,7 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   attr(out, "include_bounds") <- isTRUE(include_bounds)
   attr(out, "min_value") <- min(x, na.rm = TRUE)
   attr(out, "range_difference") <- diff(range(x, na.rm = TRUE))
+  class(out) <- c("dw_transformer", class(out))
 
   out
 }

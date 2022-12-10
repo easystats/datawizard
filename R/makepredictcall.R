@@ -33,7 +33,7 @@ makepredictcall.dw_transformer <- function(var, call) {
   if (is.matrix(var) || is.array(var))
     insight::format_error("datawizard scalers in model formulas are not supported for matrices.")
 
-  switch (as.character(call)[1L],
+  switch(as.character(call)[1L],
 
     centre = ,
     center =  {
@@ -46,8 +46,16 @@ makepredictcall.dw_transformer <- function(var, call) {
       call$scale <- attr(var, "scale")
     },
 
+    normalize = ,
+    normalise = {
+      call$min_value <- attr(var, "min_value")
+      call$range_difference <- attr(var, "range_difference")
+    },
+
     # ELSE:
-    {return(call)}
+    {
+      return(call)
+    }
   )
 
   call$verbose <- FALSE
