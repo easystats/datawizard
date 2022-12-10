@@ -156,9 +156,10 @@ test_that("weights + NA + na.exclude", {
   iris$weight_me <- runif(nrow(iris))
   iris$Sepal.Length[sample(nrow(iris), size = 25)] <- NA
   iris$weight_me[sample(nrow(iris), size = 15)] <- NA
+  d <<- iris
 
-  m1 <- lm(Sepal.Length ~ Species + Petal.Width, data = iris, weights = weight_me, na.action = na.exclude)
-  m2 <- lm(Sepal.Length ~ Species + Petal.Width, data = iris, weights = weight_me)
+  m1 <- lm(Sepal.Length ~ Species + Petal.Width, data = d, weights = weight_me, na.action = na.exclude)
+  m2 <- lm(Sepal.Length ~ Species + Petal.Width, data = d, weights = weight_me)
 
   expect_equal(coef(standardize(m2)), coef(standardize(m1)), tolerance = 1e-3)
   expect_equal(effectsize::standardize_parameters(m1, method = "basic")[[2]],
