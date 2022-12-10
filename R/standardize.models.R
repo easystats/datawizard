@@ -99,7 +99,7 @@ standardize.default <- function(x,
                                 update_expr,
                                 ...) {
   m_info <- .get_model_info(x, ...)
-  data <- insight::get_data(x)
+  data <- insight::get_data(x, source = "mf", verbose = FALSE)
 
   if (isTRUE(attr(data, "is_subset"))) {
     insight::format_error("Cannot standardize a model fit with a 'subset = '.")
@@ -336,8 +336,8 @@ standardize.mediate <- function(x,
   # models and data
   y <- x$model.y
   m <- x$model.m
-  y_data <- insight::get_data(y)
-  m_data <- insight::get_data(m)
+  y_data <- insight::get_data(y, source = "mf", verbose = FALSE)
+  m_data <- insight::get_data(m, source = "mf", verbose = FALSE)
 
   # std models and data
   y_std <- standardize(y,
@@ -350,8 +350,8 @@ standardize.mediate <- function(x,
     weights = weights, verbose = verbose,
     include_response = TRUE, ...
   )
-  y_data_std <- insight::get_data(y_std)
-  m_data_std <- insight::get_data(m_std)
+  y_data_std <- insight::get_data(y_std, source = "mf", verbose = FALSE)
+  m_data_std <- insight::get_data(m_std, source = "mf", verbose = FALSE)
 
   # fixed values
   covs <- x$covariates

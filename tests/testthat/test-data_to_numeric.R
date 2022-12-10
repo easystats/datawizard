@@ -25,7 +25,8 @@ test_that("convert character to numeric preserve levels", {
 
 test_that("convert character to numeric lowest", {
   mtcars$vs <- as.factor(mtcars$vs)
-  model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+  d <<- mtcars
+  model <- glm(vs ~ wt + mpg, data = d, family = "binomial")
   expect_equal(
     to_numeric(insight::get_response(model), dummy_factors = FALSE),
     c(1, 1, 2, 2, 1, 2, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2)
