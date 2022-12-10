@@ -81,7 +81,7 @@ test_that("weights", {
 
   m <- lm(mpg ~ wt + hp, weights = cyl, mtcars)
 
-  sm <- standardize(m, weights = TRUE)
+  sm <<- standardize(m, weights = TRUE)
   sm_data <- insight::get_data(sm)
   sm_data2 <- standardize(mtcars, select = c("mpg", "wt", "hp"), weights = "cyl")
   expect_equal(sm_data[, c("mpg", "wt", "hp")], sm_data2[, c("mpg", "wt", "hp")])
@@ -89,7 +89,7 @@ test_that("weights", {
   expect_error(standardize(m, weights = TRUE, robust = TRUE), NA)
 
   # no weights in stding
-  sm_xw <- standardize(m, weights = FALSE)
+  sm_xw <<- standardize(m, weights = FALSE)
   sm_data_xw <- insight::get_data(sm_xw)
   expect_false(isTRUE(all.equal(coef(sm)[-1], coef(sm_xw)[-1])))
 
@@ -156,9 +156,10 @@ test_that("weights + NA + na.exclude", {
   iris$weight_me <- runif(nrow(iris))
   iris$Sepal.Length[sample(nrow(iris), size = 25)] <- NA
   iris$weight_me[sample(nrow(iris), size = 15)] <- NA
+  d <<- iris
 
-  m1 <- lm(Sepal.Length ~ Species + Petal.Width, data = iris, weights = weight_me, na.action = na.exclude)
-  m2 <- lm(Sepal.Length ~ Species + Petal.Width, data = iris, weights = weight_me)
+  m1 <- lm(Sepal.Length ~ Species + Petal.Width, data = d, weights = weight_me, na.action = na.exclude)
+  m2 <- lm(Sepal.Length ~ Species + Petal.Width, data = d, weights = weight_me)
 
   expect_equal(coef(standardize(m2)), coef(standardize(m1)), tolerance = 1e-3)
   expect_equal(effectsize::standardize_parameters(m1, method = "basic")[[2]],
