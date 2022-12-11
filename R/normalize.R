@@ -100,7 +100,7 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
 
 
   # Warning if only one value
-  if (!flag_predict && insight::n_unique(x) == 1) {
+  if (!flag_predict && insight::has_single_value(x)) {
     if (verbose) {
       insight::format_warning(
         paste0(
