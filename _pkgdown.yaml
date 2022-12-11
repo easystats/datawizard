@@ -42,6 +42,7 @@ reference:
       - standardize.default
       - unstandardize
       - winsorize
+      - makepredictcall.dw_transformer
 
   - title: Data Properties
     desc: |

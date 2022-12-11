@@ -149,6 +149,8 @@ Regression with Beta-Distributed Dependent Variables. Psychological Methods,
 11(1), 54–71.
 }
 \seealso{
+See \code{\link[=makepredictcall.dw_transformer]{makepredictcall.dw_transformer()}} for use in model formulas.
+
 Other transform utilities: 
 \code{\link{ranktransform}()},
 \code{\link{rescale}()},
