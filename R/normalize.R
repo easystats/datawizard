@@ -79,7 +79,10 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   # called from "makepredictcal()"? Then we have additional arguments
   dot_args <- list(...)
   flag_predict <- FALSE
-  if (all(c("range_difference", "min_value", "vector_length", "flag_bounds") %in% names(dot_args))) {
+  required_dot_args <- c("range_difference", "min_value", "vector_length",
+                         "flag_bounds")
+
+  if (all(required_dot_args %in% names(dot_args))) {
     # we gather informatiom about the original data, which is needed
     # for "predict()" to work properly when "normalize()" is called
     # in formulas on-the-fly, e.g. "lm(mpg ~ normalize(hp), data = mtcars)"
@@ -87,9 +90,6 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
     min_value <- dot_args$min_value
     vector_length <- dot_args$vector_length
     flag_bounds <- dot_args$flag_bounds
-    if (!is.null(dot_args$include_bounds)) {
-      include_bounds <- isTRUE(dot_args$include_bounds)
-    }
     flag_predict <- TRUE
   } else {
     range_difference <- diff(range(x, na.rm = TRUE))
@@ -150,7 +150,7 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   # Re-insert infinite values
   out[infinite_idx] <- infinite_vals
 
-  attr(out, "include_bounds") <- isTRUE(include_bounds)
+  attr(out, "include_bounds") <- include_bounds
   attr(out, "flag_bounds") <- isTRUE(flag_bounds)
   attr(out, "min_value") <- min_value
   attr(out, "vector_length") <- vector_length
