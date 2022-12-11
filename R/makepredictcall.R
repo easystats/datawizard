@@ -55,6 +55,13 @@ makepredictcall.dw_transformer <- function(var, call) {
       call$flag_bounds <- attr(var, "flag_bounds")
     },
 
+    rescale = {
+      call$min_value <- attr(var, "min_value")
+      call$max_value <- attr(var, "max_value")
+      call$new_min <- attr(var, "new_min")
+      call$new_max <- attr(var, "new_max")
+    },
+
     # ELSE:
     {
       return(call)
