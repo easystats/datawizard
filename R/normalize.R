@@ -29,6 +29,8 @@
 #' - If `x` is a grouped data frame (`grouped_df`), normalization is performed
 #'   separately for each group.
 #'
+#' @seealso See [makepredictcall.dw_transformer()] for use in model formulas.
+#'
 #' @examples
 #'
 #' normalize(c(0, 1, 5, -5, -2))

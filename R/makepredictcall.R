@@ -3,14 +3,16 @@
 #' This function allows for the use of (some of) `datawizard`'s transformers
 #' inside a model formula. See examples below.
 #' \cr\cr
-#' Currently, only [center()] and [standardize()] are supported.
+#' Currently, [center()], [standardize()], [normalize()], & [rescale()] are
+#' supported.
 #'
 #' @inheritParams stats::makepredictcall
 #'
 #' @inherit stats::makepredictcall return
 #' @importFrom stats makepredictcall
 #'
-#' @seealso [stats::makepredictcall()], [center()], [standardize()]
+#' @seealso [stats::makepredictcall()]
+#' @family datawizard-transformers
 #'
 #' @examples
 #'
@@ -26,6 +28,16 @@
 #' m3 <- lm(mpg ~ scale(hp), data = train) # same as above
 #' predict(m2, newdata = test) # Data is "standardized" before the prediction is made.
 #' predict(m3, newdata = test) # Data is "standardized" before the prediction is made.
+#'
+#'
+#' m4 <- lm(mpg ~ normalize(hp), data = mtcars)
+#' m5 <- lm(mpg ~ rescale(hp, to = c(-3, 3)), data = mtcars)
+#'
+#' (newdata <- data.frame(hp = c(range(mtcars$hp), 400))) # 400 is outside original range!
+#'
+#' model.frame(delete.response(terms(m4)), data = newdata)
+#' model.frame(delete.response(terms(m5)), data = newdata)
+#'
 #'
 #'
 #' @export

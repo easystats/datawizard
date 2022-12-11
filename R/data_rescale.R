@@ -37,10 +37,11 @@
 #'   "Sepal.Length" = c(0, 1),
 #'   "Petal.Length" = c(-1, 0)
 #' )))
-#' @inherit data_rename seealso
+#' @inherit data_rename
 #'
 #' @return A rescaled object.
 #'
+#' @seealso See [makepredictcall.dw_transformer()] for use in model formulas.
 #' @family transform utilities
 #'
 #' @export

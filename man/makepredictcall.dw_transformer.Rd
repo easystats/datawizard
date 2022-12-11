@@ -19,7 +19,8 @@ A replacement for \code{call} for the \code{predvars} attribute of
 This function allows for the use of (some of) \code{datawizard}'s transformers
 inside a model formula. See examples below.
 \cr\cr
-Currently, only \code{\link[=center]{center()}} and \code{\link[=standardize]{standardize()}} are supported.
+Currently, \code{\link[=center]{center()}}, \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, & \code{\link[=rescale]{rescale()}} are
+supported.
 }
 \examples{
 
@@ -37,7 +38,18 @@ predict(m2, newdata = test) # Data is "standardized" before the prediction is ma
 predict(m3, newdata = test) # Data is "standardized" before the prediction is made.
 
 
+m4 <- lm(mpg ~ normalize(hp), data = mtcars)
+m5 <- lm(mpg ~ rescale(hp, to = c(-3, 3)), data = mtcars)
+
+(newdata <- data.frame(hp = c(range(mtcars$hp), 400))) # 400 is outside original range!
+
+model.frame(delete.response(terms(m4)), data = newdata)
+model.frame(delete.response(terms(m5)), data = newdata)
+
+
+
 }
 \seealso{
-\code{\link[stats:makepredictcall]{stats::makepredictcall()}}, \code{\link[=center]{center()}}, \code{\link[=standardize]{standardize()}}
+\code{\link[stats:makepredictcall]{stats::makepredictcall()}}
 }
+\concept{datawizard-transformers}
