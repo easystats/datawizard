@@ -6,7 +6,8 @@ MAJOR CHANGES
 
 NEW FUNCTIONS
 
-* `standardize()` and `center()` can be used in model formulas, similar to `base::scale()`.
+* `standardize()`, `center()`, `normalize()` and `rescale()` can be used in
+  model formulas, similar to `base::scale()`.
 
 MINOR CHANGES
 
