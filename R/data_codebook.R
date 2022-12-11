@@ -177,6 +177,12 @@ data_codebook <- function(data,
       # if not all value labels are present in the data, remove unused value labels
       if (!all(vallab %in% unique_values)) {
         not_needed <- setdiff(vallab, unique_values)
+        # if we had tagged NA values, we don't have numeric values, but strings
+        # for each tagged NA. In such cases, we need to find the position, to
+        # have numerics when we remove the not needed labels
+        if (is.character(not_needed)) {
+          not_needed <- stats::na.omit(match(not_needed, vallab))
+        }
         vallab <- vallab[-not_needed]
       }
       # we now should have the same length of value labels and labelled values
