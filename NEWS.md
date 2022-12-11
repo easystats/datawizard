@@ -1,6 +1,12 @@
 # datawizard (development version)
 
+MAJOR CHANGES
+
 * Etienne Bacher is the new maintainer.
+
+NEW FUNCTIONS
+
+* `standardize()` and `center()` can be used in model formulas, similar to `base::scale()`.
 
 MINOR CHANGES
 

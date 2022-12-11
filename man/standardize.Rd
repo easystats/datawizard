@@ -266,7 +266,8 @@ standardize(d, center = c(3, 4), scale = c(2, 4))
 standardize(d, center = 1, scale = 3)
 }
 \seealso{
-See \code{\link[=center]{center()}} for grand-mean centering of variables.
+See \code{\link[=center]{center()}} for grand-mean centering of variables, and
+\code{\link[=makepredictcall.dw_transformer]{makepredictcall.dw_transformer()}} for use in model formulas.
 
 Other transform utilities: 
 \code{\link{normalize}()},
