@@ -79,13 +79,23 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   # called from "makepredictcal()"? Then we have additional arguments
   dot_args <- list(...)
   flag_predict <- FALSE
-  if (all(c("range_difference", "min_value") %in% names(dot_args))) {
+  if (all(c("range_difference", "min_value", "vector_length", "flag_bounds") %in% names(dot_args))) {
+    # we gather informatiom about the original data, which is needed
+    # for "predict()" to work properly when "normalize()" is called
+    # in formulas on-the-fly, e.g. "lm(mpg ~ normalize(hp), data = mtcars)"
     range_difference <- dot_args$range_difference
     min_value <- dot_args$min_value
+    vector_length <- dot_args$vector_length
+    flag_bounds <- dot_args$flag_bounds
+    if (!is.null(dot_args$include_bounds)) {
+      include_bounds <- isTRUE(dot_args$include_bounds)
+    }
     flag_predict <- TRUE
   } else {
     range_difference <- diff(range(x, na.rm = TRUE))
     min_value <- min(x, na.rm = TRUE)
+    vector_length <- length(x)
+    flag_bounds <- NULL
   }
 
 
@@ -115,11 +125,18 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
     )
   }
 
+  # rescale
   out <- as.vector((x - min_value) / range_difference)
 
-  if (!isTRUE(include_bounds) && (any(out == 0) || any(out == 1))) {
+  # if we don't have information on whether bounds are included or not,
+  # get this information here.
+  if (is.null(flag_bounds)) {
+    flag_bounds <- (any(out == 0) || any(out == 1))
+  }
+
+  if (!isTRUE(include_bounds) && flag_bounds) {
     if (isFALSE(include_bounds)) {
-      out <- (out * (length(out) - 1) + 0.5) / length(out)
+      out <- (out * (vector_length - 1) + 0.5) / vector_length
     } else if (is.numeric(include_bounds) && include_bounds > 0 && include_bounds < 1) {
       out <- rescale(out, to = c(0 + include_bounds, 1 - include_bounds))
     } else if (verbose) {
@@ -134,7 +151,9 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   out[infinite_idx] <- infinite_vals
 
   attr(out, "include_bounds") <- isTRUE(include_bounds)
+  attr(out, "flag_bounds") <- isTRUE(flag_bounds)
   attr(out, "min_value") <- min_value
+  attr(out, "vector_length") <- vector_length
   attr(out, "range_difference") <- range_difference
   class(out) <- c("dw_transformer", class(out))
 

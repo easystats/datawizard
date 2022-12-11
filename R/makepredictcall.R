@@ -50,6 +50,9 @@ makepredictcall.dw_transformer <- function(var, call) {
     normalise = {
       call$min_value <- attr(var, "min_value")
       call$range_difference <- attr(var, "range_difference")
+      call$vector_length <- attr(var, "vector_length")
+      call$include_bounds <- attr(var, "include_bounds")
+      call$flag_bounds <- attr(var, "flag_bounds")
     },
 
     # ELSE:
