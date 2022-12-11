@@ -76,8 +76,21 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   x[infinite_idx] <- NA
 
 
+  # called from "makepredictcal()"? Then we have additional arguments
+  dot_args <- list(...)
+  flag_predict <- FALSE
+  if (all(c("range_difference", "min_value") %in% names(dot_args))) {
+    range_difference <- dot_args$range_difference
+    min_value <- dot_args$min_value
+    flag_predict <- TRUE
+  } else {
+    range_difference <- diff(range(x, na.rm = TRUE))
+    min_value <- min(x, na.rm = TRUE)
+  }
+
+
   # Warning if only one value
-  if (insight::n_unique(x) == 1) {
+  if (!flag_predict && insight::n_unique(x) == 1) {
     if (verbose) {
       insight::format_warning(
         paste0(
@@ -88,17 +101,6 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
       )
     }
     return(x)
-  }
-
-
-  # called from "makepredictcal()"? Then we have additional arguments
-  dot_args <- list(...)
-  if (all(c("range_difference", "min_value") %in% names(dot_args))) {
-    range_difference <- dot_args$range_difference
-    min_value <- dot_args$min_value
-  } else {
-    range_difference <- diff(range(x, na.rm = TRUE))
-    min_value <- min(x, na.rm = TRUE)
   }
 
 
