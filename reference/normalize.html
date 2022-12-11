@@ -249,7 +249,8 @@ Regression with Beta-Distributed Dependent Variables. Psychological Methods,
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other transform utilities: 
+    <div class="dont-index"><p>See <code><a href="makepredictcall.dw_transformer.html">makepredictcall.dw_transformer()</a></code> for use in model formulas.</p>
+<p>Other transform utilities: 
 <code><a href="ranktransform.html">ranktransform</a>()</code>,
 <code><a href="rescale.html">rescale</a>()</code>,
 <code><a href="reverse.html">reverse</a>()</code>,
@@ -263,29 +264,53 @@ Regression with Beta-Distributed Dependent Variables. Psychological Methods,
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5 0.6 1.0 0.0 0.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"include_bounds")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"flag_bounds")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"min_value")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"vector_length")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"range_difference")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "dw_transformer" "numeric"       </span>
 <span class="r-in"><span><span class="fu">normalize</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span>, include_bounds <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.50 0.58 0.90 0.10 0.34</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"include_bounds")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"flag_bounds")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"min_value")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"vector_length")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"range_difference")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "dw_transformer" "numeric"       </span>
 <span class="r-in"><span><span class="co"># use a value defining the bounds</span></span></span>
 <span class="r-in"><span><span class="fu">normalize</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span>, include_bounds <span class="op">=</span> <span class="fl">.001</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5000 0.5998 0.9990 0.0010 0.3004</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"min_value")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"max_value")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"new_min")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"new_max")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.999</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"range_difference")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"to_range")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.001 0.999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "dw_transformer" "dw_transformer" "numeric"       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"include_bounds")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"flag_bounds")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"vector_length")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">normalize</span><span class="op">(</span><span class="va">trees</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Girth     Height      Volume</span>
