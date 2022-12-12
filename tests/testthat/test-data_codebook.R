@@ -549,4 +549,35 @@ test_that("data_codebook, tagged NA", {
       "--------------------------------------------------------------------"
     )
   )
+
+  x <- labelled(
+    x = c(
+      1:3, tagged_na("a", "c"),
+      4:1, tagged_na("a", "a", "c"),
+      1:3, tagged_na("c", "c"),
+      1:4, tagged_na("a", "c")
+    ),
+    labels = c(
+      "Agreement" = 1, "Disagreement" = 4,
+      "First" = tagged_na("c"), "Refused" = tagged_na("a"),
+      "Not home" = tagged_na("z")
+    )
+  )
+  out <- capture.output(data_codebook(data.frame(x)))
+  expect_equal(
+    out,
+    c(
+      "data.frame(x) (23 rows and 1 variables, 1 shown)",
+      "",
+      "ID | Name | Type    |  Missings | Values | Value Labels |         N",
+      "---+------+---------+-----------+--------+--------------+----------",
+      "1  | x    | numeric | 9 (39.1%) |      1 | Agreement    | 4 (17.4%)",
+      "   |      |         |           |      2 | 2            | 4 (17.4%)",
+      "   |      |         |           |      3 | 3            | 4 (17.4%)",
+      "   |      |         |           |      4 | Disagreement | 2 ( 8.7%)",
+      "   |      |         |           |  NA(a) | Refused      | 4 (17.4%)",
+      "   |      |         |           |  NA(c) | First        | 5 (21.7%)",
+      "-------------------------------------------------------------------"
+    )
+  )
 })
