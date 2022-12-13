@@ -581,3 +581,37 @@ test_that("data_codebook, tagged NA", {
     )
   )
 })
+
+
+test_that("data_codebook, negative label values #334", {
+  skip_if_not_installed("haven")
+  library(haven)
+  x1 <- labelled(
+    x = 1:4,
+    labels = c("Agreement" = 1, "Disagreement" = 4, "Missing" = -9)
+  )
+  x2 <- labelled(
+    x = c(1:3, -9),
+    labels = c("Agreement" = 1, "Disagreement" = 4, "Missing" = -9)
+  )
+  out <- capture.output(data_codebook(data.frame(x1, x2)))
+  expect_equal(
+    out,
+    c(
+      "data.frame(x1, x2) (4 rows and 2 variables, 2 shown)",
+      "",
+      "ID | Name | Type    | Missings | Values | Value Labels |         N",
+      "---+------+---------+----------+--------+--------------+----------",
+      "1  | x1   | integer | 0 (0.0%) |      1 | Agreement    | 1 (25.0%)",
+      "   |      |         |          |      2 | 2            | 1 (25.0%)",
+      "   |      |         |          |      3 | 3            | 1 (25.0%)",
+      "   |      |         |          |      4 | Disagreement | 1 (25.0%)",
+      "---+------+---------+----------+--------+--------------+----------",
+      "2  | x2   | numeric | 0 (0.0%) |     -9 | Missing      | 1 (25.0%)",
+      "   |      |         |          |      1 | Agreement    | 1 (25.0%)",
+      "   |      |         |          |      2 | 2            | 1 (25.0%)",
+      "   |      |         |          |      3 | 3            | 1 (25.0%)",
+      "------------------------------------------------------------------"
+    )
+  )
+})
