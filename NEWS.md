@@ -4,12 +4,10 @@ MAJOR CHANGES
 
 * Etienne Bacher is the new maintainer.
 
-NEW FUNCTIONS
+MINOR CHANGES
 
 * `standardize()`, `center()`, `normalize()` and `rescale()` can be used in
   model formulas, similar to `base::scale()`.
-
-MINOR CHANGES
 
 * `data_codebook()` now includes the proportion for each category/value, in
   addition to the counts. Furthermore, if data contains tagged NA values,
@@ -19,6 +17,9 @@ BUG FIXES
 
 * `center(x)` now works correctly when `x` is a single value and either
   `reference` or `center` is specified (#324).
+
+* Fixed issue in `data_codebook()`, which failed for labelled vectors when
+  values of labels were not in sorted order.
 
 # datawizard 0.6.4
 
