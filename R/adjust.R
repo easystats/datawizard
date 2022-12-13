@@ -105,16 +105,14 @@ adjust <- function(data,
 
   # Factors
   formula_random <- NULL
-  facs <- names(data[effect][!sapply(data[effect], is.numeric)])
-  if (length(facs) >= 1) {
-    if (multilevel) {
-      if (additive) {
-        formula_random <- stats::as.formula(paste("~", paste(paste0("(1|", facs, ")"), collapse = " + ")))
-      } else {
-        formula_random <- paste("+", paste(paste0("(1|", facs, ")"), collapse = " + "))
-      }
-      effect <- effect[!effect %in% facs]
+  facs <- names(data[effect][!vapply(data[effect], is.numeric, logical(1))])
+  if (length(facs) >= 1 && multilevel) {
+    if (additive) {
+      formula_random <- stats::as.formula(paste("~", paste(paste0("(1|", facs, ")"), collapse = " + ")))
+    } else {
+      formula_random <- paste("+", paste(paste0("(1|", facs, ")"), collapse = " + "))
     }
+    effect <- effect[!effect %in% facs]
   }
 
   # Fit models
@@ -122,7 +120,7 @@ adjust <- function(data,
   for (var in select) {
     predictors <- effect[effect != var]
     if (additive) {
-      predictors_num <- names(data[predictors][sapply(data[predictors], is.numeric)])
+      predictors_num <- names(data[predictors][vapply(data[predictors], is.numeric, logical(1))])
       predictors[predictors == predictors_num] <- paste0("s(", predictors_num, ")")
     }
     formula_predictors <- paste(c("1", predictors), collapse = " + ")
