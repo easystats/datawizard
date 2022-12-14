@@ -20,7 +20,7 @@ Authors@R: c(
     person("Thomas J.", "Faulkenberry", , "faulkenberry@tarleton.edu", role = "rev"),
     person("Robert", "Garrett", , "rcg4@illinois.edu", role = "rev")
   )
-Maintainer: Indrajeet Patil <patilindrajeet.science@gmail.com>
+Maintainer: Etienne Bacher <etienne.bacher@protonmail.com>
 Description: A lightweight package to assist in key steps involved in any data 
     analysis workflow: (1) wrangling the raw data to get it in the needed form, 
     (2) applying preprocessing steps and statistical transformations, and 
