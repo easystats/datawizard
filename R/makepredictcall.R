@@ -22,7 +22,7 @@
 #'
 #' m1 <- lm(mpg ~ center(hp), data = train)
 #' predict(m1, newdata = test) # Data is "centered" before the prediction is made,
-#'                             # according to the center of the old data
+#' # according to the center of the old data
 #'
 #' m2 <- lm(mpg ~ standardize(hp), data = train)
 #' m3 <- lm(mpg ~ scale(hp), data = train) # same as above
@@ -38,26 +38,22 @@
 #' model.frame(delete.response(terms(m4)), data = newdata)
 #' model.frame(delete.response(terms(m5)), data = newdata)
 #'
-#'
-#'
 #' @export
 makepredictcall.dw_transformer <- function(var, call) {
-  if (is.matrix(var) || is.array(var))
+  if (is.matrix(var) || is.array(var)) {
     insight::format_error("datawizard scalers in model formulas are not supported for matrices.")
+  }
 
   switch(as.character(call)[1L],
-
     centre = ,
-    center =  {
+    center = {
       call$center <- attr(var, "center")
     },
-
     standardise = ,
     standardize = {
       call$center <- attr(var, "center")
       call$scale <- attr(var, "scale")
     },
-
     normalize = ,
     normalise = {
       call$min_value <- attr(var, "min_value")
@@ -66,7 +62,6 @@ makepredictcall.dw_transformer <- function(var, call) {
       call$include_bounds <- attr(var, "include_bounds")
       call$flag_bounds <- attr(var, "flag_bounds")
     },
-
     rescale = {
       call$min_value <- attr(var, "min_value")
       call$max_value <- attr(var, "max_value")

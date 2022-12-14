@@ -109,7 +109,6 @@ data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, .
     } else {
       insight::format_error(paste0("Variable `", pattern, "` is not in your data frame :/"))
     }
-
   }
 
   names(data) <- replace(names(data), names(data) == pattern, replacement)

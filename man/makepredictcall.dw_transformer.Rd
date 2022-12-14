@@ -30,7 +30,7 @@ test <- mtcars[31:32, ]
 
 m1 <- lm(mpg ~ center(hp), data = train)
 predict(m1, newdata = test) # Data is "centered" before the prediction is made,
-                            # according to the center of the old data
+# according to the center of the old data
 
 m2 <- lm(mpg ~ standardize(hp), data = train)
 m3 <- lm(mpg ~ scale(hp), data = train) # same as above
@@ -45,8 +45,6 @@ m5 <- lm(mpg ~ rescale(hp, to = c(-3, 3)), data = mtcars)
 
 model.frame(delete.response(terms(m4)), data = newdata)
 model.frame(delete.response(terms(m5)), data = newdata)
-
-
 
 }
 \seealso{

@@ -123,7 +123,7 @@ rescale.numeric <- function(x,
   }
 
   out <- as.vector((new_max - new_min) / (max_value - min_value) *
-                   (x - min_value) + new_min)
+    (x - min_value) + new_min)
 
   attr(out, "min_value") <- min_value
   attr(out, "max_value") <- max_value
