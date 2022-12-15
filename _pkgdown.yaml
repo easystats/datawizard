@@ -129,3 +129,9 @@ articles:
     navbar: ~
     contents:
       - standardize_data
+
+navbar:
+  right:
+  - text: "Roadmap"
+    href: articles/roadmap.html
+    icon: fa-solid fa-map

@@ -1,0 +1,37 @@
+---
+title: "Roadmap"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+vignette: >
+  \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{Roadmap}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+Current version of `datawizard`: `r packageVersion("datawizard")`
+
+## What is left to do before 1.0.0?
+
+The `datawizard` package has evolved a lot since its creation in May 2021. A lot
+of functions were added, and many of them changed names as we were trying to 
+implement a consistent interface.
+
+Version 1.0.0 will be the first **stable** version. Before reaching version 1.0.0,
+the following objectives need to be reached:
+
+* **stability**: function and arguments names should be stable and consistent
+  across the package;
+  
+* **robustness**: the source code of the package should be revised to ensure it
+  follows best practices in terms of stability and consistency;
+  
+* **speed**: functions should be as fast as possible, while respecting the 
+  constraint that everything should be written in base R (no C++, no dependencies 
+  other than other *easystats* packages).
+  
+
+Do you want more details or to add something to this roadmap? Check out the [list
+of issues](github.com/easystats/datawizard/issues) on Github.
