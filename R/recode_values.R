@@ -239,8 +239,8 @@ recode_values.numeric <- function(x,
 
     if (is.character(old_values)) {
       # replace placeholder
-      old_values <- gsub("min", min(x, na.rm = TRUE), old_values)
-      old_values <- gsub("max", max(x, na.rm = TRUE), old_values)
+      old_values <- gsub("min", min(x, na.rm = TRUE), old_values, fixed = TRUE)
+      old_values <- gsub("max", max(x, na.rm = TRUE), old_values, fixed = TRUE)
 
       # mimic vector
       if (length(old_values) == 1 && !grepl("c(", old_values, fixed = TRUE)) {

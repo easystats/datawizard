@@ -128,7 +128,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
       standard = ,
       unbiased = mean(x, ...),
       median_mad = stats::median(x, ...),
-      qcd = unname(sum(stats::quantile(x, probs = c(.25, .75), ...)))
+      qcd = unname(sum(stats::quantile(x, probs = c(0.25, 0.75), ...)))
     )
   }
   if (is.null(sigma)) {
@@ -136,7 +136,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
       standard = ,
       unbiased = stats::sd(x, ...),
       median_mad = stats::mad(x, center = mu, ...),
-      qcd = unname(diff(stats::quantile(x, probs = c(.25, .75), ...)))
+      qcd = unname(diff(stats::quantile(x, probs = c(0.25, 0.75), ...)))
     )
   }
   out <- sigma / mu

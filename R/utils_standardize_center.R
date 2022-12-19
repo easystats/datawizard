@@ -105,8 +105,8 @@
 
   omit <- switch(remove_na,
     none = logical(nrow(x)),
-    selected = rowSums(sapply(x[select], is.na)) > 0,
-    all = rowSums(sapply(x, is.na)) > 0
+    selected = rowSums(vapply(x[select], is.na, FUN.VALUE = logical(nrow(x)))) > 0,
+    all = rowSums(vapply(x, is.na, FUN.VALUE = logical(nrow(x)))) > 0
   )
   x <- x[!omit, , drop = FALSE]
 
@@ -284,9 +284,9 @@
 
   if (!force) {
     if (!keep_character) {
-      factors <- sapply(x[select], function(i) is.factor(i) | is.character(i))
+      factors <- vapply(x[select], function(i) is.factor(i) | is.character(i), FUN.VALUE = logical(1L))
     } else {
-      factors <- sapply(x[select], function(i) is.factor(i))
+      factors <- vapply(x[select], function(i) is.factor(i), FUN.VALUE = logical(1L))
     }
     select <- select[!factors]
   }

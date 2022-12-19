@@ -285,7 +285,7 @@ degroup <- function(x,
       sprintf(
         "%i variables were not found in the dataset: %s\n",
         length(not_found),
-        paste0(not_found, collapse = ", ")
+        toString(not_found)
       )
     )
   }
@@ -297,7 +297,7 @@ degroup <- function(x,
 
 
   # find categorical predictors that are coded as factors
-  categorical_predictors <- sapply(dat[select], is.factor)
+  categorical_predictors <- vapply(dat[select], is.factor, FUN.VALUE = logical(1L))
 
   # convert binary predictors to numeric
   if (any(categorical_predictors)) {
@@ -329,7 +329,7 @@ degroup <- function(x,
       insight::print_color(
         sprintf(
           "Categorical predictors (%s) have been coerced to numeric values to compute de- and group-meaned variables.\n",
-          paste0(names(categorical_predictors)[categorical_predictors], collapse = ", ")
+          toString(names(categorical_predictors)[categorical_predictors])
         ),
         "yellow"
       )

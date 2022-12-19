@@ -94,9 +94,9 @@ data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose =
     } else {
       var_info <- data.frame(
         Variable = obj_name,
-        Group = paste0(lapply(colnames(group_variable), function(i) {
+        Group = toString(lapply(colnames(group_variable), function(i) {
           sprintf("%s (%s)", i, group_variable[[i]])
-        }), collapse = ", "),
+        })),
         stringsAsFactors = FALSE
       )
     }
@@ -259,9 +259,9 @@ print.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
 
   # grouped data? if yes, add information on grouping factor
   if (!is.null(a$group_variable)) {
-    group_title <- paste0("Grouped by ", paste0(lapply(colnames(a$group_variable), function(i) {
+    group_title <- paste0("Grouped by ", toString(lapply(colnames(a$group_variable), function(i) {
       sprintf("%s (%s)", i, a$group_variable[[i]])
-    }), collapse = ", "))
+    })))
     cat(insight::print_color(group_title, "blue"))
     cat("\n")
   }

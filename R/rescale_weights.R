@@ -105,7 +105,7 @@ rescale_weights <- function(data, group, probability_weights, nest = FALSE) {
   }
 
   # sort id
-  data_tmp$.bamboozled <- 1:nrow(data_tmp)
+  data_tmp$.bamboozled <- seq_len(nrow(data_tmp))
 
   if (nest && length(group) < 2) {
     insight::format_warning(
@@ -161,8 +161,8 @@ rescale_weights <- function(data, group, probability_weights, nest = FALSE) {
   w_b <- x[[probability_weights]] * x$sum_weights_by_group / x$sum_squared_weights_by_group
 
   out <- data.frame(
-    pweights_a = rep(as.numeric(NA), times = n),
-    pweights_b = rep(as.numeric(NA), times = n)
+    pweights_a = rep(NA_real_, times = n),
+    pweights_b = rep(NA_real_, times = n)
   )
 
   out$pweights_a[weight_non_na] <- w_a
@@ -210,8 +210,8 @@ rescale_weights <- function(data, group, probability_weights, nest = FALSE) {
   w_b <- x[[probability_weights]] * x$sum_weights_by_group / x$sum_squared_weights_by_group
 
   out <- data.frame(
-    pweights_a = rep(as.numeric(NA), times = n),
-    pweights_b = rep(as.numeric(NA), times = n)
+    pweights_a = rep(NA_real_, times = n),
+    pweights_b = rep(NA_real_, times = n)
   )
 
   out$pweights_a[weight_non_na] <- w_a
