@@ -286,7 +286,7 @@ data_to_long <- function(data,
   # can't use do.call("c", ...) all the time because its behavior changed with
   # factors in 4.1.0
   values_are_dates <- all(
-    vapply(x, .is_date, FUN.VALUE = logical(1))
+    vapply(x, .is_date, FUN.VALUE = logical(1L))
   )
   if (values_are_dates) {
     data.frame(values = do.call("c", unname(x)), ind, stringsAsFactors = FALSE)

@@ -289,7 +289,7 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   if (!is.null(out$.data_merge_id_x)) {
     # for full joins, we have no complete sorting id, but NAs for each
     # data frame. we now "merge" the two sorting IDs from each data frame.
-    if (any(is.na(out$.data_merge_id_x)) && !is.null(out$.data_merge_id_y)) {
+    if (anyNA(out$.data_merge_id_x) && !is.null(out$.data_merge_id_y)) {
       out$.data_merge_id_x[is.na(out$.data_merge_id_x)] <- out$.data_merge_id_y[is.na(out$.data_merge_id_x)]
     }
     out <- out[order(out$.data_merge_id_x), ]

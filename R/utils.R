@@ -81,7 +81,7 @@
   msg <- ""
   # guess the misspelled string
   possible_strings <- unlist(lapply(searchterm, function(s) {
-    source[.fuzzy_grep(source, s)]
+    source[.fuzzy_grep(source, s)] # nolint
   }))
   if (length(possible_strings)) {
     msg <- "Did you mean "

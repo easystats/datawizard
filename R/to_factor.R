@@ -87,7 +87,7 @@ to_factor.data.frame <- function(x,
                                  verbose = TRUE,
                                  ...) {
   # sanity check, return as is for complete numeric
-  if (all(sapply(x, is.factor))) {
+  if (all(vapply(x, is.factor, FUN.VALUE = logical(1L)))) {
     return(x)
   }
 
@@ -102,7 +102,7 @@ to_factor.data.frame <- function(x,
 
   # drop factors, when append is not FALSE
   if (!isFALSE(append)) {
-    select <- colnames(x[select])[!sapply(x[select], is.factor)]
+    select <- colnames(x[select])[!vapply(x[select], is.factor, FUN.VALUE = logical(1L))]
   }
 
   # process arguments

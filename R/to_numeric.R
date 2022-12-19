@@ -70,7 +70,7 @@ to_numeric.data.frame <- function(x,
                                   verbose = TRUE,
                                   ...) {
   # sanity check, return as is for complete numeric
-  if (all(sapply(x, is.numeric))) {
+  if (all(vapply(x, is.numeric, FUN.VALUE = logical(1L)))) {
     return(x)
   }
 
@@ -87,7 +87,7 @@ to_numeric.data.frame <- function(x,
 
   # drop numerics, when append is not FALSE
   if (!isFALSE(append)) {
-    select <- colnames(x[select])[!sapply(x[select], is.numeric)]
+    select <- colnames(x[select])[!vapply(x[select], is.numeric, FUN.VALUE = logical(1L))]
   }
 
   # process arguments
@@ -246,12 +246,12 @@ to_numeric.character <- function(x,
                                  lowest = NULL,
                                  verbose = TRUE,
                                  ...) {
-  numbers <- sapply(x, function(i) {
+  numbers <- vapply(x, function(i) {
     element <- tryCatch(str2lang(i), error = function(e) NULL)
     !is.null(element) && is.numeric(element)
-  })
+  }, FUN.VALUE = logical(1L))
   if (all(numbers)) {
-    out <- as.numeric(sapply(x, str2lang))
+    out <- as.numeric(vapply(x, str2lang, FUN.VALUE = numeric(1L)))
   } else {
     out <- to_numeric(as.factor(x), dummy_factors = dummy_factors)
   }

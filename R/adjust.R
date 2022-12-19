@@ -105,7 +105,7 @@ adjust <- function(data,
 
   # Factors
   formula_random <- NULL
-  facs <- names(data[effect][!vapply(data[effect], is.numeric, logical(1))])
+  facs <- names(data[effect][!vapply(data[effect], is.numeric, logical(1L))])
   if (length(facs) >= 1 && multilevel) {
     if (additive) {
       formula_random <- stats::as.formula(paste("~", paste(paste0("(1|", facs, ")"), collapse = " + ")))
@@ -120,7 +120,7 @@ adjust <- function(data,
   for (var in select) {
     predictors <- effect[effect != var]
     if (additive) {
-      predictors_num <- names(data[predictors][vapply(data[predictors], is.numeric, logical(1))])
+      predictors_num <- names(data[predictors][vapply(data[predictors], is.numeric, logical(1L))])
       predictors[predictors == predictors_num] <- paste0("s(", predictors_num, ")")
     }
     formula_predictors <- paste(c("1", predictors), collapse = " + ")

@@ -66,7 +66,7 @@ data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, .
 
   # if duplicated names in replacement, append ".2", ".3", etc. to duplicates
   # ex: c("foo", "foo") -> c("foo", "foo.2")
-  if (any(duplicated(replacement))) {
+  if (anyDuplicated(replacement) > 0L) {
     dup <- as.data.frame(table(replacement))
     dup <- dup[dup$Freq > 1, ]
     for (i in dup$replacement) {

@@ -82,8 +82,8 @@ data_codebook <- function(data,
         sprintf("Following %i columns were empty and have been removed:", length(empty)),
         text_concatenate(names(empty))
       )
-      select <- select[-empty]
     }
+    select <- select[-empty]
   }
 
   # needed for % NA

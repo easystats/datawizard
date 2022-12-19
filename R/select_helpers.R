@@ -42,10 +42,10 @@
 
   # select and exclude might also be a (user-defined) function
   if (inherits(select, "function")) {
-    select <- columns[sapply(data, select)]
+    select <- columns[vapply(data, select, FUN.VALUE = logical(1L))]
   }
   if (inherits(exclude, "function")) {
-    exclude <- columns[sapply(data, exclude)]
+    exclude <- columns[vapply(data, exclude, FUN.VALUE = logical(1L))]
   }
 
   # if select could not be evaluated (because expression "makes no sense")
@@ -103,7 +103,7 @@
   }
 
   # remove parentheses for functions
-  if (!is.null(x) && length(x) == 1 && substr(x, nchar(x) - 1, nchar(x)) == "()") {
+  if (!is.null(x) && length(x) == 1 && endsWith(x, "()")) {
     x <- substr(x, 0, nchar(x) - 2)
   }
 
@@ -145,7 +145,7 @@
 
           # if starts_with() et al. come from tidyselect but need to be used in
           # a select environment, then the error doesn't have the same structure.
-          if (is.null(fn) && grepl("must be used within a", e$message)) {
+          if (is.null(fn) && grepl("must be used within a", e$message, fixed = TRUE)) {
             trace <- lapply(e$trace$call, function(x) {
               tmp <- insight::safe_deparse(x)
               if (grepl(paste0("^", .regex_select_helper()), tmp)) {
@@ -231,9 +231,9 @@
   } else if (!is.null(data) && !is.null(user_function)) {
     # function -----
     if (negate) {
-      pattern <- columns[!sapply(data, function(i) user_function(i))]
+      pattern <- columns[!vapply(data, user_function, FUN.VALUE = logical(1L))]
     } else {
-      pattern <- columns[sapply(data, user_function)]
+      pattern <- columns[vapply(data, user_function, FUN.VALUE = logical(1L))]
     }
     fixed <- TRUE
   } else if (!is.null(data) && grepl("^c\\((.*)\\)$", x)) {
@@ -344,7 +344,7 @@
   if (!all(pattern %in% columns)) {
     if (isTRUE(verbose)) {
       insight::format_warning(
-        paste0("Following variable(s) were not found: ", paste0(setdiff(pattern, columns), collapse = ", ")),
+        paste0("Following variable(s) were not found: ", toString(setdiff(pattern, columns))),
         .misspelled_string(columns, setdiff(pattern, columns), default_message = "Possibly misspelled?")
       )
     }
@@ -361,7 +361,7 @@
     packages <- "poorman"
   }
 
-  namespace <- sapply(packages, isNamespaceLoaded)
+  namespace <- vapply(packages, isNamespaceLoaded, FUN.VALUE = logical(1L))
   attached <- paste0("package:", packages) %in% search()
   attached <- stats::setNames(attached, packages)
 
@@ -405,7 +405,7 @@
   tmp <- gsub(paste0(select_helper, "\\(\"(.*)\"\\)"), "\\1", x)
   tmp <- gsub("'", "", tmp, fixed = TRUE)
   tmp <- gsub('"', "", tmp, fixed = TRUE)
-  tmp <- strsplit(tmp, ",")[[1]]
+  tmp <- strsplit(tmp, ",", fixed = TRUE)[[1]]
   tmp <- insight::trim_ws(tmp)
   if (select_helper == "contains") {
     tmp <- paste0("\\Q", tmp, "\\E")
