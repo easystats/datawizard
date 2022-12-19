@@ -26,12 +26,12 @@ visualisation_recipe <- function(x, ...) {
 
 #' @export
 print.visualisation_recipe <- function(x, ...) {
-  for (i in 1:length(x)) {
+  for (i in seq_along(x)) {
     l <- x[[paste0("l", i)]]
     insight::print_color(paste0("Layer ", i, "\n--------\n"), "blue")
     insight::print_color(paste0("Geom type: ", ifelse(is.null(l$geom), "[NULL]", l$geom), "\n"), "yellow")
 
-    elements <- names(l)[!sapply(l, is.null)]
+    elements <- names(l)[!vapply(l, is.null, FUN.VALUE = logical(1L))]
 
     # Loop through all elements of list
     for (element in elements[elements != "geom"]) {
@@ -64,7 +64,7 @@ print.visualisation_recipe <- function(x, ...) {
             if (length(l[[element]]) == 1) {
               cat(l[[element]])
             } else {
-              cat(paste0("c(", paste0(l[[element]], collapse = ", "), ")"))
+              cat(paste0("c(", toString(l[[element]]), ")"))
             }
           }
         } else {

@@ -118,7 +118,7 @@ text_remove <- function(text, pattern = "", ...) {
 text_wrap <- function(text, width = NULL, ...) {
   width <- width %||% getOption("width")
 
-  text <- strsplit(text, "\n", perl = TRUE)
+  text <- strsplit(text, "\n", fixed = TRUE)
   text <- unlist(text)
 
   wrapped <- ""
