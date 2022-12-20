@@ -3,11 +3,11 @@ df$character <- c("a", "b", "b", "c", "c", "a")
 
 test_that("data_arrange works with one numeric column", {
   skip_if_not_installed("poorman")
-  expect_equal(
+  expect_identical(
     poorman::arrange(df, carb),
     data_arrange(df, "carb")
   )
-  expect_equal(
+  expect_identical(
     poorman::arrange(df, -carb),
     data_arrange(df, "-carb")
   )
@@ -15,11 +15,11 @@ test_that("data_arrange works with one numeric column", {
 
 test_that("data_arrange works with one character column", {
   skip_if_not_installed("poorman")
-  expect_equal(
+  expect_identical(
     poorman::arrange(df, character),
     data_arrange(df, "character")
   )
-  expect_equal(
+  expect_identical(
     poorman::arrange(df, desc(character)),
     data_arrange(df, "-character")
   )
@@ -27,32 +27,32 @@ test_that("data_arrange works with one character column", {
 
 test_that("data_arrange works with several columns", {
   skip_if_not_installed("poorman")
-  expect_equal(
+  expect_identical(
     poorman::arrange(df, carb, gear),
     data_arrange(df, c("carb", "gear"))
   )
-  expect_equal(
+  expect_identical(
     poorman::arrange(df, -carb, gear),
     data_arrange(df, c("-carb", "gear"))
   )
-  expect_equal(
+  expect_identical(
     poorman::arrange(df, -carb, desc(character)),
     data_arrange(df, c("-carb", "-character"))
   )
 })
 
 test_that("data_arrange works without columns", {
-  expect_equal(data_arrange(df), df)
+  expect_identical(data_arrange(df), df)
 })
 
 test_that("data_arrange ignores wrong names if safe = TRUE", {
   expect_warning(
-    expect_equal(data_arrange(df, "foo"), df),
+    expect_identical(data_arrange(df, "foo"), df),
     regexp = "don't exist"
   )
 
   expect_warning(
-    expect_equal(
+    expect_identical(
       data_arrange(df, c("gear", "foo")),
       data_arrange(df, "gear")
     ),
@@ -90,7 +90,7 @@ test_that("data_arrange works with grouped df", {
   )
   attributes(expected)$groups <- attributes(g)$groups
 
-  expect_equal(
+  expect_identical(
     data_arrange(g, "mpg"),
     expected
   )
@@ -104,7 +104,7 @@ test_that("data_arrange works with NA", {
     b = c(1, NA, 3, 3, NA, 5)
   )
 
-  expect_equal(
+  expect_identical(
     data_arrange(tmp, "a"),
     data.frame(
       a = c(1, 1, 2, 2, 3, 8),
@@ -123,7 +123,7 @@ test_that("data_arrange works with NA", {
   class(expected) <- c("grouped_df", "data.frame")
   attributes(expected)$groups <- attributes(g)$groups
 
-  expect_equal(
+  expect_identical(
     data_arrange(g, "a"),
     expected
   )
