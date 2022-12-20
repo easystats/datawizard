@@ -3,10 +3,10 @@ data(iris)
 
 test_that("data_codebook iris", {
   x <- data_codebook(iris)
-  expect_equal(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N", "Prop", ".row_id"))
+  expect_identical(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N", "Prop", ".row_id"))
   expect_equal(dim(x), c(12, 8))
   out <- capture.output(x)
-  expect_equal(
+  expect_identical(
     out,
     c(
       "iris (150 rows and 5 variables, 5 shown)",
@@ -33,7 +33,7 @@ test_that("data_codebook iris", {
 test_that("data_codebook iris, reordered", {
   x <- data_codebook(iris[c(1, 2, 5, 3, 4)])
   out <- capture.output(x)
-  expect_equal(out[1], "iris[c(1, 2, 5, 3, 4)] (150 rows and 5 variables, 5 shown)")
+  expect_identical(out[1], "iris[c(1, 2, 5, 3, 4)] (150 rows and 5 variables, 5 shown)")
 })
 
 
@@ -43,7 +43,7 @@ test_that("data_codebook NaN and Inf", {
   )
   x <- data_codebook(d)
   out <- capture.output(x)
-  expect_equal(
+  expect_identical(
     out,
     c(
       "d (9 rows and 1 variables, 1 shown)",
@@ -64,7 +64,7 @@ test_that("data_codebook NaN and Inf", {
   )
   x <- data_codebook(d)
   out <- capture.output(x)
-  expect_equal(
+  expect_identical(
     out,
     c(
       "d (102 rows and 1 variables, 1 shown)",
@@ -79,7 +79,7 @@ test_that("data_codebook NaN and Inf", {
 
   x <- data_codebook(d, range_at = 100)
   out <- capture.output(x)
-  expect_equal(
+  expect_identical(
     out,
     c(
       "d (102 rows and 1 variables, 1 shown)",
@@ -103,7 +103,7 @@ test_that("data_codebook NaN and Inf", {
 
   x <- data_codebook(d, range_at = 100, max_values = 4)
   out <- capture.output(x)
-  expect_equal(
+  expect_identical(
     out,
     c(
       "d (102 rows and 1 variables, 1 shown)",
@@ -123,10 +123,10 @@ test_that("data_codebook NaN and Inf", {
 
 test_that("data_codebook iris, select", {
   x <- data_codebook(iris, select = starts_with("Sepal"))
-  expect_equal(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N", ".row_id"))
+  expect_identical(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N", ".row_id"))
   expect_equal(dim(x), c(4, 7))
   out <- capture.output(x)
-  expect_equal(
+  expect_identical(
     out,
     c(
       "iris (150 rows and 5 variables, 2 shown)",
@@ -144,10 +144,10 @@ test_that("data_codebook iris, select", {
 
 test_that("data_codebook iris, select, ID", {
   x <- data_codebook(iris, select = starts_with("Petal"))
-  expect_equal(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N", ".row_id"))
+  expect_identical(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N", ".row_id"))
   expect_equal(dim(x), c(4, 7))
   out <- capture.output(x)
-  expect_equal(
+  expect_identical(
     out,
     c(
       "iris (150 rows and 5 variables, 2 shown)",
@@ -165,12 +165,12 @@ test_that("data_codebook iris, select, ID", {
 
 test_that("data_codebook efc", {
   x <- data_codebook(efc)
-  expect_equal(colnames(x), c(
+  expect_identical(colnames(x), c(
     "ID", "Name", "Label", "Type", "Missings", "Values", "Value Labels", "N", "Prop", ".row_id"
   ))
   expect_equal(dim(x), c(16, 10))
   out <- capture.output(x)
-  expect_equal(
+  expect_identical(
     out,
     c(
       "efc (100 rows and 5 variables, 5 shown)",
@@ -202,7 +202,7 @@ test_that("data_codebook efc, variable_label_width", {
   x <- data_codebook(efc, variable_label_width = 30)
   expect_equal(dim(x), c(17, 10))
   out <- capture.output(x)
-  expect_equal(
+  expect_identical(
     out,
     c(
       "efc (100 rows and 5 variables, 5 shown)",
@@ -235,7 +235,7 @@ test_that("data_codebook efc, value_label_width", {
   x <- data_codebook(efc, variable_label_width = 30, value_label_width = 15)
   expect_equal(dim(x), c(17, 10))
   out <- capture.output(x)
-  expect_equal(
+  expect_identical(
     out,
     c(
       "efc (100 rows and 5 variables, 5 shown)",
@@ -272,10 +272,10 @@ test_that("data_codebook truncated data", {
     stringsAsFactors = FALSE
   )
   x <- data_codebook(d, max_values = 5)
-  expect_equal(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N", "Prop", ".row_id"))
+  expect_identical(colnames(x), c("ID", "Name", "Type", "Missings", "Values", "N", "Prop", ".row_id"))
   expect_equal(dim(x), c(9, 8))
   out <- capture.output(x)
-  expect_equal(
+  expect_identical(
     out,
     c(
       "d (100 rows and 2 variables, 2 shown)",
@@ -306,7 +306,7 @@ test_that("data_codebook mixed numeric lengths", {
   x <- data_codebook(d)
   expect_equal(dim(x), c(7, 8))
   out <- capture.output(x)
-  expect_equal(
+  expect_identical(
     out,
     c(
       "d (100 rows and 2 variables, 2 shown)",
@@ -334,7 +334,7 @@ test_that("data_codebook mixed range_at", {
   x <- data_codebook(d, range_at = 3)
   expect_equal(dim(x), c(4, 7))
   out <- capture.output(x)
-  expect_equal(
+  expect_identical(
     out,
     c(
       "d (100 rows and 2 variables, 2 shown)",
@@ -359,7 +359,7 @@ test_that("data_codebook logicals", {
     stringsAsFactors = FALSE
   )
   x <- data_codebook(d)
-  expect_equal(x$Values, c("[1, 15]", "", "a", "b", "c", "", "FALSE", "TRUE", ""))
+  expect_identical(x$Values, c("[1, 15]", "", "a", "b", "c", "", "FALSE", "TRUE", ""))
 })
 
 
@@ -379,16 +379,16 @@ test_that("data_codebook labelled data exceptions", {
   d <- data.frame(f1, f2, f3)
   x <- data_codebook(d)
 
-  expect_equal(
+  expect_identical(
     x$Values,
     c(names(table(f1)), "", names(table(f2)), "", names(table(f3)), "")
   )
-  expect_equal(
+  expect_identical(
     x$N,
     as.character(c(table(f1), "", table(f2), "", table(f3), ""))
   )
   out <- capture.output(x)
-  expect_equal(
+  expect_identical(
     out,
     c(
       "d (100 rows and 3 variables, 3 shown)",
@@ -432,16 +432,16 @@ test_that("data_codebook labelled data factors", {
   d <- data.frame(f1, f2, f3)
   x <- data_codebook(d)
 
-  expect_equal(
+  expect_identical(
     x$Values,
     c(names(table(f1)), "", names(table(f2)), "", names(table(f3)), "")
   )
-  expect_equal(
+  expect_identical(
     x$N,
     as.character(c(table(f1), "", table(f2), "", table(f3), ""))
   )
   out <- capture.output(x)
-  expect_equal(
+  expect_identical(
     out,
     c(
       "d (100 rows and 3 variables, 3 shown)",
@@ -471,7 +471,7 @@ test_that("data_codebook works with numbers < 1", {
     b = c(0, 0, 0, 1, 1, 2)
   )
   out <- data_codebook(d)
-  expect_equal(
+  expect_identical(
     out$N,
     c("2", "2", "2", "", "3", "2", "1", "")
   )
@@ -481,7 +481,7 @@ test_that("data_codebook works with numbers < 1", {
     b = c(-1.3, 0.2, 0.2, 1, 1, 2)
   )
   out <- data_codebook(d)
-  expect_equal(
+  expect_identical(
     out$N,
     c("2", "2", "2", "", "1", "2", "2", "1", "")
   )
@@ -495,7 +495,7 @@ test_that("data_codebook, big marks", {
   d <- data.frame(f1, f2)
   x <- data_codebook(d)
   out <- capture.output(x)
-  expect_equal(
+  expect_identical(
     out,
     c(
       "d (1,000,000 rows and 2 variables, 2 shown)",
@@ -532,7 +532,7 @@ test_that("data_codebook, tagged NA", {
     )
   )
   out <- capture.output(data_codebook(data.frame(x)))
-  expect_equal(
+  expect_identical(
     out,
     c(
       "data.frame(x) (26 rows and 1 variables, 1 shown)",
@@ -564,7 +564,7 @@ test_that("data_codebook, tagged NA", {
     )
   )
   out <- capture.output(data_codebook(data.frame(x)))
-  expect_equal(
+  expect_identical(
     out,
     c(
       "data.frame(x) (23 rows and 1 variables, 1 shown)",
@@ -595,7 +595,7 @@ test_that("data_codebook, negative label values #334", {
     labels = c("Agreement" = 1, "Disagreement" = 4, "Missing" = -9)
   )
   out <- capture.output(data_codebook(data.frame(x1, x2)))
-  expect_equal(
+  expect_identical(
     out,
     c(
       "data.frame(x1, x2) (4 rows and 2 variables, 2 shown)",
