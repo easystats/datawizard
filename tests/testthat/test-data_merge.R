@@ -14,19 +14,19 @@ test_that("left-join", {
   skip_if_not_installed("poorman")
 
   out <- data_merge(x, y, join = "left")
-  expect_equal(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
+  expect_identical(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
   expect_equal(dim(out), c(3, 6))
-  expect_equal(out, suppressMessages(poorman::left_join(x, y)))
+  expect_identical(out, suppressMessages(poorman::left_join(x, y)))
 
   out <- data_merge(x, y, join = "left", by = "id")
-  expect_equal(colnames(out), c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y"))
-  expect_equal(out$disp, poorman::left_join(x, y, by = "id")$disp)
+  expect_identical(colnames(out), c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y"))
+  expect_identical(out$disp, poorman::left_join(x, y, by = "id")$disp)
   expect_equal(dim(out), c(3, 7))
 
   out <- data_merge(x, y, join = "left", by = "mpg")
-  expect_equal(colnames(out), c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y"))
-  expect_equal(out$disp, poorman::left_join(x, y, by = "mpg")$disp)
-  expect_equal(out$mpg, poorman::left_join(x, y, by = "mpg")$mpg)
+  expect_identical(colnames(out), c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y"))
+  expect_identical(out$disp, poorman::left_join(x, y, by = "mpg")$disp)
+  expect_identical(out$mpg, poorman::left_join(x, y, by = "mpg")$mpg)
   expect_equal(dim(out), c(3, 7))
 })
 
@@ -46,30 +46,30 @@ test_that("right-join", {
   skip_if_not_installed("poorman")
 
   out <- data_merge(x, y, join = "right")
-  expect_equal(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
+  expect_identical(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
   expect_equal(dim(out), c(3, 6))
   # in data_merge(), we keep sorting from x, so do some preparation here
   poor_out <- suppressMessages(poorman::right_join(x, y))
   poor_out <- poor_out[order(poor_out$id), ]
   row.names(poor_out) <- 1:nrow(poor_out)
-  expect_equal(out, poor_out)
+  expect_identical(out, poor_out)
 
   out <- data_merge(x, y, join = "right", by = "id")
-  expect_equal(colnames(out), c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y"))
+  expect_identical(colnames(out), c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y"))
   # in data_merge(), we keep sorting from x, so do some preparation here
   poor_out <- suppressMessages(poorman::right_join(x, y, by = "id"))
   poor_out <- poor_out[order(poor_out$id), ]
-  expect_equal(out$disp, poor_out$disp)
+  expect_identical(out$disp, poor_out$disp)
   expect_equal(dim(out), c(3, 7))
 
   out <- data_merge(x, y, join = "right", by = "mpg")
-  expect_equal(colnames(out), c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y"))
+  expect_identical(colnames(out), c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y"))
   # in data_merge(), we keep sorting from x, so do some preparation here
   poor_out <- suppressMessages(poorman::right_join(x, y, by = "mpg"))
   poor_out <- poor_out[order(poor_out$id.y, decreasing = TRUE), ]
   out <- out[order(out$id.y, decreasing = TRUE), ]
-  expect_equal(out$disp, poor_out$disp)
-  expect_equal(out$mpg, poor_out$mpg)
+  expect_identical(out$disp, poor_out$disp)
+  expect_identical(out$mpg, poor_out$mpg)
   expect_equal(dim(out), c(3, 7))
 })
 
@@ -80,17 +80,17 @@ test_that("inner-join", {
   skip_if_not_installed("poorman")
 
   out <- data_merge(x, y, join = "inner")
-  expect_equal(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
+  expect_identical(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
   expect_equal(dim(out), c(0, 6))
 
   out <- data_merge(x, y, join = "inner", by = "id")
-  expect_equal(colnames(out), c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y"))
-  expect_equal(out$disp, poorman::inner_join(x, y, by = "id")$disp)
+  expect_identical(colnames(out), c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y"))
+  expect_identical(out$disp, poorman::inner_join(x, y, by = "id")$disp)
   expect_equal(dim(out), c(2, 7))
 
   out <- data_merge(x, y, join = "inner", by = "mpg")
-  expect_equal(colnames(out), c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y"))
-  expect_equal(out$disp, poorman::inner_join(x, y, by = "mpg")$disp)
+  expect_identical(colnames(out), c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y"))
+  expect_identical(out$disp, poorman::inner_join(x, y, by = "mpg")$disp)
   expect_equal(dim(out), c(1, 7))
 })
 
@@ -99,28 +99,28 @@ test_that("inner-join", {
 
 test_that("full-join", {
   out <- data_merge(x, y, join = "full")
-  expect_equal(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
+  expect_identical(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
   expect_equal(dim(out), c(6, 6))
-  expect_equal(out$mpg, c(22.8, 21.4, 18.7, 19.7, 15, 21.4), tolerance = 1e-2)
-  expect_equal(out$id, c(1, 2, 3, 2, 3, 4), tolerance = 1e-2)
+  expect_identical(out$mpg, c(22.8, 21.4, 18.7, 19.7, 15, 21.4), tolerance = 1e-2)
+  expect_identical(out$id, c(1, 2, 3, 2, 3, 4), tolerance = 1e-2)
 
   out <- data_merge(x, y, join = "full", by = "id")
-  expect_equal(colnames(out), c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y"))
+  expect_identical(colnames(out), c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y"))
   expect_equal(dim(out), c(4, 7))
-  expect_equal(out$mpg.x, c(22.8, 21.4, 18.7, NA), tolerance = 1e-2)
-  expect_equal(out$id, 1:4, tolerance = 1e-2)
+  expect_identical(out$mpg.x, c(22.8, 21.4, 18.7, NA), tolerance = 1e-2)
+  expect_identical(out$id, 1:4, tolerance = 1e-2)
 
   out <- data_merge(x, y, join = "full", by = "mpg")
-  expect_equal(colnames(out), c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y"))
+  expect_identical(colnames(out), c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y"))
   expect_equal(dim(out), c(5, 7))
-  expect_equal(out$mpg, c(22.8, 21.4, 18.7, 19.7, 15), tolerance = 1e-2)
-  expect_equal(out$id.x, c(1, 2, 3, NA, NA), tolerance = 1e-2)
+  expect_identical(out$mpg, c(22.8, 21.4, 18.7, 19.7, 15), tolerance = 1e-2)
+  expect_identical(out$id.x, c(1, 2, 3, NA, NA), tolerance = 1e-2)
 
   out <- data_merge(x, y, join = "full", by = c("id", "mpg"))
-  expect_equal(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
+  expect_identical(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
   expect_equal(dim(out), c(6, 6))
-  expect_equal(out$mpg, c(22.8, 21.4, 18.7, 19.7, 15, 21.4), tolerance = 1e-2)
-  expect_equal(out$id, c(1, 2, 3, 2, 3, 4), tolerance = 1e-2)
+  expect_identical(out$mpg, c(22.8, 21.4, 18.7, 19.7, 15, 21.4), tolerance = 1e-2)
+  expect_identical(out$id, c(1, 2, 3, 2, 3, 4), tolerance = 1e-2)
 })
 
 
@@ -132,21 +132,21 @@ test_that("bind-join", {
   out <- data_merge(x, y, join = "bind")
   poor_out <- poorman::bind_rows(x, y)
   row.names(poor_out) <- 1:nrow(poor_out)
-  expect_equal(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
+  expect_identical(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
   expect_equal(dim(out), c(6, 6))
-  expect_equal(out, poor_out)
+  expect_identical(out, poor_out)
 
   # by will be ignored
   out <- data_merge(x, y, join = "bind", by = "id")
-  expect_equal(out, poor_out)
+  expect_identical(out, poor_out)
 
   # by will be ignored
   out <- data_merge(x, y, join = "bind", by = "mpg")
-  expect_equal(out, poor_out)
+  expect_identical(out, poor_out)
 
   # by will be ignored
   out <- data_merge(x, y, join = "bind", by = c("id", "mpg"))
-  expect_equal(out, poor_out)
+  expect_identical(out, poor_out)
 
   x <- mtcars[1, ]
   y <- mtcars[2, ]
@@ -154,11 +154,11 @@ test_that("bind-join", {
     out <- data_merge(x, y, join = "bind", id = "mpg"),
     regexp = "already exists"
   )
-  expect_equal(
+  expect_identical(
     names(out),
     c(names(mtcars), "mpg_1")
   )
-  expect_equal(out$mpg_1, c(1, 2))
+  expect_identical(out$mpg_1, c(1, 2))
 })
 
 # joins without common columns -----------------------
@@ -174,13 +174,13 @@ test_that("bind-join", {
     "Found no matching columns in the data frames."
   )
 
-  expect_equal(
+  expect_identical(
     suppressWarnings(data_merge(x2, y2, join = "full")),
     poorman::full_join(x2, y2),
     ignore_attr = TRUE
   )
 
-  expect_equal(
+  expect_identical(
     data_merge(x2, y2, join = "bind"),
     poorman::bind_rows(x2, y2),
     ignore_attr = TRUE
@@ -192,7 +192,7 @@ test_that("bind-join", {
 test_that("compare bind and full joins", {
   x2 <- mtcars[3:5, 1:3]
   y2 <- mtcars[30:32, 3:6]
-  expect_equal(
+  expect_identical(
     data_merge(x2, y2, join = "full"),
     data_merge(x2, y2, join = "bind"),
     ignore_attr = TRUE
@@ -213,19 +213,19 @@ test_that("join data frames in a list", {
 
   dat <- data_merge(list(x, y, z), by = "id", id = "df", join = "bind")
 
-  expect_equal(
+  expect_identical(
     remove_empty(subset(poorman::filter(dat, df == 1), select = -df)),
     x,
     ignore_attr = TRUE
   )
 
-  expect_equal(
+  expect_identical(
     remove_empty(subset(poorman::filter(dat, df == 2), select = -c(df, id))),
     subset(y, select = -id),
     ignore_attr = TRUE
   )
 
-  expect_equal(
+  expect_identical(
     remove_empty(subset(poorman::filter(dat, df == 3), select = -c(df, id))),
     subset(z, select = -id),
     ignore_attr = TRUE
@@ -237,11 +237,11 @@ test_that("join data frames in a list", {
     out <- data_merge(list(x, y), join = "bind", id = "mpg"),
     regexp = "already exists"
   )
-  expect_equal(
+  expect_identical(
     names(out),
     c(names(mtcars), "mpg_1")
   )
-  expect_equal(out$mpg_1, c(1, 2))
+  expect_identical(out$mpg_1, c(1, 2))
 })
 
 
