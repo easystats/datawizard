@@ -126,7 +126,7 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
 
   # prepare
   if (identical(match, "or")) {
-    idx <- c()
+    idx <- vector("numeric", length = 0L)
   } else {
     # remove missings before matching
     if (isTRUE(drop_na)) {
@@ -205,8 +205,8 @@ data_filter.data.frame <- function(x, filter, ...) {
     has_curley <- grepl("{", condition, fixed = TRUE)
 
     if (has_curley) {
-      condition <- gsub("\\{ ", "\\{", condition)
-      condition <- gsub(" \\}", "\\}", condition)
+      condition <- gsub("{ ", "{", condition, fixed = TRUE)
+      condition <- gsub(" }", "}", condition, fixed = TRUE)
 
       curley_vars <- regmatches(condition, gregexpr("[^{\\}]+(?=\\})", condition, perl = TRUE))
       curley_vars <- unique(unlist(curley_vars))

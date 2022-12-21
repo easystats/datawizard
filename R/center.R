@@ -206,8 +206,8 @@ center.data.frame <- function(x,
     )
   }
 
-  attr(x, "center") <- sapply(x[args$select], function(z) attributes(z)$center)
-  attr(x, "scale") <- sapply(x[args$select], function(z) attributes(z)$scale)
+  attr(x, "center") <- vapply(x[args$select], function(z) attributes(z)$center, numeric(1))
+  attr(x, "scale") <- vapply(x[args$select], function(z) attributes(z)$scale, numeric(1))
   attr(x, "robust") <- robust
   x
 }

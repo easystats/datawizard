@@ -81,8 +81,10 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   # called from "makepredictcal()"? Then we have additional arguments
   dot_args <- list(...)
   flag_predict <- FALSE
-  required_dot_args <- c("range_difference", "min_value", "vector_length",
-                         "flag_bounds")
+  required_dot_args <- c(
+    "range_difference", "min_value", "vector_length",
+    "flag_bounds"
+  )
 
   if (all(required_dot_args %in% names(dot_args))) {
     # we gather informatiom about the original data, which is needed

@@ -82,8 +82,8 @@ data_codebook <- function(data,
         sprintf("Following %i columns were empty and have been removed:", length(empty)),
         text_concatenate(names(empty))
       )
-      select <- select[-empty]
     }
+    select <- select[-empty]
   }
 
   # needed for % NA
@@ -177,6 +177,11 @@ data_codebook <- function(data,
       # if not all value labels are present in the data, remove unused value labels
       if (!all(vallab %in% unique_values)) {
         not_needed <- setdiff(vallab, unique_values)
+        # match not needed values in vallab vector - values from labels
+        # may not be in sorted order (e.g. 1, 2, 3, -9), or may be character
+        # vectors in case of tagged NAs, so we have to make sure we know which
+        # values can be removed from vallab
+        not_needed <- stats::na.omit(match(not_needed, vallab))
         vallab <- vallab[-not_needed]
       }
       # we now should have the same length of value labels and labelled values

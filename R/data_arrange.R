@@ -70,7 +70,7 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
     return(data)
   }
 
-  already_sorted <- all(vapply(data[, select, drop = FALSE], .is_sorted, logical(1)))
+  already_sorted <- all(vapply(data[, select, drop = FALSE], .is_sorted, logical(1L)))
 
   if (isTRUE(already_sorted)) {
     return(data)
