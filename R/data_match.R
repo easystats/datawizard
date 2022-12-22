@@ -1,4 +1,3 @@
-# styler: off
 #' Return filtered or sliced data frame, or row indices
 #'
 #' Return a filtered (or sliced) data frame or row indices of a data frame that
@@ -82,13 +81,17 @@
 #' # Define a custom function containing data_filter() and pass variable names
 #' # to it using curly brackets
 #' my_filter <- function(data, variable) {
-#'   data_filter(data, {variable} <= 20)
+#'   data_filter(data, {
+#'     variable
+#'   } <= 20)
 #' }
 #' my_filter(mtcars, "mpg")
 #'
 #' # Pass complete filter-condition as string
 #' my_filter <- function(data, condition) {
-#'   data_filter(data, {condition})
+#'   data_filter(data, {
+#'     condition
+#'   })
 #' }
 #' my_filter(mtcars, "am != 0")
 #'
@@ -247,7 +250,6 @@ data_filter.data.frame <- function(x, filter, ...) {
 
 #' @export
 data_filter.grouped_df <- function(x, filter, ...) {
-
   # works only for dplyr >= 0.8.0
   grps <- attr(x, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
@@ -305,4 +307,3 @@ data_filter.grouped_df <- function(x, filter, ...) {
     )
   }
 }
-# styler: on
