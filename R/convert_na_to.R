@@ -81,7 +81,8 @@ convert_na_to.default <- function(x, verbose = TRUE, ...) {
     insight::format_alert(
       sprintf(
         "Converting missing values (`NA`) into regular values currently not possible for variables of class `%s`.",
-        class(x)[1])
+        class(x)[1]
+      )
     )
   }
   x

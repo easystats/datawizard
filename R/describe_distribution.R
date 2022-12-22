@@ -469,7 +469,7 @@ describe_distribution.grouped_df <- function(x,
       paste(sprintf(
         "%s=%s",
         group_vars,
-        vapply(group_data[i,], as.character, FUN.VALUE = character(1L))
+        vapply(group_data[i, ], as.character, FUN.VALUE = character(1L))
       ), collapse = " | ")
 
     d
