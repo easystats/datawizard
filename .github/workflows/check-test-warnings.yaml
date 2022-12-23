@@ -5,10 +5,10 @@ on:
   pull_request:
     branches: [main, master]
 
-name: test-package
+name: check-test-warnings
 
 jobs:
-  test-package:
+  check-test-warnings:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -22,12 +22,15 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: local::.
+          pak-version: devel
+          extra-packages: |
+            local::.
 
       - name: Run Tests
         run: |
-          ## --------------------------------------------------------------------
           options(crayon.enabled = TRUE, warn = 2L)
-          if (Sys.getenv("_R_CHECK_FORCE_SUGGESTS_", "") == "") Sys.setenv("_R_CHECK_FORCE_SUGGESTS_" = "false")
+          if (Sys.getenv("_R_CHECK_FORCE_SUGGESTS_", "") == "") {
+            Sys.setenv("_R_CHECK_FORCE_SUGGESTS_" = "false")
+          }
           testthat::test_dir("tests")
         shell: Rscript {0}
