@@ -110,7 +110,7 @@ test_that("data_to_long, attributes preserved", {
 test_that("to_numeric, attributes preserved", {
   x <- iris
   attr(x, "myattri") <- "I'm here"
-  x2 <- datawizard::to_numeric(x, "Species")
+  x2 <- to_numeric(x, "Species")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
@@ -121,7 +121,7 @@ test_that("to_numeric, attributes preserved", {
 test_that("convert_to_na, attributes preserved", {
   x <- iris
   attr(x, "myattri") <- "I'm here"
-  x2 <- datawizard::convert_to_na(x, na = 2)
+  x2 <- convert_to_na(x, na = 2)
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
@@ -143,7 +143,7 @@ test_that("data_rename, attributes preserved", {
 test_that("rescale, attributes preserved", {
   x <- iris
   attr(x, "myattri") <- "I'm here"
-  x2 <- datawizard::rescale(x, 1:3)
+  x2 <- rescale(x, 1:3)
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
@@ -154,7 +154,7 @@ test_that("rescale, attributes preserved", {
 test_that("center, attributes preserved", {
   x <- iris
   attr(x, "myattri") <- "I'm here"
-  x2 <- datawizard::center(x, "Sepal.Width")
+  x2 <- center(x, "Sepal.Width")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
@@ -165,7 +165,7 @@ test_that("center, attributes preserved", {
 test_that("categorize, attributes preserved", {
   x <- iris
   attr(x, "myattri") <- "I'm here"
-  x2 <- datawizard::categorize(x, "Sepal.Width")
+  x2 <- categorize(x, "Sepal.Width")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
@@ -176,7 +176,7 @@ test_that("categorize, attributes preserved", {
 test_that("change_code, attributes preserved", {
   x <- mtcars
   attr(x, "myattri") <- "I'm here"
-  x2 <- datawizard::change_code(x, select = "am", recode = list(`5` = 0, `10` = 1))
+  x2 <- change_code(x, select = "am", recode = list(`5` = 0, `10` = 1))
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
@@ -187,6 +187,6 @@ test_that("change_code, attributes preserved", {
 test_that("standardize, attributes preserved", {
   x <- iris
   attr(x, "myattri") <- "I'm here"
-  x2 <- datawizard::standardize(x, "Sepal.Width")
+  x2 <- standardize(x, "Sepal.Width")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })

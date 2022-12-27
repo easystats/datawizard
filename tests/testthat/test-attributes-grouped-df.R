@@ -16,7 +16,7 @@ test_that("data_arrange, attributes preserved", {
 test_that("rescale, attributes preserved", {
   x <- iris
   attr(x, "myattri") <- "I'm here"
-  x2 <- datawizard::rescale(data_group(x, "Species"), 1:3)
+  x2 <- rescale(data_group(x, "Species"), 1:3)
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
@@ -27,7 +27,7 @@ test_that("rescale, attributes preserved", {
 test_that("center, attributes preserved", {
   x <- iris
   attr(x, "myattri") <- "I'm here"
-  x2 <- datawizard::center(data_group(x, "Species"), "Sepal.Width")
+  x2 <- center(data_group(x, "Species"), "Sepal.Width")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
@@ -38,7 +38,7 @@ test_that("center, attributes preserved", {
 test_that("categorize, attributes preserved", {
   x <- iris
   attr(x, "myattri") <- "I'm here"
-  x2 <- datawizard::categorize(data_group(x, "Species"), "Sepal.Width")
+  x2 <- categorize(data_group(x, "Species"), "Sepal.Width")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
@@ -49,7 +49,7 @@ test_that("categorize, attributes preserved", {
 test_that("standardize, attributes preserved", {
   x <- iris
   attr(x, "myattri") <- "I'm here"
-  x2 <- datawizard::standardize(data_group(x, "Species"), "Sepal.Width")
+  x2 <- standardize(data_group(x, "Species"), "Sepal.Width")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
