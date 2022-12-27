@@ -1,4 +1,3 @@
-
 #' @title Read (import) data files from various sources
 #' @name data_read
 #'

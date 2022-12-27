@@ -1,5 +1,3 @@
-
-
 # standardize.numeric -----------------------------------------------------
 test_that("standardize.numeric", {
   x <- standardize(seq(0, 1, length.out = 100))
