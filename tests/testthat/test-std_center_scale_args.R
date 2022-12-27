@@ -1,4 +1,3 @@
-
 d <- data.frame(a = 1:5, b = 21:25, c = 41:45)
 
 test_that("standardize", {

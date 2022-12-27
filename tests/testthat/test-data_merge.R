@@ -1,4 +1,3 @@
-
 data(mtcars)
 x <- mtcars[3:5, 1:3]
 y <- mtcars[30:32, c(1, 4:5)]

@@ -168,16 +168,9 @@ categorize.numeric <- function(x,
     )
   }
 
-
   # handle aliases
-  if (identical(split, "equal_length")) {
-    split <- "length"
-  }
-
-  if (identical(split, "equal_range")) {
-    split <- "range"
-  }
-
+  if (identical(split, "equal_length")) split <- "length"
+  if (identical(split, "equal_range")) split <- "range"
 
   # save
   original_x <- x
