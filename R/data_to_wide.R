@@ -207,7 +207,7 @@ data_to_wide <- function(data,
       rep(data[[x]][ind], times = rep_times)
     })
 
-    new_data <- data_arrange(new_data, c("temporary_id_2"))
+    new_data <- data_arrange(new_data, "temporary_id_2")
   }
 
   # don't need temporary ids anymore
@@ -290,7 +290,7 @@ data_to_wide <- function(data,
 
   # convert back to date if original values were dates
   values_are_dates <- all(
-    vapply(data[, values_from, drop = FALSE], .is_date, FUN.VALUE = logical(1))
+    vapply(data[, values_from, drop = FALSE], .is_date, FUN.VALUE = logical(1L))
   )
   if (values_are_dates) {
     for (i in unstacked$col_order) {

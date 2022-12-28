@@ -1,4 +1,3 @@
-
 test_that("testing Winsorization of factors", {
   expect_equal(winsorize(as.factor(mtcars$am)), as.factor(mtcars$am))
 })

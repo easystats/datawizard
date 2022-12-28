@@ -178,7 +178,7 @@ standardize.default <- function(x,
     insight::format_warning(
       "Unable to standardize variables evaluated in the environment (i.e., not in `data`).",
       "The following variables will not be standardizd:",
-      paste0(doller_vars, collapse = ", ")
+      toString(doller_vars)
     )
     do_standardize <- setdiff(do_standardize, doller_vars)
     dont_standardize <- c(dont_standardize, doller_vars)
@@ -444,7 +444,7 @@ standardize.biglm <- standardize.wbm
   x <- insight::find_terms(model, flatten = TRUE)
   # log_pattern <- "^log\\((.*)\\)"
   log_pattern <- "(log\\(log|log|log1|log10|log1p|log2)\\(([^,\\+)]*).*"
-  out <- insight::trim_ws(gsub(log_pattern, "\\2", x[grepl(log_pattern, x)]))
+  out <- insight::trim_ws(gsub(log_pattern, "\\2", grep(log_pattern, x, value = TRUE)))
   intersect(colnames(data), out)
 }
 
@@ -452,7 +452,7 @@ standardize.biglm <- standardize.wbm
 .sqrt_terms <- function(model, data) {
   x <- insight::find_terms(model, flatten = TRUE)
   pattern <- "sqrt\\(([^,\\+)]*).*"
-  out <- insight::trim_ws(gsub(pattern, "\\1", x[grepl(pattern, x)]))
+  out <- insight::trim_ws(gsub(pattern, "\\1", grep(pattern, x, value = TRUE)))
   intersect(colnames(data), out)
 }
 

@@ -37,10 +37,11 @@
 #'   "Sepal.Length" = c(0, 1),
 #'   "Petal.Length" = c(-1, 0)
 #' )))
-#' @inherit data_rename seealso
+#' @inherit data_rename
 #'
 #' @return A rescaled object.
 #'
+#' @seealso See [makepredictcall.dw_transformer()] for use in model formulas.
 #' @family transform utilities
 #'
 #' @export
@@ -86,8 +87,33 @@ rescale.numeric <- function(x,
     return(x)
   }
 
+  if (is.null(range)) {
+    range <- c(min(x, na.rm = TRUE), max(x, na.rm = TRUE))
+  }
+
+  # called from "makepredictcal()"? Then we have additional arguments
+  dot_args <- list(...)
+  required_dot_args <- c("min_value", "max_value", "new_min", "new_max")
+  flag_predict <- FALSE
+
+  if (all(required_dot_args %in% names(dot_args))) {
+    # we gather informatiom about the original data, which is needed
+    # for "predict()" to work properly when "rescale()" is called
+    # in formulas on-the-fly, e.g. "lm(mpg ~ rescale(hp), data = mtcars)"
+    min_value <- dot_args$min_value
+    max_value <- dot_args$max_value
+    new_min <- dot_args$new_min
+    new_max <- dot_args$new_max
+    flag_predict <- TRUE
+  } else {
+    min_value <- ifelse(is.na(range[1]), min(x, na.rm = TRUE), range[1])
+    max_value <- ifelse(is.na(range[2]), max(x, na.rm = TRUE), range[2])
+    new_min <- ifelse(is.na(to[1]), min_value, to[1])
+    new_max <- ifelse(is.na(to[2]), max_value, to[2])
+  }
+
   # Warning if only one value
-  if (insight::has_single_value(x) && is.null(range)) {
+  if (!flag_predict && insight::has_single_value(x) && is.null(range)) {
     if (verbose) {
       insight::format_warning(
         "A `range` must be provided for data with only one unique value."
@@ -96,19 +122,17 @@ rescale.numeric <- function(x,
     return(x)
   }
 
-  if (is.null(range)) {
-    range <- c(min(x, na.rm = TRUE), max(x, na.rm = TRUE))
-  }
+  out <- as.vector((new_max - new_min) / (max_value - min_value) *
+    (x - min_value) + new_min)
 
-  min <- ifelse(is.na(range[1]), min(x, na.rm = TRUE), range[1])
-  max <- ifelse(is.na(range[2]), max(x, na.rm = TRUE), range[2])
-  new_min <- ifelse(is.na(to[1]), min, to[1])
-  new_max <- ifelse(is.na(to[2]), max, to[2])
-
-  out <- as.vector((new_max - new_min) / (max - min) * (x - min) + new_min)
-  attr(out, "min_value") <- min
-  attr(out, "range_difference") <- max - min
+  attr(out, "min_value") <- min_value
+  attr(out, "max_value") <- max_value
+  attr(out, "new_min") <- new_min
+  attr(out, "new_max") <- new_max
+  attr(out, "range_difference") <- max_value - min_value
   attr(out, "to_range") <- c(new_min, new_max)
+  class(out) <- c("dw_transformer", class(out))
+
   out
 }
 

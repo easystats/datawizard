@@ -123,7 +123,7 @@ format.dw_data_peek <- function(x, ...) {
   v_type[v_type == "categorical"] <- "factor"
 
   max_width <- ifelse(is.null(width), 0.9 * options()$width, width)
-  v_values <- paste0(x[[variable]][1:max_width], collapse = ", ")
+  v_values <- toString(x[[variable]][1:max_width])
 
   data.frame(Variable = v_name, Type = v_type, Values = v_values, stringsAsFactors = FALSE)
 }

@@ -59,9 +59,9 @@ text_fullstop <- function(text) {
 #' @rdname text_format
 #' @export
 text_lastchar <- function(text, n = 1) {
-  sapply(text, function(xx) {
+  vapply(text, function(xx) {
     substr(xx, (nchar(xx) - n + 1), nchar(xx))
-  })
+  }, FUN.VALUE = character(1L))
 }
 
 
@@ -87,18 +87,18 @@ text_concatenate <- function(text, sep = ", ", last = " and ", enclose = NULL) {
 text_paste <- function(text, text2 = NULL, sep = ", ", enclose = NULL, ...) {
   if (!is.null(text2)) {
     if (!is.null(enclose) && length(enclose) == 1 && nchar(enclose) > 0) {
-      text <- sapply(text, function(i) {
+      text <- vapply(text, function(i) {
         if (i != "") {
           i <- paste0(enclose, i, enclose)
         }
         i
-      })
-      text2 <- sapply(text2, function(i) {
+      }, character(1L))
+      text2 <- vapply(text2, function(i) {
         if (i != "") {
           i <- paste0(enclose, i, enclose)
         }
         i
-      })
+      }, character(1L))
     }
     paste0(text, ifelse(text == "" | text2 == "", "", sep), text2)
   }
@@ -118,7 +118,7 @@ text_remove <- function(text, pattern = "", ...) {
 text_wrap <- function(text, width = NULL, ...) {
   width <- width %||% getOption("width")
 
-  text <- strsplit(text, "\n", perl = TRUE)
+  text <- strsplit(text, "\n", fixed = TRUE)
   text <- unlist(text)
 
   wrapped <- ""

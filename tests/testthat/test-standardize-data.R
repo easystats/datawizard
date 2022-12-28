@@ -1,5 +1,3 @@
-
-
 # standardize.numeric -----------------------------------------------------
 test_that("standardize.numeric", {
   x <- standardize(seq(0, 1, length.out = 100))
@@ -132,7 +130,7 @@ test_that("standardize.data.frame, weights", {
   )
 
   d <- poorman::group_by(mtcars, am)
-  expect_warning(expect_warning(expect_warning(standardize(d, weights = d$cyl))))
+  expect_warning(standardize(d, weights = d$cyl))
 })
 
 
@@ -199,7 +197,7 @@ test_that("unstandardize, data frame", {
   expect_equal(rez, iris, tolerance = 0.1, ignore_attr = TRUE)
 
   d <- poorman::group_by(mtcars, am)
-  expect_warning(x <- standardize(d))
+  x <- standardize(d)
   expect_error(unstandardize(x))
 })
 

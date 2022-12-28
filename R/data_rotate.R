@@ -58,7 +58,7 @@ data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE)
   }
 
   # warning after possible removal of columns
-  if (length(unique(sapply(data, class))) > 1) {
+  if (insight::n_unique(vapply(data, class, FUN.VALUE = character(1L))) > 1L) {
     if (verbose) {
       insight::format_warning("Your data frame contains mixed types of data. After transposition, all variables will be transformed into characters.")
     }

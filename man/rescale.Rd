@@ -129,6 +129,8 @@ head(rescale(iris, to = list(
 )))
 }
 \seealso{
+See \code{\link[=makepredictcall.dw_transformer]{makepredictcall.dw_transformer()}} for use in model formulas.
+
 Other transform utilities: 
 \code{\link{normalize}()},
 \code{\link{ranktransform}()},

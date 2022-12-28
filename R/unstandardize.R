@@ -58,25 +58,25 @@ unstandardize.data.frame <- function(x,
                                      exclude = NULL,
                                      ...) {
   if (!is.null(reference)) {
-    i <- sapply(x, is.numeric)
+    i <- vapply(x, is.numeric, FUN.VALUE = logical(1L))
     i <- i[i]
     reference <- reference[names(i)]
     if (robust) {
-      center <- sapply(reference, stats::median, na.rm = TRUE)
-      scale <- sapply(reference, stats::mad, na.rm = TRUE)
+      center <- vapply(reference, FUN.VALUE = numeric(1L), stats::median, na.rm = TRUE)
+      scale <- vapply(reference, FUN.VALUE = numeric(1L), stats::mad, na.rm = TRUE)
     } else {
-      center <- sapply(reference, mean, na.rm = TRUE)
-      scale <- sapply(reference, stats::sd, na.rm = TRUE)
+      center <- vapply(reference, FUN.VALUE = numeric(1L), mean, na.rm = TRUE)
+      scale <- vapply(reference, FUN.VALUE = numeric(1L), stats::sd, na.rm = TRUE)
     }
   } else if (is.null(center) || is.null(scale)) {
-    i <- sapply(x, function(k) {
+    i <- vapply(x, function(k) {
       is.numeric(k) && !is.null(a <- attributes(k)) && all(c("scale", "center") %in% names(a))
-    })
+    }, FUN.VALUE = logical(1L))
 
     if (any(i)) {
       i <- i[i]
-      center <- sapply(x[names(i)], attr, "center", exact = TRUE)
-      scale <- sapply(x[names(i)], attr, "scale", exact = TRUE)
+      center <- vapply(x[names(i)], FUN.VALUE = numeric(1L), attr, "center", exact = TRUE)
+      scale <- vapply(x[names(i)], FUN.VALUE = numeric(1L), attr, "scale", exact = TRUE)
     } else if (all(c("center", "scale") %in% names(attributes(x)))) {
       center <- attr(x, "center", exact = TRUE)
       scale <- attr(x, "scale", exact = TRUE)
@@ -88,7 +88,7 @@ unstandardize.data.frame <- function(x,
     }
   } else {
     if (is.null(names(center))) {
-      i <- sapply(x, is.numeric)
+      i <- vapply(x, is.numeric, FUN.VALUE = logical(1L))
       names(center) <- names(scale) <- names(x[i])
     }
 

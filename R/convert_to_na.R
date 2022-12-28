@@ -121,7 +121,7 @@ convert_to_na.character <- convert_to_na.factor
 convert_to_na.Date <- function(x, na = NULL, verbose = TRUE, ...) {
   # if we have a list, use first valid element
   if (is.list(na)) {
-    na <- na[vapply(na, .is_date, FUN.VALUE = logical(1))]
+    na <- na[vapply(na, .is_date, FUN.VALUE = logical(1L))]
     if (length(na) > 1) {
       na <- na[[1]]
     }

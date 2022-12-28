@@ -77,15 +77,15 @@ describe_distribution.list <- function(x,
                                        ci = NULL,
                                        include_factors = FALSE,
                                        iterations = 100,
-                                       threshold = .1,
+                                       threshold = 0.1,
                                        verbose = TRUE,
                                        ...) {
-  factor_el <- which(sapply(x, is.factor))
-  num_el <- which(sapply(x, is.numeric))
+  factor_el <- which(vapply(x, is.factor, FUN.VALUE = logical(1L)))
+  num_el <- which(vapply(x, is.numeric, FUN.VALUE = logical(1L)))
 
   # get elements names as is
   # ex: list(mtcars$mpg, mtcars$cyl) -> c("mtcars$mpg", "mtcars$cyl")
-  nm <- sapply(sys.call()[[2]], insight::safe_deparse)[-1]
+  nm <- vapply(sys.call()[[2]], insight::safe_deparse, FUN.VALUE = character(1L))[-1]
 
   if (!isTRUE(include_factors)) {
     x <- x[num_el]
@@ -156,7 +156,7 @@ describe_distribution.numeric <- function(x,
                                           quartiles = FALSE,
                                           ci = NULL,
                                           iterations = 100,
-                                          threshold = .1,
+                                          threshold = 0.1,
                                           verbose = TRUE,
                                           ...) {
   insight::check_if_installed("bayestestR")
@@ -377,7 +377,7 @@ describe_distribution.data.frame <- function(x,
                                              include_factors = FALSE,
                                              ci = NULL,
                                              iterations = 100,
-                                             threshold = .1,
+                                             threshold = 0.1,
                                              ignore_case = FALSE,
                                              regex = FALSE,
                                              verbose = TRUE,
@@ -433,7 +433,7 @@ describe_distribution.grouped_df <- function(x,
                                              include_factors = FALSE,
                                              ci = NULL,
                                              iterations = 100,
-                                             threshold = .1,
+                                             threshold = 0.1,
                                              ignore_case = FALSE,
                                              regex = FALSE,
                                              verbose = TRUE,
@@ -464,8 +464,13 @@ describe_distribution.grouped_df <- function(x,
       ...
     )
 
+
     d[[".group"]] <-
-      paste(sprintf("%s=%s", group_vars, sapply(group_data[i, ], as.character)), collapse = " | ")
+      paste(sprintf(
+        "%s=%s",
+        group_vars,
+        vapply(group_data[i, ], as.character, FUN.VALUE = character(1L))
+      ), collapse = " | ")
 
     d
   }))

@@ -1,4 +1,3 @@
-
 data(efc)
 
 test_that("data_extract works with select-length > 1", {

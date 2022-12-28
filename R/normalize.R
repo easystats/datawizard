@@ -29,6 +29,8 @@
 #' - If `x` is a grouped data frame (`grouped_df`), normalization is performed
 #'   separately for each group.
 #'
+#' @seealso See [makepredictcall.dw_transformer()] for use in model formulas.
+#'
 #' @examples
 #'
 #' normalize(c(0, 1, 5, -5, -2))
@@ -76,8 +78,33 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   x[infinite_idx] <- NA
 
 
+  # called from "makepredictcal()"? Then we have additional arguments
+  dot_args <- list(...)
+  flag_predict <- FALSE
+  required_dot_args <- c(
+    "range_difference", "min_value", "vector_length",
+    "flag_bounds"
+  )
+
+  if (all(required_dot_args %in% names(dot_args))) {
+    # we gather informatiom about the original data, which is needed
+    # for "predict()" to work properly when "normalize()" is called
+    # in formulas on-the-fly, e.g. "lm(mpg ~ normalize(hp), data = mtcars)"
+    range_difference <- dot_args$range_difference
+    min_value <- dot_args$min_value
+    vector_length <- dot_args$vector_length
+    flag_bounds <- dot_args$flag_bounds
+    flag_predict <- TRUE
+  } else {
+    range_difference <- diff(range(x, na.rm = TRUE))
+    min_value <- min(x, na.rm = TRUE)
+    vector_length <- length(x)
+    flag_bounds <- NULL
+  }
+
+
   # Warning if only one value
-  if (insight::n_unique(x) == 1) {
+  if (!flag_predict && insight::has_single_value(x)) {
     if (verbose) {
       insight::format_warning(
         paste0(
@@ -102,11 +129,18 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
     )
   }
 
-  out <- as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE)))
+  # rescale
+  out <- as.vector((x - min_value) / range_difference)
 
-  if (!isTRUE(include_bounds) && (any(out == 0) || any(out == 1))) {
+  # if we don't have information on whether bounds are included or not,
+  # get this information here.
+  if (is.null(flag_bounds)) {
+    flag_bounds <- (any(out == 0) || any(out == 1))
+  }
+
+  if (!isTRUE(include_bounds) && flag_bounds) {
     if (isFALSE(include_bounds)) {
-      out <- (out * (length(out) - 1) + 0.5) / length(out)
+      out <- (out * (vector_length - 1) + 0.5) / vector_length
     } else if (is.numeric(include_bounds) && include_bounds > 0 && include_bounds < 1) {
       out <- rescale(out, to = c(0 + include_bounds, 1 - include_bounds))
     } else if (verbose) {
@@ -120,9 +154,12 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   # Re-insert infinite values
   out[infinite_idx] <- infinite_vals
 
-  attr(out, "include_bounds") <- isTRUE(include_bounds)
-  attr(out, "min_value") <- min(x, na.rm = TRUE)
-  attr(out, "range_difference") <- diff(range(x, na.rm = TRUE))
+  attr(out, "include_bounds") <- include_bounds
+  attr(out, "flag_bounds") <- isTRUE(flag_bounds)
+  attr(out, "min_value") <- min_value
+  attr(out, "vector_length") <- vector_length
+  attr(out, "range_difference") <- range_difference
+  class(out) <- c("dw_transformer", class(out))
 
   out
 }

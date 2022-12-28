@@ -29,19 +29,24 @@ reference:
     contents:
       - categorize
       - recode_values
-      - rescale
-      - reverse
-      - slide
       - adjust
-      - center
       - demean
-      - normalize
       - ranktransform
       - rescale_weights
+      - winsorize
+  - subtitle: "Linear Transformers"
+    desc: |
+      Convenient functions for common linear transformations
+    contents:
+      - center
+      - slide
       - standardize
       - standardize.default
+      - reverse
+      - rescale
+      - normalize
       - unstandardize
-      - winsorize
+      - makepredictcall.dw_transformer
 
   - title: Data Properties
     desc: |

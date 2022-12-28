@@ -79,7 +79,8 @@
 #'   missing values are preserved, so the return value has the same length /
 #'   number of rows as the original input.
 #'
-#' @seealso See [center()] for grand-mean centering of variables.
+#' @seealso See [center()] for grand-mean centering of variables, and
+#'   [makepredictcall.dw_transformer()] for use in model formulas.
 #'
 #' @family transform utilities
 #' @family standardize
@@ -170,7 +171,9 @@ standardize.numeric <- function(x,
   attr(scaled_x, "scale") <- args$scale
   attr(scaled_x, "robust") <- robust
   # labels
-  .set_back_labels(scaled_x, x, include_values = FALSE)
+  z <- .set_back_labels(scaled_x, x, include_values = FALSE)
+  class(z) <- c("dw_transformer", class(z))
+  z
 }
 
 #' @export
@@ -191,6 +194,7 @@ standardize.matrix <- function(x, ...) {
   attr(x_out, "center") <- sapply(xz, attr, "center")
   attr(x_out, "scale") <- sapply(xz, attr, "scale")
   attr(x_out, "robust") <- sapply(xz, attr, "robust")[1]
+  class(x_out) <- c("dw_transformer", class(x_out))
 
   x_out
 }
