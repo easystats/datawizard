@@ -14,7 +14,8 @@ test_that("data_to_long works", {
   )
 
   expect_equal(
-    head(data_to_long(wide_data,
+    head(data_to_long(
+      wide_data,
       select = c(1, 2),
       names_to = "Column",
       values_to = "Numbers",
@@ -485,7 +486,7 @@ test_that("preserve date format", {
   )
 
   tidyr <- tidyr::pivot_longer(family, !family, names_to = "child")
-  datawiz <- data_to_long(family, -c("family"), names_to = "child")
+  datawiz <- data_to_long(family, -family, names_to = "child")
 
   expect_identical(tidyr, datawiz)
 })
