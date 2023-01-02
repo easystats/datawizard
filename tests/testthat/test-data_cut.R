@@ -33,7 +33,16 @@ test_that("recode range", {
   d2[d > 60 & d <= 80] <- 4
   d2[d > 80] <- 5
   expect_equal(table(categorize(d, split = "equal_range", range = 20)), table(d2), ignore_attr = TRUE)
-  expect_equal(table(categorize(d, split = "equal_range", range = 20, lowest = 1)), table(d2), ignore_attr = TRUE)
+  expect_equal(
+    table(categorize(
+      d,
+      split = "equal_range",
+      range = 20,
+      lowest = 1
+    )),
+    table(d2),
+    ignore_attr = TRUE
+  )
 
   d2 <- d
   d2[d < 20] <- 0
@@ -41,7 +50,16 @@ test_that("recode range", {
   d2[d >= 40 & d < 60] <- 2
   d2[d >= 60 & d < 80] <- 3
   d2[d >= 80] <- 4
-  expect_equal(table(categorize(d, split = "equal_range", range = 20, lowest = 0)), table(d2), ignore_attr = TRUE)
+  expect_equal(
+    table(categorize(
+      d,
+      split = "equal_range",
+      range = 20,
+      lowest = 0
+    )),
+    table(d2),
+    ignore_attr = TRUE
+  )
 })
 
 test_that("recode length", {
@@ -53,7 +71,16 @@ test_that("recode length", {
   d2[d > 60 & d <= 80] <- 4
   d2[d > 80] <- 5
   expect_equal(table(categorize(d, split = "equal_length", n_groups = 5)), table(d2), ignore_attr = TRUE)
-  expect_equal(table(categorize(d, split = "equal_length", n_groups = 5, lowest = 1)), table(d2), ignore_attr = TRUE)
+  expect_equal(
+    table(categorize(
+      d,
+      split = "equal_length",
+      n_groups = 5,
+      lowest = 1
+    )),
+    table(d2),
+    ignore_attr = TRUE
+  )
 })
 
 set.seed(123)
@@ -61,7 +88,15 @@ x <- sample(1:10, size = 30, replace = TRUE)
 test_that("recode factor labels", {
   expect_type(categorize(x, "equal_length", n_groups = 3), "double")
   expect_s3_class(categorize(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high")), "factor")
-  expect_identical(levels(categorize(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high"))), c("low", "mid", "high"))
+  expect_identical(
+    levels(categorize(
+      x,
+      "equal_length",
+      n_groups = 3,
+      labels = c("low", "mid", "high")
+    )),
+    c("low", "mid", "high")
+  )
   t1 <- table(categorize(x, "equal_length", n_groups = 3))
   t2 <- table(categorize(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high")))
   expect_equal(t1, t2, ignore_attr = TRUE)
