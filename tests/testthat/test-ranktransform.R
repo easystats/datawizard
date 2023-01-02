@@ -68,7 +68,7 @@ test_df <- data.frame(
 
 test_that("ranktransform works with data frames (grouped data)", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
   expect_equal(
     test_df %>%
@@ -98,7 +98,7 @@ test_df <- data.frame(
 
 test_that("ranktransform works with data frames containing NAs (grouped data)", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
   expect_equal(
     test_df %>%

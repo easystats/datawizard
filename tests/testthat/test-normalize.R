@@ -119,7 +119,7 @@ test_that("normalize: matrix", {
 
 test_that("normalize: select", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
   expect_equal(
     normalize(
@@ -133,7 +133,7 @@ test_that("normalize: select", {
 
 test_that("normalize: exclude", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
   expect_equal(
     normalize(
@@ -150,7 +150,7 @@ test_that("normalize: exclude", {
 
 test_that("normalize (grouped data)", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
   datawizard <- iris %>%
     group_by(Species) %>%
@@ -169,7 +169,7 @@ test_that("normalize (grouped data)", {
 
 test_that("normalize, include bounds (grouped data)", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
   datawizard <- iris %>%
     group_by(Species) %>%
@@ -189,7 +189,7 @@ test_that("normalize, include bounds (grouped data)", {
 
 test_that("normalize, factor (grouped data)", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
   datawizard <- iris %>%
     group_by(Species) %>%

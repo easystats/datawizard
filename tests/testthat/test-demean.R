@@ -12,14 +12,22 @@ test_that("demean works", {
   expect_snapshot(head(x))
 
   set.seed(123)
-  x <- demean(df, select = c("Sepal.Length", "binary", "Species"), group = "ID")
+  expect_message(
+    x <- demean(df, select = c("Sepal.Length", "binary", "Species"), group = "ID"),
+    "have been coerced to numeric"
+  )
   expect_snapshot(head(x))
 
   set.seed(123)
-  expect_equal(
-    demean(df, select = ~ Sepal.Length + binary + Species, group = ~ID),
-    demean(df, select = c("Sepal.Length", "binary", "Species"), group = "ID")
+  expect_message(
+    y <- demean(df, select = ~ Sepal.Length + binary + Species, group = ~ID),
+    "have been coerced to numeric"
   )
+  expect_message(
+    z <- demean(df, select = c("Sepal.Length", "binary", "Species"), group = "ID"),
+    "have been coerced to numeric"
+  )
+  expect_equal(y, z)
 })
 
 test_that("demean interaction term", {

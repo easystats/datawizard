@@ -121,7 +121,7 @@ test_that("to_numeric, attributes preserved", {
 test_that("convert_to_na, attributes preserved", {
   x <- iris
   attr(x, "myattri") <- "I'm here"
-  x2 <- convert_to_na(x, na = 2)
+  x2 <- convert_to_na(x, na = 2, verbose = FALSE)
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
@@ -130,7 +130,7 @@ test_that("convert_to_na, attributes preserved", {
 # data_rename -----------------------------------
 
 test_that("data_rename, attributes preserved", {
-  x <- iris
+  x <- mtcars
   attr(x, "myattri") <- "I'm here"
   x2 <- data_rename(x, pattern = "hp", replacement = "horsepower")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")

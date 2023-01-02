@@ -175,7 +175,7 @@ test_that("bind-join", {
 
   expect_identical(
     suppressWarnings(data_merge(x2, y2, join = "full")),
-    poorman::full_join(x2, y2),
+    suppressMessages(poorman::full_join(x2, y2)),
     ignore_attr = TRUE
   )
 
@@ -269,3 +269,4 @@ test_that("join when all 'by' are not present", {
     regexp = "Not all columns"
   )
 })
+

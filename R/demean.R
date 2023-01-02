@@ -326,12 +326,12 @@ degroup <- function(x,
     }
     # tell user...
     if (isTRUE(verbose)) {
-      insight::print_color(
-        sprintf(
-          "Categorical predictors (%s) have been coerced to numeric values to compute de- and group-meaned variables.\n",
-          toString(names(categorical_predictors)[categorical_predictors])
-        ),
-        "yellow"
+      insight::format_alert(
+        paste0(
+          "Categorical predictors (",
+          toString(names(categorical_predictors)[categorical_predictors]),
+          ") have been coerced to numeric values to compute de- and group-meaned variables.\n"
+        )
       )
     }
   }

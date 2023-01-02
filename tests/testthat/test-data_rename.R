@@ -97,8 +97,9 @@ test_that("data_rename deals correctly with duplicated replacement", {
 })
 
 test_that("data_rename doesn't change colname if invalid pattern", {
+  x <- suppressMessages(data_rename(test, "FakeCol", "length"))
   expect_equal(
-    names(data_rename(test, "FakeCol", "length")),
+    names(x),
     names(test)
   )
 })

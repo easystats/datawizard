@@ -59,8 +59,12 @@ test_that("center, all NA or Inf", {
 })
 
 test_that("center works correctly with only one value", {
-  expect_equal(center(100), 0, ignore_attr = TRUE)
-  expect_message(center(100), "will be set to 0")
+  expect_message(
+    x <- center(100),
+    "will be set to 0"
+  )
+  expect_equal(x, 0, ignore_attr = TRUE)
+
   expect_equal(center(100, center = 1), 99, ignore_attr = TRUE)
   expect_equal(
     center(100, reference = mtcars$mpg),

@@ -181,7 +181,7 @@ categorize.numeric <- function(x,
   # stop if all NA
   if (!length(x)) {
     if (isTRUE(verbose)) {
-      insight::format_warning(
+      insight::format_alert(
         "Variable contains only missing values. No recoding carried out."
       )
     }

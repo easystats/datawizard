@@ -15,8 +15,10 @@ test_that("convert_to_na-factor", {
   expect_equal(levels(x), c("setosa", "virginica"))
   expect_equal(as.vector(table(x)), c(50, 50))
 
-  x <- suppressWarnings(convert_to_na(iris$Species, na = 2))
-  expect_message(convert_to_na(iris$Species, na = 2))
+  expect_message(
+    x <- convert_to_na(iris$Species, na = 2),
+    "for a factor or character variable"
+  )
   expect_equal(sum(is.na(x)), 0)
 })
 
@@ -27,21 +29,29 @@ test_that("convert_to_na-numeric", {
   x <- convert_to_na(iris$Sepal.Length, na = list(5, "versicolor"))
   expect_equal(sum(is.na(x)), 10)
 
-  x <- suppressWarnings(convert_to_na(iris$Sepal.Width, na = "a"))
-  expect_message(convert_to_na(iris$Sepal.Width, na = "a"))
+  x <- convert_to_na(iris$Sepal.Width, na = "a", verbose = FALSE)
+  expect_message(
+    convert_to_na(iris$Sepal.Width, na = "a"),
+    "needs to be a numeric vector"
+  )
   expect_equal(sum(is.na(x)), 0)
 })
 
 test_that("convert_to_na-df", {
-  expect_message(x <- convert_to_na(iris, na = 5))
+  expect_message(
+    x <- convert_to_na(iris, na = 5),
+    "needs to be a character vector"
+  )
   expect_equal(sum(is.na(x)), sum(sapply(iris, function(i) sum(i == 5))))
 
   x <- convert_to_na(iris, na = list(5, "versicolor"))
   expect_equal(sum(is.na(x)), 64)
 
   data(iris)
-  iris$Sepal.Width <- as.character(iris$Sepal.Width)
-  expect_message(expect_message(x <- convert_to_na(iris, na = 3)))
+  expect_message(
+    x <- convert_to_na(iris, na = 3),
+    "needs to be a character vector"
+  )
   expect_equal(sum(is.na(x)), sum(sapply(iris, function(i) if (is.numeric(i)) sum(i == 3) else 0)))
 
   x <- convert_to_na(iris, na = list(3, "3"))
@@ -60,7 +70,10 @@ test_that("convert_to_na other classes", {
 
   x <- convert_to_na(d$a, na = 3)
   expect_equal(x, c(1, 2, NA, 4, 5), tolerance = 1e-3, ignore_attr = TRUE)
-  expect_message(x <- convert_to_na(d$a, na = "c"))
+  expect_message(
+    x <- convert_to_na(d$a, na = "c"),
+    "needs to be a numeric vector"
+  )
   expect_equal(x, 1:5, tolerance = 1e-3, ignore_attr = TRUE)
 
   x <- convert_to_na(d$b, na = "c")
@@ -84,7 +97,10 @@ test_that("convert_to_na other classes", {
 
   x <- convert_to_na(d$d, na = TRUE)
   expect_equal(x, c(NA, NA, FALSE, FALSE, NA), tolerance = 1e-3, ignore_attr = TRUE)
-  expect_message(x <- convert_to_na(d$e, na = as.complex(4)))
+  expect_message(
+    x <- convert_to_na(d$e, na = as.complex(4)),
+    "variables of class `complex`"
+  )
   expect_equal(x, d$e, tolerance = 1e-3, ignore_attr = TRUE)
 
   out <- data.frame(
@@ -94,11 +110,8 @@ test_that("convert_to_na other classes", {
     d = c(NA, NA, FALSE, FALSE, NA),
     e = as.complex(1:5)
   )
-  expect_message(
-    convert_to_na(d, na = list(3, "c", TRUE, "2022-01-02")),
-    "must be of class 'Date'"
-  )
-  x <- convert_to_na(d, na = list(3, "c", TRUE, as.Date("2022-01-02")))
+  convert_to_na(d, na = list(3, "c", TRUE, "2022-01-02"), verbose = FALSE)
+  x <- convert_to_na(d, na = list(3, "c", TRUE, as.Date("2022-01-02")), verbose = FALSE)
   expect_equal(x, out, ignore_attr = TRUE, tolerance = 1e-3)
 })
 

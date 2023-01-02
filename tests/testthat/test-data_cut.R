@@ -147,10 +147,18 @@ test_that("recode data frame", {
 
 test_that("recode all NA", {
   x <- rep(NA, 10)
-  expect_equal(categorize(x), x)
+  expect_message(
+    y <- categorize(x),
+    "can't be recoded"
+  )
+  expect_equal(y, x)
 
-  x <- as.numeric(rep(NA, 10))
-  expect_warning(expect_equal(categorize(x), x))
+  x <- rep(NA_real_, 10)
+  expect_message(
+    y <- categorize(x),
+    "only missing values"
+  )
+  expect_equal(y, x)
 })
 
 
