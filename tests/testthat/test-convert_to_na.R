@@ -126,4 +126,3 @@ test_that("convert_to_na regex", {
     convert_to_na(mtcars, na = 4, select = "carb")
   )
 })
-
