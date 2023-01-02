@@ -5,7 +5,7 @@ test_that("demean works", {
   df$ID <- sample(1:4, nrow(df), replace = TRUE) # fake-ID
 
   set.seed(123)
-  df$binary <- as.factor(rbinom(150, 1, .35)) # binary variable
+  df$binary <- as.factor(rbinom(150, 1, 0.35)) # binary variable
 
   set.seed(123)
   x <- demean(df, select = c("Sepal.Length", "Petal.Length"), group = "ID")
@@ -27,7 +27,7 @@ test_that("demean works", {
     z <- demean(df, select = c("Sepal.Length", "binary", "Species"), group = "ID"),
     "have been coerced to numeric"
   )
-  expect_equal(y, z)
+  expect_identical(y, z)
 })
 
 test_that("demean interaction term", {
@@ -52,7 +52,7 @@ test_that("demean shows message if some vars don't exist", {
 
   set.seed(123)
   expect_message(
-    demean(dat, select = c("foo"), group = "ID"),
+    demean(dat, select = "foo", group = "ID"),
     regexp = "not found"
   )
 })

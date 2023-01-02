@@ -338,7 +338,8 @@ value2 <- sample(1:10, 6, replace = TRUE)
 test_df <- data.frame(
   id = rep(c("A", "B"), each = 3),
   value1 = value1,
-  value2 = value2
+  value2 = value2,
+  stringsAsFactors = FALSE
 )
 
 test_that("reverse works with data frames (grouped data)", {
@@ -353,7 +354,8 @@ test_that("reverse works with data frames (grouped data)", {
     data.frame(
       id = rep(c("A", "B"), each = 3),
       value1 = c(10, 10, 3, 6, 2, 3),
-      value2 = c(4, 6, 3, 10, 6, 5)
+      value2 = c(4, 6, 3, 10, 6, 5),
+      stringsAsFactors = FALSE
     )
   )
 })
@@ -367,7 +369,8 @@ value2 <- sample(c(1:10, NA), 6, replace = TRUE)
 test_df <- data.frame(
   id = rep(c("A", "B"), each = 3),
   value1 = value1,
-  value2 = value2
+  value2 = value2,
+  stringsAsFactors = FALSE
 )
 
 test_that("reverse works with data frames containing NAs (grouped data)", {
@@ -382,7 +385,8 @@ test_that("reverse works with data frames containing NAs (grouped data)", {
     data.frame(
       id = rep(c("A", "B"), each = 3),
       value1 = c(10, 4, 4, 5, 3, 4),
-      value2 = c(NA, 10, 9, 7, 6, 8)
+      value2 = c(NA, 10, 9, 7, 6, 8),
+      stringsAsFactors = FALSE
     )
   )
 })

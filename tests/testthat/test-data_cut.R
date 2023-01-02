@@ -2,13 +2,13 @@ set.seed(123)
 d <- sample(1:10, size = 500, replace = TRUE)
 
 test_that("recode median", {
-  expect_equal(categorize(d), ifelse(d >= median(d), 2, 1))
-  expect_equal(categorize(d, lowest = 0), ifelse(d >= median(d), 1, 0))
+  expect_identical(categorize(d), ifelse(d >= median(d), 2, 1))
+  expect_identical(categorize(d, lowest = 0), ifelse(d >= median(d), 1, 0))
 })
 
 test_that("recode mean", {
-  expect_equal(categorize(d, split = "mean"), ifelse(d >= mean(d), 2, 1))
-  expect_equal(categorize(d, split = "mean", lowest = 0), ifelse(d >= mean(d), 1, 0))
+  expect_identical(categorize(d, split = "mean"), ifelse(d >= mean(d), 2, 1))
+  expect_identical(categorize(d, split = "mean", lowest = 0), ifelse(d >= mean(d), 1, 0))
 })
 
 test_that("recode quantile", {
@@ -17,8 +17,8 @@ test_that("recode quantile", {
   q <- quantile(d, probs = c(1 / 3, 2 / 3, 1))
   f <- cut(d, breaks = unique(c(min(d), q, max(d))), include.lowest = TRUE, right = FALSE)
   levels(f) <- 1:nlevels(f)
-  expect_equal(categorize(d, split = "quantile", n_groups = 3), as.numeric(f))
-  expect_equal(categorize(d, split = "quantile", n_groups = 3, lowest = 0), as.numeric(f) - 1)
+  expect_identical(categorize(d, split = "quantile", n_groups = 3), as.numeric(f))
+  expect_identical(categorize(d, split = "quantile", n_groups = 3, lowest = 0), as.numeric(f) - 1)
 })
 
 set.seed(123)
@@ -61,7 +61,7 @@ x <- sample(1:10, size = 30, replace = TRUE)
 test_that("recode factor labels", {
   expect_type(categorize(x, "equal_length", n_groups = 3), "double")
   expect_s3_class(categorize(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high")), "factor")
-  expect_equal(levels(categorize(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high"))), c("low", "mid", "high"))
+  expect_identical(levels(categorize(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high"))), c("low", "mid", "high"))
   t1 <- table(categorize(x, "equal_length", n_groups = 3))
   t2 <- table(categorize(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high")))
   expect_equal(t1, t2, ignore_attr = TRUE)
@@ -72,46 +72,46 @@ test_that("recode data frame", {
   x <- iris
   out <- categorize(x, split = "median", select = c("Sepal.Length", "Sepal.Width"))
   expect_s3_class(out, "data.frame")
-  expect_equal(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
-  expect_equal(out$Petal.Length, iris$Petal.Length)
+  expect_identical(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
+  expect_identical(out$Petal.Length, iris$Petal.Length)
 
   out <- categorize(x, split = "median", select = starts_with("Sepal"))
   expect_s3_class(out, "data.frame")
-  expect_equal(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
-  expect_equal(out$Petal.Length, iris$Petal.Length)
+  expect_identical(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
+  expect_identical(out$Petal.Length, iris$Petal.Length)
 
   out <- categorize(x, split = "median", select = ~ Sepal.Width + Sepal.Length)
   expect_s3_class(out, "data.frame")
-  expect_equal(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
-  expect_equal(out$Petal.Length, iris$Petal.Length)
+  expect_identical(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
+  expect_identical(out$Petal.Length, iris$Petal.Length)
 
   out <- categorize(x, split = "median", select = Sepal.Length)
   expect_s3_class(out, "data.frame")
-  expect_equal(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
-  expect_equal(out$Petal.Length, iris$Petal.Length)
+  expect_identical(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
+  expect_identical(out$Petal.Length, iris$Petal.Length)
 
   expect_warning(
     out <- categorize(x, split = "median", select = c("sepal.Length", "sepal.Width"), ignore_case = FALSE),
     "not found"
   )
-  expect_equal(out$Sepal.Length, iris$Sepal.Length)
+  expect_identical(out$Sepal.Length, iris$Sepal.Length)
 
   out <- categorize(x, split = "median", select = starts_with("sepal"), ignore_case = TRUE)
   expect_s3_class(out, "data.frame")
-  expect_equal(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
-  expect_equal(out$Petal.Length, iris$Petal.Length)
+  expect_identical(out$Sepal.Length, ifelse(iris$Sepal.Length >= median(iris$Sepal.Length), 2, 1))
+  expect_identical(out$Petal.Length, iris$Petal.Length)
 
   out <- categorize(x, split = "median", select = starts_with("sepal"), ignore_case = FALSE)
-  expect_equal(out$Sepal.Length, iris$Sepal.Length)
+  expect_identical(out$Sepal.Length, iris$Sepal.Length)
 
   out <- categorize(x, split = "median", select = starts_with("sepal"), ignore_case = TRUE, append = "_r")
-  expect_equal(colnames(out), c(
+  expect_identical(colnames(out), c(
     "Sepal.Length", "Sepal.Width", "Petal.Length",
     "Petal.Width", "Species", "Sepal.Length_r", "Sepal.Width_r"
   ))
 
   out <- categorize(iris, split = "median", select = starts_with("Sepal"))
-  expect_equal(
+  expect_identical(
     out$Sepal.Length,
     c(
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1,
@@ -129,7 +129,7 @@ test_that("recode data frame", {
 
   x <- poorman::group_by(iris, Species)
   out <- categorize(x, split = "median", select = starts_with("Sepal"))
-  expect_equal(
+  expect_identical(
     out$Sepal.Length,
     c(
       2, 1, 1, 1, 2, 2, 1, 2, 1, 1, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2,
@@ -151,20 +151,20 @@ test_that("recode all NA", {
     y <- categorize(x),
     "can't be recoded"
   )
-  expect_equal(y, x)
+  expect_identical(y, x)
 
   x <- rep(NA_real_, 10)
   expect_message(
     y <- categorize(x),
     "only missing values"
   )
-  expect_equal(y, x)
+  expect_identical(y, x)
 })
 
 
 
 test_that("recode numeric", {
-  expect_equal(
+  expect_identical(
     categorize(mtcars$hp, split = c(100, 150)),
     c(
       2, 2, 1, 2, 3, 2, 3, 1, 1, 2, 2, 3, 3, 3, 3, 3, 3, 1, 1, 1,
@@ -175,10 +175,10 @@ test_that("recode numeric", {
   x[mtcars$hp < 100] <- 1
   x[mtcars$hp >= 100 & mtcars$hp < 150] <- 2
   x[mtcars$hp >= 150] <- 3
-  expect_equal(categorize(mtcars$hp, split = c(100, 150)), x)
-  expect_equal(categorize(mtcars$hp, split = c(100, 150), lowest = NULL), x)
+  expect_identical(categorize(mtcars$hp, split = c(100, 150)), x)
+  expect_identical(categorize(mtcars$hp, split = c(100, 150), lowest = NULL), x)
 
-  expect_equal(
+  expect_identical(
     categorize(mtcars$hp, split = "equal_range", range = 50, lowest = NULL),
     c(
       2, 2, 1, 2, 3, 2, 4, 1, 1, 2, 2, 3, 3, 3, 4, 4, 4, 1, 1, 1,
@@ -189,7 +189,7 @@ test_that("recode numeric", {
 
 # select helpers ------------------------------
 test_that("categorize regex", {
-  expect_equal(
+  expect_identical(
     categorize(mtcars, select = "pg", regex = TRUE),
     categorize(mtcars, select = "mpg")
   )

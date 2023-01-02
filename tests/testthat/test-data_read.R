@@ -16,7 +16,7 @@ test_that("data_read", {
     "https://raw.githubusercontent.com/easystats/circus/master/data/bootstrapped.csv",
     verbose = FALSE
   )
-  expect_equal(dim(d), c(10000, 4))
+  expect_identical(dim(d), c(10000L, 4L))
 })
 
 
@@ -28,8 +28,8 @@ test_that("data_read, skip_empty", {
     "https://raw.githubusercontent.com/easystats/circus/master/data/test_skip_empty.csv",
     verbose = FALSE
   )
-  expect_equal(ncol(d), 3)
-  expect_equal(colnames(d), c("Var1", "Var2", "Var3"))
+  expect_identical(ncol(d), 3L)
+  expect_identical(colnames(d), c("Var1", "Var2", "Var3"))
 })
 
 
@@ -46,10 +46,10 @@ test_that("data_read", {
     temp_file,
     verbose = FALSE
   )
-  expect_equal(nrow(d), 3)
-  expect_equal(colnames(d), c("a", "b", "c"))
-  expect_equal(sum(sapply(d, is.numeric)), 2)
-  expect_equal(sum(sapply(d, is.character)), 1)
+  expect_identical(nrow(d), 3L)
+  expect_identical(colnames(d), c("a", "b", "c"))
+  expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 2L)
+  expect_identical(sum(vapply(d, is.character, FUN.VALUE = logical(1L))), 1L)
 })
 
 unlink(temp_file)
@@ -68,10 +68,10 @@ test_that("data_read", {
     temp_file,
     verbose = FALSE
   )
-  expect_equal(nrow(d), 3)
-  expect_equal(colnames(d), c("a", "b", "c"))
-  expect_equal(sum(sapply(d, is.numeric)), 2)
-  expect_equal(sum(sapply(d, is.character)), 1)
+  expect_identical(nrow(d), 3L)
+  expect_identical(colnames(d), c("a", "b", "c"))
+  expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 2L)
+  expect_identical(sum(vapply(d, is.character, FUN.VALUE = logical(1L))), 1L)
 })
 
 unlink(temp_file)
@@ -142,9 +142,9 @@ test_that("data_read", {
     temp_file,
     verbose = FALSE
   )
-  expect_equal(sum(sapply(d, is.factor)), 15)
-  expect_equal(sum(sapply(d, is.numeric)), 11)
-  expect_equal(
+  expect_identical(sum(vapply(d, is.factor, FUN.VALUE = logical(1L))), 15L)
+  expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 11L)
+  expect_identical(
     levels(d$c172code),
     c(
       "low level of education",
@@ -152,7 +152,7 @@ test_that("data_read", {
       "high level of education"
     )
   )
-  expect_equal(
+  expect_identical(
     attr(d$n4pstu, "labels"),
     c(
       `spouse/partner` = 1,
@@ -179,7 +179,7 @@ test_that("data_read", {
     temp_file,
     verbose = FALSE
   )
-  expect_equal(
+  expect_identical(
     d,
     structure(
       list(
@@ -220,8 +220,8 @@ test_that("data_read", {
     temp_file,
     verbose = FALSE
   )
-  expect_equal(sum(sapply(d, is.factor)), 15)
-  expect_equal(sum(sapply(d, is.numeric)), 11)
+  expect_identical(sum(vapply(d, is.factor, FUN.VALUE = logical(1L))), 15L)
+  expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 11L)
 })
 
 test_that("data_read, convert_factors", {
@@ -230,8 +230,8 @@ test_that("data_read, convert_factors", {
     convert_factors = FALSE,
     verbose = FALSE
   )
-  expect_equal(sum(sapply(d, is.factor)), 0)
-  expect_equal(sum(sapply(d, is.numeric)), 26)
+  expect_identical(sum(vapply(d, is.factor, FUN.VALUE = logical(1L))), 0L)
+  expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 26L)
 })
 
 unlink(temp_file)

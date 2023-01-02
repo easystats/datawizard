@@ -82,10 +82,10 @@ test_that("data_to_long works - complex dataset", {
     rows_to = "Participant"
   )
 
-  expect_equal(unique(long1$Item), c("A1", "A2", "A3", "A4", "A5"))
-  expect_equal(unique(long1$Score), c(2L, 4L, 3L, 5L, 6L, 1L, NA))
-  expect_equal(ncol(long1), 26)
-  expect_equal(nrow(long1), 14000)
+  expect_identical(unique(long1$Item), c("A1", "A2", "A3", "A4", "A5"))
+  expect_identical(unique(long1$Score), c(2L, 4L, 3L, 5L, 6L, 1L, NA))
+  expect_identical(ncol(long1), 26L)
+  expect_identical(nrow(long1), 14000L)
 
 
   long1 <- data_to_long(data,
@@ -95,8 +95,8 @@ test_that("data_to_long works - complex dataset", {
     rows_to = "Participant"
   )
 
-  expect_equal(ncol(long1), 30)
-  expect_equal(nrow(long1), nrow(data))
+  expect_identical(ncol(long1), 30L)
+  expect_identical(nrow(long1), nrow(data))
 
   long1 <- data_to_long(data,
     select = starts_with("a"),
@@ -106,9 +106,9 @@ test_that("data_to_long works - complex dataset", {
     ignore_case = TRUE
   )
 
-  expect_equal(unique(long1$Item), c("A1", "A2", "A3", "A4", "A5", "age"))
-  expect_equal(ncol(long1), 25)
-  expect_equal(nrow(long1), 16800)
+  expect_identical(unique(long1$Item), c("A1", "A2", "A3", "A4", "A5", "age"))
+  expect_identical(ncol(long1), 25L)
+  expect_identical(nrow(long1), 16800L)
 
   long1 <- data_to_long(data,
     select = c(1:5, 28),
@@ -118,9 +118,9 @@ test_that("data_to_long works - complex dataset", {
     ignore_case = TRUE
   )
 
-  expect_equal(unique(long1$Item), c("A1", "A2", "A3", "A4", "A5", "age"))
-  expect_equal(ncol(long1), 25)
-  expect_equal(nrow(long1), 16800)
+  expect_identical(unique(long1$Item), c("A1", "A2", "A3", "A4", "A5", "age"))
+  expect_identical(ncol(long1), 25L)
+  expect_identical(nrow(long1), 16800L)
 })
 
 
@@ -196,21 +196,21 @@ d <- data.frame(
 
 test_that("data_to_long works as expected - simple dataset", {
   out <- data_to_long(d, starts_with("score"))
-  expect_equal(
+  expect_identical(
     out$name,
     c("score_t1", "score_t2", "score_t1", "score_t2", "score_t1", "score_t2")
   )
-  expect_equal(
+  expect_identical(
     out$value,
     c(d$score_t1, d$score_t2)[c(1, 4, 2, 5, 3, 6)]
   )
 
   out <- data_to_long(d, contains("t2"), names_to = "NewCol", values_to = "Time")
-  expect_equal(
+  expect_identical(
     out$NewCol,
     c("score_t2", "speed_t2", "score_t2", "speed_t2", "score_t2", "speed_t2")
   )
-  expect_equal(out$Time, c(33, 3, 34, 4, 37, 5))
+  expect_identical(out$Time, c(33, 3, 34, 4, 37, 5))
 })
 
 
@@ -219,11 +219,11 @@ test_that("data_to_long works as expected - select-helper inside functions, usin
     data_to_long(data, select = i, regex = TRUE)
   }
   out <- test_fun(d, "^score")
-  expect_equal(
+  expect_identical(
     out$name,
     c("score_t1", "score_t2", "score_t1", "score_t2", "score_t1", "score_t2")
   )
-  expect_equal(
+  expect_identical(
     out$value,
     c(d$score_t1, d$score_t2)[c(1, 4, 2, 5, 3, 6)]
   )
@@ -412,8 +412,8 @@ test_that("can reshape all cols to long", {
   pv <- data_to_long(df, x:y)
 
   expect_named(pv, c("name", "value"))
-  expect_equal(pv$name, rep(names(df), 2))
-  expect_equal(pv$value, c(1, 3, 2, 4))
+  expect_identical(pv$name, rep(names(df), 2))
+  expect_identical(pv$value, c(1L, 3L, 2L, 4L))
 })
 
 test_that("values interleaved correctly", {
@@ -423,11 +423,11 @@ test_that("values interleaved correctly", {
   df <- tibble(
     x = c(1, 2),
     y = c(10, 20),
-    z = c(100, 200),
+    z = c(100, 200)
   )
   pv <- data_to_long(df, 1:3)
 
-  expect_equal(pv$value, c(1, 10, 100, 2, 20, 200))
+  expect_identical(pv$value, c(1, 10, 100, 2, 20, 200))
 })
 
 test_that("preserves original keys", {
@@ -438,7 +438,7 @@ test_that("preserves original keys", {
   pv <- data_to_long(df, y:z)
 
   expect_named(pv, c("x", "name", "value"))
-  expect_equal(pv$x, rep(df$x, each = 2))
+  expect_identical(pv$x, rep(df$x, each = 2))
 })
 
 test_that("can drop missing values", {
@@ -448,8 +448,8 @@ test_that("can drop missing values", {
   df <- data.frame(x = c(1, NA), y = c(NA, 2))
   pv <- data_to_long(df, x:y, values_drop_na = TRUE)
 
-  expect_equal(pv$name, c("x", "y"))
-  expect_equal(pv$value, c(1, 2))
+  expect_identical(pv$name, c("x", "y"))
+  expect_identical(pv$value, c(1, 2))
 })
 
 test_that("mixed columns are automatically coerced", {
@@ -459,7 +459,7 @@ test_that("mixed columns are automatically coerced", {
   df <- data.frame(x = factor("a"), y = factor("b"))
   pv <- data_to_long(df, x:y)
 
-  expect_equal(pv$value, factor(c("a", "b")))
+  expect_identical(pv$value, factor(c("a", "b")))
 })
 
 test_that("error when overwriting existing column", {

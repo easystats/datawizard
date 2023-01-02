@@ -3,22 +3,22 @@ test <- head(iris)
 # basic tests --------------
 
 test_that("data_rename works with one or several replacements", {
-  expect_equal(
-    names(data_rename(test, "Sepal.Length", "length")),
+  expect_named(
+    data_rename(test, "Sepal.Length", "length"),
     c("length", "Sepal.Width", "Petal.Length", "Petal.Width", "Species")
   )
-  expect_equal(
-    names(data_rename(
+  expect_named(
+    data_rename(
       test, c("Sepal.Length", "Sepal.Width"),
       c("length", "width")
-    )),
+    ),
     c("length", "width", "Petal.Length", "Petal.Width", "Species")
   )
 })
 
 test_that("data_rename returns a data frame", {
   x <- data_rename(test, "Sepal.Length", "length")
-  expect_true(class(x) == "data.frame")
+  expect_s3_class(x, "data.frame")
 })
 
 test_that("data_rename: pattern must be of type character", {
@@ -36,8 +36,8 @@ test_that("data_rename: pattern must be of type character", {
 
 test_that("data_rename uses indices when no replacement", {
   x <- data_rename(test, pattern = c("Sepal.Length", "Petal.Length"))
-  expect_equal(dim(test), dim(x))
-  expect_equal(names(x), c("1", "Sepal.Width", "2", "Petal.Width", "Species"))
+  expect_identical(dim(test), dim(x))
+  expect_named(x, c("1", "Sepal.Width", "2", "Petal.Width", "Species"))
 })
 
 test_that("data_rename works when too many names in 'replacement'", {
@@ -45,8 +45,8 @@ test_that("data_rename works when too many names in 'replacement'", {
     x <- data_rename(test, replacement = paste0("foo", 1:6)),
     "There are more names in"
   )
-  expect_equal(dim(test), dim(x))
-  expect_equal(names(x), paste0("foo", 1:5))
+  expect_identical(dim(test), dim(x))
+  expect_named(x, paste0("foo", 1:5))
 })
 
 test_that("data_rename works when not enough names in 'replacement'", {
@@ -54,8 +54,8 @@ test_that("data_rename works when not enough names in 'replacement'", {
     x <- data_rename(test, replacement = paste0("foo", 1:2)),
     "There are more names in"
   )
-  expect_equal(dim(test), dim(x))
-  expect_equal(names(x), c("foo1", "foo2", "Petal.Length", "Petal.Width", "Species"))
+  expect_identical(dim(test), dim(x))
+  expect_named(x, c("foo1", "foo2", "Petal.Length", "Petal.Width", "Species"))
 })
 
 
@@ -64,12 +64,12 @@ test_that("data_rename works when not enough names in 'replacement'", {
 test_that("data_rename uses the whole dataset when pattern = NULL", {
   x1 <- data_rename(test)
   x2 <- data_rename(test, pattern = names(test))
-  expect_equal(dim(test), dim(x1))
+  expect_identical(dim(test), dim(x1))
   expect_identical(x1, x2)
 
   x3 <- data_rename(test, replacement = paste0("foo", 1:5))
   x4 <- data_rename(test, pattern = names(test), replacement = paste0("foo", 1:5))
-  expect_equal(dim(test), dim(x3))
+  expect_identical(dim(test), dim(x3))
   expect_identical(x3, x4)
 })
 
@@ -92,13 +92,13 @@ test_that("data_rename deals correctly with duplicated replacement", {
     pattern = names(test)[1:4],
     replacement = c("foo", "bar", "foo", "bar")
   )
-  expect_equal(dim(test), dim(x))
-  expect_equal(names(x)[1:4], c("foo", "bar", "foo.2", "bar.2"))
+  expect_identical(dim(test), dim(x))
+  expect_named(x[1:4], c("foo", "bar", "foo.2", "bar.2"))
 })
 
 test_that("data_rename doesn't change colname if invalid pattern", {
   x <- suppressMessages(data_rename(test, "FakeCol", "length"))
-  expect_equal(
+  expect_identical(
     names(x),
     names(test)
   )
@@ -118,5 +118,5 @@ test_that("data_rename preserves attributes", {
   out2 <- data_rename(out, "p", "p-val")
   a2 <- attributes(out2)
 
-  expect_equal(names(a1), names(a2))
+  expect_identical(names(a1), names(a2))
 })

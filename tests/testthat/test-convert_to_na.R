@@ -2,39 +2,39 @@ data(iris)
 
 test_that("convert_to_na-factor", {
   x <- convert_to_na(iris$Species, na = "versicolor")
-  expect_equal(sum(is.na(x)), 50)
+  expect_identical(sum(is.na(x)), 50L)
 
   x <- convert_to_na(iris$Species, na = list(2, "versicolor"))
-  expect_equal(sum(is.na(x)), 50)
+  expect_identical(sum(is.na(x)), 50L)
 
   x <- convert_to_na(iris$Species, na = list(2, "versicolor"), drop_levels = FALSE)
-  expect_equal(levels(x), c("setosa", "versicolor", "virginica"))
-  expect_equal(as.vector(table(x)), c(50, 0, 50))
+  expect_identical(levels(x), c("setosa", "versicolor", "virginica"))
+  expect_identical(as.vector(table(x)), c(50L, 0L, 50L))
 
   x <- convert_to_na(iris$Species, na = list(2, "versicolor"), drop_levels = TRUE)
-  expect_equal(levels(x), c("setosa", "virginica"))
-  expect_equal(as.vector(table(x)), c(50, 50))
+  expect_identical(levels(x), c("setosa", "virginica"))
+  expect_identical(as.vector(table(x)), c(50L, 50L))
 
   expect_message(
     x <- convert_to_na(iris$Species, na = 2),
     "for a factor or character variable"
   )
-  expect_equal(sum(is.na(x)), 0)
+  expect_identical(sum(is.na(x)), 0L)
 })
 
 test_that("convert_to_na-numeric", {
   x <- convert_to_na(iris$Sepal.Length, na = 5)
-  expect_equal(sum(is.na(x)), sum(iris$Sepal.Length == 5))
+  expect_identical(sum(is.na(x)), sum(iris$Sepal.Length == 5))
 
   x <- convert_to_na(iris$Sepal.Length, na = list(5, "versicolor"))
-  expect_equal(sum(is.na(x)), 10)
+  expect_identical(sum(is.na(x)), 10L)
 
   x <- convert_to_na(iris$Sepal.Width, na = "a", verbose = FALSE)
   expect_message(
     convert_to_na(iris$Sepal.Width, na = "a"),
     "needs to be a numeric vector"
   )
-  expect_equal(sum(is.na(x)), 0)
+  expect_identical(sum(is.na(x)), 0L)
 })
 
 test_that("convert_to_na-df", {
@@ -42,20 +42,20 @@ test_that("convert_to_na-df", {
     x <- convert_to_na(iris, na = 5),
     "needs to be a character vector"
   )
-  expect_equal(sum(is.na(x)), sum(sapply(iris, function(i) sum(i == 5))))
+  expect_identical(sum(is.na(x)), sum(vapply(iris, function(i) sum(i == 5), FUN.VALUE = integer(1L))))
 
   x <- convert_to_na(iris, na = list(5, "versicolor"))
-  expect_equal(sum(is.na(x)), 64)
+  expect_identical(sum(is.na(x)), 64L)
 
   data(iris)
   expect_message(
     x <- convert_to_na(iris, na = 3),
     "needs to be a character vector"
   )
-  expect_equal(sum(is.na(x)), sum(sapply(iris, function(i) if (is.numeric(i)) sum(i == 3) else 0)))
+  expect_identical(sum(is.na(x)), sum(vapply(iris, function(i) if (is.numeric(i)) sum(i == 3) else 0L, FUN.VALUE = integer(1L))))
 
   x <- convert_to_na(iris, na = list(3, "3"))
-  expect_equal(sum(is.na(x)), 27)
+  expect_identical(sum(is.na(x)), 27L)
 })
 
 
@@ -117,12 +117,13 @@ test_that("convert_to_na other classes", {
 
 # select helpers ------------------------------
 test_that("convert_to_na regex", {
-  expect_equal(
+  expect_identical(
     convert_to_na(mtcars, na = 4, select = "arb", regex = TRUE),
     convert_to_na(mtcars, na = 4, select = "carb")
   )
-  expect_equal(
+  expect_identical(
     convert_to_na(mtcars, na = 4, select = "arb$", regex = TRUE),
     convert_to_na(mtcars, na = 4, select = "carb")
   )
 })
+

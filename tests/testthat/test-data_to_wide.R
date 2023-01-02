@@ -5,7 +5,8 @@ test_that("data_to_wide works", {
       "X1", "X1", "X1", "X1", "X1", "X2", "X2", "X2", "X2", "X2",
       "X3", "X3", "X3", "X3", "X3"
     ),
-    value = c(3L, 2L, 5L, 4L, 1L, 3L, 1L, 2L, 5L, 4L, 2L, 3L, 1L, 4L, 5L)
+    value = c(3L, 2L, 5L, 4L, 1L, 3L, 1L, 2L, 5L, 4L, 2L, 3L, 1L, 4L, 5L),
+    stringsAsFactors = FALSE
   )
 
   expect_equal(
@@ -51,8 +52,8 @@ test_that("data_to_wide, names_prefix works", {
       names_prefix = "foo_"
     )
 
-  expect_equal(
-    names(out),
+  expect_named(
+    out,
     c(
       "fish", "foo_Release", "foo_I80_1", "foo_Lisbon", "foo_Rstr", "foo_Base_TD",
       "foo_BCE", "foo_BCW", "foo_BCE2", "foo_BCW2", "foo_MAE", "foo_MAW"
@@ -88,7 +89,7 @@ test_that("data_to_wide, values_fill works", {
       Lisbon = c(1, 1, 1),
       BCW2 = c(1, 1, 1),
       MAE = c(1, 1, 1),
-      MAW = c(1, 1, 1),
+      MAW = c(1, 1, 1)
     )
   )
   expect_error(
@@ -130,7 +131,7 @@ test_that("data_to_wide, values_fill works", {
     tibble(
       person_id = 1:3,
       name = c("Jiena McLellan", "John Smith", "Huxley Ratcliffe"),
-      company = c("Toyota", "foo", "foo"),
+      company = c("Toyota", "foo", "foo")
     )
   )
   expect_error(
@@ -207,7 +208,7 @@ test_that("can pivot all cols to wide", {
   pv <- data_to_wide(df, names_from = "key", values_from = "val")
 
   expect_named(pv, c("x", "y", "z"))
-  expect_equal(nrow(pv), 1)
+  expect_identical(nrow(pv), 1L)
 })
 
 test_that("non-pivoted cols are preserved", {
@@ -218,7 +219,7 @@ test_that("non-pivoted cols are preserved", {
   pv <- data_to_wide(df, names_from = "key", values_from = "val")
 
   expect_named(pv, c("a", "x", "y"))
-  expect_equal(nrow(pv), 1)
+  expect_identical(nrow(pv), 1L)
 })
 
 test_that("implicit missings turn into explicit missings", {
@@ -228,9 +229,9 @@ test_that("implicit missings turn into explicit missings", {
   df <- tibble(a = 1:2, key = c("x", "y"), val = 1:2)
   pv <- data_to_wide(df, names_from = "key", values_from = "val")
 
-  expect_equal(pv$a, c(1, 2))
-  expect_equal(pv$x, c(1, NA))
-  expect_equal(pv$y, c(NA, 2))
+  expect_identical(pv$a, c(1L, 2L))
+  expect_identical(pv$x, c(1L, NA))
+  expect_identical(pv$y, c(NA, 2L))
 })
 
 test_that("error when overwriting existing column", {
@@ -454,9 +455,10 @@ test_that("data_to_wide, names_glue works", {
 
   df <- data.frame(
     food = c("banana", "banana", "banana", "banana", "cheese", "cheese", "cheese", "cheese"),
-    binary = c(rep(c("yes", "no"), 4)),
+    binary = rep(c("yes", "no"), 4),
     car = c("toyota", "subaru", "mazda", "skoda", "toyota", "subaru", "mazda", "skoda"),
-    fun = c(2, 4, 3, 6, 2, 4, 2, 3)
+    fun = c(2, 4, 3, 6, 2, 4, 2, 3),
+    stringsAsFactors = FALSE
   )
 
   x <- df %>%
@@ -535,12 +537,12 @@ test_that("new names starting with digits are not corrected automatically", {
   tidyr <- tidyr::pivot_wider(
     percentages,
     names_from = c(year, type),
-    values_from = percentage,
+    values_from = percentage
   )
   datawiz <- data_to_wide(
     percentages,
     names_from = c("year", "type"),
-    values_from = "percentage",
+    values_from = "percentage"
   )
   expect_identical(tidyr, datawiz)
 })
