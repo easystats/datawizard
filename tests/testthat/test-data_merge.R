@@ -269,4 +269,3 @@ test_that("join when all 'by' are not present", {
     regexp = "Not all columns"
   )
 })
-

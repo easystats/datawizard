@@ -226,7 +226,8 @@ test_that("data_read", {
 
 test_that("data_read, convert_factors", {
   d <- data_read(
-    temp_file, convert_factors = FALSE,
+    temp_file,
+    convert_factors = FALSE,
     verbose = FALSE
   )
   expect_equal(sum(sapply(d, is.factor)), 0)
