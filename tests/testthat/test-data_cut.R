@@ -3,12 +3,12 @@ d <- sample(1:10, size = 500, replace = TRUE)
 
 test_that("recode median", {
   expect_identical(categorize(d), ifelse(d >= median(d), 2, 1))
-  expect_identical(categorize(d, lowest = 0), ifelse(d >= median(d), 1, 0))
+  expect_identical(categorize(d, lowest = 0), as.numeric(d >= median(d)))
 })
 
 test_that("recode mean", {
   expect_identical(categorize(d, split = "mean"), ifelse(d >= mean(d), 2, 1))
-  expect_identical(categorize(d, split = "mean", lowest = 0), ifelse(d >= mean(d), 1, 0))
+  expect_identical(categorize(d, split = "mean", lowest = 0), as.numeric(d >= mean(d)))
 })
 
 test_that("recode quantile", {
