@@ -2,22 +2,22 @@
 # https://github.com/easystats/datawizard/issues/106#issuecomment-1066628399
 
 test_that("reverse works with numeric", {
-  expect_equal(
+  expect_identical(
     reverse(1:5),
-    5:1
+    as.double(5:1)
   )
-  expect_equal(
+  expect_identical(
     reverse(-2:2),
-    2:-2
+    as.double(2:-2)
   )
 })
 
 test_that("reverse works with factor", {
-  expect_equal(
+  expect_identical(
     reverse(factor(1:5)),
     factor(5:1)
   )
-  expect_equal(
+  expect_identical(
     reverse(factor(-2:2)),
     factor(2:-2)
   )
@@ -28,24 +28,24 @@ test_that("reverse works with data frame", {
     x = 1:5,
     y = c(3, 8, 2, 5, 1)
   )
-  expect_equal(
+  expect_identical(
     reverse(test, select = "x"),
     data.frame(
-      x = 5:1,
+      x = as.double(5:1),
       y = c(3, 8, 2, 5, 1)
     )
   )
-  expect_equal(
+  expect_identical(
     reverse(test, exclude = "x"),
     data.frame(
       x = 1:5,
       y = c(6, 1, 7, 4, 8)
     )
   )
-  expect_equal(
+  expect_identical(
     reverse(test),
     data.frame(
-      x = 5:1,
+      x = as.double(5:1),
       y = c(6, 1, 7, 4, 8)
     )
   )
@@ -56,17 +56,17 @@ test_that("reverse: arg 'select' works with formula", {
     x = 1:5,
     y = c(3, 8, 2, 5, 1)
   )
-  expect_equal(
+  expect_identical(
     reverse(test, select = ~x),
     data.frame(
-      x = 5:1,
+      x = as.double(5:1),
       y = c(3, 8, 2, 5, 1)
     )
   )
-  expect_equal(
+  expect_identical(
     reverse(test, select = ~ x + y),
     data.frame(
-      x = 5:1,
+      x = as.double(5:1),
       y = c(6, 1, 7, 4, 8)
     )
   )
@@ -77,25 +77,25 @@ test_that("reverse: arg 'exclude' works with formula", {
     x = 1:5,
     y = c(3, 8, 2, 5, 1)
   )
-  expect_equal(
+  expect_identical(
     reverse(test, exclude = ~x),
     data.frame(
       x = 1:5,
       y = c(6, 1, 7, 4, 8)
     )
   )
-  expect_equal(
+  expect_identical(
     reverse(test, exclude = ~ x + y),
     test
   )
 })
 
 test_that("reverse: argument 'range' works", {
-  expect_equal(
+  expect_identical(
     reverse(c(1, 3, 4), range = c(0, 4)),
     c(3, 1, 0)
   )
-  expect_equal(
+  expect_identical(
     reverse(factor(c(1, 2, 3, 4, 5)), range = 0:10),
     factor(9:5, levels = 0:10)
   )
@@ -104,35 +104,35 @@ test_that("reverse: argument 'range' works", {
     x = 1:5,
     y = c(3, 8, 2, 5, 1)
   )
-  expect_equal(
+  expect_identical(
     reverse(test, select = "x", range = c(0, 8)),
     data.frame(
-      x = 7:3,
+      x = as.double(7:3),
       y = c(3, 8, 2, 5, 1)
     )
   )
-  expect_equal(
+  expect_identical(
     reverse(test, range = c(0, 8)),
     data.frame(
-      x = 7:3,
+      x = as.double(7:3),
       y = c(5, 0, 6, 3, 7)
     )
   )
 })
 
 test_that("reverse ignores NA", {
-  expect_equal(
+  expect_identical(
     reverse(c(1, 2, 8, NA)),
     c(8, 7, 1, NA)
   )
 })
 
 test_that("reverse returns NA if only NA provided", {
-  expect_equal(
+  expect_identical(
     reverse(c(NA_real_, NA_real_)),
     c(NA_real_, NA_real_)
   )
-  expect_equal(
+  expect_identical(
     reverse(factor(c(NA, NA))),
     factor(c(NA, NA))
   )
@@ -160,22 +160,22 @@ test_that("reverse msg for unsupported", {
 # Same tests with reverse_scale (alias) --------------------------
 
 test_that("reverse_scale works with numeric", {
-  expect_equal(
+  expect_identical(
     reverse_scale(1:5),
-    5:1
+    as.double(5:1)
   )
-  expect_equal(
+  expect_identical(
     reverse_scale(-2:2),
-    2:-2
+    as.double(2:-2)
   )
 })
 
 test_that("reverse_scale works with factor", {
-  expect_equal(
+  expect_identical(
     reverse_scale(factor(1:5)),
     factor(5:1)
   )
-  expect_equal(
+  expect_identical(
     reverse_scale(factor(-2:2)),
     factor(2:-2)
   )
@@ -186,24 +186,24 @@ test_that("reverse_scale works with data frame", {
     x = 1:5,
     y = c(3, 8, 2, 5, 1)
   )
-  expect_equal(
+  expect_identical(
     reverse_scale(test, select = "x"),
     data.frame(
-      x = 5:1,
+      x = as.double(5:1),
       y = c(3, 8, 2, 5, 1)
     )
   )
-  expect_equal(
+  expect_identical(
     reverse_scale(test, exclude = "x"),
     data.frame(
       x = 1:5,
       y = c(6, 1, 7, 4, 8)
     )
   )
-  expect_equal(
+  expect_identical(
     reverse_scale(test),
     data.frame(
-      x = 5:1,
+      x = as.double(5:1),
       y = c(6, 1, 7, 4, 8)
     )
   )
@@ -214,17 +214,17 @@ test_that("reverse_scale: arg 'select' works with formula", {
     x = 1:5,
     y = c(3, 8, 2, 5, 1)
   )
-  expect_equal(
+  expect_identical(
     reverse_scale(test, select = ~x),
     data.frame(
-      x = 5:1,
+      x = as.double(5:1),
       y = c(3, 8, 2, 5, 1)
     )
   )
-  expect_equal(
+  expect_identical(
     reverse_scale(test, select = ~ x + y),
     data.frame(
-      x = 5:1,
+      x = as.double(5:1),
       y = c(6, 1, 7, 4, 8)
     )
   )
@@ -235,25 +235,25 @@ test_that("reverse_scale: arg 'exclude' works with formula", {
     x = 1:5,
     y = c(3, 8, 2, 5, 1)
   )
-  expect_equal(
+  expect_identical(
     reverse_scale(test, exclude = ~x),
     data.frame(
       x = 1:5,
       y = c(6, 1, 7, 4, 8)
     )
   )
-  expect_equal(
+  expect_identical(
     reverse_scale(test, exclude = ~ x + y),
     test
   )
 })
 
 test_that("reverse_scale: argument 'range' works", {
-  expect_equal(
+  expect_identical(
     reverse_scale(c(1, 3, 4), range = c(0, 4)),
     c(3, 1, 0)
   )
-  expect_equal(
+  expect_identical(
     reverse_scale(factor(c(1, 2, 3, 4, 5)), range = 0:10),
     factor(9:5, levels = 0:10)
   )
@@ -262,35 +262,35 @@ test_that("reverse_scale: argument 'range' works", {
     x = 1:5,
     y = c(3, 8, 2, 5, 1)
   )
-  expect_equal(
+  expect_identical(
     reverse_scale(test, select = "x", range = c(0, 8)),
     data.frame(
-      x = 7:3,
+      x = as.double(7:3),
       y = c(3, 8, 2, 5, 1)
     )
   )
-  expect_equal(
+  expect_identical(
     reverse_scale(test, range = c(0, 8)),
     data.frame(
-      x = 7:3,
+      x = as.double(7:3),
       y = c(5, 0, 6, 3, 7)
     )
   )
 })
 
 test_that("reverse_scale ignores NA", {
-  expect_equal(
+  expect_identical(
     reverse_scale(c(1, 2, 8, NA)),
     c(8, 7, 1, NA)
   )
 })
 
 test_that("reverse_scale returns NA if only NA provided", {
-  expect_equal(
+  expect_identical(
     reverse_scale(c(NA_real_, NA_real_)),
     c(NA_real_, NA_real_)
   )
-  expect_equal(
+  expect_identical(
     reverse_scale(factor(c(NA, NA))),
     factor(c(NA, NA))
   )
@@ -315,14 +315,14 @@ test_that("reverse_scale select helpers", {
     "Petal.Length" = c(-1, 0)
   ), select = ends_with("length"))
 
-  expect_equal(out$Sepal.Length, iris$Sepal.Length, tolerance = 1e-3)
+  expect_identical(out$Sepal.Length, iris$Sepal.Length, tolerance = 1e-3)
 
   out <- rescale(iris, to = list(
     "Sepal.Length" = c(0, 1),
     "Petal.Length" = c(-1, 0)
   ), select = ends_with("length"), ignore_case = TRUE)
 
-  expect_equal(head(out$Sepal.Length), c(0.22222, 0.16667, 0.11111, 0.08333, 0.19444, 0.30556), tolerance = 1e-3)
+  expect_identical(head(out$Sepal.Length), c(0.22222, 0.16667, 0.11111, 0.08333, 0.19444, 0.30556), tolerance = 1e-3)
 })
 
 
@@ -338,14 +338,15 @@ value2 <- sample(1:10, 6, replace = TRUE)
 test_df <- data.frame(
   id = rep(c("A", "B"), each = 3),
   value1 = value1,
-  value2 = value2
+  value2 = value2,
+  stringsAsFactors = FALSE
 )
 
 test_that("reverse works with data frames (grouped data)", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
-  expect_equal(
+  expect_identical(
     test_df %>%
       group_by(id) %>%
       reverse(exclude = "id") %>%
@@ -353,7 +354,8 @@ test_that("reverse works with data frames (grouped data)", {
     data.frame(
       id = rep(c("A", "B"), each = 3),
       value1 = c(10, 10, 3, 6, 2, 3),
-      value2 = c(4, 6, 3, 10, 6, 5)
+      value2 = c(4, 6, 3, 10, 6, 5),
+      stringsAsFactors = FALSE
     )
   )
 })
@@ -367,14 +369,15 @@ value2 <- sample(c(1:10, NA), 6, replace = TRUE)
 test_df <- data.frame(
   id = rep(c("A", "B"), each = 3),
   value1 = value1,
-  value2 = value2
+  value2 = value2,
+  stringsAsFactors = FALSE
 )
 
 test_that("reverse works with data frames containing NAs (grouped data)", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
-  expect_equal(
+  expect_identical(
     test_df %>%
       group_by(id) %>%
       reverse(exclude = "id") %>%
@@ -382,14 +385,15 @@ test_that("reverse works with data frames containing NAs (grouped data)", {
     data.frame(
       id = rep(c("A", "B"), each = 3),
       value1 = c(10, 4, 4, 5, 3, 4),
-      value2 = c(NA, 10, 9, 7, 6, 8)
+      value2 = c(NA, 10, 9, 7, 6, 8),
+      stringsAsFactors = FALSE
     )
   )
 })
 
 # select helpers ------------------------------
 test_that("reverse regex", {
-  expect_equal(
+  expect_identical(
     reverse(mtcars, select = "arb", regex = TRUE),
     reverse(mtcars, select = "carb")
   )

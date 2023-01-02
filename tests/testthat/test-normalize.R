@@ -12,7 +12,7 @@ test_that("normalize work as expected", {
   )
 
   expect_equal(
-    normalize(c(0, 1, 5, -5, -2), include_bounds = .01),
+    normalize(c(0, 1, 5, -5, -2), include_bounds = 0.01),
     c(0.5, 0.598, 0.99, 0.01, 0.304),
     ignore_attr = TRUE,
     tolerance = 1e-4
@@ -77,7 +77,7 @@ test_that("normalize: all Na or Inf", {
 
 
 test_that("normalize: only one value", {
-  foo <- c(1)
+  foo <- 1
   expect_warning(
     normalize(x = foo),
     regexp = "Variable `foo` contains only one unique value and will"
@@ -103,8 +103,8 @@ test_that("normalize: only two values", {
 })
 
 test_that("normalize: factor", {
-  expect_equal(
-    normalize(factor(c(1:3))),
+  expect_identical(
+    normalize(factor(1:3)),
     factor(1:3)
   )
 })
@@ -119,9 +119,9 @@ test_that("normalize: matrix", {
 
 test_that("normalize: select", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
-  expect_equal(
+  expect_identical(
     normalize(
       iris,
       select = starts_with("Petal\\.L")
@@ -133,9 +133,9 @@ test_that("normalize: select", {
 
 test_that("normalize: exclude", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
-  expect_equal(
+  expect_identical(
     normalize(
       iris,
       exclude = ends_with("ecies")
@@ -150,7 +150,7 @@ test_that("normalize: exclude", {
 
 test_that("normalize (grouped data)", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
   datawizard <- iris %>%
     group_by(Species) %>%
@@ -164,12 +164,12 @@ test_that("normalize (grouped data)", {
     ungroup() %>%
     pull(Sepal.Width)
 
-  expect_equal(datawizard, manual)
+  expect_identical(datawizard, manual)
 })
 
 test_that("normalize, include bounds (grouped data)", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
   datawizard <- iris %>%
     group_by(Species) %>%
@@ -183,13 +183,13 @@ test_that("normalize, include bounds (grouped data)", {
     ungroup() %>%
     pull(Sepal.Width)
 
-  expect_equal(datawizard, manual)
+  expect_identical(datawizard, manual)
 })
 
 
 test_that("normalize, factor (grouped data)", {
   skip_if_not_installed("poorman")
-  library(poorman)
+  suppressPackageStartupMessages(library(poorman))
 
   datawizard <- iris %>%
     group_by(Species) %>%
@@ -199,12 +199,12 @@ test_that("normalize, factor (grouped data)", {
 
   manual <- iris$Species
 
-  expect_equal(datawizard, manual)
+  expect_identical(datawizard, manual)
 })
 
 # select helpers ------------------------------
 test_that("normalize regex", {
-  expect_equal(
+  expect_identical(
     normalize(mtcars, select = "pg", regex = TRUE),
     normalize(mtcars, select = "mpg")
   )

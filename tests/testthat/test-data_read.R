@@ -12,8 +12,11 @@ skip_if_not_installed("rio")
 # csv -------------------------
 
 test_that("data_read", {
-  d <- data_read("https://raw.githubusercontent.com/easystats/circus/master/data/bootstrapped.csv")
-  expect_equal(dim(d), c(10000, 4))
+  d <- data_read(
+    "https://raw.githubusercontent.com/easystats/circus/master/data/bootstrapped.csv",
+    verbose = FALSE
+  )
+  expect_identical(dim(d), c(10000L, 4L))
 })
 
 
@@ -21,9 +24,12 @@ test_that("data_read", {
 # csv -------------------------
 
 test_that("data_read, skip_empty", {
-  d <- data_read("https://raw.githubusercontent.com/easystats/circus/master/data/test_skip_empty.csv")
-  expect_equal(ncol(d), 3)
-  expect_equal(colnames(d), c("Var1", "Var2", "Var3"))
+  d <- data_read(
+    "https://raw.githubusercontent.com/easystats/circus/master/data/test_skip_empty.csv",
+    verbose = FALSE
+  )
+  expect_identical(ncol(d), 3L)
+  expect_identical(colnames(d), c("Var1", "Var2", "Var3"))
 })
 
 
@@ -36,11 +42,14 @@ httr::stop_for_status(request)
 writeBin(httr::content(request, type = "raw"), temp_file)
 
 test_that("data_read", {
-  d <- data_read(temp_file)
-  expect_equal(nrow(d), 3)
-  expect_equal(colnames(d), c("a", "b", "c"))
-  expect_equal(sum(sapply(d, is.numeric)), 2)
-  expect_equal(sum(sapply(d, is.character)), 1)
+  d <- data_read(
+    temp_file,
+    verbose = FALSE
+  )
+  expect_identical(nrow(d), 3L)
+  expect_identical(colnames(d), c("a", "b", "c"))
+  expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 2L)
+  expect_identical(sum(vapply(d, is.character, FUN.VALUE = logical(1L))), 1L)
 })
 
 unlink(temp_file)
@@ -55,11 +64,14 @@ httr::stop_for_status(request)
 writeBin(httr::content(request, type = "raw"), temp_file)
 
 test_that("data_read", {
-  d <- data_read(temp_file)
-  expect_equal(nrow(d), 3)
-  expect_equal(colnames(d), c("a", "b", "c"))
-  expect_equal(sum(sapply(d, is.numeric)), 2)
-  expect_equal(sum(sapply(d, is.character)), 1)
+  d <- data_read(
+    temp_file,
+    verbose = FALSE
+  )
+  expect_identical(nrow(d), 3L)
+  expect_identical(colnames(d), c("a", "b", "c"))
+  expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 2L)
+  expect_identical(sum(vapply(d, is.character, FUN.VALUE = logical(1L))), 1L)
 })
 
 unlink(temp_file)
@@ -74,7 +86,10 @@ httr::stop_for_status(request)
 writeBin(httr::content(request, type = "raw"), temp_file)
 
 test_that("data_read", {
-  d <- data_read(temp_file)
+  d <- data_read(
+    temp_file,
+    verbose = FALSE
+  )
   expect_identical(
     d,
     data.frame(
@@ -97,7 +112,10 @@ httr::stop_for_status(request)
 writeBin(httr::content(request, type = "raw"), temp_file)
 
 test_that("data_read", {
-  d <- data_read(temp_file)
+  d <- data_read(
+    temp_file,
+    verbose = FALSE
+  )
   expect_identical(
     d,
     data.frame(
@@ -120,10 +138,13 @@ httr::stop_for_status(request)
 writeBin(httr::content(request, type = "raw"), temp_file)
 
 test_that("data_read", {
-  d <- data_read(temp_file)
-  expect_equal(sum(sapply(d, is.factor)), 15)
-  expect_equal(sum(sapply(d, is.numeric)), 11)
-  expect_equal(
+  d <- data_read(
+    temp_file,
+    verbose = FALSE
+  )
+  expect_identical(sum(vapply(d, is.factor, FUN.VALUE = logical(1L))), 15L)
+  expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 11L)
+  expect_identical(
     levels(d$c172code),
     c(
       "low level of education",
@@ -131,7 +152,7 @@ test_that("data_read", {
       "high level of education"
     )
   )
-  expect_equal(
+  expect_identical(
     attr(d$n4pstu, "labels"),
     c(
       `spouse/partner` = 1,
@@ -154,8 +175,11 @@ httr::stop_for_status(request)
 writeBin(httr::content(request, type = "raw"), temp_file)
 
 test_that("data_read", {
-  d <- data_read(temp_file)
-  expect_equal(
+  d <- data_read(
+    temp_file,
+    verbose = FALSE
+  )
+  expect_identical(
     d,
     structure(
       list(
@@ -192,15 +216,22 @@ httr::stop_for_status(request)
 writeBin(httr::content(request, type = "raw"), temp_file)
 
 test_that("data_read", {
-  d <- data_read(temp_file)
-  expect_equal(sum(sapply(d, is.factor)), 15)
-  expect_equal(sum(sapply(d, is.numeric)), 11)
+  d <- data_read(
+    temp_file,
+    verbose = FALSE
+  )
+  expect_identical(sum(vapply(d, is.factor, FUN.VALUE = logical(1L))), 15L)
+  expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 11L)
 })
 
 test_that("data_read, convert_factors", {
-  d <- data_read(temp_file, convert_factors = FALSE)
-  expect_equal(sum(sapply(d, is.factor)), 0)
-  expect_equal(sum(sapply(d, is.numeric)), 26)
+  d <- data_read(
+    temp_file,
+    convert_factors = FALSE,
+    verbose = FALSE
+  )
+  expect_identical(sum(vapply(d, is.factor, FUN.VALUE = logical(1L))), 0L)
+  expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 26L)
 })
 
 unlink(temp_file)

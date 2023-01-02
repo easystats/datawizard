@@ -30,7 +30,7 @@ test_that("center, select", {
 
 test_that("center, factors", {
   z <- center(iris, select = "Species")
-  expect_equal(z$Species, iris$Species)
+  expect_identical(z$Species, iris$Species)
 })
 
 test_that("center, force factors", {
@@ -45,7 +45,7 @@ test_that("center, force factors", {
 
 test_that("center, all na", {
   z <- center(c(NA, NA, NA))
-  expect_equal(z, c(NA, NA, NA))
+  expect_identical(z, c(NA, NA, NA))
 })
 
 test_that("center, with Inf", {
@@ -59,8 +59,12 @@ test_that("center, all NA or Inf", {
 })
 
 test_that("center works correctly with only one value", {
-  expect_equal(center(100), 0, ignore_attr = TRUE)
-  expect_message(center(100), "will be set to 0")
+  expect_message(
+    x <- center(100),
+    "will be set to 0"
+  )
+  expect_equal(x, 0, ignore_attr = TRUE)
+
   expect_equal(center(100, center = 1), 99, ignore_attr = TRUE)
   expect_equal(
     center(100, reference = mtcars$mpg),
@@ -89,7 +93,7 @@ test_that("center (grouped data)", {
     ungroup() %>%
     pull(Sepal.Width)
 
-  expect_equal(datawizard, manual)
+  expect_identical(datawizard, manual)
 })
 
 test_that("center, robust (grouped data)", {
@@ -108,7 +112,7 @@ test_that("center, robust (grouped data)", {
     ungroup() %>%
     pull(Sepal.Width)
 
-  expect_equal(datawizard, manual)
+  expect_identical(datawizard, manual)
 })
 
 test_that("center, select (grouped data)", {
@@ -127,7 +131,7 @@ test_that("center, select (grouped data)", {
     ungroup() %>%
     pull(Sepal.Width)
 
-  expect_equal(datawizard, manual)
+  expect_identical(datawizard, manual)
 })
 
 test_that("center, factors (grouped data)", {
@@ -143,16 +147,16 @@ test_that("center, factors (grouped data)", {
   manual <- iris %>%
     pull(Species)
 
-  expect_equal(datawizard, manual)
+  expect_identical(datawizard, manual)
 })
 
 # select helpers ------------------------------
 test_that("center regex", {
-  expect_equal(
+  expect_identical(
     center(mtcars, select = "pg", regex = TRUE)$mpg,
     center(mtcars$mpg)
   )
-  expect_equal(
+  expect_identical(
     center(mtcars, select = "pg$", regex = TRUE)$mpg,
     center(mtcars$mpg)
   )
