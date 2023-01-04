@@ -252,17 +252,15 @@
   }
 
   # Warning if logical vector
-  if (length(unique(x)) == 2 && !is.factor(x) && !is.character(x)) {
-    if (verbose) {
-      if (is.null(name)) {
-        insight::format_alert(
-          "The variable contains only two different values. Consider converting it to a factor."
-        )
-      } else {
-        insight::format_alert(
-          paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor.")
-        )
-      }
+  if (verbose && insight::n_unique(x) == 2 && !is.factor(x) && !is.character(x)) {
+    if (is.null(name)) {
+      insight::format_alert(
+        "The variable contains only two different values. Consider converting it to a factor."
+      )
+    } else {
+      insight::format_alert(
+        paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor.")
+      )
     }
   }
   x
@@ -285,7 +283,7 @@
     if (!keep_character) {
       factors <- vapply(x[select], function(i) is.factor(i) | is.character(i), FUN.VALUE = logical(1L))
     } else {
-      factors <- vapply(x[select], function(i) is.factor(i), FUN.VALUE = logical(1L))
+      factors <- vapply(x[select], is.factor, FUN.VALUE = logical(1L))
     }
     select <- select[!factors]
   }

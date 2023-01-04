@@ -6,7 +6,7 @@ test_that("with missing values", {
   skip_if_not_installed("ggplot2")
 
   expect_snapshot(suppressWarnings(head(winsorize(na.omit(ggplot2::msleep$brainwt)))))
-  expect_equal(length(winsorize(as.factor(ggplot2::msleep$vore))), 83)
+  expect_length(winsorize(as.factor(ggplot2::msleep$vore)), 83L)
 })
 
 test_that("winsorize: threshold must be between 0 and 1", {
@@ -49,5 +49,5 @@ test_that("winsorize on data.frame", {
     iris2$Petal.Width,
     winsorize(iris$Petal.Width)
   )
-  expect_equal(names(iris2), names(iris))
+  expect_named(iris2, names(iris))
 })

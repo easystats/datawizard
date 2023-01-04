@@ -1,7 +1,7 @@
 test_that("rownames_as_column works", {
   test <- rownames_as_column(mtcars, "new_column")
   expect_true("new_column" %in% names(test))
-  expect_true(test[1, "new_column"] == "Mazda RX4")
+  expect_identical(test[1, "new_column"], "Mazda RX4")
 })
 
 test_that("rownames_as_column doesn't work if var is not a character", {
@@ -28,11 +28,11 @@ test_that("column_as_rownames works", {
   )
   test2 <- column_as_rownames(test, "continent")
   expect_identical(rownames(test2), continents)
-  expect_true(ncol(test2) == 1)
+  expect_identical(ncol(test2), 1L)
 
   test3 <- column_as_rownames(test, 1)
   expect_identical(rownames(test3), continents)
-  expect_true(ncol(test3) == 1)
+  expect_identical(ncol(test3), 1L)
 })
 
 test_that("column_as_rownames sanity checks work", {
@@ -85,19 +85,19 @@ test_na <- data.frame(
 
 test_that("row_to_colnames works", {
   test <- row_to_colnames(test_char, verbose = FALSE)
-  expect_equal(
+  expect_identical(
     colnames(test),
     c("iso", "year", "x1")
   )
 
   test <- row_to_colnames(test_num, verbose = FALSE)
-  expect_equal(
+  expect_identical(
     colnames(test),
     c("5", "3", "x1")
   )
 
   test <- row_to_colnames(test_na, verbose = FALSE)
-  expect_equal(
+  expect_identical(
     colnames(test),
     c("x1", "x2", "x3")
   )
@@ -116,7 +116,7 @@ test_that("row_to_colnames: check arg 'row'", {
     row_to_colnames(test_num, row = c(3, 5), verbose = FALSE),
     regexp = "Argument `row`"
   )
-  expect_equal(
+  expect_identical(
     row_to_colnames(test_num, verbose = FALSE),
     row_to_colnames(test_num, row = 1, verbose = FALSE)
   )
@@ -124,13 +124,13 @@ test_that("row_to_colnames: check arg 'row'", {
 
 test_that("row_to_colnames: check arg 'na_prefix'", {
   test <- row_to_colnames(test_char, na_prefix = "foo", verbose = FALSE)
-  expect_equal(
+  expect_identical(
     colnames(test),
     c("iso", "year", "foo1")
   )
 
   test <- row_to_colnames(test_num, na_prefix = "foo", verbose = FALSE)
-  expect_equal(
+  expect_identical(
     colnames(test),
     c("5", "3", "foo1")
   )
@@ -147,7 +147,7 @@ foo <- data.frame(
 
 test_that("colnames_to_row works", {
   test <- colnames_to_row(foo)
-  expect_equal(
+  expect_identical(
     colnames(test),
     c("x1", "x2", "x3")
   )
@@ -163,7 +163,7 @@ test_that("colnames_to_row works", {
 
 test_that("colnames_to_row: check arg 'prefix'", {
   test <- colnames_to_row(foo, prefix = "hi")
-  expect_equal(
+  expect_identical(
     colnames(test),
     c("hi1", "hi2", "hi3")
   )
@@ -175,7 +175,7 @@ test_that("colnames_to_row: check arg 'prefix'", {
     colnames_to_row(test_num, prefix = c("A", "B")),
     regexp = "Argument `prefix`"
   )
-  expect_equal(
+  expect_identical(
     colnames_to_row(test),
     colnames_to_row(test, prefix = "x")
   )

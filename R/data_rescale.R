@@ -200,10 +200,8 @@ rescale.data.frame <- function(x,
   )
 
   # Transform the range so that it is a list now
-  if (!is.null(range)) {
-    if (!is.list(range)) {
-      range <- stats::setNames(rep(list(range), length(select)), select)
-    }
+  if (!is.null(range) && !is.list(range)) {
+    range <- stats::setNames(rep(list(range), length(select)), select)
   }
   # Transform the 'to' so that it is a list now
   if (!is.list(to)) {

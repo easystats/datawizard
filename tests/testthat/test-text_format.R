@@ -62,7 +62,7 @@ test_that("text formatting helpers work as expected", {
 
 test_that("text formatters respect `width` argument", {
   expect_snapshot({
-    long_text <- paste(rep("abc ", 100), collapse = "")
+    long_text <- strrep("abc ", 100)
     cat(format_text(long_text, width = 50))
     cat(format_text(long_text, width = 80))
 
