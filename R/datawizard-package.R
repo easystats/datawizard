@@ -1,4 +1,4 @@
-#' \code{datawizard}
+#' `datawizard`
 #'
 #' @title datawizard: Easy Data Wrangling and Statistical Transformations
 #'
