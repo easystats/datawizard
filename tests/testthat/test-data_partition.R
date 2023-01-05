@@ -24,9 +24,9 @@ test_that("data_partition works as expected", {
 
   # values
 
-  out <- data_partition(mtcars, proportion = .8, seed = 123)
+  out <- data_partition(mtcars, proportion = 0.8, seed = 123)
 
-  expect_equal(
+  expect_identical(
     out$p_0.8$.row_id,
     c(
       1L, 3L, 4L, 5L, 7L, 8L, 9L, 10L, 11L, 14L, 15L, 17L, 18L, 19L,
@@ -34,7 +34,7 @@ test_that("data_partition works as expected", {
     )
   )
 
-  expect_equal(
+  expect_identical(
     colnames(out$p_0.8),
     c(
       "mpg", "cyl", "disp", "hp", "drat", "wt", "qsec", "vs", "am",
@@ -42,7 +42,7 @@ test_that("data_partition works as expected", {
     )
   )
 
-  expect_equal(
+  expect_identical(
     lapply(out, nrow),
     list(p_0.8 = 26L, test = 6L)
   )
@@ -51,10 +51,10 @@ test_that("data_partition works as expected", {
   # data frames
 
   data(iris)
-  expect_snapshot(str(data_partition(iris, proportion = .7, seed = 123)))
-  expect_snapshot(str(data_partition(iris, proportion = c(.2, .5), seed = 123)))
-  expect_snapshot(str(data_partition(iris, proportion = .7, group = "Species", seed = 123)))
-  expect_snapshot(str(data_partition(iris, proportion = c(.2, .5), group = "Species", seed = 123)))
+  expect_snapshot(str(data_partition(iris, proportion = 0.7, seed = 123)))
+  expect_snapshot(str(data_partition(iris, proportion = c(0.2, 0.5), seed = 123)))
+  expect_snapshot(str(data_partition(iris, proportion = 0.7, group = "Species", seed = 123)))
+  expect_snapshot(str(data_partition(iris, proportion = c(0.2, 0.5), group = "Species", seed = 123)))
 })
 
 test_that("data_partition warns if no testing set", {

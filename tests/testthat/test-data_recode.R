@@ -121,7 +121,7 @@ d <- data.frame(
 test_that("recode data.frame", {
   out <- recode_values(
     d,
-    recode = list(`1` = 0, `2:3` = 1, `4` = 2, a = "x", `b, c` = "y"),
+    recode = list(`1` = 0, `2:3` = 1, `4` = 2, a = "x", `b, c` = "y")
   )
   expect_equal(
     out,
@@ -140,7 +140,7 @@ test_that("recode data.frame", {
 
   out <- recode_values(
     d,
-    recode = list(`1` = 0, `2:3` = 1, `4` = 2, a = "x", `b, c` = "y"),
+    recode = list(`1` = 0, `2:3` = 1, `4` = 2, a = "x", `b, c` = "y")
   )
   expect_equal(
     out,
@@ -197,7 +197,7 @@ test_that("recode numeric", {
 })
 
 test_that("recode, recode-arg is named list", {
-  expect_warning(expect_equal(recode_values(x, recode = c(`0` = 1, `1` = 2:3, `2` = 4)), x))
+  expect_warning(expect_identical(recode_values(x, recode = c(`0` = 1, `1` = 2:3, `2` = 4)), x))
 })
 
 
@@ -226,7 +226,7 @@ test_that("recode factor", {
 })
 
 test_that("recode, recode-arg is named list", {
-  expect_warning(expect_equal(recode_values(x, recode = c(x = "a", y = "b, c")), x))
+  expect_warning(expect_identical(recode_values(x, recode = c(x = "a", y = "b, c")), x))
 })
 
 
@@ -240,7 +240,7 @@ d <- data.frame(
 test_that("recode data.frame", {
   out <- recode_values(
     d,
-    recode = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = "b, c"),
+    recode = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = "b, c")
   )
   expect_equal(
     out,
@@ -259,7 +259,7 @@ test_that("recode data.frame", {
 
   out <- recode_values(
     d,
-    recode = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c")),
+    recode = list(`0` = 1, `1` = 2:3, `2` = 4, x = "a", y = c("b", "c"))
   )
   expect_equal(
     out,
@@ -299,7 +299,7 @@ test_that("recode data.frame", {
 
 # select helpers ------------------------------
 test_that("recode_values regex", {
-  expect_equal(
+  expect_identical(
     recode_values(iris, select = "ies", regex = TRUE, recode = list(
       Group1 = "setosa", Group2 = "versicolor", Group3 = "virginica"
     )),
