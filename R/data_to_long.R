@@ -186,7 +186,8 @@ data_to_long <- function(data,
         seq_len(nrow(stacked_data)),
         nrow = length(unique(stacked_data$ind)),
         byrow = TRUE
-      ), ]
+      ),
+    ]
 
     row.names(stacked_data) <- NULL
   }
