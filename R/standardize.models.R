@@ -173,7 +173,8 @@ standardize.default <- function(x,
   do_standardize <- setdiff(colnames(data), dont_standardize)
 
   # can't std data$var variables
-  if (any(doller_vars <- grepl("(.*)\\$(.*)", do_standardize))) {
+  doller_vars <- grepl("(.*)\\$(.*)", do_standardize)
+  if (any(doller_vars)) {
     doller_vars <- colnames(data)[doller_vars]
     insight::format_warning(
       "Unable to standardize variables evaluated in the environment (i.e., not in `data`).",
