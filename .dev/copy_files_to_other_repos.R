@@ -14,7 +14,7 @@ pkg_without_change <- easystats:::.packages_on_cran() %>% setdiff(pkg_with_chang
 copy_from_folder <- map_chr(pkg_with_change, ~here::here(common_root, .x, ".github", "workflows"))
 copy_to_folders <- map_chr(pkg_without_change, ~here::here(common_root, .x, ".github", "workflows"))
 
-file_name <- "check-link-rot.yaml"
+file_name <- "R-CMD-check-strict.yaml"
 
 purrr::walk2(
   .x = here::here(copy_from_folder, file_name),
