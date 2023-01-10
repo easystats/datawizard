@@ -2,6 +2,8 @@
 #'
 #' @param x A numeric vector (or one that can be coerced to one via
 #'   `as.numveric()`) to be summarized.
+#' @param named Should the vector be named?
+#'   (E.g., `c("-SD" = -1, Mean = 1, "+SD" = 2)`.)
 #' @param ... Not used.
 #' @inheritParams stats::mad
 #'

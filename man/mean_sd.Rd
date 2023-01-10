@@ -16,6 +16,9 @@ median_mad(x, na.rm = TRUE, constant = 1.4826, named = TRUE, ...)
 \item{na.rm}{if \code{TRUE} then \code{NA} values are stripped
     from \code{x} before computation takes place.}
 
+\item{named}{Should the vector be named?
+(E.g., \code{c("-SD" = -1, Mean = 1, "+SD" = 2)}.)}
+
 \item{...}{Not used.}
 
 \item{constant}{scale factor.}
