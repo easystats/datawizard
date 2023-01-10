@@ -60,6 +60,7 @@ reference:
       - smoothness
       - skewness
       - weighted_mean
+      - mean_sd
 
   - title: Convert and Replace Data
     desc: |
