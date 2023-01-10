@@ -18,7 +18,7 @@ mean_sd <- function(x, na.rm = TRUE, named = TRUE, ...) {
   x <- as.numeric(x)
 
   M <- mean(x, na.rm = na.rm)
-  S <- sd(x, na.rm = na.rm)
+  S <- stats::sd(x, na.rm = na.rm)
 
   v <- M + c(-1, 0, 1) * S
   if (isTRUE(named)) {
@@ -32,8 +32,8 @@ mean_sd <- function(x, na.rm = TRUE, named = TRUE, ...) {
 median_mad <- function(x, na.rm = TRUE, constant = 1.4826, named = TRUE, ...) {
   x <- as.numeric(x)
 
-  M <- median(x, na.rm = na.rm)
-  S <- mad(x, na.rm = na.rm, constant = constant)
+  M <- stats::median(x, na.rm = na.rm)
+  S <- stats::mad(x, na.rm = na.rm, constant = constant)
 
   v <- M + c(-1, 0, 1) * S
   if (isTRUE(named)) {
