@@ -1,3 +1,11 @@
+# datawizard 0.6.5.xx
+
+NEW FUNCTIONS
+
+* `mean_sd()` and `median_mad()` for summarizing vectors to their mean (or median) and a range of one SD (or MAD) above and below.  
+
+
+
 # datawizard 0.6.5
 
 MAJOR CHANGES
