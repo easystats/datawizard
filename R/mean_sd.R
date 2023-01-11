@@ -43,21 +43,21 @@ median_mad <- function(x, times = 1L, na.rm = TRUE, constant = 1.4826, named = T
 
   # centrality
   M <- switch(type,
-              median = stats::median(x, na.rm = na.rm),
-              mean(x, na.rm = na.rm)
+    median = stats::median(x, na.rm = na.rm),
+    mean(x, na.rm = na.rm)
   )
 
   S <- switch(type,
-              median = stats::mad(x, na.rm = na.rm, constant = constant),
-              stats::sd(x, na.rm = na.rm)
+    median = stats::mad(x, na.rm = na.rm, constant = constant),
+    stats::sd(x, na.rm = na.rm)
   )
 
   v <- M + c(-rev(seq_len(times)), 0, seq_len(times)) * S
 
   if (isTRUE(named)) {
     string_cs <- switch(type,
-                        median = c("Median", "MAD"),
-                        c("Mean", "SD")
+      median = c("Median", "MAD"),
+      c("Mean", "SD")
     )
     if (times == 1) {
       times <- ""
