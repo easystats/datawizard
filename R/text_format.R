@@ -128,7 +128,7 @@ text_wrap <- function(text, width = NULL, ...) {
       leading_spaces <- nchar(s) - nchar(trimws(s))
       s <- strwrap(s, width = width)
       s <- paste0(s, collapse = "\n")
-      s <- paste0(paste0(rep(" ", leading_spaces), collapse = ""), s)
+      s <- paste0(strrep(" ", leading_spaces), s)
     }
     wrapped <- paste0(wrapped, s, "\n")
   }

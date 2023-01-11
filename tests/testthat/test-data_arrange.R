@@ -75,7 +75,7 @@ test_that("data_arrange errors if not coercable to data frame", {
 
 test_that("data_arrange works with grouped df", {
   set.seed(123)
-  x <- mtcars[sample(1:nrow(mtcars), 10, replace = TRUE), c("cyl", "mpg")]
+  x <- mtcars[sample(seq_len(nrow(mtcars)), 10, replace = TRUE), c("cyl", "mpg")]
   g <- data_group(x, cyl)
 
   expected <- data.frame(

@@ -48,15 +48,11 @@ column_as_rownames <- function(x, var = "rowname") {
   if (!is.character(var) && !is.numeric(var)) {
     insight::format_error("Argument `var` must be of type character or numeric.")
   }
-  if (is.character(var)) {
-    if (!var %in% names(x)) {
-      insight::format_error(paste0("Variable \"", var, "\" is not in the data frame."))
-    }
+  if (is.character(var) && !var %in% names(x)) {
+    insight::format_error(paste0("Variable \"", var, "\" is not in the data frame."))
   }
-  if (is.numeric(var)) {
-    if (var > ncol(x) || var <= 0) {
-      insight::format_error("Column ", var, " does not exist. There are ", ncol(x), " columns in the data frame.")
-    }
+  if (is.numeric(var) && (var > ncol(x) || var <= 0)) {
+    insight::format_error("Column ", var, " does not exist. There are ", ncol(x), " columns in the data frame.")
   }
   rownames(x) <- x[[var]]
   x[[var]] <- NULL

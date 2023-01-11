@@ -18,7 +18,7 @@
 # text formatters respect `width` argument
 
     Code
-      long_text <- paste(rep("abc ", 100), collapse = "")
+      long_text <- strrep("abc ", 100)
       cat(format_text(long_text, width = 50))
     Output
        abc abc abc abc abc abc abc abc abc abc abc abc

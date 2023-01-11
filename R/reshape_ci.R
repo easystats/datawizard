@@ -62,7 +62,7 @@ reshape_ci <- function(x, ci_type = "CI") {
     }
 
     # Replace at the right place
-    ci_colname <- names(x)[c(grepl(paste0(ci_low, "_*"), names(x)) | grepl(paste0(ci_high, "_*"), names(x)))]
+    ci_colname <- names(x)[grepl(paste0(ci_low, "_*"), names(x)) | grepl(paste0(ci_high, "_*"), names(x))]
     colnames_1 <- names(x)[0:(ci_position - 1)][!names(x)[0:(ci_position - 1)] %in% ci_colname]
     colnames_2 <- names(x)[!names(x) %in% c(ci_colname, colnames_1)]
     x <- x[c(colnames_1, ci_colname, colnames_2)]

@@ -70,7 +70,8 @@ unstandardize.data.frame <- function(x,
     }
   } else if (is.null(center) || is.null(scale)) {
     i <- vapply(x, function(k) {
-      is.numeric(k) && !is.null(a <- attributes(k)) && all(c("scale", "center") %in% names(a))
+      a <- attributes(k)
+      is.numeric(k) && !is.null(a) && all(c("scale", "center") %in% names(a))
     }, FUN.VALUE = logical(1L))
 
     if (any(i)) {

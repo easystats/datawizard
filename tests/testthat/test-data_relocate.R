@@ -14,22 +14,22 @@ test_that("data_relocate works as expected", {
     "No valid position defined in `after`."
   )
 
-  expect_equal(
-    names(data_relocate(iris, select = "Species", before = "Sepal.Length")),
+  expect_named(
+    data_relocate(iris, select = "Species", before = "Sepal.Length"),
     c("Species", "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
   )
-  expect_equal(
-    names(data_relocate(iris, select = "Species", before = "Sepal.Width")),
+  expect_named(
+    data_relocate(iris, select = "Species", before = "Sepal.Width"),
     c("Sepal.Length", "Species", "Sepal.Width", "Petal.Length", "Petal.Width")
   )
 
-  expect_equal(
-    names(data_relocate(iris, select = "Sepal.Width", after = "Species")),
+  expect_named(
+    data_relocate(iris, select = "Sepal.Width", after = "Species"),
     names(data_relocate(iris, select = "Sepal.Width", after = -1))
   )
 
-  expect_equal(
-    names(data_relocate(iris, select = c("Species", "Petal.Length"), after = "Sepal.Width")),
+  expect_named(
+    data_relocate(iris, select = c("Species", "Petal.Length"), after = "Sepal.Width"),
     names(data_relocate(iris, select = c("Species", "Petal.Length"), after = 2))
   )
 })
@@ -37,31 +37,31 @@ test_that("data_relocate works as expected", {
 
 
 test_that("data_relocate select-helpers", {
-  expect_equal(
+  expect_identical(
     colnames(data_relocate(iris, select = starts_with("Sepal"), after = 5)),
     colnames(iris[c(3:5, 1:2)])
   )
-  expect_equal(
+  expect_identical(
     colnames(data_relocate(iris, select = 1:2, after = 5)),
     colnames(iris[c(3:5, 1:2)])
   )
-  expect_equal(
+  expect_identical(
     colnames(data_relocate(iris, select = -1)),
     colnames(iris[c(2:5, 1)])
   )
-  expect_equal(
+  expect_identical(
     colnames(data_relocate(iris, select = Species, after = 1)),
     colnames(iris[c(1, 5, 2:4)])
   )
-  expect_equal(
+  expect_identical(
     colnames(data_relocate(iris, select = ~ Sepal.Width + Species)),
     colnames(iris[c(2, 5, 1, 3:4)])
   )
-  expect_equal(
+  expect_identical(
     colnames(data_relocate(iris, select = starts_with("sepal"), after = 5)),
     colnames(iris)
   )
-  expect_equal(
+  expect_identical(
     colnames(data_relocate(iris, select = starts_with("sepal"), after = 5, ignore_case = TRUE)),
     colnames(iris[c(3:5, 1:2)])
   )
@@ -81,13 +81,14 @@ test_that("data_relocate preserves attributes", {
   a2 <- attributes(out2)
 
   # attributes may not be in the same order
-  expect_true(all(names(a1) %in% names(a2)) && length(a1) == length(a2))
+  expect_true(all(names(a1) %in% names(a2)))
+  expect_identical(length(a1), length(a2))
 })
 
 
 # select helpers ------------------------------
 test_that("data_relocate regex", {
-  expect_equal(
+  expect_identical(
     names(data_relocate(mtcars, select = "pg", regex = TRUE, after = "carb"))[11],
     "mpg"
   )
@@ -100,10 +101,11 @@ out <- data.frame(
   Median = 0.5,
   CI_low = 0.4,
   CI_high = 0.6,
-  pd = .97,
-  Rhat = .99,
+  pd = 0.97,
+  Rhat = 0.99,
   ESS = 1000,
-  log_BF = 3
+  log_BF = 3,
+  stringsAsFactors = FALSE
 )
 
 test_that("data_relocate misspelled", {

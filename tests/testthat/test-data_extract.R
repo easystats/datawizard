@@ -15,7 +15,7 @@ test_that("data_extract works with select-length > 1", {
 
   # properly extract vector, with naming
   x <- data_extract(efc, select = "e42dep", name = "c172code")
-  expect_equal(names(x), as.character(efc$c172code))
+  expect_named(x, as.character(efc$c172code))
 })
 
 

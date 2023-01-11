@@ -54,5 +54,5 @@ test_that("data_ungroup works", {
 
   ungrouped <- data_ungroup(x)
   expect_false(inherits(ungrouped, "grouped_df"))
-  expect_true(attributes(x)$foo == TRUE)
+  expect_identical(attributes(x)$foo, TRUE)
 })

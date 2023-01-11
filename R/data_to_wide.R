@@ -329,7 +329,7 @@ data_to_wide <- function(data,
   # expand the values for each variable in "values_from"
   res <- list()
   for (i in seq_along(values_from)) {
-    res[[i]] <- c(tapply(x[[values_from[i]]], x$future_colnames, as.vector))
+    res[[i]] <- tapply(x[[values_from[i]]], x$future_colnames, as.vector)
     if (length(values_from) > 1L) {
       names(res[[i]]) <- paste0(values_from[i], names_sep, names(res[[i]]))
     }
@@ -342,7 +342,7 @@ data_to_wide <- function(data,
     res <- data.frame(
       matrix(
         res[[1]],
-        nrow = 1, dimnames = list(c(), names(res[[1]]))
+        nrow = 1, dimnames = list(NULL, names(res[[1]]))
       ),
       stringsAsFactors = FALSE,
       check.names = FALSE
