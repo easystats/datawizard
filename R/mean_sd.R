@@ -4,6 +4,7 @@
 #'   `as.numveric()`) to be summarized.
 #' @param named Should the vector be named?
 #'   (E.g., `c("-SD" = -1, Mean = 1, "+SD" = 2)`.)
+#' @param times How many SDs above and below the Mean (or MADs around the Median)
 #' @param ... Not used.
 #' @inheritParams stats::mad
 #'
@@ -13,33 +14,61 @@
 #' @examples
 #' mean_sd(mtcars$mpg)
 #'
+#' mean_sd(mtcars$mpg, times = 2L)
+#'
 #' median_mad(mtcars$mpg)
 #'
 #' @export
-mean_sd <- function(x, na.rm = TRUE, named = TRUE, ...) {
-  x <- as.numeric(x)
-
-  M <- mean(x, na.rm = na.rm)
-  S <- stats::sd(x, na.rm = na.rm)
-
-  v <- M + c(-1, 0, 1) * S
-  if (isTRUE(named)) {
-    names(v) <- c("-SD", "Mean", "+SD")
-  }
-  v
+mean_sd <- function(x, times = 1L, na.rm = TRUE, named = TRUE, ...) {
+  .centrality_dispersion(x, type = "mean", times = times, na.rm = na.rm, named = named)
 }
 
 #' @export
 #' @rdname mean_sd
-median_mad <- function(x, na.rm = TRUE, constant = 1.4826, named = TRUE, ...) {
+median_mad <- function(x, times = 1L, na.rm = TRUE, constant = 1.4826, named = TRUE, ...) {
+  .centrality_dispersion(x, type = "median", times = times, na.rm = na.rm, constant = constant, named = named)
+}
+
+#' @keywords Internal
+.centrality_dispersion <- function(x,
+                                   type = "mean",
+                                   na.rm = TRUE,
+                                   times = 1L,
+                                   constant = 1.4826,
+                                   named = TRUE,
+                                   ...) {
   x <- as.numeric(x)
+  times <- as.integer(times)
+  type <- match.arg(type, choices = c("mean", "median"))
 
-  M <- stats::median(x, na.rm = na.rm)
-  S <- stats::mad(x, na.rm = na.rm, constant = constant)
+  # centrality
+  M <- switch(type,
+              median = stats::median(x, na.rm = na.rm),
+              mean(x, na.rm = na.rm)
+  )
 
-  v <- M + c(-1, 0, 1) * S
+  S <- switch(type,
+              median = stats::mad(x, na.rm = na.rm, constant = constant),
+              stats::sd(x, na.rm = na.rm)
+  )
+
+  v <- M + c(-rev(seq_len(times)), 0, seq_len(times)) * S
+
   if (isTRUE(named)) {
-    names(v) <- c("-MAD", "Median", "+MAD")
+    string_cs <- switch(type,
+                        median = c("Median", "MAD"),
+                        c("Mean", "SD")
+    )
+    if (times == 1) {
+      times <- ""
+    } else {
+      times <- paste0(seq_len(times), " ")
+    }
+    names(v) <- c(
+      paste0("-", times, string_cs[2]),
+      string_cs[1],
+      paste0("+", times, string_cs[2])
+    )
   }
   v
 }

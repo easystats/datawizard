@@ -5,13 +5,15 @@
 \alias{median_mad}
 \title{Summary Helpers}
 \usage{
-mean_sd(x, na.rm = TRUE, named = TRUE, ...)
+mean_sd(x, times = 1L, na.rm = TRUE, named = TRUE, ...)
 
-median_mad(x, na.rm = TRUE, constant = 1.4826, named = TRUE, ...)
+median_mad(x, times = 1L, na.rm = TRUE, constant = 1.4826, named = TRUE, ...)
 }
 \arguments{
 \item{x}{A numeric vector (or one that can be coerced to one via
 \code{as.numveric()}) to be summarized.}
+
+\item{times}{How many SDs above and below the Mean (or MADs around the Median)}
 
 \item{na.rm}{if \code{TRUE} then \code{NA} values are stripped
     from \code{x} before computation takes place.}
@@ -32,6 +34,8 @@ Summary Helpers
 }
 \examples{
 mean_sd(mtcars$mpg)
+
+mean_sd(mtcars$mpg, times = 2L)
 
 median_mad(mtcars$mpg)
 
