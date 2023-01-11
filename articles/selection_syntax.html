@@ -39,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -426,7 +426,7 @@ want to use:</p>
 <code class="sourceCode R"><span><span class="va">my_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">selection</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="va">selection</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="fu">my_function</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">my_function</span><span class="op">(</span><span class="va">iris</span>, <span class="st">"Sepal.Length"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Sepal.Length"</span></span>
 <span><span class="fu">my_function</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sep"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Sepal.Length" "Sepal.Width"</span></span>
