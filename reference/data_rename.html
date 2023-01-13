@@ -22,7 +22,7 @@ pipe-workflow."><meta property="og:image" content="https://easystats.github.io/d
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -132,7 +132,14 @@ pipe-workflow.</p>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">data_rename</span><span class="op">(</span><span class="va">data</span>, pattern <span class="op">=</span> <span class="cn">NULL</span>, replacement <span class="op">=</span> <span class="cn">NULL</span>, safe <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">data_rename</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  replacement <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  safe <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">data_rename_rows</span><span class="op">(</span><span class="va">data</span>, rows <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -204,7 +211,7 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
 
 
 <dt>verbose</dt>
-<dd><p>Toggle warnings.</p></dd>
+<dd><p>Toggle warnings and messages.</p></dd>
 
 
 <dt>...</dt>
@@ -278,14 +285,7 @@ renamed/removed doesn't exist.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6    5.4         3.9          1.7         0.4  setosa</span>
 <span class="r-in"><span><span class="co"># data_rename(iris, "FakeCol", "length", safe=FALSE)  # This fails</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">data_rename</span><span class="op">(</span><span class="va">iris</span>, <span class="st">"FakeCol"</span>, <span class="st">"length"</span><span class="op">)</span><span class="op">)</span> <span class="co"># This doesn't</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Variable `FakeCol` is not in your data frame :/</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          5.1         3.5          1.4         0.2  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          4.9         3.0          1.4         0.2  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          4.7         3.2          1.3         0.2  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          4.6         3.1          1.5         0.2  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          5.0         3.6          1.4         0.2  setosa</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          5.4         3.9          1.7         0.4  setosa</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .data_rename(data, pattern[i], replacement[i], safe):</span> object 'verbose' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">data_rename</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Sepal.Width"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"length"</span>, <span class="st">"width"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   length width Petal.Length Petal.Width Species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    5.1   3.5          1.4         0.2  setosa</span>
