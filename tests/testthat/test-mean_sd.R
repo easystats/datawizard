@@ -17,4 +17,3 @@ test_that("mean_sd", {
   expect_equal(unname(diff(msd2)), rep(sd(mtcars[["mpg"]]), 6), tolerance = 0.00001)
   expect_named(msd2, c("-3 SD", "-2 SD", "-1 SD", "Mean", "+1 SD", "+2 SD", "+3 SD"))
 })
-
