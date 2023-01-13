@@ -19,7 +19,7 @@ pkgs <- c(
   "htmltools"
 )
 
-if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
+if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 ```
@@ -187,7 +187,7 @@ For example, if we want to let the user decide the selection they want to use:
 my_function <- function(data, selection) {
   find_columns(data, select = selection)
 }
-my_function(iris, c("Sepal.Length"))
+my_function(iris, "Sepal.Length")
 my_function(iris, starts_with("Sep"))
 
 my_function_2 <- function(data, pattern) {

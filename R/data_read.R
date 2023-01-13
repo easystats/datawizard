@@ -161,7 +161,8 @@ data_read <- function(path,
         }
 
         # drop unused value labels
-        if (!is.null(value_labels) && length(value_labels <- value_labels[value_labels %in% unique(i)])) {
+        value_labels <- value_labels[value_labels %in% unique(i)]
+        if (length(value_labels) > 0L) {
           attr(i, "labels") <- value_labels
         }
 

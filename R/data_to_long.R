@@ -181,13 +181,13 @@ data_to_long <- function(data,
   needs_to_rearrange <- length(not_selected) == 0L && is.null(rows_to)
   if (isTRUE(needs_to_rearrange)) {
     # https://stackoverflow.com/questions/73984957/efficient-way-to-reorder-rows-to-have-a-repeated-sequence
-    stacked_data <- stacked_data[c(
+    stacked_data <- stacked_data[
       matrix(
         seq_len(nrow(stacked_data)),
         nrow = length(unique(stacked_data$ind)),
         byrow = TRUE
-      )
-    ), ]
+      ),
+    ]
 
     row.names(stacked_data) <- NULL
   }
