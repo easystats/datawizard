@@ -1,5 +1,8 @@
 # datawizard (development version)
 
+MINOR CHANGES
+
+* `data_rename()` gets a `verbose` argument.
 
 # datawizard 0.6.5
 

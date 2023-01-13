@@ -21,6 +21,7 @@
 #' @param rows Vector of row names.
 #' @param safe Do not throw error if for instance the variable to be
 #'   renamed/removed doesn't exist.
+#' @param verbose Toggle warnings and messages.
 #' @param ... Other arguments passed to or from other functions.
 #'
 #' @return A modified data frame.
@@ -49,7 +50,12 @@
 #' - Functions to filter rows: [data_match()], [data_filter()]
 #'
 #' @export
-data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, ...) {
+data_rename <- function(data,
+                        pattern = NULL,
+                        replacement = NULL,
+                        safe = TRUE,
+                        verbose = TRUE,
+                        ...) {
   # change all names if no pattern specified
   if (is.null(pattern)) {
     pattern <- names(data)
@@ -76,14 +82,14 @@ data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, .
     }
   }
 
-  if (length(replacement) > length(pattern)) {
+  if (length(replacement) > length(pattern) && verbose) {
     insight::format_alert(
       paste0(
         "There are more names in `replacement` than in `pattern`. The last ",
         length(replacement) - length(pattern), " names of `replacement` are not used."
       )
     )
-  } else if (length(replacement) < length(pattern)) {
+  } else if (length(replacement) < length(pattern) && verbose) {
     insight::format_alert(
       paste0(
         "There are more names in `pattern` than in `replacement`. The last ",
@@ -105,7 +111,11 @@ data_rename <- function(data, pattern = NULL, replacement = NULL, safe = TRUE, .
 .data_rename <- function(data, pattern, replacement, safe = TRUE) {
   if (!pattern %in% names(data)) {
     if (isTRUE(safe)) {
-      insight::format_alert(paste0("Variable `", pattern, "` is not in your data frame :/"))
+      # only give message when verbose is TRUE
+      if (verbose) {
+        insight::format_alert(paste0("Variable `", pattern, "` is not in your data frame :/"))
+      }
+      # if not safe, always error, no matter what verbose is
     } else {
       insight::format_error(paste0("Variable `", pattern, "` is not in your data frame :/"))
     }
