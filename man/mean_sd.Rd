@@ -11,7 +11,7 @@ median_mad(x, times = 1L, na.rm = TRUE, constant = 1.4826, named = TRUE, ...)
 }
 \arguments{
 \item{x}{A numeric vector (or one that can be coerced to one via
-\code{as.numveric()}) to be summarized.}
+\code{as.numeric()}) to be summarized.}
 
 \item{times}{How many SDs above and below the Mean (or MADs around the Median)}
 
@@ -26,8 +26,8 @@ median_mad(x, times = 1L, na.rm = TRUE, constant = 1.4826, named = TRUE, ...)
 \item{constant}{scale factor.}
 }
 \value{
-A vector of length 3: one SD below the mean, the mean, and one SD
-above the mean (or median and MAD).
+A (possibly named) numeric vector of length \code{2*times + 1} of SDs
+below the mean, the mean, and SDs above the mean (or median and MAD).
 }
 \description{
 Summary Helpers

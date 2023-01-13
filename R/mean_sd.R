@@ -1,15 +1,15 @@
 #' Summary Helpers
 #'
 #' @param x A numeric vector (or one that can be coerced to one via
-#'   `as.numveric()`) to be summarized.
+#'   `as.numeric()`) to be summarized.
 #' @param named Should the vector be named?
 #'   (E.g., `c("-SD" = -1, Mean = 1, "+SD" = 2)`.)
 #' @param times How many SDs above and below the Mean (or MADs around the Median)
 #' @param ... Not used.
 #' @inheritParams stats::mad
 #'
-#' @return A vector of length 3: one SD below the mean, the mean, and one SD
-#'   above the mean (or median and MAD).
+#' @return A (possibly named) numeric vector of length `2*times + 1` of SDs
+#'   below the mean, the mean, and SDs above the mean (or median and MAD).
 #'
 #' @examples
 #' mean_sd(mtcars$mpg)
@@ -59,7 +59,7 @@ median_mad <- function(x, times = 1L, na.rm = TRUE, constant = 1.4826, named = T
       median = c("Median", "MAD"),
       c("Mean", "SD")
     )
-    if (times == 1) {
+    if (times == 1L) {
       times <- ""
     } else {
       times <- paste0(seq_len(times), " ")
