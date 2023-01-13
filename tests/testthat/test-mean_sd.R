@@ -1,0 +1,20 @@
+# library(testthat)
+
+test_that("mean_sd", {
+  x <- c(-1, 0, 1)
+  msd <- mean_sd(x)
+  expect_equal(unname(msd), x)
+  expect_equal(names(msd), c("-SD", "Mean", "+SD"))
+
+  msd <- mean_sd(mtcars[["mpg"]])
+  mmad <- median_mad(mtcars[["mpg"]])
+  expect_equal(unname(msd), mean(mtcars[["mpg"]]) + c(-1, 0, 1) * sd(mtcars[["mpg"]]))
+  expect_equal(unname(mmad), median(mtcars[["mpg"]]) + c(-1, 0, 1) * mad(mtcars[["mpg"]]))
+
+  msd2 <- mean_sd(mtcars[["mpg"]], times = 3L)
+  expect_length(msd2, n = 3 * 2 + 1)
+  expect_equal(unname(msd2[3:5]), unname(msd))
+  expect_equal(unname(diff(msd2)), rep(sd(mtcars[["mpg"]]), 6), tolerance = 0.00001)
+  expect_equal(names(msd2), c("-3 SD", "-2 SD", "-1 SD", "Mean", "+1 SD", "+2 SD", "+3 SD"))
+})
+

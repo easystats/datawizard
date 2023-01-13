@@ -65,7 +65,7 @@ median_mad <- function(x, times = 1L, na.rm = TRUE, constant = 1.4826, named = T
       times <- paste0(seq_len(times), " ")
     }
     names(v) <- c(
-      paste0("-", times, string_cs[2]),
+      paste0("-", rev(times), string_cs[2]),
       string_cs[1],
       paste0("+", times, string_cs[2])
     )
