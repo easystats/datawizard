@@ -61,6 +61,7 @@ Suggests:
     rmarkdown,
     rstanarm,
     see,
+    spelling,
     testthat (>= 3.1.0),
     tidyr,
     withr
