@@ -6,12 +6,12 @@ test_that("remove empty with character", {
     d = c(1, NA, 3, NA, 5)
   )
 
-  expect_equal(empty_columns(tmp), c(c = 3L))
-  expect_equal(empty_rows(tmp), 4)
+  expect_identical(empty_columns(tmp), c(c = 3L))
+  expect_identical(empty_rows(tmp), 4L)
 
-  expect_equal(dim(remove_empty_columns(tmp)), c(5L, 3L))
-  expect_equal(dim(remove_empty_rows(tmp)), c(4L, 4L))
-  expect_equal(dim(remove_empty(tmp)), c(4L, 3L))
+  expect_identical(dim(remove_empty_columns(tmp)), c(5L, 3L))
+  expect_identical(dim(remove_empty_rows(tmp)), c(4L, 4L))
+  expect_identical(dim(remove_empty(tmp)), c(4L, 3L))
 
   expect_snapshot(remove_empty_columns(tmp))
   expect_snapshot(remove_empty_rows(tmp))
@@ -29,9 +29,9 @@ test_that("remove empty columns with character", {
     stringsAsFactors = FALSE
   )
 
-  expect_equal(empty_columns(tmp), c(b = 2L, c = 3L, e = 5L))
-  expect_equal(dim(remove_empty_columns(tmp)), c(5L, 2L))
-  expect_equal(dim(remove_empty(tmp)), c(4L, 2L))
+  expect_identical(empty_columns(tmp), c(b = 2L, c = 3L, e = 5L))
+  expect_identical(dim(remove_empty_columns(tmp)), c(5L, 2L))
+  expect_identical(dim(remove_empty(tmp)), c(4L, 2L))
 })
 
 
@@ -47,7 +47,15 @@ test_that("remove empty rows with character", {
     stringsAsFactors = FALSE
   )
 
-  expect_equal(empty_rows(tmp), c(2L, 4L))
-  expect_equal(dim(remove_empty_rows(tmp)), c(3L, 7L))
-  expect_equal(dim(remove_empty(tmp)), c(3L, 2L))
+  expect_identical(empty_rows(tmp), c(2L, 4L))
+  expect_identical(dim(remove_empty_rows(tmp)), c(3L, 7L))
+  expect_identical(dim(remove_empty(tmp)), c(3L, 2L))
+})
+
+test_that("empty_columns with only NA characters", {
+  tmp <- data.frame(
+    var1 = c(1, 1, 1),
+    var2 = c(NA_character_, NA_character_, NA_character_)
+  )
+  expect_identical(empty_columns(tmp), c(var2 = 2L))
 })
