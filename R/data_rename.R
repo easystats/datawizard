@@ -100,7 +100,7 @@ data_rename <- function(data,
 
   for (i in seq_along(pattern)) {
     if (!is.na(replacement[i])) {
-      data <- .data_rename(data, pattern[i], replacement[i], safe)
+      data <- .data_rename(data, pattern[i], replacement[i], safe, verbose)
     }
   }
 
@@ -108,7 +108,7 @@ data_rename <- function(data,
 }
 
 #' @keywords internal
-.data_rename <- function(data, pattern, replacement, safe = TRUE) {
+.data_rename <- function(data, pattern, replacement, safe = TRUE, verbose = TRUE) {
   if (!pattern %in% names(data)) {
     if (isTRUE(safe)) {
       # only give message when verbose is TRUE
