@@ -161,7 +161,7 @@ test_that("programming with data_filter", {
       var
     } > 30)
   }
-  expect_equal(
+  expect_identical(
     foo("mpg"),
     data_filter(mtcars, "mpg >= 30")
   )
@@ -169,7 +169,7 @@ test_that("programming with data_filter", {
   foo <- function(var) {
     data_filter(mtcars, filter = "{var} > 30")
   }
-  expect_equal(
+  expect_identical(
     foo("mpg"),
     data_filter(mtcars, "mpg >= 30")
   )
@@ -183,7 +183,7 @@ test_that("programming with data_filter", {
       var2
     } <= 66)
   }
-  expect_equal(
+  expect_identical(
     foo("mpg", "hp"),
     data_filter(mtcars, "mpg >= 30 & hp <= 66")
   )
@@ -191,7 +191,7 @@ test_that("programming with data_filter", {
   foo <- function(var, var2) {
     data_filter(mtcars, filter = "{var} > 30 & {var2} <= 66")
   }
-  expect_equal(
+  expect_identical(
     foo("mpg", "hp"),
     data_filter(mtcars, "mpg >= 30 & hp <= 66")
   )
@@ -200,11 +200,11 @@ test_that("programming with data_filter", {
 test_that("programming with data_filter in global env", {
   var <- "mpg"
   var2 <- "hp"
-  expect_equal(
+  expect_identical(
     data_filter(mtcars, "{var} > 30 & {var2} <= 66"),
     data_filter(mtcars, "mpg >= 30 & hp <= 66")
   )
-  expect_equal(
+  expect_identical(
     data_filter(mtcars, {
       var
     } > 30 & {

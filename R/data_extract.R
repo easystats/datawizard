@@ -102,10 +102,10 @@ data_extract.data.frame <- function(data,
   names(nl) <- names(data)
   name <- eval(substitute(name), nl, parent.frame())
 
-  if (is.numeric(name) && length(name) == 1) {
-    if (name < 0) {
-      name <- ncol(data) + name + 1
-    } else if (name == 0) {
+  if (is.numeric(name) && length(name) == 1L) {
+    if (name < 0L) {
+      name <- ncol(data) + name + 1L
+    } else if (name == 0L) {
       name <- rownames(data)
     }
   } else if (is.character(name) && identical(name, "row.names")) {
@@ -114,26 +114,29 @@ data_extract.data.frame <- function(data,
 
   # chose which matched variables to extract
   select <- switch(extract,
-    "first" = select[1],
+    "first" = select[1L],
     "last" = select[length(select)],
-    "odd" = select[seq(1, length(select), 2)],
-    "even" = select[seq(2, length(select), 2)],
+    "odd" = select[seq(1L, length(select), 2L)],
+    "even" = select[seq(2L, length(select), 2L)],
     select
   )
 
   # "name" only used for naming elements in a vector, not data frame
-  if (isTRUE(as_data_frame) ||
+  needs_no_names <- isTRUE(as_data_frame) ||
     # more than one variable means data frame, so no name
-    length(select) > 1 ||
+    length(select) > 1L ||
     # if we have only one variable, but number of observations not equal to
     # length of names, we have no proper match, so no naming, too.
-    (length(select) == 1 && length(name) > 1 && length(data[[select]]) != length(name))) {
+    (length(select) == 1L && length(name) > 1L && length(data[[select]]) != length(name))
+
+  if (needs_no_names) {
     name <- NULL
   }
+
   # we definitely should have a vector here when name not NULL
   if (!is.null(name)) {
     # if name indicates a variable, extract values for naming now
-    if (length(name) == 1) {
+    if (length(name) == 1L) {
       name <- data[[name]]
     }
     stats::setNames(data[[select]], name)

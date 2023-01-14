@@ -29,7 +29,7 @@ pkgs <- c(
   "lme4"
 )
 
-if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
+if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 ```

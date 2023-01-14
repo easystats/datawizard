@@ -364,12 +364,14 @@ format.data_codebook <- function(x, format = "text", ...) {
 print.data_codebook <- function(x, ...) {
   caption <- c(.get_codebook_caption(x), "blue")
   x$.row_id <- NULL
-  cat(insight::export_table(format(x),
-    title = caption,
-    empty_line = "-",
-    cross = "+",
-    align = .get_codebook_align(x)
-  ))
+  cat(
+    insight::export_table(format(x),
+      title = caption,
+      empty_line = "-",
+      cross = "+",
+      align = .get_codebook_align(x)
+    )
+  )
 }
 
 

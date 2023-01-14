@@ -29,7 +29,14 @@ data_addsuffix(
   ...
 )
 
-data_rename(data, pattern = NULL, replacement = NULL, safe = TRUE, ...)
+data_rename(
+  data,
+  pattern = NULL,
+  replacement = NULL,
+  safe = TRUE,
+  verbose = TRUE,
+  ...
+)
 
 data_rename_rows(data, rows = NULL)
 }
@@ -90,7 +97,7 @@ select-helpers, \code{select = contains("")} or \code{select = regex("")}, howev
 since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.}
 
-\item{verbose}{Toggle warnings.}
+\item{verbose}{Toggle warnings and messages.}
 
 \item{...}{Other arguments passed to or from other functions.}
 
