@@ -9,6 +9,11 @@ MINOR CHANGES
 
 * `data_rename()` gets a `verbose` argument.
 
+BUG FIXES
+
+* `empty_columns()` (and therefore `remove_empty_columns()`) now correctly detects
+  columns containing only `NA_character_` (#349).
+
 # datawizard 0.6.5
 
 MAJOR CHANGES

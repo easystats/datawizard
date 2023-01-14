@@ -63,7 +63,7 @@ empty_columns <- function(x) {
   } else {
     all_na <- colSums(is.na(x)) == nrow(x)
     all_empty <- vapply(x, function(i) {
-      (is.character(i) || is.factor(i)) && max(nchar(as.character(i)), na.rm = TRUE) == 0
+      (is.character(i) || is.factor(i)) && max(c(0, nchar(as.character(i))), na.rm = TRUE) == 0
     }, FUN.VALUE = logical(1L))
 
     which(all_na | all_empty)
