@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.3</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -134,19 +134,17 @@ be incremented at each column (<code>x1</code>, <code>x2</code>, etc.).</p></dd>
 <span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iso"</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="fl">3</span>, <span class="fl">6</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  c <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">5</span>, <span class="fl">7</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  c <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"value"</span>, <span class="fl">5</span>, <span class="fl">7</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">test</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     a    b  c</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 iso year NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2    3  5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   5    6  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     a    b     c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 iso year value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2    3     5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   5    6     7</span>
 <span class="r-in"><span><span class="fu">row_to_colnames</span><span class="op">(</span><span class="va">test</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Some values of row 1 were NAs. The corresponding column names are</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   prefixed with `x`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iso year x1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2    3  5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   5    6  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iso year value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2    3     5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   5    6     7</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Convert column names to row --------------------------------</span></span></span>
 <span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>

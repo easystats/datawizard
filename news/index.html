@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.3</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,6 +93,9 @@
 </ul><p>MINOR CHANGES</p>
 <ul><li>
 <code><a href="../reference/data_rename.html">data_rename()</a></code> gets a <code>verbose</code> argument.</li>
+</ul><p>BUG FIXES</p>
+<ul><li>
+<code><a href="../reference/remove_empty.html">empty_columns()</a></code> (and therefore <code><a href="../reference/remove_empty.html">remove_empty_columns()</a></code>) now correctly detects columns containing only <code>NA_character_</code> (<a href="https://github.com/easystats/datawizard/issues/349" class="external-link">#349</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.5" id="datawizard-065">datawizard 0.6.5<a class="anchor" aria-label="anchor" href="#datawizard-065"></a></h2><p class="text-muted">CRAN release: 2022-12-14</p>
