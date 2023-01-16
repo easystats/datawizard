@@ -82,7 +82,7 @@ column_as_rownames <- function(x, var = "rowname") {
 #' test <- data.frame(
 #'   a = c("iso", 2, 5),
 #'   b = c("year", 3, 6),
-#'   c = c(NA, 5, 7)
+#'   c = c("value", 5, 7)
 #' )
 #' test
 #' row_to_colnames(test)
