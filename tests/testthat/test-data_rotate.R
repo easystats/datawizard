@@ -82,4 +82,10 @@ test_that("data_rotate warns if mixed types of data", {
     data_rotate(df),
     "mixed types of data"
   )
+
+  df$rowname <- factor(df$rowname)
+  expect_warning(
+    data_rotate(df),
+    "mixed types of data"
+  )
 })
