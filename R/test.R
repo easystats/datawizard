@@ -43,7 +43,7 @@
 
   is_select_helper <- FALSE
   is_unquoted_variable <- FALSE
-  is_negated <- grepl("^-", deparsed)
+  is_negated <- startsWith(deparsed, "-")
 
   if (is_negated) {
     .check_mixed_numeric(deparsed)
@@ -73,6 +73,8 @@
       out <- try_eval[try_eval %in% columns]
     } else if (is.function(try_eval)) {
       out <- columns[vapply(data, try_eval, FUN.VALUE = logical(1L))]
+    } else if (is.list(try_eval)) {
+      out <- names(try_eval)[names(try_eval) %in% columns]
     }
 
   }
