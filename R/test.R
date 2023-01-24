@@ -11,8 +11,8 @@
     return(columns)
   }
 
-  selected <- .get_cols_of_("select", select, exclude, ignore_case, regex, verbose, columns)
-  excluded <- .get_cols_of_("exclude", select, exclude, ignore_case, regex, verbose, columns)
+  selected <- .get_cols_of_("select", data, select, exclude, ignore_case, regex, verbose, columns)
+  excluded <- .get_cols_of_("exclude", data, select, exclude, ignore_case, regex, verbose, columns)
 
   if (length(selected) == 0L) {
     if (length(excluded) == 0L) {
@@ -29,7 +29,7 @@
 
 
 
-.get_cols_of_ <- function(which, select, exclude, ignore_case, regex, verbose, columns) {
+.get_cols_of_ <- function(which, data, select, exclude, ignore_case, regex, verbose, columns) {
 
   if (which == "select") {
     obj <- substitute(select, env = parent.frame(2L))
@@ -44,6 +44,7 @@
   is_select_helper <- FALSE
   is_unquoted_variable <- FALSE
   is_negated <- startsWith(deparsed, "-")
+  out <- NULL
 
   if (is_negated) {
     .check_mixed_numeric(deparsed)
@@ -65,31 +66,119 @@
     is_select_helper <- grepl("^(starts_with|ends_with|contains|regex)", deparsed)
     is_unquoted_variable <- deparsed %in% columns
 
-  } else {
-
-    if (is.numeric(try_eval)) {
-      out <- columns[try_eval]
-    } else if (is.character(try_eval)) {
-      out <- try_eval[try_eval %in% columns]
-    } else if (is.function(try_eval)) {
-      out <- columns[vapply(data, try_eval, FUN.VALUE = logical(1L))]
-    } else if (is.list(try_eval)) {
-      out <- names(try_eval)[names(try_eval) %in% columns]
+    if (isTRUE(regex) && is.character(obj)) {
+      out <- grep(obj, columns, value = TRUE, ignore.case = ignore_case)
+    } else if (is_unquoted_variable) {
+      out <- deparsed
+    } else if (is_select_helper) {
+      pattern <- .extract_pattern_from_select_helper(deparsed)
+      if (is.null(pattern)) {
+        out <- NULL
+      } else {
+        pattern_to_eval <- .find_regex_to_eval(deparsed, pattern)
+        out <- grep(pattern_to_eval, columns, value = TRUE, ignore.case = ignore_case)
+      }
     }
 
+    if (is.null(out)) {
+      # if x is an object that was called through a function or a loop, e.g select = i
+      # where i = starts_with("Sep"), then we need to find the value of i. This can be
+      # done with dynGet() but evaluating starts_with("Sep") errors, either because
+      # this function doesn't exist, or because it was already imported via a tidyselect
+      # related package and cannot be evaluated outside of a select environment.
+      # However, the expression starts_with("Sep") is part of the error message, so
+      # we can use this to retrieve "i".
+      suppressWarnings({
+        # if y is in global environment (e.g i = "Petal" in globenv but i = starts_with("Sep")
+        # in the function environment), then evaluation works and we never go through
+        # dynGet() whereas it's needed. So we force y to go in the tryCatch().
+        deparsed_is_in_globenv <- deparsed %in% ls(globalenv())
+        x <- tryCatch(
+          dynGet(deparsed, inherits = FALSE, minframe = 0L),
+          error = function(e) {
+            # if starts_with() et al. don't exist
+            fn <- insight::safe_deparse(e$call)
+
+            # if starts_with() et al. come from tidyselect but need to be used in
+            # a select environment, then the error doesn't have the same structure.
+            if (is.null(fn) && grepl("must be used within a", e$message, fixed = TRUE)) {
+              trace <- lapply(e$trace$call, function(x) {
+                tmp <- insight::safe_deparse(x)
+                if (grepl(paste0("^", .regex_select_helper()), tmp)) {
+                  tmp
+                }
+              })
+              fn <- Filter(Negate(is.null), trace)[1]
+            }
+            # if we actually obtain the select helper call, return it, else return
+            # what we already had
+            if (length(fn) > 0 && grepl(.regex_select_helper(), fn)) {
+              return(fn)
+            } else if (!is.null(deparsed)) {
+              return(deparsed)
+            } else {
+              NULL
+            }
+          }
+        )
+      })
+
+      # if element is a select helper but the arg in the select helper is not a
+      # character, e.g starts_with(i), then we need to find the value of this object
+      # by going up all parent.frame() gradually with dynGet()
+      if (!is.null(x) && length(x) == 1 &&
+          grepl(.regex_select_helper(), x) &&
+          !grepl(paste0(.regex_select_helper(), "\\(\"(.*)\"\\)"), x)) {
+        obj <- gsub(.regex_select_helper(), "", x)
+        obj <- gsub("^\\(", "", obj)
+        obj <- gsub("\\)$", "", obj)
+        obj_eval <- try(dynGet(obj, inherits = FALSE, minframe = 0L), silent = TRUE)
+        x <- gsub(paste0("\\(", obj, "\\)"), paste0("\\(\"", obj_eval, "\"\\)"), x)
+      }
+
+      if (length(x) > 1L) {
+        deparsed <- paste0("c(\"", paste(x, collapse = "\", \""), "\")")
+      } else {
+        deparsed <- x
+      }
+
+      # Try to evaluate the expression.
+      # Should pass: character vector (var names), numeric vector (var positions),
+      #              functions, formulas
+      # Should fail: select helpers, unquoted variable names
+      try_eval <- try(eval(str2lang(deparsed)), silent = TRUE)
+      obj_is_not_evaluable <- inherits(try_eval, "try-error")
+
+      # If regex then character is evaluable but should pass through grep()
+      if (obj_is_not_evaluable || isTRUE(regex)) {
+
+        is_select_helper <- grepl("^(starts_with|ends_with|contains|regex)", deparsed)
+        is_unquoted_variable <- deparsed %in% columns
+
+        if (isTRUE(regex)) {
+          out <- grep(deparsed, columns, value = TRUE, ignore.case = ignore_case)
+        } else if (is_unquoted_variable) {
+          out <- deparsed
+        } else if (is_select_helper) {
+          pattern <- .extract_pattern_from_select_helper(deparsed)
+          pattern_to_eval <- .find_regex_to_eval(deparsed, pattern)
+          out <- grep(pattern_to_eval, columns, value = TRUE, ignore.case = ignore_case)
+        }
+
+      } else {
+
+        out <- .extract_vars_from_evaluable_object(try_eval, data, columns)
+
+      }
+    }
+
+  } else {
+
+    out <- .extract_vars_from_evaluable_object(try_eval, data, columns)
+
   }
 
-  if (isTRUE(regex)) {
-    out <- grep(obj, columns, value = TRUE, ignore.case = ignore_case)
-  } else if (is_unquoted_variable) {
-    out <- deparsed
-  } else if (is_select_helper) {
-    pattern <- .extract_pattern_from_select_helper(deparsed)
-    pattern_to_eval <- .find_regex_to_eval(deparsed, pattern)
-    out <- grep(pattern_to_eval, columns, value = TRUE, ignore.case = ignore_case)
-  }
-
-  if (is_negated) {
+  if (is_negated && !is.null(out)) {
     out <- setdiff(columns, out)
   }
 
@@ -103,6 +192,11 @@
   pattern <- gsub("\\\\", "\\", x, fixed = TRUE)
   pattern <- gsub("^(starts_with|ends_with|contains|regex)\\(", "", pattern)
   pattern <- gsub("\\)$", "", pattern)
+
+  if (!startsWith(pattern, "\"") && !startsWith(pattern, "'")) {
+    return(NULL)
+  }
+
   pattern <- strsplit(pattern, "\", ")[[1]]
   pattern <- gsub("'", "", pattern)
   pattern <- gsub('"', "", pattern)
@@ -133,6 +227,19 @@
       paste0("You can't mix negative and positive numeric indices in `select` or `exclude`.")
     )
   }
+}
+
+.extract_vars_from_evaluable_object <- function(x, data, cols) {
+  if (is.numeric(x)) {
+    out <- cols[x]
+  } else if (is.character(x)) {
+    out <- x[x %in% cols]
+  } else if (is.function(x)) {
+    out <- cols[vapply(data, x, FUN.VALUE = logical(1L))]
+  } else if (is.list(x)) {
+    out <- names(x)[names(x) %in% cols]
+  }
+  out
 }
 
 
