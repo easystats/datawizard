@@ -12,7 +12,7 @@ winsorize(data, ...)
   threshold = 0.2,
   method = "percentile",
   robust = FALSE,
-  verbose,
+  verbose = TRUE,
   ...
 )
 }

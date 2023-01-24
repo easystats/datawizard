@@ -96,16 +96,14 @@ winsorize.numeric <- function(data,
                               threshold = 0.2,
                               method = "percentile",
                               robust = FALSE,
-                              verbose,
+                              verbose = TRUE,
                               ...) {
   method <- match.arg(method, choices = c("percentile", "zscore", "raw"))
 
-  if (method == "raw") {
-    if (length(threshold) != 2L) {
-      insight::format_error(
-        "`threshold` must be of length 2 for lower and upper bound."
-      )
-    }
+  if (method == "raw" && length(threshold) != 2L) {
+    insight::format_error(
+      "`threshold` must be of length 2 for lower and upper bound."
+    )
   }
 
   if (method == "percentile") {

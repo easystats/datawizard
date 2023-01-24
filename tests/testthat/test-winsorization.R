@@ -1,5 +1,5 @@
 test_that("testing Winsorization of factors", {
-  expect_equal(winsorize(as.factor(mtcars$am)), as.factor(mtcars$am))
+  expect_identical(winsorize(as.factor(mtcars$am)), as.factor(mtcars$am))
 })
 
 test_that("with missing values", {
@@ -34,11 +34,11 @@ test_that("winsorize: threshold must be between 0 and 1", {
 
 test_that("winsorize on data.frame", {
   iris2 <- winsorize(iris)
-  expect_equal(
+  expect_identical(
     iris2$Sepal.Length,
     winsorize(iris$Sepal.Length)
   )
-  expect_equal(
+  expect_identical(
     iris2$Petal.Width,
     winsorize(iris$Petal.Width)
   )
