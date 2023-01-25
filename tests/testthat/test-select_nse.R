@@ -39,6 +39,10 @@ test_that(".select_nse: arg 'select' works", {
     names(iris)
   )
   expect_identical(
+    foo(iris, is.numeric),
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+  )
+  expect_identical(
     foo(iris, starts_with("Petal")),
     c("Petal.Length", "Petal.Width")
   )
