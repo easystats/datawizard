@@ -36,6 +36,8 @@
     out <- setdiff(selected, excluded)
   }
 
+  if (is.null(out)) out <- character(0L)
+
   out
 }
 
