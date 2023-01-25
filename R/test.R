@@ -5,6 +5,9 @@
   .check_data(data)
   columns <- colnames(data)
 
+  # avoid conflicts
+  conflicting_packages <- .conflicting_packages("poorman")
+
   expr_select <- substitute(select, env = parent.frame(1L))
   expr_exclude <- substitute(exclude, env = parent.frame(1L))
 
@@ -38,6 +41,9 @@
 
   if (is.null(out)) out <- character(0L)
 
+  # load again
+  .attach_packages(conflicting_packages)
+
   out
 }
 
@@ -62,12 +68,16 @@
 }
 
 .select_char <- function(data, x, ignore_case, regex) {
+  # use colnames because names() doesn't work for matrices
   if (isTRUE(regex)) {
     grep(x, colnames(data))
-  } else if (length(x) > 0L && x == "all") {
+  } else if (length(x) == 1L && x == "all") {
     return(seq_along(iris))
+  } else if (isTRUE(ignore_case)) {
+    grep(x, colnames(data), ignore.case = TRUE)
   } else {
-    which(x == colnames(data)) # colnames because names() doesn't work for matrices
+    matches <- match(x, colnames(data))
+    matches[!is.na(matches)]
   }
 }
 
@@ -146,8 +156,8 @@
 }
 
 .select_seq <- function(expr, data, ignore_case, regex) {
-  x <- .eval_expr(expr[[2]])
-  y <- .eval_expr(expr[[3]])
+  x <- .eval_expr(expr[[2]], data, ignore_case = ignore_case, regex = regex)
+  y <- .eval_expr(expr[[3]], data, ignore_case = ignore_case, regex = regex)
   x:y
 }
 
@@ -226,5 +236,38 @@
   }
 }
 
-.regex_select_helper <- function() "(starts\\_with|ends\\_with|col\\_ends\\_with|contains|regex)"
+.regex_select_helper <- function() {
+  "(starts\\_with|ends\\_with|col\\_ends\\_with|contains|regex)"
+}
+
+
+.conflicting_packages <- function(packages = NULL) {
+  if (is.null(packages)) {
+    packages <- "poorman"
+  }
+
+  namespace <- vapply(packages, isNamespaceLoaded, FUN.VALUE = logical(1L))
+  attached <- paste0("package:", packages) %in% search()
+  attached <- stats::setNames(attached, packages)
+
+  for (i in packages) {
+    unloadNamespace(i)
+  }
+
+  list(package = packages, namespace = namespace, attached = attached)
+}
+
+.attach_packages <- function(packages = NULL) {
+  if (!is.null(packages)) {
+    pkg <- packages$package
+    for (i in seq_along(pkg)) {
+      if (isTRUE(packages$namespace[i])) {
+        loadNamespace(pkg[i])
+      }
+      if (isTRUE(packages$attached[i])) {
+        suppressPackageStartupMessages(suppressWarnings(require(pkg[i], quietly = TRUE, character.only = TRUE)))
+      }
+    }
+  }
+}
 
