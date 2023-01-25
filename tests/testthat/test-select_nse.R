@@ -43,6 +43,10 @@ test_that(".select_nse: arg 'select' works", {
     c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
   )
   expect_identical(
+    foo(iris, is.numeric()),
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+  )
+  expect_identical(
     find_columns(iris, sepal.length, ignore_case = TRUE),
     "Sepal.Length"
   )

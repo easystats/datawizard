@@ -89,11 +89,10 @@ test_that("get_columns works with select-functions", {
 
 
 # select-nse with user-function  ---------------------
-
+testfun <- function(i) {
+  is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
+}
 test_that("get_columns works with user-defined select-functions", {
-  testfun <<- function(i) {
-    is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
-  }
   expect_equal(get_columns(iris, testfun), iris[sapply(iris, testfun)])
   expect_equal(get_columns(iris, -testfun), iris[!sapply(iris, testfun)])
 

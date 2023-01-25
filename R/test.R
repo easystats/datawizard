@@ -127,6 +127,8 @@
     if (is_select_helper) {
       new_expr <- str2lang(new_expr)
       .eval_expr(new_expr, data = data, ignore_case = ignore_case, regex = regex)
+    } else if (length(new_expr) == 1L && is.function(new_expr)) {
+      which(vapply(data, new_expr, FUN.VALUE = logical(1L)))
     } else {
       unlist(lapply(new_expr, .eval_expr, data = data, ignore_case = ignore_case, regex = regex))
     }
@@ -155,7 +157,7 @@
     "matches" = ,
     "contains" = ,
     "regex" = .select_helper(x, data, ignore_case, regex),
-    .select_context(x, data)
+    .select_context(x, data, ignore_case, regex)
   )
 }
 
@@ -225,8 +227,15 @@
   unlist(lapply(vars, .eval_expr, data = data, ignore_case = ignore_case, regex = regex))
 }
 
-.select_context <- function(expr, data) {
-  eval(expr, envir = data)
+.select_context <- function(expr, data, ignore_case, regex) {
+  x_dep <- deparse(expr)
+  if (endsWith(x_dep, "()")) {
+    new_expr <- gsub("\\(\\)$", "", x_dep)
+    new_expr <- str2lang(new_expr)
+    .eval_expr(new_expr, data = data, ignore_case = ignore_case, regex = regex)
+  } else {
+    eval(expr, envir = data)
+  }
 }
 
 
