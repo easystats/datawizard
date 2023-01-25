@@ -8,6 +8,10 @@ NEW FUNCTIONS
 MINOR CHANGES
 
 * `data_rename()` gets a `verbose` argument.
+* `winsorize()` now errors if the threshold is incorrect (previously, it provided
+  a warning and returned the unchanged data). The argument `verbose` is now 
+  useless but is kept for backward compatibility. The documentation now contains   
+  details about the valid values for `threshold` (#357).
 
 BUG FIXES
 
