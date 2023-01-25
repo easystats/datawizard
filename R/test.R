@@ -90,7 +90,11 @@
     cols <- names(data)
     which(vapply(data, x, FUN.VALUE = logical(1L)))
   } else if (x_dep %in% colnames(data)) {
-    which(x_dep == colnames(data))
+    matches <- match(x_dep, colnames(data))
+    matches[!is.na(matches)]
+  } else if (isTRUE(ignore_case)) {
+    matches <- match(toupper(x_dep), toupper(colnames(data)))
+    matches[!is.na(matches)]
   } else {
     new_expr <- tryCatch(
       dynGet(x, inherits = FALSE, minframe = 0L),
