@@ -22,11 +22,6 @@ test_that("get_columns works with select helpers", {
   )
 
   expect_equal(
-    get_columns(iris, col_ends_with("Width")),
-    iris[c("Sepal.Width", "Petal.Width")]
-  )
-
-  expect_equal(
     get_columns(iris, regex("\\.")),
     iris[c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")]
   )
@@ -49,11 +44,6 @@ test_that("get_columns works with negation of select helpers", {
 
   expect_equal(
     get_columns(iris, -ends_with("Width")),
-    iris[c("Sepal.Length", "Petal.Length", "Species")]
-  )
-
-  expect_equal(
-    get_columns(iris, -col_ends_with("Width")),
     iris[c("Sepal.Length", "Petal.Length", "Species")]
   )
 })

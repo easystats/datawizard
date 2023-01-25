@@ -174,7 +174,13 @@
   } else {
     .eval_expr(expr[[2]], data, ignore_case = ignore_case, regex = regex)
   }
-  x * -1L
+
+  if (length(x) == 0L) {
+    seq_along(data)
+  } else {
+    x * -1L
+  }
+
 }
 
 .is_negated_colon <- function(expr, data, ignore_case, regex) {
@@ -183,7 +189,11 @@
 
 .select_minus <- function(expr, data, ignore_case, regex) {
   x <- .eval_expr(expr[[2]], data, ignore_case = ignore_case, regex = regex)
-  x * -1L
+  if (length(x) == 0L) {
+    seq_along(data)
+  } else {
+    x * -1L
+  }
 }
 
 .select_c <- function(expr, data, ignore_case, regex) {
