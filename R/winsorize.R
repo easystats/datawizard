@@ -25,12 +25,12 @@
 #'   than 0 and of length 1.
 #' - For `method = "raw"`: a vector of length 2 with the lower and upper bound
 #'   for winsorization.
-#' @param verbose Toggle warnings.
 #' @param method One of "percentile" (default), "zscore", or "raw".
 #' @param robust Logical, if TRUE, winsorizing through the "zscore" method is
 #'   done via the median and the median absolute deviation (MAD); if FALSE, via
 #'   the mean and the standard deviation.
 #' @param ... Currently not used.
+#' @param verbose Not used anymore since `datawizard` 0.6.6.
 #'
 #' @examples
 #' hist(iris$Sepal.Length, main = "Original data")

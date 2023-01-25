@@ -38,7 +38,7 @@ for winsorization.
 done via the median and the median absolute deviation (MAD); if FALSE, via
 the mean and the standard deviation.}
 
-\item{verbose}{Toggle warnings.}
+\item{verbose}{Not used anymore since \code{datawizard} 0.6.6.}
 }
 \value{
 A data frame with winsorized columns or a winsorized vector.
