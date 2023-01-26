@@ -126,7 +126,10 @@ test_that("recode data frame", {
   expect_identical(out$Petal.Length, iris$Petal.Length)
 
   expect_warning(
-    out <- categorize(x, split = "median", select = c("sepal.Length", "sepal.Width"), ignore_case = FALSE),
+    expect_warning(
+      out <- categorize(x, split = "median", select = c("sepal.Length", "sepal.Width"), ignore_case = FALSE),
+      "not found"
+    ),
     "not found"
   )
   expect_identical(out$Sepal.Length, iris$Sepal.Length)

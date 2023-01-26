@@ -22,8 +22,8 @@
     return(columns)
   }
 
-  selected <- .eval_expr(expr_select, data, ignore_case = ignore_case, regex = regex)
-  excluded <- .eval_expr(expr_exclude, data, ignore_case = ignore_case, regex = regex)
+  selected <- .eval_expr(expr_select, data, ignore_case = ignore_case, regex = regex, verbose)
+  excluded <- .eval_expr(expr_exclude, data, ignore_case = ignore_case, regex = regex, verbose)
 
   if ((any(selected < 0) && any(selected > 0)) ||
       (any(excluded < 0) && any(excluded > 0))) {
@@ -54,7 +54,7 @@
 }
 
 
-.eval_expr <- function(x, data, ignore_case, regex) {
+.eval_expr <- function(x, data, ignore_case, regex, verbose) {
 
   if (is.null(x)) return(NULL)
 
@@ -64,30 +64,37 @@
     type,
     "integer" = x,
     "double" = as.integer(x),
-    "character" = .select_char(data, x, ignore_case, regex = regex),
-    "symbol" = .select_symbol(data, x, ignore_case, regex = regex),
-    "language" = .eval_call(data, x, ignore_case, regex = regex),
+    "character" = .select_char(data, x, ignore_case, regex = regex, verbose),
+    "symbol" = .select_symbol(data, x, ignore_case, regex = regex, verbose),
+    "language" = .eval_call(data, x, ignore_case, regex = regex, verbose),
     stop("Expressions of type <", typeof(x), "> cannot be evaluated for use when subsetting.")
   )
 
   out
 }
 
-.select_char <- function(data, x, ignore_case, regex) {
+.select_char <- function(data, x, ignore_case, regex, verbose) {
   # use colnames because names() doesn't work for matrices
+  columns <- colnames(data)
   if (isTRUE(regex)) {
-    grep(x, colnames(data))
+    grep(x, columns)
   } else if (length(x) == 1L && x == "all") {
     return(seq_along(data))
   } else if (isTRUE(ignore_case)) {
-    grep(x, colnames(data), ignore.case = TRUE)
+    grep(x, columns, ignore.case = TRUE)
   } else {
-    matches <- match(x, colnames(data))
+    matches <- match(x, columns)
+    if (anyNA(matches) && verbose) {
+      insight::format_warning(
+        paste0("Following variable(s) were not found: ", toString(x[is.na(matches)])),
+        .misspelled_string(columns, x[is.na(matches)], default_message = "Possibly misspelled?")
+      )
+    }
     matches[!is.na(matches)]
   }
 }
 
-.select_symbol <- function(data, x, ignore_case, regex) {
+.select_symbol <- function(data, x, ignore_case, regex, verbose) {
   try_eval <- try(eval(x), silent = TRUE)
   x_dep <- deparse(x)
   is_select_helper <- FALSE
@@ -132,16 +139,16 @@
 
     if (is_select_helper) {
       new_expr <- str2lang(new_expr)
-      .eval_expr(new_expr, data = data, ignore_case = ignore_case, regex = regex)
+      .eval_expr(new_expr, data = data, ignore_case = ignore_case, regex = regex, verbose)
     } else if (length(new_expr) == 1L && is.function(new_expr)) {
       which(vapply(data, new_expr, FUN.VALUE = logical(1L)))
     } else {
-      unlist(lapply(new_expr, .eval_expr, data = data, ignore_case = ignore_case, regex = regex))
+      unlist(lapply(new_expr, .eval_expr, data = data, ignore_case = ignore_case, regex = regex, verbose))
     }
   }
 }
 
-.eval_call <- function(data, x, ignore_case = ignore_case, regex) {
+.eval_call <- function(data, x, ignore_case = ignore_case, regex, verbose) {
   type <- as.character(x[[1]])
   if (length(type) > 1L) {
     # This helps when pkg::fn is used in a select helper
@@ -150,35 +157,35 @@
 
   switch(
     type,
-    `:` = .select_seq(x, data, ignore_case, regex),
-    `!` = .select_negate(x, data, ignore_case, regex),
-    `-` = .select_minus(x, data, ignore_case, regex),
-    `c` = .select_c(x, data, ignore_case, regex),
-    `(` = .select_bracket(x, data, ignore_case, regex),
-    `&` = .select_and(x, data, ignore_case, regex),
-    `$` = .select_dollar(x, data, ignore_case, regex),
-    `~` = .select_tilde(x, data, ignore_case, regex),
+    `:` = .select_seq(x, data, ignore_case, regex, verbose),
+    `!` = .select_negate(x, data, ignore_case, regex, verbose),
+    `-` = .select_minus(x, data, ignore_case, regex, verbose),
+    `c` = .select_c(x, data, ignore_case, regex, verbose),
+    `(` = .select_bracket(x, data, ignore_case, regex, verbose),
+    `&` = .select_and(x, data, ignore_case, regex, verbose),
+    `$` = .select_dollar(x, data, ignore_case, regex, verbose),
+    `~` = .select_tilde(x, data, ignore_case, regex, verbose),
     "starts_with" = ,
     "ends_with" = ,
     "matches" = ,
     "contains" = ,
-    "regex" = .select_helper(x, data, ignore_case, regex),
-    .select_context(x, data, ignore_case, regex)
+    "regex" = .select_helper(x, data, ignore_case, regex, verbose),
+    .select_context(x, data, ignore_case, regex, verbose)
   )
 }
 
-.select_seq <- function(expr, data, ignore_case, regex) {
-  x <- .eval_expr(expr[[2]], data, ignore_case = ignore_case, regex = regex)
-  y <- .eval_expr(expr[[3]], data, ignore_case = ignore_case, regex = regex)
+.select_seq <- function(expr, data, ignore_case, regex, verbose) {
+  x <- .eval_expr(expr[[2]], data, ignore_case = ignore_case, regex = regex, verbose)
+  y <- .eval_expr(expr[[3]], data, ignore_case = ignore_case, regex = regex, verbose)
   x:y
 }
 
-.select_negate <- function(expr, data, ignore_case, regex) {
+.select_negate <- function(expr, data, ignore_case, regex, verbose) {
   x <- if (.is_negated_colon(expr, data)) {
     expr <- call(":", expr[[2]][[2]], expr[[2]][[3]][[2]])
-    .eval_expr(expr, data)
+    .eval_expr(expr, data, ignore_case = ignore_case, regex = regex, verbose)
   } else {
-    .eval_expr(expr[[2]], data, ignore_case = ignore_case, regex = regex)
+    .eval_expr(expr[[2]], data, ignore_case = ignore_case, regex = regex, verbose)
   }
 
   if (length(x) == 0L) {
@@ -189,12 +196,12 @@
 
 }
 
-.is_negated_colon <- function(expr, data, ignore_case, regex) {
+.is_negated_colon <- function(expr, data, ignore_case, regex, verbose) {
   expr[[1]] == "!" && length(expr[[2]]) > 1L && expr[[2]][[1]] == ":" && expr[[2]][[3]][[1]] == "!"
 }
 
-.select_minus <- function(expr, data, ignore_case, regex) {
-  x <- .eval_expr(expr[[2]], data, ignore_case = ignore_case, regex = regex)
+.select_minus <- function(expr, data, ignore_case, regex, verbose) {
+  x <- .eval_expr(expr[[2]], data, ignore_case = ignore_case, regex = regex, verbose)
   if (length(x) == 0L) {
     seq_along(data)
   } else {
@@ -202,17 +209,17 @@
   }
 }
 
-.select_c <- function(expr, data, ignore_case, regex) {
+.select_c <- function(expr, data, ignore_case, regex, verbose) {
   lst_expr <- as.list(expr)
   lst_expr[[1]] <- NULL
-  unlist(lapply(lst_expr, .eval_expr, data = data, ignore_case = ignore_case, regex = regex))
+  unlist(lapply(lst_expr, .eval_expr, data = data, ignore_case = ignore_case, regex = regex, verbose))
 }
 
-.select_bracket <- function(expr, data, ignore_case, regex) {
-  .eval_expr(expr[[2]], ignore_case = ignore_case, regex = regex)
+.select_bracket <- function(expr, data, ignore_case, regex, verbose) {
+  .eval_expr(expr[[2]], ignore_case = ignore_case, regex = regex, verbose)
 }
 
-.select_helper <- function(expr, data, ignore_case, regex) {
+.select_helper <- function(expr, data, ignore_case, regex, verbose) {
   lst_expr <- as.list(expr)
 
   if (length(lst_expr) == 2L && typeof(lst_expr[[2]]) == "symbol") {
@@ -230,25 +237,25 @@
   } else if (lst_expr[[1]] == "regex") {
     collapsed_patterns
   }
-  grep(rgx, colnames(data), ignore.case = ignore_case)
+  grep(rgx, colnames(data), ignore.case = ignore_case, verbose)
 }
 
-.select_dollar <- function(expr, data, ignore_case, regex) {
+.select_dollar <- function(expr, data, ignore_case, regex, verbose) {
   first_obj <- dynGet(expr[[2]], inherits = FALSE, minframe = 0L)
-  .eval_expr(first_obj[[deparse(expr[[3]])]], data, ignore_case = ignore_case, regex = regex)
+  .eval_expr(first_obj[[deparse(expr[[3]])]], data, ignore_case = ignore_case, regex = regex, verbose)
 }
 
-.select_tilde <- function(expr, data, ignore_case, regex) {
+.select_tilde <- function(expr, data, ignore_case, regex, verbose) {
   vars <- all.vars(expr)
-  unlist(lapply(vars, .eval_expr, data = data, ignore_case = ignore_case, regex = regex))
+  unlist(lapply(vars, .eval_expr, data = data, ignore_case = ignore_case, regex = regex, verbose))
 }
 
-.select_context <- function(expr, data, ignore_case, regex) {
+.select_context <- function(expr, data, ignore_case, regex, verbose) {
   x_dep <- deparse(expr)
   if (endsWith(x_dep, "()")) {
     new_expr <- gsub("\\(\\)$", "", x_dep)
     new_expr <- str2lang(new_expr)
-    .eval_expr(new_expr, data = data, ignore_case = ignore_case, regex = regex)
+    .eval_expr(new_expr, data = data, ignore_case = ignore_case, regex = regex, verbose)
   } else {
     eval(expr, envir = data)
   }
