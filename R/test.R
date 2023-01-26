@@ -28,7 +28,7 @@
   if ((any(selected < 0) && any(selected > 0)) ||
       (any(excluded < 0) && any(excluded > 0))) {
     insight::format_error(
-      paste0("You can't mix negative and positive numeric indices in `select` or `exclude`.")
+      paste0("You can't mix negative and positive indices in `select` or `exclude`.")
     )
   }
 
@@ -165,6 +165,7 @@
     `&` = .select_and(x, data, ignore_case, regex, verbose),
     `$` = .select_dollar(x, data, ignore_case, regex, verbose),
     `~` = .select_tilde(x, data, ignore_case, regex, verbose),
+    "list" = .select_list(x, data, ignore_case, regex, verbose),
     "starts_with" = ,
     "ends_with" = ,
     "matches" = ,
@@ -175,8 +176,8 @@
 }
 
 .select_seq <- function(expr, data, ignore_case, regex, verbose) {
-  x <- .eval_expr(expr[[2]], data, ignore_case = ignore_case, regex = regex, verbose)
-  y <- .eval_expr(expr[[3]], data, ignore_case = ignore_case, regex = regex, verbose)
+  x <- .eval_expr(expr[[2]], data = data, ignore_case = ignore_case, regex = regex, verbose)
+  y <- .eval_expr(expr[[3]], data = data, ignore_case = ignore_case, regex = regex, verbose)
   x:y
 }
 
@@ -216,7 +217,7 @@
 }
 
 .select_bracket <- function(expr, data, ignore_case, regex, verbose) {
-  .eval_expr(expr[[2]], ignore_case = ignore_case, regex = regex, verbose)
+  .eval_expr(expr[[2]], data, ignore_case = ignore_case, regex = regex, verbose)
 }
 
 .select_helper <- function(expr, data, ignore_case, regex, verbose) {
@@ -247,6 +248,11 @@
 
 .select_tilde <- function(expr, data, ignore_case, regex, verbose) {
   vars <- all.vars(expr)
+  unlist(lapply(vars, .eval_expr, data = data, ignore_case = ignore_case, regex = regex, verbose))
+}
+
+.select_list <- function(expr, data, ignore_case, regex, verbose) {
+  vars <- names(expr)
   unlist(lapply(vars, .eval_expr, data = data, ignore_case = ignore_case, regex = regex, verbose))
 }
 

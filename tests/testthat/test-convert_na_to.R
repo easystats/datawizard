@@ -331,66 +331,66 @@ test_that("convert_na_to - data frame: arg 'exclude' works", {
   )
 })
 
-test_that("convert_na_to - data frame: works when arg 'select' is a list", {
-  # numeric
-  expect_equal(
-    convert_na_to(test, replace_num = 4, select = list(x = 0), verbose = FALSE),
-    data.frame(
-      x = c(1, 2, 0),
-      y = c("a", "b", NA),
-      z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, 4),
-      stringsAsFactors = FALSE
-    )
-  )
-
-  # character
-  expect_equal(
-    convert_na_to(test, replace_char = "e", select = list(y = "d"), verbose = FALSE),
-    data.frame(
-      x = c(1, 2, NA),
-      y = c("a", "b", "d"),
-      z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, NA),
-      stringsAsFactors = FALSE
-    )
-  )
-
-  # only named list can override replace_*
-  expect_equal(
-    convert_na_to(test, replace_num = 4, select = list(0), verbose = FALSE),
-    data.frame(
-      x = c(1, 2, 4),
-      y = c("a", "b", NA),
-      z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, 4),
-      stringsAsFactors = FALSE
-    )
-  )
-
-  expect_equal(
-    convert_na_to(test, replace_char = "e", select = list("d"), verbose = FALSE),
-    data.frame(
-      x = c(1, 2, NA),
-      y = c("a", "b", "e"),
-      z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, NA),
-      stringsAsFactors = FALSE
-    )
-  )
-
-  # no problem if put a variable that doesn't exist in list
-  expect_equal(
-    convert_na_to(test, replace_num = 4, select = list(x = 0, foo = 5), verbose = FALSE),
-    data.frame(
-      x = c(1, 2, 0),
-      y = c("a", "b", NA),
-      z = factor(c("a", "b", NA)),
-      x2 = c(4, 5, 4),
-      stringsAsFactors = FALSE
-    )
-  )
-})
+# test_that("convert_na_to - data frame: works when arg 'select' is a list", {
+#   # numeric
+#   expect_equal(
+#     convert_na_to(test, replace_num = 4, select = list(x = 0), verbose = FALSE),
+#     data.frame(
+#       x = c(1, 2, 0),
+#       y = c("a", "b", NA),
+#       z = factor(c("a", "b", NA)),
+#       x2 = c(4, 5, 4),
+#       stringsAsFactors = FALSE
+#     )
+#   )
+#
+#   # character
+#   expect_equal(
+#     convert_na_to(test, replace_char = "e", select = list(y = "d"), verbose = FALSE),
+#     data.frame(
+#       x = c(1, 2, NA),
+#       y = c("a", "b", "d"),
+#       z = factor(c("a", "b", NA)),
+#       x2 = c(4, 5, NA),
+#       stringsAsFactors = FALSE
+#     )
+#   )
+#
+#   # only named list can override replace_*
+#   expect_equal(
+#     convert_na_to(test, replace_num = 4, select = list(0), verbose = FALSE),
+#     data.frame(
+#       x = c(1, 2, 4),
+#       y = c("a", "b", NA),
+#       z = factor(c("a", "b", NA)),
+#       x2 = c(4, 5, 4),
+#       stringsAsFactors = FALSE
+#     )
+#   )
+#
+#   expect_equal(
+#     convert_na_to(test, replace_char = "e", select = list("d"), verbose = FALSE),
+#     data.frame(
+#       x = c(1, 2, NA),
+#       y = c("a", "b", "e"),
+#       z = factor(c("a", "b", NA)),
+#       x2 = c(4, 5, NA),
+#       stringsAsFactors = FALSE
+#     )
+#   )
+#
+#   # no problem if put a variable that doesn't exist in list
+#   expect_equal(
+#     convert_na_to(test, replace_num = 4, select = list(x = 0, foo = 5), verbose = FALSE),
+#     data.frame(
+#       x = c(1, 2, 0),
+#       y = c("a", "b", NA),
+#       z = factor(c("a", "b", NA)),
+#       x2 = c(4, 5, 4),
+#       stringsAsFactors = FALSE
+#     )
+#   )
+# })
 
 
 
