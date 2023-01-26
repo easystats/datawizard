@@ -25,10 +25,14 @@
   }
 
   # get the position of columns that are selected or excluded
-  selected <- .eval_expr(expr_select, data, ignore_case = ignore_case,
-                         regex = regex, verbose)
-  excluded <- .eval_expr(expr_exclude, data, ignore_case = ignore_case,
-                         regex = regex, verbose)
+  selected <- .eval_expr(expr_select, data,
+    ignore_case = ignore_case,
+    regex = regex, verbose
+  )
+  excluded <- .eval_expr(expr_exclude, data,
+    ignore_case = ignore_case,
+    regex = regex, verbose
+  )
 
   if ((any(selected < 0) && any(selected > 0)) ||
     (any(excluded < 0) && any(excluded > 0))) {
@@ -91,8 +95,10 @@
     matches <- match(x, columns)
     if (anyNA(matches) && verbose) {
       insight::format_warning(
-        paste0("Following variable(s) were not found: ",
-               toString(x[is.na(matches)])),
+        paste0(
+          "Following variable(s) were not found: ",
+          toString(x[is.na(matches)])
+        ),
         .misspelled_string(
           columns,
           x[is.na(matches)],
@@ -161,13 +167,17 @@
 
     if (is_select_helper) {
       new_expr <- str2lang(unlist(new_expr))
-      .eval_expr(new_expr, data = data, ignore_case = ignore_case,
-                 regex = regex, verbose)
+      .eval_expr(new_expr,
+        data = data, ignore_case = ignore_case,
+        regex = regex, verbose
+      )
     } else if (length(new_expr) == 1L && is.function(new_expr)) {
       which(vapply(data, new_expr, FUN.VALUE = logical(1L)))
     } else {
-      unlist(lapply(new_expr, .eval_expr, data = data,
-                    ignore_case = ignore_case, regex = regex, verbose))
+      unlist(lapply(new_expr, .eval_expr,
+        data = data,
+        ignore_case = ignore_case, regex = regex, verbose
+      ))
     }
   }
 }
@@ -200,16 +210,22 @@
 }
 
 .select_seq <- function(expr, data, ignore_case, regex, verbose) {
-  x <- .eval_expr(expr[[2]], data = data, ignore_case = ignore_case,
-                  regex = regex, verbose)
-  y <- .eval_expr(expr[[3]], data = data, ignore_case = ignore_case,
-                  regex = regex, verbose)
+  x <- .eval_expr(expr[[2]],
+    data = data, ignore_case = ignore_case,
+    regex = regex, verbose
+  )
+  y <- .eval_expr(expr[[3]],
+    data = data, ignore_case = ignore_case,
+    regex = regex, verbose
+  )
   x:y
 }
 
 .select_minus <- function(expr, data, ignore_case, regex, verbose) {
-  x <- .eval_expr(expr[[2]], data, ignore_case = ignore_case,
-                  regex = regex, verbose)
+  x <- .eval_expr(expr[[2]], data,
+    ignore_case = ignore_case,
+    regex = regex, verbose
+  )
   if (length(x) == 0L) {
     seq_along(data)
   } else {
@@ -220,13 +236,17 @@
 .select_c <- function(expr, data, ignore_case, regex, verbose) {
   lst_expr <- as.list(expr)
   lst_expr[[1]] <- NULL
-  unlist(lapply(lst_expr, .eval_expr, data, ignore_case = ignore_case,
-                regex = regex, verbose))
+  unlist(lapply(lst_expr, .eval_expr, data,
+    ignore_case = ignore_case,
+    regex = regex, verbose
+  ))
 }
 
 .select_bracket <- function(expr, data, ignore_case, regex, verbose) {
-  .eval_expr(expr[[2]], data, ignore_case = ignore_case,
-             regex = regex, verbose)
+  .eval_expr(expr[[2]], data,
+    ignore_case = ignore_case,
+    regex = regex, verbose
+  )
 }
 
 .select_helper <- function(expr, data, ignore_case, regex, verbose) {
@@ -256,20 +276,26 @@
 # that happens when we use grouped_data (see e.g center.grouped_df())
 .select_dollar <- function(expr, data, ignore_case, regex, verbose) {
   first_obj <- dynGet(expr[[2]], inherits = FALSE, minframe = 0L)
-  .eval_expr(first_obj[[deparse(expr[[3]])]], data, ignore_case = ignore_case,
-             regex = regex, verbose)
+  .eval_expr(first_obj[[deparse(expr[[3]])]], data,
+    ignore_case = ignore_case,
+    regex = regex, verbose
+  )
 }
 
 .select_tilde <- function(expr, data, ignore_case, regex, verbose) {
   vars <- all.vars(expr)
-  unlist(lapply(vars, .eval_expr, data = data, ignore_case = ignore_case,
-                regex = regex, verbose))
+  unlist(lapply(vars, .eval_expr,
+    data = data, ignore_case = ignore_case,
+    regex = regex, verbose
+  ))
 }
 
 .select_list <- function(expr, data, ignore_case, regex, verbose) {
   vars <- names(expr)
-  unlist(lapply(vars, .eval_expr, data = data, ignore_case = ignore_case,
-                regex = regex, verbose))
+  unlist(lapply(vars, .eval_expr,
+    data = data, ignore_case = ignore_case,
+    regex = regex, verbose
+  ))
 }
 
 # For functions with parenthesis e.g is.numeric()
