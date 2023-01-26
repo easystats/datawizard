@@ -1,4 +1,4 @@
-# Code adapted from {poorman} by Nathan Eastwood
+# Code adapted from {poorman} by Nathan Eastwood [License: MIT]
 # https://github.com/nathaneastwood/poorman/blob/master/R/select_positions.R
 
 .select_nse <- function(select, data, exclude, ignore_case, regex = FALSE, verbose = FALSE) {
