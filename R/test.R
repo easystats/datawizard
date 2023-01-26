@@ -11,6 +11,12 @@
   expr_select <- substitute(select, env = parent.frame(1L))
   expr_exclude <- substitute(exclude, env = parent.frame(1L))
 
+  # when exclude is not an argument called from the function (e.g data_to_long),
+  # do not consider "exclude" as a symbol
+  if (deparse(expr_exclude) == "exclude" && is.null(substitute(exclude))) {
+    expr_exclude <- NULL
+  }
+
   # directly return all names if select == exclude == NULL
   if (is.null(expr_select) && is.null(expr_exclude)) {
     return(columns)
@@ -72,7 +78,7 @@
   if (isTRUE(regex)) {
     grep(x, colnames(data))
   } else if (length(x) == 1L && x == "all") {
-    return(seq_along(iris))
+    return(seq_along(data))
   } else if (isTRUE(ignore_case)) {
     grep(x, colnames(data), ignore.case = TRUE)
   } else {
@@ -86,12 +92,12 @@
   x_dep <- deparse(x)
   is_select_helper <- FALSE
 
-  if (is.function(try_eval)) {
-    cols <- names(data)
-    which(vapply(data, x, FUN.VALUE = logical(1L)))
-  } else if (x_dep %in% colnames(data)) {
+  if (x_dep %in% colnames(data)) {
     matches <- match(x_dep, colnames(data))
     matches[!is.na(matches)]
+  } else if (is.function(try_eval)) {
+    cols <- names(data)
+    which(vapply(data, x, FUN.VALUE = logical(1L)))
   } else if (isTRUE(ignore_case)) {
     matches <- match(toupper(x_dep), toupper(colnames(data)))
     matches[!is.na(matches)]

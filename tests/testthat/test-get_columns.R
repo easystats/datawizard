@@ -79,7 +79,7 @@ test_that("get_columns works with select-functions", {
 
 
 # select-nse with user-function  ---------------------
-testfun <- function(i) {
+testfun <<- function(i) {
   is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
 }
 test_that("get_columns works with user-defined select-functions", {
