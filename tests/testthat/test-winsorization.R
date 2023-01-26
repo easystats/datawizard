@@ -1,5 +1,5 @@
 test_that("testing Winsorization of factors", {
-  expect_equal(winsorize(as.factor(mtcars$am)), as.factor(mtcars$am))
+  expect_identical(winsorize(as.factor(mtcars$am)), as.factor(mtcars$am))
 })
 
 test_that("with missing values", {
@@ -10,42 +10,35 @@ test_that("with missing values", {
 })
 
 test_that("winsorize: threshold must be between 0 and 1", {
-  expect_warning(
+  expect_error(
     winsorize(sample(1:10, 5), threshold = -0.1),
     regexp = "must be a scalar between 0 and 0.5"
   )
-  expect_warning(
+  expect_error(
     winsorize(sample(1:10, 5), threshold = 1.1),
     regexp = "must be a scalar between 0 and 0.5"
   )
-  expect_warning(
+  expect_error(
     winsorize(sample(1:10, 5), method = "zscore", threshold = -3),
     regexp = "must be a scalar greater than 0"
   )
-  expect_warning(
+  expect_error(
     winsorize(sample(1:10, 5), method = "zscore", threshold = -3, robust = TRUE),
     regexp = "must be a scalar greater than 0"
   )
-  expect_warning(
+  expect_error(
     winsorize(sample(1:10, 5), method = "raw", threshold = 1.1),
     regexp = "must be of length 2 for lower and upper bound"
   )
-  x <- sample(1:10, 5)
-  suppressWarnings({
-    y <- winsorize(x, threshold = -0.1)
-    z <- winsorize(x, threshold = 1.1)
-  })
-  expect_equal(x, y)
-  expect_equal(x, z)
 })
 
 test_that("winsorize on data.frame", {
   iris2 <- winsorize(iris)
-  expect_equal(
+  expect_identical(
     iris2$Sepal.Length,
     winsorize(iris$Sepal.Length)
   )
-  expect_equal(
+  expect_identical(
     iris2$Petal.Width,
     winsorize(iris$Petal.Width)
   )

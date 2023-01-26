@@ -19,14 +19,18 @@
 #' @param data data frame or vector.
 #' @param threshold The amount of winsorization, depends on the value of `method`:
 #' - For `method = "percentile"`: the amount to winsorize from *each* tail.
-#' - For `method = "zscore"`: the number of *SD*/*MAD*-deviations from the *mean*/*median* (see `robust`)
-#' - For `method = "raw"`: a vector of length 2 with the lower and upper bound for winsorization.
-#' @param verbose Toggle warnings.
+#'   The value of `threshold` must be between 0 and 0.5 and of length 1.
+#' - For `method = "zscore"`: the number of *SD*/*MAD*-deviations from the
+#'   *mean*/*median* (see `robust`). The value of `threshold` must be greater
+#'   than 0 and of length 1.
+#' - For `method = "raw"`: a vector of length 2 with the lower and upper bound
+#'   for winsorization.
 #' @param method One of "percentile" (default), "zscore", or "raw".
 #' @param robust Logical, if TRUE, winsorizing through the "zscore" method is
 #'   done via the median and the median absolute deviation (MAD); if FALSE, via
 #'   the mean and the standard deviation.
 #' @param ... Currently not used.
+#' @param verbose Not used anymore since `datawizard` 0.6.6.
 #'
 #' @examples
 #' hist(iris$Sepal.Length, main = "Original data")
@@ -96,27 +100,17 @@ winsorize.numeric <- function(data,
                               ...) {
   method <- match.arg(method, choices = c("percentile", "zscore", "raw"))
 
-  if (method == "raw") {
-    if (length(threshold) != 2L) {
-      if (isTRUE(verbose)) {
-        insight::format_warning(
-          "`threshold` must be of length 2 for lower and upper bound.",
-          "Did not winsorize data."
-        )
-      }
-      return(data)
-    }
+  if (method == "raw" && length(threshold) != 2L) {
+    insight::format_error(
+      "`threshold` must be of length 2 for lower and upper bound."
+    )
   }
 
   if (method == "percentile") {
     if (threshold < 0 || threshold > 0.5) {
-      if (isTRUE(verbose)) {
-        insight::format_warning(
-          "`threshold` for winsorization must be a scalar between 0 and 0.5.",
-          "Did not winsorize data."
-        )
-      }
-      return(data)
+      insight::format_error(
+        "`threshold` for winsorization must be a scalar between 0 and 0.5."
+      )
     }
 
     y <- sort(data)
@@ -129,12 +123,9 @@ winsorize.numeric <- function(data,
 
   if (method == "zscore") {
     if (threshold <= 0) {
-      if (isTRUE(verbose)) {
-        insight::format_warning(
-          "'threshold' for winsorization must be a scalar greater than 0. Did not winsorize data."
-        )
-      }
-      return(data)
+      insight::format_error(
+        "'threshold' for winsorization must be a scalar greater than 0."
+      )
     }
 
     if (isTRUE(robust)) {

@@ -24,8 +24,12 @@ winsorize(data, ...)
 \item{threshold}{The amount of winsorization, depends on the value of \code{method}:
 \itemize{
 \item For \code{method = "percentile"}: the amount to winsorize from \emph{each} tail.
-\item For \code{method = "zscore"}: the number of \emph{SD}/\emph{MAD}-deviations from the \emph{mean}/\emph{median} (see \code{robust})
-\item For \code{method = "raw"}: a vector of length 2 with the lower and upper bound for winsorization.
+The value of \code{threshold} must be between 0 and 0.5 and of length 1.
+\item For \code{method = "zscore"}: the number of \emph{SD}/\emph{MAD}-deviations from the
+\emph{mean}/\emph{median} (see \code{robust}). The value of \code{threshold} must be greater
+than 0 and of length 1.
+\item For \code{method = "raw"}: a vector of length 2 with the lower and upper bound
+for winsorization.
 }}
 
 \item{method}{One of "percentile" (default), "zscore", or "raw".}
@@ -34,7 +38,7 @@ winsorize(data, ...)
 done via the median and the median absolute deviation (MAD); if FALSE, via
 the mean and the standard deviation.}
 
-\item{verbose}{Toggle warnings.}
+\item{verbose}{Not used anymore since \code{datawizard} 0.6.6.}
 }
 \value{
 A data frame with winsorized columns or a winsorized vector.
