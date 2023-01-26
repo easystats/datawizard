@@ -159,11 +159,13 @@
 
     if (is_select_helper) {
       new_expr <- str2lang(unlist(new_expr))
-      .eval_expr(new_expr, data = data, ignore_case = ignore_case, regex = regex, verbose)
+      .eval_expr(new_expr, data = data, ignore_case = ignore_case,
+                 regex = regex, verbose)
     } else if (length(new_expr) == 1L && is.function(new_expr)) {
       which(vapply(data, new_expr, FUN.VALUE = logical(1L)))
     } else {
-      unlist(lapply(new_expr, .eval_expr, data = data, ignore_case = ignore_case, regex = regex, verbose))
+      unlist(lapply(new_expr, .eval_expr, data = data,
+                    ignore_case = ignore_case, regex = regex, verbose))
     }
   }
 }
