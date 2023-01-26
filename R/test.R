@@ -158,11 +158,9 @@
   switch(
     type,
     `:` = .select_seq(x, data, ignore_case, regex, verbose),
-    `!` = .select_negate(x, data, ignore_case, regex, verbose),
     `-` = .select_minus(x, data, ignore_case, regex, verbose),
     `c` = .select_c(x, data, ignore_case, regex, verbose),
     `(` = .select_bracket(x, data, ignore_case, regex, verbose),
-    `&` = .select_and(x, data, ignore_case, regex, verbose),
     `$` = .select_dollar(x, data, ignore_case, regex, verbose),
     `~` = .select_tilde(x, data, ignore_case, regex, verbose),
     "list" = .select_list(x, data, ignore_case, regex, verbose),
@@ -179,22 +177,6 @@
   x <- .eval_expr(expr[[2]], data = data, ignore_case = ignore_case, regex = regex, verbose)
   y <- .eval_expr(expr[[3]], data = data, ignore_case = ignore_case, regex = regex, verbose)
   x:y
-}
-
-.select_negate <- function(expr, data, ignore_case, regex, verbose) {
-  x <- if (.is_negated_colon(expr, data)) {
-    expr <- call(":", expr[[2]][[2]], expr[[2]][[3]][[2]])
-    .eval_expr(expr, data, ignore_case = ignore_case, regex = regex, verbose)
-  } else {
-    .eval_expr(expr[[2]], data, ignore_case = ignore_case, regex = regex, verbose)
-  }
-
-  if (length(x) == 0L) {
-    seq_along(data)
-  } else {
-    x * -1L
-  }
-
 }
 
 .is_negated_colon <- function(expr, data, ignore_case, regex, verbose) {
