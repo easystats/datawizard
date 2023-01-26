@@ -19,6 +19,8 @@
 
   # directly return all names if select == exclude == NULL
   if (is.null(expr_select) && is.null(expr_exclude)) {
+    # load again
+    .attach_packages(conflicting_packages)
     return(columns)
   }
 
