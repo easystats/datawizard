@@ -1,7 +1,7 @@
-# this function evaluates the select-expression and allows non-standard evaluation
+# Code adapted from {poorman} by Nathan Eastwood
+# https://github.com/nathaneastwood/poorman/blob/master/R/select_positions.R
 
 .select_nse <- function(select, data, exclude, ignore_case, regex = FALSE, verbose = FALSE) {
-
   .check_data(data)
   columns <- colnames(data)
 
@@ -22,30 +22,32 @@
     return(columns)
   }
 
-  selected <- .eval_expr(expr_select, data, ignore_case = ignore_case, regex = regex, verbose)
-  excluded <- .eval_expr(expr_exclude, data, ignore_case = ignore_case, regex = regex, verbose)
+  # get the position of columns that are selected or excluded
+  selected <- .eval_expr(expr_select, data, ignore_case = ignore_case,
+                         regex = regex, verbose)
+  excluded <- .eval_expr(expr_exclude, data, ignore_case = ignore_case,
+                         regex = regex, verbose)
 
   if ((any(selected < 0) && any(selected > 0)) ||
-      (any(excluded < 0) && any(excluded > 0))) {
+    (any(excluded < 0) && any(excluded > 0))) {
     insight::format_error(
-      paste0("You can't mix negative and positive indices in `select` or `exclude`.")
+      "You can't mix negative and positive indices in `select` or `exclude`."
     )
   }
 
+  # variable positions -> variable names
   selected <- columns[selected]
   excluded <- columns[excluded]
 
   if (length(selected) == 0L) {
     if (length(excluded) == 0L) {
-      out <- NULL
+      out <- character(0L)
     } else {
       out <- setdiff(columns, excluded)
     }
   } else {
     out <- setdiff(selected, excluded)
   }
-
-  if (is.null(out)) out <- character(0L)
 
   # load again
   .attach_packages(conflicting_packages)
@@ -55,13 +57,13 @@
 
 
 .eval_expr <- function(x, data, ignore_case, regex, verbose) {
-
-  if (is.null(x)) return(NULL)
+  if (is.null(x)) {
+    return(NULL)
+  }
 
   type <- typeof(x)
 
-  out <- switch(
-    type,
+  out <- switch(type,
     "integer" = x,
     "double" = as.integer(x),
     "character" = .select_char(data, x, ignore_case, regex = regex, verbose),
@@ -81,18 +83,36 @@
   } else if (length(x) == 1L && x == "all") {
     return(seq_along(data))
   } else if (isTRUE(ignore_case)) {
-    grep(x, columns, ignore.case = TRUE)
+    matches <- match(toupper(x), toupper(columns))
+    matches[!is.na(matches)]
   } else {
     matches <- match(x, columns)
     if (anyNA(matches) && verbose) {
       insight::format_warning(
-        paste0("Following variable(s) were not found: ", toString(x[is.na(matches)])),
-        .misspelled_string(columns, x[is.na(matches)], default_message = "Possibly misspelled?")
+        paste0("Following variable(s) were not found: ",
+               toString(x[is.na(matches)])),
+        .misspelled_string(
+          columns,
+          x[is.na(matches)],
+          default_message = "Possibly misspelled?"
+        )
       )
     }
     matches[!is.na(matches)]
   }
 }
+
+# 3 types of symbols:
+# - unquoted variables
+# - functions (without parenthesis)
+# - objects that need to be evaluated, e.g data_find(iris, i) where i is a
+#   function arg or is defined before
+
+# The first 2 cases are easy to deal with.
+# For the 3rd one, we try to get the value of the object at each environment
+# (starting from the lower one) until the global environment. If we get its
+# value but it errors because the function doesn't exist then it means that
+# it is a select helper that we grab from the error message.
 
 .select_symbol <- function(data, x, ignore_case, regex, verbose) {
   try_eval <- try(eval(x), silent = TRUE)
@@ -148,6 +168,9 @@
   }
 }
 
+# Evaluate language expressions i.e when there's a function involved (-, c(),
+# :, etc.)
+
 .eval_call <- function(data, x, ignore_case = ignore_case, regex, verbose) {
   type <- as.character(x[[1]])
   if (length(type) > 1L) {
@@ -155,8 +178,7 @@
     type <- "context"
   }
 
-  switch(
-    type,
+  switch(type,
     `:` = .select_seq(x, data, ignore_case, regex, verbose),
     `-` = .select_minus(x, data, ignore_case, regex, verbose),
     `c` = .select_c(x, data, ignore_case, regex, verbose),
@@ -174,17 +196,16 @@
 }
 
 .select_seq <- function(expr, data, ignore_case, regex, verbose) {
-  x <- .eval_expr(expr[[2]], data = data, ignore_case = ignore_case, regex = regex, verbose)
-  y <- .eval_expr(expr[[3]], data = data, ignore_case = ignore_case, regex = regex, verbose)
+  x <- .eval_expr(expr[[2]], data = data, ignore_case = ignore_case,
+                  regex = regex, verbose)
+  y <- .eval_expr(expr[[3]], data = data, ignore_case = ignore_case,
+                  regex = regex, verbose)
   x:y
 }
 
-.is_negated_colon <- function(expr, data, ignore_case, regex, verbose) {
-  expr[[1]] == "!" && length(expr[[2]]) > 1L && expr[[2]][[1]] == ":" && expr[[2]][[3]][[1]] == "!"
-}
-
 .select_minus <- function(expr, data, ignore_case, regex, verbose) {
-  x <- .eval_expr(expr[[2]], data, ignore_case = ignore_case, regex = regex, verbose)
+  x <- .eval_expr(expr[[2]], data, ignore_case = ignore_case,
+                  regex = regex, verbose)
   if (length(x) == 0L) {
     seq_along(data)
   } else {
@@ -195,16 +216,20 @@
 .select_c <- function(expr, data, ignore_case, regex, verbose) {
   lst_expr <- as.list(expr)
   lst_expr[[1]] <- NULL
-  unlist(lapply(lst_expr, .eval_expr, data = data, ignore_case = ignore_case, regex = regex, verbose))
+  unlist(lapply(lst_expr, .eval_expr, data, ignore_case = ignore_case,
+                regex = regex, verbose))
 }
 
 .select_bracket <- function(expr, data, ignore_case, regex, verbose) {
-  .eval_expr(expr[[2]], data, ignore_case = ignore_case, regex = regex, verbose)
+  .eval_expr(expr[[2]], data, ignore_case = ignore_case,
+             regex = regex, verbose)
 }
 
 .select_helper <- function(expr, data, ignore_case, regex, verbose) {
   lst_expr <- as.list(expr)
 
+  # need this if condition to distinguish between starts_with("Sep") (that we
+  # can use directly) and starts_with(i) (where we need to get i)
   if (length(lst_expr) == 2L && typeof(lst_expr[[2]]) == "symbol") {
     collapsed_patterns <- dynGet(lst_expr[[2]], inherits = FALSE, minframe = 0L)
   } else {
@@ -212,32 +237,38 @@
   }
 
   rgx <- if (lst_expr[[1]] == "starts_with") {
-    paste0("^(", collapsed_patterns ,")")
+    paste0("^(", collapsed_patterns, ")")
   } else if (lst_expr[[1]] == "ends_with") {
-    paste0("(", collapsed_patterns ,")$")
+    paste0("(", collapsed_patterns, ")$")
   } else if (lst_expr[[1]] == "contains") {
-    paste0("(", collapsed_patterns,")")
+    paste0("(", collapsed_patterns, ")")
   } else if (lst_expr[[1]] == "regex") {
     collapsed_patterns
   }
   grep(rgx, colnames(data), ignore.case = ignore_case, verbose)
 }
 
+# Special case where the expression of select is something like args$select
+# that happens when we use grouped_data (see e.g center.grouped_df())
 .select_dollar <- function(expr, data, ignore_case, regex, verbose) {
   first_obj <- dynGet(expr[[2]], inherits = FALSE, minframe = 0L)
-  .eval_expr(first_obj[[deparse(expr[[3]])]], data, ignore_case = ignore_case, regex = regex, verbose)
+  .eval_expr(first_obj[[deparse(expr[[3]])]], data, ignore_case = ignore_case,
+             regex = regex, verbose)
 }
 
 .select_tilde <- function(expr, data, ignore_case, regex, verbose) {
   vars <- all.vars(expr)
-  unlist(lapply(vars, .eval_expr, data = data, ignore_case = ignore_case, regex = regex, verbose))
+  unlist(lapply(vars, .eval_expr, data = data, ignore_case = ignore_case,
+                regex = regex, verbose))
 }
 
 .select_list <- function(expr, data, ignore_case, regex, verbose) {
   vars <- names(expr)
-  unlist(lapply(vars, .eval_expr, data = data, ignore_case = ignore_case, regex = regex, verbose))
+  unlist(lapply(vars, .eval_expr, data = data, ignore_case = ignore_case,
+                regex = regex, verbose))
 }
 
+# For functions with parenthesis e.g is.numeric()
 .select_context <- function(expr, data, ignore_case, regex, verbose) {
   x_dep <- deparse(expr)
   if (endsWith(x_dep, "()")) {
@@ -263,7 +294,6 @@
 .regex_select_helper <- function() {
   "(starts\\_with|ends\\_with|col\\_ends\\_with|contains|regex)"
 }
-
 
 .conflicting_packages <- function(packages = NULL) {
   if (is.null(packages)) {
@@ -294,4 +324,3 @@
     }
   }
 }
-
