@@ -31,6 +31,8 @@ BUG FIXES
 
 * `empty_columns()` (and therefore `remove_empty_columns()`) now correctly detects
   columns containing only `NA_character_` (#349).
+* Select helpers now work in custom functions when argument is called `select`
+  (#356).
 
 # datawizard 0.6.5
 
