@@ -138,7 +138,7 @@
     matches[!is.na(matches)]
   } else {
     new_expr <- tryCatch(
-      dynGet(x, inherits = FALSE, minframe = 0L),
+      .dynGet(x, inherits = FALSE, minframe = 0L),
       error = function(e) {
         # if starts_with() et al. don't exist
         fn <- insight::safe_deparse(e$call)
@@ -255,7 +255,7 @@
   # need this if condition to distinguish between starts_with("Sep") (that we
   # can use directly) and starts_with(i) (where we need to get i)
   if (length(lst_expr) == 2L && typeof(lst_expr[[2]]) == "symbol") {
-    collapsed_patterns <- dynGet(lst_expr[[2]], inherits = FALSE, minframe = 0L)
+    collapsed_patterns <- .dynGet(lst_expr[[2]], inherits = FALSE, minframe = 0L)
   } else {
     collapsed_patterns <- paste(unlist(lst_expr[2:length(lst_expr)]), collapse = "|")
   }
@@ -275,7 +275,7 @@
 # Special case where the expression of select is something like args$select
 # that happens when we use grouped_data (see e.g center.grouped_df())
 .select_dollar <- function(expr, data, ignore_case, regex, verbose) {
-  first_obj <- dynGet(expr[[2]], inherits = FALSE, minframe = 0L)
+  first_obj <- .dynGet(expr[[2]], inherits = FALSE, minframe = 0L)
   .eval_expr(first_obj[[deparse(expr[[3]])]], data,
     ignore_case = ignore_case,
     regex = regex, verbose
@@ -353,4 +353,22 @@
       }
     }
   }
+}
+
+# Almost identical to .dynGet(). The difference is that we deparse the expression
+# because get0() allows symbol only since R 4.1.0
+.dynGet <- function(x, ifnotfound = stop(gettextf("%s not found", sQuote(x)),
+                                         domain = NA), minframe = 1L,
+                    inherits = FALSE){
+  x <- deparse(x)
+  n <- sys.nframe()
+  myObj <- structure(list(.b = as.raw(7)), foo = 47L)
+  while (n > minframe) {
+    n <- n - 1L
+    env <- sys.frame(n)
+    r <- get0(x, envir = env, inherits = inherits, ifnotfound = myObj)
+    if (!identical(r, myObj))
+      return(r)
+  }
+  ifnotfound
 }
