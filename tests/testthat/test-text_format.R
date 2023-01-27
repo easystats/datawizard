@@ -23,38 +23,38 @@ test_that("text formatting helpers work as expected", {
     width = 20
   ))
 
-  expect_equal(
+  expect_identical(
     text_fullstop(c("something", "something else.")),
     c("something.", "something else.")
   )
 
-  expect_equal(
+  expect_identical(
     text_lastchar(c("ABC", "DEF"), n = 2),
     c("BC", "EF"),
     ignore_attr = TRUE
   )
 
-  expect_equal(
+  expect_identical(
     text_concatenate(c("First", "Second", "Last")),
     "First, Second and Last"
   )
 
-  expect_equal(
+  expect_identical(
     text_concatenate(c("First", "Second", "Last"), last = " or ", enclose = "`"),
     "`First`, `Second` or `Last`"
   )
 
-  expect_equal(
+  expect_identical(
     text_remove(c("one!", "two", "three!"), "!"),
     c("one", "two", "three")
   )
 
-  expect_equal(
+  expect_identical(
     text_paste(c("A", "", "B"), c("42", "42", "42")),
     c("A, 42", "42", "B, 42")
   )
 
-  expect_equal(
+  expect_identical(
     text_paste(c("A", "", "B"), c("42", "42", "42"), enclose = "`"),
     c("`A`, `42`", "`42`", "`B`, `42`")
   )

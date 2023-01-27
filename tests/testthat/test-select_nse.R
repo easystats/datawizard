@@ -103,7 +103,7 @@ test_that(".select_nse: arg 'exclude' works", {
 test_that(".select_nse: args 'select' and 'exclude' at the same time", {
   expect_identical(
     foo(iris, select = contains("Length"), exclude = starts_with("Petal")),
-    c("Sepal.Length")
+    "Sepal.Length"
   )
   expect_identical(
     foo(iris, select = contains("Length"), exclude = contains("Length")),

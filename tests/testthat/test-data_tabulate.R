@@ -2,11 +2,11 @@ data(efc)
 
 test_that("data_tabulate factor", {
   x <- data_tabulate(efc$e42dep)
-  expect_equal(as.vector(x$Value), as.vector(sort(unique(
+  expect_identical(as.vector(x$Value), as.vector(sort(unique(
     addNA(efc$e42dep)
   ))))
-  expect_equal(x$N, as.vector(table(addNA(efc$e42dep))))
-  expect_equal(x$`Valid %`,
+  expect_identical(x$N, as.vector(table(addNA(efc$e42dep))))
+  expect_identical(x$`Valid %`,
     as.vector(c(
       100 * table(efc$e42dep) / sum(!is.na(efc$e42dep)), NA
     )),
@@ -18,11 +18,11 @@ test_that("data_tabulate factor", {
 
 test_that("data_tabulate numeric", {
   x <- data_tabulate(efc$neg_c_7)
-  expect_equal(as.vector(x$Value), as.vector(sort(unique(
+  expect_identical(as.vector(x$Value), as.vector(sort(unique(
     addNA(efc$neg_c_7)
   ))))
-  expect_equal(x$N, as.vector(table(addNA(efc$neg_c_7))))
-  expect_equal(x$`Valid %`,
+  expect_identical(x$N, as.vector(table(addNA(efc$neg_c_7))))
+  expect_identical(x$`Valid %`,
     as.vector(c(
       100 * table(efc$neg_c_7) / sum(!is.na(efc$neg_c_7)), NA
     )),
@@ -35,8 +35,8 @@ test_that("data_tabulate numeric", {
 test_that("data_tabulate data.frame", {
   x <- data_tabulate(efc, c("e16sex", "c172code"))
   expect_s3_class(x, "list")
-  expect_equal(length(x), 2)
-  expect_equal(
+  expect_identical(length(x), 2L)
+  expect_identical(
     attributes(x[[1]]),
     list(
       names = c(
@@ -54,7 +54,7 @@ test_that("data_tabulate data.frame", {
       valid_n = 100L
     )
   )
-  expect_equal(
+  expect_identical(
     attributes(x[[2]]),
     list(
       names = c(
@@ -73,11 +73,11 @@ test_that("data_tabulate data.frame", {
     )
   )
   table1 <- x[[1]]
-  expect_equal(as.vector(table1$Value), as.character(c(sort(
+  expect_identical(as.vector(table1$Value), as.character(c(sort(
     unique(efc$e16sex)
   ), NA)))
-  expect_equal(table1$N, as.vector(table(addNA(efc$e16sex))))
-  expect_equal(table1$`Valid %`,
+  expect_identical(table1$N, as.vector(table(addNA(efc$e16sex))))
+  expect_identical(table1$`Valid %`,
     as.vector(c(
       100 * table(efc$e16sex) / sum(!is.na(efc$e16sex)), NA
     )),
@@ -91,7 +91,7 @@ test_that("data_tabulate print", {
   set.seed(123)
   x <- sample(1:3, 1e6, TRUE)
   out <- data_tabulate(x, name = "Large Number")
-  expect_equal(
+  expect_identical(
     attributes(out),
     list(
       names = c("Variable", "Value", "N", "Raw %", "Valid %", "Cumulative %"),
@@ -111,7 +111,7 @@ test_that("data_tabulate print", {
 test_that("data_tabulate print", {
   x <- data_tabulate(efc$e42dep)
   out <- capture.output(print(x))
-  expect_equal(
+  expect_identical(
     out,
     c(
       "elder's dependency (efc$e42dep) <categorical>",
@@ -132,7 +132,7 @@ test_that("data_tabulate print", {
 test_that("data_tabulate print multiple", {
   x <- data_tabulate(efc, c("c172code", "e16sex"))
   out <- capture.output(print(x))
-  expect_equal(
+  expect_identical(
     out,
     c(
       "carer's level of education (c172code) <numeric>",
@@ -162,7 +162,7 @@ test_that("data_tabulate big numbers", {
   set.seed(123)
   x <- sample(1:5, size = 1e7, TRUE)
   out <- capture.output(print(data_tabulate(x)))
-  expect_equal(
+  expect_identical(
     out,
     c(
       "x <integer>",
@@ -179,7 +179,7 @@ test_that("data_tabulate big numbers", {
     )
   )
   out <- capture.output(print(data_tabulate(x), big_mark = ""))
-  expect_equal(
+  expect_identical(
     out,
     c(
       "x <integer>",
@@ -196,7 +196,7 @@ test_that("data_tabulate big numbers", {
     )
   )
   out <- capture.output(print(data_tabulate(x), big_mark = "-"))
-  expect_equal(
+  expect_identical(
     out,
     c(
       "x <integer>",
@@ -219,7 +219,7 @@ if (packageVersion("insight") > "0.17.0") {
   test_that("data_tabulate print multiple, collapse", {
     x <- data_tabulate(efc, c("c172code", "e16sex"), collapse = TRUE)
     out <- capture.output(print(x))
-    expect_equal(
+    expect_identical(
       out,
       c(
         "# Frequency Table",
@@ -247,8 +247,8 @@ if (requireNamespace("poorman", quietly = TRUE)) {
   test_that("data_tabulate grouped data.frame", {
     x <- data_tabulate(poorman::group_by(efc, e16sex), "c172code")
     expect_s3_class(x, "list")
-    expect_equal(length(x), 2)
-    expect_equal(
+    expect_identical(length(x), 2L)
+    expect_identical(
       attributes(x[[1]]),
       list(
         names = c(
@@ -278,11 +278,11 @@ if (requireNamespace("poorman", quietly = TRUE)) {
       )
     )
     table1 <- x[[1]]
-    expect_equal(as.vector(table1$Value), as.character(c(sort(
+    expect_identical(as.vector(table1$Value), as.character(c(sort(
       unique(efc$c172code)
     ), NA)))
-    expect_equal(table1$N, as.vector(table(addNA(efc$c172code[efc$e16sex == 1]))))
-    expect_equal(table1$`Valid %`,
+    expect_identical(table1$N, as.vector(table(addNA(efc$c172code[efc$e16sex == 1]))))
+    expect_identical(table1$`Valid %`,
       as.vector(c(
         100 * table(efc$c172code[efc$e16sex == 1]) / sum(!is.na(efc$c172code[efc$e16sex == 1])), NA
       )),
@@ -295,7 +295,7 @@ if (requireNamespace("poorman", quietly = TRUE)) {
   test_that("data_tabulate print", {
     x <- data_tabulate(poorman::group_by(efc, e16sex), "c172code")
     out <- capture.output(print(x))
-    expect_equal(
+    expect_identical(
       out,
       c(
         "carer's level of education (c172code) <numeric>",
@@ -327,7 +327,7 @@ if (requireNamespace("poorman", quietly = TRUE)) {
     x <-
       data_tabulate(poorman::group_by(efc, e16sex), "c172code", collapse = TRUE)
     out <- capture.output(print(x))
-    expect_equal(
+    expect_identical(
       out,
       c(
         "# Frequency Table",
@@ -357,7 +357,7 @@ if (requireNamespace("poorman", quietly = TRUE)) {
         drop_levels = TRUE
       )
     out <- capture.output(print(x))
-    expect_equal(
+    expect_identical(
       out,
       c(
         "# Frequency Table",
@@ -382,7 +382,7 @@ if (requireNamespace("poorman", quietly = TRUE)) {
 
 # select helpers ------------------------------
 test_that("data_tabulate regex", {
-  expect_equal(
+  expect_identical(
     data_tabulate(mtcars, select = "arb", regex = TRUE),
     data_tabulate(mtcars, select = "carb")
   )
