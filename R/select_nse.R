@@ -126,16 +126,14 @@
   try_eval <- try(eval(x), silent = TRUE)
   x_dep <- deparse(x)
   is_select_helper <- FALSE
+  out <- NULL
 
   if (x_dep %in% colnames(data)) {
     matches <- match(x_dep, colnames(data))
-    matches[!is.na(matches)]
-  } else if (is.function(try_eval)) {
-    cols <- names(data)
-    which(vapply(data, x, FUN.VALUE = logical(1L)))
+    out <- matches[!is.na(matches)]
   } else if (isTRUE(ignore_case)) {
     matches <- match(toupper(x_dep), toupper(colnames(data)))
-    matches[!is.na(matches)]
+    out <- matches[!is.na(matches)]
   } else {
     new_expr <- tryCatch(
       .dynGet(x, inherits = FALSE, minframe = 0L),
@@ -167,19 +165,29 @@
 
     if (is_select_helper) {
       new_expr <- str2lang(unlist(new_expr))
-      .eval_expr(new_expr,
+      out <- .eval_expr(new_expr,
         data = data, ignore_case = ignore_case,
         regex = regex, verbose
       )
     } else if (length(new_expr) == 1L && is.function(new_expr)) {
-      which(vapply(data, new_expr, FUN.VALUE = logical(1L)))
+      out <- which(vapply(data, new_expr, FUN.VALUE = logical(1L)))
     } else {
-      unlist(lapply(new_expr, .eval_expr,
+      out <- unlist(lapply(new_expr, .eval_expr,
         data = data,
         ignore_case = ignore_case, regex = regex, verbose
       ))
     }
   }
+
+  # sometimes an object that needs to be evaluated has the same name as a
+  # function (e.g colnames). Vector of names have the priority on functions
+  # so function evaluation is delayed at the max.
+  if (is.null(out) && is.function(try_eval)) {
+    cols <- names(data)
+    out <- which(vapply(data, x, FUN.VALUE = logical(1L)))
+  }
+
+  out
 }
 
 # Evaluate language expressions i.e when there's a function involved (-, c(),
@@ -324,7 +332,7 @@
     new_expr <- str2lang(new_expr)
     .eval_expr(new_expr, data = data, ignore_case = ignore_case, regex = regex, verbose)
   } else {
-    eval(expr, envir = data)
+    .dynEval(expr, inherits = FALSE, minframe = 0L)
   }
 }
 
@@ -407,3 +415,4 @@
   }
   ifnotfound
 }
+
