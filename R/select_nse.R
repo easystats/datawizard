@@ -197,9 +197,11 @@
     `-` = .select_minus(x, data, ignore_case, regex, verbose),
     `c` = .select_c(x, data, ignore_case, regex, verbose),
     `(` = .select_bracket(x, data, ignore_case, regex, verbose),
+    `[` = .select_square_bracket(x, data, ignore_case, regex, verbose),
     `$` = .select_dollar(x, data, ignore_case, regex, verbose),
     `~` = .select_tilde(x, data, ignore_case, regex, verbose),
     "list" = .select_list(x, data, ignore_case, regex, verbose),
+    "names" = .select_names(x, data, ignore_case, regex, verbose),
     "starts_with" = ,
     "ends_with" = ,
     "matches" = ,
@@ -247,6 +249,22 @@
     ignore_case = ignore_case,
     regex = regex, verbose
   )
+}
+
+.select_square_bracket <- function(expr, data, ignore_case, regex, verbose) {
+  first_obj <- .eval_expr(expr[[2]], data,
+                          ignore_case = ignore_case,
+                          regex = regex, verbose)
+  .eval_expr(first_obj[expr[[3]]], data,
+             ignore_case = ignore_case,
+             regex = regex, verbose)
+}
+
+.select_names <- function(expr, data, ignore_case, regex, verbose) {
+  first_obj <- .dynEval(expr[[2]], inherits = FALSE, minframe = 0L)
+  .eval_expr(names(first_obj), data,
+             ignore_case = ignore_case,
+             regex = regex, verbose = FALSE)
 }
 
 .select_helper <- function(expr, data, ignore_case, regex, verbose) {
@@ -369,6 +387,21 @@
     env <- sys.frame(n)
     r <- get0(x, envir = env, inherits = inherits, ifnotfound = myObj)
     if (!identical(r, myObj)) {
+      return(r)
+    }
+  }
+  ifnotfound
+}
+
+.dynEval <- function(x, ifnotfound = stop(gettextf("%s not found", sQuote(x)),
+                                         domain = NA), minframe = 1L, inherits = FALSE) {
+  n <- sys.nframe()
+  x <- deparse(x)
+  while (n > minframe) {
+    n <- n - 1L
+    env <- sys.frame(n)
+    r <- try(eval(str2lang(x), envir = env), silent = TRUE)
+    if (!inherits(r, "try-error") && !is.null(r)) {
       return(r)
     }
   }

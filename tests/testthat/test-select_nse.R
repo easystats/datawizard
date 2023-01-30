@@ -110,3 +110,15 @@ test_that(".select_nse: args 'select' and 'exclude' at the same time", {
     character(0)
   )
 })
+
+test_that(".select_nse: misc", {
+  iris2 <- iris[, 1:3]
+  expect_identical(
+    foo(iris, select = names(iris2)),
+    c("Sepal.Length", "Sepal.Width",  "Petal.Length")
+  )
+  expect_identical(
+    foo(iris, select = names(iris2)[2]),
+    "Sepal.Width"
+  )
+})
