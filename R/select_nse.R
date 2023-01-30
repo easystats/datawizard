@@ -1,7 +1,8 @@
 # Code adapted from {poorman} by Nathan Eastwood [License: MIT]
 # https://github.com/nathaneastwood/poorman/blob/master/R/select_positions.R
 
-.select_nse <- function(select, data, exclude, ignore_case, regex = FALSE, verbose = FALSE) {
+.select_nse <- function(select, data, exclude, ignore_case, regex = FALSE,
+                        verbose = FALSE) {
   .check_data(data)
   columns <- colnames(data)
 
@@ -73,7 +74,10 @@
     "character" = .select_char(data, x, ignore_case, regex = regex, verbose),
     "symbol" = .select_symbol(data, x, ignore_case, regex = regex, verbose),
     "language" = .eval_call(data, x, ignore_case, regex = regex, verbose),
-    insight::format_error("Expressions of type <", typeof(x), "> cannot be evaluated for use when subsetting.")
+    insight::format_error(
+      "Expressions of type <", typeof(x),
+      "> cannot be evaluated for use when subsetting."
+    )
   )
 
   out
@@ -142,7 +146,8 @@
 
         # if starts_with() et al. come from tidyselect but need to be used in
         # a select environment, then the error doesn't have the same structure.
-        if (is.null(fn) && grepl("must be used within a", e$message, fixed = TRUE)) {
+        if (is.null(fn) &&
+          grepl("must be used within a", e$message, fixed = TRUE)) {
           trace <- lapply(e$trace$call, function(x) {
             tmp <- insight::safe_deparse(x)
             if (grepl(paste0("^", .regex_select_helper()), tmp)) {
@@ -192,7 +197,7 @@
 # Evaluate language expressions i.e when there's a function involved (-, c(),
 # :, etc.)
 
-.eval_call <- function(data, x, ignore_case = ignore_case, regex, verbose) {
+.eval_call <- function(data, x, ignore_case, regex, verbose) {
   type <- as.character(x[[1]])
   if (length(type) > 1L) {
     # This helps when pkg::fn is used in a select helper
@@ -285,7 +290,9 @@
   if (length(lst_expr) == 2L && typeof(lst_expr[[2]]) == "symbol") {
     collapsed_patterns <- .dynGet(lst_expr[[2]], inherits = FALSE, minframe = 0L)
   } else {
-    collapsed_patterns <- paste(unlist(lst_expr[2:length(lst_expr)]), collapse = "|")
+    collapsed_patterns <- paste(unlist(lst_expr[2:length(lst_expr)]),
+      collapse = "|"
+    )
   }
 
   rgx <- if (lst_expr[[1]] == "starts_with") {
@@ -297,7 +304,7 @@
   } else if (lst_expr[[1]] == "regex") {
     collapsed_patterns
   }
-  grep(rgx, colnames(data), ignore.case = ignore_case, verbose)
+  grep(rgx, colnames(data), ignore.case = ignore_case)
 }
 
 # Special case where the expression of select is something like args$select
@@ -332,7 +339,10 @@
   if (endsWith(x_dep, "()")) {
     new_expr <- gsub("\\(\\)$", "", x_dep)
     new_expr <- str2lang(new_expr)
-    .eval_expr(new_expr, data = data, ignore_case = ignore_case, regex = regex, verbose)
+    .eval_expr(new_expr,
+      data = data, ignore_case = ignore_case, regex = regex,
+      verbose
+    )
   } else {
     .dynEval(expr, inherits = FALSE, minframe = 0L)
   }
@@ -377,7 +387,11 @@
         loadNamespace(pkg[i])
       }
       if (isTRUE(packages$attached[i])) {
-        suppressPackageStartupMessages(suppressWarnings(require(pkg[i], quietly = TRUE, character.only = TRUE)))
+        suppressPackageStartupMessages(
+          suppressWarnings(
+            require(pkg[i], quietly = TRUE, character.only = TRUE)
+          )
+        )
       }
     }
   }
