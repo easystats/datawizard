@@ -1,6 +1,6 @@
 Library: C:\Users\etienne\Desktop\Divers\datawizard/revdep/library/datawizard/old
 datawizard (0.6.5)
-insight    (0.18.8)
+insight    (0.19.0)
 
 Library: C:\Users\etienne\Desktop\Divers\datawizard/revdep/library/rempsyc
 abind             (1.4-5)
@@ -70,7 +70,7 @@ htmltools         (0.5.4)
 httpcode          (0.3.0)
 httpuv            (1.6.8)
 httr              (1.4.4)
-insight           (0.18.8)
+insight           (0.19.0)
 interactions      (1.1.5)
 isoband           (0.2.7)
 iterators         (1.0.14)

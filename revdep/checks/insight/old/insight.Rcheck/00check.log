@@ -5,7 +5,7 @@
 * using options '--no-manual --no-build-vignettes'
 * checking for file 'insight/DESCRIPTION' ... OK
 * checking extension type ... Package
-* this is package 'insight' version '0.18.8'
+* this is package 'insight' version '0.19.0'
 * package encoding: UTF-8
 * checking package namespace information ... OK
 * checking package dependencies ... OK

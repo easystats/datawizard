@@ -71,4 +71,4 @@ Some of the nested models seem to be identical
 > 
 > proc.time()
    user  system elapsed 
-  52.98    3.45   59.42 
+  57.32    4.59   69.18 

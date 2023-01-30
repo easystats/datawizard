@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("pscl")) {
+if (requiet("pscl")) {
   data("bioChemists")
 
   m1 <- hurdle(art ~ fem + mar + kid5 + ment | kid5 + phd, data = bioChemists)
@@ -35,7 +33,7 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), exp(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), exp(0.2), tolerance = 1e-5)
   })
 
   test_that("get_data", {

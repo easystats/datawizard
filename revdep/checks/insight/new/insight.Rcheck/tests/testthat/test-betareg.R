@@ -1,5 +1,5 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
+if (
+
   requiet("betareg")) {
   data("GasolineYield")
   data("FoodExpenditure")
@@ -35,7 +35,7 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_identical(link_inverse(m1)(.2), plogis(.2))
+    expect_identical(link_inverse(m1)(0.2), plogis(0.2))
   })
 
   test_that("get_data", {
@@ -44,7 +44,7 @@ if (requiet("testthat") &&
     expect_equal(nrow(get_data(m2)), 38)
     expect_equal(
       colnames(get_data(m2)),
-      c("I(food/income)", "income", "persons", "food", "income.1")
+      c("food", "income", "persons")
     )
   })
 

@@ -1553,7 +1553,7 @@ detaching 'package:sjlabelled', 'package:sjmisc'
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  41.86 1.75 46.78 NA NA 
+Time elapsed:  41.46 1.58 45.71 NA NA 
 > grDevices::dev.off()
 null device 
           1 

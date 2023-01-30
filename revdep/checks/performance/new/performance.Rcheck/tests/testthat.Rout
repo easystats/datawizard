@@ -62,26 +62,13 @@ Checking normality of residuals is only useful an appropriate assumption
 boundary (singular) fit: see help('isSingular')
 
 Some of the nested models seem to be identical
-[ FAIL 1 | WARN 0 | SKIP 4 | PASS 236 ]
+[ FAIL 0 | WARN 0 | SKIP 4 | PASS 237 ]
 
 ══ Skipped tests ═══════════════════════════════════════════════════════════════
 • On CRAN (4)
 
-══ Failed tests ════════════════════════════════════════════════════════════════
-── Error ('test-check_outliers.R:300'): cook multiple methods which ────────────
-Error in `eval(expr, envir = data)`: object 'info' not found
-Backtrace:
-    ▆
- 1. ├─performance::check_outliers(iris2, method = c("zscore", "iqr")) at test-check_outliers.R:300:6
- 2. └─performance:::check_outliers.grouped_df(...)
- 3.   └─datawizard::data_relocate(...)
- 4.     └─datawizard:::.select_nse(...)
- 5.       └─datawizard:::.eval_expr(...)
- 6.         └─datawizard:::.eval_call(...)
- 7.           └─datawizard:::.select_context(x, data, ignore_case, regex, verbose)
- 8.             └─base::eval(expr, envir = data)
- 9.               └─base::eval(expr, envir = data)
-
-[ FAIL 1 | WARN 0 | SKIP 4 | PASS 236 ]
-Error: Test failures
-Execution halted
+[ FAIL 0 | WARN 0 | SKIP 4 | PASS 237 ]
+> 
+> proc.time()
+   user  system elapsed 
+  55.48    4.14   66.00 

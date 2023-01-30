@@ -2,8 +2,8 @@
 
 We checked 17 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
- * We saw 5 new problems
- * We failed to check 0 packages
+ * We saw 4 new problems
+ * We failed to check 1 packages
 
 Issues with CRAN packages are summarised below.
 
@@ -17,10 +17,6 @@ Issues with CRAN packages are summarised below.
   checking examples ... ERROR
   checking tests ...
 
-* performance
-  checking examples ... ERROR
-  checking tests ...
-
 * report
   checking examples ... ERROR
   checking tests ...
@@ -28,3 +24,6 @@ Issues with CRAN packages are summarised below.
 * see
   checking tests ...
 
+### Failed to check
+
+* ggstatsplot (NA)

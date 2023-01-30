@@ -575,6 +575,12 @@ Warning in norm.inter(t, adj.alpha) :
 > # Make and format model
 > model <- lm(mpg ~ gear * wt, mtcars)
 > nice_lm_slopes(model, predictor = "gear", moderator = "wt")
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
   Dependent Variable Predictor (+/-1 SD) df        b        t          p
 1                mpg       gear (LOW-wt) 28 7.540509 2.010656 0.05408136
 2                mpg      gear (MEAN-wt) 28 5.615951 1.943711 0.06204275
@@ -588,6 +594,18 @@ Warning in norm.inter(t, adj.alpha) :
 > model2 <- lm(qsec ~ gear * wt, mtcars)
 > my.models <- list(model, model2)
 > nice_lm_slopes(my.models, predictor = "gear", moderator = "wt")
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
   Model Number Dependent Variable Predictor (+/-1 SD) df         b          t
 1            1                mpg       gear (LOW-wt) 28  7.540509  2.0106560
 2            1                mpg      gear (MEAN-wt) 28  5.615951  1.9437108
@@ -626,6 +644,9 @@ Warning in norm.inter(t, adj.alpha) :
 +   predictor = "gear",
 +   moderator = "wt"
 + )
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
   Dependent Variable Predictor df         b          t          p         sr2
 1                mpg      gear 28  5.615951  1.9437108 0.06204275 0.028488305
 2                mpg        wt 28  1.403861  0.4301493 0.67037970 0.001395217
@@ -638,6 +659,15 @@ Warning in norm.inter(t, adj.alpha) :
 +   predictor = "gear",
 +   moderator = "wt"
 + )
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
   Model Number Dependent Variable Predictor df          b          t          p
 1            1                mpg      gear 28   5.615951  1.9437108 0.06204275
 2            1                mpg        wt 28   1.403861  0.4301493 0.67037970
@@ -667,6 +697,9 @@ Warning in norm.inter(t, adj.alpha) :
 +   moderator = "wt",
 +   covariates = c("am", "vs")
 + )
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
   Dependent Variable Predictor df         b          t           p         sr2
 1                mpg      gear 26  5.840594  2.0773482 0.047786602 0.024922116
 2                mpg        wt 26  3.433057  1.1692031 0.252929701 0.007894893
@@ -682,6 +715,9 @@ Warning in norm.inter(t, adj.alpha) :
 +   moderator = "wt",
 +   moderator2 = "am"
 + )
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
   Dependent Variable  Predictor df         b         t          p        sr2
 1                mpg       gear 24  52.97009  1.831564 0.07945785 0.01660219
 2                mpg         wt 24  42.12157  1.603869 0.12182331 0.01273090
@@ -965,6 +1001,15 @@ Warning in norm.inter(t, adj.alpha) :
 +   predictor = "gear",
 +   moderator = "wt"
 + )
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
   Dependent Variable Predictor (+/-1 SD) df        b        t          p
 1                mpg       gear (LOW-wt) 28 7.540509 2.010656 0.05408136
 2                mpg      gear (MEAN-wt) 28 5.615951 1.943711 0.06204275
@@ -981,6 +1026,33 @@ Warning in norm.inter(t, adj.alpha) :
 +   predictor = "gear",
 +   moderator = "wt"
 + )
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
   Model Number Dependent Variable Predictor (+/-1 SD) df          b          t
 1            1                mpg       gear (LOW-wt) 28   7.540509  2.0106560
 2            1                mpg      gear (MEAN-wt) 28   5.615951  1.9437108
@@ -1010,6 +1082,15 @@ Warning in norm.inter(t, adj.alpha) :
 +   moderator = "wt",
 +   covariates = c("am", "vs")
 + )
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
   Dependent Variable Predictor (+/-1 SD) df        b        t          p
 1                mpg       gear (LOW-wt) 26 7.891888 2.211309 0.03601159
 2                mpg      gear (MEAN-wt) 26 5.840594 2.077348 0.04778660
@@ -1028,6 +1109,24 @@ Warning in norm.inter(t, adj.alpha) :
 +   moderator = "wt",
 +   moderator2 = "am"
 + )
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
+Warning: Could not recover model data from environment. Please make sure your
+  data is available in your workspace.
+  Trying to retrieve data from the model frame now.
   Dependent Variable am Predictor (+/-1 SD) df         b          t          p
 1                mpg  0       gear (LOW-wt) 24 67.737763  1.8085806 0.08306317
 2                mpg  0      gear (MEAN-wt) 24 52.970093  1.8315641 0.07945785
@@ -1555,7 +1654,7 @@ original dataset sample:
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  15.75 1.3 17.52 NA NA 
+Time elapsed:  17.99 1.24 21.47 NA NA 
 > grDevices::dev.off()
 null device 
           1 

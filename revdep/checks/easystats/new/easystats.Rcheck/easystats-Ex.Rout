@@ -23,7 +23,7 @@ Type 'q()' to quit R.
 [34m# Attaching packages: easystats 0.6.0[39m
 [32m✔ [39m[37mbayestestR [39m [32m0.13.0 [39m   [32m✔ [39m[37mcorrelation[39m [32m0.8.3  [39m
 [32m✔ [39m[37mdatawizard [39m [32m0.6.5.6[39m   [32m✔ [39m[37meffectsize [39m [32m0.8.3  [39m
-[32m✔ [39m[37minsight    [39m [32m0.18.8 [39m   [32m✔ [39m[37mmodelbased [39m [32m0.8.6  [39m
+[32m✔ [39m[37minsight    [39m [32m0.19.0 [39m   [32m✔ [39m[37mmodelbased [39m [32m0.8.6  [39m
 [32m✔ [39m[37mperformance[39m [32m0.10.2 [39m   [32m✔ [39m[37mparameters [39m [32m0.20.2 [39m
 [32m✔ [39m[37mreport     [39m [32m0.5.5  [39m   [32m✔ [39m[37msee        [39m [32m0.7.4  [39m
 
@@ -156,7 +156,7 @@ Type 'q()' to quit R.
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  2.69 0.28 3.31 NA NA 
+Time elapsed:  2.63 0.28 3.14 NA NA 
 > grDevices::dev.off()
 null device 
           1 

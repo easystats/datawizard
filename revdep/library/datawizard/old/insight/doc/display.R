@@ -42,9 +42,9 @@ df %>%
 
 ## ----eval=.Platform$OS.type == "windows"--------------------------------------
 x <- data.frame(
-  phi_adjusted = .3,
-  Glass_delta = .4,
-  Epsilon2 = .7,
+  phi_adjusted = 0.3,
+  Glass_delta = 0.4,
+  Epsilon2 = 0.7,
   R2 = 0.4
 )
 

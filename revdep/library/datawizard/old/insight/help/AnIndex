@@ -217,6 +217,7 @@ model_info.default	model_info
 model_name	model_name
 model_name.default	model_name
 null_model	null_model
+n_grouplevels	n_grouplevels
 n_obs	n_obs
 n_obs.afex_aov	n_obs
 n_obs.glm	n_obs

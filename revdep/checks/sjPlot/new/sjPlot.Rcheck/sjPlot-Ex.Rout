@@ -20,7 +20,7 @@ Type 'q()' to quit R.
 > options(warn = 1)
 > options(pager = "console")
 > library('sjPlot')
-Install package "strengejacke" from GitHub (`devtools::install_github("strengejacke/strengejacke")`) to load all sj-packages at once!
+Learn more about sjPlot with 'browseVignettes("sjPlot")'.
 > 
 > base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 > base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
@@ -1554,7 +1554,7 @@ detaching 'package:sjlabelled', 'package:sjmisc'
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  41.59 1.77 46.64 NA NA 
+Time elapsed:  42.81 1.66 47.01 NA NA 
 > grDevices::dev.off()
 null device 
           1 

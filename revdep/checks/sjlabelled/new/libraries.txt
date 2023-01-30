@@ -1,6 +1,6 @@
 Library: C:\Users\etienne\Desktop\Divers\datawizard/revdep/library/datawizard/new
 datawizard (0.6.5.6)
-insight    (0.18.8)
+insight    (0.19.0)
 
 Library: C:\Users\etienne\Desktop\Divers\datawizard/revdep/library/sjlabelled
 backports    (1.4.1)
@@ -42,7 +42,7 @@ haven        (2.5.1)
 highr        (0.10)
 hms          (1.1.2)
 htmltools    (0.5.4)
-insight      (0.18.8)
+insight      (0.19.0)
 isoband      (0.2.7)
 jquerylib    (0.1.4)
 jsonlite     (1.8.4)

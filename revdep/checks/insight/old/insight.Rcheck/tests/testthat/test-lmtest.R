@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("lmtest")) {
+if (requiet("lmtest")) {
   data("Mandible", package = "lmtest")
   m <- lm(length ~ age, data = Mandible, subset = (age <= 28))
   ct1 <- coeftest(m)

@@ -1,7 +1,7 @@
 Type: Package
 Package: insight
 Title: Easy Access to Model Information for Various Model Objects
-Version: 0.18.8
+Version: 0.19.0
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -72,25 +72,25 @@ Suggests: AER, afex, aod, BayesFactor, bayestestR, bbmle, bdsmatrix,
         betareg, bife, biglm, blavaan, blme, boot, brms, censReg, cgam,
         clubSandwich, coxme, cplm, crch, datawizard, effectsize,
         emmeans, epiR, estimatr, feisr, fixest, fungible, gam, gamlss,
-        gamm4, gbm, gee, geepack, GLMMadaptive, glmmTMB, gmnl, gt,
-        httr, ivreg, JM, knitr, lavaan, lavaSearch2, lfe, lme4,
+        gamm4, gbm, gee, geepack, geoR, GLMMadaptive, glmmTMB, gmnl,
+        gt, httr, ivreg, JM, knitr, lavaan, lavaSearch2, lfe, lme4,
         lmerTest, lmtest, logistf, logitr, MASS, marginaleffects,
         Matrix, mclogit, mclust, MCMCglmm, merTools, metaBMA, mgcv,
-        mice, mlogit, mhurdle, multgee, nlme, nnet, nonnest2, ordinal,
-        panelr, parameters, parsnip, pbkrtest, performance, plm,
-        poorman, pscl, psych, quantreg, rmarkdown, rms, robustbase,
-        robustlmm, rstanarm (>= 2.21.1), rstantools, rstudioapi,
-        sandwich, speedglm, splines, statmod, survey, survival,
-        testthat, truncreg, tweedie, VGAM
+        mice, mlogit, mhurdle, mmrm, multgee, nlme, nnet, nonnest2,
+        ordinal, panelr, parameters, parsnip, pbkrtest, performance,
+        plm, poorman, pscl, psych, quantreg, rmarkdown, rms,
+        robustbase, robustlmm, rstanarm (>= 2.21.1), rstantools,
+        rstudioapi, sandwich, speedglm, splines, statmod, survey,
+        survival, testthat, truncreg, tweedie, TMB, VGAM
 VignetteBuilder: knitr
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3.9000
 Config/testthat/edition: 3
 Config/Needs/website: rstudio/bslib, r-lib/pkgdown,
         easystats/easystatstemplate
 NeedsCompilation: no
-Packaged: 2022-11-22 19:08:38 UTC; DL
+Packaged: 2023-01-30 08:26:38 UTC; Daniel
 Author: Daniel Lüdecke [aut, cre] (<https://orcid.org/0000-0002-8895-3206>,
     @strengejacke),
   Dominique Makowski [aut, ctb] (<https://orcid.org/0000-0001-5375-9967>,
@@ -109,5 +109,5 @@ Author: Daniel Lüdecke [aut, cre] (<https://orcid.org/0000-0002-8895-3206>,
   Rémi Thériault [ctb] (<https://orcid.org/0000-0003-4315-6788>,
     @rempsyc)
 Repository: CRAN
-Date/Publication: 2022-11-24 10:10:02 UTC
-Built: R 4.2.2; ; 2023-01-29 01:53:14 UTC; windows
+Date/Publication: 2023-01-30 12:10:02 UTC
+Built: R 4.2.2; ; 2023-01-30 13:56:42 UTC; windows

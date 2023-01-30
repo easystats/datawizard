@@ -162,4 +162,4 @@ No variable was specified for contrast estimation. Selecting `contrast = "Specie
 > 
 > proc.time()
    user  system elapsed 
-  43.06    1.68   49.50 
+  41.73    1.82   47.09 

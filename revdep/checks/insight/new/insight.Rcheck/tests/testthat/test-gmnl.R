@@ -1,18 +1,17 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
+if (
+
   requiet("gmnl") &&
-  requiet("mlogit") &&
-  requiet("MASS")) {
+    requiet("mlogit") &&
+    requiet("MASS")) {
   data(housing, package = "MASS")
 
-  dat <- mlogit.data(housing, choice = "Sat", shape = "wide")
+  dat <<- mlogit.data(housing, choice = "Sat", shape = "wide")
   void <- capture.output(
-    m1 <-
-      gmnl(Sat ~ Infl + Type + Cont | 1,
-        data = dat,
-        model = "smnl",
-        R = 100
-      )
+    m1 <- gmnl(Sat ~ Infl + Type + Cont | 1,
+      data = dat,
+      model = "smnl",
+      R = 100
+    )
   )
 
   test_that("model_info", {
@@ -34,12 +33,12 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), plogis(0.2), tolerance = 1e-5)
   })
 
   test_that("get_data", {
-    expect_equal(nrow(get_data(m1)), 216)
-    expect_equal(colnames(get_data(m1)), c("Sat", "Infl", "Type", "Cont"))
+    expect_equal(nrow(get_data(m1, verbose = FALSE)), 216)
+    expect_equal(colnames(get_data(m1, verbose = FALSE)), c("Sat", "Infl", "Type", "Cont"))
   })
 
   test_that("find_formula", {

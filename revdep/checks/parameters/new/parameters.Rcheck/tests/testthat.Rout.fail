@@ -69,8 +69,9 @@ Gu & Wahba 4 term additive model
 
 Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
   using a Wald t-distribution approximation.
-Multiple `BFBayesFactor` models detected - posteriors are extracted from the first numerator model.
-See help("get_parameters", package = "insight").
+Multiple `BFBayesFactor` models detected - posteriors are extracted from
+  the first numerator model.
+  See help("get_parameters", package = "insight").
 Contrasts set to contr.sum for the following variables: treatment, gender
 Loading required namespace: GPArotation
 

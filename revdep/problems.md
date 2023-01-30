@@ -39,6 +39,25 @@ Run `revdep_details(, "correlation")` for more info
     Execution halted
     ```
 
+# ggstatsplot
+
+<details>
+
+* Version: 0.10.0
+* GitHub: https://github.com/IndrajeetPatil/ggstatsplot
+* Source code: https://github.com/cran/ggstatsplot
+* Date/Publication: 2022-11-27 13:20:02 UTC
+* Number of recursive dependencies: 169
+
+Run `revdep_details(, "ggstatsplot")` for more info
+
+</details>
+
+## Newly broken
+
+*   R CMD check timed out
+    
+
 # parameters
 
 <details>
@@ -93,70 +112,6 @@ Run `revdep_details(, "parameters")` for more info
        14.                         └─base::ncol(params)
       
       [ FAIL 1 | WARN 0 | SKIP 33 | PASS 631 ]
-      Error: Test failures
-      Execution halted
-    ```
-
-# performance
-
-<details>
-
-* Version: 0.10.2
-* GitHub: https://github.com/easystats/performance
-* Source code: https://github.com/cran/performance
-* Date/Publication: 2023-01-12 09:00:06 UTC
-* Number of recursive dependencies: 258
-
-Run `revdep_details(, "performance")` for more info
-
-</details>
-
-## Newly broken
-
-*   checking examples ... ERROR
-    ```
-    Running examples in 'performance-Ex.R' failed
-    The error most likely occurred in:
-    
-    > ### Name: check_outliers
-    > ### Title: Outliers detection (check for influential observations)
-    > ### Aliases: check_outliers check_outliers.default check_outliers.numeric
-    > ###   check_outliers.data.frame
-    > 
-    > ### ** Examples
-    > 
-    ...
-    
-    Attaching package: 'poorman'
-    
-    The following objects are masked from 'package:stats':
-    
-        filter, lag
-    
-    Error in eval(expr, envir = data) : object 'info' not found
-    Calls: %>% ... .eval_expr -> .eval_call -> .select_context -> eval -> eval
-    Execution halted
-    ```
-
-*   checking tests ...
-    ```
-      Running 'testthat.R'
-     ERROR
-    Running the tests in 'tests/testthat.R' failed.
-    Last 13 lines of output:
-      Backtrace:
-          ▆
-       1. ├─performance::check_outliers(iris2, method = c("zscore", "iqr")) at test-check_outliers.R:300:6
-       2. └─performance:::check_outliers.grouped_df(...)
-       3.   └─datawizard::data_relocate(...)
-       4.     └─datawizard:::.select_nse(...)
-       5.       └─datawizard:::.eval_expr(...)
-       6.         └─datawizard:::.eval_call(...)
-       7.           └─datawizard:::.select_context(x, data, ignore_case, regex, verbose)
-       8.             └─base::eval(expr, envir = data)
-       9.               └─base::eval(expr, envir = data)
-      
-      [ FAIL 1 | WARN 0 | SKIP 4 | PASS 236 ]
       Error: Test failures
       Execution halted
     ```

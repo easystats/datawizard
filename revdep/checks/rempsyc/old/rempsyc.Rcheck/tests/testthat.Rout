@@ -27,4 +27,4 @@ Suggested APA citation: Thériault, R. (2022). rempsyc: Convenience functions fo
 > 
 > proc.time()
    user  system elapsed 
-   3.51    0.71    4.23 
+   3.42    0.79    4.32 

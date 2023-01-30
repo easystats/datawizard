@@ -3402,7 +3402,7 @@ detaching 'package:rstanarm', 'package:Rcpp', 'package:lme4',
 
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  30.13 2.33 34.39 NA NA 
+Time elapsed:  29.8 2.51 34.04 NA NA 
 > grDevices::dev.off()
 null device 
           1 

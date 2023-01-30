@@ -35,4 +35,4 @@ Starting 2 test processes
 > 
 > proc.time()
    user  system elapsed 
-   4.23    0.73   13.81 
+   4.07    0.76   12.28 

@@ -1927,7 +1927,7 @@ detaching 'package:correlation'
 
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  12.89 1.35 16.56 NA NA 
+Time elapsed:  11.64 1.05 13.22 NA NA 
 > grDevices::dev.off()
 null device 
           1 

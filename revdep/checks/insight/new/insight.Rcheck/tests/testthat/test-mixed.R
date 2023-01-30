@@ -1,12 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-## TODO enable once it's clear what the problem is...
-
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("lme4") &&
-  suppressPackageStartupMessages(requiet("afex")) &&
-  FALSE) {
+# TODO: check why this is failing
+if (requiet("lme4") && suppressPackageStartupMessages(requiet("afex")) && FALSE) {
   data(sleepstudy)
 
   set.seed(123)
@@ -102,8 +97,8 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_identical(link_inverse(m1)(.2), .2)
-    expect_identical(link_inverse(m2)(.2), .2)
+    expect_identical(link_inverse(m1)(0.2), 0.2)
+    expect_identical(link_inverse(m2)(0.2), 0.2)
   })
 
   test_that("get_data", {

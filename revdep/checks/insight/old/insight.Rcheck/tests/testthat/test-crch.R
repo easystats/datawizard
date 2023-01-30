@@ -1,9 +1,9 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
+if (
+
   requiet("crch")) {
   data("RainIbk")
-  RainIbk$sqrtensmean <- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, mean)
-  RainIbk$sqrtenssd <- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, sd)
+  RainIbk$sqrtensmean <<- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, mean)
+  RainIbk$sqrtenssd <<- apply(sqrt(RainIbk[, grep("^rainfc", names(RainIbk))]), 1, sd)
 
   m1 <- crch(sqrt(rain) ~ sqrtensmean, data = RainIbk, dist = "gaussian")
 
@@ -39,7 +39,7 @@ if (requiet("testthat") &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("get_data", {

@@ -1,6 +1,6 @@
 Library: C:\Users\etienne\Desktop\Divers\datawizard/revdep/library/datawizard/new
 datawizard (0.6.5.6)
-insight    (0.18.8)
+insight    (0.19.0)
 
 Library: C:\Users\etienne\Desktop\Divers\datawizard/revdep/library/ggstatsplot
 abind            (1.4-5)
@@ -66,7 +66,7 @@ htmltools        (0.5.4)
 hunspell         (3.0.2)
 hypergeo         (1.2-13)
 inline           (0.3.19)
-insight          (0.18.8)
+insight          (0.19.0)
 isoband          (0.2.7)
 iterators        (1.0.14)
 jquerylib        (0.1.4)

@@ -1,6 +1,6 @@
 Library: C:\Users\etienne\Desktop\Divers\datawizard/revdep/library/datawizard/old
 datawizard (0.6.5)
-insight    (0.18.8)
+insight    (0.19.0)
 
 Library: C:\Users\etienne\Desktop\Divers\datawizard/revdep/library/easystats
 askpass       (1.1)
@@ -38,7 +38,7 @@ htmltools     (0.5.4)
 htmlwidgets   (1.6.1)
 httpuv        (1.6.8)
 httr          (1.4.4)
-insight       (0.18.8)
+insight       (0.19.0)
 isoband       (0.2.7)
 jquerylib     (0.1.4)
 jsonlite      (1.8.4)

@@ -1,3 +1,49 @@
+# insight 0.19.0
+
+## New supported models
+
+* `mmrm` (package *mmrm*), `flac` and `flic` (*logistf*)
+
+## Breaking changes
+
+* `get_data()` was revised and now always tries to recover the data that was
+  used to fit a model from the environment. If this fails, it falls back to
+  recovering data from the model frame (the former default behaviour).
+  Futrhermore, the `source` argument can be used to explicitly force the old
+  behaviour: `source = "mf"` will try to recover data from the model frame first,
+  then possibly falling back to look in the environment.
+
+## New functions
+
+* `n_grouplevels()`, to return random effect groups and number of group levels
+  for mixed models.
+
+## Changes to functions
+
+* `get_datagrid()` preserves all factor levels for factors that are hold constant
+  at their reference level. This is required to work together with
+  `get_modelmatrix()` when calculating standard errors for `get_predicted()`.
+
+## Bug fixes
+
+* Fixed but in `get_modelmatrix()` handling of incomplete factors which
+  sometimes had downstream implications for numerical results in the uncertainty
+  estimates produced by `get_predicted()`.
+
+* Fixed minor issues for HTML tables in `export_table()` when model parameters
+  were grouped.
+
+* Fixed issue with incorrect back-transforming in `get_data()` for models with
+  log-transformed variables.
+
+* Fixes issue in `compact_list()`.
+
+* `has_single_value()` now returns `FALSE` when the object only has `NA` and 
+  `na.rm = TRUE`.
+
+* Fixed issue in `get_parameters()` for gam-models without smooth terms, or with
+  only smooth terms and removed intercept.
+
 # insight 0.18.8
 
 ## Bug fixes

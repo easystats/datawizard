@@ -67,51 +67,18 @@ Type 'q()' to quit R.
 +   test_check("insight")
 + }
 Loading required package: testthat
-Some of the variables were in matrix-format - probably you used
-  `scale()` on your data?
-  If so, and you get an error, please try `datawizard::standardize()` to
-  standardize your data.
 Confidence intervals are not yet supported for models of class `mlm`.
-
-Iteration 1 - deviance = 39.74973 - criterion = 0.8590917
-Iteration 2 - deviance = 10.50328 - criterion = 2.758244
-Iteration 3 - deviance = 9.231325 - criterion = 0.1363107
-Iteration 4 - deviance = 9.227742 - criterion = 0.0003840654
-Iteration 5 - deviance = 9.227742 - criterion = 3.446475e-09
-converged
-Confidence intervals are not yet supported for models of class
-  `multinom`.
-Confidence intervals are not yet supported for models of class
-  `multinom`.
-Confidence intervals are not yet supported for models of class
-  `multinom`.
-Confidence intervals are not yet supported for models of class
-  `multinom`.
-Confidence intervals are not yet supported for models of class
-  `multinom`.
-Confidence intervals are not yet supported for models of class
-  `multinom`.
-Confidence intervals are not yet supported for models of class
-  `multinom`.
-Confidence intervals are not yet supported for models of class
-  `multinom`.
-
-Re-fitting to get Hessian
-
-
-Re-fitting to get Hessian
-
 boundary (singular) fit: see help('isSingular')
 boundary (singular) fit: see help('isSingular')
-[ FAIL 0 | WARN 1 | SKIP 15 | PASS 2537 ]
+[ FAIL 0 | WARN 1 | SKIP 15 | PASS 2634 ]
 
 ══ Skipped tests ═══════════════════════════════════════════════════════════════
 • On CRAN (5)
 • isFALSE(run_stan) is TRUE (5)
 • works interactively (5)
 
-[ FAIL 0 | WARN 1 | SKIP 15 | PASS 2537 ]
+[ FAIL 0 | WARN 1 | SKIP 15 | PASS 2634 ]
 > 
 > proc.time()
    user  system elapsed 
- 129.17   18.71  158.54 
+ 142.34   15.82  177.15 

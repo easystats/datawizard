@@ -1,6 +1,6 @@
 Library: C:\Users\etienne\Desktop\Divers\datawizard/revdep/library/datawizard/old
 datawizard (0.6.5)
-insight    (0.18.8)
+insight    (0.19.0)
 
 Library: C:\Users\etienne\Desktop\Divers\datawizard/revdep/library/modelbased
 abind           (1.4-5)
@@ -68,7 +68,7 @@ htmlwidgets     (1.6.1)
 httpuv          (1.6.8)
 igraph          (1.3.5)
 inline          (0.3.19)
-insight         (0.18.8)
+insight         (0.19.0)
 isoband         (0.2.7)
 jquerylib       (0.1.4)
 jsonlite        (1.8.4)

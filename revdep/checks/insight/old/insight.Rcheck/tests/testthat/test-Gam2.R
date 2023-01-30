@@ -1,8 +1,8 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
 if (.runThisTest &&
-  requiet("testthat") &&
-  requiet("insight") &&
+
+
   requiet("gam")) {
   data(kyphosis)
   void <- capture.output(m1 <- gam::gam(
@@ -28,7 +28,7 @@ if (.runThisTest &&
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), plogis(.2), tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), plogis(0.2), tolerance = 1e-5)
   })
 
   test_that("get_data", {

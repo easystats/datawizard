@@ -27,8 +27,9 @@ Type 'q()' to quit R.
 > library(statsExpressions)
 > 
 > test_check("statsExpressions")
-Multiple `BFBayesFactor` models detected - posteriors are extracted from the first numerator model.
-See help("get_parameters", package = "insight").
+Multiple `BFBayesFactor` models detected - posteriors are extracted from
+  the first numerator model.
+  See help("get_parameters", package = "insight").
 [ FAIL 0 | WARN 1 | SKIP 52 | PASS 25 ]
 
 ══ Skipped tests ═══════════════════════════════════════════════════════════════
@@ -38,4 +39,4 @@ See help("get_parameters", package = "insight").
 > 
 > proc.time()
    user  system elapsed 
- 124.73    3.32  134.68 
+ 122.28    2.93  130.39 

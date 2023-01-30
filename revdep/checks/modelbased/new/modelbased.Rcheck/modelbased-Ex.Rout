@@ -1457,7 +1457,7 @@ detaching 'package:ggplot2', 'package:lme4', 'package:Matrix',
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  14.54 0.81 15.68 NA NA 
+Time elapsed:  14.11 0.89 16.34 NA NA 
 > grDevices::dev.off()
 null device 
           1 

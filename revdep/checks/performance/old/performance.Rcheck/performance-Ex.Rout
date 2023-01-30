@@ -2371,7 +2371,7 @@ detaching 'package:mgcv', 'package:nlme', 'package:lme4',
 
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  25.33 1.83 27.99 NA NA 
+Time elapsed:  26.73 1.95 31.38 NA NA 
 > grDevices::dev.off()
 null device 
           1 

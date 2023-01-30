@@ -796,9 +796,9 @@ Team, 2022) on Windows 10 x64 (build 19044)
 > library(report)
 > 
 > report_date()
-It's Monday, January 30 of the year 2023, at  1pm 20 and 29 seconds
+It's Monday, January 30 of the year 2023, at  3pm 15 and 35 seconds
 > summary(report_date())
-30/01/23 - 13:20:29
+30/01/23 - 15:15:35
 > report_story()
 Did you ever hear the tragedy of Darth Plagueis The Wise? I thought not. It's
 not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a
@@ -1378,7 +1378,7 @@ p = 0.120, Std. beta = 0.97)
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  10.5 1.19 12.74 NA NA 
+Time elapsed:  12.02 1.47 15.89 NA NA 
 > grDevices::dev.off()
 null device 
           1 

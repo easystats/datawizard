@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("insight") &&
-  requiet("estimatr")) {
+if (requiet("estimatr")) {
   data(mtcars)
   m1 <- iv_robust(mpg ~ gear + cyl | carb + wt, data = mtcars)
 
@@ -51,7 +49,7 @@ if (requiet("testthat") &&
     expect_equal(nrow(get_data(m1)), 32)
     expect_equal(
       colnames(get_data(m1)),
-      c("mpg", "carb + wt", "gear", "cyl", "carb", "wt")
+      c("mpg", "gear", "cyl", "carb", "wt")
     )
   })
 
@@ -87,11 +85,11 @@ if (requiet("testthat") &&
   })
 
   test_that("link_function", {
-    expect_equal(link_function(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_function(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("link_inverse", {
-    expect_equal(link_inverse(m1)(.2), .2, tolerance = 1e-5)
+    expect_equal(link_inverse(m1)(0.2), 0.2, tolerance = 1e-5)
   })
 
   test_that("find_parameters", {

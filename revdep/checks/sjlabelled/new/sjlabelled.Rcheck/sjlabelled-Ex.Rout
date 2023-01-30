@@ -5945,7 +5945,7 @@ detaching 'package:haven'
 
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  3.38 0.64 4.65 NA NA 
+Time elapsed:  2.95 0.63 3.85 NA NA 
 > grDevices::dev.off()
 null device 
           1 

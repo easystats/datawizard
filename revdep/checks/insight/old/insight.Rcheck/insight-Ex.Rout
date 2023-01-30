@@ -919,21 +919,15 @@ detaching 'package:mgcv', 'package:nlme'
 > 
 > if (require("lme4")) {
 +   data(sleepstudy)
-+   m <- lmer(
++   m <- suppressWarnings(lmer(
 +     log(Reaction) ~ Days + I(Days^2) + (1 + Days + exp(Days) | Subject),
 +     data = sleepstudy
-+   )
++   ))
 + 
 +   find_terms(m)
 + }
 Loading required package: lme4
 Loading required package: Matrix
-Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv,  :
-  Model failed to converge with max|grad| = 14.7145 (tol = 0.002, component 1)
-Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv,  :
-  Model is nearly unidentifiable: very large eigenvalue
- - Rescale variables?;Model is nearly unidentifiable: large eigenvalue ratio
- - Rescale variables?
 $response
 [1] "log(Reaction)"
 
@@ -1522,20 +1516,13 @@ detaching 'package:lme4', 'package:Matrix'
 + }
 Loading required package: lme4
 Loading required package: Matrix
-  cbind(incidence, trials).incidence cbind(incidence, trials).trials period
-1                                  2                              12      1
-2                                  3                               9      2
-3                                  4                               5      3
-4                                  0                               5      4
-5                                  3                              19      1
-6                                  1                              17      2
-  incidence trials
-1         2     12
-2         3      9
-3         4      5
-4         0      5
-5         3     19
-6         1     17
+  incidence trials period
+1         2     12      1
+2         3      9      2
+3         4      5      3
+4         0      5      4
+5         3     19      1
+6         1     17      2
 > 
 > 
 > 
@@ -1572,6 +1559,8 @@ detaching 'package:lme4', 'package:Matrix'
 +   get_datagrid(iris, at = "Sepal.Length", range = "ci", ci = 0.90) # change min/max of target
 +   get_datagrid(iris, at = "Sepal.Length = [0, 1]") # Manually change min/max
 +   get_datagrid(iris, at = "Sepal.Length = [sd]") # -1 SD, mean and +1 SD
++   # identical to previous line: -1 SD, mean and +1 SD
++   get_datagrid(iris, at = "Sepal.Length", range = "sd", length = 3)
 +   get_datagrid(iris, at = "Sepal.Length = [quartiles]") # quartiles
 + 
 +   # Numeric and categorical variables, generating a grid for plots
@@ -2559,16 +2548,15 @@ detaching 'package:lme4', 'package:Matrix'
 > if (require("lme4")) {
 +   data(cbpp)
 +   cbpp$trials <- cbpp$size - cbpp$incidence
++   dat <<- cbpp
 + 
-+   m <- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
++   m <- glm(cbind(incidence, trials) ~ period, data = dat, family = binomial)
 +   head(get_response(m))
 +   get_response(m, select = "incidence")
 + }
 Loading required package: lme4
 Loading required package: Matrix
- [1]  2  3  4  0  3  1  1  8  2  0  2  2  0  2  0  5  0  0  1  3  0  0  1  8  1
-[26]  3  0 12  2  0  0  0  1  1  0  2  0  5  3  1  2  1  0  0  1  2  0  0 11  0
-[51]  0  0  1  1  1  0
+[1] 2
 > 
 > data(mtcars)
 > m <- lm(mpg ~ wt + cyl + vs, data = mtcars)
@@ -2647,14 +2635,14 @@ attr(,"class")
 $transformation
 function (x) 
 x
-<bytecode: 0x000001c79356ea18>
-<environment: 0x000001c793561ee0>
+<bytecode: 0x0000029bcd1523a0>
+<environment: 0x0000029bcd1477d0>
 
 $inverse
 function (x) 
 x
-<bytecode: 0x000001c79356ea18>
-<environment: 0x000001c793561ee0>
+<bytecode: 0x0000029bcd1523a0>
+<environment: 0x0000029bcd1477d0>
 
 > 
 > # log-transformation
@@ -3095,74 +3083,77 @@ detaching 'package:lme4', 'package:Matrix'
  [75] "ergm"                    "feglm"                  
  [77] "feis"                    "felm"                   
  [79] "fitdistr"                "fixest"                 
- [81] "flexsurvreg"             "gam"                    
- [83] "gamlss"                  "gamm"                   
- [85] "gamm4"                   "garch"                  
- [87] "gbm"                     "gee"                    
- [89] "geeglm"                  "glht"                   
- [91] "glimML"                  "glm"                    
- [93] "glmRob"                  "glmm"                   
- [95] "glmmPQL"                 "glmmTMB"                
- [97] "glmmadmb"                "glmrob"                 
- [99] "glmx"                    "gls"                    
-[101] "gmnl"                    "htest"                  
-[103] "hurdle"                  "ivFixed"                
-[105] "iv_robust"               "ivprobit"               
-[107] "ivreg"                   "lavaan"                 
-[109] "lm"                      "lmRob"                  
-[111] "lm_robust"               "lme"                    
-[113] "lmerMod"                 "lmerModLmerTest"        
-[115] "lmodel2"                 "lmrob"                  
-[117] "logistf"                 "logitmfx"               
-[119] "logitor"                 "logitr"                 
-[121] "lqm"                     "lqmm"                   
-[123] "lrm"                     "manova"                 
-[125] "marginaleffects"         "marginaleffects.summary"
-[127] "margins"                 "maxLik"                 
-[129] "mblogit"                 "mclogit"                
-[131] "mcmc"                    "mcmc.list"              
-[133] "mcp1"                    "mcp12"                  
-[135] "mcp2"                    "med1way"                
-[137] "mediate"                 "merMod"                 
-[139] "merModList"              "meta_bma"               
-[141] "meta_fixed"              "meta_random"            
-[143] "metaplus"                "mhurdle"                
-[145] "mipo"                    "mira"                   
-[147] "mixed"                   "mixor"                  
-[149] "mjoint"                  "mle"                    
-[151] "mle2"                    "mlm"                    
-[153] "mlogit"                  "mmclogit"               
-[155] "mmlogit"                 "model_fit"              
-[157] "multinom"                "mvord"                  
-[159] "negbinirr"               "negbinmfx"              
-[161] "ols"                     "onesampb"               
-[163] "orm"                     "pgmm"                   
-[165] "plm"                     "poissonirr"             
-[167] "poissonmfx"              "polr"                   
-[169] "probitmfx"               "psm"                    
-[171] "ridgelm"                 "riskRegression"         
-[173] "rjags"                   "rlm"                    
-[175] "rlmerMod"                "rma"                    
-[177] "rma.uni"                 "robmixglm"              
-[179] "robtab"                  "rq"                     
-[181] "rqs"                     "rqss"                   
-[183] "rvar"                    "scam"                   
-[185] "selection"               "sem"                    
-[187] "semLm"                   "semLme"                 
-[189] "slm"                     "speedglm"               
-[191] "speedlm"                 "stanfit"                
-[193] "stanmvreg"               "stanreg"                
-[195] "summary.lm"              "survfit"                
-[197] "survreg"                 "svy_vglm"               
-[199] "svychisq"                "svyglm"                 
-[201] "svyolr"                  "t1way"                  
-[203] "tobit"                   "trimcibt"               
-[205] "truncreg"                "vgam"                   
-[207] "vglm"                    "wbgee"                  
-[209] "wblm"                    "wbm"                    
-[211] "wmcpAKP"                 "yuen"                   
-[213] "yuend"                   "zcpglm"                 
-[215] "zeroinfl"                "zerotrunc"              
+ [81] "flac"                    "flexsurvreg"            
+ [83] "flic"                    "gam"                    
+ [85] "gamlss"                  "gamm"                   
+ [87] "gamm4"                   "garch"                  
+ [89] "gbm"                     "gee"                    
+ [91] "geeglm"                  "glht"                   
+ [93] "glimML"                  "glm"                    
+ [95] "glmRob"                  "glmm"                   
+ [97] "glmmPQL"                 "glmmTMB"                
+ [99] "glmmadmb"                "glmrob"                 
+[101] "glmx"                    "gls"                    
+[103] "gmnl"                    "htest"                  
+[105] "hurdle"                  "ivFixed"                
+[107] "iv_robust"               "ivprobit"               
+[109] "ivreg"                   "lavaan"                 
+[111] "lm"                      "lmRob"                  
+[113] "lm_robust"               "lme"                    
+[115] "lmerMod"                 "lmerModLmerTest"        
+[117] "lmodel2"                 "lmrob"                  
+[119] "logistf"                 "logitmfx"               
+[121] "logitor"                 "logitr"                 
+[123] "lqm"                     "lqmm"                   
+[125] "lrm"                     "manova"                 
+[127] "marginaleffects"         "marginaleffects.summary"
+[129] "margins"                 "maxLik"                 
+[131] "mblogit"                 "mclogit"                
+[133] "mcmc"                    "mcmc.list"              
+[135] "mcp1"                    "mcp12"                  
+[137] "mcp2"                    "med1way"                
+[139] "mediate"                 "merMod"                 
+[141] "merModList"              "meta_bma"               
+[143] "meta_fixed"              "meta_random"            
+[145] "metaplus"                "mhurdle"                
+[147] "mipo"                    "mira"                   
+[149] "mixed"                   "mixor"                  
+[151] "mjoint"                  "mle"                    
+[153] "mle2"                    "mlm"                    
+[155] "mlogit"                  "mmclogit"               
+[157] "mmlogit"                 "mmrm"                   
+[159] "mmrm_fit"                "mmrm_tmb"               
+[161] "model_fit"               "multinom"               
+[163] "mvord"                   "negbinirr"              
+[165] "negbinmfx"               "ols"                    
+[167] "onesampb"                "orm"                    
+[169] "pgmm"                    "plm"                    
+[171] "poissonirr"              "poissonmfx"             
+[173] "polr"                    "probitmfx"              
+[175] "psm"                     "ridgelm"                
+[177] "riskRegression"          "rjags"                  
+[179] "rlm"                     "rlmerMod"               
+[181] "rma"                     "rma.uni"                
+[183] "robmixglm"               "robtab"                 
+[185] "rq"                      "rqs"                    
+[187] "rqss"                    "rvar"                   
+[189] "scam"                    "selection"              
+[191] "sem"                     "semLm"                  
+[193] "semLme"                  "slm"                    
+[195] "speedglm"                "speedlm"                
+[197] "stanfit"                 "stanmvreg"              
+[199] "stanreg"                 "summary.lm"             
+[201] "survfit"                 "survreg"                
+[203] "svy_vglm"                "svychisq"               
+[205] "svyglm"                  "svyolr"                 
+[207] "t1way"                   "tobit"                  
+[209] "trimcibt"                "truncreg"               
+[211] "vgam"                    "vglm"                   
+[213] "wbgee"                   "wblm"                   
+[215] "wbm"                     "wmcpAKP"                
+[217] "yuen"                    "yuend"                  
+[219] "zcpglm"                  "zeroinfl"               
+[221] "zerotrunc"              
 > 
 > 
 > 
@@ -3481,6 +3472,9 @@ $family
 $n_obs
 [1] 12
 
+$n_grouplevels
+NULL
+
 > ## Not run: 
 > ##D library(glmmTMB)
 > ##D data("Salamanders")
@@ -3632,6 +3626,9 @@ $family
 $n_obs
 [1] 12
 
+$n_grouplevels
+NULL
+
 > 
 > 
 > 
@@ -3661,6 +3658,48 @@ $n_obs
 Loading required package: lme4
 Loading required package: Matrix
 [1] "lmerMod"
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:lme4', 'package:Matrix'
+
+> nameEx("n_grouplevels")
+> ### * n_grouplevels
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: n_grouplevels
+> ### Title: Count number of random effect levels in a mixed model
+> ### Aliases: n_grouplevels
+> 
+> ### ** Examples
+> 
+> if (require("lme4")) {
++   data(sleepstudy)
++   set.seed(12345)
++   sleepstudy$grp <- sample(1:5, size = 180, replace = TRUE)
++   sleepstudy$subgrp <- NA
++   for (i in 1:5) {
++     filter_group <- sleepstudy$grp == i
++     sleepstudy$subgrp[filter_group] <-
++       sample(1:30, size = sum(filter_group), replace = TRUE)
++   }
++   model <- lmer(
++     Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject),
++     data = sleepstudy
++   )
++   n_grouplevels(model)
++ }
+Loading required package: lme4
+Loading required package: Matrix
+Group      | N_levels
+---------------------
+subgrp     |       30
+grp        |        5
+Subject    |       18
+subgrp:grp |      108
 > 
 > 
 > 
@@ -4011,7 +4050,7 @@ detaching 'package:parameters'
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  13.21 1.45 15.76 NA NA 
+Time elapsed:  11.94 1.27 14.04 NA NA 
 > grDevices::dev.off()
 null device 
           1 

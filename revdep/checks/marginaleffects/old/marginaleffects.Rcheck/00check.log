@@ -45,7 +45,28 @@
 * checking for unstated dependencies in examples ... OK
 * checking installed files from 'inst/doc' ... OK
 * checking files in 'vignettes' ... OK
-* checking examples ... OK
+* checking examples ... ERROR
+Running examples in 'marginaleffects-Ex.R' failed
+The error most likely occurred in:
+
+> ### Name: plot_cco
+> ### Title: Plot Conditional Contrasts
+> ### Aliases: plot_cco
+> 
+> ### ** Examples
+> 
+> mod <- lm(mpg ~ hp * drat * factor(am), data = mtcars)
+> 
+> plot_cco(mod, effect = "hp", condition = "drat")
+> 
+> plot_cco(mod, effect = "hp", condition = c("drat", "am"))
+> 
+> plot_cco(mod, effect = "hp", condition = list("am", "drat" = 3:5))
+Error: Unable to compute predicted values with this model. You can try to
+  supply a different dataset to the `newdata` argument. If this does not
+  work, you can file a report on the Github Issue Tracker:
+  https://github.com/vincentarelbundock/marginaleffects/issues
+Execution halted
 * checking for unstated dependencies in 'tests' ... OK
 * checking tests ... OK
   Running 'spelling.R'
@@ -56,4 +77,4 @@
   'documentation.Rmd' using 'UTF-8'... OK
 * checking re-building of vignette outputs ... SKIPPED
 * DONE
-Status: OK
+Status: 1 ERROR

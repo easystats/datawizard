@@ -81,14 +81,14 @@ lavaan is FREE software! Please report any bugs.
 Loading required package: effectsize
 boundary (singular) fit: see help('isSingular')
 Loading required package: survival
-[ FAIL 0 | WARN 8 | SKIP 13 | PASS 86 ]
+[ FAIL 0 | WARN 11 | SKIP 13 | PASS 86 ]
 
 ══ Skipped tests ═══════════════════════════════════════════════════════════════
 • On CRAN (11)
 • getRversion() <= "4.2.1" is not TRUE (2)
 
-[ FAIL 0 | WARN 8 | SKIP 13 | PASS 86 ]
+[ FAIL 0 | WARN 11 | SKIP 13 | PASS 86 ]
 > 
 > proc.time()
    user  system elapsed 
-  31.00    3.09   36.35 
+  34.35    3.07   40.31 

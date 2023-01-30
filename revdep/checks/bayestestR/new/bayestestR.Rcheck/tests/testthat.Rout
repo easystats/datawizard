@@ -52,4 +52,4 @@ The following object is masked from 'package:brms':
 > 
 > proc.time()
    user  system elapsed 
-  71.56    3.21   83.28 
+  76.45    3.23   88.28 

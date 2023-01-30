@@ -124,6 +124,8 @@ link_function           Get link-function from model object
 link_inverse            Get link-inverse function from model object
 model_info              Access information from model objects
 model_name              Name the model
+n_grouplevels           Count number of random effect levels in a mixed
+                        model
 n_obs                   Get number of observations from a model
 n_parameters            Count number of parameters in a model
 null_model              Compute intercept-only model for regression
