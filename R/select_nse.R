@@ -7,6 +7,7 @@
 
   # avoid conflicts
   conflicting_packages <- .conflicting_packages("poorman")
+  on.exit(.attach_packages(conflicting_packages))
 
   expr_select <- substitute(select, env = parent.frame(1L))
   expr_exclude <- substitute(exclude, env = parent.frame(1L))
@@ -54,9 +55,6 @@
   } else {
     out <- setdiff(selected, excluded)
   }
-
-  # load again
-  .attach_packages(conflicting_packages)
 
   out
 }
@@ -112,12 +110,13 @@
 
 # 3 types of symbols:
 # - unquoted variables
-# - functions (without parenthesis)
 # - objects that need to be evaluated, e.g data_find(iris, i) where i is a
-#   function arg or is defined before
+#   function arg or is defined before. This can also be a vector of names or
+#   positions.
+# - functions (without parenthesis)
 
-# The first 2 cases are easy to deal with.
-# For the 3rd one, we try to get the value of the object at each environment
+# The first case is easy to deal with.
+# For the 2nd one, we try to get the value of the object at each environment
 # (starting from the lower one) until the global environment. If we get its
 # value but it errors because the function doesn't exist then it means that
 # it is a select helper that we grab from the error message.
@@ -404,6 +403,9 @@
   ifnotfound
 }
 
+# Similar to dynGet() but instead of getting an object from the environment,
+# we try to evaluate an expression. It stops as soon as the evaluation works.
+# Returns NULL if can never be evaluated.
 .dynEval <- function(x, ifnotfound = stop(gettextf("%s not found", sQuote(x)),
                        domain = NA
                      ), minframe = 1L, inherits = FALSE) {
