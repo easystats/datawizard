@@ -124,7 +124,7 @@
 
 .select_symbol <- function(data, x, ignore_case, regex, verbose) {
   try_eval <- try(eval(x), silent = TRUE)
-  x_dep <- deparse(x)
+  x_dep <- insight::safe_deparse(x)
   is_select_helper <- FALSE
   out <- NULL
 
@@ -326,7 +326,7 @@
 
 # For functions with parenthesis e.g is.numeric()
 .select_context <- function(expr, data, ignore_case, regex, verbose) {
-  x_dep <- deparse(expr)
+  x_dep <- insight::safe_deparse(expr)
   if (endsWith(x_dep, "()")) {
     new_expr <- gsub("\\(\\)$", "", x_dep)
     new_expr <- str2lang(new_expr)
@@ -387,7 +387,7 @@
                       domain = NA
                     ), minframe = 1L,
                     inherits = FALSE) {
-  x <- deparse(x)
+  x <- insight::safe_deparse(x)
   n <- sys.nframe()
   myObj <- structure(list(.b = as.raw(7)), foo = 47L)
   while (n > minframe) {
@@ -404,7 +404,7 @@
 .dynEval <- function(x, ifnotfound = stop(gettextf("%s not found", sQuote(x)),
                                          domain = NA), minframe = 1L, inherits = FALSE) {
   n <- sys.nframe()
-  x <- deparse(x)
+  x <- insight::safe_deparse(x)
   while (n > minframe) {
     n <- n - 1L
     env <- sys.frame(n)
