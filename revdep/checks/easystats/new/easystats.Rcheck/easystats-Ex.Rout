@@ -1,0 +1,168 @@
+
+R version 4.2.2 (2022-10-31 ucrt) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "easystats"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> library('easystats')
+[34m# Attaching packages: easystats 0.6.0[39m
+[32m✔ [39m[37mbayestestR [39m [32m0.13.0 [39m   [32m✔ [39m[37mcorrelation[39m [32m0.8.3  [39m
+[32m✔ [39m[37mdatawizard [39m [32m0.6.5.6[39m   [32m✔ [39m[37meffectsize [39m [32m0.8.3  [39m
+[32m✔ [39m[37minsight    [39m [32m0.18.8 [39m   [32m✔ [39m[37mmodelbased [39m [32m0.8.6  [39m
+[32m✔ [39m[37mperformance[39m [32m0.10.2 [39m   [32m✔ [39m[37mparameters [39m [32m0.20.2 [39m
+[32m✔ [39m[37mreport     [39m [32m0.5.5  [39m   [32m✔ [39m[37msee        [39m [32m0.7.4  [39m
+
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("easystats_update")
+> ### * easystats_update
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: easystats_update
+> ### Title: Update _easystats_-packages and its dependencies from CRAN, if
+> ###   necessary.
+> ### Aliases: easystats_update
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # check which local easystats-packages (and their dependencies)
+> ##D # are out of date and install updates from CRAN
+> ##D easystats_update()
+> ##D 
+> ##D # update only easystats core-packages
+> ##D easystats_update("core")
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("easystats_zen")
+> ### * easystats_zen
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: easystats_zen
+> ### Title: Welcome to the easyverse
+> ### Aliases: easystats_zen
+> 
+> ### ** Examples
+> 
+> easystats_zen()
+[1] "Patience you must have my young padawan."
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("install_latest")
+> ### * install_latest
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: install_latest
+> ### Title: Install the easystats suite from R-universe (GitHub) or CRAN
+> ### Aliases: install_latest
+> 
+> ### ** Examples
+> 
+> if (FALSE) {
++   # install latest development-version of easystats packages from
++   # the r-universe repository, but only those packages that have newer
++   # versions available
++   install_latest()
++ 
++   # install all latest development-version of easystats packages from
++   # the r-universe repository, no matter whether local installations
++   # are up to date or not.
++   install_latest(force = TRUE)
++ }
+> 
+> 
+> 
+> cleanEx()
+> nameEx("install_suggested")
+> ### * install_suggested
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: install_suggested
+> ### Title: Download all suggested packages
+> ### Aliases: install_suggested show_suggested show_reverse_dependencies
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D install_suggested("easystats")
+> ##D 
+> ##D # listing all reverse dependencies of easystats packages
+> ##D show_reverse_dependencies()
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("model_dashboard")
+> ### * model_dashboard
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_dashboard
+> ### Title: Generate a regression model summary from 'easystats'
+> ### Aliases: model_dashboard
+> 
+> ### ** Examples
+> 
+> if (interactive()) {
++   mod <- lm(wt ~ mpg, mtcars)
++ 
++   # with default options
++   model_dashboard(mod)
++ 
++   # customizing 'parameters' output: standardize coefficients
++   model_dashboard(mod, parameters_args = list(standardize = "refit"))
++ 
++   # customizing 'performance' output: only show selected performance metrics
++   model_dashboard(mod, performance_args = list(metrics = c("AIC", "RMSE")))
++ 
++   # customizing output of model assumptions plot: don't show dots (faster plot)
++   model_dashboard(mod, check_model_args = list(show_dots = FALSE))
++ }
+> 
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  2.69 0.28 3.31 NA NA 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

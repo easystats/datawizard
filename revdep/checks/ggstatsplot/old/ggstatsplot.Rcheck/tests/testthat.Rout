@@ -1,0 +1,40 @@
+
+R version 4.2.2 (2022-10-31 ucrt) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+> library(ggstatsplot)
+You can cite this package as:
+     Patil, I. (2021). Visualizations with statistical details: The 'ggstatsplot' approach.
+     Journal of Open Source Software, 6(61), 3167, doi:10.21105/joss.03167
+> 
+> library(statsExpressions)
+> library(vdiffr)
+> 
+> test_check("ggstatsplot")
+Starting 2 test processes
+[ FAIL 0 | WARN 1 | SKIP 52 | PASS 9 ]
+
+══ Skipped tests ═══════════════════════════════════════════════════════════════
+• .Platform$OS.type == "unix" is not TRUE (1)
+• On CRAN (49)
+• On Windows (2)
+
+[ FAIL 0 | WARN 1 | SKIP 52 | PASS 9 ]
+> 
+> proc.time()
+   user  system elapsed 
+   3.32    0.59  343.93 

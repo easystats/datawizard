@@ -1,0 +1,2493 @@
+
+R version 4.2.2 (2022-10-31 ucrt) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "bayestestR"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> library('bayestestR')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("area_under_curve")
+> ### * area_under_curve
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: area_under_curve
+> ### Title: Area under the Curve (AUC)
+> ### Aliases: area_under_curve auc
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> posterior <- distribution_normal(1000)
+> 
+> dens <- estimate_density(posterior)
+> dens <- dens[dens$x > 0, ]
+> x <- dens$x
+> y <- dens$y
+> 
+> area_under_curve(x, y, method = "trapezoid")
+[1] 0.498307
+> area_under_curve(x, y, method = "step")
+[1] 0.499534
+> area_under_curve(x, y, method = "spline")
+[1] 0.498307
+> 
+> 
+> 
+> cleanEx()
+> nameEx("bayesfactor")
+> ### * bayesfactor
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: bayesfactor
+> ### Title: Bayes Factors (BF)
+> ### Aliases: bayesfactor
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> if (require("logspline")) {
++   prior <- distribution_normal(1000, mean = 0, sd = 1)
++   posterior <- distribution_normal(1000, mean = .5, sd = .3)
++ 
++   bayesfactor(posterior, prior = prior)
++ }
+Loading required package: logspline
+Warning: Bayes factors might not be precise.
+For precise Bayes factors, sampling at least 40,000 posterior samples is recommended.
+[34mBayes Factor (Savage-Dickey density ratio)[39m
+
+BF  
+----
+1.21
+
+* Evidence Against The Null: [36m0[39m> ## Not run: 
+> ##D # rstanarm models
+> ##D # ---------------
+> ##D if (require("rstanarm")) {
+> ##D   model <- stan_lmer(extra ~ group + (1 | ID), data = sleep)
+> ##D   bayesfactor(model)
+> ##D }
+> ## End(Not run)
+> 
+> if (require("logspline")) {
++   # Frequentist models
++   # ---------------
++   m0 <- lm(extra ~ 1, data = sleep)
++   m1 <- lm(extra ~ group, data = sleep)
++   m2 <- lm(extra ~ group + ID, data = sleep)
++ 
++   comparison <- bayesfactor(m0, m1, m2)
++   comparison
++ 
++   bayesfactor(comparison)
++ }
+[34mInclusion Bayes Factors (Model Averaged)[39m
+
+      P(prior) P(posterior) Inclusion BF
+group     0.67         1.00     5.61e+03
+ID        0.33         1.00     9.77e+03
+
+* Compared among: [36mall models[39m
+*    Priors odds: [36muniform-equal[39m> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:logspline'
+
+> nameEx("bayesfactor_inclusion")
+> ### * bayesfactor_inclusion
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: bayesfactor_inclusion
+> ### Title: Inclusion Bayes Factors for testing predictors across Bayesian
+> ###   models
+> ### Aliases: bayesfactor_inclusion bf_inclusion
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> # Using bayesfactor_models:
+> # ------------------------------
+> mo0 <- lm(Sepal.Length ~ 1, data = iris)
+> mo1 <- lm(Sepal.Length ~ Species, data = iris)
+> mo2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
+> mo3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
+> 
+> BFmodels <- bayesfactor_models(mo1, mo2, mo3, denominator = mo0)
+> (bf_inc <- bayesfactor_inclusion(BFmodels))
+[34mInclusion Bayes Factors (Model Averaged)[39m
+
+                     P(prior) P(posterior) Inclusion BF
+Species                  0.75         1.00     2.02e+55
+Petal.Length             0.50         1.00     3.58e+26
+Petal.Length:Species     0.25         0.04        0.113
+
+* Compared among: [36mall models[39m
+*    Priors odds: [36muniform-equal[39m> 
+> as.numeric(bf_inc)
+[1] 2.021143e+55 3.575448e+26 1.131202e-01
+> 
+> ## Not run: 
+> ##D # BayesFactor
+> ##D # -------------------------------
+> ##D library(BayesFactor)
+> ##D 
+> ##D BF <- generalTestBF(len ~ supp * dose, ToothGrowth, progress = FALSE)
+> ##D 
+> ##D bayesfactor_inclusion(BF)
+> ##D 
+> ##D # compare only matched models:
+> ##D bayesfactor_inclusion(BF, match_models = TRUE)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("bayesfactor_models")
+> ### * bayesfactor_models
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: bayesfactor_models
+> ### Title: Bayes Factors (BF) for model comparison
+> ### Aliases: bayesfactor_models bf_models bayesfactor_models.default
+> ###   update.bayesfactor_models as.matrix.bayesfactor_models
+> 
+> ### ** Examples
+> 
+> # With lm objects:
+> # ----------------
+> lm1 <- lm(mpg ~ 1, data = mtcars)
+> lm2 <- lm(mpg ~ hp, data = mtcars)
+> lm3 <- lm(mpg ~ hp + drat, data = mtcars)
+> lm4 <- lm(mpg ~ hp * drat, data = mtcars)
+> (BFM <- bayesfactor_models(lm1, lm2, lm3, lm4, denominator = 1))
+[34mBayes Factors for Model Comparison[39m
+
+      Model           BF
+[lm2] hp        4.54e+05
+[lm3] hp + drat 7.70e+07
+[lm4] hp * drat 1.59e+07
+
+* Against Denominator: [36m[lm1] (Intercept only)[39m
+*   Bayes Factor Type: [36mBIC approximation[39m> # bayesfactor_models(lm2, lm3, lm4, denominator = lm1) # same result
+> # bayesfactor_models(lm1, lm2, lm3, lm4, denominator = lm1) # same result
+> 
+> 
+> update(BFM, reference = "bottom")
+[34mBayes Factors for Model Comparison[39m
+
+      Model           BF
+[lm2] hp        4.54e+05
+[lm3] hp + drat 7.70e+07
+[lm4] hp * drat 1.59e+07
+
+* Against Denominator: [36m[lm1] (Intercept only)[39m
+*   Bayes Factor Type: [36mBIC approximation[39m> as.matrix(BFM)
+[34m# Bayes Factors for Model Comparison[39m [36m
+
+           Numerator
+Denominator[39m
+
+          |      [1] |      [2] |      [3] |      [4]
+----------------------------------------------------------------
+[1] (Intercept only) |        1 | 4.54e+05 | 7.70e+07 | 1.59e+07
+[2] hp               | 2.20e-06 |        1 |   169.72 |    35.09
+[3] hp + drat        | 1.30e-08 |    0.006 |        1 |    0.207
+[4] hp * drat        | 6.28e-08 |    0.028 |     4.84 |        1
+> as.numeric(BFM)
+[1]        1.0   453874.3 77029881.3 15925712.4
+> 
+> 
+> lm2b <- lm(sqrt(mpg) ~ hp, data = mtcars)
+> # Set check_response = TRUE for transformed responses
+> bayesfactor_models(lm2b, denominator = lm2, check_response = TRUE)
+[34mBayes Factors for Model Comparison[39m
+
+       Model   BF
+[lm2b] hp    6.94
+
+* Against Denominator: [36m[lm2] hp[39m
+*   Bayes Factor Type: [36mBIC approximation[39m> 
+> ## Not run: 
+> ##D # With lmerMod objects:
+> ##D # ---------------------
+> ##D if (require("lme4")) {
+> ##D   lmer1 <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+> ##D   lmer2 <- lmer(Sepal.Length ~ Petal.Length + (Petal.Length | Species), data = iris)
+> ##D   lmer3 <- lmer(Sepal.Length ~ Petal.Length + (Petal.Length | Species) + (1 | Petal.Width),
+> ##D     data = iris
+> ##D   )
+> ##D   bayesfactor_models(lmer1, lmer2, lmer3,
+> ##D     denominator = 1,
+> ##D     estimator = "REML"
+> ##D   )
+> ##D }
+> ##D 
+> ##D # rstanarm models
+> ##D # ---------------------
+> ##D # (note that a unique diagnostic_file MUST be specified in order to work)
+> ##D if (require("rstanarm")) {
+> ##D   stan_m0 <- stan_glm(Sepal.Length ~ 1,
+> ##D     data = iris,
+> ##D     family = gaussian(),
+> ##D     diagnostic_file = file.path(tempdir(), "df0.csv")
+> ##D   )
+> ##D   stan_m1 <- stan_glm(Sepal.Length ~ Species,
+> ##D     data = iris,
+> ##D     family = gaussian(),
+> ##D     diagnostic_file = file.path(tempdir(), "df1.csv")
+> ##D   )
+> ##D   stan_m2 <- stan_glm(Sepal.Length ~ Species + Petal.Length,
+> ##D     data = iris,
+> ##D     family = gaussian(),
+> ##D     diagnostic_file = file.path(tempdir(), "df2.csv")
+> ##D   )
+> ##D   bayesfactor_models(stan_m1, stan_m2, denominator = stan_m0)
+> ##D }
+> ##D 
+> ##D 
+> ##D # brms models
+> ##D # --------------------
+> ##D # (note the save_pars MUST be set to save_pars(all = TRUE) in order to work)
+> ##D if (require("brms")) {
+> ##D   brm1 <- brm(Sepal.Length ~ 1, data = iris, save_all_pars = TRUE)
+> ##D   brm2 <- brm(Sepal.Length ~ Species, data = iris, save_all_pars = TRUE)
+> ##D   brm3 <- brm(
+> ##D     Sepal.Length ~ Species + Petal.Length,
+> ##D     data = iris,
+> ##D     save_pars = save_pars(all = TRUE)
+> ##D   )
+> ##D 
+> ##D   bayesfactor_models(brm1, brm2, brm3, denominator = 1)
+> ##D }
+> ##D 
+> ##D 
+> ##D # BayesFactor
+> ##D # ---------------------------
+> ##D if (require("BayesFactor")) {
+> ##D   data(puzzles)
+> ##D   BF <- anovaBF(RT ~ shape * color + ID,
+> ##D     data = puzzles,
+> ##D     whichRandom = "ID", progress = FALSE
+> ##D   )
+> ##D   BF
+> ##D   bayesfactor_models(BF) # basically the same
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("bayesfactor_parameters")
+> ### * bayesfactor_parameters
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: bayesfactor_parameters
+> ### Title: Bayes Factors (BF) for a Single Parameter
+> ### Aliases: bayesfactor_parameters bayesfactor_pointnull bayesfactor_rope
+> ###   bf_parameters bf_pointnull bf_rope bayesfactor_parameters.numeric
+> ###   bayesfactor_parameters.stanreg bayesfactor_parameters.brmsfit
+> ###   bayesfactor_parameters.blavaan bayesfactor_parameters.data.frame
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> if (require("logspline")) {
++   prior <- distribution_normal(1000, mean = 0, sd = 1)
++   posterior <- distribution_normal(1000, mean = .5, sd = .3)
++   (BF_pars <- bayesfactor_parameters(posterior, prior))
++ 
++   as.numeric(BF_pars)
++ }
+Loading required package: logspline
+Warning: Bayes factors might not be precise.
+For precise Bayes factors, sampling at least 40,000 posterior samples is recommended.
+[1] 1.212843
+> ## Not run: 
+> ##D # rstanarm models
+> ##D # ---------------
+> ##D if (require("rstanarm") && require("emmeans") && require("logspline")) {
+> ##D   contrasts(sleep$group) <- contr.equalprior_pairs # see vingette
+> ##D   stan_model <- stan_lmer(extra ~ group + (1 | ID), data = sleep)
+> ##D   bayesfactor_parameters(stan_model)
+> ##D   bayesfactor_parameters(stan_model, null = rope_range(stan_model))
+> ##D 
+> ##D   # emmGrid objects
+> ##D   # ---------------
+> ##D   group_diff <- pairs(emmeans(stan_model, ~group))
+> ##D   bayesfactor_parameters(group_diff, prior = stan_model)
+> ##D 
+> ##D   # Or
+> ##D   group_diff_prior <- pairs(emmeans(unupdate(stan_model), ~group))
+> ##D   bayesfactor_parameters(group_diff, prior = group_diff_prior)
+> ##D }
+> ##D 
+> ##D # brms models
+> ##D # -----------
+> ##D if (require("brms")) {
+> ##D   contrasts(sleep$group) <- contr.equalprior_pairs # see vingette
+> ##D   my_custom_priors <-
+> ##D     set_prior("student_t(3, 0, 1)", class = "b") +
+> ##D     set_prior("student_t(3, 0, 1)", class = "sd", group = "ID")
+> ##D 
+> ##D   brms_model <- brm(extra ~ group + (1 | ID),
+> ##D     data = sleep,
+> ##D     prior = my_custom_priors
+> ##D   )
+> ##D   bayesfactor_parameters(brms_model)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:logspline'
+
+> nameEx("bayesfactor_restricted")
+> ### * bayesfactor_restricted
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: bayesfactor_restricted
+> ### Title: Bayes Factors (BF) for Order Restricted Models
+> ### Aliases: bayesfactor_restricted bf_restricted
+> ###   bayesfactor_restricted.stanreg bayesfactor_restricted.brmsfit
+> ###   bayesfactor_restricted.blavaan bayesfactor_restricted.emmGrid
+> 
+> ### ** Examples
+> 
+> set.seed(444)
+> library(bayestestR)
+> prior <- data.frame(
++   A = rnorm(1000),
++   B = rnorm(1000),
++   C = rnorm(1000)
++ )
+> 
+> posterior <- data.frame(
++   A = rnorm(1000, .4, 0.7),
++   B = rnorm(1000, -.2, 0.4),
++   C = rnorm(1000, 0, 0.5)
++ )
+> 
+> hyps <- c(
++   "A > B & B > C",
++   "A > B & A > C",
++   "C > A"
++ )
+> 
+> if (getRversion() > "3.5.0") {
++   (b <- bayesfactor_restricted(posterior, hypothesis = hyps, prior = prior))
++ 
++   as.numeric(b)
++ 
++   if (require("see") && require("patchwork")) {
++     i <- attr(b, "bool_results")[["posterior"]]
++ 
++     see::plots(
++       plot(estimate_density(posterior)),
++       # distribution **conditional** on the restrictions
++       plot(estimate_density(posterior[i[[hyps[1]]], ])) + ggplot2::ggtitle(hyps[1]),
++       plot(estimate_density(posterior[i[[hyps[2]]], ])) + ggplot2::ggtitle(hyps[2]),
++       plot(estimate_density(posterior[i[[hyps[3]]], ])) + ggplot2::ggtitle(hyps[3]),
++       guides = "collect"
++     )
++   }
++ }
+Loading required package: see
+Loading required package: patchwork
+> 
+> ## Not run: 
+> ##D # rstanarm models
+> ##D # ---------------
+> ##D if (require("rstanarm") && require("emmeans")) {
+> ##D   fit_stan <- stan_glm(mpg ~ wt + cyl + am,
+> ##D     data = mtcars, refresh = 0
+> ##D   )
+> ##D   hyps <- c(
+> ##D     "am > 0 & cyl < 0",
+> ##D     "cyl < 0",
+> ##D     "wt - cyl > 0"
+> ##D   )
+> ##D   bayesfactor_restricted(fit_stan, hypothesis = hyps)
+> ##D 
+> ##D   # emmGrid objects
+> ##D   # ---------------
+> ##D   # replicating http://bayesfactor.blogspot.com/2015/01/multiple-comparisons-with-bayesfactor-2.html
+> ##D   disgust_data <- read.table(url("http://www.learnbayes.org/disgust_example.txt"), header = TRUE)
+> ##D 
+> ##D   contrasts(disgust_data$condition) <- contr.equalprior_pairs # see vignette
+> ##D   fit_model <- stan_glm(score ~ condition, data = disgust_data, family = gaussian())
+> ##D 
+> ##D   em_condition <- emmeans(fit_model, ~condition)
+> ##D   hyps <- c("lemon < control & control < sulfur")
+> ##D 
+> ##D   bayesfactor_restricted(em_condition, prior = fit_model, hypothesis = hyps)
+> ##D   # > # Bayes Factor (Order-Restriction)
+> ##D   # >
+> ##D   # >                          Hypothesis P(Prior) P(Posterior)   BF
+> ##D   # >  lemon < control & control < sulfur     0.17         0.75 4.49
+> ##D   # > ---
+> ##D   # > Bayes factors for the restricted model vs. the un-restricted model.
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:patchwork', 'package:see'
+
+> nameEx("bci")
+> ### * bci
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: bci
+> ### Title: Bias Corrected and Accelerated Interval (BCa)
+> ### Aliases: bci bcai bci.numeric bci.data.frame bci.MCMCglmm
+> ###   bci.sim.merMod bci.sim bci.emmGrid bci.stanreg bci.brmsfit
+> ###   bci.BFBayesFactor
+> 
+> ### ** Examples
+> 
+> posterior <- rnorm(1000)
+> bci(posterior)
+95% ETI: [-2.06, 2.07]> bci(posterior, ci = c(.80, .89, .95))
+Equal-Tailed Interval
+
+80% ETI       |       89% ETI |       95% ETI
+---------------------------------------------
+[-1.25, 1.40] | [-1.57, 1.76] | [-2.06, 2.07]
+> 
+> 
+> 
+> cleanEx()
+> nameEx("bic_to_bf")
+> ### * bic_to_bf
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: bic_to_bf
+> ### Title: Convert BIC indices to Bayes Factors via the BIC-approximation
+> ###   method.
+> ### Aliases: bic_to_bf
+> 
+> ### ** Examples
+> 
+> bic1 <- BIC(lm(Sepal.Length ~ 1, data = iris))
+> bic2 <- BIC(lm(Sepal.Length ~ Species, data = iris))
+> bic3 <- BIC(lm(Sepal.Length ~ Species + Petal.Length, data = iris))
+> bic4 <- BIC(lm(Sepal.Length ~ Species * Petal.Length, data = iris))
+> 
+> bic_to_bf(c(bic1, bic2, bic3, bic4), denominator = bic1)
+[1] 1.000000e+00 1.695852e+29 5.843105e+55 2.203243e+54
+> 
+> 
+> 
+> cleanEx()
+> nameEx("check_prior")
+> ### * check_prior
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_prior
+> ### Title: Check if Prior is Informative
+> ### Aliases: check_prior
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D library(bayestestR)
+> ##D if (require("rstanarm")) {
+> ##D   model <- stan_glm(mpg ~ wt + am, data = mtcars, chains = 1, refresh = 0)
+> ##D   check_prior(model, method = "gelman")
+> ##D   check_prior(model, method = "lakeland")
+> ##D 
+> ##D   # An extreme example where both methods diverge:
+> ##D   model <- stan_glm(mpg ~ wt,
+> ##D     data = mtcars[1:3, ],
+> ##D     prior = normal(-3.3, 1, FALSE),
+> ##D     prior_intercept = normal(0, 1000, FALSE),
+> ##D     refresh = 0
+> ##D   )
+> ##D   check_prior(model, method = "gelman")
+> ##D   check_prior(model, method = "lakeland")
+> ##D   plot(si(model)) # can provide visual confirmation to the Lakeland method
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("ci")
+> ### * ci
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ci
+> ### Title: Confidence/Credible/Compatibility Interval (CI)
+> ### Aliases: ci ci.numeric ci.data.frame ci.sim.merMod ci.sim ci.stanreg
+> ###   ci.brmsfit ci.BFBayesFactor ci.MCMCglmm
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> posterior <- rnorm(1000)
+> ci(posterior, method = "ETI")
+95% ETI: [-2.13, 2.01]> ci(posterior, method = "HDI")
+95% HDI: [-2.10, 2.03]> 
+> df <- data.frame(replicate(4, rnorm(100)))
+> ci(df, method = "ETI", ci = c(.80, .89, .95))
+Equal-Tailed Interval
+
+Parameter |       80% ETI |       89% ETI |       95% ETI
+---------------------------------------------------------
+X1        | [-1.41, 1.22] | [-1.76, 1.71] | [-1.88, 1.85]
+X2        | [-1.26, 1.22] | [-1.53, 1.43] | [-1.84, 1.82]
+X3        | [-1.10, 1.62] | [-1.51, 2.07] | [-1.62, 2.33]
+X4        | [-1.21, 1.09] | [-1.34, 1.28] | [-1.52, 1.45]
+> ci(df, method = "HDI", ci = c(.80, .89, .95))
+Highest Density Interval
+
+Parameter |       80% HDI |       89% HDI |       95% HDI
+---------------------------------------------------------
+X1        | [-1.45, 1.21] | [-1.91, 1.36] | [-1.91, 1.92]
+X2        | [-1.40, 0.99] | [-1.40, 1.52] | [-1.65, 2.19]
+X3        | [-1.34, 1.40] | [-1.65, 1.76] | [-1.65, 2.39]
+X4        | [-1.35, 0.85] | [-1.43, 1.16] | [-1.43, 1.57]
+> ## Not run: 
+> ##D if (require("rstanarm")) {
+> ##D   model <- stan_glm(mpg ~ wt, data = mtcars, chains = 2, iter = 200, refresh = 0)
+> ##D   ci(model, method = "ETI", ci = c(.80, .89))
+> ##D   ci(model, method = "HDI", ci = c(.80, .89))
+> ##D   ci(model, method = "SI")
+> ##D }
+> ##D 
+> ##D if (require("brms")) {
+> ##D   model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+> ##D   ci(model, method = "ETI")
+> ##D   ci(model, method = "HDI")
+> ##D   ci(model, method = "SI")
+> ##D }
+> ##D 
+> ##D if (require("BayesFactor")) {
+> ##D   bf <- ttestBF(x = rnorm(100, 1, 1))
+> ##D   ci(bf, method = "ETI")
+> ##D   ci(bf, method = "HDI")
+> ##D }
+> ##D 
+> ##D if (require("emmeans")) {
+> ##D   model <- emtrends(model, ~1, "wt")
+> ##D   ci(model, method = "ETI")
+> ##D   ci(model, method = "HDI")
+> ##D   ci(model, method = "SI")
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("contr.equalprior")
+> ### * contr.equalprior
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: contr.equalprior
+> ### Title: Contrast Matrices for Equal Marginal Priors in Bayesian
+> ###   Estimation
+> ### Aliases: contr.equalprior contr.bayes contr.orthonorm
+> ###   contr.equalprior_pairs contr.equalprior_deviations
+> 
+> ### ** Examples
+> 
+> contr.equalprior(2) # Q_2 in Rouder et al. (2012, p. 363)
+           [,1]
+[1,] -0.7071068
+[2,]  0.7071068
+> 
+> contr.equalprior(5) # equivalent to Q_5 in Rouder et al. (2012, p. 363)
+           [,1]       [,2]       [,3]       [,4]
+[1,]  0.0000000  0.8944272  0.0000000  0.0000000
+[2,]  0.0000000 -0.2236068 -0.5000000  0.7071068
+[3,]  0.7071068 -0.2236068 -0.1666667 -0.4714045
+[4,] -0.7071068 -0.2236068 -0.1666667 -0.4714045
+[5,]  0.0000000 -0.2236068  0.8333333  0.2357023
+> 
+> ## check decomposition
+> Q3 <- contr.equalprior(3)
+> Q3 %*% t(Q3) ## 2/3 on diagonal and -1/3 on off-diagonal elements
+           [,1]       [,2]       [,3]
+[1,]  0.6666667 -0.3333333 -0.3333333
+[2,] -0.3333333  0.6666667 -0.3333333
+[3,] -0.3333333 -0.3333333  0.6666667
+> 
+> 
+> 
+> cleanEx()
+> nameEx("convert_bayesian_as_frequentist")
+> ### * convert_bayesian_as_frequentist
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: convert_bayesian_as_frequentist
+> ### Title: Convert (refit) a Bayesian model to frequentist
+> ### Aliases: convert_bayesian_as_frequentist bayesian_as_frequentist
+> 
+> ### ** Examples
+> 
+> 
+> ## Not run: 
+> ##D if (require("rstanarm")) {
+> ##D   model <- stan_glm(vs ~ mpg,
+> ##D     family = "binomial",
+> ##D     data = mtcars, chains = 2, refresh = 0
+> ##D   )
+> ##D   bayesian_as_frequentist(model)
+> ##D 
+> ##D   # Mixed models
+> ##D   model <- stan_glmer(Sepal.Length ~ Petal.Length + (1 | Species),
+> ##D     data = iris, chains = 2, refresh = 0
+> ##D   )
+> ##D   bayesian_as_frequentist(model)
+> ##D 
+> ##D   model <- stan_glmer(vs ~ mpg + (1 | cyl),
+> ##D     family = "binomial",
+> ##D     data = mtcars, chains = 2, refresh = 0
+> ##D   )
+> ##D   bayesian_as_frequentist(model)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("cwi")
+> ### * cwi
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cwi
+> ### Title: Curvewise Intervals (CWI)
+> ### Aliases: cwi cwi.data.frame
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("density_at")
+> ### * density_at
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: density_at
+> ### Title: Density Probability at a Given Value
+> ### Aliases: density_at
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> posterior <- distribution_normal(n = 10)
+> density_at(posterior, 0)
+[1] 0.3207106
+> density_at(posterior, c(0, 1))
+[1] 0.3207106 0.2375008
+> 
+> 
+> 
+> cleanEx()
+> nameEx("describe_posterior")
+> ### * describe_posterior
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: describe_posterior
+> ### Title: Describe Posterior Distributions
+> ### Aliases: describe_posterior describe_posterior.numeric
+> ###   describe_posterior.stanreg describe_posterior.brmsfit
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> if (require("logspline")) {
++   x <- rnorm(1000)
++   describe_posterior(x)
++   describe_posterior(x, centrality = "all", dispersion = TRUE, test = "all")
++   describe_posterior(x, ci = c(0.80, 0.90))
++ 
++   df <- data.frame(replicate(4, rnorm(100)))
++   describe_posterior(df)
++   describe_posterior(df, centrality = "all", dispersion = TRUE, test = "all")
++   describe_posterior(df, ci = c(0.80, 0.90))
++ 
++   df <- data.frame(replicate(4, rnorm(20)))
++   head(reshape_iterations(describe_posterior(df, keep_iterations = TRUE)))
++ }
+Loading required package: logspline
+Warning in bayesfactor_parameters.numeric(x, prior = bf_prior, ...) :
+  Prior not specified! Please specify a prior (in the form 'prior = distribution_normal(1000, 0, 1)') to get meaningful results.
+Warning: Bayes factors might not be precise.
+For precise Bayes factors, sampling at least 40,000 posterior samples is recommended.
+Warning in bayesfactor_parameters.data.frame(x, prior = bf_prior, ...) :
+  Prior not specified! Please specify priors (with column order matching 'posterior') to get meaningful results.
+Warning: Bayes factors might not be precise.
+For precise Bayes factors, sampling at least 40,000 posterior samples is recommended.
+  Parameter      Median   CI     CI_low  CI_high   pd ROPE_CI ROPE_low
+1        X1 -0.02099673 0.95 -1.6134651 1.426083 0.50    0.95     -0.1
+2        X2  0.83153918 0.95 -0.8097621 2.185360 0.75    0.95     -0.1
+3        X3  0.09369067 0.95 -3.0360222 1.445113 0.60    0.95     -0.1
+4        X4 -0.43278249 0.95 -1.7525166 1.806863 0.70    0.95     -0.1
+5        X1 -0.02099673 0.95 -1.6134651 1.426083 0.50    0.95     -0.1
+6        X2  0.83153918 0.95 -0.8097621 2.185360 0.75    0.95     -0.1
+  ROPE_high ROPE_Percentage iter_index iter_group iter_value
+1       0.1      0.05555556          1          1  1.5468813
+2       0.1      0.11111111          2          1  0.9790561
+3       0.1      0.11111111          3          1  0.1603770
+4       0.1      0.00000000          4          1 -0.2748804
+5       0.1      0.05555556          1          2  0.1789210
+6       0.1      0.11111111          2          2  0.3294698
+> ## Not run: 
+> ##D # rstanarm models
+> ##D # -----------------------------------------------
+> ##D if (require("rstanarm") && require("emmeans")) {
+> ##D   model <- stan_glm(mpg ~ wt + gear, data = mtcars, chains = 2, iter = 200, refresh = 0)
+> ##D   describe_posterior(model)
+> ##D   describe_posterior(model, centrality = "all", dispersion = TRUE, test = "all")
+> ##D   describe_posterior(model, ci = c(0.80, 0.90))
+> ##D 
+> ##D   # emmeans estimates
+> ##D   # -----------------------------------------------
+> ##D   describe_posterior(emtrends(model, ~1, "wt"))
+> ##D }
+> ##D 
+> ##D # brms models
+> ##D # -----------------------------------------------
+> ##D if (require("brms")) {
+> ##D   model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+> ##D   describe_posterior(model)
+> ##D   describe_posterior(model, centrality = "all", dispersion = TRUE, test = "all")
+> ##D   describe_posterior(model, ci = c(0.80, 0.90))
+> ##D }
+> ##D 
+> ##D # BayesFactor objects
+> ##D # -----------------------------------------------
+> ##D if (require("BayesFactor")) {
+> ##D   bf <- ttestBF(x = rnorm(100, 1, 1))
+> ##D   describe_posterior(bf)
+> ##D   describe_posterior(bf, centrality = "all", dispersion = TRUE, test = "all")
+> ##D   describe_posterior(bf, ci = c(0.80, 0.90))
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:logspline'
+
+> nameEx("describe_prior")
+> ### * describe_prior
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: describe_prior
+> ### Title: Describe Priors
+> ### Aliases: describe_prior describe_prior.brmsfit
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D library(bayestestR)
+> ##D 
+> ##D # rstanarm models
+> ##D # -----------------------------------------------
+> ##D if (require("rstanarm")) {
+> ##D   model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
+> ##D   describe_prior(model)
+> ##D }
+> ##D 
+> ##D # brms models
+> ##D # -----------------------------------------------
+> ##D if (require("brms")) {
+> ##D   model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+> ##D   describe_prior(model)
+> ##D }
+> ##D 
+> ##D # BayesFactor objects
+> ##D # -----------------------------------------------
+> ##D if (require("BayesFactor")) {
+> ##D   bf <- ttestBF(x = rnorm(100, 1, 1))
+> ##D   describe_prior(bf)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("diagnostic_draws")
+> ### * diagnostic_draws
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: diagnostic_draws
+> ### Title: Diagnostic values for each iteration
+> ### Aliases: diagnostic_draws
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D set.seed(333)
+> ##D 
+> ##D if (require("brms", quietly = TRUE)) {
+> ##D   model <- brm(mpg ~ wt * cyl * vs,
+> ##D     data = mtcars,
+> ##D     iter = 100, control = list(adapt_delta = 0.80),
+> ##D     refresh = 0
+> ##D   )
+> ##D   diagnostic_draws(model)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("diagnostic_posterior")
+> ### * diagnostic_posterior
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: diagnostic_posterior
+> ### Title: Posteriors Sampling Diagnostic
+> ### Aliases: diagnostic_posterior diagnostic_posterior.stanreg
+> ###   diagnostic_posterior.brmsfit
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # rstanarm models
+> ##D # -----------------------------------------------
+> ##D if (require("rstanarm", quietly = TRUE)) {
+> ##D   model <- stan_glm(mpg ~ wt + gear, data = mtcars, chains = 2, iter = 200, refresh = 0)
+> ##D   diagnostic_posterior(model)
+> ##D }
+> ##D 
+> ##D # brms models
+> ##D # -----------------------------------------------
+> ##D if (require("brms", quietly = TRUE)) {
+> ##D   model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+> ##D   diagnostic_posterior(model)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("distribution")
+> ### * distribution
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: distribution
+> ### Title: Empirical Distributions
+> ### Aliases: distribution distribution_custom distribution_beta
+> ###   distribution_binomial distribution_binom distribution_cauchy
+> ###   distribution_chisquared distribution_chisq distribution_gamma
+> ###   distribution_mixture_normal distribution_normal distribution_gaussian
+> ###   distribution_nbinom distribution_poisson distribution_student
+> ###   distribution_t distribution_student_t distribution_tweedie
+> ###   distribution_uniform rnorm_perfect
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> x <- distribution(n = 10)
+> plot(density(x))
+> 
+> x <- distribution(type = "gamma", n = 100, shape = 2)
+> plot(density(x))
+> 
+> 
+> 
+> cleanEx()
+> nameEx("effective_sample")
+> ### * effective_sample
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: effective_sample
+> ### Title: Effective Sample Size (ESS)
+> ### Aliases: effective_sample effective_sample.brmsfit
+> ###   effective_sample.stanreg
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D library(rstanarm)
+> ##D model <- stan_glm(mpg ~ wt + gear, data = mtcars, chains = 2, iter = 200, refresh = 0)
+> ##D effective_sample(model)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("equivalence_test")
+> ### * equivalence_test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: equivalence_test
+> ### Title: Test for Practical Equivalence
+> ### Aliases: equivalence_test equivalence_test.default
+> ###   equivalence_test.data.frame equivalence_test.stanreg
+> ###   equivalence_test.brmsfit
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> equivalence_test(x = rnorm(1000, 0, 0.01), range = c(-0.1, 0.1))
+[34m# Test for Practical Equivalence
+
+[39m  ROPE: [-0.10 0.10]
+
+H0       | inside ROPE |      95% HDI
+-------------------------------------
+Accepted |    100.00 % | [-0.02 0.02]
+
+
+> equivalence_test(x = rnorm(1000, 0, 1), range = c(-0.1, 0.1))
+[34m# Test for Practical Equivalence
+
+[39m  ROPE: [-0.10 0.10]
+
+H0        | inside ROPE |      95% HDI
+--------------------------------------
+Undecided |      8.32 % | [-2.00 2.04]
+
+
+> equivalence_test(x = rnorm(1000, 1, 0.01), range = c(-0.1, 0.1))
+[34m# Test for Practical Equivalence
+
+[39m  ROPE: [-0.10 0.10]
+
+H0       | inside ROPE |     95% HDI
+------------------------------------
+Rejected |      0.00 % | [0.98 1.02]
+
+
+> equivalence_test(x = rnorm(1000, 1, 1), ci = c(.50, .99))
+[34m# Test for Practical Equivalence
+
+[39m  ROPE: [-0.10 0.10]
+
+H0       | inside ROPE |      50% HDI
+-------------------------------------
+Rejected |      0.00 % | [ 0.32 1.72]
+
+
+H0        | inside ROPE |      99% HDI
+--------------------------------------
+Undecided |      4.95 % | [-1.89 3.55]
+
+
+> 
+> # print more digits
+> test <- equivalence_test(x = rnorm(1000, 1, 1), ci = c(.50, .99))
+> print(test, digits = 4)
+[34m# Test for Practical Equivalence
+
+[39m  ROPE: [-0.1000 0.1000]
+
+H0       | inside ROPE |          50% HDI
+-----------------------------------------
+Rejected |    0.0000 % | [ 0.3257 1.6225]
+
+
+H0        | inside ROPE |          99% HDI
+------------------------------------------
+Undecided |    5.1515 % | [-1.4420 3.3730]
+
+
+> ## Not run: 
+> ##D library(rstanarm)
+> ##D model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
+> ##D equivalence_test(model)
+> ##D equivalence_test(model, ci = c(.50, 1))
+> ##D 
+> ##D # plot result
+> ##D test <- equivalence_test(model)
+> ##D plot(test)
+> ##D 
+> ##D library(emmeans)
+> ##D equivalence_test(emtrends(model, ~1, "wt"))
+> ##D 
+> ##D library(brms)
+> ##D model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+> ##D equivalence_test(model)
+> ##D equivalence_test(model, ci = c(.50, .99))
+> ##D 
+> ##D library(BayesFactor)
+> ##D bf <- ttestBF(x = rnorm(100, 1, 1))
+> ##D equivalence_test(bf)
+> ##D equivalence_test(bf, ci = c(.50, .99))
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("estimate_density")
+> ### * estimate_density
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: estimate_density
+> ### Title: Density Estimation
+> ### Aliases: estimate_density estimate_density.data.frame
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> set.seed(1)
+> x <- rnorm(250, mean = 1)
+> 
+> # Basic usage
+> density_kernel <- estimate_density(x) # default method is "kernel"
+> 
+> hist(x, prob = TRUE)
+> lines(density_kernel$x, density_kernel$y, col = "black", lwd = 2)
+> lines(density_kernel$x, density_kernel$CI_low, col = "gray", lty = 2)
+> lines(density_kernel$x, density_kernel$CI_high, col = "gray", lty = 2)
+> legend("topright",
++   legend = c("Estimate", "95% CI"),
++   col = c("black", "gray"), lwd = 2, lty = c(1, 2)
++ )
+> 
+> # Other Methods
+> density_logspline <- estimate_density(x, method = "logspline")
+> density_KernSmooth <- estimate_density(x, method = "KernSmooth")
+> density_mixture <- estimate_density(x, method = "mixture")
+> 
+> hist(x, prob = TRUE)
+> lines(density_kernel$x, density_kernel$y, col = "black", lwd = 2)
+> lines(density_logspline$x, density_logspline$y, col = "red", lwd = 2)
+> lines(density_KernSmooth$x, density_KernSmooth$y, col = "blue", lwd = 2)
+> lines(density_mixture$x, density_mixture$y, col = "green", lwd = 2)
+> 
+> # Extension
+> density_extended <- estimate_density(x, extend = TRUE)
+> density_default <- estimate_density(x, extend = FALSE)
+> 
+> hist(x, prob = TRUE)
+> lines(density_extended$x, density_extended$y, col = "red", lwd = 3)
+> lines(density_default$x, density_default$y, col = "black", lwd = 3)
+> 
+> # Multiple columns
+> head(estimate_density(iris))
+     Parameter        x          y
+1 Sepal.Length 4.300000 0.09650527
+2 Sepal.Length 4.303519 0.09766644
+3 Sepal.Length 4.307038 0.09883222
+4 Sepal.Length 4.310557 0.10001063
+5 Sepal.Length 4.314076 0.10119336
+6 Sepal.Length 4.317595 0.10238484
+> head(estimate_density(iris, select = "Sepal.Width"))
+    Parameter        x          y
+1 Sepal.Width 2.000000 0.04651972
+2 Sepal.Width 2.002346 0.04733324
+3 Sepal.Width 2.004692 0.04816144
+4 Sepal.Width 2.007038 0.04899919
+5 Sepal.Width 2.009384 0.04984690
+6 Sepal.Width 2.011730 0.05071174
+> 
+> # Grouped data
+> head(estimate_density(iris, at = "Species"))
+     Parameter        x         y Species
+1 Sepal.Length 4.300000 0.2355986  setosa
+2 Sepal.Length 4.301466 0.2375879  setosa
+3 Sepal.Length 4.302933 0.2395766  setosa
+4 Sepal.Length 4.304399 0.2415640  setosa
+5 Sepal.Length 4.305865 0.2435508  setosa
+6 Sepal.Length 4.307331 0.2455353  setosa
+> head(estimate_density(iris$Petal.Width, at = iris$Species))
+          x        y  Group
+1 0.1000000 9.011872 setosa
+2 0.1004888 8.955399 setosa
+3 0.1009775 8.792239 setosa
+4 0.1014663 8.528268 setosa
+5 0.1019550 8.172719 setosa
+6 0.1024438 7.737660 setosa
+> ## Not run: 
+> ##D # rstanarm models
+> ##D # -----------------------------------------------
+> ##D library(rstanarm)
+> ##D model <- stan_glm(mpg ~ wt + gear, data = mtcars, chains = 2, iter = 200, refresh = 0)
+> ##D head(estimate_density(model))
+> ##D 
+> ##D library(emmeans)
+> ##D head(estimate_density(emtrends(model, ~1, "wt")))
+> ##D 
+> ##D # brms models
+> ##D # -----------------------------------------------
+> ##D library(brms)
+> ##D model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+> ##D estimate_density(model)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("eti")
+> ### * eti
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: eti
+> ### Title: Equal-Tailed Interval (ETI)
+> ### Aliases: eti eti.numeric eti.stanreg eti.brmsfit
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> posterior <- rnorm(1000)
+> eti(posterior)
+95% ETI: [-2.13, 2.01]> eti(posterior, ci = c(.80, .89, .95))
+Equal-Tailed Interval
+
+80% ETI       |       89% ETI |       95% ETI
+---------------------------------------------
+[-1.34, 1.32] | [-1.66, 1.68] | [-2.13, 2.01]
+> 
+> df <- data.frame(replicate(4, rnorm(100)))
+> eti(df)
+Equal-Tailed Interval
+
+Parameter |       95% ETI
+-------------------------
+X1        | [-1.88, 1.85]
+X2        | [-1.84, 1.82]
+X3        | [-1.62, 2.33]
+X4        | [-1.52, 1.45]
+> eti(df, ci = c(.80, .89, .95))
+Equal-Tailed Interval
+
+Parameter |       80% ETI |       89% ETI |       95% ETI
+---------------------------------------------------------
+X1        | [-1.41, 1.22] | [-1.76, 1.71] | [-1.88, 1.85]
+X2        | [-1.26, 1.22] | [-1.53, 1.43] | [-1.84, 1.82]
+X3        | [-1.10, 1.62] | [-1.51, 2.07] | [-1.62, 2.33]
+X4        | [-1.21, 1.09] | [-1.34, 1.28] | [-1.52, 1.45]
+> ## Not run: 
+> ##D library(rstanarm)
+> ##D model <- stan_glm(mpg ~ wt + gear, data = mtcars, chains = 2, iter = 200, refresh = 0)
+> ##D eti(model)
+> ##D eti(model, ci = c(.80, .89, .95))
+> ##D 
+> ##D library(emmeans)
+> ##D eti(emtrends(model, ~1, "wt"))
+> ##D 
+> ##D library(brms)
+> ##D model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+> ##D eti(model)
+> ##D eti(model, ci = c(.80, .89, .95))
+> ##D 
+> ##D library(BayesFactor)
+> ##D bf <- ttestBF(x = rnorm(100, 1, 1))
+> ##D eti(bf)
+> ##D eti(bf, ci = c(.80, .89, .95))
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("hdi")
+> ### * hdi
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: hdi
+> ### Title: Highest Density Interval (HDI)
+> ### Aliases: hdi hdi.numeric hdi.data.frame hdi.stanreg hdi.brmsfit
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> posterior <- rnorm(1000)
+> hdi(posterior, ci = .89)
+89% HDI: [-1.49, 1.80]> hdi(posterior, ci = c(.80, .90, .95))
+Highest Density Interval
+
+80% HDI       |       90% HDI |       95% HDI
+---------------------------------------------
+[-1.38, 1.21] | [-1.57, 1.80] | [-2.10, 2.03]
+> 
+> df <- data.frame(replicate(4, rnorm(100)))
+> hdi(df)
+Highest Density Interval
+
+Parameter |       95% HDI
+-------------------------
+X1        | [-1.91, 1.92]
+X2        | [-1.65, 2.19]
+X3        | [-1.65, 2.39]
+X4        | [-1.43, 1.57]
+> hdi(df, ci = c(.80, .90, .95))
+Highest Density Interval
+
+Parameter |       80% HDI |       90% HDI |       95% HDI
+---------------------------------------------------------
+X1        | [-1.45, 1.21] | [-1.66, 1.78] | [-1.91, 1.92]
+X2        | [-1.40, 0.99] | [-1.40, 1.54] | [-1.65, 2.19]
+X3        | [-1.34, 1.40] | [-1.65, 1.92] | [-1.65, 2.39]
+X4        | [-1.35, 0.85] | [-1.43, 1.23] | [-1.43, 1.57]
+> ## Not run: 
+> ##D library(rstanarm)
+> ##D model <- stan_glm(mpg ~ wt + gear, data = mtcars, chains = 2, iter = 200, refresh = 0)
+> ##D hdi(model)
+> ##D hdi(model, ci = c(.80, .90, .95))
+> ##D 
+> ##D library(emmeans)
+> ##D hdi(emtrends(model, ~1, "wt"))
+> ##D 
+> ##D library(brms)
+> ##D model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+> ##D hdi(model)
+> ##D hdi(model, ci = c(.80, .90, .95))
+> ##D 
+> ##D library(BayesFactor)
+> ##D bf <- ttestBF(x = rnorm(100, 1, 1))
+> ##D hdi(bf)
+> ##D hdi(bf, ci = c(.80, .90, .95))
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("map_estimate")
+> ### * map_estimate
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: map_estimate
+> ### Title: Maximum A Posteriori probability estimate (MAP)
+> ### Aliases: map_estimate map_estimate.numeric map_estimate.stanreg
+> ###   map_estimate.brmsfit map_estimate.data.frame
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D library(bayestestR)
+> ##D 
+> ##D posterior <- rnorm(10000)
+> ##D map_estimate(posterior)
+> ##D 
+> ##D plot(density(posterior))
+> ##D abline(v = map_estimate(posterior), col = "red")
+> ##D 
+> ##D library(rstanarm)
+> ##D model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
+> ##D map_estimate(model)
+> ##D 
+> ##D library(brms)
+> ##D model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+> ##D map_estimate(model)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("mcse")
+> ### * mcse
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: mcse
+> ### Title: Monte-Carlo Standard Error (MCSE)
+> ### Aliases: mcse mcse.stanreg
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D library(bayestestR)
+> ##D library(rstanarm)
+> ##D 
+> ##D model <- stan_glm(mpg ~ wt + am, data = mtcars, chains = 1, refresh = 0)
+> ##D mcse(model)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("mediation")
+> ### * mediation
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: mediation
+> ### Title: Summary of Bayesian multivariate-response mediation-models
+> ### Aliases: mediation mediation.brmsfit mediation.stanmvreg
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D library(mediation)
+> ##D library(brms)
+> ##D library(rstanarm)
+> ##D 
+> ##D # load sample data
+> ##D data(jobs)
+> ##D set.seed(123)
+> ##D 
+> ##D # linear models, for mediation analysis
+> ##D b1 <- lm(job_seek ~ treat + econ_hard + sex + age, data = jobs)
+> ##D b2 <- lm(depress2 ~ treat + job_seek + econ_hard + sex + age, data = jobs)
+> ##D # mediation analysis, for comparison with Stan models
+> ##D m1 <- mediate(b1, b2, sims = 1000, treat = "treat", mediator = "job_seek")
+> ##D 
+> ##D # Fit Bayesian mediation model in brms
+> ##D f1 <- bf(job_seek ~ treat + econ_hard + sex + age)
+> ##D f2 <- bf(depress2 ~ treat + job_seek + econ_hard + sex + age)
+> ##D m2 <- brm(f1 + f2 + set_rescor(FALSE), data = jobs, cores = 4, refresh = 0)
+> ##D 
+> ##D # Fit Bayesian mediation model in rstanarm
+> ##D m3 <- stan_mvmer(
+> ##D   list(
+> ##D     job_seek ~ treat + econ_hard + sex + age + (1 | occp),
+> ##D     depress2 ~ treat + job_seek + econ_hard + sex + age + (1 | occp)
+> ##D   ),
+> ##D   data = jobs,
+> ##D   cores = 4,
+> ##D   refresh = 0
+> ##D )
+> ##D 
+> ##D summary(m1)
+> ##D mediation(m2, centrality = "mean", ci = .95)
+> ##D mediation(m3, centrality = "mean", ci = .95)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("model_to_priors")
+> ### * model_to_priors
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_to_priors
+> ### Title: Convert model's posteriors to priors (EXPERIMENTAL)
+> ### Aliases: model_to_priors
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # brms models
+> ##D # -----------------------------------------------
+> ##D if (require("brms")) {
+> ##D   formula <- brms::brmsformula(mpg ~ wt + cyl, center = FALSE)
+> ##D 
+> ##D   model <- brms::brm(formula, data = mtcars, refresh = 0)
+> ##D   priors <- model_to_priors(model)
+> ##D   priors <- brms::validate_prior(priors, formula, data = mtcars)
+> ##D   priors
+> ##D 
+> ##D   model2 <- brms::brm(formula, data = mtcars, prior = priors, refresh = 0)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("overlap")
+> ### * overlap
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: overlap
+> ### Title: Overlap Coefficient
+> ### Aliases: overlap
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> x <- distribution_normal(1000, 2, 0.5)
+> y <- distribution_normal(1000, 0, 1)
+> 
+> overlap(x, y)
+[34m# Overlap
+
+[39m0.19> plot(overlap(x, y))
+> 
+> 
+> 
+> cleanEx()
+> nameEx("p_direction")
+> ### * p_direction
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: p_direction
+> ### Title: Probability of Direction (pd)
+> ### Aliases: p_direction pd p_direction.numeric p_direction.data.frame
+> ###   p_direction.MCMCglmm p_direction.emmGrid p_direction.stanreg
+> ###   p_direction.brmsfit p_direction.BFBayesFactor
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> # Simulate a posterior distribution of mean 1 and SD 1
+> # ----------------------------------------------------
+> posterior <- rnorm(1000, mean = 1, sd = 1)
+> p_direction(posterior)
+Probability of Direction: 0.83> p_direction(posterior, method = "kernel")
+Probability of Direction: 0.82> 
+> # Simulate a dataframe of posterior distributions
+> # -----------------------------------------------
+> df <- data.frame(replicate(4, rnorm(100)))
+> p_direction(df)
+Probability of Direction
+
+Parameter |     pd
+------------------
+X1        | 51.00%
+X2        | 62.00%
+X3        | 55.00%
+X4        | 62.00%
+> p_direction(df, method = "kernel")
+Probability of Direction
+
+Parameter |     pd
+------------------
+X1        | 50.32%
+X2        | 58.57%
+X3        | 57.02%
+X4        | 58.77%
+> ## Not run: 
+> ##D # rstanarm models
+> ##D # -----------------------------------------------
+> ##D if (require("rstanarm")) {
+> ##D   model <- rstanarm::stan_glm(mpg ~ wt + cyl,
+> ##D     data = mtcars,
+> ##D     chains = 2, refresh = 0
+> ##D   )
+> ##D   p_direction(model)
+> ##D   p_direction(model, method = "kernel")
+> ##D }
+> ##D 
+> ##D # emmeans
+> ##D # -----------------------------------------------
+> ##D if (require("emmeans")) {
+> ##D   p_direction(emtrends(model, ~1, "wt"))
+> ##D }
+> ##D 
+> ##D # brms models
+> ##D # -----------------------------------------------
+> ##D if (require("brms")) {
+> ##D   model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+> ##D   p_direction(model)
+> ##D   p_direction(model, method = "kernel")
+> ##D }
+> ##D 
+> ##D # BayesFactor objects
+> ##D # -----------------------------------------------
+> ##D if (require("BayesFactor")) {
+> ##D   bf <- ttestBF(x = rnorm(100, 1, 1))
+> ##D   p_direction(bf)
+> ##D   p_direction(bf, method = "kernel")
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("p_map")
+> ### * p_map
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: p_map
+> ### Title: Bayesian p-value based on the density at the Maximum A
+> ###   Posteriori (MAP)
+> ### Aliases: p_map p_pointnull p_map.stanreg p_map.brmsfit
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> p_map(rnorm(1000, 0, 1))
+MAP-based p-value: 0.98> p_map(rnorm(1000, 10, 1))
+MAP-based p-value: 0.00> ## Not run: 
+> ##D library(rstanarm)
+> ##D model <- stan_glm(mpg ~ wt + gear, data = mtcars, chains = 2, iter = 200, refresh = 0)
+> ##D p_map(model)
+> ##D 
+> ##D library(emmeans)
+> ##D p_map(emtrends(model, ~1, "wt"))
+> ##D 
+> ##D library(brms)
+> ##D model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+> ##D p_map(model)
+> ##D 
+> ##D library(BayesFactor)
+> ##D bf <- ttestBF(x = rnorm(100, 1, 1))
+> ##D p_map(bf)
+> ##D 
+> ##D # ---------------------------------------
+> ##D # Robustness to density estimation method
+> ##D set.seed(333)
+> ##D data <- data.frame()
+> ##D for (iteration in 1:250) {
+> ##D   x <- rnorm(1000, 1, 1)
+> ##D   result <- data.frame(
+> ##D     "Kernel" = p_map(x, method = "kernel"),
+> ##D     "KernSmooth" = p_map(x, method = "KernSmooth"),
+> ##D     "logspline" = p_map(x, method = "logspline")
+> ##D   )
+> ##D   data <- rbind(data, result)
+> ##D }
+> ##D data$KernSmooth <- data$Kernel - data$KernSmooth
+> ##D data$logspline <- data$Kernel - data$logspline
+> ##D 
+> ##D summary(data$KernSmooth)
+> ##D summary(data$logspline)
+> ##D boxplot(data[c("KernSmooth", "logspline")])
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("p_rope")
+> ### * p_rope
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: p_rope
+> ### Title: Probability of being in the ROPE
+> ### Aliases: p_rope p_rope.numeric p_rope.stanreg p_rope.brmsfit
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> p_rope(x = rnorm(1000, 0, 0.01), range = c(-0.1, 0.1))
+Proportion of samples inside the ROPE [-0.10, 0.10]: > .999> p_rope(x = mtcars, range = c(-0.1, 0.1))
+Proportion of samples inside the ROPE [-0.10, 0.10]
+
+Parameter | p (ROPE)
+--------------------
+mpg       |   < .001
+cyl       |   < .001
+disp      |   < .001
+hp        |   < .001
+drat      |   < .001
+wt        |   < .001
+qsec      |   < .001
+vs        |   0.562 
+am        |   0.594 
+gear      |   < .001
+carb      |   < .001
+> 
+> 
+> 
+> cleanEx()
+> nameEx("p_significance")
+> ### * p_significance
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: p_significance
+> ### Title: Practical Significance (ps)
+> ### Aliases: p_significance p_significance.numeric p_significance.stanreg
+> ###   p_significance.brmsfit
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> # Simulate a posterior distribution of mean 1 and SD 1
+> # ----------------------------------------------------
+> posterior <- rnorm(1000, mean = 1, sd = 1)
+> p_significance(posterior)
+Practical Significance (threshold: 0.10): 0.80> 
+> # Simulate a dataframe of posterior distributions
+> # -----------------------------------------------
+> df <- data.frame(replicate(4, rnorm(100)))
+> p_significance(df)
+Practical Significance (threshold: 0.10)
+
+Parameter |   ps
+----------------
+X1        | 0.48
+X2        | 0.58
+X3        | 0.52
+X4        | 0.54
+> ## Not run: 
+> ##D # rstanarm models
+> ##D # -----------------------------------------------
+> ##D if (require("rstanarm")) {
+> ##D   model <- rstanarm::stan_glm(mpg ~ wt + cyl,
+> ##D     data = mtcars,
+> ##D     chains = 2, refresh = 0
+> ##D   )
+> ##D   p_significance(model)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("p_to_bf")
+> ### * p_to_bf
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: p_to_bf
+> ### Title: Convert p-values to (pseudo) Bayes Factors
+> ### Aliases: p_to_bf p_to_bf.numeric p_to_bf.default
+> 
+> ### ** Examples
+> 
+> if (requireNamespace("parameters", quietly = TRUE)) {
++   data(iris)
++   model <- lm(Petal.Length ~ Sepal.Length + Species, data = iris)
++   p_to_bf(model)
++ 
++   # Examples that demonstrate comparison between
++   # BIC-approximated and pseudo BF
++   # --------------------------------------------
++   m0 <- lm(mpg ~ 1, mtcars)
++   m1 <- lm(mpg ~ am, mtcars)
++   m2 <- lm(mpg ~ factor(cyl), mtcars)
++ 
++   # In this first example, BIC-approximated BF and
++   # pseudo-BF based on p-values are close...
++ 
++   # BIC-approximated BF, m1 against null model
++   bic_to_bf(BIC(m1), denominator = BIC(m0))
++ 
++   # pseudo-BF based on p-values - dropping intercept
++   p_to_bf(m1)[-1, ]
++ 
++   # The second example shows that results from pseudo-BF are less accurate
++   # and should be handled wit caution!
++   bic_to_bf(BIC(m2), denominator = BIC(m0))
++   p_to_bf(anova(m2), n_obs = nrow(mtcars))
++ }
+Pseudo-BF (against NULL)
+
+Parameter   |      p |       BF
+-------------------------------
+factor(cyl) | < .001 | 1.18e+07
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("pd_to_p")
+> ### * pd_to_p
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: pd_to_p
+> ### Title: Convert between Probability of Direction (pd) and p-value.
+> ### Aliases: pd_to_p p_to_pd convert_p_to_pd convert_pd_to_p
+> 
+> ### ** Examples
+> 
+> pd_to_p(pd = 0.95)
+[1] 0.1
+> pd_to_p(pd = 0.95, direction = "one-sided")
+[1] 0.05
+> 
+> 
+> 
+> cleanEx()
+> nameEx("point_estimate")
+> ### * point_estimate
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: point_estimate
+> ### Title: Point-estimates of posterior distributions
+> ### Aliases: point_estimate point_estimate.numeric point_estimate.stanreg
+> ###   point_estimate.brmsfit point_estimate.BFBayesFactor
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> point_estimate(rnorm(1000))
+Point Estimate
+
+Median |  Mean |   MAP
+----------------------
+-0.04  | -0.01 | -0.18
+> point_estimate(rnorm(1000), centrality = "all", dispersion = TRUE)
+Point Estimate
+
+Median |  MAD |  Mean |   SD |   MAP
+------------------------------------
+-0.03  | 1.08 | -0.02 | 1.04 | -0.15
+> point_estimate(rnorm(1000), centrality = c("median", "MAP"))
+Point Estimate
+
+Median    |   MAP
+-----------------
+-5.50e-03 | -0.15
+> 
+> df <- data.frame(replicate(4, rnorm(100)))
+> point_estimate(df, centrality = "all", dispersion = TRUE)
+Point Estimate
+
+Parameter |   Median |  MAD | Mean |   SD |   MAP
+-------------------------------------------------
+X1        |     0.10 | 1.30 | 0.14 | 1.16 |  0.17
+X2        |     0.13 | 1.08 | 0.12 | 1.03 |  0.21
+X3        | 2.78e-03 | 1.08 | 0.13 | 1.06 | -0.16
+X4        |     0.18 | 1.16 | 0.08 | 1.07 |  0.33
+> point_estimate(df, centrality = c("median", "MAP"))
+Point Estimate
+
+Parameter |   Median |   MAP
+----------------------------
+X1        |     0.10 |  0.17
+X2        |     0.13 |  0.21
+X3        | 2.78e-03 | -0.16
+X4        |     0.18 |  0.33
+> ## Not run: 
+> ##D # rstanarm models
+> ##D # -----------------------------------------------
+> ##D library(rstanarm)
+> ##D model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
+> ##D point_estimate(model, centrality = "all", dispersion = TRUE)
+> ##D point_estimate(model, centrality = c("median", "MAP"))
+> ##D 
+> ##D 
+> ##D # emmeans estimates
+> ##D # -----------------------------------------------
+> ##D library(emmeans)
+> ##D point_estimate(emtrends(model, ~1, "wt"), centrality = c("median", "MAP"))
+> ##D 
+> ##D # brms models
+> ##D # -----------------------------------------------
+> ##D library(brms)
+> ##D model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+> ##D point_estimate(model, centrality = "all", dispersion = TRUE)
+> ##D point_estimate(model, centrality = c("median", "MAP"))
+> ##D 
+> ##D # BayesFactor objects
+> ##D # -----------------------------------------------
+> ##D library(BayesFactor)
+> ##D bf <- ttestBF(x = rnorm(100, 1, 1))
+> ##D point_estimate(bf, centrality = "all", dispersion = TRUE)
+> ##D point_estimate(bf, centrality = c("median", "MAP"))
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("reshape_iterations")
+> ### * reshape_iterations
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: reshape_iterations
+> ### Title: Reshape estimations with multiple iterations (draws) to long
+> ###   format
+> ### Aliases: reshape_iterations reshape_draws
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("rope")
+> ### * rope
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: rope
+> ### Title: Region of Practical Equivalence (ROPE)
+> ### Aliases: rope rope.numeric rope.stanreg rope.brmsfit
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> rope(x = rnorm(1000, 0, 0.01), range = c(-0.1, 0.1))
+[34m# Proportion of samples inside the ROPE [-0.10, 0.10]:
+
+[39minside ROPE
+-----------
+100.00 %   
+
+> rope(x = rnorm(1000, 0, 1), range = c(-0.1, 0.1))
+[34m# Proportion of samples inside the ROPE [-0.10, 0.10]:
+
+[39minside ROPE
+-----------
+8.32 %     
+
+> rope(x = rnorm(1000, 1, 0.01), range = c(-0.1, 0.1))
+[34m# Proportion of samples inside the ROPE [-0.10, 0.10]:
+
+[39minside ROPE
+-----------
+0.00 %     
+
+> rope(x = rnorm(1000, 1, 1), ci = c(.90, .95))
+[34m# Proportions of samples inside the ROPE [-0.10, 0.10]:
+
+[39m[36mROPE for the 90% HDI:
+
+[39minside ROPE
+-----------
+5.44 %     
+
+
+[36mROPE for the 95% HDI:
+
+[39minside ROPE
+-----------
+5.16 %     
+
+
+> ## Not run: 
+> ##D library(rstanarm)
+> ##D model <- stan_glm(mpg ~ wt + gear, data = mtcars, chains = 2, iter = 200, refresh = 0)
+> ##D rope(model)
+> ##D rope(model, ci = c(.90, .95))
+> ##D 
+> ##D library(emmeans)
+> ##D rope(emtrends(model, ~1, "wt"), ci = c(.90, .95))
+> ##D 
+> ##D library(brms)
+> ##D model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+> ##D rope(model)
+> ##D rope(model, ci = c(.90, .95))
+> ##D 
+> ##D library(brms)
+> ##D model <- brms::brm(brms::mvbind(mpg, disp) ~ wt + cyl, data = mtcars)
+> ##D rope(model)
+> ##D rope(model, ci = c(.90, .95))
+> ##D 
+> ##D library(BayesFactor)
+> ##D bf <- ttestBF(x = rnorm(100, 1, 1))
+> ##D rope(bf)
+> ##D rope(bf, ci = c(.90, .95))
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("rope_range")
+> ### * rope_range
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: rope_range
+> ### Title: Find Default Equivalence (ROPE) Region Bounds
+> ### Aliases: rope_range rope_range.default
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D if (require("rstanarm")) {
+> ##D   model <- stan_glm(
+> ##D     mpg ~ wt + gear,
+> ##D     data = mtcars,
+> ##D     chains = 2,
+> ##D     iter = 200,
+> ##D     refresh = 0
+> ##D   )
+> ##D   rope_range(model)
+> ##D 
+> ##D   model <- stan_glm(vs ~ mpg, data = mtcars, family = "binomial", refresh = 0)
+> ##D   rope_range(model)
+> ##D }
+> ##D 
+> ##D if (require("brms")) {
+> ##D   model <- brm(mpg ~ wt + cyl, data = mtcars)
+> ##D   rope_range(model)
+> ##D }
+> ##D 
+> ##D if (require("BayesFactor")) {
+> ##D   model <- ttestBF(mtcars[mtcars$vs == 1, "mpg"], mtcars[mtcars$vs == 0, "mpg"])
+> ##D   rope_range(model)
+> ##D 
+> ##D   model <- lmBF(mpg ~ vs, data = mtcars)
+> ##D   rope_range(model)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("sensitivity_to_prior")
+> ### * sensitivity_to_prior
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: sensitivity_to_prior
+> ### Title: Sensitivity to Prior
+> ### Aliases: sensitivity_to_prior
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D library(bayestestR)
+> ##D 
+> ##D # rstanarm models
+> ##D # -----------------------------------------------
+> ##D if (require("rstanarm")) {
+> ##D   model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars)
+> ##D   sensitivity_to_prior(model)
+> ##D 
+> ##D   model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
+> ##D   sensitivity_to_prior(model, index = c("Median", "MAP"))
+> ##D }
+> ##D 
+> ##D # brms models
+> ##D # -----------------------------------------------
+> ##D if (require("brms")) {
+> ##D   model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+> ##D   # sensitivity_to_prior(model)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("sexit")
+> ### * sexit
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: sexit
+> ### Title: Sequential Effect eXistence and sIgnificance Testing (SEXIT)
+> ### Aliases: sexit
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D library(bayestestR)
+> ##D 
+> ##D s <- sexit(rnorm(1000, -1, 1))
+> ##D s
+> ##D print(s, summary = TRUE)
+> ##D 
+> ##D s <- sexit(iris)
+> ##D s
+> ##D print(s, summary = TRUE)
+> ##D 
+> ##D if (require("rstanarm")) {
+> ##D   model <- rstanarm::stan_glm(mpg ~ wt * cyl,
+> ##D     data = mtcars,
+> ##D     iter = 400, refresh = 0
+> ##D   )
+> ##D   s <- sexit(model)
+> ##D   s
+> ##D   print(s, summary = TRUE)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("sexit_thresholds")
+> ### * sexit_thresholds
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: sexit_thresholds
+> ### Title: Find Effect Size Thresholds
+> ### Aliases: sexit_thresholds
+> 
+> ### ** Examples
+> 
+> sexit_thresholds(rnorm(1000))
+[1] 0.05 0.30
+> ## Not run: 
+> ##D if (require("rstanarm")) {
+> ##D   model <- stan_glm(
+> ##D     mpg ~ wt + gear,
+> ##D     data = mtcars,
+> ##D     chains = 2,
+> ##D     iter = 200,
+> ##D     refresh = 0
+> ##D   )
+> ##D   sexit_thresholds(model)
+> ##D 
+> ##D   model <- stan_glm(vs ~ mpg, data = mtcars, family = "binomial", refresh = 0)
+> ##D   sexit_thresholds(model)
+> ##D }
+> ##D 
+> ##D if (require("brms")) {
+> ##D   model <- brm(mpg ~ wt + cyl, data = mtcars)
+> ##D   sexit_thresholds(model)
+> ##D }
+> ##D 
+> ##D if (require("BayesFactor")) {
+> ##D   bf <- ttestBF(x = rnorm(100, 1, 1))
+> ##D   sexit_thresholds(bf)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("si")
+> ### * si
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: si
+> ### Title: Compute Support Intervals
+> ### Aliases: si si.numeric si.stanreg si.brmsfit si.blavaan si.emmGrid
+> ###   si.data.frame
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> prior <- distribution_normal(1000, mean = 0, sd = 1)
+> posterior <- distribution_normal(1000, mean = .5, sd = .3)
+> 
+> si(posterior, prior)
+Warning: Support intervals might not be precise.
+For precise support intervals, sampling at least 40,000 posterior samples is recommended.
+BF = 1 SI: [0.04, 1.04]> ## Not run: 
+> ##D # rstanarm models
+> ##D # ---------------
+> ##D library(rstanarm)
+> ##D contrasts(sleep$group) <- contr.equalprior_pairs # see vingette
+> ##D stan_model <- stan_lmer(extra ~ group + (1 | ID), data = sleep)
+> ##D si(stan_model)
+> ##D si(stan_model, BF = 3)
+> ##D 
+> ##D # emmGrid objects
+> ##D # ---------------
+> ##D library(emmeans)
+> ##D group_diff <- pairs(emmeans(stan_model, ~group))
+> ##D si(group_diff, prior = stan_model)
+> ##D 
+> ##D # brms models
+> ##D # -----------
+> ##D library(brms)
+> ##D contrasts(sleep$group) <- contr.equalprior_pairs # see vingette
+> ##D my_custom_priors <-
+> ##D   set_prior("student_t(3, 0, 1)", class = "b") +
+> ##D   set_prior("student_t(3, 0, 1)", class = "sd", group = "ID")
+> ##D 
+> ##D brms_model <- brm(extra ~ group + (1 | ID),
+> ##D   data = sleep,
+> ##D   prior = my_custom_priors
+> ##D )
+> ##D si(brms_model)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("simulate_correlation")
+> ### * simulate_correlation
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simulate_correlation
+> ### Title: Data Simulation
+> ### Aliases: simulate_correlation simulate_ttest simulate_difference
+> 
+> ### ** Examples
+> 
+> 
+> # Correlation --------------------------------
+> data <- simulate_correlation(r = 0.5)
+> plot(data$V1, data$V2)
+> cor.test(data$V1, data$V2)
+
+	Pearson's product-moment correlation
+
+data:  data$V1 and data$V2
+t = 5.7155, df = 98, p-value = 1.18e-07
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.3366433 0.6341398
+sample estimates:
+cor 
+0.5 
+
+> summary(lm(V2 ~ V1, data = data))
+
+Call:
+lm(formula = V2 ~ V1, data = data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.11862 -0.58218 -0.06576  0.62165  2.21304 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -1.041e-17  8.704e-02   0.000        1    
+V1           5.000e-01  8.748e-02   5.715 1.18e-07 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.8704 on 98 degrees of freedom
+Multiple R-squared:   0.25,	Adjusted R-squared:  0.2423 
+F-statistic: 32.67 on 1 and 98 DF,  p-value: 1.18e-07
+
+> 
+> # Specify mean and SD
+> data <- simulate_correlation(r = 0.5, n = 50, mean = c(0, 1), sd = c(0.7, 1.7))
+> cor.test(data$V1, data$V2)
+
+	Pearson's product-moment correlation
+
+data:  data$V1 and data$V2
+t = 4, df = 48, p-value = 0.000218
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.2574879 0.6832563
+sample estimates:
+cor 
+0.5 
+
+> round(c(mean(data$V1), sd(data$V1)), 1)
+[1] 0.0 0.7
+> round(c(mean(data$V2), sd(data$V2)), 1)
+[1] 1.0 1.7
+> summary(lm(V2 ~ V1, data = data))
+
+Call:
+lm(formula = V2 ~ V1, data = data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.7386 -0.8903 -0.0729  0.7957  3.5832 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   1.0000     0.2104   4.754 1.86e-05 ***
+V1            1.2143     0.3036   4.000 0.000218 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.488 on 48 degrees of freedom
+Multiple R-squared:   0.25,	Adjusted R-squared:  0.2344 
+F-statistic:    16 on 1 and 48 DF,  p-value: 0.000218
+
+> 
+> # Generate multiple variables
+> cor_matrix <- matrix(
++   c(
++     1.0, 0.2, 0.4,
++     0.2, 1.0, 0.3,
++     0.4, 0.3, 1.0
++   ),
++   nrow = 3
++ )
+> 
+> data <- simulate_correlation(r = cor_matrix, names = c("y", "x1", "x2"))
+> cor(data)
+     y  x1  x2
+y  1.0 0.2 0.4
+x1 0.2 1.0 0.3
+x2 0.4 0.3 1.0
+> summary(lm(y ~ x1, data = data))
+
+Call:
+lm(formula = y ~ x1, data = data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.96515 -0.57551 -0.06583  0.54324  2.46411 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)  
+(Intercept) -1.310e-16  9.848e-02   0.000    1.000  
+x1           2.000e-01  9.897e-02   2.021    0.046 *
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.9848 on 98 degrees of freedom
+Multiple R-squared:   0.04,	Adjusted R-squared:  0.0302 
+F-statistic: 4.083 on 1 and 98 DF,  p-value: 0.04604
+
+> 
+> # t-test --------------------------------
+> data <- simulate_ttest(n = 30, d = 0.3)
+> plot(data$V1, data$V0)
+> round(c(mean(data$V1), sd(data$V1)), 1)
+[1] 0 1
+> diff(t.test(data$V1 ~ data$V0)$estimate)
+mean in group 1 
+    -0.07871408 
+> summary(lm(V1 ~ V0, data = data))
+
+Call:
+lm(formula = V1 ~ V0, data = data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.1726 -0.6347 -0.0446  0.6242  2.1622 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  0.04460    0.28086   0.159    0.875
+V01         -0.07871    0.37310  -0.211    0.834
+
+Residual standard error: 1.013 on 28 degrees of freedom
+Multiple R-squared:  0.001587,	Adjusted R-squared:  -0.03407 
+F-statistic: 0.04451 on 1 and 28 DF,  p-value: 0.8344
+
+> summary(glm(V0 ~ V1, data = data, family = "binomial"))
+
+Call:
+glm(formula = V0 ~ V1, family = "binomial", data = data)
+
+Deviance Residuals: 
+   Min      1Q  Median      3Q     Max  
+-1.371  -1.287   1.023   1.068   1.138  
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)
+(Intercept)  0.26870    0.36875   0.729    0.466
+V1          -0.08223    0.37709  -0.218    0.827
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 41.054  on 29  degrees of freedom
+Residual deviance: 41.006  on 28  degrees of freedom
+AIC: 45.006
+
+Number of Fisher Scoring iterations: 4
+
+> 
+> # Difference --------------------------------
+> data <- simulate_difference(n = 30, d = 0.3)
+> plot(data$V1, data$V0)
+> round(c(mean(data$V1), sd(data$V1)), 1)
+[1] 0 1
+> diff(t.test(data$V1 ~ data$V0)$estimate)
+mean in group 1 
+            0.3 
+> summary(lm(V1 ~ V0, data = data))
+
+Call:
+lm(formula = V1 ~ V0, data = data)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-1.834 -0.677  0.000  0.677  1.834 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  -0.1500     0.2562  -0.586    0.563
+V01           0.3000     0.3623   0.828    0.415
+
+Residual standard error: 0.9922 on 28 degrees of freedom
+Multiple R-squared:  0.0239,	Adjusted R-squared:  -0.01096 
+F-statistic: 0.6857 on 1 and 28 DF,  p-value: 0.4146
+
+> summary(glm(V0 ~ V1, data = data, family = "binomial"))
+
+Call:
+glm(formula = V0 ~ V1, family = "binomial", data = data)
+
+Deviance Residuals: 
+   Min      1Q  Median      3Q     Max  
+-1.417  -1.151   0.000   1.151   1.417  
+
+Coefficients:
+             Estimate Std. Error z value Pr(>|z|)
+(Intercept) 8.207e-17  3.696e-01   0.000    1.000
+V1          3.251e-01  3.877e-01   0.839    0.402
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 41.589  on 29  degrees of freedom
+Residual deviance: 40.865  on 28  degrees of freedom
+AIC: 44.865
+
+Number of Fisher Scoring iterations: 4
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("simulate_prior")
+> ### * simulate_prior
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simulate_prior
+> ### Title: Returns Priors of a Model as Empirical Distributions
+> ### Aliases: simulate_prior
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D library(bayestestR)
+> ##D if (require("rstanarm")) {
+> ##D   model <- stan_glm(mpg ~ wt + am, data = mtcars, chains = 1, refresh = 0)
+> ##D   simulate_prior(model)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("simulate_simpson")
+> ### * simulate_simpson
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simulate_simpson
+> ### Title: Simpson's paradox dataset simulation
+> ### Aliases: simulate_simpson
+> 
+> ### ** Examples
+> 
+> data <- simulate_simpson(n = 10, groups = 5, r = 0.5)
+> 
+> if (require("ggplot2")) {
++   ggplot(data, aes(x = V1, y = V2)) +
++     geom_point(aes(color = Group)) +
++     geom_smooth(aes(color = Group), method = "lm") +
++     geom_smooth(method = "lm")
++ }
+Loading required package: ggplot2
+`geom_smooth()` using formula = 'y ~ x'
+`geom_smooth()` using formula = 'y ~ x'
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:ggplot2'
+
+> nameEx("spi")
+> ### * spi
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: spi
+> ### Title: Shortest Probability Interval (SPI)
+> ### Aliases: spi spi.numeric spi.stanreg spi.brmsfit
+> 
+> ### ** Examples
+> 
+> library(bayestestR)
+> 
+> posterior <- rnorm(1000)
+> spi(posterior)
+95% SPI: [-2.10, 2.05]> spi(posterior, ci = c(.80, .89, .95))
+Shortest Probability Interval
+
+80% SPI       |       89% SPI |       95% SPI
+---------------------------------------------
+[-1.38, 1.22] | [-1.49, 1.81] | [-2.10, 2.05]
+> 
+> df <- data.frame(replicate(4, rnorm(100)))
+> spi(df)
+Shortest Probability Interval
+
+Parameter |       95% SPI
+-------------------------
+X1        | [-2.00, 1.90]
+X2        | [-2.04, 1.64]
+X3        | [-1.76, 2.45]
+X4        | [-1.52, 1.50]
+> spi(df, ci = c(.80, .89, .95))
+Shortest Probability Interval
+
+Parameter |       80% SPI |       89% SPI |       95% SPI
+---------------------------------------------------------
+X1        | [-1.50, 1.19] | [-2.00, 1.30] | [-2.00, 1.90]
+X2        | [-1.45, 0.90] | [-1.34, 1.64] | [-2.04, 1.64]
+X3        | [-1.02, 1.71] | [-1.69, 1.79] | [-1.76, 2.45]
+X4        | [-1.30, 0.90] | [-1.52, 1.15] | [-1.52, 1.50]
+> ## Not run: 
+> ##D library(rstanarm)
+> ##D model <- stan_glm(mpg ~ wt + gear, data = mtcars, chains = 2, iter = 200, refresh = 0)
+> ##D spi(model)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("weighted_posteriors")
+> ### * weighted_posteriors
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: weighted_posteriors
+> ### Title: Generate posterior distributions weighted across models
+> ### Aliases: weighted_posteriors weighted_posteriors.data.frame
+> ###   weighted_posteriors.stanreg weighted_posteriors.brmsfit
+> ###   weighted_posteriors.blavaan weighted_posteriors.BFBayesFactor
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  7.26 0.74 8.43 NA NA 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

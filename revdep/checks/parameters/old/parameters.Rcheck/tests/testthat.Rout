@@ -1,0 +1,91 @@
+
+R version 4.2.2 (2022-10-31 ucrt) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> if (require("testthat")) {
++   library(parameters)
++   if (length(strsplit(packageDescription("parameters")$Version, ".", fixed = TRUE)[[1]]) > 3) {
++     Sys.setenv("RunAllparametersTests" = "yes")
++   } else {
++     Sys.setenv("RunAllparametersTests" = "no")
++   }
++ 
++   si <- Sys.info()
++ 
++   osx <- tryCatch(
++     {
++       if (!is.null(si["sysname"])) {
++         si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
++       } else {
++         FALSE
++       }
++     },
++     error = function(e) {
++       FALSE
++     }
++   )
++ 
++   solaris <- tryCatch(
++     {
++       if (!is.null(si["sysname"])) {
++         grepl("SunOS", si["sysname"], ignore.case = TRUE)
++       } else {
++         FALSE
++       }
++     },
++     error = function(e) {
++       FALSE
++     }
++   )
++ 
++   # if (!osx && !solaris) {
++   #   test_check("parameters")
++   # }
++   test_check("parameters")
++ }
+Loading required package: testthat
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald z-distribution approximation.
+
+The model has a log- or logit-link. Consider using `exponentiate =
+  TRUE` to interpret coefficients as ratios.
+Waiting for profiling to be done...
+Waiting for profiling to be done...
+Gu & Wahba 4 term additive model
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald t-distribution approximation.
+Multiple `BFBayesFactor` models detected - posteriors are extracted from the first numerator model.
+See help("get_parameters", package = "insight").
+Contrasts set to contr.sum for the following variables: treatment, gender
+Loading required namespace: GPArotation
+
+Uncertainty intervals (profile-likelihood) and p-values (two-tailed)
+  computed using a Wald t-distribution approximation.
+[ FAIL 0 | WARN 0 | SKIP 33 | PASS 632 ]
+
+══ Skipped tests ═══════════════════════════════════════════════════════════════
+• !isTRUE(Sys.getenv("RunAllparametersTests") == "yes") is TRUE (1)
+• On CRAN (26)
+• empty test (5)
+• estimatr cannot be loaded (1)
+
+[ FAIL 0 | WARN 0 | SKIP 33 | PASS 632 ]
+> 
+> proc.time()
+   user  system elapsed 
+  92.04    9.51  108.71 

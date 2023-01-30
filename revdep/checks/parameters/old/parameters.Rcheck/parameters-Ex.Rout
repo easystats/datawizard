@@ -1,0 +1,3414 @@
+
+R version 4.2.2 (2022-10-31 ucrt) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "parameters"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> library('parameters')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("bootstrap_model")
+> ### * bootstrap_model
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: bootstrap_model
+> ### Title: Model bootstrapping
+> ### Aliases: bootstrap_model bootstrap_model.default bootstrap_model.merMod
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D if (require("boot", quietly = TRUE)) {
+> ##D   model <- lm(mpg ~ wt + factor(cyl), data = mtcars)
+> ##D   b <- bootstrap_model(model)
+> ##D   print(head(b))
+> ##D 
+> ##D   if (require("emmeans", quietly = TRUE)) {
+> ##D     est <- emmeans(b, consec ~ cyl)
+> ##D     print(model_parameters(est))
+> ##D   }
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("bootstrap_parameters")
+> ### * bootstrap_parameters
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: bootstrap_parameters
+> ### Title: Parameters bootstrapping
+> ### Aliases: bootstrap_parameters
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D if (require("boot", quietly = TRUE)) {
+> ##D   set.seed(2)
+> ##D   model <- lm(Sepal.Length ~ Species * Petal.Width, data = iris)
+> ##D   b <- bootstrap_parameters(model)
+> ##D   print(b)
+> ##D 
+> ##D   if (require("emmeans")) {
+> ##D     est <- emmeans(b, trt.vs.ctrl ~ Species)
+> ##D     print(model_parameters(est))
+> ##D   }
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("ci.default")
+> ### * ci.default
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ci.default
+> ### Title: Confidence Intervals (CI)
+> ### Aliases: ci.default ci.glmmTMB ci.merMod
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("cluster_analysis")
+> ### * cluster_analysis
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cluster_analysis
+> ### Title: Cluster Analysis
+> ### Aliases: cluster_analysis
+> 
+> ### ** Examples
+> 
+> set.seed(33)
+> # K-Means ====================================================
+> rez <- cluster_analysis(iris[1:4], n = 3, method = "kmeans")
+> rez # Show results
+[34m# Clustering Solution[39m
+
+[33mThe 3 clusters accounted for 68.16% of the total variance of the original data.[39m
+
+Cluster | n_Obs | Sum_Squares | Sepal.Length | Sepal.Width | Petal.Length | Petal.Width
+---------------------------------------------------------------------------------------
+1       |    21 |       23.16 |        -1.32 |       -0.37 |        -1.13 |       -1.11
+2       |    33 |       17.33 |        -0.81 |        1.31 |        -1.28 |       -1.22
+3       |    96 |      149.26 |         0.57 |       -0.37 |         0.69 |        0.66
+
+  Sum_Squares_Total Sum_Squares_Between Sum_Squares_Within        R2
+1               596            406.2488           189.7512 0.6816254
+[33m
+# You can access the predicted clusters via `predict()`.
+[39m> predict(rez) # Get clusters
+  [1] 2 1 1 1 2 2 2 2 1 1 2 2 1 1 2 2 2 2 2 2 2 2 2 2 2 1 2 2 2 1 1 2 2 2 1 1 2
+ [38] 2 1 2 2 1 1 2 2 1 2 1 2 2 3 3 3 3 3 3 3 1 3 3 1 3 3 3 3 3 3 3 3 3 3 3 3 3
+ [75] 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 1 3 3 3 3 1 3 3 3 3 3 3 3 3 3 3 3 3
+[112] 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+[149] 3 3
+> summary(rez) # Extract the centers values (can use 'plot()' on that)
+  Cluster Sepal.Length Sepal.Width Petal.Length Petal.Width
+1       1   -1.3232208  -0.3718921   -1.1334386  -1.1111395
+2       2   -0.8135055   1.3145538   -1.2825372  -1.2156393
+3       3    0.5690971  -0.3705265    0.6888118   0.6609378
+> if (requireNamespace("MASS", quietly = TRUE)) {
++   cluster_discrimination(rez) # Perform LDA
++ }
+[34m# Accuracy of Cluster Group Classification via Linear Discriminant Analysis (LDA)
+
+[39m Group Accuracy
+     1  100.00%
+     2   71.43%
+     3  100.00%
+[33m
+Overall accuracy of classification: 96.00%
+[39m> 
+> # Hierarchical k-means (more robust k-means)
+> if (require("factoextra", quietly = TRUE)) {
++   rez <- cluster_analysis(iris[1:4], n = 3, method = "hkmeans")
++   rez # Show results
++   predict(rez) # Get clusters
++ }
+Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa
+  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ [38] 1 1 1 1 1 1 1 1 1 1 1 1 1 3 3 3 2 2 2 3 2 2 2 2 2 2 2 2 3 2 2 2 2 3 2 2 2
+ [75] 2 3 3 3 2 2 2 2 2 2 2 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 3 2 3 3 3 3 2 3 3 3 3
+[112] 3 3 2 2 3 3 3 3 2 3 2 3 2 3 3 2 3 3 3 3 3 3 2 2 3 3 3 2 3 3 3 2 3 3 3 2 3
+[149] 3 2
+> 
+> # Hierarchical Clustering (hclust) ===========================
+> rez <- cluster_analysis(iris[1:4], n = 3, method = "hclust")
+> rez # Show results
+[34m# Clustering Solution[39m
+
+[33mThe 3 clusters accounted for 74.35% of the total variance of the original data.[39m
+
+Cluster | n_Obs | Sum_Squares | Sepal.Length | Sepal.Width | Petal.Length | Petal.Width
+---------------------------------------------------------------------------------------
+1       |    49 |       40.12 |        -1.00 |        0.90 |        -1.30 |       -1.25
+2       |    24 |       18.65 |        -0.40 |       -1.36 |         0.06 |       -0.04
+3       |    77 |       94.08 |         0.76 |       -0.15 |         0.81 |        0.81
+
+  Sum_Squares_Total Sum_Squares_Between Sum_Squares_Within        R2
+1               596            443.1431           152.8569 0.7435286
+[33m
+# You can access the predicted clusters via `predict()`.
+[39m> predict(rez) # Get clusters
+  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ [38] 1 1 1 1 2 1 1 1 1 1 1 1 1 3 3 3 2 3 2 3 2 3 2 2 3 2 3 3 3 3 2 2 2 3 3 3 3
+ [75] 3 3 3 3 3 2 2 2 2 3 3 3 3 2 3 2 2 3 2 2 2 3 3 3 2 2 3 3 3 3 3 3 2 3 3 3 3
+[112] 3 3 3 3 3 3 3 3 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+[149] 3 3
+> 
+> # K-Medoids (pam) ============================================
+> if (require("cluster", quietly = TRUE)) {
++   rez <- cluster_analysis(iris[1:4], n = 3, method = "pam")
++   rez # Show results
++   predict(rez) # Get clusters
++ }
+  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ [38] 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 3 3 3 2 3 3 3 3 3 3 3 3 2 3 3 3 3 3 3 3 3
+ [75] 3 2 2 2 3 3 3 3 3 3 3 3 2 3 3 3 3 3 3 3 3 3 3 3 3 3 2 3 2 2 2 2 3 2 2 2 2
+[112] 2 2 3 2 2 2 2 2 3 2 3 2 3 2 2 3 3 2 2 2 2 2 3 3 2 2 2 3 2 2 2 3 2 2 2 3 2
+[149] 2 3
+> 
+> # PAM with automated number of clusters
+> if (require("fpc", quietly = TRUE)) {
++   rez <- cluster_analysis(iris[1:4], method = "pamk")
++   rez # Show results
++   predict(rez) # Get clusters
++ }
+  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ [38] 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ [75] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+[112] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+[149] 2 2
+> 
+> # DBSCAN ====================================================
+> if (require("dbscan", quietly = TRUE)) {
++   # Note that you can assimilate more outliers (cluster 0) to neighbouring
++   # clusters by setting borderPoints = TRUE.
++   rez <- cluster_analysis(iris[1:4], method = "dbscan", dbscan_eps = 1.45)
++   rez # Show results
++   predict(rez) # Get clusters
++ }
+
+Attaching package: 'dbscan'
+
+The following object is masked from 'package:fpc':
+
+    dbscan
+
+The following object is masked from 'package:stats':
+
+    as.dendrogram
+
+  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ [38] 1 1 1 1 0 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ [75] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+[112] 2 2 2 2 2 2 0 0 2 2 2 2 2 2 2 2 2 2 2 2 0 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+[149] 2 2
+> 
+> # Mixture ====================================================
+> if (require("mclust", quietly = TRUE)) {
++   library(mclust) # Needs the package to be loaded
++   rez <- cluster_analysis(iris[1:4], method = "mixture")
++   rez # Show results
++   predict(rez) # Get clusters
++ }
+Package 'mclust' version 6.0.0
+Type 'citation("mclust")' for citing this R package in publications.
+  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ [38] 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ [75] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+[112] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+[149] 2 2
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:mclust', 'package:dbscan', 'package:fpc',
+  'package:cluster', 'package:factoextra', 'package:ggplot2'
+
+> nameEx("cluster_centers")
+> ### * cluster_centers
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cluster_centers
+> ### Title: Find the cluster centers in your data
+> ### Aliases: cluster_centers
+> 
+> ### ** Examples
+> 
+> k <- kmeans(iris[1:4], 3)
+> cluster_centers(iris[1:4], clusters = k$cluster)
+  Cluster n_Obs Sum_Squares Sepal.Length Sepal.Width Petal.Length Petal.Width
+1       1    62    39.82097     5.901613    2.748387     4.393548    1.433871
+2       2    38    23.87947     6.850000    3.073684     5.742105    2.071053
+3       3    50    15.15100     5.006000    3.428000     1.462000    0.246000
+> cluster_centers(iris[1:4], clusters = k$cluster, fun = median)
+  Cluster n_Obs Sum_Squares Sepal.Length Sepal.Width Petal.Length Petal.Width
+1       1    62    39.82097          5.9         2.8         4.50         1.4
+2       2    38    23.87947          6.7         3.0         5.65         2.1
+3       3    50    15.15100          5.0         3.4         1.50         0.2
+> 
+> 
+> 
+> cleanEx()
+> nameEx("cluster_discrimination")
+> ### * cluster_discrimination
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cluster_discrimination
+> ### Title: Compute a linear discriminant analysis on classified cluster
+> ###   groups
+> ### Aliases: cluster_discrimination
+> 
+> ### ** Examples
+> 
+> if (requireNamespace("MASS", quietly = TRUE)) {
++   # Retrieve group classification from hierarchical cluster analysis
++   clustering <- cluster_analysis(iris[, 1:4], n = 3)
++ 
++   # Goodness of group classification
++   cluster_discrimination(clustering)
++ }
+[34m# Accuracy of Cluster Group Classification via Linear Discriminant Analysis (LDA)
+
+[39m Group Accuracy
+     1  100.00%
+     2   82.98%
+     3   94.34%
+[33m
+Overall accuracy of classification: 92.67%
+[39m> 
+> 
+> 
+> cleanEx()
+> nameEx("cluster_meta")
+> ### * cluster_meta
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cluster_meta
+> ### Title: Metaclustering
+> ### Aliases: cluster_meta
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D data <- iris[1:4]
+> ##D 
+> ##D rez1 <- cluster_analysis(data, n = 2, method = "kmeans")
+> ##D rez2 <- cluster_analysis(data, n = 3, method = "kmeans")
+> ##D rez3 <- cluster_analysis(data, n = 6, method = "kmeans")
+> ##D 
+> ##D list_of_clusters <- list(rez1, rez2, rez3)
+> ##D 
+> ##D m <- cluster_meta(list_of_clusters)
+> ##D 
+> ##D # Visualize matrix without reordering
+> ##D heatmap(m, Rowv = NA, Colv = NA, scale = "none") # Without reordering
+> ##D # Reordered heatmap
+> ##D heatmap(m, scale = "none")
+> ##D 
+> ##D # Extract 3 clusters
+> ##D predict(m, n = 3)
+> ##D 
+> ##D # Convert to dissimilarity
+> ##D d <- as.dist(abs(m - 1))
+> ##D model <- hclust(d)
+> ##D plot(model, hang = -1)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("cluster_performance")
+> ### * cluster_performance
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cluster_performance
+> ### Title: Performance of clustering models
+> ### Aliases: cluster_performance cluster_performance.kmeans
+> ###   cluster_performance.hclust cluster_performance.dbscan
+> ###   cluster_performance.parameters_clusters
+> 
+> ### ** Examples
+> 
+> # kmeans
+> model <- kmeans(iris[1:4], 3)
+> cluster_performance(model)
+  Sum_Squares_Total Sum_Squares_Between Sum_Squares_Within        R2
+1          681.3706            602.5192           78.85144 0.8842753
+> # hclust
+> data <- iris[1:4]
+> model <- hclust(dist(data))
+> clusters <- cutree(model, 3)
+> 
+> rez <- cluster_performance(model, data, clusters)
+> rez
+  Sum_Squares_Total Sum_Squares_Between Sum_Squares_Within        R2
+1          681.3706            591.8456           89.52501 0.8686104
+> # DBSCAN
+> if (require("dbscan", quietly = TRUE)) {
++   model <- dbscan::dbscan(iris[1:4], eps = 1.45, minPts = 10)
++ 
++   rez <- cluster_performance(model, iris[1:4])
++   rez
++ }
+
+Attaching package: 'dbscan'
+
+The following object is masked from 'package:stats':
+
+    as.dendrogram
+
+  Sum_Squares_Total Sum_Squares_Between Sum_Squares_Within        R2
+1          681.3706            526.4236            154.947 0.7725951
+> # Retrieve performance from parameters
+> params <- model_parameters(kmeans(iris[1:4], 3))
+> cluster_performance(params)
+  Sum_Squares_Total Sum_Squares_Between Sum_Squares_Within        R2
+1          681.3706            602.5192           78.85144 0.8842753
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:dbscan'
+
+> nameEx("compare_parameters")
+> ### * compare_parameters
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: compare_parameters
+> ### Title: Compare model parameters of multiple models
+> ### Aliases: compare_parameters compare_models
+> 
+> ### ** Examples
+> 
+> data(iris)
+> lm1 <- lm(Sepal.Length ~ Species, data = iris)
+> lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
+> compare_parameters(lm1, lm2)
+Parameter            |               lm1 |                  lm2
+---------------------------------------------------------------
+(Intercept)          | 5.01 (4.86, 5.15) |  3.68 ( 3.47,  3.89)
+Species (versicolor) | 0.93 (0.73, 1.13) | -1.60 (-1.98, -1.22)
+Species (virginica)  | 1.58 (1.38, 1.79) | -2.12 (-2.66, -1.58)
+Petal Length         |                   |  0.90 ( 0.78,  1.03)
+---------------------------------------------------------------
+Observations         |               150 |                  150
+> 
+> # custom style
+> compare_parameters(lm1, lm2, select = "{estimate}{stars} ({se})")
+Parameter            |            lm1 |             lm2
+-------------------------------------------------------
+(Intercept)          | 5.01*** (0.07) |  3.68*** (0.11)
+Species (versicolor) | 0.93*** (0.10) | -1.60*** (0.19)
+Species (virginica)  | 1.58*** (0.10) | -2.12*** (0.27)
+Petal Length         |                |  0.90*** (0.06)
+-------------------------------------------------------
+Observations         |            150 |             150
+> 
+> ## Not run: 
+> ##D # custom style, in HTML
+> ##D result <- compare_parameters(lm1, lm2, select = "{estimate}<br>({se})|{p}")
+> ##D print_html(result)
+> ## End(Not run)
+> 
+> data(mtcars)
+> m1 <- lm(mpg ~ wt, data = mtcars)
+> m2 <- glm(vs ~ wt + cyl, data = mtcars, family = "binomial")
+> compare_parameters(m1, m2)
+Parameter    |                   m1 |                   m2
+----------------------------------------------------------
+(Intercept)  | 37.29 (33.45, 41.12) | 10.62 ( 2.45, 18.79)
+wt           | -5.34 (-6.49, -4.20) |  2.10 (-0.93,  5.13)
+cyl          |                      | -2.93 (-5.63, -0.23)
+----------------------------------------------------------
+Observations |                   32 |                   32
+> ## Not run: 
+> ##D # exponentiate coefficients, but not for lm
+> ##D compare_parameters(m1, m2, exponentiate = "nongaussian")
+> ##D 
+> ##D # change column names
+> ##D compare_parameters("linear model" = m1, "logistic reg." = m2)
+> ##D compare_parameters(m1, m2, column_names = c("linear model", "logistic reg."))
+> ##D 
+> ##D # or as list
+> ##D compare_parameters(list(m1, m2))
+> ##D compare_parameters(list("linear model" = m1, "logistic reg." = m2))
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("convert_efa_to_cfa")
+> ### * convert_efa_to_cfa
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: convert_efa_to_cfa
+> ### Title: Conversion between EFA results and CFA structure
+> ### Aliases: convert_efa_to_cfa convert_efa_to_cfa.fa efa_to_cfa
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("degrees_of_freedom")
+> ### * degrees_of_freedom
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: degrees_of_freedom
+> ### Title: Degrees of Freedom (DoF)
+> ### Aliases: degrees_of_freedom degrees_of_freedom.default dof
+> 
+> ### ** Examples
+> 
+> model <- lm(Sepal.Length ~ Petal.Length * Species, data = iris)
+> dof(model)
+[1] 144 144 144 144 144 144
+> 
+> model <- glm(vs ~ mpg * cyl, data = mtcars, family = "binomial")
+> dof(model)
+[1] Inf
+> ## Not run: 
+> ##D if (require("lme4", quietly = TRUE)) {
+> ##D   model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+> ##D   dof(model)
+> ##D }
+> ##D 
+> ##D if (require("rstanarm", quietly = TRUE)) {
+> ##D   model <- stan_glm(
+> ##D     Sepal.Length ~ Petal.Length * Species,
+> ##D     data = iris,
+> ##D     chains = 2,
+> ##D     refresh = 0
+> ##D   )
+> ##D   dof(model)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("display.parameters_model")
+> ### * display.parameters_model
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: display.parameters_model
+> ### Title: Print tables in different output formats
+> ### Aliases: display.parameters_model display.parameters_sem
+> ###   display.parameters_efa_summary display.parameters_efa
+> ###   display.equivalence_test_lm format.parameters_model
+> ###   print_html.parameters_model print_md.parameters_model
+> 
+> ### ** Examples
+> 
+> model <- lm(mpg ~ wt + cyl, data = mtcars)
+> mp <- model_parameters(model)
+> display(mp)
+[1] "|Parameter   | Coefficient |   SE |         95% CI | t(29) |      p |"
+[2] "|:-----------|:-----------:|:----:|:--------------:|:-----:|:------:|"
+[3] "|(Intercept) |       39.69 | 1.71 | (36.18, 43.19) | 23.14 | < .001 |"
+[4] "|wt          |       -3.19 | 0.76 | (-4.74, -1.64) | -4.22 | < .001 |"
+[5] "|cyl         |       -1.51 | 0.41 | (-2.36, -0.66) | -3.64 | 0.001  |"
+attr(,"format")
+[1] "pipe"
+attr(,"class")
+[1] "knitr_kable" "character"  
+> 
+> ## Not run: 
+> ##D data(iris)
+> ##D lm1 <- lm(Sepal.Length ~ Species, data = iris)
+> ##D lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
+> ##D lm3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
+> ##D out <- compare_parameters(lm1, lm2, lm3)
+> ##D 
+> ##D print_html(
+> ##D   out,
+> ##D   select = "{coef}{stars}|({ci})",
+> ##D   column_labels = c("Estimate", "95% CI")
+> ##D )
+> ##D 
+> ##D # line break, unicode minus-sign
+> ##D print_html(
+> ##D   out,
+> ##D   select = "{estimate}{stars}<br>({ci_low} \u2212 {ci_high})",
+> ##D   column_labels = c("Est. (95% CI)")
+> ##D )
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("dominance_analysis")
+> ### * dominance_analysis
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: dominance_analysis
+> ### Title: Dominance Analysis
+> ### Aliases: dominance_analysis
+> 
+> ### ** Examples
+> 
+> if (getRversion() >= "3.5.0" && require("domir") &&
++   require("performance")) {
++   data(mtcars)
++ 
++   # Dominance Analysis with Logit Regression
++   model <- glm(vs ~ cyl + carb + mpg, data = mtcars, family = binomial())
++ 
++   performance::r2(model)
++   dominance_analysis(model)
++ 
++   # Dominance Analysis with Weighted Logit Regression
++   model_wt <- glm(vs ~ cyl + carb + mpg,
++     data = mtcars,
++     weights = wt, family = quasibinomial()
++   )
++ 
++   dominance_analysis(model_wt, quote_args = "weights")
++ }
+Loading required package: domir
+Loading required package: performance
+[34m# Dominance Analysis Results[39m
+
+Model R2 Value:  0.776 
+
+General Dominance Statistics
+
+Parameter   | General Dominance | Percent | Ranks |   Subset
+------------------------------------------------------------
+(Intercept) |                   |         |       | constant
+cyl         |             0.390 |   0.503 |     1 |      cyl
+carb        |             0.174 |   0.224 |     3 |     carb
+mpg         |             0.212 |   0.273 |     2 |      mpg
+
+Conditional Dominance Statistics
+
+Subset | IVs: 1 | IVs: 2 | IVs: 3
+---------------------------------
+cyl    |  0.679 |  0.279 |  0.213
+carb   |  0.376 |  0.062 |  0.083
+mpg    |  0.496 |  0.100 |  0.039
+
+Complete Dominance Designations
+
+Subset | < cyl | < carb | < mpg
+-------------------------------
+cyl    |       |  FALSE | FALSE
+carb   |  TRUE |        |      
+mpg    |  TRUE |        |      
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:performance', 'package:domir'
+
+> nameEx("equivalence_test.lm")
+> ### * equivalence_test.lm
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: equivalence_test.lm
+> ### Title: Equivalence test
+> ### Aliases: equivalence_test.lm equivalence_test.merMod
+> 
+> ### ** Examples
+> 
+> data(qol_cancer)
+> model <- lm(QoL ~ time + age + education, data = qol_cancer)
+> 
+> # default rule
+> equivalence_test(model)
+[34m# TOST-test for Practical Equivalence
+
+[39m  ROPE: [-1.99 1.99]
+
+Parameter        |         90% CI | % in ROPE |        H0 |      p
+------------------------------------------------------------------
+(Intercept)      | [59.33, 68.41] |        0% |  Rejected | > .999
+time             | [-0.76,  2.53] |    83.52% | Undecided | 0.137 
+age              | [-0.26,  0.32] |      100% |  Accepted | < .001
+education [mid]  | [ 5.13, 12.39] |        0% |  Rejected | 0.999 
+education [high] | [10.14, 18.57] |        0% |  Rejected | > .999
+> 
+> # conditional equivalence test
+> equivalence_test(model, rule = "cet")
+[34m# Conditional Equivalence Testing
+
+[39m  ROPE: [-1.99 1.99]
+
+Parameter        |         90% CI | % in ROPE |        H0 |      p
+------------------------------------------------------------------
+(Intercept)      | [59.33, 68.41] |        0% |  Rejected | > .999
+time             | [-0.76,  2.53] |    83.52% | Undecided | 0.137 
+age              | [-0.26,  0.32] |      100% |  Accepted | < .001
+education [mid]  | [ 5.13, 12.39] |        0% |  Rejected | 0.999 
+education [high] | [10.14, 18.57] |        0% |  Rejected | > .999
+> 
+> # plot method
+> if (require("see", quietly = TRUE)) {
++   result <- equivalence_test(model)
++   plot(result)
++ }
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:see'
+
+> nameEx("format_df_adjust")
+> ### * format_df_adjust
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: format_df_adjust
+> ### Title: Format the name of the degrees-of-freedom adjustment methods
+> ### Aliases: format_df_adjust
+> 
+> ### ** Examples
+> 
+> library(parameters)
+> 
+> format_df_adjust("kenward")
+[1] "Kenward-Roger-approximated degrees of freedom"
+> format_df_adjust("kenward", approx_string = "", dof_string = " DoF")
+[1] "Kenward-Roger DoF"
+> 
+> 
+> 
+> cleanEx()
+> nameEx("format_order")
+> ### * format_order
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: format_order
+> ### Title: Order (first, second, ...) formatting
+> ### Aliases: format_order
+> 
+> ### ** Examples
+> 
+> format_order(2)
+[1] "second"
+> format_order(8)
+[1] "eigth"
+> format_order(25, textual = FALSE)
+[1] "25th"
+> 
+> 
+> 
+> cleanEx()
+> nameEx("format_p_adjust")
+> ### * format_p_adjust
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: format_p_adjust
+> ### Title: Format the name of the p-value adjustment methods
+> ### Aliases: format_p_adjust
+> 
+> ### ** Examples
+> 
+> library(parameters)
+> 
+> format_p_adjust("holm")
+[1] "Holm (1979)"
+> format_p_adjust("bonferroni")
+[1] "Bonferroni"
+> 
+> 
+> 
+> cleanEx()
+> nameEx("format_parameters")
+> ### * format_parameters
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: format_parameters
+> ### Title: Parameter names formatting
+> ### Aliases: format_parameters format_parameters.default
+> 
+> ### ** Examples
+> 
+> model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
+> format_parameters(model)
+                         (Intercept)                    Speciesversicolor 
+                       "(Intercept)"               "Species [versicolor]" 
+                    Speciesvirginica                          Sepal.Width 
+               "Species [virginica]"                        "Sepal Width" 
+       Speciesversicolor:Sepal.Width         Speciesvirginica:Sepal.Width 
+"Species [versicolor] × Sepal Width"  "Species [virginica] × Sepal Width" 
+> 
+> model <- lm(Sepal.Length ~ Petal.Length + (Species / Sepal.Width), data = iris)
+> format_parameters(model)
+                         (Intercept)                         Petal.Length 
+                       "(Intercept)"                       "Petal Length" 
+                   Speciesversicolor                     Speciesvirginica 
+              "Species [versicolor]"                "Species [virginica]" 
+           Speciessetosa:Sepal.Width        Speciesversicolor:Sepal.Width 
+    "Species [setosa] × Sepal Width" "Species [versicolor] × Sepal Width" 
+        Speciesvirginica:Sepal.Width 
+ "Species [virginica] × Sepal Width" 
+> 
+> model <- lm(Sepal.Length ~ Species + poly(Sepal.Width, 2), data = iris)
+> format_parameters(model)
+               (Intercept)          Speciesversicolor 
+             "(Intercept)"     "Species [versicolor]" 
+          Speciesvirginica      poly(Sepal.Width, 2)1 
+     "Species [virginica]" "Sepal Width [1st degree]" 
+     poly(Sepal.Width, 2)2 
+"Sepal Width [2nd degree]" 
+> 
+> model <- lm(Sepal.Length ~ Species + poly(Sepal.Width, 2, raw = TRUE), data = iris)
+> format_parameters(model)
+                      (Intercept)                 Speciesversicolor 
+                    "(Intercept)"            "Species [versicolor]" 
+                 Speciesvirginica poly(Sepal.Width, 2, raw = TRUE)1 
+            "Species [virginica]"        "Sepal Width [1st degree]" 
+poly(Sepal.Width, 2, raw = TRUE)2 
+       "Sepal Width [2nd degree]" 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("get_scores")
+> ### * get_scores
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: get_scores
+> ### Title: Get Scores from Principal Component Analysis (PCA)
+> ### Aliases: get_scores
+> 
+> ### ** Examples
+> 
+> if (require("psych")) {
++   pca <- principal_components(mtcars[, 1:7], n = 2, rotation = "varimax")
++ 
++   # PCA extracted two components
++   pca
++ 
++   # assignment of items to each component
++   closest_component(pca)
++ 
++   # now we want to have sum scores for each component
++   get_scores(pca)
++ 
++   # compare to manually computed sum score for 2nd component, which
++   # consists of items "hp" and "qsec"
++   (mtcars$hp + mtcars$qsec) / 2
++ }
+Loading required package: psych
+ [1]  63.230  63.510  55.805  64.720  96.010  62.610 130.420  41.000  58.950
+[10]  70.650  70.950  98.700  98.800  99.000 111.490 116.410 123.710  42.735
+[19]  35.260  42.450  58.505  83.435  83.650 130.205  96.025  42.450  53.850
+[28]  64.950 139.250  95.250 174.800  63.800
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:psych'
+
+> nameEx("model_parameters.BFBayesFactor")
+> ### * model_parameters.BFBayesFactor
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_parameters.BFBayesFactor
+> ### Title: Parameters from BayesFactor objects
+> ### Aliases: model_parameters.BFBayesFactor
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("model_parameters.aov")
+> ### * model_parameters.aov
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_parameters.aov
+> ### Title: Parameters from ANOVAs
+> ### Aliases: model_parameters.aov model_parameters.anova
+> ###   model_parameters.aovlist model_parameters.afex_aov
+> ###   model_parameters.anova.rms model_parameters.Anova.mlm
+> ###   model_parameters.maov
+> 
+> ### ** Examples
+> 
+> ## Don't show: 
+> if (requireNamespace("effectsize", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ df <- iris
++ df$Sepal.Big <- ifelse(df$Sepal.Width >= 3, "Yes", "No")
++ 
++ model <- aov(Sepal.Length ~ Sepal.Big, data = df)
++ model_parameters(model)
++ 
++ model_parameters(model, effectsize_type = c("omega", "eta"), ci = 0.9)
++ 
++ model <- anova(lm(Sepal.Length ~ Sepal.Big, data = df))
++ model_parameters(model)
++ model_parameters(
++   model,
++   effectsize_type = c("omega", "eta", "epsilon"),
++   alternative = "greater"
++ )
++ 
++ model <- aov(Sepal.Length ~ Sepal.Big + Error(Species), data = df)
++ model_parameters(model)
++ ## Don't show: 
++ }) # examplesIf
+> df <- iris
+> df$Sepal.Big <- ifelse(df$Sepal.Width >= 3, "Yes", "No")
+> model <- aov(Sepal.Length ~ Sepal.Big, data = df)
+> model_parameters(model)
+Parameter | Sum_Squares |  df | Mean_Square |    F |     p
+----------------------------------------------------------
+Sepal.Big |        1.10 |   1 |        1.10 | 1.61 | 0.207
+Residuals |      101.07 | 148 |        0.68 |      |      
+[34m
+Anova Table (Type 1 tests)
+[39m> model_parameters(model, effectsize_type = c("omega", "eta"), ci = 0.9)
+Parameter | Sum_Squares |  df | Mean_Square |    F |     p |   Omega2 | Omega2 90% CI | Eta2 |  Eta2 90% CI
+-----------------------------------------------------------------------------------------------------------
+Sepal.Big |        1.10 |   1 |        1.10 | 1.61 | 0.207 | 4.04e-03 |  [0.00, 1.00] | 0.01 | [0.00, 1.00]
+Residuals |      101.07 | 148 |        0.68 |      |       |          |               |      |             
+[34m
+Anova Table (Type 1 tests)
+[39m> model <- anova(lm(Sepal.Length ~ Sepal.Big, data = df))
+> model_parameters(model)
+Parameter | Sum_Squares |  df | Mean_Square |    F |     p
+----------------------------------------------------------
+Sepal.Big |        1.10 |   1 |        1.10 | 1.61 | 0.207
+Residuals |      101.07 | 148 |        0.68 |      |      
+[34m
+Anova Table (Type 1 tests)
+[39m> model_parameters(model, effectsize_type = c("omega", "eta", "epsilon"), 
++     alternative = "greater")
+Parameter | Sum_Squares |  df | Mean_Square |    F |     p |   Omega2 | Eta2 | Epsilon2
+---------------------------------------------------------------------------------------
+Sepal.Big |        1.10 |   1 |        1.10 | 1.61 | 0.207 | 4.04e-03 | 0.01 | 4.07e-03
+Residuals |      101.07 | 148 |        0.68 |      |       |          |      |         
+[34m
+Anova Table (Type 1 tests)
+[39m> model <- aov(Sepal.Length ~ Sepal.Big + Error(Species), data = df)
+> model_parameters(model)
+[34m# Species [39m
+
+Parameter | Sum_Squares | df | Mean_Square |    F |     p
+---------------------------------------------------------
+Sepal.Big |       28.27 |  1 |       28.27 | 0.81 | 0.534
+Residuals |       34.94 |  1 |       34.94 |      |      
+
+[34m# Within [39m
+
+Parameter | Sum_Squares |  df | Mean_Square |     F |      p
+------------------------------------------------------------
+Sepal.Big |        4.74 |   1 |        4.74 | 20.24 | < .001
+Residuals |       34.21 | 146 |        0.23 |       |       
+[34m
+Anova Table (Type 1 tests)
+[39m> ## End(Don't show)
+> ## Don't show: 
+> if (requireNamespace("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ ## Not run: 
++ ##D mm <- lmer(Sepal.Length ~ Sepal.Big + Petal.Width + (1 | Species), data = df)
++ ##D model <- anova(mm)
++ ##D 
++ ##D # simple parameters table
++ ##D model_parameters(model)
++ ##D 
++ ##D # parameters table including effect sizes
++ ##D model_parameters(
++ ##D   model,
++ ##D   effectsize_type = "eta",
++ ##D   ci = 0.9,
++ ##D   df_error = dof_satterthwaite(mm)[2:3]
++ ##D )
++ ## End(Not run)
++ ## Don't show: 
++ }) # examplesIf
+> ## End(Don't show)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("model_parameters.averaging")
+> ### * model_parameters.averaging
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_parameters.PMCMR
+> ### Title: Parameters from special models
+> ### Aliases: model_parameters.PMCMR model_parameters.glimML
+> ###   model_parameters.averaging model_parameters.mle2
+> ###   model_parameters.betareg model_parameters.bfsl
+> ###   model_parameters.deltaMethod model_parameters.emmGrid
+> ###   model_parameters.emm_list model_parameters.epi.2by2
+> ###   model_parameters.fitdistr model_parameters.ggeffects
+> ###   model_parameters.SemiParBIV model_parameters.glmm
+> ###   model_parameters.glmx model_parameters.ivFixed
+> ###   model_parameters.ivprobit model_parameters.lmodel2
+> ###   model_parameters.logistf model_parameters.lqmm
+> ###   model_parameters.marginaleffects model_parameters.comparisons
+> ###   model_parameters.marginalmeans model_parameters.deltamethod
+> ###   model_parameters.predictions model_parameters.margins
+> ###   model_parameters.maxLik model_parameters.maxim
+> ###   model_parameters.mediate model_parameters.metaplus
+> ###   model_parameters.meta_random model_parameters.meta_fixed
+> ###   model_parameters.meta_bma model_parameters.logitor
+> ###   model_parameters.poissonirr model_parameters.negbinirr
+> ###   model_parameters.poissonmfx model_parameters.logitmfx
+> ###   model_parameters.probitmfx model_parameters.negbinmfx
+> ###   model_parameters.betaor model_parameters.betamfx
+> ###   model_parameters.mjoint model_parameters.model_fit
+> ###   model_parameters.glht model_parameters.mvord model_parameters.pgmm
+> ###   model_parameters.rqss model_parameters.rqs model_parameters.selection
+> ###   model_parameters.mle model_parameters.systemfit
+> ###   model_parameters.varest model_parameters.t1way
+> ###   model_parameters.med1way model_parameters.dep.effect
+> ###   model_parameters.yuen
+> 
+> ### ** Examples
+> 
+> library(parameters)
+> if (require("brglm2", quietly = TRUE)) {
++   data("stemcell")
++   model <- bracl(
++     research ~ as.numeric(religion) + gender,
++     weights = frequency,
++     data = stemcell,
++     type = "ML"
++   )
++   model_parameters(model)
++ }
+[34m# Response level: definitely[39m
+
+Parameter       | Log-Odds |   SE |         95% CI |     z |      p
+-------------------------------------------------------------------
+(Intercept)     |    -1.25 | 0.26 | [-1.76, -0.73] | -4.76 | < .001
+religion        |     0.44 | 0.10 | [ 0.23,  0.64] |  4.20 | < .001
+gender [female] |    -0.14 | 0.17 | [-0.47,  0.19] | -0.82 | 0.414 
+
+[34m# Response level: probably[39m
+
+Parameter       | Log-Odds |   SE |        95% CI |    z |     p
+----------------------------------------------------------------
+(Intercept)     |     0.47 | 0.29 | [-0.10, 1.04] | 1.62 | 0.105
+religion        |     0.26 | 0.13 | [ 0.01, 0.51] | 2.01 | 0.044
+gender [female] |     0.19 | 0.21 | [-0.22, 0.60] | 0.90 | 0.370
+
+[34m# Response level: probably not[39m
+
+Parameter       | Log-Odds |   SE |        95% CI |     z |     p
+-----------------------------------------------------------------
+(Intercept)     |     0.43 | 0.39 | [-0.33, 1.18] |  1.11 | 0.268
+religion        |     0.01 | 0.17 | [-0.33, 0.35] |  0.07 | 0.945
+gender [female] |    -0.16 | 0.28 | [-0.71, 0.39] | -0.57 | 0.566
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald z-distribution approximation.
+
+The model has a log- or logit-link. Consider using `exponentiate =
+  TRUE` to interpret coefficients as ratios.
+> if (require("WRS2") && packageVersion("WRS2") >= "1.1.3") {
++   model <- t1way(libido ~ dose, data = viagra)
++   model_parameters(model)
++ }
+Loading required package: WRS2
+A heteroscedastic one-way ANOVA for trimmed means
+
+F    | df | df (error) |     p | Estimate |       95% CI |                         Effectsize
+---------------------------------------------------------------------------------------------
+3.00 |  2 |          4 | 0.160 |     0.79 | [0.52, 1.71] | Explanatory measure of effect size
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:WRS2', 'package:brglm2'
+
+> nameEx("model_parameters.befa")
+> ### * model_parameters.befa
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_parameters.befa
+> ### Title: Parameters from Bayesian Exploratory Factor Analysis
+> ### Aliases: model_parameters.befa
+> 
+> ### ** Examples
+> 
+> library(parameters)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("model_parameters.cgam")
+> ### * model_parameters.cgam
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_parameters.cgam
+> ### Title: Parameters from Generalized Additive (Mixed) Models
+> ### Aliases: model_parameters.cgam model_parameters.gam
+> ###   model_parameters.gamlss model_parameters.gamm model_parameters.Gam
+> ###   model_parameters.scam model_parameters.vgam
+> 
+> ### ** Examples
+> 
+> library(parameters)
+> if (require("mgcv")) {
++   dat <- gamSim(1, n = 400, dist = "normal", scale = 2)
++   model <- gam(y ~ s(x0) + s(x1) + s(x2) + s(x3), data = dat)
++   model_parameters(model)
++ }
+Loading required package: mgcv
+Loading required package: nlme
+This is mgcv 1.8-41. For overview type 'help("mgcv-package")'.
+Gu & Wahba 4 term additive model
+[34m# Fixed Effects [39m
+
+Parameter   | Coefficient |   SE |       95% CI | t(379.98) |      p
+--------------------------------------------------------------------
+(Intercept) |        7.94 | 0.10 | [7.73, 8.14] |     76.54 | < .001
+
+[34m# Smooth Terms [39m
+
+Parameter        |     F |   df |      p
+----------------------------------------
+Smooth term (x0) |  8.03 | 2.71 | < .001
+Smooth term (x1) | 37.46 | 6.93 | < .001
+Smooth term (x2) | 75.31 | 8.38 | < .001
+Smooth term (x3) |  0.71 | 1.00 | 0.399 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:mgcv', 'package:nlme'
+
+> nameEx("model_parameters.default")
+> ### * model_parameters.default
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_parameters.default
+> ### Title: Parameters from (General) Linear Models
+> ### Aliases: model_parameters.default model_parameters.glm
+> ###   model_parameters.censReg model_parameters.ridgelm
+> ###   model_parameters.polr model_parameters.negbin model_parameters.svyglm
+> 
+> ### ** Examples
+> 
+> library(parameters)
+> model <- lm(mpg ~ wt + cyl, data = mtcars)
+> 
+> model_parameters(model)
+Parameter   | Coefficient |   SE |         95% CI | t(29) |      p
+------------------------------------------------------------------
+(Intercept) |       39.69 | 1.71 | [36.18, 43.19] | 23.14 | < .001
+wt          |       -3.19 | 0.76 | [-4.74, -1.64] | -4.22 | < .001
+cyl         |       -1.51 | 0.41 | [-2.36, -0.66] | -3.64 | 0.001 
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald t-distribution approximation.
+> 
+> # bootstrapped parameters
+> if (require("boot", quietly = TRUE)) {
++   model_parameters(model, bootstrap = TRUE)
++ }
+Parameter   | Coefficient |         95% CI |      p
+---------------------------------------------------
+(Intercept) |       39.94 | [35.58, 44.01] | < .001
+wt          |       -3.26 | [-4.89, -2.00] | < .001
+cyl         |       -1.47 | [-2.22, -0.77] | < .001
+
+Uncertainty intervals (equal-tailed) are naıve bootstrap intervals.
+> 
+> # standardized parameters
+> model_parameters(model, standardize = "refit")
+Parameter   | Coefficient |   SE |         95% CI |    t(29) |      p
+---------------------------------------------------------------------
+(Intercept) |    4.90e-17 | 0.08 | [-0.15,  0.15] | 6.50e-16 | > .999
+wt          |       -0.52 | 0.12 | [-0.77, -0.27] |    -4.22 | < .001
+cyl         |       -0.45 | 0.12 | [-0.70, -0.20] |    -3.64 | 0.001 
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald t-distribution approximation.
+> 
+> # robust, heteroskedasticity-consistent standard errors
+> if (require("sandwich") && require("clubSandwich")) {
++   model_parameters(model, vcov = "HC3")
++ 
++   model_parameters(model,
++     vcov = "vcovCL",
++     vcov_args = list(cluster = mtcars$cyl)
++   )
++ }
+Loading required package: sandwich
+Loading required package: clubSandwich
+Parameter   | Coefficient |   SE |         95% CI | t(29) |      p
+------------------------------------------------------------------
+(Intercept) |       39.69 | 1.50 | [36.61, 42.76] | 26.43 | < .001
+wt          |       -3.19 | 1.20 | [-5.65, -0.73] | -2.65 | 0.013 
+cyl         |       -1.51 | 0.40 | [-2.32, -0.70] | -3.82 | < .001
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald t-distribution approximation.
+> 
+> # different p-value style in output
+> model_parameters(model, p_digits = 5)
+Parameter   | Coefficient |   SE |         95% CI | t(29) |           p
+-----------------------------------------------------------------------
+(Intercept) |       39.69 | 1.71 | [36.18, 43.19] | 23.14 | 3.04318e-20
+wt          |       -3.19 | 0.76 | [-4.74, -1.64] | -4.22 | 0.00022    
+cyl         |       -1.51 | 0.41 | [-2.36, -0.66] | -3.64 | 0.00106    
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald t-distribution approximation.
+> model_parameters(model, digits = 3, ci_digits = 4, p_digits = "scientific")
+Parameter   | Coefficient |    SE |             95% CI |  t(29) |           p
+-----------------------------------------------------------------------------
+(Intercept) |      39.686 | 1.715 | [36.1787, 43.1938] | 23.141 | 3.04318e-20
+wt          |      -3.191 | 0.757 | [-4.7390, -1.6429] | -4.216 | 2.22020e-04
+cyl         |      -1.508 | 0.415 | [-2.3559, -0.6597] | -3.636 | 1.06428e-03
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald t-distribution approximation.
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:clubSandwich', 'package:sandwich', 'package:boot'
+
+> nameEx("model_parameters.htest")
+> ### * model_parameters.htest
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_parameters.htest
+> ### Title: Parameters from hypothesis tests
+> ### Aliases: model_parameters.htest model_parameters.pairwise.htest
+> ###   model_parameters.coeftest
+> 
+> ### ** Examples
+> 
+> 
+> model <- cor.test(mtcars$mpg, mtcars$cyl, method = "pearson")
+> model_parameters(model)
+Pearson's product-moment correlation
+
+Parameter1 | Parameter2 |     r |         95% CI | t(30) |      p
+-----------------------------------------------------------------
+mtcars$mpg | mtcars$cyl | -0.85 | [-0.93, -0.72] | -8.92 | < .001
+[34m
+Alternative hypothesis: true correlation is not equal to 0
+[39m> 
+> model <- t.test(iris$Sepal.Width, iris$Sepal.Length)
+> model_parameters(model, effectsize_type = "hedges_g")
+Welch Two Sample t-test
+
+Parameter1       |        Parameter2 | Mean_Parameter1 | Mean_Parameter2 | Difference |         95% CI | Hedges' g |       g 95% CI | t(225.68) |      p
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+iris$Sepal.Width | iris$Sepal.Length |            3.06 |            5.84 |      -2.79 | [-2.94, -2.64] |     -4.20 | [-4.64, -3.75] |    -36.46 | < .001
+[34m
+Alternative hypothesis: true difference in means is not equal to 0
+[39m> 
+> model <- t.test(mtcars$mpg ~ mtcars$vs)
+> model_parameters(model, effectsize_type = "hedges_g")
+Welch Two Sample t-test
+
+Parameter  |     Group | Mean_Group1 | Mean_Group2 | Difference |          95% CI | Hedges' g |       g 95% CI | t(22.72) |      p
+----------------------------------------------------------------------------------------------------------------------------------
+mtcars$mpg | mtcars$vs |       16.62 |       24.56 |      -7.94 | [-11.46, -4.42] |     -1.64 | [-2.46, -0.79] |    -4.67 | < .001
+[34m
+Alternative hypothesis: true difference in means between group 0 and group 1 is not equal to 0
+[39m> 
+> model <- t.test(iris$Sepal.Width, mu = 1)
+> model_parameters(model, effectsize_type = "cohens_d")
+One Sample t-test
+
+Parameter        |   mu | Difference |       95% CI | Cohen's d |     d 95% CI | t(149) |      p
+------------------------------------------------------------------------------------------------
+iris$Sepal.Width | 1.00 |       2.06 | [2.99, 3.13] |      4.72 | [4.15, 5.27] |  57.81 | < .001
+[34m
+Alternative hypothesis: true mean is not equal to 1
+[39m> 
+> data(airquality)
+> airquality$Month <- factor(airquality$Month, labels = month.abb[5:9])
+> model <- pairwise.t.test(airquality$Ozone, airquality$Month)
+> model_parameters(model)
+[34m# Fixed Effects[39m
+
+Group1 | Group2 |      p
+------------------------
+Jun    |    May | > .999
+Jul    |    May | < .001
+Jul    |    Jun | 0.051 
+Aug    |    May | < .001
+Aug    |    Jun | 0.050 
+Aug    |    Jul | > .999
+Sep    |    May | > .999
+Sep    |    Jun | > .999
+Sep    |    Jul | 0.005 
+Sep    |    Aug | 0.004 
+[34m
+p-value adjustment method: Holm (1979)
+[39m> 
+> smokers <- c(83, 90, 129, 70)
+> patients <- c(86, 93, 136, 82)
+> model <- suppressWarnings(pairwise.prop.test(smokers, patients))
+> model_parameters(model)
+[34m# Fixed Effects[39m
+
+Group1 | Group2 |      p
+------------------------
+2      |      1 | > .999
+3      |      1 | > .999
+3      |      2 | > .999
+4      |      1 | 0.119 
+4      |      2 | 0.093 
+4      |      3 | 0.124 
+[34m
+p-value adjustment method: Holm (1979)
+[39m> 
+> model <- suppressWarnings(chisq.test(table(mtcars$am, mtcars$cyl)))
+> model_parameters(model, effectsize_type = "cramers_v")
+Pearson's Chi-squared test
+
+Chi2(2) | Cramer's V (adj.) | Cramers 95% CI |     p
+----------------------------------------------------
+8.74    |              0.46 |   [0.00, 1.00] | 0.013
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("model_parameters.kmeans")
+> ### * model_parameters.kmeans
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_parameters.dbscan
+> ### Title: Parameters from Cluster Models (k-means, ...)
+> ### Aliases: model_parameters.dbscan model_parameters.hclust
+> ###   model_parameters.pvclust model_parameters.kmeans
+> ###   model_parameters.hkmeans model_parameters.Mclust model_parameters.pam
+> 
+> ### ** Examples
+> 
+> #
+> # Hierarchical clustering (hclust) ---------------------------
+> data <- iris[1:4]
+> model <- hclust(dist(data))
+> clusters <- cutree(model, 3)
+> 
+> rez <- model_parameters(model, data, clusters)
+> rez
+[34m# Clustering Solution[39m
+
+[33mThe 3 clusters accounted for 86.86% of the total variance of the original data.[39m
+
+Cluster | n_Obs | Sum_Squares | Sepal.Length | Sepal.Width | Petal.Length | Petal.Width
+---------------------------------------------------------------------------------------
+1       |    50 |       15.15 |         5.01 |        3.43 |         1.46 |        0.25
+2       |    72 |       64.62 |         6.55 |        2.96 |         5.27 |        1.85
+3       |    28 |        9.75 |         5.53 |        2.64 |         3.96 |        1.23
+> 
+> # Get clusters
+> predict(rez)
+  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ [38] 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 3 2 3 2 3 2 3 3 3 3 2 3 2 3 3 2 3 2 3 2 2
+ [75] 2 2 2 2 2 3 3 3 3 2 3 2 2 2 3 3 3 2 3 3 3 3 3 2 3 3 2 2 2 2 2 2 3 2 2 2 2
+[112] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+[149] 2 2
+> 
+> # Clusters centers in long form
+> attributes(rez)$means
+   Cluster n_Obs Sum_Squares     Variable     Mean
+1        1    50   15.151000 Sepal.Length 5.006000
+2        1    50   15.151000  Sepal.Width 3.428000
+3        1    50   15.151000 Petal.Length 1.462000
+4        1    50   15.151000  Petal.Width 0.246000
+5        2    72   64.624722 Sepal.Length 6.545833
+6        2    72   64.624722  Sepal.Width 2.963889
+7        2    72   64.624722 Petal.Length 5.273611
+8        2    72   64.624722  Petal.Width 1.850000
+9        3    28    9.749286 Sepal.Length 5.532143
+10       3    28    9.749286  Sepal.Width 2.635714
+11       3    28    9.749286 Petal.Length 3.960714
+12       3    28    9.749286  Petal.Width 1.228571
+> 
+> # Between and Total Sum of Squares
+> attributes(rez)$Total_Sum_Squares
+NULL
+> attributes(rez)$Between_Sum_Squares
+NULL
+> ## Not run: 
+> ##D #
+> ##D # K-means -------------------------------
+> ##D model <- kmeans(iris[1:4], centers = 3)
+> ##D rez <- model_parameters(model)
+> ##D rez
+> ##D 
+> ##D # Get clusters
+> ##D predict(rez)
+> ##D 
+> ##D # Clusters centers in long form
+> ##D attributes(rez)$means
+> ##D 
+> ##D # Between and Total Sum of Squares
+> ##D attributes(rez)$Sum_Squares_Total
+> ##D attributes(rez)$Sum_Squares_Between
+> ## End(Not run)
+> ## Not run: 
+> ##D #
+> ##D # Hierarchical K-means (factoextra::hkclust) ----------------------
+> ##D if (require("factoextra", quietly = TRUE)) {
+> ##D   data <- iris[1:4]
+> ##D   model <- factoextra::hkmeans(data, k = 3)
+> ##D 
+> ##D   rez <- model_parameters(model)
+> ##D   rez
+> ##D 
+> ##D   # Get clusters
+> ##D   predict(rez)
+> ##D 
+> ##D   # Clusters centers in long form
+> ##D   attributes(rez)$means
+> ##D 
+> ##D   # Between and Total Sum of Squares
+> ##D   attributes(rez)$Sum_Squares_Total
+> ##D   attributes(rez)$Sum_Squares_Between
+> ##D }
+> ## End(Not run)
+> if (require("mclust", quietly = TRUE)) {
++   model <- mclust::Mclust(iris[1:4], verbose = FALSE)
++   model_parameters(model)
++ }
+Package 'mclust' version 6.0.0
+Type 'citation("mclust")' for citing this R package in publications.
+[34m# Clustering Solution[39m
+
+[33mThe 2 clusters accounted for 77.26% of the total variance of the original data.[39m
+
+Cluster | n_Obs | Sum_Squares | Sepal.Length | Sepal.Width | Petal.Length | Petal.Width
+---------------------------------------------------------------------------------------
+1       |    50 |       15.15 |         5.01 |        3.43 |         1.46 |        0.25
+2       |   100 |      139.80 |         6.26 |        2.87 |         4.91 |        1.68
+> ## Not run: 
+> ##D #
+> ##D # K-Medoids (PAM and HPAM) ==============
+> ##D if (require("cluster", quietly = TRUE)) {
+> ##D   model <- cluster::pam(iris[1:4], k = 3)
+> ##D   model_parameters(model)
+> ##D }
+> ##D if (require("fpc", quietly = TRUE)) {
+> ##D   model <- fpc::pamk(iris[1:4], criterion = "ch")
+> ##D   model_parameters(model)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:mclust'
+
+> nameEx("model_parameters.merMod")
+> ### * model_parameters.merMod
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_parameters.cpglmm
+> ### Title: Parameters from Mixed Models
+> ### Aliases: model_parameters.cpglmm model_parameters.glmmTMB
+> ###   model_parameters.merMod model_parameters.merModList
+> ###   model_parameters.mixed model_parameters.MixMod model_parameters.mixor
+> ###   model_parameters.lme model_parameters.clmm2 model_parameters.clmm
+> ###   model_parameters.rlmerMod model_parameters.HLfit
+> 
+> ### ** Examples
+> 
+> library(parameters)
+> if (require("lme4")) {
++   data(mtcars)
++   model <- lmer(mpg ~ wt + (1 | gear), data = mtcars)
++   model_parameters(model)
++ }
+Loading required package: lme4
+Loading required package: Matrix
+[34m# Fixed Effects [39m
+
+Parameter   | Coefficient |   SE |         95% CI | t(28) |      p
+------------------------------------------------------------------
+(Intercept) |       36.19 | 2.19 | [31.70, 40.68] | 16.52 | < .001
+wt          |       -5.05 | 0.64 | [-6.36, -3.73] | -7.89 | < .001
+
+[34m# Random Effects [39m
+
+Parameter            | Coefficient |   SE |       95% CI
+--------------------------------------------------------
+SD (Intercept: gear) |        1.26 | 1.12 | [0.22, 7.17]
+SD (Residual)        |        2.91 | 0.39 | [2.24, 3.78]
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald t-distribution approximation. Uncertainty intervals for
+  random effect variances computed using a Wald z-distribution
+  approximation.
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:lme4', 'package:Matrix'
+
+> nameEx("model_parameters.mira")
+> ### * model_parameters.mira
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_parameters.mipo
+> ### Title: Parameters from multiply imputed repeated analyses
+> ### Aliases: model_parameters.mipo model_parameters.mira
+> 
+> ### ** Examples
+> 
+> library(parameters)
+> if (require("mice", quietly = TRUE)) {
++   data(nhanes2)
++   imp <- mice(nhanes2)
++   fit <- with(data = imp, exp = lm(bmi ~ age + hyp + chl))
++   model_parameters(fit)
++ }
+
+Attaching package: 'mice'
+
+The following object is masked from 'package:stats':
+
+    filter
+
+The following objects are masked from 'package:base':
+
+    cbind, rbind
+
+
+ iter imp variable
+  1   1  bmi  hyp  chl
+  1   2  bmi  hyp  chl
+  1   3  bmi  hyp  chl
+  1   4  bmi  hyp  chl
+  1   5  bmi  hyp  chl
+  2   1  bmi  hyp  chl
+  2   2  bmi  hyp  chl
+  2   3  bmi  hyp  chl
+  2   4  bmi  hyp  chl
+  2   5  bmi  hyp  chl
+  3   1  bmi  hyp  chl
+  3   2  bmi  hyp  chl
+  3   3  bmi  hyp  chl
+  3   4  bmi  hyp  chl
+  3   5  bmi  hyp  chl
+  4   1  bmi  hyp  chl
+  4   2  bmi  hyp  chl
+  4   3  bmi  hyp  chl
+  4   4  bmi  hyp  chl
+  4   5  bmi  hyp  chl
+  5   1  bmi  hyp  chl
+  5   2  bmi  hyp  chl
+  5   3  bmi  hyp  chl
+  5   4  bmi  hyp  chl
+  5   5  bmi  hyp  chl
+[34m# Fixed Effects[39m
+
+Parameter   | Coefficient |   SE |          95% CI | Statistic |    df |      p
+-------------------------------------------------------------------------------
+(Intercept) |       18.67 | 3.91 | [  9.88, 27.45] |      4.78 |  9.36 | < .001
+age40-59    |       -4.67 | 2.57 | [-11.63,  2.30] |     -1.81 |  4.27 | 0.139 
+age60-99    |       -6.55 | 2.92 | [-14.39,  1.29] |     -2.24 |  4.37 | 0.082 
+hypyes      |        2.27 | 1.93 | [ -1.97,  6.52] |      1.18 | 10.90 | 0.263 
+chl         |        0.05 | 0.02 | [ -0.00,  0.11] |      2.25 |  6.62 | 0.061 
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald distribution approximation.
+> ## Not run: 
+> ##D # model_parameters() also works for models that have no "tidy"-method in mice
+> ##D if (require("mice", quietly = TRUE) && require("gee", quietly = TRUE)) {
+> ##D   data(warpbreaks)
+> ##D   set.seed(1234)
+> ##D   warpbreaks$tension[sample(1:nrow(warpbreaks), size = 10)] <- NA
+> ##D   imp <- mice(warpbreaks)
+> ##D   fit <- with(data = imp, expr = gee(breaks ~ tension, id = wool))
+> ##D 
+> ##D   # does not work:
+> ##D   # summary(pool(fit))
+> ##D 
+> ##D   model_parameters(fit)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> # and it works with pooled results
+> if (require("mice")) {
++   data("nhanes2")
++   imp <- mice(nhanes2)
++   fit <- with(data = imp, exp = lm(bmi ~ age + hyp + chl))
++   pooled <- pool(fit)
++ 
++   model_parameters(pooled)
++ }
+
+ iter imp variable
+  1   1  bmi  hyp  chl
+  1   2  bmi  hyp  chl
+  1   3  bmi  hyp  chl
+  1   4  bmi  hyp  chl
+  1   5  bmi  hyp  chl
+  2   1  bmi  hyp  chl
+  2   2  bmi  hyp  chl
+  2   3  bmi  hyp  chl
+  2   4  bmi  hyp  chl
+  2   5  bmi  hyp  chl
+  3   1  bmi  hyp  chl
+  3   2  bmi  hyp  chl
+  3   3  bmi  hyp  chl
+  3   4  bmi  hyp  chl
+  3   5  bmi  hyp  chl
+  4   1  bmi  hyp  chl
+  4   2  bmi  hyp  chl
+  4   3  bmi  hyp  chl
+  4   4  bmi  hyp  chl
+  4   5  bmi  hyp  chl
+  5   1  bmi  hyp  chl
+  5   2  bmi  hyp  chl
+  5   3  bmi  hyp  chl
+  5   4  bmi  hyp  chl
+  5   5  bmi  hyp  chl
+[34m# Fixed Effects[39m
+
+Parameter   | Coefficient |   SE |          95% CI |     t |    df |      p
+---------------------------------------------------------------------------
+(Intercept) |       19.22 | 3.26 | [ 12.32, 26.11] |  5.89 | 16.71 | < .001
+age [40-59] |       -5.12 | 1.78 | [ -9.03, -1.21] | -2.87 | 11.15 | 0.015 
+age [60-99] |       -6.80 | 2.02 | [-11.18, -2.41] | -3.36 | 12.54 | 0.005 
+hyp [yes]   |        2.31 | 1.70 | [ -1.26,  5.89] |  1.36 | 17.43 | 0.191 
+chl         |        0.05 | 0.02 | [  0.01,  0.09] |  2.91 | 16.58 | 0.010 
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald t-distribution approximation.
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:mice'
+
+> nameEx("model_parameters.mlm")
+> ### * model_parameters.mlm
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_parameters.DirichletRegModel
+> ### Title: Parameters from multinomial or cumulative link models
+> ### Aliases: model_parameters.DirichletRegModel model_parameters.bifeAPEs
+> ###   model_parameters.bracl model_parameters.mlm model_parameters.clm2
+> 
+> ### ** Examples
+> 
+> library(parameters)
+> if (require("brglm2", quietly = TRUE)) {
++   data("stemcell")
++   model <- bracl(
++     research ~ as.numeric(religion) + gender,
++     weights = frequency,
++     data = stemcell,
++     type = "ML"
++   )
++   model_parameters(model)
++ }
+[34m# Response level: definitely[39m
+
+Parameter       | Log-Odds |   SE |         95% CI |     z |      p
+-------------------------------------------------------------------
+(Intercept)     |    -1.25 | 0.26 | [-1.76, -0.73] | -4.76 | < .001
+religion        |     0.44 | 0.10 | [ 0.23,  0.64] |  4.20 | < .001
+gender [female] |    -0.14 | 0.17 | [-0.47,  0.19] | -0.82 | 0.414 
+
+[34m# Response level: probably[39m
+
+Parameter       | Log-Odds |   SE |        95% CI |    z |     p
+----------------------------------------------------------------
+(Intercept)     |     0.47 | 0.29 | [-0.10, 1.04] | 1.62 | 0.105
+religion        |     0.26 | 0.13 | [ 0.01, 0.51] | 2.01 | 0.044
+gender [female] |     0.19 | 0.21 | [-0.22, 0.60] | 0.90 | 0.370
+
+[34m# Response level: probably not[39m
+
+Parameter       | Log-Odds |   SE |        95% CI |     z |     p
+-----------------------------------------------------------------
+(Intercept)     |     0.43 | 0.39 | [-0.33, 1.18] |  1.11 | 0.268
+religion        |     0.01 | 0.17 | [-0.33, 0.35] |  0.07 | 0.945
+gender [female] |    -0.16 | 0.28 | [-0.71, 0.39] | -0.57 | 0.566
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald z-distribution approximation.
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:brglm2'
+
+> nameEx("model_parameters.principal")
+> ### * model_parameters.principal
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_parameters.PCA
+> ### Title: Parameters from PCA, FA, CFA, SEM
+> ### Aliases: model_parameters.PCA model_parameters.FAMD
+> ###   model_parameters.lavaan model_parameters.principal
+> ###   model_parameters.omega model_parameters.sem
+> 
+> ### ** Examples
+> 
+> 
+> # lavaan
+> 
+> library(parameters)
+> 
+> # lavaan -------------------------------------
+> if (require("lavaan", quietly = TRUE)) {
++   # Confirmatory Factor Analysis (CFA) ---------
++ 
++   structure <- " visual  =~ x1 + x2 + x3
++                  textual =~ x4 + x5 + x6
++                  speed   =~ x7 + x8 + x9 "
++   model <- lavaan::cfa(structure, data = HolzingerSwineford1939)
++   model_parameters(model)
++   model_parameters(model, standardize = TRUE)
++ 
++   # filter parameters
++   model_parameters(
++     model,
++     parameters = list(
++       To = "^(?!visual)",
++       From = "^(?!(x7|x8))"
++     )
++   )
++ 
++   # Structural Equation Model (SEM) ------------
++ 
++   structure <- "
++     # latent variable definitions
++       ind60 =~ x1 + x2 + x3
++       dem60 =~ y1 + a*y2 + b*y3 + c*y4
++       dem65 =~ y5 + a*y6 + b*y7 + c*y8
++     # regressions
++       dem60 ~ ind60
++       dem65 ~ ind60 + dem60
++     # residual correlations
++       y1 ~~ y5
++       y2 ~~ y4 + y6
++       y3 ~~ y7
++       y4 ~~ y8
++       y6 ~~ y8
++   "
++   model <- lavaan::sem(structure, data = PoliticalDemocracy)
++   model_parameters(model)
++   model_parameters(model, standardize = TRUE)
++ }
+This is lavaan 0.6-13
+lavaan is FREE software! Please report any bugs.
+[34m# Loading [39m
+
+Link            | Coefficient |   SE |       95% CI |     z |      p
+--------------------------------------------------------------------
+ind60 =~ x1     |        0.92 | 0.02 | [0.88, 0.97] | 40.08 | < .001
+ind60 =~ x2     |        0.97 | 0.02 | [0.94, 1.01] | 59.14 | < .001
+ind60 =~ x3     |        0.87 | 0.03 | [0.81, 0.93] | 28.09 | < .001
+dem60 =~ y1     |        0.85 | 0.04 | [0.77, 0.93] | 20.92 | < .001
+dem60 =~ y2 (a) |        0.69 | 0.06 | [0.57, 0.81] | 11.58 | < .001
+dem60 =~ y3 (b) |        0.76 | 0.05 | [0.66, 0.86] | 14.70 | < .001
+dem60 =~ y4 (c) |        0.84 | 0.04 | [0.76, 0.92] | 20.12 | < .001
+dem65 =~ y5     |        0.82 | 0.04 | [0.73, 0.90] | 18.52 | < .001
+dem65 =~ y6 (a) |        0.75 | 0.05 | [0.65, 0.86] | 14.01 | < .001
+dem65 =~ y7 (b) |        0.80 | 0.05 | [0.71, 0.89] | 17.40 | < .001
+dem65 =~ y8 (c) |        0.83 | 0.04 | [0.75, 0.91] | 19.79 | < .001
+
+[34m# Regression [39m
+
+Link          | Coefficient |   SE |       95% CI |     z |      p
+------------------------------------------------------------------
+dem60 ~ ind60 |        0.45 | 0.10 | [0.25, 0.65] |  4.33 | < .001
+dem65 ~ ind60 |        0.19 | 0.07 | [0.05, 0.33] |  2.64 | 0.008 
+dem65 ~ dem60 |        0.88 | 0.05 | [0.78, 0.98] | 17.24 | < .001
+
+[34m# Correlation [39m
+
+Link     | Coefficient |   SE |        95% CI |    z |      p
+-------------------------------------------------------------
+y1 ~~ y5 |        0.28 | 0.14 | [ 0.00, 0.56] | 1.97 | 0.049 
+y2 ~~ y4 |        0.29 | 0.11 | [ 0.07, 0.52] | 2.55 | 0.011 
+y2 ~~ y6 |        0.36 | 0.10 | [ 0.17, 0.54] | 3.71 | < .001
+y3 ~~ y7 |        0.17 | 0.13 | [-0.09, 0.43] | 1.26 | 0.208 
+y4 ~~ y8 |        0.11 | 0.13 | [-0.14, 0.36] | 0.86 | 0.388 
+y6 ~~ y8 |        0.34 | 0.11 | [ 0.12, 0.55] | 3.08 | 0.002 
+> 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:lavaan'
+
+> nameEx("model_parameters.rma")
+> ### * model_parameters.rma
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_parameters.rma
+> ### Title: Parameters from Meta-Analysis
+> ### Aliases: model_parameters.rma
+> 
+> ### ** Examples
+> 
+> library(parameters)
+> mydat <<- data.frame(
++   effectsize = c(-0.393, 0.675, 0.282, -1.398),
++   stderr = c(0.317, 0.317, 0.13, 0.36)
++ )
+> if (require("metafor", quietly = TRUE)) {
++   model <- rma(yi = effectsize, sei = stderr, method = "REML", data = mydat)
++   model_parameters(model)
++ }
+
+Loading the 'metafor' package (version 3.8-1). For an
+introduction to the package please type: help(metafor)
+
+Meta-analysis using 'metafor'
+
+Parameter | Coefficient |   SE |         95% CI |     z |      p | Weight
+-------------------------------------------------------------------------
+Study 1   |       -0.39 | 0.32 | [-1.01,  0.23] | -1.24 | 0.215  |   9.95
+Study 2   |        0.68 | 0.32 | [ 0.05,  1.30] |  2.13 | 0.033  |   9.95
+Study 3   |        0.28 | 0.13 | [ 0.03,  0.54] |  2.17 | 0.030  |  59.17
+Study 4   |       -1.40 | 0.36 | [-2.10, -0.69] | -3.88 | < .001 |   7.72
+Overall   |       -0.18 | 0.44 | [-1.05,  0.68] | -0.42 | 0.676  |       
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald z-distribution approximation.
+> ## Not run: 
+> ##D # with subgroups
+> ##D if (require("metafor", quietly = TRUE)) {
+> ##D   data(dat.bcg)
+> ##D   dat <- escalc(
+> ##D     measure = "RR",
+> ##D     ai = tpos,
+> ##D     bi = tneg,
+> ##D     ci = cpos,
+> ##D     di = cneg,
+> ##D     data = dat.bcg
+> ##D   )
+> ##D   dat$alloc <- ifelse(dat$alloc == "random", "random", "other")
+> ##D   model <- rma(yi, vi, mods = ~alloc, data = dat, digits = 3, slab = author)
+> ##D   model_parameters(model)
+> ##D }
+> ##D 
+> ##D if (require("metaBMA", quietly = TRUE)) {
+> ##D   data(towels)
+> ##D   m <- meta_random(logOR, SE, study, data = towels)
+> ##D   model_parameters(m)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:metafor', 'package:metadat', 'package:Matrix'
+
+> nameEx("model_parameters.stanreg")
+> ### * model_parameters.stanreg
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_parameters.MCMCglmm
+> ### Title: Parameters from Bayesian Models
+> ### Aliases: model_parameters.MCMCglmm model_parameters.bamlss
+> ###   model_parameters.data.frame model_parameters.bayesQR
+> ###   model_parameters.brmsfit model_parameters.mcmc.list
+> ###   model_parameters.bcplm model_parameters.blrm model_parameters.draws
+> ###   model_parameters.stanfit model_parameters.stanreg
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D library(parameters)
+> ##D if (require("rstanarm")) {
+> ##D   model <- stan_glm(
+> ##D     Sepal.Length ~ Petal.Length * Species,
+> ##D     data = iris, iter = 500, refresh = 0
+> ##D   )
+> ##D   model_parameters(model)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("model_parameters.zcpglm")
+> ### * model_parameters.zcpglm
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_parameters.zcpglm
+> ### Title: Parameters from Zero-Inflated Models
+> ### Aliases: model_parameters.zcpglm model_parameters.mhurdle
+> ###   model_parameters.zeroinfl model_parameters.hurdle
+> ###   model_parameters.zerocount
+> 
+> ### ** Examples
+> 
+> library(parameters)
+> if (require("pscl")) {
++   data("bioChemists")
++   model <- zeroinfl(art ~ fem + mar + kid5 + ment | kid5 + phd, data = bioChemists)
++   model_parameters(model)
++ }
+Loading required package: pscl
+Classes and Methods for R developed in the
+Political Science Computational Laboratory
+Department of Political Science
+Stanford University
+Simon Jackman
+hurdle and zeroinfl functions by Achim Zeileis
+[34m# Fixed Effects [39m
+
+Parameter     | Log-Mean |       SE |         95% CI |     z |      p
+---------------------------------------------------------------------
+(Intercept)   |     0.56 |     0.07 | [ 0.43,  0.69] |  8.26 | < .001
+fem [Women]   |    -0.23 |     0.06 | [-0.34, -0.11] | -3.91 | < .001
+mar [Married] |     0.14 |     0.07 | [ 0.01,  0.27] |  2.07 | 0.038 
+kid5          |    -0.17 |     0.05 | [-0.26, -0.07] | -3.43 | < .001
+ment          |     0.02 | 2.12e-03 | [ 0.02,  0.03] | 10.05 | < .001
+
+[34m# Zero-Inflation [39m
+
+Parameter   | Log-Odds |   SE |         95% CI |     z |     p
+--------------------------------------------------------------
+(Intercept) |    -0.93 | 0.43 | [-1.78, -0.08] | -2.14 | 0.032
+kid5        |     0.05 | 0.22 | [-0.38,  0.47] |  0.21 | 0.831
+phd         |    -0.25 | 0.14 | [-0.51,  0.02] | -1.84 | 0.065
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:pscl'
+
+> nameEx("n_clusters")
+> ### * n_clusters
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: n_clusters
+> ### Title: Find number of clusters in your data
+> ### Aliases: n_clusters n_clusters_elbow n_clusters_gap
+> ###   n_clusters_silhouette n_clusters_dbscan n_clusters_hclust
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D library(parameters)
+> ##D 
+> ##D # The main 'n_clusters' function ===============================
+> ##D if (require("mclust", quietly = TRUE) && require("NbClust", quietly = TRUE) &&
+> ##D   require("cluster", quietly = TRUE) && require("see", quietly = TRUE)) {
+> ##D   n <- n_clusters(iris[, 1:4], package = c("NbClust", "mclust")) # package can be "all"
+> ##D   n
+> ##D   summary(n)
+> ##D   as.data.frame(n) # Duration is the time elapsed for each method in seconds
+> ##D   plot(n)
+> ##D 
+> ##D   # The following runs all the method but it significantly slower
+> ##D   # n_clusters(iris[1:4], standardize = FALSE, package = "all", fast = FALSE)
+> ##D }
+> ## End(Not run)
+> ## Don't show: 
+> if (require("see", quietly = TRUE) && require("factoextra", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ ## Don't show: 
++ }) # examplesIf
+Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa
+> ## End(Don't show)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:factoextra', 'package:ggplot2', 'package:see'
+
+> nameEx("n_factors")
+> ### * n_factors
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: n_factors
+> ### Title: Number of components/factors to retain in PCA/FA
+> ### Aliases: n_factors n_components
+> 
+> ### ** Examples
+> 
+> ## Don't show: 
+> if (require("PCDimension", quietly = TRUE) && require("nFactors", quietly = TRUE) && require("EGAnet", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ library(parameters)
++ n_factors(mtcars, type = "PCA")
++ 
++ result <- n_factors(mtcars[1:5], type = "FA")
++ as.data.frame(result)
++ summary(result)
++ ## Not run: 
++ ##D # Setting package = 'all' will increase the number of methods (but is slow)
++ ##D n_factors(mtcars, type = "PCA", package = "all")
++ ##D n_factors(mtcars, type = "FA", algorithm = "mle", package = "all")
++ ## End(Not run)
++ ## Don't show: 
++ }) # examplesIf
+
+Attaching package: 'nFactors'
+
+The following object is masked from 'package:lattice':
+
+    parallel
+
+
+EGAnet (version 1.2.3) 
+For help getting started, type browseVignettes("EGAnet")
+ 
+For bugs and errors, submit an issue to <https://github.com/hfgolino/EGAnet/issues>
+> library(parameters)
+> n_factors(mtcars, type = "PCA")
+[34m# Method Agreement Procedure:
+
+[39mThe choice of 3 dimensions is supported by 5 (29.41%) methods out of 17 (Bartlett, CNG, Scree (SE), Scree (R2), Velicer's MAP).
+> result <- n_factors(mtcars[1:5], type = "FA")
+> as.data.frame(result)
+   n_Factors              Method       Family
+1          1             Bentler      Bentler
+2          1 Optimal coordinates        Scree
+3          1 Acceleration factor        Scree
+4          1   Parallel analysis        Scree
+5          1    Kaiser criterion        Scree
+6          1          Scree (SE)     Scree_SE
+7          1    VSS complexity 1          VSS
+8          1       Velicer's MAP Velicers_MAP
+9          1                 BIC          BIC
+10         2            Bartlett      Barlett
+11         2            Anderson      Barlett
+12         2              Lawley      Barlett
+13         2          Scree (R2)     Scree_SE
+14         2      BIC (adjusted)          BIC
+15         3    VSS complexity 2          VSS
+> summary(result)
+  n_Factors n_Methods
+1         1         9
+2         2         5
+3         3         1
+> ## End(Don't show)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:EGAnet', 'package:nFactors', 'package:lattice',
+  'package:PCDimension', 'package:ClassDiscovery', 'package:oompaBase',
+  'package:cluster'
+
+> nameEx("p_calibrate")
+> ### * p_calibrate
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: p_calibrate
+> ### Title: Calculate calibrated p-values.
+> ### Aliases: p_calibrate p_calibrate.default
+> 
+> ### ** Examples
+> 
+> model <- lm(mpg ~ wt + as.factor(gear) + am, data = mtcars)
+> p_calibrate(model, verbose = FALSE)
+Parameter        |      p | p (calibrated)
+------------------------------------------
+(Intercept)      | < .001 |         < .001
+wt               | < .001 |         < .001
+as.factor(gear)4 | 0.242  |         0.483 
+as.factor(gear)5 | 0.660  |               
+am               | 0.925  |               
+[34mCalibrated p-values indicate the posterior probability of H0.
+[39m> 
+> 
+> 
+> cleanEx()
+> nameEx("p_function")
+> ### * p_function
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: p_function
+> ### Title: p-value or consonance function
+> ### Aliases: p_function consonance_function confidence_curve
+> 
+> ### ** Examples
+> 
+> model <- lm(Sepal.Length ~ Species, data = iris)
+> p_function(model)
+Consonance Function
+
+Parameter            |       25% CI |       50% CI |       75% CI |       95% CI
+--------------------------------------------------------------------------------
+(Intercept)          | [4.98, 5.03] | [4.96, 5.06] | [4.92, 5.09] | [4.86, 5.15]
+Species [versicolor] | [0.90, 0.96] | [0.86, 1.00] | [0.81, 1.05] | [0.73, 1.13]
+Species [virginica]  | [1.55, 1.61] | [1.51, 1.65] | [1.46, 1.70] | [1.38, 1.79]
+> 
+> if (requireNamespace("see") && packageVersion("see") > "0.7.3") {
++   model <- lm(mpg ~ wt + as.factor(gear) + am, data = mtcars)
++   result <- p_function(model)
++ 
++   # single panels
++   plot(result, n_columns = 2)
++ 
++   # integrated plot, the default
++   plot(result)
++ }
+Warning: Using linewidth for a discrete variable is not advised.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("p_value.BFBayesFactor")
+> ### * p_value.BFBayesFactor
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: p_value.BFBayesFactor
+> ### Title: p-values for Bayesian Models
+> ### Aliases: p_value.BFBayesFactor
+> 
+> ### ** Examples
+> 
+> data(iris)
+> model <- lm(Petal.Length ~ Sepal.Length + Species, data = iris)
+> p_value(model)
+          Parameter            p
+1       (Intercept) 1.005180e-11
+2      Sepal.Length 1.121002e-28
+3 Speciesversicolor 9.645641e-67
+4  Speciesvirginica 4.917626e-71
+> 
+> 
+> 
+> cleanEx()
+> nameEx("p_value")
+> ### * p_value
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: p_value
+> ### Title: p-values
+> ### Aliases: p_value p_value.default p_value.emmGrid
+> 
+> ### ** Examples
+> 
+> data(iris)
+> model <- lm(Petal.Length ~ Sepal.Length + Species, data = iris)
+> p_value(model)
+          Parameter            p
+1       (Intercept) 1.005180e-11
+2      Sepal.Length 1.121002e-28
+3 Speciesversicolor 9.645641e-67
+4  Speciesvirginica 4.917626e-71
+> 
+> 
+> 
+> cleanEx()
+> nameEx("p_value.poissonmfx")
+> ### * p_value.poissonmfx
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: p_value.poissonmfx
+> ### Title: p-values for Marginal Effects Models
+> ### Aliases: p_value.poissonmfx p_value.betaor p_value.betamfx
+> 
+> ### ** Examples
+> 
+> if (require("mfx", quietly = TRUE)) {
++   set.seed(12345)
++   n <- 1000
++   x <- rnorm(n)
++   y <- rnegbin(n, mu = exp(1 + 0.5 * x), theta = 0.5)
++   d <- data.frame(y, x)
++   model <- poissonmfx(y ~ x, data = d)
++ 
++   p_value(model)
++   p_value(model, component = "marginal")
++ }
+
+Attaching package: 'zoo'
+
+The following objects are masked from 'package:base':
+
+    as.Date, as.Date.numeric
+
+  Parameter             p Component
+1         x 9.631324e-254  marginal
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:mfx', 'package:betareg', 'package:MASS',
+  'package:lmtest', 'package:zoo', 'package:sandwich'
+
+> nameEx("p_value.zcpglm")
+> ### * p_value.zcpglm
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: p_value.zcpglm
+> ### Title: p-values for Models with Zero-Inflation
+> ### Aliases: p_value.zcpglm p_value.zeroinfl
+> 
+> ### ** Examples
+> 
+> if (require("pscl", quietly = TRUE)) {
++   data("bioChemists")
++   model <- zeroinfl(art ~ fem + mar + kid5 | kid5 + phd, data = bioChemists)
++   p_value(model)
++   p_value(model, component = "zi")
++ }
+Classes and Methods for R developed in the
+Political Science Computational Laboratory
+Department of Political Science
+Stanford University
+Simon Jackman
+hurdle and zeroinfl functions by Achim Zeileis
+         Parameter         p     Component
+5 zero_(Intercept) 0.0446362 zero_inflated
+6        zero_kid5 0.4146050 zero_inflated
+7         zero_phd 0.0248504 zero_inflated
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:pscl'
+
+> nameEx("p_value_betwithin")
+> ### * p_value_betwithin
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ci_betwithin
+> ### Title: Between-within approximation for SEs, CIs and p-values
+> ### Aliases: ci_betwithin dof_betwithin p_value_betwithin
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("p_value_kenward")
+> ### * p_value_kenward
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ci_kenward
+> ### Title: Kenward-Roger approximation for SEs, CIs and p-values
+> ### Aliases: ci_kenward dof_kenward p_value_kenward se_kenward
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("p_value_ml1")
+> ### * p_value_ml1
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ci_ml1
+> ### Title: "m-l-1" approximation for SEs, CIs and p-values
+> ### Aliases: ci_ml1 dof_ml1 p_value_ml1
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("p_value_satterthwaite")
+> ### * p_value_satterthwaite
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ci_satterthwaite
+> ### Title: Satterthwaite approximation for SEs, CIs and p-values
+> ### Aliases: ci_satterthwaite dof_satterthwaite p_value_satterthwaite
+> ###   se_satterthwaite
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("parameters_type")
+> ### * parameters_type
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: parameters_type
+> ### Title: Type of model parameters
+> ### Aliases: parameters_type
+> 
+> ### ** Examples
+> 
+> library(parameters)
+> 
+> model <- lm(Sepal.Length ~ Petal.Length + Species, data = iris)
+> parameters_type(model)
+          Parameter      Type        Link              Term     Variable
+1       (Intercept) intercept        Mean       (Intercept)         <NA>
+2      Petal.Length   numeric Association      Petal.Length Petal.Length
+3 Speciesversicolor    factor  Difference Speciesversicolor      Species
+4  Speciesvirginica    factor  Difference  Speciesvirginica      Species
+       Level Secondary_Parameter Secondary_Type Secondary_Link Secondary_Term
+1       <NA>                <NA>             NA             NA             NA
+2       <NA>                <NA>             NA             NA             NA
+3 versicolor                <NA>             NA             NA             NA
+4  virginica                <NA>             NA             NA             NA
+  Secondary_Variable Secondary_Level Tertiary_Parameter
+1                 NA              NA                 NA
+2                 NA              NA                 NA
+3                 NA              NA                 NA
+4                 NA              NA                 NA
+> 
+> model <- lm(Sepal.Length ~ Species + poly(Sepal.Width, 2), data = iris)
+> parameters_type(model)
+              Parameter      Type        Link                  Term    Variable
+1           (Intercept) intercept        Mean           (Intercept)        <NA>
+2     Speciesversicolor    factor  Difference     Speciesversicolor     Species
+3      Speciesvirginica    factor  Difference      Speciesvirginica     Species
+4 poly(Sepal.Width, 2)1      poly Association poly(Sepal.Width, 2)1 Sepal.Width
+5 poly(Sepal.Width, 2)2      poly Association poly(Sepal.Width, 2)2 Sepal.Width
+       Level Secondary_Parameter Secondary_Type Secondary_Link Secondary_Term
+1       <NA>                <NA>             NA             NA             NA
+2 versicolor                <NA>             NA             NA             NA
+3  virginica                <NA>             NA             NA             NA
+4          1                <NA>             NA             NA             NA
+5          2                <NA>             NA             NA             NA
+  Secondary_Variable Secondary_Level Tertiary_Parameter
+1                 NA              NA                 NA
+2                 NA              NA                 NA
+3                 NA              NA                 NA
+4                 NA              NA                 NA
+5                 NA              NA                 NA
+> 
+> model <- lm(Sepal.Length ~ Species + poly(Sepal.Width, 2, raw = TRUE), data = iris)
+> parameters_type(model)
+                          Parameter      Type        Link                  Term
+1                       (Intercept) intercept        Mean           (Intercept)
+2                 Speciesversicolor    factor  Difference     Speciesversicolor
+3                  Speciesvirginica    factor  Difference      Speciesvirginica
+4 poly(Sepal.Width, 2, raw = TRUE)1  poly_raw Association poly(Sepal.Width, 2)1
+5 poly(Sepal.Width, 2, raw = TRUE)2  poly_raw Association poly(Sepal.Width, 2)2
+     Variable      Level Secondary_Parameter Secondary_Type Secondary_Link
+1        <NA>       <NA>                <NA>             NA             NA
+2     Species versicolor                <NA>             NA             NA
+3     Species  virginica                <NA>             NA             NA
+4 Sepal.Width          1                <NA>             NA             NA
+5 Sepal.Width          2                <NA>             NA             NA
+  Secondary_Term Secondary_Variable Secondary_Level Tertiary_Parameter
+1             NA                 NA              NA                 NA
+2             NA                 NA              NA                 NA
+3             NA                 NA              NA                 NA
+4             NA                 NA              NA                 NA
+5             NA                 NA              NA                 NA
+> 
+> # Interactions
+> model <- lm(Sepal.Length ~ Sepal.Width * Species, data = iris)
+> parameters_type(model)
+                      Parameter        Type        Link              Term
+1                   (Intercept)   intercept        Mean       (Intercept)
+2                   Sepal.Width     numeric Association       Sepal.Width
+3             Speciesversicolor      factor  Difference Speciesversicolor
+4              Speciesvirginica      factor  Difference  Speciesvirginica
+5 Sepal.Width:Speciesversicolor interaction  Difference Speciesversicolor
+6  Sepal.Width:Speciesvirginica interaction  Difference  Speciesvirginica
+     Variable      Level Secondary_Parameter Secondary_Type Secondary_Link
+1        <NA>       <NA>                <NA>           <NA>           <NA>
+2 Sepal.Width       <NA>                <NA>           <NA>           <NA>
+3     Species versicolor                <NA>           <NA>           <NA>
+4     Species  virginica                <NA>           <NA>           <NA>
+5     Species versicolor         Sepal.Width        numeric    Association
+6     Species  virginica         Sepal.Width        numeric    Association
+  Secondary_Term Secondary_Variable Secondary_Level Tertiary_Parameter
+1           <NA>               <NA>            <NA>               <NA>
+2           <NA>               <NA>            <NA>               <NA>
+3           <NA>               <NA>            <NA>               <NA>
+4           <NA>               <NA>            <NA>               <NA>
+5    Sepal.Width        Sepal.Width            <NA>               <NA>
+6    Sepal.Width        Sepal.Width            <NA>               <NA>
+> 
+> model <- lm(Sepal.Length ~ Sepal.Width * Species * Petal.Length, data = iris)
+> parameters_type(model)
+                                    Parameter        Type        Link
+1                                 (Intercept)   intercept        Mean
+2                                 Sepal.Width     numeric Association
+3                           Speciesversicolor      factor  Difference
+4                            Speciesvirginica      factor  Difference
+5                                Petal.Length     numeric Association
+6               Sepal.Width:Speciesversicolor interaction  Difference
+7                Sepal.Width:Speciesvirginica interaction  Difference
+8                    Sepal.Width:Petal.Length interaction Association
+9              Speciesversicolor:Petal.Length interaction  Difference
+10              Speciesvirginica:Petal.Length interaction  Difference
+11 Sepal.Width:Speciesversicolor:Petal.Length interaction Association
+12  Sepal.Width:Speciesvirginica:Petal.Length interaction Association
+                Term     Variable      Level           Secondary_Parameter
+1        (Intercept)         <NA>       <NA>                          <NA>
+2        Sepal.Width  Sepal.Width       <NA>                          <NA>
+3  Speciesversicolor      Species versicolor                          <NA>
+4   Speciesvirginica      Species  virginica                          <NA>
+5       Petal.Length Petal.Length       <NA>                          <NA>
+6  Speciesversicolor      Species versicolor                   Sepal.Width
+7   Speciesvirginica      Species  virginica                   Sepal.Width
+8       Petal.Length Petal.Length       <NA>                   Sepal.Width
+9       Petal.Length Petal.Length       <NA>             Speciesversicolor
+10      Petal.Length Petal.Length       <NA>              Speciesvirginica
+11      Petal.Length Petal.Length       <NA> Sepal.Width:Speciesversicolor
+12      Petal.Length Petal.Length       <NA>  Sepal.Width:Speciesvirginica
+   Secondary_Type Secondary_Link    Secondary_Term Secondary_Variable
+1            <NA>           <NA>              <NA>               <NA>
+2            <NA>           <NA>              <NA>               <NA>
+3            <NA>           <NA>              <NA>               <NA>
+4            <NA>           <NA>              <NA>               <NA>
+5            <NA>           <NA>              <NA>               <NA>
+6         numeric    Association       Sepal.Width        Sepal.Width
+7         numeric    Association       Sepal.Width        Sepal.Width
+8         numeric    Association       Sepal.Width        Sepal.Width
+9          factor     Difference Speciesversicolor            Species
+10         factor     Difference  Speciesvirginica            Species
+11    interaction     Difference Speciesversicolor            Species
+12    interaction     Difference  Speciesvirginica            Species
+   Secondary_Level Tertiary_Parameter
+1             <NA>               <NA>
+2             <NA>               <NA>
+3             <NA>               <NA>
+4             <NA>               <NA>
+5             <NA>               <NA>
+6             <NA>               <NA>
+7             <NA>               <NA>
+8             <NA>               <NA>
+9       versicolor               <NA>
+10       virginica               <NA>
+11      versicolor        Sepal.Width
+12       virginica        Sepal.Width
+> 
+> model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
+> parameters_type(model)
+                      Parameter        Type        Link              Term
+1                   (Intercept)   intercept        Mean       (Intercept)
+2             Speciesversicolor      factor  Difference Speciesversicolor
+3              Speciesvirginica      factor  Difference  Speciesvirginica
+4                   Sepal.Width     numeric Association       Sepal.Width
+5 Speciesversicolor:Sepal.Width interaction  Difference       Sepal.Width
+6  Speciesvirginica:Sepal.Width interaction  Difference       Sepal.Width
+     Variable      Level Secondary_Parameter Secondary_Type Secondary_Link
+1        <NA>       <NA>                <NA>           <NA>           <NA>
+2     Species versicolor                <NA>           <NA>           <NA>
+3     Species  virginica                <NA>           <NA>           <NA>
+4 Sepal.Width       <NA>                <NA>           <NA>           <NA>
+5 Sepal.Width       <NA>   Speciesversicolor         factor     Difference
+6 Sepal.Width       <NA>    Speciesvirginica         factor     Difference
+     Secondary_Term Secondary_Variable Secondary_Level Tertiary_Parameter
+1              <NA>               <NA>            <NA>               <NA>
+2              <NA>               <NA>            <NA>               <NA>
+3              <NA>               <NA>            <NA>               <NA>
+4              <NA>               <NA>            <NA>               <NA>
+5 Speciesversicolor            Species      versicolor               <NA>
+6  Speciesvirginica            Species       virginica               <NA>
+> 
+> model <- lm(Sepal.Length ~ Species / Sepal.Width, data = iris)
+> parameters_type(model)
+                      Parameter      Type       Link              Term
+1                   (Intercept) intercept       Mean       (Intercept)
+2             Speciesversicolor    factor Difference Speciesversicolor
+3              Speciesvirginica    factor Difference  Speciesvirginica
+4     Speciessetosa:Sepal.Width    nested Difference       Sepal.Width
+5 Speciesversicolor:Sepal.Width    nested Difference       Sepal.Width
+6  Speciesvirginica:Sepal.Width    nested Difference       Sepal.Width
+     Variable      Level Secondary_Parameter Secondary_Type Secondary_Link
+1        <NA>       <NA>                <NA>           <NA>           <NA>
+2     Species versicolor                <NA>           <NA>           <NA>
+3     Species  virginica                <NA>           <NA>           <NA>
+4 Sepal.Width       <NA>       Speciessetosa         factor     Difference
+5 Sepal.Width       <NA>   Speciesversicolor         factor     Difference
+6 Sepal.Width       <NA>    Speciesvirginica         factor     Difference
+     Secondary_Term Secondary_Variable Secondary_Level Tertiary_Parameter
+1              <NA>               <NA>            <NA>               <NA>
+2              <NA>               <NA>            <NA>               <NA>
+3              <NA>               <NA>            <NA>               <NA>
+4     Speciessetosa            Species          setosa               <NA>
+5 Speciesversicolor            Species      versicolor               <NA>
+6  Speciesvirginica            Species       virginica               <NA>
+> 
+> 
+> # Complex interactions
+> data <- iris
+> data$fac2 <- ifelse(data$Sepal.Width > mean(data$Sepal.Width), "A", "B")
+> model <- lm(Sepal.Length ~ Species / fac2 / Petal.Length, data = data)
+> parameters_type(model)
+                              Parameter      Type        Link              Term
+1                           (Intercept) intercept        Mean       (Intercept)
+2                     Speciesversicolor    factor  Difference Speciesversicolor
+3                      Speciesvirginica    factor  Difference  Speciesvirginica
+4                   Speciessetosa:fac2B    nested  Difference             fac2B
+5               Speciesversicolor:fac2B    nested  Difference             fac2B
+6                Speciesvirginica:fac2B    nested  Difference             fac2B
+7      Speciessetosa:fac2A:Petal.Length    nested Association      Petal.Length
+8  Speciesversicolor:fac2A:Petal.Length    nested Association      Petal.Length
+9   Speciesvirginica:fac2A:Petal.Length    nested Association      Petal.Length
+10     Speciessetosa:fac2B:Petal.Length    nested Association      Petal.Length
+11 Speciesversicolor:fac2B:Petal.Length    nested Association      Petal.Length
+12  Speciesvirginica:fac2B:Petal.Length    nested Association      Petal.Length
+       Variable      Level     Secondary_Parameter Secondary_Type
+1          <NA>       <NA>                    <NA>           <NA>
+2       Species versicolor                    <NA>           <NA>
+3       Species  virginica                    <NA>           <NA>
+4          fac2          B           Speciessetosa         factor
+5          fac2          B       Speciesversicolor         factor
+6          fac2          B        Speciesvirginica         factor
+7  Petal.Length       <NA>     Speciessetosa:fac2A    interaction
+8  Petal.Length       <NA> Speciesversicolor:fac2A    interaction
+9  Petal.Length       <NA>  Speciesvirginica:fac2A    interaction
+10 Petal.Length       <NA>     Speciessetosa:fac2B         nested
+11 Petal.Length       <NA> Speciesversicolor:fac2B         nested
+12 Petal.Length       <NA>  Speciesvirginica:fac2B         nested
+   Secondary_Link    Secondary_Term Secondary_Variable Secondary_Level
+1            <NA>              <NA>               <NA>            <NA>
+2            <NA>              <NA>               <NA>            <NA>
+3            <NA>              <NA>               <NA>            <NA>
+4      Difference     Speciessetosa            Species          setosa
+5      Difference Speciesversicolor            Species      versicolor
+6      Difference  Speciesvirginica            Species       virginica
+7      Difference             fac2A               fac2               A
+8      Difference             fac2A               fac2               A
+9      Difference             fac2A               fac2               A
+10     Difference             fac2B               fac2               B
+11     Difference             fac2B               fac2               B
+12     Difference             fac2B               fac2               B
+   Tertiary_Parameter
+1                <NA>
+2                <NA>
+3                <NA>
+4                <NA>
+5                <NA>
+6                <NA>
+7       Speciessetosa
+8   Speciesversicolor
+9    Speciesvirginica
+10      Speciessetosa
+11  Speciesversicolor
+12   Speciesvirginica
+> 
+> model <- lm(Sepal.Length ~ Species / fac2 * Petal.Length, data = data)
+> parameters_type(model)
+                              Parameter        Type        Link
+1                           (Intercept)   intercept        Mean
+2                     Speciesversicolor      factor  Difference
+3                      Speciesvirginica      factor  Difference
+4                          Petal.Length     numeric Association
+5                   Speciessetosa:fac2B      nested  Difference
+6               Speciesversicolor:fac2B      nested  Difference
+7                Speciesvirginica:fac2B      nested  Difference
+8        Speciesversicolor:Petal.Length interaction  Difference
+9         Speciesvirginica:Petal.Length interaction  Difference
+10     Speciessetosa:fac2B:Petal.Length      simple Association
+11 Speciesversicolor:fac2B:Petal.Length      simple Association
+12  Speciesvirginica:fac2B:Petal.Length      simple Association
+                Term     Variable      Level     Secondary_Parameter
+1        (Intercept)         <NA>       <NA>                    <NA>
+2  Speciesversicolor      Species versicolor                    <NA>
+3   Speciesvirginica      Species  virginica                    <NA>
+4       Petal.Length Petal.Length       <NA>                    <NA>
+5              fac2B         fac2          B           Speciessetosa
+6              fac2B         fac2          B       Speciesversicolor
+7              fac2B         fac2          B        Speciesvirginica
+8       Petal.Length Petal.Length       <NA>       Speciesversicolor
+9       Petal.Length Petal.Length       <NA>        Speciesvirginica
+10      Petal.Length Petal.Length       <NA>     Speciessetosa:fac2B
+11      Petal.Length Petal.Length       <NA> Speciesversicolor:fac2B
+12      Petal.Length Petal.Length       <NA>  Speciesvirginica:fac2B
+   Secondary_Type Secondary_Link    Secondary_Term Secondary_Variable
+1            <NA>           <NA>              <NA>               <NA>
+2            <NA>           <NA>              <NA>               <NA>
+3            <NA>           <NA>              <NA>               <NA>
+4            <NA>           <NA>              <NA>               <NA>
+5          factor     Difference     Speciessetosa            Species
+6          factor     Difference Speciesversicolor            Species
+7          factor     Difference  Speciesvirginica            Species
+8          factor     Difference Speciesversicolor            Species
+9          factor     Difference  Speciesvirginica            Species
+10         nested     Difference             fac2B               fac2
+11         nested     Difference             fac2B               fac2
+12         nested     Difference             fac2B               fac2
+   Secondary_Level Tertiary_Parameter
+1             <NA>               <NA>
+2             <NA>               <NA>
+3             <NA>               <NA>
+4             <NA>               <NA>
+5           setosa               <NA>
+6       versicolor               <NA>
+7        virginica               <NA>
+8       versicolor               <NA>
+9        virginica               <NA>
+10               B      Speciessetosa
+11               B  Speciesversicolor
+12               B   Speciesvirginica
+> 
+> 
+> 
+> cleanEx()
+> nameEx("pool_parameters")
+> ### * pool_parameters
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: pool_parameters
+> ### Title: Pool Model Parameters
+> ### Aliases: pool_parameters
+> 
+> ### ** Examples
+> 
+> # example for multiple imputed datasets
+> if (require("mice")) {
++   data("nhanes2")
++   imp <- mice(nhanes2, printFlag = FALSE)
++   models <- lapply(1:5, function(i) {
++     lm(bmi ~ age + hyp + chl, data = complete(imp, action = i))
++   })
++   pool_parameters(models)
++ 
++   # should be identical to:
++   m <- with(data = imp, exp = lm(bmi ~ age + hyp + chl))
++   summary(pool(m))
++ }
+Loading required package: mice
+
+Attaching package: 'mice'
+
+The following object is masked from 'package:stats':
+
+    filter
+
+The following objects are masked from 'package:base':
+
+    cbind, rbind
+
+         term    estimate  std.error statistic        df      p.value
+1 (Intercept) 18.66788816 3.90652449  4.778644  9.360282 0.0008989516
+2    age40-59 -4.66637582 2.57226734 -1.814110  4.274780 0.1392378647
+3    age60-99 -6.55049039 2.91863326 -2.244369  4.372382 0.0824824605
+4      hypyes  2.27386418 1.92812073  1.179316 10.902595 0.2633671041
+5         chl  0.05312788 0.02359584  2.251578  6.622509 0.0611862472
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:mice'
+
+> nameEx("principal_components")
+> ### * principal_components
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: factor_analysis
+> ### Title: Principal Component Analysis (PCA) and Factor Analysis (FA)
+> ### Aliases: factor_analysis principal_components rotated_data
+> ###   predict.parameters_efa print.parameters_efa sort.parameters_efa
+> ###   closest_component
+> 
+> ### ** Examples
+> 
+> ## Don't show: 
+> if (require("nFactors", quietly = TRUE) && require("sparsepca", quietly = TRUE) && require("psych", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ library(parameters)
++ 
++ 
++ # Factor Analysis (FA) ------------------------
++ 
++ factor_analysis(mtcars[, 1:7], n = "all", threshold = 0.2)
++ factor_analysis(mtcars[, 1:7], n = 2, rotation = "oblimin", threshold = "max", sort = TRUE)
++ factor_analysis(mtcars[, 1:7], n = 2, threshold = 2, sort = TRUE)
++ 
++ efa <- factor_analysis(mtcars[, 1:5], n = 2)
++ summary(efa)
++ predict(efa)
++ 
++ ## Don't show: 
++ }) # examplesIf
+
+Attaching package: 'nFactors'
+
+The following object is masked from 'package:lattice':
+
+    parallel
+
+> library(parameters)
+> factor_analysis(mtcars[, 1:7], n = "all", threshold = 0.2)
+[34m# Loadings from Factor Analysis (no rotation)[39m
+
+Variable |  MR1  |  MR2  | MR3  | MR4  | MR5 | MR6 | Complexity | Uniqueness
+----------------------------------------------------------------------------
+mpg      | -0.92 |       |      | 0.22 |     |     |    1.16    |    0.08   
+cyl      | 0.96  |       |      |      |     |     |    1.14    |    0.01   
+disp     | 0.95  |       |      | 0.20 |     |     |    1.13    |    0.03   
+hp       | 0.86  | -0.35 |      |      |     |     |    1.38    |    0.12   
+drat     | -0.72 | -0.40 | 0.29 |      |     |     |    1.96    |    0.24   
+wt       | 0.89  | 0.38  | 0.24 |      |     |     |    1.53    |  5.00e-03 
+qsec     | -0.53 | 0.76  |      |      |     |     |    1.81    |    0.14   
+[33m
+The 6 latent factors accounted for 90.99% of the total variance of the original data (MR1 = 71.60%, MR2 = 14.55%, MR3 = 2.91%, MR4 = 1.35%, MR5 = 0.45%, MR6 = 0.12%).
+[39m> factor_analysis(mtcars[, 1:7], n = 2, rotation = "oblimin", threshold = "max", 
++     sort = TRUE)
+Loading required namespace: GPArotation
+[34m# Rotated loadings from Factor Analysis (oblimin-rotation)[39m
+
+Variable |  MR1  | MR2  | Complexity | Uniqueness
+-------------------------------------------------
+wt       | 1.00  |      |    1.07    |    0.10   
+disp     | 0.92  |      |    1.02    |    0.09   
+mpg      | -0.88 |      |    1.02    |    0.15   
+drat     | -0.84 |      |    1.14    |    0.39   
+cyl      | 0.82  |      |    1.23    |    0.08   
+hp       | 0.60  |      |    1.94    |    0.18   
+qsec     |       | 1.00 |    1.00    |  4.75e-03 
+[33m
+The 2 latent factors (oblimin rotation) accounted for 85.83% of the total variance of the original data (MR1 = 63.85%, MR2 = 21.99%).
+[39m> factor_analysis(mtcars[, 1:7], n = 2, threshold = 2, sort = TRUE)
+[34m# Loadings from Factor Analysis (no rotation)[39m
+
+Variable | MR1  | MR2  | Complexity | Uniqueness
+------------------------------------------------
+cyl      | 0.96 |      |    1.01    |    0.08   
+disp     | 0.95 |      |    1.03    |    0.09   
+mpg      |      |      |    1.03    |    0.15   
+wt       |      | 0.36 |    1.33    |    0.10   
+hp       |      |      |    1.23    |    0.18   
+drat     |      |      |    1.49    |    0.39   
+qsec     |      | 0.83 |    1.74    |  4.75e-03 
+[33m
+The 2 latent factors accounted for 85.83% of the total variance of the original data (MR1 = 70.67%, MR2 = 15.16%).
+[39m> efa <- factor_analysis(mtcars[, 1:5], n = 2)
+> summary(efa)
+[34m# (Explained) Variance of Components[39m
+
+Parameter                       |   MR1 |   MR2
+-----------------------------------------------
+Eigenvalues                     | 3.908 | 0.398
+Variance Explained              | 0.782 | 0.080
+Variance Explained (Cumulative) | 0.782 | 0.861
+Variance Explained (Proportion) | 0.908 | 0.092
+> predict(efa)
+Warning: Could not retrieve information about missing data. Returning only
+  complete cases.
+           MR1         MR2
+1  -0.41953471 -0.35544083
+2  -0.41953471 -0.35544083
+3  -0.93451791  0.05188420
+4  -0.02247401 -1.06704187
+5   0.80423811 -0.57723722
+6   0.05132529 -1.40382795
+7   1.17796287  0.82565287
+8  -0.97981546 -0.77961043
+9  -0.87835186  0.02703875
+10 -0.31368972 -0.16476124
+11 -0.28032337 -0.23570818
+12  0.73053450 -0.34851886
+13  0.70908470 -0.30291012
+14  0.75913424 -0.40933052
+15  1.40523363 -0.78714835
+16  1.40381792 -0.48501471
+17  1.26324243  0.25588537
+18 -1.39062136  0.13411535
+19 -1.62307787  0.15402661
+20 -1.48149201  0.28280884
+21 -0.82463188 -0.03789222
+22  0.79425443 -1.37121293
+23  0.67357950 -1.14361360
+24  1.04878537  1.07073183
+25  0.89062471 -0.71650907
+26 -1.26846941 -0.12530276
+27 -1.14242028  0.42262235
+28 -1.03993655  0.89398689
+29  0.94311149  1.87551864
+30 -0.08324543  0.96674422
+31  1.32372015  3.27012728
+32 -0.87651282  0.43537850
+> ## End(Don't show)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:psych', 'package:sparsepca', 'package:nFactors',
+  'package:lattice'
+
+> nameEx("print.parameters_model")
+> ### * print.parameters_model
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: print.parameters_model
+> ### Title: Print model parameters
+> ### Aliases: print.parameters_model summary.parameters_model
+> 
+> ### ** Examples
+> 
+> 
+> 
+> # custom column layouts ------
+> 
+> data(iris)
+> lm1 <- lm(Sepal.Length ~ Species, data = iris)
+> lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
+> 
+> # custom style
+> result <- compare_parameters(lm1, lm2, select = "{estimate}{stars} ({se})")
+> print(result)
+Parameter            |            lm1 |             lm2
+-------------------------------------------------------
+(Intercept)          | 5.01*** (0.07) |  3.68*** (0.11)
+Species (versicolor) | 0.93*** (0.10) | -1.60*** (0.19)
+Species (virginica)  | 1.58*** (0.10) | -2.12*** (0.27)
+Petal Length         |                |  0.90*** (0.06)
+-------------------------------------------------------
+Observations         |            150 |             150
+> 
+> ## Not run: 
+> ##D # custom style, in HTML
+> ##D result <- compare_parameters(lm1, lm2, select = "{estimate}<br>({se})|{p}")
+> ##D print_html(result)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("random_parameters")
+> ### * random_parameters
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: random_parameters
+> ### Title: Summary information from random effects
+> ### Aliases: random_parameters
+> 
+> ### ** Examples
+> 
+> if (require("lme4")) {
++   data(sleepstudy)
++   model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
++   random_parameters(model)
++ }
+Loading required package: lme4
+Loading required package: Matrix
+[34m# Random Effects
+
+[39m[34mWithin-Group Variance          [39m654.94 (25.59)
+[34mBetween-Group Variance
+[39m  Random Intercept (Subject)    612.1 (24.74)
+  Random Slope (Subject.Days)   35.07  (5.92)
+[34mCorrelations
+[39m  Subject.Days                   0.07
+[34mN (groups per factor)
+[39m  Subject                          18
+[34mObservations                   [39m   180
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:lme4', 'package:Matrix'
+
+> nameEx("reduce_parameters")
+> ### * reduce_parameters
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: reduce_parameters
+> ### Title: Dimensionality reduction (DR) / Features Reduction
+> ### Aliases: reduce_parameters reduce_data
+> 
+> ### ** Examples
+> 
+> data(iris)
+> model <- lm(Sepal.Width ~ Species * Sepal.Length + Petal.Width, data = iris)
+> model
+
+Call:
+lm(formula = Sepal.Width ~ Species * Sepal.Length + Petal.Width, 
+    data = iris)
+
+Coefficients:
+                   (Intercept)               Speciesversicolor  
+                       -0.4731                          1.2981  
+              Speciesvirginica                    Sepal.Length  
+                        1.2252                          0.7515  
+                   Petal.Width  Speciesversicolor:Sepal.Length  
+                        0.5662                         -0.5503  
+ Speciesvirginica:Sepal.Length  
+                       -0.5883  
+
+> reduce_parameters(model)
+
+Call:
+lm(formula = Sepal.Width ~ `Petal.Width_0.98/Species.setosa_-0.90/Sepal.Length_0.89/Species.virginica_0.78` + 
+    `Species.versicolor_-0.99`, data = cbind(data, y))
+
+Coefficients:
+                                                                     (Intercept)  
+                                                                         3.05733  
+`Petal.Width_0.98/Species.setosa_-0.90/Sepal.Length_0.89/Species.virginica_0.78`  
+                                                                        -0.08903  
+                                                      `Species.versicolor_-0.99`  
+                                                                         0.14879  
+
+> 
+> out <- reduce_data(iris, method = "PCA", n = "max")
+> head(out)
+  Petal.Length_0.99/Petal.Width_0.97/Species.setosa_-0.94/Sepal.Length_0.86/Species.virginica_0.73
+1                                                                                        -2.803852
+2                                                                                        -2.633035
+3                                                                                        -2.866923
+4                                                                                        -2.808656
+5                                                                                        -2.907343
+6                                                                                        -2.668523
+  Species.versicolor_0.93 Sepal.Width_0.62
+1             -0.65195900        0.1365792
+2             -0.09924539       -0.8296167
+3             -0.26560467       -0.5984029
+4             -0.14622405       -0.8154592
+5             -0.73579102        0.2543209
+6             -1.14741717        1.0076406
+> 
+> 
+> 
+> cleanEx()
+> nameEx("reshape_loadings")
+> ### * reshape_loadings
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: reshape_loadings
+> ### Title: Reshape loadings between wide/long formats
+> ### Aliases: reshape_loadings reshape_loadings.parameters_efa
+> ###   reshape_loadings.data.frame
+> 
+> ### ** Examples
+> 
+> if (require("psych")) {
++   pca <- model_parameters(psych::fa(attitude, nfactors = 3))
++   loadings <- reshape_loadings(pca)
++ 
++   loadings
++   reshape_loadings(loadings)
++ }
+Loading required package: psych
+Variable   |   MR1 |   MR2 |   MR3 | Complexity | Uniqueness
+------------------------------------------------------------
+rating     |  0.90 | -0.07 | -0.05 |       1.02 |       0.23
+complaints |  0.97 | -0.06 |  0.04 |       1.01 |       0.10
+privileges |  0.44 |  0.25 | -0.05 |       1.64 |       0.65
+learning   |  0.47 |  0.54 | -0.28 |       2.51 |       0.24
+raises     |  0.55 |  0.43 |  0.25 |       2.35 |       0.23
+critical   |  0.16 |  0.17 |  0.48 |       1.46 |       0.67
+advance    | -0.11 |  0.91 |  0.07 |       1.04 |       0.22
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:psych'
+
+> nameEx("select_parameters")
+> ### * select_parameters
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: select_parameters
+> ### Title: Automated selection of model parameters
+> ### Aliases: select_parameters select_parameters.lm
+> ###   select_parameters.merMod
+> 
+> ### ** Examples
+> 
+> model <- lm(mpg ~ ., data = mtcars)
+> select_parameters(model)
+
+Call:
+lm(formula = mpg ~ wt + qsec + am, data = mtcars)
+
+Coefficients:
+(Intercept)           wt         qsec           am  
+      9.618       -3.917        1.226        2.936  
+
+> 
+> model <- lm(mpg ~ cyl * disp * hp * wt, data = mtcars)
+> select_parameters(model)
+
+Call:
+lm(formula = mpg ~ cyl + disp + hp + wt + cyl:disp + cyl:hp + 
+    disp:hp + cyl:wt + disp:wt + hp:wt + cyl:disp:hp + cyl:hp:wt, 
+    data = mtcars)
+
+Coefficients:
+(Intercept)          cyl         disp           hp           wt     cyl:disp  
+ 49.1436077   -3.6167276   -1.2955318   -0.0004854   58.8328841    0.1704703  
+     cyl:hp      disp:hp       cyl:wt      disp:wt        hp:wt  cyl:disp:hp  
+ -0.0134573    0.0132124   -7.4915051   -0.0167172   -0.6524341   -0.0016542  
+  cyl:hp:wt  
+  0.0850798  
+
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("simulate_model")
+> ### * simulate_model
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simulate_model
+> ### Title: Simulated draws from model coefficients
+> ### Aliases: simulate_model simulate_model.glmmTMB
+> 
+> ### ** Examples
+> 
+> model <- lm(Sepal.Length ~ Species * Petal.Width + Petal.Length, data = iris)
+> head(simulate_model(model))
+  (Intercept) Speciesversicolor Speciesvirginica Petal.Width Petal.Length
+1    3.246061        -1.1424123        -2.669552   0.7445918    1.0555162
+2    3.384400        -1.6255483        -2.921861   0.5191252    1.0587871
+3    3.518506        -0.6681135        -1.566518   0.4492639    0.9652203
+4    3.710829        -1.2707771        -2.552432  -0.2308241    0.8812763
+5    3.579159        -1.1767164        -2.343988   0.4764213    0.8378748
+6    3.540320        -1.0089701        -1.371204   0.5768720    0.9145789
+  Speciesversicolor:Petal.Width Speciesvirginica:Petal.Width
+1                   -1.18441803                   -0.6810843
+2                   -0.77852645                   -0.3728963
+3                   -1.13132713                   -0.7857371
+4                    0.01722007                    0.5142991
+5                   -0.51092812                   -0.1081075
+6                   -0.92843589                   -0.9253949
+> 
+> 
+> 
+> cleanEx()
+> nameEx("simulate_parameters")
+> ### * simulate_parameters
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simulate_parameters.glmmTMB
+> ### Title: Simulate Model Parameters
+> ### Aliases: simulate_parameters.glmmTMB simulate_parameters
+> ###   simulate_parameters.default
+> 
+> ### ** Examples
+> 
+> model <- lm(Sepal.Length ~ Species * Petal.Width + Petal.Length, data = iris)
+> simulate_parameters(model)
+[34m# Fixed Effects[39m
+
+Parameter                     | Coefficient |         95% CI |      p
+---------------------------------------------------------------------
+(Intercept)                   |        3.53 | [ 3.21,  3.85] | < .001
+Speciesversicolor             |       -1.15 | [-1.89, -0.45] | < .001
+Speciesvirginica              |       -2.23 | [-3.11, -1.32] | < .001
+Petal.Width                   |        0.41 | [-0.48,  1.44] | 0.386 
+Petal.Length                  |        0.94 | [ 0.78,  1.09] | < .001
+Speciesversicolor:Petal.Width |       -0.75 | [-1.82,  0.27] | 0.182 
+Speciesvirginica:Petal.Width  |       -0.39 | [-1.38,  0.66] | 0.444 
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a simulated multivariate normal distribution approximation.
+> 
+> ## Not run: 
+> ##D if (require("glmmTMB", quietly = TRUE)) {
+> ##D   model <- glmmTMB(
+> ##D     count ~ spp + mined + (1 | site),
+> ##D     ziformula = ~mined,
+> ##D     family = poisson(),
+> ##D     data = Salamanders
+> ##D   )
+> ##D   simulate_parameters(model, centrality = "mean")
+> ##D   simulate_parameters(model, ci = c(.8, .95), component = "zero_inflated")
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("sort_parameters")
+> ### * sort_parameters
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: sort_parameters
+> ### Title: Sort parameters by coefficient values
+> ### Aliases: sort_parameters sort_parameters.default
+> 
+> ### ** Examples
+> 
+> # creating object to sort (can also be a regular data frame)
+> mod <- model_parameters(stats::lm(wt ~ am * cyl, data = mtcars))
+> 
+> # original output
+> mod
+Parameter   | Coefficient |   SE |        95% CI | t(28) |      p
+-----------------------------------------------------------------
+(Intercept) |        1.66 | 0.59 | [ 0.46, 2.86] |  2.82 | 0.009 
+am          |       -0.96 | 0.79 | [-2.58, 0.67] | -1.21 | 0.238 
+cyl         |        0.30 | 0.08 | [ 0.13, 0.47] |  3.68 | < .001
+am × cyl    |        0.03 | 0.13 | [-0.23, 0.30] |  0.25 | 0.803 
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald t-distribution approximation.
+> 
+> # sorted outputs
+> sort_parameters(mod, sort = "ascending")
+Parameter   | Coefficient |   SE |        95% CI | t(28) |      p
+-----------------------------------------------------------------
+am          |       -0.96 | 0.79 | [-2.58, 0.67] | -1.21 | 0.238 
+am × cyl    |        0.03 | 0.13 | [-0.23, 0.30] |  0.25 | 0.803 
+cyl         |        0.30 | 0.08 | [ 0.13, 0.47] |  3.68 | < .001
+(Intercept) |        1.66 | 0.59 | [ 0.46, 2.86] |  2.82 | 0.009 
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald t-distribution approximation.
+> sort_parameters(mod, sort = "descending")
+Parameter   | Coefficient |   SE |        95% CI | t(28) |      p
+-----------------------------------------------------------------
+(Intercept) |        1.66 | 0.59 | [ 0.46, 2.86] |  2.82 | 0.009 
+cyl         |        0.30 | 0.08 | [ 0.13, 0.47] |  3.68 | < .001
+am × cyl    |        0.03 | 0.13 | [-0.23, 0.30] |  0.25 | 0.803 
+am          |       -0.96 | 0.79 | [-2.58, 0.67] | -1.21 | 0.238 
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald t-distribution approximation.
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("standard_error")
+> ### * standard_error
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: standard_error
+> ### Title: Standard Errors
+> ### Aliases: standard_error standard_error.default standard_error.factor
+> ###   standard_error.glmmTMB standard_error.merMod
+> 
+> ### ** Examples
+> 
+> model <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
+> standard_error(model)
+                       Parameter        SE
+1                    (Intercept) 0.5310388
+2                   Sepal.Length 0.1058237
+3              Speciesversicolor 0.6836543
+4               Speciesvirginica 0.6578142
+5 Sepal.Length:Speciesversicolor 0.1281447
+6  Sepal.Length:Speciesvirginica 0.1209952
+> 
+> if (require("sandwich") && require("clubSandwich")) {
++   standard_error(model, vcov = "HC3")
++ 
++   standard_error(model,
++     vcov = "vcovCL",
++     vcov_args = list(cluster = iris$Species)
++   )
++ }
+Loading required package: sandwich
+Loading required package: clubSandwich
+                       Parameter           SE
+1                    (Intercept) 1.397486e-15
+2                   Sepal.Length 2.784715e-16
+3              Speciesversicolor 1.528110e-15
+4               Speciesvirginica 1.758550e-15
+5 Sepal.Length:Speciesversicolor 2.977050e-16
+6  Sepal.Length:Speciesvirginica 3.226855e-16
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:clubSandwich', 'package:sandwich'
+
+> nameEx("standardize_info")
+> ### * standardize_info
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: standardize_info
+> ### Title: Get Standardization Information
+> ### Aliases: standardize_info standardise_info
+> 
+> ### ** Examples
+> 
+> model <- lm(mpg ~ ., data = mtcars)
+> standardize_info(model)
+     Parameter      Type        Link Secondary_Parameter EffectSize_Type
+1  (Intercept) intercept        Mean                <NA>            <NA>
+2          cyl   numeric Association                <NA>               r
+3         disp   numeric Association                <NA>               r
+4           hp   numeric Association                <NA>               r
+5         drat   numeric Association                <NA>               r
+6           wt   numeric Association                <NA>               r
+7         qsec   numeric Association                <NA>               r
+8           vs   numeric Association                <NA>               r
+9           am   numeric Association                <NA>               r
+10        gear   numeric Association                <NA>               r
+11        carb   numeric Association                <NA>               r
+   Deviation_Response_Basic Deviation_Response_Smart Deviation_Basic
+1                  6.026948                 6.026948       0.0000000
+2                  6.026948                 6.026948       1.7859216
+3                  6.026948                 6.026948     123.9386938
+4                  6.026948                 6.026948      68.5628685
+5                  6.026948                 6.026948       0.5346787
+6                  6.026948                 6.026948       0.9784574
+7                  6.026948                 6.026948       1.7869432
+8                  6.026948                 6.026948       0.5040161
+9                  6.026948                 6.026948       0.4989909
+10                 6.026948                 6.026948       0.7378041
+11                 6.026948                 6.026948       1.6152000
+   Deviation_Smart
+1        0.0000000
+2        1.7859216
+3      123.9386938
+4       68.5628685
+5        0.5346787
+6        0.9784574
+7        1.7869432
+8        0.5040161
+9        0.4989909
+10       0.7378041
+11       1.6152000
+> standardize_info(model, robust = TRUE)
+     Parameter      Type        Link Secondary_Parameter EffectSize_Type
+1  (Intercept) intercept        Mean                <NA>            <NA>
+2          cyl   numeric Association                <NA>               r
+3         disp   numeric Association                <NA>               r
+4           hp   numeric Association                <NA>               r
+5         drat   numeric Association                <NA>               r
+6           wt   numeric Association                <NA>               r
+7         qsec   numeric Association                <NA>               r
+8           vs   numeric Association                <NA>               r
+9           am   numeric Association                <NA>               r
+10        gear   numeric Association                <NA>               r
+11        carb   numeric Association                <NA>               r
+   Deviation_Response_Basic Deviation_Response_Smart Deviation_Basic
+1                   5.41149                  5.41149       0.0000000
+2                   5.41149                  5.41149       2.9652000
+3                   5.41149                  5.41149     140.4763500
+4                   5.41149                  5.41149      77.0952000
+5                   5.41149                  5.41149       0.7042350
+6                   5.41149                  5.41149       0.7672455
+7                   5.41149                  5.41149       1.4158830
+8                   5.41149                  5.41149       0.0000000
+9                   5.41149                  5.41149       0.0000000
+10                  5.41149                  5.41149       1.4826000
+11                  5.41149                  5.41149       1.4826000
+   Deviation_Smart
+1        0.0000000
+2        2.9652000
+3      140.4763500
+4       77.0952000
+5        0.7042350
+6        0.7672455
+7        1.4158830
+8        0.0000000
+9        0.0000000
+10       1.4826000
+11       1.4826000
+> standardize_info(model, two_sd = TRUE)
+     Parameter      Type        Link Secondary_Parameter EffectSize_Type
+1  (Intercept) intercept        Mean                <NA>            <NA>
+2          cyl   numeric Association                <NA>               r
+3         disp   numeric Association                <NA>               r
+4           hp   numeric Association                <NA>               r
+5         drat   numeric Association                <NA>               r
+6           wt   numeric Association                <NA>               r
+7         qsec   numeric Association                <NA>               r
+8           vs   numeric Association                <NA>               r
+9           am   numeric Association                <NA>               r
+10        gear   numeric Association                <NA>               r
+11        carb   numeric Association                <NA>               r
+   Deviation_Response_Basic Deviation_Response_Smart Deviation_Basic
+1                  6.026948                 6.026948       0.0000000
+2                  6.026948                 6.026948       3.5718433
+3                  6.026948                 6.026948     247.8773877
+4                  6.026948                 6.026948     137.1257370
+5                  6.026948                 6.026948       1.0693575
+6                  6.026948                 6.026948       1.9569149
+7                  6.026948                 6.026948       3.5738865
+8                  6.026948                 6.026948       1.0080323
+9                  6.026948                 6.026948       0.9979818
+10                 6.026948                 6.026948       1.4756081
+11                 6.026948                 6.026948       3.2304000
+   Deviation_Smart
+1        0.0000000
+2        3.5718433
+3      247.8773877
+4      137.1257370
+5        1.0693575
+6        1.9569149
+7        3.5738865
+8        1.0080323
+9        0.9979818
+10       1.4756081
+11       3.2304000
+> 
+> 
+> 
+> cleanEx()
+> nameEx("standardize_parameters")
+> ### * standardize_parameters
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: standardize_parameters
+> ### Title: Parameters standardization
+> ### Aliases: standardize_parameters standardise_parameters
+> ###   standardize_posteriors standardise_posteriors
+> 
+> ### ** Examples
+> 
+> model <- lm(len ~ supp * dose, data = ToothGrowth)
+> standardize_parameters(model, method = "refit")
+[34m# Standardization method: refit[39m
+
+Parameter   | Std. Coef. |         95% CI
+-----------------------------------------
+(Intercept) |       0.24 | [ 0.05,  0.44]
+suppVC      |      -0.48 | [-0.76, -0.21]
+dose        |       0.64 | [ 0.45,  0.84]
+suppVC:dose |       0.32 | [ 0.04,  0.60]
+> 
+> ## Don't show: 
+> if (require("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ ## Don't show: 
++ }) # examplesIf
+> ## End(Don't show)
+> ## Don't show: 
+> if (require("rstanarm", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ ## Don't show: 
++ }) # examplesIf
+This is rstanarm version 2.21.3
+- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!
+- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.
+- For execution on a local, multicore CPU with excess RAM we recommend calling
+  options(mc.cores = parallel::detectCores())
+
+Attaching package: 'rstanarm'
+
+The following object is masked from 'package:parameters':
+
+    compare_models
+
+> ## End(Don't show)
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+
+detaching 'package:rstanarm', 'package:Rcpp', 'package:lme4',
+  'package:Matrix'
+
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  30.13 2.33 34.39 NA NA 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

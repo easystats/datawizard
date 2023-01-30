@@ -1,0 +1,1939 @@
+
+R version 4.2.2 (2022-10-31 ucrt) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "effectsize"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> library('effectsize')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("F_to_eta2")
+> ### * F_to_eta2
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: F_to_eta2
+> ### Title: Convert _F_ and _t_ Statistics to *partial*-eta^2 and Other
+> ###   ANOVA Effect Sizes
+> ### Aliases: F_to_eta2 t_to_eta2 F_to_epsilon2 t_to_epsilon2 F_to_eta2_adj
+> ###   t_to_eta2_adj F_to_omega2 t_to_omega2 F_to_f t_to_f F_to_f2 t_to_f2
+> 
+> ### ** Examples
+> 
+> mod <- aov(mpg ~ factor(cyl) * factor(am), mtcars)
+> anova(mod)
+Analysis of Variance Table
+
+Response: mpg
+                       Df Sum Sq Mean Sq F value    Pr(>F)    
+factor(cyl)             2 824.78  412.39 44.8517 3.725e-09 ***
+factor(am)              1  36.77   36.77  3.9988   0.05608 .  
+factor(cyl):factor(am)  2  25.44   12.72  1.3832   0.26861    
+Residuals              26 239.06    9.19                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+> (etas <- F_to_eta2(
++   f = c(44.85, 3.99, 1.38),
++   df = c(2, 1, 2),
++   df_error = 26
++ ))
+Eta2 (partial) |       95% CI
+-----------------------------
+0.78           | [0.63, 1.00]
+0.13           | [0.00, 1.00]
+0.10           | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> if (require(see)) plot(etas)
+Loading required package: see
+> 
+> # Compare to:
+> eta_squared(mod)
+[34m# Effect Size for ANOVA (Type I)[39m
+
+Parameter              | Eta2 (partial) |       95% CI
+------------------------------------------------------
+factor(cyl)            |           0.78 | [0.63, 1.00]
+factor(am)             |           0.13 | [0.00, 1.00]
+factor(cyl):factor(am) |           0.10 | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> ## Don't show: 
+> if (require(lmerTest) && interactive()) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ fit <- lmerTest::lmer(extra ~ group + (1 | ID), sleep)
++ # anova(fit)
++ # #> Type III Analysis of Variance Table with Satterthwaite's method
++ # #>       Sum Sq Mean Sq NumDF DenDF F value   Pr(>F)
++ # #> group 12.482  12.482     1     9  16.501 0.002833 **
++ # #> ---
++ # #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
++ 
++ F_to_eta2(16.501, 1, 9)
++ F_to_omega2(16.501, 1, 9)
++ F_to_epsilon2(16.501, 1, 9)
++ F_to_f(16.501, 1, 9)
++ ## Don't show: 
++ }) # examplesIf
+Loading required package: lmerTest
+Loading required package: lme4
+Loading required package: Matrix
+
+Attaching package: 'lmerTest'
+
+The following object is masked from 'package:lme4':
+
+    lmer
+
+The following object is masked from 'package:stats':
+
+    step
+
+> ## End(Don't show)
+> ## Don't show: 
+> if (require(emmeans)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ ## Use with emmeans based contrasts
++ ## --------------------------------
++ warp.lm <- lm(breaks ~ wool * tension, data = warpbreaks)
++ 
++ jt <- emmeans::joint_tests(warp.lm, by = "wool")
++ F_to_eta2(jt$F.ratio, jt$df1, jt$df2)
++ ## Don't show: 
++ }) # examplesIf
+Loading required package: emmeans
+> warp.lm <- lm(breaks ~ wool * tension, data = warpbreaks)
+> jt <- emmeans::joint_tests(warp.lm, by = "wool")
+> F_to_eta2(jt$F.ratio, jt$df1, jt$df2)
+Eta2 (partial) |       95% CI
+-----------------------------
+0.30           | [0.12, 1.00]
+0.09           | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> ## End(Don't show)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:emmeans', 'package:lmerTest', 'package:lme4',
+  'package:Matrix', 'package:see'
+
+> nameEx("cohens_d")
+> ### * cohens_d
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cohens_d
+> ### Title: Cohen's _d_ and Other Standardized Differences
+> ### Aliases: cohens_d hedges_g glass_delta
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("cohens_g")
+> ### * cohens_g
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cohens_g
+> ### Title: Effect Size for Paired Contingency Tables
+> ### Aliases: cohens_g
+> 
+> ### ** Examples
+> 
+> 
+> data("screening_test")
+> 
+> phi(screening_test$Diagnosis, screening_test$Test1)
+Phi (adj.) |       95% CI
+-------------------------
+0.85       | [0.81, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> phi(screening_test$Diagnosis, screening_test$Test2)
+Phi (adj.) |       95% CI
+-------------------------
+0.85       | [0.81, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> # Both tests seem comparable - but are the tests actually different?
+> 
+> (tests <- table(Test1 = screening_test$Test1, Test2 = screening_test$Test2))
+       Test2
+Test1   "Neg" "Pos"
+  "Neg"   794    86
+  "Pos"   150   570
+> 
+> mcnemar.test(tests)
+
+	McNemar's Chi-squared test with continuity correction
+
+data:  tests
+McNemar's chi-squared = 16.818, df = 1, p-value = 4.115e-05
+
+> 
+> cohens_g(tests)
+Cohen's g |       95% CI
+------------------------
+0.14      | [0.07, 0.19]
+> 
+> # Test 2 gives a negative result more than test 1!
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("convert_chisq")
+> ### * convert_chisq
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: chisq_to_phi
+> ### Title: Convert chi^2 to phi and Other Correlation-like Effect Sizes
+> ### Aliases: chisq_to_phi chisq_to_cohens_w chisq_to_cramers_v
+> ###   chisq_to_tschuprows_t chisq_to_fei chisq_to_pearsons_c phi_to_chisq
+> 
+> ### ** Examples
+> 
+> 
+> data("Music_preferences")
+> 
+> # chisq.test(Music_preferences)
+> #>
+> #> 	Pearson's Chi-squared test
+> #>
+> #> data:  Music_preferences
+> #> X-squared = 95.508, df = 6, p-value < 2.2e-16
+> #>
+> 
+> chisq_to_cohens_w(95.508,
++   n = sum(Music_preferences),
++   nrow = nrow(Music_preferences),
++   ncol = ncol(Music_preferences)
++ )
+Cohen's w |       95% CI
+------------------------
+0.34      | [0.27, 1.41]
+[36m
+- One-sided CIs: upper bound fixed at [1.41~].[39m> 
+> 
+> 
+> 
+> data("Smoking_FASD")
+> 
+> # chisq.test(Smoking_FASD, p = c(0.015, 0.010, 0.975))
+> #>
+> #> 	Chi-squared test for given probabilities
+> #>
+> #> data:  Smoking_FASD
+> #> X-squared = 7.8521, df = 2, p-value = 0.01972
+> 
+> chisq_to_fei(
++   7.8521,
++   n = sum(Smoking_FASD),
++   nrow = 1,
++   ncol = 3,
++   p = c(0.015, 0.010, 0.975)
++ )
+Fei  |       95% CI
+-------------------
+0.01 | [0.00, 1.00]
+[36m
+- Adjusted for uniform expected probabilities.[39m[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("d_to_r")
+> ### * d_to_r
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: d_to_r
+> ### Title: Convert Between _d_, _r_, and Odds Ratio
+> ### Aliases: d_to_r convert_d_to_r r_to_d convert_r_to_d oddsratio_to_d
+> ###   convert_oddsratio_to_d logoddsratio_to_d convert_logoddsratio_to_d
+> ###   d_to_oddsratio convert_d_to_oddsratio oddsratio_to_r
+> ###   convert_oddsratio_to_r logoddsratio_to_r convert_logoddsratio_to_r
+> ###   r_to_oddsratio convert_r_to_oddsratio
+> 
+> ### ** Examples
+> 
+> r_to_d(0.5)
+[1] 1.154701
+> d_to_oddsratio(1.154701)
+[1] 8.120534
+> oddsratio_to_r(8.120534)
+[1] 0.5000001
+> 
+> d_to_r(1)
+[1] 0.4472136
+> r_to_oddsratio(0.4472136, log = TRUE)
+[1] 1.813799
+> oddsratio_to_d(1.813799, log = TRUE)
+[1] 0.9999998
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("effectsize")
+> ### * effectsize
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: effectsize.BFBayesFactor
+> ### Title: Effect Sizes
+> ### Aliases: effectsize.BFBayesFactor effectsize effectsize.aov
+> ###   effectsize.htest
+> 
+> ### ** Examples
+> 
+> 
+> ## Hypothesis Testing
+> ## ------------------
+> data("Music_preferences")
+> Xsq <- chisq.test(Music_preferences)
+> effectsize(Xsq)
+Cramer's V (adj.) |       95% CI
+--------------------------------
+0.23              | [0.18, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> effectsize(Xsq, type = "cohens_w")
+Cohen's w |       95% CI
+------------------------
+0.34      | [0.27, 1.41]
+[36m
+- One-sided CIs: upper bound fixed at [1.41~].[39m> 
+> Tt <- t.test(1:10, y = c(7:20), alternative = "less")
+> effectsize(Tt)
+Cohen's d |        95% CI
+-------------------------
+-2.19     | [-Inf, -1.32]
+[36m
+- Estimated using un-pooled SD.[39m[36m
+- One-sided CIs: lower bound fixed at [-Inf].[39m> 
+> Aov <- oneway.test(extra ~ group, data = sleep, var.equal = TRUE)
+> effectsize(Aov)
+Eta2 |       95% CI
+-------------------
+0.16 | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> effectsize(Aov, type = "omega")
+Omega2 |       95% CI
+---------------------
+0.11   | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> Wt <- wilcox.test(1:10, 7:20, mu = -3, alternative = "less", exact = FALSE)
+> effectsize(Wt)
+r (rank biserial) |         95% CI
+----------------------------------
+-0.65             | [-1.00, -0.36]
+[36m
+- Deviation from a difference of -3.[39m[36m
+- One-sided CIs: lower bound fixed at [-1.00].[39m> effectsize(Wt, type = "u2")
+Cohen's U2 |       95% CI
+-------------------------
+0.73       | [0.00, 1.00]
+[36m
+- Non-parametric CLES[39m> 
+> ## Models and Anova Tables
+> ## -----------------------
+> fit <- lm(mpg ~ factor(cyl) * wt + hp, data = mtcars)
+> effectsize(fit, method = "basic")
+[34m# Standardization method: basic[39m
+
+Parameter       | Std. Coef. |         95% CI
+---------------------------------------------
+(Intercept)     |       0.00 | [ 0.00,  0.00]
+factor(cyl)6    |      -0.59 | [-1.89,  0.70]
+factor(cyl)8    |      -1.06 | [-1.90, -0.23]
+wt              |      -0.90 | [-1.33, -0.46]
+hp              |      -0.25 | [-0.52,  0.01]
+factor(cyl)6:wt |       0.50 | [-0.85,  1.84]
+factor(cyl)8:wt |       1.15 | [ 0.06,  2.25]
+> 
+> anova_table <- anova(fit)
+> effectsize(anova_table)
+[34m# Effect Size for ANOVA (Type I)[39m
+
+Parameter      | Eta2 (partial) |       95% CI
+----------------------------------------------
+factor(cyl)    |           0.86 | [0.76, 1.00]
+wt             |           0.47 | [0.22, 1.00]
+hp             |           0.14 | [0.00, 1.00]
+factor(cyl):wt |           0.16 | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> effectsize(anova_table, type = "epsilon")
+[34m# Effect Size for ANOVA (Type I)[39m
+
+Parameter      | Epsilon2 (partial) |       95% CI
+--------------------------------------------------
+factor(cyl)    |               0.85 | [0.74, 1.00]
+wt             |               0.44 | [0.20, 1.00]
+hp             |               0.11 | [0.00, 1.00]
+factor(cyl):wt |               0.09 | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> ## Don't show: 
+> if (requireNamespace("BayesFactor", quietly = TRUE) && interactive()) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ ## Bayesian Hypothesis Testing
++ ## ---------------------------
++ bf_prop <- BayesFactor::proportionBF(3, 7, p = 0.3)
++ effectsize(bf_prop)
++ 
++ bf_corr <- BayesFactor::correlationBF(attitude$rating, attitude$complaints)
++ effectsize(bf_corr)
++ 
++ data(RCT_table)
++ bf_xtab <- BayesFactor::contingencyTableBF(RCT_table, sampleType = "poisson", fixedMargin = "cols")
++ effectsize(bf_xtab)
++ effectsize(bf_xtab, type = "oddsratio")
++ 
++ bf_ttest <- BayesFactor::ttestBF(sleep$extra[sleep$group == 1],
++   sleep$extra[sleep$group == 2],
++   paired = TRUE, mu = -1
++ )
++ effectsize(bf_ttest)
++ ## Don't show: 
++ }) # examplesIf
+> ## End(Don't show)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("equivalence_test.effectsize_table")
+> ### * equivalence_test.effectsize_table
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: equivalence_test.effectsize_table
+> ### Title: Test Effect Size for Practical Equivalence to the Null
+> ### Aliases: equivalence_test.effectsize_table
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("eta_squared")
+> ### * eta_squared
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: eta_squared
+> ### Title: eta^2 and Other Effect Size for ANOVA
+> ### Aliases: eta_squared omega_squared epsilon_squared cohens_f
+> ###   cohens_f_squared eta_squared_posterior
+> 
+> ### ** Examples
+> 
+> data(mtcars)
+> mtcars$am_f <- factor(mtcars$am)
+> mtcars$cyl_f <- factor(mtcars$cyl)
+> 
+> model <- aov(mpg ~ am_f * cyl_f, data = mtcars)
+> 
+> (eta2 <- eta_squared(model))
+[34m# Effect Size for ANOVA (Type I)[39m
+
+Parameter  | Eta2 (partial) |       95% CI
+------------------------------------------
+am_f       |           0.63 | [0.42, 1.00]
+cyl_f      |           0.66 | [0.45, 1.00]
+am_f:cyl_f |           0.10 | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> # More types:
+> eta_squared(model, partial = FALSE)
+[34m# Effect Size for ANOVA (Type I)[39m
+
+Parameter  | Eta2 |       95% CI
+--------------------------------
+am_f       | 0.36 | [0.13, 1.00]
+cyl_f      | 0.41 | [0.14, 1.00]
+am_f:cyl_f | 0.02 | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> eta_squared(model, generalized = "cyl_f")
+[34m# Effect Size for ANOVA (Type I)[39m
+
+Parameter  | Eta2 (generalized) |       95% CI
+----------------------------------------------
+am_f       |               0.36 | [0.13, 1.00]
+cyl_f      |               0.63 | [0.42, 1.00]
+am_f:cyl_f |               0.04 | [0.00, 1.00]
+[36m
+- Observed variables: cyl_f[39m[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> omega_squared(model)
+[34m# Effect Size for ANOVA (Type I)[39m
+
+Parameter  | Omega2 (partial) |       95% CI
+--------------------------------------------
+am_f       |             0.57 | [0.35, 1.00]
+cyl_f      |             0.60 | [0.37, 1.00]
+am_f:cyl_f |             0.02 | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> epsilon_squared(model)
+[34m# Effect Size for ANOVA (Type I)[39m
+
+Parameter  | Epsilon2 (partial) |       95% CI
+----------------------------------------------
+am_f       |               0.61 | [0.40, 1.00]
+cyl_f      |               0.63 | [0.41, 1.00]
+am_f:cyl_f |               0.03 | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> cohens_f(model)
+[34m# Effect Size for ANOVA (Type I)[39m
+
+Parameter  | Cohen's f (partial) |      95% CI
+----------------------------------------------
+am_f       |                1.30 | [0.86, Inf]
+cyl_f      |                1.38 | [0.90, Inf]
+am_f:cyl_f |                0.33 | [0.00, Inf]
+[36m
+- One-sided CIs: upper bound fixed at [Inf].[39m> 
+> model0 <- aov(mpg ~ am_f + cyl_f, data = mtcars) # no interaction
+> cohens_f_squared(model0, model2 = model)
+Cohen's f2 (partial) |      95% CI | R2_delta
+---------------------------------------------
+0.11                 | [0.00, Inf] |     0.02
+[36m
+- One-sided CIs: upper bound fixed at [Inf].[39m> 
+> ## Interpretation of effect sizes
+> ## ------------------------------
+> 
+> interpret_omega_squared(0.10, rules = "field2013")
+[1] "medium"
+[3m(Rules: field2013)
+[23m> interpret_eta_squared(0.10, rules = "cohen1992")
+[1] "small"
+[3m(Rules: cohen1992)
+[23m> interpret_epsilon_squared(0.10, rules = "cohen1992")
+[1] "small"
+[3m(Rules: cohen1992)
+[23m> 
+> interpret(eta2, rules = "cohen1992")
+[34m# Effect Size for ANOVA (Type I)[39m
+
+Parameter  | Eta2 (partial) |       95% CI | Interpretation
+-----------------------------------------------------------
+am_f       |           0.63 | [0.42, 1.00] |          large
+cyl_f      |           0.66 | [0.45, 1.00] |          large
+am_f:cyl_f |           0.10 | [0.00, 1.00] |          small
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m[36m
+- Interpretation rule: cohen1992[39m> 
+> ## Don't show: 
+> if (require("see") && interactive()) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ plot(eta2) # Requires the {see} package
++ ## Don't show: 
++ }) # examplesIf
+Loading required package: see
+> ## End(Don't show)
+> ## Don't show: 
+> if (require("car")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ # Recommended: Type-2 or -3 effect sizes + effects coding
++ # -------------------------------------------------------
++ contrasts(mtcars$am_f) <- contr.sum
++ contrasts(mtcars$cyl_f) <- contr.sum
++ 
++ model <- aov(mpg ~ am_f * cyl_f, data = mtcars)
++ model_anova <- car::Anova(model, type = 3)
++ 
++ epsilon_squared(model_anova)
++ ## Don't show: 
++ }) # examplesIf
+Loading required package: car
+Loading required package: carData
+> contrasts(mtcars$am_f) <- contr.sum
+> contrasts(mtcars$cyl_f) <- contr.sum
+> model <- aov(mpg ~ am_f * cyl_f, data = mtcars)
+> model_anova <- car::Anova(model, type = 3)
+> epsilon_squared(model_anova)
+Type 3 ANOVAs only give sensible and informative results when covariates
+  are mean-centered and factors are coded with orthogonal contrasts (such
+  as those produced by `contr.sum`, `contr.poly`, or `contr.helmert`, but
+  *not* by the default `contr.treatment`).
+[34m# Effect Size for ANOVA (Type III)[39m
+
+Parameter  | Epsilon2 (partial) |       95% CI
+----------------------------------------------
+am_f       |               0.08 | [0.00, 1.00]
+cyl_f      |               0.60 | [0.38, 1.00]
+am_f:cyl_f |               0.03 | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> ## End(Don't show)
+> ## Don't show: 
+> if (require("car") && require("afex")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ # afex takes care of both type-3 effects and effects coding:
++ data(obk.long, package = "afex")
++ model <- afex::aov_car(value ~ gender + Error(id / (phase * hour)),
++   data = obk.long, observed = "gender"
++ )
++ 
++ omega_squared(model)
++ eta_squared(model, generalized = TRUE) # observed vars are pulled from the afex model.
++ ## Don't show: 
++ }) # examplesIf
+Loading required package: afex
+Loading required package: lme4
+Loading required package: Matrix
+************
+Welcome to afex. For support visit: http://afex.singmann.science/
+- Functions for ANOVAs: aov_car(), aov_ez(), and aov_4()
+- Methods for calculating p-values with mixed(): 'S', 'KR', 'LRT', and 'PB'
+- 'afex_aov' and 'mixed' objects can be passed to emmeans() for follow-up tests
+- NEWS: emmeans() for ANOVA models now uses model = 'multivariate' as default.
+- Get and set global package options with: afex_options()
+- Set orthogonal sum-to-zero contrasts globally: set_sum_contrasts()
+- For example analyses see: browseVignettes("afex")
+************
+
+Attaching package: 'afex'
+
+The following object is masked from 'package:lme4':
+
+    lmer
+
+> data(obk.long, package = "afex")
+> model <- afex::aov_car(value ~ gender + Error(id/(phase * hour)), data = obk.long, 
++     observed = "gender")
+Contrasts set to contr.sum for the following variables: gender
+> omega_squared(model)
+[34m# Effect Size for ANOVA (Type III)[39m
+
+Parameter         | Omega2 (partial) |       95% CI
+---------------------------------------------------
+gender            |             0.00 | [0.00, 1.00]
+phase             |             0.16 | [0.00, 1.00]
+gender:phase      |             0.00 | [0.00, 1.00]
+hour              |             0.13 | [0.00, 1.00]
+gender:hour       |             0.00 | [0.00, 1.00]
+phase:hour        |         3.73e-03 | [0.00, 1.00]
+gender:phase:hour |             0.00 | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> eta_squared(model, generalized = TRUE)
+[34m# Effect Size for ANOVA (Type III)[39m
+
+Parameter         | Eta2 (generalized) |       95% CI
+-----------------------------------------------------
+gender            |               0.03 | [0.00, 1.00]
+phase             |               0.15 | [0.00, 1.00]
+gender:phase      |           3.53e-34 | [0.00, 1.00]
+hour              |               0.10 | [0.00, 1.00]
+gender:hour       |           2.36e-03 | [0.00, 1.00]
+phase:hour        |               0.01 | [0.00, 1.00]
+gender:phase:hour |           6.54e-03 | [0.00, 1.00]
+[36m
+- Observed variables: gender[39m[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> ## End(Don't show)
+> ## Don't show: 
+> if (require("lmerTest") && require("lme4") && FALSE) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ ## Approx. effect sizes for mixed models
++ ## -------------------------------------
++ model <- lme4::lmer(mpg ~ am_f * cyl_f + (1 | vs), data = mtcars)
++ omega_squared(model)
++ ## Don't show: 
++ }) # examplesIf
+Loading required package: lmerTest
+
+Attaching package: 'lmerTest'
+
+The following object is masked from 'package:lme4':
+
+    lmer
+
+The following object is masked from 'package:stats':
+
+    step
+
+> ## End(Don't show)
+> ## Don't show: 
+> if (require(rstanarm) && require(bayestestR) && require(car) && interactive()) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ ## Bayesian Models (PPD)
++ ## ---------------------
++ fit_bayes <- rstanarm::stan_glm(
++   mpg ~ factor(cyl) * wt + qsec,
++   data = mtcars, family = gaussian(),
++   refresh = 0
++ )
++ 
++ es <- eta_squared_posterior(fit_bayes,
++   verbose = FALSE,
++   ss_function = car::Anova, type = 3
++ )
++ bayestestR::describe_posterior(es, test = NULL)
++ 
++ 
++ # compare to:
++ fit_freq <- lm(mpg ~ factor(cyl) * wt + qsec,
++   data = mtcars
++ )
++ aov_table <- car::Anova(fit_freq, type = 3)
++ eta_squared(aov_table)
++ ## Don't show: 
++ }) # examplesIf
+Loading required package: rstanarm
+Loading required package: Rcpp
+This is rstanarm version 2.21.3
+- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!
+- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.
+- For execution on a local, multicore CPU with excess RAM we recommend calling
+  options(mc.cores = parallel::detectCores())
+
+Attaching package: 'rstanarm'
+
+The following object is masked from 'package:car':
+
+    logit
+
+Loading required package: bayestestR
+> ## End(Don't show)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:bayestestR', 'package:rstanarm', 'package:Rcpp',
+  'package:lmerTest', 'package:afex', 'package:lme4', 'package:Matrix',
+  'package:car', 'package:carData', 'package:see'
+
+> nameEx("format_standardize")
+> ### * format_standardize
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: format_standardize
+> ### Title: Format a Standardized Vector
+> ### Aliases: format_standardize
+> 
+> ### ** Examples
+> 
+> format_standardize(c(-1, 0, 1))
+[1] -1.0 SD Mean    +1.0 SD
+Levels: +1.0 SD Mean -1.0 SD
+> format_standardize(c(-1, 0, 1, 2), reference = rnorm(1000))
+[1] -1.0 SD Mean    +1.0 SD +1.9 SD
+Levels: +1.9 SD +1.0 SD Mean -1.0 SD
+> format_standardize(c(-1, 0, 1, 2), reference = rnorm(1000), robust = TRUE)
+[1] -0.9 MAD Median   +1.0 MAD +1.9 MAD
+Levels: +1.9 MAD +1.0 MAD Median -0.9 MAD
+> 
+> format_standardize(standardize(mtcars$wt), digits = 1)
+ [1] -0.6 SD -0.3 SD -0.9 SD Mean    +0.2 SD +0.2 SD +0.4 SD Mean    -0.1 SD
+[10] +0.2 SD +0.2 SD +0.9 SD +0.5 SD +0.6 SD +2.1 SD +2.3 SD +2.2 SD -1.0 SD
+[19] -1.6 SD -1.4 SD -0.8 SD +0.3 SD +0.2 SD +0.6 SD +0.6 SD -1.3 SD -1.1 SD
+[28] -1.7 SD Mean    -0.5 SD +0.4 SD -0.4 SD
+23 Levels: +2.3 SD +2.2 SD +2.1 SD +0.9 SD +0.6 SD +0.5 SD +0.4 SD ... -1.7 SD
+> format_standardize(standardize(mtcars$wt, robust = TRUE), digits = 1)
+ [1] -0.9 MAD -0.6 MAD -1.3 MAD -0.1 MAD +0.1 MAD +0.2 MAD +0.3 MAD -0.2 MAD
+ [9] -0.2 MAD +0.1 MAD +0.1 MAD +1.0 MAD +0.5 MAD +0.6 MAD +2.5 MAD +2.7 MAD
+[17] +2.6 MAD -1.5 MAD -2.2 MAD -1.9 MAD -1.1 MAD +0.3 MAD +0.1 MAD +0.7 MAD
+[25] +0.7 MAD -1.8 MAD -1.5 MAD -2.4 MAD -0.2 MAD -0.7 MAD +0.3 MAD -0.7 MAD
+22 Levels: +2.7 MAD +2.6 MAD +2.5 MAD +1.0 MAD +0.7 MAD +0.6 MAD ... -2.4 MAD
+> 
+> 
+> 
+> cleanEx()
+> nameEx("interpret")
+> ### * interpret
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpret
+> ### Title: Generic Function for Interpretation
+> ### Aliases: interpret interpret.numeric interpret.effectsize_table
+> 
+> ### ** Examples
+> 
+> rules_grid <- rules(c(0.01, 0.05), c("very significant", "significant", "not significant"))
+> interpret(0.001, rules_grid)
+[1] "very significant"
+[3m(Rules: Custom rules)
+[23m> interpret(0.021, rules_grid)
+[1] "significant"
+[3m(Rules: Custom rules)
+[23m> interpret(0.08, rules_grid)
+[1] "not significant"
+[3m(Rules: Custom rules)
+[23m> interpret(c(0.01, 0.005, 0.08), rules_grid)
+[1] "very significant" "very significant" "not significant" 
+[3m(Rules: Custom rules)
+[23m> 
+> interpret(c(0.35, 0.15), c("small" = 0.2, "large" = 0.4), name = "Cohen's Rules")
+[1] "large" "small"
+[3m(Rules: Cohen's Rules)
+[23m> interpret(c(0.35, 0.15), rules(c(0.2, 0.4), c("small", "medium", "large")))
+[1] "medium" "small" 
+[3m(Rules: Custom rules)
+[23m> 
+> # ----------
+> d <- cohens_d(mpg ~ am, data = mtcars)
+> interpret(d, rules = "cohen1988")
+Cohen's d |         95% CI | Interpretation
+-------------------------------------------
+-1.48     | [-2.27, -0.67] |          large
+[36m
+- Estimated using pooled SD.[39m[36m
+- Interpretation rule: cohen1988[39m> 
+> d <- glass_delta(mpg ~ am, data = mtcars)
+> interpret(d, rules = "gignac2016")
+Glass' delta |         95% CI | Interpretation
+----------------------------------------------
+-1.17        | [-1.93, -0.39] |          large
+[36m
+- Interpretation rule: gignac2016[39m> 
+> interpret(d, rules = rules(1, c("tiny", "yeah okay")))
+Glass' delta |         95% CI | Interpretation
+----------------------------------------------
+-1.17        | [-1.93, -0.39] |      yeah okay
+[36m
+- Interpretation rule: Custom rules[39m> 
+> m <- lm(formula = wt ~ am * cyl, data = mtcars)
+> eta2 <- eta_squared(m)
+> interpret(eta2, rules = "field2013")
+[34m# Effect Size for ANOVA (Type I)[39m
+
+Parameter | Eta2 (partial) |       95% CI | Interpretation
+----------------------------------------------------------
+am        |           0.63 | [0.44, 1.00] |          large
+cyl       |           0.47 | [0.24, 1.00] |          large
+am:cyl    |       2.26e-03 | [0.00, 1.00] |     very small
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m[36m
+- Interpretation rule: field2013[39m> 
+> X <- chisq.test(mtcars$am, mtcars$cyl == 8)
+> interpret(oddsratio(X), rules = "chen2010")
+Odds ratio |       95% CI | Interpretation
+------------------------------------------
+0.11       | [0.02, 0.62] |          large
+[36m
+- Interpretation rule: chen2010[39m> interpret(cramers_v(X), "lovakov2021")
+Cramer's V (adj.) |       95% CI | Interpretation
+-------------------------------------------------
+0.44              | [0.03, 1.00] |          large
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m[36m
+- Interpretation rule: lovakov2021[39m> 
+> 
+> 
+> cleanEx()
+> nameEx("interpret_bf")
+> ### * interpret_bf
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpret_bf
+> ### Title: Interpret Bayes Factor (BF)
+> ### Aliases: interpret_bf
+> ### Keywords: interpreters
+> 
+> ### ** Examples
+> 
+> interpret_bf(1)
+[1] "no evidence against or in favour of"
+[3m(Rules: jeffreys1961)
+[23m> interpret_bf(c(5, 2))
+[1] "moderate evidence in favour of"  "anecdotal evidence in favour of"
+[3m(Rules: jeffreys1961)
+[23m> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("interpret_cohens_d")
+> ### * interpret_cohens_d
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpret_cohens_d
+> ### Title: Interpret Standardized Differences
+> ### Aliases: interpret_cohens_d interpret_hedges_g interpret_glass_delta
+> ### Keywords: interpreters
+> 
+> ### ** Examples
+> 
+> interpret_cohens_d(.02)
+[1] "very small"
+[3m(Rules: cohen1988)
+[23m> interpret_cohens_d(c(.5, .02))
+[1] "medium"     "very small"
+[3m(Rules: cohen1988)
+[23m> interpret_cohens_d(.3, rules = "lovakov2021")
+[1] "small"
+[3m(Rules: lovakov2021)
+[23m> 
+> 
+> 
+> cleanEx()
+> nameEx("interpret_cohens_g")
+> ### * interpret_cohens_g
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpret_cohens_g
+> ### Title: Interpret Cohen's _g_
+> ### Aliases: interpret_cohens_g
+> ### Keywords: interpreters
+> 
+> ### ** Examples
+> 
+> interpret_cohens_g(.02)
+[1] "very small"
+[3m(Rules: cohen1988)
+[23m> interpret_cohens_g(c(.3, .15))
+[1] "large"  "medium"
+[3m(Rules: cohen1988)
+[23m> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("interpret_direction")
+> ### * interpret_direction
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpret_direction
+> ### Title: Interpret Direction
+> ### Aliases: interpret_direction
+> ### Keywords: interpreters
+> 
+> ### ** Examples
+> 
+> interpret_direction(.02)
+[1] "positive"
+[3m(Rules: math)
+[23m> interpret_direction(c(.5, -.02))
+[1] "positive" "negative"
+[3m(Rules: math)
+[23m> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("interpret_ess")
+> ### * interpret_ess
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpret_ess
+> ### Title: Interpret Bayesian Diagnostic Indices
+> ### Aliases: interpret_ess interpret_rhat
+> ### Keywords: interpreters
+> 
+> ### ** Examples
+> 
+> interpret_ess(1001)
+[1] "sufficient"
+[3m(Rules: burkner2017)
+[23m> interpret_ess(c(852, 1200))
+[1] "insufficient" "sufficient"  
+[3m(Rules: burkner2017)
+[23m> 
+> interpret_rhat(1.00)
+[1] "converged"
+[3m(Rules: vehtari2019)
+[23m> interpret_rhat(c(1.5, 0.9))
+[1] "failed"    "converged"
+[3m(Rules: vehtari2019)
+[23m> 
+> 
+> 
+> cleanEx()
+> nameEx("interpret_gfi")
+> ### * interpret_gfi
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpret_gfi
+> ### Title: Interpret of CFA / SEM Indices of Goodness of Fit
+> ### Aliases: interpret_gfi interpret_agfi interpret_nfi interpret_nnfi
+> ###   interpret_cfi interpret_rmsea interpret_srmr interpret_rfi
+> ###   interpret_ifi interpret_pnfi interpret.lavaan
+> ###   interpret.performance_lavaan
+> ### Keywords: interpreters
+> 
+> ### ** Examples
+> 
+> interpret_gfi(c(.5, .99))
+[1] "poor"         "satisfactory"
+[3m(Rules: default)
+[23m> interpret_agfi(c(.5, .99))
+[1] "poor"         "satisfactory"
+[3m(Rules: default)
+[23m> interpret_nfi(c(.5, .99))
+[1] "poor"         "satisfactory"
+[3m(Rules: byrne1994)
+[23m> interpret_nnfi(c(.5, .99))
+[1] "poor"         "satisfactory"
+[3m(Rules: byrne1994)
+[23m> interpret_cfi(c(.5, .99))
+[1] "poor"         "satisfactory"
+[3m(Rules: default)
+[23m> interpret_rmsea(c(.07, .04))
+[1] "poor"         "satisfactory"
+[3m(Rules: default)
+[23m> interpret_srmr(c(.5, .99))
+[1] "poor" "poor"
+[3m(Rules: default)
+[23m> interpret_rfi(c(.5, .99))
+[1] "poor"         "satisfactory"
+[3m(Rules: default)
+[23m> interpret_ifi(c(.5, .99))
+[1] "poor"         "satisfactory"
+[3m(Rules: default)
+[23m> interpret_pnfi(c(.5, .99))
+[1] "poor"         "satisfactory"
+[3m(Rules: default)
+[23m> 
+> ## Don't show: 
+> if (require("lavaan") && interactive()) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ # Structural Equation Models (SEM)
++ structure <- " ind60 =~ x1 + x2 + x3
++                dem60 =~ y1 + y2 + y3
++                dem60 ~ ind60 "
++ 
++ model <- lavaan::sem(structure, data = lavaan::PoliticalDemocracy)
++ 
++ interpret(model)
++ ## Don't show: 
++ }) # examplesIf
+Loading required package: lavaan
+This is lavaan 0.6-13
+lavaan is FREE software! Please report any bugs.
+> ## End(Don't show)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:lavaan'
+
+> nameEx("interpret_icc")
+> ### * interpret_icc
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpret_icc
+> ### Title: Interpret Intraclass Correlation Coefficient (ICC)
+> ### Aliases: interpret_icc
+> ### Keywords: interpreters
+> 
+> ### ** Examples
+> 
+> interpret_icc(0.6)
+[1] "moderate"
+[3m(Rules: koo2016)
+[23m> interpret_icc(c(0.4, 0.8))
+[1] "poor" "good"
+[3m(Rules: koo2016)
+[23m> 
+> 
+> 
+> cleanEx()
+> nameEx("interpret_oddsratio")
+> ### * interpret_oddsratio
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpret_oddsratio
+> ### Title: Interpret Odds Ratio
+> ### Aliases: interpret_oddsratio
+> ### Keywords: interpreters
+> 
+> ### ** Examples
+> 
+> interpret_oddsratio(1)
+[1] "very small"
+[3m(Rules: chen2010)
+[23m> interpret_oddsratio(c(5, 2))
+[1] "medium" "small" 
+[3m(Rules: chen2010)
+[23m> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("interpret_omega_squared")
+> ### * interpret_omega_squared
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpret_omega_squared
+> ### Title: Interpret ANOVA Effect Sizes
+> ### Aliases: interpret_omega_squared interpret_eta_squared
+> ###   interpret_epsilon_squared
+> ### Keywords: interpreters
+> 
+> ### ** Examples
+> 
+> interpret_eta_squared(.02)
+[1] "small"
+[3m(Rules: field2013)
+[23m> interpret_eta_squared(c(.5, .02), rules = "cohen1992")
+[1] "large" "small"
+[3m(Rules: cohen1992)
+[23m> 
+> 
+> 
+> cleanEx()
+> nameEx("interpret_p")
+> ### * interpret_p
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpret_p
+> ### Title: Interpret _p_-Values
+> ### Aliases: interpret_p
+> ### Keywords: interpreters
+> 
+> ### ** Examples
+> 
+> interpret_p(c(.5, .02, 0.001))
+[1] "not significant" "significant"     "significant"    
+[3m(Rules: default)
+[23m> interpret_p(c(.5, .02, 0.001), rules = "rss")
+[1] "not significant" "suggestive"      "significant"    
+[3m(Rules: rss)
+[23m> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("interpret_pd")
+> ### * interpret_pd
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpret_pd
+> ### Title: Interpret Probability of Direction (pd)
+> ### Aliases: interpret_pd
+> ### Keywords: interpreters
+> 
+> ### ** Examples
+> 
+> interpret_pd(.98)
+[1] "significant"
+[3m(Rules: default)
+[23m> interpret_pd(c(.96, .99), rules = "makowski2019")
+[1] "possibly existing" "likely existing"  
+[3m(Rules: makowski2019)
+[23m> 
+> 
+> 
+> cleanEx()
+> nameEx("interpret_r")
+> ### * interpret_r
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpret_r
+> ### Title: Interpret Correlation Coefficient
+> ### Aliases: interpret_r interpret_phi interpret_cramers_v
+> ###   interpret_rank_biserial
+> ### Keywords: interpreters
+> 
+> ### ** Examples
+> 
+> interpret_r(.015)
+[1] "tiny"
+[3m(Rules: funder2019)
+[23m> interpret_r(c(.5, -.02))
+[1] "very large" "tiny"      
+[3m(Rules: funder2019)
+[23m> interpret_r(.3, rules = "lovakov2021")
+[1] "medium"
+[3m(Rules: lovakov2021)
+[23m> 
+> 
+> 
+> cleanEx()
+> nameEx("interpret_r2")
+> ### * interpret_r2
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpret_r2
+> ### Title: Interpret Coefficient of Determination (R^2)
+> ### Aliases: interpret_r2
+> ### Keywords: interpreters
+> 
+> ### ** Examples
+> 
+> interpret_r2(.02)
+[1] "weak"
+[3m(Rules: cohen1988)
+[23m> interpret_r2(c(.5, .02))
+[1] "substantial" "weak"       
+[3m(Rules: cohen1988)
+[23m> 
+> 
+> 
+> cleanEx()
+> nameEx("interpret_rope")
+> ### * interpret_rope
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpret_rope
+> ### Title: Interpret Bayesian Posterior Percentage in ROPE.
+> ### Aliases: interpret_rope
+> ### Keywords: interpreters
+> 
+> ### ** Examples
+> 
+> interpret_rope(0, ci = 0.9)
+[1] "significant"
+[3m(Rules: default)
+[23m> interpret_rope(c(0.005, 0.99), ci = 1)
+[1] "significant"         "probably negligible"
+[3m(Rules: default)
+[23m> 
+> 
+> 
+> cleanEx()
+> nameEx("interpret_vif")
+> ### * interpret_vif
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpret_vif
+> ### Title: Interpret the Variance Inflation Factor (VIF)
+> ### Aliases: interpret_vif
+> ### Keywords: interpreters
+> 
+> ### ** Examples
+> 
+> 
+> interpret_vif(c(1.4, 30.4))
+[1] "low"  "high"
+[3m(Rules: default)
+[23m> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("mahalanobis_d")
+> ### * mahalanobis_d
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: mahalanobis_d
+> ### Title: Mahalanobis' _D_ (a multivariate Cohen's _d_)
+> ### Aliases: mahalanobis_d
+> 
+> ### ** Examples
+> 
+> ## Two samples --------------
+> mtcars_am0 <- subset(mtcars, am == 0,
++   select = c(mpg, hp, cyl)
++ )
+> mtcars_am1 <- subset(mtcars, am == 1,
++   select = c(mpg, hp, cyl)
++ )
+> 
+> mahalanobis_d(mtcars_am0, mtcars_am1)
+Mahalanobis' D |      95% CI
+----------------------------
+2.14           | [1.22, Inf]
+[36m
+- One-sided CIs: upper bound fixed at [Inf].[39m> 
+> # Or
+> mahalanobis_d(mpg + hp + cyl ~ am, data = mtcars)
+Mahalanobis' D |      95% CI
+----------------------------
+2.14           | [1.22, Inf]
+[36m
+- One-sided CIs: upper bound fixed at [Inf].[39m> 
+> mahalanobis_d(mpg + hp + cyl ~ am, data = mtcars, alternative = "two.sided")
+Mahalanobis' D |       95% CI
+-----------------------------
+2.14           | [1.07, 2.90]
+> 
+> # Different mu:
+> mahalanobis_d(mpg + hp + cyl ~ am,
++   data = mtcars,
++   mu = c(mpg = -4, hp = 15, cyl = 0)
++ )
+Mahalanobis' D |      95% CI
+----------------------------
+1.90           | [1.00, Inf]
+[36m
+- Deviation from a difference of 15.5242.[39m[36m
+- One-sided CIs: upper bound fixed at [Inf].[39m> 
+> 
+> # D is a multivariate d, so when only 1 variate is provided:
+> mahalanobis_d(hp ~ am, data = mtcars)
+Mahalanobis' D |      95% CI
+----------------------------
+0.49           | [0.00, Inf]
+[36m
+- One-sided CIs: upper bound fixed at [Inf].[39m> 
+> cohens_d(hp ~ am, data = mtcars)
+Cohen's d |        95% CI
+-------------------------
+0.49      | [-0.23, 1.21]
+[36m
+- Estimated using pooled SD.[39m> 
+> 
+> # One sample ---------------------------
+> mahalanobis_d(mtcars[, c("mpg", "hp", "cyl")])
+Mahalanobis' D |      95% CI
+----------------------------
+12.59          | [9.49, Inf]
+[36m
+- One-sided CIs: upper bound fixed at [Inf].[39m> 
+> # Or
+> mahalanobis_d(mpg + hp + cyl ~ 1,
++   data = mtcars,
++   mu = c(mpg = 15, hp = 5, cyl = 3)
++ )
+Mahalanobis' D |      95% CI
+----------------------------
+5.31           | [3.97, Inf]
+[36m
+- Deviation from a difference of 16.0935.[39m[36m
+- One-sided CIs: upper bound fixed at [Inf].[39m> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("means_ratio")
+> ### * means_ratio
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: means_ratio
+> ### Title: Ratio of Means
+> ### Aliases: means_ratio
+> 
+> ### ** Examples
+> 
+> x <- c(1.83, 0.50, 1.62, 2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
+> y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
+> means_ratio(x, y)
+Means Ratio (adj.) |       95% CI
+---------------------------------
+1.31               | [0.82, 2.10]
+> means_ratio(x, y, adjust = FALSE)
+Means Ratio |       95% CI
+--------------------------
+1.32        | [0.82, 2.13]
+> 
+> means_ratio(x, y, log = TRUE)
+log(Means Ratio, adj.) |        95% CI
+--------------------------------------
+0.27                   | [-0.20, 0.74]
+> 
+> 
+> # The ratio is scale invariant, making it a standardized effect size
+> means_ratio(3 * x, 3 * y)
+Means Ratio (adj.) |       95% CI
+---------------------------------
+1.31               | [0.82, 2.10]
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("odds_to_probs")
+> ### * odds_to_probs
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: odds_to_probs
+> ### Title: Convert Between Odds and Probabilities
+> ### Aliases: odds_to_probs convert_odds_to_probs odds_to_probs.data.frame
+> ###   probs_to_odds convert_probs_to_odds probs_to_odds.data.frame
+> 
+> ### ** Examples
+> 
+> odds_to_probs(3)
+[1] 0.75
+> odds_to_probs(1.09, log = TRUE)
+[1] 0.7483817
+> 
+> probs_to_odds(0.95)
+[1] 19
+> probs_to_odds(0.95, log = TRUE)
+[1] 2.944439
+> 
+> 
+> 
+> cleanEx()
+> nameEx("oddsratio")
+> ### * oddsratio
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: oddsratio
+> ### Title: Odds Ratios, Risk Ratios and Cohen's _h_ for 2-by-2 Contingency
+> ###   Tables
+> ### Aliases: oddsratio riskratio cohens_h
+> 
+> ### ** Examples
+> 
+> data("RCT_table")
+> RCT_table # note groups are COLUMNS
+           Group
+Diagnosis   Treatment Control
+  Sick             71      30
+  Recovered        50     100
+> 
+> oddsratio(RCT_table)
+Odds ratio |       95% CI
+-------------------------
+4.73       | [2.74, 8.17]
+> oddsratio(RCT_table, alternative = "greater")
+Odds ratio |      95% CI
+------------------------
+4.73       | [3.00, Inf]
+[36m
+- One-sided CIs: upper bound fixed at [Inf].[39m> 
+> riskratio(RCT_table)
+Risk ratio |       95% CI
+-------------------------
+2.54       | [1.87, 3.45]
+> 
+> cohens_h(RCT_table)
+Cohen's h |       95% CI
+------------------------
+0.74      | [0.50, 0.99]
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("oddsratio_to_riskratio")
+> ### * oddsratio_to_riskratio
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: oddsratio_to_riskratio
+> ### Title: Convert Between Odds Ratios and Risk Ratios
+> ### Aliases: oddsratio_to_riskratio riskratio_to_oddsratio
+> 
+> ### ** Examples
+> 
+> p0 <- 0.4
+> p1 <- 0.7
+> 
+> (OR <- probs_to_odds(p1) / probs_to_odds(p0))
+[1] 3.5
+> (RR <- p1 / p0)
+[1] 1.75
+> 
+> riskratio_to_oddsratio(RR, p0 = p0)
+[1] 3.5
+> oddsratio_to_riskratio(OR, p0 = p0)
+[1] 1.75
+> 
+> m <- glm(am ~ factor(cyl),
++   data = mtcars,
++   family = binomial()
++ )
+> oddsratio_to_riskratio(m, verbose = FALSE) # RR is relative to the intercept if p0 not provided
+Parameter   | Risk Ratio |       95% CI
+---------------------------------------
+(Intercept) |       0.73 |             
+cyl [6]     |       0.59 | [0.11, 1.16]
+cyl [8]     |       0.20 | [0.02, 0.70]
+
+Uncertainty intervals (profile-likelihood) and p-values (two-tailed)
+  computed using a Wald z-distribution approximation.
+> 
+> 
+> 
+> cleanEx()
+> nameEx("p_superiority")
+> ### * p_superiority
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: p_superiority
+> ### Title: Cohen's _U_s and Other Common Language Effect Sizes (CLES)
+> ### Aliases: p_superiority cles cohens_u1 cohens_u2 cohens_u3 p_overlap
+> ###   vd_a wmw_odds
+> 
+> ### ** Examples
+> 
+> cohens_u2(mpg ~ am, data = mtcars)
+Cohen's U2 |       95% CI
+-------------------------
+0.77       | [0.63, 0.87]
+> 
+> p_superiority(mpg ~ am, data = mtcars, parametric = FALSE)
+Pr(superiority) |       95% CI
+------------------------------
+0.17            | [0.08, 0.32]
+[36m
+- Non-parametric CLES[39m> 
+> wmw_odds(mpg ~ am, data = mtcars)
+WMW Odds |       95% CI
+-----------------------
+0.20     | [0.09, 0.47]
+[36m
+- Non-parametric CLES[39m> 
+> x <- c(1.83, 0.5, 1.62, 2.48, 1.68, 1.88, 1.55, 3.06, 1.3)
+> y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
+> 
+> p_overlap(x, y)
+Overlap |       95% CI
+----------------------
+0.78    | [0.45, 1.00]
+> p_overlap(y, x) # direction of effect does not matter
+Overlap |       95% CI
+----------------------
+0.78    | [0.45, 1.00]
+> 
+> cohens_u3(x, y)
+Cohen's U3 |       95% CI
+-------------------------
+0.72       | [0.35, 0.93]
+> cohens_u3(y, x) # direction of effect does matter
+Cohen's U3 |       95% CI
+-------------------------
+0.28       | [0.07, 0.65]
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("phi")
+> ### * phi
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: phi
+> ### Title: phi and Other Contingency Tables Correlations
+> ### Aliases: phi cramers_v tschuprows_t cohens_w fei pearsons_c
+> 
+> ### ** Examples
+> 
+> 
+> ## 2-by-2 tables
+> ## -------------
+> data("RCT_table")
+> RCT_table # note groups are COLUMNS
+           Group
+Diagnosis   Treatment Control
+  Sick             71      30
+  Recovered        50     100
+> 
+> phi(RCT_table)
+Phi (adj.) |       95% CI
+-------------------------
+0.36       | [0.25, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> pearsons_c(RCT_table)
+Pearson's C |       95% CI
+--------------------------
+0.34        | [0.25, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> 
+> 
+> ## Larger tables
+> ## -------------
+> data("Music_preferences")
+> Music_preferences
+      Pop Rock Jazz Classic
+Psych 150  100  165     130
+Econ   50   65   35      10
+Law     2   55   40      25
+> 
+> cramers_v(Music_preferences)
+Cramer's V (adj.) |       95% CI
+--------------------------------
+0.23              | [0.18, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> cohens_w(Music_preferences)
+Cohen's w |       95% CI
+------------------------
+0.34      | [0.27, 1.41]
+[36m
+- One-sided CIs: upper bound fixed at [1.41~].[39m> 
+> pearsons_c(Music_preferences)
+Pearson's C |       95% CI
+--------------------------
+0.32        | [0.26, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> 
+> 
+> ## Goodness of fit
+> ## ---------------
+> data("Smoking_FASD")
+> Smoking_FASD
+ FAS PFAS   TD 
+  17   11  640 
+> 
+> fei(Smoking_FASD)
+Fei  |       95% CI
+-------------------
+0.94 | [0.89, 1.00]
+[36m
+- Adjusted for non-uniform expected probabilities.[39m[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> cohens_w(Smoking_FASD)
+Cohen's w |       95% CI
+------------------------
+1.33      | [1.26, 1.41]
+[36m
+- One-sided CIs: upper bound fixed at [1.41~].[39m> 
+> pearsons_c(Smoking_FASD)
+Pearson's C |       95% CI
+--------------------------
+0.80        | [0.78, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> # Use custom expected values:
+> fei(Smoking_FASD, p = c(0.015, 0.010, 0.975))
+Fei  |       95% CI
+-------------------
+0.01 | [0.00, 1.00]
+[36m
+- Adjusted for uniform expected probabilities.[39m[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> cohens_w(Smoking_FASD, p = c(0.015, 0.010, 0.975))
+Cohen's w |       95% CI
+------------------------
+0.11      | [0.03, 9.95]
+[36m
+- One-sided CIs: upper bound fixed at [9.95~].[39m> 
+> pearsons_c(Smoking_FASD, p = c(0.015, 0.010, 0.975))
+Pearson's C |       95% CI
+--------------------------
+0.11        | [0.03, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> 
+> 
+> cleanEx()
+> nameEx("r2_semipartial")
+> ### * r2_semipartial
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: r2_semipartial
+> ### Title: Semi-Partial (Part) Correlation Squared (Delta R^2)
+> ### Aliases: r2_semipartial r2_delta r2_part
+> 
+> ### ** Examples
+> 
+> data("hardlyworking")
+> 
+> m <- lm(salary ~ factor(n_comps) + xtra_hours * seniority, data = hardlyworking)
+> 
+> r2_semipartial(m)
+Term                 |      sr2 |       95% CI
+----------------------------------------------
+factor(n_comps)      |     0.15 | [0.12, 1.00]
+xtra_hours           |     0.06 | [0.05, 1.00]
+seniority            | 2.07e-03 | [0.00, 1.00]
+xtra_hours:seniority | 4.85e-04 | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> r2_semipartial(m, type = "parameters")
+Parameter            |      sr2 |       95% CI
+----------------------------------------------
+factor(n_comps)1     |     0.04 | [0.03, 1.00]
+factor(n_comps)2     |     0.12 | [0.10, 1.00]
+factor(n_comps)3     |     0.07 | [0.05, 1.00]
+xtra_hours           |     0.06 | [0.05, 1.00]
+seniority            | 2.07e-03 | [0.00, 1.00]
+xtra_hours:seniority | 4.85e-04 | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> 
+> 
+> # Compare to `eta_squared()`
+> # --------------------------
+> npk.aov <- lm(yield ~ N + P + K, npk)
+> 
+> # When predictors are orthogonal,
+> # eta_squared(partial = FALSE) gives the same effect size:
+> performance::check_collinearity(npk.aov)
+[34m# Check for Multicollinearity
+[39m
+[32mLow Correlation
+
+[39m Term  VIF      VIF  CI Increased SE Tolerance
+    N 1.00 [1.00, 1.00]         1.00      1.00
+    P 1.00 [1.00, 1.00]         1.00      1.00
+    K 1.00 [1.00, 1.00]         1.00      1.00
+> 
+> eta_squared(npk.aov, partial = FALSE)
+[34m# Effect Size for ANOVA (Type I)[39m
+
+Parameter |     Eta2 |       95% CI
+-----------------------------------
+N         |     0.22 | [0.01, 1.00]
+P         | 9.59e-03 | [0.00, 1.00]
+K         |     0.11 | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> r2_semipartial(npk.aov)
+Term |      sr2 |       95% CI
+------------------------------
+N    |     0.22 | [0.00, 1.00]
+P    | 9.59e-03 | [0.00, 1.00]
+K    |     0.11 | [0.00, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> ## Don't show: 
+> if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ # Compare to `dominance_analysis()`
++ # ---------------------------------
++ m_full <- lm(salary ~ ., data = hardlyworking)
++ 
++ r2_semipartial(m_full)
++ 
++ # Compare to last column of "Conditional Dominance Statistics":
++ parameters::dominance_analysis(m_full)
++ ## Don't show: 
++ }) # examplesIf
+> ## End(Don't show)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("rank_biserial")
+> ### * rank_biserial
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: rank_biserial
+> ### Title: Dominance Effect Sizes for Rank Based Differences
+> ### Aliases: rank_biserial cliffs_delta
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("rank_epsilon_squared")
+> ### * rank_epsilon_squared
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: rank_epsilon_squared
+> ### Title: Effect Size for Rank Based ANOVA
+> ### Aliases: rank_epsilon_squared rank_eta_squared kendalls_w
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("rules")
+> ### * rules
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: rules
+> ### Title: Create an Interpretation Grid
+> ### Aliases: rules is.rules
+> 
+> ### ** Examples
+> 
+> rules(c(0.05), c("significant", "not significant"), right = FALSE)
+[3m# Reference Thresholds (Custom rules)[23m
+
+             Label            
+------------------------------
+          significant   < 0.05
+0.05 <= not significant       
+> rules(c(0.2, 0.5, 0.8), c("small", "medium", "large"))
+[3m# Reference Values (Custom rules)[23m
+
+Labels ~ Values
+---------------
+ small ~ 0.2   
+medium ~ 0.5   
+ large ~ 0.8   
+> rules(c("small" = 0.2, "medium" = 0.5), name = "Cohen's Rules")
+[3m# Reference Values (Cohen's Rules)[23m
+
+Labels ~ Values
+---------------
+ small ~ 0.2   
+medium ~ 0.5   
+> 
+> 
+> 
+> cleanEx()
+> nameEx("sd_pooled")
+> ### * sd_pooled
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: sd_pooled
+> ### Title: Pooled Indices of (Co)Deviation
+> ### Aliases: sd_pooled mad_pooled cov_pooled
+> 
+> ### ** Examples
+> 
+> sd_pooled(mpg ~ am, data = mtcars)
+[1] 4.902029
+> mad_pooled(mtcars$mpg, factor(mtcars$am))
+[1] 4.52193
+> 
+> cov_pooled(mpg + hp + cyl ~ am, data = mtcars)
+            mpg         hp       cyl
+mpg   24.029887 -269.13174 -5.991498
+hp  -269.131741 4570.24588 89.247233
+cyl   -5.991498   89.24723  2.395682
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("t_to_r")
+> ### * t_to_r
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: t_to_d
+> ### Title: Convert _t_, _z_, and _F_ to Cohen's _d_ or *partial*-_r_
+> ### Aliases: t_to_d z_to_d F_to_d t_to_r z_to_r F_to_r
+> 
+> ### ** Examples
+> 
+> ## t Tests
+> res <- t.test(1:10, y = c(7:20), var.equal = TRUE)
+> t_to_d(t = res$statistic, res$parameter)
+d     |         95% CI
+----------------------
+-2.19 | [-3.23, -1.12]
+> t_to_r(t = res$statistic, res$parameter)
+r     |         95% CI
+----------------------
+-0.74 | [-0.85, -0.49]
+> t_to_r(t = res$statistic, res$parameter, alternative = "less")
+r     |         95% CI
+----------------------
+-0.74 | [-1.00, -0.54]
+[36m
+- One-sided CIs: lower bound fixed at [-1.00].[39m> 
+> res <- with(sleep, t.test(extra[group == 1], extra[group == 2], paired = TRUE))
+> t_to_d(t = res$statistic, res$parameter, paired = TRUE)
+d     |         95% CI
+----------------------
+-1.35 | [-2.23, -0.44]
+> t_to_r(t = res$statistic, res$parameter)
+r     |         95% CI
+----------------------
+-0.80 | [-0.91, -0.40]
+> t_to_r(t = res$statistic, res$parameter, alternative = "greater")
+r     |        95% CI
+---------------------
+-0.80 | [-0.90, 1.00]
+[36m
+- One-sided CIs: upper bound fixed at [1.00].[39m> 
+> ## Don't show: 
+> if (require(correlation)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ ## Linear Regression
++ model <- lm(rating ~ complaints + critical, data = attitude)
++ (param_tab <- parameters::model_parameters(model))
++ 
++ (rs <- t_to_r(param_tab$t[2:3], param_tab$df_error[2:3]))
++ 
++ # How does this compare to actual partial correlations?
++ correlation::correlation(attitude,
++   select = "rating",
++   select2 = c("complaints", "critical"),
++   partial = TRUE
++ )
++ ## Don't show: 
++ }) # examplesIf
+Loading required package: correlation
+> model <- lm(rating ~ complaints + critical, data = attitude)
+> (param_tab <- parameters::model_parameters(model))
+Parameter   | Coefficient |    SE |         95% CI | t(27) |      p
+-------------------------------------------------------------------
+(Intercept) |       14.25 | 11.17 | [-8.67, 37.18] |  1.28 | 0.213 
+complaints  |        0.75 |  0.10 | [ 0.55,  0.96] |  7.46 | < .001
+critical    |    1.91e-03 |  0.14 | [-0.28,  0.28] |  0.01 | 0.989 
+
+Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+  using a Wald t-distribution approximation.
+> (rs <- t_to_r(param_tab$t[2:3], param_tab$df_error[2:3]))
+r        |        95% CI
+------------------------
+0.82     | [ 0.67, 0.89]
+2.70e-03 | [-0.35, 0.36]
+> correlation::correlation(attitude, select = "rating", select2 = c("complaints", 
++     "critical"), partial = TRUE)
+[34m# Correlation Matrix (pearson-method)[39m
+
+Parameter1 | Parameter2 |        r |        95% CI | t(28) |         p
+----------------------------------------------------------------------
+rating     | complaints |     0.82 | [ 0.65, 0.91] |  7.60 | < .001***
+rating     |   critical | 2.70e-03 | [-0.36, 0.36] |  0.01 | 0.989    
+
+p-value adjustment method: Holm (1979)
+Observations: 30
+> ## End(Don't show)
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+
+detaching 'package:correlation'
+
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  12.89 1.35 16.56 NA NA 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

@@ -1,0 +1,1567 @@
+
+R version 4.2.2 (2022-10-31 ucrt) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "rempsyc"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> library('rempsyc')
+Suggested APA citation: Thériault, R. (2022). rempsyc: Convenience functions for psychology 
+(R package version 0.1.0) [Computer software]. https://rempsyc.remi-theriault.com 
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("best_duplicate")
+> ### * best_duplicate
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: best_duplicate
+> ### Title: Choose the best duplicate
+> ### Aliases: best_duplicate
+> ### Keywords: duplicates
+> 
+> ### ** Examples
+> 
+> df1 <- data.frame(
++    id = c(1, 2, 3, 1, 3),
++    item1 = c(NA, 1, 1, 2, 3),
++    item2 = c(NA, 1, 1, 2, 3),
++    item3 = c(NA, 1, 1, 2, 3)
++ )
+> 
+> best_duplicate(df1, id = "id")
+(2 duplicates removed)
+  id item1 item2 item3
+1  1     2     2     2
+2  2     1     1     1
+3  3     1     1     1
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("cormatrix_excel")
+> ### * cormatrix_excel
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cormatrix_excel
+> ### Title: Easy export of correlation matrix to Excel (improved version)
+> ### Aliases: cormatrix_excel
+> ### Keywords: Excel correlation matrix
+> 
+> ### ** Examples
+> 
+> ## Don't show: 
+> .old_wd <- setwd(tempdir())
+> ## End(Don't show)
+> # Basic example
+> cormatrix_excel(mtcars, "cormatrix1")
+[34m# Correlation Matrix (pearson-method)[39m
+
+Parameter |      mpg |      cyl |     disp |       hp |     drat |       wt |     qsec |       vs |       am |     gear |     carb
+----------------------------------------------------------------------------------------------------------------------------------
+mpg       |          | -0.85*** | -0.85*** | -0.78*** |  0.68*** | -0.87*** |    0.42* |  0.66*** |  0.60*** |   0.48** |  -0.55**
+cyl       | -0.85*** |          |  0.90*** |  0.83*** | -0.70*** |  0.78*** | -0.59*** | -0.81*** |  -0.52** |  -0.49** |   0.53**
+disp      | -0.85*** |  0.90*** |          |  0.79*** | -0.71*** |  0.89*** |   -0.43* | -0.71*** | -0.59*** | -0.56*** |    0.39*
+hp        | -0.78*** |  0.83*** |  0.79*** |          |  -0.45** |  0.66*** | -0.71*** | -0.72*** |    -0.24 |    -0.13 |  0.75***
+drat      |  0.68*** | -0.70*** | -0.71*** |  -0.45** |          | -0.71*** |     0.09 |    0.44* |  0.71*** |  0.70*** |    -0.09
+wt        | -0.87*** |  0.78*** |  0.89*** |  0.66*** | -0.71*** |          |    -0.17 | -0.55*** | -0.69*** | -0.58*** |    0.43*
+qsec      |    0.42* | -0.59*** |   -0.43* | -0.71*** |     0.09 |    -0.17 |          |  0.74*** |    -0.23 |    -0.21 | -0.66***
+vs        |  0.66*** | -0.81*** | -0.71*** | -0.72*** |    0.44* | -0.55*** |  0.74*** |          |     0.17 |     0.21 | -0.57***
+am        |  0.60*** |  -0.52** | -0.59*** |    -0.24 |  0.71*** | -0.69*** |    -0.23 |     0.17 |          |  0.79*** |     0.06
+gear      |   0.48** |  -0.49** | -0.56*** |    -0.13 |  0.70*** | -0.58*** |    -0.21 |     0.21 |  0.79*** |          |     0.27
+carb      |  -0.55** |   0.53** |    0.39* |  0.75*** |    -0.09 |    0.43* | -0.66*** | -0.57*** |     0.06 |     0.27 |         
+
+p-value adjustment method: none
+
+
+ [Correlation matrix 'cormatrix1.xlsx' has been saved to working directory (or where specified).]Warning in xl_open.default(paste0(filename, ".xlsx")) :
+  will not open file when not interactive
+NULL
+> cormatrix_excel(iris, p_adjust = "none", "cormatrix2")
+[34m# Correlation Matrix (pearson-method)[39m
+
+Parameter    | Sepal.Length | Sepal.Width | Petal.Length | Petal.Width
+----------------------------------------------------------------------
+Sepal.Length |              |       -0.12 |      0.87*** |     0.82***
+Sepal.Width  |        -0.12 |             |     -0.43*** |    -0.37***
+Petal.Length |      0.87*** |    -0.43*** |              |     0.96***
+Petal.Width  |      0.82*** |    -0.37*** |      0.96*** |            
+
+p-value adjustment method: none
+
+
+ [Correlation matrix 'cormatrix2.xlsx' has been saved to working directory (or where specified).]Warning in xl_open.default(paste0(filename, ".xlsx")) :
+  will not open file when not interactive
+NULL
+> cormatrix_excel(airquality, method = "spearman", "cormatrix3")
+[34m# Correlation Matrix (spearman-method)[39m
+
+Parameter |    Ozone |   Solar.R |      Wind |     Temp |     Month |       Day
+-------------------------------------------------------------------------------
+Ozone     |          |   0.35*** |  -0.59*** |  0.77*** |      0.14 |     -0.06
+Solar.R   |  0.35*** |           | -9.77e-04 |    0.21* |     -0.13 |     -0.15
+Wind      | -0.59*** | -9.77e-04 |           | -0.45*** |     -0.16 |      0.04
+Temp      |  0.77*** |     0.21* |  -0.45*** |          |   0.37*** |     -0.16
+Month     |     0.14 |     -0.13 |     -0.16 |  0.37*** |           | -7.85e-03
+Day       |    -0.06 |     -0.15 |      0.04 |    -0.16 | -7.85e-03 |          
+
+p-value adjustment method: none
+
+
+ [Correlation matrix 'cormatrix3.xlsx' has been saved to working directory (or where specified).]Warning in xl_open.default(paste0(filename, ".xlsx")) :
+  will not open file when not interactive
+NULL
+> ## Don't show: 
+> setwd(.old_wd)
+> ## End(Don't show)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("cormatrix_excel_deprecated")
+> ### * cormatrix_excel_deprecated
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cormatrix_excel_deprecated
+> ### Title: Easy export of correlation matrix to Excel
+> ### Aliases: cormatrix_excel_deprecated
+> ### Keywords: Excel correlation internal matrix
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("extract_duplicates")
+> ### * extract_duplicates
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: extract_duplicates
+> ### Title: Choose the best duplicate
+> ### Aliases: extract_duplicates
+> ### Keywords: duplicates
+> 
+> ### ** Examples
+> 
+> df1 <- data.frame(
++    id = c(1, 2, 3, 1, 3),
++    item1 = c(NA, 1, 1, 2, 3),
++    item2 = c(NA, 1, 1, 2, 3),
++    item3 = c(NA, 1, 1, 2, 3)
++ )
+> 
+> extract_duplicates(df1, id = "id")
+  Row id item1 item2 item3 count_na
+1   1  1    NA    NA    NA        3
+2   4  1     2     2     2        0
+3   3  3     1     1     1        0
+4   5  3     3     3     3        0
+> 
+> # Filter to exclude duplicates
+> df2 <- df1[-c(1, 5),]
+> df2
+  id item1 item2 item3
+2  2     1     1     1
+3  3     1     1     1
+4  1     2     2     2
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("find_mad")
+> ### * find_mad
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: find_mad
+> ### Title: Identify outliers based on 3 MAD
+> ### Aliases: find_mad
+> ### Keywords: MAD mean median normalization outliers standardization
+> 
+> ### ** Examples
+> 
+> find_mad(
++   data = mtcars,
++   col.list = names(mtcars),
++   criteria = 3
++ )
+20 outlier(s) based on 3 median absolute deviations for variable(s): 
+ mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb 
+
+The following participants were considered outliers for more than one variable: 
+
+  Row n
+1   3 2
+2   9 2
+3  18 2
+4  19 2
+5  20 2
+6  26 2
+7  28 2
+8  31 2
+9  32 2
+
+Outliers per variable: 
+
+$qsec
+  Row qsec_mad
+1   9 3.665557
+
+$vs
+   Row vs_mad
+1    3    Inf
+2    4    Inf
+3    6    Inf
+4    8    Inf
+5    9    Inf
+6   10    Inf
+7   11    Inf
+8   18    Inf
+9   19    Inf
+10  20    Inf
+11  21    Inf
+12  26    Inf
+13  28    Inf
+14  32    Inf
+
+$am
+   Row am_mad
+1    1    Inf
+2    2    Inf
+3    3    Inf
+4   18    Inf
+5   19    Inf
+6   20    Inf
+7   26    Inf
+8   27    Inf
+9   28    Inf
+10  29    Inf
+11  30    Inf
+12  31    Inf
+13  32    Inf
+
+$carb
+  Row carb_mad
+1  31 4.046945
+
+> 
+> mtcars2 <- mtcars
+> mtcars2$car <- row.names(mtcars)
+> find_mad(
++   data = mtcars2,
++   col.list = names(mtcars),
++   ID = "car",
++   criteria = 3
++ )
+20 outlier(s) based on 3 median absolute deviations for variable(s): 
+ mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb 
+
+The following participants were considered outliers for more than one variable: 
+
+  Row            car n
+1   3     Datsun 710 2
+2   9       Merc 230 2
+3  18       Fiat 128 2
+4  19    Honda Civic 2
+5  20 Toyota Corolla 2
+6  26      Fiat X1-9 2
+7  28   Lotus Europa 2
+8  31  Maserati Bora 2
+9  32     Volvo 142E 2
+
+Outliers per variable: 
+
+$qsec
+  Row      car qsec_mad
+1   9 Merc 230 3.665557
+
+$vs
+   Row            car vs_mad
+1    3     Datsun 710    Inf
+2    4 Hornet 4 Drive    Inf
+3    6        Valiant    Inf
+4    8      Merc 240D    Inf
+5    9       Merc 230    Inf
+6   10       Merc 280    Inf
+7   11      Merc 280C    Inf
+8   18       Fiat 128    Inf
+9   19    Honda Civic    Inf
+10  20 Toyota Corolla    Inf
+11  21  Toyota Corona    Inf
+12  26      Fiat X1-9    Inf
+13  28   Lotus Europa    Inf
+14  32     Volvo 142E    Inf
+
+$am
+   Row            car am_mad
+1    1      Mazda RX4    Inf
+2    2  Mazda RX4 Wag    Inf
+3    3     Datsun 710    Inf
+4   18       Fiat 128    Inf
+5   19    Honda Civic    Inf
+6   20 Toyota Corolla    Inf
+7   26      Fiat X1-9    Inf
+8   27  Porsche 914-2    Inf
+9   28   Lotus Europa    Inf
+10  29 Ford Pantera L    Inf
+11  30   Ferrari Dino    Inf
+12  31  Maserati Bora    Inf
+13  32     Volvo 142E    Inf
+
+$carb
+  Row           car carb_mad
+1  31 Maserati Bora 4.046945
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("format_value")
+> ### * format_value
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: format_value
+> ### Title: Easily format p or r values
+> ### Aliases: format_value format_p format_r format_d
+> ### Keywords: correlation formatting p-value r-value
+> 
+> ### ** Examples
+> 
+> format_value(0.00041231, "p")
+[1] "< .001"
+> format_value(0.00041231, "r")
+[1] ".00"
+> format_value(1.341231, "d")
+[1] "1.34"
+> format_p(0.0041231)
+[1] ".004"
+> format_p(0.00041231)
+[1] "< .001"
+> format_r(0.41231)
+[1] ".41"
+> format_r(0.041231)
+[1] ".04"
+> format_d(1.341231)
+[1] "1.34"
+> format_d(0.341231)
+[1] "0.34"
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_assumptions")
+> ### * nice_assumptions
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_assumptions
+> ### Title: Easy assumptions checks
+> ### Aliases: nice_assumptions
+> ### Keywords: assumptions linear regression statistical violations
+> 
+> ### ** Examples
+> 
+> # Create a regression model (using data available in R by default)
+> model <- lm(mpg ~ wt * cyl + gear, data = mtcars)
+> nice_assumptions(model)
+Interpretation: (p) values < .05 imply assumptions are not respected. Diagnostic is how many assumptions are not respected for a given model or variable. 
+
+               Model... Normality (Shapiro-Wilk)...
+1 mpg ~ wt * cyl + gear                       0.615
+  Homoscedasticity (Breusch-Pagan)...
+1                               0.054
+  Autocorrelation of residuals (Durbin-Watson)... Diagnostic...
+1                                           0.525             0
+> 
+> # Multiple dependent variables at once
+> DV <- names(mtcars[-1])
+> formulas <- paste(DV, "~ mpg")
+> models.list <- lapply(X = formulas, FUN = lm, data = mtcars)
+> assumptions.table <- do.call("rbind", lapply(models.list, nice_assumptions
++ ))
+> assumptions.table
+Interpretation: (p) values < .05 imply assumptions are not respected. Diagnostic is how many assumptions are not respected for a given model or variable. 
+
+     Model... Normality (Shapiro-Wilk)... Homoscedasticity (Breusch-Pagan)...
+1   cyl ~ mpg                       0.361                               0.282
+2  disp ~ mpg                       0.506                               0.831
+3    hp ~ mpg                       0.004                               0.351
+4  drat ~ mpg                       0.939                               0.887
+5    wt ~ mpg                       0.020                               0.270
+6  qsec ~ mpg                       0.427                               0.944
+7    vs ~ mpg                       0.142                               0.568
+8    am ~ mpg                       0.074                               0.650
+9  gear ~ mpg                       0.001                               0.528
+10 carb ~ mpg                       0.008                               0.362
+   Autocorrelation of residuals (Durbin-Watson)... Diagnostic...
+1                                            0.460             0
+2                                            0.077             0
+3                                            0.198             1
+4                                            0.505             0
+5                                            0.002             2
+6                                            0.011             1
+7                                            0.238             0
+8                                            0.000             1
+9                                            0.000             2
+10                                           0.003             2
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_contrasts")
+> ### * nice_contrasts
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_contrasts
+> ### Title: Easy planned contrasts
+> ### Aliases: nice_contrasts
+> ### Keywords: comparisons contrasts differences group internal pairwise
+> ###   planned
+> 
+> ### ** Examples
+> 
+> # Basic example
+> nice_contrasts(
++   data = mtcars,
++   response = "mpg",
++   group = "cyl",
++   bootstraps = 200
++ )
+Warning in norm.inter(t, adj.alpha) :
+  extreme order statistics used as endpoints
+  Dependent Variable Comparison df        t            p       dR  CI_lower
+1                mpg      4 - 8 29 8.904534 8.568209e-10 3.031774 2.0821535
+2                mpg      6 - 8 29 3.111825 4.152209e-03 1.245144 0.7055591
+3                mpg      4 - 6 29 4.441099 1.194696e-04 1.786630 1.1501916
+  CI_upper
+1 5.656017
+2 2.777309
+3 7.395790
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_density")
+> ### * nice_density
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_density
+> ### Title: Easy density plots
+> ### Aliases: nice_density
+> ### Keywords: density normality
+> 
+> ### ** Examples
+> 
+> # Make the basic plot
+> nice_density(
++   data = iris,
++   variable = "Sepal.Length",
++   group = "Species"
++ )
+> 
+> # Further customization
+> nice_density(
++   data = iris,
++   variable = "Sepal.Length",
++   group = "Species",
++   colours = c("#00BA38", "#619CFF", "#F8766D"),
++   xtitle = "Sepal Length",
++   ytitle = "Density (vs. Normal Distribution)",
++   groups.labels = c(
++     "(a) Setosa",
++     "(b) Versicolor",
++     "(c) Virginica"
++   ),
++   grid = FALSE,
++   shapiro = TRUE,
++   title = "Density (Sepal Length)"
++ )
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_lm")
+> ### * nice_lm
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_lm
+> ### Title: Nice formatting of lm models
+> ### Aliases: nice_lm
+> ### Keywords: interaction moderation regression
+> 
+> ### ** Examples
+> 
+> # Make and format model
+> model <- lm(mpg ~ cyl + wt * hp, mtcars)
+> nice_lm(model)
+  Dependent Variable Predictor df           b          t            p
+1                mpg       cyl 27 -0.36523909 -0.7180977 4.788652e-01
+2                mpg        wt 27 -7.62748929 -5.0146028 2.928375e-05
+3                mpg        hp 27 -0.10839427 -3.6404181 1.136403e-03
+4                mpg     wt:hp 27  0.02583659  3.2329593 3.221753e-03
+          sr2
+1 0.002159615
+2 0.105313085
+3 0.055502405
+4 0.043773344
+> 
+> # Make and format multiple models
+> model2 <- lm(qsec ~ disp + drat * carb, mtcars)
+> my.models <- list(model, model2)
+> nice_lm(my.models)
+  Model Number Dependent Variable Predictor df            b          t
+1            1                mpg       cyl 27 -0.365239089 -0.7180977
+2            1                mpg        wt 27 -7.627489287 -5.0146028
+3            1                mpg        hp 27 -0.108394273 -3.6404181
+4            1                mpg     wt:hp 27  0.025836594  3.2329593
+5            2               qsec      disp 27 -0.006222635 -1.9746464
+6            2               qsec      drat 27  0.227692395  0.1968842
+7            2               qsec      carb 27  1.154106215  0.7179431
+8            2               qsec drat:carb 27 -0.477539959 -1.0825727
+             p          sr2
+1 4.788652e-01 0.0021596150
+2 2.928375e-05 0.1053130854
+3 1.136403e-03 0.0555024045
+4 3.221753e-03 0.0437733438
+5 5.861684e-02 0.0702566891
+6 8.453927e-01 0.0006984424
+7 4.789590e-01 0.0092872897
+8 2.885720e-01 0.0211165564
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_lm_slopes")
+> ### * nice_lm_slopes
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_lm_slopes
+> ### Title: Nice formatting of simple slopes for lm models
+> ### Aliases: nice_lm_slopes
+> ### Keywords: interaction moderation regression
+> 
+> ### ** Examples
+> 
+> # Make and format model
+> model <- lm(mpg ~ gear * wt, mtcars)
+> nice_lm_slopes(model, predictor = "gear", moderator = "wt")
+  Dependent Variable Predictor (+/-1 SD) df        b        t          p
+1                mpg       gear (LOW-wt) 28 7.540509 2.010656 0.05408136
+2                mpg      gear (MEAN-wt) 28 5.615951 1.943711 0.06204275
+3                mpg      gear (HIGH-wt) 28 3.691393 1.795568 0.08336403
+         sr2
+1 0.03048448
+2 0.02848830
+3 0.02431123
+> 
+> # Make and format multiple models
+> model2 <- lm(qsec ~ gear * wt, mtcars)
+> my.models <- list(model, model2)
+> nice_lm_slopes(my.models, predictor = "gear", moderator = "wt")
+  Model Number Dependent Variable Predictor (+/-1 SD) df         b          t
+1            1                mpg       gear (LOW-wt) 28  7.540509  2.0106560
+2            1                mpg      gear (MEAN-wt) 28  5.615951  1.9437108
+3            1                mpg      gear (HIGH-wt) 28  3.691393  1.7955678
+4            2               qsec       gear (LOW-wt) 28 -1.933515 -0.8847558
+5            2               qsec      gear (MEAN-wt) 28 -1.742853 -1.0351610
+6            2               qsec      gear (HIGH-wt) 28 -1.552191 -1.2956736
+           p        sr2
+1 0.05408136 0.03048448
+2 0.06204275 0.02848830
+3 0.08336403 0.02431123
+4 0.38382325 0.02280057
+5 0.30945179 0.03121151
+6 0.20566798 0.04889790
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_mod")
+> ### * nice_mod
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_mod
+> ### Title: Easy moderations
+> ### Aliases: nice_mod
+> ### Keywords: interaction moderation regression
+> 
+> ### ** Examples
+> 
+> # Make the basic table
+> nice_mod(
++   data = mtcars,
++   response = "mpg",
++   predictor = "gear",
++   moderator = "wt"
++ )
+  Dependent Variable Predictor df         b          t          p         sr2
+1                mpg      gear 28  5.615951  1.9437108 0.06204275 0.028488305
+2                mpg        wt 28  1.403861  0.4301493 0.67037970 0.001395217
+3                mpg   gear:wt 28 -1.966931 -2.1551077 0.03989970 0.035022025
+> 
+> # Multiple dependent variables at once
+> nice_mod(
++   data = mtcars,
++   response = c("mpg", "disp", "hp"),
++   predictor = "gear",
++   moderator = "wt"
++ )
+  Model Number Dependent Variable Predictor df          b          t          p
+1            1                mpg      gear 28   5.615951  1.9437108 0.06204275
+2            1                mpg        wt 28   1.403861  0.4301493 0.67037970
+3            1                mpg   gear:wt 28  -1.966931 -2.1551077 0.03989970
+4            2               disp      gear 28  35.797623  0.6121820 0.54535707
+5            2               disp        wt 28 160.930043  2.4364098 0.02144867
+6            2               disp   gear:wt 28 -15.037022 -0.8140664 0.42247646
+7            3                 hp      gear 28  -7.461189 -0.1554963 0.87754563
+8            3                 hp        wt 28  11.253239  0.2076235 0.83702568
+9            3                 hp   gear:wt 28  14.539586  0.9592587 0.34563902
+           sr2
+1 0.0284883047
+2 0.0013952173
+3 0.0350220247
+4 0.0027372180
+5 0.0433559718
+6 0.0048402513
+7 0.0003885555
+8 0.0006927326
+9 0.0147871391
+> 
+> # Add covariates
+> nice_mod(
++   data = mtcars,
++   response = "mpg",
++   predictor = "gear",
++   moderator = "wt",
++   covariates = c("am", "vs")
++ )
+  Dependent Variable Predictor df         b          t           p         sr2
+1                mpg      gear 26  5.840594  2.0773482 0.047786602 0.024922116
+2                mpg        wt 26  3.433057  1.1692031 0.252929701 0.007894893
+3                mpg        am 26  1.578465  0.8569286 0.399314133 0.004240876
+4                mpg        vs 26  3.817509  3.2441426 0.003228614 0.060780767
+5                mpg   gear:wt 26 -2.096457 -2.5615471 0.016567730 0.037894048
+> 
+> # Three-way interaction
+> nice_mod(
++   data = mtcars,
++   response = "mpg",
++   predictor = "gear",
++   moderator = "wt",
++   moderator2 = "am"
++ )
+  Dependent Variable  Predictor df         b         t          p        sr2
+1                mpg       gear 24  52.97009  1.831564 0.07945785 0.01660219
+2                mpg         wt 24  42.12157  1.603869 0.12182331 0.01273090
+3                mpg         am 24 202.38995  2.216085 0.03641826 0.02430490
+4                mpg    gear:wt 24 -15.09281 -1.729114 0.09663310 0.01479682
+5                mpg    gear:am 24 -58.83248 -1.992346 0.05782588 0.01964494
+6                mpg      wt:am 24 -58.67147 -2.053052 0.05112221 0.02086032
+7                mpg gear:wt:am 24  16.79352  1.854357 0.07601677 0.01701798
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_na")
+> ### * nice_na
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_na
+> ### Title: Report missing values according to guidelines
+> ### Aliases: nice_na
+> ### Keywords: NA guidelines missing values
+> 
+> ### ** Examples
+> 
+> # Use whole data frame
+> nice_na(airquality)
+        var items na cells na_percent na_max na_max_percent all_na
+1 Ozone:Day     6 44   918       4.79      2          33.33      0
+> 
+> # Use selected columns explicitly
+> nice_na(airquality,
++   vars = list(
++     c("Ozone", "Solar.R", "Wind"),
++     c("Temp", "Month", "Day")
++   )
++ )
+         var items na cells na_percent na_max na_max_percent all_na
+1 Ozone:Wind     3 44   459       9.59      2          66.67      0
+2   Temp:Day     3  0   459       0.00      0           0.00      0
+3      Total     6 44   918       4.79      2          33.33      0
+> 
+> # If the questionnaire items start with the same name, e.g.,
+> set.seed(15)
+> fun <- function() {
++   c(sample(c(NA, 1:10), replace = TRUE), NA, NA, NA)
++ }
+> df <- data.frame(
++   ID = c("idz", NA),
++   scale1_Q1 = fun(), scale1_Q2 = fun(), scale1_Q3 = fun(),
++   scale2_Q1 = fun(), scale2_Q2 = fun(), scale2_Q3 = fun(),
++   scale3_Q1 = fun(), scale3_Q2 = fun(), scale3_Q3 = fun()
++ )
+> 
+> # One can list the scale names directly:
+> nice_na(df, scales = c("ID", "scale1", "scale2", "scale3"))
+                  var items na cells na_percent na_max na_max_percent all_na
+1               ID:ID     1  7    14      50.00      1            100      7
+2 scale1_Q1:scale1_Q3     3 11    42      26.19      3            100      3
+3 scale2_Q1:scale2_Q3     3 17    42      40.48      3            100      3
+4 scale3_Q1:scale3_Q3     3 10    42      23.81      3            100      3
+5               Total    10 45   140      32.14     10            100      2
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_normality")
+> ### * nice_normality
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_normality
+> ### Title: Easy normality check per group
+> ### Aliases: nice_normality
+> ### Keywords: QQ density distribution normality plots
+> 
+> ### ** Examples
+> 
+> # Make the basic plot
+> nice_normality(
++   data = iris,
++   variable = "Sepal.Length",
++   group = "Species"
++ )
+> 
+> # Further customization
+> nice_normality(
++   data = iris,
++   variable = "Sepal.Length",
++   group = "Species",
++   colours = c(
++     "#00BA38",
++     "#619CFF",
++     "#F8766D"
++   ),
++   groups.labels = c(
++     "(a) Setosa",
++     "(b) Versicolor",
++     "(c) Virginica"
++   ),
++   grid = FALSE,
++   shapiro = TRUE
++ )
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_qq")
+> ### * nice_qq
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_qq
+> ### Title: Easy QQ plots per group
+> ### Aliases: nice_qq
+> ### Keywords: QQ distribution normality plots
+> 
+> ### ** Examples
+> 
+> # Make the basic plot
+> nice_qq(
++   data = iris,
++   variable = "Sepal.Length",
++   group = "Species"
++ )
+> 
+> # Further customization
+> nice_qq(
++   data = iris,
++   variable = "Sepal.Length",
++   group = "Species",
++   colours = c("#00BA38", "#619CFF", "#F8766D"),
++   groups.labels = c("(a) Setosa", "(b) Versicolor", "(c) Virginica"),
++   grid = FALSE,
++   shapiro = TRUE,
++   title = NULL
++ )
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_randomize")
+> ### * nice_randomize
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_randomize
+> ### Title: Easily randomization
+> ### Aliases: nice_randomize
+> ### Keywords: allocation conditions design experimental random
+> ###   randomization
+> 
+> ### ** Examples
+> 
+> # Specify design, number of conditions, number of
+> # participants, and names of conditions:
+> nice_randomize(
++   design = "between", Ncondition = 4, n = 8,
++   condition.names = c("BP", "CX", "PZ", "ZL")
++ )
+  id Condition
+1  1        BP
+2  2        PZ
+3  3        ZL
+4  4        CX
+5  5        BP
+6  6        PZ
+7  7        ZL
+8  8        CX
+> 
+> # Within-Group Design
+> nice_randomize(
++   design = "within", Ncondition = 4, n = 6,
++   condition.names = c("SV", "AV", "ST", "AT")
++ )
+  id         Condition
+1  1 AV - ST - SV - AT
+2  2 SV - AT - AV - ST
+3  3 AV - AT - SV - ST
+4  4 ST - SV - AT - AV
+5  5 SV - AV - AT - ST
+6  6 AV - AT - ST - SV
+> 
+> # Make a quick runsheet
+> randomized <- nice_randomize(
++   design = "within", Ncondition = 4, n = 128,
++   condition.names = c("SV", "AV", "ST", "AT"),
++   col.names = c(
++     "id", "Condition", "Date/Time",
++     "SONA ID", "Age/Gd.", "Handedness",
++     "Tester", "Notes"
++   )
++ )
+> head(randomized)
+  id         Condition Date/Time SONA ID Age/Gd. Handedness Tester Notes
+1  1 AT - ST - SV - AV        NA      NA      NA         NA     NA    NA
+2  2 ST - AV - AT - SV        NA      NA      NA         NA     NA    NA
+3  3 AV - ST - AT - SV        NA      NA      NA         NA     NA    NA
+4  4 AT - AV - ST - SV        NA      NA      NA         NA     NA    NA
+5  5 ST - AV - SV - AT        NA      NA      NA         NA     NA    NA
+6  6 AT - SV - ST - AV        NA      NA      NA         NA     NA    NA
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_reverse")
+> ### * nice_reverse
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_reverse
+> ### Title: Easily recode scores
+> ### Aliases: nice_reverse
+> ### Keywords: reverse scoring
+> 
+> ### ** Examples
+> 
+> # Reverse score of 5 with a maximum score of 5
+> nice_reverse(5, 5)
+[1] 1
+> 
+> # Reverse several scores at once
+> nice_reverse(1:5, 5)
+[1] 5 4 3 2 1
+> 
+> # Reverse scores with maximum = 4 and minimum = 0
+> nice_reverse(1:4, 4, min = 0)
+[1] 3 2 1 0
+> 
+> # Reverse scores with maximum = 3 and minimum = -3
+> nice_reverse(-3:3, 3, min = -3)
+[1]  3  2  1  0 -1 -2 -3
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_scatter")
+> ### * nice_scatter
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_scatter
+> ### Title: Easy scatter plots
+> ### Aliases: nice_scatter
+> ### Keywords: plots scatter
+> 
+> ### ** Examples
+> 
+> # Make the basic plot
+> nice_scatter(
++   data = mtcars,
++   predictor = "wt",
++   response = "mpg"
++ )
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_slopes")
+> ### * nice_slopes
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_slopes
+> ### Title: Easy simple slopes
+> ### Aliases: nice_slopes
+> ### Keywords: interaction moderation regression simple slopes
+> 
+> ### ** Examples
+> 
+> # Make the basic table
+> nice_slopes(
++   data = mtcars,
++   response = "mpg",
++   predictor = "gear",
++   moderator = "wt"
++ )
+  Dependent Variable Predictor (+/-1 SD) df        b        t          p
+1                mpg       gear (LOW-wt) 28 7.540509 2.010656 0.05408136
+2                mpg      gear (MEAN-wt) 28 5.615951 1.943711 0.06204275
+3                mpg      gear (HIGH-wt) 28 3.691393 1.795568 0.08336403
+         sr2
+1 0.03048448
+2 0.02848830
+3 0.02431123
+> 
+> # Multiple dependent variables at once
+> nice_slopes(
++   data = mtcars,
++   response = c("mpg", "disp", "hp"),
++   predictor = "gear",
++   moderator = "wt"
++ )
+  Model Number Dependent Variable Predictor (+/-1 SD) df          b          t
+1            1                mpg       gear (LOW-wt) 28   7.540509  2.0106560
+2            1                mpg      gear (MEAN-wt) 28   5.615951  1.9437108
+3            1                mpg      gear (HIGH-wt) 28   3.691393  1.7955678
+4            2               disp       gear (LOW-wt) 28  50.510710  0.6654856
+5            2               disp      gear (MEAN-wt) 28  35.797623  0.6121820
+6            2               disp      gear (HIGH-wt) 28  21.084536  0.5067498
+7            3                 hp       gear (LOW-wt) 28 -21.687555 -0.3482182
+8            3                 hp      gear (MEAN-wt) 28  -7.461189 -0.1554963
+9            3                 hp      gear (HIGH-wt) 28   6.765177  0.1981502
+           p          sr2
+1 0.05408136 0.0304844847
+2 0.06204275 0.0284883047
+3 0.08336403 0.0243112307
+4 0.51118526 0.0032346367
+5 0.54535707 0.0027372180
+6 0.61629796 0.0018755795
+7 0.73028083 0.0019485684
+8 0.87754563 0.0003885555
+9 0.84435922 0.0006309595
+> 
+> # Add covariates
+> nice_slopes(
++   data = mtcars,
++   response = "mpg",
++   predictor = "gear",
++   moderator = "wt",
++   covariates = c("am", "vs")
++ )
+  Dependent Variable Predictor (+/-1 SD) df        b        t          p
+1                mpg       gear (LOW-wt) 26 7.891888 2.211309 0.03601159
+2                mpg      gear (MEAN-wt) 26 5.840594 2.077348 0.04778660
+3                mpg      gear (HIGH-wt) 26 3.789301 1.815690 0.08096849
+         sr2
+1 0.02824004
+2 0.02492212
+3 0.01903925
+> 
+> # Three-way interaction (continuous moderator and binary
+> # second moderator required)
+> nice_slopes(
++   data = mtcars,
++   response = "mpg",
++   predictor = "gear",
++   moderator = "wt",
++   moderator2 = "am"
++ )
+  Dependent Variable am Predictor (+/-1 SD) df         b          t          p
+1                mpg  0       gear (LOW-wt) 24 67.737763  1.8085806 0.08306317
+2                mpg  0      gear (MEAN-wt) 24 52.970093  1.8315641 0.07945785
+3                mpg  0      gear (HIGH-wt) 24 38.202424  1.8731910 0.07327171
+4                mpg  1       gear (LOW-wt) 24 -7.526458 -0.9092225 0.37227347
+5                mpg  1      gear (MEAN-wt) 24 -5.862384 -0.9829465 0.33543976
+6                mpg  1      gear (HIGH-wt) 24 -4.198309 -1.1312335 0.26913442
+          sr2
+1 0.016188137
+2 0.016602191
+3 0.017365419
+4 0.004091302
+5 0.004781684
+6 0.006333236
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_t_test")
+> ### * nice_t_test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_t_test
+> ### Title: Easy t-tests
+> ### Aliases: nice_t_test
+> ### Keywords: differences group t-test
+> 
+> ### ** Examples
+> 
+> # Make the basic table
+> nice_t_test(
++   data = mtcars,
++   response = "mpg",
++   group = "am"
++ )
+[97mUsing Welch t-test (base R's default; cf. https://doi.org/10.5334/irsp.82).
+For the Student t-test, use `var.equal = TRUE`. 
+ [97m
+  Dependent Variable         t       df           p         d  CI_lower
+1                mpg -3.767123 18.33225 0.001373638 -1.477947 -2.265973
+    CI_upper
+1 -0.6705686
+> 
+> # Multiple dependent variables at once
+> nice_t_test(
++   data = mtcars,
++   response = names(mtcars)[1:7],
++   group = "am"
++ )
+[97mUsing Welch t-test (base R's default; cf. https://doi.org/10.5334/irsp.82).
+For the Student t-test, use `var.equal = TRUE`. 
+ [97m
+  Dependent Variable         t       df            p          d   CI_lower
+1                mpg -3.767123 18.33225 1.373638e-03 -1.4779471 -2.2659731
+2                cyl  3.354114 25.85363 2.464713e-03  1.2084550  0.4315896
+3               disp  4.197727 29.25845 2.300413e-04  1.4452210  0.6417834
+4                 hp  1.266189 18.71541 2.209796e-01  0.4943081 -0.2260466
+5               drat -5.646088 27.19780 5.266742e-06 -2.0030843 -2.8592770
+6                 wt  5.493905 29.23352 6.272020e-06  1.8924060  1.0300224
+7               qsec  1.287845 25.53421 2.093498e-01  0.4656285 -0.2532864
+    CI_upper
+1 -0.6705686
+2  1.9683146
+3  2.2295592
+4  1.2066992
+5 -1.1245498
+6  2.7329218
+7  1.1770176
+> 
+> # Can be passed some of the regular arguments
+> # of base `t.test()`
+> 
+> # Student t-test (instead of Welch)
+> nice_t_test(
++   data = mtcars,
++   response = "mpg",
++   group = "am",
++   var.equal = TRUE
++ )
+[97mUsing Student t-test. 
+ [97m
+  Dependent Variable         t df            p         d  CI_lower   CI_upper
+1                mpg -4.106127 30 0.0002850207 -1.477947 -2.265973 -0.6705686
+> 
+> # One-sided instead of two-sided
+> nice_t_test(
++   data = mtcars,
++   response = "mpg",
++   group = "am",
++   alternative = "less"
++ )
+[97mUsing Welch t-test (base R's default; cf. https://doi.org/10.5334/irsp.82).
+For the Student t-test, use `var.equal = TRUE`. 
+ [97m
+  Dependent Variable         t       df            p         d  CI_lower
+1                mpg -3.767123 18.33225 0.0006868192 -1.477947 -2.265973
+    CI_upper
+1 -0.6705686
+> 
+> # One-sample t-test
+> nice_t_test(
++   data = mtcars,
++   response = "mpg",
++   mu = 10
++ )
+[97mUsing Welch t-test (base R's default; cf. https://doi.org/10.5334/irsp.82).
+For the Student t-test, use `var.equal = TRUE`. 
+ [97m
+[97mUsing one-sample t-test. 
+ [97m
+  Dependent Variable        t df            p        d CI_lower CI_upper
+1                mpg 9.470995 31 1.154598e-10 1.674251  1.12797 2.208995
+> 
+> # Paired t-test instead of independent samples
+> nice_t_test(
++   data = ToothGrowth,
++   response = "len",
++   group = "supp",
++   paired = TRUE
++ )
+[97mUsing paired t-test. 
+ [97m
+  Dependent Variable        t df           p         d  CI_lower  CI_upper
+1                len 3.302585 29 0.002549842 0.6029668 0.2088153 0.9883436
+> # Make sure cases appear in the same order for
+> # both levels of the grouping factor
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_table")
+> ### * nice_table
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_table
+> ### Title: Easily make nice APA tables
+> ### Aliases: nice_table
+> ### Keywords: APA style table
+> 
+> ### ** Examples
+> 
+> # Make the basic table
+> my_table <- nice_table(mtcars[1:3, ],
++   title = "Motor Trend Car Road Tests",
++   footnote = "1974 Motor Trend US magazine."
++ )
+> my_table
+a flextable object.
+col_keys: `mpg`, `cyl`, `disp`, `hp`, `drat`, `wt`, `qsec`, `vs`, `am`, `gear`, `carb` 
+header has 2 row(s) 
+body has 3 row(s) 
+original dataset sample: 
+               mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4     21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710    22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+> 
+> 
+> # Publication-ready tables
+> mtcars.std <- lapply(mtcars, scale)
+> model <- lm(mpg ~ cyl + wt * hp, mtcars.std)
+> stats.table <- as.data.frame(summary(model)$coefficients)
+> CI <- confint(model)
+> stats.table <- cbind(
++   row.names(stats.table),
++   stats.table, CI
++ )
+> names(stats.table) <- c(
++   "Term", "B", "SE", "t", "p",
++   "CI_lower", "CI_upper"
++ )
+> nice_table(stats.table, highlight = TRUE)
+a flextable object.
+col_keys: `Term`, `B`, `SE`, `t`, `p`, `95% CI` 
+header has 1 row(s) 
+body has 5 row(s) 
+original dataset sample: 
+                   Term          B         SE          t            p
+(Intercept) (Intercept) -0.1835269 0.08532112 -2.1510135 4.058431e-02
+cyl                 cyl -0.1082286 0.15071576 -0.7180977 4.788652e-01
+wt                   wt -0.6230206 0.10927573 -5.7013627 4.663587e-06
+hp                   hp -0.2874898 0.11955935 -2.4045781 2.331865e-02
+wt:hp             wt:hp  0.2875867 0.08895462  3.2329593 3.221753e-03
+                    95% CI signif
+(Intercept) [-0.36, -0.01]   TRUE
+cyl          [-0.42, 0.20]  FALSE
+wt          [-0.85, -0.40]   TRUE
+hp          [-0.53, -0.04]   TRUE
+wt:hp         [0.11, 0.47]   TRUE
+> 
+> # Test different column names
+> test <- head(mtcars)
+> names(test) <- c(
++   "dR", "N", "M", "SD", "b", "np2",
++   "ges", "p", "r", "R2", "sr2"
++ )
+> test[, 10:11] <- test[, 10:11] / 10
+> nice_table(test)
+a flextable object.
+col_keys: `dR`, `N`, `M`, `SD`, `b`, `np2`, `ges`, `p`, `r`, `R2`, `sr2` 
+header has 1 row(s) 
+body has 6 row(s) 
+original dataset sample: 
+                    dR N   M  SD    b   np2   ges p r  R2 sr2
+Mazda RX4         21.0 6 160 110 3.90 2.620 16.46 0 1 0.4 0.4
+Mazda RX4 Wag     21.0 6 160 110 3.90 2.875 17.02 0 1 0.4 0.4
+Datsun 710        22.8 4 108  93 3.85 2.320 18.61 1 1 0.4 0.1
+Hornet 4 Drive    21.4 6 258 110 3.08 3.215 19.44 1 0 0.3 0.1
+Hornet Sportabout 18.7 8 360 175 3.15 3.440 17.02 0 0 0.3 0.2
+> 
+> # Custom cell formatting (such as p or r)
+> nice_table(test[8:11], col.format.p = 2:4, highlight = .001)
+a flextable object.
+col_keys: `p`, `r`, `R2`, `sr2` 
+header has 1 row(s) 
+body has 6 row(s) 
+original dataset sample: 
+                  p r  R2 sr2 signif
+Mazda RX4         0 1 0.4 0.4   TRUE
+Mazda RX4 Wag     0 1 0.4 0.4   TRUE
+Datsun 710        1 1 0.4 0.1  FALSE
+Hornet 4 Drive    1 0 0.3 0.1  FALSE
+Hornet Sportabout 0 0 0.3 0.2   TRUE
+> 
+> nice_table(test[8:11], col.format.r = 1:4)
+a flextable object.
+col_keys: `p`, `r`, `R2`, `sr2` 
+header has 1 row(s) 
+body has 6 row(s) 
+original dataset sample: 
+                  p r  R2 sr2
+Mazda RX4         0 1 0.4 0.4
+Mazda RX4 Wag     0 1 0.4 0.4
+Datsun 710        1 1 0.4 0.1
+Hornet 4 Drive    1 0 0.3 0.1
+Hornet Sportabout 0 0 0.3 0.2
+> 
+> # Apply custom functions to cells
+> fun <- function(x) {
++   x + 11.1
++ }
+> nice_table(test[8:11], col.format.custom = 2:4, format.custom = "fun")
+a flextable object.
+col_keys: `p`, `r`, `R2`, `sr2` 
+header has 1 row(s) 
+body has 6 row(s) 
+original dataset sample: 
+                  p r  R2 sr2
+Mazda RX4         0 1 0.4 0.4
+Mazda RX4 Wag     0 1 0.4 0.4
+Datsun 710        1 1 0.4 0.1
+Hornet 4 Drive    1 0 0.3 0.1
+Hornet Sportabout 0 0 0.3 0.2
+> 
+> fun <- function(x) {
++   paste("x", x)
++ }
+> nice_table(test[8:11], col.format.custom = 2:4, format.custom = "fun")
+a flextable object.
+col_keys: `p`, `r`, `R2`, `sr2` 
+header has 1 row(s) 
+body has 6 row(s) 
+original dataset sample: 
+                  p r  R2 sr2
+Mazda RX4         0 1 0.4 0.4
+Mazda RX4 Wag     0 1 0.4 0.4
+Datsun 710        1 1 0.4 0.1
+Hornet 4 Drive    1 0 0.3 0.1
+Hornet Sportabout 0 0 0.3 0.2
+> 
+> # Separate headers based on periods
+> header.data <- structure(list(
++   Variable = c(
++     "Sepal.Length",
++     "Sepal.Width", "Petal.Length"
++   ), setosa.M = c(
++     5.01, 3.43,
++     1.46
++   ), setosa.SD = c(0.35, 0.38, 0.17), versicolor.M =
++     c(5.94, 2.77, 4.26), versicolor.SD = c(0.52, 0.31, 0.47)
++ ),
++ row.names = c(NA, -3L), class = "data.frame"
++ )
+> nice_table(header.data,
++   separate.header = TRUE,
++   italics = 2:4
++ )
+a flextable object.
+col_keys: `Variable`, `setosa.M`, `setosa.SD`, `versicolor.M`, `versicolor.SD` 
+header has 2 row(s) 
+body has 3 row(s) 
+original dataset sample: 
+      Variable setosa.M setosa.SD versicolor.M versicolor.SD
+1 Sepal.Length     5.01      0.35         5.94          0.52
+2  Sepal.Width     3.43      0.38         2.77          0.31
+3 Petal.Length     1.46      0.17         4.26          0.47
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_var")
+> ### * nice_var
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_var
+> ### Title: Obtain variance per group
+> ### Aliases: nice_var
+> ### Keywords: variance
+> 
+> ### ** Examples
+> 
+> # Make the basic table
+> nice_var(
++   data = iris,
++   variable = "Sepal.Length",
++   group = "Species"
++ )
+      Variable Setosa Versicolor Virginica Variance.ratio Criteria
+1 Sepal.Length  0.124      0.266     0.404            3.3        4
+  Heteroscedastic
+1           FALSE
+> 
+> # Try on multiple variables
+> DV <- names(iris[1:4])
+> var.table <- do.call("rbind", lapply(DV, nice_var,
++   data = iris, group = "Species"
++ ))
+> var.table
+      Variable Setosa Versicolor Virginica Variance.ratio Criteria
+1 Sepal.Length  0.124      0.266     0.404            3.3        4
+2  Sepal.Width  0.144      0.098     0.104            1.5        4
+3 Petal.Length  0.030      0.221     0.305           10.2        4
+4  Petal.Width  0.011      0.039     0.075            6.8        4
+  Heteroscedastic
+1           FALSE
+2           FALSE
+3            TRUE
+4            TRUE
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_varplot")
+> ### * nice_varplot
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_varplot
+> ### Title: Attempt to visualize variance per group
+> ### Aliases: nice_varplot
+> ### Keywords: variance
+> 
+> ### ** Examples
+> 
+> # Make the basic plot
+> nice_varplot(
++   data = iris,
++   variable = "Sepal.Length",
++   group = "Species"
++ )
+> 
+> # Further customization
+> nice_varplot(
++   data = iris,
++   variable = "Sepal.Length",
++   group = "Species",
++   colours = c(
++     "#00BA38",
++     "#619CFF",
++     "#F8766D"
++   ),
++   ytitle = "Sepal Length",
++   groups.labels = c(
++     "(a) Setosa",
++     "(b) Versicolor",
++     "(c) Virginica"
++   )
++ )
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("nice_violin")
+> ### * nice_violin
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: nice_violin
+> ### Title: Easy violin plots
+> ### Aliases: nice_violin
+> ### Keywords: plots violin
+> 
+> ### ** Examples
+> 
+> # Make the basic plot
+> nice_violin(
++   data = ToothGrowth,
++   group = "dose",
++   response = "len"
++ )
+> 
+> 
+> 
+> cleanEx()
+> nameEx("overlap_circle")
+> ### * overlap_circle
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: overlap_circle
+> ### Title: Interpolate the Inclusion of the Other in the Self Scale
+> ### Aliases: overlap_circle
+> ### Keywords: Venn diagrams merging overlap psychology self-other social
+> 
+> ### ** Examples
+> 
+> # Score of 1 (0% overlap)
+> overlap_circle(1)
+> 
+> # Score of 3.5 (25% overlap)
+> overlap_circle(3.5)
+> 
+> # Score of 6.84 (81.8% overlap)
+> overlap_circle(6.84)
+> 
+> # Changing labels
+> overlap_circle(3.12, categories = c("Humans", "Animals"))
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("rcompanion_groupwiseMean")
+> ### * rcompanion_groupwiseMean
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: rcompanion_groupwiseMean
+> ### Title: Get group means and CIs (rcompanion::groupwiseMean)
+> ### Aliases: rcompanion_groupwiseMean
+> ### Keywords: bootstrapping confidence group internal intervals means
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("scale_mad")
+> ### * scale_mad
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: scale_mad
+> ### Title: Standardize based on the absolute median deviation
+> ### Aliases: scale_mad
+> ### Keywords: MAD mean median normalization outliers standardization
+> 
+> ### ** Examples
+> 
+> scale_mad(mtcars$mpg)
+ [1]  0.33262558  0.33262558  0.66525116  0.40654238 -0.09239599 -0.20327119
+ [7] -0.90548075  0.96091834  0.66525116  0.00000000 -0.25870878 -0.51741757
+[13] -0.35110478 -0.73916796 -1.62616950 -1.62616950 -0.83156395  2.43925425
+[19]  2.06967028  2.71644224  0.42502157 -0.68373036 -0.73916796 -1.09027273
+[25]  0.00000000  1.49681511  1.25658552  2.06967028 -0.62829276  0.09239599
+[31] -0.77612635  0.40654238
+> 
+> 
+> 
+> cleanEx()
+> nameEx("sr2")
+> ### * sr2
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: sr2
+> ### Title: Semi-Partial Correlation Squared (Delta R2)
+> ### Aliases: sr2
+> 
+> ### ** Examples
+> 
+> m <- lm(mpg ~ cyl + disp + hp * drat, data = mtcars)
+> sr2(m)
+  Parameter         sr2
+1       cyl 0.007338114
+2      disp 0.018414581
+3        hp 0.005330776
+4      drat 0.023587381
+5   hp:drat 0.010561014
+> 
+> 
+> 
+> cleanEx()
+> nameEx("winsorize_mad")
+> ### * winsorize_mad
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: winsorize_mad
+> ### Title: Winsorize based on the absolute median deviation
+> ### Aliases: winsorize_mad
+> ### Keywords: MAD mean median normalization outliers standardization
+> 
+> ### ** Examples
+> 
+> winsorize_mad(mtcars$qsec, criteria = 2)
+ [1] 16.46000 17.02000 18.61000 19.44000 17.02000 20.22000 15.84000 20.00000
+ [9] 20.54177 18.30000 18.90000 17.40000 17.60000 18.00000 17.98000 17.82000
+[17] 17.42000 19.47000 18.52000 19.90000 20.01000 16.87000 17.30000 15.41000
+[25] 17.05000 18.90000 16.70000 16.90000 14.87823 15.50000 14.87823 18.60000
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  15.75 1.3 17.52 NA NA 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

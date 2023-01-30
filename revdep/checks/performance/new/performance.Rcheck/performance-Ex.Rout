@@ -1,0 +1,638 @@
+
+R version 4.2.2 (2022-10-31 ucrt) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "performance"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> library('performance')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("binned_residuals")
+> ### * binned_residuals
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: binned_residuals
+> ### Title: Binned residuals for binomial logistic regression
+> ### Aliases: binned_residuals
+> 
+> ### ** Examples
+> 
+> model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+> result <- binned_residuals(model)
+> result
+[31mWarning: Probably bad model fit. Only about 50% of the residuals are inside the error bounds.
+[39m> 
+> # look at the data frame
+> as.data.frame(result)
+        xbar        ybar n       x.lo       x.hi         se   ci_range
+1 0.03786483 -0.03786483 5 0.01744776 0.06917366 0.01899089 0.00968941
+2 0.09514191 -0.09514191 5 0.07087498 0.15160143 0.02816391 0.01436960
+3 0.25910531  0.07422802 6 0.17159955 0.35374001 0.42499664 0.21683901
+4 0.47954643 -0.07954643 5 0.38363314 0.54063600 0.49728294 0.25372045
+5 0.71108931  0.28891069 5 0.57299903 0.89141359 0.10975381 0.05599787
+6 0.97119262 -0.13785929 6 0.91147360 0.99815623 0.30361062 0.15490623
+       CI_low     CI_high group
+1 -0.05685572 -0.01887394    no
+2 -0.12330581 -0.06697800    no
+3 -0.35076862  0.49922466   yes
+4 -0.57682937  0.41773650   yes
+5  0.17915688  0.39866451    no
+6 -0.44146992  0.16575133   yes
+> 
+> # plot
+> if (require("see")) {
++   plot(result)
++ }
+Loading required package: see
+Warning: Computation failed in `stat_smooth()`
+Caused by error in `smooth.construct.tp.smooth.spec()`:
+! A term has fewer unique covariate combinations than specified maximum degrees of freedom
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:see'
+
+> nameEx("check_autocorrelation")
+> ### * check_autocorrelation
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_autocorrelation
+> ### Title: Check model for independence of residuals.
+> ### Aliases: check_autocorrelation check_autocorrelation.default
+> 
+> ### ** Examples
+> 
+> m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+> check_autocorrelation(m)
+[32mOK: Residuals appear to be independent and not autocorrelated (p = 0.324).[39m> 
+> 
+> 
+> cleanEx()
+> nameEx("check_clusterstructure")
+> ### * check_clusterstructure
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_clusterstructure
+> ### Title: Check suitability of data for clustering
+> ### Aliases: check_clusterstructure
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("check_collinearity")
+> ### * check_collinearity
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_collinearity
+> ### Title: Check for multicollinearity of model terms
+> ### Aliases: check_collinearity multicollinearity
+> ###   check_collinearity.default check_collinearity.glmmTMB
+> ###   check_concurvity
+> 
+> ### ** Examples
+> 
+> m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+> check_collinearity(m)
+[34m# Check for Multicollinearity
+[39m
+[32mLow Correlation
+
+[39m Term  VIF    VIF 95% CI Increased SE Tolerance Tolerance 95% CI
+  cyl 5.41 [3.42,  9.04]         2.33      0.18     [0.11, 0.29]
+
+[33mModerate Correlation
+
+[39m Term  VIF    VIF 95% CI Increased SE Tolerance Tolerance 95% CI
+ gear 1.53  [1.19, 2.51]         1.24      0.65     [0.40, 0.84]
+   wt 5.05 [3.21,  8.41]         2.25      0.20     [0.12, 0.31]
+ disp 9.97 [6.08, 16.85]         3.16      0.10     [0.06, 0.16]
+> 
+> # plot results
+> if (require("see")) {
++   x <- check_collinearity(m)
++   plot(x)
++ }
+Loading required package: see
+Variable `Component` is not in your data frame :/
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:see'
+
+> nameEx("check_convergence")
+> ### * check_convergence
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_convergence
+> ### Title: Convergence test for mixed effects models
+> ### Aliases: check_convergence
+> 
+> ### ** Examples
+> 
+> if (require("lme4")) {
++   data(cbpp)
++   set.seed(1)
++   cbpp$x <- rnorm(nrow(cbpp))
++   cbpp$x2 <- runif(nrow(cbpp))
++ 
++   model <- glmer(
++     cbind(incidence, size - incidence) ~ period + x + x2 + (1 + x | herd),
++     data = cbpp,
++     family = binomial()
++   )
++ 
++   check_convergence(model)
++ }
+Loading required package: lme4
+Loading required package: Matrix
+[1] TRUE
+attr(,"gradient")
+[1] 0.0002803075
+> 
+> ## Not run: 
+> ##D if (require("glmmTMB")) {
+> ##D   model <- glmmTMB(
+> ##D     Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
+> ##D       (1 + poly(Petal.Width, 4) | Species),
+> ##D     data = iris
+> ##D   )
+> ##D   check_convergence(model)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:lme4', 'package:Matrix'
+
+> nameEx("check_distribution")
+> ### * check_distribution
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_distribution
+> ### Title: Classify the distribution of a model-family using machine
+> ###   learning
+> ### Aliases: check_distribution
+> 
+> ### ** Examples
+> 
+> if (require("lme4") && require("parameters") &&
++   require("see") && require("patchwork") && require("randomForest")) {
++   data(sleepstudy)
++ 
++   model <<- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
++   check_distribution(model)
++   plot(check_distribution(model))
++ }
+Loading required package: lme4
+Loading required package: Matrix
+Loading required package: parameters
+Loading required package: see
+Loading required package: patchwork
+Loading required package: randomForest
+randomForest 4.7-1.1
+Type rfNews() to see new features/changes/bug fixes.
+Warning: Removed 6 rows containing missing values (`geom_segment()`).
+Warning: Removed 6 rows containing missing values (`geom_point()`).
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:randomForest', 'package:patchwork', 'package:see',
+  'package:parameters', 'package:lme4', 'package:Matrix'
+
+> nameEx("check_factorstructure")
+> ### * check_factorstructure
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_factorstructure
+> ### Title: Check suitability of data for Factor Analysis (FA)
+> ### Aliases: check_factorstructure
+> 
+> ### ** Examples
+> 
+> library(performance)
+> check_factorstructure(mtcars)
+[34m# Is the data suitable for Factor Analysis?
+
+[39m[32m  - KMO: The Kaiser, Meyer, Olkin (KMO) measure of sampling adequacy suggests that data seems appropriate for factor analysis (KMO = 0.83).
+  - Sphericity: Bartlett's test of sphericity suggests that there is sufficient significant correlation in the data for factor analysis (Chisq(55) = 408.01, p < .001).[39m> 
+> 
+> 
+> cleanEx()
+> nameEx("check_heterogeneity_bias")
+> ### * check_heterogeneity_bias
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_heterogeneity_bias
+> ### Title: Check model predictor for heterogeneity bias
+> ### Aliases: check_heterogeneity_bias
+> 
+> ### ** Examples
+> 
+> data(iris)
+> iris$ID <- sample(1:4, nrow(iris), replace = TRUE) # fake-ID
+> check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), group = "ID")
+Possible heterogeneity bias due to following predictors: [31mSepal.Length, Petal.Length[39m
+> 
+> 
+> 
+> cleanEx()
+> nameEx("check_heteroscedasticity")
+> ### * check_heteroscedasticity
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_heteroscedasticity
+> ### Title: Check model for (non-)constant error variance
+> ### Aliases: check_heteroscedasticity check_heteroskedasticity
+> 
+> ### ** Examples
+> 
+> m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+> check_heteroscedasticity(m)
+[31mWarning: Heteroscedasticity (non-constant error variance) detected (p = 0.042).
+[39m> 
+> # plot results
+> if (require("see")) {
++   x <- check_heteroscedasticity(m)
++   plot(x)
++ }
+Loading required package: see
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:see'
+
+> nameEx("check_homogeneity")
+> ### * check_homogeneity
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_homogeneity
+> ### Title: Check model for homogeneity of variances
+> ### Aliases: check_homogeneity check_homogeneity.afex_aov
+> 
+> ### ** Examples
+> 
+> model <<- lm(len ~ supp + dose, data = ToothGrowth)
+> check_homogeneity(model)
+[32mOK: There is not clear evidence for different variances across groups (Bartlett Test, p = 0.226).
+[39m> 
+> # plot results
+> if (require("see")) {
++   result <- check_homogeneity(model)
++   plot(result)
++ }
+Loading required package: see
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:see'
+
+> nameEx("check_itemscale")
+> ### * check_itemscale
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_itemscale
+> ### Title: Describe Properties of Item Scales
+> ### Aliases: check_itemscale
+> 
+> ### ** Examples
+> 
+> # data generation from '?prcomp', slightly modified
+> C <- chol(S <- toeplitz(0.9^(0:15)))
+> set.seed(17)
+> X <- matrix(rnorm(1600), 100, 16)
+> Z <- X %*% C
+> if (require("parameters") && require("psych")) {
++   pca <- principal_components(as.data.frame(Z), rotation = "varimax", n = 3)
++   pca
++   check_itemscale(pca)
++ }
+Loading required package: parameters
+Loading required package: psych
+[34m# Description of (Sub-)Scales[39m[31m
+Component 1[39m
+
+Item | Missings |  Mean |   SD | Skewness | Difficulty | Discrimination | alpha if deleted
+------------------------------------------------------------------------------------------
+V1   |        0 | -0.02 | 1.06 |    -0.49 |      -0.01 |           0.80 |             0.96
+V2   |        0 | -0.05 | 1.05 |    -0.29 |      -0.02 |           0.90 |             0.95
+V3   |        0 |  0.00 | 1.10 |    -0.77 |       0.00 |           0.94 |             0.95
+V4   |        0 |  0.00 | 1.10 |    -0.82 |       0.00 |           0.92 |             0.95
+V5   |        0 | -0.07 | 1.09 |    -0.29 |      -0.02 |           0.90 |             0.95
+V6   |        0 | -0.04 | 1.13 |    -0.27 |      -0.01 |           0.83 |             0.96
+[33m
+Mean inter-item-correlation = 0.813  Cronbach's alpha = 0.963[39m
+[31m
+Component 2[39m
+
+Item | Missings |  Mean |   SD | Skewness | Difficulty | Discrimination | alpha if deleted
+------------------------------------------------------------------------------------------
+V7   |        0 | -0.01 | 1.07 |     0.01 |       0.00 |           0.87 |             0.97
+V8   |        0 |  0.02 | 0.96 |     0.23 |       0.01 |           0.89 |             0.96
+V9   |        0 |  0.04 | 0.98 |     0.37 |       0.01 |           0.93 |             0.96
+V10  |        0 |  0.08 | 1.00 |     0.18 |       0.02 |           0.93 |             0.96
+V11  |        0 |  0.02 | 1.03 |     0.18 |       0.01 |           0.92 |             0.96
+V12  |        0 |  0.00 | 1.04 |     0.27 |       0.00 |           0.84 |             0.97
+[33m
+Mean inter-item-correlation = 0.840  Cronbach's alpha = 0.969[39m
+[31m
+Component 3[39m
+
+Item | Missings |  Mean |   SD | Skewness | Difficulty | Discrimination | alpha if deleted
+------------------------------------------------------------------------------------------
+V13  |        0 |  0.04 | 0.95 |     0.10 |       0.01 |           0.81 |             0.95
+V14  |        0 | -0.02 | 0.96 |     0.24 |      -0.01 |           0.93 |             0.91
+V15  |        0 | -0.03 | 0.94 |     0.41 |      -0.01 |           0.92 |             0.91
+V16  |        0 |  0.03 | 0.96 |     0.28 |       0.01 |           0.82 |             0.94
+[33m
+Mean inter-item-correlation = 0.811  Cronbach's alpha = 0.945[39m> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:psych', 'package:parameters'
+
+> nameEx("check_kmo")
+> ### * check_kmo
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_kmo
+> ### Title: Kaiser, Meyer, Olkin (KMO) Measure of Sampling Adequacy (MSA)
+> ###   for Factor Analysis
+> ### Aliases: check_kmo
+> 
+> ### ** Examples
+> 
+> library(performance)
+> check_kmo(mtcars)
+[34m# KMO Measure of Sampling Adequacy
+
+[39m[32mThe Kaiser, Meyer, Olkin (KMO) measure of sampling adequacy suggests that data seems appropriate for factor analysis (KMO = 0.83).[39m> 
+> 
+> 
+> cleanEx()
+> nameEx("check_model")
+> ### * check_model
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_model
+> ### Title: Visual check of model assumptions
+> ### Aliases: check_model check_model.default
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+> ##D check_model(m)
+> ##D 
+> ##D if (require("lme4")) {
+> ##D   m <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+> ##D   check_model(m, panel = FALSE)
+> ##D }
+> ##D 
+> ##D if (require("rstanarm")) {
+> ##D   m <- stan_glm(mpg ~ wt + gear, data = mtcars, chains = 2, iter = 200)
+> ##D   check_model(m)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("check_multimodal")
+> ### * check_multimodal
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_multimodal
+> ### Title: Check if a distribution is unimodal or multimodal
+> ### Aliases: check_multimodal
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D if (require("multimode")) {
+> ##D   # Univariate
+> ##D   x <- rnorm(1000)
+> ##D   check_multimodal(x)
+> ##D }
+> ##D 
+> ##D if (require("multimode") && require("mclust")) {
+> ##D   x <- c(rnorm(1000), rnorm(1000, 2))
+> ##D   check_multimodal(x)
+> ##D 
+> ##D   # Multivariate
+> ##D   m <- data.frame(
+> ##D     x = rnorm(200),
+> ##D     y = rbeta(200, 2, 1)
+> ##D   )
+> ##D   plot(m$x, m$y)
+> ##D   check_multimodal(m)
+> ##D 
+> ##D   m <- data.frame(
+> ##D     x = c(rnorm(100), rnorm(100, 4)),
+> ##D     y = c(rbeta(100, 2, 1), rbeta(100, 1, 4))
+> ##D   )
+> ##D   plot(m$x, m$y)
+> ##D   check_multimodal(m)
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("check_normality")
+> ### * check_normality
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_normality
+> ### Title: Check model for (non-)normality of residuals.
+> ### Aliases: check_normality check_normality.merMod
+> 
+> ### ** Examples
+> 
+> m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+> check_normality(m)
+[32mOK: residuals appear as normally distributed (p = 0.230).
+[39m> 
+> # plot results
+> if (require("see")) {
++   x <- check_normality(m)
++   plot(x)
++ }
+Loading required package: see
+> ## Not run: 
+> ##D # QQ-plot
+> ##D plot(check_normality(m), type = "qq")
+> ##D 
+> ##D # PP-plot
+> ##D plot(check_normality(m), type = "pp")
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:see'
+
+> nameEx("check_outliers")
+> ### * check_outliers
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: check_outliers
+> ### Title: Outliers detection (check for influential observations)
+> ### Aliases: check_outliers check_outliers.default check_outliers.numeric
+> ###   check_outliers.data.frame
+> 
+> ### ** Examples
+> 
+> data <- mtcars # Size nrow(data) = 32
+> 
+> # For single variables ------------------------------------------------------
+> outliers_list <- check_outliers(data$mpg) # Find outliers
+> outliers_list # Show the row index of the outliers
+[32mOK: No outliers detected.
+- Based on the following method and threshold: zscore_robust (3.09).
+- For variable: data$mpg
+
+[39m> as.numeric(outliers_list) # The object is a binary vector...
+ [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+> filtered_data <- data[!outliers_list, ] # And can be used to filter a dataframe
+> nrow(filtered_data) # New size, 28 (4 outliers removed)
+[1] 32
+> 
+> # Find all observations beyond +/- 2 SD
+> check_outliers(data$mpg, method = "zscore", threshold = 2)
+[33m2 outliers detected: cases 18, 20.
+- Based on the following method and threshold: zscore (2).
+- For variable: data$mpg.
+[39m
+-----------------------------------------------------------------------------
+Outliers per variable (zscore): 
+
+$`data$mpg`
+   Row Distance_Zscore
+18  18        2.042389
+20  20        2.291272
+
+> 
+> # For dataframes ------------------------------------------------------
+> check_outliers(data) # It works the same way on dataframes
+[32mOK: No outliers detected.
+- Based on the following method and threshold: mahalanobis (31.26).
+- For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb
+
+[39m> 
+> # You can also use multiple methods at once
+> outliers_list <- check_outliers(data, method = c(
++   "mahalanobis",
++   "iqr",
++   "zscore"
++ ))
+> outliers_list
+[33m1 outlier detected: case 31.
+- Based on the following methods and thresholds: mahalanobis (3.09), iqr
+  (1.7), zscore (31.26).
+- For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb.[39m[33m
+Note: Outliers were classified as such by[39m [33mat least half of the selected methods. 
+[39m
+-----------------------------------------------------------------------------
+The following observations were considered outliers for two or more variables 
+by at least one of the selected methods: 
+
+  Row n_Zscore n_IQR
+1  31        1     2
+> 
+> # Using `as.data.frame()`, we can access more details!
+> outliers_info <- as.data.frame(outliers_list)
+> head(outliers_info)
+  Row Distance_Zscore Outlier_Zscore Distance_IQR Outlier_IQR
+1   1        1.189901              0    0.4208483           0
+2   2        1.189901              0    0.2941176           0
+3   3        1.224858              0    0.5882353           0
+4   4        1.122152              0    0.5882353           0
+5   5        1.043081              0    0.3915954           0
+6   6        1.564608              0    0.6809025           0
+  Distance_Mahalanobis Outlier_Mahalanobis Outlier
+1             8.946673                   0       0
+2             8.287933                   0       0
+3             8.937150                   0       0
+4             6.096726                   0       0
+5             5.429061                   0       0
+6             8.877558                   0       0
+> outliers_info$Outlier # Including the probability of being an outlier
+ [1] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000
+ [8] 0.0000000 0.3333333 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000
+[15] 0.0000000 0.3333333 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000
+[22] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000
+[29] 0.0000000 0.0000000 0.6666667 0.0000000
+> 
+> # And we can be more stringent in our outliers removal process
+> filtered_data <- data[outliers_info$Outlier < 0.1, ]
+> 
+> # We can run the function stratified by groups using `{dplyr}` package:
+> if (require("poorman")) {
++   iris %>%
++     group_by(Species) %>%
++     check_outliers()
++ }
+Loading required package: poorman
+
+  I'd seen my father. He was a poor man, and I watched him do astonishing things.
+    - Sidney Poitier
+
+Attaching package: 'poorman'
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+Error in eval(expr, envir = data) : object 'info' not found
+Calls: %>% ... .eval_expr -> .eval_call -> .select_context -> eval -> eval
+Execution halted

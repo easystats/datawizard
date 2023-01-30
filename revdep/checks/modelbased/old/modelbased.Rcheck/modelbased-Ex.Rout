@@ -1,0 +1,1469 @@
+
+R version 4.2.2 (2022-10-31 ucrt) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "modelbased"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> library('modelbased')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("describe_nonlinear")
+> ### * describe_nonlinear
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: describe_nonlinear
+> ### Title: Describe the smooth term (for GAMs) or non-linear predictors
+> ### Aliases: describe_nonlinear describe_nonlinear.data.frame
+> ###   estimate_smooth
+> 
+> ### ** Examples
+> 
+> library(modelbased)
+> 
+> # Create data
+> data <- data.frame(x = rnorm(200))
+> data$y <- data$x^2 + rnorm(200, 0, 0.5)
+> 
+> model <- lm(y ~ poly(x, 2), data = data)
+> link_data <- estimate_relation(model, length = 100)
+> 
+> describe_nonlinear(link_data, x = "x")
+Start |   End | Length | Change | Slope |   R2
+----------------------------------------------
+-2.21 | -0.02 |   0.47 |  -5.13 | -2.34 | 0.02
+-0.02 |  2.40 |   0.52 |   5.93 |  2.45 | 0.02
+> 
+> 
+> 
+> cleanEx()
+> nameEx("estimate_contrasts")
+> ### * estimate_contrasts
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: estimate_contrasts
+> ### Title: Estimate Marginal Contrasts
+> ### Aliases: estimate_contrasts
+> 
+> ### ** Examples
+> 
+> ## Don't show: 
+> if (requireNamespace("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ # Basic usage
++ model <- lm(Sepal.Width ~ Species, data = iris)
++ estimate_contrasts(model)
++ 
++ # Dealing with interactions
++ model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
++ 
++ # By default: selects first factor
++ estimate_contrasts(model)
++ 
++ # Can also run contrasts between points of numeric
++ estimate_contrasts(model, contrast = "Petal.Width", length = 4)
++ 
++ # Or both
++ estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
++ 
++ # Or with custom specifications
++ estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
++ 
++ # Can fixate the numeric at a specific value
++ estimate_contrasts(model, fixed = "Petal.Width")
++ 
++ # Or modulate it
++ estimate_contrasts(model, at = "Petal.Width", length = 4)
++ 
++ # Standardized differences
++ estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
++ standardize(estimated)
++ ## Don't show: 
++ }) # examplesIf
+> model <- lm(Sepal.Width ~ Species, data = iris)
+> estimate_contrasts(model)
+No variable was specified for contrast estimation. Selecting `contrast = "Species"`.
+[34mMarginal Contrasts Analysis[39m
+
+Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p
+------------------------------------------------------------------------------
+setosa     | versicolor |       0.66 | [ 0.49,  0.82] | 0.07 |   9.69 | < .001
+setosa     |  virginica |       0.45 | [ 0.29,  0.62] | 0.07 |   6.68 | < .001
+versicolor |  virginica |      -0.20 | [-0.37, -0.04] | 0.07 |  -3.00 | 0.003 
+[34m
+Marginal contrasts estimated at Species
+p-value adjustment method: Holm (1979)[39m> model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
+> estimate_contrasts(model)
+No variable was specified for contrast estimation. Selecting `contrast = "Species"`.
+NOTE: Results may be misleading due to involvement in interactions
+[34mMarginal Contrasts Analysis[39m
+
+Level1     |     Level2 | Difference |        95% CI |   SE | t(144) |      p
+-----------------------------------------------------------------------------
+setosa     | versicolor |       1.59 | [ 0.64, 2.54] | 0.39 |   4.04 | < .001
+setosa     |  virginica |       1.77 | [ 0.77, 2.78] | 0.41 |   4.29 | < .001
+versicolor |  virginica |       0.18 | [-0.17, 0.54] | 0.15 |   1.27 | 0.205 
+[34m
+Marginal contrasts estimated at Species
+p-value adjustment method: Holm (1979)[39m> estimate_contrasts(model, contrast = "Petal.Width", length = 4)
+NOTE: Results may be misleading due to involvement in interactions
+[34mMarginal Contrasts Analysis[39m
+
+Level1         |         Level2 | Difference |         95% CI |   SE | t(144) |      p
+--------------------------------------------------------------------------------------
+Petal.Width0.1 | Petal.Width0.9 |      -0.67 | [-1.02, -0.33] | 0.13 |  -5.18 | < .001
+Petal.Width0.1 | Petal.Width1.7 |      -1.35 | [-2.04, -0.65] | 0.26 |  -5.18 | < .001
+Petal.Width0.1 | Petal.Width2.5 |      -2.02 | [-3.06, -0.98] | 0.39 |  -5.18 | < .001
+Petal.Width0.9 | Petal.Width1.7 |      -0.67 | [-1.02, -0.33] | 0.13 |  -5.18 | < .001
+Petal.Width0.9 | Petal.Width2.5 |      -1.35 | [-2.04, -0.65] | 0.26 |  -5.18 | < .001
+Petal.Width1.7 | Petal.Width2.5 |      -0.67 | [-1.02, -0.33] | 0.13 |  -5.18 | < .001
+[34m
+Marginal contrasts estimated at Petal.Width
+p-value adjustment method: Holm (1979)[39m> estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
+[34mMarginal Contrasts Analysis[39m
+
+Level1                    |                    Level2 | Difference |         95% CI |   SE | t(144) |      p
+------------------------------------------------------------------------------------------------------------
+setosa Petal.Width0.1     |     setosa Petal.Width2.5 |      -2.01 | [-4.92,  0.91] | 0.98 |  -2.06 | 0.166 
+setosa Petal.Width0.1     | versicolor Petal.Width0.1 |       1.83 | [ 0.99,  2.66] | 0.28 |   6.55 | < .001
+setosa Petal.Width0.1     | versicolor Petal.Width2.5 |      -0.70 | [-1.50,  0.10] | 0.27 |  -2.61 | 0.059 
+setosa Petal.Width0.1     |  virginica Petal.Width0.1 |       1.55 | [ 0.62,  2.48] | 0.31 |   4.95 | < .001
+setosa Petal.Width0.1     |  virginica Petal.Width2.5 |       0.03 | [-0.30,  0.37] | 0.11 |   0.29 | 0.984 
+setosa Petal.Width2.5     | versicolor Petal.Width2.5 |       1.31 | [-1.54,  4.16] | 0.95 |   1.37 | 0.517 
+setosa Petal.Width2.5     |  virginica Petal.Width2.5 |       2.04 | [-0.71,  4.79] | 0.92 |   2.21 | 0.142 
+versicolor Petal.Width0.1 |     setosa Petal.Width2.5 |      -3.84 | [-6.69, -0.98] | 0.96 |  -4.01 | < .001
+versicolor Petal.Width0.1 | versicolor Petal.Width2.5 |      -2.53 | [-4.08, -0.98] | 0.52 |  -4.86 | < .001
+versicolor Petal.Width0.1 |  virginica Petal.Width0.1 |      -0.28 | [-1.49,  0.93] | 0.41 |  -0.69 | 0.984 
+versicolor Petal.Width0.1 |  virginica Petal.Width2.5 |      -1.80 | [-2.64, -0.95] | 0.28 |  -6.35 | < .001
+versicolor Petal.Width2.5 |  virginica Petal.Width2.5 |       0.73 | [-0.08,  1.55] | 0.27 |   2.70 | 0.055 
+virginica Petal.Width0.1  |     setosa Petal.Width2.5 |      -3.56 | [-6.44, -0.67] | 0.97 |  -3.68 | 0.003 
+virginica Petal.Width0.1  | versicolor Petal.Width2.5 |      -2.25 | [-3.44, -1.06] | 0.40 |  -5.64 | < .001
+virginica Petal.Width0.1  |  virginica Petal.Width2.5 |      -1.52 | [-2.63, -0.40] | 0.37 |  -4.04 | < .001
+[34m
+Marginal contrasts estimated at Species, Petal.Width
+p-value adjustment method: Holm (1979)[39m> estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
+[34mMarginal Contrasts Analysis[39m
+
+Level1                  |                  Level2 | Difference |         95% CI |   SE | t(144) |      p
+--------------------------------------------------------------------------------------------------------
+setosa Petal.Width1     |     setosa Petal.Width2 |      -0.84 | [-2.05,  0.38] | 0.41 |  -2.06 | 0.166 
+setosa Petal.Width1     | versicolor Petal.Width1 |       1.63 | [ 0.68,  2.59] | 0.32 |   5.09 | < .001
+setosa Petal.Width1     | versicolor Petal.Width2 |       0.58 | [-0.45,  1.61] | 0.35 |   1.68 | 0.191 
+setosa Petal.Width1     |  virginica Petal.Width1 |       1.73 | [ 0.68,  2.78] | 0.35 |   4.93 | < .001
+setosa Petal.Width1     |  virginica Petal.Width2 |       1.10 | [ 0.17,  2.04] | 0.31 |   3.52 | 0.005 
+setosa Petal.Width2     | versicolor Petal.Width2 |       1.42 | [-0.77,  3.60] | 0.73 |   1.94 | 0.166 
+setosa Petal.Width2     |  virginica Petal.Width2 |       1.94 | [-0.20,  4.08] | 0.72 |   2.71 | 0.038 
+versicolor Petal.Width1 |     setosa Petal.Width2 |      -2.47 | [-4.62, -0.32] | 0.72 |  -3.43 | 0.005 
+versicolor Petal.Width1 | versicolor Petal.Width2 |      -1.05 | [-1.70, -0.41] | 0.22 |  -4.86 | < .001
+versicolor Petal.Width1 |  virginica Petal.Width1 |       0.10 | [-0.45,  0.65] | 0.19 |   0.54 | 0.589 
+versicolor Petal.Width1 |  virginica Petal.Width2 |      -0.53 | [-0.81, -0.25] | 0.09 |  -5.72 | < .001
+versicolor Petal.Width2 |  virginica Petal.Width2 |       0.52 | [ 0.05,  0.99] | 0.16 |   3.31 | 0.007 
+virginica Petal.Width1  |     setosa Petal.Width2 |      -2.57 | [-4.76, -0.38] | 0.73 |  -3.50 | 0.005 
+virginica Petal.Width1  | versicolor Petal.Width2 |      -1.15 | [-1.83, -0.48] | 0.23 |  -5.13 | < .001
+virginica Petal.Width1  |  virginica Petal.Width2 |      -0.63 | [-1.10, -0.17] | 0.16 |  -4.04 | < .001
+[34m
+Marginal contrasts estimated at Species, Petal.Width
+p-value adjustment method: Holm (1979)[39m> estimate_contrasts(model, fixed = "Petal.Width")
+No variable was specified for contrast estimation. Selecting `contrast = "Species"`.
+[34mMarginal Contrasts Analysis[39m
+
+Level1     |     Level2 | Petal.Width | Difference |        95% CI |   SE | t(144) |      p
+-------------------------------------------------------------------------------------------
+setosa     | versicolor |        1.20 |       1.59 | [ 0.64, 2.54] | 0.39 |   4.04 | < .001
+setosa     |  virginica |        1.20 |       1.77 | [ 0.77, 2.78] | 0.41 |   4.29 | < .001
+versicolor |  virginica |        1.20 |       0.18 | [-0.17, 0.54] | 0.15 |   1.27 | 0.205 
+[34m
+Marginal contrasts estimated at Species
+p-value adjustment method: Holm (1979)[39m> estimate_contrasts(model, at = "Petal.Width", length = 4)
+No variable was specified for contrast estimation. Selecting `contrast = "Species"`.
+[34mMarginal Contrasts Analysis[39m
+
+Level1     |     Level2 | Petal.Width | Difference |        95% CI |   SE | t(144) |      p
+-------------------------------------------------------------------------------------------
+setosa     | versicolor |        0.10 |       1.83 | [ 1.15, 2.50] | 0.28 |   6.55 | < .001
+setosa     | versicolor |        0.90 |       1.65 | [ 0.96, 2.35] | 0.29 |   5.74 | < .001
+setosa     | versicolor |        1.70 |       1.48 | [ 0.03, 2.94] | 0.60 |   2.47 | 0.015 
+setosa     | versicolor |        2.50 |       1.31 | [-1.00, 3.62] | 0.95 |   1.37 | 0.172 
+setosa     |  virginica |        0.10 |       1.55 | [ 0.79, 2.30] | 0.31 |   4.95 | < .001
+setosa     |  virginica |        0.90 |       1.71 | [ 0.93, 2.50] | 0.32 |   5.28 | < .001
+setosa     |  virginica |        1.70 |       1.88 | [ 0.43, 3.32] | 0.60 |   3.14 | 0.004 
+setosa     |  virginica |        2.50 |       2.04 | [-0.19, 4.28] | 0.92 |   2.21 | 0.057 
+versicolor |  virginica |        0.10 |      -0.28 | [-1.26, 0.70] | 0.41 |  -0.69 | 0.492 
+versicolor |  virginica |        0.90 |       0.06 | [-0.44, 0.56] | 0.21 |   0.28 | 0.780 
+versicolor |  virginica |        1.70 |       0.40 | [ 0.12, 0.67] | 0.11 |   3.50 | 0.002 
+versicolor |  virginica |        2.50 |       0.73 | [ 0.08, 1.39] | 0.27 |   2.70 | 0.023 
+[34m
+Marginal contrasts estimated at Species
+p-value adjustment method: Holm (1979)[39m> estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
+No variable was specified for contrast estimation. Selecting `contrast = "Species"`.
+> standardize(estimated)
+[34mMarginal Contrasts Analysis (standardized)[39m
+
+Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p
+------------------------------------------------------------------------------
+setosa     | versicolor |       1.51 | [ 1.13,  1.89] | 0.16 |   9.69 | < .001
+setosa     |  virginica |       1.04 | [ 0.66,  1.42] | 0.16 |   6.68 | < .001
+versicolor |  virginica |      -0.47 | [-0.85, -0.09] | 0.16 |  -3.00 | 0.003 
+[34m
+Marginal contrasts estimated at Species
+p-value adjustment method: Holm (1979)[39m> ## End(Don't show)
+> ## Don't show: 
+> if (requireNamespace("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ # Other models (mixed, Bayesian, ...)
++ data <- iris
++ data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
++ 
++ model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
++ estimate_contrasts(model)
++ ## Don't show: 
++ }) # examplesIf
+> data <- iris
+> data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+> model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), 
++     data = data)
+> estimate_contrasts(model)
+No variable was specified for contrast estimation. Selecting `contrast = "Species"`.
+Cannot use mode = "kenward-roger" because *pbkrtest* package is not installed
+Cannot use mode = "satterthwaite" because *lmerTest* package is not installed
+[34mMarginal Contrasts Analysis[39m
+
+Level1     |     Level2 | Difference |        95% CI |   SE |  df |     z |      p
+----------------------------------------------------------------------------------
+setosa     | versicolor |       0.87 | [ 0.66, 1.08] | 0.09 | Inf | 10.11 | < .001
+setosa     |  virginica |       0.80 | [ 0.53, 1.07] | 0.11 | Inf |  7.11 | < .001
+versicolor |  virginica |      -0.07 | [-0.25, 0.10] | 0.07 | Inf | -1.00 | 0.318 
+[34m
+Marginal contrasts estimated at Species
+p-value adjustment method: Holm (1979)[39m> ## End(Don't show)
+> ## Don't show: 
+> if (requireNamespace("rstanarm", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ library(rstanarm)
++ 
++ data <- mtcars
++ data$cyl <- as.factor(data$cyl)
++ data$am <- as.factor(data$am)
++ ## Not run: 
++ ##D model <- stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
++ ##D estimate_contrasts(model)
++ ##D estimate_contrasts(model, fixed = "am")
++ ##D 
++ ##D model <- stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
++ ##D estimate_contrasts(model)
++ ##D estimate_contrasts(model, fixed = "wt")
++ ##D estimate_contrasts(model, at = "wt", length = 4)
++ ##D 
++ ##D model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris, refresh = 0)
++ ##D estimate_contrasts(model, at = "Petal.Length", test = "bf")
++ ## End(Not run)
++ ## Don't show: 
++ }) # examplesIf
+> library(rstanarm)
+Loading required package: Rcpp
+This is rstanarm version 2.21.3
+- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!
+- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.
+- For execution on a local, multicore CPU with excess RAM we recommend calling
+  options(mc.cores = parallel::detectCores())
+> data <- mtcars
+> data$cyl <- as.factor(data$cyl)
+> data$am <- as.factor(data$am)
+> ## End(Don't show)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:rstanarm', 'package:Rcpp'
+
+> nameEx("estimate_expectation")
+> ### * estimate_expectation
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: estimate_expectation
+> ### Title: Model-based response estimates and uncertainty
+> ### Aliases: estimate_expectation estimate_response estimate_link
+> ###   estimate_prediction estimate_relation
+> 
+> ### ** Examples
+> 
+> library(modelbased)
+> 
+> # Linear Models
+> model <- lm(mpg ~ wt, data = mtcars)
+> 
+> # Get predicted and prediction interval (see insight::get_predicted)
+> estimate_response(model)
+`estimate_response()` is deprecated.
+  Please use `estimate_expectation()` (for conditional expected values) or
+  `estimate_prediction()` (for individual case predictions) instead.
+[34mModel-based Expectation[39m
+
+wt   | Predicted |   SE |         95% CI | Residuals
+----------------------------------------------------
+2.62 |     23.28 | 0.63 | [21.99, 24.58] |     -2.28
+2.88 |     21.92 | 0.57 | [20.75, 23.09] |     -0.92
+2.32 |     24.89 | 0.74 | [23.38, 26.39] |     -2.09
+3.21 |     20.10 | 0.54 | [19.00, 21.20] |      1.30
+3.44 |     18.90 | 0.55 | [17.77, 20.03] |     -0.20
+3.46 |     18.79 | 0.56 | [17.66, 19.93] |     -0.69
+3.57 |     18.21 | 0.57 | [17.03, 19.38] |     -3.91
+3.19 |     20.24 | 0.54 | [19.14, 21.34] |      4.16
+3.15 |     20.45 | 0.54 | [19.35, 21.55] |      2.35
+3.44 |     18.90 | 0.55 | [17.77, 20.03] |      0.30
+3.44 |     18.90 | 0.55 | [17.77, 20.03] |     -1.10
+4.07 |     15.53 | 0.72 | [14.06, 17.00] |      0.87
+3.73 |     17.35 | 0.61 | [16.10, 18.60] |     -0.05
+3.78 |     17.08 | 0.62 | [15.81, 18.36] |     -1.88
+5.25 |      9.23 | 1.26 | [ 6.66, 11.80] |      1.17
+5.42 |      8.30 | 1.35 | [ 5.55, 11.05] |      2.10
+5.34 |      8.72 | 1.31 | [ 6.05, 11.39] |      5.98
+2.20 |     25.53 | 0.78 | [23.93, 27.13] |      6.87
+1.61 |     28.65 | 1.05 | [26.52, 30.79] |      1.75
+1.83 |     27.48 | 0.94 | [25.55, 29.40] |      6.42
+2.46 |     24.11 | 0.68 | [22.72, 25.51] |     -2.61
+3.52 |     18.47 | 0.56 | [17.32, 19.63] |     -2.97
+3.44 |     18.93 | 0.55 | [17.80, 20.05] |     -3.73
+3.84 |     16.76 | 0.64 | [15.45, 18.07] |     -3.46
+3.85 |     16.74 | 0.64 | [15.42, 18.05] |      2.46
+1.94 |     26.94 | 0.90 | [25.11, 28.77] |      0.36
+2.14 |     25.85 | 0.81 | [24.20, 27.50] |      0.15
+1.51 |     29.20 | 1.09 | [26.96, 31.43] |      1.20
+3.17 |     20.34 | 0.54 | [19.24, 21.44] |     -4.54
+2.77 |     22.48 | 0.59 | [21.27, 23.69] |     -2.78
+3.57 |     18.21 | 0.57 | [17.03, 19.38] |     -3.21
+2.78 |     22.43 | 0.59 | [21.22, 23.64] |     -1.03
+[34m
+Variable predicted: mpg
+[39m> 
+> # Get expected values with confidence interval
+> pred <- estimate_relation(model)
+> pred
+[34mModel-based Expectation[39m
+
+wt   | Predicted |   SE |         95% CI
+----------------------------------------
+1.51 |     29.20 | 1.09 | [26.96, 31.43]
+1.95 |     26.88 | 0.89 | [25.06, 28.70]
+2.38 |     24.55 | 0.71 | [23.10, 26.01]
+2.82 |     22.23 | 0.58 | [21.04, 23.42]
+3.25 |     19.91 | 0.54 | [18.81, 21.01]
+3.69 |     17.59 | 0.60 | [16.36, 18.81]
+4.12 |     15.26 | 0.74 | [13.76, 16.77]
+4.55 |     12.94 | 0.92 | [11.06, 14.82]
+4.99 |     10.62 | 1.13 | [ 8.32, 12.92]
+5.42 |      8.30 | 1.35 | [ 5.55, 11.05]
+[34m
+Variable predicted: mpg
+Predictors modulated: wt
+[39m> 
+> # Visualisation (see visualisation_recipe())
+> if (require("see")) {
++   plot(pred)
++ }
+Loading required package: see
+> 
+> # Standardize predictions
+> pred <- estimate_relation(lm(mpg ~ wt + am, data = mtcars))
+> z <- standardize(pred, include_response = FALSE)
+> z
+[34mModel-based Expectation (standardized)[39m
+
+wt    |    am | Predicted |   SE |         95% CI
+-------------------------------------------------
+-1.74 | -0.81 |     29.22 | 1.91 | [25.31, 33.14]
+-1.30 | -0.81 |     26.90 | 1.60 | [23.62, 30.17]
+-0.85 | -0.81 |     24.57 | 1.30 | [21.90, 27.24]
+-0.41 | -0.81 |     22.24 | 1.03 | [20.13, 24.36]
+0.03  | -0.81 |     19.92 | 0.82 | [18.24, 21.59]
+0.48  | -0.81 |     17.59 | 0.71 | [16.13, 19.05]
+0.92  | -0.81 |     15.27 | 0.76 | [13.71, 16.83]
+1.37  | -0.81 |     12.94 | 0.94 | [11.01, 14.87]
+1.81  | -0.81 |     10.61 | 1.20 | [ 8.17, 13.06]
+2.26  | -0.81 |      8.29 | 1.49 | [ 5.25, 11.33]
+-1.74 | -0.59 |     29.22 | 1.78 | [25.58, 32.86]
+-1.30 | -0.59 |     26.89 | 1.46 | [23.90, 29.89]
+-0.85 | -0.59 |     24.57 | 1.17 | [22.19, 26.95]
+-0.41 | -0.59 |     22.24 | 0.90 | [20.40, 24.08]
+0.03  | -0.59 |     19.92 | 0.70 | [18.48, 21.35]
+0.48  | -0.59 |     17.59 | 0.64 | [16.28, 18.90]
+0.92  | -0.59 |     15.26 | 0.75 | [13.73, 16.80]
+1.37  | -0.59 |     12.94 | 0.98 | [10.94, 14.93]
+1.81  | -0.59 |     10.61 | 1.26 | [ 8.04, 13.18]
+2.26  | -0.59 |      8.29 | 1.56 | [ 5.09, 11.48]
+-1.74 | -0.37 |     29.22 | 1.65 | [25.85, 32.59]
+-1.30 | -0.37 |     26.89 | 1.33 | [24.17, 29.62]
+-0.85 | -0.37 |     24.57 | 1.04 | [22.45, 26.68]
+-0.41 | -0.37 |     22.24 | 0.78 | [20.65, 23.83]
+0.03  | -0.37 |     19.91 | 0.61 | [18.67, 21.16]
+0.48  | -0.37 |     17.59 | 0.61 | [16.34, 18.83]
+0.92  | -0.37 |     15.26 | 0.78 | [13.67, 16.85]
+1.37  | -0.37 |     12.93 | 1.04 | [10.81, 15.06]
+1.81  | -0.37 |     10.61 | 1.33 | [ 7.88, 13.34]
+2.26  | -0.37 |      8.28 | 1.65 | [ 4.91, 11.66]
+-1.74 | -0.15 |     29.21 | 1.53 | [26.10, 32.33]
+-1.30 | -0.15 |     26.89 | 1.21 | [24.41, 29.37]
+-0.85 | -0.15 |     24.56 | 0.92 | [22.68, 26.45]
+-0.41 | -0.15 |     22.24 | 0.68 | [20.85, 23.63]
+0.03  | -0.15 |     19.91 | 0.56 | [18.77, 21.05]
+0.48  | -0.15 |     17.58 | 0.63 | [16.30, 18.86]
+0.92  | -0.15 |     15.26 | 0.84 | [13.54, 16.98]
+1.37  | -0.15 |     12.93 | 1.12 | [10.64, 15.23]
+1.81  | -0.15 |     10.61 | 1.43 | [ 7.68, 13.53]
+2.26  | -0.15 |      8.28 | 1.75 | [ 4.70, 11.86]
+-1.74 |  0.08 |     29.21 | 1.41 | [26.32, 32.10]
+-1.30 |  0.08 |     26.89 | 1.11 | [24.62, 29.15]
+-0.85 |  0.08 |     24.56 | 0.83 | [22.87, 26.25]
+-0.41 |  0.08 |     22.23 | 0.61 | [20.98, 23.49]
+0.03  |  0.08 |     19.91 | 0.55 | [18.78, 21.04]
+0.48  |  0.08 |     17.58 | 0.69 | [16.18, 18.98]
+0.92  |  0.08 |     15.26 | 0.93 | [13.35, 17.16]
+1.37  |  0.08 |     12.93 | 1.23 | [10.42, 15.44]
+1.81  |  0.08 |     10.60 | 1.54 | [ 7.46, 13.75]
+2.26  |  0.08 |      8.28 | 1.86 | [ 4.47, 12.09]
+-1.74 |  0.30 |     29.21 | 1.31 | [26.52, 31.90]
+-1.30 |  0.30 |     26.88 | 1.02 | [24.80, 28.96]
+-0.85 |  0.30 |     24.56 | 0.76 | [23.01, 26.11]
+-0.41 |  0.30 |     22.23 | 0.59 | [21.02, 23.44]
+0.03  |  0.30 |     19.91 | 0.60 | [18.67, 21.14]
+0.48  |  0.30 |     17.58 | 0.78 | [15.98, 19.17]
+0.92  |  0.30 |     15.25 | 1.04 | [13.12, 17.39]
+1.37  |  0.30 |     12.93 | 1.34 | [10.18, 15.67]
+1.81  |  0.30 |     10.60 | 1.66 | [ 7.21, 13.99]
+2.26  |  0.30 |      8.27 | 1.98 | [ 4.22, 12.33]
+-1.74 |  0.52 |     29.21 | 1.23 | [26.69, 31.73]
+-1.30 |  0.52 |     26.88 | 0.95 | [24.93, 28.83]
+-0.85 |  0.52 |     24.55 | 0.73 | [23.07, 26.04]
+-0.41 |  0.52 |     22.23 | 0.62 | [20.96, 23.50]
+0.03  |  0.52 |     19.90 | 0.69 | [18.49, 21.32]
+0.48  |  0.52 |     17.58 | 0.90 | [15.74, 19.41]
+0.92  |  0.52 |     15.25 | 1.17 | [12.86, 17.64]
+1.37  |  0.52 |     12.92 | 1.47 | [ 9.92, 15.93]
+1.81  |  0.52 |     10.60 | 1.79 | [ 6.94, 14.25]
+2.26  |  0.52 |      8.27 | 2.11 | [ 3.95, 12.59]
+-1.74 |  0.74 |     29.20 | 1.17 | [26.81, 31.59]
+-1.30 |  0.74 |     26.88 | 0.91 | [25.01, 28.75]
+-0.85 |  0.74 |     24.55 | 0.73 | [23.05, 26.05]
+-0.41 |  0.74 |     22.23 | 0.69 | [20.81, 23.64]
+0.03  |  0.74 |     19.90 | 0.81 | [18.25, 21.55]
+0.48  |  0.74 |     17.57 | 1.03 | [15.47, 19.68]
+0.92  |  0.74 |     15.25 | 1.30 | [12.58, 17.92]
+1.37  |  0.74 |     12.92 | 1.61 | [ 9.64, 16.21]
+1.81  |  0.74 |     10.60 | 1.92 | [ 6.67, 14.53]
+2.26  |  0.74 |      8.27 | 2.24 | [ 3.68, 12.86]
+-1.74 |  0.97 |     29.20 | 1.13 | [26.89, 31.51]
+-1.30 |  0.97 |     26.88 | 0.91 | [25.02, 28.73]
+-0.85 |  0.97 |     24.55 | 0.78 | [22.95, 26.15]
+-0.41 |  0.97 |     22.22 | 0.79 | [20.60, 23.85]
+0.03  |  0.97 |     19.90 | 0.94 | [17.97, 21.82]
+0.48  |  0.97 |     17.57 | 1.17 | [15.17, 19.97]
+0.92  |  0.97 |     15.25 | 1.45 | [12.28, 18.21]
+1.37  |  0.97 |     12.92 | 1.75 | [ 9.34, 16.50]
+1.81  |  0.97 |     10.59 | 2.06 | [ 6.38, 14.81]
+2.26  |  0.97 |      8.27 | 2.38 | [ 3.39, 13.14]
+-1.74 |  1.19 |     29.20 | 1.11 | [26.92, 31.48]
+-1.30 |  1.19 |     26.87 | 0.93 | [24.96, 28.78]
+-0.85 |  1.19 |     24.55 | 0.86 | [22.79, 26.30]
+-0.41 |  1.19 |     22.22 | 0.92 | [20.35, 24.10]
+0.03  |  1.19 |     19.89 | 1.08 | [17.68, 22.11]
+0.48  |  1.19 |     17.57 | 1.32 | [14.86, 20.27]
+0.92  |  1.19 |     15.24 | 1.60 | [11.97, 18.51]
+1.37  |  1.19 |     12.92 | 1.90 | [ 9.04, 16.79]
+1.81  |  1.19 |     10.59 | 2.21 | [ 6.08, 15.10]
+2.26  |  1.19 |      8.26 | 2.53 | [ 3.10, 13.43]
+[34m
+Variable predicted: mpg
+Predictors modulated: wt, am
+[39m> unstandardize(z, include_response = FALSE)
+[34mModel-based Expectation (standardized)[39m
+
+wt   |   am | Predicted |   SE |         95% CI
+-----------------------------------------------
+1.51 | 0.00 |     29.22 | 1.91 | [25.31, 33.14]
+1.95 | 0.00 |     26.90 | 1.60 | [23.62, 30.17]
+2.38 | 0.00 |     24.57 | 1.30 | [21.90, 27.24]
+2.82 | 0.00 |     22.24 | 1.03 | [20.13, 24.36]
+3.25 | 0.00 |     19.92 | 0.82 | [18.24, 21.59]
+3.69 | 0.00 |     17.59 | 0.71 | [16.13, 19.05]
+4.12 | 0.00 |     15.27 | 0.76 | [13.71, 16.83]
+4.55 | 0.00 |     12.94 | 0.94 | [11.01, 14.87]
+4.99 | 0.00 |     10.61 | 1.20 | [ 8.17, 13.06]
+5.42 | 0.00 |      8.29 | 1.49 | [ 5.25, 11.33]
+1.51 | 0.11 |     29.22 | 1.78 | [25.58, 32.86]
+1.95 | 0.11 |     26.89 | 1.46 | [23.90, 29.89]
+2.38 | 0.11 |     24.57 | 1.17 | [22.19, 26.95]
+2.82 | 0.11 |     22.24 | 0.90 | [20.40, 24.08]
+3.25 | 0.11 |     19.92 | 0.70 | [18.48, 21.35]
+3.69 | 0.11 |     17.59 | 0.64 | [16.28, 18.90]
+4.12 | 0.11 |     15.26 | 0.75 | [13.73, 16.80]
+4.55 | 0.11 |     12.94 | 0.98 | [10.94, 14.93]
+4.99 | 0.11 |     10.61 | 1.26 | [ 8.04, 13.18]
+5.42 | 0.11 |      8.29 | 1.56 | [ 5.09, 11.48]
+1.51 | 0.22 |     29.22 | 1.65 | [25.85, 32.59]
+1.95 | 0.22 |     26.89 | 1.33 | [24.17, 29.62]
+2.38 | 0.22 |     24.57 | 1.04 | [22.45, 26.68]
+2.82 | 0.22 |     22.24 | 0.78 | [20.65, 23.83]
+3.25 | 0.22 |     19.91 | 0.61 | [18.67, 21.16]
+3.69 | 0.22 |     17.59 | 0.61 | [16.34, 18.83]
+4.12 | 0.22 |     15.26 | 0.78 | [13.67, 16.85]
+4.55 | 0.22 |     12.93 | 1.04 | [10.81, 15.06]
+4.99 | 0.22 |     10.61 | 1.33 | [ 7.88, 13.34]
+5.42 | 0.22 |      8.28 | 1.65 | [ 4.91, 11.66]
+1.51 | 0.33 |     29.21 | 1.53 | [26.10, 32.33]
+1.95 | 0.33 |     26.89 | 1.21 | [24.41, 29.37]
+2.38 | 0.33 |     24.56 | 0.92 | [22.68, 26.45]
+2.82 | 0.33 |     22.24 | 0.68 | [20.85, 23.63]
+3.25 | 0.33 |     19.91 | 0.56 | [18.77, 21.05]
+3.69 | 0.33 |     17.58 | 0.63 | [16.30, 18.86]
+4.12 | 0.33 |     15.26 | 0.84 | [13.54, 16.98]
+4.55 | 0.33 |     12.93 | 1.12 | [10.64, 15.23]
+4.99 | 0.33 |     10.61 | 1.43 | [ 7.68, 13.53]
+5.42 | 0.33 |      8.28 | 1.75 | [ 4.70, 11.86]
+1.51 | 0.44 |     29.21 | 1.41 | [26.32, 32.10]
+1.95 | 0.44 |     26.89 | 1.11 | [24.62, 29.15]
+2.38 | 0.44 |     24.56 | 0.83 | [22.87, 26.25]
+2.82 | 0.44 |     22.23 | 0.61 | [20.98, 23.49]
+3.25 | 0.44 |     19.91 | 0.55 | [18.78, 21.04]
+3.69 | 0.44 |     17.58 | 0.69 | [16.18, 18.98]
+4.12 | 0.44 |     15.26 | 0.93 | [13.35, 17.16]
+4.55 | 0.44 |     12.93 | 1.23 | [10.42, 15.44]
+4.99 | 0.44 |     10.60 | 1.54 | [ 7.46, 13.75]
+5.42 | 0.44 |      8.28 | 1.86 | [ 4.47, 12.09]
+1.51 | 0.56 |     29.21 | 1.31 | [26.52, 31.90]
+1.95 | 0.56 |     26.88 | 1.02 | [24.80, 28.96]
+2.38 | 0.56 |     24.56 | 0.76 | [23.01, 26.11]
+2.82 | 0.56 |     22.23 | 0.59 | [21.02, 23.44]
+3.25 | 0.56 |     19.91 | 0.60 | [18.67, 21.14]
+3.69 | 0.56 |     17.58 | 0.78 | [15.98, 19.17]
+4.12 | 0.56 |     15.25 | 1.04 | [13.12, 17.39]
+4.55 | 0.56 |     12.93 | 1.34 | [10.18, 15.67]
+4.99 | 0.56 |     10.60 | 1.66 | [ 7.21, 13.99]
+5.42 | 0.56 |      8.27 | 1.98 | [ 4.22, 12.33]
+1.51 | 0.67 |     29.21 | 1.23 | [26.69, 31.73]
+1.95 | 0.67 |     26.88 | 0.95 | [24.93, 28.83]
+2.38 | 0.67 |     24.55 | 0.73 | [23.07, 26.04]
+2.82 | 0.67 |     22.23 | 0.62 | [20.96, 23.50]
+3.25 | 0.67 |     19.90 | 0.69 | [18.49, 21.32]
+3.69 | 0.67 |     17.58 | 0.90 | [15.74, 19.41]
+4.12 | 0.67 |     15.25 | 1.17 | [12.86, 17.64]
+4.55 | 0.67 |     12.92 | 1.47 | [ 9.92, 15.93]
+4.99 | 0.67 |     10.60 | 1.79 | [ 6.94, 14.25]
+5.42 | 0.67 |      8.27 | 2.11 | [ 3.95, 12.59]
+1.51 | 0.78 |     29.20 | 1.17 | [26.81, 31.59]
+1.95 | 0.78 |     26.88 | 0.91 | [25.01, 28.75]
+2.38 | 0.78 |     24.55 | 0.73 | [23.05, 26.05]
+2.82 | 0.78 |     22.23 | 0.69 | [20.81, 23.64]
+3.25 | 0.78 |     19.90 | 0.81 | [18.25, 21.55]
+3.69 | 0.78 |     17.57 | 1.03 | [15.47, 19.68]
+4.12 | 0.78 |     15.25 | 1.30 | [12.58, 17.92]
+4.55 | 0.78 |     12.92 | 1.61 | [ 9.64, 16.21]
+4.99 | 0.78 |     10.60 | 1.92 | [ 6.67, 14.53]
+5.42 | 0.78 |      8.27 | 2.24 | [ 3.68, 12.86]
+1.51 | 0.89 |     29.20 | 1.13 | [26.89, 31.51]
+1.95 | 0.89 |     26.88 | 0.91 | [25.02, 28.73]
+2.38 | 0.89 |     24.55 | 0.78 | [22.95, 26.15]
+2.82 | 0.89 |     22.22 | 0.79 | [20.60, 23.85]
+3.25 | 0.89 |     19.90 | 0.94 | [17.97, 21.82]
+3.69 | 0.89 |     17.57 | 1.17 | [15.17, 19.97]
+4.12 | 0.89 |     15.25 | 1.45 | [12.28, 18.21]
+4.55 | 0.89 |     12.92 | 1.75 | [ 9.34, 16.50]
+4.99 | 0.89 |     10.59 | 2.06 | [ 6.38, 14.81]
+5.42 | 0.89 |      8.27 | 2.38 | [ 3.39, 13.14]
+1.51 | 1.00 |     29.20 | 1.11 | [26.92, 31.48]
+1.95 | 1.00 |     26.87 | 0.93 | [24.96, 28.78]
+2.38 | 1.00 |     24.55 | 0.86 | [22.79, 26.30]
+2.82 | 1.00 |     22.22 | 0.92 | [20.35, 24.10]
+3.25 | 1.00 |     19.89 | 1.08 | [17.68, 22.11]
+3.69 | 1.00 |     17.57 | 1.32 | [14.86, 20.27]
+4.12 | 1.00 |     15.24 | 1.60 | [11.97, 18.51]
+4.55 | 1.00 |     12.92 | 1.90 | [ 9.04, 16.79]
+4.99 | 1.00 |     10.59 | 2.21 | [ 6.08, 15.10]
+5.42 | 1.00 |      8.26 | 2.53 | [ 3.10, 13.43]
+[34m
+Variable predicted: mpg
+Predictors modulated: wt, am
+[39m> 
+> # Logistic Models
+> model <- glm(vs ~ wt, data = mtcars, family = "binomial")
+> estimate_response(model)
+`estimate_response()` is deprecated.
+  Please use `estimate_expectation()` (for conditional expected values) or
+  `estimate_prediction()` (for individual case predictions) instead.
+[34mModel-based Expectation[39m
+
+wt   | Predicted |   SE |       95% CI | Residuals
+--------------------------------------------------
+2.62 |      0.67 | 0.12 | [0.40, 0.86] |     -0.67
+2.88 |      0.56 | 0.12 | [0.33, 0.76] |     -0.56
+2.32 |      0.78 | 0.12 | [0.47, 0.94] |      0.22
+3.21 |      0.39 | 0.11 | [0.21, 0.61] |      0.61
+3.44 |      0.30 | 0.11 | [0.14, 0.53] |     -0.30
+3.46 |      0.29 | 0.10 | [0.13, 0.53] |      0.71
+3.57 |      0.25 | 0.10 | [0.10, 0.50] |     -0.25
+3.19 |      0.41 | 0.11 | [0.22, 0.62] |      0.59
+3.15 |      0.42 | 0.11 | [0.24, 0.64] |      0.58
+3.44 |      0.30 | 0.11 | [0.14, 0.53] |      0.70
+3.44 |      0.30 | 0.11 | [0.14, 0.53] |      0.70
+4.07 |      0.11 | 0.08 | [0.02, 0.39] |     -0.11
+3.73 |      0.20 | 0.10 | [0.07, 0.46] |     -0.20
+3.78 |      0.18 | 0.10 | [0.06, 0.45] |     -0.18
+5.25 |      0.01 | 0.02 | [0.00, 0.24] |     -0.01
+5.42 |  9.49e-03 | 0.02 | [0.00, 0.23] | -9.49e-03
+5.34 |      0.01 | 0.02 | [0.00, 0.23] |     -0.01
+2.20 |      0.82 | 0.12 | [0.49, 0.96] |      0.18
+1.61 |      0.93 | 0.07 | [0.58, 0.99] |      0.07
+1.83 |      0.90 | 0.09 | [0.55, 0.99] |      0.10
+2.46 |      0.73 | 0.13 | [0.44, 0.91] |      0.27
+3.52 |      0.27 | 0.10 | [0.11, 0.51] |     -0.27
+3.44 |      0.30 | 0.11 | [0.14, 0.53] |     -0.30
+3.84 |      0.16 | 0.10 | [0.05, 0.43] |     -0.16
+3.85 |      0.16 | 0.10 | [0.05, 0.43] |     -0.16
+1.94 |      0.88 | 0.10 | [0.54, 0.98] |      0.12
+2.14 |      0.84 | 0.11 | [0.50, 0.96] |     -0.84
+1.51 |      0.94 | 0.07 | [0.60, 0.99] |      0.06
+3.17 |      0.42 | 0.11 | [0.23, 0.63] |     -0.42
+2.77 |      0.60 | 0.12 | [0.36, 0.80] |     -0.60
+3.57 |      0.25 | 0.10 | [0.10, 0.50] |     -0.25
+2.78 |      0.60 | 0.12 | [0.36, 0.80] |      0.40
+[34m
+Variable predicted: vs
+[39m> estimate_relation(model)
+[34mModel-based Expectation[39m
+
+wt   | Predicted |   SE |       95% CI
+--------------------------------------
+1.51 |      0.94 | 0.07 | [0.60, 0.99]
+1.95 |      0.88 | 0.10 | [0.53, 0.98]
+2.38 |      0.76 | 0.12 | [0.46, 0.92]
+2.82 |      0.58 | 0.12 | [0.35, 0.78]
+3.25 |      0.38 | 0.11 | [0.20, 0.60]
+3.69 |      0.21 | 0.10 | [0.07, 0.47]
+4.12 |      0.10 | 0.08 | [0.02, 0.38]
+4.55 |      0.05 | 0.05 | [0.01, 0.32]
+4.99 |      0.02 | 0.03 | [0.00, 0.27]
+5.42 |  9.49e-03 | 0.02 | [0.00, 0.23]
+[34m
+Variable predicted: vs
+Predictors modulated: wt
+[39m> 
+> # Mixed models
+> if (require("lme4")) {
++   model <- lmer(mpg ~ wt + (1 | gear), data = mtcars)
++   estimate_response(model)
++   estimate_relation(model)
++ }
+Loading required package: lme4
+Loading required package: Matrix
+`estimate_response()` is deprecated.
+  Please use `estimate_expectation()` (for conditional expected values) or
+  `estimate_prediction()` (for individual case predictions) instead.
+[34mModel-based Expectation[39m
+
+wt   | gear | Predicted |   SE |         95% CI
+-----------------------------------------------
+1.51 | 0.00 |     28.56 | 1.37 | [25.75, 31.37]
+1.95 | 0.00 |     26.36 | 1.18 | [23.95, 28.78]
+2.38 | 0.00 |     24.17 | 1.03 | [22.07, 26.27]
+2.82 | 0.00 |     21.98 | 0.93 | [20.07, 23.89]
+3.25 | 0.00 |     19.79 | 0.92 | [17.91, 21.67]
+3.69 | 0.00 |     17.60 | 0.98 | [15.58, 19.61]
+4.12 | 0.00 |     15.40 | 1.12 | [13.11, 17.69]
+4.55 | 0.00 |     13.21 | 1.30 | [10.55, 15.87]
+4.99 | 0.00 |     11.02 | 1.51 | [ 7.93, 14.11]
+5.42 | 0.00 |      8.83 | 1.74 | [ 5.27, 12.39]
+[34m
+Variable predicted: mpg
+Predictors modulated: wt
+[39m> 
+> # Bayesian models
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:lme4', 'package:Matrix', 'package:see'
+
+> nameEx("estimate_grouplevel")
+> ### * estimate_grouplevel
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: estimate_grouplevel
+> ### Title: Group-specific parameters of mixed models random effects
+> ### Aliases: estimate_grouplevel reshape_grouplevel
+> 
+> ### ** Examples
+> 
+> # lme4 model
+> if (require("lme4") && require("see")) {
++   model <- lmer(mpg ~ hp + (1 | carb), data = mtcars)
++   random <- estimate_grouplevel(model)
++   random
++ 
++   # Visualize random effects
++   plot(random)
++ 
++   # Show group-specific effects
++   estimate_grouplevel(model, deviation = FALSE)
++ 
++   # Reshape to wide data so that it matches the original dataframe...
++   reshaped <- reshape_grouplevel(random, indices = c("Coefficient", "SE"))
++ 
++   # ... and can be easily combined
++   alldata <- cbind(mtcars, reshaped)
++ 
++   # Use summary() to remove duplicated rows
++   summary(reshaped)
++ 
++   # Compute BLUPs
++   estimate_grouplevel(model, type = "total")
++ }
+Loading required package: lme4
+Loading required package: Matrix
+Loading required package: see
+Group | Level |   Parameter | Coefficient
+-----------------------------------------
+carb  |     1 | (Intercept) |       30.18
+carb  |     2 | (Intercept) |       29.88
+carb  |     3 | (Intercept) |       29.45
+carb  |     4 | (Intercept) |       28.99
+carb  |     6 | (Intercept) |       29.87
+carb  |     8 | (Intercept) |       30.27
+> 
+> # Bayesian models
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:see', 'package:lme4', 'package:Matrix'
+
+> nameEx("estimate_means")
+> ### * estimate_means
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: estimate_means
+> ### Title: Estimate Marginal Means (Model-based average at each factor
+> ###   level)
+> ### Aliases: estimate_means
+> 
+> ### ** Examples
+> 
+> library(modelbased)
+> if (require("emmeans")) {
++ 
++ # Frequentist models
++ # -------------------
++ model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
++ 
++ estimate_means(model)
++ estimate_means(model, fixed = "Sepal.Width")
++ estimate_means(model, at = c("Species", "Sepal.Width"), length = 2)
++ estimate_means(model, at = "Species=c('versicolor', 'setosa')")
++ estimate_means(model, at = "Sepal.Width=c(2, 4)")
++ estimate_means(model, at = c("Species", "Sepal.Width=0"))
++ estimate_means(model, at = "Sepal.Width", length = 5)
++ estimate_means(model, at = "Sepal.Width=c(2, 4)")
++ 
++ # Methods that can be applied to it:
++ means <- estimate_means(model, fixed = "Sepal.Width")
++ if (require("see")) {
++   plot(means) # which runs visualisation_recipe()
++ }
++ standardize(means)
++ }
+Loading required package: emmeans
+We selected `at = c("Species")`.
+NOTE: Results may be misleading due to involvement in interactions
+We selected `at = c("Species")`.
+NOTE: Results may be misleading due to involvement in interactions
+NOTE: Results may be misleading due to involvement in interactions
+NOTE: Results may be misleading due to involvement in interactions
+NOTE: Results may be misleading due to involvement in interactions
+We selected `at = c("Species")`.
+Loading required package: see
+[34mEstimated Marginal Means (standardized)[39m
+
+Species    | Sepal.Width |  Mean |   SE |         95% CI
+--------------------------------------------------------
+setosa     |        0.00 | -1.32 | 0.04 | [-1.40, -1.23]
+versicolor |        0.00 |  0.42 | 0.04 | [ 0.34,  0.50]
+virginica  |        0.00 |  1.05 | 0.03 | [ 0.99,  1.11]
+[34m
+Marginal means estimated at Species[39m> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:see', 'package:emmeans'
+
+> nameEx("estimate_slopes")
+> ### * estimate_slopes
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: estimate_slopes
+> ### Title: Estimate Marginal Effects
+> ### Aliases: estimate_slopes
+> 
+> ### ** Examples
+> 
+> if (require("emmeans")) {
++   # Get an idea of the data
++   if (require("ggplot2")) {
++     ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
++       geom_point(aes(color = Species)) +
++       geom_smooth(color = "black", se = FALSE) +
++       geom_smooth(aes(color = Species), linetype = "dotted", se = FALSE) +
++       geom_smooth(aes(color = Species), method = "lm", se = FALSE)
++   }
++ 
++   # Model it
++   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
++   # Compute the marginal effect of Petal.Length at each level of Species
++   slopes <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
++   slopes
++   if (require("see")) {
++     plot(slopes)
++   }
++   standardize(slopes)
++ 
++   ## Not run: 
++ ##D   # TODO: fails with latest emmeans (1.8.0)
++ ##D   if (require("mgcv") && require("see")) {
++ ##D     model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
++ ##D     slopes <- estimate_slopes(model, at = "Petal.Length", length = 50)
++ ##D     summary(slopes)
++ ##D     plot(slopes)
++ ##D 
++ ##D     model <- mgcv::gam(Sepal.Width ~ s(Petal.Length, by = Species), data = iris)
++ ##D     slopes <- estimate_slopes(model,
++ ##D       trend = "Petal.Length",
++ ##D       at = c("Petal.Length", "Species"), length = 20
++ ##D     )
++ ##D     summary(slopes)
++ ##D     plot(slopes)
++ ##D   }
++ ## End(Not run)
++ }
+Loading required package: emmeans
+Loading required package: ggplot2
+Loading required package: see
+[34mEstimated Marginal Effects (standardized)[39m
+
+Species    | Coefficient |   SE |        95% CI | t(144) |      p
+-----------------------------------------------------------------
+setosa     |        0.89 | 0.60 | [-0.29, 2.07] |   1.49 | 0.138 
+versicolor |        0.86 | 0.22 | [ 0.42, 1.29] |   3.89 | < .001
+virginica  |        0.54 | 0.19 | [ 0.17, 0.91] |   2.86 | 0.005 
+[34mMarginal effects estimated for Petal.Length[39m> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:see', 'package:ggplot2', 'package:emmeans'
+
+> nameEx("find_inversions")
+> ### * find_inversions
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: find_inversions
+> ### Title: Find points of inversion
+> ### Aliases: find_inversions
+> 
+> ### ** Examples
+> 
+> x <- sin(seq(0, 4 * pi, length.out = 100))
+> plot(x, type = "b")
+> find_inversions(x)
+[1] 12.87478 37.62484 62.37516 87.12522
+> 
+> 
+> 
+> cleanEx()
+> nameEx("get_emmeans")
+> ### * get_emmeans
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: get_emcontrasts
+> ### Title: Easy 'emmeans' and 'emtrends'
+> ### Aliases: get_emcontrasts model_emcontrasts get_emmeans model_emmeans
+> ###   get_emtrends model_emtrends
+> 
+> ### ** Examples
+> 
+> if (require("emmeans", quietly = TRUE)) {
++   # Basic usage
++   model <- lm(Sepal.Width ~ Species, data = iris)
++   get_emcontrasts(model)
++ 
++   # Dealing with interactions
++   model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
++   # By default: selects first factor
++   get_emcontrasts(model)
++   # Can also run contrasts between points of numeric
++   get_emcontrasts(model, contrast = "Petal.Width", length = 3)
++   # Or both
++   get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
++   # Or with custom specifications
++   estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
++   # Can fixate the numeric at a specific value
++   get_emcontrasts(model, fixed = "Petal.Width")
++   # Or modulate it
++   get_emcontrasts(model, at = "Petal.Width", length = 4)
++ }
+No variable was specified for contrast estimation. Selecting `contrast = "Species"`.
+No variable was specified for contrast estimation. Selecting `contrast = "Species"`.
+NOTE: Results may be misleading due to involvement in interactions
+NOTE: Results may be misleading due to involvement in interactions
+No variable was specified for contrast estimation. Selecting `contrast = "Species"`.
+No variable was specified for contrast estimation. Selecting `contrast = "Species"`.
+Petal.Width = 0.1:
+ contrast               estimate    SE  df t.ratio p.value
+ setosa - versicolor      1.8275 0.279 144   6.550  <.0001
+ setosa - virginica       1.5479 0.312 144   4.955  <.0001
+ versicolor - virginica  -0.2797 0.406 144  -0.689  0.7703
+
+Petal.Width = 0.9:
+ contrast               estimate    SE  df t.ratio p.value
+ setosa - versicolor      1.6544 0.288 144   5.743  <.0001
+ setosa - virginica       1.7125 0.325 144   5.276  <.0001
+ versicolor - virginica   0.0581 0.208 144   0.280  0.9577
+
+Petal.Width = 1.7:
+ contrast               estimate    SE  df t.ratio p.value
+ setosa - versicolor      1.4812 0.600 144   2.467  0.0390
+ setosa - virginica       1.8771 0.597 144   3.144  0.0057
+ versicolor - virginica   0.3959 0.113 144   3.502  0.0018
+
+Petal.Width = 2.5:
+ contrast               estimate    SE  df t.ratio p.value
+ setosa - versicolor      1.3080 0.954 144   1.371  0.3587
+ setosa - virginica       2.0417 0.922 144   2.214  0.0722
+ versicolor - virginica   0.7337 0.272 144   2.699  0.0212
+
+P value adjustment: tukey method for comparing a family of 3 estimates 
+> model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
+> 
+> if (require("emmeans", quietly = TRUE)) {
++   # By default, 'at' is set to "Species"
++   get_emmeans(model)
++ 
++   # Overall mean (close to 'mean(iris$Sepal.Length)')
++   get_emmeans(model, at = NULL)
++ 
++   # One can estimate marginal means at several values of a 'modulate' variable
++   get_emmeans(model, at = "Petal.Width", length = 3)
++ 
++   # Interactions
++   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
++ 
++   get_emmeans(model)
++   get_emmeans(model, at = c("Species", "Petal.Length"), length = 2)
++   get_emmeans(model, at = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
++ }
+We selected `at = c("Species")`.
+We selected `at = c("Species")`.
+NOTE: Results may be misleading due to involvement in interactions
+ Species    Petal.Length emmean     SE  df lower.CL upper.CL
+ setosa                1   3.25 0.1282 144    2.995     3.50
+ versicolor            1   1.55 0.3166 144    0.924     2.18
+ virginica             1   1.91 0.3753 144    1.165     2.65
+ setosa                3   4.02 0.4026 144    3.229     4.82
+ versicolor            3   2.30 0.1291 144    2.043     2.55
+ virginica             3   2.38 0.2137 144    1.954     2.80
+ setosa                5   4.80 0.9216 144    2.979     6.62
+ versicolor            5   3.05 0.0840 144    2.881     3.21
+ virginica             5   2.84 0.0636 144    2.719     2.97
+
+Confidence level used: 0.95 
+> if (require("emmeans")) {
++   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
++ 
++   get_emtrends(model)
++   get_emtrends(model, at = "Species")
++   get_emtrends(model, at = "Petal.Length")
++   get_emtrends(model, at = c("Species", "Petal.Length"))
++ 
++   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
++   get_emtrends(model)
++   get_emtrends(model, at = "Sepal.Width")
++ }
+No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.
+No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.
+No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.
+NOTE: Results may be misleading due to involvement in interactions
+No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.
+No numeric variable was specified for slope estimation. Selecting `trend = "Sepal.Width"`.
+No numeric variable was specified for slope estimation. Selecting `trend = "Sepal.Width"`.
+ Sepal.Width Sepal.Width.trend    SE  df lower.CL upper.CL
+        2.00             7.484 5.418 145   -3.225   18.192
+        2.27             3.779 2.093 145   -0.358    7.916
+        2.53             0.831 0.765 145   -0.681    2.342
+        2.80            -1.337 0.706 145   -2.732    0.058
+        3.07            -2.699 0.543 145   -3.772   -1.626
+        3.33            -3.231 0.607 145   -4.430   -2.032
+        3.60            -2.909 0.838 145   -4.564   -1.254
+        3.87            -1.708 1.009 145   -3.702    0.287
+        4.13             0.398 2.392 145   -4.330    5.125
+        4.40             3.431 5.798 145   -8.028   14.890
+
+Confidence level used: 0.95 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:emmeans'
+
+> nameEx("get_marginaleffects")
+> ### * get_marginaleffects
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: get_marginaleffects
+> ### Title: Easy marginaleffects
+> ### Aliases: get_marginaleffects
+> 
+> ### ** Examples
+> 
+> if (require("marginaleffects")) {
++   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
++ 
++   get_marginaleffects(model, trend = "Petal.Length", at = "Species")
++   get_marginaleffects(model, trend = "Petal.Length", at = "Petal.Length")
++   get_marginaleffects(model, trend = "Petal.Length", at = c("Species", "Petal.Length"))
++ }
+Loading required package: marginaleffects
+  rowid     type         term      dydx  std.error statistic      p.value
+1     1 response Petal.Length 0.3878739 0.26016781  1.490860 1.359982e-01
+2     2 response Petal.Length 0.3878739 0.26016781  1.490860 1.359982e-01
+3     3 response Petal.Length 0.3743068 0.09614966  3.892961 9.902820e-05
+4     4 response Petal.Length 0.3743068 0.09614966  3.892960 9.902831e-05
+5     5 response Petal.Length 0.3743068 0.09614966  3.892961 9.902823e-05
+6     6 response Petal.Length 0.2343482 0.08186666  2.862559 4.202344e-03
+7     7 response Petal.Length 0.2343482 0.08186667  2.862559 4.202345e-03
+8     8 response Petal.Length 0.2343482 0.08186667  2.862559 4.202346e-03
+9     9 response Petal.Length 0.2343482 0.08186667  2.862559 4.202346e-03
+     conf.low conf.high predicted predicted_hi predicted_lo    Species
+1 -0.12204567 0.8977934  3.248802     3.249031     3.248802     setosa
+2 -0.12204566 0.8977934  3.503075     3.503304     3.503075     setosa
+3  0.18585697 0.5627567  2.531275     2.531496     2.531275 versicolor
+4  0.18585696 0.5627567  2.776654     2.776875     2.776654 versicolor
+5  0.18585697 0.5627567  3.022033     3.022254     3.022033 versicolor
+6  0.07389248 0.3948039  2.829017     2.829155     2.829017  virginica
+7  0.07389248 0.3948039  2.982645     2.982783     2.982645  virginica
+8  0.07389247 0.3948039  3.136273     3.136411     3.136273  virginica
+9  0.07389247 0.3948039  3.289901     3.290040     3.289901  virginica
+  Petal.Length Sepal.Width     eps
+1     1.000000         3.5 0.00059
+2     1.655556         3.5 0.00059
+3     3.622222         3.5 0.00059
+4     4.277778         3.5 0.00059
+5     4.933333         3.5 0.00059
+6     4.933333         3.5 0.00059
+7     5.588889         3.5 0.00059
+8     6.244444         3.5 0.00059
+9     6.900000         3.5 0.00059
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:marginaleffects'
+
+> nameEx("smoothing")
+> ### * smoothing
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: smoothing
+> ### Title: Smoothing a vector or a time series
+> ### Aliases: smoothing
+> 
+> ### ** Examples
+> 
+> x <- sin(seq(0, 4 * pi, length.out = 100)) + rnorm(100, 0, 0.2)
+> plot(x, type = "l")
+> lines(smoothing(x, method = "smooth"), type = "l", col = "blue")
+> lines(smoothing(x, method = "loess"), type = "l", col = "red")
+> 
+> x <- sin(seq(0, 4 * pi, length.out = 10000)) + rnorm(10000, 0, 0.2)
+> plot(x, type = "l")
+> lines(smoothing(x, method = "smooth"), type = "l", col = "blue")
+> lines(smoothing(x, method = "loess"), type = "l", col = "red")
+> 
+> 
+> 
+> cleanEx()
+> nameEx("visualisation_matrix")
+> ### * visualisation_matrix
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: visualisation_matrix
+> ### Title: Create a reference grid
+> ### Aliases: visualisation_matrix visualisation_matrix.data.frame
+> ###   visualisation_matrix.numeric visualisation_matrix.factor
+> 
+> ### ** Examples
+> 
+> library(modelbased)
+> 
+> # Add one row to change the "mode" of Species
+> data <- rbind(iris, iris[149, ], make.row.names = FALSE)
+> 
+> # Single variable is of interest; all others are "fixed"
+> visualisation_matrix(data, at = "Sepal.Length")
+[34mVisualisation Grid[39m
+
+Sepal.Length | Sepal.Width | Petal.Length | Petal.Width | Species
+-----------------------------------------------------------------
+        4.30 |        3.06 |         3.77 |        1.21 |  setosa
+        4.70 |        3.06 |         3.77 |        1.21 |  setosa
+        5.10 |        3.06 |         3.77 |        1.21 |  setosa
+        5.50 |        3.06 |         3.77 |        1.21 |  setosa
+        5.90 |        3.06 |         3.77 |        1.21 |  setosa
+        6.30 |        3.06 |         3.77 |        1.21 |  setosa
+        6.70 |        3.06 |         3.77 |        1.21 |  setosa
+        7.10 |        3.06 |         3.77 |        1.21 |  setosa
+        7.50 |        3.06 |         3.77 |        1.21 |  setosa
+        7.90 |        3.06 |         3.77 |        1.21 |  setosa
+[34m
+Maintained constant: Sepal.Width, Petal.Length, Petal.Width, Species[39m> visualisation_matrix(data, at = "Sepal.Length", length = 3)
+[34mVisualisation Grid[39m
+
+Sepal.Length | Sepal.Width | Petal.Length | Petal.Width | Species
+-----------------------------------------------------------------
+        4.30 |        3.06 |         3.77 |        1.21 |  setosa
+        6.10 |        3.06 |         3.77 |        1.21 |  setosa
+        7.90 |        3.06 |         3.77 |        1.21 |  setosa
+[34m
+Maintained constant: Sepal.Width, Petal.Length, Petal.Width, Species[39m> visualisation_matrix(data, at = "Sepal.Length", range = "ci", ci = 0.90)
+[34mVisualisation Grid[39m
+
+Sepal.Length | Sepal.Width | Petal.Length | Petal.Width | Species
+-----------------------------------------------------------------
+        4.60 |        3.06 |         3.77 |        1.21 |  setosa
+        4.89 |        3.06 |         3.77 |        1.21 |  setosa
+        5.19 |        3.06 |         3.77 |        1.21 |  setosa
+        5.48 |        3.06 |         3.77 |        1.21 |  setosa
+        5.78 |        3.06 |         3.77 |        1.21 |  setosa
+        6.07 |        3.06 |         3.77 |        1.21 |  setosa
+        6.37 |        3.06 |         3.77 |        1.21 |  setosa
+        6.66 |        3.06 |         3.77 |        1.21 |  setosa
+        6.96 |        3.06 |         3.77 |        1.21 |  setosa
+        7.25 |        3.06 |         3.77 |        1.21 |  setosa
+[34m
+Maintained constant: Sepal.Width, Petal.Length, Petal.Width, Species[39m> visualisation_matrix(data, at = "Sepal.Length", factors = "mode")
+[34mVisualisation Grid[39m
+
+Sepal.Length | Sepal.Width | Petal.Length | Petal.Width |   Species
+-------------------------------------------------------------------
+        4.30 |        3.06 |         3.77 |        1.21 | virginica
+        4.70 |        3.06 |         3.77 |        1.21 | virginica
+        5.10 |        3.06 |         3.77 |        1.21 | virginica
+        5.50 |        3.06 |         3.77 |        1.21 | virginica
+        5.90 |        3.06 |         3.77 |        1.21 | virginica
+        6.30 |        3.06 |         3.77 |        1.21 | virginica
+        6.70 |        3.06 |         3.77 |        1.21 | virginica
+        7.10 |        3.06 |         3.77 |        1.21 | virginica
+        7.50 |        3.06 |         3.77 |        1.21 | virginica
+        7.90 |        3.06 |         3.77 |        1.21 | virginica
+[34m
+Maintained constant: Sepal.Width, Petal.Length, Petal.Width, Species[39m> 
+> # Multiple variables are of interest, creating a combination
+> visualisation_matrix(data, at = c("Sepal.Length", "Species"), length = 3)
+[34mVisualisation Grid[39m
+
+Sepal.Length |    Species | Sepal.Width | Petal.Length | Petal.Width
+--------------------------------------------------------------------
+        4.30 |     setosa |        3.06 |         3.77 |        1.21
+        6.10 |     setosa |        3.06 |         3.77 |        1.21
+        7.90 |     setosa |        3.06 |         3.77 |        1.21
+        4.30 | versicolor |        3.06 |         3.77 |        1.21
+        6.10 | versicolor |        3.06 |         3.77 |        1.21
+        7.90 | versicolor |        3.06 |         3.77 |        1.21
+        4.30 |  virginica |        3.06 |         3.77 |        1.21
+        6.10 |  virginica |        3.06 |         3.77 |        1.21
+        7.90 |  virginica |        3.06 |         3.77 |        1.21
+[34m
+Maintained constant: Sepal.Width, Petal.Length, Petal.Width[39m> visualisation_matrix(data, at = c(1, 3), length = 3)
+[34mVisualisation Grid[39m
+
+Sepal.Length | Petal.Length | Sepal.Width | Petal.Width | Species
+-----------------------------------------------------------------
+        4.30 |         1.00 |        3.06 |        1.21 |  setosa
+        6.10 |         1.00 |        3.06 |        1.21 |  setosa
+        7.90 |         1.00 |        3.06 |        1.21 |  setosa
+        4.30 |         3.95 |        3.06 |        1.21 |  setosa
+        6.10 |         3.95 |        3.06 |        1.21 |  setosa
+        7.90 |         3.95 |        3.06 |        1.21 |  setosa
+        4.30 |         6.90 |        3.06 |        1.21 |  setosa
+        6.10 |         6.90 |        3.06 |        1.21 |  setosa
+        7.90 |         6.90 |        3.06 |        1.21 |  setosa
+[34m
+Maintained constant: Sepal.Width, Petal.Width, Species[39m> visualisation_matrix(data, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
+[34mVisualisation Grid[39m
+
+Sepal.Length |    Species | Sepal.Width | Petal.Length | Petal.Width
+--------------------------------------------------------------------
+        4.30 |     setosa |        3.06 |         3.77 |        1.21
+        4.70 |     setosa |        3.06 |         3.77 |        1.21
+        5.10 |     setosa |        3.06 |         3.77 |        1.21
+        5.50 |     setosa |        3.06 |         3.77 |        1.21
+        5.10 | versicolor |        3.06 |         3.77 |        1.21
+        5.50 | versicolor |        3.06 |         3.77 |        1.21
+        5.90 | versicolor |        3.06 |         3.77 |        1.21
+        6.30 | versicolor |        3.06 |         3.77 |        1.21
+        6.70 | versicolor |        3.06 |         3.77 |        1.21
+        5.10 |  virginica |        3.06 |         3.77 |        1.21
+        5.50 |  virginica |        3.06 |         3.77 |        1.21
+        5.90 |  virginica |        3.06 |         3.77 |        1.21
+        6.30 |  virginica |        3.06 |         3.77 |        1.21
+        6.70 |  virginica |        3.06 |         3.77 |        1.21
+        7.10 |  virginica |        3.06 |         3.77 |        1.21
+        7.50 |  virginica |        3.06 |         3.77 |        1.21
+        7.90 |  virginica |        3.06 |         3.77 |        1.21
+[34m
+Maintained constant: Sepal.Width, Petal.Length, Petal.Width[39m> visualisation_matrix(data, at = c("Sepal.Length", "Species"), numerics = 0)
+[34mVisualisation Grid[39m
+
+Sepal.Length |    Species | Sepal.Width | Petal.Length | Petal.Width
+--------------------------------------------------------------------
+        4.30 |     setosa |           0 |            0 |           0
+        4.70 |     setosa |           0 |            0 |           0
+        5.10 |     setosa |           0 |            0 |           0
+        5.50 |     setosa |           0 |            0 |           0
+        5.90 |     setosa |           0 |            0 |           0
+        6.30 |     setosa |           0 |            0 |           0
+        6.70 |     setosa |           0 |            0 |           0
+        7.10 |     setosa |           0 |            0 |           0
+        7.50 |     setosa |           0 |            0 |           0
+        7.90 |     setosa |           0 |            0 |           0
+        4.30 | versicolor |           0 |            0 |           0
+        4.70 | versicolor |           0 |            0 |           0
+        5.10 | versicolor |           0 |            0 |           0
+        5.50 | versicolor |           0 |            0 |           0
+        5.90 | versicolor |           0 |            0 |           0
+        6.30 | versicolor |           0 |            0 |           0
+        6.70 | versicolor |           0 |            0 |           0
+        7.10 | versicolor |           0 |            0 |           0
+        7.50 | versicolor |           0 |            0 |           0
+        7.90 | versicolor |           0 |            0 |           0
+        4.30 |  virginica |           0 |            0 |           0
+        4.70 |  virginica |           0 |            0 |           0
+        5.10 |  virginica |           0 |            0 |           0
+        5.50 |  virginica |           0 |            0 |           0
+        5.90 |  virginica |           0 |            0 |           0
+        6.30 |  virginica |           0 |            0 |           0
+        6.70 |  virginica |           0 |            0 |           0
+        7.10 |  virginica |           0 |            0 |           0
+        7.50 |  virginica |           0 |            0 |           0
+        7.90 |  virginica |           0 |            0 |           0
+[34m
+Maintained constant: Sepal.Width, Petal.Length, Petal.Width[39m> visualisation_matrix(data, at = c("Sepal.Length = 3", "Species"))
+[34mVisualisation Grid[39m
+
+Sepal.Length |    Species | Sepal.Width | Petal.Length | Petal.Width
+--------------------------------------------------------------------
+           3 |     setosa |        3.06 |         3.77 |        1.21
+           3 | versicolor |        3.06 |         3.77 |        1.21
+           3 |  virginica |        3.06 |         3.77 |        1.21
+[34m
+Maintained constant: Sepal.Width, Petal.Length, Petal.Width[39m> visualisation_matrix(data, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
+[34mVisualisation Grid[39m
+
+Sepal.Length | Species | Sepal.Width | Petal.Length | Petal.Width
+-----------------------------------------------------------------
+           3 |  setosa |        3.06 |         3.77 |        1.21
+           1 |  setosa |        3.06 |         3.77 |        1.21
+[34m
+Maintained constant: Sepal.Width, Petal.Length, Petal.Width[39m> 
+> # with list-style at-argument
+> visualisation_matrix(data, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
+[34mVisualisation Grid[39m
+
+Sepal.Length | Species | Sepal.Width | Petal.Length | Petal.Width
+-----------------------------------------------------------------
+           1 |  setosa |        3.06 |         3.77 |        1.21
+           3 |  setosa |        3.06 |         3.77 |        1.21
+[34m
+Maintained constant: Sepal.Width, Petal.Length, Petal.Width[39m> 
+> # Standardize
+> vizdata <- visualisation_matrix(data, at = "Sepal.Length")
+> standardize(vizdata)
+[34mVisualisation Grid[39m
+
+Sepal.Length | Sepal.Width | Petal.Length | Petal.Width | Species
+-----------------------------------------------------------------
+       -1.87 |           0 |            0 |           0 |  setosa
+       -1.39 |           0 |            0 |           0 |  setosa
+       -0.90 |           0 |            0 |           0 |  setosa
+       -0.42 |           0 |            0 |           0 |  setosa
+        0.07 |           0 |            0 |           0 |  setosa
+        0.55 |           0 |            0 |           0 |  setosa
+        1.03 |           0 |            0 |           0 |  setosa
+        1.52 |           0 |            0 |           0 |  setosa
+        2.00 |           0 |            0 |           0 |  setosa
+        2.49 |           0 |            0 |           0 |  setosa
+[34m
+Maintained constant: Sepal.Width, Petal.Length, Petal.Width, Species[39m> 
+> 
+> 
+> cleanEx()
+> nameEx("visualisation_recipe.estimate_predicted")
+> ### * visualisation_recipe.estimate_predicted
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: visualisation_recipe.estimate_grouplevel
+> ### Title: Visualisation Recipe for 'modelbased' Objects
+> ### Aliases: visualisation_recipe.estimate_grouplevel
+> ###   visualisation_recipe.estimate_means
+> ###   visualisation_recipe.estimate_predicted
+> ###   visualisation_recipe.estimate_slopes
+> 
+> ### ** Examples
+> 
+> # ==============================================
+> # estimate_grouplevel
+> # ==============================================
+> if (require("see") && require("lme4")) {
++   data <- lme4::sleepstudy
++   data <- rbind(data, data)
++   data$Newfactor <- rep(c("A", "B", "C", "D"))
++ 
++   # 1 random intercept
++   model <- lmer(Reaction ~ Days + (1 | Subject), data = data)
++   x <- estimate_grouplevel(model)
++   layers <- visualisation_recipe(x)
++   layers
++   plot(layers)
++ }
+Loading required package: see
+Loading required package: lme4
+Loading required package: Matrix
+> # ==============================================
+> # estimate_means
+> # ==============================================
+> if (require("ggplot2")) {
++   # Simple Model ---------------
++   x <- estimate_means(lm(Sepal.Width ~ Species, data = iris))
++   layers <- visualisation_recipe(x)
++   layers
++   plot(layers)
++ }
+Loading required package: ggplot2
+We selected `at = c("Species")`.
+> # ==============================================
+> # estimate_relation, estimate_response, ...
+> # ==============================================
+> if (require("ggplot2")) {
++   # Simple Model ---------------
++   x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
++   layers <- visualisation_recipe(x)
++   layers
++   plot(layers)
++ }
+> # ==============================================
+> # estimate_slopes
+> # ==============================================
+> if (require("ggplot2")) {
++   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
++   x <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
++ 
++   layers <- visualisation_recipe(x)
++   layers
++   plot(layers)
++ 
++   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
++   x <- estimate_slopes(model, at = "Sepal.Width", length = 20)
++   plot(visualisation_recipe(x))
++ 
++   model <- lm(Petal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
++   x <- estimate_slopes(model, at = c("Sepal.Width", "Species"))
++   plot(visualisation_recipe(x))
++ }
+No numeric variable was specified for slope estimation. Selecting `trend = "Sepal.Width"`.
+No numeric variable was specified for slope estimation. Selecting `trend = "Sepal.Width"`.
+Warning: Using alpha for a discrete variable is not advised.
+> ## Not run: 
+> ##D # TODO: fails with latest emmeans (1.8.0)
+> ##D if (require("mgcv")) {
+> ##D   data <- iris
+> ##D   data$Petal.Length <- data$Petal.Length^2
+> ##D 
+> ##D   model <- mgcv::gam(Sepal.Width ~ t2(Petal.Width, Petal.Length), data = data)
+> ##D   x <- estimate_slopes(model, at = c("Petal.Width", "Petal.Length"), length = 20)
+> ##D   plot(visualisation_recipe(x))
+> ##D 
+> ##D   model <- mgcv::gam(Sepal.Width ~ t2(Petal.Width, Petal.Length, by = Species), data = data)
+> ##D   x <- estimate_slopes(model, at = c("Petal.Width", "Petal.Length", "Species"), length = 10)
+> ##D   plot(visualisation_recipe(x))
+> ##D }
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:ggplot2', 'package:lme4', 'package:Matrix',
+  'package:see'
+
+> nameEx("zero_crossings")
+> ### * zero_crossings
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: zero_crossings
+> ### Title: Find zero crossings of a vector
+> ### Aliases: zero_crossings
+> 
+> ### ** Examples
+> 
+> x <- sin(seq(0, 4 * pi, length.out = 100))
+> plot(x)
+> zero_crossings(x)
+[1]  1.00000 25.74975 50.50000 75.25025
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  14.55 1.27 17.23 NA NA 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

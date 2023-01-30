@@ -1,0 +1,121 @@
+
+R version 4.2.2 (2022-10-31 ucrt) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+> library(correlation)
+> 
+> is_dev_version <- length(strsplit(packageDescription("correlation")$Version, "\\.")[[1]]) > 3
+> if (is_dev_version) {
++   Sys.setenv("RunAllcorrelationTests" = "yes")
++ } else {
++   Sys.setenv("RunAllcorrelationTests" = "no")
++ }
+> 
+> test_check("correlation")
+
+  I'd seen my father. He was a poor man, and I watched him do astonishing things.
+    - Sidney Poitier
+
+Attaching package: 'poorman'
+
+The following objects are masked from 'package:testthat':
+
+    %>%, matches
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+boundary (singular) fit: see help('isSingular')
+************
+Welcome to BayesFactor 0.9.12-4.4. If you have questions, please contact Richard Morey (richarddmorey@gmail.com).
+
+Type BFManual() to open the manual.
+************
+
+Attaching package: 'BayesFactor'
+
+The following object is masked from 'package:testthat':
+
+    compare
+
+
+
+Attaching package: 'Hmisc'
+
+The following object is masked from 'package:poorman':
+
+    summarize
+
+The following object is masked from 'package:testthat':
+
+    describe
+
+The following objects are masked from 'package:base':
+
+    format.pval, units
+
+Loading required namespace: ppcor
+For i = 2 j = 1  A cell entry of 0 was replaced with correct =  0.5.  Check your data!
+For i = 2 j = 1  A cell entry of 0 was replaced with correct =  0.5.  Check your data!
+For i = 2 j = 1  A cell entry of 0 was replaced with correct =  0.5.  Check your data!
+Loading required package: gt
+
+Attaching package: 'gt'
+
+The following objects are masked from 'package:poorman':
+
+    %>%, contains, ends_with, everything, matches, num_range,
+    starts_with
+
+The following object is masked from 'package:Hmisc':
+
+    html
+
+The following object is masked from 'package:testthat':
+
+    matches
+
+[ FAIL 0 | WARN 8 | SKIP 11 | PASS 113 ]
+
+══ Skipped tests ═══════════════════════════════════════════════════════════════
+• On CRAN (11)
+
+[ FAIL 0 | WARN 8 | SKIP 11 | PASS 113 ]
+> 
+> proc.time()
+   user  system elapsed 
+  22.18    3.03   26.28 

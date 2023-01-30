@@ -1,0 +1,1669 @@
+
+R version 4.2.2 (2022-10-31 ucrt) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "sjstats"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> library('sjstats')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("anova_stats")
+> ### * anova_stats
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: anova_stats
+> ### Title: Effect size statistics for anova
+> ### Aliases: anova_stats
+> 
+> ### ** Examples
+> 
+> # load sample data
+> data(efc)
+> 
+> # fit linear model
+> fit <- aov(
++   c12hour ~ as.factor(e42dep) + as.factor(c172code) + c160age,
++   data = efc
++ )
+> ## Not run: 
+> ##D anova_stats(car::Anova(fit, type = 2))
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("auto_prior")
+> ### * auto_prior
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: auto_prior
+> ### Title: Create default priors for brms-models
+> ### Aliases: auto_prior
+> 
+> ### ** Examples
+> 
+> library(sjmisc)
+> data(efc)
+> efc$c172code <- as.factor(efc$c172code)
+> efc$c161sex <- to_label(efc$c161sex)
+> 
+> mf <- formula(neg_c_7 ~ c161sex + c160age + c172code)
+> 
+> if (requireNamespace("brms", quietly = TRUE))
++   auto_prior(mf, efc, TRUE)
+            prior     class          coef group resp dpar nlpar   lb   ub
+ normal(0, 38.96) Intercept                                     <NA> <NA>
+  normal(0, 9.74)         b c161sexFemale                       <NA> <NA>
+  normal(0, 0.73)         b       c160age                       <NA> <NA>
+  normal(0, 9.74)         b     c172code2                       <NA> <NA>
+  normal(0, 9.74)         b     c172code3                       <NA> <NA>
+ source
+   user
+   user
+   user
+   user
+   user
+> 
+> ## compare to
+> # library(rstanarm)
+> # m <- stan_glm(mf, data = efc, chains = 2, iter = 200)
+> # ps <- prior_summary(m)
+> # ps$prior_intercept$adjusted_scale
+> # ps$prior$adjusted_scale
+> 
+> ## usage
+> # ap <- auto_prior(mf, efc, TRUE)
+> # brm(mf, data = efc, priors = ap)
+> 
+> # add informative priors
+> mf <- formula(neg_c_7 ~ c161sex + c172code)
+> 
+> if (requireNamespace("brms", quietly = TRUE)) {
++   auto_prior(mf, efc, TRUE) +
++     brms::prior(normal(.1554, 40), class = "b", coef = "c160age")
++ }
+              prior     class          coef group resp dpar nlpar   lb   ub
+   normal(0, 38.95) Intercept                                     <NA> <NA>
+    normal(0, 9.74)         b c161sexFemale                       <NA> <NA>
+    normal(0, 9.74)         b     c172code2                       <NA> <NA>
+    normal(0, 9.74)         b     c172code3                       <NA> <NA>
+ normal(0.1554, 40)         b       c160age                       <NA> <NA>
+ source
+   user
+   user
+   user
+   user
+   user
+> 
+> # example with binary response
+> efc$neg_c_7d <- ifelse(efc$neg_c_7 < median(efc$neg_c_7, na.rm = TRUE), 0, 1)
+> mf <- formula(neg_c_7d ~ c161sex + c160age + c172code + e17age)
+> 
+> if (requireNamespace("brms", quietly = TRUE))
++   auto_prior(mf, efc, FALSE)
+           prior     class          coef group resp dpar nlpar   lb   ub source
+   normal(0, 10) Intercept                                     <NA> <NA>   user
+  normal(0, 2.5)         b c161sexFemale                       <NA> <NA>   user
+ normal(0, 0.19)         b       c160age                       <NA> <NA>   user
+  normal(0, 2.5)         b     c172code2                       <NA> <NA>   user
+  normal(0, 2.5)         b     c172code3                       <NA> <NA>   user
+ normal(0, 0.31)         b        e17age                       <NA> <NA>   user
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:sjmisc'
+
+> nameEx("boot_ci")
+> ### * boot_ci
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: boot_ci
+> ### Title: Standard error and confidence intervals for bootstrapped
+> ###   estimates
+> ### Aliases: boot_ci boot_se boot_p boot_est
+> 
+> ### ** Examples
+> 
+> library(dplyr)
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+> library(purrr)
+> data(efc)
+> bs <- bootstrap(efc, 100)
+> 
+> # now run models for each bootstrapped sample
+> bs$models <- map(bs$strap, ~lm(neg_c_7 ~ e42dep + c161sex, data = .x))
+> 
+> # extract coefficient "dependency" and "gender" from each model
+> bs$dependency <- map_dbl(bs$models, ~coef(.x)[2])
+> bs$gender <- map_dbl(bs$models, ~coef(.x)[3])
+> 
+> # get bootstrapped confidence intervals
+> boot_ci(bs$dependency)
+  term conf.low conf.high
+1    x 1.277827  1.799727
+> 
+> # compare with model fit
+> fit <- lm(neg_c_7 ~ e42dep + c161sex, data = efc)
+> confint(fit)[2, ]
+   2.5 %   97.5 % 
+1.292945 1.796430 
+> 
+> # alternative function calls.
+> boot_ci(bs$dependency)
+  term conf.low conf.high
+1    x 1.277827  1.799727
+> boot_ci(bs, dependency)
+        term conf.low conf.high
+1 dependency 1.277827  1.799727
+> boot_ci(bs, dependency, gender)
+        term   conf.low conf.high
+1 dependency  1.2778270  1.799727
+2     gender -0.1092468  1.025608
+> boot_ci(bs, dependency, gender, method = "q")
+        term   conf.low conf.high
+1 dependency  1.2703179 1.7832376
+2     gender -0.1022075 0.9591205
+> 
+> 
+> # compare coefficients
+> mean(bs$dependency)
+[1] 1.538777
+> boot_est(bs$dependency)
+  term estimate
+1    x 1.538777
+> coef(fit)[2]
+  e42dep 
+1.544687 
+> 
+> 
+> # bootstrap() and boot_ci() work fine within pipe-chains
+> efc %>%
++   bootstrap(100) %>%
++   mutate(
++     models = map(strap, ~lm(neg_c_7 ~ e42dep + c161sex, data = .x)),
++     dependency = map_dbl(models, ~coef(.x)[2])
++   ) %>%
++   boot_ci(dependency)
+        term conf.low conf.high
+1 dependency 1.314159  1.769069
+> 
+> # check p-value
+> boot_p(bs$gender)
+  term   p.value
+1    x 0.1122984
+> summary(fit)$coefficients[3, ]
+  Estimate Std. Error    t value   Pr(>|t|) 
+ 0.4339069  0.2818786  1.5393398  0.1240780 
+> 
+> ## Not run: 
+> ##D # 'spread_coef()' from the 'sjmisc'-package makes it easy to generate
+> ##D # bootstrapped statistics like confidence intervals or p-values
+> ##D library(dplyr)
+> ##D library(sjmisc)
+> ##D efc %>%
+> ##D   # generate bootstrap replicates
+> ##D   bootstrap(100) %>%
+> ##D   # apply lm to all bootstrapped data sets
+> ##D   mutate(
+> ##D     models = map(strap, ~lm(neg_c_7 ~ e42dep + c161sex + c172code, data = .x))
+> ##D   ) %>%
+> ##D   # spread model coefficient for all 100 models
+> ##D   spread_coef(models) %>%
+> ##D   # compute the CI for all bootstrapped model coefficients
+> ##D   boot_ci(e42dep, c161sex, c172code)
+> ##D 
+> ##D # or...
+> ##D efc %>%
+> ##D   # generate bootstrap replicates
+> ##D   bootstrap(100) %>%
+> ##D   # apply lm to all bootstrapped data sets
+> ##D   mutate(
+> ##D     models = map(strap, ~lm(neg_c_7 ~ e42dep + c161sex + c172code, data = .x))
+> ##D   ) %>%
+> ##D   # spread model coefficient for all 100 models
+> ##D   spread_coef(models, append = FALSE) %>%
+> ##D   # compute the CI for all bootstrapped model coefficients
+> ##D   boot_ci()
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:purrr', 'package:dplyr'
+
+> nameEx("bootstrap")
+> ### * bootstrap
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: bootstrap
+> ### Title: Generate nonparametric bootstrap replications
+> ### Aliases: bootstrap
+> 
+> ### ** Examples
+> 
+> data(efc)
+> bs <- bootstrap(efc, 5)
+> 
+> # now run models for each bootstrapped sample
+> lapply(bs$strap, function(x) lm(neg_c_7 ~ e42dep + c161sex, data = x))
+[[1]]
+
+Call:
+lm(formula = neg_c_7 ~ e42dep + c161sex, data = x)
+
+Coefficients:
+(Intercept)       e42dep      c161sex  
+     5.6403       1.8424       0.4905  
+
+
+[[2]]
+
+Call:
+lm(formula = neg_c_7 ~ e42dep + c161sex, data = x)
+
+Coefficients:
+(Intercept)       e42dep      c161sex  
+     7.2926       1.2172       0.4868  
+
+
+[[3]]
+
+Call:
+lm(formula = neg_c_7 ~ e42dep + c161sex, data = x)
+
+Coefficients:
+(Intercept)       e42dep      c161sex  
+     5.3180       1.6388       0.9364  
+
+
+[[4]]
+
+Call:
+lm(formula = neg_c_7 ~ e42dep + c161sex, data = x)
+
+Coefficients:
+(Intercept)       e42dep      c161sex  
+     6.5792       1.6322       0.2662  
+
+
+[[5]]
+
+Call:
+lm(formula = neg_c_7 ~ e42dep + c161sex, data = x)
+
+Coefficients:
+(Intercept)       e42dep      c161sex  
+    7.84166      1.31365      0.02465  
+
+
+> 
+> # generate bootstrap samples with 600 observations for each sample
+> bs <- bootstrap(efc, 5, 600)
+> 
+> # generate bootstrap samples with 70% observations of the original sample size
+> bs <- bootstrap(efc, 5, .7)
+> 
+> # compute standard error for a simple vector from bootstraps
+> # use the `as.data.frame()`-method to get the resampled
+> # data frame
+> bs <- bootstrap(efc, 100)
+> bs$c12hour <- unlist(lapply(bs$strap, function(x) {
++   mean(as.data.frame(x)$c12hour, na.rm = TRUE)
++ }))
+> 
+> # or as tidyverse-approach
+> if (require("dplyr") && require("purrr")) {
++   bs <- efc %>%
++     bootstrap(100) %>%
++     mutate(
++       c12hour = map_dbl(strap, ~mean(as.data.frame(.x)$c12hour, na.rm = TRUE))
++     )
++ 
++   # bootstrapped standard error
++   boot_se(bs, c12hour)
++ }
+Loading required package: dplyr
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+Loading required package: purrr
+     term  std.err
+1 c12hour 1.573233
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:purrr', 'package:dplyr'
+
+> nameEx("chisq_gof")
+> ### * chisq_gof
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: chisq_gof
+> ### Title: Compute model quality
+> ### Aliases: chisq_gof
+> 
+> ### ** Examples
+> 
+> data(efc)
+> efc$neg_c_7d <- ifelse(efc$neg_c_7 < median(efc$neg_c_7, na.rm = TRUE), 0, 1)
+> m <- glm(
++   neg_c_7d ~ c161sex + barthtot + c172code,
++   data = efc,
++   family = binomial(link = "logit")
++ )
+> 
+> # goodness-of-fit test for logistic regression
+> chisq_gof(m)
+[34m
+# Chi-squared Goodness-of-Fit Test
+
+[39m  Chi-squared: 852.765
+      z-score:   1.025
+      p-value:   0.305
+
+Summary: model seems to fit well.
+> 
+> # goodness-of-fit test for vectors against probabilities
+> # differing from population
+> chisq_gof(efc$e42dep, c(0.3,0.2,0.22,0.28))
+
+	Chi-squared test for given probabilities
+
+data:  dummy
+X-squared = 234.76, df = 3, p-value < 2.2e-16
+
+> 
+> # equal to population
+> chisq_gof(efc$e42dep, prop.table(table(efc$e42dep)))
+
+	Chi-squared test for given probabilities
+
+data:  dummy
+X-squared = 0, df = 3, p-value = 1
+
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("crosstable_statistics")
+> ### * crosstable_statistics
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cramer
+> ### Title: Measures of association for contingency tables
+> ### Aliases: cramer cramer.formula phi crosstable_statistics
+> ###   xtab_statistics
+> 
+> ### ** Examples
+> 
+> # Phi coefficient for 2x2 tables
+> tab <- table(sample(1:2, 30, TRUE), sample(1:2, 30, TRUE))
+> phi(tab)
+[1] 0.0978232
+> 
+> # Cramer's V for nominal variables with more than 2 categories
+> tab <- table(sample(1:2, 30, TRUE), sample(1:3, 30, TRUE))
+> cramer(tab)
+[1] 0.1666667
+> 
+> # formula notation
+> data(efc)
+> cramer(e16sex ~ c161sex, data = efc)
+[1] 0.05258249
+> 
+> # bootstrapped confidence intervals
+> cramer(e16sex ~ c161sex, data = efc, ci.lvl = .95, n = 100)
+      cramer     conf.low conf.high
+1 0.05258249 -0.002772196  0.110122
+> 
+> # 2x2 table, compute Phi automatically
+> crosstable_statistics(efc, e16sex, c161sex)
+[34m
+# Measure of Association for Contingency Tables
+[39m
+   Chi-squared: 2.2327
+           Phi: 0.0526
+            df: 1
+       p-value: 0.135
+  Observations: 900
+> 
+> # more dimensions than 2x2, compute Cramer's V automatically
+> crosstable_statistics(efc, c172code, c161sex)
+[34m
+# Measure of Association for Contingency Tables
+[39m
+   Chi-squared: 4.1085
+    Cramer's V: 0.0699
+            df: 2
+       p-value: 0.128
+  Observations: 841
+> 
+> # ordinal data, use Kendall's tau
+> crosstable_statistics(efc, e42dep, quol_5, statistics = "kendall")
+[34m
+# Measure of Association for Contingency Tables
+[39m
+              z: -9.5951
+  Kendall's tau: -0.2496
+             df: 75
+        p-value: < .001***
+   Observations: 896
+> 
+> # calcilate Spearman's rho, with continuity correction
+> crosstable_statistics(efc,
++   e42dep,
++   quol_5,
++   statistics = "spearman",
++   exact = FALSE,
++   continuity = TRUE
++ )
+[34m
+# Measure of Association for Contingency Tables
+[39m
+               S: 157974157.4198
+  Spearman's rho: -0.3177
+              df: 75
+         p-value: < .001***
+    Observations: 896
+> 
+> 
+> 
+> cleanEx()
+> nameEx("cv")
+> ### * cv
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cv
+> ### Title: Compute model quality
+> ### Aliases: cv
+> 
+> ### ** Examples
+> 
+> data(efc)
+> fit <- lm(barthtot ~ c160age + c12hour, data = efc)
+> cv(fit)
+[1] 0.3948098
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("cv_error")
+> ### * cv_error
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cv_error
+> ### Title: Test and training error from model cross-validation
+> ### Aliases: cv_error cv_compare
+> 
+> ### ** Examples
+> 
+> data(efc)
+> cv_error(efc, neg_c_7 ~ barthtot + c161sex)
+Warning: `unnest()` has a new interface. See `?unnest` for details.
+ℹ Try `df %>% unnest(c(predicted, residuals))`, with `mutate()` if needed.
+                         model train.error test.error
+1 neg_c_7 ~ barthtot + c161sex      3.5048     3.5377
+> 
+> cv_compare(efc, formulas = list(
++   neg_c_7 ~ barthtot + c161sex,
++   neg_c_7 ~ barthtot + c161sex + e42dep,
++   neg_c_7 ~ barthtot + c12hour
++ ))
+Warning: `unnest()` has a new interface. See `?unnest` for details.
+ℹ Try `df %>% unnest(c(predicted, residuals))`, with `mutate()` if needed.
+Warning: `unnest()` has a new interface. See `?unnest` for details.
+ℹ Try `df %>% unnest(c(predicted, residuals))`, with `mutate()` if needed.
+Warning: `unnest()` has a new interface. See `?unnest` for details.
+ℹ Try `df %>% unnest(c(predicted, residuals))`, with `mutate()` if needed.
+                                  model train.error test.error
+1          neg_c_7 ~ barthtot + c161sex      3.5075     3.5164
+2 neg_c_7 ~ barthtot + c161sex + e42dep      3.4871     3.5016
+3          neg_c_7 ~ barthtot + c12hour      3.5033     3.5203
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("design_effect")
+> ### * design_effect
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: design_effect
+> ### Title: Design effects for two-level mixed models
+> ### Aliases: design_effect
+> 
+> ### ** Examples
+> 
+> # Design effect for two-level model with 30 observations per
+> # cluster group (level-2 unit) and an assumed intraclass
+> # correlation coefficient of 0.05.
+> design_effect(n = 30)
+[1] 2.45
+> 
+> # Design effect for two-level model with 24 observation per cluster
+> # group and an assumed intraclass correlation coefficient of 0.2.
+> design_effect(n = 24, icc = 0.2)
+[1] 5.6
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("find_beta")
+> ### * find_beta
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: find_beta
+> ### Title: Determining distribution parameters
+> ### Aliases: find_beta find_beta2 find_cauchy find_normal
+> 
+> ### ** Examples
+> 
+> # example from blogpost:
+> # https://www.johndcook.com/blog/2010/01/31/parameters-from-percentiles/
+> # 10% of patients respond within 30 days of treatment
+> # and 80% respond within 90 days of treatment
+> find_normal(x1 = 30, p1 = .1, x2 = 90, p2 = .8)
+$mean
+[1] 53.78387
+
+$sd
+[1] 30.48026
+
+> find_cauchy(x1 = 30, p1 = .1, x2 = 90, p2 = .8)
+$location
+[1] 48.54102
+
+$scale
+[1] 57.06339
+
+> 
+> parms <- find_normal(x1 = 30, p1 = .1, x2 = 90, p2 = .8)
+> curve(
++   dnorm(x, mean = parms$mean, sd = parms$sd),
++   from = 0, to = 200
++ )
+> 
+> parms <- find_cauchy(x1 = 30, p1 = .1, x2 = 90, p2 = .8)
+> curve(
++   dcauchy(x, location = parms$location, scale = parms$scale),
++   from = 0, to = 200
++ )
+> 
+> 
+> find_beta2(x = .25, ci = .5)
+$shape1
+[1] 2.860267
+
+$shape2
+[1] 7.93757
+
+> 
+> shapes <- find_beta2(x = .25, ci = .5)
+> curve(dbeta(x, shapes[[1]], shapes[[2]]))
+> 
+> # find Beta distribution for 3 events out of 20 observations
+> find_beta2(x = 3, n = 20)
+$shape1
+[1] 4.157811
+
+$shape2
+[1] 22.03272
+
+> 
+> shapes <- find_beta2(x = 3, n = 20)
+> curve(dbeta(x, shapes[[1]], shapes[[2]]))
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("gmd")
+> ### * gmd
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: gmd
+> ### Title: Gini's Mean Difference
+> ### Aliases: gmd
+> 
+> ### ** Examples
+> 
+> data(efc)
+> gmd(efc$e17age)
+[1] 9.297005
+> gmd(efc, e17age, c160age, c12hour)
+# A tibble: 1 × 3
+  e17age c160age c12hour
+   <dbl>   <dbl>   <dbl>
+1   9.30    15.2    47.9
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("inequ_trend")
+> ### * inequ_trend
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: inequ_trend
+> ### Title: Compute trends in status inequalities
+> ### Aliases: inequ_trend
+> 
+> ### ** Examples
+> 
+> # This example reproduces Fig. 1 of Mackenbach et al. 2015, p.5
+> 
+> # 40 simulated time points, with an initial rate ratio of 2 and
+> # a rate difference of 100 (i.e. low status group starts with a
+> # prevalence rate of 200, the high status group with 100)
+> 
+> # annual decline of prevalence is 1% for the low, and 3% for the
+> # high status group
+> 
+> n <- 40
+> time <- seq(1, n, by = 1)
+> lo <- rep(200, times = n)
+> for (i in 2:n) lo[i] <- lo[i - 1] * .99
+> 
+> hi <- rep(100, times = n)
+> for (i in 2:n) hi[i] <- hi[i - 1] * .97
+> 
+> prev.data <- data.frame(lo, hi)
+> 
+> # print values
+> inequ_trend(prev.data, lo, hi)
+$data
+         lo        hi       rr       rd
+1  200.0000 100.00000 2.000000 100.0000
+2  198.0000  97.00000 2.041237 101.0000
+3  196.0200  94.09000 2.083324 101.9300
+4  194.0598  91.26730 2.126280 102.7925
+5  192.1192  88.52928 2.170120 103.5899
+6  190.1980  85.87340 2.214865 104.3246
+7  188.2960  83.29720 2.260533 104.9988
+8  186.4131  80.79828 2.307141 105.6148
+9  184.5489  78.37434 2.354711 106.1746
+10 182.7034  76.02311 2.403262 106.6803
+11 180.8764  73.74241 2.452814 107.1340
+12 179.0677  71.53014 2.503387 107.5375
+13 177.2770  69.38424 2.555004 107.8927
+14 175.5042  67.30271 2.607684 108.2015
+15 173.7492  65.28363 2.661451 108.4655
+16 172.0117  63.32512 2.716326 108.6866
+17 170.2916  61.42537 2.772333 108.8662
+18 168.5886  59.58260 2.829494 109.0060
+19 166.9028  57.79513 2.887834 109.1076
+20 165.2337  56.06127 2.947377 109.1725
+21 163.5814  54.37943 3.008148 109.2020
+22 161.9456  52.74805 3.070172 109.1975
+23 160.3261  51.16561 3.133474 109.1605
+24 158.7229  49.63064 3.198082 109.0922
+25 157.1356  48.14172 3.264022 108.9939
+26 155.5643  46.69747 3.331321 108.8668
+27 154.0086  45.29655 3.400008 108.7121
+28 152.4685  43.93765 3.470111 108.5309
+29 150.9439  42.61952 3.541660 108.3243
+30 149.4344  41.34093 3.614684 108.0935
+31 147.9401  40.10071 3.689214 107.8394
+32 146.4607  38.89769 3.765280 107.5630
+33 144.9961  37.73076 3.842915 107.2653
+34 143.5461  36.59883 3.922150 106.9473
+35 142.1106  35.50087 4.003019 106.6098
+36 140.6895  34.43584 4.085555 106.2537
+37 139.2826  33.40277 4.169794 105.8799
+38 137.8898  32.40068 4.255769 105.4891
+39 136.5109  31.42866 4.343517 105.0823
+40 135.1458  30.48580 4.433074 104.6600
+
+attr(,"class")
+[1] "sj_inequ_trend"
+> 
+> # plot trends - here we see that the relative inequalities
+> # are increasing over time, while the absolute inequalities
+> # are first increasing as well, but later are decreasing
+> # (while rel. inequ. are still increasing)
+> plot(inequ_trend(prev.data, lo, hi))
+Warning: The `<scale>` argument of `guides()` cannot be `FALSE`. Use "none" instead as
+of ggplot2 3.3.4.
+ℹ The deprecated feature was likely used in the sjstats package.
+  Please report the issue at <https://github.com/strengejacke/sjstats/issues>.
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("is_prime")
+> ### * is_prime
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: is_prime
+> ### Title: Find prime numbers
+> ### Aliases: is_prime
+> 
+> ### ** Examples
+> 
+> is_prime(89)
+[1] TRUE
+> is_prime(15)
+[1] FALSE
+> is_prime(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+ [1]  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE FALSE FALSE
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("mean_n")
+> ### * mean_n
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: mean_n
+> ### Title: Row means with min amount of valid values
+> ### Aliases: mean_n
+> 
+> ### ** Examples
+> 
+> dat <- data.frame(c1 = c(1,2,NA,4),
++                   c2 = c(NA,2,NA,5),
++                   c3 = c(NA,4,NA,NA),
++                   c4 = c(2,3,7,8))
+> 
+> # needs at least 4 non-missing values per row
+> mean_n(dat, 4) # 1 valid return value
+[1]   NA 2.75   NA   NA
+> 
+> # needs at least 3 non-missing values per row
+> mean_n(dat, 3) # 2 valid return values
+[1]   NA 2.75   NA 5.67
+> 
+> # needs at least 2 non-missing values per row
+> mean_n(dat, 2)
+[1] 1.50 2.75   NA 5.67
+> 
+> # needs at least 1 non-missing value per row
+> mean_n(dat, 1) # all means are shown
+[1] 1.50 2.75 7.00 5.67
+> 
+> # needs at least 50% of non-missing values per row
+> mean_n(dat, .5) # 3 valid return values
+[1] 1.50 2.75   NA 5.67
+> 
+> # needs at least 75% of non-missing values per row
+> mean_n(dat, .75) # 2 valid return values
+[1]   NA 2.75   NA 5.67
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("means_by_group")
+> ### * means_by_group
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: means_by_group
+> ### Title: Summary of mean values by group
+> ### Aliases: means_by_group grpmean
+> 
+> ### ** Examples
+> 
+> data(efc)
+> means_by_group(efc, c12hour, e42dep)
+
+[34m# Grouped Means for average number of hours of care per week by elder's dependency
+
+[39mCategory             |  Mean |   N |    SD |   SE |      p
+----------------------------------------------------------
+independent          |  9.91 |  66 |  8.01 | 0.99 | < .001
+slightly dependent   | 17.54 | 225 | 17.74 | 1.18 | < .001
+moderately dependent | 34.52 | 306 | 41.54 | 2.37 |  0.983
+severely dependent   | 75.90 | 304 | 61.72 | 3.54 | < .001
+Total                | 42.44 | 901 | 50.82 | 1.69 |       
+
+Anova: R2=0.245; adj.R2=0.242; F=96.908; p=0.000
+> 
+> data(iris)
+> means_by_group(iris, Sepal.Width, Species)
+
+[34m# Grouped Means for Sepal.Width by Species
+
+[39mCategory   | Mean |   N |   SD |   SE |      p
+----------------------------------------------
+setosa     | 3.43 |  50 | 0.38 | 0.05 | < .001
+versicolor | 2.77 |  50 | 0.31 | 0.04 | < .001
+virginica  | 2.97 |  50 | 0.32 | 0.05 |  0.035
+Total      | 3.06 | 150 | 0.44 | 0.04 |       
+
+Anova: R2=0.401; adj.R2=0.393; F=49.160; p=0.000
+> 
+> # also works for grouped data frames
+> if (require("dplyr")) {
++   efc %>%
++     group_by(c172code) %>%
++     means_by_group(c12hour, e42dep)
++ }
+Loading required package: dplyr
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+
+[36mGrouped by:
+carer's level of education: low level of education
+
+[39m[34m# Grouped Means for average number of hours of care per week by elder's dependency
+
+[39mCategory             |  Mean |   N |    SD |   SE |      p
+----------------------------------------------------------
+independent          | 16.33 |  12 | 10.74 | 3.10 |  0.024
+slightly dependent   | 15.38 |  42 |  9.55 | 1.47 | < .001
+moderately dependent | 42.05 |  61 | 46.53 | 5.96 |  0.696
+severely dependent   | 85.52 |  65 | 56.42 | 7.00 | < .001
+Total                | 49.81 | 180 | 52.24 | 3.89 |       
+
+Anova: R2=0.307; adj.R2=0.295; F=25.955; p=0.000
+
+
+[36mGrouped by:
+carer's level of education: intermediate level of education
+
+[39m[34m# Grouped Means for average number of hours of care per week by elder's dependency
+
+[39mCategory             |  Mean |   N |    SD |   SE |      p
+----------------------------------------------------------
+independent          |  7.96 |  45 |  3.91 | 0.58 | < .001
+slightly dependent   | 17.12 | 135 | 16.52 | 1.42 | < .001
+moderately dependent | 33.55 | 163 | 41.05 | 3.22 |  0.753
+severely dependent   | 79.71 | 163 | 63.13 | 4.94 | < .001
+Total                | 41.76 | 506 | 51.42 | 2.29 |       
+
+Anova: R2=0.284; adj.R2=0.280; F=66.374; p=0.000
+
+
+[36mGrouped by:
+carer's level of education: high level of education
+
+[39m[34m# Grouped Means for average number of hours of care per week by elder's dependency
+
+[39mCategory             |  Mean |   N |    SD |   SE |      p
+----------------------------------------------------------
+independent          | 15.20 |   5 | 18.43 | 8.24 |  0.363
+slightly dependent   | 18.08 |  39 | 12.98 | 2.08 |  0.146
+moderately dependent | 28.42 |  62 | 35.64 | 4.53 |  0.670
+severely dependent   | 63.38 |  50 | 62.69 | 8.87 | < .001
+Total                | 36.62 | 156 | 46.38 | 3.71 |       
+
+Anova: R2=0.167; adj.R2=0.151; F=10.155; p=0.000
+
+
+> 
+> # weighting
+> efc$weight <- abs(rnorm(n = nrow(efc), mean = 1, sd = .5))
+> means_by_group(efc, c12hour, e42dep, weights = weight)
+
+[34m# Grouped Means for average number of hours of care per week by elder's dependency
+
+[39mCategory             |  Mean |   N |    SD |   SE |      p
+----------------------------------------------------------
+independent          | 10.08 |  61 |  8.09 | 1.00 | < .001
+slightly dependent   | 18.33 | 228 | 20.15 | 1.34 | < .001
+moderately dependent | 34.42 | 317 | 41.44 | 2.37 |  0.706
+severely dependent   | 78.71 | 298 | 61.94 | 3.55 | < .001
+Total                | 43.32 | 901 | 51.41 | 1.71 |       
+
+Anova: R2=0.255; adj.R2=0.253; F=102.379; p=0.000
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:dplyr'
+
+> nameEx("mwu")
+> ### * mwu
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: mwu
+> ### Title: Mann-Whitney-U-Test
+> ### Aliases: mwu mannwhitney
+> 
+> ### ** Examples
+> 
+> data(efc)
+> # Mann-Whitney-U-Tests for elder's age by elder's dependency.
+> mwu(efc, e17age, e42dep)
+[34m
+# Mann-Whitney-U-Test
+
+[39m[36mGroups 1 = independent (n = 65) | 2 = slightly dependent (n = 224):
+[39m  U = 7635.000, W = 5490.000, p = 0.003, Z = -3.020
+  effect-size r =   0.178
+   rank-mean(1) = 117.46
+   rank-mean(2) = 152.99
+
+[36mGroups 1 = independent (n = 65) | 3 = moderately dependent (n = 304):
+[39m  U = 8692.000, W = 6547.000, p < .001, Z = -4.273
+  effect-size r =   0.222
+   rank-mean(1) = 133.72
+   rank-mean(3) = 195.96
+
+[36mGroups 1 = independent (n = 65) | 4 = severely dependent (n = 297):
+[39m  U = 7905.500, W = 5760.500, p < .001, Z = -5.096
+  effect-size r =   0.268
+   rank-mean(1) = 121.62
+   rank-mean(4) = 194.60
+
+[36mGroups 2 = slightly dependent (n = 224) | 3 = moderately dependent (n = 304):
+[39m  U = 54664.500, W = 29464.500, p = 0.008, Z = -2.647
+  effect-size r =   0.115
+   rank-mean(2) = 244.04
+   rank-mean(3) = 279.58
+
+[36mGroups 2 = slightly dependent (n = 224) | 4 = severely dependent (n = 297):
+[39m  U = 51007.500, W = 25807.500, p < .001, Z = -4.386
+  effect-size r =   0.192
+   rank-mean(2) = 227.71
+   rank-mean(4) = 286.11
+
+[36mGroups 3 = moderately dependent (n = 304) | 4 = severely dependent (n = 297):
+[39m  U = 87819.500, W = 41459.500, p = 0.083, Z = -1.732
+  effect-size r =   0.071
+   rank-mean(3) = 288.88
+   rank-mean(4) = 313.41
+
+[34m# Kruskal-Wallis-Test
+
+[39mchi-squared = 38.476
+df = 3
+p < .001*** 
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("prop")
+> ### * prop
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: prop
+> ### Title: Proportions of values in a vector
+> ### Aliases: prop props
+> 
+> ### ** Examples
+> 
+> data(efc)
+> 
+> # proportion of value 1 in e42dep
+> prop(efc, e42dep == 1)
+[1] 0.0733
+> 
+> # expression may also be completely quoted
+> prop(efc, "e42dep == 1")
+[1] 0.0733
+> 
+> # use "props()" for multiple logical statements
+> props(efc, e17age > 70 & e17age < 80)
+[1] 0.3199
+> 
+> # proportion of value 1 in e42dep, and all values greater
+> # than 2 in e42dep, including missing values. will return a data frame
+> prop(efc, e42dep == 1, e42dep > 2, na.rm = FALSE)
+  condition   prop
+1 e42dep==1 0.0727
+2  e42dep>2 0.6718
+> 
+> # for factors or character vectors, use quoted or unquoted values
+> library(sjmisc)
+> # convert numeric to factor, using labels as factor levels
+> efc$e16sex <- to_label(efc$e16sex)
+> efc$n4pstu <- to_label(efc$n4pstu)
+> 
+> # get proportion of female older persons
+> prop(efc, e16sex == female)
+[1] 0.6715
+> 
+> # get proportion of male older persons
+> prop(efc, e16sex == "male")
+[1] 0.3285
+> 
+> # "props()" needs quotes around non-numeric factor levels
+> props(efc,
++   e17age > 70 & e17age < 80,
++   n4pstu == 'Care Level 1' | n4pstu == 'Care Level 3'
++ )
+                              condition   prop
+1                   e17age>70&e17age<80 0.3199
+2 n4pstu==CareLevel1|n4pstu==CareLevel3 0.3137
+> 
+> # also works with pipe-chains
+> library(dplyr)
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+> efc %>% prop(e17age > 70)
+[1] 0.8092
+> efc %>% prop(e17age > 70, e16sex == 1)
+  condition   prop
+1 e17age>70 0.8092
+2 e16sex==1 0.0000
+> 
+> # and with group_by
+> efc %>%
++   group_by(e16sex) %>%
++   prop(e42dep > 2)
+  elder's gender e42dep>2
+1           male   0.6847
+2         female   0.6744
+> 
+> efc %>%
++   select(e42dep, c161sex, c172code, e16sex) %>%
++   group_by(c161sex, c172code) %>%
++   prop(e42dep > 2, e16sex == 1)
+New names:
+• `.` -> `....1`
+• `.` -> `....2`
+New names:
+• `val.labels` -> `val.labels...1`
+• `val.labels` -> `val.labels...2`
+  carer's gender      carer's level of education e42dep>2 e16sex==1
+1           Male          low level of education   0.6829         0
+5           Male intermediate level of education   0.6590         0
+3           Male         high level of education   0.7872         0
+4         Female          low level of education   0.7101         0
+2         Female intermediate level of education   0.5929         0
+6         Female         high level of education   0.6881         0
+> 
+> # same for "props()"
+> efc %>%
++   select(e42dep, c161sex, c172code, c12hour, n4pstu) %>%
++   group_by(c161sex, c172code) %>%
++   props(
++     e42dep > 2,
++     c12hour > 20 & c12hour < 40,
++     n4pstu == 'Care Level 1' | n4pstu == 'Care Level 3'
++   )
+New names:
+• `.` -> `....1`
+• `.` -> `....2`
+New names:
+• `val.labels` -> `val.labels...1`
+• `val.labels` -> `val.labels...2`
+  carer's gender      carer's level of education e42dep>2 c12hour>20&c12hour<40
+1           Male          low level of education   0.6829                0.2439
+5           Male intermediate level of education   0.6590                0.1756
+3           Male         high level of education   0.7872                0.1489
+4         Female          low level of education   0.7101                0.1957
+2         Female intermediate level of education   0.5929                0.1504
+6         Female         high level of education   0.6881                0.2018
+  n4pstu==CareLevel1|n4pstu==CareLevel3
+1                                0.2250
+5                                0.3111
+3                                0.3191
+4                                0.3433
+2                                0.3540
+6                                0.2752
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:dplyr', 'package:sjmisc'
+
+> nameEx("samplesize_mixed")
+> ### * samplesize_mixed
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: samplesize_mixed
+> ### Title: Sample size for linear mixed models
+> ### Aliases: samplesize_mixed smpsize_lmm
+> 
+> ### ** Examples
+> 
+> # Sample size for multilevel model with 30 cluster groups and a small to
+> # medium effect size (Cohen's d) of 0.3. 27 subjects per cluster and
+> # hence a total sample size of about 802 observations is needed.
+> samplesize_mixed(eff.size = .3, k = 30)
+$`Subjects per Cluster`
+[1] 27
+
+$`Total Sample Size`
+[1] 802
+
+> 
+> # Sample size for multilevel model with 20 cluster groups and a medium
+> # to large effect size for linear models of 0.2. Five subjects per cluster and
+> # hence a total sample size of about 107 observations is needed.
+> samplesize_mixed(eff.size = .2, df.n = 5, k = 20, power = .9)
+$`Subjects per Cluster`
+[1] 5
+
+$`Total Sample Size`
+[1] 107
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("se_ybar")
+> ### * se_ybar
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: se_ybar
+> ### Title: Standard error of sample mean for mixed models
+> ### Aliases: se_ybar
+> 
+> ### ** Examples
+> 
+> if (require("lme4")) {
++   fit <- lmer(Reaction ~ 1 + (1 | Subject), sleepstudy)
++   se_ybar(fit)
++ }
+Loading required package: lme4
+Loading required package: Matrix
+ Subject 
+9.049936 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:lme4', 'package:Matrix'
+
+> nameEx("svyglm.nb")
+> ### * svyglm.nb
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: svyglm.nb
+> ### Title: Survey-weighted negative binomial generalised linear model
+> ### Aliases: svyglm.nb
+> 
+> ### ** Examples
+> 
+> # ------------------------------------------
+> # This example reproduces the results from
+> # Lumley 2010, figure E.7 (Appendix E, p256)
+> # ------------------------------------------
+> if (require("survey")) {
++   data(nhanes_sample)
++ 
++   # create survey design
++   des <- svydesign(
++     id = ~SDMVPSU,
++     strat = ~SDMVSTRA,
++     weights = ~WTINT2YR,
++     nest = TRUE,
++     data = nhanes_sample
++   )
++ 
++   # fit negative binomial regression
++   fit <- svyglm.nb(total ~ factor(RIAGENDR) * (log(age) + factor(RIDRETH1)), des)
++ 
++   # print coefficients and standard errors
++   fit
++ }
+Loading required package: survey
+Loading required package: grid
+Loading required package: Matrix
+Loading required package: survival
+
+Attaching package: 'survey'
+
+The following object is masked from 'package:sjstats':
+
+    cv
+
+The following object is masked from 'package:graphics':
+
+    dotchart
+
+                                  term    irr std.error conf.low conf.high
+2                          (Intercept) 9.8463    0.1556   7.2578   13.3580
+3                    factor(RIAGENDR)2 0.4511    0.1805   0.3167    0.6426
+4                             log(age) 2.9163    0.2331   1.8467    4.6056
+5                    factor(RIDRETH1)2 1.0859    0.1477   0.8130    1.4504
+6                    factor(RIDRETH1)3 1.0977    0.1779   0.7746    1.5556
+7                    factor(RIDRETH1)4 2.2686    0.2974   1.2665    4.0634
+8                    factor(RIDRETH1)5 1.0589    0.3789   0.5039    2.2250
+9           factor(RIAGENDR)2:log(age) 0.2947    0.2651   0.1753    0.4955
+10 factor(RIAGENDR)2:factor(RIDRETH1)2 0.8314    0.2611   0.4984    1.3870
+11 factor(RIAGENDR)2:factor(RIDRETH1)3 1.8285    0.1931   1.2523    2.6698
+12 factor(RIAGENDR)2:factor(RIDRETH1)4 1.0668    0.3747   0.5119    2.2232
+13 factor(RIAGENDR)2:factor(RIDRETH1)5 1.4564    0.4427   0.6116    3.4680
+      p.value
+2  <0.001 ***
+3  <0.001 ***
+4  <0.001 ***
+5  0.5769    
+6  0.6003    
+7  0.0059 ** 
+8  0.8800    
+9  <0.001 ***
+10 0.4795    
+11 0.0018 ** 
+12 0.8630    
+13 0.3957    
+
+Dispersion parameter Theta: 0.8062
+   Standard Error of Theta: 0.0216
+Showing robust standard errors on link-scale (untransformed).
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:survey', 'package:survival', 'package:Matrix',
+  'package:grid'
+
+> nameEx("svyglm.zip")
+> ### * svyglm.zip
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: svyglm.zip
+> ### Title: Survey-weighted zero-inflated Poisson model
+> ### Aliases: svyglm.zip
+> 
+> ### ** Examples
+> 
+> if (require("survey")) {
++   data(nhanes_sample)
++   set.seed(123)
++   nhanes_sample$malepartners <- rpois(nrow(nhanes_sample), 2)
++   nhanes_sample$malepartners[sample(1:2992, 400)] <- 0
++ 
++   # create survey design
++   des <- svydesign(
++     id = ~SDMVPSU,
++     strat = ~SDMVSTRA,
++     weights = ~WTINT2YR,
++     nest = TRUE,
++     data = nhanes_sample
++   )
++ 
++   # fit negative binomial regression
++   fit <- svyglm.zip(
++     malepartners ~ age + factor(RIDRETH1) | age + factor(RIDRETH1),
++     des
++   )
++ 
++   # print coefficients and standard errors
++   fit
++ }
+Loading required package: survey
+Loading required package: grid
+Loading required package: Matrix
+Loading required package: survival
+
+Attaching package: 'survey'
+
+The following object is masked from 'package:sjstats':
+
+    cv
+
+The following object is masked from 'package:graphics':
+
+    dotchart
+
+Warning in eval(family$initialize) :
+  non-integer #successes in a binomial glm!
+                   term estimate std.error conf.low conf.high    p.value
+2                   age   0.0149    0.0354   0.9469    1.0879 0.6745    
+3     factor(RIDRETH1)2   0.0185    0.0754   0.8787    1.1810 0.8062    
+4     factor(RIDRETH1)3  -0.0449    0.0284   0.9043    1.0107 0.1133    
+5     factor(RIDRETH1)4  -0.0240    0.0276   0.9250    1.0305 0.3843    
+6     factor(RIDRETH1)5   0.0371    0.0617   0.9197    1.1712 0.5470    
+7        tp.(Intercept)  -1.6694    0.4717   0.0747    0.4748 <0.001 ***
+8                tp.age  -0.0333    0.2831   0.5553    1.6848 0.9064    
+9  tp.factor(RIDRETH1)2   0.1548    0.2571   0.7053    1.9323 0.5472    
+10 tp.factor(RIDRETH1)3  -0.3969    0.2111   0.4446    1.0169 0.0601 .  
+11 tp.factor(RIDRETH1)4  -0.2330    0.3050   0.4357    1.4402 0.4450    
+12 tp.factor(RIDRETH1)5  -0.3303    0.4744   0.2836    1.8214 0.4863    
+
+Showing robust standard errors on link-scale (untransformed).
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:survey', 'package:survival', 'package:Matrix',
+  'package:grid'
+
+> nameEx("table_values")
+> ### * table_values
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: table_values
+> ### Title: Expected and relative table values
+> ### Aliases: table_values
+> 
+> ### ** Examples
+> 
+> tab <- table(sample(1:2, 30, TRUE), sample(1:3, 30, TRUE))
+> # show expected values
+> table_values(tab)$expected
+   A  B  C
+A  4 11  5
+B  2  6  2
+> # show cell percentages
+> table_values(tab)$cell
+       1     2     3
+                    
+1   6.67 40.00 20.00
+2  13.33 16.67  3.33
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("var_pop")
+> ### * var_pop
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: var_pop
+> ### Title: Calculate population variance and standard deviation
+> ### Aliases: var_pop sd_pop
+> 
+> ### ** Examples
+> 
+> data(efc)
+> 
+> # sampling variance
+> var(efc$c12hour, na.rm = TRUE)
+[1] 2581.152
+> # population variance
+> var_pop(efc$c12hour)
+[1] 2578.291
+> 
+> # sampling sd
+> sd(efc$c12hour, na.rm = TRUE)
+[1] 50.80504
+> # population sd
+> sd_pop(efc$c12hour)
+[1] 50.77687
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("weight")
+> ### * weight
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: weight
+> ### Title: Weight a variable
+> ### Aliases: weight weight2
+> 
+> ### ** Examples
+> 
+> v <- sample(1:4, 20, TRUE)
+> table(v)
+v
+1 2 3 4 
+6 7 6 1 
+> w <- abs(rnorm(20))
+> table(weight(v, w))
+
+1 2 3 
+6 5 4 
+> table(weight2(v, w))
+
+1 2 3 
+6 5 4 
+> 
+> set.seed(1)
+> x <- sample(letters[1:5], size = 20, replace = TRUE)
+> w <- runif(n = 20)
+> 
+> table(x)
+x
+a b c d e 
+6 4 3 1 6 
+> table(weight(x, w))
+
+a b c e 
+3 3 2 3 
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("weighted_sd")
+> ### * weighted_sd
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: survey_median
+> ### Title: Weighted statistics for tests and variables
+> ### Aliases: survey_median weighted_chisqtest weighted_chisqtest.default
+> ###   weighted_chisqtest.formula weighted_correlation
+> ###   weighted_correlation.default weighted_correlation.formula
+> ###   weighted_mean weighted_median weighted_mannwhitney
+> ###   weighted_mannwhitney.default weighted_mannwhitney.formula weighted_sd
+> ###   wtd_sd weighted_se weighted_ttest weighted_ttest.default
+> ###   weighted_ttest.formula
+> 
+> ### ** Examples
+> 
+> # weighted sd and se ----
+> weighted_sd(rnorm(n = 100, mean = 3), runif(n = 100))
+[1] 0.906099
+> 
+> data(efc)
+> weighted_sd(efc[, 1:3], runif(n = nrow(efc)))
+   c12hour   e15relat     e16sex 
+52.1574301  2.1355774  0.4663965 
+> weighted_se(efc[, 1:3], runif(n = nrow(efc)))
+   c12hour   e15relat     e16sex 
+1.63896019 0.06861318 0.01565511 
+> 
+> # survey_median ----
+> # median for variables from weighted survey designs
+> if (require("survey")) {
++   data(nhanes_sample)
++ 
++   des <- svydesign(
++     id = ~SDMVPSU,
++     strat = ~SDMVSTRA,
++     weights = ~WTINT2YR,
++     nest = TRUE,
++     data = nhanes_sample
++   )
++ 
++   survey_median(total, des)
++   survey_median("total", des)
++ }
+Loading required package: survey
+Loading required package: grid
+Loading required package: Matrix
+Loading required package: survival
+
+Attaching package: 'survey'
+
+The following object is masked from 'package:sjstats':
+
+    cv
+
+The following object is masked from 'package:graphics':
+
+    dotchart
+
+$total
+     0.5
+[1,]   6
+
+attr(,"hasci")
+[1] FALSE
+attr(,"class")
+[1] "newsvyquantile"
+> 
+> # weighted t-test ----
+> efc$weight <- abs(rnorm(nrow(efc), 1, .3))
+> weighted_ttest(efc, e17age, weights = weight)
+[34m
+One Sample t-test (two.sided)
+[39m[36m# t=292.84  df=890  p-value=0.000
+
+[39m  mean of e17age: 79.014 [78.484, 79.543]
+
+> weighted_ttest(efc, e17age, c160age, weights = weight)
+[34m
+Two-Sample t-test (two.sided)
+[39m[36m
+# comparison between e17age and c160age
+[39m[36m# t=49.36  df=1461  p-value=0.000
+
+[39m  mean of e17age    : 79.013
+  mean of c160age   : 53.222
+  difference of mean: 25.791 [24.766  26.816]
+
+> weighted_ttest(e17age ~ e16sex + weight, efc)
+[34m
+Two-Sample t-test (two.sided)
+[39m[36m
+# comparison of e17age by e16sex
+[39m[36m# t=-8.12  df=611  p-value=0.000
+
+[39m  mean in group [1] male  : 76.086
+  mean in group [2] female: 80.510
+  difference of mean      : -4.425 [-5.495  -3.354]
+
+> 
+> # weighted Mann-Whitney-U-test ----
+> weighted_mannwhitney(c12hour ~ c161sex + weight, efc)
+[34m
+# Weighted Mann-Whitney-U test
+[39m[36m
+  comparison of c12hour by c161sex
+[39m  Chisq=2.83  df=899  p-value=0.005
+
+> 
+> # weighted Chi-squared-test ----
+> weighted_chisqtest(efc, c161sex, e16sex, weights = weight, correct = FALSE)
+[34m
+# Measure of Association for Contingency Tables
+[39m
+   Chi-squared: 2.2085
+           Phi: 0.0497
+            df: 1
+       p-value: 0.137
+  Observations: 894
+> weighted_chisqtest(c172code ~ c161sex + weight, efc)
+[34m
+# Measure of Association for Contingency Tables
+[39m
+   Chi-squared: 5.9173
+    Cramer's V: 0.0842
+            df: 2
+       p-value: 0.052
+  Observations: 835
+> 
+> # weighted Chi-squared-test for given probabilities ----
+> weighted_chisqtest(c172code ~ weight, efc, p = c(.33, .33, .34))
+[34m
+# Weighted chi-squared test for given probabilities
+
+[39m   Chi-squared: 292.1885
+            df: 2
+       p-value: < .001***
+  Observations: 908
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+
+detaching 'package:survey', 'package:survival', 'package:Matrix',
+  'package:grid'
+
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  18.38 1.69 21.82 NA NA 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

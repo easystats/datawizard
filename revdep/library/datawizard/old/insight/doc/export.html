@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Exporting tables with captions and footers</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Exporting tables with captions and
+footers</h1>
+
+
+
+<div id="exporting-data-frames-into-nice-tables" class="section level2">
+<h2>Exporting data frames into nice tables</h2>
+<p>The <code>export_table()</code> functions creates nicely formatted
+tables in text, markdown or HTML format. You can add (coloured) captions
+or footer lines to the table as well, and you can even create multiple
+tables from a <em>list</em> of data frames.</p>
+<p>This vignette shows some examples how to do this (focusing on text
+output). Note that <code>export_table()</code> returns a <em>formatted
+string</em>, which prints nicely (which essentially just uses
+<code>cat()</code>).</p>
+<p><strong><em>Note:</em></strong> The vignettes includes example with
+coloured text output. The coloured text is not rendered in this
+vignette. Rather, try out these examples and look at the results in your
+console!</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(insight)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> iris[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>)]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># the table as &quot;readable&quot; output</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(x)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># see the underlying string</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">unclass</span>(<span class="fu">export_table</span>(x))</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Sepal.Length | Sepal.Width | Species\n------------------------------------\n        5.10 |        3.50 |  setosa\n        4.90 |        3.00 |  setosa\n        4.70 |        3.20 |  setosa\n&quot;</span></span></code></pre></div>
+</div>
+<div id="adding-coloured-titles" class="section level2">
+<h2>Adding (coloured) titles</h2>
+<p>A title can be added by either using the <code>caption</code>
+argument, or by adding a string as <code>table_caption</code>
+attribute.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a simple caption</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(x, <span class="at">caption =</span> <span class="st">&quot;Title&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Title</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># we use a new object, so &quot;x&quot; has no attributes yet</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> x</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(out, <span class="st">&quot;table_caption&quot;</span>) <span class="ot">&lt;-</span> <span class="st">&quot;Another title&quot;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(out)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Another title</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span></code></pre></div>
+<p><code>caption</code> can also be character vector of length 2, with
+the first element being the caption, and the second being the name of a
+colour (see <code>?print_colour</code> for available options). This is
+helpful for printing coloured table captions.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A red caption</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(x, <span class="at">caption =</span> <span class="fu">c</span>(<span class="st">&quot;# Title&quot;</span>, <span class="st">&quot;red&quot;</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Title</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># same for attribute</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> x</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(out, <span class="st">&quot;table_caption&quot;</span>) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;*A green title*&quot;</span>, <span class="st">&quot;green&quot;</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(out)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; *A green title*</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span></code></pre></div>
+<p>Since the coloured text is not rendered, we provide a screenshot as
+example here:</p>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAuYAAADyCAIAAACOI5egAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxIAAAsSAdLdfvwAAFqYSURBVHhe7Z0JfE1H+8dPJBIRsYfY9zXWaGqtLYgl1qraaWspWqq0SvvW3lf50xZFKW1eraidCkqIIKg9llBLCJFEVmRfuP/fZMbpleXeuTfrTZ7vJ445z8ydM9uZ+c05c84x02g0CkEQBEEQRP6miPifIAiCIAgiH0OShSAIgiAIE4AkC0EQBEEQJoApSRZ/f2XjRiUkROwSBEEQBFF4yFiyaDTKy5fCnX84c0ZZtUp59kzsZp2UFMXPLz/mlCAIgiCINGQsWU6fVkaMYFc1CjDQK+vWKV26KHv3CgtBEARBEPmWjCWLtbXy6JHi5KR8950SGyuMxoGfr12rtGmjmJkpDRsqP/yQNsLff1datFD++UfsArhhgZ0TEaH07Ml+PnKk4uvLIoEbf59+qiQliTCGotEo27Ypc+Yo48YpPXoIYzby8iUrupIllcOHhQX4+Cg1azI7XdchCIIgCEPJWLI4Oip//aV89ZWyaJEyaJBy6RIb440A6uTzz5Vvv1XefVfx8lImTmTyBRaDZFCJEsq8eeznc+cq9eopv/3G3PgbP16xtBRhDOXECaZXRo1iWxsbYcxGihRRxo5lSuvnn5WoKGZ5/lxZv155801mhy9BEARBEAaR6eCJgXz6dOXiRaVcOaVzZ2X2bCUsTHjJA92zeTMbqhEVIsF25UpmgV0eKyt2kQY/h14pXlx54w3mxl+jRiKAody8qcyaxS7kfP11jugVTpkyyrRpyrlzyo4d7LLKvn2KtzeTa7ATBEEQBGEoeub7NWsqv/zC1nzs2aN0764cPWrA5ZaEBBa+fXt2zUYFblhgh2+ecOeO8skn7MrN4sWKhQW76yTzFxVlzN0cKK0pU9hTTocPszKEYmvVSngRBEEQBGEQ+m9RWFkpw4crnp5MvmzfboDUiI1V7t1TatR47UoG3LDAbtC9oewiOlqZP58JCGimJk2U8uVl/4YNE/d3DMLcnN0GqlxZ6dWLbUePZktwCIIgCIIwAqlVFf7+ytSpyrFjTLVgGDZdbG3ZpY7WrdmqmoAAJTxc9s/d3cgbOvhV8+bMUa8eOzpBEARBEMahR7LExrInXJyclORk5fhxtgTE6BWv+YRWrdhy4EOH2LZYMbZSR+YPysO4NbM+Psru3cqkSWwdLjQfQRAEQRDGkek4rNEoFy4oLi7soaGvvlK2bmXLUAy6r2Fjo9Spwy5maN8DghsW2HNu3ateOnZUvvmGrQJevZq9nSXnCAlRli1TBg9WlixRhgxh28ePhRdBEARBEAaRsWQJC2OPCHXtqlSvzh4amj7dGIVRrJji7MwuM1y6JCwAbvz16MF8ORYWSlyckpgodiGVcMQM32Jna6uEhmbD228hvCAgvvySrcD97rucUi2I9uefladP2etkSpZUJk9WIiOVNWtyViQRBEEQREHFfN68ecKphacne8Ll22+ZcClfXhiNAIoHIgPjdHIyEyW7d7NrNq6ubCmJeoOpaFH2/tmkJLYeNjZW2bCBvXkFu5A7zZqJMJwSJZSTJ5UjR5gjOJitBYZ8qV9f+BpEkSLscR6oJaTHwYG9ni7bOX6cvUhmzhylQwe2i2JEplavZnematVKDUEQBEEQhDRmmoyeWk5JYU8GQRlkHaiQn39W3NyUy5fZutcxY9iDM9rXbHB8Ly92p+boURGgTx9lwgT2nrcRI0QYlUePlIULlZ07mQZq355Jn759jV8RjLQdO8Yu+VhZCUt2ERLC3qtbuTK7iqNmNiyMJRjCBQViby+MBEEQBEHIkLFkIQiCIAiCyFcY9RgMQRAEQRBE7kKShSAIgiAIE4AkC0EQBEEQJgBJFoIgCIIgTACSLARBEARBmACFWrJoNMZ8n5kgTA6084L9aCCdywRh0kj2UYVXsqSkKD/+qCxYYMC3qQnCFEELRztHay+ob16mc5kgTBr5PqqQShaUy3ffKZs2sY8oqZ8OIGSIj2eftsaWMBXQwtHO0dpz7vMUeQidywRh6sj3UYVRsmg0yrZt7MsAKJ22bYXR1PnnH6VFC+XDD5WICLaFG5acYNcupVs35eFDsZseHx/2FSf1b+FCYS9sbN/OPliBbY4iWe9o52jtaPNo+QXpDpHecznXzgtCkqycF7nft+Rm+ymobVUyX5J9VH6RLP7+ysaN7D33OpAJI8PFi8q8eeyvY0dhyTmyK83ZRS6kp0ED9gUG/O3bx77AUPCQLMMnT9j3JbDNJ6C182aP9l9gyM1zOSlJ+fRTNlJiCzeRhuw6L3TEU+D7lkKOTB+VsWSBxsnltWxnziirVun5SrNMGL3Ex7NP/EDQubqy3ienyZY0y1C2rGJnp1SpopQrx7Zww5KeXEhP+fJK587sr107pXRpYSxISJbh5MnsO97Y5iiS9Q7Q2tHm0fLR/rN+Xy8lRfHzy+MVrzLnsnz56CU8nH0orWVLtoWbSEN2nRc64sn9viUb249ecvNYuYl8vmT6qIwly+nT7JOEULsFj2vXmELv318pWVJYCgZFirz2eUi4YSHyEJR/qVI5XgsG1TvaPFo+2j/OgqwAvbJundKlC/sGex4icy7Llw+/6YBtZty4oURFKdOns8vacGcLMTHKuXPsBkd2RZj/QfnnwnmRXci3n6xjxLFMov0YlC+9fVTGP7W2ZtfunJzYvaXYWGE0gidPlKVL2dIHpAPdARy7dr22uCYiQunZk3mNHKn4+ioNGzI3/rQvvcqEAeptzp9+YpM/T092OOx2784+oayCYLVqKa1aid0MQZbXrlXatGE/x+F++CFtIfz+e9obcvx2HewcyTRnO/zj2+k/wS2ZHr31pYJfbdqkNGvGQg4Zoly5IuwGoV1NGZazPA8esLzUrMmiwiQM1acdlUy+UHcooqCgTPMlWYZqMP734YcZTxdk2hjiQdNViwiB9+zJ+C5vZvWeHrR8tH8dA7Ne+PKROXPYt8p79BDGnEB3nQKZc5kjXz6Z8eIFux/RsiUTau3bMzcsRqCdKfzZ2rIbHF9/rdy6JQJI9mMy547eMAa1sczIrvNCMh5J5PsWXuC6z4istx95dB/LdNuPfBnq6aM0mRATo1mxQlO2rKZHD83Fi5qXL4XdIEJCNB9/rFm3TuPlpTl8WPPRRxpbW8369f/GlpCgOXOG+c6dq6lXT/Pbb8yNPz8/EQDIhAFhYcw4frzm6681mzdrHBxY+vETFxdNeLgIEx+vmTxZM3iw5ulTYUkPMo4wNWqwnyNCbBs0YBbYVZCG5s01t26JXQA3LLBzJNOca0imR299AfwWMQwapBk2TLN/v+bXXzVOTizv6bOGYkfhL1ggdtOQnKxZulRToYLmP//ReHpqNm1ikaQpZ0m8vVkd4Vjbt7Oolixhu8uXa168EAEk8/XWW5qpU0W+eHpat9bcvi0CSJahGuyvvzQDBmgmTtTExQkvFck2hvRMn67p2ZPla+9ediY2aqS5fl0EMA60fLR/HAvngnEcP85SblxNyaO3TmXOZb0gNrRDzqlT6GjZlgO7eiwQFKTp1o01IbQZJANuWAwFTQUtSs3U/PmsitEAtNuhTD8mc+7IhMmWNpZd54VkPJxs7FvS1Ht+pkC2n/To7qMylSyc+/dZD47+fdYsTWioMBoNSuHzzzV9+mgiI4VFBZlHiWiLgPTIhEEjRiU5O4uGjp9oHw4O7GY4iqjs3Mnyi/NKBW5YYFdJn5I0kkVFJs25iUHpybC+EAPOcAwh8OWcP8/GMLTslBRh4ejuVvivcFKp5xss6Kr27BG7kjx5ounXT9O/P9MlKs+fsx4wM3Tk65tv/v0hRs1Kldj4pN0jAMkyRBtDS8uwsUm2MaRHu49Ar4owW7eKXePgqcrwHJSBd5ppSjvbkalTmXNZLxcuaGrX1kybprl6lf2h3+AOWGCHrwp6bfTFvr7MjYpAVw6LQSQmss69SxdNYKCw6FA/OGt09GMy545MmOxtY1k/Lzgy8WSxb5GXqvmHAt9+VHT3UXruldWsqfzyC7tvvWcPu7J09Khh1wy1iY9nK6osLNgF+Zc5uWrvxg1l2DClUSPmLlGCXcu1tk71SL3SleFtDpWEBJbH9u0VR0dhAXDDAnuhelGVjvpq3lwZMIB5cRo0YCu9L11Snj8XFr2gFR06xK7+de3KLidyGjdWOnVSvL0Nuw7s68tufI4erVSsKCzA1laxshLuNOjO16BB//6waVNW9VeusBvG2Yh8G0MCPv5YsbERu+XLK7Vr62nAkhh3Dt65o3zyCTunFi9mBRgRIfUXFWXwsWTqVO+5LEPx4kqfPqxza9aMXdm+do1t4YYFdvhy0FzPnFEcHJQaNdguGjzqCxaDOkPUbFCQUr/+v2sP0fLRTXl6ZrxqMLN+TObckT+/cq6N5RUyeb98mVUiGjNqvGRJxdmZbeGGBXb45kMKW/vJrI/Sv5QI3cTw4axcIF+2bzds2MYhvbyUgQNZg8D5j/x8843wyjlat2YFzenfny1Nkn/BVGyscu8e65jUOgBwwwJ7ZndDCwzG1RfOBzTTkBA2PkmCVhQYyF7PgCOqYxvERIUKbBFVmpvcurlwgZ02OJ10YFy+0GyqVlVCQ187RbOOfBsrUuTf/iLPiY5W5s9XDh9muqpJE1aGkn/oN6FaDEKmTrMFdOgrVyp37zJh+uabrK6xhRsW2Hl3D9A4fXzYUyqlSrHdMmXYOj9Y5Bs8sLRkT0zgENpd6MOHSqVKGXdQmfVjMueO/PmVr9pYtiCTd0mpmq+g9sPRL1kARNzUqcqxY0y1aC/91Q2U2tatrLAg7tzdWSTh4WzVXk5TujQbmTIEtY5CJzLE6PpCk0WrgCiWX5CIUwIS53//U6pVe214g5LA0GiQSEdg3adNXrXD/AzOApwLBmFryx6WQT84caISEMDKUPIPZY4x3iD01inIxnPZwoI9dvvPP0zUYgu3egWRwx8RcnAQfTcCYHiDZNFegK8XDBhDhrCLkcuXs/EA8aBH/eUXpUMHpvjTk1k/JnPuZOP5ZXLI5F1SquYrClv7yayP0iNZMOf77js2pUhOVo4fV2bNMqCnw4m9ZYvSrx9b6g/pWqsWE4kZ6sFcw8qKlfuDB0pcnLAQKkbXF5QKdLeNjQGVi5D29sp777FzL4sjHEYXTAWgSzIjH7bDPAQtH+0fZ0FmN8500KqV8u237IoxtihAFKPMH2oT+sMg9NYpyMZz+eZN1rOhhfz6K9vCDYsKkvH332xy6eIiOm78vfMO67th153INHTqpKxYwd7vyUcCZ2d2aW3ZMsMavMy5k43nl8khn3e9UjW/UUjaj+4+KtO+BKfihQvsLF20SPnqKzZPdXQ07BIQpCsy3KCBuJqaH4DeQreLefbjx8KSBoy7deqwSaT29Xm4YYFd+0p+wcPo+kILww8rVzbg5U44JapWVe7fZy0qiyMc5r7XrrERJTOMzhev95o1s/lCcd62MbR8tH+cBYZeZeF07MhmWps3K6tX5+BkS2+dAr3nsiQoeczKMFZ99BGblWILt/bLHTCSnTqlTJrE7i2qf56eyqhRzA5feYKDmW5G0UVGst4fv0W/ilHHIGTOnWw8v0wO+bzrlqr5kELSfnT3URkfPCxMmT2b3QmrXp29Onf6dGN6UmSvUiV2ePXW15MnLDZMyjGFSoOtLRtadL85USaMXtq1Y8uX0ONkOD1CVUG6+viw628qcOOvRw/my0GnhnE6MVHsIirkC6WcHpk0o+uHdsaQD72c09fcdKRHvr4Qg/Y4cf48K0/MADLUBPh5+qLGmYDyxMzm2LHXfJOTM64XHTg5sfvQGES1Bw9UjZoLo/OFSkdLQPx82ZpKFtuhZBvLCVC2qCm0f5wFxoGKGzJE+fJLtgIX43oONVe9dcrRfS5Lgp7tww/ZMh1oU4At3LCoPd6dO8rZs2wizt+7yv9Qg4MHM3uGZ31mIDBSizMd/T6aJc4XlKehyJw72Xh+yZMt/TOQjycrfYteqWoQudOHF+z2w0H8uvso83nz5gmnFvjNunXs8i+ES/nywmgo6OgjItitwehottbh5Ellxgym3dBZo9CbNXttWUyJEizAkSPMAS25fTtrsvXrC1+O7jBQnefOscgxW61Vi634s7NjrTANaJ1I1b59rNPJ8KoAVBpOmDVrWPWgl9y9m11ncnVlt/BV0Ve0KHvvZ1ISW4eIJr5hg/Lbb2wXcSJf2sjkC8MkDuHnx7Qzemp1QXhOoCM9kvWF6e/+/awpo4RxcqIcFixgz9pgjoI4tUH469fZS9tQbjExbNkmCl/NXcWKTDF88QVLBsoTZ+OmTWzxOYYrHFQedHCYZ/zwA7txifEese3YweJB2lq3ZueefL5Q14cPs+eeeL5QKUgMAqfJl44yBGgzFy6wm+KYoyBJaB4VUtesYfRFg+QTFJk2hvScPs1uQKgnIHKBrLVvn7aNyYNTA1Kjb1+ld2/jp0r4YZs27MxCmh0c2Dumsh29dcrRey5LAkWrvRoAblhUtm1jR4GIQarScPAgGzzaSn9aFZILLefBA5ZyNAk40CpwRvAWyJHpx2TOHZkw2dvGsn5ecHTHw8l634IfVqnCWjJ/cA/tB03urbcMvmjByZ0+vGC3H47+Pko87Pw6ycma6GjhzgpxcZoffmDvgLK1Za8POnaMvVxh7lz29gv1aW+Vhw/ZC3DKlmWBe/bU7N6d9j0fQEcY/ni9+qf95pw0BAayp9vTvBVHG9i//17TsiWLp3VrzZo1aUMi8UePsqfe1QABAeyIv6V7LwvQmy9EPnYsiwq+YWHCmHPoSI9MfSGPyOnlyyKSGjU0M2dqgoOFbxoiIjRffsnCIHedOrFC0+bFC82RIywNOByieucddkTjXopw9armgw/+PVCaKpPMV/Pm7EVz06axxOBvxoxM86WjDPkbI5CMNH9pXkSht43x9Gi/nQJuWDJsYzIgfrR57fc6ZAXEtm+frpffZB3ddcrRey5nkchIzcCB7H0YiYnCooIj4rQ16F12aGxoKqhutVXgD81y165/26FkPyZz7ugNk+1tLOvnBUdvnwlyrW+RgTcGpARHzLk+vMC3HxSj3j4qY8lS4OFv8NR+H1resm4da17p31pG5BrpT7+CBNo5WjvaPFp+ASO/ncsGERSk+eSTgtzwCg950ocXpPYj2UcZe3XYxOnUSXFzY584xzbnbj1KkpCgXL3KnqxzcTHm3mRBJT6eXWbM7C/NsgZCB2jhamtHyy9g5KtzWQf+/sq77yonTohdTqVK7B1foaHZ/LpCIpfJhT68YLcf+T6qkEoWgHLZupXdT9W+EZgnREaym6Dduyt16woLAXbtYrdIM/uDLyEJWjjaOVp7wdMrnPxzLuugYkX26NnMmeyhj+PH2Z+HB1sBNn06W9ubE0uCiFwjF/rwgt1+5PsoM01OrwAm9HHxovL220xgOjsLCwHi43W9cgNnb5oHebLI77+z1f5//MEehyaInCAsjJ3me/eyR41AjRpsNfHQoWyloRGvySHyD7nTh1P7ASRZCILx4kW+nqMTBEEQJFkIgiAIgjABCuxaFiixlwZ+P5bI5+STOkUa9Op8mTAEQRCEQRRMyZKSovz4I3vFWYIh350m8jP5pE5xdKQBKdHxcIpMGIIgCMJQCqBkwTjx3XfsVX0uLjn7+vPCSXw8e8FiLj9jnH/qFEdHGpASHa+rlwlDEARBGEpBkywaDXvB9oYNbLSQf5E2Ic+uXeyN1A8fit30+PiwNxOofwsXCrvR5Lc6RRqQEqQHqcrs7o9MGIIgCMIgTEmy+PuzR7xCQsRuhly8qMybx/46dhSWgoFM3mXIrnh00KCB+Nrtvn3sGbysk5t1Klk+SAlPEtKWGTJhCIIgCHkyliyYF+bDtatnziirVrFPZGVGfLzy889sguvqmlOvIMwr9OZdkuyKRwfly4uv3bZrl6WP1XFyuU4lywcpQXqQKqQts3tkMmEIgiAIeTKWLKdPKyNGsBmnaXHtGpvZ9+/PPnRJFAzybZ0iPUgV0oYUZoZMGIIgCEKSjCWLtTX7trWTE7sfHxsrjEbz4IHy6adKzZps3onJ99q1r8X55ImydClbHoH+HQHg2LXrtUWLERFKz57Ma+RIxdeXvZkYbvwhzqQkEYbj48M+t92qldjNkJcvFU9PdhTEgKh++OG1xMAXWUZKDh8WFoBokXjY1StPv//OkhQUxJZYNmvGwg8Zoly5InxVEDMy26ZNxscC6rKPn356LWHdu7MXHQL5vOtGMh69daGCX+nOuwy664IjU6d6yxn11aKF8s8/YhfADQvsHOPKGalC2pBCHciEIQiCIGTIWLI4Oip//aV89ZWyaJEyaJBy6ZLxSwhPnGCDgZ+f8n//x8anXr3YiMJHaJXAQOWdd9hkFEKhUSNl7Fjll1/+PWKJEmxBgJeXMneuUq+e8ttvYqnE+PGKpaUIAxISlLt3lcqVdd2MwOi7fDm7gNSuHUvMrFnsQJ9//u8IV6QIOzoS/PPPSlQUszx/rqxfr7z5JrPDVyUuTvn2WxbJf//LcnT7tvLhh8qdO8IXIE7EjDDvvstSO3EiG1a1jwX4sg9kBOpnyxblk0+UPn1YNs3NxbEk864X+Xh01wUHeUdsPO+rVjFJimA3bwpfSfTWBZCpU5ly1otx5YxUIW1IoY7nrmXCEARBEFKwzzlnzv37mmHDNLa2mlmzNKGhwijPkyeafv00/ftrQkKEBTx/rklIEO70JCdrPv9c06ePJjJSWFR++03XV7YRHr+aOFETFycs6Tl/nn3bevPmf78PDku9epo9e8Qu59QpFmz9es2LFyww3AimDVKCkvvmm38z4u2tqVTptS+P79zJyu2vv8QugBsW2NOwYIHGwUHj7Kzx82O7iDx99nXnXR6D4smwLnjetb/1z0v1P//RpKQICyc8XOPiwnKXITJ1IVOnMuWcPtdwwwJ7GgwqH6QKacuwrarIhCEIgiBkyPgqi0rNmmzuu26dsmcPu1tx9Khhl1t8fdl8ffRo9hVKFVvbTL/hFB/PVj5aWLApuPZlGBkQPsNbGCpI+aFD7Cp9167smj+ncWP26Uhv79eu/7dpo0yZwp4cOXyY5X369AxuTDRvzq4/qRlp2pRdmrpyRXwEHFNqlFX79syoAjcssKefcN+4oQwbxq5qAMz4W7bM5m/+GYGOukDeBwxgXpwGDdjTMZcusStSkkjWhd46NbSccwKZtmpEeyYIgiDSoEeyAIzKw4ezS/eQL9u3GzYMXLjAxnIMRTpAV+7lxT6fXbIk+zxv+fLKN98Ir+wFKQ8MVKpXZ0eMiBB/GJgrVGALd7Sf6TA3Z3c6Kldmt7GwheRSh9XMKFZMqVpVCQ0Vw21srHLvHvvSpo1NqncqcMMCe/p7Fq1bs8Gb078/e5dJnrwwzbi6gMaqXZs9GIzylES+LnRjaDkTBEEQpot+yQL8/ZWpU5Vjx5hqMehrt5hcFimia7zHbHvrVjZIW1sr7u7sQOHhypw5wtcgLC3ZgKcDDJMYVv/3P6VaNTYYq38YlaOj087my5Rh1xJAvXrsslBOU7o0Uwl5i9F1gfpFq0ABvnghLHqRrAu9dZofQAr1riuSCUMQBEHoRo9kwTz1u+/Yo0PJycrx42yNpEE9r4UFm0bruJf09ClbdtqvH1sy2acPu1NQrpyRFxisrNiY9+ABWxyaIYjW3l557z02v8dgrP2HERoaRRsfH2X3bmXSJLYOF1qtMGB0XUCpxMezaxvyFSdZF3rrNG9BqpA2pDCzG51AJgxBEAQhQ6aSBTrjwgX2qZRFi9ijQ5h/Ozrqvz+SBgcH9kaKR4/EbnpCQ9mg1aCBUqqUsBgNtFSrVuzawOPHwpIGDJNVqyr377NcYDDW/sMYqf00UEiIsmyZMniwsmQJe4IX28ziVIG2CwhgV6GKF2e7GL/r1GEW7XsTPAzs2ncx8g9G1wVGZfxQ93M9aZCsC711mrfljFQhbUihDh0vE4YgCIKQIWPJEhamzJ7NVldUr85eNz59upG9v5MTe+vG5s1sBq+SmPjvYgUMUZUqsW5dtTx5wo6IifvLdMsVbW3ZsKrjzaTt2illy7JlNxle18Ho2KMHeyHHsWOvBUhOfm03JYVdWUGCR45kN2smT1YiI5U1a9LeOUJKtMfRS5fYhRnkly+bxZDs7MwssKvAjT+kQf5qhIrevEuiIx75ukiT9/PnWZl36pSx1sHP01eHZF0A3XUqWc4WFkxXoeFxEBXyBSWRHvlyRiRIFdKGFGaGTBiCIAhCEvN58+YJpxboZ9etY++6gHApX14YjQADQI0a7LUlx4+z8SM4WNmxQ/n4Yzb8t27Nxi0M8BERysqVbAWDubly8qQyYwabf2MQwqy9WbPXls6UKMECHDnCHIhq+3Y2tNSvL3wBFAZi27ePDWMZzvgrVmSj7xdfsJ8XLcoGrU2bWHogNXBQDpI6dy5bw9GhA9tF9pOSlNWr2US5Vq3UEKmvZN29mz1P9Pw5y8vevexaFCJB4pE2DtQeBj9oHQzDGCwRHmFcXdmLQ9QJd3i4cu4cy2xAAIs8Kkqxs/v3SRxt9OZdEh3xSNYF8r5/P5MaSC3P+4IFbN3PrFn/5p2D8Nevs5fRIb8xMewRHlQQxm+OTF0AvXUqU86IH+lEPTZpwq7BbNjA3ryCXcSJfGkjX86ossWLlb59ld69X7tEp41MGIIgCEIW8bDz6yQna6KjhTvrXL2q+eAD9hIOHK1TJ82aNZqYGOEF4uI0P/ygadCAvUtjwADNsWPsxS1z57K3nqhv7FB5+FAzfrymbFkWuGdPze7dad8FEhio6dJFM3nya4fQ5sULzZEj7LeIAfG88w47Ioyc4GD2Cg0cQvvnoaGagQOZHb4c/vaOw4c106axSPA3Y8a/viqI5PvvNS1bsoy3bp024+DUKeal/rm4sHeZZIbevEuiIx6ZukDekc7Ll0UkqNaZMzPIOyciQvPll/9W/dGjws7RXRcqeutUbzkj8Ti0s/O/AQICWC7Sv5cFyJQz4kd6kCqkLTNkwhAEQRDymOGfEC8FBW9vZcwYtnJ2xoyMr1hknd9/Z4td/viDrfwgcoFcqFN5UlLf27t2reLmxm6HZYhMGIIgCMIgCuDVaowQGCc2bmRbjBwFnvh4dusksz91YYpJk3/qFEdXU6JDr+gNQxAEQRhKwbzBjnFi61b2MgztpTAFlV272IKbzP7gWzDIJ3WKoyMNSIkOLSIThiAIgjCUAnhjKBfIVzeG4uN1vbakeHHxEBNBEARBmDQkWYzhxYtCcf2GIAiCIPIPJFkIgiAIgjAB6GURBEEQBEGYACRZCIIgCIIwAUiyEARBEARhApBkyRfs9F329sYS2Ip9Qzh9f1f/DVbq37KjI4QHQRAEQRQgsipZkl7Ef32gN0ZKbOEWVuIV/hFX3M59Gfz8ntjPhPCYwJSXydiK/XToiKd+BadPu7jhb0K772ytXn3ChyAIgiAKFlmVLBhlH0besLEsha2OEbfQci5g/yG/9dEJEWI/E8a3W/G/UYHYiv106IinvE21TnWH4q9Nzf5WFkZ9cZsgCIIg8j16JAu/6YCt2E+HX4hPYkqca5OPnieEwy2sWSMmMQoj9LKjI26EnBKmgk4RM/NSxeywFfsEQRAEQbyOnveyQKx86zlsVjf3drUGCZMWKS+Tlxx5NyoueHqXX745PKRyqbpfdP/DokhR4S3Ng8hrm87OuhF8MuVlkjClMrb1fwc2+xQOngw4+jedBqPXnd9/Oz83Mi6onE2Vb/sdtytRPTW48lLzQvWyNLfuWn/k6DcX21iW4r4cvWG2Xlp05NavS/oduxp0nAeztSo7pOXsvk0/NlPMRCB9RMQ+/nxvp/DYR2L/Fc2rOH/lshPH5btpgjWq2PbrXvuKFy3Jd4FkPBweuGHF1p85/y5MryNTPhzd9U4QBEEQuY/5vHnzhPMVGNheaFL4jP/R05s+/js71B5crUwj7HJJYWYmrs08ib6/03fZG9V7daw79EHEVb8nPm1q9jN0OcXNJ2fmH3SNS4p+u8VnnesNh+J5nhAx5a01s7pvbVSxHQ9jbVmibvlWkXHBL5WXj5/d/v383La1Bla0rRUZG9yj4fvFLdkYj7T9eHLytsv/bV6lK6KqXKqO5z9u14KOt6nV39K8GI9HJsz14BP/hP59O/T8mfu7XR0mv1mjz52wCxceHXSo1KHCK22kF/MiFlVK13Oq7oqyQikNcZzdo+EHSHObmn3tbWuLQFrBWlXv+SjqVrGiNp3qDStqbiW8pePhxCdHH/nn1/Ilqrav/bYwaSGTd5U09U4QBEEQeU4GN4YuBx4Z+mv5/3j0vBbsbVusXNnilbGFGxbY4SvCQW2EnIlJjHKq3ttMMWtZrXtUXAgswk+OpBfx7hcXYpBe0MdjUPMZXeuN/Mz59zer93E7NydEa6kpX65hV6La5UeH/7q5cV5vD2iaGmUdihQxV/XTlcdHve9uHdJyNrQO4hnltHCG8/+gNo7d3swDAJkw4Fl8aMqLxB/ePo8kuTpMeb/t0qSU+JuG3PaysijeukY/pBmJtChi6Vi1B19uooowjhoMIqO0tZ2waiEZjwx68w6pmuYqlwrs8BU7BEEQBJEXZCBZiluWbFihjV+Iz1f7e3zt0etp/BNs4YYFdn5JA2gUzaXAwxAT1cs0xm6DCm+Ws6kCC+w8gAwJybGRcUEVbWuWKV6JW6B+6tq1ioh9fD/iKrdok5AS27ne8EYV28JtY1mqdrnm1kVt4cZBj9/ZYmtVFsO5evsG43rNcs3OPzzIH2WSCcNBnKl3TErzXTubarCkvEzmu6aITN7lpSpBEARB5D4ZSBaMZItcD//xXsSC3gftSlTH9BpbuGGBXZ3fR8QG3npy1qFSh1LWFbBb2tq+bnlHWGDnAWQoal6spFW5Zwnh0C7CpChBz+6Ym1lYWRQX+1pg0H2rzhDu7tvk49ndt1kXLQF3fHJ0eMyjMsXtX2hSIHf4X0JyTGnrCuExgfFJ0ZJhOBjUi7y6eFMwkMm7pFQlCIIgiDwh04HZoojls4SwqLjgyqXqYQs3LMIvlX9Cz8Fev4ITH/+exYfWr/AmxkXYRQgJIDh6Np4QGh2w7tTUR09vIh6vO78fu725Uqm6tcu3EIG0sLKwKVWsvNjRIjEl7ml8qH/ElY+2t3h/S23171zAfnjxCyQyYQoqMnmXlKoEQRAEkSdkKlluPjmz3ucTh0pvfdvvOLZwwyL8Um80XH50BEPd6hMfquOf27k53I6tCCdBxzrvjnJacP6hBx9Nvz/+fmnrip87/17G2l6EkMDKonhp6wp17VqtGXJ103B/7b//G3iqTHEWlUyYgop83vVKVYIgCILIEzKWLLFJT385O6uImfmYN78pWaw8tnDDAjsPEBUXciPkVGP79vy9q/xvWueNtcs1hx2+PJgMwc/v7ru+Cqrl15EBGEH/Nypw1TuXa5RtIrzlsC5qW75EtYiYx2ZKkXI2VbT/IH34008yYQoq8nnXLVUJgiAIIq/IWLLYWJYe2uqrsW2W1CrXDLvYwg2LuiL1btjFJ8/vO9cfzR9g4X9d643sWn807PcjfHkwGe5HXI2IfWxfsjbGToygpYrZqetD5cFPOtZ593lCuPfdrdrXeJJfJKq7MmGyHZQYvykj9o1FPp6XmpfpsyOZd71SlSAIgiDyigzey8KpVLIO1yscuGERO4qy59r30BkQMbbFyglTKtAaJ+9tL1LE4s0afYRJH/HJ0T7+O6FyippbPXp6KyDy+tP4kLI2lcy1XkkXHvvo/MODVx4fhVeZ4hWj4oPtSlRL8866iiVrPol+4HFjzfXgExrNS/+IK+6XFv54cnL1Mo2rlm4oH4a9l+XJ313qjYB+4hbk9PidLQ0rtmlSqSO3yFPCqtTp+7vOB3hASQRH+++99n1UXEg9uze4L1TIxUcH74VffhB59XKgZ0JKXAmrMoFP/0E2y5eopn3xQ3c8HPMiFleDvHwfH4tJjHqeEOF9dwtiK/vqUSyZvFuaFytXokpD+7aOVbtjF0VdqniFN6r3qlHGgQcgCIIgiLxCz9tvMyQyLvjL/d3tSlRP/wJWTMe/9ugVnxz7376e/EkivWCW/+e1Vdsu/zc6MVKY2NhpPdJpfr+mU/kVF/Xtt5zyNtWW9vdWJYXKy9S3u7pfXBge88jMzKxyqfrvtJjVse672mO/3jBbLy3ae/WH+b096ld4k1tuh56be6BP/2bThjp+xS0G8Sjq5qoTE++EnUdRQ4j0a/Jxb4dJXG9BDGX4ctv0r8EFOuJRiYwLWndq2sVHh1JeJpW2rji29X+hvYSfXPkQBEEQRP7EGMmS0wQ/v7v21Md3Qi9o6waCIAiCIAozefz2Ef7Y7cl728R+KpVK1m1QoU1iSpz2dReCIAiCIAozeXyVhd9ICom+36XeiHp2Ttxy4eHBy4HsRSBfuuxUF/wSBEEQBFGYyfsbQ6ExAb9fmHfx4V/RiRHYtShiWalkne4N3+vZaHyGL8AlCIIgCKIQkh/XshAEQRAEQaQhj9eyEARBEARByECShSAIgiAIE4AkC0EQBEEQJgBJFoIgCIIgTACSLARBEARBmAAkWQiCIAiCMAFIshAEQRAEYQKQZCEIgiAIwgQgyUIQBEEQhAlAkoUgCIIgCBOAJAtBEARBECYASRaCIAiCIEwAkiwEQRAEQZgAJFkIgiAIgjABSLIQBEEQBGECkGQhCIIgCMIEIMlCEARBEIQJQJKFIAiCIAgTgCQLQRAEQRAmAEkWgiAIgiBMAJIsBEEQBEGYACRZCIIgCIIwAUiyEARBEARhApBkIQiCIAjCBCDJQhAEQRCECUCShSAIgiAIE4AkS6Hj/v37GzZsCA0NFftE4YDqnSAIU4ckS34nISHh6dOnKSkpYj/LhIeHe3h4REdHi30ih0ENRkZGYiv25aB6JwiCSIMJSJbz58930eK7774THoUDDDNjx44NCAgQ+4QWedU2/vzzTxcXF2zFvk4eP378/vvvox7FvhxU75IYVBcEQZg0mUqWR48ezZ8/39XVFSNBz549Z86ceeHChZcvXwrvXKROnTqLU5k9e3a5cuWE1Sgwc/3iiy/GjBkTFRUlTPkADEvu7u4mdMW+gLUNrnu8vb3F/uv4+vpiREQYsZ9KWFhYUlIStmLfKKjes4VsqQuCIEyCjCXLmTNnxo8f7+/vj3kexoNx48ZFRkZ+9tlnGzduzP0eqmzZsu1ScXJysrGxEdYCBPr9P/74w1Su2Be8tlGmTJmSJUuGh4fzXSiJ06dP3759m+8+ffrU2toaB+K7HOR979692Ip9o6B6zxaypS4IgjAJMpAssbGx27dvr1at2vfffz948GCMB9j+/PPPK1asGDRoUJEitPzFSFCwly9f/u677/755x9hMjUKZNuwtbWF3Hn48CHf3bVr15dffrlv3z6NRoPd0NBQBChdujT35SCnUDmF51zIz/Ve2OqCIAozGZznSUlJERERNWrUQE8tTKn9QsuWLdNce8fs6sSJEyNHjuzSpYurq+uGDRvi4uKEXyo7d+4cM2bMkydP3N3d+/fv7+zsPGnSpOvXrwvvVDC7/fHHHxEJfBEPHAcOHMjGVYdGIJkvlJIaDD34wYMH+SCn8ujRo3nz5vXs2RMBeFSffvopxsK7d+/CNyoqCpHAvnr16mfPnmHayoPhJ8nJyTwGFSTJx8fn/fffR4AMj5U7FMi2YW1tjTEPVYBiT0hIQJIsLS2x5QtmAwMD7e3tixcvDrdaZZwvvvgiw0W1SPa3337brVs3VD0c6vUbTgGud5k6BXrbBkf79Bk2bJibm5t2MMm6kDkWKmjVqlXwRZj8c8OLIIj0mKNTEM5X4Fw9e/bsP//806JFi/LlywtrOjBy/JRK+/btR48eXbNmzd27d9+8ebNNmzbo8XkY7F69etXf3//OnTsI06hRI8SMHuSNN94oU6YMD4MJ3NGjR1u3bv3222937NgxMjJy27ZtRYsWbdq0qZmZGQ/DQZd06NAhjB9t27YVJgNBmo8fPx4TE4OOCQOVsL6OQfny8vIaMmRIp06dbt26dfLkyVatWqklhix/9tlnyN17773Xu3fvEiVKYHyaM2fOV199Vb9+fQQwNzevXbs2fouUYFz88MMPeS+PoqhQoQKPBOBYvr6+KBZPT08UEcJD8Xh7e2sfyyCCgoKQVBcXlzQ3O2QokG0DIuDcuXOIAWWLLcZdR0fHhw8fQnPgKB4eHkgPjo4RWq2yt9566/Hjx9AxnTt3trCwEBGlEhYWhlq+cePGoEGDkOyQkJCNGzfGx8c7OTk1btwYAQpwvcvUqUzbAPjhrFmzEhMT+ekDL2h9FCOqhle9TF3IHIvXF4wjRowYOHBg8+bNcS7/+eefRpczQRA5CPrr9Jw+fRpdG7rR5cuXo5/C5E94aHHlyhWE2bFjB7oz1dKrVy8+EeTAF/3IDz/8gK6HW86cOdOjR4+1a9eqv0oDjrVw4UL0U5hFCdMr0H2j31mxYoXYNxx0eegHEQmiEqZ0yOdr9uzZUD/c8vfff3ft2nXPnj18F7PSuXPnDh8+PDg4mFsQG3KN2R7GMG5RQWwYtDAgif3XSX8sPz8/pEc9lqFgeNZxOL0UyLaBH/JWgWIZNWoUynbo0KFw40A4HMY8Ee4VvCEBOITpFVu2bEEuTp06JfY1GrhhQX7F/isKXr3L1KlM24CM+OCDD8aNGxcaGipMGk10dLQarTY66kLmWJjDIM1Ip9hPPVVR75k1QoIg8pCMbwBjqrphwwZMODDFnDhxoqur68qVK7Wvb+OXXl5emK516NBBne/Wr1/fwcEB0yN0Z9wCSpUq1adPH3VO07BhwypVqmBOk+GlYMxx0TFhqvTixQscQlhzEfl8lSxZ8v3331eXfJYrV87W1hazOr6LjKDbrVatmroGArEhHsyq1TUT8qQ5FgoTqMfKZQpk26hevToif/bsGVQL0lyrVi0cBW7IBVCjRg0RTh+xsbHIIzLSokULYVIUe3v7zC7p6ca06p2ju04l28aNGzfu3bs3cOBAOzs7bgElSpRQo5VB8lhWVlbY4qyERuEWBMZpq/6EIIj8Q6Zr1jDcYjq1c+fOL774Am6+Jh+nOvfFdCckJKRChQro2TEj4WBQwcgNO6Y7PFh6ihUrhl89ffo0KSmJW9BT+Pj4jB8/HhM4TIAGDRr0119/ca/cRz5f6NF0dGpFixZF340xD78VptT3c6QOOgZ0uxzdx8p9Cl7bwLCKFCJtQUFBlSpVqlixIoY6uGHE2KY9cOoGOQ0ODoZGQV6EKQuYVr1nSJo6lWwbvr6+kGuQF3zXOCSP1bRpU6ixtWvXDh8+3M3NDZMKVbsQBJHf0LPMHrMNFxeX9evX/9///R96n02bNqH3gR3dQUREBHqWESNGYCBRwYiCvgB9BP+5XjAT2rNnz9dff43IZ8+ejS5j165dOKLwznWyK1/ITt++fTF1++mnnzDyoa/E0Isuvnbt2jVr1hSBTJyC1DagL7GNiYkJCAgoX748diFZ4EbFQTTAzYPpBXnH2IwEm5ubC1OBI7N6l0GybcCRdbkmeSwbG5sFCxYsXboUsnXz5s2jRo0aN27ctWvXsv1KHkEQWUfqyUD0HS1atOjQoUNoaCh6AVisrKwwWXF0dHR3d8dAos3KlSv5ACDDs2fP9u/f7+DgsHjx4m7dulWvXr1MmTL8Um2ekF35Api6TZ061dPTk/eYX331FSZ8X375pUGR5H8KRtuwtbUtUaLE7du3Mf+uUaMGRmJ7e3u+tAVe8mlG8iwtLTGVl1dmJkr6epdBsm1A8EExZFE0yLdDCwsLJyen5cuXHzp0aMmSJSkpKXPmzFFfzEMQRP5BSrIA9FDabz5Ad4A+PTg4GHYMJNqgL9AOmYa4uDiMCpUqVeJ399HZYWCoVatWyZIleYAsgu5mzZo1mAWuW7fOiLv+RucrPfxRT6iWPXv2oJfcu3fvjz/+WLVqVeFdgCgAbQN6BQQEBPBbCbBgzh0VFQXJoqZHBiS1bNmyiASqRZgKLmnqPUPS1Klk22jQoMHz588fP37Md43DiHYI7dK6devJkyfHxMSkfzabIIg8J4PzFj31H3/8ga3YTwVn/pUrV9CbY+KCXfQCnTp1wqDCn4zgYUBy6nMEYieV+Ph49FliR1GuXr366NGj5s2bYyKLXXQfpUuXVt+BAcLCwvz8/F6mwi1pwPxVx/Trzp07mJonJSUdPnw4MDBQWKWRz5deHj58iASg00T/iGxiMEPkwu91MFiilNBHi/18TEFtGzgi0n///n0kkkuW6tWrQ8HgJxUrVuTpkcHW1rZhw4a3bt26du0at0AbHTx48NmzZ3xXmwJW7xzddSrZNlq0aAFxD6GvXTiJiYkGCUHJYyG1aRYR85XCqB2+SxBE/iGD97L4+PisX79++/btmOVgDAgKCjp06NCKFSsw85g2bVrdunV5MDs7u+jo6M2bN6NbNzc3R/++devWZcuWocuuXLkyD3Pz5s2///4bXUZoaCiiQjy//PILBoPx48fz5yDQkaG/wBCCoyCSs2fPLl26FDH7+/sjQKNGjbTXBMCNEQvJw4gVGxt78uRJjBAY1YR3Kjw2jBOY1WE+ncYX9uPHj0NMYPp+6dKlc6/w9fWtVq0aT5JkvtAXI351lQN6cxwXXTN/9wZA9+rt7f3gwQNEi9yh48a4hWFYO0ccdI4oIuQL80IU1L59+9BT165dm/vKHMsgkBij389RUNsGptcQGWfOnEEV9OvXD/oS1YfASJuzs7ODgwMPBrmDpgJlgxwh8RieUYZIHmoWwzYm7hgmMYSfSAXhMV5u2rQJ4zqGyVatWqWpr4JX73rrFMi0DZRMpUqVdu7ciWIsWrQoYvvzzz+XLFmCmnV89V4WvXWBMHqPhV8h2lWrVuGHSDCE7I4dO1BlderUGTlypJpmgiDyCRlIFnSavXr1whmOjsDDw+Po0aMYbjt37jxr1iztvhKdwhtvvIHAGJjRoaBzwU+mTJni5OTE+xSALgwzzs8++wxbdBw3btxo164d4uETWYCQGA8w6cFRjhw5gk550qRJw4YN448YtG3bVo0KIP5mzZph4EHnzkcyjFvoEIV3KtAE6KTu3r3r6uqKNKe5/MslC7o5dGFImwpmWt26deM3ICTzpXc44RcJ8HNMso+lAgcmjjCii9fOFzpo5BRx7t6928vLC/0y8oUE8MTLHMsgsjJ0FeC2geHq/PnzUK7whYbAcVEX0BB9+vRRV0xjd/78+agm5AuqF8CBmoWjY8eO0D0Ig6M0bdr03r17qG6o4TZt2nz88cfQWw0aNEhTXwWv3vXWKZBpGwAVAZH3zz//7N+/H7WPEu7bt+/w4cPVB+5k6kLvsaCH2rdvjyqDJkMA/BzRDhgwYPr06UaUEkEQOQ665pwDU5asvL2qgAFhNHfu3DwvEIyj+aFSqG3kMrlQ71SnBEHkKK9NNInsIiAgYPLkyWleWVGxYkUHB4f4+PiYmBhhIgiCIAhCDpIsOUL58uWLFSu2bNkyNze306l4enouWrTop59+atWqlXrvP09wcnLas2dPnTp1xD5ROKB6JwjC1CHJkiPY2NjMmTOnc+fO+/fv/zKV//u//wsKCvr000/nzZtHy/oIgiAIwlDMNJk/FJp1Xrx4YV5wXwNKZAVqGwUPqlOCIHKUnJUsBEEQBEEQ2QLdGCIIgiAIwgQgyUIQBEEQhAlAkoUgCIIgCBOAJAtBEARBECYASRaCIAiCIEwAkiwEQRAEQZgAJFkIgiAIgjABSLIQBEEQBGECkGQhCIIgCMIEIMlCEARBEIQJkPEL+xMSEuLj48WOFtbW1sWKFeNuCsPd2lAY7qYw3K0NheFuUwxDEEQ+IWPJsnPnztWrV4sdLT766KO3336buykMd2tDYbibwnC3NhSGu00xDEEQ+QS6ysKgMNxNYbhbGwrD3YU5DEEQ+QT6kjNBEARBECYALb8lCIIgCMIEIMlCEARBEIQJQJKFIAiCIAgTgCQLQRAEQRAmAEkWgiAIgiBMAJIsBEEQBEGYACRZCIIgCIIwAUiyEARBEARhApBkIQiCIAjCBCDJQhAEQRCECUCShSAIgiAIE4AkS6Hj/v37GzZsCA0NFftE4YDqnSAIU4ckS6EjPDzcw8MjOjpa7BOFA6p3giBMHZIsBEEQBEGYACRZjCEqKmrMmDFdXmfQoEEPHjwQIQxBo9GcP3/+7bffRpyIWVi1SEpK2r179+DBg3EUbOGGRfgRuQiK3dPTc+zYsc7Ozt26dZsxY8aNGzdQfcJbGsn2U8jrPSAgwN3dne5kEQShYj5v3jzhJKRJSEg4dOhQhw4d+OjF6dq1a506dczNzUUgOWJiYr7//vuffvopLi6uVKlSPXv2tLa2Fn6pvHjxYsOGDW5ubp07dx4xYoSZmdmWLVuQAEdHxyJFjFGcQUFBJ0+edHFxKVu2rDAREqDMly5d+scff7Rv3x4V0aJFiwsXLmzbtg3F2KBBAxFIDpn2Q/V+9OhRZBnZp4ZKEASHrrIYT61atdppgbHE0tJS+Mlx7tw5zLYxkEyZMqVHjx7C+jp37949ePDg0KFDZ86c2alTJ2zhhgV2EYLIFYoVKzZ48OBNmzZNnz4dasPV1XX16tVNmjTx8PB4/vy5CGQIutsP1TtBEEQaSLLkJZUrV8bc+tdffx00aBBGRGF9HW9vb8y8EQzzbOxiCzcssPMARK7RqFEjVJnYURRbW9saNWpERUXFxMQIU/ZhovUeHh6+atUq6LkuXbr07NkTSuvChQsvX74U3qlg98SJEyNHjkQYhNywYUNcXJzw07prBkX47NmzcePGwQ3mzZuXnJwsAqWCX7m5ufEbZ+nj4ehNDwL8+OOPSIyzszPCwHHgwIGUlBThTRBEfoIkS1ZBN5qmJ5WnatWqU6ZMKV++vNhPR0JCwoMHD+zt7e3s7IRJUeCGBXb4ChORF2Bgi42NrVKlSqlSpYTJcDJsPyZa72FhYbNnzz5+/Pjo0aMXL148derUxMTEhQsX3rlzR4RILbR169bB2Lx5c2whETw8PBYtWoSS5AFsbGymTZuGn/fp08fa2vqjjz6CGwwfPrxo0aI8DEB4/Mrd3b179+7w7dev3969e7XjATLp0Wg0ISEhLi4usEMV1axZc/ny5Vu3bjViiRJBEDkNSRbjOX369NChQ3uk8sknnwQFBQmP7AODE/rT0qVLW1pa/v333+PHj8cWblhgJ8mSJ2COjtk/hkNM6319fSdNmoRRVvgZgo72Y6L17ufnd/fu3c8++2zIkCHt2rXr3bv3ypUr3dzc6tevL0Ioyo0bN/bt2/fhhx/OnDmzQ4cOKIH58+dfuXLl5MmTPACy6ejoiJ/XqlUL7hYtWqTeN2unHQnw9vZGmXzxxRcTJ06E74QJExAhLNpXoWTSAyEIsTJq1CgE6NSpE1RLly5djh07hioWIQiCyDeQZDGGIkWKVKhQoWLFih9//DF6wMmTJ2Pui84uIiJChMgmMNV78eIFHPHx8ZhEov/FFm5YYKeJYJ4AbQENgVEQemXu3Ll169YVHtLobT8mWu9WVlbYPnz4UL3zYmZmBpnF720BpNzLy6ts2bIQK6oRAsLBweHs2bPyVysh2k6dOlWtWrVmzZoJk6LADQvsqqTTm5404IfR0dEWFhZ0chFE/oQkizGUKlVq2bJln3/+efv27atXr/7OO+9glnzv3r0LFy6IENmNtbV127ZtMenENs0jRUQuY29vv379+lWrVrVs2RJtYO3atYYufZBvP6ZV702bNkU6USDDhw+HFAsMDNReNQISExNDQkIg16AJol4BoVCuXDnYuSaTASEfP36MiihevLgwKQrcsMCuxqM3PQAWHx8faFBnZ+devXoNGjTor7/+En4EQeQzSLJkDzVr1sQ45OfnJ/azCXNzc3Wg6tu3LzpTbPku7PDlbiI3wSwcM/UmTZpMmDDhgw8+2Lt377Vr14SfsaRpPyZa7zY2NgsWLFi6dGmVKlU2b948atSocePGoXDUKxaQLBEREb6+viNGjIA4UEEGoTP4haVsRG964NizZ8/XX39drFix2bNnQ9bs2rXLxcWF+xIEkd8gyZI92NraGregQTeYXpctW/bp06fa7xCDGxbY4StMRF5gZmbWuHFjCAh/f39hMpY07cd06x16zsnJafny5YcOHVqyZElKSsqcOXNu377Nfa2srMqVK+fo6Oju7g5xoM3KlSuzsoo5M3Sn59mzZ/v373dwcFi8eHG3bt2qV69epkwZfjuJIIh8CEmW7CE0NBTTx/SqBV3kmjVrMG9bt26dobcPACZ/mH+HhISEhYUJU+pzELDAntlz0USuARmR4bUBQ+s9TfspAPUOrdC6devJkyfHxMRcv36dG6EG7O3tg4ODofYgDrSBXpF/RZ61tXWVKlVQGtpPNcMNC+zqBSptMkwPyjwyMrJWrVolS5bkFoIg8jMkWYzh/v37ly5dUi8vY0w6evToy5cv0Sdyi8qdO3cwjcPAdvjw4cDAQGE1hE6dOmFQPHbsGD8ctnDDAjsPQOQOqMQDBw5EaX1RAfXu5eVlaWnZpEkTYXqF7nqXaT+mWO9QDOHh4WInFS4pSpQowXehVJB+CIVTp06p2QfJycnauxz8Kj4+PsPX9EG0dejQ4dGjR1evXhUmRYH78ePHHTt2VCWd3vRAKpUuXfrJkyfqil3oQj8/P9QF4BaCIPIP9MJ+g0lMTHRzc8Mc+tatW9hFv7lp0yYMOQMGDOjVq1eamSJ6TAxaGJMw88OcG/2j8EgFE74rV64EBAQgkosXL6LrrFSpErbPnj0rV64cjwq9Kna3b9+OiTjigWPPnj39+vXr0aOH/KxUG3phv3E8ePBgxYoVO3bswLwcWgQz9e+///7MmTMTJkzQfv6Fo6PeJduPydU75MWSJUtWrVqFA0FaQaihrJC1OnXqjBw5Ur2AZGdnFx0dvXnzZqg6c3NzNP6tW7cuW7asYcOG2q/pAxAWUDY+Pj5WVlYohH379kG+1K5dm/sisL+//+7du3ESoUgPHjz4yy+/ODo64lj8xplMeiBueE0hDBJz9uzZpUuXIoWIGQEaNWqUb5cNEUThxCz95IbQC2ZgGKt+++03dLsoQHSjY8eObdu2bfqxBIPN+vXr9+7dO3DgwHHjxllYWAiPVO7duzdjxoz0b4DAbBtSUp0sYoD08PD4/fffMT2FlBkxYkSfPn2MXtBw/vz5xYsXL1++HH23MBFyREVFYYw8cuQIpu8YR5s0afLee+81btw4/UOzuutdsv2YXL3HxcUdOnQI2gI6DHm0t7fv3r374MGD09x2gRe0CNQDgqHo6tWrBw2R4ekDJfHDDz9AzaOUqlWr9u6770KxqTICh0PhHDhw4OnTpyifvn37vvPOO9rPEMmkJyEhARUBOQiJwyuiefPm69atQzl//PHH6WuWIIg8hCRLoYMkS+GE6p0gCFPHmCvMBEEQBEEQuQxdZSEIgiAIwgSgqywEQRAEQZgAJFkIgiAIgjABSLIQBEEQBGECkGQhCIIgCMIEIMlS6Lh///6GDRtCQ0PFPlE4oHonCMLUIclS6AgPD/fw8IiOjhb7ROGA6p0gCFOHJEuWeP78+Z07d17S50gIgiAIIochyZIlTp069emnn0K1iH3DCQkJ+e9//9uzZ88uXboMGzZs9+7dSUlJwu8VsMA+ePBghME2wzBELoBi9/T0HDt2rLOzc7du3WbMmHHjxg3j3mwkU6eFvN4DAgLc3d3pThZBECr0WUTjiY2N3bhxY40aNfr372/c59OgdTDsRUREfPDBB71794Zly5YtiNbR0VH93sqLFy82bNjg5ubWuXPnESNGmJmZIUxCQoJ2GIPI6c/jFVRQ5kuXLv3jjz/at2+PimjRosWFCxe2bduGYmzQoIEIJIdMnVK9Hz16FFlG9qmhEgQhwByRMI5Lly5hADhx4oTYN5DExMT58+cPGTLk4cOH3PLy5cvNmzcjzitXrnALuHXrlqur6/r16+GLXWzhhgV2HsBQzp07B4119+5dsU9I4+fn9/jxY7Gj0Tx//nzatGkTJ0589uyZMMkhU6dU7zt27KCGShCENnRjyEgwCfb09KxevXrTpk2FyUCioqIw/GCyrn5zHzPptm3bFitW7OrVq9wCvL29zc3Nu3btyj8qiy3csMDOAxC5RqNGjdTKAra2tjVq1EA9xsTECJMcMnVqovUeHh6+atUqSKsuXbr07Nlz5syZFy5cgN4S3qlgF0J/5MiRCIOQGzZsiIuLE36p58WYMWPgtXr1amjBcePGwQ3mzZuXnJwsAqWCX7m5ufEbZ+nj4ehNDwL8+OOPSIyzszPCwHHgwIGUlBThTRBEfoIki5Fgtv3333+jjytdurQwGQjGOfSwVatWxTgkTIpStmzZUqVKBQYGQhJhNyEh4cGDB/b29nZ2djwAgBsW2OErTERegIEtNja2SpUqqDJhkkCmTk203sPCwmbPnn38+PHRo0cvXrx46tSpiYmJCxcu1F7shUJbt24djM2bN8cWEsHDw2PRokUoSR7AxsZm2rRp+HmfPn2sra0/+ugjuMHw4cOLFi3KwwCEx6/c3d27d+8O3379+u3du1c7HiCTHszbQkJCXFxcYIcqqlmz5vLly7du3Qq7CEEQRL6BJIuR+Pj4YNu+fXts7927N2DAgPPnz6f6GAYmecKlBSaXfEKJwQn9KVSRpaUlFNL48eOxhRsW2PPt0FWwwRwdFYThENN6X1/fSZMmYZQVfhLI1KmJ1rufn9/du3c/++yzIUOGtGvXrnfv3itXrnRzc6tfv74IoSg3btzYt2/fhx9+OHPmzA4dOgwdOnT+/PlXrlw5efIkD4BsOjo64ue1atWCu0WLFnAD7UiAt7c3yuSLL76YOHEifCdMmIAIYdG+CiWTHghBiJVRo0YhQKdOnaBaMA85duwYqliEIAgi30CSxRiePn3q5eXVunVrzLCFyXD4pPnRo0fa88Jbt249efKkWLFi/NILpnr8ckt8fDwmkeh/sYUbFthpIpgnBAUFQUNgFIRemTt3bt26dYWHHDJ1aqL1bmVlhe3Dhw/VOy9mZmaQWfzeFkDKceKULVsWYkU1QkA4ODicPXs2zX0fHUC0nTp1qlq1as2aNRMmRYEbFthVSac3PWnAD6Ojoy0sLOjkIoj8CUkWYzh9+nRAQEC3bt24sIiMjDRiTlayZMmePXteu3btf//7H6bsERERO3fuXLVqFbxKlSqlfQ0cWFtbt23bFpNObOEWViIvgNBcv349aqply5aff/752rVrjVv6IFOnplXvTZs2RTpRIMOHD3dzcwsMDNReNQISExNDQkIqVKgATRD1CgiFcuXKwc41mQwI+fjxY1RE8eLFhUlR4IYFdjUevekBsPj4+ECDOjs79+rVa9CgQX/99ZfwIwgin0GSxWBiY2M9PT1r165tZ2fH+1y++hJbCJf0faIOXF1dR44cCaWCKfvgwYM9PDymTJmCOWjVqlV5AEgidaDq27cvOlNs+S7s2otgiFwDs3DM1Js0aTJhwoQPPvhg79690J3CTwKZOjXRerexsVmwYMHSpUurVKmyefPmUaNGjRs3DoWjXrGAZIE09/X1HTFiBMSBCjIIncEvLGUjetMDx549e77++utixYrNnj0bsmbXrl0uLi7clyCI/AZJFoNJSkpCt3vr1i30gLzDRbcIO7ZTp0416HILBr8xY8bs378fHSW6zp9//rlo0aKRkZHqvXZMr6Fgnj59qv0OMbhhgR2+wkTkBWZmZo0bN4aA8Pf3FyYJZOrUdOsdTdrJyWn58uWHDh1asmRJSkrKnDlzbt++zX2trKzKlSvn6Ojo7u6ONq/NypUrDVrFLInu9OBsxdnn4OCwePHibt26Va9evUyZMvx2EkEQ+RCSLAaDjhXdq+hoU8EsDXZs03e76CLXrFmDedu6desyu32AGR46SvwQY9K+fftq1apVs2ZN1QvukJCQsLAwbgFwwwI7fIWJyCNQZRleG9BR7zJ1WgDqHVqhdevWkydPjomJuX79OjdCDdjb2wcHB0Ptoc1rg/Yv/4o8a2vrKlWqoDS0n2qGGxbY1QtU2mSYHsw9MEPAGVeyZEluIQgiP0OSxWDQsaJ7FR1tKiVKlIAd2/Td7p07dzCNw8B2+PDhwMBAYc0IhNm4ceOlS5dGjx6trXs6deqEQfHYsWP8aja2cMMCOw9A5A6ooAMHDkRFRYn9VF3i5eVlaWnZpEkTYXqF7nqXqVNTrHcohjRPwHFJwU8QAKWC9EMonDp1iueLk5ycrL3Lwa/i4+OfP38u9rWAaOvQocOjR4+032AE9+PHjzt27KhKOr3pwclbunTpJ0+eqCt2oQv9/PxepsItBEHkH+iF/dlAUFDQkSNHunfvnv4BIvSYGLQwtmHmhzk3+kfhoQU6R/S2//nPfy5evPjxxx936dJF+4kG9KrPnj3bvn17aGgo4oFjz549/fr169GjRyF5cXs+4cGDBytWrNixYwfm5dAimKl///33Z86cmTBhgvbzLxzd9S5TpyZX75AXS5YsWbVqFQ4EaQWhhrLatGlTnTp1Ro4cqT4HbmdnFx0dvXnzZqg6c3PzgICArVu3Llu2rGHDhtqv6QMQFlA2Pj4+VlZWKIR9+/ZBvtSuXZv7IrC/v//u3btjYmISExMPHjz4yy+/ODo64lj8xplMeiBueE0hDBJz9uzZpUuXIoWIGQEaNWqUb5cNEUThhCRLNoD+LjPJgoEHHfTdu3ddXV07d+6cZrDB5HLnzp2LFi1Cz9u4ceP58+e/8cYbaQY//KR58+aIB50ywHg5bty4oUOHpnmkSJ6cHroKKiiubt26aTSa48eP//nnn9CXVatWnTNnDqb1aaoM6K53mTo1uXpHwtq3b48EQ2SgfI4dOwaFMWDAgOnTp2sfEflCI4fy8Pb2RrATJ05AFkyZMsXJySlNMUKytG3b9ubNmzg7vLy8YmNjoSHwQ16Y0CXwhXZE4Rw4cCA4OHjgwIHa78iRSQ+O6ODggDo9evQoTuGoqCjEMGzYML6KCPGnr1mCIPIQs/TXY4lcA4Xv5uZmYWHRs2fP8uXLC2sOc/78+cWLFy9fvhzTTWEiCgFU7wRBmDrGXGEmsgvM4caOHTty5Mhc0ysEQRAEYaLQVRaCIAiCIEwAuspCEARBEIQJQJKFIAiCIAgTgCQLQRAEQRAmAEkWgiAIgiBMAJIshY779+9v2LAhNDRU7BOFA6p3giBMHZIshY7w8HAPD4/o6GixTxQOqN4JgjB1SLJkiefPn9+5c4c+R0IQBEEQOQ1Jlixx6tSpTz/9FKpF7BvIzp07u2TEd999J0KkkpSUtHv37sGDB8MLW7hhEX5ELoJi9/T0HDt2rLOzc7du3WbMmHHjxg0j3myEeDw8PEaOHIkK5fHcvHlT+GlRyOs9ICDA3d2d7mQRBKFC3xgyntjY2I0bN9aoUaN///7GfT6tZMmSb7zxBsY/lUaNGl2/fh1DVOPGjXmYFy9ebNiwwc3NrXPnziNGjDAzM9uyZUtCQoKjo2OaL9dIQt8YMg6U+dKlS//444/27dujIlq0aHHhwoVt27ahGBs0aCACSRATE7Nw4UJIFlTo8OHDeTwQr/Xr19f+RhXV+9GjR5FlZJ8aKkEQAswRCeO4dOkSBoATJ06I/Szz8uXL9evXY/IdEhIiTBrNrVu3XF1dYYcvdnkYWGDnAQzl3Llz0Fh3794V+4Q0fn5+jx8/FjsazfPnz6dNmzZx4sRnz54JkwSJiYnQPdrVFxwcDO0ya9as+Ph4YaJ612h27NhBDZUgCG3oxpCRYBLs6elZvXr1pk2bClOWCQ0NhQDCJL5ChQrCpCje3t7m5uZdu3blH5XFFm5YYOcBiFyjUaNGlStXFjuKYmtrW6NGjaioqJiYGGGSwNLScsiQIdoXZuzs7Jo0aQLhAskiTCZb7+Hh4atWrYK06tKlS8+ePWfOnHnhwgXoLeGdCnbRzvl9MYTcsGFDXFyc8FMUlOeYMWPgtXr1amjBcePGwQ3mzZuXnJwsAqWCX7m5ufEbZ+nj4ehNDwL8+OOPSIyzszPCwHHgwIGUlBThTRBEfoIki5Fgtv3333+jjytdurQwZZmLFy8+ffoUcfJRCiQkJDx48MDe3h6jGrcAuGGBHb7CROQFGNhiY2OrVKlSqlQpYTIKjKCJiYliJxUTrfewsLDZs2cfP3589OjRixcvnjp1KvK1cOFC7cVeKLR169bB2Lx5c2whETw8PBYtWoSS5AFsbGymTZuGn/fp08fa2vqjjz6CGwwfPrxo0aI8DEB4/Mrd3b179+7w7dev3969e7XjATLpwbwtJCTExcUFdqiimjVrLl++fOvWrbCLEARB5B9Sr7UQBrNly5a33347ICAA7rt37/bv3//cuXPcyzj4XYb//Oc/6FWFSaPBjPO9997jtwzOnj2LGSe2cMMCO3xFOEOgG0NZ5MWLF1CWoaGha9aswRT/9u3bwsNYUI/jx4+fO3duUlKSajHFeoc46Ny585kzZ8R+6v0spBZbsa/RXLlyBfpgx44dqhGWXr16HTx4kO+q6L4xBKHTtWtXLy8vsa/RwA0L7GJfLj1pSE5OhnYxupAJgshR6CqLMWDEQv/YunVr7fWSWQQd961btwYOHGhpaSlMqYISAyQcGK4wiUT3jS3csMAO39RQRK4SFBQEhTFkyBBfX1/ojLp16woPY4EcuX//vrOzs3oVwUTr3crKCtuHDx9CE3CLmZlZ6dKl1auGSDlOnLJly3bo0EE11q9f38HBAYWQ5r6PDhISEk6dOlWtWrVmzZoJk6LADQvs6lUovelJA34YHR1tYWFBJxdB5E9IshjD6dOnAwICunXrxh8UioyMfPbsGfcyDkyvjxw50rhxY3TfwvQ61tbWbdu2hZrBFm5hJfICe3v79evXr1q1qmXLlp9//vnatWuzsvTB39//559/fuutt6CAhUkL06r3pk2bIp0okOHDh7u5uQUGBqpagZOYmBgSElKhQgVogqhXQCiUK1cOdq7JZEDIx48foyKKFy8uTIoCNyywq/HoTQ+AxcfHBxoUkrFXr16DBg3666+/hB9BEPkMkiwGExsb6+npWbt2bTs7O97n8tWX2EK4pO8TZcA0+vLly9BANjY2wpQKJJE6UPXt2xedKbZ8F3YumIhcBrNwzNSbNGkyYcKEDz74YO/evdeuXRN+BoLG89NPP5UpU2bSpEnaV9dMtN7RehcsWLB06dIqVaps3rx51KhR48aNQ+GoVywgWSIiInx9fUeMGAFxoIIMQmfwC0vZiN70wLFnz56vv/66WLFis2fPhqzZtWuXi4sL9yUIIr9BksVgkpKS0O3eunULPSDvcNEtwo7t1KlTjbjcgp7aw8MDo2CrVq2E6RUYxsqWLfv06VPtd4jBDQvs2oMckfuYmZk1btwYAsLf31+YDAHad9myZcHBwXPmzNFeZgtMt96h55ycnJYvX37o0KElS5akpKQgd7dv3+a+VlZW5cqVc3R0dHd3hzjQZuXKlVlcxZwhutODs3X//v0ODg6LFy/GhKF69eqQj/x2EkEQ+RCSLAaDjhXdq+hoU8EsDXZs03e76CLXrFmDedu6desyu33AHz5K82wzB5O/mjVrhoSEhIWFCVPqcxCwwA5fYSLyCMiIDK8N6K136BXM/gMDA+fPn1+rVi1hfUUBqHdohdatW0+ePDkmJub69evcCDVgb28PlQa1B3GgDU4c+VfkWVtbV6lSBaWh/VQz3LDArl6g0ibD9GDuERkZifIvWbIktxAEkZ8hyWIw6FjRvYqONpUSJUrAjm36bvfOnTuYxmFgO3z4MMYnYdVCo9GcOHECjt69e2e4KrBTp04YFI8dO8avZmMLNyyw8wBE7oBKPHDgQFRUlNhP1SVeXl6WlpZNmjQRplforneuVx49evTNN9+k1yscU6x3KIbw8HCxkwqXFPwEAWjhSD+EwqlTp3i+OMnJydq7HPwqPj7++fPnYl8LiLYOHTqgAK9evSpMigI31H/Hjh1VSac3PTh5S5cu/eTJE3XFLnShn5/fy1S4hSCI/AO9sD8bCAoKOnLkSPfu3dM/QIQeE4MWxjbM/DDnRv8oPF4RGhq6du3aVq1awTfDWSZ61WfPnm3fvh0hEQ8ce/bs6devX48ePQrJi9vzCQ8ePFixYsWOHTswL4cWwUz9+++/P3PmzIQJE7Sff+HoqHeMjlAqvr6+77zzDsZFjLsqNjY26hUCk6t3yIslS5asWrUKB4K0glBDWW3atKlOnTojR45UF2nZ2dlFR0dv3rwZqs7c3DwgIGDr1q3Lli1r2LCh9mv6AIQFlI2Pj4+VlRUKYd++fZAvtWvX5r4I7O/vv3v37piYmMTExIMHD/7yyy+Ojo44Fr9xJpMeiBteUwiDxJw9exZSEilEzAjQqFGjfLtsiCAKJyRZsgH0d5lJFgw86KDv3r3r6urauXPn9IMNBqrbt28PGjSoUqVKwvQ6+Enz5s0RDzplgPFy3LhxQ4cO1X6tlkHk9NBVUEFxdevWTZP6to8///zz4sWLVatWnTNnDqb16S+P6ah32Ldt24bZ/Llz545pAfXTvn17dVGLydU7Eob0I8EQGSgf5AgKY8CAAdOnT9c+IvL1xhtvQHl4e3sj2IkTJyALpkyZ4uTklKYYIVnatm178+ZN6BIvL6/Y2FhoCPyQFyZ0CXyhHVE4Bw4cCA4OHjhw4KRJk1RtJJMeHNHBwQF1evToUZzCUVFRiGHYsGF8FRHiT1+zBEHkIWbpr8cSBZvz588vXrx4+fLlmG4KE1EIoHonCMLUMeYKM0EQBEEQRC5DV1kIgiAIgjAB6CoLQRAEQRAmAEkWgiAIgiBMAJIsBEEQBEGYACRZCIIgCIIwAUiyEARBEASR71GU/wdKkYveJB0rlQAAAABJRU5ErkJggg==" width="50%" /></p>
+</div>
+<div id="adding-coloured-table-footers" class="section level2">
+<h2>Adding (coloured) table footers</h2>
+<p>Use the <code>footer</code> argument to add a footer line to the
+table. It is also possible to add a string as <code>table_footer</code>
+attribute.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># colored caption, simple footer</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  x,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="fu">c</span>(<span class="st">&quot;# Title&quot;</span>, <span class="st">&quot;red&quot;</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">footer =</span> <span class="st">&quot;Footer line&quot;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Title</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Footer line</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># as attribute</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> x</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(out, <span class="st">&quot;table_caption&quot;</span>) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;*A green title*&quot;</span>, <span class="st">&quot;green&quot;</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(out, <span class="st">&quot;table_footer&quot;</span>) <span class="ot">&lt;-</span> <span class="st">&quot;A simple footer&quot;</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(out)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; *A green title*</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; A simple footer</span></span></code></pre></div>
+<p>Coloured footers can be added in the same way as for captions.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># colored caption and footer</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  x,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="fu">c</span>(<span class="st">&quot;# Title&quot;</span>, <span class="st">&quot;red&quot;</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">footer =</span> <span class="fu">c</span>(<span class="st">&quot;Footer line in blue&quot;</span>, <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Title</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Footer line in blue</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># as attribute</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> x</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(out, <span class="st">&quot;table_caption&quot;</span>) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;*A green title*&quot;</span>, <span class="st">&quot;green&quot;</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(out, <span class="st">&quot;table_footer&quot;</span>) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Footer line in blue&quot;</span>, <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(out)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; *A green title*</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Footer line in blue</span></span></code></pre></div>
+</div>
+<div id="adding-subtitles" class="section level2">
+<h2>Adding subtitles</h2>
+<p>Subtitles can be added using the <code>subtitle</code> argument, or
+the <code>table_subtitle</code> attribute. Note that you must take care
+of adding new-line characters.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># colored caption, subtitle and footer</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  x,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="fu">c</span>(<span class="st">&quot;# Title&quot;</span>, <span class="st">&quot;red&quot;</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">subtitle =</span> <span class="fu">c</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">   A subtitle in yellow&quot;</span>, <span class="st">&quot;yellow&quot;</span>),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">footer =</span> <span class="fu">c</span>(<span class="st">&quot;Footer line in blue&quot;</span>, <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Title </span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   A subtitle in yellow</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Footer line in blue</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co"># as attribute</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> x</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(out, <span class="st">&quot;table_caption&quot;</span>) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;*A green title*&quot;</span>, <span class="st">&quot;green&quot;</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(out, <span class="st">&quot;table_subtitle&quot;</span>) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">A yellow subtitle&quot;</span>, <span class="st">&quot;yellow&quot;</span>)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(out, <span class="st">&quot;table_footer&quot;</span>) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Footer line in blue&quot;</span>, <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(out)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; *A green title* </span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; A yellow subtitle</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Footer line in blue</span></span></code></pre></div>
+</div>
+<div id="exporting-multiple-data-frames-into-multiple-tables" class="section level2">
+<h2>Exporting multiple data frames into multiple tables</h2>
+<p>Multiple data frames saved in a <code>list()</code> can be used to
+create multiple tables at once.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(iris[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>)]),</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(iris[<span class="dv">51</span><span class="sc">:</span><span class="dv">53</span>, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>)]),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(iris[<span class="dv">111</span><span class="sc">:</span><span class="dv">113</span>, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">5</span>)])</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># three different tables</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(x)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Petal.Length |    Species</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ----------------------------------------</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         7.00 |         4.70 | versicolor</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.40 |         4.50 | versicolor</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.90 |         4.90 | versicolor</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Petal.Width |   Species</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------------------------</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.50 |        2.00 | virginica</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.40 |        1.90 | virginica</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.80 |        2.10 | virginica</span></span></code></pre></div>
+</div>
+<div id="adding-table-captions-and-footers" class="section level2">
+<h2>Adding table captions and footers</h2>
+<p>For multiple tables, it is also possible to add a caption for each
+table. Simply use a <code>list()</code> of strings for the
+<code>caption</code> argument, or add a <code>table_caption</code>
+attribute. to <em>each</em> data frame in the list.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># one caption for each table</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(x, <span class="at">caption =</span> <span class="fu">list</span>(<span class="st">&quot;Table 1&quot;</span>, <span class="st">&quot;Table 2&quot;</span>, <span class="st">&quot;Table 3&quot;</span>))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Table 1</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Table 2</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Petal.Length |    Species</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ----------------------------------------</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         7.00 |         4.70 | versicolor</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.40 |         4.50 | versicolor</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.90 |         4.90 | versicolor</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Table 3</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Petal.Width |   Species</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------------------------</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.50 |        2.00 | virginica</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.40 |        1.90 | virginica</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.80 |        2.10 | virginica</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="co"># add attribute to *each* data frame</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> x</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(out)) {</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">attr</span>(out[[i]], <span class="st">&quot;table_caption&quot;</span>) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;Table&quot;</span>, i)</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(out)</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Table 1</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Table 2</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Petal.Length |    Species</span></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ----------------------------------------</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         7.00 |         4.70 | versicolor</span></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.40 |         4.50 | versicolor</span></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.90 |         4.90 | versicolor</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Table 3</span></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Petal.Width |   Species</span></span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------------------------</span></span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.50 |        2.00 | virginica</span></span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.40 |        1.90 | virginica</span></span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.80 |        2.10 | virginica</span></span></code></pre></div>
+<p>In the same way you can add multiple footers. Note, however, that you
+have to take care about adding new-line characters.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add captions and footers for each table</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  x,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="fu">list</span>(<span class="st">&quot;Table 1&quot;</span>, <span class="st">&quot;Table 2&quot;</span>, <span class="st">&quot;Table 3&quot;</span>),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">footer =</span> <span class="fu">list</span>(<span class="st">&quot;Footer 1</span><span class="sc">\n\n</span><span class="st">&quot;</span>, <span class="st">&quot;Footer 2</span><span class="sc">\n\n</span><span class="st">&quot;</span>, <span class="st">&quot;Footer 3</span><span class="sc">\n\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Table 1</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Footer 1</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Table 2</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Petal.Length |    Species</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ----------------------------------------</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         7.00 |         4.70 | versicolor</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.40 |         4.50 | versicolor</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.90 |         4.90 | versicolor</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Footer 2</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Table 3</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Petal.Width |   Species</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------------------------</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.50 |        2.00 | virginica</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.40 |        1.90 | virginica</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.80 |        2.10 | virginica</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Footer 3</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> x</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(out)) {</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">attr</span>(out[[i]], <span class="st">&quot;table_caption&quot;</span>) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;Table&quot;</span>, i)</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">attr</span>(out[[i]], <span class="st">&quot;table_footer&quot;</span>) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;Footer&quot;</span>, i, <span class="st">&quot;</span><span class="sc">\n\n</span><span class="st">&quot;</span>)</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(out)</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Table 1</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Footer 1 </span></span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Table 2</span></span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Petal.Length |    Species</span></span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ----------------------------------------</span></span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         7.00 |         4.70 | versicolor</span></span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.40 |         4.50 | versicolor</span></span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.90 |         4.90 | versicolor</span></span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Footer 2 </span></span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Table 3</span></span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Petal.Width |   Species</span></span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------------------------</span></span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.50 |        2.00 | virginica</span></span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.40 |        1.90 | virginica</span></span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.80 |        2.10 | virginica</span></span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Footer 3</span></span></code></pre></div>
+<p>Finally, you can even add multiple footer lines to each table, giving
+each a different color. In this case, each list element has to be a
+character vector of length 2 (the first element being the caption, and
+the second being the name of a colour).</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colored table captions and multiple footers per table</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">export_table</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  x,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="fu">list</span>(</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;Red Table 1&quot;</span>, <span class="st">&quot;red&quot;</span>),</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;Blue Table 2&quot;</span>, <span class="st">&quot;bue&quot;</span>),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;Green Table 3&quot;</span>, <span class="st">&quot;green&quot;</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">footer =</span> <span class="fu">list</span>(</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;Footer line 1</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="st">&quot;green&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;Second line</span><span class="sc">\n\n</span><span class="st">&quot;</span>, <span class="st">&quot;red&quot;</span>)),</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;Footer line A</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="st">&quot;blue&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;Second line</span><span class="sc">\n\n</span><span class="st">&quot;</span>, <span class="st">&quot;green&quot;</span>)),</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;Footer line I</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="st">&quot;yellow&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;Second line</span><span class="sc">\n\n</span><span class="st">&quot;</span>, <span class="st">&quot;blue&quot;</span>))</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Red Table 1</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Sepal.Width | Species</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ------------------------------------</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         5.10 |        3.50 |  setosa</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.90 |        3.00 |  setosa</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         4.70 |        3.20 |  setosa</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Footer line 1</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Second line</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Blue Table 2</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Petal.Length |    Species</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ----------------------------------------</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         7.00 |         4.70 | versicolor</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.40 |         4.50 | versicolor</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.90 |         4.90 | versicolor</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Footer line A</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Second line</span></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Green Table 3</span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length | Petal.Width |   Species</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --------------------------------------</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.50 |        2.00 | virginica</span></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.40 |        1.90 | virginica</span></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         6.80 |        2.10 | virginica</span></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Footer line I</span></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Second line</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

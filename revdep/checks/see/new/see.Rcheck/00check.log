@@ -1,0 +1,68 @@
+* using log directory 'C:/Users/etienne/Desktop/Divers/datawizard/revdep/checks/see/new/see.Rcheck'
+* using R version 4.2.2 (2022-10-31 ucrt)
+* using platform: x86_64-w64-mingw32 (64-bit)
+* using session charset: UTF-8
+* using options '--no-manual --no-build-vignettes'
+* checking for file 'see/DESCRIPTION' ... OK
+* checking extension type ... Package
+* this is package 'see' version '0.7.4'
+* package encoding: UTF-8
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking whether package 'see' can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking R files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking loading without being on the library search path ... OK
+* checking dependencies in R code ... OK
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... OK
+* checking Rd files ... OK
+* checking Rd metadata ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... OK
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking examples ... OK
+* checking for unstated dependencies in 'tests' ... OK
+* checking tests ... ERROR
+  Running 'testthat.R'
+Running the tests in 'tests/testthat.R' failed.
+Last 13 lines of output:
+    4. ├─base::plot(s)
+    5. └─correlation:::plot.easycormatrix(s)
+    6.   ├─base::plot(visualisation_recipe(x, ...), ...)
+    7.   ├─datawizard::visualisation_recipe(x, ...)
+    8.   └─correlation:::visualisation_recipe.easycormatrix(x, ...)
+    9.     └─datawizard::reshape_longer(...)
+   10.       └─datawizard:::.select_nse(...)
+   11.         └─datawizard:::.eval_expr(...)
+   12.           └─datawizard:::.select_symbol(...)
+   13.             ├─base::which(vapply(data, x, FUN.VALUE = logical(1L)))
+   14.             └─base::vapply(data, x, FUN.VALUE = logical(1L))
+  
+  [ FAIL 2 | WARN 5 | SKIP 8 | PASS 30 ]
+  Error: Test failures
+  Execution halted
+* DONE
+Status: 1 ERROR

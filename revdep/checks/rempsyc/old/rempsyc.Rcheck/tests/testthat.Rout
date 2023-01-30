@@ -1,0 +1,30 @@
+
+R version 4.2.2 (2022-10-31 ucrt) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+> library(rempsyc)
+Suggested APA citation: Thériault, R. (2022). rempsyc: Convenience functions for psychology 
+(R package version 0.1.0) [Computer software]. https://rempsyc.remi-theriault.com 
+> 
+> test_check("rempsyc")
+[ FAIL 0 | WARN 1 | SKIP 0 | PASS 0 ]
+
+[ FAIL 0 | WARN 1 | SKIP 0 | PASS 0 ]
+> 
+> proc.time()
+   user  system elapsed 
+   3.51    0.71    4.23 
