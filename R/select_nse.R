@@ -261,18 +261,21 @@
 
 .select_square_bracket <- function(expr, data, ignore_case, regex, verbose) {
   first_obj <- .eval_expr(expr[[2]], data,
-                          ignore_case = ignore_case,
-                          regex = regex, verbose)
+    ignore_case = ignore_case,
+    regex = regex, verbose
+  )
   .eval_expr(first_obj[expr[[3]]], data,
-             ignore_case = ignore_case,
-             regex = regex, verbose)
+    ignore_case = ignore_case,
+    regex = regex, verbose
+  )
 }
 
 .select_names <- function(expr, data, ignore_case, regex, verbose) {
   first_obj <- .dynEval(expr[[2]], inherits = FALSE, minframe = 0L)
   .eval_expr(names(first_obj), data,
-             ignore_case = ignore_case,
-             regex = regex, verbose = FALSE)
+    ignore_case = ignore_case,
+    regex = regex, verbose = FALSE
+  )
 }
 
 .select_helper <- function(expr, data, ignore_case, regex, verbose) {
@@ -402,7 +405,8 @@
 }
 
 .dynEval <- function(x, ifnotfound = stop(gettextf("%s not found", sQuote(x)),
-                                         domain = NA), minframe = 1L, inherits = FALSE) {
+                       domain = NA
+                     ), minframe = 1L, inherits = FALSE) {
   n <- sys.nframe()
   x <- insight::safe_deparse(x)
   while (n > minframe) {
@@ -415,4 +419,3 @@
   }
   ifnotfound
 }
-
