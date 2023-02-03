@@ -61,6 +61,15 @@
 }
 
 
+# This is where we dispatch the expression to several helper functions.
+# This function is called multiple times for expressions that are composed
+# of several symbols/language.
+#
+# Ex:
+# * "cyl" -> will go to .select_char() and will return directly
+# * cyl:gear -> function (`:`) so find which function it is, then get the
+#   position for each variable, then evaluate the function with the positions
+
 .eval_expr <- function(x, data, ignore_case, regex, verbose) {
   if (is.null(x)) {
     return(NULL)
@@ -82,6 +91,13 @@
 
   out
 }
+
+
+# Possibilites:
+# - quoted variable name
+# - quoted variable name with ignore case
+# - character that should be regex-ed on variable names
+# - special word "all" to return all vars
 
 .select_char <- function(data, x, ignore_case, regex, verbose) {
   # use colnames because names() doesn't work for matrices
@@ -194,8 +210,7 @@
   out
 }
 
-# Evaluate language expressions i.e when there's a function involved (-, c(),
-# :, etc.)
+# Dispatch expressions to various select helpers according to the function call.
 
 .eval_call <- function(data, x, ignore_case, regex, verbose) {
   type <- as.character(x[[1]])
@@ -223,6 +238,7 @@
   )
 }
 
+# e.g 1:3, or gear:cyl
 .select_seq <- function(expr, data, ignore_case, regex, verbose) {
   x <- .eval_expr(expr[[2]],
     data = data, ignore_case = ignore_case,
@@ -235,6 +251,7 @@
   x:y
 }
 
+# e.g -cyl
 .select_minus <- function(expr, data, ignore_case, regex, verbose) {
   x <- .eval_expr(expr[[2]], data,
     ignore_case = ignore_case,
@@ -247,6 +264,7 @@
   }
 }
 
+# e.g c("gear", "cyl")
 .select_c <- function(expr, data, ignore_case, regex, verbose) {
   lst_expr <- as.list(expr)
   lst_expr[[1]] <- NULL
@@ -256,6 +274,7 @@
   ))
 }
 
+# e.g -(gear:cyl)
 .select_bracket <- function(expr, data, ignore_case, regex, verbose) {
   .eval_expr(expr[[2]], data,
     ignore_case = ignore_case,
@@ -263,6 +282,7 @@
   )
 }
 
+# e.g myvector[3]
 .select_square_bracket <- function(expr, data, ignore_case, regex, verbose) {
   first_obj <- .eval_expr(expr[[2]], data,
     ignore_case = ignore_case,
@@ -282,6 +302,7 @@
   )
 }
 
+# e.g starts_with("Sep")
 .select_helper <- function(expr, data, ignore_case, regex, verbose) {
   lst_expr <- as.list(expr)
 
@@ -307,8 +328,7 @@
   grep(rgx, colnames(data), ignore.case = ignore_case)
 }
 
-# Special case where the expression of select is something like args$select
-# that happens when we use grouped_data (see e.g center.grouped_df())
+# e.g args$select (happens when we use grouped_data (see center.grouped_df()))
 .select_dollar <- function(expr, data, ignore_case, regex, verbose) {
   first_obj <- .dynGet(expr[[2]], inherits = FALSE, minframe = 0L)
   .eval_expr(first_obj[[deparse(expr[[3]])]], data,
@@ -317,6 +337,7 @@
   )
 }
 
+# e.g ~ gear + cyl
 .select_tilde <- function(expr, data, ignore_case, regex, verbose) {
   vars <- all.vars(expr)
   unlist(lapply(vars, .eval_expr,
@@ -325,6 +346,7 @@
   ))
 }
 
+# e.g list(gear = 4, cyl = 5) [NOT SURE IT WILL BE USED]
 .select_list <- function(expr, data, ignore_case, regex, verbose) {
   vars <- names(expr)
   unlist(lapply(vars, .eval_expr,
@@ -333,7 +355,7 @@
   ))
 }
 
-# For functions with parenthesis e.g is.numeric()
+# e.g is.numeric()
 .select_context <- function(expr, data, ignore_case, regex, verbose) {
   x_dep <- insight::safe_deparse(expr)
   if (endsWith(x_dep, "()")) {
@@ -348,6 +370,7 @@
   }
 }
 
+# -------------------------------------
 
 .check_data <- function(data) {
   if (is.null(data)) {
@@ -397,7 +420,7 @@
   }
 }
 
-# Almost identical to .dynGet(). The difference is that we deparse the expression
+# Almost identical to dynGet(). The difference is that we deparse the expression
 # because get0() allows symbol only since R 4.1.0
 .dynGet <- function(x, ifnotfound = stop(gettextf("%s not found", sQuote(x)),
                       domain = NA
@@ -417,9 +440,9 @@
   ifnotfound
 }
 
-# Similar to dynGet() but instead of getting an object from the environment,
-# we try to evaluate an expression. It stops as soon as the evaluation works.
-# Returns NULL if can never be evaluated.
+# Similar to .dynGet() but instead of getting an object from the environment,
+# we try to evaluate an expression. It stops as soon as the evaluation doesn't
+# error. Returns NULL if can never be evaluated.
 .dynEval <- function(x, ifnotfound = stop(gettextf("%s not found", sQuote(x)),
                        domain = NA
                      ), minframe = 1L, inherits = FALSE) {
