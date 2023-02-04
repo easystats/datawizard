@@ -21,8 +21,6 @@
 
   # directly return all names if select == exclude == NULL
   if (is.null(expr_select) && is.null(expr_exclude)) {
-    # load again
-    .attach_packages(conflicting_packages)
     return(columns)
   }
 
@@ -93,7 +91,7 @@
 }
 
 
-# Possibilites:
+# Possibilities:
 # - quoted variable name
 # - quoted variable name with ignore case
 # - character that should be regex-ed on variable names
