@@ -25,17 +25,25 @@
   }
 
   # get the position of columns that are selected or excluded
-  selected <- .eval_expr(expr_select, data,
+  selected <- .eval_expr(
+    expr_select,
+    data,
     ignore_case = ignore_case,
-    regex = regex, verbose
+    regex = regex,
+    verbose = verbose
   )
-  excluded <- .eval_expr(expr_exclude, data,
+  excluded <- .eval_expr(
+    expr_exclude,
+    data,
     ignore_case = ignore_case,
-    regex = regex, verbose
+    regex = regex,
+    verbose = verbose
   )
 
-  if ((any(selected < 0) && any(selected > 0)) ||
-    (any(excluded < 0) && any(excluded > 0))) {
+  selected_has_mix_idx <- any(selected < 0L) && any(selected > 0L)
+  excluded_has_mix_idx <- any(excluded < 0L) && any(excluded > 0L)
+
+  if (selected_has_mix_idx || excluded_has_mix_idx) {
     insight::format_error(
       "You can't mix negative and positive indices in `select` or `exclude`."
     )
@@ -103,7 +111,7 @@
   if (isTRUE(regex)) {
     grep(x, columns)
   } else if (length(x) == 1L && x == "all") {
-    return(seq_along(data))
+    seq_along(data)
   } else if (isTRUE(ignore_case)) {
     matches <- match(toupper(x), toupper(columns))
     matches[!is.na(matches)]
@@ -183,16 +191,23 @@
 
     if (is_select_helper) {
       new_expr <- str2lang(unlist(new_expr))
-      out <- .eval_expr(new_expr,
-        data = data, ignore_case = ignore_case,
-        regex = regex, verbose
+      out <- .eval_expr(
+        new_expr,
+        data = data,
+        ignore_case = ignore_case,
+        regex = regex,
+        verbose = verbose
       )
     } else if (length(new_expr) == 1L && is.function(new_expr)) {
       out <- which(vapply(data, new_expr, FUN.VALUE = logical(1L)))
     } else {
-      out <- unlist(lapply(new_expr, .eval_expr,
+      out <- unlist(lapply(
+        new_expr,
+        .eval_expr,
         data = data,
-        ignore_case = ignore_case, regex = regex, verbose
+        ignore_case = ignore_case,
+        regex = regex,
+        verbose = verbose
       ))
     }
   }
@@ -238,22 +253,31 @@
 
 # e.g 1:3, or gear:cyl
 .select_seq <- function(expr, data, ignore_case, regex, verbose) {
-  x <- .eval_expr(expr[[2]],
-    data = data, ignore_case = ignore_case,
-    regex = regex, verbose
+  x <- .eval_expr(
+    expr[[2]],
+    data = data,
+    ignore_case = ignore_case,
+    regex = regex,
+    verbose = verbose
   )
-  y <- .eval_expr(expr[[3]],
-    data = data, ignore_case = ignore_case,
-    regex = regex, verbose
+  y <- .eval_expr(
+    expr[[3]],
+    data = data,
+    ignore_case = ignore_case,
+    regex = regex,
+    verbose = verbose
   )
   x:y
 }
 
 # e.g -cyl
 .select_minus <- function(expr, data, ignore_case, regex, verbose) {
-  x <- .eval_expr(expr[[2]], data,
+  x <- .eval_expr(
+    expr[[2]],
+    data,
     ignore_case = ignore_case,
-    regex = regex, verbose
+    regex = regex,
+    verbose = verbose
   )
   if (length(x) == 0L) {
     seq_along(data)
@@ -266,37 +290,53 @@
 .select_c <- function(expr, data, ignore_case, regex, verbose) {
   lst_expr <- as.list(expr)
   lst_expr[[1]] <- NULL
-  unlist(lapply(lst_expr, .eval_expr, data,
+  unlist(lapply(
+    lst_expr,
+    .eval_expr,
+    data,
     ignore_case = ignore_case,
-    regex = regex, verbose
+    regex = regex,
+    verbose = verbose
   ))
 }
 
 # e.g -(gear:cyl)
 .select_bracket <- function(expr, data, ignore_case, regex, verbose) {
-  .eval_expr(expr[[2]], data,
+  .eval_expr(
+    expr[[2]],
+    data,
     ignore_case = ignore_case,
-    regex = regex, verbose
+    regex = regex,
+    verbose = verbose
   )
 }
 
 # e.g myvector[3]
 .select_square_bracket <- function(expr, data, ignore_case, regex, verbose) {
-  first_obj <- .eval_expr(expr[[2]], data,
+  first_obj <- .eval_expr(
+    expr[[2]],
+    data,
     ignore_case = ignore_case,
-    regex = regex, verbose
+    regex = regex,
+    verbose = verbose
   )
-  .eval_expr(first_obj[expr[[3]]], data,
+  .eval_expr(
+    first_obj[expr[[3]]],
+    data,
     ignore_case = ignore_case,
-    regex = regex, verbose
+    regex = regex,
+    verbose = verbose
   )
 }
 
 .select_names <- function(expr, data, ignore_case, regex, verbose) {
   first_obj <- .dynEval(expr[[2]], inherits = FALSE, minframe = 0L)
-  .eval_expr(names(first_obj), data,
+  .eval_expr(
+    names(first_obj),
+    data,
     ignore_case = ignore_case,
-    regex = regex, verbose = FALSE
+    regex = regex,
+    verbose = FALSE
   )
 }
 
@@ -329,27 +369,38 @@
 # e.g args$select (happens when we use grouped_data (see center.grouped_df()))
 .select_dollar <- function(expr, data, ignore_case, regex, verbose) {
   first_obj <- .dynGet(expr[[2]], inherits = FALSE, minframe = 0L)
-  .eval_expr(first_obj[[deparse(expr[[3]])]], data,
+  .eval_expr(
+    first_obj[[deparse(expr[[3]])]],
+    data,
     ignore_case = ignore_case,
-    regex = regex, verbose
+    regex = regex,
+    verbose = verbose
   )
 }
 
 # e.g ~ gear + cyl
 .select_tilde <- function(expr, data, ignore_case, regex, verbose) {
   vars <- all.vars(expr)
-  unlist(lapply(vars, .eval_expr,
-    data = data, ignore_case = ignore_case,
-    regex = regex, verbose
+  unlist(lapply(
+    vars,
+    .eval_expr,
+    data = data,
+    ignore_case = ignore_case,
+    regex = regex,
+    verbose = verbose
   ))
 }
 
 # e.g list(gear = 4, cyl = 5) [NOT SURE IT WILL BE USED]
 .select_list <- function(expr, data, ignore_case, regex, verbose) {
   vars <- names(expr)
-  unlist(lapply(vars, .eval_expr,
-    data = data, ignore_case = ignore_case,
-    regex = regex, verbose
+  unlist(lapply(
+    vars,
+    .eval_expr,
+    data = data,
+    ignore_case = ignore_case,
+    regex = regex,
+    verbose = verbose
   ))
 }
 
@@ -359,9 +410,12 @@
   if (endsWith(x_dep, "()")) {
     new_expr <- gsub("\\(\\)$", "", x_dep)
     new_expr <- str2lang(new_expr)
-    .eval_expr(new_expr,
-      data = data, ignore_case = ignore_case, regex = regex,
-      verbose
+    .eval_expr(
+      new_expr,
+      data = data,
+      ignore_case = ignore_case,
+      regex = regex,
+      verbose = verbose
     )
   } else {
     .dynEval(expr, inherits = FALSE, minframe = 0L)
@@ -374,10 +428,7 @@
   if (is.null(data)) {
     insight::format_error("The `data` argument must be provided.")
   }
-  # check data frame input
-  if (!is.null(data)) {
-    data <- .coerce_to_dataframe(data)
-  }
+  .coerce_to_dataframe(data)
 }
 
 .regex_select_helper <- function() {
