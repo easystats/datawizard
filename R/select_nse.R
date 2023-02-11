@@ -354,13 +354,15 @@
     )
   }
 
-  rgx <- if (lst_expr[[1]] == "starts_with") {
+  helper <- lst_expr[[1]]
+
+  rgx <- if (helper == "starts_with") {
     paste0("^(", collapsed_patterns, ")")
-  } else if (lst_expr[[1]] == "ends_with") {
+  } else if (helper == "ends_with") {
     paste0("(", collapsed_patterns, ")$")
-  } else if (lst_expr[[1]] == "contains") {
+  } else if (helper == "contains") {
     paste0("(", collapsed_patterns, ")")
-  } else if (lst_expr[[1]] == "regex") {
+  } else if (helper == "regex") {
     collapsed_patterns
   }
   grep(rgx, colnames(data), ignore.case = ignore_case)
@@ -471,9 +473,9 @@
 
 # Almost identical to dynGet(). The difference is that we deparse the expression
 # because get0() allows symbol only since R 4.1.0
-.dynGet <- function(x, ifnotfound = stop(gettextf("%s not found", sQuote(x)),
-                      domain = NA
-                    ), minframe = 1L,
+.dynGet <- function(x,
+                    ifnotfound = stop(gettextf("%s not found", sQuote(x)), domain = NA),
+                    minframe = 1L,
                     inherits = FALSE) {
   x <- insight::safe_deparse(x)
   n <- sys.nframe()
@@ -492,9 +494,10 @@
 # Similar to .dynGet() but instead of getting an object from the environment,
 # we try to evaluate an expression. It stops as soon as the evaluation doesn't
 # error. Returns NULL if can never be evaluated.
-.dynEval <- function(x, ifnotfound = stop(gettextf("%s not found", sQuote(x)),
-                       domain = NA
-                     ), minframe = 1L, inherits = FALSE) {
+.dynEval <- function(x,
+                     ifnotfound = stop(gettextf("%s not found", sQuote(x)), domain = NA),
+                     minframe = 1L,
+                     inherits = FALSE) {
   n <- sys.nframe()
   x <- insight::safe_deparse(x)
   while (n > minframe) {
