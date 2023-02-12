@@ -180,7 +180,7 @@
         }
         # if we actually obtain the select helper call, return it, else return
         # what we already had
-        if (length(fn) > 0 && grepl(.regex_select_helper(), fn)) {
+        if (length(fn) > 0L && grepl(.regex_select_helper(), fn)) {
           is_select_helper <<- TRUE
           return(fn)
         } else {
@@ -213,7 +213,7 @@
   }
 
   # sometimes an object that needs to be evaluated has the same name as a
-  # function (e.g colnames). Vector of names have the priority on functions
+  # function (e.g `colnames`). Vector of names have the priority on functions
   # so function evaluation is delayed at the max.
   if (is.null(out) && is.function(try_eval)) {
     cols <- names(data)
@@ -227,11 +227,6 @@
 
 .eval_call <- function(data, x, ignore_case, regex, verbose) {
   type <- as.character(x[[1]])
-  if (length(type) > 1L) {
-    # This helps when pkg::fn is used in a select helper
-    type <- "context"
-  }
-
   switch(type,
     `:` = .select_seq(x, data, ignore_case, regex, verbose),
     `-` = .select_minus(x, data, ignore_case, regex, verbose),
@@ -349,22 +344,18 @@
   if (length(lst_expr) == 2L && typeof(lst_expr[[2]]) == "symbol") {
     collapsed_patterns <- .dynGet(lst_expr[[2]], inherits = FALSE, minframe = 0L)
   } else {
-    collapsed_patterns <- paste(unlist(lst_expr[2:length(lst_expr)]),
-      collapse = "|"
-    )
+    collapsed_patterns <- paste(unlist(lst_expr[2:length(lst_expr)]), collapse = "|")
   }
 
-  helper <- lst_expr[[1]]
+  helper <- insight::safe_deparse(lst_expr[[1]])
 
-  rgx <- if (helper == "starts_with") {
-    paste0("^(", collapsed_patterns, ")")
-  } else if (helper == "ends_with") {
-    paste0("(", collapsed_patterns, ")$")
-  } else if (helper == "contains") {
-    paste0("(", collapsed_patterns, ")")
-  } else if (helper == "regex") {
-    collapsed_patterns
-  }
+  rgx <- switch(helper,
+    "starts_with" = paste0("^(", collapsed_patterns, ")"),
+    "ends_with" = paste0("(", collapsed_patterns, ")$"),
+    "contains" = paste0("(", collapsed_patterns, ")"),
+    "regex" = collapsed_patterns,
+    insight::format_error("There is no select helper called '", helper, "'.")
+  )
   grep(rgx, colnames(data), ignore.case = ignore_case)
 }
 

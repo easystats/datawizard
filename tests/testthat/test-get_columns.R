@@ -259,10 +259,6 @@ test_that("get_columns from other functions", {
     iris[c("Sepal.Length", "Sepal.Width")]
   )
 
-  # This turns out to be that the variable name "i" in test_fun1
-  # becomes the search string "i" after evaluation, so all columns
-  # containing an "i" will be returned.
-
   expect_identical(
     test_fun1(iris, starts_with("Sep")),
     iris[c("Sepal.Length", "Sepal.Width")]
