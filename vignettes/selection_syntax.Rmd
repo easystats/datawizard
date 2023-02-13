@@ -164,6 +164,12 @@ two columns; `select = -1:2` will *not* work:
 data_select(iris, -(1:2))
 ```
 
+Same thing for variable names:
+
+```{r}
+data_select(iris, -(Petal.Length:Species))
+```
+
 The second way is to use the argument `exclude`. This argument has the same 
 possibilities as `select`. Although this may not be required in most contexts, 
 if we wanted to, we could use both `select` and `exclude` arguments at the same 
