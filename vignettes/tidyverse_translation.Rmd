@@ -226,7 +226,7 @@ here and quoting them won't work. Should we comment on that? -->
 ```{r select3, class.source = "datawizard"}
 # ---------- datawizard -----------
 starwars %>%
-  data_select(select = -hair_color:eye_color)
+  data_select(select = -(hair_color:eye_color))
 ```
 :::
 

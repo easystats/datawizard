@@ -4,6 +4,17 @@ NEW FUNCTIONS
 
 * `mean_sd()` and `median_mad()` for summarizing vectors to their mean (or
   median) and a range of one SD (or MAD) above and below.  
+  
+BREAKING CHANGES
+
+* In selection patterns, expressions like `-var1:var3` to exclude all variables
+  between `var1` and `var3` are no longer accepted. The correct expression is
+  `-(var1:var3)`. This is for 2 reasons:
+  
+  * to be consistent with the behavior for numerics (`-1:2` is not accepted but
+    `-(1:2)` is);
+  * to be consistent with `dplyr::select()`, which throws a warning and only
+    uses the first variable in the first expression.
 
 MINOR CHANGES
 
@@ -12,11 +23,16 @@ MINOR CHANGES
   a warning and returned the unchanged data). The argument `verbose` is now 
   useless but is kept for backward compatibility. The documentation now contains   
   details about the valid values for `threshold` (#357).
+* In all functions that have arguments `select` and/or `exclude`, there is now
+  one warning per misspelled variable. The previous behavior was to have only one
+  warning.
 
 BUG FIXES
 
 * `empty_columns()` (and therefore `remove_empty_columns()`) now correctly detects
   columns containing only `NA_character_` (#349).
+* Select helpers now work in custom functions when argument is called `select`
+  (#356).
 
 # datawizard 0.6.5
 

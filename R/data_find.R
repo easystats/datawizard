@@ -28,7 +28,7 @@
 #'   - ranges specified via literal variable names, select-helpers (except
 #'     `regex()`) and (user-defined) functions can be negated, i.e. return
 #'     non-matching elements, when prefixed with a `-`, e.g. `-ends_with("")`,
-#'     `-is.numeric` or `-Sepal.Width:Petal.Length`. **Note:** Negation means
+#'     `-is.numeric` or `-(Sepal.Width:Petal.Length)`. **Note:** Negation means
 #'     that matches are _excluded_, and thus, the `exclude` argument can be
 #'     used alternatively. For instance, `select=-ends_with("Length")` (with
 #'     `-`) is equivalent to `exclude=ends_with("Length")` (no `-`). In case

@@ -2,7 +2,7 @@ data(efc)
 
 test_that("data_group attributes", {
   x <- data_group(efc, "c172code")
-  expect_equal(
+  expect_identical(
     attributes(x)$groups,
     structure(
       list(
@@ -41,7 +41,7 @@ test_that("data_group attributes", {
 
 # select helpers ------------------------------
 test_that("data_group regex", {
-  expect_equal(
+  expect_identical(
     attributes(data_group(mtcars, select = "yl", regex = TRUE))$groups[[1]],
     sort(unique(mtcars$cyl))
   )
@@ -54,5 +54,5 @@ test_that("data_ungroup works", {
 
   ungrouped <- data_ungroup(x)
   expect_false(inherits(ungrouped, "grouped_df"))
-  expect_identical(attributes(x)$foo, TRUE)
+  expect_true(attributes(x)$foo)
 })

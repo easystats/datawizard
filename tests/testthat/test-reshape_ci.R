@@ -1,9 +1,9 @@
 test_that("reshape_ci with single CI level", {
   df <- data.frame(
     Parameter = c("Term 1"),
-    CI = c(.8),
-    CI_low = c(.2),
-    CI_high = c(.5),
+    CI = c(0.8),
+    CI_low = c(0.2),
+    CI_high = c(0.5),
     stringsAsFactors = FALSE
   )
 
@@ -16,9 +16,9 @@ test_that("reshape_ci with single CI level", {
 test_that("reshape_ci with multiple CI levels", {
   x <- data.frame(
     Parameter = c("Term 1", "Term 2", "Term 1", "Term 2"),
-    CI = c(.8, .8, .9, .9),
-    CI_low = c(.2, .3, .1, .15),
-    CI_high = c(.5, .6, .8, .85),
+    CI = c(0.8, 0.8, 0.9, 0.9),
+    CI_low = c(0.2, 0.3, 0.1, 0.15),
+    CI_high = c(0.5, 0.6, 0.8, 0.85),
     stringsAsFactors = FALSE
   )
 

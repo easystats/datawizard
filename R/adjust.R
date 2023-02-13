@@ -65,7 +65,7 @@
 #' @export
 adjust <- function(data,
                    effect = NULL,
-                   select = NULL,
+                   select = is.numeric,
                    exclude = NULL,
                    multilevel = FALSE,
                    additive = FALSE,

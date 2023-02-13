@@ -11,27 +11,22 @@ test_that("get_columns checks for data frame", {
 # select helpers ---------------------
 
 test_that("get_columns works with select helpers", {
-  expect_equal(
+  expect_identical(
     get_columns(iris, starts_with("Sepal")),
     iris[c("Sepal.Length", "Sepal.Width")]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, ends_with("Width")),
     iris[c("Sepal.Width", "Petal.Width")]
   )
 
-  expect_equal(
-    get_columns(iris, col_ends_with("Width")),
-    iris[c("Sepal.Width", "Petal.Width")]
-  )
-
-  expect_equal(
+  expect_identical(
     get_columns(iris, regex("\\.")),
     iris[c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, contains("Wid")),
     iris[c("Sepal.Width", "Petal.Width")]
   )
@@ -42,18 +37,13 @@ test_that("get_columns works with select helpers", {
 # select helpers, negation ---------------------
 
 test_that("get_columns works with negation of select helpers", {
-  expect_equal(
+  expect_identical(
     get_columns(iris, -starts_with("Sepal")),
     iris[c("Petal.Length", "Petal.Width", "Species")]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, -ends_with("Width")),
-    iris[c("Sepal.Length", "Petal.Length", "Species")]
-  )
-
-  expect_equal(
-    get_columns(iris, -col_ends_with("Width")),
     iris[c("Sepal.Length", "Petal.Length", "Species")]
   )
 })
@@ -63,22 +53,22 @@ test_that("get_columns works with negation of select helpers", {
 # select-nse with function  ---------------------
 
 test_that("get_columns works with select-functions", {
-  expect_equal(
+  expect_identical(
     get_columns(iris, is.numeric()),
     iris[sapply(iris, is.numeric)]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, is.numeric),
     iris[sapply(iris, is.numeric)]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, is.factor()),
     iris[sapply(iris, is.factor)]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, is.factor),
     iris[sapply(iris, is.factor)]
   )
@@ -89,22 +79,21 @@ test_that("get_columns works with select-functions", {
 
 
 # select-nse with user-function  ---------------------
-
+testfun <<- function(i) {
+  is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
+}
 test_that("get_columns works with user-defined select-functions", {
-  testfun <<- function(i) {
-    is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
-  }
-  expect_equal(get_columns(iris, testfun), iris[sapply(iris, testfun)])
-  expect_equal(get_columns(iris, -testfun), iris[!sapply(iris, testfun)])
+  expect_identical(get_columns(iris, testfun), iris[sapply(iris, testfun)])
+  expect_identical(get_columns(iris, -testfun), iris[!sapply(iris, testfun)])
 
   testfun2 <<- function(i) {
     is.numeric(i) && mean(i, na.rm = TRUE) < 5
   }
-  expect_equal(
+  expect_identical(
     get_columns(iris, select = testfun, exclude = testfun2),
     iris["Sepal.Length"]
   )
-  expect_equal(
+  expect_identical(
     get_columns(iris, select = testfun, exclude = -testfun2),
     iris["Petal.Length"]
   )
@@ -115,27 +104,27 @@ test_that("get_columns works with user-defined select-functions", {
 # select-nse with negation of functions  ---------------------
 
 test_that("get_columns works with negated select-functions", {
-  expect_equal(
+  expect_identical(
     get_columns(iris, -is.numeric()),
     iris[sapply(iris, function(i) !is.numeric(i))]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, -is.numeric),
     iris[sapply(iris, function(i) !is.numeric(i))]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, -is.factor()),
     iris[sapply(iris, function(i) !is.factor(i))]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, -is.factor),
     iris[sapply(iris, function(i) !is.factor(i))]
   )
 
-  expect_equal(get_columns(iris, -is.logical), iris)
+  expect_identical(get_columns(iris, -is.logical), iris)
 })
 
 
@@ -143,12 +132,12 @@ test_that("get_columns works with negated select-functions", {
 # select-nse with ranges  ---------------------
 
 test_that("get_columns works with ranges", {
-  expect_equal(
+  expect_identical(
     get_columns(iris, 2:3),
     iris[2:3]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, Sepal.Width:Petal.Length),
     iris[2:3]
   )
@@ -159,28 +148,32 @@ test_that("get_columns works with ranges", {
 # select-nse with negated ranges  ---------------------
 
 test_that("get_columns works with negated ranges", {
-  expect_equal(
+  expect_identical(
     get_columns(iris, -(1:2)),
     iris[c(3, 4, 5)]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, -1:-2),
     iris[c(3, 4, 5)]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, exclude = -1:-2),
     iris[1:2]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, exclude = 2:3),
     iris[c(1, 4, 5)]
   )
 
-  expect_equal(
+  expect_error(
     get_columns(iris, -Sepal.Width:Petal.Length),
+    "can't mix negative and positive"
+  )
+  expect_identical(
+    get_columns(iris, -(Sepal.Width:Petal.Length)),
     iris[c(1, 4, 5)]
   )
 })
@@ -190,12 +183,12 @@ test_that("get_columns works with negated ranges", {
 # select-nse with formulas  ---------------------
 
 test_that("get_columns works with formulas", {
-  expect_equal(
+  expect_identical(
     get_columns(iris, ~ Sepal.Width + Petal.Length),
     iris[2:3]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, exclude = ~ Sepal.Width + Petal.Length),
     iris[c(1, 4, 5)]
   )
@@ -206,48 +199,48 @@ test_that("get_columns works with formulas", {
 # select-nse, other cases ---------------------
 
 test_that("get_columns works, other cases", {
-  expect_equal(get_columns(iris), iris)
+  expect_identical(get_columns(iris), iris)
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, c("Petal.Width", "Sepal.Length")),
     iris[c("Petal.Width", "Sepal.Length")]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, -c("Petal.Width", "Sepal.Length")),
     iris[setdiff(colnames(iris), c("Petal.Width", "Sepal.Length"))]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(iris, -Petal.Width),
     iris[setdiff(colnames(iris), "Petal.Width")]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(mtcars, c("am", "gear", "cyl")),
     mtcars[c("am", "gear", "cyl")]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(mtcars, c("vam", "gear", "cyl")),
     mtcars[c("gear", "cyl")]
   )
 
   expect_warning(expect_null(get_columns(mtcars, ends_with("abc"))))
 
-  expect_equal(
+  expect_identical(
     get_columns(mtcars, regex("rb$")),
     mtcars["carb"]
   )
 
-  expect_equal(
+  expect_identical(
     get_columns(mtcars, regex("^c")),
     mtcars[c("cyl", "carb")]
   )
 
   expect_warning(expect_null(get_columns(mtcars, "^c")))
 
-  expect_equal(
+  expect_identical(
     get_columns(mtcars, regex("^C"), ignore_case = TRUE),
     mtcars[c("cyl", "carb")]
   )
@@ -261,16 +254,12 @@ test_that("get_columns from other functions", {
   test_fun1 <- function(data, i) {
     get_columns(data, select = i)
   }
-  expect_equal(
+  expect_identical(
     test_fun1(iris, c("Sepal.Length", "Sepal.Width")),
     iris[c("Sepal.Length", "Sepal.Width")]
   )
 
-  # This turns out to be that the variable name "i" in test_fun1
-  # becomes the search string "i" after evaluation, so all columns
-  # containing an "i" will be returned.
-
-  expect_equal(
+  expect_identical(
     test_fun1(iris, starts_with("Sep")),
     iris[c("Sepal.Length", "Sepal.Width")]
   )
@@ -278,7 +267,7 @@ test_that("get_columns from other functions", {
   test_fun1a <- function(data, i) {
     get_columns(data, select = i, regex = TRUE)
   }
-  expect_equal(
+  expect_identical(
     test_fun1a(iris, "Sep"),
     iris[c("Sepal.Length", "Sepal.Width")]
   )
@@ -286,7 +275,7 @@ test_that("get_columns from other functions", {
   test_fun1b <- function(data, i) {
     get_columns(data, select = i, regex = TRUE)
   }
-  expect_equal(
+  expect_identical(
     test_fun1b(iris, "Width$"),
     iris[c("Sepal.Width", "Petal.Width")]
   )
@@ -294,7 +283,7 @@ test_that("get_columns from other functions", {
   test_fun1c <- function(data, i) {
     get_columns(data, select = -i)
   }
-  expect_equal(
+  expect_identical(
     test_fun1c(iris, c("Sepal.Length", "Sepal.Width")),
     iris[c("Petal.Length", "Petal.Width", "Species")]
   )
@@ -303,7 +292,7 @@ test_that("get_columns from other functions", {
   test_fun2 <- function(data) {
     get_columns(data, select = starts_with("Sep"))
   }
-  expect_equal(
+  expect_identical(
     test_fun2(iris),
     iris[c("Sepal.Length", "Sepal.Width")]
   )
@@ -312,7 +301,7 @@ test_that("get_columns from other functions", {
     i <- "Sep"
     get_columns(data, select = starts_with(i))
   }
-  expect_equal(
+  expect_identical(
     test_fun3(iris),
     iris[, c("Sepal.Length", "Sepal.Width")]
   )
@@ -326,7 +315,7 @@ test_that("get_columns from other functions", {
     }
     get_columns(x, select = testfun, exclude = -testfun2)
   }
-  expect_equal(test_top(iris), iris["Petal.Length"])
+  expect_identical(test_top(iris), iris["Petal.Length"])
 })
 
 
@@ -343,7 +332,7 @@ test_that("get_columns preserves attributes", {
   out2 <- get_columns(out, 1:3)
   a2 <- attributes(out2)
 
-  expect_equal(sort(names(a1)), sort(names(a2)))
+  expect_identical(sort(names(a1)), sort(names(a2)))
 })
 
 # Select helpers work in functions and loops
@@ -352,7 +341,7 @@ test_that("select helpers work in functions and loops", {
   foo <- function(data, i) {
     find_columns(data, select = starts_with(i))
   }
-  expect_equal(
+  expect_identical(
     foo(iris, "Sep"),
     c("Sepal.Length", "Sepal.Width")
   )
@@ -360,7 +349,7 @@ test_that("select helpers work in functions and loops", {
   for (i in "Sepal") {
     x <- find_columns(iris, select = starts_with(i))
   }
-  expect_equal(
+  expect_identical(
     x,
     c("Sepal.Length", "Sepal.Width")
   )
@@ -368,7 +357,7 @@ test_that("select helpers work in functions and loops", {
   for (i in "Length") {
     x <- find_columns(iris, select = ends_with(i))
   }
-  expect_equal(
+  expect_identical(
     x,
     c("Sepal.Length", "Petal.Length")
   )
@@ -379,7 +368,7 @@ test_that("select helpers work in functions and loops even if there's an object 
   foo <- function(data, i) {
     find_columns(data, select = starts_with(i))
   }
-  expect_equal(
+  expect_identical(
     foo(iris, "Sep"),
     c("Sepal.Length", "Sepal.Width")
   )
@@ -387,7 +376,7 @@ test_that("select helpers work in functions and loops even if there's an object 
   for (i in "Sepal") {
     x <- find_columns(iris, select = starts_with(i))
   }
-  expect_equal(
+  expect_identical(
     x,
     c("Sepal.Length", "Sepal.Width")
   )
@@ -397,7 +386,7 @@ test_that("select helpers work in functions and loops even if there's an object 
   for (i in "Length") {
     x <- find_columns(iris, select = ends_with(i))
   }
-  expect_equal(
+  expect_identical(
     x,
     c("Sepal.Length", "Petal.Length")
   )
@@ -408,7 +397,7 @@ test_that("old solution still works", {
     i <- "Sep"
     find_columns(data, select = i, regex = TRUE)
   }
-  expect_equal(
+  expect_identical(
     foo(iris),
     c("Sepal.Length", "Sepal.Width")
   )
