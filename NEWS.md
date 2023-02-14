@@ -33,6 +33,7 @@ BUG FIXES
   columns containing only `NA_character_` (#349).
 * Select helpers now work in custom functions when argument is called `select`
   (#356).
+* Fix unexpected warning in `convert_na_to()` when `select` is a list (#352).
 
 # datawizard 0.6.5
 
