@@ -82,7 +82,7 @@ test_that("weights", {
   m <- lm(mpg ~ wt + hp, weights = cyl, mtcars)
 
   sm <<- standardize(m, weights = TRUE)
-  sm_data <- insight::get_data(sm)
+  sm_data <- insight::get_data(sm, source = "frame")
   sm_data2 <- standardize(mtcars, select = c("mpg", "wt", "hp"), weights = "cyl")
   expect_equal(sm_data[, c("mpg", "wt", "hp")], sm_data2[, c("mpg", "wt", "hp")])
 
@@ -90,7 +90,7 @@ test_that("weights", {
 
   # no weights in stding
   sm_xw <<- standardize(m, weights = FALSE)
-  sm_data_xw <- insight::get_data(sm_xw)
+  sm_data_xw <- insight::get_data(sm_xw, source = "frame")
   expect_false(isTRUE(all.equal(coef(sm)[-1], coef(sm_xw)[-1])))
 
   skip_if_not_installed("effectsize")

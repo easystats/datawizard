@@ -37,7 +37,6 @@
 #'
 #' # Reorder columns
 #' head(data_reorder(iris, c("Species", "Sepal.Length")))
-#' head(data_reorder(iris, c("Species", "dupa"))) # Safe for non-existing cols
 #'
 #' @export
 data_relocate <- function(data,

@@ -125,7 +125,6 @@ head(data_relocate(iris, select = c("Species", "Petal.Length"), after = 2))
 
 # Reorder columns
 head(data_reorder(iris, c("Species", "Sepal.Length")))
-head(data_reorder(iris, c("Species", "dupa"))) # Safe for non-existing cols
 
 # Remove columns
 head(data_remove(iris, "Sepal.Length"))
