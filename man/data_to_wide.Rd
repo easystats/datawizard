@@ -101,14 +101,14 @@ data_long <- read.table(header = TRUE, text = "
        4   M     cond2        12.9")
 
 
-reshape_wider(
+data_to_wide(
   data_long,
   id_cols = "subject",
   names_from = "condition",
   values_from = "measurement"
 )
 
-reshape_wider(
+data_to_wide(
   data_long,
   id_cols = "subject",
   names_from = "condition",
@@ -126,7 +126,7 @@ production <- data_filter(production, (product == "A" & country == "AI") | produ
 
 production$production <- rnorm(nrow(production))
 
-reshape_wider(
+data_to_wide(
   production,
   names_from = c("product", "country"),
   values_from = "production",

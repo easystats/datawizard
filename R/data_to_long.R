@@ -56,7 +56,7 @@
 #'   rows_to = "Participant"
 #' )
 #'
-#' reshape_longer(
+#' data_to_long(
 #'   tidyr::who,
 #'   select = new_sp_m014:newrel_f65,
 #'   names_to = c("diagnosis", "gender", "age"),

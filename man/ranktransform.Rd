@@ -106,7 +106,9 @@ from the input data frame.
 
 \examples{
 ranktransform(c(0, 1, 5, -5, -2))
-ranktransform(c(0, 1, 5, -5, -2), sign = TRUE)
+
+# Won't work
+# ranktransform(c(0, 1, 5, -5, -2), sign = TRUE)
 
 head(ranktransform(trees))
 }
