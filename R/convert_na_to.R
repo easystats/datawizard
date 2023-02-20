@@ -161,7 +161,8 @@ convert_na_to.data.frame <- function(x,
                                      verbose = TRUE,
                                      ...) {
   data <- x
-  select_nse <- .select_nse(select,
+  select_nse <- .select_nse(
+    select,
     data,
     exclude = exclude,
     ignore_case,
@@ -169,60 +170,34 @@ convert_na_to.data.frame <- function(x,
     verbose = verbose
   )
 
-  # list are not covered by .select_nse
-  if (length(select_nse) == 0 && is.list(select)) {
-    if (inherits(exclude, "formula")) {
-      exclude <- all.vars(exclude)
+  # default
+  lookup <- lapply(x, function(y) {
+    if (is.numeric(y)) {
+      replace_num
+    } else if (is.character(y)) {
+      replace_char
+    } else if (is.factor(y)) {
+      replace_fac
     }
+  })
 
-    not_modify <- if (is.character(exclude)) {
-      exclude
-    } else if (is.numeric(exclude)) {
-      colnames(x)[exclude]
-    }
-    names_data <- names(x)
-    names_sel <- names(select)
-    apply_default <- names_data[which(!names_data %in% c(names_sel, not_modify))]
+  # override for specific vars
+  try_eval <- try(eval(select), silent = TRUE)
+  select_is_list <- !inherits(try_eval, "try-error") && is.list(select)
 
-    for (i in seq_along(names_sel)) {
-      if (!names_sel[i] %in% names_data) next
-      x[[names_sel[i]]] <- convert_na_to(
-        x[[names_sel[i]]],
-        replacement = select[[i]],
-        verbose = verbose
-      )
+  if (select_is_list) {
+    for (i in select_nse) {
+      lookup[[i]] <- select[[i]]
     }
-
-    for (i in seq_along(apply_default)) {
-      to_convert <- x[[apply_default[i]]]
-      if (is.numeric(to_convert)) {
-        repl <- replace_num
-      } else if (is.character(to_convert)) {
-        repl <- replace_char
-      } else if (is.factor(to_convert)) {
-        repl <- replace_fac
-      }
-      if (!is.null(repl)) {
-        x[[apply_default[i]]] <- convert_na_to(
-          to_convert,
-          replacement = repl,
-          verbose = FALSE
-        )
-      }
-    }
-    return(x)
+  } else {
+    lookup <- lookup[names(lookup) %in% select_nse]
   }
 
+  lookup <- Filter(Negate(is.null), lookup)
 
-  x[select_nse] <- lapply(x[select_nse], function(x) {
-    if (is.numeric(x)) {
-      repl <- replace_num
-    } else if (is.character(x)) {
-      repl <- as.character(replace_char)
-    } else if (is.factor(x)) {
-      repl <- replace_fac
-    }
-    convert_na_to(x, replacement = repl, verbose = FALSE)
-  })
+  for (i in names(lookup)) {
+    x[[i]] <- convert_na_to(x[[i]], replacement = lookup[[i]], verbose = verbose)
+  }
+
   x
 }

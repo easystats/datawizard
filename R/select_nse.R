@@ -384,9 +384,9 @@
   ))
 }
 
-# e.g list(gear = 4, cyl = 5) [NOT SURE IT WILL BE USED]
+# e.g list(gear = 4, cyl = 5)
 .select_list <- function(expr, data, ignore_case, regex, verbose) {
-  vars <- names(expr)
+  vars <- names(.dynEval(expr, inherits = FALSE, minframe = 0L))
   unlist(lapply(
     vars,
     .eval_expr,

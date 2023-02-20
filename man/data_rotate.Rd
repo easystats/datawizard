@@ -44,11 +44,8 @@ data_rotate(x, rownames = "property")
 data_rotate(x, colnames = TRUE)
 data_rotate(x, rownames = "property", colnames = TRUE)
 
-# warn that data types are changed
-str(data_rotate(iris[1:4, ]))
-
 # use either first column or specific column for column names
-x <- data.frame(a = 1:5, b = 11:15, c = letters[1:5], d = rnorm(5))
+x <- data.frame(a = 1:5, b = 11:15, c = 21:25)
 data_rotate(x, colnames = TRUE)
 data_rotate(x, colnames = "c")
 
