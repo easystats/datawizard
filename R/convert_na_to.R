@@ -161,7 +161,8 @@ convert_na_to.data.frame <- function(x,
                                      verbose = TRUE,
                                      ...) {
   data <- x
-  select_nse <- .select_nse(select,
+  select_nse <- .select_nse(
+    select,
     data,
     exclude = exclude,
     ignore_case,
