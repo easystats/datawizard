@@ -161,8 +161,7 @@ convert_na_to.data.frame <- function(x,
                                      verbose = TRUE,
                                      ...) {
   data <- x
-  select_nse <- .select_nse(
-    select,
+  select_nse <- .select_nse(select,
     data,
     exclude = exclude,
     ignore_case,
@@ -170,17 +169,16 @@ convert_na_to.data.frame <- function(x,
     verbose = verbose
   )
 
-  .replace_by_type <- function(y) {
-    switch(class(y),
-      "integer" = ,
-      "numeric" = replace_num,
-      "character" = replace_char,
-      "factor" = replace_fac
-    )
-  }
-
   # default
-  lookup <- lapply(x, .replace_by_type)
+  lookup <- lapply(x, function(y) {
+    if (is.numeric(y)) {
+      replace_num
+    } else if (is.character(y)) {
+      replace_char
+    } else if (is.factor(y)) {
+      replace_fac
+    }
+  })
 
   # override for specific vars
   try_eval <- try(eval(select), silent = TRUE)
