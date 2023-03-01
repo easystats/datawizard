@@ -34,6 +34,8 @@ BUG FIXES
 * Select helpers now work in custom functions when argument is called `select`
   (#356).
 * Fix unexpected warning in `convert_na_to()` when `select` is a list (#352).
+* Fixed issue with correct labelling of numeric variables with more than nine
+  unique values and associated value labels.
 
 # datawizard 0.6.5
 
