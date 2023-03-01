@@ -149,7 +149,11 @@ data_read <- function(path,
         if (!is.character(i)) {
           # if all values are labelled, we assume factor. Use labels as levels
           if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
-            i <- factor(as.character(i), labels = names(value_labels))
+            if (is.numeric(i)) {
+              i <- factor(i, labels = names(value_labels))
+            } else {
+              i <- factor(as.character(i), labels = names(value_labels))
+            }
             value_labels <- NULL
           } else {
             # else, fall back to numeric
