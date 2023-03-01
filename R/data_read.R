@@ -175,6 +175,13 @@ data_read <- function(path,
       }
       i
     })
+  } else {
+    # drop haven class attributes
+    x[] <- lapply(x, function(i) {
+      # save labels
+      class(i) <- setdiff(class(i), c("haven_labelled", "vctrs_vctr"))
+      i
+    })
   }
 
   class(x) <- "data.frame"
