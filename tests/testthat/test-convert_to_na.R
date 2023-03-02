@@ -16,7 +16,7 @@ test_that("convert_to_na-factor", {
   expect_identical(as.vector(table(x)), c(50L, 50L))
 
   expect_message(
-    x <- convert_to_na(iris$Species, na = 2),
+    x <- convert_to_na(iris$Species, na = 2), # nolint
     "for a factor or character variable"
   )
   expect_identical(sum(is.na(x)), 0L)
@@ -39,7 +39,7 @@ test_that("convert_to_na-numeric", {
 
 test_that("convert_to_na-df", {
   expect_message(
-    x <- convert_to_na(iris, na = 5),
+    x <- convert_to_na(iris, na = 5), # nolint
     "needs to be a character vector"
   )
   expect_identical(sum(is.na(x)), sum(vapply(iris, function(i) sum(i == 5), FUN.VALUE = integer(1L))))
@@ -49,7 +49,7 @@ test_that("convert_to_na-df", {
 
   data(iris)
   expect_message(
-    x <- convert_to_na(iris, na = 3),
+    x <- convert_to_na(iris, na = 3), # nolint
     "needs to be a character vector"
   )
   expect_identical(sum(is.na(x)), sum(vapply(iris, function(i) {
@@ -76,7 +76,7 @@ test_that("convert_to_na other classes", {
 
   x <- convert_to_na(d$a, na = 3)
   expect_equal(x, c(1, 2, NA, 4, 5), tolerance = 1e-3, ignore_attr = TRUE)
-  expect_message(x <- convert_to_na(d$a, na = "c"), "needs to be a numeric vector")
+  expect_message(x <- convert_to_na(d$a, na = "c"), "needs to be a numeric vector") # nolint
   expect_equal(x, 1:5, tolerance = 1e-3, ignore_attr = TRUE)
 
   x <- convert_to_na(d$b, na = "c")
@@ -109,7 +109,7 @@ test_that("convert_to_na other classes", {
   x <- convert_to_na(d$d, na = TRUE)
   expect_equal(x, c(NA, NA, FALSE, FALSE, NA), tolerance = 1e-3, ignore_attr = TRUE)
   expect_message(
-    x <- convert_to_na(d$e, na = as.complex(4)),
+    x <- convert_to_na(d$e, na = as.complex(4)), # nolint
     "variables of class `complex`"
   )
   expect_equal(x, d$e, tolerance = 1e-3, ignore_attr = TRUE)
