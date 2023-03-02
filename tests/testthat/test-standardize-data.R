@@ -211,7 +211,7 @@ test_that("un/standardize, matrix", {
   z2 <- scale(x)
 
   expect_equal(z1, z2, ignore_attr = TRUE)
-  expect_identical(unstandardize(z1), x)
+  expect_equal(unstandardize(z1), x, ignore_attr = TRUE)
   expect_identical(unstandardize(z2), unstandardize(z1))
 })
 

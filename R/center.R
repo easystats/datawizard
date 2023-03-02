@@ -112,7 +112,7 @@ center.numeric <- function(x,
                            verbose = TRUE,
                            ...) {
   # set default
-  if (is.null(center)) {
+  if (is.null(center) || is.na(center)) {
     center <- TRUE
   }
 

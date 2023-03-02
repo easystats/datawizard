@@ -151,10 +151,10 @@ standardize.numeric <- function(x,
                                 ...) {
   # set default - need to fix this, else we don't know whether this
   # comes from "center()" or "standardize()"
-  if (is.null(scale)) {
+  if (is.null(scale) || is.na(scale)) {
     scale <- TRUE
   }
-  if (is.null(center)) {
+  if (is.null(center) || is.na(center)) {
     center <- TRUE
   }
 
