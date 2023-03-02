@@ -149,7 +149,11 @@ data_read <- function(path,
         if (!is.character(i)) {
           # if all values are labelled, we assume factor. Use labels as levels
           if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
-            i <- factor(as.character(i), labels = names(value_labels))
+            if (is.numeric(i)) {
+              i <- factor(i, labels = names(value_labels))
+            } else {
+              i <- factor(as.character(i), labels = names(value_labels))
+            }
             value_labels <- NULL
           } else {
             # else, fall back to numeric
@@ -169,6 +173,13 @@ data_read <- function(path,
         # add back variable label
         attr(i, "label") <- variable_labels
       }
+      i
+    })
+  } else {
+    # drop haven class attributes
+    x[] <- lapply(x, function(i) {
+      # save labels
+      class(i) <- setdiff(class(i), c("haven_labelled", "vctrs_vctr"))
       i
     })
   }
