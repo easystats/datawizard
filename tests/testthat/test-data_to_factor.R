@@ -97,7 +97,9 @@ test_that("data_read, convert many labels correctly", {
   expect_identical(
     out,
     c(
-      "d$selv1 <categorical>", "# total N=2413 valid N=2413", "",
+      "to_factor(d$selv1) <categorical>",
+      "# total N=2413 valid N=2413",
+      "",
       "Value                                              |   N | Raw % | Valid % | Cumulative %",
       "---------------------------------------------------+-----+-------+---------+-------------",
       "Vignette 1 weiblich (Gülsen E. Reinigungskraft B)  | 150 |  6.22 |    6.22 |         6.22",
@@ -125,7 +127,7 @@ test_that("data_read, convert many labels correctly", {
   expect_identical(
     out,
     c(
-      "Sind oder waren Sie schon einmal selbst von solchen Beschwerden betroffen? (d$c12) <categorical>",
+      "Sind oder waren Sie schon einmal selbst von solchen Beschwerden betroffen? (to_factor(d$c12)) <categorical>",
       "# total N=2413 valid N=2413",
       "",
       "Value        |    N | Raw % | Valid % | Cumulative %",
@@ -137,12 +139,12 @@ test_that("data_read, convert many labels correctly", {
     )
   )
 
-  expect_identical(to_factor(levels(d$c12a)), c("Filter", "ja", "nein", "keine Angabe"))
+  expect_identical(levels(to_factor(d$c12a)), c("Filter", "ja", "nein", "keine Angabe"))
   out <- capture.output(data_tabulate(to_factor(d$c12a)))
   expect_identical(
     out,
     c(
-      "Haben Sie deswegen Behandlung(en) in Anspruch genommen? (d$c12a) <categorical>",
+      "Haben Sie deswegen Behandlung(en) in Anspruch genommen? (to_factor(d$c12a)) <categorical>",
       "# total N=2413 valid N=2413",
       "",
       "Value        |    N | Raw % | Valid % | Cumulative %",
@@ -165,7 +167,7 @@ test_that("data_read, convert many labels correctly", {
   expect_identical(
     out,
     c(
-      "Wie sehr haben diese Behandlung(en) Ihre Beeinträchtigung durch die Beschwerden verbessert? (d$c12c) <categorical>",
+      "Wie sehr haben diese Behandlung(en) Ihre Beeinträchtigung durch die Beschwerden verbessert? (to_factor(d$c12c)) <categorical>",
       "# total N=2413 valid N=2413",
       "",
       "Value                     |    N | Raw % | Valid % | Cumulative %",
