@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.5</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,15 +90,24 @@
 <p>NEW FUNCTIONS</p>
 <ul><li>
 <code><a href="../reference/mean_sd.html">mean_sd()</a></code> and <code><a href="../reference/mean_sd.html">median_mad()</a></code> for summarizing vectors to their mean (or median) and a range of one SD (or MAD) above and below.</li>
+</ul><p>BREAKING CHANGES</p>
+<ul><li>
+<p>In selection patterns, expressions like <code>-var1:var3</code> to exclude all variables between <code>var1</code> and <code>var3</code> are no longer accepted. The correct expression is <code>-(var1:var3)</code>. This is for 2 reasons:</p>
+<ul><li>to be consistent with the behavior for numerics (<code>-1:2</code> is not accepted but <code>-(1:2)</code> is);</li>
+<li>to be consistent with <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">dplyr::select()</a></code>, which throws a warning and only uses the first variable in the first expression.</li>
+</ul></li>
 </ul><p>MINOR CHANGES</p>
 <ul><li>
 <code><a href="../reference/data_rename.html">data_rename()</a></code> gets a <code>verbose</code> argument.</li>
 <li>
 <code><a href="../reference/winsorize.html">winsorize()</a></code> now errors if the threshold is incorrect (previously, it provided a warning and returned the unchanged data). The argument <code>verbose</code> is now useless but is kept for backward compatibility. The documentation now contains<br>
 details about the valid values for <code>threshold</code> (<a href="https://github.com/easystats/datawizard/issues/357" class="external-link">#357</a>).</li>
+<li>In all functions that have arguments <code>select</code> and/or <code>exclude</code>, there is now one warning per misspelled variable. The previous behavior was to have only one warning.</li>
 </ul><p>BUG FIXES</p>
 <ul><li>
 <code><a href="../reference/remove_empty.html">empty_columns()</a></code> (and therefore <code><a href="../reference/remove_empty.html">remove_empty_columns()</a></code>) now correctly detects columns containing only <code>NA_character_</code> (<a href="https://github.com/easystats/datawizard/issues/349" class="external-link">#349</a>).</li>
+<li>Select helpers now work in custom functions when argument is called <code>select</code> (<a href="https://github.com/easystats/datawizard/issues/356" class="external-link">#356</a>).</li>
+<li>Fix unexpected warning in <code><a href="../reference/convert_na_to.html">convert_na_to()</a></code> when <code>select</code> is a list (<a href="https://github.com/easystats/datawizard/issues/352" class="external-link">#352</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.5" id="datawizard-065">datawizard 0.6.5<a class="anchor" aria-label="anchor" href="#datawizard-065"></a></h2><p class="text-muted">CRAN release: 2022-12-14</p>

@@ -39,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.5</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -381,12 +381,26 @@ columns; <code>select = -1:2</code> will <em>not</em> work:</p>
 <span><span class="co">#&gt; 8           4.4         1.2 versicolor</span></span>
 <span><span class="co">#&gt; 9           5.1         1.9  virginica</span></span>
 <span><span class="co">#&gt; 10          4.6         1.4 versicolor</span></span></code></pre></div>
+<p>Same thing for variable names:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span><span class="va">iris</span>, <span class="op">-</span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">:</span><span class="va">Species</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    Sepal.Length Sepal.Width</span></span>
+<span><span class="co">#&gt; 1           4.3         3.0</span></span>
+<span><span class="co">#&gt; 2           5.0         3.3</span></span>
+<span><span class="co">#&gt; 3           7.7         3.8</span></span>
+<span><span class="co">#&gt; 4           4.4         3.2</span></span>
+<span><span class="co">#&gt; 5           5.9         3.0</span></span>
+<span><span class="co">#&gt; 6           6.5         3.0</span></span>
+<span><span class="co">#&gt; 7           5.5         2.5</span></span>
+<span><span class="co">#&gt; 8           5.5         2.6</span></span>
+<span><span class="co">#&gt; 9           5.8         2.7</span></span>
+<span><span class="co">#&gt; 10          6.1         3.0</span></span></code></pre></div>
 <p>The second way is to use the argument <code>exclude</code>. This
 argument has the same possibilities as <code>select</code>. Although
 this may not be required in most contexts, if we wanted to, we could use
 both <code>select</code> and <code>exclude</code> arguments at the same
 time.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span><span class="va">iris</span>, exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    Sepal.Width Petal.Length    Species</span></span>
 <span><span class="co">#&gt; 1          3.0          1.1     setosa</span></span>
@@ -422,7 +436,7 @@ arguments and loop indices in <code>select</code> and
 <code>datawizard</code>.</p>
 <p>For example, if we want to let the user decide the selection they
 want to use:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">selection</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/find_columns.html">find_columns</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="va">selection</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -439,7 +453,7 @@ want to use:</p>
 <p>It is also possible to pass these values in loops, for example if we
 have a list of patterns and we want to relocate columns based on these
 patterns, one by one:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">new_iris</span> <span class="op">&lt;-</span> <span class="va">iris</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sep"</span>, <span class="st">"Pet"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">new_iris</span> <span class="op">&lt;-</span> <span class="va">new_iris</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -469,7 +483,7 @@ columns starting with <code>"Pet"</code>.</p>
 </h3>
 <p>In every selection that uses variable names, we can ignore the case
 in the selection by applying <code>ignore_case = TRUE</code>.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sepal.length"</span>, <span class="st">"petal.width"</span><span class="op">)</span>, ignore_case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    Sepal.Length Petal.Width</span></span>
 <span><span class="co">#&gt; 1           4.3         0.1</span></span>
@@ -513,7 +527,7 @@ in the selection by applying <code>ignore_case = TRUE</code>.</p>
 <h3 id="formulas">Formulas<a class="anchor" aria-label="anchor" href="#formulas"></a>
 </h3>
 <p>It is also possible to use formulas to select variables:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/find_columns.html">data_select</a></span><span class="op">(</span><span class="va">iris</span>, <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">+</span> <span class="va">Petal.Width</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    Sepal.Length Petal.Width</span></span>
 <span><span class="co">#&gt; 1           4.3         0.1</span></span>

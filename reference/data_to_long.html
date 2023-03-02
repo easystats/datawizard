@@ -14,7 +14,7 @@ tidyr::pivot_longer().'><meta property="og:image" content="https://easystats.git
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.5</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -159,7 +159,7 @@ for which the function returns <code>TRUE</code> (like: <code>foo &lt;- function
 <li><p>ranges specified via literal variable names, select-helpers (except
 <code>regex()</code>) and (user-defined) functions can be negated, i.e. return
 non-matching elements, when prefixed with a <code>-</code>, e.g. <code>-ends_with("")</code>,
-<code>-is.numeric</code> or <code>-Sepal.Width:Petal.Length</code>. <strong>Note:</strong> Negation means
+<code>-is.numeric</code> or <code>-(Sepal.Width:Petal.Length)</code>. <strong>Note:</strong> Negation means
 that matches are <em>excluded</em>, and thus, the <code>exclude</code> argument can be
 used alternatively. For instance, <code>select=-ends_with("Length")</code> (with
 <code>-</code>) is equivalent to <code>exclude=ends_with("Length")</code> (no <code>-</code>). In case
@@ -17021,7 +17021,7 @@ tibble. Otherwise, it returns a data frame.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 16666      2         3  19       63004   N1     5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [ reached 'max' / getOption("max.print") -- omitted 53334 rows ]</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">reshape_longer</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu">data_to_long</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="va"><a href="https://tidyr.tidyverse.org/reference/who.html" class="external-link">who</a></span>,</span></span>
 <span class="r-in"><span>  select <span class="op">=</span> <span class="va">new_sp_m014</span><span class="op">:</span><span class="va">newrel_f65</span>,</span></span>
 <span class="r-in"><span>  names_to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"diagnosis"</span>, <span class="st">"gender"</span>, <span class="st">"age"</span><span class="op">)</span>,</span></span>
