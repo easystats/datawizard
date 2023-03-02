@@ -253,7 +253,7 @@
                                        reference = NULL,
                                        center) {
   # Warning if only one value
-  if (insight::has_single_value(x) && is.null(reference) && is.null(center)) {
+  if (insight::has_single_value(x) && is.null(reference) && (is.null(center) || isTRUE(center))) {
     if (verbose) {
       if (is.null(name)) {
         insight::format_alert(
