@@ -20,7 +20,7 @@ test_that("to_factor", {
 # factor
 test_that("to_factor", {
   data(efc)
-  expect_equal(to_factor(efc$e42dep), efc$e42dep)
+  expect_identical(to_factor(efc$e42dep), efc$e42dep)
 })
 
 # data frame
@@ -28,7 +28,7 @@ test_that("to_factor", {
   data(iris)
   out <- to_factor(iris)
   expect_identical(out$Species, iris$Species)
-  expect_true(all(sapply(out, is.factor)))
+  expect_true(all(vapply(out, is.factor, TRUE)))
   expect_identical(
     levels(out$Sepal.Length),
     c(
@@ -47,7 +47,7 @@ test_that("to_factor", {
       "Species", "Sepal.Length_f", "Sepal.Width_f"
     )
   )
-  expect_identical(sum(sapply(out, is.factor)), 3L)
+  expect_identical(sum(vapply(out, is.factor, TRUE)), 3L)
 })
 
 
@@ -173,7 +173,7 @@ test_that("data_read, convert many labels correctly", {
   expect_identical(
     out,
     c(
-      "Wie sehr haben diese Behandlung(en) Ihre Beeinträchtigung durch die Beschwerden verbessert? (to_factor(d$c12c)) <categorical>",
+      "Wie sehr haben diese Behandlung(en) Ihre Beeinträchtigung durch die Beschwerden verbessert? (to_factor(d$c12c)) <categorical>", # nolint
       "# total N=2413 valid N=2413",
       "",
       "Value                     |    N | Raw % | Valid % | Cumulative %",

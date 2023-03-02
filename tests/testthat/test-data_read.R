@@ -343,7 +343,7 @@ test_that("data_read, convert many labels correctly", {
   expect_identical(
     out,
     c(
-      "Wie sehr haben diese Behandlung(en) Ihre Beeinträchtigung durch die Beschwerden verbessert? (d$c12c) <categorical>",
+      "Wie sehr haben diese Behandlung(en) Ihre Beeinträchtigung durch die Beschwerden verbessert? (d$c12c) <categorical>", # nolint
       "# total N=2413 valid N=2413",
       "",
       "Value                     |    N | Raw % | Valid % | Cumulative %",
