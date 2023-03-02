@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.7</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.8</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,6 +108,7 @@ details about the valid values for <code>threshold</code> (<a href="https://gith
 <code><a href="../reference/remove_empty.html">empty_columns()</a></code> (and therefore <code><a href="../reference/remove_empty.html">remove_empty_columns()</a></code>) now correctly detects columns containing only <code>NA_character_</code> (<a href="https://github.com/easystats/datawizard/issues/349" class="external-link">#349</a>).</li>
 <li>Select helpers now work in custom functions when argument is called <code>select</code> (<a href="https://github.com/easystats/datawizard/issues/356" class="external-link">#356</a>).</li>
 <li>Fix unexpected warning in <code><a href="../reference/convert_na_to.html">convert_na_to()</a></code> when <code>select</code> is a list (<a href="https://github.com/easystats/datawizard/issues/352" class="external-link">#352</a>).</li>
+<li>Fixed issue with correct labelling of numeric variables with more than nine unique values and associated value labels.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.5" id="datawizard-065">datawizard 0.6.5<a class="anchor" aria-label="anchor" href="#datawizard-065"></a></h2><p class="text-muted">CRAN release: 2022-12-14</p>
