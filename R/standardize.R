@@ -150,7 +150,9 @@ standardize.numeric <- function(x,
                                 verbose = TRUE,
                                 ...) {
   # set default - need to fix this, else we don't know whether this
-  # comes from "center()" or "standardize()"
+  # comes from "center()" or "standardize()". Furthermore, data.frame
+  # methods cannot return a vector of NULLs for each variable - instead
+  # they return NA. Thus, we have to treat NA like NULL
   if (is.null(scale) || is.na(scale)) {
     scale <- TRUE
   }
