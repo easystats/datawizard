@@ -149,6 +149,15 @@ standardize.numeric <- function(x,
                                 scale = NULL,
                                 verbose = TRUE,
                                 ...) {
+  # set default - need to fix this, else we don't know whether this
+  # comes from "center()" or "standardize()"
+  if (is.null(scale)) {
+    scale <- TRUE
+  }
+  if (is.null(center)) {
+    center <- TRUE
+  }
+
   args <- .process_std_center(x, weights, robust, verbose, reference, center, scale)
 
   # Perform standardization

@@ -86,7 +86,7 @@ test_that("standardize.data.frame, apend", {
   iris$Sepal.Length[c(32, 12, 109, 92, 119, 49, 83, 113, 64, 30)] <- NA
 
   x <- standardize(iris, append = TRUE)
-  expect_equal(colnames(x), c(
+  expect_identical(colnames(x), c(
     "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
     "Species", "Sepal.Length_z", "Sepal.Width_z", "Petal.Length_z",
     "Petal.Width_z"
@@ -211,8 +211,8 @@ test_that("un/standardize, matrix", {
   z2 <- scale(x)
 
   expect_equal(z1, z2, ignore_attr = TRUE)
-  expect_equal(unstandardize(z1), x)
-  expect_equal(unstandardize(z2), unstandardize(z1))
+  expect_identical(unstandardize(z1), x)
+  expect_identical(unstandardize(z2), unstandardize(z1))
 })
 
 test_that("unstandardize with reference (data frame)", {
@@ -226,7 +226,7 @@ test_that("unstandardize with reference (data frame)", {
 })
 
 test_that("unstandardize does nothing with characters and factors", {
-  expect_equal(
+  expect_identical(
     unstandardise(c("a", "b")),
     c("a", "b")
   )
@@ -241,5 +241,26 @@ test_that("standardize regex", {
   expect_equal(
     standardize(mtcars, select = "pg", regex = TRUE),
     standardize(mtcars, select = "mpg")
+  )
+})
+
+# standardize when only providing one of center/scale ---------------
+test_that("standardize when only providing one of center/scale", {
+  x <- 1:10
+  expect_identical(
+    as.vector(datawizard::standardize(x, center = FALSE)),
+    x / sd(x)
+  )
+  expect_identical(
+    as.vector(datawizard::standardize(x, center = 2)),
+    (x - 2) / sd(x)
+  )
+  expect_identical(
+    as.vector(datawizard::standardize(x, scale = FALSE)),
+    as.vector(datawizard::center(x))
+  )
+  expect_identical(
+    as.vector(datawizard::standardize(x, scale = 1.5)),
+    (x - mean(x)) / 1.5
   )
 })

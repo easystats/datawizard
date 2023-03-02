@@ -111,6 +111,11 @@ center.numeric <- function(x,
                            center = NULL,
                            verbose = TRUE,
                            ...) {
+  # set default
+  if (is.null(center)) {
+    center <- TRUE
+  }
+
   args <- .process_std_center(x, weights, robust, verbose, reference, center, scale = NULL)
 
   if (is.null(args)) {
