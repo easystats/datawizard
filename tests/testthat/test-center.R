@@ -60,7 +60,7 @@ test_that("center, all NA or Inf", {
 
 test_that("center works correctly with only one value", {
   expect_message(
-    x <- center(100),
+    x <- center(100), # nolint
     "will be set to 0"
   )
   expect_equal(x, 0, ignore_attr = TRUE)

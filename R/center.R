@@ -111,6 +111,13 @@ center.numeric <- function(x,
                            center = NULL,
                            verbose = TRUE,
                            ...) {
+  # set default. Furthermore, data.frame methods cannot return a vector
+  # of NULLs for each variable - instead they return NA. Thus, we have to
+  # treat NA like NULL
+  if (is.null(center) || is.na(center)) {
+    center <- TRUE
+  }
+
   args <- .process_std_center(x, weights, robust, verbose, reference, center, scale = NULL)
 
   if (is.null(args)) {

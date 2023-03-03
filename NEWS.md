@@ -26,6 +26,8 @@ MINOR CHANGES
 * In all functions that have arguments `select` and/or `exclude`, there is now
   one warning per misspelled variable. The previous behavior was to have only one
   warning.
+* Fixed inconsistent behaviour in `standardize()` when only one of the arguments
+  `center` or `scale` were provided (#365).
 
 BUG FIXES
 

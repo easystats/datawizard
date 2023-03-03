@@ -192,24 +192,41 @@
 
 ## retrieve center and scale information ----
 
-.get_center_scale <- function(x, robust = FALSE, weights = NULL, reference = NULL, .center = NULL, .scale = NULL, verbose = TRUE) {
+.get_center_scale <- function(x,
+                              robust = FALSE,
+                              weights = NULL,
+                              reference = NULL,
+                              .center = NULL,
+                              .scale = NULL,
+                              verbose = TRUE) {
   if (is.null(reference)) reference <- x
 
-  # for center(), we have no scale. default to 0
-  if (is.null(.scale) || is.na(.scale)) {
-    .scale <- 1
+  # for center(), we have no scale. default to 1
+  if (is.null(.scale) || is.na(.scale) || isFALSE(.scale)) {
+    scale <- 1
+  } else if (isTRUE(.scale)) {
+    if (robust) {
+      scale <- weighted_mad(reference, weights)
+    } else {
+      scale <- weighted_sd(reference, weights)
+    }
+  } else {
+    # we must have a numeric value here
+    scale <- .scale
   }
 
-  if (!is.null(.center) && !is.na(.center)) {
-    center <- .center
-    scale <- .scale
-  } else if (robust) {
-    center <- weighted_median(reference, weights)
-    scale <- weighted_mad(reference, weights)
+  # process center
+  if (is.null(.center) || is.na(.center) || isFALSE(.center)) {
+    center <- 0
+  } else if (isTRUE(.center)) {
+    if (robust) {
+      center <- weighted_median(reference, weights)
+    } else {
+      center <- weighted_mean(reference, weights)
+    }
   } else {
-    center <- weighted_mean(reference, weights)
-    scale <- weighted_sd(reference, weights)
-    if (is.na(scale)) scale <- 1
+    # we must have a numeric value here
+    center <- .center
   }
 
   if (scale == 0) {
@@ -236,7 +253,7 @@
                                        reference = NULL,
                                        center) {
   # Warning if only one value
-  if (insight::has_single_value(x) && is.null(reference) && is.null(center)) {
+  if (insight::has_single_value(x) && is.null(reference) && (is.null(center) || isTRUE(center))) {
     if (verbose) {
       if (is.null(name)) {
         insight::format_alert(
