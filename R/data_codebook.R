@@ -117,7 +117,7 @@ data_codebook <- function(data,
           text_wrap(variable_label, width = variable_label_width),
           "\n",
           fixed = TRUE
-        )))
+        ), use.names = FALSE))
       }
     } else {
       variable_label <- NA

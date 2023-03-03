@@ -119,7 +119,7 @@ text_wrap <- function(text, width = NULL, ...) {
   width <- width %||% getOption("width")
 
   text <- strsplit(text, "\n", fixed = TRUE)
-  text <- unlist(text)
+  text <- unlist(text, use.names = FALSE)
 
   wrapped <- ""
 
