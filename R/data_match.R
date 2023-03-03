@@ -62,6 +62,7 @@
 #' working with labelled data.
 #'
 #' @examples
+#' # styler: off
 #' data_match(mtcars, data.frame(vs = 0, am = 1))
 #' data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
 #'
@@ -81,22 +82,19 @@
 #' # Define a custom function containing data_filter() and pass variable names
 #' # to it using curly brackets
 #' my_filter <- function(data, variable) {
-#'   data_filter(data, {
-#'     variable
-#'   } <= 20)
+#'   data_filter(data, {variable} <= 20)
 #' }
 #' my_filter(mtcars, "mpg")
 #'
 #' # Pass complete filter-condition as string
 #' my_filter <- function(data, condition) {
-#'   data_filter(data, {
-#'     condition
-#'   })
+#'   data_filter(data, {condition})
 #' }
 #' my_filter(mtcars, "am != 0")
 #'
 #' # string can also be used directly as argument
 #' data_filter(mtcars, "am != 0")
+#' # styler: on
 #' @inherit data_rename seealso
 #' @export
 data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = TRUE, ...) {
