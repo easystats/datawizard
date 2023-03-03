@@ -151,7 +151,7 @@ data_partition <- function(data,
   # remove all training set id's from data, add remaining data (= test set)
   out <- c(
     training_sets,
-    list(test = data[-unlist(lapply(training_sets, data_extract, select = row_id, as_data_frame = FALSE)), ])
+    list(test = data[-unlist(lapply(training_sets, data_extract, select = row_id, as_data_frame = FALSE), use.names = FALSE), ])
   )
 
   lapply(out, `row.names<-`, NULL)
