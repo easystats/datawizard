@@ -190,7 +190,7 @@
     )
 
     if (is_select_helper) {
-      new_expr <- str2lang(unlist(new_expr))
+      new_expr <- str2lang(unlist(new_expr, use.names = FALSE))
       out <- .eval_expr(
         new_expr,
         data = data,
@@ -208,7 +208,7 @@
         ignore_case = ignore_case,
         regex = regex,
         verbose = verbose
-      ))
+      ), use.names = FALSE)
     }
   }
 
@@ -292,7 +292,7 @@
     ignore_case = ignore_case,
     regex = regex,
     verbose = verbose
-  ))
+  ), use.names = FALSE)
 }
 
 # e.g -(gear:cyl)
@@ -381,7 +381,7 @@
     ignore_case = ignore_case,
     regex = regex,
     verbose = verbose
-  ))
+  ), use.names = FALSE)
 }
 
 # e.g list(gear = 4, cyl = 5)
@@ -394,7 +394,7 @@
     ignore_case = ignore_case,
     regex = regex,
     verbose = verbose
-  ))
+  ), use.names = FALSE)
 }
 
 # e.g is.numeric()

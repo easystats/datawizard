@@ -210,7 +210,7 @@ data_filter.data.frame <- function(x, filter, ...) {
       condition <- gsub(" }", "}", condition, fixed = TRUE)
 
       curley_vars <- regmatches(condition, gregexpr("[^{\\}]+(?=\\})", condition, perl = TRUE))
-      curley_vars <- unique(unlist(curley_vars))
+      curley_vars <- unique(unlist(curley_vars, use.names = FALSE))
 
       for (i in curley_vars) {
         if (isTRUE(dots$called_from_group)) {
