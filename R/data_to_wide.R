@@ -348,7 +348,7 @@ data_to_wide <- function(data,
       check.names = FALSE
     )
   } else {
-    res <- unlist(res, recursive = FALSE)
+    res <- unlist(res, recursive = FALSE, use.names = FALSE)
   }
 
   # return the wide data and the order in which the new columns should be
