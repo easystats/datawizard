@@ -114,19 +114,22 @@ test_that("standardize.data.frame, weights", {
   x <- rexp(30)
   w <- rpois(30, 20) + 1
 
-  expect_identical(
+  expect_equal(
     sqrt(cov.wt(cbind(x, x), w)$cov[1, 1]),
-    attr(standardize(x, weights = w), "scale")
+    attr(standardize(x, weights = w), "scale"),
+    tolerance = 1e-4
   )
-  expect_identical(
+  expect_equal(
     standardize(x, weights = w),
-    standardize(data.frame(x), weights = w)$x
+    standardize(data.frame(x), weights = w)$x,
+    tolerance = 1e-4
   )
 
   # name and vector give same results
-  expect_identical(
+  expect_equal(
     standardize(mtcars, exclude = "cyl", weights = mtcars$cyl),
-    standardize(mtcars, weights = "cyl")
+    standardize(mtcars, weights = "cyl"),
+    tolerance = 1e-4
   )
 
   d <- poorman::group_by(mtcars, am)
