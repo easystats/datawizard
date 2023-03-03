@@ -315,7 +315,10 @@ recode_values.factor <- function(x,
       # pattern: old = new
       # name of list element is old value
 
-      old_values <- paste(deparse(insight::trim_ws(unlist(strsplit(i, ",", fixed = TRUE)))), collapse = ",")
+      old_values <- paste(
+        deparse(insight::trim_ws(unlist(strsplit(i, ",", fixed = TRUE), use.names = FALSE))),
+        collapse = ","
+      )
 
       # parse old values, which are strings (names of element), but which should
       # contain values, like "a" or "a, b, c". These should now be in the
@@ -333,7 +336,7 @@ recode_values.factor <- function(x,
       # check input style: "a, b, c"
       if (length(old_values) == 1 && grepl(",", old_values, fixed = TRUE)) {
         # split and make character vector
-        old_values <- insight::trim_ws(unlist(strsplit(old_values, ",", fixed = TRUE)))
+        old_values <- insight::trim_ws(unlist(strsplit(old_values, ",", fixed = TRUE), use.names = FALSE))
       }
       # recode
       if (identical(i, "NA")) {
@@ -401,7 +404,10 @@ recode_values.character <- function(x,
       # name of list element is old value
 
       # name of list element is old value
-      value_string <- paste(deparse(insight::trim_ws(unlist(strsplit(i, ",", fixed = TRUE)))), collapse = ",")
+      value_string <- paste(
+        deparse(insight::trim_ws(unlist(strsplit(i, ",", fixed = TRUE), use.names = FALSE))),
+        collapse = ","
+      )
 
       # parse old values, which are strings (names of element), but which should
       # contain values, like "a" or "a, b, c". These should now be in the
@@ -419,7 +425,7 @@ recode_values.character <- function(x,
       # check input style: "a, b, c"
       if (length(old_values) == 1 && grepl(",", old_values, fixed = TRUE)) {
         # split and make character vector
-        old_values <- insight::trim_ws(unlist(strsplit(old_values, ",", fixed = TRUE)))
+        old_values <- insight::trim_ws(unlist(strsplit(old_values, ",", fixed = TRUE), use.names = FALSE))
       }
       # recode
       if (identical(i, "NA")) {

@@ -260,7 +260,10 @@ degroup <- function(x,
 
   if (inherits(select, "formula")) {
     # formula to character, remove "~", split at "+"
-    select <- trimws(unlist(strsplit(gsub("~", "", insight::safe_deparse(select), fixed = TRUE), "+", fixed = TRUE)))
+    select <- trimws(unlist(
+      strsplit(gsub("~", "", insight::safe_deparse(select), fixed = TRUE), "+", fixed = TRUE),
+      use.names = FALSE
+    ))
   }
 
   if (inherits(group, "formula")) {
