@@ -291,7 +291,7 @@ data_to_long <- function(data,
   if (values_are_dates) {
     data.frame(values = do.call("c", unname(x)), ind, stringsAsFactors = FALSE)
   } else {
-    data.frame(values = unlist(unname(x)), ind, stringsAsFactors = FALSE)
+    data.frame(values = unlist(x, use.names = FALSE), ind, stringsAsFactors = FALSE)
   }
 }
 

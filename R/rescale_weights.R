@@ -187,13 +187,13 @@ rescale_weights <- function(data, group, probability_weights, nest = FALSE) {
         x[[probability_weights]], lapply(group, function(i) {
           as.factor(x[[i]])
         }), sum
-      ))),
+      )), use.names = FALSE),
       sum_squared_weights_by_group = unlist(as.list(tapply(
         x[[probability_weights]]^2, lapply(group, function(i) {
           as.factor(x[[i]])
         }), sum
-      ))),
-      n_per_group = unlist(as.list(table(x[, group])))
+      )), use.names = FALSE),
+      n_per_group = unlist(as.list(table(x[, group])), use.names = FALSE)
     )
   )
 
