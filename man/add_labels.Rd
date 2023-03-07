@@ -13,7 +13,6 @@ add_labels(x, ...)
   exclude = NULL,
   values = NULL,
   ignore_case = FALSE,
-  append = FALSE,
   regex = FALSE,
   verbose = TRUE,
   ...
@@ -125,7 +124,6 @@ x <- 1:5
 add_labels(
   x,
   variable = "My x",
-  values = c(`1` = "lowest", `5` = "highest"),
-  verbose = FALSE
+  values = c(`1` = "lowest", `5` = "highest")
 )
 }

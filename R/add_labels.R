@@ -43,8 +43,7 @@
 #' add_labels(
 #'   x,
 #'   variable = "My x",
-#'   values = c(`1` = "lowest", `5` = "highest"),
-#'   verbose = FALSE
+#'   values = c(`1` = "lowest", `5` = "highest")
 #' )
 #' @export
 add_labels <- function(x, ...) {
@@ -69,43 +68,49 @@ add_labels.numeric <- function(x, variable = NULL, values = NULL, verbose = TRUE
     if (is.character(variable) && length(variable) == 1) {
       attr(x, "label") <- variable
     } else if (verbose) {
-      insight::format_alert("Variable labels must be a character string.")
+      insight::format_alert(
+        "No variable label was added, because the label (argument `variable`) must be provided as character string."
+      )
     }
   }
 
-  # extract unique values
-  unique_values <- as.vector(sort(stats::na.omit(unique(x))))
-  labels <- NULL
+  # if user just wants to add a variable label, skip next steps
+  if (!is.null(values)) {
+    # extract unique values
+    unique_values <- as.vector(sort(stats::na.omit(unique(x))))
+    labels <- NULL
 
-  # do we have a names vector for "values"?
-  # else check if number of labels and values match
-  if (is.null(names(values))) {
-    if (length(values) == length(unique_values)) {
-      labels <- stats::setNames(unique_values, values)
-    } else if (verbose) {
-      insight::format_alert(
-        "Cannot add labels. Number of unique values and number of value labels are not equal.",
-        sprintf("There are %i unique values and %i provided labels.", length(unique_values), length(values))
-      )
-    }
-  } else {
-    # check whether we have matches of labels and values
-    matching_labels <- names(values) %in% unique_values
-    if (!all(matching_labels) && verbose) {
-      insight::format_alert(
-        "Following labels were associated with values that don't exist:",
-        text_concatenate(paste0(values[!matching_labels], " (", names(values)[!matching_labels], ")"), enclose = "`")
-      )
-    }
-    values <- values[names(values) %in% unique_values]
+    # do we have a names vector for "values"?
+    # else check if number of labels and values match
+    if (is.null(names(values))) {
+      if (length(values) == length(unique_values)) {
+        labels <- stats::setNames(unique_values, values)
+      } else {
+        insight::format_error(
+          "Cannot add labels. Number of unique values and number of value labels are not equal.",
+          sprintf("There are %i unique values and %i provided labels.", length(unique_values), length(values))
+        )
+      }
+    } else {
+      # check whether we have matches of labels and values
+      matching_labels <- names(values) %in% unique_values
+      if (!all(matching_labels)) {
+        insight::format_error(
+          "Following labels were associated with values that don't exist:",
+          text_concatenate(paste0(values[!matching_labels], " (", names(values)[!matching_labels], ")"), enclose = "`")
+        )
+      }
+      values <- values[names(values) %in% unique_values]
 
-    if (length(values)) {
-      # we need to switch names and values
-      labels <- stats::setNames(coerce_to_numeric(names(values)), values)
+      if (length(values)) {
+        # we need to switch names and values
+        labels <- stats::setNames(coerce_to_numeric(names(values)), values)
+      }
     }
+
+    attr(x, "labels") <- labels
   }
 
-  attr(x, "labels") <- labels
   x
 }
 
@@ -122,7 +127,6 @@ add_labels.data.frame <- function(x,
                                   exclude = NULL,
                                   values = NULL,
                                   ignore_case = FALSE,
-                                  append = FALSE,
                                   regex = FALSE,
                                   verbose = TRUE,
                                   ...) {
@@ -141,7 +145,7 @@ add_labels.data.frame <- function(x,
     select,
     exclude,
     weights = NULL,
-    append,
+    append = FALSE,
     append_suffix = "_l",
     force = TRUE,
     preserve_value_labels = TRUE,
