@@ -28,6 +28,7 @@ reference:
       Functions for transforming variables
     contents:
       - categorize
+      - recode_into
       - recode_values
       - adjust
       - demean
