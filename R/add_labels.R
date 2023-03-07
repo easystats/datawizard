@@ -38,6 +38,15 @@
 #' )
 #' str(out)
 #'
+#' # data frame example
+#' out <- add_labels(
+#'   iris,
+#'   select = "Species",
+#'   variable = "Labelled Species",
+#'   values = c(`setosa` = "Spec1", `versicolor` = "Spec2", `virginica` = "Spec3")
+#' )
+#' str(out$Species)
+#'
 #' # Partial labelling
 #' x <- 1:5
 #' add_labels(
@@ -61,6 +70,7 @@ add_labels.default <- function(x, verbose = TRUE, ...) {
   x
 }
 
+#' @rdname add_labels
 #' @export
 add_labels.numeric <- function(x, variable = NULL, values = NULL, verbose = TRUE, ...) {
   # add variable label

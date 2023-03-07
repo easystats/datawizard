@@ -2,10 +2,13 @@
 % Please edit documentation in R/add_labels.R
 \name{add_labels}
 \alias{add_labels}
+\alias{add_labels.numeric}
 \alias{add_labels.data.frame}
 \title{Add variable and value labels}
 \usage{
 add_labels(x, ...)
+
+\method{add_labels}{numeric}(x, variable = NULL, values = NULL, verbose = TRUE, ...)
 
 \method{add_labels}{data.frame}(
   x,
@@ -22,6 +25,16 @@ add_labels(x, ...)
 \item{x}{A data frame, factor or vector.}
 
 \item{...}{Currently not used.}
+
+\item{variable}{The variable label as string.}
+
+\item{values}{The value labels as (named) character vector. If \code{values} is
+\emph{not} a named vector, the length of lables must be equal to the length of
+unique values. For a named vector, the left-hand side (LHS) is the value in
+\code{x}, the right-hand side (RHS) the associated value label. Non-matching
+labels are omitted.}
+
+\item{verbose}{Toggle warnings.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -59,12 +72,6 @@ return \code{"Species"}.}
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
 excludes no columns.}
 
-\item{values}{The value labels as (named) character vector. If \code{values} is
-\emph{not} a named vector, the length of lables must be equal to the length of
-unique values. For a named vector, the left-hand side (LHS) is the value in
-\code{x}, the right-hand side (RHS) the associated value label. Non-matching
-labels are omitted.}
-
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}
@@ -77,10 +84,6 @@ of length > 1. \code{regex = TRUE} is comparable to using one of the two
 select-helpers, \code{select = contains("")} or \code{select = regex("")}, however,
 since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.}
-
-\item{verbose}{Toggle warnings.}
-
-\item{variable}{The variable label as string.}
 }
 \value{
 A labelled variable, or a data frame of labelled variables.
@@ -118,6 +121,15 @@ out <- add_labels(
   values = c(`setosa` = "Spec1", `versicolor` = "Spec2", `virginica` = "Spec3")
 )
 str(out)
+
+# data frame example
+out <- add_labels(
+  iris,
+  select = "Species",
+  variable = "Labelled Species",
+  values = c(`setosa` = "Spec1", `versicolor` = "Spec2", `virginica` = "Spec3")
+)
+str(out$Species)
 
 # Partial labelling
 x <- 1:5
