@@ -2,6 +2,9 @@
 
 NEW FUNCTIONS
 
+* `recode_into()`, similar to `dplyr::case_when()`, to recode values from one
+  or more variables into a new variable.
+
 * `mean_sd()` and `median_mad()` for summarizing vectors to their mean (or
   median) and a range of one SD (or MAD) above and below.  
   
