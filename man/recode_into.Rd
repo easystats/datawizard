@@ -59,7 +59,7 @@ recode_into(
 )
 
 # pipe-style
-if (getRversion() >= "4.1.0") {
+if (getRversion() >= "4.2.0") {
   d |>
     recode_into(
       data = _,
