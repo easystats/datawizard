@@ -26,7 +26,7 @@ test_that("recode_into, data frame", {
   out1 <- recode_into(
     mtcars$mpg > 20 & mtcars$cyl == 6 ~ 1,
     mtcars$mpg <= 20 ~ 2,
-    ~ 0
+    ~0
   )
   out2 <- poorman::case_when(
     mtcars$mpg > 20 & mtcars$cyl == 6 ~ 1,
