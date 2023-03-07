@@ -10,19 +10,29 @@ test_that("recode_into", {
 
 test_that("recode_into, check mixed types", {
   x <<- 1:10
-  expect_error(out <- recode_into( # nolint
-    x > 5 ~ 1,
-    x > 2 & x <= 5 ~ "b"
-  ))
+  expect_error(
+    {
+      out <- recode_into(
+        x > 5 ~ 1,
+        x > 2 & x <= 5 ~ "b"
+      )
+    },
+    regexp = "Recoding not carried out"
+  )
 })
 
 test_that("recode_into, complain about default = NULL", {
   x <<- 1:10
-  expect_warning(out <- recode_into( # nolint
-    x > 5 ~ "c",
-    x > 2 & x <= 5 ~ "b",
-    default = NULL
-  ))
+  expect_warning(
+    {
+      out <- recode_into(
+        x > 5 ~ "c",
+        x > 2 & x <= 5 ~ "b",
+        default = NULL
+      )
+    },
+    regexp = "Default value"
+  )
   expect_identical(out, c(NA, NA, "b", "b", "b", "c", "c", "c", "c", "c"))
 })
 
