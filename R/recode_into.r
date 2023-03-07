@@ -19,7 +19,7 @@
 #' @return A vector with recoded values.
 #'
 #' @examples
-#' x <- 1:30
+#' x <<- 1:30
 #' recode_into(
 #'   x > 15 ~ "a",
 #'   x > 10 & x <= 15 ~ "b",
@@ -34,7 +34,7 @@
 #' )
 #'
 #' set.seed(123)
-#' d <- data.frame(
+#' d <<- data.frame(
 #'   x = sample(1:5, 30, TRUE),
 #'   y = sample(letters[1:5], 30, TRUE),
 #'   stringsAsFactors = FALSE
