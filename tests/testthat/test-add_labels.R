@@ -34,11 +34,12 @@ test_that("add_labels, partially named values", {
   expect_identical(attributes(out)$labels, c(lowest = 1, highest = 5))
 })
 
-test_that("add_labels, messages", {
+test_that("add_labels, error and messages", {
   x <- 1:5
-  expect_message(add_labels(x, values = c(`1` = "lowest", `6` = "highest")))
-  expect_message(add_labels(x, variable = 1, values = c(`1` = "lowest", `6` = "highest")))
-  expect_message(add_labels(x, values = c("a", "b", "c")))
+  expect_error(add_labels(x, values = c(`1` = "lowest", `6` = "highest")))
+  expect_error(expect_message(add_labels(x, variable = 1, values = c(`1` = "lowest", `6` = "highest"))))
+  expect_error(add_labels(x, values = c("a", "b", "c")))
+  expect_message(add_labels(x, variable = 1, values = c(`1` = "lowest", `5` = "highest")))
 })
 
 test_that("add_labels, data frame", {
