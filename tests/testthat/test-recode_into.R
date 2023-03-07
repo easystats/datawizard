@@ -1,45 +1,48 @@
-skip_if_not_installed("poorman")
-
-x <<- 1:30
 test_that("recode_into", {
-  out1 <- recode_into(
-    x > 15 ~ "a",
-    x > 10 & x <= 15 ~ "b",
-    ~"c"
-  )
-  out2 <- poorman::case_when(
-    x > 15 ~ "a",
-    x > 10 & x <= 15 ~ "b",
-    TRUE ~ "c"
-  )
-  expect_identical(out1, out2)
-  out1 <- recode_into(
-    x > 15 ~ "a",
-    x > 10 & x <= 15 ~ "b",
+  x <<- 1:10
+  out <- recode_into(
+    x > 5 ~ "a",
+    x > 2 & x <= 5 ~ "b",
     default = "c"
   )
-  expect_identical(out1, out2)
+  expect_identical(out, c("c", "c", "b", "b", "b", "a", "a", "a", "a", "a"))
+})
+
+test_that("recode_into, check mixed types", {
+  x <<- 1:10
+  expect_warning(out <- recode_into( # nolint
+    x > 5 ~ 1,
+    x > 2 & x <= 5 ~ "b"
+  ))
+  expect_identical(out, c(NA, NA, "b", "b", "b", "1", "1", "1", "1", "1"))
 })
 
 test_that("recode_into, data frame", {
   data(mtcars)
-  out1 <- recode_into(
+  out <- recode_into(
     mtcars$mpg > 20 & mtcars$cyl == 6 ~ 1,
     mtcars$mpg <= 20 ~ 2,
-    ~0
+    default = 0
   )
-  out2 <- poorman::case_when(
-    mtcars$mpg > 20 & mtcars$cyl == 6 ~ 1,
-    mtcars$mpg <= 20 ~ 2,
-    TRUE ~ 0
+  expect_identical(
+    out,
+    c(
+      1, 1, 0, 1, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 
+      0, 2, 2, 2, 2, 0, 0, 0, 2, 2, 2, 0
+    )
   )
-  expect_identical(out1, out2)
   d <<- mtcars
-  out1 <- recode_into(
+  out <- recode_into(
     mpg > 20 & cyl == 6 ~ 1,
     mpg <= 20 ~ 2,
     default = 0,
     data = d
   )
-  expect_identical(out1, out2)
+  expect_identical(
+    out,
+    c(
+      1, 1, 0, 1, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0,
+      0, 2, 2, 2, 2, 0, 0, 0, 2, 2, 2, 0
+    )
+  )
 })

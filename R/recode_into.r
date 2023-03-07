@@ -82,21 +82,23 @@ recode_into <- function(..., data = NULL, default = NA, verbose = TRUE) {
   # create default output vector
   out <- rep(default, times = len)
 
+  all_recodes <- NULL
   # check recode values
   for (i in seq_len(n_params)) {
     # get type of all recode values
     if (is.null(data)) {
-      all_recodes <- typeof(eval(dots[[i]][[3]]))
+      type <- typeof(eval(dots[[i]][[3]]))
     } else {
-      all_recodes <- typeof(with(data, eval(dots[[i]][[3]])))
+      type <- typeof(with(data, eval(dots[[i]][[3]])))
     }
-    # if we have mixed types, warn user
-    if (!(all_recodes == all_recodes[1]) && verbose) {
-      insight::format_warning(
-        "Not all recode values are of the same type.",
-        "Trying to coerce all values into a common type, please check your recoded variable!"
-      )
-    }
+    all_recodes <- c(all_recodes, type)
+  }
+  # if we have mixed types, warn user
+  if (!is.null(all_recodes) && !all(all_recodes == all_recodes[1]) && verbose) {
+    insight::format_warning(
+      "Not all recode values are of the same type.",
+      "Trying to coerce all values into a common type, please check your recoded variable!"
+    )
   }
 
   # iterate all expressions
