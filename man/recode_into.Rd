@@ -32,7 +32,7 @@ x <- 1:30
 recode_into(
   x > 15 ~ "a",
   x > 10 & x <= 15 ~ "b",
-  ~ "c"
+  ~"c"
 )
 
 # use default argument
