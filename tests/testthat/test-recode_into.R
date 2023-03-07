@@ -16,6 +16,16 @@ test_that("recode_into, check mixed types", {
   ))
 })
 
+test_that("recode_into, complain about default = NULL", {
+  x <<- 1:10
+  expect_warning(out <- recode_into( # nolint
+    x > 5 ~ "c",
+    x > 2 & x <= 5 ~ "b",
+    default = NULL
+  ))
+  expect_identical(out, c(NA, NA, "b", "b", "b", "c", "c", "c", "c", "c"))
+})
+
 test_that("recode_into, data frame", {
   data(mtcars)
   out <- recode_into(
@@ -39,6 +49,30 @@ test_that("recode_into, data frame", {
   )
   expect_identical(
     out,
+    c(
+      1, 1, 0, 1, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0,
+      0, 2, 2, 2, 2, 0, 0, 0, 2, 2, 2, 0
+    )
+  )
+})
+
+test_that("recode_into, works inside functions", {
+  test <- function() {
+    set.seed(123)
+    d <- data.frame(
+      x = sample(1:5, 30, TRUE),
+      y = sample(letters[1:5], 30, TRUE),
+      stringsAsFactors = FALSE
+    )
+    recode_into(
+      x %in% 1:3 & y %in% c("a", "b") ~ 1,
+      x > 3 ~ 2,
+      data = d,
+      default = 0
+    )
+  }
+  expect_identical(
+    test(),
     c(
       1, 1, 0, 1, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0,
       0, 2, 2, 2, 2, 0, 0, 0, 2, 2, 2, 0
