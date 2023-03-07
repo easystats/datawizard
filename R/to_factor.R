@@ -2,9 +2,9 @@
 #' @name to_factor
 #'
 #' @details
-#' Convert data to numeric by converting characters to factors and factors to
-#' either numeric levels or dummy variables. The "counterpart" to convert
-#' variables into numeric is `to_numeric()`.
+#' Convert variables or data into factors. If the data is labelled, value labels
+#' will be used as factor levels. The counterpart to convert variables into
+#' numeric is `to_numeric()`.
 #'
 #' @param x A data frame or vector.
 #' @param ... Arguments passed to or from other methods.
@@ -59,7 +59,7 @@ to_factor.numeric <- function(x, ...) {
 
   # use value labels as levels
   if (!is.null(value_labels)) {
-    try(levels(x) <- names(value_labels), silent = TRUE)
+    try(levels(x) <- names(value_labels), silent = TRUE) # nolint
   }
 
   # add back variable label
