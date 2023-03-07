@@ -91,9 +91,9 @@ A factor, or a data frame of factors.
 Convert data to factors
 }
 \details{
-Convert data to numeric by converting characters to factors and factors to
-either numeric levels or dummy variables. The "counterpart" to convert
-variables into numeric is \code{to_numeric()}.
+Convert variables or data into factors. If the data is labelled, value labels
+will be used as factor levels. The counterpart to convert variables into
+numeric is \code{to_numeric()}.
 }
 \section{Selection of variables - the \code{select} argument}{
 
