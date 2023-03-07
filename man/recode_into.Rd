@@ -4,38 +4,30 @@
 \alias{recode_into}
 \title{Recode values from one or more variables into a new variable}
 \usage{
-recode_into(..., data = NULL, default = NULL)
+recode_into(..., data = NULL, default = NA, verbose = TRUE)
 }
 \arguments{
 \item{...}{A sequence of two-sided formulas, where the left hand side (LHS)
 is a logical condition that determines which values match this case. The
-right hand side (RHS) indicates the replacement value. The last formula can
-be used to indicate the default value. If the \code{default} argument is provided,
-the last formula is considered as further recode-pattern.}
+right hand side (RHS) indicates the replacement value.}
 
 \item{data}{Optional, name of a data frame. This can be used to avoid writing
 the data name multiple times in \code{...}. See 'Examples'.}
 
 \item{default}{Indicates the default value that is chosen when no match in
-the formulas in \code{...} is found. If \code{NULL}, the default value needs to be
-determined as last formula in \code{...}. See 'Examples'.}
+the formulas in \code{...} is found. If not provided, \code{NA} is used as default
+value.}
 }
 \value{
 A vector with recoded values.
 }
 \description{
 This functions recodes values from one or more variables into a new variable.
-It is a convenient function to avoid nested \code{\link[=ifelse]{ifelse()}} statements.
+It is a convenient function to avoid nested \code{\link[=ifelse]{ifelse()}} statements, which
+is similar to \code{dplyr::case_when()}.
 }
 \examples{
 x <<- 1:30
-recode_into(
-  x > 15 ~ "a",
-  x > 10 & x <= 15 ~ "b",
-  ~"c"
-)
-
-# use default argument
 recode_into(
   x > 15 ~ "a",
   x > 10 & x <= 15 ~ "b",
@@ -53,7 +45,7 @@ d <<- data.frame(
 recode_into(
   d$x \%in\% 1:3 & d$y \%in\% c("a", "b") ~ 1,
   d$x > 3 ~ 2,
-  TRUE ~ 0 # the LHS of this formula is arbitrary and can be omitted
+  default = 0
 )
 
 # no need to write name of data frame each time
