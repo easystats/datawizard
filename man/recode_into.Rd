@@ -57,15 +57,4 @@ recode_into(
   data = d,
   default = 0
 )
-
-# pipe-style
-if (getRversion() >= "4.2.0") {
-  d |>
-    recode_into(
-      data = _,
-      x \%in\% 1:3 & y \%in\% c("a", "b") ~ 1,
-      x > 3 ~ 2,
-      default = 0
-    )
-}
 }
