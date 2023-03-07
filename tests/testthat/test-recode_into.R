@@ -10,11 +10,10 @@ test_that("recode_into", {
 
 test_that("recode_into, check mixed types", {
   x <<- 1:10
-  expect_warning(out <- recode_into( # nolint
+  expect_error(out <- recode_into( # nolint
     x > 5 ~ 1,
     x > 2 & x <= 5 ~ "b"
   ))
-  expect_identical(out, c(NA, NA, "b", "b", "b", "1", "1", "1", "1", "1"))
 })
 
 test_that("recode_into, data frame", {
