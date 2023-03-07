@@ -96,10 +96,7 @@ recode_into <- function(..., data = NULL, default = NA, verbose = TRUE) {
   }
   # if we have mixed types, warn user
   if (!is.null(all_recodes) && !all(all_recodes == all_recodes[1]) && verbose) {
-    insight::format_error(
-      "Not all recode values are of the same type.",
-      "Trying to coerce all values into a common type, please check your recoded variable!"
-    )
+    insight::format_error("Recoding not carried out. Not all recode values are of the same type.")
   }
 
   # iterate all expressions
