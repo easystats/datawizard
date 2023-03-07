@@ -46,7 +46,7 @@ set.seed(123)
 d <- data.frame(
   x = sample(1:5, 30, TRUE),
   y = sample(letters[1:5], 30, TRUE),
-  stringsAsFactors = FALS
+  stringsAsFactors = FALSE
 )
 
 # from different variables into new vector
