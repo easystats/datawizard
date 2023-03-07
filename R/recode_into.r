@@ -14,6 +14,7 @@
 #' @param default Indicates the default value that is chosen when no match in
 #' the formulas in `...` is found. If not provided, `NA` is used as default
 #' value.
+#' @param verbose Toggle warnings.
 #'
 #' @return A vector with recoded values.
 #'

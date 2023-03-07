@@ -17,6 +17,8 @@ the data name multiple times in \code{...}. See 'Examples'.}
 \item{default}{Indicates the default value that is chosen when no match in
 the formulas in \code{...} is found. If not provided, \code{NA} is used as default
 value.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 A vector with recoded values.
