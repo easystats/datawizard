@@ -309,6 +309,19 @@ test_that("data_read, convert many labels correctly", {
   expect_snapshot(data_tabulate(d$c12c))
 })
 
+test_that("data_read, give message", {
+  expect_message(
+    expect_message(
+      expect_message(
+        data_read(temp_file),
+        regexp = "Reading"
+      ),
+      regexp = "Variables where all"
+    ),
+    regexp = "4 out of 4"
+  )
+})
+
 test_that("data_read, convert many labels correctly", {
   d <- data_read(
     temp_file,
@@ -350,19 +363,6 @@ test_that("data_read, convert many labels correctly", {
       `5` = 5, `6` = 6, `7` = 7, `8` = 8, `9` = 9, `10 = sehr starke` = 10,
       `weiß nicht / keine Angabe` = 99
     )
-  )
-})
-
-test_that("data_read, give message", {
-  expect_message(
-    expect_message(
-      expect_message(
-        data_read(temp_file),
-        regexp = "Reading"
-      ),
-      regexp = "Variables where all"
-    ),
-    regexp = "4 out of 4"
   )
 })
 
