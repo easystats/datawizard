@@ -185,7 +185,8 @@ data_read <- function(path,
     })
     # tell user how many variables were converted
     if (verbose) {
-      insight::format_altert(sprintf("%i out of %i variables were fully labelled and converted into factors.", i, ncol(x)))
+      msg <- sprintf("%i out of %i variables were fully labelled and converted into factors.", i, ncol(x))
+      insight::format_altert(msg)
     }
   } else {
     # drop haven class attributes
