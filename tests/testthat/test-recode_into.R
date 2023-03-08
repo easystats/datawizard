@@ -89,3 +89,31 @@ test_that("recode_into, works inside functions", {
     )
   )
 })
+
+test_that("recode_into, check differen input length", {
+  x <<- 1:10
+  y <<- 10:30
+  expect_error(
+    {
+      out <- recode_into(
+        x > 5 ~ 1,
+        y > 10 ~ 2
+      )
+    },
+    regexp = "matching conditions"
+  )
+})
+
+test_that("recode_into, check differen input length", {
+  x <<- 1:5
+  y <<- c(5, 2, 3, 1, 4)
+  expect_warning(
+    {
+      out <- recode_into(
+        x == 2 ~ 1,
+        y == 2 & x == 2 ~ 2
+      )
+    },
+    regexp = "already recoded"
+  )
+})

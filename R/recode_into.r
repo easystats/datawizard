@@ -7,8 +7,9 @@
 #' is similar to `dplyr::case_when()`.
 #'
 #' @param ... A sequence of two-sided formulas, where the left hand side (LHS)
-#' is a logical condition that determines which values match this case. The
-#' right hand side (RHS) indicates the replacement value.
+#' is a logical matching condition that determines which values match this case.
+#' The LHS of this formula is also called "recode pattern" (e.g., in messages).
+#' The right hand side (RHS) indicates the replacement value.
 #' @param data Optional, name of a data frame. This can be used to avoid writing
 #' the data name multiple times in `...`. See 'Examples'.
 #' @param default Indicates the default value that is chosen when no match in
@@ -73,29 +74,57 @@ recode_into <- function(..., data = NULL, default = NA, verbose = TRUE) {
   out <- rep(default, times = len)
 
   all_recodes <- NULL
+  all_same_length <- NULL
   # check recode values
   for (i in seq_len(n_params)) {
     # get type of all recode values
     if (is.null(data)) {
       type <- typeof(eval(dots[[i]][[3]]))
+      len_matches <- length(eval(dots[[i]][[2]]))
     } else {
       type <- typeof(with(data, eval(dots[[i]][[3]])))
+      len_matches <- length(with(data, eval(dots[[i]][[2]])))
     }
     all_recodes <- c(all_recodes, type)
+    all_same_length <- c(all_same_length, len_matches)
   }
   # if we have mixed types, warn user
   if (!is.null(all_recodes) && !all(all_recodes == all_recodes[1])) {
     insight::format_error("Recoding not carried out. Not all recode values are of the same type.")
   }
+  # all inputs of correct length?
+  if (!is.null(all_same_length) && !all(all_same_length == all_same_length[1])) {
+    insight::format_error(
+      "The matching conditions return vectors of different length.",
+      "Please check if all variables in your recode patterns are of the same length."
+    )
+  }
+
 
   # iterate all expressions
   for (i in seq_len(n_params)) {
+    # grep index of observations with replacements and replacement value
     if (is.null(data)) {
       index <- eval(dots[[i]][[2]])
       value <- eval(dots[[i]][[3]])
     } else {
       index <- with(data, eval(dots[[i]][[2]]))
       value <- with(data, eval(dots[[i]][[3]]))
+    }
+    # overwriting values? do more recode-patterns match the same case?
+    if (is.na(default)) {
+      already_exists <- !is.na(out[index])
+    } else {
+      already_exists <- out[index] != default
+    }
+    if (any(already_exists) && verbose) {
+      insight::format_warning(
+        "Several recode patterns apply to the same case.",
+        sprintf(
+          "Some of the already recoded cases will be overwritten with new values again (e.g. pattern %i overwrites the former recode of case %i).", i, which(already_exists)[1]
+        ),
+        "Please check if this is intentional!"
+      )
     }
     out[index] <- value
   }

@@ -8,8 +8,9 @@ recode_into(..., data = NULL, default = NA, verbose = TRUE)
 }
 \arguments{
 \item{...}{A sequence of two-sided formulas, where the left hand side (LHS)
-is a logical condition that determines which values match this case. The
-right hand side (RHS) indicates the replacement value.}
+is a logical matching condition that determines which values match this case.
+The LHS of this formula is also called "recode pattern" (e.g., in messages).
+The right hand side (RHS) indicates the replacement value.}
 
 \item{data}{Optional, name of a data frame. This can be used to avoid writing
 the data name multiple times in \code{...}. See 'Examples'.}
