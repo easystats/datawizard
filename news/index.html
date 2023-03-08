@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,8 +88,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="datawizard-development-version">datawizard (development version)<a class="anchor" aria-label="anchor" href="#datawizard-development-version"></a></h2>
 <p>NEW FUNCTIONS</p>
-<ul><li>
-<code><a href="../reference/mean_sd.html">mean_sd()</a></code> and <code><a href="../reference/mean_sd.html">median_mad()</a></code> for summarizing vectors to their mean (or median) and a range of one SD (or MAD) above and below.</li>
+<ul><li><p><code><a href="../reference/recode_into.html">recode_into()</a></code>, similar to <code><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">dplyr::case_when()</a></code>, to recode values from one or more variables into a new variable.</p></li>
+<li><p><code><a href="../reference/mean_sd.html">mean_sd()</a></code> and <code><a href="../reference/mean_sd.html">median_mad()</a></code> for summarizing vectors to their mean (or median) and a range of one SD (or MAD) above and below.</p></li>
 </ul><p>BREAKING CHANGES</p>
 <ul><li>
 <p>In selection patterns, expressions like <code>-var1:var3</code> to exclude all variables between <code>var1</code> and <code>var3</code> are no longer accepted. The correct expression is <code>-(var1:var3)</code>. This is for 2 reasons:</p>
