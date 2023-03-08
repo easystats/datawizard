@@ -181,26 +181,22 @@ test_that("data_read", {
   )
   expect_identical(
     d,
-    structure(
-      list(
-        V1 = structure(
-          1:4,
-          levels = c("Eins", "Zwei", "Drei", "Vier"),
-          class = "factor", label = "Variable 1"
-        ),
-        V2 = structure(
-          c(2, 3, 4, 1),
-          labels = c(Eins = 1, Zwei = 2, Drei = 3),
-          label = "Variable 2"
-        ),
-        V3 = structure(
-          c(3L, 2L, 1L, 4L),
-          levels = c("Eins", "Zwei", "Drei", "Vier"),
-          class = "factor", label = "Variable 3"
-        )
-      ),
-      row.names = c(NA, -4L), class = "data.frame"
-    )
+    structure(list(
+      V1 = structure(1:4, levels = c(
+        "Eins", "Zwei",
+        "Drei", "Vier"
+      ), class = "factor", converted_to_factor = TRUE, label = "Variable 1"),
+      V2 = structure(c(2, 3, 4, 1), labels = c(
+        Eins = 1, Zwei = 2,
+        Drei = 3
+      ), label = "Variable 2"), V3 = structure(c(
+        3L, 2L,
+        1L, 4L
+      ), levels = c("Eins", "Zwei", "Drei", "Vier"), class = "factor", converted_to_factor = TRUE, label = "Variable 3")
+    ), row.names = c(
+      NA,
+      -4L
+    ), class = "data.frame")
   )
 })
 
@@ -243,7 +239,7 @@ unlink(temp_file)
 
 # Output validated against SPSS output from original dataset
 
-temp_file <- tempfile(fileext = ".sav")
+temp_file <- tempfile(fil6eext = ".sav")
 request <- httr::GET("https://raw.github.com/easystats/circus/master/data/spss_many_labels.sav")
 httr::stop_for_status(request)
 writeBin(httr::content(request, type = "raw"), temp_file)
@@ -355,6 +351,10 @@ test_that("data_read, convert many labels correctly", {
       `weiß nicht / keine Angabe` = 99
     )
   )
+})
+
+test_that("data_read, give message", {
+  expect_message(expect_message(expect_message(data_read(temp_file))), regexp = "4 out of 4")
 })
 
 unlink(temp_file)
