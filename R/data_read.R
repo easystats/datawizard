@@ -136,10 +136,6 @@ data_read <- function(path,
       msg <- "Variables where all values have associated labels are now converted into factors. If this is not intended, use `convert_factors = FALSE`."
       insight::format_alert(msg)
     }
-    # I love "cnt" - all variables in for-loops or iteration back in my
-    # C++ time were named "cnt"
-    cnt <- 0
-
     x[] <- lapply(x, function(i) {
       # only proceed if not all missing
       if (!all(is.na(i))) {
@@ -160,7 +156,7 @@ data_read <- function(path,
               i <- factor(as.character(i), labels = names(value_labels))
             }
             value_labels <- NULL
-            cnt <- cnt + 1
+            attr(i, "converted_to_factor") <- TRUE
           } else {
             # else, fall back to numeric
             i <- as.numeric(i)
@@ -183,6 +179,7 @@ data_read <- function(path,
     })
     # tell user how many variables were converted
     if (verbose) {
+      cnt <- sum(vapply(x, function(i) isTRUE(attributes(i)$converted_to_factor), TRUE))
       msg <- sprintf("%i out of %i variables were fully labelled and converted into factors.", cnt, ncol(x))
       insight::format_alert(msg)
     }
