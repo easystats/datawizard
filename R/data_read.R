@@ -133,10 +133,8 @@ data_read <- function(path,
   # user may decide whether we automatically detect variable type or not
   if (isTRUE(convert_factors)) {
     if (verbose) {
-      insight::format_alert(
-        "Variables where all values have associated labels are now converted into factors.",
-        "If this is not intended, use `convert_factors = FALSE`."
-      )
+      msg <- "Variables where all values have associated labels are now converted into factors. If this is not intended, use `convert_factors = FALSE`."
+      insight::format_alert(msg)
     }
     # I love "cnt" - all variables in for-loops or iteration back in my
     # C++ time were named "cnt"
@@ -186,7 +184,7 @@ data_read <- function(path,
     # tell user how many variables were converted
     if (verbose) {
       msg <- sprintf("%i out of %i variables were fully labelled and converted into factors.", cnt, ncol(x))
-      insight::format_altert(msg)
+      insight::format_alert(msg)
     }
   } else {
     # drop haven class attributes
