@@ -133,7 +133,10 @@ data_read <- function(path,
   # user may decide whether we automatically detect variable type or not
   if (isTRUE(convert_factors)) {
     if (verbose) {
-      message("Preparing data... Almost there!")
+      insight::format_alert(
+        "Variables where all values have associated labels are now converted into factors.",
+        "If this is not intended, use `convert_factors = FALSE`."
+      )
     }
     x[] <- lapply(x, function(i) {
       # only proceed if not all missing
