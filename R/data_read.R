@@ -138,6 +138,10 @@ data_read <- function(path,
         "If this is not intended, use `convert_factors = FALSE`."
       )
     }
+    # I love "cnt" - all variables in for-loops or iteration back in my
+    # C++ time were named "cnt"
+    cnt <- 0
+
     x[] <- lapply(x, function(i) {
       # only proceed if not all missing
       if (!all(is.na(i))) {
@@ -158,6 +162,7 @@ data_read <- function(path,
               i <- factor(as.character(i), labels = names(value_labels))
             }
             value_labels <- NULL
+            cnt <- cnt + 1
           } else {
             # else, fall back to numeric
             i <- as.numeric(i)
@@ -178,6 +183,10 @@ data_read <- function(path,
       }
       i
     })
+    # tell user how many variables were converted
+    if (verbose) {
+      insight::format_altert(sprintf("%i out of %i variables were fully labelled and converted into factors.", i, ncol(x)))
+    }
   } else {
     # drop haven class attributes
     x[] <- lapply(x, function(i) {
