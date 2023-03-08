@@ -185,7 +185,7 @@ data_read <- function(path,
     })
     # tell user how many variables were converted
     if (verbose) {
-      msg <- sprintf("%i out of %i variables were fully labelled and converted into factors.", i, ncol(x))
+      msg <- sprintf("%i out of %i variables were fully labelled and converted into factors.", cnt, ncol(x))
       insight::format_altert(msg)
     }
   } else {
