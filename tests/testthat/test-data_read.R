@@ -354,7 +354,16 @@ test_that("data_read, convert many labels correctly", {
 })
 
 test_that("data_read, give message", {
-  expect_message(expect_message(expect_message(data_read(temp_file))), regexp = "4 out of 4")
+  expect_message(
+    expect_message(
+      expect_message(
+        data_read(temp_file),
+        regexp = "Reading"
+      ),
+      regexp = "Variables where all"
+    ),
+    regexp = "4 out of 4"
+  )
 })
 
 unlink(temp_file)
