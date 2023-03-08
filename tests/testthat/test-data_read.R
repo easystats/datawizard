@@ -239,7 +239,7 @@ unlink(temp_file)
 
 # Output validated against SPSS output from original dataset
 
-temp_file <- tempfile(fil6eext = ".sav")
+temp_file <- tempfile(fileext = ".sav")
 request <- httr::GET("https://raw.github.com/easystats/circus/master/data/spss_many_labels.sav")
 httr::stop_for_status(request)
 writeBin(httr::content(request, type = "raw"), temp_file)
