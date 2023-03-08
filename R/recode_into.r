@@ -120,7 +120,7 @@ recode_into <- function(..., data = NULL, default = NA, verbose = TRUE) {
     if (any(already_exists) && verbose) {
       insight::format_warning(
         paste(
-          "Several recode patterns apply to the same case.",
+          "Several recode patterns apply to the same cases.",
           "Some of the already recoded cases will be overwritten with new values again",
           sprintf("(e.g. pattern %i overwrites the former recode of case %i).", i, which(already_exists)[1])
         ),
