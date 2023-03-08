@@ -121,9 +121,8 @@ recode_into <- function(..., data = NULL, default = NA, verbose = TRUE) {
       insight::format_warning(
         paste(
           "Several recode patterns apply to the same case.",
-          sprintf(
-            "Some of the already recoded cases will be overwritten with new values again (e.g. pattern %i overwrites the former recode of case %i).", i, which(already_exists)[1]
-          )
+          "Some of the already recoded cases will be overwritten with new values again",
+          sprintf("(e.g. pattern %i overwrites the former recode of case %i).", i, which(already_exists)[1])
         ),
         "Please check if this is intentional!"
       )
