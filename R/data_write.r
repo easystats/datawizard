@@ -23,21 +23,13 @@ data_write <- function(data,
     "zsav" = "zspss",
     "dta" = "stata",
     "xpt" = "sas",
-    "xlsx" = "excel",
-    NULL
+    "unknown"
   )
-
-  # stop on unsupported
-  if (is.null(type)) {
-    insight::format_error(
-      "Unknow file type. Supported file types are \".csv\", \".xlsx\", \".sav\", \".zsav\", \".dta\" and \".xpt\"."
-    )
-  }
 
   if (type == "csv") {
     .write_csv(data, path, delimiter, convert_factors, save_variable_labels, verbose, ...)
-  } else if (type == "xlsx") {
-    .write_excel(data, path, convert_factors, save_variable_labels, verbose, ...)
+  } else if (type == "unknown") {
+    .write_unknown(data, path, convert_factors, save_variable_labels, verbose, ...)
   } else {
     .write_haven(data, path, verbose, type, ...)
   }
@@ -73,14 +65,14 @@ data_write <- function(data,
 }
 
 
-# saving into Excel -----
+# saving into unknown -----
 
-.write_excel <- function(data,
-                         path,
-                         convert_factors = FALSE,
-                         save_variable_labels = FALSE,
-                         verbose = TRUE,
-                         ...) {
+.write_unknown <- function(data,
+                           path,
+                           convert_factors = FALSE,
+                           save_variable_labels = FALSE,
+                           verbose = TRUE,
+                           ...) {
   insight::check_if_installed("rio")
 
   # this might make sense when writing labelled data to CSV

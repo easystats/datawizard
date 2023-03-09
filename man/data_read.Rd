@@ -25,9 +25,7 @@ data_write(
 )
 }
 \arguments{
-\item{path}{Character string, the file path to the data file. For \code{data_write()},
-supported file types are \code{".csv"} (text, Ecxel), \code{".xlsx"} (Excel) \code{".sav"},
-\code{".zsav"} (SPSS), \code{".dta"} (Stata) and \code{".xpt"} (SAS).}
+\item{path}{Character string, the file path to the data file.}
 
 \item{path_catalog}{Character string, path to the catalog file. Only relevant
 for SAS data files.}
@@ -39,10 +37,11 @@ values have a value label, are assumed to be categorical and converted
 into factors. If \code{FALSE}, no variable types are guessed and no conversion
 of numeric variables into factors will be performed. See also section
 'Differences to other packages'. For \code{data_write()}, this argument only
-applies to the CSV file format. Converting to factors might be useful in for
-this format because labelled numeric variables are then converted into
-factors and exported as character columns - else, value labels would be lost
-and only numeric values are written to the CSV file.}
+applies to the text (e.g. \code{.txt} or \code{.csv}) or spreadsheet file formats (like
+\code{.xlsx}). Converting to factors might be useful in for these formats because
+labelled numeric variables are then converted into factors and exported as
+character columns - else, value labels would be lost and only numeric values
+are written to the file.}
 
 \item{verbose}{Toggle warnings and messages.}
 
@@ -67,8 +66,8 @@ around \code{haven::read_spss()}, \code{haven::read_stata()}, \code{haven::read_
 \code{readxl::read_excel()} and \code{data.table::fread()} resp. \code{readr::read_delim()}
 (the latter if package \strong{data.table} is not installed). Thus, supported file
 types for importing data are data files from SPSS, SAS or Stata, Excel files
-or text files (like '.csv' files). All non-supported file types are passed
-to \code{rio::import()}.
+or text files (like '.csv' files). All other file types are passed to
+\code{rio::import()}. \code{data_write()} works in a similar way.
 }
 \section{Supported file types}{
 
@@ -77,8 +76,9 @@ to \code{rio::import()}.
 \strong{readxl} and \strong{rio} packages. Currently supported file types are \code{.txt},
 \code{.csv}, \code{.xls}, \code{.xlsx}, \code{.sav}, \code{.por}, \code{.dta} and \code{.sas} (and related
 files). All other file types are passed to \code{rio::import()}.
-\item \code{data_write()} is a wrapper around \strong{haven} and \strong{readr} functions, and
-supports writing files into CSV, SPSS, SAS or Stata format.
+\item \code{data_write()} is a wrapper around \strong{haven}, \strong{readr} and \strong{rio}
+packages, and supports writing files into all formats supported by these
+packages.
 }
 }
 
