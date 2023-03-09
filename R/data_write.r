@@ -100,6 +100,7 @@ data_write <- function(data,
     compress <- "byte"
   }
 
+  ## TODO: check if this is really needed
   # labelled data needs "labelled" class attributes
   data <- .set_haven_class_attributes(data, verbose)
 
