@@ -31,10 +31,12 @@
 #' @return A data frame.
 #'
 #' @section Supported file types:
-#' `data_read()` is a wrapper around the **haven**, **data.table**, **readr**
+#' - `data_read()` is a wrapper around the **haven**, **data.table**, **readr**
 #'  **readxl** and **rio** packages. Currently supported file types are `.txt`,
 #'  `.csv`, `.xls`, `.xlsx`, `.sav`, `.por`, `.dta` and `.sas` (and related
 #'  files). All other file types are passed to `rio::import()`.
+#' - `data_write()` is a wrapper around **haven** and **readr** functions, and
+#'  supports writing files into CSV, SPSS, SAS or Stata format.
 #'
 #' @section Compressed files (zip) and URLs:
 #' `data_read()` can also read the above mentioned files from URLs or from
@@ -47,7 +49,9 @@
 #' `data_read()` detects the appropriate `read_*()` function based on the
 #' file-extension of the data file. Thus, in most cases it should be enough to
 #' only specify the `path` argument. However, if more control is needed, all
-#' arguments in `...` are passed down to the related `read_*()` function.
+#' arguments in `...` are passed down to the related `read_*()` function. The
+#' same applies to `data_write()`, i.e. based on the file extension provided in
+#' `path`, the appropriate `write_*()` function is used automatically.
 #'
 #' @section Differences to other packages that read foreign data formats:
 #' `data_read()` is most comparable to `rio::import()`. For data files from

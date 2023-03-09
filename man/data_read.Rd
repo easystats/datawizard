@@ -19,6 +19,7 @@ data_write(
   path,
   delimiter = ",",
   convert_factors = FALSE,
+  save_variable_labels = FALSE,
   verbose = TRUE,
   ...
 )
@@ -52,6 +53,10 @@ and only numeric values are written to the CSV file.}
 \item{delimiter}{For CSV-files, specifies the delimiter. Defaults to \code{","},
 but in particular in European regions, \code{";"} might be a useful alternative,
 especially when CSV-files should be imported into MS Excel.}
+
+\item{save_variable_labels}{Only applies to CSV files. If \code{TRUE}, variable
+labels (if any) will be saved to the CSV file as additional row after the
+column names row.}
 }
 \value{
 A data frame.
@@ -67,10 +72,14 @@ to \code{rio::import()}.
 }
 \section{Supported file types}{
 
-\code{data_read()} is a wrapper around the \strong{haven}, \strong{data.table}, \strong{readr}
+\itemize{
+\item \code{data_read()} is a wrapper around the \strong{haven}, \strong{data.table}, \strong{readr}
 \strong{readxl} and \strong{rio} packages. Currently supported file types are \code{.txt},
 \code{.csv}, \code{.xls}, \code{.xlsx}, \code{.sav}, \code{.por}, \code{.dta} and \code{.sas} (and related
 files). All other file types are passed to \code{rio::import()}.
+\item \code{data_write()} is a wrapper around \strong{haven} and \strong{readr} functions, and
+supports writing files into CSV, SPSS, SAS or Stata format.
+}
 }
 
 \section{Compressed files (zip) and URLs}{
@@ -87,7 +96,9 @@ file is extracted and loaded.
 \code{data_read()} detects the appropriate \verb{read_*()} function based on the
 file-extension of the data file. Thus, in most cases it should be enough to
 only specify the \code{path} argument. However, if more control is needed, all
-arguments in \code{...} are passed down to the related \verb{read_*()} function.
+arguments in \code{...} are passed down to the related \verb{read_*()} function. The
+same applies to \code{data_write()}, i.e. based on the file extension provided in
+\code{path}, the appropriate \verb{write_*()} function is used automatically.
 }
 
 \section{Differences to other packages that read foreign data formats}{
