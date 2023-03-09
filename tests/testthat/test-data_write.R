@@ -19,7 +19,7 @@ tmp <- tempfile(fileext = ".sav")
 on.exit(unlink(tmp))
 
 test_that("data_write, SPSS", {
-  expect_message(expect_message(data_write(d, tmp)))
+  expect_message(data_write(d, tmp))
   d2 <- data_read(tmp, verbose = FALSE)
 
   expect_equal(
