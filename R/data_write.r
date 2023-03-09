@@ -16,6 +16,7 @@ data_write <- function(data,
     "csv" = "csv",
     "sav" = ,
     "por" = "spss",
+    "zsav" = "zspss",
     "dta" = "stata",
     "xpt" = "sas",
     NULL
