@@ -14,10 +14,19 @@ data_read(
   ...
 )
 
-data_write(path, ...)
+data_write(
+  data,
+  path,
+  delimiter = ",",
+  convert_factors = FALSE,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
-\item{path}{Character string, the file path to the data file.}
+\item{path}{Character string, the file path to the data file. For \code{data_write()},
+supported file types are \code{".csv"} (text, Ecxel), \code{".sav"} (SPSS), \code{".dta"}
+(Stata) and \code{".xpt"} (SAS).}
 
 \item{path_catalog}{Character string, path to the catalog file. Only relevant
 for SAS data files.}
@@ -33,6 +42,12 @@ of numeric variables into factors will be performed. See also section
 \item{verbose}{Toggle warnings and messages.}
 
 \item{...}{Arguments passed to the related \verb{read_*()} function.}
+
+\item{data}{The data frame that should be written to a file.}
+
+\item{delimiter}{For CSV-files, specifies the delimiter. Defaults to \code{","},
+but in particular in European regions, \code{";"} might be a useful alternative,
+especially when CSV-files should be imported into MS Excel.}
 }
 \value{
 A data frame.
