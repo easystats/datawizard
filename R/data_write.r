@@ -29,7 +29,7 @@ data_write <- function(data,
   # stop on unsupported
   if (is.null(type)) {
     insight::format_error(
-      "Unknow file type. Supported file types are \".csv\", \".sav\", \".dta\" and \".xpt\"."
+      "Unknow file type. Supported file types are \".csv\", \".sav\", \".zsav\", \".dta\" and \".xpt\"."
     )
   }
 
