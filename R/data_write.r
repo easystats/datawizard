@@ -119,7 +119,7 @@ data_write <- function(data,
   if (verbose) {
     insight::format_alert("")
   }
-  x[] <- laply(x, function(i) {
+  x[] <- lapply(x, function(i) {
     # is type of labels same as type of vector? typically, character
     # vectors can have numeric labels or vice versa, numeric vectors
     # have "numeric" labels as character strings. in this case,
