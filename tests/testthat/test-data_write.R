@@ -15,7 +15,7 @@ d$e42dep <- droplevels(d$e42dep)
 
 # SPSS -------------------------------------
 
-tmp <- paste0(tempfile(), ".sav")
+tmp <- tempfile(fileext = ".sav")
 on.exit(unlink(tmp))
 
 test_that("data_write, SPSS", {
@@ -33,7 +33,7 @@ test_that("data_write, SPSS", {
 
 # Stata -------------------------------------
 
-tmp <- paste0(tempfile(), ".dta")
+tmp <- tempfile(fileext = ".dta")
 on.exit(unlink(tmp))
 
 test_that("data_write, Stata", {
@@ -51,7 +51,7 @@ test_that("data_write, Stata", {
 
 # csv -------------------------
 
-tmp <- paste0(tempfile(), ".csv")
+tmp <- tempfile(fileext = ".csv")
 on.exit(unlink(tmp))
 
 test_that("data_write, CSV, keep numeric", {
