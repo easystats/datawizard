@@ -37,11 +37,15 @@ for SAS data files.}
 values have a value label, are assumed to be categorical and converted
 into factors. If \code{FALSE}, no variable types are guessed and no conversion
 of numeric variables into factors will be performed. See also section
-'Differences to other packages'.}
+'Differences to other packages'. For \code{data_write()}, this argument only
+applies to the CSV file format. Converting to factors might be useful in for
+this format because labelled numeric variables are then converted into
+factors and exported as character columns - else, value labels would be lost
+and only numeric values are written to the CSV file.}
 
 \item{verbose}{Toggle warnings and messages.}
 
-\item{...}{Arguments passed to the related \verb{read_*()} function.}
+\item{...}{Arguments passed to the related \verb{read_*()} or \verb{write_*()} functions.}
 
 \item{data}{The data frame that should be written to a file.}
 
