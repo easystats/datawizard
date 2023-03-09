@@ -26,8 +26,8 @@ data_write(
 }
 \arguments{
 \item{path}{Character string, the file path to the data file. For \code{data_write()},
-supported file types are \code{".csv"} (text, Ecxel), \code{".sav"}, \code{".zsav"} (SPSS),
-\code{".dta"} (Stata) and \code{".xpt"} (SAS).}
+supported file types are \code{".csv"} (text, Ecxel), \code{".xlsx"} (Excel) \code{".sav"},
+\code{".zsav"} (SPSS), \code{".dta"} (Stata) and \code{".xpt"} (SAS).}
 
 \item{path_catalog}{Character string, path to the catalog file. Only relevant
 for SAS data files.}

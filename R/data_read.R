@@ -11,8 +11,8 @@
 #' to `rio::import()`.
 #'
 #' @param path Character string, the file path to the data file. For `data_write()`,
-#' supported file types are `".csv"` (text, Ecxel), `".sav"`, `".zsav"` (SPSS),
-#' `".dta"` (Stata) and `".xpt"` (SAS).
+#' supported file types are `".csv"` (text, Ecxel), `".xlsx"` (Excel) `".sav"`,
+#' `".zsav"` (SPSS), `".dta"` (Stata) and `".xpt"` (SAS).
 #' @param path_catalog Character string, path to the catalog file. Only relevant
 #' for SAS data files.
 #' @param encoding The character encoding used for the file. Usually not needed.

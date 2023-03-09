@@ -23,18 +23,21 @@ data_write <- function(data,
     "zsav" = "zspss",
     "dta" = "stata",
     "xpt" = "sas",
+    "xlsx" = "excel",
     NULL
   )
 
   # stop on unsupported
   if (is.null(type)) {
     insight::format_error(
-      "Unknow file type. Supported file types are \".csv\", \".sav\", \".zsav\", \".dta\" and \".xpt\"."
+      "Unknow file type. Supported file types are \".csv\", \".xlsx\", \".sav\", \".zsav\", \".dta\" and \".xpt\"."
     )
   }
 
   if (type == "csv") {
     .write_csv(data, path, delimiter, convert_factors, save_variable_labels, verbose, ...)
+  } else if (type == "xlsx") {
+    .write_excel(data, path, convert_factors, save_variable_labels, verbose, ...)
   } else {
     .write_haven(data, path, verbose, type, ...)
   }
@@ -70,6 +73,30 @@ data_write <- function(data,
 }
 
 
+# saving into Excel -----
+
+.write_excel <- function(data,
+                         path,
+                         convert_factors = FALSE,
+                         save_variable_labels = FALSE,
+                         verbose = TRUE,
+                         ...) {
+  insight::check_if_installed("rio")
+
+  # this might make sense when writing labelled data to CSV
+  if (convert_factors) {
+    data <- .pre_process_exported_data(data, convert_factors)
+  }
+
+  # add row with variable labels
+  if (save_variable_labels) {
+    data <- .add_labels_as_row(data)
+  }
+
+  rio::export(x = data, file = path, ...)
+}
+
+
 # saving into haven format -----
 
 .write_haven <- function(data, path, verbose = TRUE, type = "spss", ...) {
@@ -87,8 +114,9 @@ data_write <- function(data,
   # fix invalid column names
   data <- .fix_column_names(data)
 
+  ## TODO: check if this is really needed
   # repair duplicated value labels
-  data <- .repair_value_labels(data, verbose)
+  # data <- .repair_value_labels(data, verbose)
 
   if (type %in% c("spss", "zspss")) {
     # write to SPSS
