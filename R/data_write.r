@@ -34,7 +34,7 @@ data_write <- function(data,
   }
 
   if (type == "csv") {
-    .write_csv(data, path, delimiter, save_variable_labels, verbose, ...)
+    .write_csv(data, path, delimiter, convert_factors, save_variable_labels, verbose, ...)
   } else {
     .write_haven(data, path, verbose, type, ...)
   }
@@ -43,7 +43,13 @@ data_write <- function(data,
 
 # saving into CSV -----
 
-.write_csv <- function(data, path, delimiter = ",", save_variable_labels = FALSE, verbose = TRUE, ...) {
+.write_csv <- function(data,
+                       path,
+                       delimiter = ",",
+                       convert_factors = FALSE,
+                       save_variable_labels = FALSE,
+                       verbose = TRUE,
+                       ...) {
   insight::check_if_installed("readr")
 
   # this might make sense when writing labelled data to CSV
@@ -57,7 +63,7 @@ data_write <- function(data,
 
   # add row with variable labels
   if (save_variable_labels) {
-    ## TODO
+    data <- .add_labels_as_row(data)
   }
 
   if (delimiter == ",") {
@@ -182,4 +188,40 @@ data_write <- function(data,
   # check if we have numeric character values only
   if (na.rm) x <- stats::na.omit(x)
   !anyNA(suppressWarnings(as.numeric(x)))
+}
+
+
+# variable labels cannot be saved to CSV format, but we can add
+# variable labels as data row to the file
+.add_labels_as_row <- function(x) {
+  # extract labels
+  labs <- vapply(x, function(i) {
+    l <- attr(i, "label", exact = TRUE)
+    if (is.null(l)) {
+      l <- ""
+    }
+    l
+  }, character(1))
+
+  # any labels?
+  if (!all(labs == "")) {
+    # convert variables to character, else we cannot add the character label
+    # to it as new value. The row with labels is a data row...
+    x[] <- lapply(x, function(i) {
+      l <- attr(i, "label", exact = TRUE)
+      if (!is.null(l)) {
+        as.character(i)
+      } else {
+        i
+      }
+    })
+
+    # add new row with labels
+    x[nrow(x) + 1, ] <- labs
+
+    # re-order rows, so labels are first row
+    x <- x[c(nrow(x), seq_len(nrow(x) - 1)), ]
+  }
+
+  x
 }
