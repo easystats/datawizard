@@ -54,11 +54,7 @@ data_write <- function(data,
 
   # this might make sense when writing labelled data to CSV
   if (convert_factors) {
-    data <- .post_process_imported_data(
-      data,
-      convert_factors,
-      verbose
-    )
+    data <- .pre_process_exported_data(data, convert_factors)
   }
 
   # add row with variable labels
@@ -92,7 +88,7 @@ data_write <- function(data,
   data <- .fix_column_names(data)
 
   # repair duplicated value labels
-  data <- .repair_value_labels(data)
+  data <- .repair_value_labels(data, verbose)
 
   if (type %in% c("spss", "zspss")) {
     # write to SPSS
@@ -117,7 +113,7 @@ data_write <- function(data,
 # harmonize the type of variables and their value labels
 .set_haven_class_attributes <- function(x, verbose = TRUE) {
   if (verbose) {
-    insight::format_alert("")
+    insight::format_alert("Preparing data file: converting variable types.")
   }
   x[] <- lapply(x, function(i) {
     # is type of labels same as type of vector? typically, character
@@ -165,7 +161,10 @@ data_write <- function(data,
 #    1    2    3    4    5
 # In this case, to ensure proper writing into SPSS or similar, we need to
 # repair those labels to avoid duplicates.
-.repair_value_labels <- function(x) {
+.repair_value_labels <- function(x, verbose = TRUE) {
+  if (verbose) {
+    insight::format_alert("Preparing data file: checking for duplicated value labels.")
+  }
   for (i in seq_len(ncol(x))) {
     labs <- attr(x[[i]], "labels", exact = TRUE)
     # check if we have a labelled vector
@@ -209,11 +208,7 @@ data_write <- function(data,
     # to it as new value. The row with labels is a data row...
     x[] <- lapply(x, function(i) {
       l <- attr(i, "label", exact = TRUE)
-      if (!is.null(l)) {
-        as.character(i)
-      } else {
-        i
-      }
+      as.character(i)
     })
 
     # add new row with labels
@@ -223,5 +218,57 @@ data_write <- function(data,
     x <- x[c(nrow(x), seq_len(nrow(x) - 1)), ]
   }
 
+  x
+}
+
+
+# process imported data from SPSS, SAS or Stata -----------------------
+
+.pre_process_exported_data <- function(x, convert_factors) {
+  # user may decide whether we automatically detect variable type or not
+  if (isTRUE(convert_factors)) {
+    x[] <- lapply(x, function(i) {
+      # only proceed if not all missing
+      if (!all(is.na(i))) {
+        # save labels
+        value_labels <- attr(i, "labels", exact = TRUE)
+        variable_labels <- attr(i, "label", exact = TRUE)
+
+        # filter, so only matching value labels remain
+        value_labels <- value_labels[value_labels %in% unique(i)]
+
+        # guess variable type
+        if (!is.character(i)) {
+          # if all values are labelled, we assume factor. Use labels as levels
+          if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
+            if (is.numeric(i)) {
+              i <- factor(i, labels = names(value_labels))
+            } else {
+              i <- factor(as.character(i), labels = names(value_labels))
+            }
+            i <- as.character(i)
+          } else {
+            # else, fall back to numeric
+            i <- as.numeric(as.character(i))
+          }
+        } else {
+          # we need this to drop haven-specific class attributes
+          i <- as.character(i)
+        }
+        # add back variable label
+        attr(i, "label") <- variable_labels
+      }
+      i
+    })
+  } else {
+    # drop haven class attributes
+    x[] <- lapply(x, function(i) {
+      # save labels
+      class(i) <- setdiff(class(i), c("haven_labelled", "vctrs_vctr"))
+      i
+    })
+  }
+
+  class(x) <- "data.frame"
   x
 }
