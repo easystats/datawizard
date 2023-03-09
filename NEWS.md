@@ -8,6 +8,9 @@ NEW FUNCTIONS
 * `mean_sd()` and `median_mad()` for summarizing vectors to their mean (or
   median) and a range of one SD (or MAD) above and below.  
   
+* `data_Write()` as counterpart to `data_read()`, to write data frames into
+  CSV, SPSS, SAS or Stata files.
+
 BREAKING CHANGES
 
 * In selection patterns, expressions like `-var1:var3` to exclude all variables
