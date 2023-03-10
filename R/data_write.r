@@ -26,6 +26,14 @@ data_write <- function(data,
     "unknown"
   )
 
+  # no file type provided?
+  if (!is.character(type) || type == "") {
+    insight::format_error(
+      "Could not retrieve file type. The `path` argument did not contain a file extension.",
+      "Please provide a file path including file extension, like \"myfile.csv\" or \"c:/Users/Default/myfile.sav\"."
+    )
+  }
+
   if (type == "csv") {
     .write_csv(data, path, delimiter, convert_factors, save_variable_labels, verbose, ...)
   } else if (type == "unknown") {

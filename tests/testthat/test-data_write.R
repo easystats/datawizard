@@ -86,3 +86,11 @@ test_that("data_write, CSV, add labels as row", {
     ignore_attr = TRUE
   )
 })
+
+
+# invalid file type -------------------------
+
+test_that("data_write, no file extension", {
+  expect_error(data_write(d, "mytestfile"))
+  expect_error(data_write(d, NULL))
+})

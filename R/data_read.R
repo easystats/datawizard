@@ -73,12 +73,21 @@ data_read <- function(path,
                       verbose = TRUE,
                       ...) {
   # extract first valid file from zip-file
-  if (.file_ext(path) == "zip") {
+  if (identical(.file_ext(path), "zip")) {
     path <- .extract_zip(path)
   }
 
+  # check for valid file type
+  file_type <- .file_ext(path)
+  if (!is.character(file_type) || file_type == "") {
+    insight::format_error(
+      "Could not retrieve file type. The `path` argument did not contain a file extension.",
+      "Please provide a file path including file extension, like \"myfile.csv\" or \"c:/Users/Default/myfile.sav\"."
+    )
+  }
+
   # read data
-  out <- switch(.file_ext(path),
+  out <- switch(file_type,
     "txt" = ,
     "csv" = .read_text(path, encoding, verbose, ...),
     "xls" = ,
