@@ -15,7 +15,8 @@ data_write <- function(data,
                        verbose = TRUE,
                        ...) {
   # check file type, so we know the target dta format
-  type <- switch(.file_ext(path),
+  file_type <- .file_ext(path)
+  type <- switch(file_type,
     "txt" = ,
     "csv" = "csv",
     "sav" = ,
@@ -27,7 +28,7 @@ data_write <- function(data,
   )
 
   # no file type provided?
-  if (!is.character(type) || type == "") {
+  if (!is.character(file_type) || file_type == "") {
     insight::format_error(
       "Could not detect file type. The `path` argument has no file extension.",
       "Please provide a file path including extension, like \"myfile.csv\" or \"c:/Users/Default/myfile.sav\"."
