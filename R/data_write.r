@@ -195,14 +195,6 @@ data_write <- function(data,
 }
 
 
-# helper to check whether a character can be coerced into numeric
-.is_numeric_character <- function(x, na.rm = FALSE) {
-  # check if we have numeric character values only
-  if (na.rm) x <- stats::na.omit(x)
-  !anyNA(suppressWarnings(as.numeric(x)))
-}
-
-
 # variable labels cannot be saved to CSV format, but we can add
 # variable labels as data row to the file
 .add_labels_as_row <- function(x) {
