@@ -81,8 +81,8 @@ data_read <- function(path,
   file_type <- .file_ext(path)
   if (!is.character(file_type) || file_type == "") {
     insight::format_error(
-      "Could not retrieve file type. The `path` argument did not contain a file extension.",
-      "Please provide a file path including file extension, like \"myfile.csv\" or \"c:/Users/Default/myfile.sav\"."
+      "Could not detect file type. The `path` argument has no file extension.",
+      "Please provide a file path including extension, like \"myfile.csv\" or \"c:/Users/Default/myfile.sav\"."
     )
   }
 
