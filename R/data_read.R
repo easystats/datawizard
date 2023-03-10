@@ -53,6 +53,15 @@
 #' same applies to `data_write()`, i.e. based on the file extension provided in
 #' `path`, the appropriate `write_*()` function is used automatically.
 #'
+#' @section SPSS specific behaviour:
+#' `data_read()` does *not* import user-defined ("tagged") `NA` values from
+#' SPSS, i.e. argument `user_na` is always set to `FALSE` when importing SPSS
+#' data with the **haven** package. Use `convert_to_na()` to define missing
+#' values in the imported data, if necessary. Furthermore, `data_write()`
+#' compresses SPSS files by default. If this causes problems with (older) SPSS
+#' versions, use `compress = "none"`, for example
+#' `data_write(data, "myfile.sav", compress = "none")`.
+#'
 #' @section Differences to other packages that read foreign data formats:
 #' `data_read()` is most comparable to `rio::import()`. For data files from
 #' SPSS, SAS or Stata, which support labelled data, variables are converted into

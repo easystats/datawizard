@@ -82,7 +82,12 @@ data_write <- function(data,
 .write_haven <- function(data, path, verbose = TRUE, type = "spss", ...) {
   insight::check_if_installed("haven")
 
-  if (identical(type, "zspss")) {
+  # check if user provided "compress" argument for SPSS files,
+  # else, default to compression
+  dots <- list(...)
+  if (!is.null(dots$compress)) {
+    compress <- dots$compress
+  } else if (identical(type, "zspss")) {
     compress <- "zsav"
   } else {
     compress <- "byte"
@@ -96,7 +101,7 @@ data_write <- function(data,
 
   if (type %in% c("spss", "zspss")) {
     # write to SPSS
-    haven::write_sav(data = data, path = path, compress = compress, ...)
+    haven::write_sav(data = data, path = path, compress = compress)
   } else if (type == "stata") {
     # write to Stata
     haven::write_dta(data = data, path = path, ...)

@@ -101,6 +101,17 @@ same applies to \code{data_write()}, i.e. based on the file extension provided i
 \code{path}, the appropriate \verb{write_*()} function is used automatically.
 }
 
+\section{SPSS specific behaviour}{
+
+\code{data_read()} does \emph{not} import user-defined ("tagged") \code{NA} values from
+SPSS, i.e. argument \code{user_na} is always set to \code{FALSE} when importing SPSS
+data with the \strong{haven} package. Use \code{convert_to_na()} to define missing
+values in the imported data, if necessary. Furthermore, \code{data_write()}
+compresses SPSS files by default. If this causes problems with (older) SPSS
+versions, use \code{compress = "none"}, for example
+\code{data_write(data, "myfile.sav", compress = "none")}.
+}
+
 \section{Differences to other packages that read foreign data formats}{
 
 \code{data_read()} is most comparable to \code{rio::import()}. For data files from
