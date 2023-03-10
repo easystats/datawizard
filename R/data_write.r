@@ -35,27 +35,24 @@ data_write <- function(data,
     )
   }
 
-  if (type == "csv") {
-    .write_csv(data, path, delimiter, convert_factors, save_variable_labels, verbose, ...)
-  } else if (type == "unknown") {
-    .write_unknown(data, path, convert_factors, save_variable_labels, verbose, ...)
+  if (type %in% c("csv", "unknown")) {
+    .write_csv_or_unknown(data, path, type, delimiter, convert_factors, save_variable_labels, verbose, ...)
   } else {
     .write_haven(data, path, verbose, type, ...)
   }
 }
 
 
-# saving into CSV -----
+# saving into CSV or unknown format -----
 
-.write_csv <- function(data,
-                       path,
-                       delimiter = ",",
-                       convert_factors = FALSE,
-                       save_variable_labels = FALSE,
-                       verbose = TRUE,
-                       ...) {
-  insight::check_if_installed("readr")
-
+.write_csv_or_unknown <- function(data,
+                                  path,
+                                  type = "csv",
+                                  delimiter = ",",
+                                  convert_factors = FALSE,
+                                  save_variable_labels = FALSE,
+                                  verbose = TRUE,
+                                  ...) {
   # this might make sense when writing labelled data to CSV
   if (convert_factors) {
     data <- .pre_process_exported_data(data, convert_factors)
@@ -66,35 +63,17 @@ data_write <- function(data,
     data <- .add_labels_as_row(data)
   }
 
-  if (delimiter == ",") {
-    readr::write_csv(x = data, file = path, ...)
+  if (type == "csv") {
+    insight::check_if_installed("readr")
+    if (delimiter == ",") {
+      readr::write_csv(x = data, file = path, ...)
+    } else {
+      readr::write_csv2(x = data, file = path, ...)
+    }
   } else {
-    readr::write_csv2(x = data, file = path, ...)
+    insight::check_if_installed("rio")
+    rio::export(x = data, file = path, ...)
   }
-}
-
-
-# saving into unknown -----
-
-.write_unknown <- function(data,
-                           path,
-                           convert_factors = FALSE,
-                           save_variable_labels = FALSE,
-                           verbose = TRUE,
-                           ...) {
-  insight::check_if_installed("rio")
-
-  # this might make sense when writing labelled data to CSV
-  if (convert_factors) {
-    data <- .pre_process_exported_data(data, convert_factors)
-  }
-
-  # add row with variable labels
-  if (save_variable_labels) {
-    data <- .add_labels_as_row(data)
-  }
-
-  rio::export(x = data, file = path, ...)
 }
 
 
@@ -206,7 +185,7 @@ data_write <- function(data,
 }
 
 
-# process imported data from SPSS, SAS or Stata -----------------------
+# process data for export, use factor levels as data values -------------------
 
 .pre_process_exported_data <- function(x, convert_factors) {
   # user may decide whether we automatically detect variable type or not
