@@ -1,7 +1,7 @@
 #' @param data The data frame that should be written to a file.
 #' @param delimiter For CSV-files, specifies the delimiter. Defaults to `","`,
 #'   but in particular in European regions, `";"` might be a useful alternative,
-#'   especially when CSV-files should be imported into MS Excel.
+#'   especially when exported CSV-files should be opened in Excel.
 #' @param save_variable_labels Only applies to CSV files. If `TRUE`, variable
 #' labels (if any) will be saved to the CSV file as additional row after the
 #' column names row.
@@ -97,7 +97,7 @@ data_write <- function(data,
   data <- .set_haven_class_attributes(data, verbose)
 
   # fix invalid column names
-  data <- .fix_column_names(data)
+  data <- .fix_column_names(data, verbose)
 
   if (type %in% c("spss", "zspss")) {
     # write to SPSS
@@ -148,10 +148,13 @@ data_write <- function(data,
 
 # packages like SPSS cannot deal with variable which names end with a dot
 # fix column names here by added a "fix" suffix
-.fix_column_names <- function(x) {
+.fix_column_names <- function(x, verbose = TRUE) {
   # check for correct column names
   dot_ends <- vapply(colnames(x), endsWith, FUN.VALUE = TRUE, suffix = ".")
   if (any(dot_ends)) {
+    if (verbose) {
+      insight::format_alert("Found and fixed invalid column names so they can be read by other software packages.")
+    }
     colnames(x)[dot_ends] <- paste0(colnames(x)[dot_ends], "fix")
   }
   x

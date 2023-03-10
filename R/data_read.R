@@ -20,7 +20,7 @@
 #' of numeric variables into factors will be performed. See also section
 #' 'Differences to other packages'. For `data_write()`, this argument only
 #' applies to the text (e.g. `.txt` or `.csv`) or spreadsheet file formats (like
-#' `.xlsx`). Converting to factors might be useful in for these formats because
+#' `.xlsx`). Converting to factors might be useful for these formats because
 #' labelled numeric variables are then converted into factors and exported as
 #' character columns - else, value labels would be lost and only numeric values
 #' are written to the file.

@@ -38,7 +38,7 @@ into factors. If \code{FALSE}, no variable types are guessed and no conversion
 of numeric variables into factors will be performed. See also section
 'Differences to other packages'. For \code{data_write()}, this argument only
 applies to the text (e.g. \code{.txt} or \code{.csv}) or spreadsheet file formats (like
-\code{.xlsx}). Converting to factors might be useful in for these formats because
+\code{.xlsx}). Converting to factors might be useful for these formats because
 labelled numeric variables are then converted into factors and exported as
 character columns - else, value labels would be lost and only numeric values
 are written to the file.}
@@ -51,7 +51,7 @@ are written to the file.}
 
 \item{delimiter}{For CSV-files, specifies the delimiter. Defaults to \code{","},
 but in particular in European regions, \code{";"} might be a useful alternative,
-especially when CSV-files should be imported into MS Excel.}
+especially when exported CSV-files should be opened in Excel.}
 
 \item{save_variable_labels}{Only applies to CSV files. If \code{TRUE}, variable
 labels (if any) will be saved to the CSV file as additional row after the
