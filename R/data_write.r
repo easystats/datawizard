@@ -115,10 +115,6 @@ data_write <- function(data,
   # fix invalid column names
   data <- .fix_column_names(data)
 
-  ## TODO: check if this is really needed
-  # repair duplicated value labels
-  # data <- .repair_value_labels(data, verbose)
-
   if (type %in% c("spss", "zspss")) {
     # write to SPSS
     haven::write_sav(data = data, path = path, compress = compress, ...)
@@ -173,32 +169,6 @@ data_write <- function(data,
   dot_ends <- vapply(colnames(x), endsWith, FUN.VALUE = TRUE, suffix = ".")
   if (any(dot_ends)) {
     colnames(x)[dot_ends] <- paste0(colnames(x)[dot_ends], "fix")
-  }
-  x
-}
-
-
-# sometimes we have duplicated labels for partially labelled vectors, e.g.
-#  low   ..   ..   .. high
-#    1    2    3    4    5
-# In this case, to ensure proper writing into SPSS or similar, we need to
-# repair those labels to avoid duplicates.
-.repair_value_labels <- function(x, verbose = TRUE) {
-  if (verbose) {
-    insight::format_alert("Preparing data file: checking for duplicated value labels.")
-  }
-  for (i in seq_len(ncol(x))) {
-    labs <- attr(x[[i]], "labels", exact = TRUE)
-    # check if we have a labelled vector
-    if (!is.null(labs)) {
-      # extract all duplicates, if any
-      duped_labels <- duplicated(names(labs), fromLast = TRUE) | duplicated(names(labs))
-      if (any(duped_labels)) {
-        # append value to label, so we have unique labels again
-        names(labs)[duped_labels] <- paste0(names(labs)[duped_labels], "_", labs[duped_labels])
-        attr(x[[i]], "labels") <- labs
-      }
-    }
   }
   x
 }
