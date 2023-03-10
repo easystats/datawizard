@@ -100,7 +100,6 @@ data_write <- function(data,
     compress <- "byte"
   }
 
-  ## TODO: check if this is really needed
   # labelled data needs "labelled" class attributes
   data <- .set_haven_class_attributes(data, verbose)
 
@@ -129,37 +128,30 @@ data_write <- function(data,
 # helper -------------------------------
 
 
-# haven used to be very strict about the type of value labels (attached as
-# attributes), which had to be of the same type as the variable. Here we
-# harmonize the type of variables and their value labels
+# make sure we have the "labelled" class for labelled data
 .set_haven_class_attributes <- function(x, verbose = TRUE) {
+  insight::check_if_installed("haven")
+
   if (verbose) {
     insight::format_alert("Preparing data file: converting variable types.")
   }
   x[] <- lapply(x, function(i) {
-    # is type of labels same as type of vector? typically, character
-    # vectors can have numeric labels or vice versa, numeric vectors
-    # have "numeric" labels as character strings. in this case,
-    # harmonize types of vector and labels, so haven doesn't complain.
-    # we skip factors, because those are automatically labelled
-    if (!is.factor(i) && !is.null(attr(i, "labels", exact = TRUE))) {
-      label_type <- as.vector(attr(i, "labels", exact = TRUE))
-      if (!is.null(label_type) && typeof(label_type) != typeof(i)) {
-        lab.at <- attr(i, "labels", exact = TRUE)
-        nlab <- names(lab.at)
-        if (is.integer(i) && !is.integer(label_type)) {
-          lab.at <- as.integer(lab.at)
-        } else if (.is_numeric_character(label_type, na.rm = TRUE)) {
-          lab.at <- as.numeric(lab.at)
-        } else {
-          lab.at <- as.character(lab.at)
-        }
-        names(lab.at) <- nlab
-        attr(i, "labels") <- lab.at
-      }
-      class(i) <- c("haven_labelled", "vctrs_vctr")
+    value_labels <- attr(v, "labels", exact = TRUE)
+    variable_label <- attr(v, "label", exact = TRUE)
+    if (is.factor(i)) {
+      # factor requires special preparation to save levels as labels
+      haven::labelled(
+        x = as.numeric(i),
+        labels = stats::setNames(seq_along(levels(i)), levels(i)),
+        label = variable_label
+      )
+    } else if (!is.null(value_labels) || !is.null(variable_label)) {
+      # make sure we have labelled class for labelled data
+      haven::labelled(x = i, labels = value_labels, label = variable_label)
+    } else {
+      # non labelled data can be saved "as is"
+      i
     }
-    i
   })
   x
 }
