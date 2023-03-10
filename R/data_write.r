@@ -136,8 +136,8 @@ data_write <- function(data,
     insight::format_alert("Preparing data file: converting variable types.")
   }
   x[] <- lapply(x, function(i) {
-    value_labels <- attr(v, "labels", exact = TRUE)
-    variable_label <- attr(v, "label", exact = TRUE)
+    value_labels <- attr(i, "labels", exact = TRUE)
+    variable_label <- attr(i, "label", exact = TRUE)
     if (is.factor(i)) {
       # factor requires special preparation to save levels as labels
       haven::labelled(
