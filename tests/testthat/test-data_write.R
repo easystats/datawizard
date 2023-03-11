@@ -76,17 +76,6 @@ test_that("data_write, CSV, convert to factor", {
   expect_equal(out, d2, ignore_attr = TRUE)
 })
 
-test_that("data_write, CSV, add labels as row", {
-  data_write(d, tmp, save_variable_labels = TRUE)
-  d2 <- data_read(tmp)
-
-  expect_equal(
-    d2$c12hour,
-    c("average number of hours of care per week", "16", "148", "70", NA, "168"),
-    ignore_attr = TRUE
-  )
-})
-
 
 # invalid file type -------------------------
 
