@@ -193,7 +193,7 @@ data_write <- function(data,
     if (is.null(l)) {
       ""
     } else {
-      paste(names(l), collapse = "; ")
+      paste0(l, "=", names(l), collapse = "; ")
     }
   }, character(1))
 
