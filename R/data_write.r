@@ -2,16 +2,18 @@
 #' @param delimiter For CSV-files, specifies the delimiter. Defaults to `","`,
 #'   but in particular in European regions, `";"` might be a useful alternative,
 #'   especially when exported CSV-files should be opened in Excel.
-#' @param save_variable_labels Only applies to CSV files. If `TRUE`, variable
-#' labels (if any) will be saved to the CSV file as additional row after the
-#' column names row.
+#' @param save_labels Only applies to CSV files. If `TRUE`, value and variable
+#'   labels (if any) will be saved as additional CSV file. This file has the same
+#'   file name as the exported CSV file, but includes a `"_labels"` suffix (i.e.
+#'   when the file name is `"mydat.csv"`, the additional file with value and
+#'   variable labels is named `"mydat_labels.csv"`.
 #' @rdname data_read
 #' @export
 data_write <- function(data,
                        path,
                        delimiter = ",",
                        convert_factors = FALSE,
-                       save_variable_labels = FALSE,
+                       save_labels = FALSE,
                        verbose = TRUE,
                        ...) {
   # check file type, so we know the target dta format
@@ -36,7 +38,7 @@ data_write <- function(data,
   }
 
   if (type %in% c("csv", "unknown")) {
-    .write_csv_or_unknown(data, path, type, delimiter, convert_factors, save_variable_labels, verbose, ...)
+    .write_csv_or_unknown(data, path, type, delimiter, convert_factors, save_labels, verbose, ...)
   } else {
     .write_haven(data, path, verbose, type, ...)
   }
@@ -50,17 +52,17 @@ data_write <- function(data,
                                   type = "csv",
                                   delimiter = ",",
                                   convert_factors = FALSE,
-                                  save_variable_labels = FALSE,
+                                  save_labels = FALSE,
                                   verbose = TRUE,
                                   ...) {
+  # save labels
+  if (save_labels && type == "csv") {
+    data <- .save_labels_to_file(data, path, delimiter, verbose)
+  }
+
   # this might make sense when writing labelled data to CSV
   if (convert_factors) {
     data <- .pre_process_exported_data(data, convert_factors)
-  }
-
-  # add row with variable labels
-  if (save_variable_labels) {
-    data <- .add_labels_as_row(data)
   }
 
   if (type == "csv") {
@@ -161,11 +163,23 @@ data_write <- function(data,
 }
 
 
-# variable labels cannot be saved to CSV format, but we can add
-# variable labels as data row to the file
-.add_labels_as_row <- function(x) {
+# save value and variable labels as addtional file
+.save_labels_to_file <- function(x, path, delimiter, verbose = TRUE) {
+  insight::check_if_installed("readr")
+
+  # get file path information
+  fpath <- dirname(path)
+  fname <- sub("\\.csv$", "", basename(path))
+  path <- paste0(fpath, .Platform$file.sep, fname, "_labels.csv")
+
+  if (verbose) {
+    insight::format_alert(
+      paste0("Saving variable and value labels to \"", path, "\".")
+    )
+  }
+
   # extract labels
-  labs <- vapply(x, function(i) {
+  var_labs <- vapply(x, function(i) {
     l <- attr(i, "label", exact = TRUE)
     if (is.null(l)) {
       l <- ""
@@ -173,23 +187,28 @@ data_write <- function(data,
     l
   }, character(1))
 
-  # any labels?
-  if (!all(labs == "")) {
-    # convert variables to character, else we cannot add the character label
-    # to it as new value. The row with labels is a data row...
-    x[] <- lapply(x, function(i) {
-      l <- attr(i, "label", exact = TRUE)
-      as.character(i)
-    })
+  # extract value labels
+  value_labs <- vapply(x, function(i) {
+    l <- attr(i, "labels", exact = TRUE)
+    if (is.null(l)) {
+      ""
+    } else {
+      paste(names(l), collapse = "; ")
+    }
+  }, character(1))
 
-    # add new row with labels
-    x[nrow(x) + 1, ] <- labs
+  out <- data.frame(
+    variable = colnames(x),
+    label = var_labs,
+    labels = value_labs,
+    stringsAsFactors = FALSE
+  )
 
-    # re-order rows, so labels are first row
-    x <- x[c(nrow(x), seq_len(nrow(x) - 1)), ]
+  if (delimiter == ",") {
+    readr::write_csv(x = out, file = path)
+  } else {
+    readr::write_csv2(x = out, file = path)
   }
-
-  x
 }
 
 

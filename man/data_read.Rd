@@ -19,7 +19,7 @@ data_write(
   path,
   delimiter = ",",
   convert_factors = FALSE,
-  save_variable_labels = FALSE,
+  save_labels = FALSE,
   verbose = TRUE,
   ...
 )
@@ -53,9 +53,11 @@ are written to the file.}
 but in particular in European regions, \code{";"} might be a useful alternative,
 especially when exported CSV-files should be opened in Excel.}
 
-\item{save_variable_labels}{Only applies to CSV files. If \code{TRUE}, variable
-labels (if any) will be saved to the CSV file as additional row after the
-column names row.}
+\item{save_labels}{Only applies to CSV files. If \code{TRUE}, value and variable
+labels (if any) will be saved as additional CSV file. This file has the same
+file name as the exported CSV file, but includes a \code{"_labels"} suffix (i.e.
+when the file name is \code{"mydat.csv"}, the additional file with value and
+variable labels is named \code{"mydat_labels.csv"}.}
 }
 \value{
 A data frame.
