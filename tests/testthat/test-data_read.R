@@ -367,3 +367,19 @@ test_that("data_read, convert many labels correctly", {
 })
 
 unlink(temp_file)
+
+
+# invalid file type -------------------------
+
+test_that("data_read, no file extension", {
+  expect_error(data_read("mytestfile"), regex = "extension")
+  expect_error(data_read(NULL, regex = "extension"))
+})
+
+
+# file not exists -------------------------
+
+test_that("data_read, file not exists", {
+  expect_error(data_read("thisfileshouldnotexist.csv"), regex = "not exist")
+  expect_error(data_read("thisfileshouldnotexist.sav"), regex = "not exist")
+})

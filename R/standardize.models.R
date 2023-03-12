@@ -156,8 +156,8 @@ standardize.default <- function(x,
   weight_variable <- insight::find_weights(x)
 
   if (!is.null(weight_variable) &&
-        !weight_variable %in% colnames(data) &&
-        "(weights)" %in% colnames(data)) {
+    !weight_variable %in% colnames(data) &&
+    "(weights)" %in% colnames(data)) {
     data$.missing_weight <- data[["(weights)"]]
     colnames(data)[ncol(data)] <- weight_variable
     weight_variable <- c(weight_variable, "(weights)")

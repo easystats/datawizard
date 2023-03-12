@@ -8,6 +8,13 @@ NEW FUNCTIONS
 * `mean_sd()` and `median_mad()` for summarizing vectors to their mean (or
   median) and a range of one SD (or MAD) above and below.  
   
+* `data_write()` as counterpart to `data_read()`, to write data frames into
+  CSV, SPSS, SAS, Stata files and many other file types. One advantage over
+  existing functions to write data in other packages is that labelled (numeric)
+  data can be converted into factors (with values labels used as factor levels)
+  even for text formats like CSV and similar. This allows exporting "labelled"
+  data into those file formats, too.
+
 BREAKING CHANGES
 
 * In selection patterns, expressions like `-var1:var3` to exclude all variables
