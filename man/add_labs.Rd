@@ -29,7 +29,7 @@ add_labs(x, ...)
 \item{variable}{The variable label as string.}
 
 \item{values}{The value labels as (named) character vector. If \code{values} is
-\emph{not} a named vector, the length of lables must be equal to the length of
+\emph{not} a named vector, the length of labels must be equal to the length of
 unique values. For a named vector, the left-hand side (LHS) is the value in
 \code{x}, the right-hand side (RHS) the associated value label. Non-matching
 labels are omitted.}

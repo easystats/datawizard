@@ -9,7 +9,7 @@
 #' @param x A data frame, factor or vector.
 #' @param variable The variable label as string.
 #' @param values The value labels as (named) character vector. If `values` is
-#' *not* a named vector, the length of lables must be equal to the length of
+#' *not* a named vector, the length of labels must be equal to the length of
 #' unique values. For a named vector, the left-hand side (LHS) is the value in
 #' `x`, the right-hand side (RHS) the associated value label. Non-matching
 #' labels are omitted.
