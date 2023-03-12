@@ -264,7 +264,9 @@ standardize.default <- function(x,
   if (isTRUE(verbose)) {
     model_std <- eval(substitute(update_expr))
   } else {
-    utils::capture.output(model_std <- eval(substitute(update_expr)))
+    utils::capture.output({
+      model_std <- eval(substitute(update_expr))
+    })
   }
 
   on.exit() # undo previous on.exit()
@@ -398,13 +400,13 @@ standardize.mediate <- function(x,
   }
 
 
-  text <- utils::capture.output(
+  text <- utils::capture.output({
     model_std <- stats::update(x,
       model.y = y_std, model.m = m_std,
       # control.value = control.value, treat.value = treat.value
       covariates = covs
     )
-  )
+  })
 
   model_std
 }

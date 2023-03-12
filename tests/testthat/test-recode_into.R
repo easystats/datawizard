@@ -111,9 +111,10 @@ test_that("recode_into, check differen input length", {
     {
       out <- recode_into(
         x == 2 ~ 1,
-        y == 2 & x == 2 ~ 2
+        y == 2 & x == 2 ~ 2,
+        default = 0
       )
     },
-    regexp = "already recoded"
+    regexp = "Several recode patterns"
   )
 })

@@ -181,26 +181,22 @@ test_that("data_read", {
   )
   expect_identical(
     d,
-    structure(
-      list(
-        V1 = structure(
-          1:4,
-          levels = c("Eins", "Zwei", "Drei", "Vier"),
-          class = "factor", label = "Variable 1"
-        ),
-        V2 = structure(
-          c(2, 3, 4, 1),
-          labels = c(Eins = 1, Zwei = 2, Drei = 3),
-          label = "Variable 2"
-        ),
-        V3 = structure(
-          c(3L, 2L, 1L, 4L),
-          levels = c("Eins", "Zwei", "Drei", "Vier"),
-          class = "factor", label = "Variable 3"
-        )
-      ),
-      row.names = c(NA, -4L), class = "data.frame"
-    )
+    structure(list(
+      V1 = structure(1:4, levels = c(
+        "Eins", "Zwei",
+        "Drei", "Vier"
+      ), class = "factor", converted_to_factor = TRUE, label = "Variable 1"),
+      V2 = structure(c(2, 3, 4, 1), labels = c(
+        Eins = 1, Zwei = 2,
+        Drei = 3
+      ), label = "Variable 2"), V3 = structure(c(
+        3L, 2L,
+        1L, 4L
+      ), levels = c("Eins", "Zwei", "Drei", "Vier"), class = "factor", converted_to_factor = TRUE, label = "Variable 3")
+    ), row.names = c(
+      NA,
+      -4L
+    ), class = "data.frame")
   )
 })
 
@@ -313,6 +309,19 @@ test_that("data_read, convert many labels correctly", {
   expect_snapshot(data_tabulate(d$c12c))
 })
 
+test_that("data_read, give message", {
+  expect_message(
+    expect_message(
+      expect_message(
+        data_read(temp_file),
+        regexp = "Reading"
+      ),
+      regexp = "Variables where all"
+    ),
+    regexp = "4 out of 4"
+  )
+})
+
 test_that("data_read, convert many labels correctly", {
   d <- data_read(
     temp_file,
@@ -358,3 +367,19 @@ test_that("data_read, convert many labels correctly", {
 })
 
 unlink(temp_file)
+
+
+# invalid file type -------------------------
+
+test_that("data_read, no file extension", {
+  expect_error(data_read("mytestfile"), regex = "extension")
+  expect_error(data_read(NULL, regex = "extension"))
+})
+
+
+# file not exists -------------------------
+
+test_that("data_read, file not exists", {
+  expect_error(data_read("thisfileshouldnotexist.csv"), regex = "not exist")
+  expect_error(data_read("thisfileshouldnotexist.sav"), regex = "not exist")
+})
