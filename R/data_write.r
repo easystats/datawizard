@@ -6,7 +6,7 @@
 #'   labels (if any) will be saved as additional CSV file. This file has the same
 #'   file name as the exported CSV file, but includes a `"_labels"` suffix (i.e.
 #'   when the file name is `"mydat.csv"`, the additional file with value and
-#'   variable labels is named `"mydat_labels.csv"`.
+#'   variable labels is named `"mydat_labels.csv"`).
 #' @rdname data_read
 #' @export
 data_write <- function(data,
