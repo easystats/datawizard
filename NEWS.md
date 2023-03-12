@@ -15,6 +15,10 @@ NEW FUNCTIONS
   even for text formats like CSV and similar. This allows exporting "labelled"
   data into those file formats, too.
 
+* `add_labs()`, to manually add value and variable labels as attributes to
+  variables. These attributes are stored as `"label"` and `"labels"` attributes,
+  similar to the `labelled` class from the _haven_ package.
+
 BREAKING CHANGES
 
 * In selection patterns, expressions like `-var1:var3` to exclude all variables
