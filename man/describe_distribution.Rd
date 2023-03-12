@@ -48,11 +48,7 @@ describe_distribution(x, ...)
 \item{x}{A numeric vector, a character vector, a data frame, or a list. See
 \code{Details}.}
 
-\item{...}{Additional arguments to be passed to or from methods.}
-
-\item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
-
-\item{dispersion}{Logical, if \code{TRUE}, computes indices of dispersion related to the estimate(s) (\code{SD} and \code{MAD} for \code{mean} and \code{median}, respectively).}
+\item{...}{Arguments passed down to other functions. Mostly not used yet.}
 
 \item{iqr}{Logical, if \code{TRUE}, the interquartile range is calculated
 (based on \code{\link[stats:IQR]{stats::IQR()}}, using \code{type = 6}).}
@@ -70,8 +66,6 @@ the first centrality index (which is typically the median).}
 
 \item{iterations}{The number of bootstrap replicates for computing confidence
 intervals. Only applies when \code{ci} is not \code{NULL}.}
-
-\item{threshold}{For \code{centrality = "trimmed"} (i.e. trimmed mean), indicates the fraction (0 to 0.5) of observations to be trimmed from each end of the vector before the mean is computed.}
 
 \item{verbose}{Toggle warnings and messages.}
 
