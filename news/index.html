@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.12</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.13</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,6 +91,7 @@
 <ul><li><p><code><a href="../reference/recode_into.html">recode_into()</a></code>, similar to <code><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">dplyr::case_when()</a></code>, to recode values from one or more variables into a new variable.</p></li>
 <li><p><code><a href="../reference/mean_sd.html">mean_sd()</a></code> and <code><a href="../reference/mean_sd.html">median_mad()</a></code> for summarizing vectors to their mean (or median) and a range of one SD (or MAD) above and below.</p></li>
 <li><p><code><a href="../reference/data_read.html">data_write()</a></code> as counterpart to <code><a href="../reference/data_read.html">data_read()</a></code>, to write data frames into CSV, SPSS, SAS, Stata files and many other file types. One advantage over existing functions to write data in other packages is that labelled (numeric) data can be converted into factors (with values labels used as factor levels) even for text formats like CSV and similar. This allows exporting “labelled” data into those file formats, too.</p></li>
+<li><p><code><a href="../reference/add_labs.html">add_labs()</a></code>, to manually add value and variable labels as attributes to variables. These attributes are stored as <code>"label"</code> and <code>"labels"</code> attributes, similar to the <code>labelled</code> class from the <em>haven</em> package.</p></li>
 </ul><p>BREAKING CHANGES</p>
 <ul><li>
 <p>In selection patterns, expressions like <code>-var1:var3</code> to exclude all variables between <code>var1</code> and <code>var3</code> are no longer accepted. The correct expression is <code>-(var1:var3)</code>. This is for 2 reasons:</p>
