@@ -57,7 +57,7 @@ especially when exported CSV-files should be opened in Excel.}
 labels (if any) will be saved as additional CSV file. This file has the same
 file name as the exported CSV file, but includes a \code{"_labels"} suffix (i.e.
 when the file name is \code{"mydat.csv"}, the additional file with value and
-variable labels is named \code{"mydat_labels.csv"}.}
+variable labels is named \code{"mydat_labels.csv"}).}
 }
 \value{
 A data frame.
