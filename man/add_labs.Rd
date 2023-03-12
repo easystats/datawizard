@@ -8,7 +8,7 @@
 \usage{
 add_labs(x, ...)
 
-\method{add_labs}{numeric}(x, variable = NULL, values = NULL, verbose = TRUE, ...)
+\method{add_labs}{numeric}(x, variable = NULL, values = NULL, ...)
 
 \method{add_labs}{data.frame}(
   x,
@@ -33,8 +33,6 @@ add_labs(x, ...)
 unique values. For a named vector, the left-hand side (LHS) is the value in
 \code{x}, the right-hand side (RHS) the associated value label. Non-matching
 labels are omitted.}
-
-\item{verbose}{Toggle warnings.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -84,6 +82,8 @@ of length > 1. \code{regex = TRUE} is comparable to using one of the two
 select-helpers, \code{select = contains("")} or \code{select = regex("")}, however,
 since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 A labelled variable, or a data frame of labelled variables.

@@ -72,14 +72,14 @@ add_labs.default <- function(x, verbose = TRUE, ...) {
 
 #' @rdname add_labs
 #' @export
-add_labs.numeric <- function(x, variable = NULL, values = NULL, verbose = TRUE, ...) {
+add_labs.numeric <- function(x, variable = NULL, values = NULL, ...) {
   # add variable label
   if (!is.null(variable)) {
     if (is.character(variable) && length(variable) == 1) {
       attr(x, "label") <- variable
-    } else if (verbose) {
-      insight::format_alert(
-        "No variable label was added, because the label (argument `variable`) must be provided as character string."
+    } else {
+      insight::format_error(
+        "Variable labels (argument `variable`) must be provided as a single character string, e.g. `variable = \"mylabel\"`."
       )
     }
   }
