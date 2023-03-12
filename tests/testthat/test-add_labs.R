@@ -1,7 +1,7 @@
-test_that("add_labels, unnamed values", {
+test_that("add_labs, unnamed values", {
   x <- 1:3
   # labelling by providing required number of labels
-  out <- add_labels(
+  out <- add_labs(
     x,
     variable = "My x",
     values = c("one", "two", "three")
@@ -10,10 +10,10 @@ test_that("add_labels, unnamed values", {
   expect_identical(attributes(out)$labels, structure(1:3, names = c("one", "two", "three")))
 })
 
-test_that("add_labels, named values", {
+test_that("add_labs, named values", {
   # labelling using named vectors
   x <- factor(letters[1:3])
-  out <- add_labels(
+  out <- add_labs(
     x,
     variable = "Labelled factor",
     values = c(`a` = "low", `b` = "mid", `c` = "high")
@@ -22,9 +22,9 @@ test_that("add_labels, named values", {
   expect_identical(attributes(out)$labels, c(low = "a", mid = "b", high = "c"))
 })
 
-test_that("add_labels, partially named values", {
+test_that("add_labs, partially named values", {
   x <- 1:5
-  out <- add_labels(
+  out <- add_labs(
     x,
     variable = "My x",
     values = c(`1` = "lowest", `5` = "highest"),
@@ -34,16 +34,16 @@ test_that("add_labels, partially named values", {
   expect_identical(attributes(out)$labels, c(lowest = 1, highest = 5))
 })
 
-test_that("add_labels, error and messages", {
+test_that("add_labs, error and messages", {
   x <- 1:5
-  expect_error(add_labels(x, values = c(`1` = "lowest", `6` = "highest")))
-  expect_error(expect_message(add_labels(x, variable = 1, values = c(`1` = "lowest", `6` = "highest"))))
-  expect_error(add_labels(x, values = c("a", "b", "c")))
-  expect_message(add_labels(x, variable = 1, values = c(`1` = "lowest", `5` = "highest")))
+  expect_error(add_labs(x, values = c(`1` = "lowest", `6` = "highest")))
+  expect_error(expect_message(add_labs(x, variable = 1, values = c(`1` = "lowest", `6` = "highest"))))
+  expect_error(add_labs(x, values = c("a", "b", "c")))
+  expect_message(add_labs(x, variable = 1, values = c(`1` = "lowest", `5` = "highest")))
 })
 
-test_that("add_labels, data frame", {
+test_that("add_labs, data frame", {
   data(iris)
-  out <- add_labels(iris, "Species", values = c("a", "b", "c"))
+  out <- add_labs(iris, "Species", values = c("a", "b", "c"))
   expect_identical(attributes(out$Species)$labels, c(a = "setosa", b = "versicolor", c = "virginica"))
 })
