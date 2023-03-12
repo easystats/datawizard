@@ -133,13 +133,13 @@ add_labs.character <- add_labs.numeric
 #' @rdname add_labs
 #' @export
 add_labs.data.frame <- function(x,
-                                  select = NULL,
-                                  exclude = NULL,
-                                  values = NULL,
-                                  ignore_case = FALSE,
-                                  regex = FALSE,
-                                  verbose = TRUE,
-                                  ...) {
+                                select = NULL,
+                                exclude = NULL,
+                                values = NULL,
+                                ignore_case = FALSE,
+                                regex = FALSE,
+                                verbose = TRUE,
+                                ...) {
   # evaluate arguments
   select <- .select_nse(select,
     x,
