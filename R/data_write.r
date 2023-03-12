@@ -193,12 +193,7 @@ data_write <- function(data,
     if (is.null(l)) {
       ""
     } else {
-      label_string <- paste0(l, "=", names(l), collapse = "; ")
-      # we need to enquote labels, due to delimiter
-      if (identical(delimiter, ";")) {
-        label_string <- paste0("\"", label_string, "\"")
-      }
-      label_string
+      paste0(l, "=", names(l), collapse = "; ")
     }
   }, character(1))
 

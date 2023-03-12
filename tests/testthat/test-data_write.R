@@ -76,6 +76,32 @@ test_that("data_write, CSV, convert to factor", {
   expect_equal(out, d2, ignore_attr = TRUE)
 })
 
+# main file
+tmp <- tempfile(fileext = ".csv")
+on.exit(unlink(tmp))
+
+# file for labels
+fpath <- dirname(tmp)
+fname <- sub("\\.csv$", "", basename(tmp))
+tmp2 <- paste0(fpath, .Platform$file.sep, fname, "_labels.csv")
+on.exit(unlink(tmp2))
+
+test_that("data_write, CSV, create labels file", {
+  data(efc)
+  expect_message(data_write(efc, tmp, save_labels = TRUE))
+  d <- data_read(tmp2)
+
+  expect_identical(d$variable[2], "e16sex")
+  expect_identical(d$label[2], "elder's gender")
+  expect_identical(d$labels[2], "1=male; 2=female")
+
+  expect_message(data_write(efc, tmp, save_labels = TRUE, delimiter = ";"))
+  d <- data_read(tmp2)
+  expect_identical(d$variable[2], "e16sex")
+  expect_identical(d$label[2], "elder's gender")
+  expect_identical(d$labels[2], "1=male; 2=female")
+})
+
 
 # invalid file type -------------------------
 
