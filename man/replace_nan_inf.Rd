@@ -4,7 +4,7 @@
 \alias{replace_nan_inf}
 \title{Convert infinite or \code{NaN} values into \code{NA}}
 \usage{
-replace_nan_inf(data)
+replace_nan_inf(x, ...)
 }
 \arguments{
 \item{data}{A vector or a data frame.}

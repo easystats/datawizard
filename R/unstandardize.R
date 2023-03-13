@@ -56,9 +56,23 @@ unstandardize.data.frame <- function(x,
                                      two_sd = FALSE,
                                      select = NULL,
                                      exclude = NULL,
+                                     ignore_case = FALSE,
+                                     regex = FALSE,
+                                     verbose = TRUE,
                                      ...) {
+
+  # Select and deselect
+  cols <- .select_nse(
+    select,
+    x,
+    exclude = exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
+
   if (!is.null(reference)) {
-    i <- vapply(x, is.numeric, FUN.VALUE = logical(1L))
+    i <- vapply(x[, cols, drop = FALSE], is.numeric, FUN.VALUE = logical(1L))
     i <- i[i]
     reference <- reference[names(i)]
     if (robust) {
@@ -69,7 +83,7 @@ unstandardize.data.frame <- function(x,
       scale <- vapply(reference, FUN.VALUE = numeric(1L), stats::sd, na.rm = TRUE)
     }
   } else if (is.null(center) || is.null(scale)) {
-    i <- vapply(x, function(k) {
+    i <- vapply(x[, cols, drop = FALSE], function(k) {
       a <- attributes(k)
       is.numeric(k) && !is.null(a) && all(c("scale", "center") %in% names(a))
     }, FUN.VALUE = logical(1L))
@@ -102,10 +116,7 @@ unstandardize.data.frame <- function(x,
     scale <- 2 * scale
   }
 
-  # Select and deselect
   cols <- names(i)
-  if (!is.null(select)) cols <- cols[cols %in% select]
-  if (!is.null(exclude)) cols <- cols[!cols %in% exclude]
 
   # Apply unstandardization to cols
   for (col in cols) {

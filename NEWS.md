@@ -42,6 +42,7 @@ MINOR CHANGES
   warning.
 * Fixed inconsistent behaviour in `standardize()` when only one of the arguments
   `center` or `scale` were provided (#365).
+* `unstandardize()` and `replace_nan_inf()` now work with select helpers (#133).
 
 BUG FIXES
 

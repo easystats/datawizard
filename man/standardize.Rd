@@ -80,6 +80,9 @@ unstandardise(x, ...)
   two_sd = FALSE,
   select = NULL,
   exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
   ...
 )
 }
