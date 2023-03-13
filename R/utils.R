@@ -11,9 +11,15 @@
 #' @param arg Argument that is deprecated
 #' @param replacement Argument that replaces the deprecated argument
 #' @keywords internal
-.is_deprecated <- function(arg, replacement) {
+.arg_is_deprecated <- function(arg, replacement) {
   insight::format_warning(
-    paste0("Argument `", arg, "` is deprecated. Please use `", replacement, "` instead.")
+    paste0("Argument `", arg, "` is deprecated and will be removed in a future version. Please use `", replacement, "` instead.")
+  )
+}
+
+.function_is_deprecated <- function(old, new) {
+  insight::format_warning(
+    paste0("Function `", old, "()` is deprecated and will be removed in a future version. Please use `", new, "()` instead.")
   )
 }
 
