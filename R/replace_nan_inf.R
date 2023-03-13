@@ -1,10 +1,10 @@
 #' @title Convert infinite or `NaN` values into `NA`
 #' @name replace_nan_inf
+#' @param x A vector or a dataframe
+#' @param ... Currently not used.
 #'
 #' @description
 #' Replaces all infinite (`Inf` and `-Inf`) or `NaN` values with `NA`.
-#'
-#' @param data A vector or a data frame.
 #'
 #' @return
 #' Data with `Inf`, `-Inf`, and `NaN` converted to `NA`.
@@ -28,11 +28,12 @@ replace_nan_inf <- function(x, ...) {
 }
 
 #' @export
-replace_nan_inf.default <- function(x) {
+replace_nan_inf.default <- function(x, ...) {
   x[is.nan(x) | is.infinite(x)] <- NA
   x
 }
 
+#' @inheritParams find_columns
 #' @export
 replace_nan_inf.data.frame <- function(x,
                                        select = NULL,
