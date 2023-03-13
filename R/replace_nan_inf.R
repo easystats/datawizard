@@ -41,7 +41,6 @@ replace_nan_inf.data.frame <- function(x,
                                        regex = FALSE,
                                        verbose = TRUE,
                                        ...) {
-
   # Select and deselect
   cols <- .select_nse(
     select,

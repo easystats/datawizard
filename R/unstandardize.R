@@ -60,7 +60,6 @@ unstandardize.data.frame <- function(x,
                                      regex = FALSE,
                                      verbose = TRUE,
                                      ...) {
-
   # Select and deselect
   cols <- .select_nse(
     select,
