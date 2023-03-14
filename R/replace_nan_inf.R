@@ -1,10 +1,11 @@
 #' @title Convert infinite or `NaN` values into `NA`
 #' @name replace_nan_inf
-#' @param x A vector or a dataframe
-#' @param ... Currently not used.
 #'
 #' @description
 #' Replaces all infinite (`Inf` and `-Inf`) or `NaN` values with `NA`.
+#'
+#' @param x A vector or a dataframe
+#' @param ... Currently not used.
 #'
 #' @return
 #' Data with `Inf`, `-Inf`, and `NaN` converted to `NA`.
