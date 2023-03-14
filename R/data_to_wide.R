@@ -98,19 +98,19 @@ data_to_wide <- function(data,
                          rows_from,
                          sep) {
   if (!missing(colnames_from)) {
-    .arg_is_deprecated("colnames_from", "names_from")
+    .is_deprecated("colnames_from", "names_from")
     if (is.null(names_from)) {
       names_from <- colnames_from
     }
   }
   if (!missing(rows_from)) {
-    .arg_is_deprecated("rows_from", "id_cols")
+    .is_deprecated("rows_from", "id_cols")
     if (is.null(id_cols)) {
       id_cols <- rows_from
     }
   }
   if (!missing(sep)) {
-    .arg_is_deprecated("sep", "names_sep")
+    .is_deprecated("sep", "names_sep")
     if (is.null(names_sep)) {
       names_sep <- sep
     }

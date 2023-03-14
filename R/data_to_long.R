@@ -82,7 +82,7 @@ data_to_long <- function(data,
                          colnames_to) {
   # Check args
   if (!missing(colnames_to)) {
-    .arg_is_deprecated("colnames_to", "names_to")
+    .is_deprecated("colnames_to", "names_to")
     if (is.null(names_to)) {
       names_to <- colnames_to
     }

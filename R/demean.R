@@ -9,7 +9,8 @@
 #' median for centering.
 #'
 #' @param x A data frame.
-#' @inheritParams find_columns
+#' @param select Character vector (or formula) with names of variables to select
+#'   that should be group- and de-meaned.
 #' @param group Character vector (or formula) with the name of the variable that
 #'   indicates the group- or cluster-ID.
 #' @param center Method for centering. `demean()` always performs
@@ -219,74 +220,38 @@
 #'
 #' @export
 demean <- function(x,
-                   select = NULL,
-                   exclude = NULL,
+                   select,
                    group,
                    suffix_demean = "_within",
                    suffix_groupmean = "_between",
                    add_attributes = TRUE,
-                   ignore_case = FALSE,
-                   regex = FALSE,
-                   verbose = TRUE
-){
-
-  .function_is_deprecated(old = "demean", new = "data_demean")
-
-  data_demean(
+                   verbose = TRUE) {
+  degroup(
     x = x,
     select = select,
-    exclude = exclude,
-    group = group,
-    suffix_demean = suffix_demean,
-    suffix_groupmean = suffix_groupmean,
-    add_attributes = add_attributes,
-    ignore_case = ignore_case,
-    regex = regex,
-    verbose = verbose
-  )
-}
-
-#' @export
-data_demean <- function(x,
-                        select = NULL,
-                        exclude = NULL,
-                        group,
-                        suffix_demean = "_within",
-                        suffix_groupmean = "_between",
-                        add_attributes = TRUE,
-                        ignore_case = FALSE,
-                        regex = FALSE,
-                        verbose = TRUE) {
-  data_degroup(
-    x = x,
-    select = select,
-    exclude = exclude,
     group = group,
     center = "mean",
     suffix_demean = suffix_demean,
     suffix_groupmean = suffix_groupmean,
     add_attributes = add_attributes,
-    ignore_case = ignore_case,
-    regex = regex,
     verbose = verbose
   )
 }
+
+
 
 
 
 
 #' @rdname demean
 #' @export
-data_degroup <- function(x,
-                    select = NULL,
-                    exclude = NULL,
+degroup <- function(x,
+                    select,
                     group,
                     center = "mean",
                     suffix_demean = "_within",
                     suffix_groupmean = "_between",
                     add_attributes = TRUE,
-                    ignore_case = FALSE,
-                    regex = FALSE,
                     verbose = TRUE) {
   # ugly tibbles again...
   x <- as.data.frame(x)
@@ -432,35 +397,6 @@ data_degroup <- function(x,
   cbind(x_gm, x_dm)
 }
 
-
-degroup <- function(x,
-                    select = NULL,
-                    exclude = NULL,
-                    group,
-                    center = "mean",
-                    suffix_demean = "_within",
-                    suffix_groupmean = "_between",
-                    add_attributes = TRUE,
-                    ignore_case = FALSE,
-                    regex = FALSE,
-                    verbose = TRUE) {
-
-  .function_is_deprecated(old = "degroup", new = "data_degroup")
-
-  data_degroup(
-    x = x,
-    select = select,
-    exclude = exclude,
-    group = group,
-    center = center,
-    suffix_demean = suffix_demean,
-    suffix_groupmean = suffix_groupmean,
-    add_attributes = add_attributes,
-    ignore_case = ignore_case,
-    regex = regex,
-    verbose = verbose
-  )
-}
 
 #' @rdname demean
 #' @export
