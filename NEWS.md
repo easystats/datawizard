@@ -42,7 +42,7 @@ MINOR CHANGES
   warning.
 * Fixed inconsistent behaviour in `standardize()` when only one of the arguments
   `center` or `scale` were provided (#365).
-* `unstandardize()` and `replace_nan_inf()` now work with select helpers (#133).
+* `unstandardize()` and `replace_nan_inf()` now work with select helpers (#376).
 
 BUG FIXES
 
@@ -53,6 +53,7 @@ BUG FIXES
 * Fix unexpected warning in `convert_na_to()` when `select` is a list (#352).
 * Fixed issue with correct labelling of numeric variables with more than nine
   unique values and associated value labels.
+  
 
 # datawizard 0.6.5
 
