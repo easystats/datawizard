@@ -178,6 +178,10 @@ test_that("unstandardize, data frame", {
   rez <- unstandardize(x)
   expect_equal(rez, iris, tolerance = 0.1, ignore_attr = TRUE)
 
+  x <- standardize(iris, select = starts_with("Pet"))
+  rez <- unstandardize(x, select = starts_with("Pet"))
+  expect_equal(rez, iris, tolerance = 0.1, ignore_attr = TRUE)
+
   x <- standardize(iris, select = "Petal.Length")
   rez <- unstandardize(x,
     center = c(Petal.Length = mean(iris$Petal.Length)),

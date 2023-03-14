@@ -4,7 +4,8 @@
 #' @description
 #' Replaces all infinite (`Inf` and `-Inf`) or `NaN` values with `NA`.
 #'
-#' @param data A vector or a data frame.
+#' @param x A vector or a dataframe
+#' @param ... Currently not used.
 #'
 #' @return
 #' Data with `Inf`, `-Inf`, and `NaN` converted to `NA`.
@@ -23,19 +24,38 @@
 #' replace_nan_inf(df)
 #' @export
 
-replace_nan_inf <- function(data) {
-  if (is.data.frame(data)) {
-    # iterate variables of data frame
-    data[] <- lapply(data, function(i) {
-      # convert `NaN` and `Inf` to missing
-      i[is.nan(i)] <- NA
-      i[is.infinite(i)] <- NA
-      i
-    })
-  } else {
-    data[is.nan(data)] <- NA
-    data[is.infinite(data)] <- NA
+replace_nan_inf <- function(x, ...) {
+  UseMethod("replace_nan_inf")
+}
+
+#' @export
+replace_nan_inf.default <- function(x, ...) {
+  x[is.nan(x) | is.infinite(x)] <- NA
+  x
+}
+
+#' @inheritParams find_columns
+#' @export
+replace_nan_inf.data.frame <- function(x,
+                                       select = NULL,
+                                       exclude = NULL,
+                                       ignore_case = FALSE,
+                                       regex = FALSE,
+                                       verbose = TRUE,
+                                       ...) {
+  # Select and deselect
+  cols <- .select_nse(
+    select,
+    x,
+    exclude = exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
+
+  for (i in cols) {
+    x[[i]] <- replace_nan_inf(x[[i]])
   }
 
-  data
+  x
 }
