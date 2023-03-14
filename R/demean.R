@@ -254,7 +254,7 @@ degroup <- function(x,
                     add_attributes = TRUE,
                     verbose = TRUE) {
   # ugly tibbles again...
-  x <- as.data.frame(x)
+  x <- .coerce_to_dataframe(x)
 
   center <- match.arg(tolower(center), choices = c("mean", "median", "mode", "min", "max"))
 
