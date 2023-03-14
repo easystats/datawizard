@@ -105,7 +105,7 @@ standardize.default <- function(x,
     insight::format_error("Cannot standardize a model fit with a 'subset = '.")
   }
 
-  if (m_info$is_bayesian) {
+  if (m_info$is_bayesian && verbose) {
     insight::format_warning(
       "Standardizing variables without adjusting priors may lead to bogus results unless priors are auto-scaled."
     )
