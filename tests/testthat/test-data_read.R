@@ -381,5 +381,8 @@ test_that("data_read, no file extension", {
 
 test_that("data_read, file not exists", {
   expect_error(data_read("thisfileshouldnotexist.csv"), regex = "not exist")
-  expect_error(data_read("thisfileshouldnotexist.sav"), regex = "not exist")
+  expect_error(
+    suppressMessages(data_read("thisfileshouldnotexist.sav")),
+    regex = "not exist"
+  )
 })

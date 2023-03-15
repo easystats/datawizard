@@ -181,3 +181,10 @@ test_that("find_columns works correctly with minus sign", {
     c("Sepal.Width", "Petal.Length")
   )
 })
+
+test_that("find_columns with square brackets", {
+  expect_identical(
+    find_columns(mtcars, select = names(mtcars)[-1]),
+    find_columns(mtcars, select = 2:11)
+  )
+})

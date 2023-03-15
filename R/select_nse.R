@@ -316,7 +316,7 @@
     verbose = verbose
   )
   .eval_expr(
-    first_obj[expr[[3]]],
+    first_obj[eval(expr[[3]])],
     data,
     ignore_case = ignore_case,
     regex = regex,
@@ -325,9 +325,9 @@
 }
 
 .select_names <- function(expr, data, ignore_case, regex, verbose) {
-  first_obj <- .dynEval(expr[[2]], inherits = FALSE, minframe = 0L)
+  first_obj <- .dynEval(expr, inherits = FALSE, minframe = 0L)
   .eval_expr(
-    names(first_obj),
+    first_obj,
     data,
     ignore_case = ignore_case,
     regex = regex,
@@ -361,7 +361,10 @@
 
 # e.g args$select (happens when we use grouped_data (see center.grouped_df()))
 .select_dollar <- function(expr, data, ignore_case, regex, verbose) {
-  first_obj <- .dynGet(expr[[2]], inherits = FALSE, minframe = 0L)
+  first_obj <- .dynGet(expr[[2]], ifnotfound = NULL, inherits = FALSE, minframe = 0L)
+  if (is.null(first_obj)) {
+    first_obj <- .dynEval(expr[[2]], inherits = FALSE, minframe = 0L)
+  }
   .eval_expr(
     first_obj[[deparse(expr[[3]])]],
     data,
