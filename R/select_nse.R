@@ -361,7 +361,10 @@
 
 # e.g args$select (happens when we use grouped_data (see center.grouped_df()))
 .select_dollar <- function(expr, data, ignore_case, regex, verbose) {
-  first_obj <- .dynGet(expr[[2]], inherits = FALSE, minframe = 0L)
+  first_obj <- .dynGet(expr[[2]], ifnotfound = NULL, inherits = FALSE, minframe = 0L)
+  if (is.null(first_obj)) {
+    first_obj <- .dynEval(expr[[2]], inherits = FALSE, minframe = 0L)
+  }
   .eval_expr(
     first_obj[[deparse(expr[[3]])]],
     data,
