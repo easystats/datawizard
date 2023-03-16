@@ -144,8 +144,8 @@ reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
       }
     }
     if (length(range) > 2 && length(range) < nlevels(droplevels(x))) {
-      # if range has more than two values, but is not of the same length as
-      # number of factor levels, we cannot associate the reversed scale, so stop
+      # if range has more than two values, but fewer values than number of
+      # factor levels, we cannot associate the reversed scale, so stop
       range_ok <- FALSE
     }
     if (!range_ok) {
