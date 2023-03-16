@@ -92,20 +92,18 @@ reverse.numeric <- function(x,
     range <- c(min(x, na.rm = TRUE), max(x, na.rm = TRUE))
   }
 
+  # old minimum and maximum
+  min <- min(range)
+  max <- max(range)
+
   # check if a valid range (i.e. vector of length 2) is provided
   if (length(range) > 2) {
     insight::format_error(
       "`range` must be a numeric vector of length two, indicating lowest and highest value of the required range.",
-      sprintf(
-        "Did you want to provide `range = c(%g, %g)`?",
-        min(range, na.rm = TRUE),
-        max(range, na.rm = TRUE)
-      )
+      sprintf("Did you want to provide `range = c(%g, %g)`?", min, max)
     )
   }
 
-  min <- min(range)
-  max <- max(range)
   new_min <- max
   new_max <- min
 
