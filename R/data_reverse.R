@@ -84,7 +84,7 @@ reverse.numeric <- function(x,
   # check if a valid range (i.e. vector of length 2) is provided
   if (length(range) > 2 || anyNA(range)) {
     insight::format_error(
-      "`range` must be a vector of length two, indicating lowest and highest value of the required range."
+      "`range` must be a numeric vector of length two, indicating lowest and highest value of the required range."
     )
   }
 
@@ -121,6 +121,23 @@ reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
   original_x <- x
 
   if (!is.null(range)) {
+    # no missing values allowed
+    if (anyNA(range)) {
+      insight::format_error("`range` is not allowed to have missing values.")
+    }
+    # if we have a vector of length 2 for range, and more factor levels,
+    # we assume `range` indicates minimum and maximum of range values
+    if (length(range) == 2 && nlevels(droplevels(x)) > 2) {
+      if (is.numeric(range)) {
+        range <- min(range):max(range)
+      } else {
+        insight::format_error(
+          "`range` must be one of the following:",
+          "Either a numeric vector of length two, indicating lowest and highest value of the required range.",
+          "Or a vector (numeric or character) of values of the same length as factor levels."
+        )
+      }
+    }
     old_levels <- range
     x <- factor(x, levels = range)
   } else {
