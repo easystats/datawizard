@@ -6,9 +6,10 @@
 #'   `NULL` or a numeric vector of length two, indicating the lowest and highest
 #'   value of the reference range. If `NULL`, will take the range of the input
 #'   vector (`range(x)`). For factors, `range` can be `NULL`, a numeric vector
-#'   of length two, or a (numeric) vector of the same length as factor levels
-#'   (i.e. `nlevels(x)`). Note that providing a `range` for factors usually
-#'   only makes sense when factor levels are numeric, not characters.
+#'   of length two, or a (numeric) vector of at least the same length as factor
+#'   levels (i.e. must be equal to or larger than `nlevels(x)`). Note that
+#'   providing a `range` for factors usually only makes sense when factor levels
+#'   are numeric, not characters.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams categorize
 #' @inheritParams find_columns
