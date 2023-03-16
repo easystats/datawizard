@@ -416,9 +416,12 @@ test_that("reverse, larger range", {
     structure(c(4L, 2L, 1L), levels = c("0", "1", "2", "3", "4"), class = "factor")
   )
 
-  # errors
+  # errors on invalid input
   expect_error(reverse(c(1, 3, 4), range = 0:4))
   expect_error(reverse(factor(c(1, 3, 4, 5)), range = c(0, 2, 4)))
+  # errors on invalid input (NA in range)
+  expect_error(reverse(c(1, 3, 4), range = c(1, NA)), regex = "missing")
+  expect_error(reverse(factor(letters[1:3]), range = c(1, NA)), regex = "missing")
 
   # warns
   expect_warning(
