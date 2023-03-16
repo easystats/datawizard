@@ -433,4 +433,15 @@ test_that("reverse, larger range", {
     reverse(factor(c(1, 3, 11)), range = c(1, 3, 5, 7)),
     regex = "Not all"
   )
+
+  # silent
+  expect_silent(reverse(factor(c("a", "b", "c")), range = c(1, 3, 5, 7), verbose = FALSE))
+  expect_silent(reverse(factor(c(9, 10, 11)), range = c(1, 3, 5, 7), verbose = FALSE))
+  expect_silent(reverse(factor(c(1, 3, 11)), range = c(1, 3, 5, 7), verbose = FALSE))
+
+  # works as intended
+  expect_identical(
+    reverse(factor(c(1, 3, 11)), range = c(1, 3, 5, 7), verbose = FALSE),
+    structure(c(4L, 3L, NA), levels = c("1", "3", "5", "7"), class = "factor")
+  )
 })
