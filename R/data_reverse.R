@@ -131,26 +131,18 @@ reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
     if (anyNA(range)) {
       insight::format_error("`range` is not allowed to have missing values.")
     }
-    range_ok <- TRUE
     # if we have a vector of length 2 for range, and more factor levels,
     # we assume `range` indicates minimum and maximum of range values
     if (length(range) == 2 && nlevels(droplevels(x)) > 2) {
       if (is.numeric(range)) {
         range <- min(range):max(range)
       } else {
-        range_ok <- FALSE
+        insight::format_error(
+          "`range` must be one of the following:",
+          "Either a numeric vector of length two, indicating lowest and highest value of the required range.",
+          "Or a vector (numeric or character) of values with at least as many values as number of levels in `x`."
+        )
       }
-    } else if (length(range) != nlevels(droplevels(x))) {
-      range_ok <- FALSE
-    }
-    # range must either be numeric of length 2, or of same length as number of
-    # factor levels. In all other cases, we cannot safely reverse the factor scale
-    if (!range_ok) {
-      insight::format_error(
-        "`range` must be one of the following:",
-        "Either a numeric vector of length two, indicating lowest and highest value of the required range.",
-        "Or a vector (numeric or character) of values of the same length as factor levels."
-      )
     }
     old_levels <- range
     x <- factor(x, levels = range)
