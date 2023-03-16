@@ -2,14 +2,14 @@
 #'
 #' Reverse-score variables (change the keying/scoring direction).
 #'
-#' @param range Initial (old) range of values. For numeric variables, can be
-#'   `NULL` or a numeric vector of length two, indicating the lowest and highest
-#'   value of the reference range. If `NULL`, will take the range of the input
-#'   vector (`range(x)`). For factors, `range` can be `NULL`, a numeric vector
-#'   of length two, or a (numeric) vector of at least the same length as factor
-#'   levels (i.e. must be equal to or larger than `nlevels(x)`). Note that
-#'   providing a `range` for factors usually only makes sense when factor levels
-#'   are numeric, not characters.
+#' @param range Range of values that is used as reference for reversing the
+#'   scale. For numeric variables, can be `NULL` or a numeric vector of length
+#'   two, indicating the lowest and highest value of the reference range. If
+#'   `NULL`, will take the range of the input vector (`range(x)`). For factors,
+#'   `range` can be `NULL`, a numeric vector of length two, or a (numeric)
+#'   vector of at least the same length as factor levels (i.e. must be equal
+#'   to or larger than `nlevels(x)`). Note that providing a `range` for factors
+#'   usually only makes sense when factor levels are numeric, not characters.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams categorize
 #' @inheritParams find_columns
@@ -96,7 +96,11 @@ reverse.numeric <- function(x,
   if (length(range) > 2) {
     insight::format_error(
       "`range` must be a numeric vector of length two, indicating lowest and highest value of the required range.",
-      sprintf("Did you probably mean to provide `range = c(%g, %g)`?", min(range, na.rm = TRUE), max(range, na.rm = TRUE))
+      sprintf(
+        "Did you probably mean to provide `range = c(%g, %g)`?",
+        min(range, na.rm = TRUE),
+        max(range, na.rm = TRUE)
+      )
     )
   }
 
@@ -160,6 +164,18 @@ reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
         "- a numeric vector of length two, indicating lowest and highest value of the required range,",
         "- a vector (numeric or character) of values with at least as many values as number of levels in `x`,",
         "- or `NULL`."
+      )
+    }
+    # check if no or not all old levels are in new range
+    if (verbose && !any(levels(x) %in% as.character(range))) {
+      insight::format_warning(
+        "No current factor level is included in `range`.",
+        "Returned factor will only contain missing values."
+      )
+    } else  if (verbose && !all(levels(x) %in% as.character(range))) {
+      insight::format_warning(
+        "Not all current factor level are included in `range`.",
+        "Returned factor will contain missing values."
       )
     }
     old_levels <- range

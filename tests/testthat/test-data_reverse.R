@@ -402,6 +402,7 @@ test_that("reverse regex", {
 
 # work or give informative errors / warnings (#380) ------------------
 test_that("reverse, larger range", {
+  # works
   expect_identical(
     reverse(c(1, 3, 4), range = c(0, 4)),
     c(3, 1, 0)
@@ -414,6 +415,22 @@ test_that("reverse, larger range", {
     reverse(factor(c(1, 3, 4)), range = c(0, 4)),
     structure(c(4L, 2L, 1L), levels = c("0", "1", "2", "3", "4"), class = "factor")
   )
+
+  # errors
   expect_error(reverse(c(1, 3, 4), range = 0:4))
   expect_error(reverse(factor(c(1, 3, 4, 5)), range = c(0, 2, 4)))
+
+  # warns
+  expect_warning(
+    reverse(factor(c("a", "b", "c")), range = c(1, 3, 5, 7)),
+    regex = "No current"
+  )
+  expect_warning(
+    reverse(factor(c(9, 10, 11)), range = c(1, 3, 5, 7)),
+    regex = "No current"
+  )
+  expect_warning(
+    reverse(factor(c(1, 3, 11)), range = c(1, 3, 5, 7)),
+    regex = "Not all"
+  )
 })
