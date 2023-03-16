@@ -398,3 +398,53 @@ test_that("reverse regex", {
     reverse(mtcars, select = "carb")
   )
 })
+
+
+# work or give informative errors / warnings (#380) ------------------
+test_that("reverse, larger range", {
+  # works
+  expect_identical(
+    reverse(c(1, 3, 4), range = c(0, 4)),
+    c(3, 1, 0)
+  )
+  expect_identical(
+    reverse(factor(c(1, 3, 4)), range = 0:4),
+    structure(c(4L, 2L, 1L), levels = c("0", "1", "2", "3", "4"), class = "factor")
+  )
+  expect_identical(
+    reverse(factor(c(1, 3, 4)), range = c(0, 4)),
+    structure(c(4L, 2L, 1L), levels = c("0", "1", "2", "3", "4"), class = "factor")
+  )
+
+  # errors on invalid input
+  expect_error(reverse(c(1, 3, 4), range = 0:4))
+  expect_error(reverse(factor(c(1, 3, 4, 5)), range = c(0, 2, 4)))
+  # errors on invalid input (NA in range)
+  expect_error(reverse(c(1, 3, 4), range = c(1, NA)), regex = "missing")
+  expect_error(reverse(factor(letters[1:3]), range = c(1, NA)), regex = "missing")
+
+  # warns
+  expect_warning(
+    reverse(factor(c("a", "b", "c")), range = c(1, 3, 5, 7)),
+    regex = "No current"
+  )
+  expect_warning(
+    reverse(factor(c(9, 10, 11)), range = c(1, 3, 5, 7)),
+    regex = "No current"
+  )
+  expect_warning(
+    reverse(factor(c(1, 3, 11)), range = c(1, 3, 5, 7)),
+    regex = "Not all"
+  )
+
+  # silent
+  expect_silent(reverse(factor(c("a", "b", "c")), range = c(1, 3, 5, 7), verbose = FALSE))
+  expect_silent(reverse(factor(c(9, 10, 11)), range = c(1, 3, 5, 7), verbose = FALSE))
+  expect_silent(reverse(factor(c(1, 3, 11)), range = c(1, 3, 5, 7), verbose = FALSE))
+
+  # works as intended
+  expect_identical(
+    reverse(factor(c(1, 3, 11)), range = c(1, 3, 5, 7), verbose = FALSE),
+    structure(c(4L, 3L, NA), levels = c("1", "3", "5", "7"), class = "factor")
+  )
+})
