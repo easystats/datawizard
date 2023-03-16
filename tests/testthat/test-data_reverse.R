@@ -398,3 +398,22 @@ test_that("reverse regex", {
     reverse(mtcars, select = "carb")
   )
 })
+
+
+# work or give informative errors / warnings (#380) ------------------
+test_that("reverse, lager range", {
+  expect_identical(
+    reverse(c(1, 3, 4), range = c(0, 4)),
+    c(3, 1, 0)
+  )
+  expect_identical(
+    reverse(factor(c(1, 3, 4)), range = 0:4),
+    structure(c(4L, 2L, 1L), levels = c("0", "1", "2", "3", "4"), class = "factor")
+  )
+  expect_identical(
+    reverse(factor(c(1, 3, 4)), range = c(0, 4)),
+    structure(c(4L, 2L, 1L), levels = c("0", "1", "2", "3", "4"), class = "factor")
+  )
+  expect_error(reverse(c(1, 3, 4), range = 0:4))
+  expect_error(reverse(factor(c(1, 3, 4, 5)), range = c(0, 2, 4)))
+})
