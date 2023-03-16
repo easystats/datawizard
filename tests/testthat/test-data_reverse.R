@@ -401,7 +401,7 @@ test_that("reverse regex", {
 
 
 # work or give informative errors / warnings (#380) ------------------
-test_that("reverse, lager range", {
+test_that("reverse, larger range", {
   expect_identical(
     reverse(c(1, 3, 4), range = c(0, 4)),
     c(3, 1, 0)
