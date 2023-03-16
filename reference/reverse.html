@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.15</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.16</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -123,8 +123,14 @@
 
 
 <dt>range</dt>
-<dd><p>Initial (old) range of values. If <code>NULL</code>, will take the range of
-the input vector (<code>range(x)</code>).</p></dd>
+<dd><p>Range of values that is used as reference for reversing the
+scale. For numeric variables, can be <code>NULL</code> or a numeric vector of length
+two, indicating the lowest and highest value of the reference range. If
+<code>NULL</code>, will take the range of the input vector (<code>range(x)</code>). For factors,
+<code>range</code> can be <code>NULL</code>, a numeric vector of length two, or a (numeric)
+vector of at least the same length as factor levels (i.e. must be equal
+to or larger than <code>nlevels(x)</code>). Note that providing a <code>range</code> for factors
+usually only makes sense when factor levels are numeric, not characters.</p></dd>
 
 
 <dt>verbose</dt>

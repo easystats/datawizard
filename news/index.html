@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.15</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.16</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,6 +108,7 @@ details about the valid values for <code>threshold</code> (<a href="https://gith
 <li>Fixed inconsistent behaviour in <code><a href="../reference/standardize.html">standardize()</a></code> when only one of the arguments <code>center</code> or <code>scale</code> were provided (<a href="https://github.com/easystats/datawizard/issues/365" class="external-link">#365</a>).</li>
 <li>
 <code><a href="../reference/standardize.html">unstandardize()</a></code> and <code><a href="../reference/replace_nan_inf.html">replace_nan_inf()</a></code> now work with select helpers (<a href="https://github.com/easystats/datawizard/issues/376" class="external-link">#376</a>).</li>
+<li>Added informative warning and error messages to <code><a href="../reference/reverse.html">reverse()</a></code>. Furthermore, the docs now describe the <code>range</code> argument more clearly (<a href="https://github.com/easystats/datawizard/issues/380" class="external-link">#380</a>).</li>
 </ul><p>BUG FIXES</p>
 <ul><li>
 <code><a href="../reference/remove_empty.html">empty_columns()</a></code> (and therefore <code><a href="../reference/remove_empty.html">remove_empty_columns()</a></code>) now correctly detects columns containing only <code>NA_character_</code> (<a href="https://github.com/easystats/datawizard/issues/349" class="external-link">#349</a>).</li>
