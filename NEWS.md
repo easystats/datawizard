@@ -44,7 +44,7 @@ MINOR CHANGES
   `center` or `scale` were provided (#365).
 * `unstandardize()` and `replace_nan_inf()` now work with select helpers (#376).
 * Added informative warning and error messages to `reverse()`. Furthermore, the
-  docs now clearer describe the `range` argument (#380).
+  docs now describe the `range` argument more clearly (#380).
 
 BUG FIXES
 

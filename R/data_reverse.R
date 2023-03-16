@@ -97,15 +97,15 @@ reverse.numeric <- function(x,
     insight::format_error(
       "`range` must be a numeric vector of length two, indicating lowest and highest value of the required range.",
       sprintf(
-        "Did you probably mean to provide `range = c(%g, %g)`?",
+        "Did you want to provide `range = c(%g, %g)`?",
         min(range, na.rm = TRUE),
         max(range, na.rm = TRUE)
       )
     )
   }
 
-  min <- range[1]
-  max <- range[2]
+  min <- min(range)
+  max <- max(range)
   new_min <- max
   new_max <- min
 
@@ -167,16 +167,18 @@ reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
       )
     }
     # check if no or not all old levels are in new range
-    if (verbose && !any(levels(x) %in% as.character(range))) {
-      insight::format_warning(
-        "No current factor level is included in `range`.",
-        "Returned factor will only contain missing values."
-      )
-    } else if (verbose && !all(levels(x) %in% as.character(range))) {
-      insight::format_warning(
-        "Not all current factor levels are included in `range`.",
-        "Returned factor will contain missing values."
-      )
+    if (verbose) {
+      if (!any(levels(x) %in% as.character(range))) {
+        insight::format_warning(
+          "No current factor level is included in `range`.",
+          "Returned factor will only contain missing values."
+        )
+      } else if (!all(levels(x) %in% as.character(range))) {
+        insight::format_warning(
+          "Not all current factor levels are included in `range`.",
+          "Returned factor will contain missing values."
+        )
+      }
     }
     old_levels <- range
     x <- factor(x, levels = range)
