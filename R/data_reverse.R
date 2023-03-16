@@ -90,7 +90,7 @@ reverse.numeric <- function(x,
   if (length(range) > 2) {
     insight::format_error(
       "`range` must be a numeric vector of length two, indicating lowest and highest value of the required range.",
-      sprintf("Did you probably mean to provide `range = %g:%g`?", min(range, na.rm = TRUE), max(range, na.rm = TRUE))
+      sprintf("Did you probably mean to provide `range = c(%g, %g)`?", min(range, na.rm = TRUE), max(range, na.rm = TRUE))
     )
   }
 
