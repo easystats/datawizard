@@ -174,7 +174,7 @@ reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
       )
     } else  if (verbose && !all(levels(x) %in% as.character(range))) {
       insight::format_warning(
-        "Not all current factor level are included in `range`.",
+        "Not all current factor levels are included in `range`.",
         "Returned factor will contain missing values."
       )
     }
