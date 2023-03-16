@@ -104,8 +104,8 @@ reverse.numeric <- function(x,
     )
   }
 
-  min <- ifelse(is.na(range[1]), min(x, na.rm = TRUE), range[1])
-  max <- ifelse(is.na(range[2]), max(x, na.rm = TRUE), range[2])
+  min <- range[1]
+  max <- range[2]
   new_min <- max
   new_max <- min
 
