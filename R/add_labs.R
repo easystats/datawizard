@@ -75,7 +75,7 @@ add_labs.default <- function(x, verbose = TRUE, ...) {
 add_labs.numeric <- function(x, variable = NULL, values = NULL, ...) {
   # add variable label
   if (!is.null(variable)) {
-    if (is.character(variable) && length(variable) == 1) {
+    if (is.character(variable) && length(variable) == 1L) {
       attr(x, "label") <- variable
     } else {
       insight::format_error(
