@@ -8,6 +8,12 @@ test_that("unnormalize work as expected", {
   expect_warning(expect_equal(unnormalize(c(0, 1, 5, -5, -2)), c(0, 1, 5, -5, -2), ignore_attr = TRUE))
 })
 
+test_that("unnormalize error if not supported", {
+  expect_error(
+    unnormalize(c("a", "b")),
+    "can't be unnormalized"
+  )
+})
 
 test_that("unnormalize and unstandardized x 4", {
   x <- rnorm(6, 4, 10)

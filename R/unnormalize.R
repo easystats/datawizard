@@ -6,8 +6,10 @@ unnormalize <- function(x, ...) {
 
 
 #' @export
-unnormalize.numeric <- function(x, verbose = TRUE, ...) {
-  x
+unnormalize.default <- function(x, ...) {
+  insight::format_error(
+    "Variables of class '", class(x)[1], "' can't be unnormalized."
+  )
 }
 
 
