@@ -45,6 +45,7 @@ MINOR CHANGES
 * `unstandardize()` and `replace_nan_inf()` now work with select helpers (#376).
 * Added informative warning and error messages to `reverse()`. Furthermore, the
   docs now describe the `range` argument more clearly (#380).
+* `unnormalize()` errors with unexpected inputs (#383).
 
 BUG FIXES
 
