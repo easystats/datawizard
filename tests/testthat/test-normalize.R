@@ -118,8 +118,7 @@ test_that("normalize: matrix", {
 })
 
 test_that("normalize: select", {
-  skip_if_not_installed("poorman")
-  suppressPackageStartupMessages(library(poorman))
+  skip_if_not_or_load_if_installed("poorman")
 
   expect_identical(
     normalize(
@@ -132,8 +131,7 @@ test_that("normalize: select", {
 })
 
 test_that("normalize: exclude", {
-  skip_if_not_installed("poorman")
-  suppressPackageStartupMessages(library(poorman))
+  skip_if_not_or_load_if_installed("poorman")
 
   expect_identical(
     normalize(
@@ -149,8 +147,7 @@ test_that("normalize: exclude", {
 # with grouped data -------------------------------------------
 
 test_that("normalize (grouped data)", {
-  skip_if_not_installed("poorman")
-  suppressPackageStartupMessages(library(poorman))
+  skip_if_not_or_load_if_installed("poorman")
 
   datawizard <- iris %>%
     group_by(Species) %>%
@@ -168,8 +165,7 @@ test_that("normalize (grouped data)", {
 })
 
 test_that("normalize, include bounds (grouped data)", {
-  skip_if_not_installed("poorman")
-  suppressPackageStartupMessages(library(poorman))
+  skip_if_not_or_load_if_installed("poorman")
 
   datawizard <- iris %>%
     group_by(Species) %>%
@@ -188,8 +184,7 @@ test_that("normalize, include bounds (grouped data)", {
 
 
 test_that("normalize, factor (grouped data)", {
-  skip_if_not_installed("poorman")
-  suppressPackageStartupMessages(library(poorman))
+  skip_if_not_or_load_if_installed("poorman")
 
   datawizard <- iris %>%
     group_by(Species) %>%

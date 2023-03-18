@@ -59,7 +59,7 @@ test_that("data_to_long works - using row names as idvar", {
 
 
 test_that("data_to_long works - complex dataset", {
-  skip_if_not_installed("psych")
+  skip_if_not_or_load_if_installed("psych")
 
   data <- psych::bfi
 
@@ -128,7 +128,7 @@ test_that("data_to_long works - complex dataset", {
 
 
 test_that("data_to_long: arg 'cols' overrides 'select'", {
-  skip_if_not_installed("psych")
+  skip_if_not_or_load_if_installed("psych")
 
   data <- psych::bfi
 
@@ -267,8 +267,7 @@ test_that("data_to_long: error if no columns to reshape", {
 # Examples coming from: https://tidyr.tidyverse.org/articles/pivot.html#longer
 
 test_that("data_to_long equivalent to pivot_longer: ex 1", {
-  skip_if_not_installed("tidyr")
-  suppressPackageStartupMessages(library(tidyr))
+  skip_if_not_or_load_if_installed("tidyr")
 
   x <- relig_income %>%
     tidyr::pivot_longer(!religion, names_to = "income", values_to = "count")
@@ -281,8 +280,7 @@ test_that("data_to_long equivalent to pivot_longer: ex 1", {
 
 
 test_that("data_to_long equivalent to pivot_longer: ex 2", {
-  skip_if_not_installed("tidyr")
-  suppressPackageStartupMessages(library(tidyr))
+  skip_if_not_or_load_if_installed("tidyr")
 
   x <- billboard %>%
     tidyr::pivot_longer(
@@ -303,8 +301,7 @@ test_that("data_to_long equivalent to pivot_longer: ex 2", {
 
 
 test_that("data_to_long equivalent to pivot_longer: ex 3", {
-  skip_if_not_installed("tidyr")
-  suppressPackageStartupMessages(library(tidyr))
+  skip_if_not_or_load_if_installed("tidyr")
 
   x <- billboard %>%
     tidyr::pivot_longer(
@@ -327,8 +324,7 @@ test_that("data_to_long equivalent to pivot_longer: ex 3", {
 
 
 test_that("data_to_long equivalent to pivot_longer: ex 4", {
-  skip_if_not_installed("tidyr")
-  suppressPackageStartupMessages(library(tidyr))
+  skip_if_not_or_load_if_installed("tidyr")
 
   x <- billboard %>%
     tidyr::pivot_longer(
@@ -353,8 +349,7 @@ test_that("data_to_long equivalent to pivot_longer: ex 4", {
 
 
 test_that("data_to_long equivalent to pivot_longer: ex 5", {
-  skip_if_not_installed("tidyr")
-  suppressPackageStartupMessages(library(tidyr))
+  skip_if_not_or_load_if_installed("tidyr")
 
   suppressWarnings({
     x <- who %>%
@@ -378,8 +373,7 @@ test_that("data_to_long equivalent to pivot_longer: ex 5", {
 })
 
 test_that("data_to_long equivalent to pivot_longer: ex 6", {
-  skip_if_not_installed("tidyr")
-  suppressPackageStartupMessages(library(tidyr))
+  skip_if_not_or_load_if_installed("tidyr")
 
   x <- who %>%
     tidyr::pivot_longer(
@@ -406,8 +400,7 @@ test_that("data_to_long equivalent to pivot_longer: ex 6", {
 # https://github.com/tidyverse/tidyr/blob/main/tests/testthat/test-pivot-long.R
 
 test_that("can reshape all cols to long", {
-  skip_if_not_installed("tidyr")
-  suppressPackageStartupMessages(library(tidyr))
+  skip_if_not_or_load_if_installed("tidyr")
 
   df <- tibble(x = 1:2, y = 3:4)
   pv <- data_to_long(df, x:y)
@@ -418,8 +411,7 @@ test_that("can reshape all cols to long", {
 })
 
 test_that("values interleaved correctly", {
-  skip_if_not_installed("tidyr")
-  suppressPackageStartupMessages(library(tidyr))
+  skip_if_not_or_load_if_installed("tidyr")
 
   df <- tibble(
     x = c(1, 2),
@@ -432,8 +424,7 @@ test_that("values interleaved correctly", {
 })
 
 test_that("preserves original keys", {
-  skip_if_not_installed("tidyr")
-  suppressPackageStartupMessages(library(tidyr))
+  skip_if_not_or_load_if_installed("tidyr")
 
   df <- tibble(x = 1:2, y = 2, z = 1:2)
   pv <- data_to_long(df, y:z)
@@ -443,8 +434,7 @@ test_that("preserves original keys", {
 })
 
 test_that("can drop missing values", {
-  skip_if_not_installed("tidyr")
-  suppressPackageStartupMessages(library(tidyr))
+  skip_if_not_or_load_if_installed("tidyr")
 
   df <- data.frame(x = c(1, NA), y = c(NA, 2))
   pv <- data_to_long(df, x:y, values_drop_na = TRUE)
@@ -454,8 +444,7 @@ test_that("can drop missing values", {
 })
 
 test_that("mixed columns are automatically coerced", {
-  skip_if_not_installed("tidyr")
-  suppressPackageStartupMessages(library(tidyr))
+  skip_if_not_or_load_if_installed("tidyr")
 
   df <- data.frame(x = factor("a"), y = factor("b"))
   pv <- data_to_long(df, x:y)
@@ -464,8 +453,7 @@ test_that("mixed columns are automatically coerced", {
 })
 
 test_that("error when overwriting existing column", {
-  skip_if_not_installed("tidyr")
-  suppressPackageStartupMessages(library(tidyr))
+  skip_if_not_or_load_if_installed("tidyr")
 
   df <- tibble(x = 1, y = 2)
 
@@ -476,8 +464,7 @@ test_that("error when overwriting existing column", {
 })
 
 test_that("preserve date format", {
-  skip_if_not_installed("tidyr")
-  suppressPackageStartupMessages(library(tidyr))
+  skip_if_not_or_load_if_installed("tidyr")
 
   family <- tidyr::tibble(
     family = 1:3,

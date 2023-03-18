@@ -150,8 +150,7 @@ test_that("data_codebook, big marks", {
 
 
 test_that("data_codebook, tagged NA", {
-  skip_if_not_installed("haven")
-  library(haven)
+  skip_if_not_or_load_if_installed("haven")
   x <- labelled(
     x = c(
       1:3, tagged_na("a", "c", "z"),
@@ -185,8 +184,7 @@ test_that("data_codebook, tagged NA", {
 
 
 test_that("data_codebook, negative label values #334", {
-  skip_if_not_installed("haven")
-  library(haven)
+  skip_if_not_or_load_if_installed("haven")
   x1 <- labelled(
     x = 1:4,
     labels = c("Agreement" = 1, "Disagreement" = 4, "Missing" = -9)

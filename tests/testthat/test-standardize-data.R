@@ -34,7 +34,7 @@ test_that("standardize.numeric", {
 # standardize.data.frame --------------------------------------------------
 
 test_that("standardize.data.frame", {
-  skip_if_not_installed("poorman")
+  skip_if_not_or_load_if_installed("poorman")
 
   data(iris)
   x <- standardize(iris)
@@ -54,7 +54,7 @@ test_that("standardize.data.frame", {
 
 
 test_that("standardize.data.frame, NAs", {
-  skip_if_not_installed("poorman")
+  skip_if_not_or_load_if_installed("poorman")
 
   data(iris)
   iris$Sepal.Width[c(148, 65, 33, 58, 54, 93, 114, 72, 32, 23)] <- NA
@@ -79,7 +79,7 @@ test_that("standardize.data.frame, NAs", {
 
 
 test_that("standardize.data.frame, apend", {
-  skip_if_not_installed("poorman")
+  skip_if_not_or_load_if_installed("poorman")
 
   data(iris)
   iris$Sepal.Width[c(26, 43, 56, 11, 66, 132, 23, 133, 131, 28)] <- NA
@@ -109,7 +109,7 @@ test_that("standardize.data.frame, apend", {
 
 
 test_that("standardize.data.frame, weights", {
-  skip_if_not_installed("poorman")
+  skip_if_not_or_load_if_installed("poorman")
 
   x <- rexp(30)
   w <- rpois(30, 20) + 1
@@ -167,7 +167,7 @@ test_that("unstandardize, numeric", {
 })
 
 test_that("unstandardize, data frame", {
-  skip_if_not_installed("poorman")
+  skip_if_not_or_load_if_installed("poorman")
 
   data(iris)
   x <- standardize(iris)

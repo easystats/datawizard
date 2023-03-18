@@ -54,7 +54,7 @@ test_that("rescale works with select helpers", {
   expect_equal(head(out$Sepal.Width), c(0.625, 0.41667, 0.5, 0.45833, 0.66667, 0.79167), tolerance = 1e-3)
   expect_equal(head(out$Petal.Length), head(iris$Petal.Length), tolerance = 1e-3)
 
-  skip_if_not_installed("poorman")
+  skip_if_not_or_load_if_installed("poorman")
 
   x <- poorman::group_by(iris, Species)
   out <- rescale(x, to = c(0, 1), select = starts_with("Sepal"))

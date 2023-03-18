@@ -241,7 +241,7 @@ if (packageVersion("insight") > "0.17.0") {
 }
 
 
-skip_if_not_installed("poorman")
+skip_if_not_or_load_if_installed("poorman")
 
 if (requireNamespace("poorman", quietly = TRUE)) {
   test_that("data_tabulate grouped data.frame", {

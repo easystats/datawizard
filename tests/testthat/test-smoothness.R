@@ -6,7 +6,7 @@ test_that("smoothness works", {
 })
 
 test_that("smoothness works with iterations", {
-  skip_if_not_installed("boot")
+  skip_if_not_or_load_if_installed("boot")
 
   set.seed(123)
   x <- (-10:10)^3 + rnorm(21, 0, 100)

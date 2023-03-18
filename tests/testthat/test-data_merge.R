@@ -10,7 +10,7 @@ z$id <- 3:5
 # left -----------------------
 
 test_that("left-join", {
-  skip_if_not_installed("poorman")
+  skip_if_not_or_load_if_installed("poorman")
 
   out <- data_merge(x, y, join = "left")
   expect_identical(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
@@ -42,7 +42,7 @@ test_that("semi-anti-join", {
 # right -----------------------
 
 test_that("right-join", {
-  skip_if_not_installed("poorman")
+  skip_if_not_or_load_if_installed("poorman")
 
   out <- data_merge(x, y, join = "right")
   expect_identical(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
@@ -76,7 +76,7 @@ test_that("right-join", {
 # inner -----------------------
 
 test_that("inner-join", {
-  skip_if_not_installed("poorman")
+  skip_if_not_or_load_if_installed("poorman")
 
   out <- data_merge(x, y, join = "inner")
   expect_identical(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
@@ -126,7 +126,7 @@ test_that("full-join", {
 # bind -----------------------
 
 test_that("bind-join", {
-  skip_if_not_installed("poorman")
+  skip_if_not_or_load_if_installed("poorman")
 
   out <- data_merge(x, y, join = "bind")
   poor_out <- poorman::bind_rows(x, y)
@@ -163,7 +163,7 @@ test_that("bind-join", {
 # joins without common columns -----------------------
 
 test_that("bind-join", {
-  skip_if_not_installed("poorman")
+  skip_if_not_or_load_if_installed("poorman")
 
   x2 <- mtcars[3:5, 1:3]
   y2 <- mtcars[30:32, 4:6]
@@ -201,7 +201,7 @@ test_that("compare bind and full joins", {
 # join data frames in a list -----------------------
 
 test_that("join data frames in a list", {
-  skip_if_not_installed("poorman")
+  skip_if_not_or_load_if_installed("poorman")
 
   x <- mtcars[1:5, 1:3]
   y <- mtcars[28:31, 3:5]

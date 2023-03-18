@@ -323,7 +323,7 @@ test_that("get_columns from other functions", {
 # preserve attributes --------------------------
 
 test_that("get_columns preserves attributes", {
-  skip_if_not_installed("parameters")
+  skip_if_not_or_load_if_installed("parameters")
 
   m <- lm(Sepal.Length ~ Species, data = iris)
   out <- parameters::parameters(m)

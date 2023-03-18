@@ -78,8 +78,7 @@ test_that("center works correctly with only one value", {
 # with grouped data -------------------------------------------
 
 test_that("center (grouped data)", {
-  skip_if_not_installed("poorman")
-  suppressPackageStartupMessages(library(poorman))
+  skip_if_not_or_load_if_installed("poorman")
 
   datawizard <- iris %>%
     group_by(Species) %>%
@@ -97,8 +96,7 @@ test_that("center (grouped data)", {
 })
 
 test_that("center, robust (grouped data)", {
-  skip_if_not_installed("poorman")
-  suppressPackageStartupMessages(library(poorman))
+  skip_if_not_or_load_if_installed("poorman")
 
   datawizard <- iris %>%
     group_by(Species) %>%
@@ -116,8 +114,7 @@ test_that("center, robust (grouped data)", {
 })
 
 test_that("center, select (grouped data)", {
-  skip_if_not_installed("poorman")
-  suppressPackageStartupMessages(library(poorman))
+  skip_if_not_or_load_if_installed("poorman")
 
   datawizard <- iris %>%
     group_by(Species) %>%
@@ -135,8 +132,7 @@ test_that("center, select (grouped data)", {
 })
 
 test_that("center, factors (grouped data)", {
-  skip_if_not_installed("poorman")
-  suppressPackageStartupMessages(library(poorman))
+  skip_if_not_or_load_if_installed("poorman")
 
   datawizard <- iris %>%
     group_by(Species) %>%

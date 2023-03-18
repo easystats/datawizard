@@ -13,7 +13,7 @@ test_that("data_match works as expected", {
 })
 
 test_that("data_match works with missing data", {
-  skip_if_not_installed("poorman")
+  skip_if_not_or_load_if_installed("poorman")
 
   # "OR" works
   x1 <- length(data_match(

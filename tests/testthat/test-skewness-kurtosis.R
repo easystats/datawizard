@@ -11,7 +11,7 @@ test_that("kurtosis", {
 })
 
 test_that("kurtosis and skewness with bootstrapping", {
-  skip_if_not_installed("boot")
+  skip_if_not_or_load_if_installed("boot")
 
   set.seed(123)
   expect_equal(skewness(iris$Sepal.Length, iterations = 100)[[2]], 0.1262203, tolerance = 1e-3)
@@ -21,7 +21,7 @@ test_that("kurtosis and skewness with bootstrapping", {
 })
 
 test_that("skewness works with data frames", {
-  skip_if_not_installed("boot")
+  skip_if_not_or_load_if_installed("boot")
 
   set.seed(123)
   expect_snapshot(skewness(iris[, 1:4]))
@@ -31,7 +31,7 @@ test_that("skewness works with data frames", {
 })
 
 test_that("kurtosis works with data frames", {
-  skip_if_not_installed("boot")
+  skip_if_not_or_load_if_installed("boot")
 
   set.seed(123)
   expect_snapshot(kurtosis(iris[, 1:4]))
@@ -42,7 +42,7 @@ test_that("kurtosis works with data frames", {
 
 
 test_that("skewness works with matrices", {
-  skip_if_not_installed("boot")
+  skip_if_not_or_load_if_installed("boot")
 
   set.seed(123)
   expect_snapshot(skewness(as.matrix(iris[, 1:4])))
@@ -52,7 +52,7 @@ test_that("skewness works with matrices", {
 })
 
 test_that("kurtosis works with matrices", {
-  skip_if_not_installed("boot")
+  skip_if_not_or_load_if_installed("boot")
 
   set.seed(123)
   expect_snapshot(kurtosis(as.matrix(iris[, 1:4])))
