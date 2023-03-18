@@ -125,7 +125,7 @@ text_wrap <- function(text, width = NULL, ...) {
 
   for (s in text) {
     if (nchar(s) > width) {
-      leading_spaces <- nchar(s) - nchar(trimws(s))
+      leading_spaces <- nchar(s) - nchar(insight::trim_ws(s))
       s <- strwrap(s, width = width)
       s <- paste0(s, collapse = "\n")
       s <- paste0(strrep(" ", leading_spaces), s)
