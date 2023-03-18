@@ -75,8 +75,8 @@ text_concatenate <- function(text, sep = ", ", last = " and ", enclose = NULL) {
   if (length(text) == 1) {
     s <- text
   } else {
-    s <- paste0(utils::head(text, -1), collapse = sep)
-    s <- paste0(c(s, utils::tail(text, 1)), collapse = last)
+    s <- paste0(text[1:(length(text) - 1)], collapse = sep)
+    s <- paste0(c(s, text[length(text)], collapse = last))
   }
   s
 }
