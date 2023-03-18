@@ -231,7 +231,7 @@ data_read <- function(path,
 .read_spss <- function(path, encoding, convert_factors, verbose, ...) {
   insight::check_if_installed("haven", reason = paste0("to read files of type '", .file_ext(path), "'"))
   if (verbose) {
-    message("Reading data...")
+    insight::format_alert("Reading data...")
   }
   out <- haven::read_sav(file = path, encoding = encoding, user_na = FALSE, ...)
   .post_process_imported_data(out, convert_factors, verbose)
@@ -241,7 +241,7 @@ data_read <- function(path,
 .read_stata <- function(path, encoding, convert_factors, verbose, ...) {
   insight::check_if_installed("haven", reason = paste0("to read files of type '", .file_ext(path), "'"))
   if (verbose) {
-    message("Reading data...")
+    insight::format_alert("Reading data...")
   }
   out <- haven::read_dta(file = path, encoding = encoding, ...)
   .post_process_imported_data(out, convert_factors, verbose)
@@ -251,7 +251,7 @@ data_read <- function(path,
 .read_sas <- function(path, path_catalog, encoding, convert_factors, verbose, ...) {
   insight::check_if_installed("haven", reason = paste0("to read files of type '", .file_ext(path), "'"))
   if (verbose) {
-    message("Reading data...")
+    insight::format_alert("Reading data...")
   }
   out <- haven::read_sas(data_file = path, catalog_file = path_catalog, encoding = encoding, ...)
   .post_process_imported_data(out, convert_factors, verbose)
@@ -261,7 +261,7 @@ data_read <- function(path,
 .read_excel <- function(path, encoding, verbose, ...) {
   insight::check_if_installed("readxl", reason = paste0("to read files of type '", .file_ext(path), "'"))
   if (verbose) {
-    message("Reading data...")
+    insight::format_alert("Reading data...")
   }
   out <- readxl::read_excel(path, ...)
   class(out) <- "data.frame"
@@ -278,7 +278,7 @@ data_read <- function(path,
 
   insight::check_if_installed("readr", reason = paste0("to read files of type '", .file_ext(path), "'"))
   if (verbose) {
-    message("Reading data...")
+    insight::format_alert("Reading data...")
   }
   out <- readr::read_delim(path, ...)
   class(out) <- "data.frame"
@@ -289,7 +289,7 @@ data_read <- function(path,
 .read_unknown <- function(path, convert_factors, verbose, ...) {
   insight::check_if_installed("rio", reason = paste0("to read files of type '", .file_ext(path), "'"))
   if (verbose) {
-    message("Reading data...")
+    insight::format_alert("Reading data...")
   }
   out <- rio::import(file = path, ...)
   .post_process_imported_data(out, convert_factors, verbose)
