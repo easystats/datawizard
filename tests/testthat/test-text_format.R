@@ -35,6 +35,16 @@ test_that("text formatting helpers work as expected", {
   )
 
   expect_identical(
+    text_concatenate(c("First", "Second")),
+    "First and Second"
+  )
+
+  expect_identical(
+    text_concatenate("First"),
+    "First"
+  )
+
+  expect_identical(
     text_concatenate(c("First", "Second", "Last")),
     "First, Second and Last"
   )
