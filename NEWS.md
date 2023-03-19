@@ -1,6 +1,6 @@
 # datawizard 0.7.0
 
-BREAKING CHANGES
+BREAKING CHANGES 
 
 * In selection patterns, expressions like `-var1:var3` to exclude all variables
   between `var1` and `var3` are no longer accepted. The correct expression is
