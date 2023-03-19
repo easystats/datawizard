@@ -1,4 +1,15 @@
-# datawizard (development version)
+# datawizard 0.7.0
+
+BREAKING CHANGES
+
+* In selection patterns, expressions like `-var1:var3` to exclude all variables
+  between `var1` and `var3` are no longer accepted. The correct expression is
+  `-(var1:var3)`. This is for 2 reasons:
+  
+  * to be consistent with the behavior for numerics (`-1:2` is not accepted but
+    `-(1:2)` is);
+  * to be consistent with `dplyr::select()`, which throws a warning and only
+    uses the first variable in the first expression.
 
 NEW FUNCTIONS
 
@@ -18,17 +29,6 @@ NEW FUNCTIONS
 * `add_labs()`, to manually add value and variable labels as attributes to
   variables. These attributes are stored as `"label"` and `"labels"` attributes,
   similar to the `labelled` class from the _haven_ package.
-
-BREAKING CHANGES
-
-* In selection patterns, expressions like `-var1:var3` to exclude all variables
-  between `var1` and `var3` are no longer accepted. The correct expression is
-  `-(var1:var3)`. This is for 2 reasons:
-  
-  * to be consistent with the behavior for numerics (`-1:2` is not accepted but
-    `-(1:2)` is);
-  * to be consistent with `dplyr::select()`, which throws a warning and only
-    uses the first variable in the first expression.
 
 MINOR CHANGES
 
