@@ -54,7 +54,7 @@ to_factor.numeric <- function(x, ...) {
 
   # add back labels
   attr(x, "label") <- variable_label
-  attr(x, "labels") <- variable_value_labelslabel
+  attr(x, "labels") <- value_labels
 
   # value labels to factor levels
   .value_labels_to_levels(x)
