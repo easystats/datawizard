@@ -52,30 +52,7 @@ labs_to_levels.default <- function(x, verbose = TRUE, ...) {
 #' @rdname labs_to_levels
 #' @export
 labs_to_levels.factor <- function(x, remove_attr = TRUE, verbose = TRUE, ...) {
-  # extract value labels
-  value_labels <- attr(x, "labels", exact = TRUE)
-  # return, if none
-  if (is.null(value_labels)) {
-    return(x)
-  }
-  # check positions of matching values and levels
-  levels_in_labs <- stats::na.omit(match(value_labels, levels(x)))
-  labs_in_levels <- stats::na.omit(match(levels(x), value_labels))
-  # sanity check - if labelled values and levels don't match
-  if (!length(levels_in_labs) || !length(labs_in_levels)) {
-    if (verbose) {
-      insight::format_alert(
-        "Could not use value labels as factor levels.",
-        "Labelled values and factor levels didn't macth."
-      )
-    }
-    return(x)
-  }
-  levels(x)[levels_in_labs] <- names(value_labels[labs_in_levels])
-  if (remove_attr) {
-    attr(x, "labels") <- NULL
-  }
-  x
+  .value_labels_to_levels(x, remove_attr, verbose)
 }
 
 #' @export
