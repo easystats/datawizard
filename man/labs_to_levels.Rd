@@ -106,9 +106,6 @@ factors as is, \code{labs_to_levels()} always uses value labels as factor levels
 even for factors.
 }
 \examples{
-str(labs_to_levels(iris))
-
-# use labels as levels
 data(efc)
 # create factor
 x <- as.factor(efc$c172code)

@@ -19,9 +19,6 @@
 #' @return A factor, or a data frame of factors.
 #'
 #' @examples
-#' str(labs_to_levels(iris))
-#'
-#' # use labels as levels
 #' data(efc)
 #' # create factor
 #' x <- as.factor(efc$c172code)
@@ -52,17 +49,21 @@ labs_to_levels.default <- function(x, verbose = TRUE, ...) {
 #' @rdname labs_to_levels
 #' @export
 labs_to_levels.factor <- function(x, remove_attr = TRUE, verbose = TRUE, ...) {
+  if (is.null(attr(x, "labels", exact = TRUE))) {
+    insight::format_error("Could not change factor levels. Variable had no value labels.")
+  }
   .value_labels_to_levels(x, remove_attr, verbose)
 }
 
 #' @export
 labs_to_levels.numeric <- function(x, remove_attr = TRUE, verbose = TRUE, ...) {
-  labs_to_levels(
-    to_factor(x, verbose = verbose, ...),
-    remove_attr = remove_attr,
-    verbose = verbose,
-    ...
-  )
+  if (is.null(attr(x, "labels", exact = TRUE))) {
+    insight::format_error(
+      "Could not convert to factor and set value labels as factor level.",
+      "Variable had no value labels."
+    )
+  }
+  to_factor(x, labs_to_levels = TRUE, verbose = verbose, ...)
 }
 
 #' @export

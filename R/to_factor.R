@@ -7,6 +7,9 @@
 #' numeric is `to_numeric()`.
 #'
 #' @param x A data frame or vector.
+#' @param labs_to_levels Logical, if `TRUE`, value labels are used as factor
+#' levels after `x` was converted to factor. Else, factor levels are based on
+#' the values of `x` (i.e. as if using `as.factor()`).
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams find_columns
 #' @inheritParams categorize
@@ -43,8 +46,9 @@ to_factor.factor <- function(x, ...) {
   x
 }
 
+#' @rdname to_factor
 #' @export
-to_factor.numeric <- function(x, ...) {
+to_factor.numeric <- function(x, labs_to_levels = TRUE, verbose = TRUE, ...) {
   # preserve labels
   variable_label <- attr(x, "label", exact = TRUE)
   value_labels <- attr(x, "labels", exact = TRUE)
@@ -57,7 +61,10 @@ to_factor.numeric <- function(x, ...) {
   attr(x, "labels") <- value_labels
 
   # value labels to factor levels
-  .value_labels_to_levels(x)
+  if (labs_to_levels) {
+    x <- .value_labels_to_levels(x, verbose = verbose)
+  }
+  x
 }
 
 #' @export
@@ -122,6 +129,8 @@ to_factor.data.frame <- function(x,
 
 
 # helper -----------------------
+
+## TODO: either remove or enable "remove_attr" argument
 
 .value_labels_to_levels <- function(x, remove_attr = TRUE, verbose = TRUE) {
   # extract value labels
