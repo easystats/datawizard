@@ -296,7 +296,7 @@ data_read <- function(path,
   # for "unknown" data formats (like .RDS), which still can be imported via
   # "rio::import()", we must check whether we actually have a data frame or
   # not. Else, tell user.
-  if (!is.data.frame(x)) {
+  if (!is.data.frame(out)) {
     tmp <- tryCatch(as.data.frame(out, stringsAsFactors = FALSE), error = function(e) NULL)
     if (!is.null(tmp)) {
       out <- tmp
