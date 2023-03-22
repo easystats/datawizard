@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,7 +86,13 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.7.0" id="datawizard-070">datawizard 0.7.0<a class="anchor" aria-label="anchor" href="#datawizard-070"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.7.1" id="datawizard-071">datawizard 0.7.1<a class="anchor" aria-label="anchor" href="#datawizard-071"></a></h2>
+<p>MINOR CHANGES</p>
+<ul><li>
+<code><a href="../reference/data_read.html">data_read()</a></code> now checks if the imported object actually is a data frame (or coercible to a data frame), and if not, no longer errors, but gives an informative warning of the type of object that was imported.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.7.0" id="datawizard-070">datawizard 0.7.0<a class="anchor" aria-label="anchor" href="#datawizard-070"></a></h2><p class="text-muted">CRAN release: 2023-03-22</p>
 <p>BREAKING CHANGES</p>
 <ul><li>
 <p>In selection patterns, expressions like <code>-var1:var3</code> to exclude all variables between <code>var1</code> and <code>var3</code> are no longer accepted. The correct expression is <code>-(var1:var3)</code>. This is for 2 reasons:</p>
