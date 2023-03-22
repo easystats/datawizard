@@ -68,6 +68,7 @@ text_lastchar <- function(text, n = 1) {
 #' @rdname text_format
 #' @export
 text_concatenate <- function(text, sep = ", ", last = " and ", enclose = NULL) {
+  if (length(text) == 1 && nchar(text) == 0) return(text)
   text <- text[text != ""]
   if (length(text) && !is.null(enclose) && length(enclose) == 1 && nchar(enclose) > 0) {
     text <- paste0(enclose, text, enclose)
@@ -75,8 +76,8 @@ text_concatenate <- function(text, sep = ", ", last = " and ", enclose = NULL) {
   if (length(text) == 1) {
     s <- text
   } else {
-    s <- paste0(utils::head(text, -1), collapse = sep)
-    s <- paste0(c(s, utils::tail(text, 1)), collapse = last)
+    s <- paste0(text[1:(length(text) - 1)], collapse = sep)
+    s <- paste0(c(s, text[length(text)]), collapse = last)
   }
   s
 }
@@ -125,7 +126,7 @@ text_wrap <- function(text, width = NULL, ...) {
 
   for (s in text) {
     if (nchar(s) > width) {
-      leading_spaces <- nchar(s) - nchar(trimws(s))
+      leading_spaces <- nchar(s) - nchar(insight::trim_ws(s))
       s <- strwrap(s, width = width)
       s <- paste0(s, collapse = "\n")
       s <- paste0(strrep(" ", leading_spaces), s)
