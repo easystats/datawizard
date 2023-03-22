@@ -1,35 +1,43 @@
-#' @title Convert data to factors
-#' @name to_factor
+#' @title Convert value labels into factor levels
+#' @name labs_to_levels
 #'
 #' @details
-#' Convert variables or data into factors. If the data is labelled, value labels
-#' will be used as factor levels. The counterpart to convert variables into
-#' numeric is `to_numeric()`.
+#' Convert variables or data into factors and uses value labels as factor levels.
+#' This function is similar to `to_factor()`, however, it is specially designed
+#' for factors with value labels attributes. While `to_factor()` returns factors
+#' as is, `labs_to_levels()` always uses value labels as factor levels, even
+#' for factors.
 #'
 #' @param x A data frame or vector.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams find_columns
 #' @inheritParams categorize
 #'
-#' @inheritSection center Selection of variables - the `select` argument
-#'
 #' @return A factor, or a data frame of factors.
 #'
 #' @examples
-#' str(to_factor(iris))
+#' str(labs_to_levels(iris))
 #'
 #' # use labels as levels
 #' data(efc)
-#' str(efc$c172code)
-#' head(to_factor(efc$c172code))
+#' # create factor
+#' x <- as.factor(efc$c172code)
+#' # add value labels - these are not factor levels yet
+#' x <- add_labs(x, values = c(`1` = "low", `2` = "mid", `3` = "high"))
+#' levels(x)
+#' data_tabluate(x)
+#'
+#' x <- labs_to_levels(x)
+#' levels(x)
+#' data_tabluate(x)
 #' @export
-to_factor <- function(x, ...) {
-  UseMethod("to_factor")
+labs_to_levels <- function(x, ...) {
+  UseMethod("labs_to_levels")
 }
 
 
 #' @export
-to_factor.default <- function(x, verbose = TRUE, ...) {
+labs_to_levels.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     insight::format_alert(
       sprintf("Converting into factors values currently not possible for variables of class `%s`.", class(x)[1])
@@ -38,59 +46,65 @@ to_factor.default <- function(x, verbose = TRUE, ...) {
   x
 }
 
+#' @rdname labs_to_levels
 #' @export
-to_factor.factor <- function(x, ...) {
-  x
-}
-
-#' @export
-to_factor.numeric <- function(x, ...) {
-  # preserve labels
-  variable_label <- attr(x, "label", exact = TRUE)
+labs_to_levels.factor <- function(x, remove_attr = TRUE, verbose = TRUE, ...) {
+  # extract value labels
   value_labels <- attr(x, "labels", exact = TRUE)
-
-  # make sure we have matching labels
-  if (!is.null(value_labels)) {
-    value_labels <- value_labels[value_labels %in% x]
-  }
-
-  # to factor
-  x <- as.factor(x)
-
-  # use value labels as levels
-  if (!is.null(value_labels)) {
-    try(levels(x) <- names(value_labels), silent = TRUE) # nolint
-  }
-
-  # add back variable label
-  attr(x, "label") <- variable_label
-  x
-}
-
-#' @export
-to_factor.logical <- to_factor.numeric
-
-#' @export
-to_factor.character <- to_factor.numeric
-
-#' @export
-to_factor.Date <- to_factor.numeric
-
-#' @rdname to_factor
-#' @export
-to_factor.data.frame <- function(x,
-                                 select = NULL,
-                                 exclude = NULL,
-                                 ignore_case = FALSE,
-                                 append = FALSE,
-                                 regex = FALSE,
-                                 verbose = TRUE,
-                                 ...) {
-  # sanity check, return as is for complete numeric
-  if (all(vapply(x, is.factor, FUN.VALUE = logical(1L)))) {
+  # return, if none
+  if (is.null(value_labels)) {
     return(x)
   }
+  # check positions of matching values and levels
+  levels_in_labs <- stats::na.omit(match(value_labels, levels(x)))
+  labs_in_levels <- stats::na.omit(match(levels(x), labels))
+  # sanity check - if labelled values and levels don't match
+  if (!length(levels_in_labs) || !length(labs_in_levels)) {
+    if (verbose) {
+      insight::format_alert(
+        "Could not use value labels as factor levels.",
+        "Labelled values and factor levels didn't macth."
+      )
+    }
+    return(x)
+  }
+  levels(x)[levels_in_labs] <- names(labels[labs_in_levels])
+  if (remove_attr) {
+    attr(x, "labels") <- NULL
+  }
+  x
+}
 
+#' @export
+labs_to_levels.numeric <- function(x, remove_attr = TRUE, verbose = TRUE, ...) {
+  labs_to_levels(
+    to_factor(x, verbose = verbose, ...),
+    remove_attr = remove_attr,
+    verbose = verbose,
+    ...
+  )
+}
+
+#' @export
+labs_to_levels.logical <- labs_to_levels.numeric
+
+#' @export
+labs_to_levels.character <- labs_to_levels.numeric
+
+#' @export
+labs_to_levels.Date <- labs_to_levels.numeric
+
+#' @rdname labs_to_levels
+#' @export
+labs_to_levels.data.frame <- function(x,
+                                      select = NULL,
+                                      exclude = NULL,
+                                      ignore_case = FALSE,
+                                      append = FALSE,
+                                      regex = FALSE,
+                                      remove_attr = TRUE,
+                                      verbose = TRUE,
+                                      ...) {
   # evaluate arguments
   select <- .select_nse(select,
     x,
@@ -100,11 +114,6 @@ to_factor.data.frame <- function(x,
     verbose = verbose
   )
 
-  # drop factors, when append is not FALSE
-  if (!isFALSE(append)) {
-    select <- colnames(x[select])[!vapply(x[select], is.factor, FUN.VALUE = logical(1L))]
-  }
-
   # process arguments
   args <- .process_std_args(
     x,
@@ -112,7 +121,7 @@ to_factor.data.frame <- function(x,
     exclude,
     weights = NULL,
     append,
-    append_suffix = "_f",
+    append_suffix = "_l",
     force = FALSE,
     preserve_value_labels = TRUE,
     keep_character = TRUE
@@ -122,6 +131,6 @@ to_factor.data.frame <- function(x,
   x <- args$x
   select <- args$select
 
-  x[select] <- lapply(x[select], to_factor, verbose = verbose, ...)
+  x[select] <- lapply(x[select], labs_to_levels, remove_attr = remove_attr, verbose = verbose, ...)
   x
 }

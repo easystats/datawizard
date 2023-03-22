@@ -1,3 +1,10 @@
+# datawizard 0.7.1
+
+NEW FUNCTIONS
+
+* `labs_to_levels()`, to convert data into factors, and use value labels as
+  factor levels. This function also processes factors themselves.
+
 # datawizard 0.7.0
 
 BREAKING CHANGES
