@@ -3,16 +3,16 @@
 #'
 #' @details
 #' Convert variables or data into factors and uses value labels as factor levels.
-#' This function is similar to `to_factor()`, however, it is specially designed
-#' for factors with value labels attributes. While `to_factor()` returns factors
-#' as is, `labs_to_levels()` always uses value labels as factor levels, even
-#' for factors.
+#' This function is similar to `to_factor()`, however, it is provides additional
+#' options for factors with value labels attributes. While `to_factor()` returns
+#' factors as is, `labs_to_levels()` always uses value labels as factor levels,
+#' even for factors.
 #'
 #' @param x A data frame or vector.
 #' @param remove_attr Logical, if `"labels"` attribute should be removed after
 #' value labels are set as factor levels.
 #' @param ... Arguments passed to or from other methods, in this in particular
-#' to `to_factor()`.
+#' case to `to_factor()`.
 #' @inheritParams find_columns
 #' @inheritParams categorize
 #'

@@ -26,7 +26,7 @@ labs_to_levels(x, ...)
 \item{x}{A data frame or vector.}
 
 \item{...}{Arguments passed to or from other methods, in this in particular
-to \code{to_factor()}.}
+case to \code{to_factor()}.}
 
 \item{remove_attr}{Logical, if \code{"labels"} attribute should be removed after
 value labels are set as factor levels.}
@@ -100,10 +100,10 @@ Convert value labels into factor levels
 }
 \details{
 Convert variables or data into factors and uses value labels as factor levels.
-This function is similar to \code{to_factor()}, however, it is specially designed
-for factors with value labels attributes. While \code{to_factor()} returns factors
-as is, \code{labs_to_levels()} always uses value labels as factor levels, even
-for factors.
+This function is similar to \code{to_factor()}, however, it is provides additional
+options for factors with value labels attributes. While \code{to_factor()} returns
+factors as is, \code{labs_to_levels()} always uses value labels as factor levels,
+even for factors.
 }
 \examples{
 str(labs_to_levels(iris))

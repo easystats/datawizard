@@ -138,10 +138,16 @@ to_factor.data.frame <- function(x,
     if (verbose) {
       insight::format_alert(
         "Could not use value labels as factor levels.",
-        "Labelled values and factor levels didn't macth."
+        "Labelled values and factor levels had no match."
       )
     }
     return(x)
+  }
+  # check if all levels have matching labels, and if not, tell user
+  if (verbose && nlevels(x) != length(levels_in_labs)) {
+    insight::format_alert(
+      "Not all factor levels had a matching value label. Non-matching levels were preserved."
+    )
   }
   levels(x)[levels_in_labs] <- names(value_labels[labs_in_levels])
   if (remove_attr) {
