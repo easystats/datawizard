@@ -20,7 +20,7 @@
 #' @return A vector with recoded values.
 #'
 #' @examples
-#' x <<- 1:30
+#' x <- 1:30
 #' recode_into(
 #'   x > 15 ~ "a",
 #'   x > 10 & x <= 15 ~ "b",
@@ -28,7 +28,7 @@
 #' )
 #'
 #' set.seed(123)
-#' d <<- data.frame(
+#' d <- data.frame(
 #'   x = sample(1:5, 30, TRUE),
 #'   y = sample(letters[1:5], 30, TRUE),
 #'   stringsAsFactors = FALSE
@@ -54,7 +54,7 @@ recode_into <- function(..., data = NULL, default = NA, verbose = TRUE) {
 
   # get length of vector, so we know the length of the output vector
   len <- if (is.null(data)) {
-    length(eval(dots[[1]][[2]]))
+    length(.dynEval(dots[[1]][[2]], ifnotfound = NULL))
   } else {
     length(with(data, eval(dots[[1]][[2]])))
   }
@@ -79,8 +79,8 @@ recode_into <- function(..., data = NULL, default = NA, verbose = TRUE) {
   for (i in seq_len(n_params)) {
     # get type of all recode values
     if (is.null(data)) {
-      type <- typeof(eval(dots[[i]][[3]]))
-      len_matches <- length(eval(dots[[i]][[2]]))
+      type <- typeof(.dynEval(dots[[i]][[3]], ifnotfound = NULL))
+      len_matches <- length(.dynEval(dots[[i]][[2]], ifnotfound = NULL))
     } else {
       type <- typeof(with(data, eval(dots[[i]][[3]])))
       len_matches <- length(with(data, eval(dots[[i]][[2]])))
@@ -105,8 +105,8 @@ recode_into <- function(..., data = NULL, default = NA, verbose = TRUE) {
   for (i in seq_len(n_params)) {
     # grep index of observations with replacements and replacement value
     if (is.null(data)) {
-      index <- eval(dots[[i]][[2]])
-      value <- eval(dots[[i]][[3]])
+      index <- .dynEval(dots[[i]][[2]], ifnotfound = NULL)
+      value <- .dynEval(dots[[i]][[3]], ifnotfound = NULL)
     } else {
       index <- with(data, eval(dots[[i]][[2]]))
       value <- with(data, eval(dots[[i]][[3]]))

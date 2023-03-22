@@ -1,5 +1,5 @@
 test_that("recode_into", {
-  x <<- 1:10
+  x <- 1:10
   out <- recode_into(
     x > 5 ~ "a",
     x > 2 & x <= 5 ~ "b",
@@ -9,7 +9,7 @@ test_that("recode_into", {
 })
 
 test_that("recode_into, check mixed types", {
-  x <<- 1:10
+  x <- 1:10
   expect_error(
     {
       out <- recode_into(
@@ -22,7 +22,7 @@ test_that("recode_into, check mixed types", {
 })
 
 test_that("recode_into, complain about default = NULL", {
-  x <<- 1:10
+  x <- 1:10
   expect_warning(
     {
       out <- recode_into(
@@ -50,7 +50,7 @@ test_that("recode_into, data frame", {
       0, 2, 2, 2, 2, 0, 0, 0, 2, 2, 2, 0
     )
   )
-  d <<- mtcars
+  d <- mtcars
   out <- recode_into(
     mpg > 20 & cyl == 6 ~ 1,
     mpg <= 20 ~ 2,
@@ -91,8 +91,8 @@ test_that("recode_into, works inside functions", {
 })
 
 test_that("recode_into, check differen input length", {
-  x <<- 1:10
-  y <<- 10:30
+  x <- 1:10
+  y <- 10:30
   expect_error(
     {
       out <- recode_into(
@@ -105,8 +105,8 @@ test_that("recode_into, check differen input length", {
 })
 
 test_that("recode_into, check differen input length", {
-  x <<- 1:5
-  y <<- c(5, 2, 3, 1, 4)
+  x <- 1:5
+  y <- c(5, 2, 3, 1, 4)
   expect_warning(
     {
       out <- recode_into(
