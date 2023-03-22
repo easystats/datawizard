@@ -303,7 +303,7 @@ data_read <- function(path,
     } else {
       if (verbose) {
         insight::format_warning(
-          paste0("Imported file is no data frame, but of class \"", class(x)[1], "\"."),
+          paste0("Imported file is no data frame, but of class \"", class(out)[1], "\"."),
           "Returning file as is. Please check if importing this file was intented."
         )
       }
