@@ -5,6 +5,12 @@ NEW FUNCTIONS
 * `labs_to_levels()`, to convert data into factors, and use value labels as
   factor levels. This function also processes factors themselves.
 
+MINOR CHANGES
+
+* `data_read()` now checks if the imported object actually is a data frame (or
+  coercible to a data frame), and if not, no longer errors, but gives an
+  informative warning of the type of object that was imported.
+
 # datawizard 0.7.0
 
 BREAKING CHANGES 

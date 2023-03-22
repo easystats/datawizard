@@ -33,7 +33,7 @@ BugReports: https://github.com/easystats/datawizard/issues
 Depends:
     R (>= 3.6)
 Imports:
-    insight (>= 0.18.8),
+    insight (>= 0.19.1),
     stats,
     utils
 Suggests: 
@@ -61,7 +61,7 @@ Suggests:
     rmarkdown,
     rstanarm,
     see,
-    testthat (>= 3.1.0),
+    testthat (>= 3.1.6),
     tidyr,
     withr
 VignetteBuilder: 
