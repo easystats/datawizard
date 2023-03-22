@@ -130,6 +130,55 @@ unlink(temp_file)
 
 
 
+# RDS file, no data frame -----------------------------------
+
+temp_file <- tempfile(fileext = ".rds")
+request <- httr::GET("https://raw.github.com/easystats/circus/master/data/model_object.rds")
+httr::stop_for_status(request)
+writeBin(httr::content(request, type = "raw"), temp_file)
+
+test_that("data_read", {
+  expect_warning(
+    {
+      d <- data_read(
+        temp_file,
+        verbose = TRUE
+      )
+    },
+    regex = "no data frame"
+  )
+  expect_s3_class(d, "lm")
+})
+
+unlink(temp_file)
+
+
+
+# RDS file, matrix, coercable -----------------------------------
+
+temp_file <- tempfile(fileext = ".rds")
+request <- httr::GET("https://raw.github.com/easystats/circus/master/data/matrix_object.rds")
+httr::stop_for_status(request)
+writeBin(httr::content(request, type = "raw"), temp_file)
+
+test_that("data_read", {
+  expect_message(expect_message(expect_message(
+    {
+      d <- data_read(
+        temp_file,
+        verbose = TRUE
+      )
+    }
+  )), regex = "0 out of 5")
+
+  expect_s3_class(d, "data.frame")
+  expect_identical(dim(d), c(2L, 5L))
+})
+
+unlink(temp_file)
+
+
+
 # SPSS file -----------------------------------
 
 temp_file <- tempfile(fileext = ".sav")
