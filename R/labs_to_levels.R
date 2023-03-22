@@ -9,7 +9,10 @@
 #' for factors.
 #'
 #' @param x A data frame or vector.
-#' @param ... Arguments passed to or from other methods.
+#' @param remove_attr Logical, if `"labels"` attribute should be removed after
+#' value labels are set as factor levels.
+#' @param ... Arguments passed to or from other methods, in this in particular
+#' to `to_factor()`.
 #' @inheritParams find_columns
 #' @inheritParams categorize
 #'

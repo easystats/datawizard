@@ -25,7 +25,11 @@ labs_to_levels(x, ...)
 \arguments{
 \item{x}{A data frame or vector.}
 
-\item{...}{Arguments passed to or from other methods.}
+\item{...}{Arguments passed to or from other methods, in this in particular
+to \code{to_factor()}.}
+
+\item{remove_attr}{Logical, if \code{"labels"} attribute should be removed after
+value labels are set as factor levels.}
 
 \item{verbose}{Toggle warnings.}
 
