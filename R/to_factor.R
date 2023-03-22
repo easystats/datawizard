@@ -49,22 +49,15 @@ to_factor.numeric <- function(x, ...) {
   variable_label <- attr(x, "label", exact = TRUE)
   value_labels <- attr(x, "labels", exact = TRUE)
 
-  # make sure we have matching labels
-  if (!is.null(value_labels)) {
-    value_labels <- value_labels[value_labels %in% x]
-  }
-
   # to factor
   x <- as.factor(x)
 
-  # use value labels as levels
-  if (!is.null(value_labels)) {
-    try(levels(x) <- names(value_labels), silent = TRUE) # nolint
-  }
-
-  # add back variable label
+  # add back labels
   attr(x, "label") <- variable_label
-  x
+  attr(x, "labels") <- variable_value_labelslabel
+
+  # value labels to factor levels
+  .value_labels_to_levels(x)
 }
 
 #' @export
