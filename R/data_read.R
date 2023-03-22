@@ -158,6 +158,22 @@ data_read <- function(path,
 # process imported data from SPSS, SAS or Stata -----------------------
 
 .post_process_imported_data <- function(x, convert_factors, verbose) {
+  # for "unknown" data formats (like .RDS), which still can be imported via
+  # "rio::import()", we must check whether we actually have a data frame or
+  # not. Else, tell user.
+  if (!is.data.frame(x)) {
+    tmp <- tryCatch(as.data.frame(x, stringsAsFactors = FALSE), error = function(e) NULL)
+    if (!is.null(tmp)) {
+      x <- tmp
+    } else {
+      if (verbose) {
+        insight::format_warning(
+          "Imported file is no data frame. Returning file as is. Please check if importing this file was intented."
+        )
+      }
+      return(x)
+    }
+  }
   # user may decide whether we automatically detect variable type or not
   if (isTRUE(convert_factors)) {
     if (verbose) {
