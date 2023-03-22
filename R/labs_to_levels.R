@@ -25,11 +25,11 @@
 #' # add value labels - these are not factor levels yet
 #' x <- add_labs(x, values = c(`1` = "low", `2` = "mid", `3` = "high"))
 #' levels(x)
-#' data_tabluate(x)
+#' data_tabulate(x)
 #'
 #' x <- labs_to_levels(x)
 #' levels(x)
-#' data_tabluate(x)
+#' data_tabulate(x)
 #' @export
 labs_to_levels <- function(x, ...) {
   UseMethod("labs_to_levels")
@@ -57,7 +57,7 @@ labs_to_levels.factor <- function(x, remove_attr = TRUE, verbose = TRUE, ...) {
   }
   # check positions of matching values and levels
   levels_in_labs <- stats::na.omit(match(value_labels, levels(x)))
-  labs_in_levels <- stats::na.omit(match(levels(x), labels))
+  labs_in_levels <- stats::na.omit(match(levels(x), value_labels))
   # sanity check - if labelled values and levels don't match
   if (!length(levels_in_labs) || !length(labs_in_levels)) {
     if (verbose) {
@@ -68,7 +68,7 @@ labs_to_levels.factor <- function(x, remove_attr = TRUE, verbose = TRUE, ...) {
     }
     return(x)
   }
-  levels(x)[levels_in_labs] <- names(labels[labs_in_levels])
+  levels(x)[levels_in_labs] <- names(value_labels[labs_in_levels])
   if (remove_attr) {
     attr(x, "labels") <- NULL
   }
