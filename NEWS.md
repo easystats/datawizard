@@ -1,3 +1,11 @@
+# datawizard 0.7.1
+
+MINOR CHANGES
+
+* `data_read()` now checks if the imported object actually is a data frame (or
+  coercable to a data frame), and if not, no longer errors, but gives an
+  informative warning of the type of object that was imported.
+
 # datawizard 0.7.0
 
 BREAKING CHANGES
