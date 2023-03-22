@@ -147,7 +147,7 @@ test_that("data_read", {
     },
     regex = "no data frame"
   )
-  expect_s3_class("lm")
+  expect_s3_class(d, "lm")
 })
 
 unlink(temp_file)
@@ -171,7 +171,7 @@ test_that("data_read", {
     }
   )), regex = "0 out of 5")
 
-  expect_s3_class("data.frame")
+  expect_s3_class(d, "data.frame")
   expect_identical(dim(d), as.integer(c(2, 5)))
 })
 
