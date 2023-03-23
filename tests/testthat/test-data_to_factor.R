@@ -87,12 +87,12 @@ skip_if_not_or_load_if_installed("haven")
 
 # Output validated against SPSS output from original dataset
 
-temp_file <- tempfile(fileext = ".sav")
-request <- httr::GET("https://raw.github.com/easystats/circus/master/data/spss_many_labels.sav")
-httr::stop_for_status(request)
-writeBin(httr::content(request, type = "raw"), temp_file)
-
 test_that("data_read, convert many labels correctly", {
+  temp_file <- tempfile(fileext = ".sav")
+  request <- httr::GET("https://raw.github.com/easystats/circus/master/data/spss_many_labels.sav")
+  httr::stop_for_status(request)
+  writeBin(httr::content(request, type = "raw"), temp_file)
+
   d <- data_read(
     temp_file,
     convert_factors = FALSE,
@@ -206,6 +206,5 @@ test_that("data_read, convert many labels correctly", {
       "<NA>                      |    0 |  0.00 |    <NA> |         <NA>"
     )
   )
+  unlink(temp_file)
 })
-
-unlink(temp_file)

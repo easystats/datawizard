@@ -68,7 +68,9 @@ text_lastchar <- function(text, n = 1) {
 #' @rdname text_format
 #' @export
 text_concatenate <- function(text, sep = ", ", last = " and ", enclose = NULL) {
-  if (length(text) == 1 && nchar(text) == 0) return(text)
+  if (length(text) == 1 && nchar(text) == 0) {
+    return(text)
+  }
   text <- text[text != ""]
   if (length(text) && !is.null(enclose) && length(enclose) == 1 && nchar(enclose) > 0) {
     text <- paste0(enclose, text, enclose)
