@@ -36,12 +36,12 @@ test_that("data_read, skip_empty", {
 
 # tsv -------------------------
 
-temp_file <- tempfile(fileext = ".tsv")
-request <- httr::GET("https://raw.github.com/easystats/circus/master/data/sample1.tsv")
-httr::stop_for_status(request)
-writeBin(httr::content(request, type = "raw"), temp_file)
-
 test_that("data_read", {
+  temp_file <- tempfile(fileext = ".tsv")
+  request <- httr::GET("https://raw.github.com/easystats/circus/master/data/sample1.tsv")
+  httr::stop_for_status(request)
+  writeBin(httr::content(request, type = "raw"), temp_file)
+
   d <- data_read(
     temp_file,
     verbose = FALSE
@@ -50,9 +50,8 @@ test_that("data_read", {
   expect_identical(colnames(d), c("a", "b", "c"))
   expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 2L)
   expect_identical(sum(vapply(d, is.character, FUN.VALUE = logical(1L))), 1L)
+  unlink(temp_file)
 })
-
-unlink(temp_file)
 
 
 
@@ -129,54 +128,25 @@ test_that("data_read", {
 unlink(temp_file)
 
 
-
-# RDS file, no data frame -----------------------------------
-
-temp_file <- tempfile(fileext = ".rds")
-request <- httr::GET("https://raw.github.com/easystats/circus/master/data/model_object.rds")
-httr::stop_for_status(request)
-writeBin(httr::content(request, type = "raw"), temp_file)
+# RDS file, matrix, coercible -----------------------------------
 
 test_that("data_read", {
-  expect_warning(
-    {
-      d <- data_read(
-        temp_file,
-        verbose = TRUE
-      )
-    },
-    regex = "no data frame"
-  )
-  expect_s3_class(d, "lm")
-})
+  temp_file <- tempfile(fileext = ".rds")
+  request <- httr::GET("https://raw.github.com/easystats/circus/master/data/matrix_object.rds")
+  httr::stop_for_status(request)
+  writeBin(httr::content(request, type = "raw"), temp_file)
 
-unlink(temp_file)
-
-
-
-# RDS file, matrix, coercable -----------------------------------
-
-temp_file <- tempfile(fileext = ".rds")
-request <- httr::GET("https://raw.github.com/easystats/circus/master/data/matrix_object.rds")
-httr::stop_for_status(request)
-writeBin(httr::content(request, type = "raw"), temp_file)
-
-test_that("data_read", {
-  expect_message(expect_message(expect_message(
-    {
-      d <- data_read(
-        temp_file,
-        verbose = TRUE
-      )
-    }
-  )), regex = "0 out of 5")
+  expect_message(expect_message(expect_message({
+    d <- data_read(
+      temp_file,
+      verbose = TRUE
+    )
+  })), regex = "0 out of 5")
 
   expect_s3_class(d, "data.frame")
   expect_identical(dim(d), c(2L, 5L))
+  unlink(temp_file)
 })
-
-unlink(temp_file)
-
 
 
 # SPSS file -----------------------------------
@@ -434,4 +404,25 @@ test_that("data_read, file not exists", {
     suppressMessages(data_read("thisfileshouldnotexist.sav")),
     regex = "not exist"
   )
+})
+
+# RDS file, no data frame -----------------------------------
+
+test_that("data_read", {
+  temp_file <- tempfile(fileext = ".rds")
+  request <- httr::GET("https://raw.github.com/easystats/circus/master/data/model_object.rds")
+  httr::stop_for_status(request)
+  writeBin(httr::content(request, type = "raw"), temp_file)
+
+  expect_warning(
+    {
+      d <- data_read(
+        temp_file,
+        verbose = TRUE
+      )
+    },
+    regex = "no data frame"
+  )
+  expect_s3_class(d, "lm")
+  unlink(temp_file)
 })
