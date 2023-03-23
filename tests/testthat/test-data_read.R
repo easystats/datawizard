@@ -57,7 +57,7 @@ test_that("data_read - tsv", {
 
 # excel -------------------------
 
-test_that("data_read", {
+test_that("data_read - excel", {
   temp_file <- tempfile(fileext = ".xlsx")
   request <- httr::GET("https://raw.github.com/easystats/circus/master/data/sample1.xlsx")
   httr::stop_for_status(request)
