@@ -409,20 +409,23 @@ test_that("data_read, file not exists", {
 # RDS file, no data frame -----------------------------------
 
 test_that("data_read", {
-  temp_file <- tempfile(fileext = ".rds")
-  request <- httr::GET("https://raw.github.com/easystats/circus/master/data/model_object.rds")
-  httr::stop_for_status(request)
-  writeBin(httr::content(request, type = "raw"), temp_file)
+  skip_if_not_installed("withr")
 
-  expect_warning(
-    {
-      d <- data_read(
-        temp_file,
-        verbose = TRUE
-      )
-    },
-    regex = "no data frame"
-  )
-  expect_s3_class(d, "lm")
-  unlink(temp_file)
+  withr::with_tempfile("temp_file", fileext = ".rds", code = {
+    request <- httr::GET("https://raw.github.com/easystats/circus/master/data/model_object.rds")
+    httr::stop_for_status(request)
+    writeBin(httr::content(request, type = "raw"), temp_file)
+
+    expect_warning(
+      {
+        d <- data_read(
+          temp_file,
+          verbose = TRUE
+        )
+      },
+      regex = "no data frame"
+    )
+    expect_s3_class(d, "lm")
+    unlink(temp_file)
+  })
 })
