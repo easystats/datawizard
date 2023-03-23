@@ -36,12 +36,12 @@ test_that("data_read, skip_empty", {
 
 # tsv -------------------------
 
-temp_file <- tempfile(fileext = ".tsv")
-request <- httr::GET("https://raw.github.com/easystats/circus/master/data/sample1.tsv")
-httr::stop_for_status(request)
-writeBin(httr::content(request, type = "raw"), temp_file)
-
 test_that("data_read", {
+  temp_file <- tempfile(fileext = ".tsv")
+  request <- httr::GET("https://raw.github.com/easystats/circus/master/data/sample1.tsv")
+  httr::stop_for_status(request)
+  writeBin(httr::content(request, type = "raw"), temp_file)
+
   d <- data_read(
     temp_file,
     verbose = FALSE
@@ -50,9 +50,8 @@ test_that("data_read", {
   expect_identical(colnames(d), c("a", "b", "c"))
   expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 2L)
   expect_identical(sum(vapply(d, is.character, FUN.VALUE = logical(1L))), 1L)
+  unlink(temp_file)
 })
-
-unlink(temp_file)
 
 
 
