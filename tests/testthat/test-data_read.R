@@ -11,7 +11,7 @@ skip_if_not_or_load_if_installed("rio")
 
 # csv -------------------------
 
-test_that("data_read", {
+test_that("data_read - csv", {
   d <- data_read(
     "https://raw.githubusercontent.com/easystats/circus/master/data/bootstrapped.csv",
     verbose = FALSE
@@ -36,7 +36,7 @@ test_that("data_read, skip_empty", {
 
 # tsv -------------------------
 
-test_that("data_read", {
+test_that("data_read - tsv", {
   temp_file <- tempfile(fileext = ".tsv")
   request <- httr::GET("https://raw.github.com/easystats/circus/master/data/sample1.tsv")
   httr::stop_for_status(request)
@@ -57,34 +57,34 @@ test_that("data_read", {
 
 # excel -------------------------
 
-temp_file <- tempfile(fileext = ".xlsx")
-request <- httr::GET("https://raw.github.com/easystats/circus/master/data/sample1.xlsx")
-httr::stop_for_status(request)
-writeBin(httr::content(request, type = "raw"), temp_file)
-
 test_that("data_read", {
+  temp_file <- tempfile(fileext = ".xlsx")
+  request <- httr::GET("https://raw.github.com/easystats/circus/master/data/sample1.xlsx")
+  httr::stop_for_status(request)
+  writeBin(httr::content(request, type = "raw"), temp_file)
+
   d <- data_read(
     temp_file,
     verbose = FALSE
   )
+
   expect_identical(nrow(d), 3L)
   expect_identical(colnames(d), c("a", "b", "c"))
   expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 2L)
   expect_identical(sum(vapply(d, is.character, FUN.VALUE = logical(1L))), 1L)
+
+  unlink(temp_file)
 })
-
-unlink(temp_file)
-
 
 
 # Stata file -----------------------------------
 
-temp_file <- tempfile(fileext = ".dta")
-request <- httr::GET("https://raw.github.com/easystats/circus/master/data/stata_test.dta")
-httr::stop_for_status(request)
-writeBin(httr::content(request, type = "raw"), temp_file)
+test_that("data_read - Stata file", {
+  temp_file <- tempfile(fileext = ".dta")
+  request <- httr::GET("https://raw.github.com/easystats/circus/master/data/stata_test.dta")
+  httr::stop_for_status(request)
+  writeBin(httr::content(request, type = "raw"), temp_file)
 
-test_that("data_read", {
   d <- data_read(
     temp_file,
     verbose = FALSE
@@ -97,20 +97,21 @@ test_that("data_read", {
       disp = c(160, 160, 108)
     )
   )
-})
 
-unlink(temp_file)
+  unlink(temp_file)
+})
 
 
 
 # SAS file -----------------------------------
 
-temp_file <- tempfile(fileext = ".sas7bdat")
-request <- httr::GET("https://raw.github.com/easystats/circus/master/data/sas_test.sas7bdat")
-httr::stop_for_status(request)
-writeBin(httr::content(request, type = "raw"), temp_file)
 
-test_that("data_read", {
+test_that("data_read - SAS file", {
+  temp_file <- tempfile(fileext = ".sas7bdat")
+  request <- httr::GET("https://raw.github.com/easystats/circus/master/data/sas_test.sas7bdat")
+  httr::stop_for_status(request)
+  writeBin(httr::content(request, type = "raw"), temp_file)
+
   d <- data_read(
     temp_file,
     verbose = FALSE
@@ -123,14 +124,15 @@ test_that("data_read", {
       disp = c(160, 160, 108)
     )
   )
+  unlink(temp_file)
 })
 
-unlink(temp_file)
+
 
 
 # RDS file, matrix, coercible -----------------------------------
 
-test_that("data_read", {
+test_that("data_read - RDS file, matrix, coercible", {
   temp_file <- tempfile(fileext = ".rds")
   request <- httr::GET("https://raw.github.com/easystats/circus/master/data/matrix_object.rds")
   httr::stop_for_status(request)
@@ -151,12 +153,12 @@ test_that("data_read", {
 
 # SPSS file -----------------------------------
 
-temp_file <- tempfile(fileext = ".sav")
-request <- httr::GET("https://raw.github.com/easystats/circus/master/data/EFC.sav")
-httr::stop_for_status(request)
-writeBin(httr::content(request, type = "raw"), temp_file)
+test_that("data_read - SPSS file", {
+  temp_file <- tempfile(fileext = ".sav")
+  request <- httr::GET("https://raw.github.com/easystats/circus/master/data/EFC.sav")
+  httr::stop_for_status(request)
+  writeBin(httr::content(request, type = "raw"), temp_file)
 
-test_that("data_read", {
   d <- data_read(
     temp_file,
     verbose = FALSE
@@ -180,66 +182,78 @@ test_that("data_read", {
       `daughter or son -in-law` = 4
     )
   )
+
+  unlink(temp_file)
 })
 
-unlink(temp_file)
 
 
 
-# SPSS file. 2 ---------------------------------
+# SPSS file 2 ---------------------------------
 
-temp_file <- tempfile(fileext = ".sav")
-request <- httr::GET("https://raw.github.com/easystats/circus/master/data/spss_test.sav")
-httr::stop_for_status(request)
-writeBin(httr::content(request, type = "raw"), temp_file)
+test_that("data_read - SPSS file 2", {
+  temp_file <- tempfile(fileext = ".sav")
+  request <- httr::GET("https://raw.github.com/easystats/circus/master/data/spss_test.sav")
+  httr::stop_for_status(request)
+  writeBin(httr::content(request, type = "raw"), temp_file)
 
-test_that("data_read", {
   d <- data_read(
     temp_file,
     verbose = FALSE
   )
+
   expect_identical(
     d,
     structure(list(
-      V1 = structure(1:4, levels = c(
-        "Eins", "Zwei",
-        "Drei", "Vier"
-      ), class = "factor", converted_to_factor = TRUE, label = "Variable 1"),
-      V2 = structure(c(2, 3, 4, 1), labels = c(
-        Eins = 1, Zwei = 2,
-        Drei = 3
-      ), label = "Variable 2"), V3 = structure(c(
-        3L, 2L,
-        1L, 4L
-      ), levels = c("Eins", "Zwei", "Drei", "Vier"), class = "factor", converted_to_factor = TRUE, label = "Variable 3")
-    ), row.names = c(
-      NA,
-      -4L
-    ), class = "data.frame")
+      V1 = structure(1:4,
+        levels = c(
+          "Eins", "Zwei",
+          "Drei", "Vier"
+        ),
+        class = "factor",
+        converted_to_factor = TRUE,
+        label = "Variable 1"
+      ),
+      V2 = structure(c(2, 3, 4, 1),
+        labels = c(
+          Eins = 1, Zwei = 2,
+          Drei = 3
+        ),
+        label = "Variable 2"
+      ),
+      V3 = structure(
+        c(
+          3L, 2L,
+          1L, 4L
+        ),
+        levels = c("Eins", "Zwei", "Drei", "Vier"),
+        class = "factor",
+        converted_to_factor = TRUE,
+        label = "Variable 3"
+      )
+    ), row.names = c(NA, -4L), class = "data.frame")
   )
-})
 
-unlink(temp_file)
+  unlink(temp_file)
+})
 
 
 
 # zipped SPSS file -----------------------------------
 
-temp_file <- tempfile(fileext = ".zip")
-request <- httr::GET("https://raw.github.com/easystats/circus/master/data/EFC.zip")
-httr::stop_for_status(request)
-writeBin(httr::content(request, type = "raw"), temp_file)
+test_that("data_read - zipped SPSS file", {
+  temp_file <- tempfile(fileext = ".zip")
+  request <- httr::GET("https://raw.github.com/easystats/circus/master/data/EFC.zip")
+  httr::stop_for_status(request)
+  writeBin(httr::content(request, type = "raw"), temp_file)
 
-test_that("data_read", {
   d <- data_read(
     temp_file,
     verbose = FALSE
   )
   expect_identical(sum(vapply(d, is.factor, FUN.VALUE = logical(1L))), 15L)
   expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 11L)
-})
 
-test_that("data_read, convert_factors", {
   d <- data_read(
     temp_file,
     convert_factors = FALSE,
@@ -247,23 +261,22 @@ test_that("data_read, convert_factors", {
   )
   expect_identical(sum(vapply(d, is.factor, FUN.VALUE = logical(1L))), 0L)
   expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 26L)
+
+  unlink(temp_file)
 })
-
-unlink(temp_file)
-
 
 
 
 # SPSS file, many value labels  -----------------------------------
 
-# Output validated against SPSS output from original dataset
-
-temp_file <- tempfile(fileext = ".sav")
-request <- httr::GET("https://raw.github.com/easystats/circus/master/data/spss_many_labels.sav")
-httr::stop_for_status(request)
-writeBin(httr::content(request, type = "raw"), temp_file)
-
 test_that("data_read, convert many labels correctly", {
+  # Output validated against SPSS output from original dataset
+
+  temp_file <- tempfile(fileext = ".sav")
+  request <- httr::GET("https://raw.github.com/easystats/circus/master/data/spss_many_labels.sav")
+  httr::stop_for_status(request)
+  writeBin(httr::content(request, type = "raw"), temp_file)
+
   d <- data_read(
     temp_file,
     verbose = FALSE
@@ -326,9 +339,7 @@ test_that("data_read, convert many labels correctly", {
     )
   )
   expect_snapshot(data_tabulate(d$c12c))
-})
 
-test_that("data_read, give message", {
   expect_message(
     expect_message(
       expect_message(
@@ -339,9 +350,7 @@ test_that("data_read, give message", {
     ),
     regexp = "4 out of 4"
   )
-})
 
-test_that("data_read, convert many labels correctly", {
   d <- data_read(
     temp_file,
     convert_factors = FALSE,
@@ -383,9 +392,11 @@ test_that("data_read, convert many labels correctly", {
       `weiß nicht / keine Angabe` = 99
     )
   )
+
+  unlink(temp_file)
 })
 
-unlink(temp_file)
+
 
 
 # invalid file type -------------------------
@@ -408,7 +419,7 @@ test_that("data_read, file not exists", {
 
 # RDS file, no data frame -----------------------------------
 
-test_that("data_read", {
+test_that("data_read - RDS file, no data frame" , {
   skip_if_not_installed("withr")
 
   withr::with_tempfile("temp_file", fileext = ".rds", code = {
@@ -426,6 +437,5 @@ test_that("data_read", {
       regex = "no data frame"
     )
     expect_s3_class(d, "lm")
-    unlink(temp_file)
   })
 })
