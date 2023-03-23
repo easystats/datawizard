@@ -419,7 +419,7 @@ test_that("data_read, file not exists", {
 
 # RDS file, no data frame -----------------------------------
 
-test_that("data_read - RDS file, no data frame" , {
+test_that("data_read - RDS file, no data frame", {
   skip_if_not_installed("withr")
 
   withr::with_tempfile("temp_file", fileext = ".rds", code = {
