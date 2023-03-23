@@ -1,4 +1,8 @@
-# datawizard 0.7.1
+# datawizard (devel)
+
+BUG FIXES
+
+* Fix test for CRAN check on Mac OS arm64
 
 MINOR CHANGES
 
