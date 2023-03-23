@@ -15,7 +15,7 @@ unloadNamespace("bayestestR")
 
 test_that("data_read - csv", {
   d <- data_read(
-    "https://raw.githubusercontent.com/easystats/circus/master/data/bootstrapped.csv",
+    "https://raw.githubusercontent.com/easystats/circus/main/data/bootstrapped.csv",
     verbose = FALSE
   )
   expect_identical(dim(d), c(10000L, 4L))
@@ -27,7 +27,7 @@ test_that("data_read - csv", {
 
 test_that("data_read, skip_empty", {
   d <- data_read(
-    "https://raw.githubusercontent.com/easystats/circus/master/data/test_skip_empty.csv",
+    "https://raw.githubusercontent.com/easystats/circus/main/data/test_skip_empty.csv",
     verbose = FALSE
   )
   expect_identical(ncol(d), 3L)
@@ -42,7 +42,7 @@ test_that("data_read - tsv", {
   skip_if_not_installed("withr")
 
   withr::with_tempfile("temp_file", fileext = ".tsv", code = {
-    request <- httr::GET("https://raw.github.com/easystats/circus/master/data/sample1.tsv")
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/sample1.tsv")
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
@@ -65,7 +65,7 @@ test_that("data_read - excel", {
   skip_if_not_installed("withr")
 
   withr::with_tempfile("temp_file", fileext = ".xlsx", code = {
-    request <- httr::GET("https://raw.github.com/easystats/circus/master/data/sample1.xlsx")
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/sample1.xlsx")
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
@@ -86,7 +86,7 @@ test_that("data_read - excel", {
 
 test_that("data_read - Stata file", {
   withr::with_tempfile("temp_file", fileext = ".dta", code = {
-    request <- httr::GET("https://raw.github.com/easystats/circus/master/data/stata_test.dta")
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/stata_test.dta")
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
@@ -112,7 +112,7 @@ test_that("data_read - Stata file", {
 
 test_that("data_read - SAS file", {
   withr::with_tempfile("temp_file", fileext = ".sas7bdat", code = {
-    request <- httr::GET("https://raw.github.com/easystats/circus/master/data/sas_test.sas7bdat")
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/sas_test.sas7bdat")
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
@@ -138,7 +138,7 @@ test_that("data_read - SAS file", {
 
 test_that("data_read - RDS file, matrix, coercible", {
   withr::with_tempfile("temp_file", fileext = ".rds", code = {
-    request <- httr::GET("https://raw.github.com/easystats/circus/master/data/matrix_object.rds")
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/matrix_object.rds")
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
@@ -159,7 +159,7 @@ test_that("data_read - RDS file, matrix, coercible", {
 
 test_that("data_read - SPSS file", {
   withr::with_tempfile("temp_file", fileext = ".sav", code = {
-    request <- httr::GET("https://raw.github.com/easystats/circus/master/data/EFC.sav")
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/EFC.sav")
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
@@ -196,7 +196,7 @@ test_that("data_read - SPSS file", {
 
 test_that("data_read - SPSS file 2", {
   withr::with_tempfile("temp_file", fileext = ".sav", code = {
-    request <- httr::GET("https://raw.github.com/easystats/circus/master/data/spss_test.sav")
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/spss_test.sav")
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
@@ -245,7 +245,7 @@ test_that("data_read - SPSS file 2", {
 
 test_that("data_read - zipped SPSS file", {
   withr::with_tempfile("temp_file", fileext = ".zip", code = {
-    request <- httr::GET("https://raw.github.com/easystats/circus/master/data/EFC.zip")
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/EFC.zip")
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
@@ -274,7 +274,7 @@ test_that("data_read, convert many labels correctly", {
   # Output validated against SPSS output from original dataset
 
   withr::with_tempfile("temp_file", fileext = ".sav", code = {
-    request <- httr::GET("https://raw.github.com/easystats/circus/master/data/spss_many_labels.sav")
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/spss_many_labels.sav")
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
@@ -423,7 +423,7 @@ test_that("data_read - RDS file, no data frame", {
   skip_if_not_installed("withr")
 
   withr::with_tempfile("temp_file", fileext = ".rds", code = {
-    request <- httr::GET("https://raw.github.com/easystats/circus/master/data/model_object.rds")
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/model_object.rds")
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
