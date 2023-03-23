@@ -56,7 +56,7 @@ labs_to_levels.factor <- function(x, remove_attr = TRUE, verbose = TRUE, ...) {
 }
 
 #' @export
-labs_to_levels.numeric <- function(x, remove_attr = TRUE, verbose = TRUE, ...) {
+labs_to_levels.numeric <- function(x, verbose = TRUE, ...) {
   if (is.null(attr(x, "labels", exact = TRUE))) {
     insight::format_error(
       "Could not convert to factor and set value labels as factor level.",

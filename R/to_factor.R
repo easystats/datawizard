@@ -62,7 +62,7 @@ to_factor.numeric <- function(x, labs_to_levels = TRUE, verbose = TRUE, ...) {
 
   # value labels to factor levels
   if (labs_to_levels) {
-    x <- .value_labels_to_levels(x, verbose = verbose)
+    x <- .value_labels_to_levels(x, verbose = verbose, ...)
   }
   x
 }
@@ -132,7 +132,7 @@ to_factor.data.frame <- function(x,
 
 ## TODO: either remove or enable "remove_attr" argument
 
-.value_labels_to_levels <- function(x, remove_attr = TRUE, verbose = TRUE) {
+.value_labels_to_levels <- function(x, remove_attr = TRUE, verbose = TRUE, ...) {
   # extract value labels
   value_labels <- attr(x, "labels", exact = TRUE)
   # return, if none
