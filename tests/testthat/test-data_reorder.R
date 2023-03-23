@@ -14,7 +14,7 @@ test_that("data_reorder works as expected", {
 # preserve attributes --------------------------
 
 test_that("data_reorder preserves attributes", {
-  skip_if_not_or_load_if_installed("parameters")
+  skip_if_not_installed("parameters")
 
   m <- lm(Sepal.Length ~ Species, data = iris)
   out <- parameters::parameters(m)

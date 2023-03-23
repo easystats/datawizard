@@ -264,7 +264,7 @@ test_that("standardize mediation", {
 
 test_that("offsets", {
   skip_if_not_or_load_if_installed("effectsize")
-  skip_if_not_or_load_if_installed("parameters")
+  skip_if_not_installed("parameters")
 
   m <- lm(mpg ~ hp + offset(wt), data = mtcars)
 
