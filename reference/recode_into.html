@@ -86,7 +86,7 @@ is similar to dplyr::case_when()."><meta property="og:image" content="https://ea
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Recode values from one or more variables into a new variable</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/recode_into.r" class="external-link"><code>R/recode_into.r</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/recode_into.R" class="external-link"><code>R/recode_into.R</code></a></small>
       <div class="d-none name"><code>recode_into.Rd</code></div>
     </div>
 
@@ -134,7 +134,7 @@ value.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span></span></span>
 <span class="r-in"><span><span class="fu">recode_into</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">x</span> <span class="op">&gt;</span> <span class="fl">15</span> <span class="op">~</span> <span class="st">"a"</span>,</span></span>
 <span class="r-in"><span>  <span class="va">x</span> <span class="op">&gt;</span> <span class="fl">10</span> <span class="op">&amp;</span> <span class="va">x</span> <span class="op">&lt;=</span> <span class="fl">15</span> <span class="op">~</span> <span class="st">"b"</span>,</span></span>
@@ -144,7 +144,7 @@ value.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [20] "a" "a" "a" "a" "a" "a" "a" "a" "a" "a" "a"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">30</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>, <span class="fl">30</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span></span></span>
