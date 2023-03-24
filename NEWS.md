@@ -6,7 +6,7 @@ BUG FIXES
 
 NEW FUNCTIONS
 
-* `labs_to_levels()`, to convert data into factors, and use value labels as
+* `labels_to_levels()`, to convert data into factors, and use value labels as
   factor levels. This function also processes factors themselves.
 
 MINOR CHANGES
