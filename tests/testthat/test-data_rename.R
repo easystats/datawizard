@@ -106,7 +106,7 @@ test_that("data_rename doesn't change colname if invalid pattern", {
 # preserve attributes --------------------------
 
 test_that("data_rename preserves attributes", {
-  skip_if_not_or_load_if_installed("parameters")
+  skip_if_not_installed("parameters")
 
   m <- lm(Sepal.Length ~ Species, data = iris)
   out <- parameters::parameters(m)
