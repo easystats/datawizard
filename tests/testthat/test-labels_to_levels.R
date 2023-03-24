@@ -1,7 +1,7 @@
 test_that("labels_to_levels, numeric", {
-  expect_error(
+  expect_warning(
     labels_to_levels(1:10),
-    regex = "Converting into factors"
+    regex = "only works"
   )
 })
 

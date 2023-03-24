@@ -35,9 +35,7 @@ labels_to_levels <- function(x, ...) {
 #' @export
 labels_to_levels.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    insight::format_alert(
-      sprintf("Converting into factors values currently not possible for variables of class `%s`.", class(x)[1])
-    )
+    insight::format_alert("`labels_to_levels()` only works for factors.")
   }
   x
 }
