@@ -6,8 +6,8 @@ BUG FIXES
 
 NEW FUNCTIONS
 
-* `labels_to_levels()`, to convert data into factors, and use value labels as
-  factor levels. This function also processes factors themselves.
+* `labels_to_levels()`, to convert levels of factors (or factors in data frames)
+  by setting value labels as factor levels.
 
 MINOR CHANGES
 
