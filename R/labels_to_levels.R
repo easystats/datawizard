@@ -76,7 +76,9 @@ labels_to_levels.data.frame <- function(x,
   # keep only factors
   select <- colnames(x[select])[vapply(x[select], is.factor, TRUE)]
 
-  # process arguments
+  # process arguments - we usually need this function for standardizing/centering
+  # but in this case, we just need the part, where "append" is handled to create
+  # new columns (if data should be appended)
   args <- .process_std_args(
     x,
     select,
@@ -84,9 +86,9 @@ labels_to_levels.data.frame <- function(x,
     weights = NULL,
     append,
     append_suffix = "_l",
-    force = FALSE,
+    force = TRUE,
     preserve_value_labels = TRUE,
-    keep_character = TRUE
+    keep_character = FALSE
   )
 
   # update processed arguments

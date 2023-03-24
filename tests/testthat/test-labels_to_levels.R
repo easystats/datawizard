@@ -16,6 +16,21 @@ test_that("labels_to_levels, factor", {
 
 test_that("labels_to_levels, factor, error on no labels", {
   data(efc)
+  data(iris)
   x <- as.factor(efc$c172code)
   expect_error(labels_to_levels(x), regex = "Could not change factor")
+  expect_error(labels_to_levels(iris), regex = "Could not change factor")
+})
+
+test_that("labels_to_levels, factor, data frame", {
+  data(efc)
+  out <- labels_to_levels(efc)
+  expect_identical(
+    levels(out$e42dep),
+    c(
+      "independent", "slightly dependent", "moderately dependent",
+      "severely dependent"
+    )
+  )
+  expect_identical(sum(vapply(efc, is.factor, TRUE)), 1L)
 })
