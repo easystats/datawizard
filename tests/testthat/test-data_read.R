@@ -1,6 +1,8 @@
 skip_on_cran()
 skip_if_offline()
 
+skip_if(packageVersion("parameters") < "0.20.2.12")
+
 skip_if_not_or_load_if_installed("httr")
 skip_if_not_or_load_if_installed("readxl")
 skip_if_not_or_load_if_installed("haven")

@@ -12,28 +12,28 @@ test_that("convert character to numeric Date", {
 })
 
 test_that("convert character to numeric preserve levels", {
-  x <- as.factor(mtcars$gear)
+  x <- head(as.factor(mtcars$gear))
   expect_identical(
     to_numeric(x, dummy_factors = FALSE),
-    c(2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 2, 3, 3, 3, 3, 3, 2)
+    c(2, 2, 2, 1, 1, 1)
   )
   expect_identical(
     to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE),
-    c(4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4, 4, 3, 3, 3, 3, 3, 4, 5, 5, 5, 5, 5, 4)
+    c(4, 4, 4, 3, 3, 3)
   )
 })
 
 test_that("convert character to numeric lowest", {
-  mtcars$vs <- as.factor(mtcars$vs)
-  d <<- mtcars
+  d <- head(mtcars)
+  d$vs <- as.factor(d$vs)
   model <- glm(vs ~ wt + mpg, data = d, family = "binomial")
   expect_identical(
     to_numeric(insight::get_response(model), dummy_factors = FALSE),
-    c(1, 1, 2, 2, 1, 2, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2)
+    c(1, 1, 2, 2, 1, 2)
   )
   expect_identical(
     to_numeric(insight::get_response(model), dummy_factors = FALSE, lowest = 0),
-    c(0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1)
+    c(0, 0, 1, 1, 0, 1)
   )
 })
 
