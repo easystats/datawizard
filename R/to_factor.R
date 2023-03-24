@@ -7,7 +7,7 @@
 #' numeric is `to_numeric()`.
 #'
 #' @param x A data frame or vector.
-#' @param labs_to_levels Logical, if `TRUE`, value labels are used as factor
+#' @param labels_to_levels Logical, if `TRUE`, value labels are used as factor
 #' levels after `x` was converted to factor. Else, factor levels are based on
 #' the values of `x` (i.e. as if using `as.factor()`).
 #' @param ... Arguments passed to or from other methods.
@@ -17,6 +17,9 @@
 #' @inheritSection center Selection of variables - the `select` argument
 #'
 #' @return A factor, or a data frame of factors.
+#'
+#' @note Factors are ignored and returned as is. If you want to use value labels
+#' as levels for factors, use [`labels_to_levels()`] instead.
 #'
 #' @examples
 #' str(to_factor(iris))
@@ -48,7 +51,7 @@ to_factor.factor <- function(x, ...) {
 
 #' @rdname to_factor
 #' @export
-to_factor.numeric <- function(x, labs_to_levels = TRUE, verbose = TRUE, ...) {
+to_factor.numeric <- function(x, labels_to_levels = TRUE, verbose = TRUE, ...) {
   # preserve labels
   variable_label <- attr(x, "label", exact = TRUE)
   value_labels <- attr(x, "labels", exact = TRUE)
@@ -61,7 +64,7 @@ to_factor.numeric <- function(x, labs_to_levels = TRUE, verbose = TRUE, ...) {
   attr(x, "labels") <- value_labels
 
   # value labels to factor levels
-  if (labs_to_levels) {
+  if (labels_to_levels) {
     x <- .value_labels_to_levels(x, verbose = verbose, ...)
   }
   x
@@ -86,7 +89,7 @@ to_factor.data.frame <- function(x,
                                  regex = FALSE,
                                  verbose = TRUE,
                                  ...) {
-  # sanity check, return as is for complete numeric
+  # sanity check, return as is for complete factor
   if (all(vapply(x, is.factor, FUN.VALUE = logical(1L)))) {
     return(x)
   }
@@ -130,9 +133,7 @@ to_factor.data.frame <- function(x,
 
 # helper -----------------------
 
-## TODO: either remove or enable "remove_attr" argument
-
-.value_labels_to_levels <- function(x, remove_attr = TRUE, verbose = TRUE, ...) {
+.value_labels_to_levels <- function(x, verbose = TRUE, ...) {
   # extract value labels
   value_labels <- attr(x, "labels", exact = TRUE)
   # return, if none
@@ -159,8 +160,7 @@ to_factor.data.frame <- function(x,
     )
   }
   levels(x)[levels_in_labs] <- names(value_labels[labs_in_levels])
-  if (remove_attr) {
-    attr(x, "labels") <- NULL
-  }
+  attr(x, "labels") <- NULL
+
   x
 }

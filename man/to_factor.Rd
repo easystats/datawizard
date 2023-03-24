@@ -8,7 +8,7 @@
 \usage{
 to_factor(x, ...)
 
-\method{to_factor}{numeric}(x, labs_to_levels = TRUE, verbose = TRUE, ...)
+\method{to_factor}{numeric}(x, labels_to_levels = TRUE, verbose = TRUE, ...)
 
 \method{to_factor}{data.frame}(
   x,
@@ -26,7 +26,7 @@ to_factor(x, ...)
 
 \item{...}{Arguments passed to or from other methods.}
 
-\item{labs_to_levels}{Logical, if \code{TRUE}, value labels are used as factor
+\item{labels_to_levels}{Logical, if \code{TRUE}, value labels are used as factor
 levels after \code{x} was converted to factor. Else, factor levels are based on
 the values of \code{x} (i.e. as if using \code{as.factor()}).}
 
@@ -101,6 +101,10 @@ Convert data to factors
 Convert variables or data into factors. If the data is labelled, value labels
 will be used as factor levels. The counterpart to convert variables into
 numeric is \code{to_numeric()}.
+}
+\note{
+Factors are ignored and returned as is. If you want to use value labels
+as levels for factors, use \code{\link[=labels_to_levels]{labels_to_levels()}} instead.
 }
 \section{Selection of variables - the \code{select} argument}{
 
