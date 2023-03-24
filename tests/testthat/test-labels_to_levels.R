@@ -1,5 +1,5 @@
 test_that("labels_to_levels, numeric", {
-  expect_warning(
+  expect_message(
     labels_to_levels(1:10),
     regex = "only works"
   )
