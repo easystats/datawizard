@@ -421,7 +421,7 @@ test_that("convert_na_to - data frame: works when arg 'select' is a list", {
 # preserve attributes --------------------------
 
 test_that("data_rename preserves attributes", {
-  skip_if_not_or_load_if_installed("parameters")
+  skip_if_not_installed("parameters")
 
   m <- lm(Sepal.Length ~ Species, data = iris)
   out <- parameters::parameters(m)

@@ -1,6 +1,6 @@
 test_that("distributions", {
-  skip_if_not_or_load_if_installed("bayestestR", minimum_version = "0.12.0")
-  skip_if_not_or_load_if_installed("parameters")
+  skip_if_not_installed("bayestestR")
+  skip_if_not_installed("parameters")
 
   set.seed(123)
   x <- bayestestR::distribution_normal(100)
