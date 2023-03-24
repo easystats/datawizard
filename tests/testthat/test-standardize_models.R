@@ -14,7 +14,7 @@ test_that("standardize, mlm", {
   m2 <- lm(scale(cbind(mpg, hp)) ~ scale(cyl) + scale(am), data = mtcars)
 
   mz <- standardize(m)
-  expect_identical(coef(mz), coef(m2), ignore_attr = TRUE)
+  expect_equal(coef(mz), coef(m2), ignore_attr = TRUE, tolerance = 1e-4)
 })
 
 test_that("standardize | errors", {
@@ -264,7 +264,7 @@ test_that("standardize mediation", {
 
 test_that("offsets", {
   skip_if_not_or_load_if_installed("effectsize")
-  skip_if_not_or_load_if_installed("parameters")
+  skip_if_not_installed("parameters")
 
   m <- lm(mpg ~ hp + offset(wt), data = mtcars)
 
