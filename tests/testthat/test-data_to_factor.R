@@ -15,6 +15,18 @@ test_that("to_factor", {
       "high level of education"
     )
   )
+  x <- to_factor(efc$c172code, labels_to_levels = FALSE)
+  expect_identical(levels(x), c("1", "2", "3"))
+})
+
+# numeric, partially labelled
+test_that("to_factor", {
+  x <- c(10, 11, 12)
+  attr(x, "labels") <- c("ten" = 10, "twelve" = 12)
+  expect_identical(
+    to_factor(x),
+    structure(1:3, levels = c("ten", "11", "twelve"), class = "factor")
+  )
 })
 
 # factor

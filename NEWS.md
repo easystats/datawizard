@@ -4,6 +4,10 @@ BUG FIXES
 
 * Fix test for CRAN check on Mac OS arm64
 
+NEW FUNCTIONS
+
+* `labels_to_levels()`, to use value labels of factors as their levels.
+
 MINOR CHANGES
 
 * `data_read()` now checks if the imported object actually is a data frame (or

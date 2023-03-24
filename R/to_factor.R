@@ -7,6 +7,9 @@
 #' numeric is `to_numeric()`.
 #'
 #' @param x A data frame or vector.
+#' @param labels_to_levels Logical, if `TRUE`, value labels are used as factor
+#' levels after `x` was converted to factor. Else, factor levels are based on
+#' the values of `x` (i.e. as if using `as.factor()`).
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams find_columns
 #' @inheritParams categorize
@@ -14,6 +17,9 @@
 #' @inheritSection center Selection of variables - the `select` argument
 #'
 #' @return A factor, or a data frame of factors.
+#'
+#' @note Factors are ignored and returned as is. If you want to use value labels
+#' as levels for factors, use [`labels_to_levels()`] instead.
 #'
 #' @examples
 #' str(to_factor(iris))
@@ -43,27 +49,24 @@ to_factor.factor <- function(x, ...) {
   x
 }
 
+#' @rdname to_factor
 #' @export
-to_factor.numeric <- function(x, ...) {
+to_factor.numeric <- function(x, labels_to_levels = TRUE, verbose = TRUE, ...) {
   # preserve labels
   variable_label <- attr(x, "label", exact = TRUE)
   value_labels <- attr(x, "labels", exact = TRUE)
 
-  # make sure we have matching labels
-  if (!is.null(value_labels)) {
-    value_labels <- value_labels[value_labels %in% x]
-  }
-
   # to factor
   x <- as.factor(x)
 
-  # use value labels as levels
-  if (!is.null(value_labels)) {
-    try(levels(x) <- names(value_labels), silent = TRUE) # nolint
-  }
-
-  # add back variable label
+  # add back labels
   attr(x, "label") <- variable_label
+  attr(x, "labels") <- value_labels
+
+  # value labels to factor levels
+  if (labels_to_levels) {
+    x <- .value_labels_to_levels(x, verbose = verbose, ...)
+  }
   x
 }
 
@@ -86,7 +89,7 @@ to_factor.data.frame <- function(x,
                                  regex = FALSE,
                                  verbose = TRUE,
                                  ...) {
-  # sanity check, return as is for complete numeric
+  # sanity check, return as is for complete factor
   if (all(vapply(x, is.factor, FUN.VALUE = logical(1L)))) {
     return(x)
   }
@@ -123,5 +126,41 @@ to_factor.data.frame <- function(x,
   select <- args$select
 
   x[select] <- lapply(x[select], to_factor, verbose = verbose, ...)
+  x
+}
+
+
+
+# helper -----------------------
+
+.value_labels_to_levels <- function(x, verbose = TRUE, ...) {
+  # extract value labels
+  value_labels <- attr(x, "labels", exact = TRUE)
+  # return, if none
+  if (is.null(value_labels)) {
+    return(x)
+  }
+  # check positions of matching values and levels
+  levels_in_labs <- stats::na.omit(match(value_labels, levels(x)))
+  labs_in_levels <- stats::na.omit(match(levels(x), value_labels))
+  # sanity check - if labelled values and levels don't match
+  if (!length(levels_in_labs) || !length(labs_in_levels)) {
+    if (verbose) {
+      insight::format_alert(
+        "Could not use value labels as factor levels.",
+        "Labelled values and factor levels had no match."
+      )
+    }
+    return(x)
+  }
+  # check if all levels have matching labels, and if not, tell user
+  if (verbose && nlevels(x) != length(levels_in_labs)) {
+    insight::format_alert(
+      "Not all factor levels had a matching value label. Non-matching levels were preserved."
+    )
+  }
+  levels(x)[levels_in_labs] <- names(value_labels[labs_in_levels])
+  attr(x, "labels") <- NULL
+
   x
 }

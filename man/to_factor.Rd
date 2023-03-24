@@ -2,10 +2,13 @@
 % Please edit documentation in R/to_factor.R
 \name{to_factor}
 \alias{to_factor}
+\alias{to_factor.numeric}
 \alias{to_factor.data.frame}
 \title{Convert data to factors}
 \usage{
 to_factor(x, ...)
+
+\method{to_factor}{numeric}(x, labels_to_levels = TRUE, verbose = TRUE, ...)
 
 \method{to_factor}{data.frame}(
   x,
@@ -22,6 +25,12 @@ to_factor(x, ...)
 \item{x}{A data frame or vector.}
 
 \item{...}{Arguments passed to or from other methods.}
+
+\item{labels_to_levels}{Logical, if \code{TRUE}, value labels are used as factor
+levels after \code{x} was converted to factor. Else, factor levels are based on
+the values of \code{x} (i.e. as if using \code{as.factor()}).}
+
+\item{verbose}{Toggle warnings.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -81,8 +90,6 @@ of length > 1. \code{regex = TRUE} is comparable to using one of the two
 select-helpers, \code{select = contains("")} or \code{select = regex("")}, however,
 since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.}
-
-\item{verbose}{Toggle warnings.}
 }
 \value{
 A factor, or a data frame of factors.
@@ -94,6 +101,10 @@ Convert data to factors
 Convert variables or data into factors. If the data is labelled, value labels
 will be used as factor levels. The counterpart to convert variables into
 numeric is \code{to_numeric()}.
+}
+\note{
+Factors are ignored and returned as is. If you want to use value labels
+as levels for factors, use \code{\link[=labels_to_levels]{labels_to_levels()}} instead.
 }
 \section{Selection of variables - the \code{select} argument}{
 

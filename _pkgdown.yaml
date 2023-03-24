@@ -68,6 +68,7 @@ reference:
       Helpers for data replacements
     contents:
       - add_labs
+      - labels_to_levels
       - contains("to_numeric")
       - to_factor
       - starts_with("replace_")
