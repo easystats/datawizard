@@ -2,8 +2,7 @@
 #' @name labels_to_levels
 #'
 #' @details
-#' Changes levels of factors (or factors in data frames) by setting value labels
-#' as factor levels.
+#' `labels_to_levels()` allows to use value labels of factors as their levels.
 #'
 #' @param x A data frame or factor. Other variable types (e.g. numerics) are not
 #' allowed.

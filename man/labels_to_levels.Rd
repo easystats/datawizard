@@ -96,8 +96,7 @@ labels.
 Convert value labels into factor levels
 }
 \details{
-Changes levels of factors (or factors in data frames) by setting value labels
-as factor levels.
+\code{labels_to_levels()} allows to use value labels of factors as their levels.
 }
 \examples{
 data(efc)
