@@ -133,13 +133,13 @@ assign_labels.character <- assign_labels.numeric
 #' @rdname assign_labels
 #' @export
 assign_labels.data.frame <- function(x,
-                                select = NULL,
-                                exclude = NULL,
-                                values = NULL,
-                                ignore_case = FALSE,
-                                regex = FALSE,
-                                verbose = TRUE,
-                                ...) {
+                                     select = NULL,
+                                     exclude = NULL,
+                                     values = NULL,
+                                     ignore_case = FALSE,
+                                     regex = FALSE,
+                                     verbose = TRUE,
+                                     ...) {
   # evaluate arguments
   select <- .select_nse(select,
     x,

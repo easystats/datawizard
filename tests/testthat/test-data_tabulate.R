@@ -173,11 +173,11 @@ test_that("data_tabulate grouped data.frame", {
   ), NA)))
   expect_identical(table1$N, as.vector(table(addNA(efc$c172code[efc$e16sex == 1]))))
   expect_identical(table1$`Valid %`,
-                   as.vector(c(
-                     100 * table(efc$c172code[efc$e16sex == 1]) / sum(!is.na(efc$c172code[efc$e16sex == 1])), NA
-                   )),
-                   ignore_attr = TRUE,
-                   tolerance = 1e-3
+    as.vector(c(
+      100 * table(efc$c172code[efc$e16sex == 1]) / sum(!is.na(efc$c172code[efc$e16sex == 1])), NA
+    )),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
   )
 })
 
