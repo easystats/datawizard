@@ -35,7 +35,7 @@ test_that("data_tabulate numeric", {
 test_that("data_tabulate data.frame", {
   x <- data_tabulate(efc, c("e16sex", "c172code"))
   expect_s3_class(x, "list")
-  expect_identical(length(x), 2L)
+  expect_length(x, 2L)
   expect_identical(
     attributes(x[[1]]),
     list(
@@ -215,170 +215,171 @@ test_that("data_tabulate big numbers", {
 })
 
 
-if (packageVersion("insight") > "0.17.0") {
-  test_that("data_tabulate print multiple, collapse", {
-    x <- data_tabulate(efc, c("c172code", "e16sex"), collapse = TRUE)
-    out <- capture.output(print(x))
-    expect_identical(
-      out,
-      c(
-        "# Frequency Table",
-        "",
-        "Variable | Value |  N | Raw % | Valid % | Cumulative %",
-        "---------+-------+----+-------+---------+-------------",
-        "c172code |     1 |  8 |  8.00 |    8.89 |         8.89",
-        "         |     2 | 66 | 66.00 |   73.33 |        82.22",
-        "         |     3 | 16 | 16.00 |   17.78 |       100.00",
-        "         |  <NA> | 10 | 10.00 |    <NA> |         <NA>",
-        "---------+-------+----+-------+---------+-------------",
-        "e16sex   |     1 | 46 | 46.00 |   46.00 |        46.00",
-        "         |     2 | 54 | 54.00 |   54.00 |       100.00",
-        "         |  <NA> |  0 |  0.00 |    <NA> |         <NA>",
-        "------------------------------------------------------"
-      )
+test_that("data_tabulate print multiple, collapse", {
+  skip_if_not(packageVersion("insight") > "0.17.0", "insight must be >= 0.17.0")
+  x <- data_tabulate(efc, c("c172code", "e16sex"), collapse = TRUE)
+  out <- capture.output(print(x))
+  expect_identical(
+    out,
+    c(
+      "# Frequency Table",
+      "",
+      "Variable | Value |  N | Raw % | Valid % | Cumulative %",
+      "---------+-------+----+-------+---------+-------------",
+      "c172code |     1 |  8 |  8.00 |    8.89 |         8.89",
+      "         |     2 | 66 | 66.00 |   73.33 |        82.22",
+      "         |     3 | 16 | 16.00 |   17.78 |       100.00",
+      "         |  <NA> | 10 | 10.00 |    <NA> |         <NA>",
+      "---------+-------+----+-------+---------+-------------",
+      "e16sex   |     1 | 46 | 46.00 |   46.00 |        46.00",
+      "         |     2 | 54 | 54.00 |   54.00 |       100.00",
+      "         |  <NA> |  0 |  0.00 |    <NA> |         <NA>",
+      "------------------------------------------------------"
     )
-  })
-}
+  )
+})
 
 
-skip_if_not_or_load_if_installed("poorman")
 
-if (requireNamespace("poorman", quietly = TRUE)) {
-  test_that("data_tabulate grouped data.frame", {
-    x <- data_tabulate(poorman::group_by(efc, e16sex), "c172code")
-    expect_s3_class(x, "list")
-    expect_identical(length(x), 2L)
-    expect_identical(
-      attributes(x[[1]]),
-      list(
-        names = c(
-          "Variable",
-          "Group",
-          "Value",
-          "N",
-          "Raw %",
-          "Valid %",
-          "Cumulative %"
-        ),
-        class = c("dw_data_tabulate", "data.frame"),
-        row.names = 1:4,
-        type = "numeric",
-        varname = "c172code",
-        label = "carer's level of education",
-        object = "c172code",
-        group_variable = structure(
-          list(e16sex = 1),
-          .drop = TRUE,
-          row.names = 1L,
-          class = "data.frame"
-        ),
-        duplicate_varnames = c(FALSE, TRUE, TRUE, TRUE),
-        total_n = 46L,
-        valid_n = 41L
-      )
+test_that("data_tabulate grouped data.frame", {
+  skip_if_not_or_load_if_installed("poorman")
+  x <- data_tabulate(poorman::group_by(efc, e16sex), "c172code")
+  expect_s3_class(x, "list")
+  expect_length(x, 2L)
+  expect_identical(
+    attributes(x[[1]]),
+    list(
+      names = c(
+        "Variable",
+        "Group",
+        "Value",
+        "N",
+        "Raw %",
+        "Valid %",
+        "Cumulative %"
+      ),
+      class = c("dw_data_tabulate", "data.frame"),
+      row.names = 1:4,
+      type = "numeric",
+      varname = "c172code",
+      label = "carer's level of education",
+      object = "c172code",
+      group_variable = structure(
+        list(e16sex = 1),
+        .drop = TRUE,
+        row.names = 1L,
+        class = "data.frame"
+      ),
+      duplicate_varnames = c(FALSE, TRUE, TRUE, TRUE),
+      total_n = 46L,
+      valid_n = 41L
     )
-    table1 <- x[[1]]
-    expect_identical(as.vector(table1$Value), as.character(c(sort(
-      unique(efc$c172code)
-    ), NA)))
-    expect_identical(table1$N, as.vector(table(addNA(efc$c172code[efc$e16sex == 1]))))
-    expect_identical(table1$`Valid %`,
-      as.vector(c(
-        100 * table(efc$c172code[efc$e16sex == 1]) / sum(!is.na(efc$c172code[efc$e16sex == 1])), NA
-      )),
-      ignore_attr = TRUE,
-      tolerance = 1e-3
-    )
-  })
+  )
+  table1 <- x[[1]]
+  expect_identical(as.vector(table1$Value), as.character(c(sort(
+    unique(efc$c172code)
+  ), NA)))
+  expect_identical(table1$N, as.vector(table(addNA(efc$c172code[efc$e16sex == 1]))))
+  expect_identical(table1$`Valid %`,
+                   as.vector(c(
+                     100 * table(efc$c172code[efc$e16sex == 1]) / sum(!is.na(efc$c172code[efc$e16sex == 1])), NA
+                   )),
+                   ignore_attr = TRUE,
+                   tolerance = 1e-3
+  )
+})
 
 
-  test_that("data_tabulate print", {
-    x <- data_tabulate(poorman::group_by(efc, e16sex), "c172code")
-    out <- capture.output(print(x))
-    expect_identical(
-      out,
-      c(
-        "carer's level of education (c172code) <numeric>",
-        "Grouped by e16sex (1)",
-        "# total N=46 valid N=41",
-        "",
-        "Value |  N | Raw % | Valid % | Cumulative %",
-        "------+----+-------+---------+-------------",
-        "1     |  5 | 10.87 |   12.20 |        12.20",
-        "2     | 32 | 69.57 |   78.05 |        90.24",
-        "3     |  4 |  8.70 |    9.76 |       100.00",
-        "<NA>  |  5 | 10.87 |    <NA> |         <NA>",
-        "",
-        "carer's level of education (c172code) <numeric>",
-        "Grouped by e16sex (2)",
-        "# total N=54 valid N=49",
-        "",
-        "Value |  N | Raw % | Valid % | Cumulative %",
-        "------+----+-------+---------+-------------",
-        "1     |  3 |  5.56 |    6.12 |         6.12",
-        "2     | 34 | 62.96 |   69.39 |        75.51",
-        "3     | 12 | 22.22 |   24.49 |       100.00",
-        "<NA>  |  5 |  9.26 |    <NA> |         <NA>"
-      )
+test_that("data_tabulate print", {
+  skip_if_not_or_load_if_installed("poorman")
+  x <- data_tabulate(poorman::group_by(efc, e16sex), "c172code")
+  out <- capture.output(print(x))
+  expect_identical(
+    out,
+    c(
+      "carer's level of education (c172code) <numeric>",
+      "Grouped by e16sex (1)",
+      "# total N=46 valid N=41",
+      "",
+      "Value |  N | Raw % | Valid % | Cumulative %",
+      "------+----+-------+---------+-------------",
+      "1     |  5 | 10.87 |   12.20 |        12.20",
+      "2     | 32 | 69.57 |   78.05 |        90.24",
+      "3     |  4 |  8.70 |    9.76 |       100.00",
+      "<NA>  |  5 | 10.87 |    <NA> |         <NA>",
+      "",
+      "carer's level of education (c172code) <numeric>",
+      "Grouped by e16sex (2)",
+      "# total N=54 valid N=49",
+      "",
+      "Value |  N | Raw % | Valid % | Cumulative %",
+      "------+----+-------+---------+-------------",
+      "1     |  3 |  5.56 |    6.12 |         6.12",
+      "2     | 34 | 62.96 |   69.39 |        75.51",
+      "3     | 12 | 22.22 |   24.49 |       100.00",
+      "<NA>  |  5 |  9.26 |    <NA> |         <NA>"
     )
-  })
+  )
+})
 
-  test_that("data_tabulate print, collapse groups", {
-    x <-
-      data_tabulate(poorman::group_by(efc, e16sex), "c172code", collapse = TRUE)
-    out <- capture.output(print(x))
-    expect_identical(
-      out,
-      c(
-        "# Frequency Table",
-        "",
-        "Variable |      Group | Value |  N | Raw % | Valid % | Cumulative %",
-        "---------+------------+-------+----+-------+---------+-------------",
-        "c172code | e16sex (1) |     1 |  5 | 10.87 |   12.20 |        12.20",
-        "         |            |     2 | 32 | 69.57 |   78.05 |        90.24",
-        "         |            |     3 |  4 |  8.70 |    9.76 |       100.00",
-        "         |            |  <NA> |  5 | 10.87 |    <NA> |         <NA>",
-        "---------+------------+-------+----+-------+---------+-------------",
-        "c172code | e16sex (2) |     1 |  3 |  5.56 |    6.12 |         6.12",
-        "         |            |     2 | 34 | 62.96 |   69.39 |        75.51",
-        "         |            |     3 | 12 | 22.22 |   24.49 |       100.00",
-        "         |            |  <NA> |  5 |  9.26 |    <NA> |         <NA>",
-        "-------------------------------------------------------------------"
-      )
+test_that("data_tabulate print, collapse groups", {
+  skip_if_not_or_load_if_installed("poorman")
+  x <-
+    data_tabulate(poorman::group_by(efc, e16sex), "c172code", collapse = TRUE)
+  out <- capture.output(print(x))
+  expect_identical(
+    out,
+    c(
+      "# Frequency Table",
+      "",
+      "Variable |      Group | Value |  N | Raw % | Valid % | Cumulative %",
+      "---------+------------+-------+----+-------+---------+-------------",
+      "c172code | e16sex (1) |     1 |  5 | 10.87 |   12.20 |        12.20",
+      "         |            |     2 | 32 | 69.57 |   78.05 |        90.24",
+      "         |            |     3 |  4 |  8.70 |    9.76 |       100.00",
+      "         |            |  <NA> |  5 | 10.87 |    <NA> |         <NA>",
+      "---------+------------+-------+----+-------+---------+-------------",
+      "c172code | e16sex (2) |     1 |  3 |  5.56 |    6.12 |         6.12",
+      "         |            |     2 | 34 | 62.96 |   69.39 |        75.51",
+      "         |            |     3 | 12 | 22.22 |   24.49 |       100.00",
+      "         |            |  <NA> |  5 |  9.26 |    <NA> |         <NA>",
+      "-------------------------------------------------------------------"
     )
-  })
+  )
+})
 
-  test_that("data_tabulate print, collapse groups, dropl evels", {
-    x <-
-      data_tabulate(
-        poorman::group_by(efc, e16sex),
-        "e42dep",
-        collapse = TRUE,
-        drop_levels = TRUE
-      )
-    out <- capture.output(print(x))
-    expect_identical(
-      out,
-      c(
-        "# Frequency Table",
-        "",
-        "Variable |      Group | Value |  N | Raw % | Valid % | Cumulative %",
-        "---------+------------+-------+----+-------+---------+-------------",
-        "e42dep   | e16sex (1) |     1 |  2 |  4.35 |    4.44 |         4.44",
-        "         |            |     2 |  2 |  4.35 |    4.44 |         8.89",
-        "         |            |     3 |  8 | 17.39 |   17.78 |        26.67",
-        "         |            |     4 | 33 | 71.74 |   73.33 |       100.00",
-        "         |            |  <NA> |  1 |  2.17 |    <NA> |         <NA>",
-        "---------+------------+-------+----+-------+---------+-------------",
-        "e42dep   | e16sex (2) |     2 |  2 |  3.70 |    3.85 |         3.85",
-        "         |            |     3 | 20 | 37.04 |   38.46 |        42.31",
-        "         |            |     4 | 30 | 55.56 |   57.69 |       100.00",
-        "         |            |  <NA> |  2 |  3.70 |    <NA> |         <NA>",
-        "-------------------------------------------------------------------"
-      )
+test_that("data_tabulate print, collapse groups, dropl evels", {
+  skip_if_not_or_load_if_installed("poorman")
+  x <-
+    data_tabulate(
+      poorman::group_by(efc, e16sex),
+      "e42dep",
+      collapse = TRUE,
+      drop_levels = TRUE
     )
-  })
-}
+  out <- capture.output(print(x))
+  expect_identical(
+    out,
+    c(
+      "# Frequency Table",
+      "",
+      "Variable |      Group | Value |  N | Raw % | Valid % | Cumulative %",
+      "---------+------------+-------+----+-------+---------+-------------",
+      "e42dep   | e16sex (1) |     1 |  2 |  4.35 |    4.44 |         4.44",
+      "         |            |     2 |  2 |  4.35 |    4.44 |         8.89",
+      "         |            |     3 |  8 | 17.39 |   17.78 |        26.67",
+      "         |            |     4 | 33 | 71.74 |   73.33 |       100.00",
+      "         |            |  <NA> |  1 |  2.17 |    <NA> |         <NA>",
+      "---------+------------+-------+----+-------+---------+-------------",
+      "e42dep   | e16sex (2) |     2 |  2 |  3.70 |    3.85 |         3.85",
+      "         |            |     3 | 20 | 37.04 |   38.46 |        42.31",
+      "         |            |     4 | 30 | 55.56 |   57.69 |       100.00",
+      "         |            |  <NA> |  2 |  3.70 |    <NA> |         <NA>",
+      "-------------------------------------------------------------------"
+    )
+  )
+})
+
 
 # select helpers ------------------------------
 test_that("data_tabulate regex", {

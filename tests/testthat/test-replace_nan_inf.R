@@ -1,7 +1,7 @@
 test_that("extract from data frame", {
   x <- c(1, 2, NA, 3, NaN, 4, NA, 5, Inf, -Inf, 6, 7)
 
-  expect_equal(
+  expect_identical(
     replace_nan_inf(x),
     c(1, 2, NA, 3, NA, 4, NA, 5, NA, NA, 6, 7)
   )
@@ -13,7 +13,7 @@ test_that("extract from data frame", {
     stringsAsFactors = FALSE
   )
 
-  expect_equal(
+  expect_identical(
     replace_nan_inf(df),
     structure(
       list(
@@ -25,7 +25,7 @@ test_that("extract from data frame", {
     )
   )
 
-  expect_equal(
+  expect_identical(
     replace_nan_inf(df, select = starts_with("x")),
     structure(
       list(

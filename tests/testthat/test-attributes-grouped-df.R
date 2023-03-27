@@ -1,5 +1,3 @@
-data(efc, package = "datawizard")
-
 # data_arrange -----------------------------------
 
 test_that("data_arrange, attributes preserved", {

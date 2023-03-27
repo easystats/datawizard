@@ -23,9 +23,12 @@ test_that("to_factor", {
 test_that("to_factor", {
   x <- c(10, 11, 12)
   attr(x, "labels") <- c("ten" = 10, "twelve" = 12)
-  expect_identical(
-    to_factor(x),
-    structure(1:3, levels = c("ten", "11", "twelve"), class = "factor")
+  expect_message(
+    expect_identical(
+      to_factor(x),
+      structure(1:3, levels = c("ten", "11", "twelve"), class = "factor")
+    ),
+    regexp = "Not all factor levels"
   )
 })
 
