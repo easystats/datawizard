@@ -67,7 +67,7 @@ reference:
     desc: |
       Helpers for data replacements
     contents:
-      - add_labs
+      - assign_labels
       - labels_to_levels
       - contains("to_numeric")
       - to_factor
