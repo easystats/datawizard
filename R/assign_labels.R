@@ -1,8 +1,8 @@
-#' @title Add variable and value labels
-#' @name add_labs
+#' @title Assign variable and value labels
+#' @name assign_labels
 #'
 #' @description
-#' Add variable and values labels to a variable or variables in a data frame.
+#' Assign variable and values labels to a variable or variables in a data frame.
 #' Labels are stored as attributes (`"label"` for variable labels and `"labels"`)
 #' for value labels.
 #'
@@ -23,7 +23,7 @@
 #' @examples
 #' x <- 1:3
 #' # labelling by providing required number of labels
-#' add_labs(
+#' assign_labels(
 #'   x,
 #'   variable = "My x",
 #'   values = c("one", "two", "three")
@@ -31,7 +31,7 @@
 #'
 #' # labelling using named vectors
 #' data(iris)
-#' out <- add_labs(
+#' out <- assign_labels(
 #'   iris$Species,
 #'   variable = "Labelled Species",
 #'   values = c(`setosa` = "Spec1", `versicolor` = "Spec2", `virginica` = "Spec3")
@@ -39,7 +39,7 @@
 #' str(out)
 #'
 #' # data frame example
-#' out <- add_labs(
+#' out <- assign_labels(
 #'   iris,
 #'   select = "Species",
 #'   variable = "Labelled Species",
@@ -49,19 +49,19 @@
 #'
 #' # Partial labelling
 #' x <- 1:5
-#' add_labs(
+#' assign_labels(
 #'   x,
 #'   variable = "My x",
 #'   values = c(`1` = "lowest", `5` = "highest")
 #' )
 #' @export
-add_labs <- function(x, ...) {
-  UseMethod("add_labs")
+assign_labels <- function(x, ...) {
+  UseMethod("assign_labels")
 }
 
 
 #' @export
-add_labs.default <- function(x, verbose = TRUE, ...) {
+assign_labels.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     insight::format_alert(
       sprintf("Adding labels currently not possible for variables of class `%s`.", class(x)[1])
@@ -70,9 +70,9 @@ add_labs.default <- function(x, verbose = TRUE, ...) {
   x
 }
 
-#' @rdname add_labs
+#' @rdname assign_labels
 #' @export
-add_labs.numeric <- function(x, variable = NULL, values = NULL, ...) {
+assign_labels.numeric <- function(x, variable = NULL, values = NULL, ...) {
   # add variable label
   if (!is.null(variable)) {
     if (is.character(variable) && length(variable) == 1L) {
@@ -125,14 +125,14 @@ add_labs.numeric <- function(x, variable = NULL, values = NULL, ...) {
 }
 
 #' @export
-add_labs.factor <- add_labs.numeric
+assign_labels.factor <- assign_labels.numeric
 
 #' @export
-add_labs.character <- add_labs.numeric
+assign_labels.character <- assign_labels.numeric
 
-#' @rdname add_labs
+#' @rdname assign_labels
 #' @export
-add_labs.data.frame <- function(x,
+assign_labels.data.frame <- function(x,
                                 select = NULL,
                                 exclude = NULL,
                                 values = NULL,
@@ -166,6 +166,6 @@ add_labs.data.frame <- function(x,
   x <- args$x
   select <- args$select
 
-  x[select] <- lapply(x[select], add_labs, values = values, verbose = verbose, ...)
+  x[select] <- lapply(x[select], assign_labels, values = values, verbose = verbose, ...)
   x
 }

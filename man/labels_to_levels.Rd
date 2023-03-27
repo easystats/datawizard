@@ -103,7 +103,7 @@ data(efc)
 # create factor
 x <- as.factor(efc$c172code)
 # add value labels - these are not factor levels yet
-x <- add_labs(x, values = c(`1` = "low", `2` = "mid", `3` = "high"))
+x <- assign_labels(x, values = c(`1` = "low", `2` = "mid", `3` = "high"))
 levels(x)
 data_tabulate(x)
 
