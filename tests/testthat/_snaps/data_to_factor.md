@@ -1,9 +1,9 @@
 # data_read, convert many labels correctly
 
     Code
-      data_tabulate(d$selv1)
+      data_tabulate(to_factor(d$selv1))
     Output
-      d$selv1 <categorical>
+      to_factor(d$selv1) <categorical>
       # total N=2413 valid N=2413
       
       Value                                              |   N | Raw % | Valid % | Cumulative %
@@ -29,9 +29,9 @@
 ---
 
     Code
-      data_tabulate(d$c12)
+      data_tabulate(to_factor(d$c12))
     Output
-      Sind oder waren Sie schon einmal selbst von solchen Beschwerden betroffen? (d$c12) <categorical>
+      Sind oder waren Sie schon einmal selbst von solchen Beschwerden betroffen? (to_factor(d$c12)) <categorical>
       # total N=2413 valid N=2413
       
       Value        |    N | Raw % | Valid % | Cumulative %
@@ -44,9 +44,9 @@
 ---
 
     Code
-      data_tabulate(d$c12a)
+      data_tabulate(to_factor(d$c12a))
     Output
-      Haben Sie deswegen Behandlung(en) in Anspruch genommen? (d$c12a) <categorical>
+      Haben Sie deswegen Behandlung(en) in Anspruch genommen? (to_factor(d$c12a)) <categorical>
       # total N=2413 valid N=2413
       
       Value        |    N | Raw % | Valid % | Cumulative %
@@ -60,9 +60,9 @@
 ---
 
     Code
-      data_tabulate(d$c12c)
+      data_tabulate(to_factor(d$c12c))
     Output
-      Wie sehr haben diese Behandlung(en) Ihre Beeinträchtigung durch die Beschwerden verbessert? (d$c12c) <categorical>
+      Wie sehr haben diese Behandlung(en) Ihre Beeinträchtigung durch die Beschwerden verbessert? (to_factor(d$c12c)) <categorical>
       # total N=2413 valid N=2413
       
       Value                     |    N | Raw % | Valid % | Cumulative %
@@ -81,40 +81,4 @@
       10 = sehr starke          |   99 |  4.10 |    4.10 |        99.79
       weiß nicht / keine Angabe |    5 |  0.21 |    0.21 |       100.00
       <NA>                      |    0 |  0.00 |    <NA> |         <NA>
-
----
-
-    Code
-      table(d$selv1)
-    Output
-      
-        1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16 
-      150 150 150 151 151 153 150 150 151 150 150 151 155 150 150 151 
-
----
-
-    Code
-      table(d$c12)
-    Output
-      
-         1    2   99 
-       786 1616   11 
-
----
-
-    Code
-      table(d$c12a)
-    Output
-      
-        -2    1    2   99 
-      1627  500  285    1 
-
----
-
-    Code
-      table(d$c12c)
-    Output
-      
-        -2    0    1    2    3    4    5    6    7    8    9   10   99 
-      1913   34    2   11   14   19   61   42   63   97   53   99    5 
 
