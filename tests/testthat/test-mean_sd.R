@@ -1,5 +1,3 @@
-# library(testthat)
-
 test_that("mean_sd", {
   x <- c(-1, 0, 1)
   msd <- mean_sd(x)

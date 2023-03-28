@@ -1,5 +1,3 @@
-# library(testthat)
-
 test_that("makepredictcall", {
   data("mtcars")
   nd <- data.frame(hp = c(100, 200))
