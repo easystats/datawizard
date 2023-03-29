@@ -52,7 +52,7 @@ Suggests:
     knitr,
     lme4,
     mediation,
-    parameters (>= 0.20.2),
+    parameters (>= 0.20.2.16),
     poorman (>= 0.2.6),
     psych,
     readxl,
@@ -64,6 +64,8 @@ Suggests:
     testthat (>= 3.1.6),
     tidyr,
     withr
+Remotes:
+    easystats/parameters
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
