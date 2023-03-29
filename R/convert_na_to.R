@@ -92,7 +92,7 @@ convert_na_to.default <- function(x, verbose = TRUE, ...) {
 #' @rdname convert_na_to
 #' @export
 convert_na_to.numeric <- function(x, replacement = NULL, verbose = TRUE, ...) {
-  if (is_empty_object(replacement) || !is.numeric(replacement)) {
+  if (insight::is_empty_object(replacement) || !is.numeric(replacement)) {
     if (isTRUE(verbose)) {
       insight::format_warning("`replacement` needs to be a numeric vector.")
     }
@@ -109,7 +109,7 @@ convert_na_to.numeric <- function(x, replacement = NULL, verbose = TRUE, ...) {
 
 #' @export
 convert_na_to.factor <- function(x, replacement = NULL, verbose = TRUE, ...) {
-  if (is_empty_object(replacement) || length(replacement) > 1) {
+  if (insight::is_empty_object(replacement) || length(replacement) > 1) {
     if (isTRUE(verbose)) {
       insight::format_warning("`replacement` needs to be of length one.")
     }
@@ -125,7 +125,7 @@ convert_na_to.factor <- function(x, replacement = NULL, verbose = TRUE, ...) {
 #' @rdname convert_na_to
 #' @export
 convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE, ...) {
-  if (is_empty_object(replacement) || !is.character(replacement) && !is.numeric(replacement)) {
+  if (insight::is_empty_object(replacement) || !is.character(replacement) && !is.numeric(replacement)) {
     if (isTRUE(verbose)) {
       insight::format_warning(
         "`replacement` needs to be a character or numeric vector."
