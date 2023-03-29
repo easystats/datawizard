@@ -104,12 +104,6 @@ reference:
     contents:
       - visualisation_recipe
 
-  - title: Reexports
-    desc: |
-      Functions from other packages re-exported for convenience
-    contents:
-      - reexports
-
   - title: Data
     desc: |
       Datasets useful for examples and tests
