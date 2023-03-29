@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0.5</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,6 +85,20 @@
       <small>Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.7.1" id="datawizard-071">datawizard 0.7.1<a class="anchor" aria-label="anchor" href="#datawizard-071"></a></h2>
+<p>BREAKING CHANGES</p>
+<ul><li>
+<code>add_labs()</code> was renamed into <code><a href="../reference/assign_labels.html">assign_labels()</a></code>. Since <code>add_labs()</code> existed only for a few days, there will be no alias for backwards compatibility.</li>
+</ul><p>NEW FUNCTIONS</p>
+<ul><li>
+<code><a href="../reference/labels_to_levels.html">labels_to_levels()</a></code>, to use value labels of factors as their levels.</li>
+</ul><p>MINOR CHANGES</p>
+<ul><li>
+<code><a href="../reference/data_read.html">data_read()</a></code> now checks if the imported object actually is a data frame (or coercible to a data frame), and if not, no longer errors, but gives an informative warning of the type of object that was imported.</li>
+</ul><p>BUG FIXES</p>
+<ul><li>Fix test for CRAN check on Mac OS arm64</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.0" id="datawizard-070">datawizard 0.7.0<a class="anchor" aria-label="anchor" href="#datawizard-070"></a></h2><p class="text-muted">CRAN release: 2023-03-22</p>
 <p>BREAKING CHANGES</p>
