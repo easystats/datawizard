@@ -284,12 +284,17 @@ test_that("offsets", {
 
 # BRMS --------------------------------------------------------------------
 
-# test_that("brms", {
-#   skip_on_cran()
-#   skip_if_not_or_load_if_installed("brms")
-#
-#   mod <- brms::brm(mpg ~ hp, data = mtcars,
-#                    refresh = 0, chains = 1)
-#
-#   expect_warning(standardize(mod))
-# })
+test_that("brms", {
+  skip_on_cran()
+  skip_if_not_or_load_if_installed("brms")
+
+  invisible(
+    capture.output(mod <- brms::brm(mpg ~ hp, data = mtcars,
+                     refresh = 0, chains = 1, silent = 2))
+  )
+
+  expect_warning(
+    standardize(mod),
+    regexp = "without adjusting priors may lead to bogus"
+  )
+})
