@@ -134,7 +134,7 @@ test_that("data_tabulate print multiple, collapse", {
 
 
 test_that("data_tabulate grouped data.frame", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
   x <- data_tabulate(poorman::group_by(efc, e16sex), "c172code")
   expect_s3_class(x, "list")
   expect_length(x, 2L)
@@ -183,19 +183,19 @@ test_that("data_tabulate grouped data.frame", {
 
 
 test_that("data_tabulate print grouped data", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
   expect_snapshot(data_tabulate(poorman::group_by(efc, e16sex), "c172code"))
 })
 
 test_that("data_tabulate print, collapse groups", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
   expect_snapshot(
     data_tabulate(poorman::group_by(efc, e16sex), "c172code", collapse = TRUE)
   )
 })
 
 test_that("data_tabulate print, collapse groups, drop levels", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
   expect_snapshot(
     data_tabulate(
       poorman::group_by(efc, e16sex),

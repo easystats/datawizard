@@ -42,9 +42,9 @@ test_that("data_to_wide works", {
 
 
 test_that("data_to_wide, names_prefix works", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  out <- fish_encounters %>%
+  out <- tidyr::fish_encounters %>%
     data_to_wide(
       names_from = "station",
       values_from = "seen",
@@ -61,9 +61,9 @@ test_that("data_to_wide, names_prefix works", {
 })
 
 test_that("data_to_wide, values_fill works", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  data <- fish_encounters[c(1:3, 20:25), ]
+  data <- tidyr::fish_encounters[c(1:3, 20:25), ]
 
   ### Should be numeric
   expect_identical(
@@ -73,7 +73,7 @@ test_that("data_to_wide, values_fill works", {
         values_from = "seen",
         values_fill = 1
       ),
-    tibble(
+    tidyr::tibble(
       fish = factor(
         c("4842", "4843", "4844"),
         levels = c(
@@ -110,7 +110,7 @@ test_that("data_to_wide, values_fill works", {
   )
 
   ### Should be character
-  contacts <- tribble(
+  contacts <- tidyr::tribble(
     ~field, ~value,
     "name", "Jiena McLellan",
     "company", "Toyota",
@@ -126,7 +126,7 @@ test_that("data_to_wide, values_fill works", {
         values_from = "value",
         values_fill = "foo"
       ),
-    tibble(
+    tidyr::tibble(
       person_id = 1:3,
       name = c("Jiena McLellan", "John Smith", "Huxley Ratcliffe"),
       company = c("Toyota", "foo", "foo")
@@ -174,10 +174,10 @@ test_that("data_to_wide, values_fill works", {
 })
 
 test_that("data_to_wide, values_fill errors when length > 1", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
   expect_error(
-    fish_encounters %>%
+    tidyr::fish_encounters %>%
       data_to_wide(
         names_from = "station",
         values_from = "seen",
@@ -198,9 +198,9 @@ test_that("data_to_wide, values_fill errors when length > 1", {
 ### From tidyr tests
 
 test_that("can pivot all cols to wide", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  df <- tibble(key = c("x", "y", "z"), val = 1:3)
+  df <- tidyr::tibble(key = c("x", "y", "z"), val = 1:3)
   pv <- data_to_wide(df, names_from = "key", values_from = "val")
 
   expect_named(pv, c("x", "y", "z"))
@@ -208,9 +208,9 @@ test_that("can pivot all cols to wide", {
 })
 
 test_that("non-pivoted cols are preserved", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  df <- tibble(a = 1, key = c("x", "y"), val = 1:2)
+  df <- tidyr::tibble(a = 1, key = c("x", "y"), val = 1:2)
   pv <- data_to_wide(df, names_from = "key", values_from = "val")
 
   expect_named(pv, c("a", "x", "y"))
@@ -218,9 +218,9 @@ test_that("non-pivoted cols are preserved", {
 })
 
 test_that("implicit missings turn into explicit missings", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  df <- tibble(a = 1:2, key = c("x", "y"), val = 1:2)
+  df <- tidyr::tibble(a = 1:2, key = c("x", "y"), val = 1:2)
   pv <- data_to_wide(df, names_from = "key", values_from = "val")
 
   expect_identical(pv$a, c(1L, 2L))
@@ -229,9 +229,9 @@ test_that("implicit missings turn into explicit missings", {
 })
 
 test_that("error when overwriting existing column", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  df <- tibble(
+  df <- tidyr::tibble(
     a = c(1, 1),
     key = c("a", "b"),
     val = c(1, 2)
@@ -244,11 +244,11 @@ test_that("error when overwriting existing column", {
 })
 
 test_that("data_to_wide: fill values, #293", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
   weekdays <- c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 
-  daily <- tibble(
+  daily <- tidyr::tibble(
     day = factor(c("Tue", "Thu", "Fri", "Mon"), levels = weekdays),
     value = c(2, 3, 1, 5),
     type = factor(c("A", "B", "B", "A"))
@@ -271,9 +271,9 @@ test_that("data_to_wide: fill values, #293", {
 })
 
 test_that("data_to_wide, id_cols works correctly, #293", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  updates <- tibble(
+  updates <- tidyr::tibble(
     county = c("Wake", "Wake", "Wake", "Guilford", "Guilford"),
     date = c(as.Date("2020-01-01") + 0:2, as.Date("2020-01-03") + 0:1),
     system = c("A", "B", "C", "A", "C"),
@@ -300,12 +300,12 @@ test_that("data_to_wide, id_cols works correctly, #293", {
 ### Examples from tidyr website
 
 test_that("data_to_wide equivalent to pivot_wider: ex 1", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  x <- fish_encounters %>%
+  x <- tidyr::fish_encounters %>%
     tidyr::pivot_wider(names_from = "station", values_from = "seen", values_fill = 0)
 
-  y <- fish_encounters %>%
+  y <- tidyr::fish_encounters %>%
     data_to_wide(
       names_from = "station",
       values_from = "seen",
@@ -316,9 +316,9 @@ test_that("data_to_wide equivalent to pivot_wider: ex 1", {
 })
 
 test_that("data_to_wide equivalent to pivot_wider: ex 2", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  production <- expand_grid(
+  production <- tidyr::expand_grid(
     product = c("A", "B"),
     country = c("AI", "EI"),
     year = 2000:2014
@@ -343,15 +343,15 @@ test_that("data_to_wide equivalent to pivot_wider: ex 2", {
 })
 
 test_that("data_to_wide equivalent to pivot_wider: ex 3", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  x <- us_rent_income %>%
+  x <- tidyr::us_rent_income %>%
     tidyr::pivot_wider(
       names_from = variable,
       values_from = c(estimate, moe)
     )
 
-  y <- us_rent_income %>%
+  y <- tidyr::us_rent_income %>%
     data_to_wide(
       names_from = "variable",
       values_from = c("estimate", "moe")
@@ -361,16 +361,16 @@ test_that("data_to_wide equivalent to pivot_wider: ex 3", {
 })
 
 test_that("data_to_wide equivalent to pivot_wider: ex 4", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  x <- us_rent_income %>%
+  x <- tidyr::us_rent_income %>%
     tidyr::pivot_wider(
       names_from = variable,
       names_sep = ".",
       values_from = c(estimate, moe)
     )
 
-  y <- us_rent_income %>%
+  y <- tidyr::us_rent_income %>%
     data_to_wide(
       names_from = "variable",
       names_sep = ".",
@@ -381,9 +381,9 @@ test_that("data_to_wide equivalent to pivot_wider: ex 4", {
 })
 
 test_that("data_to_wide equivalent to pivot_wider: ex 5", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  contacts <- tribble(
+  contacts <- tidyr::tribble(
     ~field, ~value,
     "name", "Jiena McLellan",
     "company", "Toyota",
@@ -405,9 +405,9 @@ test_that("data_to_wide equivalent to pivot_wider: ex 5", {
 
 
 test_that("data_to_wide equivalent to pivot_wider: ex 6", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  production <- expand_grid(
+  production <- tidyr::expand_grid(
     product = c("A", "B"),
     country = c("AI", "EI"),
     year = 2000:2014
@@ -435,7 +435,7 @@ test_that("data_to_wide equivalent to pivot_wider: ex 6", {
 
 
 test_that("data_to_wide, names_glue works", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
   df <- data.frame(
     food = c("banana", "banana", "banana", "banana", "cheese", "cheese", "cheese", "cheese"),
@@ -467,9 +467,9 @@ test_that("data_to_wide, names_glue works", {
 
 
 test_that("preserve date format", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  family <- tibble(
+  family <- tidyr::tibble(
     family = c(1L, 1L, 2L, 2L, 3L, 3L),
     child = c(
       "dob_child1", "dob_child2", "dob_child1", "dob_child2", "dob_child1",
@@ -490,11 +490,11 @@ test_that("preserve date format", {
 
 
 test_that("#293", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
   weekdays <- c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 
-  daily <- tibble(
+  daily <- tidyr::tibble(
     day = factor(c("Tue", "Thu", "Fri", "Mon"), levels = weekdays),
     value = c(2, 3, 1, 5)
   )
@@ -507,9 +507,9 @@ test_that("#293", {
 
 
 test_that("new names starting with digits are not corrected automatically", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  percentages <- tibble(
+  percentages <- tidyr::tibble(
     year = c(2018, 2019, 2020, 2020),
     type = factor(c("A", "B", "A", "B"), levels = c("A", "B")),
     percentage = c(100, 100, 40, 60)

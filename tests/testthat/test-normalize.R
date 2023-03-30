@@ -118,20 +118,20 @@ test_that("normalize: matrix", {
 })
 
 test_that("normalize: select", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
 
   expect_identical(
     normalize(
       iris,
       select = starts_with("Petal\\.L")
     ) %>%
-      pull(Petal.Length),
+      poorman::pull(Petal.Length),
     normalize(iris$Petal.Length)
   )
 })
 
 test_that("normalize: exclude", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
 
   expect_identical(
     normalize(
@@ -147,50 +147,50 @@ test_that("normalize: exclude", {
 # with grouped data -------------------------------------------
 
 test_that("normalize (grouped data)", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
 
   datawizard <- iris %>%
-    group_by(Species) %>%
+    poorman::group_by(Species) %>%
     normalize(Sepal.Width) %>%
-    ungroup() %>%
-    pull(Sepal.Width)
+    poorman::ungroup() %>%
+    poorman::pull(Sepal.Width)
 
   manual <- iris %>%
-    group_by(Species) %>%
-    mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width)) / diff(range(Sepal.Width))) %>%
-    ungroup() %>%
-    pull(Sepal.Width)
+    poorman::group_by(Species) %>%
+    poorman::mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width)) / diff(range(Sepal.Width))) %>%
+    poorman::ungroup() %>%
+    poorman::pull(Sepal.Width)
 
   expect_identical(datawizard, manual)
 })
 
 test_that("normalize, include bounds (grouped data)", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
 
   datawizard <- iris %>%
-    group_by(Species) %>%
+    poorman::group_by(Species) %>%
     normalize(Sepal.Width, include_bounds = TRUE) %>%
-    ungroup() %>%
-    pull(Sepal.Width)
+    poorman::ungroup() %>%
+    poorman::pull(Sepal.Width)
 
   manual <- iris %>%
-    group_by(Species) %>%
-    mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width)) / diff(range(Sepal.Width))) %>%
-    ungroup() %>%
-    pull(Sepal.Width)
+    poorman::group_by(Species) %>%
+    poorman::mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width)) / diff(range(Sepal.Width))) %>%
+    poorman::ungroup() %>%
+    poorman::pull(Sepal.Width)
 
   expect_identical(datawizard, manual)
 })
 
 
 test_that("normalize, factor (grouped data)", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
 
   datawizard <- iris %>%
-    group_by(Species) %>%
+    poorman::group_by(Species) %>%
     normalize(Species) %>%
-    ungroup() %>%
-    pull(Species)
+    poorman::ungroup() %>%
+    poorman::pull(Species)
 
   manual <- iris$Species
 
