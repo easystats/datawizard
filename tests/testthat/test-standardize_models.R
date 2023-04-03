@@ -33,7 +33,7 @@ test_that("standardize | errors", {
 
 # Transformations ---------------------------------------------------------
 test_that("transformations", {
-  skip_if_not_or_load_if_installed("effectsize")
+  skip_if_not_installed("effectsize")
   # deal with log / sqrt terms
   expect_message(standardize(lm(mpg ~ sqrt(cyl) + log(hp), mtcars)))
   expect_message(standardize(lm(mpg ~ sqrt(cyl), mtcars)))
@@ -55,7 +55,7 @@ test_that("transformations", {
     unname(coef(fit_scale2)[2])
   )
 
-  skip_if_not_or_load_if_installed("insight", minimum_version = "0.10.0")
+  skip_if_not_installed("insight", minimum_version = "0.10.0")
   d <- data.frame(
     time = as.factor(c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5)),
     group = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
@@ -93,7 +93,7 @@ test_that("weights", {
   sm_data_xw <- insight::get_data(sm_xw, source = "frame")
   expect_false(isTRUE(all.equal(coef(sm)[-1], coef(sm_xw)[-1])))
 
-  skip_if_not_or_load_if_installed("effectsize")
+  skip_if_not_installed("effectsize")
   # refit and posthoc should give same results
   stdREFIT <- effectsize::standardize_parameters(m, method = "refit")
   expect_equal(
@@ -148,7 +148,7 @@ test_that("weights + NA", {
 
 # weights + missing data ´+ na.action = na.exclude --------------------------------------------------
 test_that("weights + NA + na.exclude", {
-  skip_if_not_or_load_if_installed("effectsize")
+  skip_if_not_installed("effectsize")
   set.seed(1234)
   data(iris)
 
@@ -184,7 +184,7 @@ test_that("fail with subset", {
 # don't standardize non-Gaussian response ------------------------------------
 test_that("standardize non-Gaussian response", {
   skip_on_cran()
-  skip_if_not_or_load_if_installed("lme4")
+  skip_if_not_installed("lme4")
   set.seed(1234)
   data(sleepstudy, package = "lme4")
 
@@ -218,7 +218,7 @@ test_that("variables evaluated in the environment", {
 # mediation models --------------------------------------------------------
 test_that("standardize mediation", {
   skip_on_cran()
-  skip_if_not_or_load_if_installed("mediation")
+  skip_if_not_installed("mediation")
   set.seed(444)
   data(jobs, package = "mediation")
   jobs$econ_hard <- jobs$econ_hard * 20
@@ -263,7 +263,7 @@ test_that("standardize mediation", {
 # Offsets -----------------------------------------------------------------
 
 test_that("offsets", {
-  skip_if_not_or_load_if_installed("effectsize")
+  skip_if_not_installed("effectsize")
   skip_if_not_installed("parameters")
 
   m <- lm(mpg ~ hp + offset(wt), data = mtcars)

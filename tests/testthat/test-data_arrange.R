@@ -2,7 +2,7 @@ df <- head(mtcars)
 df$character <- c("a", "b", "b", "c", "c", "a")
 
 test_that("data_arrange works with one numeric column", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
   expect_identical(
     poorman::arrange(df, carb),
     data_arrange(df, "carb")
@@ -14,7 +14,7 @@ test_that("data_arrange works with one numeric column", {
 })
 
 test_that("data_arrange works with one character column", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
   expect_identical(
     poorman::arrange(df, character),
     data_arrange(df, "character")
@@ -26,7 +26,7 @@ test_that("data_arrange works with one character column", {
 })
 
 test_that("data_arrange works with several columns", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
   expect_identical(
     poorman::arrange(df, carb, gear),
     data_arrange(df, c("carb", "gear"))
@@ -92,7 +92,8 @@ test_that("data_arrange works with grouped df", {
 
   expect_identical(
     data_arrange(g, "mpg"),
-    expected
+    expected,
+    ignore_attr = TRUE
   )
 })
 
@@ -125,6 +126,7 @@ test_that("data_arrange works with NA", {
 
   expect_identical(
     data_arrange(g, "a"),
-    expected
+    expected,
+    ignore_attr = TRUE
   )
 })

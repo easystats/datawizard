@@ -343,13 +343,13 @@ test_df <- data.frame(
 )
 
 test_that("reverse works with data frames (grouped data)", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
 
   expect_identical(
     test_df %>%
-      group_by(id) %>%
+      poorman::group_by(id) %>%
       reverse(exclude = "id") %>%
-      ungroup(),
+      poorman::ungroup(),
     data.frame(
       id = rep(c("A", "B"), each = 3),
       value1 = c(10, 10, 3, 6, 2, 3),
@@ -373,13 +373,13 @@ test_df <- data.frame(
 )
 
 test_that("reverse works with data frames containing NAs (grouped data)", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
 
   expect_identical(
     test_df %>%
-      group_by(id) %>%
+      poorman::group_by(id) %>%
       reverse(exclude = "id") %>%
-      ungroup(),
+      poorman::ungroup(),
     data.frame(
       id = rep(c("A", "B"), each = 3),
       value1 = c(10, 4, 4, 5, 3, 4),

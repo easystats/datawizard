@@ -1,5 +1,5 @@
 test_that("adjust multilevel", {
-  skip_if_not_or_load_if_installed("lme4")
+  skip_if_not_installed("lme4")
   adj <- adjust(iris[c("Sepal.Length", "Species")], multilevel = TRUE, bayesian = FALSE)
   expect_equal(
     head(adj$Sepal.Length),
