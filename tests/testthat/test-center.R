@@ -78,70 +78,70 @@ test_that("center works correctly with only one value", {
 # with grouped data -------------------------------------------
 
 test_that("center (grouped data)", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
 
   datawizard <- iris %>%
-    group_by(Species) %>%
+    poorman::group_by(Species) %>%
     center(Sepal.Width) %>%
-    ungroup() %>%
-    pull(Sepal.Width)
+    poorman::ungroup() %>%
+    poorman::pull(Sepal.Width)
 
   manual <- iris %>%
-    group_by(Species) %>%
-    mutate(Sepal.Width = Sepal.Width - mean(Sepal.Width)) %>%
-    ungroup() %>%
-    pull(Sepal.Width)
+    poorman::group_by(Species) %>%
+    poorman::mutate(Sepal.Width = Sepal.Width - mean(Sepal.Width)) %>%
+    poorman::ungroup() %>%
+    poorman::pull(Sepal.Width)
 
   expect_identical(datawizard, manual)
 })
 
 test_that("center, robust (grouped data)", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
 
   datawizard <- iris %>%
-    group_by(Species) %>%
+    poorman::group_by(Species) %>%
     center(Sepal.Width, robust = TRUE) %>%
-    ungroup() %>%
-    pull(Sepal.Width)
+    poorman::ungroup() %>%
+    poorman::pull(Sepal.Width)
 
   manual <- iris %>%
-    group_by(Species) %>%
-    mutate(Sepal.Width = Sepal.Width - median(Sepal.Width)) %>%
-    ungroup() %>%
-    pull(Sepal.Width)
+    poorman::group_by(Species) %>%
+    poorman::mutate(Sepal.Width = Sepal.Width - median(Sepal.Width)) %>%
+    poorman::ungroup() %>%
+    poorman::pull(Sepal.Width)
 
   expect_identical(datawizard, manual)
 })
 
 test_that("center, select (grouped data)", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
 
   datawizard <- iris %>%
-    group_by(Species) %>%
+    poorman::group_by(Species) %>%
     center(select = starts_with("Sepal\\.W")) %>%
-    ungroup() %>%
-    pull(Sepal.Width)
+    poorman::ungroup() %>%
+    poorman::pull(Sepal.Width)
 
   manual <- iris %>%
-    group_by(Species) %>%
-    mutate(Sepal.Width = Sepal.Width - mean(Sepal.Width)) %>%
-    ungroup() %>%
-    pull(Sepal.Width)
+    poorman::group_by(Species) %>%
+    poorman::mutate(Sepal.Width = Sepal.Width - mean(Sepal.Width)) %>%
+    poorman::ungroup() %>%
+    poorman::pull(Sepal.Width)
 
   expect_identical(datawizard, manual)
 })
 
 test_that("center, factors (grouped data)", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
 
   datawizard <- iris %>%
-    group_by(Species) %>%
+    poorman::group_by(Species) %>%
     center(select = "Species") %>%
-    ungroup() %>%
-    pull(Species)
+    poorman::ungroup() %>%
+    poorman::pull(Species)
 
   manual <- iris %>%
-    pull(Species)
+    poorman::pull(Species)
 
   expect_identical(datawizard, manual)
 })

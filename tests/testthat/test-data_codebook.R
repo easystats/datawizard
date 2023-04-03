@@ -150,33 +150,33 @@ test_that("data_codebook, big marks", {
 
 
 test_that("data_codebook, tagged NA", {
-  skip_if_not_or_load_if_installed("haven")
-  x <- labelled(
+  skip_if_not_installed("haven")
+  x <- haven::labelled(
     x = c(
-      1:3, tagged_na("a", "c", "z"),
-      4:1, tagged_na("a", "a", "c"),
-      1:3, tagged_na("z", "c", "c"),
-      1:4, tagged_na("a", "c", "z")
+      1:3, haven::tagged_na("a", "c", "z"),
+      4:1, haven::tagged_na("a", "a", "c"),
+      1:3, haven::tagged_na("z", "c", "c"),
+      1:4, haven::tagged_na("a", "c", "z")
     ),
     labels = c(
       "Agreement" = 1, "Disagreement" = 4,
-      "First" = tagged_na("c"), "Refused" = tagged_na("a"),
-      "Not home" = tagged_na("z")
+      "First" = haven::tagged_na("c"), "Refused" = haven::tagged_na("a"),
+      "Not home" = haven::tagged_na("z")
     )
   )
   expect_snapshot(data_codebook(data.frame(x)))
 
-  x <- labelled(
+  x <- haven::labelled(
     x = c(
-      1:3, tagged_na("a", "c"),
-      4:1, tagged_na("a", "a", "c"),
-      1:3, tagged_na("c", "c"),
-      1:4, tagged_na("a", "c")
+      1:3, haven::tagged_na("a", "c"),
+      4:1, haven::tagged_na("a", "a", "c"),
+      1:3, haven::tagged_na("c", "c"),
+      1:4, haven::tagged_na("a", "c")
     ),
     labels = c(
       "Agreement" = 1, "Disagreement" = 4,
-      "First" = tagged_na("c"), "Refused" = tagged_na("a"),
-      "Not home" = tagged_na("z")
+      "First" = haven::tagged_na("c"), "Refused" = haven::tagged_na("a"),
+      "Not home" = haven::tagged_na("z")
     )
   )
   expect_snapshot(data_codebook(data.frame(x)))
@@ -184,12 +184,12 @@ test_that("data_codebook, tagged NA", {
 
 
 test_that("data_codebook, negative label values #334", {
-  skip_if_not_or_load_if_installed("haven")
-  x1 <- labelled(
+  skip_if_not_installed("haven")
+  x1 <- haven::labelled(
     x = 1:4,
     labels = c("Agreement" = 1, "Disagreement" = 4, "Missing" = -9)
   )
-  x2 <- labelled(
+  x2 <- haven::labelled(
     x = c(1:3, -9),
     labels = c("Agreement" = 1, "Disagreement" = 4, "Missing" = -9)
   )
