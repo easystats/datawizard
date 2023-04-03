@@ -1,3 +1,2 @@
-if (insight::check_if_installed("poorman")) {
-  `%>%` <- poorman::`%>%`
-}
+# {poorman} availability is checked in `testthat.R`
+`%>%` <- poorman::`%>%`
