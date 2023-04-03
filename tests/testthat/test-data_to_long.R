@@ -265,12 +265,12 @@ test_that("data_to_long: error if no columns to reshape", {
 # Examples coming from: https://tidyr.tidyverse.org/articles/pivot.html#longer
 
 test_that("data_to_long equivalent to pivot_longer: ex 1", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  x <- relig_income %>%
+  x <- tidyr::relig_income %>%
     tidyr::pivot_longer(!religion, names_to = "income", values_to = "count")
 
-  y <- relig_income %>%
+  y <- tidyr::relig_income %>%
     data_to_long(cols = -religion, names_to = "income", values_to = "count")
 
   expect_equal(x, y, ignore_attr = TRUE)
@@ -278,16 +278,16 @@ test_that("data_to_long equivalent to pivot_longer: ex 1", {
 
 
 test_that("data_to_long equivalent to pivot_longer: ex 2", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  x <- billboard %>%
+  x <- tidyr::billboard %>%
     tidyr::pivot_longer(
       cols = starts_with("wk"),
       names_to = "week",
       values_to = "rank"
     )
 
-  y <- billboard %>%
+  y <- tidyr::billboard %>%
     data_to_long(
       cols = starts_with("wk"),
       names_to = "week",
@@ -299,9 +299,9 @@ test_that("data_to_long equivalent to pivot_longer: ex 2", {
 
 
 test_that("data_to_long equivalent to pivot_longer: ex 3", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  x <- billboard %>%
+  x <- tidyr::billboard %>%
     tidyr::pivot_longer(
       cols = starts_with("wk"),
       names_to = "week",
@@ -309,7 +309,7 @@ test_that("data_to_long equivalent to pivot_longer: ex 3", {
       values_drop_na = TRUE
     )
 
-  y <- billboard %>%
+  y <- tidyr::billboard %>%
     data_to_long(
       cols = starts_with("wk"),
       names_to = "week",
@@ -322,9 +322,9 @@ test_that("data_to_long equivalent to pivot_longer: ex 3", {
 
 
 test_that("data_to_long equivalent to pivot_longer: ex 4", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  x <- billboard %>%
+  x <- tidyr::billboard %>%
     tidyr::pivot_longer(
       cols = starts_with("wk"),
       names_to = "week",
@@ -333,7 +333,7 @@ test_that("data_to_long equivalent to pivot_longer: ex 4", {
       values_drop_na = TRUE
     )
 
-  y <- billboard %>%
+  y <- tidyr::billboard %>%
     data_to_long(
       select = starts_with("wk"),
       names_to = "week",
@@ -347,10 +347,10 @@ test_that("data_to_long equivalent to pivot_longer: ex 4", {
 
 
 test_that("data_to_long equivalent to pivot_longer: ex 5", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
   suppressWarnings({
-    x <- who %>%
+    x <- tidyr::who %>%
       tidyr::pivot_longer(
         cols = 5:60,
         names_to = c("diagnosis", "gender", "age"),
@@ -359,7 +359,7 @@ test_that("data_to_long equivalent to pivot_longer: ex 5", {
       )
   })
 
-  y <- who %>%
+  y <- tidyr::who %>%
     data_to_long(
       cols = 5:60,
       names_to = c("diagnosis", "gender", "age"),
@@ -371,9 +371,9 @@ test_that("data_to_long equivalent to pivot_longer: ex 5", {
 })
 
 test_that("data_to_long equivalent to pivot_longer: ex 6", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  x <- who %>%
+  x <- tidyr::who %>%
     tidyr::pivot_longer(
       cols = new_sp_m014:newrel_f65,
       names_to = c("diagnosis", "gender", "age"),
@@ -381,7 +381,7 @@ test_that("data_to_long equivalent to pivot_longer: ex 6", {
       values_to = "count"
     )
 
-  y <- who %>%
+  y <- tidyr::who %>%
     data_to_long(
       cols = 5:60,
       names_to = c("diagnosis", "gender", "age"),
@@ -398,9 +398,9 @@ test_that("data_to_long equivalent to pivot_longer: ex 6", {
 # https://github.com/tidyverse/tidyr/blob/main/tests/testthat/test-pivot-long.R
 
 test_that("can reshape all cols to long", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  df <- tibble(x = 1:2, y = 3:4)
+  df <- tidyr::tibble(x = 1:2, y = 3:4)
   pv <- data_to_long(df, x:y)
 
   expect_named(pv, c("name", "value"))
@@ -409,9 +409,9 @@ test_that("can reshape all cols to long", {
 })
 
 test_that("values interleaved correctly", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  df <- tibble(
+  df <- tidyr::tibble(
     x = c(1, 2),
     y = c(10, 20),
     z = c(100, 200)
@@ -422,9 +422,9 @@ test_that("values interleaved correctly", {
 })
 
 test_that("preserves original keys", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  df <- tibble(x = 1:2, y = 2, z = 1:2)
+  df <- tidyr::tibble(x = 1:2, y = 2, z = 1:2)
   pv <- data_to_long(df, y:z)
 
   expect_named(pv, c("x", "name", "value"))
@@ -432,7 +432,7 @@ test_that("preserves original keys", {
 })
 
 test_that("can drop missing values", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
   df <- data.frame(x = c(1, NA), y = c(NA, 2))
   pv <- data_to_long(df, x:y, values_drop_na = TRUE)
@@ -442,7 +442,7 @@ test_that("can drop missing values", {
 })
 
 test_that("mixed columns are automatically coerced", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
   df <- data.frame(x = factor("a"), y = factor("b"))
   pv <- data_to_long(df, x:y)
@@ -451,9 +451,9 @@ test_that("mixed columns are automatically coerced", {
 })
 
 test_that("error when overwriting existing column", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
-  df <- tibble(x = 1, y = 2)
+  df <- tidyr::tibble(x = 1, y = 2)
 
   expect_error(
     data_to_long(df, y, names_to = "x"),
@@ -462,7 +462,7 @@ test_that("error when overwriting existing column", {
 })
 
 test_that("preserve date format", {
-  skip_if_not_or_load_if_installed("tidyr")
+  skip_if_not_installed("tidyr")
 
   family <- tidyr::tibble(
     family = 1:3,

@@ -32,7 +32,7 @@ test_that("data_group attributes", {
 
 
 test_that("data_group attributes", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
   x <- data_group(efc, "c172code")
   out <- poorman::summarise(x, mw = mean(c12hour, na.rm = TRUE))
   expect_equal(out$mw, c(87.125, 94.046875, 75), tolerance = 1e-3)

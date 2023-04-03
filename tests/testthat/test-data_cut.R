@@ -163,7 +163,7 @@ test_that("recode data frame", {
     )
   )
 
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
 
   x <- poorman::group_by(iris, Species)
   out <- categorize(x, split = "median", select = starts_with("Sepal"))

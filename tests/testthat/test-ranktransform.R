@@ -55,26 +55,26 @@ test_that("ranktransform works with data frames", {
 
 # with grouped data -------------------------------------------
 
-set.seed(123)
-value1 <- sample(1:20, 9, replace = TRUE)
-set.seed(456)
-value2 <- sample(1:20, 9, replace = TRUE)
-
-test_df <- data.frame(
-  id = rep(c("A", "B", "C"), each = 3),
-  value1 = value1,
-  value2 = value2,
-  stringsAsFactors = FALSE
-)
-
 test_that("ranktransform works with data frames (grouped data)", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
+
+  set.seed(123)
+  value1 <- sample(1:20, 9, replace = TRUE)
+  set.seed(456)
+  value2 <- sample(1:20, 9, replace = TRUE)
+
+  test_df <- data.frame(
+    id = rep(c("A", "B", "C"), each = 3),
+    value1 = value1,
+    value2 = value2,
+    stringsAsFactors = FALSE
+  )
 
   expect_identical(
     test_df %>%
-      group_by(id) %>%
+      poorman::group_by(id) %>%
       ranktransform(exclude = "id") %>%
-      ungroup(),
+      poorman::ungroup(),
     data.frame(
       id = rep(c("A", "B", "C"), each = 3),
       value1 = c(2, 3, 1, 1, 2, 3, 2, 1, 3),
@@ -86,26 +86,26 @@ test_that("ranktransform works with data frames (grouped data)", {
 
 
 
-set.seed(789)
-value1 <- sample(c(1:15, NA), 9, replace = TRUE)
-set.seed(10)
-value2 <- sample(c(1:15, NA), 9, replace = TRUE)
-
-test_df <- data.frame(
-  id = rep(c("A", "B", "C"), each = 3),
-  value1 = value1,
-  value2 = value2,
-  stringsAsFactors = FALSE
-)
-
 test_that("ranktransform works with data frames containing NAs (grouped data)", {
-  skip_if_not_or_load_if_installed("poorman")
+  skip_if_not_installed("poorman")
+
+  set.seed(789)
+  value1 <- sample(c(1:15, NA), 9, replace = TRUE)
+  set.seed(10)
+  value2 <- sample(c(1:15, NA), 9, replace = TRUE)
+
+  test_df <- data.frame(
+    id = rep(c("A", "B", "C"), each = 3),
+    value1 = value1,
+    value2 = value2,
+    stringsAsFactors = FALSE
+  )
 
   expect_identical(
     test_df %>%
-      group_by(id) %>%
+      poorman::group_by(id) %>%
       ranktransform(exclude = "id") %>%
-      ungroup(),
+      poorman::ungroup(),
     data.frame(
       id = rep(c("A", "B", "C"), each = 3),
       value1 = c(2, NA, 1, 1, 3, 2, 2, NA, 1),
