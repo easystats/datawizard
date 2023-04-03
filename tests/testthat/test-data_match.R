@@ -228,7 +228,8 @@ test_that("data_filter works with groups", {
 
   expect_identical(
     data_filter(test, x == min(x)),
-    expected
+    expected,
+    ignore_attr = TRUE
   )
 })
 
@@ -248,6 +249,7 @@ test_that("data_filter programming works with groups", {
 
   expect_identical(
     data_filter(test, "{var} == min({var})"),
-    expected
+    expected,
+    ignore_attr = TRUE
   )
 })

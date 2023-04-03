@@ -1,6 +1,9 @@
 # data_arrange -----------------------------------
 
 test_that("data_arrange, attributes preserved", {
+  # if dplyr:::`[.grouped_df` in the environment it destroys the attributes
+  # (only occurs when we run tests in random order)
+  skip_if("[.grouped_df" %in% methods(`[`))
   x <- mtcars
   attr(x, "myattri") <- "I'm here"
   x2 <- data_arrange(data_group(x, "cyl"), "hp")
@@ -54,6 +57,9 @@ test_that("standardize, attributes preserved", {
 # filter -----------------------------------
 
 test_that("filter, attributes preserved", {
+  # if dplyr:::`[.grouped_df` in the environment it destroys the attributes
+  # (only occurs when we run tests in random order)
+  skip_if("[.grouped_df" %in% methods(`[`))
   test <- data.frame(
     id = c(1, 1, 2, 2),
     x = c(0, 1, 3, 4)

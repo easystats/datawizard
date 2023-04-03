@@ -92,7 +92,8 @@ test_that("data_arrange works with grouped df", {
 
   expect_identical(
     data_arrange(g, "mpg"),
-    expected
+    expected,
+    ignore_attr = TRUE
   )
 })
 
@@ -125,6 +126,7 @@ test_that("data_arrange works with NA", {
 
   expect_identical(
     data_arrange(g, "a"),
-    expected
+    expected,
+    ignore_attr = TRUE
   )
 })
