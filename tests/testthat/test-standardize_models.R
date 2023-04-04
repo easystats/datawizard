@@ -286,7 +286,7 @@ test_that("offsets", {
 
 test_that("brms", {
   skip_on_cran()
-  skip_if_not_or_load_if_installed("brms")
+  skip_if_not_installed("brms")
 
   invisible(
     capture.output(mod <- brms::brm(mpg ~ hp, data = mtcars,
