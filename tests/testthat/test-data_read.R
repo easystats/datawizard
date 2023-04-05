@@ -1,17 +1,12 @@
 skip_on_cran()
 skip_if_offline()
 
-skip_if(packageVersion("parameters") < "0.20.2.12")
-
 skip_if_not_installed("httr")
 skip_if_not_installed("readxl")
 skip_if_not_installed("haven")
 skip_if_not_installed("readr")
 skip_if_not_installed("data.table")
 skip_if_not_installed("rio")
-
-unloadNamespace("parameters")
-unloadNamespace("bayestestR")
 
 # csv -------------------------
 
