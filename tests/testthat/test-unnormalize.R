@@ -30,18 +30,24 @@ test_that("unnormalize and unstandardized x 4", {
 
 
   z <- normalize(x)
-  expect_named(attributes(z), c("include_bounds", "flag_bounds", "min_value",
-                                "vector_length", "range_difference", "class"))
+  expect_named(attributes(z), c(
+    "include_bounds", "flag_bounds", "min_value",
+    "vector_length", "range_difference", "class"
+  ))
   expect_equal(unnormalize(z), x, ignore_attr = TRUE)
 
   z <- change_scale(x, to = c(-3, 14.5))
-  expect_named(attributes(z), c("min_value", "max_value", "new_min", "new_max",
-                                "range_difference", "to_range", "class"))
+  expect_named(attributes(z), c(
+    "min_value", "max_value", "new_min", "new_max",
+    "range_difference", "to_range", "class"
+  ))
   expect_equal(unnormalize(z), x, ignore_attr = TRUE)
 
   z <- change_scale(x, range = c(-100, 100))
-  expect_named(attributes(z), c("min_value", "max_value", "new_min", "new_max",
-                                "range_difference", "to_range", "class"))
+  expect_named(attributes(z), c(
+    "min_value", "max_value", "new_min", "new_max",
+    "range_difference", "to_range", "class"
+  ))
   expect_equal(unnormalize(z), x, ignore_attr = TRUE)
 })
 
