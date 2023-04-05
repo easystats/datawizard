@@ -123,9 +123,19 @@ standardize.default <- function(x,
 
   resp <- NULL
   if (!include_response) {
-    resp <- unique(c(insight::find_response(x), insight::find_response(x, combine = FALSE)))
+    resp <- unique(
+      c(
+        insight::clean_names(insight::find_response(x)),
+        insight::clean_names(insight::find_response(x, combine = FALSE))
+      )
+    )
   } else if (include_response && two_sd) {
-    resp <- unique(c(insight::find_response(x), insight::find_response(x, combine = FALSE)))
+    resp <- unique(
+      c(
+        insight::clean_names(insight::find_response(x)),
+        insight::clean_names(insight::find_response(x, combine = FALSE))
+      )
+    )
   }
 
   # If there's an offset, don't standardize offset OR response

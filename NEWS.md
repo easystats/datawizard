@@ -1,3 +1,11 @@
+# datawizard (devel)
+
+BUG FIXES
+
+* `standardize_parameters()` now works when the package namespace is in the model
+  formula (#401).
+
+
 # datawizard 0.7.1
 
 BREAKING CHANGES
