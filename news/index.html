@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,8 +88,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.1" id="datawizard-071">datawizard 0.7.1<a class="anchor" aria-label="anchor" href="#datawizard-071"></a></h2><p class="text-muted">CRAN release: 2023-04-03</p>
 <p>BREAKING CHANGES</p>
-<ul><li>
-<code>add_labs()</code> was renamed into <code><a href="../reference/assign_labels.html">assign_labels()</a></code>. Since <code>add_labs()</code> existed only for a few days, there will be no alias for backwards compatibility.</li>
+<ul><li><p><code>add_labs()</code> was renamed into <code><a href="../reference/assign_labels.html">assign_labels()</a></code>. Since <code>add_labs()</code> existed only for a few days, there will be no alias for backwards compatibility.</p></li>
+<li><p>The following re-exported functions from <a href="https://easystats.github.io/insight/" class="external-link">insight</a> have now been removed: <code>object_has_names()</code>, <code>object_has_rownames()</code>, <code>is_empty_object()</code>, <code>compact_list()</code>, <code>compact_character()</code></p></li>
 </ul><p>NEW FUNCTIONS</p>
 <ul><li>
 <code><a href="../reference/labels_to_levels.html">labels_to_levels()</a></code>, to use value labels of factors as their levels.</li>
@@ -287,7 +287,7 @@ details about the valid values for <code>threshold</code> (<a href="https://gith
 <h2 class="pkg-version" data-toc-text="0.4.0" id="datawizard-040">datawizard 0.4.0<a class="anchor" aria-label="anchor" href="#datawizard-040"></a></h2><p class="text-muted">CRAN release: 2022-03-30</p>
 <p>MAJOR CHANGES</p>
 <ul><li><p><code><a href="../reference/data_match.html">data_match()</a></code> now returns filtered data by default. Old behavior (returning rows indices) can be set by setting <code>return_indices = TRUE</code>.</p></li>
-<li><p>The following functions are now re-exported from <a href="https://easystats.github.io/insight/" class="external-link">insight</a> package: <code><a href="https://easystats.github.io/insight/reference/object_has_names.html" class="external-link">object_has_names()</a></code>, <code><a href="https://easystats.github.io/insight/reference/object_has_names.html" class="external-link">object_has_rownames()</a></code>, <code><a href="https://easystats.github.io/insight/reference/is_empty_object.html" class="external-link">is_empty_object()</a></code>, <code><a href="https://easystats.github.io/insight/reference/compact_list.html" class="external-link">compact_list()</a></code>, <code><a href="https://easystats.github.io/insight/reference/compact_character.html" class="external-link">compact_character()</a></code></p></li>
+<li><p>The following functions are now re-exported from <a href="https://easystats.github.io/insight/" class="external-link">insight</a> package: <code>object_has_names()</code>, <code>object_has_rownames()</code>, <code>is_empty_object()</code>, <code>compact_list()</code>, <code>compact_character()</code></p></li>
 <li><p><code>data_findcols()</code> will become deprecated in future updates. Please use the new replacements <code><a href="../reference/find_columns.html">find_columns()</a></code> and <code><a href="../reference/find_columns.html">get_columns()</a></code>.</p></li>
 <li><p>The vignette <em>Analysing Longitudinal or Panel Data</em> has now moved to <a href="https://easystats.github.io/parameters/articles/demean.html" class="external-link">parameters package</a>.</p></li>
 </ul><p>NEW FUNCTIONS</p>
@@ -314,7 +314,7 @@ details about the valid values for <code>threshold</code> (<a href="https://gith
 <h2 class="pkg-version" data-toc-text="0.3.0" id="datawizard-030">datawizard 0.3.0<a class="anchor" aria-label="anchor" href="#datawizard-030"></a></h2><p class="text-muted">CRAN release: 2022-03-02</p>
 <p>NEW FUNCTIONS</p>
 <ul><li><p>To find or remove empty rows and columns in a data frame: <code><a href="../reference/remove_empty.html">empty_rows()</a></code>, <code><a href="../reference/remove_empty.html">empty_columns()</a></code>, <code><a href="../reference/remove_empty.html">remove_empty_rows()</a></code>, <code><a href="../reference/remove_empty.html">remove_empty_columns()</a></code>, and <code>remove_empty</code>.</p></li>
-<li><p>To check for names: <code><a href="https://easystats.github.io/insight/reference/object_has_names.html" class="external-link">object_has_names()</a></code> and <code><a href="https://easystats.github.io/insight/reference/object_has_names.html" class="external-link">object_has_rownames()</a></code>.</p></li>
+<li><p>To check for names: <code>object_has_names()</code> and <code>object_has_rownames()</code>.</p></li>
 <li><p>To rotate data frames: <code><a href="../reference/data_rotate.html">data_rotate()</a></code>.</p></li>
 <li><p>To reverse score variables: <code>data_reverse()</code>.</p></li>
 <li><p>To merge/join multiple data frames: <code><a href="../reference/data_merge.html">data_merge()</a></code> (or its alias <code><a href="../reference/data_merge.html">data_join()</a></code>).</p></li>
@@ -327,8 +327,8 @@ details about the valid values for <code>threshold</code> (<a href="https://gith
 <h2 class="pkg-version" data-toc-text="0.2.3" id="datawizard-023">datawizard 0.2.3<a class="anchor" aria-label="anchor" href="#datawizard-023"></a></h2><p class="text-muted">CRAN release: 2022-01-26</p>
 <ul><li>
 <p>New functions:</p>
-<ul><li><p>to work with lists: <code><a href="https://easystats.github.io/insight/reference/is_empty_object.html" class="external-link">is_empty_object()</a></code> and <code><a href="https://easystats.github.io/insight/reference/compact_list.html" class="external-link">compact_list()</a></code></p></li>
-<li><p>to work with strings: <code><a href="https://easystats.github.io/insight/reference/compact_character.html" class="external-link">compact_character()</a></code></p></li>
+<ul><li><p>to work with lists: <code>is_empty_object()</code> and <code>compact_list()</code></p></li>
+<li><p>to work with strings: <code>compact_character()</code></p></li>
 </ul></li>
 </ul></div>
     <div class="section level2">
