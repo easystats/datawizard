@@ -26,7 +26,7 @@
 #'
 #' @export
 rownames_as_column <- function(x, var = "rowname") {
-  if (!object_has_rownames(x)) {
+  if (!insight::object_has_rownames(x)) {
     insight::format_error("The data frame doesn't have rownames.")
   }
   if (is.null(var)) {

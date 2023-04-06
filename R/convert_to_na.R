@@ -66,7 +66,7 @@ convert_to_na.numeric <- function(x, na = NULL, verbose = TRUE, ...) {
     na <- unlist(na[vapply(na, is.numeric, FUN.VALUE = TRUE)], use.names = FALSE)
   }
 
-  if (is_empty_object(na) || !is.numeric(na)) {
+  if (insight::is_empty_object(na) || !is.numeric(na)) {
     if (isTRUE(verbose)) {
       insight::format_alert(
         "Could not convert values into `NA` for a numeric variable.",
@@ -92,7 +92,7 @@ convert_to_na.factor <- function(x, na = NULL, drop_levels = FALSE, verbose = TR
     na <- unlist(na[vapply(na, is.character, FUN.VALUE = TRUE)], use.names = FALSE)
   }
 
-  if (is_empty_object(na) || (!is.factor(na) && !is.character(na))) {
+  if (insight::is_empty_object(na) || (!is.factor(na) && !is.character(na))) {
     if (isTRUE(verbose)) {
       insight::format_alert(
         "Could not convert values into `NA` for a factor or character variable.",
@@ -127,7 +127,7 @@ convert_to_na.Date <- function(x, na = NULL, verbose = TRUE, ...) {
     }
   }
 
-  if (is_empty_object(na) || !.is_date(na)) {
+  if (insight::is_empty_object(na) || !.is_date(na)) {
     if (isTRUE(verbose)) {
       insight::format_alert(
         "Could not convert values into `NA` for a date/time variable.",
@@ -149,7 +149,7 @@ convert_to_na.logical <- function(x, na = NULL, verbose = TRUE, ...) {
     na <- unlist(na[vapply(na, is.logical, FUN.VALUE = TRUE)], use.names = FALSE)
   }
 
-  if (is_empty_object(na) || !is.logical(na)) {
+  if (insight::is_empty_object(na) || !is.logical(na)) {
     if (isTRUE(verbose)) {
       insight::format_alert(
         "Could not convert values into `NA` for a logical variable.",
