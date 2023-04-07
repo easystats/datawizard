@@ -422,13 +422,11 @@ summary.parameters_kurtosis <- function(object, test = FALSE, ...) {
 .check_skewness_type <- function(type) {
   # convenience
   if (is.numeric(type)) type <- as.character(type)
+  skewness_types <- c("1", "2", "3", "I", "II", "III", "classic", "SPSS", "SAS", "Minitab")
+  is_skewness_type_invalid <- is.null(type) || is.na(type) || !(type %in% skewness_types)
 
-  if (is.null(type) ||
-    is.na(type) ||
-    !(type %in% c("1", "2", "3", "I", "II", "III", "classic", "SPSS", "SAS", "Minitab"))) {
-    insight::format_warning(
-      "'type' must be a character value from \"1\" to \"3\". Using 'type=\"2\"' now."
-    )
+  if (is_skewness_type_invalid) {
+    insight::format_warning("'type' must be a character value from \"1\" to \"3\". Using 'type=\"2\"' now.")
     type <- "2"
   }
 

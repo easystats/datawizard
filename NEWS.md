@@ -13,6 +13,10 @@ BREAKING CHANGES
 * `add_labs()` was renamed into `assign_labels()`. Since `add_labs()` existed
   only for a few days, there will be no alias for backwards compatibility.
 
+* The following re-exported functions from `{insight}` have now been removed:
+  `object_has_names()`, `object_has_rownames()`, `is_empty_object()`,
+  `compact_list()`, `compact_character()`
+
 NEW FUNCTIONS
 
 * `labels_to_levels()`, to use value labels of factors as their levels.

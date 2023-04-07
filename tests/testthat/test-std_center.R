@@ -74,8 +74,11 @@ test_that("standardize other classes", {
 
   ## TODO conflict with standardize.default() in effectsize
 
-  # expect_message(x <- standardize(d$e))
-  # expect_equal(x, d$e, tolerance = 1e-3, ignore_attr = TRUE)
+  expect_warning(
+    x <- standardize(d$e),
+    "cannot be standardized"
+  )
+  expect_equal(x, d$e, tolerance = 1e-3, ignore_attr = TRUE)
 })
 
 
