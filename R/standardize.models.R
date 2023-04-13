@@ -114,18 +114,20 @@ standardize.default <- function(x,
 
 
   ## ---- Z the RESPONSE? ----
-  # Some models have special responses that should not be standardized. This
+  # 1. Some models have special responses that should not be standardized. This
   # includes:
   # - generalized linear models (counts, binomial, etc...)
   # - Survival models
+  # 2. We also don't want to standardize the response when `two_sd = TRUE` -
+  # instead we will standardize the response separately.
 
   include_response <- include_response && .safe_to_standardize_response(m_info)
 
   resp <- NULL
-  if (!include_response) {
-    resp <- unique(c(insight::find_response(x), insight::find_response(x, combine = FALSE)))
-  } else if (include_response && two_sd) {
-    resp <- unique(c(insight::find_response(x), insight::find_response(x, combine = FALSE)))
+  if (!include_response || (include_response && two_sd)) {
+    resp <- c(insight::find_response(x), insight::find_response(x, combine = FALSE))
+    resp <- insight::clean_names(resp)
+    resp <- unique(resp)
   }
 
   # If there's an offset, don't standardize offset OR response

@@ -1,13 +1,23 @@
+# datawizard (devel)
+
+BREAKING CHANGES
+
+* The following re-exported functions from `{insight}` have now been removed:
+  `object_has_names()`, `object_has_rownames()`, `is_empty_object()`,
+  `compact_list()`, `compact_character()`.
+
+BUG FIXES
+
+* `standardize_parameters()` now works when the package namespace is in the model
+  formula (#401).
+
+
 # datawizard 0.7.1
 
 BREAKING CHANGES
 
 * `add_labs()` was renamed into `assign_labels()`. Since `add_labs()` existed
   only for a few days, there will be no alias for backwards compatibility.
-
-* The following re-exported functions from `{insight}` have now been removed:
-  `object_has_names()`, `object_has_rownames()`, `is_empty_object()`,
-  `compact_list()`, `compact_character()`
 
 NEW FUNCTIONS
 
