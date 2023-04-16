@@ -279,7 +279,7 @@ test_that("join when all 'by' are not present", {
 # no warning for tibble #404 ---------------------
 
 skip_if_not_installed("tibble")
-test_that("join when all 'by' are not present", {
+test_that("no warning for tibble when checking if column exist", {
   d_tibble <- tibble::as_tibble(iris)
   expect_silent(data_join(d_tibble, d_tibble[20:30, ], join = "bind"))
 })
