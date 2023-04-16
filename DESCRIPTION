@@ -62,6 +62,7 @@ Suggests:
     rstanarm,
     see,
     testthat (>= 3.1.6),
+    tibble,
     tidyr,
     withr
 VignetteBuilder: 
