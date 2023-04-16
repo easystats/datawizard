@@ -281,5 +281,5 @@ test_that("join when all 'by' are not present", {
 test_that("no warning for tibble when checking if column exist", {
   skip_if_not_installed("tibble")
   d_tibble <- tibble::as_tibble(iris)
-  expect_silent(data_join(d_tibble, d_tibble[20:30, ], join = "bind"))
+  expect_silent(data_merge(d_tibble, d_tibble[20:30, ], join = "bind"))
 })
