@@ -150,7 +150,9 @@ test_that("bind-join", {
   x <- mtcars[1, ]
   y <- mtcars[2, ]
   expect_warning(
-    out <- data_merge(x, y, join = "bind", id = "mpg"),
+    {
+      out <- data_merge(x, y, join = "bind", id = "mpg")
+    },
     regexp = "already exists"
   )
   expect_named(
@@ -233,7 +235,9 @@ test_that("join data frames in a list", {
   x <- mtcars[1, ]
   y <- mtcars[2, ]
   expect_warning(
-    out <- data_merge(list(x, y), join = "bind", id = "mpg"),
+    {
+      out <- data_merge(list(x, y), join = "bind", id = "mpg")
+    },
     regexp = "already exists"
   )
   expect_named(
@@ -265,7 +269,17 @@ test_that("join when all 'by' are not present", {
   y <- mtcars[, c("mpg", "hp", "cyl", "wt")]
 
   expect_error(
-    out <- data_merge(x, y, by = c("mpg", "drat", "qsec")),
+    {
+      out <- data_merge(x, y, by = c("mpg", "drat", "qsec"))
+    },
     regexp = "Not all columns"
   )
+})
+
+# no warning for tibble #404 ---------------------
+
+test_that("no warning for tibble when checking if column exist", {
+  skip_if_not_installed("tibble")
+  d_tibble <- tibble::as_tibble(iris)
+  expect_silent(data_merge(d_tibble, d_tibble[20:30, ], join = "bind"))
 })
