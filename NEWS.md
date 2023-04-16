@@ -11,7 +11,7 @@ BUG FIXES
 * `standardize_parameters()` now works when the package namespace is in the model
   formula (#401).
 
-* `data_merge()` no longer yields a warning for `tibbles`.
+* `data_merge()` no longer yields a warning for `tibbles` when `join = "bind"`.
 
 # datawizard 0.7.1
 
