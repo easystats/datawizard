@@ -3,10 +3,11 @@
 #' @inheritParams stats::weighted.mean
 #' @inheritParams stats::mad
 #' @param weights A numerical vector of weights the same length as `x` giving
-#'   the weights to use for elements of `x`.
+#'   the weights to use for elements of `x`. If `weights = NULL`, `x` is passed
+#' to the non-weighted function.
 #' @param verbose Show warning when `weights` are negative?
 #'
-#' If `weights = NULL`, `x` is passed to the non-weighted function.
+#' @note Missing and infinite values are silently removed from `x` and `weights`.
 #'
 #' @examples
 #' ## GPA from Siegel 1994
@@ -105,11 +106,22 @@ weighted_mad <- function(x, weights = NULL, constant = 1.4826, verbose = TRUE, .
 }
 
 .clean_missings <- function(x, weights) {
+  flag <- FALSE
+  if (any(is.infinite(x)) || any(is.infinite(weights))) {
+    # remove Inf
+    x[is.infinite(x)] <- NA
+    weights[is.infinite(weights)] <- NA
+    flag <- TRUE
+  }
+
   if (anyNA(x) || anyNA(weights)) {
     # remove missings
     x[is.na(weights)] <- NA
     weights[is.na(x)] <- NA
+    flag <- TRUE
+  }
 
+  if (flag) {
     weights <- stats::na.omit(weights)
     x <- stats::na.omit(x)
   }

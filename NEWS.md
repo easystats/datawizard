@@ -6,6 +6,9 @@ BREAKING CHANGES
   `object_has_names()`, `object_has_rownames()`, `is_empty_object()`,
   `compact_list()`, `compact_character()`.
 
+* `weighted_sd()` and `weighted_mean()` no longer return `NA` when either `x`
+  or `weights` contains missing or infinite values.
+
 BUG FIXES
 
 * `standardize_parameters()` now works when the package namespace is in the model

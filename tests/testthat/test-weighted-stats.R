@@ -19,3 +19,15 @@ test_that("weighted centrality and dispersion measures work with NA", {
   expect_equal(weighted_sd(x, wt), 1.237671, tolerance = 0.001)
   expect_equal(weighted_mad(x, wt), 0.59304, tolerance = 0.001)
 })
+
+
+test_that("weighted centrality and dispersion measures work with Inf", {
+  x <- c(3.7, 3.3, NA, 3.5, 2.8, 5.5, Inf, 4)
+  wt <- c(5, 5, 4, NA, 1, 7, 3, Inf) / 15
+
+  set.seed(123)
+  expect_equal(weighted_mean(x, wt), 4.238889, tolerance = 0.001)
+  expect_equal(weighted_median(x, wt), 3.7, tolerance = 0.001)
+  expect_equal(weighted_sd(x, wt), 1.237671, tolerance = 0.001)
+  expect_equal(weighted_mad(x, wt), 0.59304, tolerance = 0.001)
+})
