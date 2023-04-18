@@ -72,7 +72,7 @@ weighted_sd <- function(x, weights = NULL, verbose = TRUE, ...) {
   complete <- .clean_missings(x, weights)
 
   weights1 <- complete$weights / sum(complete$weights)
-  center <- sum(weights1 * x)
+  center <- sum(weights1 * complete$x)
   xc <- sqrt(weights1) * (complete$x - center)
   var <- (t(xc) %*% xc) / (1 - sum(weights1^2))
   sqrt(as.vector(var))
