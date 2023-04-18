@@ -25,6 +25,13 @@ weighted_mean <- function(x, weights = NULL, verbose = TRUE, ...) {
     return(mean(x, na.rm = TRUE))
   }
 
+  # remove missings
+  x[is.na(weights)] <- NA
+  weights[is.na(x)] <- NA
+
+  weights <- stats::na.omit(weights)
+  x <- stats::na.omit(x)
+
   stats::weighted.mean(x, weights, na.rm = TRUE)
 }
 
@@ -69,6 +76,13 @@ weighted_sd <- function(x, weights = NULL, verbose = TRUE, ...) {
   if (!.are_weights(weights) || !.validate_weights(weights, verbose)) {
     return(stats::sd(x, na.rm = TRUE))
   }
+
+  # remove missings
+  x[is.na(weights)] <- NA
+  weights[is.na(x)] <- NA
+
+  weights <- stats::na.omit(weights)
+  x <- stats::na.omit(x)
 
   weights1 <- weights / sum(weights)
   center <- sum(weights1 * x)
