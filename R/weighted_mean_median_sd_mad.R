@@ -26,13 +26,8 @@ weighted_mean <- function(x, weights = NULL, verbose = TRUE, ...) {
   }
 
   # remove missings
-  x[is.na(weights)] <- NA
-  weights[is.na(x)] <- NA
-
-  weights <- stats::na.omit(weights)
-  x <- stats::na.omit(x)
-
-  stats::weighted.mean(x, weights, na.rm = TRUE)
+  complete <- .clean_missings(x, weights)
+  stats::weighted.mean(complete$x, complete$weights, na.rm = TRUE)
 }
 
 
@@ -46,15 +41,11 @@ weighted_median <- function(x, weights = NULL, verbose = TRUE, ...) {
   p <- 0.5 # split probability
 
   # remove missings
-  x[is.na(weights)] <- NA
-  weights[is.na(x)] <- NA
+  complete <- .clean_missings(x, weights)
 
-  weights <- stats::na.omit(weights)
-  x <- stats::na.omit(x)
-
-  order <- order(x)
-  x <- x[order]
-  weights <- weights[order]
+  order <- order(complete$x)
+  x <- complete$x[order]
+  weights <- complete$weights[order]
 
   rw <- cumsum(weights) / sum(weights)
   md.values <- min(which(rw >= p))
@@ -78,15 +69,11 @@ weighted_sd <- function(x, weights = NULL, verbose = TRUE, ...) {
   }
 
   # remove missings
-  x[is.na(weights)] <- NA
-  weights[is.na(x)] <- NA
+  complete <- .clean_missings(x, weights)
 
-  weights <- stats::na.omit(weights)
-  x <- stats::na.omit(x)
-
-  weights1 <- weights / sum(weights)
+  weights1 <- complete$weights / sum(complete$weights)
   center <- sum(weights1 * x)
-  xc <- sqrt(weights1) * (x - center)
+  xc <- sqrt(weights1) * (complete$x - center)
   var <- (t(xc) %*% xc) / (1 - sum(weights1^2))
   sqrt(as.vector(var))
 }
@@ -115,4 +102,17 @@ weighted_mad <- function(x, weights = NULL, constant = 1.4826, verbose = TRUE, .
   }
 
   pos
+}
+
+.clean_missings <- function(x, weights) {
+  if (anyNA(x) || anyNA(weights)) {
+    # remove missings
+    x[is.na(weights)] <- NA
+    weights[is.na(x)] <- NA
+
+    weights <- stats::na.omit(weights)
+    x <- stats::na.omit(x)
+  }
+
+  list(x = x, weights = weights)
 }
