@@ -119,6 +119,7 @@ center.numeric <- function(x,
   }
 
   args <- .process_std_center(x, weights, robust, verbose, reference, center, scale = NULL)
+  dot_args <- list(...)
 
   if (is.null(args)) {
     # all NA?
