@@ -7,13 +7,20 @@
 \alias{weighted_mad}
 \title{Weighted Mean, Median, SD, and MAD}
 \usage{
-weighted_mean(x, weights = NULL, verbose = TRUE, ...)
+weighted_mean(x, weights = NULL, na.rm = TRUE, verbose = TRUE, ...)
 
-weighted_median(x, weights = NULL, verbose = TRUE, ...)
+weighted_median(x, weights = NULL, na.rm = TRUE, verbose = TRUE, ...)
 
-weighted_sd(x, weights = NULL, verbose = TRUE, ...)
+weighted_sd(x, weights = NULL, na.rm = TRUE, verbose = TRUE, ...)
 
-weighted_mad(x, weights = NULL, constant = 1.4826, verbose = TRUE, ...)
+weighted_mad(
+  x,
+  weights = NULL,
+  constant = 1.4826,
+  na.rm = TRUE,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{an object containing the values whose weighted mean is to be
@@ -22,6 +29,9 @@ weighted_mad(x, weights = NULL, constant = 1.4826, verbose = TRUE, ...)
 \item{weights}{A numerical vector of weights the same length as \code{x} giving
 the weights to use for elements of \code{x}. If \code{weights = NULL}, \code{x} is passed
 to the non-weighted function.}
+
+\item{na.rm}{a logical value indicating whether \code{NA}
+    values in \code{x} should be stripped before the computation proceeds.}
 
 \item{verbose}{Show warning when \code{weights} are negative?}
 
