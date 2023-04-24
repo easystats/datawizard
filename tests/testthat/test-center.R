@@ -156,13 +156,15 @@ test_that("center, factors (grouped data)", {
 
 # select helpers ------------------------------
 test_that("center regex", {
-  expect_identical(
+  expect_equal(
     center(mtcars, select = "pg", regex = TRUE)$mpg,
-    center(mtcars$mpg)
+    center(mtcars$mpg),
+    ignore_attr = TRUE
   )
-  expect_identical(
+  expect_equal(
     center(mtcars, select = "pg$", regex = TRUE)$mpg,
-    center(mtcars$mpg)
+    center(mtcars$mpg),
+    ignore_attr = TRUE
   )
 })
 

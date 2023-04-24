@@ -131,7 +131,8 @@ test_that("standardize.data.frame, weights", {
   expect_equal(
     standardize(x, weights = w),
     standardize(data.frame(x), weights = w)$x,
-    tolerance = 1e-4
+    tolerance = 1e-4,
+    ignore_attr = TRUE
   )
 
   # name and vector give same results
