@@ -30,8 +30,8 @@ weighted_mad(
 the weights to use for elements of \code{x}. If \code{weights = NULL}, \code{x} is passed
 to the non-weighted function.}
 
-\item{na.rm}{a logical value indicating whether \code{NA}
-    values in \code{x} should be stripped before the computation proceeds.}
+\item{na.rm}{Logical, if \code{TRUE} (default), removes missing (\code{NA}) and infinite
+values from \code{x} and \code{weights}.}
 
 \item{verbose}{Show warning when \code{weights} are negative?}
 
@@ -41,9 +41,6 @@ to the non-weighted function.}
 }
 \description{
 Weighted Mean, Median, SD, and MAD
-}
-\note{
-Missing and infinite values are silently removed from \code{x} and \code{weights}.
 }
 \examples{
 ## GPA from Siegel 1994

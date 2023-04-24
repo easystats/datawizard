@@ -3,12 +3,11 @@
 #' @inheritParams stats::weighted.mean
 #' @inheritParams stats::mad
 #' @param weights A numerical vector of weights the same length as `x` giving
-#'   the weights to use for elements of `x`. If `weights = NULL`, `x` is passed
+#' the weights to use for elements of `x`. If `weights = NULL`, `x` is passed
 #' to the non-weighted function.
 #' @param verbose Show warning when `weights` are negative?
-#' @inheritParams skewness
-#'
-#' @note Missing and infinite values are silently removed from `x` and `weights`.
+#' @param na.rm Logical, if `TRUE` (default), removes missing (`NA`) and infinite
+#' values from `x` and `weights`.
 #'
 #' @examples
 #' ## GPA from Siegel 1994
