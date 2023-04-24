@@ -41,6 +41,14 @@ test_that("center, force factors", {
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
+  # check class attributes
+  expect_identical(
+    vapply(z, class, character(1)),
+    c(
+      Sepal.Length = "numeric", Sepal.Width = "numeric", Petal.Length = "numeric",
+      Petal.Width = "numeric", Species = "factor"
+    )
+  )
 })
 
 test_that("center, all na", {
