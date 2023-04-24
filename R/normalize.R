@@ -159,7 +159,10 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   attr(out, "min_value") <- min_value
   attr(out, "vector_length") <- vector_length
   attr(out, "range_difference") <- range_difference
-  class(out) <- c("dw_transformer", class(out))
+  # don't add attribute when we call data frame methods
+  if (!isFALSE(dot_args$add_transform_class)) {
+    class(out) <- c("dw_transformer", class(out))
+  }
 
   out
 }
@@ -209,6 +212,7 @@ normalize.grouped_df <- function(x,
       exclude = exclude,
       include_bounds = include_bounds,
       verbose = verbose,
+      add_transform_class = FALSE,
       ...
     )
   }
@@ -241,7 +245,8 @@ normalize.data.frame <- function(x,
     x[select],
     normalize,
     include_bounds = include_bounds,
-    verbose = verbose
+    verbose = verbose,
+    add_transform_class = FALSE
   )
 
   x
