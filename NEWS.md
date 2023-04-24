@@ -6,6 +6,12 @@ BREAKING CHANGES
   `object_has_names()`, `object_has_rownames()`, `is_empty_object()`,
   `compact_list()`, `compact_character()`.
 
+CHANGES
+
+* Weighted-functions (`weighted_sd()`, `weighted_mean()`, ...) gain an `na.rm`
+  argument, to remove or keep missing and infinite values. By default,
+  `na.rm = TRUE`, i.e. missing and infinite values are removed by default.
+
 BUG FIXES
 
 * `standardize_parameters()` now works when the package namespace is in the model

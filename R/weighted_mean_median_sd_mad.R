@@ -3,10 +3,11 @@
 #' @inheritParams stats::weighted.mean
 #' @inheritParams stats::mad
 #' @param weights A numerical vector of weights the same length as `x` giving
-#'   the weights to use for elements of `x`.
+#' the weights to use for elements of `x`. If `weights = NULL`, `x` is passed
+#' to the non-weighted function.
 #' @param verbose Show warning when `weights` are negative?
-#'
-#' If `weights = NULL`, `x` is passed to the non-weighted function.
+#' @param na.rm Logical, if `TRUE` (default), removes missing (`NA`) and infinite
+#' values from `x` and `weights`.
 #'
 #' @examples
 #' ## GPA from Siegel 1994
@@ -20,36 +21,39 @@
 #' weighted_mad(x, wt)
 #'
 #' @export
-weighted_mean <- function(x, weights = NULL, verbose = TRUE, ...) {
+weighted_mean <- function(x, weights = NULL, na.rm = TRUE, verbose = TRUE, ...) {
   if (!.are_weights(weights) || !.validate_weights(weights, verbose)) {
-    return(mean(x, na.rm = TRUE))
+    return(mean(x, na.rm = na.rm))
   }
 
-  stats::weighted.mean(x, weights, na.rm = TRUE)
+  # remove missings
+  complete <- .clean_missings(x, weights, na.rm)
+  stats::weighted.mean(complete$x, complete$weights, na.rm = na.rm)
 }
 
 
 #' @export
 #' @rdname weighted_mean
-weighted_median <- function(x, weights = NULL, verbose = TRUE, ...) {
+weighted_median <- function(x, weights = NULL, na.rm = TRUE, verbose = TRUE, ...) {
   if (!.are_weights(weights) || !.validate_weights(weights, verbose)) {
-    return(stats::median(x, na.rm = TRUE))
+    return(stats::median(x, na.rm = na.rm))
   }
 
   p <- 0.5 # split probability
 
   # remove missings
-  x[is.na(weights)] <- NA
-  weights[is.na(x)] <- NA
+  complete <- .clean_missings(x, weights, na.rm)
 
-  weights <- stats::na.omit(weights)
-  x <- stats::na.omit(x)
-
-  order <- order(x)
-  x <- x[order]
-  weights <- weights[order]
+  order <- order(complete$x)
+  x <- complete$x[order]
+  weights <- complete$weights[order]
 
   rw <- cumsum(weights) / sum(weights)
+  # sanity check
+  if (all(is.na(rw))) {
+    return(NA_real_)
+  }
+
   md.values <- min(which(rw >= p))
 
   if (rw[md.values] == p) {
@@ -64,30 +68,33 @@ weighted_median <- function(x, weights = NULL, verbose = TRUE, ...) {
 
 #' @export
 #' @rdname weighted_mean
-weighted_sd <- function(x, weights = NULL, verbose = TRUE, ...) {
+weighted_sd <- function(x, weights = NULL, na.rm = TRUE, verbose = TRUE, ...) {
   # from cov.wt
   if (!.are_weights(weights) || !.validate_weights(weights, verbose)) {
-    return(stats::sd(x, na.rm = TRUE))
+    return(stats::sd(x, na.rm = na.rm))
   }
 
-  weights1 <- weights / sum(weights)
-  center <- sum(weights1 * x)
-  xc <- sqrt(weights1) * (x - center)
+  # remove missings
+  complete <- .clean_missings(x, weights, na.rm)
+
+  weights1 <- complete$weights / sum(complete$weights)
+  center <- sum(weights1 * complete$x)
+  xc <- sqrt(weights1) * (complete$x - center)
   var <- (t(xc) %*% xc) / (1 - sum(weights1^2))
   sqrt(as.vector(var))
 }
 
 #' @export
 #' @rdname weighted_mean
-weighted_mad <- function(x, weights = NULL, constant = 1.4826, verbose = TRUE, ...) {
+weighted_mad <- function(x, weights = NULL, constant = 1.4826, na.rm = TRUE, verbose = TRUE, ...) {
   # From matrixStats
   if (!.are_weights(weights) || !.validate_weights(weights, verbose)) {
-    return(stats::mad(x, na.rm = TRUE))
+    return(stats::mad(x, na.rm = na.rm))
   }
 
-  center <- weighted_median(x, weights = weights)
+  center <- weighted_median(x, weights = weights, na.rm = na.rm)
   x <- abs(x - center)
-  constant * weighted_median(x, weights = weights)
+  constant * weighted_median(x, weights = weights, na.rm = na.rm)
 }
 
 
@@ -101,4 +108,30 @@ weighted_mad <- function(x, weights = NULL, constant = 1.4826, verbose = TRUE, .
   }
 
   pos
+}
+
+.clean_missings <- function(x, weights, na.rm) {
+  if (isTRUE(na.rm)) {
+    flag <- FALSE
+    if (any(is.infinite(x)) || any(is.infinite(weights))) {
+      # remove Inf
+      x[is.infinite(x)] <- NA
+      weights[is.infinite(weights)] <- NA
+      flag <- TRUE
+    }
+
+    if (anyNA(x) || anyNA(weights)) {
+      # remove missings
+      x[is.na(weights)] <- NA
+      weights[is.na(x)] <- NA
+      flag <- TRUE
+    }
+
+    if (flag) {
+      weights <- stats::na.omit(weights)
+      x <- stats::na.omit(x)
+    }
+  }
+
+  list(x = x, weights = weights)
 }
