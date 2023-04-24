@@ -26,6 +26,14 @@ test_that("center, select", {
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
+  # check class attributes
+  expect_identical(
+    vapply(z, class, character(1)),
+    c(
+      Sepal.Length = "numeric", Sepal.Width = "numeric", Petal.Length = "numeric",
+      Petal.Width = "numeric", Species = "factor"
+    )
+  )
 })
 
 test_that("center, factors", {
@@ -40,14 +48,6 @@ test_that("center, force factors", {
     v - median(v),
     tolerance = 1e-4,
     ignore_attr = TRUE
-  )
-  # check class attributes
-  expect_identical(
-    vapply(z, class, character(1)),
-    c(
-      Sepal.Length = "numeric", Sepal.Width = "numeric", Petal.Length = "numeric",
-      Petal.Width = "numeric", Species = "factor"
-    )
   )
 })
 
