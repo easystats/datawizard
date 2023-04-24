@@ -7,7 +7,13 @@ BREAKING CHANGES
   `compact_list()`, `compact_character()`.
 
 * `weighted_sd()` and `weighted_mean()` no longer return `NA` when either `x`
-  or `weights` contains missing or infinite values.
+  or `weights` contains infinite values.
+
+CHANGES
+
+* Weighted-functions (`weighted_sd()`, `weighted_mean()`, ...) gain an `na.rm`
+  argument, to remove or keep missing values. By default, `na.rm = TRUE`, i.e.
+  missing values are removed by default.
 
 BUG FIXES
 
