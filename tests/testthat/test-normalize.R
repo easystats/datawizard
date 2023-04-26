@@ -83,7 +83,9 @@ test_that("normalize: only one value", {
     regexp = "Variable `foo` contains only one unique value and will"
   )
   expect_warning(
-    y <- normalize(x = 12),
+    {
+      y <- normalize(x = 12)
+    },
     regexp = "Variable `12` contains only one unique value and will"
   )
   expect_equal(y, 12, ignore_attr = TRUE)
@@ -93,9 +95,9 @@ test_that("normalize: only one value", {
 })
 
 test_that("normalize: only two values", {
-  expect_warning(
+  expect_warning({
     y <- normalize(x = c(1, 2))
-  )
+  })
   expect_equal(y, c(0, 1), ignore_attr = TRUE)
 
   expect_silent(normalize(x = c(1, 2), verbose = FALSE))
@@ -120,13 +122,14 @@ test_that("normalize: matrix", {
 test_that("normalize: select", {
   skip_if_not_installed("poorman")
 
-  expect_identical(
+  expect_equal(
     normalize(
       iris,
       select = starts_with("Petal\\.L")
     ) %>%
       poorman::pull(Petal.Length),
-    normalize(iris$Petal.Length)
+    normalize(iris$Petal.Length),
+    ignore_attr = TRUE
   )
 })
 

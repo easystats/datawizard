@@ -50,6 +50,15 @@ test_that("rescale works with select helpers", {
   expect_equal(head(out$Sepal.Width), c(0.625, 0.41667, 0.5, 0.45833, 0.66667, 0.79167), tolerance = 1e-3)
   expect_equal(head(out$Petal.Length), head(iris$Petal.Length), tolerance = 1e-3)
 
+  # check class attributes
+  expect_identical(
+    vapply(out, class, character(1)),
+    c(
+      Sepal.Length = "numeric", Sepal.Width = "numeric", Petal.Length = "numeric",
+      Petal.Width = "numeric", Species = "factor"
+    )
+  )
+
   out <- rescale(iris, to = c(0, 1), select = starts_with("Sepal"))
   expect_equal(head(out$Sepal.Width), c(0.625, 0.41667, 0.5, 0.45833, 0.66667, 0.79167), tolerance = 1e-3)
   expect_equal(head(out$Petal.Length), head(iris$Petal.Length), tolerance = 1e-3)
@@ -66,6 +75,7 @@ test_that("rescale works with select helpers", {
 test_that("data_rescale regex", {
   expect_equal(
     rescale(mtcars, select = "pg", regex = TRUE)$mpg,
-    rescale(mtcars, select = "mpg")$mpg
+    rescale(mtcars, select = "mpg")$mpg,
+    ignore_attr = TRUE
   )
 })

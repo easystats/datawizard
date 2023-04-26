@@ -161,6 +161,7 @@ standardize.numeric <- function(x,
   }
 
   args <- .process_std_center(x, weights, robust, verbose, reference, center, scale)
+  dot_args <- list(...)
 
   # Perform standardization
   if (is.null(args)) {
@@ -183,7 +184,9 @@ standardize.numeric <- function(x,
   attr(scaled_x, "robust") <- robust
   # labels
   z <- .set_back_labels(scaled_x, x, include_values = FALSE)
-  class(z) <- c("dw_transformer", class(z))
+  if (!isFALSE(dot_args$add_transform_class)) {
+    class(z) <- c("dw_transformer", class(z))
+  }
   z
 }
 
@@ -292,7 +295,8 @@ standardize.data.frame <- function(x,
       center = args$center[var],
       scale = args$scale[var],
       verbose = FALSE,
-      force = force
+      force = force,
+      add_transform_class = FALSE
     )
   }
 
@@ -350,6 +354,7 @@ standardize.grouped_df <- function(x,
       append = FALSE,
       center = center,
       scale = scale,
+      add_transform_class = FALSE,
       ...
     )
   }

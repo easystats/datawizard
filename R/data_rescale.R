@@ -130,7 +130,10 @@ rescale.numeric <- function(x,
   attr(out, "new_max") <- new_max
   attr(out, "range_difference") <- max_value - min_value
   attr(out, "to_range") <- c(new_min, new_max)
-  class(out) <- c("dw_transformer", class(out))
+  # don't add attribute when we call data frame methods
+  if (!isFALSE(dot_args$add_transform_class)) {
+    class(out) <- c("dw_transformer", class(out))
+  }
 
   out
 }
@@ -168,6 +171,7 @@ rescale.grouped_df <- function(x,
       exclude = exclude,
       to = to,
       range = range,
+      add_transform_class = FALSE,
       ...
     )
   }
@@ -208,7 +212,7 @@ rescale.data.frame <- function(x,
   }
 
   x[select] <- as.data.frame(sapply(select, function(n) {
-    rescale(x[[n]], to = to[[n]], range = range[[n]])
+    rescale(x[[n]], to = to[[n]], range = range[[n]], add_transform_class = FALSE)
   }, simplify = FALSE))
   x
 }

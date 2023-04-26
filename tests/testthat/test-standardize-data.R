@@ -42,6 +42,15 @@ test_that("standardize.data.frame", {
   expect_length(levels(x$Species), 3)
   expect_equal(mean(subset(x, Species == "virginica")$Sepal.Length), 0.90, tolerance = 0.01)
 
+  # check class attributes
+  expect_identical(
+    vapply(x, class, character(1)),
+    c(
+      Sepal.Length = "numeric", Sepal.Width = "numeric", Petal.Length = "numeric",
+      Petal.Width = "numeric", Species = "factor"
+    )
+  )
+
   x2 <- standardize(x = iris[1, ], reference = iris)
   expect_true(all(x2[1, ] == x[1, ]))
 
@@ -122,7 +131,8 @@ test_that("standardize.data.frame, weights", {
   expect_equal(
     standardize(x, weights = w),
     standardize(data.frame(x), weights = w)$x,
-    tolerance = 1e-4
+    tolerance = 1e-4,
+    ignore_attr = TRUE
   )
 
   # name and vector give same results
