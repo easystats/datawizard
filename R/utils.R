@@ -5,6 +5,7 @@
   model_info
 }
 
+
 #' Print a message saying that an argument is deprecated and that the user
 #' should use its replacement instead.
 #'
@@ -16,6 +17,7 @@
     paste0("Argument `", arg, "` is deprecated. Please use `", replacement, "` instead.")
   )
 }
+
 
 #' `NULL` coalescing operator
 #'
@@ -52,7 +54,6 @@
 #' grep(pattern = p, x = colnames(iris), ignore.case = FALSE)
 #' @keywords internal
 #' @noRd
-
 .fuzzy_grep <- function(x, pattern, precision = NULL) {
   if (is.null(precision)) {
     precision <- round(nchar(pattern) / 3)
@@ -70,7 +71,6 @@
 #'
 #' @keywords internal
 #' @noRd
-
 .misspelled_string <- function(source, searchterm, default_message = NULL) {
   if (is.null(searchterm) || length(searchterm) < 1) {
     return(default_message)
@@ -106,9 +106,10 @@
   insight::trim_ws(msg)
 }
 
+
 #' Check that a vector is sorted
 #' @noRd
-
+#' @keywords internal
 .is_sorted <- Negate(is.unsorted)
 
 
@@ -119,7 +120,7 @@
 #'
 #' This function gives only custom attributes to the new dataset.
 #' @noRd
-
+#' @keywords internal
 .replace_attrs <- function(data, custom_attr) {
   for (nm in setdiff(names(custom_attr), names(attributes(data.frame())))) {
     attr(data, which = nm) <- custom_attr[[nm]]
@@ -128,8 +129,75 @@
 }
 
 
+#' @keywords internal
 .is_date <- function(x) {
   inherits(x, "Date")
+}
+
+
+#' @keywords internal
+.are_weights <- function(w) {
+  !is.null(w) && length(w) && !all(w == 1) && !all(w == w[1])
+}
+
+
+#' @keywords internal
+.factor_to_numeric <- function(x) {
+  # no need to change for numeric
+  if (is.numeric(x)) {
+    return(x)
+  }
+
+  # Dates can be coerced by as.numeric(), w/o as.character()
+  if (inherits(x, "Date")) {
+    return(as.numeric(x))
+  }
+
+  # Logicals should be 0/1
+  if (is.logical(x)) {
+    return(as.numeric(x))
+  }
+
+  if (anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
+    if (is.character(x)) {
+      x <- as.factor(x)
+    }
+    levels(x) <- 1:nlevels(x)
+  }
+
+  as.numeric(as.character(x))
+}
+
+
+# For standardize_parameters ----------------------------------------------
+
+#' @keywords internal
+.get_object <- function(x, attribute_name = "object_name") {
+  obj_name <- attr(x, attribute_name, exact = TRUE)
+  model <- NULL
+  if (!is.null(obj_name)) {
+    model <- tryCatch(
+      {
+        get(obj_name, envir = parent.frame())
+      },
+      error = function(e) {
+        NULL
+      }
+    )
+    if (is.null(model) ||
+      # prevent self reference
+      inherits(model, "parameters_model")) {
+      model <- tryCatch(
+        {
+          get(obj_name, envir = globalenv())
+        },
+        error = function(e) {
+          NULL
+        }
+      )
+    }
+  }
+  model
 }
 
 
@@ -137,7 +205,7 @@
 #' Same functionality as `{glue}`
 #'
 #' @noRd
-
+#' @keywords internal
 .gluestick <- function(fmt, src = parent.frame(), open = "{", close = "}", eval = TRUE) {
   nchar_open <- nchar(open)
   nchar_close <- nchar(close)
