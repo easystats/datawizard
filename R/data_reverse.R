@@ -201,6 +201,7 @@ reverse.grouped_df <- function(x,
                                select = NULL,
                                exclude = NULL,
                                range = NULL,
+                               append = FALSE,
                                ignore_case = FALSE,
                                regex = FALSE,
                                verbose = FALSE,
@@ -219,6 +220,26 @@ reverse.grouped_df <- function(x,
     verbose = verbose
   )
 
+  # don't include grouping variables for re-scaling
+  grp_vars <- setdiff(colnames(attr(x, "groups", exact = TRUE)), ".rows")
+  select <- setdiff(select, grp_vars)
+
+  # when we append variables, we call ".process_append()", which will
+  # create the new variables and updates "select", so new variables are processed
+  if (!isFALSE(append)) {
+    # process arguments
+    args <- .process_append(
+      x,
+      select,
+      append,
+      append_suffix = "_r",
+      preserve_value_labels = TRUE
+    )
+    # update processed arguments
+    x <- args$x
+    select <- args$select
+  }
+
   x <- as.data.frame(x)
   for (rows in grps) {
     x[rows, ] <- reverse(
@@ -230,7 +251,7 @@ reverse.grouped_df <- function(x,
     )
   }
   # set back class, so data frame still works with dplyr
-  attributes(x) <- info
+  attributes(x) <- utils::modifyList(info, attributes(x))
   x
 }
 
@@ -242,6 +263,7 @@ reverse.data.frame <- function(x,
                                select = NULL,
                                exclude = NULL,
                                range = NULL,
+                               append = FALSE,
                                ignore_case = FALSE,
                                regex = FALSE,
                                verbose = FALSE,
@@ -255,6 +277,22 @@ reverse.data.frame <- function(x,
     verbose = verbose
   )
 
+  # when we append variables, we call ".process_append()", which will
+  # create the new variables and updates "select", so new variables are processed
+  if (!isFALSE(append)) {
+    # process arguments
+    args <- .process_append(
+      x,
+      select,
+      append,
+      append_suffix = "_r",
+      preserve_value_labels = TRUE
+    )
+    # update processed arguments
+    x <- args$x
+    select <- args$select
+  }
+
   # Transform the range so that it is a list now
   if (!is.null(range) && !is.list(range)) {
     range <- stats::setNames(rep(list(range), length(select)), select)
@@ -264,18 +302,4 @@ reverse.data.frame <- function(x,
     reverse(x[[n]], range = range[[n]])
   })
   x
-}
-
-
-
-# helper -----------------------------
-
-.set_back_labels <- function(new, old, include_values = TRUE) {
-  # labelled data?
-  attr(new, "label") <- attr(old, "label", exact = TRUE)
-  labels <- attr(old, "labels", exact = TRUE)
-  if (isTRUE(include_values) && !is.null(labels)) {
-    attr(new, "labels") <- stats::setNames(rev(labels), names(labels))
-  }
-  new
 }

@@ -12,6 +12,10 @@ CHANGES
   argument, to remove or keep missing and infinite values. By default,
   `na.rm = TRUE`, i.e. missing and infinite values are removed by default.
 
+* `reverse_scale()` gains an `append` argument (similar to other data frame
+  methods of transformation functions), to append recoded variables to the
+  input data frame instead of overwriting existing variables.
+
 BUG FIXES
 
 * `standardize_parameters()` now works when the package namespace is in the model

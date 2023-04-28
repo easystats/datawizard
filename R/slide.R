@@ -50,7 +50,7 @@ slide.numeric <- function(x, lowest = 0, ...) {
   minval <- min(x, na.rm = TRUE)
   difference <- minval - lowest
   x <- x - difference
-  .set_back_labels(x, original_x)
+  .set_back_labels(x, original_x, include_values = FALSE)
 }
 
 
@@ -74,20 +74,21 @@ slide.data.frame <- function(x,
     verbose = verbose
   )
 
-  # process arguments
-  args <- .process_std_args(
-    x,
-    select,
-    exclude,
-    weights = NULL,
-    append,
-    append_suffix = "_s",
-    force = FALSE
-  )
-
-  # update processed arguments
-  x <- args$x
-  select <- args$select
+  # when we append variables, we call ".process_append()", which will
+  # create the new variables and updates "select", so new variables are processed
+  if (!isFALSE(append)) {
+    # process arguments
+    args <- .process_append(
+      x,
+      select,
+      append,
+      append_suffix = "_s",
+      keep_factors = FALSE
+    )
+    # update processed arguments
+    x <- args$x
+    select <- args$select
+  }
 
   x[select] <- lapply(
     x[select],

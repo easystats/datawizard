@@ -103,64 +103,26 @@ to_factor.data.frame <- function(x,
     verbose = verbose
   )
 
-  # drop factors, when append is not FALSE
+  # when we append variables, we call ".process_append()", which will
+  # create the new variables and updates "select", so new variables are processed
   if (!isFALSE(append)) {
+    # drop factors, when append is not FALSE
     select <- colnames(x[select])[!vapply(x[select], is.factor, FUN.VALUE = logical(1L))]
+    # process arguments
+    args <- .process_append(
+      x,
+      select,
+      append,
+      append_suffix = "_f",
+      keep_factors = FALSE,
+      keep_character = TRUE,
+      preserve_value_labels = TRUE
+    )
+    # update processed arguments
+    x <- args$x
+    select <- args$select
   }
-
-  # process arguments
-  args <- .process_std_args(
-    x,
-    select,
-    exclude,
-    weights = NULL,
-    append,
-    append_suffix = "_f",
-    force = FALSE,
-    preserve_value_labels = TRUE,
-    keep_character = TRUE
-  )
-
-  # update processed arguments
-  x <- args$x
-  select <- args$select
 
   x[select] <- lapply(x[select], to_factor, verbose = verbose, ...)
-  x
-}
-
-
-
-# helper -----------------------
-
-.value_labels_to_levels <- function(x, verbose = TRUE, ...) {
-  # extract value labels
-  value_labels <- attr(x, "labels", exact = TRUE)
-  # return, if none
-  if (is.null(value_labels)) {
-    return(x)
-  }
-  # check positions of matching values and levels
-  levels_in_labs <- stats::na.omit(match(value_labels, levels(x)))
-  labs_in_levels <- stats::na.omit(match(levels(x), value_labels))
-  # sanity check - if labelled values and levels don't match
-  if (!length(levels_in_labs) || !length(labs_in_levels)) {
-    if (verbose) {
-      insight::format_alert(
-        "Could not use value labels as factor levels.",
-        "Labelled values and factor levels had no match."
-      )
-    }
-    return(x)
-  }
-  # check if all levels have matching labels, and if not, tell user
-  if (verbose && nlevels(x) != length(levels_in_labs)) {
-    insight::format_alert(
-      "Not all factor levels had a matching value label. Non-matching levels were preserved."
-    )
-  }
-  levels(x)[levels_in_labs] <- names(value_labels[labs_in_levels])
-  attr(x, "labels") <- NULL
-
   x
 }

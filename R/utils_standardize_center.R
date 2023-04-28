@@ -1,8 +1,10 @@
-# helper -----------------------------
-
-
-## preparation for standardize and center ----
-
+# preparation for standardize and center ----
+#
+# Performs some preparation when standardizing or centering variables,
+# like finding the center or scale, also in relation to some reference values.
+# This function is applied to *vectors*.
+#
+#' @keywords internal
 .process_std_center <- function(x,
                                 weights,
                                 robust,
@@ -28,7 +30,6 @@
     vals <- x[valid_x]
   }
 
-
   # Sanity checks
   check <- .check_standardize_numeric(x, name = NULL, verbose = verbose, reference = reference, center = center)
 
@@ -51,16 +52,20 @@
 }
 
 
-
-## processing and checking of arguments ----
-
+# processing and checking of arguments ----
+#
+# Performs some preparation when standardizing or centering variables,
+# like finding the center or scale, also in relation to some reference values.
+# This function is applied to the *data frame methods*.
+#
+#' @keywords internal
 .process_std_args <- function(x,
                               select,
                               exclude,
                               weights,
                               append,
                               append_suffix = "_z",
-                              force,
+                              keep_factors,
                               remove_na = "none",
                               reference = NULL,
                               .center = NULL,
@@ -85,7 +90,7 @@
     }
   }
 
-  select <- .select_variables(x, select, exclude, force, keep_character)
+  select <- .select_variables(x, select, exclude, keep_factors, keep_character)
 
   # check if selected variables are in reference
   if (!is.null(reference) && !all(select %in% names(reference))) {
@@ -189,9 +194,8 @@
 }
 
 
-
-## retrieve center and scale information ----
-
+# retrieve center and scale information ----
+#' @keywords internal
 .get_center_scale <- function(x,
                               robust = FALSE,
                               weights = NULL,
@@ -243,9 +247,7 @@
 }
 
 
-
-## check range of input variables ----
-
+# check range of input variables ----
 #' @keywords internal
 .check_standardize_numeric <- function(x,
                                        name = NULL,
@@ -284,10 +286,76 @@
 }
 
 
+# process append argument ----
+#' @keywords internal
+.process_append <- function(x,
+                            select,
+                            append,
+                            append_suffix = "_z",
+                            preserve_value_labels = FALSE,
+                            keep_factors = TRUE,
+                            keep_character = FALSE) {
+  # check append argument, and set default
+  if (isFALSE(append)) {
+    append <- NULL
+  } else if (isTRUE(append)) {
+    append <- append_suffix
+  }
 
-## variables to standardize and center ----
+  # append recoded variables
+  if (!is.null(append) && append != "") {
+    # keep or drop factors and characters
+    select <- .select_variables(
+      x,
+      select,
+      exclude = NULL,
+      keep_factors = keep_factors,
+      keep_character = keep_character
+    )
 
-.select_variables <- function(x, select, exclude, force, keep_character = FALSE) {
+    # copy label attributes
+    variable_labels <- insight::compact_list(lapply(x, attr, "label", exact = TRUE))
+    value_labels <- NULL
+    if (preserve_value_labels) {
+      value_labels <- insight::compact_list(lapply(x, attr, "labels", exact = TRUE))
+    }
+
+    # add new variables that sould be appended
+    new_variables <- x[select]
+    colnames(new_variables) <- paste0(colnames(new_variables), append)
+    if (length(variable_labels)) {
+      variable_labels <- c(variable_labels, stats::setNames(variable_labels[select], colnames(new_variables)))
+    }
+    if (length(value_labels)) {
+      value_labels <- c(value_labels, stats::setNames(value_labels[select], colnames(new_variables)))
+    }
+    x <- cbind(x, new_variables)
+    select <- colnames(new_variables)
+
+    # add back variable labels
+    if (length(variable_labels)) {
+      for (i in names(variable_labels)) {
+        attr(x[[i]], "label") <- variable_labels[[i]]
+      }
+    }
+
+    if (preserve_value_labels && length(value_labels)) {
+      for (i in names(value_labels)) {
+        attr(x[[i]], "labels") <- value_labels[[i]]
+      }
+    }
+  }
+  list(x = x, select = select)
+}
+
+
+# variables to standardize and center ----
+#
+# This function mainly serves the purpose to keep or drop factors and
+# character vectors from transformation functions.
+#
+#' @keywords internal
+.select_variables <- function(x, select, exclude, keep_factors, keep_character = FALSE) {
   if (is.null(select)) {
     select <- names(x)
   }
@@ -296,7 +364,7 @@
     select <- setdiff(select, exclude)
   }
 
-  if (!force) {
+  if (!keep_factors) {
     if (!keep_character) {
       factors <- vapply(x[select], function(i) is.factor(i) | is.character(i), FUN.VALUE = logical(1L))
     } else {
@@ -309,76 +377,8 @@
 }
 
 
-
-
-.are_weights <- function(w) {
-  !is.null(w) && length(w) && !all(w == 1) && !all(w == w[1])
-}
-
-
-
-
-.factor_to_numeric <- function(x) {
-  # no need to change for numeric
-  if (is.numeric(x)) {
-    return(x)
-  }
-
-  # Dates can be coerced by as.numeric(), w/o as.character()
-  if (inherits(x, "Date")) {
-    return(as.numeric(x))
-  }
-
-  # Logicals should be 0/1
-  if (is.logical(x)) {
-    return(as.numeric(x))
-  }
-
-  if (anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
-    if (is.character(x)) {
-      x <- as.factor(x)
-    }
-    levels(x) <- 1:nlevels(x)
-  }
-
-  as.numeric(as.character(x))
-}
-
-
-# For standardize_parameters ----------------------------------------------
-
-#' @keywords internal
-.get_object <- function(x, attribute_name = "object_name") {
-  obj_name <- attr(x, attribute_name, exact = TRUE)
-  model <- NULL
-  if (!is.null(obj_name)) {
-    model <- tryCatch(
-      {
-        get(obj_name, envir = parent.frame())
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-    if (is.null(model) ||
-      # prevent self reference
-      inherits(model, "parameters_model")) {
-      model <- tryCatch(
-        {
-          get(obj_name, envir = globalenv())
-        },
-        error = function(e) {
-          NULL
-        }
-      )
-    }
-  }
-  model
-}
-
-
 # for grouped df ---------------------------
-
+#' @keywords internal
 .process_grouped_df <- function(x,
                                 select,
                                 exclude,
@@ -386,7 +386,7 @@
                                 append_suffix = "_z",
                                 reference,
                                 weights,
-                                force) {
+                                keep_factors) {
   if (!is.null(reference)) {
     insight::format_error("The `reference` argument cannot be used with grouped standardization for now.")
   }
@@ -411,7 +411,7 @@
   }
 
   x <- as.data.frame(x)
-  select <- .select_variables(x, select, exclude, force)
+  select <- .select_variables(x, select, exclude, keep_factors)
 
   # append standardized variables
   if (!is.null(append) && append != "") {
