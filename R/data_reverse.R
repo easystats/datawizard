@@ -201,6 +201,7 @@ reverse.grouped_df <- function(x,
                                select = NULL,
                                exclude = NULL,
                                range = NULL,
+                               append = FALSE,
                                ignore_case = FALSE,
                                regex = FALSE,
                                verbose = FALSE,
@@ -218,6 +219,13 @@ reverse.grouped_df <- function(x,
     regex = regex,
     verbose = verbose
   )
+
+  # process arguments
+  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force = TRUE)
+
+  # update processed arguments
+  x <- args$x
+  select <- args$select
 
   x <- as.data.frame(x)
   for (rows in grps) {
@@ -242,6 +250,7 @@ reverse.data.frame <- function(x,
                                select = NULL,
                                exclude = NULL,
                                range = NULL,
+                               append = FALSE,
                                ignore_case = FALSE,
                                regex = FALSE,
                                verbose = FALSE,
@@ -254,6 +263,13 @@ reverse.data.frame <- function(x,
     regex = regex,
     verbose = verbose
   )
+
+  # process arguments
+  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force = TRUE)
+
+  # update processed arguments
+  x <- args$x
+  select <- args$select
 
   # Transform the range so that it is a list now
   if (!is.null(range) && !is.list(range)) {

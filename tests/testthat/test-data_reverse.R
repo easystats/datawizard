@@ -51,6 +51,30 @@ test_that("reverse works with data frame", {
   )
 })
 
+test_that("reverse works with data frame and append", {
+  test <- data.frame(
+    x = 1:5,
+    y = c(3, 8, 2, 5, 1)
+  )
+  expect_identical(
+    reverse(test, select = "x", append = TRUE),
+    data.frame(
+      x = as.double(1:5),
+      y = c(3, 8, 2, 5, 1),
+      x_r = as.double(5:1)
+    )
+  )
+  expect_identical(
+    reverse(test, append = TRUE),
+    data.frame(
+      x = as.double(1:5),
+      y = c(3, 8, 2, 5, 1),
+      x_r = as.double(5:1),
+      y_r = rev(c(3, 8, 2, 5, 1))
+    )
+  )
+})
+
 test_that("reverse: arg 'select' works with formula", {
   test <- data.frame(
     x = 1:5,
