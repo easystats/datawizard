@@ -302,7 +302,6 @@
 
   # append recoded variables
   if (!is.null(append) && append != "") {
-
     # keep or drop factors and characters
     select <- .select_variables(
       x,
