@@ -149,23 +149,6 @@ assign_labels.data.frame <- function(x,
     verbose = verbose
   )
 
-  # process arguments
-  args <- .process_std_args(
-    x,
-    select,
-    exclude,
-    weights = NULL,
-    append = FALSE,
-    append_suffix = "_l",
-    force = TRUE,
-    preserve_value_labels = TRUE,
-    keep_character = TRUE
-  )
-
-  # update processed arguments
-  x <- args$x
-  select <- args$select
-
   x[select] <- lapply(x[select], assign_labels, values = values, verbose = verbose, ...)
   x
 }
