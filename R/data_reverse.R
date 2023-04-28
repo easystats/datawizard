@@ -224,12 +224,17 @@ reverse.grouped_df <- function(x,
   grp_vars <- setdiff(colnames(attr(x, "groups", exact = TRUE)), ".rows")
   select <- setdiff(select, grp_vars)
 
-  # when we append variables, we call ".process_std_args()", which will
+  # when we append variables, we call ".process_append()", which will
   # create the new variables and updates "select", so new variables are processed
   if (!isFALSE(append)) {
     # process arguments
-    args <- .process_std_args(x, select, exclude = NULL, weights = NULL, append, append_suffix = "_r", force = TRUE)
-
+    args <- .process_append(
+      x,
+      select,
+      append,
+      append_suffix = "_r",
+      preserve_value_labels = TRUE
+    )
     # update processed arguments
     x <- args$x
     select <- args$select
@@ -272,12 +277,17 @@ reverse.data.frame <- function(x,
     verbose = verbose
   )
 
-  # when we append variables, we call ".process_std_args()", which will
+  # when we append variables, we call ".process_append()", which will
   # create the new variables and updates "select", so new variables are processed
   if (!isFALSE(append)) {
     # process arguments
-    args <- .process_std_args(x, select, exclude = NULL, weights = NULL, append, append_suffix = "_r", force = TRUE)
-
+    args <- .process_append(
+      x,
+      select,
+      append,
+      append_suffix = "_r",
+      preserve_value_labels = TRUE
+    )
     # update processed arguments
     x <- args$x
     select <- args$select

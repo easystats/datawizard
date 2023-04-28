@@ -284,6 +284,54 @@
 }
 
 
+## process append argument ----
+
+.process_append <- function(x,
+                            select,
+                            append,
+                            append_suffix = "_z",
+                            preserve_value_labels = FALSE,
+                            keep_factors = TRUE,
+                            keep_character = FALSE) {
+  # check append argument, and set default
+  if (isFALSE(append)) {
+    append <- NULL
+  } else if (isTRUE(append)) {
+    append <- append_suffix
+  }
+
+  # append recoded variables
+  if (!is.null(append) && append != "") {
+    # keep or drop factors and characters
+    select <- .select_variables(
+      x,
+      select,
+      exclude = NULL,
+      force = keep_factors,
+      keep_character = keep_character
+    )
+    # copy label attributes
+    variable_labels <- insight::compact_list(lapply(x, attr, "label", exact = TRUE))
+    value_labels <- NULL
+    if (preserve_value_labels) {
+      value_labels <- insight::compact_list(lapply(x, attr, "labels", exact = TRUE))
+    }
+
+    new_variables <- x[select]
+    colnames(new_variables) <- paste0(colnames(new_variables), append)
+    if (length(variable_labels)) {
+      variable_labels <- c(variable_labels, stats::setNames(variable_labels[select], colnames(new_variables)))
+    }
+    if (length(value_labels)) {
+      value_labels <- c(value_labels, stats::setNames(value_labels[select], colnames(new_variables)))
+    }
+    x <- cbind(x, new_variables)
+    select <- colnames(new_variables)
+  }
+  list(x = x, select = select)
+}
+
+
 
 ## variables to standardize and center ----
 

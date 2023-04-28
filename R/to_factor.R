@@ -103,27 +103,25 @@ to_factor.data.frame <- function(x,
     verbose = verbose
   )
 
-  # drop factors, when append is not FALSE
+  # when we append variables, we call ".process_append()", which will
+  # create the new variables and updates "select", so new variables are processed
   if (!isFALSE(append)) {
+    # drop factors, when append is not FALSE
     select <- colnames(x[select])[!vapply(x[select], is.factor, FUN.VALUE = logical(1L))]
+    # process arguments
+    args <- .process_append(
+      x,
+      select,
+      append,
+      append_suffix = "_f",
+      keep_factors = FALSE,
+      keep_character = TRUE,
+      preserve_value_labels = TRUE
+    )
+    # update processed arguments
+    x <- args$x
+    select <- args$select
   }
-
-  # process arguments
-  args <- .process_std_args(
-    x,
-    select,
-    exclude,
-    weights = NULL,
-    append,
-    append_suffix = "_f",
-    force = FALSE,
-    preserve_value_labels = TRUE,
-    keep_character = TRUE
-  )
-
-  # update processed arguments
-  x <- args$x
-  select <- args$select
 
   x[select] <- lapply(x[select], to_factor, verbose = verbose, ...)
   x
