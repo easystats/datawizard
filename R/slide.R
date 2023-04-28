@@ -50,7 +50,7 @@ slide.numeric <- function(x, lowest = 0, ...) {
   minval <- min(x, na.rm = TRUE)
   difference <- minval - lowest
   x <- x - difference
-  .set_back_labels(x, original_x)
+  .set_back_labels(x, original_x, include_values = FALSE)
 }
 
 
