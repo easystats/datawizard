@@ -302,6 +302,7 @@
 
   # append recoded variables
   if (!is.null(append) && append != "") {
+
     # keep or drop factors and characters
     select <- .select_variables(
       x,
@@ -310,6 +311,7 @@
       force = keep_factors,
       keep_character = keep_character
     )
+
     # copy label attributes
     variable_labels <- insight::compact_list(lapply(x, attr, "label", exact = TRUE))
     value_labels <- NULL
@@ -317,6 +319,7 @@
       value_labels <- insight::compact_list(lapply(x, attr, "labels", exact = TRUE))
     }
 
+    # add new variables that sould be appended
     new_variables <- x[select]
     colnames(new_variables) <- paste0(colnames(new_variables), append)
     if (length(variable_labels)) {
@@ -327,6 +330,19 @@
     }
     x <- cbind(x, new_variables)
     select <- colnames(new_variables)
+
+    # add back variable labels
+    if (length(variable_labels)) {
+      for (i in names(variable_labels)) {
+        attr(x[[i]], "label") <- variable_labels[[i]]
+      }
+    }
+
+    if (preserve_value_labels && length(value_labels)) {
+      for (i in names(value_labels)) {
+        attr(x[[i]], "labels") <- value_labels[[i]]
+      }
+    }
   }
   list(x = x, select = select)
 }
