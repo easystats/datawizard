@@ -59,7 +59,7 @@ test_that("reverse works with data frame and append", {
   expect_identical(
     reverse(test, select = "x", append = TRUE),
     data.frame(
-      x = as.double(1:5),
+      x = 1:5,
       y = c(3, 8, 2, 5, 1),
       x_r = as.double(5:1)
     )
@@ -67,10 +67,10 @@ test_that("reverse works with data frame and append", {
   expect_identical(
     reverse(test, append = TRUE),
     data.frame(
-      x = as.double(1:5),
+      x = 1:5,
       y = c(3, 8, 2, 5, 1),
       x_r = as.double(5:1),
-      y_r = rev(c(3, 8, 2, 5, 1))
+      y_r = c(6, 1, 7, 4, 8)
     )
   )
 })
@@ -378,6 +378,32 @@ test_that("reverse works with data frames (grouped data)", {
       id = rep(c("A", "B"), each = 3),
       value1 = c(10, 10, 3, 6, 2, 3),
       value2 = c(4, 6, 3, 10, 6, 5),
+      stringsAsFactors = FALSE
+    )
+  )
+})
+
+
+test_that("reverse works with grouped data frames and append", {
+  skip_if_not_installed("poorman")
+
+  test <- data.frame(
+    x = 1:6,
+    y = c(3, 8, 2, 5, 1, 4),
+    grp = rep(c("a", "b"), 3),
+    stringsAsFactors = FALSE
+  )
+  expect_identical(
+    test %>%
+      poorman::group_by(grp) %>%
+      reverse(append = TRUE) %>%
+      poorman::ungroup(),
+    data.frame(
+      x = 1:6,
+      y = c(3, 8, 2, 5, 1, 4),
+      grp = rep(c("a", "b"), 3),
+      x_r = as.double(c(5, 6, 3, 4, 1, 2)),
+      y_r = as.double(c(1, 4, 2, 7, 3, 8)),
       stringsAsFactors = FALSE
     )
   )

@@ -220,8 +220,12 @@ reverse.grouped_df <- function(x,
     verbose = verbose
   )
 
+  # don't include grouping variables for re-scaling
+  grp_vars <- setdiff(colnames(attr(x, "groups", exact = TRUE)), ".rows")
+  select <- setdiff(select, grp_vars)
+
   # process arguments
-  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force = TRUE)
+  args <- .process_std_args(x, select, exclude = NULL, weights = NULL, append, append_suffix = "_r", force = TRUE)
 
   # update processed arguments
   x <- args$x
@@ -238,7 +242,7 @@ reverse.grouped_df <- function(x,
     )
   }
   # set back class, so data frame still works with dplyr
-  attributes(x) <- info
+  attributes(x) <- utils::modifyList(info, attributes(x))
   x
 }
 
@@ -265,7 +269,7 @@ reverse.data.frame <- function(x,
   )
 
   # process arguments
-  args <- .process_std_args(x, select, exclude, weights = NULL, append, append_suffix = "_r", force = TRUE)
+  args <- .process_std_args(x, select, exclude = NULL, weights = NULL, append, append_suffix = "_r", force = TRUE)
 
   # update processed arguments
   x <- args$x
