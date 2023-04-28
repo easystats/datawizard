@@ -314,6 +314,8 @@ reverse.data.frame <- function(x,
   labels <- attr(old, "labels", exact = TRUE)
   if (isTRUE(include_values) && !is.null(labels)) {
     attr(new, "labels") <- stats::setNames(rev(labels), names(labels))
+  } else if (isFALSE(include_values)) {
+    attr(new, "labels") <- NULL
   }
   new
 }
