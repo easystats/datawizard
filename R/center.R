@@ -198,7 +198,7 @@ center.data.frame <- function(x,
 
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append,
-    append_suffix = "_c", force, remove_na, reference,
+    append_suffix = "_c", keep_factors = force, remove_na, reference,
     .center = center, .scale = NULL
   )
 
@@ -250,9 +250,9 @@ center.grouped_df <- function(x,
     verbose = verbose
   )
 
-  args <- .process_grouped_df(x, select, exclude, append,
-    append_suffix = "_c",
-    reference, weights, force
+  args <- .process_grouped_df(
+    x, select, exclude, append, append_suffix = "_c",
+    reference, weights, keep_factors = force
   )
 
   for (rows in args$grps) {

@@ -278,7 +278,7 @@ standardize.data.frame <- function(x,
 
   # process arguments
   args <- .process_std_args(x, select, exclude, weights, append,
-    append_suffix = "_z", force, remove_na, reference,
+    append_suffix = "_z", keep_factors = force, remove_na, reference,
     .center = center, .scale = scale
   )
 
@@ -335,9 +335,9 @@ standardize.grouped_df <- function(x,
     verbose = verbose
   )
 
-  args <- .process_grouped_df(x, select, exclude, append,
-    append_suffix = "_z",
-    reference, weights, force
+  args <- .process_grouped_df(
+    x, select, exclude, append, append_suffix = "_z",
+    reference, weights, keep_factors = force
   )
 
   for (rows in args$grps) {
