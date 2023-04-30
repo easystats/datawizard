@@ -146,6 +146,12 @@ test_that("normalize: exclude", {
   )
 })
 
+test_that("normalize, with append", {
+  out_n <- normalize(iris, "Sepal.Width", append = TRUE)
+  manual <- (iris$Sepal.Width - min(iris$Sepal.Width)) / diff(range(iris$Sepal.Width))
+  expect_equal(out_n$Sepal.Width_n, manual, ignore_attr = TRUE)
+})
+
 
 # with grouped data -------------------------------------------
 
@@ -165,6 +171,24 @@ test_that("normalize (grouped data)", {
     poorman::pull(Sepal.Width)
 
   expect_identical(datawizard, manual)
+})
+
+test_that("normalize (grouped data)z, with append", {
+  skip_if_not_installed("poorman")
+
+  datawizard_n <- iris %>%
+    poorman::group_by(Species) %>%
+    normalize(Sepal.Width, append = TRUE) %>%
+    poorman::ungroup() %>%
+    poorman::pull(Sepal.Width_n)
+
+  manual_n <- iris %>%
+    poorman::group_by(Species) %>%
+    poorman::mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width)) / diff(range(Sepal.Width))) %>%
+    poorman::ungroup() %>%
+    poorman::pull(Sepal.Width)
+
+  expect_identical(datawizard_n, manual_n)
 })
 
 test_that("normalize, include bounds (grouped data)", {
