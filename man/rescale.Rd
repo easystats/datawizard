@@ -19,6 +19,7 @@ change_scale(x, ...)
   exclude = NULL,
   to = c(0, 100),
   range = NULL,
+  append = FALSE,
   ignore_case = FALSE,
   regex = FALSE,
   verbose = FALSE,
@@ -74,6 +75,16 @@ return \code{"Species"}.}
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
 excludes no columns.}
+
+\item{append}{Logical or string. If \code{TRUE}, recoded or converted variables
+get new column names and are appended (column bind) to \code{x}, thus returning
+both the original and the recoded variables. The new columns get a suffix,
+based on the calling function: \code{"_r"} for recode functions, \code{"_n"} for
+\code{to_numeric()}, \code{"_f"} for \code{to_factor()}, or \code{"_s"} for
+\code{slide()}. If \code{append=FALSE}, original variables in \code{x} will be
+overwritten by their recoded versions. If a character value, recoded
+variables are appended with new column names (using the defined suffix) to
+the original data frame.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
