@@ -103,6 +103,27 @@ test_that("center (grouped data)", {
   expect_identical(datawizard, manual)
 })
 
+test_that("center (grouped data), with force = TRUE", {
+  skip_if_not_installed("poorman")
+
+  datawizard_c <- iris %>%
+    poorman::group_by(Species) %>%
+    center(force = TRUE) %>%
+    poorman::ungroup()
+
+  manual_c <- iris %>%
+    poorman::group_by(Species) %>%
+    poorman::mutate(
+      Sepal.Length = Sepal.Length - mean(Sepal.Length),
+      Sepal.Width = Sepal.Width - mean(Sepal.Width),
+      Petal.Length = Petal.Length - mean(Petal.Length),
+      Petal.Width = Petal.Width - mean(Petal.Width)
+    ) %>%
+    poorman::ungroup()
+
+  expect_identical(datawizard_c, manual_c)
+})
+
 test_that("center, robust (grouped data)", {
   skip_if_not_installed("poorman")
 

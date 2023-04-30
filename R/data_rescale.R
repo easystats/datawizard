@@ -160,8 +160,25 @@ rescale.grouped_df <- function(x,
     exclude,
     ignore_case,
     regex = regex,
+    remove_group_var = TRUE,
     verbose = verbose
   )
+
+  # when we append variables, we call ".process_append()", which will
+  # create the new variables and updates "select", so new variables are processed
+  if (!isFALSE(append)) {
+    # process arguments
+    args <- .process_append(
+      x,
+      select,
+      append,
+      append_suffix = "_r",
+      preserve_value_labels = TRUE
+    )
+    # update processed arguments
+    x <- args$x
+    select <- args$select
+  }
 
   x <- as.data.frame(x)
   for (rows in grps) {
@@ -171,6 +188,7 @@ rescale.grouped_df <- function(x,
       exclude = exclude,
       to = to,
       range = range,
+      append = FALSE, # need to set to FALSE here, else variable will be doubled
       add_transform_class = FALSE,
       ...
     )
@@ -189,6 +207,7 @@ rescale.data.frame <- function(x,
                                exclude = NULL,
                                to = c(0, 100),
                                range = NULL,
+                               append = FALSE,
                                ignore_case = FALSE,
                                regex = FALSE,
                                verbose = FALSE,
@@ -201,6 +220,21 @@ rescale.data.frame <- function(x,
     regex = regex,
     verbose = verbose
   )
+
+  # when we append variables, we call ".pro6cess_append()", which will
+  # create the new variables and updates "select", so new variables are processed
+  if (!isFALSE(append)) {
+    # process arguments
+    args <- .process_append(
+      x,
+      select,
+      append,
+      append_suffix = "_r"
+    )
+    # update processed arguments
+    x <- args$x
+    select <- args$select
+  }
 
   # Transform the range so that it is a list now
   if (!is.null(range) && !is.list(range)) {

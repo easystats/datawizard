@@ -217,12 +217,9 @@ reverse.grouped_df <- function(x,
     exclude,
     ignore_case,
     regex = regex,
+    remove_group_var = TRUE,
     verbose = verbose
   )
-
-  # don't include grouping variables for re-scaling
-  grp_vars <- setdiff(colnames(attr(x, "groups", exact = TRUE)), ".rows")
-  select <- setdiff(select, grp_vars)
 
   # when we append variables, we call ".process_append()", which will
   # create the new variables and updates "select", so new variables are processed
@@ -247,6 +244,7 @@ reverse.grouped_df <- function(x,
       select = select,
       exclude = exclude,
       range = range,
+      append = FALSE, # need to set to FALSE here, else variable will be doubled
       ...
     )
   }

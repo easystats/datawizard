@@ -402,6 +402,9 @@
   # works only for dplyr >= 0.8.0
   grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
+  # for grouped data frames, we can decide to remove group variable from selection
+  grp_vars <- setdiff(colnames(attr(x, "groups", exact = TRUE)), ".rows")
+
   if (is.numeric(weights)) {
     insight::format_warning(
       "For grouped data frames, `weights` must be a character, not a numeric vector.",
@@ -412,6 +415,7 @@
 
   x <- as.data.frame(x)
   select <- .select_variables(x, select, exclude, keep_factors)
+  select <- setdiff(select, grp_vars)
 
   # append standardized variables
   if (!is.null(append) && append != "") {
