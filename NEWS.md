@@ -12,9 +12,10 @@ CHANGES
   argument, to remove or keep missing and infinite values. By default,
   `na.rm = TRUE`, i.e. missing and infinite values are removed by default.
 
-* `reverse_scale()` gains an `append` argument (similar to other data frame
-  methods of transformation functions), to append recoded variables to the
-  input data frame instead of overwriting existing variables.
+* `reverse_scale()`, `normalize()` and `rescaöle()` gain an `append` argument
+  (similar to other data frame methods of transformation functions), to append
+  recoded variables to the input data frame instead of overwriting existing
+  variables.
 
 BUG FIXES
 
@@ -22,6 +23,9 @@ BUG FIXES
   formula (#401).
 
 * `data_merge()` no longer yields a warning for `tibbles` when `join = "bind"`.
+
+* `center()` and `standardize()` did not work for grouped data frames (of class
+  `grouped_df`) when `force = TRUE`.
 
 # datawizard 0.7.1
 
