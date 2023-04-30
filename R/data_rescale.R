@@ -195,7 +195,7 @@ rescale.grouped_df <- function(x,
     )
   }
   # set back class, so data frame still works with dplyr
-  attributes(x) <- info
+  attributes(x) <- utils::modifyList(info, attributes(x))
   x
 }
 
