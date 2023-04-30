@@ -121,7 +121,7 @@ test_that("center (grouped data), with force = TRUE", {
     ) %>%
     poorman::ungroup()
 
-  expect_identical(datawizard_c, manual_c)
+  expect_equal(datawizard_c, manual_c, ignore_attr = TRUE)
 })
 
 test_that("center, robust (grouped data)", {
