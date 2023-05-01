@@ -173,7 +173,7 @@ test_that("normalize (grouped data)", {
   expect_identical(datawizard, manual)
 })
 
-test_that("normalize (grouped data)z, with append", {
+test_that("normalize (grouped data), with append", {
   skip_if_not_installed("poorman")
 
   datawizard_n <- iris %>%
