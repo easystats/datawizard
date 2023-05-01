@@ -334,6 +334,7 @@ categorize.grouped_df <- function(x,
     exclude,
     ignore_case,
     regex = regex,
+    remove_group_var = TRUE,
     verbose = verbose
   )
 

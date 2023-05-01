@@ -2,7 +2,7 @@
 # https://github.com/nathaneastwood/poorman/blob/master/R/select_positions.R
 
 .select_nse <- function(select, data, exclude, ignore_case, regex = FALSE,
-                        verbose = FALSE) {
+                        remove_group_var = FALSE, verbose = FALSE) {
   .check_data(data)
   columns <- colnames(data)
 
@@ -19,8 +19,15 @@
     expr_exclude <- NULL
   }
 
+  # for grouped data frames, we can decide to remove group variable from selection
+  grp_vars <- setdiff(colnames(attr(data, "groups", exact = TRUE)), ".rows")
+
   # directly return all names if select == exclude == NULL
   if (is.null(expr_select) && is.null(expr_exclude)) {
+    # don't include grouping variables
+    if (remove_group_var) {
+      columns <- setdiff(columns, grp_vars)
+    }
     return(columns)
   }
 
@@ -61,6 +68,11 @@
     }
   } else {
     out <- setdiff(selected, excluded)
+  }
+
+  # don't include grouping variables
+  if (remove_group_var && length(out)) {
+    out <- setdiff(out, grp_vars)
   }
 
   out
