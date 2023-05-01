@@ -251,7 +251,8 @@ center.grouped_df <- function(x,
   )
 
   args <- .process_grouped_df(
-    x, select, exclude, append, append_suffix = "_c",
+    x, select, exclude, append,
+    append_suffix = "_c",
     reference, weights, keep_factors = force
   )
 

@@ -336,7 +336,8 @@ standardize.grouped_df <- function(x,
   )
 
   args <- .process_grouped_df(
-    x, select, exclude, append, append_suffix = "_z",
+    x, select, exclude, append,
+    append_suffix = "_z",
     reference, weights, keep_factors = force
   )
 

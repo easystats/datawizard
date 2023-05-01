@@ -95,7 +95,7 @@ test_that("rescale works grouped df and append", {
     colnames(out),
     c(
       "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
-      "Species", "Sepal.Length_r",  "Sepal.Width_r"
+      "Species", "Sepal.Length_r", "Sepal.Width_r"
     )
   )
 })
