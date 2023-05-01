@@ -222,7 +222,7 @@ rescale.data.frame <- function(x,
     verbose = verbose
   )
 
-  # when we append variables, we call ".pro6cess_append()", which will
+  # when we append variables, we call ".process_append()", which will
   # create the new variables and updates "select", so new variables are processed
   if (!isFALSE(append)) {
     # process arguments
