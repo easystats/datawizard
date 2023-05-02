@@ -238,7 +238,7 @@
 # Dispatch expressions to various select helpers according to the function call.
 
 .eval_call <- function(data, x, ignore_case, regex, verbose) {
-  type <- as.character(x[[1]])
+  type <- insight::safe_deparse(x[[1]])
   switch(type,
     `:` = .select_seq(x, data, ignore_case, regex, verbose),
     `-` = .select_minus(x, data, ignore_case, regex, verbose),
