@@ -2,28 +2,36 @@
 % Please edit documentation in R/skewness_kurtosis.R
 \name{skewness}
 \alias{skewness}
+\alias{skewness.numeric}
 \alias{kurtosis}
+\alias{kurtosis.numeric}
 \alias{print.parameters_kurtosis}
 \alias{print.parameters_skewness}
 \alias{summary.parameters_skewness}
 \alias{summary.parameters_kurtosis}
 \title{Compute Skewness and (Excess) Kurtosis}
 \usage{
-skewness(
+skewness(x, ...)
+
+\method{skewness}{numeric}(
   x,
   remove_na = TRUE,
   type = "2",
   iterations = NULL,
   verbose = TRUE,
+  na.rm = TRUE,
   ...
 )
 
-kurtosis(
+kurtosis(x, ...)
+
+\method{kurtosis}{numeric}(
   x,
   remove_na = TRUE,
   type = "2",
   iterations = NULL,
   verbose = TRUE,
+  na.rm = TRUE,
   ...
 )
 
@@ -38,6 +46,8 @@ kurtosis(
 \arguments{
 \item{x}{A numeric vector or data.frame.}
 
+\item{...}{Arguments passed to or from other methods.}
+
 \item{remove_na}{Logical. Should \code{NA} values be removed before computing (\code{TRUE})
 or not (\code{FALSE}, default)?}
 
@@ -51,7 +61,7 @@ errors. If \code{NULL} (default), parametric standard errors are computed.}
 
 \item{verbose}{Toggle warnings and messages.}
 
-\item{...}{Arguments passed to or from other methods.}
+\item{na.rm}{Deprecated. Please use \code{remove_na} instead.}
 
 \item{digits}{Number of decimal places.}
 

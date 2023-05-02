@@ -95,12 +95,7 @@
 #' skewness(rnorm(1000))
 #' kurtosis(rnorm(1000))
 #' @export
-skewness <- function(x,
-                     remove_na = TRUE,
-                     type = "2",
-                     iterations = NULL,
-                     verbose = TRUE,
-                     ...) {
+skewness <- function(x, ...) {
   UseMethod("skewness")
 }
 
@@ -108,6 +103,7 @@ skewness <- function(x,
 # skewness -----------------------------------------
 
 
+#' @rdname skewness
 #' @export
 skewness.numeric <- function(x,
                              remove_na = TRUE,
@@ -175,7 +171,6 @@ skewness.numeric <- function(x,
 }
 
 
-
 #' @export
 skewness.matrix <- function(x,
                             remove_na = TRUE,
@@ -211,7 +206,6 @@ skewness.matrix <- function(x,
 }
 
 
-
 #' @export
 skewness.data.frame <- function(x,
                                 remove_na = TRUE,
@@ -237,7 +231,6 @@ skewness.data.frame <- function(x,
   class(.skewness) <- unique(c("parameters_skewness", class(.skewness)))
   .skewness
 }
-
 
 
 #' @export
@@ -268,16 +261,12 @@ skewness.default <- function(x,
 
 #' @rdname skewness
 #' @export
-kurtosis <- function(x,
-                     remove_na = TRUE,
-                     type = "2",
-                     iterations = NULL,
-                     verbose = TRUE,
-                     ...) {
+kurtosis <- function(x, ...) {
   UseMethod("kurtosis")
 }
 
 
+#' @rdname skewness
 #' @export
 kurtosis.numeric <- function(x,
                              remove_na = TRUE,
@@ -374,7 +363,6 @@ kurtosis.matrix <- function(x,
 }
 
 
-
 #' @export
 kurtosis.data.frame <- function(x,
                                 remove_na = TRUE,
@@ -398,7 +386,6 @@ kurtosis.data.frame <- function(x,
   class(.kurtosis) <- unique(c("parameters_kurtosis", class(.kurtosis)))
   .kurtosis
 }
-
 
 
 #' @export
