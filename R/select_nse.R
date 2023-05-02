@@ -47,11 +47,6 @@
     verbose = verbose
   )
 
-  # sanity check, if ".eval_expr" returns a column name, and no index (see #407)
-  if (is.character(selected) && all(selected %in% columns)) {
-    selected <- match(selected, columns)
-  }
-
   selected_has_mix_idx <- any(selected < 0L) && any(selected > 0L)
   excluded_has_mix_idx <- any(excluded < 0L) && any(excluded > 0L)
 
@@ -431,7 +426,14 @@
       verbose = verbose
     )
   } else {
-    .dynEval(expr, inherits = FALSE, minframe = 0L)
+    out <- .dynEval(expr, inherits = FALSE, minframe = 0L)
+    .eval_expr(
+      out,
+      data = data,
+      ignore_case = ignore_case,
+      regex = regex,
+      verbose = verbose
+    )
   }
 }
 
