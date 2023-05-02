@@ -7,17 +7,17 @@
 \alias{weighted_mad}
 \title{Weighted Mean, Median, SD, and MAD}
 \usage{
-weighted_mean(x, weights = NULL, na.rm = TRUE, verbose = TRUE, ...)
+weighted_mean(x, weights = NULL, remove_na = TRUE, verbose = TRUE, ...)
 
-weighted_median(x, weights = NULL, na.rm = TRUE, verbose = TRUE, ...)
+weighted_median(x, weights = NULL, remove_na = TRUE, verbose = TRUE, ...)
 
-weighted_sd(x, weights = NULL, na.rm = TRUE, verbose = TRUE, ...)
+weighted_sd(x, weights = NULL, remove_na = TRUE, verbose = TRUE, ...)
 
 weighted_mad(
   x,
   weights = NULL,
   constant = 1.4826,
-  na.rm = TRUE,
+  remove_na = TRUE,
   verbose = TRUE,
   ...
 )
@@ -30,7 +30,7 @@ weighted_mad(
 the weights to use for elements of \code{x}. If \code{weights = NULL}, \code{x} is passed
 to the non-weighted function.}
 
-\item{na.rm}{Logical, if \code{TRUE} (default), removes missing (\code{NA}) and infinite
+\item{remove_na}{Logical, if \code{TRUE} (default), removes missing (\code{NA}) and infinite
 values from \code{x} and \code{weights}.}
 
 \item{verbose}{Show warning when \code{weights} are negative?}

@@ -1,7 +1,6 @@
 #' Compute Skewness and (Excess) Kurtosis
 #'
 #' @param x A numeric vector or data.frame.
-#' @param na.rm Remove missing values.
 #' @param type Type of algorithm for computing skewness. May be one of `1`
 #'   (or `"1"`, `"I"` or `"classic"`), `2` (or `"2"`,
 #'   `"II"` or `"SPSS"` or `"SAS"`) or `3` (or  `"3"`,
@@ -14,6 +13,7 @@
 #' @param object An object returned by `skewness()` or `kurtosis()`.
 #' @param verbose Toggle warnings and messages.
 #' @param ... Arguments passed to or from other methods.
+#' @inheritParams coef_var
 #'
 #' @details
 #'
@@ -96,7 +96,7 @@
 #' kurtosis(rnorm(1000))
 #' @export
 skewness <- function(x,
-                     na.rm = TRUE,
+                     remove_na = TRUE,
                      type = "2",
                      iterations = NULL,
                      verbose = TRUE,
@@ -110,12 +110,12 @@ skewness <- function(x,
 
 #' @export
 skewness.numeric <- function(x,
-                             na.rm = TRUE,
+                             remove_na = TRUE,
                              type = "2",
                              iterations = NULL,
                              verbose = TRUE,
                              ...) {
-  if (na.rm) x <- x[!is.na(x)]
+  if (remove_na) x <- x[!is.na(x)]
   n <- length(x)
   out <- (sum((x - mean(x))^3) / n) / (sum((x - mean(x))^2) / n)^1.5
 
@@ -152,7 +152,7 @@ skewness.numeric <- function(x,
         data = x,
         statistic = .boot_skewness,
         R = iterations,
-        na.rm = na.rm,
+        remove_na = remove_na,
         type = type
       )
       out_se <- stats::sd(results$t, na.rm = TRUE)
@@ -171,7 +171,7 @@ skewness.numeric <- function(x,
 
 #' @export
 skewness.matrix <- function(x,
-                            na.rm = TRUE,
+                            remove_na = TRUE,
                             type = "2",
                             iterations = NULL,
                             ...) {
@@ -179,7 +179,7 @@ skewness.matrix <- function(x,
     x,
     2,
     skewness,
-    na.rm = na.rm,
+    remove_na = remove_na,
     type = type,
     iterations = iterations
   )
@@ -200,13 +200,13 @@ skewness.matrix <- function(x,
 
 #' @export
 skewness.data.frame <- function(x,
-                                na.rm = TRUE,
+                                remove_na = TRUE,
                                 type = "2",
                                 iterations = NULL,
                                 ...) {
   .skewness <- lapply(x,
     skewness,
-    na.rm = na.rm,
+    remove_na = remove_na,
     type = type,
     iterations = iterations
   )
@@ -221,13 +221,13 @@ skewness.data.frame <- function(x,
 
 #' @export
 skewness.default <- function(x,
-                             na.rm = TRUE,
+                             remove_na = TRUE,
                              type = "2",
                              iterations = NULL,
                              ...) {
   skewness(
     .factor_to_numeric(x),
-    na.rm = na.rm,
+    remove_na = remove_na,
     type = type,
     iterations = iterations
   )
@@ -241,7 +241,7 @@ skewness.default <- function(x,
 #' @rdname skewness
 #' @export
 kurtosis <- function(x,
-                     na.rm = TRUE,
+                     remove_na = TRUE,
                      type = "2",
                      iterations = NULL,
                      verbose = TRUE,
@@ -252,12 +252,12 @@ kurtosis <- function(x,
 
 #' @export
 kurtosis.numeric <- function(x,
-                             na.rm = TRUE,
+                             remove_na = TRUE,
                              type = "2",
                              iterations = NULL,
                              verbose = TRUE,
                              ...) {
-  if (na.rm) x <- x[!is.na(x)]
+  if (remove_na) x <- x[!is.na(x)]
   n <- length(x)
   out <- n * sum((x - mean(x))^4) / (sum((x - mean(x))^2)^2)
 
@@ -293,7 +293,7 @@ kurtosis.numeric <- function(x,
       data = x,
       statistic = .boot_kurtosis,
       R = iterations,
-      na.rm = na.rm,
+      remove_na = remove_na,
       type = type
     )
     out_se <- stats::sd(results$t, na.rm = TRUE)
@@ -310,7 +310,7 @@ kurtosis.numeric <- function(x,
 
 #' @export
 kurtosis.matrix <- function(x,
-                            na.rm = TRUE,
+                            remove_na = TRUE,
                             type = "2",
                             iterations = NULL,
                             ...) {
@@ -318,7 +318,7 @@ kurtosis.matrix <- function(x,
     x,
     2,
     kurtosis,
-    na.rm = na.rm,
+    remove_na = remove_na,
     type = type,
     iterations = iterations
   )
@@ -335,13 +335,13 @@ kurtosis.matrix <- function(x,
 
 #' @export
 kurtosis.data.frame <- function(x,
-                                na.rm = TRUE,
+                                remove_na = TRUE,
                                 type = "2",
                                 iterations = NULL,
                                 ...) {
   .kurtosis <- lapply(x,
     kurtosis,
-    na.rm = na.rm,
+    remove_na = remove_na,
     type = type,
     iterations = iterations
   )
@@ -354,13 +354,13 @@ kurtosis.data.frame <- function(x,
 
 #' @export
 kurtosis.default <- function(x,
-                             na.rm = TRUE,
+                             remove_na = TRUE,
                              type = "2",
                              iterations = NULL,
                              ...) {
   kurtosis(
     .factor_to_numeric(x),
-    na.rm = na.rm,
+    remove_na = remove_na,
     type = type,
     iterations = iterations
   )
@@ -448,18 +448,18 @@ summary.parameters_kurtosis <- function(object, test = FALSE, ...) {
 
 # bootstrapping -----------------------------------
 
-.boot_skewness <- function(data, indices, na.rm, type) {
+.boot_skewness <- function(data, indices, remove_na, type) {
   datawizard::skewness(data[indices],
-    na.rm = na.rm,
+    remove_na = remove_na,
     type = type,
     iterations = NULL
   )$Skewness
 }
 
 
-.boot_kurtosis <- function(data, indices, na.rm, type) {
+.boot_kurtosis <- function(data, indices, remove_na, type) {
   datawizard::kurtosis(data[indices],
-    na.rm = na.rm,
+    remove_na = remove_na,
     type = type,
     iterations = NULL
   )$Kurtosis

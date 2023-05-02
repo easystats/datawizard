@@ -5,18 +5,22 @@
 \alias{median_mad}
 \title{Summary Helpers}
 \usage{
-mean_sd(x, times = 1L, na.rm = TRUE, named = TRUE, ...)
+mean_sd(x, times = 1L, remove_na = TRUE, named = TRUE, ...)
 
-median_mad(x, times = 1L, na.rm = TRUE, constant = 1.4826, named = TRUE, ...)
+median_mad(
+  x,
+  times = 1L,
+  remove_na = TRUE,
+  constant = 1.4826,
+  named = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{A numeric vector (or one that can be coerced to one via
 \code{as.numeric()}) to be summarized.}
 
 \item{times}{How many SDs above and below the Mean (or MADs around the Median)}
-
-\item{na.rm}{if \code{TRUE} then \code{NA} values are stripped
-    from \code{x} before computation takes place.}
 
 \item{named}{Should the vector be named?
 (E.g., \code{c("-SD" = -1, Mean = 1, "+SD" = 2)}.)}

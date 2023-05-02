@@ -17,7 +17,7 @@ distribution_coef_var(x, ...)
   sigma = NULL,
   method = c("standard", "unbiased", "median_mad", "qcd"),
   trim = 0,
-  na.rm = FALSE,
+  remove_na = FALSE,
   n = NULL,
   ...
 )
@@ -45,7 +45,7 @@ each end of \code{x} before the mean and standard deviation (or other measures)
 are computed. Values of \code{trim} outside the range of (0 to 0.5) are taken
 as the nearest endpoint.}
 
-\item{na.rm}{Logical. Should \code{NA} values be removed before computing (\code{TRUE})
+\item{remove_na}{Logical. Should \code{NA} values be removed before computing (\code{TRUE})
 or not (\code{FALSE}, default)?}
 
 \item{n}{If \code{method = "unbiased"} and both \code{mu} and \code{sigma} are provided (not

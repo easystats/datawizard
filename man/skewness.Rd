@@ -9,9 +9,23 @@
 \alias{summary.parameters_kurtosis}
 \title{Compute Skewness and (Excess) Kurtosis}
 \usage{
-skewness(x, na.rm = TRUE, type = "2", iterations = NULL, verbose = TRUE, ...)
+skewness(
+  x,
+  remove_na = TRUE,
+  type = "2",
+  iterations = NULL,
+  verbose = TRUE,
+  ...
+)
 
-kurtosis(x, na.rm = TRUE, type = "2", iterations = NULL, verbose = TRUE, ...)
+kurtosis(
+  x,
+  remove_na = TRUE,
+  type = "2",
+  iterations = NULL,
+  verbose = TRUE,
+  ...
+)
 
 \method{print}{parameters_kurtosis}(x, digits = 3, test = FALSE, ...)
 
@@ -24,7 +38,8 @@ kurtosis(x, na.rm = TRUE, type = "2", iterations = NULL, verbose = TRUE, ...)
 \arguments{
 \item{x}{A numeric vector or data.frame.}
 
-\item{na.rm}{Remove missing values.}
+\item{remove_na}{Logical. Should \code{NA} values be removed before computing (\code{TRUE})
+or not (\code{FALSE}, default)?}
 
 \item{type}{Type of algorithm for computing skewness. May be one of \code{1}
 (or \code{"1"}, \code{"I"} or \code{"classic"}), \code{2} (or \code{"2"},
