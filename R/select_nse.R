@@ -49,7 +49,7 @@
 
   # sanity check, if ".eval_expr" returns a column name, and no index (see #407)
   if (is.character(selected) && all(selected %in% columns)) {
-    selected <- which(selected %in% columns)
+    selected <- match(selected, columns)
   }
 
   selected_has_mix_idx <- any(selected < 0L) && any(selected > 0L)

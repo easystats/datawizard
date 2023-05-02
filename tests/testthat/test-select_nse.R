@@ -122,3 +122,10 @@ test_that(".select_nse: misc", {
     "Sepal.Width"
   )
 })
+
+test_that(".select_nse: works with function and namespace", {
+  data(iris)
+  model <- lm(Petal.Length ~ Petal.Width, data = iris)
+  out <- data_select(iris, insight::find_predictors(model, effects = "fixed", flatten = TRUE))
+  expect_identical(out, iris["Petal.Width"])
+})
