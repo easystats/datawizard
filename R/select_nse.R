@@ -101,10 +101,10 @@
     "character" = .select_char(data, x, ignore_case, regex = regex, verbose),
     "symbol" = .select_symbol(data, x, ignore_case, regex = regex, verbose),
     "language" = .eval_call(data, x, ignore_case, regex = regex, verbose),
-    insight::format_error(
+    insight::format_error(paste0(
       "Expressions of type <", typeof(x),
       "> cannot be evaluated for use when subsetting."
-    )
+    ))
   )
 
   out
