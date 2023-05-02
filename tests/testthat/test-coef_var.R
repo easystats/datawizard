@@ -18,12 +18,12 @@ test_that("coef_var returns NULL if can't compute", {
 })
 
 
-test_that("coef_var: argument 'na.rm' works", {
+test_that("coef_var: argument 'remove_na' works", {
   expect_identical(coef_var(c(1:10, NA)), NA_real_)
 
   expect_identical(
     coef_var(1:10),
-    coef_var(c(1:10, NA), na.rm = TRUE)
+    coef_var(c(1:10, NA), remove_na = TRUE)
   )
 })
 
