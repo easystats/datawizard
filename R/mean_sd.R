@@ -6,6 +6,7 @@
 #'   (E.g., `c("-SD" = -1, Mean = 1, "+SD" = 2)`.)
 #' @param times How many SDs above and below the Mean (or MADs around the Median)
 #' @param ... Not used.
+#' @inheritParams coef_var
 #' @inheritParams stats::mad
 #'
 #' @return A (possibly named) numeric vector of length `2*times + 1` of SDs
@@ -19,13 +20,23 @@
 #' median_mad(mtcars$mpg)
 #'
 #' @export
-mean_sd <- function(x, times = 1L, remove_na = TRUE, named = TRUE, ...) {
+mean_sd <- function(x, times = 1L, remove_na = TRUE, named = TRUE, na.rm = TRUE, ...) {
+  # TODO: remove deprecated argument later
+  if (!missing(na.rm)) {
+    # TODO: add deprecation warning in a later update
+    remove_na <- na.rm
+  }
   .centrality_dispersion(x, type = "mean", times = times, remove_na = remove_na, named = named)
 }
 
 #' @export
 #' @rdname mean_sd
-median_mad <- function(x, times = 1L, remove_na = TRUE, constant = 1.4826, named = TRUE, ...) {
+median_mad <- function(x, times = 1L, remove_na = TRUE, constant = 1.4826, named = TRUE, na.rm = TRUE, ...) {
+  # TODO: remove deprecated argument later
+  if (!missing(na.rm)) {
+    # TODO: add deprecation warning in a later update
+    remove_na <- na.rm
+  }
   .centrality_dispersion(x, type = "median", times = times, remove_na = remove_na, constant = constant, named = named)
 }
 

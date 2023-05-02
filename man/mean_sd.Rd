@@ -5,7 +5,7 @@
 \alias{median_mad}
 \title{Summary Helpers}
 \usage{
-mean_sd(x, times = 1L, remove_na = TRUE, named = TRUE, ...)
+mean_sd(x, times = 1L, remove_na = TRUE, named = TRUE, na.rm = TRUE, ...)
 
 median_mad(
   x,
@@ -13,6 +13,7 @@ median_mad(
   remove_na = TRUE,
   constant = 1.4826,
   named = TRUE,
+  na.rm = TRUE,
   ...
 )
 }
@@ -22,8 +23,13 @@ median_mad(
 
 \item{times}{How many SDs above and below the Mean (or MADs around the Median)}
 
+\item{remove_na}{Logical. Should \code{NA} values be removed before computing (\code{TRUE})
+or not (\code{FALSE}, default)?}
+
 \item{named}{Should the vector be named?
 (E.g., \code{c("-SD" = -1, Mean = 1, "+SD" = 2)}.)}
+
+\item{na.rm}{Deprecated. Please use \code{remove_na} instead.}
 
 \item{...}{Not used.}
 
