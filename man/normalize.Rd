@@ -7,6 +7,7 @@
 \alias{unnormalize}
 \alias{unnormalize.numeric}
 \alias{unnormalize.data.frame}
+\alias{unnormalize.grouped_df}
 \title{Normalize numeric variable to 0-1 range}
 \usage{
 normalize(x, ...)
@@ -30,6 +31,16 @@ unnormalize(x, ...)
 \method{unnormalize}{numeric}(x, verbose = TRUE, ...)
 
 \method{unnormalize}{data.frame}(
+  x,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+)
+
+\method{unnormalize}{grouped_df}(
   x,
   select = NULL,
   exclude = NULL,

@@ -59,3 +59,38 @@ test_that("unnormalize regex", {
     unnormalize(x, select = "mpg")
   )
 })
+
+
+test_that("unnormalize: grouped data", {
+  skip_if_not_installed("poorman")
+
+  # 1 group, 1 normalized var
+  norm <- poorman::group_by(iris, Species)
+  norm <- normalize(norm, "Sepal.Length")
+  expect_equal(
+    poorman::ungroup(unnormalize(norm, "Sepal.Length")),
+    iris
+  )
+
+  # 2 groups, 1 normalized var
+  set.seed(123)
+  test <- iris
+  test$grp <- sample(c("A", "B"), nrow(test), replace = TRUE)
+  norm <- poorman::group_by(test, Species, grp)
+  norm <- normalize(norm, "Sepal.Length")
+  expect_equal(
+    poorman::ungroup(unnormalize(norm, "Sepal.Length")),
+    test
+  )
+
+  # 2 groups, 2 normalized vars
+  set.seed(123)
+  test <- iris
+  test$grp <- sample(c("A", "B"), nrow(test), replace = TRUE)
+  norm <- poorman::group_by(test, Species, grp)
+  norm <- normalize(norm, c("Sepal.Length", "Petal.Length"))
+  expect_equal(
+    poorman::ungroup(unnormalize(norm, c("Sepal.Length", "Petal.Length"))),
+    test
+  )
+})
