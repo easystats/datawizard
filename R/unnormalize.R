@@ -133,6 +133,9 @@ unnormalize.grouped_df <- function(x,
   for (rows in seq_along(grps)) {
 
     raw_attrs <- unlist(info$groups[rows, grepl("^attr", names(info$groups))])
+    if (length(select) == 1L) {
+      names(raw_attrs) <- paste0("attr_", select, ".", names(raw_attrs))
+    }
 
     tmp <- unnormalize(
       x[grps[[rows]], , drop = FALSE],
