@@ -17,6 +17,9 @@ unnormalize.default <- function(x, ...) {
 #' @export
 unnormalize.numeric <- function(x, verbose = TRUE, ...) {
 
+  # if function called from the "grouped_df" method, we use the dw_transformer
+  # attributes that were recovered in the "grouped_df" method
+
   mc <- match.call(expand.dots = FALSE)
 
   if ("raw_attributes" %in% names(mc[["..."]])) {
@@ -78,6 +81,9 @@ unnormalize.data.frame <- function(x,
     verbose = verbose
   )
 
+  # if function called from the "grouped_df" method, we use the dw_transformer
+  # attributes that were recovered in the "grouped_df" method
+
   mc <- match.call(expand.dots = FALSE)
 
   if ("raw_attributes" %in% names(mc[["..."]])) {
@@ -132,6 +138,7 @@ unnormalize.grouped_df <- function(x,
   }
   for (rows in seq_along(grps)) {
 
+    # get the dw_transformer attributes for this group
     raw_attrs <- unlist(info$groups[rows, grepl("^attr", names(info$groups))])
     if (length(select) == 1L) {
       names(raw_attrs) <- paste0("attr_", select, ".", names(raw_attrs))
