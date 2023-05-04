@@ -21,10 +21,10 @@ unnormalize.numeric <- function(x, verbose = TRUE, ...) {
   # attributes that were recovered in the "grouped_df" method
 
   dots <- match.call(expand.dots = FALSE)[["..."]]
+  grp_attr_dw <- eval(dots$grp_attr_dw, envir = parent.frame(1L))
 
-  if (!is.null(dots$grp_attr_dw)) {
+  if (!is.null(grp_attr_dw)) {
 
-    grp_attr_dw <- eval(dots$grp_attr_dw, envir = parent.frame(1L))
     names(grp_attr_dw) <- gsub(".*\\.", "", names(grp_attr_dw))
 
     include_bounds <- unname(grp_attr_dw["include_bounds"])
