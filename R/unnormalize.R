@@ -144,10 +144,9 @@ unnormalize.grouped_df <- function(x,
       x[grps[[rows]], , drop = FALSE],
       select = select,
       exclude = exclude,
-      include_bounds = include_bounds,
+      ignore_case = ignore_case,
+      regex = regex,
       verbose = verbose,
-      append = FALSE, # need to set to FALSE here, else variable will be doubled
-      add_transform_class = FALSE,
       grp_attr_dw = raw_attrs
     )
     x[grps[[rows]], ] <- tmp
