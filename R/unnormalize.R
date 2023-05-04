@@ -20,22 +20,19 @@ unnormalize.numeric <- function(x, verbose = TRUE, ...) {
   # if function called from the "grouped_df" method, we use the dw_transformer
   # attributes that were recovered in the "grouped_df" method
 
-  mc <- match.call(expand.dots = FALSE)
+  dots <- match.call(expand.dots = FALSE)[["..."]]
 
-  if ("raw_attributes" %in% names(mc[["..."]])) {
-    raw_attributes <- eval(mc[["..."]]$raw_attributes, envir = parent.frame(1L))
-  } else {
-    raw_attributes <- NULL
-  }
+  if (!is.null(dots$grp_attr_dw)) {
 
-  if (!is.null(raw_attributes)) {
+    grp_attr_dw <- eval(dots$grp_attr_dw, envir = parent.frame(1L))
+    names(grp_attr_dw) <- gsub(".*\\.", "", names(grp_attr_dw))
 
-    include_bounds <- unname(raw_attributes[which(grepl("include_bounds", names(raw_attributes)))])
-    min_value <- unname(raw_attributes[which(grepl("min_value", names(raw_attributes)))])
-    range_difference <- unname(raw_attributes[which(grepl("range_difference", names(raw_attributes)))])
-    to_range <- unname(raw_attributes[which(grepl("to_range", names(raw_attributes)))])
+    include_bounds <- unname(grp_attr_dw["include_bounds"])
+    min_value <- unname(grp_attr_dw["min_value"])
+    range_difference <- unname(grp_attr_dw["range_difference"])
+    to_range <- unname(grp_attr_dw["to_range"])
 
-    if (length(to_range) == 0L) to_range <- NULL
+    if (is.na(to_range)) to_range <- NULL
 
   } else {
 
@@ -84,22 +81,18 @@ unnormalize.data.frame <- function(x,
   # if function called from the "grouped_df" method, we use the dw_transformer
   # attributes that were recovered in the "grouped_df" method
 
-  mc <- match.call(expand.dots = FALSE)
+  dots <- match.call(expand.dots = FALSE)[["..."]]
 
-  if ("raw_attributes" %in% names(mc[["..."]])) {
-    raw_attributes <- eval(mc[["..."]]$raw_attributes, envir = parent.frame(1L))
+  if (!is.null(dots$grp_attr_dw)) {
+    grp_attr_dw <- eval(dots$grp_attr_dw, envir = parent.frame(1L))
   } else {
-    raw_attributes <- NULL
+    grp_attr_dw <- NULL
   }
 
   for (i in select) {
-    attrs <- raw_attributes[
-      which(
-        grepl(paste0("^attr\\_", i, "\\."),
-              names(raw_attributes))
-      )
-    ]
-    x[[i]] <- unnormalize(x[[i]], verbose = verbose, raw_attributes = attrs)
+    var_attr <- which(grepl(paste0("^attr\\_", i, "\\."), names(grp_attr_dw)))
+    attrs <- grp_attr_dw[var_attr]
+    x[[i]] <- unnormalize(x[[i]], verbose = verbose, grp_attr_dw = attrs)
   }
 
   x
@@ -152,7 +145,7 @@ unnormalize.grouped_df <- function(x,
       verbose = verbose,
       append = FALSE, # need to set to FALSE here, else variable will be doubled
       add_transform_class = FALSE,
-      raw_attributes = raw_attrs
+      grp_attr_dw = raw_attrs
     )
     x[grps[[rows]], ] <- tmp
   }
