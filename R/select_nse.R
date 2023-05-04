@@ -201,6 +201,13 @@
       }
     )
 
+    # when "x" is a function arg which is itself a function call to evaluate,
+    # .dynGet can return "x" infinitely so we try to evaluate this arg
+    # see #414
+    if (!is.null(new_expr) && insight::safe_deparse(new_expr) == "x") {
+      new_expr <- .dynEval(x, inherits = FALSE, minframe = 0L, remove_n_top_env = 4)
+    }
+
     if (is_select_helper) {
       new_expr <- str2lang(unlist(new_expr, use.names = FALSE))
       out <- .eval_expr(
@@ -238,7 +245,7 @@
 # Dispatch expressions to various select helpers according to the function call.
 
 .eval_call <- function(data, x, ignore_case, regex, verbose) {
-  type <- as.character(x[[1]])
+  type <- insight::safe_deparse(x[[1]])
   switch(type,
     `:` = .select_seq(x, data, ignore_case, regex, verbose),
     `-` = .select_minus(x, data, ignore_case, regex, verbose),
@@ -426,7 +433,14 @@
       verbose = verbose
     )
   } else {
-    .dynEval(expr, inherits = FALSE, minframe = 0L)
+    out <- .dynEval(expr, inherits = FALSE, minframe = 0L)
+    .eval_expr(
+      out,
+      data = data,
+      ignore_case = ignore_case,
+      regex = regex,
+      verbose = verbose
+    )
   }
 }
 
@@ -500,11 +514,15 @@
 # Similar to .dynGet() but instead of getting an object from the environment,
 # we try to evaluate an expression. It stops as soon as the evaluation doesn't
 # error. Returns NULL if can never be evaluated.
+#
+# Custom arg "remove_n_top_env" to remove the first environments which are
+# ".select_nse()" and the other custom functions
 .dynEval <- function(x,
                      ifnotfound = stop(gettextf("%s not found", sQuote(x)), domain = NA),
                      minframe = 1L,
-                     inherits = FALSE) {
-  n <- sys.nframe()
+                     inherits = FALSE,
+                     remove_n_top_env = 0) {
+  n <- sys.nframe() - remove_n_top_env
   x <- insight::safe_deparse(x)
   while (n > minframe) {
     n <- n - 1L
