@@ -93,4 +93,14 @@ test_that("unnormalize: grouped data", {
     poorman::ungroup(unnormalize(norm, c("Sepal.Length", "Petal.Length"))),
     test
   )
+
+  # can't recover attributes
+  norm <- poorman::group_by(iris, Species)
+  norm <- normalize(norm, "Sepal.Length")
+  attr(norm, "groups") <- NULL
+
+  expect_error(
+    unnormalize(norm, "Sepal.Length"),
+    regexp = "Couldn't retrieve the necessary information"
+  )
 })

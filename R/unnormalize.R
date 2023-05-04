@@ -126,7 +126,10 @@ unnormalize.grouped_df <- function(x,
 
   for (i in select) {
     if (is.null(info$groups[[paste0("attr_", i)]])) {
-      insight::format_error("Couldn't retrieve the necessary information to unnormalize", i)
+      insight::format_error(
+        paste("Couldn't retrieve the necessary information to unnormalize",
+              text_concatenate(i, enclose = "`"))
+      )
     }
   }
   for (rows in seq_along(grps)) {
