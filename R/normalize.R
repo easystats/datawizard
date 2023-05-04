@@ -239,6 +239,10 @@ normalize.grouped_df <- function(x,
 
     x[grps[[rows]], ] <- tmp
   }
+
+  # last column of "groups" attributes must be called ".rows"
+  info$groups <- data_relocate(info$groups, ".rows", after = -1)
+
   # set back class, so data frame still works with dplyr
   attributes(x) <- utils::modifyList(info, attributes(x))
   class(x) <- c("grouped_df", class(x))

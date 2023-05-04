@@ -67,7 +67,7 @@ test_that("unnormalize: grouped data", {
   # 1 group, 1 normalized var
   norm <- poorman::group_by(iris, Species)
   norm <- normalize(norm, "Sepal.Length")
-  expect_equal(
+  expect_identical(
     poorman::ungroup(unnormalize(norm, "Sepal.Length")),
     iris
   )
@@ -78,7 +78,7 @@ test_that("unnormalize: grouped data", {
   test$grp <- sample(c("A", "B"), nrow(test), replace = TRUE)
   norm <- poorman::group_by(test, Species, grp)
   norm <- normalize(norm, "Sepal.Length")
-  expect_equal(
+  expect_identical(
     poorman::ungroup(unnormalize(norm, "Sepal.Length")),
     test
   )
@@ -89,7 +89,7 @@ test_that("unnormalize: grouped data", {
   test$grp <- sample(c("A", "B"), nrow(test), replace = TRUE)
   norm <- poorman::group_by(test, Species, grp)
   norm <- normalize(norm, c("Sepal.Length", "Petal.Length"))
-  expect_equal(
+  expect_identical(
     poorman::ungroup(unnormalize(norm, c("Sepal.Length", "Petal.Length"))),
     test
   )
