@@ -522,7 +522,6 @@
                      minframe = 1L,
                      inherits = FALSE,
                      remove_n_top_env = 0) {
-
   n <- sys.nframe() - remove_n_top_env
   x <- insight::safe_deparse(x)
   while (n > minframe) {
