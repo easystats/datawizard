@@ -54,7 +54,7 @@ test_that("unnormalize and unstandardized x 4", {
 # select helpers ------------------------------
 test_that("unnormalize regex", {
   x <- normalize(mtcars, select = "mpg")
-  expect_equal(
+  expect_identical(
     unnormalize(x, select = "pg", regex = TRUE),
     unnormalize(x, select = "mpg")
   )

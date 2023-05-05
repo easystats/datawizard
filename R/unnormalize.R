@@ -54,8 +54,7 @@ unnormalize.numeric <- function(x, verbose = TRUE, ...) {
   if (is.null(to_range)) {
     x * range_difference + min_value
   } else {
-    out <- (x - to_range[1]) * (range_difference / diff(to_range)) + min_value
-    out
+    (x - to_range[1]) * (range_difference / diff(to_range)) + min_value
   }
 }
 
@@ -135,7 +134,7 @@ unnormalize.grouped_df <- function(x,
   for (rows in seq_along(grps)) {
 
     # get the dw_transformer attributes for this group
-    raw_attrs <- unlist(info$groups[rows, grepl("^attr", names(info$groups))])
+    raw_attrs <- unlist(info$groups[rows, startsWith(names(info$groups), "attr")])
     if (length(select) == 1L) {
       names(raw_attrs) <- paste0("attr_", select, ".", names(raw_attrs))
     }
