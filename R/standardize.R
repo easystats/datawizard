@@ -341,9 +341,14 @@ standardize.grouped_df <- function(x,
     reference, weights, keep_factors = force
   )
 
-  for (rows in args$grps) {
-    args$x[rows, ] <- standardize(
-      args$x[rows, , drop = FALSE],
+  # create column(s) to store dw_transformer attributes
+  for (i in select) {
+    args$info$groups[[paste0("attr_", i)]] <- rep(NA, length(args$grps))
+  }
+
+  for (rows in seq_along(args$grps)) {
+    tmp <- standardize(
+      args$x[args$grps[[rows]], , drop = FALSE],
       select = args$select,
       exclude = NULL,
       robust = robust,
@@ -358,7 +363,18 @@ standardize.grouped_df <- function(x,
       add_transform_class = FALSE,
       ...
     )
+
+    # store dw_transformer_attributes
+    for (i in select) {
+      args$info$groups[rows, paste0("attr_", i)][[1]] <- list(unlist(attributes(tmp[[i]])))
+    }
+
+    args$x[args$grps[[rows]], ] <- tmp
   }
+
+  # last column of "groups" attributes must be called ".rows"
+  args$info$groups <- data_relocate(args$info$groups, ".rows", after = -1)
+
   # set back class, so data frame still works with dplyr
   attributes(args$x) <- args$info
   args$x
