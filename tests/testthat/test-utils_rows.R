@@ -18,6 +18,26 @@ test_that("rownames_as_column uses 'rowname' as default column name", {
   expect_true("rowname" %in% names(test))
 })
 
+test_that("rownames_as_column preserves labels", {
+  test_data <- mtcars
+  test_data <- assign_labels(test_data, select = "hp", variable = "horsepower")
+
+  # ungrouped
+  with_id <- rownames_as_column(test_data)
+  expect_identical(
+    attributes(with_id$hp)$label,
+    "horsepower"
+  )
+
+  # grouped
+  with_id_grouped <- data_group(test_data, "cyl")
+  with_id_grouped <- rownames_as_column(with_id_grouped)
+  expect_identical(
+    attributes(with_id_grouped$hp)$label,
+    "horsepower"
+  )
+})
+
 #-------------------------------------------------
 
 test_that("rowid_as_column works", {
@@ -119,4 +139,24 @@ test_that("rownames_as_column and column_as_rownames cancel each other", {
   test <- rownames_as_column(mtcars)
   test2 <- column_as_rownames(test)
   expect_identical(test2, mtcars)
+})
+
+test_that("column_as_rownames preserves labels", {
+  test_data <- rownames_as_column(mtcars)
+  test_data <- assign_labels(test_data, select = "hp", variable = "horsepower")
+
+  # ungrouped
+  with_id <- column_as_rownames(test_data)
+  expect_identical(
+    attributes(with_id$hp)$label,
+    "horsepower"
+  )
+
+  # grouped
+  with_id_grouped <- data_group(test_data, "cyl")
+  with_id_grouped <- column_as_rownames(with_id_grouped)
+  expect_identical(
+    attributes(with_id_grouped$hp)$label,
+    "horsepower"
+  )
 })
