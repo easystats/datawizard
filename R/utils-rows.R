@@ -59,7 +59,6 @@ column_as_rownames <- function(x, var = "rowname") {
 #'
 #' rowid_as_column(test_data)
 #' rowid_as_column(test_data, var = "my_id")
-
 rowid_as_column <- function(x, var = "rowid") {
   UseMethod("rowid_as_column")
 }

@@ -35,10 +35,10 @@ test_that("rowid_as_column works with grouped data", {
 
 test_that("rowid_as_column doesn't work if var is not a character", {
   expect_error(rowid_as_column(mtcars, var = 1),
-               regexp = "Argument 'var' must be of type character"
+    regexp = "Argument 'var' must be of type character"
   )
   expect_error(rowid_as_column(mtcars, var = TRUE),
-               regexp = "Argument 'var' must be of type character"
+    regexp = "Argument 'var' must be of type character"
   )
 })
 
