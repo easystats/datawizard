@@ -71,10 +71,12 @@ rowid_as_column.default <- function(x, var = "rowid") {
   if (!is.character(var)) {
     insight::format_error("Argument 'var' must be of type character.")
   }
+  original_x <- x
   rn <- data.frame(rn = seq_len(nrow(x)), stringsAsFactors = FALSE)
   x <- cbind(rn, x)
   colnames(x)[1] <- var
   rownames(x) <- NULL
+  x <- .set_back_labels(x, original_x)
   x
 }
 
@@ -85,13 +87,13 @@ rowid_as_column.grouped_df <- function(x, var = "rowid") {
   grps <- attr(x, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 
-  out <- lapply(grps, function(rows) {
-    rowid_as_column.default(x[rows, ], var = var)
-  })
+  for (i in seq_len(length(grps))) {
+    x[grps[[i]], var] <- seq_len(length(grps[[i]]))
+  }
 
-  out <- do.call(rbind, out)
+  # can't just put select = "var" because there could be another variable
+  # called var
+  x <- data_relocate(x, paste0("^", var, "$"), regex = TRUE, before = 1)
 
-  rownames(out) <- NULL
-
-  out
+  x
 }

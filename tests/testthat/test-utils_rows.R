@@ -47,6 +47,37 @@ test_that("rowid_as_column uses 'rowid' as default column name", {
   expect_true("rowid" %in% names(test))
 })
 
+test_that("rowid_as_column preserves labels", {
+  test_data <- mtcars
+  test_data <- assign_labels(test_data, select = "hp", variable = "horsepower")
+
+  # ungrouped
+  with_id <- rowid_as_column(test_data)
+  expect_identical(
+    attributes(with_id$hp)$label,
+    "horsepower"
+  )
+
+  # grouped
+  with_id_grouped <- data_group(test_data, "cyl")
+  with_id_grouped <- rowid_as_column(with_id_grouped)
+  expect_identical(
+    attributes(with_id_grouped$hp)$label,
+    "horsepower"
+  )
+})
+
+test_that("rowid_as_column has no issue if another variable is called 'var'", {
+  foo <- data.frame(
+    grp = c("A", "A", "B", "B"),
+    var = 1:4
+  )
+
+  out <- data_group(foo, grp)
+  out <- rowid_as_column(out)
+  expect_named(out, c("rowid", "grp", "var"))
+})
+
 #-------------------------------------------------
 
 test_that("column_as_rownames works", {
