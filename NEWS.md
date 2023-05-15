@@ -16,6 +16,11 @@ CHANGES
   (similar to other data frame methods of transformation functions), to append
   recoded variables to the input data frame instead of overwriting existing
   variables.
+  
+NEW FUNCTIONS
+
+* `rowid_as_column()` to complement `rownames_as_column()` (and to mimic 
+  `tibble::rowid_to_column()`).
 
 BUG FIXES
 

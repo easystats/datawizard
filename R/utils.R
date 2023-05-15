@@ -256,3 +256,13 @@
   # Create the string(s)
   do.call(sprintf, c(list(fmt_sprintf), args))
 }
+
+
+#' help-functions
+#' @keywords internal
+#' @noRd
+.data_frame <- function(...) {
+  x <- data.frame(..., stringsAsFactors = FALSE)
+  rownames(x) <- NULL
+  x
+}
