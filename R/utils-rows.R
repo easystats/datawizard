@@ -61,6 +61,11 @@ column_as_rownames <- function(x, var = "rowname") {
 #' rowid_as_column(test_data, var = "my_id")
 
 rowid_as_column <- function(x, var = "rowid") {
+  UseMethod("rowid_as_column")
+}
+
+#' @export
+rowid_as_column.default <- function(x, var = "rowid") {
   if (is.null(var)) {
     var <- "rowid"
   }
@@ -72,4 +77,22 @@ rowid_as_column <- function(x, var = "rowid") {
   colnames(x)[1] <- var
   rownames(x) <- NULL
   x
+}
+
+
+#' @export
+rowid_as_column.grouped_df <- function(x, var = "rowid") {
+  # works only for dplyr >= 0.8.0
+  grps <- attr(x, "groups", exact = TRUE)
+  grps <- grps[[".rows"]]
+
+  out <- lapply(grps, function(rows) {
+    rowid_as_column.default(x[rows, ], var = var)
+  })
+
+  out <- do.call(rbind, out)
+
+  rownames(out) <- NULL
+
+  out
 }
