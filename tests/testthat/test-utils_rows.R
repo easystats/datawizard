@@ -43,12 +43,12 @@ test_that("rownames_as_column preserves other attribs", {
 
   # ungrouped
   with_id <- rownames_as_column(test_data)
-  expect_true(!is.null(attributes(with_id)$center))
+  expect_false(is.null(attributes(with_id)$center))
 
   # grouped
   with_id_grouped <- data_group(test_data, "cyl")
   with_id_grouped <- rownames_as_column(with_id_grouped)
-  expect_true(!is.null(attributes(with_id_grouped)$center))
+  expect_false(is.null(attributes(with_id_grouped)$center))
 })
 
 test_that("rownames_as_column errors if already var of same name", {
@@ -112,18 +112,19 @@ test_that("rowid_as_column preserves other attribs", {
 
   # ungrouped
   with_id <- rowid_as_column(test_data)
-  expect_true(!is.null(attributes(with_id)$center))
+  expect_false(is.null(attributes(with_id)$center))
 
   # grouped
   with_id_grouped <- data_group(test_data, "cyl")
   with_id_grouped <- rowid_as_column(with_id_grouped)
-  expect_true(!is.null(attributes(with_id_grouped)$center))
+  expect_false(is.null(attributes(with_id_grouped)$center))
 })
 
 test_that("rowid_as_column has no issue if another variable is called 'var'", {
   foo <- data.frame(
     grp = c("A", "A", "B", "B"),
-    var = 1:4
+    var = 1:4,
+    stringsAsFactors = FALSE
   )
 
   out <- data_group(foo, grp)
@@ -207,10 +208,10 @@ test_that("column_as_rownames preserves other attribs", {
 
   # ungrouped
   with_id <- column_as_rownames(test_data, "rowname")
-  expect_true(!is.null(attributes(with_id)$center))
+  expect_false(is.null(attributes(with_id)$center))
 
   # grouped
   with_id_grouped <- data_group(test_data, "cyl")
   with_id_grouped <- column_as_rownames(with_id_grouped)
-  expect_true(!is.null(attributes(with_id_grouped)$center))
+  expect_false(is.null(attributes(with_id_grouped)$center))
 })
