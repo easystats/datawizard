@@ -2,7 +2,9 @@
 #'
 #' @param x A data frame.
 #' @param var Name of column to use for row names/ids. For `column_as_rownames()`,
-#'   this argument can be the variable name or the column number.
+#'   this argument can be the variable name or the column number. For
+#'   `rownames_as_column()` and `rowid_as_column()`, the column name must not
+#'   already exist in the data.
 #'
 #' @return
 #' A data frame.
@@ -26,10 +28,17 @@ rownames_as_column <- function(x, var = "rowname") {
   if (!is.character(var)) {
     insight::format_error("Argument 'var' must be of type character.")
   }
+  if (var %in% colnames(x)) {
+    insight::format_error(
+      paste0("There is already a variable named `", var, "` in your dataset.")
+    )
+  }
+  original_x <- x
   rn <- data.frame(rn = rownames(x), stringsAsFactors = FALSE)
   x <- cbind(rn, x)
   colnames(x)[1] <- var
   rownames(x) <- NULL
+  x <- .replace_attrs(x, attributes(original_x))
   x
 }
 
@@ -45,8 +54,11 @@ column_as_rownames <- function(x, var = "rowname") {
   if (is.numeric(var) && (var > ncol(x) || var <= 0)) {
     insight::format_error("Column ", var, " does not exist. There are ", ncol(x), " columns in the data frame.")
   }
+
+  original_x <- x
   rownames(x) <- x[[var]]
   x[[var]] <- NULL
+  x <- .replace_attrs(x, attributes(original_x))
   x
 }
 
@@ -71,18 +83,32 @@ rowid_as_column.default <- function(x, var = "rowid") {
   if (!is.character(var)) {
     insight::format_error("Argument 'var' must be of type character.")
   }
+  if (var %in% colnames(x)) {
+    insight::format_error(
+      paste0("There is already a variable named `", var, "` in your dataset.")
+    )
+  }
   original_x <- x
   rn <- data.frame(rn = seq_len(nrow(x)), stringsAsFactors = FALSE)
   x <- cbind(rn, x)
   colnames(x)[1] <- var
   rownames(x) <- NULL
-  x <- .set_back_labels(x, original_x)
+  x <- .replace_attrs(x, attributes(original_x))
   x
 }
 
 
 #' @export
 rowid_as_column.grouped_df <- function(x, var = "rowid") {
+
+  if (!is.character(var)) {
+    insight::format_error("Argument 'var' must be of type character.")
+  }
+  if (var %in% colnames(x)) {
+    insight::format_error(
+      paste0("There is already a variable named `", var, "` in your dataset.")
+    )
+  }
   # works only for dplyr >= 0.8.0
   grps <- attr(x, "groups", exact = TRUE)
   grps <- grps[[".rows"]]

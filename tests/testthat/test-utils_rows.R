@@ -38,6 +38,26 @@ test_that("rownames_as_column preserves labels", {
   )
 })
 
+test_that("rownames_as_column preserves other attribs", {
+  test_data <- standardize(mtcars)
+
+  # ungrouped
+  with_id <- rownames_as_column(test_data)
+  expect_true(!is.null(attributes(with_id)$center))
+
+  # grouped
+  with_id_grouped <- data_group(test_data, "cyl")
+  with_id_grouped <- rownames_as_column(with_id_grouped)
+  expect_true(!is.null(attributes(with_id_grouped)$center))
+})
+
+test_that("rownames_as_column errors if already var of same name", {
+  expect_error(
+    rownames_as_column(mtcars, "mpg"),
+    "already a variable named"
+  )
+})
+
 #-------------------------------------------------
 
 test_that("rowid_as_column works", {
@@ -87,6 +107,19 @@ test_that("rowid_as_column preserves labels", {
   )
 })
 
+test_that("rowid_as_column preserves other attribs", {
+  test_data <- standardize(mtcars)
+
+  # ungrouped
+  with_id <- rowid_as_column(test_data)
+  expect_true(!is.null(attributes(with_id)$center))
+
+  # grouped
+  with_id_grouped <- data_group(test_data, "cyl")
+  with_id_grouped <- rowid_as_column(with_id_grouped)
+  expect_true(!is.null(attributes(with_id_grouped)$center))
+})
+
 test_that("rowid_as_column has no issue if another variable is called 'var'", {
   foo <- data.frame(
     grp = c("A", "A", "B", "B"),
@@ -96,6 +129,13 @@ test_that("rowid_as_column has no issue if another variable is called 'var'", {
   out <- data_group(foo, grp)
   out <- rowid_as_column(out)
   expect_named(out, c("rowid", "grp", "var"))
+})
+
+test_that("rowid_as_column errors if already var of same name", {
+  expect_error(
+    rowid_as_column(mtcars, "mpg"),
+    "already a variable named"
+  )
 })
 
 #-------------------------------------------------
@@ -159,4 +199,18 @@ test_that("column_as_rownames preserves labels", {
     attributes(with_id_grouped$hp)$label,
     "horsepower"
   )
+})
+
+
+test_that("column_as_rownames preserves other attribs", {
+  test_data <- rownames_as_column(standardize(mtcars))
+
+  # ungrouped
+  with_id <- column_as_rownames(test_data, "rowname")
+  expect_true(!is.null(attributes(with_id)$center))
+
+  # grouped
+  with_id_grouped <- data_group(test_data, "cyl")
+  with_id_grouped <- column_as_rownames(with_id_grouped)
+  expect_true(!is.null(attributes(with_id_grouped)$center))
 })

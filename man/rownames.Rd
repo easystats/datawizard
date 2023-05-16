@@ -16,7 +16,9 @@ rowid_as_column(x, var = "rowid")
 \item{x}{A data frame.}
 
 \item{var}{Name of column to use for row names/ids. For \code{column_as_rownames()},
-this argument can be the variable name or the column number.}
+this argument can be the variable name or the column number. For
+\code{rownames_as_column()} and \code{rowid_as_column()}, the column name must not
+already exist in the data.}
 }
 \value{
 A data frame.
