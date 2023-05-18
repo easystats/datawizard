@@ -26,6 +26,22 @@ A data frame.
 \description{
 Tools for working with row names or row ids
 }
+\details{
+These are similar to \code{tibble}'s functions \code{column_to_rownames()},
+\code{rownames_to_column()} and \code{rowid_to_column()}. Note that the behavior of
+\code{rowid_as_column()} is different for grouped dataframe: instead of making
+the rowid unique across the full dataframe, it creates rowid per group.
+Therefore, there can be several rows with the same rowid if they belong to
+different groups.
+
+If you are familiar with \code{dplyr}, this is similar to doing the following:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data |>
+  group_by(grp) |>
+  mutate(id = row_number()) |>
+  ungroup()
+}\if{html}{\out{</div>}}
+}
 \examples{
 # Convert between row names and column --------------------------------
 test <- rownames_as_column(mtcars, var = "car")

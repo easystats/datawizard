@@ -6,6 +6,22 @@
 #'   `rownames_as_column()` and `rowid_as_column()`, the column name must not
 #'   already exist in the data.
 #'
+#' @details
+#' These are similar to `tibble`'s functions `column_to_rownames()`,
+#' `rownames_to_column()` and `rowid_to_column()`. Note that the behavior of
+#' `rowid_as_column()` is different for grouped dataframe: instead of making
+#' the rowid unique across the full dataframe, it creates rowid per group.
+#' Therefore, there can be several rows with the same rowid if they belong to
+#' different groups.
+#'
+#' If you are familiar with `dplyr`, this is similar to doing the following:
+#' ```r
+#' data |>
+#'   group_by(grp) |>
+#'   mutate(id = row_number()) |>
+#'   ungroup()
+#' ```
+#'
 #' @return
 #' A data frame.
 #'
