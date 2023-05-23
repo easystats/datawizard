@@ -408,6 +408,8 @@ describe_distribution.data.frame <- function(x,
     }
   }))
 
+  if (is.null(out)) return(NULL)
+
   out$Variable <- row.names(out)
   row.names(out) <- NULL
   out <- out[c("Variable", setdiff(colnames(out), "Variable"))]
