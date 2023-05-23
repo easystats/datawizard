@@ -129,8 +129,8 @@ rowid_as_column.grouped_df <- function(x, var = "rowid") {
   grps <- attr(x, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 
-  for (i in seq_len(length(grps))) {
-    x[grps[[i]], var] <- seq_len(length(grps[[i]]))
+  for (i in seq_along(grps)) {
+    x[grps[[i]], var] <- seq_along(grps[[i]])
   }
 
   # can't just put select = "var" because there could be another variable
