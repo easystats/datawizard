@@ -217,6 +217,11 @@ test_that("describe_distribution - select", {
 
   expect_equal(out$Variable, c("Petal.Length", "Petal.Width"))
   expect_equal(out$Mean, c(3.758000, 1.199333), tolerance = 1e-3)
+
+  expect_null(describe_distribution(iris, select = "Species"))
+  out <- describe_distribution(iris, select = "Species", include_factors = TRUE)
+  exp <- describe_distribution(iris$Species)
+  expect_identical(out$Range, exp$Range)
 })
 
 
