@@ -18,6 +18,12 @@ Create new variables in a data frame. Unlike \code{base::transform()}, \code{dat
 can be used on grouped data frames, and newly created variables can be directly
 used.
 }
+\note{
+This function is still experimental and well tested for interactive
+use. There might be corner cases, e.g. when called from inside functions
+or similar, where \code{data_transform()} does not yet work. Please carefully
+check your results before using this function, say, in package code.
+}
 \examples{
 data(efc)
 new_efc <- data_transform(

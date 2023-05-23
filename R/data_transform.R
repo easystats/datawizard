@@ -9,6 +9,11 @@
 #' to the name of the new variable, while the right-hand side represent the
 #' values of the new variable. See 'Examples'.
 #'
+#' @note This function is still experimental and well tested for interactive
+#' use. There might be corner cases, e.g. when called from inside functions
+#' or similar, where `data_transform()` does not yet work. Please carefully
+#' check your results before using this function, say, in package code.
+#'
 #' @examples
 #' data(efc)
 #' new_efc <- data_transform(
