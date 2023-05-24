@@ -11,7 +11,9 @@ test_that("coefficient of variation works", {
 
 test_that("coef_var returns NULL if can't compute", {
   expect_warning(
-    x <- coef_var(as.Date("2022-10-31")),
+    {
+      x <- coef_var(as.Date("2022-10-31"))
+    },
     "Can't compute"
   )
   expect_null(x)

@@ -408,7 +408,9 @@ describe_distribution.data.frame <- function(x,
     }
   }))
 
-  if (is.null(out)) return(NULL)
+  if (is.null(out)) {
+    return(NULL)
+  }
 
   out$Variable <- row.names(out)
   row.names(out) <- NULL
