@@ -11,20 +11,26 @@ test_that("coefficient of variation works", {
 
 test_that("coef_var returns NULL if can't compute", {
   expect_warning(
-    x <- coef_var(as.Date("2022-10-31")),
+    {
+      x <- coef_var(as.Date("2022-10-31"))
+    },
     "Can't compute"
   )
   expect_null(x)
 })
 
 
-test_that("coef_var: argument 'na.rm' works", {
+test_that("coef_var: argument 'remove_na' works", {
   expect_identical(coef_var(c(1:10, NA)), NA_real_)
 
   expect_identical(
     coef_var(1:10),
-    coef_var(c(1:10, NA), na.rm = TRUE)
+    coef_var(c(1:10, NA), remove_na = TRUE)
   )
+})
+
+test_that("coef_var: deprecation warning", {
+  expect_warning(coef_var(c(1:10, NA), na.rm = TRUE))
 })
 
 test_that("coef_var: method 'unbiased' needs argument 'n' when sigma and mu are provided", {
