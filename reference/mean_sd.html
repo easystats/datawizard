@@ -92,9 +92,17 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mean_sd</span><span class="op">(</span><span class="va">x</span>, times <span class="op">=</span> <span class="fl">1L</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span>, named <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mean_sd</span><span class="op">(</span><span class="va">x</span>, times <span class="op">=</span> <span class="fl">1L</span>, remove_na <span class="op">=</span> <span class="cn">TRUE</span>, named <span class="op">=</span> <span class="cn">TRUE</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">median_mad</span><span class="op">(</span><span class="va">x</span>, times <span class="op">=</span> <span class="fl">1L</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span>, constant <span class="op">=</span> <span class="fl">1.4826</span>, named <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">median_mad</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  times <span class="op">=</span> <span class="fl">1L</span>,</span>
+<span>  remove_na <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  constant <span class="op">=</span> <span class="fl">1.4826</span>,</span>
+<span>  named <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -108,14 +116,18 @@
 <dd><p>How many SDs above and below the Mean (or MADs around the Median)</p></dd>
 
 
-<dt>na.rm</dt>
-<dd><p>if <code>TRUE</code> then <code>NA</code> values are stripped
-    from <code>x</code> before computation takes place.</p></dd>
+<dt>remove_na</dt>
+<dd><p>Logical. Should <code>NA</code> values be removed before computing (<code>TRUE</code>)
+or not (<code>FALSE</code>, default)?</p></dd>
 
 
 <dt>named</dt>
 <dd><p>Should the vector be named?
 (E.g., <code>c("-SD" = -1, Mean = 1, "+SD" = 2)</code>.)</p></dd>
+
+
+<dt>na.rm</dt>
+<dd><p>Deprecated. Please use <code>remove_na</code> instead.</p></dd>
 
 
 <dt>...</dt>

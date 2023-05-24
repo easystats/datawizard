@@ -106,8 +106,9 @@ the mean, \(\sigma/\mu\)) for a set of numeric values.</p>
 <span>  sigma <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"standard"</span>, <span class="st">"unbiased"</span>, <span class="st">"median_mad"</span>, <span class="st">"qcd"</span><span class="op">)</span>,</span>
 <span>  trim <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  na.rm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  remove_na <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  n <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  na.rm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -148,7 +149,7 @@ are computed. Values of <code>trim</code> outside the range of (0 to 0.5) are ta
 as the nearest endpoint.</p></dd>
 
 
-<dt>na.rm</dt>
+<dt>remove_na</dt>
 <dd><p>Logical. Should <code>NA</code> values be removed before computing (<code>TRUE</code>)
 or not (<code>FALSE</code>, default)?</p></dd>
 
@@ -157,6 +158,10 @@ or not (<code>FALSE</code>, default)?</p></dd>
 <dd><p>If <code>method = "unbiased"</code> and both <code>mu</code> and <code>sigma</code> are provided (not
 computed from <code>x</code>), what sample size to use to adjust the computed CV
 for small-sample bias?</p></dd>
+
+
+<dt>na.rm</dt>
+<dd><p>Deprecated. Please use <code>remove_na</code> instead.</p></dd>
 
 </dl></div>
     <div class="section level2">

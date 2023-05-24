@@ -92,17 +92,17 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">weighted_mean</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="cn">NULL</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">weighted_mean</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="cn">NULL</span>, remove_na <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">weighted_median</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="cn">NULL</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">weighted_median</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="cn">NULL</span>, remove_na <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">weighted_sd</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="cn">NULL</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">weighted_sd</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="cn">NULL</span>, remove_na <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">weighted_mad</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  constant <span class="op">=</span> <span class="fl">1.4826</span>,</span>
-<span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  remove_na <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -121,7 +121,7 @@ the weights to use for elements of <code>x</code>. If <code>weights = NULL</code
 to the non-weighted function.</p></dd>
 
 
-<dt>na.rm</dt>
+<dt>remove_na</dt>
 <dd><p>Logical, if <code>TRUE</code> (default), removes missing (<code>NA</code>) and infinite
 values from <code>x</code> and <code>weights</code>.</p></dd>
 
