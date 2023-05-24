@@ -1,26 +1,35 @@
 #' Create new variables in a data frame
 #'
-#' Create new variables in a data frame. Unlike `base::transform()`, `data_transform`
+#' Create new variables in a data frame. Unlike `base::transform()`, `data_modify()`
 #' can be used on grouped data frames, and newly created variables can be directly
 #' used.
 #'
 #' @param data The data frame, for which new variables should be created.
 #' @param ... A sequence of named expressions, where the left-hand side refers
 #' to the name of the new variable, while the right-hand side represent the
-#' values of the new variable. See 'Examples'.
+#' values of the new variable. The right-hand side can also be represented
+#' as character string. See 'Examples'.
 #'
 #' @note This function is still experimental and well tested for interactive
 #' use. There might be corner cases, e.g. when called from inside functions
-#' or similar, where `data_transform()` does not yet work. Please carefully
+#' or similar, where `data_modify()` does not yet work. Please carefully
 #' check your results before using this function, say, in package code.
 #'
 #' @examples
 #' data(efc)
-#' new_efc <- data_transform(
+#' new_efc <- data_modify(
 #'   efc,
 #'   c12hour_c = center(c12hour),
 #'   c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
 #'   c12hour_z2 = standardize(c12hour)
+#' )
+#' head(new_efc)
+#'
+#' # using character strings
+#' new_efc <- data_modify(
+#'   efc,
+#'   c12hour_c = center(c12hour),
+#'   c12hour_z = "c12hour_c / sd(c12hour, na.rm = TRUE)"
 #' )
 #' head(new_efc)
 #'
@@ -29,7 +38,7 @@
 #'
 #' # works on grouped data
 #' grouped_efc <- data_group(efc, "c172code")
-#' new_efc <- data_transform(
+#' new_efc <- data_modify(
 #'   grouped_efc,
 #'   c12hour_c = center(c12hour),
 #'   c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
@@ -37,20 +46,24 @@
 #' )
 #' head(new_efc)
 #' @export
-data_transform <- function(data, ...) {
-  UseMethod("data_transform")
+data_modify <- function(data, ...) {
+  UseMethod("data_modify")
 }
 
 #' @export
-data_transform.default <- function(data, ...) {
+data_modify.default <- function(data, ...) {
   insight::format_error("`data` must be a data frame.")
 }
 
 #' @export
-data_transform.data.frame <- function(data, ...) {
+data_modify.data.frame <- function(data, ...) {
   dots <- match.call(expand.dots = FALSE)$`...`
   for (i in seq_along(dots)) {
-    new_variable <- with(data, eval(dots[[i]]))
+    symbol <- dots[[i]]
+    if (is.character(symbol)) {
+      symbol <- str2lang(symbol)
+    }
+    new_variable <- with(data, eval(symbol))
     if (length(new_variable) != nrow(data)) {
       insight::format_error("New variable has not the same length as the other variables in the data frame.")
     }
@@ -60,7 +73,7 @@ data_transform.data.frame <- function(data, ...) {
 }
 
 #' @export
-data_transform.grouped_df <- function(data, ...) {
+data_modify.grouped_df <- function(data, ...) {
   # we need to evaluate dots here, and pass them with "do.call" to
   # the data.frame method later...
   dots <- match.call(expand.dots = FALSE)$`...`
@@ -74,7 +87,7 @@ data_transform.grouped_df <- function(data, ...) {
   }
   # perform transform on groups
   for (rows in grps) {
-    data[rows, ] <- do.call("data_transform", c(list(data[rows, , drop = FALSE]), dots))
+    data[rows, ] <- do.call("data_modify", c(list(data[rows, , drop = FALSE]), dots))
   }
   # set back class, so data frame still works with dplyr
   data <- .replace_attrs(data, attr_data)
