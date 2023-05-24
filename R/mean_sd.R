@@ -23,7 +23,7 @@
 mean_sd <- function(x, times = 1L, remove_na = TRUE, named = TRUE, na.rm = TRUE, ...) {
   # TODO: remove deprecated argument later
   if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
+    insight::format_warning("Argument `na.rm` is deprecated. Please use `remove_na` instead.")
     remove_na <- na.rm
   }
   .centrality_dispersion(x, type = "mean", times = times, remove_na = remove_na, named = named)
@@ -34,7 +34,7 @@ mean_sd <- function(x, times = 1L, remove_na = TRUE, named = TRUE, na.rm = TRUE,
 median_mad <- function(x, times = 1L, remove_na = TRUE, constant = 1.4826, named = TRUE, na.rm = TRUE, ...) {
   # TODO: remove deprecated argument later
   if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
+    insight::format_warning("Argument `na.rm` is deprecated. Please use `remove_na` instead.")
     remove_na <- na.rm
   }
   .centrality_dispersion(x, type = "median", times = times, remove_na = remove_na, constant = constant, named = named)

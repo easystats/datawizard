@@ -114,7 +114,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
                              trim = 0, remove_na = FALSE, n = NULL, na.rm = FALSE, ...) {
   # TODO: remove deprecated argument later
   if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
+    insight::format_warning("Argument `na.rm` is deprecated. Please use `remove_na` instead.")
     remove_na <- na.rm
   }
 
