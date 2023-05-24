@@ -30,6 +30,10 @@ BUG FIXES
 
 * `center()` and `standardize()` did not work for grouped data frames (of class
   `grouped_df`) when `force = TRUE`.
+  
+* The `data.frame` method of `describe_distribution()` returns `NULL` instead of
+  an error if no valid variable were passed (for example a factor variable with
+  `include_factors = FALSE`) (#421).
 
 # datawizard 0.7.1
 
