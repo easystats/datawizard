@@ -12,7 +12,7 @@ BREAKING CHANGES
 
 CHANGES
 
-* Weighted-functions (`weighted_sd()`, `weighted_mean()`, ...) gain an `remove_na`
+* Weighted-functions (`weighted_sd()`, `weighted_mean()`, ...) gain a `remove_na`
   argument, to remove or keep missing and infinite values. By default,
   `remove_na = TRUE`, i.e. missing and infinite values are removed by default.
 
