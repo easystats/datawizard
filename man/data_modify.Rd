@@ -29,12 +29,27 @@ values of the new variable. Example: \code{Sepal.Width = center(Sepal.Width)}.
 )
 }\if{html}{\out{</div>}}
 \item A (single) character vector of expressions. Example:
-\code{c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")}
-\item A list of character expressions. Example:
-\code{list("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")}
+\code{c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")}. This
+type of expression cannot be mixed with other ways of defining expressions,
+i.e. this example will \strong{not} work:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{data_modify( # doesn't work!
+  iris,
+  c(
+    "Sepal.Width = center(Sepal.Width)",
+    "Sepal_Width_c = Sepal.Width - mean(Sepal.Width)"
+  ),
+  Sepal_W_z = Sepal_Width_c / sd(Sepal.With)
+)
+}\if{html}{\out{</div>}}
+\item A (single) list of character expressions. Example:
+\code{list("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")}.
+Like the single character vector of expressions, this type of expression
+cannot be mixed with other ways of defining expressions.
+}
+
 Note that newly created variables can be used in subsequent expressions.
-See also 'Examples'.
-}}
+See also 'Examples'.}
 
 \item{verbose}{Toggle messages.}
 }

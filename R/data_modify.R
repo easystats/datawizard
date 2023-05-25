@@ -21,9 +21,24 @@
 #'   )
 #'   ```
 #' - A (single) character vector of expressions. Example:
-#'   `c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")`
-#' - A list of character expressions. Example:
-#'   `list("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")`
+#'   `c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")`. This
+#'   type of expression cannot be mixed with other ways of defining expressions,
+#'   i.e. this example will **not** work:
+#'   ```
+#'   data_modify( # doesn't work!
+#'     iris,
+#'     c(
+#'       "Sepal.Width = center(Sepal.Width)",
+#'       "Sepal_Width_c = Sepal.Width - mean(Sepal.Width)"
+#'     ),
+#'     Sepal_W_z = Sepal_Width_c / sd(Sepal.With)
+#'   )
+#'   ```
+#' - A (single) list of character expressions. Example:
+#'   `list("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")`.
+#'   Like the single character vector of expressions, this type of expression
+#'   cannot be mixed with other ways of defining expressions.
+#'
 #' Note that newly created variables can be used in subsequent expressions.
 #' See also 'Examples'.
 #' @param verbose Toggle messages.
@@ -90,6 +105,7 @@ data_modify.default <- function(data, ...) {
 data_modify.data.frame <- function(data, ..., verbose = TRUE) {
   dots <- match.call(expand.dots = FALSE)$`...`
 
+  # we che
   if (length(dots) == 1 && is.null(names(dots))) {
     # expression is given as character string, e.g.
     # a <- "double_SepWidth = 2 * Sepal.Width"
