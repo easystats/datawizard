@@ -9,6 +9,7 @@
 #' to the name of the new variable, while the right-hand side represent the
 #' values of the new variable. The right-hand side can also be represented
 #' as character string. See 'Examples'.
+#' @param verbose Toggle messages.
 #'
 #' @note This function is still experimental and well tested for interactive
 #' use. There might be corner cases, e.g. when called from inside functions
@@ -56,7 +57,7 @@ data_modify.default <- function(data, ...) {
 }
 
 #' @export
-data_modify.data.frame <- function(data, ...) {
+data_modify.data.frame <- function(data, ..., verbose = TRUE) {
   dots <- match.call(expand.dots = FALSE)$`...`
   for (i in seq_along(dots)) {
     symbol <- dots[[i]]
@@ -67,13 +68,20 @@ data_modify.data.frame <- function(data, ...) {
     if (length(new_variable) != nrow(data) && (nrow(data) %% length(new_variable)) != 0) {
       insight::format_error("New variable has not the same length as the other variables in the data frame.")
     }
+    if (length(new_variable) != nrow(data) && verbose) {
+      insight::format_alert(paste0(
+        "Variable ", names(dots)[i], " had ", length(new_variable),
+        " value", ifelse(length(new_variable) > 1, "s", ""),
+        " and was recycled to match the number of rows in the data."
+      ))
+    }
     data[[names(dots)[i]]] <- new_variable
   }
   data
 }
 
 #' @export
-data_modify.grouped_df <- function(data, ...) {
+data_modify.grouped_df <- function(data, ..., verbose = TRUE) {
   # we need to evaluate dots here, and pass them with "do.call" to
   # the data.frame method later...
   dots <- match.call(expand.dots = FALSE)$`...`
@@ -87,7 +95,9 @@ data_modify.grouped_df <- function(data, ...) {
   }
   # perform transform on groups
   for (rows in grps) {
-    data[rows, ] <- do.call("data_modify", c(list(data[rows, , drop = FALSE]), dots))
+    data[rows, ] <- do.call("data_modify", c(list(data[rows, , drop = FALSE]), dots, list(verbose = verbose)))
+    # only throw message once
+    verbose <- FALSE
   }
   # set back class, so data frame still works with dplyr
   data <- .replace_attrs(data, attr_data)
