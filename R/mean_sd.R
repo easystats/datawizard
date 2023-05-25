@@ -6,6 +6,7 @@
 #'   (E.g., `c("-SD" = -1, Mean = 1, "+SD" = 2)`.)
 #' @param times How many SDs above and below the Mean (or MADs around the Median)
 #' @param ... Not used.
+#' @inheritParams coef_var
 #' @inheritParams stats::mad
 #'
 #' @return A (possibly named) numeric vector of length `2*times + 1` of SDs
@@ -19,20 +20,30 @@
 #' median_mad(mtcars$mpg)
 #'
 #' @export
-mean_sd <- function(x, times = 1L, na.rm = TRUE, named = TRUE, ...) {
-  .centrality_dispersion(x, type = "mean", times = times, na.rm = na.rm, named = named)
+mean_sd <- function(x, times = 1L, remove_na = TRUE, named = TRUE, na.rm = TRUE, ...) {
+  # TODO: remove deprecated argument later
+  if (!missing(na.rm)) {
+    insight::format_warning("Argument `na.rm` is deprecated. Please use `remove_na` instead.")
+    remove_na <- na.rm
+  }
+  .centrality_dispersion(x, type = "mean", times = times, remove_na = remove_na, named = named)
 }
 
 #' @export
 #' @rdname mean_sd
-median_mad <- function(x, times = 1L, na.rm = TRUE, constant = 1.4826, named = TRUE, ...) {
-  .centrality_dispersion(x, type = "median", times = times, na.rm = na.rm, constant = constant, named = named)
+median_mad <- function(x, times = 1L, remove_na = TRUE, constant = 1.4826, named = TRUE, na.rm = TRUE, ...) {
+  # TODO: remove deprecated argument later
+  if (!missing(na.rm)) {
+    insight::format_warning("Argument `na.rm` is deprecated. Please use `remove_na` instead.")
+    remove_na <- na.rm
+  }
+  .centrality_dispersion(x, type = "median", times = times, remove_na = remove_na, constant = constant, named = named)
 }
 
 #' @keywords Internal
 .centrality_dispersion <- function(x,
                                    type = "mean",
-                                   na.rm = TRUE,
+                                   remove_na = TRUE,
                                    times = 1L,
                                    constant = 1.4826,
                                    named = TRUE,
@@ -43,13 +54,13 @@ median_mad <- function(x, times = 1L, na.rm = TRUE, constant = 1.4826, named = T
 
   # centrality
   M <- switch(type,
-    median = stats::median(x, na.rm = na.rm),
-    mean(x, na.rm = na.rm)
+    median = stats::median(x, na.rm = remove_na),
+    mean(x, na.rm = remove_na)
   )
 
   S <- switch(type,
-    median = stats::mad(x, na.rm = na.rm, constant = constant),
-    stats::sd(x, na.rm = na.rm)
+    median = stats::mad(x, na.rm = remove_na, constant = constant),
+    stats::sd(x, na.rm = remove_na)
   )
 
   v <- M + c(-rev(seq_len(times)), 0, seq_len(times)) * S

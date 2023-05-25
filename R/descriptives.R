@@ -75,8 +75,9 @@ coef_var.default <- function(x, verbose = TRUE, ...) {
 #'   each end of `x` before the mean and standard deviation (or other measures)
 #'   are computed. Values of `trim` outside the range of (0 to 0.5) are taken
 #'   as the nearest endpoint.
-#' @param na.rm Logical. Should `NA` values be removed before computing (`TRUE`)
+#' @param remove_na Logical. Should `NA` values be removed before computing (`TRUE`)
 #'   or not (`FALSE`, default)?
+#' @param na.rm Deprecated. Please use `remove_na` instead.
 #' @param n If `method = "unbiased"` and both `mu` and `sigma` are provided (not
 #'   computed from `x`), what sample size to use to adjust the computed CV
 #'   for small-sample bias?
@@ -110,14 +111,20 @@ coef_var.default <- function(x, verbose = TRUE, ...) {
 #' @export
 coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
                              method = c("standard", "unbiased", "median_mad", "qcd"),
-                             trim = 0, na.rm = FALSE, n = NULL, ...) {
+                             trim = 0, remove_na = FALSE, n = NULL, na.rm = FALSE, ...) {
+  # TODO: remove deprecated argument later
+  if (!missing(na.rm)) {
+    insight::format_warning("Argument `na.rm` is deprecated. Please use `remove_na` instead.")
+    remove_na <- na.rm
+  }
+
   # TODO: Support weights
   if (!missing(x) && all(c(-1, 1) %in% sign(x))) {
     insight::format_error("Coefficient of variation only applicable for ratio scale variables.")
   }
   method <- match.arg(method, choices = c("standard", "unbiased", "median_mad", "qcd"))
   if (is.null(mu) || is.null(sigma)) {
-    if (isTRUE(na.rm)) {
+    if (isTRUE(remove_na)) {
       x <- .drop_na(x)
     }
     n <- length(x)

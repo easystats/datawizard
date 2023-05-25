@@ -6,11 +6,15 @@ BREAKING CHANGES
   `object_has_names()`, `object_has_rownames()`, `is_empty_object()`,
   `compact_list()`, `compact_character()`.
 
+* Argument `na.rm` was renamed to `remove_na` throughout `{datawizard}` functions.
+  `na.rm` is kept for backward compatibility, but will be deprecated and later
+  removed in future updates.
+
 CHANGES
 
-* Weighted-functions (`weighted_sd()`, `weighted_mean()`, ...) gain an `na.rm`
+* Weighted-functions (`weighted_sd()`, `weighted_mean()`, ...) gain a `remove_na`
   argument, to remove or keep missing and infinite values. By default,
-  `na.rm = TRUE`, i.e. missing and infinite values are removed by default.
+  `remove_na = TRUE`, i.e. missing and infinite values are removed by default.
 
 * `reverse_scale()`, `normalize()` and `rescale()` gain an `append` argument
   (similar to other data frame methods of transformation functions), to append
