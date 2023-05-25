@@ -106,6 +106,37 @@ test_that("data_modify expression in character vector", {
 })
 
 
+test_that("data_modify expression in character vector", {
+  data(iris)
+  foo <- function(data) {
+    y <- "var_a = Sepal.Width"
+    head(data_modify(data, y))
+  }
+  out <- foo(iris)
+  expect_identical(
+    colnames(out),
+    c(
+      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
+      "Species", "var_a"
+    )
+  )
+  expect_identical(out$var_a, out$Sepal.Width)
+
+  foo2 <- function(data, z) {
+    head(data_modify(data, z))
+  }
+  out <- foo2(iris, "var_a = Sepal.Width")
+  expect_identical(
+    colnames(out),
+    c(
+      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
+      "Species", "var_a"
+    )
+  )
+  expect_identical(out$var_a, out$Sepal.Width)
+})
+
+
 test_that("data_modify works on grouped data", {
   data(efc)
   grouped_efc <- data_group(efc, "c172code")
