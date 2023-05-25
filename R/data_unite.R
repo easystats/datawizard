@@ -56,7 +56,7 @@ data_unite <- function(data,
 
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select,
-    x,
+    data,
     exclude,
     ignore_case,
     regex = regex,
