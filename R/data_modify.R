@@ -64,7 +64,7 @@ data_modify.data.frame <- function(data, ...) {
       symbol <- str2lang(symbol)
     }
     new_variable <- with(data, eval(symbol))
-    if (length(new_variable) != nrow(data)) {
+    if (length(new_variable) != nrow(data) && (nrow(data) %% length(new_variable)) != 0) {
       insight::format_error("New variable has not the same length as the other variables in the data frame.")
     }
     data[[names(dots)[i]]] <- new_variable
