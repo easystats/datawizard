@@ -239,6 +239,88 @@ test_that("data_modify works on grouped data, with strings", {
 })
 
 
+test_that("data_modify works on grouped data, with character vectors", {
+  data(efc)
+  grouped_efc <- data_group(efc, "c172code")
+  out <- data_modify(
+    grouped_efc,
+    c(
+      "c12hour_c = center(c12hour)",
+      "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
+      "c12hour_z2 = standardize(c12hour)"
+    )
+  )
+  out2 <- lapply(by(efc["c12hour"], efc$c172code, scale), as.vector)
+  expect_equal(
+    na.omit(out$c12hour_z2[out$c172code == 1]),
+    out2[[1]],
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+  expect_equal(
+    na.omit(out$c12hour_z[out$c172code == 1]),
+    out2[[1]],
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+
+})
+
+
+test_that("data_modify works on grouped data, inside functions", {
+  data(efc)
+  foo4 <- function(data) {
+    data_modify(
+      data,
+      c(
+        "c12hour_c = center(c12hour)",
+        "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
+        "c12hour_z2 = standardize(c12hour)"
+      )
+    )
+  }
+  out <- foo4(data_group(efc, "c172code"))
+  out2 <- lapply(by(efc["c12hour"], efc$c172code, scale), as.vector)
+  expect_equal(
+    na.omit(out$c12hour_z2[out$c172code == 1]),
+    out2[[1]],
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+  expect_equal(
+    na.omit(out$c12hour_z[out$c172code == 1]),
+    out2[[1]],
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+
+  foo5 <- function(data, rec) {
+    data_modify(data, rec)
+  }
+  out <- foo5(
+    data_group(efc, "c172code"),
+    list(
+      "c12hour_c = center(c12hour)",
+      "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
+      "c12hour_z2 = standardize(c12hour)"
+    )
+  )
+  out2 <- lapply(by(efc["c12hour"], efc$c172code, scale), as.vector)
+  expect_equal(
+    na.omit(out$c12hour_z2[out$c172code == 1]),
+    out2[[1]],
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+  expect_equal(
+    na.omit(out$c12hour_z[out$c172code == 1]),
+    out2[[1]],
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+})
+
+
 test_that("data_modify errors for non df", {
   expect_error(data_modify(iris$Sepal.Length, Sepal_W_z = standardize(Sepal.Width)))
 })
