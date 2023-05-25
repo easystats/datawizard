@@ -173,6 +173,9 @@ data_modify.grouped_df <- function(data, ..., verbose = TRUE) {
   attr_data <- attributes(data)
   data <- as.data.frame(data)
 
+  ## TODO This code is duplicated, taken from the .data.frame method
+  ## @etiennebacher can we move this into a separate function and ".dynEval()" still works?
+
   # we check for list or character vector of expressions, in which case
   # "dots" should be unnamed, and also only of length 1
   if (length(dots) == 1 && is.null(names(dots))) {
