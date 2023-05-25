@@ -105,7 +105,8 @@ data_modify.default <- function(data, ...) {
 data_modify.data.frame <- function(data, ..., verbose = TRUE) {
   dots <- match.call(expand.dots = FALSE)$`...`
 
-  # we che
+  # we check for list or character vector of expressions, in which case
+  # "dots" should be unnamed, and also only of length 1
   if (length(dots) == 1 && is.null(names(dots))) {
     # expression is given as character string, e.g.
     # a <- "double_SepWidth = 2 * Sepal.Width"
