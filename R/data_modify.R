@@ -67,17 +67,17 @@ data_modify.data.frame <- function(data, ..., verbose = TRUE) {
     # data_modify(iris, "double_SepWidth = 2 * Sepal.Width")
     if (is.character(symbol)) {
       symbol <- str2lang(symbol)
-    }
-
-    # expression is given as character vector, e.g.
-    # a <- "double_SepWidth = 2 * Sepal.Width"
-    # data_modify(iris, a)
-    character_symbol <- tryCatch(eval(symbol), error = function(e) NULL)
-    if (is.character(character_symbol)) {
-      # turn value from character vector into expression
-      symbol <- str2lang(eval(symbol))
-      # make sure "dots" still has names
-      names(dots)[i] <- insight::safe_deparse(symbol[[2]])
+    } else {
+      # expression is given as character vector, e.g.
+      # a <- "double_SepWidth = 2 * Sepal.Width"
+      # data_modify(iris, a)
+      character_symbol <- tryCatch(.dynEval(symbol), error = function(e) NULL)
+      if (is.character(character_symbol)) {
+        # turn value from character vector into expression
+        symbol <- str2lang(.dynEval(symbol))
+        # make sure "dots" still has names
+        names(dots)[i] <- insight::safe_deparse(symbol[[2]])
+      }
     }
 
     # finally, we can evaluate expression and get values for new variables
