@@ -24,6 +24,7 @@
 #'   `c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")`
 #' - A list of character expressions. Example:
 #'   `list("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")`
+#' Note that newly created variables can be used in subsequent expressions.
 #' See also 'Examples'.
 #' @param verbose Toggle messages.
 #'

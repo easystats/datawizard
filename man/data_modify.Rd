@@ -32,6 +32,7 @@ values of the new variable. Example: \code{Sepal.Width = center(Sepal.Width)}.
 \code{c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")}
 \item A list of character expressions. Example:
 \code{list("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")}
+Note that newly created variables can be used in subsequent expressions.
 See also 'Examples'.
 }}
 
