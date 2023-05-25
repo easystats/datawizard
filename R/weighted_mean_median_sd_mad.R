@@ -6,7 +6,7 @@
 #' the weights to use for elements of `x`. If `weights = NULL`, `x` is passed
 #' to the non-weighted function.
 #' @param verbose Show warning when `weights` are negative?
-#' @param na.rm Logical, if `TRUE` (default), removes missing (`NA`) and infinite
+#' @param remove_na Logical, if `TRUE` (default), removes missing (`NA`) and infinite
 #' values from `x` and `weights`.
 #'
 #' @examples
@@ -21,28 +21,28 @@
 #' weighted_mad(x, wt)
 #'
 #' @export
-weighted_mean <- function(x, weights = NULL, na.rm = TRUE, verbose = TRUE, ...) {
+weighted_mean <- function(x, weights = NULL, remove_na = TRUE, verbose = TRUE, ...) {
   if (!.are_weights(weights) || !.validate_weights(weights, verbose)) {
-    return(mean(x, na.rm = na.rm))
+    return(mean(x, na.rm = remove_na))
   }
 
   # remove missings
-  complete <- .clean_missings(x, weights, na.rm)
-  stats::weighted.mean(complete$x, complete$weights, na.rm = na.rm)
+  complete <- .clean_missings(x, weights, remove_na)
+  stats::weighted.mean(complete$x, complete$weights, na.rm = remove_na)
 }
 
 
 #' @export
 #' @rdname weighted_mean
-weighted_median <- function(x, weights = NULL, na.rm = TRUE, verbose = TRUE, ...) {
+weighted_median <- function(x, weights = NULL, remove_na = TRUE, verbose = TRUE, ...) {
   if (!.are_weights(weights) || !.validate_weights(weights, verbose)) {
-    return(stats::median(x, na.rm = na.rm))
+    return(stats::median(x, na.rm = remove_na))
   }
 
   p <- 0.5 # split probability
 
   # remove missings
-  complete <- .clean_missings(x, weights, na.rm)
+  complete <- .clean_missings(x, weights, remove_na)
 
   order <- order(complete$x)
   x <- complete$x[order]
@@ -68,14 +68,14 @@ weighted_median <- function(x, weights = NULL, na.rm = TRUE, verbose = TRUE, ...
 
 #' @export
 #' @rdname weighted_mean
-weighted_sd <- function(x, weights = NULL, na.rm = TRUE, verbose = TRUE, ...) {
+weighted_sd <- function(x, weights = NULL, remove_na = TRUE, verbose = TRUE, ...) {
   # from cov.wt
   if (!.are_weights(weights) || !.validate_weights(weights, verbose)) {
-    return(stats::sd(x, na.rm = na.rm))
+    return(stats::sd(x, na.rm = remove_na))
   }
 
   # remove missings
-  complete <- .clean_missings(x, weights, na.rm)
+  complete <- .clean_missings(x, weights, remove_na)
 
   weights1 <- complete$weights / sum(complete$weights)
   center <- sum(weights1 * complete$x)
@@ -86,15 +86,15 @@ weighted_sd <- function(x, weights = NULL, na.rm = TRUE, verbose = TRUE, ...) {
 
 #' @export
 #' @rdname weighted_mean
-weighted_mad <- function(x, weights = NULL, constant = 1.4826, na.rm = TRUE, verbose = TRUE, ...) {
+weighted_mad <- function(x, weights = NULL, constant = 1.4826, remove_na = TRUE, verbose = TRUE, ...) {
   # From matrixStats
   if (!.are_weights(weights) || !.validate_weights(weights, verbose)) {
-    return(stats::mad(x, na.rm = na.rm))
+    return(stats::mad(x, na.rm = remove_na))
   }
 
-  center <- weighted_median(x, weights = weights, na.rm = na.rm)
+  center <- weighted_median(x, weights = weights, remove_na = remove_na)
   x <- abs(x - center)
-  constant * weighted_median(x, weights = weights, na.rm = na.rm)
+  constant * weighted_median(x, weights = weights, remove_na = remove_na)
 }
 
 
@@ -110,8 +110,8 @@ weighted_mad <- function(x, weights = NULL, constant = 1.4826, na.rm = TRUE, ver
   pos
 }
 
-.clean_missings <- function(x, weights, na.rm) {
-  if (isTRUE(na.rm)) {
+.clean_missings <- function(x, weights, remove_na) {
+  if (isTRUE(remove_na)) {
     flag <- FALSE
     if (any(is.infinite(x)) || any(is.infinite(weights))) {
       # remove Inf

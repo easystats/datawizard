@@ -2,16 +2,38 @@
 % Please edit documentation in R/skewness_kurtosis.R
 \name{skewness}
 \alias{skewness}
+\alias{skewness.numeric}
 \alias{kurtosis}
+\alias{kurtosis.numeric}
 \alias{print.parameters_kurtosis}
 \alias{print.parameters_skewness}
 \alias{summary.parameters_skewness}
 \alias{summary.parameters_kurtosis}
 \title{Compute Skewness and (Excess) Kurtosis}
 \usage{
-skewness(x, na.rm = TRUE, type = "2", iterations = NULL, verbose = TRUE, ...)
+skewness(x, ...)
 
-kurtosis(x, na.rm = TRUE, type = "2", iterations = NULL, verbose = TRUE, ...)
+\method{skewness}{numeric}(
+  x,
+  remove_na = TRUE,
+  type = "2",
+  iterations = NULL,
+  verbose = TRUE,
+  na.rm = TRUE,
+  ...
+)
+
+kurtosis(x, ...)
+
+\method{kurtosis}{numeric}(
+  x,
+  remove_na = TRUE,
+  type = "2",
+  iterations = NULL,
+  verbose = TRUE,
+  na.rm = TRUE,
+  ...
+)
 
 \method{print}{parameters_kurtosis}(x, digits = 3, test = FALSE, ...)
 
@@ -24,7 +46,10 @@ kurtosis(x, na.rm = TRUE, type = "2", iterations = NULL, verbose = TRUE, ...)
 \arguments{
 \item{x}{A numeric vector or data.frame.}
 
-\item{na.rm}{Remove missing values.}
+\item{...}{Arguments passed to or from other methods.}
+
+\item{remove_na}{Logical. Should \code{NA} values be removed before computing (\code{TRUE})
+or not (\code{FALSE}, default)?}
 
 \item{type}{Type of algorithm for computing skewness. May be one of \code{1}
 (or \code{"1"}, \code{"I"} or \code{"classic"}), \code{2} (or \code{"2"},
@@ -36,7 +61,7 @@ errors. If \code{NULL} (default), parametric standard errors are computed.}
 
 \item{verbose}{Toggle warnings and messages.}
 
-\item{...}{Arguments passed to or from other methods.}
+\item{na.rm}{Deprecated. Please use \code{remove_na} instead.}
 
 \item{digits}{Number of decimal places.}
 

@@ -15,3 +15,8 @@ test_that("mean_sd", {
   expect_equal(unname(diff(msd2)), rep(sd(mtcars[["mpg"]]), 6), tolerance = 0.00001)
   expect_named(msd2, c("-3 SD", "-2 SD", "-1 SD", "Mean", "+1 SD", "+2 SD", "+3 SD"))
 })
+
+test_that("deprecation warning for `na.rm`", {
+  expect_warning(mean_sd(c(-1, 0, 1, NA), na.rm = TRUE))
+  expect_warning(median_mad(c(-1, 0, 1, 2, 3, NA), na.rm = TRUE))
+})
