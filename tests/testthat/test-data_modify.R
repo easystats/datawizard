@@ -263,7 +263,6 @@ test_that("data_modify works on grouped data, with character vectors", {
     ignore_attr = TRUE,
     tolerance = 1e-3
   )
-
 })
 
 
