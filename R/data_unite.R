@@ -5,7 +5,14 @@
 #' Merges values of multiple variables per observation into one new variable.
 #'
 #' @param data A data frame.
-#' @param new_column New column name.
+#' @param new_column The name of the new column, as a string.
+#' @param separator Separator, as string, to use between values.
+#' @param append Logical, if `FALSE` (default), removes original columns that
+#' were united. If `TRUE`, all columns are preserved and the new column is
+#' appended to the data frame.
+#' @param remove_na Logical, if `TRUE`, missing values (`NA`) are not included
+#' in the united values. If `FALSE`, missing values are represented as `"NA"`
+#' in the united values.
 #' @param ... Currently not used.
 #' @inheritParams find_columns
 #'
@@ -21,12 +28,16 @@
 #' )
 #' d
 #' data_unite(d, new_column = "xyz")
+#' data_unite(d, new_column = "xyz", remove = FALSE)
+#' data_unite(d, select = c("x", "z"), new_column = "xyz")
 #' @export
 data_unite <- function(data,
                        new_column = NULL,
                        select = NULL,
                        exclude = NULL,
                        separator = "_",
+                       append = FALSE,
+                       remove_na = FALSE,
                        ignore_case = FALSE,
                        verbose = TRUE,
                        regex = FALSE,
@@ -46,14 +57,6 @@ data_unite <- function(data,
     )
   }
 
-  # overwrite?
-  if (new_column %in% colnames(data) && verbose) {
-    insight::format_alert(
-      "The name for `new_column` already exists as variable name in the data.",
-      "This variable will be replaced by `new_column`."
-    )
-  }
-
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select,
     data,
@@ -63,10 +66,35 @@ data_unite <- function(data,
     verbose = verbose
   )
 
+  if (is.null(select) || length(select) <= 1) {
+    insight::format_error(
+      "At least two columns in `select` are required for `data_unite()`."
+    )
+  }
+
   # transpose and unite
   d <- data[select]
   out <- as.data.frame(do.call(rbind, lapply(data_transpose(d, verbose = FALSE), paste0, collapse = separator)))
   colnames(out) <- new_column
+
+  # remove missings
+  if (remove_na) {
+    out[[new_column]] <- gsub("NA_", "", out[[new_column]], fixed = TRUE)
+    out[[new_column]] <- gsub("_NA", "", out[[new_column]], fixed = TRUE)
+  }
+
+  # remove old columns
+  if (!isTRUE(append)) {
+    data[select] <- NULL
+  }
+
+  # overwrite?
+  if (new_column %in% colnames(data) && verbose) {
+    insight::format_alert(
+      "The name for `new_column` already exists as variable name in the data.",
+      "This variable will be replaced by `new_column`."
+    )
+  }
 
   # overwrite or append
   if (new_column %in% colnames(data)) {
