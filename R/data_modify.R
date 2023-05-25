@@ -172,6 +172,34 @@ data_modify.grouped_df <- function(data, ..., verbose = TRUE) {
   grps <- attr(data, "groups", exact = TRUE)[[".rows"]]
   attr_data <- attributes(data)
   data <- as.data.frame(data)
+
+  # we check for list or character vector of expressions, in which case
+  # "dots" should be unnamed, and also only of length 1
+  if (length(dots) == 1 && is.null(names(dots))) {
+    # expression is given as character string, e.g.
+    # a <- "double_SepWidth = 2 * Sepal.Width"
+    # data_modify(iris, a)
+    # or as character vector / list of character strings e.g.
+    # data_modify(iris, c("var_a = Sepal.Width / 10", "var_b = Sepal.Width * 10"))
+    # data_modify(iris, list("var_a = Sepal.Width / 10", "var_b = Sepal.Width * 10"))
+    character_symbol <- tryCatch(.dynEval(dots[[1]]), error = function(e) NULL)
+    # check if not NULL - then we can assume we have either a list or a vector
+    if (!is.null(character_symbol)) {
+      # turn list into vector
+      if (is.list(character_symbol)) {
+        character_symbol <- unlist(character_symbol)
+      }
+      # do we have a character vector? Then we can proceed
+      if (is.character(character_symbol)) {
+        dots <- lapply(character_symbol, function(s) {
+          # turn value from character vector into expression
+          str2lang(.dynEval(s))
+        })
+        names(dots) <- vapply(dots, function(n) insight::safe_deparse(n[[2]]), character(1))
+      }
+    }
+  }
+
   # create new variables now - else we cannot replace rows later
   for (i in names(dots)) {
     data[[i]] <- NA
