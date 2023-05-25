@@ -5,16 +5,31 @@
 #' used.
 #'
 #' @param data The data frame, for which new variables should be created.
-#' @param ... A sequence of named expressions, where the left-hand side refers
-#' to the name of the new variable, while the right-hand side represent the
-#' values of the new variable. The right-hand side can also be represented
-#' as character string. See 'Examples'.
+#' @param ... One or more expressions that define the new variable name and the
+#' values or recoding of those new variables. These expressions can be one of:
+#' - A sequence of named, literal expressions, where the left-hand side refers
+#'   to the name of the new variable, while the right-hand side represent the
+#'   values of the new variable. Example: `Sepal.Width = center(Sepal.Width)`.
+#' - The *right-hand* side can also be represented as character string. Example:
+#'   `Sepal_Width_c = "Sepal.Width - mean(Sepal.Width"`
+#' - You can mix both literal and character strings as right-hand side. Example:
+#'   ```
+#'   data_modify(
+#'     iris,
+#'     Sepal.Width = center(Sepal.Width),
+#'     Sepal_Width_c = "Sepal.Width - mean(Sepal.Width"
+#'   )
+#'   ```
+#' - A (single) character vector of expressions. Example:
+#'   `c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")`
+#' - A list of character expressions. Example:
+#'   `list("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")`
+#' See also 'Examples'.
 #' @param verbose Toggle messages.
 #'
-#' @note This function is still experimental and well tested for interactive
-#' use. There might be corner cases, e.g. when called from inside functions
-#' or similar, where `data_modify()` does not yet work. Please carefully
-#' check your results before using this function, say, in package code.
+#' @note `data_modify()` can also be used inside functions. However, it is
+#' recommended to pass the recode-expression as character vector or list of
+#' characters.
 #'
 #' @examples
 #' data(efc)
@@ -46,6 +61,19 @@
 #'   c12hour_z2 = standardize(c12hour)
 #' )
 #' head(new_efc)
+#'
+#' # works from inside functions
+#' foo <- function(data, z) {
+#'   head(data_modify(data, z))
+#' }
+#' foo(iris, "var_a = Sepal.Width / 10")
+#'
+#' # works from inside functions
+#' foo <- function(data, z) {
+#'   head(data_modify(data, z))
+#' }
+#' new_exp <- c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")
+#' foo(iris, new_exp)
 #' @export
 data_modify <- function(data, ...) {
   UseMethod("data_modify")
@@ -56,9 +84,36 @@ data_modify.default <- function(data, ...) {
   insight::format_error("`data` must be a data frame.")
 }
 
+#' @rdname data_modify
 #' @export
 data_modify.data.frame <- function(data, ..., verbose = TRUE) {
   dots <- match.call(expand.dots = FALSE)$`...`
+
+  if (length(dots) == 1 && is.null(names(dots))) {
+    # expression is given as character string, e.g.
+    # a <- "double_SepWidth = 2 * Sepal.Width"
+    # data_modify(iris, a)
+    # or as character vector / list of character strings e.g.
+    # data_modify(iris, c("var_a = Sepal.Width / 10", "var_b = Sepal.Width * 10"))
+    # data_modify(iris, list("var_a = Sepal.Width / 10", "var_b = Sepal.Width * 10"))
+    character_symbol <- tryCatch(.dynEval(dots[[1]]), error = function(e) NULL)
+    # check if not NULL - then we can assume we have either a list or a vector
+    if (!is.null(character_symbol)) {
+      # turn list into vector
+      if (is.list(character_symbol)) {
+        character_symbol <- unlist(character_symbol)
+      }
+      # do we have a character vector? Then we can proceed
+      if (is.character(character_symbol)) {
+        dots <- lapply(character_symbol, function(s) {
+          # turn value from character vector into expression
+          str2lang(.dynEval(s))
+        })
+        names(dots) <- vapply(dots, function(n) insight::safe_deparse(n[[2]]), character(1))
+      }
+    }
+  }
+
   for (i in seq_along(dots)) {
     # iterate expressions for new variables
     symbol <- dots[[i]]
@@ -67,17 +122,6 @@ data_modify.data.frame <- function(data, ..., verbose = TRUE) {
     # data_modify(iris, "double_SepWidth = 2 * Sepal.Width")
     if (is.character(symbol)) {
       symbol <- str2lang(symbol)
-    } else {
-      # expression is given as character vector, e.g.
-      # a <- "double_SepWidth = 2 * Sepal.Width"
-      # data_modify(iris, a)
-      character_symbol <- tryCatch(.dynEval(symbol), error = function(e) NULL)
-      if (is.character(character_symbol)) {
-        # turn value from character vector into expression
-        symbol <- str2lang(.dynEval(symbol))
-        # make sure "dots" still has names
-        names(dots)[i] <- insight::safe_deparse(symbol[[2]])
-      }
     }
 
     # finally, we can evaluate expression and get values for new variables

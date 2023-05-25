@@ -137,6 +137,64 @@ test_that("data_modify expression in character vector", {
 })
 
 
+test_that("data_modify expression as character vector or list", {
+  data(iris)
+  x <- "var_a = Sepal.Width"
+  y <- "Sepal_Wz_double = 2 * var_a"
+  out <- data_modify(iris, c(x, y))
+  expect_identical(
+    colnames(out),
+    c(
+      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
+      "Species", "var_a", "Sepal_Wz_double"
+    )
+  )
+  expect_identical(out$var_a, out$Sepal.Width)
+  expect_identical(out$Sepal_Wz_double, 2 * out$Sepal.Width)
+
+  out <- data_modify(iris, list("var_a = Sepal.Width", "Sepal_Wz_double = 2 * var_a"))
+  expect_identical(
+    colnames(out),
+    c(
+      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
+      "Species", "var_a", "Sepal_Wz_double"
+    )
+  )
+  expect_identical(out$var_a, out$Sepal.Width)
+  expect_identical(out$Sepal_Wz_double, 2 * out$Sepal.Width)
+
+  foo1 <- function(data) {
+    x1 <- "var_a = Sepal.Width"
+    y1 <- "Sepal_Wz_double = 2 * var_a"
+    data_modify(iris, c(x1, y1))
+  }
+  out <- foo1(iris)
+  expect_identical(
+    colnames(out),
+    c(
+      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
+      "Species", "var_a", "Sepal_Wz_double"
+    )
+  )
+  expect_identical(out$var_a, out$Sepal.Width)
+  expect_identical(out$Sepal_Wz_double, 2 * out$Sepal.Width)
+
+  foo2 <- function(data, z3) {
+    data_modify(data, z3)
+  }
+  out <- foo2(iris, c("var_a = Sepal.Width", "Sepal_Wz_double = 2 * var_a"))
+  expect_identical(
+    colnames(out),
+    c(
+      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
+      "Species", "var_a", "Sepal_Wz_double"
+    )
+  )
+  expect_identical(out$var_a, out$Sepal.Width)
+  expect_identical(out$Sepal_Wz_double, 2 * out$Sepal.Width)
+})
+
+
 test_that("data_modify works on grouped data", {
   data(efc)
   grouped_efc <- data_group(efc, "c172code")

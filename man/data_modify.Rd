@@ -2,17 +2,38 @@
 % Please edit documentation in R/data_modify.R
 \name{data_modify}
 \alias{data_modify}
+\alias{data_modify.data.frame}
 \title{Create new variables in a data frame}
 \usage{
 data_modify(data, ...)
+
+\method{data_modify}{data.frame}(data, ..., verbose = TRUE)
 }
 \arguments{
 \item{data}{The data frame, for which new variables should be created.}
 
-\item{...}{A sequence of named expressions, where the left-hand side refers
+\item{...}{One or more expressions that define the new variable name and the
+values or recoding of those new variables. These expressions can be one of:
+\itemize{
+\item A sequence of named, literal expressions, where the left-hand side refers
 to the name of the new variable, while the right-hand side represent the
-values of the new variable. The right-hand side can also be represented
-as character string. See 'Examples'.}
+values of the new variable. Example: \code{Sepal.Width = center(Sepal.Width)}.
+\item The \emph{right-hand} side can also be represented as character string. Example:
+\code{Sepal_Width_c = "Sepal.Width - mean(Sepal.Width"}
+\item You can mix both literal and character strings as right-hand side. Example:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{data_modify(
+  iris,
+  Sepal.Width = center(Sepal.Width),
+  Sepal_Width_c = "Sepal.Width - mean(Sepal.Width"
+)
+}\if{html}{\out{</div>}}
+\item A (single) character vector of expressions. Example:
+\code{c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")}
+\item A list of character expressions. Example:
+\code{list("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")}
+See also 'Examples'.
+}}
 
 \item{verbose}{Toggle messages.}
 }
@@ -22,10 +43,9 @@ can be used on grouped data frames, and newly created variables can be directly
 used.
 }
 \note{
-This function is still experimental and well tested for interactive
-use. There might be corner cases, e.g. when called from inside functions
-or similar, where \code{data_modify()} does not yet work. Please carefully
-check your results before using this function, say, in package code.
+\code{data_modify()} can also be used inside functions. However, it is
+recommended to pass the recode-expression as character vector or list of
+characters.
 }
 \examples{
 data(efc)
@@ -57,4 +77,17 @@ new_efc <- data_modify(
   c12hour_z2 = standardize(c12hour)
 )
 head(new_efc)
+
+# works from inside functions
+foo <- function(data, z) {
+  head(data_modify(data, z))
+}
+foo(iris, "var_a = Sepal.Width / 10")
+
+# works from inside functions
+foo <- function(data, z) {
+  head(data_modify(data, z))
+}
+new_exp <- c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")
+foo(iris, new_exp)
 }
