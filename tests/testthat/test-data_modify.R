@@ -92,6 +92,20 @@ test_that("data_modify recycling works", {
 })
 
 
+test_that("data_modify expression in character vector", {
+  data(iris)
+  x <- "var_a = Sepal.Width"
+  out <- data_modify(iris, x)
+  expect_identical(
+    colnames(out),
+    c(
+      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
+      "Species", "var_a"
+    )
+  )
+})
+
+
 test_that("data_modify works on grouped data", {
   data(efc)
   grouped_efc <- data_group(efc, "c172code")

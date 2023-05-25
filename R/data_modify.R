@@ -60,14 +60,35 @@ data_modify.default <- function(data, ...) {
 data_modify.data.frame <- function(data, ..., verbose = TRUE) {
   dots <- match.call(expand.dots = FALSE)$`...`
   for (i in seq_along(dots)) {
+    # iterate expressions for new variables
     symbol <- dots[[i]]
+
+    # expression is given as character, e.g.
+    # data_modify(iris, "double_SepWidth = 2 * Sepal.Width")
     if (is.character(symbol)) {
       symbol <- str2lang(symbol)
     }
+
+    # expression is given as character vector, e.g.
+    # a <- "double_SepWidth = 2 * Sepal.Width"
+    # data_modify(iris, a)
+    character_symbol <- tryCatch(eval(symbol), error = function(e) NULL)
+    if (is.character(character_symbol)) {
+      # turn value from character vector into expression
+      symbol <- str2lang(eval(symbol))
+      # make sure "dots" still has names
+      names(dots)[i] <- insight::safe_deparse(symbol[[2]])
+    }
+
+    # finally, we can evaluate expression and get values for new variables
     new_variable <- with(data, eval(symbol))
+
+    # give informative error when new variable doesn't match number of rows
     if (length(new_variable) != nrow(data) && (nrow(data) %% length(new_variable)) != 0) {
       insight::format_error("New variable has not the same length as the other variables in the data frame.")
     }
+
+    # give informative message when variable was recycled
     if (length(new_variable) != nrow(data) && verbose) {
       insight::format_alert(paste0(
         "Variable ", names(dots)[i], " had ", length(new_variable),
