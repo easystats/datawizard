@@ -28,6 +28,7 @@ reference:
       Functions for transforming variables
     contents:
       - data_modify
+      - data_unite
       - categorize
       - recode_into
       - recode_values

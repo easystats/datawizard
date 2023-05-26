@@ -28,6 +28,8 @@ NEW FUNCTIONS
   `tibble::rowid_to_column()` for grouped data. See the Details section in the
   docs.
 
+* `data_unite()`, to merge values of multiple variables into one new variable.
+
 BUG FIXES
 
 * `standardize_parameters()` now works when the package namespace is in the model
