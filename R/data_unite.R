@@ -72,15 +72,13 @@ data_unite <- function(data,
     )
   }
 
-  # transpose and unite
-  d <- data[select]
-  out <- as.data.frame(do.call(rbind, lapply(data_transpose(d, verbose = FALSE), paste0, collapse = separator)))
-  colnames(out) <- new_column
+  # unite
+  out[[new_column]] <- do.call(paste, c(d[select], sep = separator))
 
   # remove missings
   if (remove_na) {
-    out[[new_column]] <- gsub("NA_", "", out[[new_column]], fixed = TRUE)
-    out[[new_column]] <- gsub("_NA", "", out[[new_column]], fixed = TRUE)
+    out[[new_column]] <- gsub(paste0("NA", separator), "", out[[new_column]], fixed = TRUE)
+    out[[new_column]] <- gsub(paste0(separator, "NA"), "", out[[new_column]], fixed = TRUE)
   }
 
   # remove old columns
