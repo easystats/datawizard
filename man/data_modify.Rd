@@ -18,6 +18,7 @@ values or recoding of those new variables. These expressions can be one of:
 \item A sequence of named, literal expressions, where the left-hand side refers
 to the name of the new variable, while the right-hand side represent the
 values of the new variable. Example: \code{Sepal.Width = center(Sepal.Width)}.
+\item A sequence of string values, representing expressions.
 \item A variable that contains a string representation of the expression. Example:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{a <- "2 * Sepal.Width"
@@ -27,11 +28,6 @@ data_modify(iris, a)
 \code{c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")}. This
 type of expression cannot be mixed with other expressions, i.e. if a
 character vector is provided, you may not add further elements to \code{...}.
-\item A list of character expressions. Example:
-\code{list("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")}.
-Like the character vector of expressions, this type of expression
-cannot be mixed with other expressions, i.e. you may not add further elements
-to \code{...}.
 }
 
 Note that newly created variables can be used in subsequent expressions.
@@ -59,7 +55,15 @@ new_efc <- data_modify(
 )
 head(new_efc)
 
-# using character strings, provided as variable(!)
+# using strings instead of literal expressions
+new_efc <- data_modify(
+  efc,
+  "c12hour_c = center(c12hour)",
+  "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
+  "c12hour_z2 = standardize(c12hour)"
+)
+head(new_efc)
+# using character strings, provided as variable
 stand <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
 new_efc <- data_modify(
   efc,

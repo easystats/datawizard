@@ -10,6 +10,7 @@
 #' - A sequence of named, literal expressions, where the left-hand side refers
 #'   to the name of the new variable, while the right-hand side represent the
 #'   values of the new variable. Example: `Sepal.Width = center(Sepal.Width)`.
+#' - A sequence of string values, representing expressions.
 #' - A variable that contains a string representation of the expression. Example:
 #'   ```r
 #'   a <- "2 * Sepal.Width"
@@ -19,11 +20,6 @@
 #'   `c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")`. This
 #'   type of expression cannot be mixed with other expressions, i.e. if a
 #'   character vector is provided, you may not add further elements to `...`.
-#' - A list of character expressions. Example:
-#'   `list("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")`.
-#'   Like the character vector of expressions, this type of expression
-#'   cannot be mixed with other expressions, i.e. you may not add further elements
-#'   to `...`.
 #'
 #' Note that newly created variables can be used in subsequent expressions.
 #' See also 'Examples'.
@@ -43,7 +39,16 @@
 #' )
 #' head(new_efc)
 #'
-#' # using character strings, provided as variable(!)
+#' # using strings instead of literal expressions
+#' new_efc <- data_modify(
+#'   efc,
+#'   "c12hour_c = center(c12hour)",
+#'   "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
+#'   "c12hour_z2 = standardize(c12hour)"
+#' )
+#' head(new_efc)
+
+#' # using character strings, provided as variable
 #' stand <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
 #' new_efc <- data_modify(
 #'   efc,
@@ -98,7 +103,16 @@ data_modify.data.frame <- function(data, ..., verbose = TRUE) {
 
   # we check for list or character vector of expressions, in which case
   # "dots" should be unnamed, and also only of length 1
-  if (length(dots) == 1 && is.null(names(dots))) {
+  if (is.null(names(dots))) {
+    # if we have multiple strings, concatenate them to a character vector
+    # and put it into a list...
+    if (length(dots) > 1) {
+      if (all(vapply(dots, is.character, logical(1)))) {
+        dots <- list(unlist(dots))
+      } else {
+        insight::format_error("You cannot mix string and literal representation of expressions.")
+      }
+    }
     # expression is given as character string, e.g.
     # a <- "double_SepWidth = 2 * Sepal.Width"
     # data_modify(iris, a)
@@ -178,6 +192,14 @@ data_modify.grouped_df <- function(data, ..., verbose = TRUE) {
   # we check for list or character vector of expressions, in which case
   # "dots" should be unnamed, and also only of length 1
   if (length(dots) == 1 && is.null(names(dots))) {
+    # if we have multiple strings, concatenate them to a character vector
+    if (length(dots) > 1) {
+      if (all(vapply(dots, is.character, logical(1)))) {
+        dots <- unlist(dots)
+      } else {
+        insight::format_error("You cannot mix string and literal representation of expressions.")
+      }
+    }
     # expression is given as character string, e.g.
     # a <- "double_SepWidth = 2 * Sepal.Width"
     # data_modify(iris, a)

@@ -230,6 +230,12 @@ test_that("data_modify expression as character vector or list", {
   )
   expect_identical(out$var_a, out$Sepal.Width)
   expect_identical(out$Sepal_Wz_double, 2 * out$Sepal.Width)
+
+  # works with separated strings
+  data(iris)
+  out <- data_modify(iris, "var_a = Sepal.Width", "Sepal_Wz_double = 2 * var_a")
+  expect_identical(out$var_a, out$Sepal.Width)
+  expect_identical(out$Sepal_Wz_double, 2 * out$Sepal.Width)
 })
 
 
