@@ -20,6 +20,8 @@
 #'   `c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")`. This
 #'   type of expression cannot be mixed with other expressions, i.e. if a
 #'   character vector is provided, you may not add further elements to `...`.
+#' - Using `NULL` as right-hand side removes a variable from the data frame.
+#'   Example: `Petal.Width = NULL`.
 #'
 #' Note that newly created variables can be used in subsequent expressions.
 #' See also 'Examples'.
@@ -68,6 +70,10 @@
 #' # attributes - in this case, value and variable labels - are preserved
 #' str(new_efc)
 #'
+#' # overwrite existing variable, remove old variable
+#' out <- data_modify(iris, Petal.Length = 1 / Sepal.Length, Sepal.Length = NULL)
+#' head(out)
+#'
 #' # works on grouped data
 #' grouped_efc <- data_group(efc, "c172code")
 #' new_efc <- data_modify(
@@ -100,6 +106,7 @@ data_modify.default <- function(data, ...) {
 #' @export
 data_modify.data.frame <- function(data, ..., verbose = TRUE) {
   dots <- match.call(expand.dots = FALSE)$`...`
+  column_names <- colnames(data)
 
   # we check for character vector of expressions, in which case
   # "dots" should be unnamed
@@ -154,12 +161,12 @@ data_modify.data.frame <- function(data, ..., verbose = TRUE) {
     new_variable <- with(data, eval(symbol))
 
     # give informative error when new variable doesn't match number of rows
-    if (length(new_variable) != nrow(data) && (nrow(data) %% length(new_variable)) != 0) {
+    if (!is.null(new_variable) && length(new_variable) != nrow(data) && (nrow(data) %% length(new_variable)) != 0) {
       insight::format_error("New variable has not the same length as the other variables in the data frame.")
     }
 
     # give informative message when variable was recycled
-    if (length(new_variable) != nrow(data)) {
+    if (!is.null(new_variable) && length(new_variable) != nrow(data)) {
       recycled_variables <- c(
         recycled_variables,
         stats::setNames(length(new_variable), names(dots)[i])
@@ -183,6 +190,11 @@ data_modify.data.frame <- function(data, ..., verbose = TRUE) {
       ifelse(max_r > 1, "s", ""), " and ", ifelse(l_recycled > 1, "were", "was"),
       " recycled to match the number of rows in the data."
     ))
+  }
+
+  # inform about replaced (overwritten) variables
+  if (any(names(dots) %in% column_names) && verbose) {
+    overwritten <- intersect(names(dots), column_names)
   }
 
   data

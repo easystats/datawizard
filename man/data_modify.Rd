@@ -28,6 +28,8 @@ data_modify(iris, a)
 \code{c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")}. This
 type of expression cannot be mixed with other expressions, i.e. if a
 character vector is provided, you may not add further elements to \code{...}.
+\item Using \code{NULL} as right-hand side removes a variable from the data frame.
+Example: \code{Petal.Width = NULL}.
 }
 
 Note that newly created variables can be used in subsequent expressions.
@@ -83,6 +85,10 @@ head(new_efc)
 
 # attributes - in this case, value and variable labels - are preserved
 str(new_efc)
+
+# overwrite existing variable, remove old variable
+out <- data_modify(iris, Petal.Length = 1 / Sepal.Length, Sepal.Length = NULL)
+head(out)
 
 # works on grouped data
 grouped_efc <- data_group(efc, "c172code")

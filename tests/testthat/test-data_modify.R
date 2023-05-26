@@ -99,6 +99,7 @@ test_that("data_modify recycling works", {
   data(iris)
   d <- data_group(iris, "Species")
   expect_message(data_modify(d, x = 1, test = 1:2))
+  expect_silent(data_modify(d, x = 1, test = 1:2, verbose = FALSE))
 })
 
 
@@ -175,7 +176,7 @@ test_that("data_modify expression in character vector", {
 })
 
 
-test_that("data_modify expression as character vector or list", {
+test_that("data_modify expression as character vector", {
   data(iris)
   x <- "var_a = Sepal.Width"
   y <- "Sepal_Wz_double = 2 * var_a"
@@ -225,6 +226,14 @@ test_that("data_modify expression as character vector or list", {
   out <- data_modify(iris, "var_a = Sepal.Width", "Sepal_Wz_double = 2 * var_a")
   expect_identical(out$var_a, out$Sepal.Width)
   expect_identical(out$Sepal_Wz_double, 2 * out$Sepal.Width)
+})
+
+
+test_that("data_modify remove variables with NULL", {
+  data(iris)
+  out <- data_modify(iris, PL_new = 2 * Petal.Length, Petal.Length = NULL)
+  expect_identical(colnames(out), c("Sepal.Length", "Sepal.Width", "Petal.Width", "Species", "PL_new"))
+  expect_identical(out$PL_new, 2 * iris$Petal.Length)
 })
 
 
@@ -331,6 +340,7 @@ test_that("data_modify works on grouped data, inside functions", {
 test_that("data_modify errors for non df", {
   expect_error(data_modify(iris$Sepal.Length, Sepal_W_z = standardize(Sepal.Width)))
 })
+
 
 test_that("data_modify message about recycling values", {
   expect_snapshot(head(data_modify(iris, Sepal.Width = 1)))
