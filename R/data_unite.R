@@ -73,7 +73,11 @@ data_unite <- function(data,
   }
 
   # unite
-  out[[new_column]] <- do.call(paste, c(d[select], sep = separator))
+  out <- data.frame(
+    new_col = do.call(paste, c(data[select], sep = separator)),
+    stringsAsFactors = FALSE
+  )
+  colnames(out) <- new_column
 
   # remove missings
   if (remove_na) {
