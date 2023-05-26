@@ -6,7 +6,7 @@
 #'
 #' @param data A data frame.
 #' @param new_column The name of the new column, as a string.
-#' @param separator Separator, as string, to use between values.
+#' @param separator A character to use between values.
 #' @param append Logical, if `FALSE` (default), removes original columns that
 #' were united. If `TRUE`, all columns are preserved and the new column is
 #' appended to the data frame.
