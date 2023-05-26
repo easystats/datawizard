@@ -190,17 +190,6 @@ test_that("data_modify expression as character vector or list", {
   expect_identical(out$var_a, out$Sepal.Width)
   expect_identical(out$Sepal_Wz_double, 2 * out$Sepal.Width)
 
-  out <- data_modify(iris, list("var_a = Sepal.Width", "Sepal_Wz_double = 2 * var_a"))
-  expect_identical(
-    colnames(out),
-    c(
-      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
-      "Species", "var_a", "Sepal_Wz_double"
-    )
-  )
-  expect_identical(out$var_a, out$Sepal.Width)
-  expect_identical(out$Sepal_Wz_double, 2 * out$Sepal.Width)
-
   foo1 <- function(data) {
     x1 <- "var_a = Sepal.Width"
     y1 <- "Sepal_Wz_double = 2 * var_a"
@@ -317,7 +306,7 @@ test_that("data_modify works on grouped data, inside functions", {
   }
   out <- foo5(
     data_group(efc, "c172code"),
-    list(
+    c(
       "c12hour_c = center(c12hour)",
       "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
       "c12hour_z2 = standardize(c12hour)"
