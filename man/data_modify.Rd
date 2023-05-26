@@ -10,7 +10,7 @@ data_modify(data, ...)
 \method{data_modify}{data.frame}(data, ..., verbose = TRUE)
 }
 \arguments{
-\item{data}{The data frame, for which new variables should be created.}
+\item{data}{A data frame}
 
 \item{...}{One or more expressions that define the new variable name and the
 values or recoding of those new variables. These expressions can be one of:
@@ -18,34 +18,20 @@ values or recoding of those new variables. These expressions can be one of:
 \item A sequence of named, literal expressions, where the left-hand side refers
 to the name of the new variable, while the right-hand side represent the
 values of the new variable. Example: \code{Sepal.Width = center(Sepal.Width)}.
-\item The \emph{right-hand} side can also be represented as character string. Example:
-\code{Sepal_Width_c = "Sepal.Width - mean(Sepal.Width"}
-\item You can mix both literal and character strings as right-hand side. Example:
+\item A variable that contains a string representation of the expression. Example:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{data_modify(
-  iris,
-  Sepal.Width = center(Sepal.Width),
-  Sepal_Width_c = "Sepal.Width - mean(Sepal.Width"
-)
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{a <- "2 * Sepal.Width"
+data_modify(iris, a)
 }\if{html}{\out{</div>}}
-\item A (single) character vector of expressions. Example:
+\item A character vector of expressions. Example:
 \code{c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")}. This
-type of expression cannot be mixed with other ways of defining expressions,
-i.e. this example will \strong{not} work:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{data_modify( # doesn't work!
-  iris,
-  c(
-    "Sepal.Width = center(Sepal.Width)",
-    "Sepal_Width_c = Sepal.Width - mean(Sepal.Width)"
-  ),
-  Sepal_W_z = Sepal_Width_c / sd(Sepal.With)
-)
-}\if{html}{\out{</div>}}
-\item A (single) list of character expressions. Example:
+type of expression cannot be mixed with other expressions, i.e. if a
+character vector is provided, you may not add further elements to \code{...}.
+\item A list of character expressions. Example:
 \code{list("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")}.
-Like the single character vector of expressions, this type of expression
-cannot be mixed with other ways of defining expressions.
+Like the character vector of expressions, this type of expression
+cannot be mixed with other expressions, i.e. you may not add further elements
+to \code{...}.
 }
 
 Note that newly created variables can be used in subsequent expressions.
@@ -73,12 +59,21 @@ new_efc <- data_modify(
 )
 head(new_efc)
 
-# using character strings
+# using character strings, provided as variable(!)
+stand <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
 new_efc <- data_modify(
   efc,
   c12hour_c = center(c12hour),
-  c12hour_z = "c12hour_c / sd(c12hour, na.rm = TRUE)"
+  c12hour_z = stand
 )
+head(new_efc)
+
+# providing expressions as character vector
+new_exp <- c(
+  "c12hour_c = center(c12hour)",
+  "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"
+)
+new_efc <- data_modify(efc, new_exp)
 head(new_efc)
 
 # attributes - in this case, value and variable labels - are preserved
@@ -100,10 +95,6 @@ foo <- function(data, z) {
 }
 foo(iris, "var_a = Sepal.Width / 10")
 
-# works from inside functions
-foo <- function(data, z) {
-  head(data_modify(data, z))
-}
 new_exp <- c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")
 foo(iris, new_exp)
 }

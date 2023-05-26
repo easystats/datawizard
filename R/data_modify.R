@@ -10,34 +10,20 @@
 #' - A sequence of named, literal expressions, where the left-hand side refers
 #'   to the name of the new variable, while the right-hand side represent the
 #'   values of the new variable. Example: `Sepal.Width = center(Sepal.Width)`.
-#' - The *right-hand* side can also be represented as character string. Example:
-#'   `Sepal_Width_c = "Sepal.Width - mean(Sepal.Width)"`
-#' - You can mix both literal and character strings as right-hand side. Example:
+#' - A variable that contains a string representation of the expression. Example:
+#'   ```r
+#'   a <- "2 * Sepal.Width"
+#'   data_modify(iris, a)
 #'   ```
-#'   data_modify(
-#'     iris,
-#'     Sepal.Width = center(Sepal.Width),
-#'     Sepal_Width_c = "Sepal.Width - mean(Sepal.Width"
-#'   )
-#'   ```
-#' - A (single) character vector of expressions. Example:
+#' - A character vector of expressions. Example:
 #'   `c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")`. This
-#'   type of expression cannot be mixed with other ways of defining expressions,
-#'   i.e. this example will **not** work:
-#'   ```
-#'   data_modify( # doesn't work!
-#'     iris,
-#'     c(
-#'       "Sepal.Width = center(Sepal.Width)",
-#'       "Sepal_Width_c = Sepal.Width - mean(Sepal.Width)"
-#'     ),
-#'     Sepal_W_z = Sepal_Width_c / sd(Sepal.With)
-#'   )
-#'   ```
-#' - A (single) list of character expressions. Example:
+#'   type of expression cannot be mixed with other expressions, i.e. if a
+#'   character vector is provided, you may not add further elements to `...`.
+#' - A list of character expressions. Example:
 #'   `list("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")`.
-#'   Like the single character vector of expressions, this type of expression
-#'   cannot be mixed with other ways of defining expressions.
+#'   Like the character vector of expressions, this type of expression
+#'   cannot be mixed with other expressions, i.e. you may not add further elements
+#'   to `...`.
 #'
 #' Note that newly created variables can be used in subsequent expressions.
 #' See also 'Examples'.
@@ -57,12 +43,21 @@
 #' )
 #' head(new_efc)
 #'
-#' # using character strings
+#' # using character strings, provided as variable(!)
+#' stand <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
 #' new_efc <- data_modify(
 #'   efc,
 #'   c12hour_c = center(c12hour),
-#'   c12hour_z = "c12hour_c / sd(c12hour, na.rm = TRUE)"
+#'   c12hour_z = stand
 #' )
+#' head(new_efc)
+#'
+#' # providing expressions as character vector
+#' new_exp <- c(
+#'   "c12hour_c = center(c12hour)",
+#'   "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"
+#' )
+#' new_efc <- data_modify(efc, new_exp)
 #' head(new_efc)
 #'
 #' # attributes - in this case, value and variable labels - are preserved
@@ -134,7 +129,7 @@ data_modify.data.frame <- function(data, ..., verbose = TRUE) {
 
     # expression is given as character, e.g.
     # data_modify(iris, "double_SepWidth = 2 * Sepal.Width")
-    if (is.character(symbol)) {
+    if (is.character(symbol) && is.null(names(dots)[i])) {
       symbol <- str2lang(symbol)
     }
 
@@ -142,9 +137,11 @@ data_modify.data.frame <- function(data, ..., verbose = TRUE) {
     # a <- "2 * Sepal.Width"
     # data_modify(iris, double_SepWidth = a)
     # we reconstruct the symbol is if it were not provided as string here
-    eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
-    if (is.character(eval_symbol)) {
-      symbol <- str2lang(paste0(names(dots)[i], " = ", eval_symbol))
+    if (!is.character(symbol)) {
+      eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
+      if (is.character(eval_symbol)) {
+        symbol <- str2lang(paste0(names(dots)[i], " = ", eval_symbol))
+      }
     }
 
     # finally, we can evaluate expression and get values for new variables
