@@ -2,7 +2,7 @@
 #' @name data_unite
 #'
 #' @description
-#' Merges values of multiple variables per observation into one new variable.
+#' Merge values of multiple variables per observation into one new variable.
 #'
 #' @param data A data frame.
 #' @param new_column The name of the new column, as a string.
