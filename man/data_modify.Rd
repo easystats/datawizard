@@ -63,6 +63,7 @@ new_efc <- data_modify(
   "c12hour_z2 = standardize(c12hour)"
 )
 head(new_efc)
+
 # using character strings, provided as variable
 stand <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
 new_efc <- data_modify(
