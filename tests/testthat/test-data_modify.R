@@ -349,3 +349,9 @@ test_that("data_modify message about recycling values", {
   expect_snapshot(head(data_modify(iris, Petal.Length = 1, Sepal.Width = 1:2)))
   expect_snapshot(head(data_modify(iris, Petal.Length = 2, Sepal.Width = 2)))
 })
+
+
+test_that("data_modify message about modified variables", {
+  expect_snapshot(head(data_modify(iris, Sepal.Width = 2 * Sepal.Width)))
+  expect_snapshot(head(data_modify(iris, Petal.Length = Sepal.Length, Sepal.Width = Petal.Width)))
+})

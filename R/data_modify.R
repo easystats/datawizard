@@ -195,6 +195,12 @@ data_modify.data.frame <- function(data, ..., verbose = TRUE) {
   # inform about replaced (overwritten) variables
   if (any(names(dots) %in% column_names) && verbose) {
     overwritten <- intersect(names(dots), column_names)
+    insight::format_alert(paste0(
+      "The existing variable", ifelse(length(overwritten) > 1, "s ", " "),
+      text_concatenate(overwritten, enclose = "`"),
+      ifelse(length(overwritten) > 1, " have ", " has "),
+      "been modified."
+    ))
   }
 
   data
