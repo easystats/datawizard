@@ -127,16 +127,13 @@ data_modify.data.frame <- function(data, ..., verbose = TRUE) {
     # iterate expressions for new variables
     symbol <- dots[[i]]
 
-    # expression is given as character, e.g.
-    # data_modify(iris, "double_SepWidth = 2 * Sepal.Width")
-    if (is.character(symbol) && is.null(names(dots)[i])) {
-      symbol <- str2lang(symbol)
-    }
-
     # expression is given as character string in a variable, but named, e.g.
     # a <- "2 * Sepal.Width"
     # data_modify(iris, double_SepWidth = a)
-    # we reconstruct the symbol is if it were not provided as string here
+    # we reconstruct the symbol is if it were not provided as string here.
+    # However, we need to check that we don't have a character vector here,
+    # like: data_modify(iris, new_var = "a")
+    # this one should be recycled instead.
     if (!is.character(symbol)) {
       eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
       if (is.character(eval_symbol)) {
