@@ -84,10 +84,6 @@
 #' }
 #' foo(iris, "var_a = Sepal.Width / 10")
 #'
-#' # works from inside functions
-#' foo <- function(data, z) {
-#'   head(data_modify(data, z))
-#' }
 #' new_exp <- c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")
 #' foo(iris, new_exp)
 #' @export
