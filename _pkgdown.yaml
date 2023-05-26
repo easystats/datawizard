@@ -89,6 +89,7 @@ reference:
       - data_addprefix
       - remove_empty
       - contains("rownames")
+      - rowid_as_column
       - contains("colnames")
       - find_columns
       - data_restoretype

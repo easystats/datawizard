@@ -30,7 +30,7 @@
 #'
 #' @return A data frame comparable to `data`, with adjusted variables.
 #'
-#' @examplesIf require("bayestestR", quietly = TRUE) && require("rstanarm", quietly = TRUE)
+#' @examplesIf require("bayestestR", quietly = TRUE) && require("rstanarm", quietly = TRUE) && require("gamm4", quietly = TRUE)
 #' adjusted_all <- adjust(attitude)
 #' head(adjusted_all)
 #' adjusted_one <- adjust(attitude, effect = "complaints", select = "rating")
