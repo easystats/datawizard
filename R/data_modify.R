@@ -4,7 +4,7 @@
 #' can be used on grouped data frames, and newly created variables can be directly
 #' used.
 #'
-#' @param data The data frame, for which new variables should be created.
+#' @param data A data frame
 #' @param ... One or more expressions that define the new variable name and the
 #' values or recoding of those new variables. These expressions can be one of:
 #' - A sequence of named, literal expressions, where the left-hand side refers
