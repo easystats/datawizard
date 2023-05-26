@@ -59,7 +59,7 @@ return \code{"Species"}.}
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
 excludes no columns.}
 
-\item{separator}{Separator, as string, to use between values.}
+\item{separator}{A character to use between values.}
 
 \item{append}{Logical, if \code{FALSE} (default), removes original columns that
 were united. If \code{TRUE}, all columns are preserved and the new column is
@@ -90,7 +90,7 @@ functions (see 'Details'), this argument may be used as workaround.}
 \code{data}, with a newly created variable.
 }
 \description{
-Merges values of multiple variables per observation into one new variable.
+Merge values of multiple variables per observation into one new variable.
 }
 \section{Selection of variables - the \code{select} argument}{
 
