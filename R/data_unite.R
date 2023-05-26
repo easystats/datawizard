@@ -77,8 +77,12 @@ data_unite <- function(data,
 
   # remove missings
   if (remove_na) {
-    out[[new_column]] <- gsub(paste0("NA", separator), "", out[[new_column]], fixed = TRUE)
-    out[[new_column]] <- gsub(paste0(separator, "NA"), "", out[[new_column]], fixed = TRUE)
+    # remove trailing and leading "NA_" and "_NA"
+    out[[new_column]] <- gsub(paste0("^NA", separator), "", out[[new_column]])
+    out[[new_column]] <- gsub(paste0(separator, "NA$"), "", out[[new_column]])
+    # remove _NA_ inside string, add separator back. This ensure we match
+    # whole-word NA and do not break strings like "COUNTRY_NATION"
+    out[[new_column]] <- gsub(paste0(separator, "NA", separator), separator, out[[new_column]], fixed = TRUE)
   }
 
   # remove old columns
@@ -95,11 +99,7 @@ data_unite <- function(data,
   }
 
   # overwrite or append
-  if (new_column %in% colnames(data)) {
-    data[[new_column]] <- out[[new_column]]
-  } else {
-    data <- cbind(data, out)
-  }
+  data[[new_column]] <- out[[new_column]]
 
   # fin
   data
