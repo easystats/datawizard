@@ -30,7 +30,8 @@ NEW FUNCTIONS
 
 * `data_unite()`, to merge values of multiple variables into one new variable.
 
-* `data_modify()`, to create new variables in a data frame.
+* `data_modify()`, to create new variables, or modify or remove existing
+  variables in a data frame.
 
 BUG FIXES
 
