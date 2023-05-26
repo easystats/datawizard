@@ -137,6 +137,34 @@ test_that("data_modify expression in character vector", {
 })
 
 
+test_that("data_modify expression in character vector", {
+  data(iris)
+  aa <- "2 * Sepal.Width"
+  out <- data_modify(iris, new_var = aa)
+  expect_identical(
+    colnames(out),
+    c(
+      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
+      "Species", "new_var"
+    )
+  )
+  expect_identical(out$new_var, 2 * out$Sepal.Width)
+
+  foo_nv <- function(data, z) {
+    head(data_modify(data, new_var = z))
+  }
+  out <- foo_nv(iris, "2 * Sepal.Width")
+  expect_identical(
+    colnames(out),
+    c(
+      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
+      "Species", "new_var"
+    )
+  )
+  expect_identical(out$new_var, 2 * out$Sepal.Width)
+})
+
+
 test_that("data_modify expression as character vector or list", {
   data(iris)
   x <- "var_a = Sepal.Width"

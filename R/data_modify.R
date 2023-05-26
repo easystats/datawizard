@@ -138,6 +138,15 @@ data_modify.data.frame <- function(data, ..., verbose = TRUE) {
       symbol <- str2lang(symbol)
     }
 
+    # expression is given as character string in a variable, but named, e.g.
+    # a <- "2 * Sepal.Width"
+    # data_modify(iris, double_SepWidth = a)
+    # we reconstruct the symbol is if it were not provided as string here
+    eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
+    if (is.character(eval_symbol)) {
+      symbol <- str2lang(paste0(names(dots)[i], " = ", eval_symbol))
+    }
+
     # finally, we can evaluate expression and get values for new variables
     new_variable <- with(data, eval(symbol))
 
