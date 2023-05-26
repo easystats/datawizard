@@ -112,5 +112,6 @@ d <- data.frame(
 d
 data_unite(d, new_column = "xyz")
 data_unite(d, new_column = "xyz", remove = FALSE)
-data_unite(d, select = c("x", "z"), new_column = "xyz")
+data_unite(d, new_column = "xyz", select = c("x", "z"))
+data_unite(d, new_column = "xyz", select = c("x", "z"), append = TRUE)
 }
