@@ -129,6 +129,9 @@ data_modify.data.frame <- function(data, ..., verbose = TRUE) {
     }
   }
 
+  # for message later - we collect all recycled variables here
+  recycled_variables <- NULL
+
   for (i in seq_along(dots)) {
     # iterate expressions for new variables
     symbol <- dots[[i]]
@@ -156,15 +159,32 @@ data_modify.data.frame <- function(data, ..., verbose = TRUE) {
     }
 
     # give informative message when variable was recycled
-    if (length(new_variable) != nrow(data) && verbose) {
-      insight::format_alert(paste0(
-        "Variable ", names(dots)[i], " had ", length(new_variable),
-        " value", ifelse(length(new_variable) > 1, "s", ""),
-        " and was recycled to match the number of rows in the data."
-      ))
+    if (length(new_variable) != nrow(data)) {
+      recycled_variables <- c(
+        recycled_variables,
+        stats::setNames(length(new_variable), names(dots)[i])
+      )
     }
     data[[names(dots)[i]]] <- new_variable
   }
+
+  # inform about recycled variables
+  if (!is.null(recycled_variables) && verbose) {
+    # prepare some constants...
+    l_recycled <- length(recycled_variables)
+    n_recycled <- insight::n_unique(recycled_variables)
+    min_r <- min(recycled_variables)
+    max_r <- max(recycled_variables)
+    # ...probably makes this composition a bit clearer
+    insight::format_alert(paste0(
+      "Variable", ifelse(l_recycled > 1, "s", ""), " ",
+      text_concatenate(names(recycled_variables), enclose = "`"), " had ",
+      min_r, ifelse(n_recycled > 1, paste0(" to ", max_r), ""), " value",
+      ifelse(max_r > 1, "s", ""), " and ", ifelse(l_recycled > 1, "were", "was"),
+      " recycled to match the number of rows in the data."
+    ))
+  }
+
   data
 }
 

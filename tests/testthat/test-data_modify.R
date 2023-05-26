@@ -98,7 +98,7 @@ test_that("data_modify recycling works", {
 test_that("data_modify recycling works", {
   data(iris)
   d <- data_group(iris, "Species")
-  expect_message(expect_message(data_modify(d, x = 1, test = 1:2)))
+  expect_message(data_modify(d, x = 1, test = 1:2))
 })
 
 
@@ -330,4 +330,12 @@ test_that("data_modify works on grouped data, inside functions", {
 
 test_that("data_modify errors for non df", {
   expect_error(data_modify(iris$Sepal.Length, Sepal_W_z = standardize(Sepal.Width)))
+})
+
+test_that("data_modify message about recycling values", {
+  expect_snapshot(head(data_modify(iris, Sepal.Width = 1)))
+  expect_snapshot(head(data_modify(iris, Sepal.Width = 1:2)))
+  expect_snapshot(head(data_modify(iris, Petal.Length = 1, Sepal.Width = 1)))
+  expect_snapshot(head(data_modify(iris, Petal.Length = 1, Sepal.Width = 1:2)))
+  expect_snapshot(head(data_modify(iris, Petal.Length = 2, Sepal.Width = 2)))
 })
