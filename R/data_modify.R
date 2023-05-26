@@ -101,8 +101,8 @@ data_modify.default <- function(data, ...) {
 data_modify.data.frame <- function(data, ..., verbose = TRUE) {
   dots <- match.call(expand.dots = FALSE)$`...`
 
-  # we check for list or character vector of expressions, in which case
-  # "dots" should be unnamed, and also only of length 1
+  # we check for character vector of expressions, in which case
+  # "dots" should be unnamed
   if (is.null(names(dots))) {
     # if we have multiple strings, concatenate them to a character vector
     # and put it into a list...
@@ -116,24 +116,16 @@ data_modify.data.frame <- function(data, ..., verbose = TRUE) {
     # expression is given as character string, e.g.
     # a <- "double_SepWidth = 2 * Sepal.Width"
     # data_modify(iris, a)
-    # or as character vector / list of character strings e.g.
+    # or as character vector, e.g.
     # data_modify(iris, c("var_a = Sepal.Width / 10", "var_b = Sepal.Width * 10"))
-    # data_modify(iris, list("var_a = Sepal.Width / 10", "var_b = Sepal.Width * 10"))
     character_symbol <- tryCatch(.dynEval(dots[[1]]), error = function(e) NULL)
-    # check if not NULL - then we can assume we have either a list or a vector
-    if (!is.null(character_symbol)) {
-      # turn list into vector
-      if (is.list(character_symbol)) {
-        character_symbol <- unlist(character_symbol)
-      }
-      # do we have a character vector? Then we can proceed
-      if (is.character(character_symbol)) {
-        dots <- lapply(character_symbol, function(s) {
-          # turn value from character vector into expression
-          str2lang(.dynEval(s))
-        })
-        names(dots) <- vapply(dots, function(n) insight::safe_deparse(n[[2]]), character(1))
-      }
+    # do we have a character vector? Then we can proceed
+    if (is.character(character_symbol)) {
+      dots <- lapply(character_symbol, function(s) {
+        # turn value from character vector into expression
+        str2lang(.dynEval(s))
+      })
+      names(dots) <- vapply(dots, function(n) insight::safe_deparse(n[[2]]), character(1))
     }
   }
 
@@ -144,8 +136,8 @@ data_modify.data.frame <- function(data, ..., verbose = TRUE) {
     # expression is given as character string in a variable, but named, e.g.
     # a <- "2 * Sepal.Width"
     # data_modify(iris, double_SepWidth = a)
-    # we reconstruct the symbol is if it were not provided as string here.
-    # However, we need to check that we don't have a character vector here,
+    # we reconstruct the symbol as if it were provided as literal expression.
+    # However, we need to check that we don't have a character vector,
     # like: data_modify(iris, new_var = "a")
     # this one should be recycled instead.
     if (!is.character(symbol)) {
@@ -189,13 +181,14 @@ data_modify.grouped_df <- function(data, ..., verbose = TRUE) {
   ## TODO This code is duplicated, taken from the .data.frame method
   ## @etiennebacher can we move this into a separate function and ".dynEval()" still works?
 
-  # we check for list or character vector of expressions, in which case
-  # "dots" should be unnamed, and also only of length 1
-  if (length(dots) == 1 && is.null(names(dots))) {
+  # we check for character vector of expressions, in which case
+  # "dots" should be unnamed
+  if (is.null(names(dots))) {
     # if we have multiple strings, concatenate them to a character vector
+    # and put it into a list...
     if (length(dots) > 1) {
       if (all(vapply(dots, is.character, logical(1)))) {
-        dots <- unlist(dots)
+        dots <- list(unlist(dots))
       } else {
         insight::format_error("You cannot mix string and literal representation of expressions.")
       }
@@ -203,24 +196,16 @@ data_modify.grouped_df <- function(data, ..., verbose = TRUE) {
     # expression is given as character string, e.g.
     # a <- "double_SepWidth = 2 * Sepal.Width"
     # data_modify(iris, a)
-    # or as character vector / list of character strings e.g.
+    # or as character vector, e.g.
     # data_modify(iris, c("var_a = Sepal.Width / 10", "var_b = Sepal.Width * 10"))
-    # data_modify(iris, list("var_a = Sepal.Width / 10", "var_b = Sepal.Width * 10"))
     character_symbol <- tryCatch(.dynEval(dots[[1]]), error = function(e) NULL)
-    # check if not NULL - then we can assume we have either a list or a vector
-    if (!is.null(character_symbol)) {
-      # turn list into vector
-      if (is.list(character_symbol)) {
-        character_symbol <- unlist(character_symbol)
-      }
-      # do we have a character vector? Then we can proceed
-      if (is.character(character_symbol)) {
-        dots <- lapply(character_symbol, function(s) {
-          # turn value from character vector into expression
-          str2lang(.dynEval(s))
-        })
-        names(dots) <- vapply(dots, function(n) insight::safe_deparse(n[[2]]), character(1))
-      }
+    # do we have a character vector? Then we can proceed
+    if (is.character(character_symbol)) {
+      dots <- lapply(character_symbol, function(s) {
+        # turn value from character vector into expression
+        str2lang(.dynEval(s))
+      })
+      names(dots) <- vapply(dots, function(n) insight::safe_deparse(n[[2]]), character(1))
     }
   }
 
