@@ -11,7 +11,7 @@
 #'   to the name of the new variable, while the right-hand side represent the
 #'   values of the new variable. Example: `Sepal.Width = center(Sepal.Width)`.
 #' - The *right-hand* side can also be represented as character string. Example:
-#'   `Sepal_Width_c = "Sepal.Width - mean(Sepal.Width"`
+#'   `Sepal_Width_c = "Sepal.Width - mean(Sepal.Width)"`
 #' - You can mix both literal and character strings as right-hand side. Example:
 #'   ```
 #'   data_modify(
