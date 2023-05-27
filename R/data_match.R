@@ -214,10 +214,10 @@ data_filter.data.frame <- function(x, ...) {
     }
 
     # here we go when we have a filter expression, and no numeric vector to slice
-    if (is.null(eval_symbol) || (is.character(eval_symbol) && !is.numeric(eval_symbol_numeric))) {
+    if (is.null(eval_symbol) || (!is.numeric(eval_symbol) && !is.numeric(eval_symbol_numeric))) {
       # could be evaluated? Then filter expression is a string and we need
       # to convert into symbol
-      if (!is.null(eval_symbol)) {
+      if (!is.null(eval_symbol) && is.character(eval_symbol)) {
         symbol <- str2lang(eval_symbol)
       }
       # filter data
@@ -259,8 +259,11 @@ data_filter.grouped_df <- function(x, ...) {
   grps <- attr(x, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 
+  dots <- match.call(expand.dots = FALSE)$`...`
   out <- lapply(grps, function(grp) {
-    data_filter.data.frame(x[grp, ], ..., called_from_group = TRUE)
+    args <- list(x[grp, ])
+    args <- c(args, dots)
+    do.call("data_filter.data.frame", args)
   })
 
   out <- do.call(rbind, out)
