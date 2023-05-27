@@ -179,7 +179,7 @@ data_filter <- function(x, ...) {
 
 #' @export
 data_filter.data.frame <- function(x, ...) {
-  out <- data
+  out <- x
   dots <- match.call(expand.dots = FALSE)$`...`
 
   if (!is.null(names(dots)) && any(nchar(names(dots)) > 0)) {
@@ -243,12 +243,12 @@ data_filter.data.frame <- function(x, ...) {
 
   # restore value and variable labels
   for (i in colnames(out)) {
-    attr(out[[i]], "label") <- attr(data[[i]], "label", exact = TRUE)
-    attr(out[[i]], "labels") <- attr(data[[i]], "labels", exact = TRUE)
+    attr(out[[i]], "label") <- attr(x[[i]], "label", exact = TRUE)
+    attr(out[[i]], "labels") <- attr(x[[i]], "labels", exact = TRUE)
   }
 
   # add back custom attributes
-  out <- .replace_attrs(out, attributes(data))
+  out <- .replace_attrs(out, attributes(x))
   out
 }
 
