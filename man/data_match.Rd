@@ -7,7 +7,7 @@
 \usage{
 data_match(x, to, match = "and", return_indices = FALSE, drop_na = TRUE, ...)
 
-data_filter(x, filter, ...)
+data_filter(x, ...)
 }
 \arguments{
 \item{x}{A data frame.}

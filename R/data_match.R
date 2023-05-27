@@ -173,112 +173,94 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
 
 #' @rdname data_match
 #' @export
-data_filter <- function(x, filter, ...) {
+data_filter <- function(x, ...) {
   UseMethod("data_filter")
 }
 
 #' @export
-data_filter.data.frame <- function(x, filter, ...) {
-  .fcondition <- substitute(filter)
+data_filter.data.frame <- function(x, ...) {
+  out <- data
+  dots <- match.call(expand.dots = FALSE)$`...`
 
-  dots <- list(...)
-
-  # if called from data_filter.grouped_df, the substitute above just gets
-  # "filter" whereas it needs to pass the condition
-  if (isTRUE(dots$called_from_group)) {
-    .fcondition <- substitute(filter, env = parent.frame(3L))
-  }
-
-  # condition can be a numeric vector, to slice rows by indices,
-  # or a logical condition to filter observations. first, we check
-  # for numeric vector. the logical condition can also be passed
-  # as character vector, which allows to use data_filer() from inside
-  # other function w/o the need to define "globalVariables".
-
-  # numeric vector to slice data frame?
-  rows <- try(eval(.fcondition, envir = parent.frame()), silent = TRUE)
-  if (is.numeric(rows)) {
-    out <- x[rows, , drop = FALSE]
-  } else {
-    if (!is.character(.fcondition)) {
-      # special handling for grouped data frames
-      if (isTRUE(dots$called_from_group)) {
-        ## TODO: need to check when expression is given as string, or inside functions
-        .fcondition <- insight::safe_deparse(.fcondition)
-      } else {
-        # evaluate condition, to find out whether it's a string, a variable
-        # or given as literal expression...
-        cond_string <- .dynEval(.fcondition, ifnotfound = NULL)
-        if (is.null(cond_string)) {
-          # could not evaluate "condition", so we assume a regular filter syntax
-          .fcondition <- insight::safe_deparse(.fcondition)
-        } else if (is.function(cond_string) && is.character(rows)) {
-          # when called from inside functions, ".dynEval()" might return a
-          # function - in this case, "rows" should already contain the correctly
-          # evaluated string
-          .fcondition <- rows
-        } else {
-          # "condition" was evaluated by ".dynEval()", so we have a variable
-          # that contained the filter syntax as string
-          .fcondition <- cond_string
-        }
-      }
-    }
-    # Check syntax of the filter. Must be done *before* calling subset()
-    # (cf easystats/datawizard#237)
-    .check_filter_syntax(.fcondition)
-
-    has_curley <- grepl("{", .fcondition, fixed = TRUE)
-
-    if (has_curley) {
-      .fcondition <- gsub("{ ", "{", .fcondition, fixed = TRUE)
-      .fcondition <- gsub(" }", "}", .fcondition, fixed = TRUE)
-
-      curley_vars <- regmatches(.fcondition, gregexpr("[^{\\}]+(?=\\})", .fcondition, perl = TRUE))
-      curley_vars <- unique(unlist(curley_vars, use.names = FALSE))
-
-      for (i in curley_vars) {
-        if (isTRUE(dots$called_from_group)) {
-          token <- get(i, envir = parent.frame(4L))
-        } else {
-          token <- get(i, envir = parent.frame())
-        }
-
-        .fcondition <- gsub(paste0("{", i, "}"), token, .fcondition, fixed = TRUE)
-      }
-    }
-
-    out <- tryCatch(
-      subset(x, subset = eval(parse(text = .fcondition), envir = new.env())),
-      warning = function(e) NULL,
-      error = function(e) NULL
+  if (!is.null(names(dots)) && any(nchar(names(dots)) > 0)) {
+    insight::format_error(
+      "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
     )
-    if (is.null(out)) {
-      insight::format_error(
-        "Filtering did not work. Please check the syntax of your `filter` argument."
-      )
+  }
+
+  # turn character vector (like `c("mpg <= 20", "cyl == 6")`) into symbols
+  if (length(dots) == 1) {
+    character_vector <- .dynEval(dots[[1]], ifnotfound = NULL)
+    if (is.character(character_vector) && length(character_vector) > 1) {
+      dots <- lapply(character_vector, str2lang)
     }
   }
+
+  # Check syntax of the filter. Must be done *before* calling subset()
+  # (cf easystats/datawizard#237)
+  for (.fcondition in dots) {
+    .check_filter_syntax(insight::safe_deparse(.fcondition))
+  }
+
+  for (i in seq_along(dots)) {
+    symbol <- dots[[i]]
+    # evaluate, we may have a variable with filter expression
+    eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
+    eval_symbol_numeric <- NULL
+    if (!is.null(eval_symbol)) {
+      # when possible to evaluate, do we have a numeric vector provided
+      # as string? (e.g. `"5:10"`) - then try to coerce to numeric
+      eval_symbol_numeric <- tryCatch(eval(parse(text = eval_symbol)), error = function(e) NULL)
+    }
+
+    # here we go when we have a filter expression, and no numeric vector to slice
+    if (is.null(eval_symbol) || (is.character(eval_symbol) && !is.numeric(eval_symbol_numeric))) {
+      # could be evaluated? Then filter expression is a string and we need
+      # to convert into symbol
+      if (!is.null(eval_symbol)) {
+        symbol <- str2lang(eval_symbol)
+      }
+      # filter data
+      out <- tryCatch(
+        subset(out, subset = eval(symbol, envir = new.env())),
+        warning = function(e) NULL,
+        error = function(e) NULL
+      )
+    } else if (is.numeric(eval_symbol)) {
+      # if symbol could be evaluated and is numeric, slice
+      out <- tryCatch(out[eval_symbol, , drop = FALSE], error = function(e) NULL)
+    } else if (is.numeric(eval_symbol_numeric)) {
+      # if symbol could be evaluated, was string and could be converted to numeric, slice
+      out <- tryCatch(out[eval_symbol_numeric, , drop = FALSE], error = function(e) NULL)
+    }
+  }
+
+  if (is.null(out)) {
+    insight::format_error(
+      "Filtering did not work. Please check the syntax of your `filter` argument."
+    )
+  }
+
   # restore value and variable labels
   for (i in colnames(out)) {
-    attr(out[[i]], "label") <- attr(x[[i]], "label", exact = TRUE)
-    attr(out[[i]], "labels") <- attr(x[[i]], "labels", exact = TRUE)
+    attr(out[[i]], "label") <- attr(data[[i]], "label", exact = TRUE)
+    attr(out[[i]], "labels") <- attr(data[[i]], "labels", exact = TRUE)
   }
 
   # add back custom attributes
-  out <- .replace_attrs(out, attributes(x))
+  out <- .replace_attrs(out, attributes(data))
   out
 }
 
 
 #' @export
-data_filter.grouped_df <- function(x, filter, ...) {
+data_filter.grouped_df <- function(x, ...) {
   # works only for dplyr >= 0.8.0
   grps <- attr(x, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 
   out <- lapply(grps, function(grp) {
-    data_filter.data.frame(x[grp, ], filter, called_from_group = TRUE, ...)
+    data_filter.data.frame(x[grp, ], ..., called_from_group = TRUE)
   })
 
   out <- do.call(rbind, out)
