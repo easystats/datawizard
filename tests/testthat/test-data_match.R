@@ -112,15 +112,15 @@ test_that("data_filter gives informative message on errors", {
     "`==`"
   )
   expect_error(
-    data_filter(mtcars, filter = mpg > 10 || cyl == 4),
+    data_filter(mtcars, mpg > 10 || cyl == 4),
     "`||`"
   )
   expect_error(
-    data_filter(mtcars, filter = mpg > 10 && cyl == 4),
+    data_filter(mtcars, mpg > 10 && cyl == 4),
     "`&&`"
   )
   expect_error(
-    data_filter(mtcars, filter = mpg > 10 ? cyl == 4),
+    data_filter(mtcars, mpg > 10 ? cyl == 4),
     "syntax"
   )
 })
@@ -156,8 +156,8 @@ test_that("data_filter works with >= or <=", {
 test_that("programming with data_filter", {
   # One arg ------------
 
-  foo <- function(var) {
-    data_filter(mtcars, filter = var)
+  foo <- function(var1) {
+    data_filter(mtcars, var1)
   }
   expect_identical(
     foo("mpg >= 30"),
@@ -188,15 +188,6 @@ test_that("programming with data_filter with variables", {
   var4 <- "mpg >= 30 & hp <= 66"
   expect_identical(
     data_filter(mtcars, var4),
-    data_filter(mtcars, "mpg >= 30 & hp <= 66")
-  )
-})
-
-test_that("data_filter and curlies, as string", {
-  v1 <- "mpg"
-  v2 <- "hp"
-  expect_identical(
-    data_filter(mtcars, "{v1} >= 30 & {v2} <= 66"),
     data_filter(mtcars, "mpg >= 30 & hp <= 66")
   )
 })
@@ -232,10 +223,8 @@ test_that("data_filter programming works with groups", {
   class(expected) <- c("grouped_df", "data.frame")
   attributes(expected)$groups <- attributes(test)$groups
 
-  var <- "x"
-
   expect_identical(
-    data_filter(test, "{var} == min({var})"),
+    data_filter(test, "x == min(x)"),
     expected,
     ignore_attr = TRUE
   )
