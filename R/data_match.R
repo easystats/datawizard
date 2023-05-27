@@ -206,6 +206,10 @@ data_filter.data.frame <- function(x, ...) {
     symbol <- dots[[i]]
     # evaluate, we may have a variable with filter expression
     eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
+    # sanity check: is variable named like a function?
+    if (is.function(eval_symbol)) {
+      eval_symbol <- .dynGet(symbol, ifnotfound = NULL)
+    }
     eval_symbol_numeric <- NULL
     if (!is.null(eval_symbol)) {
       # when possible to evaluate, do we have a numeric vector provided

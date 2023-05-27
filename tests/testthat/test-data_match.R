@@ -156,8 +156,8 @@ test_that("data_filter works with >= or <=", {
 test_that("programming with data_filter", {
   # One arg ------------
 
-  foo <- function(var1) {
-    data_filter(mtcars, var1)
+  foo <- function(var) {
+    data_filter(mtcars, var)
   }
   expect_identical(
     foo("mpg >= 30"),
@@ -173,13 +173,22 @@ test_that("programming with data_filter", {
     data_filter(mtcars, "mpg >= 30")
   )
 
+  foo3 <- function(data) {
+    var <- "mpg >= 30"
+    data_filter(data, var)
+  }
+  expect_identical(
+    foo3(mtcars),
+    data_filter(mtcars, "mpg >= 30")
+  )
+
   # Two args -----------
 
-  foo3 <- function(data, var3) {
+  foo4 <- function(data, var3) {
     data_filter(data, var3)
   }
   expect_identical(
-    foo3(mtcars, "mpg >= 30 & hp <= 66"),
+    foo4(mtcars, "mpg >= 30 & hp <= 66"),
     data_filter(mtcars, "mpg >= 30 & hp <= 66")
   )
 })
@@ -188,6 +197,11 @@ test_that("programming with data_filter with variables", {
   var4 <- "mpg >= 30 & hp <= 66"
   expect_identical(
     data_filter(mtcars, var4),
+    data_filter(mtcars, "mpg >= 30 & hp <= 66")
+  )
+  var <- "mpg >= 30 & hp <= 66"
+  expect_identical(
+    data_filter(mtcars, var),
     data_filter(mtcars, "mpg >= 30 & hp <= 66")
   )
 })
