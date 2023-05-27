@@ -197,9 +197,13 @@ data_filter.data.frame <- function(x, filter, ...) {
     out <- x[rows, , drop = FALSE]
   } else {
     if (!is.character(condition)) {
+      # special handling for grouped data frames
       if (isTRUE(dots$called_from_group)) {
+        ## TODO: need to check when expression is given as string, or inside functions
         condition <- insight::safe_deparse(condition)
       } else {
+        # evaluate condition, to find out whether it's a string, a variable
+        # or given as literal expression...
         cond_string <- .dynEval(condition, ifnotfound = NULL)
         if (is.null(cond_string)) {
           # could not evaluate "condition", so we assume a regular filter syntax
