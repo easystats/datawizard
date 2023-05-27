@@ -181,7 +181,7 @@ data_filter.data.frame <- function(x, filter, ...) {
 
   # if called from data_filter.grouped_df, the substitute above just gets
   # "filter" whereas it needs to pass the condition
-  if ("called_from_group" %in% names(dots) && dots$called_from_group) {
+  if (isTRUE(dots$called_from_group)) {
     condition <- substitute(filter, env = parent.frame(3L))
   }
 
@@ -197,19 +197,23 @@ data_filter.data.frame <- function(x, filter, ...) {
     out <- x[rows, , drop = FALSE]
   } else {
     if (!is.character(condition)) {
-      cond_string <- .dynEval(condition, ifnotfound = NULL)
-      if (is.null(cond_string)) {
-        # could not evaluate "condition", so we assume a regular filter syntax
+      if (isTRUE(dots$called_from_group)) {
         condition <- insight::safe_deparse(condition)
-      } else if (is.function(cond_string) && is.character(rows)) {
-        # when called from inside functions, ".dynEval()" might return a
-        # function - in this case, "rows" should already contain the correctly
-        # evaluated string
-        condition <- rows
       } else {
-        # "condition" was evaluated by ".dynEval()", so we have a variable
-        # that contained the filter syntax as string
-        condition <- cond_string
+        cond_string <- .dynEval(condition, ifnotfound = NULL)
+        if (is.null(cond_string)) {
+          # could not evaluate "condition", so we assume a regular filter syntax
+          condition <- insight::safe_deparse(condition)
+        } else if (is.function(cond_string) && is.character(rows)) {
+          # when called from inside functions, ".dynEval()" might return a
+          # function - in this case, "rows" should already contain the correctly
+          # evaluated string
+          condition <- rows
+        } else {
+          # "condition" was evaluated by ".dynEval()", so we have a variable
+          # that contained the filter syntax as string
+          condition <- cond_string
+        }
       }
     }
     # Check syntax of the filter. Must be done *before* calling subset()
