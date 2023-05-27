@@ -192,6 +192,15 @@ test_that("programming with data_filter with variables", {
   )
 })
 
+test_that("data_filter and curlies, as string", {
+  v1 <- "mpg"
+  v2 <- "hp"
+  expect_identical(
+    data_filter(mtcars, "{v1} >= 30 & {v2} <= 66"),
+    data_filter(mtcars, "mpg >= 30 & hp <= 66")
+  )
+})
+
 test_that("data_filter works with groups", {
   test <- data.frame(
     id = c(1, 1, 2, 2),
