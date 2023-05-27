@@ -82,18 +82,22 @@
 #' # Define a custom function containing data_filter() and pass variable names
 #' # to it using curly brackets
 #' my_filter <- function(data, variable) {
-#'   data_filter(data, {variable} <= 20)
+#'   data_filter(data, "{variable} <= 20")
 #' }
 #' my_filter(mtcars, "mpg")
 #'
-#' # Pass complete filter-condition as string
+#' # Pass complete filter-condition as string. No need for curley braces
 #' my_filter <- function(data, condition) {
-#'   data_filter(data, {condition})
+#'   data_filter(data, condition)
 #' }
 #' my_filter(mtcars, "am != 0")
 #'
 #' # string can also be used directly as argument
 #' data_filter(mtcars, "am != 0")
+#' 
+#' # or as variable
+#' fl <- "am != 0"
+#' data_filter(mtcars, fl)
 #' # styler: on
 #' @inherit data_rename seealso
 #' @export
@@ -175,14 +179,14 @@ data_filter <- function(x, filter, ...) {
 
 #' @export
 data_filter.data.frame <- function(x, filter, ...) {
-  condition <- substitute(filter)
+  .fcondition <- substitute(filter)
 
   dots <- list(...)
 
   # if called from data_filter.grouped_df, the substitute above just gets
   # "filter" whereas it needs to pass the condition
   if (isTRUE(dots$called_from_group)) {
-    condition <- substitute(filter, env = parent.frame(3L))
+    .fcondition <- substitute(filter, env = parent.frame(3L))
   }
 
   # condition can be a numeric vector, to slice rows by indices,
@@ -192,45 +196,45 @@ data_filter.data.frame <- function(x, filter, ...) {
   # other function w/o the need to define "globalVariables".
 
   # numeric vector to slice data frame?
-  rows <- try(eval(condition, envir = parent.frame()), silent = TRUE)
+  rows <- try(eval(.fcondition, envir = parent.frame()), silent = TRUE)
   if (is.numeric(rows)) {
     out <- x[rows, , drop = FALSE]
   } else {
-    if (!is.character(condition)) {
+    if (!is.character(.fcondition)) {
       # special handling for grouped data frames
       if (isTRUE(dots$called_from_group)) {
         ## TODO: need to check when expression is given as string, or inside functions
-        condition <- insight::safe_deparse(condition)
+        .fcondition <- insight::safe_deparse(.fcondition)
       } else {
         # evaluate condition, to find out whether it's a string, a variable
         # or given as literal expression...
-        cond_string <- .dynEval(condition, ifnotfound = NULL)
+        cond_string <- .dynEval(.fcondition, ifnotfound = NULL)
         if (is.null(cond_string)) {
           # could not evaluate "condition", so we assume a regular filter syntax
-          condition <- insight::safe_deparse(condition)
+          .fcondition <- insight::safe_deparse(.fcondition)
         } else if (is.function(cond_string) && is.character(rows)) {
           # when called from inside functions, ".dynEval()" might return a
           # function - in this case, "rows" should already contain the correctly
           # evaluated string
-          condition <- rows
+          .fcondition <- rows
         } else {
           # "condition" was evaluated by ".dynEval()", so we have a variable
           # that contained the filter syntax as string
-          condition <- cond_string
+          .fcondition <- cond_string
         }
       }
     }
     # Check syntax of the filter. Must be done *before* calling subset()
     # (cf easystats/datawizard#237)
-    .check_filter_syntax(condition)
+    .check_filter_syntax(.fcondition)
 
-    has_curley <- grepl("{", condition, fixed = TRUE)
+    has_curley <- grepl("{", .fcondition, fixed = TRUE)
 
     if (has_curley) {
-      condition <- gsub("{ ", "{", condition, fixed = TRUE)
-      condition <- gsub(" }", "}", condition, fixed = TRUE)
+      .fcondition <- gsub("{ ", "{", .fcondition, fixed = TRUE)
+      .fcondition <- gsub(" }", "}", .fcondition, fixed = TRUE)
 
-      curley_vars <- regmatches(condition, gregexpr("[^{\\}]+(?=\\})", condition, perl = TRUE))
+      curley_vars <- regmatches(.fcondition, gregexpr("[^{\\}]+(?=\\})", .fcondition, perl = TRUE))
       curley_vars <- unique(unlist(curley_vars, use.names = FALSE))
 
       for (i in curley_vars) {
@@ -240,12 +244,12 @@ data_filter.data.frame <- function(x, filter, ...) {
           token <- get(i, envir = parent.frame())
         }
 
-        condition <- gsub(paste0("{", i, "}"), token, condition, fixed = TRUE)
+        .fcondition <- gsub(paste0("{", i, "}"), token, .fcondition, fixed = TRUE)
       }
     }
 
     out <- tryCatch(
-      subset(x, subset = eval(parse(text = condition), envir = new.env())),
+      subset(x, subset = eval(parse(text = .fcondition), envir = new.env())),
       warning = function(e) NULL,
       error = function(e) NULL
     )
@@ -289,13 +293,13 @@ data_filter.grouped_df <- function(x, filter, ...) {
 
 # helper -------------------
 
-.check_filter_syntax <- function(condition) {
+.check_filter_syntax <- function(.fcondition) {
   # NOTE: We cannot check for `=` when "filter" is not a character vector
   # because the function will then fail in general. I.e.,
   # "data_filter(mtcars, filter = mpg > 10 & cyl = 4)" will not start
   # running this function and never reaches the first code line,
   # but immediately stops...
-  tmp <- gsub("==", "", condition, fixed = TRUE)
+  tmp <- gsub("==", "", .fcondition, fixed = TRUE)
   tmp <- gsub("<=", "", tmp, fixed = TRUE)
   tmp <- gsub(">=", "", tmp, fixed = TRUE)
   tmp <- gsub("!=", "", tmp, fixed = TRUE)
@@ -310,10 +314,10 @@ data_filter.grouped_df <- function(x, filter, ...) {
   }
   # check if "&&" etc instead of "&" was used?
   logical_operator <- NULL
-  if (any(grepl("&&", condition, fixed = TRUE))) {
+  if (any(grepl("&&", .fcondition, fixed = TRUE))) {
     logical_operator <- "&&"
   }
-  if (any(grepl("||", condition, fixed = TRUE))) {
+  if (any(grepl("||", .fcondition, fixed = TRUE))) {
     logical_operator <- "||"
   }
   if (!is.null(logical_operator)) {
