@@ -67,17 +67,25 @@ test_that("data_match works with missing data", {
 test_that("data_match and data_filter work similar", {
   out1 <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
   out2 <- data_filter(mtcars, vs != 0 & am != 1)
-  expect_identical(out1, out2, ignore_attr = TRUE)
+  expect_equal(out1, out2, ignore_attr = TRUE)
 
   # using a data frame re-orders rows!
   out1 <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
   out2 <- data_filter(mtcars, vs == 0 | am == 1)
-  expect_identical(out1[order(out1$vs, out1$am), ], out2[order(out2$vs, out2$am), ], ignore_attr = TRUE)
+  expect_equal(
+    out1[order(out1$vs, out1$am), ],
+    out2[order(out2$vs, out2$am), ],
+    ignore_attr = TRUE
+  )
 
   # string representation is working
   out1 <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "or")
   out2 <- data_filter(mtcars, "vs == 0 | am == 1")
-  expect_identical(out1[order(out1$vs, out1$am), ], out2[order(out2$vs, out2$am), ], ignore_attr = TRUE)
+  expect_equal(
+    out1[order(out1$vs, out1$am), ],
+    out2[order(out2$vs, out2$am), ],
+    ignore_attr = TRUE
+  )
 })
 
 
@@ -85,9 +93,10 @@ test_that("data_filter works", {
   out1 <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
   out2 <- data_filter(mtcars, vs != 0 & am != 1)
   out3 <- subset(mtcars, vs != 0 & am != 1)
-  expect_identical(out1, out2, ignore_attr = TRUE)
-  expect_identical(out1, out3, ignore_attr = TRUE)
-  expect_identical(out2, out3, ignore_attr = TRUE)
+  out4 <- data_filter(mtcars, vs != 0, am != 1)
+  expect_equal(out1, out2, ignore_attr = TRUE)
+  expect_equal(out1, out3, ignore_attr = TRUE)
+  expect_equal(out2, out4, ignore_attr = TRUE)
 })
 
 
@@ -95,15 +104,25 @@ test_that("data_filter works with string representation", {
   out1 <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
   out2 <- data_filter(mtcars, "vs != 0 & am != 1")
   out3 <- subset(mtcars, vs != 0 & am != 1)
-  expect_identical(out1, out2, ignore_attr = TRUE)
-  expect_identical(out1, out3, ignore_attr = TRUE)
-  expect_identical(out2, out3, ignore_attr = TRUE)
+  out4 <- data_filter(mtcars, c("vs != 0", "am != 1"))
+  expect_equal(out1, out2, ignore_attr = TRUE)
+  expect_equal(out1, out3, ignore_attr = TRUE)
+  expect_equal(out2, out3, ignore_attr = TRUE)
+  expect_equal(out2, out4, ignore_attr = TRUE)
 })
 
 
 test_that("data_filter works like slice", {
   out <- data_filter(mtcars, 5:10)
-  expect_identical(out, mtcars[5:10, ], ignore_attr = TRUE)
+  expect_equal(out, mtcars[5:10, ], ignore_attr = TRUE)
+  out <- data_filter(mtcars, "5:10")
+  expect_equal(out, mtcars[5:10, ], ignore_attr = TRUE)
+  slc <- 5:10
+  out <- data_filter(mtcars, slc)
+  expect_equal(out, mtcars[5:10, ], ignore_attr = TRUE)
+  slc <- "5:10"
+  out <- data_filter(mtcars, slc)
+  expect_equal(out, mtcars[5:10, ], ignore_attr = TRUE)
 })
 
 test_that("data_filter gives informative message on errors", {
@@ -142,6 +161,11 @@ test_that("data_filter works with >= or <=", {
     data_filter(mtcars, mpg <= 30.4),
     subset(mtcars, mpg <= 30.4)
   )
+  mpgl30 <- "mpg <= 30.4"
+  expect_identical(
+    data_filter(mtcars, mpgl30),
+    subset(mtcars, mpg <= 30.4)
+  )
 
   expect_identical(
     data_filter(mtcars, "mpg >= 30.4 & hp == 66"),
@@ -150,6 +174,11 @@ test_that("data_filter works with >= or <=", {
   expect_identical(
     data_filter(mtcars, mpg <= 30.4 & hp == 66),
     subset(mtcars, mpg <= 30.4 & hp == 66)
+  )
+  mpgl30hp66 <- "mpg >= 30.4 & hp == 66"
+  expect_identical(
+    data_filter(mtcars, mpgl30hp66),
+    subset(mtcars, mpg >= 30.4 & hp == 66)
   )
 })
 
@@ -218,7 +247,7 @@ test_that("data_filter works with groups", {
   class(expected) <- c("grouped_df", "data.frame")
   attributes(expected)$groups <- attributes(test)$groups
 
-  expect_identical(
+  expect_equal(
     data_filter(test, x == min(x)),
     expected,
     ignore_attr = TRUE
@@ -237,9 +266,26 @@ test_that("data_filter programming works with groups", {
   class(expected) <- c("grouped_df", "data.frame")
   attributes(expected)$groups <- attributes(test)$groups
 
-  expect_identical(
+  expect_equal(
     data_filter(test, "x == min(x)"),
     expected,
     ignore_attr = TRUE
   )
+
+  foo_gr1 <- function(data, var) {
+    data_filter(data, var)
+  }
+  out <- foo_gr1(test, "x == min(x)")
+  expect_equal(out, expected, ignore_attr = TRUE)
+})
+
+
+test_that("data_filter with groups, different ways of dots", {
+  grp <- data_group(mtcars, "cyl")
+  fli <- "mpg <= 20"
+  out1 <- data_filter(grp, mpg <= 20)
+  out2 <- data_filter(grp, "mpg <= 20")
+  out3 <- data_filter(grp, fli)
+  expect_identical(out1, out2)
+  expect_identical(out1, out3)
 })

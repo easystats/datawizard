@@ -9,10 +9,6 @@
 #' @param to A data frame matching the specified conditions. Note that if
 #'   `match` is a value other than `"and"`, the original row order might be
 #'   changed. See 'Details'.
-#' @param filter A logical expression indicating which rows to keep, or a numeric
-#'   vector indicating the row indices of rows to keep. Can also be a string
-#'   representation of a logical expression. e.g. `filter = "x > 4"`. This might
-#'   be useful when used in packages to avoid defining undefined global variables.
 #' @param match String, indicating with which logical operation matching
 #'   conditions should be combined. Can be `"and"` (or `"&"`), `"or"` (or `"|"`)
 #'   or `"not"` (or `"!"`).
@@ -24,9 +20,15 @@
 #'   row indices are requested (i.e. `return_indices=TRUE`), it might be useful
 #'   to preserve `NA` values, so returned row indices match the row indices of
 #'   the original data frame.
-#' @param ... Not used.
+#' @param ... A sequence of logical expressions indicating which rows to keep,
+#'   or a numeric vector indicating the row indices of rows to keep. Can also be
+#'   a string representation of a logical expression (e.g. `"x > 4"`), a
+#'   character vector (e.g. `c("x > 4", "y == 2)`) or a variable that contains
+#'   the string representation of a logical expression. These might be useful
+#'   when used in packages to avoid defining undefined global variables.
 #'
-#' @return A filtered data frame, or the row indices that match the specified configuration.
+#' @return A filtered data frame, or the row indices that match the specified
+#' configuration.
 #'
 #' @details For `data_match()`, if `match` is either `"or"` or `"not"`, the
 #' original row order from `x` might be changed. If preserving row order is
@@ -62,7 +64,6 @@
 #' working with labelled data.
 #'
 #' @examples
-#' # styler: off
 #' data_match(mtcars, data.frame(vs = 0, am = 1))
 #' data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
 #'
@@ -82,9 +83,9 @@
 #' # Define a custom function containing data_filter() and pass variable names
 #' # to it using curly brackets
 #' my_filter <- function(data, variable) {
-#'   data_filter(data, "{variable} <= 20")
+#'   data_filter(data, variable)
 #' }
-#' my_filter(mtcars, "mpg")
+#' my_filter(mtcars, "cyl == 6")
 #'
 #' # Pass complete filter-condition as string. No need for curley braces
 #' my_filter <- function(data, condition) {
@@ -94,11 +95,10 @@
 #'
 #' # string can also be used directly as argument
 #' data_filter(mtcars, "am != 0")
-#' 
+#'
 #' # or as variable
 #' fl <- "am != 0"
 #' data_filter(mtcars, fl)
-#' # styler: on
 #' @inherit data_rename seealso
 #' @export
 data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = TRUE, ...) {
