@@ -355,3 +355,82 @@ test_that("data_modify message about modified variables", {
   expect_snapshot(head(data_modify(iris, Sepal.Width = 2 * Sepal.Width)))
   expect_snapshot(head(data_modify(iris, Petal.Length = Sepal.Length, Sepal.Width = Petal.Width)))
 })
+
+
+test_that("data_modify works with character variables, and inside functions", {
+  data(efc)
+  a <- "center(c12hour)"
+  b <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
+  d <- "standardize(c12hour)"
+  out <- data_modify(
+    efc,
+    c12hour_c = a,
+    c12hour_z = b,
+    c12hour_z2 = d
+  )
+  expect_equal(
+    out$c12hour_z2,
+    as.vector(scale(efc$c12hour)),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+  expect_equal(
+    out$c12hour_z,
+    as.vector(scale(efc$c12hour)),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+
+  # when calling functions
+  a1 <- "center(c12hour)"
+  b1 <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
+  d1 <- "standardize(c12hour)"
+  foo <- function(data, x1, x2, x3) {
+    data_modify(
+      efc,
+      c12hour_c = x1,
+      c12hour_z = x2,
+      c12hour_z2 = x3
+    )
+  }
+  out <- foo(efc, a1, b1, d1)
+  expect_equal(
+    out$c12hour_z2,
+    as.vector(scale(efc$c12hour)),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+  expect_equal(
+    out$c12hour_z,
+    as.vector(scale(efc$c12hour)),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+
+  # when calling functions, arguments inside function defined
+  foo2 <- function(data) {
+    a2 <- "center(c12hour)"
+    b2 <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
+    d2 <- "standardize(c12hour)"
+
+    data_modify(
+      efc,
+      c12hour_c = a2,
+      c12hour_z = b2,
+      c12hour_z2 = d2
+    )
+  }
+  out <- foo2(efc)
+  expect_equal(
+    out$c12hour_z2,
+    as.vector(scale(efc$c12hour)),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+  expect_equal(
+    out$c12hour_z,
+    as.vector(scale(efc$c12hour)),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+})
