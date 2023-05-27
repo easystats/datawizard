@@ -197,7 +197,12 @@ data_filter.data.frame <- function(x, filter, ...) {
     out <- x[rows, , drop = FALSE]
   } else {
     if (!is.character(condition)) {
-      condition <- insight::safe_deparse(condition)
+      cond_string <- .dynEval(condition, ifnotfound = NULL)
+      if (is.null(cond_string)) {
+        condition <- insight::safe_deparse(condition)
+      } else {
+        condition <- cond_string
+      }
     }
     # Check syntax of the filter. Must be done *before* calling subset()
     # (cf easystats/datawizard#237)
