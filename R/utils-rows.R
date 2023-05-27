@@ -116,7 +116,6 @@ rowid_as_column.default <- function(x, var = "rowid") {
 
 #' @export
 rowid_as_column.grouped_df <- function(x, var = "rowid") {
-
   if (!is.character(var)) {
     insight::format_error("Argument 'var' must be of type character.")
   }
