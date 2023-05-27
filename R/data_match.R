@@ -199,8 +199,16 @@ data_filter.data.frame <- function(x, filter, ...) {
     if (!is.character(condition)) {
       cond_string <- .dynEval(condition, ifnotfound = NULL)
       if (is.null(cond_string)) {
+        # could not evaluate "condition", so we assume a regular filter syntax
         condition <- insight::safe_deparse(condition)
+      } else if (is.function(cond_string) && is.character(rows)) {
+        # when called from inside functions, ".dynEval()" might return a
+        # function - in this case, "rows" should already contain the correctly
+        # evaluated string
+        condition <- rows
       } else {
+        # "condition" was evaluated by ".dynEval()", so we have a variable
+        # that contained the filter syntax as string
         condition <- cond_string
       }
     }
