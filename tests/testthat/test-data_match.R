@@ -12,6 +12,7 @@ test_that("data_match works as expected", {
   expect_identical(unique(df2$am), c(1, 0))
 })
 
+
 test_that("data_match works with missing data", {
   skip_if_not_installed("poorman")
 
@@ -63,6 +64,7 @@ test_that("data_match works with missing data", {
   ))
   expect_identical(x1, 36L)
 })
+
 
 test_that("data_match and data_filter work similar", {
   out1 <- data_match(mtcars, data.frame(vs = 0, am = 1), match = "not")
@@ -125,7 +127,12 @@ test_that("data_filter works like slice", {
   expect_equal(out, mtcars[5:10, ], ignore_attr = TRUE)
 })
 
+
 test_that("data_filter gives informative message on errors", {
+  expect_error(
+    data_filter(mtcars, mpg = 10),
+    "`==`"
+  )
   expect_error(
     data_filter(mtcars, "mpg > 10 || cyl = 4"),
     "`==`"
@@ -143,6 +150,7 @@ test_that("data_filter gives informative message on errors", {
     "syntax"
   )
 })
+
 
 test_that("data_filter works with >= or <=", {
   expect_identical(
@@ -181,6 +189,7 @@ test_that("data_filter works with >= or <=", {
     subset(mtcars, mpg >= 30.4 & hp == 66)
   )
 })
+
 
 test_that("programming with data_filter", {
   # One arg ------------
@@ -222,6 +231,7 @@ test_that("programming with data_filter", {
   )
 })
 
+
 test_that("programming with data_filter with variables", {
   var4 <- "mpg >= 30 & hp <= 66"
   expect_identical(
@@ -234,6 +244,7 @@ test_that("programming with data_filter with variables", {
     data_filter(mtcars, "mpg >= 30 & hp <= 66")
   )
 })
+
 
 test_that("data_filter works with groups", {
   test <- data.frame(
@@ -253,6 +264,7 @@ test_that("data_filter works with groups", {
     ignore_attr = TRUE
   )
 })
+
 
 test_that("data_filter programming works with groups", {
   test <- data.frame(
