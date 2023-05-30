@@ -149,6 +149,10 @@ test_that("data_filter gives informative message on errors", {
     data_filter(mtcars, mpg > 10 ? cyl == 4),
     "syntax"
   )
+  expect_error(
+    data_filter(mtcars, mgp > 10 ? cyl == 4),
+    "Variable \"mgp\""
+  )
 })
 
 
