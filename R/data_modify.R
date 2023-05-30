@@ -175,7 +175,7 @@ data_modify.data.frame <- function(data, ...) {
           .misspelled_string(colnames(data), error_var, "Possibly misspelled or not yet defined?")
         )
       } else {
-        insight::format_error(paste0(step_msg, " ", insight::format_capitalize(error_msg), ". Possibly misspelled?"))
+        insight::format_error(paste0(step_msg, " ", insight::format_capitalize(error_msg), ". Possibly misspelled or not yet defined?"))
       }
     }
 
