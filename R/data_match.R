@@ -227,8 +227,8 @@ data_filter.data.frame <- function(x, ...) {
       # filter data
       out <- tryCatch(
         subset(out, subset = eval(symbol, envir = new.env())),
-        warning = function(e) NULL,
-        error = function(e) NULL
+        warning = function(e) e,
+        error = function(e) e
       )
     } else if (is.numeric(eval_symbol)) {
       # if symbol could be evaluated and is numeric, slice
@@ -236,6 +236,19 @@ data_filter.data.frame <- function(x, ...) {
     } else if (is.numeric(eval_symbol_numeric)) {
       # if symbol could be evaluated, was string and could be converted to numeric, slice
       out <- tryCatch(out[eval_symbol_numeric, , drop = FALSE], error = function(e) NULL)
+    }
+
+    if (inherits(out, "simpleError")) {
+      # try to find out which variable was the cause for the error
+      if (grepl("object '(.*)' not found", out$message)) {
+        error_var <- gsub("object '(.*)' not found", "\\1", out$message)
+        insight::format_error(
+          paste0("Variable \"", error_var, "\" was not found in the dataset."),
+          .misspelled_string(colnames(x), error_var, "Possibly misspelled?")
+        )
+      } else {
+        insight::format_error(insight::format_capitalize(out$message), ". Possibly misspelled?")
+      }
     }
   }
 

@@ -152,6 +152,19 @@ test_that("data_filter gives informative message on errors", {
 })
 
 
+test_that("data_filter gives informative message on errors", {
+  data(mtcars)
+  expect_error(
+    data_filter(mtcars, cxl == 6),
+    regex = "Variable \"cxl\""
+  )
+  expect_error(
+    data_filter(mtcars, "cxl == 6"),
+    regex = "Variable \"cxl\""
+  )
+})
+
+
 test_that("data_filter works with >= or <=", {
   expect_identical(
     data_filter(mtcars, "mpg >= 30.4"),
