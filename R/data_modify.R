@@ -157,7 +157,23 @@ data_modify.data.frame <- function(data, ...) {
     }
 
     # finally, we can evaluate expression and get values for new variables
-    new_variable <- with(data, eval(symbol))
+    new_variable <- try(with(data, eval(symbol)), silent = TRUE)
+
+    # successful, or any errors, like misspelled variable name?
+    if (inherits(new_variable, "try-error")) {
+      # try to find out which variable was the cause for the error
+      error_msg <- attributes(new_variable)$condition$message
+      if (grepl("object '(.*)' not found", error_msg)) {
+        error_var <- gsub("object '(.*)' not found", "\\1", error_msg)
+        insight::format_error(
+          paste0("Variable \"", error_var, "\" was not found in the dataset"),
+          .misspelled_string(colnames(data), error_var, "Possibly misspelled?")
+        )
+      } else {
+        error_var <- error_msg
+        insight::format_error(paste0(insight::format_capitalize(error_var), ". Possibly misspelled?"))
+      }
+    }
 
     # give informative error when new variable doesn't match number of rows
     if (!is.null(new_variable) && length(new_variable) != nrow(data) && (nrow(data) %% length(new_variable)) != 0) {

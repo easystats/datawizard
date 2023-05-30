@@ -339,6 +339,17 @@ test_that("data_modify errors for non df", {
 })
 
 
+test_that("data_modify errors for non df", {
+  data(efc)
+  a <- "center(c22hour)" # <---------------- error in variable name
+  b <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
+  expect_error(
+    data_modify(efc, c12hour_c = a, c12hour_z = b),
+    regex = "c22hour"
+  )
+})
+
+
 test_that("data_modify message about recycling values", {
   expect_snapshot(head(data_modify(iris, Sepal.Width = 1)))
   expect_snapshot(head(data_modify(iris, Sepal.Width = 1:2)))
