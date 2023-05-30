@@ -347,6 +347,17 @@ test_that("data_modify errors for non df", {
     data_modify(efc, c12hour_c = a, c12hour_z = b),
     regex = "c22hour"
   )
+
+  a <- "center(c12hour)"
+  b <- "c12hour_c / sd(c21hour, na.rm = TRUE)"
+  expect_error(
+    data_modify(efc, c12hour_c = a, c12hour_z = b),
+    regex = "c12hour_c"
+  )
+  expect_error(
+    data_modify(efc, c12hour_c = a, c12hour_z = b),
+    regex = "second expression"
+  )
 })
 
 
