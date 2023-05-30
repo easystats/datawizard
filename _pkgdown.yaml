@@ -27,6 +27,8 @@ reference:
     desc: |
       Functions for transforming variables
     contents:
+      - data_modify
+      - data_unite
       - categorize
       - recode_into
       - recode_values
@@ -88,6 +90,7 @@ reference:
       - data_addprefix
       - remove_empty
       - contains("rownames")
+      - rowid_as_column
       - contains("colnames")
       - find_columns
       - data_restoretype

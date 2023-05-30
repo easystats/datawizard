@@ -6,16 +6,32 @@ BREAKING CHANGES
   `object_has_names()`, `object_has_rownames()`, `is_empty_object()`,
   `compact_list()`, `compact_character()`.
 
+* Argument `na.rm` was renamed to `remove_na` throughout `{datawizard}` functions.
+  `na.rm` is kept for backward compatibility, but will be deprecated and later
+  removed in future updates.
+
 CHANGES
 
-* Weighted-functions (`weighted_sd()`, `weighted_mean()`, ...) gain an `na.rm`
+* Weighted-functions (`weighted_sd()`, `weighted_mean()`, ...) gain a `remove_na`
   argument, to remove or keep missing and infinite values. By default,
-  `na.rm = TRUE`, i.e. missing and infinite values are removed by default.
+  `remove_na = TRUE`, i.e. missing and infinite values are removed by default.
 
 * `reverse_scale()`, `normalize()` and `rescale()` gain an `append` argument
   (similar to other data frame methods of transformation functions), to append
   recoded variables to the input data frame instead of overwriting existing
   variables.
+  
+NEW FUNCTIONS
+
+* `rowid_as_column()` to complement `rownames_as_column()` (and to mimic 
+  `tibble::rowid_to_column()`). Note that its behavior is different from 
+  `tibble::rowid_to_column()` for grouped data. See the Details section in the
+  docs.
+
+* `data_unite()`, to merge values of multiple variables into one new variable.
+
+* `data_modify()`, to create new variables, or modify or remove existing
+  variables in a data frame.
 
 BUG FIXES
 
@@ -26,6 +42,10 @@ BUG FIXES
 
 * `center()` and `standardize()` did not work for grouped data frames (of class
   `grouped_df`) when `force = TRUE`.
+  
+* The `data.frame` method of `describe_distribution()` returns `NULL` instead of
+  an error if no valid variable were passed (for example a factor variable with
+  `include_factors = FALSE`) (#421).
 
 # datawizard 0.7.1
 

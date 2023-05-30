@@ -121,7 +121,7 @@ Note that a regular correlation between two "adjusted" variables is
 equivalent to the partial correlation between them.
 }
 \examples{
-\dontshow{if (require("bayestestR", quietly = TRUE) && require("rstanarm", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("bayestestR", quietly = TRUE) && require("rstanarm", quietly = TRUE) && require("gamm4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 adjusted_all <- adjust(attitude)
 head(adjusted_all)
 adjusted_one <- adjust(attitude, effect = "complaints", select = "rating")

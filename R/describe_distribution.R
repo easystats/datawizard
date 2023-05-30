@@ -277,18 +277,18 @@ describe_distribution.factor <- function(x,
   }
 
 
-  dot.arguments <- list(...)
+  dot_args <- list(...)
 
-  if (is.null(dot.arguments[["ci"]])) {
+  if (is.null(dot_args[["ci"]])) {
     out$CI_low <- NULL
     out$CI_high <- NULL
   }
 
-  if (is.null(dot.arguments[["iqr"]]) || isFALSE(dot.arguments[["iqr"]])) {
+  if (is.null(dot_args[["iqr"]]) || isFALSE(dot_args[["iqr"]])) {
     out$IQR <- NULL
   }
 
-  if (is.null(dot.arguments[["quartiles"]]) || isFALSE(dot.arguments[["quartiles"]])) {
+  if (is.null(dot_args[["quartiles"]]) || isFALSE(dot_args[["quartiles"]])) {
     out$Q1 <- NULL
     out$Q3 <- NULL
   }
@@ -338,17 +338,17 @@ describe_distribution.character <- function(x,
   }
 
 
-  dot.arguments <- list(...)
-  if (is.null(dot.arguments[["ci"]])) {
+  dot_args <- list(...)
+  if (is.null(dot_args[["ci"]])) {
     out$CI_low <- NULL
     out$CI_high <- NULL
   }
 
-  if (is.null(dot.arguments[["iqr"]]) || isFALSE(dot.arguments[["iqr"]])) {
+  if (is.null(dot_args[["iqr"]]) || isFALSE(dot_args[["iqr"]])) {
     out$IQR <- NULL
   }
 
-  if (is.null(dot.arguments[["quartiles"]]) || isFALSE(dot.arguments[["quartiles"]])) {
+  if (is.null(dot_args[["quartiles"]]) || isFALSE(dot_args[["quartiles"]])) {
     out$Q1 <- NULL
     out$Q3 <- NULL
   }
@@ -407,6 +407,10 @@ describe_distribution.data.frame <- function(x,
       )
     }
   }))
+
+  if (is.null(out)) {
+    return(NULL)
+  }
 
   out$Variable <- row.names(out)
   row.names(out) <- NULL

@@ -25,10 +25,10 @@ test_that("weighted centrality and dispersion measures work with NA when not rem
   wt <- c(5, 5, 4, NA, 1, 7) / 15
 
   set.seed(123)
-  expect_identical(weighted_mean(x, wt, na.rm = FALSE), NA_real_)
-  expect_identical(weighted_median(x, wt, na.rm = FALSE), NA_real_)
-  expect_identical(weighted_sd(x, wt, na.rm = FALSE), NA_real_)
-  expect_identical(weighted_mad(x, wt, na.rm = FALSE), NA_real_)
+  expect_identical(weighted_mean(x, wt, remove_na = FALSE), NA_real_)
+  expect_identical(weighted_median(x, wt, remove_na = FALSE), NA_real_)
+  expect_identical(weighted_sd(x, wt, remove_na = FALSE), NA_real_)
+  expect_identical(weighted_mad(x, wt, remove_na = FALSE), NA_real_)
 })
 
 test_that("weighted centrality and dispersion measures work with Inf", {
