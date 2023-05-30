@@ -158,17 +158,25 @@ data_modify.data.frame <- function(data, ...) {
 
     # successful, or any errors, like misspelled variable name?
     if (inherits(new_variable, "try-error")) {
+      # in which step did error happen?
+      step_number <- switch(as.character(i),
+        "1" = "the first expression",
+        "2" = "the second expression",
+        "3" = "the third expression",
+        paste("expression", i)
+      )
+      step_msg <- paste0("There was an error in ", step_number, ".")
       # try to find out which variable was the cause for the error
       error_msg <- attributes(new_variable)$condition$message
       if (grepl("object '(.*)' not found", error_msg)) {
         error_var <- gsub("object '(.*)' not found", "\\1", error_msg)
         insight::format_error(
-          paste0("Variable \"", error_var, "\" was not found in the dataset"),
+          paste0(step_msg, " Variable \"", error_var, "\" was not found in the dataset."),
           .misspelled_string(colnames(data), error_var, "Possibly misspelled?")
         )
       } else {
         error_var <- error_msg
-        insight::format_error(paste0(insight::format_capitalize(error_var), ". Possibly misspelled?"))
+        insight::format_error(paste0(step_msg, " ", insight::format_capitalize(error_var), ". Possibly misspelled?"))
       }
     }
 
