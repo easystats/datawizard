@@ -25,7 +25,6 @@
 #'
 #' Note that newly created variables can be used in subsequent expressions.
 #' See also 'Examples'.
-#' @param verbose Toggle messages.
 #'
 #' @note `data_modify()` can also be used inside functions. However, it is
 #' recommended to pass the recode-expression as character vector or list of
@@ -104,7 +103,7 @@ data_modify.default <- function(data, ...) {
 
 #' @rdname data_modify
 #' @export
-data_modify.data.frame <- function(data, ..., verbose = TRUE) {
+data_modify.data.frame <- function(data, ...) {
   dots <- match.call(expand.dots = FALSE)$`...`
   column_names <- colnames(data)
 
@@ -175,39 +174,11 @@ data_modify.data.frame <- function(data, ..., verbose = TRUE) {
     data[[names(dots)[i]]] <- new_variable
   }
 
-  # inform about recycled variables
-  if (!is.null(recycled_variables) && verbose) {
-    # prepare some constants...
-    l_recycled <- length(recycled_variables)
-    n_recycled <- insight::n_unique(recycled_variables)
-    min_r <- min(recycled_variables)
-    max_r <- max(recycled_variables)
-    # ...probably makes this composition a bit clearer
-    insight::format_alert(paste0(
-      "Variable", ifelse(l_recycled > 1, "s", ""), " ",
-      text_concatenate(names(recycled_variables), enclose = "`"), " had ",
-      min_r, ifelse(n_recycled > 1, paste0(" to ", max_r), ""), " value",
-      ifelse(max_r > 1, "s", ""), " and ", ifelse(l_recycled > 1, "were", "was"),
-      " recycled to match the number of rows in the data."
-    ))
-  }
-
-  # inform about replaced (overwritten) variables
-  if (any(names(dots) %in% column_names) && verbose) {
-    overwritten <- intersect(names(dots), column_names)
-    insight::format_alert(paste0(
-      "The existing variable", ifelse(length(overwritten) > 1, "s ", " "),
-      text_concatenate(overwritten, enclose = "`"),
-      ifelse(length(overwritten) > 1, " have ", " has "),
-      "been modified."
-    ))
-  }
-
   data
 }
 
 #' @export
-data_modify.grouped_df <- function(data, ..., verbose = TRUE) {
+data_modify.grouped_df <- function(data, ...) {
   # we need to evaluate dots here, and pass them with "do.call" to
   # the data.frame method later...
   dots <- match.call(expand.dots = FALSE)$`...`
@@ -253,9 +224,7 @@ data_modify.grouped_df <- function(data, ..., verbose = TRUE) {
   }
   # perform transform on groups
   for (rows in grps) {
-    data[rows, ] <- do.call("data_modify", c(list(data[rows, , drop = FALSE]), dots, list(verbose = verbose)))
-    # only throw message once
-    verbose <- FALSE
+    data[rows, ] <- do.call("data_modify", c(list(data[rows, , drop = FALSE]), dots))
   }
   # set back class, so data frame still works with dplyr
   data <- .replace_attrs(data, attr_data)

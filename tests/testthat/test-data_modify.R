@@ -83,14 +83,12 @@ test_that("data_modify preserves labels", {
 
 test_that("data_modify recycling works", {
   data(iris)
-  out <- data_modify(iris, x = 1, verbose = FALSE)
+  out <- data_modify(iris, x = 1)
   expect_equal(out$x, rep(1, nrow(iris)), ignore_attr = TRUE)
-  out <- data_modify(iris, x = c(1, 2), verbose = FALSE)
+  out <- data_modify(iris, x = c(1, 2))
   expect_equal(out$x, rep(c(1, 2), nrow(iris) / 2), ignore_attr = TRUE)
   expect_error(data_modify(iris, x = 1:4), regex = "same length")
-  expect_message(data_modify(iris, x = 1), regex = "1 value")
-  expect_message(data_modify(iris, x = 1:2), regex = "2 values")
-  out <- data_modify(iris, x = "a", verbose = FALSE)
+  out <- data_modify(iris, x = "a")
   expect_equal(out$x, rep("a", nrow(iris)), ignore_attr = TRUE)
 })
 
@@ -98,8 +96,7 @@ test_that("data_modify recycling works", {
 test_that("data_modify recycling works", {
   data(iris)
   d <- data_group(iris, "Species")
-  expect_message(data_modify(d, x = 1, test = 1:2))
-  expect_silent(data_modify(d, x = 1, test = 1:2, verbose = FALSE))
+  expect_silent(data_modify(d, x = 1, test = 1:2))
 })
 
 

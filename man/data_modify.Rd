@@ -7,7 +7,7 @@
 \usage{
 data_modify(data, ...)
 
-\method{data_modify}{data.frame}(data, ..., verbose = TRUE)
+\method{data_modify}{data.frame}(data, ...)
 }
 \arguments{
 \item{data}{A data frame}
@@ -34,8 +34,6 @@ Example: \code{Petal.Width = NULL}.
 
 Note that newly created variables can be used in subsequent expressions.
 See also 'Examples'.}
-
-\item{verbose}{Toggle messages.}
 }
 \description{
 Create new variables in a data frame. Unlike \code{base::transform()}, \code{data_modify()}
