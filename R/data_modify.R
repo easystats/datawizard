@@ -104,7 +104,7 @@ data_modify.default <- function(data, ...) {
 #' @rdname data_modify
 #' @export
 data_modify.data.frame <- function(data, ...) {
-  dots <- match.call(expand.dots = FALSE)$`...`
+  dots <- eval(substitute(alist(...)))
   column_names <- colnames(data)
 
   # we check for character vector of expressions, in which case
@@ -195,51 +195,17 @@ data_modify.grouped_df <- function(data, ...) {
   # we need to evaluate dots here, and pass them with "do.call" to
   # the data.frame method later...
   dots <- match.call(expand.dots = FALSE)$`...`
-  # save attributes, convert to regular data frame
-  grps <- attr(data, "groups", exact = TRUE)[[".rows"]]
+
+  # works only for dplyr >= 0.8.0
+  grps <- attr(data, "groups", exact = TRUE)
+  grps <- grps[[".rows"]]
   attr_data <- attributes(data)
-  data <- as.data.frame(data)
 
-  ## TODO This code is duplicated, taken from the .data.frame method
-  ## @etiennebacher can we move this into a separate function and ".dynEval()" still works?
+  out <- lapply(grps, function(x) {
+    data_modify.data.frame(data[x, ], ...)
+  })
 
-  # we check for character vector of expressions, in which case
-  # "dots" should be unnamed
-  if (is.null(names(dots))) {
-    # if we have multiple strings, concatenate them to a character vector
-    # and put it into a list...
-    if (length(dots) > 1) {
-      if (all(vapply(dots, is.character, logical(1)))) {
-        dots <- list(unlist(dots))
-      } else {
-        insight::format_error("You cannot mix string and literal representation of expressions.")
-      }
-    }
-    # expression is given as character string, e.g.
-    # a <- "double_SepWidth = 2 * Sepal.Width"
-    # data_modify(iris, a)
-    # or as character vector, e.g.
-    # data_modify(iris, c("var_a = Sepal.Width / 10", "var_b = Sepal.Width * 10"))
-    character_symbol <- tryCatch(.dynEval(dots[[1]]), error = function(e) NULL)
-    # do we have a character vector? Then we can proceed
-    if (is.character(character_symbol)) {
-      dots <- lapply(character_symbol, function(s) {
-        # turn value from character vector into expression
-        str2lang(.dynEval(s))
-      })
-      names(dots) <- vapply(dots, function(n) insight::safe_deparse(n[[2]]), character(1))
-    }
-  }
-
-  # create new variables now - else we cannot replace rows later
-  for (i in names(dots)) {
-    data[[i]] <- NA
-  }
-  # perform transform on groups
-  for (rows in grps) {
-    data[rows, ] <- do.call("data_modify", c(list(data[rows, , drop = FALSE]), dots))
-  }
-  # set back class, so data frame still works with dplyr
-  data <- .replace_attrs(data, attr_data)
-  data
+  out <- do.call(rbind, out)
+  out <- .replace_attrs(out, attr_data)
+  out
 }
