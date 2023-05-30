@@ -202,10 +202,13 @@ data_modify.grouped_df <- function(data, ...) {
   attr_data <- attributes(data)
 
   out <- lapply(grps, function(x) {
-    data_modify.data.frame(data[x, ], ...)
+    .out <- data_modify.data.frame(data[x, ], ...)
+    class(.out) <- setdiff(class(.out), "grouped_df")
+    .out
   })
 
   out <- do.call(rbind, out)
   out <- .replace_attrs(out, attr_data)
+  class(out) <- unique("grouped_df", class(out))
   out
 }
