@@ -171,7 +171,7 @@ data_modify.data.frame <- function(data, ...) {
       if (grepl("object '(.*)' not found", error_msg)) {
         error_var <- gsub("object '(.*)' not found", "\\1", error_msg)
         insight::format_error(
-          paste0(step_msg, " Variable \"", error_var, "\" was not found in the dataset."),
+          paste0(step_msg, " Variable \"", error_var, "\" was not found in the dataset or defined otherwise."),
           .misspelled_string(colnames(data), error_var, "Possibly misspelled?")
         )
       } else {
