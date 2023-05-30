@@ -12,7 +12,7 @@ BREAKING CHANGES
 
 * The way how expressions are defined in `data_filter()` was revised. The `filter`
   argument was replaced by `...`, allowing to separate multiple expression with
-  a comma (which are then and-combined). Futhermore, expressions can now also be
+  a comma (which are then and-combined). Furthermore, expressions can now also be
   defined as strings, or be provided as character vectors, to allow string-friendly
   programming.
 
