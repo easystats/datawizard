@@ -181,7 +181,7 @@ data_modify.data.frame <- function(data, ...) {
 
     # give informative error when new variable doesn't match number of rows
     if (!is.null(new_variable) && length(new_variable) != nrow(data) && (nrow(data) %% length(new_variable)) != 0) {
-      insight::format_error("New variable has not the same length as the other variables in the data frame.")
+      insight::format_error("New variable has not the same length as the other variables in the data frame and cannot be recycled.")
     }
 
     data[[names(dots)[i]]] <- new_variable
