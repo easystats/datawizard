@@ -135,9 +135,6 @@ data_modify.data.frame <- function(data, ...) {
     }
   }
 
-  # for message later - we collect all recycled variables here
-  recycled_variables <- NULL
-
   for (i in seq_along(dots)) {
     # iterate expressions for new variables
     symbol <- dots[[i]]
@@ -180,13 +177,6 @@ data_modify.data.frame <- function(data, ...) {
       insight::format_error("New variable has not the same length as the other variables in the data frame.")
     }
 
-    # give informative message when variable was recycled
-    if (!is.null(new_variable) && length(new_variable) != nrow(data)) {
-      recycled_variables <- c(
-        recycled_variables,
-        stats::setNames(length(new_variable), names(dots)[i])
-      )
-    }
     data[[names(dots)[i]]] <- new_variable
   }
 
