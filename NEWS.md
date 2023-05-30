@@ -30,6 +30,9 @@ NEW FUNCTIONS
 
 * `data_unite()`, to merge values of multiple variables into one new variable.
 
+* `data_modify()`, to create new variables, or modify or remove existing
+  variables in a data frame.
+
 BUG FIXES
 
 * `standardize_parameters()` now works when the package namespace is in the model
