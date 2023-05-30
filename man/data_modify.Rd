@@ -36,7 +36,7 @@ Note that newly created variables can be used in subsequent expressions.
 See also 'Examples'.}
 }
 \description{
-Create new variables in a data frame. Unlike \code{base::transform()}, \code{data_modify()}
+Create new variables or modify existing variables in a data frame. Unlike \code{base::transform()}, \code{data_modify()}
 can be used on grouped data frames, and newly created variables can be directly
 used.
 }
