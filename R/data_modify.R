@@ -200,16 +200,23 @@ data_modify.grouped_df <- function(data, ...) {
   grps <- attr(data, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
   attr_data <- attributes(data)
+
   # remove conflicting class attributes
   class_attr <- class(data)
   data <- as.data.frame(data)
 
-  out <- lapply(grps, function(x) {
-    data_modify.data.frame(data[x, ], ...)
-  })
+  # create new variables as dummys, do for-loop works
+  for (i in names(dots)) {
+    data[[i]] <- NA
+  }
 
-  out <- do.call(rbind, out)
-  out <- .replace_attrs(out, attr_data)
-  class(out) <- class_attr
-  out
+  # create new variables per group
+  for (rows in grps) {
+    data[rows, ] <- data_modify.data.frame(data[rows, ], ...)
+  }
+
+  # set back attributes and class
+  data <- .replace_attrs(data, attr_data)
+  class(data) <- class_attr
+  data
 }
