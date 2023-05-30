@@ -97,14 +97,13 @@ data_filter(mtcars, vs == 0 | am == 1)
 # slice data frame by row indices
 data_filter(mtcars, 5:10)
 
-# Define a custom function containing data_filter() and pass variable names
-# to it using curly brackets
+# Define a custom function containing data_filter()
 my_filter <- function(data, variable) {
   data_filter(data, variable)
 }
 my_filter(mtcars, "cyl == 6")
 
-# Pass complete filter-condition as string. No need for curley braces
+# Pass complete filter-condition as string.
 my_filter <- function(data, condition) {
   data_filter(data, condition)
 }
