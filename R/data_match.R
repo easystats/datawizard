@@ -239,9 +239,10 @@ data_filter.data.frame <- function(x, ...) {
     }
 
     if (inherits(out, "simpleError")) {
+      error_msg <- out$message[1]
       # try to find out which variable was the cause for the error
-      if (grepl("object '(.*)' not found", out$message)) {
-        error_var <- gsub("object '(.*)' not found", "\\1", out$message)
+      if (grepl("object '(.*)' not found", error_msg)) {
+        error_var <- gsub("object '(.*)' not found", "\\1", error_msg)
         # some syntax errors do not relate to misspelled variables...
         if (!error_var %in% colnames(x)) {
           insight::format_error(
@@ -252,7 +253,7 @@ data_filter.data.frame <- function(x, ...) {
           out <- NULL
         }
       } else {
-        insight::format_error(insight::format_capitalize(out$message), ". Possibly misspelled?")
+        insight::format_error(paste0(insight::format_capitalize(error_msg), ". Possibly misspelled?"))
       }
     }
   }
