@@ -280,6 +280,20 @@ test_that("data_modify works on grouped data, with character vectors", {
 })
 
 
+test_that("data_modify works on grouped data, preserves attributes and labels", {
+  data(efc)
+  grouped_efc <- data_group(efc, "c172code")
+  out <- data_modify(
+    grouped_efc,
+    c12hour_c = center(c12hour)
+  )
+  expect_identical(
+    attributes(out$c12hour)$label,
+    attributes(efc$c12hour)$label
+  )
+})
+
+
 test_that("data_modify works on grouped data, inside functions", {
   data(efc)
   foo4 <- function(data) {
