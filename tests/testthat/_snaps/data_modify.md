@@ -2,10 +2,6 @@
 
     Code
       head(data_modify(iris, Sepal.Width = 1))
-    Message <simpleMessage>
-      Variable `Sepal.Width` had 1 value and was recycled to match the number
-        of rows in the data.
-      The existing variable `Sepal.Width` has been modified.
     Output
         Sepal.Length Sepal.Width Petal.Length Petal.Width Species
       1          5.1           1          1.4         0.2  setosa
@@ -19,10 +15,6 @@
 
     Code
       head(data_modify(iris, Sepal.Width = 1:2))
-    Message <simpleMessage>
-      Variable `Sepal.Width` had 2 values and was recycled to match the number
-        of rows in the data.
-      The existing variable `Sepal.Width` has been modified.
     Output
         Sepal.Length Sepal.Width Petal.Length Petal.Width Species
       1          5.1           1          1.4         0.2  setosa
@@ -36,11 +28,6 @@
 
     Code
       head(data_modify(iris, Petal.Length = 1, Sepal.Width = 1))
-    Message <simpleMessage>
-      Variables `Petal.Length` and `Sepal.Width` had 1 value and were recycled
-        to match the number of rows in the data.
-      The existing variables `Petal.Length` and `Sepal.Width` have been
-        modified.
     Output
         Sepal.Length Sepal.Width Petal.Length Petal.Width Species
       1          5.1           1            1         0.2  setosa
@@ -54,11 +41,6 @@
 
     Code
       head(data_modify(iris, Petal.Length = 1, Sepal.Width = 1:2))
-    Message <simpleMessage>
-      Variables `Petal.Length` and `Sepal.Width` had 1 to 2 values and were
-        recycled to match the number of rows in the data.
-      The existing variables `Petal.Length` and `Sepal.Width` have been
-        modified.
     Output
         Sepal.Length Sepal.Width Petal.Length Petal.Width Species
       1          5.1           1            1         0.2  setosa
@@ -72,11 +54,6 @@
 
     Code
       head(data_modify(iris, Petal.Length = 2, Sepal.Width = 2))
-    Message <simpleMessage>
-      Variables `Petal.Length` and `Sepal.Width` had 1 value and were recycled
-        to match the number of rows in the data.
-      The existing variables `Petal.Length` and `Sepal.Width` have been
-        modified.
     Output
         Sepal.Length Sepal.Width Petal.Length Petal.Width Species
       1          5.1           2            2         0.2  setosa
@@ -90,8 +67,6 @@
 
     Code
       head(data_modify(iris, Sepal.Width = 2 * Sepal.Width))
-    Message <simpleMessage>
-      The existing variable `Sepal.Width` has been modified.
     Output
         Sepal.Length Sepal.Width Petal.Length Petal.Width Species
       1          5.1         7.0          1.4         0.2  setosa
@@ -105,9 +80,6 @@
 
     Code
       head(data_modify(iris, Petal.Length = Sepal.Length, Sepal.Width = Petal.Width))
-    Message <simpleMessage>
-      The existing variables `Petal.Length` and `Sepal.Width` have been
-        modified.
     Output
         Sepal.Length Sepal.Width Petal.Length Petal.Width Species
       1          5.1         0.2          5.1         0.2  setosa
