@@ -200,15 +200,16 @@ data_modify.grouped_df <- function(data, ...) {
   grps <- attr(data, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
   attr_data <- attributes(data)
+  # remove conflicting class attributes
+  class_attr <- class(data)
+  data <- as.data.frame(data)
 
   out <- lapply(grps, function(x) {
-    .out <- data_modify.data.frame(data[x, ], ...)
-    class(.out) <- setdiff(class(.out), "grouped_df")
-    .out
+    data_modify.data.frame(data[x, ], ...)
   })
 
   out <- do.call(rbind, out)
   out <- .replace_attrs(out, attr_data)
-  class(out) <- unique("grouped_df", class(out))
+  class(out) <- class_attr
   out
 }
