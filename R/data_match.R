@@ -203,57 +203,57 @@ data_filter.data.frame <- function(x, ...) {
   }
 
   for (i in seq_along(dots)) {
-    symbol <- dots[[i]]
-    # evaluate, we may have a variable with filter expression
-    eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
-    # sanity check: is variable named like a function?
-    if (is.function(eval_symbol)) {
-      eval_symbol <- .dynGet(symbol, ifnotfound = NULL)
-    }
-    eval_symbol_numeric <- NULL
-    if (!is.null(eval_symbol)) {
-      # when possible to evaluate, do we have a numeric vector provided
-      # as string? (e.g. `"5:10"`) - then try to coerce to numeric
-      eval_symbol_numeric <- tryCatch(eval(parse(text = eval_symbol)), error = function(e) NULL)
-    }
-
-    # here we go when we have a filter expression, and no numeric vector to slice
-    if (is.null(eval_symbol) || (!is.numeric(eval_symbol) && !is.numeric(eval_symbol_numeric))) {
-      # could be evaluated? Then filter expression is a string and we need
-      # to convert into symbol
-      if (!is.null(eval_symbol) && is.character(eval_symbol)) {
-        symbol <- str2lang(eval_symbol)
+    # only proceed when result is still valid
+    if (!is.null(out)) {
+      symbol <- dots[[i]]
+      # evaluate, we may have a variable with filter expression
+      eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
+      # sanity check: is variable named like a function?
+      if (is.function(eval_symbol)) {
+        eval_symbol <- .dynGet(symbol, ifnotfound = NULL)
       }
-      # filter data
-      out <- tryCatch(
-        subset(out, subset = eval(symbol, envir = new.env())),
-        warning = function(e) e,
-        error = function(e) e
-      )
-    } else if (is.numeric(eval_symbol)) {
-      # if symbol could be evaluated and is numeric, slice
-      out <- tryCatch(out[eval_symbol, , drop = FALSE], error = function(e) NULL)
-    } else if (is.numeric(eval_symbol_numeric)) {
-      # if symbol could be evaluated, was string and could be converted to numeric, slice
-      out <- tryCatch(out[eval_symbol_numeric, , drop = FALSE], error = function(e) NULL)
-    }
+      eval_symbol_numeric <- NULL
+      if (!is.null(eval_symbol)) {
+        # when possible to evaluate, do we have a numeric vector provided
+        # as string? (e.g. `"5:10"`) - then try to coerce to numeric
+        eval_symbol_numeric <- tryCatch(eval(parse(text = eval_symbol)), error = function(e) NULL)
+      }
 
-    if (inherits(out, "simpleError")) {
-      error_msg <- out$message[1]
-      # try to find out which variable was the cause for the error
-      if (grepl("object '(.*)' not found", error_msg)) {
-        error_var <- gsub("object '(.*)' not found", "\\1", error_msg)
-        # some syntax errors do not relate to misspelled variables...
-        if (!error_var %in% colnames(x)) {
-          insight::format_error(
-            paste0("Variable \"", error_var, "\" was not found in the dataset."),
-            .misspelled_string(colnames(x), error_var, "Possibly misspelled?")
-          )
-        } else {
-          out <- NULL
+      # here we go when we have a filter expression, and no numeric vector to slice
+      if (is.null(eval_symbol) || (!is.numeric(eval_symbol) && !is.numeric(eval_symbol_numeric))) {
+        # could be evaluated? Then filter expression is a string and we need
+        # to convert into symbol
+        if (!is.null(eval_symbol) && is.character(eval_symbol)) {
+          symbol <- str2lang(eval_symbol)
         }
-      } else {
-        insight::format_error(paste0(insight::format_capitalize(error_msg), ". Possibly misspelled?"))
+        # filter data
+        out <- tryCatch(
+          subset(out, subset = eval(symbol, envir = new.env())),
+          warning = function(e) e,
+          error = function(e) e
+        )
+      } else if (is.numeric(eval_symbol)) {
+        # if symbol could be evaluated and is numeric, slice
+        out <- tryCatch(out[eval_symbol, , drop = FALSE], error = function(e) NULL)
+      } else if (is.numeric(eval_symbol_numeric)) {
+        # if symbol could be evaluated, was string and could be converted to numeric, slice
+        out <- tryCatch(out[eval_symbol_numeric, , drop = FALSE], error = function(e) NULL)
+      }
+
+      if (inherits(out, "simpleError")) {
+        error_msg <- out$message[1]
+        # try to find out which variable was the cause for the error
+        if (grepl("object '(.*)' not found", error_msg)) {
+          error_var <- gsub("object '(.*)' not found", "\\1", error_msg)
+          # some syntax errors do not relate to misspelled variables...
+          if (!error_var %in% colnames(x)) {
+            insight::format_error(
+              paste0("Variable \"", error_var, "\" was not found in the dataset."),
+              .misspelled_string(colnames(x), error_var, "Possibly misspelled?")
+            )
+          }
+        }
+        out <- NULL
       }
     }
   }
