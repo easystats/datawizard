@@ -27,6 +27,7 @@ reference:
     desc: |
       Functions for transforming variables
     contents:
+      - data_modify
       - data_unite
       - categorize
       - recode_into
