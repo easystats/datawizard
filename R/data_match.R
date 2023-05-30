@@ -23,7 +23,7 @@
 #' @param ... A sequence of logical expressions indicating which rows to keep,
 #'   or a numeric vector indicating the row indices of rows to keep. Can also be
 #'   a string representation of a logical expression (e.g. `"x > 4"`), a
-#'   character vector (e.g. `c("x > 4", "y == 2)`) or a variable that contains
+#'   character vector (e.g. `c("x > 4", "y == 2")`) or a variable that contains
 #'   the string representation of a logical expression. These might be useful
 #'   when used in packages to avoid defining undefined global variables.
 #'

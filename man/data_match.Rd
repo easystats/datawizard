@@ -33,7 +33,7 @@ the original data frame.}
 \item{...}{A sequence of logical expressions indicating which rows to keep,
 or a numeric vector indicating the row indices of rows to keep. Can also be
 a string representation of a logical expression (e.g. \code{"x > 4"}), a
-character vector (e.g. \verb{c("x > 4", "y == 2)}) or a variable that contains
+character vector (e.g. \code{c("x > 4", "y == 2")}) or a variable that contains
 the string representation of a logical expression. These might be useful
 when used in packages to avoid defining undefined global variables.}
 }
