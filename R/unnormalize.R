@@ -16,7 +16,6 @@ unnormalize.default <- function(x, ...) {
 #' @rdname normalize
 #' @export
 unnormalize.numeric <- function(x, verbose = TRUE, ...) {
-
   # if function called from the "grouped_df" method, we use the dw_transformer
   # attributes that were recovered in the "grouped_df" method
 
@@ -24,7 +23,6 @@ unnormalize.numeric <- function(x, verbose = TRUE, ...) {
   grp_attr_dw <- eval(dots$grp_attr_dw, envir = parent.frame(1L))
 
   if (!is.null(grp_attr_dw)) {
-
     names(grp_attr_dw) <- gsub(".*\\.", "", names(grp_attr_dw))
 
     include_bounds <- unname(grp_attr_dw["include_bounds"])
@@ -33,15 +31,12 @@ unnormalize.numeric <- function(x, verbose = TRUE, ...) {
     to_range <- unname(grp_attr_dw["to_range"])
 
     if (is.na(to_range)) to_range <- NULL
-
   } else {
-
     ## TODO implement algorithm include_bounds = FALSE
     include_bounds <- attr(x, "include_bounds")
     min_value <- attr(x, "min_value")
     range_difference <- attr(x, "range_difference")
     to_range <- attr(x, "to_range")
-
   }
 
   if (is.null(min_value) || is.null(range_difference)) {
@@ -106,15 +101,14 @@ unnormalize.grouped_df <- function(x,
                                    regex = FALSE,
                                    verbose = TRUE,
                                    ...) {
-
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        remove_group_var = TRUE,
-                        verbose = verbose
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    remove_group_var = TRUE,
+    verbose = verbose
   )
 
   info <- attributes(x)
@@ -126,13 +120,14 @@ unnormalize.grouped_df <- function(x,
   for (i in select) {
     if (is.null(info$groups[[paste0("attr_", i)]])) {
       insight::format_error(
-        paste("Couldn't retrieve the necessary information to unnormalize",
-              text_concatenate(i, enclose = "`"))
+        paste(
+          "Couldn't retrieve the necessary information to unnormalize",
+          text_concatenate(i, enclose = "`")
+        )
       )
     }
   }
   for (rows in seq_along(grps)) {
-
     # get the dw_transformer attributes for this group
     raw_attrs <- unlist(info$groups[rows, startsWith(names(info$groups), "attr")])
     if (length(select) == 1L) {

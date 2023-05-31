@@ -149,15 +149,14 @@ unstandardize.grouped_df <- function(x,
                                      regex = FALSE,
                                      verbose = TRUE,
                                      ...) {
-
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select,
-                        x,
-                        exclude,
-                        ignore_case,
-                        regex = regex,
-                        remove_group_var = TRUE,
-                        verbose = verbose
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    remove_group_var = TRUE,
+    verbose = verbose
   )
 
   info <- attributes(x)
@@ -170,14 +169,15 @@ unstandardize.grouped_df <- function(x,
   for (i in select) {
     if (is.null(info$groups[[paste0("attr_", i)]])) {
       insight::format_error(
-        paste("Couldn't retrieve the necessary information to unstandardize",
-              text_concatenate(i, enclose = "`"))
+        paste(
+          "Couldn't retrieve the necessary information to unstandardize",
+          text_concatenate(i, enclose = "`")
+        )
       )
     }
   }
 
   for (rows in seq_along(grps)) {
-
     # get the dw_transformer attributes for this group
     raw_attrs <- unlist(info$groups[rows, startsWith(names(info$groups), "attr")])
     if (length(select) == 1L) {
@@ -203,9 +203,6 @@ unstandardize.grouped_df <- function(x,
   # set back class, so data frame still works with dplyr
   attributes(x) <- utils::modifyList(info, attributes(x))
   x
-
-
-
 }
 
 #' @export
