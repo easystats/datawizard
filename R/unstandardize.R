@@ -170,7 +170,7 @@ unstandardize.grouped_df <- function(x,
   for (i in select) {
     if (is.null(info$groups[[paste0("attr_", i)]])) {
       insight::format_error(
-        paste("Couldn't retrieve the necessary information to unnormalize",
+        paste("Couldn't retrieve the necessary information to unstandardize",
               text_concatenate(i, enclose = "`"))
       )
     }
