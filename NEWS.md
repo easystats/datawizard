@@ -10,7 +10,7 @@ BREAKING CHANGES
   `na.rm` is kept for backward compatibility, but will be deprecated and later
   removed in future updates.
 
-* The way how expressions are defined in `data_filter()` was revised. The `filter`
+* The way expressions are defined in `data_filter()` was revised. The `filter`
   argument was replaced by `...`, allowing to separate multiple expression with
   a comma (which are then and-combined). Furthermore, expressions can now also be
   defined as strings, or be provided as character vectors, to allow string-friendly
