@@ -222,7 +222,7 @@ data_filter.data.frame <- function(x, ...) {
       if (is.null(eval_symbol) || (!is.numeric(eval_symbol) && !is.numeric(eval_symbol_numeric))) {
         # could be evaluated? Then filter expression is a string and we need
         # to convert into symbol
-        if (!is.null(eval_symbol) && is.character(eval_symbol)) {
+        if (is.character(eval_symbol)) {
           symbol <- str2lang(eval_symbol)
         }
         # filter data
