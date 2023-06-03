@@ -181,7 +181,7 @@ data_filter.data.frame <- function(x, ...) {
   out <- x
   dots <- match.call(expand.dots = FALSE)$`...`
 
-  if (!is.null(names(dots)) && any(nchar(names(dots)) > 0)) {
+  if (any(nchar(names(dots)) > 0)) {
     insight::format_error(
       "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
     )
@@ -259,7 +259,7 @@ data_filter.data.frame <- function(x, ...) {
 
   if (is.null(out)) {
     insight::format_error(
-      "Filtering did not work. Please check the syntax of your `filter` argument."
+      "Filtering did not work. Please check the syntax of your conditions."
     )
   }
 
