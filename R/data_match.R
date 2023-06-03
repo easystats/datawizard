@@ -9,10 +9,6 @@
 #' @param to A data frame matching the specified conditions. Note that if
 #'   `match` is a value other than `"and"`, the original row order might be
 #'   changed. See 'Details'.
-#' @param filter A logical expression indicating which rows to keep, or a numeric
-#'   vector indicating the row indices of rows to keep. Can also be a string
-#'   representation of a logical expression. e.g. `filter = "x > 4"`. This might
-#'   be useful when used in packages to avoid defining undefined global variables.
 #' @param match String, indicating with which logical operation matching
 #'   conditions should be combined. Can be `"and"` (or `"&"`), `"or"` (or `"|"`)
 #'   or `"not"` (or `"!"`).
@@ -24,9 +20,15 @@
 #'   row indices are requested (i.e. `return_indices=TRUE`), it might be useful
 #'   to preserve `NA` values, so returned row indices match the row indices of
 #'   the original data frame.
-#' @param ... Not used.
+#' @param ... A sequence of logical expressions indicating which rows to keep,
+#'   or a numeric vector indicating the row indices of rows to keep. Can also be
+#'   a string representation of a logical expression (e.g. `"x > 4"`), a
+#'   character vector (e.g. `c("x > 4", "y == 2")`) or a variable that contains
+#'   the string representation of a logical expression. These might be useful
+#'   when used in packages to avoid defining undefined global variables.
 #'
-#' @return A filtered data frame, or the row indices that match the specified configuration.
+#' @return A filtered data frame, or the row indices that match the specified
+#' configuration.
 #'
 #' @details For `data_match()`, if `match` is either `"or"` or `"not"`, the
 #' original row order from `x` might be changed. If preserving row order is
@@ -62,7 +64,6 @@
 #' working with labelled data.
 #'
 #' @examples
-#' # styler: off
 #' data_match(mtcars, data.frame(vs = 0, am = 1))
 #' data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
 #'
@@ -79,22 +80,24 @@
 #' # slice data frame by row indices
 #' data_filter(mtcars, 5:10)
 #'
-#' # Define a custom function containing data_filter() and pass variable names
-#' # to it using curly brackets
+#' # Define a custom function containing data_filter()
 #' my_filter <- function(data, variable) {
-#'   data_filter(data, {variable} <= 20)
+#'   data_filter(data, variable)
 #' }
-#' my_filter(mtcars, "mpg")
+#' my_filter(mtcars, "cyl == 6")
 #'
-#' # Pass complete filter-condition as string
+#' # Pass complete filter-condition as string.
 #' my_filter <- function(data, condition) {
-#'   data_filter(data, {condition})
+#'   data_filter(data, condition)
 #' }
 #' my_filter(mtcars, "am != 0")
 #'
 #' # string can also be used directly as argument
 #' data_filter(mtcars, "am != 0")
-#' # styler: on
+#'
+#' # or as variable
+#' fl <- "am != 0"
+#' data_filter(mtcars, fl)
 #' @inherit data_rename seealso
 #' @export
 data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = TRUE, ...) {
@@ -169,71 +172,97 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
 
 #' @rdname data_match
 #' @export
-data_filter <- function(x, filter, ...) {
+data_filter <- function(x, ...) {
   UseMethod("data_filter")
 }
 
 #' @export
-data_filter.data.frame <- function(x, filter, ...) {
-  condition <- substitute(filter)
+data_filter.data.frame <- function(x, ...) {
+  out <- x
+  dots <- match.call(expand.dots = FALSE)$`...`
 
-  dots <- list(...)
-
-  # if called from data_filter.grouped_df, the substitute above just gets
-  # "filter" whereas it needs to pass the condition
-  if ("called_from_group" %in% names(dots) && dots$called_from_group) {
-    condition <- substitute(filter, env = parent.frame(3L))
+  if (any(nchar(names(dots)) > 0)) {
+    insight::format_error(
+      "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
+    )
   }
 
-  # condition can be a numeric vector, to slice rows by indices,
-  # or a logical condition to filter observations. first, we check
-  # for numeric vector. the logical condition can also be passed
-  # as character vector, which allows to use data_filer() from inside
-  # other function w/o the need to define "globalVariables".
-
-  # numeric vector to slice data frame?
-  rows <- try(eval(condition, envir = parent.frame()), silent = TRUE)
-  if (is.numeric(rows)) {
-    out <- x[rows, , drop = FALSE]
-  } else {
-    if (!is.character(condition)) {
-      condition <- insight::safe_deparse(condition)
+  # turn character vector (like `c("mpg <= 20", "cyl == 6")`) into symbols
+  if (length(dots) == 1) {
+    character_vector <- .dynEval(dots[[1]], ifnotfound = NULL)
+    if (is.character(character_vector) && length(character_vector) > 1) {
+      dots <- lapply(character_vector, str2lang)
     }
-    # Check syntax of the filter. Must be done *before* calling subset()
-    # (cf easystats/datawizard#237)
-    .check_filter_syntax(condition)
+  }
 
-    has_curley <- grepl("{", condition, fixed = TRUE)
+  # Check syntax of the filter. Must be done *before* calling subset()
+  # (cf easystats/datawizard#237)
+  for (.fcondition in dots) {
+    .check_filter_syntax(insight::safe_deparse(.fcondition))
+  }
 
-    if (has_curley) {
-      condition <- gsub("{ ", "{", condition, fixed = TRUE)
-      condition <- gsub(" }", "}", condition, fixed = TRUE)
+  for (i in seq_along(dots)) {
+    # only proceed when result is still valid
+    if (!is.null(out)) {
+      symbol <- dots[[i]]
+      # evaluate, we may have a variable with filter expression
+      eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
+      # sanity check: is variable named like a function?
+      if (is.function(eval_symbol)) {
+        eval_symbol <- .dynGet(symbol, ifnotfound = NULL)
+      }
+      eval_symbol_numeric <- NULL
+      if (!is.null(eval_symbol)) {
+        # when possible to evaluate, do we have a numeric vector provided
+        # as string? (e.g. `"5:10"`) - then try to coerce to numeric
+        eval_symbol_numeric <- tryCatch(eval(parse(text = eval_symbol)), error = function(e) NULL)
+      }
 
-      curley_vars <- regmatches(condition, gregexpr("[^{\\}]+(?=\\})", condition, perl = TRUE))
-      curley_vars <- unique(unlist(curley_vars, use.names = FALSE))
-
-      for (i in curley_vars) {
-        if (isTRUE(dots$called_from_group)) {
-          token <- get(i, envir = parent.frame(4L))
-        } else {
-          token <- get(i, envir = parent.frame())
+      # here we go when we have a filter expression, and no numeric vector to slice
+      if (is.null(eval_symbol) || (!is.numeric(eval_symbol) && !is.numeric(eval_symbol_numeric))) {
+        # could be evaluated? Then filter expression is a string and we need
+        # to convert into symbol
+        if (is.character(eval_symbol)) {
+          symbol <- str2lang(eval_symbol)
         }
+        # filter data
+        out <- tryCatch(
+          subset(out, subset = eval(symbol, envir = new.env())),
+          warning = function(e) e,
+          error = function(e) e
+        )
+      } else if (is.numeric(eval_symbol)) {
+        # if symbol could be evaluated and is numeric, slice
+        out <- tryCatch(out[eval_symbol, , drop = FALSE], error = function(e) NULL)
+      } else if (is.numeric(eval_symbol_numeric)) {
+        # if symbol could be evaluated, was string and could be converted to numeric, slice
+        out <- tryCatch(out[eval_symbol_numeric, , drop = FALSE], error = function(e) NULL)
+      }
 
-        condition <- gsub(paste0("{", i, "}"), token, condition, fixed = TRUE)
+      if (inherits(out, "simpleError")) {
+        error_msg <- out$message[1]
+        # try to find out which variable was the cause for the error
+        if (grepl("object '(.*)' not found", error_msg)) {
+          error_var <- gsub("object '(.*)' not found", "\\1", error_msg)
+          # some syntax errors do not relate to misspelled variables...
+          if (!error_var %in% colnames(x)) {
+            insight::format_error(
+              paste0("Variable \"", error_var, "\" was not found in the dataset."),
+              .misspelled_string(colnames(x), error_var, "Possibly misspelled?")
+            )
+          }
+        }
+        out <- NULL
       }
     }
-
-    out <- tryCatch(
-      subset(x, subset = eval(parse(text = condition), envir = new.env())),
-      warning = function(e) NULL,
-      error = function(e) NULL
-    )
-    if (is.null(out)) {
-      insight::format_error(
-        "Filtering did not work. Please check the syntax of your `filter` argument."
-      )
-    }
   }
+
+  if (is.null(out)) {
+    insight::format_error(
+      "Filtering did not work. Please check the syntax of your conditions."
+    )
+  }
+
   # restore value and variable labels
   for (i in colnames(out)) {
     attr(out[[i]], "label") <- attr(x[[i]], "label", exact = TRUE)
@@ -247,13 +276,16 @@ data_filter.data.frame <- function(x, filter, ...) {
 
 
 #' @export
-data_filter.grouped_df <- function(x, filter, ...) {
+data_filter.grouped_df <- function(x, ...) {
   # works only for dplyr >= 0.8.0
   grps <- attr(x, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 
+  dots <- match.call(expand.dots = FALSE)$`...`
   out <- lapply(grps, function(grp) {
-    data_filter.data.frame(x[grp, ], filter, called_from_group = TRUE, ...)
+    args <- list(x[grp, ])
+    args <- c(args, dots)
+    do.call("data_filter.data.frame", args)
   })
 
   out <- do.call(rbind, out)
@@ -268,13 +300,13 @@ data_filter.grouped_df <- function(x, filter, ...) {
 
 # helper -------------------
 
-.check_filter_syntax <- function(condition) {
+.check_filter_syntax <- function(.fcondition) {
   # NOTE: We cannot check for `=` when "filter" is not a character vector
   # because the function will then fail in general. I.e.,
   # "data_filter(mtcars, filter = mpg > 10 & cyl = 4)" will not start
   # running this function and never reaches the first code line,
   # but immediately stops...
-  tmp <- gsub("==", "", condition, fixed = TRUE)
+  tmp <- gsub("==", "", .fcondition, fixed = TRUE)
   tmp <- gsub("<=", "", tmp, fixed = TRUE)
   tmp <- gsub(">=", "", tmp, fixed = TRUE)
   tmp <- gsub("!=", "", tmp, fixed = TRUE)
@@ -289,10 +321,10 @@ data_filter.grouped_df <- function(x, filter, ...) {
   }
   # check if "&&" etc instead of "&" was used?
   logical_operator <- NULL
-  if (any(grepl("&&", condition, fixed = TRUE))) {
+  if (any(grepl("&&", .fcondition, fixed = TRUE))) {
     logical_operator <- "&&"
   }
-  if (any(grepl("||", condition, fixed = TRUE))) {
+  if (any(grepl("||", .fcondition, fixed = TRUE))) {
     logical_operator <- "||"
   }
   if (!is.null(logical_operator)) {

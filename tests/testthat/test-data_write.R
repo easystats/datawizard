@@ -8,7 +8,7 @@ skip_if_not_installed("readr")
 # prepare data set ---------------
 
 data(efc)
-d <- data_filter(efc, filter = 1:5)
+d <- data_filter(efc, 1:5)
 d$e42dep <- droplevels(d$e42dep)
 
 
