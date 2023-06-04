@@ -90,7 +90,7 @@ Before we look at their *tidyverse* equivalents, we can first have a look at
 | :---------------- | :------------------------------------------------ |
 | `data_filter()`   | [to select only certain observations](#filtering) |
 | `data_select()`   | [to select only a few variables](#selecting)      |
-| `data_modify()`   | [to create variables or modify exisiting ones](#modifying) |
+| `data_modify()`   | [to create variables or modify existing ones](#modifying) |
 | `data_arrange()`  | [to sort observations](#sorting)                  |
 | `data_extract()`  | [to extract a single variable](#extracting)       |
 | `data_rename()`   | [to rename variables](#renaming)                  |
