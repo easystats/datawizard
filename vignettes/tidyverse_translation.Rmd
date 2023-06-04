@@ -126,10 +126,7 @@ Before we look at them individually, let's first have a look at the summary tabl
 
 ## Filtering {#filtering}
 
-`data_filter()` is a wrapper around `subset()`. Therefore, if you want to have
-several filtering conditions, you need to use `&`. Separating the conditions
-with a comma (as in `dplyr::filter()`) will **not** work; it will only apply the
-first condition.
+`data_filter()` is a wrapper around `subset()`. However, if you want to have several filtering conditions, you can either use `&` (as in `subset()`) or `,` (as in `dplyr::filter()`).
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
 
@@ -138,8 +135,17 @@ first condition.
 ```{r filter, class.source = "datawizard"}
 # ---------- datawizard -----------
 starwars %>%
-  data_filter(skin_color == "light" &
-    eye_color == "brown")
+  data_filter(
+    skin_color == "light",
+    eye_color == "brown"
+  )
+
+# or
+starwars %>%
+  data_filter(
+    skin_color == "light" &
+      eye_color == "brown"
+  )
 ```
 :::
 
@@ -368,7 +374,7 @@ This makes it easy to use it in custom functions:
 ```{r eval=evaluate_chunk}
 miles_to_km <- function(data, var) {
   data_modify(
-    data, 
+    data,
     paste0("km = ", var, "* 1.609344")
   )
 }
@@ -526,7 +532,7 @@ to_rename <- names(starwars)
 starwars %>%
   data_rename(
     pattern = to_rename,
-    replacement = tools::toTitleCase(gsub("_", " ", to_rename))
+    replacement = tools::toTitleCase(gsub("_", " ", to_rename, fixed = TRUE))
   )
 ```
 
@@ -893,9 +899,10 @@ offers an interface very close to `tidyr::unite()`:
 
 ```{r eval=evaluate_chunk}
 test <- data.frame(
-  year = 2002:2004, 
+  year = 2002:2004,
   month = c("02", "03", "09"),
-  day = c("11", "22", "28")
+  day = c("11", "22", "28"),
+  stringsAsFactors = FALSE
 )
 test
 ```
@@ -909,8 +916,8 @@ test
 # ---------- datawizard -----------
 test %>%
   data_unite(
-    new_column = "date", 
-    select = c("year", "month", "day"), 
+    new_column = "date",
+    select = c("year", "month", "day"),
     separator = "-"
   )
 ```
@@ -922,8 +929,8 @@ test %>%
 # ---------- tidyverse -----------
 test %>%
   unite(
-    col = "date", 
-    year, month, day, 
+    col = "date",
+    year, month, day,
     sep = "-"
   )
 ```
@@ -942,9 +949,9 @@ test %>%
 # ---------- datawizard -----------
 test %>%
   data_unite(
-    new_column = "date", 
-    select = c("year", "month", "day"), 
-    separator = "-", 
+    new_column = "date",
+    select = c("year", "month", "day"),
+    separator = "-",
     append = TRUE
   )
 ```
@@ -956,9 +963,9 @@ test %>%
 # ---------- tidyverse -----------
 test %>%
   unite(
-    col = "date", 
-    year, month, day, 
-    sep = "-", 
+    col = "date",
+    year, month, day,
+    sep = "-",
     remove = FALSE
   )
 ```
@@ -1008,7 +1015,8 @@ the following:
 ```{r eval=evaluate_chunk}
 test <- data.frame(
   group = c("A", "A", "B", "B"),
-  value = c(3, 5, 8, 1)
+  value = c(3, 5, 8, 1),
+  stringsAsFactors = FALSE
 )
 test
 
@@ -1022,7 +1030,7 @@ test %>%
 
 test %>%
   data_group(group) %>%
-  mutate(id = 1:n())
+  mutate(id = seq_len(n()))
 ```
 
 
