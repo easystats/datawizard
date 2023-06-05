@@ -76,6 +76,9 @@ This vignette is largely inspired from `{dplyr}`'s [Getting started vignette](ht
 library(dplyr)
 library(tidyr)
 library(datawizard)
+
+data(efc)
+efc <- head(efc)
 ```
 
 # Workhorses
@@ -87,6 +90,7 @@ Before we look at their *tidyverse* equivalents, we can first have a look at
 | :---------------- | :------------------------------------------------ |
 | `data_filter()`   | [to select only certain observations](#filtering) |
 | `data_select()`   | [to select only a few variables](#selecting)      |
+| `data_modify()`   | [to create variables or modify existing ones](#modifying) |
 | `data_arrange()`  | [to sort observations](#sorting)                  |
 | `data_extract()`  | [to extract a single variable](#extracting)       |
 | `data_rename()`   | [to rename variables](#renaming)                  |
@@ -94,6 +98,7 @@ Before we look at their *tidyverse* equivalents, we can first have a look at
 | `data_to_long()`  | [to convert data from wide to long](#reshaping)   |
 | `data_to_wide()`  | [to convert data from long to wide](#reshaping)   |
 | `data_join()`     | [to join two data frames](#joining)               |
+| `data_unite()`     | [to concatenate several columns into a single one](#uniting)               |
 
 Note that there are a few functions in `{datawizard}` that have no strict equivalent
 in `{dplyr}` or `{tidyr}` (e.g `data_rotate()`), and so we won't discuss them in
@@ -107,6 +112,7 @@ Before we look at them individually, let's first have a look at the summary tabl
 | :---------------- | :------------------------------------------------------------------ |
 | `data_filter()`   | `dplyr::filter()`, `dplyr::slice()`                                 |
 | `data_select()`   | `dplyr::select()`                                                   |
+| `data_modify()`   | `dplyr::mutate()`                                 |
 | `data_arrange()`  | `dplyr::arrange()`                                                  |
 | `data_extract()`  | `dplyr::pull()`                                                     |
 | `data_rename()`   | `dplyr::rename()`                                                   |
@@ -116,13 +122,11 @@ Before we look at them individually, let's first have a look at the summary tabl
 | `data_join()`     | `dplyr::inner_join()`, `dplyr::left_join()`, `dplyr::right_join()`, |
 |                   | `dplyr::full_join()`, `dplyr::anti_join()`, `dplyr::semi_join()`    |
 | `data_peek()`     | `dplyr::glimpse()`                                                  |
+| `data_unite()`  | `tidyr::unite()`                                              |
 
 ## Filtering {#filtering}
 
-`data_filter()` is a wrapper around `subset()`. Therefore, if you want to have
-several filtering conditions, you need to use `&`. Separating the conditions
-with a comma (as in `dplyr::filter()`) will **not** work; it will only apply the
-first condition.
+`data_filter()` is a wrapper around `subset()`. However, if you want to have several filtering conditions, you can either use `&` (as in `subset()`) or `,` (as in `dplyr::filter()`).
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
 
@@ -131,8 +135,17 @@ first condition.
 ```{r filter, class.source = "datawizard"}
 # ---------- datawizard -----------
 starwars %>%
-  data_filter(skin_color == "light" &
-    eye_color == "brown")
+  data_filter(
+    skin_color == "light",
+    eye_color == "brown"
+  )
+
+# or
+starwars %>%
+  data_filter(
+    skin_color == "light" &
+      eye_color == "brown"
+  )
 ```
 :::
 
@@ -299,6 +312,80 @@ starwars %>%
 You can find a list of all the select helpers with `?data_select`.
 
 
+## Modifying {#modifying}
+
+`data_modify()` is a wrapper around `base::transform()` but has several additional 
+benefits: 
+
+* it allows us to use newly created variables in the following expressions;
+* it works with grouped data;
+* it preserves variable attributes such as labels;
+* it accepts expressions as character vectors so that it is easy to program with it
+
+
+This last point is also the main difference between `data_modify()` and 
+`dplyr::mutate()`. 
+
+:::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
+
+::: {}
+
+```{r modify1, class.source = "datawizard"}
+# ---------- datawizard -----------
+efc %>%
+  data_modify(
+    c12hour_c = center(c12hour),
+    c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
+    c12hour_z2 = standardize(c12hour)
+  )
+```
+:::
+
+::: {}
+
+```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
+efc %>%
+  mutate(
+    c12hour_c = center(c12hour),
+    c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
+    c12hour_z2 = standardize(c12hour)
+  )
+```
+:::
+
+::::
+
+```{r modify1, eval = evaluate_chunk, echo = FALSE}
+```
+
+`data_modify()` accepts expressions as strings:
+
+```{r eval=evaluate_chunk}
+new_exp <- c(
+  "c12hour_c = center(c12hour)",
+  "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"
+)
+data_modify(efc, new_exp)
+```
+
+This makes it easy to use it in custom functions:
+
+```{r eval=evaluate_chunk}
+miles_to_km <- function(data, var) {
+  data_modify(
+    data,
+    paste0("km = ", var, "* 1.609344")
+  )
+}
+
+distance <- data.frame(miles = c(1, 8, 233, 88, 9))
+distance
+
+miles_to_km(distance, "miles")
+```
+
+
 
 ## Sorting {#sorting}
 
@@ -445,7 +532,7 @@ to_rename <- names(starwars)
 starwars %>%
   data_rename(
     pattern = to_rename,
-    replacement = tools::toTitleCase(gsub("_", " ", to_rename))
+    replacement = tools::toTitleCase(gsub("_", " ", to_rename, fixed = TRUE))
   )
 ```
 
@@ -804,6 +891,91 @@ band_members %>%
 ```
 
 
+## Uniting {#uniting}
+
+Uniting variables is useful e.g to create unique indices by combining several
+variables or to gather years, months, and days into a single date. `data_unite()`
+offers an interface very close to `tidyr::unite()`:
+
+```{r eval=evaluate_chunk}
+test <- data.frame(
+  year = 2002:2004,
+  month = c("02", "03", "09"),
+  day = c("11", "22", "28"),
+  stringsAsFactors = FALSE
+)
+test
+```
+
+
+:::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
+
+::: {}
+
+```{r unite1, class.source = "datawizard"}
+# ---------- datawizard -----------
+test %>%
+  data_unite(
+    new_column = "date",
+    select = c("year", "month", "day"),
+    separator = "-"
+  )
+```
+:::
+  
+::: {}
+
+```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
+test %>%
+  unite(
+    col = "date",
+    year, month, day,
+    sep = "-"
+  )
+```
+:::
+  
+::::
+
+```{r unite1, eval = evaluate_chunk, echo = FALSE}
+```
+
+:::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
+
+::: {}
+
+```{r unite2, class.source = "datawizard"}
+# ---------- datawizard -----------
+test %>%
+  data_unite(
+    new_column = "date",
+    select = c("year", "month", "day"),
+    separator = "-",
+    append = TRUE
+  )
+```
+:::
+  
+::: {}
+
+```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
+test %>%
+  unite(
+    col = "date",
+    year, month, day,
+    sep = "-",
+    remove = FALSE
+  )
+```
+:::
+  
+::::
+
+```{r unite2, eval = evaluate_chunk, echo = FALSE}
+```
+
 
 # Other useful functions
 
@@ -827,6 +999,38 @@ mtcars2
 
 mtcars2 %>%
   column_as_rownames(var = "model")
+```
+
+## Work with row ids
+
+`rowid_as_column()` is close but not identical to `tibble::rowid_to_column()`.
+The main difference is when we use it with grouped data. While `tibble::rowid_to_column()`
+uses one distinct rowid for every row in the dataset, `rowid_as_column()` creates
+one id for every row *in each group*. Therefore, two rows in different groups
+can have the same row id. 
+
+This means that `rowid_as_column()` is closer to using `n()` in `mutate()`, like
+the following:
+
+```{r eval=evaluate_chunk}
+test <- data.frame(
+  group = c("A", "A", "B", "B"),
+  value = c(3, 5, 8, 1),
+  stringsAsFactors = FALSE
+)
+test
+
+test %>%
+  data_group(group) %>%
+  tibble::rowid_to_column()
+
+test %>%
+  data_group(group) %>%
+  rowid_as_column()
+
+test %>%
+  data_group(group) %>%
+  mutate(id = seq_len(n()))
 ```
 
 
