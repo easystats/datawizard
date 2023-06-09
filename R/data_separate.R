@@ -84,12 +84,16 @@ data_separate <- function(data,
 
     # separate column into multiple strings
     if (is.numeric(separator)) {
-      maxlen <- max(nchar(x))
-      starts <- c(0, cumsum(separator) + 1)
-      ends <- c(cumsum(separator), maxlen)
+      maxlen <- max(nchar(x), na.rm = TRUE)
+      starts <- c(0, separator)
+      ends <- c(separator - 1, maxlen)
       separated_columns <- lapply(seq_along(starts), function(i) {
         substr(x, starts[i], ends[i])
       })
+      separated_columns <- as.data.frame(
+        t(do.call(cbind, separated_columns)),
+        stringsAsFactors = FALSE
+      )
     } else {
       separated_columns <- strsplit(x, separator)
     }
