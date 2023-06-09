@@ -231,6 +231,14 @@ data_separate <- function(data,
     out
   })
 
+  # any split performed?
+  if (length(split_data) == 1) {
+    if (verbose) {
+      insight::format_alert("Separator probably not found. No values were split. Returning original data.")
+    }
+    return(data)
+  }
+
   # final preparation, bind or merge columns, make unique columm names
   if (isTRUE(merge_multiple) && length(split_data) > 1) {
     # we merge all split columns, which are currently saved as list
