@@ -39,6 +39,8 @@
 #' are merged.
 #' @param merge_separator Separator string when `merge_multiple = TRUE`. Defines
 #' the string that is used to merge values together.
+#' @param convert_na Logical, if `TRUE`, character `"NA"` values are converted
+#' into real `NA` values.
 #' @param ... Currently not used.
 #' @inheritParams find_columns
 #'
@@ -117,6 +119,7 @@ data_separate <- function(data,
                           merge_separator = "",
                           fill = "right",
                           extra = "drop_right",
+                          convert_na = TRUE,
                           exclude = NULL,
                           append = FALSE,
                           ignore_case = FALSE,
@@ -190,7 +193,7 @@ data_separate <- function(data,
         "mode" = distribution_mode(l),
       )
       # tell user
-      if (verbose) {
+      if (verbose && !all(l == 1)) {
         insight::format_alert(paste0(
           "Column `", sep_column, "` had different number of values after splitting. Variable was split into ",
           n_cols, " column", ifelse(n_cols > 1, "s", ""), "."
@@ -232,7 +235,7 @@ data_separate <- function(data,
   })
 
   # any split performed?
-  if (length(split_data) == 1) {
+  if (all(lengths(split_data) == 1)) {
     if (verbose) {
       insight::format_alert("Separator probably not found. No values were split. Returning original data.")
     }
@@ -259,6 +262,14 @@ data_separate <- function(data,
     colnames(split_data) <- make.unique(colnames(split_data))
   }
 
+  # convert "NA" strings into real NA?
+  if (convert_na) {
+    split_data[] <- lapply(split_data, function(i) {
+      i[i == "NA"] <- NA_character_
+      i
+    })
+  }
+
   if (isTRUE(append)) {
     data <- cbind(data, split_data)
   } else {
@@ -273,7 +284,8 @@ data_separate <- function(data,
 #' @keywords internal
 .fix_separated_columns <- function(separated_columns, fill, extra, n_cols, verbose = TRUE) {
   warn_extra <- warn_fill <- FALSE
-  separated_columns <- lapply(separated_columns, function(i) {
+  for (sc in seq_along(separated_columns)) {
+    i <- separated_columns[[sc]]
     # determine number of values in separated column
     n_values <- length(i)
     if (all(is.na(i))) {
@@ -287,7 +299,7 @@ data_separate <- function(data,
         out <- i[1:n_cols]
       } else if (extra == "merge_left") {
         out <- paste(i[1:(n_values - n_cols + 1)], collapse = " ")
-        out <- c(out, i[(n_cols + 1):n_values])
+        out <- c(out, i[(n_values - n_cols + 2):n_values])
       } else {
         out <- i[1:(n_cols - 1)]
         out <- c(out, paste(i[n_cols:n_values], collapse = " "))
@@ -308,8 +320,8 @@ data_separate <- function(data,
     } else {
       out <- i
     }
-    out
-  })
+    separated_columns[[sc]] <- out
+  }
 
   if (verbose) {
     if (warn_extra) {
@@ -326,7 +338,7 @@ data_separate <- function(data,
     if (warn_fill) {
       insight::format_alert(paste0(
         "Fewer columns than expected were returned after splitting. ",
-        switch(extra,
+        switch(fill,
           "left" = "Left-most columns were filled with `NA`.",
           "right" = "Right-most columns were filled with `NA`.",
           "value_left" = "Left-most columns were filled with first value.",
