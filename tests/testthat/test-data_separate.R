@@ -253,4 +253,9 @@ test_that("data_separate: numeric separator", {
     ),
     ignore_attr = TRUE
   )
+
+  expect_error(
+    data_separate(d_sep, separator = c(5, 7, 8, 12), new_columns = LETTERS[1:6]),
+    regex = "went wrong"
+  )
 })

@@ -229,13 +229,6 @@ data_separate <- function(data,
 
     # check if column names should be recycled
     if (ncol(out) != length(new_column_names)) {
-      # if column names can't be recycled, error
-      if (ncol(out) %% length(new_column_names) != 0) {
-        insight::format_error(
-          "Number of provided column names does not match number of newly created columns.",
-          "Cannot recycle column names."
-        )
-      }
       # recycle names, avoid duplicates
       new_column_names <- make.unique(rep(new_column_names, times = ncol(out) / new_column_names))
     }
