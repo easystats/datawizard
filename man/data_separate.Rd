@@ -11,6 +11,7 @@ data_separate(
   separator = "[^[:alnum:]]+",
   guess_columns = "mode",
   merge_multiple = FALSE,
+  merge_separator = "",
   fill = "right",
   extra = "drop_right",
   exclude = NULL,
@@ -56,19 +57,43 @@ If \code{NULL}, selects all columns. Patterns that found no matches are silently
 ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
 return \code{"Species"}.}
 
-\item{new_columns}{The names of the new columns, as character vector.}
+\item{new_columns}{The names of the new columns, as character vector. If
+number of provided columns does not equal the new amount of columns that were
+created after splitting values, \code{data_separate()} tries to recycle column names
+to match the required number of column names. Duplicated column names are then
+made unique using \code{make.unique()}.}
 
 \item{separator}{Separator between columns. Can be a character vector, which
 is then treated as regular expression, or a numeric vector that indicates at
 which positions the string values will be split.}
 
-\item{guess_columns}{...}
+\item{guess_columns}{If \code{new_columns} is not given, the required number of
+new columns is guessed based on the results of value splitting. For example,
+if a variable is split into three new columns, this will be considered as
+the required number of new columns, and columns are named \code{"split_1"},
+\code{"split_2"} and \code{"split_3"}. When values from a variable are split into
+different amount of new columns, the \code{guess_column} can be either \code{"mode"}
+(number of new columns is based on the most common number of splits), \code{"min"}
+or \code{"max"} to use the minimum resp. maximum number of possible splits as
+required number of columns.}
 
-\item{merge_multiple}{...}
+\item{merge_multiple}{Logical, if \code{TRUE} and more than one variable is selected
+for separating, new columns can be merged. Value pairs of all split variables
+are merged.}
 
-\item{fill}{...}
+\item{merge_separator}{Separator string when \code{merge_multiple = TRUE}. Defines
+the string that is used to merge values together.}
 
-\item{extra}{...}
+\item{fill}{How to deal with values that return fewer new columns after
+splitting? Can be \code{"left"} (fill missing columns from the left with \code{NA}),
+\code{"right"} (fill missing columns from the right with \code{NA}) or \code{"value_left"}
+or \code{"value_right"} to fill missing columns from left or right with the
+left-most or right-most values.}
+
+\item{extra}{How to deal with values that return too many new columns after
+splitting? Can be \code{"drop_left"} or \code{"drop_right"} to drop the left-most or
+right-most values, or \code{"merge_left"} or \code{"merge_right"} to merge the left-
+or right-most value together, and keeping all remaining values as is.}
 
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
@@ -102,12 +127,66 @@ functions (see 'Details'), this argument may be used as workaround.}
 Separates a single variable into multiple new variables.
 }
 \examples{
+# simple case
 d <- data.frame(
   x = c("1.a.6", "2.b.7", "3.c.8"),
   stringsAsFactors = FALSE
 )
 d
-data_separate(d, new_columns = c("a", "b", "c")
+data_separate(d, new_columns = c("a", "b", "c"))
+
+# guess number of columns
+d <- data.frame(
+  x = c("1.a.6", NA, "2.b.6.7", "3.c", "x.y.z"),
+  stringsAsFactors = FALSE
+)
+d
+data_separate(d)
+
+data_separate(d, guess_columns = "max")
+
+# drop left-most column
+data_separate(d, extra = "drop_left")
+
+# merge right-most column
+data_separate(d, extra = "merge_right")
+
+# fill columns with fewer values with left-most values
+data_separate(d, fill = "value_left")
+
+# fill and merge
+data_separate(d, fill = "value_left", extra = "merge_right")
+
+# multiple columns to split
+d <- data.frame(
+  x = c("1.a.6", "2.b.7", "3.c.8"),
+  y = c("x.y.z", "10.11.12", "m.n.o"),
+  stringsAsFactors = FALSE
+)
+d
+# split two columns, default column names
+data_separate(d)
+
+# split into new named columns, repeating column names
+data_separate(d, new_columns = c("a", "b", "c"))
+
+# split selected variable new columns
+data_separate(d, select = "y", new_columns = c("a", "b", "c"))
+
+# merge multiple split columns
+data_separate(
+  d,
+  new_columns = c("a", "b", "c"),
+  merge_multiple = TRUE
+)
+
+# merge multiple split columns
+data_separate(
+  d,
+  new_columns = c("a", "b", "c"),
+  merge_multiple = TRUE,
+  merge_separator = "-"
+)
 }
 \seealso{
 \code{\link[=data_unite]{data_unite()}}

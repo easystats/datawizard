@@ -5,17 +5,40 @@
 #' Separates a single variable into multiple new variables.
 #'
 #' @param data A data frame.
-#' @param new_columns The names of the new columns, as character vector.
+#' @param new_columns The names of the new columns, as character vector. If
+#' number of provided columns does not equal the new amount of columns that were
+#' created after splitting values, `data_separate()` tries to recycle column names
+#' to match the required number of column names. Duplicated column names are then
+#' made unique using `make.unique()`.
 #' @param separator Separator between columns. Can be a character vector, which
 #' is then treated as regular expression, or a numeric vector that indicates at
 #' which positions the string values will be split.
 #' @param append Logical, if `FALSE` (default), removes original columns that
 #' were united. If `TRUE`, all columns are preserved and the new column is
 #' appended to the data frame.
-#' @param guess_columns ...
-#' @param fill ...
-#' @param extra ...
-#' @param merge_multiple ...
+#' @param guess_columns If `new_columns` is not given, the required number of
+#' new columns is guessed based on the results of value splitting. For example,
+#' if a variable is split into three new columns, this will be considered as
+#' the required number of new columns, and columns are named `"split_1"`,
+#' `"split_2"` and `"split_3"`. When values from a variable are split into
+#' different amount of new columns, the `guess_column` can be either `"mode"`
+#' (number of new columns is based on the most common number of splits), `"min"`
+#' or `"max"` to use the minimum resp. maximum number of possible splits as
+#' required number of columns.
+#' @param fill How to deal with values that return fewer new columns after
+#' splitting? Can be `"left"` (fill missing columns from the left with `NA`),
+#' `"right"` (fill missing columns from the right with `NA`) or `"value_left"`
+#' or `"value_right"` to fill missing columns from left or right with the
+#' left-most or right-most values.
+#' @param extra How to deal with values that return too many new columns after
+#' splitting? Can be `"drop_left"` or `"drop_right"` to drop the left-most or
+#' right-most values, or `"merge_left"` or `"merge_right"` to merge the left-
+#' or right-most value together, and keeping all remaining values as is.
+#' @param merge_multiple Logical, if `TRUE` and more than one variable is selected
+#' for separating, new columns can be merged. Value pairs of all split variables
+#' are merged.
+#' @param merge_separator Separator string when `merge_multiple = TRUE`. Defines
+#' the string that is used to merge values together.
 #' @param ... Currently not used.
 #' @inheritParams find_columns
 #'
@@ -24,12 +47,66 @@
 #' @return `data`, with a newly created variable.
 #'
 #' @examples
+#' # simple case
 #' d <- data.frame(
 #'   x = c("1.a.6", "2.b.7", "3.c.8"),
 #'   stringsAsFactors = FALSE
 #' )
 #' d
-#' data_separate(d, new_columns = c("a", "b", "c")
+#' data_separate(d, new_columns = c("a", "b", "c"))
+#'
+#' # guess number of columns
+#' d <- data.frame(
+#'   x = c("1.a.6", NA, "2.b.6.7", "3.c", "x.y.z"),
+#'   stringsAsFactors = FALSE
+#' )
+#' d
+#' data_separate(d)
+#'
+#' data_separate(d, guess_columns = "max")
+#'
+#' # drop left-most column
+#' data_separate(d, extra = "drop_left")
+#'
+#' # merge right-most column
+#' data_separate(d, extra = "merge_right")
+#'
+#' # fill columns with fewer values with left-most values
+#' data_separate(d, fill = "value_left")
+#'
+#' # fill and merge
+#' data_separate(d, fill = "value_left", extra = "merge_right")
+#'
+#' # multiple columns to split
+#' d <- data.frame(
+#'   x = c("1.a.6", "2.b.7", "3.c.8"),
+#'   y = c("x.y.z", "10.11.12", "m.n.o"),
+#'   stringsAsFactors = FALSE
+#' )
+#' d
+#' # split two columns, default column names
+#' data_separate(d)
+#'
+#' # split into new named columns, repeating column names
+#' data_separate(d, new_columns = c("a", "b", "c"))
+#'
+#' # split selected variable new columns
+#' data_separate(d, select = "y", new_columns = c("a", "b", "c"))
+#'
+#' # merge multiple split columns
+#' data_separate(
+#'   d,
+#'   new_columns = c("a", "b", "c"),
+#'   merge_multiple = TRUE
+#' )
+#'
+#' # merge multiple split columns
+#' data_separate(
+#'   d,
+#'   new_columns = c("a", "b", "c"),
+#'   merge_multiple = TRUE,
+#'   merge_separator = "-"
+#' )
 #' @export
 data_separate <- function(data,
                           select = NULL,
@@ -37,6 +114,7 @@ data_separate <- function(data,
                           separator = "[^[:alnum:]]+",
                           guess_columns = "mode",
                           merge_multiple = FALSE,
+                          merge_separator = "",
                           fill = "right",
                           extra = "drop_right",
                           exclude = NULL,
@@ -148,11 +226,15 @@ data_separate <- function(data,
 
   # final preparation, bind or merge columns, make unique columm names
   if (isTRUE(merge_multiple) && length(split_data) > 1) {
-    # we merge all splitted columns, which are currently saved as list
+    # we merge all split columns, which are currently saved as list
     # of data frames, together into one data frame
     for (i in 2:length(split_data)) {
       for (j in seq_along(split_data[[1]])) {
-        split_data[[1]][[j]] <- paste(split_data[[1]][[j]], split_data[[i]][[j]])
+        split_data[[1]][[j]] <- paste(
+          split_data[[1]][[j]],
+          split_data[[i]][[j]],
+          collapse = merge_separator
+        )
       }
     }
     split_data <- split_data[[1]]
