@@ -162,6 +162,13 @@ test_that("data_separate: multiple columns", {
     stringsAsFactors = FALSE
   )
 
+  # select works
+  out <- data_separate(d_sep, select = "x", verbose = FALSE)
+  expect_identical(colnames(out), c("split_1", "split_2", "split_3"))
+  expect_identical(out$split_1, c("1", "2", "3", "5"))
+  expect_identical(out$split_2, c("a", "b", "c", "j"))
+  expect_identical(out$split_3, c("6", "7", "8", NA))
+
   out <- data_separate(d_sep, verbose = FALSE)
   expect_snapshot(print(out))
 
