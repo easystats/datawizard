@@ -233,7 +233,7 @@ data_separate <- function(data,
         split_data[[1]][[j]] <- paste(
           split_data[[1]][[j]],
           split_data[[i]][[j]],
-          collapse = merge_separator
+          sep = merge_separator
         )
       }
     }
