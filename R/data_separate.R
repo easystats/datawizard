@@ -213,7 +213,7 @@ data_separate <- function(data,
     # catch error
     if (is.null(separated_columns)) {
       insight::format_error(
-        "Something went wront. Probably the number of provided column names did not match number of newly created columns?"
+        "Something went wrong. Probably the number of provided column names did not match number of newly created columns?"
       )
     }
 
