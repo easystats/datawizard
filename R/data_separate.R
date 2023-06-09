@@ -111,7 +111,7 @@ data_separate <- function(data,
     }
 
     # main task here - fill or drop values for all columns
-    .fix_separated_columns(separated_columns, fill, extra, n_cols)
+    separated_columns <- .fix_separated_columns(separated_columns, fill, extra, n_cols)
 
     # bind separated columns into data frame and set column names
     out <- as.data.frame(do.call(rbind, separated_columns))
