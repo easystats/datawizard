@@ -29,7 +29,7 @@ test_that("data_separate: simple use case", {
 
   # column names
   out <- data_separate(d_sep, new_columns = c("A1", "B2", "C3"), verbose = FALSE)
-  expect_identical(colnames(out), c("A1", "B2", "C2"))
+  expect_identical(colnames(out), c("A1", "B2", "C3"))
   expect_identical(out$A1, c("1", "2", "3"))
   expect_identical(out$B2, c("a", "b", "c"))
 
