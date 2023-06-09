@@ -153,3 +153,104 @@ test_that("data_separate: different number of values", {
     ignore_attr = TRUE
   )
 })
+
+
+test_that("data_separate: multiple columns", {
+  d_sep <- data.frame(
+    x = c("1.a.6", "2.b.7.d", "3.c.8", "5.j"),
+    y = c("m.n.99", "77.f.g", "44.9", NA),
+    stringsAsFactors = FALSE
+  )
+
+  out <- data_separate(d_sep, verbose = FALSE)
+  expect_snapshot(print(out))
+
+  out <- data_separate(d_sep, extra = "merge_right", verbose = FALSE)
+  expect_snapshot(print(out))
+
+  out <- data_separate(d_sep, new_columns = c("A", "B", "C"), extra = "merge_right", verbose = FALSE)
+  expect_snapshot(print(out))
+
+  out <- data_separate(d_sep, new_columns = c("A", "B", "C"), extra = "merge_right", append = TRUE, verbose = FALSE)
+  expect_snapshot(print(out))
+
+  out <- data_separate(
+    d_sep,
+    new_columns = c("A", "B", "C"),
+    fill = "value_right",
+    extra = "merge_right",
+    append = TRUE,
+    verbose = FALSE
+  )
+  expect_snapshot(print(out))
+
+  out <- data_separate(
+    d_sep,
+    new_columns = c("A", "B", "C"),
+    fill = "value_right",
+    extra = "merge_right",
+    merge_multiple = TRUE,
+    append = TRUE,
+    verbose = FALSE
+  )
+  expect_snapshot(print(out))
+
+  out <- data_separate(
+    d_sep,
+    new_columns = c("A", "B", "C"),
+    merge_multiple = TRUE,
+    append = TRUE,
+    verbose = FALSE
+  )
+  expect_snapshot(print(out))
+})
+
+
+test_that("data_separate: numeric separator", {
+  d_sep <- data.frame(
+    x = c("Thisisalongstring", "Doeshe1losteverything", "Wereme2longornot"),
+    stringsAsFactors = FALSE
+  )
+
+  expect_silent({
+    out <- data_separate(d_sep, separator = c(5, 7, 8, 12), verbose = TRUE)
+  })
+  expect_equal(
+    out,
+    data.frame(
+      split_1 = c("This", "Does", "Were"),
+      split_2 = c("is", "he", "me"),
+      split_3 = c("a", "1", "2"),
+      split_4 = c("long", "lost", "long"),
+      split_5 = c("string", "everything", "ornot"),
+      stringsAsFactors = FALSE
+    ),
+    ignore_attr = TRUE
+  )
+
+  d_sep <- data.frame(
+    x = c("Thisisalongstring", "Doeshe1losteverything"),
+    y = c("Wereme2longornot", NA),
+    stringsAsFactors = FALSE
+  )
+  expect_silent({
+    out <- data_separate(d_sep, separator = c(5, 7, 8, 12), new_columns = LETTERS[1:5])
+  })
+  expect_equal(
+    out,
+    data.frame(
+      A = c("This", "Does"),
+      B = c("is", "he"),
+      C = c("a", "1"),
+      D = c("long", "lost"),
+      E = c("string", "everything"),
+      A.1 = c("Were", NA),
+      B.1 = c("me", NA),
+      C.1 = c("2", NA),
+      D.1 = c("long", NA),
+      E.1 = c("ornot", NA),
+      stringsAsFactors = FALSE
+    ),
+    ignore_attr = TRUE
+  )
+})

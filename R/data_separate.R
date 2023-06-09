@@ -193,7 +193,7 @@ data_separate <- function(data,
         "mode" = distribution_mode(l),
       )
       # tell user
-      if (verbose && !all(l == 1)) {
+      if (verbose && !all(l == 1) && !is.numeric(separator)) {
         insight::format_alert(paste0(
           "Column `", sep_column, "` had different number of values after splitting. Variable was split into ",
           n_cols, " column", ifelse(n_cols > 1, "s", ""), "."
@@ -205,7 +205,17 @@ data_separate <- function(data,
     }
 
     # main task here - fill or drop values for all columns
-    separated_columns <- .fix_separated_columns(separated_columns, fill, extra, n_cols, verbose)
+    separated_columns <- tryCatch(
+      .fix_separated_columns(separated_columns, fill, extra, n_cols, verbose),
+      error = function(e) NULL
+    )
+
+    # catch error
+    if (is.null(separated_columns)) {
+      insight::format_error(
+        "Something went wront. Probably the number of provided column names did not match number of newly created columns?"
+      )
+    }
 
     # bind separated columns into data frame and set column names
     out <- as.data.frame(do.call(rbind, separated_columns))
