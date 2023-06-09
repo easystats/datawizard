@@ -1,18 +1,19 @@
-#' @title Unite ("merge") multiple variables
+#' @title Separate single variable into multiple variables
 #' @name data_separate
 #'
 #' @description
-#' Merge values of multiple variables per observation into one new variable.
+#' Separates a single variable into multiple new variables.
 #'
 #' @param data A data frame.
-#' @param new_column The name of the new column, as a string.
-#' @param separator A character to use between values.
+#' @param new_columns The names of the new columns, as character vector.
+#' @param separator Separator between columns. Can be a character vector, which
+#' is then treated as regular expression, or a numeric vector that indicates at
+#' which positions the string values will be split.
 #' @param append Logical, if `FALSE` (default), removes original columns that
 #' were united. If `TRUE`, all columns are preserved and the new column is
 #' appended to the data frame.
-#' @param remove_na Logical, if `TRUE`, missing values (`NA`) are not included
-#' in the united values. If `FALSE`, missing values are represented as `"NA"`
-#' in the united values.
+#' @param guess_columns ...
+#' @param merge_multiple ...
 #' @param ... Currently not used.
 #' @inheritParams find_columns
 #'
@@ -20,41 +21,27 @@
 #'
 #' @examples
 #' d <- data.frame(
-#'   x = 1:3,
-#'   y = letters[1:3],
-#'   z = 6:8
+#'   x = c("1.a.6", "2.b.7", "3.c.8"),
+#'   stringsAsFactors = FALSE
 #' )
 #' d
-#' data_separate(d, new_column = "xyz")
-#' data_separate(d, new_column = "xyz", remove = FALSE)
-#' data_separate(d, new_column = "xyz", select = c("x", "z"))
-#' data_separate(d, new_column = "xyz", select = c("x", "z"), append = TRUE)
+#' data_separate(d, new_columns = c("a", "b", "c")
 #' @export
 data_separate <- function(data,
-                       new_column = NULL,
-                       select = NULL,
-                       exclude = NULL,
-                       separator = "_",
-                       append = FALSE,
-                       remove_na = FALSE,
-                       ignore_case = FALSE,
-                       verbose = TRUE,
-                       regex = FALSE,
-                       ...) {
-  # we need a name for the new column
-  if (is.null(new_column)) {
-    insight::format_error(
-      "No name for the new column was provided.",
-      "Please use `new_column` to define a name for the newly created column."
-    )
-  }
-
-  # only one column name
-  if (length(new_column) > 1) {
-    insight::format_error(
-      "Please provide only a single string for `new_column`, no character vector with multiple values."
-    )
-  }
+                          select = NULL,
+                          new_columns = NULL,
+                          separator = "[^[:alnum:]]+",
+                          guess_columns = "mode",
+                          merge_multiple = FALSE,
+                          exclude = NULL,
+                          append = FALSE,
+                          ignore_case = FALSE,
+                          verbose = TRUE,
+                          regex = FALSE,
+                          ...) {
+  # in case user did not provide names of new columns, we can try
+  # to guess number of columns per variable
+  guess_columns <- match.arg(guess_columns, choices = c("min", "max", "mode"))
 
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select,
@@ -65,44 +52,64 @@ data_separate <- function(data,
     verbose = verbose
   )
 
-  if (is.null(select) || length(select) <= 1) {
-    insight::format_error(
-      "At least two columns in `select` are required for `data_separate()`."
-    )
+  if (is.null(select)) {
+    insight::format_error("No columnas found to separate. Please check your `select` argument.")
   }
 
-  # unite
-  out <- data.frame(
-    new_col = do.call(paste, c(data[select], sep = separator)),
-    stringsAsFactors = FALSE
-  )
-  colnames(out) <- new_column
-
-  # remove missings
-  if (remove_na) {
-    # remove trailing and leading "NA_" and "_NA"
-    out[[new_column]] <- gsub(paste0("^NA", separator), "", out[[new_column]])
-    out[[new_column]] <- gsub(paste0(separator, "NA$"), "", out[[new_column]])
-    # remove _NA_ inside string, add separator back. This ensure we match
-    # whole-word NA and do not break strings like "COUNTRY_NATION"
-    out[[new_column]] <- gsub(paste0(separator, "NA", separator), separator, out[[new_column]], fixed = TRUE)
+  # do we have known number of columns?
+  if (is.null(new_columns)) {
+    n_columns <- NULL
+    new_column_names <- NULL
+  } else {
+    n_columns <- length(new_columns)
+    new_column_names <- new_columns
   }
 
-  # remove old columns
-  if (!isTRUE(append)) {
-    data[select] <- NULL
+  # iterate columns that should be split
+  for (sep_column in select) {
+
+    # make sure we have a character that we can split
+    x <- data[[sep_column]]
+    if (!is.character(x)) {
+      x <- as.character(x)
+    }
+
+    # separate column into multiple strings
+    if (is.numeric(separator)) {
+      maxlen <- max(nchar(x))
+      starts <- c(0, cumsum(separator) + 1)
+      ends <- c(cumsum(separator), maxlen)
+      separated_columns <- lapply(seq_along(starts), function(i) {
+        substr(x, starts[i], ends[i])
+      })
+    } else {
+      separated_columns <- strsplit(x, separator)
+    }
+
+    # how many new columns do we need?
+    if (is.null(n_columns)) {
+      # lengths of all split strings
+      l <- lengths(separated_columns)
+      # define number of new columns, based on user-choice
+      n_cols <- switch(
+        guess_columns,
+        "min" = min(l, na.rm = TRUE),
+        "max" = max(l, na.rm = TRUE),
+        "mode" = distribution_mode(l),
+      )
+    } else {
+      # else, if we know number of columns, use that number
+      n_cols <- n_columns
+    }
+
+    # bind separated columns into data frame and set column names
+    out <- as.data.frame(do.call(rbind, separated_columns))
+    colnames(out) <- new_columns
   }
 
-  # overwrite?
-  if (new_column %in% colnames(data) && verbose) {
-    insight::format_alert(
-      "The name for `new_column` already exists as variable name in the data.",
-      "This variable will be replaced by `new_column`."
-    )
+  if (isTRUE(append)) {
+    data <- cbind(data, out)
   }
-
-  # overwrite or append
-  data[[new_column]] <- out[[new_column]]
 
   # fin
   data
