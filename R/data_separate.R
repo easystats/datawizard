@@ -151,7 +151,7 @@ data_separate <- function(data,
     # we merge all splitted columns, which are currently saved as list
     # of data frames, together into one data frame
     for (i in 2:length(split_data)) {
-      for (j in seq_len(split_data[[1]])) {
+      for (j in seq_along(split_data[[1]])) {
         split_data[[1]][[j]] <- paste(split_data[[1]][[j]], split_data[[i]][[j]])
       }
     }
