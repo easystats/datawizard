@@ -189,13 +189,20 @@ data_separate <- function(data,
         "max" = max(l, na.rm = TRUE),
         "mode" = distribution_mode(l),
       )
+      # tell user
+      if (verbose) {
+        insight::format_alert(paste0(
+          "Column `", sep_column, "` had different number of values after splitting. Variable was split into ",
+          n_cols, " column", ifelse(n_cols > 1, "s", ""), "."
+        ))
+      }
     } else {
       # else, if we know number of columns, use that number
       n_cols <- n_columns
     }
 
     # main task here - fill or drop values for all columns
-    separated_columns <- .fix_separated_columns(separated_columns, fill, extra, n_cols)
+    separated_columns <- .fix_separated_columns(separated_columns, fill, extra, n_cols, verbose)
 
     # bind separated columns into data frame and set column names
     out <- as.data.frame(do.call(rbind, separated_columns))
@@ -256,7 +263,8 @@ data_separate <- function(data,
 
 
 #' @keywords internal
-.fix_separated_columns <- function(separated_columns, fill, extra, n_cols) {
+.fix_separated_columns <- function(separated_columns, fill, extra, n_cols, verbose = TRUE) {
+  warn_extra <- warn_fill <- FALSE
   separated_columns <- lapply(separated_columns, function(i) {
     # determine number of values in separated column
     n_values <- length(i)
@@ -276,6 +284,7 @@ data_separate <- function(data,
         out <- i[1:(n_cols - 1)]
         out <- c(out, paste(i[n_cols:n_values], collapse = " "))
       }
+      warn_extra <- TRUE
     } else if (n_values < n_cols) {
       # we have fewer values than required - fill columns
       if (fill == "left") {
@@ -287,9 +296,37 @@ data_separate <- function(data,
       } else if (fill == "value_right") {
         out <- c(i, rep(i[length(i)], times = n_cols - n_values))
       }
+      warn_fill <- TRUE
     } else {
       out <- i
     }
     out
   })
+
+  if (verbose) {
+    if (warn_extra) {
+      insight::format_alert(paste0(
+        "More columns than expected were returned after splitting. ",
+        switch(extra,
+          "drop_left" = "Left-most columns have been dropped.",
+          "drop_right" = "Right-most columns have been dropped.",
+          "merge_left" = "Left-most columns have been merged together.",
+          "merge_right" = "Right-most columns have been merged together."
+        )
+      ))
+    }
+    if (warn_fill) {
+      insight::format_alert(paste0(
+        "Fewer columns than expected were returned after splitting. ",
+        switch(extra,
+          "left" = "Left-most columns were filled with `NA`.",
+          "right" = "Right-most columns were filled with `NA`.",
+          "value_left" = "Left-most columns were filled with first value.",
+          "value_right" = "Right-most columns were filled with last value."
+        )
+      ))
+    }
+  }
+
+  separated_columns
 }
