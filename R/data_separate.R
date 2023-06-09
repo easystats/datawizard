@@ -144,7 +144,7 @@ data_separate <- function(data,
   )
 
   if (is.null(select)) {
-    insight::format_error("No columnas found to separate. Please check your `select` argument.")
+    insight::format_error("No columns found to separate. Please check your `select` argument.")
   }
 
   # do we have known number of columns?
