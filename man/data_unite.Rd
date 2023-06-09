@@ -104,3 +104,6 @@ data_unite(d, new_column = "xyz", remove = FALSE)
 data_unite(d, new_column = "xyz", select = c("x", "z"))
 data_unite(d, new_column = "xyz", select = c("x", "z"), append = TRUE)
 }
+\seealso{
+\code{\link[=data_separate]{data_separate()}}
+}

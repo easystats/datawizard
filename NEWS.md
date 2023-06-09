@@ -36,6 +36,9 @@ NEW FUNCTIONS
 
 * `data_unite()`, to merge values of multiple variables into one new variable.
 
+* `data_separate()`, as counterpart to `data_unite()`, to separate a single 
+  variable into multiple new variables.
+
 * `data_modify()`, to create new variables, or modify or remove existing
   variables in a data frame.
 

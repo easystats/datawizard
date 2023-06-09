@@ -109,3 +109,6 @@ d <- data.frame(
 d
 data_separate(d, new_columns = c("a", "b", "c")
 }
+\seealso{
+\code{\link[=data_unite]{data_unite()}}
+}

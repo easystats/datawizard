@@ -19,6 +19,8 @@
 #' @param ... Currently not used.
 #' @inheritParams find_columns
 #'
+#' @seealso [`data_unite()`]
+#'
 #' @return `data`, with a newly created variable.
 #'
 #' @examples
