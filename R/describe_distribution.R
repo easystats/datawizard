@@ -34,8 +34,6 @@
 #' `describe_distribution(list(mtcars$mpg))`), then `"mtcars$mpg"` is used as
 #' variable name.
 #'
-#' @inheritSection center Selection of variables - the `select` argument
-
 #' @note There is also a
 #'   [`plot()`-method](https://easystats.github.io/see/articles/parameters.html)
 #'   implemented in the
