@@ -9,9 +9,12 @@ data_separate(
   select = NULL,
   new_columns = NULL,
   separator = "[^[:alnum:]]+",
+  guess_columns = "mode",
+  merge_multiple = FALSE,
+  fill = "right",
+  extra = "drop_right",
   exclude = NULL,
   append = FALSE,
-  remove_na = FALSE,
   ignore_case = FALSE,
   verbose = TRUE,
   regex = FALSE,
@@ -59,6 +62,14 @@ return \code{"Species"}.}
 is then treated as regular expression, or a numeric vector that indicates at
 which positions the string values will be split.}
 
+\item{guess_columns}{...}
+
+\item{merge_multiple}{...}
+
+\item{fill}{...}
+
+\item{extra}{...}
+
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
 excludes no columns.}
@@ -66,10 +77,6 @@ excludes no columns.}
 \item{append}{Logical, if \code{FALSE} (default), removes original columns that
 were united. If \code{TRUE}, all columns are preserved and the new column is
 appended to the data frame.}
-
-\item{remove_na}{Logical, if \code{TRUE}, missing values (\code{NA}) are not included
-in the united values. If \code{FALSE}, missing values are represented as \code{"NA"}
-in the united values.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
