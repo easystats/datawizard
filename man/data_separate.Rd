@@ -14,6 +14,7 @@ data_separate(
   merge_separator = "",
   fill = "right",
   extra = "drop_right",
+  convert_na = TRUE,
   exclude = NULL,
   append = FALSE,
   ignore_case = FALSE,
@@ -94,6 +95,9 @@ left-most or right-most values.}
 splitting? Can be \code{"drop_left"} or \code{"drop_right"} to drop the left-most or
 right-most values, or \code{"merge_left"} or \code{"merge_right"} to merge the left-
 or right-most value together, and keeping all remaining values as is.}
+
+\item{convert_na}{Logical, if \code{TRUE}, character \code{"NA"} values are converted
+into real \code{NA} values.}
 
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
