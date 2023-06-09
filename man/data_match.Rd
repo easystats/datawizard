@@ -7,7 +7,7 @@
 \usage{
 data_match(x, to, match = "and", return_indices = FALSE, drop_na = TRUE, ...)
 
-data_filter(x, filter, ...)
+data_filter(x, ...)
 }
 \arguments{
 \item{x}{A data frame.}
@@ -30,15 +30,16 @@ row indices are requested (i.e. \code{return_indices=TRUE}), it might be useful
 to preserve \code{NA} values, so returned row indices match the row indices of
 the original data frame.}
 
-\item{...}{Not used.}
-
-\item{filter}{A logical expression indicating which rows to keep, or a numeric
-vector indicating the row indices of rows to keep. Can also be a string
-representation of a logical expression. e.g. \code{filter = "x > 4"}. This might
-be useful when used in packages to avoid defining undefined global variables.}
+\item{...}{A sequence of logical expressions indicating which rows to keep,
+or a numeric vector indicating the row indices of rows to keep. Can also be
+a string representation of a logical expression (e.g. \code{"x > 4"}), a
+character vector (e.g. \code{c("x > 4", "y == 2")}) or a variable that contains
+the string representation of a logical expression. These might be useful
+when used in packages to avoid defining undefined global variables.}
 }
 \value{
-A filtered data frame, or the row indices that match the specified configuration.
+A filtered data frame, or the row indices that match the specified
+configuration.
 }
 \description{
 Return a filtered (or sliced) data frame or row indices of a data frame that
@@ -80,7 +81,6 @@ However, unlike \code{subset()}, it preserves label attributes and is useful whe
 working with labelled data.
 }
 \examples{
-# styler: off
 data_match(mtcars, data.frame(vs = 0, am = 1))
 data_match(mtcars, data.frame(vs = 0, am = c(0, 1)))
 
@@ -97,22 +97,24 @@ data_filter(mtcars, vs == 0 | am == 1)
 # slice data frame by row indices
 data_filter(mtcars, 5:10)
 
-# Define a custom function containing data_filter() and pass variable names
-# to it using curly brackets
+# Define a custom function containing data_filter()
 my_filter <- function(data, variable) {
-  data_filter(data, {variable} <= 20)
+  data_filter(data, variable)
 }
-my_filter(mtcars, "mpg")
+my_filter(mtcars, "cyl == 6")
 
-# Pass complete filter-condition as string
+# Pass complete filter-condition as string.
 my_filter <- function(data, condition) {
-  data_filter(data, {condition})
+  data_filter(data, condition)
 }
 my_filter(mtcars, "am != 0")
 
 # string can also be used directly as argument
 data_filter(mtcars, "am != 0")
-# styler: on
+
+# or as variable
+fl <- "am != 0"
+data_filter(mtcars, fl)
 }
 \seealso{
 \itemize{
