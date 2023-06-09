@@ -19,19 +19,17 @@ test_that("data_separate: simple use case", {
 
   # manual separator char
   out2 <- data_separate(d_sep, separator = "\\.", verbose = FALSE)
-  expect_identical(out1, out2)
+  expect_identical(out, out2)
 
   # non-existing separator char
   expect_message(
-    {
-      out3 <- data_separate(d_sep, separator = "_")
-    },
+    data_separate(d_sep, separator = "_"),
     regex = "Separator probably not found"
   )
 
   # column names
-  out4 <- data_separate(d_sep, new_columns = c("A1", "B2", "C3"), verbose = FALSE)
-  expect_identical(colnames(out4), c("A1", "B2", "C2"))
+  out <- data_separate(d_sep, new_columns = c("A1", "B2", "C3"), verbose = FALSE)
+  expect_identical(colnames(out), c("A1", "B2", "C2"))
   expect_identical(out$A1, c("1", "2", "3"))
   expect_identical(out$B2, c("a", "b", "c"))
 
