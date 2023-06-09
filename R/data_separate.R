@@ -185,7 +185,7 @@ data_separate <- function(data,
         out <- i[1:n_cols]
       } else if (extra == "merge_left") {
         out <- paste(i[1:(n_values - n_cols + 1)], collapse = " ")
-        out <- c(out, i[n_cols:n_values])
+        out <- c(out, i[(n_cols + 1):n_values])
       } else {
         out <- i[1:(n_cols - 1)]
         out <- c(out, paste(i[n_cols:n_values], collapse = " "))
