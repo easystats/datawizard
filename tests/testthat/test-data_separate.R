@@ -219,6 +219,34 @@ test_that("data_separate: multiple columns", {
 })
 
 
+test_that("data_separate: multiple columns, different lengths", {
+  d_sep <- data.frame(
+    x = c("1.a.6", "2.b.7.d", "3.c.8", "5.j"),
+    y = c("m.n.99.22", "77.f.g.34", "44.9", NA),
+    stringsAsFactors = FALSE
+  )
+
+  # separate column names
+  out <- data_separate(
+    d_sep,
+    select = c("x", "y"),
+    new_columns = list(x = c("A", "B", "C"), y = c("EE", "FF", "GG")),
+    verbose = FALSE
+  )
+  expect_named(out, c("A", "B", "C", "EE", "FF", "GG"))
+  expect_snapshot(print(out))
+
+  out <- data_separate(
+    d_sep,
+    select = c("x", "y"),
+    new_columns = list(x = c("A", "B", "C"), y = c("EE", "FF", "GG", "HH")),
+    verbose = FALSE
+  )
+  expect_named(out, c("A", "B", "C", "EE", "FF", "GG", "HH"))
+  expect_snapshot(print(out))
+})
+
+
 test_that("data_separate: numeric separator", {
   d_sep <- data.frame(
     x = c("Thisisalongstring", "Doeshe1losteverything", "Wereme2longornot"),

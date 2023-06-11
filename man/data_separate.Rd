@@ -59,10 +59,10 @@ ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
 return \code{"Species"}.}
 
 \item{new_columns}{The names of the new columns, as character vector. If
-number of provided columns does not equal the new amount of columns that were
-created after splitting values, \code{data_separate()} tries to recycle column names
-to match the required number of column names. Duplicated column names are then
-made unique using \code{make.unique()}.}
+more than one variable was selected (in \code{select}), names are duplicated and
+then made unique using \code{make.unique()}. \code{new_columns} can also be a list of
+(named) character vectors when multiple variables should be separated. See
+'Examples'.}
 
 \item{separator}{Separator between columns. Can be a character vector, which
 is then treated as regular expression, or a numeric vector that indicates at
@@ -190,6 +190,23 @@ data_separate(
   new_columns = c("a", "b", "c"),
   merge_multiple = TRUE,
   merge_separator = "-"
+)
+
+# separate multiple columns, give proper column names
+d_sep <- data.frame(
+  x = c("1.a.6", "2.b.7.d", "3.c.8", "5.j"),
+  y = c("m.n.99.22", "77.f.g.34", "44.9", NA),
+  stringsAsFactors = FALSE
+)
+
+data_separate(
+  d_sep,
+  select = c("x", "y"),
+  new_columns = list(
+    x = c("A", "B", "C"),         # separate "x" into three columns
+    y = c("EE", "FF", "GG", "HH") # separate "y" into four columns
+  ),
+  verbose = FALSE
 )
 }
 \seealso{

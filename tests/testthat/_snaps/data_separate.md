@@ -97,6 +97,28 @@
       3       3       c       8        44        44         9
       4       5       5       j      <NA>      <NA>      <NA>
 
+# data_separate: multiple columns, different lengths
+
+    Code
+      print(out)
+    Output
+        A B    C   EE   FF   GG
+      1 1 a    6    m    n   99
+      2 2 b    7   77    f    g
+      3 3 c    8   44    9 <NA>
+      4 5 j <NA> <NA> <NA> <NA>
+
+---
+
+    Code
+      print(out)
+    Output
+        A B    C   EE   FF   GG   HH
+      1 1 a    6    m    n   99   22
+      2 2 b    7   77    f    g   34
+      3 3 c    8   44    9 <NA> <NA>
+      4 5 j <NA> <NA> <NA> <NA> <NA>
+
 # data_separate: fail if invalid column selected
 
     Code

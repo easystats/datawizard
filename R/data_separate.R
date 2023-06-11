@@ -6,10 +6,10 @@
 #'
 #' @param data A data frame.
 #' @param new_columns The names of the new columns, as character vector. If
-#' number of provided columns does not equal the new amount of columns that were
-#' created after splitting values, `data_separate()` tries to recycle column names
-#' to match the required number of column names. Duplicated column names are then
-#' made unique using `make.unique()`.
+#' more than one variable was selected (in `select`), names are duplicated and
+#' then made unique using `make.unique()`. `new_columns` can also be a list of
+#' (named) character vectors when multiple variables should be separated. See
+#' 'Examples'.
 #' @param separator Separator between columns. Can be a character vector, which
 #' is then treated as regular expression, or a numeric vector that indicates at
 #' which positions the string values will be split.
@@ -109,6 +109,23 @@
 #'   merge_multiple = TRUE,
 #'   merge_separator = "-"
 #' )
+#'
+#' # separate multiple columns, give proper column names
+#' d_sep <- data.frame(
+#'   x = c("1.a.6", "2.b.7.d", "3.c.8", "5.j"),
+#'   y = c("m.n.99.22", "77.f.g.34", "44.9", NA),
+#'   stringsAsFactors = FALSE
+#' )
+#'
+#' data_separate(
+#'   d_sep,
+#'   select = c("x", "y"),
+#'   new_columns = list(
+#'     x = c("A", "B", "C"),         # separate "x" into three columns
+#'     y = c("EE", "FF", "GG", "HH") # separate "y" into four columns
+#'   ),
+#'   verbose = FALSE
+#' )
 #' @export
 data_separate <- function(data,
                           select = NULL,
@@ -143,15 +160,25 @@ data_separate <- function(data,
     verbose = verbose
   )
 
-  # do we have known number of columns?
-  if (is.null(new_columns)) {
-    n_columns <- NULL
-  } else {
-    n_columns <- length(new_columns)
+  # make new_columns as list, this works with single and multiple columns
+  if (!is.null(new_columns) && !is.list(new_columns)) {
+    new_columns <- rep(list(new_columns), times = length(select))
+  }
+
+  # make sure list of new column names is named
+  if (!is.null(new_columns) && is.null(names(new_columns))) {
+    names(new_columns) <- select
   }
 
   # iterate columns that should be split
   split_data <- lapply(select, function(sep_column) {
+
+    # do we have known number of columns?
+    if (is.null(new_columns)) {
+      n_columns <- NULL
+    } else {
+      n_columns <- length(new_columns[[sep_column]])
+    }
 
     # make sure we have a character that we can split
     x <- data[[sep_column]]
@@ -217,10 +244,10 @@ data_separate <- function(data,
     out <- as.data.frame(do.call(rbind, separated_columns))
 
     # if no column names provided, use standard names
-    if (is.null(new_columns)) {
+    if (is.null(new_columns[[sep_column]])) {
       new_column_names <- paste0("split_", seq_along(out))
     } else {
-      new_column_names <- new_columns
+      new_column_names <- new_columns[[sep_column]]
     }
 
     colnames(out) <- new_column_names
