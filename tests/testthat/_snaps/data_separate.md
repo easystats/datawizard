@@ -86,6 +86,17 @@
       3   3.c.8   44.9 344  c9  8NA
       4     5.j   <NA> 5NA jNA NANA
 
+---
+
+    Code
+      print(out)
+    Output
+        split_1 split_2 split_3 split_1.1 split_2.1 split_3.1
+      1       1       a       6         m         n        99
+      2       2       b       7        77         f         g
+      3       3       c       8        44        44         9
+      4       5       5       j      <NA>      <NA>      <NA>
+
 # data_separate: fail if invalid column selected
 
     Code
@@ -107,4 +118,15 @@
       2       2       b       7        77         f         g
       3       3       c       8        44         9      <NA>
       4       5       j    <NA>      <NA>      <NA>      <NA>
+
+# data_separate: numeric column
+
+    Code
+      print(out)
+    Output
+         split_1 split_2 split_3 split_4
+      V1      15     435     352       3
+      V2      53     554     353       2
+      V3      12     342     422        
+      V4      15     454     334     535
 

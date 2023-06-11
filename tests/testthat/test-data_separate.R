@@ -213,6 +213,9 @@ test_that("data_separate: multiple columns", {
     verbose = FALSE
   )
   expect_snapshot(print(out))
+
+  out <- data_separate(d_sep, fill = "value_left", verbose = FALSE)
+  expect_snapshot(print(out))
 })
 
 
@@ -283,4 +286,16 @@ test_that("data_separate: fail if invalid column selected", {
     d_sep
   )
   expect_snapshot(data_separate(d_sep, select = NULL))
+})
+
+
+test_that("data_separate: numeric column", {
+  d_sep <- data.frame(
+    x = c(154353523, 535543532, 12342422, 15454334535),
+    y = c("m.n.99", "77.f.g", "44.9", NA),
+    stringsAsFactors = FALSE
+  )
+  expect_message(data_separate(d_sep, select = "x"), regex = "Separator probably")
+  out <- data_separate(d_sep, select = "x", separator = c(3, 6, 9))
+  expect_snapshot(print(out))
 })
