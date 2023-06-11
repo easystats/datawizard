@@ -315,7 +315,7 @@ data_separate <- function(data,
         out <- c(i, rep(NA_character_, times = n_cols - n_values))
       } else if (fill == "value_left") {
         out <- c(rep(i[1], times = n_cols - n_values), i)
-      } else if (fill == "value_right") {
+      } else {
         out <- c(i, rep(i[length(i)], times = n_cols - n_values))
       }
       warn_fill <- TRUE
