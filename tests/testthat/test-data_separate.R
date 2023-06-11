@@ -181,6 +181,9 @@ test_that("data_separate: multiple columns", {
   out <- data_separate(d_sep, new_columns = c("A", "B", "C"), extra = "merge_right", append = TRUE, verbose = FALSE)
   expect_snapshot(print(out))
 
+  out <- data_separate(d_sep, extra = "drop_left", verbose = FALSE)
+
+
   out <- data_separate(
     d_sep,
     new_columns = c("A", "B", "C"),
