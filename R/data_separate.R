@@ -223,12 +223,6 @@ data_separate <- function(data,
       new_column_names <- new_columns
     }
 
-    # check if column names should be recycled
-    if (ncol(out) != length(new_column_names)) {
-      # recycle names, avoid duplicates
-      new_column_names <- make.unique(rep(new_column_names, times = ncol(out) / new_column_names))
-    }
-
     colnames(out) <- new_column_names
     out
   })
