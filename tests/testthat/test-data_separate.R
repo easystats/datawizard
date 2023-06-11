@@ -269,3 +269,18 @@ test_that("data_separate: numeric separator", {
     regex = "went wrong"
   )
 })
+
+
+test_that("data_separate: fail if invalid column selected", {
+  d_sep <- data.frame(
+    x = c("1.a.6", "2.b.7.d", "3.c.8", "5.j"),
+    y = c("m.n.99", "77.f.g", "44.9", NA),
+    stringsAsFactors = FALSE
+  )
+  expect_warning(expect_message(data_separate(d_sep, select = "z"), reg = "not found"), regex = "misspelled?")
+  expect_identical(
+    data_separate(d_sep, select = "z", verbose = FALSE),
+    d_sep
+  )
+  expect_snapshot(data_separate(d_sep, select = NULL))
+})
