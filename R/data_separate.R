@@ -251,10 +251,13 @@ data_separate <- function(data,
     # of data frames, together into one data frame
     for (i in 2:length(split_data)) {
       for (j in seq_along(split_data[[1]])) {
-        split_data[[1]][[j]] <- paste(
-          split_data[[1]][[j]],
-          split_data[[i]][[j]],
-          sep = merge_separator
+        split_data[[1]][[j]] <- gsub(" ", "",
+          paste(
+            split_data[[1]][[j]],
+            split_data[[i]][[j]],
+            sep = merge_separator
+          ),
+          fixed = TRUE
         )
       }
     }

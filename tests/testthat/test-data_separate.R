@@ -182,7 +182,7 @@ test_that("data_separate: multiple columns", {
   expect_snapshot(print(out))
 
   out <- data_separate(d_sep, extra = "drop_left", verbose = FALSE)
-
+  expect_snapshot(print(out))
 
   out <- data_separate(
     d_sep,
