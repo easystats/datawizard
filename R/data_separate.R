@@ -259,7 +259,7 @@ data_separate <- function(data,
 
     # if no column names provided, use standard names
     if (is.null(new_columns[[sep_column]])) {
-      new_column_names <- paste0("split_", seq_along(out))
+      new_column_names <- paste0(sep_column, "_", seq_along(out))
     } else {
       # if we have multiple columns that were separated, we avoid duplicated
       # column names of created variables by appending name of original column

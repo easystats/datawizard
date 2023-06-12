@@ -3,22 +3,22 @@
     Code
       print(out)
     Output
-        split_1 split_2 split_3 split_1.1 split_2.1 split_3.1
-      1       1       a       6         m         n        99
-      2       2       b       7        77         f         g
-      3       3       c       8        44         9      <NA>
-      4       5       j    <NA>      <NA>      <NA>      <NA>
+        x_1 x_2  x_3  y_1  y_2  y_3
+      1   1   a    6    m    n   99
+      2   2   b    7   77    f    g
+      3   3   c    8   44    9 <NA>
+      4   5   j <NA> <NA> <NA> <NA>
 
 ---
 
     Code
       print(out)
     Output
-        split_1 split_2 split_3 split_1.1 split_2.1 split_3.1
-      1       1       a       6         m         n        99
-      2       2       b     7 d        77         f         g
-      3       3       c       8        44         9      <NA>
-      4       5       j    <NA>      <NA>      <NA>      <NA>
+        x_1 x_2  x_3  y_1  y_2  y_3
+      1   1   a    6    m    n   99
+      2   2   b  7 d   77    f    g
+      3   3   c    8   44    9 <NA>
+      4   5   j <NA> <NA> <NA> <NA>
 
 ---
 
@@ -47,11 +47,11 @@
     Code
       print(out)
     Output
-        split_1 split_2 split_3 split_1.1 split_2.1 split_3.1
-      1       1       a       6         m         n        99
-      2       b       7       d        77         f         g
-      3       3       c       8        44         9      <NA>
-      4       5       j    <NA>      <NA>      <NA>      <NA>
+        x_1 x_2  x_3  y_1  y_2  y_3
+      1   1   a    6    m    n   99
+      2   b   7    d   77    f    g
+      3   3   c    8   44    9 <NA>
+      4   5   j <NA> <NA> <NA> <NA>
 
 ---
 
@@ -91,11 +91,11 @@
     Code
       print(out)
     Output
-        split_1 split_2 split_3 split_1.1 split_2.1 split_3.1
-      1       1       a       6         m         n        99
-      2       2       b       7        77         f         g
-      3       3       c       8        44        44         9
-      4       5       5       j      <NA>      <NA>      <NA>
+        x_1 x_2 x_3  y_1  y_2  y_3
+      1   1   a   6    m    n   99
+      2   2   b   7   77    f    g
+      3   3   c   8   44   44    9
+      4   5   5   j <NA> <NA> <NA>
 
 # data_separate: multiple columns, different lengths
 
@@ -135,20 +135,20 @@
       Fewer columns than expected were returned after splitting. Right-most
         columns were filled with `NA`.
     Output
-        split_1 split_2 split_3 split_1.1 split_2.1 split_3.1
-      1       1       a       6         m         n        99
-      2       2       b       7        77         f         g
-      3       3       c       8        44         9      <NA>
-      4       5       j    <NA>      <NA>      <NA>      <NA>
+        x_1 x_2  x_3  y_1  y_2  y_3
+      1   1   a    6    m    n   99
+      2   2   b    7   77    f    g
+      3   3   c    8   44    9 <NA>
+      4   5   j <NA> <NA> <NA> <NA>
 
 # data_separate: numeric column
 
     Code
       print(out)
     Output
-         split_1 split_2 split_3 split_4
-      V1      15     435     352       3
-      V2      53     554     353       2
-      V3      12     342     422        
-      V4      15     454     334     535
+         x_1 x_2 x_3 x_4
+      V1  15 435 352   3
+      V2  53 554 353   2
+      V3  12 342 422    
+      V4  15 454 334 535
 

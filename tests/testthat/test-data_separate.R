@@ -15,17 +15,17 @@ test_that("data_separate: simple use case", {
     },
     regex = "3 columns"
   )
-  expect_identical(colnames(out), c("split_1", "split_2", "split_3"))
-  expect_identical(out$split_1, c("1", "2", "3"))
-  expect_identical(out$split_2, c("a", "b", "c"))
+  expect_identical(colnames(out), c("x_1", "x_2", "x_3"))
+  expect_identical(out$x_1, c("1", "2", "3"))
+  expect_identical(out$x_2, c("a", "b", "c"))
 
   # manual separator char
-  out2 <- data_separate(d_sep, separator = "\\.", , guess_columns = "mode", verbose = FALSE)
+  out2 <- data_separate(d_sep, separator = "\\.", guess_columns = "mode", verbose = FALSE)
   expect_identical(out, out2)
 
   # non-existing separator char
   expect_message(
-    data_separate(d_sep, separator = "_", , guess_columns = "mode"),
+    data_separate(d_sep, separator = "_", guess_columns = "mode"),
     regex = "Separator probably not found"
   )
 
@@ -86,34 +86,34 @@ test_that("data_separate: different number of values", {
     regex = "filled with `NA`"
   )
   out <- data_separate(d_sep, guess_columns = "mode", verbose = FALSE)
-  expect_identical(colnames(out), c("split_1", "split_2", "split_3"))
-  expect_identical(out$split_1, c("1", "2", "3", "5"))
-  expect_identical(out$split_2, c("a", "b", "c", "j"))
-  expect_identical(out$split_3, c("6", "7", "8", NA))
+  expect_identical(colnames(out), c("x_1", "x_2", "x_3"))
+  expect_identical(out$x_1, c("1", "2", "3", "5"))
+  expect_identical(out$x_2, c("a", "b", "c", "j"))
+  expect_identical(out$x_3, c("6", "7", "8", NA))
 
   # fill missings left
   out <- data_separate(d_sep, guess_columns = "mode", fill = "left", verbose = FALSE)
-  expect_identical(colnames(out), c("split_1", "split_2", "split_3"))
-  expect_identical(out$split_1, c("1", "2", "3", NA))
-  expect_identical(out$split_2, c("a", "b", "c", "5"))
-  expect_identical(out$split_3, c("6", "7", "8", "j"))
+  expect_identical(colnames(out), c("x_1", "x_2", "x_3"))
+  expect_identical(out$x_1, c("1", "2", "3", NA))
+  expect_identical(out$x_2, c("a", "b", "c", "5"))
+  expect_identical(out$x_3, c("6", "7", "8", "j"))
 
   # merge extra right
   out <- data_separate(d_sep, guess_columns = "mode", extra = "merge_right", verbose = FALSE)
-  expect_identical(colnames(out), c("split_1", "split_2", "split_3"))
-  expect_identical(out$split_1, c("1", "2", "3", "5"))
-  expect_identical(out$split_2, c("a", "b", "c", "j"))
-  expect_identical(out$split_3, c("6", "7 d", "8", NA))
+  expect_identical(colnames(out), c("x_1", "x_2", "x_3"))
+  expect_identical(out$x_1, c("1", "2", "3", "5"))
+  expect_identical(out$x_2, c("a", "b", "c", "j"))
+  expect_identical(out$x_3, c("6", "7 d", "8", NA))
 
   # max columns
   out <- data_separate(d_sep, guess_columns = "max", verbose = FALSE)
   expect_equal(
     out,
     data.frame(
-      split_1 = c("1", "2", "3", "5"),
-      split_2 = c("a", "b", "c", "j"),
-      split_3 = c("6", "7", "8", NA),
-      split_4 = c(NA, "d", NA, NA),
+      x_1 = c("1", "2", "3", "5"),
+      x_2 = c("a", "b", "c", "j"),
+      x_3 = c("6", "7", "8", NA),
+      x_4 = c(NA, "d", NA, NA),
       stringsAsFactors = FALSE
     ),
     ignore_attr = TRUE
@@ -124,8 +124,8 @@ test_that("data_separate: different number of values", {
   expect_equal(
     out,
     data.frame(
-      split_1 = c("1", "2", "3", "5"),
-      split_2 = c("a", "b", "c", "j"),
+      x_1 = c("1", "2", "3", "5"),
+      x_2 = c("a", "b", "c", "j"),
       stringsAsFactors = FALSE
     ),
     ignore_attr = TRUE
@@ -135,8 +135,8 @@ test_that("data_separate: different number of values", {
   expect_equal(
     out,
     data.frame(
-      split_1 = c("1 a", "2 b 7", "3 c", "5"),
-      split_2 = c("6", "d", "8", "j"),
+      x_1 = c("1 a", "2 b 7", "3 c", "5"),
+      x_2 = c("6", "d", "8", "j"),
       stringsAsFactors = FALSE
     ),
     ignore_attr = TRUE
@@ -146,10 +146,10 @@ test_that("data_separate: different number of values", {
   expect_equal(
     out,
     data.frame(
-      split_1 = c(NA, "2", NA, NA),
-      split_2 = c("1", "b", "3", NA),
-      split_3 = c("a", "7", "c", "5"),
-      split_4 = c("6", "d", "8", "j"),
+      x_1 = c(NA, "2", NA, NA),
+      x_2 = c("1", "b", "3", NA),
+      x_3 = c("a", "7", "c", "5"),
+      x_4 = c("6", "d", "8", "j"),
       stringsAsFactors = FALSE
     ),
     ignore_attr = TRUE
@@ -166,10 +166,10 @@ test_that("data_separate: multiple columns", {
 
   # select works
   out <- data_separate(d_sep, select = "x", guess_columns = "mode", verbose = FALSE)
-  expect_identical(colnames(out), c("split_1", "split_2", "split_3"))
-  expect_identical(out$split_1, c("1", "2", "3", "5"))
-  expect_identical(out$split_2, c("a", "b", "c", "j"))
-  expect_identical(out$split_3, c("6", "7", "8", NA))
+  expect_identical(colnames(out), c("x_1", "x_2", "x_3"))
+  expect_identical(out$x_1, c("1", "2", "3", "5"))
+  expect_identical(out$x_2, c("a", "b", "c", "j"))
+  expect_identical(out$x_3, c("6", "7", "8", NA))
 
   out <- data_separate(d_sep, guess_columns = "mode", verbose = FALSE)
   expect_snapshot(print(out))
@@ -261,11 +261,11 @@ test_that("data_separate: numeric separator", {
   expect_equal(
     out,
     data.frame(
-      split_1 = c("This", "Does", "Were"),
-      split_2 = c("is", "he", "me"),
-      split_3 = c("a", "1", "2"),
-      split_4 = c("long", "lost", "long"),
-      split_5 = c("string", "everything", "ornot"),
+      x_1 = c("This", "Does", "Were"),
+      x_2 = c("is", "he", "me"),
+      x_3 = c("a", "1", "2"),
+      x_4 = c("long", "lost", "long"),
+      x_5 = c("string", "everything", "ornot"),
       stringsAsFactors = FALSE
     ),
     ignore_attr = TRUE
