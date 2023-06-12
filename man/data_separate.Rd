@@ -9,7 +9,7 @@ data_separate(
   select = NULL,
   new_columns = NULL,
   separator = "[^[:alnum:]]+",
-  guess_columns = "mode",
+  guess_columns = NULL,
   merge_multiple = FALSE,
   merge_separator = "",
   fill = "right",
