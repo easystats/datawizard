@@ -126,13 +126,13 @@
     Message <simpleMessage>
       Column `x` had different number of values after splitting. Variable was
         split into 3 columns.
-      More columns than expected were returned after splitting. Right-most
+      `x` returned more columns than expected after splitting. Right-most
         columns have been dropped.
-      Fewer columns than expected were returned after splitting. Right-most
+      `x`returned fewer columns than expected after splitting. Right-most
         columns were filled with `NA`.
       Column `y` had different number of values after splitting. Variable was
         split into 3 columns.
-      Fewer columns than expected were returned after splitting. Right-most
+      `y`returned fewer columns than expected after splitting. Right-most
         columns were filled with `NA`.
     Output
         x_1 x_2  x_3  y_1  y_2  y_3
