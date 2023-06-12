@@ -131,7 +131,7 @@ data_separate <- function(data,
                           select = NULL,
                           new_columns = NULL,
                           separator = "[^[:alnum:]]+",
-                          guess_columns = "mode",
+                          guess_columns = NULL,
                           merge_multiple = FALSE,
                           merge_separator = "",
                           fill = "right",
@@ -143,6 +143,10 @@ data_separate <- function(data,
                           verbose = TRUE,
                           regex = FALSE,
                           ...) {
+  # we need at least one explicit choice for either `new_columns` or `guess_columns`
+  if (is.null(new_columns) && is.null(guess_columns)) {
+    insight::format_error("Cannot separate values. Either `new_columns` or `guess_columns` must be provided.")
+  }
   # in case user did not provide names of new columns, we can try
   # to guess number of columns per variable
   guess_columns <- match.arg(guess_columns, choices = c("min", "max", "mode"))
@@ -163,6 +167,16 @@ data_separate <- function(data,
   # make new_columns as list, this works with single and multiple columns
   if (!is.null(new_columns) && !is.list(new_columns)) {
     new_columns <- rep(list(new_columns), times = length(select))
+    # if we have multiple columns that were separated, we avoid duplicated
+    # column names of created variables by appending name of original column
+    # however, we don't have duplicated column names when we merge them together
+    # so don't create new column names when "merge_multiple" is FALSE.
+    make_unique_colnames <- length(select) > 1 && !merge_multiple
+  } else {
+    # we don't want to create own unique column names when user explicitly
+    # provided column names as a list, i.e. column names for each separated
+    # variable
+    make_unique_colnames <- FALSE
   }
 
   # make sure list of new column names is named
@@ -247,7 +261,13 @@ data_separate <- function(data,
     if (is.null(new_columns[[sep_column]])) {
       new_column_names <- paste0("split_", seq_along(out))
     } else {
-      new_column_names <- new_columns[[sep_column]]
+      # if we have multiple columns that were separated, we avoid duplicated
+      # column names of created variables by appending name of original column
+      if (make_unique_colnames) {
+        new_column_names <- paste0(sep_column, "_", new_columns[[sep_column]])
+      } else {
+        new_column_names <- new_columns[[sep_column]]
+      }
     }
 
     colnames(out) <- new_column_names

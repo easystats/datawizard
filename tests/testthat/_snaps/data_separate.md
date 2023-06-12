@@ -25,22 +25,22 @@
     Code
       print(out)
     Output
-        A B    C  A.1  B.1  C.1
-      1 1 a    6    m    n   99
-      2 2 b  7 d   77    f    g
-      3 3 c    8   44    9 <NA>
-      4 5 j <NA> <NA> <NA> <NA>
+        x_A x_B  x_C  y_A  y_B  y_C
+      1   1   a    6    m    n   99
+      2   2   b  7 d   77    f    g
+      3   3   c    8   44    9 <NA>
+      4   5   j <NA> <NA> <NA> <NA>
 
 ---
 
     Code
       print(out)
     Output
-              x      y A B    C  A.1  B.1  C.1
-      1   1.a.6 m.n.99 1 a    6    m    n   99
-      2 2.b.7.d 77.f.g 2 b  7 d   77    f    g
-      3   3.c.8   44.9 3 c    8   44    9 <NA>
-      4     5.j   <NA> 5 j <NA> <NA> <NA> <NA>
+              x      y x_A x_B  x_C  y_A  y_B  y_C
+      1   1.a.6 m.n.99   1   a    6    m    n   99
+      2 2.b.7.d 77.f.g   2   b  7 d   77    f    g
+      3   3.c.8   44.9   3   c    8   44    9 <NA>
+      4     5.j   <NA>   5   j <NA> <NA> <NA> <NA>
 
 ---
 
@@ -58,11 +58,11 @@
     Code
       print(out)
     Output
-              x      y A B   C  A.1  B.1  C.1
-      1   1.a.6 m.n.99 1 a   6    m    n   99
-      2 2.b.7.d 77.f.g 2 b 7 d   77    f    g
-      3   3.c.8   44.9 3 c   8   44    9    9
-      4     5.j   <NA> 5 j   j <NA> <NA> <NA>
+              x      y x_A x_B x_C  y_A  y_B  y_C
+      1   1.a.6 m.n.99   1   a   6    m    n   99
+      2 2.b.7.d 77.f.g   2   b 7 d   77    f    g
+      3   3.c.8   44.9   3   c   8   44    9    9
+      4     5.j   <NA>   5   j   j <NA> <NA> <NA>
 
 ---
 
@@ -122,7 +122,7 @@
 # data_separate: fail if invalid column selected
 
     Code
-      data_separate(d_sep, select = NULL)
+      data_separate(d_sep, guess_columns = "mode", select = NULL)
     Message <simpleMessage>
       Column `x` had different number of values after splitting. Variable was
         split into 3 columns.
