@@ -243,7 +243,7 @@ data_separate <- function(data,
 
     # main task here - fill or drop values for all columns
     separated_columns <- tryCatch(
-      .fix_separated_columns(separated_columns, fill, extra, n_cols, verbose),
+      .fix_separated_columns(separated_columns, fill, extra, n_cols, sep_column, verbose),
       error = function(e) NULL
     )
 
@@ -325,7 +325,7 @@ data_separate <- function(data,
 
 
 #' @keywords internal
-.fix_separated_columns <- function(separated_columns, fill, extra, n_cols, verbose = TRUE) {
+.fix_separated_columns <- function(separated_columns, fill, extra, n_cols, sep_column, verbose = TRUE) {
   warn_extra <- warn_fill <- FALSE
   for (sc in seq_along(separated_columns)) {
     i <- separated_columns[[sc]]
@@ -369,7 +369,8 @@ data_separate <- function(data,
   if (verbose) {
     if (warn_extra) {
       insight::format_alert(paste0(
-        "More columns than expected were returned after splitting. ",
+        "`", sep_column, "`",
+        " returned more columns than expected after splitting. ",
         switch(extra,
           "drop_left" = "Left-most columns have been dropped.",
           "drop_right" = "Right-most columns have been dropped.",
@@ -380,7 +381,8 @@ data_separate <- function(data,
     }
     if (warn_fill) {
       insight::format_alert(paste0(
-        "Fewer columns than expected were returned after splitting. ",
+        "`", sep_column, "`",
+        "returned fewer columns than expected after splitting. ",
         switch(fill,
           "left" = "Left-most columns were filled with `NA`.",
           "right" = "Right-most columns were filled with `NA`.",
