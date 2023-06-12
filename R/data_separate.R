@@ -46,7 +46,8 @@
 #'
 #' @seealso [`data_unite()`]
 #'
-#' @return `data`, with a newly created variable.
+#' @return A data frame with the newly created variable(s), or - when `append = TRUE` -
+#' `data` including new variables.
 #'
 #' @examples
 #' # simple case
@@ -63,21 +64,26 @@
 #'   stringsAsFactors = FALSE
 #' )
 #' d
-#' data_separate(d)
+#' data_separate(d, guess_columns = "mode")
 #'
 #' data_separate(d, guess_columns = "max")
 #'
 #' # drop left-most column
-#' data_separate(d, extra = "drop_left")
+#' data_separate(d, guess_columns = "mode", extra = "drop_left")
 #'
 #' # merge right-most column
-#' data_separate(d, extra = "merge_right")
+#' data_separate(d, guess_columns = "mode", extra = "merge_right")
 #'
 #' # fill columns with fewer values with left-most values
-#' data_separate(d, fill = "value_left")
+#' data_separate(d, guess_columns = "mode", fill = "value_left")
 #'
 #' # fill and merge
-#' data_separate(d, fill = "value_left", extra = "merge_right")
+#' data_separate(
+#'   d,
+#'   guess_columns = "mode",
+#'   fill = "value_left",
+#'   extra = "merge_right"
+#' )
 #'
 #' # multiple columns to split
 #' d <- data.frame(
@@ -87,7 +93,7 @@
 #' )
 #' d
 #' # split two columns, default column names
-#' data_separate(d)
+#' data_separate(d, guess_columns = "mode")
 #'
 #' # split into new named columns, repeating column names
 #' data_separate(d, new_columns = c("a", "b", "c"))
