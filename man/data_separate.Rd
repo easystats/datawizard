@@ -59,8 +59,8 @@ ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
 return \code{"Species"}.}
 
 \item{new_columns}{The names of the new columns, as character vector. If
-more than one variable was selected (in \code{select}), names are duplicated and
-then made unique using \code{make.unique()}. \code{new_columns} can also be a list of
+more than one variable was selected (in \code{select}), the new names are prefixed
+with the name of the original column. \code{new_columns} can also be a list of
 (named) character vectors when multiple variables should be separated. See
 'Examples'.}
 
@@ -104,7 +104,7 @@ from \code{exclude} will be excluded instead of selected. If \code{NULL} (the de
 excludes no columns.}
 
 \item{append}{Logical, if \code{FALSE} (default), removes original columns that
-were united. If \code{TRUE}, all columns are preserved and the new column is
+were separated. If \code{TRUE}, all columns are preserved and the new columns are
 appended to the data frame.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
