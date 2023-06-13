@@ -150,8 +150,8 @@ return <code>"Species"</code>.</p></dd>
 
 <dt>new_columns</dt>
 <dd><p>The names of the new columns, as character vector. If
-more than one variable was selected (in <code>select</code>), names are duplicated and
-then made unique using <code><a href="https://rdrr.io/r/base/make.unique.html" class="external-link">make.unique()</a></code>. <code>new_columns</code> can also be a list of
+more than one variable was selected (in <code>select</code>), the new names are prefixed
+with the name of the original column. <code>new_columns</code> can also be a list of
 (named) character vectors when multiple variables should be separated. See
 'Examples'.</p></dd>
 
@@ -213,7 +213,7 @@ excludes no columns.</p></dd>
 
 <dt>append</dt>
 <dd><p>Logical, if <code>FALSE</code> (default), removes original columns that
-were united. If <code>TRUE</code>, all columns are preserved and the new column is
+were separated. If <code>TRUE</code>, all columns are preserved and the new columns are
 appended to the data frame.</p></dd>
 
 

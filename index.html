@@ -126,7 +126,11 @@
 <!-- ***Hockety pockety wockety woss, you can cite i-it from JOSS*** <sup>(soon)</sup> -->
 <!-- ***Hockety pockety wockety wass, datawizard saves your ass! :sparkles:*** -->
 <p><a href="https://easystats.github.io/datawizard/">datawizard</a> is a lightweight package to easily manipulate, clean, transform, and prepare your data for analysis. It is part of the <a href="https://easystats.github.io/easystats/" class="external-link">easystats ecosystem</a>, a suite of R packages to deal with your entire statistical analysis, from cleaning the data to reporting the results.</p>
-<p>Most courses and tutorials about statistical modeling assume that you are working with a clean and tidy dataset. In practice, however, a major part of doing statistical modeling is preparing your data–cleaning up values, creating new columns, reshaping the dataset, or transforming some variables. <a href="https://easystats.github.io/datawizard/">datawizard</a> provides easy to use tools to perform these common, critical, and sometimes tedious data preparation tasks.</p>
+<p>It covers two aspects of data preparation:</p>
+<ul>
+<li><p><strong>Data manipulation</strong>: <a href="https://easystats.github.io/datawizard/">datawizard</a> offers a very similar set of functions to that of the <em>tidyverse</em> packages, such as a <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> and <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a>, to select, filter and reshape data, with a few key differences. 1) All data manipulation functions start with the prefix <code>data_*</code> (which makes them easy to identify). 2) Although most functions can be used exactly as their <em>tidyverse</em> equivalents, they are also string-friendly (which makes them easy to program with and use inside functions). Finally, <a href="https://easystats.github.io/datawizard/">datawizard</a> is super lightweight (no dependencies, similar to <a href="https://github.com/nathaneastwood/poorman" class="external-link">poorman</a>), which makes it awesome for developers to use in their packages.</p></li>
+<li><p><strong>Statistical transformations</strong>: <a href="https://easystats.github.io/datawizard/">datawizard</a> also has powerful functions to easily apply common data <a href="https://easystats.github.io/datawizard/reference/index.html#statistical-transformations">transformations</a>, including standardization, normalization, rescaling, rank-transformation, scale reversing, recoding, binning, etc.</p></li>
+</ul>
 <p></p>
 <p><img src="https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif" width="300"></p>
 <p></p>
@@ -175,29 +179,29 @@
 </h1>
 <p>To cite the package, run the following command:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">citation</span>(<span class="st">"datawizard"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>To cite package <span class="st">'datawizard'</span> <span class="cf">in</span> publications use<span class="sc">:</span></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  Patil et al., (<span class="dv">2022</span>). datawizard<span class="sc">:</span> An R Package <span class="cf">for</span> Easy Data</span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  Preparation and Statistical Transformations. Journal of Open Source</span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  Software, <span class="dv">7</span>(<span class="dv">78</span>), <span class="dv">4684</span>, https<span class="sc">:</span><span class="er">//</span>doi.org<span class="sc">/</span><span class="fl">10.21105</span><span class="sc">/</span>joss<span class="fl">.04684</span></span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>A BibTeX entry <span class="cf">for</span> LaTeX users is</span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>  <span class="sc">@</span>Article{,</span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>    title <span class="ot">=</span> {{datawizard}<span class="sc">:</span> An {R} Package <span class="cf">for</span> Easy Data Preparation and Statistical Transformations},</span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>    author <span class="ot">=</span> {Indrajeet Patil and Dominique Makowski and Mattan S. Ben<span class="sc">-</span>Shachar and Brenton M. Wiernik and Etienne Bacher and Daniel Lüdecke},</span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>    journal <span class="ot">=</span> {Journal of Open Source Software},</span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>    year <span class="ot">=</span> {<span class="dv">2022</span>},</span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>    volume <span class="ot">=</span> {<span class="dv">7</span>},</span>
-<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>    number <span class="ot">=</span> {<span class="dv">78</span>},</span>
-<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>    pages <span class="ot">=</span> {<span class="dv">4684</span>},</span>
-<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>    doi <span class="ot">=</span> {<span class="fl">10.21105</span><span class="sc">/</span>joss<span class="fl">.04684</span>},</span>
-<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>  }</span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>To cite package <span class="st">'datawizard'</span> <span class="cf">in</span> publications use<span class="sc">:</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  Patil et al., (<span class="dv">2022</span>). datawizard<span class="sc">:</span> An R Package <span class="cf">for</span> Easy Data</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  Preparation and Statistical Transformations. Journal of Open Source</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  Software, <span class="dv">7</span>(<span class="dv">78</span>), <span class="dv">4684</span>, https<span class="sc">:</span><span class="er">//</span>doi.org<span class="sc">/</span><span class="fl">10.21105</span><span class="sc">/</span>joss<span class="fl">.04684</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>A BibTeX entry <span class="cf">for</span> LaTeX users is</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>  <span class="sc">@</span>Article{,</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>    title <span class="ot">=</span> {{datawizard}<span class="sc">:</span> An {R} Package <span class="cf">for</span> Easy Data Preparation and Statistical Transformations},</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>    author <span class="ot">=</span> {Indrajeet Patil and Dominique Makowski and Mattan S. Ben<span class="sc">-</span>Shachar and Brenton M. Wiernik and Etienne Bacher and Daniel Lüdecke},</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>    journal <span class="ot">=</span> {Journal of Open Source Software},</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>    year <span class="ot">=</span> {<span class="dv">2022</span>},</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>    volume <span class="ot">=</span> {<span class="dv">7</span>},</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>    number <span class="ot">=</span> {<span class="dv">78</span>},</span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>    pages <span class="ot">=</span> {<span class="dv">4684</span>},</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>    doi <span class="ot">=</span> {<span class="fl">10.21105</span><span class="sc">/</span>joss<span class="fl">.04684</span>},</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>  }</span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
 </h1>
+<p>Most courses and tutorials about statistical modeling assume that you are working with a clean and tidy dataset. In practice, however, a major part of doing statistical modeling is preparing your data–cleaning up values, creating new columns, reshaping the dataset, or transforming some variables. <a href="https://easystats.github.io/datawizard/">datawizard</a> provides easy to use tools to perform these common, critical, and sometimes tedious data preparation tasks.</p>
 <div class="section level2">
 <h2 id="data-wrangling">Data wrangling<a class="anchor" aria-label="anchor" href="#data-wrangling"></a>
 </h2>
@@ -583,10 +587,18 @@
 <span><span class="co">#&gt; [1]  50  60 100   0  30</span></span>
 <span><span class="co">#&gt; attr(,"min_value")</span></span>
 <span><span class="co">#&gt; [1] -5</span></span>
+<span><span class="co">#&gt; attr(,"max_value")</span></span>
+<span><span class="co">#&gt; [1] 5</span></span>
+<span><span class="co">#&gt; attr(,"new_min")</span></span>
+<span><span class="co">#&gt; [1] 0</span></span>
+<span><span class="co">#&gt; attr(,"new_max")</span></span>
+<span><span class="co">#&gt; [1] 100</span></span>
 <span><span class="co">#&gt; attr(,"range_difference")</span></span>
 <span><span class="co">#&gt; [1] 10</span></span>
 <span><span class="co">#&gt; attr(,"to_range")</span></span>
-<span><span class="co">#&gt; [1]   0 100</span></span></code></pre></div>
+<span><span class="co">#&gt; [1]   0 100</span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "dw_transformer" "numeric"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="rotate-or-transpose">Rotate or transpose<a class="anchor" aria-label="anchor" href="#rotate-or-transpose"></a>
@@ -656,13 +668,13 @@
 <span>  <span class="co"># remove fourth column</span></span>
 <span>  <span class="fu"><a href="reference/data_relocate.html">data_remove</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    Sepal.Length Petal.Length Sepal.Width</span></span>
-<span><span class="co">#&gt; 51          7.0          4.7         3.2</span></span>
-<span><span class="co">#&gt; 52          6.4          4.5         3.2</span></span>
-<span><span class="co">#&gt; 53          6.9          4.9         3.1</span></span>
-<span><span class="co">#&gt; 54          5.5          4.0         2.3</span></span>
-<span><span class="co">#&gt; 55          6.5          4.6         2.8</span></span>
-<span><span class="co">#&gt; 56          5.7          4.5         2.8</span></span></code></pre></div>
+<span><span class="co">#&gt;    Sepal.Length Petal.Length Sepal.Width    Species</span></span>
+<span><span class="co">#&gt; 51          7.0          4.7         3.2 versicolor</span></span>
+<span><span class="co">#&gt; 52          6.4          4.5         3.2 versicolor</span></span>
+<span><span class="co">#&gt; 53          6.9          4.9         3.1 versicolor</span></span>
+<span><span class="co">#&gt; 54          5.5          4.0         2.3 versicolor</span></span>
+<span><span class="co">#&gt; 55          6.5          4.6         2.8 versicolor</span></span>
+<span><span class="co">#&gt; 56          5.7          4.5         2.8 versicolor</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level1">
