@@ -1,7 +1,7 @@
 # data_separate: multiple columns
 
     Code
-      print(out)
+      out
     Output
         x_1 x_2  x_3  y_1  y_2  y_3
       1   1   a    6    m    n   99
@@ -12,7 +12,7 @@
 ---
 
     Code
-      print(out)
+      out
     Output
         x_1 x_2  x_3  y_1  y_2  y_3
       1   1   a    6    m    n   99
@@ -23,7 +23,7 @@
 ---
 
     Code
-      print(out)
+      out
     Output
         x_A x_B  x_C  y_A  y_B  y_C
       1   1   a    6    m    n   99
@@ -34,7 +34,7 @@
 ---
 
     Code
-      print(out)
+      out
     Output
               x      y x_A x_B  x_C  y_A  y_B  y_C
       1   1.a.6 m.n.99   1   a    6    m    n   99
@@ -45,7 +45,7 @@
 ---
 
     Code
-      print(out)
+      out
     Output
         x_1 x_2  x_3  y_1  y_2  y_3
       1   1   a    6    m    n   99
@@ -56,7 +56,7 @@
 ---
 
     Code
-      print(out)
+      out
     Output
               x      y x_A x_B x_C  y_A  y_B  y_C
       1   1.a.6 m.n.99   1   a   6    m    n   99
@@ -67,7 +67,7 @@
 ---
 
     Code
-      print(out)
+      out
     Output
               x      y   A   B   C
       1   1.a.6 m.n.99  1m  an 699
@@ -78,7 +78,7 @@
 ---
 
     Code
-      print(out)
+      out
     Output
               x      y   A   B    C
       1   1.a.6 m.n.99  1m  an  699
@@ -89,7 +89,7 @@
 ---
 
     Code
-      print(out)
+      out
     Output
         x_1 x_2 x_3  y_1  y_2  y_3
       1   1   a   6    m    n   99
@@ -100,7 +100,7 @@
 # data_separate: multiple columns, different lengths
 
     Code
-      print(out)
+      out
     Output
         A B    C   EE   FF   GG
       1 1 a    6    m    n   99
@@ -111,7 +111,7 @@
 ---
 
     Code
-      print(out)
+      out
     Output
         A B    C   EE   FF   GG   HH
       1 1 a    6    m    n   99   22
@@ -144,11 +144,11 @@
 # data_separate: numeric column
 
     Code
-      print(out)
+      out
     Output
-         x_1 x_2 x_3 x_4
-      V1  15 435 352   3
-      V2  53 554 353   2
-      V3  12 342 422    
-      V4  15 454 334 535
+              y x_1 x_2 x_3 x_4
+      V1 m.n.99  15 435 352   3
+      V2 77.f.g  53 554 353   2
+      V3   44.9  12 342 422    
+      V4   <NA>  15 454 334 535
 

@@ -9,13 +9,13 @@ test_that("data_separate: simple use case", {
 
   # basic
   expect_silent(data_separate(d_sep, guess_columns = "mode", verbose = FALSE))
-  expect_message(
+  expect_silent(
     {
       out <- data_separate(d_sep, guess_columns = "mode")
     },
     regex = "3 columns"
   )
-  expect_identical(colnames(out), c("x_1", "x_2", "x_3"))
+  expect_identical(colnames(out), c("y", "x_1", "x_2", "x_3"))
   expect_identical(out$x_1, c("1", "2", "3"))
   expect_identical(out$x_2, c("a", "b", "c"))
 
@@ -172,19 +172,19 @@ test_that("data_separate: multiple columns", {
   expect_identical(out$x_3, c("6", "7", "8", NA))
 
   out <- data_separate(d_sep, guess_columns = "mode", verbose = FALSE)
-  expect_snapshot(print(out))
+  expect_snapshot(out)
 
   out <- data_separate(d_sep, guess_columns = "mode", extra = "merge_right", verbose = FALSE)
-  expect_snapshot(print(out))
+  expect_snapshot(out)
 
   out <- data_separate(d_sep, new_columns = c("A", "B", "C"), extra = "merge_right", verbose = FALSE)
-  expect_snapshot(print(out))
+  expect_snapshot(out)
 
   out <- data_separate(d_sep, new_columns = c("A", "B", "C"), extra = "merge_right", append = TRUE, verbose = FALSE)
-  expect_snapshot(print(out))
+  expect_snapshot(out)
 
   out <- data_separate(d_sep, guess_columns = "mode", extra = "drop_left", verbose = FALSE)
-  expect_snapshot(print(out))
+  expect_snapshot(out)
 
   out <- data_separate(
     d_sep,
@@ -194,7 +194,7 @@ test_that("data_separate: multiple columns", {
     append = TRUE,
     verbose = FALSE
   )
-  expect_snapshot(print(out))
+  expect_snapshot(out)
 
   out <- data_separate(
     d_sep,
@@ -205,7 +205,7 @@ test_that("data_separate: multiple columns", {
     append = TRUE,
     verbose = FALSE
   )
-  expect_snapshot(print(out))
+  expect_snapshot(out)
 
   out <- data_separate(
     d_sep,
@@ -214,10 +214,10 @@ test_that("data_separate: multiple columns", {
     append = TRUE,
     verbose = FALSE
   )
-  expect_snapshot(print(out))
+  expect_snapshot(out)
 
   out <- data_separate(d_sep, guess_columns = "mode", fill = "value_left", verbose = FALSE)
-  expect_snapshot(print(out))
+  expect_snapshot(out)
 })
 
 
@@ -236,7 +236,7 @@ test_that("data_separate: multiple columns, different lengths", {
     verbose = FALSE
   )
   expect_named(out, c("A", "B", "C", "EE", "FF", "GG"))
-  expect_snapshot(print(out))
+  expect_snapshot(out)
 
   out <- data_separate(
     d_sep,
@@ -245,7 +245,7 @@ test_that("data_separate: multiple columns, different lengths", {
     verbose = FALSE
   )
   expect_named(out, c("A", "B", "C", "EE", "FF", "GG", "HH"))
-  expect_snapshot(print(out))
+  expect_snapshot(out)
 })
 
 
@@ -333,5 +333,5 @@ test_that("data_separate: numeric column", {
   )
   expect_message(data_separate(d_sep, guess_columns = "mode", select = "x"), regex = "Separator probably")
   out <- data_separate(d_sep, guess_columns = "mode", select = "x", separator = c(3, 6, 9))
-  expect_snapshot(print(out))
+  expect_snapshot(out)
 })
