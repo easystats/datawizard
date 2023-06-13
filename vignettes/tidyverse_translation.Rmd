@@ -997,7 +997,7 @@ test
 
 ::: {}
 
-```{r unite1, class.source = "datawizard"}
+```{r separate1, class.source = "datawizard"}
 # ---------- datawizard -----------
 test %>%
   data_separate(
@@ -1021,13 +1021,13 @@ test %>%
   
 ::::
 
-```{r separate1, eval = evaluate_chunk, echo = FALSE}
+```{r separate2, eval = evaluate_chunk, echo = FALSE}
 ```
 
 
 Unlike `tidyr::separate()`, you can separate multiple columns in one step with `data_separate()`.
 
-```{r separate2, class.source = "datawizard"}
+```{r separate3, class.source = "datawizard"}
 # ---------- datawizard -----------
 test %>%
   data_separate(
