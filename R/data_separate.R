@@ -6,15 +6,15 @@
 #'
 #' @param data A data frame.
 #' @param new_columns The names of the new columns, as character vector. If
-#' more than one variable was selected (in `select`), names are duplicated and
-#' then made unique using `make.unique()`. `new_columns` can also be a list of
+#' more than one variable was selected (in `select`), the new names are prefixed 
+#' with the name of the original column. `new_columns` can also be a list of
 #' (named) character vectors when multiple variables should be separated. See
 #' 'Examples'.
 #' @param separator Separator between columns. Can be a character vector, which
 #' is then treated as regular expression, or a numeric vector that indicates at
 #' which positions the string values will be split.
 #' @param append Logical, if `FALSE` (default), removes original columns that
-#' were united. If `TRUE`, all columns are preserved and the new column is
+#' were separated. If `TRUE`, all columns are preserved and the new columns are
 #' appended to the data frame.
 #' @param guess_columns If `new_columns` is not given, the required number of
 #' new columns is guessed based on the results of value splitting. For example,
@@ -219,7 +219,7 @@ data_separate <- function(data,
         stringsAsFactors = FALSE
       )
     } else {
-      separated_columns <- strsplit(x, separator)
+      separated_columns <- strsplit(x, separator, perl = TRUE)
     }
 
     # how many new columns do we need?
@@ -236,7 +236,7 @@ data_separate <- function(data,
         "mode" = distribution_mode(l),
       )
       # tell user
-      if (verbose && !all(l == 1) && !is.numeric(separator)) {
+      if (verbose && insight::n_unique(l) != 1 && !is.numeric(separator)) {
         insight::format_alert(paste0(
           "Column `", sep_column, "` had different number of values after splitting. Variable was split into ",
           n_cols, " column", ifelse(n_cols > 1, "s", ""), "."
@@ -308,7 +308,6 @@ data_separate <- function(data,
   } else {
     # bind all columns
     split_data <- do.call(cbind, split_data)
-    colnames(split_data) <- make.unique(colnames(split_data))
   }
 
   # convert "NA" strings into real NA?
@@ -319,10 +318,9 @@ data_separate <- function(data,
     })
   }
 
-  if (isTRUE(append)) {
-    data <- cbind(data, split_data)
-  } else {
-    data <- split_data
+  data <- cbind(data, split_data)
+  if (!isTRUE(append)) {
+    data[select] <- NULL
   }
 
   # fin
