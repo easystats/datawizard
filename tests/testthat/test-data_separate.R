@@ -12,10 +12,9 @@ test_that("data_separate: simple use case", {
   expect_silent(
     {
       out <- data_separate(d_sep, guess_columns = "mode")
-    },
-    regex = "3 columns"
+    }
   )
-  expect_identical(colnames(out), c("y", "x_1", "x_2", "x_3"))
+  expect_identical(colnames(out), c("x_1", "x_2", "x_3"))
   expect_identical(out$x_1, c("1", "2", "3"))
   expect_identical(out$x_2, c("a", "b", "c"))
 
@@ -166,7 +165,7 @@ test_that("data_separate: multiple columns", {
 
   # select works
   out <- data_separate(d_sep, select = "x", guess_columns = "mode", verbose = FALSE)
-  expect_identical(colnames(out), c("x_1", "x_2", "x_3"))
+  expect_identical(colnames(out), c("y", "x_1", "x_2", "x_3"))
   expect_identical(out$x_1, c("1", "2", "3", "5"))
   expect_identical(out$x_2, c("a", "b", "c", "j"))
   expect_identical(out$x_3, c("6", "7", "8", NA))

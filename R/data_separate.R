@@ -215,7 +215,7 @@ data_separate <- function(data,
         substr(x, starts[i], ends[i])
       })
       separated_columns <- as.data.frame(
-        t(do.call(cbind, separated_columns)),
+        do.call(rbind, separated_columns),
         stringsAsFactors = FALSE
       )
     } else {
