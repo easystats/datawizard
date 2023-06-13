@@ -98,7 +98,8 @@ Before we look at their *tidyverse* equivalents, we can first have a look at
 | `data_to_long()`  | [to convert data from wide to long](#reshaping)   |
 | `data_to_wide()`  | [to convert data from long to wide](#reshaping)   |
 | `data_join()`     | [to join two data frames](#joining)               |
-| `data_unite()`     | [to concatenate several columns into a single one](#uniting)               |
+| `data_unite()`    | [to concatenate several columns into a single one](#uniting)               |
+| `data_separate()` | [to separate a single column into multiple columns](#separating)               |
 
 Note that there are a few functions in `{datawizard}` that have no strict equivalent
 in `{dplyr}` or `{tidyr}` (e.g `data_rotate()`), and so we won't discuss them in
@@ -122,7 +123,8 @@ Before we look at them individually, let's first have a look at the summary tabl
 | `data_join()`     | `dplyr::inner_join()`, `dplyr::left_join()`, `dplyr::right_join()`, |
 |                   | `dplyr::full_join()`, `dplyr::anti_join()`, `dplyr::semi_join()`    |
 | `data_peek()`     | `dplyr::glimpse()`                                                  |
-| `data_unite()`  | `tidyr::unite()`                                              |
+| `data_unite()`    | `tidyr::unite()`                                              |
+| `data_separate()` | `tidyr::separate()`                                           |
 
 ## Filtering {#filtering}
 
@@ -974,6 +976,66 @@ test %>%
 ::::
 
 ```{r unite2, eval = evaluate_chunk, echo = FALSE}
+```
+
+
+## Separating {#separating}
+
+Separating variables is the counterpart to uniting variables and is useful to split values into multiple columns, e.g. when splitting a date into values for years, months and days. `data_separate()` offers an interface very close to `tidyr::separate()`:
+
+```{r eval=evaluate_chunk}
+test <- data.frame(
+  date_arrival = c("2002-02-11", "2003-03-22", "2004-09-28"),
+  date_departure = c("2002-03-15", "2003-03-28", "2004-09-30"),
+  stringsAsFactors = FALSE
+)
+test
+```
+
+
+:::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
+
+::: {}
+
+```{r unite1, class.source = "datawizard"}
+# ---------- datawizard -----------
+test %>%
+  data_separate(
+    select = "date_arrival",
+    new_columns = c("Year", "Month", "Day")
+  )
+```
+:::
+  
+::: {}
+
+```{r, class.source = "tidyverse"}
+# ---------- tidyverse -----------
+test %>%
+  separate(
+    date_arrival,
+    into = c("Year", "Month", "Day")
+  )
+```
+:::
+  
+::::
+
+```{r separate1, eval = evaluate_chunk, echo = FALSE}
+```
+
+
+Unlike `tidyr::separate()`, you can separate multiple columns in one step with `data_separate()`.
+
+```{r separate2, class.source = "datawizard"}
+# ---------- datawizard -----------
+test %>%
+  data_separate(
+    new_columns = list(
+      date_arrival = c("Arr_Year", "Arr_Month", "Arr_Day"),
+      date_departure = c("Dep_Year", "Dep_Month", "Dep_Day")
+    )
+  )
 ```
 
 
