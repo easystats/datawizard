@@ -1,4 +1,4 @@
-#' @title Recode (or "cut") data into groups of values.
+#' @title Recode (or "cut" / "bin") data into groups of values.
 #' @name categorize
 #'
 #' @description
