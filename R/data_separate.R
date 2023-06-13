@@ -6,7 +6,7 @@
 #'
 #' @param data A data frame.
 #' @param new_columns The names of the new columns, as character vector. If
-#' more than one variable was selected (in `select`), the new names are prefixed 
+#' more than one variable was selected (in `select`), the new names are prefixed
 #' with the name of the original column. `new_columns` can also be a list of
 #' (named) character vectors when multiple variables should be separated. See
 #' 'Examples'.
@@ -127,7 +127,7 @@
 #'   d_sep,
 #'   select = c("x", "y"),
 #'   new_columns = list(
-#'     x = c("A", "B", "C"),         # separate "x" into three columns
+#'     x = c("A", "B", "C"), # separate "x" into three columns
 #'     y = c("EE", "FF", "GG", "HH") # separate "y" into four columns
 #'   ),
 #'   verbose = FALSE
@@ -192,7 +192,6 @@ data_separate <- function(data,
 
   # iterate columns that should be split
   split_data <- lapply(select, function(sep_column) {
-
     # do we have known number of columns?
     if (is.null(new_columns)) {
       n_columns <- NULL
@@ -229,8 +228,7 @@ data_separate <- function(data,
       # but without NA values
       l <- l[!vapply(l, function(i) all(is.na(i)), TRUE)]
       # define number of new columns, based on user-choice
-      n_cols <- switch(
-        guess_columns,
+      n_cols <- switch(guess_columns,
         "min" = min(l, na.rm = TRUE),
         "max" = max(l, na.rm = TRUE),
         "mode" = distribution_mode(l),

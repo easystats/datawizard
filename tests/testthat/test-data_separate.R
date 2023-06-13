@@ -9,11 +9,9 @@ test_that("data_separate: simple use case", {
 
   # basic
   expect_silent(data_separate(d_sep, guess_columns = "mode", verbose = FALSE))
-  expect_silent(
-    {
-      out <- data_separate(d_sep, guess_columns = "mode")
-    }
-  )
+  expect_silent({
+    out <- data_separate(d_sep, guess_columns = "mode")
+  })
   expect_identical(colnames(out), c("x_1", "x_2", "x_3"))
   expect_identical(out$x_1, c("1", "2", "3"))
   expect_identical(out$x_2, c("a", "b", "c"))
