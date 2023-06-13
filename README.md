@@ -18,12 +18,25 @@ transform, and prepare your data for analysis. It is part of the
 of R packages to deal with your entire statistical analysis, from
 cleaning the data to reporting the results.
 
-Most courses and tutorials about statistical modeling assume that you
-are working with a clean and tidy dataset. In practice, however, a major
-part of doing statistical modeling is preparing your data–cleaning up
-values, creating new columns, reshaping the dataset, or transforming
-some variables. `{datawizard}` provides easy to use tools to perform
-these common, critical, and sometimes tedious data preparation tasks.
+It covers two aspects of data preparation:
+
+- **Data manipulation**: `{datawizard}` offers a very similar set of
+  functions to that of the *tidyverse* packages, such as a `{dplyr}` and
+  `{tidyr}`, to select, filter and reshape data, with a few key
+  differences. 1) All data manipulation functions start with the prefix
+  `data_*` (which makes them easy to identify). 2) Although most
+  functions can be used exactly as their *tidyverse* equivalents, they
+  are also string-friendly (which makes them easy to program with and
+  use inside functions). Finally, `{datawizard}` is super lightweight
+  (no dependencies, similar to
+  [poorman](https://github.com/nathaneastwood/poorman)), which makes it
+  awesome for developers to use in their packages.
+
+- **Statistical transformations**: `{datawizard}` also has powerful
+  functions to easily apply common data
+  [transformations](https://easystats.github.io/datawizard/reference/index.html#statistical-transformations),
+  including standardization, normalization, rescaling,
+  rank-transformation, scale reversing, recoding, binning, etc.
 
 </br>
 
@@ -57,7 +70,6 @@ To cite the package, run the following command:
 
 ``` r
 citation("datawizard")
-
 To cite package 'datawizard' in publications use:
 
   Patil et al., (2022). datawizard: An R Package for Easy Data
@@ -79,6 +91,13 @@ A BibTeX entry for LaTeX users is
 ```
 
 # Features
+
+Most courses and tutorials about statistical modeling assume that you
+are working with a clean and tidy dataset. In practice, however, a major
+part of doing statistical modeling is preparing your data–cleaning up
+values, creating new columns, reshaping the dataset, or transforming
+some variables. `{datawizard}` provides easy to use tools to perform
+these common, critical, and sometimes tedious data preparation tasks.
 
 ## Data wrangling
 
@@ -488,10 +507,18 @@ change_scale(c(0, 1, 5, -5, -2))
 #> [1]  50  60 100   0  30
 #> attr(,"min_value")
 #> [1] -5
+#> attr(,"max_value")
+#> [1] 5
+#> attr(,"new_min")
+#> [1] 0
+#> attr(,"new_max")
+#> [1] 100
 #> attr(,"range_difference")
 #> [1] 10
 #> attr(,"to_range")
 #> [1]   0 100
+#> attr(,"class")
+#> [1] "dw_transformer" "numeric"
 ```
 
 ### Rotate or transpose
@@ -576,13 +603,13 @@ iris |>
   # remove fourth column
   data_remove(4) |>
   head()
-#>    Sepal.Length Petal.Length Sepal.Width
-#> 51          7.0          4.7         3.2
-#> 52          6.4          4.5         3.2
-#> 53          6.9          4.9         3.1
-#> 54          5.5          4.0         2.3
-#> 55          6.5          4.6         2.8
-#> 56          5.7          4.5         2.8
+#>    Sepal.Length Petal.Length Sepal.Width    Species
+#> 51          7.0          4.7         3.2 versicolor
+#> 52          6.4          4.5         3.2 versicolor
+#> 53          6.9          4.9         3.1 versicolor
+#> 54          5.5          4.0         2.3 versicolor
+#> 55          6.5          4.6         2.8 versicolor
+#> 56          5.7          4.5         2.8 versicolor
 ```
 
 # Contributing and Support
