@@ -1021,14 +1021,13 @@ test %>%
   
 ::::
 
-```{r separate2, eval = evaluate_chunk, echo = FALSE}
+```{r separate1, eval = evaluate_chunk, echo = FALSE}
 ```
 
 
 Unlike `tidyr::separate()`, you can separate multiple columns in one step with `data_separate()`.
 
-```{r separate3, class.source = "datawizard"}
-# ---------- datawizard -----------
+```{r eval = evaluate_chunk}
 test %>%
   data_separate(
     new_columns = list(
