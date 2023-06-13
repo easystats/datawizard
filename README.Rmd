@@ -314,7 +314,7 @@ iris |>
   # all rows where Species is "versicolor" or "virginica"
   data_filter(Species %in% c("versicolor", "virginica")) |>
   # select only columns with "." in names (i.e. drop Species)
-  get_columns(contains(".")) |>
+  get_columns(contains("\\.")) |>
   # move columns that ends with "Length" to start of data frame
   data_relocate(ends_with("Length")) |>
   # remove fourth column

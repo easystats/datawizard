@@ -597,19 +597,19 @@ iris |>
   # all rows where Species is "versicolor" or "virginica"
   data_filter(Species %in% c("versicolor", "virginica")) |>
   # select only columns with "." in names (i.e. drop Species)
-  get_columns(contains(".")) |>
+  get_columns(contains("\\.")) |>
   # move columns that ends with "Length" to start of data frame
   data_relocate(ends_with("Length")) |>
   # remove fourth column
   data_remove(4) |>
   head()
-#>    Sepal.Length Petal.Length Sepal.Width    Species
-#> 51          7.0          4.7         3.2 versicolor
-#> 52          6.4          4.5         3.2 versicolor
-#> 53          6.9          4.9         3.1 versicolor
-#> 54          5.5          4.0         2.3 versicolor
-#> 55          6.5          4.6         2.8 versicolor
-#> 56          5.7          4.5         2.8 versicolor
+#>    Sepal.Length Petal.Length Sepal.Width
+#> 51          7.0          4.7         3.2
+#> 52          6.4          4.5         3.2
+#> 53          6.9          4.9         3.1
+#> 54          5.5          4.0         2.3
+#> 55          6.5          4.6         2.8
+#> 56          5.7          4.5         2.8
 ```
 
 # Contributing and Support
