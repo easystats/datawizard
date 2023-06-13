@@ -209,7 +209,7 @@ data_separate(
   d_sep,
   select = c("x", "y"),
   new_columns = list(
-    x = c("A", "B", "C"),         # separate "x" into three columns
+    x = c("A", "B", "C"), # separate "x" into three columns
     y = c("EE", "FF", "GG", "HH") # separate "y" into four columns
   ),
   verbose = FALSE
