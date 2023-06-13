@@ -39,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1.10</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -244,6 +244,11 @@ wide</a></td>
 <td align="left"><a href="#uniting">to concatenate several columns into
 a single one</a></td>
 </tr>
+<tr class="even">
+<td align="left"><code><a href="../reference/data_separate.html">data_separate()</a></code></td>
+<td align="left"><a href="#separating">to separate a single column into
+multiple columns</a></td>
+</tr>
 </tbody>
 </table>
 <p>Note that there are a few functions in <a href="https://easystats.github.io/datawizard/">datawizard</a> that
@@ -325,6 +330,10 @@ summary table of this equivalence.</p>
 <tr class="odd">
 <td align="left"><code><a href="../reference/data_unite.html">data_unite()</a></code></td>
 <td align="left"><code><a href="https://tidyr.tidyverse.org/reference/unite.html" class="external-link">tidyr::unite()</a></code></td>
+</tr>
+<tr class="even">
+<td align="left"><code><a href="../reference/data_separate.html">data_separate()</a></code></td>
+<td align="left"><code><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">tidyr::separate()</a></code></td>
 </tr>
 </tbody>
 </table>
@@ -1268,6 +1277,63 @@ date. <code><a href="../reference/data_unite.html">data_unite()</a></code> offer
 <span><span class="co">## 2 2003    03  22 2003-03-22</span></span>
 <span><span class="co">## 3 2004    09  28 2004-09-28</span></span></code></pre>
 </div>
+<div class="section level3">
+<h3 id="separating">Separating<a class="anchor" aria-label="anchor" href="#separating"></a>
+</h3>
+<p>Separating variables is the counterpart to uniting variables and is
+useful to split values into multiple columns, e.g. when splitting a date
+into values for years, months and days. <code><a href="../reference/data_separate.html">data_separate()</a></code>
+offers an interface very close to <code><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">tidyr::separate()</a></code>:</p>
+<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  date_arrival <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2002-02-11"</span>, <span class="st">"2003-03-22"</span>, <span class="st">"2004-09-28"</span><span class="op">)</span>,</span>
+<span>  date_departure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2002-03-15"</span>, <span class="st">"2003-03-28"</span>, <span class="st">"2004-09-30"</span><span class="op">)</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">test</span></span></code></pre></div>
+<pre><code><span><span class="co">##   date_arrival date_departure</span></span>
+<span><span class="co">## 1   2002-02-11     2002-03-15</span></span>
+<span><span class="co">## 2   2003-03-22     2003-03-28</span></span>
+<span><span class="co">## 3   2004-09-28     2004-09-30</span></span></code></pre>
+<div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
+<div>
+<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
+<span><span class="va">test</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/data_separate.html">data_separate</a></span><span class="op">(</span></span>
+<span>    select <span class="op">=</span> <span class="st">"date_arrival"</span>,</span>
+<span>    new_columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Year"</span>, <span class="st">"Month"</span>, <span class="st">"Day"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+<div>
+<div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
+<span><span class="va">test</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></span><span class="op">(</span></span>
+<span>    <span class="va">date_arrival</span>,</span>
+<span>    into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Year"</span>, <span class="st">"Month"</span>, <span class="st">"Day"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<pre><code><span><span class="co">##   date_departure Year Month Day</span></span>
+<span><span class="co">## 1     2002-03-15 2002    02  11</span></span>
+<span><span class="co">## 2     2003-03-28 2003    03  22</span></span>
+<span><span class="co">## 3     2004-09-30 2004    09  28</span></span></code></pre>
+<p>Unlike <code><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">tidyr::separate()</a></code>, you can separate multiple
+columns in one step with <code><a href="../reference/data_separate.html">data_separate()</a></code>.</p>
+<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">test</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/data_separate.html">data_separate</a></span><span class="op">(</span></span>
+<span>    new_columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      date_arrival <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Arr_Year"</span>, <span class="st">"Arr_Month"</span>, <span class="st">"Arr_Day"</span><span class="op">)</span>,</span>
+<span>      date_departure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Dep_Year"</span>, <span class="st">"Dep_Month"</span>, <span class="st">"Dep_Day"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   Arr_Year Arr_Month Arr_Day Dep_Year Dep_Month Dep_Day</span></span>
+<span><span class="co">## 1     2002        02      11     2002        03      15</span></span>
+<span><span class="co">## 2     2003        03      22     2003        03      28</span></span>
+<span><span class="co">## 3     2004        09      28     2004        09      30</span></span></code></pre>
+</div>
 </div>
 <div class="section level2">
 <h2 id="other-useful-functions">Other useful functions<a class="anchor" aria-label="anchor" href="#other-useful-functions"></a>
@@ -1282,7 +1348,7 @@ package <code>janitor</code>.</p>
 <p>We can convert a column in rownames and move rownames to a new column
 with <code><a href="../reference/rownames.html">rownames_as_column()</a></code> and
 <code><a href="../reference/rownames.html">column_as_rownames()</a></code>:</p>
-<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
 <span><span class="va">mtcars</span></span></code></pre></div>
 <pre><code><span><span class="co">##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb</span></span>
@@ -1292,7 +1358,7 @@ with <code><a href="../reference/rownames.html">rownames_as_column()</a></code> 
 <span><span class="co">## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1</span></span>
 <span><span class="co">## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2</span></span>
 <span><span class="co">## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</span></span></code></pre>
-<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars2</span> <span class="op">&lt;-</span> <span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/rownames.html">rownames_as_column</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span>
 <span></span>
@@ -1304,7 +1370,7 @@ with <code><a href="../reference/rownames.html">rownames_as_column()</a></code> 
 <span><span class="co">## 4    Hornet 4 Drive 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1</span></span>
 <span><span class="co">## 5 Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2</span></span>
 <span><span class="co">## 6           Valiant 18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</span></span></code></pre>
-<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtcars2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/rownames.html">column_as_rownames</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb</span></span>
@@ -1327,7 +1393,7 @@ group</em>. Therefore, two rows in different groups can have the same
 row id.</p>
 <p>This means that <code><a href="../reference/rownames.html">rowid_as_column()</a></code> is closer to using
 <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> in <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code>, like the following:</p>
-<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span><span class="op">)</span>,</span>
 <span>  value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">8</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -1339,7 +1405,7 @@ row id.</p>
 <span><span class="co">## 2     A     5</span></span>
 <span><span class="co">## 3     B     8</span></span>
 <span><span class="co">## 4     B     1</span></span></code></pre>
-<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">test</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_group.html">data_group</a></span><span class="op">(</span><span class="va">group</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rowid_to_column</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -1348,7 +1414,7 @@ row id.</p>
 <span><span class="co">## 2     2     A     5</span></span>
 <span><span class="co">## 3     3     B     8</span></span>
 <span><span class="co">## 4     4     B     1</span></span></code></pre>
-<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">test</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_group.html">data_group</a></span><span class="op">(</span><span class="va">group</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/rownames.html">rowid_as_column</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -1360,7 +1426,7 @@ row id.</p>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span>     2 A         5</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span>     1 B         8</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">4</span>     2 B         1</span></span></code></pre>
-<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">test</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/data_group.html">data_group</a></span><span class="op">(</span><span class="va">group</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -1379,7 +1445,7 @@ row id.</p>
 <p>When dealing with messy data, it is sometimes useful to use a row as
 column names, and vice versa. This can be done with
 <code><a href="../reference/colnames.html">row_to_colnames()</a></code> and <code><a href="../reference/colnames.html">colnames_to_row()</a></code>.</p>
-<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  X_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="st">"Title"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>,</span>
 <span>  X_2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="st">"Title2"</span>, <span class="fl">4</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span></span>
@@ -1391,7 +1457,7 @@ column names, and vice versa. This can be done with
 <span><span class="co">## 3     1      4</span></span>
 <span><span class="co">## 4     2      5</span></span>
 <span><span class="co">## 5     3      6</span></span></code></pre>
-<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/colnames.html">row_to_colnames</a></span><span class="op">(</span>row <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">x2</span></span></code></pre></div>
@@ -1400,7 +1466,7 @@ column names, and vice versa. This can be done with
 <span><span class="co">## 3     1      4</span></span>
 <span><span class="co">## 4     2      5</span></span>
 <span><span class="co">## 5     3      6</span></span></code></pre>
-<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/colnames.html">colnames_to_row</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##       x1     x2</span></span>
@@ -1415,12 +1481,12 @@ column names, and vice versa. This can be done with
 </h3>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
 <div>
-<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="fu"><a href="../reference/data_peek.html">data_peek</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div>
-<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ---------- tidyverse -----------</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></code></pre></div>
 </div>
