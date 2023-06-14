@@ -240,7 +240,12 @@ data_modify.grouped_df <- function(data, ...) {
 
   # create new variables as dummys, do for-loop works
   for (i in names(dots)) {
-    data[[i]] <- NA
+    # don't overwrite / fill existing variables with NA,
+    # e.g. if we have "data_modify(iris, Sepal.Length = normalize(Sepal.Length))"
+    # normalize() won't work when we fill with NA
+    if (!i %in% colnames(data)) {
+      data[[i]] <- NA
+    }
   }
 
   # create new variables per group
