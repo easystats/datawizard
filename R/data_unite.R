@@ -16,7 +16,7 @@
 #' @param ... Currently not used.
 #' @inheritParams find_columns
 #'
-#' @inheritSection center Selection of variables - the `select` argument
+#' @seealso [`data_separate()`]
 #'
 #' @return `data`, with a newly created variable.
 #'
