@@ -482,3 +482,11 @@ test_that("data_modify works with grouped df when overwriting existing variables
   )
   expect_equal(head(out$Sepal.Length2), 2 * c(0.53333, 0.4, 0.26667, 0.2, 0.46667, 0.73333), tolerance = 1e-3)
 })
+
+
+test_that("data_modify works with functions that return character vectors", {
+  data(iris)
+  set.seed(123)
+  out <- data_modify(iris, grp = sample(letters[1:3], nrow(iris), TRUE))
+  expect_identical(head(out$grp), c("c", "c", "c", "b", "c", "b"))
+})

@@ -149,7 +149,17 @@ data_modify.data.frame <- function(data, ...) {
     if (!is.character(symbol)) {
       eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
       if (is.character(eval_symbol)) {
-        symbol <- str2lang(paste0(names(dots)[i], " = ", eval_symbol))
+        symbol <- try(str2lang(paste0(names(dots)[i], " = ", eval_symbol)), silent = TRUE)
+        # we may have the edge-case of having a function that returns a character
+        # vector, like "new_var = sample(letters[1:3])". In this case, "eval_symbol"
+        # is of type character, but no symbol, thus str2lang() above creates a
+        # wrong pattern. We then take "eval_symbol" as character input.
+        if (inherits(symbol, "try-error")) {
+          symbol <- str2lang(paste0(
+            names(dots)[i],
+            " = c(", paste0("\"", eval_symbol, "\"", collapse = ","), ")"
+          ))
+        }
       }
     }
 
