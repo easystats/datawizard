@@ -467,3 +467,18 @@ test_that("data_modify works with character variables, and inside functions", {
     tolerance = 1e-3
   )
 })
+
+
+test_that("data_modify works with grouped df when overwriting existing variables", {
+  data(iris)
+  iris_grp <- data_group(iris, "Species")
+  out <- data_modify(iris_grp, Sepal.Length = normalize(Sepal.Length))
+  expect_equal(head(out$Sepal.Length), c(0.53333, 0.4, 0.26667, 0.2, 0.46667, 0.73333), tolerance = 1e-3)
+
+  out <- data_modify(
+    iris_grp,
+    Sepal.Length = normalize(Sepal.Length),
+    Sepal.Length2 = 2 * Sepal.Length
+  )
+  expect_equal(head(out$Sepal.Length2), 2 * c(0.53333, 0.4, 0.26667, 0.2, 0.46667, 0.73333), tolerance = 1e-3)
+})
