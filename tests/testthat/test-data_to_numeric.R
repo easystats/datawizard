@@ -9,6 +9,8 @@ test_that("convert character to numeric", {
 
 test_that("convert character to numeric Date", {
   expect_warning(expect_identical(to_numeric(as.Date("2022-01-01")), 18993))
+  expect_warning(expect_identical(to_numeric(as.POSIXct("2022-01-01")), 1640991600))
+  expect_warning(expect_identical(to_numeric(as.POSIXlt("2022-01-01")), 1640991600))
 })
 
 test_that("convert character to numeric preserve levels", {

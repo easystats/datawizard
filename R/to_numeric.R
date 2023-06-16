@@ -161,7 +161,7 @@ to_numeric.logical <- to_numeric.numeric
 to_numeric.Date <- function(x, verbose = TRUE, ...) {
   if (verbose) {
     insight::format_warning(
-      "Converting a date-time variable into numeric.",
+      paste0("Converting a date-time variable of class `", class(x)[1], "` into numeric."),
       "Please note that this conversion probably does not return meaningful results."
     )
   }

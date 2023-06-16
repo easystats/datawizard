@@ -42,6 +42,11 @@ NEW FUNCTIONS
 * `data_modify()`, to create new variables, or modify or remove existing
   variables in a data frame.
 
+MINOR CHANGES
+
+* `as.numeric()` for variables of type `Date`, `POSIXct` and `POSIXlt` now
+  includes the class name in the warning message.
+
 BUG FIXES
 
 * `standardize_parameters()` now works when the package namespace is in the model
