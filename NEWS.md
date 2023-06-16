@@ -47,6 +47,9 @@ MINOR CHANGES
 * `to_numeric()` for variables of type `Date`, `POSIXct` and `POSIXlt` now
   includes the class name in the warning message.
 
+* Added a `print()` method for `center()`, `standardize()`, `normalize()` and
+  `rescale()`.
+
 BUG FIXES
 
 * `standardize_parameters()` now works when the package namespace is in the model
