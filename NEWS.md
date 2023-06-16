@@ -44,7 +44,7 @@ NEW FUNCTIONS
 
 MINOR CHANGES
 
-* `as.numeric()` for variables of type `Date`, `POSIXct` and `POSIXlt` now
+* `to_numeric()` for variables of type `Date`, `POSIXct` and `POSIXlt` now
   includes the class name in the warning message.
 
 BUG FIXES
