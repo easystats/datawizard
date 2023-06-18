@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1.15</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,6 +85,29 @@
       <small>Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.8.0" id="datawizard-080">datawizard 0.8.0<a class="anchor" aria-label="anchor" href="#datawizard-080"></a></h2><p class="text-muted">CRAN release: 2023-06-16</p>
+<p>BREAKING CHANGES</p>
+<ul><li><p>The following re-exported functions from <a href="https://easystats.github.io/insight/" class="external-link">insight</a> have now been removed: <code>object_has_names()</code>, <code>object_has_rownames()</code>, <code>is_empty_object()</code>, <code>compact_list()</code>, <code>compact_character()</code>.</p></li>
+<li><p>Argument <code>na.rm</code> was renamed to <code>remove_na</code> throughout <a href="https://easystats.github.io/datawizard/">datawizard</a> functions. <code>na.rm</code> is kept for backward compatibility, but will be deprecated and later removed in future updates.</p></li>
+<li><p>The way expressions are defined in <code><a href="../reference/data_match.html">data_filter()</a></code> was revised. The <code>filter</code> argument was replaced by <code>...</code>, allowing to separate multiple expression with a comma (which are then combined with <code>&amp;</code>). Furthermore, expressions can now also be defined as strings, or be provided as character vectors, to allow string-friendly programming.</p></li>
+</ul><p>CHANGES</p>
+<ul><li><p>Weighted-functions (<code><a href="../reference/weighted_mean.html">weighted_sd()</a></code>, <code><a href="../reference/weighted_mean.html">weighted_mean()</a></code>, …) gain a <code>remove_na</code> argument, to remove or keep missing and infinite values. By default, <code>remove_na = TRUE</code>, i.e. missing and infinite values are removed by default.</p></li>
+<li><p><code><a href="../reference/reverse.html">reverse_scale()</a></code>, <code><a href="../reference/normalize.html">normalize()</a></code> and <code><a href="../reference/rescale.html">rescale()</a></code> gain an <code>append</code> argument (similar to other data frame methods of transformation functions), to append recoded variables to the input data frame instead of overwriting existing variables.</p></li>
+</ul><p>NEW FUNCTIONS</p>
+<ul><li><p><code><a href="../reference/rownames.html">rowid_as_column()</a></code> to complement <code><a href="../reference/rownames.html">rownames_as_column()</a></code> (and to mimic <code><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">tibble::rowid_to_column()</a></code>). Note that its behavior is different from <code><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">tibble::rowid_to_column()</a></code> for grouped data. See the Details section in the docs.</p></li>
+<li><p><code><a href="../reference/data_unite.html">data_unite()</a></code>, to merge values of multiple variables into one new variable.</p></li>
+<li><p><code><a href="../reference/data_separate.html">data_separate()</a></code>, as counterpart to <code><a href="../reference/data_unite.html">data_unite()</a></code>, to separate a single variable into multiple new variables.</p></li>
+<li><p><code><a href="../reference/data_modify.html">data_modify()</a></code>, to create new variables, or modify or remove existing variables in a data frame.</p></li>
+</ul><p>MINOR CHANGES</p>
+<ul><li><p><code><a href="../reference/to_numeric.html">to_numeric()</a></code> for variables of type <code>Date</code>, <code>POSIXct</code> and <code>POSIXlt</code> now includes the class name in the warning message.</p></li>
+<li><p>Added a <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method for <code><a href="../reference/center.html">center()</a></code>, <code><a href="../reference/standardize.html">standardize()</a></code>, <code><a href="../reference/normalize.html">normalize()</a></code> and <code><a href="../reference/rescale.html">rescale()</a></code>.</p></li>
+</ul><p>BUG FIXES</p>
+<ul><li><p><code><a href="https://easystats.github.io/parameters/reference/standardize_parameters.html" class="external-link">standardize_parameters()</a></code> now works when the package namespace is in the model formula (<a href="https://github.com/easystats/datawizard/issues/401" class="external-link">#401</a>).</p></li>
+<li><p><code><a href="../reference/data_merge.html">data_merge()</a></code> no longer yields a warning for <code>tibbles</code> when <code>join = "bind"</code>.</p></li>
+<li><p><code><a href="../reference/center.html">center()</a></code> and <code><a href="../reference/standardize.html">standardize()</a></code> did not work for grouped data frames (of class <code>grouped_df</code>) when <code>force = TRUE</code>.</p></li>
+<li><p>The <code>data.frame</code> method of <code><a href="../reference/describe_distribution.html">describe_distribution()</a></code> returns <code>NULL</code> instead of an error if no valid variable were passed (for example a factor variable with <code>include_factors = FALSE</code>) (<a href="https://github.com/easystats/datawizard/issues/421" class="external-link">#421</a>).</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.1" id="datawizard-071">datawizard 0.7.1<a class="anchor" aria-label="anchor" href="#datawizard-071"></a></h2><p class="text-muted">CRAN release: 2023-04-03</p>
 <p>BREAKING CHANGES</p>
