@@ -127,18 +127,30 @@ data_write <- function(data,
     insight::format_alert("Preparing data file: converting variable types.")
   }
   x[] <- lapply(x, function(i) {
+    # make sure we have labelled class for labelled data
     value_labels <- attr(i, "labels", exact = TRUE)
     variable_label <- attr(i, "label", exact = TRUE)
+    # factor requires special preparation to save levels as labels
+    # haven:::vec_cast_named requires "x" and "labels" to be of same type
     if (is.factor(i)) {
-      # factor requires special preparation to save levels as labels
       haven::labelled(
         x = as.numeric(i),
         labels = stats::setNames(seq_along(levels(i)), levels(i)),
         label = variable_label
       )
     } else if (!is.null(value_labels) || !is.null(variable_label)) {
-      # make sure we have labelled class for labelled data
-      haven::labelled(x = i, labels = value_labels, label = variable_label)
+      # character requires special preparation to save levels as labels
+      # haven:::vec_cast_named requires "x" and "labels" to be of same type
+      if (is.character(i)) {
+        haven::labelled(
+          x = i,
+          labels = stats::setNames(as.character(value_labels), names(value_labels)),
+          label = variable_label
+        )
+      } else {
+        # this should work for the remaining types...
+        haven::labelled(x = i, labels = value_labels, label = variable_label)
+      }
     } else {
       # non labelled data can be saved "as is"
       i
