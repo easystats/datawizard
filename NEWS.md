@@ -1,3 +1,10 @@
+# datawizard (devel)
+
+BUG FIXES
+
+* Fixed issues in `data_write()` when writing labelled data into SPSS format
+  and vectors were of different type as value labels.
+
 # datawizard 0.8.0
 
 BREAKING CHANGES
