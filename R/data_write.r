@@ -139,7 +139,7 @@ data_write <- function(data,
         label = variable_label
       )
     } else if (!is.null(value_labels) || !is.null(variable_label)) {
-      # character requires special preparation to save levels as labels
+      # character requires special preparation to save value labels
       # haven:::vec_cast_named requires "x" and "labels" to be of same type
       if (is.character(i)) {
         haven::labelled(
