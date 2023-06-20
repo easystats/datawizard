@@ -48,7 +48,6 @@ test_that("data_write, SPSS, mixed types of labelled vectors", {
   d$c <- assign_labels(d$c, variable = "Third", values = c("ey", "bee", "see"))
 
   expect_silent(data_write(d, tmp))
-
 })
 
 
