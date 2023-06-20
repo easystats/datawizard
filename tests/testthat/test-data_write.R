@@ -43,11 +43,13 @@ test_that("data_write, SPSS, mixed types of labelled vectors", {
     stringsAsFactors = FALSE
   )
 
+  # Date and Logical cannot be labelled
   d$a <- assign_labels(d$a, variable = "First", values = c("one", "two", "three"))
   d$b <- assign_labels(d$b, variable = "Second", values = c("A", "B", "C"))
   d$c <- assign_labels(d$c, variable = "Third", values = c("ey", "bee", "see"))
 
-  expect_silent(data_write(d, tmp))
+  # expect message, but no error
+  expect_message(data_write(d, "test.sav"), regex = "Preparing")
 })
 
 
