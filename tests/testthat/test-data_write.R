@@ -30,6 +30,28 @@ test_that("data_write, SPSS", {
 })
 
 
+tmp <- tempfile(fileext = ".sav")
+on.exit(unlink(tmp))
+
+test_that("data_write, SPSS, mixed types of labelled vectors", {
+  d <- data.frame(
+    a = 1:3,
+    b = letters[1:3],
+    c = factor(letters[1:3]),
+    d = as.Date(c("2022-01-01", "2022-02-01", "2022-03-01")),
+    e = c(TRUE, FALSE, FALSE),
+    stringsAsFactors = FALSE
+  )
+
+  d$a <- assign_labels(d$a, variable = "First", values = c("one", "two", "three"))
+  d$b <- assign_labels(d$b, variable = "Second", values = c("A", "B", "C"))
+  d$c <- assign_labels(d$c, variable = "Third", values = c("ey", "bee", "see"))
+
+  expect_silent(data_write(d, tmp))
+
+})
+
+
 
 # Stata -------------------------------------
 
