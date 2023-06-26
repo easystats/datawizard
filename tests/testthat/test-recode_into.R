@@ -9,6 +9,7 @@ test_that("recode_into", {
 })
 
 test_that("recode_into, overwrite", {
+  x <- 1:30
   expect_warning(
     recode_into(
       x > 1 ~ "a",
@@ -21,6 +22,7 @@ test_that("recode_into, overwrite", {
 })
 
 test_that("recode_into, don't overwrite", {
+  x <- 1:30
   expect_warning(
     recode_into(
       x > 1 ~ "a",
