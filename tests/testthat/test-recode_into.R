@@ -8,6 +8,30 @@ test_that("recode_into", {
   expect_identical(out, c("c", "c", "b", "b", "b", "a", "a", "a", "a", "a"))
 })
 
+test_that("recode_into, overwrite", {
+  expect_warning(
+    recode_into(
+      x > 1 ~ "a",
+      x > 10 & x <= 15 ~ "b",
+      default = "c",
+      overwrite = TRUE
+    ),
+    regex = "overwritten"
+  )
+})
+
+test_that("recode_into, don't overwrite", {
+  expect_warning(
+    recode_into(
+      x > 1 ~ "a",
+      x > 10 & x <= 15 ~ "b",
+      default = "c",
+      overwrite = FALSE
+    ),
+    regex = "altered"
+  )
+})
+
 test_that("recode_into, check mixed types", {
   x <- 1:10
   expect_error(
