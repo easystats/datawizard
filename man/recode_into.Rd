@@ -4,7 +4,7 @@
 \alias{recode_into}
 \title{Recode values from one or more variables into a new variable}
 \usage{
-recode_into(..., data = NULL, default = NA, verbose = TRUE)
+recode_into(..., data = NULL, default = NA, overwrite = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{...}{A sequence of two-sided formulas, where the left hand side (LHS)
@@ -18,6 +18,12 @@ the data name multiple times in \code{...}. See 'Examples'.}
 \item{default}{Indicates the default value that is chosen when no match in
 the formulas in \code{...} is found. If not provided, \code{NA} is used as default
 value.}
+
+\item{overwrite}{Logical, if \code{TRUE} (default) and more than one recode pattern
+apply to the same case, already recoded values will be overwritten by subsequent
+recode patterns. If \code{FALSE}, former recoded cases will not be altered by later
+recode patterns that would apply to those cases again. A warning message is
+printed to alert such situations and to avoid unintentional recodings.}
 
 \item{verbose}{Toggle warnings.}
 }

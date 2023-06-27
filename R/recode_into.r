@@ -15,6 +15,11 @@
 #' @param default Indicates the default value that is chosen when no match in
 #' the formulas in `...` is found. If not provided, `NA` is used as default
 #' value.
+#' @param overwrite Logical, if `TRUE` (default) and more than one recode pattern
+#' apply to the same case, already recoded values will be overwritten by subsequent
+#' recode patterns. If `FALSE`, former recoded cases will not be altered by later
+#' recode patterns that would apply to those cases again. A warning message is
+#' printed to alert such situations and to avoid unintentional recodings.
 #' @param verbose Toggle warnings.
 #'
 #' @return A vector with recoded values.
@@ -49,7 +54,7 @@
 #'   default = 0
 #' )
 #' @export
-recode_into <- function(..., data = NULL, default = NA, verbose = TRUE) {
+recode_into <- function(..., data = NULL, default = NA, overwrite = TRUE, verbose = TRUE) {
   dots <- list(...)
 
   # get length of vector, so we know the length of the output vector
@@ -118,14 +123,24 @@ recode_into <- function(..., data = NULL, default = NA, verbose = TRUE) {
       already_exists <- out[index] != default
     }
     if (any(already_exists) && verbose) {
-      insight::format_warning(
-        paste(
+      if (overwrite) {
+        msg <- paste(
           "Several recode patterns apply to the same cases.",
           "Some of the already recoded cases will be overwritten with new values again",
           sprintf("(e.g. pattern %i overwrites the former recode of case %i).", i, which(already_exists)[1])
-        ),
-        "Please check if this is intentional!"
-      )
+        )
+      } else {
+        msg <- paste(
+          "Several recode patterns apply to the same cases.",
+          "Some of the already recoded cases will not be altered by later recode patterns.",
+          sprintf("(e.g. pattern %i also matches the former recode of case %i).", i, which(already_exists)[1])
+        )
+      }
+      insight::format_warning(msg, "Please check if this is intentional!")
+    }
+    # if user doesn't want to overwrite, remove already recoded indices
+    if (!overwrite) {
+      index[which(index)[already_exists]] <- FALSE
     }
     out[index] <- value
   }
