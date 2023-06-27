@@ -47,10 +47,10 @@
 #'   x >= 3 & x <= 7 ~ 1,
 #'   x > 5 ~ 2,
 #'   default = 0,
-#'   overwrote = FALSE,
+#'   overwrite = FALSE,
 #'   verbose = FALSE
 #' )
-
+#'
 #' set.seed(123)
 #' d <- data.frame(
 #'   x = sample(1:5, 30, TRUE),
