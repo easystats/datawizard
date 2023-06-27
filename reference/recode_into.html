@@ -14,7 +14,7 @@ is similar to dplyr::case_when()."><meta property="og:image" content="https://ea
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,7 +98,7 @@ is similar to <code><a href="https://dplyr.tidyverse.org/reference/case_when.htm
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">recode_into</span><span class="op">(</span><span class="va">...</span>, data <span class="op">=</span> <span class="cn">NULL</span>, default <span class="op">=</span> <span class="cn">NA</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">recode_into</span><span class="op">(</span><span class="va">...</span>, data <span class="op">=</span> <span class="cn">NULL</span>, default <span class="op">=</span> <span class="cn">NA</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -119,6 +119,14 @@ the data name multiple times in <code>...</code>. See 'Examples'.</p></dd>
 <dd><p>Indicates the default value that is chosen when no match in
 the formulas in <code>...</code> is found. If not provided, <code>NA</code> is used as default
 value.</p></dd>
+
+
+<dt>overwrite</dt>
+<dd><p>Logical, if <code>TRUE</code> (default) and more than one recode pattern
+apply to the same case, already recoded values will be overwritten by subsequent
+recode patterns. If <code>FALSE</code>, former recoded cases will not be altered by later
+recode patterns that would apply to those cases again. A warning message is
+printed to alert such situations and to avoid unintentional recodings.</p></dd>
 
 
 <dt>verbose</dt>
