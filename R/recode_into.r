@@ -141,25 +141,28 @@ recode_into <- function(..., data = NULL, default = NA, overwrite = TRUE, verbos
     } else {
       already_exists <- out[index] != default
     }
+    # save indices of overwritten cases
+    overwritten_cases <- which(index)[already_exists]
+    # tell user...
     if (any(already_exists) && verbose) {
       if (overwrite) {
         msg <- paste(
           "Several recode patterns apply to the same cases.",
           "Some of the already recoded cases will be overwritten with new values again",
-          sprintf("(e.g. pattern %i overwrites the former recode of case %i).", i, which(already_exists)[1])
+          sprintf("(e.g. pattern %i overwrites the former recode of case %i).", i, overwritten_cases[1])
         )
       } else {
         msg <- paste(
           "Several recode patterns apply to the same cases.",
           "Some of the already recoded cases will not be altered by later recode patterns.",
-          sprintf("(e.g. pattern %i also matches the former recode of case %i).", i, which(already_exists)[1])
+          sprintf("(e.g. pattern %i also matches the former recode of case %i).", i, overwritten_cases[1])
         )
       }
       insight::format_warning(msg, "Please check if this is intentional!")
     }
     # if user doesn't want to overwrite, remove already recoded indices
     if (!overwrite) {
-      index[which(index)[already_exists]] <- FALSE
+      index[overwritten_cases] <- FALSE
     }
     out[index] <- value
   }

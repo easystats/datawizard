@@ -30,6 +30,14 @@ test_that("recode_into, overwrite", {
     )
   })
   expect_identical(out, c(0, 0, 1, 1, 1, 2, 2, 2, 2, 2))
+  expect_warning(
+    recode_into(
+      x >= 3 & x <= 7 ~ 1,
+      x > 5 ~ 2,
+      default = 0
+    ),
+    regex = "case 6"
+  )
 
   x <- 1:10
   expect_silent({
@@ -42,6 +50,15 @@ test_that("recode_into, overwrite", {
     )
   })
   expect_identical(out, c(0, 0, 1, 1, 1, 1, 1, 2, 2, 2))
+  expect_warning(
+    recode_into(
+      x >= 3 & x <= 7 ~ 1,
+      x > 5 ~ 2,
+      default = 0,
+      overwrite = FALSE
+    ),
+    regex = "case 6"
+  )
 })
 
 test_that("recode_into, don't overwrite", {
