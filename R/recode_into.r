@@ -140,7 +140,8 @@ recode_into <- function(..., data = NULL, default = NA, overwrite = TRUE, verbos
     }
     # if user doesn't want to overwrite, remove already recoded indices
     if (!overwrite) {
-      index <- index[!already_exists]
+      index[which(index)[already_exists]] <- FALSE
+      # index <- index[which(index)[!already_exists]]
     }
     out[index] <- value
   }
