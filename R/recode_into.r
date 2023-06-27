@@ -32,6 +32,25 @@
 #'   default = "c"
 #' )
 #'
+#' x <- 1:10
+#' # default behaviour: second recode pattern "x > 5" overwrites
+#' # some of the formerly recoded cases from pattern "x >= 3 & x <= 7"
+#' recode_into(
+#'   x >= 3 & x <= 7 ~ 1,
+#'   x > 5 ~ 2,
+#'   default = 0,
+#'   verbose = FALSE
+#' )
+#'
+#' # setting "overwrite = FALSE" will not alter formerly recoded cases
+#' recode_into(
+#'   x >= 3 & x <= 7 ~ 1,
+#'   x > 5 ~ 2,
+#'   default = 0,
+#'   overwrote = FALSE,
+#'   verbose = FALSE
+#' )
+
 #' set.seed(123)
 #' d <- data.frame(
 #'   x = sample(1:5, 30, TRUE),
