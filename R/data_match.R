@@ -311,29 +311,39 @@ data_filter.grouped_df <- function(x, ...) {
   tmp <- gsub(">=", "", tmp, fixed = TRUE)
   tmp <- gsub("!=", "", tmp, fixed = TRUE)
 
-  # Give more informative message to users
-  # about possible misspelled comparisons / logical conditions
-  # check if "=" instead of "==" was used?
-  if (any(grepl("=", tmp, fixed = TRUE))) {
-    insight::format_error(
-      "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
-    )
-  }
-  # check if "&&" etc instead of "&" was used?
-  logical_operator <- NULL
-  if (any(grepl("&&", .fcondition, fixed = TRUE))) {
-    logical_operator <- "&&"
-  }
-  if (any(grepl("||", .fcondition, fixed = TRUE))) {
-    logical_operator <- "||"
-  }
-  if (!is.null(logical_operator)) {
-    insight::format_error(
-      paste0(
-        "Filtering did not work. Please check if you need `",
-        substr(logical_operator, 0, 1),
-        "` (instead of `", logical_operator, "`) as logical operator."
+  # We want to check whether user used a "=" in the filter syntax. This
+  # typically indicates that the comparison "==" is probably wrong by using
+  # a "=" instead of `"=="`. However, if a function was provided, we indeed
+  # may have "=", e.g. if the pattern was
+  # `data_filter(out, grep("pattern", x = value))`. We thus first check if we
+  # can identify a function call, and only continue checking for wrong syntax
+  # when we have not identified a function.
+
+  if (!is.function(try(get(gsub("^(.*?)\\((.*)", "\\1", tmp)), silent = TRUE))) {
+    # Give more informative message to users
+    # about possible misspelled comparisons / logical conditions
+    # check if "=" instead of "==" was used?
+    if (any(grepl("=", tmp, fixed = TRUE))) {
+      insight::format_error(
+        "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
       )
-    )
+    }
+    # check if "&&" etc instead of "&" was used?
+    logical_operator <- NULL
+    if (any(grepl("&&", .fcondition, fixed = TRUE))) {
+      logical_operator <- "&&"
+    }
+    if (any(grepl("||", .fcondition, fixed = TRUE))) {
+      logical_operator <- "||"
+    }
+    if (!is.null(logical_operator)) {
+      insight::format_error(
+        paste0(
+          "Filtering did not work. Please check if you need `",
+          substr(logical_operator, 0, 1),
+          "` (instead of `", logical_operator, "`) as logical operator."
+        )
+      )
+    }
   }
 }
