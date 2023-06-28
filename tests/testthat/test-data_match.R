@@ -338,5 +338,10 @@ test_that("data_filter, slicing works with functions", {
   out3 <- data_filter(iris, (Sepal.Width == 3.0) & (Species == "setosa"))
   expect_identical(nrow(out3), 6L)
 
-  expect_error(data_filter(iris, (Sepal.Width = 3.0) & (Species = "setosa"))) # nolint
+  # styler: off
+  expect_error(
+    data_filter(iris, (Sepal.Width = 3.0) & (Species = "setosa")), # nolint
+    regex = "Filtering did not work"
+  )
+  # styler: on
 })
