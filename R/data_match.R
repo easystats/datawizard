@@ -311,12 +311,14 @@ data_filter.grouped_df <- function(x, ...) {
   tmp <- gsub(">=", "", tmp, fixed = TRUE)
   tmp <- gsub("!=", "", tmp, fixed = TRUE)
 
-  # we now want to check whether user used a "=" in the filter syntax. This
-  # typically indicates that the comparison "==" is probably wrong by using "="
-  # instead. However, if a function was provided, we indeed may have "=", e.g.
-  # if the pattern was `data_filter(out, grep("pattern", x = value))`. We thus
-  # first check if we can identify a function call, and if only continue checking
-  # when we have no function identified
+  # We want to check whether user used a "=" in the filter syntax. This
+  # typically indicates that the comparison "==" is probably wrong by using
+  #a "=" instead of `"=="`. However, if a function was provided, we indeed
+  # may have "=", e.g. if the pattern was
+  # `data_filter(out, grep("pattern", x = value))`. We thus first check if we
+  # can identify a function call, and only continue checking for wrong syntax
+  # when we have not identified a function.
+
   if (!is.function(try(get(gsub("^(.*?)\\((.*)", "\\1", tmp)), silent = TRUE))) {
     # Give more informative message to users
     # about possible misspelled comparisons / logical conditions
