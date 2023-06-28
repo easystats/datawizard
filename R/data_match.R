@@ -313,7 +313,7 @@ data_filter.grouped_df <- function(x, ...) {
 
   # We want to check whether user used a "=" in the filter syntax. This
   # typically indicates that the comparison "==" is probably wrong by using
-  #a "=" instead of `"=="`. However, if a function was provided, we indeed
+  # a "=" instead of `"=="`. However, if a function was provided, we indeed
   # may have "=", e.g. if the pattern was
   # `data_filter(out, grep("pattern", x = value))`. We thus first check if we
   # can identify a function call, and only continue checking for wrong syntax
