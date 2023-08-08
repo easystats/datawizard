@@ -8,6 +8,7 @@ test_that("contr.deviation", {
 })
 
 test_that("contr.deviation | snapshot", {
+  skip_if_not_installed("base", "4.3")
   # IF THIS TESTS FAILS, UPDATE THE EXAMPLE
 
   data("mtcars")
