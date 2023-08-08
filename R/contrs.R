@@ -54,8 +54,10 @@
 #' mtcars <- data_arrange(mtcars, select = c("cyl", "am"))
 #'
 #' mm <- unique(model.matrix(~ cyl * am, data = mtcars))
-#' rownames(mm) <- c("cyl4.am0", "cyl4.am1", "cyl6.am0",
-#'                   "cyl6.am1", "cyl8.am0", "cyl8.am1")
+#' rownames(mm) <- c(
+#'   "cyl4.am0", "cyl4.am1", "cyl6.am0",
+#'   "cyl6.am1", "cyl8.am0", "cyl8.am1"
+#' )
 #'
 #' solve(mm)
 #' #>             cyl4.am0 cyl4.am1 cyl6.am0 cyl6.am1 cyl8.am0 cyl8.am1
@@ -72,9 +74,10 @@ contr.deviation <- function(n, base = 1,
                             contrasts = TRUE,
                             sparse = FALSE) {
   cont <- stats::contr.treatment(n,
-                                 base = base,
-                                 contrasts = contrasts,
-                                 sparse = sparse)
+    base = base,
+    contrasts = contrasts,
+    sparse = sparse
+  )
   if (contrasts) {
     n <- nrow(cont)
     cont <- cont - 1 / n
