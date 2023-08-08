@@ -5,17 +5,29 @@
 #' @inheritParams stats::contr.sum
 #'
 #' @details
-#' In effects coding, unlike dummy coding ([stats::contr.treatment()]), each
-#' contrasts sums to 0. In regressions models, this results in an intercept that
+#' In effects coding, unlike treatment/dummy coding ([stats::contr.treatment()]), each
+#' contrast sums to 0. In regressions models, this results in an intercept that
 #' represents the (unweighted) average of the group means. In ANOVA settings,
 #' this also guarantees that lower order effects represent _main_ effects (and
-#' not _simple_ or _conditional_ effects, as is the case when using
-#' [stats::contr.treatment()], which is `R`'s default).
+#' not _simple_ or _conditional_ effects, as is the case when using R's default
+#' [stats::contr.treatment()]).
 #' \cr\cr
-#' `contr.deviation`, unlike [stats::contr.sum()], also has the added benefit
-#' that the factor-related coefficients are interpretable. In fact, they
-#' represent the same contrasts as those of [stats::contr.treatment()]: the
-#' difference of each level from the base level.
+#' Deviation coding (`contr.deviation`) is a type of effects coding.
+#' With deviation coding, the coefficients for factor variables are interpreted
+#' as the difference of each factor level from the base level
+#' (this is the same interpretation as with treatment/dummy coding). 
+#' For example, for a factor `group` with levels "Red" and "Blue", with `contr.devation`,
+#' the intercept represents the average of the group means for Red and Blue groups,
+#' and the coefficient for `groupBlue` represents the difference between Blue and Red
+#' group means.
+#' \cr\cr
+#' Sum coding ([stats::contr.sum()]) is another type of effects coding.
+#' With sum coding, the coefficients for factor variables are interpreted
+#' as the difference of each factor level from **the grand (across-groups) mean**.
+#' For example, for a factor `group` with levels "Red" and "Blue", with `contr.sum`,
+#' the intercept represents the average of the group means for Red and Blue groups,
+#' and the coefficient for `groupBlue` represents the difference of the Red group mean
+#' from the grand mean (the average of Red and Blue group means).
 #'
 #' @seealso [stats::contr.sum()]
 #'
