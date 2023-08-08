@@ -1,5 +1,9 @@
 # datawizard (devel)
 
+NEW FUNCTIONS
+
+* `contr.deviation()` for sum-deviation contrast coding of factors.
+
 CHANGES
 
 * `recode_into()` gains an `overwrite` argument to skip overwriting already

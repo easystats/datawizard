@@ -39,7 +39,7 @@ difference of each level from the base level.
 \dontrun{
 data("mtcars")
 
-mtcars$cyl <- factor(mtcars$cyl)
+mtcars <- data_modify(mtcars, cyl = factor(cyl))
 
 c.treatment <- cbind(Intercept = 1, contrasts(mtcars$cyl))
 solve(c.treatment)
@@ -66,10 +66,9 @@ solve(c.deviation)
 #> 8         -1.000 0.000 1.000   # 3rd level - 1st level
 
 ## With Interactions -----------------------------------------
-mtcars$am <- factor(mtcars$am)
-contrasts(mtcars$am) <- contr.deviation
+mtcars <- data_modify(mtcars, am = factor(am))
+mtcars <- data_arrange(mtcars, select = c("cyl", "am"))
 
-mtcars <- mtcars[order(mtcars$cyl, mtcars$am),]
 mm <- unique(model.matrix(~ cyl * am, data = mtcars))
 rownames(mm) <- c("cyl4.am0", "cyl4.am1", "cyl6.am0",
                   "cyl6.am1", "cyl8.am0", "cyl8.am1")
