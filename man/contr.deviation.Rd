@@ -44,26 +44,26 @@ mtcars$cyl <- factor(mtcars$cyl)
 c.treatment <- cbind(Intercept = 1, contrasts(mtcars$cyl))
 solve(c.treatment)
 #>            4 6 8
-#> Intercept  1 0 0  # Intercept is the mean of the 1st level
-#> 6         -1 1 0  # Difference between 2nd and 1st level
-#> 8         -1 0 1  # Difference between 3rd and 1st level
+#> Intercept  1 0 0  # mean of the 1st level
+#> 6         -1 1 0  # 2nd level - 1st level
+#> 8         -1 0 1  # 3rd level - 1st level
 
 contrasts(mtcars$cyl) <- contr.sum
 c.sum <- cbind(Intercept = 1, contrasts(mtcars$cyl))
 solve(c.sum)
-#>                    4          6          8
-#> Intercept  0.3333333  0.3333333  0.3333333   # Intercept is the overall mean
-#>            0.6666667 -0.3333333 -0.3333333   # 2/3 of the different between 2nd/3rd and 1st levels
-#>           -0.3333333  0.6666667 -0.3333333   # 2/3 of the different between 1st/3rd and 2nd levels
+#>                4      6      8
+#> Intercept  0.333  0.333  0.333   # overall mean
+#>            0.667 -0.333 -0.333   # 2/3 * ({2nd, 3rd} - 1st)
+#>           -0.333  0.667 -0.333   # 2/3 * ({1st, 3rd} - 2nd)
 
 
 contrasts(mtcars$cyl) <- contr.deviation
 c.deviation <- cbind(Intercept = 1, contrasts(mtcars$cyl))
 solve(c.deviation)
-#>                    4         6         8
-#> Intercept  0.3333333 0.3333333 0.3333333   # Intercept is the overall mean
-#> 6         -1.0000000 1.0000000 0.0000000   # Difference between 2nd and 1st level
-#> 8         -1.0000000 0.0000000 1.0000000   # Difference between 3rd and 1st level
+#>                4     6     8
+#> Intercept  0.333 0.333 0.333   # overall mean
+#> 6         -1.000 1.000 0.000   # 2nd level - 1st level
+#> 8         -1.000 0.000 1.000   # 3rd level - 1st level
 
 ## With Interactions -----------------------------------------
 mtcars$am <- factor(mtcars$am)
@@ -71,16 +71,17 @@ contrasts(mtcars$am) <- contr.deviation
 
 mtcars <- mtcars[order(mtcars$cyl, mtcars$am),]
 mm <- unique(model.matrix(~ cyl * am, data = mtcars))
-rownames(mm) <- c("cyl4.am0", "cyl4.am1", "cyl6.am0", "cyl6.am1", "cyl8.am0", "cyl8.am1")
+rownames(mm) <- c("cyl4.am0", "cyl4.am1", "cyl6.am0",
+                  "cyl6.am1", "cyl8.am0", "cyl8.am1")
 
 solve(mm)
-#>               cyl4.am0   cyl4.am1   cyl6.am0  cyl6.am1   cyl8.am0  cyl8.am1
-#> (Intercept)  0.1666667  0.1666667  0.1666667 0.1666667  0.1666667 0.1666667   # Overall mean
-#> cyl6        -0.5000000 -0.5000000  0.5000000 0.5000000  0.0000000 0.0000000   # MAIN effect cyl contrasts - 2nd and 1st diff
-#> cyl8        -0.5000000 -0.5000000  0.0000000 0.0000000  0.5000000 0.5000000   # MAIN effect cyl contrasts - 3rd and 1st diff
-#> am1         -0.3333333  0.3333333 -0.3333333 0.3333333 -0.3333333 0.3333333   # MAIN effect for am
-#> cyl6:am1     1.0000000 -1.0000000 -1.0000000 1.0000000  0.0000000 0.0000000
-#> cyl8:am1     1.0000000 -1.0000000  0.0000000 0.0000000 -1.0000000 1.0000000
+#>             cyl4.am0 cyl4.am1 cyl6.am0 cyl6.am1 cyl8.am0 cyl8.am1
+#> (Intercept)    0.167    0.167    0.167    0.167    0.167    0.167  # overall mean
+#> cyl6          -0.500   -0.500    0.500    0.500    0.000    0.000  # cyl MAIN eff: 2nd - 1st
+#> cyl8          -0.500   -0.500    0.000    0.000    0.500    0.500  # cyl MAIN eff: 2nd - 1st
+#> am1           -0.333    0.333   -0.333    0.333   -0.333    0.333  # am MAIN eff
+#> cyl6:am1       1.000   -1.000   -1.000    1.000    0.000    0.000
+#> cyl8:am1       1.000   -1.000    0.000    0.000   -1.000    1.000
 }
 
 }
