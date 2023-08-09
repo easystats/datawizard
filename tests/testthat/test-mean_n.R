@@ -6,11 +6,12 @@ test_that("mean_n", {
     c4 = c(2, 3, 7, 8)
   )
   expect_equal(mean_n(d_mn, 4), c(NA, 2.75, NA, NA), tolerance = 1e-3)
-  expect_equal(mean_n(d_mn, 3), c(NA, 2.75, NA, 5.67), tolerance = 1e-3)
-  expect_equal(mean_n(d_mn, 2), c(1.5, 2.75, NA, 5.67), tolerance = 1e-3)
-  expect_equal(mean_n(d_mn, 1), c(1.5, 2.75, 7, 5.67), tolerance = 1e-3)
-  expect_equal(mean_n(d_mn, 0.5), c(1.5, 2.75, NA, 5.67), tolerance = 1e-3)
-  expect_equal(mean_n(d_mn, 0.75), c(NA, 2.75, NA, 5.67), tolerance = 1e-3)
+  expect_equal(mean_n(d_mn, 3), c(NA, 2.75, NA, 5.66667), tolerance = 1e-3)
+  expect_equal(mean_n(d_mn, 2), c(1.5, 2.75, NA, 5.66667), tolerance = 1e-3)
+  expect_equal(mean_n(d_mn, 1), c(1.5, 2.75, 7, 5.66667), tolerance = 1e-3)
+  expect_equal(mean_n(d_mn, 0.5), c(1.5, 2.75, NA, 5.66667), tolerance = 1e-3)
+  expect_equal(mean_n(d_mn, 0.75), c(NA, 2.75, NA, 5.66667), tolerance = 1e-3)
+  expect_equal(mean_n(d_mn, 2, digits = 1), c(1.5, 2.8, NA, 5.7), tolerance = 1e-1)
 })
 
 test_that("mean_n, errors or messages", {

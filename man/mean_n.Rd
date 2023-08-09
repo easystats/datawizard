@@ -4,7 +4,7 @@
 \alias{mean_n}
 \title{Row means with minimum amount of valid values}
 \usage{
-mean_n(data, n, digits = 2, verbose = TRUE)
+mean_n(data, n, digits = NULL, verbose = TRUE)
 }
 \arguments{
 \item{data}{A data frame with at least two columns, where row means are applied.}
@@ -20,7 +20,8 @@ row to calculate the row mean (see 'Details').
 If a row's sum of valid values is less than \code{n}, \code{NA} will be returned.}
 
 \item{digits}{Numeric value indicating the number of decimal places to be
-used for rounding mean values. Negative values are allowed (see 'Details').}
+used for rounding mean values. Negative values are allowed (see 'Details').
+By default, \code{digits = NULL} and no rounding is used.}
 
 \item{verbose}{Toggle warnings.}
 }

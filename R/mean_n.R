@@ -14,6 +14,7 @@
 #' If a row's sum of valid values is less than `n`, `NA` will be returned.
 #' @param digits Numeric value indicating the number of decimal places to be
 #' used for rounding mean values. Negative values are allowed (see 'Details').
+#' By default, `digits = NULL` and no rounding is used.
 #' @param verbose Toggle warnings.
 #'
 #' @return A vector with row means for those rows with at least `n` valid values.
@@ -54,7 +55,7 @@
 #' mean_n(dat, 0.75) # 2 valid return values
 #'
 #' @export
-mean_n <- function(data, n, digits = 2, verbose = TRUE) {
+mean_n <- function(data, n, digits = NULL, verbose = TRUE) {
   # check if data is data frame or matrix
   if (!is.data.frame(data) && !is.matrix(data)) {
     insight::format_error("`data` must be a data frame or matrix.")
@@ -63,6 +64,11 @@ mean_n <- function(data, n, digits = 2, verbose = TRUE) {
   # coerce matrix to data frame
   if (is.matrix(data)) {
     data <- as.data.frame(data)
+  }
+
+  # n must be a numeric, non-missing value
+  if (is.null(n) || all(is.na(n)) || !is.numeric(n) || length(n) > 1) {
+    insight::format_error("`n` must be a numeric value of length 1.")
   }
 
   # make sure we only have numeric values
@@ -79,11 +85,6 @@ mean_n <- function(data, n, digits = 2, verbose = TRUE) {
     insight::format_error("`data` must be a data frame with at least two columns.")
   }
 
-  # n must be a numeric, non-missing value
-  if (is.null(n) || all(is.na(n)) || !is.numeric(n) || length(n) > 1) {
-    insight::format_error("`n` must be a numeric value of length 1.")
-  }
-
   # is 'n' indicating a proportion?
   decimals <- n %% 1
   if (decimals != 0) {
@@ -95,5 +96,12 @@ mean_n <- function(data, n, digits = 2, verbose = TRUE) {
     insight::format_error("`n` must be smaller or equal to number of columns in data frame.")
   }
 
-  round(apply(data, 1, function(x) ifelse(sum(!is.na(x)) >= n, mean(x, na.rm = TRUE), NA)), digits)
+  # row means
+  out <- apply(data, 1, function(x) ifelse(sum(!is.na(x)) >= n, mean(x, na.rm = TRUE), NA))
+
+  # round, if requested
+  if (!is.null(digits) && !all(is.na(digits))) {
+    out <- round(out, digits = digits)
+  }
+  out
 }
