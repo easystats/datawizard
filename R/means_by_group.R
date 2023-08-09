@@ -132,8 +132,16 @@ means_by_group.data.frame <- function(x,
     verbose = verbose
   )
 
+  if (is.null(weights)) {
+    w <- NULL
+  } else if (is.character(weights)) {
+    w <- x[[weights]]
+  } else {
+    w <- weights
+  }
+
   out <- lapply(select, function(i) {
-    means_by_group(x[[i]], group = x[[group]], weights = x[[weights]], digits = digits, ...)
+    means_by_group(x[[i]], group = x[[group]], weights = w, digits = digits, ...)
   })
 
   out
