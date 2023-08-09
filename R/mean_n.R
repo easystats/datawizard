@@ -5,7 +5,7 @@
 #' valid (and not `NA`).
 #'
 #' @param data A data frame with at least two columns, where row means are applied.
-#' @param n May either be
+#' @param n A numeric value of length 1. May either be
 #' - a numeric value that indicates the amount of valid values per row to
 #'   calculate the row mean;
 #' - or a value between 0 and 1, indicating a proportion of valid values per
@@ -14,6 +14,7 @@
 #' If a row's sum of valid values is less than `n`, `NA` will be returned.
 #' @param digits Numeric value indicating the number of decimal places to be
 #' used for rounding mean values. Negative values are allowed (see 'Details').
+#' @param verbose Toggle warnings.
 #'
 #' @return A vector with row means for those rows with at least `n` valid values.
 #'
@@ -53,7 +54,7 @@
 #' mean_n(dat, 0.75) # 2 valid return values
 #'
 #' @export
-mean_n <- function(data, n, digits = 2) {
+mean_n <- function(data, n, digits = 2, verbose = TRUE) {
   # check if data is data frame or matrix
   if (!is.data.frame(data) && !is.matrix(data)) {
     insight::format_error("`data` must be a data frame or matrix.")
@@ -64,9 +65,23 @@ mean_n <- function(data, n, digits = 2) {
     data <- as.data.frame(data)
   }
 
+  # make sure we only have numeric values
+  numeric_columns <- vapply(data, is.numeric, TRUE)
+  if (!all(numeric_columns)) {
+    if (verbose) {
+      insight::format_alert("Only numeric columns are considered for calculation.")
+    }
+    data <- data[numeric_columns]
+  }
+
   # check if we have a data framme with at least two columns
   if (ncol(data) < 2) {
     insight::format_error("`data` must be a data frame with at least two columns.")
+  }
+
+  # n must be a numeric, non-missing value
+  if (is.null(n) || all(is.na(n)) || !is.numeric(n) || length(n) > 1) {
+    insight::format_error("`n` must be a numeric value of length 1.")
   }
 
   # is 'n' indicating a proportion?

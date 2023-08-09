@@ -4,12 +4,12 @@
 \alias{mean_n}
 \title{Row means with minimum amount of valid values}
 \usage{
-mean_n(data, n, digits = 2)
+mean_n(data, n, digits = 2, verbose = TRUE)
 }
 \arguments{
 \item{data}{A data frame with at least two columns, where row means are applied.}
 
-\item{n}{May either be
+\item{n}{A numeric value of length 1. May either be
 \itemize{
 \item a numeric value that indicates the amount of valid values per row to
 calculate the row mean;
@@ -21,6 +21,8 @@ If a row's sum of valid values is less than \code{n}, \code{NA} will be returned
 
 \item{digits}{Numeric value indicating the number of decimal places to be
 used for rounding mean values. Negative values are allowed (see 'Details').}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 A vector with row means for those rows with at least \code{n} valid values.
