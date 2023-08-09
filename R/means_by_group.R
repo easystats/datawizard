@@ -4,7 +4,7 @@
 #' @description Computes mean, sd and se for each sub-group (indicated by \code{grp})
 #'                of \code{dv}.
 #'
-#' @param x A vector or a (grouped) data frame.
+#' @param x A vector or a data frame.
 #' @param select to do Name of the dependent variable, for which the mean value, grouped
 #'   by \code{grp}, is computed.
 #' @param group Factor with the cross-classifying variable, where \code{dv} is
@@ -50,6 +50,13 @@ means_by_group <- function(x, ...) {
   UseMethod("means_by_group")
 }
 
+
+#' @export
+means_by_group.default <- function(x, ...) {
+  insight::format_error("`means_by_group()` does not work for objects of class `", class(x)[1], "`.")
+}
+
+
 #' @export
 means_by_group.numeric <- function(x, group = NULL, weights = NULL, digits = NULL, ...) {
   # sanity check for arguments
@@ -87,11 +94,48 @@ means_by_group.numeric <- function(x, group = NULL, weights = NULL, digits = NUL
   var_mean_label <- attr(x, "label", exact = TRUE)
   var_grp_label <- attr(group, "label", exact = TRUE)
 
+  # if no labels present, use variable names directlf y
+  if (is.null(var_mean_label)) {
+    var_mean_label <- deparse(substitute(x))
+  }
+  if (is.null(var_grp_label)) {
+    var_grp_label <- deparse(substitute(group))
+  }
+
   # attributes
   attr(out, "var_mean_label") <- var_mean_label
   attr(out, "var_grp_label") <- var_grp_label
+  attr(out, "digits") <- digits
 
   class(out) <- c("dw_groupmeans", "data.frame")
+  out
+}
+
+
+#' @export
+means_by_group.data.frame <- function(x,
+                                      select = NULL,
+                                      group = NULL,
+                                      weights = NULL,
+                                      digits = NULL,
+                                      exclude = NULL,
+                                      ignore_case = FALSE,
+                                      regex = FALSE,
+                                      verbose = TRUE,
+                                      ...) {
+  # evaluate select/exclude, may be select-helpers
+  select <- .select_nse(select,
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
+
+  out <- lapply(select, function(i) {
+    means_by_group(x[[i]], group = group, weights = weights, digits = digits, ...)
+  })
+
   out
 }
 
@@ -144,11 +188,47 @@ means_by_group.numeric <- function(x, group = NULL, weights = NULL, digits = NUL
   fstat <- sum.fit$fstatistic
   pval <- stats::pf(fstat[1], fstat[2], fstat[3], lower.tail = FALSE)
 
-
   # copy as attributes
   attr(out, "r2") <- r2
   attr(out, "adj.r2") <- r2.adj
   attr(out, "fstat") <- fstat[1]
+  attr(out, "p.value") <- pval
 
   out
+}
+
+
+# methods -----------------
+
+#' @export
+format.dw_groupmeans <- function(x, digits = NULL, ...) {
+  if (is.null(digits)) {
+    digits <- attr(x, "digits", exact = TRUE)
+  }
+  insight::format_table(x, digits = digits, ...)
+}
+
+#' @export
+print.dw_groupmeans <- function(x, digits = NULL, ...) {
+  out <- format(x, digits = digits, ...)
+
+  # caption
+  l1 <- attributes(x)$var_mean_label
+  l2 <- attributes(x)$var_grp_label
+  if (!is.null(l1) && !is.null(l2)) {
+    caption <- c(paste0("# Mean of ", l1, " by ", l2), "blue")
+  } else {
+    caption <- NULL
+  }
+
+  # footer
+  footer <- paste0(
+    "\nAnova: R2=", insight::format_value(attributes(out)$r2, digits = 3),
+    "; adj.R2=", insight::format_value(attributes(out)$adj.r2, digits = 3),
+    "; F=", insight::format_value(attributes(out)$fstat, digits = 3),
+    "; ", insight::format_p(attributes(out)$p.value, whitespace = FALSE),
+    "\n"
+  )
+
+  cat(insight::export_table(x, caption = caption, footer = footer, ...))
 }

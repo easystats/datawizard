@@ -7,7 +7,7 @@
 means_by_group(x, ...)
 }
 \arguments{
-\item{x}{A vector or a (grouped) data frame.}
+\item{x}{A vector or a data frame.}
 
 \item{...}{}
 
