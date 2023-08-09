@@ -1,5 +1,5 @@
 #' @title Row means with minimum amount of valid values
-#' @name mean_n
+#' @name rowmean_n
 #' @description This function is similar to the SPSS `MEAN.n` function and computes
 #' row means from a data frame or matrix if at least `n` values of a row are
 #' valid (and not `NA`).
@@ -20,7 +20,7 @@
 #' @return A vector with row means for those rows with at least `n` valid values.
 #'
 #' @details Rounding to a negative number of `digits` means rounding to a power of
-#' ten, for example `mean_n(df, 3, digits = -2)` rounds to the nearest hundred.
+#' ten, for example `rowmean_n(df, 3, digits = -2)` rounds to the nearest hundred.
 #' For `n`, must be a numeric value from `0` to `ncol(data)`. If a row in the
 #' data frame has at least `n` non-missing values, the row mean is returned. If
 #' `n` is a non-integer value from 0 to 1, `n` is considered to indicate the
@@ -37,25 +37,25 @@
 #' )
 #'
 #' # needs at least 4 non-missing values per row
-#' mean_n(dat, 4) # 1 valid return value
+#' rowmean_n(dat, 4) # 1 valid return value
 #'
 #' # needs at least 3 non-missing values per row
-#' mean_n(dat, 3) # 2 valid return values
+#' rowmean_n(dat, 3) # 2 valid return values
 #'
 #' # needs at least 2 non-missing values per row
-#' mean_n(dat, 2)
+#' rowmean_n(dat, 2)
 #'
 #' # needs at least 1 non-missing value per row
-#' mean_n(dat, 1) # all means are shown
+#' rowmean_n(dat, 1) # all means are shown
 #'
 #' # needs at least 50% of non-missing values per row
-#' mean_n(dat, 0.5) # 3 valid return values
+#' rowmean_n(dat, 0.5) # 3 valid return values
 #'
 #' # needs at least 75% of non-missing values per row
-#' mean_n(dat, 0.75) # 2 valid return values
+#' rowmean_n(dat, 0.75) # 2 valid return values
 #'
 #' @export
-mean_n <- function(data, n, digits = NULL, verbose = TRUE) {
+rowmean_n <- function(data, n, digits = NULL, verbose = TRUE) {
   # check if data is data frame or matrix
   if (!is.data.frame(data) && !is.matrix(data)) {
     insight::format_error("`data` must be a data frame or matrix.")

@@ -2,7 +2,7 @@
 
 NEW FUNCTIONS
 
-* `mean_n()`, to compute row means if row contains at least `n` non-missing
+* `rowmean_n()`, to compute row means if row contains at least `n` non-missing
   values.
 
 CHANGES

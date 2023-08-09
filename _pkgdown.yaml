@@ -64,7 +64,7 @@ reference:
       - smoothness
       - skewness
       - weighted_mean
-      - mean_n
+      - rowmean_n
       - mean_sd
 
   - title: Convert and Replace Data
