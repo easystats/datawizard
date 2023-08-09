@@ -15,19 +15,19 @@
 #' Deviation coding (`contr.deviation`) is a type of effects coding.
 #' With deviation coding, the coefficients for factor variables are interpreted
 #' as the difference of each factor level from the base level
-#' (this is the same interpretation as with treatment/dummy coding). 
-#' For example, for a factor `group` with levels "Red" and "Blue", with `contr.devation`,
-#' the intercept represents the average of the group means for Red and Blue groups,
-#' and the coefficient for `groupBlue` represents the difference between Blue and Red
-#' group means.
+#' (this is the same interpretation as with treatment/dummy coding).
+#' For example, for a factor `group` with levels "A", "B", and "C", with `contr.devation`,
+#' the intercept represents the overall mean (average of the group means for the 3 groups),
+#' and the coefficients `groupB` and `groupC` represent the differences between
+#' the A group mean and the B and C group means, respectively.
 #' \cr\cr
 #' Sum coding ([stats::contr.sum()]) is another type of effects coding.
 #' With sum coding, the coefficients for factor variables are interpreted
 #' as the difference of each factor level from **the grand (across-groups) mean**.
-#' For example, for a factor `group` with levels "Red" and "Blue", with `contr.sum`,
-#' the intercept represents the average of the group means for Red and Blue groups,
-#' and the coefficient for `groupBlue` represents the difference of the Blue group mean
-#' from the grand mean (the average of Red and Blue group means).
+#' For example, for a factor `group` with levels "A", "B", and "C", with `contr.sum`,
+#' the intercept represents the overall mean (average of the group means for the 3 groups),
+#' and the coefficients `group1` and `group2` represent the differences the
+#' **A** and **B** group means from the overall mean, respectively.
 #'
 #' @seealso [stats::contr.sum()]
 #'
@@ -49,8 +49,8 @@
 #' solve(c.sum)
 #' #>                4      6      8
 #' #> Intercept  0.333  0.333  0.333   # overall mean
-#' #>            0.667 -0.333 -0.333   # 2/3 * ({2nd, 3rd} - 1st)
-#' #>           -0.333  0.667 -0.333   # 2/3 * ({1st, 3rd} - 2nd)
+#' #>            0.667 -0.333 -0.333   # deviation of 1st from overall mean
+#' #>           -0.333  0.667 -0.333   # deviation of 2nd from overall mean
 #'
 #'
 #' contrasts(mtcars$cyl) <- contr.deviation
