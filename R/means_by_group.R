@@ -133,7 +133,7 @@ means_by_group.data.frame <- function(x,
   )
 
   out <- lapply(select, function(i) {
-    means_by_group(x[[i]], group = group, weights = weights, digits = digits, ...)
+    means_by_group(x[[i]], group = x[[group]], weights = x[[weights]], digits = digits, ...)
   })
 
   out
