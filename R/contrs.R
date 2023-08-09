@@ -26,7 +26,7 @@
 #' as the difference of each factor level from **the grand (across-groups) mean**.
 #' For example, for a factor `group` with levels "Red" and "Blue", with `contr.sum`,
 #' the intercept represents the average of the group means for Red and Blue groups,
-#' and the coefficient for `groupBlue` represents the difference of the Red group mean
+#' and the coefficient for `groupBlue` represents the difference of the Blue group mean
 #' from the grand mean (the average of Red and Blue group means).
 #'
 #' @seealso [stats::contr.sum()]
