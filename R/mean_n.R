@@ -80,11 +80,5 @@ mean_n <- function(data, n, digits = 2) {
     insight::format_error("`n` must be smaller or equal to number of columns in data frame.")
   }
 
-  out <- NULL
-  for (i in nrow(data)) {
-    x <- as.numeric(data[i, ])
-    out <- c(out, round(ifelse(sum(!is.na(x)) >= n, mean(x, na.rm = TRUE), NA), digits))
-  }
-
-  out
+  round(apply(data, 1, function(x) ifelse(sum(!is.na(x)) >= n, mean(x, na.rm = TRUE), NA)), digits)
 }
