@@ -34,7 +34,7 @@ should be a character string, naming the variable in \code{x} that is used for
 grouping. Numeric vectors are coerced to factors.}
 
 \item{weights}{If \code{x} is a numeric vector, \code{weights} should be a vector of
-weightes that will be applied to weight all observations. If \code{x} is a data
+weighted that will be applied to weight all observations. If \code{x} is a data
 frame, can also be a character string indicating the name of the variable in
 \code{x} that should be used for weighting. Default is \code{NULL}, so no weights are
 used.}
@@ -98,12 +98,11 @@ A data frame with with information of mean and further summary
 statistics for each sub-group.
 }
 \description{
-Computes mean, sd and se for each sub-group (indicated by \code{grp})
-of \code{dv}.
+Computes sumary table of means by groups.
 }
 \details{
 This function is comparable to \verb{aggregate(x, group mean)}, but provides
-some further information, including summary statistics from a One-Way-Anova
+some further information, including summary statistics from a One-Way-ANOVA
 using \code{x} as dependent and \code{group} as independent variable.
 Then \code{\link[emmeans]{contrast}}
 is called to get p-values for each sub-group. P-values indicate whether

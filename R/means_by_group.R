@@ -1,8 +1,7 @@
 #' @title Summary of mean values by group
 #' @name means_by_group
 #'
-#' @description Computes mean, sd and se for each sub-group (indicated by \code{grp})
-#'                of \code{dv}.
+#' @description Computes sumary table of means by groups.
 #'
 #' @param x A vector or a data frame.
 #' @param group If `x` is a numeric vector, `group` should be a factor that
@@ -10,7 +9,7 @@
 #' should be a character string, naming the variable in `x` that is used for
 #' grouping. Numeric vectors are coerced to factors.
 #' @param weights If `x` is a numeric vector, `weights` should be a vector of
-#' weightes that will be applied to weight all observations. If `x` is a data
+#' weighted that will be applied to weight all observations. If `x` is a data
 #' frame, can also be a character string indicating the name of the variable in
 #' `x` that should be used for weighting. Default is `NULL`, so no weights are
 #' used.
@@ -23,7 +22,7 @@
 #' statistics for each sub-group.
 #'
 #' @details This function is comparable to `aggregate(x, group mean)`, but provides
-#' some further information, including summary statistics from a One-Way-Anova
+#' some further information, including summary statistics from a One-Way-ANOVA
 #' using `x` as dependent and `group` as independent variable.
 #' Then \code{\link[emmeans]{contrast}}
 #' is called to get p-values for each sub-group. P-values indicate whether
