@@ -97,7 +97,9 @@ rowmean_n <- function(data, n, digits = NULL, verbose = TRUE) {
   }
 
   # row means
-  out <- apply(data, 1, function(x) ifelse(sum(!is.na(x)) >= n, mean(x, na.rm = TRUE), NA))
+  to_na <- rowSums(is.na(data)) > ncol(data) - n
+  out <- rowMeans(data, na.rm = TRUE)
+  out[to_na] <- NA
 
   # round, if requested
   if (!is.null(digits) && !all(is.na(digits))) {
