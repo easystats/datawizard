@@ -1,5 +1,10 @@
 # datawizard (devel)
 
+NEW FUNCTIONS
+
+* `rowmean_n()`, to compute row means if row contains at least `n` non-missing
+  values.
+
 CHANGES
 
 * `recode_into()` gains an `overwrite` argument to skip overwriting already
