@@ -63,7 +63,7 @@ rowmean_n <- function(data, n, digits = NULL, verbose = TRUE) {
 
   # coerce matrix to data frame
   if (is.matrix(data)) {
-    data <- as.data.frame(data)
+    data <- .coerce_to_dataframe(data)
   }
 
   # n must be a numeric, non-missing value
@@ -82,7 +82,7 @@ rowmean_n <- function(data, n, digits = NULL, verbose = TRUE) {
 
   # check if we have a data framme with at least two columns
   if (ncol(data) < 2) {
-    insight::format_error("`data` must be a data frame with at least two columns.")
+    insight::format_error("`data` must be a data frame with at least two numeric columns.")
   }
 
   # is 'n' indicating a proportion?
