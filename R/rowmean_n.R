@@ -56,15 +56,7 @@
 #'
 #' @export
 rowmean_n <- function(data, n, digits = NULL, verbose = TRUE) {
-  # check if data is data frame or matrix
-  if (!is.data.frame(data) && !is.matrix(data)) {
-    insight::format_error("`data` must be a data frame or matrix.")
-  }
-
-  # coerce matrix to data frame
-  if (is.matrix(data)) {
-    data <- .coerce_to_dataframe(data)
-  }
+  data <- .coerce_to_dataframe(data)
 
   # n must be a numeric, non-missing value
   if (is.null(n) || all(is.na(n)) || !is.numeric(n) || length(n) > 1) {
