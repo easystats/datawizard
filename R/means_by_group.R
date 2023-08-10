@@ -74,17 +74,6 @@ means_by_group.numeric <- function(x, group = NULL, weights = NULL, digits = NUL
   # if weights are NULL, set weights to 1
   if (is.null(weights)) weights <- rep(1, length(x))
 
-  # create string with variable names
-  data <- stats::na.omit(data.frame(
-    x = x,
-    group = to_factor(group),
-    weights = weights,
-    stringsAsFactors = FALSE
-  ))
-
-  # get grouped means table
-  out <- .means_by_group(data)
-
   # retrieve labels
   var_mean_label <- attr(x, "label", exact = TRUE)
   var_grp_label <- attr(group, "label", exact = TRUE)
@@ -96,6 +85,24 @@ means_by_group.numeric <- function(x, group = NULL, weights = NULL, digits = NUL
   if (is.null(var_grp_label)) {
     var_grp_label <- deparse(substitute(group))
   }
+
+  # coerce group to factor if numeric, or convert labels to levels, if factor
+  if (is.factor(group)) {
+    group <- tryCatch(labels_to_levels(group, verbose = FALSE), error = function(e) group)
+  } else {
+    group <- to_factor(group)
+  }
+
+  # create string with variable names
+  data <- stats::na.omit(data.frame(
+    x = x,
+    group = group,
+    weights = weights,
+    stringsAsFactors = FALSE
+  ))
+
+  # get grouped means table
+  out <- .means_by_group(data)
 
   # attributes
   attr(out, "var_mean_label") <- var_mean_label
@@ -148,6 +155,7 @@ means_by_group.data.frame <- function(x,
     means_by_group(x[[i]], group = x[[group]], weights = w, digits = digits, ...)
   })
 
+  class(out) <- c("dw_groupmeans_list", "list")
   out
 }
 
@@ -243,4 +251,12 @@ print.dw_groupmeans <- function(x, digits = NULL, ...) {
   )
 
   cat(insight::export_table(x, caption = caption, footer = footer, ...))
+}
+
+#' @export
+print.dw_groupmeans_list <- function(x, digits = NULL, ...) {
+  for (i in seq_along(x)) {
+    if (i > 1) cat("\n")
+    print(x[[i]], digits = digits, ...)
+  }
 }
