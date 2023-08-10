@@ -50,9 +50,14 @@ describe_distribution(x, ...)
 
 \item{...}{Additional arguments to be passed to or from methods.}
 
-\item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
+\item{centrality}{The point-estimates (centrality indices) to compute. Character
+(vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"}
+(see \code{\link[bayestestR:map_estimate]{map_estimate()}}), \code{"trimmed"} (which is just \code{mean(x, trim = threshold)}),
+\code{"mode"} or \code{"all"}.}
 
-\item{dispersion}{Logical, if \code{TRUE}, computes indices of dispersion related to the estimate(s) (\code{SD} and \code{MAD} for \code{mean} and \code{median}, respectively).}
+\item{dispersion}{Logical, if \code{TRUE}, computes indices of dispersion related
+to the estimate(s) (\code{SD} and \code{MAD} for \code{mean} and \code{median}, respectively).
+Dispersion is not available for \code{"MAP"} or \code{"mode"} centrality indices.}
 
 \item{iqr}{Logical, if \code{TRUE}, the interquartile range is calculated
 (based on \code{\link[stats:IQR]{stats::IQR()}}, using \code{type = 6}).}
@@ -71,7 +76,9 @@ the first centrality index (which is typically the median).}
 \item{iterations}{The number of bootstrap replicates for computing confidence
 intervals. Only applies when \code{ci} is not \code{NULL}.}
 
-\item{threshold}{For \code{centrality = "trimmed"} (i.e. trimmed mean), indicates the fraction (0 to 0.5) of observations to be trimmed from each end of the vector before the mean is computed.}
+\item{threshold}{For \code{centrality = "trimmed"} (i.e. trimmed mean), indicates
+the fraction (0 to 0.5) of observations to be trimmed from each end of the
+vector before the mean is computed.}
 
 \item{verbose}{Toggle warnings and messages.}
 
