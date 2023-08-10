@@ -5,46 +5,40 @@
 #'                of \code{dv}.
 #'
 #' @param x A vector or a data frame.
-#' @param select to do Name of the dependent variable, for which the mean value, grouped
-#'   by \code{grp}, is computed.
-#' @param group Factor with the cross-classifying variable, where \code{dv} is
-#'   grouped into the categories represented by \code{grp}. Numeric vectors
-#'   are coerced to factors.
-#' @param weights Name of variable in \code{x} that indicated the vector of
-#'   weights that will be applied to weight all observations. Default is
-#'   \code{NULL}, so no weights are used.
-#' @param digits Numeric, amount of digits after decimal point when rounding
-#'   estimates and values.
-#' @param ...
+#' @param group If `x` is a numeric vector, `group` should be a factor that
+#' indicates the group-classifying categories. If `x` is a data frame, `group`
+#' should be a character string, naming the variable in `x` that is used for
+#' grouping. Numeric vectors are coerced to factors.
+#' @param weights If `x` is a numeric vector, `weights` should be a vector of
+#' weightes that will be applied to weight all observations. If `x` is a data
+#' frame, can also be a character string indicating the name of the variable in
+#' `x` that should be used for weighting. Default is `NULL`, so no weights are
+#' used.
+#' @param digits Optional scalar, indicating the amount of digits after decimal
+#' point when rounding estimates and values.
+#' @param ... Currently not used
+#' @inheritParams find_columns
 #'
-#' @return For non-grouped data frames, \code{means_by_group()} returns a data frame with
-#'   following columns: \code{term}, \code{mean}, \code{N}, \code{std.dev},
-#'   \code{std.error} and \code{p.value}. For grouped data frames, returns
-#'   a list of such data frames.
+#' @return A data frame with with information of mean and further summary
+#' statistics for each sub-group.
 #'
-#' @details This function performs a One-Way-Anova with \code{dv} as dependent
-#'   and \code{grp} as independent variable, by calling
-#'   \code{lm(count ~ as.factor(grp))}. Then \code{\link[emmeans]{contrast}}
-#'   is called to get p-values for each sub-group. P-values indicate whether
-#'   each group-mean is significantly different from the total mean.
+#' @details This function is comparable to `aggregate(x, group mean)`, but provides
+#' some further information, including summary statistics from a One-Way-Anova
+#' using `x` as dependent and `group` as independent variable.
+#' Then \code{\link[emmeans]{contrast}}
+#' is called to get p-values for each sub-group. P-values indicate whether
+#' each group-mean is significantly different from the total mean.
 #'
 #' @examples
 #' data(efc)
-#' means_by_group(efc, c12hour, e42dep)
+#' means_by_group(efc, "c12hour", "e42dep")
 #'
 #' data(iris)
-#' means_by_group(iris, Sepal.Width, Species)
-#'
-#' # also works for grouped data frames
-#' if (require("dplyr")) {
-#'   efc %>%
-#'     group_by(c172code) %>%
-#'     means_by_group(c12hour, e42dep)
-#' }
+#' means_by_group(iris, "Sepal.Width", "Species")
 #'
 #' # weighting
 #' efc$weight <- abs(rnorm(n = nrow(efc), mean = 1, sd = .5))
-#' means_by_group(efc, c12hour, e42dep, weights = weight)
+#' means_by_group(efc, "c12hour", "e42dep", weights = "weight")
 #' @export
 means_by_group <- function(x, ...) {
   UseMethod("means_by_group")
@@ -57,6 +51,7 @@ means_by_group.default <- function(x, ...) {
 }
 
 
+#' @rdname means_by_group
 #' @export
 means_by_group.numeric <- function(x, group = NULL, weights = NULL, digits = NULL, ...) {
   # sanity check for arguments
@@ -94,7 +89,7 @@ means_by_group.numeric <- function(x, group = NULL, weights = NULL, digits = NUL
   var_mean_label <- attr(x, "label", exact = TRUE)
   var_grp_label <- attr(group, "label", exact = TRUE)
 
-  # if no labels present, use variable names directlf y
+  # if no labels present, use variable names directly
   if (is.null(var_mean_label)) {
     var_mean_label <- deparse(substitute(x))
   }
@@ -112,6 +107,7 @@ means_by_group.numeric <- function(x, group = NULL, weights = NULL, digits = NUL
 }
 
 
+#' @rdname means_by_group
 #' @export
 means_by_group.data.frame <- function(x,
                                       select = NULL,
@@ -141,6 +137,14 @@ means_by_group.data.frame <- function(x,
   }
 
   out <- lapply(select, function(i) {
+    # if no labels present, use variable names directy
+    if (is.null(attr(x[[i]], "label", exact = TRUE))) {
+      attr(x[[i]], "label") <- i
+    }
+    if (is.null(attr(x[[group]], "label", exact = TRUE))) {
+      attr(x[[group]], "label") <- group
+    }
+    # compute means table
     means_by_group(x[[i]], group = x[[group]], weights = w, digits = digits, ...)
   })
 
