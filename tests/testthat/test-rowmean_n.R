@@ -17,7 +17,7 @@ test_that("rowmean_n", {
 test_that("rowmean_n, errors or messages", {
   data(iris)
   expect_error(rowmean_n(5, n = 1), regex = "`data` must be")
-  expect_error(rowmean_n(iris[1], n = 1), regex = "two numeric columns")
+  expect_error(rowmean_n(iris[1], n = 1), regex = "two numeric")
   expect_error(rowmean_n(iris, n = NULL), regex = "numeric value")
   expect_error(rowmean_n(iris, n = 1:4), regex = "numeric value")
   expect_error(rowmean_n(iris, n = "a"), regex = "numeric value")
