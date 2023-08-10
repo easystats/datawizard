@@ -242,14 +242,14 @@ print.dw_groupmeans <- function(x, digits = NULL, ...) {
 
   # footer
   footer <- paste0(
-    "\nAnova: R2=", insight::format_value(attributes(out)$r2, digits = 3),
-    "; adj.R2=", insight::format_value(attributes(out)$adj.r2, digits = 3),
-    "; F=", insight::format_value(attributes(out)$fstat, digits = 3),
-    "; ", insight::format_p(attributes(out)$p.value, whitespace = FALSE),
+    "\nAnova: R2=", insight::format_value(attributes(x)$r2, digits = 3),
+    "; adj.R2=", insight::format_value(attributes(x)$adj.r2, digits = 3),
+    "; F=", insight::format_value(attributes(x)$fstat, digits = 3),
+    "; ", insight::format_p(attributes(x)$p.value, whitespace = FALSE),
     "\n"
   )
 
-  cat(insight::export_table(x, caption = caption, footer = footer, ...))
+  cat(insight::export_table(out, caption = caption, footer = footer, ...))
 }
 
 #' @export
