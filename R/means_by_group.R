@@ -165,7 +165,7 @@ means_by_group.data.frame <- function(x,
   if (is.null(data$weights) || all(data$weights == 1)) {
     fit <- stats::lm(x ~ group, data = data)
   } else {
-    fit <- stats::lm(x ~ group, weights = weights, data = data)
+    fit <- stats::lm(x ~ group, weights = data$weights, data = data)
   }
 
   # summary table data
@@ -223,6 +223,9 @@ means_by_group.data.frame <- function(x,
 format.dw_groupmeans <- function(x, digits = NULL, ...) {
   if (is.null(digits)) {
     digits <- attr(x, "digits", exact = TRUE)
+  }
+  if (is.null(digits)) {
+    digits <- 2
   }
   insight::format_table(x, digits = digits, ...)
 }
