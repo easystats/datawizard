@@ -187,7 +187,7 @@ means_by_group.data.frame <- function(x,
   # p-values of contrast-means
   if (insight::check_if_installed("emmeans", quietly = TRUE)) {
     # create summary table of contrasts, for p-values and confidence intervals
-    predicted <- emmeans::emmeans(fit, specs = "group")
+    predicted <- emmeans::emmeans(fit, specs = "group", level = ci)
     contrasts <- emmeans::contrast(predicted, method = "eff")
     # add p-values and confidence intervals to "out"
     if (!is.null(ci) && !is.na(ci)) {
@@ -247,7 +247,7 @@ format.dw_groupmeans <- function(x, digits = NULL, ...) {
     digits <- 2
   }
   x$N <- insight::format_value(x$N, digits = 0)
-  insight::format_table(x, digits = digits, ...)
+  insight::format_table(remove_empty_columns(x), digits = digits, ...)
 }
 
 #' @export
