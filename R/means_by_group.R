@@ -177,13 +177,19 @@ means_by_group.data.frame <- function(x,
   }
 
   # summary table data
-  out <- stats::aggregate(data["x"], data["group"], weighted_mean, weights = data$weights)
-  out_sd <- stats::aggregate(data["x"], data["group"], weighted_sd, weights = data$weights)
-  out_weights <- stats::aggregate(data["weights"], data["group"], sum)
+  groups <- split(data$x, data$group)
+  group_weights <- split(data$weights, data$group)
+  out <- do.call(rbind, Map(function(x, w) {
+    data.frame(
+      Mean = weighted_mean(x, weights = w),
+      SD = weighted_sd(x, weights = w),
+      N = round(sum(w)),
+      stringsAsFactors = FALSE
+    )
+  }, groups, group_weights))
 
-  colnames(out) <- c("Category", "Mean")
-  out$N <- round(out_weights[[2]])
-  out$SD <- out_sd[[2]]
+  # add group names
+  out$Category <- levels(data$group)
   out$p <- out$CI_high <- out$CI_low <- NA
 
   # p-values of contrast-means
@@ -200,6 +206,9 @@ means_by_group.data.frame <- function(x,
     summary_table <- as.data.frame(contrasts)
     out$p <- summary_table$p.value
   }
+
+  # reorder columns
+  out <- out[c("Category", "Mean", "N", "SD", "CI_low", "CI_high", "p")]
 
   # finally, add total-row
   out <- rbind(

@@ -9,3 +9,11 @@ test_that("meany_by_group", {
   expect_snapshot(means_by_group(efc$c12hour, efc$e42dep))
   expect_snapshot(means_by_group(efc$c12hour, efc$e42dep, ci = NA))
 })
+
+test_that("meany_by_group, weighted", {
+  data(efc)
+  set.seed(123)
+  efc$weight <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  expect_snapshot(means_by_group(efc, "c12hour", "e42dep", weights = "weight"), variant = "windows")
+  expect_snapshot(means_by_group(efc, "c12hour", "e42dep", weights = "weight", ci = NA), variant = "windows")
+})
