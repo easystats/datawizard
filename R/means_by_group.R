@@ -52,7 +52,12 @@ means_by_group.default <- function(x, ...) {
 
 #' @rdname means_by_group
 #' @export
-means_by_group.numeric <- function(x, group = NULL, weights = NULL, digits = NULL, ...) {
+means_by_group.numeric <- function(x,
+                                   group = NULL,
+                                   ci = 0.95,
+                                   weights = NULL,
+                                   digits = NULL,
+                                   ...) {
   # sanity check for arguments
 
   # "group" must be provided
@@ -101,7 +106,7 @@ means_by_group.numeric <- function(x, group = NULL, weights = NULL, digits = NUL
   ))
 
   # get grouped means table
-  out <- .means_by_group(data)
+  out <- .means_by_group(data, ci = ci)
 
   # attributes
   attr(out, "var_mean_label") <- var_mean_label
@@ -118,6 +123,7 @@ means_by_group.numeric <- function(x, group = NULL, weights = NULL, digits = NUL
 means_by_group.data.frame <- function(x,
                                       select = NULL,
                                       group = NULL,
+                                      ci = 0.95,
                                       weights = NULL,
                                       digits = NULL,
                                       exclude = NULL,
@@ -151,7 +157,7 @@ means_by_group.data.frame <- function(x,
       attr(x[[group]], "label") <- group
     }
     # compute means table
-    means_by_group(x[[i]], group = x[[group]], weights = w, digits = digits, ...)
+    means_by_group(x[[i]], group = x[[group]], ci = ci, weights = w, digits = digits, ...)
   })
 
   class(out) <- c("dw_groupmeans_list", "list")
@@ -160,7 +166,7 @@ means_by_group.data.frame <- function(x,
 
 
 #' @keywords internal
-.means_by_group <- function(data) {
+.means_by_group <- function(data, ci = 0.95) {
   # compute anova statistics for mean table
   if (is.null(data$weights) || all(data$weights == 1)) {
     fit <- stats::lm(x ~ group, data = data)
@@ -176,14 +182,21 @@ means_by_group.data.frame <- function(x,
   colnames(out) <- c("Category", "Mean")
   out$N <- out_weights[[2]]
   out$SD <- out_sd[[2]]
+  out$p <- out$CI_high <- out$CI_low <- NA
 
   # p-values of contrast-means
   if (insight::check_if_installed("emmeans", quietly = TRUE)) {
-    emm <- emmeans::emmeans(fit, specs = "group")
-    con <- emmeans::contrast(emm, method = "eff")
-    pvalues <- c(data_extract(as.data.frame(summary(con)), "p.value"), NA)
-  } else {
-    pvalues <- NULL
+    # create summary table of contrasts, for p-values and confidence intervals
+    predicted <- emmeans::emmeans(fit, specs = "group")
+    contrasts <- emmeans::contrast(predicted, method = "eff")
+    # add p-values and confidence intervals to "out"
+    if (!is.null(ci) && !is.na(ci)) {
+      summary_table <- as.data.frame(predicted)
+      out$CI_low <- summary_table$lower.CL
+      out$CI_high <- summary_table$upper.CL
+    }
+    summary_table <- as.data.frame(contrasts)
+    out$p <- summary_table$p.value
   }
 
   # finally, add total-row
@@ -194,12 +207,12 @@ means_by_group.data.frame <- function(x,
       Mean = weighted_mean(data$x, weights = data$weights),
       N = nrow(data),
       SD = weighted_sd(data$x, weights = data$weights),
+      CI_low = NA,
+      CI_high = NA,
+      p = NA,
       stringsAsFactors = FALSE
     )
   )
-
-  # if we have p-values, add this column to "out"
-  out$p <- pvalues
 
   # get anova statistics for mean table
   sum.fit <- summary(fit)
@@ -214,6 +227,7 @@ means_by_group.data.frame <- function(x,
 
   # copy as attributes
   attr(out, "r2") <- r2
+  attr(out, "ci") <- ci
   attr(out, "adj.r2") <- r2.adj
   attr(out, "fstat") <- fstat[1]
   attr(out, "p.value") <- pval
@@ -232,6 +246,7 @@ format.dw_groupmeans <- function(x, digits = NULL, ...) {
   if (is.null(digits)) {
     digits <- 2
   }
+  x$N <- insight::format_value(x$N, digits = 0)
   insight::format_table(x, digits = digits, ...)
 }
 
