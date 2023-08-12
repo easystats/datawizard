@@ -43,6 +43,7 @@ Suggests:
     data.table,
     dplyr (>= 1.0),
     effectsize,
+    emmeans,
     gamm4,
     ggplot2,
     gt,
