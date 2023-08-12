@@ -178,11 +178,13 @@ means_by_group.data.frame <- function(x,
   out$SD <- out_sd[[2]]
 
   # p-values of contrast-means
-  # means.p <- fit %>%
-  #   emmeans::emmeans(specs = "grp") %>%
-  #   emmeans::contrast(method = "eff") %>%
-  #   summary() %>%
-  #   dplyr::pull("p.value")
+  if (insight::check_if_installed("emmeans", quietly = TRUE)) {
+    emm <- emmeans::emmeans(fit, specs = "group")
+    con <- emmeans::contrast(emm, method = "eff")
+    pvalues <- c(data_extract(as.data.frame(summary(con)), "p.value"), NA)
+  } else {
+    pvalues <- NULL
+  }
 
   # finally, add total-row
   out <- rbind(
@@ -195,6 +197,9 @@ means_by_group.data.frame <- function(x,
       stringsAsFactors = FALSE
     )
   )
+
+  # if we have p-values, add this column to "out"
+  out$p <- pvalues
 
   # get anova statistics for mean table
   sum.fit <- summary(fit)
