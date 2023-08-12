@@ -5,7 +5,7 @@ NEW FUNCTIONS
 * `rowmean_n()`, to compute row means if row contains at least `n` non-missing
   values.
 
-* `means_by_group()`, to compute mean values of vbariables, grouped by levels
+* `means_by_group()`, to compute mean values of variables, grouped by levels
   of specified factors.
 
 CHANGES
