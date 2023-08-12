@@ -1,13 +1,15 @@
 #' @title Summary of mean values by group
 #' @name means_by_group
 #'
-#' @description Computes sumary table of means by groups.
+#' @description Computes summary table of means by groups.
 #'
 #' @param x A vector or a data frame.
 #' @param group If `x` is a numeric vector, `group` should be a factor that
 #' indicates the group-classifying categories. If `x` is a data frame, `group`
 #' should be a character string, naming the variable in `x` that is used for
 #' grouping. Numeric vectors are coerced to factors.
+#' @param ci Level of confidence interval for mean estimates. Default is `0.95`.
+#' Use `ci = NA` to suppress confidence intervals.
 #' @param weights If `x` is a numeric vector, `weights` should be a vector of
 #' weighted that will be applied to weight all observations. If `x` is a data
 #' frame, can also be a character string indicating the name of the variable in
@@ -23,10 +25,9 @@
 #'
 #' @details This function is comparable to `aggregate(x, group mean)`, but provides
 #' some further information, including summary statistics from a One-Way-ANOVA
-#' using `x` as dependent and `group` as independent variable.
-#' Then \code{\link[emmeans]{contrast}}
-#' is called to get p-values for each sub-group. P-values indicate whether
-#' each group-mean is significantly different from the total mean.
+#' using `x` as dependent and `group` as independent variable. [`emmeans::contrast()`]
+#' is used to get p-values for each sub-group. P-values indicate whether each
+#' group-mean is significantly different from the total mean.
 #'
 #' @examples
 #' data(efc)

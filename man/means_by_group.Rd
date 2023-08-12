@@ -8,12 +8,13 @@
 \usage{
 means_by_group(x, ...)
 
-\method{means_by_group}{numeric}(x, group = NULL, weights = NULL, digits = NULL, ...)
+\method{means_by_group}{numeric}(x, group = NULL, ci = 0.95, weights = NULL, digits = NULL, ...)
 
 \method{means_by_group}{data.frame}(
   x,
   select = NULL,
   group = NULL,
+  ci = 0.95,
   weights = NULL,
   digits = NULL,
   exclude = NULL,
@@ -32,6 +33,9 @@ means_by_group(x, ...)
 indicates the group-classifying categories. If \code{x} is a data frame, \code{group}
 should be a character string, naming the variable in \code{x} that is used for
 grouping. Numeric vectors are coerced to factors.}
+
+\item{ci}{Level of confidence interval for mean estimates. Default is \code{0.95}.
+Use \code{ci = NA} to suppress confidence intervals.}
 
 \item{weights}{If \code{x} is a numeric vector, \code{weights} should be a vector of
 weighted that will be applied to weight all observations. If \code{x} is a data
@@ -98,15 +102,14 @@ A data frame with with information of mean and further summary
 statistics for each sub-group.
 }
 \description{
-Computes sumary table of means by groups.
+Computes summary table of means by groups.
 }
 \details{
 This function is comparable to \verb{aggregate(x, group mean)}, but provides
 some further information, including summary statistics from a One-Way-ANOVA
-using \code{x} as dependent and \code{group} as independent variable.
-Then \code{\link[emmeans]{contrast}}
-is called to get p-values for each sub-group. P-values indicate whether
-each group-mean is significantly different from the total mean.
+using \code{x} as dependent and \code{group} as independent variable. \code{\link[emmeans:contrast]{emmeans::contrast()}}
+is used to get p-values for each sub-group. P-values indicate whether each
+group-mean is significantly different from the total mean.
 }
 \examples{
 data(efc)
