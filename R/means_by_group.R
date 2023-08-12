@@ -7,7 +7,8 @@
 #' @param group If `x` is a numeric vector, `group` should be a factor that
 #' indicates the group-classifying categories. If `x` is a data frame, `group`
 #' should be a character string, naming the variable in `x` that is used for
-#' grouping. Numeric vectors are coerced to factors.
+#' grouping. Numeric vectors are coerced to factors. Not that `group` should
+#' only refer to a single variable.
 #' @param ci Level of confidence interval for mean estimates. Default is `0.95`.
 #' Use `ci = NA` to suppress confidence intervals.
 #' @param weights If `x` is a numeric vector, `weights` should be a vector of

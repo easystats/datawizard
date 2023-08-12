@@ -32,7 +32,8 @@ means_by_group(x, ...)
 \item{group}{If \code{x} is a numeric vector, \code{group} should be a factor that
 indicates the group-classifying categories. If \code{x} is a data frame, \code{group}
 should be a character string, naming the variable in \code{x} that is used for
-grouping. Numeric vectors are coerced to factors.}
+grouping. Numeric vectors are coerced to factors. Not that \code{group} should
+only refer to a single variable.}
 
 \item{ci}{Level of confidence interval for mean estimates. Default is \code{0.95}.
 Use \code{ci = NA} to suppress confidence intervals.}
