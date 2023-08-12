@@ -59,6 +59,7 @@ reference:
       - data_codebook
       - data_tabulate
       - data_peek
+      - means_by_group
       - contains("distribution")
       - kurtosis
       - smoothness
