@@ -1,4 +1,5 @@
-test_that("meany_by_group", {
+test_that("mean_by_group", {
+  skip_if_not_installed("emmeans")
   data(efc)
   expect_snapshot(means_by_group(efc, "c12hour", "e42dep"))
   expect_snapshot(means_by_group(efc, "c12hour", "e42dep", ci = 0.99))
@@ -10,7 +11,8 @@ test_that("meany_by_group", {
   expect_snapshot(means_by_group(efc$c12hour, efc$e42dep, ci = NA))
 })
 
-test_that("meany_by_group, weighted", {
+test_that("mean_by_group, weighted", {
+  skip_if_not_installed("emmeans")
   data(efc)
   set.seed(123)
   efc$weight <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
