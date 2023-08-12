@@ -182,7 +182,7 @@ means_by_group.data.frame <- function(x,
   out_weights <- stats::aggregate(data["weights"], data["group"], sum)
 
   colnames(out) <- c("Category", "Mean")
-  out$N <- out_weights[[2]]
+  out$N <- round(out_weights[[2]])
   out$SD <- out_sd[[2]]
   out$p <- out$CI_high <- out$CI_low <- NA
 
