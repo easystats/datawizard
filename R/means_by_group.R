@@ -12,19 +12,19 @@
 #' @param ci Level of confidence interval for mean estimates. Default is `0.95`.
 #' Use `ci = NA` to suppress confidence intervals.
 #' @param weights If `x` is a numeric vector, `weights` should be a vector of
-#' weighted that will be applied to weight all observations. If `x` is a data
-#' frame, can also be a character string indicating the name of the variable in
-#' `x` that should be used for weighting. Default is `NULL`, so no weights are
-#' used.
+#' weights that will be applied to weight all observations. If `x` is a data
+#' frame, `weights` can also be a character string indicating the name of the
+#' variable in `x` that should be used for weighting. Default is `NULL`, so no
+#' weights are used.
 #' @param digits Optional scalar, indicating the amount of digits after decimal
 #' point when rounding estimates and values.
 #' @param ... Currently not used
 #' @inheritParams find_columns
 #'
-#' @return A data frame with with information of mean and further summary
-#' statistics for each sub-group.
+#' @return A data frame with information on mean and further summary statistics
+#' for each sub-group.
 #'
-#' @details This function is comparable to `aggregate(x, group mean)`, but provides
+#' @details This function is comparable to `aggregate(x, group, mean)`, but provides
 #' some further information, including summary statistics from a One-Way-ANOVA
 #' using `x` as dependent and `group` as independent variable. [`emmeans::contrast()`]
 #' is used to get p-values for each sub-group. P-values indicate whether each
@@ -99,7 +99,6 @@ means_by_group.numeric <- function(x,
     group <- to_factor(group)
   }
 
-  # create string with variable names
   data <- stats::na.omit(data.frame(
     x = x,
     group = group,

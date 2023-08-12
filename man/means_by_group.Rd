@@ -39,10 +39,10 @@ only refer to a single variable.}
 Use \code{ci = NA} to suppress confidence intervals.}
 
 \item{weights}{If \code{x} is a numeric vector, \code{weights} should be a vector of
-weighted that will be applied to weight all observations. If \code{x} is a data
-frame, can also be a character string indicating the name of the variable in
-\code{x} that should be used for weighting. Default is \code{NULL}, so no weights are
-used.}
+weights that will be applied to weight all observations. If \code{x} is a data
+frame, \code{weights} can also be a character string indicating the name of the
+variable in \code{x} that should be used for weighting. Default is \code{NULL}, so no
+weights are used.}
 
 \item{digits}{Optional scalar, indicating the amount of digits after decimal
 point when rounding estimates and values.}
@@ -99,14 +99,14 @@ functions (see 'Details'), this argument may be used as workaround.}
 \item{verbose}{Toggle warnings.}
 }
 \value{
-A data frame with with information of mean and further summary
-statistics for each sub-group.
+A data frame with information on mean and further summary statistics
+for each sub-group.
 }
 \description{
 Computes summary table of means by groups.
 }
 \details{
-This function is comparable to \verb{aggregate(x, group mean)}, but provides
+This function is comparable to \code{aggregate(x, group, mean)}, but provides
 some further information, including summary statistics from a One-Way-ANOVA
 using \code{x} as dependent and \code{group} as independent variable. \code{\link[emmeans:contrast]{emmeans::contrast()}}
 is used to get p-values for each sub-group. P-values indicate whether each
