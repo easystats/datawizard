@@ -117,10 +117,10 @@ row_means <- function(data,
 
   # proceed here if min_valid is not NULL
   if (!is.null(min_valid)) {
-    # is 'n' indicating a proportion?
+    # is 'min_valid' indicating a proportion?
     decimals <- min_valid %% 1
     if (decimals != 0) {
-      n <- round(ncol(data) * decimals)
+      min_valid <- round(ncol(data) * decimals)
     }
 
     # min_valid may not be larger as df's amount of columns
