@@ -16,6 +16,7 @@ test_that("row_means", {
 
 test_that("row_means, errors or messages", {
   data(iris)
+  expect_error(expect_warning(row_means(iris, select = "abc")), regex = "No columns")
   expect_error(row_means(5, min_valid = 1), regex = "`data` must be")
   expect_error(row_means(iris[1], min_valid = 1), regex = "two numeric")
   expect_error(row_means(iris, min_valid = NULL), regex = "numeric value")
