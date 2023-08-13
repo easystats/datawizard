@@ -129,7 +129,7 @@ row_means <- function(data,
     }
 
     # row means
-    to_na <- rowSums(is.na(data)) > min_valid
+    to_na <- rowSums(is.na(data)) > ncol(data) - min_valid
     out <- rowMeans(data, na.rm = TRUE)
     out[to_na] <- NA
   } else {
