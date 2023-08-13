@@ -52,8 +52,8 @@
 #' # needs at least 2 non-missing values per row
 #' row_means(dat, min_valid = 2)
 #'
-#' # needs at least 1 non-missing value per row
-#' row_means(dat, select = c("c1", "c3"), min_valid = 1) # all means are shown
+#' # needs at least 1 non-missing value per row, for two selected variables
+#' row_means(dat, select = c("c1", "c3"), min_valid = 1)
 #'
 #' # needs at least 50% of non-missing values per row
 #' row_means(dat, min_valid = 0.5) # 3 valid return values
@@ -80,21 +80,11 @@ row_means <- function(data,
     verbose = verbose
   )
 
-  .row_means(
-    data[select],
-    min_valid = min_valid,
-    remove_na = remove_na,
-    digits = digits,
-    verbose = verbose
-  )
-}
+  if (is.null(select) || length(select) == 0) {
+    insight::format_error("No columns selected.")
+  }
 
-
-# helper ---------------------
-
-#' @keywords internal
-.row_means <- function(data, min_valid = NULL, remove_na = FALSE, digits = NULL, verbose = TRUE) {
-  data <- .coerce_to_dataframe(data)
+  data <- .coerce_to_dataframe(data[select])
 
   # n must be a numeric, non-missing value
   if (!is.null(min_valid) && (all(is.na(min_valid)) || !is.numeric(min_valid) || length(min_valid) > 1)) {

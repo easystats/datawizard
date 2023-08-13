@@ -78,7 +78,7 @@ row_means(dat, min_valid = 3) # 2 valid return values
 row_means(dat, min_valid = 2)
 
 # needs at least 1 non-missing value per row
-row_means(dat, select = c("c1", "c3"), min_valid = 1) # all means are shown
+row_means(dat, select = c("c1", "c3"), min_valid = 1)
 
 # needs at least 50\% of non-missing values per row
 row_means(dat, min_valid = 0.5) # 3 valid return values
