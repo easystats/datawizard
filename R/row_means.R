@@ -22,11 +22,12 @@
 #'
 #' @details Rounding to a negative number of `digits` means rounding to a power of
 #' ten, for example `row_means(df, 3, digits = -2)` rounds to the nearest hundred.
-#' For `n`, must be a numeric value from `0` to `ncol(data)`. If a row in the
-#' data frame has at least `n` non-missing values, the row mean is returned. If
-#' `n` is a non-integer value from 0 to 1, `n` is considered to indicate the
-#' proportion of required non-missing values per row. E.g., if `n = 0.75`, a
-#' row must have at least `ncol(data) * n` non-missing values for the row mean
+#' For `min_valid`, if not `NULL`, `min_valid` must be a numeric value from `0`
+#' to `ncol(data)`. If a row in the data frame has at least `min_valid`
+#' non-missing values, the row mean is returned. If `min_valid` is a non-integer
+#' value from 0 to 1, `min_valid` is considered to indicate the proportion of
+#' required non-missing values per row. E.g., if `min_valid = 0.75`, a row must
+#' have at least `ncol(data) * min_valid` non-missing values for the row mean
 #' to be calculated. See 'Examples'.
 #'
 #' @examples

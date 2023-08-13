@@ -47,11 +47,12 @@ valid (and not \code{NA}).
 \details{
 Rounding to a negative number of \code{digits} means rounding to a power of
 ten, for example \code{row_means(df, 3, digits = -2)} rounds to the nearest hundred.
-For \code{n}, must be a numeric value from \code{0} to \code{ncol(data)}. If a row in the
-data frame has at least \code{n} non-missing values, the row mean is returned. If
-\code{n} is a non-integer value from 0 to 1, \code{n} is considered to indicate the
-proportion of required non-missing values per row. E.g., if \code{n = 0.75}, a
-row must have at least \code{ncol(data) * n} non-missing values for the row mean
+For \code{min_valid}, if not \code{NULL}, \code{min_valid} must be a numeric value from \code{0}
+to \code{ncol(data)}. If a row in the data frame has at least \code{min_valid}
+non-missing values, the row mean is returned. If \code{min_valid} is a non-integer
+value from 0 to 1, \code{min_valid} is considered to indicate the proportion of
+required non-missing values per row. E.g., if \code{min_valid = 0.75}, a row must
+have at least \code{ncol(data) * min_valid} non-missing values for the row mean
 to be calculated. See 'Examples'.
 }
 \examples{
@@ -77,7 +78,7 @@ row_means(dat, min_valid = 3) # 2 valid return values
 # needs at least 2 non-missing values per row
 row_means(dat, min_valid = 2)
 
-# needs at least 1 non-missing value per row
+# needs at least 1 non-missing value per row, for two selected variables
 row_means(dat, select = c("c1", "c3"), min_valid = 1)
 
 # needs at least 50\% of non-missing values per row
