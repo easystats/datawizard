@@ -2,8 +2,8 @@
 
 NEW FUNCTIONS
 
-* `rowmean_n()`, to compute row means if row contains at least `n` non-missing
-  values.
+* `row_means()`, to compute row means, optionally only for those row with at
+  least `min_valid` non-missing values.
 
 * `means_by_group()`, to compute mean values of variables, grouped by levels
   of specified factors.
