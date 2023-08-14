@@ -16,7 +16,10 @@
 #' @param digits Numeric value indicating the number of decimal places to be
 #' used for rounding mean values. Negative values are allowed (see 'Details').
 #' By default, `digits = NULL` and no rounding is used.
+#' @param remove_na Logical, if `TRUE` (default), removes missing (`NA`) values
+#' before calculating row means. Only applies if `min_valuid` is not specified.
 #' @param verbose Toggle warnings.
+#' @inheritParams find_columns
 #'
 #' @return A vector with row means for those rows with at least `n` valid values.
 #'

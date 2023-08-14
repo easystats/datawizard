@@ -19,6 +19,42 @@ row_means(
 \arguments{
 \item{data}{A data frame with at least two columns, where row means are applied.}
 
+\item{select}{Variables that will be included when performing the required
+tasks. Can be either
+\itemize{
+\item a variable specified as a literal variable name (e.g., \code{column_name}),
+\item a string with the variable name (e.g., \code{"column_name"}), or a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a formula with variable names (e.g., \code{~column_1 + column_2}),
+\item a vector of positive integers, giving the positions counting from the left
+(e.g. \code{1} or \code{c(1, 3, 5)}),
+\item a vector of negative integers, giving the positions counting from the
+right (e.g., \code{-1} or \code{-1:-3}),
+\item one of the following select-helpers: \code{starts_with()}, \code{ends_with()},
+\code{contains()}, a range using \code{:} or \code{regex("")}. \code{starts_with()},
+\code{ends_with()}, and  \code{contains()} accept several patterns, e.g
+\code{starts_with("Sep", "Petal")}.
+\item or a function testing for logical conditions, e.g. \code{is.numeric()} (or
+\code{is.numeric}), or any user-defined function that selects the variables
+for which the function returns \code{TRUE} (like: \code{foo <- function(x) mean(x) > 3}),
+\item ranges specified via literal variable names, select-helpers (except
+\code{regex()}) and (user-defined) functions can be negated, i.e. return
+non-matching elements, when prefixed with a \code{-}, e.g. \code{-ends_with("")},
+\code{-is.numeric} or \code{-(Sepal.Width:Petal.Length)}. \strong{Note:} Negation means
+that matches are \emph{excluded}, and thus, the \code{exclude} argument can be
+used alternatively. For instance, \code{select=-ends_with("Length")} (with
+\code{-}) is equivalent to \code{exclude=ends_with("Length")} (no \code{-}). In case
+negation should not work as expected, use the \code{exclude} argument instead.
+}
+
+If \code{NULL}, selects all columns. Patterns that found no matches are silently
+ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
+return \code{"Species"}.}
+
+\item{exclude}{See \code{select}, however, column names matched by the pattern
+from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
+excludes no columns.}
+
 \item{min_valid}{Optional, a numeric value of length 1. May either be
 \itemize{
 \item a numeric value that indicates the amount of valid values per row to
@@ -33,6 +69,22 @@ If a row's sum of valid values is less than \code{min_valid}, \code{NA} will be 
 \item{digits}{Numeric value indicating the number of decimal places to be
 used for rounding mean values. Negative values are allowed (see 'Details').
 By default, \code{digits = NULL} and no rounding is used.}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
+
+\item{regex}{Logical, if \code{TRUE}, the search pattern from \code{select} will be
+treated as regular expression. When \code{regex = TRUE}, select \emph{must} be a
+character string (or a variable containing a character string) and is not
+allowed to be one of the supported select-helpers or a character vector
+of length > 1. \code{regex = TRUE} is comparable to using one of the two
+select-helpers, \code{select = contains("")} or \code{select = regex("")}, however,
+since the select-helpers may not work when called from inside other
+functions (see 'Details'), this argument may be used as workaround.}
+
+\item{remove_na}{Logical, if \code{TRUE} (default), removes missing (\code{NA}) values
+before calculating row means. Only applies if \code{min_valuid} is not specified.}
 
 \item{verbose}{Toggle warnings.}
 }
