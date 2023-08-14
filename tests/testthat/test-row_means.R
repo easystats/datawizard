@@ -12,14 +12,14 @@ test_that("row_means", {
   expect_equal(row_means(d_mn, min_valid = 0.5), c(1.5, 2.75, NA, 5.66667), tolerance = 1e-3)
   expect_equal(row_means(d_mn, min_valid = 0.75), c(NA, 2.75, NA, 5.66667), tolerance = 1e-3)
   expect_equal(row_means(d_mn, min_valid = 2, digits = 1), c(1.5, 2.8, NA, 5.7), tolerance = 1e-1)
+  expect_message(row_means(iris), regex = "Only numeric")
+  expect_equal(row_means(iris, verbose = FALSE), rowMeans(iris[, 1:4]), tolerance = 1e-3, ignore_attr = TRUE)
 })
 
 test_that("row_means, errors or messages", {
   data(iris)
   expect_error(expect_warning(row_means(iris, select = "abc")), regex = "No columns")
-  expect_error(row_means(5, min_valid = 1), regex = "`data` must be")
   expect_error(row_means(iris[1], min_valid = 1), regex = "two numeric")
-  expect_error(row_means(iris, min_valid = NULL), regex = "numeric value")
   expect_error(row_means(iris, min_valid = 1:4), regex = "numeric value")
   expect_error(row_means(iris, min_valid = "a"), regex = "numeric value")
   expect_message(row_means(iris[1:3, ], min_valid = 3), regex = "Only numeric")
