@@ -1,0 +1,21 @@
+test_that("mean_by_group", {
+  skip_if_not_installed("emmeans")
+  data(efc)
+  expect_snapshot(means_by_group(efc, "c12hour", "e42dep"))
+  expect_snapshot(means_by_group(efc, "c12hour", "e42dep", ci = 0.99))
+  expect_snapshot(means_by_group(efc, "c12hour", "e42dep", ci = NA))
+  expect_snapshot(means_by_group(efc, c("neg_c_7", "c12hour"), "e42dep"))
+  expect_snapshot(means_by_group(efc, c("neg_c_7", "c12hour"), "e42dep", ci = NA))
+  expect_snapshot(means_by_group(efc, c("neg_c_7", "c12hour"), "e42dep", ci = 0.99))
+  expect_snapshot(means_by_group(efc$c12hour, efc$e42dep))
+  expect_snapshot(means_by_group(efc$c12hour, efc$e42dep, ci = NA))
+})
+
+test_that("mean_by_group, weighted", {
+  skip_if_not_installed("emmeans")
+  data(efc)
+  set.seed(123)
+  efc$weight <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  expect_snapshot(means_by_group(efc, "c12hour", "e42dep", weights = "weight"), variant = "windows")
+  expect_snapshot(means_by_group(efc, "c12hour", "e42dep", weights = "weight", ci = NA), variant = "windows")
+})
