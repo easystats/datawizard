@@ -64,8 +64,8 @@ reference:
       - kurtosis
       - smoothness
       - skewness
+      - row_means
       - weighted_mean
-      - rowmean_n
       - mean_sd
 
   - title: Convert and Replace Data
