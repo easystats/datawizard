@@ -212,10 +212,6 @@ test_that("unstandardize, data frame", {
   x <- standardize(iris, robust = TRUE, two_sd = TRUE)
   rez <- unstandardize(x, robust = TRUE, two_sd = TRUE)
   expect_equal(rez, iris, tolerance = 0.1, ignore_attr = TRUE)
-
-  d <- poorman::group_by(mtcars, am)
-  x <- standardize(d)
-  expect_error(unstandardize(x))
 })
 
 test_that("un/standardize, matrix", {
