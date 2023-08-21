@@ -13,6 +13,9 @@
     <loc>https://easystats.github.io/datawizard/LICENSE-text.html</loc>
   </url>
   <url>
+    <loc>https://easystats.github.io/datawizard/LICENSE.html</loc>
+  </url>
+  <url>
     <loc>https://easystats.github.io/datawizard/SUPPORT.html</loc>
   </url>
   <url>
@@ -56,6 +59,9 @@
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/colnames.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/datawizard/reference/contr.deviation.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/datawizard/reference/convert_na_to.html</loc>
