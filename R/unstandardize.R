@@ -17,6 +17,7 @@ unstandardize.numeric <- function(x,
                                   robust = FALSE,
                                   two_sd = FALSE,
                                   ...) {
+
   if (!is.null(reference)) {
     if (robust) {
       center <- stats::median(reference, na.rm = TRUE)
@@ -70,7 +71,23 @@ unstandardize.data.frame <- function(x,
     verbose = verbose
   )
 
-  if (!is.null(reference)) {
+  dots <- match.call(expand.dots = FALSE)[["..."]]
+
+  if (!is.null(dots$grp_attr_dw)) {
+    grp_attr_dw <- eval(dots$grp_attr_dw, envir = parent.frame(1L))
+  } else {
+    grp_attr_dw <- NULL
+  }
+
+  if (!is.null(grp_attr_dw)) {
+    center <- vapply(cols, function(x) {
+      grp_attr_dw[grep(paste0("^attr\\_", x, "\\.center"), names(grp_attr_dw))]
+    }, FUN.VALUE = numeric(1L))
+    scale <- vapply(cols, function(x) {
+      grp_attr_dw[grep(paste0("^attr\\_", x, "\\.scale"), names(grp_attr_dw))]
+    }, FUN.VALUE = numeric(1L))
+    i <- vapply(x[, cols, drop = FALSE], is.numeric, FUN.VALUE = logical(1L))
+  } else if (!is.null(reference)) {
     i <- vapply(x[, cols, drop = FALSE], is.numeric, FUN.VALUE = logical(1L))
     i <- i[i]
     reference <- reference[names(i)]

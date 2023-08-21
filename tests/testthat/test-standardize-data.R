@@ -281,3 +281,50 @@ test_that("standardize when only providing one of center/scale", {
     (x - mean(x)) / 1.5
   )
 })
+
+
+# grouped data
+
+test_that("unstandardize: grouped data", {
+  skip_if_not_installed("poorman")
+
+  # 1 group, 1 standardized var
+  norm <- poorman::group_by(iris, Species)
+  norm <- standardize(norm, "Sepal.Length")
+  expect_identical(
+    poorman::ungroup(unstandardize(norm, select = "Sepal.Length")),
+    iris
+  )
+
+  # 2 groups, 1 standardized var
+  set.seed(123)
+  test <- iris
+  test$grp <- sample(c("A", "B"), nrow(test), replace = TRUE)
+  norm <- poorman::group_by(test, Species, grp)
+  norm <- standardize(norm, "Sepal.Length")
+  expect_identical(
+    poorman::ungroup(unstandardize(norm, select = "Sepal.Length")),
+    test
+  )
+
+  # 2 groups, 2 standardized vars
+  set.seed(123)
+  test <- iris
+  test$grp <- sample(c("A", "B"), nrow(test), replace = TRUE)
+  norm <- poorman::group_by(test, Species, grp)
+  norm <- standardize(norm, c("Sepal.Length", "Petal.Length"))
+  expect_identical(
+    poorman::ungroup(unstandardize(norm, select = c("Sepal.Length", "Petal.Length"))),
+    test
+  )
+
+  # can't recover attributes
+  norm <- poorman::group_by(iris, Species)
+  norm <- standardize(norm, "Sepal.Length")
+  attr(norm, "groups") <- NULL
+
+  expect_error(
+    unstandardize(norm, "Sepal.Length"),
+    regexp = "Couldn't retrieve the necessary information"
+  )
+})
