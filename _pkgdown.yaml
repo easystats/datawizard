@@ -59,11 +59,13 @@ reference:
       - data_codebook
       - data_tabulate
       - data_peek
+      - means_by_group
       - contains("distribution")
       - kurtosis
       - smoothness
       - skewness
       - weighted_mean
+      - rowmean_n
       - mean_sd
 
   - title: Convert and Replace Data

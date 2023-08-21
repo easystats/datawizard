@@ -320,3 +320,28 @@ test_that("data_filter with groups, different ways of dots", {
   expect_identical(out1, out2)
   expect_identical(out1, out3)
 })
+
+
+test_that("data_filter, slicing works with functions", {
+  d <- data.frame(
+    a = c("aa", "a1", "bb", "b1", "cc", "c1"),
+    b = 1:6,
+    stringsAsFactors = FALSE
+  )
+
+  rows <- grep("^[A-Za-z][0-9]$", x = d$a)
+  out1 <- data_filter(d, rows)
+  out2 <- data_filter(d, grep("^[A-Za-z][0-9]$", x = d$a))
+
+  expect_identical(out1, out2)
+
+  out3 <- data_filter(iris, (Sepal.Width == 3.0) & (Species == "setosa"))
+  expect_identical(nrow(out3), 6L)
+
+  # styler: off
+  expect_error(
+    data_filter(iris, (Sepal.Width = 3.0) & (Species = "setosa")), # nolint
+    regex = "Filtering did not work"
+  )
+  # styler: on
+})

@@ -2,12 +2,9 @@
 % Please edit documentation in R/data_modify.R
 \name{data_modify}
 \alias{data_modify}
-\alias{data_modify.data.frame}
 \title{Create new variables in a data frame}
 \usage{
 data_modify(data, ...)
-
-\method{data_modify}{data.frame}(data, ...)
 }
 \arguments{
 \item{data}{A data frame}

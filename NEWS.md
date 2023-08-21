@@ -1,5 +1,34 @@
 # datawizard (devel)
 
+NEW FUNCTIONS
+
+* `rowmean_n()`, to compute row means if row contains at least `n` non-missing
+  values.
+
+* `means_by_group()`, to compute mean values of variables, grouped by levels
+  of specified factors.
+
+CHANGES
+
+* `recode_into()` gains an `overwrite` argument to skip overwriting already
+  recoded cases when multiple recode patterns apply to the same case.
+
+* `datawizard` moves from the GPL-3 license to the MIT license.
+
+BUG FIXES
+
+* Fixed issues in `data_write()` when writing labelled data into SPSS format
+  and vectors were of different type as value labels.
+
+* Fixed issue in `recode_into()` with probably wrong case number printed in the
+  warning when several recode patterns match to one case.
+
+* Fixed issue in `data_filter()` where functions containing a `=` (e.g. when
+  naming arguments, like `grepl(pattern, x = a)`) were mistakenly seen as
+  faulty syntax. 
+
+# datawizard 0.8.0
+
 BREAKING CHANGES
 
 * The following re-exported functions from `{insight}` have now been removed:
@@ -41,6 +70,14 @@ NEW FUNCTIONS
 
 * `data_modify()`, to create new variables, or modify or remove existing
   variables in a data frame.
+
+MINOR CHANGES
+
+* `to_numeric()` for variables of type `Date`, `POSIXct` and `POSIXlt` now
+  includes the class name in the warning message.
+
+* Added a `print()` method for `center()`, `standardize()`, `normalize()` and
+  `rescale()`.
 
 BUG FIXES
 
