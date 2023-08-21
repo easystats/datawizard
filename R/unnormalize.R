@@ -16,7 +16,6 @@ unnormalize.default <- function(x, ...) {
 #' @rdname normalize
 #' @export
 unnormalize.numeric <- function(x, verbose = TRUE, ...) {
-
   ## TODO implement algorithm include_bounds = FALSE
 
   # if function called from the "grouped_df" method, we use the dw_transformer

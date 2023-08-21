@@ -205,9 +205,15 @@ standardize.matrix <- function(x, ...) {
   x_out <- do.call(cbind, xz)
   dimnames(x_out) <- dimnames(x)
 
-  attr(x_out, "center") <- sapply(xz, attr, "center")
-  attr(x_out, "scale") <- sapply(xz, attr, "scale")
-  attr(x_out, "robust") <- sapply(xz, attr, "robust")[1]
+  attr(x_out, "center") <- vapply(xz, function(x) {
+    attr(x, "center")
+  }, FUN.VALUE = numeric(1L))
+  attr(x_out, "scale") <- vapply(xz, function(x) {
+    attr(x, "scale")
+  }, FUN.VALUE = numeric(1L))
+  attr(x_out, "robust") <- vapply(xz, function(x) {
+    attr(x, "robust")
+  }, FUN.VALUE = logical(1L))[1]
   class(x_out) <- c("dw_transformer", class(x_out))
 
   x_out
@@ -300,9 +306,12 @@ standardize.data.frame <- function(x,
     )
   }
 
-
-  attr(x, "center") <- sapply(x[args$select], function(z) attributes(z)$center)
-  attr(x, "scale") <- sapply(x[args$select], function(z) attributes(z)$scale)
+  attr(x, "center") <- unlist(lapply(x[args$select], function(z) {
+    attributes(z)$center
+  }))
+  attr(x, "scale") <- unlist(lapply(x[args$select], function(z) {
+    attributes(z)$scale
+  }))
   attr(x, "robust") <- robust
   x
 }

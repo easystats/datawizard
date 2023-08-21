@@ -17,7 +17,6 @@ unstandardize.numeric <- function(x,
                                   robust = FALSE,
                                   two_sd = FALSE,
                                   ...) {
-
   if (!is.null(reference)) {
     if (robust) {
       center <- stats::median(reference, na.rm = TRUE)
