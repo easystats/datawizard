@@ -15,6 +15,8 @@ CHANGES
 
 * `datawizard` moves from the GPL-3 license to the MIT license.
 
+* `unnormalize()` and `unstandardize()` now work with grouped data (#415).
+
 BUG FIXES
 
 * Fixed issues in `data_write()` when writing labelled data into SPSS format

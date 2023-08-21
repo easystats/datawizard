@@ -285,21 +285,24 @@ test_that("unstandardize: grouped data", {
   skip_if_not_installed("poorman")
 
   # 1 group, 1 standardized var
-  norm <- poorman::group_by(iris, Species)
-  norm <- standardize(norm, "Sepal.Length")
+  stand <- poorman::group_by(iris, Species)
+  stand <- standardize(stand, "Sepal.Length")
+  unstand <- unstandardize(stand, select = "Sepal.Length")
   expect_identical(
-    poorman::ungroup(unstandardize(norm, select = "Sepal.Length")),
+    poorman::ungroup(unstand),
     iris
   )
+
+  expect_s3_class(unstand, "grouped_df")
 
   # 2 groups, 1 standardized var
   set.seed(123)
   test <- iris
   test$grp <- sample(c("A", "B"), nrow(test), replace = TRUE)
-  norm <- poorman::group_by(test, Species, grp)
-  norm <- standardize(norm, "Sepal.Length")
+  stand <- poorman::group_by(test, Species, grp)
+  stand <- standardize(stand, "Sepal.Length")
   expect_identical(
-    poorman::ungroup(unstandardize(norm, select = "Sepal.Length")),
+    poorman::ungroup(unstandardize(stand, select = "Sepal.Length")),
     test
   )
 
@@ -307,20 +310,22 @@ test_that("unstandardize: grouped data", {
   set.seed(123)
   test <- iris
   test$grp <- sample(c("A", "B"), nrow(test), replace = TRUE)
-  norm <- poorman::group_by(test, Species, grp)
-  norm <- standardize(norm, c("Sepal.Length", "Petal.Length"))
+  stand <- poorman::group_by(test, Species, grp)
+  stand <- standardize(stand, c("Sepal.Length", "Petal.Length"))
   expect_identical(
-    poorman::ungroup(unstandardize(norm, select = c("Sepal.Length", "Petal.Length"))),
+    poorman::ungroup(unstandardize(stand, select = c("Sepal.Length", "Petal.Length"))),
     test
   )
 
+  expect_s3_class(unstand, "grouped_df")
+
   # can't recover attributes
-  norm <- poorman::group_by(iris, Species)
-  norm <- standardize(norm, "Sepal.Length")
-  attr(norm, "groups") <- NULL
+  stand <- poorman::group_by(iris, Species)
+  stand <- standardize(stand, "Sepal.Length")
+  attr(stand, "groups") <- NULL
 
   expect_error(
-    unstandardize(norm, "Sepal.Length"),
+    unstandardize(stand, "Sepal.Length"),
     regexp = "Couldn't retrieve the necessary information"
   )
 })

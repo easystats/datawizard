@@ -219,6 +219,7 @@ unstandardize.grouped_df <- function(x,
   }
   # set back class, so data frame still works with dplyr
   attributes(x) <- utils::modifyList(info, attributes(x))
+  class(x) <- c("grouped_df", class(x))
   x
 }
 

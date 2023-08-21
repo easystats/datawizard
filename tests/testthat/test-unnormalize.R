@@ -89,10 +89,13 @@ test_that("unnormalize: grouped data", {
   test$grp <- sample(c("A", "B"), nrow(test), replace = TRUE)
   norm <- poorman::group_by(test, Species, grp)
   norm <- normalize(norm, c("Sepal.Length", "Petal.Length"))
+  unnorm <- unnormalize(norm, c("Sepal.Length", "Petal.Length"))
   expect_identical(
-    poorman::ungroup(unnormalize(norm, c("Sepal.Length", "Petal.Length"))),
+    poorman::ungroup(unnorm),
     test
   )
+
+  expect_s3_class(unnorm, "grouped_df")
 
   # can't recover attributes
   norm <- poorman::group_by(iris, Species)

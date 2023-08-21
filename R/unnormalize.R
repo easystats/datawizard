@@ -16,6 +16,9 @@ unnormalize.default <- function(x, ...) {
 #' @rdname normalize
 #' @export
 unnormalize.numeric <- function(x, verbose = TRUE, ...) {
+
+  ## TODO implement algorithm include_bounds = FALSE
+
   # if function called from the "grouped_df" method, we use the dw_transformer
   # attributes that were recovered in the "grouped_df" method
 
@@ -24,15 +27,14 @@ unnormalize.numeric <- function(x, verbose = TRUE, ...) {
 
   if (!is.null(grp_attr_dw)) {
     names(grp_attr_dw) <- gsub(".*\\.", "", names(grp_attr_dw))
-
-    include_bounds <- unname(grp_attr_dw["include_bounds"])
-    min_value <- unname(grp_attr_dw["min_value"])
-    range_difference <- unname(grp_attr_dw["range_difference"])
-    to_range <- unname(grp_attr_dw["to_range"])
-
-    if (is.na(to_range)) to_range <- NULL
+    include_bounds <- grp_attr_dw["include_bounds"]
+    min_value <- grp_attr_dw["min_value"]
+    range_difference <- grp_attr_dw["range_difference"]
+    to_range <- grp_attr_dw["to_range"]
+    if (is.na(to_range)) {
+      to_range <- NULL
+    }
   } else {
-    ## TODO implement algorithm include_bounds = FALSE
     include_bounds <- attr(x, "include_bounds")
     min_value <- attr(x, "min_value")
     range_difference <- attr(x, "range_difference")
@@ -84,7 +86,7 @@ unnormalize.data.frame <- function(x,
   }
 
   for (i in select) {
-    var_attr <- which(grepl(paste0("^attr\\_", i, "\\."), names(grp_attr_dw)))
+    var_attr <- grep(paste0("^attr\\_", i, "\\."), names(grp_attr_dw))
     attrs <- grp_attr_dw[var_attr]
     x[[i]] <- unnormalize(x[[i]], verbose = verbose, grp_attr_dw = attrs)
   }
@@ -147,5 +149,6 @@ unnormalize.grouped_df <- function(x,
   }
   # set back class, so data frame still works with dplyr
   attributes(x) <- utils::modifyList(info, attributes(x))
+  class(x) <- c("grouped_df", class(x))
   x
 }
