@@ -101,7 +101,6 @@ data_modify.default <- function(data, ...) {
   insight::format_error("`data` must be a data frame.")
 }
 
-#' @rdname data_modify
 #' @export
 data_modify.data.frame <- function(data, ...) {
   dots <- eval(substitute(alist(...)))
@@ -149,7 +148,17 @@ data_modify.data.frame <- function(data, ...) {
     if (!is.character(symbol)) {
       eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
       if (is.character(eval_symbol)) {
-        symbol <- str2lang(paste0(names(dots)[i], " = ", eval_symbol))
+        symbol <- try(str2lang(paste0(names(dots)[i], " = ", eval_symbol)), silent = TRUE)
+        # we may have the edge-case of having a function that returns a character
+        # vector, like "new_var = sample(letters[1:3])". In this case, "eval_symbol"
+        # is of type character, but no symbol, thus str2lang() above creates a
+        # wrong pattern. We then take "eval_symbol" as character input.
+        if (inherits(symbol, "try-error")) {
+          symbol <- str2lang(paste0(
+            names(dots)[i],
+            " = c(", paste0("\"", eval_symbol, "\"", collapse = ","), ")"
+          ))
+        }
       }
     }
 
@@ -240,7 +249,12 @@ data_modify.grouped_df <- function(data, ...) {
 
   # create new variables as dummys, do for-loop works
   for (i in names(dots)) {
-    data[[i]] <- NA
+    # don't overwrite / fill existing variables with NA,
+    # e.g. if we have "data_modify(iris, Sepal.Length = normalize(Sepal.Length))"
+    # normalize() won't work when we fill with NA
+    if (!i %in% colnames(data)) {
+      data[[i]] <- NA
+    }
   }
 
   # create new variables per group

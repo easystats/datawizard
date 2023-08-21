@@ -8,6 +8,72 @@ test_that("recode_into", {
   expect_identical(out, c("c", "c", "b", "b", "b", "a", "a", "a", "a", "a"))
 })
 
+test_that("recode_into, overwrite", {
+  x <- 1:30
+  expect_warning(
+    recode_into(
+      x > 1 ~ "a",
+      x > 10 & x <= 15 ~ "b",
+      default = "c",
+      overwrite = TRUE
+    ),
+    regex = "overwritten"
+  )
+  # validate results
+  x <- 1:10
+  expect_silent({
+    out <- recode_into(
+      x >= 3 & x <= 7 ~ 1,
+      x > 5 ~ 2,
+      default = 0,
+      verbose = FALSE
+    )
+  })
+  expect_identical(out, c(0, 0, 1, 1, 1, 2, 2, 2, 2, 2))
+  expect_warning(
+    recode_into(
+      x >= 3 & x <= 7 ~ 1,
+      x > 5 ~ 2,
+      default = 0
+    ),
+    regex = "case 6"
+  )
+
+  x <- 1:10
+  expect_silent({
+    out <- recode_into(
+      x >= 3 & x <= 7 ~ 1,
+      x > 5 ~ 2,
+      default = 0,
+      overwrite = FALSE,
+      verbose = FALSE
+    )
+  })
+  expect_identical(out, c(0, 0, 1, 1, 1, 1, 1, 2, 2, 2))
+  expect_warning(
+    recode_into(
+      x >= 3 & x <= 7 ~ 1,
+      x > 5 ~ 2,
+      default = 0,
+      overwrite = FALSE
+    ),
+    regex = "case 6"
+  )
+})
+
+test_that("recode_into, don't overwrite", {
+  x <- 1:30
+  expect_warning(
+    recode_into(
+      x > 1 ~ "a",
+      x > 10 & x <= 15 ~ "b",
+      default = "c",
+      overwrite = FALSE
+    ),
+    regex = "altered"
+  )
+})
+
 test_that("recode_into, check mixed types", {
   x <- 1:10
   expect_error(
