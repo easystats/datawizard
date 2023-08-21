@@ -15,6 +15,8 @@ CHANGES
 * `recode_into()` gains an `overwrite` argument to skip overwriting already
   recoded cases when multiple recode patterns apply to the same case.
 
+* `datawizard` moves from the GPL-3 license to the MIT license.
+
 BUG FIXES
 
 * Fixed issues in `data_write()` when writing labelled data into SPSS format
