@@ -2,6 +2,8 @@
 
 NEW FUNCTIONS
 
+* `contr.deviation()` for sum-deviation contrast coding of factors.
+
 * `rowmean_n()`, to compute row means if row contains at least `n` non-missing
   values.
 
