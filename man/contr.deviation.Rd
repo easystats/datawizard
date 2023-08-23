@@ -23,32 +23,33 @@ contr.deviation(n, base = 1, contrasts = TRUE, sparse = FALSE)
 Build a deviation contrast matrix, a type of \emph{effects contrast} matrix.
 }
 \details{
-In effects coding, unlike treatment/dummy coding (\code{\link[stats:contrast]{stats::contr.treatment()}}), each
-contrast sums to 0. In regressions models, this results in an intercept that
-represents the (unweighted) average of the group means. In ANOVA settings,
-this also guarantees that lower order effects represent \emph{main} effects (and
-not \emph{simple} or \emph{conditional} effects, as is the case when using R's default
-\code{\link[stats:contrast]{stats::contr.treatment()}}).
+In effects coding, unlike treatment/dummy coding
+(\code{\link[stats:contrast]{stats::contr.treatment()}}), each contrast sums to 0. In regressions models,
+this results in an intercept that represents the (unweighted) average of the
+group means. In ANOVA settings, this also guarantees that lower order effects
+represent \emph{main} effects (and not \emph{simple} or \emph{conditional} effects, as is
+the case when using R's default \code{\link[stats:contrast]{stats::contr.treatment()}}).
 \cr\cr
-Deviation coding (\code{contr.deviation}) is a type of effects coding.
-With deviation coding, the coefficients for factor variables are interpreted
-as the difference of each factor level from the base level
-(this is the same interpretation as with treatment/dummy coding).
-For example, for a factor \code{group} with levels "A", "B", and "C", with \code{contr.devation},
-the intercept represents the overall mean (average of the group means for the 3 groups),
+Deviation coding (\code{contr.deviation}) is a type of effects coding. With
+deviation coding, the coefficients for factor variables are interpreted as
+the difference of each factor level from the base level (this is the same
+interpretation as with treatment/dummy coding). For example, for a factor
+\code{group} with levels "A", "B", and "C", with \code{contr.devation}, the intercept
+represents the overall mean (average of the group means for the 3 groups),
 and the coefficients \code{groupB} and \code{groupC} represent the differences between
 the A group mean and the B and C group means, respectively.
 \cr\cr
-Sum coding (\code{\link[stats:contrast]{stats::contr.sum()}}) is another type of effects coding.
-With sum coding, the coefficients for factor variables are interpreted
-as the difference of each factor level from \strong{the grand (across-groups) mean}.
-For example, for a factor \code{group} with levels "A", "B", and "C", with \code{contr.sum},
-the intercept represents the overall mean (average of the group means for the 3 groups),
-and the coefficients \code{group1} and \code{group2} represent the differences the
+Sum coding (\code{\link[stats:contrast]{stats::contr.sum()}}) is another type of effects coding. With sum
+coding, the coefficients for factor variables are interpreted as the
+difference of each factor level from \strong{the grand (across-groups) mean}. For
+example, for a factor \code{group} with levels "A", "B", and "C", with
+\code{contr.sum}, the intercept represents the overall mean (average of the group
+means for the 3 groups), and the coefficients \code{group1} and \code{group2} represent
+the differences the
 \strong{A} and \strong{B} group means from the overall mean, respectively.
 }
 \examples{
-\dontrun{
+if (FALSE) {
 data("mtcars")
 
 mtcars <- data_modify(mtcars, cyl = factor(cyl))
@@ -78,7 +79,7 @@ solve(c.deviation)
 #> 8         -1.000 0.000 1.000   # 3rd level - 1st level
 
 ## With Interactions -----------------------------------------
-mtcars <- data_modify(mtcars, am = factor(am))
+mtcars <- data_modify(mtcars, am = C(am, contr = contr.deviation))
 mtcars <- data_arrange(mtcars, select = c("cyl", "am"))
 
 mm <- unique(model.matrix(~ cyl * am, data = mtcars))
