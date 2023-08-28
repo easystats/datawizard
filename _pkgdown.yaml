@@ -23,7 +23,8 @@ reference:
       - data_duplicated
       - data_unique
 
-  - title: Statistical Transformations
+  - title: Data and Variable Transformations
+  - subtitle: Statistical Transformations
     desc: |
       Functions for transforming variables
     contents:
@@ -51,6 +52,9 @@ reference:
       - normalize
       - unstandardize
       - makepredictcall.dw_transformer
+  - subtitle: "Others"
+    contents:
+    - contr.deviation
 
   - title: Data Properties
     desc: |
