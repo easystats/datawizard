@@ -29,6 +29,10 @@ BUG FIXES
   naming arguments, like `grepl(pattern, x = a)`) were mistakenly seen as
   faulty syntax. 
 
+* Fixed issue in `empty_column()` for strings with invalid multibyte strings.
+  For such data frames or files, `empty_column()` or `data_read()` no longer
+  fails.
+
 # datawizard 0.8.0
 
 BREAKING CHANGES
