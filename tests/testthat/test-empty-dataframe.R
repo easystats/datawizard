@@ -59,3 +59,16 @@ test_that("empty_columns with only NA characters", {
   )
   expect_identical(empty_columns(tmp), c(var2 = 2L))
 })
+
+
+test_that("works with non-ascii chars", {
+  tmp <- data.frame(
+    a = c(1, 2, 3, NA, 5),
+    b = c("", NA, "", NA, ""),
+    c = c(NA, NA, NA, NA, NA),
+    d = c("test", "Se\x96ora", "works fine", "this too", "yeah"),
+    e = c("", "", "", "", ""),
+    stringsAsFactors = FALSE
+  )
+  expect_identical(empty_columns(tmp), c(b = 2L, c = 3L, e = 5L))
+})

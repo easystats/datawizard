@@ -271,7 +271,11 @@ data_read <- function(path,
 
 .read_text <- function(path, encoding, verbose, ...) {
   if (insight::check_if_installed("data.table", quietly = TRUE)) {
-    out <- data.table::fread(input = path, ...)
+    # set proper default encoding-value for fread
+    if (is.null(encoding)) {
+      encoding <- "unknown"
+    }
+    out <- data.table::fread(input = path, encoding = encoding, ...)
     class(out) <- "data.frame"
     return(out)
   }
