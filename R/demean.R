@@ -28,13 +28,13 @@
 #' @inheritParams center
 #'
 #' @return
-#'
 #' A data frame with the group-/de-meaned variables, which get the suffix
 #' `"_between"` (for the group-meaned variable) and `"_within"` (for the
 #' de-meaned variable) by default.
 #'
 #' @seealso If grand-mean centering (instead of centering within-clusters)
-#'   is required, see [center()].
+#'   is required, see [center()]. See [`performance::check_heterogeneity_bias()`]
+#'   to check for heterogeneity bias.
 #'
 #' @details
 #'
