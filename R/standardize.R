@@ -205,15 +205,9 @@ standardize.matrix <- function(x, ...) {
   x_out <- do.call(cbind, xz)
   dimnames(x_out) <- dimnames(x)
 
-  attr(x_out, "center") <- vapply(xz, function(x) {
-    attr(x, "center")
-  }, FUN.VALUE = numeric(1L))
-  attr(x_out, "scale") <- vapply(xz, function(x) {
-    attr(x, "scale")
-  }, FUN.VALUE = numeric(1L))
-  attr(x_out, "robust") <- vapply(xz, function(x) {
-    attr(x, "robust")
-  }, FUN.VALUE = logical(1L))[1]
+  attr(x_out, "center") <- vapply(xz, attr, "center", FUN.VALUE = numeric(1L))
+  attr(x_out, "scale") <- vapply(xz, attr, "scale", FUN.VALUE = numeric(1L))
+  attr(x_out, "robust") <- vapply(xz, attr, "robust", FUN.VALUE = logical(1L))[1]
   class(x_out) <- c("dw_transformer", class(x_out))
 
   x_out
