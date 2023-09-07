@@ -103,7 +103,7 @@ is similar to <code><a href="https://dplyr.tidyverse.org/reference/case_when.htm
 <span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  default <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  preserve_na <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  preserve_na <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -137,10 +137,13 @@ printed to alert such situations and to avoid unintentional recodings.</p></dd>
 
 
 <dt>preserve_na</dt>
-<dd><p>Logical, if <code>TRUE</code> (default) and <code>default</code> is not <code>NA</code>,
-missing values in the original variable will be set back to <code>NA</code> in the
-recoded variable (unless overwritten by other recode patterns). If <code>FALSE</code>,
-missing values in the original variable will be recoded to <code>default</code>.</p></dd>
+<dd><p>Logical, if <code>TRUE</code> and <code>default</code> is not <code>NA</code>, missing
+values in the original variable will be set back to <code>NA</code> in the recoded
+variable (unless overwritten by other recode patterns). If <code>FALSE</code>, missing
+values in the original variable will be recoded to <code>default</code>. The latter
+behaviour prevents unintentional overwriting of missing values with <code>default</code>,
+which means that you won't find valid values where the original data only
+had missing values. See 'Examples'.</p></dd>
 
 
 <dt>verbose</dt>
@@ -209,6 +212,35 @@ missing values in the original variable will be recoded to <code>default</code>.
 <span class="r-in"><span>  default <span class="op">=</span> <span class="fl">0</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1 1 1 0 0 2 2 0 1 1 2 0 0 0 2 1 1 2 1 0 1 1 0 2 0 1 2 2 1 2</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># handling of missing values</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="cn">NA</span>, <span class="fl">2</span>, <span class="cn">NA</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">11</span>, <span class="fl">3</span>, <span class="cn">NA</span>, <span class="fl">5</span>, <span class="fl">6</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># first NA in x is overwritten by valid value from y</span></span></span>
+<span class="r-in"><span><span class="co"># we have no known value for second NA in x and y,</span></span></span>
+<span class="r-in"><span><span class="co"># thus we get one NA in the result</span></span></span>
+<span class="r-in"><span><span class="fu">recode_into</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span> <span class="op">&lt;=</span> <span class="fl">3</span> <span class="op">~</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  <span class="va">y</span> <span class="op">&gt;</span> <span class="fl">5</span> <span class="op">~</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">d</span>,</span></span>
+<span class="r-in"><span>  default <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  preserve_na <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  1  2  1 NA  1  2</span>
+<span class="r-in"><span><span class="co"># first NA in x is overwritten by valid value from y</span></span></span>
+<span class="r-in"><span><span class="co"># default value is used for second NA</span></span></span>
+<span class="r-in"><span><span class="fu">recode_into</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span> <span class="op">&lt;=</span> <span class="fl">3</span> <span class="op">~</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  <span class="va">y</span> <span class="op">&gt;</span> <span class="fl">5</span> <span class="op">~</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">d</span>,</span></span>
+<span class="r-in"><span>  default <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  preserve_na <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Missing values in original variable are overwritten by default value. If</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   you want to preserve missing values, set `preserve_na = TRUE`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1 2 1 0 1 2</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
