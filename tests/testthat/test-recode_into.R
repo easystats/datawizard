@@ -189,27 +189,28 @@ test_that("recode_into, make sure recode works with missing in original variable
   data(mtcars)
   mtcars$mpg[c(3, 10, 12, 15, 16)] <- NA
   mtcars$cyl[c(2, 15, 16)] <- NA
+  d <<- as.data.frame(mtcars)
   out1 <- recode_into(
-    mtcars$mpg > 20 & mtcars$cyl == 6 ~ 1,
-    mtcars$mpg <= 20 ~ 2,
-    mtcars$cyl == 4 ~ 3,
+    d$mpg > 20 & d$cyl == 6 ~ 1,
+    d$mpg <= 20 ~ 2,
+    d$cyl == 4 ~ 3,
     default = 0
   )
   out2 <- recode_into(
-    mtcars$mpg > 20 & mtcars$cyl == 6 ~ 1,
-    mtcars$mpg <= 20 ~ 2,
+    d$mpg > 20 & d$cyl == 6 ~ 1,
+    d$mpg <= 20 ~ 2,
     default = 0
   )
   out3 <- recode_into(
-    mtcars$mpg > 20 & mtcars$cyl == 6 ~ 1,
-    mtcars$mpg <= 20 ~ 2,
-    mtcars$cyl == 4 ~ 3,
+    d$mpg > 20 & d$cyl == 6 ~ 1,
+    d$mpg <= 20 ~ 2,
+    d$cyl == 4 ~ 3,
     default = 0,
     preserve_na = FALSE
   )
   out4 <- recode_into(
-    mtcars$mpg > 20 & mtcars$cyl == 6 ~ 1,
-    mtcars$mpg <= 20 ~ 2,
+    d$mpg > 20 & d$cyl == 6 ~ 1,
+    d$mpg <= 20 ~ 2,
     default = 0,
     preserve_na = FALSE
   )
@@ -238,7 +239,7 @@ test_that("recode_into, make sure recode works with missing in original variable
     )
   )
   expect_identical(
-    out3,
+    out4,
     c(
       1, 0, 0, 1, 2, 2, 2, 0, 0, 0, 2, 0, 2, 2, 0, 0, 2, 0, 0, 0,
       0, 2, 2, 2, 2, 0, 0, 0, 2, 2, 2, 0
