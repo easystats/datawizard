@@ -140,10 +140,10 @@ printed to alert such situations and to avoid unintentional recodings.</p></dd>
 <dd><p>Logical, if <code>TRUE</code> and <code>default</code> is not <code>NA</code>, missing
 values in the original variable will be set back to <code>NA</code> in the recoded
 variable (unless overwritten by other recode patterns). If <code>FALSE</code>, missing
-values in the original variable will be recoded to <code>default</code>. The latter
-behaviour prevents unintentional overwriting of missing values with <code>default</code>,
-which means that you won't find valid values where the original data only
-had missing values. See 'Examples'.</p></dd>
+values in the original variable will be recoded to <code>default</code>. Setting
+<code>preserve_na = TRUE</code> prevents unintentional overwriting of missing values
+with <code>default</code>, which means that you won't find valid values where the
+original data only had missing values. See 'Examples'.</p></dd>
 
 
 <dt>verbose</dt>
