@@ -194,25 +194,37 @@ test_that("recode_into, make sure recode works with missing in original variable
     d_recode_na$mpg > 20 & d_recode_na$cyl == 6 ~ 1,
     d_recode_na$mpg <= 20 ~ 2,
     d_recode_na$cyl == 4 ~ 3,
-    default = 0
+    default = 0,
+    preserve_na = TRUE
   )
   out2_recoded_na <- recode_into(
     d_recode_na$mpg > 20 & d_recode_na$cyl == 6 ~ 1,
     d_recode_na$mpg <= 20 ~ 2,
-    default = 0
-  )
-  out3_recoded_na <- recode_into(
-    d_recode_na$mpg > 20 & d_recode_na$cyl == 6 ~ 1,
-    d_recode_na$mpg <= 20 ~ 2,
-    d_recode_na$cyl == 4 ~ 3,
     default = 0,
-    preserve_na = FALSE
+    preserve_na = TRUE
   )
-  out4_recoded_na <- recode_into(
-    d_recode_na$mpg > 20 & d_recode_na$cyl == 6 ~ 1,
-    d_recode_na$mpg <= 20 ~ 2,
-    default = 0,
-    preserve_na = FALSE
+  expect_message(
+    {
+      out3_recoded_na <- recode_into(
+        d_recode_na$mpg > 20 & d_recode_na$cyl == 6 ~ 1,
+        d_recode_na$mpg <= 20 ~ 2,
+        d_recode_na$cyl == 4 ~ 3,
+        default = 0,
+        preserve_na = FALSE
+      )
+    },
+    regex = "Missing values in original variable"
+  )
+  expect_message(
+    {
+      out4_recoded_na <- recode_into(
+        d_recode_na$mpg > 20 & d_recode_na$cyl == 6 ~ 1,
+        d_recode_na$mpg <= 20 ~ 2,
+        default = 0,
+        preserve_na = FALSE
+      )
+    },
+    regex = "Missing values in original variable"
   )
   # one NA in mpg is overwritten by valid value from cyl, total 5 NA
   expect_identical(

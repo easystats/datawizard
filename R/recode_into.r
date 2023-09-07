@@ -20,10 +20,13 @@
 #' recode patterns. If `FALSE`, former recoded cases will not be altered by later
 #' recode patterns that would apply to those cases again. A warning message is
 #' printed to alert such situations and to avoid unintentional recodings.
-#' @param preserve_na Logical, if `TRUE` (default) and `default` is not `NA`,
-#' missing values in the original variable will be set back to `NA` in the
-#' recoded variable (unless overwritten by other recode patterns). If `FALSE`,
-#' missing values in the original variable will be recoded to `default`.
+#' @param preserve_na Logical, if `TRUE` and `default` is not `NA`, missing
+#' values in the original variable will be set back to `NA` in the recoded
+#' variable (unless overwritten by other recode patterns). If `FALSE`, missing
+#' values in the original variable will be recoded to `default`. The latter
+#' behaviour prevents unintentional overwriting of missing values with `default`,
+#' which means that you won't find valid values where the original data only
+#' had missing values. See 'Examples'.
 #' @param verbose Toggle warnings.
 #'
 #' @return A vector with recoded values.
@@ -76,12 +79,37 @@
 #'   data = d,
 #'   default = 0
 #' )
+#'
+#' # handling of missing values
+#' d <- data.frame(
+#'   x = c(1, NA, 2, NA, 3, 4),
+#'   y = c(1, 11, 3, NA, 5, 6)
+#' )
+#' # first NA in x is overwritten by valid value from y
+#' # we have no known value for second NA in x and y,
+#' # thus we get one NA in the result
+#' recode_into(
+#'   x <= 3 ~ 1,
+#'   y > 5 ~ 2,
+#'   data = d,
+#'   default = 0,
+#'   preserve_na = TRUE
+#' )
+#' # first NA in x is overwritten by valid value from y
+#' # default value is used for second NA
+#' recode_into(
+#'   x <= 3 ~ 1,
+#'   y > 5 ~ 2,
+#'   data = d,
+#'   default = 0,
+#'   preserve_na = FALSE
+#' )
 #' @export
 recode_into <- function(...,
                         data = NULL,
                         default = NA,
                         overwrite = TRUE,
-                        preserve_na = TRUE,
+                        preserve_na = FALSE,
                         verbose = TRUE) {
   dots <- list(...)
 
@@ -133,6 +161,9 @@ recode_into <- function(...,
     )
   }
 
+  # indicator to show message when replacing NA by default
+  # needed to show message only once
+  overwrite_NA_msg <- TRUE
 
   # iterate all expressions
   for (i in seq_len(n_params)) {
@@ -182,10 +213,18 @@ recode_into <- function(...,
     # write new values into output vector
     out[index] <- value
     # set back missing values
-    if (any(missing_index) && !is.na(default) && preserve_na) {
-      # but only where we still have default values
-      # we don't want to overwrite already recoded values with NA
-      out[missing_index & out == default] <- NA
+    if (any(missing_index) && !is.na(default)) {
+      if (preserve_na) {
+        # but only where we still have default values
+        # we don't want to overwrite already recoded values with NA
+        out[missing_index & out == default] <- NA
+      } else if (overwrite_NA_msg && verbose) {
+        # don't show msg again
+        overwrite_NA_msg <- FALSE
+        insight::format_alert(
+          "Missing values in original variable are overwritten by default value. If you want to preserve missing values, set `preserve_na = TRUE`."
+        )
+      }
     }
   }
 
