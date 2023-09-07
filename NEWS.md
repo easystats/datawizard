@@ -2,10 +2,10 @@
 
 NEW FUNCTIONS
 
-* `contr.deviation()` for sum-deviation contrast coding of factors.
+* `row_means()`, to compute row means, optionally only for the rows with at
+  least `min_valid` non-missing values.
 
-* `rowmean_n()`, to compute row means if row contains at least `n` non-missing
-  values.
+* `contr.deviation()` for sum-deviation contrast coding of factors.
 
 * `means_by_group()`, to compute mean values of variables, grouped by levels
   of specified factors.
