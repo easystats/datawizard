@@ -170,7 +170,7 @@ test_that("recode_into, check differen input length", {
   )
 })
 
-test_that("recode_into, check differen input length", {
+test_that("recode_into, check different input length", {
   x <- 1:5
   y <- c(5, 2, 3, 1, 4)
   expect_warning(
@@ -182,5 +182,67 @@ test_that("recode_into, check differen input length", {
       )
     },
     regexp = "Several recode patterns"
+  )
+})
+
+test_that("recode_into, make sure recode works with missing in original variable", {
+  data(mtcars)
+  mtcars$mpg[c(3, 10, 12, 15, 16)] <- NA
+  mtcars$cyl[c(2, 15, 16)] <- NA
+  d_recode_na <<- as.data.frame(mtcars)
+  out1_recoded_na <- recode_into(
+    d_recode_na$mpg > 20 & d_recode_na$cyl == 6 ~ 1,
+    d_recode_na$mpg <= 20 ~ 2,
+    d_recode_na$cyl == 4 ~ 3,
+    default = 0
+  )
+  out2_recoded_na <- recode_into(
+    d_recode_na$mpg > 20 & d_recode_na$cyl == 6 ~ 1,
+    d_recode_na$mpg <= 20 ~ 2,
+    default = 0
+  )
+  out3_recoded_na <- recode_into(
+    d_recode_na$mpg > 20 & d_recode_na$cyl == 6 ~ 1,
+    d_recode_na$mpg <= 20 ~ 2,
+    d_recode_na$cyl == 4 ~ 3,
+    default = 0,
+    preserve_na = FALSE
+  )
+  out4_recoded_na <- recode_into(
+    d_recode_na$mpg > 20 & d_recode_na$cyl == 6 ~ 1,
+    d_recode_na$mpg <= 20 ~ 2,
+    default = 0,
+    preserve_na = FALSE
+  )
+  # one NA in mpg is overwritten by valid value from cyl, total 5 NA
+  expect_identical(
+    out1_recoded_na,
+    c(
+      1, NA, 3, 1, 2, 2, 2, 3, 3, NA, 2, NA, 2, 2, NA, NA, 2, 3,
+      3, 3, 3, 2, 2, 2, 2, 3, 3, 3, 2, 2, 2, 3
+    )
+  )
+  # total 6 NA
+  expect_identical(
+    out2_recoded_na,
+    c(
+      1, NA, NA, 1, 2, 2, 2, 0, 0, NA, 2, NA, 2, 2, NA, NA, 2, 0,
+      0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 2, 2, 2, 0
+    )
+  )
+  # NA is preserved, set to default if not overwritten by other recodes
+  expect_identical(
+    out3_recoded_na,
+    c(
+      1, 0, 3, 1, 2, 2, 2, 3, 3, 0, 2, 0, 2, 2, 0, 0, 2, 3, 3, 3,
+      3, 2, 2, 2, 2, 3, 3, 3, 2, 2, 2, 3
+    )
+  )
+  expect_identical(
+    out4_recoded_na,
+    c(
+      1, 0, 0, 1, 2, 2, 2, 0, 0, 0, 2, 0, 2, 2, 0, 0, 2, 0, 0, 0,
+      0, 2, 2, 2, 2, 0, 0, 0, 2, 2, 2, 0
+    )
   )
 })

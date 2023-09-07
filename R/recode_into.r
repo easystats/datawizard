@@ -20,6 +20,10 @@
 #' recode patterns. If `FALSE`, former recoded cases will not be altered by later
 #' recode patterns that would apply to those cases again. A warning message is
 #' printed to alert such situations and to avoid unintentional recodings.
+#' @param preserve_na Logical, if `TRUE` (default) and `default` is not `NA`,
+#' missing values in the original variable will be set back to `NA` in the
+#' recoded variable (unless overwritten by other recode patterns). If `FALSE`,
+#' missing values in the original variable will be recoded to `default`.
 #' @param verbose Toggle warnings.
 #'
 #' @return A vector with recoded values.
@@ -73,7 +77,12 @@
 #'   default = 0
 #' )
 #' @export
-recode_into <- function(..., data = NULL, default = NA, overwrite = TRUE, verbose = TRUE) {
+recode_into <- function(...,
+                        data = NULL,
+                        default = NA,
+                        overwrite = TRUE,
+                        preserve_na = TRUE,
+                        verbose = TRUE) {
   dots <- list(...)
 
   # get length of vector, so we know the length of the output vector
@@ -135,6 +144,12 @@ recode_into <- function(..., data = NULL, default = NA, overwrite = TRUE, verbos
       index <- with(data, eval(dots[[i]][[2]]))
       value <- with(data, eval(dots[[i]][[3]]))
     }
+    # remember missing values, so we can add back later
+    missing_index <- is.na(index)
+    # make sure index has no missing values. when we have missing values in
+    # original expression, these are considered as "no match" and set to FALSE
+    # we handle NA value later and thus want to remove them from "index" now
+    index[is.na(index)] <- FALSE
     # overwriting values? do more recode-patterns match the same case?
     if (is.na(default)) {
       already_exists <- !is.na(out[index])
@@ -144,7 +159,7 @@ recode_into <- function(..., data = NULL, default = NA, overwrite = TRUE, verbos
     # save indices of overwritten cases
     overwritten_cases <- which(index)[already_exists]
     # tell user...
-    if (any(already_exists) && verbose) {
+    if (any(already_exists, na.rm = TRUE) && verbose) {
       if (overwrite) {
         msg <- paste(
           "Several recode patterns apply to the same cases.",
@@ -164,7 +179,14 @@ recode_into <- function(..., data = NULL, default = NA, overwrite = TRUE, verbos
     if (!overwrite) {
       index[overwritten_cases] <- FALSE
     }
+    # write new values into output vector
     out[index] <- value
+    # set back missing values
+    if (any(missing_index) && !is.na(default) && preserve_na) {
+      # but only where we still have default values
+      # we don't want to overwrite already recoded values with NA
+      out[missing_index & out == default] <- NA
+    }
   }
 
   out

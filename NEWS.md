@@ -15,6 +15,9 @@ CHANGES
 * `recode_into()` gains an `overwrite` argument to skip overwriting already
   recoded cases when multiple recode patterns apply to the same case.
 
+* `recode_into()` gains an `preserve_na` argument to preserve `NA` values
+  when recoding.
+
 * `data_read()` now passes the `encoding` argument to `data.table::fread()`.
   This allows to read files with non-ASCII characters.
 
@@ -27,6 +30,9 @@ BUG FIXES
 
 * Fixed issue in `recode_into()` with probably wrong case number printed in the
   warning when several recode patterns match to one case.
+
+* Fixed issue in `recode_into()` when original data contained `NA` values and
+  `NA` was not included in the recode pattern.
 
 * Fixed issue in `data_filter()` where functions containing a `=` (e.g. when
   naming arguments, like `grepl(pattern, x = a)`) were mistakenly seen as
