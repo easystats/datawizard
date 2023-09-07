@@ -148,6 +148,7 @@ recode_into <- function(...,
     missing_index <- is.na(index)
     # make sure index has no missing values. when we have missing values in
     # original expression, these are considered as "no match" and set to FALSE
+    # we handle NA value later and thus want to remove them from "index" now
     index[is.na(index)] <- FALSE
     # overwriting values? do more recode-patterns match the same case?
     if (is.na(default)) {
@@ -182,6 +183,8 @@ recode_into <- function(...,
     out[index] <- value
     # set back missing values
     if (any(missing_index) && !is.na(default) && preserve_na) {
+      # but only where we still have default values
+      # we don't want to overwrite already recoded values with NA
       out[missing_index & out == default] <- NA
     }
   }
