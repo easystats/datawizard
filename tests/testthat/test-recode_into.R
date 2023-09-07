@@ -170,7 +170,7 @@ test_that("recode_into, check differen input length", {
   )
 })
 
-test_that("recode_into, check differen input length", {
+test_that("recode_into, check different input length", {
   x <- 1:5
   y <- c(5, 2, 3, 1, 4)
   expect_warning(
@@ -182,5 +182,37 @@ test_that("recode_into, check differen input length", {
       )
     },
     regexp = "Several recode patterns"
+  )
+})
+
+test_that("recode_into, make sure recode works with missing in original variable", {
+  mtcars$mpg[c(3, 10, 12, 15, 16)] <- NA
+  mtcars$cyl[c(2, 15, 16)] <- NA
+  out1 <- recode_into(
+    mtcars$mpg > 20 & mtcars$cyl == 6 ~ 1,
+    mtcars$mpg <= 20 ~ 2,
+    mtcars$cyl == 4 ~ 3,
+    default = 0
+  )
+  out2 <- recode_into(
+    mtcars$mpg > 20 & mtcars$cyl == 6 ~ 1,
+    mtcars$mpg <= 20 ~ 2,
+    default = 0
+  )
+  # one NA in mpg is overwritten by valid value from cyl, total 5 NA
+  expect_identical(
+    out1,
+    c(
+      1, NA, 3, 1, 2, 2, 2, 3, 3, NA, 2, NA, 2, 2, NA, NA, 2, 3,
+      3, 3, 3, 2, 2, 2, 2, 3, 3, 3, 2, 2, 2, 3
+    )
+  )
+  # total 6 NA
+  expect_identical(
+    out2,
+    c(
+      1, NA, NA, 1, 2, 2, 2, 0, 0, NA, 2, NA, 2, 2, NA, NA, 2, 0,
+      0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 2, 2, 2, 0
+    )
   )
 })

@@ -28,6 +28,9 @@ BUG FIXES
 * Fixed issue in `recode_into()` with probably wrong case number printed in the
   warning when several recode patterns match to one case.
 
+* Fixed issue in `recode_into()` when original data contained `NA` values and
+  `NA` was not included in the recode pattern.
+
 * Fixed issue in `data_filter()` where functions containing a `=` (e.g. when
   naming arguments, like `grepl(pattern, x = a)`) were mistakenly seen as
   faulty syntax. 
