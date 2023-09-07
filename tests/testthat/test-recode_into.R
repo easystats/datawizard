@@ -186,6 +186,7 @@ test_that("recode_into, check different input length", {
 })
 
 test_that("recode_into, make sure recode works with missing in original variable", {
+  data(mtcars)
   mtcars$mpg[c(3, 10, 12, 15, 16)] <- NA
   mtcars$cyl[c(2, 15, 16)] <- NA
   out1 <- recode_into(
