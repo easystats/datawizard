@@ -35,10 +35,10 @@ printed to alert such situations and to avoid unintentional recodings.}
 \item{preserve_na}{Logical, if \code{TRUE} and \code{default} is not \code{NA}, missing
 values in the original variable will be set back to \code{NA} in the recoded
 variable (unless overwritten by other recode patterns). If \code{FALSE}, missing
-values in the original variable will be recoded to \code{default}. The latter
-behaviour prevents unintentional overwriting of missing values with \code{default},
-which means that you won't find valid values where the original data only
-had missing values. See 'Examples'.}
+values in the original variable will be recoded to \code{default}. Setting
+\code{preserve_na = TRUE} prevents unintentional overwriting of missing values
+with \code{default}, which means that you won't find valid values where the
+original data only had missing values. See 'Examples'.}
 
 \item{verbose}{Toggle warnings.}
 }

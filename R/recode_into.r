@@ -23,10 +23,10 @@
 #' @param preserve_na Logical, if `TRUE` and `default` is not `NA`, missing
 #' values in the original variable will be set back to `NA` in the recoded
 #' variable (unless overwritten by other recode patterns). If `FALSE`, missing
-#' values in the original variable will be recoded to `default`. The latter
-#' behaviour prevents unintentional overwriting of missing values with `default`,
-#' which means that you won't find valid values where the original data only
-#' had missing values. See 'Examples'.
+#' values in the original variable will be recoded to `default`. Setting
+#' `preserve_na = TRUE` prevents unintentional overwriting of missing values
+#' with `default`, which means that you won't find valid values where the
+#' original data only had missing values. See 'Examples'.
 #' @param verbose Toggle warnings.
 #'
 #' @return A vector with recoded values.
