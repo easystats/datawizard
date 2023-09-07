@@ -20,6 +20,10 @@
 #' recode patterns. If `FALSE`, former recoded cases will not be altered by later
 #' recode patterns that would apply to those cases again. A warning message is
 #' printed to alert such situations and to avoid unintentional recodings.
+#' @param preserve_na Logical, if `TRUE` (default) and `default` is not `NA`,
+#' missing values in the original variable will be set back to `NA` in the
+#' recoded variable (unless overwritten by other recode patterns). If `FALSE`,
+#' missing values in the original variable will be recoded to `default`.
 #' @param verbose Toggle warnings.
 #'
 #' @return A vector with recoded values.
@@ -73,7 +77,12 @@
 #'   default = 0
 #' )
 #' @export
-recode_into <- function(..., data = NULL, default = NA, overwrite = TRUE, verbose = TRUE) {
+recode_into <- function(...,
+                        data = NULL,
+                        default = NA,
+                        overwrite = TRUE,
+                        preserve_na = TRUE,
+                        verbose = TRUE) {
   dots <- list(...)
 
   # get length of vector, so we know the length of the output vector
@@ -172,7 +181,7 @@ recode_into <- function(..., data = NULL, default = NA, overwrite = TRUE, verbos
     # write new values into output vector
     out[index] <- value
     # set back missing values
-    if (any(missing_index) && !is.na(default)) {
+    if (any(missing_index) && !is.na(default) && preserve_na) {
       out[missing_index & out == default] <- NA
     }
   }

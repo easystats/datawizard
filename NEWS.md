@@ -15,6 +15,9 @@ CHANGES
 * `recode_into()` gains an `overwrite` argument to skip overwriting already
   recoded cases when multiple recode patterns apply to the same case.
 
+* `recode_into()` gains an `preserve_na` argument to preserve `NA` values
+  when recoding.
+
 * `data_read()` now passes the `encoding` argument to `data.table::fread()`.
   This allows to read files with non-ASCII characters.
 

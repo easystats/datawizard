@@ -199,6 +199,19 @@ test_that("recode_into, make sure recode works with missing in original variable
     mtcars$mpg <= 20 ~ 2,
     default = 0
   )
+  out3 <- recode_into(
+    mtcars$mpg > 20 & mtcars$cyl == 6 ~ 1,
+    mtcars$mpg <= 20 ~ 2,
+    mtcars$cyl == 4 ~ 3,
+    default = 0,
+    preserve_na = FALSE
+  )
+  out4 <- recode_into(
+    mtcars$mpg > 20 & mtcars$cyl == 6 ~ 1,
+    mtcars$mpg <= 20 ~ 2,
+    default = 0,
+    preserve_na = FALSE
+  )
   # one NA in mpg is overwritten by valid value from cyl, total 5 NA
   expect_identical(
     out1,
@@ -213,6 +226,21 @@ test_that("recode_into, make sure recode works with missing in original variable
     c(
       1, NA, NA, 1, 2, 2, 2, 0, 0, NA, 2, NA, 2, 2, NA, NA, 2, 0,
       0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 2, 2, 2, 0
+    )
+  )
+  # NA is preserved, set to default if not overwritten by other recodes
+  expect_identical(
+    out3,
+    c(
+      1, 0, 3, 1, 2, 2, 2, 3, 3, 0, 2, 0, 2, 2, 0, 0, 2, 3, 3, 3,
+      3, 2, 2, 2, 2, 3, 3, 3, 2, 2, 2, 3
+    )
+  )
+  expect_identical(
+    out3,
+    c(
+      1, 0, 0, 1, 2, 2, 2, 0, 0, 0, 2, 0, 2, 2, 0, 0, 2, 0, 0, 0,
+      0, 2, 2, 2, 2, 0, 0, 0, 2, 2, 2, 0
     )
   )
 })

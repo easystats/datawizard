@@ -4,7 +4,14 @@
 \alias{recode_into}
 \title{Recode values from one or more variables into a new variable}
 \usage{
-recode_into(..., data = NULL, default = NA, overwrite = TRUE, verbose = TRUE)
+recode_into(
+  ...,
+  data = NULL,
+  default = NA,
+  overwrite = TRUE,
+  preserve_na = TRUE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{...}{A sequence of two-sided formulas, where the left hand side (LHS)
@@ -24,6 +31,11 @@ apply to the same case, already recoded values will be overwritten by subsequent
 recode patterns. If \code{FALSE}, former recoded cases will not be altered by later
 recode patterns that would apply to those cases again. A warning message is
 printed to alert such situations and to avoid unintentional recodings.}
+
+\item{preserve_na}{Logical, if \code{TRUE} (default) and \code{default} is not \code{NA},
+missing values in the original variable will be set back to \code{NA} in the
+recoded variable (unless overwritten by other recode patterns). If \code{FALSE},
+missing values in the original variable will be recoded to \code{default}.}
 
 \item{verbose}{Toggle warnings.}
 }
