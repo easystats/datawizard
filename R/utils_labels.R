@@ -46,17 +46,17 @@
       "Not all factor levels had a matching value label. Non-matching levels were preserved."
     )
   }
-  # to match factor levels with value labels, we need to swicth names and elements
-  value_levels <- stats::setNames(names(value_labels), as.character(value_labels))
+  # we need to find out which levels have no labelled value
+  missing_levels <- levels(x)[!levels(x) %in% value_labels]
 
-  # find out if we have any non-matching levels
-  non_match <- is.na(value_levels[levels(x)])
+  # and we need to remove those value labels that don't have a matching level
+  value_labels <- value_labels[value_labels %in% levels(x)]
 
-  # if we have non-matching levels, we need to add them to the value labels
-  value_levels[non_match] <- stats::setNames(levels(x)[non_match], levels(x)[non_match])
+  # for levels that have no label, we just keep the original factor level
+  value_labels <- c(value_labels, setNames(missing_levels, missing_levels))
 
   # now we can add back levels
-  levels(x) <- value_levels[order(names(value_levels))]
+  levels(x) <- names(value_labels)[order(value_labels)]
   attr(x, "labels") <- NULL
 
   x
