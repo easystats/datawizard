@@ -67,7 +67,7 @@ test_that("labels_to_levels, factor, with random value numbers (no sequential or
     out,
     structure(
       c(3L, 3L, 1L, 2L, 1L, 4L),
-      levels = c("yes", "maybe",  "don't know", "no"),
+      levels = c("yes", "maybe", "don't know", "no"),
       class = "factor"
     )
   )
