@@ -53,7 +53,7 @@
   value_labels <- value_labels[value_labels %in% levels(x)]
 
   # for levels that have no label, we just keep the original factor level
-  value_labels <- c(value_labels, setNames(missing_levels, missing_levels))
+  value_labels <- c(value_labels, stats::setNames(missing_levels, missing_levels))
 
   # now we can add back levels
   levels(x) <- names(value_labels)[order(value_labels)]
