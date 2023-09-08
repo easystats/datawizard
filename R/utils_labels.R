@@ -46,7 +46,14 @@
       "Not all factor levels had a matching value label. Non-matching levels were preserved."
     )
   }
-  levels(x)[levels_in_labs] <- names(value_labels)
+  # when length of value_labels and levels_in_labs is identical, we can simply
+  # replace the levels with the value labels. Else, we need to select only those
+  # value labels that have a matching level (labs_in_levels)
+  if (length(value_labels) == length(levels_in_labs)) {
+    levels(x)[levels_in_labs] <- names(value_labels)
+  } else {
+    levels(x)[levels_in_labs] <- names(value_labels[labs_in_levels])
+  }
   attr(x, "labels") <- NULL
 
   x
