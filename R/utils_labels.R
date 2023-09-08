@@ -56,7 +56,7 @@
   value_labels <- c(value_labels, stats::setNames(missing_levels, missing_levels))
 
   # now we can add back levels
-  levels(x) <- names(value_labels)[order(value_labels)]
+  levels(x) <- names(value_labels)[order(as.numeric(value_labels))]
   attr(x, "labels") <- NULL
 
   x
