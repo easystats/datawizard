@@ -25,6 +25,9 @@ CHANGES
 
 BUG FIXES
 
+* Fixed issue in `labels_to_levels()` when values of labels were not in sorted
+  order and values were not sequentially numbered.
+
 * Fixed issues in `data_write()` when writing labelled data into SPSS format
   and vectors were of different type as value labels.
 

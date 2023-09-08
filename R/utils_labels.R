@@ -46,7 +46,21 @@
       "Not all factor levels had a matching value label. Non-matching levels were preserved."
     )
   }
-  levels(x)[levels_in_labs] <- names(value_labels[labs_in_levels])
+  if (length(value_labels) == length(levels_in_labs)) {
+    # when length of value_labels and levels_in_labs is identical, we can simply
+    # replace the levels with the value labels. This makes sure than levels or
+    # value labels, which are not sorted or not sequentially numbered, match.
+    # Example:
+    # x <- c(5, 5, 1, 3, 1, 7)
+    # attr(x, "labels") <- c(no = 7, yes = 1, maybe = 3, `don't know` = 5)
+    # to_factor(x, labels_to_levels = TRUE)
+    levels(x)[levels_in_labs] <- names(value_labels)
+  } else {
+    # else, we need to select only those value labels that have a matching level
+    # (in labs_in_levels). This is required when not all values that have labels
+    # appear in the data.
+    levels(x)[levels_in_labs] <- names(value_labels[labs_in_levels])
+  }
   attr(x, "labels") <- NULL
 
   x
