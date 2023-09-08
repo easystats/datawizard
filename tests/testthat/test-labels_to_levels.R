@@ -8,13 +8,13 @@ test_that("labels_to_levels, numeric", {
 test_that("labels_to_levels, factor", {
   data(efc)
   x <- as.factor(efc$c172code)
-  attr(x, "labels") <- c("low" = 1, "mid" = 2, "high" = 3)
+  attr(x, "labels") <- c(low = 1, mid = 2, high = 3)
   x <- labels_to_levels(x)
   expect_identical(levels(x), c("low", "mid", "high"))
   expect_equal(table(x), table(efc$c172code), ignore_attr = TRUE)
 
   x <- as.ordered(efc$c172code)
-  attr(x, "labels") <- c("low" = 1, "mid" = 2, "high" = 3)
+  attr(x, "labels") <- c(low = 1, mid = 2, high = 3)
   x <- labels_to_levels(x)
   expect_identical(levels(x), c("low", "mid", "high"))
   expect_s3_class(x, "ordered")
