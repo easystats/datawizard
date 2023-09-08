@@ -46,7 +46,7 @@
       "Not all factor levels had a matching value label. Non-matching levels were preserved."
     )
   }
-  levels(x)[levels_in_labs] <- names(value_labels[labs_in_levels])
+  levels(x)[levels_in_labs] <- names(value_labels)
   attr(x, "labels") <- NULL
 
   x
