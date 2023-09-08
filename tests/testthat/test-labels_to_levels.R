@@ -59,4 +59,77 @@ test_that("labels_to_levels, factor, with random value numbers (no sequential or
   out <- to_factor(x, labels_to_levels = TRUE)
   expect_identical(as.character(out), c("a", "a", "d", "c", "d", "b"))
   expect_identical(levels(out), c("d", "c", "b", "a"))
+
+  x <- c(5, 5, 1, 3, 1, 7)
+  attr(x, "labels") <- c(no = 7, yes = 1, maybe = 3, `don't know` = 5)
+  out <- to_factor(x, labels_to_levels = TRUE)
+  expect_identical(
+    out,
+    structure(
+      c(3L, 3L, 1L, 2L, 1L, 4L),
+      levels = c("yes", "maybe", "don't know", "no"),
+      class = "factor"
+    )
+  )
+  expect_identical(
+    as.character(out),
+    c("don't know", "don't know", "yes", "maybe", "yes", "no")
+  )
+
+  x <- c(5, 5, 1, 3, 1, 7, 4)
+  attr(x, "labels") <- c(no = 7, yes = 1, maybe = 3, `don't know` = 5)
+  expect_message(
+    {
+      out <- to_factor(x, labels_to_levels = TRUE)
+    },
+    regex = "Not all factor levels"
+  )
+  expect_identical(
+    out,
+    structure(
+      c(4L, 4L, 1L, 2L, 1L, 5L, 3L),
+      levels = c("yes", "maybe", "4", "don't know", "no"),
+      class = "factor"
+    )
+  )
+  expect_identical(
+    as.character(out),
+    c("don't know", "don't know", "yes", "maybe", "yes", "no", "4")
+  )
+
+  x <- c(5, 5, 1, 3, 1, 7)
+  attr(x, "labels") <- c(no = 7, yes = 1, maybe = 4, `don't know` = 5)
+  expect_message({
+    out <- to_factor(x, labels_to_levels = TRUE)
+  })
+  expect_identical(
+    out,
+    structure(
+      c(3L, 3L, 1L, 2L, 1L, 4L),
+      levels = c("yes", "3", "don't know", "no"),
+      class = "factor"
+    )
+  )
+  expect_identical(
+    as.character(out),
+    c("don't know", "don't know", "yes", "3", "yes", "no")
+  )
+
+  x <- c(5, 5, 1, 3, 1, 7, 6)
+  attr(x, "labels") <- c(no = 7, yes = 1, maybe = 4, `don't know` = 5)
+  expect_message({
+    out <- to_factor(x, labels_to_levels = TRUE)
+  })
+  expect_identical(
+    out,
+    structure(
+      c(3L, 3L, 1L, 2L, 1L, 5L, 4L),
+      levels = c("yes", "3", "don't know", "6", "no"),
+      class = "factor"
+    )
+  )
+  expect_identical(
+    as.character(out),
+    c("don't know", "don't know", "yes", "3", "yes", "no", "6")
+  )
 })
