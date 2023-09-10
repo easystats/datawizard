@@ -46,7 +46,17 @@
       "Not all factor levels had a matching value label. Non-matching levels were preserved."
     )
   }
-  levels(x)[levels_in_labs] <- names(value_labels[labs_in_levels])
+  # we need to find out which levels have no labelled value
+  missing_levels <- levels(x)[!levels(x) %in% value_labels]
+
+  # and we need to remove those value labels that don't have a matching level
+  value_labels <- value_labels[value_labels %in% levels(x)]
+
+  # for levels that have no label, we just keep the original factor level
+  value_labels <- c(value_labels, stats::setNames(missing_levels, missing_levels))
+
+  # now we can add back levels
+  levels(x) <- names(value_labels)[order(as.numeric(value_labels))]
   attr(x, "labels") <- NULL
 
   x
