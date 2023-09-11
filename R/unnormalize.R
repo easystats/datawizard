@@ -42,7 +42,7 @@ unnormalize.numeric <- function(x, verbose = TRUE, ...) {
 
   if (is.null(min_value) || is.null(range_difference)) {
     if (verbose) {
-      insight::format_warning("Can't unnormalize variable. Information about range and/or minimum value is missing.")
+      insight::format_error("Can't unnormalize variable. Information about range and/or minimum value is missing.")
     }
     return(x)
   }

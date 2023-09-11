@@ -5,7 +5,10 @@ test_that("unnormalize work as expected", {
     c(0, 1, 5, -5, -2),
     ignore_attr = TRUE
   )
-  expect_warning(expect_equal(unnormalize(c(0, 1, 5, -5, -2)), c(0, 1, 5, -5, -2), ignore_attr = TRUE))
+  expect_error(
+    unnormalize(c(0, 1, 5, -5, -2)),
+    "Can't unnormalize variable"
+  )
 })
 
 test_that("unnormalize error if not supported", {
@@ -113,7 +116,7 @@ test_that("unnormalize: grouped data", {
   norm <- normalize(norm, "mpg")
   norm <- poorman::ungroup(norm)
 
-  expect_warning(
+  expect_error(
     unnormalize(norm, "mpg"),
     regexp = "Can't unnormalize variable"
   )
