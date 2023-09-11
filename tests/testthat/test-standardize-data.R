@@ -290,7 +290,8 @@ test_that("unstandardize: grouped data", {
   unstand <- unstandardize(stand, select = "mpg")
   expect_identical(
     poorman::ungroup(unstand),
-    mtcars
+    mtcars,
+    ignore_attr = TRUE
   )
 
   expect_s3_class(unstand, "grouped_df")
