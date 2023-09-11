@@ -285,12 +285,12 @@ test_that("unstandardize: grouped data", {
   skip_if_not_installed("poorman")
 
   # 1 group, 1 standardized var
-  stand <- poorman::group_by(iris, Species)
-  stand <- standardize(stand, "Sepal.Length")
-  unstand <- unstandardize(stand, select = "Sepal.Length")
+  stand <- poorman::group_by(mtcars, cyl)
+  stand <- standardize(stand, "mpg")
+  unstand <- unstandardize(stand, select = "mpg")
   expect_identical(
     poorman::ungroup(unstand),
-    iris
+    mtcars
   )
 
   expect_s3_class(unstand, "grouped_df")
@@ -327,5 +327,23 @@ test_that("unstandardize: grouped data", {
   expect_error(
     unstandardize(stand, "Sepal.Length"),
     regexp = "Couldn't retrieve the necessary information"
+  )
+
+  # normalize applied on grouped data but unstandardize applied on ungrouped data
+  stand <- poorman::group_by(mtcars, cyl)
+  stand <- standardize(stand, "mpg")
+  stand <- poorman::ungroup(stand)
+
+  expect_error(
+    unstandardize(stand, "mpg"),
+    regexp = "must provide the arguments"
+  )
+
+  # standardize applied on grouped data but unstandardize applied different grouped
+  # data
+  stand <- poorman::group_by(stand, am)
+  expect_error(
+    unstandardize(stand, "mpg"),
+    regexp = "Couldn't retrieve the necessary"
   )
 })

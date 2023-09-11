@@ -65,11 +65,12 @@ test_that("unnormalize: grouped data", {
   skip_if_not_installed("poorman")
 
   # 1 group, 1 normalized var
-  norm <- poorman::group_by(iris, Species)
-  norm <- normalize(norm, "Sepal.Length")
+  norm <- poorman::group_by(mtcars, cyl)
+  norm <- normalize(norm, "mpg")
   expect_identical(
-    poorman::ungroup(unnormalize(norm, "Sepal.Length")),
-    iris
+    poorman::ungroup(unnormalize(norm, "mpg")),
+    mtcars,
+    ignore_attr = TRUE # unnormalize removed rownames
   )
 
   # 2 groups, 1 normalized var
@@ -106,4 +107,23 @@ test_that("unnormalize: grouped data", {
     unnormalize(norm, "Sepal.Length"),
     regexp = "Couldn't retrieve the necessary information"
   )
+
+  # normalize applied on grouped data but unnormalize applied on ungrouped data
+  norm <- poorman::group_by(mtcars, cyl)
+  norm <- normalize(norm, "mpg")
+  norm <- poorman::ungroup(norm)
+
+  expect_warning(
+    unnormalize(norm, "mpg"),
+    regexp = "Can't unnormalize variable"
+  )
+
+  # normalize applied on grouped data but unnormalize applied different grouped
+  # data
+  norm <- poorman::group_by(norm, am)
+  expect_error(
+    unnormalize(norm, "mpg"),
+    regexp = "Couldn't retrieve the necessary"
+  )
+
 })
