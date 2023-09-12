@@ -10,6 +10,11 @@ NEW FUNCTIONS
 * `means_by_group()`, to compute mean values of variables, grouped by levels
   of specified factors.
 
+* `seek_variables()`, to seek for variables in a data frame, based on their
+  column names, variables labels, value labels or factor levels. Searching for
+  labels only works for "labelled" data, i.e. when variables have a `label` or
+  `labels` attribute.
+
 CHANGES
 
 * `recode_into()` gains an `overwrite` argument to skip overwriting already
