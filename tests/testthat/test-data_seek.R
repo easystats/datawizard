@@ -75,3 +75,7 @@ test_that("seek_variables - valid input", {
   expect_error(seek_variables(rnorm(10), "Length"), regex = "`data` must be a data frame.")
   expect_error(seek_variables(iris, "Length", seek = "somewhere"), regex = "`seek` must be")
 })
+
+test_that("seek_variables - print", {
+  expect_snapshot(seek_variables(iris, "Length"))
+})

@@ -2,9 +2,12 @@
 % Please edit documentation in R/seek_variables.R
 \name{seek_variables}
 \alias{seek_variables}
+\alias{data_seek}
 \title{Find variables by its name, variable or value labels}
 \usage{
 seek_variables(data, pattern, seek = c("names", "labels"), fuzzy = FALSE)
+
+data_seek(data, pattern, seek = c("names", "labels"), fuzzy = FALSE)
 }
 \arguments{
 \item{data}{A data frame.}

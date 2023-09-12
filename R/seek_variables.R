@@ -120,7 +120,6 @@ seek_variables <- function(data, pattern, seek = c("names", "labels"), fuzzy = F
         }
       }
     }
-    # get unique variable indices
     c(pos1, pos2, pos3)
   }))
 
@@ -143,10 +142,28 @@ seek_variables <- function(data, pattern, seek = c("names", "labels"), fuzzy = F
     character(1)
   )
 
-  data.frame(
+  out <- data.frame(
     index = pos,
     column = colnames(data)[pos],
     labels = labels,
     stringsAsFactors = FALSE
   )
+  # no row names
+  rownames(out) <- NULL
+
+  class(out) <- c("data_seek", "data.frame")
+  out
+}
+
+# alias
+#' @rdname seek_variables
+#' @export
+data_seek <- seek_variables
+
+
+# methods ---------------------------------------------------------------------
+
+#' @export
+print.data_seek <- function(x, ...) {
+  cat(insight::export_table(x, ...))
 }
