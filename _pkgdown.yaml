@@ -63,6 +63,7 @@ reference:
       - data_codebook
       - data_tabulate
       - data_peek
+      - seek_variables
       - means_by_group
       - contains("distribution")
       - kurtosis
