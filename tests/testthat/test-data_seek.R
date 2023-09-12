@@ -78,4 +78,5 @@ test_that("data_seek - valid input", {
 
 test_that("data_seek - print", {
   expect_snapshot(data_seek(iris, "Length"))
+  expect_snapshot(data_seek(iris, "abc"))
 })

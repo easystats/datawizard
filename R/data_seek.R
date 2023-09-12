@@ -160,5 +160,9 @@ data_seek <- function(data, pattern, seek = c("names", "labels"), fuzzy = FALSE)
 
 #' @export
 print.data_seek <- function(x, ...) {
-  cat(insight::export_table(x, ...))
+  if (nrow(x) == 0) {
+    cat("No matches found.\n")
+  } else {
+    cat(insight::export_table(x, ...))
+  }
 }

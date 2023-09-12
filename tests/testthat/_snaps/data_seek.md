@@ -8,3 +8,10 @@
           1 | Sepal.Length | Sepal.Length
           3 | Petal.Length | Petal.Length
 
+---
+
+    Code
+      data_seek(iris, "abc")
+    Output
+      No matches found.
+
