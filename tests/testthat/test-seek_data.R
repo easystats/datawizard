@@ -70,3 +70,8 @@ test_that("seek_variables - multiple pattern", {
   expect_identical(out$index, which(colnames(efc) %in% out$column))
   expect_identical(out$labels, c("elder's gender", "elder's dependency"))
 })
+
+test_that("seek_variables - valid input", {
+  expect_error(seek_variables(rnorm(10), "Length"), regex = "`data` must be a data frame.")
+  expect_error(seek_variables(iris, "Length", search = "somewhere"), regex = "`search` must be")
+})
