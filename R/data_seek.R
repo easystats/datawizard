@@ -127,8 +127,6 @@ data_seek <- function(data, pattern, seek = c("names", "labels"), fuzzy = FALSE)
 
   # clean up
   pos <- unique(pos)
-  # remove -1
-  pos <- pos[which(pos != -1)]
 
   # variable labels of matching variables
   labels <- vapply(
