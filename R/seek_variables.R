@@ -84,7 +84,10 @@ seek_variables <- function(data, pattern, source = c("names", "labels"), fuzzy =
         pos2 <- match(names(labels)[found], colnames(data))
         # find in near distanc?
         if (fuzzy) {
-          pos2 <- c(pos2, .fuzzy_grep(x = labels, pattern = search_pattern))
+          found <- .fuzzy_grep(x = labels, pattern = search_pattern)
+          if (length(found)) {
+            pos2 <- c(pos2, names(labels)[found])
+          }
         }
       }
     }
@@ -104,7 +107,7 @@ seek_variables <- function(data, pattern, source = c("names", "labels"), fuzzy =
         pos3 <- match(names(found)[found], colnames(data))
         # find in near distance
         if (fuzzy) {
-          pos3 <- which(vapply(
+          found <- vapply(
             values,
             function(i) {
               p <- .fuzzy_grep(
@@ -114,7 +117,10 @@ seek_variables <- function(data, pattern, source = c("names", "labels"), fuzzy =
               !insight::is_empty_object(p[1])
             },
             logical(1)
-          ))
+          )
+          if (length(found)) {
+            pos3 <- c(pos3, match(names(found)[found], colnames(data)))
+          }
         }
       }
     }
