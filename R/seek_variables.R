@@ -7,6 +7,11 @@
 #' data, i.e. when the variables either have a `label` attribute or `labels`
 #' attribute.
 #'
+#' `seek_variables()` is particular useful for larger data frames with labelled
+#' data - finding the correct variable name can be a challenge. This function
+#' helps to find the required variables, when only certain patterns of variable
+#' names or labels are known.
+#'
 #' @param data A data frame.
 #' @param pattern Character string (regular expression) to be matched in `data`.
 #' May also be a character vector of length > 1. `pattern` is searched for in

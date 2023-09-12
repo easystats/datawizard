@@ -38,6 +38,11 @@ that either match the variable name (column name), variable labels, value labels
 or factor levels. Matching variable and value labels only works for "labelled"
 data, i.e. when the variables either have a \code{label} attribute or \code{labels}
 attribute.
+
+\code{seek_variables()} is particular useful for larger data frames with labelled
+data - finding the correct variable name can be a challenge. This function
+helps to find the required variables, when only certain patterns of variable
+names or labels are known.
 }
 \examples{
 # seek variables with "Length" in variable name or labels
