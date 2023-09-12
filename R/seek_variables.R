@@ -18,7 +18,7 @@
 #' column names, variable label and value labels attributes, or factor levels of
 #' variables in `data`.
 #' @param seek Character vector, indicating where `pattern` is sought. Use one
-#' of more of the following options:
+#' or more of the following options:
 #'
 #' - `"name"`: searches in column names.
 #' - `"labels"`: searches in variable labels. Only applies when a `label` attribute
