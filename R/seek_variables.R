@@ -26,7 +26,7 @@
 #' - `"values"`: searches in value labels or factor levels. Only applies when a
 #'   `labels` attribute is set for a variable, or if a variable is a factor.
 #' - `"all"`: searches in all of the above.
-#' @param fuzzy Logical, if `TRUE`, "fuzzy matching" (partial and close distance
+#' @param fuzzy Logical. If `TRUE`, "fuzzy matching" (partial and close distance
 #' matching) will be used to find `pattern`.
 #'
 #' @return A data frame with three columns: the column index, the column name
