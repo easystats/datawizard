@@ -212,10 +212,6 @@ test_that("unstandardize, data frame", {
   x <- standardize(iris, robust = TRUE, two_sd = TRUE)
   rez <- unstandardize(x, robust = TRUE, two_sd = TRUE)
   expect_equal(rez, iris, tolerance = 0.1, ignore_attr = TRUE)
-
-  d <- poorman::group_by(mtcars, am)
-  x <- standardize(d)
-  expect_error(unstandardize(x))
 })
 
 test_that("un/standardize, matrix", {
@@ -279,5 +275,76 @@ test_that("standardize when only providing one of center/scale", {
   expect_identical(
     as.vector(datawizard::standardize(x, scale = 1.5)),
     (x - mean(x)) / 1.5
+  )
+})
+
+
+# grouped data
+
+test_that("unstandardize: grouped data", {
+  skip_if_not_installed("poorman")
+
+  # 1 group, 1 standardized var
+  stand <- poorman::group_by(mtcars, cyl)
+  stand <- standardize(stand, "mpg")
+  unstand <- unstandardize(stand, select = "mpg")
+  expect_identical(
+    poorman::ungroup(unstand),
+    mtcars,
+    ignore_attr = TRUE
+  )
+
+  expect_s3_class(unstand, "grouped_df")
+
+  # 2 groups, 1 standardized var
+  set.seed(123)
+  test <- iris
+  test$grp <- sample(c("A", "B"), nrow(test), replace = TRUE)
+  stand <- poorman::group_by(test, Species, grp)
+  stand <- standardize(stand, "Sepal.Length")
+  expect_identical(
+    poorman::ungroup(unstandardize(stand, select = "Sepal.Length")),
+    test
+  )
+
+  # 2 groups, 2 standardized vars
+  set.seed(123)
+  test <- iris
+  test$grp <- sample(c("A", "B"), nrow(test), replace = TRUE)
+  stand <- poorman::group_by(test, Species, grp)
+  stand <- standardize(stand, c("Sepal.Length", "Petal.Length"))
+  expect_identical(
+    poorman::ungroup(unstandardize(stand, select = c("Sepal.Length", "Petal.Length"))),
+    test
+  )
+
+  expect_s3_class(unstand, "grouped_df")
+
+  # can't recover attributes
+  stand <- poorman::group_by(iris, Species)
+  stand <- standardize(stand, "Sepal.Length")
+  attr(stand, "groups") <- NULL
+
+  expect_error(
+    unstandardize(stand, "Sepal.Length"),
+    regexp = "Couldn't retrieve the necessary information"
+  )
+
+  # normalize applied on grouped data but unstandardize applied on ungrouped data
+  stand <- poorman::group_by(mtcars, cyl)
+  stand <- standardize(stand, "mpg")
+  stand <- poorman::ungroup(stand)
+
+  expect_error(
+    unstandardize(stand, "mpg"),
+    regexp = "must provide the arguments"
+  )
+
+  # standardize applied on grouped data but unstandardize applied different grouped
+  # data
+  stand <- poorman::group_by(stand, am)
+  expect_error(
+    unstandardize(stand, "mpg"),
+    regexp = "Couldn't retrieve the necessary"
   )
 })

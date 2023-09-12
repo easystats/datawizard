@@ -70,7 +70,23 @@ unstandardize.data.frame <- function(x,
     verbose = verbose
   )
 
-  if (!is.null(reference)) {
+  dots <- match.call(expand.dots = FALSE)[["..."]]
+
+  if (!is.null(dots$grp_attr_dw)) {
+    grp_attr_dw <- eval(dots$grp_attr_dw, envir = parent.frame(1L))
+  } else {
+    grp_attr_dw <- NULL
+  }
+
+  if (!is.null(grp_attr_dw)) {
+    center <- vapply(cols, function(x) {
+      grp_attr_dw[grep(paste0("^attr\\_", x, "\\.center"), names(grp_attr_dw))]
+    }, FUN.VALUE = numeric(1L))
+    scale <- vapply(cols, function(x) {
+      grp_attr_dw[grep(paste0("^attr\\_", x, "\\.scale"), names(grp_attr_dw))]
+    }, FUN.VALUE = numeric(1L))
+    i <- vapply(x[, cols, drop = FALSE], is.numeric, FUN.VALUE = logical(1L))
+  } else if (!is.null(reference)) {
     i <- vapply(x[, cols, drop = FALSE], is.numeric, FUN.VALUE = logical(1L))
     i <- i[i]
     reference <- reference[names(i)]
@@ -143,8 +159,67 @@ unstandardize.grouped_df <- function(x,
                                      reference = NULL,
                                      robust = FALSE,
                                      two_sd = FALSE,
+                                     select = NULL,
+                                     exclude = NULL,
+                                     ignore_case = FALSE,
+                                     regex = FALSE,
+                                     verbose = TRUE,
                                      ...) {
-  insight::format_error("Cannot (yet) unstandardize a `grouped_df`.")
+  # evaluate select/exclude, may be select-helpers
+  select <- .select_nse(select,
+    x,
+    exclude,
+    ignore_case,
+    regex = regex,
+    remove_group_var = TRUE,
+    verbose = verbose
+  )
+
+  info <- attributes(x)
+
+  # works only for dplyr >= 0.8.0
+  grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
+
+  x <- as.data.frame(x)
+
+  for (i in select) {
+    if (is.null(info$groups[[paste0("attr_", i)]])) {
+      insight::format_error(
+        paste(
+          "Couldn't retrieve the necessary information to unstandardize",
+          text_concatenate(i, enclose = "`")
+        )
+      )
+    }
+  }
+
+  for (rows in seq_along(grps)) {
+    # get the dw_transformer attributes for this group
+    raw_attrs <- unlist(info$groups[rows, startsWith(names(info$groups), "attr")])
+    if (length(select) == 1L) {
+      names(raw_attrs) <- paste0("attr_", select, ".", names(raw_attrs))
+    }
+
+    tmp <- unstandardise(
+      x[grps[[rows]], , drop = FALSE],
+      center = center,
+      scale = scale,
+      reference = reference,
+      robust = robust,
+      two_sd = two_sd,
+      select = select,
+      exclude = exclude,
+      ignore_case = ignore_case,
+      regex = regex,
+      verbose = verbose,
+      grp_attr_dw = raw_attrs
+    )
+    x[grps[[rows]], ] <- tmp
+  }
+  # set back class, so data frame still works with dplyr
+  attributes(x) <- utils::modifyList(info, attributes(x))
+  class(x) <- c("grouped_df", class(x))
+  x
 }
 
 #' @export

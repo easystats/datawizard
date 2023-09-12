@@ -214,9 +214,15 @@ normalize.grouped_df <- function(x,
   }
 
   x <- as.data.frame(x)
-  for (rows in grps) {
-    x[rows, ] <- normalize(
-      x[rows, , drop = FALSE],
+
+  # create column(s) to store dw_transformer attributes
+  for (i in select) {
+    info$groups[[paste0("attr_", i)]] <- rep(NA, length(grps))
+  }
+
+  for (rows in seq_along(grps)) {
+    tmp <- normalize(
+      x[grps[[rows]], , drop = FALSE],
       select = select,
       exclude = exclude,
       include_bounds = include_bounds,
@@ -225,9 +231,21 @@ normalize.grouped_df <- function(x,
       add_transform_class = FALSE,
       ...
     )
+
+    # store dw_transformer_attributes
+    for (i in select) {
+      info$groups[rows, paste0("attr_", i)][[1]] <- list(unlist(attributes(tmp[[i]])))
+    }
+
+    x[grps[[rows]], ] <- tmp
   }
+
+  # last column of "groups" attributes must be called ".rows"
+  info$groups <- data_relocate(info$groups, ".rows", after = -1)
+
   # set back class, so data frame still works with dplyr
   attributes(x) <- utils::modifyList(info, attributes(x))
+  class(x) <- c("grouped_df", class(x))
   x
 }
 

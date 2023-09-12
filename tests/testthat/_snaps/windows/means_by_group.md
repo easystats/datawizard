@@ -1,4 +1,4 @@
-# meany_by_group, weighted
+# mean_by_group, weighted
 
     Code
       means_by_group(efc, "c12hour", "e42dep", weights = "weight")
