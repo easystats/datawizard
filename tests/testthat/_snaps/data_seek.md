@@ -1,7 +1,7 @@
-# seek_variables - print
+# data_seek - print
 
     Code
-      seek_variables(iris, "Length")
+      data_seek(iris, "Length")
     Output
       index |       column |       labels
       -----------------------------------
