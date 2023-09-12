@@ -99,7 +99,7 @@ standardize.default <- function(x,
                                 update_expr,
                                 ...) {
   m_info <- .get_model_info(x, ...)
-  data <- insight::get_data(x, source = "environment", verbose = FALSE)
+  data <- insight::get_data(x, source = "mf", verbose = FALSE)
 
   if (isTRUE(attr(data, "is_subset"))) {
     insight::format_error("Cannot standardize a model fit with a 'subset = '.")
