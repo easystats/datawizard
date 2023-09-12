@@ -128,5 +128,4 @@ test_that("unnormalize: grouped data", {
     unnormalize(norm, "mpg"),
     regexp = "Couldn't retrieve the necessary"
   )
-
 })
