@@ -1,5 +1,5 @@
-#' @title Find variables by its name, variable or value labels
-#' @name seek_variables
+#' @title Find variables by their names, variable or value labels
+#' @name data_seek
 #'
 #' @description This functions seeks variables in a data frame, based on patterns
 #' that either match the variable name (column name), variable labels, value labels
@@ -7,7 +7,7 @@
 #' data, i.e. when the variables either have a `label` attribute or `labels`
 #' attribute.
 #'
-#' `seek_variables()` is particular useful for larger data frames with labelled
+#' `data_seek()` is particular useful for larger data frames with labelled
 #' data - finding the correct variable name can be a challenge. This function
 #' helps to find the required variables, when only certain patterns of variable
 #' names or labels are known.
@@ -34,25 +34,25 @@
 #'
 #' @examples
 #' # seek variables with "Length" in variable name or labels
-#' seek_variables(iris, "Length")
+#' data_seek(iris, "Length")
 #'
 #' # seek variables with "dependency" in names or labels
 #' # column "e42dep" has a label-attribute "elder's dependency"
 #' data(efc)
-#' seek_variables(efc, "dependency")
+#' data_seek(efc, "dependency")
 #'
 #' # "female" only appears as value label attribute - default search is in
 #' # variable names and labels only, so no match
-#' seek_variables(efc, "female")
+#' data_seek(efc, "female")
 #' # when we seek in all sources, we find the variable "e16sex"
-#' seek_variables(efc, "female", seek = "all")
+#' data_seek(efc, "female", seek = "all")
 #'
 #' # typo, no match
-#' seek_variables(iris, "Lenght")
+#' data_seek(iris, "Lenght")
 #' # typo, fuzzy match
-#' seek_variables(iris, "Lenght", fuzzy = TRUE)
+#' data_seek(iris, "Lenght", fuzzy = TRUE)
 #' @export
-seek_variables <- function(data, pattern, seek = c("names", "labels"), fuzzy = FALSE) {
+data_seek <- function(data, pattern, seek = c("names", "labels"), fuzzy = FALSE) {
   # check valid args
   if (!is.data.frame(data)) {
     insight::format_error("`data` must be a data frame.")
@@ -154,11 +154,6 @@ seek_variables <- function(data, pattern, seek = c("names", "labels"), fuzzy = F
   class(out) <- c("data_seek", "data.frame")
   out
 }
-
-# alias
-#' @rdname seek_variables
-#' @export
-data_seek <- seek_variables
 
 
 # methods ---------------------------------------------------------------------
