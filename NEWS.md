@@ -1,11 +1,37 @@
 # datawizard (devel)
 
+NEW FUNCTIONS
+
+* `row_means()`, to compute row means, optionally only for the rows with at
+  least `min_valid` non-missing values.
+
+* `contr.deviation()` for sum-deviation contrast coding of factors.
+
+* `means_by_group()`, to compute mean values of variables, grouped by levels
+  of specified factors.
+
 CHANGES
 
 * `recode_into()` gains an `overwrite` argument to skip overwriting already
   recoded cases when multiple recode patterns apply to the same case.
 
+* `recode_into()` gains an `preserve_na` argument to preserve `NA` values
+  when recoding.
+
+* `data_read()` now passes the `encoding` argument to `data.table::fread()`.
+  This allows to read files with non-ASCII characters.
+
+* `datawizard` moves from the GPL-3 license to the MIT license.
+
+* `unnormalize()` and `unstandardize()` now work with grouped data (#415).
+
+* `unnormalize()` now errors instead of emitting a warning if it doesn't have the 
+  necessary info (#415).
+
 BUG FIXES
+
+* Fixed issue in `labels_to_levels()` when values of labels were not in sorted
+  order and values were not sequentially numbered.
 
 * Fixed issues in `data_write()` when writing labelled data into SPSS format
   and vectors were of different type as value labels.
@@ -13,9 +39,16 @@ BUG FIXES
 * Fixed issue in `recode_into()` with probably wrong case number printed in the
   warning when several recode patterns match to one case.
 
+* Fixed issue in `recode_into()` when original data contained `NA` values and
+  `NA` was not included in the recode pattern.
+
 * Fixed issue in `data_filter()` where functions containing a `=` (e.g. when
   naming arguments, like `grepl(pattern, x = a)`) were mistakenly seen as
   faulty syntax. 
+
+* Fixed issue in `empty_column()` for strings with invalid multibyte strings.
+  For such data frames or files, `empty_column()` or `data_read()` no longer
+  fails.
 
 # datawizard 0.8.0
 

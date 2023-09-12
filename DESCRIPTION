@@ -1,7 +1,7 @@
 Type: Package
 Package: datawizard
 Title: Easy Data Wrangling and Statistical Transformations
-Version: 0.8.0.5
+Version: 0.8.0.13
 Authors@R: c(
     person("Indrajeet", "Patil", , "patilindrajeet.science@gmail.com", role = "aut",
            comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@patilindrajeets")),
@@ -27,13 +27,13 @@ Description: A lightweight package to assist in key steps involved in any data
     (3) compute statistical summaries of data properties and distributions. 
     It is also the data wrangling backend for packages in 'easystats' ecosystem.
     References: Patil et al. (2022) <doi:10.21105/joss.04684>.
-License: GPL (>= 3)
+License: MIT + file LICENSE
 URL: https://easystats.github.io/datawizard/
 BugReports: https://github.com/easystats/datawizard/issues
 Depends:
     R (>= 3.6)
 Imports:
-    insight (>= 0.19.1),
+    insight (>= 0.19.3.2),
     stats,
     utils
 Suggests: 
@@ -43,6 +43,7 @@ Suggests:
     data.table,
     dplyr (>= 1.0),
     effectsize,
+    emmeans,
     gamm4,
     ggplot2,
     gt,
@@ -77,3 +78,4 @@ Config/Needs/website:
     rstudio/bslib,
     r-lib/pkgdown,
     easystats/easystatstemplate
+Remotes: easystats/insight

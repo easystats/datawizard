@@ -4,7 +4,14 @@
 \alias{recode_into}
 \title{Recode values from one or more variables into a new variable}
 \usage{
-recode_into(..., data = NULL, default = NA, overwrite = TRUE, verbose = TRUE)
+recode_into(
+  ...,
+  data = NULL,
+  default = NA,
+  overwrite = TRUE,
+  preserve_na = FALSE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{...}{A sequence of two-sided formulas, where the left hand side (LHS)
@@ -24,6 +31,14 @@ apply to the same case, already recoded values will be overwritten by subsequent
 recode patterns. If \code{FALSE}, former recoded cases will not be altered by later
 recode patterns that would apply to those cases again. A warning message is
 printed to alert such situations and to avoid unintentional recodings.}
+
+\item{preserve_na}{Logical, if \code{TRUE} and \code{default} is not \code{NA}, missing
+values in the original variable will be set back to \code{NA} in the recoded
+variable (unless overwritten by other recode patterns). If \code{FALSE}, missing
+values in the original variable will be recoded to \code{default}. Setting
+\code{preserve_na = TRUE} prevents unintentional overwriting of missing values
+with \code{default}, which means that you won't find valid values where the
+original data only had missing values. See 'Examples'.}
 
 \item{verbose}{Toggle warnings.}
 }
@@ -82,5 +97,30 @@ recode_into(
   x > 3 ~ 2,
   data = d,
   default = 0
+)
+
+# handling of missing values
+d <- data.frame(
+  x = c(1, NA, 2, NA, 3, 4),
+  y = c(1, 11, 3, NA, 5, 6)
+)
+# first NA in x is overwritten by valid value from y
+# we have no known value for second NA in x and y,
+# thus we get one NA in the result
+recode_into(
+  x <= 3 ~ 1,
+  y > 5 ~ 2,
+  data = d,
+  default = 0,
+  preserve_na = TRUE
+)
+# first NA in x is overwritten by valid value from y
+# default value is used for second NA
+recode_into(
+  x <= 3 ~ 1,
+  y > 5 ~ 2,
+  data = d,
+  default = 0,
+  preserve_na = FALSE
 )
 }
