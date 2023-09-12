@@ -205,9 +205,9 @@ standardize.matrix <- function(x, ...) {
   x_out <- do.call(cbind, xz)
   dimnames(x_out) <- dimnames(x)
 
-  attr(x_out, "center") <- sapply(xz, attr, "center")
-  attr(x_out, "scale") <- sapply(xz, attr, "scale")
-  attr(x_out, "robust") <- sapply(xz, attr, "robust")[1]
+  attr(x_out, "center") <- vapply(xz, attr, "center", FUN.VALUE = numeric(1L))
+  attr(x_out, "scale") <- vapply(xz, attr, "scale", FUN.VALUE = numeric(1L))
+  attr(x_out, "robust") <- vapply(xz, attr, "robust", FUN.VALUE = logical(1L))[1]
   class(x_out) <- c("dw_transformer", class(x_out))
 
   x_out
@@ -300,9 +300,12 @@ standardize.data.frame <- function(x,
     )
   }
 
-
-  attr(x, "center") <- sapply(x[args$select], function(z) attributes(z)$center)
-  attr(x, "scale") <- sapply(x[args$select], function(z) attributes(z)$scale)
+  attr(x, "center") <- unlist(lapply(x[args$select], function(z) {
+    attributes(z)$center
+  }))
+  attr(x, "scale") <- unlist(lapply(x[args$select], function(z) {
+    attributes(z)$scale
+  }))
   attr(x, "robust") <- robust
   x
 }
@@ -341,9 +344,14 @@ standardize.grouped_df <- function(x,
     reference, weights, keep_factors = force
   )
 
-  for (rows in args$grps) {
-    args$x[rows, ] <- standardize(
-      args$x[rows, , drop = FALSE],
+  # create column(s) to store dw_transformer attributes
+  for (i in select) {
+    args$info$groups[[paste0("attr_", i)]] <- rep(NA, length(args$grps))
+  }
+
+  for (rows in seq_along(args$grps)) {
+    tmp <- standardize(
+      args$x[args$grps[[rows]], , drop = FALSE],
       select = args$select,
       exclude = NULL,
       robust = robust,
@@ -358,7 +366,18 @@ standardize.grouped_df <- function(x,
       add_transform_class = FALSE,
       ...
     )
+
+    # store dw_transformer_attributes
+    for (i in select) {
+      args$info$groups[rows, paste0("attr_", i)][[1]] <- list(unlist(attributes(tmp[[i]])))
+    }
+
+    args$x[args$grps[[rows]], ] <- tmp
   }
+
+  # last column of "groups" attributes must be called ".rows"
+  args$info$groups <- data_relocate(args$info$groups, ".rows", after = -1)
+
   # set back class, so data frame still works with dplyr
   attributes(args$x) <- args$info
   args$x

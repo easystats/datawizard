@@ -28,6 +28,11 @@ CHANGES
 
 * `datawizard` moves from the GPL-3 license to the MIT license.
 
+* `unnormalize()` and `unstandardize()` now work with grouped data (#415).
+
+* `unnormalize()` now errors instead of emitting a warning if it doesn't have the 
+  necessary info (#415).
+
 BUG FIXES
 
 * Fixed issue in `labels_to_levels()` when values of labels were not in sorted

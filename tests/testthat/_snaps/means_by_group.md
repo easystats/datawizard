@@ -1,4 +1,4 @@
-# meany_by_group
+# mean_by_group
 
     Code
       means_by_group(efc, "c12hour", "e42dep")
