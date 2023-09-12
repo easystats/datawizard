@@ -17,12 +17,14 @@ variables in \code{data}.}
 \item{seek}{Character vector, indicating where \code{pattern} is sought. Use one
 or more of the following options:
 \itemize{
-\item \code{"name"}: searches in column names.
-\item \code{"labels"}: searches in variable labels. Only applies when a \code{label} attribute
+\item \code{"names"}: Searches in column names. \code{"column_names"} and \code{"columns"} are
+aliases for \code{"names"}.
+\item \code{"labels"}: Searches in variable labels. Only applies when a \code{label} attribute
 is set for a variable.
-\item \code{"values"}: searches in value labels or factor levels. Only applies when a
+\item \code{"values"}: Searches in value labels or factor levels. Only applies when a
 \code{labels} attribute is set for a variable, or if a variable is a factor.
-\item \code{"all"}: searches in all of the above.
+\code{"levels"} is an alias for \code{"values"}.
+\item \code{"all"}: Searches in all of the above.
 }}
 
 \item{fuzzy}{Logical. If \code{TRUE}, "fuzzy matching" (partial and close distance

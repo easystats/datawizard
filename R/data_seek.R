@@ -20,12 +20,14 @@
 #' @param seek Character vector, indicating where `pattern` is sought. Use one
 #' or more of the following options:
 #'
-#' - `"name"`: searches in column names.
-#' - `"labels"`: searches in variable labels. Only applies when a `label` attribute
+#' - `"names"`: Searches in column names. `"column_names"` and `"columns"` are
+#'   aliases for `"names"`.
+#' - `"labels"`: Searches in variable labels. Only applies when a `label` attribute
 #'   is set for a variable.
-#' - `"values"`: searches in value labels or factor levels. Only applies when a
+#' - `"values"`: Searches in value labels or factor levels. Only applies when a
 #'   `labels` attribute is set for a variable, or if a variable is a factor.
-#' - `"all"`: searches in all of the above.
+#'   `"levels"` is an alias for `"values"`.
+#' - `"all"`: Searches in all of the above.
 #' @param fuzzy Logical. If `TRUE`, "fuzzy matching" (partial and close distance
 #' matching) will be used to find `pattern`.
 #'
