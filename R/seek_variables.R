@@ -17,7 +17,7 @@
 #' May also be a character vector of length > 1. `pattern` is searched for in
 #' column names, variable label and value labels attributes, or factor levels of
 #' variables in `data`.
-#' @param search Character vector, indicating where `pattern` is sought. Use one
+#' @param seek Character vector, indicating where `pattern` is sought. Use one
 #' of more of the following options:
 #'
 #' - `"name"`: searches in column names.
@@ -45,30 +45,30 @@
 #' # variable names and labels only, so no match
 #' seek_variables(efc, "female")
 #' # when we seek in all sources, we find the variable "e16sex"
-#' seek_variables(efc, "female", search = "all")
+#' seek_variables(efc, "female", seek = "all")
 #'
 #' # typo, no match
 #' seek_variables(iris, "Lenght")
 #' # typo, fuzzy match
 #' seek_variables(iris, "Lenght", fuzzy = TRUE)
 #' @export
-seek_variables <- function(data, pattern, search = c("names", "labels"), fuzzy = FALSE) {
+seek_variables <- function(data, pattern, seek = c("names", "labels"), fuzzy = FALSE) {
   # check valid args
   if (!is.data.frame(data)) {
     insight::format_error("`data` must be a data frame.")
   }
 
   # check valid args
-  search <- intersect(search, c("names", "labels", "values", "levels", "column_names", "columns", "all"))
-  if (is.null(search) || !length(search)) {
-    insight::format_error("`search` must be one of \"names\", \"labels\", \"values\", a combination of these options, or \"all\".")
+  seek <- intersect(seek, c("names", "labels", "values", "levels", "column_names", "columns", "all"))
+  if (is.null(seek) || !length(seek)) {
+    insight::format_error("`seek` must be one of \"names\", \"labels\", \"values\", a combination of these options, or \"all\".")
   }
 
   pos1 <- pos2 <- pos3 <- NULL
 
   pos <- unlist(lapply(pattern, function(search_pattern) {
     # search in variable names?
-    if (any(search %in% c("names", "columns", "column_names", "all"))) {
+    if (any(seek %in% c("names", "columns", "column_names", "all"))) {
       pos1 <- which(grepl(search_pattern, colnames(data)))
       # find in near distance?
       if (fuzzy) {
@@ -77,7 +77,7 @@ seek_variables <- function(data, pattern, search = c("names", "labels"), fuzzy =
     }
 
     # search in variable labels?
-    if (any(search %in% c("labels", "all"))) {
+    if (any(seek %in% c("labels", "all"))) {
       labels <- insight::compact_character(unlist(lapply(data, attr, which = "label", exact = TRUE)))
       if (!is.null(labels) && length(labels)) {
         found <- grepl(search_pattern, labels)
@@ -93,7 +93,7 @@ seek_variables <- function(data, pattern, search = c("names", "labels"), fuzzy =
     }
 
     # search for pattern in value labels or levels?
-    if (any(search %in% c("values", "levels", "all"))) {
+    if (any(seek %in% c("values", "levels", "all"))) {
       values <- insight::compact_list(lapply(data, function(i) {
         l <- attr(i, "labels", exact = TRUE)
         if (is.null(l) && is.factor(i)) {

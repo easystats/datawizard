@@ -4,7 +4,7 @@
 \alias{seek_variables}
 \title{Find variables by its name, variable or value labels}
 \usage{
-seek_variables(data, pattern, search = c("names", "labels"), fuzzy = FALSE)
+seek_variables(data, pattern, seek = c("names", "labels"), fuzzy = FALSE)
 }
 \arguments{
 \item{data}{A data frame.}
@@ -14,7 +14,7 @@ May also be a character vector of length > 1. \code{pattern} is searched for in
 column names, variable label and value labels attributes, or factor levels of
 variables in \code{data}.}
 
-\item{search}{Character vector, indicating where \code{pattern} is sought. Use one
+\item{seek}{Character vector, indicating where \code{pattern} is sought. Use one
 of more of the following options:
 \itemize{
 \item \code{"name"}: searches in column names.
@@ -57,7 +57,7 @@ seek_variables(efc, "dependency")
 # variable names and labels only, so no match
 seek_variables(efc, "female")
 # when we seek in all sources, we find the variable "e16sex"
-seek_variables(efc, "female", search = "all")
+seek_variables(efc, "female", seek = "all")
 
 # typo, no match
 seek_variables(iris, "Lenght")
