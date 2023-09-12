@@ -86,7 +86,7 @@ seek_variables <- function(data, pattern, search = c("names", "labels"), fuzzy =
         if (fuzzy) {
           found <- .fuzzy_grep(x = labels, pattern = search_pattern)
           if (length(found)) {
-            pos2 <- c(pos2, names(labels)[found])
+            pos2 <- c(pos2, match(names(labels)[found], colnames(data)))
           }
         }
       }
@@ -110,15 +110,11 @@ seek_variables <- function(data, pattern, search = c("names", "labels"), fuzzy =
           found <- vapply(
             values,
             function(i) {
-              p <- .fuzzy_grep(
-                x = i,
-                pattern = search_pattern
-              )
-              !insight::is_empty_object(p[1])
+              length(.fuzzy_grep(x = i, pattern = search_pattern)) > 0
             },
             logical(1)
           )
-          if (length(found)) {
+          if (any(found)) {
             pos3 <- c(pos3, match(names(found)[found], colnames(data)))
           }
         }
