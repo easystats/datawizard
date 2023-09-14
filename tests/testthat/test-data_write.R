@@ -132,3 +132,19 @@ test_that("data_write, no file extension", {
   expect_error(data_write(d, "mytestfile"))
   expect_error(data_write(d, NULL))
 })
+
+
+# writing character vector works for missing value labels ------------------
+
+tmp <- tempfile(fileext = ".sav")
+on.exit(unlink(tmp))
+
+test_that("data_write, no file extension", {
+  d <- data.frame(
+    a = letters[1:3],
+    stringsAsFactors = FALSE
+  )
+  d$a <- assign_labels(d$a, variable = "First")
+  # expect message, but no error
+  expect_message(data_write(d, "test.sav"), regex = "Preparing")
+})
