@@ -147,4 +147,8 @@ test_that("data_write, existing variable label but missing value labels", {
   d$a <- assign_labels(d$a, variable = "First")
   # expect message, but no error
   expect_message(data_write(d, tmp), regex = "Preparing")
+
+  # check if data is really the same
+  d2 <- data_read(tmp)
+  expect_identical(d2, d)
 })
