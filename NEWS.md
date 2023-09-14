@@ -41,6 +41,10 @@ BUG FIXES
 * Fixed issues in `data_write()` when writing labelled data into SPSS format
   and vectors were of different type as value labels.
 
+* Fixed issues in `data_write()` when writing labelled data into SPSS format
+  for character vectors with missing value labels, but existing variable
+  labels.
+
 * Fixed issue in `recode_into()` with probably wrong case number printed in the
   warning when several recode patterns match to one case.
 
