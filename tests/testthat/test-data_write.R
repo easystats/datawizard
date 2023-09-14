@@ -146,5 +146,5 @@ test_that("data_write, existing variable label but missing value labels", {
   )
   d$a <- assign_labels(d$a, variable = "First")
   # expect message, but no error
-  expect_message(data_write(d, "test.sav"), regex = "Preparing")
+  expect_message(data_write(d, tmp), regex = "Preparing")
 })
