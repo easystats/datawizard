@@ -139,7 +139,7 @@ test_that("data_write, no file extension", {
 tmp <- tempfile(fileext = ".sav")
 on.exit(unlink(tmp))
 
-test_that("data_write, no file extension", {
+test_that("data_write, existing variable label but missing value labels", {
   d <- data.frame(
     a = letters[1:3],
     stringsAsFactors = FALSE
