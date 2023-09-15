@@ -1,4 +1,4 @@
-# datawizard (devel)
+# datawizard 0.9.0
 
 NEW FUNCTIONS
 
