@@ -1,6 +1,6 @@
 on:
   schedule:
-    # Check for once a month
+    # Check for dependency updates once a month
     - cron: "0 0 1 * *"
 
 name: update-to-latest-easystats
