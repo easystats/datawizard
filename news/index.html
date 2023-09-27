@@ -102,6 +102,7 @@
 </ul><p>BUG FIXES</p>
 <ul><li><p>Fixed issue in <code><a href="../reference/labels_to_levels.html">labels_to_levels()</a></code> when values of labels were not in sorted order and values were not sequentially numbered.</p></li>
 <li><p>Fixed issues in <code><a href="../reference/data_read.html">data_write()</a></code> when writing labelled data into SPSS format and vectors were of different type as value labels.</p></li>
+<li><p>Fixed issues in <code><a href="../reference/data_read.html">data_write()</a></code> when writing labelled data into SPSS format for character vectors with missing value labels, but existing variable labels.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/recode_into.html">recode_into()</a></code> with probably wrong case number printed in the warning when several recode patterns match to one case.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/recode_into.html">recode_into()</a></code> when original data contained <code>NA</code> values and <code>NA</code> was not included in the recode pattern.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/data_match.html">data_filter()</a></code> where functions containing a <code>=</code> (e.g. when naming arguments, like <code>grepl(pattern, x = a)</code>) were mistakenly seen as faulty syntax.</p></li>
