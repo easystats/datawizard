@@ -49,7 +49,11 @@ test_that("data_write, SPSS, mixed types of labelled vectors", {
   d$c <- assign_labels(d$c, variable = "Third", values = c("ey", "bee", "see"))
 
   # expect message, but no error
-  expect_message(data_write(d, "test.sav"), regex = "Preparing")
+  skip_if_not_installed("withr")
+  withr::with_tempdir(code = {
+    expect_snapshot(data_write(d, "test.sav"))
+  })
+
 })
 
 
@@ -146,7 +150,7 @@ test_that("data_write, existing variable label but missing value labels", {
   )
   d$a <- assign_labels(d$a, variable = "First")
   # expect message, but no error
-  expect_message(data_write(d, tmp), regex = "Preparing")
+  expect_snapshot(data_write(d, tmp))
 
   # check if data is really the same
   d2 <- data_read(tmp)
