@@ -123,7 +123,7 @@
 
     Code
       data_separate(d_sep, guess_columns = "mode", select = NULL)
-    Message <simpleMessage>
+    Message
       Column `x` had different number of values after splitting. Variable was
         split into 3 columns.
       `x` returned more columns than expected after splitting. Right-most
