@@ -1,12 +1,14 @@
-skip_on_cran()
-skip_if_offline()
-
 skip_if_not_installed("httr")
 skip_if_not_installed("readxl")
 skip_if_not_installed("haven")
 skip_if_not_installed("readr")
 skip_if_not_installed("data.table")
 skip_if_not_installed("rio")
+
+skip_on_cran()
+
+skip_if_not_installed("curl")
+skip_if_offline()
 
 # csv -------------------------
 
