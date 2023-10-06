@@ -49,7 +49,8 @@ the differences the
 \strong{A} and \strong{B} group means from the overall mean, respectively.
 }
 \examples{
-if (FALSE) {
+\dontshow{if (!identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
   data("mtcars")
 
   mtcars <- data_modify(mtcars, cyl = factor(cyl))
@@ -97,7 +98,7 @@ if (FALSE) {
   #> cyl6:am1       1.000   -1.000   -1.000    1.000    0.000    0.000
   #> cyl8:am1       1.000   -1.000    0.000    0.000   -1.000    1.000
 }
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[stats:contrast]{stats::contr.sum()}}

@@ -32,8 +32,8 @@
 #'
 #' @seealso [stats::contr.sum()]
 #'
-#' @examples
-#' if (FALSE) {
+#' @examplesIf !identical(Sys.getenv("IN_PKGDOWN"), "true")
+#' \donttest{
 #'   data("mtcars")
 #'
 #'   mtcars <- data_modify(mtcars, cyl = factor(cyl))
@@ -83,7 +83,8 @@
 #' }
 #'
 #' @export
-contr.deviation <- function(n, base = 1,
+contr.deviation <- function(n,
+                            base = 1,
                             contrasts = TRUE,
                             sparse = FALSE) {
   cont <- stats::contr.treatment(n,
