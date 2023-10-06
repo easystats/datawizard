@@ -69,7 +69,7 @@ to_numeric.data.frame <- function(x,
                                   regex = FALSE,
                                   verbose = TRUE,
                                   ...) {
-  # sanity check, return as is for complete numeric
+  # validation check, return as is for complete numeric
   if (all(vapply(x, is.numeric, FUN.VALUE = logical(1L)))) {
     return(x)
   }

@@ -30,7 +30,7 @@
   # check positions of matching values and levels
   levels_in_labs <- stats::na.omit(match(value_labels, levels(x)))
   labs_in_levels <- stats::na.omit(match(levels(x), value_labels))
-  # sanity check - if labelled values and levels don't match
+  # validation check - if labelled values and levels don't match
   if (!length(levels_in_labs) || !length(labs_in_levels)) {
     if (verbose) {
       insight::format_alert(

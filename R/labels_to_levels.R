@@ -58,7 +58,7 @@ labels_to_levels.data.frame <- function(x,
                                         regex = FALSE,
                                         verbose = TRUE,
                                         ...) {
-  # sanity check, return as is for complete factor
+  # validation check, return as is for complete factor
   if (all(vapply(x, is.factor, TRUE))) {
     return(x)
   }

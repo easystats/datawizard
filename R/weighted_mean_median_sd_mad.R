@@ -49,7 +49,7 @@ weighted_median <- function(x, weights = NULL, remove_na = TRUE, verbose = TRUE,
   weights <- complete$weights[order]
 
   rw <- cumsum(weights) / sum(weights)
-  # sanity check
+  # validation check
   if (all(is.na(rw))) {
     return(NA_real_)
   }

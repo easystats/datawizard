@@ -117,7 +117,7 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
     "or"
   )
 
-  # sanity check
+  # validation check
   shared_columns <- intersect(colnames(x), colnames(to))
   if (is.null(shared_columns) || length(shared_columns) == 0) {
     insight::format_error(
@@ -207,7 +207,7 @@ data_filter.data.frame <- function(x, ...) {
       symbol <- dots[[i]]
       # evaluate, we may have a variable with filter expression
       eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
-      # sanity check: is variable named like a function?
+      # validation check: is variable named like a function?
       if (is.function(eval_symbol)) {
         eval_symbol <- .dynGet(symbol, ifnotfound = NULL)
       }

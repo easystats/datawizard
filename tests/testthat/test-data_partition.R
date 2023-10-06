@@ -10,7 +10,7 @@ test_that("data_partition works as expected", {
 
   expect_snapshot(data_partition(letters, seed = 123))
 
-  # sanity checks
+  # validation checks
 
   expect_warning(
     data_partition(iris, 0.7, row_id = "Species"),

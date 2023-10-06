@@ -210,7 +210,7 @@
   nchar_open <- nchar(open)
   nchar_close <- nchar(close)
 
-  # Sanity checks
+  # validation checks
   stopifnot(exprs = {
     is.character(fmt)
     length(fmt) == 1L
