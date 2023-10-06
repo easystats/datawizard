@@ -489,14 +489,14 @@ print_md.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
   }
 
   switch(vt,
-    "ord" = "ordinal",
-    "fct" = "categorical",
-    "dbl" = "numeric",
-    "int" = "integer",
-    "chr" = "character",
-    "lbl" = "labelled",
-    "cpl" = "complex",
-    "lgl" = "logical",
+    ord = "ordinal",
+    fct = "categorical",
+    dbl = "numeric",
+    int = "integer",
+    chr = "character",
+    lbl = "labelled",
+    cpl = "complex",
+    lgl = "logical",
     vt
   )
 }

@@ -37,8 +37,8 @@ test_that("rescale works as expected", {
 
   expect_snapshot(
     head(rescale(iris, to = list(
-      "Sepal.Length" = c(0, 1),
-      "Petal.Length" = c(-1, 0)
+      Sepal.Length = c(0, 1),
+      Petal.Length = c(-1, 0)
     )))
   )
 })

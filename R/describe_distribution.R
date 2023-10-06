@@ -230,7 +230,7 @@ describe_distribution.numeric <- function(x,
 
   out$n <- length(x)
   out$n_Missing <- n_missing
-  out$`.temp` <- NULL
+  out$.temp <- NULL
 
   class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
   attr(out, "data") <- x

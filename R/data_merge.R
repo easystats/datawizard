@@ -274,13 +274,13 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   all_columns <- union(colnames(x), colnames(y))
 
   out <- switch(join,
-    "full" = merge(x, y, all = TRUE, sort = FALSE, by = by),
-    "left" = merge(x, y, all.x = TRUE, sort = FALSE, by = by),
-    "right" = merge(x, y, all.y = TRUE, sort = FALSE, by = by),
-    "inner" = merge(x, y, sort = FALSE, by = by),
-    "semi" = x[x[[by]] %in% y[[by]], , drop = FALSE],
-    "anti" = x[!x[[by]] %in% y[[by]], , drop = FALSE],
-    "bind" = .bind_data_frames(x, y)
+    full = merge(x, y, all = TRUE, sort = FALSE, by = by),
+    left = merge(x, y, all.x = TRUE, sort = FALSE, by = by),
+    right = merge(x, y, all.y = TRUE, sort = FALSE, by = by),
+    inner = merge(x, y, sort = FALSE, by = by),
+    semi = x[x[[by]] %in% y[[by]], , drop = FALSE],
+    anti = x[!x[[by]] %in% y[[by]], , drop = FALSE],
+    bind = .bind_data_frames(x, y)
   )
 
 

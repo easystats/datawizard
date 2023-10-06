@@ -474,16 +474,16 @@ summary.parameters_kurtosis <- function(object, test = FALSE, ...) {
   }
 
   switch(type,
-    "1" = ,
-    "I" = ,
-    "classic" = "1",
-    "2" = ,
-    "II" = ,
-    "SPSS" = ,
-    "SAS" = "2",
-    "3" = ,
-    "III" = ,
-    "Minitab" = "3"
+    `1` = ,
+    I = ,
+    classic = "1",
+    `2` = ,
+    II = ,
+    SPSS = ,
+    SAS = "2",
+    `3` = ,
+    III = ,
+    Minitab = "3"
   )
 }
 

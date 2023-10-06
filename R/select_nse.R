@@ -96,11 +96,11 @@
   type <- typeof(x)
 
   out <- switch(type,
-    "integer" = x,
-    "double" = as.integer(x),
-    "character" = .select_char(data, x, ignore_case, regex = regex, verbose),
-    "symbol" = .select_symbol(data, x, ignore_case, regex = regex, verbose),
-    "language" = .eval_call(data, x, ignore_case, regex = regex, verbose),
+    integer = x,
+    double = as.integer(x),
+    character = .select_char(data, x, ignore_case, regex = regex, verbose),
+    symbol = .select_symbol(data, x, ignore_case, regex = regex, verbose),
+    language = .eval_call(data, x, ignore_case, regex = regex, verbose),
     insight::format_error(paste0(
       "Expressions of type <", typeof(x),
       "> cannot be evaluated for use when subsetting."
@@ -254,13 +254,13 @@
     `[` = .select_square_bracket(x, data, ignore_case, regex, verbose),
     `$` = .select_dollar(x, data, ignore_case, regex, verbose),
     `~` = .select_tilde(x, data, ignore_case, regex, verbose),
-    "list" = .select_list(x, data, ignore_case, regex, verbose),
-    "names" = .select_names(x, data, ignore_case, regex, verbose),
-    "starts_with" = ,
-    "ends_with" = ,
-    "matches" = ,
-    "contains" = ,
-    "regex" = .select_helper(x, data, ignore_case, regex, verbose),
+    list = .select_list(x, data, ignore_case, regex, verbose),
+    names = .select_names(x, data, ignore_case, regex, verbose),
+    starts_with = ,
+    ends_with = ,
+    matches = ,
+    contains = ,
+    regex = .select_helper(x, data, ignore_case, regex, verbose),
     .select_context(x, data, ignore_case, regex, verbose)
   )
 }
@@ -369,10 +369,10 @@
   helper <- insight::safe_deparse(lst_expr[[1]])
 
   rgx <- switch(helper,
-    "starts_with" = paste0("^(", collapsed_patterns, ")"),
-    "ends_with" = paste0("(", collapsed_patterns, ")$"),
-    "contains" = paste0("(", collapsed_patterns, ")"),
-    "regex" = collapsed_patterns,
+    starts_with = paste0("^(", collapsed_patterns, ")"),
+    ends_with = paste0("(", collapsed_patterns, ")$"),
+    contains = paste0("(", collapsed_patterns, ")"),
+    regex = collapsed_patterns,
     insight::format_error("There is no select helper called '", helper, "'.")
   )
   grep(rgx, colnames(data), ignore.case = ignore_case)

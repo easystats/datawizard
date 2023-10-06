@@ -109,17 +109,17 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
   # evaluate
   match <- match.arg(tolower(match), c("and", "&", "&&", "or", "|", "||", "!", "not"))
   match <- switch(match,
-    "&" = ,
-    "&&" = ,
-    "and" = "and",
-    "!" = ,
-    "not" = "not",
+    `&` = ,
+    `&&` = ,
+    and = "and",
+    `!` = ,
+    not = "not",
     "or"
   )
 
   # validation check
   shared_columns <- intersect(colnames(x), colnames(to))
-  if (is.null(shared_columns) || length(shared_columns) == 0) {
+  if (is.null(shared_columns) || length(shared_columns) == 0L) {
     insight::format_error(
       "None of the columns from the data frame with matching conditions were found in `x`."
     )
@@ -277,7 +277,6 @@ data_filter.data.frame <- function(x, ...) {
 
 #' @export
 data_filter.grouped_df <- function(x, ...) {
-  # works only for dplyr >= 0.8.0
   grps <- attr(x, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 

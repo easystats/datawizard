@@ -19,13 +19,13 @@ data_write <- function(data,
   # check file type, so we know the target dta format
   file_type <- .file_ext(path)
   type <- switch(file_type,
-    "txt" = ,
-    "csv" = "csv",
-    "sav" = ,
-    "por" = "spss",
-    "zsav" = "zspss",
-    "dta" = "stata",
-    "xpt" = "sas",
+    txt = ,
+    csv = "csv",
+    sav = ,
+    por = "spss",
+    zsav = "zspss",
+    dta = "stata",
+    xpt = "sas",
     "unknown"
   )
 

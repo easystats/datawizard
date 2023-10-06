@@ -229,9 +229,9 @@ data_separate <- function(data,
       l <- l[!vapply(l, function(i) all(is.na(i)), TRUE)]
       # define number of new columns, based on user-choice
       n_cols <- switch(guess_columns,
-        "min" = min(l, na.rm = TRUE),
-        "max" = max(l, na.rm = TRUE),
-        "mode" = distribution_mode(l),
+        min = min(l, na.rm = TRUE),
+        max = max(l, na.rm = TRUE),
+        mode = distribution_mode(l),
       )
       # tell user
       if (verbose && insight::n_unique(l) != 1 && !is.numeric(separator)) {
@@ -374,10 +374,10 @@ data_separate <- function(data,
         "`", sep_column, "`",
         " returned more columns than expected after splitting. ",
         switch(extra,
-          "drop_left" = "Left-most columns have been dropped.",
-          "drop_right" = "Right-most columns have been dropped.",
-          "merge_left" = "Left-most columns have been merged together.",
-          "merge_right" = "Right-most columns have been merged together."
+          drop_left = "Left-most columns have been dropped.",
+          drop_right = "Right-most columns have been dropped.",
+          merge_left = "Left-most columns have been merged together.",
+          merge_right = "Right-most columns have been merged together."
         )
       ))
     }
@@ -386,10 +386,10 @@ data_separate <- function(data,
         "`", sep_column, "`",
         "returned fewer columns than expected after splitting. ",
         switch(fill,
-          "left" = "Left-most columns were filled with `NA`.",
-          "right" = "Right-most columns were filled with `NA`.",
-          "value_left" = "Left-most columns were filled with first value.",
-          "value_right" = "Right-most columns were filled with last value."
+          left = "Left-most columns were filled with `NA`.",
+          right = "Right-most columns were filled with `NA`.",
+          value_left = "Left-most columns were filled with first value.",
+          value_right = "Right-most columns were filled with last value."
         )
       ))
     }

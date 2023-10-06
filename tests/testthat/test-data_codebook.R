@@ -159,9 +159,11 @@ test_that("data_codebook, tagged NA", {
       1:4, haven::tagged_na("a", "c", "z")
     ),
     labels = c(
-      "Agreement" = 1, "Disagreement" = 4,
-      "First" = haven::tagged_na("c"), "Refused" = haven::tagged_na("a"),
-      "Not home" = haven::tagged_na("z")
+      Agreement = 1,
+      Disagreement = 4,
+      First = haven::tagged_na("c"),
+      Refused = haven::tagged_na("a"),
+      `Not home` = haven::tagged_na("z")
     )
   )
   expect_snapshot(data_codebook(data.frame(x)))
@@ -174,9 +176,11 @@ test_that("data_codebook, tagged NA", {
       1:4, haven::tagged_na("a", "c")
     ),
     labels = c(
-      "Agreement" = 1, "Disagreement" = 4,
-      "First" = haven::tagged_na("c"), "Refused" = haven::tagged_na("a"),
-      "Not home" = haven::tagged_na("z")
+      Agreement = 1,
+      Disagreement = 4,
+      First = haven::tagged_na("c"),
+      Refused = haven::tagged_na("a"),
+      `Not home` = haven::tagged_na("z")
     )
   )
   expect_snapshot(data_codebook(data.frame(x)))
@@ -187,11 +191,11 @@ test_that("data_codebook, negative label values #334", {
   skip_if_not_installed("haven")
   x1 <- haven::labelled(
     x = 1:4,
-    labels = c("Agreement" = 1, "Disagreement" = 4, "Missing" = -9)
+    labels = c(Agreement = 1, Disagreement = 4, Missing = -9)
   )
   x2 <- haven::labelled(
     x = c(1:3, -9),
-    labels = c("Agreement" = 1, "Disagreement" = 4, "Missing" = -9)
+    labels = c(Agreement = 1, Disagreement = 4, Missing = -9)
   )
   expect_snapshot(data_codebook(data.frame(x1, x2)))
 })

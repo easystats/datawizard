@@ -22,7 +22,7 @@ test_that("to_factor", {
 # numeric, partially labelled
 test_that("to_factor", {
   x <- c(10, 11, 12)
-  attr(x, "labels") <- c("ten" = 10, "twelve" = 12)
+  attr(x, "labels") <- c(ten = 10, twelve = 12)
   expect_message(
     expect_identical(
       to_factor(x),

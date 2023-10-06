@@ -97,14 +97,14 @@ data_read <- function(path,
 
   # read data
   out <- switch(file_type,
-    "txt" = ,
-    "csv" = .read_text(path, encoding, verbose, ...),
-    "xls" = ,
-    "xlsx" = .read_excel(path, encoding, verbose, ...),
-    "sav" = ,
-    "por" = .read_spss(path, encoding, convert_factors, verbose, ...),
-    "dta" = .read_stata(path, encoding, convert_factors, verbose, ...),
-    "sas7bdat" = .read_sas(path, path_catalog, encoding, convert_factors, verbose, ...),
+    txt = ,
+    csv = .read_text(path, encoding, verbose, ...),
+    xls = ,
+    xlsx = .read_excel(path, encoding, verbose, ...),
+    sav = ,
+    por = .read_spss(path, encoding, convert_factors, verbose, ...),
+    dta = .read_stata(path, encoding, convert_factors, verbose, ...),
+    sas7bdat = .read_sas(path, path_catalog, encoding, convert_factors, verbose, ...),
     .read_unknown(path, convert_factors, verbose, ...)
   )
 
