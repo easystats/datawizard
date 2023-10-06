@@ -82,11 +82,13 @@ test_that("to_factor regex", {
 
 # SPSS file, many value labels  -----------------------------------
 
-skip_on_cran()
-skip_if_offline()
-
 skip_if_not_installed("httr")
 skip_if_not_installed("haven")
+
+skip_on_cran()
+
+skip_if_not_installed("curl")
+skip_if_offline()
 
 # Output validated against SPSS output from original dataset
 
