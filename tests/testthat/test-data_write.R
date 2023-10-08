@@ -104,7 +104,6 @@ test_that("data_write, CSV, convert to factor", {
 test_that("data_write, CSV, create labels file", {
   skip_if_not_installed("withr")
   withr::with_tempfile("tmp", fileext = ".csv", code = {
-
     # file for labels
     fpath <- dirname(tmp)
     fname <- sub("\\.csv$", "", basename(tmp))
