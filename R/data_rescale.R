@@ -305,8 +305,7 @@ rescale.data.frame <- function(x,
 
 # helper ----------------------------------------------------------------------
 
-#' expand the new target range by multiplying or adding
-#' @keywords internal
+# expand the new target range by multiplying or adding
 .update_to <- function(x, to, multiply, add) {
   # check if user specified "multiply" or "add", and if not, return "to"
   if (is.null(multiply) && is.null(add)) {
