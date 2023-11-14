@@ -317,9 +317,7 @@ rescale.data.frame <- function(x,
   }
   # multiply? If yes, calculate the "add" value
   if (!is.null(multiply)) {
-    x_range <- range(x, na.rm = TRUE)
-    x_diff <- diff(x_range)
-    add <- x_diff * (multiply - 1)
+    add <- diff(range(x, na.rm = TRUE)) * (multiply - 1)
   }
   # add?
   if (!is.null(add)) {
