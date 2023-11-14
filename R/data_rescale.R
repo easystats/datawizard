@@ -1,7 +1,7 @@
 #' Rescale Variables to a New Range
 #'
-#' Rescale variables to a new range.
-#' Can also be used to reverse-score variables (change the keying/scoring direction).
+#' Rescale variables to a new range. Can also be used to reverse-score variables
+#' (change the keying/scoring direction), or to expand a range.
 #'
 #' @inheritParams categorize
 #' @inheritParams find_columns
@@ -13,12 +13,12 @@
 #' @param multiply If not `NULL`, `to` is ignored and `multiply` will be used,
 #'   giving the factor by which the actual range of `x` should be expanded.
 #'   For example, if a vector range from 5 to 15 and `multiply = 1.1`, the current
-#'   range of 10 will be expanced by the factor of 1.1, giving a new range of
+#'   range of 10 will be expanded by the factor of 1.1, giving a new range of
 #'   11. Thus, the rescaled vector would range from 4.5 to 15.5.
 #' @param add If not `NULL`, `to` is ignored and `add` will be used, giving the
 #'   amount by which the actual range of `x` should be expanded. For example,
 #'   if a vector range from 5 to 15 and `add = 1`, the current range of 10 will
-#'   be expanced by 1, giving a new range of 11. Thus, the rescaled vector would
+#'   be expanded by 1, giving a new range of 11. Thus, the rescaled vector would
 #'   range from 4.5 to 15.5, because the lower and upper bounds are each expanded
 #'   by half of the amount specified in `add`.
 #' @param range Initial (old) range of values. If `NULL`, will take the range of

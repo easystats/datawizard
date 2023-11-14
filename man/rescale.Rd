@@ -48,13 +48,13 @@ be given with the maximum value first. See examples.}
 \item{multiply}{If not \code{NULL}, \code{to} is ignored and \code{multiply} will be used,
 giving the factor by which the actual range of \code{x} should be expanded.
 For example, if a vector range from 5 to 15 and \code{multiply = 1.1}, the current
-range of 10 will be expanced by the factor of 1.1, giving a new range of
+range of 10 will be expanded by the factor of 1.1, giving a new range of
 11. Thus, the rescaled vector would range from 4.5 to 15.5.}
 
 \item{add}{If not \code{NULL}, \code{to} is ignored and \code{add} will be used, giving the
 amount by which the actual range of \code{x} should be expanded. For example,
 if a vector range from 5 to 15 and \code{add = 1}, the current range of 10 will
-be expanced by 1, giving a new range of 11. Thus, the rescaled vector would
+be expanded by 1, giving a new range of 11. Thus, the rescaled vector would
 range from 4.5 to 15.5, because the lower and upper bounds are each expanded
 by half of the amount specified in \code{add}.}
 
@@ -126,8 +126,8 @@ functions (see 'Details'), this argument may be used as workaround.}
 A rescaled object.
 }
 \description{
-Rescale variables to a new range.
-Can also be used to reverse-score variables (change the keying/scoring direction).
+Rescale variables to a new range. Can also be used to reverse-score variables
+(change the keying/scoring direction), or to expand a range.
 }
 \section{Selection of variables - the \code{select} argument}{
 
