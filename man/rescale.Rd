@@ -47,13 +47,13 @@ be given with the maximum value first. See examples.}
 
 \item{multiply}{If not \code{NULL}, \code{to} is ignored and \code{multiply} will be used,
 giving the factor by which the actual range of \code{x} should be expanded.
-For example, if a vector range from 5 to 15 and \code{multiply = 1.1}, the current
+For example, if a vector ranges from 5 to 15 and \code{multiply = 1.1}, the current
 range of 10 will be expanded by the factor of 1.1, giving a new range of
 11. Thus, the rescaled vector would range from 4.5 to 15.5.}
 
 \item{add}{A vector of length 1 or 2. If not \code{NULL}, \code{to} is ignored and \code{add}
 will be used, giving the amount by which the minimum and maximum of the
-actual range of \code{x} should be expanded. For example, if a vector range from
+actual range of \code{x} should be expanded. For example, if a vector ranges from
 5 to 15 and \code{add = 1}, the range will be expanded from 4 to 16. If \code{add} is
 of length 2, then the first value is used for the lower bound and the second
 value for the upper bound.}
