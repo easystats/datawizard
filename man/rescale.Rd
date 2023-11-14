@@ -51,12 +51,12 @@ For example, if a vector range from 5 to 15 and \code{multiply = 1.1}, the curre
 range of 10 will be expanded by the factor of 1.1, giving a new range of
 11. Thus, the rescaled vector would range from 4.5 to 15.5.}
 
-\item{add}{If not \code{NULL}, \code{to} is ignored and \code{add} will be used, giving the
-amount by which the actual range of \code{x} should be expanded. For example,
-if a vector range from 5 to 15 and \code{add = 1}, the current range of 10 will
-be expanded by 1, giving a new range of 11. Thus, the rescaled vector would
-range from 4.5 to 15.5, because the lower and upper bounds are each expanded
-by half of the amount specified in \code{add}.}
+\item{add}{A vector of length 1 or 2. If not \code{NULL}, \code{to} is ignored and \code{add}
+will be used, giving the amount by which the minimum and maximum of the
+actual range of \code{x} should be expanded. For example, if a vector range from
+5 to 15 and \code{add = 1}, the range will be expanded from 4 to 16. If \code{add} is
+of length 2, then the first value is used for the lower bound and the second
+value for the upper bound.}
 
 \item{range}{Initial (old) range of values. If \code{NULL}, will take the range of
 the input vector (\code{range(x)}).}
@@ -167,11 +167,10 @@ x <- 5:15
 x
 # both will expand the range by 10\%
 rescale(x, multiply = 1.1)
-rescale(x, add = 1)
+rescale(x, add = 0.5)
 
-# "expand" range by 50\%
-rescale(x, multiply = 1.5)
-rescale(x, add = 5)
+# expand range by different values
+rescale(x, add = c(1, 3))
 
 # Specify list of multipliers
 d <- data.frame(x = 5:15, y = 5:15)

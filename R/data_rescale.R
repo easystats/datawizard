@@ -15,12 +15,12 @@
 #'   For example, if a vector range from 5 to 15 and `multiply = 1.1`, the current
 #'   range of 10 will be expanded by the factor of 1.1, giving a new range of
 #'   11. Thus, the rescaled vector would range from 4.5 to 15.5.
-#' @param add If not `NULL`, `to` is ignored and `add` will be used, giving the
-#'   amount by which the actual range of `x` should be expanded. For example,
-#'   if a vector range from 5 to 15 and `add = 1`, the current range of 10 will
-#'   be expanded by 1, giving a new range of 11. Thus, the rescaled vector would
-#'   range from 4.5 to 15.5, because the lower and upper bounds are each expanded
-#'   by half of the amount specified in `add`.
+#' @param add A vector of length 1 or 2. If not `NULL`, `to` is ignored and `add`
+#'   will be used, giving the amount by which the minimum and maximum of the
+#'   actual range of `x` should be expanded. For example, if a vector range from
+#'   5 to 15 and `add = 1`, the range will be expanded from 4 to 16. If `add` is
+#'   of length 2, then the first value is used for the lower bound and the second
+#'   value for the upper bound.
 #' @param range Initial (old) range of values. If `NULL`, will take the range of
 #'   the input vector (`range(x)`).
 #' @param ... Arguments passed to or from other methods.
@@ -54,11 +54,10 @@
 #' x
 #' # both will expand the range by 10%
 #' rescale(x, multiply = 1.1)
-#' rescale(x, add = 1)
+#' rescale(x, add = 0.5)
 #'
-#' # "expand" range by 50%
-#' rescale(x, multiply = 1.5)
-#' rescale(x, add = 5)
+#' # expand range by different values
+#' rescale(x, add = c(1, 3))
 #'
 #' # Specify list of multipliers
 #' d <- data.frame(x = 5:15, y = 5:15)
@@ -317,11 +316,27 @@ rescale.data.frame <- function(x,
   }
   # multiply? If yes, calculate the "add" value
   if (!is.null(multiply)) {
-    add <- diff(range(x, na.rm = TRUE)) * (multiply - 1)
+    # check for correct length
+    if (length(multiply) > 1) {
+      insight::format_error("The length of `multiply` must be 1.")
+    }
+    add <- (diff(range(x, na.rm = TRUE)) * (multiply - 1)) / 2
   }
   # add?
   if (!is.null(add)) {
-    to <- c(min(x, na.rm = TRUE) - (add / 2), max(x, na.rm = TRUE) + (add / 2))
+    # add must be of length 1 or 2
+    if (length(add) > 2) {
+      insight::format_error("The length of `add` must be 1 or 2.")
+    }
+    # if add is of length 2, then the first value is used for the lower bound
+    # and the second value for the upper bound
+    if (length(add) == 2) {
+      add_low <- add[1]
+      add_high <- add[2]
+    } else {
+      add_low <- add_high <- add
+    }
+    to <- c(min(x, na.rm = TRUE) - add_low, max(x, na.rm = TRUE) + add_high)
   }
   to
 }

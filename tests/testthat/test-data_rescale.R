@@ -120,8 +120,17 @@ test_that("data_rescale can expand range", {
     c(4.5, 5.6, 6.7, 7.8, 8.9, 10, 11.1, 12.2, 13.3, 14.4, 15.5),
     ignore_attr = TRUE
   )
-  expect_equal(rescale(x, multiply = 1.1), rescale(x, add = 1), ignore_attr = TRUE)
+  expect_equal(rescale(x, multiply = 1.1), rescale(x, add = 0.5), ignore_attr = TRUE)
   expect_error(rescale(x, multiply = 0.9, add = 1), regex = "Only one of")
+  expect_error(rescale(x, multiply = c(1.2, 1.4)), regex = "The length of")
+
+  # different values for add
+  expect_equal(
+    rescale(x, add = c(1, 3)),
+    c(4, 5.4, 6.8, 8.2, 9.6, 11, 12.4, 13.8, 15.2, 16.6, 18),
+    ignore_attr = TRUE
+  )
+  expect_error(rescale(x, add = 1:3), regex = "The length of")
 
   # works with NA
   expect_equal(
@@ -139,14 +148,28 @@ test_that("data_rescale can expand range", {
   d <- data.frame(x = 5:15, y = 5:15)
   expect_equal(
     rescale(d, multiply = 1.1),
-    rescale(d, add = 1),
+    rescale(d, add = 0.5),
     ignore_attr = TRUE
   )
   expect_equal(
     rescale(d, multiply = list(x = 1.1, y = 0.5)),
-    rescale(d, add = list(x = 1, y = -5)),
+    rescale(d, add = list(x = 0.5, y = -2.5)),
     ignore_attr = TRUE
   )
+  # data frames accept multiple add-values per column
+  out <- rescale(d, add = list(x = c(1, 3), y = c(2, 4)))
+  expect_equal(
+    out$x,
+    rescale(d$x, add = c(1, 3)),
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    out$y,
+    rescale(d$y, add = c(2, 4)),
+    ignore_attr = TRUE
+  )
+
   expect_error(rescale(d, multiply = 0.9, add = 1), regex = "Only one of")
   expect_error(rescale(d, multiply = list(x = 0.9, y = 2), add = list(y = 1)), regex = "Only one of")
+  expect_error(rescale(d, multiply = c(0.9, 1.5)), regex = "The length of")
 })
