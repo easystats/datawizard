@@ -7,9 +7,20 @@
 #' @inheritParams find_columns
 #' @inheritParams standardize.data.frame
 #'
-#' @param to Numeric vector of length 2 giving the new range that the variable will have after rescaling.
-#'   To reverse-score a variable, the range should be given with the maximum value first.
-#'   See examples.
+#' @param to Numeric vector of length 2 giving the new range that the variable
+#'   will have after rescaling. To reverse-score a variable, the range should
+#'   be given with the maximum value first. See examples.
+#' @param multiply If not `NULL`, `to` is ignored and `multiply` will be used,
+#'   giving the factor by which the actual range of `x` should be expanded.
+#'   For example, if a vector range from 5 to 15 and `multiply = 1.1`, the current
+#'   range of 10 will be expanced by the factor of 1.1, giving a new range of
+#'   11. Thus, the rescaled vector would range from 4.5 to 15.5.
+#' @param add If not `NULL`, `to` is ignored and `add` will be used, giving the
+#'   amount by which the actual range of `x` should be expanded. For example,
+#'   if a vector range from 5 to 15 and `add = 1`, the current range of 10 will
+#'   be expanced by 1, giving a new range of 11. Thus, the rescaled vector would
+#'   range from 4.5 to 15.5, because the lower and upper bounds are each expanded
+#'   by half of the amount specified in `add`.
 #' @param range Initial (old) range of values. If `NULL`, will take the range of
 #'   the input vector (`range(x)`).
 #' @param ... Arguments passed to or from other methods.
@@ -37,6 +48,22 @@
 #'   "Sepal.Length" = c(0, 1),
 #'   "Petal.Length" = c(-1, 0)
 #' )))
+#'
+#' # "expand" ranges by a factor or a given value
+#' x <- 5:15
+#' x
+#' # both will expand the range by 10%
+#' rescale(x, multiply = 1.1)
+#' rescale(x, add = 1)
+#'
+#' # "expand" range by 50%
+#' rescale(x, multiply = 1.5)
+#' rescale(x, add = 5)
+#'
+#' # Specify list of multipliers
+#' d <- data.frame(x = 5:15, y = 5:15)
+#' rescale(d, multiply = list(x = 1.1, y = 0.5))
+#'
 #' @inherit data_rename
 #'
 #' @return A rescaled object.
@@ -75,6 +102,8 @@ rescale.default <- function(x, verbose = TRUE, ...) {
 #' @export
 rescale.numeric <- function(x,
                             to = c(0, 100),
+                            multiply = NULL,
+                            add = NULL,
                             range = NULL,
                             verbose = TRUE,
                             ...) {
@@ -90,6 +119,9 @@ rescale.numeric <- function(x,
   if (is.null(range)) {
     range <- c(min(x, na.rm = TRUE), max(x, na.rm = TRUE))
   }
+
+  # check if user specified "multiply" or "add", and then update "to"
+  to <- .update_to(x, to, multiply, add)
 
   # called from "makepredictcal()"? Then we have additional arguments
   dot_args <- list(...)
@@ -144,6 +176,8 @@ rescale.grouped_df <- function(x,
                                select = NULL,
                                exclude = NULL,
                                to = c(0, 100),
+                               multiply = NULL,
+                               add = NULL,
                                range = NULL,
                                append = FALSE,
                                ignore_case = FALSE,
@@ -188,6 +222,8 @@ rescale.grouped_df <- function(x,
       select = select,
       exclude = exclude,
       to = to,
+      multiply = multiply,
+      add = add,
       range = range,
       append = FALSE, # need to set to FALSE here, else variable will be doubled
       add_transform_class = FALSE,
@@ -207,6 +243,8 @@ rescale.data.frame <- function(x,
                                select = NULL,
                                exclude = NULL,
                                to = c(0, 100),
+                               multiply = NULL,
+                               add = NULL,
                                range = NULL,
                                append = FALSE,
                                ignore_case = FALSE,
@@ -245,9 +283,48 @@ rescale.data.frame <- function(x,
   if (!is.list(to)) {
     to <- stats::setNames(rep(list(to), length(select)), select)
   }
+  # Transform the 'multiply' so that it is a list now
+  if (!is.null(multiply) && !is.list(multiply)) {
+    multiply <- stats::setNames(rep(list(multiply), length(select)), select)
+  }
+  # Transform the 'add' so that it is a list now
+  if (!is.null(add) && !is.list(add)) {
+    add <- stats::setNames(rep(list(add), length(select)), select)
+  }
+  # update "to" if user specified "multiply" or "add"
+  to[] <- lapply(names(to), function(i) {
+    .update_to(x[[i]], to[[i]], multiply[[i]], add[[i]])
+  })
 
   x[select] <- as.data.frame(sapply(select, function(n) {
     rescale(x[[n]], to = to[[n]], range = range[[n]], add_transform_class = FALSE)
   }, simplify = FALSE))
   x
+}
+
+
+# helper ----------------------------------------------------------------------
+
+#' expand the new target range by multiplying or adding
+#' @keywords internal
+.update_to <- function(x, to, multiply, add) {
+  # check if user specified "multiply" or "add", and if not, return "to"
+  if (is.null(multiply) && is.null(add)) {
+    return(to)
+  }
+  # only one of "multiply" or "add" can be specified
+  if (!is.null(multiply) && !is.null(add)) {
+    insight::format_error("Only one of `multiply` or `add` can be specified.")
+  }
+  # multiply? If yes, calculate the "add" value
+  if (!is.null(multiply)) {
+    x_range <- range(x, na.rm = TRUE)
+    x_diff <- diff(x_range)
+    add <- x_diff * (multiply - 1)
+  }
+  # add?
+  if (!is.null(add)) {
+    to <- c(min(x, na.rm = TRUE) - (add / 2), max(x, na.rm = TRUE) + (add / 2))
+  }
+  to
 }

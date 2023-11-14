@@ -11,13 +11,23 @@ rescale(x, ...)
 
 change_scale(x, ...)
 
-\method{rescale}{numeric}(x, to = c(0, 100), range = NULL, verbose = TRUE, ...)
+\method{rescale}{numeric}(
+  x,
+  to = c(0, 100),
+  multiply = NULL,
+  add = NULL,
+  range = NULL,
+  verbose = TRUE,
+  ...
+)
 
 \method{rescale}{data.frame}(
   x,
   select = NULL,
   exclude = NULL,
   to = c(0, 100),
+  multiply = NULL,
+  add = NULL,
   range = NULL,
   append = FALSE,
   ignore_case = FALSE,
@@ -31,9 +41,22 @@ change_scale(x, ...)
 
 \item{...}{Arguments passed to or from other methods.}
 
-\item{to}{Numeric vector of length 2 giving the new range that the variable will have after rescaling.
-To reverse-score a variable, the range should be given with the maximum value first.
-See examples.}
+\item{to}{Numeric vector of length 2 giving the new range that the variable
+will have after rescaling. To reverse-score a variable, the range should
+be given with the maximum value first. See examples.}
+
+\item{multiply}{If not \code{NULL}, \code{to} is ignored and \code{multiply} will be used,
+giving the factor by which the actual range of \code{x} should be expanded.
+For example, if a vector range from 5 to 15 and \code{multiply = 1.1}, the current
+range of 10 will be expanced by the factor of 1.1, giving a new range of
+11. Thus, the rescaled vector would range from 4.5 to 15.5.}
+
+\item{add}{If not \code{NULL}, \code{to} is ignored and \code{add} will be used, giving the
+amount by which the actual range of \code{x} should be expanded. For example,
+if a vector range from 5 to 15 and \code{add = 1}, the current range of 10 will
+be expanced by 1, giving a new range of 11. Thus, the rescaled vector would
+range from 4.5 to 15.5, because the lower and upper bounds are each expanded
+by half of the amount specified in \code{add}.}
 
 \item{range}{Initial (old) range of values. If \code{NULL}, will take the range of
 the input vector (\code{range(x)}).}
@@ -138,6 +161,22 @@ head(rescale(iris, to = list(
   "Sepal.Length" = c(0, 1),
   "Petal.Length" = c(-1, 0)
 )))
+
+# "expand" ranges by a factor or a given value
+x <- 5:15
+x
+# both will expand the range by 10\%
+rescale(x, multiply = 1.1)
+rescale(x, add = 1)
+
+# "expand" range by 50\%
+rescale(x, multiply = 1.5)
+rescale(x, add = 5)
+
+# Specify list of multipliers
+d <- data.frame(x = 5:15, y = 5:15)
+rescale(d, multiply = list(x = 1.1, y = 0.5))
+
 }
 \seealso{
 See \code{\link[=makepredictcall.dw_transformer]{makepredictcall.dw_transformer()}} for use in model formulas.
