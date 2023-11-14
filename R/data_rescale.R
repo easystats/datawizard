@@ -1,15 +1,26 @@
 #' Rescale Variables to a New Range
 #'
-#' Rescale variables to a new range.
-#' Can also be used to reverse-score variables (change the keying/scoring direction).
+#' Rescale variables to a new range. Can also be used to reverse-score variables
+#' (change the keying/scoring direction), or to expand a range.
 #'
 #' @inheritParams categorize
 #' @inheritParams find_columns
 #' @inheritParams standardize.data.frame
 #'
-#' @param to Numeric vector of length 2 giving the new range that the variable will have after rescaling.
-#'   To reverse-score a variable, the range should be given with the maximum value first.
-#'   See examples.
+#' @param to Numeric vector of length 2 giving the new range that the variable
+#'   will have after rescaling. To reverse-score a variable, the range should
+#'   be given with the maximum value first. See examples.
+#' @param multiply If not `NULL`, `to` is ignored and `multiply` will be used,
+#'   giving the factor by which the actual range of `x` should be expanded.
+#'   For example, if a vector ranges from 5 to 15 and `multiply = 1.1`, the current
+#'   range of 10 will be expanded by the factor of 1.1, giving a new range of
+#'   11. Thus, the rescaled vector would range from 4.5 to 15.5.
+#' @param add A vector of length 1 or 2. If not `NULL`, `to` is ignored and `add`
+#'   will be used, giving the amount by which the minimum and maximum of the
+#'   actual range of `x` should be expanded. For example, if a vector ranges from
+#'   5 to 15 and `add = 1`, the range will be expanded from 4 to 16. If `add` is
+#'   of length 2, then the first value is used for the lower bound and the second
+#'   value for the upper bound.
 #' @param range Initial (old) range of values. If `NULL`, will take the range of
 #'   the input vector (`range(x)`).
 #' @param ... Arguments passed to or from other methods.
@@ -37,6 +48,21 @@
 #'   "Sepal.Length" = c(0, 1),
 #'   "Petal.Length" = c(-1, 0)
 #' )))
+#'
+#' # "expand" ranges by a factor or a given value
+#' x <- 5:15
+#' x
+#' # both will expand the range by 10%
+#' rescale(x, multiply = 1.1)
+#' rescale(x, add = 0.5)
+#'
+#' # expand range by different values
+#' rescale(x, add = c(1, 3))
+#'
+#' # Specify list of multipliers
+#' d <- data.frame(x = 5:15, y = 5:15)
+#' rescale(d, multiply = list(x = 1.1, y = 0.5))
+#'
 #' @inherit data_rename
 #'
 #' @return A rescaled object.
@@ -75,6 +101,8 @@ rescale.default <- function(x, verbose = TRUE, ...) {
 #' @export
 rescale.numeric <- function(x,
                             to = c(0, 100),
+                            multiply = NULL,
+                            add = NULL,
                             range = NULL,
                             verbose = TRUE,
                             ...) {
@@ -90,6 +118,9 @@ rescale.numeric <- function(x,
   if (is.null(range)) {
     range <- c(min(x, na.rm = TRUE), max(x, na.rm = TRUE))
   }
+
+  # check if user specified "multiply" or "add", and then update "to"
+  to <- .update_to(x, to, multiply, add)
 
   # called from "makepredictcal()"? Then we have additional arguments
   dot_args <- list(...)
@@ -144,6 +175,8 @@ rescale.grouped_df <- function(x,
                                select = NULL,
                                exclude = NULL,
                                to = c(0, 100),
+                               multiply = NULL,
+                               add = NULL,
                                range = NULL,
                                append = FALSE,
                                ignore_case = FALSE,
@@ -188,6 +221,8 @@ rescale.grouped_df <- function(x,
       select = select,
       exclude = exclude,
       to = to,
+      multiply = multiply,
+      add = add,
       range = range,
       append = FALSE, # need to set to FALSE here, else variable will be doubled
       add_transform_class = FALSE,
@@ -207,6 +242,8 @@ rescale.data.frame <- function(x,
                                select = NULL,
                                exclude = NULL,
                                to = c(0, 100),
+                               multiply = NULL,
+                               add = NULL,
                                range = NULL,
                                append = FALSE,
                                ignore_case = FALSE,
@@ -245,9 +282,61 @@ rescale.data.frame <- function(x,
   if (!is.list(to)) {
     to <- stats::setNames(rep(list(to), length(select)), select)
   }
+  # Transform the 'multiply' so that it is a list now
+  if (!is.null(multiply) && !is.list(multiply)) {
+    multiply <- stats::setNames(rep(list(multiply), length(select)), select)
+  }
+  # Transform the 'add' so that it is a list now
+  if (!is.null(add) && !is.list(add)) {
+    add <- stats::setNames(rep(list(add), length(select)), select)
+  }
+  # update "to" if user specified "multiply" or "add"
+  to[] <- lapply(names(to), function(i) {
+    .update_to(x[[i]], to[[i]], multiply[[i]], add[[i]])
+  })
 
   x[select] <- as.data.frame(sapply(select, function(n) {
     rescale(x[[n]], to = to[[n]], range = range[[n]], add_transform_class = FALSE)
   }, simplify = FALSE))
   x
+}
+
+
+# helper ----------------------------------------------------------------------
+
+# expand the new target range by multiplying or adding
+.update_to <- function(x, to, multiply, add) {
+  # check if user specified "multiply" or "add", and if not, return "to"
+  if (is.null(multiply) && is.null(add)) {
+    return(to)
+  }
+  # only one of "multiply" or "add" can be specified
+  if (!is.null(multiply) && !is.null(add)) {
+    insight::format_error("Only one of `multiply` or `add` can be specified.")
+  }
+  # multiply? If yes, calculate the "add" value
+  if (!is.null(multiply)) {
+    # check for correct length
+    if (length(multiply) > 1) {
+      insight::format_error("The length of `multiply` must be 1.")
+    }
+    add <- (diff(range(x, na.rm = TRUE)) * (multiply - 1)) / 2
+  }
+  # add?
+  if (!is.null(add)) {
+    # add must be of length 1 or 2
+    if (length(add) > 2) {
+      insight::format_error("The length of `add` must be 1 or 2.")
+    }
+    # if add is of length 2, then the first value is used for the lower bound
+    # and the second value for the upper bound
+    if (length(add) == 2) {
+      add_low <- add[1]
+      add_high <- add[2]
+    } else {
+      add_low <- add_high <- add
+    }
+    to <- c(min(x, na.rm = TRUE) - add_low, max(x, na.rm = TRUE) + add_high)
+  }
+  to
 }
