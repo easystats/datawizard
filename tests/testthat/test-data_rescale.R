@@ -123,6 +123,18 @@ test_that("data_rescale can expand range", {
   expect_equal(rescale(x, multiply = 1.1), rescale(x, add = 1), ignore_attr = TRUE)
   expect_error(rescale(x, multiply = 0.9, add = 1), regex = "Only one of")
 
+  # works with NA
+  expect_equal(
+    rescale(rep(NA_real_, 3), multiply = 1.1),
+    rep(NA_real_, 3),
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    rescale(rep(NA_real_, 3), add = 2),
+    rep(NA_real_, 3),
+    ignore_attr = TRUE
+  )
+
   # for data frames
   d <- data.frame(x = 5:15, y = 5:15)
   expect_equal(
