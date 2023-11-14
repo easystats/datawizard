@@ -1,5 +1,10 @@
 # datawizard 0.9.0.9000 (development version)
 
+CHANGES
+
+* `rescale()` gains `multiply` and `add` arguments, to expand ranges by a given
+  factor or value.
+
 # datawizard 0.9.0
 
 NEW FUNCTIONS
