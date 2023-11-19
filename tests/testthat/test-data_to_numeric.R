@@ -163,9 +163,12 @@ test_that("to_numeric regex", {
 
 
 test_that("to_numeric works with haven_labelled, convert many labels correctly", {
+  skip_on_cran()
   skip_if_not_installed("httr")
   skip_if_not_installed("haven")
-  skip_on_cran()
+  skip_if_not_installed("withr")
+  skip_if_not_installed("curl")
+  skip_if_offline()
 
   withr::with_tempfile("temp_file", fileext = ".sav", code = {
     request <- httr::GET("https://raw.github.com/easystats/circus/main/data/EFC.sav")

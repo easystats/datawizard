@@ -144,6 +144,7 @@ test_that("data_read, convert many labels correctly", {
 
 
 test_that("to_factor works with haven_labelled, convert many labels correctly", {
+  skip_if_not_installed("withr")
   withr::with_tempfile("temp_file", fileext = ".sav", code = {
     request <- httr::GET("https://raw.github.com/easystats/circus/main/data/EFC.sav")
     httr::stop_for_status(request)
