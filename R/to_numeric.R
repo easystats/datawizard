@@ -158,6 +158,9 @@ to_numeric.double <- to_numeric.numeric
 to_numeric.logical <- to_numeric.numeric
 
 #' @export
+to_numeric.haven_labelled <- to_numeric.numeric
+
+#' @export
 to_numeric.Date <- function(x, verbose = TRUE, ...) {
   if (verbose) {
     insight::format_warning(

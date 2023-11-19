@@ -79,6 +79,12 @@ to_factor.character <- to_factor.numeric
 #' @export
 to_factor.Date <- to_factor.numeric
 
+#' @export
+to_factor.haven_labelled <- to_factor.numeric
+
+#' @export
+to_factor.double <- to_factor.numeric
+
 #' @rdname to_factor
 #' @export
 to_factor.data.frame <- function(x,
