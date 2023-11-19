@@ -141,3 +141,23 @@ test_that("data_read, convert many labels correctly", {
   expect_snapshot(data_tabulate(to_factor(d$c12c)))
   unlink(temp_file)
 })
+
+
+test_that("to_factor works with haven_labelled, convert many labels correctly", {
+  withr::with_tempfile("temp_file", fileext = ".sav", code = {
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/EFC.sav")
+    httr::stop_for_status(request)
+    writeBin(httr::content(request, type = "raw"), temp_file)
+
+    d <- haven::read_spss(temp_file)
+    x <- to_factor(d$c172code)
+    expect_identical(
+      levels(x),
+      c(
+        "low level of education",
+        "intermediate level of education",
+        "high level of education"
+      )
+    )
+  })
+})

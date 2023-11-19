@@ -5,6 +5,8 @@ CHANGES
 * `rescale()` gains `multiply` and `add` arguments, to expand ranges by a given
   factor or value.
 
+* `to_factor()` and `to_numeric()` now support class `haven_labelled`.
+
 # datawizard 0.9.0
 
 NEW FUNCTIONS

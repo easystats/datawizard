@@ -160,3 +160,16 @@ test_that("to_numeric regex", {
     to_numeric(mtcars, select = "mpg")
   )
 })
+
+
+test_that("to_numeric works with haven_labelled, convert many labels correctly", {
+  withr::with_tempfile("temp_file", fileext = ".sav", code = {
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/EFC.sav")
+    httr::stop_for_status(request)
+    writeBin(httr::content(request, type = "raw"), temp_file)
+
+    d <- haven::read_spss(temp_file)
+    x <- to_numeric(d$c172code)
+    expect_identical(as.vector(table(x)), c(180L, 506L, 156L))
+  })
+})
