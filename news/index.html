@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.4</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,10 +86,13 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.9.0.9000" id="datawizard-0909000-development-version">datawizard 0.9.0.9000 (development version)<a class="anchor" aria-label="anchor" href="#datawizard-0909000-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.9.0" id="datawizard-090x-development-version">datawizard 0.9.0.x (development version)<a class="anchor" aria-label="anchor" href="#datawizard-090x-development-version"></a></h2><p class="text-muted">CRAN release: 2023-09-15</p>
 <p>CHANGES</p>
 <ul><li><p><code><a href="../reference/rescale.html">rescale()</a></code> gains <code>multiply</code> and <code>add</code> arguments, to expand ranges by a given factor or value.</p></li>
 <li><p><code><a href="../reference/to_factor.html">to_factor()</a></code> and <code><a href="../reference/to_numeric.html">to_numeric()</a></code> now support class <code>haven_labelled</code>.</p></li>
+</ul><p>BUG FIXES</p>
+<ul><li>
+<code><a href="../reference/to_numeric.html">to_numeric()</a></code> now correctly deals with inversed factor levels when <code>preserve_levels = TRUE</code>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.0" id="datawizard-090">datawizard 0.9.0<a class="anchor" aria-label="anchor" href="#datawizard-090"></a></h2><p class="text-muted">CRAN release: 2023-09-15</p>
