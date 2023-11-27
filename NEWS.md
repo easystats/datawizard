@@ -1,4 +1,4 @@
-# datawizard 0.9.0.9000 (development version)
+# datawizard 0.9.0.x (development version)
 
 CHANGES
 
@@ -6,6 +6,11 @@ CHANGES
   factor or value.
 
 * `to_factor()` and `to_numeric()` now support class `haven_labelled`.
+
+BUG FIXES
+
+* `to_numeric()` now correctly deals with inversed factor levels when
+  `preserve_levels = TRUE`.
 
 # datawizard 0.9.0
 

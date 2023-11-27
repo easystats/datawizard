@@ -74,7 +74,7 @@ to_numeric.data.frame <- function(x,
     return(x)
   }
 
-  attr <- attributes(x)
+  df_attr <- attributes(x)
 
   # evaluate arguments
   select <- .select_nse(select,
@@ -91,7 +91,7 @@ to_numeric.data.frame <- function(x,
     # drop numerics, when append is not FALSE
     select <- colnames(x[select])[!vapply(x[select], is.numeric, FUN.VALUE = logical(1L))]
     # process arguments
-    args <- .process_append(
+    fun_args <- .process_append(
       x,
       select,
       append,
@@ -99,8 +99,8 @@ to_numeric.data.frame <- function(x,
       keep_factors = TRUE
     )
     # update processed arguments
-    x <- args$x
-    select <- args$select
+    x <- fun_args$x
+    select <- fun_args$select
   }
 
   out <- sapply(
@@ -129,7 +129,7 @@ to_numeric.data.frame <- function(x,
   }
 
   # due to the special handling of dummy factors, we need to take care
-  # of appending the data here again. usually, "args$x" includes the appended
+  # of appending the data here again. usually, "fun_args$x" includes the appended
   # data, which does not work here...
 
   if (!isFALSE(append)) {
@@ -141,7 +141,7 @@ to_numeric.data.frame <- function(x,
   }
 
   # add back custom attributes
-  out <- .replace_attrs(out, attr)
+  out <- .replace_attrs(out, df_attr)
   out
 }
 
@@ -226,6 +226,13 @@ to_numeric.factor <- function(x,
     }
     names(out) <- levels(x)
   } else if (preserve_levels) {
+    if (is.unsorted(levels(x))) {
+      x_inverse <- rep(NA_real_, length(x))
+      for (i in 1:nlevels(x)) {
+        x_inverse[x == levels(x)[i]] <- as.numeric(levels(x)[nlevels(x) - i + 1])
+      }
+      x <- factor(x_inverse)
+    }
     out <- .set_back_labels(as.numeric(as.character(x)), x)
   } else {
     out <- .set_back_labels(as.numeric(x), x)
