@@ -91,7 +91,7 @@ to_numeric.data.frame <- function(x,
     # drop numerics, when append is not FALSE
     select <- colnames(x[select])[!vapply(x[select], is.numeric, FUN.VALUE = logical(1L))]
     # process arguments
-    args <- .process_append(
+    fun_args <- .process_append(
       x,
       select,
       append,
@@ -99,8 +99,8 @@ to_numeric.data.frame <- function(x,
       keep_factors = TRUE
     )
     # update processed arguments
-    x <- args$x
-    select <- args$select
+    x <- fun_args$x
+    select <- fun_args$select
   }
 
   out <- sapply(
@@ -129,7 +129,7 @@ to_numeric.data.frame <- function(x,
   }
 
   # due to the special handling of dummy factors, we need to take care
-  # of appending the data here again. usually, "args$x" includes the appended
+  # of appending the data here again. usually, "fun_args$x" includes the appended
   # data, which does not work here...
 
   if (!isFALSE(append)) {

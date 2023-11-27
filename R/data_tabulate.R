@@ -179,10 +179,10 @@ data_tabulate.grouped_df <- function(x,
   for (i in seq_along(grps)) {
     rows <- grps[[i]]
     # save information about grouping factors
-    if (!is.null(group_variables)) {
-      group_variable <- group_variables[i, , drop = FALSE]
-    } else {
+    if (is.null(group_variables)) {
       group_variable <- NULL
+    } else {
+      group_variable <- group_variables[i, , drop = FALSE]
     }
     out <- c(out, data_tabulate(
       data_filter(x, rows),
@@ -226,7 +226,7 @@ format.dw_data_tabulate <- function(x, format = "text", big_mark = NULL, ...) {
   # format data frame
   ftab <- insight::format_table(x, ...)
   ftab[] <- lapply(ftab, function(i) {
-    i[i == ""] <- ifelse(identical(format, "text"), "<NA>", "(NA)")
+    i[i == ""] <- ifelse(identical(format, "text"), "<NA>", "(NA)") # nolint
     i
   })
   ftab$N <- gsub("\\.00$", "", ftab$N)
