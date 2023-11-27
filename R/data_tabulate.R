@@ -347,10 +347,10 @@ print.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
     }
   } else {
     x <- lapply(x, function(i) {
-      attr <- attributes(i)
+      i_attr <- attributes(i)
       i <- format(i, format = "text", big_mark = big_mark, ...)
-      i$Variable[attr$duplicate_varnames] <- ""
-      if (!is.null(i$Group)) i$Group[attr$duplicate_varnames] <- ""
+      i$Variable[i_attr$duplicate_varnames] <- ""
+      if (!is.null(i$Group)) i$Group[i_attr$duplicate_varnames] <- ""
       i[nrow(i) + 1, ] <- ""
       i
     })
@@ -375,9 +375,9 @@ print_html.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
     print_html(x[[1]], big_mark = big_mark, ...)
   } else {
     x <- lapply(x, function(i) {
-      attr <- attributes(i)
+      i_attr <- attributes(i)
       i <- format(i, format = "html", big_mark = big_mark, ...)
-      i$Variable[attr$duplicate_varnames] <- ""
+      i$Variable[i_attr$duplicate_varnames] <- ""
       i
     })
 
@@ -401,10 +401,10 @@ print_md.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
     print_md(x[[1]], big_mark = big_mark, ...)
   } else {
     x <- lapply(x, function(i) {
-      attr <- attributes(i)
+      i_attr <- attributes(i)
       i <- format(i, format = "markdown", big_mark = big_mark, ...)
-      i$Variable[attr$duplicate_varnames] <- ""
-      if (!is.null(i$Group)) i$Group[attr$duplicate_varnames] <- ""
+      i$Variable[i_attr$duplicate_varnames] <- ""
+      if (!is.null(i$Group)) i$Group[i_attr$duplicate_varnames] <- ""
       i[nrow(i) + 1, ] <- ""
       i
     })
