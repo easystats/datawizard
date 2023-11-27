@@ -226,6 +226,13 @@ to_numeric.factor <- function(x,
     }
     names(out) <- levels(x)
   } else if (preserve_levels) {
+    if (is.unsorted(levels(x))) {
+      x_inverse <- rep(NA_real_, length(x))
+      for (i in 1:nlevels(x)) {
+        x_inverse[x == levels(x)[i]] <- as.numeric(levels(x)[nlevels(x) - i + 1])
+      }
+      x <- factor(x_inverse)
+    }
     out <- .set_back_labels(as.numeric(as.character(x)), x)
   } else {
     out <- .set_back_labels(as.numeric(x), x)

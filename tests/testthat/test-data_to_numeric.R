@@ -44,14 +44,12 @@ test_that("convert factor to numeric", {
   expect_snapshot(to_numeric(f))
 })
 
-
 test_that("convert factor to numeric", {
   expect_identical(to_numeric(c("abc", "xyz")), c(1, 2))
   expect_identical(to_numeric(c("123", "789")), c(123, 789))
   expect_identical(to_numeric(c("1L", "2e-3")), c(1, 0.002))
   expect_identical(to_numeric(c("1L", "2e-3", "ABC")), c(1, 2, 3))
 })
-
 
 test_that("convert factor to numeric, dummy factors", {
   expect_identical(
@@ -65,7 +63,6 @@ test_that("convert factor to numeric, dummy factors", {
     ignore_attr = TRUE
   )
 })
-
 
 test_that("convert factor to numeric, append", {
   data(efc)
@@ -94,12 +91,10 @@ test_that("convert factor to numeric, append", {
   )
 })
 
-
 test_that("convert factor to numeric, all numeric", {
   data(mtcars)
   expect_identical(to_numeric(mtcars), mtcars)
 })
-
 
 test_that("convert factor to numeric, dummy factors, with NA", {
   x1 <- factor(rep(c("a", "b"), 3))
@@ -151,6 +146,20 @@ test_that("convert factor to numeric, dummy factors, with NA", {
   expect_identical(nrow(to_numeric(x5, dummy_factors = TRUE)), length(x5))
   expect_identical(nrow(to_numeric(x6, dummy_factors = TRUE)), length(x6))
   expect_identical(nrow(to_numeric(x7, dummy_factors = TRUE)), length(x7))
+})
+
+test_that("to_numeric, inverse factor levels", {
+  f <- c(0, 0, 1, 1, 1, 0)
+  x1 <- factor(f, levels = c(0, 1))
+  x2 <- factor(f, levels = c(1, 0))
+  out <- to_numeric(x1, dummy_factors = FALSE, preserve_levels = FALSE)
+  expect_identical(out, c(1, 1, 2, 2, 2, 1))
+  out <- to_numeric(x2, dummy_factors = FALSE, preserve_levels = FALSE)
+  expect_identical(out, c(2, 2, 1, 1, 1, 2))
+  out <- to_numeric(x1, dummy_factors = FALSE, preserve_levels = TRUE)
+  expect_identical(out, c(0, 0, 1, 1, 1, 0))
+  out <- to_numeric(x2, dummy_factors = FALSE, preserve_levels = TRUE)
+  expect_identical(out, c(1, 1, 0, 0, 0, 1))
 })
 
 # select helpers ------------------------------
