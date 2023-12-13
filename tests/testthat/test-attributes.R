@@ -123,6 +123,10 @@ test_that("convert_to_na, attributes preserved", {
   attr(x, "myattri") <- "I'm here"
   x2 <- convert_to_na(x, na = 2, verbose = FALSE)
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
+  # label attribute is preserved
+  attr(x$Species, "label") <- "Species Variable"
+  x2 <- convert_to_na(x, na = "setosa", drop_levels = TRUE, verbose = FALSE)
+  expect_identical(attributes(x$Species)$label, "Species Variable")
 })
 
 
