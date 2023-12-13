@@ -12,6 +12,8 @@ BUG FIXES
 * `to_numeric()` now correctly deals with inversed factor levels when
   `preserve_levels = TRUE`.
 
+* `convert_to_na()` now preserves attributes for factors when `drop_levels = TRUE`.
+
 # datawizard 0.9.0
 
 NEW FUNCTIONS
