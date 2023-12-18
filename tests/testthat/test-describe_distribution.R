@@ -5,7 +5,7 @@ test_that("describe_distribution - numeric: works with basic numeric vector", {
 
   x <- describe_distribution(mtcars$mpg)
   expect_identical(dim(x), c(1L, 9L))
-  expect_equal(round(x$Mean), 20)
+  expect_identical(round(x$Mean), 20)
 })
 
 test_that("describe_distribution - numeric: correctly handles missing values", {
@@ -54,7 +54,7 @@ test_that("describe_distribution - data frame: works with basic data frame", {
 
   x <- describe_distribution(mtcars)
   expect_identical(dim(x), c(11L, 10L))
-  expect_equal(round(x[1, "Mean"]), 20)
+  expect_identical(round(x[1, "Mean"]), 20)
 })
 
 test_that("describe_distribution - data frame: correctly handles missing values", {
@@ -121,13 +121,13 @@ test_that("describe_distribution - list: works with basic list", {
   mix <- describe_distribution(list(foo = mtcars$mpg, mtcars$cyl))
 
   expect_identical(dim(stored), c(2L, 10L))
-  expect_equal(round(stored$Mean), c(20, 6))
+  expect_identical(round(stored$Mean), c(20, 6))
   expect_identical(dim(unnamed), c(2L, 10L))
-  expect_equal(round(unnamed$Mean), c(20, 6))
+  expect_identical(round(unnamed$Mean), c(20, 6))
   expect_identical(dim(named), c(2L, 10L))
-  expect_equal(round(named$Mean), c(20, 6))
+  expect_identical(round(named$Mean), c(20, 6))
   expect_identical(dim(mix), c(2L, 10L))
-  expect_equal(round(mix$Mean), c(20, 6))
+  expect_identical(round(mix$Mean), c(20, 6))
 })
 
 test_that("describe_distribution - list: works with include_factors", {
