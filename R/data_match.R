@@ -179,9 +179,9 @@ data_filter <- function(x, ...) {
 #' @export
 data_filter.data.frame <- function(x, ...) {
   out <- x
-  dots <- match.call(expand.dots = FALSE)$`...`
+  dots <- match.call(expand.dots = FALSE)[["..."]]
 
-  if (any(nchar(names(dots)) > 0)) {
+  if (any(nzchar(names(dots), keepNA = TRUE))) {
     insight::format_error(
       "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
     )
@@ -280,11 +280,11 @@ data_filter.grouped_df <- function(x, ...) {
   grps <- attr(x, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 
-  dots <- match.call(expand.dots = FALSE)$`...`
+  dots <- match.call(expand.dots = FALSE)[["..."]]
   out <- lapply(grps, function(grp) {
-    args <- list(x[grp, ])
-    args <- c(args, dots)
-    do.call("data_filter.data.frame", args)
+    arguments <- list(x[grp, ])
+    arguments <- c(arguments, dots)
+    do.call("data_filter.data.frame", arguments)
   })
 
   out <- do.call(rbind, out)
