@@ -110,7 +110,7 @@ reverse.numeric <- function(x,
   out <- as.vector((new_max - new_min) / (max - min) * (x - min) + new_min)
 
   # labelled data?
-  out <- .set_back_labels(out, x)
+  out <- .set_back_labels(out, x, reverse_values = TRUE)
   out
 }
 
@@ -189,7 +189,7 @@ reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
   x <- factor(rev_x, levels = seq_len(length(old_levels)), labels = old_levels)
 
   # labelled data?
-  x <- .set_back_labels(x, original_x)
+  x <- .set_back_labels(x, original_x, reverse_values = TRUE)
 
   x
 }

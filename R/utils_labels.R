@@ -3,12 +3,19 @@
 # to the transformed vector
 
 #' @keywords internal
-.set_back_labels <- function(new, old, include_values = TRUE) {
+.set_back_labels <- function(new, old, include_values = TRUE, reverse_values = FALSE) {
   # labelled data?
   attr(new, "label") <- attr(old, "label", exact = TRUE)
   labels <- attr(old, "labels", exact = TRUE)
+  # "include_values" is used to preserve value labels
   if (isTRUE(include_values) && !is.null(labels)) {
-    attr(new, "labels") <- stats::setNames(rev(labels), names(labels))
+    if (reverse_values) {
+      # reverse values? Used for "reverse_scale()"
+      attr(new, "labels") <- stats::setNames(rev(labels), names(labels))
+    } else {
+      # keep value oder? Used for "to_numeric()"
+      attr(new, "labels") <- stats::setNames(labels, names(labels))
+    }
   } else if (isFALSE(include_values)) {
     attr(new, "labels") <- NULL
   }
