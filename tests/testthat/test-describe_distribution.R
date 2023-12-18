@@ -182,8 +182,8 @@ test_that("describe_distribution - list: correctly handles missing values", {
   test[1] <- NA
   test2[1] <- NA
   with_missing <- describe_distribution(list(test, test2))
-  expect_identical(unique(with_missing$n), 31)
-  expect_identical(unique(with_missing$n_Missing), 1)
+  expect_identical(unique(with_missing$n), 31L)
+  expect_identical(unique(with_missing$n_Missing), 1L)
   expect_false(unique(with_missing$Mean == no_missing$Mean))
 })
 
