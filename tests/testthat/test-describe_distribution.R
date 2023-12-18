@@ -250,7 +250,6 @@ test_that("describe_distribution - grouped df", {
 
 
 # distribution_mode --------------------------
-
 test_that("distribution_mode works as expected", {
   skip_if_not_installed("bayestestR")
 
@@ -278,4 +277,11 @@ test_that("describe_distribution regex", {
     describe_distribution(mtcars, select = "mpg"),
     ignore_attr = TRUE
   )
+})
+
+# formatting ------------------------------
+test_that("describe_distribution formatting", {
+  data(iris)
+  x <- describe_distribution(iris$Sepal.Width, quartiles = TRUE)
+  expect_snapshot(format(x))
 })
