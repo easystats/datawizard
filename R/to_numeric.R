@@ -148,7 +148,7 @@ to_numeric.data.frame <- function(x,
 
 #' @export
 to_numeric.numeric <- function(x, verbose = TRUE, ...) {
-  .set_back_labels(as.numeric(x), x)
+  .set_back_labels(as.numeric(x), x, reverse_values = FALSE)
 }
 
 #' @export
@@ -233,9 +233,9 @@ to_numeric.factor <- function(x,
       }
       x <- factor(x_inverse)
     }
-    out <- .set_back_labels(as.numeric(as.character(x)), x)
+    out <- .set_back_labels(as.numeric(as.character(x)), x, reverse_values = FALSE)
   } else {
-    out <- .set_back_labels(as.numeric(x), x)
+    out <- .set_back_labels(as.numeric(x), x, reverse_values = FALSE)
   }
 
   # shift to requested starting value
