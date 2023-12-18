@@ -235,7 +235,7 @@ to_numeric.factor <- function(x,
     }
     out <- .set_back_labels(as.numeric(as.character(x)), x, reverse_values = FALSE)
   } else {
-    out <- .set_back_labels(as.numeric(x), x, , reverse_values = FALSE)
+    out <- .set_back_labels(as.numeric(x), x, reverse_values = FALSE)
   }
 
   # shift to requested starting value

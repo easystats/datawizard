@@ -197,12 +197,26 @@ test_that("to_numeric preserves correct label order", {
   out <- to_numeric(x, dummy_factors = FALSE)
   expect_identical(
     attributes(out)$labels,
-    c(one = "1", two = "2", three = "3", four = "4")
+    c(one = 1, two = 2, three = 3, four = 4)
   )
   # correctly reverse scale
   out <- to_numeric(reverse_scale(x), dummy_factors = FALSE)
   expect_identical(
     attributes(out)$labels,
-    c(one = "4", two = "3", three = "2", four = "1")
+    c(one = 4, two = 3, three = 2, four = 1)
+  )
+  # factor with alphabetical values
+  x <- factor(letters[1:4])
+  x <- assign_labels(x, values = c("one", "two", "three", "four"))
+  out <- to_numeric(x, dummy_factors = FALSE)
+  expect_identical(
+    attributes(out)$labels,
+    c(one = 1, two = 2, three = 3, four = 4)
+  )
+  # correctly reverse scale
+  out <- to_numeric(reverse_scale(x), dummy_factors = FALSE)
+  expect_identical(
+    attributes(out)$labels,
+    c(one = 4, two = 3, three = 2, four = 1)
   )
 })

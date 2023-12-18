@@ -14,7 +14,17 @@
       attr(new, "labels") <- stats::setNames(rev(labels), names(labels))
     } else {
       # keep value oder? Used for "to_numeric()"
-      attr(new, "labels") <- stats::setNames(labels, names(labels))
+      if (is.numeric(new)) {
+        if (any(grepl("[^0-9]", labels))) {
+          # if we have any non-numeric characters, convert to numeric
+          attr(new, "labels") <- stats::setNames(as.numeric(as.factor(labels)), names(labels))
+        } else {
+          # if we have numeric, or "numeric character" (like "1", "2", "3" etc.)
+          attr(new, "labels") <- stats::setNames(as.numeric(labels), names(labels))
+        }
+      } else {
+        attr(new, "labels") <- stats::setNames(labels, names(labels))
+      }
     }
   } else if (isFALSE(include_values)) {
     attr(new, "labels") <- NULL
