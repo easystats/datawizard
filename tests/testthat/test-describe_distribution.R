@@ -15,8 +15,8 @@ test_that("describe_distribution - numeric: correctly handles missing values", {
   test <- mtcars$mpg
   test[1] <- NA
   with_missing <- describe_distribution(test)
-  expect_equal(with_missing$n, 31)
-  expect_equal(with_missing$n_Missing, 1)
+  expect_identical(with_missing$n, 31L)
+  expect_identical(with_missing$n_Missing, 1L)
   expect_false(with_missing$Mean == no_missing$Mean)
 })
 
@@ -24,7 +24,7 @@ test_that("describe_distribution - numeric: works with quartiles", {
   skip_if_not_installed("bayestestR")
 
   x <- describe_distribution(mtcars$mpg, quartiles = TRUE)
-  expect_equal(dim(x), c(1, 11))
+  expect_identical(dim(x), c(1L, 11L))
   expect_true("Q1" %in% names(x))
   expect_true("Q3" %in% names(x))
 })
@@ -33,7 +33,7 @@ test_that("describe_distribution - numeric: works with range", {
   skip_if_not_installed("bayestestR")
 
   x <- describe_distribution(mtcars$mpg, range = FALSE)
-  expect_equal(dim(x), c(1, 7))
+  expect_identical(dim(x), c(1L, 7L))
   expect_false("min" %in% names(x))
   expect_false("max" %in% names(x))
 })
@@ -53,7 +53,7 @@ test_that("describe_distribution - data frame: works with basic data frame", {
   skip_if_not_installed("bayestestR")
 
   x <- describe_distribution(mtcars)
-  expect_equal(dim(x), c(11, 10))
+  expect_identical(dim(x), c(11L, 10L))
   expect_equal(round(x[1, "Mean"]), 20)
 })
 
@@ -64,8 +64,8 @@ test_that("describe_distribution - data frame: correctly handles missing values"
   test <- mtcars
   test[1, ] <- NA
   with_missing <- describe_distribution(test)
-  expect_equal(unique(with_missing$n), 31)
-  expect_equal(unique(with_missing$n_Missing), 1)
+  expect_identical(unique(with_missing$n), 31L)
+  expect_identical(unique(with_missing$n_Missing), 1L)
   expect_false(unique(with_missing$Mean == no_missing$Mean))
 })
 
@@ -73,7 +73,7 @@ test_that("describe_distribution - data frame: works with quartiles", {
   skip_if_not_installed("bayestestR")
 
   x <- describe_distribution(mtcars, quartiles = TRUE)
-  expect_equal(dim(x), c(11, 12))
+  expect_identical(dim(x), c(11L, 12L))
   expect_true("Q1" %in% names(x))
   expect_true("Q3" %in% names(x))
 })
@@ -82,7 +82,7 @@ test_that("describe_distribution - data frame: works with range", {
   skip_if_not_installed("bayestestR")
 
   x <- describe_distribution(mtcars, range = FALSE)
-  expect_equal(dim(x), c(11, 8))
+  expect_identical(dim(x), c(11L, 8L))
   expect_false("min" %in% names(x))
   expect_false("max" %in% names(x))
 })
@@ -120,13 +120,13 @@ test_that("describe_distribution - list: works with basic list", {
   named <- describe_distribution(list(foo = mtcars$mpg, foo2 = mtcars$cyl))
   mix <- describe_distribution(list(foo = mtcars$mpg, mtcars$cyl))
 
-  expect_equal(dim(stored), c(2, 10))
+  expect_identical(dim(stored), c(2L, 10L))
   expect_equal(round(stored$Mean), c(20, 6))
-  expect_equal(dim(unnamed), c(2, 10))
+  expect_identical(dim(unnamed), c(2L, 10L))
   expect_equal(round(unnamed$Mean), c(20, 6))
-  expect_equal(dim(named), c(2, 10))
+  expect_identical(dim(named), c(2L, 10L))
   expect_equal(round(named$Mean), c(20, 6))
-  expect_equal(dim(mix), c(2, 10))
+  expect_identical(dim(mix), c(2L, 10L))
   expect_equal(round(mix$Mean), c(20, 6))
 })
 
