@@ -132,5 +132,7 @@ to_numeric(head(ToothGrowth), dummy_factors = FALSE)
 x <- as.factor(mtcars$gear)
 to_numeric(x, dummy_factors = FALSE)
 to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE)
+# same as:
+coerce_to_numeric(x)
 
 }

@@ -40,6 +40,8 @@
 #' x <- as.factor(mtcars$gear)
 #' to_numeric(x, dummy_factors = FALSE)
 #' to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE)
+#' # same as:
+#' coerce_to_numeric(x)
 #'
 #' @return A data frame of numeric variables.
 #'
