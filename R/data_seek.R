@@ -63,7 +63,7 @@ data_seek <- function(data, pattern, seek = c("names", "labels"), fuzzy = FALSE)
   # check valid args
   seek <- intersect(seek, c("names", "labels", "values", "levels", "column_names", "columns", "all"))
   if (is.null(seek) || !length(seek)) {
-    insight::format_error("`seek` must be one of \"names\", \"labels\", \"values\", a combination of these options, or \"all\".")
+    insight::format_error("`seek` must be one of \"names\", \"labels\", \"values\", a combination of these options, or \"all\".") # nolint
   }
 
   pos1 <- pos2 <- pos3 <- NULL

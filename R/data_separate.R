@@ -264,14 +264,12 @@ data_separate <- function(data,
     # if no column names provided, use standard names
     if (is.null(new_columns[[sep_column]])) {
       new_column_names <- paste0(sep_column, "_", seq_along(out))
-    } else {
+    } else if (make_unique_colnames) {
       # if we have multiple columns that were separated, we avoid duplicated
       # column names of created variables by appending name of original column
-      if (make_unique_colnames) {
-        new_column_names <- paste0(sep_column, "_", new_columns[[sep_column]])
-      } else {
-        new_column_names <- new_columns[[sep_column]]
-      }
+      new_column_names <- paste0(sep_column, "_", new_columns[[sep_column]])
+    } else {
+      new_column_names <- new_columns[[sep_column]]
     }
 
     colnames(out) <- new_column_names
