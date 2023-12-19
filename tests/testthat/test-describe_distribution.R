@@ -281,6 +281,7 @@ test_that("describe_distribution regex", {
 
 # formatting ------------------------------
 test_that("describe_distribution formatting", {
+  skip_if_not_installed("bayestestR")
   data(iris)
   x <- describe_distribution(iris$Sepal.Width, quartiles = TRUE)
   expect_snapshot(format(x))
