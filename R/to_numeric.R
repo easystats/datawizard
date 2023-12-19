@@ -17,6 +17,12 @@
 #' @inheritParams find_columns
 #' @inheritParams categorize
 #'
+#' @note By default, `to_numeric()` converts factors into "binary" dummies, i.e.
+#' each factor level is converted into a separate column filled with a binary
+#' 0-1 value. If only one column is required, use `dummy_factors = FALSE`. If
+#' you want to preserve the original factor levels (in case these represent
+#' numeric values), use `preserve_levels = TRUE`.
+#'
 #' @section Selection of variables - `select` argument:
 #' For most functions that have a `select` argument the complete input data
 #' frame is returned, even when `select` only selects a range of variables.
