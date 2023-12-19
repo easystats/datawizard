@@ -82,7 +82,7 @@ describe_distribution.list <- function(x,
   num_el <- which(vapply(x, is.numeric, FUN.VALUE = logical(1L)))
 
   # get elements names as is
-  # ex: list(mtcars$mpg, mtcars$cyl) -> c("mtcars$mpg", "mtcars$cyl")
+  # ex: `list(mtcars$mpg, mtcars$cyl) -> c("mtcars$mpg", "mtcars$cyl")`
   nm <- vapply(sys.call()[[2]], insight::safe_deparse, FUN.VALUE = character(1L))[-1]
 
   if (isTRUE(include_factors)) {

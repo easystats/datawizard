@@ -219,15 +219,13 @@ to_numeric.factor <- function(x,
         # if the first observation was missing, add NA row and bind data frame
         if (i == 1 && na_values[i] == 1) {
           out <- rbind(NA, out)
-        } else {
+        } else if (na_values[i] == rows_x) {
           # if the last observation was NA, add NA row to data frame
-          if (na_values[i] == rows_x) {
-            out <- rbind(out, NA)
-          } else {
-            # else, pick rows from beginning to current NA value, add NA,
-            # and rbind the remaining rows
-            out <- rbind(out[1:(na_values[i] - 1), ], NA, out[na_values[i]:nrow(out), ])
-          }
+          out <- rbind(out, NA)
+        } else {
+          # else, pick rows from beginning to current NA value, add NA,
+          # and rbind the remaining rows
+          out <- rbind(out[1:(na_values[i] - 1), ], NA, out[na_values[i]:nrow(out), ])
         }
       }
       rownames(out) <- NULL
