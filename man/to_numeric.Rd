@@ -106,6 +106,13 @@ Convert data to numeric by converting characters to factors and factors to
 either numeric levels or dummy variables. The "counterpart" to convert
 variables into factors is \code{to_factor()}.
 }
+\note{
+By default, \code{to_numeric()} converts factors into "binary" dummies, i.e.
+each factor level is converted into a separate column filled with a binary
+0-1 value. If only one column is required, use \code{dummy_factors = FALSE}. If
+you want to preserve the original factor levels (in case these represent
+numeric values), use \code{preserve_levels = TRUE}.
+}
 \section{Selection of variables - \code{select} argument}{
 
 For most functions that have a \code{select} argument the complete input data
@@ -125,5 +132,7 @@ to_numeric(head(ToothGrowth), dummy_factors = FALSE)
 x <- as.factor(mtcars$gear)
 to_numeric(x, dummy_factors = FALSE)
 to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE)
+# same as:
+coerce_to_numeric(x)
 
 }

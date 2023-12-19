@@ -17,6 +17,12 @@
 #' @inheritParams find_columns
 #' @inheritParams categorize
 #'
+#' @note By default, `to_numeric()` converts factors into "binary" dummies, i.e.
+#' each factor level is converted into a separate column filled with a binary
+#' 0-1 value. If only one column is required, use `dummy_factors = FALSE`. If
+#' you want to preserve the original factor levels (in case these represent
+#' numeric values), use `preserve_levels = TRUE`.
+#'
 #' @section Selection of variables - `select` argument:
 #' For most functions that have a `select` argument the complete input data
 #' frame is returned, even when `select` only selects a range of variables.
@@ -34,6 +40,8 @@
 #' x <- as.factor(mtcars$gear)
 #' to_numeric(x, dummy_factors = FALSE)
 #' to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE)
+#' # same as:
+#' coerce_to_numeric(x)
 #'
 #' @return A data frame of numeric variables.
 #'
@@ -211,15 +219,13 @@ to_numeric.factor <- function(x,
         # if the first observation was missing, add NA row and bind data frame
         if (i == 1 && na_values[i] == 1) {
           out <- rbind(NA, out)
-        } else {
+        } else if (na_values[i] == rows_x) {
           # if the last observation was NA, add NA row to data frame
-          if (na_values[i] == rows_x) {
-            out <- rbind(out, NA)
-          } else {
-            # else, pick rows from beginning to current NA value, add NA,
-            # and rbind the remaining rows
-            out <- rbind(out[1:(na_values[i] - 1), ], NA, out[na_values[i]:nrow(out), ])
-          }
+          out <- rbind(out, NA)
+        } else {
+          # else, pick rows from beginning to current NA value, add NA,
+          # and rbind the remaining rows
+          out <- rbind(out[1:(na_values[i] - 1), ], NA, out[na_values[i]:nrow(out), ])
         }
       }
       rownames(out) <- NULL

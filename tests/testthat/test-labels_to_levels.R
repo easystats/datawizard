@@ -28,6 +28,18 @@ test_that("labels_to_levels, factor, error on no labels", {
   expect_error(labels_to_levels(iris), regex = "Could not change factor")
 })
 
+test_that("labels_to_levels, data frame, append", {
+  data(efc)
+  out <- labels_to_levels(efc, append = "_ll")
+  expect_named(out, c("c12hour", "e16sex", "e42dep", "c172code", "neg_c_7", "e42dep_ll"))
+})
+
+test_that("labels_to_levels, data frame, append", {
+  data(iris)
+  d <- as.data.frame(lapply(iris, as.factor))
+  expect_identical(labels_to_levels(d), d)
+})
+
 test_that("labels_to_levels, factor, data frame", {
   data(efc)
   out <- labels_to_levels(efc)
