@@ -26,10 +26,18 @@ pkgs <- c(
   "see",
   "ggplot2",
   "parameters",
-  "lme4"
+  "lme4",
+  "curl"
 )
+pkg_available <- all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))
 
-if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
+if (pkg_available) {
+  net_available <- curl::has_internet()
+} else {
+  net_available <- FALSE
+}
+
+if (!pkg_available || !net_available) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 ```

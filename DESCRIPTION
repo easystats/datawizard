@@ -40,6 +40,7 @@ Suggests:
     bayestestR,
     boot,
     brms,
+    curl,
     data.table,
     dplyr (>= 1.0),
     effectsize,
