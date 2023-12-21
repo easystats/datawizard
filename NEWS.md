@@ -1,4 +1,4 @@
-# datawizard 0.9.0.x (development version)
+# datawizard 0.9.1
 
 CHANGES
 
