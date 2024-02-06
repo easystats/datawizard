@@ -36,14 +36,18 @@ Note that newly created variables can be used in subsequent expressions.
 See also 'Examples'.}
 
 \item{.if}{A function that returns \code{TRUE} for columns in the data frame where
-\code{.if} applies. This argument is used in combination with the \code{.modify} argument.}
+\code{.if} applies. This argument is used in combination with the \code{.modify} argument.
+Note that only one of \code{.at} or \code{.if} can be provided, but not both at the same
+time.}
 
 \item{.at}{A character vector of variable names that should be modified. This
-argument is used in combination with the \code{.modify} argument.}
+argument is used in combination with the \code{.modify} argument. Note that only one
+of \code{.at} or \code{.if} can be provided, but not both at the same time.}
 
 \item{.modify}{A function that modifies the variables defined in \code{.at} or \code{.if}.
-This argument is used in combination with either the \code{.at} or the \code{.if}argument.
-If \code{.modify} is not provided, \code{.at} and \code{.if} are ignored.}
+This argument is used in combination with either the \code{.at} or the \code{.if} argument.
+Note that the modified variable (i.e. the result from \code{.modify}) must be either
+of length 1 or of same length as the input variable.}
 }
 \description{
 Create new variables or modify existing variables in a data frame. Unlike \code{base::transform()}, \code{data_modify()}

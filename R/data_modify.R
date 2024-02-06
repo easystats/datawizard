@@ -27,12 +27,16 @@
 #' See also 'Examples'.
 #'
 #' @param .at A character vector of variable names that should be modified. This
-#' argument is used in combination with the `.modify` argument.
+#' argument is used in combination with the `.modify` argument. Note that only one
+#' of `.at` or `.if` can be provided, but not both at the same time.
 #' @param .if A function that returns `TRUE` for columns in the data frame where
 #' `.if` applies. This argument is used in combination with the `.modify` argument.
+#' Note that only one of `.at` or `.if` can be provided, but not both at the same
+#' time.
 #' @param .modify A function that modifies the variables defined in `.at` or `.if`.
-#' This argument is used in combination with either the `.at` or the `.if`argument.
-#' If `.modify` is not provided, `.at` and `.if` are ignored.
+#' This argument is used in combination with either the `.at` or the `.if` argument.
+#' Note that the modified variable (i.e. the result from `.modify`) must be either
+#' of length 1 or of same length as the input variable.
 #'
 #' @note `data_modify()` can also be used inside functions. However, it is
 #' recommended to pass the recode-expression as character vector or list of
@@ -310,56 +314,61 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 # helper -------------
 
 .modify_at <- function(data, .at, .if, .modify, column_names) {
+  # check if ".at" or ".if" is defined, but not ".modify"
+  if (is.null(.modify)) {
+    if (!is.null(.at) || !is.null(.if)) {
+      insight::format_error("You need to specify `.modify` when using `.at` or `.if`.")
+    }
+    return(data)
+  }
+  # make sure "modify" is a function
+  if (!is.function(.modify)) {
+    insight::format_error("`.modify` must be a function.")
+  }
   # make sure either .at or .if is defined, not both
   if (!is.null(.at) && !is.null(.if)) {
     insight::format_error("You cannot use both `.at` and `.if` at the same time.")
   }
-  if ((!is.null(.at) || !is.null(.if)) && !is.null(.modify)) {
-    # if we have ".if" defined, specify ".at"
-    if (!is.null(.if)) {
-      .at <- column_names[vapply(data[column_names], .if, logical(1))]
-    }
-    # make sure "modify" is a function
-    if (!is.function(.modify)) {
-      insight::format_error("`.modify` must be a function.")
-    }
-    # check for valid defined column names
-    if (!all(.at %in% column_names)) {
-      not_found <- .at[!.at %in% column_names]
-      insight::format_alert(
-        paste0(
-          "Variable",
-          ifelse(length(not_found) > 1, "s ", " "),
-          text_concatenate(not_found, enclose = "\""),
-          ifelse(length(not_found) > 1, " were", " was"),
-          " not found in the dataset."
-        ),
-        .misspelled_string(column_names, not_found, "Possibly misspelled or not yet defined?")
-      )
-    }
-    # modify variables
-    found <- .at[.at %in% column_names]
-    if (length(found)) {
-      for (i in found) {
-        result <- tryCatch(.modify(data[[i]]), warning = function(e) e, error = function(e) e)
-        if (inherits(result, "error")) {
-          insight::format_error(
-            paste0("Error in modifying variable \"", i, "\": ", result$message),
-            "Please check if you correctly specified the `.modify` function."
-          )
-        } else if (inherits(result, "warning")) {
-          insight::format_warning(
-            paste0("Warning when modifying variable \"", i, "\": ", result$message),
-            "Results may be incorrect or unexpected."
-          )
-          data[[i]] <- result
-        } else {
-          data[[i]] <- result
-        }
-      }
-    } else {
-      insight::format_alert("No variables found in the dataset that match the `.if` or `.at` argument.")
-    }
+  # make sure either .at or .if is defined, not both
+  if (is.null(.at) && is.null(.if)) {
+    insight::format_error("You need to specify either `.at` or `.if`.")
   }
+
+  # if we have ".if" defined, specify ".at"
+  if (!is.null(.if)) {
+    .at <- column_names[vapply(data[column_names], .if, logical(1))]
+  }
+  # check for valid defined column names
+  if (!all(.at %in% column_names)) {
+    not_found <- .at[!.at %in% column_names]
+    insight::format_error(
+      paste0(
+        "Variable",
+        ifelse(length(not_found) > 1, "s ", " "),
+        text_concatenate(not_found, enclose = "\""),
+        ifelse(length(not_found) > 1, " were", " was"),
+        " not found in the dataset."
+      ),
+      .misspelled_string(column_names, not_found, "Possibly misspelled or not yet defined?")
+    )
+  }
+  # modify variables
+  found <- .at[.at %in% column_names]
+  if (length(found)) {
+    for (i in found) {
+      result <- tryCatch(.modify(data[[i]]), warning = function(e) e, error = function(e) e)
+      if (inherits(result, c("error", "warning"))) {
+        insight::format_error(
+          paste0("Error in modifying variable \"", i, "\": ", result$message),
+          "Please check if you correctly specified the `.modify` function."
+        )
+      } else {
+        data[[i]] <- result
+      }
+    }
+  } else {
+    insight::format_error("No variables found in the dataset that match the `.if` or `.at` argument.")
+  }
+
   data
 }
