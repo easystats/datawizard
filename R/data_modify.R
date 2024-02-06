@@ -108,6 +108,15 @@
 #' # can be combined with dots
 #' data_modify(d, new_length = Petal.Length * 2, .at = "Species", .modify = as.numeric)
 #'
+#' # combine "data_find()" and ".at" argument
+#' out <- data_modify(
+#'   d,
+#'   .at = data_find(d, select = starts_with("Sepal")),
+#'   .modify = as.factor
+#' )
+#' # "Sepal.Length" and "Sepal.Width" are now factors
+#' str(out)
+#'
 #' @export
 data_modify <- function(data, ...) {
   UseMethod("data_modify")
