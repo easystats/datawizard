@@ -233,6 +233,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # we need to evaluate dots here, and pass them with "do.call" to
   # the data.frame method later...
   dots <- match.call(expand.dots = FALSE)[["..."]]
+  column_names <- colnames(data)
 
   # works only for dplyr >= 0.8.0
   grps <- attr(data, "groups", exact = TRUE)
