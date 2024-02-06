@@ -31,6 +31,16 @@ Example: \code{Petal.Width = NULL}.
 
 Note that newly created variables can be used in subsequent expressions.
 See also 'Examples'.}
+
+\item{.at}{A character vector of variable names that should be modified. This
+argument is used in combination with the \code{.modify} argument.}
+
+\item{.if}{A function that returns \code{TRUE} for columns in the data frame where
+\code{.if} applies. This argument is used in combination with the \code{.modify} argument.}
+
+\item{.modify}{A function that modifies the variables defined in \code{.at} or \code{.if}.
+This argument is used in combination with either the \code{.at} or the \code{.if}argument.
+If \code{.modify} is not provided, \code{.at} and \code{.if} are ignored.}
 }
 \description{
 Create new variables or modify existing variables in a data frame. Unlike \code{base::transform()}, \code{data_modify()}
@@ -103,4 +113,13 @@ foo(iris, "var_a = Sepal.Width / 10")
 
 new_exp <- c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")
 foo(iris, new_exp)
+
+# modify at specific positions or if condition is met
+d <- iris[1:5, ]
+data_modify(d, .at = "Species", .modify = as.numeric)
+data_modify(d, .if = is.factor, .modify = as.numeric)
+
+# can be combined with dots
+data_modify(d, new_length = Petal.Length * 2, .at = "Species", .modify = as.numeric)
+
 }
