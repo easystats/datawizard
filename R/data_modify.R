@@ -322,7 +322,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
           "Variable",
           ifelse(length(not_found) > 1, "s ", " "),
           text_concatenate(not_found, enclose = "\""),
-          ifelse(length(not_found) > 1, "were", "was"),
+          ifelse(length(not_found) > 1, " were", " was"),
           " not found in the dataset."
         ),
         .misspelled_string(column_names, not_found, "Possibly misspelled or not yet defined?")
