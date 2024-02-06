@@ -352,22 +352,16 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       .misspelled_string(column_names, not_found, "Possibly misspelled or not yet defined?")
     )
   }
-  # modify variables
-  found <- .at[.at %in% column_names]
-  if (length(found)) {
-    for (i in found) {
-      result <- tryCatch(.modify(data[[i]]), warning = function(e) e, error = function(e) e)
-      if (inherits(result, c("error", "warning"))) {
-        insight::format_error(
-          paste0("Error in modifying variable \"", i, "\": ", result$message),
-          "Please check if you correctly specified the `.modify` function."
-        )
-      } else {
-        data[[i]] <- result
-      }
+  for (i in .at) {
+    result <- tryCatch(.modify(data[[i]]), warning = function(e) e, error = function(e) e)
+    if (inherits(result, c("error", "warning"))) {
+      insight::format_error(
+        paste0("Error in modifying variable \"", i, "\": ", result$message),
+        "Please check if you correctly specified the `.modify` function."
+      )
+    } else {
+      data[[i]] <- result
     }
-  } else {
-    insight::format_error("No variables found in the dataset that match the `.if` or `.at` argument.")
   }
 
   data

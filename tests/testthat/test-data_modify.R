@@ -513,24 +513,23 @@ test_that("data_modify .if/.at arguments", {
     data_modify(d, .at = "Species", .modify = "a"),
     regex = "`.modify` must"
   )
-  expect_message(
+  expect_error(
     data_modify(d, .at = c("Species", "Test"), .modify = as.numeric),
     regex = "Variable \"Test\""
   )
-  expect_message(
+  expect_error(
     data_modify(d, .at = c("Species", "Hi", "Test"), .modify = as.numeric),
     regex = "Variables \"Hi\" and \"Test\""
-  )
-  expect_message(
-    data_modify(d, .at = c("Hi", "Test"), .modify = as.numeric),
-    regex = "No variables found in the dataset"
   )
   expect_error(
     data_modify(d, .at = "Species", .modify = function(x) 2 / y + x),
     regex = "Error in modifying variable"
   )
-  expect_warning(
+  expect_error(
     data_modify(d, .at = "Species", .modify = function(x) 2 * x),
-    regex = "Warning when modifying variable"
+    regex = "Error in modifying variable"
   )
+  # newly created variables are not modified by if/at
+  out <- data_modify(d, new_length = Petal.Length * 2, .if = is.numeric, .modify = as.factor)
+  expect_identical(out$new_length, c(2.8, 2.8, 2.6, 3, 2.8))
 })
