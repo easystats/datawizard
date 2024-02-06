@@ -341,7 +341,25 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     found <- .at[.at %in% column_names]
     if (length(found)) {
       for (i in found) {
-        data[[i]] <- .modify(data[[i]])
+        result <- tryCatch(
+          .modify(data[[i]]),
+          warning = function(e) e,
+          error = function(e) e
+        )
+        if (inherits(result, "error")) {
+          insight::format_error(
+            paste0("Error in modifying variable \"", i, "\": ", result$message),
+            "Please check if you correctly specified the `.modify` function."
+          )
+        } else if (inherits(result, "warning")) {
+          insight::format_warning(
+            paste0("Warning when modifying variable \"", i, "\": ", result$message),
+            "Results may be incorrect or unexpected."
+          )
+          data[[i]] <- result
+        } else {
+          data[[i]] <- result
+        }
       }
     } else {
       insight::format_alert("No variables found in the dataset that match the `.if` or `.at` argument.")

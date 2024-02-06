@@ -525,4 +525,12 @@ test_that("data_modify .if/.at arguments", {
     data_modify(d, .at = c("Hi", "Test"), .modify = as.numeric),
     regex = "No variables found in the dataset"
   )
+  expect_error(
+    data_modify(d, .at = "Species", .modify = function(x) 2 / y + x),
+    regex = "Error in modifying variable"
+  )
+  expect_warning(
+    data_modify(d, .at = "Species", .modify = function(x) 2 * x),
+    regex = "Warning when modifying variable"
+  )
 })
