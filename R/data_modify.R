@@ -118,6 +118,7 @@ data_modify.default <- function(data, ...) {
   insight::format_error("`data` must be a data frame.")
 }
 
+#' @rdname data_modify
 #' @export
 data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = NULL) {
   dots <- eval(substitute(alist(...)))

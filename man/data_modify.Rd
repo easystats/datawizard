@@ -2,9 +2,12 @@
 % Please edit documentation in R/data_modify.R
 \name{data_modify}
 \alias{data_modify}
+\alias{data_modify.data.frame}
 \title{Create new variables in a data frame}
 \usage{
 data_modify(data, ...)
+
+\method{data_modify}{data.frame}(data, ..., .if = NULL, .at = NULL, .modify = NULL)
 }
 \arguments{
 \item{data}{A data frame}
@@ -32,11 +35,11 @@ Example: \code{Petal.Width = NULL}.
 Note that newly created variables can be used in subsequent expressions.
 See also 'Examples'.}
 
-\item{.at}{A character vector of variable names that should be modified. This
-argument is used in combination with the \code{.modify} argument.}
-
 \item{.if}{A function that returns \code{TRUE} for columns in the data frame where
 \code{.if} applies. This argument is used in combination with the \code{.modify} argument.}
+
+\item{.at}{A character vector of variable names that should be modified. This
+argument is used in combination with the \code{.modify} argument.}
 
 \item{.modify}{A function that modifies the variables defined in \code{.at} or \code{.if}.
 This argument is used in combination with either the \code{.at} or the \code{.if}argument.
