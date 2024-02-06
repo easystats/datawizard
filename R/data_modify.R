@@ -341,11 +341,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     found <- .at[.at %in% column_names]
     if (length(found)) {
       for (i in found) {
-        result <- tryCatch(
-          .modify(data[[i]]),
-          warning = function(e) e,
-          error = function(e) e
-        )
+        result <- tryCatch(.modify(data[[i]]), warning = function(e) e, error = function(e) e)
         if (inherits(result, "error")) {
           insight::format_error(
             paste0("Error in modifying variable \"", i, "\": ", result$message),
