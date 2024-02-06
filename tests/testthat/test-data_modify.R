@@ -522,12 +522,20 @@ test_that("data_modify .if/.at arguments", {
     regex = "Variables \"Hi\" and \"Test\""
   )
   expect_error(
+    data_modify(d, .modify = as.numeric),
+    regex = "You need to specify"
+  )
+  expect_error(
     data_modify(d, .at = "Species", .modify = function(x) 2 / y + x),
     regex = "Error in modifying variable"
   )
   expect_error(
     data_modify(d, .at = "Species", .modify = function(x) 2 * x),
     regex = "Error in modifying variable"
+  )
+  expect_error(
+    data_modify(d, .at = "Species", .if = is.factor),
+    regex = "You need to specify"
   )
   # newly created variables are not modified by if/at
   out <- data_modify(d, new_length = Petal.Length * 2, .if = is.numeric, .modify = as.factor)
