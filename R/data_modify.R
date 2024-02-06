@@ -329,7 +329,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   if (!is.null(.at) && !is.null(.if)) {
     insight::format_error("You cannot use both `.at` and `.if` at the same time.")
   }
-  # make sure either .at or .if is defined, not both
+  # make sure at least one of .at or .if is defined
   if (is.null(.at) && is.null(.if)) {
     insight::format_error("You need to specify either `.at` or `.if`.")
   }
