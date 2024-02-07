@@ -122,7 +122,7 @@
 #'   .at = c("Species", "new_length"),
 #'   .modify = as.numeric
 #' )}
-#' 
+#'
 #' # combine "data_find()" and ".at" argument
 #' out <- data_modify(
 #'   d,

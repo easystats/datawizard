@@ -51,7 +51,7 @@ test_that("data_tabulate, weights", {
   expect_equal(out[[1]]$N, out1$N, ignore_attr = TRUE)
   # mismatch of lengths
   w <- c(efc$weights, 1)
-  expect_error(data_tabulate(efc$e42dep, weights = w), regex = "Length of weights")
+  expect_error(data_tabulate(efc$e42dep, weights = w), regex = "Length of `weights`")
   # correct table footer
   expect_snapshot(print(data_tabulate(efc$e42dep, weights = efc$weights)))
   expect_snapshot(print_md(data_tabulate(efc$e42dep, weights = efc$weights)))
