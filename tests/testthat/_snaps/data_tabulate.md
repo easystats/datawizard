@@ -1,6 +1,42 @@
 # data_tabulate, weights
 
     Code
+      print(data_tabulate(efc$e42dep, weights = efc$weights))
+    Output
+      elder's dependency (efc$e42dep) <categorical>
+      # total N=105 valid N=100 (weighted)
+      
+      Value |  N | Raw % | Valid % | Cumulative %
+      ------+----+-------+---------+-------------
+      1     |  3 |  2.86 |    3.00 |         3.00
+      2     |  4 |  3.81 |    4.00 |         7.00
+      3     | 26 | 24.76 |   26.00 |        33.00
+      4     | 67 | 63.81 |   67.00 |       100.00
+      <NA>  |  5 |  4.76 |    <NA> |         <NA>
+
+---
+
+    Code
+      print_md(data_tabulate(efc$e42dep, weights = efc$weights))
+    Output
+       [1] "Table: elder's dependency (efc$e42dep) (categorical)"
+       [2] ""                                                    
+       [3] "|Value |  N| Raw %| Valid %| Cumulative %|"          
+       [4] "|:-----|--:|-----:|-------:|------------:|"          
+       [5] "|1     |  3|  2.86|    3.00|         3.00|"          
+       [6] "|2     |  4|  3.81|    4.00|         7.00|"          
+       [7] "|3     | 26| 24.76|   26.00|        33.00|"          
+       [8] "|4     | 67| 63.81|   67.00|       100.00|"          
+       [9] "|(NA)  |  5|  4.76|    (NA)|         (NA)|"          
+      [10] "total N=105 valid N=100 (weighted)\n\n"              
+      attr(,"format")
+      [1] "pipe"
+      attr(,"class")
+      [1] "knitr_kable" "character"  
+
+---
+
+    Code
       print(data_tabulate(efc, c("e42dep", "e16sex"), collapse = TRUE, weights = efc$
         weights))
     Output

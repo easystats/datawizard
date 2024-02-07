@@ -39,8 +39,8 @@ test_that("data_tabulate, weights", {
   # vector/factor
   out1 <- data_tabulate(efc$e42dep, weights = efc$weights)
   out2 <- data_tabulate(efc$e42dep)
-  expect_identical(out1$N, c(3, 4, 26, 67, 5))
-  expect_identical(out2$N, c(2L, 4L, 28L, 63L, 3L))
+  expect_equal(out1$N, c(3, 4, 26, 67, 5), ignore_attr = TRUE)
+  expect_equal(out2$N, c(2L, 4L, 28L, 63L, 3L), ignore_attr = TRUE)
   expect_equal(
     out1$N,
     round(xtabs(efc$weights ~ efc$e42dep, addNA = TRUE)),
@@ -48,10 +48,13 @@ test_that("data_tabulate, weights", {
   )
   # data frames
   out <- data_tabulate(efc, c("e42dep", "e16sex"), weights = efc$weights)
-  expect_identical(out[[1]]$N, out1$N)
+  expect_equal(out[[1]]$N, out1$N, ignore_attr = TRUE)
   # mismatch of lengths
   w <- c(efc$weights, 1)
   expect_error(data_tabulate(efc$e42dep, weights = w), regex = "Length of weights")
+  # correct table footer
+  expect_snapshot(print(data_tabulate(efc$e42dep, weights = efc$weights)))
+  expect_snapshot(print_md(data_tabulate(efc$e42dep, weights = efc$weights)))
   # correct table caption
   expect_snapshot(print(data_tabulate(efc, c("e42dep", "e16sex"), collapse = TRUE, weights = efc$weights)))
   expect_snapshot(print_md(data_tabulate(efc, c("e42dep", "e16sex"), weights = efc$weights)))

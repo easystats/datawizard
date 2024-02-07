@@ -307,7 +307,12 @@ print.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
   a$valid_n <- .add_commas_in_numbers(a$valid_n, big_mark)
 
   # summary of total and valid N (we may add mean/sd as well?)
-  summary_line <- sprintf("# total N=%s valid N=%s\n\n", a$total_n, a$valid_n)
+  summary_line <- sprintf(
+    "# total N=%s valid N=%s%s\n\n",
+    a$total_n,
+    a$valid_n,
+    ifelse(is.null(a$weights), "", " (weighted)")
+  )
   cat(insight::print_color(summary_line, "blue"))
 
   # remove information that goes into the header/footer
@@ -332,7 +337,12 @@ print_html.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
   caption <- .table_header(x, "html")
 
   # summary of total and valid N (we may add mean/sd as well?)
-  footer <- sprintf("total N=%i valid N=%i\n\n", a$total_n, a$valid_n)
+  footer <- sprintf(
+    "total N=%i valid N=%i%s",
+    a$total_n,
+    a$valid_n,
+    ifelse(is.null(a$weights), "", " (weighted)")
+  )
 
   # remove information that goes into the header/footer
   x$Variable <- NULL
@@ -357,7 +367,12 @@ print_md.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
   caption <- .table_header(x, "markdown")
 
   # summary of total and valid N (we may add mean/sd as well?)
-  footer <- sprintf("total N=%i valid N=%i\n\n", a$total_n, a$valid_n)
+  footer <- sprintf(
+    "total N=%i valid N=%i%s\n\n",
+    a$total_n,
+    a$valid_n,
+    ifelse(is.null(a$weights), "", " (weighted)")
+  )
 
   # remove information that goes into the header/footer
   x$Variable <- NULL
