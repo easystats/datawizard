@@ -28,11 +28,12 @@
 #'
 #' @param .at A character vector of variable names that should be modified. This
 #' argument is used in combination with the `.modify` argument. Note that only one
-#' of `.at` or `.if` can be provided, but not both at the same time.
+#' of `.at` or `.if` can be provided, but not both at the same time. Newly created
+#' variables in `...` are not affected by `.at`.
 #' @param .if A function that returns `TRUE` for columns in the data frame where
 #' `.if` applies. This argument is used in combination with the `.modify` argument.
 #' Note that only one of `.at` or `.if` can be provided, but not both at the same
-#' time.
+#' time. Newly created variables in `...` are not affected by `.if`.
 #' @param .modify A function that modifies the variables defined in `.at` or `.if`.
 #' This argument is used in combination with either the `.at` or the `.if` argument.
 #' Note that the modified variable (i.e. the result from `.modify`) must be either
@@ -112,6 +113,16 @@
 #' # can be combined with dots
 #' data_modify(d, new_length = Petal.Length * 2, .at = "Species", .modify = as.numeric)
 #'
+#' # note that new variables cannot be used in `.at` or `.if` arguments
+#' # this example would throw an error
+#' \dontrun{
+#' data_modify(
+#'   d,
+#'   new_length = Petal.Length * 2,
+#'   .at = c("Species", "new_length"),
+#'   .modify = as.numeric
+#' )}
+#' 
 #' # combine "data_find()" and ".at" argument
 #' out <- data_modify(
 #'   d,
