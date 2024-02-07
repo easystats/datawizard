@@ -1,3 +1,10 @@
+# datawizard 0.9.2
+
+CHANGES
+
+* `data_modify()` gets three new arguments, `.at`, `.if` and `.modify`, to modify
+  variables at specific positions or based on logical conditions.
+
 # datawizard 0.9.1
 
 CHANGES

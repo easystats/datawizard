@@ -3,7 +3,6 @@
 \docType{package}
 \name{datawizard-package}
 \alias{datawizard-package}
-\alias{_PACKAGE}
 \alias{datawizard}
 \title{datawizard: Easy Data Wrangling and Statistical Transformations}
 \description{
