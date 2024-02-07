@@ -1,3 +1,46 @@
+# data_tabulate, weights
+
+    Code
+      print(data_tabulate(efc, c("e42dep", "e16sex"), collapse = TRUE, weights = efc$
+        weights))
+    Output
+      # Frequency Table (weighted)
+      
+      Variable | Value |  N | Raw % | Valid % | Cumulative %
+      ---------+-------+----+-------+---------+-------------
+      e42dep   |     1 |  3 |  2.86 |    3.00 |         3.00
+               |     2 |  4 |  3.81 |    4.00 |         7.00
+               |     3 | 26 | 24.76 |   26.00 |        33.00
+               |     4 | 67 | 63.81 |   67.00 |       100.00
+               |  <NA> |  5 |  4.76 |    <NA> |         <NA>
+      ---------+-------+----+-------+---------+-------------
+      e16sex   |     1 | 50 | 47.62 |  100.00 |       100.00
+               |     2 | 55 | 52.38 |    <NA> |         <NA>
+      ------------------------------------------------------
+
+---
+
+    Code
+      print_md(data_tabulate(efc, c("e42dep", "e16sex"), weights = efc$weights))
+    Output
+       [1] "Table: Frequency Table (weighted)"                   
+       [2] ""                                                    
+       [3] "|Variable | Value|  N| Raw %| Valid %| Cumulative %|"
+       [4] "|:--------|-----:|--:|-----:|-------:|------------:|"
+       [5] "|e42dep   |     1|  3|  2.86|    3.00|         3.00|"
+       [6] "|         |     2|  4|  3.81|    4.00|         7.00|"
+       [7] "|         |     3| 26| 24.76|   26.00|        33.00|"
+       [8] "|         |     4| 67| 63.81|   67.00|       100.00|"
+       [9] "|         |  (NA)|  5|  4.76|    (NA)|         (NA)|"
+      [10] "|         |      |   |      |        |             |"
+      [11] "|e16sex   |     1| 50| 47.62|  100.00|       100.00|"
+      [12] "|         |     2| 55| 52.38|    (NA)|         (NA)|"
+      [13] "|         |      |   |      |        |             |"
+      attr(,"format")
+      [1] "pipe"
+      attr(,"class")
+      [1] "knitr_kable" "character"  
+
 # data_tabulate print
 
     Code

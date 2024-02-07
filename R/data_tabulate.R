@@ -141,6 +141,7 @@ data_tabulate.default <- function(x, drop_levels = FALSE, weights = NULL, name =
   attr(out, "object") <- obj_name
   attr(out, "group_variable") <- group_variable
   attr(out, "duplicate_varnames") <- duplicated(out$Variable)
+  attr(out, "weights") <- weights
 
   attr(out, "total_n") <- sum(out$N, na.rm = TRUE)
   attr(out, "valid_n") <- sum(out$N[-length(out$N)], na.rm = TRUE)
@@ -177,6 +178,7 @@ data_tabulate.data.frame <- function(x,
 
   class(out) <- c("dw_data_tabulates", "list")
   attr(out, "collapse") <- isTRUE(collapse)
+  attr(out, "is_weighted") <- !is.null(weights)
 
   out
 }
@@ -231,6 +233,7 @@ data_tabulate.grouped_df <- function(x,
   }
   class(out) <- c("dw_data_tabulates", "list")
   attr(out, "collapse") <- isTRUE(collapse)
+  attr(out, "is_weighted") <- !is.null(weights)
 
   out
 }
@@ -373,6 +376,9 @@ print_md.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
 
 #' @export
 print.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
+  # check if we have weights
+  is_weighted <- isTRUE(attributes(x)$is_weighted)
+
   a <- attributes(x)
   if (!isTRUE(a$collapse) || length(x) == 1) {
     for (i in seq_along(x)) {
@@ -390,7 +396,11 @@ print.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
     })
 
     out <- do.call(rbind, x)
-    cat(insight::print_color("# Frequency Table\n\n", "blue"))
+    if (is_weighted) {
+      cat(insight::print_color("# Frequency Table (weighted)\n\n", "blue"))
+    } else {
+      cat(insight::print_color("# Frequency Table\n\n", "blue"))
+    }
 
     # print table
     cat(insight::export_table(
@@ -405,6 +415,9 @@ print.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
 
 #' @export
 print_html.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
+  # check if we have weights
+  is_weighted <- isTRUE(attributes(x)$is_weighted)
+
   if (length(x) == 1) {
     print_html(x[[1]], big_mark = big_mark, ...)
   } else {
@@ -421,7 +434,7 @@ print_html.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
     insight::export_table(
       out,
       missing = "<NA>",
-      caption = "Frequency Table",
+      caption = ifelse(is_weighted, "Frequency Table (weighted)", "Frequency Table"),
       format = "html",
       group_by = "Group"
     )
@@ -431,6 +444,9 @@ print_html.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
 
 #' @export
 print_md.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
+  # check if we have weights
+  is_weighted <- isTRUE(attributes(x)$is_weighted)
+
   if (length(x) == 1) {
     print_md(x[[1]], big_mark = big_mark, ...)
   } else {
@@ -451,7 +467,7 @@ print_md.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
       missing = "(NA)",
       empty_line = "-",
       format = "markdown",
-      title = "Frequency Table"
+      title = ifelse(is_weighted, "Frequency Table (weighted)", "Frequency Table")
     )
   }
 }

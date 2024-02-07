@@ -52,6 +52,9 @@ test_that("data_tabulate, weights", {
   # mismatch of lengths
   w <- c(efc$weights, 1)
   expect_error(data_tabulate(efc$e42dep, weights = w), regex = "Length of weights")
+  # correct table caption
+  expect_snapshot(print(data_tabulate(efc, c("e42dep", "e16sex"), collapse = TRUE, weights = efc$weights)))
+  expect_snapshot(print_md(data_tabulate(efc, c("e42dep", "e16sex"), weights = efc$weights)))
 })
 
 
