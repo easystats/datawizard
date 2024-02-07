@@ -175,7 +175,10 @@ data_read <- function(path,
         value_labels <- value_labels[value_labels %in% unique(i)]
 
         # guess variable type
-        if (!is.character(i)) {
+        if (is.character(i)) {
+          # we need this to drop haven-specific class attributes
+          i <- as.character(i)
+        } else {
           # if all values are labelled, we assume factor. Use labels as levels
           if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
             if (is.numeric(i)) {
@@ -189,9 +192,6 @@ data_read <- function(path,
             # else, fall back to numeric
             i <- as.numeric(i)
           }
-        } else {
-          # we need this to drop haven-specific class attributes
-          i <- as.character(i)
         }
 
         # drop unused value labels
@@ -302,9 +302,7 @@ data_read <- function(path,
   # not. Else, tell user.
   if (!is.data.frame(out)) {
     tmp <- tryCatch(as.data.frame(out, stringsAsFactors = FALSE), error = function(e) NULL)
-    if (!is.null(tmp)) {
-      out <- tmp
-    } else {
+    if (is.null(tmp)) {
       if (verbose) {
         insight::format_warning(
           paste0("Imported file is no data frame, but of class \"", class(out)[1], "\"."),
@@ -312,6 +310,8 @@ data_read <- function(path,
         )
       }
       return(out)
+    } else {
+      out <- tmp
     }
   }
 
