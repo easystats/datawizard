@@ -125,22 +125,22 @@ type of expression cannot be mixed with other expressions, i.e. if a
 character vector is provided, you may not add further elements to <code>...</code>.</p></li>
 <li><p>Using <code>NULL</code> as right-hand side removes a variable from the data frame.
 Example: <code>Petal.Width = NULL</code>.</p></li>
-</ul><p>Note that newly created variables can be used in subsequent expressions.
-See also 'Examples'.</p></dd>
+</ul><p>Note that newly created variables can be used in subsequent expressions,
+including <code>.at</code> or <code>.if</code>. See also 'Examples'.</p></dd>
 
 
 <dt>.if</dt>
 <dd><p>A function that returns <code>TRUE</code> for columns in the data frame where
 <code>.if</code> applies. This argument is used in combination with the <code>.modify</code> argument.
 Note that only one of <code>.at</code> or <code>.if</code> can be provided, but not both at the same
-time. Newly created variables in <code>...</code> are not affected by <code>.if</code>.</p></dd>
+time. Newly created variables in <code>...</code> can also be selected, see 'Examples'.</p></dd>
 
 
 <dt>.at</dt>
 <dd><p>A character vector of variable names that should be modified. This
 argument is used in combination with the <code>.modify</code> argument. Note that only one
 of <code>.at</code> or <code>.if</code> can be provided, but not both at the same time. Newly created
-variables in <code>...</code> are not affected by <code>.at</code>.</p></dd>
+variables in <code>...</code> can also be selected, see 'Examples'.</p></dd>
 
 
 <dt>.modify</dt>
@@ -339,17 +339,19 @@ characters.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4          4.6         3.1          1.5         0.2       1        3.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5          5.0         3.6          1.4         0.2       1        2.8</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># note that new variables cannot be used in `.at` or `.if` arguments</span></span></span>
-<span class="r-in"><span><span class="co"># this example would throw an error</span></span></span>
-<span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="co"># new variables used in `.at` or `.if`</span></span></span>
 <span class="r-in"><span><span class="fu">data_modify</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">d</span>,</span></span>
 <span class="r-in"><span>  new_length <span class="op">=</span> <span class="va">Petal.Length</span> <span class="op">*</span> <span class="fl">2</span>,</span></span>
-<span class="r-in"><span>  .at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"new_length"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  .modify <span class="op">=</span> <span class="va">as.numeric</span></span></span>
-<span class="r-in"><span><span class="op">)</span><span class="co"># }</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> Variable "new_length" was not found in the dataset.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span>   Possibly misspelled or not yet defined?</span>
+<span class="r-in"><span>  .at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Length"</span>, <span class="st">"new_length"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  .modify <span class="op">=</span> <span class="va">round</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species new_length</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          5.1         3.5            1         0.2  setosa          3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          4.9         3.0            1         0.2  setosa          3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          4.7         3.2            1         0.2  setosa          3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          4.6         3.1            2         0.2  setosa          3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          5.0         3.6            1         0.2  setosa          3</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># combine "data_find()" and ".at" argument</span></span></span>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">data_modify</span><span class="op">(</span></span></span>
