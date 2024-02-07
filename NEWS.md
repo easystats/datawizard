@@ -5,6 +5,8 @@ CHANGES
 * `data_modify()` gets three new arguments, `.at`, `.if` and `.modify`, to modify
   variables at specific positions or based on logical conditions.
 
+* `data_tabulate()` gets a `weights` argument, to compute weighted frequency tables.
+
 # datawizard 0.9.1
 
 CHANGES

@@ -13,6 +13,8 @@
 #' for printing.
 #' @param collapse Logical, if `TRUE` collapses multiple tables into one larger
 #' table for printing. This affects only printing, not the returned object.
+#' @param weights Optional numeric vector of weights. Must be of the same length
+#' as `x`. If `weights` is supplied, weighted frequencies are calculated.
 #' @param ... not used.
 #' @inheritParams find_columns
 #'
@@ -46,6 +48,12 @@
 #'
 #' # to remove the big mark, use "print(..., big_mark = "")"
 #' print(data_tabulate(x), big_mark = "")
+#'
+#' # weighted frequencies
+#' set.seed(123)
+#' efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+#' data_tabulate(efc$e42dep, weights = efc$weights)
+#'
 #' @export
 data_tabulate <- function(x, ...) {
   UseMethod("data_tabulate")
@@ -54,7 +62,7 @@ data_tabulate <- function(x, ...) {
 
 #' @rdname data_tabulate
 #' @export
-data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose = TRUE, ...) {
+data_tabulate.default <- function(x, drop_levels = FALSE, weights = NULL, name = NULL, verbose = TRUE, ...) {
   # save label attribute, before it gets lost...
   var_label <- attr(x, "label", exact = TRUE)
 
@@ -70,8 +78,26 @@ data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose =
     x <- droplevels(x)
   }
 
+  # check for correct length of weights - must be equal to "x"
+  if (!is.null(weights) && length(weights) != length(x)) {
+    insight::format_error("Length of `weights` must be equal to length of `x`.")
+  }
+
   # frequency table
-  freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
+  if (is.null(weights)) {
+    freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
+  } else {
+    # weighted frequency table
+    freq_table <- tryCatch(
+      stats::xtabs(
+        weights ~ x,
+        data = data.frame(weights = weights, x = x),
+        na.action = stats::na.pass,
+        addNA = TRUE
+      ),
+      error = function(e) NULL
+    )
+  }
 
   if (is.null(freq_table)) {
     insight::format_warning(paste0("Can't compute frequency tables for objects of class `", class(x)[1], "`."))
@@ -82,6 +108,11 @@ data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose =
   out <- data_rename(data.frame(freq_table, stringsAsFactors = FALSE),
     replacement = c("Value", "N")
   )
+
+  # we want to round N for weighted frequencies
+  if (!is.null(weights)) {
+    out$N <- round(out$N)
+  }
 
   out$`Raw %` <- 100 * out$N / sum(out$N)
   out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
@@ -110,6 +141,7 @@ data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose =
   attr(out, "object") <- obj_name
   attr(out, "group_variable") <- group_variable
   attr(out, "duplicate_varnames") <- duplicated(out$Variable)
+  attr(out, "weights") <- weights
 
   attr(out, "total_n") <- sum(out$N, na.rm = TRUE)
   attr(out, "valid_n") <- sum(out$N[-length(out$N)], na.rm = TRUE)
@@ -129,6 +161,7 @@ data_tabulate.data.frame <- function(x,
                                      regex = FALSE,
                                      collapse = FALSE,
                                      drop_levels = FALSE,
+                                     weights = NULL,
                                      verbose = TRUE,
                                      ...) {
   # evaluate arguments
@@ -140,11 +173,12 @@ data_tabulate.data.frame <- function(x,
     verbose = verbose
   )
   out <- lapply(select, function(i) {
-    data_tabulate(x[[i]], drop_levels = drop_levels, name = i, verbose = verbose, ...)
+    data_tabulate(x[[i]], drop_levels = drop_levels, weights = weights, name = i, verbose = verbose, ...)
   })
 
   class(out) <- c("dw_data_tabulates", "list")
   attr(out, "collapse") <- isTRUE(collapse)
+  attr(out, "is_weighted") <- !is.null(weights)
 
   out
 }
@@ -159,6 +193,7 @@ data_tabulate.grouped_df <- function(x,
                                      verbose = TRUE,
                                      collapse = FALSE,
                                      drop_levels = FALSE,
+                                     weights = NULL,
                                      ...) {
   # works only for dplyr >= 0.8.0
   grps <- attr(x, "groups", exact = TRUE)
@@ -191,12 +226,14 @@ data_tabulate.grouped_df <- function(x,
       ignore_case = ignore_case,
       verbose = verbose,
       drop_levels = drop_levels,
+      weights = weights,
       group_variable = group_variable,
       ...
     ))
   }
   class(out) <- c("dw_data_tabulates", "list")
   attr(out, "collapse") <- isTRUE(collapse)
+  attr(out, "is_weighted") <- !is.null(weights)
 
   out
 }
@@ -270,7 +307,12 @@ print.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
   a$valid_n <- .add_commas_in_numbers(a$valid_n, big_mark)
 
   # summary of total and valid N (we may add mean/sd as well?)
-  summary_line <- sprintf("# total N=%s valid N=%s\n\n", a$total_n, a$valid_n)
+  summary_line <- sprintf(
+    "# total N=%s valid N=%s%s\n\n",
+    a$total_n,
+    a$valid_n,
+    ifelse(is.null(a$weights), "", " (weighted)")
+  )
   cat(insight::print_color(summary_line, "blue"))
 
   # remove information that goes into the header/footer
@@ -295,7 +337,12 @@ print_html.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
   caption <- .table_header(x, "html")
 
   # summary of total and valid N (we may add mean/sd as well?)
-  footer <- sprintf("total N=%i valid N=%i\n\n", a$total_n, a$valid_n)
+  footer <- sprintf(
+    "total N=%i valid N=%i%s",
+    a$total_n,
+    a$valid_n,
+    ifelse(is.null(a$weights), "", " (weighted)")
+  )
 
   # remove information that goes into the header/footer
   x$Variable <- NULL
@@ -320,7 +367,12 @@ print_md.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
   caption <- .table_header(x, "markdown")
 
   # summary of total and valid N (we may add mean/sd as well?)
-  footer <- sprintf("total N=%i valid N=%i\n\n", a$total_n, a$valid_n)
+  footer <- sprintf(
+    "total N=%i valid N=%i%s\n\n",
+    a$total_n,
+    a$valid_n,
+    ifelse(is.null(a$weights), "", " (weighted)")
+  )
 
   # remove information that goes into the header/footer
   x$Variable <- NULL
@@ -339,6 +391,9 @@ print_md.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
 
 #' @export
 print.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
+  # check if we have weights
+  is_weighted <- isTRUE(attributes(x)$is_weighted)
+
   a <- attributes(x)
   if (!isTRUE(a$collapse) || length(x) == 1) {
     for (i in seq_along(x)) {
@@ -356,7 +411,11 @@ print.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
     })
 
     out <- do.call(rbind, x)
-    cat(insight::print_color("# Frequency Table\n\n", "blue"))
+    if (is_weighted) {
+      cat(insight::print_color("# Frequency Table (weighted)\n\n", "blue"))
+    } else {
+      cat(insight::print_color("# Frequency Table\n\n", "blue"))
+    }
 
     # print table
     cat(insight::export_table(
@@ -371,6 +430,9 @@ print.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
 
 #' @export
 print_html.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
+  # check if we have weights
+  is_weighted <- isTRUE(attributes(x)$is_weighted)
+
   if (length(x) == 1) {
     print_html(x[[1]], big_mark = big_mark, ...)
   } else {
@@ -387,7 +449,7 @@ print_html.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
     insight::export_table(
       out,
       missing = "<NA>",
-      caption = "Frequency Table",
+      caption = ifelse(is_weighted, "Frequency Table (weighted)", "Frequency Table"),
       format = "html",
       group_by = "Group"
     )
@@ -397,6 +459,9 @@ print_html.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
 
 #' @export
 print_md.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
+  # check if we have weights
+  is_weighted <- isTRUE(attributes(x)$is_weighted)
+
   if (length(x) == 1) {
     print_md(x[[1]], big_mark = big_mark, ...)
   } else {
@@ -417,7 +482,7 @@ print_md.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
       missing = "(NA)",
       empty_line = "-",
       format = "markdown",
-      title = "Frequency Table"
+      title = ifelse(is_weighted, "Frequency Table (weighted)", "Frequency Table")
     )
   }
 }

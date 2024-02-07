@@ -8,7 +8,14 @@
 \usage{
 data_tabulate(x, ...)
 
-\method{data_tabulate}{default}(x, drop_levels = FALSE, name = NULL, verbose = TRUE, ...)
+\method{data_tabulate}{default}(
+  x,
+  drop_levels = FALSE,
+  weights = NULL,
+  name = NULL,
+  verbose = TRUE,
+  ...
+)
 
 \method{data_tabulate}{data.frame}(
   x,
@@ -18,6 +25,7 @@ data_tabulate(x, ...)
   regex = FALSE,
   collapse = FALSE,
   drop_levels = FALSE,
+  weights = NULL,
   verbose = TRUE,
   ...
 )
@@ -30,6 +38,9 @@ data_tabulate(x, ...)
 \item{drop_levels}{Logical, if \code{TRUE}, factor levels that do not occur in
 the data are included in the table (with frequency of zero), else unused
 factor levels are dropped from the frequency table.}
+
+\item{weights}{Optional numeric vector of weights. Must be of the same length
+as \code{x}. If \code{weights} is supplied, weighted frequencies are calculated.}
 
 \item{name}{Optional character string, which includes the name that is used
 for printing.}
@@ -125,5 +136,10 @@ data_tabulate(x, name = "Large Number")
 
 # to remove the big mark, use "print(..., big_mark = "")"
 print(data_tabulate(x), big_mark = "")
+
+# weighted frequencies
+set.seed(123)
+efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+data_tabulate(efc$e42dep, weights = efc$weights)
 \dontshow{\}) # examplesIf}
 }

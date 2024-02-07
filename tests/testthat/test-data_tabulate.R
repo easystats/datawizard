@@ -32,6 +32,35 @@ test_that("data_tabulate numeric", {
 })
 
 
+test_that("data_tabulate, weights", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  # vector/factor
+  out1 <- data_tabulate(efc$e42dep, weights = efc$weights)
+  out2 <- data_tabulate(efc$e42dep)
+  expect_equal(out1$N, c(3, 4, 26, 67, 5), ignore_attr = TRUE)
+  expect_equal(out2$N, c(2L, 4L, 28L, 63L, 3L), ignore_attr = TRUE)
+  expect_equal(
+    out1$N,
+    round(xtabs(efc$weights ~ efc$e42dep, addNA = TRUE)),
+    ignore_attr = TRUE
+  )
+  # data frames
+  out <- data_tabulate(efc, c("e42dep", "e16sex"), weights = efc$weights)
+  expect_equal(out[[1]]$N, out1$N, ignore_attr = TRUE)
+  # mismatch of lengths
+  w <- c(efc$weights, 1)
+  expect_error(data_tabulate(efc$e42dep, weights = w), regex = "Length of `weights`")
+  # correct table footer
+  expect_snapshot(print(data_tabulate(efc$e42dep, weights = efc$weights)))
+  expect_snapshot(print_md(data_tabulate(efc$e42dep, weights = efc$weights)))
+  # correct table caption
+  expect_snapshot(print(data_tabulate(efc, c("e42dep", "e16sex"), collapse = TRUE, weights = efc$weights)))
+  expect_snapshot(print_md(data_tabulate(efc, c("e42dep", "e16sex"), weights = efc$weights)))
+})
+
+
 test_that("data_tabulate data.frame", {
   x <- data_tabulate(efc, c("e16sex", "c172code"))
   expect_s3_class(x, "list")
@@ -89,7 +118,7 @@ test_that("data_tabulate data.frame", {
 
 test_that("data_tabulate print", {
   set.seed(123)
-  x <- sample(1:3, 1e6, TRUE)
+  x <- sample.int(3, 1e6, TRUE)
   out <- data_tabulate(x, name = "Large Number")
   expect_identical(
     attributes(out),
@@ -120,7 +149,7 @@ test_that("data_tabulate print multiple", {
 
 test_that("data_tabulate big numbers", {
   set.seed(123)
-  x <- sample(1:5, size = 1e7, TRUE)
+  x <- sample.int(5, size = 1e7, TRUE)
   expect_snapshot(data_tabulate(x))
   expect_snapshot(print(data_tabulate(x), big_mark = "-"))
 })
