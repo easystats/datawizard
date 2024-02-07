@@ -32,18 +32,18 @@ character vector is provided, you may not add further elements to \code{...}.
 Example: \code{Petal.Width = NULL}.
 }
 
-Note that newly created variables can be used in subsequent expressions.
-See also 'Examples'.}
+Note that newly created variables can be used in subsequent expressions,
+including \code{.at} or \code{.if}. See also 'Examples'.}
 
 \item{.if}{A function that returns \code{TRUE} for columns in the data frame where
 \code{.if} applies. This argument is used in combination with the \code{.modify} argument.
 Note that only one of \code{.at} or \code{.if} can be provided, but not both at the same
-time. Newly created variables in \code{...} are not affected by \code{.if}.}
+time. Newly created variables in \code{...} can also be selected, see 'Examples'.}
 
 \item{.at}{A character vector of variable names that should be modified. This
 argument is used in combination with the \code{.modify} argument. Note that only one
 of \code{.at} or \code{.if} can be provided, but not both at the same time. Newly created
-variables in \code{...} are not affected by \code{.at}.}
+variables in \code{...} can also be selected, see 'Examples'.}
 
 \item{.modify}{A function that modifies the variables defined in \code{.at} or \code{.if}.
 This argument is used in combination with either the \code{.at} or the \code{.if} argument.
@@ -130,15 +130,13 @@ data_modify(d, .if = is.factor, .modify = as.numeric)
 # can be combined with dots
 data_modify(d, new_length = Petal.Length * 2, .at = "Species", .modify = as.numeric)
 
-# note that new variables cannot be used in `.at` or `.if` arguments
-# this example would throw an error
-\dontrun{
+# new variables used in `.at` or `.if`
 data_modify(
   d,
   new_length = Petal.Length * 2,
-  .at = c("Species", "new_length"),
-  .modify = as.numeric
-)}
+  .at = c("Petal.Length", "new_length"),
+  .modify = round
+)
 
 # combine "data_find()" and ".at" argument
 out <- data_modify(

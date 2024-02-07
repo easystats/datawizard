@@ -23,17 +23,17 @@
 #' - Using `NULL` as right-hand side removes a variable from the data frame.
 #'   Example: `Petal.Width = NULL`.
 #'
-#' Note that newly created variables can be used in subsequent expressions.
-#' See also 'Examples'.
+#' Note that newly created variables can be used in subsequent expressions,
+#' including `.at` or `.if`. See also 'Examples'.
 #'
 #' @param .at A character vector of variable names that should be modified. This
 #' argument is used in combination with the `.modify` argument. Note that only one
 #' of `.at` or `.if` can be provided, but not both at the same time. Newly created
-#' variables in `...` are not affected by `.at`.
+#' variables in `...` can also be selected, see 'Examples'.
 #' @param .if A function that returns `TRUE` for columns in the data frame where
 #' `.if` applies. This argument is used in combination with the `.modify` argument.
 #' Note that only one of `.at` or `.if` can be provided, but not both at the same
-#' time. Newly created variables in `...` are not affected by `.if`.
+#' time. Newly created variables in `...` can also be selected, see 'Examples'.
 #' @param .modify A function that modifies the variables defined in `.at` or `.if`.
 #' This argument is used in combination with either the `.at` or the `.if` argument.
 #' Note that the modified variable (i.e. the result from `.modify`) must be either
@@ -113,15 +113,13 @@
 #' # can be combined with dots
 #' data_modify(d, new_length = Petal.Length * 2, .at = "Species", .modify = as.numeric)
 #'
-#' # note that new variables cannot be used in `.at` or `.if` arguments
-#' # this example would throw an error
-#' \dontrun{
+#' # new variables used in `.at` or `.if`
 #' data_modify(
 #'   d,
 #'   new_length = Petal.Length * 2,
-#'   .at = c("Species", "new_length"),
-#'   .modify = as.numeric
-#' )}
+#'   .at = c("Petal.Length", "new_length"),
+#'   .modify = round
+#' )
 #'
 #' # combine "data_find()" and ".at" argument
 #' out <- data_modify(
@@ -146,7 +144,6 @@ data_modify.default <- function(data, ...) {
 #' @export
 data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = NULL) {
   dots <- eval(substitute(alist(...)))
-  column_names <- colnames(data)
 
   # check if we have dots, or only at/modify ----
 
@@ -248,7 +245,7 @@ data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   }
 
   # check if we have at/modify ----
-  data <- .modify_at(data, .at, .if, .modify, column_names)
+  data <- .modify_at(data, .at, .if, .modify)
 
   data
 }
@@ -258,7 +255,6 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # we need to evaluate dots here, and pass them with "do.call" to
   # the data.frame method later...
   dots <- match.call(expand.dots = FALSE)[["..."]]
-  column_names <- colnames(data)
 
   # works only for dplyr >= 0.8.0
   grps <- attr(data, "groups", exact = TRUE)
@@ -313,7 +309,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   }
 
   # check if we have at/modify ----
-  data <- .modify_at(data, .at, .if, .modify, column_names)
+  data <- .modify_at(data, .at, .if, .modify)
 
   # set back attributes and class
   data <- .replace_attrs(data, attr_data)
@@ -324,7 +320,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 
 # helper -------------
 
-.modify_at <- function(data, .at, .if, .modify, column_names) {
+.modify_at <- function(data, .at, .if, .modify) {
   # check if ".at" or ".if" is defined, but not ".modify"
   if (is.null(.modify)) {
     if (!is.null(.at) || !is.null(.if)) {
@@ -345,9 +341,11 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     insight::format_error("You need to specify either `.at` or `.if`.")
   }
 
+  column_names <- colnames(data)
+
   # if we have ".if" defined, specify ".at"
   if (!is.null(.if)) {
-    .at <- column_names[vapply(data[column_names], .if, logical(1))]
+    .at <- column_names[vapply(data, .if, logical(1))]
   }
   # check for valid defined column names
   if (!all(.at %in% column_names)) {
