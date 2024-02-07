@@ -118,7 +118,7 @@ test_that("data_tabulate data.frame", {
 
 test_that("data_tabulate print", {
   set.seed(123)
-  x <- sample(1:3, 1e6, TRUE)
+  x <- sample.int(3, 1e6, TRUE)
   out <- data_tabulate(x, name = "Large Number")
   expect_identical(
     attributes(out),
@@ -149,7 +149,7 @@ test_that("data_tabulate print multiple", {
 
 test_that("data_tabulate big numbers", {
   set.seed(123)
-  x <- sample(1:5, size = 1e7, TRUE)
+  x <- sample.int(5, size = 1e7, TRUE)
   expect_snapshot(data_tabulate(x))
   expect_snapshot(print(data_tabulate(x), big_mark = "-"))
 })
