@@ -26,6 +26,19 @@
 #' Note that newly created variables can be used in subsequent expressions.
 #' See also 'Examples'.
 #'
+#' @param .at A character vector of variable names that should be modified. This
+#' argument is used in combination with the `.modify` argument. Note that only one
+#' of `.at` or `.if` can be provided, but not both at the same time. Newly created
+#' variables in `...` are not affected by `.at`.
+#' @param .if A function that returns `TRUE` for columns in the data frame where
+#' `.if` applies. This argument is used in combination with the `.modify` argument.
+#' Note that only one of `.at` or `.if` can be provided, but not both at the same
+#' time. Newly created variables in `...` are not affected by `.if`.
+#' @param .modify A function that modifies the variables defined in `.at` or `.if`.
+#' This argument is used in combination with either the `.at` or the `.if` argument.
+#' Note that the modified variable (i.e. the result from `.modify`) must be either
+#' of length 1 or of same length as the input variable.
+#'
 #' @note `data_modify()` can also be used inside functions. However, it is
 #' recommended to pass the recode-expression as character vector or list of
 #' characters.
@@ -91,6 +104,34 @@
 #'
 #' new_exp <- c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")
 #' foo(iris, new_exp)
+#'
+#' # modify at specific positions or if condition is met
+#' d <- iris[1:5, ]
+#' data_modify(d, .at = "Species", .modify = as.numeric)
+#' data_modify(d, .if = is.factor, .modify = as.numeric)
+#'
+#' # can be combined with dots
+#' data_modify(d, new_length = Petal.Length * 2, .at = "Species", .modify = as.numeric)
+#'
+#' # note that new variables cannot be used in `.at` or `.if` arguments
+#' # this example would throw an error
+#' \dontrun{
+#' data_modify(
+#'   d,
+#'   new_length = Petal.Length * 2,
+#'   .at = c("Species", "new_length"),
+#'   .modify = as.numeric
+#' )}
+#' 
+#' # combine "data_find()" and ".at" argument
+#' out <- data_modify(
+#'   d,
+#'   .at = data_find(d, select = starts_with("Sepal")),
+#'   .modify = as.factor
+#' )
+#' # "Sepal.Length" and "Sepal.Width" are now factors
+#' str(out)
+#'
 #' @export
 data_modify <- function(data, ...) {
   UseMethod("data_modify")
@@ -101,114 +142,123 @@ data_modify.default <- function(data, ...) {
   insight::format_error("`data` must be a data frame.")
 }
 
+#' @rdname data_modify
 #' @export
-data_modify.data.frame <- function(data, ...) {
+data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = NULL) {
   dots <- eval(substitute(alist(...)))
   column_names <- colnames(data)
 
-  # we check for character vector of expressions, in which case
-  # "dots" should be unnamed
-  if (is.null(names(dots))) {
-    # if we have multiple strings, concatenate them to a character vector
-    # and put it into a list...
-    if (length(dots) > 1) {
-      if (all(vapply(dots, is.character, logical(1)))) {
-        dots <- list(unlist(dots))
-      } else {
-        insight::format_error("You cannot mix string and literal representation of expressions.")
+  # check if we have dots, or only at/modify ----
+
+  if (length(dots)) {
+    # we check for character vector of expressions, in which case
+    # "dots" should be unnamed
+    if (is.null(names(dots))) {
+      # if we have multiple strings, concatenate them to a character vector
+      # and put it into a list...
+      if (length(dots) > 1) {
+        if (all(vapply(dots, is.character, logical(1)))) {
+          dots <- list(unlist(dots))
+        } else {
+          insight::format_error("You cannot mix string and literal representation of expressions.")
+        }
+      }
+      # expression is given as character string, e.g.
+      # a <- "double_SepWidth = 2 * Sepal.Width"
+      # data_modify(iris, a)
+      # or as character vector, e.g.
+      # data_modify(iris, c("var_a = Sepal.Width / 10", "var_b = Sepal.Width * 10"))
+      character_symbol <- tryCatch(.dynEval(dots[[1]]), error = function(e) NULL)
+      # do we have a character vector? Then we can proceed
+      if (is.character(character_symbol)) {
+        dots <- lapply(character_symbol, function(s) {
+          # turn value from character vector into expression
+          str2lang(.dynEval(s))
+        })
+        names(dots) <- vapply(dots, function(n) insight::safe_deparse(n[[2]]), character(1))
       }
     }
-    # expression is given as character string, e.g.
-    # a <- "double_SepWidth = 2 * Sepal.Width"
-    # data_modify(iris, a)
-    # or as character vector, e.g.
-    # data_modify(iris, c("var_a = Sepal.Width / 10", "var_b = Sepal.Width * 10"))
-    character_symbol <- tryCatch(.dynEval(dots[[1]]), error = function(e) NULL)
-    # do we have a character vector? Then we can proceed
-    if (is.character(character_symbol)) {
-      dots <- lapply(character_symbol, function(s) {
-        # turn value from character vector into expression
-        str2lang(.dynEval(s))
-      })
-      names(dots) <- vapply(dots, function(n) insight::safe_deparse(n[[2]]), character(1))
-    }
-  }
 
-  for (i in seq_along(dots)) {
-    # iterate expressions for new variables
-    symbol <- dots[[i]]
+    for (i in seq_along(dots)) {
+      # iterate expressions for new variables
+      symbol <- dots[[i]]
 
-    # expression is given as character string in a variable, but named, e.g.
-    # a <- "2 * Sepal.Width"
-    # data_modify(iris, double_SepWidth = a)
-    # we reconstruct the symbol as if it were provided as literal expression.
-    # However, we need to check that we don't have a character vector,
-    # like: data_modify(iris, new_var = "a")
-    # this one should be recycled instead.
-    if (!is.character(symbol)) {
-      eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
-      if (is.character(eval_symbol)) {
-        symbol <- try(str2lang(paste0(names(dots)[i], " = ", eval_symbol)), silent = TRUE)
-        # we may have the edge-case of having a function that returns a character
-        # vector, like "new_var = sample(letters[1:3])". In this case, "eval_symbol"
-        # is of type character, but no symbol, thus str2lang() above creates a
-        # wrong pattern. We then take "eval_symbol" as character input.
-        if (inherits(symbol, "try-error")) {
-          symbol <- str2lang(paste0(
-            names(dots)[i],
-            " = c(", paste0("\"", eval_symbol, "\"", collapse = ","), ")"
+      # expression is given as character string in a variable, but named, e.g.
+      # a <- "2 * Sepal.Width"
+      # data_modify(iris, double_SepWidth = a)
+      # we reconstruct the symbol as if it were provided as literal expression.
+      # However, we need to check that we don't have a character vector,
+      # like: data_modify(iris, new_var = "a")
+      # this one should be recycled instead.
+      if (!is.character(symbol)) {
+        eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
+        if (is.character(eval_symbol)) {
+          symbol <- try(str2lang(paste0(names(dots)[i], " = ", eval_symbol)), silent = TRUE)
+          # we may have the edge-case of having a function that returns a character
+          # vector, like "new_var = sample(letters[1:3])". In this case, "eval_symbol"
+          # is of type character, but no symbol, thus str2lang() above creates a
+          # wrong pattern. We then take "eval_symbol" as character input.
+          if (inherits(symbol, "try-error")) {
+            symbol <- str2lang(paste0(
+              names(dots)[i],
+              " = c(", paste0("\"", eval_symbol, "\"", collapse = ","), ")"
+            ))
+          }
+        }
+      }
+
+      # finally, we can evaluate expression and get values for new variables
+      new_variable <- try(with(data, eval(symbol)), silent = TRUE)
+
+      # successful, or any errors, like misspelled variable name?
+      if (inherits(new_variable, "try-error")) {
+        # in which step did error happen?
+        step_number <- switch(as.character(i),
+          "1" = "the first expression",
+          "2" = "the second expression",
+          "3" = "the third expression",
+          paste("expression", i)
+        )
+        step_msg <- paste0("There was an error in ", step_number, ".")
+        # try to find out which variable was the cause for the error
+        error_msg <- attributes(new_variable)$condition$message
+        if (grepl("object '(.*)' not found", error_msg)) {
+          error_var <- gsub("object '(.*)' not found", "\\1", error_msg)
+          insight::format_error(
+            paste0(step_msg, " Variable \"", error_var, "\" was not found in the dataset or in the environment."),
+            .misspelled_string(colnames(data), error_var, "Possibly misspelled or not yet defined?")
+          )
+        } else {
+          insight::format_error(paste0(
+            step_msg, " ", insight::format_capitalize(error_msg),
+            ". Possibly misspelled or not yet defined?"
           ))
         }
       }
-    }
 
-    # finally, we can evaluate expression and get values for new variables
-    new_variable <- try(with(data, eval(symbol)), silent = TRUE)
-
-    # successful, or any errors, like misspelled variable name?
-    if (inherits(new_variable, "try-error")) {
-      # in which step did error happen?
-      step_number <- switch(as.character(i),
-        "1" = "the first expression",
-        "2" = "the second expression",
-        "3" = "the third expression",
-        paste("expression", i)
-      )
-      step_msg <- paste0("There was an error in ", step_number, ".")
-      # try to find out which variable was the cause for the error
-      error_msg <- attributes(new_variable)$condition$message
-      if (grepl("object '(.*)' not found", error_msg)) {
-        error_var <- gsub("object '(.*)' not found", "\\1", error_msg)
+      # give informative error when new variable doesn't match number of rows
+      if (!is.null(new_variable) && length(new_variable) != nrow(data) && (nrow(data) %% length(new_variable)) != 0) {
         insight::format_error(
-          paste0(step_msg, " Variable \"", error_var, "\" was not found in the dataset or in the environment."),
-          .misspelled_string(colnames(data), error_var, "Possibly misspelled or not yet defined?")
+          "New variable has not the same length as the other variables in the data frame and cannot be recycled."
         )
-      } else {
-        insight::format_error(paste0(
-          step_msg, " ", insight::format_capitalize(error_msg),
-          ". Possibly misspelled or not yet defined?"
-        ))
       }
-    }
 
-    # give informative error when new variable doesn't match number of rows
-    if (!is.null(new_variable) && length(new_variable) != nrow(data) && (nrow(data) %% length(new_variable)) != 0) {
-      insight::format_error(
-        "New variable has not the same length as the other variables in the data frame and cannot be recycled."
-      )
+      data[[names(dots)[i]]] <- new_variable
     }
-
-    data[[names(dots)[i]]] <- new_variable
   }
+
+  # check if we have at/modify ----
+  data <- .modify_at(data, .at, .if, .modify, column_names)
 
   data
 }
 
 #' @export
-data_modify.grouped_df <- function(data, ...) {
+data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = NULL) {
   # we need to evaluate dots here, and pass them with "do.call" to
   # the data.frame method later...
-  dots <- match.call(expand.dots = FALSE)$`...`
+  dots <- match.call(expand.dots = FALSE)[["..."]]
+  column_names <- colnames(data)
 
   # works only for dplyr >= 0.8.0
   grps <- attr(data, "groups", exact = TRUE)
@@ -262,8 +312,68 @@ data_modify.grouped_df <- function(data, ...) {
     data[rows, ] <- data_modify.data.frame(data[rows, ], ...)
   }
 
+  # check if we have at/modify ----
+  data <- .modify_at(data, .at, .if, .modify, column_names)
+
   # set back attributes and class
   data <- .replace_attrs(data, attr_data)
   class(data) <- class_attr
+  data
+}
+
+
+# helper -------------
+
+.modify_at <- function(data, .at, .if, .modify, column_names) {
+  # check if ".at" or ".if" is defined, but not ".modify"
+  if (is.null(.modify)) {
+    if (!is.null(.at) || !is.null(.if)) {
+      insight::format_error("You need to specify `.modify` when using `.at` or `.if`.")
+    }
+    return(data)
+  }
+  # make sure "modify" is a function
+  if (!is.function(.modify)) {
+    insight::format_error("`.modify` must be a function.")
+  }
+  # make sure either .at or .if is defined, not both
+  if (!is.null(.at) && !is.null(.if)) {
+    insight::format_error("You cannot use both `.at` and `.if` at the same time.")
+  }
+  # make sure at least one of .at or .if is defined
+  if (is.null(.at) && is.null(.if)) {
+    insight::format_error("You need to specify either `.at` or `.if`.")
+  }
+
+  # if we have ".if" defined, specify ".at"
+  if (!is.null(.if)) {
+    .at <- column_names[vapply(data[column_names], .if, logical(1))]
+  }
+  # check for valid defined column names
+  if (!all(.at %in% column_names)) {
+    not_found <- .at[!.at %in% column_names]
+    insight::format_error(
+      paste0(
+        "Variable",
+        ifelse(length(not_found) > 1, "s ", " "),
+        text_concatenate(not_found, enclose = "\""),
+        ifelse(length(not_found) > 1, " were", " was"),
+        " not found in the dataset."
+      ),
+      .misspelled_string(column_names, not_found, "Possibly misspelled or not yet defined?")
+    )
+  }
+  for (i in .at) {
+    result <- tryCatch(.modify(data[[i]]), warning = function(e) e, error = function(e) e)
+    if (inherits(result, c("error", "warning"))) {
+      insight::format_error(
+        paste0("Error in modifying variable \"", i, "\": ", result$message),
+        "Please check if you correctly specified the `.modify` function."
+      )
+    } else {
+      data[[i]] <- result
+    }
+  }
+
   data
 }

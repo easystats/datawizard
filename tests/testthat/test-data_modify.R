@@ -490,3 +490,54 @@ test_that("data_modify works with functions that return character vectors", {
   out <- data_modify(iris, grp = sample(letters[1:3], nrow(iris), TRUE))
   expect_identical(head(out$grp), c("c", "c", "c", "b", "c", "b"))
 })
+
+
+test_that("data_modify .if/.at arguments", {
+  data(iris)
+  d <- iris[1:5, ]
+  out <- data_modify(d, .at = "Species", .modify = as.numeric)
+  expect_identical(out$Species, c(1, 1, 1, 1, 1))
+  out <- data_modify(d, .if = is.factor, .modify = as.numeric)
+  expect_identical(out$Species, c(1, 1, 1, 1, 1))
+  out <- data_modify(d, new_length = Petal.Length * 2, .at = "Species", .modify = as.numeric)
+  expect_identical(out$Species, c(1, 1, 1, 1, 1))
+  expect_named(out, c(
+    "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
+    "Species", "new_length"
+  ))
+  expect_error(
+    data_modify(d, .at = "Species", .if = is.factor, .modify = as.numeric),
+    regex = "You cannot use both"
+  )
+  expect_error(
+    data_modify(d, .at = "Species", .modify = "a"),
+    regex = "`.modify` must"
+  )
+  expect_error(
+    data_modify(d, .at = c("Species", "Test"), .modify = as.numeric),
+    regex = "Variable \"Test\""
+  )
+  expect_error(
+    data_modify(d, .at = c("Species", "Hi", "Test"), .modify = as.numeric),
+    regex = "Variables \"Hi\" and \"Test\""
+  )
+  expect_error(
+    data_modify(d, .modify = as.numeric),
+    regex = "You need to specify"
+  )
+  expect_error(
+    data_modify(d, .at = "Species", .modify = function(x) 2 / y + x),
+    regex = "Error in modifying variable"
+  )
+  expect_error(
+    data_modify(d, .at = "Species", .modify = function(x) 2 * x),
+    regex = "Error in modifying variable"
+  )
+  expect_error(
+    data_modify(d, .at = "Species", .if = is.factor),
+    regex = "You need to specify"
+  )
+  # newly created variables are not modified by if/at
+  out <- data_modify(d, new_length = Petal.Length * 2, .if = is.numeric, .modify = as.factor)
+  expect_identical(out$new_length, c(2.8, 2.8, 2.6, 3, 2.8))
+})
