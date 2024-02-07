@@ -13,6 +13,8 @@
 #' for printing.
 #' @param collapse Logical, if `TRUE` collapses multiple tables into one larger
 #' table for printing. This affects only printing, not the returned object.
+#' @param weights Optional numeric vector of weights. Must be of the same length
+#' as `x`. If `weights` is supplied, weighted frequencies are calculated.
 #' @param ... not used.
 #' @inheritParams find_columns
 #'
@@ -46,6 +48,12 @@
 #'
 #' # to remove the big mark, use "print(..., big_mark = "")"
 #' print(data_tabulate(x), big_mark = "")
+#'
+#' # weighted frequencies
+#' set.seed(123)
+#' efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+#' data_tabulate(efc$e42dep, weights = efc$weights)
+#'
 #' @export
 data_tabulate <- function(x, ...) {
   UseMethod("data_tabulate")
@@ -54,7 +62,7 @@ data_tabulate <- function(x, ...) {
 
 #' @rdname data_tabulate
 #' @export
-data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose = TRUE, ...) {
+data_tabulate.default <- function(x, drop_levels = FALSE, weights = NULL, name = NULL, verbose = TRUE, ...) {
   # save label attribute, before it gets lost...
   var_label <- attr(x, "label", exact = TRUE)
 
@@ -70,8 +78,26 @@ data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose =
     x <- droplevels(x)
   }
 
+  # check for correct length of weights - must be equal to "x"
+  if (!is.null(weights) && length(weights) != length(x)) {
+    insight::format_error("Length of weights must be equal to length of `x`.")
+  }
+
   # frequency table
-  freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
+  if (is.null(weights)) {
+    freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
+  } else {
+    # weighted frequency table
+    freq_table <- tryCatch(
+      stats::xtabs(
+        weights ~ x,
+        data = data.frame(weights = weights, x = x),
+        na.action = stats::na.pass,
+        addNA = TRUE
+      ),
+      error = function(e) NULL
+    )
+  }
 
   if (is.null(freq_table)) {
     insight::format_warning(paste0("Can't compute frequency tables for objects of class `", class(x)[1], "`."))
@@ -82,6 +108,11 @@ data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose =
   out <- data_rename(data.frame(freq_table, stringsAsFactors = FALSE),
     replacement = c("Value", "N")
   )
+
+  # we want to round N for weighted frequencies
+  if (!is.null(weights)) {
+    out$N <- round(out$N)
+  }
 
   out$`Raw %` <- 100 * out$N / sum(out$N)
   out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
@@ -129,6 +160,7 @@ data_tabulate.data.frame <- function(x,
                                      regex = FALSE,
                                      collapse = FALSE,
                                      drop_levels = FALSE,
+                                     weights = NULL,
                                      verbose = TRUE,
                                      ...) {
   # evaluate arguments
@@ -140,7 +172,7 @@ data_tabulate.data.frame <- function(x,
     verbose = verbose
   )
   out <- lapply(select, function(i) {
-    data_tabulate(x[[i]], drop_levels = drop_levels, name = i, verbose = verbose, ...)
+    data_tabulate(x[[i]], drop_levels = drop_levels, weights = weights, name = i, verbose = verbose, ...)
   })
 
   class(out) <- c("dw_data_tabulates", "list")
@@ -159,6 +191,7 @@ data_tabulate.grouped_df <- function(x,
                                      verbose = TRUE,
                                      collapse = FALSE,
                                      drop_levels = FALSE,
+                                     weights = NULL,
                                      ...) {
   # works only for dplyr >= 0.8.0
   grps <- attr(x, "groups", exact = TRUE)
@@ -191,6 +224,7 @@ data_tabulate.grouped_df <- function(x,
       ignore_case = ignore_case,
       verbose = verbose,
       drop_levels = drop_levels,
+      weights = weights,
       group_variable = group_variable,
       ...
     ))

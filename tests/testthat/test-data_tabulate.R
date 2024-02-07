@@ -32,6 +32,29 @@ test_that("data_tabulate numeric", {
 })
 
 
+test_that("data_tabulate, weights", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  # vector/factor
+  out1 <- data_tabulate(efc$e42dep, weights = efc$weights)
+  out2 <- data_tabulate(efc$e42dep)
+  expect_identical(out1$N, c(3, 4, 26, 67, 5))
+  expect_identical(out2$N, c(2L, 4L, 28L, 63L, 3L))
+  expect_equal(
+    out1$N,
+    round(xtabs(efc$weights ~ efc$e42dep, addNA = TRUE)),
+    ignore_attr = TRUE
+  )
+  # data frames
+  out <- data_tabulate(efc, c("e42dep", "e16sex"), weights = efc$weights)
+  expect_identical(out[[1]]$N, out1$N)
+  # mismatch of lengths
+  w <- c(efc$weights, 1)
+  expect_error(data_tabulate(efc$e42dep, weights = w), regex = "Length of weights")
+})
+
+
 test_that("data_tabulate data.frame", {
   x <- data_tabulate(efc, c("e16sex", "c172code"))
   expect_s3_class(x, "list")
