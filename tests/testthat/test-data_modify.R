@@ -495,6 +495,7 @@ test_that("data_modify works with functions that return character vectors", {
 test_that("data_modify .if/.at arguments", {
   data(iris)
   d <- iris[1:5, ]
+  # validate results
   out <- data_modify(d, .at = "Species", .modify = as.numeric)
   expect_identical(out$Species, c(1, 1, 1, 1, 1))
   out <- data_modify(d, .if = is.factor, .modify = as.numeric)
@@ -505,39 +506,47 @@ test_that("data_modify .if/.at arguments", {
     "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
     "Species", "new_length"
   ))
+  # .at and .if cannot be used at same timne
   expect_error(
     data_modify(d, .at = "Species", .if = is.factor, .modify = as.numeric),
     regex = "You cannot use both"
   )
+  # modify must be a function
   expect_error(
     data_modify(d, .at = "Species", .modify = "a"),
     regex = "`.modify` must"
   )
+  # unknown variable
   expect_error(
     data_modify(d, .at = c("Species", "Test"), .modify = as.numeric),
     regex = "Variable \"Test\""
   )
+  # unknown variables
   expect_error(
     data_modify(d, .at = c("Species", "Hi", "Test"), .modify = as.numeric),
     regex = "Variables \"Hi\" and \"Test\""
   )
+  # one of .at or .if must be specified
   expect_error(
     data_modify(d, .modify = as.numeric),
     regex = "You need to specify"
   )
+  # function not applicable to factors
   expect_error(
     data_modify(d, .at = "Species", .modify = function(x) 2 / y + x),
     regex = "Error in modifying variable"
   )
+  # function not applicable to factors
   expect_error(
     data_modify(d, .at = "Species", .modify = function(x) 2 * x),
     regex = "Error in modifying variable"
   )
+  # .modify needs to be specified
   expect_error(
     data_modify(d, .at = "Species", .if = is.factor),
     regex = "You need to specify"
   )
-  # newly created variables are not modified by if/at
-  out <- data_modify(d, new_length = Petal.Length * 2, .if = is.numeric, .modify = as.factor)
-  expect_identical(out$new_length, c(2.8, 2.8, 2.6, 3, 2.8))
+  # newly created variables are processed by if/at
+  out <- data_modify(d, new_length = Petal.Length * 2, .if = is.numeric, .modify = round)
+  expect_equal(out$new_length, c(3, 3, 3, 3, 3), ignore_attr = TRUE)
 })
