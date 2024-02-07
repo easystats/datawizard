@@ -80,7 +80,7 @@ data_tabulate.default <- function(x, drop_levels = FALSE, weights = NULL, name =
 
   # check for correct length of weights - must be equal to "x"
   if (!is.null(weights) && length(weights) != length(x)) {
-    insight::format_error("Length of weights must be equal to length of `x`.")
+    insight::format_error("Length of `weights` must be equal to length of `x`.")
   }
 
   # frequency table
