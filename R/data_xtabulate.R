@@ -166,7 +166,6 @@ print.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
     format(x, big_mark = big_mark, ...),
     cross = "+",
     missing = "<NA>",
-    footer = summary_line,
     caption = caption,
     empty_line = "-"
   ))
