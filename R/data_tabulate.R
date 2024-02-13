@@ -99,7 +99,16 @@ data_tabulate.default <- function(x,
   # we go into another function for crosstables here...
   if (!is.null(by)) {
     by <- .validate_by(by, x)
-    return(.crosstable(x, by, weights, proportions, obj_name, group_variable, ...))
+    return(.crosstable(
+      x,
+      by = by,
+      weights = weights,
+      include_na = include_na,
+      proportions = proportions,
+      obj_name = obj_name,
+      group_variable = group_variable,
+      ...
+    ))
   }
 
   # frequency table
