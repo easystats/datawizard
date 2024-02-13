@@ -49,6 +49,7 @@
 
   out <- as.data.frame(stats::ftable(x_table))
   colnames(out) <- c("Value", "by", "N")
+  total_n <- sum(out$N, na.rm = TRUE)
 
   out <- data_to_wide(out, values_from = "N", names_from = "by")
 
@@ -65,7 +66,7 @@
     out <- cbind(out[1], data.frame(Group = var_info, stringsAsFactors = FALSE), out[-1])
   }
 
-  attr(out, "total_n") <- sum(out$N, na.rm = TRUE)
+  attr(out, "total_n") <- total_n
   attr(out, "weights") <- weights
   attr(out, "proportions") <- proportions
 
