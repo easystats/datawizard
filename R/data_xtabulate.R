@@ -82,6 +82,9 @@
 }
 
 
+# methods ---------------------
+
+
 #' @export
 format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = NULL, ...) {
   # convert to character manually, else, for large numbers,
