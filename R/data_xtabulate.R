@@ -151,7 +151,7 @@ format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = 
   # Remove ".00" from numbers
   ftab$Total <- gsub("\\.00$", "", as.character(total_column))
   # for text format, insert "empty row" before last total row
-  if (identical(format, "text")) {
+  if (identical(format, "text") || identical(format, "markdown")) {
     sub <- as.data.frame(t(data.frame(
       rep("", ncol(ftab)),
       c("Total", as.character(total_row)),
@@ -194,6 +194,28 @@ print.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
     empty_line = "-"
   ))
   invisible(x)
+}
+
+
+#' @export
+print_md.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
+  # grouped data? if yes, add information on grouping factor
+  if (is.null(x[["Group"]])) {
+    caption <- NULL
+  } else {
+    caption <- paste0("Grouped by ", x[["Group"]][1])
+    x$Group <- NULL
+  }
+
+  # print table
+  insight::export_table(
+    format(x, format = "markdown", big_mark = big_mark, ...),
+    cross = "+",
+    missing = "<NA>",
+    caption = caption,
+    empty_line = "-",
+    format = "markdown"
+  )
 }
 
 
