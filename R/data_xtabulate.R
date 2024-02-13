@@ -88,6 +88,9 @@ format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = 
   # format_table() returns scientific notation
   x <- as.data.frame(x)
 
+  # remove group variable
+  x$Group <- NULL
+
   # compute total N for rows and colummns
   total_n <- attributes(x)$total_n
   total_column <- rowSums(x[, -1], na.rm = TRUE)
@@ -166,6 +169,7 @@ print.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
     caption <- NULL
   } else {
     caption <- paste0("Grouped by ", x[["Group"]][1])
+    x$Group <- NULL
   }
 
   # print table
