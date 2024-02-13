@@ -46,8 +46,8 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
   dont_exist <- select[which(!select %in% names(data))]
 
   if (length(dont_exist) > 0) {
-    if (!safe) {
-      insight::format_error(
+    if (safe) {
+      insight::format_warning(
         paste0(
           "The following column(s) don't exist in the dataset: ",
           text_concatenate(dont_exist), "."
@@ -55,7 +55,7 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
         .misspelled_string(names(data), dont_exist, "Possibly misspelled?")
       )
     } else {
-      insight::format_warning(
+      insight::format_error(
         paste0(
           "The following column(s) don't exist in the dataset: ",
           text_concatenate(dont_exist), "."

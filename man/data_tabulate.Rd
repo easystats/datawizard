@@ -10,8 +10,11 @@ data_tabulate(x, ...)
 
 \method{data_tabulate}{default}(
   x,
+  by = NULL,
   drop_levels = FALSE,
   weights = NULL,
+  include_na = TRUE,
+  proportions = NULL,
   name = NULL,
   verbose = TRUE,
   ...
@@ -23,9 +26,12 @@ data_tabulate(x, ...)
   exclude = NULL,
   ignore_case = FALSE,
   regex = FALSE,
-  collapse = FALSE,
+  by = NULL,
   drop_levels = FALSE,
   weights = NULL,
+  include_na = TRUE,
+  proportions = NULL,
+  collapse = FALSE,
   verbose = TRUE,
   ...
 )
@@ -35,12 +41,19 @@ data_tabulate(x, ...)
 
 \item{...}{not used.}
 
+\item{by}{Optional vector or factor. If supplied, a crosstable is created.
+If \code{x} is a data frame, \code{by} can also be a character string indicating the
+name of a variable in \code{x}.}
+
 \item{drop_levels}{Logical, if \code{TRUE}, factor levels that do not occur in
 the data are included in the table (with frequency of zero), else unused
 factor levels are dropped from the frequency table.}
 
 \item{weights}{Optional numeric vector of weights. Must be of the same length
 as \code{x}. If \code{weights} is supplied, weighted frequencies are calculated.}
+
+\item{include_na}{Logical, if \code{TRUE}, missing values are included in the
+frequency or cross table, else missing values are omitted.}
 
 \item{name}{Optional character string, which includes the name that is used
 for printing.}

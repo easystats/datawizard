@@ -6,11 +6,16 @@
 #' cumulative percentages.
 #'
 #' @param x A (grouped) data frame, a vector or factor.
+#' @param by Optional vector or factor. If supplied, a crosstable is created.
+#' If `x` is a data frame, `by` can also be a character string indicating the
+#' name of a variable in `x`.
 #' @param drop_levels Logical, if `TRUE`, factor levels that do not occur in
 #' the data are included in the table (with frequency of zero), else unused
 #' factor levels are dropped from the frequency table.
 #' @param name Optional character string, which includes the name that is used
 #' for printing.
+#' @param include_na Logical, if `TRUE`, missing values are included in the
+#' frequency or cross table, else missing values are omitted.
 #' @param collapse Logical, if `TRUE` collapses multiple tables into one larger
 #' table for printing. This affects only printing, not the returned object.
 #' @param weights Optional numeric vector of weights. Must be of the same length
@@ -62,7 +67,15 @@ data_tabulate <- function(x, ...) {
 
 #' @rdname data_tabulate
 #' @export
-data_tabulate.default <- function(x, drop_levels = FALSE, weights = NULL, name = NULL, verbose = TRUE, ...) {
+data_tabulate.default <- function(x,
+                                  by = NULL,
+                                  drop_levels = FALSE,
+                                  weights = NULL,
+                                  include_na = TRUE,
+                                  proportions = NULL,
+                                  name = NULL,
+                                  verbose = TRUE,
+                                  ...) {
   # save label attribute, before it gets lost...
   var_label <- attr(x, "label", exact = TRUE)
 
@@ -83,20 +96,42 @@ data_tabulate.default <- function(x, drop_levels = FALSE, weights = NULL, name =
     insight::format_error("Length of `weights` must be equal to length of `x`.")
   }
 
+  # we go into another function for crosstables here...
+  if (!is.null(by)) {
+    by <- .validate_by(by, x)
+    return(.crosstable(x, by, weights, proportions, obj_name, group_variable, ...))
+  }
+
   # frequency table
   if (is.null(weights)) {
-    freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
+    if (include_na) {
+      freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
+    } else {
+      freq_table <- tryCatch(table(x), error = function(e) NULL)
+    }
   } else {
     # weighted frequency table
-    freq_table <- tryCatch(
-      stats::xtabs(
-        weights ~ x,
-        data = data.frame(weights = weights, x = x),
-        na.action = stats::na.pass,
-        addNA = TRUE
-      ),
-      error = function(e) NULL
-    )
+    if (include_na) {
+      freq_table <- tryCatch(
+        stats::xtabs(
+          weights ~ x,
+          data = data.frame(weights = weights, x = addNA(x)),
+          na.action = stats::na.pass,
+          addNA = TRUE
+        ),
+        error = function(e) NULL
+      )
+    } else {
+      freq_table <- tryCatch(
+        stats::xtabs(
+          weights ~ x,
+          data = data.frame(weights = weights, x = x),
+          na.action = stats::na.omit,
+          addNA = FALSE
+        ),
+        error = function(e) NULL
+      )
+    }
   }
 
   if (is.null(freq_table)) {
@@ -159,9 +194,12 @@ data_tabulate.data.frame <- function(x,
                                      exclude = NULL,
                                      ignore_case = FALSE,
                                      regex = FALSE,
-                                     collapse = FALSE,
+                                     by = NULL,
                                      drop_levels = FALSE,
                                      weights = NULL,
+                                     include_na = TRUE,
+                                     proportions = NULL,
+                                     collapse = FALSE,
                                      verbose = TRUE,
                                      ...) {
   # evaluate arguments
@@ -172,11 +210,24 @@ data_tabulate.data.frame <- function(x,
     regex = regex,
     verbose = verbose
   )
+  # validate "by"
+  by <- .validate_by(by, x)
+
   out <- lapply(select, function(i) {
-    data_tabulate(x[[i]], drop_levels = drop_levels, weights = weights, name = i, verbose = verbose, ...)
+    data_tabulate(
+      x[[i]],
+      by = by,
+      proportions = proportions,
+      drop_levels = drop_levels,
+      weights = weights,
+      include_na = include_na,
+      name = i,
+      verbose = verbose,
+      ...
+    )
   })
 
-  class(out) <- c("dw_data_tabulates", "list")
+  class(out) <- ifelse(is.null(by), c("dw_data_tabulates", "list"), c("dw_data_xtabulates", "list"))
   attr(out, "collapse") <- isTRUE(collapse)
   attr(out, "is_weighted") <- !is.null(weights)
 
@@ -190,10 +241,13 @@ data_tabulate.grouped_df <- function(x,
                                      exclude = NULL,
                                      ignore_case = FALSE,
                                      regex = FALSE,
-                                     verbose = TRUE,
-                                     collapse = FALSE,
+                                     by = NULL,
+                                     proportions = NULL,
                                      drop_levels = FALSE,
                                      weights = NULL,
+                                     include_na = TRUE,
+                                     collapse = FALSE,
+                                     verbose = TRUE,
                                      ...) {
   # works only for dplyr >= 0.8.0
   grps <- attr(x, "groups", exact = TRUE)
@@ -210,6 +264,7 @@ data_tabulate.grouped_df <- function(x,
   )
 
   x <- as.data.frame(x)
+
   out <- list()
   for (i in seq_along(grps)) {
     rows <- grps[[i]]
@@ -227,18 +282,19 @@ data_tabulate.grouped_df <- function(x,
       verbose = verbose,
       drop_levels = drop_levels,
       weights = weights,
+      include_na = include_na,
+      by = by,
+      proportions = proportions,
       group_variable = group_variable,
       ...
     ))
   }
-  class(out) <- c("dw_data_tabulates", "list")
+  class(out) <- ifelse(is.null(by), c("dw_data_tabulates", "list"), c("dw_data_xtabulates", "list"))
   attr(out, "collapse") <- isTRUE(collapse)
   attr(out, "is_weighted") <- !is.null(weights)
 
   out
 }
-
-
 
 
 # methods --------------------
@@ -284,7 +340,6 @@ format.dw_data_tabulate <- function(x, format = "text", big_mark = NULL, ...) {
 
   x
 }
-
 
 
 #' @export
