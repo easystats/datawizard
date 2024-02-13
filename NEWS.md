@@ -5,7 +5,10 @@ CHANGES
 * `data_modify()` gets three new arguments, `.at`, `.if` and `.modify`, to modify
   variables at specific positions or based on logical conditions.
 
-* `data_tabulate()` gets a `weights` argument, to compute weighted frequency tables.
+* `data_tabulate()` was revised and gets several new arguments: a `weights`
+  argument, to compute weighted frequency tables. `include_na` allows to include
+  or omit missing values from the table. Furthermore, a `by` argument was added,
+  to compute crosstables (#479, #481).
 
 # datawizard 0.9.1
 

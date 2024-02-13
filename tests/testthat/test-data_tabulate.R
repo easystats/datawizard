@@ -1,6 +1,5 @@
-data(efc)
-
 test_that("data_tabulate factor", {
+  data(efc, package = "datawizard")
   x <- data_tabulate(efc$e42dep)
   expect_identical(as.vector(x$Value), as.vector(sort(unique(
     addNA(efc$e42dep)
@@ -17,6 +16,7 @@ test_that("data_tabulate factor", {
 
 
 test_that("data_tabulate numeric", {
+  data(efc, package = "datawizard")
   x <- data_tabulate(efc$neg_c_7)
   expect_identical(as.vector(x$Value), as.vector(sort(unique(
     addNA(efc$neg_c_7)
@@ -29,6 +29,14 @@ test_that("data_tabulate numeric", {
     ignore_attr = TRUE,
     tolerance = 1e-3
   )
+})
+
+
+test_that("data_tabulate, HTML", {
+  skip_if_not_installed("gt")
+  data(efc, package = "datawizard")
+  expect_s3_class(print_html(data_tabulate(efc$c172code)), "gt_tbl")
+  expect_s3_class(print_html(data_tabulate(efc, "c172code")), "gt_tbl")
 })
 
 
@@ -62,6 +70,7 @@ test_that("data_tabulate, weights", {
 
 
 test_that("data_tabulate data.frame", {
+  data(efc, package = "datawizard")
   x <- data_tabulate(efc, c("e16sex", "c172code"))
   expect_s3_class(x, "list")
   expect_length(x, 2L)
@@ -116,6 +125,12 @@ test_that("data_tabulate data.frame", {
 })
 
 
+test_that("data_tabulate unsupported class", {
+  data(mtcars)
+  expect_warning(data_tabulate(lm(mpg ~ hp, data = mtcars)), regex = "Can't compute frequency tables")
+})
+
+
 test_that("data_tabulate print", {
   set.seed(123)
   x <- sample.int(3, 1e6, TRUE)
@@ -138,11 +153,13 @@ test_that("data_tabulate print", {
 
 
 test_that("data_tabulate print", {
+  data(efc, package = "datawizard")
   expect_snapshot(data_tabulate(efc$e42dep))
 })
 
 
 test_that("data_tabulate print multiple", {
+  data(efc, package = "datawizard")
   expect_snapshot(data_tabulate(efc, c("c172code", "e16sex")))
 })
 
@@ -157,6 +174,7 @@ test_that("data_tabulate big numbers", {
 
 test_that("data_tabulate print multiple, collapse", {
   skip_if_not(packageVersion("insight") > "0.17.0", "insight must be >= 0.17.0")
+  data(efc, package = "datawizard")
   expect_snapshot(data_tabulate(efc, c("c172code", "e16sex"), collapse = TRUE))
 })
 
@@ -164,6 +182,7 @@ test_that("data_tabulate print multiple, collapse", {
 
 test_that("data_tabulate grouped data.frame", {
   skip_if_not_installed("poorman")
+  data(efc, package = "datawizard")
   x <- data_tabulate(poorman::group_by(efc, e16sex), "c172code")
   expect_s3_class(x, "list")
   expect_length(x, 2L)
@@ -213,11 +232,13 @@ test_that("data_tabulate grouped data.frame", {
 
 test_that("data_tabulate print grouped data", {
   skip_if_not_installed("poorman")
+  data(efc, package = "datawizard")
   expect_snapshot(data_tabulate(poorman::group_by(efc, e16sex), "c172code"))
 })
 
 test_that("data_tabulate print, collapse groups", {
   skip_if_not_installed("poorman")
+  data(efc, package = "datawizard")
   expect_snapshot(
     data_tabulate(poorman::group_by(efc, e16sex), "c172code", collapse = TRUE)
   )
@@ -225,6 +246,7 @@ test_that("data_tabulate print, collapse groups", {
 
 test_that("data_tabulate print, collapse groups, drop levels", {
   skip_if_not_installed("poorman")
+  data(efc, package = "datawizard")
   expect_snapshot(
     data_tabulate(
       poorman::group_by(efc, e16sex),
@@ -235,11 +257,143 @@ test_that("data_tabulate print, collapse groups, drop levels", {
   )
 })
 
+test_that("data_tabulate drop levels", {
+  x <- factor(rep(letters[1:3], 3), levels = letters[1:5])
+  out1 <- data_tabulate(x, drop_levels = FALSE)
+  out2 <- data_tabulate(x, drop_levels = TRUE)
+  expect_identical(out1$N, c(3L, 3L, 3L, 0L, 0L, 0L))
+  expect_identical(as.character(out1$Value), c("a", "b", "c", "d", "e", NA))
+  expect_identical(out2$N, c(3L, 3L, 3L, 0L))
+  expect_identical(as.character(out2$Value), c("a", "b", "c", NA))
+})
+
 
 # select helpers ------------------------------
 test_that("data_tabulate regex", {
+  data(mtcars)
   expect_identical(
     data_tabulate(mtcars, select = "arb", regex = TRUE),
     data_tabulate(mtcars, select = "carb")
   )
+})
+
+
+# missing values ------------------------------
+
+test_that("data_tabulate exclude/include missing values", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+  out <- data_tabulate(efc$c172code)
+  expect_identical(out$N, c(8L, 66L, 16L, 10L))
+  out <- data_tabulate(efc$c172code, include_na = FALSE)
+  expect_identical(out$N, c(8L, 66L, 16L))
+  out <- data_tabulate(efc$c172code, weights = efc$weights)
+  expect_identical(out$N, c(10, 67, 15, 13))
+  out <- data_tabulate(efc$c172code, include_na = FALSE, weights = efc$weights)
+  expect_identical(out$N, c(10, 67, 15))
+})
+
+
+# cross tables ------------------------------
+test_that("data_tabulate, cross tables", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+
+  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full")))
+  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE)))
+  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", weights = efc$weights)))
+  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE, weights = efc$weights))) # nolint
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row")))
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", include_na = FALSE)))
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", weights = efc$weights)))
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", include_na = FALSE, weights = efc$weights))) # nolint
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")))
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", include_na = FALSE)))
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", weights = "weights")))
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", include_na = FALSE, weights = "weights"))) # nolint
+})
+
+test_that("data_tabulate, cross tables, HTML", {
+  skip_if_not_installed("gt")
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+
+  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full")), "gt_tbl")
+  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE)), "gt_tbl") # nolint
+  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", weights = efc$weights)), "gt_tbl") # nolint
+  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE, weights = efc$weights)), "gt_tbl") # nolint
+  expect_s3_class(print_html(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row")), "gt_tbl")
+  expect_s3_class(print_html(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", include_na = FALSE, weights = efc$weights)), "gt_tbl") # nolint
+})
+
+test_that("data_tabulate, cross tables, grouped df", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+  grp <- data_group(efc, "e42dep")
+  expect_snapshot(print(data_tabulate(grp, "c172code", by = "e16sex", proportions = "row")))
+})
+
+test_that("data_tabulate, cross tables, errors by", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+  expect_error(data_tabulate(efc$c172code, by = "e16sex"), regex = "If `by` is a string")
+  expect_error(data_tabulate(efc$c172code, by = efc$e16sex[-1]), regex = "Length of `by`")
+  expect_error(data_tabulate(efc, "c172code", by = efc$e16sex[-1]), regex = "Length of `by`")
+  expect_error(data_tabulate(efc, "c172code", by = "c16sex"), regex = "not found")
+  expect_error(data_tabulate(efc, "c172code", by = c("e16sex", "e42dep")), regex = "You may use")
+})
+
+test_that("data_tabulate, cross tables, errors weights", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+  expect_error(data_tabulate(efc$c172code, weights = "weights"), regex = "If `weights`")
+  expect_error(data_tabulate(efc$c172code, weights = efc$weights[-1]), regex = "Length of `weights`")
+  expect_error(data_tabulate(efc, "c172code", weights = efc$weights[-1]), regex = "Length of `weights`")
+  expect_error(data_tabulate(efc, "c172code", weights = "weigths"), regex = "not found")
+  expect_error(data_tabulate(efc, "c172code", weights = c("e16sex", "e42dep")), regex = "length 1")
+})
+
+
+# markdown -------------------------
+
+test_that("data_tabulate, cross tables, markdown", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+
+  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full")))
+  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE)))
+  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", weights = efc$weights)))
+  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE, weights = efc$weights))) # nolint
+})
+
+# validate against table -------------------------
+
+test_that("data_tabulate, validate against table", {
+  data(mtcars)
+  # frequency table
+  out1 <- as.data.frame(table(mtcars$cyl))
+  out2 <- data_tabulate(mtcars$cyl, include_na = FALSE)
+  expect_identical(out1$Freq, out2$N)
+  # crosstable
+  out1 <- data_arrange(as.data.frame(table(mtcars$cyl, mtcars$gear)), c("Var1", "Var2"))
+  out2 <- data_rename(data_to_long(
+    as.data.frame(data_tabulate(mtcars$cyl, by = mtcars$gear, include_na = FALSE)), 2:4,
+    names_to = "Var2", values_to = "Freq"
+  ), "mtcars$cyl", "Var1")
+  out1[[2]] <- as.character(out1[[2]])
+  expect_equal(out1, out2, ignore_attr = TRUE)
 })

@@ -1,20 +1,30 @@
-#' @title Create frequency tables of variables
+#' @title Create frequency and crosstables of variables
 #' @name data_tabulate
 #'
-#' @description This function creates frequency tables of variables, including
-#' the number of levels/values as well as the distribution of raw, valid and
-#' cumulative percentages.
+#' @description This function creates frequency or crosstables of variables,
+#' including the number of levels/values as well as the distribution of raw,
+#' valid and cumulative percentages. For crosstables, row, column  and cell
+#' percentages can be calculated.
 #'
 #' @param x A (grouped) data frame, a vector or factor.
-#' @param drop_levels Logical, if `TRUE`, factor levels that do not occur in
+#' @param by Optional vector or factor. If supplied, a crosstable is created.
+#' If `x` is a data frame, `by` can also be a character string indicating the
+#' name of a variable in `x`.
+#' @param drop_levels Logical, if `FALSE`, factor levels that do not occur in
 #' the data are included in the table (with frequency of zero), else unused
 #' factor levels are dropped from the frequency table.
 #' @param name Optional character string, which includes the name that is used
 #' for printing.
+#' @param include_na Logical, if `TRUE`, missing values are included in the
+#' frequency or crosstable, else missing values are omitted.
 #' @param collapse Logical, if `TRUE` collapses multiple tables into one larger
 #' table for printing. This affects only printing, not the returned object.
 #' @param weights Optional numeric vector of weights. Must be of the same length
 #' as `x`. If `weights` is supplied, weighted frequencies are calculated.
+#' @param proportions Optional character string, indicating the type of
+#' percentages to be calculated. Only applies to crosstables, i.e. when `by` is
+#' not `NULL`. Can be `"row"` (row percentages), `"column"` (column percentages)
+#' or `"full"` (to calculate relative frequencies for the full table).
 #' @param ... not used.
 #' @inheritParams find_columns
 #'
@@ -22,10 +32,15 @@
 #' as data frame per variable.
 #'
 #' @examplesIf requireNamespace("poorman")
+#' # frequency tables -------
+#' # ------------------------
 #' data(efc)
 #'
 #' # vector/factor
 #' data_tabulate(efc$c172code)
+#'
+#' # drop missing values
+#' data_tabulate(efc$c172code, include_na = FALSE)
 #'
 #' # data frame
 #' data_tabulate(efc, c("e42dep", "c172code"))
@@ -54,6 +69,30 @@
 #' efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
 #' data_tabulate(efc$e42dep, weights = efc$weights)
 #'
+#' # crosstables ------
+#' # ------------------
+#'
+#' # add some missing values
+#' set.seed(123)
+#' efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+#'
+#' data_tabulate(efc, "c172code", by = "e16sex")
+#'
+#' # add row and column percentages
+#' data_tabulate(efc, "c172code", by = "e16sex", proportions = "row")
+#' data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")
+#'
+#' # omit missing values
+#' data_tabulate(
+#'   efc$c172code,
+#'   by = efc$e16sex,
+#'   proportions = "column",
+#'   include_na = FALSE
+#' )
+#'
+#' # round percentages
+#' out <- data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")
+#' print(out, digits = 0)
 #' @export
 data_tabulate <- function(x, ...) {
   UseMethod("data_tabulate")
@@ -62,7 +101,15 @@ data_tabulate <- function(x, ...) {
 
 #' @rdname data_tabulate
 #' @export
-data_tabulate.default <- function(x, drop_levels = FALSE, weights = NULL, name = NULL, verbose = TRUE, ...) {
+data_tabulate.default <- function(x,
+                                  by = NULL,
+                                  drop_levels = FALSE,
+                                  weights = NULL,
+                                  include_na = TRUE,
+                                  proportions = NULL,
+                                  name = NULL,
+                                  verbose = TRUE,
+                                  ...) {
   # save label attribute, before it gets lost...
   var_label <- attr(x, "label", exact = TRUE)
 
@@ -78,22 +125,49 @@ data_tabulate.default <- function(x, drop_levels = FALSE, weights = NULL, name =
     x <- droplevels(x)
   }
 
-  # check for correct length of weights - must be equal to "x"
-  if (!is.null(weights) && length(weights) != length(x)) {
-    insight::format_error("Length of `weights` must be equal to length of `x`.")
+  # validate "weights"
+  weights <- .validate_table_weights(weights, x)
+
+  # we go into another function for crosstables here...
+  if (!is.null(by)) {
+    by <- .validate_by(by, x)
+    return(.crosstable(
+      x,
+      by = by,
+      weights = weights,
+      include_na = include_na,
+      proportions = proportions,
+      obj_name = obj_name,
+      group_variable = group_variable
+    ))
   }
 
   # frequency table
   if (is.null(weights)) {
-    freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
+    if (include_na) {
+      freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
+    } else {
+      freq_table <- tryCatch(table(x), error = function(e) NULL)
+    }
+  } else if (include_na) {
+    # weighted frequency table, including NA
+    freq_table <- tryCatch(
+      stats::xtabs(
+        weights ~ x,
+        data = data.frame(weights = weights, x = addNA(x)),
+        na.action = stats::na.pass,
+        addNA = TRUE
+      ),
+      error = function(e) NULL
+    )
   } else {
-    # weighted frequency table
+    # weighted frequency table, excluding NA
     freq_table <- tryCatch(
       stats::xtabs(
         weights ~ x,
         data = data.frame(weights = weights, x = x),
-        na.action = stats::na.pass,
-        addNA = TRUE
+        na.action = stats::na.omit,
+        addNA = FALSE
       ),
       error = function(e) NULL
     )
@@ -115,7 +189,14 @@ data_tabulate.default <- function(x, drop_levels = FALSE, weights = NULL, name =
   }
 
   out$`Raw %` <- 100 * out$N / sum(out$N)
-  out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
+  # if we have missing values, we add a row with NA
+  if (include_na) {
+    out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
+    valid_n <- sum(out$N[-length(out$N)], na.rm = TRUE)
+  } else {
+    out$`Valid %` <- 100 * out$N / sum(out$N)
+    valid_n <- sum(out$N, na.rm = TRUE)
+  }
   out$`Cumulative %` <- cumsum(out$`Valid %`)
 
   # add information about variable/group names
@@ -144,7 +225,7 @@ data_tabulate.default <- function(x, drop_levels = FALSE, weights = NULL, name =
   attr(out, "weights") <- weights
 
   attr(out, "total_n") <- sum(out$N, na.rm = TRUE)
-  attr(out, "valid_n") <- sum(out$N[-length(out$N)], na.rm = TRUE)
+  attr(out, "valid_n") <- valid_n
 
   class(out) <- c("dw_data_tabulate", "data.frame")
 
@@ -159,9 +240,12 @@ data_tabulate.data.frame <- function(x,
                                      exclude = NULL,
                                      ignore_case = FALSE,
                                      regex = FALSE,
-                                     collapse = FALSE,
+                                     by = NULL,
                                      drop_levels = FALSE,
                                      weights = NULL,
+                                     include_na = TRUE,
+                                     proportions = NULL,
+                                     collapse = FALSE,
                                      verbose = TRUE,
                                      ...) {
   # evaluate arguments
@@ -172,11 +256,31 @@ data_tabulate.data.frame <- function(x,
     regex = regex,
     verbose = verbose
   )
+
+  # validate "by"
+  by <- .validate_by(by, x)
+  # validate "weights"
+  weights <- .validate_table_weights(weights, x)
+
   out <- lapply(select, function(i) {
-    data_tabulate(x[[i]], drop_levels = drop_levels, weights = weights, name = i, verbose = verbose, ...)
+    data_tabulate(
+      x[[i]],
+      by = by,
+      proportions = proportions,
+      drop_levels = drop_levels,
+      weights = weights,
+      include_na = include_na,
+      name = i,
+      verbose = verbose,
+      ...
+    )
   })
 
-  class(out) <- c("dw_data_tabulates", "list")
+  if (is.null(by)) {
+    class(out) <- c("dw_data_tabulates", "list")
+  } else {
+    class(out) <- c("dw_data_xtabulates", "list")
+  }
   attr(out, "collapse") <- isTRUE(collapse)
   attr(out, "is_weighted") <- !is.null(weights)
 
@@ -190,10 +294,13 @@ data_tabulate.grouped_df <- function(x,
                                      exclude = NULL,
                                      ignore_case = FALSE,
                                      regex = FALSE,
-                                     verbose = TRUE,
-                                     collapse = FALSE,
+                                     by = NULL,
+                                     proportions = NULL,
                                      drop_levels = FALSE,
                                      weights = NULL,
+                                     include_na = TRUE,
+                                     collapse = FALSE,
+                                     verbose = TRUE,
                                      ...) {
   # works only for dplyr >= 0.8.0
   grps <- attr(x, "groups", exact = TRUE)
@@ -210,6 +317,7 @@ data_tabulate.grouped_df <- function(x,
   )
 
   x <- as.data.frame(x)
+
   out <- list()
   for (i in seq_along(grps)) {
     rows <- grps[[i]]
@@ -227,18 +335,23 @@ data_tabulate.grouped_df <- function(x,
       verbose = verbose,
       drop_levels = drop_levels,
       weights = weights,
+      include_na = include_na,
+      by = by,
+      proportions = proportions,
       group_variable = group_variable,
       ...
     ))
   }
-  class(out) <- c("dw_data_tabulates", "list")
+  if (is.null(by)) {
+    class(out) <- c("dw_data_tabulates", "list")
+  } else {
+    class(out) <- c("dw_data_xtabulates", "list")
+  }
   attr(out, "collapse") <- isTRUE(collapse)
   attr(out, "is_weighted") <- !is.null(weights)
 
   out
 }
-
-
 
 
 # methods --------------------
@@ -284,7 +397,6 @@ format.dw_data_tabulate <- function(x, format = "text", big_mark = NULL, ...) {
 
   x
 }
-
 
 
 #' @export
