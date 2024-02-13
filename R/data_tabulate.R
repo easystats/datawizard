@@ -158,7 +158,14 @@ data_tabulate.default <- function(x,
   }
 
   out$`Raw %` <- 100 * out$N / sum(out$N)
-  out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
+  # if we have missing values, we add a row with NA
+  if (include_na) {
+    out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
+    valid_n <- sum(out$N[-length(out$N)], na.rm = TRUE)
+  } else {
+    out$`Valid %` <- 100 * out$N / sum(out$N)
+    valid_n <- sum(out$N, na.rm = TRUE)
+  }
   out$`Cumulative %` <- cumsum(out$`Valid %`)
 
   # add information about variable/group names
@@ -187,7 +194,7 @@ data_tabulate.default <- function(x,
   attr(out, "weights") <- weights
 
   attr(out, "total_n") <- sum(out$N, na.rm = TRUE)
-  attr(out, "valid_n") <- sum(out$N[-length(out$N)], na.rm = TRUE)
+  attr(out, "valid_n") <- valid_n
 
   class(out) <- c("dw_data_tabulate", "data.frame")
 

@@ -50,9 +50,6 @@
   out <- as.data.frame(stats::ftable(x_table))
   colnames(out) <- c("Value", "by", "N")
 
-  total_n <- sum(out$N, na.rm = TRUE)
-  valid_n <- sum(out$N[!is.na(out$N)], na.rm = TRUE)
-
   out <- data_to_wide(out, values_from = "N", names_from = "by")
 
   # use variable name as column name
@@ -68,8 +65,7 @@
     out <- cbind(out[1], data.frame(Group = var_info, stringsAsFactors = FALSE), out[-1])
   }
 
-  attr(out, "total_n") <- total_n
-  attr(out, "valid_n") <- valid_n
+  attr(out, "total_n") <- sum(out$N, na.rm = TRUE)
   attr(out, "weights") <- weights
   attr(out, "proportions") <- proportions
 
@@ -158,24 +154,12 @@ format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = 
 
 #' @export
 print.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
-  a <- attributes(x)
-  a$total_n <- .add_commas_in_numbers(a$total_n, big_mark)
-  a$valid_n <- .add_commas_in_numbers(a$valid_n, big_mark)
-
   # grouped data? if yes, add information on grouping factor
   if (is.null(x[["Group"]])) {
     caption <- NULL
   } else {
     caption <- paste0("Grouped by ", x[["Group"]][1])
   }
-
-  # summary of total and valid N (we may add mean/sd as well?)
-  summary_line <- sprintf(
-    "\ntotal N=%s valid N=%s%s\n",
-    a$total_n,
-    a$valid_n,
-    ifelse(is.null(a$weights), "", " (weighted)")
-  )
 
   # print table
   cat(insight::export_table(
