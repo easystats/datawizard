@@ -164,6 +164,9 @@ format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = 
   ftab$Total <- .add_commas_in_numbers(ftab$Total, big_mark)
   ftab[nrow(ftab), ] <- .add_commas_in_numbers(ftab[nrow(ftab), ], big_mark)
 
+  # also format NA column name
+  colnames(ftab)[colnames(ftab) == "NA"] <- ifelse(identical(format, "text"), "<NA>", "(NA)")
+
   ftab
 }
 

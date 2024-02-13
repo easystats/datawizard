@@ -246,7 +246,7 @@
     Code
       print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell"))
     Output
-      efc$c172code |       male |     female |       NA | Total
+      efc$c172code |       male |     female |     <NA> | Total
       -------------+------------+------------+----------+------
       1            |  5  (5.0%) |  2  (2.0%) | 1 (1.0%) |     8
       2            | 31 (31.0%) | 33 (33.0%) | 2 (2.0%) |    66
@@ -275,7 +275,7 @@
       print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell",
       weights = efc$weights))
     Output
-      efc$c172code |       male |     female |       NA | Total
+      efc$c172code |       male |     female |     <NA> | Total
       -------------+------------+------------+----------+------
       1            |  5  (4.8%) |  3  (2.9%) | 2 (1.9%) |    10
       2            | 32 (30.5%) | 32 (30.5%) | 3 (2.9%) |    67
@@ -303,7 +303,7 @@
     Code
       print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row"))
     Output
-      c172code |       male |     female |        NA | Total
+      c172code |       male |     female |      <NA> | Total
       ---------+------------+------------+-----------+------
       1        |  5 (62.5%) |  2 (25.0%) | 1 (12.5%) |     8
       2        | 31 (47.0%) | 33 (50.0%) | 2  (3.0%) |    66
@@ -334,7 +334,7 @@
       print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row",
       weights = efc$weights))
     Output
-      c172code |       male |     female |        NA | Total
+      c172code |       male |     female |      <NA> | Total
       ---------+------------+------------+-----------+------
       1        |  5 (50.0%) |  3 (30.0%) | 2 (20.0%) |    10
       2        | 32 (47.8%) | 32 (47.8%) | 3  (4.5%) |    67
@@ -364,7 +364,7 @@
     Code
       print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column"))
     Output
-      c172code |       male |     female |        NA | Total
+      c172code |       male |     female |      <NA> | Total
       ---------+------------+------------+-----------+------
       1        |  5 (11.1%) |  2  (4.0%) | 1 (20.0%) |     8
       2        | 31 (68.9%) | 33 (66.0%) | 2 (40.0%) |    66
@@ -395,7 +395,7 @@
       print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column",
         weights = "weights"))
     Output
-      c172code |       male |     female |        NA | Total
+      c172code |       male |     female |      <NA> | Total
       ---------+------------+------------+-----------+------
       1        |  5 (10.4%) |  3  (5.9%) | 2 (28.6%) |    10
       2        | 32 (66.7%) | 32 (62.7%) | 3 (42.9%) |    67
@@ -427,7 +427,7 @@
     Output
       Grouped by e42dep (1)
       
-      c172code |       male |         NA | Total
+      c172code |       male |       <NA> | Total
       ---------+------------+------------+------
       2        | 2 (100.0%) | 0   (0.0%) |     2
       <NA>     |   0 (NaN%) |   0 (NaN%) |     0
@@ -436,7 +436,7 @@
       
       Grouped by e42dep (2)
       
-      c172code |      male |    female |        NA | Total
+      c172code |      male |    female |      <NA> | Total
       ---------+-----------+-----------+-----------+------
       2        | 2 (50.0%) | 2 (50.0%) | 0  (0.0%) |     4
       <NA>     |  0 (NaN%) |  0 (NaN%) |  0 (NaN%) |     0
@@ -445,7 +445,7 @@
       
       Grouped by e42dep (3)
       
-      c172code |      male |     female |        NA | Total
+      c172code |      male |     female |      <NA> | Total
       ---------+-----------+------------+-----------+------
       1        | 2 (50.0%) |  2 (50.0%) | 0  (0.0%) |     4
       2        | 4 (25.0%) | 11 (68.8%) | 1  (6.2%) |    16
@@ -456,7 +456,7 @@
       
       Grouped by e42dep (4)
       
-      c172code |       male |     female |        NA | Total
+      c172code |       male |     female |      <NA> | Total
       ---------+------------+------------+-----------+------
       1        |  3 (75.0%) |  0  (0.0%) | 1 (25.0%) |     4
       2        | 23 (54.8%) | 18 (42.9%) | 1  (2.4%) |    42
@@ -467,7 +467,7 @@
       
       Grouped by e42dep (NA)
       
-      c172code |       male |     female |         NA | Total
+      c172code |       male |     female |       <NA> | Total
       ---------+------------+------------+------------+------
       2        | 0   (0.0%) | 2 (100.0%) | 0   (0.0%) |     2
       <NA>     | 1 (100.0%) | 0   (0.0%) | 0   (0.0%) |     1
@@ -480,7 +480,7 @@
     Code
       print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell"))
     Output
-      [1] "|efc$c172code |       male|     female|      NA | Total|"
+      [1] "|efc$c172code |       male|     female|    (NA) | Total|"
       [2] "|:------------|----------:|----------:|:--------|-----:|"
       [3] "|1            |  5  (5.0%)|  2  (2.0%)|1 (1.0%) |     8|"
       [4] "|2            | 31 (31.0%)| 33 (33.0%)|2 (2.0%) |    66|"
@@ -517,7 +517,7 @@
       print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell",
       weights = efc$weights))
     Output
-      [1] "|efc$c172code |       male|     female|      NA | Total|"
+      [1] "|efc$c172code |       male|     female|    (NA) | Total|"
       [2] "|:------------|----------:|----------:|:--------|-----:|"
       [3] "|1            |  5  (4.8%)|  3  (2.9%)|2 (1.9%) |    10|"
       [4] "|2            | 32 (30.5%)| 32 (30.5%)|3 (2.9%) |    67|"
