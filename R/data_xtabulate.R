@@ -6,8 +6,7 @@
                         include_na = TRUE,
                         proportions = NULL,
                         obj_name = NULL,
-                        group_variable = NULL,
-                        ...) {
+                        group_variable = NULL) {
   if (!is.null(proportions)) {
     proportions <- match.arg(proportions, c("row", "column", "cell"))
   }

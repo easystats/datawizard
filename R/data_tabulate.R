@@ -106,8 +106,7 @@ data_tabulate.default <- function(x,
       include_na = include_na,
       proportions = proportions,
       obj_name = obj_name,
-      group_variable = group_variable,
-      ...
+      group_variable = group_variable
     ))
   }
 
