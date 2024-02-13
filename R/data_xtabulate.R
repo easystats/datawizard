@@ -51,6 +51,11 @@
   colnames(out) <- c("Value", "by", "N")
   total_n <- sum(out$N, na.rm = TRUE)
 
+  # we want to round N for weighted frequencies
+  if (!is.null(weights)) {
+    out$N <- round(out$N)
+  }
+
   out <- data_to_wide(out, values_from = "N", names_from = "by")
 
   # use variable name as column name
