@@ -32,6 +32,14 @@ test_that("data_tabulate numeric", {
 })
 
 
+test_that("data_tabulate, HTML", {
+  skip_if_not_installed("gt")
+  data(efc, package = "datawizard")
+  expect_s3_class(print_html(data_tabulate(efc$c172code)), "gt_tbl")
+  expect_s3_class(print_html(data_tabulate(efc, "c172code")), "gt_tbl")
+})
+
+
 test_that("data_tabulate, weights", {
   data(efc, package = "datawizard")
   set.seed(123)
@@ -303,6 +311,21 @@ test_that("data_tabulate, cross tables", {
   expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", include_na = FALSE, weights = "weights"))) # nolint
 })
 
+test_that("data_tabulate, cross tables, HTML", {
+  skip_if_not_installed("gt")
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+
+  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell")), "gt_tbl")
+  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", include_na = FALSE)), "gt_tbl") # nolint
+  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", weights = efc$weights)), "gt_tbl") # nolint
+  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", include_na = FALSE, weights = efc$weights)), "gt_tbl") # nolint
+  expect_s3_class(print_html(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row")), "gt_tbl")
+  expect_s3_class(print_html(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", include_na = FALSE, weights = efc$weights)), "gt_tbl") # nolint
+})
+
 test_that("data_tabulate, cross tables, grouped df", {
   data(efc, package = "datawizard")
   set.seed(123)
@@ -312,7 +335,7 @@ test_that("data_tabulate, cross tables, grouped df", {
   expect_snapshot(print(data_tabulate(grp, "c172code", by = "e16sex", proportions = "row")))
 })
 
-test_that("data_tabulate, cross tables, errors", {
+test_that("data_tabulate, cross tables, errors by", {
   data(efc, package = "datawizard")
   set.seed(123)
   efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
@@ -324,7 +347,7 @@ test_that("data_tabulate, cross tables, errors", {
   expect_error(data_tabulate(efc, "c172code", by = c("e16sex", "e42dep")), regex = "You may use")
 })
 
-test_that("data_tabulate, cross tables, errors", {
+test_that("data_tabulate, cross tables, errors weights", {
   data(efc, package = "datawizard")
   set.seed(123)
   efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
