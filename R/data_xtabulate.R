@@ -17,29 +17,28 @@
     } else {
       x_table <- tryCatch(table(x, by), error = function(e) NULL)
     }
+  } else if (include_na) {
+    # weighted frequency table, including NA
+    x_table <- tryCatch(
+      stats::xtabs(
+        weights ~ x + by,
+        data = data.frame(weights = weights, x = addNA(x), by = addNA(by)),
+        na.action = stats::na.pass,
+        addNA = TRUE
+      ),
+      error = function(e) NULL
+    )
   } else {
-    # weighted frequency table
-    if (include_na) {
-      x_table <- tryCatch(
-        stats::xtabs(
-          weights ~ x + by,
-          data = data.frame(weights = weights, x = addNA(x), by = addNA(by)),
-          na.action = stats::na.pass,
-          addNA = TRUE
-        ),
-        error = function(e) NULL
-      )
-    } else {
-      x_table <- tryCatch(
-        stats::xtabs(
-          weights ~ x + by,
-          data = data.frame(weights = weights, x = x, by = by),
-          na.action = stats::na.omit,
-          addNA = FALSE
-        ),
-        error = function(e) NULL
-      )
-    }
+    # weighted frequency table, excluding NA
+    x_table <- tryCatch(
+      stats::xtabs(
+        weights ~ x + by,
+        data = data.frame(weights = weights, x = x, by = by),
+        na.action = stats::na.omit,
+        addNA = FALSE
+      ),
+      error = function(e) NULL
+    )
   }
 
   if (is.null(x_table)) {
@@ -152,19 +151,19 @@ format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = 
   ftab$Total <- gsub("\\.00$", "", as.character(total_column))
   # for text format, insert "empty row" before last total row
   if (identical(format, "text") || identical(format, "markdown")) {
-    sub <- as.data.frame(t(data.frame(
+    empty_row <- as.data.frame(t(data.frame(
       rep("", ncol(ftab)),
       c("Total", as.character(total_row)),
       stringsAsFactors = FALSE
     )))
   } else {
-    sub <- as.data.frame(t(data.frame(
+    empty_row <- as.data.frame(t(data.frame(
       c("Total", as.character(total_row)),
       stringsAsFactors = FALSE
     )))
   }
-  colnames(sub) <- colnames(ftab)
-  ftab <- rbind(ftab, sub)
+  colnames(empty_row) <- colnames(ftab)
+  ftab <- rbind(ftab, empty_row)
   ftab[nrow(ftab), ] <- gsub("\\.00$", "", ftab[nrow(ftab), ])
 
   # insert big marks?

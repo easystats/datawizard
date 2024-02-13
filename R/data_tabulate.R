@@ -149,29 +149,28 @@ data_tabulate.default <- function(x,
     } else {
       freq_table <- tryCatch(table(x), error = function(e) NULL)
     }
+  } else if (include_na) {
+    # weighted frequency table, including NA
+    freq_table <- tryCatch(
+      stats::xtabs(
+        weights ~ x,
+        data = data.frame(weights = weights, x = addNA(x)),
+        na.action = stats::na.pass,
+        addNA = TRUE
+      ),
+      error = function(e) NULL
+    )
   } else {
-    # weighted frequency table
-    if (include_na) {
-      freq_table <- tryCatch(
-        stats::xtabs(
-          weights ~ x,
-          data = data.frame(weights = weights, x = addNA(x)),
-          na.action = stats::na.pass,
-          addNA = TRUE
-        ),
-        error = function(e) NULL
-      )
-    } else {
-      freq_table <- tryCatch(
-        stats::xtabs(
-          weights ~ x,
-          data = data.frame(weights = weights, x = x),
-          na.action = stats::na.omit,
-          addNA = FALSE
-        ),
-        error = function(e) NULL
-      )
-    }
+    # weighted frequency table, excluding NA
+    freq_table <- tryCatch(
+      stats::xtabs(
+        weights ~ x,
+        data = data.frame(weights = weights, x = x),
+        na.action = stats::na.omit,
+        addNA = FALSE
+      ),
+      error = function(e) NULL
+    )
   }
 
   if (is.null(freq_table)) {
