@@ -303,10 +303,10 @@ test_that("data_tabulate, cross tables", {
   efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
   efc$e16sex[sample.int(nrow(efc), 5)] <- NA
 
-  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell")))
-  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", include_na = FALSE)))
-  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", weights = efc$weights)))
-  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", include_na = FALSE, weights = efc$weights))) # nolint
+  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full")))
+  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE)))
+  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", weights = efc$weights)))
+  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE, weights = efc$weights))) # nolint
   expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row")))
   expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", include_na = FALSE)))
   expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", weights = efc$weights)))
@@ -324,10 +324,10 @@ test_that("data_tabulate, cross tables, HTML", {
   efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
   efc$e16sex[sample.int(nrow(efc), 5)] <- NA
 
-  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell")), "gt_tbl")
-  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", include_na = FALSE)), "gt_tbl") # nolint
-  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", weights = efc$weights)), "gt_tbl") # nolint
-  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", include_na = FALSE, weights = efc$weights)), "gt_tbl") # nolint
+  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full")), "gt_tbl")
+  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE)), "gt_tbl") # nolint
+  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", weights = efc$weights)), "gt_tbl") # nolint
+  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE, weights = efc$weights)), "gt_tbl") # nolint
   expect_s3_class(print_html(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row")), "gt_tbl")
   expect_s3_class(print_html(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", include_na = FALSE, weights = efc$weights)), "gt_tbl") # nolint
 })
@@ -374,8 +374,8 @@ test_that("data_tabulate, cross tables, markdown", {
   efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
   efc$e16sex[sample.int(nrow(efc), 5)] <- NA
 
-  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell")))
-  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", include_na = FALSE)))
-  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", weights = efc$weights)))
-  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", include_na = FALSE, weights = efc$weights))) # nolint
+  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full")))
+  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE)))
+  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", weights = efc$weights)))
+  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE, weights = efc$weights))) # nolint
 })

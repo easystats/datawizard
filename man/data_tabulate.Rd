@@ -57,8 +57,8 @@ frequency or crosstable, else missing values are omitted.}
 
 \item{proportions}{Optional character string, indicating the type of
 percentages to be calculated. Only applies to crosstables, i.e. when \code{by} is
-not \code{NULL}. Can be \code{"row"}, \code{"column"} or \code{"cell"}, to calculate row, column
-or cell percentages, respectively.}
+not \code{NULL}. Can be \code{"row"} (row percentages), \code{"column"} (column percentages)
+or \code{"full"} (to calculate relative frequencies for the full table).}
 
 \item{name}{Optional character string, which includes the name that is used
 for printing.}

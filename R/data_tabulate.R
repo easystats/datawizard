@@ -23,8 +23,8 @@
 #' as `x`. If `weights` is supplied, weighted frequencies are calculated.
 #' @param proportions Optional character string, indicating the type of
 #' percentages to be calculated. Only applies to crosstables, i.e. when `by` is
-#' not `NULL`. Can be `"row"`, `"column"` or `"cell"`, to calculate row, column
-#' or cell percentages, respectively.
+#' not `NULL`. Can be `"row"` (row percentages), `"column"` (column percentages)
+#' or `"full"` (to calculate relative frequencies for the full table).
 #' @param ... not used.
 #' @inheritParams find_columns
 #'

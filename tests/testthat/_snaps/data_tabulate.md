@@ -19,20 +19,20 @@
     Code
       print_md(data_tabulate(efc$e42dep, weights = efc$weights))
     Output
-       [1] "Table: elder's dependency (efc$e42dep) (categorical)"
-       [2] ""                                                    
-       [3] "|Value |  N| Raw %| Valid %| Cumulative %|"          
-       [4] "|:-----|--:|-----:|-------:|------------:|"          
-       [5] "|1     |  3|  2.86|    3.00|         3.00|"          
-       [6] "|2     |  4|  3.81|    4.00|         7.00|"          
-       [7] "|3     | 26| 24.76|   26.00|        33.00|"          
-       [8] "|4     | 67| 63.81|   67.00|       100.00|"          
-       [9] "|(NA)  |  5|  4.76|    (NA)|         (NA)|"          
-      [10] "total N=105 valid N=100 (weighted)\n\n"              
-      attr(,"format")
-      [1] "pipe"
-      attr(,"class")
-      [1] "knitr_kable" "character"  
+      
+      
+      Table: elder's dependency (efc$e42dep) (categorical)
+      
+      |Value |  N| Raw %| Valid %| Cumulative %|
+      |:-----|--:|-----:|-------:|------------:|
+      |1     |  3|  2.86|    3.00|         3.00|
+      |2     |  4|  3.81|    4.00|         7.00|
+      |3     | 26| 24.76|   26.00|        33.00|
+      |4     | 67| 63.81|   67.00|       100.00|
+      |(NA)  |  5|  4.76|    (NA)|         (NA)|
+      total N=105 valid N=100 (weighted)
+      
+      
 
 ---
 
@@ -60,24 +60,22 @@
     Code
       print_md(data_tabulate(efc, c("e42dep", "e16sex"), weights = efc$weights))
     Output
-       [1] "Table: Frequency Table (weighted)"                   
-       [2] ""                                                    
-       [3] "|Variable | Value|  N| Raw %| Valid %| Cumulative %|"
-       [4] "|:--------|-----:|--:|-----:|-------:|------------:|"
-       [5] "|e42dep   |     1|  3|  2.86|    3.00|         3.00|"
-       [6] "|         |     2|  4|  3.81|    4.00|         7.00|"
-       [7] "|         |     3| 26| 24.76|   26.00|        33.00|"
-       [8] "|         |     4| 67| 63.81|   67.00|       100.00|"
-       [9] "|         |  (NA)|  5|  4.76|    (NA)|         (NA)|"
-      [10] "|         |      |   |      |        |             |"
-      [11] "|e16sex   |     1| 50| 47.62|   47.62|        47.62|"
-      [12] "|         |     2| 55| 52.38|   52.38|       100.00|"
-      [13] "|         |  (NA)|  0|  0.00|    (NA)|         (NA)|"
-      [14] "|         |      |   |      |        |             |"
-      attr(,"format")
-      [1] "pipe"
-      attr(,"class")
-      [1] "knitr_kable" "character"  
+      
+      
+      Table: Frequency Table (weighted)
+      
+      |Variable | Value|  N| Raw %| Valid %| Cumulative %|
+      |:--------|-----:|--:|-----:|-------:|------------:|
+      |e42dep   |     1|  3|  2.86|    3.00|         3.00|
+      |         |     2|  4|  3.81|    4.00|         7.00|
+      |         |     3| 26| 24.76|   26.00|        33.00|
+      |         |     4| 67| 63.81|   67.00|       100.00|
+      |         |  (NA)|  5|  4.76|    (NA)|         (NA)|
+      |         |      |   |      |        |             |
+      |e16sex   |     1| 50| 47.62|   47.62|        47.62|
+      |         |     2| 55| 52.38|   52.38|       100.00|
+      |         |  (NA)|  0|  0.00|    (NA)|         (NA)|
+      |         |      |   |      |        |             |
 
 # data_tabulate print
 
@@ -244,7 +242,7 @@
 # data_tabulate, cross tables
 
     Code
-      print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell"))
+      print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full"))
     Output
       efc$c172code |       male |     female |     <NA> | Total
       -------------+------------+------------+----------+------
@@ -258,7 +256,7 @@
 ---
 
     Code
-      print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell",
+      print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full",
       include_na = FALSE))
     Output
       efc$c172code |       male |     female | Total
@@ -272,7 +270,7 @@
 ---
 
     Code
-      print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell",
+      print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full",
       weights = efc$weights))
     Output
       efc$c172code |       male |     female |     <NA> | Total
@@ -287,7 +285,7 @@
 ---
 
     Code
-      print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell",
+      print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full",
       include_na = FALSE, weights = efc$weights))
     Output
       efc$c172code |       male |     female | Total
@@ -478,73 +476,65 @@
 # data_tabulate, cross tables, markdown
 
     Code
-      print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell"))
+      print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full"))
     Output
-      [1] "|efc$c172code |       male|     female|    (NA) | Total|"
-      [2] "|:------------|----------:|----------:|:--------|-----:|"
-      [3] "|1            |  5  (5.0%)|  2  (2.0%)|1 (1.0%) |     8|"
-      [4] "|2            | 31 (31.0%)| 33 (33.0%)|2 (2.0%) |    66|"
-      [5] "|3            |  4  (4.0%)| 11 (11.0%)|1 (1.0%) |    16|"
-      [6] "|<NA>         |  5  (5.0%)|  4  (4.0%)|1 (1.0%) |    10|"
-      [7] "|             |           |           |         |      |"
-      [8] "|Total        |         45|         50|       5 |   100|"
-      attr(,"format")
-      [1] "pipe"
-      attr(,"class")
-      [1] "knitr_kable" "character"  
+      
+      
+      |efc$c172code |       male|     female|    (NA) | Total|
+      |:------------|----------:|----------:|:--------|-----:|
+      |1            |  5  (5.0%)|  2  (2.0%)|1 (1.0%) |     8|
+      |2            | 31 (31.0%)| 33 (33.0%)|2 (2.0%) |    66|
+      |3            |  4  (4.0%)| 11 (11.0%)|1 (1.0%) |    16|
+      |<NA>         |  5  (5.0%)|  4  (4.0%)|1 (1.0%) |    10|
+      |             |           |           |         |      |
+      |Total        |         45|         50|       5 |   100|
 
 ---
 
     Code
-      print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell",
+      print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full",
       include_na = FALSE))
     Output
-      [1] "|efc$c172code |       male|     female| Total|"
-      [2] "|:------------|----------:|----------:|-----:|"
-      [3] "|1            |  5  (5.8%)|  2  (2.3%)|     7|"
-      [4] "|2            | 31 (36.0%)| 33 (38.4%)|    64|"
-      [5] "|3            |  4  (4.7%)| 11 (12.8%)|    15|"
-      [6] "|             |           |           |      |"
-      [7] "|Total        |         40|         46|    86|"
-      attr(,"format")
-      [1] "pipe"
-      attr(,"class")
-      [1] "knitr_kable" "character"  
+      
+      
+      |efc$c172code |       male|     female| Total|
+      |:------------|----------:|----------:|-----:|
+      |1            |  5  (5.8%)|  2  (2.3%)|     7|
+      |2            | 31 (36.0%)| 33 (38.4%)|    64|
+      |3            |  4  (4.7%)| 11 (12.8%)|    15|
+      |             |           |           |      |
+      |Total        |         40|         46|    86|
 
 ---
 
     Code
-      print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell",
+      print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full",
       weights = efc$weights))
     Output
-      [1] "|efc$c172code |       male|     female|    (NA) | Total|"
-      [2] "|:------------|----------:|----------:|:--------|-----:|"
-      [3] "|1            |  5  (4.8%)|  3  (2.9%)|2 (1.9%) |    10|"
-      [4] "|2            | 32 (30.5%)| 32 (30.5%)|3 (2.9%) |    67|"
-      [5] "|3            |  3  (2.9%)| 11 (10.5%)|1 (1.0%) |    15|"
-      [6] "|<NA>         |  8  (7.6%)|  5  (4.8%)|1 (1.0%) |    14|"
-      [7] "|             |           |           |         |      |"
-      [8] "|Total        |         48|         51|       7 |   105|"
-      attr(,"format")
-      [1] "pipe"
-      attr(,"class")
-      [1] "knitr_kable" "character"  
+      
+      
+      |efc$c172code |       male|     female|    (NA) | Total|
+      |:------------|----------:|----------:|:--------|-----:|
+      |1            |  5  (4.8%)|  3  (2.9%)|2 (1.9%) |    10|
+      |2            | 32 (30.5%)| 32 (30.5%)|3 (2.9%) |    67|
+      |3            |  3  (2.9%)| 11 (10.5%)|1 (1.0%) |    15|
+      |<NA>         |  8  (7.6%)|  5  (4.8%)|1 (1.0%) |    14|
+      |             |           |           |         |      |
+      |Total        |         48|         51|       7 |   105|
 
 ---
 
     Code
-      print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell",
+      print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full",
       include_na = FALSE, weights = efc$weights))
     Output
-      [1] "|efc$c172code |       male|     female| Total|"
-      [2] "|:------------|----------:|----------:|-----:|"
-      [3] "|1            |  5  (5.8%)|  3  (3.5%)|     8|"
-      [4] "|2            | 32 (37.2%)| 32 (37.2%)|    64|"
-      [5] "|3            |  3  (3.5%)| 11 (12.8%)|    14|"
-      [6] "|             |           |           |      |"
-      [7] "|Total        |         40|         46|    86|"
-      attr(,"format")
-      [1] "pipe"
-      attr(,"class")
-      [1] "knitr_kable" "character"  
+      
+      
+      |efc$c172code |       male|     female| Total|
+      |:------------|----------:|----------:|-----:|
+      |1            |  5  (5.8%)|  3  (3.5%)|     8|
+      |2            | 32 (37.2%)| 32 (37.2%)|    64|
+      |3            |  3  (3.5%)| 11 (12.8%)|    14|
+      |             |           |           |      |
+      |Total        |         40|         46|    86|
 

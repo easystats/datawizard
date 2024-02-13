@@ -8,7 +8,7 @@
                         obj_name = NULL,
                         group_variable = NULL) {
   if (!is.null(proportions)) {
-    proportions <- match.arg(proportions, c("row", "column", "cell"))
+    proportions <- match.arg(proportions, c("row", "column", "full"))
   }
   # frequency table
   if (is.null(weights)) {
@@ -120,7 +120,7 @@ format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = 
           format(sprintf("(%.*f%%)", digits, 100 * x[, i] / sum(x[, i], na.rm = TRUE)), justify = "right")
         )
       }
-    } else if (identical(props, "cell")) {
+    } else if (identical(props, "full")) {
       for (i in seq_len(ncol(x))[-1]) {
         tmp[, i] <- paste(
           format(x[, i]),
