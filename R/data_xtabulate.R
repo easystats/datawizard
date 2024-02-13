@@ -312,7 +312,7 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
 }
 
 
-.validate_tableweights <- function(weights, x) {
+.validate_table_weights <- function(weights, x) {
   if (!is.null(weights)) {
     if (is.character(weights)) {
       # If "weights" is a character string, must be of length 1

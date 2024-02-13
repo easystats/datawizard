@@ -126,7 +126,7 @@ data_tabulate.default <- function(x,
   }
 
   # validate "weights"
-  weights <- .validate_tableweights(weights, x)
+  weights <- .validate_table_weights(weights, x)
 
   # we go into another function for crosstables here...
   if (!is.null(by)) {
@@ -260,7 +260,7 @@ data_tabulate.data.frame <- function(x,
   # validate "by"
   by <- .validate_by(by, x)
   # validate "weights"
-  weights <- .validate_tableweights(weights, x)
+  weights <- .validate_table_weights(weights, x)
 
   out <- lapply(select, function(i) {
     data_tabulate(
