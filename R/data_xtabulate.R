@@ -108,29 +108,23 @@ format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = 
     tmp <- x
     if (identical(props, "row")) {
       for (i in seq_len(nrow(x))) {
-        tmp[i, -1] <- sprintf(
-          "%s (%.*f%%)",
-          x[i, -1],
-          digits,
-          100 * x[i, -1] / sum(x[i, -1], na.rm = TRUE)
+        tmp[i, -1] <- paste(
+          format(x[i, -1]),
+          format(sprintf("(%.*f%%)", digits, 100 * x[i, -1] / sum(x[i, -1], na.rm = TRUE)), justify = "right")
         )
       }
     } else if (identical(props, "column")) {
       for (i in seq_len(ncol(x))[-1]) {
-        tmp[, i] <- sprintf(
-          "%s (%.*f%%)",
-          x[, i],
-          digits,
-          100 * x[, i] / sum(x[, i], na.rm = TRUE)
+        tmp[, i] <- paste(
+          format(x[, i]),
+          format(sprintf("(%.*f%%)", digits, 100 * x[, i] / sum(x[, i], na.rm = TRUE)), justify = "right")
         )
       }
     } else if (identical(props, "cell")) {
       for (i in seq_len(ncol(x))[-1]) {
-        tmp[, i] <- sprintf(
-          "%s (%.*f%%)",
-          x[, i],
-          digits,
-          100 * x[, i] / total_n
+        tmp[, i] <- paste(
+          format(x[, i]),
+          format(sprintf("(%.*f%%)", digits, 100 * x[, i] / total_n), justify = "right")
         )
       }
     }
