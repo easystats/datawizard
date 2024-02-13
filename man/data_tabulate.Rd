@@ -55,6 +55,11 @@ as \code{x}. If \code{weights} is supplied, weighted frequencies are calculated.
 \item{include_na}{Logical, if \code{TRUE}, missing values are included in the
 frequency or crosstable, else missing values are omitted.}
 
+\item{proportions}{Optional character string, indicating the type of
+percentages to be calculated. Only applies to crosstables, i.e. when \code{by} is
+not \code{NULL}. Can be \code{"row"}, \code{"column"} or \code{"cell"}, to calculate row, column
+or cell percentages, respectively.}
+
 \item{name}{Optional character string, which includes the name that is used
 for printing.}
 
