@@ -202,13 +202,13 @@ print.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
       # If "by" is a character string, must be of length 1
       if (length(by) > 1) {
         insight::format_error(
-          "If argument `by` is a character indicating a variable name, `by` must be of length 1.",
+          "If `by` is a string indicating a variable name, `by` must be of length 1.",
           "You may use `data_group()` to group by multiple variables, then call `data_tabulate()`."
         )
       }
       # if "by" is a character, "x" must be a data frame
       if (!is.data.frame(x)) {
-        insight::format_error("If argument `by` is a character indicating a variable name, `x` must be a data frame.")
+        insight::format_error("If `by` is a string indicating a variable name, `x` must be a data frame.")
       }
       # is "by" a column in "x"?
       if (!by %in% colnames(x)) {
@@ -221,10 +221,10 @@ print.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
     }
     # is "by" of same length as "x"?
     if (is.data.frame(x) && length(by) != nrow(x)) {
-      insight::format_error("The variable specified in `by` must have the same length as rows in `x`.") # nolint
+      insight::format_error("Length of `by` must be equal to number of rows in `x`.") # nolint
     }
     if (!is.data.frame(x) && length(by) != length(x)) {
-      insight::format_error("The variable specified in `by` must have the same length as `x`.") # nolint
+      insight::format_error("Length of `by` must be equal to length of `x`.") # nolint
     }
     if (!is.factor(by)) {
       # coerce "by" to factor, including labels
@@ -233,4 +233,39 @@ print.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
   }
 
   by
+}
+
+
+.validate_tableweights <- function(weights, x) {
+  if (!is.null(weights)) {
+    if (is.character(weights)) {
+      # If "weights" is a character string, must be of length 1
+      if (length(weights) > 1) {
+        insight::format_error(
+          "If `weights` is a string indicating a variable name, `weights` must be of length 1."
+        )
+      }
+      # if "weights" is a character, "x" must be a data frame
+      if (!is.data.frame(x)) {
+        insight::format_error("If `weights` is a string indicating a variable name, `x` must be a data frame.") # nolint
+      }
+      # is "by" a column in "x"?
+      if (!weights %in% colnames(x)) {
+        insight::format_error(sprintf(
+          "The variable specified in `weights` was not found in `x`. %s",
+          .misspelled_string(names(x), weights, "Possibly misspelled?")
+        ))
+      }
+      weights <- x[[weights]]
+    }
+    # is "by" of same length as "x"?
+    if (is.data.frame(x) && length(weights) != nrow(x)) {
+      insight::format_error("Length of `weights` must be equal to number of rows in `x`.") # nolint
+    }
+    if (!is.data.frame(x) && length(weights) != length(x)) {
+      insight::format_error("Length of `weights` must be equal to length of `x`.") # nolint
+    }
+  }
+
+  weights
 }

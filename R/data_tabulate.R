@@ -91,10 +91,8 @@ data_tabulate.default <- function(x,
     x <- droplevels(x)
   }
 
-  # check for correct length of weights - must be equal to "x"
-  if (!is.null(weights) && length(weights) != length(x)) {
-    insight::format_error("Length of `weights` must be equal to length of `x`.")
-  }
+  # validate "weights"
+  weights <- .validate_tableweights(weights, x)
 
   # we go into another function for crosstables here...
   if (!is.null(by)) {
@@ -225,8 +223,11 @@ data_tabulate.data.frame <- function(x,
     regex = regex,
     verbose = verbose
   )
+
   # validate "by"
   by <- .validate_by(by, x)
+  # validate "weights"
+  weights <- .validate_tableweights(weights, x)
 
   out <- lapply(select, function(i) {
     data_tabulate(

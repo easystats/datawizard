@@ -252,3 +252,74 @@ test_that("data_tabulate regex", {
     data_tabulate(mtcars, select = "carb")
   )
 })
+
+
+test_that("data_tabulate exclude/include missing values", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+  out <- data_tabulate(efc$c172code)
+  expect_identical(out$N, c(8L, 66L, 16L, 10L))
+  out <- data_tabulate(efc$c172code, include_na = FALSE)
+  expect_identical(out$N, c(8L, 66L, 16L))
+  out <- data_tabulate(efc$c172code, weights = efc$weights)
+  expect_identical(out$N, c(10, 67, 15, 13))
+  out <- data_tabulate(efc$c172code, include_na = FALSE, weights = efc$weights)
+  expect_identical(out$N, c(10, 67, 15))
+})
+
+
+# cross tables ------------------------------
+test_that("data_tabulate, cross tables", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+
+  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell")))
+  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", include_na = FALSE)))
+  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", weights = efc$weights)))
+  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", include_na = FALSE, weights = efc$weights))) # nolint
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row")))
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", include_na = FALSE)))
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", weights = efc$weights)))
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", include_na = FALSE, weights = efc$weights))) # nolint
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")))
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", include_na = FALSE)))
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", weights = "weights")))
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", include_na = FALSE, weights = "weights"))) # nolint
+})
+
+test_that("data_tabulate, cross tables, grouped df", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+  grp <- data_group(efc, "e42dep")
+  expect_snapshot(print(data_tabulate(grp, "c172code", by = "e16sex", proportions = "row")))
+})
+
+test_that("data_tabulate, cross tables, errors", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+  expect_error(data_tabulate(efc$c172code, by = "e16sex"), regex = "If `by` is a string")
+  expect_error(data_tabulate(efc$c172code, by = efc$e16sex[-1]), regex = "Length of `by`")
+  expect_error(data_tabulate(efc, "c172code", by = efc$e16sex[-1]), regex = "Length of `by`")
+  expect_error(data_tabulate(efc, "c172code", by = "c16sex"), regex = "not found")
+  expect_error(data_tabulate(efc, "c172code", by = c("e16sex", "e42dep")), regex = "You may use")
+})
+
+test_that("data_tabulate, cross tables, errors", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+  expect_error(data_tabulate(efc$c172code, weights = "weights"), regex = "If `weights`")
+  expect_error(data_tabulate(efc$c172code, weights = efc$weights[-1]), regex = "Length of `weights`")
+  expect_error(data_tabulate(efc, "c172code", weights = efc$weights[-1]), regex = "Length of `weights`")
+  expect_error(data_tabulate(efc, "c172code", weights = "weigths"), regex = "not found")
+  expect_error(data_tabulate(efc, "c172code", weights = c("e16sex", "e42dep")), regex = "length 1")
+})
