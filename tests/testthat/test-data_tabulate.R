@@ -243,6 +243,16 @@ test_that("data_tabulate print, collapse groups, drop levels", {
   )
 })
 
+test_that("data_tabulate drop levels", {
+  x <- factor(rep(letters[1:3], 3), levels = letters[1:5])
+  out1 <- data_tabulate(x, drop_levels = FALSE)
+  out2 <- data_tabulate(x, drop_levels = TRUE)
+  expect_identical(out1$N, c(3L, 3L, 3L, 0L, 0L, 0L))
+  expect_identical(as.character(out1$Value), c("a", "b", "c", "d", "e", NA))
+  expect_identical(out2$N, c(3L, 3L, 3L, 0L))
+  expect_identical(as.character(out2$Value), c("a", "b", "c", NA))
+})
+
 
 # select helpers ------------------------------
 test_that("data_tabulate regex", {
@@ -253,6 +263,8 @@ test_that("data_tabulate regex", {
   )
 })
 
+
+# missing values ------------------------------
 
 test_that("data_tabulate exclude/include missing values", {
   data(efc, package = "datawizard")

@@ -10,7 +10,7 @@
 #' @param by Optional vector or factor. If supplied, a crosstable is created.
 #' If `x` is a data frame, `by` can also be a character string indicating the
 #' name of a variable in `x`.
-#' @param drop_levels Logical, if `TRUE`, factor levels that do not occur in
+#' @param drop_levels Logical, if `FALSE`, factor levels that do not occur in
 #' the data are included in the table (with frequency of zero), else unused
 #' factor levels are dropped from the frequency table.
 #' @param name Optional character string, which includes the name that is used

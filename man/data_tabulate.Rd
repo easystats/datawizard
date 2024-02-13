@@ -45,7 +45,7 @@ data_tabulate(x, ...)
 If \code{x} is a data frame, \code{by} can also be a character string indicating the
 name of a variable in \code{x}.}
 
-\item{drop_levels}{Logical, if \code{TRUE}, factor levels that do not occur in
+\item{drop_levels}{Logical, if \code{FALSE}, factor levels that do not occur in
 the data are included in the table (with frequency of zero), else unused
 factor levels are dropped from the frequency table.}
 
