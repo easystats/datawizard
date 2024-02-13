@@ -335,3 +335,18 @@ test_that("data_tabulate, cross tables, errors", {
   expect_error(data_tabulate(efc, "c172code", weights = "weigths"), regex = "not found")
   expect_error(data_tabulate(efc, "c172code", weights = c("e16sex", "e42dep")), regex = "length 1")
 })
+
+
+# markdown -------------------------
+
+test_that("data_tabulate, cross tables, markdown", {
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+
+  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell")))
+  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", include_na = FALSE)))
+  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", weights = efc$weights)))
+  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "cell", include_na = FALSE, weights = efc$weights))) # nolint
+})
