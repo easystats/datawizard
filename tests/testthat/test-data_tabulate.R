@@ -1,6 +1,5 @@
-data(efc)
-
 test_that("data_tabulate factor", {
+  data(efc, package = "datawizard")
   x <- data_tabulate(efc$e42dep)
   expect_identical(as.vector(x$Value), as.vector(sort(unique(
     addNA(efc$e42dep)
@@ -17,6 +16,7 @@ test_that("data_tabulate factor", {
 
 
 test_that("data_tabulate numeric", {
+  data(efc, package = "datawizard")
   x <- data_tabulate(efc$neg_c_7)
   expect_identical(as.vector(x$Value), as.vector(sort(unique(
     addNA(efc$neg_c_7)
@@ -62,6 +62,7 @@ test_that("data_tabulate, weights", {
 
 
 test_that("data_tabulate data.frame", {
+  data(efc, package = "datawizard")
   x <- data_tabulate(efc, c("e16sex", "c172code"))
   expect_s3_class(x, "list")
   expect_length(x, 2L)
@@ -138,11 +139,13 @@ test_that("data_tabulate print", {
 
 
 test_that("data_tabulate print", {
+  data(efc, package = "datawizard")
   expect_snapshot(data_tabulate(efc$e42dep))
 })
 
 
 test_that("data_tabulate print multiple", {
+  data(efc, package = "datawizard")
   expect_snapshot(data_tabulate(efc, c("c172code", "e16sex")))
 })
 
@@ -157,6 +160,7 @@ test_that("data_tabulate big numbers", {
 
 test_that("data_tabulate print multiple, collapse", {
   skip_if_not(packageVersion("insight") > "0.17.0", "insight must be >= 0.17.0")
+  data(efc, package = "datawizard")
   expect_snapshot(data_tabulate(efc, c("c172code", "e16sex"), collapse = TRUE))
 })
 
@@ -164,6 +168,7 @@ test_that("data_tabulate print multiple, collapse", {
 
 test_that("data_tabulate grouped data.frame", {
   skip_if_not_installed("poorman")
+  data(efc, package = "datawizard")
   x <- data_tabulate(poorman::group_by(efc, e16sex), "c172code")
   expect_s3_class(x, "list")
   expect_length(x, 2L)
@@ -213,11 +218,13 @@ test_that("data_tabulate grouped data.frame", {
 
 test_that("data_tabulate print grouped data", {
   skip_if_not_installed("poorman")
+  data(efc, package = "datawizard")
   expect_snapshot(data_tabulate(poorman::group_by(efc, e16sex), "c172code"))
 })
 
 test_that("data_tabulate print, collapse groups", {
   skip_if_not_installed("poorman")
+  data(efc, package = "datawizard")
   expect_snapshot(
     data_tabulate(poorman::group_by(efc, e16sex), "c172code", collapse = TRUE)
   )
@@ -225,6 +232,7 @@ test_that("data_tabulate print, collapse groups", {
 
 test_that("data_tabulate print, collapse groups, drop levels", {
   skip_if_not_installed("poorman")
+  data(efc, package = "datawizard")
   expect_snapshot(
     data_tabulate(
       poorman::group_by(efc, e16sex),
@@ -238,6 +246,7 @@ test_that("data_tabulate print, collapse groups, drop levels", {
 
 # select helpers ------------------------------
 test_that("data_tabulate regex", {
+  data(mtcars)
   expect_identical(
     data_tabulate(mtcars, select = "arb", regex = TRUE),
     data_tabulate(mtcars, select = "carb")
