@@ -125,6 +125,12 @@ test_that("data_tabulate data.frame", {
 })
 
 
+test_that("data_tabulate unsupported class", {
+  data(mtcars)
+  expect_warning(data_tabulate(lm(mpg ~ hp, data = mtcars)), regex = "Can't compute frequency tables")
+})
+
+
 test_that("data_tabulate print", {
   set.seed(123)
   x <- sample.int(3, 1e6, TRUE)
