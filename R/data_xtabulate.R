@@ -54,7 +54,7 @@
   # we want to round N for weighted frequencies
   if (!is.null(weights)) {
     out$N <- round(out$N)
-    tota_n <- round(total_n)
+    total_n <- round(total_n)
   }
 
   out <- data_to_wide(out, values_from = "N", names_from = "by")
