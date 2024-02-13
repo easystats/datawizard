@@ -242,7 +242,11 @@ data_tabulate.data.frame <- function(x,
     )
   })
 
-  class(out) <- ifelse(is.null(by), c("dw_data_tabulates", "list"), c("dw_data_xtabulates", "list"))
+  if (is.null(by)) {
+    class(out) <- c("dw_data_tabulates", "list")
+  } else {
+    class(out) <- c("dw_data_xtabulates", "list")
+  }
   attr(out, "collapse") <- isTRUE(collapse)
   attr(out, "is_weighted") <- !is.null(weights)
 
@@ -304,7 +308,11 @@ data_tabulate.grouped_df <- function(x,
       ...
     ))
   }
-  class(out) <- ifelse(is.null(by), c("dw_data_tabulates", "list"), c("dw_data_xtabulates", "list"))
+  if (is.null(by)) {
+    class(out) <- c("dw_data_tabulates", "list")
+  } else {
+    class(out) <- c("dw_data_xtabulates", "list")
+  }
   attr(out, "collapse") <- isTRUE(collapse)
   attr(out, "is_weighted") <- !is.null(weights)
 
