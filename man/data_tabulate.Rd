@@ -4,7 +4,7 @@
 \alias{data_tabulate}
 \alias{data_tabulate.default}
 \alias{data_tabulate.data.frame}
-\title{Create frequency tables of variables}
+\title{Create frequency and crosstables of variables}
 \usage{
 data_tabulate(x, ...)
 
@@ -53,7 +53,7 @@ factor levels are dropped from the frequency table.}
 as \code{x}. If \code{weights} is supplied, weighted frequencies are calculated.}
 
 \item{include_na}{Logical, if \code{TRUE}, missing values are included in the
-frequency or cross table, else missing values are omitted.}
+frequency or crosstable, else missing values are omitted.}
 
 \item{name}{Optional character string, which includes the name that is used
 for printing.}
@@ -117,16 +117,22 @@ A data frame, or a list of data frames, with one frequency table
 as data frame per variable.
 }
 \description{
-This function creates frequency tables of variables, including
-the number of levels/values as well as the distribution of raw, valid and
-cumulative percentages.
+This function creates frequency or crosstables of variables,
+including the number of levels/values as well as the distribution of raw,
+valid and cumulative percentages. For crosstables, row, column  and cell
+percentages can be calculated.
 }
 \examples{
 \dontshow{if (requireNamespace("poorman")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# frequency tables -------
+# ------------------------
 data(efc)
 
 # vector/factor
 data_tabulate(efc$c172code)
+
+# drop missing values
+data_tabulate(efc$c172code, include_na = FALSE)
 
 # data frame
 data_tabulate(efc, c("e42dep", "c172code"))
@@ -154,5 +160,30 @@ print(data_tabulate(x), big_mark = "")
 set.seed(123)
 efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
 data_tabulate(efc$e42dep, weights = efc$weights)
+
+# crosstables ------
+# ------------------
+
+# add some missing values
+set.seed(123)
+efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+
+data_tabulate(efc, "c172code", by = "e16sex")
+
+# add row and column percentages
+data_tabulate(efc, "c172code", by = "e16sex", proportions = "row")
+data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")
+
+# omit missing values
+data_tabulate(
+  efc$c172code,
+  by = efc$e16sex,
+  proportions = "column",
+  include_na = FALSE
+)
+
+# round percentages
+out <- data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")
+print(out, digits = 0)
 \dontshow{\}) # examplesIf}
 }

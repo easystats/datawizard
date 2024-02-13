@@ -140,16 +140,26 @@ format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = 
 
   # format data frame
   ftab <- insight::format_table(x, ...)
+  # replace empty cells with NA
   ftab[] <- lapply(ftab, function(i) {
     i[i == ""] <- ifelse(identical(format, "text"), "<NA>", "(NA)") # nolint
     i
   })
+  # Remove ".00" from numbers
   ftab$Total <- gsub("\\.00$", "", as.character(total_column))
-  sub <- as.data.frame(t(data.frame(
-    rep("", ncol(ftab)),
-    c("Total", as.character(total_row)),
-    stringsAsFactors = FALSE
-  )))
+  # for text format, insert "empty row" before last total row
+  if (identical(format, "text")) {
+    sub <- as.data.frame(t(data.frame(
+      rep("", ncol(ftab)),
+      c("Total", as.character(total_row)),
+      stringsAsFactors = FALSE
+    )))
+  } else {
+    sub <- as.data.frame(t(data.frame(
+      c("Total", as.character(total_row)),
+      stringsAsFactors = FALSE
+    )))
+  }
   colnames(sub) <- colnames(ftab)
   ftab <- rbind(ftab, sub)
   ftab[nrow(ftab), ] <- gsub("\\.00$", "", ftab[nrow(ftab), ])
@@ -185,12 +195,57 @@ print.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
 
 
 #' @export
+print_html.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
+  # grouped data? if yes, add information on grouping factor
+  if (!is.null(x[["Group"]])) {
+    x$groups <- paste0("Grouped by ", x[["Group"]][1])
+    x$Group <- NULL
+  }
+
+  # print table
+  insight::export_table(
+    format(x, big_mark = big_mark, format = "html", ...),
+    missing = "(NA)",
+    format = "html",
+    group_by = "groups"
+  )
+}
+
+
+#' @export
 print.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
   for (i in seq_along(x)) {
     print(x[[i]], big_mark = big_mark, ...)
     cat("\n")
   }
   invisible(x)
+}
+
+
+#' @export
+print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
+  if (length(x) == 1) {
+    print_html(x[[1]], big_mark = big_mark, ...)
+  } else {
+    x <- lapply(x, function(i) {
+      # grouped data? if yes, add information on grouping factor
+      if (!is.null(i[["Group"]])) {
+        i$groups <- paste0("Grouped by ", i[["Group"]][1])
+        i$Group <- NULL
+      }
+      format(i, format = "html", big_mark = big_mark, ...)
+    })
+
+    out <- do.call(rbind, x)
+
+    # print table
+    insight::export_table(
+      out,
+      missing = "(NA)",
+      format = "html",
+      group_by = "groups"
+    )
+  }
 }
 
 
