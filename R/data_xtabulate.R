@@ -223,6 +223,9 @@ print.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
     if (is.data.frame(x) && length(by) != nrow(x)) {
       insight::format_error("The variable specified in `by` must have the same length as rows in `x`.") # nolint
     }
+    if (!is.data.frame(x) && length(by) != length(x)) {
+      insight::format_error("The variable specified in `by` must have the same length as `x`.") # nolint
+    }
     if (!is.factor(by)) {
       # coerce "by" to factor, including labels
       by <- to_factor(by, labels_to_levels = TRUE, verbose = FALSE)
