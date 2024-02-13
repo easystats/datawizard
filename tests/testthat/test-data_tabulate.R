@@ -379,3 +379,21 @@ test_that("data_tabulate, cross tables, markdown", {
   expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", weights = efc$weights)))
   expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE, weights = efc$weights))) # nolint
 })
+
+# validate against table -------------------------
+
+test_that("data_tabulate, validate against table", {
+  data(mtcars)
+  # frequency table
+  out1 <- as.data.frame(table(mtcars$cyl))
+  out2 <- data_tabulate(mtcars$cyl, include_na = FALSE)
+  expect_identical(out1$Freq, out2$N)
+  # crosstable
+  out1 <- data_arrange(as.data.frame(table(mtcars$cyl, mtcars$gear)), c("Var1", "Var2"))
+  out2 <- data_rename(data_to_long(
+    as.data.frame(data_tabulate(mtcars$cyl, by = mtcars$gear, include_na = FALSE)), 2:4,
+    names_to = "Var2", values_to = "Freq"
+  ), "mtcars$cyl", "Var1")
+  out1[[2]] <- as.character(out1[[2]])
+  expect_equal(out1, out2, ignore_attr = TRUE)
+})
