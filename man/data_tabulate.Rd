@@ -127,6 +127,23 @@ including the number of levels/values as well as the distribution of raw,
 valid and cumulative percentages. For crosstables, row, column  and cell
 percentages can be calculated.
 }
+\note{
+There are \code{print_html()} and \code{print_md()} methods available for printing
+frequency or crosstables in HTML and markdown format, e.g.
+\code{print_html(data_tabulate(x))}.
+}
+\section{Crosstables}{
+
+If \code{by} is supplied, a crosstable is created. The crosstable includes \verb{<NA>}
+(missing) values by default. The first column indicates values of \code{x}, the
+first row indicates values of \code{by} (including missing values). The last row
+and column contain the total frequencies for each row and column, respectively.
+Setting \code{include_na = FALSE} will omit missing values from the crosstable.
+Setting \code{proportions} to \code{"row"} or \code{"column"} will add row or column
+percentages. Setting \code{proportions} to \code{"full"} will add relative frequencies
+for the full table.
+}
+
 \examples{
 \dontshow{if (requireNamespace("poorman")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # frequency tables -------

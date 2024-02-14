@@ -28,6 +28,21 @@
 #' @param ... not used.
 #' @inheritParams find_columns
 #'
+#' @section Crosstables:
+#' If `by` is supplied, a crosstable is created. The crosstable includes `<NA>`
+#' (missing) values by default. The first column indicates values of `x`, the
+#' first row indicates values of `by` (including missing values). The last row
+#' and column contain the total frequencies for each row and column, respectively.
+#' Setting `include_na = FALSE` will omit missing values from the crosstable.
+#' Setting `proportions` to `"row"` or `"column"` will add row or column
+#' percentages. Setting `proportions` to `"full"` will add relative frequencies
+#' for the full table.
+#'
+#' @note
+#' There are `print_html()` and `print_md()` methods available for printing
+#' frequency or crosstables in HTML and markdown format, e.g.
+#' `print_html(data_tabulate(x))`.
+#'
 #' @return A data frame, or a list of data frames, with one frequency table
 #' as data frame per variable.
 #'
