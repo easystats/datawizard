@@ -247,6 +247,25 @@ table for printing. This affects only printing, not the returned object.</p></dd
 <p>A data frame, or a list of data frames, with one frequency table
 as data frame per variable.</p>
     </div>
+    <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>There are <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_html()</a></code> and <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md()</a></code> methods available for printing
+frequency or crosstables in HTML and markdown format, e.g.
+<code>print_html(data_tabulate(x))</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="crosstables">Crosstables<a class="anchor" aria-label="anchor" href="#crosstables"></a></h2>
+    
+
+<p>If <code>by</code> is supplied, a crosstable is created. The crosstable includes <code>&lt;NA&gt;</code>
+(missing) values by default. The first column indicates values of <code>x</code>, the
+first row indicates values of <code>by</code> (including missing values). The last row
+and column contain the total frequencies for each row and column, respectively.
+Setting <code>include_na = FALSE</code> will omit missing values from the crosstable.
+Setting <code>proportions</code> to <code>"row"</code> or <code>"column"</code> will add row or column
+percentages. Setting <code>proportions</code> to <code>"full"</code> will add relative frequencies
+for the full table.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
