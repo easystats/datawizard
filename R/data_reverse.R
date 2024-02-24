@@ -93,24 +93,24 @@ reverse.numeric <- function(x,
   }
 
   # old minimum and maximum
-  min <- min(range)
-  max <- max(range)
+  min_value <- min(range)
+  max_value <- max(range)
 
   # check if a valid range (i.e. vector of length 2) is provided
   if (length(range) > 2) {
     insight::format_error(
       "`range` must be a numeric vector of length two, indicating lowest and highest value of the required range.",
-      sprintf("Did you want to provide `range = c(%g, %g)`?", min, max)
+      sprintf("Did you want to provide `range = c(%g, %g)`?", min_value, max_value)
     )
   }
 
-  new_min <- max
-  new_max <- min
+  new_min <- max_value
+  new_max <- min_value
 
-  out <- as.vector((new_max - new_min) / (max - min) * (x - min) + new_min)
+  out <- as.vector((new_max - new_min) / (max_value - min_value) * (x - min_value) + new_min)
 
   # labelled data?
-  out <- .set_back_labels(out, x)
+  out <- .set_back_labels(out, x, reverse_values = TRUE)
   out
 }
 
@@ -134,7 +134,9 @@ reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
   # save for later use
   original_x <- x
 
-  if (!is.null(range)) {
+  if (is.null(range)) {
+    old_levels <- levels(x)
+  } else {
     # no missing values allowed
     if (anyNA(range)) {
       insight::format_error("`range` is not allowed to have missing values.")
@@ -180,8 +182,6 @@ reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
     }
     old_levels <- range
     x <- factor(x, levels = range)
-  } else {
-    old_levels <- levels(x)
   }
 
   int_x <- as.integer(x)
@@ -189,7 +189,7 @@ reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
   x <- factor(rev_x, levels = seq_len(length(old_levels)), labels = old_levels)
 
   # labelled data?
-  x <- .set_back_labels(x, original_x)
+  x <- .set_back_labels(x, original_x, reverse_values = TRUE)
 
   x
 }
@@ -225,7 +225,7 @@ reverse.grouped_df <- function(x,
   # create the new variables and updates "select", so new variables are processed
   if (!isFALSE(append)) {
     # process arguments
-    args <- .process_append(
+    arguments <- .process_append(
       x,
       select,
       append,
@@ -233,8 +233,8 @@ reverse.grouped_df <- function(x,
       preserve_value_labels = TRUE
     )
     # update processed arguments
-    x <- args$x
-    select <- args$select
+    x <- arguments$x
+    select <- arguments$select
   }
 
   x <- as.data.frame(x)
@@ -279,7 +279,7 @@ reverse.data.frame <- function(x,
   # create the new variables and updates "select", so new variables are processed
   if (!isFALSE(append)) {
     # process arguments
-    args <- .process_append(
+    arguments <- .process_append(
       x,
       select,
       append,
@@ -287,8 +287,8 @@ reverse.data.frame <- function(x,
       preserve_value_labels = TRUE
     )
     # update processed arguments
-    x <- args$x
-    select <- args$select
+    x <- arguments$x
+    select <- arguments$select
   }
 
   # Transform the range so that it is a list now

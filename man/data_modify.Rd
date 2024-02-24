@@ -2,9 +2,12 @@
 % Please edit documentation in R/data_modify.R
 \name{data_modify}
 \alias{data_modify}
+\alias{data_modify.data.frame}
 \title{Create new variables in a data frame}
 \usage{
 data_modify(data, ...)
+
+\method{data_modify}{data.frame}(data, ..., .if = NULL, .at = NULL, .modify = NULL)
 }
 \arguments{
 \item{data}{A data frame}
@@ -29,8 +32,23 @@ character vector is provided, you may not add further elements to \code{...}.
 Example: \code{Petal.Width = NULL}.
 }
 
-Note that newly created variables can be used in subsequent expressions.
-See also 'Examples'.}
+Note that newly created variables can be used in subsequent expressions,
+including \code{.at} or \code{.if}. See also 'Examples'.}
+
+\item{.if}{A function that returns \code{TRUE} for columns in the data frame where
+\code{.if} applies. This argument is used in combination with the \code{.modify} argument.
+Note that only one of \code{.at} or \code{.if} can be provided, but not both at the same
+time. Newly created variables in \code{...} can also be selected, see 'Examples'.}
+
+\item{.at}{A character vector of variable names that should be modified. This
+argument is used in combination with the \code{.modify} argument. Note that only one
+of \code{.at} or \code{.if} can be provided, but not both at the same time. Newly created
+variables in \code{...} can also be selected, see 'Examples'.}
+
+\item{.modify}{A function that modifies the variables defined in \code{.at} or \code{.if}.
+This argument is used in combination with either the \code{.at} or the \code{.if} argument.
+Note that the modified variable (i.e. the result from \code{.modify}) must be either
+of length 1 or of same length as the input variable.}
 }
 \description{
 Create new variables or modify existing variables in a data frame. Unlike \code{base::transform()}, \code{data_modify()}
@@ -103,4 +121,30 @@ foo(iris, "var_a = Sepal.Width / 10")
 
 new_exp <- c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")
 foo(iris, new_exp)
+
+# modify at specific positions or if condition is met
+d <- iris[1:5, ]
+data_modify(d, .at = "Species", .modify = as.numeric)
+data_modify(d, .if = is.factor, .modify = as.numeric)
+
+# can be combined with dots
+data_modify(d, new_length = Petal.Length * 2, .at = "Species", .modify = as.numeric)
+
+# new variables used in `.at` or `.if`
+data_modify(
+  d,
+  new_length = Petal.Length * 2,
+  .at = c("Petal.Length", "new_length"),
+  .modify = round
+)
+
+# combine "data_find()" and ".at" argument
+out <- data_modify(
+  d,
+  .at = data_find(d, select = starts_with("Sepal")),
+  .modify = as.factor
+)
+# "Sepal.Length" and "Sepal.Width" are now factors
+str(out)
+
 }

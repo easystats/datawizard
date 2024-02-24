@@ -105,7 +105,11 @@ convert_to_na.factor <- function(x, na = NULL, drop_levels = FALSE, verbose = TR
     # drop unused labels
     value_labels <- attr(x, "labels", exact = TRUE)
     if (is.factor(x) && isTRUE(drop_levels)) {
+      # save label attribute
+      variable_label <- attr(x, "label", exact = TRUE)
       x <- droplevels(x)
+      # droplevels() discards attributes, so we need to re-assign them
+      attr(x, "label") <- variable_label
     }
     attr(x, "labels") <- value_labels[!value_labels %in% na]
   }

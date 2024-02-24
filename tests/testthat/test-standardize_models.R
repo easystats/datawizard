@@ -47,24 +47,28 @@ test_that("transformations", {
   fit_scale2 <- lm(scale(mpg) ~ scale(exp(hp_100)), mt)
   expect_equal(
     effectsize::standardize_parameters(fit_exp, method = "refit")[2, 2],
-    unname(coef(fit_scale1)[2])
+    unname(coef(fit_scale1)[2]),
+    ignore_attr = TRUE
   )
 
   expect_equal(
     effectsize::standardize_parameters(fit_exp, method = "basic")[2, 2],
-    unname(coef(fit_scale2)[2])
+    unname(coef(fit_scale2)[2]),
+    ignore_attr = TRUE
   )
 
   skip_if_not_installed("insight", minimum_version = "0.10.0")
   d <- data.frame(
     time = as.factor(c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5)),
     group = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
-    sum = c(0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50)
+    sum = c(0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50) # nolint
   )
   m <- lm(log(sum + 1) ~ as.numeric(time) * group, data = d)
 
 
-  expect_message(out <- standardize(m))
+  expect_message({
+    out <- standardize(m)
+  })
   expect_identical(coef(m), c(
     `(Intercept)` = -0.4575, `as.numeric(time)` = 0.5492, group = 0.3379,
     `as.numeric(time):group` = 0.15779
@@ -98,12 +102,14 @@ test_that("weights", {
   stdREFIT <- effectsize::standardize_parameters(m, method = "refit")
   expect_equal(
     stdREFIT[[2]],
-    effectsize::standardize_parameters(m, method = "posthoc")[[2]]
+    effectsize::standardize_parameters(m, method = "posthoc")[[2]],
+    ignore_attr = TRUE
   )
 
   expect_equal(
     stdREFIT[[2]],
-    effectsize::standardize_parameters(m, method = "basic")[[2]]
+    effectsize::standardize_parameters(m, method = "basic")[[2]],
+    ignore_attr = TRUE
   )
 })
 
@@ -230,7 +236,9 @@ test_that("standardize mediation", {
   )
 
   out1 <- summary(standardize(med1))
-  expect_message(out2 <- summary(standardize(med2)))
+  expect_message({
+    out2 <- summary(standardize(med2))
+  })
   expect_identical(unlist(out1[c("d0", "d1", "z0", "z1", "n0", "n1", "tau.coef")]),
     unlist(out2[c("d0", "d1", "z0", "z1", "n0", "n1", "tau.coef")]),
     tolerance = 0.1
@@ -266,13 +274,22 @@ test_that("offsets", {
 
   m <- lm(mpg ~ hp + offset(wt), data = mtcars)
 
-  expect_warning(mz1 <- standardize(m))
-  expect_warning(mz2 <- standardize(m, two_sd = TRUE))
+  expect_warning({
+    mz1 <- standardize(m)
+  })
+  expect_warning({
+    mz2 <- standardize(m, two_sd = TRUE)
+  })
   expect_identical(c(1, 2) * coef(mz1), coef(mz2))
 
 
   m <- glm(cyl ~ hp + offset(wt), family = poisson(), data = mtcars)
-  expect_warning(mz <- standardize(m), regexp = NA)
+  expect_warning(
+    {
+      mz <- standardize(m)
+    },
+    regexp = NA
+  )
 
   par1 <- parameters::model_parameters(mz)
   par2 <- effectsize::standardize_parameters(m, method = "basic")
@@ -288,10 +305,12 @@ test_that("brms", {
   skip_if_not_installed("brms")
 
   invisible(
-    capture.output(mod <- brms::brm(mpg ~ hp,
-      data = mtcars,
-      refresh = 0, chains = 1, silent = 2
-    ))
+    capture.output({
+      mod <- brms::brm(mpg ~ hp,
+        data = mtcars,
+        refresh = 0, chains = 1, silent = 2
+      )
+    })
   )
 
   expect_warning(

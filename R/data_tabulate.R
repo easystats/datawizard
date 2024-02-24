@@ -1,29 +1,61 @@
-#' @title Create frequency tables of variables
+#' @title Create frequency and crosstables of variables
 #' @name data_tabulate
 #'
-#' @description This function creates frequency tables of variables, including
-#' the number of levels/values as well as the distribution of raw, valid and
-#' cumulative percentages.
+#' @description This function creates frequency or crosstables of variables,
+#' including the number of levels/values as well as the distribution of raw,
+#' valid and cumulative percentages. For crosstables, row, column  and cell
+#' percentages can be calculated.
 #'
 #' @param x A (grouped) data frame, a vector or factor.
-#' @param drop_levels Logical, if `TRUE`, factor levels that do not occur in
+#' @param by Optional vector or factor. If supplied, a crosstable is created.
+#' If `x` is a data frame, `by` can also be a character string indicating the
+#' name of a variable in `x`.
+#' @param drop_levels Logical, if `FALSE`, factor levels that do not occur in
 #' the data are included in the table (with frequency of zero), else unused
 #' factor levels are dropped from the frequency table.
 #' @param name Optional character string, which includes the name that is used
 #' for printing.
+#' @param include_na Logical, if `TRUE`, missing values are included in the
+#' frequency or crosstable, else missing values are omitted.
 #' @param collapse Logical, if `TRUE` collapses multiple tables into one larger
 #' table for printing. This affects only printing, not the returned object.
+#' @param weights Optional numeric vector of weights. Must be of the same length
+#' as `x`. If `weights` is supplied, weighted frequencies are calculated.
+#' @param proportions Optional character string, indicating the type of
+#' percentages to be calculated. Only applies to crosstables, i.e. when `by` is
+#' not `NULL`. Can be `"row"` (row percentages), `"column"` (column percentages)
+#' or `"full"` (to calculate relative frequencies for the full table).
 #' @param ... not used.
 #' @inheritParams find_columns
+#'
+#' @section Crosstables:
+#' If `by` is supplied, a crosstable is created. The crosstable includes `<NA>`
+#' (missing) values by default. The first column indicates values of `x`, the
+#' first row indicates values of `by` (including missing values). The last row
+#' and column contain the total frequencies for each row and column, respectively.
+#' Setting `include_na = FALSE` will omit missing values from the crosstable.
+#' Setting `proportions` to `"row"` or `"column"` will add row or column
+#' percentages. Setting `proportions` to `"full"` will add relative frequencies
+#' for the full table.
+#'
+#' @note
+#' There are `print_html()` and `print_md()` methods available for printing
+#' frequency or crosstables in HTML and markdown format, e.g.
+#' `print_html(data_tabulate(x))`.
 #'
 #' @return A data frame, or a list of data frames, with one frequency table
 #' as data frame per variable.
 #'
 #' @examplesIf requireNamespace("poorman")
+#' # frequency tables -------
+#' # ------------------------
 #' data(efc)
 #'
 #' # vector/factor
 #' data_tabulate(efc$c172code)
+#'
+#' # drop missing values
+#' data_tabulate(efc$c172code, include_na = FALSE)
 #'
 #' # data frame
 #' data_tabulate(efc, c("e42dep", "c172code"))
@@ -46,6 +78,36 @@
 #'
 #' # to remove the big mark, use "print(..., big_mark = "")"
 #' print(data_tabulate(x), big_mark = "")
+#'
+#' # weighted frequencies
+#' set.seed(123)
+#' efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+#' data_tabulate(efc$e42dep, weights = efc$weights)
+#'
+#' # crosstables ------
+#' # ------------------
+#'
+#' # add some missing values
+#' set.seed(123)
+#' efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+#'
+#' data_tabulate(efc, "c172code", by = "e16sex")
+#'
+#' # add row and column percentages
+#' data_tabulate(efc, "c172code", by = "e16sex", proportions = "row")
+#' data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")
+#'
+#' # omit missing values
+#' data_tabulate(
+#'   efc$c172code,
+#'   by = efc$e16sex,
+#'   proportions = "column",
+#'   include_na = FALSE
+#' )
+#'
+#' # round percentages
+#' out <- data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")
+#' print(out, digits = 0)
 #' @export
 data_tabulate <- function(x, ...) {
   UseMethod("data_tabulate")
@@ -54,7 +116,15 @@ data_tabulate <- function(x, ...) {
 
 #' @rdname data_tabulate
 #' @export
-data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose = TRUE, ...) {
+data_tabulate.default <- function(x,
+                                  by = NULL,
+                                  drop_levels = FALSE,
+                                  weights = NULL,
+                                  include_na = TRUE,
+                                  proportions = NULL,
+                                  name = NULL,
+                                  verbose = TRUE,
+                                  ...) {
   # save label attribute, before it gets lost...
   var_label <- attr(x, "label", exact = TRUE)
 
@@ -70,8 +140,53 @@ data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose =
     x <- droplevels(x)
   }
 
+  # validate "weights"
+  weights <- .validate_table_weights(weights, x)
+
+  # we go into another function for crosstables here...
+  if (!is.null(by)) {
+    by <- .validate_by(by, x)
+    return(.crosstable(
+      x,
+      by = by,
+      weights = weights,
+      include_na = include_na,
+      proportions = proportions,
+      obj_name = obj_name,
+      group_variable = group_variable
+    ))
+  }
+
   # frequency table
-  freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
+  if (is.null(weights)) {
+    if (include_na) {
+      freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
+    } else {
+      freq_table <- tryCatch(table(x), error = function(e) NULL)
+    }
+  } else if (include_na) {
+    # weighted frequency table, including NA
+    freq_table <- tryCatch(
+      stats::xtabs(
+        weights ~ x,
+        data = data.frame(weights = weights, x = addNA(x)),
+        na.action = stats::na.pass,
+        addNA = TRUE
+      ),
+      error = function(e) NULL
+    )
+  } else {
+    # weighted frequency table, excluding NA
+    freq_table <- tryCatch(
+      stats::xtabs(
+        weights ~ x,
+        data = data.frame(weights = weights, x = x),
+        na.action = stats::na.omit,
+        addNA = FALSE
+      ),
+      error = function(e) NULL
+    )
+  }
 
   if (is.null(freq_table)) {
     insight::format_warning(paste0("Can't compute frequency tables for objects of class `", class(x)[1], "`."))
@@ -83,8 +198,20 @@ data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose =
     replacement = c("Value", "N")
   )
 
+  # we want to round N for weighted frequencies
+  if (!is.null(weights)) {
+    out$N <- round(out$N)
+  }
+
   out$`Raw %` <- 100 * out$N / sum(out$N)
-  out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
+  # if we have missing values, we add a row with NA
+  if (include_na) {
+    out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
+    valid_n <- sum(out$N[-length(out$N)], na.rm = TRUE)
+  } else {
+    out$`Valid %` <- 100 * out$N / sum(out$N)
+    valid_n <- sum(out$N, na.rm = TRUE)
+  }
   out$`Cumulative %` <- cumsum(out$`Valid %`)
 
   # add information about variable/group names
@@ -110,9 +237,10 @@ data_tabulate.default <- function(x, drop_levels = FALSE, name = NULL, verbose =
   attr(out, "object") <- obj_name
   attr(out, "group_variable") <- group_variable
   attr(out, "duplicate_varnames") <- duplicated(out$Variable)
+  attr(out, "weights") <- weights
 
   attr(out, "total_n") <- sum(out$N, na.rm = TRUE)
-  attr(out, "valid_n") <- sum(out$N[-length(out$N)], na.rm = TRUE)
+  attr(out, "valid_n") <- valid_n
 
   class(out) <- c("dw_data_tabulate", "data.frame")
 
@@ -127,8 +255,12 @@ data_tabulate.data.frame <- function(x,
                                      exclude = NULL,
                                      ignore_case = FALSE,
                                      regex = FALSE,
-                                     collapse = FALSE,
+                                     by = NULL,
                                      drop_levels = FALSE,
+                                     weights = NULL,
+                                     include_na = TRUE,
+                                     proportions = NULL,
+                                     collapse = FALSE,
                                      verbose = TRUE,
                                      ...) {
   # evaluate arguments
@@ -139,12 +271,33 @@ data_tabulate.data.frame <- function(x,
     regex = regex,
     verbose = verbose
   )
+
+  # validate "by"
+  by <- .validate_by(by, x)
+  # validate "weights"
+  weights <- .validate_table_weights(weights, x)
+
   out <- lapply(select, function(i) {
-    data_tabulate(x[[i]], drop_levels = drop_levels, name = i, verbose = verbose, ...)
+    data_tabulate(
+      x[[i]],
+      by = by,
+      proportions = proportions,
+      drop_levels = drop_levels,
+      weights = weights,
+      include_na = include_na,
+      name = i,
+      verbose = verbose,
+      ...
+    )
   })
 
-  class(out) <- c("dw_data_tabulates", "list")
+  if (is.null(by)) {
+    class(out) <- c("dw_data_tabulates", "list")
+  } else {
+    class(out) <- c("dw_data_xtabulates", "list")
+  }
   attr(out, "collapse") <- isTRUE(collapse)
+  attr(out, "is_weighted") <- !is.null(weights)
 
   out
 }
@@ -156,9 +309,13 @@ data_tabulate.grouped_df <- function(x,
                                      exclude = NULL,
                                      ignore_case = FALSE,
                                      regex = FALSE,
-                                     verbose = TRUE,
-                                     collapse = FALSE,
+                                     by = NULL,
+                                     proportions = NULL,
                                      drop_levels = FALSE,
+                                     weights = NULL,
+                                     include_na = TRUE,
+                                     collapse = FALSE,
+                                     verbose = TRUE,
                                      ...) {
   # works only for dplyr >= 0.8.0
   grps <- attr(x, "groups", exact = TRUE)
@@ -175,14 +332,15 @@ data_tabulate.grouped_df <- function(x,
   )
 
   x <- as.data.frame(x)
+
   out <- list()
   for (i in seq_along(grps)) {
     rows <- grps[[i]]
     # save information about grouping factors
-    if (!is.null(group_variables)) {
-      group_variable <- group_variables[i, , drop = FALSE]
-    } else {
+    if (is.null(group_variables)) {
       group_variable <- NULL
+    } else {
+      group_variable <- group_variables[i, , drop = FALSE]
     }
     out <- c(out, data_tabulate(
       data_filter(x, rows),
@@ -191,17 +349,24 @@ data_tabulate.grouped_df <- function(x,
       ignore_case = ignore_case,
       verbose = verbose,
       drop_levels = drop_levels,
+      weights = weights,
+      include_na = include_na,
+      by = by,
+      proportions = proportions,
       group_variable = group_variable,
       ...
     ))
   }
-  class(out) <- c("dw_data_tabulates", "list")
+  if (is.null(by)) {
+    class(out) <- c("dw_data_tabulates", "list")
+  } else {
+    class(out) <- c("dw_data_xtabulates", "list")
+  }
   attr(out, "collapse") <- isTRUE(collapse)
+  attr(out, "is_weighted") <- !is.null(weights)
 
   out
 }
-
-
 
 
 # methods --------------------
@@ -226,7 +391,7 @@ format.dw_data_tabulate <- function(x, format = "text", big_mark = NULL, ...) {
   # format data frame
   ftab <- insight::format_table(x, ...)
   ftab[] <- lapply(ftab, function(i) {
-    i[i == ""] <- ifelse(identical(format, "text"), "<NA>", "(NA)")
+    i[i == ""] <- ifelse(identical(format, "text"), "<NA>", "(NA)") # nolint
     i
   })
   ftab$N <- gsub("\\.00$", "", ftab$N)
@@ -249,7 +414,6 @@ format.dw_data_tabulate <- function(x, format = "text", big_mark = NULL, ...) {
 }
 
 
-
 #' @export
 print.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
   a <- attributes(x)
@@ -270,7 +434,12 @@ print.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
   a$valid_n <- .add_commas_in_numbers(a$valid_n, big_mark)
 
   # summary of total and valid N (we may add mean/sd as well?)
-  summary_line <- sprintf("# total N=%s valid N=%s\n\n", a$total_n, a$valid_n)
+  summary_line <- sprintf(
+    "# total N=%s valid N=%s%s\n\n",
+    a$total_n,
+    a$valid_n,
+    ifelse(is.null(a$weights), "", " (weighted)")
+  )
   cat(insight::print_color(summary_line, "blue"))
 
   # remove information that goes into the header/footer
@@ -295,7 +464,12 @@ print_html.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
   caption <- .table_header(x, "html")
 
   # summary of total and valid N (we may add mean/sd as well?)
-  footer <- sprintf("total N=%i valid N=%i\n\n", a$total_n, a$valid_n)
+  footer <- sprintf(
+    "total N=%i valid N=%i%s",
+    a$total_n,
+    a$valid_n,
+    ifelse(is.null(a$weights), "", " (weighted)")
+  )
 
   # remove information that goes into the header/footer
   x$Variable <- NULL
@@ -320,7 +494,12 @@ print_md.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
   caption <- .table_header(x, "markdown")
 
   # summary of total and valid N (we may add mean/sd as well?)
-  footer <- sprintf("total N=%i valid N=%i\n\n", a$total_n, a$valid_n)
+  footer <- sprintf(
+    "total N=%i valid N=%i%s\n\n",
+    a$total_n,
+    a$valid_n,
+    ifelse(is.null(a$weights), "", " (weighted)")
+  )
 
   # remove information that goes into the header/footer
   x$Variable <- NULL
@@ -339,6 +518,9 @@ print_md.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
 
 #' @export
 print.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
+  # check if we have weights
+  is_weighted <- isTRUE(attributes(x)$is_weighted)
+
   a <- attributes(x)
   if (!isTRUE(a$collapse) || length(x) == 1) {
     for (i in seq_along(x)) {
@@ -347,16 +529,20 @@ print.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
     }
   } else {
     x <- lapply(x, function(i) {
-      attr <- attributes(i)
+      i_attr <- attributes(i)
       i <- format(i, format = "text", big_mark = big_mark, ...)
-      i$Variable[attr$duplicate_varnames] <- ""
-      if (!is.null(i$Group)) i$Group[attr$duplicate_varnames] <- ""
+      i$Variable[i_attr$duplicate_varnames] <- ""
+      if (!is.null(i$Group)) i$Group[i_attr$duplicate_varnames] <- ""
       i[nrow(i) + 1, ] <- ""
       i
     })
 
     out <- do.call(rbind, x)
-    cat(insight::print_color("# Frequency Table\n\n", "blue"))
+    if (is_weighted) {
+      cat(insight::print_color("# Frequency Table (weighted)\n\n", "blue"))
+    } else {
+      cat(insight::print_color("# Frequency Table\n\n", "blue"))
+    }
 
     # print table
     cat(insight::export_table(
@@ -371,13 +557,16 @@ print.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
 
 #' @export
 print_html.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
+  # check if we have weights
+  is_weighted <- isTRUE(attributes(x)$is_weighted)
+
   if (length(x) == 1) {
     print_html(x[[1]], big_mark = big_mark, ...)
   } else {
     x <- lapply(x, function(i) {
-      attr <- attributes(i)
+      i_attr <- attributes(i)
       i <- format(i, format = "html", big_mark = big_mark, ...)
-      i$Variable[attr$duplicate_varnames] <- ""
+      i$Variable[i_attr$duplicate_varnames] <- ""
       i
     })
 
@@ -387,7 +576,7 @@ print_html.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
     insight::export_table(
       out,
       missing = "<NA>",
-      caption = "Frequency Table",
+      caption = ifelse(is_weighted, "Frequency Table (weighted)", "Frequency Table"),
       format = "html",
       group_by = "Group"
     )
@@ -397,14 +586,17 @@ print_html.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
 
 #' @export
 print_md.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
+  # check if we have weights
+  is_weighted <- isTRUE(attributes(x)$is_weighted)
+
   if (length(x) == 1) {
     print_md(x[[1]], big_mark = big_mark, ...)
   } else {
     x <- lapply(x, function(i) {
-      attr <- attributes(i)
+      i_attr <- attributes(i)
       i <- format(i, format = "markdown", big_mark = big_mark, ...)
-      i$Variable[attr$duplicate_varnames] <- ""
-      if (!is.null(i$Group)) i$Group[attr$duplicate_varnames] <- ""
+      i$Variable[i_attr$duplicate_varnames] <- ""
+      if (!is.null(i$Group)) i$Group[i_attr$duplicate_varnames] <- ""
       i[nrow(i) + 1, ] <- ""
       i
     })
@@ -417,7 +609,7 @@ print_md.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
       missing = "(NA)",
       empty_line = "-",
       format = "markdown",
-      title = "Frequency Table"
+      title = ifelse(is_weighted, "Frequency Table (weighted)", "Frequency Table")
     )
   }
 }

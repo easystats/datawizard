@@ -44,14 +44,12 @@ test_that("convert factor to numeric", {
   expect_snapshot(to_numeric(f))
 })
 
-
 test_that("convert factor to numeric", {
   expect_identical(to_numeric(c("abc", "xyz")), c(1, 2))
   expect_identical(to_numeric(c("123", "789")), c(123, 789))
   expect_identical(to_numeric(c("1L", "2e-3")), c(1, 0.002))
   expect_identical(to_numeric(c("1L", "2e-3", "ABC")), c(1, 2, 3))
 })
-
 
 test_that("convert factor to numeric, dummy factors", {
   expect_identical(
@@ -65,7 +63,6 @@ test_that("convert factor to numeric, dummy factors", {
     ignore_attr = TRUE
   )
 })
-
 
 test_that("convert factor to numeric, append", {
   data(efc)
@@ -94,12 +91,10 @@ test_that("convert factor to numeric, append", {
   )
 })
 
-
 test_that("convert factor to numeric, all numeric", {
   data(mtcars)
   expect_identical(to_numeric(mtcars), mtcars)
 })
-
 
 test_that("convert factor to numeric, dummy factors, with NA", {
   x1 <- factor(rep(c("a", "b"), 3))
@@ -153,10 +148,75 @@ test_that("convert factor to numeric, dummy factors, with NA", {
   expect_identical(nrow(to_numeric(x7, dummy_factors = TRUE)), length(x7))
 })
 
+test_that("to_numeric, inverse factor levels", {
+  f <- c(0, 0, 1, 1, 1, 0)
+  x1 <- factor(f, levels = c(0, 1))
+  x2 <- factor(f, levels = c(1, 0))
+  out <- to_numeric(x1, dummy_factors = FALSE, preserve_levels = FALSE)
+  expect_identical(out, c(1, 1, 2, 2, 2, 1))
+  out <- to_numeric(x2, dummy_factors = FALSE, preserve_levels = FALSE)
+  expect_identical(out, c(2, 2, 1, 1, 1, 2))
+  out <- to_numeric(x1, dummy_factors = FALSE, preserve_levels = TRUE)
+  expect_identical(out, c(0, 0, 1, 1, 1, 0))
+  out <- to_numeric(x2, dummy_factors = FALSE, preserve_levels = TRUE)
+  expect_identical(out, c(1, 1, 0, 0, 0, 1))
+})
+
 # select helpers ------------------------------
 test_that("to_numeric regex", {
   expect_identical(
     to_numeric(mtcars, select = "pg", regex = TRUE),
     to_numeric(mtcars, select = "mpg")
+  )
+})
+
+
+test_that("to_numeric works with haven_labelled, convert many labels correctly", {
+  skip_on_cran()
+  skip_if_not_installed("httr")
+  skip_if_not_installed("haven")
+  skip_if_not_installed("withr")
+  skip_if_not_installed("curl")
+  skip_if_offline()
+
+  withr::with_tempfile("temp_file", fileext = ".sav", code = {
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/EFC.sav")
+    httr::stop_for_status(request)
+    writeBin(httr::content(request, type = "raw"), temp_file)
+
+    d <- haven::read_spss(temp_file)
+    x <- to_numeric(d$c172code)
+    expect_identical(as.vector(table(x)), c(180L, 506L, 156L))
+  })
+})
+
+
+test_that("to_numeric preserves correct label order", {
+  x <- factor(c(1, 2, 3, 4))
+  x <- assign_labels(x, values = c("one", "two", "three", "four"))
+  out <- to_numeric(x, dummy_factors = FALSE)
+  expect_identical(
+    attributes(out)$labels,
+    c(one = 1, two = 2, three = 3, four = 4)
+  )
+  # correctly reverse scale
+  out <- to_numeric(reverse_scale(x), dummy_factors = FALSE)
+  expect_identical(
+    attributes(out)$labels,
+    c(one = 4, two = 3, three = 2, four = 1)
+  )
+  # factor with alphabetical values
+  x <- factor(letters[1:4])
+  x <- assign_labels(x, values = c("one", "two", "three", "four"))
+  out <- to_numeric(x, dummy_factors = FALSE)
+  expect_identical(
+    attributes(out)$labels,
+    c(one = 1, two = 2, three = 3, four = 4)
+  )
+  # correctly reverse scale
+  out <- to_numeric(reverse_scale(x), dummy_factors = FALSE)
+  expect_identical(
+    attributes(out)$labels,
+    c(one = 4, two = 3, three = 2, four = 1)
   )
 })
