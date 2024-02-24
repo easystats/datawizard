@@ -114,10 +114,10 @@ data_extract.data.frame <- function(data,
 
   # chose which matched variables to extract
   select <- switch(extract,
-    "first" = select[1L],
-    "last" = select[length(select)],
-    "odd" = select[seq(1L, length(select), 2L)],
-    "even" = select[seq(2L, length(select), 2L)],
+    first = select[1L],
+    last = select[length(select)],
+    odd = select[seq(1L, length(select), 2L)],
+    even = select[seq(2L, length(select), 2L)],
     select
   )
 

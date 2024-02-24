@@ -79,6 +79,12 @@ to_factor.character <- to_factor.numeric
 #' @export
 to_factor.Date <- to_factor.numeric
 
+#' @export
+to_factor.haven_labelled <- to_factor.numeric
+
+#' @export
+to_factor.double <- to_factor.numeric
+
 #' @rdname to_factor
 #' @export
 to_factor.data.frame <- function(x,
@@ -89,7 +95,7 @@ to_factor.data.frame <- function(x,
                                  regex = FALSE,
                                  verbose = TRUE,
                                  ...) {
-  # sanity check, return as is for complete factor
+  # validation check, return as is for complete factor
   if (all(vapply(x, is.factor, FUN.VALUE = logical(1L)))) {
     return(x)
   }

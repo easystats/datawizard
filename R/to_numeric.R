@@ -17,6 +17,12 @@
 #' @inheritParams find_columns
 #' @inheritParams categorize
 #'
+#' @note By default, `to_numeric()` converts factors into "binary" dummies, i.e.
+#' each factor level is converted into a separate column filled with a binary
+#' 0-1 value. If only one column is required, use `dummy_factors = FALSE`. If
+#' you want to preserve the original factor levels (in case these represent
+#' numeric values), use `preserve_levels = TRUE`.
+#'
 #' @section Selection of variables - `select` argument:
 #' For most functions that have a `select` argument the complete input data
 #' frame is returned, even when `select` only selects a range of variables.
@@ -34,6 +40,8 @@
 #' x <- as.factor(mtcars$gear)
 #' to_numeric(x, dummy_factors = FALSE)
 #' to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE)
+#' # same as:
+#' coerce_to_numeric(x)
 #'
 #' @return A data frame of numeric variables.
 #'
@@ -69,12 +77,12 @@ to_numeric.data.frame <- function(x,
                                   regex = FALSE,
                                   verbose = TRUE,
                                   ...) {
-  # sanity check, return as is for complete numeric
+  # validation check, return as is for complete numeric
   if (all(vapply(x, is.numeric, FUN.VALUE = logical(1L)))) {
     return(x)
   }
 
-  attr <- attributes(x)
+  df_attr <- attributes(x)
 
   # evaluate arguments
   select <- .select_nse(select,
@@ -91,7 +99,7 @@ to_numeric.data.frame <- function(x,
     # drop numerics, when append is not FALSE
     select <- colnames(x[select])[!vapply(x[select], is.numeric, FUN.VALUE = logical(1L))]
     # process arguments
-    args <- .process_append(
+    fun_args <- .process_append(
       x,
       select,
       append,
@@ -99,8 +107,8 @@ to_numeric.data.frame <- function(x,
       keep_factors = TRUE
     )
     # update processed arguments
-    x <- args$x
-    select <- args$select
+    x <- fun_args$x
+    select <- fun_args$select
   }
 
   out <- sapply(
@@ -129,7 +137,7 @@ to_numeric.data.frame <- function(x,
   }
 
   # due to the special handling of dummy factors, we need to take care
-  # of appending the data here again. usually, "args$x" includes the appended
+  # of appending the data here again. usually, "fun_args$x" includes the appended
   # data, which does not work here...
 
   if (!isFALSE(append)) {
@@ -141,14 +149,14 @@ to_numeric.data.frame <- function(x,
   }
 
   # add back custom attributes
-  out <- .replace_attrs(out, attr)
+  out <- .replace_attrs(out, df_attr)
   out
 }
 
 
 #' @export
 to_numeric.numeric <- function(x, verbose = TRUE, ...) {
-  .set_back_labels(as.numeric(x), x)
+  .set_back_labels(as.numeric(x), x, reverse_values = FALSE)
 }
 
 #' @export
@@ -156,6 +164,9 @@ to_numeric.double <- to_numeric.numeric
 
 #' @export
 to_numeric.logical <- to_numeric.numeric
+
+#' @export
+to_numeric.haven_labelled <- to_numeric.numeric
 
 #' @export
 to_numeric.Date <- function(x, verbose = TRUE, ...) {
@@ -208,24 +219,29 @@ to_numeric.factor <- function(x,
         # if the first observation was missing, add NA row and bind data frame
         if (i == 1 && na_values[i] == 1) {
           out <- rbind(NA, out)
-        } else {
+        } else if (na_values[i] == rows_x) {
           # if the last observation was NA, add NA row to data frame
-          if (na_values[i] == rows_x) {
-            out <- rbind(out, NA)
-          } else {
-            # else, pick rows from beginning to current NA value, add NA,
-            # and rbind the remaining rows
-            out <- rbind(out[1:(na_values[i] - 1), ], NA, out[na_values[i]:nrow(out), ])
-          }
+          out <- rbind(out, NA)
+        } else {
+          # else, pick rows from beginning to current NA value, add NA,
+          # and rbind the remaining rows
+          out <- rbind(out[1:(na_values[i] - 1), ], NA, out[na_values[i]:nrow(out), ])
         }
       }
       rownames(out) <- NULL
     }
     names(out) <- levels(x)
   } else if (preserve_levels) {
-    out <- .set_back_labels(as.numeric(as.character(x)), x)
+    if (is.unsorted(levels(x))) {
+      x_inverse <- rep(NA_real_, length(x))
+      for (i in 1:nlevels(x)) {
+        x_inverse[x == levels(x)[i]] <- as.numeric(levels(x)[nlevels(x) - i + 1])
+      }
+      x <- factor(x_inverse)
+    }
+    out <- .set_back_labels(as.numeric(as.character(x)), x, reverse_values = FALSE)
   } else {
-    out <- .set_back_labels(as.numeric(x), x)
+    out <- .set_back_labels(as.numeric(x), x, reverse_values = FALSE)
   }
 
   # shift to requested starting value

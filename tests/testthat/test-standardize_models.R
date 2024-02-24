@@ -58,19 +58,21 @@ test_that("transformations", {
     effectsize::standardize_parameters(fit_exp, method = "refit")[2, 2],
     unname(coef(fit_scale1)[2]),
     tolerance = 1e-4
+    ignore_attr = TRUE
   )
 
   expect_equal(
     effectsize::standardize_parameters(fit_exp, method = "basic")[2, 2],
     unname(coef(fit_scale2)[2]),
     tolerance = 1e-4
+    ignore_attr = TRUE
   )
 
   skip_if_not_installed("insight", minimum_version = "0.10.0")
   d <- data.frame(
     time = as.factor(c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5)),
     group = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
-    sum = c(0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50)
+    sum = c(0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50) # nolint
   )
   m <- lm(log(sum + 1) ~ as.numeric(time) * group, data = d)
 
@@ -113,12 +115,14 @@ test_that("weights", {
     stdREFIT[[2]],
     effectsize::standardize_parameters(m, method = "posthoc")[[2]],
     tolerance = 1e-4
+    ignore_attr = TRUE
   )
 
   expect_equal(
     stdREFIT[[2]],
     effectsize::standardize_parameters(m, method = "basic")[[2]],
     tolerance = 1e-4
+    ignore_attr = TRUE
   )
 })
 
@@ -293,9 +297,12 @@ test_that("offsets", {
 
 
   m <- glm(cyl ~ hp + offset(wt), family = poisson(), data = mtcars)
-  expect_warning({
-    mz <- standardize(m)
-  }, regexp = NA)
+  expect_warning(
+    {
+      mz <- standardize(m)
+    },
+    regexp = NA
+  )
 
   par1 <- parameters::model_parameters(mz)
   par2 <- effectsize::standardize_parameters(m, method = "basic")
@@ -311,15 +318,12 @@ test_that("brms", {
   skip_if_not_installed("brms")
 
   invisible(
-    capture.output(
-      {
-        mod <- brms::brm(
-          mpg ~ hp,
-          data = mtcars,
-          refresh = 0, chains = 1, silent = 2
-        )
-      }
-    )
+    capture.output({
+      mod <- brms::brm(mpg ~ hp,
+        data = mtcars,
+        refresh = 0, chains = 1, silent = 2
+      )
+    })
   )
 
   expect_warning(

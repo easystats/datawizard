@@ -82,18 +82,18 @@ describe_distribution.list <- function(x,
   num_el <- which(vapply(x, is.numeric, FUN.VALUE = logical(1L)))
 
   # get elements names as is
-  # ex: list(mtcars$mpg, mtcars$cyl) -> c("mtcars$mpg", "mtcars$cyl")
+  # ex: `list(mtcars$mpg, mtcars$cyl) -> c("mtcars$mpg", "mtcars$cyl")`
   nm <- vapply(sys.call()[[2]], insight::safe_deparse, FUN.VALUE = character(1L))[-1]
 
-  if (!isTRUE(include_factors)) {
-    x <- x[num_el]
-    if (length(nm) != 0) {
-      nm <- nm[num_el]
-    }
-  } else {
+  if (isTRUE(include_factors)) {
     x <- x[c(num_el, factor_el)]
     if (length(nm) != 0) {
       nm <- nm[c(num_el, factor_el)]
+    }
+  } else {
+    x <- x[num_el]
+    if (length(nm) != 0) {
+      nm <- nm[num_el]
     }
   }
 
@@ -123,12 +123,12 @@ describe_distribution.list <- function(x,
   }))
 
 
-  if (!is.null(names(x))) {
-    empty_names <- which(names(x) == "")
+  if (is.null(names(x))) {
+    new_names <- nm
+  } else {
+    empty_names <- which(!nzchar(names(x), keepNA = TRUE))
     new_names <- names(x)
     new_names[empty_names] <- nm[empty_names]
-  } else {
-    new_names <- nm
   }
 
   out$Variable <- new_names
@@ -230,7 +230,7 @@ describe_distribution.numeric <- function(x,
 
   out$n <- length(x)
   out$n_Missing <- n_missing
-  out$`.temp` <- NULL
+  out$.temp <- NULL
 
   class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
   attr(out, "data") <- x

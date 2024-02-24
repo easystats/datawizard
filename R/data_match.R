@@ -109,17 +109,17 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
   # evaluate
   match <- match.arg(tolower(match), c("and", "&", "&&", "or", "|", "||", "!", "not"))
   match <- switch(match,
-    "&" = ,
-    "&&" = ,
-    "and" = "and",
-    "!" = ,
-    "not" = "not",
+    `&` = ,
+    `&&` = ,
+    and = "and",
+    `!` = ,
+    not = "not",
     "or"
   )
 
-  # sanity check
+  # validation check
   shared_columns <- intersect(colnames(x), colnames(to))
-  if (is.null(shared_columns) || length(shared_columns) == 0) {
+  if (is.null(shared_columns) || length(shared_columns) == 0L) {
     insight::format_error(
       "None of the columns from the data frame with matching conditions were found in `x`."
     )
@@ -179,9 +179,9 @@ data_filter <- function(x, ...) {
 #' @export
 data_filter.data.frame <- function(x, ...) {
   out <- x
-  dots <- match.call(expand.dots = FALSE)$`...`
+  dots <- match.call(expand.dots = FALSE)[["..."]]
 
-  if (any(nchar(names(dots)) > 0)) {
+  if (any(nzchar(names(dots), keepNA = TRUE))) {
     insight::format_error(
       "Filtering did not work. Please check if you need `==` (instead of `=`) for comparison."
     )
@@ -207,7 +207,7 @@ data_filter.data.frame <- function(x, ...) {
       symbol <- dots[[i]]
       # evaluate, we may have a variable with filter expression
       eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
-      # sanity check: is variable named like a function?
+      # validation check: is variable named like a function?
       if (is.function(eval_symbol)) {
         eval_symbol <- .dynGet(symbol, ifnotfound = NULL)
       }
@@ -277,15 +277,14 @@ data_filter.data.frame <- function(x, ...) {
 
 #' @export
 data_filter.grouped_df <- function(x, ...) {
-  # works only for dplyr >= 0.8.0
   grps <- attr(x, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 
-  dots <- match.call(expand.dots = FALSE)$`...`
+  dots <- match.call(expand.dots = FALSE)[["..."]]
   out <- lapply(grps, function(grp) {
-    args <- list(x[grp, ])
-    args <- c(args, dots)
-    do.call("data_filter.data.frame", args)
+    arguments <- list(x[grp, ])
+    arguments <- c(arguments, dots)
+    do.call("data_filter.data.frame", arguments)
   })
 
   out <- do.call(rbind, out)

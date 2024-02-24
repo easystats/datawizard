@@ -229,9 +229,9 @@ data_separate <- function(data,
       l <- l[!vapply(l, function(i) all(is.na(i)), TRUE)]
       # define number of new columns, based on user-choice
       n_cols <- switch(guess_columns,
-        "min" = min(l, na.rm = TRUE),
-        "max" = max(l, na.rm = TRUE),
-        "mode" = distribution_mode(l),
+        min = min(l, na.rm = TRUE),
+        max = max(l, na.rm = TRUE),
+        mode = distribution_mode(l),
       )
       # tell user
       if (verbose && insight::n_unique(l) != 1 && !is.numeric(separator)) {
@@ -254,7 +254,7 @@ data_separate <- function(data,
     # catch error
     if (is.null(separated_columns)) {
       insight::format_error(
-        "Something went wrong. Probably the number of provided column names did not match number of newly created columns?"
+        "Something went wrong. Probably the number of provided column names did not match number of newly created columns?" # nolint
       )
     }
 
@@ -264,14 +264,12 @@ data_separate <- function(data,
     # if no column names provided, use standard names
     if (is.null(new_columns[[sep_column]])) {
       new_column_names <- paste0(sep_column, "_", seq_along(out))
-    } else {
+    } else if (make_unique_colnames) {
       # if we have multiple columns that were separated, we avoid duplicated
       # column names of created variables by appending name of original column
-      if (make_unique_colnames) {
-        new_column_names <- paste0(sep_column, "_", new_columns[[sep_column]])
-      } else {
-        new_column_names <- new_columns[[sep_column]]
-      }
+      new_column_names <- paste0(sep_column, "_", new_columns[[sep_column]])
+    } else {
+      new_column_names <- new_columns[[sep_column]]
     }
 
     colnames(out) <- new_column_names
@@ -338,29 +336,27 @@ data_separate <- function(data,
       out <- rep(NA_character_, times = n_cols)
     } else if (n_values > n_cols) {
       # we have more values than required - drop extra columns
-      if (extra == "drop_left") {
-        out <- i[(n_values - n_cols + 1):n_values]
-      } else if (extra == "drop_right") {
-        out <- i[1:n_cols]
-      } else if (extra == "merge_left") {
-        out <- paste(i[1:(n_values - n_cols + 1)], collapse = " ")
-        out <- c(out, i[(n_values - n_cols + 2):n_values])
-      } else {
-        out <- i[1:(n_cols - 1)]
-        out <- c(out, paste(i[n_cols:n_values], collapse = " "))
-      }
+      out <- switch(extra,
+        drop_left = i[(n_values - n_cols + 1):n_values],
+        drop_right = i[1:n_cols],
+        merge_left = {
+          tmp <- paste(i[1:(n_values - n_cols + 1)], collapse = " ")
+          c(tmp, i[(n_values - n_cols + 2):n_values])
+        },
+        {
+          tmp <- i[1:(n_cols - 1)]
+          c(tmp, paste(i[n_cols:n_values], collapse = " "))
+        }
+      )
       warn_extra <- TRUE
     } else if (n_values < n_cols) {
       # we have fewer values than required - fill columns
-      if (fill == "left") {
-        out <- c(rep(NA_character_, times = n_cols - n_values), i)
-      } else if (fill == "right") {
-        out <- c(i, rep(NA_character_, times = n_cols - n_values))
-      } else if (fill == "value_left") {
-        out <- c(rep(i[1], times = n_cols - n_values), i)
-      } else {
-        out <- c(i, rep(i[length(i)], times = n_cols - n_values))
-      }
+      out <- switch(fill,
+        left = c(rep(NA_character_, times = n_cols - n_values), i),
+        right = c(i, rep(NA_character_, times = n_cols - n_values)),
+        value_left = c(rep(i[1], times = n_cols - n_values), i),
+        c(i, rep(i[length(i)], times = n_cols - n_values))
+      )
       warn_fill <- TRUE
     } else {
       out <- i
@@ -374,10 +370,10 @@ data_separate <- function(data,
         "`", sep_column, "`",
         " returned more columns than expected after splitting. ",
         switch(extra,
-          "drop_left" = "Left-most columns have been dropped.",
-          "drop_right" = "Right-most columns have been dropped.",
-          "merge_left" = "Left-most columns have been merged together.",
-          "merge_right" = "Right-most columns have been merged together."
+          drop_left = "Left-most columns have been dropped.",
+          drop_right = "Right-most columns have been dropped.",
+          merge_left = "Left-most columns have been merged together.",
+          merge_right = "Right-most columns have been merged together."
         )
       ))
     }
@@ -386,10 +382,10 @@ data_separate <- function(data,
         "`", sep_column, "`",
         "returned fewer columns than expected after splitting. ",
         switch(fill,
-          "left" = "Left-most columns were filled with `NA`.",
-          "right" = "Right-most columns were filled with `NA`.",
-          "value_left" = "Left-most columns were filled with first value.",
-          "value_right" = "Right-most columns were filled with last value."
+          left = "Left-most columns were filled with `NA`.",
+          right = "Right-most columns were filled with `NA`.",
+          value_left = "Left-most columns were filled with first value.",
+          value_right = "Right-most columns were filled with last value."
         )
       ))
     }

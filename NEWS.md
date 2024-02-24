@@ -1,4 +1,34 @@
-# datawizard (devel)
+# datawizard 0.9.2
+
+CHANGES
+
+* `data_modify()` gets three new arguments, `.at`, `.if` and `.modify`, to modify
+  variables at specific positions or based on logical conditions.
+
+* `data_tabulate()` was revised and gets several new arguments: a `weights`
+  argument, to compute weighted frequency tables. `include_na` allows to include
+  or omit missing values from the table. Furthermore, a `by` argument was added,
+  to compute crosstables (#479, #481).
+
+# datawizard 0.9.1
+
+CHANGES
+
+* `rescale()` gains `multiply` and `add` arguments, to expand ranges by a given
+  factor or value.
+
+* `to_factor()` and `to_numeric()` now support class `haven_labelled`.
+
+BUG FIXES
+
+* `to_numeric()` now correctly deals with inversed factor levels when
+  `preserve_levels = TRUE`.
+
+* `to_numeric()` inversed order of value labels when `dummy_factors = FALSE`.
+
+* `convert_to_na()` now preserves attributes for factors when `drop_levels = TRUE`.
+
+# datawizard 0.9.0
 
 NEW FUNCTIONS
 
@@ -40,6 +70,10 @@ BUG FIXES
 
 * Fixed issues in `data_write()` when writing labelled data into SPSS format
   and vectors were of different type as value labels.
+
+* Fixed issues in `data_write()` when writing labelled data into SPSS format
+  for character vectors with missing value labels, but existing variable
+  labels.
 
 * Fixed issue in `recode_into()` with probably wrong case number printed in the
   warning when several recode patterns match to one case.

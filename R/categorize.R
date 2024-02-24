@@ -192,11 +192,11 @@ categorize.numeric <- function(x,
     breaks <- split
   } else {
     breaks <- switch(split,
-      "median" = stats::median(x),
-      "mean" = mean(x),
-      "length" = n_groups,
-      "quantile" = stats::quantile(x, probs = seq_len(n_groups) / n_groups),
-      "range" = .equal_range(x, range, n_groups, lowest),
+      median = stats::median(x),
+      mean = mean(x),
+      length = n_groups,
+      quantile = stats::quantile(x, probs = seq_len(n_groups) / n_groups),
+      range = .equal_range(x, range, n_groups, lowest),
       NULL
     )
   }

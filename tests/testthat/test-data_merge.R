@@ -250,9 +250,9 @@ test_that("join data frames in a list", {
 
 # join empty data frames -----------------------
 
-x <- data.frame("x" = character(), stringsAsFactors = FALSE)
-y <- data.frame("x" = character(), stringsAsFactors = FALSE)
-z <- data.frame("y" = character(), stringsAsFactors = FALSE)
+x <- data.frame(x = character(), stringsAsFactors = FALSE)
+y <- data.frame(x = character(), stringsAsFactors = FALSE)
+z <- data.frame(y = character(), stringsAsFactors = FALSE)
 
 test_that("join empty data frames", {
   expect_identical(dim(data_merge(x, y, join = "left")), c(0L, 1L))

@@ -2,7 +2,7 @@
 
     Code
       head(rescale(iris, to = c(0, 1)))
-    Message <simpleMessage>
+    Message
       Variables of class `factor` can't be rescaled and remain unchanged.
     Output
         Sepal.Length Sepal.Width Petal.Length Petal.Width Species
@@ -30,7 +30,7 @@
 
     Code
       head(rescale(iris, to = list(Sepal.Length = c(0, 1), Petal.Length = c(-1, 0))))
-    Message <simpleMessage>
+    Message
       Variables of class `factor` can't be rescaled and remain unchanged.
     Output
         Sepal.Length Sepal.Width Petal.Length Petal.Width Species

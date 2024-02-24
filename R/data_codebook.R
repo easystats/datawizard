@@ -456,8 +456,14 @@ print_md.data_codebook <- function(x, ...) {
   # need to remove this one
   x$Prop <- NULL
   align <- c(
-    "ID" = "l", "Name" = "l", "Label" = "l", "Type" = "l", "Missings" = "r",
-    "Values" = "r", "Value Labels" = "l", "N" = "r"
+    ID = "l",
+    Name = "l",
+    Label = "l",
+    Type = "l",
+    Missings = "r",
+    Values = "r",
+    `Value Labels` = "l",
+    N = "r"
   )
   align <- align[colnames(x)]
   paste0(unname(align), collapse = "")

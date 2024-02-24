@@ -58,7 +58,7 @@ labels_to_levels.data.frame <- function(x,
                                         regex = FALSE,
                                         verbose = TRUE,
                                         ...) {
-  # sanity check, return as is for complete factor
+  # validation check, return as is for complete factor
   if (all(vapply(x, is.factor, TRUE))) {
     return(x)
   }
@@ -79,7 +79,7 @@ labels_to_levels.data.frame <- function(x,
   # create the new variables and updates "select", so new variables are processed
   if (!isFALSE(append)) {
     # process arguments
-    args <- .process_append(
+    arguments <- .process_append(
       x,
       select,
       append,
@@ -89,8 +89,8 @@ labels_to_levels.data.frame <- function(x,
       keep_character = FALSE
     )
     # update processed arguments
-    x <- args$x
-    select <- args$select
+    x <- arguments$x
+    select <- arguments$select
   }
 
   x[select] <- lapply(

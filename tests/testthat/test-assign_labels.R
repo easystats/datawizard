@@ -16,7 +16,7 @@ test_that("assign_labels, named values", {
   out <- assign_labels(
     x,
     variable = "Labelled factor",
-    values = c(`a` = "low", `b` = "mid", `c` = "high")
+    values = c(a = "low", b = "mid", c = "high")
   )
   expect_identical(attributes(out)$label, "Labelled factor")
   expect_identical(attributes(out)$labels, c(low = "a", mid = "b", high = "c"))

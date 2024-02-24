@@ -63,7 +63,7 @@ data_seek <- function(data, pattern, seek = c("names", "labels"), fuzzy = FALSE)
   # check valid args
   seek <- intersect(seek, c("names", "labels", "values", "levels", "column_names", "columns", "all"))
   if (is.null(seek) || !length(seek)) {
-    insight::format_error("`seek` must be one of \"names\", \"labels\", \"values\", a combination of these options, or \"all\".")
+    insight::format_error("`seek` must be one of \"names\", \"labels\", \"values\", a combination of these options, or \"all\".") # nolint
   }
 
   pos1 <- pos2 <- pos3 <- NULL
@@ -71,7 +71,7 @@ data_seek <- function(data, pattern, seek = c("names", "labels"), fuzzy = FALSE)
   pos <- unlist(lapply(pattern, function(search_pattern) {
     # search in variable names?
     if (any(seek %in% c("names", "columns", "column_names", "all"))) {
-      pos1 <- which(grepl(search_pattern, colnames(data)))
+      pos1 <- grep(search_pattern, colnames(data))
       # find in near distance?
       if (fuzzy) {
         pos1 <- c(pos1, .fuzzy_grep(x = colnames(data), pattern = search_pattern))
@@ -80,15 +80,15 @@ data_seek <- function(data, pattern, seek = c("names", "labels"), fuzzy = FALSE)
 
     # search in variable labels?
     if (any(seek %in% c("labels", "all"))) {
-      labels <- insight::compact_character(unlist(lapply(data, attr, which = "label", exact = TRUE)))
-      if (!is.null(labels) && length(labels)) {
-        found <- grepl(search_pattern, labels)
-        pos2 <- match(names(labels)[found], colnames(data))
+      var_labels <- insight::compact_character(unlist(lapply(data, attr, which = "label", exact = TRUE)))
+      if (!is.null(var_labels) && length(var_labels)) {
+        found <- grepl(search_pattern, var_labels)
+        pos2 <- match(names(var_labels)[found], colnames(data))
         # find in near distanc?
         if (fuzzy) {
-          found <- .fuzzy_grep(x = labels, pattern = search_pattern)
+          found <- .fuzzy_grep(x = var_labels, pattern = search_pattern)
           if (length(found)) {
-            pos2 <- c(pos2, match(names(labels)[found], colnames(data)))
+            pos2 <- c(pos2, match(names(var_labels)[found], colnames(data)))
           }
         }
       }
@@ -129,7 +129,7 @@ data_seek <- function(data, pattern, seek = c("names", "labels"), fuzzy = FALSE)
   pos <- unique(pos)
 
   # variable labels of matching variables
-  labels <- vapply(
+  var_labels <- vapply(
     colnames(data[pos]),
     function(i) {
       l <- attr(data[[i]], "label", exact = TRUE)
@@ -145,7 +145,7 @@ data_seek <- function(data, pattern, seek = c("names", "labels"), fuzzy = FALSE)
   out <- data.frame(
     index = pos,
     column = colnames(data)[pos],
-    labels = labels,
+    labels = var_labels,
     stringsAsFactors = FALSE
   )
   # no row names

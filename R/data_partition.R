@@ -52,7 +52,7 @@ data_partition <- function(data,
                            verbose = TRUE,
                            training_proportion = proportion,
                            ...) {
-  # Sanity checks
+  # validation checks
   data <- .coerce_to_dataframe(data)
 
   if (sum(proportion) > 1) {

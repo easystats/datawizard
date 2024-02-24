@@ -19,13 +19,13 @@ data_write <- function(data,
   # check file type, so we know the target dta format
   file_type <- .file_ext(path)
   type <- switch(file_type,
-    "txt" = ,
-    "csv" = "csv",
-    "sav" = ,
-    "por" = "spss",
-    "zsav" = "zspss",
-    "dta" = "stata",
-    "xpt" = "sas",
+    txt = ,
+    csv = "csv",
+    sav = ,
+    por = "spss",
+    zsav = "zspss",
+    dta = "stata",
+    xpt = "sas",
     "unknown"
   )
 
@@ -142,9 +142,13 @@ data_write <- function(data,
       # character requires special preparation to save value labels
       # haven:::vec_cast_named requires "x" and "labels" to be of same type
       if (is.character(i)) {
+        # only prepare value labels when these are not NULL
+        if (!is.null(value_labels)) {
+          value_labels <- stats::setNames(as.character(value_labels), names(value_labels))
+        }
         haven::labelled(
           x = i,
-          labels = stats::setNames(as.character(value_labels), names(value_labels)),
+          labels = value_labels,
           label = variable_label
         )
       } else {

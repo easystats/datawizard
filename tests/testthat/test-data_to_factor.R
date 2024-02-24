@@ -22,7 +22,7 @@ test_that("to_factor", {
 # numeric, partially labelled
 test_that("to_factor", {
   x <- c(10, 11, 12)
-  attr(x, "labels") <- c("ten" = 10, "twelve" = 12)
+  attr(x, "labels") <- c(ten = 10, twelve = 12)
   expect_message(
     expect_identical(
       to_factor(x),
@@ -82,11 +82,13 @@ test_that("to_factor regex", {
 
 # SPSS file, many value labels  -----------------------------------
 
-skip_on_cran()
-skip_if_offline()
-
 skip_if_not_installed("httr")
 skip_if_not_installed("haven")
+
+skip_on_cran()
+
+skip_if_not_installed("curl")
+skip_if_offline()
 
 # Output validated against SPSS output from original dataset
 
@@ -138,4 +140,25 @@ test_that("data_read, convert many labels correctly", {
   )
   expect_snapshot(data_tabulate(to_factor(d$c12c)))
   unlink(temp_file)
+})
+
+
+test_that("to_factor works with haven_labelled, convert many labels correctly", {
+  skip_if_not_installed("withr")
+  withr::with_tempfile("temp_file", fileext = ".sav", code = {
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/EFC.sav")
+    httr::stop_for_status(request)
+    writeBin(httr::content(request, type = "raw"), temp_file)
+
+    d <- haven::read_spss(temp_file)
+    x <- to_factor(d$c172code)
+    expect_identical(
+      levels(x),
+      c(
+        "low level of education",
+        "intermediate level of education",
+        "high level of education"
+      )
+    )
+  })
 })

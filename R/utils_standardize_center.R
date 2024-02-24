@@ -30,7 +30,7 @@
     vals <- x[valid_x]
   }
 
-  # Sanity checks
+  # validation checks
   check <- .check_standardize_numeric(x, name = NULL, verbose = verbose, reference = reference, center = center)
 
   if (is.factor(vals) || is.character(vals)) {
