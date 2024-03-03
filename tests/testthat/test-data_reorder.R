@@ -1,11 +1,11 @@
 test_that("data_reorder works as expected", {
-  expect_equal(
-    names(data_reorder(iris, c("Species", "Sepal.Length"))),
+  expect_named(
+    data_reorder(iris, c("Species", "Sepal.Length")),
     c("Species", "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
   )
 
-  expect_warning(expect_equal(
-    names(data_reorder(iris, c("Species", "dupa"))),
+  expect_warning(expect_named(
+    data_reorder(iris, c("Species", "dupa")),
     c("Species", "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
   ))
 })
@@ -24,5 +24,6 @@ test_that("data_reorder preserves attributes", {
   a2 <- attributes(out2)
 
   # attributes may not be in the same order
-  expect_true(all(names(a1) %in% names(a2)) && length(a1) == length(a2))
+  expect_true(all(names(a1) %in% names(a2)))
+  expect_length(a1, length(a2))
 })
