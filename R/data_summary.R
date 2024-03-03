@@ -153,10 +153,10 @@ data_summary.grouped_df <- function(x, ..., by = NULL, include_na = TRUE) {
         }
       }
       # expression is given as character string, e.g.
-      # a <- "double_SepWidth = 2 * Sepal.Width"
-      # data_modify(iris, a)
+      # a <- "mean_sepwid = mean(Sepal.Width)"
+      # data_summary(iris, a, by = "Species")
       # or as character vector, e.g.
-      # data_modify(iris, c("var_a = Sepal.Width / 10", "var_b = Sepal.Width * 10"))
+      # data_summary(iris, c("var_a = mean(Sepal.Width)", "var_b = sd(Sepal.Width)"))
       character_symbol <- tryCatch(.dynEval(dots[[1]]), error = function(e) NULL)
       # do we have a character vector? Then we can proceed
       if (is.character(character_symbol)) {
