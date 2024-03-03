@@ -96,7 +96,7 @@ data_summary.grouped_df <- function(x, ..., by = NULL) {
   group_variables <- data_remove(grps, ".rows")
   # if "by" is not supplied, use group variables
   if (is.null(by)) {
-    by <- colnames_to_row(group_variables)
+    by <- colnames(group_variables)
   }
   attr(x, "groups") <- NULL
   data_summary(x, ..., by = by)
