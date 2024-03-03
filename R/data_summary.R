@@ -64,6 +64,18 @@ data_summary.data.frame <- function(x, ..., by = NULL) {
     out <- data.frame(summarise)
     colnames(out) <- vapply(summarise, names, character(1))
   } else {
+    # sanity check - is "by" a character string?
+    if (!is.character(by)) {
+      insight::format_error("Argument `by` must be a character string, indicating the name of a variable in the data.")
+    }
+    # is "by" in the data?
+    if (!all(by %in% colnames(x))) {
+      by_not_found <- by[!by %in% colnames(x)]
+      insight::format_error(
+        paste0("Variable \"", by_not_found, "\" not found in the data."),
+        .misspelled_string(colnames(x), by_not_found, "Possibly misspelled?")
+      )
+    }
     # split data
     splitted_data <- split(x, x[by])
     out <- lapply(splitted_data, function(s) {
