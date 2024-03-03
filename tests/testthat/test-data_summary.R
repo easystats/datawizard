@@ -139,3 +139,25 @@ test_that("data_summary, print", {
   out <- data_summary(mtcars, MW = mean(mpg), SD = sd(mpg), by = c("am", "gear"))
   expect_snapshot(print(out))
 })
+
+
+test_that("data_summary, inside functions", {
+  foo1 <- function(x, ...) {
+    datawizard::data_summary(x, ..., by = "Species")
+  }
+
+  foo2 <- function(x, by, ...) {
+    datawizard::data_summary(x, ..., by = by)
+  }
+
+  foo3 <- function(x, by) {
+    datawizard::data_summary(x, MW = mean(Sepal.Width), by = by)
+  }
+
+  data(iris)
+  out1 <- foo1(iris, MW = mean(Sepal.Width))
+  out2 <- foo2(iris, by = "Species", MW = mean(Sepal.Width))
+  out3 <- foo3(iris, "Species")
+  expect_equal(out1$MW, out2$MW, tolerance = 1e-4)
+  expect_equal(out1$MW, out3$MW, tolerance = 1e-4)
+})
