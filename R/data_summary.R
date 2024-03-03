@@ -98,7 +98,9 @@ data_summary.grouped_df <- function(x, ..., by = NULL) {
   if (is.null(by)) {
     by <- colnames(group_variables)
   }
+  # remove information specific to grouped df's
   attr(x, "groups") <- NULL
+  class(x) <- "data.frame"
   data_summary(x, ..., by = by)
 }
 
