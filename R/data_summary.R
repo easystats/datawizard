@@ -95,7 +95,7 @@ data_summary.data.frame <- function(x, ..., by = NULL) {
     })
     out <- do.call(rbind, out)
   }
-  class(out) <- "data.frame"
+  class(out) <- c("dw_data_summary", "data.frame")
   rownames(out) <- NULL
   out
 }
@@ -160,62 +160,13 @@ data_summary.grouped_df <- function(x, ..., by = NULL) {
 }
 
 
-.get_new_dots_variable <- function(dots, i, data) {
-  # iterate expressions for new variables
-  symbol <- dots[[i]]
+# methods ----------------------------------------------------------------------
 
-  # expression is given as character string in a variable, but named, e.g.
-  # a <- "2 * Sepal.Width"
-  # data_modify(iris, double_SepWidth = a)
-  # we reconstruct the symbol as if it were provided as literal expression.
-  # However, we need to check that we don't have a character vector,
-  # like: data_modify(iris, new_var = "a")
-  # this one should be recycled instead.
-  if (!is.character(symbol)) {
-    eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
-    if (is.character(eval_symbol)) {
-      symbol <- try(str2lang(paste0(names(dots)[i], " = ", eval_symbol)), silent = TRUE)
-      # we may have the edge-case of having a function that returns a character
-      # vector, like "new_var = sample(letters[1:3])". In this case, "eval_symbol"
-      # is of type character, but no symbol, thus str2lang() above creates a
-      # wrong pattern. We then take "eval_symbol" as character input.
-      if (inherits(symbol, "try-error")) {
-        symbol <- str2lang(paste0(
-          names(dots)[i],
-          " = c(", paste0("\"", eval_symbol, "\"", collapse = ","), ")"
-        ))
-      }
-    }
+#' @export
+print.dw_data_summary <- function(x, ...) {
+  if (nrow(x) == 0) {
+    cat("No matches found.\n")
+  } else {
+    cat(insight::export_table(x, ...))
   }
-
-  # finally, we can evaluate expression and get values for new variables
-  new_variable <- try(with(data, eval(symbol)), silent = TRUE)
-
-  # successful, or any errors, like misspelled variable name?
-  if (inherits(new_variable, "try-error")) {
-    # in which step did error happen?
-    step_number <- switch(as.character(i),
-      "1" = "the first expression",
-      "2" = "the second expression",
-      "3" = "the third expression",
-      paste("expression", i)
-    )
-    step_msg <- paste0("There was an error in ", step_number, ".")
-    # try to find out which variable was the cause for the error
-    error_msg <- attributes(new_variable)$condition$message
-    if (grepl("object '(.*)' not found", error_msg)) {
-      error_var <- gsub("object '(.*)' not found", "\\1", error_msg)
-      insight::format_error(
-        paste0(step_msg, " Variable \"", error_var, "\" was not found in the dataset or in the environment."),
-        .misspelled_string(colnames(data), error_var, "Possibly misspelled or not yet defined?")
-      )
-    } else {
-      insight::format_error(paste0(
-        step_msg, " ", insight::format_capitalize(error_msg),
-        ". Possibly misspelled or not yet defined?"
-      ))
-    }
-  }
-
-  new_variable
 }

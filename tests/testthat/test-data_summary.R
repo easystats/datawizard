@@ -132,3 +132,10 @@ test_that("data_summary, errors", {
     regex = "only works for"
   )
 })
+
+
+test_that("data_summary, print", {
+  data(mtcars)
+  out <- data_summary(mtcars, MW = mean(mpg), SD = sd(mpg), by = c("am", "gear"))
+  expect_snapshot(print(out))
+})
