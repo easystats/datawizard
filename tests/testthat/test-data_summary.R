@@ -136,6 +136,11 @@ test_that("data_summary, errors", {
     data_summary(iris, by = "Species"),
     regex = "No expressions for calculating"
   )
+  # wrong expression
+  expect_error(
+    data_summary(mtcars, mw = mesn(mpg), by = "am"),
+    regex = "There was an error"
+  )
 })
 
 
