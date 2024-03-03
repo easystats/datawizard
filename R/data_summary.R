@@ -8,6 +8,9 @@
 #' @param by Optional character string, indicating the name of a variable in `x`.
 #' If supplied, the data will be split by this variable and summary statistics
 #' will be computed for each group.
+#' @param include_na Logical, if `TRUE`, missing values are included as a level
+#' in the grouping variable. If `FALSE`, missing values are omitted from the
+#' grouping variable.
 #' @param ... One or more named expressions that define the new variable name
 #' and the function to compute the summary statistic. Example:
 #' `mean_sepal_width = mean(Sepal.Width)`. The expression can also be provided
@@ -42,8 +45,8 @@ data_summary <- function(x, ...) {
 
 
 #' @export
-data_summary.matrix <- function(x, ..., by = NULL) {
-  data_summary(as.data.frame(x), ..., by = by)
+data_summary.matrix <- function(x, ..., by = NULL, include_na = TRUE) {
+  data_summary(as.data.frame(x), ..., by = by, include_na = include_na)
 }
 
 
@@ -55,7 +58,7 @@ data_summary.default <- function(x, ...) {
 
 #' @rdname data_summary
 #' @export
-data_summary.data.frame <- function(x, ..., by = NULL) {
+data_summary.data.frame <- function(x, ..., by = NULL, include_na = TRUE) {
   dots <- eval(substitute(alist(...)))
 
   # do we have any expression at all?
@@ -81,8 +84,15 @@ data_summary.data.frame <- function(x, ..., by = NULL) {
         .misspelled_string(colnames(x), by_not_found, "Possibly misspelled?")
       )
     }
-    # split data
-    split_data <- split(x, x[by])
+    # split data, add NA levels, if requested
+    l <- lapply(x[by], function(i) {
+      if (include_na) {
+        addNA(i)
+      } else {
+        i
+      }
+    })
+    split_data <- split(x, l, drop = TRUE)
     out <- lapply(split_data, function(s) {
       # no data for combination? Return NULL
       if (nrow(s) == 0) {
@@ -100,6 +110,9 @@ data_summary.data.frame <- function(x, ..., by = NULL) {
     })
     out <- do.call(rbind, out)
   }
+  # sort data
+  out <- data_arrange(out, select = by)
+  # data attributes
   class(out) <- c("dw_data_summary", "data.frame")
   rownames(out) <- NULL
   out
@@ -107,7 +120,7 @@ data_summary.data.frame <- function(x, ..., by = NULL) {
 
 
 #' @export
-data_summary.grouped_df <- function(x, ..., by = NULL) {
+data_summary.grouped_df <- function(x, ..., by = NULL, include_na = TRUE) {
   # extract group variables
   grps <- attr(x, "groups", exact = TRUE)
   group_variables <- data_remove(grps, ".rows")
@@ -118,7 +131,7 @@ data_summary.grouped_df <- function(x, ..., by = NULL) {
   # remove information specific to grouped df's
   attr(x, "groups") <- NULL
   class(x) <- "data.frame"
-  data_summary(x, ..., by = by)
+  data_summary(x, ..., by = by, include_na = include_na)
 }
 
 
@@ -172,6 +185,6 @@ print.dw_data_summary <- function(x, ...) {
   if (nrow(x) == 0) {
     cat("No matches found.\n")
   } else {
-    cat(insight::export_table(x, ...))
+    cat(insight::export_table(x, missing = "<NA>", ...))
   }
 }

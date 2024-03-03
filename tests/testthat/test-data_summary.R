@@ -146,6 +146,18 @@ test_that("data_summary, print", {
 })
 
 
+test_that("data_summary, with NA", {
+  data(efc, package = "datawizard")
+  out <- data_summary(efc, MW = mean(c12hour, na.rm = TRUE), by = "c172code")
+  expect_snapshot(print(out))
+  out <- data_summary(efc, MW = mean(c12hour, na.rm = TRUE), by = "c172code", include_na = FALSE)
+  expect_snapshot(print(out))
+  # sorting for multiple groups
+  out <- data_summary(efc, MW = mean(c12hour, na.rm = TRUE), by = c("e42dep", "c172code"))
+  expect_snapshot(print(out))
+})
+
+
 test_that("data_summary, inside functions", {
   foo1 <- function(x, ...) {
     datawizard::data_summary(x, ..., by = "Species")

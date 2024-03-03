@@ -7,7 +7,7 @@
 \usage{
 data_summary(x, ...)
 
-\method{data_summary}{data.frame}(x, ..., by = NULL)
+\method{data_summary}{data.frame}(x, ..., by = NULL, include_na = TRUE)
 }
 \arguments{
 \item{x}{A (grouped) data frame.}
@@ -20,6 +20,10 @@ as a character string, e.g. \code{"mean_sepal_width = mean(Sepal.Width)"}.}
 \item{by}{Optional character string, indicating the name of a variable in \code{x}.
 If supplied, the data will be split by this variable and summary statistics
 will be computed for each group.}
+
+\item{include_na}{Logical, if \code{TRUE}, missing values are included as a level
+in the grouping variable. If \code{FALSE}, missing values are omitted from the
+grouping variable.}
 }
 \value{
 A data frame with the requested summary statistics.
