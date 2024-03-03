@@ -77,8 +77,8 @@ data_summary.data.frame <- function(x, ..., by = NULL) {
       )
     }
     # split data
-    splitted_data <- split(x, x[by])
-    out <- lapply(splitted_data, function(s) {
+    split_data <- split(x, x[by])
+    out <- lapply(split_data, function(s) {
       # no data for combination? Return NULL
       if (nrow(s) == 0) {
         return(NULL)
