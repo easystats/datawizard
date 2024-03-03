@@ -131,6 +131,11 @@ test_that("data_summary, errors", {
     data_summary(iris$Sepal.Width, MW = mean(Sepal.Width), SD = sd(Sepal.Width)),
     regex = "only works for"
   )
+  # no expressions
+  expect_error(
+    data_summary(iris, by = "Species"),
+    regex = "No expressions for calculating"
+  )
 })
 
 

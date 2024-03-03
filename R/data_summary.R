@@ -58,6 +58,11 @@ data_summary.default <- function(x, ...) {
 data_summary.data.frame <- function(x, ..., by = NULL) {
   dots <- eval(substitute(alist(...)))
 
+  # do we have any expression at all?
+  if (length(dots) == 0) {
+    insight::format_error("No expressions for calculating summary statistics provided.")
+  }
+
   if (is.null(by)) {
     # when we have no grouping, just compute a one-row summary
     summarise <- .process_datasummary_dots(dots, x)
