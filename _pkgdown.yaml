@@ -61,6 +61,7 @@ reference:
       Functions to compute statistical summaries of data properties and distributions
     contents:
       - data_codebook
+      - data_summary
       - data_tabulate
       - data_peek
       - data_seek
