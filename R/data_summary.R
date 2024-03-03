@@ -105,7 +105,7 @@ data_summary.data.frame <- function(x, ..., by = NULL, include_na = TRUE) {
       # bind grouping-variables and values
       summarised_data <- cbind(s[1, by], summarised_data)
       # make sure we have proper column names
-      colnames(summarised_data) <- c(by, vapply(summarise, names, character(1)))
+      colnames(summarised_data) <- c(by, unlist(lapply(summarise, names)))
       summarised_data
     })
     out <- do.call(rbind, out)
@@ -170,7 +170,11 @@ data_summary.grouped_df <- function(x, ..., by = NULL, include_na = TRUE) {
 
     out <- lapply(seq_along(dots), function(i) {
       new_variable <- .get_new_dots_variable(dots, i, data)
-      stats::setNames(new_variable, names(dots)[i])
+      if (inherits(new_variable, c("bayestestR_ci", "bayestestR_eti"))) {
+        stats::setNames(new_variable, c("CI", "CI_low", "CI_high"))
+      } else {
+        stats::setNames(new_variable, names(dots)[i])
+      }
     })
   }
 
@@ -185,6 +189,11 @@ print.dw_data_summary <- function(x, ...) {
   if (nrow(x) == 0) {
     cat("No matches found.\n")
   } else {
+    if (all(c("CI", "CI_low", "CI_high") %in% colnames(x))) {
+      ci <- insight::format_table(x[c("CI", "CI_low", "CI_high")], ...)
+      x$CI <- x$CI_low <- x$CI_high <- NULL
+      x <- cbind(x, ci)
+    }
     cat(insight::export_table(x, missing = "<NA>", ...))
   }
 }
