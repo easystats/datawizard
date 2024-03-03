@@ -129,6 +129,6 @@ test_that("data_summary, errors", {
   # not a data frame
   expect_error(
     data_summary(iris$Sepal.Width, MW = mean(Sepal.Width), SD = sd(Sepal.Width)),
-    regex = "only works for (grouped) data frames"
+    regex = "only works for"
   )
 })
