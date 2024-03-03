@@ -178,3 +178,20 @@ test_that("data_summary, inside functions", {
   expect_equal(out1$MW, out2$MW, tolerance = 1e-4)
   expect_equal(out1$MW, out3$MW, tolerance = 1e-4)
 })
+
+
+test_that("data_summary, expression as variable", {
+  data(mtcars)
+  a <- "MW = mean(mpg)"
+  b <- "SD = sd(mpg)"
+  out <- data_summary(mtcars, a, by = c("am", "gear"))
+  expect_named(out, c("am", "gear", "MW"))
+  expect_equal(out$MW, aggregate(mtcars["mpg"], list(mtcars$am, mtcars$gear), mean)$mpg, tolerance = 1e-4)
+  expect_error(
+    data_summary(mtcars, a, b, by = c("am", "gear")),
+    regex = "You cannot mix"
+  )
+  out <- data_summary(mtcars, c(a, b), by = c("am", "gear"))
+  expect_named(out, c("am", "gear", "MW", "SD"))
+  expect_equal(out$SD, aggregate(mtcars["mpg"], list(mtcars$am, mtcars$gear), sd)$mpg, tolerance = 1e-4)
+})
