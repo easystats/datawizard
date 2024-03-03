@@ -185,7 +185,6 @@ data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = 
           "New variable has not the same length as the other variables in the data frame and cannot be recycled."
         )
       }
-
       data[[names(dots)[i]]] <- new_variable
     }
   }
