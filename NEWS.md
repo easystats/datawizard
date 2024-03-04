@@ -1,5 +1,9 @@
 # datawizard 0.9.2
 
+NEW FUNCTIONS
+
+* `data_summary()`, to compute summary statistics of (grouped) data frames.
+
 CHANGES
 
 * `data_modify()` gets three new arguments, `.at`, `.if` and `.modify`, to modify

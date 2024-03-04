@@ -145,28 +145,8 @@ categorize.numeric <- function(x,
                                labels = NULL,
                                verbose = TRUE,
                                ...) {
-  # check arguments
-  if (is.character(split)) {
-    split <- match.arg(
-      split,
-      choices = c(
-        "median", "mean", "quantile", "equal_length", "equal_range",
-        "equal", "equal_distance", "range", "distance"
-      )
-    )
-  }
-
-  if (is.character(split) && split %in% c("quantile", "equal_length") && is.null(n_groups)) {
-    insight::format_error(
-      "Recoding based on quantiles or equal-sized groups requires the `n_groups` argument to be specified."
-    )
-  }
-
-  if (is.character(split) && split == "equal_range" && is.null(n_groups) && is.null(range)) {
-    insight::format_error(
-      "Recoding into groups with equal range requires either the `range` or `n_groups` argument to be specified."
-    )
-  }
+  # sanity check
+  split <- .sanitize_split_arg(split, n_groups, range)
 
   # handle aliases
   if (identical(split, "equal_length")) split <- "length"
@@ -221,28 +201,7 @@ categorize.numeric <- function(x,
   original_x[!is.na(original_x)] <- out
 
   # turn into factor?
-  if (!is.null(labels)) {
-    if (length(labels) == length(unique(out))) {
-      original_x <- as.factor(original_x)
-      levels(original_x) <- labels
-    } else if (length(labels) == 1 && labels %in% c("mean", "median")) {
-      original_x <- as.factor(original_x)
-      no_na_x <- original_x[!is.na(original_x)]
-      if (labels == "mean") {
-        labels <- stats::aggregate(x, list(no_na_x), FUN = mean, na.rm = TRUE)$x
-      } else {
-        labels <- stats::aggregate(x, list(no_na_x), FUN = stats::median, na.rm = TRUE)$x
-      }
-      levels(original_x) <- insight::format_value(labels, ...)
-    } else if (isTRUE(verbose)) {
-      insight::format_warning(
-        "Argument `labels` and levels of the recoded variable are not of the same length.",
-        "Variable will not be converted to factor."
-      )
-    }
-  }
-
-  original_x
+  .original_x_to_factor(original_x, x, labels, out, verbose, ...)
 }
 
 
@@ -283,15 +242,15 @@ categorize.data.frame <- function(x,
   # create the new variables and updates "select", so new variables are processed
   if (!isFALSE(append)) {
     # process arguments
-    args <- .process_append(
+    my_args <- .process_append(
       x,
       select,
       append,
       append_suffix = "_r"
     )
     # update processed arguments
-    x <- args$x
-    select <- args$select
+    x <- my_args$x
+    select <- my_args$select
   }
 
   x[select] <- lapply(
@@ -342,15 +301,15 @@ categorize.grouped_df <- function(x,
   # create the new variables and updates "select", so new variables are processed
   if (!isFALSE(append)) {
     # process arguments
-    args <- .process_append(
+    my_args <- .process_append(
       x,
       select,
       append,
       append_suffix = "_r"
     )
     # update processed arguments
-    x <- args$x
-    select <- args$select
+    x <- my_args$x
+    select <- my_args$select
   }
 
   x <- as.data.frame(x)
@@ -386,4 +345,57 @@ categorize.grouped_df <- function(x,
     range <- as.numeric(size)
   }
   seq(lowest, max(x), by = range)
+}
+
+
+.sanitize_split_arg <- function(split, n_groups, range) {
+  # check arguments
+  if (is.character(split)) {
+    split <- match.arg(
+      split,
+      choices = c(
+        "median", "mean", "quantile", "equal_length", "equal_range",
+        "equal", "equal_distance", "range", "distance"
+      )
+    )
+  }
+
+  if (is.character(split) && split %in% c("quantile", "equal_length") && is.null(n_groups)) {
+    insight::format_error(
+      "Recoding based on quantiles or equal-sized groups requires the `n_groups` argument to be specified."
+    )
+  }
+
+  if (is.character(split) && split == "equal_range" && is.null(n_groups) && is.null(range)) {
+    insight::format_error(
+      "Recoding into groups with equal range requires either the `range` or `n_groups` argument to be specified."
+    )
+  }
+
+  split
+}
+
+
+.original_x_to_factor <- function(original_x, x, labels, out, verbose, ...) {
+  if (!is.null(labels)) {
+    if (length(labels) == length(unique(out))) {
+      original_x <- as.factor(original_x)
+      levels(original_x) <- labels
+    } else if (length(labels) == 1 && labels %in% c("mean", "median")) {
+      original_x <- as.factor(original_x)
+      no_na_x <- original_x[!is.na(original_x)]
+      if (labels == "mean") {
+        labels <- stats::aggregate(x, list(no_na_x), FUN = mean, na.rm = TRUE)$x
+      } else {
+        labels <- stats::aggregate(x, list(no_na_x), FUN = stats::median, na.rm = TRUE)$x
+      }
+      levels(original_x) <- insight::format_value(labels, ...)
+    } else if (isTRUE(verbose)) {
+      insight::format_warning(
+        "Argument `labels` and levels of the recoded variable are not of the same length.",
+        "Variable will not be converted to factor."
+      )
+    }
+  }
+  original_x
 }
