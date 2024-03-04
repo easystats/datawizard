@@ -285,4 +285,6 @@ test_that("describe_distribution formatting", {
   data(iris)
   x <- describe_distribution(iris$Sepal.Width, quartiles = TRUE)
   expect_snapshot(format(x))
+  x <- describe_distribution(mtcars, select = 1:4, ci = 0.9)
+  expect_snapshot(format(x))
 })
