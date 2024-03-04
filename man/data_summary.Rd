@@ -15,12 +15,8 @@ data_summary(x, ...)
 \item{...}{One or more named expressions that define the new variable name
 and the function to compute the summary statistic. Example:
 \code{mean_sepal_width = mean(Sepal.Width)}. The expression can also be provided
-as a character string, e.g. \code{"mean_sepal_width = mean(Sepal.Width)"}.
-
-\code{data_summary()} supports a few special function for summary statistics:
-\itemize{
-\item \code{n()} to count the number of observations.
-}}
+as a character string, e.g. \code{"mean_sepal_width = mean(Sepal.Width)"}. The
+summary function \code{n()} can be used to count the number of observations.}
 
 \item{by}{Optional character string, indicating the name of a variable in \code{x}.
 If supplied, the data will be split by this variable and summary statistics
