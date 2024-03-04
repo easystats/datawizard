@@ -201,7 +201,7 @@ categorize.numeric <- function(x,
   original_x[!is.na(original_x)] <- out
 
   # turn into factor?
-  .original_x_to_factor(original_x, labels, out, verbose)
+  .original_x_to_factor(original_x, x, labels, out, verbose)
 }
 
 
@@ -376,7 +376,7 @@ categorize.grouped_df <- function(x,
 }
 
 
-.original_x_to_factor <- function(original_x, labels, out, verbose) {
+.original_x_to_factor <- function(original_x, x, labels, out, verbose) {
   if (!is.null(labels)) {
     if (length(labels) == length(unique(out))) {
       original_x <- as.factor(original_x)
