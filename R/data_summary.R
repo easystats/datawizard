@@ -16,6 +16,9 @@
 #' `mean_sepal_width = mean(Sepal.Width)`. The expression can also be provided
 #' as a character string, e.g. `"mean_sepal_width = mean(Sepal.Width)"`.
 #'
+#' `data_summary()` supports a few special function for summary statistics:
+#' - `n()` to count the number of observations.
+#'
 #' @return A data frame with the requested summary statistics.
 #'
 #' @examples
