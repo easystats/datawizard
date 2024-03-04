@@ -124,11 +124,11 @@ adjust <- function(data,
       predictors[predictors == predictors_num] <- paste0("s(", predictors_num, ")")
     }
     formula_predictors <- paste(c("1", predictors), collapse = " + ")
-    formula <- paste(var, "~", formula_predictors)
+    model_formula <- paste(var, "~", formula_predictors)
 
     x <- .model_adjust_for(
       data = data[unique(c(var, effect, facs))],
-      formula,
+      model_formula = model_formula,
       multilevel = multilevel,
       additive = additive,
       bayesian = bayesian,
@@ -148,7 +148,7 @@ data_adjust <- adjust
 
 #' @keywords internal
 .model_adjust_for <- function(data,
-                              formula,
+                              model_formula,
                               multilevel = FALSE,
                               additive = FALSE,
                               bayesian = FALSE,
@@ -159,32 +159,28 @@ data_adjust <- adjust
     # Bayesian
     if (bayesian) {
       insight::check_if_installed("rstanarm")
-      model <- rstanarm::stan_gamm4(stats::as.formula(formula), random = formula_random, data = data, refresh = 0)
+      model <- rstanarm::stan_gamm4(stats::as.formula(model_formula), random = formula_random, data = data, refresh = 0)
       # Frequentist
     } else {
       insight::check_if_installed("gamm4")
-      model <- gamm4::gamm4(stats::as.formula(formula), random = formula_random, data = data)
+      model <- gamm4::gamm4(stats::as.formula(model_formula), random = formula_random, data = data)
     }
 
     # Linear -------------------------
-  } else {
+  } else if (bayesian) {
     # Bayesian
-    if (bayesian) {
-      insight::check_if_installed("rstanarm")
-      if (multilevel) {
-        model <- rstanarm::stan_lmer(paste(formula, formula_random), data = data, refresh = 0)
-      } else {
-        model <- rstanarm::stan_glm(formula, data = data, refresh = 0)
-      }
-      # Frequentist
+    insight::check_if_installed("rstanarm")
+    if (multilevel) {
+      model <- rstanarm::stan_lmer(paste(model_formula, formula_random), data = data, refresh = 0)
     } else {
-      if (multilevel) {
-        insight::check_if_installed("lme4")
-        model <- lme4::lmer(paste(formula, formula_random), data = data)
-      } else {
-        model <- stats::lm(formula, data = data)
-      }
+      model <- rstanarm::stan_glm(model_formula, data = data, refresh = 0)
     }
+  } else if (multilevel) {
+    # Frequentist
+    insight::check_if_installed("lme4")
+    model <- lme4::lmer(paste(model_formula, formula_random), data = data)
+  } else {
+    model <- stats::lm(model_formula, data = data)
   }
 
   adjusted <- insight::get_residuals(model)

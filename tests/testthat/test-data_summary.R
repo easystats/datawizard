@@ -141,6 +141,26 @@ test_that("data_summary, errors", {
     data_summary(mtcars, mw = mesn(mpg), by = "am"),
     regex = "There was an error"
   )
+  # wrong variable name
+  expect_error(
+    data_summary(mtcars, n = max(mpeg)),
+    regex = "There was an error"
+  )
+  # expression returns more than one value
+  expect_error(
+    data_summary(mtcars, n = unique(mpg), j = c(min(am), max(am)), by = c("am", "gear")),
+    regex = "Each expression must return"
+  )
+})
+
+
+test_that("data_summary, values_at", {
+  data(mtcars)
+  out <- data_summary(mtcars, pos1 = mpg[1], pos_end = mpg[length(mpg)], by = c("am", "gear"))
+  # same as:
+  # dplyr::summarise(mtcars, pos1 = dplyr::first(mpg), pos_end = dplyr::last(mpg), .by = c("am", "gear"))
+  expect_equal(out$pos1, c(21.4, 24.4, 21, 26), tolerance = 1e-3)
+  expect_equal(out$pos_end, c(19.2, 17.8, 21.4, 15), tolerance = 1e-3)
 })
 
 
@@ -199,4 +219,12 @@ test_that("data_summary, expression as variable", {
   out <- data_summary(mtcars, c(a, b), by = c("am", "gear"))
   expect_named(out, c("am", "gear", "MW", "SD"))
   expect_equal(out$SD, aggregate(mtcars["mpg"], list(mtcars$am, mtcars$gear), sd)$mpg, tolerance = 1e-4)
+})
+
+
+test_that("data_summary, extra functions", {
+  data(mtcars)
+  # n()
+  out <- data_summary(mtcars, n = n(), by = c("am", "gear"))
+  expect_identical(out$n, c(15L, 4L, 8L, 5L))
 })

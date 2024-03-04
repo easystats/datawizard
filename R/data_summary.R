@@ -8,13 +8,14 @@
 #' @param by Optional character string, indicating the name of a variable in `x`.
 #' If supplied, the data will be split by this variable and summary statistics
 #' will be computed for each group.
-#' @param include_na Logical, if `TRUE`, missing values are included as a level
+#' @param include_na Logical. If `TRUE`, missing values are included as a level
 #' in the grouping variable. If `FALSE`, missing values are omitted from the
 #' grouping variable.
 #' @param ... One or more named expressions that define the new variable name
 #' and the function to compute the summary statistic. Example:
 #' `mean_sepal_width = mean(Sepal.Width)`. The expression can also be provided
-#' as a character string, e.g. `"mean_sepal_width = mean(Sepal.Width)"`.
+#' as a character string, e.g. `"mean_sepal_width = mean(Sepal.Width)"`. The
+#' summary function `n()` can be used to count the number of observations.
 #'
 #' @return A data frame with the requested summary statistics.
 #'
@@ -38,6 +39,17 @@
 #'
 #' # expressions can also be supplied as character strings
 #' data_summary(mtcars, "MW = mean(mpg)", "SD = sd(mpg)", by = c("am", "gear"))
+#'
+#' # count observations within groups
+#' data_summary(mtcars, observations = n(), by = c("am", "gear"))
+#'
+#' # first and last observations of "mpg" within groups
+#' data_summary(
+#'   mtcars,
+#'   first = mpg[1],
+#'   last = mpg[length(mpg)],
+#'   by = c("am", "gear")
+#' )
 #' @export
 data_summary <- function(x, ...) {
   UseMethod("data_summary")
@@ -74,19 +86,24 @@ data_summary.data.frame <- function(x, ..., by = NULL, include_na = TRUE) {
   } else {
     # sanity check - is "by" a character string?
     if (!is.character(by)) {
-      insight::format_error("Argument `by` must be a character string, indicating the name of a variable in the data.")
+      insight::format_error("Argument `by` must be a character string indicating the name of variables in the data.")
     }
     # is "by" in the data?
     if (!all(by %in% colnames(x))) {
       by_not_found <- by[!by %in% colnames(x)]
       insight::format_error(
-        paste0("Variable \"", by_not_found, "\" not found in the data."),
+        paste0(
+          "Variable",
+          ifelse(length(by_not_found) > 1, "s ", " "),
+          text_concatenate(by_not_found, enclose = "\""),
+          " not found in the data."
+        ),
         .misspelled_string(colnames(x), by_not_found, "Possibly misspelled?")
       )
     }
     # split data, add NA levels, if requested
     l <- lapply(x[by], function(i) {
-      if (include_na) {
+      if (include_na && anyNA(i)) {
         addNA(i)
       } else {
         i
@@ -176,6 +193,18 @@ data_summary.grouped_df <- function(x, ..., by = NULL, include_na = TRUE) {
         stats::setNames(new_variable, names(dots)[i])
       }
     })
+  }
+
+  # check for correct length of output - must be a single value!
+  if (any(lengths(out) != 1)) {
+    insight::format_error(
+      paste0(
+        "Each expression must return a single value. Following expression",
+        ifelse(sum(lengths(out) != 1) > 1, "s", " "),
+        " returned more than one value: ",
+        text_concatenate(vapply(dots[lengths(out) != 1], insight::safe_deparse, character(1)), enclose = "\"")
+      )
+    )
   }
 
   out

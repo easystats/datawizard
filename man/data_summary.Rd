@@ -15,13 +15,14 @@ data_summary(x, ...)
 \item{...}{One or more named expressions that define the new variable name
 and the function to compute the summary statistic. Example:
 \code{mean_sepal_width = mean(Sepal.Width)}. The expression can also be provided
-as a character string, e.g. \code{"mean_sepal_width = mean(Sepal.Width)"}.}
+as a character string, e.g. \code{"mean_sepal_width = mean(Sepal.Width)"}. The
+summary function \code{n()} can be used to count the number of observations.}
 
 \item{by}{Optional character string, indicating the name of a variable in \code{x}.
 If supplied, the data will be split by this variable and summary statistics
 will be computed for each group.}
 
-\item{include_na}{Logical, if \code{TRUE}, missing values are included as a level
+\item{include_na}{Logical. If \code{TRUE}, missing values are included as a level
 in the grouping variable. If \code{FALSE}, missing values are omitted from the
 grouping variable.}
 }
@@ -52,4 +53,15 @@ data_summary(mtcars, MW = mean(mpg), SD = sd(mpg), by = c("am", "gear"))
 
 # expressions can also be supplied as character strings
 data_summary(mtcars, "MW = mean(mpg)", "SD = sd(mpg)", by = c("am", "gear"))
+
+# count observations within groups
+data_summary(mtcars, observations = n(), by = c("am", "gear"))
+
+# first and last observations of "mpg" within groups
+data_summary(
+  mtcars,
+  first = mpg[1],
+  last = mpg[length(mpg)],
+  by = c("am", "gear")
+)
 }
