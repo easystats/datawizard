@@ -73,6 +73,7 @@ reference:
       - row_means
       - weighted_mean
       - mean_sd
+      - value_at
 
   - title: Convert and Replace Data
     desc: |
