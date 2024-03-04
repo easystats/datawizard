@@ -22,7 +22,7 @@ summary function \code{n()} can be used to count the number of observations.}
 If supplied, the data will be split by this variable and summary statistics
 will be computed for each group.}
 
-\item{include_na}{Logical, if \code{TRUE}, missing values are included as a level
+\item{include_na}{Logical. If \code{TRUE}, missing values are included as a level
 in the grouping variable. If \code{FALSE}, missing values are omitted from the
 grouping variable.}
 }

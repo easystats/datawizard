@@ -8,7 +8,7 @@
 #' @param by Optional character string, indicating the name of a variable in `x`.
 #' If supplied, the data will be split by this variable and summary statistics
 #' will be computed for each group.
-#' @param include_na Logical, if `TRUE`, missing values are included as a level
+#' @param include_na Logical. If `TRUE`, missing values are included as a level
 #' in the grouping variable. If `FALSE`, missing values are omitted from the
 #' grouping variable.
 #' @param ... One or more named expressions that define the new variable name
@@ -88,19 +88,24 @@ data_summary.data.frame <- function(x, ..., by = NULL, include_na = TRUE) {
   } else {
     # sanity check - is "by" a character string?
     if (!is.character(by)) {
-      insight::format_error("Argument `by` must be a character string, indicating the name of a variable in the data.")
+      insight::format_error("Argument `by` must be a character string indicating the name of variables in the data.")
     }
     # is "by" in the data?
     if (!all(by %in% colnames(x))) {
       by_not_found <- by[!by %in% colnames(x)]
       insight::format_error(
-        paste0("Variable \"", by_not_found, "\" not found in the data."),
+        paste0(
+          "Variable",
+          ifelse(length(by_not_found) > 1, "s ", " "),
+          text_concatenate(by_not_found, enclose = "\""),
+          " not found in the data."
+        ),
         .misspelled_string(colnames(x), by_not_found, "Possibly misspelled?")
       )
     }
     # split data, add NA levels, if requested
     l <- lapply(x[by], function(i) {
-      if (include_na) {
+      if (include_na && anyNA(i)) {
         addNA(i)
       } else {
         i
