@@ -356,7 +356,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     new_variable <- nrow(data)
   } else {
     # default evaluation of expression
-    try(with(data, eval(symbol)), silent = TRUE)
+    new_variable <- try(with(data, eval(symbol)), silent = TRUE)
   }
 
   # successful, or any errors, like misspelled variable name?
