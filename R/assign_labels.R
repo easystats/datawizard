@@ -79,7 +79,7 @@ assign_labels.numeric <- function(x, variable = NULL, values = NULL, ...) {
       attr(x, "label") <- variable
     } else {
       insight::format_error(
-        "Variable labels (argument `variable`) must be provided as a single character string, e.g. `variable = \"mylabel\"`."
+        "Variable labels (argument `variable`) must be provided as a single character string, e.g. `variable = \"mylabel\"`." # nolint
       )
     }
   }
