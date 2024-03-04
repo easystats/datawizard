@@ -287,4 +287,6 @@ test_that("describe_distribution formatting", {
   expect_snapshot(format(x))
   x <- describe_distribution(mtcars, select = 1:4, ci = 0.9)
   expect_snapshot(format(x))
+  x <- describe_distribution(mtcars, select = 1:4, ci = 0.9, centrality = "trimmed")
+  expect_snapshot(format(x))
 })
