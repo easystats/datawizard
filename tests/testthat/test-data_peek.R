@@ -33,3 +33,9 @@ test_that("data_peek snapshots look as expected", {
   expect_snapshot(data_peek(iris, select = 1:3))
   expect_snapshot(data_peek(iris, width = 130))
 })
+
+
+test_that("data_peek, print_md works as expected", {
+  out <- data_peek(iris)
+  expect_snapshot(print_md(out))
+})
