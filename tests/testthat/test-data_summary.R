@@ -141,6 +141,11 @@ test_that("data_summary, errors", {
     data_summary(mtcars, mw = mesn(mpg), by = "am"),
     regex = "There was an error"
   )
+  # wrong variable name
+  expect_error(
+    data_summary(mtcars, n = max(mpeg)),
+    regex = "There was an error"
+  )
   # expression returns more than one value
   expect_error(
     data_summary(mtcars, n = unique(mpg), j = c(min(am), max(am)), by = c("am", "gear")),
