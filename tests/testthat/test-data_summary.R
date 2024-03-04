@@ -200,3 +200,11 @@ test_that("data_summary, expression as variable", {
   expect_named(out, c("am", "gear", "MW", "SD"))
   expect_equal(out$SD, aggregate(mtcars["mpg"], list(mtcars$am, mtcars$gear), sd)$mpg, tolerance = 1e-4)
 })
+
+
+test_that("data_summary, extra functions", {
+  data(mtcars)
+  # n()
+  out <- data_summary(mtcars, n = n(), by = c("am", "gear"))
+  expect_identical(out$n, c(15L, 4L, 8L, 5L))
+})

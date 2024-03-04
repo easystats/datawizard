@@ -38,6 +38,9 @@
 #'
 #' # expressions can also be supplied as character strings
 #' data_summary(mtcars, "MW = mean(mpg)", "SD = sd(mpg)", by = c("am", "gear"))
+#'
+#' # count observations within groups
+#' data_summary(mtcars, observations = n(), by = c("am", "gear"))
 #' @export
 data_summary <- function(x, ...) {
   UseMethod("data_summary")

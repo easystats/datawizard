@@ -350,7 +350,13 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   }
 
   # finally, we can evaluate expression and get values for new variables
-  new_variable <- try(with(data, eval(symbol)), silent = TRUE)
+  new_variable <- switch(
+    insight::safe_deparse(symbol),
+    # "special" functions
+    "n()" = nrow(data),
+    # default evaluation of expression
+    try(with(data, eval(symbol)), silent = TRUE)
+  )
 
   # successful, or any errors, like misspelled variable name?
   if (inherits(new_variable, "try-error")) {
