@@ -36,6 +36,7 @@ test_that("data_peek snapshots look as expected", {
 
 
 test_that("data_peek, print_md works as expected", {
+  skip_if_not_installed("knitr")
   out <- data_peek(iris)
   expect_snapshot(print_md(out))
 })
