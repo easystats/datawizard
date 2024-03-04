@@ -1,8 +1,8 @@
-#' @title Find the value at a specific position in a variable
+#' @title Find the value(s) at a specific position in a variable
 #' @name value_at
 #'
-#' @description This function can be used to compute summary statistics for a
-#' data frame or a matrix.
+#' @description This function can be used to extract one or more values at a
+#' specific position in a variable.
 #'
 #' @param x A vector or factor.
 #' @param position An integer or a vector of integers, indicating the position(s)
@@ -12,6 +12,8 @@
 #' computing the position. If `FALSE`, missing values are included in the
 #' computation.
 #' @param default The value to be returned if the position is out of range.
+#'
+#' @seealso `data_summary()` to use `value_at()` inside a `data_summary()` call.
 #'
 #' @return A vector with the value(s) at the specified position(s).
 #'

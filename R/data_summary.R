@@ -17,6 +17,8 @@
 #' as a character string, e.g. `"mean_sepal_width = mean(Sepal.Width)"`. The
 #' summary function `n()` can be used to count the number of observations.
 #'
+#' @seealso `value_at()`, which can be used inside a `data_summary()` call.
+#'
 #' @return A data frame with the requested summary statistics.
 #'
 #' @examples
@@ -42,6 +44,14 @@
 #'
 #' # count observations within groups
 #' data_summary(mtcars, observations = n(), by = c("am", "gear"))
+#'
+#' # first and last observations of "mpg" within groups
+#' data_summary(
+#'   mtcars,
+#'   first = value_at(mpg),
+#'   last = value_at(mpg, -1),
+#'   by = c("am", "gear")
+#' )
 #' @export
 data_summary <- function(x, ...) {
   UseMethod("data_summary")

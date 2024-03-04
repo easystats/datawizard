@@ -56,4 +56,15 @@ data_summary(mtcars, "MW = mean(mpg)", "SD = sd(mpg)", by = c("am", "gear"))
 
 # count observations within groups
 data_summary(mtcars, observations = n(), by = c("am", "gear"))
+
+# first and last observations of "mpg" within groups
+data_summary(
+  mtcars,
+  first = value_at(mpg),
+  last = value_at(mpg, -1),
+  by = c("am", "gear")
+)
+}
+\seealso{
+\code{value_at()}, which can be used inside a \code{data_summary()} call.
 }

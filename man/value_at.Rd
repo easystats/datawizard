@@ -2,7 +2,7 @@
 % Please edit documentation in R/value_at.R
 \name{value_at}
 \alias{value_at}
-\title{Find the value at a specific position in a variable}
+\title{Find the value(s) at a specific position in a variable}
 \usage{
 value_at(x, position = 1, default = NULL, remove_na = FALSE)
 }
@@ -23,8 +23,8 @@ computation.}
 A vector with the value(s) at the specified position(s).
 }
 \description{
-This function can be used to compute summary statistics for a
-data frame or a matrix.
+This function can be used to extract one or more values at a
+specific position in a variable.
 }
 \examples{
 data(mtcars)
@@ -36,4 +36,7 @@ value_at(mtcars$mpg, -1)
 value_at(mtcars$mpg, 150)
 # return 2nd and fifth value
 value_at(mtcars$mpg, c(2, 5))
+}
+\seealso{
+\code{data_summary()} to use \code{value_at()} inside a \code{data_summary()} call.
 }
