@@ -156,7 +156,7 @@ test_that("data_summary, errors", {
 
 test_that("data_summary, values_at", {
   data(mtcars)
-  out <- data_summary(mtcars, pos1 = value_at(mpg), pos_end = value_at(mpg, -1), by = c("am", "gear"))
+  out <- data_summary(mtcars, pos1 = mpg[1], pos_end = mpg[length(mpg)], by = c("am", "gear"))
   # same as:
   # dplyr::summarise(mtcars, pos1 = dplyr::first(mpg), pos_end = dplyr::last(mpg), .by = c("am", "gear"))
   expect_equal(out$pos1, c(21.4, 24.4, 21, 26), tolerance = 1e-3)
