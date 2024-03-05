@@ -46,17 +46,15 @@
     Code
       print_md(out)
     Output
-      [1] "Table: Data frame with 150 rows and 5 variables"                         
-      [2] ""                                                                        
-      [3] "|Variable     |   Type |                                        Values |"
-      [4] "|:------------|:-------|:----------------------------------------------|"
-      [5] "|Sepal.Length |numeric |  5.1, 4.9, 4.7, 4.6, 5, 5.4, 4.6, 5, 4.4, ... |"
-      [6] "|Sepal.Width  |numeric |3.5, 3, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, ... |"
-      [7] "|Petal.Length |numeric |   1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, ... |"
-      [8] "|Petal.Width  |numeric |   0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, ... |"
-      [9] "|Species      | factor |   setosa, setosa, setosa, setosa, setosa, ... |"
-      attr(,"format")
-      [1] "pipe"
-      attr(,"class")
-      [1] "knitr_kable" "character"  
+      
+      
+      Table: Data frame with 150 rows and 5 variables
+      
+      |Variable     |   Type |                                        Values |
+      |:------------|:-------|:----------------------------------------------|
+      |Sepal.Length |numeric |  5.1, 4.9, 4.7, 4.6, 5, 5.4, 4.6, 5, 4.4, ... |
+      |Sepal.Width  |numeric |3.5, 3, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, ... |
+      |Petal.Length |numeric |   1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, ... |
+      |Petal.Width  |numeric |   0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, ... |
+      |Species      | factor |   setosa, setosa, setosa, setosa, setosa, ... |
 
