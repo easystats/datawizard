@@ -373,11 +373,58 @@ test_that("data_tabulate, cross tables, markdown", {
   set.seed(123)
   efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
   efc$e16sex[sample.int(nrow(efc), 5)] <- NA
-
-  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full")))
-  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE)))
-  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", weights = efc$weights)))
-  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE, weights = efc$weights))) # nolint
+  out <- capture.output(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full")))
+  expect_identical(
+    out[1:3],
+    c(
+      "[1] \"|efc$c172code |       male|     female|    (NA) | Total|\"",
+      "[2] \"|:------------|----------:|----------:|:--------|-----:|\"",
+      "[3] \"|1            |  5  (5.0%)|  2  (2.0%)|1 (1.0%) |     8|\""
+    )
+  )
+  out <- capture.output(print_md(data_tabulate(
+    efc$c172code,
+    by = efc$e16sex,
+    proportions = "full",
+    include_na = FALSE
+  )))
+  expect_identical(
+    out[1:3],
+    c(
+      "[1] \"|efc$c172code |       male|     female| Total|\"",
+      "[2] \"|:------------|----------:|----------:|-----:|\"",
+      "[3] \"|1            |  5  (5.8%)|  2  (2.3%)|     7|\""
+    )
+  )
+  out <- capture.output(print_md(data_tabulate(
+    efc$c172code,
+    by = efc$e16sex,
+    proportions = "full",
+    weights = efc$weights
+  )))
+  expect_identical(
+    out[1:3],
+    c(
+      "[1] \"|efc$c172code |       male|     female|    (NA) | Total|\"",
+      "[2] \"|:------------|----------:|----------:|:--------|-----:|\"",
+      "[3] \"|1            |  5  (4.8%)|  3  (2.9%)|2 (1.9%) |    10|\""
+    )
+  )
+  out <- capture.output(print_md(data_tabulate(
+    efc$c172code,
+    by = efc$e16sex,
+    proportions = "full",
+    weights = efc$weights,
+    include_na = FALSE
+  )))
+  expect_identical(
+    out[1:3],
+    c(
+      "[1] \"|efc$c172code |       male|     female| Total|\"",
+      "[2] \"|:------------|----------:|----------:|-----:|\"",
+      "[3] \"|1            |  5  (5.8%)|  3  (3.5%)|     8|\""
+    )
+  )
 })
 
 # validate against table -------------------------
