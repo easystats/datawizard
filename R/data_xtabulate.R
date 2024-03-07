@@ -347,7 +347,7 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
   # to check this, we check whether a weights expression was provided and weights
   # is NULL, e.g. "weights = iris$not_found"
   if (!is.null(weights_expression) && !identical(weights_expression, "NULL") && is.null(weights)) {
-    insight::format_error("The variable specified in `weights` was not found in `x`. Possibly misspelled?")
+    insight::format_error("The variable specified in `weights` was not found. Possibly misspelled?")
   }
 
   weights
