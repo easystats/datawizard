@@ -313,7 +313,7 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
 
 
 .validate_table_weights <- function(weights, x, weights_expression = NULL) {
-  if (!is.null(weights)) {
+  if (!is.null(weights)) { # nolint
     if (is.character(weights)) {
       # If "weights" is a character string, must be of length 1
       if (length(weights) > 1) {
@@ -341,14 +341,14 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
     if (!is.data.frame(x) && length(weights) != length(x)) {
       insight::format_error("Length of `weights` must be equal to length of `x`.") # nolint
     }
-  }
 
-  # exception: for vectors, if weighting variable not found, "weights" is NULL
-  # to check this, we check whether a weights expression was provided and weights
-  # is NULL, e.g. "weights = iris$not_found"
+    # exception: for vectors, if weighting variable not found, "weights" is NULL
+    # to check this, we check whether a weights expression was provided and weights
+    # is NULL, e.g. "weights = iris$not_found" - all this is only relevant when
+    # weights is NULL
 
-  # do we have any value for weights_expression?
-  if (!is.null(weights_expression) &&
+    # do we have any value for weights_expression?
+  } else if (!is.null(weights_expression) &&
     # due to deparse() and substitute, NULL becomes "NULL" - we need to check for this
     !identical(weights_expression, "NULL") &&
     # we should only run into this problem, when a variable from a data frame
@@ -364,9 +364,7 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
     #> data_tabulate(efc$c172code, weights = efc$wweight)
     # Here, wweight errors anyway, because object "wweight" is not found
     #> data_tabulate(efc$c172code, weights = wweight)
-    grepl("$", weights_expression, fixed = TRUE) &&
-    # if all the above apply, weights must be NULL - only error in this case
-    is.null(weights)) {
+    grepl("$", weights_expression, fixed = TRUE)) {
     insight::format_error("The variable specified in `weights` was not found. Possibly misspelled?")
   }
 
