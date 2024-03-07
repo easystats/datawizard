@@ -358,6 +358,12 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
       # from the data.frame method, where `weights = weights`, and then,
       # deparse(substitute(weights)) is "weights" (not "NULL" or "iris$not_found"),
       # leading to an error when it's actually not (if "weights" is NULL)
+      # Example:
+      #> efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+      # Here, efc$wweight is NULL
+      #> data_tabulate(efc$c172code, weights = efc$wweight)
+      # Here, wweight errors anyway, because object "wweight" is not found
+      #> data_tabulate(efc$c172code, weights = wweight)
       grepl("$", weights_expression, fixed = TRUE) &&
       # if all the above apply, weights must be NULL - only error in this case
       is.null(weights)) {
