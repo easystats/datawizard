@@ -312,7 +312,7 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
 }
 
 
-.validate_table_weights <- function(weights, x) {
+.validate_table_weights <- function(weights, x, weights_expression = NULL) {
   if (!is.null(weights)) {
     if (is.character(weights)) {
       # If "weights" is a character string, must be of length 1
@@ -341,6 +341,13 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
     if (!is.data.frame(x) && length(weights) != length(x)) {
       insight::format_error("Length of `weights` must be equal to length of `x`.") # nolint
     }
+  }
+
+  # exception: for vectors, if weighting variable not found, "weights" is NULL
+  # to check this, we check whether a weights expression was provided and weights
+  # is NULL, e.g. "weights = iris$not_found"
+  if (!is.null(weights_expression) && !identical(weights_expression, "NULL") && is.null(weights)) {
+    insight::format_error("The variable specified in `weights` was not found in `x`. Possibly misspelled?")
   }
 
   weights
