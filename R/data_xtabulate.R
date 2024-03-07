@@ -354,6 +354,10 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
       # we should only run into this problem, when a variable from a data frame
       # is used in the data_tabulate() method for vectors - thus, we need to check
       # whether the weights_expression contains a "$" - `iris$not_found` is "NULL"
+      # we need this check, because the default-method of data_tabulate() is called
+      # from the data.frame method, where `weights = weights`, and then,
+      # deparse(substitute(weights)) is "weights" (not "NULL" or "iris$not_found"),
+      # leading to an error when it's actually not (if "weights" is NULL)
       grepl("$", weights_expression, fixed = TRUE) &&
       # if all the above apply, weights must be NULL - only error in this case
       is.null(weights)) {
