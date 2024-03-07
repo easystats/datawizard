@@ -346,7 +346,17 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
   # exception: for vectors, if weighting variable not found, "weights" is NULL
   # to check this, we check whether a weights expression was provided and weights
   # is NULL, e.g. "weights = iris$not_found"
-  if (!is.null(weights_expression) && !identical(weights_expression, "NULL") && is.null(weights)) {
+
+  # do we have any value for weights_expression?
+  if (!is.null(weights_expression) &&
+      # due to deparse() and substitute, NULL becomes "NULL" - we need to check for this
+      !identical(weights_expression, "NULL") &&
+      # we should only run into this problem, when a variable from a data frame
+      # is used in the data_tabulate() method for vectors - thus, we need to check
+      # whether the weights_expression contains a "$" - `iris$not_found` is "NULL"
+      grepl("$", weights_expression, fixed = TRUE) &&
+      # if all the above apply, weights must be NULL - only error in this case
+      is.null(weights)) {
     insight::format_error("The variable specified in `weights` was not found. Possibly misspelled?")
   }
 
