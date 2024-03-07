@@ -349,24 +349,24 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
 
   # do we have any value for weights_expression?
   if (!is.null(weights_expression) &&
-      # due to deparse() and substitute, NULL becomes "NULL" - we need to check for this
-      !identical(weights_expression, "NULL") &&
-      # we should only run into this problem, when a variable from a data frame
-      # is used in the data_tabulate() method for vectors - thus, we need to check
-      # whether the weights_expression contains a "$" - `iris$not_found` is "NULL"
-      # we need this check, because the default-method of data_tabulate() is called
-      # from the data.frame method, where `weights = weights`, and then,
-      # deparse(substitute(weights)) is "weights" (not "NULL" or "iris$not_found"),
-      # leading to an error when it's actually not (if "weights" is NULL)
-      # Example:
-      #> efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
-      # Here, efc$wweight is NULL
-      #> data_tabulate(efc$c172code, weights = efc$wweight)
-      # Here, wweight errors anyway, because object "wweight" is not found
-      #> data_tabulate(efc$c172code, weights = wweight)
-      grepl("$", weights_expression, fixed = TRUE) &&
-      # if all the above apply, weights must be NULL - only error in this case
-      is.null(weights)) {
+    # due to deparse() and substitute, NULL becomes "NULL" - we need to check for this
+    !identical(weights_expression, "NULL") &&
+    # we should only run into this problem, when a variable from a data frame
+    # is used in the data_tabulate() method for vectors - thus, we need to check
+    # whether the weights_expression contains a "$" - `iris$not_found` is "NULL"
+    # we need this check, because the default-method of data_tabulate() is called
+    # from the data.frame method, where `weights = weights`, and then,
+    # deparse(substitute(weights)) is "weights" (not "NULL" or "iris$not_found"),
+    # leading to an error when it's actually not (if "weights" is NULL)
+    # Example:
+    #> efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+    # Here, efc$wweight is NULL
+    #> data_tabulate(efc$c172code, weights = efc$wweight)
+    # Here, wweight errors anyway, because object "wweight" is not found
+    #> data_tabulate(efc$c172code, weights = wweight)
+    grepl("$", weights_expression, fixed = TRUE) &&
+    # if all the above apply, weights must be NULL - only error in this case
+    is.null(weights)) {
     insight::format_error("The variable specified in `weights` was not found. Possibly misspelled?")
   }
 
