@@ -318,7 +318,6 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
   # provided, e.g. "weights = iris$not_found" - all this is only relevant when
   # weights is NULL
   if (is.null(weights)) {
-
     # possibly misspelled weights-variables for default-method ----------------
     # -------------------------------------------------------------------------
 
@@ -343,7 +342,6 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
       insight::format_error("The variable specified in `weights` was not found. Possibly misspelled?")
     }
   } else {
-
     # possibly misspecified weights-variables for data.frame-method -----------
     # -------------------------------------------------------------------------
 
