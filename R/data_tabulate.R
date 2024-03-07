@@ -141,7 +141,7 @@ data_tabulate.default <- function(x,
   }
 
   # validate "weights"
-  weights <- .validate_table_weights(weights, x)
+  weights <- .validate_table_weights(weights, x, weights_expression = insight::safe_deparse(substitute(weights)))
 
   # we go into another function for crosstables here...
   if (!is.null(by)) {
