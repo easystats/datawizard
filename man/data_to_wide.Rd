@@ -68,12 +68,6 @@ missing values in the new columns created.}
 \item{verbose}{Toggle warnings.}
 
 \item{...}{Not used for now.}
-
-\item{colnames_from}{Deprecated. Use \code{names_from} instead.}
-
-\item{rows_from}{Deprecated. Use \code{id_cols} instead.}
-
-\item{sep}{Deprecated. Use \code{names_sep} instead.}
 }
 \value{
 If a tibble was provided as input, \code{reshape_wider()} also returns a

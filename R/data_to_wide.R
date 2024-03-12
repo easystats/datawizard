@@ -25,9 +25,6 @@
 #' missing values in the new columns created.
 #' @param verbose Toggle warnings.
 #' @param ... Not used for now.
-#' @param colnames_from Deprecated. Use `names_from` instead.
-#' @param rows_from Deprecated. Use `id_cols` instead.
-#' @param sep Deprecated. Use `names_sep` instead.
 #'
 #' @return If a tibble was provided as input, `reshape_wider()` also returns a
 #' tibble. Otherwise, it returns a data frame.
@@ -97,25 +94,7 @@ data_to_wide <- function(data,
                          colnames_from,
                          rows_from,
                          sep) {
-  if (!missing(colnames_from)) {
-    .is_deprecated("colnames_from", "names_from")
-    if (is.null(names_from)) {
-      names_from <- colnames_from
-    }
-  }
-  if (!missing(rows_from)) {
-    .is_deprecated("rows_from", "id_cols")
     if (is.null(id_cols)) {
-      id_cols <- rows_from
-    }
-  }
-  if (!missing(sep)) {
-    .is_deprecated("sep", "names_sep")
-    if (is.null(names_sep)) {
-      names_sep <- sep
-    }
-  }
-  if (is.null(id_cols)) {
     id_cols <- setdiff(names(data), c(names_from, values_from))
   }
 

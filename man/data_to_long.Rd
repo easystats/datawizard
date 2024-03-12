@@ -18,8 +18,7 @@ data_to_long(
   ignore_case = FALSE,
   regex = FALSE,
   ...,
-  cols,
-  colnames_to
+  cols
 )
 
 reshape_longer(
@@ -35,8 +34,7 @@ reshape_longer(
   ignore_case = FALSE,
   regex = FALSE,
   ...,
-  cols,
-  colnames_to
+  cols
 )
 }
 \arguments{
@@ -113,8 +111,6 @@ functions (see 'Details'), this argument may be used as workaround.}
 \item{cols}{Identical to \code{select}. This argument is here to ensure compatibility
 with \code{tidyr::pivot_longer()}. If both \code{select} and \code{cols} are provided, \code{cols}
 is used.}
-
-\item{colnames_to}{Deprecated. Use \code{names_to} instead.}
 }
 \value{
 If a tibble was provided as input, \code{reshape_longer()} also returns a

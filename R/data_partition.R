@@ -8,7 +8,6 @@
 #' @param proportion Scalar (between 0 and 1) or numeric vector, indicating the
 #'   proportion(s) of the training set(s). The sum of `proportion` must not be
 #'   greater than 1. The remaining part will be used for the test set.
-#' @param training_proportion Deprecated, please use `proportion`.
 #' @param group A character vector indicating the name(s) of the column(s) used
 #'   for stratified partitioning.
 #' @param seed A random number generator seed. Enter an integer (e.g. 123) so
@@ -50,7 +49,6 @@ data_partition <- function(data,
                            seed = NULL,
                            row_id = ".row_id",
                            verbose = TRUE,
-                           training_proportion = proportion,
                            ...) {
   # validation checks
   data <- .coerce_to_dataframe(data)

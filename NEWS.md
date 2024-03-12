@@ -1,5 +1,13 @@
 # datawizard 0.9.2
 
+BREAKING CHANGES
+
+* The following arguments were deprecated in 0.5.0 and are now removed:
+
+  * in `data_to_wide()`: `colnames_from`, `rows_from`, `sep` 
+  * in `data_to_long()`: `colnames_to` 
+  * in `data_partition()`: `training_proportion`
+
 NEW FUNCTIONS
 
 * `data_summary()`, to compute summary statistics of (grouped) data frames.
@@ -13,7 +21,7 @@ CHANGES
   argument, to compute weighted frequency tables. `include_na` allows to include
   or omit missing values from the table. Furthermore, a `by` argument was added,
   to compute crosstables (#479, #481).
-
+  
 # datawizard 0.9.1
 
 CHANGES
