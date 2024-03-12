@@ -77,9 +77,10 @@ data_to_long <- function(data,
                          ignore_case = FALSE,
                          regex = FALSE,
                          ...,
-                         cols) {
+                         cols) { # nolint
 
   # Prefer "cols" over "select" for compat with tidyr::pivot_longer
+  # nolint start
   if (!missing(cols)) {
     select <- substitute(cols)
     cols <- .select_nse(
@@ -106,6 +107,7 @@ data_to_long <- function(data,
       )
     }
   }
+  # nolint end
 
   # nothing to select?
   if (length(cols) == 0L) {

@@ -194,22 +194,22 @@ data_to_wide <- function(data,
   if (!is.null(values_fill)) {
     if (length(values_fill) == 1L) {
       if (is.numeric(new_data[[values_from]])) {
-        if (!is.numeric(values_fill)) {
-          insight::format_error(paste0("`values_fill` must be of type numeric."))
-        } else {
+        if (is.numeric(values_fill)) {
           new_data <- convert_na_to(new_data, replace_num = values_fill)
+        } else {
+          insight::format_error(paste0("`values_fill` must be of type numeric."))
         }
       } else if (is.character(new_data[[values_from]])) {
-        if (!is.character(values_fill)) {
-          insight::format_error(paste0("`values_fill` must be of type character."))
-        } else {
+        if (is.character(values_fill)) {
           new_data <- convert_na_to(new_data, replace_char = values_fill)
+        } else {
+          insight::format_error(paste0("`values_fill` must be of type character."))
         }
       } else if (is.factor(new_data[[values_from]])) {
-        if (!is.factor(values_fill)) {
-          insight::format_error(paste0("`values_fill` must be of type factor."))
-        } else {
+        if (is.factor(values_fill)) {
           new_data <- convert_na_to(new_data, replace_fac = values_fill)
+        } else {
+          insight::format_error(paste0("`values_fill` must be of type factor."))
         }
       }
     } else {
