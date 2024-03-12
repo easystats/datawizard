@@ -15,10 +15,7 @@ data_to_wide(
   names_glue = NULL,
   values_fill = NULL,
   verbose = TRUE,
-  ...,
-  colnames_from,
-  rows_from,
-  sep
+  ...
 )
 
 reshape_wider(
@@ -31,10 +28,7 @@ reshape_wider(
   names_glue = NULL,
   values_fill = NULL,
   verbose = TRUE,
-  ...,
-  colnames_from,
-  rows_from,
-  sep
+  ...
 )
 }
 \arguments{
