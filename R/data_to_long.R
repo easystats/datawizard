@@ -198,7 +198,7 @@ data_to_long <- function(data,
         header = FALSE
       )
       names(tmp) <- paste0("V", seq_len(ncol(tmp)))
-      tmp[tmp == ""] <- NA
+      tmp[tmp == ""] <- NA # nolint
 
       stacked_data$ind <- NULL
       stacked_data <- cbind(tmp, stacked_data)

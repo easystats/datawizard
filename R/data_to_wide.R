@@ -212,10 +212,8 @@ data_to_wide <- function(data,
           insight::format_error(paste0("`values_fill` must be of type factor."))
         }
       }
-    } else {
-      if (verbose) {
-        insight::format_error("`values_fill` must be of length 1.")
-      }
+    } else if (verbose) {
+      insight::format_error("`values_fill` must be of length 1.")
     }
   }
 
