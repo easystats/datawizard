@@ -91,7 +91,7 @@ data_to_wide <- function(data,
                          values_fill = NULL,
                          verbose = TRUE,
                          ...) {
-    if (is.null(id_cols)) {
+  if (is.null(id_cols)) {
     id_cols <- setdiff(names(data), c(names_from, values_from))
   }
 
