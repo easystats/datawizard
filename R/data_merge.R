@@ -221,10 +221,10 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
       missing_in_y <- setdiff(by, colnames(y))
       stop_message <- c(
         "Not all columns specified in `by` were found in the data frames.",
-        if (length(missing_in_x) > 0) {
+        if (length(missing_in_x) > 0L) {
           paste0("Following columns are in `by` but absent in `x`: ", text_concatenate(missing_in_x))
         },
-        if (length(missing_in_y) > 0) {
+        if (length(missing_in_y) > 0L) {
           paste0("Following columns are in `by` but absent in `y`: ", text_concatenate(missing_in_y))
         }
       )
@@ -264,10 +264,10 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
 
   # for later sorting
   if (join != "bind") {
-    if (nrow(x) > 0) {
+    if (nrow(x) > 0L) {
       x$.data_merge_id_x <- seq_len(nrow(x))
     }
-    if (nrow(y) > 0) {
+    if (nrow(y) > 0L) {
       y$.data_merge_id_y <- (seq_len(nrow(y))) + nrow(x)
     }
   }
@@ -364,10 +364,10 @@ data_merge.list <- function(x, join = "left", by = NULL, id = NULL, verbose = TR
     out <- rbind(x, y[match(colnames(x), colnames(y))])
   } else {
     # add ID for merging
-    if (nrow(x) > 0) {
+    if (nrow(x) > 0L) {
       x$.data_merge_row <- seq_len(nrow(x))
     }
-    if (nrow(y) > 0) {
+    if (nrow(y) > 0L) {
       y$.data_merge_row <- (nrow(x) + 1):(nrow(x) + nrow(y))
     }
     by <- intersect(colnames(x), colnames(y))
