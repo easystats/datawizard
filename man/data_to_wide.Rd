@@ -15,10 +15,7 @@ data_to_wide(
   names_glue = NULL,
   values_fill = NULL,
   verbose = TRUE,
-  ...,
-  colnames_from,
-  rows_from,
-  sep
+  ...
 )
 
 reshape_wider(
@@ -31,10 +28,7 @@ reshape_wider(
   names_glue = NULL,
   values_fill = NULL,
   verbose = TRUE,
-  ...,
-  colnames_from,
-  rows_from,
-  sep
+  ...
 )
 }
 \arguments{
@@ -68,12 +62,6 @@ missing values in the new columns created.}
 \item{verbose}{Toggle warnings.}
 
 \item{...}{Not used for now.}
-
-\item{colnames_from}{Deprecated. Use \code{names_from} instead.}
-
-\item{rows_from}{Deprecated. Use \code{id_cols} instead.}
-
-\item{sep}{Deprecated. Use \code{names_sep} instead.}
 }
 \value{
 If a tibble was provided as input, \code{reshape_wider()} also returns a

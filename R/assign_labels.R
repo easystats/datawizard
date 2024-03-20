@@ -79,7 +79,7 @@ assign_labels.numeric <- function(x, variable = NULL, values = NULL, ...) {
       attr(x, "label") <- variable
     } else {
       insight::format_error(
-        "Variable labels (argument `variable`) must be provided as a single character string, e.g. `variable = \"mylabel\"`."
+        "Variable labels (argument `variable`) must be provided as a single character string, e.g. `variable = \"mylabel\"`." # nolint
       )
     }
   }
@@ -88,13 +88,13 @@ assign_labels.numeric <- function(x, variable = NULL, values = NULL, ...) {
   if (!is.null(values)) {
     # extract unique values
     unique_values <- as.vector(sort(stats::na.omit(unique(x))))
-    labels <- NULL
+    value_labels <- NULL
 
     # do we have a names vector for "values"?
     # else check if number of labels and values match
     if (is.null(names(values))) {
       if (length(values) == length(unique_values)) {
-        labels <- stats::setNames(unique_values, values)
+        value_labels <- stats::setNames(unique_values, values)
       } else {
         insight::format_error(
           "Cannot add labels. Number of unique values and number of value labels are not equal.",
@@ -114,11 +114,11 @@ assign_labels.numeric <- function(x, variable = NULL, values = NULL, ...) {
 
       if (length(values)) {
         # we need to switch names and values
-        labels <- stats::setNames(coerce_to_numeric(names(values)), values)
+        value_labels <- stats::setNames(coerce_to_numeric(names(values)), values)
       }
     }
 
-    attr(x, "labels") <- labels
+    attr(x, "labels") <- value_labels
   }
 
   x

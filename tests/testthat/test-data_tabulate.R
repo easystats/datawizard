@@ -363,6 +363,7 @@ test_that("data_tabulate, cross tables, errors weights", {
   expect_error(data_tabulate(efc, "c172code", weights = efc$weights[-1]), regex = "Length of `weights`")
   expect_error(data_tabulate(efc, "c172code", weights = "weigths"), regex = "not found")
   expect_error(data_tabulate(efc, "c172code", weights = c("e16sex", "e42dep")), regex = "length 1")
+  expect_error(data_tabulate(efc$c172code, weights = efc$wweight), regex = "not found")
 })
 
 

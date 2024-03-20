@@ -25,7 +25,6 @@
 #' @param cols Identical to `select`. This argument is here to ensure compatibility
 #'   with `tidyr::pivot_longer()`. If both `select` and `cols` are provided, `cols`
 #'   is used.
-#' @param colnames_to Deprecated. Use `names_to` instead.
 #'
 #' @return If a tibble was provided as input, `reshape_longer()` also returns a
 #' tibble. Otherwise, it returns a data frame.
@@ -78,17 +77,10 @@ data_to_long <- function(data,
                          ignore_case = FALSE,
                          regex = FALSE,
                          ...,
-                         cols,
-                         colnames_to) {
-  # Check args
-  if (!missing(colnames_to)) {
-    .is_deprecated("colnames_to", "names_to")
-    if (is.null(names_to)) {
-      names_to <- colnames_to
-    }
-  }
+                         cols) { # nolint
 
   # Prefer "cols" over "select" for compat with tidyr::pivot_longer
+  # nolint start
   if (!missing(cols)) {
     select <- substitute(cols)
     cols <- .select_nse(
@@ -115,6 +107,7 @@ data_to_long <- function(data,
       )
     }
   }
+  # nolint end
 
   # nothing to select?
   if (length(cols) == 0L) {
@@ -205,7 +198,7 @@ data_to_long <- function(data,
         header = FALSE
       )
       names(tmp) <- paste0("V", seq_len(ncol(tmp)))
-      tmp[tmp == ""] <- NA
+      tmp[tmp == ""] <- NA # nolint
 
       stacked_data$ind <- NULL
       stacked_data <- cbind(tmp, stacked_data)
