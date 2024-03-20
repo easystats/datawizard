@@ -58,6 +58,10 @@ return \code{"Species"}.}
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
 excludes no columns.}
 
+\item{remove_na}{Logical, if \code{TRUE}, missing values (\code{NA}) in the column
+provided in \code{expand} are removed from the data frame. If \code{FALSE} and \code{expand}
+contains missing values, the function will throw an error.}
+
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
 search pattern when matching against variable names.}

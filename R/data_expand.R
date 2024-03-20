@@ -8,6 +8,9 @@
 #' @param data A data frame.
 #' @param expand The name of the column that contains the counts of replications
 #' for each row.
+#' @param remove_na Logical, if `TRUE`, missing values (`NA`) in the column
+#' provided in `expand` are removed from the data frame. If `FALSE` and `expand`
+#' contains missing values, the function will throw an error.
 #' @param ... Currently not used.
 #' @inheritParams find_columns
 #'
@@ -64,6 +67,19 @@ data_expand <- function(data,
 
   # also remove "expand" from "select" string
   select <- setdiff(select, expand)
+
+  # if user doesn't want to remove "NA", but replicates contain "NA",
+  # give informative error here
+  if (!remove_na && anyNA(replicates)) {
+    insight::format_error(
+      "The column provided in `expand` contains missing values, but `remove_na` is set to `FALSE`.",
+      "Please set `remove_na` to `TRUE` or remove the missing values from the data frame."
+    )
+  }
+
+  # remove rows where "expand" is NA
+  data <- data[!is.na(replicates), ]
+  replicates <- replicates[!is.na(replicates)]
 
   # fin
   as.data.frame(do.call(cbind, lapply(data[select], function(variable) {
