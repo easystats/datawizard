@@ -60,7 +60,10 @@ data_expand <- function(data,
   # extract variable that contains the counts of replicates
   replicates <- data[[expand]]
   # we can remove that column now
-  data[[replicates]] <- NULL
+  data[[expand]] <- NULL
+
+  # also remove "expand" from "select" string
+  select <- setdiff(select, expand)
 
   # fin
   as.data.frame(do.call(cbind, lapply(data[select], function(variable) {
