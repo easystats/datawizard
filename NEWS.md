@@ -12,7 +12,7 @@ NEW FUNCTIONS
 
 * `data_summary()`, to compute summary statistics of (grouped) data frames.
 
-* `data_expand()`, to expand a data frame by replicating rows based on another
+* `data_replicate()`, to expand a data frame by replicating rows based on another
   variable that contains the counts of replications per row.
 
 CHANGES

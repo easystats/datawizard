@@ -20,7 +20,7 @@ reference:
       - data_partition
       - data_rotate
       - data_group
-      - data_expand
+      - data_replicate
       - data_duplicated
       - data_unique
 

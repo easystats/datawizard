@@ -1,5 +1,5 @@
 #' @title Expand (i.e. replicate rows) a data frame
-#' @name data_expand
+#' @name data_replicate
 #'
 #' @description
 #' Expand a data frame by replicating rows based on another variable that
@@ -18,9 +18,9 @@
 #'
 #' @examples
 #' data(mtcars)
-#' data_expand(head(mtcars), "carb")
+#' data_replicate(head(mtcars), "carb")
 #' @export
-data_expand <- function(data,
+data_replicate <- function(data,
                         expand = NULL,
                         select = NULL,
                         exclude = NULL,
@@ -82,7 +82,5 @@ data_expand <- function(data,
   replicates <- replicates[!is.na(replicates)]
 
   # fin
-  as.data.frame(do.call(cbind, lapply(data[select], function(variable) {
-    unlist(Map(rep, variable, replicates), use.names = FALSE)
-  })))
+  as.data.frame(do.call(cbind, lapply(data[select], rep.int, times = replicates)))
 }
