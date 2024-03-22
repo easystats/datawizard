@@ -73,7 +73,7 @@ data_expand <- function(data,
   if (!remove_na && anyNA(replicates)) {
     insight::format_error(
       "The column provided in `expand` contains missing values, but `remove_na` is set to `FALSE`.",
-      "Please set `remove_na` to `TRUE` or remove the missing values from the data frame."
+      "Please set `remove_na` to `TRUE` or remove the missing values from the `expand` variable."
     )
   }
 
