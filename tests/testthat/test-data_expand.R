@@ -1,6 +1,6 @@
 test_that("data_expand: simple use case", {
   data(mtcars)
-  d <- as.data.frame(head(mtcars))
+  d <- head(mtcars)
   out <- data_expand(d, "carb")
   expect_identical(dim(out), c(13L, 10L))
   expect_identical(out$disp, c(160, 160, 160, 160, 160, 160, 160, 160, 108, 258, 360, 360, 225))
