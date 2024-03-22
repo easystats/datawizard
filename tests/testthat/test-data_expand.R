@@ -26,7 +26,7 @@ test_that("data_expand: simple use case", {
 
 test_that("data_expand: errors", {
   data(mtcars)
-  d <- as.data.frame(head(mtcars))
+  d <- head(mtcars)
   expect_error(data_expand(d), regex = "No column")
   expect_error(data_expand(d, expand = c("mpg", "gear")), regex = "a single string")
   expect_error(data_expand(d, expand = "geas"), regex = "The column provided")
