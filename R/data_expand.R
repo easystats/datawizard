@@ -14,7 +14,7 @@
 #' @param ... Currently not used.
 #' @inheritParams find_columns
 #'
-#' @return `data`, with each row replicated as many times as defined in `expand`.
+#' @return A dataframe with each row replicated as many times as defined in `expand`.
 #'
 #' @examples
 #' data(mtcars)
