@@ -8,7 +8,6 @@
 #' @param proportion Scalar (between 0 and 1) or numeric vector, indicating the
 #'   proportion(s) of the training set(s). The sum of `proportion` must not be
 #'   greater than 1. The remaining part will be used for the test set.
-#' @param training_proportion Deprecated, please use `proportion`.
 #' @param group A character vector indicating the name(s) of the column(s) used
 #'   for stratified partitioning.
 #' @param seed A random number generator seed. Enter an integer (e.g. 123) so
@@ -50,7 +49,6 @@ data_partition <- function(data,
                            seed = NULL,
                            row_id = ".row_id",
                            verbose = TRUE,
-                           training_proportion = proportion,
                            ...) {
   # validation checks
   data <- .coerce_to_dataframe(data)
@@ -132,7 +130,9 @@ data_partition <- function(data,
   })
 
   # we need to move all list elements one level higher.
-  if (!is.null(group)) {
+  if (is.null(group)) {
+    training_sets <- training_sets[[1]]
+  } else {
     # for grouped training sets, we need to row-bind all sampled training
     # sets from each group. currently, we have a list of data frames,
     # grouped by "group"; but we want one data frame per proportion that
@@ -140,18 +140,16 @@ data_partition <- function(data,
     training_sets <- lapply(seq_along(proportion), function(p) {
       do.call(rbind, lapply(training_sets, function(i) i[[p]]))
     })
-  } else {
-    # else, just move first list element one level higher
-    training_sets <- training_sets[[1]]
   }
 
   # use probabilies as element names
   names(training_sets) <- sprintf("p_%g", proportion)
 
   # remove all training set id's from data, add remaining data (= test set)
+  all_ids <- lapply(training_sets, data_extract, select = row_id, as_data_frame = FALSE)
   out <- c(
     training_sets,
-    list(test = data[-unlist(lapply(training_sets, data_extract, select = row_id, as_data_frame = FALSE), use.names = FALSE), ])
+    list(test = data[-unlist(all_ids, use.names = FALSE), ])
   )
 
   lapply(out, `row.names<-`, NULL)
