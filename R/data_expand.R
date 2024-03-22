@@ -8,7 +8,7 @@
 #' @param data A data frame.
 #' @param expand The name of the column that contains the counts of replications
 #' for each row.
-#' @param remove_na Logical, if `TRUE`, missing values (`NA`) in the column
+#' @param remove_na Logical. If `TRUE`, missing values in the column
 #' provided in `expand` are removed from the data frame. If `FALSE` and `expand`
 #' contains missing values, the function will throw an error.
 #' @param ... Currently not used.
