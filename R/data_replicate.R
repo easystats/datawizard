@@ -106,7 +106,10 @@ data_replicate <- function(data,
 }
 
 
-.is_integer <- function(x) {
+.is_integer <- function(x, remove_na = TRUE) {
+  if (remove_na) {
+    x <- x[!is.na(x)]
+  }
   tryCatch(
     all(x %% 1 == 0),
     warning = function(w) is.integer(x),
