@@ -106,6 +106,8 @@ data_replicate <- function(data,
 }
 
 
+# is.integer(c(1, 2)) -> FALSE
+# all(c(1, 2) %% 1 == 0) -> TRUE
 .is_integer <- function(x, remove_na = TRUE) {
   if (remove_na) {
     x <- x[!is.na(x)]
