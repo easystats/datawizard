@@ -7,7 +7,8 @@
 #'
 #' @param data A data frame.
 #' @param expand The name of the column that contains the counts of replications
-#' for each row.
+#' for each row. Can also be a numeric value, indicating the position of that
+#' column. Note that the variable indicated by `expand` must be an integer vector.
 #' @param remove_na Logical. If `TRUE`, missing values in the column
 #' provided in `expand` are removed from the data frame. If `FALSE` and `expand`
 #' contains missing values, the function will throw an error.
@@ -43,11 +44,23 @@ data_replicate <- function(data,
     )
   }
 
+  # check if numerics, and if so, use column name
+  if (is.numeric(expand)) {
+    expand <- colnames(data)[expand]
+  }
+
   # check if in data
   if (!expand %in% colnames(data)) {
     insight::format_error(
       "The column provided in `expand` does not exist in the data frame.",
       .misspelled_string(colnames(data), expand, "Possibly misspelled?")
+    )
+  }
+
+  # check that "expand" is integer
+  if (!.is_integer(data[[expand]])) {
+    insight::format_error(
+      "The column provided in `expand` is not of type integer. Please provide a column that contains integer values." # nolint
     )
   }
 
@@ -83,4 +96,17 @@ data_replicate <- function(data,
 
   # fin
   as.data.frame(do.call(cbind, lapply(data[select], rep.int, times = replicates)))
+}
+
+
+.is_integer <- function(x) {
+  tryCatch(
+    if (is.infinite(x)) {
+      FALSE
+    } else {
+      all(x %% 1 == 0)
+    },
+    warning = function(w) is.integer(x),
+    error = function(e) FALSE
+  )
 }

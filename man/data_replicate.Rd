@@ -20,7 +20,8 @@ data_replicate(
 \item{data}{A data frame.}
 
 \item{expand}{The name of the column that contains the counts of replications
-for each row.}
+for each row. Can also be a numeric value, indicating the position of that
+column. Note that the variable indicated by \code{expand} must be an integer vector.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either

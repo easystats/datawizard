@@ -6,6 +6,11 @@ test_that("data_replicate: simple use case", {
   expect_identical(out$disp, c(160, 160, 160, 160, 160, 160, 160, 160, 108, 258, 360, 360, 225))
   expect_named(out, c("mpg", "cyl", "disp", "hp", "drat", "wt", "qsec", "vs", "am", "gear"))
 
+  out <- data_replicate(d, 11)
+  expect_identical(dim(out), c(13L, 10L))
+  expect_identical(out$disp, c(160, 160, 160, 160, 160, 160, 160, 160, 108, 258, 360, 360, 225))
+  expect_named(out, c("mpg", "cyl", "disp", "hp", "drat", "wt", "qsec", "vs", "am", "gear"))
+
   d$mpg[5] <- NA
   out <- data_replicate(d, "carb")
   expect_identical(dim(out), c(13L, 10L))
@@ -30,6 +35,7 @@ test_that("data_replicate: errors", {
   expect_error(data_replicate(d), regex = "No column")
   expect_error(data_replicate(d, expand = c("mpg", "gear")), regex = "a single string")
   expect_error(data_replicate(d, expand = "geas"), regex = "The column provided")
+  expect_error(data_replicate(d, expand = "qsec"), regex = "The column provided")
   d$carb[3] <- NA
   expect_error(data_replicate(d, "carb"), regex = "missing values")
 })
