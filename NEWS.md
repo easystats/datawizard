@@ -1,4 +1,4 @@
-# datawizard 0.9.2
+# datawizard 0.10.0
 
 BREAKING CHANGES
 

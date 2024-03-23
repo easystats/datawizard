@@ -8,7 +8,3 @@ We checked 17 reverse dependencies, comparing R CMD check results across CRAN an
 
  * We saw 0 new problems
  * We failed to check 0 packages
-
-## Comments
-
-Second submission of 0.9.1 following email exchange on timeout of vignette rendering in one of the pre-tests.
