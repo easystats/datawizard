@@ -21,14 +21,14 @@
 #' data_replicate(head(mtcars), "carb")
 #' @export
 data_replicate <- function(data,
-                        expand = NULL,
-                        select = NULL,
-                        exclude = NULL,
-                        remove_na = FALSE,
-                        ignore_case = FALSE,
-                        verbose = TRUE,
-                        regex = FALSE,
-                        ...) {
+                           expand = NULL,
+                           select = NULL,
+                           exclude = NULL,
+                           remove_na = FALSE,
+                           ignore_case = FALSE,
+                           verbose = TRUE,
+                           regex = FALSE,
+                           ...) {
   # we need a name for the new column
   if (is.null(expand)) {
     insight::format_error(
