@@ -57,6 +57,13 @@ data_replicate <- function(data,
     )
   }
 
+  # check that "expand" contains no Inf
+  if (any(is.infinite(data[[expand]]))) {
+    insight::format_error(
+      "The column provided in `expand` contains infinite values. Please provide a column that does not contain infinite values." # nolint
+    )
+  }
+
   # check that "expand" is integer
   if (!.is_integer(data[[expand]])) {
     insight::format_error(
@@ -101,11 +108,7 @@ data_replicate <- function(data,
 
 .is_integer <- function(x) {
   tryCatch(
-    if (is.infinite(x)) {
-      FALSE
-    } else {
-      all(x %% 1 == 0)
-    },
+    all(x %% 1 == 0),
     warning = function(w) is.integer(x),
     error = function(e) FALSE
   )

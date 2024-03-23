@@ -27,7 +27,17 @@ test_that("data_replicate: simple use case", {
   expect_identical(dim(out), c(12L, 2L))
   expect_identical(out$disp, c(160, 160, 160, 160, 160, 160, 160, 160, 258, 360, 360, 225))
   expect_named(out, c("disp", "hp"))
+
+  d <- data.frame(
+    a = c("a", "b", "c"),
+    b = 1:3,
+    rep = c(3, 2, 4),
+    stringsAsFactors = FALSE
+  )
+  out <- data_replicate(d, "rep")
+  expect_identical(out$a, c("a", "a", "a", "b", "b", "c", "c", "c", "c"))
 })
+
 
 test_that("data_replicate: errors", {
   data(mtcars)
@@ -38,4 +48,7 @@ test_that("data_replicate: errors", {
   expect_error(data_replicate(d, expand = "qsec"), regex = "The column provided")
   d$carb[3] <- NA
   expect_error(data_replicate(d, "carb"), regex = "missing values")
+  d <- head(mtcars)
+  d$carb[3] <- Inf
+  expect_error(data_replicate(d, "carb"), regex = "infinite values")
 })
