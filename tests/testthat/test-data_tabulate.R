@@ -398,3 +398,10 @@ test_that("data_tabulate, validate against table", {
   out1[[2]] <- as.character(out1[[2]])
   expect_equal(out1, out2, ignore_attr = TRUE)
 })
+
+
+test_that("data_tabulate, correct 0% for proportions", {
+  data(efc, package = "datawizard")
+  out <- data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")
+  expect_identical(format(out[[1]])[[4]], c("0 (0%)", "0 (0%)", "0 (0%)", "0 (0%)", "", "0"))
+})
