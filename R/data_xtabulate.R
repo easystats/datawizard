@@ -108,17 +108,23 @@ format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = 
     tmp <- x
     if (identical(props, "row")) {
       for (i in seq_len(nrow(x))) {
-        tmp[i, -1] <- paste(
-          format(x[i, -1]),
-          format(sprintf("(%.*f%%)", digits, 100 * x[i, -1] / sum(x[i, -1], na.rm = TRUE)), justify = "right")
-        )
+        row_sum <- sum(x[i, -1], na.rm = TRUE)
+        if (row_sum == 0) {
+          row_sum_string <- "(0%)"
+        } else {
+          row_sum_string <- sprintf("(%.*f%%)", digits, 100 * x[i, -1] / row_sum)
+        }
+        tmp[i, -1] <- paste(format(x[i, -1]), format(row_sum_string, justify = "right"))
       }
     } else if (identical(props, "column")) {
       for (i in seq_len(ncol(x))[-1]) {
-        tmp[, i] <- paste(
-          format(x[, i]),
-          format(sprintf("(%.*f%%)", digits, 100 * x[, i] / sum(x[, i], na.rm = TRUE)), justify = "right")
-        )
+        col_sum <- sum(x[, i], na.rm = TRUE)
+        if (col_sum == 0) {
+          col_sum_string <- "(0%)"
+        } else {
+          col_sum_string <- sprintf("(%.*f%%)", digits, 100 * x[, i] / col_sum)
+        }
+        tmp[, i] <- paste(format(x[, i]), format(col_sum_string, justify = "right"))
       }
     } else if (identical(props, "full")) {
       for (i in seq_len(ncol(x))[-1]) {
