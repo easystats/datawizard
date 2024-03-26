@@ -118,13 +118,13 @@ format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = 
       }
     } else if (identical(props, "column")) {
       for (i in seq_len(ncol(x))[-1]) {
-        row_sum <- sum(x[, i], na.rm = TRUE)
-        if (row_sum == 0) {
-          row_sum_string <- "(0%)"
+        col_sum <- sum(x[, i], na.rm = TRUE)
+        if (col_sum == 0) {
+          col_sum_string <- "(0%)"
         } else {
-          row_sum_string <- sprintf("(%.*f%%)", digits, 100 * x[, i] / row_sum)
+          col_sum_string <- sprintf("(%.*f%%)", digits, 100 * x[, i] / col_sum)
         }
-        tmp[, i] <- paste(format(x[, i]), format(row_sum_string, justify = "right"))
+        tmp[, i] <- paste(format(x[, i]), format(col_sum_string, justify = "right"))
       }
     } else if (identical(props, "full")) {
       for (i in seq_len(ncol(x))[-1]) {
