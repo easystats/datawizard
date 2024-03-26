@@ -404,5 +404,5 @@ test_that("data_tabulate, correct 0% for proportions", {
   data(efc, package = "datawizard")
   out <- data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")
   expect_identical(format(out[[1]])[[4]], c("0 (0%)", "0 (0%)", "0 (0%)", "0 (0%)", "", "0"))
-  expect_snapshot(print(format(out[[1]])))
+  expect_snapshot(print(out[[1]]))
 })
