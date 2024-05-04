@@ -1,3 +1,11 @@
+# datawizard 0.10.1
+
+CHANGES
+
+* `recode_into()` is more relaxed regarding checking the type of `NA` values.
+  If you recode into a numeric variable, and one of the recode values is `NA`,
+  you no longer need to use `NA_real_` for numeric `NA` values.
+
 # datawizard 0.10.0
 
 BREAKING CHANGES
