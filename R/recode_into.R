@@ -140,12 +140,22 @@ recode_into <- function(...,
   for (i in seq_len(n_params)) {
     # get type of all recode values
     if (is.null(data)) {
-      type <- typeof(.dynEval(dots[[i]][[3]], ifnotfound = NULL))
-      len_matches <- length(.dynEval(dots[[i]][[2]], ifnotfound = NULL))
+      value_type <- .dynEval(dots[[i]][[3]], ifnotfound = NULL)
+      value_length <- .dynEval(dots[[i]][[2]], ifnotfound = NULL)
     } else {
-      type <- typeof(with(data, eval(dots[[i]][[3]])))
-      len_matches <- length(with(data, eval(dots[[i]][[2]])))
+      value_type <- with(data, eval(dots[[i]][[3]]))
+      value_length <- with(data, eval(dots[[i]][[2]]))
     }
+    # if we have "NA", we don't want to check the type. Else, you cannot use
+    # "NA" for numeric recodes, but rather need to use "NA_real_", which is not
+    # user-friendly
+    if (is.na(value_type)) {
+      type <- NULL
+    } else {
+      type <- typeof(value_type)
+    }
+    len_matches <- length(value_length)
+    # save type and length of recode values
     all_recodes <- c(all_recodes, type)
     all_same_length <- c(all_same_length, len_matches)
   }
