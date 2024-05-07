@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,6 +89,9 @@
 <p>CHANGES</p>
 <ul><li>
 <code><a href="../reference/recode_into.html">recode_into()</a></code> is more relaxed regarding checking the type of <code>NA</code> values. If you recode into a numeric variable, and one of the recode values is <code>NA</code>, you no longer need to use <code>NA_real_</code> for numeric <code>NA</code> values.</li>
+</ul><p>BUG FIXES</p>
+<ul><li>
+<code><a href="../reference/data_to_long.html">data_to_long()</a></code> did not work for data frame where columns had attributes (like labelled data).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.0" id="datawizard-0100">datawizard 0.10.0<a class="anchor" aria-label="anchor" href="#datawizard-0100"></a></h2><p class="text-muted">CRAN release: 2024-03-26</p>
