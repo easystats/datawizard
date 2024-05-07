@@ -78,7 +78,7 @@ slide.data.frame <- function(x,
   # create the new variables and updates "select", so new variables are processed
   if (!isFALSE(append)) {
     # process arguments
-    args <- .process_append(
+    my_args <- .process_append(
       x,
       select,
       append,
@@ -86,8 +86,8 @@ slide.data.frame <- function(x,
       keep_factors = FALSE
     )
     # update processed arguments
-    x <- args$x
-    select <- args$select
+    x <- my_args$x
+    select <- my_args$select
   }
 
   x[select] <- lapply(
