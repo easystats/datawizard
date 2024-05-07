@@ -78,6 +78,7 @@ data_to_long <- function(data,
                          regex = FALSE,
                          ...,
                          cols) { # nolint
+  original_data <- data
 
   # Prefer "cols" over "select" for compat with tidyr::pivot_longer
   # nolint start
@@ -219,6 +220,13 @@ data_to_long <- function(data,
 
   stacked_data <- data_relocate(stacked_data, select = values_to, after = -1)
 
+  # if columns in data frame have attributes (e.g. labelled data), `cbind()`
+  # won't work, so we need to remove them. We'll set them back later
+  not_stacked[] <- lapply(not_stacked, function(i) {
+    attributes(i) <- NULL
+    i
+  })
+
   # reunite unselected data with stacked data
   out <- cbind(
     not_stacked, stats::setNames(stacked_data, c(names_to, values_to)),
@@ -262,6 +270,12 @@ data_to_long <- function(data,
   # reset row names
   if (!insight::object_has_rownames(data)) {
     row.names(out) <- NULL
+  }
+
+  # set back labels
+  shared_columns <- intersect(colnames(out), colnames(original_data))
+  for (i in shared_columns) {
+    out[[i]] <- .set_back_labels(out[[i]], original_data[[i]], include_values = TRUE)
   }
 
   out

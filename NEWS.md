@@ -6,6 +6,11 @@ CHANGES
   If you recode into a numeric variable, and one of the recode values is `NA`,
   you no longer need to use `NA_real_` for numeric `NA` values.
 
+BUG FIXES
+
+* `data_to_long()` did not work for data frame where columns had attributes
+  (like labelled data).
+
 # datawizard 0.10.0
 
 BREAKING CHANGES
