@@ -142,7 +142,8 @@ adjusted <- adjust(data, effect = "V1", select = "V2")
 adjusted_icpt <- adjust(data, effect = "V1", select = "V2", keep_intercept = TRUE)
 
 # Visualize
-plot(data$V1, data$V2,
+plot(
+  data$V1, data$V2,
   pch = 19, col = "blue",
   ylim = c(min(adjusted$V2), max(data$V2)),
   main = "Original (blue), adjusted (green), and adjusted - intercept kept (red) data"
