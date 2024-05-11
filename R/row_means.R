@@ -8,7 +8,7 @@
 #' @param min_valid Optional, a numeric value of length 1. May either be
 #' - a numeric value that indicates the amount of valid values per row to
 #'   calculate the row mean;
-#' - or a value between 0 and 1, indicating a proportion of valid values per
+#' - or a value between `0` and `1`, indicating a proportion of valid values per
 #'   row to calculate the row mean (see 'Details').
 #' - `NULL` (default), in which all cases are considered.
 #'

@@ -59,7 +59,7 @@ excludes no columns.}
 \itemize{
 \item a numeric value that indicates the amount of valid values per row to
 calculate the row mean;
-\item or a value between 0 and 1, indicating a proportion of valid values per
+\item or a value between \code{0} and \code{1}, indicating a proportion of valid values per
 row to calculate the row mean (see 'Details').
 \item \code{NULL} (default), in which all cases are considered.
 }
