@@ -173,7 +173,6 @@ test_that("data_tabulate big numbers", {
 
 
 test_that("data_tabulate print multiple, collapse", {
-  skip_if_not(packageVersion("insight") > "0.17.0", "insight must be >= 0.17.0")
   data(efc, package = "datawizard")
   expect_snapshot(data_tabulate(efc, c("c172code", "e16sex"), collapse = TRUE))
 })
