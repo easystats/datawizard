@@ -39,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,12 +55,17 @@
     Reference
   </a>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="articles/index.html" aria-label="Articles">
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--articles" aria-label="Articles">
     <span class="fa fa fa fa-book-reader"></span>
      
     Articles
   </a>
+  <div class="dropdown-menu" aria-labelledby="dropdown--articles">
+    <a class="dropdown-item" href="articles/tidyverse_translation.html">Coming from 'tidyverse'</a>
+    <a class="dropdown-item" href="articles/selection_syntax.html">A quick summary of selection syntax in `{datawizard}`</a>
+    <a class="dropdown-item" href="articles/standardize_data.html">Data Standardization</a>
+  </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="news/index.html" aria-label="News">
@@ -584,20 +589,7 @@
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/rescale.html">change_scale</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1]  50  60 100   0  30</span></span>
-<span><span class="co">#&gt; attr(,"min_value")</span></span>
-<span><span class="co">#&gt; [1] -5</span></span>
-<span><span class="co">#&gt; attr(,"max_value")</span></span>
-<span><span class="co">#&gt; [1] 5</span></span>
-<span><span class="co">#&gt; attr(,"new_min")</span></span>
-<span><span class="co">#&gt; [1] 0</span></span>
-<span><span class="co">#&gt; attr(,"new_max")</span></span>
-<span><span class="co">#&gt; [1] 100</span></span>
-<span><span class="co">#&gt; attr(,"range_difference")</span></span>
-<span><span class="co">#&gt; [1] 10</span></span>
-<span><span class="co">#&gt; attr(,"to_range")</span></span>
-<span><span class="co">#&gt; [1]   0 100</span></span>
-<span><span class="co">#&gt; attr(,"class")</span></span>
-<span><span class="co">#&gt; [1] "dw_transformer" "numeric"</span></span></code></pre></div>
+<span><span class="co">#&gt; (original range = -5 to 5)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="rotate-or-transpose">Rotate or transpose<a class="anchor" aria-label="anchor" href="#rotate-or-transpose"></a>

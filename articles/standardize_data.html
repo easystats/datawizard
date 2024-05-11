@@ -39,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,12 +55,17 @@
     Reference
   </a>
 </li>
-<li class="active nav-item">
-  <a class="nav-link" href="../articles/index.html" aria-label="Articles">
+<li class="active nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--articles" aria-label="Articles">
     <span class="fa fa fa fa-book-reader"></span>
      
     Articles
   </a>
+  <div class="dropdown-menu" aria-labelledby="dropdown--articles">
+    <a class="dropdown-item" href="../articles/tidyverse_translation.html">Coming from 'tidyverse'</a>
+    <a class="dropdown-item" href="../articles/selection_syntax.html">A quick summary of selection syntax in `{datawizard}`</a>
+    <a class="dropdown-item" href="../articles/standardize_data.html">Data Standardization</a>
+  </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html" aria-label="News">
@@ -659,21 +664,21 @@ find:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # Random Effects: Participant_ID</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Model             | Coefficient |   SE |         95% CI</span></span>
-<span><span class="co">#&gt; -------------------------------------------------------</span></span>
-<span><span class="co">#&gt; m_raw             |       16.49 | 3.24 | [11.22, 24.22]</span></span>
-<span><span class="co">#&gt; m_VariableWise    |        0.45 | 0.09 | [ 0.30,  0.65]</span></span>
-<span><span class="co">#&gt; m_ParticipantWise |        0.00 |      |               </span></span>
-<span><span class="co">#&gt; m_Full            |        0.00 |      |               </span></span>
+<span><span class="co">#&gt; Model             | Coefficient</span></span>
+<span><span class="co">#&gt; -------------------------------</span></span>
+<span><span class="co">#&gt; m_raw             |       16.49</span></span>
+<span><span class="co">#&gt; m_VariableWise    |        0.45</span></span>
+<span><span class="co">#&gt; m_ParticipantWise |        0.00</span></span>
+<span><span class="co">#&gt; m_Full            |        0.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # Random Effects: Residual</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Model             | Coefficient |   SE |         95% CI</span></span>
-<span><span class="co">#&gt; -------------------------------------------------------</span></span>
-<span><span class="co">#&gt; m_raw             |       33.56 | 1.14 | [31.40, 35.86]</span></span>
-<span><span class="co">#&gt; m_VariableWise    |        0.91 | 0.03 | [ 0.85,  0.97]</span></span>
-<span><span class="co">#&gt; m_ParticipantWise |        0.98 |      |               </span></span>
-<span><span class="co">#&gt; m_Full            |        1.00 |      |</span></span></code></pre>
+<span><span class="co">#&gt; Model             | Coefficient</span></span>
+<span><span class="co">#&gt; -------------------------------</span></span>
+<span><span class="co">#&gt; m_raw             |       33.56</span></span>
+<span><span class="co">#&gt; m_VariableWise    |        0.91</span></span>
+<span><span class="co">#&gt; m_ParticipantWise |        0.98</span></span>
+<span><span class="co">#&gt; m_Full            |        1.00</span></span></code></pre>
 <p>As we can see, <strong>variable-wise</strong> standardization only
 affects <strong>the coefficient</strong> (which is expected, as it
 changes the unit), but not the test statistic or statistical
