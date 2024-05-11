@@ -67,6 +67,8 @@ Suggests:
     tibble,
     tidyr,
     withr
+Remotes:
+    easystats/modelbased
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
