@@ -505,20 +505,7 @@ To rescale a numeric variable to a new range:
 ``` r
 change_scale(c(0, 1, 5, -5, -2))
 #> [1]  50  60 100   0  30
-#> attr(,"min_value")
-#> [1] -5
-#> attr(,"max_value")
-#> [1] 5
-#> attr(,"new_min")
-#> [1] 0
-#> attr(,"new_max")
-#> [1] 100
-#> attr(,"range_difference")
-#> [1] 10
-#> attr(,"to_range")
-#> [1]   0 100
-#> attr(,"class")
-#> [1] "dw_transformer" "numeric"
+#> (original range = -5 to 5)
 ```
 
 ### Rotate or transpose
