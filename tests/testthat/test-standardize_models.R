@@ -57,7 +57,6 @@ test_that("transformations", {
     ignore_attr = TRUE
   )
 
-  skip_if_not_installed("insight", minimum_version = "0.10.0")
   d <- data.frame(
     time = as.factor(c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5)),
     group = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
