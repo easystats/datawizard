@@ -3,7 +3,7 @@
 BREAKING CHANGES
 
 * Arguments named `group` or `group_by` will be deprecated in a future release.
-  Please use `by` instead. This affects following functions in *datawizard*.
+  Please use `by` instead. This affects the following functions in *datawizard*.
 
   * `data_partition()`
   * `demean()` and `degroup()`
