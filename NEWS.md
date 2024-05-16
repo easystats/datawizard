@@ -6,6 +6,8 @@ BREAKING CHANGES
   Please use `by` instead. This affects following functions in *datawizard*.
 
   * `data_partition()`
+  * `demean()` and `degroup()`
+  * `means_by_group()`
 
 CHANGES
 
