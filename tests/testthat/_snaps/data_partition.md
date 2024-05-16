@@ -88,7 +88,7 @@
 ---
 
     Code
-      str(data_partition(iris, proportion = 0.7, group = "Species", seed = 123))
+      str(data_partition(iris, proportion = 0.7, by = "Species", seed = 123))
     Output
       List of 2
        $ p_0.7:'data.frame':	105 obs. of  6 variables:
@@ -109,7 +109,7 @@
 ---
 
     Code
-      str(data_partition(iris, proportion = c(0.2, 0.5), group = "Species", seed = 123))
+      str(data_partition(iris, proportion = c(0.2, 0.5), by = "Species", seed = 123))
     Output
       List of 3
        $ p_0.2:'data.frame':	30 obs. of  6 variables:
