@@ -8,6 +8,7 @@ BREAKING CHANGES
   * `data_partition()`
   * `demean()` and `degroup()`
   * `means_by_group()`
+  * `rescale_weights()`
 
 CHANGES
 
