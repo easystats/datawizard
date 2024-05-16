@@ -55,9 +55,10 @@ data_partition <- function(data,
   # validation checks
   data <- .coerce_to_dataframe(data)
 
-  ## TODO: deprecate later
+  ## TODO: remove warning in future release
   if (!is.null(group)) {
     by <- group
+    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
   }
 
   if (sum(proportion) > 1) {

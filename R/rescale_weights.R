@@ -89,9 +89,10 @@
 #' }
 #' @export
 rescale_weights <- function(data, by, probability_weights, nest = FALSE, group = NULL) {
-  ## TODO: deprecate later
+  ## TODO: remove warning in future release
   if (!is.null(group)) {
     by <- group
+    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
   }
 
   if (inherits(by, "formula")) {

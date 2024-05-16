@@ -228,9 +228,10 @@ demean <- function(x,
                    add_attributes = TRUE,
                    verbose = TRUE,
                    group = NULL) {
-  ## TODO: deprecate later
+  ## TODO: remove warning in future release
   if (!is.null(group)) {
     by <- group
+    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
   }
 
   degroup(
@@ -261,9 +262,10 @@ degroup <- function(x,
                     add_attributes = TRUE,
                     verbose = TRUE,
                     group = NULL) {
-  ## TODO: deprecate later
+  ## TODO: remove warning later
   if (!is.null(group)) {
     by <- group
+    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
   }
 
   # ugly tibbles again...

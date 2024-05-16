@@ -62,9 +62,10 @@ means_by_group.numeric <- function(x,
                                    digits = NULL,
                                    group = NULL,
                                    ...) {
-  ## TODO: deprecate later
+  ## TODO: remove warning in future release
   if (!is.null(group)) {
     by <- group
+    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
   }
 
   # validation check for arguments
@@ -140,9 +141,10 @@ means_by_group.data.frame <- function(x,
                                       verbose = TRUE,
                                       group = NULL,
                                       ...) {
-  ## TODO: deprecate later
+  ## TODO: remove warning in future release
   if (!is.null(group)) {
     by <- group
+    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
   }
 
   # evaluate select/exclude, may be select-helpers
