@@ -229,6 +229,9 @@ print_html.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
     x$Group <- NULL
   }
 
+
+  ## FIXME: change group_by argument later
+
   # print table
   insight::export_table(
     format(x, big_mark = big_mark, format = "html", ...),
@@ -264,6 +267,9 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
     })
 
     out <- do.call(rbind, x)
+
+
+    ## FIXME: change group_by argument later
 
     # print table
     insight::export_table(
