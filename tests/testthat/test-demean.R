@@ -2,29 +2,35 @@ test_that("demean works", {
   df <- iris
 
   set.seed(123)
-  df$ID <- sample(1:4, nrow(df), replace = TRUE) # fake-ID
+  df$ID <- sample.int(4, nrow(df), replace = TRUE) # fake-ID
 
   set.seed(123)
   df$binary <- as.factor(rbinom(150, 1, 0.35)) # binary variable
 
   set.seed(123)
-  x <- demean(df, select = c("Sepal.Length", "Petal.Length"), group = "ID")
+  x <- demean(df, select = c("Sepal.Length", "Petal.Length"), by = "ID")
   expect_snapshot(head(x))
 
   set.seed(123)
   expect_message(
-    x <- demean(df, select = c("Sepal.Length", "binary", "Species"), group = "ID"),
+    {
+      x <- demean(df, select = c("Sepal.Length", "binary", "Species"), by = "ID")
+    },
     "have been coerced to numeric"
   )
   expect_snapshot(head(x))
 
   set.seed(123)
   expect_message(
-    y <- demean(df, select = ~ Sepal.Length + binary + Species, group = ~ID),
+    {
+      y <- demean(df, select = ~ Sepal.Length + binary + Species, by = ~ID)
+    },
     "have been coerced to numeric"
   )
   expect_message(
-    z <- demean(df, select = c("Sepal.Length", "binary", "Species"), group = "ID"),
+    {
+      z <- demean(df, select = c("Sepal.Length", "binary", "Species"), by = "ID")
+    },
     "have been coerced to numeric"
   )
   expect_identical(y, z)
@@ -39,7 +45,7 @@ test_that("demean interaction term", {
   )
 
   set.seed(123)
-  expect_snapshot(demean(dat, select = c("a", "x*y"), group = "ID"))
+  expect_snapshot(demean(dat, select = c("a", "x*y"), by = "ID"))
 })
 
 test_that("demean shows message if some vars don't exist", {
@@ -52,7 +58,7 @@ test_that("demean shows message if some vars don't exist", {
 
   set.seed(123)
   expect_message(
-    demean(dat, select = "foo", group = "ID"),
+    demean(dat, select = "foo", by = "ID"),
     regexp = "not found"
   )
 })
