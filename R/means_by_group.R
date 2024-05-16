@@ -63,7 +63,7 @@ means_by_group.numeric <- function(x,
                                    group = NULL,
                                    ...) {
   ## TODO: deprecate later
-  if (is.null(group)) {
+  if (!is.null(group)) {
     by <- group
   }
 
@@ -141,7 +141,7 @@ means_by_group.data.frame <- function(x,
                                       group = NULL,
                                       ...) {
   ## TODO: deprecate later
-  if (is.null(group)) {
+  if (!is.null(group)) {
     by <- group
   }
 
