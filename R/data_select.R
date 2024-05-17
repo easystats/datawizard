@@ -34,6 +34,7 @@ data_select <- function(data,
 }
 
 
+#' @rdname extract_column_names
 #' @export
 get_columns <- function(data,
                         select = NULL,

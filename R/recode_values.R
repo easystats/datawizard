@@ -531,6 +531,7 @@ recode_values.data.frame <- function(x,
 
 ## TODO Deprecate and remove alias later
 
+#' @rdname recode_values
 #' @export
 change_code <- function(x,
                         select = NULL,

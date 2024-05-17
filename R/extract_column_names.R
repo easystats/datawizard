@@ -154,6 +154,7 @@ extract_column_names <- function(data,
 }
 
 
+#' @rdname extract_column_names
 #' @export
 data_find <- function(data,
                       select = NULL,

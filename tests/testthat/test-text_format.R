@@ -1,5 +1,5 @@
 test_that("text formatting helpers work as expected", {
-  expect_snapshot(format_text(
+  expect_snapshot(text_format(
     c(
       "A very long First",
       "Some similar long Second",
@@ -10,7 +10,7 @@ test_that("text formatting helpers work as expected", {
     width = 20
   ))
 
-  expect_snapshot(format_text(
+  expect_snapshot(text_format(
     c(
       "A very long First",
       "Some similar long Second",
@@ -73,11 +73,11 @@ test_that("text formatting helpers work as expected", {
 test_that("text formatters respect `width` argument", {
   expect_snapshot({
     long_text <- strrep("abc ", 100)
-    cat(format_text(long_text, width = 50))
-    cat(format_text(long_text, width = 80))
+    cat(text_format(long_text, width = 50))
+    cat(text_format(long_text, width = 80))
 
     withr::with_options(list(width = 50), code = {
-      cat(format_text(long_text))
+      cat(text_format(long_text))
     })
   })
 })

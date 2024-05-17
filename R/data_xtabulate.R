@@ -234,7 +234,7 @@ print_html.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
     format(x, big_mark = big_mark, format = "html", ...),
     missing = "(NA)",
     format = "html",
-    group_by = "groups"
+    by = "groups"
   )
 }
 
@@ -270,7 +270,7 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
       out,
       missing = "(NA)",
       format = "html",
-      group_by = "groups"
+      by = "groups"
     )
   }
 }
