@@ -4,6 +4,7 @@
 \alias{recode_values}
 \alias{recode_values.numeric}
 \alias{recode_values.data.frame}
+\alias{change_code}
 \title{Recode old values of variables into new values}
 \usage{
 recode_values(x, ...)
@@ -18,6 +19,20 @@ recode_values(x, ...)
 )
 
 \method{recode_values}{data.frame}(
+  x,
+  select = NULL,
+  exclude = NULL,
+  recode = NULL,
+  default = NULL,
+  preserve_na = TRUE,
+  append = FALSE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+)
+
+change_code(
   x,
   select = NULL,
   exclude = NULL,

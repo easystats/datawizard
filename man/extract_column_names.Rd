@@ -2,7 +2,9 @@
 % Please edit documentation in R/data_select.R, R/extract_column_names.R
 \name{data_select}
 \alias{data_select}
+\alias{get_columns}
 \alias{extract_column_names}
+\alias{data_find}
 \title{Find or get columns in a data frame based on search patterns}
 \usage{
 data_select(
@@ -15,7 +17,27 @@ data_select(
   ...
 )
 
+get_columns(
+  data,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+)
+
 extract_column_names(
+  data,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+)
+
+data_find(
   data,
   select = NULL,
   exclude = NULL,
