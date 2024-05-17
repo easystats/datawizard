@@ -187,7 +187,7 @@ data_merge(list(x, y, z), join = "bind", by = "id", id = "source")
 \item Functions to recode data: \code{\link[=rescale]{rescale()}}, \code{\link[=reverse]{reverse()}}, \code{\link[=categorize]{categorize()}}, \code{\link[=recode_values]{recode_values()}}, \code{\link[=slide]{slide()}}
 \item Functions to standardize, normalize, rank-transform: \code{\link[=center]{center()}}, \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
 \item Split and merge data frames: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_merge]{data_merge()}}
-\item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=data_find]{data_find()}}
+\item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=extract_column_names]{extract_column_names()}}
 \item Functions to filter rows: \code{\link[=data_match]{data_match()}}, \code{\link[=data_filter]{data_filter()}}
 }
 }
