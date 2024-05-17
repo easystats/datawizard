@@ -20,7 +20,7 @@
 #' point when rounding estimates and values.
 #' @param ... Currently not used
 #' @param group Deprecated. Use `by` instead.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @return A data frame with information on mean and further summary statistics
 #' for each sub-group.

@@ -52,8 +52,8 @@ negation should not work as expected, use the \code{exclude} argument instead.
 }
 
 If \code{NULL}, selects all columns. Patterns that found no matches are silently
-ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
-return \code{"Species"}.}
+ignored, e.g. \code{extract_column_names(iris, select = c("Species", "Test"))}
+will just return \code{"Species"}.}
 
 \item{...}{For use by future methods.}
 

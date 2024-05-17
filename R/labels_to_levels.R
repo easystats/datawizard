@@ -7,7 +7,7 @@
 #' @param x A data frame or factor. Other variable types (e.g. numerics) are not
 #' allowed.
 #' @param ... Currently not used.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #' @inheritParams categorize
 #'
 #' @return `x`, where for all factors former levels are replaced by their value

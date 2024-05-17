@@ -4,7 +4,6 @@
 \alias{recode_values}
 \alias{recode_values.numeric}
 \alias{recode_values.data.frame}
-\alias{change_code}
 \title{Recode old values of variables into new values}
 \usage{
 recode_values(x, ...)
@@ -31,8 +30,6 @@ recode_values(x, ...)
   verbose = TRUE,
   ...
 )
-
-change_code(x, ...)
 }
 \arguments{
 \item{x}{A data frame, numeric or character vector, or factor.}
@@ -88,8 +85,8 @@ negation should not work as expected, use the \code{exclude} argument instead.
 }
 
 If \code{NULL}, selects all columns. Patterns that found no matches are silently
-ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
-return \code{"Species"}.}
+ignored, e.g. \code{extract_column_names(iris, select = c("Species", "Test"))}
+will just return \code{"Species"}.}
 
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
