@@ -164,4 +164,13 @@ data_find <- function(data,
                       verbose = TRUE,
                       ...) {
   insight::format_warning("Function `data_find()` is deprecated and will be removed in a future release. Please use `extract_column_names()` instead.") # nolint
+  extract_column_names(
+    data,
+    select = select,
+    exclude = exclude,
+    ignore_case = ignore_case,
+    regex = regex,
+    verbose = verbose,
+    ...
+  )
 }
