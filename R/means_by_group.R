@@ -19,6 +19,7 @@
 #' @param digits Optional scalar, indicating the amount of digits after decimal
 #' point when rounding estimates and values.
 #' @param ... Currently not used
+#' @param group Deprecated. Use `by` instead.
 #' @inheritParams find_columns
 #'
 #' @return A data frame with information on mean and further summary statistics

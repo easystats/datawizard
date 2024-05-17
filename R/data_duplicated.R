@@ -7,7 +7,7 @@
 #' values for that row, to help in the decision-making when
 #' selecting which duplicates to keep.
 #'
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @keywords duplicates
 #' @export

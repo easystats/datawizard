@@ -45,7 +45,7 @@
 #'   variables are appended with new column names (using the defined suffix) to
 #'   the original data frame.
 #' @param ... not used.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @inherit data_rename seealso
 #'

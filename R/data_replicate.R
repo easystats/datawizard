@@ -13,7 +13,7 @@
 #' provided in `expand` are removed from the data frame. If `FALSE` and `expand`
 #' contains missing values, the function will throw an error.
 #' @param ... Currently not used.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @return A dataframe with each row replicated as many times as defined in `expand`.
 #'

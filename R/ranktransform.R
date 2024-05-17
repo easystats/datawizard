@@ -11,7 +11,7 @@
 #'   `"first"`, `"last"`, `"random"`, `"max"` or `"min"`. See [rank()] for
 #'   details.
 #' @param ... Arguments passed to or from other methods.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #' @inheritParams standardize.data.frame
 #'
 #' @inheritSection center Selection of variables - the `select` argument

@@ -21,7 +21,7 @@
 #' @param rows_to The name of the column that will contain the row names or row
 #'   numbers from the original data. If `NULL`, will be removed.
 #' @param ... Currently not used.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #' @param cols Identical to `select`. This argument is here to ensure compatibility
 #'   with `tidyr::pivot_longer()`. If both `select` and `cols` are provided, `cols`
 #'   is used.

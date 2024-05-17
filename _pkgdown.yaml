@@ -102,7 +102,7 @@ reference:
       - contains("rownames")
       - rowid_as_column
       - contains("colnames")
-      - find_columns
+      - extract_column_names
       - data_restoretype
 
   - title: Helpers for Text Formatting

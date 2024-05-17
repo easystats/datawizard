@@ -17,7 +17,7 @@
 #'   `1 - include_bounds`.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams standardize.data.frame
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @inheritSection center Selection of variables - the `select` argument
 #'
