@@ -2,7 +2,8 @@
 
 BREAKING CHANGES
 
-* Arguments named `group` or `group_by` will be deprecated in a future release.
+* Arguments named `group` or `group_by` are deprecated and will be removed
+  in a future release.
   Please use `by` instead. This affects the following functions in *datawizard*.
 
   * `data_partition()`
