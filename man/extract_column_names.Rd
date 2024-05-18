@@ -5,6 +5,7 @@
 \alias{get_columns}
 \alias{extract_column_names}
 \alias{data_find}
+\alias{find_columns}
 \title{Find or get columns in a data frame based on search patterns}
 \usage{
 data_select(
@@ -38,6 +39,16 @@ extract_column_names(
 )
 
 data_find(
+  data,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+)
+
+find_columns(
   data,
   select = NULL,
   exclude = NULL,

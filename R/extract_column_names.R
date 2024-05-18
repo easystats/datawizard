@@ -174,3 +174,7 @@ data_find <- function(data,
     ...
   )
 }
+
+#' @rdname extract_column_names
+#' @export
+find_columns <- data_find

@@ -19,7 +19,11 @@
 #' @param digits Optional scalar, indicating the amount of digits after decimal
 #' point when rounding estimates and values.
 #' @param ... Currently not used
-#' @param group Deprecated. Use `by` instead.
+#' @param group If `x` is a numeric vector, `group` should be a factor that
+#' indicates the group-classifying categories. If `x` is a data frame, `group`
+#' should be a character string, naming the variable in `x` that is used for
+#' grouping. Numeric vectors are coerced to factors. Not that `group` should
+#' only refer to a single variable.
 #' @inheritParams find_columns
 #'
 #' @return A data frame with information on mean and further summary statistics
