@@ -29,7 +29,7 @@
 #'   order, unless a named vector is given. In this case, names are matched
 #'   against the names of the selected variables.
 #' @param ... Currently not used.
-#' @inheritParams extract_column_names
+#' @inheritParams find_columns
 #' @inheritParams standardize
 #'
 #' @section Selection of variables - the `select` argument:

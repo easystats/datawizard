@@ -46,10 +46,7 @@ text_format <- function(text, sep = ", ", last = " and ", width = NULL, enclose 
 
 #' @rdname text_format
 #' @export
-format_text <- function(text, sep = ", ", last = " and ", width = NULL, enclose = NULL, ...) {
-  insight::format_warning("Function `format_text()` is deprecated and will be removed in a future release. Please use `text_format()` instead.") # nolint
-  text_format(text, sep = sep, last = last, width = width, enclose = enclose, ...)
-}
+format_text <- text_format
 
 #' @rdname text_format
 #' @export

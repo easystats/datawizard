@@ -14,7 +14,7 @@
 #' @param lowest Numeric, indicating the lowest (minimum) value when converting
 #' factors or character vectors to numeric values.
 #' @param ... Arguments passed to or from other methods.
-#' @inheritParams extract_column_names
+#' @inheritParams find_columns
 #' @inheritParams categorize
 #'
 #' @note By default, `to_numeric()` converts factors into "binary" dummies, i.e.

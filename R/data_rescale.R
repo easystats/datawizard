@@ -4,7 +4,7 @@
 #' (change the keying/scoring direction), or to expand a range.
 #'
 #' @inheritParams categorize
-#' @inheritParams extract_column_names
+#' @inheritParams find_columns
 #' @inheritParams standardize.data.frame
 #'
 #' @param to Numeric vector of length 2 giving the new range that the variable

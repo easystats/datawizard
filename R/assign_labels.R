@@ -14,7 +14,7 @@
 #' `x`, the right-hand side (RHS) the associated value label. Non-matching
 #' labels are omitted.
 #' @param ... Currently not used.
-#' @inheritParams extract_column_names
+#' @inheritParams find_columns
 #'
 #' @inheritSection center Selection of variables - the `select` argument
 #'

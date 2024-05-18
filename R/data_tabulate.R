@@ -26,7 +26,7 @@
 #' not `NULL`. Can be `"row"` (row percentages), `"column"` (column percentages)
 #' or `"full"` (to calculate relative frequencies for the full table).
 #' @param ... not used.
-#' @inheritParams extract_column_names
+#' @inheritParams find_columns
 #'
 #' @section Crosstables:
 #' If `by` is supplied, a crosstable is created. The crosstable includes `<NA>`

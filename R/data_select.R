@@ -1,6 +1,6 @@
-#' @rdname extract_column_names
+#' @rdname find_columns
 #' @export
-data_select <- function(data,
+get_columns <- function(data,
                         select = NULL,
                         exclude = NULL,
                         ignore_case = FALSE,
@@ -34,23 +34,6 @@ data_select <- function(data,
 }
 
 
-#' @rdname extract_column_names
+#' @rdname find_columns
 #' @export
-get_columns <- function(data,
-                        select = NULL,
-                        exclude = NULL,
-                        ignore_case = FALSE,
-                        regex = FALSE,
-                        verbose = TRUE,
-                        ...) {
-  insight::format_warning("Function `get_columns()` is deprecated and will be removed in a future release. Please use `data_select()` instead.") # nolint
-  data_select(
-    data,
-    select = select,
-    exclude = exclude,
-    ignore_case = ignore_case,
-    regex = regex,
-    verbose = verbose,
-    ...
-  )
-}
+data_select <- get_columns

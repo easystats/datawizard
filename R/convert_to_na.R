@@ -12,7 +12,7 @@
 #' @param drop_levels Logical, for factors, when specific levels are replaced
 #'   by `NA`, should unused levels be dropped?
 #' @param ... Not used.
-#' @inheritParams extract_column_names
+#' @inheritParams find_columns
 #'
 #' @return
 #' `x`, where all values in `na` are converted to `NA`.

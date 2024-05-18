@@ -12,7 +12,7 @@
 #'
 #' @param keep The method to be used for duplicate selection, either "best"
 #'   (the default), "first", or "last".
-#' @inheritParams extract_column_names
+#' @inheritParams find_columns
 #'
 #' @return A data frame, containing only the chosen duplicates.
 #' @seealso [data_duplicated()]

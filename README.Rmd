@@ -90,14 +90,14 @@ data_match(mtcars, data.frame(vs = 0, am = 1))
 data_filter(mtcars, vs == 0 & am == 1)
 ```
 
-Finding columns in a data frame, or retrieving the data of selected columns, can be  achieved using `extract_column_names()` or `data_select()`:
+Finding columns in a data frame, or retrieving the data of selected columns, can be  achieved using `find_columns()` or `get_columns()`:
 
 ```{r}
 # find column names matching a pattern
-extract_column_names(iris, starts_with("Sepal"))
+find_columns(iris, starts_with("Sepal"))
 
 # return data columns matching a pattern
-data_select(iris, starts_with("Sepal")) |> head()
+get_columns(iris, starts_with("Sepal")) |> head()
 ```
 
 It is also possible to extract one or more variables:

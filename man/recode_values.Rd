@@ -32,19 +32,7 @@ recode_values(x, ...)
   ...
 )
 
-change_code(
-  x,
-  select = NULL,
-  exclude = NULL,
-  recode = NULL,
-  default = NULL,
-  preserve_na = TRUE,
-  append = FALSE,
-  ignore_case = FALSE,
-  regex = FALSE,
-  verbose = TRUE,
-  ...
-)
+change_code(x, ...)
 }
 \arguments{
 \item{x}{A data frame, numeric or character vector, or factor.}
@@ -100,8 +88,8 @@ negation should not work as expected, use the \code{exclude} argument instead.
 }
 
 If \code{NULL}, selects all columns. Patterns that found no matches are silently
-ignored, e.g. \code{extract_column_names(iris, select = c("Species", "Test"))}
-will just return \code{"Species"}.}
+ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
+return \code{"Species"}.}
 
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),

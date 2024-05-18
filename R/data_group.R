@@ -6,7 +6,7 @@
 #' grouping information from a grouped data frame.
 #'
 #' @param data A data frame
-#' @inheritParams extract_column_names
+#' @inheritParams find_columns
 #'
 #' @return A grouped data frame, i.e. a data frame with additional information
 #' about the grouping structure saved as attributes.
