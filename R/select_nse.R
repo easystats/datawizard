@@ -182,7 +182,7 @@
         # if starts_with() et al. come from tidyselect but need to be used in
         # a select environment, then the error doesn't have the same structure.
         if (is.null(fn) && grepl("must be used within a", e$message, fixed = TRUE)) {
-          call_trace <- lapply(e$call_trace$call, function(x) {
+          call_trace <- lapply(e$trace$call, function(x) {
             tmp <- insight::safe_deparse(x)
             if (grepl(paste0("^", .regex_select_helper()), tmp)) {
               tmp
