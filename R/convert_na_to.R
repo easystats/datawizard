@@ -160,10 +160,10 @@ convert_na_to.data.frame <- function(x,
                                      regex = FALSE,
                                      verbose = TRUE,
                                      ...) {
-  data <- x
+  my_data <- x
   select_nse <- .select_nse(
     select,
-    data,
+    data = my_data,
     exclude = exclude,
     ignore_case,
     regex = regex,

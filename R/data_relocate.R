@@ -97,6 +97,7 @@ data_relocate <- function(data,
   original_after <- after
 
   # Find new positions
+  # nolint start
   if (!is.null(before)) {
     before <- before[before %in% data_cols][1] # Take first that exists (if vector is supplied)
     if (length(before) != 1 || is.na(before)) {
@@ -123,6 +124,7 @@ data_relocate <- function(data,
     where <- 1
     position <- union(position, where)
   }
+  # nolint end
 
   # Set left and right side
   lhs <- setdiff(seq(1, where - 1), position)

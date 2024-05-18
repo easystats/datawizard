@@ -43,7 +43,8 @@
 #' - Functions to rename stuff: [data_rename()], [data_rename_rows()], [data_addprefix()], [data_addsuffix()]
 #' - Functions to reorder or remove columns: [data_reorder()], [data_relocate()], [data_remove()]
 #' - Functions to reshape, pivot or rotate data frames: [data_to_long()], [data_to_wide()], [data_rotate()]
-#' - Functions to recode data: [rescale()], [reverse()], [categorize()], [recode_values()], [slide()]
+#' - Functions to recode data: [rescale()], [reverse()], [categorize()],
+#'   [recode_values()], [slide()]
 #' - Functions to standardize, normalize, rank-transform: [center()], [standardize()], [normalize()], [ranktransform()], [winsorize()]
 #' - Split and merge data frames: [data_partition()], [data_merge()]
 #' - Functions to find or select columns: [data_select()], [extract_column_names()]
