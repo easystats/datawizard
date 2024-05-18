@@ -6,6 +6,7 @@ BREAKING CHANGES
 
   * `get_columns()`, use `data_select()` instead.
   * `data_find()` and `find_columns()`, use `extract_column_names()` instead.
+  * `format_text()`, use `text_format()` instead.
 
 CHANGES
 
