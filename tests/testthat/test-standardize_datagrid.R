@@ -7,5 +7,9 @@ test_that("standardize.datagrid", {
 
   x <- insight::get_datagrid(iris, by = "Sepal.Length = c(-1, 0)")
   out <- unstandardize(x, select = "Sepal.Length")
-  expect_identical(out$Sepal.Length[1:2], c(mean(iris$Sepal.Length) - sd(iris$Sepal.Length), mean(iris$Sepal.Length)), tolerance = 1e-3)
+  expect_identical(
+    out$Sepal.Length[1:2],
+    c(mean(iris$Sepal.Length) - sd(iris$Sepal.Length), mean(iris$Sepal.Length)),
+    tolerance = 1e-3
+  )
 })

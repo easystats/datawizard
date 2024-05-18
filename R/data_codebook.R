@@ -466,5 +466,5 @@ print_md.data_codebook <- function(x, ...) {
     N = "r"
   )
   align <- align[colnames(x)]
-  paste0(unname(align), collapse = "")
+  paste(unname(align), collapse = "")
 }
