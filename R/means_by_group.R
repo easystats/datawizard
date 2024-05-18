@@ -4,10 +4,10 @@
 #' @description Computes summary table of means by groups.
 #'
 #' @param x A vector or a data frame.
-#' @param group If `x` is a numeric vector, `group` should be a factor that
-#' indicates the group-classifying categories. If `x` is a data frame, `group`
+#' @param by If `x` is a numeric vector, `by` should be a factor that
+#' indicates the group-classifying categories. If `x` is a data frame, `by`
 #' should be a character string, naming the variable in `x` that is used for
-#' grouping. Numeric vectors are coerced to factors. Not that `group` should
+#' grouping. Numeric vectors are coerced to factors. Not that `by` should
 #' only refer to a single variable.
 #' @param ci Level of confidence interval for mean estimates. Default is `0.95`.
 #' Use `ci = NA` to suppress confidence intervals.
@@ -19,14 +19,15 @@
 #' @param digits Optional scalar, indicating the amount of digits after decimal
 #' point when rounding estimates and values.
 #' @param ... Currently not used
+#' @param group Deprecated. Use `by` instead.
 #' @inheritParams find_columns
 #'
 #' @return A data frame with information on mean and further summary statistics
 #' for each sub-group.
 #'
-#' @details This function is comparable to `aggregate(x, group, mean)`, but provides
+#' @details This function is comparable to `aggregate(x, by, mean)`, but provides
 #' some further information, including summary statistics from a One-Way-ANOVA
-#' using `x` as dependent and `group` as independent variable. [`emmeans::contrast()`]
+#' using `x` as dependent and `by` as independent variable. [`emmeans::contrast()`]
 #' is used to get p-values for each sub-group. P-values indicate whether each
 #' group-mean is significantly different from the total mean.
 #'
@@ -55,21 +56,28 @@ means_by_group.default <- function(x, ...) {
 #' @rdname means_by_group
 #' @export
 means_by_group.numeric <- function(x,
-                                   group = NULL,
+                                   by = NULL,
                                    ci = 0.95,
                                    weights = NULL,
                                    digits = NULL,
+                                   group = NULL,
                                    ...) {
-  # validation check for arguments
-
-  # "group" must be provided
-  if (is.null(group)) {
-    insight::format_error("Argument `group` is missing.")
+  ## TODO: remove warning in future release
+  if (!is.null(group)) {
+    by <- group
+    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
   }
 
-  # group must be of same length as x
-  if (length(group) != length(x)) {
-    insight::format_error("Argument `group` must be of same length as `x`.")
+  # validation check for arguments
+
+  # "by" must be provided
+  if (is.null(by)) {
+    insight::format_error("Argument `by` is missing.")
+  }
+
+  # by must be of same length as x
+  if (length(by) != length(x)) {
+    insight::format_error("Argument `by` must be of same length as `x`.")
   }
 
   # if weights are provided, must be of same length as x
@@ -82,32 +90,32 @@ means_by_group.numeric <- function(x,
 
   # retrieve labels
   var_mean_label <- attr(x, "label", exact = TRUE)
-  var_grp_label <- attr(group, "label", exact = TRUE)
+  var_grp_label <- attr(by, "label", exact = TRUE)
 
   # if no labels present, use variable names directly
   if (is.null(var_mean_label)) {
     var_mean_label <- deparse(substitute(x))
   }
   if (is.null(var_grp_label)) {
-    var_grp_label <- deparse(substitute(group))
+    var_grp_label <- deparse(substitute(by))
   }
 
   # coerce group to factor if numeric, or convert labels to levels, if factor
-  if (is.factor(group)) {
-    group <- tryCatch(labels_to_levels(group, verbose = FALSE), error = function(e) group)
+  if (is.factor(by)) {
+    by <- tryCatch(labels_to_levels(by, verbose = FALSE), error = function(e) by)
   } else {
-    group <- to_factor(group)
+    by <- to_factor(by)
   }
 
-  data <- stats::na.omit(data.frame(
+  my_data <- stats::na.omit(data.frame(
     x = x,
-    group = group,
+    group = by,
     weights = weights,
     stringsAsFactors = FALSE
   ))
 
   # get grouped means table
-  out <- .means_by_group(data, ci = ci)
+  out <- .means_by_group(my_data, ci = ci)
 
   # attributes
   attr(out, "var_mean_label") <- var_mean_label
@@ -123,7 +131,7 @@ means_by_group.numeric <- function(x,
 #' @export
 means_by_group.data.frame <- function(x,
                                       select = NULL,
-                                      group = NULL,
+                                      by = NULL,
                                       ci = 0.95,
                                       weights = NULL,
                                       digits = NULL,
@@ -131,7 +139,14 @@ means_by_group.data.frame <- function(x,
                                       ignore_case = FALSE,
                                       regex = FALSE,
                                       verbose = TRUE,
+                                      group = NULL,
                                       ...) {
+  ## TODO: remove warning in future release
+  if (!is.null(group)) {
+    by <- group
+    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
+  }
+
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select,
     x,
@@ -154,11 +169,11 @@ means_by_group.data.frame <- function(x,
     if (is.null(attr(x[[i]], "label", exact = TRUE))) {
       attr(x[[i]], "label") <- i
     }
-    if (is.null(attr(x[[group]], "label", exact = TRUE))) {
-      attr(x[[group]], "label") <- group
+    if (is.null(attr(x[[by]], "label", exact = TRUE))) {
+      attr(x[[by]], "label") <- by
     }
     # compute means table
-    means_by_group(x[[i]], group = x[[group]], ci = ci, weights = w, digits = digits, ...)
+    means_by_group(x[[i]], by = x[[by]], ci = ci, weights = w, digits = digits, ...)
   })
 
   class(out) <- c("dw_groupmeans_list", "list")
@@ -195,14 +210,14 @@ means_by_group.data.frame <- function(x,
   if (insight::check_if_installed("emmeans", quietly = TRUE)) {
     # create summary table of contrasts, for p-values and confidence intervals
     predicted <- emmeans::emmeans(fit, specs = "group", level = ci)
-    contrasts <- emmeans::contrast(predicted, method = "eff")
+    emm_contrasts <- emmeans::contrast(predicted, method = "eff")
     # add p-values and confidence intervals to "out"
     if (!is.null(ci) && !is.na(ci)) {
       summary_table <- as.data.frame(predicted)
       out$CI_low <- summary_table$lower.CL
       out$CI_high <- summary_table$upper.CL
     }
-    summary_table <- as.data.frame(contrasts)
+    summary_table <- as.data.frame(emm_contrasts)
     out$p <- summary_table$p.value
   }
 

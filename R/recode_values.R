@@ -476,7 +476,7 @@ recode_values.data.frame <- function(x,
   # create the new variables and updates "select", so new variables are processed
   if (!isFALSE(append)) {
     # process arguments
-    args <- .process_append(
+    my_args <- .process_append(
       x,
       select,
       append,
@@ -484,8 +484,8 @@ recode_values.data.frame <- function(x,
       preserve_value_labels = TRUE
     )
     # update processed arguments
-    x <- args$x
-    select <- args$select
+    x <- my_args$x
+    select <- my_args$select
   }
 
   x[select] <- lapply(

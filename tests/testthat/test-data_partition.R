@@ -53,8 +53,8 @@ test_that("data_partition works as expected", {
   data(iris)
   expect_snapshot(str(data_partition(iris, proportion = 0.7, seed = 123)))
   expect_snapshot(str(data_partition(iris, proportion = c(0.2, 0.5), seed = 123)))
-  expect_snapshot(str(data_partition(iris, proportion = 0.7, group = "Species", seed = 123)))
-  expect_snapshot(str(data_partition(iris, proportion = c(0.2, 0.5), group = "Species", seed = 123)))
+  expect_snapshot(str(data_partition(iris, proportion = 0.7, by = "Species", seed = 123)))
+  expect_snapshot(str(data_partition(iris, proportion = c(0.2, 0.5), by = "Species", seed = 123)))
 })
 
 test_that("data_partition warns if no testing set", {

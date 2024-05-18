@@ -1,5 +1,16 @@
 # datawizard 0.10.1
 
+BREAKING CHANGES
+
+* Arguments named `group` or `group_by` are deprecated and will be removed
+  in a future release. Please use `by` instead. This affects the following
+  functions in *datawizard* (#502).
+
+  * `data_partition()`
+  * `demean()` and `degroup()`
+  * `means_by_group()`
+  * `rescale_weights()`
+
 CHANGES
 
 * `recode_into()` is more relaxed regarding checking the type of `NA` values.

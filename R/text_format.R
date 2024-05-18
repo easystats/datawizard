@@ -68,18 +68,18 @@ text_lastchar <- function(text, n = 1) {
 #' @rdname text_format
 #' @export
 text_concatenate <- function(text, sep = ", ", last = " and ", enclose = NULL) {
-  if (length(text) == 1 && nchar(text) == 0) {
+  if (length(text) == 1 && !nzchar(text, keepNA = TRUE)) {
     return(text)
   }
-  text <- text[text != ""]
-  if (length(text) && !is.null(enclose) && length(enclose) == 1 && nchar(enclose) > 0) {
+  text <- text[text != ""] # nolint
+  if (length(text) && !is.null(enclose) && length(enclose) == 1 && nzchar(enclose, keepNA = TRUE)) {
     text <- paste0(enclose, text, enclose)
   }
   if (length(text) == 1) {
     s <- text
   } else {
-    s <- paste0(text[1:(length(text) - 1)], collapse = sep)
-    s <- paste0(c(s, text[length(text)]), collapse = last)
+    s <- paste(text[1:(length(text) - 1)], collapse = sep)
+    s <- paste(c(s, text[length(text)]), collapse = last)
   }
   s
 }
@@ -89,7 +89,7 @@ text_concatenate <- function(text, sep = ", ", last = " and ", enclose = NULL) {
 #' @export
 text_paste <- function(text, text2 = NULL, sep = ", ", enclose = NULL, ...) {
   if (!is.null(text2)) {
-    if (!is.null(enclose) && length(enclose) == 1 && nchar(enclose) > 0) {
+    if (!is.null(enclose) && length(enclose) == 1 && nzchar(enclose, keepNA = TRUE)) {
       text <- vapply(text, function(i) {
         if (i != "") {
           i <- paste0(enclose, i, enclose)
@@ -103,7 +103,7 @@ text_paste <- function(text, text2 = NULL, sep = ", ", enclose = NULL, ...) {
         i
       }, character(1L))
     }
-    paste0(text, ifelse(text == "" | text2 == "", "", sep), text2)
+    paste0(text, ifelse(text == "" | text2 == "", "", sep), text2) # nolint
   }
 }
 
@@ -130,7 +130,7 @@ text_wrap <- function(text, width = NULL, ...) {
     if (nchar(s) > width) {
       leading_spaces <- nchar(s) - nchar(insight::trim_ws(s))
       s <- strwrap(s, width = width)
-      s <- paste0(s, collapse = "\n")
+      s <- paste(s, collapse = "\n")
       s <- paste0(strrep(" ", leading_spaces), s)
     }
     wrapped <- paste0(wrapped, s, "\n")

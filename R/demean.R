@@ -11,7 +11,7 @@
 #' @param x A data frame.
 #' @param select Character vector (or formula) with names of variables to select
 #'   that should be group- and de-meaned.
-#' @param group Character vector (or formula) with the name of the variable that
+#' @param by Character vector (or formula) with the name of the variable that
 #'   indicates the group- or cluster-ID.
 #' @param center Method for centering. `demean()` always performs
 #'   mean-centering, while `degroup()` can use `center = "median"` or
@@ -25,6 +25,7 @@
 #'   attributes to indicate the within- and between-effects. This is only
 #'   relevant when printing `model_parameters()` - in such cases, the
 #'   within- and between-effects are printed in separated blocks.
+#' @param group Deprecated. Use `by` instead.
 #' @inheritParams center
 #'
 #' @return
@@ -92,7 +93,7 @@
 #'
 #'   \subsection{Terminology}{
 #'     The group-meaned variable is simply the mean of an independent variable
-#'     within each group (or id-level or cluster) represented by `group`.
+#'     within each group (or id-level or cluster) represented by `by`.
 #'     It represents the cluster-mean of an independent variable. The regression
 #'     coefficient of a group-meaned variable is the *between-subject-effect*.
 #'     The de-meaned variable is then the centered version of the group-meaned
@@ -199,10 +200,10 @@
 #' iris$ID <- sample(1:4, nrow(iris), replace = TRUE) # fake-ID
 #' iris$binary <- as.factor(rbinom(150, 1, .35)) # binary variable
 #'
-#' x <- demean(iris, select = c("Sepal.Length", "Petal.Length"), group = "ID")
+#' x <- demean(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")
 #' head(x)
 #'
-#' x <- demean(iris, select = c("Sepal.Length", "binary", "Species"), group = "ID")
+#' x <- demean(iris, select = c("Sepal.Length", "binary", "Species"), by = "ID")
 #' head(x)
 #'
 #'
@@ -213,23 +214,30 @@
 #'   y = c(1, 2, 1, 2, 4, 3, 2, 1),
 #'   ID = c(1, 2, 3, 1, 2, 3, 1, 2)
 #' )
-#' demean(dat, select = c("a", "x*y"), group = "ID")
+#' demean(dat, select = c("a", "x*y"), by = "ID")
 #'
 #' # or in formula-notation
-#' demean(dat, select = ~ a + x * y, group = ~ID)
+#' demean(dat, select = ~ a + x * y, by = ~ID)
 #'
 #' @export
 demean <- function(x,
                    select,
-                   group,
+                   by,
                    suffix_demean = "_within",
                    suffix_groupmean = "_between",
                    add_attributes = TRUE,
-                   verbose = TRUE) {
+                   verbose = TRUE,
+                   group = NULL) {
+  ## TODO: remove warning in future release
+  if (!is.null(group)) {
+    by <- group
+    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
+  }
+
   degroup(
     x = x,
     select = select,
-    group = group,
+    by = by,
     center = "mean",
     suffix_demean = suffix_demean,
     suffix_groupmean = suffix_groupmean,
@@ -247,12 +255,19 @@ demean <- function(x,
 #' @export
 degroup <- function(x,
                     select,
-                    group,
+                    by,
                     center = "mean",
                     suffix_demean = "_within",
                     suffix_groupmean = "_between",
                     add_attributes = TRUE,
-                    verbose = TRUE) {
+                    verbose = TRUE,
+                    group = NULL) {
+  ## TODO: remove warning later
+  if (!is.null(group)) {
+    by <- group
+    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
+  }
+
   # ugly tibbles again...
   x <- .coerce_to_dataframe(x)
 
@@ -266,8 +281,8 @@ degroup <- function(x,
     ))
   }
 
-  if (inherits(group, "formula")) {
-    group <- all.vars(group)
+  if (inherits(by, "formula")) {
+    by <- all.vars(by)
   }
 
   interactions_no <- select[!grepl("(\\*|\\:)", select)]
@@ -296,7 +311,7 @@ degroup <- function(x,
   select <- intersect(colnames(x), select)
 
   # get data to demean...
-  dat <- x[, c(select, group)]
+  dat <- x[, c(select, by)]
 
 
   # find categorical predictors that are coded as factors
@@ -344,30 +359,17 @@ degroup <- function(x,
   # for variables within each group (the group means). assign
   # mean values to a vector of same length as the data
 
-  if (center == "mode") {
-    x_gm_list <- lapply(select, function(i) {
-      stats::ave(dat[[i]], dat[[group]], FUN = function(.gm) distribution_mode(stats::na.omit(.gm)))
-    })
-  } else if (center == "median") {
-    x_gm_list <- lapply(select, function(i) {
-      stats::ave(dat[[i]], dat[[group]], FUN = function(.gm) stats::median(.gm, na.rm = TRUE))
-    })
-  } else if (center == "min") {
-    x_gm_list <- lapply(select, function(i) {
-      stats::ave(dat[[i]], dat[[group]], FUN = function(.gm) min(.gm, na.rm = TRUE))
-    })
-  } else if (center == "max") {
-    x_gm_list <- lapply(select, function(i) {
-      stats::ave(dat[[i]], dat[[group]], FUN = function(.gm) max(.gm, na.rm = TRUE))
-    })
-  } else {
-    x_gm_list <- lapply(select, function(i) {
-      stats::ave(dat[[i]], dat[[group]], FUN = function(.gm) mean(.gm, na.rm = TRUE))
-    })
-  }
-
+  gm_fun <- switch(center,
+    mode = function(.gm) distribution_mode(stats::na.omit(.gm)),
+    median = function(.gm) stats::median(.gm, na.rm = TRUE),
+    min = function(.gm) min(.gm, na.rm = TRUE),
+    max = function(.gm) max(.gm, na.rm = TRUE),
+    function(.gm) mean(.gm, na.rm = TRUE)
+  )
+  x_gm_list <- lapply(select, function(i) {
+    stats::ave(dat[[i]], dat[[by]], FUN = gm_fun)
+  })
   names(x_gm_list) <- select
-
 
   # create de-meaned variables by subtracting the group mean from each individual value
 

@@ -177,10 +177,10 @@ test_that("categorize, attributes preserved", {
 
 # change_code -----------------------------------
 
-test_that("change_code, attributes preserved", {
+test_that("recode_values, attributes preserved", {
   x <- mtcars
   attr(x, "myattri") <- "I'm here"
-  x2 <- change_code(x, select = "am", recode = list(`5` = 0, `10` = 1))
+  x2 <- recode_values(x, select = "am", recode = list(`5` = 0, `10` = 1))
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 
