@@ -148,7 +148,7 @@
 
 # 3 types of symbols:
 # - unquoted variables
-# - objects that need to be evaluated, e.g extract_column_names(iris, i) where
+# - objects that need to be evaluated, e.g data_find(iris, i) where
 #   i is a
 #   function arg or is defined before. This can also be a vector of names or
 #   positions.

@@ -121,10 +121,10 @@
 #'   .modify = round
 #' )
 #'
-#' # combine "extract_column_names()" and ".at" argument
+#' # combine "data_find()" and ".at" argument
 #' out <- data_modify(
 #'   d,
-#'   .at = extract_column_names(d, select = starts_with("Sepal")),
+#'   .at = data_find(d, select = starts_with("Sepal")),
 #'   .modify = as.factor
 #' )
 #' # "Sepal.Length" and "Sepal.Width" are now factors

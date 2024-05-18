@@ -46,7 +46,7 @@
 #' - Functions to recode data: [rescale()], [reverse()], [categorize()], [recode_values()], [slide()]
 #' - Functions to standardize, normalize, rank-transform: [center()], [standardize()], [normalize()], [ranktransform()], [winsorize()]
 #' - Split and merge data frames: [data_partition()], [data_merge()]
-#' - Functions to find or select columns: [data_select()], [extract_column_names()]
+#' - Functions to find or select columns: [data_select()], [data_find()]
 #' - Functions to filter rows: [data_match()], [data_filter()]
 #'
 #' @export
