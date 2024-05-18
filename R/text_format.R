@@ -78,8 +78,8 @@ text_concatenate <- function(text, sep = ", ", last = " and ", enclose = NULL) {
   if (length(text) == 1) {
     s <- text
   } else {
-    s <- paste0(text[1:(length(text) - 1)], collapse = sep)
-    s <- paste0(c(s, text[length(text)]), collapse = last)
+    s <- paste(text[1:(length(text) - 1)], collapse = sep)
+    s <- paste(c(s, text[length(text)]), collapse = last)
   }
   s
 }
@@ -130,7 +130,7 @@ text_wrap <- function(text, width = NULL, ...) {
     if (nchar(s) > width) {
       leading_spaces <- nchar(s) - nchar(insight::trim_ws(s))
       s <- strwrap(s, width = width)
-      s <- paste0(s, collapse = "\n")
+      s <- paste(s, collapse = "\n")
       s <- paste0(strrep(" ", leading_spaces), s)
     }
     wrapped <- paste0(wrapped, s, "\n")
