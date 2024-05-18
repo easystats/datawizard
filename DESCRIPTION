@@ -69,7 +69,7 @@ Suggests:
     tidyr,
     withr
 Remotes:
-    easystats/modelbased
+    easystats/modelbased, easystats/insight
 VignetteBuilder: 
     knitr
 Encoding: UTF-8

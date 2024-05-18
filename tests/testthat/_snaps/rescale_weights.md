@@ -34,7 +34,7 @@
 # rescale_weights nested works as expected
 
     Code
-      rescale_weights(data = head(nhanes_sample, n = 30), group = c("SDMVSTRA",
+      rescale_weights(data = head(nhanes_sample, n = 30), by = c("SDMVSTRA",
         "SDMVPSU"), probability_weights = "WTINT2YR", nest = TRUE)
     Output
          total  age RIAGENDR RIDRETH1 SDMVPSU SDMVSTRA  WTINT2YR pweights_a

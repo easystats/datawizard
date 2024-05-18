@@ -148,10 +148,9 @@
 
 # 3 types of symbols:
 # - unquoted variables
-# - objects that need to be evaluated, e.g extract_column_names(iris, i) where
-#   i is a
-#   function arg or is defined before. This can also be a vector of names or
-#   positions.
+# - objects that need to be evaluated, e.g data_find(iris, i) where
+#   i is a function arg or is defined before. This can also be a 
+#   vector of names or positions.
 # - functions (without parenthesis)
 
 # The first case is easy to deal with.
@@ -182,7 +181,7 @@
         # if starts_with() et al. come from tidyselect but need to be used in
         # a select environment, then the error doesn't have the same structure.
         if (is.null(fn) && grepl("must be used within a", e$message, fixed = TRUE)) {
-          call_trace <- lapply(e$call_trace$call, function(x) {
+          call_trace <- lapply(e$trace$call, function(x) {
             tmp <- insight::safe_deparse(x)
             if (grepl(paste0("^", .regex_select_helper()), tmp)) {
               tmp

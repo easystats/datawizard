@@ -55,7 +55,7 @@
 # demean interaction term
 
     Code
-      demean(dat, select = c("a", "x*y"), group = "ID")
+      demean(dat, select = c("a", "x*y"), by = "ID")
     Output
         a_between x_y_between   a_within x_y_within
       1  2.666667    4.666667 -1.6666667 -0.6666667

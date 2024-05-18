@@ -264,12 +264,14 @@ test_that("recode_into, NA doesn't need to be of exact type", {
   x1 <- recode_into(
     mpg > 10 ~ 1,
     gear == 5 ~ NA_real_,
-    data = mtcars
+    data = mtcars,
+    verbose = FALSE
   )
   x2 <- recode_into(
     mpg > 10 ~ 1,
     gear == 5 ~ NA,
-    data = mtcars
+    data = mtcars,
+    verbose = FALSE
   )
   expect_identical(x1, x2)
 })

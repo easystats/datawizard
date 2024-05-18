@@ -2,6 +2,15 @@
 
 BREAKING CHANGES
 
+* Arguments named `group` or `group_by` are deprecated and will be removed
+  in a future release. Please use `by` instead. This affects the following
+  functions in *datawizard* (#502).
+
+  * `data_partition()`
+  * `demean()` and `degroup()`
+  * `means_by_group()`
+  * `rescale_weights()`
+
 * Following aliases are deprecated and will be removed in a future release (#504):
 
   * `get_columns()`, use `data_select()` instead.
