@@ -25,7 +25,7 @@
 #'   re-added. This avoids the centering around 0 that happens by default
 #'   when regressing out another variable (see the examples below for a
 #'   visual representation of this).
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #' @inheritParams standardize
 #'
 #' @return A data frame comparable to `data`, with adjusted variables.

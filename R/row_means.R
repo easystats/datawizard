@@ -19,7 +19,7 @@
 #' @param remove_na Logical, if `TRUE` (default), removes missing (`NA`) values
 #' before calculating row means. Only applies if `min_valuid` is not specified.
 #' @param verbose Toggle warnings.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @return A vector with row means for those rows with at least `n` valid values.
 #'

@@ -68,7 +68,7 @@
 #' @param force Logical, if `TRUE`, forces recoding of factors and character
 #'   vectors as well.
 #' @param ... Arguments passed to or from other methods.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @inheritSection center Selection of variables - the `select` argument
 #'

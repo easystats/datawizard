@@ -11,6 +11,12 @@ BREAKING CHANGES
   * `means_by_group()`
   * `rescale_weights()`
 
+* Following aliases are deprecated and will be removed in a future release (#504):
+
+  * `get_columns()`, use `data_select()` instead.
+  * `data_find()` and `find_columns()`, use `extract_column_names()` instead.
+  * `format_text()`, use `text_format()` instead.
+
 CHANGES
 
 * `recode_into()` is more relaxed regarding checking the type of `NA` values.

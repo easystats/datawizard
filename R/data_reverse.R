@@ -12,7 +12,7 @@
 #'   usually only makes sense when factor levels are numeric, not characters.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams categorize
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @inheritSection center Selection of variables - the `select` argument
 #'

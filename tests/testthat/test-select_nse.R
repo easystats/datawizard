@@ -47,7 +47,7 @@ test_that(".select_nse: arg 'select' works", {
     c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
   )
   expect_identical(
-    find_columns(iris, sepal.length, ignore_case = TRUE),
+    extract_column_names(iris, sepal.length, ignore_case = TRUE),
     "Sepal.Length"
   )
   expect_identical(

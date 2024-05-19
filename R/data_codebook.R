@@ -22,7 +22,7 @@
 #' @param line_padding For HTML tables, the distance (in pixel) between lines.
 #' @param row_color For HTML tables, the fill color for odd rows.
 #' @inheritParams standardize.data.frame
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @return A formatted data frame, summarizing the content of the data frame.
 #' Returned columns include the column index of the variables in the original

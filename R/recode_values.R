@@ -22,7 +22,7 @@
 #'   `preserve_na=TRUE`, `default` will no longer convert `NA` into the specified
 #'   default value.
 #' @param ... not used.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #' @inheritParams categorize
 #'
 #' @return `x`, where old values are replaced by new values.
@@ -533,4 +533,29 @@ recode_values.data.frame <- function(x,
 
 #' @rdname recode_values
 #' @export
-change_code <- recode_values
+change_code <- function(x,
+                        select = NULL,
+                        exclude = NULL,
+                        recode = NULL,
+                        default = NULL,
+                        preserve_na = TRUE,
+                        append = FALSE,
+                        ignore_case = FALSE,
+                        regex = FALSE,
+                        verbose = TRUE,
+                        ...) {
+  insight::format_warning("Function `change_code()` is deprecated. Please use `recode_values()` instead.") # nolint
+  recode_values(
+    x,
+    select = select,
+    exclude = exclude,
+    recode = recode,
+    default = default,
+    preserve_na = preserve_na,
+    append = append,
+    ignore_case = ignore_case,
+    regex = regex,
+    verbose = verbose,
+    ...
+  )
+}

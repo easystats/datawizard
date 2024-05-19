@@ -1,4 +1,4 @@
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #' @rdname data_relocate
 #' @examples
 #' # Remove columns
