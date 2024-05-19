@@ -40,8 +40,9 @@ Merge (join) two data frames, or a list of data frames. However, unlike
 base R's \code{merge()}, \code{data_merge()} offers a few more methods to join data
 frames, and it does not drop data frame nor column attributes.
 }
-\details{
-\subsection{Merging data frames}{
+\section{Merging data frames}{
+
+
 Merging data frames is performed by adding rows (cases), columns
 (variables) or both from the source data frame (\code{y}) to the target
 data frame (\code{x}). This usually requires one or more variables which
@@ -51,7 +52,9 @@ in both data frames, cases are matched and filtered by identical values
 of \code{by} in \code{x} and \code{y}.
 }
 
-\subsection{Left- and right-joins}{
+\section{Left- and right-joins}{
+
+
 Left- and right joins usually don't add new rows (cases), but only new
 columns (variables) for existing cases in \code{x}. For \code{join = "left"} or
 \code{join = "right"} to work, \code{by} \emph{must} indicate one or more columns that
@@ -68,37 +71,43 @@ variable names. Cases in \code{y} where values from the identifier have no
 match in \code{x}'s identifier are removed. \code{join = "right"} works in
 a similar way as \code{join = "left"}, just that only cases from \code{x} that
 have matching values in their identifier variable in \code{y} are chosen.
-\cr \cr
+
 In base R, these are equivalent to \code{merge(x, y, all.x = TRUE)} and
 \code{merge(x, y, all.y = TRUE)}.
 }
 
-\subsection{Full joins}{
+\section{Full joins}{
+
+
 Full joins copy all cases from \code{y} to \code{x}. For matching cases in both
 data frames, values for new variables are copied from \code{y} to \code{x}. For
 cases in \code{y} not present in \code{x}, these will be added as new rows to \code{x}.
 Thus, full joins not only add new columns (variables), but also might
 add new rows (cases).
-\cr \cr
+
 In base R, this is equivalent to \code{merge(x, y, all = TRUE)}.
 }
 
-\subsection{Inner joins}{
+\section{Inner joins}{
+
+
 Inner joins merge two data frames, however, only those rows (cases) are
 kept that are present in both data frames. Thus, inner joins usually
 add new columns (variables), but also remove rows (cases) that only
 occur in one data frame.
-\cr \cr
+
 In base R, this is equivalent to \code{merge(x, y)}.
 }
 
-\subsection{Binds}{
+\section{Binds}{
+
+
 \code{join = "bind"} row-binds the complete second data frame \code{y} to \code{x}.
 Unlike simple \code{rbind()}, which requires the same columns for both data
 frames, \code{join = "bind"} will bind shared columns from \code{y} to \code{x}, and
 add new columns from \code{y} to \code{x}.
 }
-}
+
 \examples{
 
 x <- data.frame(a = 1:3, b = c("a", "b", "c"), c = 5:7, id = 1:3)
