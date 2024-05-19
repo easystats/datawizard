@@ -11,88 +11,42 @@ readxl::read_excel() and data.table::fread() resp. readr::read_delim()
 (the latter if package data.table is not installed). Thus, supported file
 types for importing data are data files from SPSS, SAS or Stata, Excel files
 or text files (like '.csv' files). All other file types are passed to
-rio::import(). data_write() works in a similar way."><meta property="og:image" content="https://easystats.github.io/datawizard/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--></head><body>
+rio::import(). data_write() works in a similar way."><meta property="og:image" content="https://easystats.github.io/datawizard/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
-
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
-    
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
-
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.3</small>
-
-    
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.4</small>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html" aria-label="Reference">
-    <span class="fa fa fa fa-file-code"></span>
-     
-    Reference
-  </a>
-</li>
+      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--articles" aria-label="Articles">
-    <span class="fa fa fa fa-book-reader"></span>
-     
-    Articles
-  </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--articles">
-    <a class="dropdown-item" href="../articles/tidyverse_translation.html">Coming from 'tidyverse'</a>
-    <a class="dropdown-item" href="../articles/selection_syntax.html">A quick summary of selection syntax in `{datawizard}`</a>
-    <a class="dropdown-item" href="../articles/standardize_data.html">Data Standardization</a>
-  </div>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html" aria-label="News">
-    <span class="fa fa fa fa-newspaper"></span>
-     
-    News
-  </a>
-</li>
-      </ul><ul class="navbar-nav"><li><form class="form-inline" role="search">
-<input type="search" class="form-control" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json"></form></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Articles"><span class="fa fa-book-reader"></span> Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/tidyverse_translation.html">Coming from 'tidyverse'</a></li>
+    <li><a class="dropdown-item" href="../articles/selection_syntax.html">A quick summary of selection syntax in `{datawizard}`</a></li>
+    <li><a class="dropdown-item" href="../articles/standardize_data.html">Data Standardization</a></li>
+  </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html" aria-label="News"><span class="fa fa-newspaper"></span> News</a></li>
+      </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--easystats" aria-label="easystats">
-    <span class="fab fa fab fa-r-project"></span>
-     
-    easystats
-  </a>
-  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown--easystats">
-    <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
-    <a class="dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/easystats/">easystats</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/effectsize/">effectsize</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/insight/">insight</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/modelbased/">modelbased</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/performance/">performance</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/parameters/">parameters</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/report/">report</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/see/">see</a>
-  </div>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="http://twitter.com/easystats4u" aria-label="Twitter">
-    <span class="fa fa-twitter"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/easystats/datawizard/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-easystats" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="easystats"><span class="fa fab fa-r-project"></span> easystats</button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-easystats"><li><a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a></li>
+    <li><a class="dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/easystats/">easystats</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/effectsize/">effectsize</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/insight/">insight</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/modelbased/">modelbased</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/performance/">performance</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/parameters/">parameters</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/report/">report</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/see/">see</a></li>
+  </ul></li>
+<li class="nav-item"><a class="external-link nav-link" href="http://twitter.com/easystats4u" aria-label="Twitter"><span class="fa fa-twitter"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/easystats/datawizard/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
-
-    
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -101,7 +55,6 @@ rio::import(). data_write() works in a similar way."><meta property="og:image" c
       <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/data_read.R" class="external-link"><code>R/data_read.R</code></a>, <a href="https://github.com/easystats/datawizard/blob/HEAD/R/data_write.R" class="external-link"><code>R/data_write.R</code></a></small>
       <div class="d-none name"><code>data_read.Rd</code></div>
     </div>
-
     <div class="ref-description section level2">
     <p>This functions imports data from various file types. It is a small wrapper
 around <code><a href="https://haven.tidyverse.org/reference/read_spss.html" class="external-link">haven::read_spss()</a></code>, <code><a href="https://haven.tidyverse.org/reference/read_dta.html" class="external-link">haven::read_stata()</a></code>, <code><a href="https://haven.tidyverse.org/reference/read_sas.html" class="external-link">haven::read_sas()</a></code>,
@@ -111,7 +64,6 @@ types for importing data are data files from SPSS, SAS or Stata, Excel files
 or text files (like '.csv' files). All other file types are passed to
 <code><a href="https://rdrr.io/pkg/rio/man/import.html" class="external-link">rio::import()</a></code>. <code>data_write()</code> works in a similar way.</p>
     </div>
-
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">data_read</span><span class="op">(</span></span>
@@ -133,22 +85,15 @@ or text files (like '.csv' files). All other file types are passed to
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
-
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
 <dd><p>Character string, the file path to the data file.</p></dd>
-
-
 <dt id="arg-path-catalog">path_catalog<a class="anchor" aria-label="anchor" href="#arg-path-catalog"></a></dt>
 <dd><p>Character string, path to the catalog file. Only relevant
 for SAS data files.</p></dd>
-
-
 <dt id="arg-encoding">encoding<a class="anchor" aria-label="anchor" href="#arg-encoding"></a></dt>
 <dd><p>The character encoding used for the file. Usually not needed.</p></dd>
-
-
 <dt id="arg-convert-factors">convert_factors<a class="anchor" aria-label="anchor" href="#arg-convert-factors"></a></dt>
 <dd><p>If <code>TRUE</code> (default), numeric variables, where all
 values have a value label, are assumed to be categorical and converted
@@ -160,44 +105,29 @@ applies to the text (e.g. <code>.txt</code> or <code>.csv</code>) or spreadsheet
 labelled numeric variables are then converted into factors and exported as
 character columns - else, value labels would be lost and only numeric values
 are written to the file.</p></dd>
-
-
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings and messages.</p></dd>
-
-
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed to the related <code>read_*()</code> or <code>write_*()</code> functions.</p></dd>
-
-
 <dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>The data frame that should be written to a file.</p></dd>
-
-
 <dt id="arg-delimiter">delimiter<a class="anchor" aria-label="anchor" href="#arg-delimiter"></a></dt>
 <dd><p>For CSV-files, specifies the delimiter. Defaults to <code>","</code>,
 but in particular in European regions, <code>";"</code> might be a useful alternative,
 especially when exported CSV-files should be opened in Excel.</p></dd>
-
-
 <dt id="arg-save-labels">save_labels<a class="anchor" aria-label="anchor" href="#arg-save-labels"></a></dt>
 <dd><p>Only applies to CSV files. If <code>TRUE</code>, value and variable
 labels (if any) will be saved as additional CSV file. This file has the same
 file name as the exported CSV file, but includes a <code>"_labels"</code> suffix (i.e.
 when the file name is <code>"mydat.csv"</code>, the additional file with value and
 variable labels is named <code>"mydat_labels.csv"</code>).</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    
-
 <p>A data frame.</p>
     </div>
     <div class="section level2">
     <h2 id="supported-file-types">Supported file types<a class="anchor" aria-label="anchor" href="#supported-file-types"></a></h2>
-    
-
 <ul><li><p><code>data_read()</code> is a wrapper around the <strong>haven</strong>, <strong>data.table</strong>, <strong>readr</strong>
 <strong>readxl</strong> and <strong>rio</strong> packages. Currently supported file types are <code>.txt</code>,
 <code>.csv</code>, <code>.xls</code>, <code>.xlsx</code>, <code>.sav</code>, <code>.por</code>, <code>.dta</code> and <code>.sas</code> (and related
@@ -208,8 +138,6 @@ packages.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="compressed-files-zip-and-urls">Compressed files (zip) and URLs<a class="anchor" aria-label="anchor" href="#compressed-files-zip-and-urls"></a></h2>
-    
-
 <p><code>data_read()</code> can also read the above mentioned files from URLs or from
 inside zip-compressed files. Thus, <code>path</code> can also be a URL to a file like
 <code>"http://www.url.com/file.csv"</code>. When <code>path</code> points to a zip-compressed file,
@@ -218,8 +146,6 @@ file is extracted and loaded.</p>
     </div>
     <div class="section level2">
     <h2 id="general-behaviour">General behaviour<a class="anchor" aria-label="anchor" href="#general-behaviour"></a></h2>
-    
-
 <p><code>data_read()</code> detects the appropriate <code>read_*()</code> function based on the
 file-extension of the data file. Thus, in most cases it should be enough to
 only specify the <code>path</code> argument. However, if more control is needed, all
@@ -229,8 +155,6 @@ same applies to <code>data_write()</code>, i.e. based on the file extension prov
     </div>
     <div class="section level2">
     <h2 id="spss-specific-behaviour">SPSS specific behaviour<a class="anchor" aria-label="anchor" href="#spss-specific-behaviour"></a></h2>
-    
-
 <p><code>data_read()</code> does <em>not</em> import user-defined ("tagged") <code>NA</code> values from
 SPSS, i.e. argument <code>user_na</code> is always set to <code>FALSE</code> when importing SPSS
 data with the <strong>haven</strong> package. Use <code><a href="convert_to_na.html">convert_to_na()</a></code> to define missing
@@ -241,8 +165,6 @@ versions, use <code>compress = "none"</code>, for example
     </div>
     <div class="section level2">
     <h2 id="differences-to-other-packages-that-read-foreign-data-formats">Differences to other packages that read foreign data formats<a class="anchor" aria-label="anchor" href="#differences-to-other-packages-that-read-foreign-data-formats"></a></h2>
-    
-
 <p><code>data_read()</code> is most comparable to <code><a href="https://rdrr.io/pkg/rio/man/import.html" class="external-link">rio::import()</a></code>. For data files from
 SPSS, SAS or Stata, which support labelled data, variables are converted into
 their most appropriate type. The major difference to <code><a href="https://rdrr.io/pkg/rio/man/import.html" class="external-link">rio::import()</a></code> is that
@@ -254,24 +176,14 @@ is not converted to factor. In this case, value labels are preserved as
 <code>convert_factors = FALSE</code> to remove the automatic conversion of numeric
 variables to factors.</p>
     </div>
-
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
-
-
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
 </div>
-
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
-
     </footer></div>
-
-  
-
-  
-
   </body></html>
 
