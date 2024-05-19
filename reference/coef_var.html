@@ -121,9 +121,11 @@ sandwiches did I eat this week ( = sandwiches * 0.5) and 0 would still mean
 <p>This means that CV is <strong>NOT</strong> invariant to shifting, but it is to scaling:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">sandwiches</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">15</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">2</span>, <span class="fl">7</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/coef_var.html">coef_var</a></span><span class="op">(</span><span class="va">sandwiches</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1.239094</span></span>
+<span><span class="co">#&gt; [1] 1.239094</span></span></code></pre><p></p></div>
+<p></p><div class="sourceCode r"><pre><code><span></span>
 <span><span class="fu"><a href="../reference/coef_var.html">coef_var</a></span><span class="op">(</span><span class="va">sandwiches</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span> <span class="co"># same</span></span>
-<span><span class="co">#&gt; [1] 1.239094</span></span>
+<span><span class="co">#&gt; [1] 1.239094</span></span></code></pre><p></p></div>
+<p></p><div class="sourceCode r"><pre><code><span></span>
 <span><span class="fu"><a href="../reference/coef_var.html">coef_var</a></span><span class="op">(</span><span class="va">sandwiches</span> <span class="op">+</span> <span class="fl">4</span><span class="op">)</span> <span class="co"># different! 0 is no longer meaningful!</span></span>
 <span><span class="co">#&gt; [1] 0.6290784</span></span></code></pre><p></p></div>
     </div>

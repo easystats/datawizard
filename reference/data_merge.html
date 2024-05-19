@@ -88,9 +88,7 @@ source data frames for appended rows. Only applies if <code>join = "bind"</code>
 <p>A merged data frame.</p>
     </div>
     <div class="section level2">
-    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-<div class="section">
-<h3 id="merging-data-frames">Merging data frames<a class="anchor" aria-label="anchor" href="#merging-data-frames"></a></h3>
+    <h2 id="merging-data-frames">Merging data frames<a class="anchor" aria-label="anchor" href="#merging-data-frames"></a></h2>
 <p>Merging data frames is performed by adding rows (cases), columns
 (variables) or both from the source data frame (<code>y</code>) to the target
 data frame (<code>x</code>). This usually requires one or more variables which
@@ -98,9 +96,9 @@ are included in both data frames and that are used for merging, typically
 indicated with the <code>by</code> argument. When <code>by</code> contains a variable present
 in both data frames, cases are matched and filtered by identical values
 of <code>by</code> in <code>x</code> and <code>y</code>.</p>
-</div>
-<div class="section">
-<h3 id="left-and-right-joins">Left- and right-joins<a class="anchor" aria-label="anchor" href="#left-and-right-joins"></a></h3>
+    </div>
+    <div class="section level2">
+    <h2 id="left-and-right-joins">Left- and right-joins<a class="anchor" aria-label="anchor" href="#left-and-right-joins"></a></h2>
 <p>Left- and right joins usually don't add new rows (cases), but only new
 columns (variables) for existing cases in <code>x</code>. For <code>join = "left"</code> or
 <code>join = "right"</code> to work, <code>by</code> <em>must</em> indicate one or more columns that
@@ -116,37 +114,33 @@ as identifiers (with <code>by</code>), will be renamed to avoid multiple identic
 variable names. Cases in <code>y</code> where values from the identifier have no
 match in <code>x</code>'s identifier are removed. <code>join = "right"</code> works in
 a similar way as <code>join = "left"</code>, just that only cases from <code>x</code> that
-have matching values in their identifier variable in <code>y</code> are chosen.
-<br><br>
-In base R, these are equivalent to <code>merge(x, y, all.x = TRUE)</code> and
+have matching values in their identifier variable in <code>y</code> are chosen.</p>
+<p>In base R, these are equivalent to <code>merge(x, y, all.x = TRUE)</code> and
 <code>merge(x, y, all.y = TRUE)</code>.</p>
-</div>
-<div class="section">
-<h3 id="full-joins">Full joins<a class="anchor" aria-label="anchor" href="#full-joins"></a></h3>
+    </div>
+    <div class="section level2">
+    <h2 id="full-joins">Full joins<a class="anchor" aria-label="anchor" href="#full-joins"></a></h2>
 <p>Full joins copy all cases from <code>y</code> to <code>x</code>. For matching cases in both
 data frames, values for new variables are copied from <code>y</code> to <code>x</code>. For
 cases in <code>y</code> not present in <code>x</code>, these will be added as new rows to <code>x</code>.
 Thus, full joins not only add new columns (variables), but also might
-add new rows (cases).
-<br><br>
-In base R, this is equivalent to <code>merge(x, y, all = TRUE)</code>.</p>
-</div>
-<div class="section">
-<h3 id="inner-joins">Inner joins<a class="anchor" aria-label="anchor" href="#inner-joins"></a></h3>
+add new rows (cases).</p>
+<p>In base R, this is equivalent to <code>merge(x, y, all = TRUE)</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="inner-joins">Inner joins<a class="anchor" aria-label="anchor" href="#inner-joins"></a></h2>
 <p>Inner joins merge two data frames, however, only those rows (cases) are
 kept that are present in both data frames. Thus, inner joins usually
 add new columns (variables), but also remove rows (cases) that only
-occur in one data frame.
-<br><br>
-In base R, this is equivalent to <code>merge(x, y)</code>.</p>
-</div>
-<div class="section">
-<h3 id="binds">Binds<a class="anchor" aria-label="anchor" href="#binds"></a></h3>
+occur in one data frame.</p>
+<p>In base R, this is equivalent to <code>merge(x, y)</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="binds">Binds<a class="anchor" aria-label="anchor" href="#binds"></a></h2>
 <p><code>join = "bind"</code> row-binds the complete second data frame <code>y</code> to <code>x</code>.
 Unlike simple <code><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind()</a></code>, which requires the same columns for both data
 frames, <code>join = "bind"</code> will bind shared columns from <code>y</code> to <code>x</code>, and
 add new columns from <code>y</code> to <code>x</code>.</p>
-</div>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
