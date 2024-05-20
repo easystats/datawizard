@@ -38,7 +38,8 @@ reshape_longer(
 )
 }
 \arguments{
-\item{data}{A data frame to pivot.}
+\item{data}{A data frame to convert to long format, so that it has more
+rows and fewer columns post-lengthening than pre-lengthening.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -72,8 +73,9 @@ If \code{NULL}, selects all columns. Patterns that found no matches are silently
 ignored, e.g. \code{extract_column_names(iris, select = c("Species", "Test"))}
 will just return \code{"Species"}.}
 
-\item{names_to}{The name of the new column that will contain the column
-names.}
+\item{names_to}{The name of the new column (variable) that will contain the
+\emph{names} from columns in \code{select} as values, to identify the source of the
+values.}
 
 \item{names_prefix}{A regular expression used to remove matching text from
 the start of each variable name.}
@@ -82,8 +84,8 @@ the start of each variable name.}
 argument controls how the column name is broken up.
 \code{names_pattern} takes a regular expression containing matching groups, i.e. "()".}
 
-\item{values_to}{The name of the new column that will contain the values of
-the pivoted variables.}
+\item{values_to}{The name of the new column that will contain the \emph{values} of
+the columns in \code{select}.}
 
 \item{values_drop_na}{If \code{TRUE}, will drop rows that contain only \code{NA} in the
 \code{values_to} column. This effectively converts explicit missing values to
@@ -121,19 +123,47 @@ This function "lengthens" data, increasing the number of rows and decreasing
 the number of columns. This is a dependency-free base-R equivalent of
 \code{tidyr::pivot_longer()}.
 }
+\details{
+Reshaping data into long format usually means that the input data frame is
+in \emph{wide} format, where multiple measurements taken on the same subject are
+stored in multiple columns (variables). The long format stores the same
+information in a single column, with each measurement per subject stored in
+a separate row. All variables that are not in \code{select} will be repeated for
+each row that is lengthened.
+
+The necessary information for \code{data_to_long()} is:
+\itemize{
+\item The columns that contain the repeated measurements (\code{select}).
+\item The name of the newly created column that will contain the names of the
+columns in \code{select} (\code{names_to}), to identify the source of the values.
+\item The name of the newly created column that contains the values of the
+columns in \code{select} (\code{values_to}).
+}
+
+In other words: Repeated measurements that are spread across several columns
+will be gathered into a single column (\code{values_to}), with the original column
+names, that identify the source of the gathered values, stored in a new column
+(\code{names_to}).
+}
 \examples{
 \dontshow{if (requireNamespace("psych") && requireNamespace("tidyr")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-wide_data <- data.frame(replicate(5, rnorm(10)))
+wide_data <- setNames(
+  data.frame(replicate(2, rnorm(8))),
+  c("Time1", "Time2")
+)
+wide_data$ID <- 1:8
+wide_data
 
-# Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))
+# Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:3))
+# probably doesn't make much sense to mix "time" and "id"
 data_to_long(wide_data)
 
 # Customizing the names
-data_to_long(wide_data,
-  select = c(1, 2),
-  names_to = "Column",
-  values_to = "Numbers",
-  rows_to = "Row"
+data_to_long(
+  wide_data,
+  select = c("Time1", "Time2"),
+  names_to = "Timepoint",
+  values_to = "Score"
 )
 
 # Full example
@@ -141,20 +171,22 @@ data_to_long(wide_data,
 data <- psych::bfi # Wide format with one row per participant's personality test
 
 # Pivot long format
-data_to_long(data,
+very_long_data <- data_to_long(data,
   select = regex("\\\\d"), # Select all columns that contain a digit
   names_to = "Item",
   values_to = "Score",
   rows_to = "Participant"
 )
+head(very_long_data)
 
-data_to_long(
+even_longer_data <- data_to_long(
   tidyr::who,
   select = new_sp_m014:newrel_f65,
   names_to = c("diagnosis", "gender", "age"),
   names_pattern = "new_?(.*)_(.)(.*)",
   values_to = "count"
 )
+head(even_longer_data)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
