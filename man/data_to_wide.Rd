@@ -7,7 +7,7 @@
 \usage{
 data_to_wide(
   data,
-  id_cols = NULL,
+  by = NULL,
   values_from = "Value",
   names_from = "Name",
   names_sep = "_",
@@ -15,12 +15,13 @@ data_to_wide(
   names_glue = NULL,
   values_fill = NULL,
   verbose = TRUE,
+  id_cols = NULL,
   ...
 )
 
 reshape_wider(
   data,
-  id_cols = NULL,
+  by = NULL,
   values_from = "Value",
   names_from = "Name",
   names_sep = "_",
@@ -28,22 +29,28 @@ reshape_wider(
   names_glue = NULL,
   values_fill = NULL,
   verbose = TRUE,
+  id_cols = NULL,
   ...
 )
 }
 \arguments{
-\item{data}{A data frame to pivot.}
+\item{data}{A data frame to convert to wide format, so that it has more
+columns and fewer rows post-widening than pre-widening.}
 
-\item{id_cols}{The name of the column that identifies the (repeated) rows.
+\item{by}{The name of the column that identifies the rows in the data by
+which observations are grouped and the gathered data spread into new columns.
 Usually, this is a variable containing an ID for observations that have been
 repeatedly measured. If \code{NULL}, it will use all remaining columns that are
-not in \code{names_from} or \code{values_from} as id columns. See also 'Details'.}
+not in \code{names_from} or \code{values_from} as ID columns. \code{by} can also be a
+character vector with more than one name of identifier columns. See also
+'Details'.}
 
-\item{values_from}{The name of the column that contains the values to be used
-as future variable values.}
+\item{values_from}{The name of the column in the original data that contains
+the values used to fill the new columns created in the widened data.}
 
-\item{names_from}{The name of the column whose values will be used as future
-column names.}
+\item{names_from}{The name of the column in the original data whose values
+will be used for naming the new columns created in the widened data. Each
+unique value in this column will become the name of one of these new columns.}
 
 \item{names_sep}{If \code{names_from} or \code{values_from} contains multiple variables,
 this will be used to join their values together into a single string to use
@@ -81,15 +88,17 @@ stored in multiple rows. The wide format stores the same information in a
 single row, with each measurement stored in a separate column. Thus, the
 necessary information for \code{data_to_wide()} is:
 \itemize{
-\item The name of the column that identifies the repeated rows (\code{id_cols}).
+\item The name of the column that identifies the groups or repeated measurements
+(\code{by}).
 \item The name of the column whose \emph{values} will become the new column names
 (\code{names_from}). Since these values may not necessarily reflect appropriate
-column names, you can use \code{names_prefix} to add a prefix to each new column.
+column names, you can use \code{names_prefix} to add a prefix to each newly
+created column name.
 \item The name of the column that contains the values (\code{values_from}) for the
 new columns that are created by \code{names_from}.
 }
 
-In other words: Repeated measurements, as indicated by \code{id_cols}, that are
+In other words: Repeated measurements, as indicated by \code{by}, that are
 saved into the column \code{values_from} will be spread into new columns, which
 will be named after the values in \code{names_from}. See also 'Examples'.
 }
@@ -113,7 +122,7 @@ data_long <- read.table(header = TRUE, text = "
 # converting long data into wide format
 data_to_wide(
   data_long,
-  id_cols = "subject",
+  by = "subject",
   names_from = "condition",
   values_from = "measurement"
 )
@@ -121,7 +130,7 @@ data_to_wide(
 # converting long data into wide format with custom column names
 data_to_wide(
   data_long,
-  id_cols = "subject",
+  by = "subject",
   names_from = "condition",
   values_from = "measurement",
   names_prefix = "Var.",
@@ -158,7 +167,7 @@ head(sleepstudy)
 
 data_to_wide(
   sleepstudy,
-  id_cols = "Subject",
+  by = "Subject",
   names_from = "Days",
   values_from = "Reaction"
 )
@@ -166,7 +175,7 @@ data_to_wide(
 # clearer column names
 data_to_wide(
   sleepstudy,
-  id_cols = "Subject",
+  by = "Subject",
   names_from = "Days",
   values_from = "Reaction",
   names_prefix = "Reaction_Day_"

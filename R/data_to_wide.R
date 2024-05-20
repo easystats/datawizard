@@ -4,13 +4,18 @@
 #' the number of rows. This is a dependency-free base-R equivalent of
 #' `tidyr::pivot_wider()`.
 #'
-#' @param data A data frame to pivot.
-#' @param id_cols The name of the column that identifies the (repeated) rows.
+#' @param data A data frame to convert to wide format, so that it has more
+#' columns and fewer rows post-widening than pre-widening.
+#' @param by The name of the column that identifies the rows in the data by
+#' which observations are grouped and the gathered data spread into new columns.
 #' Usually, this is a variable containing an ID for observations that have been
 #' repeatedly measured. If `NULL`, it will use all remaining columns that are
-#' not in `names_from` or `values_from` as id columns. See also 'Details'.
-#' @param names_from The name of the column whose values will be used as future
-#' column names.
+#' not in `names_from` or `values_from` as ID columns. `by` can also be a
+#' character vector with more than one name of identifier columns. See also
+#' 'Details'.
+#' @param names_from The name of the column in the original data whose values
+#' will be used for naming the new columns created in the widened data. Each
+#' unique value in this column will become the name of one of these new columns.
 #' @param names_prefix String added to the start of every variable name. This is
 #'  particularly useful if `names_from` is a numeric vector and you want to create
 #'  syntactic variable names.
@@ -21,8 +26,8 @@
 #' [glue specification](https://glue.tidyverse.org/index.html) that uses the
 #' `names_from` columns to create custom column names. Note that the only
 #' delimiters supported by `names_glue` are curly brackets, `{` and `}`.
-#' @param values_from The name of the column that contains the values to be used
-#' as future variable values.
+#' @param values_from The name of the column in the original data that contains
+#' the values used to fill the new columns created in the widened data.
 #' @param values_fill Optionally, a (scalar) value that will be used to replace
 #' missing values in the new columns created.
 #' @param verbose Toggle warnings.
@@ -38,14 +43,16 @@
 #' single row, with each measurement stored in a separate column. Thus, the
 #' necessary information for `data_to_wide()` is:
 #'
-#' - The name of the column that identifies the repeated rows (`id_cols`).
+#' - The name of the column that identifies the groups or repeated measurements
+#'   (`by`).
 #' - The name of the column whose _values_ will become the new column names
 #'   (`names_from`). Since these values may not necessarily reflect appropriate
-#'   column names, you can use `names_prefix` to add a prefix to each new column.
+#'   column names, you can use `names_prefix` to add a prefix to each newly
+#'   created column name.
 #' - The name of the column that contains the values (`values_from`) for the
 #'   new columns that are created by `names_from`.
 #'
-#' In other words: Repeated measurements, as indicated by `id_cols`, that are
+#' In other words: Repeated measurements, as indicated by `by`, that are
 #' saved into the column `values_from` will be spread into new columns, which
 #' will be named after the values in `names_from`. See also 'Examples'.
 #'
@@ -68,7 +75,7 @@
 #' # converting long data into wide format
 #' data_to_wide(
 #'   data_long,
-#'   id_cols = "subject",
+#'   by = "subject",
 #'   names_from = "condition",
 #'   values_from = "measurement"
 #' )
@@ -76,7 +83,7 @@
 #' # converting long data into wide format with custom column names
 #' data_to_wide(
 #'   data_long,
-#'   id_cols = "subject",
+#'   by = "subject",
 #'   names_from = "condition",
 #'   values_from = "measurement",
 #'   names_prefix = "Var.",
@@ -113,7 +120,7 @@
 #'
 #' data_to_wide(
 #'   sleepstudy,
-#'   id_cols = "Subject",
+#'   by = "Subject",
 #'   names_from = "Days",
 #'   values_from = "Reaction"
 #' )
@@ -121,7 +128,7 @@
 #' # clearer column names
 #' data_to_wide(
 #'   sleepstudy,
-#'   id_cols = "Subject",
+#'   by = "Subject",
 #'   names_from = "Days",
 #'   values_from = "Reaction",
 #'   names_prefix = "Reaction_Day_"
@@ -129,7 +136,7 @@
 #' @inherit data_rename seealso
 #' @export
 data_to_wide <- function(data,
-                         id_cols = NULL,
+                         by = NULL,
                          values_from = "Value",
                          names_from = "Name",
                          names_sep = "_",
@@ -137,9 +144,16 @@ data_to_wide <- function(data,
                          names_glue = NULL,
                          values_fill = NULL,
                          verbose = TRUE,
+                         id_cols = NULL,
                          ...) {
-  if (is.null(id_cols)) {
-    id_cols <- setdiff(names(data), c(names_from, values_from))
+  ## TODO: remove warning later
+  if (!is.null(id_cols)) {
+    insight::format_warning("The `id_cols` argument is deprecated. Please use `by` instead.")
+    by <- id_cols
+  }
+
+  if (is.null(by)) {
+    by <- setdiff(names(data), c(names_from, values_from))
   }
 
   # save custom attributes
@@ -157,7 +171,7 @@ data_to_wide <- function(data,
 
   variable_attr <- lapply(data, attributes)
 
-  not_unstacked <- data[, id_cols, drop = FALSE]
+  not_unstacked <- data[, by, drop = FALSE]
   not_unstacked <- unique(not_unstacked)
 
   # unstack doesn't create NAs for combinations that don't exist (contrary to
@@ -167,10 +181,10 @@ data_to_wide <- function(data,
 
   # create an id with all variables that are not in names_from or values_from
   # so that we can create missing combinations between this id and names_from
-  if (length(id_cols) > 1L) {
-    new_data$temporary_id <- do.call(paste, c(new_data[, id_cols, drop = FALSE], sep = "_"))
-  } else if (length(id_cols) == 1L) {
-    new_data$temporary_id <- new_data[[id_cols]]
+  if (length(by) > 1L) {
+    new_data$temporary_id <- do.call(paste, c(new_data[, by, drop = FALSE], sep = "_"))
+  } else if (length(by) == 1L) {
+    new_data$temporary_id <- new_data[[by]]
   } else {
     new_data$temporary_id <- seq_len(nrow(new_data))
   }
@@ -181,7 +195,7 @@ data_to_wide <- function(data,
   n_rows_per_group <- table(new_data$temporary_id)
   n_values_per_group <- insight::n_unique(n_rows_per_group)
 
-  not_all_cols_are_selected <- length(id_cols) > 0L
+  not_all_cols_are_selected <- length(by) > 0L
 
   incomplete_groups <-
     (n_values_per_group > 1L &&
@@ -223,7 +237,7 @@ data_to_wide <- function(data,
 
     # creation of missing combinations was done with a temporary id, so need
     # to fill columns that are not selected in names_from or values_from
-    new_data[, id_cols] <- lapply(id_cols, function(x) {
+    new_data[, by] <- lapply(by, function(x) {
       data <- data_arrange(new_data, c("temporary_id_2", x))
       ind <- which(!is.na(data[[x]]))
       rep_times <- diff(c(ind, length(data[[x]]) + 1))
