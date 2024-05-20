@@ -9,8 +9,8 @@
 #' Usually, this is a variable containing an ID for observations that have been
 #' repeatedly measured. If `NULL`, it will use all remaining columns that are
 #' not in `names_from` or `values_from` as id columns. See also 'Details'.
-#' @param names_from The name of the column whose values levels will be used as
-#' future column names.
+#' @param names_from The name of the column whose values will be used as future
+#' column names.
 #' @param names_prefix String added to the start of every variable name. This is
 #'  particularly useful if `names_from` is a numeric vector and you want to create
 #'  syntactic variable names.
