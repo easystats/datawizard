@@ -35,7 +35,7 @@ test_that("data_to_wide works", {
       values_from = "value",
       by = "Row_ID"
     ),
-    regexp = "Some values of the columns specified in 'names_from'"
+    regexp = "Some values of the columns specified in `names_from`"
   )
 })
 
