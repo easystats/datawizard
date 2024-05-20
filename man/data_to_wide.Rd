@@ -38,12 +38,12 @@ reshape_wider(
 columns and fewer rows post-widening than pre-widening.}
 
 \item{by}{The name of the column that identifies the rows in the data by
-which observations are grouped and the gathered data spread into new columns.
-Usually, this is a variable containing an ID for observations that have been
-repeatedly measured. If \code{NULL}, it will use all remaining columns that are
-not in \code{names_from} or \code{values_from} as ID columns. \code{by} can also be a
-character vector with more than one name of identifier columns. See also
-'Details'.}
+which observations are grouped and the gathered data is spread into new
+columns. Usually, this is a variable containing an ID for observations that
+have been repeatedly measured. If \code{NULL}, it will use all remaining columns
+that are not in \code{names_from} or \code{values_from} as ID columns. \code{by} can also
+be a character vector with more than one name of identifier columns. See also
+'Details' and 'Examples'.}
 
 \item{values_from}{The name of the column in the original data that contains
 the values used to fill the new columns created in the widened data.}
