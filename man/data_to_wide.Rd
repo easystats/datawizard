@@ -70,6 +70,8 @@ missing values in the new columns created.}
 
 \item{verbose}{Toggle warnings.}
 
+\item{id_cols}{Deprecated. Use \code{by} instead.}
+
 \item{...}{Not used for now.}
 }
 \value{

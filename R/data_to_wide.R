@@ -32,6 +32,7 @@
 #' missing values in the new columns created.
 #' @param verbose Toggle warnings.
 #' @param ... Not used for now.
+#' @param id_cols Deprecated. Use `by` instead.
 #'
 #' @return If a tibble was provided as input, `data_to_wide()` also returns a
 #' tibble. Otherwise, it returns a data frame.
