@@ -180,6 +180,30 @@ data_to_wide(
   values_from = "Reaction",
   names_prefix = "Reaction_Day_"
 )
+
+# For unequal group sizes, missing information is filled with NA
+d <- subset(sleepstudy, Days \%in\% c(0, 1, 2, 3, 4))[c(1:9, 11:13, 16:17, 21), ]
+
+# long format, different number of "Subjects"
+d
+
+data_to_wide(
+  d,
+  by = "Subject",
+  names_from = "Days",
+  values_from = "Reaction",
+  names_prefix = "Reaction_Day_"
+)
+
+# filling missing values with 0
+data_to_wide(
+  d,
+  by = "Subject",
+  names_from = "Days",
+  values_from = "Reaction",
+  names_prefix = "Reaction_Day_",
+  values_fill = 0
+)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
