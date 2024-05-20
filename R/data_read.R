@@ -178,20 +178,18 @@ data_read <- function(path,
         if (is.character(i)) {
           # we need this to drop haven-specific class attributes
           i <- as.character(i)
-        } else {
+        } else if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
           # if all values are labelled, we assume factor. Use labels as levels
-          if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
-            if (is.numeric(i)) {
-              i <- factor(i, labels = names(value_labels))
-            } else {
-              i <- factor(as.character(i), labels = names(value_labels))
-            }
-            value_labels <- NULL
-            attr(i, "converted_to_factor") <- TRUE
+          if (is.numeric(i)) {
+            i <- factor(i, labels = names(value_labels))
           } else {
-            # else, fall back to numeric
-            i <- as.numeric(i)
+            i <- factor(as.character(i), labels = names(value_labels))
           }
+          value_labels <- NULL
+          attr(i, "converted_to_factor") <- TRUE
+        } else {
+          # else, fall back to numeric
+          i <- as.numeric(i)
         }
 
         # drop unused value labels
@@ -310,9 +308,8 @@ data_read <- function(path,
         )
       }
       return(out)
-    } else {
-      out <- tmp
     }
+    out <- tmp
   }
 
   .post_process_imported_data(out, convert_factors, verbose)
