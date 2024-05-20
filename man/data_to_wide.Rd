@@ -42,8 +42,8 @@ not in \code{names_from} or \code{values_from} as id columns. See also 'Details'
 \item{values_from}{The name of the column that contains the values to be used
 as future variable values.}
 
-\item{names_from}{The name of the column whose values levels will be used as
-future column names.}
+\item{names_from}{The name of the column whose values will be used as future
+column names.}
 
 \item{names_sep}{If \code{names_from} or \code{values_from} contains multiple variables,
 this will be used to join their values together into a single string to use
