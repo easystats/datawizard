@@ -33,8 +33,8 @@
 #' in _wide_ format, where multiple measurements taken on the same subject are
 #' stored in multiple columns (variables). The long format stores the same
 #' information in a single column, with each measurement per subject stored in
-#' a separate row. All variables that are not in `select` will be repeated for
-#' each row that is lengthened.
+#' a separate row. The values of all variables that are not in `select` will
+#' be repeated.
 #'
 #' The necessary information for `data_to_long()` is:
 #'
