@@ -51,7 +51,9 @@ the values used to fill the new columns created in the widened data.}
 
 \item{names_from}{The name of the column in the original data whose values
 will be used for naming the new columns created in the widened data. Each
-unique value in this column will become the name of one of these new columns.}
+unique value in this column will become the name of one of these new columns.
+In case \code{names_prefix} is provided, column names will be concatenated with
+the string given in \code{names_prefix}.}
 
 \item{names_sep}{If \code{names_from} or \code{values_from} contains multiple variables,
 this will be used to join their values together into a single string to use
@@ -89,8 +91,8 @@ stored in multiple rows. The wide format stores the same information in a
 single row, with each measurement stored in a separate column. Thus, the
 necessary information for \code{data_to_wide()} is:
 \itemize{
-\item The name of the column that identifies the groups or repeated measurements
-(\code{by}).
+\item The name of the column(s) that identify the groups or repeated measurements
+(\code{by}, resp. its alias \code{id_cols}).
 \item The name of the column whose \emph{values} will become the new column names
 (\code{names_from}). Since these values may not necessarily reflect appropriate
 column names, you can use \code{names_prefix} to add a prefix to each newly
@@ -99,7 +101,7 @@ created column name.
 new columns that are created by \code{names_from}.
 }
 
-In other words: Repeated measurements, as indicated by \code{by}, that are
+In other words: repeated measurements, as indicated by \code{by}, that are
 saved into the column \code{values_from} will be spread into new columns, which
 will be named after the values in \code{names_from}. See also 'Examples'.
 }

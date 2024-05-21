@@ -17,6 +17,8 @@
 #' @param names_from The name of the column in the original data whose values
 #' will be used for naming the new columns created in the widened data. Each
 #' unique value in this column will become the name of one of these new columns.
+#' In case `names_prefix` is provided, column names will be concatenated with
+#' the string given in `names_prefix`.
 #' @param names_prefix String added to the start of every variable name. This is
 #'  particularly useful if `names_from` is a numeric vector and you want to create
 #'  syntactic variable names.
@@ -44,8 +46,8 @@
 #' single row, with each measurement stored in a separate column. Thus, the
 #' necessary information for `data_to_wide()` is:
 #'
-#' - The name of the column that identifies the groups or repeated measurements
-#'   (`by`).
+#' - The name of the column(s) that identify the groups or repeated measurements
+#'   (`by`, resp. its alias `id_cols`).
 #' - The name of the column whose _values_ will become the new column names
 #'   (`names_from`). Since these values may not necessarily reflect appropriate
 #'   column names, you can use `names_prefix` to add a prefix to each newly
@@ -53,7 +55,7 @@
 #' - The name of the column that contains the values (`values_from`) for the
 #'   new columns that are created by `names_from`.
 #'
-#' In other words: Repeated measurements, as indicated by `by`, that are
+#' In other words: repeated measurements, as indicated by `by`, that are
 #' saved into the column `values_from` will be spread into new columns, which
 #' will be named after the values in `names_from`. See also 'Examples'.
 #'
