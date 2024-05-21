@@ -6,13 +6,14 @@
 #'
 #' @param data A data frame to convert to wide format, so that it has more
 #' columns and fewer rows post-widening than pre-widening.
-#' @param by The name of the column that identifies the rows in the data by
-#' which observations are grouped and the gathered data is spread into new
+#' @param by,id_cols The name of the column that identifies the rows in the data
+#' by which observations are grouped and the gathered data is spread into new
 #' columns. Usually, this is a variable containing an ID for observations that
 #' have been repeatedly measured. If `NULL`, it will use all remaining columns
 #' that are not in `names_from` or `values_from` as ID columns. `by` can also
-#' be a character vector with more than one name of identifier columns. See also
-#' 'Details' and 'Examples'.
+#' be a character vector with more than one name of identifier columns. `id_cols`
+#' is an aloas for `by` for those who are used to the syntax of `tidyr::pivot_*()`
+#' functions. See also 'Details' and 'Examples'.
 #' @param names_from The name of the column in the original data whose values
 #' will be used for naming the new columns created in the widened data. Each
 #' unique value in this column will become the name of one of these new columns.
@@ -32,7 +33,6 @@
 #' missing values in the new columns created.
 #' @param verbose Toggle warnings.
 #' @param ... Not used for now.
-#' @param id_cols Deprecated. Use `by` instead.
 #'
 #' @return If a tibble was provided as input, `data_to_wide()` also returns a
 #' tibble. Otherwise, it returns a data frame.
@@ -171,9 +171,8 @@ data_to_wide <- function(data,
                          verbose = TRUE,
                          id_cols = NULL,
                          ...) {
-  ## TODO: remove warning later
+  # handle alias
   if (!is.null(id_cols)) {
-    insight::format_warning("The `id_cols` argument is deprecated. Please use `by` instead.")
     by <- id_cols
   }
 

@@ -37,13 +37,14 @@ reshape_wider(
 \item{data}{A data frame to convert to wide format, so that it has more
 columns and fewer rows post-widening than pre-widening.}
 
-\item{by}{The name of the column that identifies the rows in the data by
-which observations are grouped and the gathered data is spread into new
+\item{by, id_cols}{The name of the column that identifies the rows in the data
+by which observations are grouped and the gathered data is spread into new
 columns. Usually, this is a variable containing an ID for observations that
 have been repeatedly measured. If \code{NULL}, it will use all remaining columns
 that are not in \code{names_from} or \code{values_from} as ID columns. \code{by} can also
-be a character vector with more than one name of identifier columns. See also
-'Details' and 'Examples'.}
+be a character vector with more than one name of identifier columns. \code{id_cols}
+is an aloas for \code{by} for those who are used to the syntax of \verb{tidyr::pivot_*()}
+functions. See also 'Details' and 'Examples'.}
 
 \item{values_from}{The name of the column in the original data that contains
 the values used to fill the new columns created in the widened data.}
@@ -69,8 +70,6 @@ delimiters supported by \code{names_glue} are curly brackets, \verb{\{} and \ver
 missing values in the new columns created.}
 
 \item{verbose}{Toggle warnings.}
-
-\item{id_cols}{Deprecated. Use \code{by} instead.}
 
 \item{...}{Not used for now.}
 }
