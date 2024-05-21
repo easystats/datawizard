@@ -140,7 +140,7 @@ columns in \code{select} (\code{names_to}), to identify the source of the values
 columns in \code{select} (\code{values_to}).
 }
 
-In other words: Repeated measurements that are spread across several columns
+In other words: repeated measurements that are spread across several columns
 will be gathered into a single column (\code{values_to}), with the original column
 names, that identify the source of the gathered values, stored in a new column
 (\code{names_to}).

@@ -44,7 +44,7 @@
 #' - The name of the newly created column that contains the values of the
 #'   columns in `select` (`values_to`).
 #'
-#' In other words: Repeated measurements that are spread across several columns
+#' In other words: repeated measurements that are spread across several columns
 #' will be gathered into a single column (`values_to`), with the original column
 #' names, that identify the source of the gathered values, stored in a new column
 #' (`names_to`).
