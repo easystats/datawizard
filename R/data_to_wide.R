@@ -12,7 +12,7 @@
 #' have been repeatedly measured. If `NULL`, it will use all remaining columns
 #' that are not in `names_from` or `values_from` as ID columns. `by` can also
 #' be a character vector with more than one name of identifier columns. `id_cols`
-#' is an aloas for `by` for those who are used to the syntax of `tidyr::pivot_*()`
+#' is an alias for `by` for those who are used to the syntax of `tidyr::pivot_*()`
 #' functions. See also 'Details' and 'Examples'.
 #' @param names_from The name of the column in the original data whose values
 #' will be used for naming the new columns created in the widened data. Each

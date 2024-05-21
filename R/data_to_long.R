@@ -10,7 +10,7 @@
 #' _names_ from columns in `select` as values, to identify the source of the
 #' values. `names_to` can be a character vector with more than one column name,
 #' in which case `names_sep` or `names_pattern` must be provided in order to
-#' identify which parts of the column names go into newley created columns.
+#' identify which parts of the column names go into newly created columns.
 #' See also 'Examples'.
 #' @param names_prefix A regular expression used to remove matching text from
 #' the start of each variable name.

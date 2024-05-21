@@ -77,7 +77,7 @@ will just return \code{"Species"}.}
 \emph{names} from columns in \code{select} as values, to identify the source of the
 values. \code{names_to} can be a character vector with more than one column name,
 in which case \code{names_sep} or \code{names_pattern} must be provided in order to
-identify which parts of the column names go into newley created columns.
+identify which parts of the column names go into newly created columns.
 See also 'Examples'.}
 
 \item{names_prefix}{A regular expression used to remove matching text from
