@@ -8,12 +8,15 @@
 #' rows and fewer columns after the operation.
 #' @param names_to The name of the new column (variable) that will contain the
 #' _names_ from columns in `select` as values, to identify the source of the
-#' values.
+#' values. `names_to` can be a character vector with more than one column name,
+#' in which case `names_sep` or `names_pattern` must be provided in order to
+#' identify which parts of the column names go into newley created columns.
+#' See also 'Examples'.
 #' @param names_prefix A regular expression used to remove matching text from
 #' the start of each variable name.
 #' @param names_sep,names_pattern If `names_to` contains multiple values, this
-#' argument controls how the column name is broken up.
-#' `names_pattern` takes a regular expression containing matching groups, i.e. "()".
+#' argument controls how the column name is broken up. `names_pattern` takes a
+#' regular expression containing matching groups, i.e. "()".
 #' @param values_to The name of the new column that will contain the _values_ of
 #' the columns in `select`.
 #' @param values_drop_na If `TRUE`, will drop rows that contain only `NA` in the
@@ -41,13 +44,16 @@
 #' - The columns that contain the repeated measurements (`select`).
 #' - The name of the newly created column that will contain the names of the
 #'   columns in `select` (`names_to`), to identify the source of the values.
+#'   `names_to` can also be a character vector with more than one column name,
+#'   in which case `names_sep` or `names_pattern` must be provided to specify
+#'   which parts of the column names go into the newly created columns.
 #' - The name of the newly created column that contains the values of the
 #'   columns in `select` (`values_to`).
 #'
 #' In other words: repeated measurements that are spread across several columns
 #' will be gathered into a single column (`values_to`), with the original column
-#' names, that identify the source of the gathered values, stored in a new column
-#' (`names_to`).
+#' names, that identify the source of the gathered values, stored in one or more
+#' new columns (`names_to`).
 #'
 #' @return If a tibble was provided as input, `reshape_longer()` also returns a
 #' tibble. Otherwise, it returns a data frame.
@@ -70,6 +76,29 @@
 #'   select = c("Time1", "Time2"),
 #'   names_to = "Timepoint",
 #'   values_to = "Score"
+#' )
+#'
+#' # Reshape multiple columns into long format.
+#' mydat <- data.frame(
+#'   age = c(20, 30, 40),
+#'   sex = c("Female", "Male", "Male"),
+#'   score_t1 = c(30, 35, 32),
+#'   score_t2 = c(33, 34, 37),
+#'   score_t3 = c(36, 35, 38),
+#'   speed_t1 = c(2, 3, 1),
+#'   speed_t2 = c(3, 4, 5),
+#'   speed_t3 = c(1, 8, 6)
+#' )
+#' # The column names are split into two columns: "type" and "time". The
+#' # pattern for splitting column names is provided in `names_pattern`. Values
+#' # of all "score_*" and "speed_*" columns are gathered into a single column
+#' # named "count".
+#' data_to_long(
+#'   mydat,
+#'   select = 3:8,
+#'   names_to = c("type", "time"),
+#'   names_pattern = "(score|speed)_t(\\d+)",
+#'   values_to = "count"
 #' )
 #'
 #' # Full example

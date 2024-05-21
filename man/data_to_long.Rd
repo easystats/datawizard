@@ -75,14 +75,17 @@ will just return \code{"Species"}.}
 
 \item{names_to}{The name of the new column (variable) that will contain the
 \emph{names} from columns in \code{select} as values, to identify the source of the
-values.}
+values. \code{names_to} can be a character vector with more than one column name,
+in which case \code{names_sep} or \code{names_pattern} must be provided in order to
+identify which parts of the column names go into newley created columns.
+See also 'Examples'.}
 
 \item{names_prefix}{A regular expression used to remove matching text from
 the start of each variable name.}
 
 \item{names_sep, names_pattern}{If \code{names_to} contains multiple values, this
-argument controls how the column name is broken up.
-\code{names_pattern} takes a regular expression containing matching groups, i.e. "()".}
+argument controls how the column name is broken up. \code{names_pattern} takes a
+regular expression containing matching groups, i.e. "()".}
 
 \item{values_to}{The name of the new column that will contain the \emph{values} of
 the columns in \code{select}.}
@@ -136,14 +139,17 @@ The necessary information for \code{data_to_long()} is:
 \item The columns that contain the repeated measurements (\code{select}).
 \item The name of the newly created column that will contain the names of the
 columns in \code{select} (\code{names_to}), to identify the source of the values.
+\code{names_to} can also be a character vector with more than one column name,
+in which case \code{names_sep} or \code{names_pattern} must be provided to specify
+which parts of the column names go into the newly created columns.
 \item The name of the newly created column that contains the values of the
 columns in \code{select} (\code{values_to}).
 }
 
 In other words: repeated measurements that are spread across several columns
 will be gathered into a single column (\code{values_to}), with the original column
-names, that identify the source of the gathered values, stored in a new column
-(\code{names_to}).
+names, that identify the source of the gathered values, stored in one or more
+new columns (\code{names_to}).
 }
 \examples{
 \dontshow{if (requireNamespace("psych") && requireNamespace("tidyr")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -164,6 +170,29 @@ data_to_long(
   select = c("Time1", "Time2"),
   names_to = "Timepoint",
   values_to = "Score"
+)
+
+# Reshape multiple columns into long format.
+mydat <- data.frame(
+  age = c(20, 30, 40),
+  sex = c("Female", "Male", "Male"),
+  score_t1 = c(30, 35, 32),
+  score_t2 = c(33, 34, 37),
+  score_t3 = c(36, 35, 38),
+  speed_t1 = c(2, 3, 1),
+  speed_t2 = c(3, 4, 5),
+  speed_t3 = c(1, 8, 6)
+)
+# The column names are split into two columns: "type" and "time". The
+# pattern for splitting column names is provided in `names_pattern`. Values
+# of all "score_*" and "speed_*" columns are gathered into a single column
+# named "count".
+data_to_long(
+  mydat,
+  select = 3:8,
+  names_to = c("type", "time"),
+  names_pattern = "(score|speed)_t(\\\\d+)",
+  values_to = "count"
 )
 
 # Full example
