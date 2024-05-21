@@ -5,7 +5,7 @@
 #' `tidyr::pivot_longer()`.
 #'
 #' @param data A data frame to convert to long format, so that it has more
-#' rows and fewer columns post-lengthening than pre-lengthening.
+#' rows and fewer columns after the operation.
 #' @param names_to The name of the new column (variable) that will contain the
 #' _names_ from columns in `select` as values, to identify the source of the
 #' values.

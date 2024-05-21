@@ -39,7 +39,7 @@ reshape_longer(
 }
 \arguments{
 \item{data}{A data frame to convert to long format, so that it has more
-rows and fewer columns post-lengthening than pre-lengthening.}
+rows and fewer columns after the operation.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
