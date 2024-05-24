@@ -46,7 +46,7 @@ be a character vector with more than one name of identifier columns. \code{id_co
 is an alias for \code{by} for those who are used to the syntax of \verb{tidyr::pivot_*()}
 functions. See also 'Details' and 'Examples'.}
 
-\item{values_from}{The name of the column in the original data that contains
+\item{values_from}{The name of the columns in the original data that contains
 the values used to fill the new columns created in the widened data.}
 
 \item{names_from}{The name of the column in the original data whose values

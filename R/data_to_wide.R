@@ -29,7 +29,7 @@
 #' [glue specification](https://glue.tidyverse.org/index.html) that uses the
 #' `names_from` columns to create custom column names. Note that the only
 #' delimiters supported by `names_glue` are curly brackets, `{` and `}`.
-#' @param values_from The name of the column in the original data that contains
+#' @param values_from The name of the columns in the original data that contains
 #' the values used to fill the new columns created in the widened data.
 #' @param values_fill Optionally, a (scalar) value that will be used to replace
 #' missing values in the new columns created.
