@@ -9,33 +9,36 @@
 demean(
   x,
   select,
-  group,
+  by,
   suffix_demean = "_within",
   suffix_groupmean = "_between",
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  group = NULL
 )
 
 degroup(
   x,
   select,
-  group,
+  by,
   center = "mean",
   suffix_demean = "_within",
   suffix_groupmean = "_between",
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  group = NULL
 )
 
 detrend(
   x,
   select,
-  group,
+  by,
   center = "mean",
   suffix_demean = "_within",
   suffix_groupmean = "_between",
   add_attributes = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  group = NULL
 )
 }
 \arguments{
@@ -44,7 +47,7 @@ detrend(
 \item{select}{Character vector (or formula) with names of variables to select
 that should be group- and de-meaned.}
 
-\item{group}{Character vector (or formula) with the name of the variable that
+\item{by}{Character vector (or formula) with the name of the variable that
 indicates the group- or cluster-ID.}
 
 \item{suffix_demean, suffix_groupmean}{String value, will be appended to the
@@ -58,6 +61,8 @@ relevant when printing \code{model_parameters()} - in such cases, the
 within- and between-effects are printed in separated blocks.}
 
 \item{verbose}{Toggle warnings and messages.}
+
+\item{group}{Deprecated. Use \code{by} instead.}
 
 \item{center}{Method for centering. \code{demean()} always performs
 mean-centering, while \code{degroup()} can use \code{center = "median"} or
@@ -131,7 +136,7 @@ intervals and low statistical power} (\cite{Heisig et al. 2017}).
 
 \subsection{Terminology}{
 The group-meaned variable is simply the mean of an independent variable
-within each group (or id-level or cluster) represented by \code{group}.
+within each group (or id-level or cluster) represented by \code{by}.
 It represents the cluster-mean of an independent variable. The regression
 coefficient of a group-meaned variable is the \emph{between-subject-effect}.
 The de-meaned variable is then the centered version of the group-meaned
@@ -209,10 +214,10 @@ data(iris)
 iris$ID <- sample(1:4, nrow(iris), replace = TRUE) # fake-ID
 iris$binary <- as.factor(rbinom(150, 1, .35)) # binary variable
 
-x <- demean(iris, select = c("Sepal.Length", "Petal.Length"), group = "ID")
+x <- demean(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")
 head(x)
 
-x <- demean(iris, select = c("Sepal.Length", "binary", "Species"), group = "ID")
+x <- demean(iris, select = c("Sepal.Length", "binary", "Species"), by = "ID")
 head(x)
 
 
@@ -223,10 +228,10 @@ dat <- data.frame(
   y = c(1, 2, 1, 2, 4, 3, 2, 1),
   ID = c(1, 2, 3, 1, 2, 3, 1, 2)
 )
-demean(dat, select = c("a", "x*y"), group = "ID")
+demean(dat, select = c("a", "x*y"), by = "ID")
 
 # or in formula-notation
-demean(dat, select = ~ a + x * y, group = ~ID)
+demean(dat, select = ~ a + x * y, by = ~ID)
 
 }
 \references{

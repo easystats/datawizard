@@ -15,10 +15,7 @@ data_to_wide(
   names_glue = NULL,
   values_fill = NULL,
   verbose = TRUE,
-  ...,
-  colnames_from,
-  rows_from,
-  sep
+  ...
 )
 
 reshape_wider(
@@ -31,10 +28,7 @@ reshape_wider(
   names_glue = NULL,
   values_fill = NULL,
   verbose = TRUE,
-  ...,
-  colnames_from,
-  rows_from,
-  sep
+  ...
 )
 }
 \arguments{
@@ -68,12 +62,6 @@ missing values in the new columns created.}
 \item{verbose}{Toggle warnings.}
 
 \item{...}{Not used for now.}
-
-\item{colnames_from}{Deprecated. Use \code{names_from} instead.}
-
-\item{rows_from}{Deprecated. Use \code{id_cols} instead.}
-
-\item{sep}{Deprecated. Use \code{names_sep} instead.}
 }
 \value{
 If a tibble was provided as input, \code{reshape_wider()} also returns a
@@ -139,10 +127,11 @@ data_to_wide(
 \item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}}, \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
 \item Functions to reorder or remove columns: \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
 \item Functions to reshape, pivot or rotate data frames: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
-\item Functions to recode data: \code{\link[=rescale]{rescale()}}, \code{\link[=reverse]{reverse()}}, \code{\link[=categorize]{categorize()}}, \code{\link[=recode_values]{recode_values()}}, \code{\link[=slide]{slide()}}
+\item Functions to recode data: \code{\link[=rescale]{rescale()}}, \code{\link[=reverse]{reverse()}}, \code{\link[=categorize]{categorize()}},
+\code{\link[=recode_values]{recode_values()}}, \code{\link[=slide]{slide()}}
 \item Functions to standardize, normalize, rank-transform: \code{\link[=center]{center()}}, \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
 \item Split and merge data frames: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_merge]{data_merge()}}
-\item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=data_find]{data_find()}}
+\item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=extract_column_names]{extract_column_names()}}
 \item Functions to filter rows: \code{\link[=data_match]{data_match()}}, \code{\link[=data_filter]{data_filter()}}
 }
 }

@@ -9,10 +9,10 @@ smoothness(x, method = "cor", lag = 1, iterations = NULL, ...)
 \arguments{
 \item{x}{Numeric vector (similar to a time series).}
 
-\item{method}{Can be "diff" (the standard deviation of the standardized
-differences) or "cor" (default, lag-one autocorrelation).}
+\item{method}{Can be \code{"diff"} (the standard deviation of the standardized
+differences) or \code{"cor"} (default, lag-one autocorrelation).}
 
-\item{lag}{An integer indicating which lag to use. If less than 1, will be
+\item{lag}{An integer indicating which lag to use. If less than \code{1}, will be
 interpreted as expressed in percentage of the length of the vector.}
 
 \item{iterations}{The number of bootstrap replicates for computing standard

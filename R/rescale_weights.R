@@ -10,16 +10,17 @@
 #'   models, which then can be used for multilevel modelling.
 #'
 #' @param data A data frame.
-#' @param group Variable names (as character vector, or as formula), indicating
+#' @param by Variable names (as character vector, or as formula), indicating
 #'   the grouping structure (strata) of the survey data (level-2-cluster
 #'   variable). It is also possible to create weights for multiple group
 #'   variables; in such cases, each created weighting variable will be suffixed
 #'   by the name of the group variable.
 #' @param probability_weights Variable indicating the probability (design or
 #'   sampling) weights of the survey data (level-1-weight).
-#' @param nest Logical, if `TRUE` and `group` indicates at least two
+#' @param nest Logical, if `TRUE` and `by` indicates at least two
 #'   group variables, then groups are "nested", i.e. groups are now a
-#'   combination from each group level of the variables in `group`.
+#'   combination from each group level of the variables in `by`.
+#' @param group Deprecated. Use `by` instead.
 #'
 #' @return `data`, including the new weighting variables: `pweights_a`
 #'   and `pweights_b`, which represent the rescaled design weights to use
@@ -71,7 +72,7 @@
 #'   # or nested structures.
 #'   x <- rescale_weights(
 #'     data = nhanes_sample,
-#'     group = c("SDMVSTRA", "SDMVPSU"),
+#'     by = c("SDMVSTRA", "SDMVPSU"),
 #'     probability_weights = "WTINT2YR",
 #'     nest = TRUE
 #'   )
@@ -87,9 +88,15 @@
 #'   )
 #' }
 #' @export
-rescale_weights <- function(data, group, probability_weights, nest = FALSE) {
-  if (inherits(group, "formula")) {
-    group <- all.vars(group)
+rescale_weights <- function(data, by, probability_weights, nest = FALSE, group = NULL) {
+  ## TODO: remove warning in future release
+  if (!is.null(group)) {
+    by <- group
+    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
+  }
+
+  if (inherits(by, "formula")) {
+    by <- all.vars(by)
   }
 
   # check if weight has missings. we need to remove them first,
@@ -107,22 +114,22 @@ rescale_weights <- function(data, group, probability_weights, nest = FALSE) {
   # sort id
   data_tmp$.bamboozled <- seq_len(nrow(data_tmp))
 
-  if (nest && length(group) < 2) {
+  if (nest && length(by) < 2) {
     insight::format_warning(
       sprintf(
-        "Only one group variable selected, no nested structure possible. Rescaling weights for grout '%s' now.",
-        group
+        "Only one group variable selected in `by`, no nested structure possible. Rescaling weights for grout '%s' now.",
+        by
       )
     )
     nest <- FALSE
   }
 
   if (nest) {
-    out <- .rescale_weights_nested(data_tmp, group, probability_weights, nrow(data), weight_non_na)
+    out <- .rescale_weights_nested(data_tmp, group = by, probability_weights, nrow(data), weight_non_na)
   } else {
-    out <- lapply(group, function(i) {
+    out <- lapply(by, function(i) {
       x <- .rescale_weights(data_tmp, i, probability_weights, nrow(data), weight_non_na)
-      if (length(group) > 1) {
+      if (length(by) > 1) {
         colnames(x) <- sprintf(c("pweight_a_%s", "pweight_b_%s"), i)
       }
       x

@@ -79,10 +79,14 @@ This means that CV is \strong{NOT} invariant to shifting, but it is to scaling:
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{sandwiches <- c(0, 4, 15, 0, 0, 5, 2, 7)
 coef_var(sandwiches)
 #> [1] 1.239094
+}\if{html}{\out{</div>}}
 
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 coef_var(sandwiches / 2) # same
 #> [1] 1.239094
+}\if{html}{\out{</div>}}
 
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 coef_var(sandwiches + 4) # different! 0 is no longer meaningful!
 #> [1] 0.6290784
 }\if{html}{\out{</div>}}

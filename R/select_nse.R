@@ -148,9 +148,9 @@
 
 # 3 types of symbols:
 # - unquoted variables
-# - objects that need to be evaluated, e.g data_find(iris, i) where i is a
-#   function arg or is defined before. This can also be a vector of names or
-#   positions.
+# - objects that need to be evaluated, e.g data_find(iris, i) where
+#   i is a function arg or is defined before. This can also be a
+#   vector of names or positions.
 # - functions (without parenthesis)
 
 # The first case is easy to deal with.
@@ -180,24 +180,22 @@
 
         # if starts_with() et al. come from tidyselect but need to be used in
         # a select environment, then the error doesn't have the same structure.
-        if (is.null(fn) &&
-          grepl("must be used within a", e$message, fixed = TRUE)) {
-          trace <- lapply(e$trace$call, function(x) {
+        if (is.null(fn) && grepl("must be used within a", e$message, fixed = TRUE)) {
+          call_trace <- lapply(e$trace$call, function(x) {
             tmp <- insight::safe_deparse(x)
             if (grepl(paste0("^", .regex_select_helper()), tmp)) {
               tmp
             }
           })
-          fn <- Filter(Negate(is.null), trace)[1]
+          fn <- Filter(Negate(is.null), call_trace)[1]
         }
         # if we actually obtain the select helper call, return it, else return
         # what we already had
         if (length(fn) > 0L && grepl(.regex_select_helper(), fn)) {
           is_select_helper <<- TRUE
           return(fn)
-        } else {
-          NULL
         }
+        NULL
       }
     )
 
@@ -249,7 +247,7 @@
   switch(type,
     `:` = .select_seq(x, data, ignore_case, regex, verbose),
     `-` = .select_minus(x, data, ignore_case, regex, verbose),
-    `c` = .select_c(x, data, ignore_case, regex, verbose),
+    `c` = .select_c(x, data, ignore_case, regex, verbose), # nolint
     `(` = .select_bracket(x, data, ignore_case, regex, verbose),
     `[` = .select_square_bracket(x, data, ignore_case, regex, verbose),
     `$` = .select_dollar(x, data, ignore_case, regex, verbose),
@@ -494,7 +492,7 @@
 # Almost identical to dynGet(). The difference is that we deparse the expression
 # because get0() allows symbol only since R 4.1.0
 .dynGet <- function(x,
-                    ifnotfound = stop(gettextf("%s not found", sQuote(x)), domain = NA),
+                    ifnotfound = stop(gettextf("%s not found", sQuote(x)), domain = NA, call. = FALSE),
                     minframe = 1L,
                     inherits = FALSE) {
   x <- insight::safe_deparse(x)
@@ -518,7 +516,7 @@
 # Custom arg "remove_n_top_env" to remove the first environments which are
 # ".select_nse()" and the other custom functions
 .dynEval <- function(x,
-                     ifnotfound = stop(gettextf("%s not found", sQuote(x)), domain = NA),
+                     ifnotfound = stop(gettextf("%s not found", sQuote(x)), domain = NA, call. = FALSE),
                      minframe = 1L,
                      inherits = FALSE,
                      remove_n_top_env = 0) {

@@ -8,12 +8,20 @@
 \usage{
 means_by_group(x, ...)
 
-\method{means_by_group}{numeric}(x, group = NULL, ci = 0.95, weights = NULL, digits = NULL, ...)
+\method{means_by_group}{numeric}(
+  x,
+  by = NULL,
+  ci = 0.95,
+  weights = NULL,
+  digits = NULL,
+  group = NULL,
+  ...
+)
 
 \method{means_by_group}{data.frame}(
   x,
   select = NULL,
-  group = NULL,
+  by = NULL,
   ci = 0.95,
   weights = NULL,
   digits = NULL,
@@ -21,6 +29,7 @@ means_by_group(x, ...)
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
+  group = NULL,
   ...
 )
 }
@@ -29,10 +38,10 @@ means_by_group(x, ...)
 
 \item{...}{Currently not used}
 
-\item{group}{If \code{x} is a numeric vector, \code{group} should be a factor that
-indicates the group-classifying categories. If \code{x} is a data frame, \code{group}
+\item{by}{If \code{x} is a numeric vector, \code{by} should be a factor that
+indicates the group-classifying categories. If \code{x} is a data frame, \code{by}
 should be a character string, naming the variable in \code{x} that is used for
-grouping. Numeric vectors are coerced to factors. Not that \code{group} should
+grouping. Numeric vectors are coerced to factors. Not that \code{by} should
 only refer to a single variable.}
 
 \item{ci}{Level of confidence interval for mean estimates. Default is \code{0.95}.
@@ -46,6 +55,8 @@ weights are used.}
 
 \item{digits}{Optional scalar, indicating the amount of digits after decimal
 point when rounding estimates and values.}
+
+\item{group}{Deprecated. Use \code{by} instead.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -76,8 +87,8 @@ negation should not work as expected, use the \code{exclude} argument instead.
 }
 
 If \code{NULL}, selects all columns. Patterns that found no matches are silently
-ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
-return \code{"Species"}.}
+ignored, e.g. \code{extract_column_names(iris, select = c("Species", "Test"))}
+will just return \code{"Species"}.}
 
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
@@ -106,9 +117,9 @@ for each sub-group.
 Computes summary table of means by groups.
 }
 \details{
-This function is comparable to \code{aggregate(x, group, mean)}, but provides
+This function is comparable to \code{aggregate(x, by, mean)}, but provides
 some further information, including summary statistics from a One-Way-ANOVA
-using \code{x} as dependent and \code{group} as independent variable. \code{\link[emmeans:contrast]{emmeans::contrast()}}
+using \code{x} as dependent and \code{by} as independent variable. \code{\link[emmeans:contrast]{emmeans::contrast()}}
 is used to get p-values for each sub-group. P-values indicate whether each
 group-mean is significantly different from the total mean.
 }

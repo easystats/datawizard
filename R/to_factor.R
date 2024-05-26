@@ -11,7 +11,7 @@
 #' levels after `x` was converted to factor. Else, factor levels are based on
 #' the values of `x` (i.e. as if using `as.factor()`).
 #' @param ... Arguments passed to or from other methods.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #' @inheritParams categorize
 #'
 #' @inheritSection center Selection of variables - the `select` argument

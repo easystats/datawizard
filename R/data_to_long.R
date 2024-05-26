@@ -21,11 +21,10 @@
 #' @param rows_to The name of the column that will contain the row names or row
 #'   numbers from the original data. If `NULL`, will be removed.
 #' @param ... Currently not used.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #' @param cols Identical to `select`. This argument is here to ensure compatibility
 #'   with `tidyr::pivot_longer()`. If both `select` and `cols` are provided, `cols`
 #'   is used.
-#' @param colnames_to Deprecated. Use `names_to` instead.
 #'
 #' @return If a tibble was provided as input, `reshape_longer()` also returns a
 #' tibble. Otherwise, it returns a data frame.
@@ -78,17 +77,11 @@ data_to_long <- function(data,
                          ignore_case = FALSE,
                          regex = FALSE,
                          ...,
-                         cols,
-                         colnames_to) {
-  # Check args
-  if (!missing(colnames_to)) {
-    .is_deprecated("colnames_to", "names_to")
-    if (is.null(names_to)) {
-      names_to <- colnames_to
-    }
-  }
+                         cols) { # nolint
+  original_data <- data
 
   # Prefer "cols" over "select" for compat with tidyr::pivot_longer
+  # nolint start
   if (!missing(cols)) {
     select <- substitute(cols)
     cols <- .select_nse(
@@ -115,6 +108,7 @@ data_to_long <- function(data,
       )
     }
   }
+  # nolint end
 
   # nothing to select?
   if (length(cols) == 0L) {
@@ -205,7 +199,7 @@ data_to_long <- function(data,
         header = FALSE
       )
       names(tmp) <- paste0("V", seq_len(ncol(tmp)))
-      tmp[tmp == ""] <- NA
+      tmp[tmp == ""] <- NA # nolint
 
       stacked_data$ind <- NULL
       stacked_data <- cbind(tmp, stacked_data)
@@ -225,6 +219,13 @@ data_to_long <- function(data,
   }
 
   stacked_data <- data_relocate(stacked_data, select = values_to, after = -1)
+
+  # if columns in data frame have attributes (e.g. labelled data), `cbind()`
+  # won't work, so we need to remove them. We'll set them back later
+  not_stacked[] <- lapply(not_stacked, function(i) {
+    attributes(i) <- NULL
+    i
+  })
 
   # reunite unselected data with stacked data
   out <- cbind(
@@ -269,6 +270,12 @@ data_to_long <- function(data,
   # reset row names
   if (!insight::object_has_rownames(data)) {
     row.names(out) <- NULL
+  }
+
+  # set back labels
+  shared_columns <- intersect(colnames(out), colnames(original_data))
+  for (i in shared_columns) {
+    out[[i]] <- .set_back_labels(out[[i]], original_data[[i]], include_values = TRUE)
   }
 
   out

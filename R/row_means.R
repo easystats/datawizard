@@ -8,7 +8,7 @@
 #' @param min_valid Optional, a numeric value of length 1. May either be
 #' - a numeric value that indicates the amount of valid values per row to
 #'   calculate the row mean;
-#' - or a value between 0 and 1, indicating a proportion of valid values per
+#' - or a value between `0` and `1`, indicating a proportion of valid values per
 #'   row to calculate the row mean (see 'Details').
 #' - `NULL` (default), in which all cases are considered.
 #'
@@ -19,7 +19,7 @@
 #' @param remove_na Logical, if `TRUE` (default), removes missing (`NA`) values
 #' before calculating row means. Only applies if `min_valuid` is not specified.
 #' @param verbose Toggle warnings.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @return A vector with row means for those rows with at least `n` valid values.
 #'

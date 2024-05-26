@@ -1,4 +1,49 @@
-# datawizard 0.9.2
+# datawizard 0.10.1
+
+BREAKING CHANGES
+
+* Arguments named `group` or `group_by` are deprecated and will be removed
+  in a future release. Please use `by` instead. This affects the following
+  functions in *datawizard* (#502).
+
+  * `data_partition()`
+  * `demean()` and `degroup()`
+  * `means_by_group()`
+  * `rescale_weights()`
+
+* Following aliases are deprecated and will be removed in a future release (#504):
+
+  * `get_columns()`, use `data_select()` instead.
+  * `data_find()` and `find_columns()`, use `extract_column_names()` instead.
+  * `format_text()`, use `text_format()` instead.
+
+CHANGES
+
+* `recode_into()` is more relaxed regarding checking the type of `NA` values.
+  If you recode into a numeric variable, and one of the recode values is `NA`,
+  you no longer need to use `NA_real_` for numeric `NA` values.
+
+BUG FIXES
+
+* `data_to_long()` did not work for data frame where columns had attributes
+  (like labelled data).
+
+# datawizard 0.10.0
+
+BREAKING CHANGES
+
+* The following arguments were deprecated in 0.5.0 and are now removed:
+
+  * in `data_to_wide()`: `colnames_from`, `rows_from`, `sep` 
+  * in `data_to_long()`: `colnames_to` 
+  * in `data_partition()`: `training_proportion`
+
+NEW FUNCTIONS
+
+* `data_summary()`, to compute summary statistics of (grouped) data frames.
+
+* `data_replicate()`, to expand a data frame by replicating rows based on another
+  variable that contains the counts of replications per row.
 
 CHANGES
 
@@ -9,7 +54,7 @@ CHANGES
   argument, to compute weighted frequency tables. `include_na` allows to include
   or omit missing values from the table. Furthermore, a `by` argument was added,
   to compute crosstables (#479, #481).
-
+  
 # datawizard 0.9.1
 
 CHANGES
@@ -117,7 +162,7 @@ CHANGES
   (similar to other data frame methods of transformation functions), to append
   recoded variables to the input data frame instead of overwriting existing
   variables.
-  
+
 NEW FUNCTIONS
 
 * `rowid_as_column()` to complement `rownames_as_column()` (and to mimic 

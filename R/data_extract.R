@@ -26,7 +26,7 @@
 #' @param verbose Toggle warnings.
 #' @param ... For use by future methods.
 #'
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @details `data_extract()` can be used to select multiple variables or pull a
 #' single variable from a data frame. Thus, the return value is by default not
@@ -134,13 +134,13 @@ data_extract.data.frame <- function(data,
   }
 
   # we definitely should have a vector here when name not NULL
-  if (!is.null(name)) {
+  if (is.null(name)) {
+    data[, select, drop = !as_data_frame]
+  } else {
     # if name indicates a variable, extract values for naming now
     if (length(name) == 1L) {
       name <- data[[name]]
     }
     stats::setNames(data[[select]], name)
-  } else {
-    data[, select, drop = !as_data_frame]
   }
 }

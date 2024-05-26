@@ -108,17 +108,23 @@ format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = 
     tmp <- x
     if (identical(props, "row")) {
       for (i in seq_len(nrow(x))) {
-        tmp[i, -1] <- paste(
-          format(x[i, -1]),
-          format(sprintf("(%.*f%%)", digits, 100 * x[i, -1] / sum(x[i, -1], na.rm = TRUE)), justify = "right")
-        )
+        row_sum <- sum(x[i, -1], na.rm = TRUE)
+        if (row_sum == 0) {
+          row_sum_string <- "(0%)"
+        } else {
+          row_sum_string <- sprintf("(%.*f%%)", digits, 100 * x[i, -1] / row_sum)
+        }
+        tmp[i, -1] <- paste(format(x[i, -1]), format(row_sum_string, justify = "right"))
       }
     } else if (identical(props, "column")) {
       for (i in seq_len(ncol(x))[-1]) {
-        tmp[, i] <- paste(
-          format(x[, i]),
-          format(sprintf("(%.*f%%)", digits, 100 * x[, i] / sum(x[, i], na.rm = TRUE)), justify = "right")
-        )
+        col_sum <- sum(x[, i], na.rm = TRUE)
+        if (col_sum == 0) {
+          col_sum_string <- "(0%)"
+        } else {
+          col_sum_string <- sprintf("(%.*f%%)", digits, 100 * x[, i] / col_sum)
+        }
+        tmp[, i] <- paste(format(x[, i]), format(col_sum_string, justify = "right"))
       }
     } else if (identical(props, "full")) {
       for (i in seq_len(ncol(x))[-1]) {
@@ -228,7 +234,7 @@ print_html.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
     format(x, big_mark = big_mark, format = "html", ...),
     missing = "(NA)",
     format = "html",
-    group_by = "groups"
+    by = "groups"
   )
 }
 
@@ -264,7 +270,7 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
       out,
       missing = "(NA)",
       format = "html",
-      group_by = "groups"
+      by = "groups"
     )
   }
 }
@@ -312,8 +318,39 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
 }
 
 
-.validate_table_weights <- function(weights, x) {
-  if (!is.null(weights)) {
+.validate_table_weights <- function(weights, x, weights_expression = NULL) {
+  # exception: for vectors, if weighting variable not found, "weights" is NULL.
+  # to check this, we further need to check whether a weights expression was
+  # provided, e.g. "weights = iris$not_found" - all this is only relevant when
+  # weights is NULL
+  if (is.null(weights)) {
+    # possibly misspelled weights-variables for default-method ----------------
+    # -------------------------------------------------------------------------
+
+    # do we have any value for weights_expression?
+    if (!is.null(weights_expression) &&
+      # due to deparse() and substitute, NULL becomes "NULL" - we need to check for this
+      !identical(weights_expression, "NULL") &&
+      # we should only run into this problem, when a variable from a data frame
+      # is used in the data_tabulate() method for vectors - thus, we need to check
+      # whether the weights_expression contains a "$" - `iris$not_found` is "NULL"
+      # we need this check, because the default-method of data_tabulate() is called
+      # from the data.frame method, where `weights = weights`, and then,
+      # deparse(substitute(weights)) is "weights" (not "NULL" or "iris$not_found"),
+      # leading to an error when actually all is OK (if "weights" is NULL)
+      # Example:
+      #> efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+      # Here, efc$wweight is NULL
+      #> data_tabulate(efc$c172code, weights = efc$wweight)
+      # Here, wweight errors anyway, because object "wweight" is not found
+      #> data_tabulate(efc$c172code, weights = wweight)
+      grepl("$", weights_expression, fixed = TRUE)) {
+      insight::format_error("The variable specified in `weights` was not found. Possibly misspelled?")
+    }
+  } else {
+    # possibly misspecified weights-variables for data.frame-method -----------
+    # -------------------------------------------------------------------------
+
     if (is.character(weights)) {
       # If "weights" is a character string, must be of length 1
       if (length(weights) > 1) {

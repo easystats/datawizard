@@ -173,7 +173,6 @@ test_that("data_tabulate big numbers", {
 
 
 test_that("data_tabulate print multiple, collapse", {
-  skip_if_not(packageVersion("insight") > "0.17.0", "insight must be >= 0.17.0")
   data(efc, package = "datawizard")
   expect_snapshot(data_tabulate(efc, c("c172code", "e16sex"), collapse = TRUE))
 })
@@ -363,6 +362,7 @@ test_that("data_tabulate, cross tables, errors weights", {
   expect_error(data_tabulate(efc, "c172code", weights = efc$weights[-1]), regex = "Length of `weights`")
   expect_error(data_tabulate(efc, "c172code", weights = "weigths"), regex = "not found")
   expect_error(data_tabulate(efc, "c172code", weights = c("e16sex", "e42dep")), regex = "length 1")
+  expect_error(data_tabulate(efc$c172code, weights = efc$wweight), regex = "not found")
 })
 
 
@@ -396,4 +396,12 @@ test_that("data_tabulate, validate against table", {
   ), "mtcars$cyl", "Var1")
   out1[[2]] <- as.character(out1[[2]])
   expect_equal(out1, out2, ignore_attr = TRUE)
+})
+
+
+test_that("data_tabulate, correct 0% for proportions", {
+  data(efc, package = "datawizard")
+  out <- data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")
+  expect_identical(format(out[[1]])[[4]], c("0 (0%)", "0 (0%)", "0 (0%)", "0 (0%)", "", "0"))
+  expect_snapshot(print(out[[1]]))
 })

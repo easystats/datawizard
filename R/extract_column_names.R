@@ -1,10 +1,8 @@
 #' @title Find or get columns in a data frame based on search patterns
-#' @name find_columns
+#' @name extract_column_names
 #'
-#' @description `find_columns()` returns column names from a data set that
-#' match a certain search pattern, while `get_columns()` returns the found data.
-#' `data_select()` is an alias for `get_columns()`, and `data_find()` is an alias
-#' for `find_columns()`.
+#' @description `extract_column_names()` returns column names from a data set that
+#' match a certain search pattern, while `data_select()` returns the found data.
 #'
 #' @param data A data frame.
 #' @param select Variables that will be included when performing the required
@@ -35,8 +33,8 @@
 #'     negation should not work as expected, use the `exclude` argument instead.
 #'
 #'   If `NULL`, selects all columns. Patterns that found no matches are silently
-#'   ignored, e.g. `find_columns(iris, select = c("Species", "Test"))` will just
-#'   return `"Species"`.
+#'   ignored, e.g. `extract_column_names(iris, select = c("Species", "Test"))`
+#'   will just return `"Species"`.
 #' @param exclude See `select`, however, column names matched by the pattern
 #'   from `exclude` will be excluded instead of selected. If `NULL` (the default),
 #'   excludes no columns.
@@ -58,9 +56,10 @@
 #'
 #' @return
 #'
-#' `find_columns()` returns a character vector with column names that matched
-#' the pattern in `select` and `exclude`, or `NULL` if no matching column name
-#' was found. `get_columns()` returns a data frame with matching columns.
+#' `extract_column_names()` returns a character vector with column names that
+#' matched the pattern in `select` and `exclude`, or `NULL` if no matching
+#' column name was found. `data_select()` returns a data frame with matching
+#' columns.
 #'
 #' @details
 #'
@@ -69,12 +68,12 @@
 #'
 #' ```r
 #' foo <- function(data, pattern) {
-#'   find_columns(data, select = starts_with(pattern))
+#'   extract_column_names(data, select = starts_with(pattern))
 #' }
 #' foo(iris, pattern = "Sep")
 #'
 #' foo2 <- function(data, pattern) {
-#'   find_columns(data, select = pattern)
+#'   extract_column_names(data, select = pattern)
 #' }
 #' foo2(iris, pattern = starts_with("Sep"))
 #' ```
@@ -84,7 +83,7 @@
 #' ```r
 #' for (i in c("Sepal", "Sp")) {
 #'   head(iris) |>
-#'     find_columns(select = starts_with(i)) |>
+#'     extract_column_names(select = starts_with(i)) |>
 #'     print()
 #' }
 #' ```
@@ -94,7 +93,7 @@
 #'
 #' ```r
 #' inner <- function(data, arg) {
-#'   find_columns(data, select = arg)
+#'   extract_column_names(data, select = arg)
 #' }
 #' outer <- function(data, arg) {
 #'   inner(data, starts_with(arg))
@@ -114,25 +113,25 @@
 #'
 #' @examples
 #' # Find columns names by pattern
-#' find_columns(iris, starts_with("Sepal"))
-#' find_columns(iris, ends_with("Width"))
-#' find_columns(iris, regex("\\."))
-#' find_columns(iris, c("Petal.Width", "Sepal.Length"))
+#' extract_column_names(iris, starts_with("Sepal"))
+#' extract_column_names(iris, ends_with("Width"))
+#' extract_column_names(iris, regex("\\."))
+#' extract_column_names(iris, c("Petal.Width", "Sepal.Length"))
 #'
 #' # starts with "Sepal", but not allowed to end with "width"
-#' find_columns(iris, starts_with("Sepal"), exclude = contains("Width"))
+#' extract_column_names(iris, starts_with("Sepal"), exclude = contains("Width"))
 #'
 #' # find numeric with mean > 3.5
 #' numeric_mean_35 <- function(x) is.numeric(x) && mean(x, na.rm = TRUE) > 3.5
-#' find_columns(iris, numeric_mean_35)
+#' extract_column_names(iris, numeric_mean_35)
 #' @export
-find_columns <- function(data,
-                         select = NULL,
-                         exclude = NULL,
-                         ignore_case = FALSE,
-                         regex = FALSE,
-                         verbose = TRUE,
-                         ...) {
+extract_column_names <- function(data,
+                                 select = NULL,
+                                 exclude = NULL,
+                                 ignore_case = FALSE,
+                                 regex = FALSE,
+                                 verbose = TRUE,
+                                 ...) {
   columns <- .select_nse(
     select,
     data,
@@ -155,6 +154,27 @@ find_columns <- function(data,
 }
 
 
-#' @rdname find_columns
+#' @rdname extract_column_names
 #' @export
-data_find <- find_columns
+data_find <- function(data,
+                      select = NULL,
+                      exclude = NULL,
+                      ignore_case = FALSE,
+                      regex = FALSE,
+                      verbose = TRUE,
+                      ...) {
+  insight::format_warning("Function `data_find()` is deprecated and will be removed in a future release. Please use `extract_column_names()` instead.") # nolint
+  extract_column_names(
+    data,
+    select = select,
+    exclude = exclude,
+    ignore_case = ignore_case,
+    regex = regex,
+    verbose = verbose,
+    ...
+  )
+}
+
+#' @rdname extract_column_names
+#' @export
+find_columns <- data_find

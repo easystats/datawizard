@@ -130,15 +130,16 @@ data_filter(mtcars, vs == 0 & am == 1)
 ```
 
 Finding columns in a data frame, or retrieving the data of selected
-columns, can be achieved using `find_columns()` or `get_columns()`:
+columns, can be achieved using `extract_column_names()` or
+`data_select()`:
 
 ``` r
 # find column names matching a pattern
-find_columns(iris, starts_with("Sepal"))
+extract_column_names(iris, starts_with("Sepal"))
 #> [1] "Sepal.Length" "Sepal.Width"
 
 # return data columns matching a pattern
-get_columns(iris, starts_with("Sepal")) |> head()
+data_select(iris, starts_with("Sepal")) |> head()
 #>   Sepal.Length Sepal.Width
 #> 1          5.1         3.5
 #> 2          4.9         3.0
@@ -505,20 +506,7 @@ To rescale a numeric variable to a new range:
 ``` r
 change_scale(c(0, 1, 5, -5, -2))
 #> [1]  50  60 100   0  30
-#> attr(,"min_value")
-#> [1] -5
-#> attr(,"max_value")
-#> [1] 5
-#> attr(,"new_min")
-#> [1] 0
-#> attr(,"new_max")
-#> [1] 100
-#> attr(,"range_difference")
-#> [1] 10
-#> attr(,"to_range")
-#> [1]   0 100
-#> attr(,"class")
-#> [1] "dw_transformer" "numeric"
+#> (original range = -5 to 5)
 ```
 
 ### Rotate or transpose
@@ -597,7 +585,7 @@ iris |>
   # all rows where Species is "versicolor" or "virginica"
   data_filter(Species %in% c("versicolor", "virginica")) |>
   # select only columns with "." in names (i.e. drop Species)
-  get_columns(contains("\\.")) |>
+  data_select(contains("\\.")) |>
   # move columns that ends with "Length" to start of data frame
   data_relocate(ends_with("Length")) |>
   # remove fourth column

@@ -26,7 +26,7 @@
 #' not `NULL`. Can be `"row"` (row percentages), `"column"` (column percentages)
 #' or `"full"` (to calculate relative frequencies for the full table).
 #' @param ... not used.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @section Crosstables:
 #' If `by` is supplied, a crosstable is created. The crosstable includes `<NA>`
@@ -141,7 +141,7 @@ data_tabulate.default <- function(x,
   }
 
   # validate "weights"
-  weights <- .validate_table_weights(weights, x)
+  weights <- .validate_table_weights(weights, x, weights_expression = insight::safe_deparse(substitute(weights)))
 
   # we go into another function for crosstables here...
   if (!is.null(by)) {
