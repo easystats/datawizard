@@ -488,3 +488,17 @@ test_that("works with labelled data", {
   expect_identical(nrow(out), 200L)
   expect_identical(attributes(out$e42dep)$label, "elder's dependency")
 })
+
+
+test_that("don't convert factors to integer", {
+  data("mtcars")
+  mtcars <- mtcars[c(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 18L, 29L, 31L), ]
+  mtcars$am_f <- factor(mtcars$am)
+  mtcars$cyl_f <- factor(mtcars$cyl)
+
+  mtcars$id <- factor(seq_len(nrow(mtcars)))
+  mtcars_long <- data_to_wide(mtcars,
+    select = c("mpg", "qsec", "disp"), names_to = "g"
+  )
+  expect_snapshot(print(mtcars_long))
+})

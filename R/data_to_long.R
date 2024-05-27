@@ -223,7 +223,11 @@ data_to_long <- function(data,
   # if columns in data frame have attributes (e.g. labelled data), `cbind()`
   # won't work, so we need to remove them. We'll set them back later
   not_stacked[] <- lapply(not_stacked, function(i) {
-    attributes(i) <- NULL
+    # we can't remove *all* attributes, this will convert factors into integers
+    attr(i, "label") <- NULL
+    attr(i, "labels") <- NULL
+    attr(i, "format.spss") <- NULL
+    class(i) <- setdiff(class(i), c("haven_labelled", "vctrs_vctr"))
     i
   })
 
