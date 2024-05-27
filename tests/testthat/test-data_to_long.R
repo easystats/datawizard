@@ -497,7 +497,7 @@ test_that("don't convert factors to integer", {
   mtcars$cyl_f <- factor(mtcars$cyl)
 
   mtcars$id <- factor(seq_len(nrow(mtcars)))
-  mtcars_long <- data_to_wide(mtcars,
+  mtcars_long <- data_to_long(mtcars,
     select = c("mpg", "qsec", "disp"), names_to = "g"
   )
   expect_snapshot(print(mtcars_long))
