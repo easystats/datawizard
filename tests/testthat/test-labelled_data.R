@@ -353,7 +353,7 @@ test_that("recode_values, labels preserved", {
 
 test_that("slide, labels preserved", {
   data(efc)
-  x <- slide(efc)
+  x <- slide(efc, select = c("c12hour", "e16sex", "c172code", "neg_c_7"))
   expect_equal(
     attr(x$c172code, "label", exact = TRUE),
     attr(efc$c172code, "label", exact = TRUE),

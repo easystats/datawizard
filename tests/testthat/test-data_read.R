@@ -13,10 +13,14 @@ skip_if_offline()
 # csv -------------------------
 
 test_that("data_read - csv", {
+  nullcon <- file(nullfile(), open = "wb")
+  sink(nullcon, type = "message")
   d <- data_read(
     "https://raw.githubusercontent.com/easystats/circus/main/data/bootstrapped.csv",
     verbose = FALSE
   )
+  sink(type = "message")
+  close(nullcon)
   expect_identical(dim(d), c(10000L, 4L))
 })
 
@@ -25,10 +29,14 @@ test_that("data_read - csv", {
 # csv -------------------------
 
 test_that("data_read, skip_empty", {
+  nullcon <- file(nullfile(), open = "wb")
+  sink(nullcon, type = "message")
   d <- data_read(
     "https://raw.githubusercontent.com/easystats/circus/main/data/test_skip_empty.csv",
     verbose = FALSE
   )
+  sink(type = "message")
+  close(nullcon)
   expect_identical(ncol(d), 3L)
   expect_identical(colnames(d), c("Var1", "Var2", "Var3"))
 })
@@ -417,7 +425,7 @@ test_that("data_read - RDS file, no data frame", {
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
-    expect_warning(
+    expect_message(expect_warning(
       {
         d <- data_read(
           temp_file,
@@ -425,7 +433,7 @@ test_that("data_read - RDS file, no data frame", {
         )
       },
       regex = "no data frame"
-    )
+    ))
     expect_s3_class(d, "lm")
   })
 })
