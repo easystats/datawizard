@@ -7,7 +7,7 @@
 \usage{
 data_to_wide(
   data,
-  by = NULL,
+  id_cols = NULL,
   values_from = "Value",
   names_from = "Name",
   names_sep = "_",
@@ -15,13 +15,12 @@ data_to_wide(
   names_glue = NULL,
   values_fill = NULL,
   verbose = TRUE,
-  id_cols = NULL,
   ...
 )
 
 reshape_wider(
   data,
-  by = NULL,
+  id_cols = NULL,
   values_from = "Value",
   names_from = "Name",
   names_sep = "_",
@@ -29,7 +28,6 @@ reshape_wider(
   names_glue = NULL,
   values_fill = NULL,
   verbose = TRUE,
-  id_cols = NULL,
   ...
 )
 }
@@ -37,14 +35,13 @@ reshape_wider(
 \item{data}{A data frame to convert to wide format, so that it has more
 columns and fewer rows post-widening than pre-widening.}
 
-\item{by, id_cols}{The name of the column that identifies the rows in the data
+\item{id_cols}{The name of the column that identifies the rows in the data
 by which observations are grouped and the gathered data is spread into new
 columns. Usually, this is a variable containing an ID for observations that
 have been repeatedly measured. If \code{NULL}, it will use all remaining columns
-that are not in \code{names_from} or \code{values_from} as ID columns. \code{by} can also
-be a character vector with more than one name of identifier columns. \code{id_cols}
-is an alias for \code{by} for those who are used to the syntax of \verb{tidyr::pivot_*()}
-functions. See also 'Details' and 'Examples'.}
+that are not in \code{names_from} or \code{values_from} as ID columns. \code{id_cols} can
+also be a character vector with more than one name of identifier columns. See
+also 'Details' and 'Examples'.}
 
 \item{values_from}{The name of the columns in the original data that contains
 the values used to fill the new columns created in the widened data.}
@@ -92,7 +89,7 @@ single row, with each measurement stored in a separate column. Thus, the
 necessary information for \code{data_to_wide()} is:
 \itemize{
 \item The name of the column(s) that identify the groups or repeated measurements
-(\code{by}, resp. its alias \code{id_cols}).
+(\code{id_cols}).
 \item The name of the column whose \emph{values} will become the new column names
 (\code{names_from}). Since these values may not necessarily reflect appropriate
 column names, you can use \code{names_prefix} to add a prefix to each newly
@@ -101,7 +98,7 @@ created column name.
 new columns that are created by \code{names_from}.
 }
 
-In other words: repeated measurements, as indicated by \code{by}, that are
+In other words: repeated measurements, as indicated by \code{id_cols}, that are
 saved into the column \code{values_from} will be spread into new columns, which
 will be named after the values in \code{names_from}. See also 'Examples'.
 }
@@ -125,7 +122,7 @@ data_long <- read.table(header = TRUE, text = "
 # converting long data into wide format
 data_to_wide(
   data_long,
-  by = "subject",
+  id_cols = "subject",
   names_from = "condition",
   values_from = "measurement"
 )
@@ -133,7 +130,7 @@ data_to_wide(
 # converting long data into wide format with custom column names
 data_to_wide(
   data_long,
-  by = "subject",
+  id_cols = "subject",
   names_from = "condition",
   values_from = "measurement",
   names_prefix = "Var.",
@@ -170,7 +167,7 @@ head(sleepstudy)
 
 data_to_wide(
   sleepstudy,
-  by = "Subject",
+  id_cols = "Subject",
   names_from = "Days",
   values_from = "Reaction"
 )
@@ -178,7 +175,7 @@ data_to_wide(
 # clearer column names
 data_to_wide(
   sleepstudy,
-  by = "Subject",
+  id_cols = "Subject",
   names_from = "Days",
   values_from = "Reaction",
   names_prefix = "Reaction_Day_"
@@ -192,7 +189,7 @@ d
 
 data_to_wide(
   d,
-  by = "Subject",
+  id_cols = "Subject",
   names_from = "Days",
   values_from = "Reaction",
   names_prefix = "Reaction_Day_"
@@ -201,7 +198,7 @@ data_to_wide(
 # filling missing values with 0
 data_to_wide(
   d,
-  by = "Subject",
+  id_cols = "Subject",
   names_from = "Days",
   values_from = "Reaction",
   names_prefix = "Reaction_Day_",

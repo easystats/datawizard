@@ -6,14 +6,13 @@
 #'
 #' @param data A data frame to convert to wide format, so that it has more
 #' columns and fewer rows post-widening than pre-widening.
-#' @param by,id_cols The name of the column that identifies the rows in the data
+#' @param id_cols The name of the column that identifies the rows in the data
 #' by which observations are grouped and the gathered data is spread into new
 #' columns. Usually, this is a variable containing an ID for observations that
 #' have been repeatedly measured. If `NULL`, it will use all remaining columns
-#' that are not in `names_from` or `values_from` as ID columns. `by` can also
-#' be a character vector with more than one name of identifier columns. `id_cols`
-#' is an alias for `by` for those who are used to the syntax of `tidyr::pivot_*()`
-#' functions. See also 'Details' and 'Examples'.
+#' that are not in `names_from` or `values_from` as ID columns. `id_cols` can
+#' also be a character vector with more than one name of identifier columns. See
+#' also 'Details' and 'Examples'.
 #' @param names_from The name of the column in the original data whose values
 #' will be used for naming the new columns created in the widened data. Each
 #' unique value in this column will become the name of one of these new columns.
@@ -47,7 +46,7 @@
 #' necessary information for `data_to_wide()` is:
 #'
 #' - The name of the column(s) that identify the groups or repeated measurements
-#'   (`by`, resp. its alias `id_cols`).
+#'   (`id_cols`).
 #' - The name of the column whose _values_ will become the new column names
 #'   (`names_from`). Since these values may not necessarily reflect appropriate
 #'   column names, you can use `names_prefix` to add a prefix to each newly
@@ -55,7 +54,7 @@
 #' - The name of the column that contains the values (`values_from`) for the
 #'   new columns that are created by `names_from`.
 #'
-#' In other words: repeated measurements, as indicated by `by`, that are
+#' In other words: repeated measurements, as indicated by `id_cols`, that are
 #' saved into the column `values_from` will be spread into new columns, which
 #' will be named after the values in `names_from`. See also 'Examples'.
 #'
@@ -78,7 +77,7 @@
 #' # converting long data into wide format
 #' data_to_wide(
 #'   data_long,
-#'   by = "subject",
+#'   id_cols = "subject",
 #'   names_from = "condition",
 #'   values_from = "measurement"
 #' )
@@ -86,7 +85,7 @@
 #' # converting long data into wide format with custom column names
 #' data_to_wide(
 #'   data_long,
-#'   by = "subject",
+#'   id_cols = "subject",
 #'   names_from = "condition",
 #'   values_from = "measurement",
 #'   names_prefix = "Var.",
@@ -123,7 +122,7 @@
 #'
 #' data_to_wide(
 #'   sleepstudy,
-#'   by = "Subject",
+#'   id_cols = "Subject",
 #'   names_from = "Days",
 #'   values_from = "Reaction"
 #' )
@@ -131,7 +130,7 @@
 #' # clearer column names
 #' data_to_wide(
 #'   sleepstudy,
-#'   by = "Subject",
+#'   id_cols = "Subject",
 #'   names_from = "Days",
 #'   values_from = "Reaction",
 #'   names_prefix = "Reaction_Day_"
@@ -145,7 +144,7 @@
 #'
 #' data_to_wide(
 #'   d,
-#'   by = "Subject",
+#'   id_cols = "Subject",
 #'   names_from = "Days",
 #'   values_from = "Reaction",
 #'   names_prefix = "Reaction_Day_"
@@ -154,7 +153,7 @@
 #' # filling missing values with 0
 #' data_to_wide(
 #'   d,
-#'   by = "Subject",
+#'   id_cols = "Subject",
 #'   names_from = "Days",
 #'   values_from = "Reaction",
 #'   names_prefix = "Reaction_Day_",
@@ -163,7 +162,7 @@
 #' @inherit data_rename seealso
 #' @export
 data_to_wide <- function(data,
-                         by = NULL,
+                         id_cols = NULL,
                          values_from = "Value",
                          names_from = "Name",
                          names_sep = "_",
@@ -171,15 +170,9 @@ data_to_wide <- function(data,
                          names_glue = NULL,
                          values_fill = NULL,
                          verbose = TRUE,
-                         id_cols = NULL,
                          ...) {
-  # handle alias
-  if (!is.null(id_cols)) {
-    by <- id_cols
-  }
-
-  if (is.null(by)) {
-    by <- setdiff(names(data), c(names_from, values_from))
+  if (is.null(id_cols)) {
+    id_cols <- setdiff(names(data), c(names_from, values_from))
   }
 
   # save custom attributes
@@ -197,7 +190,7 @@ data_to_wide <- function(data,
 
   variable_attr <- lapply(data, attributes)
 
-  not_unstacked <- data[, by, drop = FALSE]
+  not_unstacked <- data[, id_cols, drop = FALSE]
   not_unstacked <- unique(not_unstacked)
 
   # unstack doesn't create NAs for combinations that don't exist (contrary to
@@ -207,10 +200,10 @@ data_to_wide <- function(data,
 
   # create an id with all variables that are not in names_from or values_from
   # so that we can create missing combinations between this id and names_from
-  if (length(by) > 1L) {
-    new_data$temporary_id <- do.call(paste, c(new_data[, by, drop = FALSE], sep = "_"))
-  } else if (length(by) == 1L) {
-    new_data$temporary_id <- new_data[[by]]
+  if (length(id_cols) > 1L) {
+    new_data$temporary_id <- do.call(paste, c(new_data[, id_cols, drop = FALSE], sep = "_"))
+  } else if (length(id_cols) == 1L) {
+    new_data$temporary_id <- new_data[[id_cols]]
   } else {
     new_data$temporary_id <- seq_len(nrow(new_data))
   }
@@ -221,7 +214,7 @@ data_to_wide <- function(data,
   n_rows_per_group <- table(new_data$temporary_id)
   n_values_per_group <- insight::n_unique(n_rows_per_group)
 
-  not_all_cols_are_selected <- length(by) > 0L
+  not_all_cols_are_selected <- length(id_cols) > 0L
 
   incomplete_groups <-
     (n_values_per_group > 1L &&
@@ -263,7 +256,7 @@ data_to_wide <- function(data,
 
     # creation of missing combinations was done with a temporary id, so need
     # to fill columns that are not selected in names_from or values_from
-    new_data[, by] <- lapply(by, function(x) {
+    new_data[, id_cols] <- lapply(id_cols, function(x) {
       data <- data_arrange(new_data, c("temporary_id_2", x))
       ind <- which(!is.na(data[[x]]))
       rep_times <- diff(c(ind, length(data[[x]]) + 1))

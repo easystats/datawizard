@@ -14,7 +14,7 @@ test_that("data_to_wide works", {
       long_data,
       names_from = "name",
       values_from = "value",
-      by = "Row_ID"
+      id_cols = "Row_ID"
     ),
     data.frame(
       Row_ID = c(1, 2, 3, 4, 5),
@@ -33,7 +33,7 @@ test_that("data_to_wide works", {
       long_data,
       names_from = "name",
       values_from = "value",
-      by = "Row_ID"
+      id_cols = "Row_ID"
     ),
     regexp = "Some values of the columns specified in `names_from`"
   )
@@ -289,7 +289,7 @@ test_that("data_to_wide, by works correctly, #293", {
     ),
     data_to_wide(
       updates,
-      by = "county",
+      id_cols = "county",
       names_from = "system",
       values_from = "value"
     )
@@ -456,7 +456,7 @@ test_that("data_to_wide, names_glue works", {
 
   y <- df %>%
     data_to_wide(
-      by = "food",
+      id_cols = "food",
       names_from = c("car", "binary"),
       names_glue = "{binary}_{car}",
       values_from = "fun"
