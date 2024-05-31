@@ -105,7 +105,7 @@ data_read <- function(path,
     por = .read_spss(path, encoding, convert_factors, verbose, ...),
     dta = .read_stata(path, encoding, convert_factors, verbose, ...),
     sas7bdat = .read_sas(path, path_catalog, encoding, convert_factors, verbose, ...),
-    .read_unknown(path, convert_factors, verbose, ...)
+    .read_unknown(path, file_type, convert_factors, verbose, ...)
   )
 
   # tell user about empty columns
@@ -288,12 +288,18 @@ data_read <- function(path,
 }
 
 
-.read_unknown <- function(path, convert_factors, verbose, ...) {
-  insight::check_if_installed("rio", reason = paste0("to read files of type '", .file_ext(path), "'"))
+.read_unknown <- function(path, file_type, convert_factors, verbose, ...) {
+  insight::check_if_installed("rio", reason = paste0("to read files of type '", file_type, "'"))
   if (verbose) {
     insight::format_alert("Reading data...")
   }
-  out <- rio::import(file = path, ...)
+  # set up arguments. for RDS, we set true = TRUE, to avoid warnings
+  rio_args <- list(file = path)
+  # check if we have RDS, and if so, add trust = TRUE
+  if (file_type == "rds") {
+    rio_args$trust <- TRUE
+  }
+  out <- do.call(rio::import, c(rio_args, list(...)))
 
   # for "unknown" data formats (like .RDS), which still can be imported via
   # "rio::import()", we must check whether we actually have a data frame or
