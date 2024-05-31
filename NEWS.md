@@ -23,9 +23,6 @@ CHANGES
   If you recode into a numeric variable, and one of the recode values is `NA`,
   you no longer need to use `NA_real_` for numeric `NA` values.
 
-* `by` was added as an alias for `id_cols` in `data_to_wide()`, following the
-  renaming of other arguments in order to gain consistency across packages.
-
 * Improved documentation for some functions.
 
 BUG FIXES
