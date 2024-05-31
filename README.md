@@ -321,7 +321,7 @@ long_data <- data_to_long(wide_data, rows_to = "Row_ID") # Save row number
 data_to_wide(long_data,
   names_from = "name",
   values_from = "value",
-  by = "Row_ID"
+  id_cols = "Row_ID"
 )
 #>    Row_ID          X1          X2          X3         X4          X5
 #> 1       1 -0.08281164 -1.12490028 -0.70632036 -0.7027895  0.07633326

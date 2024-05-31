@@ -270,7 +270,7 @@ test_that("data_to_wide: fill values, #293", {
   )
 })
 
-test_that("data_to_wide, by works correctly, #293", {
+test_that("data_to_wide, id_cols works correctly, #293", {
   skip_if_not_installed("tidyr")
 
   updates <- tidyr::tibble(
