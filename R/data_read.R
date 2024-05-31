@@ -293,7 +293,7 @@ data_read <- function(path,
   if (verbose) {
     insight::format_alert("Reading data...")
   }
-  # set up arguments. for RDS, we set true = TRUE, to avoid warnings
+  # set up arguments. for RDS, we set trust = TRUE, to avoid warnings
   rio_args <- list(file = path)
   # check if we have RDS, and if so, add trust = TRUE
   if (file_type == "rds") {
