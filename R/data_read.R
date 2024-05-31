@@ -70,7 +70,7 @@
 #' factors, where imported value labels will be set as factor levels. If a
 #' numeric variable has _no_ value labels or less value labels than values, it
 #' is not converted to factor. In this case, value labels are preserved as
-#' `"labels"` attribute. Character vectors are preserved.  Use
+#' `"labels"` attribute. Character vectors are preserved. Use
 #' `convert_factors = FALSE` to remove the automatic conversion of numeric
 #' variables to factors.
 #'

@@ -244,7 +244,10 @@ data_write <- function(data,
         value_labels <- value_labels[value_labels %in% unique(i)]
 
         # guess variable type
-        if (!is.character(i)) {
+        if (is.character(i)) {
+          # we need this to drop haven-specific class attributes
+          i <- as.character(i)
+        } else {
           # if all values are labelled, we assume factor. Use labels as levels
           if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
             if (is.numeric(i)) {
@@ -257,9 +260,6 @@ data_write <- function(data,
             # else, fall back to numeric
             i <- as.numeric(as.character(i))
           }
-        } else {
-          # we need this to drop haven-specific class attributes
-          i <- as.character(i)
         }
         # add back variable label
         attr(i, "label") <- variable_labels
