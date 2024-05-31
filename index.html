@@ -5,7 +5,6 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="A lightweight package to assist in key steps involved in any data analysis workflow: (1) wrangling the raw data to get it in the needed form, (2) applying preprocessing steps and statistical transformations, and (3) compute statistical summaries of data properties and distributions. It is also the data wrangling backend for packages in easystats ecosystem. References: Patil et al. (2022) &lt;doi:10.21105/joss.04684&gt;.">
 <title>Easy Data Wrangling and Statistical Transformations • datawizard</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -13,20 +12,20 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
-<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="lightswitch.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Roboto-0.4.9/font.css" rel="stylesheet">
 <link href="deps/JetBrains_Mono-0.4.9/font.css" rel="stylesheet">
 <link href="deps/Roboto_Slab-0.4.9/font.css" rel="stylesheet">
-<!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Easy Data Wrangling and Statistical Transformations">
+<link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Easy Data Wrangling and Statistical Transformations">
+<meta name="description" content="A lightweight package to assist in key steps involved in any data analysis workflow: (1) wrangling the raw data to get it in the needed form, (2) applying preprocessing steps and statistical transformations, and (3) compute statistical summaries of data properties and distributions. It is also the data wrangling backend for packages in easystats ecosystem. References: Patil et al. (2022) &lt;doi:10.21105/joss.04684&gt;.">
 <meta property="og:description" content="A lightweight package to assist in key steps involved in any data analysis workflow: (1) wrangling the raw data to get it in the needed form, (2) applying preprocessing steps and statistical transformations, and (3) compute statistical summaries of data properties and distributions. It is also the data wrangling backend for packages in easystats ecosystem. References: Patil et al. (2022) &lt;doi:10.21105/joss.04684&gt;.">
 <meta property="og:image" content="https://easystats.github.io/datawizard/reference/figures/card.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@easystats4u">
 <meta name="twitter:site" content="@easystats4u">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -202,8 +201,9 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># find column names matching a pattern</span></span>
 <span><span class="fu"><a href="reference/extract_column_names.html">extract_column_names</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu">starts_with</span><span class="op">(</span><span class="st">"Sepal"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Sepal.Length" "Sepal.Width"</span></span>
-<span></span>
+<span><span class="co">#&gt; [1] "Sepal.Length" "Sepal.Width"</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># return data columns matching a pattern</span></span>
 <span><span class="fu"><a href="reference/extract_column_names.html">data_select</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu">starts_with</span><span class="op">(</span><span class="st">"Sepal"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Sepal.Length Sepal.Width</span></span>
@@ -214,11 +214,12 @@
 <span><span class="co">#&gt; 5          5.0         3.6</span></span>
 <span><span class="co">#&gt; 6          5.4         3.9</span></span></code></pre></div>
 <p>It is also possible to extract one or more variables:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># single variable</span></span>
 <span><span class="fu"><a href="reference/data_extract.html">data_extract</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"gear"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] 4 4 4 3 3 3 3 4 4 4 4 3 3 3 3 3 3 4 4 4 3 3 3 3 3 4 5 5 5 5 5 4</span></span>
-<span></span>
+<span><span class="co">#&gt;  [1] 4 4 4 3 3 3 3 4 4 4 4 3 3 3 3 3 3 4 4 4 3 3 3 3 3 4 5 5 5 5 5 4</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># more variables</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="reference/data_extract.html">data_extract</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu">ends_with</span><span class="op">(</span><span class="st">"Width"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Sepal.Width Petal.Width</span></span>
@@ -229,7 +230,7 @@
 <span><span class="co">#&gt; 5         3.6         0.2</span></span>
 <span><span class="co">#&gt; 6         3.9         0.4</span></span></code></pre></div>
 <p>Due to the consistent API, removing variables is just as simple:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="reference/data_relocate.html">data_remove</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu">starts_with</span><span class="op">(</span><span class="st">"Sepal"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Petal.Length Petal.Width Species</span></span>
 <span><span class="co">#&gt; 1          1.4         0.2  setosa</span></span>
@@ -242,7 +243,7 @@
 <div class="section level3">
 <h3 id="reorder-or-rename">Reorder or rename<a class="anchor" aria-label="anchor" href="#reorder-or-rename"></a>
 </h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="reference/data_relocate.html">data_relocate</a></span><span class="op">(</span><span class="va">iris</span>, select <span class="op">=</span> <span class="st">"Species"</span>, before <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Species Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
 <span><span class="co">#&gt; 1  setosa          5.1         3.5          1.4         0.2</span></span>
@@ -251,7 +252,7 @@
 <span><span class="co">#&gt; 4  setosa          4.6         3.1          1.5         0.2</span></span>
 <span><span class="co">#&gt; 5  setosa          5.0         3.6          1.4         0.2</span></span>
 <span><span class="co">#&gt; 6  setosa          5.4         3.9          1.7         0.4</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="reference/data_rename.html">data_rename</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Sepal.Width"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"length"</span>, <span class="st">"width"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   length width Petal.Length Petal.Width Species</span></span>
 <span><span class="co">#&gt; 1    5.1   3.5          1.4         0.2  setosa</span></span>
@@ -264,7 +265,7 @@
 <div class="section level3">
 <h3 id="merge">Merge<a class="anchor" aria-label="anchor" href="#merge"></a>
 </h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span><span class="op">)</span>, c <span class="op">=</span> <span class="fl">5</span><span class="op">:</span><span class="fl">7</span>, id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>c <span class="op">=</span> <span class="fl">6</span><span class="op">:</span><span class="fl">8</span>, d <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"f"</span>, <span class="st">"g"</span>, <span class="st">"h"</span><span class="op">)</span>, e <span class="op">=</span> <span class="fl">100</span><span class="op">:</span><span class="fl">102</span>, id <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span>
 <span></span>
@@ -272,46 +273,54 @@
 <span><span class="co">#&gt;   a b c id</span></span>
 <span><span class="co">#&gt; 1 1 a 5  1</span></span>
 <span><span class="co">#&gt; 2 2 b 6  2</span></span>
-<span><span class="co">#&gt; 3 3 c 7  3</span></span>
-<span><span class="va">y</span></span>
+<span><span class="co">#&gt; 3 3 c 7  3</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">y</span></span>
 <span><span class="co">#&gt;   c d   e id</span></span>
 <span><span class="co">#&gt; 1 6 f 100  2</span></span>
 <span><span class="co">#&gt; 2 7 g 101  3</span></span>
-<span><span class="co">#&gt; 3 8 h 102  4</span></span>
-<span></span>
+<span><span class="co">#&gt; 3 8 h 102  4</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="reference/data_merge.html">data_merge</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    a    b c id    d   e</span></span>
 <span><span class="co">#&gt; 3  1    a 5  1 &lt;NA&gt;  NA</span></span>
 <span><span class="co">#&gt; 1  2    b 6  2    f 100</span></span>
 <span><span class="co">#&gt; 2  3    c 7  3    g 101</span></span>
-<span><span class="co">#&gt; 4 NA &lt;NA&gt; 8  4    h 102</span></span>
-<span></span>
+<span><span class="co">#&gt; 4 NA &lt;NA&gt; 8  4    h 102</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="reference/data_merge.html">data_merge</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"left"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   a b c id    d   e</span></span>
 <span><span class="co">#&gt; 3 1 a 5  1 &lt;NA&gt;  NA</span></span>
 <span><span class="co">#&gt; 1 2 b 6  2    f 100</span></span>
-<span><span class="co">#&gt; 2 3 c 7  3    g 101</span></span>
-<span></span>
+<span><span class="co">#&gt; 2 3 c 7  3    g 101</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="reference/data_merge.html">data_merge</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    a    b c id d   e</span></span>
 <span><span class="co">#&gt; 1  2    b 6  2 f 100</span></span>
 <span><span class="co">#&gt; 2  3    c 7  3 g 101</span></span>
-<span><span class="co">#&gt; 3 NA &lt;NA&gt; 8  4 h 102</span></span>
-<span></span>
+<span><span class="co">#&gt; 3 NA &lt;NA&gt; 8  4 h 102</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="reference/data_merge.html">data_merge</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"semi"</span>, by <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   a b c id</span></span>
 <span><span class="co">#&gt; 2 2 b 6  2</span></span>
-<span><span class="co">#&gt; 3 3 c 7  3</span></span>
-<span></span>
+<span><span class="co">#&gt; 3 3 c 7  3</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="reference/data_merge.html">data_merge</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"anti"</span>, by <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   a b c id</span></span>
-<span><span class="co">#&gt; 1 1 a 5  1</span></span>
-<span></span>
+<span><span class="co">#&gt; 1 1 a 5  1</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="reference/data_merge.html">data_merge</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"inner"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   a b c id d   e</span></span>
 <span><span class="co">#&gt; 1 2 b 6  2 f 100</span></span>
-<span><span class="co">#&gt; 2 3 c 7  3 g 101</span></span>
-<span></span>
+<span><span class="co">#&gt; 2 3 c 7  3 g 101</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="reference/data_merge.html">data_merge</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="st">"bind"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    a    b c id    d   e</span></span>
 <span><span class="co">#&gt; 1  1    a 5  1 &lt;NA&gt;  NA</span></span>
@@ -326,7 +335,7 @@
 </h3>
 <p>A common data wrangling task is to reshape data.</p>
 <p>Either to go from wide/Cartesian to long/tidy format</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wide_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="reference/data_to_long.html">data_to_long</a></span><span class="op">(</span><span class="va">wide_data</span><span class="op">)</span><span class="op">)</span></span>
@@ -338,7 +347,7 @@
 <span><span class="co">#&gt; 5   X5  0.07633326</span></span>
 <span><span class="co">#&gt; 6   X1  1.93468099</span></span></code></pre></div>
 <p>or the other way</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">long_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/data_to_long.html">data_to_long</a></span><span class="op">(</span><span class="va">wide_data</span>, rows_to <span class="op">=</span> <span class="st">"Row_ID"</span><span class="op">)</span> <span class="co"># Save row number</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/data_to_wide.html">data_to_wide</a></span><span class="op">(</span><span class="va">long_data</span>,</span>
@@ -361,7 +370,7 @@
 <div class="section level3">
 <h3 id="empty-rows-and-columns">Empty rows and columns<a class="anchor" aria-label="anchor" href="#empty-rows-and-columns"></a>
 </h3>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="cn">NA</span>, <span class="fl">5</span><span class="op">)</span>,</span>
 <span>  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="cn">NA</span>, <span class="fl">3</span>, <span class="cn">NA</span>, <span class="fl">5</span><span class="op">)</span>,</span>
@@ -375,15 +384,18 @@
 <span><span class="co">#&gt; 2  2 NA NA NA</span></span>
 <span><span class="co">#&gt; 3  3  3 NA  3</span></span>
 <span><span class="co">#&gt; 4 NA NA NA NA</span></span>
-<span><span class="co">#&gt; 5  5  5 NA  5</span></span>
-<span></span>
+<span><span class="co">#&gt; 5  5  5 NA  5</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># indices of empty columns or rows</span></span>
 <span><span class="fu"><a href="reference/remove_empty.html">empty_columns</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">)</span></span>
 <span><span class="co">#&gt; c </span></span>
-<span><span class="co">#&gt; 3</span></span>
-<span><span class="fu"><a href="reference/remove_empty.html">empty_rows</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 4</span></span>
-<span></span>
+<span><span class="co">#&gt; 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/remove_empty.html">empty_rows</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 4</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># remove empty columns or rows</span></span>
 <span><span class="fu"><a href="reference/remove_empty.html">remove_empty_columns</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    a  b  d</span></span>
@@ -391,14 +403,16 @@
 <span><span class="co">#&gt; 2  2 NA NA</span></span>
 <span><span class="co">#&gt; 3  3  3  3</span></span>
 <span><span class="co">#&gt; 4 NA NA NA</span></span>
-<span><span class="co">#&gt; 5  5  5  5</span></span>
-<span><span class="fu"><a href="reference/remove_empty.html">remove_empty_rows</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 5  5  5  5</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/remove_empty.html">remove_empty_rows</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   a  b  c  d</span></span>
 <span><span class="co">#&gt; 1 1  1 NA  1</span></span>
 <span><span class="co">#&gt; 2 2 NA NA NA</span></span>
 <span><span class="co">#&gt; 3 3  3 NA  3</span></span>
-<span><span class="co">#&gt; 5 5  5 NA  5</span></span>
-<span></span>
+<span><span class="co">#&gt; 5 5  5 NA  5</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># remove empty columns and rows</span></span>
 <span><span class="fu"><a href="reference/remove_empty.html">remove_empty</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   a  b  d</span></span>
@@ -410,15 +424,16 @@
 <div class="section level3">
 <h3 id="recode-or-cut-dataframe">Recode or cut dataframe<a class="anchor" aria-label="anchor" href="#recode-or-cut-dataframe"></a>
 </h3>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, size <span class="op">=</span> <span class="fl">50</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span><span class="co">#&gt; x</span></span>
 <span><span class="co">#&gt;  1  2  3  4  5  6  7  8  9 10 </span></span>
-<span><span class="co">#&gt;  2  3  5  3  7  5  5  2 11  7</span></span>
-<span></span>
+<span><span class="co">#&gt;  2  3  5  3  7  5  5  2 11  7</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># cut into 3 groups, based on distribution (quantiles)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="fu"><a href="reference/categorize.html">categorize</a></span><span class="op">(</span><span class="va">x</span>, split <span class="op">=</span> <span class="st">"quantile"</span>, n_groups <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -434,7 +449,7 @@
 <h3 id="standardize">Standardize<a class="anchor" aria-label="anchor" href="#standardize"></a>
 </h3>
 <p>For example, to standardize (<em>z</em>-score) data:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># before</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">swiss</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    Fertility      Agriculture     Examination      Education    </span></span>
@@ -450,8 +465,9 @@
 <span><span class="co">#&gt;  Median : 15.140   Median :20.00   </span></span>
 <span><span class="co">#&gt;  Mean   : 41.144   Mean   :19.94   </span></span>
 <span><span class="co">#&gt;  3rd Qu.: 93.125   3rd Qu.:21.70   </span></span>
-<span><span class="co">#&gt;  Max.   :100.000   Max.   :26.60</span></span>
-<span></span>
+<span><span class="co">#&gt;  Max.   :100.000   Max.   :26.60</span></span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># after</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="reference/standardize.html">standardize</a></span><span class="op">(</span><span class="va">swiss</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    Fertility         Agriculture       Examination         Education      </span></span>
@@ -473,7 +489,7 @@
 <h3 id="winsorize">Winsorize<a class="anchor" aria-label="anchor" href="#winsorize"></a>
 </h3>
 <p>To winsorize data:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># before</span></span>
 <span><span class="va">anscombe</span></span>
 <span><span class="co">#&gt;    x1 x2 x3 x4    y1   y2    y3    y4</span></span>
@@ -487,8 +503,9 @@
 <span><span class="co">#&gt; 8   4  4  4 19  4.26 3.10  5.39 12.50</span></span>
 <span><span class="co">#&gt; 9  12 12 12  8 10.84 9.13  8.15  5.56</span></span>
 <span><span class="co">#&gt; 10  7  7  7  8  4.82 7.26  6.42  7.91</span></span>
-<span><span class="co">#&gt; 11  5  5  5  8  5.68 4.74  5.73  6.89</span></span>
-<span></span>
+<span><span class="co">#&gt; 11  5  5  5  8  5.68 4.74  5.73  6.89</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># after</span></span>
 <span><span class="fu"><a href="reference/winsorize.html">winsorize</a></span><span class="op">(</span><span class="va">anscombe</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    x1 x2 x3 x4   y1   y2   y3   y4</span></span>
@@ -508,7 +525,7 @@
 <h3 id="center">Center<a class="anchor" aria-label="anchor" href="#center"></a>
 </h3>
 <p>To grand-mean center data</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/center.html">center</a></span><span class="op">(</span><span class="va">anscombe</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    x1 x2 x3 x4          y1         y2    y3         y4</span></span>
 <span><span class="co">#&gt; 1   1  1  1 -1  0.53909091  1.6390909 -0.04 -0.9209091</span></span>
@@ -527,7 +544,7 @@
 <h3 id="ranktransform">Ranktransform<a class="anchor" aria-label="anchor" href="#ranktransform"></a>
 </h3>
 <p>To rank-transform data:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># before</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">trees</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Girth Height Volume</span></span>
@@ -536,8 +553,9 @@
 <span><span class="co">#&gt; 3   8.8     63   10.2</span></span>
 <span><span class="co">#&gt; 4  10.5     72   16.4</span></span>
 <span><span class="co">#&gt; 5  10.7     81   18.8</span></span>
-<span><span class="co">#&gt; 6  10.8     83   19.7</span></span>
-<span></span>
+<span><span class="co">#&gt; 6  10.8     83   19.7</span></span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># after</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="reference/ranktransform.html">ranktransform</a></span><span class="op">(</span><span class="va">trees</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Girth Height Volume</span></span>
@@ -552,7 +570,7 @@
 <h3 id="rescale">Rescale<a class="anchor" aria-label="anchor" href="#rescale"></a>
 </h3>
 <p>To rescale a numeric variable to a new range:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/rescale.html">change_scale</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1]  50  60 100   0  30</span></span>
 <span><span class="co">#&gt; (original range = -5 to 5)</span></span></code></pre></div>
@@ -560,15 +578,16 @@
 <div class="section level3">
 <h3 id="rotate-or-transpose">Rotate or transpose<a class="anchor" aria-label="anchor" href="#rotate-or-transpose"></a>
 </h3>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
 <span></span>
 <span><span class="va">x</span></span>
 <span><span class="co">#&gt;                mpg cyl disp  hp</span></span>
 <span><span class="co">#&gt; Mazda RX4     21.0   6  160 110</span></span>
 <span><span class="co">#&gt; Mazda RX4 Wag 21.0   6  160 110</span></span>
-<span><span class="co">#&gt; Datsun 710    22.8   4  108  93</span></span>
-<span></span>
+<span><span class="co">#&gt; Datsun 710    22.8   4  108  93</span></span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="reference/data_rotate.html">data_rotate</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      Mazda RX4 Mazda RX4 Wag Datsun 710</span></span>
 <span><span class="co">#&gt; mpg         21            21       22.8</span></span>
@@ -581,7 +600,7 @@
 <h2 id="data-properties">Data properties<a class="anchor" aria-label="anchor" href="#data-properties"></a>
 </h2>
 <p><code>datawizard</code> provides a way to provide comprehensive descriptive summary for all variables in a dataframe:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/describe_distribution.html">describe_distribution</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Variable     | Mean |   SD |  IQR |        Range | Skewness | Kurtosis |   n | n_Missing</span></span>
@@ -591,13 +610,13 @@
 <span><span class="co">#&gt; Petal.Length | 3.76 | 1.77 | 3.52 | [1.00, 6.90] |    -0.27 |    -1.40 | 150 |         0</span></span>
 <span><span class="co">#&gt; Petal.Width  | 1.20 | 0.76 | 1.50 | [0.10, 2.50] |    -0.10 |    -1.34 | 150 |         0</span></span></code></pre></div>
 <p>Or even just a variable</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/describe_distribution.html">describe_distribution</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">wt</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Mean |   SD |  IQR |        Range | Skewness | Kurtosis |  n | n_Missing</span></span>
 <span><span class="co">#&gt; ------------------------------------------------------------------------</span></span>
 <span><span class="co">#&gt; 3.22 | 0.98 | 1.19 | [1.51, 5.42] |     0.47 |     0.42 | 32 |         0</span></span></code></pre></div>
 <p>There are also some additional data properties that can be computed using this package.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="op">-</span><span class="fl">10</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">^</span><span class="fl">3</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">0</span>, <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/smoothness.html">smoothness</a></span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"diff"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1.791243</span></span>
@@ -614,7 +633,7 @@
 <li>the following arguments are arguments related to the specific tasks of the functions</li>
 </ol>
 <p>Most important, functions that accept data frames usually have this as their first argument, and also return a (modified) data frame again. Thus, <a href="https://easystats.github.io/datawizard/">datawizard</a> integrates smoothly into a “pipe-workflow”.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">iris</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># all rows where Species is "versicolor" or "virginica"</span></span>
 <span>  <span class="fu"><a href="reference/data_match.html">data_filter</a></span><span class="op">(</span><span class="va">Species</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"versicolor"</span>, <span class="st">"virginica"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
