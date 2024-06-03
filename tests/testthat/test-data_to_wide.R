@@ -35,7 +35,7 @@ test_that("data_to_wide works", {
       values_from = "value",
       id_cols = "Row_ID"
     ),
-    regexp = "Some values of the columns specified in 'names_from'"
+    regexp = "Some values of the columns specified in `names_from`"
   )
 })
 
@@ -44,12 +44,12 @@ test_that("data_to_wide works", {
 test_that("data_to_wide, names_prefix works", {
   skip_if_not_installed("tidyr")
 
-  out <- tidyr::fish_encounters %>%
-    data_to_wide(
-      names_from = "station",
-      values_from = "seen",
-      names_prefix = "foo_"
-    )
+  out <- data_to_wide(
+    tidyr::fish_encounters,
+    names_from = "station",
+    values_from = "seen",
+    names_prefix = "foo_"
+  )
 
   expect_named(
     out,
@@ -67,12 +67,12 @@ test_that("data_to_wide, values_fill works", {
 
   ### Should be numeric
   expect_identical(
-    data %>%
-      data_to_wide(
-        names_from = "station",
-        values_from = "seen",
-        values_fill = 1
-      ),
+    data_to_wide(
+      data,
+      names_from = "station",
+      values_from = "seen",
+      values_fill = 1
+    ),
     tidyr::tibble(
       fish = factor(
         c("4842", "4843", "4844"),
@@ -91,21 +91,21 @@ test_that("data_to_wide, values_fill works", {
     )
   )
   expect_error(
-    data %>%
-      data_to_wide(
-        names_from = "station",
-        values_from = "seen",
-        values_fill = "a"
-      ),
+    data_to_wide(
+      data,
+      names_from = "station",
+      values_from = "seen",
+      values_fill = "a"
+    ),
     regexp = "must be of type numeric"
   )
   expect_error(
-    data %>%
-      data_to_wide(
-        names_from = "station",
-        values_from = "seen",
-        values_fill = factor("a")
-      ),
+    data_to_wide(
+      data,
+      names_from = "station",
+      values_from = "seen",
+      values_fill = factor("a")
+    ),
     regexp = "must be of type numeric"
   )
 
@@ -120,12 +120,12 @@ test_that("data_to_wide, values_fill works", {
   contacts$person_id <- cumsum(contacts$field == "name")
 
   expect_identical(
-    contacts %>%
-      data_to_wide(
-        names_from = "field",
-        values_from = "value",
-        values_fill = "foo"
-      ),
+    data_to_wide(
+      contacts,
+      names_from = "field",
+      values_from = "value",
+      values_fill = "foo"
+    ),
     tidyr::tibble(
       person_id = 1:3,
       name = c("Jiena McLellan", "John Smith", "Huxley Ratcliffe"),
@@ -133,42 +133,42 @@ test_that("data_to_wide, values_fill works", {
     )
   )
   expect_error(
-    contacts %>%
-      data_to_wide(
-        names_from = "field",
-        values_from = "value",
-        values_fill = 1
-      ),
+    data_to_wide(
+      contacts,
+      names_from = "field",
+      values_from = "value",
+      values_fill = 1
+    ),
     regexp = "must be of type character"
   )
   expect_error(
-    contacts %>%
-      data_to_wide(
-        names_from = "field",
-        values_from = "value",
-        values_fill = factor("a")
-      ),
+    data_to_wide(
+      contacts,
+      names_from = "field",
+      values_from = "value",
+      values_fill = factor("a")
+    ),
     regexp = "must be of type character"
   )
 
   ### Should be factor
   contacts$value <- as.factor(contacts$value)
   expect_error(
-    contacts %>%
-      data_to_wide(
-        names_from = "field",
-        values_from = "value",
-        values_fill = "a"
-      ),
+    data_to_wide(
+      contacts,
+      names_from = "field",
+      values_from = "value",
+      values_fill = "a"
+    ),
     regexp = "must be of type factor"
   )
   expect_error(
-    contacts %>%
-      data_to_wide(
-        names_from = "field",
-        values_from = "value",
-        values_fill = 1
-      ),
+    data_to_wide(
+      contacts,
+      names_from = "field",
+      values_from = "value",
+      values_fill = 1
+    ),
     regexp = "must be of type factor"
   )
 })
@@ -177,12 +177,12 @@ test_that("data_to_wide, values_fill errors when length > 1", {
   skip_if_not_installed("tidyr")
 
   expect_error(
-    tidyr::fish_encounters %>%
-      data_to_wide(
-        names_from = "station",
-        values_from = "seen",
-        values_fill = c(1, 2)
-      ),
+    data_to_wide(
+      tidyr::fish_encounters,
+      names_from = "station",
+      values_from = "seen",
+      values_fill = c(1, 2)
+    ),
     regexp = "must be of length 1"
   )
 })
@@ -302,15 +302,19 @@ test_that("data_to_wide, id_cols works correctly, #293", {
 test_that("data_to_wide equivalent to pivot_wider: ex 1", {
   skip_if_not_installed("tidyr")
 
-  x <- tidyr::fish_encounters %>%
-    tidyr::pivot_wider(names_from = "station", values_from = "seen", values_fill = 0)
+  x <- tidyr::pivot_wider(
+    tidyr::fish_encounters,
+    names_from = "station",
+    values_from = "seen",
+    values_fill = 0
+  )
 
-  y <- tidyr::fish_encounters %>%
-    data_to_wide(
-      names_from = "station",
-      values_from = "seen",
-      values_fill = 0
-    )
+  y <- data_to_wide(
+    tidyr::fish_encounters,
+    names_from = "station",
+    values_from = "seen",
+    values_fill = 0
+  )
 
   expect_equal(x, y, ignore_attr = TRUE)
 })
@@ -394,11 +398,8 @@ test_that("data_to_wide equivalent to pivot_wider: ex 5", {
   )
   contacts$person_id <- cumsum(contacts$field == "name")
 
-  x <- contacts %>%
-    tidyr::pivot_wider(names_from = field, values_from = value)
-
-  y <- contacts %>%
-    data_to_wide(names_from = "field", values_from = "value")
+  x <- tidyr::pivot_wider(contacts, names_from = field, values_from = value)
+  y <- data_to_wide(contacts, names_from = "field", values_from = "value")
 
   expect_identical(x, y)
 })

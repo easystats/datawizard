@@ -4,11 +4,20 @@
 #' the number of rows. This is a dependency-free base-R equivalent of
 #' `tidyr::pivot_wider()`.
 #'
-#' @param data A data frame to pivot.
-#' @param id_cols The name of the column that identifies the rows. If `NULL`,
-#' it will use all the unique rows.
-#' @param names_from The name of the column that contains the levels to be
-#' used as future column names.
+#' @param data A data frame to convert to wide format, so that it has more
+#' columns and fewer rows post-widening than pre-widening.
+#' @param id_cols The name of the column that identifies the rows in the data
+#' by which observations are grouped and the gathered data is spread into new
+#' columns. Usually, this is a variable containing an ID for observations that
+#' have been repeatedly measured. If `NULL`, it will use all remaining columns
+#' that are not in `names_from` or `values_from` as ID columns. `id_cols` can
+#' also be a character vector with more than one name of identifier columns. See
+#' also 'Details' and 'Examples'.
+#' @param names_from The name of the column in the original data whose values
+#' will be used for naming the new columns created in the widened data. Each
+#' unique value in this column will become the name of one of these new columns.
+#' In case `names_prefix` is provided, column names will be concatenated with
+#' the string given in `names_prefix`.
 #' @param names_prefix String added to the start of every variable name. This is
 #'  particularly useful if `names_from` is a numeric vector and you want to create
 #'  syntactic variable names.
@@ -19,17 +28,37 @@
 #' [glue specification](https://glue.tidyverse.org/index.html) that uses the
 #' `names_from` columns to create custom column names. Note that the only
 #' delimiters supported by `names_glue` are curly brackets, `{` and `}`.
-#' @param values_from The name of the column that contains the values to be used
-#' as future variable values.
+#' @param values_from The name of the columns in the original data that contains
+#' the values used to fill the new columns created in the widened data.
 #' @param values_fill Optionally, a (scalar) value that will be used to replace
 #' missing values in the new columns created.
 #' @param verbose Toggle warnings.
 #' @param ... Not used for now.
 #'
-#' @return If a tibble was provided as input, `reshape_wider()` also returns a
+#' @return If a tibble was provided as input, `data_to_wide()` also returns a
 #' tibble. Otherwise, it returns a data frame.
 #'
-#' @examples
+#' @details
+#' Reshaping data into wide format usually means that the input data frame is
+#' in _long_ format, where multiple measurements taken on the same subject are
+#' stored in multiple rows. The wide format stores the same information in a
+#' single row, with each measurement stored in a separate column. Thus, the
+#' necessary information for `data_to_wide()` is:
+#'
+#' - The name of the column(s) that identify the groups or repeated measurements
+#'   (`id_cols`).
+#' - The name of the column whose _values_ will become the new column names
+#'   (`names_from`). Since these values may not necessarily reflect appropriate
+#'   column names, you can use `names_prefix` to add a prefix to each newly
+#'   created column name.
+#' - The name of the column that contains the values (`values_from`) for the
+#'   new columns that are created by `names_from`.
+#'
+#' In other words: repeated measurements, as indicated by `id_cols`, that are
+#' saved into the column `values_from` will be spread into new columns, which
+#' will be named after the values in `names_from`. See also 'Examples'.
+#'
+#' @examplesIf requireNamespace("lme4", quietly = TRUE)
 #' data_long <- read.table(header = TRUE, text = "
 #'  subject sex condition measurement
 #'        1   M   control         7.9
@@ -45,7 +74,7 @@
 #'        4   M     cond1        13.4
 #'        4   M     cond2        12.9")
 #'
-#'
+#' # converting long data into wide format
 #' data_to_wide(
 #'   data_long,
 #'   id_cols = "subject",
@@ -53,6 +82,7 @@
 #'   values_from = "measurement"
 #' )
 #'
+#' # converting long data into wide format with custom column names
 #' data_to_wide(
 #'   data_long,
 #'   id_cols = "subject",
@@ -62,13 +92,13 @@
 #'   names_sep = "."
 #' )
 #'
+#' # converting long data into wide format, combining multiple columns
 #' production <- expand.grid(
 #'   product = c("A", "B"),
 #'   country = c("AI", "EI"),
 #'   year = 2000:2014
 #' )
 #' production <- data_filter(production, (product == "A" & country == "AI") | product == "B")
-#'
 #' production$production <- rnorm(nrow(production))
 #'
 #' data_to_wide(
@@ -78,9 +108,59 @@
 #'   names_glue = "prod_{product}_{country}"
 #' )
 #'
+#' # using the "sleepstudy" dataset
+#' data(sleepstudy, package = "lme4")
+#'
+#' # the sleepstudy data contains repeated measurements of average reaction
+#' # times for each subjects over multiple days, in a sleep deprivation study.
+#' # It is in long-format, i.e. each row corresponds to a single measurement.
+#' # The variable "Days" contains the timepoint of the measurement, and
+#' # "Reaction" contains the measurement itself. Converting this data to wide
+#' # format will create a new column for each day, with the reaction time as the
+#' # value.
+#' head(sleepstudy)
+#'
+#' data_to_wide(
+#'   sleepstudy,
+#'   id_cols = "Subject",
+#'   names_from = "Days",
+#'   values_from = "Reaction"
+#' )
+#'
+#' # clearer column names
+#' data_to_wide(
+#'   sleepstudy,
+#'   id_cols = "Subject",
+#'   names_from = "Days",
+#'   values_from = "Reaction",
+#'   names_prefix = "Reaction_Day_"
+#' )
+#'
+#' # For unequal group sizes, missing information is filled with NA
+#' d <- subset(sleepstudy, Days %in% c(0, 1, 2, 3, 4))[c(1:9, 11:13, 16:17, 21), ]
+#'
+#' # long format, different number of "Subjects"
+#' d
+#'
+#' data_to_wide(
+#'   d,
+#'   id_cols = "Subject",
+#'   names_from = "Days",
+#'   values_from = "Reaction",
+#'   names_prefix = "Reaction_Day_"
+#' )
+#'
+#' # filling missing values with 0
+#' data_to_wide(
+#'   d,
+#'   id_cols = "Subject",
+#'   names_from = "Days",
+#'   values_from = "Reaction",
+#'   names_prefix = "Reaction_Day_",
+#'   values_fill = 0
+#' )
 #' @inherit data_rename seealso
 #' @export
-
 data_to_wide <- function(data,
                          id_cols = NULL,
                          values_from = "Value",
@@ -238,7 +318,7 @@ data_to_wide <- function(data,
   # stop if some column names would be duplicated (follow tidyr workflow)
   if (any(unstacked$col_order %in% current_colnames)) {
     insight::format_error(
-      "Some values of the columns specified in 'names_from' are already present as column names.",
+      "Some values of the columns specified in `names_from` are already present as column names.",
       paste0(
         "Either use `names_prefix` or rename the following columns: ",
         text_concatenate(current_colnames[which(current_colnames %in% unstacked$col_order)])

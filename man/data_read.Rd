@@ -123,7 +123,7 @@ their most appropriate type. The major difference to \code{rio::import()} is tha
 factors, where imported value labels will be set as factor levels. If a
 numeric variable has \emph{no} value labels or less value labels than values, it
 is not converted to factor. In this case, value labels are preserved as
-\code{"labels"} attribute. Character vectors are preserved.  Use
+\code{"labels"} attribute. Character vectors are preserved. Use
 \code{convert_factors = FALSE} to remove the automatic conversion of numeric
 variables to factors.
 }
