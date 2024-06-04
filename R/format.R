@@ -20,16 +20,16 @@ format.parameters_distribution <- function(x, digits = 2, format = NULL, ci_widt
     ci_lvl <- attributes(x)$ci
     centrality_ci <- attributes(x)$first_centrality
 
-    if (!is.null(centrality_ci)) {
-      ci_suffix <- paste0(" (", centrality_ci, ")")
-    } else {
+    if (is.null(centrality_ci)) {
       ci_suffix <- ""
+    } else {
+      ci_suffix <- paste0(" (", centrality_ci, ")")
     }
 
-    if (!is.null(ci_lvl)) {
-      colnames(x)[which(colnames(x) == "CI_low")] <- sprintf("%i%% CI%s", round(100 * ci_lvl), ci_suffix)
-    } else {
+    if (is.null(ci_lvl)) {
       colnames(x)[which(colnames(x) == "CI_low")] <- sprintf("CI%s", ci_suffix)
+    } else {
+      colnames(x)[which(colnames(x) == "CI_low")] <- sprintf("%i%% CI%s", round(100 * ci_lvl), ci_suffix)
     }
   }
 

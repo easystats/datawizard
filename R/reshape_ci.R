@@ -42,11 +42,11 @@ reshape_ci <- function(x, ci_type = "CI") {
 
     # Reshape
     if (length(unique(x$CI)) > 1) {
-      if (!"Parameter" %in% names(x)) {
+      if ("Parameter" %in% names(x)) {
+        remove_parameter <- FALSE
+      } else {
         x$Parameter <- NA
         remove_parameter <- TRUE
-      } else {
-        remove_parameter <- FALSE
       }
 
       x <- stats::reshape(
@@ -70,11 +70,11 @@ reshape_ci <- function(x, ci_type = "CI") {
 
     # Wide to long --------------
   } else {
-    if (!"Parameter" %in% names(x)) {
+    if ("Parameter" %in% names(x)) {
+      remove_parameter <- FALSE
+    } else {
       x$Parameter <- seq_len(nrow(x))
       remove_parameter <- TRUE
-    } else {
-      remove_parameter <- FALSE
     }
 
     lows <- grepl(paste0(ci_low, "_*"), names(x))
