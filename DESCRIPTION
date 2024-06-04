@@ -68,8 +68,6 @@ Suggests:
     tibble,
     tidyr,
     withr
-Remotes:
-    easystats/modelbased, easystats/insight
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
