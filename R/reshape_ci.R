@@ -42,11 +42,11 @@ reshape_ci <- function(x, ci_type = "CI") {
 
     # Reshape
     if (length(unique(x$CI)) > 1) {
-      if (!"Parameter" %in% names(x)) {
+      if ("Parameter" %in% names(x)) {
+        remove_parameter <- FALSE
+      } else {
         x$Parameter <- NA
         remove_parameter <- TRUE
-      } else {
-        remove_parameter <- FALSE
       }
 
       x <- stats::reshape(
@@ -70,17 +70,17 @@ reshape_ci <- function(x, ci_type = "CI") {
 
     # Wide to long --------------
   } else {
-    if (!"Parameter" %in% names(x)) {
+    if ("Parameter" %in% names(x)) {
+      remove_parameter <- FALSE
+    } else {
       x$Parameter <- seq_len(nrow(x))
       remove_parameter <- TRUE
-    } else {
-      remove_parameter <- FALSE
     }
 
     lows <- grepl(paste0(ci_low, "_*"), names(x))
     highs <- grepl(paste0(ci_high, "_*"), names(x))
     ci <- as.numeric(gsub(paste0(ci_low, "_"), "", names(x)[lows]))
-    if (paste0(ci, collapse = "-") != paste0(gsub(paste0(ci_high, "_"), "", names(x)[highs]), collapse = "-")) {
+    if (paste(ci, collapse = "-") != paste(gsub(paste0(ci_high, "_"), "", names(x)[highs]), collapse = "-")) {
       insight::format_error("Something went wrong in the CIs reshaping.")
       return(x)
     }
