@@ -15,7 +15,7 @@ models, which then can be used for multilevel modelling."><meta property="og:ima
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0</small>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -58,7 +58,7 @@ models, which then can be used for multilevel modelling."><meta property="og:ima
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Rescale design weights for multilevel analysis</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/rescale_weights.R" class="external-link"><code>R/rescale_weights.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/main/R/rescale_weights.R" class="external-link"><code>R/rescale_weights.R</code></a></small>
       <div class="d-none name"><code>rescale_weights.Rd</code></div>
     </div>
     <div class="ref-description section level2">
@@ -76,7 +76,7 @@ models, which then can be used for multilevel modelling.</p>
     </div>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
+<dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>A data frame.</p></dd>
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
 <dd><p>Variable names (as character vector, or as formula), indicating
@@ -96,8 +96,8 @@ combination from each group level of the variables in <code>by</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-<p><code>data</code>, including the new weighting variables: <code>pweights_a</code></p>
-<p>and <code>pweights_b</code>, which represent the rescaled design weights to use
+    <p><code>data</code>, including the new weighting variables: <code>pweights_a</code>
+and <code>pweights_b</code>, which represent the rescaled design weights to use
 in multilevel models (use these variables for the <code>weights</code> argument).</p>
     </div>
     <div class="section level2">

@@ -7,7 +7,7 @@ using the by argument."><meta property="og:image" content="https://easystats.git
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0</small>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -50,7 +50,7 @@ using the by argument."><meta property="og:image" content="https://easystats.git
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Partition data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/HEAD/R/data_partition.R" class="external-link"><code>R/data_partition.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/main/R/data_partition.R" class="external-link"><code>R/data_partition.R</code></a></small>
       <div class="d-none name"><code>data_partition.Rd</code></div>
     </div>
     <div class="ref-description section level2">
@@ -73,7 +73,7 @@ using the <code>by</code> argument.</p>
     </div>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
+<dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>A data frame, or an object that can be coerced to a data frame.</p></dd>
 <dt id="arg-proportion">proportion<a class="anchor" aria-label="anchor" href="#arg-proportion"></a></dt>
 <dd><p>Scalar (between 0 and 1) or numeric vector, indicating the
@@ -97,7 +97,7 @@ contains the row-id's.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-<p>A list of data frames. The list includes one training set per given
+    <p>A list of data frames. The list includes one training set per given
 proportion and the remaining data as test set. List elements of training
 sets are named after the given proportions (e.g., <code>$p_0.7</code>), the test set
 is named <code>$test</code>.</p>
