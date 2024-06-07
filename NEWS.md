@@ -3,7 +3,7 @@
 ## Changes
 
 * `data_select()` can directly rename selected variables when a named vector
-  is provided in `select`, e.g. `data_select(mtcars, c(new = "mpg", old = "cyl"))`.
+  is provided in `select`, e.g. `data_select(mtcars, c(new1 = "mpg", new2 = "cyl"))`.
 
 # datawizard 0.11.0
 
