@@ -83,7 +83,7 @@
     if (!is.null(new_names) && !is.null(names(new_names))) {
       # if so, copy names
       all_names <- names(new_names)
-      # if some of the element don't have a name, we set the value as name
+      # if some of the elements don't have a name, we set the value as name
       names(new_names)[!nzchar(all_names)] <- new_names[!nzchar(all_names)]
       # after inclusion and exclusion, the original values in "select"
       # may have changed, so we check that we only add names of valid values
