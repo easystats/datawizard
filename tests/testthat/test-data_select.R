@@ -106,22 +106,22 @@ test_that("data_select works with user-defined select-functions", {
 test_that("data_select works with negated select-functions", {
   expect_identical(
     data_select(iris, -is.numeric()),
-    iris[sapply(iris, function(i) !is.numeric(i))]
+    iris[sapply(iris, function(i) !is.numeric(i))] # nolint
   )
 
   expect_identical(
     data_select(iris, -is.numeric),
-    iris[sapply(iris, function(i) !is.numeric(i))]
+    iris[sapply(iris, function(i) !is.numeric(i))] # nolint
   )
 
   expect_identical(
     data_select(iris, -is.factor()),
-    iris[sapply(iris, function(i) !is.factor(i))]
+    iris[sapply(iris, function(i) !is.factor(i))] # nolint
   )
 
   expect_identical(
     data_select(iris, -is.factor),
-    iris[sapply(iris, function(i) !is.factor(i))]
+    iris[sapply(iris, function(i) !is.factor(i))] # nolint
   )
 
   expect_identical(data_select(iris, -is.logical), iris)
@@ -401,4 +401,14 @@ test_that("old solution still works", {
     foo(iris),
     c("Sepal.Length", "Sepal.Width")
   )
+})
+
+test_that("data_select renames variables on the fly", {
+  data(mtcars)
+  out <- data_select(mtcars, c(new = "mpg", old = "cyl", hoho = "wt"))
+  expect_named(out, c("new", "old", "hoho"))
+  data_select(mtcars, c(new = "mpg", "cyl", hoho = "wt"))
+  expect_named(out, c("new", "cyl", "hoho"))
+  data_select(mtcars, c("mpg", "cyl", "wt"))
+  expect_named(out, c("mpg", "cyl", "wt"))
 })

@@ -28,6 +28,11 @@ data_select <- function(data,
 
   out <- data[columns]
 
+  # for named character vectors, we offer the service to directly rename the columns
+  if (!is.null(names(columns))) {
+    colnames(out) <- names(columns)
+  }
+
   # add back attributes
   out <- .replace_attrs(out, a)
   out
