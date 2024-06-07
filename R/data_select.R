@@ -13,6 +13,7 @@ data_select <- function(data,
     exclude,
     ignore_case = ignore_case,
     regex = regex,
+    allow_rename = TRUE,
     verbose = FALSE
   )
 

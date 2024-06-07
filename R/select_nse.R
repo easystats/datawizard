@@ -2,7 +2,8 @@
 # https://github.com/nathaneastwood/poorman/blob/master/R/select_positions.R
 
 .select_nse <- function(select, data, exclude, ignore_case, regex = FALSE,
-                        remove_group_var = FALSE, verbose = FALSE) {
+                        remove_group_var = FALSE, allow_rename = FALSE,
+                        verbose = FALSE) {
   .check_data(data)
   columns <- colnames(data)
 
@@ -76,7 +77,7 @@
   }
 
   # for named character vectors, we offer the service to rename the columns
-  if (typeof(expr_select) == "language") {
+  if (allow_rename && typeof(expr_select) == "language") {
     # safe evaluation of the expression, to get the named vector from "select"
     new_names <- tryCatch(eval(expr_select), error = function(e) NULL)
     # check if we really have a named vector
