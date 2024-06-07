@@ -126,7 +126,7 @@ match a certain search pattern, while \code{data_select()} returns the found dat
 }
 \details{
 Specifically for \code{data_select()}, \code{select} can also be a named character
-vector. In tis case, the names are used to rename the columns in the
+vector. In this case, the names are used to rename the columns in the
 output data frame. See 'Examples'.
 
 Note that it is possible to either pass an entire select helper or only the
