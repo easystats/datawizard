@@ -411,4 +411,10 @@ test_that("data_select renames variables on the fly", {
   expect_named(out, c("new", "cyl", "hoho"))
   data_select(mtcars, c("mpg", "cyl", "wt"))
   expect_named(out, c("mpg", "cyl", "wt"))
+  # don't fail for non-existing columns
+  data_select(mtcars, c(new = "mpg", "cyl", hoho = "wt", test = "grea"))
+  expect_named(out, c("new", "cyl", "hoho"))
+  # check that excluded variables don't cause troubles
+  data_select(mtcars, c(new = "mpg", "cyl", hoho = "wt"), exclude = "wt")
+  expect_named(out, c("new", "cyl"))
 })
