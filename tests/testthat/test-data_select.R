@@ -405,16 +405,26 @@ test_that("old solution still works", {
 
 test_that("data_select renames variables on the fly", {
   data(mtcars)
-  out <- data_select(mtcars, c(new = "mpg", old = "cyl", hoho = "wt"))
-  expect_named(out, c("new", "old", "hoho"))
-  data_select(mtcars, c(new = "mpg", "cyl", hoho = "wt"))
-  expect_named(out, c("new", "cyl", "hoho"))
-  data_select(mtcars, c("mpg", "cyl", "wt"))
-  expect_named(out, c("mpg", "cyl", "wt"))
+  expect_named(
+    data_select(mtcars, c(new = "mpg", old = "cyl", hoho = "wt")),
+    c("new", "old", "hoho")
+  )
+  expect_named(
+    data_select(mtcars, c(new = "mpg", "cyl", hoho = "wt")),
+    c("new", "cyl", "hoho")
+  )
+  expect_named(
+    data_select(mtcars, c("mpg", "cyl", "wt")),
+    c("mpg", "cyl", "wt")
+  )
   # don't fail for non-existing columns
-  data_select(mtcars, c(new = "mpg", "cyl", hoho = "wt", test = "grea"))
-  expect_named(out, c("new", "cyl", "hoho"))
+  expect_named(
+    data_select(mtcars, c(new = "mpg", "cyl", hoho = "wt", test = "grea")),
+    c("new", "cyl", "hoho")
+  )
   # check that excluded variables don't cause troubles
-  data_select(mtcars, c(new = "mpg", "cyl", hoho = "wt"), exclude = "wt")
-  expect_named(out, c("new", "cyl"))
+  expect_named(
+    data_select(mtcars, c(new = "mpg", "cyl", hoho = "wt"), exclude = "wt"),
+    c("new", "cyl")
+  )
 })
