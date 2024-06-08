@@ -18,7 +18,7 @@ match a certain search pattern, while data_select() returns the found data."><me
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">datawizard</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.11.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.11.0.2</span>
       </span>
     </div>
 
@@ -200,7 +200,10 @@ columns.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>Note that it is possible to either pass an entire select helper or only the
+    <p>Specifically for <code>data_select()</code>, <code>select</code> can also be a named character
+vector. In this case, the names are used to rename the columns in the
+output data frame. See 'Examples'.</p>
+<p>Note that it is possible to either pass an entire select helper or only the
 pattern inside a select helper as a function argument:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">pattern</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/extract_column_names.html">extract_column_names</a></span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="va">pattern</span><span class="op">)</span><span class="op">)</span></span>
@@ -268,6 +271,16 @@ work in nested functions, like below:</p>
 <span class="r-in"><span><span class="va">numeric_mean_35</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">3.5</span></span></span>
 <span class="r-in"><span><span class="fu">extract_column_names</span><span class="op">(</span><span class="va">iris</span>, <span class="va">numeric_mean_35</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sepal.Length" "Petal.Length"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># rename returned columns for "data_select()"</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">data_select</span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`Miles per Gallon` <span class="op">=</span> <span class="st">"mpg"</span>, Cylinders <span class="op">=</span> <span class="st">"cyl"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   Miles per Gallon Cylinders</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4                     21.0         6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag                 21.0         6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710                    22.8         4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Hornet 4 Drive                21.4         6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Hornet Sportabout             18.7         8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Valiant                       18.1         6</span>
 </code></pre></div>
     </div>
   </div>
