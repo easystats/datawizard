@@ -110,7 +110,7 @@ ranktransform.grouped_df <- function(x,
                                      verbose = TRUE,
                                      ...) {
   info <- attributes(x)
-  
+
   grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
   # evaluate arguments

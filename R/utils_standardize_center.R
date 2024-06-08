@@ -399,7 +399,7 @@
   }
 
   info <- attributes(x)
-  
+
   grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
   # for grouped data frames, we can decide to remove group variable from selection

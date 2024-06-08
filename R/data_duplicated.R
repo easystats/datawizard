@@ -82,7 +82,7 @@ data_duplicated.grouped_df <- function(data,
     verbose = verbose
   )
 
-  
+
   grps <- attr(data, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 

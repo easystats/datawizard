@@ -103,7 +103,6 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
 
 #' @export
 data_arrange.grouped_df <- function(data, select = NULL, safe = TRUE) {
-  
   grps <- attr(data, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 

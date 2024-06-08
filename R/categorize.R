@@ -282,7 +282,6 @@ categorize.grouped_df <- function(x,
                                   regex = FALSE,
                                   verbose = TRUE,
                                   ...) {
-  
   grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
   attr_data <- attributes(x)

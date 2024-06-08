@@ -317,7 +317,6 @@ data_tabulate.grouped_df <- function(x,
                                      collapse = FALSE,
                                      verbose = TRUE,
                                      ...) {
-  
   grps <- attr(x, "groups", exact = TRUE)
   group_variables <- data_remove(grps, ".rows")
   grps <- grps[[".rows"]]

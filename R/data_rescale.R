@@ -185,7 +185,7 @@ rescale.grouped_df <- function(x,
                                ...) {
   info <- attributes(x)
 
-  
+
   grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
   # evaluate arguments

@@ -201,7 +201,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # the data.frame method later...
   dots <- match.call(expand.dots = FALSE)[["..."]]
 
-  
+
   grps <- attr(data, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
   attr_data <- attributes(data)

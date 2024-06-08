@@ -124,7 +124,7 @@ rowid_as_column.grouped_df <- function(x, var = "rowid") {
       paste0("There is already a variable named `", var, "` in your dataset.")
     )
   }
-  
+
   grps <- attr(x, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 

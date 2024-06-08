@@ -118,7 +118,7 @@ data_unique.grouped_df <- function(data,
     verbose = verbose
   )
 
-  
+
   grps <- attr(data, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 
