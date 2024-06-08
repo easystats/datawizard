@@ -4,7 +4,6 @@
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.04684/status.svg)](https://doi.org/10.21105/joss.04684)
 [![downloads](http://cranlogs.r-pkg.org/badges/datawizard)](https://cran.r-project.org/package=datawizard)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/)
-[![status](https://tinyverse.netlify.com/badge/datawizard)](https://CRAN.R-project.org/package=datawizard)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 
 <!-- ***:sparkles: Hockety pockety wockety wack, prepare this data forth and back*** -->
@@ -51,11 +50,11 @@ It covers two aspects of data preparation:
 badge](https://easystats.r-universe.dev/badges/datawizard)](https://easystats.r-universe.dev)
 [![R-CMD-check](https://github.com/easystats/datawizard/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/easystats/datawizard/actions)
 
-| Type        | Source     | Command                                                                      |
-|-------------|------------|------------------------------------------------------------------------------|
-| Release     | CRAN       | `install.packages("datawizard")`                                             |
+| Type | Source | Command |
+|----|----|----|
+| Release | CRAN | `install.packages("datawizard")` |
 | Development | r-universe | `install.packages("datawizard", repos = "https://easystats.r-universe.dev")` |
-| Development | GitHub     | `remotes::install_github("easystats/datawizard")`                            |
+| Development | GitHub | `remotes::install_github("easystats/datawizard")` |
 
 > **Tip**
 >
