@@ -106,22 +106,22 @@ test_that("data_select works with user-defined select-functions", {
 test_that("data_select works with negated select-functions", {
   expect_identical(
     data_select(iris, -is.numeric()),
-    iris[sapply(iris, function(i) !is.numeric(i))]
+    iris[sapply(iris, function(i) !is.numeric(i))] # nolint
   )
 
   expect_identical(
     data_select(iris, -is.numeric),
-    iris[sapply(iris, function(i) !is.numeric(i))]
+    iris[sapply(iris, function(i) !is.numeric(i))] # nolint
   )
 
   expect_identical(
     data_select(iris, -is.factor()),
-    iris[sapply(iris, function(i) !is.factor(i))]
+    iris[sapply(iris, function(i) !is.factor(i))] # nolint
   )
 
   expect_identical(
     data_select(iris, -is.factor),
-    iris[sapply(iris, function(i) !is.factor(i))]
+    iris[sapply(iris, function(i) !is.factor(i))] # nolint
   )
 
   expect_identical(data_select(iris, -is.logical), iris)
@@ -400,5 +400,45 @@ test_that("old solution still works", {
   expect_identical(
     foo(iris),
     c("Sepal.Length", "Sepal.Width")
+  )
+})
+
+test_that("data_select renames variables on the fly", {
+  data(mtcars)
+  expect_named(
+    data_select(mtcars, c(new = "mpg", old = "cyl", hoho = "wt")),
+    c("new", "old", "hoho")
+  )
+  expect_named(
+    data_select(mtcars, c(new = "mpg", "cyl", hoho = "wt")),
+    c("new", "cyl", "hoho")
+  )
+  expect_named(
+    data_select(mtcars, c("mpg", "cyl", "wt")),
+    c("mpg", "cyl", "wt")
+  )
+  # don't fail for non-existing columns
+  expect_named(
+    data_select(mtcars, c(new = "mpg", "cyl", hoho = "wt", test = "grea")),
+    c("new", "cyl", "hoho")
+  )
+  # check that excluded variables don't cause troubles
+  expect_named(
+    data_select(mtcars, c(new = "mpg", "cyl", hoho = "wt"), exclude = "wt"),
+    c("new", "cyl")
+  )
+  # error when names are not unique
+  expect_error(
+    data_select(mtcars, c(new = "mpg", old = "cyl", new = "wt")), # nolint
+    regex = "Following names are duplicated"
+  )
+  expect_error(
+    data_select(mtcars, c(new = "mpg", "cyl", cyl = "wt")), # nolint
+    regex = "Following names are duplicated"
+  )
+  # when new name is used in exclude, it should be ignored
+  expect_named(
+    data_select(mtcars, c(drat = "mpg"), exclude = "drat"),
+    "drat"
   )
 })

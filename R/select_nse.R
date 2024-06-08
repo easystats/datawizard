@@ -2,7 +2,8 @@
 # https://github.com/nathaneastwood/poorman/blob/master/R/select_positions.R
 
 .select_nse <- function(select, data, exclude, ignore_case, regex = FALSE,
-                        remove_group_var = FALSE, verbose = FALSE) {
+                        remove_group_var = FALSE, allow_rename = FALSE,
+                        verbose = FALSE) {
   .check_data(data)
   columns <- colnames(data)
 
@@ -73,6 +74,30 @@
   # don't include grouping variables
   if (remove_group_var && length(out)) {
     out <- setdiff(out, grp_vars)
+  }
+
+  # for named character vectors, we offer the service to rename the columns
+  if (allow_rename && typeof(expr_select) == "language") {
+    # safe evaluation of the expression, to get the named vector from "select"
+    new_names <- tryCatch(eval(expr_select), error = function(e) NULL)
+    # check if we really have a named vector
+    if (!is.null(new_names) && !is.null(names(new_names))) {
+      # if so, copy names
+      all_names <- names(new_names)
+      # if some of the elements don't have a name, we set the value as name
+      names(new_names)[!nzchar(all_names)] <- new_names[!nzchar(all_names)]
+      # after inclusion and exclusion, the original values in "select"
+      # may have changed, so we check that we only add names of valid values
+      out <- stats::setNames(out, names(new_names)[new_names %in% out])
+      # check if we have any duplicated names, and if so, give an error
+      if (anyDuplicated(names(out)) > 0) {
+        insight::format_error(paste0(
+          "Following names are duplicated after renaming: ",
+          text_concatenate(names(out)[duplicated(names(out))], enclose = "`"),
+          ". Using duplicated names is no good practice and therefore discouraged. Please provide unique names."
+        ))
+      }
+    }
   }
 
   out

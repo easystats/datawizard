@@ -125,6 +125,10 @@ columns.
 match a certain search pattern, while \code{data_select()} returns the found data.
 }
 \details{
+Specifically for \code{data_select()}, \code{select} can also be a named character
+vector. In this case, the names are used to rename the columns in the
+output data frame. See 'Examples'.
+
 Note that it is possible to either pass an entire select helper or only the
 pattern inside a select helper as a function argument:
 
@@ -182,6 +186,9 @@ extract_column_names(iris, starts_with("Sepal"), exclude = contains("Width"))
 # find numeric with mean > 3.5
 numeric_mean_35 <- function(x) is.numeric(x) && mean(x, na.rm = TRUE) > 3.5
 extract_column_names(iris, numeric_mean_35)
+
+# rename returned columns for "data_select()"
+head(data_select(mtcars, c(`Miles per Gallon` = "mpg", Cylinders = "cyl")))
 }
 \seealso{
 \itemize{

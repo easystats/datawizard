@@ -110,7 +110,9 @@ row_means <- function(data,
   }
 
   # proceed here if min_valid is not NULL
-  if (!is.null(min_valid)) {
+  if (is.null(min_valid)) {
+    out <- rowMeans(data, na.rm = remove_na)
+  } else {
     # is 'min_valid' indicating a proportion?
     decimals <- min_valid %% 1
     if (decimals != 0) {
@@ -126,8 +128,6 @@ row_means <- function(data,
     to_na <- rowSums(is.na(data)) > ncol(data) - min_valid
     out <- rowMeans(data, na.rm = TRUE)
     out[to_na] <- NA
-  } else {
-    out <- rowMeans(data, na.rm = remove_na)
   }
 
   # round, if requested

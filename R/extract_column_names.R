@@ -63,6 +63,10 @@
 #'
 #' @details
 #'
+#' Specifically for `data_select()`, `select` can also be a named character
+#' vector. In this case, the names are used to rename the columns in the
+#' output data frame. See 'Examples'.
+#'
 #' Note that it is possible to either pass an entire select helper or only the
 #' pattern inside a select helper as a function argument:
 #'
@@ -124,6 +128,9 @@
 #' # find numeric with mean > 3.5
 #' numeric_mean_35 <- function(x) is.numeric(x) && mean(x, na.rm = TRUE) > 3.5
 #' extract_column_names(iris, numeric_mean_35)
+#'
+#' # rename returned columns for "data_select()"
+#' head(data_select(mtcars, c(`Miles per Gallon` = "mpg", Cylinders = "cyl")))
 #' @export
 extract_column_names <- function(data,
                                  select = NULL,
