@@ -92,7 +92,7 @@
       # check if we have any duplicated names, and if so, give an error
       if (anyDuplicated(names(out)) > 0) {
         insight::format_error(paste0(
-          "Following names were duplicated after renaming: ",
+          "Following names are duplicated after renaming: ",
           text_concatenate(names(out)[duplicated(names(out))], enclose = "`"),
           ". Using duplicated names is no good practice and therefore discouraged. Please provide unique names."
         ))
