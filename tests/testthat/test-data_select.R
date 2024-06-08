@@ -436,4 +436,9 @@ test_that("data_select renames variables on the fly", {
     data_select(mtcars, c(new = "mpg", "cyl", cyl = "wt")), # nolint
     regex = "Following names are duplicated"
   )
+  # when new name is used in exclude, it should be ignored
+  expect_named(
+    data_select(mtcars, c(drat = "mpg"), exclude = "drat"),
+    "drat"
+  )
 })
