@@ -430,7 +430,7 @@ test_that("data_select renames variables on the fly", {
   # error when names are not unique
   expect_error(
     data_select(mtcars, c(new = "mpg", old = "cyl", new = "wt")), # nolint
-    regex = "Following names were duplicated"
+    regex = "Following names are duplicated"
   )
   expect_error(
     data_select(mtcars, c(new = "mpg", "cyl", cyl = "wt")), # nolint
