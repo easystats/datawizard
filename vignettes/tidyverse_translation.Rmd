@@ -30,7 +30,7 @@ pkgs <- c(
 # a logical that is FALSE only if deps are not installed (cf easystats/easystats#317)
 evaluate_chunk <- TRUE
 
-if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L))) || getRversion() < "4.2.0") {
+if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L))) || getRversion() < "4.1.0") {
   evaluate_chunk <- FALSE
 }
 ```
