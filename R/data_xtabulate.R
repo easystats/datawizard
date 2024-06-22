@@ -74,8 +74,9 @@
   attr(out, "total_n") <- total_n
   attr(out, "weights") <- weights
   attr(out, "proportions") <- proportions
+  attr(out, "varname") <- obj_name
 
-  class(out) <- c("dw_data_xtabulate", "data.frame")
+  class(out) <- c("datawizard_crosstab", "data.frame")
 
   out
 }
@@ -85,7 +86,7 @@
 
 
 #' @export
-format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = NULL, ...) {
+format.datawizard_crosstab <- function(x, format = "text", digits = 1, big_mark = NULL, ...) {
   # convert to character manually, else, for large numbers,
   # format_table() returns scientific notation
   x <- as.data.frame(x)
@@ -178,7 +179,7 @@ format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = 
 
 
 #' @export
-print.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
+print.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   # grouped data? if yes, add information on grouping factor
   if (is.null(x[["Group"]])) {
     caption <- NULL
@@ -200,7 +201,7 @@ print.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
 
 
 #' @export
-print_md.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
+print_md.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   # grouped data? if yes, add information on grouping factor
   if (is.null(x[["Group"]])) {
     caption <- NULL
@@ -222,7 +223,7 @@ print_md.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
 
 
 #' @export
-print_html.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
+print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   # grouped data? if yes, add information on grouping factor
   if (!is.null(x[["Group"]])) {
     x$groups <- paste0("Grouped by ", x[["Group"]][1])
@@ -240,7 +241,7 @@ print_html.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
 
 
 #' @export
-print.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
+print.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
   for (i in seq_along(x)) {
     print(x[[i]], big_mark = big_mark, ...)
     cat("\n")
@@ -250,7 +251,7 @@ print.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
 
 
 #' @export
-print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
+print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
   if (length(x) == 1) {
     print_html(x[[1]], big_mark = big_mark, ...)
   } else {

@@ -28,6 +28,13 @@
 #' @param ... not used.
 #' @inheritParams extract_column_names
 #'
+#' @details
+#' There is an `as.data.frame()` method, to return the frequency tables as a
+#' data frame. The structure of the returned object is a nested data frame,
+#' where the first column contains name of the variable for which frequencies
+#' were calculated, and the second column is a list column that contains the
+#' frequency tables as data frame. See 'Examples'.
+#'
 #' @section Crosstables:
 #' If `by` is supplied, a crosstable is created. The crosstable includes `<NA>`
 #' (missing) values by default. The first column indicates values of `x`, the
@@ -108,6 +115,12 @@
 #' # round percentages
 #' out <- data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")
 #' print(out, digits = 0)
+#'
+#' # coerce to data frames
+#' result <- data_tabulate(efc, "c172code", by = "e16sex")
+#' as.data.frame(result)
+#' as.data.frame(result)$table
+#' as.data.frame(result, add_total = TRUE)$table
 #' @export
 data_tabulate <- function(x, ...) {
   UseMethod("data_tabulate")
@@ -242,7 +255,7 @@ data_tabulate.default <- function(x,
   attr(out, "total_n") <- sum(out$N, na.rm = TRUE)
   attr(out, "valid_n") <- valid_n
 
-  class(out) <- c("dw_data_tabulate", "data.frame")
+  class(out) <- c("datawizard_table", "data.frame")
 
   out
 }
@@ -292,9 +305,9 @@ data_tabulate.data.frame <- function(x,
   })
 
   if (is.null(by)) {
-    class(out) <- c("dw_data_tabulates", "list")
+    class(out) <- c("datawizard_tables", "list")
   } else {
-    class(out) <- c("dw_data_xtabulates", "list")
+    class(out) <- c("datawizard_crosstabs", "list")
   }
   attr(out, "collapse") <- isTRUE(collapse)
   attr(out, "is_weighted") <- !is.null(weights)
@@ -357,9 +370,9 @@ data_tabulate.grouped_df <- function(x,
     ))
   }
   if (is.null(by)) {
-    class(out) <- c("dw_data_tabulates", "list")
+    class(out) <- c("datawizard_tables", "list")
   } else {
-    class(out) <- c("dw_data_xtabulates", "list")
+    class(out) <- c("datawizard_crosstabs", "list")
   }
   attr(out, "collapse") <- isTRUE(collapse)
   attr(out, "is_weighted") <- !is.null(weights)
@@ -380,8 +393,64 @@ insight::print_html
 insight::print_md
 
 
+#' @rdname data_tabulate
+#' @param add_total For crosstables (i.e. when `by` is not `NULL`), a row and
+#' column with the total N values are added to the data frame. `add_total` has
+#' no effect in `as.data.frame()` for simple frequency tables.
+#' @inheritParams base::as.data.frame
 #' @export
-format.dw_data_tabulate <- function(x, format = "text", big_mark = NULL, ...) {
+as.data.frame.datawizard_tables <- function(x,
+                                            row.names = NULL,
+                                            optional = FALSE,
+                                            ...,
+                                            stringsAsFactors = FALSE,
+                                            add_total = FALSE) {
+  # extract variables of frequencies
+  selected_vars <- unlist(lapply(x, function(i) attributes(i)$varname))
+  # coerce to data frame, remove rownames
+  data_frames <- lapply(x, function(i) {
+    # the `format()` methods for objects returned by `data_tabulate()` call
+    # `as.data.frame()` - we have to pay attention to avoid infinite iterations
+    # here. At the moment, this is no problem, as objects we have at this stage
+    # are of class "datawizard_table" or "datawizard_crosstab", while this
+    # `as.data.frame()` method is only called for "datawizard_tables" (the plural)
+    # form). Else, we would need to modify the class attribute here,
+    # e.g. class(i) <- "data.frame"
+    if (add_total) {
+      # to add the total column and row, we simply can call `format()`
+      out <- as.data.frame(format(i))
+      for (cols in 2:ncol(out)) {
+        # since "format()" returns a character matrix, we want to convert
+        # the columns to numeric. We have to exclude the first column, as the
+        # first column is character, due to the added "Total" value.
+        out[[cols]] <- as.numeric(out[[cols]])
+      }
+      # after formatting, we have a "separator" row for nicer printing.
+      # this should also be removed
+      out <- remove_empty_rows(out)
+    } else {
+      out <- as.data.frame(i)
+    }
+    rownames(out) <- NULL
+    out
+  })
+  # create nested data frame
+  result <- data.frame(
+    var = selected_vars,
+    table = I(data_frames),
+    stringsAsFactors = stringsAsFactors
+  )
+  # consider additional arguments
+  rownames(result) <- row.names
+  result
+}
+
+#' @export
+as.data.frame.datawizard_crosstabs <- as.data.frame.datawizard_tables
+
+
+#' @export
+format.datawizard_table <- function(x, format = "text", big_mark = NULL, ...) {
   # convert to character manually, else, for large numbers,
   # format_table() returns scientific notation
   x <- as.data.frame(x)
@@ -414,7 +483,7 @@ format.dw_data_tabulate <- function(x, format = "text", big_mark = NULL, ...) {
 
 
 #' @export
-print.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
+print.datawizard_table <- function(x, big_mark = NULL, ...) {
   a <- attributes(x)
 
   # "table" header with variable label/name, and type
@@ -456,7 +525,7 @@ print.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
 
 
 #' @export
-print_html.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
+print_html.datawizard_table <- function(x, big_mark = NULL, ...) {
   a <- attributes(x)
 
   # "table" header with variable label/name, and type
@@ -486,7 +555,7 @@ print_html.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
 
 
 #' @export
-print_md.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
+print_md.datawizard_table <- function(x, big_mark = NULL, ...) {
   a <- attributes(x)
 
   # "table" header with variable label/name, and type
@@ -516,7 +585,7 @@ print_md.dw_data_tabulate <- function(x, big_mark = NULL, ...) {
 
 
 #' @export
-print.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
+print.datawizard_tables <- function(x, big_mark = NULL, ...) {
   # check if we have weights
   is_weighted <- isTRUE(attributes(x)$is_weighted)
 
@@ -555,7 +624,7 @@ print.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
 
 
 #' @export
-print_html.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
+print_html.datawizard_tables <- function(x, big_mark = NULL, ...) {
   # check if we have weights
   is_weighted <- isTRUE(attributes(x)$is_weighted)
 
@@ -584,7 +653,7 @@ print_html.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
 
 
 #' @export
-print_md.dw_data_tabulates <- function(x, big_mark = NULL, ...) {
+print_md.datawizard_tables <- function(x, big_mark = NULL, ...) {
   # check if we have weights
   is_weighted <- isTRUE(attributes(x)$is_weighted)
 

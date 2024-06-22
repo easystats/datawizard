@@ -4,6 +4,7 @@
 \alias{data_tabulate}
 \alias{data_tabulate.default}
 \alias{data_tabulate.data.frame}
+\alias{as.data.frame.datawizard_tables}
 \title{Create frequency and crosstables of variables}
 \usage{
 data_tabulate(x, ...)
@@ -34,6 +35,15 @@ data_tabulate(x, ...)
   collapse = FALSE,
   verbose = TRUE,
   ...
+)
+
+\method{as.data.frame}{datawizard_tables}(
+  x,
+  row.names = NULL,
+  optional = FALSE,
+  ...,
+  stringsAsFactors = FALSE,
+  add_total = FALSE
 )
 }
 \arguments{
@@ -116,6 +126,24 @@ functions (see 'Details'), this argument may be used as workaround.}
 
 \item{collapse}{Logical, if \code{TRUE} collapses multiple tables into one larger
 table for printing. This affects only printing, not the returned object.}
+
+\item{row.names}{\code{NULL} or a character vector giving the row
+    names for the data frame.  Missing values are not allowed.}
+
+\item{optional}{logical. If \code{TRUE}, setting row names and
+    converting column names (to syntactic names: see
+    \code{\link[base]{make.names}}) is optional.  Note that all of \R's
+    \pkg{base} package \code{as.data.frame()} methods use
+    \code{optional} only for column names treatment, basically with the
+    meaning of \code{\link[base]{data.frame}(*, check.names = !optional)}.
+    See also the \code{make.names} argument of the \code{matrix} method.}
+
+\item{stringsAsFactors}{logical: should the character vector be converted
+    to a factor?}
+
+\item{add_total}{For crosstables (i.e. when \code{by} is not \code{NULL}), a row and
+column with the total N values are added to the data frame. \code{add_total} has
+no effect in \code{as.data.frame()} for simple frequency tables.}
 }
 \value{
 A data frame, or a list of data frames, with one frequency table
@@ -126,6 +154,13 @@ This function creates frequency or crosstables of variables,
 including the number of levels/values as well as the distribution of raw,
 valid and cumulative percentages. For crosstables, row, column  and cell
 percentages can be calculated.
+}
+\details{
+There is an \code{as.data.frame()} method, to return the frequency tables as a
+data frame. The structure of the returned object is a nested data frame,
+where the first column contains name of the variable for which frequencies
+were calculated, and the second column is a list column that contains the
+frequency tables as data frame. See 'Examples'.
 }
 \note{
 There are \code{print_html()} and \code{print_md()} methods available for printing
@@ -207,5 +242,11 @@ data_tabulate(
 # round percentages
 out <- data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")
 print(out, digits = 0)
+
+# coerce to data frames
+result <- data_tabulate(efc, "c172code", by = "e16sex")
+as.data.frame(result)
+as.data.frame(result)$table
+as.data.frame(result, add_total = TRUE)$table
 \dontshow{\}) # examplesIf}
 }
