@@ -25,9 +25,18 @@
 #' percentages to be calculated. Only applies to crosstables, i.e. when `by` is
 #' not `NULL`. Can be `"row"` (row percentages), `"column"` (column percentages)
 #' or `"full"` (to calculate relative frequencies for the full table).
-#' @param add_total Add total.
+#' @param add_total For crosstables (i.e. when `by` is not `NULL`), a row and
+#' column with the total N values are added to the data frame. `add_total` has
+#' no effect in `as.data.frame()` for simple frequency tables.
 #' @param ... not used.
 #' @inheritParams extract_column_names
+#'
+#' @details
+#' There is an `as.data.frame()` method, to return the frequency tables as a
+#' data frame. The structure of the returned object is a nested data frame,
+#' where the first column contains name of the variable for which frequencies
+#' were calculated, and the second column is a list column, contains the
+#' frequency tables as data frame. See 'Examples'.
 #'
 #' @section Crosstables:
 #' If `by` is supplied, a crosstable is created. The crosstable includes `<NA>`
@@ -109,6 +118,12 @@
 #' # round percentages
 #' out <- data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")
 #' print(out, digits = 0)
+#'
+#' # coerce to data frames
+#' result <- data_tabulate(efc, "c172code", by = "e16sex")
+#' as.data.frame(result)
+#' as.data.frame(result)$table
+#' as.data.frame(result, add_total = TRUE)$table
 #' @export
 data_tabulate <- function(x, ...) {
   UseMethod("data_tabulate")
@@ -388,7 +403,7 @@ as.data.frame.datawizard_tables <- function(x, add_total = FALSE, ...) {
   selected_vars <- unlist(lapply(x, function(i) attributes(i)$varname))
   # coerce to data frame, remove rownames
   data_frames <- lapply(x, function(i) {
-    class(i) <- "data.frame"
+    # class(i) <- "data.frame"
     if (add_total) {
       out <- as.data.frame(format(i))
       for (cols in 2:ncol(out)) {
