@@ -81,7 +81,7 @@ test_that("data_tabulate data.frame", {
         "Variable", "Value", "N", "Raw %", "Valid %",
         "Cumulative %"
       ),
-      class = c("dw_data_tabulate", "data.frame"),
+      class = c("datawizard_table", "data.frame"),
       row.names = 1:3,
       type = "numeric",
       varname = "e16sex",
@@ -99,7 +99,7 @@ test_that("data_tabulate data.frame", {
         "Variable", "Value", "N", "Raw %", "Valid %",
         "Cumulative %"
       ),
-      class = c("dw_data_tabulate", "data.frame"),
+      class = c("datawizard_table", "data.frame"),
       row.names = 1:4,
       type = "numeric",
       varname = "c172code",
@@ -139,7 +139,7 @@ test_that("data_tabulate print", {
     attributes(out),
     list(
       names = c("Variable", "Value", "N", "Raw %", "Valid %", "Cumulative %"),
-      class = c("dw_data_tabulate", "data.frame"),
+      class = c("datawizard_table", "data.frame"),
       row.names = 1:4,
       type = "integer",
       varname = "Large Number",
@@ -197,7 +197,7 @@ test_that("data_tabulate grouped data.frame", {
         "Valid %",
         "Cumulative %"
       ),
-      class = c("dw_data_tabulate", "data.frame"),
+      class = c("datawizard_table", "data.frame"),
       row.names = 1:4,
       type = "numeric",
       varname = "c172code",

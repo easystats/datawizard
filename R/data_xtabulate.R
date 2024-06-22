@@ -241,7 +241,7 @@ print_html.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
 
 
 #' @export
-print.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
+print.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
   for (i in seq_along(x)) {
     print(x[[i]], big_mark = big_mark, ...)
     cat("\n")
@@ -251,7 +251,7 @@ print.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
 
 
 #' @export
-print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
+print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
   if (length(x) == 1) {
     print_html(x[[1]], big_mark = big_mark, ...)
   } else {
