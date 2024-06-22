@@ -409,7 +409,7 @@ as.data.frame.datawizard_tables <- function(x,
   selected_vars <- unlist(lapply(x, function(i) attributes(i)$varname))
   # coerce to data frame, remove rownames
   data_frames <- lapply(x, function(i) {
-    # the `format()` methods for objects returned by `data_tabuldate()` call
+    # the `format()` methods for objects returned by `data_tabulate()` call
     # `as.data.frame()` - we have to pay attention to avoid infinite iterations
     # here. At the moment, this is no problem, as objects we have at this stage
     # are of class "datawizard_table" or "datawizard_crosstab", while this
