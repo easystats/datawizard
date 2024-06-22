@@ -405,3 +405,59 @@ test_that("data_tabulate, correct 0% for proportions", {
   expect_identical(format(out[[1]])[[4]], c("0 (0%)", "0 (0%)", "0 (0%)", "0 (0%)", "", "0"))
   expect_snapshot(print(out[[1]]))
 })
+
+
+# coercing to data frame -------------------------
+
+test_that("data_tabulate, as.data.frame", {
+  data(mtcars)
+  # frequency table
+  x <- data_tabulate(mtcars$cyl)
+  out <- as.data.frame(x)
+  expect_named(out, c("Variable", "Value", "N", "Raw %", "Valid %", "Cumulative %"))
+  expect_identical(out$Variable, c("mtcars$cyl", "mtcars$cyl", "mtcars$cyl", "mtcars$cyl"))
+  expect_false(any(vapply(out[2:ncol(out)], is.character, logical(1))))
+  # frequency tables
+  x <- data_tabulate(mtcars, select = c("cyl", "am"))
+  out <- as.data.frame(x)
+  expect_named(out, c("var", "table"))
+  expect_equal(vapply(out, class, character(1)), c("character", "AsIs"), ignore_attr = TRUE)
+  expect_length(out$table, 2L)
+  expect_named(out$table[[1]], c("Variable", "Value", "N", "Raw %", "Valid %", "Cumulative %"))
+  expect_identical(out$table[[1]]$Variable, c("cyl", "cyl", "cyl", "cyl"))
+  expect_false(any(vapply(out$table[[1]][2:ncol(out$table[[1]])], is.character, logical(1))))
+  # cross table
+  x <- data_tabulate(mtcars, "cyl", by = "am")
+  out <- as.data.frame(x)
+  expect_named(out, c("var", "table"))
+  expect_equal(vapply(out, class, character(1)), c("character", "AsIs"), ignore_attr = TRUE)
+  expect_length(out$table, 1L)
+  expect_named(out$table[[1]], c("cyl", "0", "1", "NA"))
+  expect_identical(nrow(out$table[[1]]), 4L)
+  # cross table, with total
+  x <- data_tabulate(mtcars, "cyl", by = "am")
+  out <- as.data.frame(x, add_total = TRUE)
+  expect_named(out, c("var", "table"))
+  expect_equal(vapply(out, class, character(1)), c("character", "AsIs"), ignore_attr = TRUE)
+  expect_length(out$table, 1L)
+  expect_named(out$table[[1]], c("cyl", "0", "1", "<NA>", "Total"))
+  expect_identical(nrow(out$table[[1]]), 5L)
+  expect_identical(out$table[[1]]$cyl, c("4", "6", "8", NA, "Total"))
+  # cross tables
+  x <- data_tabulate(mtcars, c("cyl", "vs"), by = "am")
+  out <- as.data.frame(x)
+  expect_named(out, c("var", "table"))
+  expect_equal(vapply(out, class, character(1)), c("character", "AsIs"), ignore_attr = TRUE)
+  expect_length(out$table, 2L)
+  expect_named(out$table[[1]], c("cyl", "0", "1", "NA"))
+  expect_identical(nrow(out$table[[1]]), 4L)
+  # cross tables, with total
+  x <- data_tabulate(mtcars, c("cyl", "vs"), by = "am")
+  out <- as.data.frame(x, add_total = TRUE)
+  expect_named(out, c("var", "table"))
+  expect_equal(vapply(out, class, character(1)), c("character", "AsIs"), ignore_attr = TRUE)
+  expect_length(out$table, 2L)
+  expect_named(out$table[[1]], c("cyl", "0", "1", "<NA>", "Total"))
+  expect_identical(nrow(out$table[[1]]), 5L)
+  expect_identical(out$table[[1]]$cyl, c("4", "6", "8", NA, "Total"))
+})
