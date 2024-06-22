@@ -5,12 +5,19 @@ tidyr::pivot_wider().'><meta property="og:description" content='This function "w
 the number of rows. This is a dependency-free base-R equivalent of
 tidyr::pivot_wider().'><meta property="og:image" content="https://easystats.github.io/datawizard/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -45,6 +52,8 @@ tidyr::pivot_wider().'><meta property="og:image" content="https://easystats.gith
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -53,11 +62,13 @@ tidyr::pivot_wider().'><meta property="og:image" content="https://easystats.gith
       <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/main/R/data_to_wide.R" class="external-link"><code>R/data_to_wide.R</code></a></small>
       <div class="d-none name"><code>data_to_wide.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>This function "widens" data, increasing the number of columns and decreasing
 the number of rows. This is a dependency-free base-R equivalent of
 <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">tidyr::pivot_wider()</a></code>.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">data_to_wide</span><span class="op">(</span></span>
@@ -86,11 +97,16 @@ the number of rows. This is a dependency-free base-R equivalent of
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>A data frame to convert to wide format, so that it has more
 columns and fewer rows post-widening than pre-widening.</p></dd>
+
+
 <dt id="arg-id-cols">id_cols<a class="anchor" aria-label="anchor" href="#arg-id-cols"></a></dt>
 <dd><p>The name of the column that identifies the rows in the data
 by which observations are grouped and the gathered data is spread into new
@@ -99,35 +115,52 @@ have been repeatedly measured. If <code>NULL</code>, it will use all remaining c
 that are not in <code>names_from</code> or <code>values_from</code> as ID columns. <code>id_cols</code> can
 also be a character vector with more than one name of identifier columns. See
 also 'Details' and 'Examples'.</p></dd>
+
+
 <dt id="arg-values-from">values_from<a class="anchor" aria-label="anchor" href="#arg-values-from"></a></dt>
 <dd><p>The name of the columns in the original data that contains
 the values used to fill the new columns created in the widened data.</p></dd>
+
+
 <dt id="arg-names-from">names_from<a class="anchor" aria-label="anchor" href="#arg-names-from"></a></dt>
 <dd><p>The name of the column in the original data whose values
 will be used for naming the new columns created in the widened data. Each
 unique value in this column will become the name of one of these new columns.
 In case <code>names_prefix</code> is provided, column names will be concatenated with
 the string given in <code>names_prefix</code>.</p></dd>
+
+
 <dt id="arg-names-sep">names_sep<a class="anchor" aria-label="anchor" href="#arg-names-sep"></a></dt>
 <dd><p>If <code>names_from</code> or <code>values_from</code> contains multiple variables,
 this will be used to join their values together into a single string to use
 as a column name.</p></dd>
+
+
 <dt id="arg-names-prefix">names_prefix<a class="anchor" aria-label="anchor" href="#arg-names-prefix"></a></dt>
 <dd><p>String added to the start of every variable name. This is
 particularly useful if <code>names_from</code> is a numeric vector and you want to create
 syntactic variable names.</p></dd>
+
+
 <dt id="arg-names-glue">names_glue<a class="anchor" aria-label="anchor" href="#arg-names-glue"></a></dt>
 <dd><p>Instead of <code>names_sep</code> and <code>names_prefix</code>, you can supply a
 <a href="https://glue.tidyverse.org/index.html" class="external-link">glue specification</a> that uses the
 <code>names_from</code> columns to create custom column names. Note that the only
 delimiters supported by <code>names_glue</code> are curly brackets, <code>{</code> and <code>}</code>.</p></dd>
+
+
 <dt id="arg-values-fill">values_fill<a class="anchor" aria-label="anchor" href="#arg-values-fill"></a></dt>
 <dd><p>Optionally, a (scalar) value that will be used to replace
 missing values in the new columns created.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Not used for now.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -166,6 +199,7 @@ will be named after the values in <code>names_from</code>. See also 'Examples'.<
 <li><p>Functions to filter rows: <code><a href="data_match.html">data_match()</a></code>, <code><a href="data_match.html">data_filter()</a></code></p></li>
 </ul></div>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">data_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span>header <span class="op">=</span> <span class="cn">TRUE</span>, text <span class="op">=</span> <span class="st">"</span></span></span>
@@ -440,12 +474,21 @@ will be named after the values in <code>names_from</code>. See also 'Examples'.<
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

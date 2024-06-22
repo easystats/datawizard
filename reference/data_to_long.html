@@ -5,12 +5,19 @@ tidyr::pivot_longer().'><meta property="og:description" content='This function "
 the number of columns. This is a dependency-free base-R equivalent of
 tidyr::pivot_longer().'><meta property="og:image" content="https://easystats.github.io/datawizard/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -45,6 +52,8 @@ tidyr::pivot_longer().'><meta property="og:image" content="https://easystats.git
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -53,11 +62,13 @@ tidyr::pivot_longer().'><meta property="og:image" content="https://easystats.git
       <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/main/R/data_to_long.R" class="external-link"><code>R/data_to_long.R</code></a></small>
       <div class="d-none name"><code>data_to_long.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>This function "lengthens" data, increasing the number of rows and decreasing
 the number of columns. This is a dependency-free base-R equivalent of
 <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">tidyr::pivot_longer()</a></code>.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">data_to_long</span><span class="op">(</span></span>
@@ -92,11 +103,16 @@ the number of columns. This is a dependency-free base-R equivalent of
 <span>  <span class="va">cols</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>A data frame to convert to long format, so that it has more
 rows and fewer columns after the operation.</p></dd>
+
+
 <dt id="arg-select">select<a class="anchor" aria-label="anchor" href="#arg-select"></a></dt>
 <dd><p>Variables that will be included when performing the required
 tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
@@ -125,6 +141,8 @@ negation should not work as expected, use the <code>exclude</code> argument inst
 </ul><p>If <code>NULL</code>, selects all columns. Patterns that found no matches are silently
 ignored, e.g. <code>extract_column_names(iris, select = c("Species", "Test"))</code>
 will just return <code>"Species"</code>.</p></dd>
+
+
 <dt id="arg-names-to">names_to<a class="anchor" aria-label="anchor" href="#arg-names-to"></a></dt>
 <dd><p>The name of the new column (variable) that will contain the
 <em>names</em> from columns in <code>select</code> as values, to identify the source of the
@@ -132,28 +150,42 @@ values. <code>names_to</code> can be a character vector with more than one colum
 in which case <code>names_sep</code> or <code>names_pattern</code> must be provided in order to
 identify which parts of the column names go into newly created columns.
 See also 'Examples'.</p></dd>
+
+
 <dt id="arg-names-prefix">names_prefix<a class="anchor" aria-label="anchor" href="#arg-names-prefix"></a></dt>
 <dd><p>A regular expression used to remove matching text from
 the start of each variable name.</p></dd>
+
+
 <dt id="arg-names-sep-names-pattern">names_sep, names_pattern<a class="anchor" aria-label="anchor" href="#arg-names-sep-names-pattern"></a></dt>
 <dd><p>If <code>names_to</code> contains multiple values, this
 argument controls how the column name is broken up. <code>names_pattern</code> takes a
 regular expression containing matching groups, i.e. "()".</p></dd>
+
+
 <dt id="arg-values-to">values_to<a class="anchor" aria-label="anchor" href="#arg-values-to"></a></dt>
 <dd><p>The name of the new column that will contain the <em>values</em> of
 the columns in <code>select</code>.</p></dd>
+
+
 <dt id="arg-values-drop-na">values_drop_na<a class="anchor" aria-label="anchor" href="#arg-values-drop-na"></a></dt>
 <dd><p>If <code>TRUE</code>, will drop rows that contain only <code>NA</code> in the
 <code>values_to</code> column. This effectively converts explicit missing values to
 implicit missing values, and should generally be used only when missing values
 in data were created by its structure.</p></dd>
+
+
 <dt id="arg-rows-to">rows_to<a class="anchor" aria-label="anchor" href="#arg-rows-to"></a></dt>
 <dd><p>The name of the column that will contain the row names or row
 numbers from the original data. If <code>NULL</code>, will be removed.</p></dd>
+
+
 <dt id="arg-ignore-case">ignore_case<a class="anchor" aria-label="anchor" href="#arg-ignore-case"></a></dt>
 <dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
 a regular expression is used in <code>select</code>, ignores lower/upper case in the
 search pattern when matching against variable names.</p></dd>
+
+
 <dt id="arg-regex">regex<a class="anchor" aria-label="anchor" href="#arg-regex"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, the search pattern from <code>select</code> will be
 treated as regular expression. When <code>regex = TRUE</code>, select <em>must</em> be a
@@ -163,12 +195,17 @@ of length &gt; 1. <code>regex = TRUE</code> is comparable to using one of the tw
 select-helpers, <code>select = contains("")</code> or <code>select = regex("")</code>, however,
 since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Currently not used.</p></dd>
+
+
 <dt id="arg-cols">cols<a class="anchor" aria-label="anchor" href="#arg-cols"></a></dt>
 <dd><p>Identical to <code>select</code>. This argument is here to ensure compatibility
 with <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">tidyr::pivot_longer()</a></code>. If both <code>select</code> and <code>cols</code> are provided, <code>cols</code>
 is used.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -210,6 +247,7 @@ new columns (<code>names_to</code>).</p>
 <li><p>Functions to filter rows: <code><a href="data_match.html">data_match()</a></code>, <code><a href="data_match.html">data_filter()</a></code></p></li>
 </ul></div>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">wide_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span></span></span>
@@ -365,12 +403,21 @@ new columns (<code>names_to</code>).</p>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

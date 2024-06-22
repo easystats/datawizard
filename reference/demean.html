@@ -9,12 +9,19 @@ degroup() is more generic in terms of the centering-operation. While
 demean() always uses mean-centering, degroup() can also use the mode or
 median for centering."><meta property="og:image" content="https://easystats.github.io/datawizard/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -49,6 +56,8 @@ median for centering."><meta property="og:image" content="https://easystats.gith
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -57,6 +66,7 @@ median for centering."><meta property="og:image" content="https://easystats.gith
       <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/main/R/demean.R" class="external-link"><code>R/demean.R</code></a></small>
       <div class="d-none name"><code>demean.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p><code>demean()</code> computes group- and de-meaned versions of a variable that can be
 used in regression analysis to model the between- and within-subject effect.
@@ -64,6 +74,7 @@ used in regression analysis to model the between- and within-subject effect.
 <code>demean()</code> always uses mean-centering, <code>degroup()</code> can also use the mode or
 median for centering.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">demean</span><span class="op">(</span></span>
@@ -101,35 +112,53 @@ median for centering.</p>
 <span>  group <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A data frame.</p></dd>
+
+
 <dt id="arg-select">select<a class="anchor" aria-label="anchor" href="#arg-select"></a></dt>
 <dd><p>Character vector (or formula) with names of variables to select
 that should be group- and de-meaned.</p></dd>
+
+
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
 <dd><p>Character vector (or formula) with the name of the variable that
 indicates the group- or cluster-ID.</p></dd>
+
+
 <dt id="arg-suffix-demean-suffix-groupmean">suffix_demean, suffix_groupmean<a class="anchor" aria-label="anchor" href="#arg-suffix-demean-suffix-groupmean"></a></dt>
 <dd><p>String value, will be appended to the
 names of the group-meaned and de-meaned variables of <code>x</code>. By default,
 de-meaned variables will be suffixed with <code>"_within"</code> and
 grouped-meaned variables with <code>"_between"</code>.</p></dd>
+
+
 <dt id="arg-add-attributes">add_attributes<a class="anchor" aria-label="anchor" href="#arg-add-attributes"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, the returned variables gain
 attributes to indicate the within- and between-effects. This is only
 relevant when printing <code>model_parameters()</code> - in such cases, the
 within- and between-effects are printed in separated blocks.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings and messages.</p></dd>
+
+
 <dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
 <dd><p>Deprecated. Use <code>by</code> instead.</p></dd>
+
+
 <dt id="arg-center">center<a class="anchor" aria-label="anchor" href="#arg-center"></a></dt>
 <dd><p>Method for centering. <code>demean()</code> always performs
 mean-centering, while <code>degroup()</code> can use <code>center = "median"</code> or
 <code>center = "mode"</code> for median- or mode-centering, and also <code>"min"</code>
 or <code>"max"</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -139,6 +168,7 @@ de-meaned variable) by default.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+
 <div class="section">
 <h3 id="heterogeneity-bias">Heterogeneity Bias<a class="anchor" aria-label="anchor" href="#heterogeneity-bias"></a></h3>
 <p>Mixed models include different levels of sources of variability, i.e.
@@ -162,6 +192,7 @@ higher level, the mean term is no longer constrained by Level 1 effects,
 so it is free to account for all the higher-level variance associated
 with that variable” (<cite>Bell et al. 2015</cite>).</p>
 </div>
+
 <div class="section">
 <h3 id="panel-data-and-correlating-fixed-and-group-effects">Panel data and correlating fixed and group effects<a class="anchor" aria-label="anchor" href="#panel-data-and-correlating-fixed-and-group-effects"></a></h3>
 <p><code>demean()</code> is intended to create group- and de-meaned variables
@@ -177,6 +208,7 @@ a higher level, e.g. level-2 predictors) in the model. By this, one can
 fit complex multilevel models for panel data, including time-varying
 predictors, time-invariant predictors and random effects.</p>
 </div>
+
 <div class="section">
 <h3 id="why-mixed-models-are-preferred-over-fixed-effects-models">Why mixed models are preferred over fixed effects models<a class="anchor" aria-label="anchor" href="#why-mixed-models-are-preferred-over-fixed-effects-models"></a></h3>
 <p>A mixed models approach can model the causes of endogeneity explicitly
@@ -191,6 +223,7 @@ in the effects of lower-level controls (which) reduces the precision of
 estimated context effects, resulting in unnecessarily wide confidence
 intervals and low statistical power” (<cite>Heisig et al. 2017</cite>).</p>
 </div>
+
 <div class="section">
 <h3 id="terminology">Terminology<a class="anchor" aria-label="anchor" href="#terminology"></a></h3>
 <p>The group-meaned variable is simply the mean of an independent variable
@@ -202,6 +235,7 @@ variable. De-meaning is sometimes also called person-mean centering or
 centering within clusters. The regression coefficient of a de-meaned
 variable represents the <em>within-subject-effect</em>.</p>
 </div>
+
 <div class="section">
 <h3 id="de-meaning-with-continuous-predictors">De-meaning with continuous predictors<a class="anchor" aria-label="anchor" href="#de-meaning-with-continuous-predictors"></a></h3>
 <p>For continuous time-varying predictors, the recommendation is to include
@@ -212,6 +246,7 @@ regression models, the coefficient of the de-meaned predictors indicates
 the within-subject effect, while the coefficient of the group-meaned
 predictor indicates the between-subject effect.</p>
 </div>
+
 <div class="section">
 <h3 id="de-meaning-with-binary-predictors">De-meaning with binary predictors<a class="anchor" aria-label="anchor" href="#de-meaning-with-binary-predictors"></a></h3>
 <p>For binary time-varying predictors, there are two recommendations. First
@@ -227,6 +262,7 @@ predictors to numeric to compute the de- and group-meaned versions for
 these variables, where the raw (untransformed) binary predictor and the
 de-meaned version should be added to the model.</p>
 </div>
+
 <div class="section">
 <h3 id="de-meaning-of-factors-with-more-than-levels">De-meaning of factors with more than 2 levels<a class="anchor" aria-label="anchor" href="#de-meaning-of-factors-with-more-than-levels"></a></h3>
 <p>Factors with more than two levels are demeaned in two ways: first, these
@@ -236,6 +272,7 @@ dummy-variables are de-meaned in the same way (as described above).
 Packages like <span class="pkg">panelr</span> internally convert factors to dummies before
 demeaning, so this behaviour can be mimicked here.</p>
 </div>
+
 <div class="section">
 <h3 id="de-meaning-interaction-terms">De-meaning interaction terms<a class="anchor" aria-label="anchor" href="#de-meaning-interaction-terms"></a></h3>
 <p>There are multiple ways to deal
@@ -259,6 +296,7 @@ To de-mean interaction terms for within-between models, simply specify
 the term as interaction for the <code>select</code>-argument, e.g.
 <code>select = "a*b"</code> (see 'Examples').</p>
 </div>
+
 <div class="section">
 <h3 id="analysing-panel-data-with-mixed-models-using-lme-">Analysing panel data with mixed models using lme4<a class="anchor" aria-label="anchor" href="#analysing-panel-data-with-mixed-models-using-lme-"></a></h3>
 <p>A description of how to translate the
@@ -266,9 +304,11 @@ formulas described in <em>Bell et al. 2018</em> into R using <code>lmer()</code>
 from <span class="pkg">lme4</span> can be found in
 <a href="https://easystats.github.io/parameters/articles/demean.html" class="external-link">this vignette</a>.</p>
 </div>
+
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+
 <ul><li><p>Bafumi J, Gelman A. 2006. Fitting Multilevel Models When Predictors
 and Group Effects Correlate. In. Philadelphia, PA: Annual meeting of the
 American Political Science Association.</p></li>
@@ -296,6 +336,7 @@ fluctuation and change. New York: Routledge</p></li>
 is required, see <code><a href="center.html">center()</a></code>. See <code><a href="https://easystats.github.io/performance/reference/check_heterogeneity_bias.html" class="external-link">performance::check_heterogeneity_bias()</a></code>
 to check for heterogeneity bias.</p></div>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
@@ -388,12 +429,21 @@ to check for heterogeneity bias.</p></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

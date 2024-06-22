@@ -3,12 +3,19 @@
 data frame or a matrix."><meta property="og:description" content="This function can be used to compute summary statistics for a
 data frame or a matrix."><meta property="og:image" content="https://easystats.github.io/datawizard/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -43,6 +50,8 @@ data frame or a matrix."><meta property="og:image" content="https://easystats.gi
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -51,10 +60,12 @@ data frame or a matrix."><meta property="og:image" content="https://easystats.gi
       <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/main/R/data_summary.R" class="external-link"><code>R/data_summary.R</code></a></small>
       <div class="d-none name"><code>data_summary.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>This function can be used to compute summary statistics for a
 data frame or a matrix.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">data_summary</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -62,29 +73,40 @@ data frame or a matrix.</p>
 <span><span class="co"># S3 method for class 'data.frame'</span></span>
 <span><span class="fu">data_summary</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, by <span class="op">=</span> <span class="cn">NULL</span>, include_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A (grouped) data frame.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>One or more named expressions that define the new variable name
 and the function to compute the summary statistic. Example:
 <code>mean_sepal_width = mean(Sepal.Width)</code>. The expression can also be provided
 as a character string, e.g. <code>"mean_sepal_width = mean(Sepal.Width)"</code>. The
 summary function <code><a href="https://nathaneastwood.github.io/poorman/reference/context.html" class="external-link">n()</a></code> can be used to count the number of observations.</p></dd>
+
+
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
 <dd><p>Optional character string, indicating the name of a variable in <code>x</code>.
 If supplied, the data will be split by this variable and summary statistics
 will be computed for each group.</p></dd>
+
+
 <dt id="arg-include-na">include_na<a class="anchor" aria-label="anchor" href="#arg-include-na"></a></dt>
 <dd><p>Logical. If <code>TRUE</code>, missing values are included as a level
 in the grouping variable. If <code>FALSE</code>, missing values are omitted from the
 grouping variable.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A data frame with the requested summary statistics.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></span>
@@ -158,12 +180,21 @@ grouping variable.</p></dd>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

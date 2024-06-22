@@ -3,12 +3,19 @@
 the mean, \(\sigma/\mu\)) for a set of numeric values."><meta property="og:description" content="Compute the coefficient of variation (CV, ratio of the standard deviation to
 the mean, \(\sigma/\mu\)) for a set of numeric values."><meta property="og:image" content="https://easystats.github.io/datawizard/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -43,6 +50,8 @@ the mean, \(\sigma/\mu\)) for a set of numeric values."><meta property="og:image
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -51,10 +60,12 @@ the mean, \(\sigma/\mu\)) for a set of numeric values."><meta property="og:image
       <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/main/R/descriptives.R" class="external-link"><code>R/descriptives.R</code></a></small>
       <div class="d-none name"><code>coef_var.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>Compute the coefficient of variation (CV, ratio of the standard deviation to
 the mean, \(\sigma/\mu\)) for a set of numeric values.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">coef_var</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -74,18 +85,29 @@ the mean, \(\sigma/\mu\)) for a set of numeric values.</p>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A numeric vector of ratio scale (see details), or vector of values than can be coerced to one.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Further arguments passed to computation functions.</p></dd>
+
+
 <dt id="arg-mu">mu<a class="anchor" aria-label="anchor" href="#arg-mu"></a></dt>
 <dd><p>A numeric vector of mean values to use to compute the coefficient
 of variation. If supplied, <code>x</code> is not used to compute the mean.</p></dd>
+
+
 <dt id="arg-sigma">sigma<a class="anchor" aria-label="anchor" href="#arg-sigma"></a></dt>
 <dd><p>A numeric vector of standard deviation values to use to compute the coefficient
 of variation. If supplied, <code>x</code> is not used to compute the SD.</p></dd>
+
+
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>Method to use to compute the CV. Can be <code>"standard"</code> to compute
 by dividing the standard deviation by the mean, <code>"unbiased"</code> for the
@@ -93,20 +115,29 @@ unbiased estimator for normally distributed data, or one of two robust
 alternatives: <code>"median_mad"</code> to divide the median by the <code><a href="https://rdrr.io/r/stats/mad.html" class="external-link">stats::mad()</a></code>,
 or <code>"qcd"</code> (quartile coefficient of dispersion, interquartile range divided
 by the sum of the quartiles [twice the midhinge]: \((Q_3 - Q_1)/(Q_3 + Q_1)\).</p></dd>
+
+
 <dt id="arg-trim">trim<a class="anchor" aria-label="anchor" href="#arg-trim"></a></dt>
 <dd><p>the fraction (0 to 0.5) of values to be trimmed from
 each end of <code>x</code> before the mean and standard deviation (or other measures)
 are computed. Values of <code>trim</code> outside the range of (0 to 0.5) are taken
 as the nearest endpoint.</p></dd>
+
+
 <dt id="arg-remove-na">remove_na<a class="anchor" aria-label="anchor" href="#arg-remove-na"></a></dt>
 <dd><p>Logical. Should <code>NA</code> values be removed before computing (<code>TRUE</code>)
 or not (<code>FALSE</code>, default)?</p></dd>
+
+
 <dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
 <dd><p>If <code>method = "unbiased"</code> and both <code>mu</code> and <code>sigma</code> are provided (not
 computed from <code>x</code>), what sample size to use to adjust the computed CV
 for small-sample bias?</p></dd>
+
+
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
 <dd><p>Deprecated. Please use <code>remove_na</code> instead.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -135,6 +166,7 @@ sandwiches did I eat this week ( = sandwiches * 0.5) and 0 would still mean
 <span><span class="fu"><a href="../reference/coef_var.html">coef_var</a></span><span class="op">(</span><span class="va">sandwiches</span> <span class="op">+</span> <span class="fl">4</span><span class="op">)</span> <span class="co"># different! 0 is no longer meaningful!</span></span>
 <span><span class="co">#&gt; [1] 0.6290784</span></span></code></pre><p></p></div>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">coef_var</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
@@ -151,12 +183,21 @@ sandwiches did I eat this week ( = sandwiches * 0.5) and 0 would still mean
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

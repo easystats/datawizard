@@ -5,12 +5,19 @@ labels, values or value range, frequencies, amount of missing values)."><meta pr
 of all variables and some more information about each variable (like
 labels, values or value range, frequencies, amount of missing values)."><meta property="og:image" content="https://easystats.github.io/datawizard/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -45,6 +52,8 @@ labels, values or value range, frequencies, amount of missing values)."><meta pr
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -53,11 +62,13 @@ labels, values or value range, frequencies, amount of missing values)."><meta pr
       <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/main/R/data_codebook.R" class="external-link"><code>R/data_codebook.R</code></a></small>
       <div class="d-none name"><code>data_codebook.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p><code>data_codebook()</code> generates codebooks from data frames, i.e. overviews
 of all variables and some more information about each variable (like
 labels, values or value range, frequencies, amount of missing values).</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">data_codebook</span><span class="op">(</span></span>
@@ -83,10 +94,15 @@ labels, values or value range, frequencies, amount of missing values).</p>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>A data frame, or an object that can be coerced to a data frame.</p></dd>
+
+
 <dt id="arg-select">select<a class="anchor" aria-label="anchor" href="#arg-select"></a></dt>
 <dd><p>Variables that will be included when performing the required
 tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
@@ -115,31 +131,45 @@ negation should not work as expected, use the <code>exclude</code> argument inst
 </ul><p>If <code>NULL</code>, selects all columns. Patterns that found no matches are silently
 ignored, e.g. <code>extract_column_names(iris, select = c("Species", "Test"))</code>
 will just return <code>"Species"</code>.</p></dd>
+
+
 <dt id="arg-exclude">exclude<a class="anchor" aria-label="anchor" href="#arg-exclude"></a></dt>
 <dd><p>See <code>select</code>, however, column names matched by the pattern
 from <code>exclude</code> will be excluded instead of selected. If <code>NULL</code> (the default),
 excludes no columns.</p></dd>
+
+
 <dt id="arg-variable-label-width">variable_label_width<a class="anchor" aria-label="anchor" href="#arg-variable-label-width"></a></dt>
 <dd><p>Length of variable labels. Longer labels will be
 wrapped at <code>variable_label_width</code> chars. If <code>NULL</code>, longer labels will not
 be split into multiple lines. Only applies to <em>labelled data</em>.</p></dd>
+
+
 <dt id="arg-value-label-width">value_label_width<a class="anchor" aria-label="anchor" href="#arg-value-label-width"></a></dt>
 <dd><p>Length of value labels. Longer labels will be
 shortened, where the remaining part is truncated. Only applies to
 <em>labelled data</em> or factor levels.</p></dd>
+
+
 <dt id="arg-max-values">max_values<a class="anchor" aria-label="anchor" href="#arg-max-values"></a></dt>
 <dd><p>Number of maximum values that should be displayed. Can be
 used to avoid too many rows when variables have lots of unique values.</p></dd>
+
+
 <dt id="arg-range-at">range_at<a class="anchor" aria-label="anchor" href="#arg-range-at"></a></dt>
 <dd><p>Indicates how many unique values in a numeric vector are
 needed in order to print a range for that variable instead of a frequency
 table for all numeric values. Can be useful if the data contains numeric
 variables with only a few unique values and where full frequency tables
 instead of value ranges should be displayed.</p></dd>
+
+
 <dt id="arg-ignore-case">ignore_case<a class="anchor" aria-label="anchor" href="#arg-ignore-case"></a></dt>
 <dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
 a regular expression is used in <code>select</code>, ignores lower/upper case in the
 search pattern when matching against variable names.</p></dd>
+
+
 <dt id="arg-regex">regex<a class="anchor" aria-label="anchor" href="#arg-regex"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, the search pattern from <code>select</code> will be
 treated as regular expression. When <code>regex = TRUE</code>, select <em>must</em> be a
@@ -149,19 +179,32 @@ of length &gt; 1. <code>regex = TRUE</code> is comparable to using one of the tw
 select-helpers, <code>select = contains("")</code> or <code>select = regex("")</code>, however,
 since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings and messages on or off.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed to or from other methods.</p></dd>
+
+
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A (grouped) data frame, a vector or a statistical model (for
 <code><a href="standardize.html">unstandardize()</a></code> cannot be a model).</p></dd>
+
+
 <dt id="arg-font-size">font_size<a class="anchor" aria-label="anchor" href="#arg-font-size"></a></dt>
 <dd><p>For HTML tables, the font size.</p></dd>
+
+
 <dt id="arg-line-padding">line_padding<a class="anchor" aria-label="anchor" href="#arg-line-padding"></a></dt>
 <dd><p>For HTML tables, the distance (in pixel) between lines.</p></dd>
+
+
 <dt id="arg-row-color">row_color<a class="anchor" aria-label="anchor" href="#arg-row-color"></a></dt>
 <dd><p>For HTML tables, the fill color for odd rows.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -178,6 +221,7 @@ Most columns are formatted as character vectors.</p>
 well methods for printing in markdown or HTML format (<code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md()</a></code> and
 <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_html()</a></code>).</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></span>
@@ -275,12 +319,21 @@ well methods for printing in markdown or HTML format (<code><a href="https://eas
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

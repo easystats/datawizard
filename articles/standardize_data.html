@@ -23,12 +23,19 @@
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
@@ -74,18 +81,26 @@
 </li>
       </ul>
 </div>
+
+
   </div>
 </nav><div class="container template-article">
+
 
 
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Data Standardization</h1>
-                        <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/main/vignettes/standardize_data.Rmd" class="external-link"><code>vignettes/standardize_data.Rmd</code></a></small>
+            
+      
+      <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/main/vignettes/standardize_data.Rmd" class="external-link"><code>vignettes/standardize_data.Rmd</code></a></small>
       <div class="d-none name"><code>standardize_data.Rmd</code></div>
     </div>
-        <p>This vignette can be referred to by citing the following:</p>
+
+    
+    
+<p>This vignette can be referred to by citing the following:</p>
 <blockquote>
 <p>Patil et al., (2022). datawizard: An R Package for Easy Data
 Preparation and Statistical Transformations. <em>Journal of Open Source
@@ -617,21 +632,21 @@ find:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # Random Effects: Participant_ID</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Model             | Coefficient</span></span>
-<span><span class="co">#&gt; -------------------------------</span></span>
-<span><span class="co">#&gt; m_raw             |       16.49</span></span>
-<span><span class="co">#&gt; m_VariableWise    |        0.45</span></span>
-<span><span class="co">#&gt; m_ParticipantWise |        0.00</span></span>
-<span><span class="co">#&gt; m_Full            |        0.00</span></span>
+<span><span class="co">#&gt; Model             | Coefficient |   SE |         95% CI</span></span>
+<span><span class="co">#&gt; -------------------------------------------------------</span></span>
+<span><span class="co">#&gt; m_raw             |       16.49 | 3.24 | [11.22, 24.22]</span></span>
+<span><span class="co">#&gt; m_VariableWise    |        0.45 | 0.09 | [ 0.30,  0.65]</span></span>
+<span><span class="co">#&gt; m_ParticipantWise |        0.00 |      |               </span></span>
+<span><span class="co">#&gt; m_Full            |        0.00 |      |               </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # Random Effects: Residual</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Model             | Coefficient</span></span>
-<span><span class="co">#&gt; -------------------------------</span></span>
-<span><span class="co">#&gt; m_raw             |       33.56</span></span>
-<span><span class="co">#&gt; m_VariableWise    |        0.91</span></span>
-<span><span class="co">#&gt; m_ParticipantWise |        0.98</span></span>
-<span><span class="co">#&gt; m_Full            |        1.00</span></span></code></pre>
+<span><span class="co">#&gt; Model             | Coefficient |   SE |         95% CI</span></span>
+<span><span class="co">#&gt; -------------------------------------------------------</span></span>
+<span><span class="co">#&gt; m_raw             |       33.56 | 1.14 | [31.40, 35.86]</span></span>
+<span><span class="co">#&gt; m_VariableWise    |        0.91 | 0.03 | [ 0.85,  0.97]</span></span>
+<span><span class="co">#&gt; m_ParticipantWise |        0.98 |      |               </span></span>
+<span><span class="co">#&gt; m_Full            |        1.00 |      |</span></span></code></pre>
 <p>As we can see, <strong>variable-wise</strong> standardization only
 affects <strong>the coefficient</strong> (which is expected, as it
 changes the unit), but not the test statistic or statistical
@@ -682,13 +697,23 @@ mixed-effects models <a href="https://easystats.github.io/parameters/articles/st
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
+
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer>
 </div>
+
+
+
+
+
   </body>
 </html>

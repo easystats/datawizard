@@ -3,12 +3,19 @@
 (change the keying/scoring direction), or to expand a range."><meta property="og:description" content="Rescale variables to a new range. Can also be used to reverse-score variables
 (change the keying/scoring direction), or to expand a range."><meta property="og:image" content="https://easystats.github.io/datawizard/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -43,6 +50,8 @@
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -51,10 +60,12 @@
       <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/main/R/data_rescale.R" class="external-link"><code>R/data_rescale.R</code></a></small>
       <div class="d-none name"><code>rescale.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>Rescale variables to a new range. Can also be used to reverse-score variables
 (change the keying/scoring direction), or to expand a range.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rescale</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -88,22 +99,33 @@
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A (grouped) data frame, numeric vector or factor.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed to or from other methods.</p></dd>
+
+
 <dt id="arg-to">to<a class="anchor" aria-label="anchor" href="#arg-to"></a></dt>
 <dd><p>Numeric vector of length 2 giving the new range that the variable
 will have after rescaling. To reverse-score a variable, the range should
 be given with the maximum value first. See examples.</p></dd>
+
+
 <dt id="arg-multiply">multiply<a class="anchor" aria-label="anchor" href="#arg-multiply"></a></dt>
 <dd><p>If not <code>NULL</code>, <code>to</code> is ignored and <code>multiply</code> will be used,
 giving the factor by which the actual range of <code>x</code> should be expanded.
 For example, if a vector ranges from 5 to 15 and <code>multiply = 1.1</code>, the current
 range of 10 will be expanded by the factor of 1.1, giving a new range of
 11. Thus, the rescaled vector would range from 4.5 to 15.5.</p></dd>
+
+
 <dt id="arg-add">add<a class="anchor" aria-label="anchor" href="#arg-add"></a></dt>
 <dd><p>A vector of length 1 or 2. If not <code>NULL</code>, <code>to</code> is ignored and <code>add</code>
 will be used, giving the amount by which the minimum and maximum of the
@@ -111,11 +133,17 @@ actual range of <code>x</code> should be expanded. For example, if a vector rang
 5 to 15 and <code>add = 1</code>, the range will be expanded from 4 to 16. If <code>add</code> is
 of length 2, then the first value is used for the lower bound and the second
 value for the upper bound.</p></dd>
+
+
 <dt id="arg-range">range<a class="anchor" aria-label="anchor" href="#arg-range"></a></dt>
 <dd><p>Initial (old) range of values. If <code>NULL</code>, will take the range of
 the input vector (<code>range(x)</code>).</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings.</p></dd>
+
+
 <dt id="arg-select">select<a class="anchor" aria-label="anchor" href="#arg-select"></a></dt>
 <dd><p>Variables that will be included when performing the required
 tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
@@ -144,10 +172,14 @@ negation should not work as expected, use the <code>exclude</code> argument inst
 </ul><p>If <code>NULL</code>, selects all columns. Patterns that found no matches are silently
 ignored, e.g. <code>extract_column_names(iris, select = c("Species", "Test"))</code>
 will just return <code>"Species"</code>.</p></dd>
+
+
 <dt id="arg-exclude">exclude<a class="anchor" aria-label="anchor" href="#arg-exclude"></a></dt>
 <dd><p>See <code>select</code>, however, column names matched by the pattern
 from <code>exclude</code> will be excluded instead of selected. If <code>NULL</code> (the default),
 excludes no columns.</p></dd>
+
+
 <dt id="arg-append">append<a class="anchor" aria-label="anchor" href="#arg-append"></a></dt>
 <dd><p>Logical or string. If <code>TRUE</code>, recoded or converted variables
 get new column names and are appended (column bind) to <code>x</code>, thus returning
@@ -158,10 +190,14 @@ based on the calling function: <code>"_r"</code> for recode functions, <code>"_n
 overwritten by their recoded versions. If a character value, recoded
 variables are appended with new column names (using the defined suffix) to
 the original data frame.</p></dd>
+
+
 <dt id="arg-ignore-case">ignore_case<a class="anchor" aria-label="anchor" href="#arg-ignore-case"></a></dt>
 <dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
 a regular expression is used in <code>select</code>, ignores lower/upper case in the
 search pattern when matching against variable names.</p></dd>
+
+
 <dt id="arg-regex">regex<a class="anchor" aria-label="anchor" href="#arg-regex"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, the search pattern from <code>select</code> will be
 treated as regular expression. When <code>regex = TRUE</code>, select <em>must</em> be a
@@ -171,6 +207,7 @@ of length &gt; 1. <code>regex = TRUE</code> is comparable to using one of the tw
 select-helpers, <code>select = contains("")</code> or <code>select = regex("")</code>, however,
 since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -178,6 +215,8 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="selection-of-variables-the-select-argument">Selection of variables - the <code>select</code> argument<a class="anchor" aria-label="anchor" href="#selection-of-variables-the-select-argument"></a></h2>
+
+
 <p>For most functions that have a <code>select</code> argument (including this function),
 the complete input data frame is returned, even when <code>select</code> only selects
 a range of variables. That is, the function is only applied to those variables
@@ -195,6 +234,7 @@ from the input data frame.</p>
 <code><a href="reverse.html">reverse</a>()</code>,
 <code><a href="standardize.html">standardize</a>()</code></p></div>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">rescale</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -299,12 +339,21 @@ from the input data frame.</p>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

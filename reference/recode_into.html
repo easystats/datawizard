@@ -5,12 +5,19 @@ is similar to dplyr::case_when()."><meta property="og:description" content="This
 It is a convenient function to avoid nested ifelse() statements, which
 is similar to dplyr::case_when()."><meta property="og:image" content="https://easystats.github.io/datawizard/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -45,6 +52,8 @@ is similar to dplyr::case_when()."><meta property="og:image" content="https://ea
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -53,11 +62,13 @@ is similar to dplyr::case_when()."><meta property="og:image" content="https://ea
       <small class="dont-index">Source: <a href="https://github.com/easystats/datawizard/blob/main/R/recode_into.R" class="external-link"><code>R/recode_into.R</code></a></small>
       <div class="d-none name"><code>recode_into.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>This functions recodes values from one or more variables into a new variable.
 It is a convenient function to avoid nested <code><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse()</a></code> statements, which
 is similar to <code><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">dplyr::case_when()</a></code>.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">recode_into</span><span class="op">(</span></span>
@@ -69,26 +80,37 @@ is similar to <code><a href="https://dplyr.tidyverse.org/reference/case_when.htm
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>A sequence of two-sided formulas, where the left hand side (LHS)
 is a logical matching condition that determines which values match this case.
 The LHS of this formula is also called "recode pattern" (e.g., in messages).
 The right hand side (RHS) indicates the replacement value.</p></dd>
+
+
 <dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>Optional, name of a data frame. This can be used to avoid writing
 the data name multiple times in <code>...</code>. See 'Examples'.</p></dd>
+
+
 <dt id="arg-default">default<a class="anchor" aria-label="anchor" href="#arg-default"></a></dt>
 <dd><p>Indicates the default value that is chosen when no match in
 the formulas in <code>...</code> is found. If not provided, <code>NA</code> is used as default
 value.</p></dd>
+
+
 <dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
 <dd><p>Logical, if <code>TRUE</code> (default) and more than one recode pattern
 apply to the same case, already recoded values will be overwritten by subsequent
 recode patterns. If <code>FALSE</code>, former recoded cases will not be altered by later
 recode patterns that would apply to those cases again. A warning message is
 printed to alert such situations and to avoid unintentional recodings.</p></dd>
+
+
 <dt id="arg-preserve-na">preserve_na<a class="anchor" aria-label="anchor" href="#arg-preserve-na"></a></dt>
 <dd><p>Logical, if <code>TRUE</code> and <code>default</code> is not <code>NA</code>, missing
 values in the original variable will be set back to <code>NA</code> in the recoded
@@ -97,13 +119,17 @@ values in the original variable will be recoded to <code>default</code>. Setting
 <code>preserve_na = TRUE</code> prevents unintentional overwriting of missing values
 with <code>default</code>, which means that you won't find valid values where the
 original data only had missing values. See 'Examples'.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A vector with recoded values.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span></span></span>
@@ -192,12 +218,21 @@ original data only had missing values. See 'Examples'.</p></dd>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 
