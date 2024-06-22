@@ -417,8 +417,12 @@ as.data.frame.datawizard_tables <- function(x,
     # form). Else, we would need to modify the class attribute here,
     # e.g. class(i) <- "data.frame"
     if (add_total) {
+      # to add the total column and row, we simply can call `format()`
       out <- as.data.frame(format(i))
       for (cols in 2:ncol(out)) {
+        # since "format()" returns a character matrix, we want to convert
+        # the columns to numeric. We have to exclude the first column, as the
+        # first column is character, due to the added "Total" value.
         out[[cols]] <- as.numeric(out[[cols]])
       }
       out <- remove_empty_rows(out)
