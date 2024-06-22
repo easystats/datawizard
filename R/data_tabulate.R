@@ -25,9 +25,6 @@
 #' percentages to be calculated. Only applies to crosstables, i.e. when `by` is
 #' not `NULL`. Can be `"row"` (row percentages), `"column"` (column percentages)
 #' or `"full"` (to calculate relative frequencies for the full table).
-#' @param add_total For crosstables (i.e. when `by` is not `NULL`), a row and
-#' column with the total N values are added to the data frame. `add_total` has
-#' no effect in `as.data.frame()` for simple frequency tables.
 #' @param ... not used.
 #' @inheritParams extract_column_names
 #'
@@ -397,8 +394,17 @@ insight::print_md
 
 
 #' @rdname data_tabulate
+#' @param add_total For crosstables (i.e. when `by` is not `NULL`), a row and
+#' column with the total N values are added to the data frame. `add_total` has
+#' no effect in `as.data.frame()` for simple frequency tables.
+#' @inheritParams base::as.data.frame
 #' @export
-as.data.frame.datawizard_tables <- function(x, add_total = FALSE, ...) {
+as.data.frame.datawizard_tables <- function(x,
+                                            row.names = NULL,
+                                            optional = FALSE,
+                                            ...,
+                                            stringsAsFactors = FALSE,
+                                            add_total = FALSE) {
   # extract variables of frequencies
   selected_vars <- unlist(lapply(x, function(i) attributes(i)$varname))
   # coerce to data frame, remove rownames
@@ -417,11 +423,14 @@ as.data.frame.datawizard_tables <- function(x, add_total = FALSE, ...) {
     out
   })
   # create nested data frame
-  data.frame(
+  result <- data.frame(
     var = selected_vars,
     table = I(data_frames),
-    stringsAsFactors = FALSE
+    stringsAsFactors = stringsAsFactors
   )
+  # consider additional arguments
+  rownames(result) <- row.names
+  result
 }
 
 #' @export

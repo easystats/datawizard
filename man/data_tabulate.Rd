@@ -37,7 +37,14 @@ data_tabulate(x, ...)
   ...
 )
 
-\method{as.data.frame}{datawizard_tables}(x, add_total = FALSE, ...)
+\method{as.data.frame}{datawizard_tables}(
+  x,
+  row.names = NULL,
+  optional = FALSE,
+  ...,
+  stringsAsFactors = FALSE,
+  add_total = FALSE
+)
 }
 \arguments{
 \item{x}{A (grouped) data frame, a vector or factor.}
@@ -119,6 +126,20 @@ functions (see 'Details'), this argument may be used as workaround.}
 
 \item{collapse}{Logical, if \code{TRUE} collapses multiple tables into one larger
 table for printing. This affects only printing, not the returned object.}
+
+\item{row.names}{\code{NULL} or a character vector giving the row
+    names for the data frame.  Missing values are not allowed.}
+
+\item{optional}{logical. If \code{TRUE}, setting row names and
+    converting column names (to syntactic names: see
+    \code{\link[base]{make.names}}) is optional.  Note that all of \R's
+    \pkg{base} package \code{as.data.frame()} methods use
+    \code{optional} only for column names treatment, basically with the
+    meaning of \code{\link[base]{data.frame}(*, check.names = !optional)}.
+    See also the \code{make.names} argument of the \code{matrix} method.}
+
+\item{stringsAsFactors}{logical: should the character vector be converted
+    to a factor?}
 
 \item{add_total}{For crosstables (i.e. when \code{by} is not \code{NULL}), a row and
 column with the total N values are added to the data frame. \code{add_total} has
