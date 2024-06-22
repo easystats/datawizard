@@ -259,7 +259,7 @@
 
     Code
       print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full",
-      include_na = FALSE))
+      remove_na = TRUE))
     Output
       efc$c172code |       male |     female | Total
       -------------+------------+------------+------
@@ -288,7 +288,7 @@
 
     Code
       print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full",
-      include_na = FALSE, weights = efc$weights))
+      remove_na = TRUE, weights = efc$weights))
     Output
       efc$c172code |       male |     female | Total
       -------------+------------+------------+------
@@ -317,7 +317,7 @@
 
     Code
       print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row",
-      include_na = FALSE))
+      remove_na = TRUE))
     Output
       c172code |       male |     female | Total
       ---------+------------+------------+------
@@ -348,7 +348,7 @@
 
     Code
       print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row",
-      include_na = FALSE, weights = efc$weights))
+      remove_na = TRUE, weights = efc$weights))
     Output
       c172code |       male |     female | Total
       ---------+------------+------------+------
@@ -378,7 +378,7 @@
 
     Code
       print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column",
-        include_na = FALSE))
+        remove_na = TRUE))
     Output
       c172code |       male |     female | Total
       ---------+------------+------------+------
@@ -409,7 +409,7 @@
 
     Code
       print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column",
-        include_na = FALSE, weights = "weights"))
+        remove_na = TRUE, weights = "weights"))
     Output
       c172code |       male |     female | Total
       ---------+------------+------------+------
@@ -497,7 +497,7 @@
 
     Code
       print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full",
-      include_na = FALSE))
+      remove_na = TRUE))
     Output
       [1] "|efc$c172code |       male|     female| Total|"
       [2] "|:------------|----------:|----------:|-----:|"
@@ -534,7 +534,7 @@
 
     Code
       print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full",
-      include_na = FALSE, weights = efc$weights))
+      remove_na = TRUE, weights = efc$weights))
     Output
       [1] "|efc$c172code |       male|     female| Total|"
       [2] "|:------------|----------:|----------:|-----:|"
