@@ -74,6 +74,7 @@
   attr(out, "total_n") <- total_n
   attr(out, "weights") <- weights
   attr(out, "proportions") <- proportions
+  attr(out, "varname") <- obj_name
 
   class(out) <- c("dw_data_xtabulate", "data.frame")
 
