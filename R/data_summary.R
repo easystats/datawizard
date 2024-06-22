@@ -103,10 +103,10 @@ data_summary.data.frame <- function(x, ..., by = NULL, remove_na = FALSE) {
     }
     # split data, add NA levels, if requested
     l <- lapply(x[by], function(i) {
-      if (remove_na && anyNA(i)) {
-        addNA(i)
-      } else {
+      if (remove_na || !anyNA(i)) {
         i
+      } else {
+        addNA(i)
       }
     })
     split_data <- split(x, l, drop = TRUE)

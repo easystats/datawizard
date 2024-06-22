@@ -62,7 +62,7 @@
 #' data_tabulate(efc$c172code)
 #'
 #' # drop missing values
-#' data_tabulate(efc$c172code, remove_na = FALSE)
+#' data_tabulate(efc$c172code, remove_na = TRUE)
 #'
 #' # data frame
 #' data_tabulate(efc, c("e42dep", "c172code"))
@@ -109,7 +109,7 @@
 #'   efc$c172code,
 #'   by = efc$e16sex,
 #'   proportions = "column",
-#'   remove_na = FALSE
+#'   remove_na = TRUE
 #' )
 #'
 #' # round percentages
@@ -173,22 +173,11 @@ data_tabulate.default <- function(x,
   # frequency table
   if (is.null(weights)) {
     if (remove_na) {
-      freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
-    } else {
       freq_table <- tryCatch(table(x), error = function(e) NULL)
+    } else {
+      freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
     }
   } else if (remove_na) {
-    # weighted frequency table, including NA
-    freq_table <- tryCatch(
-      stats::xtabs(
-        weights ~ x,
-        data = data.frame(weights = weights, x = addNA(x)),
-        na.action = stats::na.pass,
-        addNA = TRUE
-      ),
-      error = function(e) NULL
-    )
-  } else {
     # weighted frequency table, excluding NA
     freq_table <- tryCatch(
       stats::xtabs(
@@ -196,6 +185,17 @@ data_tabulate.default <- function(x,
         data = data.frame(weights = weights, x = x),
         na.action = stats::na.omit,
         addNA = FALSE
+      ),
+      error = function(e) NULL
+    )
+  } else {
+    # weighted frequency table, including NA
+    freq_table <- tryCatch(
+      stats::xtabs(
+        weights ~ x,
+        data = data.frame(weights = weights, x = addNA(x)),
+        na.action = stats::na.pass,
+        addNA = TRUE
       ),
       error = function(e) NULL
     )
@@ -219,11 +219,11 @@ data_tabulate.default <- function(x,
   out$`Raw %` <- 100 * out$N / sum(out$N)
   # if we have missing values, we add a row with NA
   if (remove_na) {
-    out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
-    valid_n <- sum(out$N[-length(out$N)], na.rm = TRUE)
-  } else {
     out$`Valid %` <- 100 * out$N / sum(out$N)
     valid_n <- sum(out$N, na.rm = TRUE)
+  } else {
+    out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
+    valid_n <- sum(out$N[-length(out$N)], na.rm = TRUE)
   }
   out$`Cumulative %` <- cumsum(out$`Valid %`)
 

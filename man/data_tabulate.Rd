@@ -189,7 +189,7 @@ data(efc)
 data_tabulate(efc$c172code)
 
 # drop missing values
-data_tabulate(efc$c172code, remove_na = FALSE)
+data_tabulate(efc$c172code, remove_na = TRUE)
 
 # data frame
 data_tabulate(efc, c("e42dep", "c172code"))
@@ -236,7 +236,7 @@ data_tabulate(
   efc$c172code,
   by = efc$e16sex,
   proportions = "column",
-  remove_na = FALSE
+  remove_na = TRUE
 )
 
 # round percentages

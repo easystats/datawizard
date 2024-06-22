@@ -13,22 +13,11 @@
   # frequency table
   if (is.null(weights)) {
     if (remove_na) {
-      x_table <- tryCatch(table(addNA(x), addNA(by)), error = function(e) NULL)
-    } else {
       x_table <- tryCatch(table(x, by), error = function(e) NULL)
+    } else {
+      x_table <- tryCatch(table(addNA(x), addNA(by)), error = function(e) NULL)
     }
   } else if (remove_na) {
-    # weighted frequency table, including NA
-    x_table <- tryCatch(
-      stats::xtabs(
-        weights ~ x + by,
-        data = data.frame(weights = weights, x = addNA(x), by = addNA(by)),
-        na.action = stats::na.pass,
-        addNA = TRUE
-      ),
-      error = function(e) NULL
-    )
-  } else {
     # weighted frequency table, excluding NA
     x_table <- tryCatch(
       stats::xtabs(
@@ -36,6 +25,17 @@
         data = data.frame(weights = weights, x = x, by = by),
         na.action = stats::na.omit,
         addNA = FALSE
+      ),
+      error = function(e) NULL
+    )
+  } else {
+    # weighted frequency table, including NA
+    x_table <- tryCatch(
+      stats::xtabs(
+        weights ~ x + by,
+        data = data.frame(weights = weights, x = addNA(x), by = addNA(by)),
+        na.action = stats::na.pass,
+        addNA = TRUE
       ),
       error = function(e) NULL
     )
