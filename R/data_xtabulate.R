@@ -3,7 +3,7 @@
 .crosstable <- function(x,
                         by,
                         weights = NULL,
-                        include_na = TRUE,
+                        remove_na = FALSE,
                         proportions = NULL,
                         obj_name = NULL,
                         group_variable = NULL) {
@@ -12,12 +12,12 @@
   }
   # frequency table
   if (is.null(weights)) {
-    if (include_na) {
+    if (remove_na) {
       x_table <- tryCatch(table(addNA(x), addNA(by)), error = function(e) NULL)
     } else {
       x_table <- tryCatch(table(x, by), error = function(e) NULL)
     }
-  } else if (include_na) {
+  } else if (remove_na) {
     # weighted frequency table, including NA
     x_table <- tryCatch(
       stats::xtabs(
