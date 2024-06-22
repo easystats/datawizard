@@ -1,6 +1,12 @@
 # datawizard 0.11.0.1
 
-## Changes
+BREAKING CHANGES
+
+* Class names for objects returned by `data_tabulate()` have been changed to
+  `datawizard_table` and `datawizard_crosstable` (resp. the plural forms,
+  `*_tables`), to provide a clearer and more consistent naming scheme.
+
+CHANGES
 
 * `data_select()` can directly rename selected variables when a named vector
   is provided in `select`, e.g. `data_select(mtcars, c(new1 = "mpg", new2 = "cyl"))`.
