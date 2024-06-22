@@ -383,7 +383,7 @@ insight::print_md
 
 #' @rdname data_tabulate
 #' @export
-data.frame.dw_data_tabulates <- function(x, add_total = FALSE, ...) {
+as.data.frame.dw_data_tabulates <- function(x, add_total = FALSE, ...) {
   # extract variables of frequencies
   selected_vars <- lapply(x, function(i) attributes(i)$varname)
   # coerce to data frame, remove rownames
@@ -409,7 +409,7 @@ data.frame.dw_data_tabulates <- function(x, add_total = FALSE, ...) {
 }
 
 #' @export
-data.frame.dw_data_xtabulate <- data.frame.dw_data_tabulates
+as.data.frame.dw_data_xtabulate <- as.data.frame.dw_data_tabulates
 
 
 #' @export

@@ -4,7 +4,7 @@
 \alias{data_tabulate}
 \alias{data_tabulate.default}
 \alias{data_tabulate.data.frame}
-\alias{data.frame.dw_data_tabulates}
+\alias{as.data.frame.dw_data_tabulates}
 \title{Create frequency and crosstables of variables}
 \usage{
 data_tabulate(x, ...)
@@ -37,7 +37,7 @@ data_tabulate(x, ...)
   ...
 )
 
-data.frame.dw_data_tabulates(x, add_total = FALSE, ...)
+\method{as.data.frame}{dw_data_tabulates}(x, add_total = FALSE, ...)
 }
 \arguments{
 \item{x}{A (grouped) data frame, a vector or factor.}
