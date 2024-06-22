@@ -25,6 +25,7 @@
 #' percentages to be calculated. Only applies to crosstables, i.e. when `by` is
 #' not `NULL`. Can be `"row"` (row percentages), `"column"` (column percentages)
 #' or `"full"` (to calculate relative frequencies for the full table).
+#' @param add_total Add total.
 #' @param ... not used.
 #' @inheritParams extract_column_names
 #'
@@ -378,6 +379,37 @@ insight::print_html
 #' @importFrom insight print_md
 #' @export
 insight::print_md
+
+
+#' @rdname data_tabulate
+#' @export
+data.frame.dw_data_tabulates <- function(x, add_total = FALSE, ...) {
+  # extract variables of frequencies
+  selected_vars <- lapply(x, function(i) attributes(i)$varname)
+  # coerce to data frame, remove rownames
+  data_frames <- lapply(x, function(i) {
+    if (add_total) {
+      out <- as.data.frame(format(i))
+      for (i in 2:ncol(out)) {
+        out[[i]] <- as.numeric(out[[i]])
+      }
+      out <- remove_empty_rows(out)
+    } else {
+      out <- as.data.frame(i)
+    }
+    rownames(out) <- NULL
+    out
+  })
+  # create nested data frame
+  data.frame(
+    var = selected_vars,
+    table = I(data_frames),
+    stringsAsFactors = FALSE
+  )
+}
+
+#' @export
+data.frame.dw_data_xtabulate <- data.frame.dw_data_tabulates
 
 
 #' @export

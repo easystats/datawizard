@@ -4,6 +4,7 @@
 \alias{data_tabulate}
 \alias{data_tabulate.default}
 \alias{data_tabulate.data.frame}
+\alias{data.frame.dw_data_tabulates}
 \title{Create frequency and crosstables of variables}
 \usage{
 data_tabulate(x, ...)
@@ -35,6 +36,8 @@ data_tabulate(x, ...)
   verbose = TRUE,
   ...
 )
+
+data.frame.dw_data_tabulates(x, add_total = FALSE, ...)
 }
 \arguments{
 \item{x}{A (grouped) data frame, a vector or factor.}
@@ -116,6 +119,8 @@ functions (see 'Details'), this argument may be used as workaround.}
 
 \item{collapse}{Logical, if \code{TRUE} collapses multiple tables into one larger
 table for printing. This affects only printing, not the returned object.}
+
+\item{add_total}{Add total.}
 }
 \value{
 A data frame, or a list of data frames, with one frequency table
