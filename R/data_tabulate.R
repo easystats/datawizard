@@ -425,6 +425,8 @@ as.data.frame.datawizard_tables <- function(x,
         # first column is character, due to the added "Total" value.
         out[[cols]] <- as.numeric(out[[cols]])
       }
+      # after formatting, we have a "separator" row for nicer printing.
+      # this should also be removed
       out <- remove_empty_rows(out)
     } else {
       out <- as.data.frame(i)
