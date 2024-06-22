@@ -159,7 +159,7 @@ percentages can be calculated.
 There is an \code{as.data.frame()} method, to return the frequency tables as a
 data frame. The structure of the returned object is a nested data frame,
 where the first column contains name of the variable for which frequencies
-were calculated, and the second column is a list column, contains the
+were calculated, and the second column is a list column that contains the
 frequency tables as data frame. See 'Examples'.
 }
 \note{
