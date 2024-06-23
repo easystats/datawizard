@@ -9,7 +9,7 @@ data frame or a matrix."><meta property="og:image" content="https://easystats.gi
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@ data frame or a matrix.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">data_summary</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'data.frame'</span></span>
-<span><span class="fu">data_summary</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, by <span class="op">=</span> <span class="cn">NULL</span>, include_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">data_summary</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, by <span class="op">=</span> <span class="cn">NULL</span>, remove_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -96,10 +96,10 @@ If supplied, the data will be split by this variable and summary statistics
 will be computed for each group.</p></dd>
 
 
-<dt id="arg-include-na">include_na<a class="anchor" aria-label="anchor" href="#arg-include-na"></a></dt>
-<dd><p>Logical. If <code>TRUE</code>, missing values are included as a level
-in the grouping variable. If <code>FALSE</code>, missing values are omitted from the
-grouping variable.</p></dd>
+<dt id="arg-remove-na">remove_na<a class="anchor" aria-label="anchor" href="#arg-remove-na"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, missing values are omitted from the
+grouping variable. If <code>FALSE</code> (default), missing values are included as a
+level in the grouping variable.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -13,7 +13,7 @@ percentages can be calculated."><meta property="og:image" content="https://easys
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,7 @@ percentages can be calculated.</p>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  drop_levels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  include_na <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  remove_na <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  proportions <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -99,7 +99,7 @@ percentages can be calculated.</p>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  drop_levels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  include_na <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  remove_na <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  proportions <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  collapse <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -146,8 +146,8 @@ factor levels are dropped from the frequency table.</p></dd>
 as <code>x</code>. If <code>weights</code> is supplied, weighted frequencies are calculated.</p></dd>
 
 
-<dt id="arg-include-na">include_na<a class="anchor" aria-label="anchor" href="#arg-include-na"></a></dt>
-<dd><p>Logical, if <code>TRUE</code>, missing values are included in the
+<dt id="arg-remove-na">remove_na<a class="anchor" aria-label="anchor" href="#arg-remove-na"></a></dt>
+<dd><p>Logical, if <code>FALSE</code>, missing values are included in the
 frequency or crosstable, else missing values are omitted.</p></dd>
 
 
@@ -278,7 +278,7 @@ frequency or crosstables in HTML and markdown format, e.g.
 (missing) values by default. The first column indicates values of <code>x</code>, the
 first row indicates values of <code>by</code> (including missing values). The last row
 and column contain the total frequencies for each row and column, respectively.
-Setting <code>include_na = FALSE</code> will omit missing values from the crosstable.
+Setting <code>remove_na = FALSE</code> will omit missing values from the crosstable.
 Setting <code>proportions</code> to <code>"row"</code> or <code>"column"</code> will add row or column
 percentages. Setting <code>proportions</code> to <code>"full"</code> will add relative frequencies
 for the full table.</p>
@@ -303,7 +303,7 @@ for the full table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;NA&gt;  | 10 | 10.00 |    &lt;NA&gt; |         &lt;NA&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># drop missing values</span></span></span>
-<span class="r-in"><span><span class="fu">data_tabulate</span><span class="op">(</span><span class="va">efc</span><span class="op">$</span><span class="va">c172code</span>, include_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">data_tabulate</span><span class="op">(</span><span class="va">efc</span><span class="op">$</span><span class="va">c172code</span>, remove_na <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">carer's level of education (efc$c172code)</span> <span style="color: #0000BB;">&lt;numeric&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># total N=90 valid N=90</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -492,7 +492,7 @@ for the full table.</p>
 <span class="r-in"><span>  <span class="va">efc</span><span class="op">$</span><span class="va">c172code</span>,</span></span>
 <span class="r-in"><span>  by <span class="op">=</span> <span class="va">efc</span><span class="op">$</span><span class="va">e16sex</span>,</span></span>
 <span class="r-in"><span>  proportions <span class="op">=</span> <span class="st">"column"</span>,</span></span>
-<span class="r-in"><span>  include_na <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span>  remove_na <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> efc$c172code |       male |     female | Total</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------+------------+------------+------</span>
