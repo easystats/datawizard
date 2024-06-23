@@ -8,9 +8,9 @@
 #' @param by Optional character string, indicating the name of a variable in `x`.
 #' If supplied, the data will be split by this variable and summary statistics
 #' will be computed for each group.
-#' @param remove_na Logical. If `TRUE`, missing values are included as a level
-#' in the grouping variable. If `FALSE`, missing values are omitted from the
-#' grouping variable.
+#' @param remove_na Logical. If `TRUE`, missing values are omitted from the
+#' grouping variable. If `FALSE` (default), missing values are included as a
+#' level in the grouping variable.
 #' @param ... One or more named expressions that define the new variable name
 #' and the function to compute the summary statistic. Example:
 #' `mean_sepal_width = mean(Sepal.Width)`. The expression can also be provided

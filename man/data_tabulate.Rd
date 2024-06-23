@@ -62,7 +62,7 @@ factor levels are dropped from the frequency table.}
 \item{weights}{Optional numeric vector of weights. Must be of the same length
 as \code{x}. If \code{weights} is supplied, weighted frequencies are calculated.}
 
-\item{remove_na}{Logical, if \code{TRUE}, missing values are included in the
+\item{remove_na}{Logical, if \code{FALSE}, missing values are included in the
 frequency or crosstable, else missing values are omitted.}
 
 \item{proportions}{Optional character string, indicating the type of

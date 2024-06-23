@@ -15,7 +15,7 @@
 #' factor levels are dropped from the frequency table.
 #' @param name Optional character string, which includes the name that is used
 #' for printing.
-#' @param remove_na Logical, if `TRUE`, missing values are included in the
+#' @param remove_na Logical, if `FALSE`, missing values are included in the
 #' frequency or crosstable, else missing values are omitted.
 #' @param collapse Logical, if `TRUE` collapses multiple tables into one larger
 #' table for printing. This affects only printing, not the returned object.
