@@ -12,6 +12,10 @@
   }
   # frequency table
   if (is.null(weights)) {
+    # we have a `.default` and a `.data.frame` method for `data_tabulate()`.
+    # since this is the default, `x` can be an object which cannot be used
+    # with `table()`, that's why we add `tryCatch()` here. Below we give an
+    # informative error message for non-supported objects.
     if (remove_na) {
       x_table <- tryCatch(table(x, by), error = function(e) NULL)
     } else {
