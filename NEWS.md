@@ -5,7 +5,7 @@ BREAKING CHANGES
 * The argument `include_na` in `data_tabulate()` and `data_summary()` has been
   renamed into `remove_na`. Consequently, to mimic former behaviour, `FALSE` and
   `TRUE` need to be switched (i.e. `remove_na = TRUE` is equivalent to the former
-  `include_na 0 FALSE`).
+  `include_na = FALSE`).
 
 * Class names for objects returned by `data_tabulate()` have been changed to
   `datawizard_table` and `datawizard_crosstable` (resp. the plural forms,
