@@ -3,7 +3,7 @@
 .crosstable <- function(x,
                         by,
                         weights = NULL,
-                        include_na = TRUE,
+                        remove_na = FALSE,
                         proportions = NULL,
                         obj_name = NULL,
                         group_variable = NULL) {
@@ -12,23 +12,16 @@
   }
   # frequency table
   if (is.null(weights)) {
-    if (include_na) {
-      x_table <- tryCatch(table(addNA(x), addNA(by)), error = function(e) NULL)
-    } else {
+    # we have a `.default` and a `.data.frame` method for `data_tabulate()`.
+    # since this is the default, `x` can be an object which cannot be used
+    # with `table()`, that's why we add `tryCatch()` here. Below we give an
+    # informative error message for non-supported objects.
+    if (remove_na) {
       x_table <- tryCatch(table(x, by), error = function(e) NULL)
+    } else {
+      x_table <- tryCatch(table(addNA(x), addNA(by)), error = function(e) NULL)
     }
-  } else if (include_na) {
-    # weighted frequency table, including NA
-    x_table <- tryCatch(
-      stats::xtabs(
-        weights ~ x + by,
-        data = data.frame(weights = weights, x = addNA(x), by = addNA(by)),
-        na.action = stats::na.pass,
-        addNA = TRUE
-      ),
-      error = function(e) NULL
-    )
-  } else {
+  } else if (remove_na) {
     # weighted frequency table, excluding NA
     x_table <- tryCatch(
       stats::xtabs(
@@ -36,6 +29,17 @@
         data = data.frame(weights = weights, x = x, by = by),
         na.action = stats::na.omit,
         addNA = FALSE
+      ),
+      error = function(e) NULL
+    )
+  } else {
+    # weighted frequency table, including NA
+    x_table <- tryCatch(
+      stats::xtabs(
+        weights ~ x + by,
+        data = data.frame(weights = weights, x = addNA(x), by = addNA(by)),
+        na.action = stats::na.pass,
+        addNA = TRUE
       ),
       error = function(e) NULL
     )

@@ -15,7 +15,7 @@
 #' factor levels are dropped from the frequency table.
 #' @param name Optional character string, which includes the name that is used
 #' for printing.
-#' @param include_na Logical, if `TRUE`, missing values are included in the
+#' @param remove_na Logical, if `FALSE`, missing values are included in the
 #' frequency or crosstable, else missing values are omitted.
 #' @param collapse Logical, if `TRUE` collapses multiple tables into one larger
 #' table for printing. This affects only printing, not the returned object.
@@ -40,7 +40,7 @@
 #' (missing) values by default. The first column indicates values of `x`, the
 #' first row indicates values of `by` (including missing values). The last row
 #' and column contain the total frequencies for each row and column, respectively.
-#' Setting `include_na = FALSE` will omit missing values from the crosstable.
+#' Setting `remove_na = FALSE` will omit missing values from the crosstable.
 #' Setting `proportions` to `"row"` or `"column"` will add row or column
 #' percentages. Setting `proportions` to `"full"` will add relative frequencies
 #' for the full table.
@@ -62,7 +62,7 @@
 #' data_tabulate(efc$c172code)
 #'
 #' # drop missing values
-#' data_tabulate(efc$c172code, include_na = FALSE)
+#' data_tabulate(efc$c172code, remove_na = TRUE)
 #'
 #' # data frame
 #' data_tabulate(efc, c("e42dep", "c172code"))
@@ -109,7 +109,7 @@
 #'   efc$c172code,
 #'   by = efc$e16sex,
 #'   proportions = "column",
-#'   include_na = FALSE
+#'   remove_na = TRUE
 #' )
 #'
 #' # round percentages
@@ -133,7 +133,7 @@ data_tabulate.default <- function(x,
                                   by = NULL,
                                   drop_levels = FALSE,
                                   weights = NULL,
-                                  include_na = TRUE,
+                                  remove_na = FALSE,
                                   proportions = NULL,
                                   name = NULL,
                                   verbose = TRUE,
@@ -163,7 +163,7 @@ data_tabulate.default <- function(x,
       x,
       by = by,
       weights = weights,
-      include_na = include_na,
+      remove_na = remove_na,
       proportions = proportions,
       obj_name = obj_name,
       group_variable = group_variable
@@ -172,23 +172,16 @@ data_tabulate.default <- function(x,
 
   # frequency table
   if (is.null(weights)) {
-    if (include_na) {
-      freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
-    } else {
+    if (remove_na) {
+      # we have a `.default` and a `.data.frame` method for `data_tabulate()`.
+      # since this is the default, `x` can be an object which cannot be used
+      # with `table()`, that's why we add `tryCatch()` here. Below we give an
+      # informative error message for non-supported objects.
       freq_table <- tryCatch(table(x), error = function(e) NULL)
+    } else {
+      freq_table <- tryCatch(table(addNA(x)), error = function(e) NULL)
     }
-  } else if (include_na) {
-    # weighted frequency table, including NA
-    freq_table <- tryCatch(
-      stats::xtabs(
-        weights ~ x,
-        data = data.frame(weights = weights, x = addNA(x)),
-        na.action = stats::na.pass,
-        addNA = TRUE
-      ),
-      error = function(e) NULL
-    )
-  } else {
+  } else if (remove_na) {
     # weighted frequency table, excluding NA
     freq_table <- tryCatch(
       stats::xtabs(
@@ -196,6 +189,17 @@ data_tabulate.default <- function(x,
         data = data.frame(weights = weights, x = x),
         na.action = stats::na.omit,
         addNA = FALSE
+      ),
+      error = function(e) NULL
+    )
+  } else {
+    # weighted frequency table, including NA
+    freq_table <- tryCatch(
+      stats::xtabs(
+        weights ~ x,
+        data = data.frame(weights = weights, x = addNA(x)),
+        na.action = stats::na.pass,
+        addNA = TRUE
       ),
       error = function(e) NULL
     )
@@ -218,12 +222,12 @@ data_tabulate.default <- function(x,
 
   out$`Raw %` <- 100 * out$N / sum(out$N)
   # if we have missing values, we add a row with NA
-  if (include_na) {
-    out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
-    valid_n <- sum(out$N[-length(out$N)], na.rm = TRUE)
-  } else {
+  if (remove_na) {
     out$`Valid %` <- 100 * out$N / sum(out$N)
     valid_n <- sum(out$N, na.rm = TRUE)
+  } else {
+    out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
+    valid_n <- sum(out$N[-length(out$N)], na.rm = TRUE)
   }
   out$`Cumulative %` <- cumsum(out$`Valid %`)
 
@@ -271,7 +275,7 @@ data_tabulate.data.frame <- function(x,
                                      by = NULL,
                                      drop_levels = FALSE,
                                      weights = NULL,
-                                     include_na = TRUE,
+                                     remove_na = FALSE,
                                      proportions = NULL,
                                      collapse = FALSE,
                                      verbose = TRUE,
@@ -297,7 +301,7 @@ data_tabulate.data.frame <- function(x,
       proportions = proportions,
       drop_levels = drop_levels,
       weights = weights,
-      include_na = include_na,
+      remove_na = remove_na,
       name = i,
       verbose = verbose,
       ...
@@ -326,7 +330,7 @@ data_tabulate.grouped_df <- function(x,
                                      proportions = NULL,
                                      drop_levels = FALSE,
                                      weights = NULL,
-                                     include_na = TRUE,
+                                     remove_na = FALSE,
                                      collapse = FALSE,
                                      verbose = TRUE,
                                      ...) {
@@ -362,7 +366,7 @@ data_tabulate.grouped_df <- function(x,
       verbose = verbose,
       drop_levels = drop_levels,
       weights = weights,
-      include_na = include_na,
+      remove_na = remove_na,
       by = by,
       proportions = proportions,
       group_variable = group_variable,

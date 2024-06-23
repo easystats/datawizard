@@ -14,7 +14,7 @@ data_tabulate(x, ...)
   by = NULL,
   drop_levels = FALSE,
   weights = NULL,
-  include_na = TRUE,
+  remove_na = FALSE,
   proportions = NULL,
   name = NULL,
   verbose = TRUE,
@@ -30,7 +30,7 @@ data_tabulate(x, ...)
   by = NULL,
   drop_levels = FALSE,
   weights = NULL,
-  include_na = TRUE,
+  remove_na = FALSE,
   proportions = NULL,
   collapse = FALSE,
   verbose = TRUE,
@@ -62,7 +62,7 @@ factor levels are dropped from the frequency table.}
 \item{weights}{Optional numeric vector of weights. Must be of the same length
 as \code{x}. If \code{weights} is supplied, weighted frequencies are calculated.}
 
-\item{include_na}{Logical, if \code{TRUE}, missing values are included in the
+\item{remove_na}{Logical, if \code{FALSE}, missing values are included in the
 frequency or crosstable, else missing values are omitted.}
 
 \item{proportions}{Optional character string, indicating the type of
@@ -173,7 +173,7 @@ If \code{by} is supplied, a crosstable is created. The crosstable includes \verb
 (missing) values by default. The first column indicates values of \code{x}, the
 first row indicates values of \code{by} (including missing values). The last row
 and column contain the total frequencies for each row and column, respectively.
-Setting \code{include_na = FALSE} will omit missing values from the crosstable.
+Setting \code{remove_na = FALSE} will omit missing values from the crosstable.
 Setting \code{proportions} to \code{"row"} or \code{"column"} will add row or column
 percentages. Setting \code{proportions} to \code{"full"} will add relative frequencies
 for the full table.
@@ -189,7 +189,7 @@ data(efc)
 data_tabulate(efc$c172code)
 
 # drop missing values
-data_tabulate(efc$c172code, include_na = FALSE)
+data_tabulate(efc$c172code, remove_na = TRUE)
 
 # data frame
 data_tabulate(efc, c("e42dep", "c172code"))
@@ -236,7 +236,7 @@ data_tabulate(
   efc$c172code,
   by = efc$e16sex,
   proportions = "column",
-  include_na = FALSE
+  remove_na = TRUE
 )
 
 # round percentages
