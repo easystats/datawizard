@@ -1,4 +1,10 @@
-#' Quantify the smoothness of a vector
+#' Series smoothness
+#'
+#' Functions to quantify the smoothness of a vector, which can be used in some cases
+#' as an index of "linearity". A smooth series is one that does not have abrupt changes in
+#' its values. The smoothness of a series can be measured in different ways, such
+#' as the standard deviation of the standardized differences or the lag-one
+#' autocorrelation.
 #'
 #' @param x Numeric vector (similar to a time series).
 #' @param method Can be `"diff"` (the standard deviation of the standardized
@@ -12,6 +18,13 @@
 #' plot(x)
 #' smoothness(x, method = "cor")
 #' smoothness(x, method = "diff")
+#'
+#' # A boootstrapped value can also be computed
+#' smoothness(x, iterations = 100)
+#'
+#' # When perfectly linear, the "smoothness" is 1
+#' smoothness(1:10)
+#'
 #' @return Value of smoothness.
 #' @references https://stats.stackexchange.com/questions/24607/how-to-measure-smoothness-of-a-time-series-in-r
 #'
