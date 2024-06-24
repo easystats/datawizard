@@ -26,7 +26,7 @@ Value of smoothness.
 \description{
 Functions to quantify the smoothness of a vector, which can be used in some cases
 as an index of "linearity". A smooth series is one that does not have abrupt changes in
-its values. The smoothness of a series can be measured in different ways, such
+its values. The smoothness of a series can be approximated in different ways, such
 as the standard deviation of the standardized differences or the lag-one
 autocorrelation.
 }
@@ -41,6 +41,10 @@ smoothness(x, iterations = 100)
 
 # When perfectly linear, the "smoothness" is 1
 smoothness(1:10)
+
+# And closer to zero for random
+smoothness(rnorm(1000))
+smoothness(rnorm(1000), method = "diff")
 
 }
 \references{
