@@ -382,8 +382,9 @@ degroup <- function(x,
   )
 
   # we allow disaggregating level-specific effects for cross-classified multilevel
-  # models (see Guo et al. 2024), but only for two levels right now. More levels
-  # may already work, but need to check the formula from the paper and validate
+  # models (see Guo et al. 2024). Two levels should work as proposed by the authors,
+  # more levels also already work, but need to check the formula from the paper
+  # and validate results
 
   if (length(by) == 1) {
     # simple case: one level
