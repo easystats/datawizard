@@ -64,7 +64,8 @@ test_that("demean shows message if some vars don't exist", {
 })
 
 
-test_that("demean for cross-classified designs (by > 1)", { #520
+# see issue #520
+test_that("demean for cross-classified designs (by > 1)", {
   skip_if(getRversion() < "4.1.0") # for pipe
 
   data(efc, package = "datawizard")
