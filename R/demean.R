@@ -338,13 +338,14 @@ degroup <- function(x,
       "Note that de-meaning for nested data structures (i.e. interaction terms for the `by`-variable) is not yet validated. Please check the results." # nolint
     )
     interaction_terms <- all.vars(stats::as.formula(paste("~", interactions_yes)))
+    new_column <- paste(interaction_terms, collapse = "_")
     new_dat <- data_unite(
       x,
-      new_column = paste(interaction_terms, collapse = "_"),
+      new_column = new_column,
       select = interaction_terms
     )
-    x <- cbind(x, new_dat)
-    by <- c(interactions_no, colnames(new_dat))
+    x <- cbind(x, new_dat[new_column])
+    by <- c(interactions_no, new_column)
   }
 
   # check if all variables are present
