@@ -47,8 +47,9 @@ detrend(
 \item{select}{Character vector (or formula) with names of variables to select
 that should be group- and de-meaned.}
 
-\item{by}{Character vector (or formula) with the name of the variable that
-indicates the group- or cluster-ID.}
+\item{by}{Character vector (or formula) with the name of the variable(s) that
+indicates the group- or cluster-ID. For cross-classified designs, \code{by} can
+also identify two or more variables as group- or cluster-IDs.}
 
 \item{suffix_demean, suffix_groupmean}{String value, will be appended to the
 names of the group-meaned and de-meaned variables of \code{x}. By default,
@@ -217,6 +218,16 @@ function from the \strong{panelr} package should be used.
 To de-mean interaction terms for within-between models, simply specify
 the term as interaction for the \code{select}-argument, e.g. \code{select = "a*b"}
 (see 'Examples').
+}
+
+\section{De-meaning of cross-classified designs}{
+
+
+\code{demean()} can also handle cross-classified designs, where the data is
+nested in two or more levels. In such cases, the \code{by}-argument can identify
+two or more variables that represent the group- or cluster-ID. The de-meaned
+variables for cross-classified designs are simply subtracting all group
+means from each individual value (see \emph{Guo et al. 2024} for details).
 }
 
 \section{Analysing panel data with mixed models using lme4}{

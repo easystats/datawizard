@@ -11,8 +11,9 @@
 #' @param x A data frame.
 #' @param select Character vector (or formula) with names of variables to select
 #'   that should be group- and de-meaned.
-#' @param by Character vector (or formula) with the name of the variable that
-#'   indicates the group- or cluster-ID.
+#' @param by Character vector (or formula) with the name of the variable(s) that
+#'   indicates the group- or cluster-ID. For cross-classified designs, `by` can
+#'   also identify two or more variables as group- or cluster-IDs.
 #' @param center Method for centering. `demean()` always performs
 #'   mean-centering, while `degroup()` can use `center = "median"` or
 #'   `center = "mode"` for median- or mode-centering, and also `"min"`
@@ -160,6 +161,14 @@
 #' the term as interaction for the `select`-argument, e.g. `select = "a*b"`
 #' (see 'Examples').
 #'
+#' @section De-meaning of cross-classified designs:
+#'
+#' `demean()` can also handle cross-classified designs, where the data is
+#' nested in two or more levels. In such cases, the `by`-argument can identify
+#' two or more variables that represent the group- or cluster-ID. The de-meaned
+#' variables for cross-classified designs are simply subtracting all group
+#' means from each individual value (see _Guo et al. 2024_ for details).
+#'
 #' @section Analysing panel data with mixed models using lme4:
 #'
 #' A description of how to translate the formulas described in *Bell et al. 2018*
@@ -288,11 +297,6 @@ degroup <- function(x,
 
   if (inherits(by, "formula")) {
     by <- all.vars(by)
-  }
-
-  # sanity check - length of `by` is maximum two
-  if (length(by) > 2) {
-    insight::format_error("Argument `by` can only identify a maximum of two variables as group- or cluster-IDs.")
   }
 
   interactions_no <- select[!grepl("(\\*|\\:)", select)]
