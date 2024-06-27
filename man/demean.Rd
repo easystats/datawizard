@@ -83,11 +83,6 @@ used in regression analysis to model the between- and within-subject effect.
 \code{demean()} always uses mean-centering, \code{degroup()} can also use the mode or
 median for centering.
 }
-\note{
-Variables specified in \code{by} or \code{select} that could not be found in the data
-are ignored. A message is printed, indicating the variables that were not
-found.
-}
 \section{Heterogeneity Bias}{
 
 

@@ -39,11 +39,6 @@
 #'   is required, see [`center()`]. See [`performance::check_heterogeneity_bias()`]
 #'   to check for heterogeneity bias.
 #'
-#' @note
-#' Variables specified in `by` or `select` that could not be found in the data
-#' are ignored. A message is printed, indicating the variables that were not
-#' found.
-#'
 #' @section Heterogeneity Bias:
 #'
 #' Mixed models include different levels of sources of variability, i.e.
