@@ -159,6 +159,51 @@ test_that("demean for cross-classified designs (by > 1)", {
   )
 })
 
+
+test_that("demean for nested designs (by > 1)", {
+  skip_if_not_installed("poorman")
+  data(efc, package = "datawizard")
+  dat <- na.omit(efc)
+  dat$e42dep <- factor(dat$e42dep)
+  dat$c172code <- factor(dat$c172code)
+  dat$e42dep_x_c172code <- data_unite(
+    dat,
+    new_column = "e42dep_x_c172code",
+    c("e42dep", "c172code")
+  )$e42dep_x_c172code
+
+  x2a <- dat %>%
+    data_group(e42dep_x_c172code) %>%
+    data_modify(
+      c12hour_between = mean(c12hour)
+    ) %>%
+    data_ungroup() %>%
+    data_modify(
+      c12hour_within = c12hour - c12hour_between
+    )
+
+  out <- degroup(
+    dat,
+    select = "c12hour",
+    by = "e42dep*c172code",
+    suffix_demean = "_within"
+  )
+
+  expect_equal(
+    out$c12hour_within,
+    x2a$c12hour_within,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    out$c12hour_between,
+    x2a$c12hour_between,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+})
+
+
 test_that("demean, sanity checks", {
   data(efc, package = "datawizard")
   dat <- na.omit(efc)
