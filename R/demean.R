@@ -139,17 +139,17 @@
 #' There are multiple ways to deal with interaction terms of within- and
 #' between-effects.
 #'
-#' - A classical approach is to simply use the product term of
-#'   the de-meaned variables (i.e. introducing the de-meaned variables as
-#'   interaction term in the model formula, e.g. `y ~ x_within * time_within`).
-#'   This approach, however, might be subject to bias (see
-#'   _Giesselmann & Schmidt-Catran 2020_).
+#' - A classical approach is to simply use the product term of the de-meaned
+#'   variables (i.e. introducing the de-meaned variables as interaction term
+#'   in the model formula, e.g. `y ~ x_within * time_within`). This approach,
+#'   however, might be subject to bias (see _Giesselmann & Schmidt-Catran 2020_).
 #'
 #' - Another option is to first calculate the product term and then apply the
 #'   de-meaning to it. This approach produces an estimator "that reflects
 #'   unit-level differences of interacted variables whose moderators vary
 #'   within units", which is desirable if *no* within interaction of
-#'   two time-dependent variables is required.
+#'   two time-dependent variables is required. This is what `demean()` does
+#'   internally when `select` contains interaction terms.
 #'
 #' - A third option, when the interaction should result in a genuine within
 #'   estimator, is to "double de-mean" the interaction terms
@@ -161,7 +161,7 @@
 #' the term as interaction for the `select`-argument, e.g. `select = "a*b"`
 #' (see 'Examples').
 #'
-#' @section De-meaning of cross-classified designs:
+#' @section De-meaning for cross-classified designs:
 #'
 #' `demean()` can also handle cross-classified designs, where the data is
 #' nested in two or more levels. In such cases, the `by`-argument can identify
@@ -288,7 +288,8 @@ degroup <- function(x,
   center <- match.arg(tolower(center), choices = c("mean", "median", "mode", "min", "max"))
 
   if (inherits(select, "formula")) {
-    # formula to character, remove "~", split at "+"
+    # formula to character, remove "~", split at "+". We don't use `all.vars()`
+    # here because we want to keep the interaction terms as they are
     select <- trimws(unlist(
       strsplit(gsub("~", "", insight::safe_deparse(select), fixed = TRUE), "+", fixed = TRUE),
       use.names = FALSE
@@ -299,9 +300,12 @@ degroup <- function(x,
     by <- all.vars(by)
   }
 
+  # identify interaction terms
   interactions_no <- select[!grepl("(\\*|\\:)", select)]
   interactions_yes <- select[grepl("(\\*|\\:)", select)]
 
+  # if we have interaction terms that should be de-meaned, calculate the product
+  # of the terms first, then demean the product
   if (length(interactions_yes)) {
     interaction_terms <- lapply(strsplit(interactions_yes, "*", fixed = TRUE), trimws)
     product <- lapply(interaction_terms, function(i) do.call(`*`, x[, i]))
@@ -310,19 +314,22 @@ degroup <- function(x,
     select <- c(interactions_no, colnames(new_dat))
   }
 
-  not_found <- setdiff(select, colnames(x))
+  not_found <- setdiff(c(select, by), colnames(x))
 
   if (length(not_found) && isTRUE(verbose)) {
     insight::format_alert(
       sprintf(
-        "%i variables were not found in the dataset: %s\n",
+        "%i variable%s not found in the dataset: %s\n",
         length(not_found),
+        ifelse(length(not_found) > 1, "s were", " was"),
         toString(not_found)
       )
     )
   }
 
+  # make sure we have only valid variables
   select <- intersect(colnames(x), select)
+  by <- intersect(colnames(x), by)
 
   # get data to demean...
   dat <- x[, c(select, by)]

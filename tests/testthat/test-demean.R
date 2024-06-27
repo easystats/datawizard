@@ -157,3 +157,29 @@ test_that("demean for cross-classified designs (by > 1)", { #520
     ignore_attr = TRUE
   )
 })
+
+test_that("demean, sanity checks", {
+  data(efc, package = "datawizard")
+  dat <- na.omit(efc)
+  dat$e42dep <- factor(dat$e42dep)
+  dat$c172code <- factor(dat$c172code)
+
+  expect_message(
+    degroup(
+      dat,
+      select = c("c12hour", "neg_c_8"),
+      by = c("e42dep", "c172code"),
+      suffix_demean = "_within"
+    ),
+    regex = "1 variable was not found"
+  )
+  expect_message(
+    degroup(
+      dat,
+      select = c("c12hour", "neg_c_8"),
+      by = c("e42dep", "c173code"),
+      suffix_demean = "_within"
+    ),
+    regex = "2 variables were not found"
+  )
+})
