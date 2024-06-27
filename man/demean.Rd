@@ -49,7 +49,8 @@ that should be group- and de-meaned.}
 
 \item{by}{Character vector (or formula) with the name of the variable(s) that
 indicates the group- or cluster-ID. For cross-classified designs, \code{by} can
-also identify two or more variables as group- or cluster-IDs.}
+also identify two or more variables as group- or cluster-IDs. See also
+section \emph{De-meaning for cross-classified designs} below.}
 
 \item{suffix_demean, suffix_groupmean}{String value, will be appended to the
 names of the group-meaned and de-meaned variables of \code{x}. By default,
@@ -228,11 +229,16 @@ the term as interaction for the \code{select}-argument, e.g. \code{select = "a*b
 \section{De-meaning for cross-classified designs}{
 
 
-\code{demean()} can also handle cross-classified designs, where the data is
-nested in two or more levels. In such cases, the \code{by}-argument can identify
-two or more variables that represent the group- or cluster-ID. The de-meaned
-variables for cross-classified designs are simply subtracting all group
-means from each individual value (see \emph{Guo et al. 2024} for details).
+\code{demean()} can also handle cross-classified designs, where the data has two
+or more groups at the higher (i.e. second) level. In such cases, the
+\code{by}-argument can identify two or more variables that represent the
+group- or cluster-ID. The de-meaned variables for cross-classified designs
+are simply subtracting all group means from each individual value
+(see \emph{Guo et al. 2024} for details). Note that de-meaning for cross-classified
+designs is \emph{not} equivalent to de-meaning of nested data structures from models
+with three or more levels, i.e. de-meaning is supposed to work for models
+like \code{y ~ x + (1|group1) + (1|group2)}, but \emph{not} for models like
+\code{y ~ x + (1|group1/group2)}.
 }
 
 \section{Analysing panel data with mixed models using lme4}{

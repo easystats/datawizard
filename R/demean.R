@@ -13,7 +13,8 @@
 #'   that should be group- and de-meaned.
 #' @param by Character vector (or formula) with the name of the variable(s) that
 #'   indicates the group- or cluster-ID. For cross-classified designs, `by` can
-#'   also identify two or more variables as group- or cluster-IDs.
+#'   also identify two or more variables as group- or cluster-IDs. See also
+#'   section _De-meaning for cross-classified designs_ below.
 #' @param center Method for centering. `demean()` always performs
 #'   mean-centering, while `degroup()` can use `center = "median"` or
 #'   `center = "mode"` for median- or mode-centering, and also `"min"`
@@ -168,11 +169,16 @@
 #'
 #' @section De-meaning for cross-classified designs:
 #'
-#' `demean()` can also handle cross-classified designs, where the data is
-#' nested in two or more levels. In such cases, the `by`-argument can identify
-#' two or more variables that represent the group- or cluster-ID. The de-meaned
-#' variables for cross-classified designs are simply subtracting all group
-#' means from each individual value (see _Guo et al. 2024_ for details).
+#' `demean()` can also handle cross-classified designs, where the data has two
+#' or more groups at the higher (i.e. second) level. In such cases, the
+#' `by`-argument can identify two or more variables that represent the
+#' group- or cluster-ID. The de-meaned variables for cross-classified designs
+#' are simply subtracting all group means from each individual value
+#' (see _Guo et al. 2024_ for details). Note that de-meaning for cross-classified
+#' designs is *not* equivalent to de-meaning of nested data structures from models
+#' with three or more levels, i.e. de-meaning is supposed to work for models
+#' like `y ~ x + (1|group1) + (1|group2)`, but *not* for models like
+#' `y ~ x + (1|group1/group2)`.
 #'
 #' @section Analysing panel data with mixed models using lme4:
 #'
