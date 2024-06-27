@@ -57,7 +57,7 @@ test_that("demean shows message if some vars don't exist", {
   )
 
   set.seed(123)
-  expect_message(
+  expect_error(
     demean(dat, select = "foo", by = "ID"),
     regexp = "not found"
   )
