@@ -187,6 +187,10 @@
 #'   effects regression models. Sociological Methods & Research, 1–28.
 #'   https://doi.org/10.1177/0049124120914934
 #'
+#'   - Guo Y, Dhaliwal J, Rights JD. 2024. Disaggregating level-specific effects
+#'   in cross-classified multilevel models. Behavior Research Methods, 56(4),
+#'   3023–3057.
+#'
 #'   - Heisig JP, Schaeffer M, Giesecke J. 2017. The Costs of Simplicity:
 #'   Why Multilevel Models May Benefit from Accounting for Cross-Cluster
 #'   Differences in the Effects of Controls. American Sociological Review 82
@@ -286,6 +290,11 @@ degroup <- function(x,
     by <- all.vars(by)
   }
 
+  # sanity check - length of `by` is maximum two
+  if (length(by) > 2) {
+    insight::format_error("Argument `by` can only identify a maximum of two variables as group- or cluster-IDs.")
+  }
+
   interactions_no <- select[!grepl("(\\*|\\:)", select)]
   interactions_yes <- select[grepl("(\\*|\\:)", select)]
 
@@ -367,16 +376,37 @@ degroup <- function(x,
     max = function(.gm) max(.gm, na.rm = TRUE),
     function(.gm) mean(.gm, na.rm = TRUE)
   )
-  group_means_list <- lapply(select, function(i) {
-    stats::ave(dat[[i]], dat[[by]], FUN = gm_fun)
-  })
-  names(group_means_list) <- select
 
-  # create de-meaned variables by subtracting the group mean from each individual value
+  # we allow disaggregating level-specific effects for cross-classified multilevel
+  # models (see Guo et al. 2024), but only for two levels right now. More levels
+  # may already work, but need to check the formula from the paper and validate
 
-  person_means_list <- lapply(select, function(i) dat[[i]] - group_means_list[[i]])
-  names(person_means_list) <- select
-
+  if (length(by) == 1) {
+    # simple case: one level
+    group_means_list <- lapply(select, function(i) {
+      stats::ave(dat[[i]], dat[[by]], FUN = gm_fun)
+    })
+    names(group_means_list) <- select
+    # create de-meaned variables by subtracting the group mean from each individual value
+    person_means_list <- lapply(select, function(i) dat[[i]] - group_means_list[[i]])
+    names(person_means_list) <- select
+  } else {
+    # cross-classified design: by > 1
+    group_means_list <- lapply(by, function(j) {
+      out <- lapply(select, function(i) {
+        stats::ave(dat[[i]], dat[[j]], FUN = gm_fun)
+      })
+      names(out) <- paste0(select, "_", j)
+      out
+    })
+    # de-meaned variables for cross-classified design is simply subtracting
+    # all group means from each individual value
+    person_means_list <- lapply(seq_along(select), function(i) {
+      sum_group_means <- do.call(`+`, lapply(group_means_list, function(j) j[[i]]))
+      dat[[select[i]]] - sum_group_means
+    })
+    names(person_means_list) <- select
+  }
 
   # convert to data frame and add suffix to column names
 

@@ -269,6 +269,9 @@ Cambridge, New York: Cambridge University Press
 \item Giesselmann M, Schmidt-Catran, AW. 2020. Interactions in fixed
 effects regression models. Sociological Methods & Research, 1–28.
 https://doi.org/10.1177/0049124120914934
+\item Guo Y, Dhaliwal J, Rights JD. 2024. Disaggregating level-specific effects
+in cross-classified multilevel models. Behavior Research Methods, 56(4),
+3023–3057.
 \item Heisig JP, Schaeffer M, Giesecke J. 2017. The Costs of Simplicity:
 Why Multilevel Models May Benefit from Accounting for Cross-Cluster
 Differences in the Effects of Controls. American Sociological Review 82
