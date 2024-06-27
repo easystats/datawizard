@@ -66,24 +66,24 @@ test_that("demean shows message if some vars don't exist", {
 
 # see issue #520
 test_that("demean for cross-classified designs (by > 1)", {
-  skip_if(getRversion() < "4.1.0") # for pipe
+  skip_if_not_installed("poorman")
 
   data(efc, package = "datawizard")
   dat <- na.omit(efc)
   dat$e42dep <- factor(dat$e42dep)
   dat$c172code <- factor(dat$c172code)
 
-  x2a <- dat |>
-    data_group(e42dep) |>
+  x2a <- dat %>%
+    data_group(e42dep) %>%
     data_modify(
       c12hour_e42dep = mean(c12hour)
-    ) |>
-    data_ungroup() |>
-    data_group(c172code) |>
+    ) %>%
+    data_ungroup() %>%
+    data_group(c172code) %>%
     data_modify(
       c12hour_c172code = mean(c12hour)
-    ) |>
-    data_ungroup() |>
+    ) %>%
+    data_ungroup() %>%
     data_modify(
       c12hour_within = c12hour - c12hour_e42dep - c12hour_c172code
     )
@@ -108,19 +108,19 @@ test_that("demean for cross-classified designs (by > 1)", {
     ignore_attr = TRUE
   )
 
-  x2a <- dat |>
-    data_group(e42dep) |>
+  x2a <- dat %>%
+    data_group(e42dep) %>%
     data_modify(
       c12hour_e42dep = mean(c12hour, na.rm = TRUE),
       neg_c_7_e42dep = mean(neg_c_7, na.rm = TRUE)
-    ) |>
-    data_ungroup() |>
-    data_group(c172code) |>
+    ) %>%
+    data_ungroup() %>%
+    data_group(c172code) %>%
     data_modify(
       c12hour_c172code = mean(c12hour, na.rm = TRUE),
       neg_c_7_c172code = mean(neg_c_7, na.rm = TRUE)
-    ) |>
-    data_ungroup() |>
+    ) %>%
+    data_ungroup() %>%
     data_modify(
       c12hour_within = c12hour - c12hour_e42dep - c12hour_c172code,
       neg_c_7_within = neg_c_7 - neg_c_7_e42dep - neg_c_7_c172code
@@ -165,7 +165,7 @@ test_that("demean, sanity checks", {
   dat$e42dep <- factor(dat$e42dep)
   dat$c172code <- factor(dat$c172code)
 
-  expect_message(
+  expect_error(
     degroup(
       dat,
       select = c("c12hour", "neg_c_8"),
@@ -174,7 +174,7 @@ test_that("demean, sanity checks", {
     ),
     regex = "Variable \"neg_c_8\" was not found"
   )
-  expect_message(
+  expect_error(
     degroup(
       dat,
       select = c("c12hour", "neg_c_8"),

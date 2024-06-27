@@ -82,6 +82,11 @@ used in regression analysis to model the between- and within-subject effect.
 \code{demean()} always uses mean-centering, \code{degroup()} can also use the mode or
 median for centering.
 }
+\note{
+Variables specified in \code{by} or \code{select} that could not be found in the data
+are ignored. A message is printed, indicating the variables that were not
+found.
+}
 \section{Heterogeneity Bias}{
 
 
@@ -198,16 +203,16 @@ demeaning, so this behaviour can be mimicked here.
 There are multiple ways to deal with interaction terms of within- and
 between-effects.
 \itemize{
-\item A classical approach is to simply use the product term of
-the de-meaned variables (i.e. introducing the de-meaned variables as
-interaction term in the model formula, e.g. \code{y ~ x_within * time_within}).
-This approach, however, might be subject to bias (see
-\emph{Giesselmann & Schmidt-Catran 2020}).
+\item A classical approach is to simply use the product term of the de-meaned
+variables (i.e. introducing the de-meaned variables as interaction term
+in the model formula, e.g. \code{y ~ x_within * time_within}). This approach,
+however, might be subject to bias (see \emph{Giesselmann & Schmidt-Catran 2020}).
 \item Another option is to first calculate the product term and then apply the
 de-meaning to it. This approach produces an estimator "that reflects
 unit-level differences of interacted variables whose moderators vary
 within units", which is desirable if \emph{no} within interaction of
-two time-dependent variables is required.
+two time-dependent variables is required. This is what \code{demean()} does
+internally when \code{select} contains interaction terms.
 \item A third option, when the interaction should result in a genuine within
 estimator, is to "double de-mean" the interaction terms
 (\emph{Giesselmann & Schmidt-Catran 2018}), however, this is currently
@@ -220,7 +225,7 @@ the term as interaction for the \code{select}-argument, e.g. \code{select = "a*b
 (see 'Examples').
 }
 
-\section{De-meaning of cross-classified designs}{
+\section{De-meaning for cross-classified designs}{
 
 
 \code{demean()} can also handle cross-classified designs, where the data is

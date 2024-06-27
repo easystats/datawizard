@@ -40,7 +40,7 @@
 #'
 #' @note
 #' Variables specified in `by` or `select` that could not be found in the data
-#' arte ignored. A message is printed, indicating the variables that were not
+#' are ignored. A message is printed, indicating the variables that were not
 #' found.
 #'
 #' @section Heterogeneity Bias:
@@ -321,8 +321,8 @@ degroup <- function(x,
 
   not_found <- setdiff(c(select, by), colnames(x))
 
-  if (length(not_found) && isTRUE(verbose)) {
-    insight::format_alert(
+  if (length(not_found)) {
+    insight::format_error(
       paste0(
         "Variable",
         ifelse(length(not_found) > 1, "s ", " "),
@@ -333,10 +333,6 @@ degroup <- function(x,
       .misspelled_string(colnames(x), not_found, "Possibly misspelled or not yet defined?")
     )
   }
-
-  # make sure we have only valid variables
-  select <- intersect(colnames(x), select)
-  by <- intersect(colnames(x), by)
 
   # get data to demean...
   dat <- x[, c(select, by)]
@@ -408,7 +404,6 @@ degroup <- function(x,
     names(group_means_list) <- select
     # create de-meaned variables by subtracting the group mean from each individual value
     person_means_list <- lapply(select, function(i) dat[[i]] - group_means_list[[i]])
-    names(person_means_list) <- select
   } else {
     # cross-classified design: by > 1
     group_means_list <- lapply(by, function(j) {
@@ -424,8 +419,10 @@ degroup <- function(x,
       sum_group_means <- do.call(`+`, lapply(group_means_list, function(j) j[[i]]))
       dat[[select[i]]] - sum_group_means
     })
-    names(person_means_list) <- select
   }
+
+  # preserve names
+  names(person_means_list) <- select
 
   # convert to data frame and add suffix to column names
 
