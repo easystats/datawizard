@@ -338,6 +338,10 @@ degroup <- function(x,
   # with all combinations of the levels of the interaction terms. This will
   # become our new "by" variable
   if (length(interactions_yes)) {
+    ## TODO: resolve this warning, or remove this feature if not correct
+    insight::format_warning(
+      "Note that de-meaning for nested data structures (i.e. interaction terms for the `by`-variable) is not yet validated. Please check the results." # nolint
+    )
     interaction_terms <- all.vars(stats::as.formula(paste("~", interactions_yes)))
     new_dat <- data_unite(
       x,
