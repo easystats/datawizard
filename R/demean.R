@@ -320,34 +320,6 @@ degroup <- function(x,
     select <- c(interactions_no, colnames(new_dat))
   }
 
-  # ---------------------------------------------------------------------------
-  # NOTE: de-meaning for nested designs is indicated if "by" is an interaction
-  # term - however, this is not yet tested or validated against external sources
-  # ---------------------------------------------------------------------------
-
-  # now the same for "by"... identify interaction terms
-  interactions_no <- by[!grepl("(\\*|\\:)", by)]
-  interactions_yes <- by[grepl("(\\*|\\:)", by)]
-
-  # if we have interaction terms for groups/clusters, create a new variable
-  # with all combinations of the levels of the interaction terms. This will
-  # become our new "by" variable
-  if (length(interactions_yes)) {
-    ## TODO: resolve this warning, or remove this feature if not correct
-    insight::format_warning(
-      "Note that de-meaning for nested data structures (i.e. interaction terms for the `by`-variable) is not yet validated. Please check the results." # nolint
-    )
-    interaction_terms <- all.vars(stats::as.formula(paste("~", interactions_yes)))
-    new_column <- paste(interaction_terms, collapse = "_")
-    new_dat <- data_unite(
-      x,
-      new_column = new_column,
-      select = interaction_terms
-    )
-    x <- cbind(x, new_dat[new_column])
-    by <- c(interactions_no, new_column)
-  }
-
   # check if all variables are present
   not_found <- setdiff(c(select, by), colnames(x))
 
