@@ -38,6 +38,11 @@
 #'   is required, see [`center()`]. See [`performance::check_heterogeneity_bias()`]
 #'   to check for heterogeneity bias.
 #'
+#' @note
+#' Variables specified in `by` or `select` that could not be found in the data
+#' arte ignored. A message is printed, indicating the variables that were not
+#' found.
+#'
 #' @section Heterogeneity Bias:
 #'
 #' Mixed models include different levels of sources of variability, i.e.
@@ -318,12 +323,14 @@ degroup <- function(x,
 
   if (length(not_found) && isTRUE(verbose)) {
     insight::format_alert(
-      sprintf(
-        "%i variable%s not found in the dataset: %s\n",
-        length(not_found),
-        ifelse(length(not_found) > 1, "s were", " was"),
-        toString(not_found)
-      )
+      paste0(
+        "Variable",
+        ifelse(length(not_found) > 1, "s ", " "),
+        text_concatenate(not_found, enclose = "\""),
+        ifelse(length(not_found) > 1, " were", " was"),
+        " not found in the dataset."
+      ),
+      .misspelled_string(colnames(x), not_found, "Possibly misspelled or not yet defined?")
     )
   }
 

@@ -171,7 +171,7 @@ test_that("demean, sanity checks", {
       by = c("e42dep", "c172code"),
       suffix_demean = "_within"
     ),
-    regex = "1 variable was not found"
+    regex = "Variable \"neg_c_8\" was not found"
   )
   expect_message(
     degroup(
@@ -180,6 +180,6 @@ test_that("demean, sanity checks", {
       by = c("e42dep", "c173code"),
       suffix_demean = "_within"
     ),
-    regex = "2 variables were not found"
+    regex = "Variables \"neg_c_8\" and \"c173code\" were not found"
   )
 })
