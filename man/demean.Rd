@@ -227,12 +227,13 @@ the term as interaction for the \code{select}-argument, e.g. \code{select = "a*b
 \code{demean()} can also handle cross-classified designs, where the data has two
 or more groups at the higher (i.e. second) level. In such cases, the
 \code{by}-argument can identify two or more variables that represent the
-group- or cluster-ID. The de-meaned variables for cross-classified designs
-are simply subtracting all group means from each individual value
-(see \emph{Guo et al. 2024} for details). Note that de-meaning for cross-classified
-designs is \emph{not} equivalent to de-meaning of nested data structures from models
-with three or more levels, i.e. de-meaning is supposed to work for models
-like \code{y ~ x + (1|group1) + (1|group2)}, but \emph{not} for models like
+cross-classified group- or cluster-IDs. The de-meaned variables for
+cross-classified designs are simply subtracting all group means from each
+individual value, i.e. \emph{fully cluster-mean-centering} (see \emph{Guo et al. 2024}
+for details). Note that de-meaning for cross-classified designs is \emph{not}
+equivalent to de-meaning of nested data structures from models with three or
+more levels, i.e. de-meaning is supposed to work for models like
+\code{y ~ x + (1|group1) + (1|group2)}, but \emph{not} for models like
 \code{y ~ x + (1|group1/group2)}.
 }
 
