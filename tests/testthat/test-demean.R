@@ -182,11 +182,16 @@ test_that("demean for nested designs (by > 1)", {
       c12hour_within = c12hour - c12hour_between
     )
 
-  out <- degroup(
-    dat,
-    select = "c12hour",
-    by = "e42dep*c172code",
-    suffix_demean = "_within"
+  expect_warning(
+    {
+      out <- degroup(
+        dat,
+        select = "c12hour",
+        by = "e42dep*c172code",
+        suffix_demean = "_within"
+      )
+    },
+    regex = "Note that de-meaning for nested data structures"
   )
 
   expect_equal(
