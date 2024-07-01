@@ -47,8 +47,10 @@ detrend(
 \item{select}{Character vector (or formula) with names of variables to select
 that should be group- and de-meaned.}
 
-\item{by}{Character vector (or formula) with the name of the variable that
-indicates the group- or cluster-ID.}
+\item{by}{Character vector (or formula) with the name of the variable(s) that
+indicates the group- or cluster-ID. For cross-classified designs, \code{by} can
+also identify two or more variables as group- or cluster-IDs. See also
+section \emph{De-meaning for cross-classified designs} below.}
 
 \item{suffix_demean, suffix_groupmean}{String value, will be appended to the
 names of the group-meaned and de-meaned variables of \code{x}. By default,
@@ -81,46 +83,50 @@ used in regression analysis to model the between- and within-subject effect.
 \code{demean()} always uses mean-centering, \code{degroup()} can also use the mode or
 median for centering.
 }
-\details{
-\subsection{Heterogeneity Bias}{
+\section{Heterogeneity Bias}{
+
+
 Mixed models include different levels of sources of variability, i.e.
 error terms at each level. When macro-indicators (or level-2 predictors,
 or higher-level units, or more general: \emph{group-level predictors that
 \strong{vary} within and across groups}) are included as fixed effects (i.e.
 treated as covariate at level-1), the variance that is left unaccounted for
 this covariate will be absorbed into the error terms of level-1 and level-2
-(\cite{Bafumi and Gelman 2006; Gelman and Hill 2007, Chapter 12.6.}):
-\dQuote{Such covariates contain two parts: one that is specific to the
-higher-level entity that does not vary between occasions, and one that
-represents the difference between occasions, within higher-level entities}
-(\cite{Bell et al. 2015}). Hence, the error terms will be correlated with
-the covariate, which violates one of the assumptions of mixed models
-(iid, independent and identically distributed error terms). This bias is
-also called the \emph{heterogeneity bias} (\cite{Bell et al. 2015}). To
-resolve this problem, level-2 predictors used as (level-1) covariates should
-be separated into their "within" and "between" effects by "de-meaning" and
-"group-meaning": After demeaning time-varying predictors, \dQuote{at the
-higher level, the mean term is no longer constrained by Level 1 effects,
-so it is free to account for all the higher-level variance associated
-with that variable} (\cite{Bell et al. 2015}).
+(\emph{Bafumi and Gelman 2006; Gelman and Hill 2007, Chapter 12.6.}):
+"Such covariates contain two parts: one that is specific to the higher-level
+entity that does not vary between occasions, and one that represents the
+difference between occasions, within higher-level entities" (\emph{Bell et al. 2015}).
+Hence, the error terms will be correlated with the covariate, which violates
+one of the assumptions of mixed models (iid, independent and identically
+distributed error terms). This bias is also called the \emph{heterogeneity bias}
+(\emph{Bell et al. 2015}). To resolve this problem, level-2 predictors used as
+(level-1) covariates should be separated into their "within" and "between"
+effects by "de-meaning" and "group-meaning": After demeaning time-varying
+predictors, "at the higher level, the mean term is no longer constrained by
+Level 1 effects, so it is free to account for all the higher-level variance
+associated with that variable" (\emph{Bell et al. 2015}).
 }
 
-\subsection{Panel data and correlating fixed and group effects}{
-\code{demean()} is intended to create group- and de-meaned variables
-for panel regression models (fixed effects models), or for complex
-random-effect-within-between models (see \cite{Bell et al. 2015, 2018}),
-where group-effects (random effects) and fixed effects correlate (see
-\cite{Bafumi and Gelman 2006}). This can happen, for instance, when
-analyzing panel data, which can lead to \emph{Heterogeneity Bias}. To
-control for correlating predictors and group effects, it is recommended
-to include the group-meaned and de-meaned version of \emph{time-varying covariates}
-(and group-meaned version of \emph{time-invariant covariates} that are on
-a higher level, e.g. level-2 predictors) in the model. By this, one can
-fit complex multilevel models for panel data, including time-varying
-predictors, time-invariant predictors and random effects.
+\section{Panel data and correlating fixed and group effects}{
+
+
+\code{demean()} is intended to create group- and de-meaned variables for panel
+regression models (fixed effects models), or for complex
+random-effect-within-between models (see \emph{Bell et al. 2015, 2018}), where
+group-effects (random effects) and fixed effects correlate (see
+\emph{Bafumi and Gelman 2006}). This can happen, for instance, when analyzing
+panel data, which can lead to \emph{Heterogeneity Bias}. To control for correlating
+predictors and group effects, it is recommended to include the group-meaned
+and de-meaned version of \emph{time-varying covariates} (and group-meaned version
+of \emph{time-invariant covariates} that are on a higher level, e.g. level-2
+predictors) in the model. By this, one can fit complex multilevel models for
+panel data, including time-varying predictors, time-invariant predictors and
+random effects.
 }
 
-\subsection{Why mixed models are preferred over fixed effects models}{
+\section{Why mixed models are preferred over fixed effects models}{
+
+
 A mixed models approach can model the causes of endogeneity explicitly
 by including the (separated) within- and between-effects of time-varying
 fixed effects and including time-constant fixed effects. Furthermore,
@@ -128,24 +134,28 @@ mixed models also include random effects, thus a mixed models approach
 is superior to classic fixed-effects models, which lack information of
 variation in the group-effects or between-subject effects. Furthermore,
 fixed effects regression cannot include random slopes, which means that
-fixed effects regressions are neglecting \dQuote{cross-cluster differences
-in the effects of lower-level controls (which) reduces the precision of
-estimated context effects, resulting in unnecessarily wide confidence
-intervals and low statistical power} (\cite{Heisig et al. 2017}).
+fixed effects regressions are neglecting "cross-cluster differences in the
+effects of lower-level controls (which) reduces the precision of estimated
+context effects, resulting in unnecessarily wide confidence intervals and
+low statistical power" (\emph{Heisig et al. 2017}).
 }
 
-\subsection{Terminology}{
+\section{Terminology}{
+
+
 The group-meaned variable is simply the mean of an independent variable
-within each group (or id-level or cluster) represented by \code{by}.
-It represents the cluster-mean of an independent variable. The regression
-coefficient of a group-meaned variable is the \emph{between-subject-effect}.
-The de-meaned variable is then the centered version of the group-meaned
-variable. De-meaning is sometimes also called person-mean centering or
-centering within clusters. The regression coefficient of a de-meaned
-variable represents the \emph{within-subject-effect}.
+within each group (or id-level or cluster) represented by \code{by}. It represents
+the cluster-mean of an independent variable. The regression coefficient of a
+group-meaned variable is the \emph{between-subject-effect}. The de-meaned variable
+is then the centered version of the group-meaned variable. De-meaning is
+sometimes also called person-mean centering or centering within clusters.
+The regression coefficient of a de-meaned variable represents the
+\emph{within-subject-effect}.
 }
 
-\subsection{De-meaning with continuous predictors}{
+\section{De-meaning with continuous predictors}{
+
+
 For continuous time-varying predictors, the recommendation is to include
 both their de-meaned and group-meaned versions as fixed effects, but not
 the raw (untransformed) time-varying predictors themselves. The de-meaned
@@ -155,7 +165,9 @@ the within-subject effect, while the coefficient of the group-meaned
 predictor indicates the between-subject effect.
 }
 
-\subsection{De-meaning with binary predictors}{
+\section{De-meaning with binary predictors}{
+
+
 For binary time-varying predictors, there are two recommendations. First
 is to include the raw (untransformed) binary predictor as fixed effect
 only and the \emph{de-meaned} variable as random effect (random slope).
@@ -163,51 +175,76 @@ The alternative would be to add the de-meaned version(s) of binary
 time-varying covariates as additional fixed effect as well (instead of
 adding it as random slope). Centering time-varying binary variables to
 obtain within-effects (level 1) isn't necessary. They have a sensible
-interpretation when left in the typical 0/1 format (\cite{Hoffmann 2015,
+interpretation when left in the typical 0/1 format (\emph{Hoffmann 2015,
 chapter 8-2.I}). \code{demean()} will thus coerce categorical time-varying
 predictors to numeric to compute the de- and group-meaned versions for
 these variables, where the raw (untransformed) binary predictor and the
 de-meaned version should be added to the model.
 }
 
-\subsection{De-meaning of factors with more than 2 levels}{
+\section{De-meaning of factors with more than 2 levels}{
+
+
 Factors with more than two levels are demeaned in two ways: first, these
 are also converted to numeric and de-meaned; second, dummy variables
 are created (binary, with 0/1 coding for each level) and these binary
 dummy-variables are de-meaned in the same way (as described above).
-Packages like \pkg{panelr} internally convert factors to dummies before
+Packages like \strong{panelr} internally convert factors to dummies before
 demeaning, so this behaviour can be mimicked here.
 }
 
-\subsection{De-meaning interaction terms}{ There are multiple ways to deal
-with interaction terms of within- and between-effects. A classical approach
-is to simply use the product term of the de-meaned variables (i.e.
-introducing the de-meaned variables as interaction term in the model
-formula, e.g. \code{y ~ x_within * time_within}). This approach, however,
-might be subject to bias (see \cite{Giesselmann & Schmidt-Catran 2020}).
-\cr \cr
-Another option is to first calculate the product term and then apply the
-de-meaning to it. This approach produces an estimator \dQuote{that reflects
+\section{De-meaning interaction terms}{
+
+
+There are multiple ways to deal with interaction terms of within- and
+between-effects.
+\itemize{
+\item A classical approach is to simply use the product term of the de-meaned
+variables (i.e. introducing the de-meaned variables as interaction term
+in the model formula, e.g. \code{y ~ x_within * time_within}). This approach,
+however, might be subject to bias (see \emph{Giesselmann & Schmidt-Catran 2020}).
+\item Another option is to first calculate the product term and then apply the
+de-meaning to it. This approach produces an estimator "that reflects
 unit-level differences of interacted variables whose moderators vary
-within units}, which is desirable if \emph{no} within interaction of
-two time-dependent variables is required. \cr \cr
-A third option, when the interaction should result in a genuine within
+within units", which is desirable if \emph{no} within interaction of
+two time-dependent variables is required. This is what \code{demean()} does
+internally when \code{select} contains interaction terms.
+\item A third option, when the interaction should result in a genuine within
 estimator, is to "double de-mean" the interaction terms
-(\cite{Giesselmann & Schmidt-Catran 2018}), however, this is currently
+(\emph{Giesselmann & Schmidt-Catran 2018}), however, this is currently
 not supported by \code{demean()}. If this is required, the \code{wmb()}
-function from the \pkg{panelr} package should be used. \cr \cr
-To de-mean interaction terms for within-between models, simply specify
-the term as interaction for the \code{select}-argument, e.g.
-\code{select = "a*b"} (see 'Examples').
+function from the \strong{panelr} package should be used.
 }
 
-\subsection{Analysing panel data with mixed models using lme4}{
-A description of how to translate the
-formulas described in \emph{Bell et al. 2018} into R using \code{lmer()}
-from \pkg{lme4} can be found in
+To de-mean interaction terms for within-between models, simply specify
+the term as interaction for the \code{select}-argument, e.g. \code{select = "a*b"}
+(see 'Examples').
+}
+
+\section{De-meaning for cross-classified designs}{
+
+
+\code{demean()} can also handle cross-classified designs, where the data has two
+or more groups at the higher (i.e. second) level. In such cases, the
+\code{by}-argument can identify two or more variables that represent the
+cross-classified group- or cluster-IDs. The de-meaned variables for
+cross-classified designs are simply subtracting all group means from each
+individual value, i.e. \emph{fully cluster-mean-centering} (see \emph{Guo et al. 2024}
+for details). Note that de-meaning for cross-classified designs is \emph{not}
+equivalent to de-meaning of nested data structures from models with three or
+more levels, i.e. de-meaning is supposed to work for models like
+\code{y ~ x + (1|group1) + (1|group2)}, but \emph{not} for models like
+\code{y ~ x + (1|group1/group2)}.
+}
+
+\section{Analysing panel data with mixed models using lme4}{
+
+
+A description of how to translate the formulas described in \emph{Bell et al. 2018}
+into R using \code{lmer()} from \strong{lme4} can be found in
 \href{https://easystats.github.io/parameters/articles/demean.html}{this vignette}.
 }
-}
+
 \examples{
 
 data(iris)
@@ -250,6 +287,9 @@ Cambridge, New York: Cambridge University Press
 \item Giesselmann M, Schmidt-Catran, AW. 2020. Interactions in fixed
 effects regression models. Sociological Methods & Research, 1–28.
 https://doi.org/10.1177/0049124120914934
+\item Guo Y, Dhaliwal J, Rights JD. 2024. Disaggregating level-specific effects
+in cross-classified multilevel models. Behavior Research Methods, 56(4),
+3023–3057.
 \item Heisig JP, Schaeffer M, Giesecke J. 2017. The Costs of Simplicity:
 Why Multilevel Models May Benefit from Accounting for Cross-Cluster
 Differences in the Effects of Controls. American Sociological Review 82

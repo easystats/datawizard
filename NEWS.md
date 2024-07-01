@@ -21,6 +21,10 @@ CHANGES
   frame, where the first column contains name of the variable for which
   frequencies were calculated, and the second column contains the frequency table.
 
+* `demean()` (and `degroup()`) now also work for cross-classified designs, or
+  more generally, for data with multiple grouping or cluster variables (i.e.
+  `by` can now specify more than one variable).
+
 # datawizard 0.11.0
 
 BREAKING CHANGES
