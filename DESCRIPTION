@@ -33,7 +33,7 @@ BugReports: https://github.com/easystats/datawizard/issues
 Depends:
     R (>= 3.6)
 Imports:
-    insight (>= 0.20.0),
+    insight (>= 0.20.1),
     stats,
     utils
 Suggests: 
