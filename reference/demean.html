@@ -15,7 +15,7 @@ median for centering."><meta property="og:image" content="https://easystats.gith
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,8 +127,10 @@ that should be group- and de-meaned.</p></dd>
 
 
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
-<dd><p>Character vector (or formula) with the name of the variable that
-indicates the group- or cluster-ID.</p></dd>
+<dd><p>Character vector (or formula) with the name of the variable(s) that
+indicates the group- or cluster-ID. For cross-classified designs, <code>by</code> can
+also identify two or more variables as group- or cluster-IDs. See also
+section <em>De-meaning for cross-classified designs</em> below.</p></dd>
 
 
 <dt id="arg-suffix-demean-suffix-groupmean">suffix_demean, suffix_groupmean<a class="anchor" aria-label="anchor" href="#arg-suffix-demean-suffix-groupmean"></a></dt>
@@ -167,50 +169,53 @@ or <code>"max"</code>.</p></dd>
 de-meaned variable) by default.</p>
     </div>
     <div class="section level2">
-    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <h2 id="heterogeneity-bias">Heterogeneity Bias<a class="anchor" aria-label="anchor" href="#heterogeneity-bias"></a></h2>
 
-<div class="section">
-<h3 id="heterogeneity-bias">Heterogeneity Bias<a class="anchor" aria-label="anchor" href="#heterogeneity-bias"></a></h3>
+
+
 <p>Mixed models include different levels of sources of variability, i.e.
 error terms at each level. When macro-indicators (or level-2 predictors,
 or higher-level units, or more general: <em>group-level predictors that
 <strong>vary</strong> within and across groups</em>) are included as fixed effects (i.e.
 treated as covariate at level-1), the variance that is left unaccounted for
 this covariate will be absorbed into the error terms of level-1 and level-2
-(<cite>Bafumi and Gelman 2006; Gelman and Hill 2007, Chapter 12.6.</cite>):
-“Such covariates contain two parts: one that is specific to the
-higher-level entity that does not vary between occasions, and one that
-represents the difference between occasions, within higher-level entities”
-(<cite>Bell et al. 2015</cite>). Hence, the error terms will be correlated with
-the covariate, which violates one of the assumptions of mixed models
-(iid, independent and identically distributed error terms). This bias is
-also called the <em>heterogeneity bias</em> (<cite>Bell et al. 2015</cite>). To
-resolve this problem, level-2 predictors used as (level-1) covariates should
-be separated into their "within" and "between" effects by "de-meaning" and
-"group-meaning": After demeaning time-varying predictors, “at the
-higher level, the mean term is no longer constrained by Level 1 effects,
-so it is free to account for all the higher-level variance associated
-with that variable” (<cite>Bell et al. 2015</cite>).</p>
-</div>
+(<em>Bafumi and Gelman 2006; Gelman and Hill 2007, Chapter 12.6.</em>):
+"Such covariates contain two parts: one that is specific to the higher-level
+entity that does not vary between occasions, and one that represents the
+difference between occasions, within higher-level entities" (<em>Bell et al. 2015</em>).
+Hence, the error terms will be correlated with the covariate, which violates
+one of the assumptions of mixed models (iid, independent and identically
+distributed error terms). This bias is also called the <em>heterogeneity bias</em>
+(<em>Bell et al. 2015</em>). To resolve this problem, level-2 predictors used as
+(level-1) covariates should be separated into their "within" and "between"
+effects by "de-meaning" and "group-meaning": After demeaning time-varying
+predictors, "at the higher level, the mean term is no longer constrained by
+Level 1 effects, so it is free to account for all the higher-level variance
+associated with that variable" (<em>Bell et al. 2015</em>).</p>
+    </div>
+    <div class="section level2">
+    <h2 id="panel-data-and-correlating-fixed-and-group-effects">Panel data and correlating fixed and group effects<a class="anchor" aria-label="anchor" href="#panel-data-and-correlating-fixed-and-group-effects"></a></h2>
 
-<div class="section">
-<h3 id="panel-data-and-correlating-fixed-and-group-effects">Panel data and correlating fixed and group effects<a class="anchor" aria-label="anchor" href="#panel-data-and-correlating-fixed-and-group-effects"></a></h3>
-<p><code>demean()</code> is intended to create group- and de-meaned variables
-for panel regression models (fixed effects models), or for complex
-random-effect-within-between models (see <cite>Bell et al. 2015, 2018</cite>),
-where group-effects (random effects) and fixed effects correlate (see
-<cite>Bafumi and Gelman 2006</cite>). This can happen, for instance, when
-analyzing panel data, which can lead to <em>Heterogeneity Bias</em>. To
-control for correlating predictors and group effects, it is recommended
-to include the group-meaned and de-meaned version of <em>time-varying covariates</em>
-(and group-meaned version of <em>time-invariant covariates</em> that are on
-a higher level, e.g. level-2 predictors) in the model. By this, one can
-fit complex multilevel models for panel data, including time-varying
-predictors, time-invariant predictors and random effects.</p>
-</div>
 
-<div class="section">
-<h3 id="why-mixed-models-are-preferred-over-fixed-effects-models">Why mixed models are preferred over fixed effects models<a class="anchor" aria-label="anchor" href="#why-mixed-models-are-preferred-over-fixed-effects-models"></a></h3>
+
+<p><code>demean()</code> is intended to create group- and de-meaned variables for panel
+regression models (fixed effects models), or for complex
+random-effect-within-between models (see <em>Bell et al. 2015, 2018</em>), where
+group-effects (random effects) and fixed effects correlate (see
+<em>Bafumi and Gelman 2006</em>). This can happen, for instance, when analyzing
+panel data, which can lead to <em>Heterogeneity Bias</em>. To control for correlating
+predictors and group effects, it is recommended to include the group-meaned
+and de-meaned version of <em>time-varying covariates</em> (and group-meaned version
+of <em>time-invariant covariates</em> that are on a higher level, e.g. level-2
+predictors) in the model. By this, one can fit complex multilevel models for
+panel data, including time-varying predictors, time-invariant predictors and
+random effects.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="why-mixed-models-are-preferred-over-fixed-effects-models">Why mixed models are preferred over fixed effects models<a class="anchor" aria-label="anchor" href="#why-mixed-models-are-preferred-over-fixed-effects-models"></a></h2>
+
+
+
 <p>A mixed models approach can model the causes of endogeneity explicitly
 by including the (separated) within- and between-effects of time-varying
 fixed effects and including time-constant fixed effects. Furthermore,
@@ -218,26 +223,30 @@ mixed models also include random effects, thus a mixed models approach
 is superior to classic fixed-effects models, which lack information of
 variation in the group-effects or between-subject effects. Furthermore,
 fixed effects regression cannot include random slopes, which means that
-fixed effects regressions are neglecting “cross-cluster differences
-in the effects of lower-level controls (which) reduces the precision of
-estimated context effects, resulting in unnecessarily wide confidence
-intervals and low statistical power” (<cite>Heisig et al. 2017</cite>).</p>
-</div>
+fixed effects regressions are neglecting "cross-cluster differences in the
+effects of lower-level controls (which) reduces the precision of estimated
+context effects, resulting in unnecessarily wide confidence intervals and
+low statistical power" (<em>Heisig et al. 2017</em>).</p>
+    </div>
+    <div class="section level2">
+    <h2 id="terminology">Terminology<a class="anchor" aria-label="anchor" href="#terminology"></a></h2>
 
-<div class="section">
-<h3 id="terminology">Terminology<a class="anchor" aria-label="anchor" href="#terminology"></a></h3>
+
+
 <p>The group-meaned variable is simply the mean of an independent variable
-within each group (or id-level or cluster) represented by <code>by</code>.
-It represents the cluster-mean of an independent variable. The regression
-coefficient of a group-meaned variable is the <em>between-subject-effect</em>.
-The de-meaned variable is then the centered version of the group-meaned
-variable. De-meaning is sometimes also called person-mean centering or
-centering within clusters. The regression coefficient of a de-meaned
-variable represents the <em>within-subject-effect</em>.</p>
-</div>
+within each group (or id-level or cluster) represented by <code>by</code>. It represents
+the cluster-mean of an independent variable. The regression coefficient of a
+group-meaned variable is the <em>between-subject-effect</em>. The de-meaned variable
+is then the centered version of the group-meaned variable. De-meaning is
+sometimes also called person-mean centering or centering within clusters.
+The regression coefficient of a de-meaned variable represents the
+<em>within-subject-effect</em>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="de-meaning-with-continuous-predictors">De-meaning with continuous predictors<a class="anchor" aria-label="anchor" href="#de-meaning-with-continuous-predictors"></a></h2>
 
-<div class="section">
-<h3 id="de-meaning-with-continuous-predictors">De-meaning with continuous predictors<a class="anchor" aria-label="anchor" href="#de-meaning-with-continuous-predictors"></a></h3>
+
+
 <p>For continuous time-varying predictors, the recommendation is to include
 both their de-meaned and group-meaned versions as fixed effects, but not
 the raw (untransformed) time-varying predictors themselves. The de-meaned
@@ -245,10 +254,12 @@ predictor should also be included as random effect (random slope). In
 regression models, the coefficient of the de-meaned predictors indicates
 the within-subject effect, while the coefficient of the group-meaned
 predictor indicates the between-subject effect.</p>
-</div>
+    </div>
+    <div class="section level2">
+    <h2 id="de-meaning-with-binary-predictors">De-meaning with binary predictors<a class="anchor" aria-label="anchor" href="#de-meaning-with-binary-predictors"></a></h2>
 
-<div class="section">
-<h3 id="de-meaning-with-binary-predictors">De-meaning with binary predictors<a class="anchor" aria-label="anchor" href="#de-meaning-with-binary-predictors"></a></h3>
+
+
 <p>For binary time-varying predictors, there are two recommendations. First
 is to include the raw (untransformed) binary predictor as fixed effect
 only and the <em>de-meaned</em> variable as random effect (random slope).
@@ -256,55 +267,74 @@ The alternative would be to add the de-meaned version(s) of binary
 time-varying covariates as additional fixed effect as well (instead of
 adding it as random slope). Centering time-varying binary variables to
 obtain within-effects (level 1) isn't necessary. They have a sensible
-interpretation when left in the typical 0/1 format (<cite>Hoffmann 2015,
-chapter 8-2.I</cite>). <code>demean()</code> will thus coerce categorical time-varying
+interpretation when left in the typical 0/1 format (<em>Hoffmann 2015,
+chapter 8-2.I</em>). <code>demean()</code> will thus coerce categorical time-varying
 predictors to numeric to compute the de- and group-meaned versions for
 these variables, where the raw (untransformed) binary predictor and the
 de-meaned version should be added to the model.</p>
-</div>
+    </div>
+    <div class="section level2">
+    <h2 id="de-meaning-of-factors-with-more-than-levels">De-meaning of factors with more than 2 levels<a class="anchor" aria-label="anchor" href="#de-meaning-of-factors-with-more-than-levels"></a></h2>
 
-<div class="section">
-<h3 id="de-meaning-of-factors-with-more-than-levels">De-meaning of factors with more than 2 levels<a class="anchor" aria-label="anchor" href="#de-meaning-of-factors-with-more-than-levels"></a></h3>
+
+
 <p>Factors with more than two levels are demeaned in two ways: first, these
 are also converted to numeric and de-meaned; second, dummy variables
 are created (binary, with 0/1 coding for each level) and these binary
 dummy-variables are de-meaned in the same way (as described above).
-Packages like <span class="pkg">panelr</span> internally convert factors to dummies before
+Packages like <strong>panelr</strong> internally convert factors to dummies before
 demeaning, so this behaviour can be mimicked here.</p>
-</div>
+    </div>
+    <div class="section level2">
+    <h2 id="de-meaning-interaction-terms">De-meaning interaction terms<a class="anchor" aria-label="anchor" href="#de-meaning-interaction-terms"></a></h2>
 
-<div class="section">
-<h3 id="de-meaning-interaction-terms">De-meaning interaction terms<a class="anchor" aria-label="anchor" href="#de-meaning-interaction-terms"></a></h3>
-<p>There are multiple ways to deal
-with interaction terms of within- and between-effects. A classical approach
-is to simply use the product term of the de-meaned variables (i.e.
-introducing the de-meaned variables as interaction term in the model
-formula, e.g. <code>y ~ x_within * time_within</code>). This approach, however,
-might be subject to bias (see <cite>Giesselmann &amp; Schmidt-Catran 2020</cite>).
-<br><br>
-Another option is to first calculate the product term and then apply the
-de-meaning to it. This approach produces an estimator “that reflects
+
+
+<p>There are multiple ways to deal with interaction terms of within- and
+between-effects.</p><ul><li><p>A classical approach is to simply use the product term of the de-meaned
+variables (i.e. introducing the de-meaned variables as interaction term
+in the model formula, e.g. <code>y ~ x_within * time_within</code>). This approach,
+however, might be subject to bias (see <em>Giesselmann &amp; Schmidt-Catran 2020</em>).</p></li>
+<li><p>Another option is to first calculate the product term and then apply the
+de-meaning to it. This approach produces an estimator "that reflects
 unit-level differences of interacted variables whose moderators vary
-within units”, which is desirable if <em>no</em> within interaction of
-two time-dependent variables is required. <br><br>
-A third option, when the interaction should result in a genuine within
+within units", which is desirable if <em>no</em> within interaction of
+two time-dependent variables is required. This is what <code>demean()</code> does
+internally when <code>select</code> contains interaction terms.</p></li>
+<li><p>A third option, when the interaction should result in a genuine within
 estimator, is to "double de-mean" the interaction terms
-(<cite>Giesselmann &amp; Schmidt-Catran 2018</cite>), however, this is currently
+(<em>Giesselmann &amp; Schmidt-Catran 2018</em>), however, this is currently
 not supported by <code>demean()</code>. If this is required, the <code>wmb()</code>
-function from the <span class="pkg">panelr</span> package should be used. <br><br>
-To de-mean interaction terms for within-between models, simply specify
-the term as interaction for the <code>select</code>-argument, e.g.
-<code>select = "a*b"</code> (see 'Examples').</p>
-</div>
+function from the <strong>panelr</strong> package should be used.</p></li>
+</ul><p>To de-mean interaction terms for within-between models, simply specify
+the term as interaction for the <code>select</code>-argument, e.g. <code>select = "a*b"</code>
+(see 'Examples').</p>
+    </div>
+    <div class="section level2">
+    <h2 id="de-meaning-for-cross-classified-designs">De-meaning for cross-classified designs<a class="anchor" aria-label="anchor" href="#de-meaning-for-cross-classified-designs"></a></h2>
 
-<div class="section">
-<h3 id="analysing-panel-data-with-mixed-models-using-lme-">Analysing panel data with mixed models using lme4<a class="anchor" aria-label="anchor" href="#analysing-panel-data-with-mixed-models-using-lme-"></a></h3>
-<p>A description of how to translate the
-formulas described in <em>Bell et al. 2018</em> into R using <code>lmer()</code>
-from <span class="pkg">lme4</span> can be found in
+
+
+<p><code>demean()</code> can also handle cross-classified designs, where the data has two
+or more groups at the higher (i.e. second) level. In such cases, the
+<code>by</code>-argument can identify two or more variables that represent the
+cross-classified group- or cluster-IDs. The de-meaned variables for
+cross-classified designs are simply subtracting all group means from each
+individual value, i.e. <em>fully cluster-mean-centering</em> (see <em>Guo et al. 2024</em>
+for details). Note that de-meaning for cross-classified designs is <em>not</em>
+equivalent to de-meaning of nested data structures from models with three or
+more levels, i.e. de-meaning is supposed to work for models like
+<code>y ~ x + (1|group1) + (1|group2)</code>, but <em>not</em> for models like
+<code>y ~ x + (1|group1/group2)</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="analysing-panel-data-with-mixed-models-using-lme-">Analysing panel data with mixed models using lme4<a class="anchor" aria-label="anchor" href="#analysing-panel-data-with-mixed-models-using-lme-"></a></h2>
+
+
+
+<p>A description of how to translate the formulas described in <em>Bell et al. 2018</em>
+into R using <code>lmer()</code> from <strong>lme4</strong> can be found in
 <a href="https://easystats.github.io/parameters/articles/demean.html" class="external-link">this vignette</a>.</p>
-</div>
-
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -323,6 +353,9 @@ Cambridge, New York: Cambridge University Press</p></li>
 <li><p>Giesselmann M, Schmidt-Catran, AW. 2020. Interactions in fixed
 effects regression models. Sociological Methods &amp; Research, 1–28.
 https://doi.org/10.1177/0049124120914934</p></li>
+<li><p>Guo Y, Dhaliwal J, Rights JD. 2024. Disaggregating level-specific effects
+in cross-classified multilevel models. Behavior Research Methods, 56(4),
+3023–3057.</p></li>
 <li><p>Heisig JP, Schaeffer M, Giesecke J. 2017. The Costs of Simplicity:
 Why Multilevel Models May Benefit from Accounting for Cross-Cluster
 Differences in the Effects of Controls. American Sociological Review 82
@@ -362,16 +395,16 @@ to check for heterogeneity bias.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6           -1.807500</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">demean</span><span class="op">(</span><span class="va">iris</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"binary"</span>, <span class="st">"Species"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Categorical predictors (Species, binary) have been coerced to numeric</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Categorical predictors (binary, Species) have been coerced to numeric</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   values to compute de- and group-meaned variables.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length_between Species_between binary_between Species_setosa_between</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1             5.691429       0.7714286      0.2571429              0.4571429</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2             5.941667       1.3333333      0.3333333              0.1944444</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3             5.941667       1.3333333      0.3333333              0.1944444</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4             5.920513       1.0000000      0.2307692              0.2564103</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5             5.691429       0.7714286      0.2571429              0.4571429</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6             5.812500       0.9000000      0.4250000              0.4250000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length_between binary_between Species_between Species_setosa_between</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1             5.691429      0.2571429       0.7714286              0.4571429</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2             5.941667      0.3333333       1.3333333              0.1944444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3             5.941667      0.3333333       1.3333333              0.1944444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4             5.920513      0.2307692       1.0000000              0.2564103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5             5.691429      0.2571429       0.7714286              0.4571429</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6             5.812500      0.4250000       0.9000000              0.4250000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Species_versicolor_between Species_virginica_between Sepal.Length_within</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1                  0.3142857                 0.2285714          -0.5914286</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2                  0.2777778                 0.5277778          -1.0416667</span>
@@ -379,13 +412,13 @@ to check for heterogeneity bias.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4                  0.4871795                 0.2564103          -1.3205128</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5                  0.3142857                 0.2285714          -0.6914286</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6                  0.2500000                 0.3250000          -0.4125000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Species_within binary_within Species_setosa_within Species_versicolor_within</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     -0.7714286    -0.2571429             0.5428571                -0.3142857</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     -1.3333333    -0.3333333             0.8055556                -0.2777778</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     -1.3333333    -0.3333333             0.8055556                -0.2777778</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     -1.0000000     0.7692308             0.7435897                -0.4871795</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     -0.7714286    -0.2571429             0.5428571                -0.3142857</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6     -0.9000000    -0.4250000             0.5750000                -0.2500000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   binary_within Species_within Species_setosa_within Species_versicolor_within</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    -0.2571429     -0.7714286             0.5428571                -0.3142857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    -0.3333333     -1.3333333             0.8055556                -0.2777778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    -0.3333333     -1.3333333             0.8055556                -0.2777778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     0.7692308     -1.0000000             0.7435897                -0.4871795</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    -0.2571429     -0.7714286             0.5428571                -0.3142857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    -0.4250000     -0.9000000             0.5750000                -0.2500000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Species_virginica_within</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1               -0.2285714</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2               -0.5277778</span>
