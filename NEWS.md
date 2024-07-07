@@ -1,9 +1,29 @@
 # datawizard 0.11.0.1
 
-## Changes
+BREAKING CHANGES
+
+* The argument `include_na` in `data_tabulate()` and `data_summary()` has been
+  renamed into `remove_na`. Consequently, to mimic former behaviour, `FALSE` and
+  `TRUE` need to be switched (i.e. `remove_na = TRUE` is equivalent to the former
+  `include_na = FALSE`).
+
+* Class names for objects returned by `data_tabulate()` have been changed to
+  `datawizard_table` and `datawizard_crosstable` (resp. the plural forms,
+  `*_tables`), to provide a clearer and more consistent naming scheme.
+
+CHANGES
 
 * `data_select()` can directly rename selected variables when a named vector
   is provided in `select`, e.g. `data_select(mtcars, c(new1 = "mpg", new2 = "cyl"))`.
+
+* `data_tabulate()` gains an `as.data.frame()` method, to return the frequency
+  table as a data frame. The structure of the returned object is a nested data
+  frame, where the first column contains name of the variable for which
+  frequencies were calculated, and the second column contains the frequency table.
+
+* `demean()` (and `degroup()`) now also work for cross-classified designs, or
+  more generally, for data with multiple grouping or cluster variables (i.e.
+  `by` can now specify more than one variable).
 
 # datawizard 0.11.0
 

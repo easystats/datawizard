@@ -4,6 +4,7 @@
 \alias{data_tabulate}
 \alias{data_tabulate.default}
 \alias{data_tabulate.data.frame}
+\alias{as.data.frame.datawizard_tables}
 \title{Create frequency and crosstables of variables}
 \usage{
 data_tabulate(x, ...)
@@ -13,7 +14,7 @@ data_tabulate(x, ...)
   by = NULL,
   drop_levels = FALSE,
   weights = NULL,
-  include_na = TRUE,
+  remove_na = FALSE,
   proportions = NULL,
   name = NULL,
   verbose = TRUE,
@@ -29,11 +30,20 @@ data_tabulate(x, ...)
   by = NULL,
   drop_levels = FALSE,
   weights = NULL,
-  include_na = TRUE,
+  remove_na = FALSE,
   proportions = NULL,
   collapse = FALSE,
   verbose = TRUE,
   ...
+)
+
+\method{as.data.frame}{datawizard_tables}(
+  x,
+  row.names = NULL,
+  optional = FALSE,
+  ...,
+  stringsAsFactors = FALSE,
+  add_total = FALSE
 )
 }
 \arguments{
@@ -52,7 +62,7 @@ factor levels are dropped from the frequency table.}
 \item{weights}{Optional numeric vector of weights. Must be of the same length
 as \code{x}. If \code{weights} is supplied, weighted frequencies are calculated.}
 
-\item{include_na}{Logical, if \code{TRUE}, missing values are included in the
+\item{remove_na}{Logical, if \code{FALSE}, missing values are included in the
 frequency or crosstable, else missing values are omitted.}
 
 \item{proportions}{Optional character string, indicating the type of
@@ -116,6 +126,24 @@ functions (see 'Details'), this argument may be used as workaround.}
 
 \item{collapse}{Logical, if \code{TRUE} collapses multiple tables into one larger
 table for printing. This affects only printing, not the returned object.}
+
+\item{row.names}{\code{NULL} or a character vector giving the row
+    names for the data frame.  Missing values are not allowed.}
+
+\item{optional}{logical. If \code{TRUE}, setting row names and
+    converting column names (to syntactic names: see
+    \code{\link[base]{make.names}}) is optional.  Note that all of \R's
+    \pkg{base} package \code{as.data.frame()} methods use
+    \code{optional} only for column names treatment, basically with the
+    meaning of \code{\link[base]{data.frame}(*, check.names = !optional)}.
+    See also the \code{make.names} argument of the \code{matrix} method.}
+
+\item{stringsAsFactors}{logical: should the character vector be converted
+    to a factor?}
+
+\item{add_total}{For crosstables (i.e. when \code{by} is not \code{NULL}), a row and
+column with the total N values are added to the data frame. \code{add_total} has
+no effect in \code{as.data.frame()} for simple frequency tables.}
 }
 \value{
 A data frame, or a list of data frames, with one frequency table
@@ -126,6 +154,13 @@ This function creates frequency or crosstables of variables,
 including the number of levels/values as well as the distribution of raw,
 valid and cumulative percentages. For crosstables, row, column  and cell
 percentages can be calculated.
+}
+\details{
+There is an \code{as.data.frame()} method, to return the frequency tables as a
+data frame. The structure of the returned object is a nested data frame,
+where the first column contains name of the variable for which frequencies
+were calculated, and the second column is a list column that contains the
+frequency tables as data frame. See 'Examples'.
 }
 \note{
 There are \code{print_html()} and \code{print_md()} methods available for printing
@@ -138,7 +173,7 @@ If \code{by} is supplied, a crosstable is created. The crosstable includes \verb
 (missing) values by default. The first column indicates values of \code{x}, the
 first row indicates values of \code{by} (including missing values). The last row
 and column contain the total frequencies for each row and column, respectively.
-Setting \code{include_na = FALSE} will omit missing values from the crosstable.
+Setting \code{remove_na = FALSE} will omit missing values from the crosstable.
 Setting \code{proportions} to \code{"row"} or \code{"column"} will add row or column
 percentages. Setting \code{proportions} to \code{"full"} will add relative frequencies
 for the full table.
@@ -154,7 +189,7 @@ data(efc)
 data_tabulate(efc$c172code)
 
 # drop missing values
-data_tabulate(efc$c172code, include_na = FALSE)
+data_tabulate(efc$c172code, remove_na = TRUE)
 
 # data frame
 data_tabulate(efc, c("e42dep", "c172code"))
@@ -201,11 +236,17 @@ data_tabulate(
   efc$c172code,
   by = efc$e16sex,
   proportions = "column",
-  include_na = FALSE
+  remove_na = TRUE
 )
 
 # round percentages
 out <- data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")
 print(out, digits = 0)
+
+# coerce to data frames
+result <- data_tabulate(efc, "c172code", by = "e16sex")
+as.data.frame(result)
+as.data.frame(result)$table
+as.data.frame(result, add_total = TRUE)$table
 \dontshow{\}) # examplesIf}
 }

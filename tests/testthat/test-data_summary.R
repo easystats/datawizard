@@ -175,7 +175,7 @@ test_that("data_summary, with NA", {
   data(efc, package = "datawizard")
   out <- data_summary(efc, MW = mean(c12hour, na.rm = TRUE), by = "c172code")
   expect_snapshot(print(out))
-  out <- data_summary(efc, MW = mean(c12hour, na.rm = TRUE), by = "c172code", include_na = FALSE)
+  out <- data_summary(efc, MW = mean(c12hour, na.rm = TRUE), by = "c172code", remove_na = TRUE)
   expect_snapshot(print(out))
   # sorting for multiple groups
   out <- data_summary(efc, MW = mean(c12hour, na.rm = TRUE), by = c("e42dep", "c172code"))

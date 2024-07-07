@@ -7,7 +7,7 @@
 \usage{
 data_summary(x, ...)
 
-\method{data_summary}{data.frame}(x, ..., by = NULL, include_na = TRUE)
+\method{data_summary}{data.frame}(x, ..., by = NULL, remove_na = FALSE)
 }
 \arguments{
 \item{x}{A (grouped) data frame.}
@@ -22,9 +22,9 @@ summary function \code{n()} can be used to count the number of observations.}
 If supplied, the data will be split by this variable and summary statistics
 will be computed for each group.}
 
-\item{include_na}{Logical. If \code{TRUE}, missing values are included as a level
-in the grouping variable. If \code{FALSE}, missing values are omitted from the
-grouping variable.}
+\item{remove_na}{Logical. If \code{TRUE}, missing values are omitted from the
+grouping variable. If \code{FALSE} (default), missing values are included as a
+level in the grouping variable.}
 }
 \value{
 A data frame with the requested summary statistics.
