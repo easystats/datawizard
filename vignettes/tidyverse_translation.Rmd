@@ -30,8 +30,15 @@ pkgs <- c(
 # a logical that is FALSE only if deps are not installed (cf easystats/easystats#317)
 evaluate_chunk <- TRUE
 
-if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
+if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L))) || getRversion() < "4.1.0") {
   evaluate_chunk <- FALSE
+}
+
+row <- function(...) {
+  div(
+    class = "custom_note",
+    ...
+  )
 }
 ```
 
@@ -46,6 +53,12 @@ Patil et al., (2022). datawizard: An R Package for Easy Data Preparation and Sta
 .tidyverse, .tidyverse > .sourceCode {
   background-color: #d9f2e5;
 }
+.custom_note {
+  border-left: solid 5px hsl(220, 100%, 30%);
+  background-color: hsl(220, 100%, 95%);
+  padding: 5px;
+  margin-bottom: 10px
+}
 ```
 
 # Introduction
@@ -57,13 +70,7 @@ one of its main features is that it has a very few dependencies: `{stats}` and `
 (included in base R) and `{insight}`, which is the core package of the _easystats_ 
 ecosystem. This package grew organically to simultaneously satisfy the 
 "0 non-base hard dependency" principle of _easystats_ and the data wrangling needs
-of the constituent packages in this ecosystem.
-
-One drawback of this genesis is that not all features of the `{tidyverse}` 
-packages are supported since only features that were necessary for _easystats_ 
-ecosystem have been implemented. Some of these missing features (such as `summarize`
-or the pipe operator `%>%`) are made available in other dependency-free packages, 
-such as [`{poorman}`](https://github.com/nathaneastwood/poorman/). It is also 
+of the constituent packages in this ecosystem. It is also 
 important to note that `{datawizard}` was designed to avoid namespace collisions 
 with `{tidyverse}` packages.
 
@@ -71,6 +78,10 @@ In this article, we will see how to go through basic data wrangling steps with
 `{datawizard}`. We will also compare it to the `{tidyverse}` syntax for achieving the same. 
 This way, if you decide to make the switch, you can easily find the translations here.
 This vignette is largely inspired from `{dplyr}`'s [Getting started vignette](https://dplyr.tidyverse.org/articles/dplyr.html).
+
+```{r echo=FALSE}
+row("Note: In this vignette, we use the native pipe-operator, `|>`, which was introduced in R 4.1. Users of R version 3.6 or 4.0 should replace the native pipe by magrittr's one (`%>%`) so that examples work.")
+```
 
 ```{r, eval = evaluate_chunk}
 library(dplyr)
@@ -136,14 +147,14 @@ Before we look at them individually, let's first have a look at the summary tabl
 
 ```{r filter, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>%
+starwars |>
   data_filter(
     skin_color == "light",
     eye_color == "brown"
   )
 
 # or
-starwars %>%
+starwars |>
   data_filter(
     skin_color == "light" &
       eye_color == "brown"
@@ -155,7 +166,7 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>%
+starwars |>
   filter(
     skin_color == "light",
     eye_color == "brown"
@@ -187,7 +198,7 @@ select several variables, while `dplyr::select()` accepts any unquoted column na
 
 ```{r select1, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>%
+starwars |>
   data_select(select = c("hair_color", "skin_color", "eye_color"))
 ```
 :::
@@ -196,7 +207,7 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>%
+starwars |>
   select(hair_color, skin_color, eye_color)
 ```
 :::
@@ -212,7 +223,7 @@ starwars %>%
 
 ```{r select2, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>%
+starwars |>
   data_select(select = -ends_with("color"))
 ```
 :::
@@ -221,7 +232,7 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>%
+starwars |>
   select(-ends_with("color"))
 ```
 :::
@@ -240,7 +251,7 @@ here and quoting them won't work. Should we comment on that? -->
 
 ```{r select3, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>%
+starwars |>
   data_select(select = -(hair_color:eye_color))
 ```
 :::
@@ -249,7 +260,7 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>%
+starwars |>
   select(!(hair_color:eye_color))
 ```
 :::
@@ -266,7 +277,7 @@ starwars %>%
 
 ```{r select4, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>%
+starwars |>
   data_select(exclude = regex("color$"))
 ```
 :::
@@ -275,7 +286,7 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>%
+starwars |>
   select(-contains("color$"))
 ```
 :::
@@ -292,7 +303,7 @@ starwars %>%
 
 ```{r select5, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>%
+starwars |>
   data_select(select = is.numeric)
 ```
 :::
@@ -301,7 +312,7 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>%
+starwars |>
   select(where(is.numeric))
 ```
 :::
@@ -334,7 +345,7 @@ This last point is also the main difference between `data_modify()` and
 
 ```{r modify1, class.source = "datawizard"}
 # ---------- datawizard -----------
-efc %>%
+efc |>
   data_modify(
     c12hour_c = center(c12hour),
     c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
@@ -347,7 +358,7 @@ efc %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-efc %>%
+efc |>
   mutate(
     c12hour_c = center(c12hour),
     c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
@@ -400,7 +411,7 @@ such as `starts_with()` in `data_arrange()`.
 :::{}
 ```{r arrange1, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>%
+starwars |>
   data_arrange(c("hair_color", "height"))
 ```
 :::
@@ -409,7 +420,7 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>%
+starwars |>
   arrange(hair_color, height)
 ```
 :::
@@ -426,7 +437,7 @@ their name, like below:
 :::{}
 ```{r arrange2, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>%
+starwars |>
   data_arrange(c("-hair_color", "-height"))
 ```
 :::
@@ -435,7 +446,7 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>%
+starwars |>
   arrange(desc(hair_color), -height)
 ```
 :::
@@ -456,7 +467,7 @@ behavior of `dplyr::pull()`:
 :::{}
 ```{r extract1, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>%
+starwars |>
   data_extract(gender)
 ```
 :::
@@ -465,7 +476,7 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>%
+starwars |>
   pull(gender)
 ```
 :::
@@ -479,7 +490,7 @@ We can also specify several variables in `select`. In this case, `data_extract()
 is equivalent to `data_select()`:
 
 ```{r eval = evaluate_chunk}
-starwars %>%
+starwars |>
   data_extract(select = contains("color"))
 ```
 
@@ -499,7 +510,7 @@ a vector of new names for these columns that must be of the same length.
 
 ```{r rename1, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>%
+starwars |>
   data_rename(
     pattern = c("sex", "hair_color"),
     replacement = c("Sex", "Hair Color")
@@ -511,7 +522,7 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>%
+starwars |>
   rename(
     Sex = sex,
     "Hair Color" = hair_color
@@ -531,7 +542,7 @@ TitleCase with the following code:
 ```{r rename2}
 to_rename <- names(starwars)
 
-starwars %>%
+starwars |>
   data_rename(
     pattern = to_rename,
     replacement = tools::toTitleCase(gsub("_", " ", to_rename, fixed = TRUE))
@@ -546,11 +557,11 @@ with `data_addprefix()` and `data_addsuffix()`. The argument `select` accepts
 all select helpers that we saw above with `data_select()`:
 
 ```{r rename3}
-starwars %>%
+starwars |>
   data_addprefix(
     pattern = "OLD.",
     select = contains("color")
-  ) %>%
+  ) |>
   data_addsuffix(
     pattern = ".NEW",
     select = -contains("color")
@@ -576,7 +587,7 @@ be relocated:
 
 ```{r relocate1, class.source = "datawizard"}
 # ---------- datawizard -----------
-starwars %>%
+starwars |>
   data_relocate(sex:homeworld, before = "height")
 ```
 :::
@@ -585,7 +596,7 @@ starwars %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-starwars %>%
+starwars |>
   relocate(sex:homeworld, .before = height)
 ```
 :::
@@ -601,7 +612,7 @@ column, or `after = -1` to relocate them after the last column.
 
 ```{r eval = evaluate_chunk}
 # ---------- datawizard -----------
-starwars %>%
+starwars |>
   data_relocate(sex:homeworld, after = -1)
 ```
 
@@ -636,7 +647,7 @@ reshaped to be in a single new column, called "count".
 
 ```{r pivot1, class.source = "datawizard"}
 # ---------- datawizard -----------
-relig_income %>%
+relig_income |>
   data_to_long(
     -religion,
     names_to = "income",
@@ -649,7 +660,7 @@ relig_income %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-relig_income %>%
+relig_income |>
   pivot_longer(
     !religion,
     names_to = "income",
@@ -676,7 +687,7 @@ billboard
 
 ```{r pivot2, class.source = "datawizard"}
 # ---------- datawizard -----------
-billboard %>%
+billboard |>
   data_to_long(
     cols = starts_with("wk"),
     names_to = "week",
@@ -690,7 +701,7 @@ billboard %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-billboard %>%
+billboard |>
   pivot_longer(
     cols = starts_with("wk"),
     names_to = "week",
@@ -721,7 +732,7 @@ fish_encounters
 
 ```{r pivot3, class.source = "datawizard"}
 # ---------- datawizard -----------
-fish_encounters %>%
+fish_encounters |>
   data_to_wide(
     names_from = "station",
     values_from = "seen",
@@ -734,7 +745,7 @@ fish_encounters %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-fish_encounters %>%
+fish_encounters |>
   pivot_wider(
     names_from = station,
     values_from = seen,
@@ -789,7 +800,7 @@ band_instruments
 
 ```{r join1, class.source = "datawizard"}
 # ---------- datawizard -----------
-band_members %>%
+band_members |>
   data_join(band_instruments, join = "full")
 ```
 :::
@@ -798,7 +809,7 @@ band_members %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-band_members %>%
+band_members |>
   full_join(band_instruments)
 ```
 :::
@@ -818,7 +829,7 @@ band_members %>%
 
 ```{r join2, class.source = "datawizard"}
 # ---------- datawizard -----------
-band_members %>%
+band_members |>
   data_join(band_instruments, join = "left")
 ```
 :::
@@ -827,7 +838,7 @@ band_members %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-band_members %>%
+band_members |>
   left_join(band_instruments)
 ```
 :::
@@ -844,7 +855,7 @@ band_members %>%
 
 ```{r join3, class.source = "datawizard"}
 # ---------- datawizard -----------
-band_members %>%
+band_members |>
   data_join(band_instruments, join = "right")
 ```
 :::
@@ -853,7 +864,7 @@ band_members %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-band_members %>%
+band_members |>
   right_join(band_instruments)
 ```
 :::
@@ -873,7 +884,7 @@ band_members %>%
 
 ```{r join4, class.source = "datawizard"}
 # ---------- datawizard -----------
-band_members %>%
+band_members |>
   data_join(band_instruments, join = "inner")
 ```
 :::
@@ -882,7 +893,7 @@ band_members %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-band_members %>%
+band_members |>
   inner_join(band_instruments)
 ```
 :::
@@ -916,7 +927,7 @@ test
 
 ```{r unite1, class.source = "datawizard"}
 # ---------- datawizard -----------
-test %>%
+test |>
   data_unite(
     new_column = "date",
     select = c("year", "month", "day"),
@@ -929,7 +940,7 @@ test %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-test %>%
+test |>
   unite(
     col = "date",
     year, month, day,
@@ -949,7 +960,7 @@ test %>%
 
 ```{r unite2, class.source = "datawizard"}
 # ---------- datawizard -----------
-test %>%
+test |>
   data_unite(
     new_column = "date",
     select = c("year", "month", "day"),
@@ -963,7 +974,7 @@ test %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-test %>%
+test |>
   unite(
     col = "date",
     year, month, day,
@@ -999,7 +1010,7 @@ test
 
 ```{r separate1, class.source = "datawizard"}
 # ---------- datawizard -----------
-test %>%
+test |>
   data_separate(
     select = "date_arrival",
     new_columns = c("Year", "Month", "Day")
@@ -1011,7 +1022,7 @@ test %>%
 
 ```{r, class.source = "tidyverse"}
 # ---------- tidyverse -----------
-test %>%
+test |>
   separate(
     date_arrival,
     into = c("Year", "Month", "Day")
@@ -1028,7 +1039,7 @@ test %>%
 Unlike `tidyr::separate()`, you can separate multiple columns in one step with `data_separate()`.
 
 ```{r eval = evaluate_chunk}
-test %>%
+test |>
   data_separate(
     new_columns = list(
       date_arrival = c("Arr_Year", "Arr_Month", "Arr_Day"),
@@ -1053,12 +1064,12 @@ We can convert a column in rownames and move rownames to a new column with
 mtcars <- head(mtcars)
 mtcars
 
-mtcars2 <- mtcars %>%
+mtcars2 <- mtcars |>
   rownames_as_column(var = "model")
 
 mtcars2
 
-mtcars2 %>%
+mtcars2 |>
   column_as_rownames(var = "model")
 ```
 
@@ -1081,16 +1092,16 @@ test <- data.frame(
 )
 test
 
-test %>%
-  data_group(group) %>%
+test |>
+  data_group(group) |>
   tibble::rowid_to_column()
 
-test %>%
-  data_group(group) %>%
+test |>
+  data_group(group) |>
   rowid_as_column()
 
-test %>%
-  data_group(group) %>%
+test |>
+  data_group(group) |>
   mutate(id = seq_len(n()))
 ```
 
@@ -1107,11 +1118,11 @@ x <- data.frame(
   X_2 = c(NA, "Title2", 4:6)
 )
 x
-x2 <- x %>%
+x2 <- x |>
   row_to_colnames(row = 2)
 x2
 
-x2 %>%
+x2 |>
   colnames_to_row()
 ```
 
