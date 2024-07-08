@@ -33,6 +33,13 @@ evaluate_chunk <- TRUE
 if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L))) || getRversion() < "4.1.0") {
   evaluate_chunk <- FALSE
 }
+
+row <- function(...) {
+  div(
+    class = "custom_note",
+    ...
+  )
+}
 ```
 
 This vignette can be referred to by citing the following:
@@ -45,6 +52,12 @@ Patil et al., (2022). datawizard: An R Package for Easy Data Preparation and Sta
 }
 .tidyverse, .tidyverse > .sourceCode {
   background-color: #d9f2e5;
+}
+.custom_note {
+  border-left: solid 5px hsl(220, 100%, 30%);
+  background-color: hsl(220, 100%, 95%);
+  padding: 5px;
+  margin-bottom: 10px
 }
 ```
 
@@ -65,6 +78,10 @@ In this article, we will see how to go through basic data wrangling steps with
 `{datawizard}`. We will also compare it to the `{tidyverse}` syntax for achieving the same. 
 This way, if you decide to make the switch, you can easily find the translations here.
 This vignette is largely inspired from `{dplyr}`'s [Getting started vignette](https://dplyr.tidyverse.org/articles/dplyr.html).
+
+```{r echo=FALSE}
+row("Note: In this vignette, we use the native pipe-operator, `|>`, which was introduced in R 4.1. Users of R version 3.6 or 4.0 should replace the native pipe by magrittr's one (`%>%`) so that examples work.")
+```
 
 ```{r, eval = evaluate_chunk}
 library(dplyr)
