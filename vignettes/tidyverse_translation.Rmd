@@ -34,7 +34,9 @@ evaluate_chunk <- TRUE
 if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L))) || getRversion() < "4.1.0") {
   evaluate_chunk <- FALSE
 }
+```
 
+```{r echo=FALSE, message=FALSE, eval=evaluate_chunk}
 row <- function(...) {
   htmltools::div(
     class = "custom_note",
