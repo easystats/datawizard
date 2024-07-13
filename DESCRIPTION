@@ -1,7 +1,7 @@
 Type: Package
 Package: datawizard
 Title: Easy Data Wrangling and Statistical Transformations
-Version: 0.12.0
+Version: 0.12.0.1
 Authors@R: c(
     person("Indrajeet", "Patil", , "patilindrajeet.science@gmail.com", role = "aut",
            comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@patilindrajeets")),
@@ -21,10 +21,10 @@ Authors@R: c(
     person("Robert", "Garrett", , "rcg4@illinois.edu", role = "rev")
   )
 Maintainer: Etienne Bacher <etienne.bacher@protonmail.com>
-Description: A lightweight package to assist in key steps involved in any data 
-    analysis workflow: (1) wrangling the raw data to get it in the needed form, 
-    (2) applying preprocessing steps and statistical transformations, and 
-    (3) compute statistical summaries of data properties and distributions. 
+Description: A lightweight package to assist in key steps involved in any data
+    analysis workflow: (1) wrangling the raw data to get it in the needed form,
+    (2) applying preprocessing steps and statistical transformations, and
+    (3) compute statistical summaries of data properties and distributions.
     It is also the data wrangling backend for packages in 'easystats' ecosystem.
     References: Patil et al. (2022) <doi:10.21105/joss.04684>.
 License: MIT + file LICENSE
@@ -36,7 +36,7 @@ Imports:
     insight (>= 0.20.1),
     stats,
     utils
-Suggests: 
+Suggests:
     bayestestR,
     boot,
     brms,
@@ -68,7 +68,7 @@ Suggests:
     tibble,
     tidyr,
     withr
-VignetteBuilder: 
+VignetteBuilder:
     knitr
 Encoding: UTF-8
 Language: en-US
