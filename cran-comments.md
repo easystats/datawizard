@@ -11,5 +11,5 @@ We checked 18 reverse dependencies, comparing R CMD check results across CRAN an
 
 ## Other comments
 
-This release fixes the two CRAN failures on r-oldrel-macos-arm64 and
-r-oldrel-macos-x86_64.
+This is a patch release that fixes an error in one of the vignettes due to a
+missing package namespace. Nothing else changed since 0.12.0.
