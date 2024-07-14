@@ -1,6 +1,6 @@
 ---
 title: "Coming from 'tidyverse'"
-output: 
+output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
@@ -22,7 +22,8 @@ knitr::opts_chunk$set(
 pkgs <- c(
   "dplyr",
   "datawizard",
-  "tidyr"
+  "tidyr",
+  "htmltools"
 )
 
 # since we explicitely put eval = TRUE for some chunks, we can't rely on
@@ -33,9 +34,11 @@ evaluate_chunk <- TRUE
 if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L))) || getRversion() < "4.1.0") {
   evaluate_chunk <- FALSE
 }
+```
 
+```{r echo=FALSE, message=FALSE, eval=evaluate_chunk}
 row <- function(...) {
-  div(
+  htmltools::div(
     class = "custom_note",
     ...
   )
@@ -63,19 +66,19 @@ Patil et al., (2022). datawizard: An R Package for Easy Data Preparation and Sta
 
 # Introduction
 
-`{datawizard}` package aims to make basic data wrangling easier than 
+`{datawizard}` package aims to make basic data wrangling easier than
 with base R. The data wrangling workflow it supports is similar to the one
 supported by the tidyverse package combination of `{dplyr}` and `{tidyr}`. However,
 one of its main features is that it has a very few dependencies: `{stats}` and `{utils}`
-(included in base R) and `{insight}`, which is the core package of the _easystats_ 
-ecosystem. This package grew organically to simultaneously satisfy the 
+(included in base R) and `{insight}`, which is the core package of the _easystats_
+ecosystem. This package grew organically to simultaneously satisfy the
 "0 non-base hard dependency" principle of _easystats_ and the data wrangling needs
-of the constituent packages in this ecosystem. It is also 
-important to note that `{datawizard}` was designed to avoid namespace collisions 
+of the constituent packages in this ecosystem. It is also
+important to note that `{datawizard}` was designed to avoid namespace collisions
 with `{tidyverse}` packages.
 
-In this article, we will see how to go through basic data wrangling steps with 
-`{datawizard}`. We will also compare it to the `{tidyverse}` syntax for achieving the same. 
+In this article, we will see how to go through basic data wrangling steps with
+`{datawizard}`. We will also compare it to the `{tidyverse}` syntax for achieving the same.
 This way, if you decide to make the switch, you can easily find the translations here.
 This vignette is largely inspired from `{dplyr}`'s [Getting started vignette](https://dplyr.tidyverse.org/articles/dplyr.html).
 
@@ -94,7 +97,7 @@ efc <- head(efc)
 
 # Workhorses
 
-Before we look at their *tidyverse* equivalents, we can first have a look at 
+Before we look at their *tidyverse* equivalents, we can first have a look at
 `{datawizard}`'s key functions for data wrangling:
 
 | Function          | Operation                                         |
@@ -187,9 +190,9 @@ starwars <- head(starwars)
 
 ## Selecting {#selecting}
 
-`data_select()` is the equivalent of `dplyr::select()`. 
+`data_select()` is the equivalent of `dplyr::select()`.
 The main difference between these two functions is that `data_select()` uses two
-arguments (`select` and `exclude`) and requires quoted column names if we want to 
+arguments (`select` and `exclude`) and requires quoted column names if we want to
 select several variables, while `dplyr::select()` accepts any unquoted column names.
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
@@ -327,8 +330,8 @@ You can find a list of all the select helpers with `?data_select`.
 
 ## Modifying {#modifying}
 
-`data_modify()` is a wrapper around `base::transform()` but has several additional 
-benefits: 
+`data_modify()` is a wrapper around `base::transform()` but has several additional
+benefits:
 
 * it allows us to use newly created variables in the following expressions;
 * it works with grouped data;
@@ -336,8 +339,8 @@ benefits:
 * it accepts expressions as character vectors so that it is easy to program with it
 
 
-This last point is also the main difference between `data_modify()` and 
-`dplyr::mutate()`. 
+This last point is also the main difference between `data_modify()` and
+`dplyr::mutate()`.
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
 
@@ -430,7 +433,7 @@ starwars |>
 ```{r arrange1, eval = evaluate_chunk, echo = FALSE}
 ```
 
-You can also sort variables in descending order by putting a `"-"` in front of 
+You can also sort variables in descending order by putting a `"-"` in front of
 their name, like below:
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
@@ -459,8 +462,8 @@ starwars |>
 
 ## Extracting {#extracting}
 
-Although we mostly work on data frames, it is sometimes useful to extract a single 
-column as a vector. This can be done with `data_extract()`, which reproduces the 
+Although we mostly work on data frames, it is sometimes useful to extract a single
+column as a vector. This can be done with `data_extract()`, which reproduces the
 behavior of `dplyr::pull()`:
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
@@ -499,9 +502,9 @@ starwars |>
 
 ## Renaming {#renaming}
 
-`data_rename()` is the equivalent of `dplyr::rename()` but the syntax between the 
+`data_rename()` is the equivalent of `dplyr::rename()` but the syntax between the
 two is different. While `dplyr::rename()` takes new-old pairs of column
-names, `data_rename()` requires a vector of column names to rename, and then 
+names, `data_rename()` requires a vector of column names to rename, and then
 a vector of new names for these columns that must be of the same length.
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
@@ -535,8 +538,8 @@ starwars |>
 ```{r rename1, eval = evaluate_chunk, echo = FALSE}
 ```
 
-The way `data_rename()` is designed makes it easy to apply the same modifications 
-to a vector of column names. For example, we can remove underscores and use 
+The way `data_rename()` is designed makes it easy to apply the same modifications
+to a vector of column names. For example, we can remove underscores and use
 TitleCase with the following code:
 
 ```{r rename2}
@@ -552,8 +555,8 @@ starwars |>
 ```{r rename2, eval = evaluate_chunk, echo = FALSE}
 ```
 
-It is also possible to add a prefix or a suffix to all or a subset of variables 
-with `data_addprefix()` and `data_addsuffix()`. The argument `select` accepts 
+It is also possible to add a prefix or a suffix to all or a subset of variables
+with `data_addprefix()` and `data_addsuffix()`. The argument `select` accepts
 all select helpers that we saw above with `data_select()`:
 
 ```{r rename3}
@@ -577,7 +580,7 @@ Sometimes, we want to relocate one or a small subset of columns in the dataset.
 Rather than typing many names in `data_select()`, we can use `data_relocate()`,
 which is the equivalent of `dplyr::relocate()`. Just like `data_select()`, we can
 specify a list of variables we want to relocate with `select` and `exclude`.
-Then, the arguments `before` and `after`^[Note that we use `before` and `after` 
+Then, the arguments `before` and `after`^[Note that we use `before` and `after`
 whereas `dplyr::relocate()` uses `.before` and `.after`.] specify where the selected columns should
 be relocated:
 
@@ -591,7 +594,7 @@ starwars |>
   data_relocate(sex:homeworld, before = "height")
 ```
 :::
-  
+
 ::: {}
 
 ```{r, class.source = "tidyverse"}
@@ -600,14 +603,14 @@ starwars |>
   relocate(sex:homeworld, .before = height)
 ```
 :::
-  
+
 ::::
 
 ```{r relocate1, eval = evaluate_chunk, echo = FALSE}
 ```
 
 In addition to column names, `before` and `after` accept column indices. Finally,
-one can use `before = -1` to relocate the selected columns just before the last 
+one can use `before = -1` to relocate the selected columns just before the last
 column, or `after = -1` to relocate them after the last column.
 
 ```{r eval = evaluate_chunk}
@@ -622,10 +625,10 @@ starwars |>
 ### Longer
 
 Reshaping data from wide to long or from long to wide format can be done with
-`data_to_long()` and `data_to_wide()`. These functions were designed to match 
-`tidyr::pivot_longer()` and `tidyr::pivot_wider()` arguments, so that the only 
-thing to do is to change the function name. However, not all of 
-`tidyr::pivot_longer()` and `tidyr::pivot_wider()` features are available yet. 
+`data_to_long()` and `data_to_wide()`. These functions were designed to match
+`tidyr::pivot_longer()` and `tidyr::pivot_wider()` arguments, so that the only
+thing to do is to change the function name. However, not all of
+`tidyr::pivot_longer()` and `tidyr::pivot_wider()` features are available yet.
 
 We will use the `relig_income` dataset, as in the [`{tidyr}` vignette](https://tidyr.tidyverse.org/articles/pivot.html).
 
@@ -634,11 +637,11 @@ relig_income
 ```
 
 
-We would like to reshape this dataset to have 3 columns: religion, count, and 
-income. The column "religion" doesn't need to change, so we exclude it with 
-`-religion`. Then, each remaining column corresponds to an income category. 
-Therefore, we want to move all these column names to a single column called 
-"income". Finally, the values corresponding to each of these columns will be 
+We would like to reshape this dataset to have 3 columns: religion, count, and
+income. The column "religion" doesn't need to change, so we exclude it with
+`-religion`. Then, each remaining column corresponds to an income category.
+Therefore, we want to move all these column names to a single column called
+"income". Finally, the values corresponding to each of these columns will be
 reshaped to be in a single new column, called "count".
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
@@ -765,12 +768,12 @@ fish_encounters |>
 
 <!-- explain a bit more the args of data_join -->
 
-In `{datawizard}`, joining datasets is done with `data_join()` (or its alias 
-`data_merge()`). Contrary to `{dplyr}`, this unique function takes care of all 
+In `{datawizard}`, joining datasets is done with `data_join()` (or its alias
+`data_merge()`). Contrary to `{dplyr}`, this unique function takes care of all
 types of join, which are then specified inside the function with the argument
 `join` (by default, `join = "left"`).
 
-Below, we show how to perform the four most common joins: full, left, right and 
+Below, we show how to perform the four most common joins: full, left, right and
 inner. We will use the datasets `band_members`and `band_instruments` provided by `{dplyr}`:
 
 :::: {style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;"}
@@ -935,7 +938,7 @@ test |>
   )
 ```
 :::
-  
+
 ::: {}
 
 ```{r, class.source = "tidyverse"}
@@ -948,7 +951,7 @@ test |>
   )
 ```
 :::
-  
+
 ::::
 
 ```{r unite1, eval = evaluate_chunk, echo = FALSE}
@@ -969,7 +972,7 @@ test |>
   )
 ```
 :::
-  
+
 ::: {}
 
 ```{r, class.source = "tidyverse"}
@@ -983,7 +986,7 @@ test |>
   )
 ```
 :::
-  
+
 ::::
 
 ```{r unite2, eval = evaluate_chunk, echo = FALSE}
@@ -1017,7 +1020,7 @@ test |>
   )
 ```
 :::
-  
+
 ::: {}
 
 ```{r, class.source = "tidyverse"}
@@ -1029,7 +1032,7 @@ test |>
   )
 ```
 :::
-  
+
 ::::
 
 ```{r separate1, eval = evaluate_chunk, echo = FALSE}
@@ -1051,9 +1054,9 @@ test |>
 
 # Other useful functions
 
-`{datawizard}` contains other functions that are not necessarily included in 
-`{dplyr}` or `{tidyr}` or do not directly modify the data. Some of them are 
-inspired from the package `janitor`. 
+`{datawizard}` contains other functions that are not necessarily included in
+`{dplyr}` or `{tidyr}` or do not directly modify the data. Some of them are
+inspired from the package `janitor`.
 
 ## Work with rownames
 
@@ -1079,7 +1082,7 @@ mtcars2 |>
 The main difference is when we use it with grouped data. While `tibble::rowid_to_column()`
 uses one distinct rowid for every row in the dataset, `rowid_as_column()` creates
 one id for every row *in each group*. Therefore, two rows in different groups
-can have the same row id. 
+can have the same row id.
 
 This means that `rowid_as_column()` is closer to using `n()` in `mutate()`, like
 the following:
