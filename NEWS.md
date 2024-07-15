@@ -1,3 +1,8 @@
+# datawizard 0.12.1
+
+This is a patch release to fix one error on CRAN checks occurring because of a
+missing package namespace in one of the vignettes.
+
 # datawizard 0.12.0
 
 BREAKING CHANGES
