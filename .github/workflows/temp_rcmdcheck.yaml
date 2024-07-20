@@ -1,7 +1,7 @@
 # To understand the aim and scope of this workflow, have a look at these slides:
 # https://indrajeetpatil.github.io/preventive-r-package-care/
 
-# name: R-CMD-check
+name: R-CMD-check
 
 on:
   push:
@@ -15,12 +15,33 @@ concurrency:
 
 jobs:
   R-CMD-check:
-    runs-on: { os: macOS-latest, r: "4.3" }
+    runs-on: ${{ matrix.config.os }}
 
-    name: macos-R-4.3
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }}) ${{ matrix.config.locale }}
 
     strategy:
       fail-fast: false
+      matrix:
+        config:
+          # CRAN doesn't provide binaries for macOS on R-devel, so skip because
+          # it will be too slow otherwise
+          #- {os: macOS-latest, r: 'devel'}
+          # - { os: macOS-latest, r: "release" }
+          - { os: macOS-latest, r: "4.3" }
+
+          # - { os: windows-latest, r: "devel" }
+          # - { os: windows-latest, r: "release" }
+          #- { os: windows-latest, r: "4.3" }
+          # use 4.1 to check with rtools40's older compiler
+          #- { os: windows-latest, r: "4.1" }
+
+          #- { os: ubuntu-latest, r: "next" }
+          # - { os: ubuntu-latest, r: "devel" }
+          # - { os: ubuntu-latest, r: "release" }
+          #- { os: ubuntu-latest, r: "4.3" }
+          #- { os: ubuntu-latest, r: "4.2" }
+          #- { os: ubuntu-latest, r: "4.1" }
+          #- { os: ubuntu-latest, r: "4.0" }
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -35,7 +56,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r@v2
         with:
-          r-version: "4.3"
+          r-version: ${{ matrix.config.r }}
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
