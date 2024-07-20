@@ -1,0 +1,92 @@
+# To understand the aim and scope of this workflow, have a look at these slides:
+# https://indrajeetpatil.github.io/preventive-r-package-care/
+
+# name: R-CMD-check
+
+on:
+  workflow_call:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  R-CMD-check:
+    runs-on: { os: macOS-latest, r: "4.3" }
+
+    name: macos-R-4.3
+
+    strategy:
+      fail-fast: false
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: "latest"
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.config.r }}
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          pak-version: devel
+          upgrade: "TRUE"
+          extra-packages: |
+            any::rcmdcheck
+            any::BH
+            any::RcppEigen
+            ivprobit=?ignore-before-r=100.0.0
+            brms=?ignore-before-r=4.3.0
+            effects=?ignore-before-r=4.3.0
+            nestedLogit=?ignore-before-r=4.3.0
+            FactoMineR=?ignore-before-r=4.3.0
+            factoextra=?ignore-before-r=4.3.0
+            bayesQR=?ignore-before-r=4.2.0
+            MuMIn=?ignore-before-r=4.2.0
+            glmmTMB=?ignore-before-r=4.1.0
+            estimability=?ignore-before-r=4.1.0
+            emmeans=?ignore-before-r=4.1.0
+            ape=?ignore-before-r=4.1.0
+            car=?ignore-before-r=4.1.0
+            drc=?ignore-before-r=4.1.0
+            EGAnet=?ignore-before-r=4.1.0
+            ggpubr=?ignore-before-r=4.1.0
+            Hmisc=?ignore-before-r=4.1.0
+            mediation=?ignore-before-r=4.1.0
+            rstatix=?ignore-before-r=4.1.0
+            PROreg=?ignore-before-r=4.1.0
+            rmcorr=?ignore-before-r=4.1.0
+            rms=?ignore-before-r=4.1.0
+            randomForest=?ignore-before-r=4.1.0
+            lavaan=?ignore-before-r=4.1.0
+            pbkrtest=?ignore-before-r=4.1.0
+            afex=?ignore-before-r=4.1.0
+            car=?ignore-before-r=4.1.0
+            ICSOutlier=?ignore-before-r=4.1.0
+            ICS=?ignore-before-r=4.1.0
+            ivreg=?ignore-before-r=4.1.0
+            AER=?ignore-before-r=4.1.0
+            WRS2=?ignore-before-r=4.1.0
+            tinytable=?ignore-before-r=4.1.0
+            srvyr=?ignore-before-r=4.1.0
+            survey=?ignore-before-r=4.1.0
+          needs: check
+
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          upload-results: true
+          error-on: 'ifelse(getRversion() > "4.3", "note", "warning")'
+        env:
+          _R_CHECK_CRAN_INCOMING_REMOTE_: false
+          _R_CHECK_CRAN_INCOMING_: false
+          _R_CHECK_FORCE_SUGGESTS_: false
+          _R_CHECK_STOP_ON_INVALID_NUMERIC_VERSION_INPUTS_: true
