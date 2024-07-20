@@ -1,3 +1,8 @@
+# datawizard (development version)
+
+* Remove `htmltools` from `Suggests` in an attempt of fixing an error in CRAN
+  checks due to failures to build a vignette (#528).
+
 # datawizard 0.12.1
 
 This is a patch release to fix one error on CRAN checks occurring because of a
