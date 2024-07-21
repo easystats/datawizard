@@ -1,4 +1,4 @@
-# datawizard (development version)
+# datawizard 0.12.2
 
 * Remove `htmltools` from `Suggests` in an attempt of fixing an error in CRAN
   checks due to failures to build a vignette (#528).
