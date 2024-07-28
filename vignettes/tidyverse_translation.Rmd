@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-```{r message=FALSE, warning=FALSE, include=FALSE, eval = TRUE}
+```{r setup, message=FALSE, warning=FALSE, include=FALSE, eval = TRUE}
 library(knitr)
 options(knitr.kable.NA = "")
 knitr::opts_chunk$set(
@@ -21,16 +21,22 @@ knitr::opts_chunk$set(
 
 pkgs <- c(
   "dplyr",
-  "datawizard",
   "tidyr"
 )
+all_deps_available <- all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))
 
-# since we explicitely put eval = TRUE for some chunks, we can't rely on
-# knitr::opts_chunk$set(eval = FALSE) at the beginning of the script. So we make
-# a logical that is FALSE only if deps are not installed (cf easystats/easystats#317)
-evaluate_chunk <- TRUE
+if (all_deps_available) {
+  library(datawizard)
+  library(dplyr)
+  library(tidyr)
+}
 
-if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L))) || getRversion() < "4.1.0") {
+# since we explicitly put `eval = TRUE` for some chunks, we can't rely on
+# `knitr::opts_chunk$set(eval = FALSE)` at the beginning of the script. So we make
+# a logical that is `FALSE` only if deps are not installed (cf easystats/easystats#317)
+if (all_deps_available && getRversion() >= "4.1.0") {
+  evaluate_chunk <- TRUE
+} else {
   evaluate_chunk <- FALSE
 }
 ```
@@ -39,7 +45,7 @@ This vignette can be referred to by citing the following:
 
 Patil et al., (2022). datawizard: An R Package for Easy Data Preparation and Statistical Transformations. *Journal of Open Source Software*, *7*(78), 4684, https://doi.org/10.21105/joss.04684
 
-```{css, echo=FALSE, eval = evaluate_chunk}
+```{css, echo=FALSE, eval = TRUE}
 .datawizard, .datawizard > .sourceCode {
   background-color: #e6e6ff;
 }
@@ -84,10 +90,6 @@ This vignette is largely inspired from `{dplyr}`'s [Getting started vignette](ht
 </div>
 
 ```{r, eval = evaluate_chunk}
-library(dplyr)
-library(tidyr)
-library(datawizard)
-
 data(efc)
 efc <- head(efc)
 ```
