@@ -31,10 +31,12 @@ if (all_deps_available) {
   library(tidyr)
 }
 
+can_vignette_be_evaluated <- all_deps_available && getRversion() >= "4.1.0"
+
 # since we explicitly put `eval = TRUE` for some chunks, we can't rely on
 # `knitr::opts_chunk$set(eval = FALSE)` at the beginning of the script. So we make
 # a logical that is `FALSE` only if deps are not installed (cf easystats/easystats#317)
-if (all_deps_available && getRversion() >= "4.1.0") {
+if (can_vignette_be_evaluated) {
   evaluate_chunk <- TRUE
 } else {
   evaluate_chunk <- FALSE
