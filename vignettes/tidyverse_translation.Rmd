@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-```{r message=FALSE, warning=FALSE, include=FALSE, eval = TRUE}
+```{r setup, message=FALSE, warning=FALSE, include=FALSE, eval = TRUE}
 library(knitr)
 options(knitr.kable.NA = "")
 knitr::opts_chunk$set(
@@ -21,25 +21,28 @@ knitr::opts_chunk$set(
 
 pkgs <- c(
   "dplyr",
-  "datawizard",
   "tidyr"
 )
+all_deps_available <- all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))
 
-# since we explicitely put eval = TRUE for some chunks, we can't rely on
-# knitr::opts_chunk$set(eval = FALSE) at the beginning of the script. So we make
-# a logical that is FALSE only if deps are not installed (cf easystats/easystats#317)
-evaluate_chunk <- TRUE
-
-if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L))) || getRversion() < "4.1.0") {
-  evaluate_chunk <- FALSE
+if (all_deps_available) {
+  library(datawizard)
+  library(dplyr)
+  library(tidyr)
 }
+
+# Since we explicitly put `eval = TRUE` for some chunks, we can't rely on
+# `knitr::opts_chunk$set(eval = FALSE)` at the beginning of the script.
+# Therefore, we introduce a logical that is `FALSE` only if all suggested
+# dependencies are not installed (cf easystats/easystats#317)
+evaluate_chunk <- all_deps_available && getRversion() >= "4.1.0"
 ```
 
 This vignette can be referred to by citing the following:
 
 Patil et al., (2022). datawizard: An R Package for Easy Data Preparation and Statistical Transformations. *Journal of Open Source Software*, *7*(78), 4684, https://doi.org/10.21105/joss.04684
 
-```{css, echo=FALSE, eval = evaluate_chunk}
+```{css, echo=FALSE, eval = TRUE}
 .datawizard, .datawizard > .sourceCode {
   background-color: #e6e6ff;
 }
@@ -97,20 +100,20 @@ efc <- head(efc)
 Before we look at their *tidyverse* equivalents, we can first have a look at
 `{datawizard}`'s key functions for data wrangling:
 
-| Function          | Operation                                         |
-| :---------------- | :------------------------------------------------ |
-| `data_filter()`   | [to select only certain observations](#filtering) |
-| `data_select()`   | [to select only a few variables](#selecting)      |
-| `data_modify()`   | [to create variables or modify existing ones](#modifying) |
-| `data_arrange()`  | [to sort observations](#sorting)                  |
-| `data_extract()`  | [to extract a single variable](#extracting)       |
-| `data_rename()`   | [to rename variables](#renaming)                  |
-| `data_relocate()` | [to reorder a data frame](#relocating)            |
-| `data_to_long()`  | [to convert data from wide to long](#reshaping)   |
-| `data_to_wide()`  | [to convert data from long to wide](#reshaping)   |
-| `data_join()`     | [to join two data frames](#joining)               |
-| `data_unite()`    | [to concatenate several columns into a single one](#uniting)               |
-| `data_separate()` | [to separate a single column into multiple columns](#separating)               |
+| Function          | Operation                                                        |
+| :---------------- | :--------------------------------------------------------------- |
+| `data_filter()`   | [to select only certain observations](#filtering)                |
+| `data_select()`   | [to select only a few variables](#selecting)                     |
+| `data_modify()`   | [to create variables or modify existing ones](#modifying)        |
+| `data_arrange()`  | [to sort observations](#sorting)                                 |
+| `data_extract()`  | [to extract a single variable](#extracting)                      |
+| `data_rename()`   | [to rename variables](#renaming)                                 |
+| `data_relocate()` | [to reorder a data frame](#relocating)                           |
+| `data_to_long()`  | [to convert data from wide to long](#reshaping)                  |
+| `data_to_wide()`  | [to convert data from long to wide](#reshaping)                  |
+| `data_join()`     | [to join two data frames](#joining)                              |
+| `data_unite()`    | [to concatenate several columns into a single one](#uniting)     |
+| `data_separate()` | [to separate a single column into multiple columns](#separating) |
 
 Note that there are a few functions in `{datawizard}` that have no strict equivalent
 in `{dplyr}` or `{tidyr}` (e.g `data_rotate()`), and so we won't discuss them in
@@ -124,7 +127,7 @@ Before we look at them individually, let's first have a look at the summary tabl
 | :---------------- | :------------------------------------------------------------------ |
 | `data_filter()`   | `dplyr::filter()`, `dplyr::slice()`                                 |
 | `data_select()`   | `dplyr::select()`                                                   |
-| `data_modify()`   | `dplyr::mutate()`                                 |
+| `data_modify()`   | `dplyr::mutate()`                                                   |
 | `data_arrange()`  | `dplyr::arrange()`                                                  |
 | `data_extract()`  | `dplyr::pull()`                                                     |
 | `data_rename()`   | `dplyr::rename()`                                                   |
@@ -134,8 +137,8 @@ Before we look at them individually, let's first have a look at the summary tabl
 | `data_join()`     | `dplyr::inner_join()`, `dplyr::left_join()`, `dplyr::right_join()`, |
 |                   | `dplyr::full_join()`, `dplyr::anti_join()`, `dplyr::semi_join()`    |
 | `data_peek()`     | `dplyr::glimpse()`                                                  |
-| `data_unite()`    | `tidyr::unite()`                                              |
-| `data_separate()` | `tidyr::separate()`                                           |
+| `data_unite()`    | `tidyr::unite()`                                                    |
+| `data_separate()` | `tidyr::separate()`                                                 |
 
 ## Filtering {#filtering}
 
