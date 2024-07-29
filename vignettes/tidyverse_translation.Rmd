@@ -31,17 +31,11 @@ if (all_deps_available) {
   library(tidyr)
 }
 
-can_vignette_be_evaluated <- all_deps_available && getRversion() >= "4.1.0"
-
 # Since we explicitly put `eval = TRUE` for some chunks, we can't rely on
 # `knitr::opts_chunk$set(eval = FALSE)` at the beginning of the script.
 # Therefore, we introduce a logical that is `FALSE` only if all suggested
 # dependencies are not installed (cf easystats/easystats#317)
-if (can_vignette_be_evaluated) {
-  evaluate_chunk <- TRUE
-} else {
-  evaluate_chunk <- FALSE
-}
+evaluate_chunk <- all_deps_available && getRversion() >= "4.1.0"
 ```
 
 This vignette can be referred to by citing the following:
@@ -93,6 +87,10 @@ This vignette is largely inspired from `{dplyr}`'s [Getting started vignette](ht
 </div>
 
 ```{r, eval = evaluate_chunk}
+library(dplyr)
+library(tidyr)
+library(datawizard)
+
 data(efc)
 efc <- head(efc)
 ```
