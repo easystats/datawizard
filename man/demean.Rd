@@ -252,9 +252,10 @@ cross-classified designs are simply subtracting all group means from each
 individual value, i.e. \emph{fully cluster-mean-centering} (see \emph{Guo et al. 2024}
 for details). Note that de-meaning for cross-classified designs is \emph{not}
 equivalent to de-meaning of nested data structures from models with three or
-more levels, i.e. de-meaning is supposed to work for models like
-\code{y ~ x + (1|group1) + (1|group2)}, but \emph{not} for models like
-\code{y ~ x + (1|group1/group2)}.
+more levels. Set \code{nested = TRUE} to explicitly assume a nested design. for
+cross-classified designs, de-meaning is supposed to work for models like
+\code{y ~ x + (1|level3) + (1|level2)}, but \emph{not} for models like
+\code{y ~ x + (1|level3/level2)}.
 }
 
 \section{Analysing panel data with mixed models using lme4}{

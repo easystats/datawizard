@@ -186,9 +186,10 @@
 #' individual value, i.e. _fully cluster-mean-centering_ (see _Guo et al. 2024_
 #' for details). Note that de-meaning for cross-classified designs is *not*
 #' equivalent to de-meaning of nested data structures from models with three or
-#' more levels, i.e. de-meaning is supposed to work for models like
-#' `y ~ x + (1|group1) + (1|group2)`, but *not* for models like
-#' `y ~ x + (1|group1/group2)`.
+#' more levels. Set `nested = TRUE` to explicitly assume a nested design. for
+#' cross-classified designs, de-meaning is supposed to work for models like
+#' `y ~ x + (1|level3) + (1|level2)`, but *not* for models like
+#' `y ~ x + (1|level3/level2)`.
 #'
 #' @section Analysing panel data with mixed models using lme4:
 #'
