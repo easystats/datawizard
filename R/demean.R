@@ -12,9 +12,23 @@
 #' @param select Character vector (or formula) with names of variables to select
 #'   that should be group- and de-meaned.
 #' @param by Character vector (or formula) with the name of the variable(s) that
-#'   indicates the group- or cluster-ID. For cross-classified designs, `by` can
-#'   also identify two or more variables as group- or cluster-IDs. See also
-#'   section _De-meaning for cross-classified designs_ below.
+#'   indicates the group- or cluster-ID. For cross-classified or nested designs,
+#'   `by` can also identify two or more variables as group- or cluster-IDs. If
+#'   the data is nested and should be treated as such, set `nested = TRUE`. Else,
+#'   if `by` defines two or more variables and `nested = FALSE`, a cross-classified
+#'   design is assumed.
+#'
+#'   For nested designs, `by` can be:
+#'   - a character vector with the name of the variable that indicates the
+#'     levels, ordered from *highest* level to *lowest* (e.g. `by = c("L3", "L2"`).
+#'   - a character vector with variable names in the format `by = "L4/L3/L2"`,
+#'     where the levels are separated by `/`.
+#'
+#'   See also section _De-meaning for cross-classified designs_ and
+#'   _De-meaning for nested designs_ below.
+#' @param nested Logical, if `TRUE`, the data is treated as nested. If `FALSE`,
+#'   the data is treated as cross-classified. Only applies if `by` contains more
+#'   than one variable.
 #' @param center Method for centering. `demean()` always performs
 #'   mean-centering, while `degroup()` can use `center = "median"` or
 #'   `center = "mode"` for median- or mode-centering, and also `"min"`
@@ -244,6 +258,7 @@
 demean <- function(x,
                    select,
                    by,
+                   nested = FALSE,
                    suffix_demean = "_within",
                    suffix_groupmean = "_between",
                    add_attributes = TRUE,
@@ -259,6 +274,7 @@ demean <- function(x,
     x = x,
     select = select,
     by = by,
+    nested = nested,
     center = "mean",
     suffix_demean = suffix_demean,
     suffix_groupmean = suffix_groupmean,
@@ -268,15 +284,12 @@ demean <- function(x,
 }
 
 
-
-
-
-
 #' @rdname demean
 #' @export
 degroup <- function(x,
                     select,
                     by,
+                    nested = FALSE,
                     center = "mean",
                     suffix_demean = "_within",
                     suffix_groupmean = "_between",
@@ -303,8 +316,15 @@ degroup <- function(x,
     ))
   }
 
+  # handle different "by" options
   if (inherits(by, "formula")) {
     by <- all.vars(by)
+  }
+
+  # we also allow lme4-syntax here: if by = "L4/L3/L2", we assume a nested design
+  if (length(by) == 1 && grepl("/", by, fixed = TRUE)) {
+    by <- insight::trim_ws(unlist(strsplit(by, "/", fixed = TRUE), use.names = FALSE))
+    nested <- TRUE
   }
 
   # identify interaction terms
@@ -407,6 +427,9 @@ degroup <- function(x,
     names(group_means_list) <- select
     # create de-meaned variables by subtracting the group mean from each individual value
     person_means_list <- lapply(select, function(i) dat[[i]] - group_means_list[[i]])
+  } else if (nested) {
+    # nested design: by > 1, nested is explicitly set to TRUE
+
   } else {
     # cross-classified design: by > 1
     group_means_list <- lapply(by, function(j) {
