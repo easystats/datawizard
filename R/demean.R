@@ -448,10 +448,13 @@ degroup <- function(x,
     })
     # create de-meaned variables by subtracting the group mean from each individual value
     person_means_list <- lapply(
-      seq_along(select),
-      function(i) dat[[select[i]]] - group_means_list[[i]][[length(by)]]
-      # select,
-      # function(i) dat[[i]] - stats::ave(dat[[i]], dat[[by[length(by)]]], FUN = gm_fun)
+      # seq_along(select),
+      # function(i) dat[[select[i]]] - group_means_list[[i]][[length(by)]]
+      select,
+      function(i) {
+        dat$higher_levels <- do.call(paste, c(dat[by], list(sep = "_")))
+        dat[[i]] - stats::ave(dat[[i]], dat$higher_levels, FUN = gm_fun)
+      }
     )
   } else {
     # cross-classified design: by > 1
