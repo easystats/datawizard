@@ -10,6 +10,7 @@ demean(
   x,
   select,
   by,
+  nested = FALSE,
   suffix_demean = "_within",
   suffix_groupmean = "_between",
   add_attributes = TRUE,
@@ -21,6 +22,7 @@ degroup(
   x,
   select,
   by,
+  nested = FALSE,
   center = "mean",
   suffix_demean = "_within",
   suffix_groupmean = "_between",
@@ -33,6 +35,7 @@ detrend(
   x,
   select,
   by,
+  nested = FALSE,
   center = "mean",
   suffix_demean = "_within",
   suffix_groupmean = "_between",
@@ -48,9 +51,26 @@ detrend(
 that should be group- and de-meaned.}
 
 \item{by}{Character vector (or formula) with the name of the variable(s) that
-indicates the group- or cluster-ID. For cross-classified designs, \code{by} can
-also identify two or more variables as group- or cluster-IDs. See also
-section \emph{De-meaning for cross-classified designs} below.}
+indicates the group- or cluster-ID. For cross-classified or nested designs,
+\code{by} can also identify two or more variables as group- or cluster-IDs. If
+the data is nested and should be treated as such, set \code{nested = TRUE}. Else,
+if \code{by} defines two or more variables and \code{nested = FALSE}, a cross-classified
+design is assumed.
+
+For nested designs, \code{by} can be:
+\itemize{
+\item a character vector with the name of the variable that indicates the
+levels, ordered from \emph{highest} level to \emph{lowest} (e.g. \verb{by = c("L3", "L2"}).
+\item a character vector with variable names in the format \code{by = "L4/L3/L2"},
+where the levels are separated by \code{/}.
+}
+
+See also section \emph{De-meaning for cross-classified designs} and
+\emph{De-meaning for nested designs} below.}
+
+\item{nested}{Logical, if \code{TRUE}, the data is treated as nested. If \code{FALSE},
+the data is treated as cross-classified. Only applies if \code{by} contains more
+than one variable.}
 
 \item{suffix_demean, suffix_groupmean}{String value, will be appended to the
 names of the group-meaned and de-meaned variables of \code{x}. By default,
@@ -232,9 +252,10 @@ cross-classified designs are simply subtracting all group means from each
 individual value, i.e. \emph{fully cluster-mean-centering} (see \emph{Guo et al. 2024}
 for details). Note that de-meaning for cross-classified designs is \emph{not}
 equivalent to de-meaning of nested data structures from models with three or
-more levels, i.e. de-meaning is supposed to work for models like
-\code{y ~ x + (1|group1) + (1|group2)}, but \emph{not} for models like
-\code{y ~ x + (1|group1/group2)}.
+more levels. Set \code{nested = TRUE} to explicitly assume a nested design. for
+cross-classified designs, de-meaning is supposed to work for models like
+\code{y ~ x + (1|level3) + (1|level2)}, but \emph{not} for models like
+\code{y ~ x + (1|level3/level2)}.
 }
 
 \section{Analysing panel data with mixed models using lme4}{
