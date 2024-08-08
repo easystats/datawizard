@@ -437,7 +437,7 @@ degroup <- function(x,
     group_means_list <- lapply(select, function(i) {
       out <- lapply(seq_along(by), function(k) {
         dat$higher_levels <- do.call(paste, c(dat[by[1:k]], list(sep = "_")))
-        stats::ave(dat[[i]], dat[["higher_levels"]], FUN = gm_fun)
+        stats::ave(dat[[i]], dat$higher_levels, FUN = gm_fun)
       })
       # subtract mean of higher level from lower level
       for (j in 2:length(by)) {
@@ -447,7 +447,10 @@ degroup <- function(x,
       out
     })
     # create de-meaned variables by subtracting the group mean from each individual value
-    person_means_list <- lapply(select, function(i) dat[[i]] - group_means_list[[i]][length(by)])
+    person_means_list <- lapply(
+      seq_along(select),
+      function(i) dat[[select[i]]] - group_means_list[[i]][[length(by)]]
+    )
   } else {
     # cross-classified design: by > 1
     group_means_list <- lapply(by, function(j) {
