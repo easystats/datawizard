@@ -431,9 +431,13 @@ degroup <- function(x,
   } else if (nested) {
     # nested design: by > 1, nested is explicitly set to TRUE
     # We want:
-    # L3 = xbar(k)
-    # L2 = xbar(j,k) - xbar(k)
-    # L1 = x(ijk) - xbar(jk)
+    # L3_between = xbar(k)
+    # L2_between = xbar(j,k) - xbar(k)
+    # L1_within = x(ijk) - xbar(jk)
+    # , where
+    # x(ijk) is the individual value / variable that is measured on level 1
+    # xbar(k) <- ave(x_ijk, L3, FUN = mean), the group mean of the variable at highest level
+    # xbar(jk) <- ave(x_ijk, L3, L2, FUN = mean), the group mean of the variable at second level
     group_means_list <- lapply(select, function(i) {
       out <- lapply(seq_along(by), function(k) {
         dat$higher_levels <- do.call(paste, c(dat[by[1:k]], list(sep = "_")))
