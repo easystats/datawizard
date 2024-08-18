@@ -198,8 +198,8 @@
 #' @section De-meaning for nested designs:
 #'
 #' _Brincks et al. (2017)_ have suggested an algorithm to center variables for
-#' nested designs, which is implememented in `demean()`. For nested designs,
-#' set `nested = TRUE` *and* specify the variables that indicate the different
+#' nested designs, which is implemented in `demean()`. For nested designs, set
+#' `nested = TRUE` *and* specify the variables that indicate the different
 #' levels in descending order in the `by` argument. E.g.,
 #' `by = c("level4", "level3, "level2")` assumes a model like
 #' `y ~ x + (1|level4/level3/level2)`. An alternative notation for the
