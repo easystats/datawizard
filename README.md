@@ -4,7 +4,6 @@
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.04684/status.svg)](https://doi.org/10.21105/joss.04684)
 [![downloads](http://cranlogs.r-pkg.org/badges/datawizard)](https://cran.r-project.org/package=datawizard)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/)
-[![status](https://tinyverse.netlify.com/badge/datawizard)](https://CRAN.R-project.org/package=datawizard)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 
 <!-- ***:sparkles: Hockety pockety wockety wack, prepare this data forth and back*** -->
@@ -51,11 +50,11 @@ It covers two aspects of data preparation:
 badge](https://easystats.r-universe.dev/badges/datawizard)](https://easystats.r-universe.dev)
 [![R-CMD-check](https://github.com/easystats/datawizard/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/easystats/datawizard/actions)
 
-| Type        | Source     | Command                                                                      |
-|-------------|------------|------------------------------------------------------------------------------|
-| Release     | CRAN       | `install.packages("datawizard")`                                             |
+| Type | Source | Command |
+|----|----|----|
+| Release | CRAN | `install.packages("datawizard")` |
 | Development | r-universe | `install.packages("datawizard", repos = "https://easystats.r-universe.dev")` |
-| Development | GitHub     | `remotes::install_github("easystats/datawizard")`                            |
+| Development | GitHub | `remotes::install_github("easystats/datawizard")` |
 
 > **Tip**
 >
@@ -130,15 +129,19 @@ data_filter(mtcars, vs == 0 & am == 1)
 ```
 
 Finding columns in a data frame, or retrieving the data of selected
-columns, can be achieved using `find_columns()` or `get_columns()`:
+columns, can be achieved using `extract_column_names()` or
+`data_select()`:
 
 ``` r
 # find column names matching a pattern
-find_columns(iris, starts_with("Sepal"))
+extract_column_names(iris, starts_with("Sepal"))
 #> [1] "Sepal.Length" "Sepal.Width"
+```
+
+``` r
 
 # return data columns matching a pattern
-get_columns(iris, starts_with("Sepal")) |> head()
+data_select(iris, starts_with("Sepal")) |> head()
 #>   Sepal.Length Sepal.Width
 #> 1          5.1         3.5
 #> 2          4.9         3.0
@@ -154,6 +157,9 @@ It is also possible to extract one or more variables:
 # single variable
 data_extract(mtcars, "gear")
 #>  [1] 4 4 4 3 3 3 3 4 4 4 4 3 3 3 3 3 3 4 4 4 3 3 3 3 3 4 5 5 5 5 5 4
+```
+
+``` r
 
 # more variables
 head(data_extract(iris, ends_with("Width")))
@@ -214,11 +220,17 @@ x
 #> 1 1 a 5  1
 #> 2 2 b 6  2
 #> 3 3 c 7  3
+```
+
+``` r
 y
 #>   c d   e id
 #> 1 6 f 100  2
 #> 2 7 g 101  3
 #> 3 8 h 102  4
+```
+
+``` r
 
 data_merge(x, y, join = "full")
 #>    a    b c id    d   e
@@ -226,32 +238,50 @@ data_merge(x, y, join = "full")
 #> 1  2    b 6  2    f 100
 #> 2  3    c 7  3    g 101
 #> 4 NA <NA> 8  4    h 102
+```
+
+``` r
 
 data_merge(x, y, join = "left")
 #>   a b c id    d   e
 #> 3 1 a 5  1 <NA>  NA
 #> 1 2 b 6  2    f 100
 #> 2 3 c 7  3    g 101
+```
+
+``` r
 
 data_merge(x, y, join = "right")
 #>    a    b c id d   e
 #> 1  2    b 6  2 f 100
 #> 2  3    c 7  3 g 101
 #> 3 NA <NA> 8  4 h 102
+```
+
+``` r
 
 data_merge(x, y, join = "semi", by = "c")
 #>   a b c id
 #> 2 2 b 6  2
 #> 3 3 c 7  3
+```
+
+``` r
 
 data_merge(x, y, join = "anti", by = "c")
 #>   a b c id
 #> 1 1 a 5  1
+```
+
+``` r
 
 data_merge(x, y, join = "inner")
 #>   a b c id d   e
 #> 1 2 b 6  2 f 100
 #> 2 3 c 7  3 g 101
+```
+
+``` r
 
 data_merge(x, y, join = "bind")
 #>    a    b c id    d   e
@@ -322,13 +352,22 @@ tmp
 #> 3  3  3 NA  3
 #> 4 NA NA NA NA
 #> 5  5  5 NA  5
+```
+
+``` r
 
 # indices of empty columns or rows
 empty_columns(tmp)
 #> c 
 #> 3
+```
+
+``` r
 empty_rows(tmp)
 #> [1] 4
+```
+
+``` r
 
 # remove empty columns or rows
 remove_empty_columns(tmp)
@@ -338,12 +377,18 @@ remove_empty_columns(tmp)
 #> 3  3  3  3
 #> 4 NA NA NA
 #> 5  5  5  5
+```
+
+``` r
 remove_empty_rows(tmp)
 #>   a  b  c  d
 #> 1 1  1 NA  1
 #> 2 2 NA NA NA
 #> 3 3  3 NA  3
 #> 5 5  5 NA  5
+```
+
+``` r
 
 # remove empty columns and rows
 remove_empty(tmp)
@@ -364,6 +409,9 @@ table(x)
 #> x
 #>  1  2  3  4  5  6  7  8  9 10 
 #>  2  3  5  3  7  5  5  2 11  7
+```
+
+``` r
 
 # cut into 3 groups, based on distribution (quantiles)
 table(categorize(x, split = "quantile", n_groups = 3))
@@ -397,6 +445,9 @@ summary(swiss)
 #>  Mean   : 41.144   Mean   :19.94   
 #>  3rd Qu.: 93.125   3rd Qu.:21.70   
 #>  Max.   :100.000   Max.   :26.60
+```
+
+``` r
 
 # after
 summary(standardize(swiss))
@@ -435,6 +486,9 @@ anscombe
 #> 9  12 12 12  8 10.84 9.13  8.15  5.56
 #> 10  7  7  7  8  4.82 7.26  6.42  7.91
 #> 11  5  5  5  8  5.68 4.74  5.73  6.89
+```
+
+``` r
 
 # after
 winsorize(anscombe)
@@ -486,6 +540,9 @@ head(trees)
 #> 4  10.5     72   16.4
 #> 5  10.7     81   18.8
 #> 6  10.8     83   19.7
+```
+
+``` r
 
 # after
 head(ranktransform(trees))
@@ -505,20 +562,7 @@ To rescale a numeric variable to a new range:
 ``` r
 change_scale(c(0, 1, 5, -5, -2))
 #> [1]  50  60 100   0  30
-#> attr(,"min_value")
-#> [1] -5
-#> attr(,"max_value")
-#> [1] 5
-#> attr(,"new_min")
-#> [1] 0
-#> attr(,"new_max")
-#> [1] 100
-#> attr(,"range_difference")
-#> [1] 10
-#> attr(,"to_range")
-#> [1]   0 100
-#> attr(,"class")
-#> [1] "dw_transformer" "numeric"
+#> (original range = -5 to 5)
 ```
 
 ### Rotate or transpose
@@ -531,6 +575,9 @@ x
 #> Mazda RX4     21.0   6  160 110
 #> Mazda RX4 Wag 21.0   6  160 110
 #> Datsun 710    22.8   4  108  93
+```
+
+``` r
 
 data_rotate(x)
 #>      Mazda RX4 Mazda RX4 Wag Datsun 710
@@ -597,7 +644,7 @@ iris |>
   # all rows where Species is "versicolor" or "virginica"
   data_filter(Species %in% c("versicolor", "virginica")) |>
   # select only columns with "." in names (i.e. drop Species)
-  get_columns(contains("\\.")) |>
+  data_select(contains("\\.")) |>
   # move columns that ends with "Length" to start of data frame
   data_relocate(ends_with("Length")) |>
   # remove fourth column

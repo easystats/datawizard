@@ -68,7 +68,7 @@
 #' @param force Logical, if `TRUE`, forces recoding of factors and character
 #'   vectors as well.
 #' @param ... Arguments passed to or from other methods.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @inheritSection center Selection of variables - the `select` argument
 #'
@@ -160,27 +160,25 @@ standardize.numeric <- function(x,
     center <- TRUE
   }
 
-  args <- .process_std_center(x, weights, robust, verbose, reference, center, scale)
+  my_args <- .process_std_center(x, weights, robust, verbose, reference, center, scale)
   dot_args <- list(...)
 
   # Perform standardization
-  if (is.null(args)) {
+  if (is.null(my_args)) {
     # all NA?
     return(x)
-  } else if (is.null(args$check)) {
-    vals <- rep(0, length(args$vals)) # If only unique value
+  } else if (is.null(my_args$check)) {
+    vals <- rep(0, length(my_args$vals)) # If only unique value
+  } else if (two_sd) {
+    vals <- as.vector((my_args$vals - my_args$center) / (2 * my_args$scale))
   } else {
-    if (two_sd) {
-      vals <- as.vector((args$vals - args$center) / (2 * args$scale))
-    } else {
-      vals <- as.vector((args$vals - args$center) / args$scale)
-    }
+    vals <- as.vector((my_args$vals - my_args$center) / my_args$scale)
   }
 
-  scaled_x <- rep(NA, length(args$valid_x))
-  scaled_x[args$valid_x] <- vals
-  attr(scaled_x, "center") <- args$center
-  attr(scaled_x, "scale") <- args$scale
+  scaled_x <- rep(NA, length(my_args$valid_x))
+  scaled_x[my_args$valid_x] <- vals
+  attr(scaled_x, "center") <- my_args$center
+  attr(scaled_x, "scale") <- my_args$scale
   attr(scaled_x, "robust") <- robust
   # labels
   z <- .set_back_labels(scaled_x, x, include_values = FALSE)
@@ -277,33 +275,33 @@ standardize.data.frame <- function(x,
   )
 
   # process arguments
-  args <- .process_std_args(x, select, exclude, weights, append,
+  my_args <- .process_std_args(x, select, exclude, weights, append,
     append_suffix = "_z", keep_factors = force, remove_na, reference,
     .center = center, .scale = scale
   )
 
   # set new values
-  x <- args$x
+  x <- my_args$x
 
   # Loop through variables and standardize it
-  for (var in args$select) {
+  for (var in my_args$select) {
     x[[var]] <- standardize(x[[var]],
       robust = robust,
       two_sd = two_sd,
-      weights = args$weights,
+      weights = my_args$weights,
       reference = reference[[var]],
-      center = args$center[var],
-      scale = args$scale[var],
+      center = my_args$center[var],
+      scale = my_args$scale[var],
       verbose = FALSE,
       force = force,
       add_transform_class = FALSE
     )
   }
 
-  attr(x, "center") <- unlist(lapply(x[args$select], function(z) {
+  attr(x, "center") <- unlist(lapply(x[my_args$select], function(z) {
     attributes(z)$center
   }))
-  attr(x, "scale") <- unlist(lapply(x[args$select], function(z) {
+  attr(x, "scale") <- unlist(lapply(x[my_args$select], function(z) {
     attributes(z)$scale
   }))
   attr(x, "robust") <- robust
@@ -338,7 +336,7 @@ standardize.grouped_df <- function(x,
     verbose = verbose
   )
 
-  args <- .process_grouped_df(
+  my_args <- .process_grouped_df(
     x, select, exclude, append,
     append_suffix = "_z",
     reference, weights, keep_factors = force
@@ -346,17 +344,17 @@ standardize.grouped_df <- function(x,
 
   # create column(s) to store dw_transformer attributes
   for (i in select) {
-    args$info$groups[[paste0("attr_", i)]] <- rep(NA, length(args$grps))
+    my_args$info$groups[[paste0("attr_", i)]] <- rep(NA, length(my_args$grps))
   }
 
-  for (rows in seq_along(args$grps)) {
+  for (rows in seq_along(my_args$grps)) {
     tmp <- standardize(
-      args$x[args$grps[[rows]], , drop = FALSE],
-      select = args$select,
+      my_args$x[my_args$grps[[rows]], , drop = FALSE],
+      select = my_args$select,
       exclude = NULL,
       robust = robust,
       two_sd = two_sd,
-      weights = args$weights,
+      weights = my_args$weights,
       remove_na = remove_na,
       verbose = verbose,
       force = force,
@@ -369,18 +367,18 @@ standardize.grouped_df <- function(x,
 
     # store dw_transformer_attributes
     for (i in select) {
-      args$info$groups[rows, paste0("attr_", i)][[1]] <- list(unlist(attributes(tmp[[i]])))
+      my_args$info$groups[rows, paste0("attr_", i)][[1]] <- list(unlist(attributes(tmp[[i]])))
     }
 
-    args$x[args$grps[[rows]], ] <- tmp
+    my_args$x[my_args$grps[[rows]], ] <- tmp
   }
 
   # last column of "groups" attributes must be called ".rows"
-  args$info$groups <- data_relocate(args$info$groups, ".rows", after = -1)
+  my_args$info$groups <- data_relocate(my_args$info$groups, ".rows", after = -1)
 
   # set back class, so data frame still works with dplyr
-  attributes(args$x) <- args$info
-  args$x
+  attributes(my_args$x) <- my_args$info
+  my_args$x
 }
 
 

@@ -32,16 +32,25 @@ reshape_wider(
 )
 }
 \arguments{
-\item{data}{A data frame to pivot.}
+\item{data}{A data frame to convert to wide format, so that it has more
+columns and fewer rows post-widening than pre-widening.}
 
-\item{id_cols}{The name of the column that identifies the rows. If \code{NULL},
-it will use all the unique rows.}
+\item{id_cols}{The name of the column that identifies the rows in the data
+by which observations are grouped and the gathered data is spread into new
+columns. Usually, this is a variable containing an ID for observations that
+have been repeatedly measured. If \code{NULL}, it will use all remaining columns
+that are not in \code{names_from} or \code{values_from} as ID columns. \code{id_cols} can
+also be a character vector with more than one name of identifier columns. See
+also 'Details' and 'Examples'.}
 
-\item{values_from}{The name of the column that contains the values to be used
-as future variable values.}
+\item{values_from}{The name of the columns in the original data that contains
+the values used to fill the new columns created in the widened data.}
 
-\item{names_from}{The name of the column that contains the levels to be
-used as future column names.}
+\item{names_from}{The name of the column in the original data whose values
+will be used for naming the new columns created in the widened data. Each
+unique value in this column will become the name of one of these new columns.
+In case \code{names_prefix} is provided, column names will be concatenated with
+the string given in \code{names_prefix}.}
 
 \item{names_sep}{If \code{names_from} or \code{values_from} contains multiple variables,
 this will be used to join their values together into a single string to use
@@ -64,7 +73,7 @@ missing values in the new columns created.}
 \item{...}{Not used for now.}
 }
 \value{
-If a tibble was provided as input, \code{reshape_wider()} also returns a
+If a tibble was provided as input, \code{data_to_wide()} also returns a
 tibble. Otherwise, it returns a data frame.
 }
 \description{
@@ -72,7 +81,29 @@ This function "widens" data, increasing the number of columns and decreasing
 the number of rows. This is a dependency-free base-R equivalent of
 \code{tidyr::pivot_wider()}.
 }
+\details{
+Reshaping data into wide format usually means that the input data frame is
+in \emph{long} format, where multiple measurements taken on the same subject are
+stored in multiple rows. The wide format stores the same information in a
+single row, with each measurement stored in a separate column. Thus, the
+necessary information for \code{data_to_wide()} is:
+\itemize{
+\item The name of the column(s) that identify the groups or repeated measurements
+(\code{id_cols}).
+\item The name of the column whose \emph{values} will become the new column names
+(\code{names_from}). Since these values may not necessarily reflect appropriate
+column names, you can use \code{names_prefix} to add a prefix to each newly
+created column name.
+\item The name of the column that contains the values (\code{values_from}) for the
+new columns that are created by \code{names_from}.
+}
+
+In other words: repeated measurements, as indicated by \code{id_cols}, that are
+saved into the column \code{values_from} will be spread into new columns, which
+will be named after the values in \code{names_from}. See also 'Examples'.
+}
 \examples{
+\dontshow{if (requireNamespace("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data_long <- read.table(header = TRUE, text = "
  subject sex condition measurement
        1   M   control         7.9
@@ -88,7 +119,7 @@ data_long <- read.table(header = TRUE, text = "
        4   M     cond1        13.4
        4   M     cond2        12.9")
 
-
+# converting long data into wide format
 data_to_wide(
   data_long,
   id_cols = "subject",
@@ -96,6 +127,7 @@ data_to_wide(
   values_from = "measurement"
 )
 
+# converting long data into wide format with custom column names
 data_to_wide(
   data_long,
   id_cols = "subject",
@@ -105,13 +137,13 @@ data_to_wide(
   names_sep = "."
 )
 
+# converting long data into wide format, combining multiple columns
 production <- expand.grid(
   product = c("A", "B"),
   country = c("AI", "EI"),
   year = 2000:2014
 )
 production <- data_filter(production, (product == "A" & country == "AI") | product == "B")
-
 production$production <- rnorm(nrow(production))
 
 data_to_wide(
@@ -121,16 +153,69 @@ data_to_wide(
   names_glue = "prod_{product}_{country}"
 )
 
+# using the "sleepstudy" dataset
+data(sleepstudy, package = "lme4")
+
+# the sleepstudy data contains repeated measurements of average reaction
+# times for each subjects over multiple days, in a sleep deprivation study.
+# It is in long-format, i.e. each row corresponds to a single measurement.
+# The variable "Days" contains the timepoint of the measurement, and
+# "Reaction" contains the measurement itself. Converting this data to wide
+# format will create a new column for each day, with the reaction time as the
+# value.
+head(sleepstudy)
+
+data_to_wide(
+  sleepstudy,
+  id_cols = "Subject",
+  names_from = "Days",
+  values_from = "Reaction"
+)
+
+# clearer column names
+data_to_wide(
+  sleepstudy,
+  id_cols = "Subject",
+  names_from = "Days",
+  values_from = "Reaction",
+  names_prefix = "Reaction_Day_"
+)
+
+# For unequal group sizes, missing information is filled with NA
+d <- subset(sleepstudy, Days \%in\% c(0, 1, 2, 3, 4))[c(1:9, 11:13, 16:17, 21), ]
+
+# long format, different number of "Subjects"
+d
+
+data_to_wide(
+  d,
+  id_cols = "Subject",
+  names_from = "Days",
+  values_from = "Reaction",
+  names_prefix = "Reaction_Day_"
+)
+
+# filling missing values with 0
+data_to_wide(
+  d,
+  id_cols = "Subject",
+  names_from = "Days",
+  values_from = "Reaction",
+  names_prefix = "Reaction_Day_",
+  values_fill = 0
+)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \itemize{
 \item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}}, \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
 \item Functions to reorder or remove columns: \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
 \item Functions to reshape, pivot or rotate data frames: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
-\item Functions to recode data: \code{\link[=rescale]{rescale()}}, \code{\link[=reverse]{reverse()}}, \code{\link[=categorize]{categorize()}}, \code{\link[=recode_values]{recode_values()}}, \code{\link[=slide]{slide()}}
+\item Functions to recode data: \code{\link[=rescale]{rescale()}}, \code{\link[=reverse]{reverse()}}, \code{\link[=categorize]{categorize()}},
+\code{\link[=recode_values]{recode_values()}}, \code{\link[=slide]{slide()}}
 \item Functions to standardize, normalize, rank-transform: \code{\link[=center]{center()}}, \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
 \item Split and merge data frames: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_merge]{data_merge()}}
-\item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=data_find]{data_find()}}
+\item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=extract_column_names]{extract_column_names()}}
 \item Functions to filter rows: \code{\link[=data_match]{data_match()}}, \code{\link[=data_filter]{data_filter()}}
 }
 }

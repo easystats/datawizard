@@ -11,7 +11,7 @@
 #' levels after `x` was converted to factor. Else, factor levels are based on
 #' the values of `x` (i.e. as if using `as.factor()`).
 #' @param ... Arguments passed to or from other methods.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #' @inheritParams categorize
 #'
 #' @inheritSection center Selection of variables - the `select` argument
@@ -115,7 +115,7 @@ to_factor.data.frame <- function(x,
     # drop factors, when append is not FALSE
     select <- colnames(x[select])[!vapply(x[select], is.factor, FUN.VALUE = logical(1L))]
     # process arguments
-    args <- .process_append(
+    my_args <- .process_append(
       x,
       select,
       append,
@@ -125,8 +125,8 @@ to_factor.data.frame <- function(x,
       preserve_value_labels = TRUE
     )
     # update processed arguments
-    x <- args$x
-    select <- args$select
+    x <- my_args$x
+    select <- my_args$select
   }
 
   x[select] <- lapply(x[select], to_factor, verbose = verbose, ...)

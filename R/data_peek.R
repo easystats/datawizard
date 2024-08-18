@@ -9,7 +9,7 @@
 #' @param width Maximum width of line length to display. If `NULL`, width will
 #' be determined using `options()$width`.
 #' @param ... not used.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @note To show only specific or a limited number of variables, use the
 #' `select` argument, e.g. `select = 1:5` to show only the first five variables.

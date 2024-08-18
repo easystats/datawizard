@@ -68,8 +68,8 @@ negation should not work as expected, use the \code{exclude} argument instead.
 }
 
 If \code{NULL}, selects all columns. Patterns that found no matches are silently
-ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
-return \code{"Species"}.}
+ignored, e.g. \code{extract_column_names(iris, select = c("Species", "Test"))}
+will just return \code{"Species"}.}
 
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
@@ -142,7 +142,8 @@ adjusted <- adjust(data, effect = "V1", select = "V2")
 adjusted_icpt <- adjust(data, effect = "V1", select = "V2", keep_intercept = TRUE)
 
 # Visualize
-plot(data$V1, data$V2,
+plot(
+  data$V1, data$V2,
   pch = 19, col = "blue",
   ylim = c(min(adjusted$V2), max(data$V2)),
   main = "Original (blue), adjusted (green), and adjusted - intercept kept (red) data"

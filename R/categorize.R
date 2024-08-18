@@ -45,7 +45,7 @@
 #'   variables are appended with new column names (using the defined suffix) to
 #'   the original data frame.
 #' @param ... not used.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @inherit data_rename seealso
 #'
@@ -282,7 +282,6 @@ categorize.grouped_df <- function(x,
                                   regex = FALSE,
                                   verbose = TRUE,
                                   ...) {
-  # works only for dplyr >= 0.8.0
   grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
   attr_data <- attributes(x)

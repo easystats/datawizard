@@ -4,43 +4,101 @@
 #' the number of columns. This is a dependency-free base-R equivalent of
 #' `tidyr::pivot_longer()`.
 #'
-#' @param data A data frame to pivot.
-#' @param names_to The name of the new column that will contain the column
-#'   names.
+#' @param data A data frame to convert to long format, so that it has more
+#' rows and fewer columns after the operation.
+#' @param names_to The name of the new column (variable) that will contain the
+#' _names_ from columns in `select` as values, to identify the source of the
+#' values. `names_to` can be a character vector with more than one column name,
+#' in which case `names_sep` or `names_pattern` must be provided in order to
+#' identify which parts of the column names go into newly created columns.
+#' See also 'Examples'.
 #' @param names_prefix A regular expression used to remove matching text from
 #' the start of each variable name.
 #' @param names_sep,names_pattern If `names_to` contains multiple values, this
-#' argument controls how the column name is broken up.
-#' `names_pattern` takes a regular expression containing matching groups, i.e. "()".
-#' @param values_to The name of the new column that will contain the values of
-#'   the pivoted variables.
+#' argument controls how the column name is broken up. `names_pattern` takes a
+#' regular expression containing matching groups, i.e. "()".
+#' @param values_to The name of the new column that will contain the _values_ of
+#' the columns in `select`.
 #' @param values_drop_na If `TRUE`, will drop rows that contain only `NA` in the
-#'   `values_to` column. This effectively converts explicit missing values to
-#'   implicit missing values, and should generally be used only when missing values
-#'   in data were created by its structure.
+#' `values_to` column. This effectively converts explicit missing values to
+#' implicit missing values, and should generally be used only when missing values
+#' in data were created by its structure.
 #' @param rows_to The name of the column that will contain the row names or row
-#'   numbers from the original data. If `NULL`, will be removed.
+#' numbers from the original data. If `NULL`, will be removed.
 #' @param ... Currently not used.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #' @param cols Identical to `select`. This argument is here to ensure compatibility
-#'   with `tidyr::pivot_longer()`. If both `select` and `cols` are provided, `cols`
-#'   is used.
+#' with `tidyr::pivot_longer()`. If both `select` and `cols` are provided, `cols`
+#' is used.
+#'
+#' @details
+#' Reshaping data into long format usually means that the input data frame is
+#' in _wide_ format, where multiple measurements taken on the same subject are
+#' stored in multiple columns (variables). The long format stores the same
+#' information in a single column, with each measurement per subject stored in
+#' a separate row. The values of all variables that are not in `select` will
+#' be repeated.
+#'
+#' The necessary information for `data_to_long()` is:
+#'
+#' - The columns that contain the repeated measurements (`select`).
+#' - The name of the newly created column that will contain the names of the
+#'   columns in `select` (`names_to`), to identify the source of the values.
+#'   `names_to` can also be a character vector with more than one column name,
+#'   in which case `names_sep` or `names_pattern` must be provided to specify
+#'   which parts of the column names go into the newly created columns.
+#' - The name of the newly created column that contains the values of the
+#'   columns in `select` (`values_to`).
+#'
+#' In other words: repeated measurements that are spread across several columns
+#' will be gathered into a single column (`values_to`), with the original column
+#' names, that identify the source of the gathered values, stored in one or more
+#' new columns (`names_to`).
 #'
 #' @return If a tibble was provided as input, `reshape_longer()` also returns a
 #' tibble. Otherwise, it returns a data frame.
 #'
 #' @examplesIf requireNamespace("psych") && requireNamespace("tidyr")
-#' wide_data <- data.frame(replicate(5, rnorm(10)))
+#' wide_data <- setNames(
+#'   data.frame(replicate(2, rnorm(8))),
+#'   c("Time1", "Time2")
+#' )
+#' wide_data$ID <- 1:8
+#' wide_data
 #'
-#' # Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))
+#' # Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:3))
+#' # probably doesn't make much sense to mix "time" and "id"
 #' data_to_long(wide_data)
 #'
 #' # Customizing the names
-#' data_to_long(wide_data,
-#'   select = c(1, 2),
-#'   names_to = "Column",
-#'   values_to = "Numbers",
-#'   rows_to = "Row"
+#' data_to_long(
+#'   wide_data,
+#'   select = c("Time1", "Time2"),
+#'   names_to = "Timepoint",
+#'   values_to = "Score"
+#' )
+#'
+#' # Reshape multiple columns into long format.
+#' mydat <- data.frame(
+#'   age = c(20, 30, 40),
+#'   sex = c("Female", "Male", "Male"),
+#'   score_t1 = c(30, 35, 32),
+#'   score_t2 = c(33, 34, 37),
+#'   score_t3 = c(36, 35, 38),
+#'   speed_t1 = c(2, 3, 1),
+#'   speed_t2 = c(3, 4, 5),
+#'   speed_t3 = c(1, 8, 6)
+#' )
+#' # The column names are split into two columns: "type" and "time". The
+#' # pattern for splitting column names is provided in `names_pattern`. Values
+#' # of all "score_*" and "speed_*" columns are gathered into a single column
+#' # named "count".
+#' data_to_long(
+#'   mydat,
+#'   select = 3:8,
+#'   names_to = c("type", "time"),
+#'   names_pattern = "(score|speed)_t(\\d+)",
+#'   values_to = "count"
 #' )
 #'
 #' # Full example
@@ -48,21 +106,22 @@
 #' data <- psych::bfi # Wide format with one row per participant's personality test
 #'
 #' # Pivot long format
-#' data_to_long(data,
+#' very_long_data <- data_to_long(data,
 #'   select = regex("\\d"), # Select all columns that contain a digit
 #'   names_to = "Item",
 #'   values_to = "Score",
 #'   rows_to = "Participant"
 #' )
+#' head(very_long_data)
 #'
-#' data_to_long(
+#' even_longer_data <- data_to_long(
 #'   tidyr::who,
 #'   select = new_sp_m014:newrel_f65,
 #'   names_to = c("diagnosis", "gender", "age"),
 #'   names_pattern = "new_?(.*)_(.)(.*)",
 #'   values_to = "count"
 #' )
-#'
+#' head(even_longer_data)
 #' @inherit data_rename
 #' @export
 data_to_long <- function(data,
@@ -78,6 +137,7 @@ data_to_long <- function(data,
                          regex = FALSE,
                          ...,
                          cols) { # nolint
+  original_data <- data
 
   # Prefer "cols" over "select" for compat with tidyr::pivot_longer
   # nolint start
@@ -219,6 +279,17 @@ data_to_long <- function(data,
 
   stacked_data <- data_relocate(stacked_data, select = values_to, after = -1)
 
+  # if columns in data frame have attributes (e.g. labelled data), `cbind()`
+  # won't work, so we need to remove them. We'll set them back later
+  not_stacked[] <- lapply(not_stacked, function(i) {
+    # we can't remove *all* attributes, this will convert factors into integers
+    attr(i, "label") <- NULL
+    attr(i, "labels") <- NULL
+    attr(i, "format.spss") <- NULL
+    class(i) <- setdiff(class(i), c("haven_labelled", "vctrs_vctr"))
+    i
+  })
+
   # reunite unselected data with stacked data
   out <- cbind(
     not_stacked, stats::setNames(stacked_data, c(names_to, values_to)),
@@ -262,6 +333,12 @@ data_to_long <- function(data,
   # reset row names
   if (!insight::object_has_rownames(data)) {
     row.names(out) <- NULL
+  }
+
+  # set back labels
+  shared_columns <- intersect(colnames(out), colnames(original_data))
+  for (i in shared_columns) {
+    out[[i]] <- .set_back_labels(out[[i]], original_data[[i]], include_values = TRUE)
   }
 
   out

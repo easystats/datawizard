@@ -259,7 +259,7 @@
 
     Code
       print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full",
-      include_na = FALSE))
+      remove_na = TRUE))
     Output
       efc$c172code |       male |     female | Total
       -------------+------------+------------+------
@@ -288,7 +288,7 @@
 
     Code
       print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full",
-      include_na = FALSE, weights = efc$weights))
+      remove_na = TRUE, weights = efc$weights))
     Output
       efc$c172code |       male |     female | Total
       -------------+------------+------------+------
@@ -317,7 +317,7 @@
 
     Code
       print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row",
-      include_na = FALSE))
+      remove_na = TRUE))
     Output
       c172code |       male |     female | Total
       ---------+------------+------------+------
@@ -348,7 +348,7 @@
 
     Code
       print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row",
-      include_na = FALSE, weights = efc$weights))
+      remove_na = TRUE, weights = efc$weights))
     Output
       c172code |       male |     female | Total
       ---------+------------+------------+------
@@ -378,7 +378,7 @@
 
     Code
       print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column",
-        include_na = FALSE))
+        remove_na = TRUE))
     Output
       c172code |       male |     female | Total
       ---------+------------+------------+------
@@ -409,7 +409,7 @@
 
     Code
       print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column",
-        include_na = FALSE, weights = "weights"))
+        remove_na = TRUE, weights = "weights"))
     Output
       c172code |       male |     female | Total
       ---------+------------+------------+------
@@ -430,7 +430,7 @@
       c172code |       male |       <NA> | Total
       ---------+------------+------------+------
       2        | 2 (100.0%) | 0   (0.0%) |     2
-      <NA>     |   0 (NaN%) |   0 (NaN%) |     0
+      <NA>     |     0 (0%) |     0 (0%) |     0
       ---------+------------+------------+------
       Total    |          2 |          0 |     2
       
@@ -439,7 +439,7 @@
       c172code |      male |    female |      <NA> | Total
       ---------+-----------+-----------+-----------+------
       2        | 2 (50.0%) | 2 (50.0%) | 0  (0.0%) |     4
-      <NA>     |  0 (NaN%) |  0 (NaN%) |  0 (NaN%) |     0
+      <NA>     |    0 (0%) |    0 (0%) |    0 (0%) |     0
       ---------+-----------+-----------+-----------+------
       Total    |         2 |         2 |         0 |     4
       
@@ -497,7 +497,7 @@
 
     Code
       print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full",
-      include_na = FALSE))
+      remove_na = TRUE))
     Output
       [1] "|efc$c172code |       male|     female| Total|"
       [2] "|:------------|----------:|----------:|-----:|"
@@ -534,7 +534,7 @@
 
     Code
       print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full",
-      include_na = FALSE, weights = efc$weights))
+      remove_na = TRUE, weights = efc$weights))
     Output
       [1] "|efc$c172code |       male|     female| Total|"
       [2] "|:------------|----------:|----------:|-----:|"
@@ -547,4 +547,18 @@
       [1] "pipe"
       attr(,"class")
       [1] "knitr_kable" "character"  
+
+# data_tabulate, correct 0% for proportions
+
+    Code
+      print(out[[1]])
+    Output
+      c172code |       male |     female |   <NA> | Total
+      ---------+------------+------------+--------+------
+      1        |  5 (10.9%) |  3  (5.6%) | 0 (0%) |     8
+      2        | 32 (69.6%) | 34 (63.0%) | 0 (0%) |    66
+      3        |  4  (8.7%) | 12 (22.2%) | 0 (0%) |    16
+      <NA>     |  5 (10.9%) |  5  (9.3%) | 0 (0%) |    10
+      ---------+------------+------------+--------+------
+      Total    |         46 |         54 |      0 |   100
 

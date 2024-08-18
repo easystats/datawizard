@@ -38,7 +38,8 @@ reshape_longer(
 )
 }
 \arguments{
-\item{data}{A data frame to pivot.}
+\item{data}{A data frame to convert to long format, so that it has more
+rows and fewer columns after the operation.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -69,21 +70,25 @@ negation should not work as expected, use the \code{exclude} argument instead.
 }
 
 If \code{NULL}, selects all columns. Patterns that found no matches are silently
-ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
-return \code{"Species"}.}
+ignored, e.g. \code{extract_column_names(iris, select = c("Species", "Test"))}
+will just return \code{"Species"}.}
 
-\item{names_to}{The name of the new column that will contain the column
-names.}
+\item{names_to}{The name of the new column (variable) that will contain the
+\emph{names} from columns in \code{select} as values, to identify the source of the
+values. \code{names_to} can be a character vector with more than one column name,
+in which case \code{names_sep} or \code{names_pattern} must be provided in order to
+identify which parts of the column names go into newly created columns.
+See also 'Examples'.}
 
 \item{names_prefix}{A regular expression used to remove matching text from
 the start of each variable name.}
 
 \item{names_sep, names_pattern}{If \code{names_to} contains multiple values, this
-argument controls how the column name is broken up.
-\code{names_pattern} takes a regular expression containing matching groups, i.e. "()".}
+argument controls how the column name is broken up. \code{names_pattern} takes a
+regular expression containing matching groups, i.e. "()".}
 
-\item{values_to}{The name of the new column that will contain the values of
-the pivoted variables.}
+\item{values_to}{The name of the new column that will contain the \emph{values} of
+the columns in \code{select}.}
 
 \item{values_drop_na}{If \code{TRUE}, will drop rows that contain only \code{NA} in the
 \code{values_to} column. This effectively converts explicit missing values to
@@ -121,19 +126,73 @@ This function "lengthens" data, increasing the number of rows and decreasing
 the number of columns. This is a dependency-free base-R equivalent of
 \code{tidyr::pivot_longer()}.
 }
+\details{
+Reshaping data into long format usually means that the input data frame is
+in \emph{wide} format, where multiple measurements taken on the same subject are
+stored in multiple columns (variables). The long format stores the same
+information in a single column, with each measurement per subject stored in
+a separate row. The values of all variables that are not in \code{select} will
+be repeated.
+
+The necessary information for \code{data_to_long()} is:
+\itemize{
+\item The columns that contain the repeated measurements (\code{select}).
+\item The name of the newly created column that will contain the names of the
+columns in \code{select} (\code{names_to}), to identify the source of the values.
+\code{names_to} can also be a character vector with more than one column name,
+in which case \code{names_sep} or \code{names_pattern} must be provided to specify
+which parts of the column names go into the newly created columns.
+\item The name of the newly created column that contains the values of the
+columns in \code{select} (\code{values_to}).
+}
+
+In other words: repeated measurements that are spread across several columns
+will be gathered into a single column (\code{values_to}), with the original column
+names, that identify the source of the gathered values, stored in one or more
+new columns (\code{names_to}).
+}
 \examples{
 \dontshow{if (requireNamespace("psych") && requireNamespace("tidyr")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-wide_data <- data.frame(replicate(5, rnorm(10)))
+wide_data <- setNames(
+  data.frame(replicate(2, rnorm(8))),
+  c("Time1", "Time2")
+)
+wide_data$ID <- 1:8
+wide_data
 
-# Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:5))
+# Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:3))
+# probably doesn't make much sense to mix "time" and "id"
 data_to_long(wide_data)
 
 # Customizing the names
-data_to_long(wide_data,
-  select = c(1, 2),
-  names_to = "Column",
-  values_to = "Numbers",
-  rows_to = "Row"
+data_to_long(
+  wide_data,
+  select = c("Time1", "Time2"),
+  names_to = "Timepoint",
+  values_to = "Score"
+)
+
+# Reshape multiple columns into long format.
+mydat <- data.frame(
+  age = c(20, 30, 40),
+  sex = c("Female", "Male", "Male"),
+  score_t1 = c(30, 35, 32),
+  score_t2 = c(33, 34, 37),
+  score_t3 = c(36, 35, 38),
+  speed_t1 = c(2, 3, 1),
+  speed_t2 = c(3, 4, 5),
+  speed_t3 = c(1, 8, 6)
+)
+# The column names are split into two columns: "type" and "time". The
+# pattern for splitting column names is provided in `names_pattern`. Values
+# of all "score_*" and "speed_*" columns are gathered into a single column
+# named "count".
+data_to_long(
+  mydat,
+  select = 3:8,
+  names_to = c("type", "time"),
+  names_pattern = "(score|speed)_t(\\\\d+)",
+  values_to = "count"
 )
 
 # Full example
@@ -141,20 +200,22 @@ data_to_long(wide_data,
 data <- psych::bfi # Wide format with one row per participant's personality test
 
 # Pivot long format
-data_to_long(data,
+very_long_data <- data_to_long(data,
   select = regex("\\\\d"), # Select all columns that contain a digit
   names_to = "Item",
   values_to = "Score",
   rows_to = "Participant"
 )
+head(very_long_data)
 
-data_to_long(
+even_longer_data <- data_to_long(
   tidyr::who,
   select = new_sp_m014:newrel_f65,
   names_to = c("diagnosis", "gender", "age"),
   names_pattern = "new_?(.*)_(.)(.*)",
   values_to = "count"
 )
+head(even_longer_data)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
@@ -162,10 +223,11 @@ data_to_long(
 \item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}}, \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
 \item Functions to reorder or remove columns: \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
 \item Functions to reshape, pivot or rotate data frames: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
-\item Functions to recode data: \code{\link[=rescale]{rescale()}}, \code{\link[=reverse]{reverse()}}, \code{\link[=categorize]{categorize()}}, \code{\link[=recode_values]{recode_values()}}, \code{\link[=slide]{slide()}}
+\item Functions to recode data: \code{\link[=rescale]{rescale()}}, \code{\link[=reverse]{reverse()}}, \code{\link[=categorize]{categorize()}},
+\code{\link[=recode_values]{recode_values()}}, \code{\link[=slide]{slide()}}
 \item Functions to standardize, normalize, rank-transform: \code{\link[=center]{center()}}, \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
 \item Split and merge data frames: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_merge]{data_merge()}}
-\item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=data_find]{data_find()}}
+\item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=extract_column_names]{extract_column_names()}}
 \item Functions to filter rows: \code{\link[=data_match]{data_match()}}, \code{\link[=data_filter]{data_filter()}}
 }
 }

@@ -2,29 +2,35 @@ test_that("demean works", {
   df <- iris
 
   set.seed(123)
-  df$ID <- sample(1:4, nrow(df), replace = TRUE) # fake-ID
+  df$ID <- sample.int(4, nrow(df), replace = TRUE) # fake-ID
 
   set.seed(123)
   df$binary <- as.factor(rbinom(150, 1, 0.35)) # binary variable
 
   set.seed(123)
-  x <- demean(df, select = c("Sepal.Length", "Petal.Length"), group = "ID")
+  x <- demean(df, select = c("Sepal.Length", "Petal.Length"), by = "ID")
   expect_snapshot(head(x))
 
   set.seed(123)
   expect_message(
-    x <- demean(df, select = c("Sepal.Length", "binary", "Species"), group = "ID"),
+    {
+      x <- demean(df, select = c("Sepal.Length", "binary", "Species"), by = "ID")
+    },
     "have been coerced to numeric"
   )
   expect_snapshot(head(x))
 
   set.seed(123)
   expect_message(
-    y <- demean(df, select = ~ Sepal.Length + binary + Species, group = ~ID),
+    {
+      y <- demean(df, select = ~ Sepal.Length + binary + Species, by = ~ID)
+    },
     "have been coerced to numeric"
   )
   expect_message(
-    z <- demean(df, select = c("Sepal.Length", "binary", "Species"), group = "ID"),
+    {
+      z <- demean(df, select = c("Sepal.Length", "binary", "Species"), by = "ID")
+    },
     "have been coerced to numeric"
   )
   expect_identical(y, z)
@@ -39,7 +45,7 @@ test_that("demean interaction term", {
   )
 
   set.seed(123)
-  expect_snapshot(demean(dat, select = c("a", "x*y"), group = "ID"))
+  expect_snapshot(demean(dat, select = c("a", "x*y"), by = "ID"))
 })
 
 test_that("demean shows message if some vars don't exist", {
@@ -51,8 +57,131 @@ test_that("demean shows message if some vars don't exist", {
   )
 
   set.seed(123)
-  expect_message(
-    demean(dat, select = "foo", group = "ID"),
+  expect_error(
+    demean(dat, select = "foo", by = "ID"),
     regexp = "not found"
+  )
+})
+
+
+# see issue #520
+test_that("demean for cross-classified designs (by > 1)", {
+  skip_if_not_installed("poorman")
+
+  data(efc, package = "datawizard")
+  dat <- na.omit(efc)
+  dat$e42dep <- factor(dat$e42dep)
+  dat$c172code <- factor(dat$c172code)
+
+  x2a <- dat %>%
+    data_group(e42dep) %>%
+    data_modify(
+      c12hour_e42dep = mean(c12hour)
+    ) %>%
+    data_ungroup() %>%
+    data_group(c172code) %>%
+    data_modify(
+      c12hour_c172code = mean(c12hour)
+    ) %>%
+    data_ungroup() %>%
+    data_modify(
+      c12hour_within = c12hour - c12hour_e42dep - c12hour_c172code
+    )
+
+  out <- degroup(
+    dat,
+    select = "c12hour",
+    by = c("e42dep", "c172code"),
+    suffix_demean = "_within"
+  )
+
+  expect_equal(
+    out$c12hour_e42dep_between,
+    x2a$c12hour_e42dep,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    out$c12hour_within,
+    x2a$c12hour_within,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  x2a <- dat %>%
+    data_group(e42dep) %>%
+    data_modify(
+      c12hour_e42dep = mean(c12hour, na.rm = TRUE),
+      neg_c_7_e42dep = mean(neg_c_7, na.rm = TRUE)
+    ) %>%
+    data_ungroup() %>%
+    data_group(c172code) %>%
+    data_modify(
+      c12hour_c172code = mean(c12hour, na.rm = TRUE),
+      neg_c_7_c172code = mean(neg_c_7, na.rm = TRUE)
+    ) %>%
+    data_ungroup() %>%
+    data_modify(
+      c12hour_within = c12hour - c12hour_e42dep - c12hour_c172code,
+      neg_c_7_within = neg_c_7 - neg_c_7_e42dep - neg_c_7_c172code
+    )
+
+  out <- degroup(
+    dat,
+    select = c("c12hour", "neg_c_7"),
+    by = c("e42dep", "c172code"),
+    suffix_demean = "_within"
+  )
+
+  expect_equal(
+    out$c12hour_e42dep_between,
+    x2a$c12hour_e42dep,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    out$neg_c_7_c172code_between,
+    x2a$neg_c_7_c172code,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    out$neg_c_7_within,
+    x2a$neg_c_7_within,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    out$c12hour_within,
+    x2a$c12hour_within,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+})
+
+
+test_that("demean, sanity checks", {
+  data(efc, package = "datawizard")
+  dat <- na.omit(efc)
+  dat$e42dep <- factor(dat$e42dep)
+  dat$c172code <- factor(dat$c172code)
+
+  expect_error(
+    degroup(
+      dat,
+      select = c("c12hour", "neg_c_8"),
+      by = c("e42dep", "c172code"),
+      suffix_demean = "_within"
+    ),
+    regex = "Variable \"neg_c_8\" was not found"
+  )
+  expect_error(
+    degroup(
+      dat,
+      select = c("c12hour", "neg_c_8"),
+      by = c("e42dep", "c173code"),
+      suffix_demean = "_within"
+    ),
+    regex = "Variables \"neg_c_8\" and \"c173code\" were not found"
   )
 })

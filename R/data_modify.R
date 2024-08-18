@@ -121,10 +121,10 @@
 #'   .modify = round
 #' )
 #'
-#' # combine "data_find()" and ".at" argument
+#' # combine "extract_column_names()" and ".at" argument
 #' out <- data_modify(
 #'   d,
-#'   .at = data_find(d, select = starts_with("Sepal")),
+#'   .at = extract_column_names(d, select = starts_with("Sepal")),
 #'   .modify = as.factor
 #' )
 #' # "Sepal.Length" and "Sepal.Width" are now factors
@@ -201,7 +201,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # the data.frame method later...
   dots <- match.call(expand.dots = FALSE)[["..."]]
 
-  # works only for dplyr >= 0.8.0
+
   grps <- attr(data, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
   attr_data <- attributes(data)

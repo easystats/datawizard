@@ -1,5 +1,5 @@
 set.seed(123)
-wide_data <- data.frame(replicate(3, sample(1:5)))
+wide_data <- data.frame(replicate(3, sample.int(5)))
 
 test_that("data_to_long works", {
   expect_equal(
@@ -267,10 +267,10 @@ test_that("data_to_long: error if no columns to reshape", {
 test_that("data_to_long equivalent to pivot_longer: ex 1", {
   skip_if_not_installed("tidyr")
 
-  x <- tidyr::relig_income %>%
+  x <- tidyr::relig_income %>% # nolint
     tidyr::pivot_longer(!religion, names_to = "income", values_to = "count")
 
-  y <- tidyr::relig_income %>%
+  y <- tidyr::relig_income %>% # nolint
     data_to_long(cols = -religion, names_to = "income", values_to = "count")
 
   expect_equal(x, y, ignore_attr = TRUE)
@@ -474,4 +474,31 @@ test_that("preserve date format", {
   datawiz <- data_to_long(family, -family, names_to = "child")
 
   expect_identical(tidyr, datawiz)
+})
+
+
+test_that("works with labelled data", {
+  data(efc, package = "datawizard")
+  out <- data_to_long(
+    efc,
+    select = c("e16sex", "c172code"),
+    names_to = "Dummy",
+    values_to = "Score"
+  )
+  expect_identical(nrow(out), 200L)
+  expect_identical(attributes(out$e42dep)$label, "elder's dependency")
+})
+
+
+test_that("don't convert factors to integer", {
+  data("mtcars")
+  mtcars <- mtcars[c(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 18L, 29L, 31L), ]
+  mtcars$am_f <- factor(mtcars$am)
+  mtcars$cyl_f <- factor(mtcars$cyl)
+
+  mtcars$id <- factor(seq_len(nrow(mtcars)))
+  mtcars_long <- data_to_long(mtcars,
+    select = c("mpg", "qsec", "disp"), names_to = "g"
+  )
+  expect_snapshot(print(mtcars_long))
 })

@@ -7,7 +7,7 @@
 data_restoretype(data, reference = NULL, ...)
 }
 \arguments{
-\item{data}{A data frame to pivot.}
+\item{data}{A data frame for which to restore the column types.}
 
 \item{reference}{A reference data frame from which to find the correct
 column types. If \code{NULL}, each column is converted to numeric if it doesn't

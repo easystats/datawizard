@@ -77,7 +77,7 @@ empty_rows <- function(x) {
   if ((!is.matrix(x) && !is.data.frame(x)) || nrow(x) < 2) {
     vector("numeric")
   } else {
-    which(rowSums((is.na(x) | x == "")) == ncol(x))
+    which(rowSums((is.na(x) | x == "")) == ncol(x)) # nolint
   }
 }
 

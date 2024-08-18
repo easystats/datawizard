@@ -11,7 +11,7 @@
 #'   `"first"`, `"last"`, `"random"`, `"max"` or `"min"`. See [rank()] for
 #'   details.
 #' @param ... Arguments passed to or from other methods.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #' @inheritParams standardize.data.frame
 #'
 #' @inheritSection center Selection of variables - the `select` argument
@@ -110,7 +110,7 @@ ranktransform.grouped_df <- function(x,
                                      verbose = TRUE,
                                      ...) {
   info <- attributes(x)
-  # works only for dplyr >= 0.8.0
+
   grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
   # evaluate arguments

@@ -42,7 +42,7 @@
 #' @param convert_na Logical, if `TRUE`, character `"NA"` values are converted
 #' into real `NA` values.
 #' @param ... Currently not used.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @seealso [`data_unite()`]
 #'

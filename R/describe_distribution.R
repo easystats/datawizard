@@ -22,7 +22,7 @@
 #'   (based on [stats::IQR()], using `type = 6`).
 #' @param verbose Toggle warnings and messages.
 #' @inheritParams bayestestR::point_estimate
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @details If `x` is a data frame, only numeric variables are kept and will be
 #' displayed in the summary.

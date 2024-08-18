@@ -8,9 +8,9 @@
 #' @param by Optional character string, indicating the name of a variable in `x`.
 #' If supplied, the data will be split by this variable and summary statistics
 #' will be computed for each group.
-#' @param include_na Logical. If `TRUE`, missing values are included as a level
-#' in the grouping variable. If `FALSE`, missing values are omitted from the
-#' grouping variable.
+#' @param remove_na Logical. If `TRUE`, missing values are omitted from the
+#' grouping variable. If `FALSE` (default), missing values are included as a
+#' level in the grouping variable.
 #' @param ... One or more named expressions that define the new variable name
 #' and the function to compute the summary statistic. Example:
 #' `mean_sepal_width = mean(Sepal.Width)`. The expression can also be provided
@@ -57,8 +57,8 @@ data_summary <- function(x, ...) {
 
 
 #' @export
-data_summary.matrix <- function(x, ..., by = NULL, include_na = TRUE) {
-  data_summary(as.data.frame(x), ..., by = by, include_na = include_na)
+data_summary.matrix <- function(x, ..., by = NULL, remove_na = FALSE) {
+  data_summary(as.data.frame(x), ..., by = by, remove_na = remove_na)
 }
 
 
@@ -70,7 +70,7 @@ data_summary.default <- function(x, ...) {
 
 #' @rdname data_summary
 #' @export
-data_summary.data.frame <- function(x, ..., by = NULL, include_na = TRUE) {
+data_summary.data.frame <- function(x, ..., by = NULL, remove_na = FALSE) {
   dots <- eval(substitute(alist(...)))
 
   # do we have any expression at all?
@@ -103,10 +103,10 @@ data_summary.data.frame <- function(x, ..., by = NULL, include_na = TRUE) {
     }
     # split data, add NA levels, if requested
     l <- lapply(x[by], function(i) {
-      if (include_na && anyNA(i)) {
-        addNA(i)
-      } else {
+      if (remove_na || !anyNA(i)) {
         i
+      } else {
+        addNA(i)
       }
     })
     split_data <- split(x, l, drop = TRUE)
@@ -137,7 +137,7 @@ data_summary.data.frame <- function(x, ..., by = NULL, include_na = TRUE) {
 
 
 #' @export
-data_summary.grouped_df <- function(x, ..., by = NULL, include_na = TRUE) {
+data_summary.grouped_df <- function(x, ..., by = NULL, remove_na = FALSE) {
   # extract group variables
   grps <- attr(x, "groups", exact = TRUE)
   group_variables <- data_remove(grps, ".rows")
@@ -148,7 +148,7 @@ data_summary.grouped_df <- function(x, ..., by = NULL, include_na = TRUE) {
   # remove information specific to grouped df's
   attr(x, "groups") <- NULL
   class(x) <- "data.frame"
-  data_summary(x, ..., by = by, include_na = include_na)
+  data_summary(x, ..., by = by, remove_na = remove_na)
 }
 
 

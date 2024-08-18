@@ -2,7 +2,8 @@
 # https://github.com/nathaneastwood/poorman/blob/master/R/select_positions.R
 
 .select_nse <- function(select, data, exclude, ignore_case, regex = FALSE,
-                        remove_group_var = FALSE, verbose = FALSE) {
+                        remove_group_var = FALSE, allow_rename = FALSE,
+                        verbose = FALSE) {
   .check_data(data)
   columns <- colnames(data)
 
@@ -73,6 +74,30 @@
   # don't include grouping variables
   if (remove_group_var && length(out)) {
     out <- setdiff(out, grp_vars)
+  }
+
+  # for named character vectors, we offer the service to rename the columns
+  if (allow_rename && typeof(expr_select) == "language") {
+    # safe evaluation of the expression, to get the named vector from "select"
+    new_names <- tryCatch(eval(expr_select), error = function(e) NULL)
+    # check if we really have a named vector
+    if (!is.null(new_names) && !is.null(names(new_names))) {
+      # if so, copy names
+      all_names <- names(new_names)
+      # if some of the elements don't have a name, we set the value as name
+      names(new_names)[!nzchar(all_names)] <- new_names[!nzchar(all_names)]
+      # after inclusion and exclusion, the original values in "select"
+      # may have changed, so we check that we only add names of valid values
+      out <- stats::setNames(out, names(new_names)[new_names %in% out])
+      # check if we have any duplicated names, and if so, give an error
+      if (anyDuplicated(names(out)) > 0) {
+        insight::format_error(paste0(
+          "Following names are duplicated after renaming: ",
+          text_concatenate(names(out)[duplicated(names(out))], enclose = "`"),
+          ". Using duplicated names is no good practice and therefore discouraged. Please provide unique names."
+        ))
+      }
+    }
   }
 
   out
@@ -148,9 +173,9 @@
 
 # 3 types of symbols:
 # - unquoted variables
-# - objects that need to be evaluated, e.g data_find(iris, i) where i is a
-#   function arg or is defined before. This can also be a vector of names or
-#   positions.
+# - objects that need to be evaluated, e.g data_find(iris, i) where
+#   i is a function arg or is defined before. This can also be a
+#   vector of names or positions.
 # - functions (without parenthesis)
 
 # The first case is easy to deal with.
@@ -180,24 +205,22 @@
 
         # if starts_with() et al. come from tidyselect but need to be used in
         # a select environment, then the error doesn't have the same structure.
-        if (is.null(fn) &&
-          grepl("must be used within a", e$message, fixed = TRUE)) {
-          trace <- lapply(e$trace$call, function(x) {
+        if (is.null(fn) && grepl("must be used within a", e$message, fixed = TRUE)) {
+          call_trace <- lapply(e$trace$call, function(x) {
             tmp <- insight::safe_deparse(x)
             if (grepl(paste0("^", .regex_select_helper()), tmp)) {
               tmp
             }
           })
-          fn <- Filter(Negate(is.null), trace)[1]
+          fn <- Filter(Negate(is.null), call_trace)[1]
         }
         # if we actually obtain the select helper call, return it, else return
         # what we already had
         if (length(fn) > 0L && grepl(.regex_select_helper(), fn)) {
           is_select_helper <<- TRUE
           return(fn)
-        } else {
-          NULL
         }
+        NULL
       }
     )
 
@@ -249,7 +272,7 @@
   switch(type,
     `:` = .select_seq(x, data, ignore_case, regex, verbose),
     `-` = .select_minus(x, data, ignore_case, regex, verbose),
-    `c` = .select_c(x, data, ignore_case, regex, verbose),
+    `c` = .select_c(x, data, ignore_case, regex, verbose), # nolint
     `(` = .select_bracket(x, data, ignore_case, regex, verbose),
     `[` = .select_square_bracket(x, data, ignore_case, regex, verbose),
     `$` = .select_dollar(x, data, ignore_case, regex, verbose),
@@ -494,7 +517,7 @@
 # Almost identical to dynGet(). The difference is that we deparse the expression
 # because get0() allows symbol only since R 4.1.0
 .dynGet <- function(x,
-                    ifnotfound = stop(gettextf("%s not found", sQuote(x)), domain = NA),
+                    ifnotfound = stop(gettextf("%s not found", sQuote(x)), domain = NA, call. = FALSE),
                     minframe = 1L,
                     inherits = FALSE) {
   x <- insight::safe_deparse(x)
@@ -518,7 +541,7 @@
 # Custom arg "remove_n_top_env" to remove the first environments which are
 # ".select_nse()" and the other custom functions
 .dynEval <- function(x,
-                     ifnotfound = stop(gettextf("%s not found", sQuote(x)), domain = NA),
+                     ifnotfound = stop(gettextf("%s not found", sQuote(x)), domain = NA, call. = FALSE),
                      minframe = 1L,
                      inherits = FALSE,
                      remove_n_top_env = 0) {

@@ -3,7 +3,7 @@
 .crosstable <- function(x,
                         by,
                         weights = NULL,
-                        include_na = TRUE,
+                        remove_na = FALSE,
                         proportions = NULL,
                         obj_name = NULL,
                         group_variable = NULL) {
@@ -12,23 +12,16 @@
   }
   # frequency table
   if (is.null(weights)) {
-    if (include_na) {
-      x_table <- tryCatch(table(addNA(x), addNA(by)), error = function(e) NULL)
-    } else {
+    # we have a `.default` and a `.data.frame` method for `data_tabulate()`.
+    # since this is the default, `x` can be an object which cannot be used
+    # with `table()`, that's why we add `tryCatch()` here. Below we give an
+    # informative error message for non-supported objects.
+    if (remove_na) {
       x_table <- tryCatch(table(x, by), error = function(e) NULL)
+    } else {
+      x_table <- tryCatch(table(addNA(x), addNA(by)), error = function(e) NULL)
     }
-  } else if (include_na) {
-    # weighted frequency table, including NA
-    x_table <- tryCatch(
-      stats::xtabs(
-        weights ~ x + by,
-        data = data.frame(weights = weights, x = addNA(x), by = addNA(by)),
-        na.action = stats::na.pass,
-        addNA = TRUE
-      ),
-      error = function(e) NULL
-    )
-  } else {
+  } else if (remove_na) {
     # weighted frequency table, excluding NA
     x_table <- tryCatch(
       stats::xtabs(
@@ -36,6 +29,17 @@
         data = data.frame(weights = weights, x = x, by = by),
         na.action = stats::na.omit,
         addNA = FALSE
+      ),
+      error = function(e) NULL
+    )
+  } else {
+    # weighted frequency table, including NA
+    x_table <- tryCatch(
+      stats::xtabs(
+        weights ~ x + by,
+        data = data.frame(weights = weights, x = addNA(x), by = addNA(by)),
+        na.action = stats::na.pass,
+        addNA = TRUE
       ),
       error = function(e) NULL
     )
@@ -74,8 +78,9 @@
   attr(out, "total_n") <- total_n
   attr(out, "weights") <- weights
   attr(out, "proportions") <- proportions
+  attr(out, "varname") <- obj_name
 
-  class(out) <- c("dw_data_xtabulate", "data.frame")
+  class(out) <- c("datawizard_crosstab", "data.frame")
 
   out
 }
@@ -85,7 +90,7 @@
 
 
 #' @export
-format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = NULL, ...) {
+format.datawizard_crosstab <- function(x, format = "text", digits = 1, big_mark = NULL, ...) {
   # convert to character manually, else, for large numbers,
   # format_table() returns scientific notation
   x <- as.data.frame(x)
@@ -108,17 +113,23 @@ format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = 
     tmp <- x
     if (identical(props, "row")) {
       for (i in seq_len(nrow(x))) {
-        tmp[i, -1] <- paste(
-          format(x[i, -1]),
-          format(sprintf("(%.*f%%)", digits, 100 * x[i, -1] / sum(x[i, -1], na.rm = TRUE)), justify = "right")
-        )
+        row_sum <- sum(x[i, -1], na.rm = TRUE)
+        if (row_sum == 0) {
+          row_sum_string <- "(0%)"
+        } else {
+          row_sum_string <- sprintf("(%.*f%%)", digits, 100 * x[i, -1] / row_sum)
+        }
+        tmp[i, -1] <- paste(format(x[i, -1]), format(row_sum_string, justify = "right"))
       }
     } else if (identical(props, "column")) {
       for (i in seq_len(ncol(x))[-1]) {
-        tmp[, i] <- paste(
-          format(x[, i]),
-          format(sprintf("(%.*f%%)", digits, 100 * x[, i] / sum(x[, i], na.rm = TRUE)), justify = "right")
-        )
+        col_sum <- sum(x[, i], na.rm = TRUE)
+        if (col_sum == 0) {
+          col_sum_string <- "(0%)"
+        } else {
+          col_sum_string <- sprintf("(%.*f%%)", digits, 100 * x[, i] / col_sum)
+        }
+        tmp[, i] <- paste(format(x[, i]), format(col_sum_string, justify = "right"))
       }
     } else if (identical(props, "full")) {
       for (i in seq_len(ncol(x))[-1]) {
@@ -172,7 +183,7 @@ format.dw_data_xtabulate <- function(x, format = "text", digits = 1, big_mark = 
 
 
 #' @export
-print.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
+print.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   # grouped data? if yes, add information on grouping factor
   if (is.null(x[["Group"]])) {
     caption <- NULL
@@ -194,7 +205,7 @@ print.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
 
 
 #' @export
-print_md.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
+print_md.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   # grouped data? if yes, add information on grouping factor
   if (is.null(x[["Group"]])) {
     caption <- NULL
@@ -216,7 +227,7 @@ print_md.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
 
 
 #' @export
-print_html.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
+print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   # grouped data? if yes, add information on grouping factor
   if (!is.null(x[["Group"]])) {
     x$groups <- paste0("Grouped by ", x[["Group"]][1])
@@ -228,13 +239,13 @@ print_html.dw_data_xtabulate <- function(x, big_mark = NULL, ...) {
     format(x, big_mark = big_mark, format = "html", ...),
     missing = "(NA)",
     format = "html",
-    group_by = "groups"
+    by = "groups"
   )
 }
 
 
 #' @export
-print.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
+print.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
   for (i in seq_along(x)) {
     print(x[[i]], big_mark = big_mark, ...)
     cat("\n")
@@ -244,7 +255,7 @@ print.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
 
 
 #' @export
-print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
+print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
   if (length(x) == 1) {
     print_html(x[[1]], big_mark = big_mark, ...)
   } else {
@@ -264,7 +275,7 @@ print_html.dw_data_xtabulates <- function(x, big_mark = NULL, ...) {
       out,
       missing = "(NA)",
       format = "html",
-      group_by = "groups"
+      by = "groups"
     )
   }
 }

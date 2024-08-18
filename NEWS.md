@@ -1,4 +1,73 @@
-# datawizard 0.9.2
+# datawizard 0.12.2
+
+* Remove `htmltools` from `Suggests` in an attempt of fixing an error in CRAN
+  checks due to failures to build a vignette (#528).
+
+# datawizard 0.12.1
+
+This is a patch release to fix one error on CRAN checks occurring because of a
+missing package namespace in one of the vignettes.
+
+# datawizard 0.12.0
+
+BREAKING CHANGES
+
+* The argument `include_na` in `data_tabulate()` and `data_summary()` has been
+  renamed into `remove_na`. Consequently, to mimic former behaviour, `FALSE` and
+  `TRUE` need to be switched (i.e. `remove_na = TRUE` is equivalent to the former
+  `include_na = FALSE`).
+
+* Class names for objects returned by `data_tabulate()` have been changed to
+  `datawizard_table` and `datawizard_crosstable` (resp. the plural forms,
+  `*_tables`), to provide a clearer and more consistent naming scheme.
+
+CHANGES
+
+* `data_select()` can directly rename selected variables when a named vector
+  is provided in `select`, e.g. `data_select(mtcars, c(new1 = "mpg", new2 = "cyl"))`.
+
+* `data_tabulate()` gains an `as.data.frame()` method, to return the frequency
+  table as a data frame. The structure of the returned object is a nested data
+  frame, where the first column contains name of the variable for which
+  frequencies were calculated, and the second column contains the frequency table.
+
+* `demean()` (and `degroup()`) now also work for cross-classified designs, or
+  more generally, for data with multiple grouping or cluster variables (i.e.
+  `by` can now specify more than one variable).
+
+# datawizard 0.11.0
+
+BREAKING CHANGES
+
+* Arguments named `group` or `group_by` are deprecated and will be removed
+  in a future release. Please use `by` instead. This affects the following
+  functions in *datawizard* (#502).
+
+  * `data_partition()`
+  * `demean()` and `degroup()`
+  * `means_by_group()`
+  * `rescale_weights()`
+
+* Following aliases are deprecated and will be removed in a future release (#504):
+
+  * `get_columns()`, use `data_select()` instead.
+  * `data_find()` and `find_columns()`, use `extract_column_names()` instead.
+  * `format_text()`, use `text_format()` instead.
+
+CHANGES
+
+* `recode_into()` is more relaxed regarding checking the type of `NA` values.
+  If you recode into a numeric variable, and one of the recode values is `NA`,
+  you no longer need to use `NA_real_` for numeric `NA` values.
+
+* Improved documentation for some functions.
+
+BUG FIXES
+
+* `data_to_long()` did not work for data frame where columns had attributes
+  (like labelled data).
+
+# datawizard 0.10.0
 
 BREAKING CHANGES
 
@@ -11,6 +80,9 @@ BREAKING CHANGES
 NEW FUNCTIONS
 
 * `data_summary()`, to compute summary statistics of (grouped) data frames.
+
+* `data_replicate()`, to expand a data frame by replicating rows based on another
+  variable that contains the counts of replications per row.
 
 CHANGES
 

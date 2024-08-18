@@ -4,11 +4,14 @@
 
 ## revdepcheck results
 
-We checked 17 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+We checked 18 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
  * We saw 0 new problems
  * We failed to check 0 packages
 
-## Comments
+## Other comments
 
-Second submission of 0.9.1 following email exchange on timeout of vignette rendering in one of the pre-tests.
+This is another patch release that should fix a failure when building vignettes.
+This only happens on macOS with R 4.3. We tried to reproduce this locally and in
+CI with the same setup, but we couldn't. Hence, we removed an optional dependency
+that might have been the problem.

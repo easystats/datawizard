@@ -12,7 +12,7 @@
 #'
 #' @param keep The method to be used for duplicate selection, either "best"
 #'   (the default), "first", or "last".
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @return A data frame, containing only the chosen duplicates.
 #' @seealso [data_duplicated()]
@@ -118,7 +118,7 @@ data_unique.grouped_df <- function(data,
     verbose = verbose
   )
 
-  # works only for dplyr >= 0.8.0
+
   grps <- attr(data, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 

@@ -34,7 +34,7 @@ replace_nan_inf.default <- function(x, ...) {
   x
 }
 
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #' @export
 replace_nan_inf.data.frame <- function(x,
                                        select = NULL,

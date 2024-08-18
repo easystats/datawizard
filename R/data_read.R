@@ -70,7 +70,7 @@
 #' factors, where imported value labels will be set as factor levels. If a
 #' numeric variable has _no_ value labels or less value labels than values, it
 #' is not converted to factor. In this case, value labels are preserved as
-#' `"labels"` attribute. Character vectors are preserved.  Use
+#' `"labels"` attribute. Character vectors are preserved. Use
 #' `convert_factors = FALSE` to remove the automatic conversion of numeric
 #' variables to factors.
 #'
@@ -105,7 +105,7 @@ data_read <- function(path,
     por = .read_spss(path, encoding, convert_factors, verbose, ...),
     dta = .read_stata(path, encoding, convert_factors, verbose, ...),
     sas7bdat = .read_sas(path, path_catalog, encoding, convert_factors, verbose, ...),
-    .read_unknown(path, convert_factors, verbose, ...)
+    .read_unknown(path, file_type, convert_factors, verbose, ...)
   )
 
   # tell user about empty columns
@@ -178,20 +178,18 @@ data_read <- function(path,
         if (is.character(i)) {
           # we need this to drop haven-specific class attributes
           i <- as.character(i)
-        } else {
+        } else if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
           # if all values are labelled, we assume factor. Use labels as levels
-          if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
-            if (is.numeric(i)) {
-              i <- factor(i, labels = names(value_labels))
-            } else {
-              i <- factor(as.character(i), labels = names(value_labels))
-            }
-            value_labels <- NULL
-            attr(i, "converted_to_factor") <- TRUE
+          if (is.numeric(i)) {
+            i <- factor(i, labels = names(value_labels))
           } else {
-            # else, fall back to numeric
-            i <- as.numeric(i)
+            i <- factor(as.character(i), labels = names(value_labels))
           }
+          value_labels <- NULL
+          attr(i, "converted_to_factor") <- TRUE
+        } else {
+          # else, fall back to numeric
+          i <- as.numeric(i)
         }
 
         # drop unused value labels
@@ -290,12 +288,18 @@ data_read <- function(path,
 }
 
 
-.read_unknown <- function(path, convert_factors, verbose, ...) {
-  insight::check_if_installed("rio", reason = paste0("to read files of type '", .file_ext(path), "'"))
+.read_unknown <- function(path, file_type, convert_factors, verbose, ...) {
+  insight::check_if_installed("rio", reason = paste0("to read files of type '", file_type, "'"))
   if (verbose) {
     insight::format_alert("Reading data...")
   }
-  out <- rio::import(file = path, ...)
+  # set up arguments. for RDS, we set trust = TRUE, to avoid warnings
+  rio_args <- list(file = path)
+  # check if we have RDS, and if so, add trust = TRUE
+  if (file_type == "rds") {
+    rio_args$trust <- TRUE
+  }
+  out <- do.call(rio::import, c(rio_args, list(...)))
 
   # for "unknown" data formats (like .RDS), which still can be imported via
   # "rio::import()", we must check whether we actually have a data frame or
@@ -310,9 +314,8 @@ data_read <- function(path,
         )
       }
       return(out)
-    } else {
-      out <- tmp
     }
+    out <- tmp
   }
 
   .post_process_imported_data(out, convert_factors, verbose)

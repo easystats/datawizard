@@ -115,6 +115,7 @@ skewness.numeric <- function(x,
   # TODO: remove deprecated argument later
   if (!missing(na.rm)) {
     # TODO: add deprecation warning in a later update
+    insight::format_warning("Argument `na.rm` is deprecated and will be removed in a future release. Please use `remove_na` instead.") # nolint
     remove_na <- na.rm
   }
 
@@ -148,9 +149,7 @@ skewness.numeric <- function(x,
   )
 
   if (!is.null(iterations)) {
-    if (!requireNamespace("boot", quietly = TRUE)) {
-      insight::format_warning("Package 'boot' needed for bootstrapping SEs.")
-    } else {
+    if (requireNamespace("boot", quietly = TRUE)) {
       results <- boot::boot(
         data = x,
         statistic = .boot_skewness,
@@ -159,6 +158,8 @@ skewness.numeric <- function(x,
         type = type
       )
       out_se <- stats::sd(results$t, na.rm = TRUE)
+    } else {
+      insight::format_warning("Package 'boot' needed for bootstrapping SEs.")
     }
   }
 
@@ -181,6 +182,7 @@ skewness.matrix <- function(x,
   # TODO: remove deprecated argument later
   if (!missing(na.rm)) {
     # TODO: add deprecation warning in a later update
+    insight::format_warning("Argument `na.rm` is deprecated and will be removed in a future release. Please use `remove_na` instead.") # nolint
     remove_na <- na.rm
   }
 
@@ -216,6 +218,7 @@ skewness.data.frame <- function(x,
   # TODO: remove deprecated argument later
   if (!missing(na.rm)) {
     # TODO: add deprecation warning in a later update
+    insight::format_warning("Argument `na.rm` is deprecated and will be removed in a future release. Please use `remove_na` instead.") # nolint
     remove_na <- na.rm
   }
 
@@ -243,6 +246,7 @@ skewness.default <- function(x,
   # TODO: remove deprecated argument later
   if (!missing(na.rm)) {
     # TODO: add deprecation warning in a later update
+    insight::format_warning("Argument `na.rm` is deprecated and will be removed in a future release. Please use `remove_na` instead.") # nolint
     remove_na <- na.rm
   }
 
@@ -278,6 +282,7 @@ kurtosis.numeric <- function(x,
   # TODO: remove deprecated argument later
   if (!missing(na.rm)) {
     # TODO: add deprecation warning in a later update
+    insight::format_warning("Argument `na.rm` is deprecated and will be removed in a future release. Please use `remove_na` instead.") # nolint
     remove_na <- na.rm
   }
 
@@ -342,6 +347,7 @@ kurtosis.matrix <- function(x,
   # TODO: remove deprecated argument later
   if (!missing(na.rm)) {
     # TODO: add deprecation warning in a later update
+    insight::format_warning("Argument `na.rm` is deprecated and will be removed in a future release. Please use `remove_na` instead.") # nolint
     remove_na <- na.rm
   }
 
@@ -373,6 +379,7 @@ kurtosis.data.frame <- function(x,
   # TODO: remove deprecated argument later
   if (!missing(na.rm)) {
     # TODO: add deprecation warning in a later update
+    insight::format_warning("Argument `na.rm` is deprecated and will be removed in a future release. Please use `remove_na` instead.") # nolint
     remove_na <- na.rm
   }
 
@@ -398,6 +405,7 @@ kurtosis.default <- function(x,
   # TODO: remove deprecated argument later
   if (!missing(na.rm)) {
     # TODO: add deprecation warning in a later update
+    insight::format_warning("Argument `na.rm` is deprecated and will be removed in a future release. Please use `remove_na` instead.") # nolint
     remove_na <- na.rm
   }
 
