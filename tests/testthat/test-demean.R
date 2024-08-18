@@ -185,3 +185,46 @@ test_that("demean, sanity checks", {
     regex = "Variables \"neg_c_8\" and \"c173code\" were not found"
   )
 })
+
+
+test_that("demean for nested designs (by > 1), nested = TRUE", {
+  data(efc, package = "datawizard")
+  dat <- na.omit(efc)
+  dat$e42dep <- factor(dat$e42dep)
+  dat$c172code <- factor(dat$c172code)
+
+  x_ijk <- dat$c12hour
+  xbar_k <- ave(x_ijk, dat$e42dep, FUN = mean)
+  xbar_jk <- ave(x_ijk, dat$e42dep, dat$c172code, FUN = mean)
+
+  L3_between <- xbar_k
+  L2_between <- xbar_jk - xbar_k
+  L1_within <- x_ijk - xbar_jk
+
+  out <- degroup(
+    dat,
+    select = "c12hour",
+    by = c("e42dep", "c172code"),
+    nested = TRUE,
+    suffix_demean = "_within"
+  )
+
+  expect_equal(
+    out$c12hour_within,
+    L1_within,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    out$c12hour_e42dep_between,
+    L3_between,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    out$c12hour_c172code_between,
+    L2_between,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+})

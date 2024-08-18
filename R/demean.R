@@ -11,7 +11,7 @@
 #' @param x A data frame.
 #' @param select Character vector (or formula) with names of variables to select
 #'   that should be group- and de-meaned.
-#' @param by Character vector (or formula) with the name of the variable(s) that
+#' @param by Character vector (or formula) with the name of the variable that
 #'   indicates the group- or cluster-ID. For cross-classified or nested designs,
 #'   `by` can also identify two or more variables as group- or cluster-IDs. If
 #'   the data is nested and should be treated as such, set `nested = TRUE`. Else,
@@ -20,7 +20,8 @@
 #'
 #'   For nested designs, `by` can be:
 #'   - a character vector with the name of the variable that indicates the
-#'     levels, ordered from *highest* level to *lowest* (e.g. `by = c("L3", "L2"`).
+#'     levels, ordered from *highest* level to *lowest* (e.g.
+#'     `by = c("L4", "L3", "L2")`.
 #'   - a character vector with variable names in the format `by = "L4/L3/L2"`,
 #'     where the levels are separated by `/`.
 #'
@@ -47,7 +48,10 @@
 #' @return
 #' A data frame with the group-/de-meaned variables, which get the suffix
 #' `"_between"` (for the group-meaned variable) and `"_within"` (for the
-#' de-meaned variable) by default.
+#' de-meaned variable) by default. For cross-classified or nested designs,
+#' the name pattern of the group-meaned variables is the name of the centered
+#' variable followed by the name of the variable that indicates the related
+#' grouping level, e.g. `predictor_L3_between` and `predictor_L2_between`.
 #'
 #' @seealso If grand-mean centering (instead of centering within-clusters)
 #'   is required, see [`center()`]. See [`performance::check_heterogeneity_bias()`]
@@ -178,18 +182,29 @@
 #'
 #' @section De-meaning for cross-classified designs:
 #'
-#' `demean()` can also handle cross-classified designs, where the data has two
-#' or more groups at the higher (i.e. second) level. In such cases, the
+#' `demean()` can handle cross-classified designs, where the data has two or
+#' more groups at the higher (i.e. second) level. In such cases, the
 #' `by`-argument can identify two or more variables that represent the
 #'  cross-classified group- or cluster-IDs. The de-meaned variables for
 #' cross-classified designs are simply subtracting all group means from each
 #' individual value, i.e. _fully cluster-mean-centering_ (see _Guo et al. 2024_
 #' for details). Note that de-meaning for cross-classified designs is *not*
 #' equivalent to de-meaning of nested data structures from models with three or
-#' more levels. Set `nested = TRUE` to explicitly assume a nested design. for
+#' more levels. Set `nested = TRUE` to explicitly assume a nested design. For
 #' cross-classified designs, de-meaning is supposed to work for models like
 #' `y ~ x + (1|level3) + (1|level2)`, but *not* for models like
 #' `y ~ x + (1|level3/level2)`.
+#'
+#' @section De-meaning for nested designs:
+#'
+#' _Brincks et al. (2017)_ have suggested an algorithm to center variables for
+#' nested designs, which is implememented in `demean()`. For nested designs,
+#' set `nested = TRUE` *and* specify the variables that indicate the different
+#' levels in descending order in the `by` argument. E.g.,
+#' `by = c("level4", "level3, "level2")` assumes a model like
+#' `y ~ x + (1|level4/level3/level2)`. An alternative notation for the
+#' `by`-argument would be `by = c("level4/level3/level2")`, similar to the
+#' formula notation.
 #'
 #' @section Analysing panel data with mixed models using lme4:
 #'
@@ -200,35 +215,40 @@
 #' @references
 #'
 #'   - Bafumi J, Gelman A. 2006. Fitting Multilevel Models When Predictors
-#'   and Group Effects Correlate. In. Philadelphia, PA: Annual meeting of the
-#'   American Political Science Association.
+#'     and Group Effects Correlate. In. Philadelphia, PA: Annual meeting of the
+#'     American Political Science Association.
 #'
 #'   - Bell A, Fairbrother M, Jones K. 2019. Fixed and Random Effects
-#'   Models: Making an Informed Choice. Quality & Quantity (53); 1051-1074
+#'     Models: Making an Informed Choice. Quality & Quantity (53); 1051-1074
 #'
 #'   - Bell A, Jones K. 2015. Explaining Fixed Effects: Random Effects
-#'   Modeling of Time-Series Cross-Sectional and Panel Data. Political Science
-#'   Research and Methods, 3(1), 133–153.
+#'     Modeling of Time-Series Cross-Sectional and Panel Data. Political Science
+#'     Research and Methods, 3(1), 133–153.
+#'
+#'   - Brincks, A. M., Enders, C. K., Llabre, M. M., Bulotsky-Shearer, R. J.,
+#'     Prado, G., and Feaster, D. J. (2017). Centering Predictor Variables in
+#'     Three-Level Contextual Models. Multivariate Behavioral Research, 52(2),
+#'     149–163. https://doi.org/10.1080/00273171.2016.1256753
 #'
 #'   - Gelman A, Hill J. 2007. Data Analysis Using Regression and
-#'   Multilevel/Hierarchical Models. Analytical Methods for Social Research.
-#'   Cambridge, New York: Cambridge University Press
+#'     Multilevel/Hierarchical Models. Analytical Methods for Social Research.
+#'     Cambridge, New York: Cambridge University Press
 #'
 #'   - Giesselmann M, Schmidt-Catran, AW. 2020. Interactions in fixed
-#'   effects regression models. Sociological Methods & Research, 1–28.
-#'   https://doi.org/10.1177/0049124120914934
+#'     effects regression models. Sociological Methods & Research, 1–28.
+#'     https://doi.org/10.1177/0049124120914934
 #'
 #'   - Guo Y, Dhaliwal J, Rights JD. 2024. Disaggregating level-specific effects
-#'   in cross-classified multilevel models. Behavior Research Methods, 56(4),
-#'   3023–3057.
+#'     in cross-classified multilevel models. Behavior Research Methods, 56(4),
+#'     3023–3057.
 #'
 #'   - Heisig JP, Schaeffer M, Giesecke J. 2017. The Costs of Simplicity:
-#'   Why Multilevel Models May Benefit from Accounting for Cross-Cluster
-#'   Differences in the Effects of Controls. American Sociological Review 82
-#'   (4): 796–827.
+#'     Why Multilevel Models May Benefit from Accounting for Cross-Cluster
+#'     Differences in the Effects of Controls. American Sociological Review 82
+#'     (4): 796–827.
 #'
 #'   - Hoffman L. 2015. Longitudinal analysis: modeling within-person
-#'   fluctuation and change. New York: Routledge
+#'     fluctuation and change. New York: Routledge
 #'
 #' @examples
 #'
