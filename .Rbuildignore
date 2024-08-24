@@ -48,3 +48,5 @@ references.bib
 ^CRAN-SUBMISSION$
 docs
 ^.dev$
+^vignettes/s.
+^vignettes/t.
