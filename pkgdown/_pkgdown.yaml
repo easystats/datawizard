@@ -125,6 +125,11 @@ reference:
       - nhanes_sample
 
 articles:
+  - title: Overview of vignettes
+    navbar: ~
+    contents:
+      - overview_of_vignettes
+
   - title: Data Preparation
     desc: |
       Articles explaining utility of 'datawizard' for data wrangling
