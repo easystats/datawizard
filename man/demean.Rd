@@ -55,7 +55,8 @@ indicates the group- or cluster-ID. For cross-classified or nested designs,
 \code{by} can also identify two or more variables as group- or cluster-IDs. If
 the data is nested and should be treated as such, set \code{nested = TRUE}. Else,
 if \code{by} defines two or more variables and \code{nested = FALSE}, a cross-classified
-design is assumed.
+design is assumed. Note that \code{demean()} and \code{degroup()} can't handle a mix
+of nested and cross-classified designs in one model.
 
 For nested designs, \code{by} can be:
 \itemize{
@@ -259,7 +260,8 @@ equivalent to de-meaning of nested data structures from models with three or
 more levels. Set \code{nested = TRUE} to explicitly assume a nested design. For
 cross-classified designs, de-meaning is supposed to work for models like
 \code{y ~ x + (1|level3) + (1|level2)}, but \emph{not} for models like
-\code{y ~ x + (1|level3/level2)}.
+\code{y ~ x + (1|level3/level2)}. Note that \code{demean()} and \code{degroup()} can't
+handle a mix of nested and cross-classified designs in one model.
 }
 
 \section{De-meaning for nested designs}{

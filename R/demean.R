@@ -16,7 +16,8 @@
 #'   `by` can also identify two or more variables as group- or cluster-IDs. If
 #'   the data is nested and should be treated as such, set `nested = TRUE`. Else,
 #'   if `by` defines two or more variables and `nested = FALSE`, a cross-classified
-#'   design is assumed.
+#'   design is assumed. Note that `demean()` and `degroup()` can't handle a mix
+#'   of nested and cross-classified designs in one model.
 #'
 #'   For nested designs, `by` can be:
 #'   - a character vector with the name of the variable that indicates the
@@ -193,7 +194,8 @@
 #' more levels. Set `nested = TRUE` to explicitly assume a nested design. For
 #' cross-classified designs, de-meaning is supposed to work for models like
 #' `y ~ x + (1|level3) + (1|level2)`, but *not* for models like
-#' `y ~ x + (1|level3/level2)`.
+#' `y ~ x + (1|level3/level2)`. Note that `demean()` and `degroup()` can't
+#' handle a mix of nested and cross-classified designs in one model.
 #'
 #' @section De-meaning for nested designs:
 #'
