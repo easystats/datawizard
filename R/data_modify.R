@@ -22,6 +22,9 @@
 #'   character vector is provided, you may not add further elements to `...`.
 #' - Using `NULL` as right-hand side removes a variable from the data frame.
 #'   Example: `Petal.Width = NULL`.
+#' - For (grouped) data frames, the function `n()` can be used to count the
+#'   number of observations and thereby, for instance, create index values by
+#'   using `id = 1:n()` or `id = 3:(n()+2)` and similar.
 #'
 #' Note that newly created variables can be used in subsequent expressions,
 #' including `.at` or `.if`. See also 'Examples'.
@@ -92,7 +95,8 @@
 #'   grouped_efc,
 #'   c12hour_c = center(c12hour),
 #'   c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
-#'   c12hour_z2 = standardize(c12hour)
+#'   c12hour_z2 = standardize(c12hour),
+#'   id = 1:n()
 #' )
 #' head(new_efc)
 #'
@@ -352,8 +356,12 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # finally, we can evaluate expression and get values for new variables
   symbol_string <- insight::safe_deparse(symbol)
   if (!is.null(symbol_string) && all(symbol_string == "n()")) {
-    # "special" functions
+    # "special" functions - using "n()" just returns number of rows
     new_variable <- nrow(data)
+  } else if (!is.null(symbol_string) && length(symbol_string) == 1 && grepl("n()", symbol_string, fixed = TRUE)) {
+    # "special" functions, like "1:n()" or similar
+    symbol_string <- str2lang(gsub("n()", "nrow(data)", symbol_string, fixed = TRUE))
+    new_variable <- try(with(data, eval(symbol_string)), silent = TRUE)
   } else {
     # default evaluation of expression
     new_variable <- try(with(data, eval(symbol)), silent = TRUE)
