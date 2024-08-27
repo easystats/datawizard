@@ -5,8 +5,8 @@ CHANGES
 * `demean()` (and `degroup()`) now also work for nested designs, if argument
   `nested = TRUE` and  `by` specifies more than one variable.
 
-* `data_modify()` now also accepts the short-cut `1:n()` and similar, for example
-  to create an index for data groups (in grouped data frames).
+* `data_modify()` now recognizes `n()`, for example to create an index for data groups 
+  with `1:n()` (#535).
 
 # datawizard 0.12.2
 
