@@ -356,7 +356,10 @@ test_that("data_modify errors for non df", {
 test_that("data_modify errors for empty data frames", {
   data(mtcars)
   x <- mtcars[1, ]
-  expect_error(data_modify(x[-1, ], new_var = 5), regex = "`data_modify()` only works")
+  expect_error(
+    data_modify(x[-1, ], new_var = 5),
+    regex = "only works"
+  )
 })
 
 
@@ -582,7 +585,7 @@ withr::with_environment(
     x <- data_group(mtcars, "gear")
 
     foo <- function(d) {
-      out <- data_modify(d, Trials = 1:n())
+      out <- data_modify(d, Trials = 1:n()) # nolint
       out$Trials
     }
     expect_identical(
