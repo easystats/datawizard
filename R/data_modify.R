@@ -22,7 +22,7 @@
 #'   character vector is provided, you may not add further elements to `...`.
 #' - Using `NULL` as right-hand side removes a variable from the data frame.
 #'   Example: `Petal.Width = NULL`.
-#' - For (grouped) data frames, the function `n()` can be used to count the
+#' - For data frames (including grouped ones), the function `n()` can be used to count the
 #'   number of observations and thereby, for instance, create index values by
 #'   using `id = 1:n()` or `id = 3:(n()+2)` and similar.
 #'
