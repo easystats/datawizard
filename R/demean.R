@@ -205,7 +205,7 @@
 #' levels in descending order in the `by` argument. E.g.,
 #' `by = c("level4", "level3, "level2")` assumes a model like
 #' `y ~ x + (1|level4/level3/level2)`. An alternative notation for the
-#' `by`-argument would be `by = c("level4/level3/level2")`, similar to the
+#' `by`-argument would be `by = "level4/level3/level2"`, similar to the
 #' formula notation.
 #'
 #' @section Analysing panel data with mixed models using lme4:

@@ -273,7 +273,7 @@ nested designs, which is implemented in \code{demean()}. For nested designs, set
 levels in descending order in the \code{by} argument. E.g.,
 \verb{by = c("level4", "level3, "level2")} assumes a model like
 \code{y ~ x + (1|level4/level3/level2)}. An alternative notation for the
-\code{by}-argument would be \code{by = c("level4/level3/level2")}, similar to the
+\code{by}-argument would be \code{by = "level4/level3/level2"}, similar to the
 formula notation.
 }
 
