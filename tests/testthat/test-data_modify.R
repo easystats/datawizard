@@ -495,10 +495,10 @@ test_that("data_modify works with functions that return character vectors", {
 test_that("data_modify 1:n() and similar works in grouped data frames", {
   data(mtcars)
   x <- data_group(mtcars, "gear")
-  out <- data_modify(x, Trials = 1:n())
+  out <- data_modify(x, Trials = 1:n()) # nolint
   expect_identical(out$Trials[out$gear == 3], 1:15)
   expect_identical(out$Trials[out$gear == 4], 1:12)
-  out <- data_modify(x, Trials = 3:(n()+2))
+  out <- data_modify(x, Trials = 3:(n() + 2))
   expect_identical(out$Trials[out$gear == 3], 3:17)
   expect_identical(out$Trials[out$gear == 4], 3:14)
 })
