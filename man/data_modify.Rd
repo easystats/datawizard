@@ -30,7 +30,7 @@ type of expression cannot be mixed with other expressions, i.e. if a
 character vector is provided, you may not add further elements to \code{...}.
 \item Using \code{NULL} as right-hand side removes a variable from the data frame.
 Example: \code{Petal.Width = NULL}.
-\item For (grouped) data frames, the function \code{n()} can be used to count the
+\item For data frames (including grouped ones), the function \code{n()} can be used to count the
 number of observations and thereby, for instance, create index values by
 using \code{id = 1:n()} or \code{id = 3:(n()+2)} and similar.
 }
