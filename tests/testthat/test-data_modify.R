@@ -353,6 +353,13 @@ test_that("data_modify errors for non df", {
 })
 
 
+test_that("data_modify errors for empty data frames", {
+  data(mtcars)
+  x <- mtcars[1, ]
+  expect_error(data_modify(x[-1, ], new_var = 5), regex = "`data_modify()` only works")
+})
+
+
 test_that("data_modify errors for non df", {
   data(efc)
   a <- "center(c22hour)" # <---------------- error in variable name
@@ -492,8 +499,10 @@ test_that("data_modify works with functions that return character vectors", {
 })
 
 
-test_that("data_modify 1:n() and similar works in grouped data frames", {
+test_that("data_modify 1:n() and similar works in (grouped) data frames", {
   data(mtcars)
+  out <- data_modify(mtcars, Trials = 1:n()) # nolint
+  expect_identical(out$Trials, 1:32)
   x <- data_group(mtcars, "gear")
   out <- data_modify(x, Trials = 1:n()) # nolint
   expect_identical(out$Trials[out$gear == 3], 1:15)
@@ -562,3 +571,27 @@ test_that("data_modify .if/.at arguments", {
   out <- data_modify(d, new_length = Petal.Length * 2, .if = is.numeric, .modify = round)
   expect_equal(out$new_length, c(3, 3, 3, 3, 3), ignore_attr = TRUE)
 })
+
+
+skip_if_not_installed("withr")
+
+withr::with_environment(
+  new.env(),
+  test_that("data_modify 1:n() and similar works in (grouped) data frames inside function calls", {
+    data(mtcars)
+    x <- data_group(mtcars, "gear")
+
+    foo <- function(d) {
+      out <- data_modify(d, Trials = 1:n())
+      out$Trials
+    }
+    expect_identical(
+      foo(x),
+      c(
+        1L, 2L, 3L, 1L, 2L, 3L, 4L, 4L, 5L, 6L, 7L, 5L, 6L, 7L, 8L,
+        9L, 10L, 8L, 9L, 10L, 11L, 12L, 13L, 14L, 15L, 11L, 1L, 2L, 3L,
+        4L, 5L, 12L
+      )
+    )
+  })
+)

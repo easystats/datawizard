@@ -149,6 +149,11 @@ data_modify.default <- function(data, ...) {
 data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = NULL) {
   dots <- eval(substitute(alist(...)))
 
+  # error for data frames with no rows...
+  if (nrow(data) == 0) {
+    insight::format_error("`data_modify()` only works for data frames with at least one row.")
+  }
+
   # check if we have dots, or only at/modify ----
 
   if (length(dots)) {
@@ -205,6 +210,10 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # the data.frame method later...
   dots <- match.call(expand.dots = FALSE)[["..."]]
 
+  # error for data frames with no rows...
+  if (nrow(data) == 0) {
+    insight::format_error("`data_modify()` only works for data frames with at least one row.")
+  }
 
   grps <- attr(data, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
@@ -358,8 +367,8 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   if (!is.null(symbol_string) && all(symbol_string == "n()")) {
     # "special" functions - using "n()" just returns number of rows
     new_variable <- nrow(data)
-  } else if (!is.null(symbol_string) && length(symbol_string) == 1 && grepl("n()", symbol_string, fixed = TRUE)) {
-    # "special" functions, like "1:n()" or similar
+  } else if (!is.null(symbol_string) && length(symbol_string) == 1 && grepl("\\bn\\(\\)", symbol_string)) {
+    # "special" functions, like "1:n()" or similar - but not "1:fun()"
     symbol_string <- str2lang(gsub("n()", "nrow(data)", symbol_string, fixed = TRUE))
     new_variable <- try(with(data, eval(symbol_string)), silent = TRUE)
   } else {
