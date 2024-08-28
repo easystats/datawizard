@@ -358,7 +358,7 @@ test_that("data_modify errors for empty data frames", {
   x <- mtcars[1, ]
   expect_error(
     data_modify(x[-1, ], new_var = 5),
-    regex = "only works"
+    regex = "empty data frame"
   )
 })
 

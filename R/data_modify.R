@@ -151,7 +151,7 @@ data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 
   # error for data frames with no rows...
   if (nrow(data) == 0) {
-    insight::format_error("`data_modify()` only works for data frames with at least one row.")
+    insight::format_error("`data` is an empty data frame. `data_modify()` only works for data frames with at least one row.") # nolint
   }
 
   # check if we have dots, or only at/modify ----
@@ -212,7 +212,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 
   # error for data frames with no rows...
   if (nrow(data) == 0) {
-    insight::format_error("`data_modify()` only works for data frames with at least one row.")
+    insight::format_error("`data` is an empty data frame. `data_modify()` only works for data frames with at least one row.") # nolint
   }
 
   grps <- attr(data, "groups", exact = TRUE)
