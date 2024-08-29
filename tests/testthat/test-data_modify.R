@@ -598,3 +598,7 @@ withr::with_environment(
     )
   })
 )
+
+test_that("data_modify errors on non-defined function", {
+  expect_error(data_modify(iris, Species = foo()))
+})
