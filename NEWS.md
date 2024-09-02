@@ -3,7 +3,7 @@
 CHANGES
 
 * `demean()` (and `degroup()`) now also work for nested designs, if argument
-  `nested = TRUE` and  `by` specifies more than one variable.
+  `nested = TRUE` and  `by` specifies more than one variable (#533).
   
 * Vignettes are no longer provided in the package, they are now only available
   on the website. There is only one "Overview" vignette available in the package,
