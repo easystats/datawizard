@@ -43,6 +43,7 @@ reshape_ci <- function(x, ci_type = "CI") {
     # Reshape
     if (length(unique(x$CI)) > 1) {
       if ("Parameter" %in% names(x)) {
+        idvar <- "Parameter"
         remove_parameter <- FALSE
       } else if (!is.null(attr(x, "idvars"))) {
         idvar <- attr(x, "idvars")
