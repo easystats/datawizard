@@ -98,9 +98,15 @@ either to wide or long format.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">reshape_ci</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in reshape_ci(x):</span> object 'idvar' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Parameter CI_low_0.8 CI_high_0.8 CI_low_0.9 CI_high_0.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    Term 1        0.2         0.5       0.10        0.80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    Term 2        0.3         0.6       0.15        0.85</span>
 <span class="r-in"><span><span class="fu">reshape_ci</span><span class="op">(</span><span class="fu">reshape_ci</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in reshape_ci(x):</span> object 'idvar' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Parameter  CI CI_low CI_high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    Term 1 0.8   0.20    0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    Term 1 0.9   0.10    0.80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    Term 2 0.8   0.30    0.60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    Term 2 0.9   0.15    0.85</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
