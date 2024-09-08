@@ -16,7 +16,7 @@
 #'   string, which will be added as prefix or suffix to the column names. For
 #'   `data_rename()`, `pattern` can also be a named vector. In this case, names
 #'   are used as values for the `replacement` argument (i.e. `pattern` can be a
-#'   character vector `<new name> = <old name>`).
+#'   character vector using `<new name> = "<old name>"`).
 #' @param replacement Character vector. Indicates the new name of the columns
 #'   selected in `pattern`. Can be `NULL` (in which case column are numbered
 #'   in sequential order). If not `NULL`, `pattern` and `replacement` must be

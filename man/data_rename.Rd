@@ -49,7 +49,7 @@ are selected). For \code{data_addprefix()} or \code{data_addsuffix()}, a charact
 string, which will be added as prefix or suffix to the column names. For
 \code{data_rename()}, \code{pattern} can also be a named vector. In this case, names
 are used as values for the \code{replacement} argument (i.e. \code{pattern} can be a
-character vector \verb{<new name> = <old name>}).}
+character vector using \verb{<new name> = "<old name>"}).}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -139,6 +139,7 @@ head(data_rename(iris, c("Sepal.Length", "Sepal.Width"), c("length", "width")))
 
 # use named vector to rename
 head(data_rename(iris, c(length = "Sepal.Length", width = "Sepal.Width")))
+
 # Reset names
 head(data_rename(iris, NULL))
 
