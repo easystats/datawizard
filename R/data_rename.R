@@ -13,7 +13,10 @@
 #' @param pattern Character vector. For `data_rename()`, indicates columns that
 #'   should be selected for renaming. Can be `NULL` (in which case all columns
 #'   are selected). For `data_addprefix()` or `data_addsuffix()`, a character
-#'   string, which will be added as prefix or suffix to the column names.
+#'   string, which will be added as prefix or suffix to the column names. For
+#'   `data_rename()`, `pattern` can also be a named vector. In this case, names
+#'   are used as values for the `replacement` argument (i.e. `pattern` can be a
+#'   character vector `<new name> = <old name>`).
 #' @param replacement Character vector. Indicates the new name of the columns
 #'   selected in `pattern`. Can be `NULL` (in which case column are numbered
 #'   in sequential order). If not `NULL`, `pattern` and `replacement` must be
@@ -32,6 +35,9 @@
 #' # data_rename(iris, "FakeCol", "length", safe=FALSE)  # This fails
 #' head(data_rename(iris, "FakeCol", "length")) # This doesn't
 #' head(data_rename(iris, c("Sepal.Length", "Sepal.Width"), c("length", "width")))
+#'
+#' # use named vector to rename
+#' head(data_rename(iris, c(length = "Sepal.Length", width = "Sepal.Width")))
 #'
 #' # Reset names
 #' head(data_rename(iris, NULL))
@@ -64,6 +70,11 @@ data_rename <- function(data,
 
   if (!is.character(pattern)) {
     insight::format_error("Argument `pattern` must be of type character.")
+  }
+
+  # check if `pattern` has names, and if so, use as "replacement"
+  if (!is.null(names(pattern))) {
+    replacement <- names(pattern)
   }
 
   # name columns 1, 2, 3 etc. if no replacement
