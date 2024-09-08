@@ -1,14 +1,22 @@
+# datawizard (development)
+
+CHANGES
+
+* The `pattern` argument in `data_rename()` can also be a named vector. In this
+  case, names are used as values for the `replacement` argument (i.e. `pattern`
+  can be a character vector using `<new name> = "<old name>"`).
+
 # datawizard 0.12.3
 
 CHANGES
 
 * `demean()` (and `degroup()`) now also work for nested designs, if argument
   `nested = TRUE` and  `by` specifies more than one variable (#533).
-  
+
 * Vignettes are no longer provided in the package, they are now only available
   on the website. There is only one "Overview" vignette available in the package,
   it contains links to the other vignettes on the website. This is because there
-  are CRAN errors occurring when building vignettes on macOS and we couldn't 
+  are CRAN errors occurring when building vignettes on macOS and we couldn't
   determine the cause after multiple patch releases (#534).
 
 # datawizard 0.12.2

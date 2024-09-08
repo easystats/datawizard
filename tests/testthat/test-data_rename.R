@@ -14,6 +14,10 @@ test_that("data_rename works with one or several replacements", {
     ),
     c("length", "width", "Petal.Length", "Petal.Width", "Species")
   )
+  expect_named(
+    data_rename(test, c(length = "Sepal.Length", width = "Sepal.Width")),
+    c("length", "width", "Petal.Length", "Petal.Width", "Species")
+  )
 })
 
 test_that("data_rename returns a data frame", {
@@ -42,7 +46,9 @@ test_that("data_rename uses indices when no replacement", {
 
 test_that("data_rename works when too many names in 'replacement'", {
   expect_message(
-    x <- data_rename(test, replacement = paste0("foo", 1:6)),
+    {
+      x <- data_rename(test, replacement = paste0("foo", 1:6))
+    },
     "There are more names in"
   )
   expect_identical(dim(test), dim(x))
@@ -51,7 +57,9 @@ test_that("data_rename works when too many names in 'replacement'", {
 
 test_that("data_rename works when not enough names in 'replacement'", {
   expect_message(
-    x <- data_rename(test, replacement = paste0("foo", 1:2)),
+    {
+      x <- data_rename(test, replacement = paste0("foo", 1:2))
+    },
     "There are more names in"
   )
   expect_identical(dim(test), dim(x))
