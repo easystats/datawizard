@@ -1,13 +1,10 @@
 ---
 title: "Overview of Vignettes"
-output: 
-  rmarkdown::html_vignette:
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Overview of Vignettes}
-  \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  chunk_output_type: console
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
