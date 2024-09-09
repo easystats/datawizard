@@ -16,11 +16,13 @@
 #'   string, which will be added as prefix or suffix to the column names. For
 #'   `data_rename()`, `pattern` can also be a named vector. In this case, names
 #'   are used as values for the `replacement` argument (i.e. `pattern` can be a
-#'   character vector using `<new name> = "<old name>"`).
+#'   character vector using `<new name> = "<old name>"` and argument `replacement`
+#'   will be ignored then). If some of the names in `pattern` are not provided,
+#'   column names will be removed. See 'Examples'.
 #' @param replacement Character vector. Indicates the new name of the columns
 #'   selected in `pattern`. Can be `NULL` (in which case column are numbered
 #'   in sequential order). If not `NULL`, `pattern` and `replacement` must be
-#'   of the same length.
+#'   of the same length. If `pattern` is a named vector, `replacement` is ignored.
 #' @param rows Vector of row names.
 #' @param safe Do not throw error if for instance the variable to be
 #'   renamed/removed doesn't exist.
@@ -45,6 +47,14 @@
 #' # Change all
 #' head(data_rename(iris, replacement = paste0("Var", 1:5)))
 #'
+#' # remove one column name
+#' head(data_rename(
+#'   iris,
+#'   pattern = c("Sepal.Length", "Sepal.Width"),
+#'   replacement = c("keep_length", "")
+#' ))
+#' # same as
+#' head(data_rename(iris, c(keep_length = "Sepal.Length", "Sepal.Width")))
 #' @seealso
 #' - Functions to rename stuff: [data_rename()], [data_rename_rows()], [data_addprefix()], [data_addsuffix()]
 #' - Functions to reorder or remove columns: [data_reorder()], [data_relocate()], [data_remove()]
