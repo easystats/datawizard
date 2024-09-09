@@ -39,7 +39,7 @@ test_that("data_rename: pattern must be of type character", {
 test_that("data_rename: replacement not allowed to have NA or empty strings", {
   expect_error(
     data_rename(test, pattern = c(test = "Species", "Sepal.Length")),
-    regexp = "`replacement` is not allowed"
+    regexp = "Either name all elements of `pattern`"
   )
   expect_error(
     data_rename(

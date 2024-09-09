@@ -3,7 +3,7 @@
 BREAKING CHANGES
 
 * `data_rename()` now errors when the `replacement` argument contains `NA` values
-  or empty strings.
+  or empty strings (#539).
 
 CHANGES
 

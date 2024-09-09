@@ -88,13 +88,26 @@ data_rename <- function(data,
   # check if `replacement` has no empty strings and no NA values
   invalid_replacement <- is.na(replacement) | !nzchar(replacement)
   if (any(invalid_replacement)) {
-    insight::format_error(
-      "`replacement` is not allowed to have `NA` or empty strings.",
-      sprintf(
-        "Following names in `pattern` have no match in `replacement`: %s",
-        toString(pattern[invalid_replacement])
+    if (is.null(names(pattern))) {
+      # when user did not match `pattern` with `replacement`
+      msg <- c(
+        "`replacement` is not allowed to have `NA` or empty strings.",
+        sprintf(
+          "Following values in `pattern` have no match in `replacement`: %s",
+          toString(pattern[invalid_replacement])
+        )
       )
-    )
+    } else {
+      # when user did not name all elements of `pattern`
+      msg <- c(
+        "Either name all elements of `pattern` or use `replacement`.",
+        sprintf(
+          "Following values in `pattern` were not named: %s",
+          toString(pattern[invalid_replacement])
+        )
+      )
+    }
+    insight::format_error(msg)
   }
 
   # if duplicated names in replacement, append ".2", ".3", etc. to duplicates
