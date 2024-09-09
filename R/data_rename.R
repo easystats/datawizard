@@ -17,8 +17,7 @@
 #'   `data_rename()`, `pattern` can also be a named vector. In this case, names
 #'   are used as values for the `replacement` argument (i.e. `pattern` can be a
 #'   character vector using `<new name> = "<old name>"` and argument `replacement`
-#'   will be ignored then). If some of the names in `pattern` are not provided,
-#'   column names will be removed. See 'Examples'.
+#'   will be ignored then).
 #' @param replacement Character vector. Indicates the new name of the columns
 #'   selected in `pattern`. Can be `NULL` (in which case column are numbered
 #'   in sequential order). If not `NULL`, `pattern` and `replacement` must be
@@ -46,15 +45,6 @@
 #'
 #' # Change all
 #' head(data_rename(iris, replacement = paste0("Var", 1:5)))
-#'
-#' # remove one column name
-#' head(data_rename(
-#'   iris,
-#'   pattern = c("Sepal.Length", "Sepal.Width"),
-#'   replacement = c("keep_length", "")
-#' ))
-#' # same as
-#' head(data_rename(iris, c(keep_length = "Sepal.Length", "Sepal.Width")))
 #' @seealso
 #' - Functions to rename stuff: [data_rename()], [data_rename_rows()], [data_addprefix()], [data_addsuffix()]
 #' - Functions to reorder or remove columns: [data_reorder()], [data_relocate()], [data_remove()]
@@ -90,6 +80,14 @@ data_rename <- function(data,
   # name columns 1, 2, 3 etc. if no replacement
   if (is.null(replacement)) {
     replacement <- paste0(seq_along(pattern))
+  }
+
+  # coerce to character
+  replacement <- as.character(replacement)
+
+  # check if `replacement` has no empty strings and no NA values
+  if (anyNA(replacement) || !all(nzchar(replacement))) {
+    insight::format_error("`replacement` is not allowed to have `NA` or empty strings.")
   }
 
   # if duplicated names in replacement, append ".2", ".3", etc. to duplicates

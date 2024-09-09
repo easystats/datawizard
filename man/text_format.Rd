@@ -67,8 +67,7 @@ string, which will be added as prefix or suffix to the column names. For
 \code{data_rename()}, \code{pattern} can also be a named vector. In this case, names
 are used as values for the \code{replacement} argument (i.e. \code{pattern} can be a
 character vector using \verb{<new name> = "<old name>"} and argument \code{replacement}
-will be ignored then). If some of the names in \code{pattern} are not provided,
-column names will be removed. See 'Examples'.}
+will be ignored then).}
 }
 \value{
 A character string.
