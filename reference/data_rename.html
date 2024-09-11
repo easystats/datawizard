@@ -19,7 +19,7 @@ pipe-workflow."><meta property="og:image" content="https://easystats.github.io/d
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,7 +127,8 @@ are selected). For <code>data_addprefix()</code> or <code>data_addsuffix()</code
 string, which will be added as prefix or suffix to the column names. For
 <code>data_rename()</code>, <code>pattern</code> can also be a named vector. In this case, names
 are used as values for the <code>replacement</code> argument (i.e. <code>pattern</code> can be a
-character vector using <code>&lt;new name&gt; = "&lt;old name&gt;"</code>).</p></dd>
+character vector using <code>&lt;new name&gt; = "&lt;old name&gt;"</code> and argument <code>replacement</code>
+will be ignored then).</p></dd>
 
 
 <dt id="arg-select">select<a class="anchor" aria-label="anchor" href="#arg-select"></a></dt>
@@ -195,7 +196,7 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
 <dd><p>Character vector. Indicates the new name of the columns
 selected in <code>pattern</code>. Can be <code>NULL</code> (in which case column are numbered
 in sequential order). If not <code>NULL</code>, <code>pattern</code> and <code>replacement</code> must be
-of the same length.</p></dd>
+of the same length. If <code>pattern</code> is a named vector, <code>replacement</code> is ignored.</p></dd>
 
 
 <dt id="arg-safe">safe<a class="anchor" aria-label="anchor" href="#arg-safe"></a></dt>
@@ -303,7 +304,6 @@ renamed/removed doesn't exist.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  4.6  3.1  1.5  0.2 setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  5.0  3.6  1.4  0.2 setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6  5.4  3.9  1.7  0.4 setosa</span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
