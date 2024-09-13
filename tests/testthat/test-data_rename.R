@@ -28,11 +28,26 @@ test_that("data_rename returns a data frame", {
 test_that("data_rename: pattern must be of type character", {
   expect_error(
     data_rename(test, pattern = 1),
-    regexp = "Argument `pattern` must be of type character."
+    regexp = "Argument `pattern` must be of type character"
   )
   expect_error(
     data_rename(test, pattern = TRUE),
-    regexp = "Argument `pattern` must be of type character."
+    regexp = "Argument `pattern` must be of type character"
+  )
+})
+
+test_that("data_rename: replacement not allowed to have NA or empty strings", {
+  expect_error(
+    data_rename(test, pattern = c(test = "Species", "Sepal.Length")),
+    regexp = "Either name all elements of `pattern`"
+  )
+  expect_error(
+    data_rename(
+      test,
+      pattern = c("Species", "Sepal.Length"),
+      replacement = c("foo", NA_character_)
+    ),
+    regexp = "`replacement` is not allowed"
   )
 })
 

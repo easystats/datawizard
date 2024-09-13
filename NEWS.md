@@ -1,5 +1,10 @@
 # datawizard (development)
 
+BREAKING CHANGES
+
+* `data_rename()` now errors when the `replacement` argument contains `NA` values
+  or empty strings (#539).
+
 CHANGES
 
 * The `pattern` argument in `data_rename()` can also be a named vector. In this
