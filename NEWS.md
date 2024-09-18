@@ -11,6 +11,9 @@ CHANGES
   case, names are used as values for the `replacement` argument (i.e. `pattern`
   can be a character vector using `<new name> = "<old name>"`).
 
+* Minor additions to `reshape_ci()` to work with forthcoming changes in the
+  `{bayestestR}` package.
+
 # datawizard 0.12.3
 
 CHANGES
