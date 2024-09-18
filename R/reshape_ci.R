@@ -45,13 +45,13 @@ reshape_ci <- function(x, ci_type = "CI") {
       if ("Parameter" %in% names(x)) {
         idvar <- "Parameter"
         remove_parameter <- FALSE
-      } else if (!is.null(attr(x, "idvars"))) {
-        idvar <- attr(x, "idvars")
-        remove_parameter <- FALSE
-      } else {
+      } else if (is.null(attr(x, "idvars"))) {
         idvar <- "Parameter"
         x$Parameter <- NA
         remove_parameter <- TRUE
+      } else {
+        idvar <- attr(x, "idvars")
+        remove_parameter <- FALSE
       }
 
       x <- stats::reshape(
