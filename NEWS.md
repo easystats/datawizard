@@ -1,3 +1,32 @@
+# datawizard (development)
+
+BREAKING CHANGES
+
+* `data_rename()` now errors when the `replacement` argument contains `NA` values
+  or empty strings (#539).
+
+CHANGES
+
+* The `pattern` argument in `data_rename()` can also be a named vector. In this
+  case, names are used as values for the `replacement` argument (i.e. `pattern`
+  can be a character vector using `<new name> = "<old name>"`).
+
+* Minor additions to `reshape_ci()` to work with forthcoming changes in the
+  `{bayestestR}` package.
+
+# datawizard 0.12.3
+
+CHANGES
+
+* `demean()` (and `degroup()`) now also work for nested designs, if argument
+  `nested = TRUE` and  `by` specifies more than one variable (#533).
+
+* Vignettes are no longer provided in the package, they are now only available
+  on the website. There is only one "Overview" vignette available in the package,
+  it contains links to the other vignettes on the website. This is because there
+  are CRAN errors occurring when building vignettes on macOS and we couldn't
+  determine the cause after multiple patch releases (#534).
+
 # datawizard 0.12.2
 
 * Remove `htmltools` from `Suggests` in an attempt of fixing an error in CRAN
@@ -73,8 +102,8 @@ BREAKING CHANGES
 
 * The following arguments were deprecated in 0.5.0 and are now removed:
 
-  * in `data_to_wide()`: `colnames_from`, `rows_from`, `sep` 
-  * in `data_to_long()`: `colnames_to` 
+  * in `data_to_wide()`: `colnames_from`, `rows_from`, `sep`
+  * in `data_to_long()`: `colnames_to`
   * in `data_partition()`: `training_proportion`
 
 NEW FUNCTIONS
@@ -93,7 +122,7 @@ CHANGES
   argument, to compute weighted frequency tables. `include_na` allows to include
   or omit missing values from the table. Furthermore, a `by` argument was added,
   to compute crosstables (#479, #481).
-  
+
 # datawizard 0.9.1
 
 CHANGES
@@ -144,7 +173,7 @@ CHANGES
 
 * `unnormalize()` and `unstandardize()` now work with grouped data (#415).
 
-* `unnormalize()` now errors instead of emitting a warning if it doesn't have the 
+* `unnormalize()` now errors instead of emitting a warning if it doesn't have the
   necessary info (#415).
 
 BUG FIXES
@@ -167,7 +196,7 @@ BUG FIXES
 
 * Fixed issue in `data_filter()` where functions containing a `=` (e.g. when
   naming arguments, like `grepl(pattern, x = a)`) were mistakenly seen as
-  faulty syntax. 
+  faulty syntax.
 
 * Fixed issue in `empty_column()` for strings with invalid multibyte strings.
   For such data frames or files, `empty_column()` or `data_read()` no longer
@@ -204,14 +233,14 @@ CHANGES
 
 NEW FUNCTIONS
 
-* `rowid_as_column()` to complement `rownames_as_column()` (and to mimic 
-  `tibble::rowid_to_column()`). Note that its behavior is different from 
+* `rowid_as_column()` to complement `rownames_as_column()` (and to mimic
+  `tibble::rowid_to_column()`). Note that its behavior is different from
   `tibble::rowid_to_column()` for grouped data. See the Details section in the
   docs.
 
 * `data_unite()`, to merge values of multiple variables into one new variable.
 
-* `data_separate()`, as counterpart to `data_unite()`, to separate a single 
+* `data_separate()`, as counterpart to `data_unite()`, to separate a single
   variable into multiple new variables.
 
 * `data_modify()`, to create new variables, or modify or remove existing
@@ -234,7 +263,7 @@ BUG FIXES
 
 * `center()` and `standardize()` did not work for grouped data frames (of class
   `grouped_df`) when `force = TRUE`.
-  
+
 * The `data.frame` method of `describe_distribution()` returns `NULL` instead of
   an error if no valid variable were passed (for example a factor variable with
   `include_factors = FALSE`) (#421).
@@ -262,12 +291,12 @@ BUG FIXES
 
 # datawizard 0.7.0
 
-BREAKING CHANGES 
+BREAKING CHANGES
 
 * In selection patterns, expressions like `-var1:var3` to exclude all variables
   between `var1` and `var3` are no longer accepted. The correct expression is
   `-(var1:var3)`. This is for 2 reasons:
-  
+
   * to be consistent with the behavior for numerics (`-1:2` is not accepted but
     `-(1:2)` is);
   * to be consistent with `dplyr::select()`, which throws a warning and only
@@ -279,8 +308,8 @@ NEW FUNCTIONS
   or more variables into a new variable.
 
 * `mean_sd()` and `median_mad()` for summarizing vectors to their mean (or
-  median) and a range of one SD (or MAD) above and below.  
-  
+  median) and a range of one SD (or MAD) above and below.
+
 * `data_write()` as counterpart to `data_read()`, to write data frames into
   CSV, SPSS, SAS, Stata files and many other file types. One advantage over
   existing functions to write data in other packages is that labelled (numeric)
@@ -296,8 +325,8 @@ MINOR CHANGES
 
 * `data_rename()` gets a `verbose` argument.
 * `winsorize()` now errors if the threshold is incorrect (previously, it provided
-  a warning and returned the unchanged data). The argument `verbose` is now 
-  useless but is kept for backward compatibility. The documentation now contains   
+  a warning and returned the unchanged data). The argument `verbose` is now
+  useless but is kept for backward compatibility. The documentation now contains
   details about the valid values for `threshold` (#357).
 * In all functions that have arguments `select` and/or `exclude`, there is now
   one warning per misspelled variable. The previous behavior was to have only one
@@ -318,7 +347,7 @@ BUG FIXES
 * Fix unexpected warning in `convert_na_to()` when `select` is a list (#352).
 * Fixed issue with correct labelling of numeric variables with more than nine
   unique values and associated value labels.
-  
+
 
 # datawizard 0.6.5
 
@@ -350,7 +379,7 @@ NEW FUNCTIONS
 * `data_codebook()`: to generate codebooks of data frames.
 
 * New functions to deal with duplicates: `data_duplicated()` (keep all duplicates,
-  including the first occurrence) and `data_unique()` (returns the data, excluding 
+  including the first occurrence) and `data_unique()` (returns the data, excluding
   all duplicates except one instance of each, based on the selected method).
 
 MINOR CHANGES
@@ -360,15 +389,15 @@ MINOR CHANGES
 * The `include_bounds` argument in `normalize()` can now also be a numeric
   value, defining the limit to the upper and lower bound (i.e. the distance
   to 1 and 0).
-  
-* `data_filter()` now works with grouped data. 
+
+* `data_filter()` now works with grouped data.
 
 BUG FIXES
 
 * `data_read()` no longer prints message for empty columns when the data
   actually had no empty columns.
-  
- * `data_to_wide()` now drops columns that are not in `id_cols` (if specified), 
+
+ * `data_to_wide()` now drops columns that are not in `id_cols` (if specified),
   `names_from`, or `values_from`. This is the behaviour observed in `tidyr::pivot_wider()`.
 
 # datawizard 0.6.3
@@ -800,4 +829,3 @@ NEW FUNCTIONS
 # datawizard 0.1.0
 
 * First release.
-
