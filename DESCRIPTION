@@ -1,7 +1,7 @@
 Type: Package
 Package: datawizard
 Title: Easy Data Wrangling and Statistical Transformations
-Version: 0.11.0.4
+Version: 0.12.3.4
 Authors@R: c(
     person("Indrajeet", "Patil", , "patilindrajeet.science@gmail.com", role = "aut",
            comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@patilindrajeets")),
@@ -21,10 +21,10 @@ Authors@R: c(
     person("Robert", "Garrett", , "rcg4@illinois.edu", role = "rev")
   )
 Maintainer: Etienne Bacher <etienne.bacher@protonmail.com>
-Description: A lightweight package to assist in key steps involved in any data 
-    analysis workflow: (1) wrangling the raw data to get it in the needed form, 
-    (2) applying preprocessing steps and statistical transformations, and 
-    (3) compute statistical summaries of data properties and distributions. 
+Description: A lightweight package to assist in key steps involved in any data
+    analysis workflow: (1) wrangling the raw data to get it in the needed form,
+    (2) applying preprocessing steps and statistical transformations, and
+    (3) compute statistical summaries of data properties and distributions.
     It is also the data wrangling backend for packages in 'easystats' ecosystem.
     References: Patil et al. (2022) <doi:10.21105/joss.04684>.
 License: MIT + file LICENSE
@@ -33,10 +33,10 @@ BugReports: https://github.com/easystats/datawizard/issues
 Depends:
     R (>= 3.6)
 Imports:
-    insight (>= 0.20.0),
+    insight (>= 0.20.3),
     stats,
     utils
-Suggests: 
+Suggests:
     bayestestR,
     boot,
     brms,
@@ -49,7 +49,6 @@ Suggests:
     ggplot2 (>= 3.5.0),
     gt,
     haven,
-    htmltools,
     httr,
     knitr,
     lme4,
@@ -68,12 +67,13 @@ Suggests:
     tibble,
     tidyr,
     withr
-VignetteBuilder: 
+VignetteBuilder:
     knitr
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/Needs/website: easystats/easystatstemplate
+Remotes: easystats/insight

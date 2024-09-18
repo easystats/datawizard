@@ -46,7 +46,11 @@ data_rename_rows(data, rows = NULL)
 \item{pattern}{Character vector. For \code{data_rename()}, indicates columns that
 should be selected for renaming. Can be \code{NULL} (in which case all columns
 are selected). For \code{data_addprefix()} or \code{data_addsuffix()}, a character
-string, which will be added as prefix or suffix to the column names.}
+string, which will be added as prefix or suffix to the column names. For
+\code{data_rename()}, \code{pattern} can also be a named vector. In this case, names
+are used as values for the \code{replacement} argument (i.e. \code{pattern} can be a
+character vector using \verb{<new name> = "<old name>"} and argument \code{replacement}
+will be ignored then).}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -104,7 +108,7 @@ functions (see 'Details'), this argument may be used as workaround.}
 \item{replacement}{Character vector. Indicates the new name of the columns
 selected in \code{pattern}. Can be \code{NULL} (in which case column are numbered
 in sequential order). If not \code{NULL}, \code{pattern} and \code{replacement} must be
-of the same length.}
+of the same length. If \code{pattern} is a named vector, \code{replacement} is ignored.}
 
 \item{safe}{Do not throw error if for instance the variable to be
 renamed/removed doesn't exist.}
@@ -134,12 +138,14 @@ head(data_rename(iris, "Sepal.Length", "length"))
 head(data_rename(iris, "FakeCol", "length")) # This doesn't
 head(data_rename(iris, c("Sepal.Length", "Sepal.Width"), c("length", "width")))
 
+# use named vector to rename
+head(data_rename(iris, c(length = "Sepal.Length", width = "Sepal.Width")))
+
 # Reset names
 head(data_rename(iris, NULL))
 
 # Change all
 head(data_rename(iris, replacement = paste0("Var", 1:5)))
-
 }
 \seealso{
 \itemize{

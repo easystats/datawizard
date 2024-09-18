@@ -197,7 +197,7 @@ standardize.default <- function(x,
 
   ## ---- STANDARDIZE! ----
 
-  w <- insight::get_weights(x, na_rm = TRUE)
+  w <- insight::get_weights(x, remove_na = TRUE)
 
   data_std <- standardize(data[do_standardize],
     robust = robust,
