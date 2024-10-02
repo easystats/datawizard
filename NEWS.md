@@ -27,6 +27,9 @@ CHANGES
   are CRAN errors occurring when building vignettes on macOS and we couldn't
   determine the cause after multiple patch releases (#534).
 
+* `data_modify()` now recognizes `n()`, for example to create an index for data groups 
+  with `1:n()` (#535).
+
 # datawizard 0.12.2
 
 * Remove `htmltools` from `Suggests` in an attempt of fixing an error in CRAN

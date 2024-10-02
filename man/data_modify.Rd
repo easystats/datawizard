@@ -30,6 +30,9 @@ type of expression cannot be mixed with other expressions, i.e. if a
 character vector is provided, you may not add further elements to \code{...}.
 \item Using \code{NULL} as right-hand side removes a variable from the data frame.
 Example: \code{Petal.Width = NULL}.
+\item For data frames (including grouped ones), the function \code{n()} can be used to count the
+number of observations and thereby, for instance, create index values by
+using \code{id = 1:n()} or \code{id = 3:(n()+2)} and similar.
 }
 
 Note that newly created variables can be used in subsequent expressions,
@@ -109,7 +112,8 @@ new_efc <- data_modify(
   grouped_efc,
   c12hour_c = center(c12hour),
   c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
-  c12hour_z2 = standardize(c12hour)
+  c12hour_z2 = standardize(c12hour),
+  id = 1:n()
 )
 head(new_efc)
 
