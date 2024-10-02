@@ -78,6 +78,7 @@ and more accessible way to define the interval breaks (cut-off values).</p>
 <span>  n_groups <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  range <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lowest <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  breaks <span class="op">=</span> <span class="st">"exclusive"</span>,</span>
 <span>  labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -92,6 +93,7 @@ and more accessible way to define the interval breaks (cut-off values).</p>
 <span>  n_groups <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  range <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lowest <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  breaks <span class="op">=</span> <span class="st">"exclusive"</span>,</span>
 <span>  labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  append <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -148,11 +150,22 @@ factors, the default minimum is <code>1</code>. For <code>split = "equal_range"<
 default minimum is always <code>1</code>, unless specified otherwise in <code>lowest</code>.</p></dd>
 
 
+<dt id="arg-breaks">breaks<a class="anchor" aria-label="anchor" href="#arg-breaks"></a></dt>
+<dd><p>Character, indicating whether breaks for categorizing data are
+<code>"inclusive"</code> (values indicate the <em>upper</em> bound of the <em>previous</em> group or
+interval) or <code>"exclusive"</code> (values indicate the <em>lower</em> bound of the <em>next</em>
+group or interval to begin). Use <code>labels = "range"</code> to make this behaviour
+easier to see.</p></dd>
+
+
 <dt id="arg-labels">labels<a class="anchor" aria-label="anchor" href="#arg-labels"></a></dt>
 <dd><p>Character vector of value labels. If not <code>NULL</code>, <code>categorize()</code>
 will returns factors instead of numeric variables, with <code>labels</code> used
-for labelling the factor levels. Can also be <code>"mean"</code> or <code>"median"</code> for a
-factor with labels as the mean/median of each groups.</p></dd>
+for labelling the factor levels. Can also be <code>"mean"</code>, <code>"median"</code>,
+<code>"range"</code> or <code>"observed"</code> for a factor with labels as the mean/median,
+the requested range (even if not all values of that range are present in
+the data) or observed range (range of the actual recoded values) of each
+group. See 'Examples'.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -232,7 +245,7 @@ is specified. In this case, a factor is returned, where the factor levels
     </div>
     <div class="section level2">
     <h2 id="splits-and-breaks-cut-off-values-">Splits and breaks (cut-off values)<a class="anchor" aria-label="anchor" href="#splits-and-breaks-cut-off-values-"></a></h2>
-    <p>Breaks are in general <em>exclusive</em>, this means that these values indicate
+    <p>Breaks are by default <em>exclusive</em>, this means that these values indicate
 the lower bound of the next group or interval to begin. Take a simple
 example, a numeric variable with values from 1 to 9. The median would be 5,
 thus the first interval ranges from 1-4 and is recoded into 1, while 5-9
@@ -241,6 +254,8 @@ using <code>split = "quantile"</code> and <code>n_groups = 3</code> would define
 and 6.33 (see <code>quantile(1:9, probs = c(1/3, 2/3))</code>), which means that values
 from 1 to 3 belong to the first interval and are recoded into 1 (because
 the next interval starts at 3.67), 4 to 6 into 2 and 7 to 9 into 3.</p>
+<p>The opposite behaviour can be achieved using <code>breaks = "inclusive"</code>, in which
+case</p>
     </div>
     <div class="section level2">
     <h2 id="recoding-into-groups-with-equal-size-or-range">Recoding into groups with equal size or range<a class="anchor" aria-label="anchor" href="#recoding-into-groups-with-equal-size-or-range"></a></h2>
@@ -348,6 +363,27 @@ from the input data frame.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 9.00 9.00 5.50 9.00 5.50 5.50 9.00 2.00 5.50 9.00 2.00 2.00 9.00 9.00 5.50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [16] 5.50 9.00 9.00 5.50 5.50 9.00 5.50 5.50 9.00 2.00 5.50 2.00 2.00 2.00 5.50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Levels: 2.00 5.50 9.00</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># cut numeric into groups with the requested range as a label name</span></span></span>
+<span class="r-in"><span><span class="co"># each category has the same range, and labels indicate this range</span></span></span>
+<span class="r-in"><span><span class="fu">categorize</span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="st">"equal_length"</span>, n_groups <span class="op">=</span> <span class="fl">5</span>, labels <span class="op">=</span> <span class="st">"range"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] [19.8,24.5) [19.8,24.5) [19.8,24.5) [19.8,24.5) [15.1,19.8) [15.1,19.8)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] [10.4,15.1) [19.8,24.5) [19.8,24.5) [15.1,19.8) [15.1,19.8) [15.1,19.8)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] [15.1,19.8) [15.1,19.8) [10.4,15.1) [10.4,15.1) [10.4,15.1) [29.2,33.9]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] [29.2,33.9] [29.2,33.9] [19.8,24.5) [15.1,19.8) [15.1,19.8) [10.4,15.1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] [15.1,19.8) [24.5,29.2) [24.5,29.2) [29.2,33.9] [15.1,19.8) [15.1,19.8)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31] [10.4,15.1) [19.8,24.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levels: [10.4,15.1) [15.1,19.8) [19.8,24.5) [24.5,29.2) [29.2,33.9]</span>
+<span class="r-in"><span><span class="co"># in this example, each category has the same range, but labels only refer</span></span></span>
+<span class="r-in"><span><span class="co"># to the ranges of the actual values (present in the data) inside each group</span></span></span>
+<span class="r-in"><span><span class="fu">categorize</span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="st">"equal_length"</span>, n_groups <span class="op">=</span> <span class="fl">5</span>, labels <span class="op">=</span> <span class="st">"observed"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] (21-24.4)   (21-24.4)   (21-24.4)   (21-24.4)   (15.2-19.7) (15.2-19.7)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] (10.4-15)   (21-24.4)   (21-24.4)   (15.2-19.7) (15.2-19.7) (15.2-19.7)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] (15.2-19.7) (15.2-19.7) (10.4-15)   (10.4-15)   (10.4-15)   (30.4-33.9)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] (30.4-33.9) (30.4-33.9) (21-24.4)   (15.2-19.7) (15.2-19.7) (10.4-15)  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] (15.2-19.7) (26-27.3)   (26-27.3)   (30.4-33.9) (15.2-19.7) (15.2-19.7)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31] (10.4-15)   (21-24.4)  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levels: (10.4-15) (15.2-19.7) (21-24.4) (26-27.3) (30.4-33.9)</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
