@@ -110,14 +110,7 @@ skewness.numeric <- function(x,
                              type = "2",
                              iterations = NULL,
                              verbose = TRUE,
-                             na.rm = TRUE,
                              ...) {
-  # TODO: remove deprecated argument later
-  if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
-    insight::format_warning("Argument `na.rm` is deprecated and will be removed in a future release. Please use `remove_na` instead.") # nolint
-    remove_na <- na.rm
-  }
 
   if (remove_na) x <- x[!is.na(x)]
   n <- length(x)
@@ -177,14 +170,7 @@ skewness.matrix <- function(x,
                             remove_na = TRUE,
                             type = "2",
                             iterations = NULL,
-                            na.rm = TRUE,
                             ...) {
-  # TODO: remove deprecated argument later
-  if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
-    insight::format_warning("Argument `na.rm` is deprecated and will be removed in a future release. Please use `remove_na` instead.") # nolint
-    remove_na <- na.rm
-  }
 
   .skewness <- apply(
     x,
@@ -213,15 +199,7 @@ skewness.data.frame <- function(x,
                                 remove_na = TRUE,
                                 type = "2",
                                 iterations = NULL,
-                                na.rm = TRUE,
                                 ...) {
-  # TODO: remove deprecated argument later
-  if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
-    insight::format_warning("Argument `na.rm` is deprecated and will be removed in a future release. Please use `remove_na` instead.") # nolint
-    remove_na <- na.rm
-  }
-
   .skewness <- lapply(x,
     skewness,
     remove_na = remove_na,
@@ -241,14 +219,7 @@ skewness.default <- function(x,
                              remove_na = TRUE,
                              type = "2",
                              iterations = NULL,
-                             na.rm = TRUE,
                              ...) {
-  # TODO: remove deprecated argument later
-  if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
-    insight::format_warning("Argument `na.rm` is deprecated and will be removed in a future release. Please use `remove_na` instead.") # nolint
-    remove_na <- na.rm
-  }
 
   skewness(
     .factor_to_numeric(x),
@@ -277,15 +248,7 @@ kurtosis.numeric <- function(x,
                              type = "2",
                              iterations = NULL,
                              verbose = TRUE,
-                             na.rm = TRUE,
                              ...) {
-  # TODO: remove deprecated argument later
-  if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
-    insight::format_warning("Argument `na.rm` is deprecated and will be removed in a future release. Please use `remove_na` instead.") # nolint
-    remove_na <- na.rm
-  }
-
   if (remove_na) x <- x[!is.na(x)]
   n <- length(x)
   out <- n * sum((x - mean(x))^4) / (sum((x - mean(x))^2)^2)
@@ -342,15 +305,7 @@ kurtosis.matrix <- function(x,
                             remove_na = TRUE,
                             type = "2",
                             iterations = NULL,
-                            na.rm = TRUE,
                             ...) {
-  # TODO: remove deprecated argument later
-  if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
-    insight::format_warning("Argument `na.rm` is deprecated and will be removed in a future release. Please use `remove_na` instead.") # nolint
-    remove_na <- na.rm
-  }
-
   .kurtosis <- apply(
     x,
     2,
@@ -374,15 +329,7 @@ kurtosis.data.frame <- function(x,
                                 remove_na = TRUE,
                                 type = "2",
                                 iterations = NULL,
-                                na.rm = TRUE,
                                 ...) {
-  # TODO: remove deprecated argument later
-  if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
-    insight::format_warning("Argument `na.rm` is deprecated and will be removed in a future release. Please use `remove_na` instead.") # nolint
-    remove_na <- na.rm
-  }
-
   .kurtosis <- lapply(x,
     kurtosis,
     remove_na = remove_na,
@@ -400,14 +347,7 @@ kurtosis.default <- function(x,
                              remove_na = TRUE,
                              type = "2",
                              iterations = NULL,
-                             na.rm = TRUE,
                              ...) {
-  # TODO: remove deprecated argument later
-  if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
-    insight::format_warning("Argument `na.rm` is deprecated and will be removed in a future release. Please use `remove_na` instead.") # nolint
-    remove_na <- na.rm
-  }
 
   kurtosis(
     .factor_to_numeric(x),

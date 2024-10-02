@@ -33,8 +33,6 @@ contains the row-id's.}
 
 \item{verbose}{Toggle messages and warnings.}
 
-\item{group}{Deprecated. Use \code{by} instead.}
-
 \item{...}{Other arguments passed to or from other functions.}
 }
 \value{

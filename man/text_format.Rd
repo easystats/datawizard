@@ -2,7 +2,6 @@
 % Please edit documentation in R/text_format.R
 \name{text_format}
 \alias{text_format}
-\alias{format_text}
 \alias{text_fullstop}
 \alias{text_lastchar}
 \alias{text_concatenate}
@@ -12,15 +11,6 @@
 \title{Convenient text formatting functionalities}
 \usage{
 text_format(
-  text,
-  sep = ", ",
-  last = " and ",
-  width = NULL,
-  enclose = NULL,
-  ...
-)
-
-format_text(
   text,
   sep = ", ",
   last = " and ",

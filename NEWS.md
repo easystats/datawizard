@@ -5,6 +5,10 @@ BREAKING CHANGES
 * `data_rename()` now errors when the `replacement` argument contains `NA` values
   or empty strings (#539).
 
+* Removed deprecated functions `get_columns()`, `data_find()`, `format_text()` (#546).
+
+* Removed deprecated arguments `group` and `na.rm` in multiple functions. Use `by` and `remove_na` instead (#546).
+
 CHANGES
 
 * The `pattern` argument in `data_rename()` can also be a named vector. In this

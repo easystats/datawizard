@@ -8,15 +8,7 @@
 \usage{
 means_by_group(x, ...)
 
-\method{means_by_group}{numeric}(
-  x,
-  by = NULL,
-  ci = 0.95,
-  weights = NULL,
-  digits = NULL,
-  group = NULL,
-  ...
-)
+\method{means_by_group}{numeric}(x, by = NULL, ci = 0.95, weights = NULL, digits = NULL, ...)
 
 \method{means_by_group}{data.frame}(
   x,
@@ -29,7 +21,6 @@ means_by_group(x, ...)
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
-  group = NULL,
   ...
 )
 }
@@ -55,8 +46,6 @@ weights are used.}
 
 \item{digits}{Optional scalar, indicating the amount of digits after decimal
 point when rounding estimates and values.}
-
-\item{group}{Deprecated. Use \code{by} instead.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
