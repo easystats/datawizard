@@ -234,7 +234,7 @@ test_that("categorize regex", {
 })
 
 
-# select helpers ------------------------------
+# labelling ranges ------------------------------
 test_that("categorize labelling ranged", {
   data(mtcars)
   expect_snapshot(categorize(mtcars$mpg, "equal_length", n_groups = 5))
