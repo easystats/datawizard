@@ -1,5 +1,5 @@
 test_that("convert data frame to numeric", {
-  expect_snapshot(to_numeric(head(ToothGrowth)))
+  expect_snapshot(to_numeric(head(ToothGrowth), dummy_factors = TRUE))
   expect_snapshot(to_numeric(head(ToothGrowth), dummy_factors = FALSE))
 })
 
@@ -41,7 +41,7 @@ test_that("convert character to numeric lowest", {
 
 test_that("convert factor to numeric", {
   f <- factor(substring("statistics", 1:10, 1:10))
-  expect_snapshot(to_numeric(f))
+  expect_snapshot(to_numeric(f, dummy_factors = TRUE))
 })
 
 test_that("convert factor to numeric", {
@@ -67,12 +67,12 @@ test_that("convert factor to numeric, dummy factors", {
 test_that("convert factor to numeric, append", {
   data(efc)
   expect_identical(
-    colnames(to_numeric(efc)),
+    colnames(to_numeric(efc, dummy_factors = TRUE)),
     c("c12hour", "e16sex", "e42dep.1", "e42dep.2", "e42dep.3", "e42dep.4", "c172code", "neg_c_7"),
     ignore_attr = TRUE
   )
   expect_identical(
-    colnames(to_numeric(efc, append = TRUE)),
+    colnames(to_numeric(efc, dummy_factors = TRUE, append = TRUE)),
     c(
       "c12hour", "e16sex", "e42dep", "c172code", "neg_c_7", "e42dep_n",
       "e42dep_n.1", "e42dep_n.2", "e42dep_n.3", "e42dep_n.4"
