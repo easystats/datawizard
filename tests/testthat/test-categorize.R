@@ -1,5 +1,5 @@
 set.seed(123)
-d <- sample(1:10, size = 500, replace = TRUE)
+d <- sample.int(10, size = 500, replace = TRUE)
 
 test_that("recode median", {
   expect_identical(categorize(d), ifelse(d >= median(d), 2, 1))
@@ -22,7 +22,7 @@ test_that("recode quantile", {
 })
 
 set.seed(123)
-d <- sample(1:100, size = 1000, replace = TRUE)
+d <- sample.int(100, size = 1000, replace = TRUE)
 
 test_that("recode range", {
   expect_error(categorize(d, split = "range"))
@@ -84,7 +84,7 @@ test_that("recode length", {
 })
 
 set.seed(123)
-x <- sample(1:10, size = 30, replace = TRUE)
+x <- sample.int(10, size = 30, replace = TRUE)
 test_that("recode factor labels", {
   expect_type(categorize(x, "equal_length", n_groups = 3), "double")
   expect_s3_class(categorize(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high")), "factor")

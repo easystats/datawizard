@@ -394,19 +394,18 @@ categorize.grouped_df <- function(x,
     } else if (length(labels) == 1 && labels %in% c("mean", "median", "range", "observed")) {
       original_x <- as.factor(original_x)
       no_na_x <- original_x[!is.na(original_x)]
-      if (labels == "mean") {
-        labels <- stats::aggregate(x, list(no_na_x), FUN = mean, na.rm = TRUE)$x
-      } else if (labels == "median") {
-        labels <- stats::aggregate(x, list(no_na_x), FUN = stats::median, na.rm = TRUE)$x
-      } else if (labels == "range") {
+      out <- switch(labels,
+        mean = stats::aggregate(x, list(no_na_x), FUN = mean, na.rm = TRUE)$x,
+        median = stats::aggregate(x, list(no_na_x), FUN = stats::median, na.rm = TRUE)$x,
         # labels basically like what "cut()" returns
-        labels <- levels(cut_result)
-      } else {
+        range = levels(cut_result),
         # range based on the values that are actually present in the data
-        temp <- stats::aggregate(x, list(no_na_x), FUN = range, na.rm = TRUE)$x
-        labels <- apply(temp, 1, function(i) paste0("(", paste(as.vector(i), collapse = "-"), ")"))
-      }
-      levels(original_x) <- insight::format_value(labels, ...)
+        {
+          temp <- stats::aggregate(x, list(no_na_x), FUN = range, na.rm = TRUE)$x
+          apply(temp, 1, function(i) paste0("(", paste(as.vector(i), collapse = "-"), ")"))
+        }
+      )
+      levels(original_x) <- insight::format_value(out, ...)
     } else if (isTRUE(verbose)) {
       insight::format_warning(
         "Argument `labels` and levels of the recoded variable are not of the same length.",
