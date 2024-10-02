@@ -18,6 +18,13 @@ CHANGES
   case, names are used as values for the `replacement` argument (i.e. `pattern`
   can be a character vector using `<new name> = "<old name>"`).
 
+* `categorize()` gains a new `breaks` argument, to decide whether breaks are
+  inclusive or exclusive (#548).
+
+* The `labels` argument in `categorize()` gets two new options, `"range"` and
+  `"observed"`, to use the range of categorized values as labels (i.e. factor
+  levels) (#548).
+
 * Minor additions to `reshape_ci()` to work with forthcoming changes in the
   `{bayestestR}` package.
 
