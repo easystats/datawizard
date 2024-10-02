@@ -31,6 +31,10 @@
 #'   for numeric variables, the minimum of the original input is preserved. For
 #'   factors, the default minimum is `1`. For `split = "equal_range"`, the
 #'   default minimum is always `1`, unless specified otherwise in `lowest`.
+#' @param breaks Character, indicating whether breaks for categorizing data are
+#'   `"inclusive"` (values indicate the _upper_ bound of the _previous_ group or
+#'   interval) or `"exclusive"` (values indicate the _lower_ bound of the _next_
+#'   group or interval to begin.)
 #' @param labels Character vector of value labels. If not `NULL`, `categorize()`
 #'   will returns factors instead of numeric variables, with `labels` used
 #'   for labelling the factor levels. Can also be `"mean"`, `"median"`,
@@ -56,7 +60,7 @@
 #'
 #' # Splits and breaks (cut-off values)
 #'
-#' Breaks are in general _exclusive_, this means that these values indicate
+#' Breaks are by default _exclusive_, this means that these values indicate
 #' the lower bound of the next group or interval to begin. Take a simple
 #' example, a numeric variable with values from 1 to 9. The median would be 5,
 #' thus the first interval ranges from 1-4 and is recoded into 1, while 5-9
@@ -65,6 +69,9 @@
 #' and 6.33 (see `quantile(1:9, probs = c(1/3, 2/3))`), which means that values
 #' from 1 to 3 belong to the first interval and are recoded into 1 (because
 #' the next interval starts at 3.67), 4 to 6 into 2 and 7 to 9 into 3.
+#'
+#' The opposite behaviour can be achieved using `breaks = "inclusive"`, in which
+#' case
 #'
 #' # Recoding into groups with equal size or range
 #'
@@ -152,6 +159,7 @@ categorize.numeric <- function(x,
                                n_groups = NULL,
                                range = NULL,
                                lowest = 1,
+                               breaks = "exclusive",
                                labels = NULL,
                                verbose = TRUE,
                                ...) {
@@ -161,6 +169,9 @@ categorize.numeric <- function(x,
   # handle aliases
   if (identical(split, "equal_length")) split <- "length"
   if (identical(split, "equal_range")) split <- "range"
+
+  # check for valid values
+  breaks <- match.arg(breaks, c("exclusive", "inclusive"))
 
   # save
   original_x <- x
@@ -179,9 +190,9 @@ categorize.numeric <- function(x,
   }
 
   if (is.numeric(split)) {
-    breaks <- split
+    category_splits <- split
   } else {
-    breaks <- switch(split,
+    category_splits <- switch(split,
       median = stats::median(x),
       mean = mean(x),
       length = n_groups,
@@ -192,14 +203,16 @@ categorize.numeric <- function(x,
   }
 
   # complete ranges, including minimum and maximum
-  if (!identical(split, "length")) breaks <- unique(c(min(x), breaks, max(x)))
+  if (!identical(split, "length")) {
+    category_splits <- unique(c(min(x), category_splits, max(x)))
+  }
 
   # recode into groups
   out <- droplevels(cut(
     x,
-    breaks = breaks,
+    breaks = category_splits,
     include.lowest = TRUE,
-    right = FALSE
+    right = identical(breaks, "inclusive")
   ))
   cut_result <- out
   levels(out) <- 1:nlevels(out)
@@ -234,6 +247,7 @@ categorize.data.frame <- function(x,
                                   n_groups = NULL,
                                   range = NULL,
                                   lowest = 1,
+                                  breaks = "exclusive",
                                   labels = NULL,
                                   append = FALSE,
                                   ignore_case = FALSE,
@@ -271,6 +285,7 @@ categorize.data.frame <- function(x,
     n_groups = n_groups,
     range = range,
     lowest = lowest,
+    breaks = breaks,
     labels = labels,
     verbose = verbose,
     ...
@@ -287,6 +302,7 @@ categorize.grouped_df <- function(x,
                                   n_groups = NULL,
                                   range = NULL,
                                   lowest = 1,
+                                  breaks = "exclusive",
                                   labels = NULL,
                                   append = FALSE,
                                   ignore_case = FALSE,
@@ -330,6 +346,7 @@ categorize.grouped_df <- function(x,
       n_groups = n_groups,
       range = range,
       lowest = lowest,
+      breaks = breaks,
       labels = labels,
       select = select,
       exclude = exclude,

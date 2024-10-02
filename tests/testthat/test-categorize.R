@@ -240,4 +240,5 @@ test_that("categorize labelling ranged", {
   expect_snapshot(categorize(mtcars$mpg, "equal_length", n_groups = 5))
   expect_snapshot(categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "range"))
   expect_snapshot(categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "observed"))
+  expect_snapshot(categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "observed", breaks = "inclusive"))
 })
