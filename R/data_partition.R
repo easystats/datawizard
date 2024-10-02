@@ -49,7 +49,6 @@ data_partition <- function(data,
                            seed = NULL,
                            row_id = ".row_id",
                            verbose = TRUE,
-                           group = NULL,
                            ...) {
   # validation checks
   data <- .coerce_to_dataframe(data)

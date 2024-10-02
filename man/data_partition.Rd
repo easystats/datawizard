@@ -11,7 +11,6 @@ data_partition(
   seed = NULL,
   row_id = ".row_id",
   verbose = TRUE,
-  group = NULL,
   ...
 )
 }
