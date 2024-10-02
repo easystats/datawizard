@@ -111,7 +111,6 @@ coef_var.default <- function(x, verbose = TRUE, ...) {
 coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
                              method = c("standard", "unbiased", "median_mad", "qcd"),
                              trim = 0, remove_na = FALSE, n = NULL, ...) {
-
   # TODO: Support weights
   if (!missing(x) && all(c(-1, 1) %in% sign(x))) {
     insight::format_error("Coefficient of variation only applicable for ratio scale variables.")

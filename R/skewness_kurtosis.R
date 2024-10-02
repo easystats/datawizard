@@ -111,7 +111,6 @@ skewness.numeric <- function(x,
                              iterations = NULL,
                              verbose = TRUE,
                              ...) {
-
   if (remove_na) x <- x[!is.na(x)]
   n <- length(x)
   out <- (sum((x - mean(x))^3) / n) / (sum((x - mean(x))^2) / n)^1.5
@@ -171,7 +170,6 @@ skewness.matrix <- function(x,
                             type = "2",
                             iterations = NULL,
                             ...) {
-
   .skewness <- apply(
     x,
     2,
@@ -220,7 +218,6 @@ skewness.default <- function(x,
                              type = "2",
                              iterations = NULL,
                              ...) {
-
   skewness(
     .factor_to_numeric(x),
     remove_na = remove_na,
@@ -348,7 +345,6 @@ kurtosis.default <- function(x,
                              type = "2",
                              iterations = NULL,
                              ...) {
-
   kurtosis(
     .factor_to_numeric(x),
     remove_na = remove_na,

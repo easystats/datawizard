@@ -60,7 +60,7 @@ means_by_group.numeric <- function(x,
                                    weights = NULL,
                                    digits = NULL,
                                    ...) {
-   # validation check for arguments
+  # validation check for arguments
 
   # "by" must be provided
   if (is.null(by)) {
