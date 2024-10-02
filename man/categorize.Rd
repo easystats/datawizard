@@ -69,8 +69,11 @@ default minimum is always \code{1}, unless specified otherwise in \code{lowest}.
 
 \item{labels}{Character vector of value labels. If not \code{NULL}, \code{categorize()}
 will returns factors instead of numeric variables, with \code{labels} used
-for labelling the factor levels. Can also be \code{"mean"} or \code{"median"} for a
-factor with labels as the mean/median of each groups.}
+for labelling the factor levels. Can also be \code{"mean"}, \code{"median"},
+\code{"range"} or \code{"observed"} for a factor with labels as the mean/median,
+the requested range (even if not all values of that range are present in
+the data) or observed range (range of the actual recoded values) of each
+group. See 'Examples'.}
 
 \item{verbose}{Toggle warnings.}
 

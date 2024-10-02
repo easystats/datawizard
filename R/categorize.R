@@ -33,8 +33,11 @@
 #'   default minimum is always `1`, unless specified otherwise in `lowest`.
 #' @param labels Character vector of value labels. If not `NULL`, `categorize()`
 #'   will returns factors instead of numeric variables, with `labels` used
-#'   for labelling the factor levels. Can also be `"mean"` or `"median"` for a
-#'   factor with labels as the mean/median of each groups.
+#'   for labelling the factor levels. Can also be `"mean"`, `"median"`,
+#'   `"range"` or `"observed"` for a factor with labels as the mean/median,
+#'   the requested range (even if not all values of that range are present in
+#'   the data) or observed range (range of the actual recoded values) of each
+#'   group. See 'Examples'.
 #' @param append Logical or string. If `TRUE`, recoded or converted variables
 #'   get new column names and are appended (column bind) to `x`, thus returning
 #'   both the original and the recoded variables. The new columns get a suffix,
@@ -191,6 +194,7 @@ categorize.numeric <- function(x,
     include.lowest = TRUE,
     right = FALSE
   ))
+  cut_result <- out
   levels(out) <- 1:nlevels(out)
 
   # fix lowest value, add back into original vector
@@ -201,7 +205,7 @@ categorize.numeric <- function(x,
   original_x[!is.na(original_x)] <- out
 
   # turn into factor?
-  .original_x_to_factor(original_x, x, labels, out, verbose, ...)
+  .original_x_to_factor(original_x, x, cut_result, labels, out, verbose, ...)
 }
 
 
@@ -375,18 +379,25 @@ categorize.grouped_df <- function(x,
 }
 
 
-.original_x_to_factor <- function(original_x, x, labels, out, verbose, ...) {
+.original_x_to_factor <- function(original_x, x, cut_result, labels, out, verbose, ...) {
   if (!is.null(labels)) {
     if (length(labels) == length(unique(out))) {
       original_x <- as.factor(original_x)
       levels(original_x) <- labels
-    } else if (length(labels) == 1 && labels %in% c("mean", "median")) {
+    } else if (length(labels) == 1 && labels %in% c("mean", "median", "range", "observed")) {
       original_x <- as.factor(original_x)
       no_na_x <- original_x[!is.na(original_x)]
       if (labels == "mean") {
         labels <- stats::aggregate(x, list(no_na_x), FUN = mean, na.rm = TRUE)$x
-      } else {
+      } else if (labels == "median") {
         labels <- stats::aggregate(x, list(no_na_x), FUN = stats::median, na.rm = TRUE)$x
+      } else if (labels == "range") {
+        # labels basically like what "cut()" returns
+        labels <- levels(cut_result)
+      } else {
+        # range based on the values that are actually present in the data
+        temp <- stats::aggregate(x, list(no_na_x), FUN = range, na.rm = TRUE)$x
+        labels <- apply(temp, 1, function(i) paste0("(", paste(as.vector(i), collapse = "-"), ")"))
       }
       levels(original_x) <- insight::format_value(labels, ...)
     } else if (isTRUE(verbose)) {
