@@ -73,7 +73,7 @@ variables into factors is <code><a href="to_factor.html">to_factor()</a></code>.
 <span>  <span class="va">x</span>,</span>
 <span>  select <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  exclude <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  dummy_factors <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  dummy_factors <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  preserve_levels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  lowest <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  append <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -188,11 +188,11 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>By default, <code>to_numeric()</code> converts factors into "binary" dummies, i.e.
+    <p>When factors should be converted into multiple "binary" dummies, i.e.
 each factor level is converted into a separate column filled with a binary
-0-1 value. If only one column is required, use <code>dummy_factors = FALSE</code>. If
-you want to preserve the original factor levels (in case these represent
-numeric values), use <code>preserve_levels = TRUE</code>.</p>
+0-1 value, set <code>dummy_factors = TRUE</code>. If you want to preserve the original
+factor levels (in case these represent numeric values), use
+<code>preserve_levels = TRUE</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="selection-of-variables-select-argument">Selection of variables - <code>select</code> argument<a class="anchor" aria-label="anchor" href="#selection-of-variables-select-argument"></a></h2>
@@ -210,14 +210,6 @@ to also include the original variables in the returned data frame.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">to_numeric</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ToothGrowth</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    len supp.OJ supp.VC dose</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  4.2       0       1  0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 11.5       0       1  0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  7.3       0       1  0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  5.8       0       1  0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  6.4       0       1  0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 10.0       0       1  0.5</span>
-<span class="r-in"><span><span class="fu">to_numeric</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ToothGrowth</span><span class="op">)</span>, dummy_factors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    len supp dose</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  4.2    2  0.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 11.5    2  0.5</span>
@@ -225,12 +217,20 @@ to also include the original variables in the returned data frame.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  5.8    2  0.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  6.4    2  0.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 10.0    2  0.5</span>
+<span class="r-in"><span><span class="fu">to_numeric</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ToothGrowth</span><span class="op">)</span>, dummy_factors <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    len supp.OJ supp.VC dose</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  4.2       0       1  0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 11.5       0       1  0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  7.3       0       1  0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  5.8       0       1  0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  6.4       0       1  0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 10.0       0       1  0.5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># factors</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">to_numeric</span><span class="op">(</span><span class="va">x</span>, dummy_factors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">to_numeric</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 2 2 2 1 1 1 1 2 2 2 2 1 1 1 1 1 1 2 2 2 1 1 1 1 1 2 3 3 3 3 3 2</span>
-<span class="r-in"><span><span class="fu">to_numeric</span><span class="op">(</span><span class="va">x</span>, dummy_factors <span class="op">=</span> <span class="cn">FALSE</span>, preserve_levels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">to_numeric</span><span class="op">(</span><span class="va">x</span>, preserve_levels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 4 4 4 3 3 3 3 4 4 4 4 3 3 3 3 3 3 4 4 4 3 3 3 3 3 4 5 5 5 5 5 4</span>
 <span class="r-in"><span><span class="co"># same as:</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="coerce_to_numeric.html">coerce_to_numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
