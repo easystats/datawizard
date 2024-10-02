@@ -9,6 +9,9 @@ BREAKING CHANGES
 
 * Removed deprecated arguments `group` and `na.rm` in multiple functions. Use `by` and `remove_na` instead (#546).
 
+* The default value for the argument `dummy_factors` in `to_numeric()` has
+  changed from `TRUE` to `FALSE` (#544).
+
 CHANGES
 
 * The `pattern` argument in `data_rename()` can also be a named vector. In this
