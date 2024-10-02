@@ -34,7 +34,8 @@
 #' @param breaks Character, indicating whether breaks for categorizing data are
 #'   `"inclusive"` (values indicate the _upper_ bound of the _previous_ group or
 #'   interval) or `"exclusive"` (values indicate the _lower_ bound of the _next_
-#'   group or interval to begin.)
+#'   group or interval to begin). Use `labels = "range"` to make this behaviour
+#'   easier to see.
 #' @param labels Character vector of value labels. If not `NULL`, `categorize()`
 #'   will returns factors instead of numeric variables, with `labels` used
 #'   for labelling the factor levels. Can also be `"mean"`, `"median"`,

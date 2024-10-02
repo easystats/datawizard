@@ -72,7 +72,8 @@ default minimum is always \code{1}, unless specified otherwise in \code{lowest}.
 \item{breaks}{Character, indicating whether breaks for categorizing data are
 \code{"inclusive"} (values indicate the \emph{upper} bound of the \emph{previous} group or
 interval) or \code{"exclusive"} (values indicate the \emph{lower} bound of the \emph{next}
-group or interval to begin.)}
+group or interval to begin). Use \code{labels = "range"} to make this behaviour
+easier to see.}
 
 \item{labels}{Character vector of value labels. If not \code{NULL}, \code{categorize()}
 will returns factors instead of numeric variables, with \code{labels} used
