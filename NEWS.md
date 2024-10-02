@@ -1,7 +1,5 @@
 # datawizard 0.13.0
 
-# datawizard (development)
-
 BREAKING CHANGES
 
 * `data_rename()` now errors when the `replacement` argument contains `NA` values
