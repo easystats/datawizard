@@ -240,5 +240,13 @@ test_that("categorize labelling ranged", {
   expect_snapshot(categorize(mtcars$mpg, "equal_length", n_groups = 5))
   expect_snapshot(categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "range"))
   expect_snapshot(categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "observed"))
+})
+
+test_that("categorize breaks", {
+  data(mtcars)
   expect_snapshot(categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "observed", breaks = "inclusive"))
+  expect_error(
+    categorize(mtcars$mpg, "equal_length", n_groups = 5, breaks = "something"),
+    regex = "should be one of"
+  )
 })
