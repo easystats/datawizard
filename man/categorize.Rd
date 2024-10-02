@@ -220,6 +220,13 @@ categorize(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high"))
 x <- sample(1:10, size = 30, replace = TRUE)
 categorize(x, "equal_length", n_groups = 3, labels = "mean")
 categorize(x, "equal_length", n_groups = 3, labels = "median")
+
+# cut numeric into groups with the requested range as a label name
+# each category has the same range, and labels indicate this range
+categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "range")
+# in this example, each category has the same range, but labels only refer
+# to the ranges of the actual values (present in the data) inside each group
+categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "observed")
 }
 \seealso{
 \itemize{

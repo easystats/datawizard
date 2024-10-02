@@ -232,3 +232,12 @@ test_that("categorize regex", {
     categorize(mtcars, select = "mpg")
   )
 })
+
+
+# select helpers ------------------------------
+test_that("categorize labelling ranged", {
+  data(mtcars)
+  expect_snapshot(categorize(mtcars$mpg, "equal_length", n_groups = 5))
+  expect_snapshot(categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "range"))
+  expect_snapshot(categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "observed"))
+})
