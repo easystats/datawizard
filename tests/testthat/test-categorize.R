@@ -1,5 +1,5 @@
 set.seed(123)
-d <- sample(1:10, size = 500, replace = TRUE)
+d <- sample.int(10, size = 500, replace = TRUE)
 
 test_that("recode median", {
   expect_identical(categorize(d), ifelse(d >= median(d), 2, 1))
@@ -22,7 +22,7 @@ test_that("recode quantile", {
 })
 
 set.seed(123)
-d <- sample(1:100, size = 1000, replace = TRUE)
+d <- sample.int(100, size = 1000, replace = TRUE)
 
 test_that("recode range", {
   expect_error(categorize(d, split = "range"))
@@ -84,7 +84,7 @@ test_that("recode length", {
 })
 
 set.seed(123)
-x <- sample(1:10, size = 30, replace = TRUE)
+x <- sample.int(10, size = 30, replace = TRUE)
 test_that("recode factor labels", {
   expect_type(categorize(x, "equal_length", n_groups = 3), "double")
   expect_s3_class(categorize(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high")), "factor")
@@ -230,5 +230,23 @@ test_that("categorize regex", {
   expect_identical(
     categorize(mtcars, select = "pg", regex = TRUE),
     categorize(mtcars, select = "mpg")
+  )
+})
+
+
+# labelling ranges ------------------------------
+test_that("categorize labelling ranged", {
+  data(mtcars)
+  expect_snapshot(categorize(mtcars$mpg, "equal_length", n_groups = 5))
+  expect_snapshot(categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "range"))
+  expect_snapshot(categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "observed"))
+})
+
+test_that("categorize breaks", {
+  data(mtcars)
+  expect_snapshot(categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "range", breaks = "inclusive"))
+  expect_error(
+    categorize(mtcars$mpg, "equal_length", n_groups = 5, breaks = "something"),
+    regex = "should be one of"
   )
 })
