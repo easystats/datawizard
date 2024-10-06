@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.3.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,19 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.13.0" id="datawizard-0130">datawizard 0.13.0<a class="anchor" aria-label="anchor" href="#datawizard-0130"></a></h2><p class="text-muted">CRAN release: 2024-10-05</p>
+<p>BREAKING CHANGES</p>
+<ul><li><p><code><a href="../reference/data_rename.html">data_rename()</a></code> now errors when the <code>replacement</code> argument contains <code>NA</code> values or empty strings (<a href="https://github.com/easystats/datawizard/issues/539" class="external-link">#539</a>).</p></li>
+<li><p>Removed deprecated functions <code>get_columns()</code>, <code>data_find()</code>, <code>format_text()</code> (<a href="https://github.com/easystats/datawizard/issues/546" class="external-link">#546</a>).</p></li>
+<li><p>Removed deprecated arguments <code>group</code> and <code>na.rm</code> in multiple functions. Use <code>by</code> and <code>remove_na</code> instead (<a href="https://github.com/easystats/datawizard/issues/546" class="external-link">#546</a>).</p></li>
+<li><p>The default value for the argument <code>dummy_factors</code> in <code><a href="../reference/to_numeric.html">to_numeric()</a></code> has changed from <code>TRUE</code> to <code>FALSE</code> (<a href="https://github.com/easystats/datawizard/issues/544" class="external-link">#544</a>).</p></li>
+</ul><p>CHANGES</p>
+<ul><li><p>The <code>pattern</code> argument in <code><a href="../reference/data_rename.html">data_rename()</a></code> can also be a named vector. In this case, names are used as values for the <code>replacement</code> argument (i.e. <code>pattern</code> can be a character vector using <code>&lt;new name&gt; = "&lt;old name&gt;"</code>).</p></li>
+<li><p><code><a href="../reference/categorize.html">categorize()</a></code> gains a new <code>breaks</code> argument, to decide whether breaks are inclusive or exclusive (<a href="https://github.com/easystats/datawizard/issues/548" class="external-link">#548</a>).</p></li>
+<li><p>The <code>labels</code> argument in <code><a href="../reference/categorize.html">categorize()</a></code> gets two new options, <code>"range"</code> and <code>"observed"</code>, to use the range of categorized values as labels (i.e. factor levels) (<a href="https://github.com/easystats/datawizard/issues/548" class="external-link">#548</a>).</p></li>
+<li><p>Minor additions to <code><a href="../reference/reshape_ci.html">reshape_ci()</a></code> to work with forthcoming changes in the <a href="https://easystats.github.io/bayestestR/" class="external-link">bayestestR</a> package.</p></li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.12.3" id="datawizard-0123">datawizard 0.12.3<a class="anchor" aria-label="anchor" href="#datawizard-0123"></a></h2><p class="text-muted">CRAN release: 2024-09-02</p>
 <p>CHANGES</p>
 <ul><li><p><code><a href="../reference/demean.html">demean()</a></code> (and <code><a href="../reference/demean.html">degroup()</a></code>) now also work for nested designs, if argument <code>nested = TRUE</code> and <code>by</code> specifies more than one variable (<a href="https://github.com/easystats/datawizard/issues/533" class="external-link">#533</a>).</p></li>
@@ -92,11 +105,11 @@
 <li>
 <p>Following aliases are deprecated and will be removed in a future release (<a href="https://github.com/easystats/datawizard/issues/504" class="external-link">#504</a>):</p>
 <ul><li>
-<code><a href="../reference/extract_column_names.html">get_columns()</a></code>, use <code><a href="../reference/extract_column_names.html">data_select()</a></code> instead.</li>
+<code>get_columns()</code>, use <code><a href="../reference/extract_column_names.html">data_select()</a></code> instead.</li>
 <li>
-<code><a href="../reference/extract_column_names.html">data_find()</a></code> and <code><a href="../reference/extract_column_names.html">find_columns()</a></code>, use <code><a href="../reference/extract_column_names.html">extract_column_names()</a></code> instead.</li>
+<code>data_find()</code> and <code><a href="../reference/extract_column_names.html">find_columns()</a></code>, use <code><a href="../reference/extract_column_names.html">extract_column_names()</a></code> instead.</li>
 <li>
-<code><a href="../reference/text_format.html">format_text()</a></code>, use <code><a href="../reference/text_format.html">text_format()</a></code> instead.</li>
+<code>format_text()</code>, use <code><a href="../reference/text_format.html">text_format()</a></code> instead.</li>
 </ul></li>
 </ul><p>CHANGES</p>
 <ul><li><p><code><a href="../reference/recode_into.html">recode_into()</a></code> is more relaxed regarding checking the type of <code>NA</code> values. If you recode into a numeric variable, and one of the recode values is <code>NA</code>, you no longer need to use <code>NA_real_</code> for numeric <code>NA</code> values.</p></li>
@@ -286,8 +299,8 @@
 <ul><li><p>The minimum needed R version has been bumped to <code>3.6</code>.</p></li>
 <li><p>Following deprecated functions have been removed:</p></li>
 </ul><p><code>data_cut()</code>, <code>data_recode()</code>, <code>data_shift()</code>, <code>data_reverse()</code>, <code>data_rescale()</code>, <code>data_to_factor()</code>, <code>data_to_numeric()</code></p>
-<ul><li><p>New <code><a href="../reference/text_format.html">text_format()</a></code> alias is introduced for <code><a href="../reference/text_format.html">format_text()</a></code>, latter of which will be removed in the next release.</p></li>
-<li><p>New <code><a href="../reference/recode_values.html">recode_values()</a></code> alias is introduced for <code><a href="../reference/recode_values.html">change_code()</a></code>, latter of which will be removed in the next release.</p></li>
+<ul><li><p>New <code><a href="../reference/text_format.html">text_format()</a></code> alias is introduced for <code>format_text()</code>, latter of which will be removed in the next release.</p></li>
+<li><p>New <code><a href="../reference/recode_values.html">recode_values()</a></code> alias is introduced for <code>change_code()</code>, latter of which will be removed in the next release.</p></li>
 <li><p><code><a href="../reference/data_merge.html">data_merge()</a></code> now errors if columns specified in <code>by</code> are not in both datasets.</p></li>
 <li><p>Using negative values in arguments <code>select</code> and <code>exclude</code> now removes the columns from the selection/exclusion. The previous behavior was to start the selection/exclusion from the end of the dataset, which was inconsistent with the use of “-” with other selecting possibilities.</p></li>
 </ul><p>NEW FUNCTIONS</p>
@@ -323,7 +336,7 @@
 <ul><li>
 <p>Following statistical transformation functions have been renamed to not have <code>data_*()</code> prefix, since they do not work exclusively with data frames, but are typically first of all used with vectors, and therefore had misleading names:</p>
 <ul><li><p><code>data_cut()</code> -&gt; <code><a href="../reference/categorize.html">categorize()</a></code></p></li>
-<li><p><code>data_recode()</code> -&gt; <code><a href="../reference/recode_values.html">change_code()</a></code></p></li>
+<li><p><code>data_recode()</code> -&gt; <code>change_code()</code></p></li>
 <li><p><code>data_shift()</code> -&gt; <code><a href="../reference/slide.html">slide()</a></code></p></li>
 <li><p><code>data_reverse()</code> -&gt; <code><a href="../reference/reverse.html">reverse()</a></code></p></li>
 <li><p><code>data_rescale()</code> -&gt; <code><a href="../reference/rescale.html">rescale()</a></code></p></li>
@@ -332,7 +345,7 @@
 </ul></li>
 </ul><p>Note that these functions also have <code>.data.frame()</code> methods and still work for data frames as well. Former function names are still available as aliases, but will be deprecated and removed in a future release.</p>
 <ul><li><p>Bumps the needed minimum R version to <code>3.5</code>.</p></li>
-<li><p>Removed deprecated function <code>data_findcols()</code>. Please use its replacement, <code><a href="../reference/extract_column_names.html">data_find()</a></code>.</p></li>
+<li><p>Removed deprecated function <code>data_findcols()</code>. Please use its replacement, <code>data_find()</code>.</p></li>
 <li><p>Removed alias <code><a href="https://tidyr.tidyverse.org/reference/extract.html" class="external-link">extract()</a></code> for <code><a href="../reference/data_extract.html">data_extract()</a></code> function since it collided with <code><a href="https://tidyr.tidyverse.org/reference/extract.html" class="external-link">tidyr::extract()</a></code>.</p></li>
 <li><p>Argument <code>training_proportion</code> in <code><a href="../reference/data_partition.html">data_partition()</a></code> is deprecated. Please use <code>proportion</code> now.</p></li>
 <li><p>Given his continued and significant contributions to the package, Etienne Bacher (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>) is now included as an author.</p></li>
@@ -365,7 +378,7 @@
 <li><p><code><a href="../reference/normalize.html">unnormalize()</a></code> as counterpart to <code><a href="../reference/normalize.html">normalize()</a></code>. This function only works for variables that have been normalized with <code><a href="../reference/normalize.html">normalize()</a></code>.</p></li>
 <li><p><code><a href="../reference/data_group.html">data_group()</a></code> and <code><a href="../reference/data_group.html">data_ungroup()</a></code> to create grouped data frames, or to remove the grouping information from grouped data frames.</p></li>
 </ul><p>CHANGES</p>
-<ul><li><p><code><a href="../reference/extract_column_names.html">data_find()</a></code> was added as alias to <code>find_colums()</code>, to have consistent name patterns for the <strong>datawizard</strong> functions. <code>data_findcols()</code> will be removed in a future update and usage is discouraged.</p></li>
+<ul><li><p><code>data_find()</code> was added as alias to <code>find_colums()</code>, to have consistent name patterns for the <strong>datawizard</strong> functions. <code>data_findcols()</code> will be removed in a future update and usage is discouraged.</p></li>
 <li><p>The <code>select</code> argument (and thus, also the <code>exclude</code> argument) now also accepts functions testing for logical conditions, e.g. <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric()</a></code> (or <code>is.numeric</code>), or any user-defined function that selects the variables for which the function returns <code>TRUE</code> (like: <code>foo &lt;- function(x) mean(x) &gt; 3</code>).</p></li>
 <li><p>Arguments <code>select</code> and <code>exclude</code> now allow the negation of select-helpers, like <code>-ends_with("")</code>, <code>-is.numeric</code> or <code>-Sepal.Width:Petal.Length</code>.</p></li>
 <li><p>Many functions now get a <code>.default</code> method, to capture unsupported classes. This now yields a message and returns the original input, and hence, the <code>.data.frame</code> methods won’t stop due to an error.</p></li>
@@ -381,11 +394,11 @@
 <p>MAJOR CHANGES</p>
 <ul><li><p><code><a href="../reference/data_match.html">data_match()</a></code> now returns filtered data by default. Old behavior (returning rows indices) can be set by setting <code>return_indices = TRUE</code>.</p></li>
 <li><p>The following functions are now re-exported from <a href="https://easystats.github.io/insight/" class="external-link">insight</a> package: <code>object_has_names()</code>, <code>object_has_rownames()</code>, <code>is_empty_object()</code>, <code>compact_list()</code>, <code>compact_character()</code></p></li>
-<li><p><code>data_findcols()</code> will become deprecated in future updates. Please use the new replacements <code><a href="../reference/extract_column_names.html">find_columns()</a></code> and <code><a href="../reference/extract_column_names.html">get_columns()</a></code>.</p></li>
+<li><p><code>data_findcols()</code> will become deprecated in future updates. Please use the new replacements <code><a href="../reference/extract_column_names.html">find_columns()</a></code> and <code>get_columns()</code>.</p></li>
 <li><p>The vignette <em>Analysing Longitudinal or Panel Data</em> has now moved to <a href="https://easystats.github.io/parameters/articles/demean.html" class="external-link">parameters package</a>.</p></li>
 </ul><p>NEW FUNCTIONS</p>
 <ul><li><p>To convert rownames to a column, and <em>vice versa</em>: <code><a href="../reference/rownames.html">rownames_as_column()</a></code> and <code><a href="../reference/rownames.html">column_as_rownames()</a></code> (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/80" class="external-link">#80</a>).</p></li>
-<li><p><code><a href="../reference/extract_column_names.html">find_columns()</a></code> and <code><a href="../reference/extract_column_names.html">get_columns()</a></code> to find column names or retrieve subsets of data frames, based on various select-methods (including select-helpers). These function will supersede <code>data_findcols()</code> in the future.</p></li>
+<li><p><code><a href="../reference/extract_column_names.html">find_columns()</a></code> and <code>get_columns()</code> to find column names or retrieve subsets of data frames, based on various select-methods (including select-helpers). These function will supersede <code>data_findcols()</code> in the future.</p></li>
 <li><p><code><a href="../reference/data_match.html">data_filter()</a></code> as complement for <code><a href="../reference/data_match.html">data_match()</a></code>, which works with logical expressions for filtering rows of data frames.</p></li>
 <li><p>For computing weighted centrality measures and dispersion: <code><a href="../reference/weighted_mean.html">weighted_mean()</a></code>, <code><a href="../reference/weighted_mean.html">weighted_median()</a></code>, <code><a href="../reference/weighted_mean.html">weighted_sd()</a></code> and <code><a href="../reference/weighted_mean.html">weighted_mad()</a></code>.</p></li>
 <li><p>To replace <code>NA</code> in vectors and dataframes: <code><a href="../reference/convert_na_to.html">convert_na_to()</a></code> (<a href="https://github.com/etiennebacher" class="external-link">@etiennebacher</a>, <a href="https://github.com/easystats/datawizard/issues/111" class="external-link">#111</a>).</p></li>

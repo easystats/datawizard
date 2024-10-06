@@ -19,7 +19,7 @@ models, which then can be used for multilevel modelling."><meta property="og:ima
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.3.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,7 @@ models, which then can be used for multilevel modelling.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rescale_weights</span><span class="op">(</span><span class="va">data</span>, <span class="va">by</span>, <span class="va">probability_weights</span>, nest <span class="op">=</span> <span class="cn">FALSE</span>, group <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rescale_weights</span><span class="op">(</span><span class="va">data</span>, <span class="va">by</span>, <span class="va">probability_weights</span>, nest <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -106,10 +106,6 @@ sampling) weights of the survey data (level-1-weight).</p></dd>
 <dd><p>Logical, if <code>TRUE</code> and <code>by</code> indicates at least two
 group variables, then groups are "nested", i.e. groups are now a
 combination from each group level of the variables in <code>by</code>.</p></dd>
-
-
-<dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
-<dd><p>Deprecated. Use <code>by</code> instead.</p></dd>
 
 </dl></div>
     <div class="section level2">
