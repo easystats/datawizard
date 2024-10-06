@@ -160,28 +160,6 @@ extract_column_names <- function(data,
   columns
 }
 
-
 #' @rdname extract_column_names
 #' @export
-data_find <- function(data,
-                      select = NULL,
-                      exclude = NULL,
-                      ignore_case = FALSE,
-                      regex = FALSE,
-                      verbose = TRUE,
-                      ...) {
-  insight::format_warning("Function `data_find()` is deprecated and will be removed in a future release. Please use `extract_column_names()` instead.") # nolint
-  extract_column_names(
-    data,
-    select = select,
-    exclude = exclude,
-    ignore_case = ignore_case,
-    regex = regex,
-    verbose = verbose,
-    ...
-  )
-}
-
-#' @rdname extract_column_names
-#' @export
-find_columns <- data_find
+find_columns <- extract_column_names

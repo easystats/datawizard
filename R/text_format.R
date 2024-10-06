@@ -42,15 +42,6 @@ text_format <- function(text, sep = ", ", last = " and ", width = NULL, enclose 
   text_wrap(text_concatenate(text, sep = sep, last = last, enclose = enclose), width = width)
 }
 
-## TODO Deprecate and remove alias later
-
-#' @rdname text_format
-#' @export
-format_text <- function(text, sep = ", ", last = " and ", width = NULL, enclose = NULL, ...) {
-  insight::format_warning("Function `format_text()` is deprecated and will be removed in a future release. Please use `text_format()` instead.") # nolint
-  text_format(text, sep = sep, last = last, width = width, enclose = enclose, ...)
-}
-
 #' @rdname text_format
 #' @export
 text_fullstop <- function(text) {

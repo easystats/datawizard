@@ -1,15 +1,29 @@
-# datawizard (development)
+# datawizard 0.13.0
 
 BREAKING CHANGES
 
 * `data_rename()` now errors when the `replacement` argument contains `NA` values
   or empty strings (#539).
 
+* Removed deprecated functions `get_columns()`, `data_find()`, `format_text()` (#546).
+
+* Removed deprecated arguments `group` and `na.rm` in multiple functions. Use `by` and `remove_na` instead (#546).
+
+* The default value for the argument `dummy_factors` in `to_numeric()` has
+  changed from `TRUE` to `FALSE` (#544).
+
 CHANGES
 
 * The `pattern` argument in `data_rename()` can also be a named vector. In this
   case, names are used as values for the `replacement` argument (i.e. `pattern`
   can be a character vector using `<new name> = "<old name>"`).
+
+* `categorize()` gains a new `breaks` argument, to decide whether breaks are
+  inclusive or exclusive (#548).
+
+* The `labels` argument in `categorize()` gets two new options, `"range"` and
+  `"observed"`, to use the range of categorized values as labels (i.e. factor
+  levels) (#548).
 
 * Minor additions to `reshape_ci()` to work with forthcoming changes in the
   `{bayestestR}` package.
