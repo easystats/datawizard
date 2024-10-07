@@ -186,7 +186,8 @@ describe_distribution.numeric <- function(x,
   # Confidence Intervals
   if (!is.null(ci)) {
     insight::check_if_installed("boot")
-    results <- tryCatch({
+    results <- tryCatch(
+      {
         boot::boot(
           data = x,
           statistic = .boot_distribution,
@@ -200,7 +201,7 @@ describe_distribution.numeric <- function(x,
           insight::format_warning(
             "When bootstrapping CIs, sample was too sparse to find TD. Returning NA for CIs."
           )
-          return(list(t = c(NA_real_, NA_real_)))
+          list(t = c(NA_real_, NA_real_))
         }
       }
     )
