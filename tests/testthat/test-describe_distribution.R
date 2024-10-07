@@ -290,7 +290,7 @@ test_that("describe_distribution formatting", {
 # other -----------------------------------
 
 test_that("return NA in CI if sample is too sparse", {
-  skip_if_not_install("bayestestR")
+  skip_if_not_installed("bayestestR")
   set.seed(123456)
   expect_warning(
     res <- describe_distribution(mtcars[mtcars$cyl == "6", ], wt, centrality = "map", ci = 0.95), #nolint
