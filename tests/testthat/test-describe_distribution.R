@@ -286,3 +286,15 @@ test_that("describe_distribution formatting", {
   x <- describe_distribution(iris$Sepal.Width, quartiles = TRUE)
   expect_snapshot(format(x))
 })
+
+# other -----------------------------------
+
+test_that("return NA in CI if sample is too sparse", {
+  set.seed(123456)
+  expect_warning(
+    res <- describe_distribution(mtcars[mtcars$cyl=="6",], wt, centrality = "map", ci = 0.95),
+    "When bootstrapping CIs, sample was too sparse to find TD"
+  )
+  expect_identical(res$CI_low, NA)
+  expect_identical(res$CI_high, NA)  
+})
