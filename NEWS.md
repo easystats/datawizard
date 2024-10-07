@@ -2,7 +2,7 @@
 
 BUG FIXES
 
-* `describe_distribution()` no longer errors if sample was too sparse to compute
+* `describe_distribution()` no longer errors if the sample was too sparse to compute
   CIs. Instead, it warns the user and returns `NA` (#550).
 
 # datawizard 0.13.0
