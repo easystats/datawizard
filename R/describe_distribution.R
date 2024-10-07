@@ -186,11 +186,24 @@ describe_distribution.numeric <- function(x,
   # Confidence Intervals
   if (!is.null(ci)) {
     insight::check_if_installed("boot")
-    results <- boot::boot(
-      data = x,
-      statistic = .boot_distribution,
-      R = iterations,
-      centrality = centrality
+    results <- tryCatch(
+      {
+        boot::boot(
+          data = x,
+          statistic = .boot_distribution,
+          R = iterations,
+          centrality = centrality
+        )
+      },
+      error = function(e) {
+        msg <- conditionMessage(e)
+        if (!is.null(msg) && msg == "sample is too sparse to find TD") {
+          insight::format_warning(
+            "When bootstrapping CIs, sample was too sparse to find TD. Returning NA for CIs."
+          )
+          list(t = c(NA_real_, NA_real_))
+        }
+      }
     )
     out_ci <- bayestestR::ci(results$t, ci = ci, verbose = FALSE)
     out <- cbind(out, data.frame(CI_low = out_ci$CI_low[1], CI_high = out_ci$CI_high[1]))
