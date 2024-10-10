@@ -162,10 +162,10 @@
       .warn_not_found(colon_vars, columns, colon_match, verbose)
       matches <- NA
     } else {
-      start <- match(colon_vars[1], columns)
-      end <- match(colon_vars[2], columns)
-      if (!is.na(start) && !is.na(end)) {
-        matches <- start:end
+      start_pos <- match(colon_vars[1], columns)
+      end_pos <- match(colon_vars[2], columns)
+      if (!is.na(start_pos) && !is.na(end_pos)) {
+        matches <- start_pos:end_pos
       } else {
         matches <- NA
       }
