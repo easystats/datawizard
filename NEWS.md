@@ -6,6 +6,9 @@ CHANGES
   variables, can now also be a character vector with quoted variable names,
   including a colon to indicate a range of several variables (e.g. `"cyl:gear"`).
 
+* New function `row_sums()`, to calculate row sums (optionally with minimum
+  amount of valid values), as complement to `row_means()`.
+
 BUG FIXES
 
 * `describe_distribution()` no longer errors if the sample was too sparse to compute

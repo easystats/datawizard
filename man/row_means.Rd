@@ -2,7 +2,8 @@
 % Please edit documentation in R/row_means.R
 \name{row_means}
 \alias{row_means}
-\title{Row means (optionally with minimum amount of valid values)}
+\alias{row_sums}
+\title{Row means or sums (optionally with minimum amount of valid values)}
 \usage{
 row_means(
   data,
@@ -15,9 +16,22 @@ row_means(
   remove_na = FALSE,
   verbose = TRUE
 )
+
+row_sums(
+  data,
+  select = NULL,
+  exclude = NULL,
+  min_valid = NULL,
+  digits = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  remove_na = FALSE,
+  verbose = TRUE
+)
 }
 \arguments{
-\item{data}{A data frame with at least two columns, where row means are applied.}
+\item{data}{A data frame with at least two columns, where row means or row
+sums are applied.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -60,9 +74,9 @@ excludes no columns.}
 \item{min_valid}{Optional, a numeric value of length 1. May either be
 \itemize{
 \item a numeric value that indicates the amount of valid values per row to
-calculate the row mean;
+calculate the row mean or row sum;
 \item or a value between \code{0} and \code{1}, indicating a proportion of valid values per
-row to calculate the row mean (see 'Details').
+row to calculate the row mean or row sum (see 'Details').
 \item \code{NULL} (default), in which all cases are considered.
 }
 
@@ -86,28 +100,31 @@ since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.}
 
 \item{remove_na}{Logical, if \code{TRUE} (default), removes missing (\code{NA}) values
-before calculating row means. Only applies if \code{min_valuid} is not specified.}
+before calculating row means or row sums. Only applies if \code{min_valid} is not
+specified.}
 
 \item{verbose}{Toggle warnings.}
 }
 \value{
-A vector with row means for those rows with at least \code{n} valid values.
+A vector with row means (for \code{row_means()}) or row sums (for
+\code{row_sums()}) for those rows with at least \code{n} valid values.
 }
 \description{
-This function is similar to the SPSS \code{MEAN.n} function and computes
-row means from a data frame or matrix if at least \code{min_valid} values of a row are
-valid (and not \code{NA}).
+This function is similar to the SPSS \code{MEAN.n} or \code{SUM.n}
+function and computes row means or row sums from a data frame or matrix if at
+least \code{min_valid} values of a row are valid (and not \code{NA}).
 }
 \details{
-Rounding to a negative number of \code{digits} means rounding to a power of
-ten, for example \code{row_means(df, 3, digits = -2)} rounds to the nearest hundred.
-For \code{min_valid}, if not \code{NULL}, \code{min_valid} must be a numeric value from \code{0}
-to \code{ncol(data)}. If a row in the data frame has at least \code{min_valid}
-non-missing values, the row mean is returned. If \code{min_valid} is a non-integer
-value from 0 to 1, \code{min_valid} is considered to indicate the proportion of
-required non-missing values per row. E.g., if \code{min_valid = 0.75}, a row must
-have at least \code{ncol(data) * min_valid} non-missing values for the row mean
-to be calculated. See 'Examples'.
+Rounding to a negative number of \code{digits} means rounding to a power
+of ten, for example \code{row_means(df, 3, digits = -2)} rounds to the nearest
+hundred. For \code{min_valid}, if not \code{NULL}, \code{min_valid} must be a numeric value
+from \code{0} to \code{ncol(data)}. If a row in the data frame has at least \code{min_valid}
+non-missing values, the row mean or row sum is returned. If \code{min_valid} is a
+non-integer value from 0 to 1, \code{min_valid} is considered to indicate the
+proportion of required non-missing values per row. E.g., if
+\code{min_valid = 0.75}, a row must have at least \code{ncol(data) * min_valid}
+non-missing values for the row mean or row sum to be calculated. See
+'Examples'.
 }
 \examples{
 dat <- data.frame(
@@ -125,6 +142,7 @@ row_means(dat, remove_na = TRUE)
 
 # needs at least 4 non-missing values per row
 row_means(dat, min_valid = 4) # 1 valid return value
+row_sums(dat, min_valid = 4) # 1 valid return value
 
 # needs at least 3 non-missing values per row
 row_means(dat, min_valid = 3) # 2 valid return values
@@ -137,6 +155,7 @@ row_means(dat, select = c("c1", "c3"), min_valid = 1)
 
 # needs at least 50\% of non-missing values per row
 row_means(dat, min_valid = 0.5) # 3 valid return values
+row_sums(dat, min_valid = 0.5)
 
 # needs at least 75\% of non-missing values per row
 row_means(dat, min_valid = 0.75) # 2 valid return values
