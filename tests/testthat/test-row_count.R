@@ -11,7 +11,8 @@ test_that("row_count", {
     c1 = c("a", "b", NA, "c"),
     c2 = c(NA, "b", NA, "d"),
     c3 = c(NA, 4, NA, NA),
-    c4 = c(2, 3, 7, Inf)
+    c4 = c(2, 3, 7, Inf),
+    stringsAsFactors = FALSE
   )
   expect_identical(row_count(d_mn, count = "b"), c(0, 2, 0, 0))
   expect_identical(row_count(d_mn, count = Inf), c(0, 0, 0, 1))
@@ -29,7 +30,8 @@ test_that("row_count, exact match", {
     c1 = c("1", "2", NA, "3"),
     c2 = c(NA, "2", NA, "3"),
     c3 = c(NA, 4, NA, NA),
-    c4 = c(2, 3, 7, Inf)
+    c4 = c(2, 3, 7, Inf),
+    stringsAsFactors = FALSE
   )
   expect_identical(row_count(d_mn, count = 2, exact = FALSE), c(1, 2, 0, 0))
   expect_identical(row_count(d_mn, count = 2, exact = TRUE), c(1, 0, 0, 0))
