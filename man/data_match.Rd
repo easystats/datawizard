@@ -5,7 +5,15 @@
 \alias{data_filter}
 \title{Return filtered or sliced data frame, or row indices}
 \usage{
-data_match(x, to, match = "and", return_indices = FALSE, drop_na = TRUE, ...)
+data_match(
+  x,
+  to,
+  match = "and",
+  return_indices = FALSE,
+  remove_na = TRUE,
+  drop_na,
+  ...
+)
 
 data_filter(x, ...)
 }
@@ -24,11 +32,13 @@ or \code{"not"} (or \code{"!"}).}
 can be used to filter the original data frame. If \code{FALSE} (default),
 returns directly the filtered data frame instead of the row indices.}
 
-\item{drop_na}{Logical, if \code{TRUE}, missing values (\code{NA}s) are removed before
+\item{remove_na}{Logical, if \code{TRUE}, missing values (\code{NA}s) are removed before
 filtering the data. This is the default behaviour, however, sometimes when
 row indices are requested (i.e. \code{return_indices=TRUE}), it might be useful
 to preserve \code{NA} values, so returned row indices match the row indices of
 the original data frame.}
+
+\item{drop_na}{Deprecated, please use \code{remove_na} instead.}
 
 \item{...}{A sequence of logical expressions indicating which rows to keep,
 or a numeric vector indicating the row indices of rows to keep. Can also be
