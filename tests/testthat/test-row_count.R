@@ -37,4 +37,21 @@ test_that("row_count, allow_coercion match", {
   expect_identical(row_count(d_mn, count = 2, allow_coercion = TRUE), c(1, 2, 0, 0))
   expect_identical(row_count(d_mn, count = 2, allow_coercion = FALSE), c(1, 0, 0, 0))
   expect_identical(row_count(d_mn, count = "2", allow_coercion = FALSE), c(0, 2, 0, 0))
+  expect_identical(row_count(d_mn, count = factor("2"), allow_coercion = TRUE), c(1, 2, 0, 0))
+  expect_error(row_count(d_mn, count = factor("2"), allow_coercion = FALSE), regex = "No column has")
+
+  # mix character / factor
+  d_mn <- data.frame(
+    c1 = factor(c("1", "2", NA, "3")),
+    c2 = c("2", "1", NA, "3"),
+    c3 = c(NA, 4, NA, NA),
+    c4 = c(2, 3, 7, Inf),
+    stringsAsFactors = FALSE
+  )
+  expect_identical(row_count(d_mn, count = 2, allow_coercion = TRUE), c(2, 1, 0, 0))
+  expect_identical(row_count(d_mn, count = 2, allow_coercion = FALSE), c(1, 0, 0, 0))
+  expect_identical(row_count(d_mn, count = "2", allow_coercion = FALSE), c(1, 0, 0, 0))
+  expect_identical(row_count(d_mn, count = "2", allow_coercion = TRUE), c(2, 1, 0, 0))
+  expect_identical(row_count(d_mn, count = factor("2"), allow_coercion = FALSE), c(0, 1, 0, 0))
+  expect_identical(row_count(d_mn, count = factor("2"), allow_coercion = TRUE), c(2, 1, 0, 0))
 })

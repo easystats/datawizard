@@ -1,7 +1,7 @@
 #' @title Count specific values row-wise
 #' @name row_count
 #' @description `row_count()` mimics base R's `rowSums()`, with sums for a
-#' specific value indicated by `count`. Hence, it is equivalent to
+#' specific value indicated by `count`. Hence, it is similar to
 #' `rowSums(x == count, na.rm = TRUE)`, but offers some more options, including
 #' strict comparisons. Comparisons using `==` coerce values to atomic vectors,
 #' thus both `2 == 2` and `"2" == 2` are `TRUE`. In `row_count()`, it is also
@@ -14,9 +14,10 @@
 #' numeric value, a character string (for factors or character vectors), `NA` or
 #' `Inf`.
 #' @param allow_coercion Logical. If `FALSE`, `count` matches only values of same
-#' type (i.e. when `count = 2`, the value `"2"` is not counted and vice versa).
-#' By default, when `allow_coercion = TRUE`, `count = 2` also matches `"2"`.
-#' See 'Examples'.
+#' class (i.e. when `count = 2`, the value `"2"` is not counted and vice versa).
+#' By default, when `allow_coercion = TRUE`, `count = 2` also matches `"2"`. In
+#' order to count factor levels in the data, use `count = factor("level")`. See
+#' 'Examples'.
 #'
 #' @inheritParams extract_column_names
 #' @inheritParams row_means
@@ -45,7 +46,18 @@
 #' # count all 2s and "2"s per row
 #' row_count(dat, count = 2)
 #' # only count 2s, but not "2"s
-#' row_count(dat, count = 2, allow_coercion = TRUE)
+#' row_count(dat, count = 2, allow_coercion = FALSE)
+#'
+#' dat <- data.frame(
+#'   c1 = factor(c("1", "2", NA, "3")),
+#'   c2 = c("2", "1", NA, "3"),
+#'   c3 = c(NA, 4, NA, NA),
+#'   c4 = c(2, 3, 7, Inf)
+#' )
+#' # find only character "2"s
+#' row_count(dat, count = "2", allow_coercion = FALSE)
+#' # find only factor level "2"s
+#' row_count(dat, count = factor("2"), allow_coercion = FALSE)
 #'
 #' @export
 row_count <- function(data,
@@ -84,23 +96,29 @@ row_count <- function(data,
   if (ncol(data) < 2) {
     insight::format_error("`data` must be a data frame with at least two numeric columns.")
   }
-
   # special case: count missing
   if (is.na(count)) {
     rowSums(is.na(data))
   } else {
     # comparisons in R using == coerce values into a atomic vector, i.e.
     # 2 == "2" is TRUE. If `allow_coercion = FALSE`, we only want 2 == 2 or
-    # "2" == "2". to achieve this, we simply compute the comparison on numeric
-    # or non-numeric columns only
+    # "2" == "2" (i.e. we want exact types to be compared only)
     if (isFALSE(allow_coercion)) {
-      numeric_columns <- vapply(data, is.numeric, TRUE)
-      if (is.numeric(count)) {
-        data <- data[numeric_columns]
-      } else {
-        data <- data[!numeric_columns]
+      # we need the "type" of the count-value - we use class() instead of typeof(),
+      # because the latter sometimes returns unsuitable classes/types. compare
+      # typeof(as.Date("2020-01-01")), which returns "double".
+      count_type <- class(count)[1]
+      valid_columns <- vapply(data, function(i) identical(class(i)[1], count_type), TRUE)
+      # check if any columns left?
+      if (!any(valid_columns)) {
+        insight::format_error("No column has same type as the value provided in `count`. Set `allow_coercion = TRUE` or specify a valid value for `count`.") # nolint
       }
+      data <- data[valid_columns]
     }
+    # coerce - we have only valid columns anyway, and we need to coerce factors
+    # to vectors, else comparison with `==` errors.
+    count <- as.vector(count)
+    # finally, count
     rowSums(data == count, na.rm = TRUE)
   }
 }
