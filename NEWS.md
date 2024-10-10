@@ -2,7 +2,7 @@
 
 BREAKING CHANGES
 
-* Argument `drop_na` in `data_match()` is deprected now. Please use `remove_na`
+* Argument `drop_na` in `data_match()` is deprecated now. Please use `remove_na`
   instead.
 
 CHANGES
