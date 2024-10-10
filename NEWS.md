@@ -1,5 +1,10 @@
 # datawizard (development)
 
+BREAKING CHANGES
+
+* Argument `drop_na` in `data_match()` is deprected now. Please use `remove_na`
+  instead.
+
 CHANGES
 
 * The `select` argument, which is available in different functions to select
