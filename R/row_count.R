@@ -108,7 +108,7 @@ row_count <- function(data,
       # because the latter sometimes returns unsuitable classes/types. compare
       # typeof(as.Date("2020-01-01")), which returns "double".
       count_type <- class(count)[1]
-      valid_columns <- vapply(data, function(i) identical(class(i)[1], count_type), TRUE)
+      valid_columns <- vapply(data, inherits, TRUE, what = count_type)
       # check if any columns left?
       if (!any(valid_columns)) {
         insight::format_error("No column has same type as the value provided in `count`. Set `allow_coercion = TRUE` or specify a valid value for `count`.") # nolint
