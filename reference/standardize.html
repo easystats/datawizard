@@ -23,7 +23,7 @@ For model standardization, see standardize.default()."><meta property="og:image"
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -239,8 +239,10 @@ vectors as well.</p></dd>
 <dt id="arg-select">select<a class="anchor" aria-label="anchor" href="#arg-select"></a></dt>
 <dd><p>Variables that will be included when performing the required
 tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
-<li><p>a string with the variable name (e.g., <code>"column_name"</code>), or a character
-vector of variable names (e.g., <code>c("col1", "col2", "col3")</code>),</p></li>
+<li><p>a string with the variable name (e.g., <code>"column_name"</code>), a character
+vector of variable names (e.g., <code>c("col1", "col2", "col3")</code>), or a
+character vector of variable names including ranges specified via <code>:</code>
+(e.g., <code>c("col1:col3", "col5")</code>),</p></li>
 <li><p>a formula with variable names (e.g., <code>~column_1 + column_2</code>),</p></li>
 <li><p>a vector of positive integers, giving the positions counting from the left
 (e.g. <code>1</code> or <code>c(1, 3, 5)</code>),</p></li>

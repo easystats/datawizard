@@ -9,7 +9,7 @@ match a certain search pattern, while data_select() returns the found data."><me
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,8 +105,10 @@ match a certain search pattern, while <code>data_select()</code> returns the fou
 <dt id="arg-select">select<a class="anchor" aria-label="anchor" href="#arg-select"></a></dt>
 <dd><p>Variables that will be included when performing the required
 tasks. Can be either</p><ul><li><p>a variable specified as a literal variable name (e.g., <code>column_name</code>),</p></li>
-<li><p>a string with the variable name (e.g., <code>"column_name"</code>), or a character
-vector of variable names (e.g., <code>c("col1", "col2", "col3")</code>),</p></li>
+<li><p>a string with the variable name (e.g., <code>"column_name"</code>), a character
+vector of variable names (e.g., <code>c("col1", "col2", "col3")</code>), or a
+character vector of variable names including ranges specified via <code>:</code>
+(e.g., <code>c("col1:col3", "col5")</code>),</p></li>
 <li><p>a formula with variable names (e.g., <code>~column_1 + column_2</code>),</p></li>
 <li><p>a vector of positive integers, giving the positions counting from the left
 (e.g. <code>1</code> or <code>c(1, 3, 5)</code>),</p></li>
@@ -225,7 +227,7 @@ work in nested functions, like below:</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Find columns names by pattern</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Find column names by pattern</span></span></span>
 <span class="r-in"><span><span class="fu">extract_column_names</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"Sepal"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sepal.Length" "Sepal.Width" </span>
 <span class="r-in"><span><span class="fu">extract_column_names</span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/select_helpers.html" class="external-link">ends_with</a></span><span class="op">(</span><span class="st">"Width"</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -243,6 +245,10 @@ work in nested functions, like below:</p>
 <span class="r-in"><span><span class="va">numeric_mean_35</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">3.5</span></span></span>
 <span class="r-in"><span><span class="fu">extract_column_names</span><span class="op">(</span><span class="va">iris</span>, <span class="va">numeric_mean_35</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sepal.Length" "Petal.Length"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># find range of colum names by range, using character vector</span></span></span>
+<span class="r-in"><span><span class="fu">extract_column_names</span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cyl:hp"</span>, <span class="st">"wt"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "cyl"  "disp" "hp"   "wt"  </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># rename returned columns for "data_select()"</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">data_select</span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`Miles per Gallon` <span class="op">=</span> <span class="st">"mpg"</span>, Cylinders <span class="op">=</span> <span class="st">"cyl"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
