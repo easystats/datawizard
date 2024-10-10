@@ -76,6 +76,11 @@ row_count <- function(data,
   data <- .coerce_to_dataframe(data[select])
 
   # check if we have a data framme with at least two columns
+  if (nrow(data) < 1) {
+    insight::format_error("`data` must be a data frame with at least one row.")
+  }
+
+  # check if we have a data framme with at least two columns
   if (ncol(data) < 2) {
     insight::format_error("`data` must be a data frame with at least two numeric columns.")
   }
