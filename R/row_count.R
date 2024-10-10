@@ -5,18 +5,18 @@
 #' `rowSums(x == count, na.rm = TRUE)`, but offers some more options, including
 #' strict comparisons. Comparisons using `==` coerce values to atomic vectors,
 #' thus both `2 == 2` and `"2" == 2` are `TRUE`. In `row_count()`, it is also
-#' possible to make "type safe" comparisons using the `exact` argument, where
-#' `"2" == 2` is not true.
+#' possible to make "type safe" comparisons using the `allow_coercion` argument,
+#' where `"2" == 2` is not true.
 #'
 #' @param data A data frame with at least two columns, where number of specific
 #' values are counted row-wise.
 #' @param count The value for which the row sum should be computed. May be a
 #' numeric value, a character string (for factors or character vectors), `NA` or
 #' `Inf`.
-#' @param exact Logical. If `TRUE`, `count` matches only values of same type
-#' (i.e. when `count = 2`, the value `"2"` is not counted and vice versa).
-#' By default, when `exact = FALSE`, `count = 2` also matches `"2"`. See
-#' 'Examples'.
+#' @param allow_coercion Logical. If `TRUE`, `count` matches only values of same
+#' type (i.e. when `count = 2`, the value `"2"` is not counted and vice versa).
+#' By default, when `allow_coercion = FALSE`, `count = 2` also matches `"2"`.
+#' See 'Examples'.
 #'
 #' @inheritParams extract_column_names
 #' @inheritParams row_means
@@ -45,14 +45,14 @@
 #' # count all 2s and "2"s per row
 #' row_count(dat, count = 2)
 #' # only count 2s, but not "2"s
-#' row_count(dat, count = 2, exact = TRUE)
+#' row_count(dat, count = 2, allow_coercion = TRUE)
 #'
 #' @export
 row_count <- function(data,
                       select = NULL,
                       exclude = NULL,
                       count = NULL,
-                      exact = FALSE,
+                      allow_coercion = FALSE,
                       ignore_case = FALSE,
                       regex = FALSE,
                       verbose = TRUE) {
@@ -90,10 +90,10 @@ row_count <- function(data,
     rowSums(is.na(data))
   } else {
     # comparisons in R using == coerce values into a atomic vector, i.e.
-    # 2 == "2" is TRUE. If `exact = TRUE`, we only want 2 == 2 or "2" == "2".
-    # to achieve this, we simply compute the comparison on numeric or non-numeric
-    # columns only
-    if (isTRUE(exact)) {
+    # 2 == "2" is TRUE. If `allow_coercion = TRUE`, we only want 2 == 2 or
+    # "2" == "2". to achieve this, we simply compute the comparison on numeric
+    # or non-numeric columns only
+    if (isTRUE(allow_coercion)) {
       numeric_columns <- vapply(data, is.numeric, TRUE)
       if (is.numeric(count)) {
         data <- data[numeric_columns]

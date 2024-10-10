@@ -26,7 +26,7 @@ test_that("row_count, errors or messages", {
   expect_error(row_count(iris[-seq_len(nrow(iris)), , drop = FALSE], count = 2), regex = "one row")
 })
 
-test_that("row_count, exact match", {
+test_that("row_count, allow_coercion match", {
   d_mn <- data.frame(
     c1 = c("1", "2", NA, "3"),
     c2 = c(NA, "2", NA, "3"),
@@ -34,7 +34,7 @@ test_that("row_count, exact match", {
     c4 = c(2, 3, 7, Inf),
     stringsAsFactors = FALSE
   )
-  expect_identical(row_count(d_mn, count = 2, exact = FALSE), c(1, 2, 0, 0))
-  expect_identical(row_count(d_mn, count = 2, exact = TRUE), c(1, 0, 0, 0))
-  expect_identical(row_count(d_mn, count = "2", exact = TRUE), c(0, 2, 0, 0))
+  expect_identical(row_count(d_mn, count = 2, allow_coercion = FALSE), c(1, 2, 0, 0))
+  expect_identical(row_count(d_mn, count = 2, allow_coercion = TRUE), c(1, 0, 0, 0))
+  expect_identical(row_count(d_mn, count = "2", allow_coercion = TRUE), c(0, 2, 0, 0))
 })

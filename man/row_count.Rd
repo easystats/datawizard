@@ -9,7 +9,7 @@ row_count(
   select = NULL,
   exclude = NULL,
   count = NULL,
-  exact = FALSE,
+  allow_coercion = FALSE,
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE
@@ -61,10 +61,10 @@ excludes no columns.}
 numeric value, a character string (for factors or character vectors), \code{NA} or
 \code{Inf}.}
 
-\item{exact}{Logical. If \code{TRUE}, \code{count} matches only values of same type
-(i.e. when \code{count = 2}, the value \code{"2"} is not counted and vice versa).
-By default, when \code{exact = FALSE}, \code{count = 2} also matches \code{"2"}. See
-'Examples'.}
+\item{allow_coercion}{Logical. If \code{TRUE}, \code{count} matches only values of same
+type (i.e. when \code{count = 2}, the value \code{"2"} is not counted and vice versa).
+By default, when \code{allow_coercion = FALSE}, \code{count = 2} also matches \code{"2"}.
+See 'Examples'.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
 a regular expression is used in \code{select}, ignores lower/upper case in the
@@ -90,8 +90,8 @@ specific value indicated by \code{count}. Hence, it is equivalent to
 \code{rowSums(x == count, na.rm = TRUE)}, but offers some more options, including
 strict comparisons. Comparisons using \code{==} coerce values to atomic vectors,
 thus both \code{2 == 2} and \code{"2" == 2} are \code{TRUE}. In \code{row_count()}, it is also
-possible to make "type safe" comparisons using the \code{exact} argument, where
-\code{"2" == 2} is not true.
+possible to make "type safe" comparisons using the \code{allow_coercion} argument,
+where \code{"2" == 2} is not true.
 }
 \examples{
 dat <- data.frame(
@@ -115,6 +115,6 @@ dat <- data.frame(
 # count all 2s and "2"s per row
 row_count(dat, count = 2)
 # only count 2s, but not "2"s
-row_count(dat, count = 2, exact = TRUE)
+row_count(dat, count = 2, allow_coercion = TRUE)
 
 }
