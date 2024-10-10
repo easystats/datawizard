@@ -1,5 +1,11 @@
 # datawizard (development)
 
+CHANGES
+
+* The `select` argument, which is available in different functions to select
+  variables, can now also be a character vector with quoted variable names,
+  including a colon to indicate a range of several variables (e.g. `"cyl:gear"`).
+
 BUG FIXES
 
 * `describe_distribution()` no longer errors if the sample was too sparse to compute
