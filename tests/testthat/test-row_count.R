@@ -23,7 +23,7 @@ test_that("row_count, errors or messages", {
   expect_error(expect_warning(row_count(iris, select = "abc")), regex = "must be a valid")
   expect_error(expect_warning(row_count(iris, select = "abc", count = 3)), regex = "No columns")
   expect_error(row_count(iris[1], count = 3), regex = "with at least")
-  expect_error(row_count(d_mn[-c(1:4), , drop = FALSE], count = 2), regex = "one row")
+  expect_error(row_count(iris[-seq_len(nrow(iris)), , drop = FALSE], count = 2), regex = "one row")
 })
 
 test_that("row_count, exact match", {
