@@ -153,7 +153,7 @@ test_that(".select_nse: allow character vector with :", {
     regex = "Did you mean \"wt\""
   )
   expect_warning(
-    center(mtcars, c("cyl:hq", "wt", "vs:gear"), verbose = TRUE)
+    center(mtcars, c("cyl:hq", "wt", "vs:gear"), verbose = TRUE),
     regex = "Did you mean one of \"hp\""
   )
 })
