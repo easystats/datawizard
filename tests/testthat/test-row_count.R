@@ -34,7 +34,7 @@ test_that("row_count, allow_coercion match", {
     c4 = c(2, 3, 7, Inf),
     stringsAsFactors = FALSE
   )
-  expect_identical(row_count(d_mn, count = 2, allow_coercion = FALSE), c(1, 2, 0, 0))
-  expect_identical(row_count(d_mn, count = 2, allow_coercion = TRUE), c(1, 0, 0, 0))
-  expect_identical(row_count(d_mn, count = "2", allow_coercion = TRUE), c(0, 2, 0, 0))
+  expect_identical(row_count(d_mn, count = 2, allow_coercion = TRUE), c(1, 2, 0, 0))
+  expect_identical(row_count(d_mn, count = 2, allow_coercion = FALSE), c(1, 0, 0, 0))
+  expect_identical(row_count(d_mn, count = "2", allow_coercion = FALSE), c(0, 2, 0, 0))
 })

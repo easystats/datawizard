@@ -52,7 +52,7 @@ row_count <- function(data,
                       select = NULL,
                       exclude = NULL,
                       count = NULL,
-                      allow_coercion = FALSE,
+                      allow_coercion = TRUE,
                       ignore_case = FALSE,
                       regex = FALSE,
                       verbose = TRUE) {
@@ -90,10 +90,10 @@ row_count <- function(data,
     rowSums(is.na(data))
   } else {
     # comparisons in R using == coerce values into a atomic vector, i.e.
-    # 2 == "2" is TRUE. If `allow_coercion = TRUE`, we only want 2 == 2 or
+    # 2 == "2" is TRUE. If `allow_coercion = FALSE`, we only want 2 == 2 or
     # "2" == "2". to achieve this, we simply compute the comparison on numeric
     # or non-numeric columns only
-    if (isTRUE(allow_coercion)) {
+    if (isFALSE(allow_coercion)) {
       numeric_columns <- vapply(data, is.numeric, TRUE)
       if (is.numeric(count)) {
         data <- data[numeric_columns]

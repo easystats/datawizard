@@ -9,7 +9,7 @@ row_count(
   select = NULL,
   exclude = NULL,
   count = NULL,
-  allow_coercion = FALSE,
+  allow_coercion = TRUE,
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE
