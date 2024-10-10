@@ -61,9 +61,9 @@ excludes no columns.}
 numeric value, a character string (for factors or character vectors), \code{NA} or
 \code{Inf}.}
 
-\item{allow_coercion}{Logical. If \code{TRUE}, \code{count} matches only values of same
+\item{allow_coercion}{Logical. If \code{FALSE}, \code{count} matches only values of same
 type (i.e. when \code{count = 2}, the value \code{"2"} is not counted and vice versa).
-By default, when \code{allow_coercion = FALSE}, \code{count = 2} also matches \code{"2"}.
+By default, when \code{allow_coercion = TRUE}, \code{count = 2} also matches \code{"2"}.
 See 'Examples'.}
 
 \item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or

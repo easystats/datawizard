@@ -13,9 +13,9 @@
 #' @param count The value for which the row sum should be computed. May be a
 #' numeric value, a character string (for factors or character vectors), `NA` or
 #' `Inf`.
-#' @param allow_coercion Logical. If `TRUE`, `count` matches only values of same
+#' @param allow_coercion Logical. If `FALSE`, `count` matches only values of same
 #' type (i.e. when `count = 2`, the value `"2"` is not counted and vice versa).
-#' By default, when `allow_coercion = FALSE`, `count = 2` also matches `"2"`.
+#' By default, when `allow_coercion = TRUE`, `count = 2` also matches `"2"`.
 #' See 'Examples'.
 #'
 #' @inheritParams extract_column_names
