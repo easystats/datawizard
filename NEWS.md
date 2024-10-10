@@ -1,5 +1,9 @@
 # datawizard (development)
 
+CHANGES
+
+
+
 BUG FIXES
 
 * `describe_distribution()` no longer errors if the sample was too sparse to compute
