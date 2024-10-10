@@ -17,9 +17,21 @@ test_that("row_count", {
   expect_identical(row_count(d_mn, count = Inf), c(0, 0, 0, 1))
 })
 
-test_that("row_means, errors or messages", {
+test_that("row_count, errors or messages", {
   data(iris)
   expect_error(expect_warning(row_count(iris, select = "abc")), regex = "must be a valid")
-  expect_error(expect_warning(row_count(iris, select = "abc", count = 3)), regex = "no columns")
+  expect_error(expect_warning(row_count(iris, select = "abc", count = 3)), regex = "No columns")
   expect_error(row_count(iris[1], count = 3), regex = "with at least")
+})
+
+test_that("row_count, exact match", {
+  d_mn <- data.frame(
+    c1 = c("1", "2", NA, "3"),
+    c2 = c(NA, "2", NA, "3"),
+    c3 = c(NA, 4, NA, NA),
+    c4 = c(2, 3, 7, Inf)
+  )
+  expect_identical(row_count(d_mn, count = 2, exact = FALSE), c(1, 2, 0, 0))
+  expect_identical(row_count(d_mn, count = 2, exact = TRUE), c(1, 0, 0, 0))
+  expect_identical(row_count(d_mn, count = "2", exact = TRUE), c(0, 2, 0, 0))
 })
