@@ -139,6 +139,7 @@
 # Possibilities:
 # - quoted variable name
 # - quoted variable name with ignore case
+# - quoted variable name with colon, to indicate range
 # - character that should be regex-ed on variable names
 # - special word "all" to return all vars
 

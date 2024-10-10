@@ -145,6 +145,8 @@ test_that(".select_nse: allow character vector with :", {
   expect_named(out, c("cyl", "disp", "hp", "wt", "vs", "am", "gear"))
   out <- data_select(mtcars, c("cyl:hp", "wta", "vs:gear"))
   expect_named(out, c("cyl", "disp", "hp", "vs", "am", "gear"))
+  out <- data_select(mtcars, c("hp:cyl", "wta", "vs:gear"))
+  expect_named(out, c("hp", "disp", "cyl", "vs", "am", "gear"))
   out <- data_select(mtcars, c("cyl:hq", "wt", "vs:gear"))
   expect_named(out, c("wt", "vs", "am", "gear"))
 
