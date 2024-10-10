@@ -1,19 +1,19 @@
-#' @title Row means or sums (optionally with minimum amount of valid values)
+#' @title Count specific values row-wise
 #' @name row_count
 #' @description `row_count()` mimics base R's `rowSums()`, with sums for a
 #' specific value indicated by `count`. Hence, it is equivalent to
 #' `rowSums(x == count, na.rm = TRUE)`, but offers some more options, including
-#' strict comparisons: Comparisons using `==` coerce values to atomic vectors,
+#' strict comparisons. Comparisons using `==` coerce values to atomic vectors,
 #' thus both `2 == 2` and `"2" == 2` are `TRUE`. In `row_count()`, it is also
 #' possible to make "type safe" comparisons using the `exact` argument, where
-#' `"2" == 2` is not treated as identical.
+#' `"2" == 2` is not true.
 #'
 #' @param data A data frame with at least two columns, where number of specific
 #' values are counted row-wise.
 #' @param count The value for which the row sum should be computed. May be a
 #' numeric value, a character string (for factors or character vectors), `NA` or
 #' `Inf`.
-#' @param exact Logical, if `TRUE`, `count` matches only values of same type
+#' @param exact Logical. If `TRUE`, `count` matches only values of same type
 #' (i.e. when `count = 2`, the value `"2"` is not counted and vice versa).
 #' By default, when `exact = FALSE`, `count = 2` also matches `"2"`. See
 #' 'Examples'.
@@ -32,7 +32,7 @@
 #' )
 #'
 #' # count all 2s per row
-#' row_count(dat, count = 2)
+#' row_count(dat, count = 4)
 #' # count all missing values per row
 #' row_count(dat, count = NA)
 #'

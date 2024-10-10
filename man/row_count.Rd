@@ -2,7 +2,7 @@
 % Please edit documentation in R/row_count.R
 \name{row_count}
 \alias{row_count}
-\title{Row means or sums (optionally with minimum amount of valid values)}
+\title{Count specific values row-wise}
 \usage{
 row_count(
   data,
@@ -61,7 +61,7 @@ excludes no columns.}
 numeric value, a character string (for factors or character vectors), \code{NA} or
 \code{Inf}.}
 
-\item{exact}{Logical, if \code{TRUE}, \code{count} matches only values of same type
+\item{exact}{Logical. If \code{TRUE}, \code{count} matches only values of same type
 (i.e. when \code{count = 2}, the value \code{"2"} is not counted and vice versa).
 By default, when \code{exact = FALSE}, \code{count = 2} also matches \code{"2"}. See
 'Examples'.}
@@ -88,10 +88,10 @@ A vector with row-wise counts of values specified in \code{count}.
 \code{row_count()} mimics base R's \code{rowSums()}, with sums for a
 specific value indicated by \code{count}. Hence, it is equivalent to
 \code{rowSums(x == count, na.rm = TRUE)}, but offers some more options, including
-strict comparisons: Comparisons using \code{==} coerce values to atomic vectors,
+strict comparisons. Comparisons using \code{==} coerce values to atomic vectors,
 thus both \code{2 == 2} and \code{"2" == 2} are \code{TRUE}. In \code{row_count()}, it is also
 possible to make "type safe" comparisons using the \code{exact} argument, where
-\code{"2" == 2} is not treated as identical.
+\code{"2" == 2} is not true.
 }
 \examples{
 dat <- data.frame(
@@ -102,7 +102,7 @@ dat <- data.frame(
 )
 
 # count all 2s per row
-row_count(dat, count = 2)
+row_count(dat, count = 4)
 # count all missing values per row
 row_count(dat, count = NA)
 
