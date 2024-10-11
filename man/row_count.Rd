@@ -102,7 +102,7 @@ dat <- data.frame(
   c4 = c(2, 3, 7, 8)
 )
 
-# count all 2s per row
+# count all 4s per row
 row_count(dat, count = 4)
 # count all missing values per row
 row_count(dat, count = NA)
