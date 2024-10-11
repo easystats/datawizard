@@ -11,6 +11,9 @@ CHANGES
   variables, can now also be a character vector with quoted variable names,
   including a colon to indicate a range of several variables (e.g. `"cyl:gear"`).
 
+* New function `row_sums()`, to calculate row sums (optionally with minimum
+  amount of valid values), as complement to `row_means()`.
+
 * New function `row_count()`, to count specific values row-wise.
 
 BUG FIXES
