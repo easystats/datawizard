@@ -161,7 +161,7 @@ test_that("data_read - no warning for RData", {
   withr::with_tempfile("temp_file", fileext = ".RData", code = {
     data(mtcars)
     save(mtcars, file = temp_file)
-    expect_silent(data_read(temp_file, verbose = FALSE, trust = TRUE))
+    expect_silent(data_read(temp_file, verbose = FALSE))
   })
 })
 
