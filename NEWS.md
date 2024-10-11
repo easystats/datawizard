@@ -16,6 +16,9 @@ CHANGES
 
 * New function `row_count()`, to count specific values row-wise.
 
+* `data_read()` no longer shows warning about forthcoming breaking changes
+  in upstream packages when reading `.RData` files.
+
 BUG FIXES
 
 * `describe_distribution()` no longer errors if the sample was too sparse to compute

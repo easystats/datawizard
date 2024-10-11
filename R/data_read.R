@@ -296,7 +296,7 @@ data_read <- function(path,
   # set up arguments. for RDS, we set trust = TRUE, to avoid warnings
   rio_args <- list(file = path)
   # check if we have RDS, and if so, add trust = TRUE
-  if (file_type == "rds") {
+  if (file_type %in% c("rds", "rdata")) {
     rio_args$trust <- TRUE
   }
   out <- do.call(rio::import, c(rio_args, list(...)))
