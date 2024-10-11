@@ -1,5 +1,10 @@
 # datawizard (development)
 
+BREAKING CHANGES
+
+* Argument `drop_na` in `data_match()` is deprecated now. Please use `remove_na`
+  instead.
+
 CHANGES
 
 * The `select` argument, which is available in different functions to select
@@ -8,6 +13,8 @@ CHANGES
 
 * New function `row_sums()`, to calculate row sums (optionally with minimum
   amount of valid values), as complement to `row_means()`.
+
+* New function `row_count()`, to count specific values row-wise.
 
 BUG FIXES
 
