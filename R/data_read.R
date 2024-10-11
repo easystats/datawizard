@@ -161,7 +161,7 @@ data_read <- function(path,
   # user may decide whether we automatically detect variable type or not
   if (isTRUE(convert_factors)) {
     if (verbose) {
-      msg <- "Variables where all values have associated labels are now converted into factors. If this is not intended, use `convert_factors = FALSE`."
+      msg <- "Variables where all values have associated labels are now converted into factors. If this is not intended, use `convert_factors = FALSE`." # nolint
       insight::format_alert(msg)
     }
     x[] <- lapply(x, function(i) {
