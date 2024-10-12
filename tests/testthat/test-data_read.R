@@ -154,6 +154,19 @@ test_that("data_read - RDS file, matrix, coercible", {
 })
 
 
+
+# RData -----------------------------------
+
+test_that("data_read - no warning for RData", {
+  withr::with_tempfile("temp_file", fileext = ".RData", code = {
+    data(mtcars)
+    save(mtcars, file = temp_file)
+    expect_silent(data_read(temp_file, verbose = FALSE))
+  })
+})
+
+
+
 # SPSS file -----------------------------------
 
 test_that("data_read - SPSS file", {

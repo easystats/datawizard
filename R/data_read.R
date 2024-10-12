@@ -161,7 +161,7 @@ data_read <- function(path,
   # user may decide whether we automatically detect variable type or not
   if (isTRUE(convert_factors)) {
     if (verbose) {
-      msg <- "Variables where all values have associated labels are now converted into factors. If this is not intended, use `convert_factors = FALSE`."
+      msg <- "Variables where all values have associated labels are now converted into factors. If this is not intended, use `convert_factors = FALSE`." # nolint
       insight::format_alert(msg)
     }
     x[] <- lapply(x, function(i) {
@@ -296,7 +296,7 @@ data_read <- function(path,
   # set up arguments. for RDS, we set trust = TRUE, to avoid warnings
   rio_args <- list(file = path)
   # check if we have RDS, and if so, add trust = TRUE
-  if (file_type == "rds") {
+  if (file_type %in% c("rds", "rdata")) {
     rio_args$trust <- TRUE
   }
   out <- do.call(rio::import, c(rio_args, list(...)))
