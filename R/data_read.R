@@ -171,35 +171,42 @@ data_read <- function(path,
         value_labels <- attr(i, "labels", exact = TRUE)
         variable_labels <- attr(i, "label", exact = TRUE)
 
-        # filter, so only matching value labels remain
-        value_labels <- value_labels[value_labels %in% unique(i)]
+        # Only process if we have value labels - if no value labels present
+        # the following code falls back to coercing to numeric. Since this
+        # function is also called for "unknown" file types, all imported data
+        # is converted to numeric for non-labelled data, which is not intended,
+        # for instance for .rds files
+        if (!is.null(value_labels) && length(value_labels)) {
+          # filter, so only matching value labels remain
+          value_labels <- value_labels[value_labels %in% unique(i)]
 
-        # guess variable type
-        if (is.character(i)) {
-          # we need this to drop haven-specific class attributes
-          i <- as.character(i)
-        } else if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
-          # if all values are labelled, we assume factor. Use labels as levels
-          if (is.numeric(i)) {
-            i <- factor(i, labels = names(value_labels))
+          # guess variable type
+          if (is.character(i)) {
+            # we need this to drop haven-specific class attributes
+            i <- as.character(i)
+          } else if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
+            # if all values are labelled, we assume factor. Use labels as levels
+            if (is.numeric(i)) {
+              i <- factor(i, labels = names(value_labels))
+            } else {
+              i <- factor(as.character(i), labels = names(value_labels))
+            }
+            value_labels <- NULL
+            attr(i, "converted_to_factor") <- TRUE
           } else {
-            i <- factor(as.character(i), labels = names(value_labels))
+            # else, fall back to numeric
+            i <- as.numeric(i)
           }
-          value_labels <- NULL
-          attr(i, "converted_to_factor") <- TRUE
-        } else {
-          # else, fall back to numeric
-          i <- as.numeric(i)
-        }
 
-        # drop unused value labels
-        value_labels <- value_labels[value_labels %in% unique(i)]
-        if (length(value_labels) > 0L) {
-          attr(i, "labels") <- value_labels
-        }
+          # drop unused value labels
+          value_labels <- value_labels[value_labels %in% unique(i)]
+          if (length(value_labels) > 0L) {
+            attr(i, "labels") <- value_labels
+          }
 
-        # add back variable label
-        attr(i, "label") <- variable_labels
+          # add back variable label
+          attr(i, "label") <- variable_labels
+        }
       }
       i
     })
