@@ -33,15 +33,16 @@ for SAS data files.}
 \item{encoding}{The character encoding used for the file. Usually not needed.}
 
 \item{convert_factors}{If \code{TRUE} (default), numeric variables, where all
-values have a value label, are assumed to be categorical and converted
-into factors. If \code{FALSE}, no variable types are guessed and no conversion
-of numeric variables into factors will be performed. See also section
-'Differences to other packages'. For \code{data_write()}, this argument only
-applies to the text (e.g. \code{.txt} or \code{.csv}) or spreadsheet file formats (like
-\code{.xlsx}). Converting to factors might be useful for these formats because
-labelled numeric variables are then converted into factors and exported as
-character columns - else, value labels would be lost and only numeric values
-are written to the file.}
+values have a value label, are assumed to be categorical and converted into
+factors. If \code{FALSE}, no variable types are guessed and no conversion of
+numeric variables into factors will be performed. For \code{data_read()}, this
+argument only applies to file types with \emph{labelled data}, e.g. files from
+SPSS, SAS or Stata. See also section 'Differences to other packages'. For
+\code{data_write()}, this argument only applies to the text (e.g. \code{.txt} or
+\code{.csv}) or spreadsheet file formats (like \code{.xlsx}). Converting to factors
+might be useful for these formats because labelled numeric variables are then
+converted into factors and exported as character columns - else, value labels
+would be lost and only numeric values are written to the file.}
 
 \item{verbose}{Toggle warnings and messages.}
 
@@ -118,12 +119,13 @@ versions, use \code{compress = "none"}, for example
 
 \code{data_read()} is most comparable to \code{rio::import()}. For data files from
 SPSS, SAS or Stata, which support labelled data, variables are converted into
-their most appropriate type. The major difference to \code{rio::import()} is that
-\code{data_read()} automatically converts fully labelled numeric variables into
-factors, where imported value labels will be set as factor levels. If a
-numeric variable has \emph{no} value labels or less value labels than values, it
-is not converted to factor. In this case, value labels are preserved as
-\code{"labels"} attribute. Character vectors are preserved. Use
+their most appropriate type. The major difference to \code{rio::import()} is for
+data files from SPSS, SAS, or Stata, i.e. file types that support
+\emph{labelled data}. \code{data_read()} automatically converts fully labelled numeric
+variables into factors, where imported value labels will be set as factor
+levels. If a numeric variable has \emph{no} value labels or less value labels than
+values, it is not converted to factor. In this case, value labels are
+preserved as \code{"labels"} attribute. Character vectors are preserved. Use
 \code{convert_factors = FALSE} to remove the automatic conversion of numeric
 variables to factors.
 }
