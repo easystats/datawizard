@@ -19,7 +19,7 @@ rio::import(). data_write() works in a similar way."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,15 +117,16 @@ for SAS data files.</p></dd>
 
 <dt id="arg-convert-factors">convert_factors<a class="anchor" aria-label="anchor" href="#arg-convert-factors"></a></dt>
 <dd><p>If <code>TRUE</code> (default), numeric variables, where all
-values have a value label, are assumed to be categorical and converted
-into factors. If <code>FALSE</code>, no variable types are guessed and no conversion
-of numeric variables into factors will be performed. See also section
-'Differences to other packages'. For <code>data_write()</code>, this argument only
-applies to the text (e.g. <code>.txt</code> or <code>.csv</code>) or spreadsheet file formats (like
-<code>.xlsx</code>). Converting to factors might be useful for these formats because
-labelled numeric variables are then converted into factors and exported as
-character columns - else, value labels would be lost and only numeric values
-are written to the file.</p></dd>
+values have a value label, are assumed to be categorical and converted into
+factors. If <code>FALSE</code>, no variable types are guessed and no conversion of
+numeric variables into factors will be performed. For <code>data_read()</code>, this
+argument only applies to file types with <em>labelled data</em>, e.g. files from
+SPSS, SAS or Stata. See also section 'Differences to other packages'. For
+<code>data_write()</code>, this argument only applies to the text (e.g. <code>.txt</code> or
+<code>.csv</code>) or spreadsheet file formats (like <code>.xlsx</code>). Converting to factors
+might be useful for these formats because labelled numeric variables are then
+converted into factors and exported as character columns - else, value labels
+would be lost and only numeric values are written to the file.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -209,12 +210,13 @@ versions, use <code>compress = "none"</code>, for example
 
 <p><code>data_read()</code> is most comparable to <code><a href="http://gesistsa.github.io/rio/reference/import.html" class="external-link">rio::import()</a></code>. For data files from
 SPSS, SAS or Stata, which support labelled data, variables are converted into
-their most appropriate type. The major difference to <code><a href="http://gesistsa.github.io/rio/reference/import.html" class="external-link">rio::import()</a></code> is that
-<code>data_read()</code> automatically converts fully labelled numeric variables into
-factors, where imported value labels will be set as factor levels. If a
-numeric variable has <em>no</em> value labels or less value labels than values, it
-is not converted to factor. In this case, value labels are preserved as
-<code>"labels"</code> attribute. Character vectors are preserved. Use
+their most appropriate type. The major difference to <code><a href="http://gesistsa.github.io/rio/reference/import.html" class="external-link">rio::import()</a></code> is for
+data files from SPSS, SAS, or Stata, i.e. file types that support
+<em>labelled data</em>. <code>data_read()</code> automatically converts fully labelled numeric
+variables into factors, where imported value labels will be set as factor
+levels. If a numeric variable has <em>no</em> value labels or less value labels than
+values, it is not converted to factor. In this case, value labels are
+preserved as <code>"labels"</code> attribute. Character vectors are preserved. Use
 <code>convert_factors = FALSE</code> to remove the automatic conversion of numeric
 variables to factors.</p>
     </div>
