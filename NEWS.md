@@ -24,6 +24,9 @@ BUG FIXES
 * `describe_distribution()` no longer errors if the sample was too sparse to compute
   CIs. Instead, it warns the user and returns `NA` (#550).
 
+* `data_read()` preserves variable types when importing files from `rds` or
+  `rdata` format (#558).
+
 # datawizard 0.13.0
 
 BREAKING CHANGES
