@@ -25,7 +25,7 @@ BUG FIXES
   CIs. Instead, it warns the user and returns `NA` (#550).
 
 * `data_read()` preserves variable types when importing files from `rds` or
-  `rdata` format.
+  `rdata` format (#558).
 
 # datawizard 0.13.0
 
