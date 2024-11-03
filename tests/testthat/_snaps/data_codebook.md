@@ -139,7 +139,7 @@
 # data_codebook efc
 
     Code
-      print(data_codebook(efc), table_witdh = Inf)
+      print(data_codebook(efc), table_width = Inf)
     Output
       efc (100 rows and 5 variables, 5 shown)
       
@@ -229,7 +229,7 @@
 # data_codebook efc, variable_label_width
 
     Code
-      print(out, table_witdh = Inf)
+      print(out, table_width = Inf)
     Output
       efc (100 rows and 5 variables, 5 shown)
       
@@ -323,7 +323,7 @@
 # data_codebook efc, value_label_width
 
     Code
-      print(out, table_witdh = Inf)
+      print(out, table_width = Inf)
     Output
       efc (100 rows and 5 variables, 5 shown)
       
