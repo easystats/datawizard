@@ -369,7 +369,8 @@ print.data_codebook <- function(x, ...) {
       title = caption,
       empty_line = "-",
       cross = "+",
-      align = .get_codebook_align(x)
+      align = .get_codebook_align(x),
+      ...
     )
   )
 }
