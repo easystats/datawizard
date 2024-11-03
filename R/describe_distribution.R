@@ -513,7 +513,7 @@ print.parameters_distribution <- function(x, digits = 2, ...) {
     ci_brackets = TRUE,
     ...
   )
-  cat(insight::export_table(formatted_table, format = "text", digits = digits))
+  cat(insight::export_table(formatted_table, format = "text", digits = digits, ...))
   invisible(x)
 }
 

@@ -522,7 +522,8 @@ print.datawizard_table <- function(x, big_mark = NULL, ...) {
   cat(insight::export_table(
     format(x, big_mark = big_mark, ...),
     cross = "+",
-    missing = "<NA>"
+    missing = "<NA>",
+    ...
   ))
   invisible(x)
 }
@@ -621,7 +622,8 @@ print.datawizard_tables <- function(x, big_mark = NULL, ...) {
       out,
       missing = "<NA>",
       cross = "+",
-      empty_line = "-"
+      empty_line = "-",
+      ...
     ))
   }
 }
