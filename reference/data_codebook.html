@@ -236,50 +236,91 @@ well methods for printing in markdown or HTML format (<code><a href="https://eas
 <span class="r-in"><span><span class="fu">data_codebook</span><span class="op">(</span><span class="va">efc</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">efc (100 rows and 5 variables, 5 shown)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ID | Name     | Label                                    | Type        |   Missings |   Values | Value Labels                    |          N</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+-------------+------------+----------+---------------------------------+-----------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  | c12hour  | average number of hours of care per week | numeric     |   2 (2.0%) | [5, 168] |                                 |         98</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+-------------+------------+----------+---------------------------------+-----------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  | e16sex   | elder's gender                           | numeric     |   0 (0.0%) |        1 | male                            | 46 (46.0%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                                          |             |            |        2 | female                          | 54 (54.0%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+-------------+------------+----------+---------------------------------+-----------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  | e42dep   | elder's dependency                       | categorical |   3 (3.0%) |        1 | independent                     |  2 ( 2.1%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                                          |             |            |        2 | slightly dependent              |  4 ( 4.1%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                                          |             |            |        3 | moderately dependent            | 28 (28.9%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                                          |             |            |        4 | severely dependent              | 63 (64.9%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+-------------+------------+----------+---------------------------------+-----------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  | c172code | carer's level of education               | numeric     | 10 (10.0%) |        1 | low level of education          |  8 ( 8.9%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                                          |             |            |        2 | intermediate level of education | 66 (73.3%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                                          |             |            |        3 | high level of education         | 16 (17.8%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+-------------+------------+----------+---------------------------------+-----------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  | neg_c_7  | Negative impact with 7 items             | numeric     |   3 (3.0%) |  [7, 28] |                                 |         97</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ID | Name     | Label                                    | Type       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  | c12hour  | average number of hours of care per week | numeric    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  | e16sex   | elder's gender                           | numeric    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  | e42dep   | elder's dependency                       | categorical</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  | c172code | carer's level of education               | numeric    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  | neg_c_7  | Negative impact with 7 items             | numeric    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ID |   Missings |   Values | Value Labels                    |          N</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------+----------+---------------------------------+-----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  |   2 (2.0%) | [5, 168] |                                 |         98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------+----------+---------------------------------+-----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  |   0 (0.0%) |        1 | male                            | 46 (46.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |            |        2 | female                          | 54 (54.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------+----------+---------------------------------+-----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  |   3 (3.0%) |        1 | independent                     |  2 ( 2.1%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |            |        2 | slightly dependent              |  4 ( 4.1%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |            |        3 | moderately dependent            | 28 (28.9%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |            |        4 | severely dependent              | 63 (64.9%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------+----------+---------------------------------+-----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  | 10 (10.0%) |        1 | low level of education          |  8 ( 8.9%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |            |        2 | intermediate level of education | 66 (73.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |            |        3 | high level of education         | 16 (17.8%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------+----------+---------------------------------+-----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  |   3 (3.0%) |  [7, 28] |                                 |         97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------------------</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># shorten labels</span></span></span>
 <span class="r-in"><span><span class="fu">data_codebook</span><span class="op">(</span><span class="va">efc</span>, variable_label_width <span class="op">=</span> <span class="fl">20</span>, value_label_width <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">efc (100 rows and 5 variables, 5 shown)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ID | Name     | Label              | Type        |   Missings |   Values | Value Labels     |          N</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+--------------------+-------------+------------+----------+------------------+-----------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  | c12hour  | average number of  | numeric     |   2 (2.0%) | [5, 168] |                  |         98</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    |          | hours of care per  |             |            |          |                  |           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    |          | week               |             |            |          |                  |           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+--------------------+-------------+------------+----------+------------------+-----------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  | e16sex   | elder's gender     | numeric     |   0 (0.0%) |        1 | male             | 46 (46.0%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                    |             |            |        2 | female           | 54 (54.0%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+--------------------+-------------+------------+----------+------------------+-----------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  | e42dep   | elder's dependency | categorical |   3 (3.0%) |        1 | independent      |  2 ( 2.1%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                    |             |            |        2 | slightly...      |  4 ( 4.1%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                    |             |            |        3 | moderately...    | 28 (28.9%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                    |             |            |        4 | severely...      | 63 (64.9%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+--------------------+-------------+------------+----------+------------------+-----------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  | c172code | carer's level of   | numeric     | 10 (10.0%) |        1 | low level of...  |  8 ( 8.9%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    |          | education          |             |            |        2 | intermediate...  | 66 (73.3%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                    |             |            |        3 | high level of... | 16 (17.8%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+--------------------+-------------+------------+----------+------------------+-----------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  | neg_c_7  | Negative impact    | numeric     |   3 (3.0%) |  [7, 28] |                  |         97</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    |          | with 7 items       |             |            |          |                  |           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ID | Name     | Label              | Type        |   Missings |   Values</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+--------------------+-------------+------------+---------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  | c12hour  | average number of  | numeric     |   2 (2.0%) | [5, 168]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          | hours of care per  |             |            |         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          | week               |             |            |         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+--------------------+-------------+------------+---------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  | e16sex   | elder's gender     | numeric     |   0 (0.0%) |        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                    |             |            |        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+--------------------+-------------+------------+---------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  | e42dep   | elder's dependency | categorical |   3 (3.0%) |        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                    |             |            |        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                    |             |            |        3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                    |             |            |        4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+--------------------+-------------+------------+---------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  | c172code | carer's level of   | numeric     | 10 (10.0%) |        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          | education          |             |            |        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                    |             |            |        3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+--------------------+-------------+------------+---------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  | neg_c_7  | Negative impact    | numeric     |   3 (3.0%) |  [7, 28]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          | with 7 items       |             |            |         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ID | Value Labels     |          N</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------------+-----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  |                  |         98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------------+-----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------------+-----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------------+-----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  | male             | 46 (46.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    | female           | 54 (54.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------------+-----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  | independent      |  2 ( 2.1%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    | slightly...      |  4 ( 4.1%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    | moderately...    | 28 (28.9%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    | severely...      | 63 (64.9%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------------+-----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  | low level of...  |  8 ( 8.9%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    | intermediate...  | 66 (73.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    | high level of... | 16 (17.8%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------------+-----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  |                  |         97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------------+-----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># automatic range for numerics at more than 5 unique values</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
