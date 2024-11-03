@@ -39,21 +39,24 @@ test_that("data_codebook iris, select, ID", {
 
 test_that("data_codebook efc", {
   expect_snapshot(print(data_codebook(efc), table_width = Inf))
-  expect_snapshot(print(data_codebook(efc), table_width = "auto"))
+  expect_snapshot(print(data_codebook(efc), table_width = "auto", remove_duplicates = FALSE))
+  expect_snapshot(print(data_codebook(efc), table_width = "auto", remove_duplicates = TRUE))
 })
 
 
 test_that("data_codebook efc, variable_label_width", {
   out <- data_codebook(efc, variable_label_width = 30)
   expect_snapshot(print(out, table_width = Inf))
-  expect_snapshot(print(out, table_width = "auto"))
+  expect_snapshot(print(out, table_width = "auto", remove_duplicates = FALSE))
+  expect_snapshot(print(out, table_width = "auto", remove_duplicates = TRUE))
 })
 
 
 test_that("data_codebook efc, value_label_width", {
   out <- data_codebook(efc, variable_label_width = 30, value_label_width = 15)
   expect_snapshot(print(out, table_width = Inf))
-  expect_snapshot(print(out, table_width = "auto"))
+  expect_snapshot(print(out, table_width = "auto", remove_duplicates = FALSE))
+  expect_snapshot(print(out, table_width = "auto", remove_duplicates = TRUE))
 })
 
 
