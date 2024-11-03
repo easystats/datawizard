@@ -48,7 +48,8 @@
 #' @note
 #' There are `print_html()` and `print_md()` methods available for printing
 #' frequency or crosstables in HTML and markdown format, e.g.
-#' `print_html(data_tabulate(x))`.
+#' `print_html(data_tabulate(x))`. The `print()` method for text outputs passes
+#' arguments in `...` to [`insight::export_table()`].
 #'
 #' @return A data frame, or a list of data frames, with one frequency table
 #' as data frame per variable.

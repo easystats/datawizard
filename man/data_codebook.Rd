@@ -127,7 +127,8 @@ labels, values or value range, frequencies, amount of missing values).
 \note{
 There are methods to \code{print()} the data frame in a nicer output, as
 well methods for printing in markdown or HTML format (\code{print_md()} and
-\code{print_html()}).
+\code{print_html()}). The \code{print()} method for text outputs passes arguments in
+\code{...} to \code{\link[insight:export_table]{insight::export_table()}}.
 }
 \examples{
 data(iris)

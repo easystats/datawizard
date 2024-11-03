@@ -167,7 +167,8 @@ frequency tables as data frame. See 'Examples'.
 \note{
 There are \code{print_html()} and \code{print_md()} methods available for printing
 frequency or crosstables in HTML and markdown format, e.g.
-\code{print_html(data_tabulate(x))}.
+\code{print_html(data_tabulate(x))}. The \code{print()} method for text outputs passes
+arguments in \code{...} to \code{\link[insight:export_table]{insight::export_table()}}.
 }
 \section{Crosstables}{
 
