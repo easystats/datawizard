@@ -11,7 +11,7 @@ labels, values or value range, frequencies, amount of missing values)."><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -216,7 +216,8 @@ Most columns are formatted as character vectors.</p>
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>There are methods to <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> the data frame in a nicer output, as
 well methods for printing in markdown or HTML format (<code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md()</a></code> and
-<code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_html()</a></code>).</p>
+<code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_html()</a></code>). The <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method for text outputs passes arguments in
+<code>...</code> to <code><a href="https://easystats.github.io/insight/reference/export_table.html" class="external-link">insight::export_table()</a></code>.</p>
     </div>
 
     <div class="section level2">
@@ -241,16 +242,16 @@ well methods for printing in markdown or HTML format (<code><a href="https://eas
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  | c12hour  | average number of hours of care per week | numeric    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  | e16sex   | elder's gender                           | numeric    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                                          |            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  | e42dep   | elder's dependency                       | categorical</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                                          |            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                                          |            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                                          |            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  | c172code | carer's level of education               | numeric    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                                          |            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |          |                                          |            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---+----------+------------------------------------------+------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  | neg_c_7  | Negative impact with 7 items             | numeric    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------------</span>
@@ -303,8 +304,8 @@ well methods for printing in markdown or HTML format (<code><a href="https://eas
 <span class="r-out co"><span class="r-pr">#&gt;</span> ID | Value Labels     |          N</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------------+-----------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  |                  |         98</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------------+-----------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------------+-----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |                  |           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |                  |           </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------------+-----------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  | male             | 46 (46.0%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    | female           | 54 (54.0%)</span>
@@ -319,7 +320,7 @@ well methods for printing in markdown or HTML format (<code><a href="https://eas
 <span class="r-out co"><span class="r-pr">#&gt;</span>    | high level of... | 16 (17.8%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------------+-----------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  |                  |         97</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---+------------------+-----------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    |                  |           </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># automatic range for numerics at more than 5 unique values</span></span></span>
