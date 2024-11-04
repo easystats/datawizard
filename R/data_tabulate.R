@@ -48,7 +48,8 @@
 #' @note
 #' There are `print_html()` and `print_md()` methods available for printing
 #' frequency or crosstables in HTML and markdown format, e.g.
-#' `print_html(data_tabulate(x))`.
+#' `print_html(data_tabulate(x))`. The `print()` method for text outputs passes
+#' arguments in `...` to [`insight::export_table()`].
 #'
 #' @return A data frame, or a list of data frames, with one frequency table
 #' as data frame per variable.
@@ -522,7 +523,8 @@ print.datawizard_table <- function(x, big_mark = NULL, ...) {
   cat(insight::export_table(
     format(x, big_mark = big_mark, ...),
     cross = "+",
-    missing = "<NA>"
+    missing = "<NA>",
+    ...
   ))
   invisible(x)
 }
@@ -621,7 +623,8 @@ print.datawizard_tables <- function(x, big_mark = NULL, ...) {
       out,
       missing = "<NA>",
       cross = "+",
-      empty_line = "-"
+      empty_line = "-",
+      ...
     ))
   }
 }
