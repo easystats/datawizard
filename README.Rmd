@@ -19,7 +19,7 @@ library(datawizard)
 
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.04684/status.svg)](https://doi.org/10.21105/joss.04684)
 [![downloads](http://cranlogs.r-pkg.org/badges/datawizard)](https://cran.r-project.org/package=datawizard)
-[![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/) [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+[![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/) 
 
 <!-- ***:sparkles: Hockety pockety wockety wack, prepare this data forth and back*** -->
 

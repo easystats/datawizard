@@ -19,7 +19,6 @@ distribution_coef_var(x, ...)
   trim = 0,
   remove_na = FALSE,
   n = NULL,
-  na.rm = FALSE,
   ...
 )
 }
@@ -52,8 +51,6 @@ or not (\code{FALSE}, default)?}
 \item{n}{If \code{method = "unbiased"} and both \code{mu} and \code{sigma} are provided (not
 computed from \code{x}), what sample size to use to adjust the computed CV
 for small-sample bias?}
-
-\item{na.rm}{Deprecated. Please use \code{remove_na} instead.}
 }
 \value{
 The computed coefficient of variation for \code{x}.

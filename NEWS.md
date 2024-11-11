@@ -2,14 +2,57 @@
 
 BREAKING CHANGES
 
+* Argument `drop_na` in `data_match()` is deprecated now. Please use `remove_na`
+  instead.
+
+CHANGES
+
+* The `select` argument, which is available in different functions to select
+  variables, can now also be a character vector with quoted variable names,
+  including a colon to indicate a range of several variables (e.g. `"cyl:gear"`).
+
+* New function `row_sums()`, to calculate row sums (optionally with minimum
+  amount of valid values), as complement to `row_means()`.
+
+* New function `row_count()`, to count specific values row-wise.
+
+* `data_read()` no longer shows warning about forthcoming breaking changes
+  in upstream packages when reading `.RData` files.
+
+BUG FIXES
+
+* `describe_distribution()` no longer errors if the sample was too sparse to compute
+  CIs. Instead, it warns the user and returns `NA` (#550).
+
+* `data_read()` preserves variable types when importing files from `rds` or
+  `rdata` format (#558).
+
+# datawizard 0.13.0
+
+BREAKING CHANGES
+
 * `data_rename()` now errors when the `replacement` argument contains `NA` values
   or empty strings (#539).
+
+* Removed deprecated functions `get_columns()`, `data_find()`, `format_text()` (#546).
+
+* Removed deprecated arguments `group` and `na.rm` in multiple functions. Use `by` and `remove_na` instead (#546).
+
+* The default value for the argument `dummy_factors` in `to_numeric()` has
+  changed from `TRUE` to `FALSE` (#544).
 
 CHANGES
 
 * The `pattern` argument in `data_rename()` can also be a named vector. In this
   case, names are used as values for the `replacement` argument (i.e. `pattern`
   can be a character vector using `<new name> = "<old name>"`).
+
+* `categorize()` gains a new `breaks` argument, to decide whether breaks are
+  inclusive or exclusive (#548).
+
+* The `labels` argument in `categorize()` gets two new options, `"range"` and
+  `"observed"`, to use the range of categorized values as labels (i.e. factor
+  levels) (#548).
 
 * Minor additions to `reshape_ci()` to work with forthcoming changes in the
   `{bayestestR}` package.

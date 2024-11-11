@@ -51,7 +51,7 @@ data_group <- function(data,
       to = my_grid[i, , drop = FALSE],
       match = "and",
       return_indices = TRUE,
-      drop_na = FALSE
+      remove_na = FALSE
     ))
   })
   my_grid[[".rows"]] <- .rows

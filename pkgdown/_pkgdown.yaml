@@ -71,6 +71,7 @@ reference:
       - kurtosis
       - smoothness
       - skewness
+      - row_count
       - row_means
       - weighted_mean
       - mean_sd

@@ -19,7 +19,6 @@ skewness(x, ...)
   type = "2",
   iterations = NULL,
   verbose = TRUE,
-  na.rm = TRUE,
   ...
 )
 
@@ -31,7 +30,6 @@ kurtosis(x, ...)
   type = "2",
   iterations = NULL,
   verbose = TRUE,
-  na.rm = TRUE,
   ...
 )
 
@@ -60,8 +58,6 @@ or not (\code{FALSE}, default)?}
 errors. If \code{NULL} (default), parametric standard errors are computed.}
 
 \item{verbose}{Toggle warnings and messages.}
-
-\item{na.rm}{Deprecated. Please use \code{remove_na} instead.}
 
 \item{digits}{Number of decimal places.}
 

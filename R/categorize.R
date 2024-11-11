@@ -31,10 +31,18 @@
 #'   for numeric variables, the minimum of the original input is preserved. For
 #'   factors, the default minimum is `1`. For `split = "equal_range"`, the
 #'   default minimum is always `1`, unless specified otherwise in `lowest`.
+#' @param breaks Character, indicating whether breaks for categorizing data are
+#'   `"inclusive"` (values indicate the _upper_ bound of the _previous_ group or
+#'   interval) or `"exclusive"` (values indicate the _lower_ bound of the _next_
+#'   group or interval to begin). Use `labels = "range"` to make this behaviour
+#'   easier to see.
 #' @param labels Character vector of value labels. If not `NULL`, `categorize()`
 #'   will returns factors instead of numeric variables, with `labels` used
-#'   for labelling the factor levels. Can also be `"mean"` or `"median"` for a
-#'   factor with labels as the mean/median of each groups.
+#'   for labelling the factor levels. Can also be `"mean"`, `"median"`,
+#'   `"range"` or `"observed"` for a factor with labels as the mean/median,
+#'   the requested range (even if not all values of that range are present in
+#'   the data) or observed range (range of the actual recoded values) of each
+#'   group. See 'Examples'.
 #' @param append Logical or string. If `TRUE`, recoded or converted variables
 #'   get new column names and are appended (column bind) to `x`, thus returning
 #'   both the original and the recoded variables. The new columns get a suffix,
@@ -53,7 +61,7 @@
 #'
 #' # Splits and breaks (cut-off values)
 #'
-#' Breaks are in general _exclusive_, this means that these values indicate
+#' Breaks are by default _exclusive_, this means that these values indicate
 #' the lower bound of the next group or interval to begin. Take a simple
 #' example, a numeric variable with values from 1 to 9. The median would be 5,
 #' thus the first interval ranges from 1-4 and is recoded into 1, while 5-9
@@ -62,6 +70,9 @@
 #' and 6.33 (see `quantile(1:9, probs = c(1/3, 2/3))`), which means that values
 #' from 1 to 3 belong to the first interval and are recoded into 1 (because
 #' the next interval starts at 3.67), 4 to 6 into 2 and 7 to 9 into 3.
+#'
+#' The opposite behaviour can be achieved using `breaks = "inclusive"`, in which
+#' case
 #'
 #' # Recoding into groups with equal size or range
 #'
@@ -119,6 +130,13 @@
 #' x <- sample(1:10, size = 30, replace = TRUE)
 #' categorize(x, "equal_length", n_groups = 3, labels = "mean")
 #' categorize(x, "equal_length", n_groups = 3, labels = "median")
+#'
+#' # cut numeric into groups with the requested range as a label name
+#' # each category has the same range, and labels indicate this range
+#' categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "range")
+#' # in this example, each category has the same range, but labels only refer
+#' # to the ranges of the actual values (present in the data) inside each group
+#' categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "observed")
 #' @export
 categorize <- function(x, ...) {
   UseMethod("categorize")
@@ -142,6 +160,7 @@ categorize.numeric <- function(x,
                                n_groups = NULL,
                                range = NULL,
                                lowest = 1,
+                               breaks = "exclusive",
                                labels = NULL,
                                verbose = TRUE,
                                ...) {
@@ -151,6 +170,9 @@ categorize.numeric <- function(x,
   # handle aliases
   if (identical(split, "equal_length")) split <- "length"
   if (identical(split, "equal_range")) split <- "range"
+
+  # check for valid values
+  breaks <- match.arg(breaks, c("exclusive", "inclusive"))
 
   # save
   original_x <- x
@@ -169,9 +191,9 @@ categorize.numeric <- function(x,
   }
 
   if (is.numeric(split)) {
-    breaks <- split
+    category_splits <- split
   } else {
-    breaks <- switch(split,
+    category_splits <- switch(split,
       median = stats::median(x),
       mean = mean(x),
       length = n_groups,
@@ -182,15 +204,18 @@ categorize.numeric <- function(x,
   }
 
   # complete ranges, including minimum and maximum
-  if (!identical(split, "length")) breaks <- unique(c(min(x), breaks, max(x)))
+  if (!identical(split, "length")) {
+    category_splits <- unique(c(min(x), category_splits, max(x)))
+  }
 
   # recode into groups
   out <- droplevels(cut(
     x,
-    breaks = breaks,
+    breaks = category_splits,
     include.lowest = TRUE,
-    right = FALSE
+    right = identical(breaks, "inclusive")
   ))
+  cut_result <- out
   levels(out) <- 1:nlevels(out)
 
   # fix lowest value, add back into original vector
@@ -201,7 +226,7 @@ categorize.numeric <- function(x,
   original_x[!is.na(original_x)] <- out
 
   # turn into factor?
-  .original_x_to_factor(original_x, x, labels, out, verbose, ...)
+  .original_x_to_factor(original_x, x, cut_result, labels, out, verbose, ...)
 }
 
 
@@ -223,6 +248,7 @@ categorize.data.frame <- function(x,
                                   n_groups = NULL,
                                   range = NULL,
                                   lowest = 1,
+                                  breaks = "exclusive",
                                   labels = NULL,
                                   append = FALSE,
                                   ignore_case = FALSE,
@@ -260,6 +286,7 @@ categorize.data.frame <- function(x,
     n_groups = n_groups,
     range = range,
     lowest = lowest,
+    breaks = breaks,
     labels = labels,
     verbose = verbose,
     ...
@@ -276,6 +303,7 @@ categorize.grouped_df <- function(x,
                                   n_groups = NULL,
                                   range = NULL,
                                   lowest = 1,
+                                  breaks = "exclusive",
                                   labels = NULL,
                                   append = FALSE,
                                   ignore_case = FALSE,
@@ -319,6 +347,7 @@ categorize.grouped_df <- function(x,
       n_groups = n_groups,
       range = range,
       lowest = lowest,
+      breaks = breaks,
       labels = labels,
       select = select,
       exclude = exclude,
@@ -375,20 +404,26 @@ categorize.grouped_df <- function(x,
 }
 
 
-.original_x_to_factor <- function(original_x, x, labels, out, verbose, ...) {
+.original_x_to_factor <- function(original_x, x, cut_result, labels, out, verbose, ...) {
   if (!is.null(labels)) {
     if (length(labels) == length(unique(out))) {
       original_x <- as.factor(original_x)
       levels(original_x) <- labels
-    } else if (length(labels) == 1 && labels %in% c("mean", "median")) {
+    } else if (length(labels) == 1 && labels %in% c("mean", "median", "range", "observed")) {
       original_x <- as.factor(original_x)
       no_na_x <- original_x[!is.na(original_x)]
-      if (labels == "mean") {
-        labels <- stats::aggregate(x, list(no_na_x), FUN = mean, na.rm = TRUE)$x
-      } else {
-        labels <- stats::aggregate(x, list(no_na_x), FUN = stats::median, na.rm = TRUE)$x
-      }
-      levels(original_x) <- insight::format_value(labels, ...)
+      out <- switch(labels,
+        mean = stats::aggregate(x, list(no_na_x), FUN = mean, na.rm = TRUE)$x,
+        median = stats::aggregate(x, list(no_na_x), FUN = stats::median, na.rm = TRUE)$x,
+        # labels basically like what "cut()" returns
+        range = levels(cut_result),
+        # range based on the values that are actually present in the data
+        {
+          temp <- stats::aggregate(x, list(no_na_x), FUN = range, na.rm = TRUE)$x
+          apply(temp, 1, function(i) paste0("(", paste(as.vector(i), collapse = "-"), ")"))
+        }
+      )
+      levels(original_x) <- insight::format_value(out, ...)
     } else if (isTRUE(verbose)) {
       insight::format_warning(
         "Argument `labels` and levels of the recoded variable are not of the same length.",
