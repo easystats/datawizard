@@ -65,9 +65,6 @@
 #'
 #' # One can list the scale names directly:
 #' describe_missing(df, scales = c("ID", "open", "extrovert", "agreeable"))
-
-
-
 describe_missing <- function(data, vars = NULL, scales = NULL) {
   classes <- lapply(data, class)
   if (missing(vars) & missing(scales)) {
@@ -104,7 +101,7 @@ describe_missing <- function(data, vars = NULL, scales = NULL) {
   na_max <- max(rowSums(is.na(data)))
   na_max_percent <- round(na_max / items * 100, 2)
   all_na <- sum(apply(data, 1, function(x) all(is.na(x))))
-  
+
   data.frame(
     var = var,
     items = items,
