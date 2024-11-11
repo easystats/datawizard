@@ -14,13 +14,14 @@ test_that("describe_missing", {
   fun <- function() {
     c(sample(c(NA, 1:10), replace = TRUE), NA, NA, NA)
   }
-  expect_snapshot(df <- data.frame(
+
+  # One can list the scale names directly:
+  df <- data.frame(
     ID = c("idz", NA),
     scale1_Q1 = fun(), scale1_Q2 = fun(), scale1_Q3 = fun(),
     scale2_Q1 = fun(), scale2_Q2 = fun(), scale2_Q3 = fun(),
-    scale3_Q1 = fun(), scale3_Q2 = fun(), scale3_Q3 = fun()
-  ))
-
-  # One can list the scale names directly:
+    scale3_Q1 = fun(), scale3_Q2 = fun(), scale3_Q3 = fun(),
+    stringsAsFactors = FALSE
+  )
   expect_snapshot(describe_missing(df, scales = c("ID", "scale1", "scale2", "scale3")))
 })

@@ -67,7 +67,7 @@
 #' describe_missing(df, scales = c("ID", "open", "extrovert", "agreeable"))
 describe_missing <- function(data, vars = NULL, scales = NULL) {
   classes <- lapply(data, class)
-  if (missing(vars) & missing(scales)) {
+  if (missing(vars) && missing(scales)) {
     vars.internal <- names(data)
   } else if (!missing(scales)) {
     vars.internal <- lapply(scales, function(x) {
@@ -81,7 +81,7 @@ describe_missing <- function(data, vars = NULL, scales = NULL) {
     vars.internal <- list(vars.internal)
   }
   na_df <- .describe_missing(data)
-  if (!missing(vars) | !missing(scales)) {
+  if (!missing(vars) || !missing(scales)) {
     na_list <- lapply(vars.internal, function(x) {
       data_subset <- data[, x, drop = FALSE]
       .describe_missing(data_subset)
@@ -93,7 +93,7 @@ describe_missing <- function(data, vars = NULL, scales = NULL) {
 }
 
 .describe_missing <- function(data) {
-  var <- paste0(names(data)[1], ":", names(data)[ncol(data)])
+  my_var <- paste0(names(data)[1], ":", names(data)[ncol(data)])
   items <- ncol(data)
   na <- sum(is.na(data))
   cells <- nrow(data) * ncol(data)
@@ -103,7 +103,7 @@ describe_missing <- function(data, vars = NULL, scales = NULL) {
   all_na <- sum(apply(data, 1, function(x) all(is.na(x))))
 
   data.frame(
-    var = var,
+    var = my_var,
     items = items,
     na = na,
     cells = cells,

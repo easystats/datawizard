@@ -20,13 +20,6 @@
 ---
 
     Code
-      df <- data.frame(ID = c("idz", NA), scale1_Q1 = fun(), scale1_Q2 = fun(),
-      scale1_Q3 = fun(), scale2_Q1 = fun(), scale2_Q2 = fun(), scale2_Q3 = fun(),
-      scale3_Q1 = fun(), scale3_Q2 = fun(), scale3_Q3 = fun())
-
----
-
-    Code
       describe_missing(df, scales = c("ID", "scale1", "scale2", "scale3"))
     Output
                         var items na cells na_percent na_max na_max_percent all_na
