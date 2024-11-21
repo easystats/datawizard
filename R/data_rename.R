@@ -10,18 +10,34 @@
 #'   pipe-workflow.
 #'
 #' @param data A data frame, or an object that can be coerced to a data frame.
-#' @param pattern Character vector. For `data_rename()`, indicates columns that
-#'   should be selected for renaming. Can be `NULL` (in which case all columns
-#'   are selected). For `data_addprefix()` or `data_addsuffix()`, a character
-#'   string, which will be added as prefix or suffix to the column names. For
-#'   `data_rename()`, `pattern` can also be a named vector. In this case, names
-#'   are used as values for the `replacement` argument (i.e. `pattern` can be a
-#'   character vector using `<new name> = "<old name>"` and argument `replacement`
-#'   will be ignored then).
-#' @param replacement Character vector. Indicates the new name of the columns
-#'   selected in `pattern`. Can be `NULL` (in which case column are numbered
-#'   in sequential order). If not `NULL`, `pattern` and `replacement` must be
-#'   of the same length. If `pattern` is a named vector, `replacement` is ignored.
+#' @param pattern Character vector.
+#'   - For `data_addprefix()` or `data_addsuffix()`, a character string, which
+#'     will be added as prefix or suffix to the column names.
+#'   - For `data_rename()`, indicates columns that should be selected for
+#'     renaming. Can be `NULL` (in which case all columns are selected).
+#'     `pattern` can also be a named vector. In this case, names are used as
+#'     values for the `replacement` argument (i.e. `pattern` can be a character
+#'     vector using `<new name> = "<old name>"` and argument `replacement` will
+#'     be ignored then).
+#' @param replacement Character vector. Can be one of the following:
+#'   - A character vector that indicates the new name of the columns selected in
+#'     `pattern`. `pattern` and `replacement` must be of the same length.
+#'   - `NULL`, in which case column are numbered in sequential order.
+#'   - A string (i.e. character vector of length 1) with a "curl" styled pattern.
+#'     Currently supported tokens are `{col}` and `{n}`. `{col}` will be replaced
+#'     by the column name, i.e. the corresponding value in `pattern`. `{n}` will
+#'     be replaced by the number of the variable that is replaced. For instance,
+#'     ```r
+#'     data_rename(
+#'       mtcars,
+#'       pattern = c("am", "vs"),
+#'       replacement = "new_name_from_{col}"
+#'     )
+#'     ```
+#'     would returns new column names `new_name_from_am` and `new_name_from__vs`.
+#'     See 'Examples'.
+#'
+#' If `pattern` is a named vector, `replacement` is ignored.
 #' @param rows Vector of row names.
 #' @param safe Do not throw error if for instance the variable to be
 #'   renamed/removed doesn't exist.
@@ -45,6 +61,10 @@
 #'
 #' # Change all
 #' head(data_rename(iris, replacement = paste0("Var", 1:5)))
+#'
+#' # Use curl-styled patterns
+#' head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "formerly_{col}"))
+#' head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "{col}_is_column_{n}"))
 #' @seealso
 #' - Functions to rename stuff: [data_rename()], [data_rename_rows()], [data_addprefix()], [data_addsuffix()]
 #' - Functions to reorder or remove columns: [data_reorder()], [data_relocate()], [data_remove()]
@@ -122,6 +142,11 @@ data_rename <- function(data,
     }
   }
 
+  # check if we have "curl" styled replacement-string
+  curl_style <- length(replacement) == 1 &&
+    grepl("{", replacement, fixed = TRUE) &&
+    length(pattern) > 1
+
   if (length(replacement) > length(pattern) && verbose) {
     insight::format_alert(
       paste0(
@@ -129,13 +154,18 @@ data_rename <- function(data,
         length(replacement) - length(pattern), " names of `replacement` are not used."
       )
     )
-  } else if (length(replacement) < length(pattern) && verbose) {
+  } else if (length(replacement) < length(pattern) && verbose && !curl_style) {
     insight::format_alert(
       paste0(
         "There are more names in `pattern` than in `replacement`. The last ",
         length(pattern) - length(replacement), " names of `pattern` are not modified."
       )
     )
+  }
+
+  # if we have curl-styled replacement-string, create replacement pattern now
+  if (curl_style) {
+    replacement <- .curl_replacement(pattern, replacement)
   }
 
   for (i in seq_along(pattern)) {
@@ -164,6 +194,33 @@ data_rename <- function(data,
   names(data) <- replace(names(data), names(data) == pattern, replacement)
 
   data
+}
+
+
+.curl_replacement <- function(pattern, replacement) {
+  # this function replaces "curl" tokens into their related
+  # real names/values. Currently, following tokens are accepted:
+  # - {col}: replacement is the name of the column (inidcated in "pattern")
+  # - {n}: replacement is the number of the variable out of n, that should be renamed
+  out <- rep_len("", length(pattern))
+  for (i in seq_along(out)) {
+    # prepare pattern
+    column_name <- pattern[i]
+    out[i] <- replacement
+    # replace first accepted token
+    out[i] <- gsub(
+      "(.*)(\\{col\\})(.*)",
+      replacement = paste0("\\1", column_name, "\\3"),
+      x = out[i]
+    )
+    # replace second accepted token
+    out[i] <- gsub(
+      "(.*)(\\{n\\})(.*)",
+      replacement = paste0("\\1", i, "\\3"),
+      x = out[i]
+    )
+  }
+  out
 }
 
 

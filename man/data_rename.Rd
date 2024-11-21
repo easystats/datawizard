@@ -43,14 +43,17 @@ data_rename_rows(data, rows = NULL)
 \arguments{
 \item{data}{A data frame, or an object that can be coerced to a data frame.}
 
-\item{pattern}{Character vector. For \code{data_rename()}, indicates columns that
-should be selected for renaming. Can be \code{NULL} (in which case all columns
-are selected). For \code{data_addprefix()} or \code{data_addsuffix()}, a character
-string, which will be added as prefix or suffix to the column names. For
-\code{data_rename()}, \code{pattern} can also be a named vector. In this case, names
-are used as values for the \code{replacement} argument (i.e. \code{pattern} can be a
-character vector using \verb{<new name> = "<old name>"} and argument \code{replacement}
-will be ignored then).}
+\item{pattern}{Character vector.
+\itemize{
+\item For \code{data_addprefix()} or \code{data_addsuffix()}, a character string, which
+will be added as prefix or suffix to the column names.
+\item For \code{data_rename()}, indicates columns that should be selected for
+renaming. Can be \code{NULL} (in which case all columns are selected).
+\code{pattern} can also be a named vector. In this case, names are used as
+values for the \code{replacement} argument (i.e. \code{pattern} can be a character
+vector using \verb{<new name> = "<old name>"} and argument \code{replacement} will
+be ignored then).
+}}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -107,10 +110,28 @@ functions (see 'Details'), this argument may be used as workaround.}
 
 \item{...}{Other arguments passed to or from other functions.}
 
-\item{replacement}{Character vector. Indicates the new name of the columns
-selected in \code{pattern}. Can be \code{NULL} (in which case column are numbered
-in sequential order). If not \code{NULL}, \code{pattern} and \code{replacement} must be
-of the same length. If \code{pattern} is a named vector, \code{replacement} is ignored.}
+\item{replacement}{Character vector. Can be one of the following:
+\itemize{
+\item A character vector that indicates the new name of the columns selected in
+\code{pattern}. \code{pattern} and \code{replacement} must be of the same length.
+\item \code{NULL}, in which case column are numbered in sequential order.
+\item A string (i.e. character vector of length 1) with a "curl" styled pattern.
+Currently supported tokens are \code{{col}} and \code{{n}}. \code{{col}} will be replaced
+by the column name, i.e. the corresponding value in \code{pattern}. \code{{n}} will
+be replaced by the number of the variable that is replaced. For instance,
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_rename(
+  mtcars,
+  pattern = c("am", "vs"),
+  replacement = "new_name_from_\{col\}"
+)
+}\if{html}{\out{</div>}}
+
+would returns new column names \code{new_name_from_am} and \code{new_name_from__vs}.
+See 'Examples'.
+}
+
+If \code{pattern} is a named vector, \code{replacement} is ignored.}
 
 \item{safe}{Do not throw error if for instance the variable to be
 renamed/removed doesn't exist.}
@@ -148,6 +169,10 @@ head(data_rename(iris, NULL))
 
 # Change all
 head(data_rename(iris, replacement = paste0("Var", 1:5)))
+
+# Use curl-styled patterns
+head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "formerly_{col}"))
+head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "{col}_is_column_{n}"))
 }
 \seealso{
 \itemize{
