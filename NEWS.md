@@ -19,6 +19,9 @@ CHANGES
 * `data_read()` no longer shows warning about forthcoming breaking changes
   in upstream packages when reading `.RData` files.
 
+* `data_modify()` now recognizes `n()`, for example to create an index for data groups
+  with `1:n()` (#535).
+
 BUG FIXES
 
 * `describe_distribution()` no longer errors if the sample was too sparse to compute
@@ -69,9 +72,6 @@ CHANGES
   it contains links to the other vignettes on the website. This is because there
   are CRAN errors occurring when building vignettes on macOS and we couldn't
   determine the cause after multiple patch releases (#534).
-
-* `data_modify()` now recognizes `n()`, for example to create an index for data groups 
-  with `1:n()` (#535).
 
 # datawizard 0.12.2
 
