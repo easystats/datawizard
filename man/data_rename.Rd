@@ -112,9 +112,9 @@ functions (see 'Details'), this argument may be used as workaround.}
 
 \item{replacement}{Character vector. Can be one of the following:
 \itemize{
-\item A character vector that indicates the new name of the columns selected in
-\code{pattern}. \code{pattern} and \code{replacement} must be of the same length.
-\item \code{NULL}, in which case column are numbered in sequential order.
+\item A character vector that indicates the new names of the columns selected
+in \code{pattern}. \code{pattern} and \code{replacement} must be of the same length.
+\item \code{NULL}, in which case columns are numbered in sequential order.
 \item A string (i.e. character vector of length 1) with a "curl" styled pattern.
 Currently supported tokens are \code{{col}} and \code{{n}}. \code{{col}} will be replaced
 by the column name, i.e. the corresponding value in \code{pattern}. \code{{n}} will
@@ -127,7 +127,7 @@ be replaced by the number of the variable that is replaced. For instance,
 )
 }\if{html}{\out{</div>}}
 
-would returns new column names \code{new_name_from_am} and \code{new_name_from__vs}.
+would returns new column names \code{new_name_from_am} and \code{new_name_from_vs}.
 See 'Examples'.
 }
 

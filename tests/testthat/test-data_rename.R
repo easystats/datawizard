@@ -140,3 +140,14 @@ test_that("data_rename preserves attributes", {
 
   expect_named(a1, names(a2))
 })
+
+
+# curl-styled pattern --------------------------
+
+test_that("data_rename curl-style", {
+  data(mtcars)
+  out <- data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "formerly_{col}")
+  expect_named(out, c("formerly_mpg", "formerly_cyl", "formerly_disp"))
+  out <- data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "{col}_is_column_{n}")
+  expect_named(out, c("mpg_is_column_1", "cyl_is_column_2", "disp_is_column_3"))
+})
