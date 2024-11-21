@@ -31,6 +31,28 @@ test_that("standardize | errors", {
 })
 
 
+test_that("standardize | problematic formulas", {
+  data(mtcars)
+  m <- lm(mpg ~ hp, data = mtcars)
+  expect_equal(
+    coef(standardise(m)),
+    c(`(Intercept)` = -3.14935717633686e-17, hp = -0.776168371826586),
+    tolerance = 1e-4
+  )
+
+  colnames(mtcars)[1] <- "1_mpg"
+  m <- lm(`1_mpg` ~ hp, data = mtcars)
+  expect_message(expect_warning(standardise(m), regex = "Looks like"))
+
+  data(mtcars)
+  m <- lm(mtcars$mpg ~ mtcars$hp)
+  expect_message(expect_warning(standardise(m), regex = "model formulas"))
+
+  m <- lm(mtcars[, 1] ~ hp, data = mtcars)
+  expect_message(expect_warning(standardise(m), regex = "indexed data"))
+})
+
+
 # Transformations ---------------------------------------------------------
 test_that("transformations", {
   skip_if_not_installed("effectsize")
