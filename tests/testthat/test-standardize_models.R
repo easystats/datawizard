@@ -42,14 +42,15 @@ test_that("standardize | problematic formulas", {
 
   colnames(mtcars)[1] <- "1_mpg"
   m <- lm(`1_mpg` ~ hp, data = mtcars)
-  expect_message(expect_warning(standardise(m), regex = "Looks like"))
+  expect_error(standardise(m), regex = "Looks like")
 
-  data(mtcars)
-  m <- lm(mtcars$mpg ~ mtcars$hp)
-  expect_message(expect_warning(standardise(m), regex = "model formulas"))
+  # works interactive only
+  # data(mtcars)
+  # m <- lm(mtcars$mpg ~ mtcars$hp)
+  # expect_error(standardise(m), regex = "model formulas")
 
   m <- lm(mtcars[, 1] ~ hp, data = mtcars)
-  expect_message(expect_warning(standardise(m), regex = "indexed data"))
+  expect_error(standardise(m), regex = "indexed data")
 })
 
 
@@ -228,15 +229,14 @@ test_that("standardize non-Gaussian response", {
 # variables evaluated in the environment $$$ ------------------------------
 test_that("variables evaluated in the environment", {
   m <- lm(mtcars$mpg ~ mtcars$cyl + am, data = mtcars)
-  w <- capture_warnings(standardize(m))
-  expect_true(any(grepl("mtcars$mpg", w, fixed = TRUE)))
+  w <- capture_error(standardize(m))
+  expect_true(any(grepl("Using `$`", w, fixed = TRUE)))
 
   ## Note:
   # No idea why this is suddenly not giving a warning on older R versions.
   m <- lm(mtcars$mpg ~ mtcars$cyl + mtcars$am, data = mtcars)
-  warns <- capture_warnings(standardize(m))
-  expect_true(any(grepl("mtcars$mpg", warns, fixed = TRUE)))
-  expect_true(any(grepl("No variables", warns, fixed = TRUE)))
+  w <- capture_error(standardize(m))
+  expect_true(any(grepl("Using `$`", w, fixed = TRUE)))
 })
 
 

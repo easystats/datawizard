@@ -79,10 +79,12 @@ standardize.default <- function(x,
   }
 
   # check model formula. Some notations don't work when standardizing data
-  if (!insight::formula_ok(x, verbose = verbose)) {
-    insight::format_alert(insight::color_text("Model cannot be standardized.", "red"))
-    return(x)
-  }
+  insight::formula_ok(
+    x,
+    action = "error",
+    prefix_msg = "Model cannot be standardized.",
+    verbose = verbose
+  )
 
   data_std <- NULL # needed to avoid note
   .standardize_models(x,
