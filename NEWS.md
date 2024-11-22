@@ -5,6 +5,10 @@ BREAKING CHANGES
 * Argument `drop_na` in `data_match()` is deprecated now. Please use `remove_na`
   instead.
 
+NEW FUNCTIONS
+
+* `describe_missing()`, to comprehensively report on missing values in a data frame.
+
 CHANGES
 
 * The `select` argument, which is available in different functions to select
