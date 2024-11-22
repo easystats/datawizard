@@ -115,7 +115,7 @@ functions (see 'Details'), this argument may be used as workaround.}
 \item A character vector that indicates the new names of the columns selected
 in \code{pattern}. \code{pattern} and \code{replacement} must be of the same length.
 \item \code{NULL}, in which case columns are numbered in sequential order.
-\item A string (i.e. character vector of length 1) with a "curl" styled pattern.
+\item A string (i.e. character vector of length 1) with a "glue" styled pattern.
 Currently supported tokens are \code{{col}} and \code{{n}}. \code{{col}} will be replaced
 by the column name, i.e. the corresponding value in \code{pattern}. \code{{n}} will
 be replaced by the number of the variable that is replaced. For instance,
@@ -170,7 +170,7 @@ head(data_rename(iris, NULL))
 # Change all
 head(data_rename(iris, replacement = paste0("Var", 1:5)))
 
-# Use curl-styled patterns
+# Use glue-styled patterns
 head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "formerly_{col}"))
 head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "{col}_is_column_{n}"))
 }

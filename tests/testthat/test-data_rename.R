@@ -142,9 +142,9 @@ test_that("data_rename preserves attributes", {
 })
 
 
-# curl-styled pattern --------------------------
+# glue-styled pattern --------------------------
 
-test_that("data_rename curl-style", {
+test_that("data_rename glue-style", {
   data(mtcars)
   out <- data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "formerly_{col}")
   expect_named(out, c("formerly_mpg", "formerly_cyl", "formerly_disp"))

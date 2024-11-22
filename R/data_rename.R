@@ -23,7 +23,7 @@
 #'   - A character vector that indicates the new names of the columns selected
 #'     in `pattern`. `pattern` and `replacement` must be of the same length.
 #'   - `NULL`, in which case columns are numbered in sequential order.
-#'   - A string (i.e. character vector of length 1) with a "curl" styled pattern.
+#'   - A string (i.e. character vector of length 1) with a "glue" styled pattern.
 #'     Currently supported tokens are `{col}` and `{n}`. `{col}` will be replaced
 #'     by the column name, i.e. the corresponding value in `pattern`. `{n}` will
 #'     be replaced by the number of the variable that is replaced. For instance,
@@ -62,7 +62,7 @@
 #' # Change all
 #' head(data_rename(iris, replacement = paste0("Var", 1:5)))
 #'
-#' # Use curl-styled patterns
+#' # Use glue-styled patterns
 #' head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "formerly_{col}"))
 #' head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "{col}_is_column_{n}"))
 #' @seealso
@@ -146,8 +146,8 @@ data_rename <- function(data,
     }
   }
 
-  # check if we have "curl" styled replacement-string
-  curl_style <- length(replacement) == 1 &&
+  # check if we have "glue" styled replacement-string
+  glue_style <- length(replacement) == 1 &&
     grepl("{", replacement, fixed = TRUE) &&
     length(pattern) > 1
 
@@ -158,7 +158,7 @@ data_rename <- function(data,
         length(replacement) - length(pattern), " names of `replacement` are not used."
       )
     )
-  } else if (length(replacement) < length(pattern) && verbose && !curl_style) {
+  } else if (length(replacement) < length(pattern) && verbose && !glue_style) {
     insight::format_alert(
       paste0(
         "There are more names in `pattern` than in `replacement`. The last ",
@@ -167,9 +167,9 @@ data_rename <- function(data,
     )
   }
 
-  # if we have curl-styled replacement-string, create replacement pattern now
-  if (curl_style) {
-    replacement <- .curl_replacement(pattern, replacement)
+  # if we have glue-styled replacement-string, create replacement pattern now
+  if (glue_style) {
+    replacement <- .glue_replacement(pattern, replacement)
   }
 
   for (i in seq_along(pattern)) {
@@ -201,8 +201,8 @@ data_rename <- function(data,
 }
 
 
-.curl_replacement <- function(pattern, replacement) {
-  # this function replaces "curl" tokens into their related
+.glue_replacement <- function(pattern, replacement) {
+  # this function replaces "glue" tokens into their related
   # real names/values. Currently, following tokens are accepted:
   # - {col}: replacement is the name of the column (inidcated in "pattern")
   # - {n}: replacement is the number of the variable out of n, that should be renamed
