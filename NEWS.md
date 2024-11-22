@@ -23,6 +23,9 @@ CHANGES
 * `data_read()` no longer shows warning about forthcoming breaking changes
   in upstream packages when reading `.RData` files.
 
+* `data_modify()` now recognizes `n()`, for example to create an index for data groups
+  with `1:n()` (#535).
+
 BUG FIXES
 
 * `describe_distribution()` no longer errors if the sample was too sparse to compute
