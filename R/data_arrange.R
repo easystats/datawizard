@@ -26,7 +26,8 @@
 #'
 #' # compare: arrange variables vs. arrange variable within groups
 #' set.seed(123)
-#' x <- iris[sample(seq_len(nrow(iris)), 10, replace = TRUE), c("Sepal.Width", "Species")]
+#' sample_rows <- sample(seq_len(nrow(iris)), 10, replace = TRUE)
+#' x <- iris[sample_rows, c("Sepal.Width", "Species")]
 #' data_arrange(x, c("Sepal.Width", "Species"))
 #' data_arrange(x, "Sepal.Width", by = "Species")
 #'
