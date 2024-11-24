@@ -9,10 +9,12 @@
 #' data frame.
 #' @param select Character vector of column names. Use a dash just before column
 #' name to arrange in decreasing order, for example `"-x1"`.
+#' @param by Optional character string, indicating the names of one or more
+#' variables in the data frame. If supplied, data rows will be sorted within
+#' each group.
 #' @param safe Do not throw an error if one of the variables specified doesn't
 #' exist.
 #' @param ... Currently not used.
-#' @inheritParams data_summary
 #'
 #' @return A data frame, where rows are sorted according to the selected columns.
 #'

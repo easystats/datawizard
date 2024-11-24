@@ -19,8 +19,8 @@ data frame.}
 name to arrange in decreasing order, for example \code{"-x1"}.}
 
 \item{by}{Optional character string, indicating the names of one or more
-variables in the data frame. If supplied, the data will be split by these
-variables and summary statistics will be computed for each group.}
+variables in the data frame. If supplied, data rows will be sorted within
+each group.}
 
 \item{safe}{Do not throw an error if one of the variables specified doesn't
 exist.}
