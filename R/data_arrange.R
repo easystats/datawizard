@@ -70,7 +70,7 @@ data_arrange.grouped_df <- function(data, select = NULL, by = NULL, safe = TRUE,
     by <- colnames(group_variables)
   }
   # remember attributes
-  info <- attributes(x)
+  info <- attributes(data)
   out <- data_arrange.default(data = data, select = select, by = by, safe = safe, ...)
 
   # set back class, so data frame still works with dplyr
