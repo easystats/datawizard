@@ -43,7 +43,6 @@
 #'   attributes to indicate the within- and between-effects. This is only
 #'   relevant when printing `model_parameters()` - in such cases, the
 #'   within- and between-effects are printed in separated blocks.
-#' @param group Deprecated. Use `by` instead.
 #' @inheritParams center
 #'
 #' @return
@@ -285,14 +284,7 @@ demean <- function(x,
                    suffix_demean = "_within",
                    suffix_groupmean = "_between",
                    add_attributes = TRUE,
-                   verbose = TRUE,
-                   group = NULL) {
-  ## TODO: remove warning in future release
-  if (!is.null(group)) {
-    by <- group
-    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
-  }
-
+                   verbose = TRUE) {
   degroup(
     x = x,
     select = select,
@@ -317,14 +309,7 @@ degroup <- function(x,
                     suffix_demean = "_within",
                     suffix_groupmean = "_between",
                     add_attributes = TRUE,
-                    verbose = TRUE,
-                    group = NULL) {
-  ## TODO: remove warning later
-  if (!is.null(group)) {
-    by <- group
-    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
-  }
-
+                    verbose = TRUE) {
   # ugly tibbles again...
   x <- .coerce_to_dataframe(x)
 

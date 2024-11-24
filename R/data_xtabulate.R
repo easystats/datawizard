@@ -198,7 +198,8 @@ print.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
     cross = "+",
     missing = "<NA>",
     caption = caption,
-    empty_line = "-"
+    empty_line = "-",
+    ...
   ))
   invisible(x)
 }

@@ -527,35 +527,3 @@ recode_values.data.frame <- function(x,
 
   ok
 }
-
-
-## TODO Deprecate and remove alias later
-
-#' @rdname recode_values
-#' @export
-change_code <- function(x,
-                        select = NULL,
-                        exclude = NULL,
-                        recode = NULL,
-                        default = NULL,
-                        preserve_na = TRUE,
-                        append = FALSE,
-                        ignore_case = FALSE,
-                        regex = FALSE,
-                        verbose = TRUE,
-                        ...) {
-  insight::format_warning("Function `change_code()` is deprecated. Please use `recode_values()` instead.") # nolint
-  recode_values(
-    x,
-    select = select,
-    exclude = exclude,
-    recode = recode,
-    default = default,
-    preserve_na = preserve_na,
-    append = append,
-    ignore_case = ignore_case,
-    regex = regex,
-    verbose = verbose,
-    ...
-  )
-}

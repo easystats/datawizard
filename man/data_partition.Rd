@@ -11,7 +11,6 @@ data_partition(
   seed = NULL,
   row_id = ".row_id",
   verbose = TRUE,
-  group = NULL,
   ...
 )
 }
@@ -32,8 +31,6 @@ that the random sampling will be the same each time you run the function.}
 contains the row-id's.}
 
 \item{verbose}{Toggle messages and warnings.}
-
-\item{group}{Deprecated. Use \code{by} instead.}
 
 \item{...}{Other arguments passed to or from other functions.}
 }
