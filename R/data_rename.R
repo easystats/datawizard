@@ -24,9 +24,10 @@
 #'     in `pattern`. `pattern` and `replacement` must be of the same length.
 #'   - `NULL`, in which case columns are numbered in sequential order.
 #'   - A string (i.e. character vector of length 1) with a "glue" styled pattern.
-#'     Currently supported tokens are `{col}` and `{n}`. `{col}` will be replaced
-#'     by the column name, i.e. the corresponding value in `pattern`. `{n}` will
-#'     be replaced by the number of the variable that is replaced. For instance,
+#'     Currently supported tokens are `{col}` (or `{name}`) and `{n}`. `{col}`
+#'     will be replaced by the column name, i.e. the corresponding value in
+#'     `pattern`. `{n}` will be replaced by the number of the variable that is
+#'     replaced. For instance,
 #'     ```r
 #'     data_rename(
 #'       mtcars,
@@ -204,7 +205,7 @@ data_rename <- function(data,
 .glue_replacement <- function(pattern, replacement) {
   # this function replaces "glue" tokens into their related
   # real names/values. Currently, following tokens are accepted:
-  # - {col}: replacement is the name of the column (inidcated in "pattern")
+  # - {col}/{name}: replacement is the name of the column (indicated in "pattern")
   # - {n}: replacement is the number of the variable out of n, that should be renamed
   out <- rep_len("", length(pattern))
   for (i in seq_along(out)) {
@@ -214,6 +215,12 @@ data_rename <- function(data,
     # replace first accepted token
     out[i] <- gsub(
       "(.*)(\\{col\\})(.*)",
+      replacement = paste0("\\1", column_name, "\\3"),
+      x = out[i]
+    )
+    # alias of {col} is {name}
+    out[i] <- gsub(
+      "(.*)(\\{name\\})(.*)",
       replacement = paste0("\\1", column_name, "\\3"),
       x = out[i]
     )
