@@ -40,6 +40,9 @@ data_arrange(head(mtcars), c("gear", "carb"))
 # Arrange in decreasing order
 data_arrange(head(mtcars), "-carb")
 
+# arrange several variables, grouped by another one
+data_arrange(head(mtcars), c("gear", "carb"), by = "cyl")
+
 # Throw an error if one of the variables specified doesn't exist
 try(data_arrange(head(mtcars), c("gear", "foo"), safe = FALSE))
 }
