@@ -2,21 +2,31 @@
 % Please edit documentation in R/data_arrange.R
 \name{data_arrange}
 \alias{data_arrange}
+\alias{data_arrange.default}
 \title{Arrange rows by column values}
 \usage{
-data_arrange(data, select = NULL, safe = TRUE)
+data_arrange(data, ...)
+
+\method{data_arrange}{default}(data, select = NULL, by = NULL, safe = TRUE, ...)
 }
 \arguments{
-\item{data}{A data frame, or an object that can be coerced to a data frame.}
+\item{data}{A (grouped) data frame, or an object that can be coerced to a
+data frame.}
+
+\item{...}{Currently not used.}
 
 \item{select}{Character vector of column names. Use a dash just before column
 name to arrange in decreasing order, for example \code{"-x1"}.}
+
+\item{by}{Optional character string, indicating the names of one or more
+variables in the data frame. If supplied, the data will be split by these
+variables and summary statistics will be computed for each group.}
 
 \item{safe}{Do not throw an error if one of the variables specified doesn't
 exist.}
 }
 \value{
-A data frame.
+A data frame, where rows are sorted according to the selected columns.
 }
 \description{
 \code{data_arrange()} orders the rows of a data frame by the values of selected

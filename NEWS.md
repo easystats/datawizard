@@ -22,6 +22,9 @@ CHANGES
 * `data_modify()` now recognizes `n()`, for example to create an index for data groups
   with `1:n()` (#535).
 
+* `data_arrange()` gets a `by` argument, to arrange data grouped by values or
+  levels of certain variables.
+
 BUG FIXES
 
 * `describe_distribution()` no longer errors if the sample was too sparse to compute

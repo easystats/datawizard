@@ -97,6 +97,48 @@ test_that("data_arrange works with grouped df", {
   )
 })
 
+test_that("data_arrange works with by", {
+  set.seed(123)
+  x <- mtcars[sample(seq_len(nrow(mtcars)), 10, replace = TRUE), c("cyl", "mpg")]
+
+  expected <- data.frame(
+    cyl = c(4, 4, 4, 6, 6, 8, 8, 8, 8, 8),
+    mpg = c(22.8, 30.4, 32.4, 17.8, 19.2, 10.4, 15, 15.2, 15.5, 18.7)
+  )
+  rownames(expected) <- c(
+    "Datsun 710", "Honda Civic", "Fiat 128", "Merc 280C", "Merc 280",
+    "Cadillac Fleetwood", "Maserati Bora", "Merc 450SLC", "Dodge Challenger",
+    "Hornet Sportabout"
+  )
+
+  expect_identical(
+    data_arrange(x, "mpg", by = "cyl"),
+    expected,
+    ignore_attr = TRUE
+  )
+
+  # works for df without rownames
+  set.seed(123)
+  x <- iris[sample(seq_len(nrow(iris)), 10, replace = TRUE), c("Sepal.Width", "Species")]
+  rownames(x) <- NULL
+
+  expected <- data.frame(
+    Sepal.Width = c(3, 3, 3.2, 3.3, 2.5, 2.6, 2.6, 3, 3.8, 3.8),
+    Species = structure(
+      c(1L, 1L, 1L, 1L, 2L, 2L, 2L, 2L, 3L, 3L),
+      levels = c("setosa", "versicolor", "virginica"),
+      class = "factor"
+    )
+  )
+  rownames(expected) <- NULL
+
+  expect_identical(
+    data_arrange(x, "Sepal.Width", by = "Species"),
+    expected,
+    ignore_attr = TRUE
+  )
+})
+
 test_that("data_arrange works with NA", {
   # without groups
 

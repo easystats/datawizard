@@ -5,9 +5,9 @@
 #' data frame or a matrix.
 #'
 #' @param x A (grouped) data frame.
-#' @param by Optional character string, indicating the name of a variable in `x`.
-#' If supplied, the data will be split by this variable and summary statistics
-#' will be computed for each group.
+#' @param by Optional character string, indicating the names of one or more
+#' variables in the data frame. If supplied, the data will be split by these
+#' variables and summary statistics will be computed for each group.
 #' @param remove_na Logical. If `TRUE`, missing values are omitted from the
 #' grouping variable. If `FALSE` (default), missing values are included as a
 #' level in the grouping variable.
@@ -84,23 +84,8 @@ data_summary.data.frame <- function(x, ..., by = NULL, remove_na = FALSE) {
     out <- data.frame(summarise)
     colnames(out) <- vapply(summarise, names, character(1))
   } else {
-    # sanity check - is "by" a character string?
-    if (!is.character(by)) {
-      insight::format_error("Argument `by` must be a character string indicating the name of variables in the data.")
-    }
-    # is "by" in the data?
-    if (!all(by %in% colnames(x))) {
-      by_not_found <- by[!by %in% colnames(x)]
-      insight::format_error(
-        paste0(
-          "Variable",
-          ifelse(length(by_not_found) > 1, "s ", " "),
-          text_concatenate(by_not_found, enclose = "\""),
-          " not found in the data."
-        ),
-        .misspelled_string(colnames(x), by_not_found, "Possibly misspelled?")
-      )
-    }
+    # check "by" argument for valid names
+    .sanitize_by_argument(x, by)
     # split data, add NA levels, if requested
     l <- lapply(x[by], function(i) {
       if (remove_na || !anyNA(i)) {
@@ -204,6 +189,27 @@ data_summary.grouped_df <- function(x, ..., by = NULL, remove_na = FALSE) {
   }
 
   out
+}
+
+
+.sanitize_by_argument <- function(x, by) {
+  # sanity check - is "by" a character string?
+  if (!is.character(by)) {
+    insight::format_error("Argument `by` must be a character string indicating the name of variables in the data.")
+  }
+  # is "by" in the data?
+  if (!all(by %in% colnames(x))) {
+    by_not_found <- by[!by %in% colnames(x)]
+    insight::format_error(
+      paste0(
+        "Variable",
+        ifelse(length(by_not_found) > 1, "s ", " "),
+        text_concatenate(by_not_found, enclose = "\""),
+        " not found in the data."
+      ),
+      .misspelled_string(colnames(x), by_not_found, "Possibly misspelled?")
+    )
+  }
 }
 
 
