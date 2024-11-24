@@ -69,10 +69,14 @@ data_arrange.grouped_df <- function(data, select = NULL, by = NULL, safe = TRUE,
   if (is.null(by)) {
     by <- colnames(group_variables)
   }
-  # remove information specific to grouped df's
-  attr(data, "groups") <- NULL
-  class(data) <- "data.frame"
-  data_arrange(data = data, select = select, by = by, safe = safe, ...)
+  # remember attributes
+  info <- attributes(x)
+  out <- data_arrange.default(data = data, select = select, by = by, safe = safe, ...)
+
+  # set back class, so data frame still works with dplyr
+  attributes(out) <- utils::modifyList(info, attributes(out))
+  out
+
 }
 
 
