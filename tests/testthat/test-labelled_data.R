@@ -311,10 +311,10 @@ test_that("convert_to_na, labels preserved", {
 
 
 
-# get_columns -----------------------------------
+# data_select -----------------------------------
 
-test_that("get_columns, labels preserved", {
-  x <- get_columns(efc, starts_with("c"))
+test_that("data_select, labels preserved", {
+  x <- data_select(efc, starts_with("c"))
   # numeric
   expect_equal(
     attr(x$c12hour, "label", exact = TRUE),
@@ -322,7 +322,7 @@ test_that("get_columns, labels preserved", {
     ignore_attr = TRUE
   )
 
-  x <- get_columns(efc, starts_with("e"))
+  x <- data_select(efc, starts_with("e"))
   # factor
   expect_equal(
     attr(x$e42dep, "label", exact = TRUE),

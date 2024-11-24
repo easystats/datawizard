@@ -169,8 +169,7 @@ test_that("center, factors (grouped data)", {
     poorman::ungroup() %>%
     poorman::pull(Species)
 
-  manual <- iris %>%
-    poorman::pull(Species)
+  manual <- poorman::pull(iris, Species)
 
   expect_identical(datawizard, manual)
 })

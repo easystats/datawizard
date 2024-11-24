@@ -110,14 +110,7 @@ skewness.numeric <- function(x,
                              type = "2",
                              iterations = NULL,
                              verbose = TRUE,
-                             na.rm = TRUE,
                              ...) {
-  # TODO: remove deprecated argument later
-  if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
-    remove_na <- na.rm
-  }
-
   if (remove_na) x <- x[!is.na(x)]
   n <- length(x)
   out <- (sum((x - mean(x))^3) / n) / (sum((x - mean(x))^2) / n)^1.5
@@ -148,9 +141,7 @@ skewness.numeric <- function(x,
   )
 
   if (!is.null(iterations)) {
-    if (!requireNamespace("boot", quietly = TRUE)) {
-      insight::format_warning("Package 'boot' needed for bootstrapping SEs.")
-    } else {
+    if (requireNamespace("boot", quietly = TRUE)) {
       results <- boot::boot(
         data = x,
         statistic = .boot_skewness,
@@ -159,6 +150,8 @@ skewness.numeric <- function(x,
         type = type
       )
       out_se <- stats::sd(results$t, na.rm = TRUE)
+    } else {
+      insight::format_warning("Package 'boot' needed for bootstrapping SEs.")
     }
   }
 
@@ -176,14 +169,7 @@ skewness.matrix <- function(x,
                             remove_na = TRUE,
                             type = "2",
                             iterations = NULL,
-                            na.rm = TRUE,
                             ...) {
-  # TODO: remove deprecated argument later
-  if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
-    remove_na <- na.rm
-  }
-
   .skewness <- apply(
     x,
     2,
@@ -211,14 +197,7 @@ skewness.data.frame <- function(x,
                                 remove_na = TRUE,
                                 type = "2",
                                 iterations = NULL,
-                                na.rm = TRUE,
                                 ...) {
-  # TODO: remove deprecated argument later
-  if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
-    remove_na <- na.rm
-  }
-
   .skewness <- lapply(x,
     skewness,
     remove_na = remove_na,
@@ -238,14 +217,7 @@ skewness.default <- function(x,
                              remove_na = TRUE,
                              type = "2",
                              iterations = NULL,
-                             na.rm = TRUE,
                              ...) {
-  # TODO: remove deprecated argument later
-  if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
-    remove_na <- na.rm
-  }
-
   skewness(
     .factor_to_numeric(x),
     remove_na = remove_na,
@@ -273,14 +245,7 @@ kurtosis.numeric <- function(x,
                              type = "2",
                              iterations = NULL,
                              verbose = TRUE,
-                             na.rm = TRUE,
                              ...) {
-  # TODO: remove deprecated argument later
-  if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
-    remove_na <- na.rm
-  }
-
   if (remove_na) x <- x[!is.na(x)]
   n <- length(x)
   out <- n * sum((x - mean(x))^4) / (sum((x - mean(x))^2)^2)
@@ -337,14 +302,7 @@ kurtosis.matrix <- function(x,
                             remove_na = TRUE,
                             type = "2",
                             iterations = NULL,
-                            na.rm = TRUE,
                             ...) {
-  # TODO: remove deprecated argument later
-  if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
-    remove_na <- na.rm
-  }
-
   .kurtosis <- apply(
     x,
     2,
@@ -368,14 +326,7 @@ kurtosis.data.frame <- function(x,
                                 remove_na = TRUE,
                                 type = "2",
                                 iterations = NULL,
-                                na.rm = TRUE,
                                 ...) {
-  # TODO: remove deprecated argument later
-  if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
-    remove_na <- na.rm
-  }
-
   .kurtosis <- lapply(x,
     kurtosis,
     remove_na = remove_na,
@@ -393,14 +344,7 @@ kurtosis.default <- function(x,
                              remove_na = TRUE,
                              type = "2",
                              iterations = NULL,
-                             na.rm = TRUE,
                              ...) {
-  # TODO: remove deprecated argument later
-  if (!missing(na.rm)) {
-    # TODO: add deprecation warning in a later update
-    remove_na <- na.rm
-  }
-
   kurtosis(
     .factor_to_numeric(x),
     remove_na = remove_na,

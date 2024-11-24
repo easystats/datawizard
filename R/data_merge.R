@@ -20,65 +20,63 @@
 #' @return
 #' A merged data frame.
 #'
-#' @details
+#' @section Merging data frames:
 #'
-#'   \subsection{Merging data frames}{
-#'     Merging data frames is performed by adding rows (cases), columns
-#'     (variables) or both from the source data frame (`y`) to the target
-#'     data frame (`x`). This usually requires one or more variables which
-#'     are included in both data frames and that are used for merging, typically
-#'     indicated with the `by` argument. When `by` contains a variable present
-#'     in both data frames, cases are matched and filtered by identical values
-#'     of `by` in `x` and `y`.
-#'   }
+#' Merging data frames is performed by adding rows (cases), columns
+#' (variables) or both from the source data frame (`y`) to the target
+#' data frame (`x`). This usually requires one or more variables which
+#' are included in both data frames and that are used for merging, typically
+#' indicated with the `by` argument. When `by` contains a variable present
+#' in both data frames, cases are matched and filtered by identical values
+#' of `by` in `x` and `y`.
 #'
-#'   \subsection{Left- and right-joins}{
-#'     Left- and right joins usually don't add new rows (cases), but only new
-#'     columns (variables) for existing cases in `x`. For `join = "left"` or
-#'     `join = "right"` to work, `by` *must* indicate one or more columns that
-#'     are included in both data frames. For `join = "left"`, if `by` is an
-#'     identifier variable, which is included in both `x` and `y`, all variables
-#'     from `y` are copied to `x`, but only those cases from `y` that have
-#'     matching values in their identifier variable in `x` (i.e. all cases
-#'     in `x` that are also found in `y` get the related values from the new
-#'     columns in `y`). If there is no match between identifiers in `x` and `y`,
-#'     the copied variable from `y` will get a `NA` value for this particular
-#'     case. Other variables that occur both in `x` and `y`, but are not used
-#'     as identifiers (with `by`), will be renamed to avoid multiple identical
-#'     variable names. Cases in `y` where values from the identifier have no
-#'     match in `x`'s identifier are removed. `join = "right"` works in
-#'     a similar way as `join = "left"`, just that only cases from `x` that
-#'     have matching values in their identifier variable in `y` are chosen.
-#'     \cr \cr
-#'     In base R, these are equivalent to `merge(x, y, all.x = TRUE)` and
-#'     `merge(x, y, all.y = TRUE)`.
-#'   }
+#' @section Left- and right-joins:
 #'
-#'   \subsection{Full joins}{
-#'     Full joins copy all cases from `y` to `x`. For matching cases in both
-#'     data frames, values for new variables are copied from `y` to `x`. For
-#'     cases in `y` not present in `x`, these will be added as new rows to `x`.
-#'     Thus, full joins not only add new columns (variables), but also might
-#'     add new rows (cases).
-#'     \cr \cr
-#'     In base R, this is equivalent to `merge(x, y, all = TRUE)`.
-#'   }
+#' Left- and right joins usually don't add new rows (cases), but only new
+#' columns (variables) for existing cases in `x`. For `join = "left"` or
+#' `join = "right"` to work, `by` *must* indicate one or more columns that
+#' are included in both data frames. For `join = "left"`, if `by` is an
+#' identifier variable, which is included in both `x` and `y`, all variables
+#' from `y` are copied to `x`, but only those cases from `y` that have
+#' matching values in their identifier variable in `x` (i.e. all cases
+#' in `x` that are also found in `y` get the related values from the new
+#' columns in `y`). If there is no match between identifiers in `x` and `y`,
+#' the copied variable from `y` will get a `NA` value for this particular
+#' case. Other variables that occur both in `x` and `y`, but are not used
+#' as identifiers (with `by`), will be renamed to avoid multiple identical
+#' variable names. Cases in `y` where values from the identifier have no
+#' match in `x`'s identifier are removed. `join = "right"` works in
+#' a similar way as `join = "left"`, just that only cases from `x` that
+#' have matching values in their identifier variable in `y` are chosen.
 #'
-#'   \subsection{Inner joins}{
-#'     Inner joins merge two data frames, however, only those rows (cases) are
-#'     kept that are present in both data frames. Thus, inner joins usually
-#'     add new columns (variables), but also remove rows (cases) that only
-#'     occur in one data frame.
-#'     \cr \cr
-#'     In base R, this is equivalent to `merge(x, y)`.
-#'   }
+#' In base R, these are equivalent to `merge(x, y, all.x = TRUE)` and
+#' `merge(x, y, all.y = TRUE)`.
 #'
-#'   \subsection{Binds}{
-#'     `join = "bind"` row-binds the complete second data frame `y` to `x`.
-#'     Unlike simple `rbind()`, which requires the same columns for both data
-#'     frames, `join = "bind"` will bind shared columns from `y` to `x`, and
-#'     add new columns from `y` to `x`.
-#'   }
+#' @section Full joins:
+#'
+#' Full joins copy all cases from `y` to `x`. For matching cases in both
+#' data frames, values for new variables are copied from `y` to `x`. For
+#' cases in `y` not present in `x`, these will be added as new rows to `x`.
+#' Thus, full joins not only add new columns (variables), but also might
+#' add new rows (cases).
+#'
+#' In base R, this is equivalent to `merge(x, y, all = TRUE)`.
+#'
+#' @section Inner joins:
+#'
+#' Inner joins merge two data frames, however, only those rows (cases) are
+#' kept that are present in both data frames. Thus, inner joins usually
+#' add new columns (variables), but also remove rows (cases) that only
+#' occur in one data frame.
+#'
+#' In base R, this is equivalent to `merge(x, y)`.
+#'
+#' @section Binds:
+#'
+#' `join = "bind"` row-binds the complete second data frame `y` to `x`.
+#' Unlike simple `rbind()`, which requires the same columns for both data
+#' frames, `join = "bind"` will bind shared columns from `y` to `x`, and
+#' add new columns from `y` to `x`.
 #'
 #' @examples
 #'
@@ -221,10 +219,10 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
       missing_in_y <- setdiff(by, colnames(y))
       stop_message <- c(
         "Not all columns specified in `by` were found in the data frames.",
-        if (length(missing_in_x) > 0) {
+        if (length(missing_in_x) > 0L) {
           paste0("Following columns are in `by` but absent in `x`: ", text_concatenate(missing_in_x))
         },
-        if (length(missing_in_y) > 0) {
+        if (length(missing_in_y) > 0L) {
           paste0("Following columns are in `by` but absent in `y`: ", text_concatenate(missing_in_y))
         }
       )
@@ -264,10 +262,10 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
 
   # for later sorting
   if (join != "bind") {
-    if (nrow(x) > 0) {
+    if (nrow(x) > 0L) {
       x$.data_merge_id_x <- seq_len(nrow(x))
     }
-    if (nrow(y) > 0) {
+    if (nrow(y) > 0L) {
       y$.data_merge_id_y <- (seq_len(nrow(y))) + nrow(x)
     }
   }
@@ -364,14 +362,14 @@ data_merge.list <- function(x, join = "left", by = NULL, id = NULL, verbose = TR
     out <- rbind(x, y[match(colnames(x), colnames(y))])
   } else {
     # add ID for merging
-    if (nrow(x) > 0) {
+    if (nrow(x) > 0L) {
       x$.data_merge_row <- seq_len(nrow(x))
     }
-    if (nrow(y) > 0) {
+    if (nrow(y) > 0L) {
       y$.data_merge_row <- (nrow(x) + 1):(nrow(x) + nrow(y))
     }
-    by <- intersect(colnames(x), colnames(y))
-    out <- merge(x, y, all = TRUE, sort = FALSE, by = by)
+    merge_by <- intersect(colnames(x), colnames(y))
+    out <- merge(x, y, all = TRUE, sort = FALSE, by = merge_by)
   }
 
   # for empty df's, merge() may return an empty character vector

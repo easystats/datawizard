@@ -14,7 +14,7 @@
 #' in the united values. If `FALSE`, missing values are represented as `"NA"`
 #' in the united values.
 #' @param ... Currently not used.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @seealso [`data_separate()`]
 #'

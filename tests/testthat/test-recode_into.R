@@ -136,7 +136,7 @@ test_that("recode_into, works inside functions", {
   test <- function() {
     set.seed(123)
     d <- data.frame(
-      x = sample(1:5, 30, TRUE),
+      x = sample.int(5, 30, TRUE),
       y = sample(letters[1:5], 30, TRUE),
       stringsAsFactors = FALSE
     )
@@ -257,4 +257,21 @@ test_that("recode_into, make sure recode works with missing in original variable
       0, 2, 2, 2, 2, 0, 0, 0, 2, 2, 2, 0
     )
   )
+})
+
+test_that("recode_into, NA doesn't need to be of exact type", {
+  data(mtcars)
+  x1 <- recode_into(
+    mpg > 10 ~ 1,
+    gear == 5 ~ NA_real_,
+    data = mtcars,
+    verbose = FALSE
+  )
+  x2 <- recode_into(
+    mpg > 10 ~ 1,
+    gear == 5 ~ NA,
+    data = mtcars,
+    verbose = FALSE
+  )
+  expect_identical(x1, x2)
 })

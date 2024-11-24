@@ -17,7 +17,7 @@
 #'   `1 - include_bounds`.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams standardize.data.frame
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @inheritSection center Selection of variables - the `select` argument
 #'
@@ -195,7 +195,7 @@ normalize.grouped_df <- function(x,
   )
 
   info <- attributes(x)
-  # works only for dplyr >= 0.8.0
+
   grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
   # when we append variables, we call ".process_append()", which will

@@ -22,7 +22,7 @@
 #' @param line_padding For HTML tables, the distance (in pixel) between lines.
 #' @param row_color For HTML tables, the fill color for odd rows.
 #' @inheritParams standardize.data.frame
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #'
 #' @return A formatted data frame, summarizing the content of the data frame.
 #' Returned columns include the column index of the variables in the original
@@ -33,7 +33,8 @@
 #'
 #' @note There are methods to `print()` the data frame in a nicer output, as
 #' well methods for printing in markdown or HTML format (`print_md()` and
-#' `print_html()`).
+#' `print_html()`). The `print()` method for text outputs passes arguments in
+#' `...` to [`insight::export_table()`].
 #'
 #' @examples
 #' data(iris)
@@ -232,9 +233,9 @@ data_codebook <- function(data,
 
     # add proportions, but not for ranges, since these are always 100%
     if (is_range) {
-      proportions <- ""
+      frq_proportions <- ""
     } else {
-      proportions <- sprintf("%.1f%%", round(100 * (frq / sum(frq)), 1))
+      frq_proportions <- sprintf("%.1f%%", round(100 * (frq / sum(frq)), 1))
     }
 
     # make sure we have not too long rows, e.g. for variables that
@@ -245,9 +246,9 @@ data_codebook <- function(data,
     }
     if (length(frq) > max_values) {
       frq <- frq[1:max_values]
-      proportions <- proportions[1:max_values]
+      frq_proportions <- frq_proportions[1:max_values]
       frq[max_values] <- NA
-      proportions[max_values] <- NA
+      frq_proportions[max_values] <- NA
     }
     if (length(values) > max_values) {
       values <- values[1:max_values]
@@ -273,7 +274,7 @@ data_codebook <- function(data,
       values,
       value_labels,
       frq,
-      proportions,
+      proportions = frq_proportions,
       stringsAsFactors = FALSE
     ))
 
@@ -347,12 +348,12 @@ format.data_codebook <- function(x, format = "text", ...) {
     x$Prop[x$Prop == "NA" | is.na(x$Prop)] <- ""
     # align only for text format
     if (identical(format, "text")) {
-      x$Prop[x$Prop != ""] <- format(x$Prop[x$Prop != ""], justify = "right")
+      x$Prop[x$Prop != ""] <- format(x$Prop[x$Prop != ""], justify = "right") # nolint
     }
-    x[["N"]][x$Prop != ""] <- sprintf(
+    x[["N"]][x$Prop != ""] <- sprintf( # nolint
       "%s (%s)",
-      as.character(x[["N"]][x$Prop != ""]),
-      x$Prop[x$Prop != ""]
+      as.character(x[["N"]][x$Prop != ""]), # nolint
+      x$Prop[x$Prop != ""] # nolint
     )
     x$Prop <- NULL
   }
@@ -369,7 +370,8 @@ print.data_codebook <- function(x, ...) {
       title = caption,
       empty_line = "-",
       cross = "+",
-      align = .get_codebook_align(x)
+      align = .get_codebook_align(x),
+      ...
     )
   )
 }
@@ -388,7 +390,7 @@ print_html.data_codebook <- function(x,
   # since we have each value at its own row, the HTML table contains
   # horizontal borders for each cell/row. We want to remove those borders
   # from rows that actually belong to one variable
-  separator_lines <- which(duplicated(x$.row_id) & x$N == "")
+  separator_lines <- which(duplicated(x$.row_id) & x$N == "") # nolint
   # remove separator lines, as we don't need these for HTML tables
   x <- x[-separator_lines, ]
   # check row IDs, and find odd rows
@@ -405,7 +407,7 @@ print_html.data_codebook <- function(x,
   out <- gt::tab_style(
     out,
     style = list(gt::cell_borders(sides = "top", style = "hidden")),
-    locations = gt::cells_body(rows = which(x$ID == ""))
+    locations = gt::cells_body(rows = which(x$ID == "")) # nolint
   )
   # highlight odd rows
   if (!is.null(row_color)) {
@@ -466,5 +468,5 @@ print_md.data_codebook <- function(x, ...) {
     N = "r"
   )
   align <- align[colnames(x)]
-  paste0(unname(align), collapse = "")
+  paste(unname(align), collapse = "")
 }

@@ -15,15 +15,16 @@
 #' for SAS data files.
 #' @param encoding The character encoding used for the file. Usually not needed.
 #' @param convert_factors If `TRUE` (default), numeric variables, where all
-#' values have a value label, are assumed to be categorical and converted
-#' into factors. If `FALSE`, no variable types are guessed and no conversion
-#' of numeric variables into factors will be performed. See also section
-#' 'Differences to other packages'. For `data_write()`, this argument only
-#' applies to the text (e.g. `.txt` or `.csv`) or spreadsheet file formats (like
-#' `.xlsx`). Converting to factors might be useful for these formats because
-#' labelled numeric variables are then converted into factors and exported as
-#' character columns - else, value labels would be lost and only numeric values
-#' are written to the file.
+#' values have a value label, are assumed to be categorical and converted into
+#' factors. If `FALSE`, no variable types are guessed and no conversion of
+#' numeric variables into factors will be performed. For `data_read()`, this
+#' argument only applies to file types with *labelled data*, e.g. files from
+#' SPSS, SAS or Stata. See also section 'Differences to other packages'. For
+#' `data_write()`, this argument only applies to the text (e.g. `.txt` or
+#' `.csv`) or spreadsheet file formats (like `.xlsx`). Converting to factors
+#' might be useful for these formats because labelled numeric variables are then
+#' converted into factors and exported as character columns - else, value labels
+#' would be lost and only numeric values are written to the file.
 #' @param verbose Toggle warnings and messages.
 #' @param ... Arguments passed to the related `read_*()` or `write_*()` functions.
 #'
@@ -65,12 +66,13 @@
 #' @section Differences to other packages that read foreign data formats:
 #' `data_read()` is most comparable to `rio::import()`. For data files from
 #' SPSS, SAS or Stata, which support labelled data, variables are converted into
-#' their most appropriate type. The major difference to `rio::import()` is that
-#' `data_read()` automatically converts fully labelled numeric variables into
-#' factors, where imported value labels will be set as factor levels. If a
-#' numeric variable has _no_ value labels or less value labels than values, it
-#' is not converted to factor. In this case, value labels are preserved as
-#' `"labels"` attribute. Character vectors are preserved.  Use
+#' their most appropriate type. The major difference to `rio::import()` is for
+#' data files from SPSS, SAS, or Stata, i.e. file types that support
+#' *labelled data*. `data_read()` automatically converts fully labelled numeric
+#' variables into factors, where imported value labels will be set as factor
+#' levels. If a numeric variable has _no_ value labels or less value labels than
+#' values, it is not converted to factor. In this case, value labels are
+#' preserved as `"labels"` attribute. Character vectors are preserved. Use
 #' `convert_factors = FALSE` to remove the automatic conversion of numeric
 #' variables to factors.
 #'
@@ -105,7 +107,7 @@ data_read <- function(path,
     por = .read_spss(path, encoding, convert_factors, verbose, ...),
     dta = .read_stata(path, encoding, convert_factors, verbose, ...),
     sas7bdat = .read_sas(path, path_catalog, encoding, convert_factors, verbose, ...),
-    .read_unknown(path, convert_factors, verbose, ...)
+    .read_unknown(path, file_type, verbose, ...)
   )
 
   # tell user about empty columns
@@ -161,7 +163,7 @@ data_read <- function(path,
   # user may decide whether we automatically detect variable type or not
   if (isTRUE(convert_factors)) {
     if (verbose) {
-      msg <- "Variables where all values have associated labels are now converted into factors. If this is not intended, use `convert_factors = FALSE`."
+      msg <- "Variables where all values have associated labels are now converted into factors. If this is not intended, use `convert_factors = FALSE`." # nolint
       insight::format_alert(msg)
     }
     x[] <- lapply(x, function(i) {
@@ -178,20 +180,18 @@ data_read <- function(path,
         if (is.character(i)) {
           # we need this to drop haven-specific class attributes
           i <- as.character(i)
-        } else {
+        } else if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
           # if all values are labelled, we assume factor. Use labels as levels
-          if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
-            if (is.numeric(i)) {
-              i <- factor(i, labels = names(value_labels))
-            } else {
-              i <- factor(as.character(i), labels = names(value_labels))
-            }
-            value_labels <- NULL
-            attr(i, "converted_to_factor") <- TRUE
+          if (is.numeric(i)) {
+            i <- factor(i, labels = names(value_labels))
           } else {
-            # else, fall back to numeric
-            i <- as.numeric(i)
+            i <- factor(as.character(i), labels = names(value_labels))
           }
+          value_labels <- NULL
+          attr(i, "converted_to_factor") <- TRUE
+        } else {
+          # else, fall back to numeric or factor
+          i <- as.numeric(i)
         }
 
         # drop unused value labels
@@ -290,12 +290,18 @@ data_read <- function(path,
 }
 
 
-.read_unknown <- function(path, convert_factors, verbose, ...) {
-  insight::check_if_installed("rio", reason = paste0("to read files of type '", .file_ext(path), "'"))
+.read_unknown <- function(path, file_type, verbose, ...) {
+  insight::check_if_installed("rio", reason = paste0("to read files of type '", file_type, "'"))
   if (verbose) {
     insight::format_alert("Reading data...")
   }
-  out <- rio::import(file = path, ...)
+  # set up arguments. for RDS, we set trust = TRUE, to avoid warnings
+  rio_args <- list(file = path)
+  # check if we have RDS, and if so, add trust = TRUE
+  if (file_type %in% c("rds", "rdata")) {
+    rio_args$trust <- TRUE
+  }
+  out <- do.call(rio::import, c(rio_args, list(...)))
 
   # for "unknown" data formats (like .RDS), which still can be imported via
   # "rio::import()", we must check whether we actually have a data frame or
@@ -310,10 +316,8 @@ data_read <- function(path,
         )
       }
       return(out)
-    } else {
-      out <- tmp
     }
+    out <- tmp
   }
-
-  .post_process_imported_data(out, convert_factors, verbose)
+  out
 }

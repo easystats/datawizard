@@ -13,19 +13,21 @@ test_that("rescale_weights nested works as expected", {
   expect_snapshot(
     rescale_weights(
       data = head(nhanes_sample, n = 30),
-      group = c("SDMVSTRA", "SDMVPSU"),
+      by = c("SDMVSTRA", "SDMVPSU"),
       probability_weights = "WTINT2YR",
       nest = TRUE
     )
   )
 
   expect_warning(
-    x <- rescale_weights(
-      data = head(nhanes_sample),
-      group = "SDMVPSU",
-      probability_weights = "WTINT2YR",
-      nest = TRUE
-    ),
+    {
+      x <- rescale_weights(
+        data = head(nhanes_sample),
+        by = "SDMVPSU",
+        probability_weights = "WTINT2YR",
+        nest = TRUE
+      )
+    },
     "Only one group variable selected"
   )
 
@@ -33,7 +35,7 @@ test_that("rescale_weights nested works as expected", {
     x,
     rescale_weights(
       data = head(nhanes_sample),
-      group = "SDMVPSU",
+      by = "SDMVPSU",
       probability_weights = "WTINT2YR"
     )
   )

@@ -14,6 +14,7 @@ categorize(x, ...)
   n_groups = NULL,
   range = NULL,
   lowest = 1,
+  breaks = "exclusive",
   labels = NULL,
   verbose = TRUE,
   ...
@@ -27,6 +28,7 @@ categorize(x, ...)
   n_groups = NULL,
   range = NULL,
   lowest = 1,
+  breaks = "exclusive",
   labels = NULL,
   append = FALSE,
   ignore_case = FALSE,
@@ -67,10 +69,19 @@ for numeric variables, the minimum of the original input is preserved. For
 factors, the default minimum is \code{1}. For \code{split = "equal_range"}, the
 default minimum is always \code{1}, unless specified otherwise in \code{lowest}.}
 
+\item{breaks}{Character, indicating whether breaks for categorizing data are
+\code{"inclusive"} (values indicate the \emph{upper} bound of the \emph{previous} group or
+interval) or \code{"exclusive"} (values indicate the \emph{lower} bound of the \emph{next}
+group or interval to begin). Use \code{labels = "range"} to make this behaviour
+easier to see.}
+
 \item{labels}{Character vector of value labels. If not \code{NULL}, \code{categorize()}
 will returns factors instead of numeric variables, with \code{labels} used
-for labelling the factor levels. Can also be \code{"mean"} or \code{"median"} for a
-factor with labels as the mean/median of each groups.}
+for labelling the factor levels. Can also be \code{"mean"}, \code{"median"},
+\code{"range"} or \code{"observed"} for a factor with labels as the mean/median,
+the requested range (even if not all values of that range are present in
+the data) or observed range (range of the actual recoded values) of each
+group. See 'Examples'.}
 
 \item{verbose}{Toggle warnings.}
 
@@ -78,8 +89,10 @@ factor with labels as the mean/median of each groups.}
 tasks. Can be either
 \itemize{
 \item a variable specified as a literal variable name (e.g., \code{column_name}),
-\item a string with the variable name (e.g., \code{"column_name"}), or a character
-vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a string with the variable name (e.g., \code{"column_name"}), a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}), or a
+character vector of variable names including ranges specified via \code{:}
+(e.g., \code{c("col1:col3", "col5")}),
 \item a formula with variable names (e.g., \code{~column_1 + column_2}),
 \item a vector of positive integers, giving the positions counting from the left
 (e.g. \code{1} or \code{c(1, 3, 5)}),
@@ -103,8 +116,8 @@ negation should not work as expected, use the \code{exclude} argument instead.
 }
 
 If \code{NULL}, selects all columns. Patterns that found no matches are silently
-ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
-return \code{"Species"}.}
+ignored, e.g. \code{extract_column_names(iris, select = c("Species", "Test"))}
+will just return \code{"Species"}.}
 
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
@@ -145,7 +158,7 @@ It is basically a wrapper around base R's \code{cut()}, providing a simplified
 and more accessible way to define the interval breaks (cut-off values).
 }
 \section{Splits and breaks (cut-off values)}{
-Breaks are in general \emph{exclusive}, this means that these values indicate
+Breaks are by default \emph{exclusive}, this means that these values indicate
 the lower bound of the next group or interval to begin. Take a simple
 example, a numeric variable with values from 1 to 9. The median would be 5,
 thus the first interval ranges from 1-4 and is recoded into 1, while 5-9
@@ -154,6 +167,9 @@ using \code{split = "quantile"} and \code{n_groups = 3} would define breaks at 3
 and 6.33 (see \code{quantile(1:9, probs = c(1/3, 2/3))}), which means that values
 from 1 to 3 belong to the first interval and are recoded into 1 (because
 the next interval starts at 3.67), 4 to 6 into 2 and 7 to 9 into 3.
+
+The opposite behaviour can be achieved using \code{breaks = "inclusive"}, in which
+case
 }
 
 \section{Recoding into groups with equal size or range}{
@@ -217,16 +233,24 @@ categorize(x, "equal_length", n_groups = 3, labels = c("low", "mid", "high"))
 x <- sample(1:10, size = 30, replace = TRUE)
 categorize(x, "equal_length", n_groups = 3, labels = "mean")
 categorize(x, "equal_length", n_groups = 3, labels = "median")
+
+# cut numeric into groups with the requested range as a label name
+# each category has the same range, and labels indicate this range
+categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "range")
+# in this example, each category has the same range, but labels only refer
+# to the ranges of the actual values (present in the data) inside each group
+categorize(mtcars$mpg, "equal_length", n_groups = 5, labels = "observed")
 }
 \seealso{
 \itemize{
 \item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}}, \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
 \item Functions to reorder or remove columns: \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
 \item Functions to reshape, pivot or rotate data frames: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
-\item Functions to recode data: \code{\link[=rescale]{rescale()}}, \code{\link[=reverse]{reverse()}}, \code{\link[=categorize]{categorize()}}, \code{\link[=recode_values]{recode_values()}}, \code{\link[=slide]{slide()}}
+\item Functions to recode data: \code{\link[=rescale]{rescale()}}, \code{\link[=reverse]{reverse()}}, \code{\link[=categorize]{categorize()}},
+\code{\link[=recode_values]{recode_values()}}, \code{\link[=slide]{slide()}}
 \item Functions to standardize, normalize, rank-transform: \code{\link[=center]{center()}}, \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
 \item Split and merge data frames: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_merge]{data_merge()}}
-\item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=data_find]{data_find()}}
+\item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=extract_column_names]{extract_column_names()}}
 \item Functions to filter rows: \code{\link[=data_match]{data_match()}}, \code{\link[=data_filter]{data_filter()}}
 }
 }

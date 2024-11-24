@@ -47,7 +47,7 @@ test_that(".select_nse: arg 'select' works", {
     c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
   )
   expect_identical(
-    find_columns(iris, sepal.length, ignore_case = TRUE),
+    extract_column_names(iris, sepal.length, ignore_case = TRUE),
     "Sepal.Length"
   )
   expect_identical(
@@ -137,4 +137,25 @@ test_that(".select_nse: works with function and namespace", {
   x <- "Sepal.Length"
   out <- fun(insight::find_predictors(model, effects = "fixed", flatten = TRUE))
   expect_identical(out, iris["Petal.Width"])
+})
+
+test_that(".select_nse: allow character vector with :", {
+  data(mtcars)
+  out <- data_select(mtcars, c("cyl:hp", "wt", "vs:gear"))
+  expect_named(out, c("cyl", "disp", "hp", "wt", "vs", "am", "gear"))
+  out <- data_select(mtcars, c("cyl:hp", "wta", "vs:gear"))
+  expect_named(out, c("cyl", "disp", "hp", "vs", "am", "gear"))
+  out <- data_select(mtcars, c("hp:cyl", "wta", "vs:gear"))
+  expect_named(out, c("hp", "disp", "cyl", "vs", "am", "gear"))
+  out <- data_select(mtcars, c("cyl:hq", "wt", "vs:gear"))
+  expect_named(out, c("wt", "vs", "am", "gear"))
+
+  expect_warning(
+    center(mtcars, c("cyl:hp", "wta", "vs:gear"), verbose = TRUE),
+    regex = "Did you mean \"wt\""
+  )
+  expect_warning(
+    center(mtcars, c("cyl:hq", "wt", "vs:gear"), verbose = TRUE),
+    regex = "Did you mean one of \"hp\""
+  )
 })

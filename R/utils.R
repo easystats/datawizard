@@ -48,7 +48,7 @@
 
 
 #' Fuzzy grep, matches pattern that are close, but not identical
-#' Example:
+#' @examples
 #' colnames(iris)
 #' p <- sprintf("(%s){~%i}", "Spela", 2)
 #' grep(pattern = p, x = colnames(iris), ignore.case = FALSE)

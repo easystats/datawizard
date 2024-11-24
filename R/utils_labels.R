@@ -12,19 +12,17 @@
     if (reverse_values) {
       # reverse values? Used for "reverse_scale()"
       attr(new, "labels") <- stats::setNames(rev(value_labels), names(value_labels))
-    } else {
+    } else if (is.numeric(new)) {
       # keep value oder? Used for "to_numeric()"
-      if (is.numeric(new)) {
-        if (any(grepl("[^0-9]", value_labels))) {
-          # if we have any non-numeric characters, convert to numeric
-          attr(new, "labels") <- stats::setNames(as.numeric(as.factor(value_labels)), names(value_labels))
-        } else {
-          # if we have numeric, or "numeric character" (like "1", "2", "3" etc.)
-          attr(new, "labels") <- stats::setNames(as.numeric(value_labels), names(value_labels))
-        }
+      if (any(grepl("[^0-9]", value_labels))) {
+        # if we have any non-numeric characters, convert to numeric
+        attr(new, "labels") <- stats::setNames(as.numeric(as.factor(value_labels)), names(value_labels))
       } else {
-        attr(new, "labels") <- stats::setNames(value_labels, names(value_labels))
+        # if we have numeric, or "numeric character" (like "1", "2", "3" etc.)
+        attr(new, "labels") <- stats::setNames(as.numeric(value_labels), names(value_labels))
       }
+    } else {
+      attr(new, "labels") <- stats::setNames(value_labels, names(value_labels))
     }
   } else if (isFALSE(include_values)) {
     attr(new, "labels") <- NULL

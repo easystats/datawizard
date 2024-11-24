@@ -40,6 +40,29 @@ test_that("standardize | errors", {
 })
 
 
+test_that("standardize | problematic formulas", {
+  data(mtcars)
+  m <- lm(mpg ~ hp, data = mtcars)
+  expect_equal(
+    coef(standardise(m)),
+    c(`(Intercept)` = -3.14935717633686e-17, hp = -0.776168371826586),
+    tolerance = 1e-4
+  )
+
+  colnames(mtcars)[1] <- "1_mpg"
+  m <- lm(`1_mpg` ~ hp, data = mtcars)
+  expect_error(standardise(m), regex = "Looks like")
+
+  # works interactive only
+  # data(mtcars)
+  # m <- lm(mtcars$mpg ~ mtcars$hp)
+  # expect_error(standardise(m), regex = "model formulas")
+
+  m <- lm(mtcars[, 1] ~ hp, data = mtcars)
+  expect_error(standardise(m), regex = "indexed data")
+})
+
+
 # Transformations ---------------------------------------------------------
 test_that("transformations", {
   skip_if_not_installed("effectsize")
@@ -68,7 +91,6 @@ test_that("transformations", {
     ignore_attr = TRUE
   )
 
-  skip_if_not_installed("insight", minimum_version = "0.10.0")
   d <- data.frame(
     time = as.factor(c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5)),
     group = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
@@ -220,15 +242,14 @@ test_that("standardize non-Gaussian response", {
 # variables evaluated in the environment $$$ ------------------------------
 test_that("variables evaluated in the environment", {
   m <- lm(mtcars$mpg ~ mtcars$cyl + am, data = mtcars)
-  w <- capture_warnings(standardize(m))
-  expect_true(any(grepl("mtcars$mpg", w, fixed = TRUE)))
+  w <- capture_error(standardize(m))
+  expect_true(any(grepl("Using `$`", w, fixed = TRUE)))
 
   ## Note:
   # No idea why this is suddenly not giving a warning on older R versions.
   m <- lm(mtcars$mpg ~ mtcars$cyl + mtcars$am, data = mtcars)
-  warns <- capture_warnings(standardize(m))
-  expect_true(any(grepl("mtcars$mpg", warns, fixed = TRUE)))
-  expect_true(any(grepl("No variables", warns, fixed = TRUE)))
+  w <- capture_error(standardize(m))
+  expect_true(any(grepl("Using `$`", w, fixed = TRUE)))
 })
 
 
@@ -316,6 +337,7 @@ test_that("brms", {
   skip_on_cran()
   skip_on_os(c("windows", "mac"))
   skip_if_not_installed("brms")
+  skip_if_not_installed("RcppEigen")
 
   invisible(
     capture.output({

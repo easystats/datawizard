@@ -19,7 +19,7 @@ library(datawizard)
 
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.04684/status.svg)](https://doi.org/10.21105/joss.04684)
 [![downloads](http://cranlogs.r-pkg.org/badges/datawizard)](https://cran.r-project.org/package=datawizard)
-[![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/) [![status](https://tinyverse.netlify.com/badge/datawizard)](https://CRAN.R-project.org/package=datawizard) [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+[![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/) 
 
 <!-- ***:sparkles: Hockety pockety wockety wack, prepare this data forth and back*** -->
 
@@ -90,14 +90,14 @@ data_match(mtcars, data.frame(vs = 0, am = 1))
 data_filter(mtcars, vs == 0 & am == 1)
 ```
 
-Finding columns in a data frame, or retrieving the data of selected columns, can be  achieved using `find_columns()` or `get_columns()`:
+Finding columns in a data frame, or retrieving the data of selected columns, can be  achieved using `extract_column_names()` or `data_select()`:
 
 ```{r}
 # find column names matching a pattern
-find_columns(iris, starts_with("Sepal"))
+extract_column_names(iris, starts_with("Sepal"))
 
 # return data columns matching a pattern
-get_columns(iris, starts_with("Sepal")) |> head()
+data_select(iris, starts_with("Sepal")) |> head()
 ```
 
 It is also possible to extract one or more variables:
@@ -314,7 +314,7 @@ iris |>
   # all rows where Species is "versicolor" or "virginica"
   data_filter(Species %in% c("versicolor", "virginica")) |>
   # select only columns with "." in names (i.e. drop Species)
-  get_columns(contains("\\.")) |>
+  data_select(contains("\\.")) |>
   # move columns that ends with "Length" to start of data frame
   data_relocate(ends_with("Length")) |>
   # remove fourth column

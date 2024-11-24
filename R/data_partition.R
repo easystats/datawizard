@@ -2,14 +2,13 @@
 #'
 #' Creates data partitions (for instance, a training and a test set) based on a
 #' data frame that can also be stratified (i.e., evenly spread a given factor)
-#' using the `group` argument.
+#' using the `by` argument.
 #'
 #' @inheritParams data_rename
 #' @param proportion Scalar (between 0 and 1) or numeric vector, indicating the
 #'   proportion(s) of the training set(s). The sum of `proportion` must not be
 #'   greater than 1. The remaining part will be used for the test set.
-#' @param training_proportion Deprecated, please use `proportion`.
-#' @param group A character vector indicating the name(s) of the column(s) used
+#' @param by A character vector indicating the name(s) of the column(s) used
 #'   for stratified partitioning.
 #' @param seed A random number generator seed. Enter an integer (e.g. 123) so
 #'   that the random sampling will be the same each time you run the function.
@@ -29,7 +28,7 @@
 #' nrow(out$p_0.9)
 #'
 #' # Stratify by group (equal proportions of each species)
-#' out <- data_partition(iris, proportion = 0.9, group = "Species")
+#' out <- data_partition(iris, proportion = 0.9, by = "Species")
 #' out$test
 #'
 #' # Create multiple partitions
@@ -39,18 +38,17 @@
 #' # Create multiple partitions, stratified by group - 30% equally sampled
 #' # from species in first training set, 50% in second training set and
 #' # remaining 20% equally sampled from each species in test set.
-#' out <- data_partition(iris, proportion = c(0.3, 0.5), group = "Species")
+#' out <- data_partition(iris, proportion = c(0.3, 0.5), by = "Species")
 #' lapply(out, function(i) table(i$Species))
 #'
 #' @inherit data_rename seealso
 #' @export
 data_partition <- function(data,
                            proportion = 0.7,
-                           group = NULL,
+                           by = NULL,
                            seed = NULL,
                            row_id = ".row_id",
                            verbose = TRUE,
-                           training_proportion = proportion,
                            ...) {
   # validation checks
   data <- .coerce_to_dataframe(data)
@@ -93,12 +91,12 @@ data_partition <- function(data,
 
   # Create list of data groups. We generally lapply over list of
   # sampled row-id's by group, thus, we even create a list if not grouped.
-  if (is.null(group)) {
+  if (is.null(by)) {
     indices_list <- list(seq_len(nrow(data)))
   } else {
     # else, split by group(s) and extract row-ids per group
     indices_list <- lapply(
-      split(data, data[group]),
+      split(data, data[by]),
       data_extract,
       select = row_id,
       as_data_frame = FALSE
@@ -132,7 +130,9 @@ data_partition <- function(data,
   })
 
   # we need to move all list elements one level higher.
-  if (!is.null(group)) {
+  if (is.null(by)) {
+    training_sets <- training_sets[[1]]
+  } else {
     # for grouped training sets, we need to row-bind all sampled training
     # sets from each group. currently, we have a list of data frames,
     # grouped by "group"; but we want one data frame per proportion that
@@ -140,18 +140,16 @@ data_partition <- function(data,
     training_sets <- lapply(seq_along(proportion), function(p) {
       do.call(rbind, lapply(training_sets, function(i) i[[p]]))
     })
-  } else {
-    # else, just move first list element one level higher
-    training_sets <- training_sets[[1]]
   }
 
   # use probabilies as element names
   names(training_sets) <- sprintf("p_%g", proportion)
 
   # remove all training set id's from data, add remaining data (= test set)
+  all_ids <- lapply(training_sets, data_extract, select = row_id, as_data_frame = FALSE)
   out <- c(
     training_sets,
-    list(test = data[-unlist(lapply(training_sets, data_extract, select = row_id, as_data_frame = FALSE), use.names = FALSE), ])
+    list(test = data[-unlist(all_ids, use.names = FALSE), ])
   )
 
   lapply(out, `row.names<-`, NULL)

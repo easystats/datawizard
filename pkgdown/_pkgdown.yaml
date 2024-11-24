@@ -20,6 +20,7 @@ reference:
       - data_partition
       - data_rotate
       - data_group
+      - data_replicate
       - data_duplicated
       - data_unique
 
@@ -61,6 +62,7 @@ reference:
       Functions to compute statistical summaries of data properties and distributions
     contents:
       - data_codebook
+      - data_summary
       - data_tabulate
       - data_peek
       - data_seek
@@ -69,6 +71,7 @@ reference:
       - kurtosis
       - smoothness
       - skewness
+      - row_count
       - row_means
       - weighted_mean
       - mean_sd
@@ -100,7 +103,7 @@ reference:
       - contains("rownames")
       - rowid_as_column
       - contains("colnames")
-      - find_columns
+      - extract_column_names
       - data_restoretype
 
   - title: Helpers for Text Formatting
@@ -123,6 +126,11 @@ reference:
       - nhanes_sample
 
 articles:
+  - title: Overview of vignettes
+    navbar: ~
+    contents:
+      - overview_of_vignettes
+
   - title: Data Preparation
     desc: |
       Articles explaining utility of 'datawizard' for data wrangling

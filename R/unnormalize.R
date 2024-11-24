@@ -24,7 +24,12 @@ unnormalize.numeric <- function(x, verbose = TRUE, ...) {
   dots <- match.call(expand.dots = FALSE)[["..."]]
   grp_attr_dw <- eval(dots$grp_attr_dw, envir = parent.frame(1L))
 
-  if (!is.null(grp_attr_dw)) {
+  if (is.null(grp_attr_dw)) {
+    include_bounds <- attr(x, "include_bounds")
+    min_value <- attr(x, "min_value")
+    range_difference <- attr(x, "range_difference")
+    to_range <- attr(x, "to_range")
+  } else {
     names(grp_attr_dw) <- gsub(".*\\.", "", names(grp_attr_dw))
     include_bounds <- grp_attr_dw["include_bounds"]
     min_value <- grp_attr_dw["min_value"]
@@ -33,11 +38,6 @@ unnormalize.numeric <- function(x, verbose = TRUE, ...) {
     if (is.na(to_range)) {
       to_range <- NULL
     }
-  } else {
-    include_bounds <- attr(x, "include_bounds")
-    min_value <- attr(x, "min_value")
-    range_difference <- attr(x, "range_difference")
-    to_range <- attr(x, "to_range")
   }
 
   if (is.null(min_value) || is.null(range_difference)) {
@@ -78,10 +78,10 @@ unnormalize.data.frame <- function(x,
 
   dots <- match.call(expand.dots = FALSE)[["..."]]
 
-  if (!is.null(dots$grp_attr_dw)) {
-    grp_attr_dw <- eval(dots$grp_attr_dw, envir = parent.frame(1L))
-  } else {
+  if (is.null(dots$grp_attr_dw)) {
     grp_attr_dw <- NULL
+  } else {
+    grp_attr_dw <- eval(dots$grp_attr_dw, envir = parent.frame(1L))
   }
 
   for (i in select) {
@@ -113,7 +113,7 @@ unnormalize.grouped_df <- function(x,
   )
 
   info <- attributes(x)
-  # works only for dplyr >= 0.8.0
+
   grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
   x <- as.data.frame(x)

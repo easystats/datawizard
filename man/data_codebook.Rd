@@ -34,8 +34,10 @@ data_codebook(
 tasks. Can be either
 \itemize{
 \item a variable specified as a literal variable name (e.g., \code{column_name}),
-\item a string with the variable name (e.g., \code{"column_name"}), or a character
-vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a string with the variable name (e.g., \code{"column_name"}), a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}), or a
+character vector of variable names including ranges specified via \code{:}
+(e.g., \code{c("col1:col3", "col5")}),
 \item a formula with variable names (e.g., \code{~column_1 + column_2}),
 \item a vector of positive integers, giving the positions counting from the left
 (e.g. \code{1} or \code{c(1, 3, 5)}),
@@ -59,8 +61,8 @@ negation should not work as expected, use the \code{exclude} argument instead.
 }
 
 If \code{NULL}, selects all columns. Patterns that found no matches are silently
-ignored, e.g. \code{find_columns(iris, select = c("Species", "Test"))} will just
-return \code{"Species"}.}
+ignored, e.g. \code{extract_column_names(iris, select = c("Species", "Test"))}
+will just return \code{"Species"}.}
 
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
@@ -125,7 +127,8 @@ labels, values or value range, frequencies, amount of missing values).
 \note{
 There are methods to \code{print()} the data frame in a nicer output, as
 well methods for printing in markdown or HTML format (\code{print_md()} and
-\code{print_html()}).
+\code{print_html()}). The \code{print()} method for text outputs passes arguments in
+\code{...} to \code{\link[insight:export_table]{insight::export_table()}}.
 }
 \examples{
 data(iris)

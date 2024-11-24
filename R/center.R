@@ -29,7 +29,7 @@
 #'   order, unless a named vector is given. In this case, names are matched
 #'   against the names of the selected variables.
 #' @param ... Currently not used.
-#' @inheritParams find_columns
+#' @inheritParams extract_column_names
 #' @inheritParams standardize
 #'
 #' @section Selection of variables - the `select` argument:
@@ -118,21 +118,21 @@ center.numeric <- function(x,
     center <- TRUE
   }
 
-  args <- .process_std_center(x, weights, robust, verbose, reference, center, scale = NULL)
+  my_args <- .process_std_center(x, weights, robust, verbose, reference, center, scale = NULL)
   dot_args <- list(...)
 
-  if (is.null(args)) {
+  if (is.null(my_args)) {
     # all NA?
     return(x)
-  } else if (is.null(args$check)) {
-    vals <- rep(0, length(args$vals)) # If only unique value
+  } else if (is.null(my_args$check)) {
+    vals <- rep(0, length(my_args$vals)) # If only unique value
   } else {
-    vals <- as.vector(args$vals - args$center)
+    vals <- as.vector(my_args$vals - my_args$center)
   }
 
-  centered_x <- rep(NA, length(args$valid_x))
-  centered_x[args$valid_x] <- vals
-  attr(centered_x, "center") <- args$center
+  centered_x <- rep(NA, length(my_args$valid_x))
+  centered_x[my_args$valid_x] <- vals
+  attr(centered_x, "center") <- my_args$center
   attr(centered_x, "scale") <- 1
   attr(centered_x, "robust") <- robust
   # labels
@@ -197,29 +197,29 @@ center.data.frame <- function(x,
   )
 
   # process arguments
-  args <- .process_std_args(x, select, exclude, weights, append,
+  my_args <- .process_std_args(x, select, exclude, weights, append,
     append_suffix = "_c", keep_factors = force, remove_na, reference,
     .center = center, .scale = NULL
   )
 
   # set new values
-  x <- args$x
+  x <- my_args$x
 
-  for (var in args$select) {
+  for (var in my_args$select) {
     x[[var]] <- center(
       x[[var]],
       robust = robust,
-      weights = args$weights,
+      weights = my_args$weights,
       verbose = FALSE,
       reference = reference[[var]],
-      center = args$center[var],
+      center = my_args$center[var],
       force = force,
       add_transform_class = FALSE
     )
   }
 
-  attr(x, "center") <- vapply(x[args$select], function(z) attributes(z)$center, numeric(1))
-  attr(x, "scale") <- vapply(x[args$select], function(z) attributes(z)$scale, numeric(1))
+  attr(x, "center") <- vapply(x[my_args$select], function(z) attributes(z)$center, numeric(1))
+  attr(x, "scale") <- vapply(x[my_args$select], function(z) attributes(z)$scale, numeric(1))
   attr(x, "robust") <- robust
   x
 }
@@ -249,19 +249,19 @@ center.grouped_df <- function(x,
     verbose = verbose
   )
 
-  args <- .process_grouped_df(
+  my_args <- .process_grouped_df(
     x, select, exclude, append,
     append_suffix = "_c",
     reference, weights, keep_factors = force
   )
 
-  for (rows in args$grps) {
-    args$x[rows, ] <- center(
-      args$x[rows, , drop = FALSE],
-      select = args$select,
+  for (rows in my_args$grps) {
+    my_args$x[rows, ] <- center(
+      my_args$x[rows, , drop = FALSE],
+      select = my_args$select,
       exclude = NULL,
       robust = robust,
-      weights = args$weights,
+      weights = my_args$weights,
       remove_na = remove_na,
       verbose = verbose,
       force = force,
@@ -272,8 +272,8 @@ center.grouped_df <- function(x,
     )
   }
   # set back class, so data frame still works with dplyr
-  attributes(args$x) <- args$info
-  args$x
+  attributes(my_args$x) <- my_args$info
+  my_args$x
 }
 
 
