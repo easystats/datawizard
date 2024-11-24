@@ -33,7 +33,8 @@
 #'
 #' @note There are methods to `print()` the data frame in a nicer output, as
 #' well methods for printing in markdown or HTML format (`print_md()` and
-#' `print_html()`).
+#' `print_html()`). The `print()` method for text outputs passes arguments in
+#' `...` to [`insight::export_table()`].
 #'
 #' @examples
 #' data(iris)
@@ -369,7 +370,8 @@ print.data_codebook <- function(x, ...) {
       title = caption,
       empty_line = "-",
       cross = "+",
-      align = .get_codebook_align(x)
+      align = .get_codebook_align(x),
+      ...
     )
   )
 }

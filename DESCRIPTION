@@ -1,30 +1,30 @@
 Type: Package
 Package: datawizard
 Title: Easy Data Wrangling and Statistical Transformations
-Version: 0.11.0.2
+Version: 0.13.0.13
 Authors@R: c(
     person("Indrajeet", "Patil", , "patilindrajeet.science@gmail.com", role = "aut",
-           comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@patilindrajeets")),
+           comment = c(ORCID = "0000-0003-1995-6531")),
     person("Etienne", "Bacher", , "etienne.bacher@protonmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9271-5075")),
     person("Dominique", "Makowski", , "dom.makowski@gmail.com", role = "aut",
-           comment = c(ORCID = "0000-0001-5375-9967", Twitter = "@Dom_Makowski")),
+           comment = c(ORCID = "0000-0001-5375-9967")),
     person("Daniel", "Lüdecke", , "d.luedecke@uke.de", role = "aut",
-           comment = c(ORCID = "0000-0002-8895-3206", Twitter = "@strengejacke")),
+           comment = c(ORCID = "0000-0002-8895-3206")),
     person("Mattan S.", "Ben-Shachar", , "matanshm@post.bgu.ac.il", role = "aut",
            comment = c(ORCID = "0000-0002-4287-4801")),
     person("Brenton M.", "Wiernik", , "brenton@wiernik.org", role = "aut",
-           comment = c(ORCID = "0000-0001-9560-6336", Twitter = "@bmwiernik")),
+           comment = c(ORCID = "0000-0001-9560-6336")),
     person("Rémi", "Thériault", , "remi.theriault@mail.mcgill.ca", role = "ctb",
-           comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc")),
+           comment = c(ORCID = "0000-0003-4315-6788")),
     person("Thomas J.", "Faulkenberry", , "faulkenberry@tarleton.edu", role = "rev"),
     person("Robert", "Garrett", , "rcg4@illinois.edu", role = "rev")
   )
 Maintainer: Etienne Bacher <etienne.bacher@protonmail.com>
-Description: A lightweight package to assist in key steps involved in any data 
-    analysis workflow: (1) wrangling the raw data to get it in the needed form, 
-    (2) applying preprocessing steps and statistical transformations, and 
-    (3) compute statistical summaries of data properties and distributions. 
+Description: A lightweight package to assist in key steps involved in any data
+    analysis workflow: (1) wrangling the raw data to get it in the needed form,
+    (2) applying preprocessing steps and statistical transformations, and
+    (3) compute statistical summaries of data properties and distributions.
     It is also the data wrangling backend for packages in 'easystats' ecosystem.
     References: Patil et al. (2022) <doi:10.21105/joss.04684>.
 License: MIT + file LICENSE
@@ -33,10 +33,10 @@ BugReports: https://github.com/easystats/datawizard/issues
 Depends:
     R (>= 4.0)
 Imports:
-    insight (>= 0.20.0),
+    insight (>= 0.20.5),
     stats,
     utils
-Suggests: 
+Suggests:
     bayestestR,
     boot,
     brms,
@@ -49,7 +49,6 @@ Suggests:
     ggplot2 (>= 3.5.0),
     gt,
     haven,
-    htmltools,
     httr,
     knitr,
     lme4,
@@ -68,12 +67,13 @@ Suggests:
     tibble,
     tidyr,
     withr
-VignetteBuilder: 
+VignetteBuilder:
     knitr
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/Needs/website: easystats/easystatstemplate
+Remotes: easystats/insight

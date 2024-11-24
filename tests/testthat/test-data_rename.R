@@ -14,6 +14,10 @@ test_that("data_rename works with one or several replacements", {
     ),
     c("length", "width", "Petal.Length", "Petal.Width", "Species")
   )
+  expect_named(
+    data_rename(test, c(length = "Sepal.Length", width = "Sepal.Width")),
+    c("length", "width", "Petal.Length", "Petal.Width", "Species")
+  )
 })
 
 test_that("data_rename returns a data frame", {
@@ -24,11 +28,26 @@ test_that("data_rename returns a data frame", {
 test_that("data_rename: pattern must be of type character", {
   expect_error(
     data_rename(test, pattern = 1),
-    regexp = "Argument `pattern` must be of type character."
+    regexp = "Argument `pattern` must be of type character"
   )
   expect_error(
     data_rename(test, pattern = TRUE),
-    regexp = "Argument `pattern` must be of type character."
+    regexp = "Argument `pattern` must be of type character"
+  )
+})
+
+test_that("data_rename: replacement not allowed to have NA or empty strings", {
+  expect_error(
+    data_rename(test, pattern = c(test = "Species", "Sepal.Length")),
+    regexp = "Either name all elements of `pattern`"
+  )
+  expect_error(
+    data_rename(
+      test,
+      pattern = c("Species", "Sepal.Length"),
+      replacement = c("foo", NA_character_)
+    ),
+    regexp = "`replacement` is not allowed"
   )
 })
 
@@ -42,7 +61,9 @@ test_that("data_rename uses indices when no replacement", {
 
 test_that("data_rename works when too many names in 'replacement'", {
   expect_message(
-    x <- data_rename(test, replacement = paste0("foo", 1:6)),
+    {
+      x <- data_rename(test, replacement = paste0("foo", 1:6))
+    },
     "There are more names in"
   )
   expect_identical(dim(test), dim(x))
@@ -51,7 +72,9 @@ test_that("data_rename works when too many names in 'replacement'", {
 
 test_that("data_rename works when not enough names in 'replacement'", {
   expect_message(
-    x <- data_rename(test, replacement = paste0("foo", 1:2)),
+    {
+      x <- data_rename(test, replacement = paste0("foo", 1:2))
+    },
     "There are more names in"
   )
   expect_identical(dim(test), dim(x))

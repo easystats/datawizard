@@ -81,7 +81,7 @@ test_that("data_tabulate data.frame", {
         "Variable", "Value", "N", "Raw %", "Valid %",
         "Cumulative %"
       ),
-      class = c("dw_data_tabulate", "data.frame"),
+      class = c("datawizard_table", "data.frame"),
       row.names = 1:3,
       type = "numeric",
       varname = "e16sex",
@@ -99,7 +99,7 @@ test_that("data_tabulate data.frame", {
         "Variable", "Value", "N", "Raw %", "Valid %",
         "Cumulative %"
       ),
-      class = c("dw_data_tabulate", "data.frame"),
+      class = c("datawizard_table", "data.frame"),
       row.names = 1:4,
       type = "numeric",
       varname = "c172code",
@@ -139,7 +139,7 @@ test_that("data_tabulate print", {
     attributes(out),
     list(
       names = c("Variable", "Value", "N", "Raw %", "Valid %", "Cumulative %"),
-      class = c("dw_data_tabulate", "data.frame"),
+      class = c("datawizard_table", "data.frame"),
       row.names = 1:4,
       type = "integer",
       varname = "Large Number",
@@ -197,7 +197,7 @@ test_that("data_tabulate grouped data.frame", {
         "Valid %",
         "Cumulative %"
       ),
-      class = c("dw_data_tabulate", "data.frame"),
+      class = c("datawizard_table", "data.frame"),
       row.names = 1:4,
       type = "numeric",
       varname = "c172code",
@@ -268,6 +268,7 @@ test_that("data_tabulate drop levels", {
 
 
 # select helpers ------------------------------
+
 test_that("data_tabulate regex", {
   data(mtcars)
   expect_identical(
@@ -286,16 +287,17 @@ test_that("data_tabulate exclude/include missing values", {
   efc$e16sex[sample.int(nrow(efc), 5)] <- NA
   out <- data_tabulate(efc$c172code)
   expect_identical(out$N, c(8L, 66L, 16L, 10L))
-  out <- data_tabulate(efc$c172code, include_na = FALSE)
+  out <- data_tabulate(efc$c172code, remove_na = TRUE)
   expect_identical(out$N, c(8L, 66L, 16L))
   out <- data_tabulate(efc$c172code, weights = efc$weights)
   expect_identical(out$N, c(10, 67, 15, 13))
-  out <- data_tabulate(efc$c172code, include_na = FALSE, weights = efc$weights)
+  out <- data_tabulate(efc$c172code, remove_na = TRUE, weights = efc$weights)
   expect_identical(out$N, c(10, 67, 15))
 })
 
 
 # cross tables ------------------------------
+
 test_that("data_tabulate, cross tables", {
   data(efc, package = "datawizard")
   set.seed(123)
@@ -303,17 +305,17 @@ test_that("data_tabulate, cross tables", {
   efc$e16sex[sample.int(nrow(efc), 5)] <- NA
 
   expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full")))
-  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE)))
+  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", remove_na = TRUE)))
   expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", weights = efc$weights)))
-  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE, weights = efc$weights))) # nolint
+  expect_snapshot(print(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", remove_na = TRUE, weights = efc$weights))) # nolint
   expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row")))
-  expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", include_na = FALSE)))
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", remove_na = TRUE)))
   expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", weights = efc$weights)))
-  expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", include_na = FALSE, weights = efc$weights))) # nolint
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", remove_na = TRUE, weights = efc$weights))) # nolint
   expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")))
-  expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", include_na = FALSE)))
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", remove_na = TRUE)))
   expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", weights = "weights")))
-  expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", include_na = FALSE, weights = "weights"))) # nolint
+  expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", remove_na = TRUE, weights = "weights"))) # nolint
 })
 
 test_that("data_tabulate, cross tables, HTML", {
@@ -324,11 +326,11 @@ test_that("data_tabulate, cross tables, HTML", {
   efc$e16sex[sample.int(nrow(efc), 5)] <- NA
 
   expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full")), "gt_tbl")
-  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE)), "gt_tbl") # nolint
+  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", remove_na = TRUE)), "gt_tbl") # nolint
   expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", weights = efc$weights)), "gt_tbl") # nolint
-  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE, weights = efc$weights)), "gt_tbl") # nolint
+  expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", remove_na = TRUE, weights = efc$weights)), "gt_tbl") # nolint
   expect_s3_class(print_html(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row")), "gt_tbl")
-  expect_s3_class(print_html(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", include_na = FALSE, weights = efc$weights)), "gt_tbl") # nolint
+  expect_s3_class(print_html(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", remove_na = TRUE, weights = efc$weights)), "gt_tbl") # nolint
 })
 
 test_that("data_tabulate, cross tables, grouped df", {
@@ -375,10 +377,11 @@ test_that("data_tabulate, cross tables, markdown", {
   efc$e16sex[sample.int(nrow(efc), 5)] <- NA
 
   expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full")))
-  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE)))
+  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", remove_na = TRUE)))
   expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", weights = efc$weights)))
-  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", include_na = FALSE, weights = efc$weights))) # nolint
+  expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", remove_na = TRUE, weights = efc$weights))) # nolint
 })
+
 
 # validate against table -------------------------
 
@@ -386,12 +389,12 @@ test_that("data_tabulate, validate against table", {
   data(mtcars)
   # frequency table
   out1 <- as.data.frame(table(mtcars$cyl))
-  out2 <- data_tabulate(mtcars$cyl, include_na = FALSE)
+  out2 <- data_tabulate(mtcars$cyl, remove_na = TRUE)
   expect_identical(out1$Freq, out2$N)
   # crosstable
   out1 <- data_arrange(as.data.frame(table(mtcars$cyl, mtcars$gear)), c("Var1", "Var2"))
   out2 <- data_rename(data_to_long(
-    as.data.frame(data_tabulate(mtcars$cyl, by = mtcars$gear, include_na = FALSE)), 2:4,
+    as.data.frame(data_tabulate(mtcars$cyl, by = mtcars$gear, remove_na = TRUE)), 2:4,
     names_to = "Var2", values_to = "Freq"
   ), "mtcars$cyl", "Var1")
   out1[[2]] <- as.character(out1[[2]])
@@ -404,4 +407,69 @@ test_that("data_tabulate, correct 0% for proportions", {
   out <- data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")
   expect_identical(format(out[[1]])[[4]], c("0 (0%)", "0 (0%)", "0 (0%)", "0 (0%)", "", "0"))
   expect_snapshot(print(out[[1]]))
+})
+
+
+# coercing to data frame -------------------------
+
+test_that("data_tabulate, as.data.frame, frequency tables", {
+  data(mtcars)
+  # frequency table
+  x <- data_tabulate(mtcars$cyl)
+  out <- as.data.frame(x)
+  expect_named(out, c("Variable", "Value", "N", "Raw %", "Valid %", "Cumulative %"))
+  expect_identical(out$Variable, c("mtcars$cyl", "mtcars$cyl", "mtcars$cyl", "mtcars$cyl"))
+  expect_false(any(vapply(out[2:ncol(out)], is.character, logical(1))))
+  # frequency tables
+  x <- data_tabulate(mtcars, select = c("cyl", "am"))
+  out <- as.data.frame(x)
+  expect_named(out, c("var", "table"))
+  expect_equal(vapply(out, class, character(1)), c("character", "AsIs"), ignore_attr = TRUE)
+  expect_length(out$table, 2L)
+  expect_named(out$table[[1]], c("Variable", "Value", "N", "Raw %", "Valid %", "Cumulative %"))
+  expect_identical(out$table[[1]]$Variable, c("cyl", "cyl", "cyl", "cyl"))
+  expect_false(any(vapply(out$table[[1]][2:ncol(out$table[[1]])], is.character, logical(1))))
+})
+
+
+test_that("data_tabulate, as.data.frame, cross tables", {
+  data(mtcars)
+  # cross table
+  x <- data_tabulate(mtcars, "cyl", by = "am")
+  out <- as.data.frame(x)
+  expect_named(out, c("var", "table"))
+  expect_equal(vapply(out, class, character(1)), c("character", "AsIs"), ignore_attr = TRUE)
+  expect_length(out$table, 1L)
+  expect_named(out$table[[1]], c("cyl", "0", "1", "NA"))
+  expect_identical(nrow(out$table[[1]]), 4L)
+  # cross tables
+  x <- data_tabulate(mtcars, c("cyl", "vs"), by = "am")
+  out <- as.data.frame(x)
+  expect_named(out, c("var", "table"))
+  expect_equal(vapply(out, class, character(1)), c("character", "AsIs"), ignore_attr = TRUE)
+  expect_length(out$table, 2L)
+  expect_named(out$table[[1]], c("cyl", "0", "1", "NA"))
+  expect_identical(nrow(out$table[[1]]), 4L)
+})
+
+
+test_that("data_tabulate, as.data.frame, cross tables with total N", {
+  # cross table, with total
+  x <- data_tabulate(mtcars, "cyl", by = "am")
+  out <- as.data.frame(x, add_total = TRUE)
+  expect_named(out, c("var", "table"))
+  expect_equal(vapply(out, class, character(1)), c("character", "AsIs"), ignore_attr = TRUE)
+  expect_length(out$table, 1L)
+  expect_named(out$table[[1]], c("cyl", "0", "1", "<NA>", "Total"))
+  expect_identical(nrow(out$table[[1]]), 5L)
+  expect_identical(out$table[[1]]$cyl, c("4", "6", "8", NA, "Total"))
+  # cross tables, with total
+  x <- data_tabulate(mtcars, c("cyl", "vs"), by = "am")
+  out <- as.data.frame(x, add_total = TRUE)
+  expect_named(out, c("var", "table"))
+  expect_equal(vapply(out, class, character(1)), c("character", "AsIs"), ignore_attr = TRUE)
+  expect_length(out$table, 2L)
+  expect_named(out$table[[1]], c("cyl", "0", "1", "<NA>", "Total"))
+  expect_identical(nrow(out$table[[1]]), 5L)
+  expect_identical(out$table[[1]]$cyl, c("4", "6", "8", NA, "Total"))
 })

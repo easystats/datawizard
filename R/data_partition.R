@@ -15,7 +15,6 @@
 #' @param row_id Character string, indicating the name of the column that
 #'   contains the row-id's.
 #' @param verbose Toggle messages and warnings.
-#' @param group Deprecated. Use `by` instead.
 #'
 #' @return A list of data frames. The list includes one training set per given
 #'   proportion and the remaining data as test set. List elements of training
@@ -50,16 +49,9 @@ data_partition <- function(data,
                            seed = NULL,
                            row_id = ".row_id",
                            verbose = TRUE,
-                           group = NULL,
                            ...) {
   # validation checks
   data <- .coerce_to_dataframe(data)
-
-  ## TODO: remove warning in future release
-  if (!is.null(group)) {
-    by <- group
-    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
-  }
 
   if (sum(proportion) > 1) {
     insight::format_error("Sum of `proportion` cannot be higher than 1.")

@@ -13,11 +13,15 @@
 #' @param pattern Character vector. For `data_rename()`, indicates columns that
 #'   should be selected for renaming. Can be `NULL` (in which case all columns
 #'   are selected). For `data_addprefix()` or `data_addsuffix()`, a character
-#'   string, which will be added as prefix or suffix to the column names.
+#'   string, which will be added as prefix or suffix to the column names. For
+#'   `data_rename()`, `pattern` can also be a named vector. In this case, names
+#'   are used as values for the `replacement` argument (i.e. `pattern` can be a
+#'   character vector using `<new name> = "<old name>"` and argument `replacement`
+#'   will be ignored then).
 #' @param replacement Character vector. Indicates the new name of the columns
 #'   selected in `pattern`. Can be `NULL` (in which case column are numbered
 #'   in sequential order). If not `NULL`, `pattern` and `replacement` must be
-#'   of the same length.
+#'   of the same length. If `pattern` is a named vector, `replacement` is ignored.
 #' @param rows Vector of row names.
 #' @param safe Do not throw error if for instance the variable to be
 #'   renamed/removed doesn't exist.
@@ -33,12 +37,14 @@
 #' head(data_rename(iris, "FakeCol", "length")) # This doesn't
 #' head(data_rename(iris, c("Sepal.Length", "Sepal.Width"), c("length", "width")))
 #'
+#' # use named vector to rename
+#' head(data_rename(iris, c(length = "Sepal.Length", width = "Sepal.Width")))
+#'
 #' # Reset names
 #' head(data_rename(iris, NULL))
 #'
 #' # Change all
 #' head(data_rename(iris, replacement = paste0("Var", 1:5)))
-#'
 #' @seealso
 #' - Functions to rename stuff: [data_rename()], [data_rename_rows()], [data_addprefix()], [data_addsuffix()]
 #' - Functions to reorder or remove columns: [data_reorder()], [data_relocate()], [data_remove()]
@@ -66,9 +72,42 @@ data_rename <- function(data,
     insight::format_error("Argument `pattern` must be of type character.")
   }
 
+  # check if `pattern` has names, and if so, use as "replacement"
+  if (!is.null(names(pattern))) {
+    replacement <- names(pattern)
+  }
+
   # name columns 1, 2, 3 etc. if no replacement
   if (is.null(replacement)) {
     replacement <- paste0(seq_along(pattern))
+  }
+
+  # coerce to character
+  replacement <- as.character(replacement)
+
+  # check if `replacement` has no empty strings and no NA values
+  invalid_replacement <- is.na(replacement) | !nzchar(replacement)
+  if (any(invalid_replacement)) {
+    if (is.null(names(pattern))) {
+      # when user did not match `pattern` with `replacement`
+      msg <- c(
+        "`replacement` is not allowed to have `NA` or empty strings.",
+        sprintf(
+          "Following values in `pattern` have no match in `replacement`: %s",
+          toString(pattern[invalid_replacement])
+        )
+      )
+    } else {
+      # when user did not name all elements of `pattern`
+      msg <- c(
+        "Either name all elements of `pattern` or use `replacement`.",
+        sprintf(
+          "Following values in `pattern` were not named: %s",
+          toString(pattern[invalid_replacement])
+        )
+      )
+    }
+    insight::format_error(msg)
   }
 
   # if duplicated names in replacement, append ".2", ".3", etc. to duplicates

@@ -2,9 +2,7 @@
 % Please edit documentation in R/data_select.R, R/extract_column_names.R
 \name{data_select}
 \alias{data_select}
-\alias{get_columns}
 \alias{extract_column_names}
-\alias{data_find}
 \alias{find_columns}
 \title{Find or get columns in a data frame based on search patterns}
 \usage{
@@ -18,27 +16,7 @@ data_select(
   ...
 )
 
-get_columns(
-  data,
-  select = NULL,
-  exclude = NULL,
-  ignore_case = FALSE,
-  regex = FALSE,
-  verbose = TRUE,
-  ...
-)
-
 extract_column_names(
-  data,
-  select = NULL,
-  exclude = NULL,
-  ignore_case = FALSE,
-  regex = FALSE,
-  verbose = TRUE,
-  ...
-)
-
-data_find(
   data,
   select = NULL,
   exclude = NULL,
@@ -65,8 +43,10 @@ find_columns(
 tasks. Can be either
 \itemize{
 \item a variable specified as a literal variable name (e.g., \code{column_name}),
-\item a string with the variable name (e.g., \code{"column_name"}), or a character
-vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a string with the variable name (e.g., \code{"column_name"}), a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}), or a
+character vector of variable names including ranges specified via \code{:}
+(e.g., \code{c("col1:col3", "col5")}),
 \item a formula with variable names (e.g., \code{~column_1 + column_2}),
 \item a vector of positive integers, giving the positions counting from the left
 (e.g. \code{1} or \code{c(1, 3, 5)}),
@@ -174,7 +154,7 @@ outer(iris, starts_with("Sep"))
 }\if{html}{\out{</div>}}
 }
 \examples{
-# Find columns names by pattern
+# Find column names by pattern
 extract_column_names(iris, starts_with("Sepal"))
 extract_column_names(iris, ends_with("Width"))
 extract_column_names(iris, regex("\\\\."))
@@ -186,6 +166,9 @@ extract_column_names(iris, starts_with("Sepal"), exclude = contains("Width"))
 # find numeric with mean > 3.5
 numeric_mean_35 <- function(x) is.numeric(x) && mean(x, na.rm = TRUE) > 3.5
 extract_column_names(iris, numeric_mean_35)
+
+# find range of colum names by range, using character vector
+extract_column_names(mtcars, c("cyl:hp", "wt"))
 
 # rename returned columns for "data_select()"
 head(data_select(mtcars, c(`Miles per Gallon` = "mpg", Cylinders = "cyl")))

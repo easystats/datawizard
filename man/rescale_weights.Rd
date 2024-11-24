@@ -4,7 +4,7 @@
 \alias{rescale_weights}
 \title{Rescale design weights for multilevel analysis}
 \usage{
-rescale_weights(data, by, probability_weights, nest = FALSE, group = NULL)
+rescale_weights(data, by, probability_weights, nest = FALSE)
 }
 \arguments{
 \item{data}{A data frame.}
@@ -21,8 +21,6 @@ sampling) weights of the survey data (level-1-weight).}
 \item{nest}{Logical, if \code{TRUE} and \code{by} indicates at least two
 group variables, then groups are "nested", i.e. groups are now a
 combination from each group level of the variables in \code{by}.}
-
-\item{group}{Deprecated. Use \code{by} instead.}
 }
 \value{
 \code{data}, including the new weighting variables: \code{pweights_a}

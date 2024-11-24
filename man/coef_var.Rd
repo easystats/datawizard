@@ -19,7 +19,6 @@ distribution_coef_var(x, ...)
   trim = 0,
   remove_na = FALSE,
   n = NULL,
-  na.rm = FALSE,
   ...
 )
 }
@@ -52,8 +51,6 @@ or not (\code{FALSE}, default)?}
 \item{n}{If \code{method = "unbiased"} and both \code{mu} and \code{sigma} are provided (not
 computed from \code{x}), what sample size to use to adjust the computed CV
 for small-sample bias?}
-
-\item{na.rm}{Deprecated. Please use \code{remove_na} instead.}
 }
 \value{
 The computed coefficient of variation for \code{x}.
@@ -79,14 +76,10 @@ This means that CV is \strong{NOT} invariant to shifting, but it is to scaling:
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{sandwiches <- c(0, 4, 15, 0, 0, 5, 2, 7)
 coef_var(sandwiches)
 #> [1] 1.239094
-}\if{html}{\out{</div>}}
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 coef_var(sandwiches / 2) # same
 #> [1] 1.239094
-}\if{html}{\out{</div>}}
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 coef_var(sandwiches + 4) # different! 0 is no longer meaningful!
 #> [1] 0.6290784
 }\if{html}{\out{</div>}}
