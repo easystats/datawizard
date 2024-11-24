@@ -76,7 +76,6 @@ data_arrange.grouped_df <- function(data, select = NULL, by = NULL, safe = TRUE,
   # set back class, so data frame still works with dplyr
   attributes(out) <- utils::modifyList(info, attributes(out))
   out
-
 }
 
 
