@@ -123,7 +123,7 @@ the corresponding value in \code{pattern}.
 \item \code{{n}} will be replaced by the number of the variable that is replaced.
 \item \code{{letter}} will be replaced by alphabetical letters in sequential order.
 \item Finally, the name of a user-defined object that is available in the
-environment can be used. In this case,
+environment can be used.
 }
 
 An example for the use of tokens is...

@@ -30,7 +30,7 @@
 #'     - `{n}` will be replaced by the number of the variable that is replaced.
 #'     - `{letter}` will be replaced by alphabetical letters in sequential order.
 #'     - Finally, the name of a user-defined object that is available in the
-#'       environment can be used. In this case,
+#'       environment can be used.
 #'
 #'     An example for the use of tokens is...
 #'     ```r
@@ -262,7 +262,7 @@ data_rename <- function(data,
         if (length(values) != length(pattern)) {
           insight::format_error(paste0(
             "The number of values provided in `", token, "` (", length(values),
-            " values) do not match the number of the columns to rename (",
+            " values) do not match the number of columns to rename (",
             length(pattern), " columns)."
           ))
         }
