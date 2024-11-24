@@ -17,11 +17,11 @@
 #' @inheritParams extract_column_names
 #' @inheritParams categorize
 #'
-#' @note By default, `to_numeric()` converts factors into "binary" dummies, i.e.
+#' @note When factors should be converted into multiple "binary" dummies, i.e.
 #' each factor level is converted into a separate column filled with a binary
-#' 0-1 value. If only one column is required, use `dummy_factors = FALSE`. If
-#' you want to preserve the original factor levels (in case these represent
-#' numeric values), use `preserve_levels = TRUE`.
+#' 0-1 value, set `dummy_factors = TRUE`. If you want to preserve the original
+#' factor levels (in case these represent numeric values), use
+#' `preserve_levels = TRUE`.
 #'
 #' @section Selection of variables - `select` argument:
 #' For most functions that have a `select` argument the complete input data
@@ -34,12 +34,12 @@
 #'
 #' @examples
 #' to_numeric(head(ToothGrowth))
-#' to_numeric(head(ToothGrowth), dummy_factors = FALSE)
+#' to_numeric(head(ToothGrowth), dummy_factors = TRUE)
 #'
 #' # factors
 #' x <- as.factor(mtcars$gear)
-#' to_numeric(x, dummy_factors = FALSE)
-#' to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE)
+#' to_numeric(x)
+#' to_numeric(x, preserve_levels = TRUE)
 #' # same as:
 #' coerce_to_numeric(x)
 #'
@@ -69,7 +69,7 @@ to_numeric.default <- function(x, verbose = TRUE, ...) {
 to_numeric.data.frame <- function(x,
                                   select = NULL,
                                   exclude = NULL,
-                                  dummy_factors = TRUE,
+                                  dummy_factors = FALSE,
                                   preserve_levels = FALSE,
                                   lowest = NULL,
                                   append = FALSE,
@@ -191,7 +191,7 @@ to_numeric.POSIXlt <- to_numeric.Date
 
 #' @export
 to_numeric.factor <- function(x,
-                              dummy_factors = TRUE,
+                              dummy_factors = FALSE,
                               preserve_levels = FALSE,
                               lowest = NULL,
                               verbose = TRUE,

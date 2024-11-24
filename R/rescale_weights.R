@@ -20,7 +20,6 @@
 #' @param nest Logical, if `TRUE` and `by` indicates at least two
 #'   group variables, then groups are "nested", i.e. groups are now a
 #'   combination from each group level of the variables in `by`.
-#' @param group Deprecated. Use `by` instead.
 #'
 #' @return `data`, including the new weighting variables: `pweights_a`
 #'   and `pweights_b`, which represent the rescaled design weights to use
@@ -88,13 +87,7 @@
 #'   )
 #' }
 #' @export
-rescale_weights <- function(data, by, probability_weights, nest = FALSE, group = NULL) {
-  ## TODO: remove warning in future release
-  if (!is.null(group)) {
-    by <- group
-    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
-  }
-
+rescale_weights <- function(data, by, probability_weights, nest = FALSE) {
   if (inherits(by, "formula")) {
     by <- all.vars(by)
   }

@@ -15,7 +15,7 @@
 #' @param return_indices Logical, if `FALSE`, return the vector of rows that
 #'   can be used to filter the original data frame. If `FALSE` (default),
 #'   returns directly the filtered data frame instead of the row indices.
-#' @param drop_na Logical, if `TRUE`, missing values (`NA`s) are removed before
+#' @param remove_na Logical, if `TRUE`, missing values (`NA`s) are removed before
 #'   filtering the data. This is the default behaviour, however, sometimes when
 #'   row indices are requested (i.e. `return_indices=TRUE`), it might be useful
 #'   to preserve `NA` values, so returned row indices match the row indices of
@@ -26,6 +26,7 @@
 #'   character vector (e.g. `c("x > 4", "y == 2")`) or a variable that contains
 #'   the string representation of a logical expression. These might be useful
 #'   when used in packages to avoid defining undefined global variables.
+#' @param drop_na Deprecated, please use `remove_na` instead.
 #'
 #' @return A filtered data frame, or the row indices that match the specified
 #' configuration.
@@ -100,11 +101,23 @@
 #' data_filter(mtcars, fl)
 #' @inherit data_rename seealso
 #' @export
-data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = TRUE, ...) {
+data_match <- function(x,
+                       to,
+                       match = "and",
+                       return_indices = FALSE,
+                       remove_na = TRUE,
+                       drop_na,
+                       ...) {
   if (!is.data.frame(to)) {
     to <- as.data.frame(to)
   }
   original_x <- x
+
+  ## TODO: remove deprecated argument later
+  if (!missing(drop_na)) {
+    insight::format_warning("Argument `drop_na` is deprecated. Please use `remove_na` instead.")
+    remove_na <- drop_na
+  }
 
   # evaluate
   match <- match.arg(tolower(match), c("and", "&", "&&", "or", "|", "||", "!", "not"))
@@ -133,7 +146,7 @@ data_match <- function(x, to, match = "and", return_indices = FALSE, drop_na = T
     idx <- vector("numeric", length = 0L)
   } else {
     # remove missings before matching
-    if (isTRUE(drop_na)) {
+    if (isTRUE(remove_na)) {
       x <- x[stats::complete.cases(x), , drop = FALSE]
     }
     idx <- seq_len(nrow(x))

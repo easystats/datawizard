@@ -19,7 +19,6 @@
 #' @param digits Optional scalar, indicating the amount of digits after decimal
 #' point when rounding estimates and values.
 #' @param ... Currently not used
-#' @param group Deprecated. Use `by` instead.
 #' @inheritParams find_columns
 #'
 #' @return A data frame with information on mean and further summary statistics
@@ -60,14 +59,7 @@ means_by_group.numeric <- function(x,
                                    ci = 0.95,
                                    weights = NULL,
                                    digits = NULL,
-                                   group = NULL,
                                    ...) {
-  ## TODO: remove warning in future release
-  if (!is.null(group)) {
-    by <- group
-    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
-  }
-
   # validation check for arguments
 
   # "by" must be provided
@@ -139,14 +131,7 @@ means_by_group.data.frame <- function(x,
                                       ignore_case = FALSE,
                                       regex = FALSE,
                                       verbose = TRUE,
-                                      group = NULL,
                                       ...) {
-  ## TODO: remove warning in future release
-  if (!is.null(group)) {
-    by <- group
-    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
-  }
-
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select,
     x,

@@ -78,6 +78,14 @@ standardize.default <- function(x,
     return(x)
   }
 
+  # check model formula. Some notations don't work when standardizing data
+  insight::formula_ok(
+    x,
+    action = "error",
+    prefix_msg = "Model cannot be standardized.",
+    verbose = verbose
+  )
+
   data_std <- NULL # needed to avoid note
   .standardize_models(x,
     robust = robust, two_sd = two_sd,

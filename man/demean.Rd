@@ -14,8 +14,7 @@ demean(
   suffix_demean = "_within",
   suffix_groupmean = "_between",
   add_attributes = TRUE,
-  verbose = TRUE,
-  group = NULL
+  verbose = TRUE
 )
 
 degroup(
@@ -27,8 +26,7 @@ degroup(
   suffix_demean = "_within",
   suffix_groupmean = "_between",
   add_attributes = TRUE,
-  verbose = TRUE,
-  group = NULL
+  verbose = TRUE
 )
 
 detrend(
@@ -40,8 +38,7 @@ detrend(
   suffix_demean = "_within",
   suffix_groupmean = "_between",
   add_attributes = TRUE,
-  verbose = TRUE,
-  group = NULL
+  verbose = TRUE
 )
 }
 \arguments{
@@ -85,8 +82,6 @@ relevant when printing \code{model_parameters()} - in such cases, the
 within- and between-effects are printed in separated blocks.}
 
 \item{verbose}{Toggle warnings and messages.}
-
-\item{group}{Deprecated. Use \code{by} instead.}
 
 \item{center}{Method for centering. \code{demean()} always performs
 mean-centering, while \code{degroup()} can use \code{center = "median"} or

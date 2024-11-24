@@ -19,7 +19,7 @@ test_that("data_codebook NaN and Inf", {
 
   set.seed(123)
   d <- data.frame(
-    x = c(sample(1:15, 100, TRUE), Inf, Inf)
+    x = c(sample.int(15, 100, TRUE), Inf, Inf)
   )
   expect_snapshot(data_codebook(d))
   expect_snapshot(data_codebook(d, range_at = 100))
@@ -38,24 +38,32 @@ test_that("data_codebook iris, select, ID", {
 
 
 test_that("data_codebook efc", {
-  expect_snapshot(data_codebook(efc))
+  expect_snapshot(print(data_codebook(efc), table_width = Inf))
+  expect_snapshot(print(data_codebook(efc), table_width = "auto", remove_duplicates = FALSE))
+  expect_snapshot(print(data_codebook(efc), table_width = "auto", remove_duplicates = TRUE))
 })
 
 
 test_that("data_codebook efc, variable_label_width", {
-  expect_snapshot(data_codebook(efc, variable_label_width = 30))
+  out <- data_codebook(efc, variable_label_width = 30)
+  expect_snapshot(print(out, table_width = Inf))
+  expect_snapshot(print(out, table_width = "auto", remove_duplicates = FALSE))
+  expect_snapshot(print(out, table_width = "auto", remove_duplicates = TRUE))
 })
 
 
 test_that("data_codebook efc, value_label_width", {
-  expect_snapshot(data_codebook(efc, variable_label_width = 30, value_label_width = 15))
+  out <- data_codebook(efc, variable_label_width = 30, value_label_width = 15)
+  expect_snapshot(print(out, table_width = Inf))
+  expect_snapshot(print(out, table_width = "auto", remove_duplicates = FALSE))
+  expect_snapshot(print(out, table_width = "auto", remove_duplicates = TRUE))
 })
 
 
 test_that("data_codebook truncated data", {
   set.seed(123)
   d <- data.frame(
-    a = sample(1:15, 100, TRUE),
+    a = sample.int(15, 100, TRUE),
     b = sample(letters[1:18], 100, TRUE),
     stringsAsFactors = FALSE
   )
@@ -66,7 +74,7 @@ test_that("data_codebook truncated data", {
 test_that("data_codebook mixed numeric lengths", {
   set.seed(123)
   d <- data.frame(
-    a = sample(1:4, 100, TRUE),
+    a = sample.int(4, 100, TRUE),
     b = sample(5:15, 100, TRUE),
     stringsAsFactors = FALSE
   )
@@ -76,7 +84,7 @@ test_that("data_codebook mixed numeric lengths", {
 test_that("data_codebook mixed range_at", {
   set.seed(123)
   d <- data.frame(
-    a = sample(1:4, 100, TRUE),
+    a = sample.int(4, 100, TRUE),
     b = sample(5:15, 100, TRUE),
     stringsAsFactors = FALSE
   )
@@ -87,7 +95,7 @@ test_that("data_codebook mixed range_at", {
 test_that("data_codebook logicals", {
   set.seed(123)
   d <- data.frame(
-    a = sample(1:15, 100, TRUE),
+    a = sample.int(15, 100, TRUE),
     b = sample(letters[1:3], 100, TRUE),
     c = sample(c(TRUE, FALSE), 100, TRUE),
     stringsAsFactors = FALSE
@@ -99,14 +107,14 @@ test_that("data_codebook logicals", {
 test_that("data_codebook labelled data exceptions", {
   set.seed(123)
 
-  f1 <- sample(1:5, 100, TRUE)
+  f1 <- sample.int(5, 100, TRUE)
   f1[f1 == 4] <- NA
   attr(f1, "labels") <- setNames(1:5, c("One", "Two", "Three", "Four", "Five"))
 
-  f2 <- sample(1:5, 100, TRUE)
+  f2 <- sample.int(5, 100, TRUE)
   attr(f2, "labels") <- setNames(c(1:3, 5), c("One", "Two", "Three", "Five"))
 
-  f3 <- sample(1:5, 100, TRUE)
+  f3 <- sample.int(5, 100, TRUE)
   attr(f3, "labels") <- setNames(1:5, c("One", "Two", "Three", "Four", "Five"))
 
   d <- data.frame(f1, f2, f3)
@@ -143,7 +151,7 @@ test_that("data_codebook works with numbers < 1", {
 test_that("data_codebook, big marks", {
   set.seed(123)
   f1 <- factor(sample(c("c", "b", "a"), 1e6, TRUE))
-  f2 <- factor(sample(1:3, 1e6, TRUE))
+  f2 <- factor(sample.int(3, 1e6, TRUE))
   d <- data.frame(f1, f2)
   expect_snapshot(data_codebook(d))
 })

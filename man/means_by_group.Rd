@@ -8,15 +8,7 @@
 \usage{
 means_by_group(x, ...)
 
-\method{means_by_group}{numeric}(
-  x,
-  by = NULL,
-  ci = 0.95,
-  weights = NULL,
-  digits = NULL,
-  group = NULL,
-  ...
-)
+\method{means_by_group}{numeric}(x, by = NULL, ci = 0.95, weights = NULL, digits = NULL, ...)
 
 \method{means_by_group}{data.frame}(
   x,
@@ -29,7 +21,6 @@ means_by_group(x, ...)
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
-  group = NULL,
   ...
 )
 }
@@ -56,14 +47,14 @@ weights are used.}
 \item{digits}{Optional scalar, indicating the amount of digits after decimal
 point when rounding estimates and values.}
 
-\item{group}{Deprecated. Use \code{by} instead.}
-
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
 \itemize{
 \item a variable specified as a literal variable name (e.g., \code{column_name}),
-\item a string with the variable name (e.g., \code{"column_name"}), or a character
-vector of variable names (e.g., \code{c("col1", "col2", "col3")}),
+\item a string with the variable name (e.g., \code{"column_name"}), a character
+vector of variable names (e.g., \code{c("col1", "col2", "col3")}), or a
+character vector of variable names including ranges specified via \code{:}
+(e.g., \code{c("col1:col3", "col5")}),
 \item a formula with variable names (e.g., \code{~column_1 + column_2}),
 \item a vector of positive integers, giving the positions counting from the left
 (e.g. \code{1} or \code{c(1, 3, 5)}),

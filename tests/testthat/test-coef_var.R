@@ -29,10 +29,6 @@ test_that("coef_var: argument 'remove_na' works", {
   )
 })
 
-test_that("coef_var: deprecation warning", {
-  expect_warning(coef_var(c(1:10, NA), na.rm = TRUE))
-})
-
 test_that("coef_var: method 'unbiased' needs argument 'n' when sigma and mu are provided", {
   expect_error(
     coef_var(1:10, method = "unbiased", mu = 10, sigma = 20),

@@ -139,6 +139,7 @@
 # Possibilities:
 # - quoted variable name
 # - quoted variable name with ignore case
+# - quoted variable name with colon, to indicate range
 # - character that should be regex-ed on variable names
 # - special word "all" to return all vars
 
@@ -146,30 +147,62 @@
   # use colnames because names() doesn't work for matrices
   columns <- colnames(data)
   if (isTRUE(regex)) {
+    # string is a regular expression
     grep(x, columns)
   } else if (length(x) == 1L && x == "all") {
+    # string is "all" - select all columns
     seq_along(data)
+  } else if (any(grepl(":", x, fixed = TRUE))) {
+    # special pattern, as string (e.g.select = c("cyl:hp", "am")). However,
+    # this will first go into `.eval_call()` and thus only single elements
+    # are passed in `x` - we have never a character *vector* here
+    # check for valid names
+    colon_vars <- unlist(strsplit(x, ":", fixed = TRUE))
+    colon_match <- match(colon_vars, columns)
+    if (anyNA(colon_match)) {
+      .warn_not_found(colon_vars, columns, colon_match, verbose)
+      matches <- NA
+    } else {
+      start_pos <- match(colon_vars[1], columns)
+      end_pos <- match(colon_vars[2], columns)
+      if (!is.na(start_pos) && !is.na(end_pos)) {
+        matches <- start_pos:end_pos
+      } else {
+        matches <- NA
+      }
+    }
+    matches[!is.na(matches)]
   } else if (isTRUE(ignore_case)) {
+    # find columns, case insensitive
     matches <- match(toupper(x), toupper(columns))
     matches[!is.na(matches)]
   } else {
+    # find columns, case sensitive
     matches <- match(x, columns)
-    if (anyNA(matches) && verbose) {
-      insight::format_warning(
-        paste0(
-          "Following variable(s) were not found: ",
-          toString(x[is.na(matches)])
-        ),
-        .misspelled_string(
-          columns,
-          x[is.na(matches)],
-          default_message = "Possibly misspelled?"
-        )
-      )
+    if (anyNA(matches)) {
+      .warn_not_found(x, columns, matches, verbose)
     }
     matches[!is.na(matches)]
   }
 }
+
+# small helper, to avoid duplicated code
+.warn_not_found <- function(x, columns, matches, verbose = TRUE) {
+  if (verbose) {
+    insight::format_warning(
+      paste0(
+        "Following variable(s) were not found: ",
+        toString(x[is.na(matches)])
+      ),
+      .misspelled_string(
+        columns,
+        x[is.na(matches)],
+        default_message = "Possibly misspelled?"
+      )
+    )
+  }
+}
+
 
 # 3 types of symbols:
 # - unquoted variables

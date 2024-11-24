@@ -52,7 +52,7 @@ test_that("data_match works with missing data", {
     data.frame(c172code = 1, e16sex = 2),
     match = "not",
     return_indices = TRUE,
-    drop_na = FALSE
+    remove_na = FALSE
   ))
   expect_identical(x1, 41L)
   x1 <- length(data_match(
@@ -60,7 +60,7 @@ test_that("data_match works with missing data", {
     data.frame(c172code = 1, e16sex = 2),
     match = "not",
     return_indices = TRUE,
-    drop_na = TRUE
+    remove_na = TRUE
   ))
   expect_identical(x1, 36L)
 })
