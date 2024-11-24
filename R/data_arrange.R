@@ -24,8 +24,11 @@
 #' # Arrange in decreasing order
 #' data_arrange(head(mtcars), "-carb")
 #'
-#' # arrange several variables, grouped by another one
-#' data_arrange(head(mtcars), c("gear", "carb"), by = "cyl")
+#' # compare: arrange variables vs. arrange variable within groups
+#' set.seed(123)
+#' x <- iris[sample(seq_len(nrow(iris)), 10, replace = TRUE), c("Sepal.Width", "Species")]
+#' data_arrange(x, c("Sepal.Width", "Species"))
+#' data_arrange(x, "Sepal.Width", by = "Species")
 #'
 #' # Throw an error if one of the variables specified doesn't exist
 #' try(data_arrange(head(mtcars), c("gear", "foo"), safe = FALSE))
