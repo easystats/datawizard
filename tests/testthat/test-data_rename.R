@@ -150,4 +150,21 @@ test_that("data_rename glue-style", {
   expect_named(out, c("formerly_mpg", "formerly_cyl", "formerly_disp"))
   out <- data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "{col}_is_column_{n}")
   expect_named(out, c("mpg_is_column_1", "cyl_is_column_2", "disp_is_column_3"))
+  out <- data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "new_{letter}")
+  expect_named(out, c("new_a", "new_b", "new_c"))
 })
+
+skip_if_not_installed("withr")
+withr::with_environment(
+  new.env(),
+  test_that("data_rename glue-style, environment", {
+    data(mtcars)
+    x <- c("hi", "there", "!")
+    out <- data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "col_{x}")
+    expect_named(out, c("col_hi", "col_there", "col_!"))
+    expect_error(
+      data_rename(mtcars[1:3], c("mpg", "disp"), "col_{x}"),
+      regex = "The number of values"
+    )
+  })
+)

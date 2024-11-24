@@ -24,10 +24,15 @@
 #'     in `pattern`. `pattern` and `replacement` must be of the same length.
 #'   - `NULL`, in which case columns are numbered in sequential order.
 #'   - A string (i.e. character vector of length 1) with a "glue" styled pattern.
-#'     Currently supported tokens are `{col}` (or `{name}`) and `{n}`. `{col}`
-#'     will be replaced by the column name, i.e. the corresponding value in
-#'     `pattern`. `{n}` will be replaced by the number of the variable that is
-#'     replaced. For instance,
+#'     Currently supported tokens are:
+#'     - `{col}` (or `{name}`), which will be replaced by the column name, i.e.
+#'       the corresponding value in `pattern`.
+#'     - `{n}` will be replaced by the number of the variable that is replaced.
+#'     - `{letter}` will be replaced by alphabetical letters in sequential order.
+#'     - Finally, the name of a user-defined object that is available in the
+#'       environment can be used. In this case,
+#'
+#'     An example for the use of tokens is...
 #'     ```r
 #'     data_rename(
 #'       mtcars,
@@ -35,8 +40,8 @@
 #'       replacement = "new_name_from_{col}"
 #'     )
 #'     ```
-#'     would returns new column names `new_name_from_am` and `new_name_from_vs`.
-#'     See 'Examples'.
+#'     ... which would return new column names `new_name_from_am` and
+#'     `new_name_from_vs`. See 'Examples'.
 #'
 #' If `pattern` is a named vector, `replacement` is ignored.
 #' @param rows Vector of row names.
@@ -66,6 +71,11 @@
 #' # Use glue-styled patterns
 #' head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "formerly_{col}"))
 #' head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "{col}_is_column_{n}"))
+#' head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "new_{letter}"))
+#'
+#' # User-defined glue-styled patterns from objects in environment
+#' x <- c("hi", "there", "!")
+#' head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "col_{x}"))
 #' @seealso
 #' - Functions to rename stuff: [data_rename()], [data_rename_rows()],
 #'   [data_addprefix()], [data_addsuffix()]
@@ -212,7 +222,7 @@ data_rename <- function(data,
     # prepare pattern
     column_name <- pattern[i]
     out[i] <- replacement
-    # replace first accepted token
+    # replace first pre-defined token
     out[i] <- gsub(
       "(.*)(\\{col\\})(.*)",
       replacement = paste0("\\1", column_name, "\\3"),
@@ -224,12 +234,44 @@ data_rename <- function(data,
       replacement = paste0("\\1", column_name, "\\3"),
       x = out[i]
     )
-    # replace second accepted token
+    # replace second pre-defined token
     out[i] <- gsub(
       "(.*)(\\{n\\})(.*)",
       replacement = paste0("\\1", i, "\\3"),
       x = out[i]
     )
+    # replace third pre-defined token
+    out[i] <- gsub(
+      "(.*)(\\{letter\\})(.*)",
+      replacement = paste0("\\1", letters[i], "\\3"),
+      x = out[i]
+    )
+    # extract all non-standard tokens
+    matches <- unlist(
+      regmatches(out[i], gregexpr("\\{([^}]*)\\}", out[i])),
+      use.names = FALSE
+    )
+    # do we have any additional tokens, i.e. variable names from the environment?
+    # users can also specify variable names, where the
+    if (length(matches)) {
+      # if so, iterate all tokens
+      for (token in matches) {
+        # evaluate token-object from the environment
+        values <- .dynEval(str2lang(gsub("\\{(.*)\\}", "\\1", token)))
+        # check for correct length
+        if (length(values) != length(pattern)) {
+          insight::format_error(paste0(
+            "The number of values provided in `", token, "` (", length(values),
+            " values) do not match the number of the columns to rename (",
+            length(pattern), " columns)."
+          ))
+        }
+        # replace token with values from the object
+        if (!is.null(values) && length(values)) {
+          out[i] <- gsub(token, values[i], out[i], fixed = TRUE)
+        }
+      }
+    }
   }
   out
 }

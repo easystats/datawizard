@@ -116,10 +116,17 @@ functions (see 'Details'), this argument may be used as workaround.}
 in \code{pattern}. \code{pattern} and \code{replacement} must be of the same length.
 \item \code{NULL}, in which case columns are numbered in sequential order.
 \item A string (i.e. character vector of length 1) with a "glue" styled pattern.
-Currently supported tokens are \code{{col}} (or \code{{name}}) and \code{{n}}. \code{{col}}
-will be replaced by the column name, i.e. the corresponding value in
-\code{pattern}. \code{{n}} will be replaced by the number of the variable that is
-replaced. For instance,
+Currently supported tokens are:
+\itemize{
+\item \code{{col}} (or \code{{name}}), which will be replaced by the column name, i.e.
+the corresponding value in \code{pattern}.
+\item \code{{n}} will be replaced by the number of the variable that is replaced.
+\item \code{{letter}} will be replaced by alphabetical letters in sequential order.
+\item Finally, the name of a user-defined object that is available in the
+environment can be used. In this case,
+}
+
+An example for the use of tokens is...
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{data_rename(
   mtcars,
@@ -128,8 +135,8 @@ replaced. For instance,
 )
 }\if{html}{\out{</div>}}
 
-would returns new column names \code{new_name_from_am} and \code{new_name_from_vs}.
-See 'Examples'.
+... which would return new column names \code{new_name_from_am} and
+\code{new_name_from_vs}. See 'Examples'.
 }
 
 If \code{pattern} is a named vector, \code{replacement} is ignored.}
@@ -174,6 +181,11 @@ head(data_rename(iris, replacement = paste0("Var", 1:5)))
 # Use glue-styled patterns
 head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "formerly_{col}"))
 head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "{col}_is_column_{n}"))
+head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "new_{letter}"))
+
+# User-defined glue-styled patterns from objects in environment
+x <- c("hi", "there", "!")
+head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "col_{x}"))
 }
 \seealso{
 \itemize{
