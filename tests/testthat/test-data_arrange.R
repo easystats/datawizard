@@ -137,6 +137,16 @@ test_that("data_arrange works with by", {
     expected,
     ignore_attr = TRUE
   )
+
+  # errors
+  expect_error(
+    data_arrange(mtcars, "mpg", by = "cxl"),
+    regex = "Variable \"cxl\" not found"
+  )
+  expect_error(
+    data_arrange(mtcars, "mpg", by = 2),
+    regex = "must be a character string"
+  )
 })
 
 test_that("data_arrange works with NA", {
