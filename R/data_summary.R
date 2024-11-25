@@ -5,9 +5,9 @@
 #' data frame or a matrix.
 #'
 #' @param x A (grouped) data frame.
-#' @param by Optional character string, indicating the name of a variable in `x`.
-#' If supplied, the data will be split by this variable and summary statistics
-#' will be computed for each group.
+#' @param by Optional character string, indicating the names of one or more
+#' variables in the data frame. If supplied, the data will be split by these
+#' variables and summary statistics will be computed for each group.
 #' @param remove_na Logical. If `TRUE`, missing values are omitted from the
 #' grouping variable. If `FALSE` (default), missing values are included as a
 #' level in the grouping variable.
