@@ -222,7 +222,7 @@ data_rename <- function(data,
   out <- rep_len("", length(pattern))
 
   # for alphabetical letters, we prepare a string if we have more than
-  # 26 columns # to rename
+  # 26 columns to rename
   if (length(out) > 26) {
     long_letters <- paste0(
       rep.int(letters[1:26], times = ceiling(length(out) / 26)),
