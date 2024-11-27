@@ -196,13 +196,15 @@ data_summary.grouped_df <- function(x, ..., by = NULL, remove_na = FALSE) {
   }
 
   # check for correct length of output - must be a single value!
-  if (any(lengths(out) != 1)) {
+  # Exception: bayestestR::ci()
+  wrong_length <- !sapply(out, inherits, what = c("bayestestR_ci", "bayestestR_eti")) & lengths(out) != 1 # nolint
+  if (any(wrong_length)) {
     insight::format_error(
       paste0(
         "Each expression must return a single value. Following expression",
-        ifelse(sum(lengths(out) != 1) > 1, "s", " "),
+        ifelse(sum(wrong_length) > 1, "s", " "),
         " returned more than one value: ",
-        text_concatenate(vapply(dots[lengths(out) != 1], insight::safe_deparse, character(1)), enclose = "\"")
+        text_concatenate(vapply(dots[wrong_length], insight::safe_deparse, character(1)), enclose = "\"")
       )
     )
   }
