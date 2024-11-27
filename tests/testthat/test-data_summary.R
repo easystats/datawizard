@@ -228,3 +228,26 @@ test_that("data_summary, extra functions", {
   out <- data_summary(mtcars, n = n(), by = c("am", "gear"))
   expect_identical(out$n, c(15L, 4L, 8L, 5L))
 })
+
+
+test_that("data_summary, bayestestR::ci", {
+  skip_if_not_installed("bayestesR")
+  data(mtcars)
+  out <- data_summary(
+    mtcars,
+    mean_value = mean(mpg),
+    ci = bayestestR::ci(mpg),
+    by = c("am", "gear")
+  )
+  expect_snapshot(out)
+  expect_error(
+    data_summary(
+      mtcars,
+      mw = mean(mpg),
+      test = bayestestR::ci(mpg),
+      yolo = c(mean(mpg), sd(mpg)),
+      by = c("am", "gear")
+    ),
+    regex = "Each expression"
+  )
+})

@@ -19,15 +19,16 @@
 #'   - a vector of negative integers, giving the positions counting from the
 #'     right (e.g., `-1` or `-1:-3`),
 #'   - one of the following select-helpers: `starts_with()`, `ends_with()`,
-#'     `contains()`, a range using `:` or `regex("")`. `starts_with()`,
+#'     `contains()`, a range using `:`, or `regex()`. `starts_with()`,
 #'     `ends_with()`, and  `contains()` accept several patterns, e.g
-#'     `starts_with("Sep", "Petal")`.
-#'   - or a function testing for logical conditions, e.g. `is.numeric()` (or
+#'     `starts_with("Sep", "Petal")`. `regex()` can be used to define regular
+#'     expression patterns.
+#'   - a function testing for logical conditions, e.g. `is.numeric()` (or
 #'     `is.numeric`), or any user-defined function that selects the variables
 #'     for which the function returns `TRUE` (like: `foo <- function(x) mean(x) > 3`),
 #'   - ranges specified via literal variable names, select-helpers (except
 #'     `regex()`) and (user-defined) functions can be negated, i.e. return
-#'     non-matching elements, when prefixed with a `-`, e.g. `-ends_with("")`,
+#'     non-matching elements, when prefixed with a `-`, e.g. `-ends_with()`,
 #'     `-is.numeric` or `-(Sepal.Width:Petal.Length)`. **Note:** Negation means
 #'     that matches are _excluded_, and thus, the `exclude` argument can be
 #'     used alternatively. For instance, `select=-ends_with("Length")` (with
@@ -48,7 +49,7 @@
 #'   character string (or a variable containing a character string) and is not
 #'   allowed to be one of the supported select-helpers or a character vector
 #'   of length > 1. `regex = TRUE` is comparable to using one of the two
-#'   select-helpers, `select = contains("")` or `select = regex("")`, however,
+#'   select-helpers, `select = contains()` or `select = regex()`, however,
 #'   since the select-helpers may not work when called from inside other
 #'   functions (see 'Details'), this argument may be used as workaround.
 #' @param verbose Toggle warnings.
@@ -131,7 +132,10 @@
 #' numeric_mean_35 <- function(x) is.numeric(x) && mean(x, na.rm = TRUE) > 3.5
 #' extract_column_names(iris, numeric_mean_35)
 #'
-#' # find range of colum names by range, using character vector
+#' # find column names, using range
+#' extract_column_names(mtcars, c(cyl:hp, wt))
+#'
+#' # find range of column names by range, using character vector
 #' extract_column_names(mtcars, c("cyl:hp", "wt"))
 #'
 #' # rename returned columns for "data_select()"
