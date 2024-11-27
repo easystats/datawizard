@@ -25,12 +25,15 @@
 #'   - `NULL`, in which case columns are numbered in sequential order.
 #'   - A string (i.e. character vector of length 1) with a "glue" styled pattern.
 #'     Currently supported tokens are:
-#'     - `{col}` (or `{name}`), which will be replaced by the column name, i.e.
-#'       the corresponding value in `pattern`.
+#'     - `{col}` which will be replaced by the column name, i.e. the
+#'       corresponding value in `pattern`.
 #'     - `{n}` will be replaced by the number of the variable that is replaced.
 #'     - `{letter}` will be replaced by alphabetical letters in sequential order.
+#'       If more than 26 letters are required, letters are repeated, but have
+#'       seqential numeric indices (e.g., `a1` to `z1`, followed by `a2` to `z2`).
 #'     - Finally, the name of a user-defined object that is available in the
-#'       environment can be used.
+#'       environment can be used. Note that the object's name is not allowed to
+#'       be one of the pre-defined tokens, `"col"`, `"n"` and `"letter"`.
 #'
 #'     An example for the use of tokens is...
 #'     ```r
@@ -158,9 +161,7 @@ data_rename <- function(data,
   }
 
   # check if we have "glue" styled replacement-string
-  glue_style <- length(replacement) == 1 &&
-    grepl("{", replacement, fixed = TRUE) &&
-    length(pattern) > 1
+  glue_style <- length(replacement) == 1 && grepl("{", replacement, fixed = TRUE)
 
   if (length(replacement) > length(pattern) && verbose) {
     insight::format_alert(
@@ -215,9 +216,23 @@ data_rename <- function(data,
 .glue_replacement <- function(pattern, replacement) {
   # this function replaces "glue" tokens into their related
   # real names/values. Currently, following tokens are accepted:
-  # - {col}/{name}: replacement is the name of the column (indicated in "pattern")
+  # - {col}: replacement is the name of the column (indicated in "pattern")
+  # - {letter}: replacement is lower-case alphabetically letter, in sequential order
   # - {n}: replacement is the number of the variable out of n, that should be renamed
   out <- rep_len("", length(pattern))
+
+  # for alphabetical letters, we prepare a string if we have more than
+  # 26 columns # to rename
+  if (length(out) > 26) {
+    long_letters <- paste0(
+      rep.int(letters[1:26], times = ceiling(length(out) / 26)),
+      rep(1:ceiling(length(out) / 26), each = 26)
+    )
+  } else {
+    long_letters <- letters[1:26]
+  }
+  long_letters <- long_letters[seq_len(length(out))]
+
   for (i in seq_along(out)) {
     # prepare pattern
     column_name <- pattern[i]
@@ -225,12 +240,6 @@ data_rename <- function(data,
     # replace first pre-defined token
     out[i] <- gsub(
       "(.*)(\\{col\\})(.*)",
-      replacement = paste0("\\1", column_name, "\\3"),
-      x = out[i]
-    )
-    # alias of {col} is {name}
-    out[i] <- gsub(
-      "(.*)(\\{name\\})(.*)",
       replacement = paste0("\\1", column_name, "\\3"),
       x = out[i]
     )
@@ -243,7 +252,7 @@ data_rename <- function(data,
     # replace third pre-defined token
     out[i] <- gsub(
       "(.*)(\\{letter\\})(.*)",
-      replacement = paste0("\\1", letters[i], "\\3"),
+      replacement = paste0("\\1", long_letters[i], "\\3"),
       x = out[i]
     )
     # extract all non-standard tokens
@@ -257,7 +266,14 @@ data_rename <- function(data,
       # if so, iterate all tokens
       for (token in matches) {
         # evaluate token-object from the environment
-        values <- .dynEval(str2lang(gsub("\\{(.*)\\}", "\\1", token)))
+         values <- tryCatch(
+          .dynEval(str2lang(gsub("\\{(.*)\\}", "\\1", token))),
+          error = function(e) {
+            insight::format_error(paste0(
+              "The object `", token, "` was not found. Please check if it really exists."
+            ))
+          }
+        )
         # check for correct length
         if (length(values) != length(pattern)) {
           insight::format_error(paste0(
@@ -267,7 +283,7 @@ data_rename <- function(data,
           ))
         }
         # replace token with values from the object
-        if (!is.null(values) && length(values)) {
+        if (length(values)) {
           out[i] <- gsub(token, values[i], out[i], fixed = TRUE)
         }
       }
