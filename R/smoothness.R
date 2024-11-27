@@ -56,16 +56,14 @@ smoothness.numeric <- function(x,
   }
 
   if (method == "cor") {
-    smooth <- stats::cor(utils::head(x, length(x) - lag), utils::tail(x, length(x) - lag))
+    smooth_value <- stats::cor(utils::head(x, length(x) - lag), utils::tail(x, length(x) - lag))
   } else {
     diff <- standardize(diff(x))
-    smooth <- 1 - mean((diff(diff) ** 2) / 4)  # Note the reversal to match the other method
+    smooth_value <- 1 - mean((diff(diff) ** 2) / 4)  # Note the reversal to match the other method
   }
 
   if (!is.null(iterations)) {
-    if (!requireNamespace("boot", quietly = TRUE)) {
-      insight::format_warning("Package 'boot' needed for bootstrapping SEs.")
-    } else {
+    if (requireNamespace("boot", quietly = TRUE)) {
       results <- boot::boot(
         data = x,
         statistic = .boot_smoothness,
@@ -74,12 +72,14 @@ smoothness.numeric <- function(x,
         lag = lag
       )
       out_se <- stats::sd(results$t, na.rm = TRUE)
-      smooth <- data.frame(Smoothness = smooth, SE = out_se)
+      smooth_value <- data.frame(Smoothness = smooth_value, SE = out_se)
+    } else {
+      insight::format_warning("Package 'boot' needed for bootstrapping SEs.")
     }
   }
 
-  class(smooth) <- unique(c("parameters_smoothness", class(smooth)))
-  smooth
+  class(smooth_value) <- unique(c("parameters_smoothness", class(smooth_value)))
+  smooth_value
 }
 
 
@@ -89,14 +89,13 @@ smoothness.data.frame <- function(x,
                                   lag = 1,
                                   iterations = NULL,
                                   ...) {
-  .smoothness <-
-    lapply(
-      x,
-      smoothness,
-      method = method,
-      lag = lag,
-      iterations = iterations
-    )
+  .smoothness <- lapply(
+    x,
+    smoothness,
+    method = method,
+    lag = lag,
+    iterations = iterations
+  )
   .smoothness <- cbind(Parameter = names(.smoothness), do.call(rbind, .smoothness))
   class(.smoothness) <- unique(c("parameters_smoothness", class(.smoothness)))
   .smoothness

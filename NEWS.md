@@ -5,6 +5,9 @@ BREAKING CHANGES
 * Argument `drop_na` in `data_match()` is deprecated now. Please use `remove_na`
   instead.
 
+* The `"diff"` method in `smoothness()` was revised and now has a reversed
+  interpretation. Documentation was updated accordingly. (#374).
+
 CHANGES
 
 * The `select` argument, which is available in different functions to select

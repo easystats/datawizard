@@ -36,7 +36,7 @@ plot(x)
 smoothness(x, method = "cor")
 smoothness(x, method = "diff")
 
-# A boootstrapped value can also be computed
+# A bootstrapped value can also be computed
 smoothness(x, iterations = 100)
 
 # When perfectly linear, the "smoothness" is 1
