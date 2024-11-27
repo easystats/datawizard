@@ -19,7 +19,7 @@
 #'   - a vector of negative integers, giving the positions counting from the
 #'     right (e.g., `-1` or `-1:-3`),
 #'   - one of the following select-helpers: `starts_with()`, `ends_with()`,
-#'     `contains()`, a range using `:` or `regex()`. `starts_with()`,
+#'     `contains()`, a range using `:`, or `regex()`. `starts_with()`,
 #'     `ends_with()`, and  `contains()` accept several patterns, e.g
 #'     `starts_with("Sep", "Petal")`. `regex()` can be used to define regular
 #'     expression patterns.
