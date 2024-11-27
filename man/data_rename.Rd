@@ -123,7 +123,7 @@ corresponding value in \code{pattern}.
 \item \code{{n}} will be replaced by the number of the variable that is replaced.
 \item \code{{letter}} will be replaced by alphabetical letters in sequential order.
 If more than 26 letters are required, letters are repeated, but have
-seqential numeric indices (e.g., \code{a1} to \code{z1}, followed by \code{a2} to \code{z2}).
+sequential numeric indices (e.g., \code{a1} to \code{z1}, followed by \code{a2} to \code{z2}).
 \item Finally, the name of a user-defined object that is available in the
 environment can be used. Note that the object's name is not allowed to
 be one of the pre-defined tokens, \code{"col"}, \code{"n"} and \code{"letter"}.

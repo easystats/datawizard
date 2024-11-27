@@ -30,7 +30,7 @@
 #'     - `{n}` will be replaced by the number of the variable that is replaced.
 #'     - `{letter}` will be replaced by alphabetical letters in sequential order.
 #'       If more than 26 letters are required, letters are repeated, but have
-#'       seqential numeric indices (e.g., `a1` to `z1`, followed by `a2` to `z2`).
+#'       sequential numeric indices (e.g., `a1` to `z1`, followed by `a2` to `z2`).
 #'     - Finally, the name of a user-defined object that is available in the
 #'       environment can be used. Note that the object's name is not allowed to
 #'       be one of the pre-defined tokens, `"col"`, `"n"` and `"letter"`.
@@ -266,7 +266,7 @@ data_rename <- function(data,
       # if so, iterate all tokens
       for (token in matches) {
         # evaluate token-object from the environment
-         values <- .dynEval(
+        values <- .dynEval(
           str2lang(gsub("\\{(.*)\\}", "\\1", token)),
           ifnotfound = insight::format_error(paste0(
             "The object `", token, "` was not found. Please check if it really exists."
