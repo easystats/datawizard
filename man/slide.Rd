@@ -44,7 +44,7 @@ character vector of variable names including ranges specified via \code{:}
 \item a vector of negative integers, giving the positions counting from the
 right (e.g., \code{-1} or \code{-1:-3}),
 \item one of the following select-helpers: \code{starts_with()}, \code{ends_with()},
-\code{contains()}, a range using \code{:} or \code{regex()}. \code{starts_with()},
+\code{contains()}, a range using \code{:}, or \code{regex()}. \code{starts_with()},
 \code{ends_with()}, and  \code{contains()} accept several patterns, e.g
 \code{starts_with("Sep", "Petal")}. \code{regex()} can be used to define regular
 expression patterns.
