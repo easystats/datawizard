@@ -43,14 +43,17 @@ data_rename_rows(data, rows = NULL)
 \arguments{
 \item{data}{A data frame, or an object that can be coerced to a data frame.}
 
-\item{pattern}{Character vector. For \code{data_rename()}, indicates columns that
-should be selected for renaming. Can be \code{NULL} (in which case all columns
-are selected). For \code{data_addprefix()} or \code{data_addsuffix()}, a character
-string, which will be added as prefix or suffix to the column names. For
-\code{data_rename()}, \code{pattern} can also be a named vector. In this case, names
-are used as values for the \code{replacement} argument (i.e. \code{pattern} can be a
-character vector using \verb{<new name> = "<old name>"} and argument \code{replacement}
-will be ignored then).}
+\item{pattern}{Character vector.
+\itemize{
+\item For \code{data_addprefix()} or \code{data_addsuffix()}, a character string, which
+will be added as prefix or suffix to the column names.
+\item For \code{data_rename()}, indicates columns that should be selected for
+renaming. Can be \code{NULL} (in which case all columns are selected).
+\code{pattern} can also be a named vector. In this case, names are used as
+values for the \code{replacement} argument (i.e. \code{pattern} can be a character
+vector using \verb{<new name> = "<old name>"} and argument \code{replacement} will
+be ignored then).
+}}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -107,10 +110,39 @@ functions (see 'Details'), this argument may be used as workaround.}
 
 \item{...}{Other arguments passed to or from other functions.}
 
-\item{replacement}{Character vector. Indicates the new name of the columns
-selected in \code{pattern}. Can be \code{NULL} (in which case column are numbered
-in sequential order). If not \code{NULL}, \code{pattern} and \code{replacement} must be
-of the same length. If \code{pattern} is a named vector, \code{replacement} is ignored.}
+\item{replacement}{Character vector. Can be one of the following:
+\itemize{
+\item A character vector that indicates the new names of the columns selected
+in \code{pattern}. \code{pattern} and \code{replacement} must be of the same length.
+\item \code{NULL}, in which case columns are numbered in sequential order.
+\item A string (i.e. character vector of length 1) with a "glue" styled pattern.
+Currently supported tokens are:
+\itemize{
+\item \code{{col}} which will be replaced by the column name, i.e. the
+corresponding value in \code{pattern}.
+\item \code{{n}} will be replaced by the number of the variable that is replaced.
+\item \code{{letter}} will be replaced by alphabetical letters in sequential order.
+If more than 26 letters are required, letters are repeated, but have
+sequential numeric indices (e.g., \code{a1} to \code{z1}, followed by \code{a2} to \code{z2}).
+\item Finally, the name of a user-defined object that is available in the
+environment can be used. Note that the object's name is not allowed to
+be one of the pre-defined tokens, \code{"col"}, \code{"n"} and \code{"letter"}.
+}
+
+An example for the use of tokens is...
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_rename(
+  mtcars,
+  pattern = c("am", "vs"),
+  replacement = "new_name_from_\{col\}"
+)
+}\if{html}{\out{</div>}}
+
+... which would return new column names \code{new_name_from_am} and
+\code{new_name_from_vs}. See 'Examples'.
+}
+
+If \code{pattern} is a named vector, \code{replacement} is ignored.}
 
 \item{safe}{Do not throw error if for instance the variable to be
 renamed/removed doesn't exist.}
@@ -148,15 +180,28 @@ head(data_rename(iris, NULL))
 
 # Change all
 head(data_rename(iris, replacement = paste0("Var", 1:5)))
+
+# Use glue-styled patterns
+head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "formerly_{col}"))
+head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "{col}_is_column_{n}"))
+head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "new_{letter}"))
+
+# User-defined glue-styled patterns from objects in environment
+x <- c("hi", "there", "!")
+head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "col_{x}"))
 }
 \seealso{
 \itemize{
-\item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}}, \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
-\item Functions to reorder or remove columns: \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}}, \code{\link[=data_remove]{data_remove()}}
-\item Functions to reshape, pivot or rotate data frames: \code{\link[=data_to_long]{data_to_long()}}, \code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
+\item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}},
+\code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
+\item Functions to reorder or remove columns: \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}},
+\code{\link[=data_remove]{data_remove()}}
+\item Functions to reshape, pivot or rotate data frames: \code{\link[=data_to_long]{data_to_long()}},
+\code{\link[=data_to_wide]{data_to_wide()}}, \code{\link[=data_rotate]{data_rotate()}}
 \item Functions to recode data: \code{\link[=rescale]{rescale()}}, \code{\link[=reverse]{reverse()}}, \code{\link[=categorize]{categorize()}},
 \code{\link[=recode_values]{recode_values()}}, \code{\link[=slide]{slide()}}
-\item Functions to standardize, normalize, rank-transform: \code{\link[=center]{center()}}, \code{\link[=standardize]{standardize()}}, \code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
+\item Functions to standardize, normalize, rank-transform: \code{\link[=center]{center()}}, \code{\link[=standardize]{standardize()}},
+\code{\link[=normalize]{normalize()}}, \code{\link[=ranktransform]{ranktransform()}}, \code{\link[=winsorize]{winsorize()}}
 \item Split and merge data frames: \code{\link[=data_partition]{data_partition()}}, \code{\link[=data_merge]{data_merge()}}
 \item Functions to find or select columns: \code{\link[=data_select]{data_select()}}, \code{\link[=extract_column_names]{extract_column_names()}}
 \item Functions to filter rows: \code{\link[=data_match]{data_match()}}, \code{\link[=data_filter]{data_filter()}}
