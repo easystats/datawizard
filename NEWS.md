@@ -25,6 +25,9 @@ CHANGES
 * The `replacement` argument in `data_rename()` now supports glue-styled
   tokens  (#563).
 
+* `data_summary()` also accepts the results of `bayestestR::ci()` as summary
+  function (#483).
+
 BUG FIXES
 
 * `describe_distribution()` no longer errors if the sample was too sparse to compute
