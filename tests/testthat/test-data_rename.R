@@ -166,7 +166,7 @@ test_that("data_rename enough letters", {
     mtcars[1:5, ], iris[1:5, ], efc[1:5, ], ChickWeight[1:5, ], ToothGrowth[1:5, ],
     USArrests[1:5, ], airquality[1:5, ]
   )
-  expect_names(
+  expect_named(
     data_rename(x, replacement = "long_letter_{letter}"),
     c(
       "long_letter_a1", "long_letter_b1", "long_letter_c1", "long_letter_d1",

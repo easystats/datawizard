@@ -266,13 +266,11 @@ data_rename <- function(data,
       # if so, iterate all tokens
       for (token in matches) {
         # evaluate token-object from the environment
-         values <- tryCatch(
-          .dynEval(str2lang(gsub("\\{(.*)\\}", "\\1", token))),
-          error = function(e) {
-            insight::format_error(paste0(
-              "The object `", token, "` was not found. Please check if it really exists."
-            ))
-          }
+         values <- .dynEval(
+          str2lang(gsub("\\{(.*)\\}", "\\1", token)),
+          ifnotfound = insight::format_error(paste0(
+            "The object `", token, "` was not found. Please check if it really exists."
+          ))
         )
         # check for correct length
         if (length(values) != length(pattern)) {
