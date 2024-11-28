@@ -10,7 +10,7 @@
 #'   pipe-workflow.
 #'
 #' @param data A data frame, or an object that can be coerced to a data frame.
-#' @param pattern Character vector.
+#' @param select Character vector.
 #'   - For `data_addprefix()` or `data_addsuffix()`, a character string, which
 #'     will be added as prefix or suffix to the column names.
 #'   - For `data_rename()`, indicates columns that should be selected for
@@ -51,6 +51,7 @@
 #' @param safe Do not throw error if for instance the variable to be
 #'   renamed/removed doesn't exist.
 #' @param verbose Toggle warnings and messages.
+#' @param pattern Deprecated. Use `select` instead.
 #' @param ... Other arguments passed to or from other functions.
 #'
 #' @return A modified data frame.
@@ -96,28 +97,34 @@
 #'
 #' @export
 data_rename <- function(data,
-                        pattern = NULL,
+                        select = NULL,
                         replacement = NULL,
                         safe = TRUE,
                         verbose = TRUE,
+                        pattern = NULL,
                         ...) {
+  if (!is.null(pattern)) {
+    .is_deprecated("pattern", "select")
+    select <- pattern
+  }
+
   # change all names if no pattern specified
-  if (is.null(pattern)) {
-    pattern <- names(data)
+  if (is.null(select)) {
+    select <- names(data)
   }
 
-  if (!is.character(pattern)) {
-    insight::format_error("Argument `pattern` must be of type character.")
+  if (!is.character(select)) {
+    insight::format_error("Argument `select` must be of type character.")
   }
 
-  # check if `pattern` has names, and if so, use as "replacement"
-  if (!is.null(names(pattern))) {
-    replacement <- names(pattern)
+  # check if `select` has names, and if so, use as "replacement"
+  if (!is.null(names(select))) {
+    replacement <- names(select)
   }
 
   # name columns 1, 2, 3 etc. if no replacement
   if (is.null(replacement)) {
-    replacement <- paste0(seq_along(pattern))
+    replacement <- paste0(seq_along(select))
   }
 
   # coerce to character
@@ -126,22 +133,22 @@ data_rename <- function(data,
   # check if `replacement` has no empty strings and no NA values
   invalid_replacement <- is.na(replacement) | !nzchar(replacement)
   if (any(invalid_replacement)) {
-    if (is.null(names(pattern))) {
-      # when user did not match `pattern` with `replacement`
+    if (is.null(names(select))) {
+      # when user did not match `select` with `replacement`
       msg <- c(
         "`replacement` is not allowed to have `NA` or empty strings.",
         sprintf(
-          "Following values in `pattern` have no match in `replacement`: %s",
-          toString(pattern[invalid_replacement])
+          "Following values in `select` have no match in `replacement`: %s",
+          toString(select[invalid_replacement])
         )
       )
     } else {
-      # when user did not name all elements of `pattern`
+      # when user did not name all elements of `select`
       msg <- c(
-        "Either name all elements of `pattern` or use `replacement`.",
+        "Either name all elements of `select` or use `replacement`.",
         sprintf(
-          "Following values in `pattern` were not named: %s",
-          toString(pattern[invalid_replacement])
+          "Following values in `select` were not named: %s",
+          toString(select[invalid_replacement])
         )
       )
     }
@@ -163,30 +170,30 @@ data_rename <- function(data,
   # check if we have "glue" styled replacement-string
   glue_style <- length(replacement) == 1 && grepl("{", replacement, fixed = TRUE)
 
-  if (length(replacement) > length(pattern) && verbose) {
+  if (length(replacement) > length(select) && verbose) {
     insight::format_alert(
       paste0(
-        "There are more names in `replacement` than in `pattern`. The last ",
-        length(replacement) - length(pattern), " names of `replacement` are not used."
+        "There are more names in `replacement` than in `select`. The last ",
+        length(replacement) - length(select), " names of `replacement` are not used."
       )
     )
-  } else if (length(replacement) < length(pattern) && verbose && !glue_style) {
+  } else if (length(replacement) < length(select) && verbose && !glue_style) {
     insight::format_alert(
       paste0(
-        "There are more names in `pattern` than in `replacement`. The last ",
-        length(pattern) - length(replacement), " names of `pattern` are not modified."
+        "There are more names in `select` than in `replacement`. The last ",
+        length(select) - length(replacement), " names of `select` are not modified."
       )
     )
   }
 
-  # if we have glue-styled replacement-string, create replacement pattern now
+  # if we have glue-styled replacement-string, create replacement select now
   if (glue_style) {
-    replacement <- .glue_replacement(pattern, replacement)
+    replacement <- .glue_replacement(select, replacement)
   }
 
-  for (i in seq_along(pattern)) {
+  for (i in seq_along(select)) {
     if (!is.na(replacement[i])) {
-      data <- .data_rename(data, pattern[i], replacement[i], safe, verbose)
+      data <- .data_rename(data, select[i], replacement[i], safe, verbose)
     }
   }
 

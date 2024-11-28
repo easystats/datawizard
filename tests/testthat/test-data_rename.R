@@ -25,26 +25,26 @@ test_that("data_rename returns a data frame", {
   expect_s3_class(x, "data.frame")
 })
 
-test_that("data_rename: pattern must be of type character", {
+test_that("data_rename: select must be of type character", {
   expect_error(
-    data_rename(test, pattern = 1),
-    regexp = "Argument `pattern` must be of type character"
+    data_rename(test, select = 1),
+    regexp = "Argument `select` must be of type character"
   )
   expect_error(
-    data_rename(test, pattern = TRUE),
-    regexp = "Argument `pattern` must be of type character"
+    data_rename(test, select = TRUE),
+    regexp = "Argument `select` must be of type character"
   )
 })
 
 test_that("data_rename: replacement not allowed to have NA or empty strings", {
   expect_error(
-    data_rename(test, pattern = c(test = "Species", "Sepal.Length")),
-    regexp = "Either name all elements of `pattern`"
+    data_rename(test, select = c(test = "Species", "Sepal.Length")),
+    regexp = "Either name all elements of `select`"
   )
   expect_error(
     data_rename(
       test,
-      pattern = c("Species", "Sepal.Length"),
+      select = c("Species", "Sepal.Length"),
       replacement = c("foo", NA_character_)
     ),
     regexp = "`replacement` is not allowed"
@@ -54,7 +54,7 @@ test_that("data_rename: replacement not allowed to have NA or empty strings", {
 # replacement -------------
 
 test_that("data_rename uses indices when no replacement", {
-  x <- data_rename(test, pattern = c("Sepal.Length", "Petal.Length"))
+  x <- data_rename(test, select = c("Sepal.Length", "Petal.Length"))
   expect_identical(dim(test), dim(x))
   expect_named(x, c("1", "Sepal.Width", "2", "Petal.Width", "Species"))
 })
@@ -82,16 +82,16 @@ test_that("data_rename works when not enough names in 'replacement'", {
 })
 
 
-# no pattern --------------
+# no select --------------
 
-test_that("data_rename uses the whole dataset when pattern = NULL", {
+test_that("data_rename uses the whole dataset when select = NULL", {
   x1 <- data_rename(test)
-  x2 <- data_rename(test, pattern = names(test))
+  x2 <- data_rename(test, select = names(test))
   expect_identical(dim(test), dim(x1))
   expect_identical(x1, x2)
 
   x3 <- data_rename(test, replacement = paste0("foo", 1:5))
-  x4 <- data_rename(test, pattern = names(test), replacement = paste0("foo", 1:5))
+  x4 <- data_rename(test, select = names(test), replacement = paste0("foo", 1:5))
   expect_identical(dim(test), dim(x3))
   expect_identical(x3, x4)
 })
@@ -112,14 +112,14 @@ test_that("data_rename: argument 'safe' works", {
 
 test_that("data_rename deals correctly with duplicated replacement", {
   x <- data_rename(test,
-    pattern = names(test)[1:4],
+    select = names(test)[1:4],
     replacement = c("foo", "bar", "foo", "bar")
   )
   expect_identical(dim(test), dim(x))
   expect_named(x[1:4], c("foo", "bar", "foo.2", "bar.2"))
 })
 
-test_that("data_rename doesn't change colname if invalid pattern", {
+test_that("data_rename doesn't change colname if invalid select", {
   x <- suppressMessages(data_rename(test, "FakeCol", "length"))
   expect_named(x, names(test))
 })
@@ -142,7 +142,7 @@ test_that("data_rename preserves attributes", {
 })
 
 
-# glue-styled pattern --------------------------
+# glue-styled select --------------------------
 
 test_that("data_rename glue-style", {
   data(mtcars)
@@ -226,3 +226,11 @@ withr::with_environment(
     )
   })
 )
+
+test_that("Argument `pattern` is deprecated", {
+  expect_warning(
+    head(data_rename(iris, pattern = "Sepal.Length", "length")),
+    "Argument `pattern` is deprecated. Please use `select` instead.",
+    fixed = TRUE
+  )
+})
