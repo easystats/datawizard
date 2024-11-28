@@ -31,10 +31,11 @@ data_addsuffix(
 
 data_rename(
   data,
-  pattern = NULL,
+  select = NULL,
   replacement = NULL,
   safe = TRUE,
   verbose = TRUE,
+  pattern = NULL,
   ...
 )
 
@@ -43,52 +44,19 @@ data_rename_rows(data, rows = NULL)
 \arguments{
 \item{data}{A data frame, or an object that can be coerced to a data frame.}
 
-\item{pattern}{Character vector.
+\item{pattern}{Deprecated. Use \code{select} instead.}
+
+\item{select}{Character vector.
 \itemize{
 \item For \code{data_addprefix()} or \code{data_addsuffix()}, a character string, which
 will be added as prefix or suffix to the column names.
 \item For \code{data_rename()}, indicates columns that should be selected for
 renaming. Can be \code{NULL} (in which case all columns are selected).
-\code{pattern} can also be a named vector. In this case, names are used as
-values for the \code{replacement} argument (i.e. \code{pattern} can be a character
+\code{select} can also be a named vector. In this case, names are used as
+values for the \code{replacement} argument (i.e. \code{select} can be a character
 vector using \verb{<new name> = "<old name>"} and argument \code{replacement} will
 be ignored then).
 }}
-
-\item{select}{Variables that will be included when performing the required
-tasks. Can be either
-\itemize{
-\item a variable specified as a literal variable name (e.g., \code{column_name}),
-\item a string with the variable name (e.g., \code{"column_name"}), a character
-vector of variable names (e.g., \code{c("col1", "col2", "col3")}), or a
-character vector of variable names including ranges specified via \code{:}
-(e.g., \code{c("col1:col3", "col5")}),
-\item a formula with variable names (e.g., \code{~column_1 + column_2}),
-\item a vector of positive integers, giving the positions counting from the left
-(e.g. \code{1} or \code{c(1, 3, 5)}),
-\item a vector of negative integers, giving the positions counting from the
-right (e.g., \code{-1} or \code{-1:-3}),
-\item one of the following select-helpers: \code{starts_with()}, \code{ends_with()},
-\code{contains()}, a range using \code{:}, or \code{regex()}. \code{starts_with()},
-\code{ends_with()}, and  \code{contains()} accept several patterns, e.g
-\code{starts_with("Sep", "Petal")}. \code{regex()} can be used to define regular
-expression patterns.
-\item a function testing for logical conditions, e.g. \code{is.numeric()} (or
-\code{is.numeric}), or any user-defined function that selects the variables
-for which the function returns \code{TRUE} (like: \code{foo <- function(x) mean(x) > 3}),
-\item ranges specified via literal variable names, select-helpers (except
-\code{regex()}) and (user-defined) functions can be negated, i.e. return
-non-matching elements, when prefixed with a \code{-}, e.g. \code{-ends_with()},
-\code{-is.numeric} or \code{-(Sepal.Width:Petal.Length)}. \strong{Note:} Negation means
-that matches are \emph{excluded}, and thus, the \code{exclude} argument can be
-used alternatively. For instance, \code{select=-ends_with("Length")} (with
-\code{-}) is equivalent to \code{exclude=ends_with("Length")} (no \code{-}). In case
-negation should not work as expected, use the \code{exclude} argument instead.
-}
-
-If \code{NULL}, selects all columns. Patterns that found no matches are silently
-ignored, e.g. \code{extract_column_names(iris, select = c("Species", "Test"))}
-will just return \code{"Species"}.}
 
 \item{exclude}{See \code{select}, however, column names matched by the pattern
 from \code{exclude} will be excluded instead of selected. If \code{NULL} (the default),
@@ -114,13 +82,13 @@ functions (see 'Details'), this argument may be used as workaround.}
 \item{replacement}{Character vector. Can be one of the following:
 \itemize{
 \item A character vector that indicates the new names of the columns selected
-in \code{pattern}. \code{pattern} and \code{replacement} must be of the same length.
+in \code{select}. \code{select} and \code{replacement} must be of the same length.
 \item \code{NULL}, in which case columns are numbered in sequential order.
 \item A string (i.e. character vector of length 1) with a "glue" styled pattern.
 Currently supported tokens are:
 \itemize{
 \item \code{{col}} which will be replaced by the column name, i.e. the
-corresponding value in \code{pattern}.
+corresponding value in \code{select}.
 \item \code{{n}} will be replaced by the number of the variable that is replaced.
 \item \code{{letter}} will be replaced by alphabetical letters in sequential order.
 If more than 26 letters are required, letters are repeated, but have
@@ -134,7 +102,7 @@ An example for the use of tokens is...
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{data_rename(
   mtcars,
-  pattern = c("am", "vs"),
+  select = c("am", "vs"),
   replacement = "new_name_from_\{col\}"
 )
 }\if{html}{\out{</div>}}
@@ -143,7 +111,7 @@ An example for the use of tokens is...
 \code{new_name_from_vs}. See 'Examples'.
 }
 
-If \code{pattern} is a named vector, \code{replacement} is ignored.}
+If \code{select} is a named vector, \code{replacement} is ignored.}
 
 \item{safe}{Do not throw error if for instance the variable to be
 renamed/removed doesn't exist.}

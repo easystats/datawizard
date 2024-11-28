@@ -15,18 +15,18 @@
 #'     will be added as prefix or suffix to the column names.
 #'   - For `data_rename()`, indicates columns that should be selected for
 #'     renaming. Can be `NULL` (in which case all columns are selected).
-#'     `pattern` can also be a named vector. In this case, names are used as
-#'     values for the `replacement` argument (i.e. `pattern` can be a character
+#'     `select` can also be a named vector. In this case, names are used as
+#'     values for the `replacement` argument (i.e. `select` can be a character
 #'     vector using `<new name> = "<old name>"` and argument `replacement` will
 #'     be ignored then).
 #' @param replacement Character vector. Can be one of the following:
 #'   - A character vector that indicates the new names of the columns selected
-#'     in `pattern`. `pattern` and `replacement` must be of the same length.
+#'     in `select`. `select` and `replacement` must be of the same length.
 #'   - `NULL`, in which case columns are numbered in sequential order.
 #'   - A string (i.e. character vector of length 1) with a "glue" styled pattern.
 #'     Currently supported tokens are:
 #'     - `{col}` which will be replaced by the column name, i.e. the
-#'       corresponding value in `pattern`.
+#'       corresponding value in `select`.
 #'     - `{n}` will be replaced by the number of the variable that is replaced.
 #'     - `{letter}` will be replaced by alphabetical letters in sequential order.
 #'       If more than 26 letters are required, letters are repeated, but have
@@ -39,14 +39,14 @@
 #'     ```r
 #'     data_rename(
 #'       mtcars,
-#'       pattern = c("am", "vs"),
+#'       select = c("am", "vs"),
 #'       replacement = "new_name_from_{col}"
 #'     )
 #'     ```
 #'     ... which would return new column names `new_name_from_am` and
 #'     `new_name_from_vs`. See 'Examples'.
 #'
-#' If `pattern` is a named vector, `replacement` is ignored.
+#' If `select` is a named vector, `replacement` is ignored.
 #' @param rows Vector of row names.
 #' @param safe Do not throw error if for instance the variable to be
 #'   renamed/removed doesn't exist.
