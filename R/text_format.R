@@ -6,15 +6,7 @@
 #' @param width Positive integer giving the target column width for wrapping
 #' lines in the output. Can be "auto", in which case it will select 90\% of the
 #' default width.
-#' @param pattern Character vector.
-#'   - For `data_addprefix()` or `data_addsuffix()`, a character string, which
-#'     will be added as prefix or suffix to the column names.
-#'   - For `data_rename()`, indicates columns that should be selected for
-#'     renaming. Can be `NULL` (in which case all columns are selected).
-#'     `pattern` can also be a named vector. In this case, names are used as
-#'     values for the `replacement` argument (i.e. `pattern` can be a character
-#'     vector using `<new name> = "<old name>"` and argument `replacement` will
-#'     be ignored then).
+#' @param pattern Regex pattern to remove from `text`.
 #' @param sep Separator.
 #' @param last Last separator.
 #' @param n The number of characters to find.
