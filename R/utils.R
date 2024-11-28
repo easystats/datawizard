@@ -47,7 +47,7 @@
 }
 
 
-#' Checks data framesfor syntactically valid column names
+#' Checks dataframes for syntactically valid column names
 #' Argument "action" can be "warning", "error", or "message".
 #'
 #' @keywords internal
