@@ -47,6 +47,22 @@
 }
 
 
+#' Checks data framesfor syntactically valid column names
+#' Argument "action" can be "warning", "error", or "message".
+#'
+#' @keywords internal
+#' @noRd
+.check_dataframe_names <- function(x, action = "warning", verbose = TRUE) {
+  if (verbose && !all(colnames(x) == make.names(colnames(x), unique = TRUE))) {
+    insight::format_alert(
+      "Bad column names (e.g., with spaces) have been detected which might create issues in many functions.",
+      "Please fix it (you can run `names(mydata) <- make.names(names(mydata))` or use `janitor::clean_names()` for a quick fix).", # nolint
+      type = action
+    )
+  }
+}
+
+
 #' Fuzzy grep, matches pattern that are close, but not identical
 #' @examples
 #' colnames(iris)
