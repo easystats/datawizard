@@ -1,36 +1,28 @@
 #' @title Rename columns and variable names
-#' @name data_rename
 #'
 #' @description Safe and intuitive functions to rename variables or rows in
 #'   data frames. `data_rename()` will rename column names, i.e. it facilitates
-#'   renaming variables `data_addprefix()` or `data_addsuffix()` add prefixes
-#'   or suffixes to column names. `data_rename_rows()` is a convenient shortcut
+#'   renaming variables. `data_rename_rows()` is a convenient shortcut
 #'   to add or rename row names of a data frame, but unlike `row.names()`, its
-#'   input and output is a data frame, thus, integrating smoothly into a possible
-#'   pipe-workflow.
+#'   input and output is a data frame, thus, integrating smoothly into a
+#'   possible pipe-workflow.
 #'
+#' @inheritParams extract_column_names
 #' @param data A data frame, or an object that can be coerced to a data frame.
-#' @param select Character vector.
-#'   - For `data_addprefix()` or `data_addsuffix()`, a character string, which
-#'     will be added as prefix or suffix to the column names.
-#'   - For `data_rename()`, indicates columns that should be selected for
-#'     renaming. Can be `NULL` (in which case all columns are selected).
-#'     `select` can also be a named vector. In this case, names are used as
-#'     values for the `replacement` argument (i.e. `select` can be a character
-#'     vector using `<new name> = "<old name>"` and argument `replacement` will
-#'     be ignored then).
 #' @param replacement Character vector. Can be one of the following:
 #'   - A character vector that indicates the new names of the columns selected
 #'     in `select`. `select` and `replacement` must be of the same length.
 #'   - `NULL`, in which case columns are numbered in sequential order.
-#'   - A string (i.e. character vector of length 1) with a "glue" styled pattern.
-#'     Currently supported tokens are:
+#'   - A string (i.e. character vector of length 1) with a "glue" styled
+#'     pattern. Currently supported tokens are:
 #'     - `{col}` which will be replaced by the column name, i.e. the
 #'       corresponding value in `select`.
 #'     - `{n}` will be replaced by the number of the variable that is replaced.
-#'     - `{letter}` will be replaced by alphabetical letters in sequential order.
+#'     - `{letter}` will be replaced by alphabetical letters in sequential
+#'       order.
 #'       If more than 26 letters are required, letters are repeated, but have
-#'       sequential numeric indices (e.g., `a1` to `z1`, followed by `a2` to `z2`).
+#'       sequential numeric indices (e.g., `a1` to `z1`, followed by `a2` to
+#'       `z2`).
 #'     - Finally, the name of a user-defined object that is available in the
 #'       environment can be used. Note that the object's name is not allowed to
 #'       be one of the pre-defined tokens, `"col"`, `"n"` and `"letter"`.
@@ -48,20 +40,19 @@
 #'
 #' If `select` is a named vector, `replacement` is ignored.
 #' @param rows Vector of row names.
-#' @param safe Do not throw error if for instance the variable to be
-#'   renamed/removed doesn't exist.
-#' @param verbose Toggle warnings and messages.
+#' @param safe Deprecated. Passing unknown column names now always errors.
 #' @param pattern Deprecated. Use `select` instead.
 #' @param ... Other arguments passed to or from other functions.
+#'
+#' @details
+#' `select` can also be a named character vector. In this case, the names are
+#' used to rename the columns in the output data frame. See 'Examples'.
 #'
 #' @return A modified data frame.
 #'
 #' @examples
 #' # Rename columns
 #' head(data_rename(iris, "Sepal.Length", "length"))
-#' # data_rename(iris, "FakeCol", "length", safe=FALSE)  # This fails
-#' head(data_rename(iris, "FakeCol", "length")) # This doesn't
-#' head(data_rename(iris, c("Sepal.Length", "Sepal.Width"), c("length", "width")))
 #'
 #' # use named vector to rename
 #' head(data_rename(iris, c(length = "Sepal.Length", width = "Sepal.Width")))
@@ -81,8 +72,7 @@
 #' x <- c("hi", "there", "!")
 #' head(data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "col_{x}"))
 #' @seealso
-#' - Functions to rename stuff: [data_rename()], [data_rename_rows()],
-#'   [data_addprefix()], [data_addsuffix()]
+#' - Add a prefix or suffix to column names: [data_addprefix()], [data_addsuffix()]
 #' - Functions to reorder or remove columns: [data_reorder()], [data_relocate()],
 #'   [data_remove()]
 #' - Functions to reshape, pivot or rotate data frames: [data_to_long()],
@@ -107,15 +97,20 @@ data_rename <- function(data,
     .is_deprecated("pattern", "select")
     select <- pattern
   }
+  if (isFALSE(safe)) {
+    insight::format_warning("In `data_rename()`, argument `safe` is no longer used and will be removed in a future release.")
+  }
 
   # change all names if no pattern specified
-  if (is.null(select)) {
-    select <- names(data)
-  }
-
-  if (!is.character(select)) {
-    insight::format_error("Argument `select` must be of type character.")
-  }
+  select <- .select_nse(
+    select,
+    data,
+    exclude = NULL,
+    ignore_case = NULL,
+    regex = NULL,
+    allow_rename = TRUE,
+    verbose = verbose
+  )
 
   # check if `select` has names, and if so, use as "replacement"
   if (!is.null(names(select))) {
@@ -170,20 +165,10 @@ data_rename <- function(data,
   # check if we have "glue" styled replacement-string
   glue_style <- length(replacement) == 1 && grepl("{", replacement, fixed = TRUE)
 
-  if (length(replacement) > length(select) && verbose) {
-    insight::format_alert(
-      paste0(
-        "There are more names in `replacement` than in `select`. The last ",
-        length(replacement) - length(select), " names of `replacement` are not used."
-      )
-    )
-  } else if (length(replacement) < length(select) && verbose && !glue_style) {
-    insight::format_alert(
-      paste0(
-        "There are more names in `select` than in `replacement`. The last ",
-        length(select) - length(replacement), " names of `select` are not modified."
-      )
-    )
+  if (length(replacement) > length(select)) {
+    insight::format_error("There are more names in `replacement` than in `select`.")
+  } else if (length(replacement) < length(select) && !glue_style) {
+    insight::format_error("There are more names in `select` than in `replacement`")
   }
 
   # if we have glue-styled replacement-string, create replacement select now

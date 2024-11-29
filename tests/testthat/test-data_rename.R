@@ -25,21 +25,21 @@ test_that("data_rename returns a data frame", {
   expect_s3_class(x, "data.frame")
 })
 
-test_that("data_rename: select must be of type character", {
-  expect_error(
+test_that("data_rename: multiple selection types", {
+  expect_named(
     data_rename(test, select = 1),
-    regexp = "Argument `select` must be of type character"
+    c(1, names(iris)[2:5])
   )
-  expect_error(
-    data_rename(test, select = TRUE),
-    regexp = "Argument `select` must be of type character"
+  expect_named(
+    data_rename(test, select = regex("tal"), c("foo1", "foo2")),
+    c("Sepal.Length", "Sepal.Width", "foo1", "foo2", "Species")
   )
 })
 
 test_that("data_rename: replacement not allowed to have NA or empty strings", {
-  expect_error(
+  expect_named(
     data_rename(test, select = c(test = "Species", "Sepal.Length")),
-    regexp = "Either name all elements of `select`"
+    c(names(iris)[1:4], "test")
   )
   expect_error(
     data_rename(
@@ -59,26 +59,18 @@ test_that("data_rename uses indices when no replacement", {
   expect_named(x, c("1", "Sepal.Width", "2", "Petal.Width", "Species"))
 })
 
-test_that("data_rename works when too many names in 'replacement'", {
-  expect_message(
-    {
-      x <- data_rename(test, replacement = paste0("foo", 1:6))
-    },
-    "There are more names in"
+test_that("data_rename errors when too many names in 'replacement'", {
+  expect_error(
+    data_rename(test, replacement = paste0("foo", 1:6)),
+    "There are more names in `replacement` than in `select`"
   )
-  expect_identical(dim(test), dim(x))
-  expect_named(x, paste0("foo", 1:5))
 })
 
 test_that("data_rename works when not enough names in 'replacement'", {
-  expect_message(
-    {
-      x <- data_rename(test, replacement = paste0("foo", 1:2))
-    },
-    "There are more names in"
+  expect_error(
+    x <- data_rename(test, replacement = paste0("foo", 1:2)),
+    "There are more names in `select` than in `replacement`"
   )
-  expect_identical(dim(test), dim(x))
-  expect_named(x, c("foo1", "foo2", "Petal.Length", "Petal.Width", "Species"))
 })
 
 
@@ -99,14 +91,16 @@ test_that("data_rename uses the whole dataset when select = NULL", {
 
 # other --------------
 
-test_that("data_rename: argument 'safe' works", {
-  expect_message(
-    data_rename(iris, "FakeCol", "length", safe = TRUE),
-    "Variable `FakeCol` is not in your data frame"
+test_that("data_rename: argument 'safe' is deprecated", {
+  expect_error(
+    data_rename(iris, "FakeCol", "length", verbose = FALSE),
+    "more names in `replacement`"
   )
   expect_error(
-    data_rename(iris, "FakeCol", "length", safe = FALSE),
-    "Variable `FakeCol` is not in your data frame"
+    expect_warning(
+      data_rename(iris, "FakeCol", "length", safe = FALSE, verbose = FALSE),
+      "used"
+    )
   )
 })
 
@@ -119,11 +113,12 @@ test_that("data_rename deals correctly with duplicated replacement", {
   expect_named(x[1:4], c("foo", "bar", "foo.2", "bar.2"))
 })
 
-test_that("data_rename doesn't change colname if invalid select", {
-  x <- suppressMessages(data_rename(test, "FakeCol", "length"))
-  expect_named(x, names(test))
+test_that("data_rename errors if invalid select", {
+  expect_error(
+    data_rename(iris, "FakeCol", "length", verbose = FALSE),
+    "more names in `replacement`"
+  )
 })
-
 
 
 # preserve attributes --------------------------

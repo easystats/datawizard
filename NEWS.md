@@ -1,12 +1,14 @@
 # datawizard (development)
 
-DEPRECATIONS
+BREAKING CHANGES AND DEPRECATIONS
 
 * Argument `drop_na` in `data_match()` is deprecated now. Please use 
   `remove_na` instead.
 
-* Argument `pattern` in `data_rename()` is deprecated. Please use `select` 
-  instead (#567).
+* In `data_rename()` (#567):
+  - argument `pattern` is deprecated. Use `select` instead.
+  - argument `safe` is deprecated. The function now errors when `select` 
+    contains unknown column names.
 
 CHANGES
 
