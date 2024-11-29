@@ -98,7 +98,7 @@ data_rename <- function(data,
     select <- pattern
   }
   if (isFALSE(safe)) {
-    insight::format_warning("In `data_rename()`, argument `safe` is no longer used and will be removed in a future release.")
+    insight::format_warning("In `data_rename()`, argument `safe` is no longer used and will be removed in a future release.") # nolint
   }
 
   # change all names if no pattern specified

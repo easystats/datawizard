@@ -68,7 +68,7 @@ test_that("data_rename errors when too many names in 'replacement'", {
 
 test_that("data_rename works when not enough names in 'replacement'", {
   expect_error(
-    x <- data_rename(test, replacement = paste0("foo", 1:2)),
+    data_rename(test, replacement = paste0("foo", 1:2)),
     "There are more names in `select` than in `replacement`"
   )
 })
