@@ -5,6 +5,9 @@
 #' @param pattern A character string, which will be added as prefix or suffix
 #' to the column names.
 #' @param ... Other arguments passed to or from other functions.
+#'
+#' @seealso
+#' [data_rename()] for more fine-grained column renaming.
 #' @examples
 #' # Add prefix / suffix to all columns
 #' head(data_addprefix(iris, "NEW_"))

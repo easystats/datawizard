@@ -98,3 +98,6 @@ head(data_addprefix(iris, "NEW_"))
 head(data_addsuffix(iris, "_OLD"))
 
 }
+\seealso{
+\code{\link[=data_rename]{data_rename()}} for more fine-grained column renaming.
+}
