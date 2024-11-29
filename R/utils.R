@@ -56,7 +56,14 @@
   if (verbose && !all(colnames(x) == make.names(colnames(x), unique = TRUE))) {
     insight::format_alert(
       "Bad column names (e.g., with spaces) have been detected which might create issues in many functions.",
-      "Please fix it (you can run `names(mydata) <- make.names(names(mydata))` or use `janitor::clean_names()` for a quick fix).", # nolint
+      paste0(
+        "We recommend to rename following columns: ",
+        text_concatenate(
+          colnames(x)[colnames(x) != make.names(colnames(x), unique = TRUE)],
+          enclose = "`"
+        )
+      ),
+      "You can run `names(mydata) <- make.names(names(mydata))` or use `janitor::clean_names()` for a quick fix.", # nolint
       type = action
     )
   }
