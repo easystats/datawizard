@@ -99,7 +99,7 @@ reference:
     contents:
       - reshape_ci
       - data_rename
-      - data_prefix_suffix
+      - data_addprefix
       - remove_empty
       - contains("rownames")
       - rowid_as_column
