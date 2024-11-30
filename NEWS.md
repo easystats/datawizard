@@ -9,6 +9,8 @@ BREAKING CHANGES AND DEPRECATIONS
   - argument `pattern` is deprecated. Use `select` instead.
   - argument `safe` is deprecated. The function now errors when `select` 
     contains unknown column names.
+  - when `replacement` is `NULL`, an error is now thrown (previously, column
+    indices were used as new names).
 
 CHANGES
 

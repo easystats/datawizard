@@ -59,7 +59,6 @@ will just return \code{"Species"}.}
 \itemize{
 \item A character vector that indicates the new names of the columns selected
 in \code{select}. \code{select} and \code{replacement} must be of the same length.
-\item \code{NULL}, in which case columns are numbered in sequential order.
 \item A string (i.e. character vector of length 1) with a "glue" styled
 pattern. Currently supported tokens are:
 \itemize{

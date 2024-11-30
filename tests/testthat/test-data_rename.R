@@ -53,10 +53,11 @@ test_that("data_rename: replacement not allowed to have NA or empty strings", {
 
 # replacement -------------
 
-test_that("data_rename uses indices when no replacement", {
-  x <- data_rename(test, select = c("Sepal.Length", "Petal.Length"))
-  expect_identical(dim(test), dim(x))
-  expect_named(x, c("1", "Sepal.Width", "2", "Petal.Width", "Species"))
+test_that("data_rename errors when no replacement", {
+  expect_error(
+    data_rename(test, select = c("Sepal.Length", "Petal.Length")),
+    "There are more names in `select` than in `replacement`"
+  )
 })
 
 test_that("data_rename errors when too many names in 'replacement'", {

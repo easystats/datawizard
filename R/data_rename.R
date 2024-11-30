@@ -12,7 +12,6 @@
 #' @param replacement Character vector. Can be one of the following:
 #'   - A character vector that indicates the new names of the columns selected
 #'     in `select`. `select` and `replacement` must be of the same length.
-#'   - `NULL`, in which case columns are numbered in sequential order.
 #'   - A string (i.e. character vector of length 1) with a "glue" styled
 #'     pattern. Currently supported tokens are:
 #'     - `{col}` which will be replaced by the column name, i.e. the
@@ -115,11 +114,6 @@ data_rename <- function(data,
   # check if `select` has names, and if so, use as "replacement"
   if (!is.null(names(select))) {
     replacement <- names(select)
-  }
-
-  # name columns 1, 2, 3 etc. if no replacement
-  if (is.null(replacement)) {
-    replacement <- paste0(seq_along(select))
   }
 
   # coerce to character
