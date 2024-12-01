@@ -108,7 +108,8 @@ data_rename <- function(data,
     ignore_case = NULL,
     regex = NULL,
     allow_rename = TRUE,
-    verbose = verbose
+    verbose = verbose,
+    ifnotfound = "error"
   )
 
   # Forbid partially named "select",
