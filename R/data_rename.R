@@ -116,10 +116,8 @@ data_rename <- function(data,
   # Ex: if select = c("foo" = "Species", "Sepal.Length") then the 2nd name and
   # 2nd value are "Sepal.Length"
   if (!is.null(names(select))) {
-    for (i in seq_along(select)) {
-      if (names(select)[i] == select[i]) {
-        insight::format_error("When `select` is a named vector, all elements must be named.")
-      }
+    if (any(names(select) == select)) {
+      insight::format_error("When `select` is a named vector, all elements must be named.")
     }
   }
 
