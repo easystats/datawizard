@@ -11,6 +11,8 @@ BREAKING CHANGES AND DEPRECATIONS
     contains unknown column names.
   - when `replacement` is `NULL`, an error is now thrown (previously, column
     indices were used as new names).
+  - if `select` (previously `pattern`) is a named vector, then all elements
+    must be named, e.g. `c(length = "Sepal.Length", "Sepal.Width")` errors.
 
 CHANGES
 

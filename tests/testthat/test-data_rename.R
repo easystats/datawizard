@@ -20,6 +20,13 @@ test_that("data_rename works with one or several replacements", {
   )
 })
 
+test_that("data_rename cannot have a partially named vector", {
+  expect_error(
+    data_rename(test, c(length = "Sepal.Length", "Sepal.Width")),
+    "all elements must"
+  )
+})
+
 test_that("data_rename returns a data frame", {
   x <- data_rename(test, "Sepal.Length", "length")
   expect_s3_class(x, "data.frame")
@@ -27,8 +34,8 @@ test_that("data_rename returns a data frame", {
 
 test_that("data_rename: multiple selection types", {
   expect_named(
-    data_rename(test, select = 1),
-    c(1, names(iris)[2:5])
+    data_rename(test, select = 1, "foo"),
+    c("foo", names(iris)[2:5])
   )
   expect_named(
     data_rename(test, select = regex("tal"), c("foo1", "foo2")),
@@ -37,10 +44,6 @@ test_that("data_rename: multiple selection types", {
 })
 
 test_that("data_rename: replacement not allowed to have NA or empty strings", {
-  expect_named(
-    data_rename(test, select = c(test = "Species", "Sepal.Length")),
-    c(names(iris)[1:4], "test")
-  )
   expect_error(
     data_rename(
       test,
