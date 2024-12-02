@@ -136,7 +136,7 @@ test_that("convert_to_na, attributes preserved", {
 test_that("data_rename, attributes preserved", {
   x <- mtcars
   attr(x, "myattri") <- "I'm here"
-  x2 <- data_rename(x, pattern = "hp", replacement = "horsepower")
+  x2 <- data_rename(x, select = "hp", replacement = "horsepower")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
 

@@ -132,6 +132,10 @@ A rescaled object.
 Rescale variables to a new range. Can also be used to reverse-score variables
 (change the keying/scoring direction), or to expand a range.
 }
+\details{
+\code{select} can also be a named character vector. In this case, the names are
+used to rename the columns in the output data frame. See 'Examples'.
+}
 \section{Selection of variables - the \code{select} argument}{
 
 For most functions that have a \code{select} argument (including this function),

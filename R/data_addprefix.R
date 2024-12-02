@@ -1,5 +1,13 @@
-#' @rdname data_rename
+#' Add a prefix or suffix to column names
+#'
+#' @rdname data_prefix_suffix
 #' @inheritParams extract_column_names
+#' @param pattern A character string, which will be added as prefix or suffix
+#' to the column names.
+#' @param ... Other arguments passed to or from other functions.
+#'
+#' @seealso
+#' [data_rename()] for more fine-grained column renaming.
 #' @examples
 #' # Add prefix / suffix to all columns
 #' head(data_addprefix(iris, "NEW_"))
@@ -29,7 +37,7 @@ data_addprefix <- function(data,
 }
 
 
-#' @rdname data_rename
+#' @rdname data_prefix_suffix
 #' @export
 data_addsuffix <- function(data,
                            pattern,
