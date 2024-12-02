@@ -94,7 +94,9 @@ data_rename <- function(data,
   # => do the switch manually
   if (!is.null(pattern)) {
     .is_deprecated("pattern", "select")
-    replacement <- select
+    if (!is.null(select)) {
+      replacement <- select
+    }
     select <- pattern
   }
   if (isFALSE(safe)) {
