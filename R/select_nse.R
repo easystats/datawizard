@@ -436,7 +436,8 @@
     data,
     ignore_case = ignore_case,
     regex = regex,
-    verbose = FALSE
+    verbose = FALSE,
+    ifnotfound = ifnotfound
   )
 }
 
