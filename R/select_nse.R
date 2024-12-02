@@ -290,7 +290,8 @@
         data = data,
         ignore_case = ignore_case,
         regex = regex,
-        verbose = verbose
+        verbose = verbose,
+        ifnotfound = ifnotfound
       )
     } else if (length(new_expr) == 1L && is.function(new_expr)) {
       out <- which(vapply(data, new_expr, FUN.VALUE = logical(1L)))
@@ -301,7 +302,8 @@
         data = data,
         ignore_case = ignore_case,
         regex = regex,
-        verbose = verbose
+        verbose = verbose,
+        ifnotfound = ifnotfound
       ), use.names = FALSE)
     }
   }
