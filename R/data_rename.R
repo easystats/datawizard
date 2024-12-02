@@ -56,9 +56,6 @@
 #' # use named vector to rename
 #' head(data_rename(iris, c(length = "Sepal.Length", width = "Sepal.Width")))
 #'
-#' # Reset names
-#' head(data_rename(iris, NULL))
-#'
 #' # Change all
 #' head(data_rename(iris, replacement = paste0("Var", 1:5)))
 #'
@@ -92,8 +89,12 @@ data_rename <- function(data,
                         verbose = TRUE,
                         pattern = NULL,
                         ...) {
+  # If the user does data_rename(iris, pattern = "Sepal.Length", "length"),
+  # then "length" is matched to select by position while it's the replacement
+  # => do the switch manually
   if (!is.null(pattern)) {
     .is_deprecated("pattern", "select")
+    replacement <- select
     select <- pattern
   }
   if (isFALSE(safe)) {

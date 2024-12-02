@@ -122,9 +122,6 @@ head(data_rename(iris, "Sepal.Length", "length"))
 # use named vector to rename
 head(data_rename(iris, c(length = "Sepal.Length", width = "Sepal.Width")))
 
-# Reset names
-head(data_rename(iris, NULL))
-
 # Change all
 head(data_rename(iris, replacement = paste0("Var", 1:5)))
 

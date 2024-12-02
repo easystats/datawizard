@@ -80,16 +80,11 @@ test_that("data_rename works when not enough names in 'replacement'", {
 
 # no select --------------
 
-test_that("data_rename uses the whole dataset when select = NULL", {
-  x1 <- data_rename(test)
-  x2 <- data_rename(test, select = names(test))
-  expect_identical(dim(test), dim(x1))
-  expect_identical(x1, x2)
-
-  x3 <- data_rename(test, replacement = paste0("foo", 1:5))
-  x4 <- data_rename(test, select = names(test), replacement = paste0("foo", 1:5))
-  expect_identical(dim(test), dim(x3))
-  expect_identical(x3, x4)
+test_that("data_rename errors when select = NULL", {
+  expect_error(
+    data_rename(test),
+    "more names in `select`"
+  )
 })
 
 
@@ -98,7 +93,7 @@ test_that("data_rename uses the whole dataset when select = NULL", {
 test_that("data_rename: argument 'safe' is deprecated", {
   expect_error(
     data_rename(iris, "FakeCol", "length", verbose = FALSE),
-    "more names in `replacement`"
+    "were not found"
   )
   expect_error(
     expect_warning(
@@ -115,13 +110,6 @@ test_that("data_rename deals correctly with duplicated replacement", {
   )
   expect_identical(dim(test), dim(x))
   expect_named(x[1:4], c("foo", "bar", "foo.2", "bar.2"))
-})
-
-test_that("data_rename errors if invalid select", {
-  expect_error(
-    data_rename(iris, "FakeCol", "length", verbose = FALSE),
-    "more names in `replacement`"
-  )
 })
 
 
