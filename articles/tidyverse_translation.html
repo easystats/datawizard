@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.17</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -702,7 +702,7 @@ must be of the same length.</p>
 <code class="sourceCode R"><span><span class="co"># ---------- datawizard -----------</span></span>
 <span><span class="va">starwars</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/data_rename.html">data_rename</a></span><span class="op">(</span></span>
-<span>    pattern <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sex"</span>, <span class="st">"hair_color"</span><span class="op">)</span>,</span>
+<span>    select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sex"</span>, <span class="st">"hair_color"</span><span class="op">)</span>,</span>
 <span>    replacement <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sex"</span>, <span class="st">"Hair Color"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
@@ -735,7 +735,7 @@ remove underscores and use TitleCase with the following code:</p>
 <span></span>
 <span><span class="va">starwars</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/data_rename.html">data_rename</a></span><span class="op">(</span></span>
-<span>    pattern <span class="op">=</span> <span class="va">to_rename</span>,</span>
+<span>    select <span class="op">=</span> <span class="va">to_rename</span>,</span>
 <span>    replacement <span class="op">=</span> <span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/toTitleCase.html" class="external-link">toTitleCase</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"_"</span>, <span class="st">" "</span>, <span class="va">to_rename</span>, fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 14</span></span></span>
@@ -750,17 +750,17 @@ remove underscores and use TitleCase with the following code:</p>
 <span><span class="co">## <span style="color: #949494;"># ℹ 6 more variables: Gender &lt;chr&gt;, Homeworld &lt;chr&gt;, Species &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   Films &lt;list&gt;, Vehicles &lt;list&gt;, Starships &lt;list&gt;</span></span></span></code></pre>
 <p>It is also possible to add a prefix or a suffix to all or a subset of
-variables with <code><a href="../reference/data_rename.html">data_addprefix()</a></code> and
-<code><a href="../reference/data_rename.html">data_addsuffix()</a></code>. The argument <code>select</code> accepts
+variables with <code><a href="../reference/data_prefix_suffix.html">data_addprefix()</a></code> and
+<code><a href="../reference/data_prefix_suffix.html">data_addsuffix()</a></code>. The argument <code>select</code> accepts
 all select helpers that we saw above with
 <code><a href="../reference/extract_column_names.html">data_select()</a></code>:</p>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">starwars</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/data_rename.html">data_addprefix</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/data_prefix_suffix.html">data_addprefix</a></span><span class="op">(</span></span>
 <span>    pattern <span class="op">=</span> <span class="st">"OLD."</span>,</span>
 <span>    select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"color"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/data_rename.html">data_addsuffix</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/data_prefix_suffix.html">data_addsuffix</a></span><span class="op">(</span></span>
 <span>    pattern <span class="op">=</span> <span class="st">".NEW"</span>,</span>
 <span>    select <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"color"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
