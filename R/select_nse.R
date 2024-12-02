@@ -202,7 +202,7 @@
     x,
     columns,
     matches,
-    verbose = TRUE,
+    verbose,
     ifnotfound) {
   msg <- paste0(
     "Following variable(s) were not found: ",
