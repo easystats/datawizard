@@ -98,6 +98,7 @@ reference:
       Primarily useful in the context of other 'easystats' packages
     contents:
       - reshape_ci
+      - data_rename
       - data_addprefix
       - remove_empty
       - contains("rownames")

@@ -1,9 +1,18 @@
 # datawizard (development)
 
-BREAKING CHANGES
+BREAKING CHANGES AND DEPRECATIONS
 
-* Argument `drop_na` in `data_match()` is deprecated now. Please use `remove_na`
-  instead.
+* Argument `drop_na` in `data_match()` is deprecated now. Please use 
+  `remove_na` instead.
+
+* In `data_rename()` (#567):
+  - argument `pattern` is deprecated. Use `select` instead.
+  - argument `safe` is deprecated. The function now errors when `select` 
+    contains unknown column names.
+  - when `replacement` is `NULL`, an error is now thrown (previously, column
+    indices were used as new names).
+  - if `select` (previously `pattern`) is a named vector, then all elements
+    must be named, e.g. `c(length = "Sepal.Length", "Sepal.Width")` errors.
 
 CHANGES
 
