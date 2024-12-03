@@ -28,3 +28,13 @@ test_that("adjust regex", {
     adjust(mtcars, select = "mpg")
   )
 })
+
+# select helpers ------------------------------
+test_that("adjust, invalid column names", {
+  data(iris)
+  colnames(iris)[1] <- "I am"
+  expect_error(
+    adjust(iris[c("I am", "Species")], multilevel = FALSE, bayesian = FALSE),
+    regex = "Bad column names"
+  )
+})
