@@ -75,12 +75,8 @@ adjust <- function(data,
                    ignore_case = FALSE,
                    regex = FALSE,
                    verbose = FALSE) {
-  if (!all(colnames(data) == make.names(colnames(data), unique = TRUE))) {
-    insight::format_warning(
-      "Bad column names (e.g., with spaces) have been detected which might create issues in many functions.",
-      "Please fix it (you can run `names(mydata) <- make.names(names(mydata))` for a quick fix)."
-    )
-  }
+  # make sure column names are syntactically valid
+  .check_dataframe_names(data, action = "error")
 
   # check for formula notation, convert to character vector
   if (inherits(effect, "formula")) {
