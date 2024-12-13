@@ -17,6 +17,8 @@
 #'   names.
 #' @param verbose Toggle warnings.
 #'
+#' @inherit data_rename seealso
+#'
 #' @return A (rotated) data frame.
 #'
 #' @examples
@@ -36,7 +38,6 @@
 #' data_rotate(x, colnames = TRUE)
 #' data_rotate(x, colnames = "c")
 #'
-#' @inherit data_rename seealso
 #' @export
 data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE) {
   # copy attributes

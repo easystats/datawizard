@@ -221,3 +221,11 @@ test_that("Argument `pattern` is deprecated", {
     fixed = TRUE
   )
 })
+
+test_that("works with lists", {
+  result <- list(x = 1, y = 2)
+  expect_error(
+    data_rename(result, select = names(result), replacement = c("a", "b")),
+    regex = "must be a data frame"
+  )
+})

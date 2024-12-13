@@ -1,4 +1,5 @@
 #' @title Rename columns and variable names
+#' @name data_rename
 #'
 #' @description Safe and intuitive functions to rename variables or rows in
 #'   data frames. `data_rename()` will rename column names, i.e. it facilitates
@@ -8,7 +9,7 @@
 #'   possible pipe-workflow.
 #'
 #' @inheritParams extract_column_names
-#' @param data A data frame, or an object that can be coerced to a data frame.
+#' @param data A data frame.
 #' @param replacement Character vector. Can be one of the following:
 #'   - A character vector that indicates the new names of the columns selected
 #'     in `select`. `select` and `replacement` must be of the same length.
@@ -89,6 +90,10 @@ data_rename <- function(data,
                         verbose = TRUE,
                         pattern = NULL,
                         ...) {
+  # check for valid input
+  if (!is.data.frame(data)) {
+    insight::format_error("Argument `data` must be a data frame.")
+  }
   # If the user does data_rename(iris, pattern = "Sepal.Length", "length"),
   # then "length" is matched to select by position while it's the replacement
   # => do the switch manually

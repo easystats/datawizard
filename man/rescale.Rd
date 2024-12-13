@@ -132,10 +132,6 @@ A rescaled object.
 Rescale variables to a new range. Can also be used to reverse-score variables
 (change the keying/scoring direction), or to expand a range.
 }
-\details{
-\code{select} can also be a named character vector. In this case, the names are
-used to rename the columns in the output data frame. See 'Examples'.
-}
 \section{Selection of variables - the \code{select} argument}{
 
 For most functions that have a \code{select} argument (including this function),
@@ -182,7 +178,6 @@ rescale(x, add = c(1, 3))
 # Specify list of multipliers
 d <- data.frame(x = 5:15, y = 5:15)
 rescale(d, multiply = list(x = 1.1, y = 0.5))
-
 }
 \seealso{
 See \code{\link[=makepredictcall.dw_transformer]{makepredictcall.dw_transformer()}} for use in model formulas.

@@ -124,7 +124,7 @@ Note that a regular correlation between two "adjusted" variables is
 equivalent to the partial correlation between them.
 }
 \examples{
-\dontshow{if (require("bayestestR", quietly = TRUE) && require("rstanarm", quietly = TRUE) && require("gamm4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("bayestestR", "rstanarm", "gamm4"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 adjusted_all <- adjust(attitude)
 head(adjusted_all)
 adjusted_one <- adjust(attitude, effect = "complaints", select = "rating")
@@ -137,7 +137,7 @@ adjust(attitude, effect = "complaints_LMH", select = "rating", multilevel = TRUE
 }
 
 # Generate data
-data <- simulate_correlation(n = 100, r = 0.7)
+data <- bayestestR::simulate_correlation(n = 100, r = 0.7)
 data$V2 <- (5 * data$V2) + 20 # Add intercept
 
 # Adjust
