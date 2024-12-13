@@ -137,7 +137,7 @@ adjust(attitude, effect = "complaints_LMH", select = "rating", multilevel = TRUE
 }
 
 # Generate data
-data <- simulate_correlation(n = 100, r = 0.7)
+data <- bayestestR::simulate_correlation(n = 100, r = 0.7)
 data$V2 <- (5 * data$V2) + 20 # Add intercept
 
 # Adjust
