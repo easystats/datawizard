@@ -1,5 +1,7 @@
-#' Rescale Variables to a New Range
+#' @title Rescale Variables to a New Range
+#' @name rescale
 #'
+#' @description
 #' Rescale variables to a new range. Can also be used to reverse-score variables
 #' (change the keying/scoring direction), or to expand a range.
 #'

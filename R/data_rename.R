@@ -1,4 +1,5 @@
 #' @title Rename columns and variable names
+#' @name data_rename
 #'
 #' @description Safe and intuitive functions to rename variables or rows in
 #'   data frames. `data_rename()` will rename column names, i.e. it facilitates
@@ -46,6 +47,10 @@
 #' @details
 #' `select` can also be a named character vector. In this case, the names are
 #' used to rename the columns in the output data frame. See 'Examples'.
+#'
+#' `data_rename()` also works with list-inputs, but in this case, `select` must
+#' be a character vector with valid names. It is not possible to use
+#' select-helpers when `data` is a list.
 #'
 #' @return A modified data frame.
 #'

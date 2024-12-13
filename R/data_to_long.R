@@ -1,5 +1,7 @@
-#' Reshape (pivot) data from wide to long
+#' @title Reshape (pivot) data from wide to long
+#' @name data_to_long
 #'
+#' @description
 #' This function "lengthens" data, increasing the number of rows and decreasing
 #' the number of columns. This is a dependency-free base-R equivalent of
 #' `tidyr::pivot_longer()`.

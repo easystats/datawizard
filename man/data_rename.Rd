@@ -114,6 +114,10 @@ possible pipe-workflow.
 \details{
 \code{select} can also be a named character vector. In this case, the names are
 used to rename the columns in the output data frame. See 'Examples'.
+
+\code{data_rename()} also works with list-inputs, but in this case, \code{select} must
+be a character vector with valid names. It is not possible to use
+select-helpers when \code{data} is a list.
 }
 \examples{
 # Rename columns
