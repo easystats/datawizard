@@ -229,5 +229,5 @@ test_that("works with lists", {
   )
   new_names <- c("setosa, a", "versicolor, a")
   out <- data_rename(result, select = names(result), replacement = new_names)
-  expect_identical(names(out), new_names)
+  expect_named(out, new_names)
 })
