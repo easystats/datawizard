@@ -223,10 +223,7 @@ test_that("Argument `pattern` is deprecated", {
 })
 
 test_that("works with lists", {
-  result <- list(
-    setosa.a = structure(data.frame(1)),
-    versicolor.a = structure(data.frame(2))
-  )
+  result <- list(x = 1, y = 2)
   expect_error(
     data_rename(result, select = names(result), replacement = c("a", "b")),
     regex = "must be a data frame"
