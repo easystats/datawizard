@@ -8,7 +8,6 @@
 #' @inheritParams categorize
 #' @inheritParams extract_column_names
 #' @inheritParams standardize.data.frame
-#'
 #' @param to Numeric vector of length 2 giving the new range that the variable
 #'   will have after rescaling. To reverse-score a variable, the range should
 #'   be given with the maximum value first. See examples.
@@ -28,6 +27,11 @@
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @inheritSection center Selection of variables - the `select` argument
+#'
+#' @seealso See [makepredictcall.dw_transformer()] for use in model formulas.
+#' @family transform utilities
+#'
+#' @return A rescaled object.
 #'
 #' @examples
 #' rescale(c(0, 1, 5, -5, -2))
@@ -64,14 +68,6 @@
 #' # Specify list of multipliers
 #' d <- data.frame(x = 5:15, y = 5:15)
 #' rescale(d, multiply = list(x = 1.1, y = 0.5))
-#'
-#' @inherit data_rename
-#'
-#' @return A rescaled object.
-#'
-#' @seealso See [makepredictcall.dw_transformer()] for use in model formulas.
-#' @family transform utilities
-#'
 #' @export
 rescale <- function(x, ...) {
   UseMethod("rescale")
