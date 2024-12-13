@@ -103,17 +103,19 @@ data_rename <- function(data,
     insight::format_warning("In `data_rename()`, argument `safe` is no longer used and will be removed in a future release.") # nolint
   }
 
-  # change all names if no pattern specified
-  select <- .select_nse(
-    select,
-    data,
-    exclude = NULL,
-    ignore_case = NULL,
-    regex = NULL,
-    allow_rename = TRUE,
-    verbose = verbose,
-    ifnotfound = "error"
-  )
+  # change all names if no pattern specified - this only works for data frames
+  if (!is.list(data) || is.data.frame(data)) {
+    select <- .select_nse(
+      select,
+      data,
+      exclude = NULL,
+      ignore_case = NULL,
+      regex = NULL,
+      allow_rename = TRUE,
+      verbose = verbose,
+      ifnotfound = "error"
+    )
+  }
 
   # Forbid partially named "select",
   # Ex: if select = c("foo" = "Species", "Sepal.Length") then the 2nd name and

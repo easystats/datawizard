@@ -221,3 +221,13 @@ test_that("Argument `pattern` is deprecated", {
     fixed = TRUE
   )
 })
+
+test_that("works with lists", {
+  result <- list(
+    setosa.a = structure(data.frame(1)),
+    versicolor.a = structure(data.frame(2))
+  )
+  new_names <- c("setosa, a", "versicolor, a")
+  out <- data_rename(result, select = names(result), replacement = new_names)
+  expect_identical(names(out), new_names)
+})
