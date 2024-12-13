@@ -62,7 +62,7 @@
 #' @return If a tibble was provided as input, `reshape_longer()` also returns a
 #' tibble. Otherwise, it returns a data frame.
 #'
-#' @examplesIf requireNamespace("psych") && requireNamespace("tidyr")
+#' @examplesIf all(insight::check_if_installed(c("psych", "tidyr"), quietly = TRUE))
 #' wide_data <- setNames(
 #'   data.frame(replicate(2, rnorm(8))),
 #'   c("Time1", "Time2")
