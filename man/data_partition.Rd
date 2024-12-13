@@ -15,7 +15,7 @@ data_partition(
 )
 }
 \arguments{
-\item{data}{A data frame, or an object that can be coerced to a data frame.}
+\item{data}{A data frame.}
 
 \item{proportion}{Scalar (between 0 and 1) or numeric vector, indicating the
 proportion(s) of the training set(s). The sum of \code{proportion} must not be

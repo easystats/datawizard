@@ -18,7 +18,7 @@ data_rename(
 data_rename_rows(data, rows = NULL)
 }
 \arguments{
-\item{data}{A data frame, or an object that can be coerced to a data frame.}
+\item{data}{A data frame.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either

@@ -30,7 +30,7 @@
 #'
 #' @return A data frame comparable to `data`, with adjusted variables.
 #'
-#' @examplesIf require("bayestestR", quietly = TRUE) && require("rstanarm", quietly = TRUE) && require("gamm4", quietly = TRUE)
+#' @examplesIf all(insight::check_if_installed(c("bayestestR", "rstanarm", "gamm4"), quietly = TRUE))
 #' adjusted_all <- adjust(attitude)
 #' head(adjusted_all)
 #' adjusted_one <- adjust(attitude, effect = "complaints", select = "rating")
@@ -43,7 +43,7 @@
 #' }
 #'
 #' # Generate data
-#' data <- simulate_correlation(n = 100, r = 0.7)
+#' data <- bayestestR::simulate_correlation(n = 100, r = 0.7)
 #' data$V2 <- (5 * data$V2) + 20 # Add intercept
 #'
 #' # Adjust
