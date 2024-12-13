@@ -18,7 +18,7 @@ data_rename(
 data_rename_rows(data, rows = NULL)
 }
 \arguments{
-\item{data}{A data frame, or an object that can be coerced to a data frame.}
+\item{data}{A data frame.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -114,10 +114,6 @@ possible pipe-workflow.
 \details{
 \code{select} can also be a named character vector. In this case, the names are
 used to rename the columns in the output data frame. See 'Examples'.
-
-\code{data_rename()} also works with list-inputs, but in this case, \code{select} must
-be a character vector with valid names. It is not possible to use
-select-helpers when \code{data} is a list.
 }
 \examples{
 # Rename columns

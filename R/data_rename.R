@@ -9,7 +9,7 @@
 #'   possible pipe-workflow.
 #'
 #' @inheritParams extract_column_names
-#' @param data A data frame, or an object that can be coerced to a data frame.
+#' @param data A data frame.
 #' @param replacement Character vector. Can be one of the following:
 #'   - A character vector that indicates the new names of the columns selected
 #'     in `select`. `select` and `replacement` must be of the same length.
@@ -47,10 +47,6 @@
 #' @details
 #' `select` can also be a named character vector. In this case, the names are
 #' used to rename the columns in the output data frame. See 'Examples'.
-#'
-#' `data_rename()` also works with list-inputs, but in this case, `select` must
-#' be a character vector with valid names. It is not possible to use
-#' select-helpers when `data` is a list.
 #'
 #' @return A modified data frame.
 #'
@@ -94,6 +90,10 @@ data_rename <- function(data,
                         verbose = TRUE,
                         pattern = NULL,
                         ...) {
+  # check for valid input
+  if (!is.data.frame(data)) {
+    insight::format_error("Argument `data` must be a data frame.")
+  }
   # If the user does data_rename(iris, pattern = "Sepal.Length", "length"),
   # then "length" is matched to select by position while it's the replacement
   # => do the switch manually
@@ -108,19 +108,17 @@ data_rename <- function(data,
     insight::format_warning("In `data_rename()`, argument `safe` is no longer used and will be removed in a future release.") # nolint
   }
 
-  # change all names if no pattern specified - this does not work for lists!
-  if (!is.list(data) || is.data.frame(data)) {
-    select <- .select_nse(
-      select,
-      data,
-      exclude = NULL,
-      ignore_case = NULL,
-      regex = NULL,
-      allow_rename = TRUE,
-      verbose = verbose,
-      ifnotfound = "error"
-    )
-  }
+  # change all names if no pattern specified
+  select <- .select_nse(
+    select,
+    data,
+    exclude = NULL,
+    ignore_case = NULL,
+    regex = NULL,
+    allow_rename = TRUE,
+    verbose = verbose,
+    ifnotfound = "error"
+  )
 
   # Forbid partially named "select",
   # Ex: if select = c("foo" = "Species", "Sepal.Length") then the 2nd name and

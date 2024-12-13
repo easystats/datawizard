@@ -227,7 +227,8 @@ test_that("works with lists", {
     setosa.a = structure(data.frame(1)),
     versicolor.a = structure(data.frame(2))
   )
-  new_names <- c("setosa, a", "versicolor, a")
-  out <- data_rename(result, select = names(result), replacement = new_names)
-  expect_named(out, new_names)
+  expect_error(
+    data_rename(result, select = names(result), replacement = c("a", "b")),
+    regex = "must be a data frame"
+  )
 })
