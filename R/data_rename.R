@@ -103,7 +103,7 @@ data_rename <- function(data,
     insight::format_warning("In `data_rename()`, argument `safe` is no longer used and will be removed in a future release.") # nolint
   }
 
-  # change all names if no pattern specified - this only works for data frames
+  # change all names if no pattern specified - this does not work for lists!
   if (!is.list(data) || is.data.frame(data)) {
     select <- .select_nse(
       select,
