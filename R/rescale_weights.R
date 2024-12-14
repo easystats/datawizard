@@ -133,9 +133,6 @@ rescale_weights <- function(data, by, probability_weights, nest = FALSE) {
 }
 
 
-
-
-
 # rescale weights, for one or more group variables ----------------------------
 
 .rescale_weights <- function(x, group, probability_weights, n, weight_non_na) {
@@ -170,7 +167,6 @@ rescale_weights <- function(data, by, probability_weights, nest = FALSE) {
 
   out
 }
-
 
 
 # rescale weights, for nested groups ----------------------------

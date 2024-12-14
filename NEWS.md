@@ -2,6 +2,8 @@
 
 BREAKING CHANGES AND DEPRECATIONS
 
+* *datawizard* now requires R >= 4.0 (#515).
+
 * Argument `drop_na` in `data_match()` is deprecated now. Please use 
   `remove_na` instead.
 

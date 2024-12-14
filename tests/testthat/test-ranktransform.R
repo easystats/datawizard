@@ -52,7 +52,6 @@ test_that("ranktransform works with data frames", {
 })
 
 
-
 # with grouped data -------------------------------------------
 
 test_that("ranktransform works with data frames (grouped data)", {
@@ -83,7 +82,6 @@ test_that("ranktransform works with data frames (grouped data)", {
     )
   )
 })
-
 
 
 test_that("ranktransform works with data frames containing NAs (grouped data)", {

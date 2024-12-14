@@ -46,7 +46,6 @@ test_that("describe_distribution - NULL for date", {
 })
 
 
-
 # data frame ---------------------------------------
 
 test_that("describe_distribution - data frame: works with basic data frame", {
@@ -88,7 +87,6 @@ test_that("describe_distribution - data frame: works with range", {
 })
 
 
-
 # factor ---------------------------------------
 
 test_that("describe_distribution - factor", {
@@ -98,7 +96,6 @@ test_that("describe_distribution - factor", {
 })
 
 
-
 # character ---------------------------------------
 
 test_that("describe_distribution - character", {
@@ -106,7 +103,6 @@ test_that("describe_distribution - character", {
 
   expect_snapshot(describe_distribution(as.character(ToothGrowth$supp)))
 })
-
 
 
 # list ---------------------------------------
@@ -206,7 +202,6 @@ test_that("describe_distribution - list: works with range", {
 })
 
 
-
 # select ----------------------
 
 test_that("describe_distribution - select", {
@@ -223,7 +218,6 @@ test_that("describe_distribution - select", {
   exp <- describe_distribution(iris$Species)
   expect_identical(out$Range, exp$Range)
 })
-
 
 
 # select and grouped df ----------------------

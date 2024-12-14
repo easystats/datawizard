@@ -7,7 +7,6 @@ test_that("data_select checks for data frame", {
 })
 
 
-
 # select helpers ---------------------
 
 test_that("data_select works with select helpers", {
@@ -33,7 +32,6 @@ test_that("data_select works with select helpers", {
 })
 
 
-
 # select helpers, negation ---------------------
 
 test_that("data_select works with negation of select helpers", {
@@ -47,7 +45,6 @@ test_that("data_select works with negation of select helpers", {
     iris[c("Sepal.Length", "Petal.Length", "Species")]
   )
 })
-
 
 
 # select-nse with function  ---------------------
@@ -77,7 +74,6 @@ test_that("data_select works with select-functions", {
 })
 
 
-
 # select-nse with user-function  ---------------------
 testfun <- function(i) {
   is.numeric(i) && mean(i, na.rm = TRUE) > 3.5
@@ -98,7 +94,6 @@ test_that("data_select works with user-defined select-functions", {
     iris["Petal.Length"]
   )
 })
-
 
 
 # select-nse with negation of functions  ---------------------
@@ -128,7 +123,6 @@ test_that("data_select works with negated select-functions", {
 })
 
 
-
 # select-nse with ranges  ---------------------
 
 test_that("data_select works with ranges", {
@@ -142,7 +136,6 @@ test_that("data_select works with ranges", {
     iris[2:3]
   )
 })
-
 
 
 # select-nse with negated ranges  ---------------------
@@ -179,7 +172,6 @@ test_that("data_select works with negated ranges", {
 })
 
 
-
 # select-nse with formulas  ---------------------
 
 test_that("data_select works with formulas", {
@@ -193,7 +185,6 @@ test_that("data_select works with formulas", {
     iris[c(1, 4, 5)]
   )
 })
-
 
 
 # select-nse, other cases ---------------------
@@ -245,7 +236,6 @@ test_that("data_select works, other cases", {
     mtcars[c("cyl", "carb")]
   )
 })
-
 
 
 # select-nse works when called from other function  ---------------------
@@ -317,7 +307,6 @@ test_that("data_select from other functions", {
   }
   expect_identical(test_top(iris), iris["Petal.Length"])
 })
-
 
 
 # preserve attributes --------------------------

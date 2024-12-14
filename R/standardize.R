@@ -309,7 +309,6 @@ standardize.data.frame <- function(x,
 }
 
 
-
 #' @export
 standardize.grouped_df <- function(x,
                                    select = NULL,
@@ -380,9 +379,6 @@ standardize.grouped_df <- function(x,
   attributes(my_args$x) <- my_args$info
   my_args$x
 }
-
-
-
 
 
 # Datagrid ----------------------------------------------------------------

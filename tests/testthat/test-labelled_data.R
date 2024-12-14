@@ -38,7 +38,6 @@ test_that("reverse, labels preserved", {
 })
 
 
-
 # data_merge -----------------------------------
 
 test_that("data_merge, labels preserved", {
@@ -53,7 +52,6 @@ test_that("data_merge, labels preserved", {
     )
   )
 })
-
 
 
 # data_extract -----------------------------------
@@ -80,7 +78,6 @@ test_that("data_extract, labels preserved", {
 })
 
 
-
 # categorize -----------------------------------
 
 test_that("categorize, labels preserved", {
@@ -99,7 +96,6 @@ test_that("categorize, labels preserved", {
 })
 
 
-
 # data_reorder -----------------------------------
 
 test_that("data_reorder, labels preserved", {
@@ -111,7 +107,6 @@ test_that("data_reorder, labels preserved", {
 })
 
 
-
 # data_remove -----------------------------------
 
 test_that("data_remove, labels preserved", {
@@ -121,7 +116,6 @@ test_that("data_remove, labels preserved", {
     ignore_attr = TRUE
   )
 })
-
 
 
 # data_rename -----------------------------------
@@ -150,7 +144,6 @@ test_that("data_rename, labels preserved", {
 })
 
 
-
 # data_addprefix -----------------------------------
 
 test_that("data_addprefix, labels preserved", {
@@ -170,7 +163,6 @@ test_that("data_addprefix, labels preserved", {
 })
 
 
-
 # data_suffix -----------------------------------
 
 test_that("data_addsuffix, labels preserved", {
@@ -188,7 +180,6 @@ test_that("data_addsuffix, labels preserved", {
     ignore_attr = TRUE
   )
 })
-
 
 
 # to_numeric -----------------------------------
@@ -216,7 +207,6 @@ test_that("to_numeric, labels preserved", {
     ignore_attr = TRUE
   )
 })
-
 
 
 # data_match -----------------------------------
@@ -249,7 +239,6 @@ test_that("data_match, labels preserved", {
 })
 
 
-
 # data_filter -----------------------------------
 
 test_that("data_filter, labels preserved", {
@@ -265,7 +254,6 @@ test_that("data_filter, labels preserved", {
     attr(efc$c12hour, "label", exact = TRUE)
   )
 })
-
 
 
 # convert_to_na -----------------------------------
@@ -310,7 +298,6 @@ test_that("convert_to_na, labels preserved", {
 })
 
 
-
 # data_select -----------------------------------
 
 test_that("data_select, labels preserved", {
@@ -332,7 +319,6 @@ test_that("data_select, labels preserved", {
 })
 
 
-
 # recode_values -----------------------------------
 
 test_that("recode_values, labels preserved", {
@@ -346,7 +332,6 @@ test_that("recode_values, labels preserved", {
   )
   expect_null(attr(x, "labels", exact = TRUE))
 })
-
 
 
 # slide -----------------------------------
@@ -368,7 +353,6 @@ test_that("slide, labels preserved", {
     ignore_attr = TRUE
   )
 })
-
 
 
 # to_factor -----------------------------------

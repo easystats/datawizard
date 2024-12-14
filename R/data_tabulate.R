@@ -690,8 +690,6 @@ print_md.datawizard_tables <- function(x, big_mark = NULL, ...) {
 }
 
 
-
-
 # tools --------------------
 
 .table_header <- function(x, format = "text") {

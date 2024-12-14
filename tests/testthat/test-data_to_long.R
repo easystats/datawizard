@@ -124,8 +124,6 @@ test_that("data_to_long works - complex dataset", {
 })
 
 
-
-
 test_that("data_to_long: arg 'cols' overrides 'select'", {
   skip_if_not_installed("psych")
   data <- psych::bfi
@@ -254,10 +252,6 @@ test_that("data_to_long: error if no columns to reshape", {
     "No columns found"
   )
 })
-
-
-
-
 
 
 # EQUIVALENCE WITH TIDYR - PIVOT_LONGER -------------------------------------------
@@ -391,7 +385,6 @@ test_that("data_to_long equivalent to pivot_longer: ex 6", {
 
   expect_equal(x, y, ignore_attr = TRUE)
 })
-
 
 
 # tests coming from tidyr's repo
