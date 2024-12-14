@@ -91,7 +91,9 @@ ranktransform.numeric <- function(x,
     if (zeros == "na") {
       out <- rep(NA, length(x))
       ZEROES <- x == 0
-      if (any(ZEROES) && verbose) insight::format_warning("Zeros detected. These cannot be sign-rank transformed.")
+      if (any(ZEROES) && verbose) {
+        insight::format_warning("Zeros detected. These cannot be sign-rank transformed.") # nolint
+      }
       out[!ZEROES] <- sign(x[!ZEROES]) * rank(abs(x[!ZEROES]),
         ties.method = method,
         na.last = "keep"
