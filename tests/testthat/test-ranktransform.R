@@ -46,6 +46,22 @@ test_that("signed rank works as expected", {
   ))))
 })
 
+test_that("argument 'zeros' works", {
+  x <- c(-1, 0, 2, -3, 4)
+  expect_warning(
+    ranktransform(x, sign = TRUE),
+    "cannot be sign-rank"
+  )
+  expect_identical(
+    ranktransform(x, sign = TRUE, zeros = "signrank"),
+    c(-2, 0, 3, -4, 5)
+  )
+  expect_error(
+    ranktransform(x, sign = TRUE, zeros = "foo"),
+    "should be one of"
+  )
+})
+
 test_that("ranktransform works with data frames", {
   set.seed(123)
   expect_snapshot(ranktransform(BOD))
