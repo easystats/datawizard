@@ -74,9 +74,9 @@ test_that("ranktransform works with data frames (grouped data)", {
   skip_if_not_installed("poorman")
 
   set.seed(123)
-  value1 <- sample(1:20, 9, replace = TRUE)
+  value1 <- sample.int(20, 9, replace = TRUE)
   set.seed(456)
-  value2 <- sample(1:20, 9, replace = TRUE)
+  value2 <- sample.int(20, 9, replace = TRUE)
 
   test_df <- data.frame(
     id = rep(c("A", "B", "C"), each = 3),
@@ -85,6 +85,7 @@ test_that("ranktransform works with data frames (grouped data)", {
     stringsAsFactors = FALSE
   )
 
+  # nolint start: nested_pipe_linter
   expect_identical(
     test_df %>%
       poorman::group_by(id) %>%
@@ -97,6 +98,7 @@ test_that("ranktransform works with data frames (grouped data)", {
       stringsAsFactors = FALSE
     )
   )
+  # nolint end
 })
 
 
@@ -115,6 +117,7 @@ test_that("ranktransform works with data frames containing NAs (grouped data)", 
     stringsAsFactors = FALSE
   )
 
+  # nolint start: nested_pipe_linter
   expect_identical(
     test_df %>%
       poorman::group_by(id) %>%
@@ -127,6 +130,7 @@ test_that("ranktransform works with data frames containing NAs (grouped data)", 
       stringsAsFactors = FALSE
     )
   )
+  # nolint end
 })
 
 # select helpers ------------------------------
