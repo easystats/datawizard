@@ -35,7 +35,6 @@ test_that("data_relocate works as expected", {
 })
 
 
-
 test_that("data_relocate select-helpers", {
   expect_identical(
     colnames(data_relocate(iris, select = starts_with("Sepal"), after = 5)),

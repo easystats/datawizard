@@ -178,7 +178,6 @@ test_that("data_tabulate print multiple, collapse", {
 })
 
 
-
 test_that("data_tabulate grouped data.frame", {
   skip_if_not_installed("poorman")
   data(efc, package = "datawizard")

@@ -499,8 +499,6 @@ describe_distribution.grouped_df <- function(x,
 }
 
 
-
-
 # methods ------------------
 
 #' @export

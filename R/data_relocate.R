@@ -139,7 +139,6 @@ data_relocate <- function(data,
 }
 
 
-
 #' @rdname data_relocate
 #' @export
 data_reorder <- function(data,

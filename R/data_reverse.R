@@ -115,7 +115,6 @@ reverse.numeric <- function(x,
 }
 
 
-
 #' @export
 reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
   # Warning if all NaNs
@@ -195,7 +194,6 @@ reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 reverse.grouped_df <- function(x,
                                select = NULL,
@@ -252,7 +250,6 @@ reverse.grouped_df <- function(x,
   attributes(x) <- utils::modifyList(info, attributes(x))
   x
 }
-
 
 
 #' @rdname reverse

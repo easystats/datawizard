@@ -74,8 +74,6 @@ row_to_colnames <- function(x, row = 1, na_prefix = "x", verbose = TRUE) {
 }
 
 
-
-
 #' @rdname colnames
 #' @export
 colnames_to_row <- function(x, prefix = "x") {

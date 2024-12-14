@@ -11,7 +11,6 @@ test_that("data_arrange, attributes preserved", {
 })
 
 
-
 # rescale -----------------------------------
 
 test_that("rescale, attributes preserved", {
@@ -20,7 +19,6 @@ test_that("rescale, attributes preserved", {
   x2 <- rescale(data_group(x, "Species"), 1:3)
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
-
 
 
 # center -----------------------------------
@@ -33,7 +31,6 @@ test_that("center, attributes preserved", {
 })
 
 
-
 # categorize -----------------------------------
 
 test_that("categorize, attributes preserved", {
@@ -42,7 +39,6 @@ test_that("categorize, attributes preserved", {
   x2 <- categorize(data_group(x, "Species"), "Sepal.Width")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
-
 
 
 # standardize -----------------------------------

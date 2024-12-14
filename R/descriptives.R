@@ -153,8 +153,6 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
 }
 
 
-
-
 # descriptives helpers
 
 .drop_na <- function(x) {

@@ -178,9 +178,6 @@ test_that("reverse msg for unsupported", {
 })
 
 
-
-
-
 # Same tests with reverse_scale (alias) --------------------------
 
 test_that("reverse_scale works with numeric", {
@@ -352,8 +349,6 @@ test_that("reverse_scale select helpers", {
 
   expect_identical(head(out$Sepal.Length), c(0.22222, 0.16667, 0.11111, 0.08333, 0.19444, 0.30556), tolerance = 1e-3)
 })
-
-
 
 
 # with grouped data -------------------------------------------

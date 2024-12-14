@@ -40,7 +40,6 @@ test_that("data_to_wide works", {
 })
 
 
-
 test_that("data_to_wide, names_prefix works", {
   skip_if_not_installed("tidyr")
 
@@ -186,7 +185,6 @@ test_that("data_to_wide, values_fill errors when length > 1", {
     regexp = "must be of length 1"
   )
 })
-
 
 
 # EQUIVALENCE WITH TIDYR - PIVOT_WIDER -----------------------------------------------
@@ -464,7 +462,6 @@ test_that("data_to_wide, names_glue works", {
 
   expect_identical(x, y, ignore_attr = TRUE)
 })
-
 
 
 test_that("preserve date format", {

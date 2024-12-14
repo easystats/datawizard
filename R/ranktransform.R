@@ -33,7 +33,6 @@ ranktransform <- function(x, ...) {
 }
 
 
-
 #' @rdname ranktransform
 #' @export
 ranktransform.numeric <- function(x,
@@ -89,14 +88,10 @@ ranktransform.numeric <- function(x,
 }
 
 
-
-
 #' @export
 ranktransform.factor <- function(x, ...) {
   x
 }
-
-
 
 
 #' @export

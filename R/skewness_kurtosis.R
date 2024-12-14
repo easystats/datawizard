@@ -227,7 +227,6 @@ skewness.default <- function(x,
 }
 
 
-
 # Kurtosis -----------------------------------
 
 
@@ -430,7 +429,6 @@ summary.parameters_kurtosis <- function(object, test = FALSE, ...) {
     Minitab = "3"
   )
 }
-
 
 
 # bootstrapping -----------------------------------

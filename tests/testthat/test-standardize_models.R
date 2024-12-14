@@ -98,9 +98,6 @@ test_that("transformations", {
 })
 
 
-
-
-
 # W/ weights --------------------------------------------------------------
 test_that("weights", {
   expect_warning(standardize(mtcars, weights = "xx"))
@@ -156,7 +153,6 @@ test_that("weights + NA", {
     weights = "weight_me",
     remove_na = "selected"
   )
-
 
 
   m1 <- lm(Sepal.Length ~ Species + Petal.Width, data = iris, weights = weight_me)

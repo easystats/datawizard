@@ -102,7 +102,6 @@ text_paste <- function(text, text2 = NULL, sep = ", ", enclose = NULL, ...) {
 }
 
 
-
 #' @rdname text_format
 #' @export
 text_remove <- function(text, pattern = "", ...) {

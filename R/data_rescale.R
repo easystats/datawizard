@@ -82,7 +82,6 @@ change_scale <- function(x, ...) {
 }
 
 
-
 #' @export
 rescale.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
@@ -92,7 +91,6 @@ rescale.default <- function(x, verbose = TRUE, ...) {
   }
   x
 }
-
 
 
 #' @rdname rescale
@@ -231,7 +229,6 @@ rescale.grouped_df <- function(x,
   attributes(x) <- utils::modifyList(info, attributes(x))
   x
 }
-
 
 
 #' @rdname rescale

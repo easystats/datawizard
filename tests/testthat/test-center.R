@@ -82,7 +82,6 @@ test_that("center works correctly with only one value", {
 })
 
 
-
 # with grouped data -------------------------------------------
 
 test_that("center (grouped data)", {
