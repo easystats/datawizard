@@ -8,7 +8,14 @@
 \usage{
 ranktransform(x, ...)
 
-\method{ranktransform}{numeric}(x, sign = FALSE, method = "average", verbose = TRUE, ...)
+\method{ranktransform}{numeric}(
+  x,
+  sign = FALSE,
+  method = "average",
+  zeros = "na",
+  verbose = TRUE,
+  ...
+)
 
 \method{ranktransform}{data.frame}(
   x,
@@ -18,6 +25,7 @@ ranktransform(x, ...)
   method = "average",
   ignore_case = FALSE,
   regex = FALSE,
+  zeros = "na",
   verbose = TRUE,
   ...
 )
@@ -32,6 +40,10 @@ ranktransform(x, ...)
 \item{method}{Treatment of ties. Can be one of \code{"average"} (default),
 \code{"first"}, \code{"last"}, \code{"random"}, \code{"max"} or \code{"min"}. See \code{\link[=rank]{rank()}} for
 details.}
+
+\item{zeros}{How to handle zeros. If \code{"na"} (default), they are marked as
+\code{NA}. If \code{"signrank"}, they are kept during the ranking and marked as zeros.
+This is only used when \code{sign = TRUE}.}
 
 \item{verbose}{Toggle warnings.}
 
@@ -110,8 +122,11 @@ from the input data frame.
 \examples{
 ranktransform(c(0, 1, 5, -5, -2))
 
-# Won't work
-# ranktransform(c(0, 1, 5, -5, -2), sign = TRUE)
+# By default, zeros are converted to NA
+suppressWarnings(
+  ranktransform(c(0, 1, 5, -5, -2), sign = TRUE)
+)
+ranktransform(c(0, 1, 5, -5, -2), sign = TRUE, zeros = "signrank")
 
 head(ranktransform(trees))
 }

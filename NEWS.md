@@ -39,6 +39,9 @@ CHANGES
 * `data_summary()` also accepts the results of `bayestestR::ci()` as summary
   function (#483).
 
+* `ranktransform()` has a new argument `zeros` to determine how zeros should be
+  handled when `sign = TRUE` (#573).
+
 BUG FIXES
 
 * `describe_distribution()` no longer errors if the sample was too sparse to compute

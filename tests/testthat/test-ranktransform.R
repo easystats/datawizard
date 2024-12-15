@@ -46,6 +46,22 @@ test_that("signed rank works as expected", {
   ))))
 })
 
+test_that("argument 'zeros' works", {
+  x <- c(-1, 0, 2, -3, 4)
+  expect_warning(
+    ranktransform(x, sign = TRUE),
+    "cannot be sign-rank"
+  )
+  expect_identical(
+    ranktransform(x, sign = TRUE, zeros = "signrank"),
+    c(-2, 0, 3, -4, 5)
+  )
+  expect_error(
+    ranktransform(x, sign = TRUE, zeros = "foo"),
+    "should be one of"
+  )
+})
+
 test_that("ranktransform works with data frames", {
   set.seed(123)
   expect_snapshot(ranktransform(BOD))
@@ -58,9 +74,9 @@ test_that("ranktransform works with data frames (grouped data)", {
   skip_if_not_installed("poorman")
 
   set.seed(123)
-  value1 <- sample(1:20, 9, replace = TRUE)
+  value1 <- sample.int(20, 9, replace = TRUE)
   set.seed(456)
-  value2 <- sample(1:20, 9, replace = TRUE)
+  value2 <- sample.int(20, 9, replace = TRUE)
 
   test_df <- data.frame(
     id = rep(c("A", "B", "C"), each = 3),
@@ -69,6 +85,7 @@ test_that("ranktransform works with data frames (grouped data)", {
     stringsAsFactors = FALSE
   )
 
+  # nolint start: nested_pipe_linter
   expect_identical(
     test_df %>%
       poorman::group_by(id) %>%
@@ -81,6 +98,7 @@ test_that("ranktransform works with data frames (grouped data)", {
       stringsAsFactors = FALSE
     )
   )
+  # nolint end
 })
 
 
@@ -99,6 +117,7 @@ test_that("ranktransform works with data frames containing NAs (grouped data)", 
     stringsAsFactors = FALSE
   )
 
+  # nolint start: nested_pipe_linter
   expect_identical(
     test_df %>%
       poorman::group_by(id) %>%
@@ -111,6 +130,7 @@ test_that("ranktransform works with data frames containing NAs (grouped data)", 
       stringsAsFactors = FALSE
     )
   )
+  # nolint end
 })
 
 # select helpers ------------------------------
