@@ -13,7 +13,7 @@ but where the sign is preserved (i.e., 2, 1, -3, 4)."><meta property="og:image" 
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.18</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.19</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,14 @@ but where the sign is preserved (i.e., 2, 1, -3, 4).</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ranktransform</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'numeric'</span></span>
-<span><span class="fu">ranktransform</span><span class="op">(</span><span class="va">x</span>, sign <span class="op">=</span> <span class="cn">FALSE</span>, method <span class="op">=</span> <span class="st">"average"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">ranktransform</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  sign <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"average"</span>,</span>
+<span>  zeros <span class="op">=</span> <span class="st">"na"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'data.frame'</span></span>
 <span><span class="fu">ranktransform</span><span class="op">(</span></span>
@@ -83,6 +90,7 @@ but where the sign is preserved (i.e., 2, 1, -3, 4).</p>
 <span>  method <span class="op">=</span> <span class="st">"average"</span>,</span>
 <span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  regex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  zeros <span class="op">=</span> <span class="st">"na"</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -108,6 +116,12 @@ but where the sign is preserved (i.e., 2, 1, -3, 4).</p>
 <dd><p>Treatment of ties. Can be one of <code>"average"</code> (default),
 <code>"first"</code>, <code>"last"</code>, <code>"random"</code>, <code>"max"</code> or <code>"min"</code>. See <code><a href="https://rdrr.io/r/base/rank.html" class="external-link">rank()</a></code> for
 details.</p></dd>
+
+
+<dt id="arg-zeros">zeros<a class="anchor" aria-label="anchor" href="#arg-zeros"></a></dt>
+<dd><p>How to handle zeros. If <code>"na"</code> (default), they are marked as
+<code>NA</code>. If <code>"signrank"</code>, they are kept during the ranking and marked as zeros.
+This is only used when <code>sign = TRUE</code>.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -200,8 +214,13 @@ from the input data frame.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">ranktransform</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3 4 5 1 2</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Won't work</span></span></span>
-<span class="r-in"><span><span class="co"># ranktransform(c(0, 1, 5, -5, -2), sign = TRUE)</span></span></span>
+<span class="r-in"><span><span class="co"># By default, zeros are converted to NA</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu">ranktransform</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span>, sign <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]   NA  1.0  3.5 -3.5 -2.0</span>
+<span class="r-in"><span><span class="fu">ranktransform</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span>, sign <span class="op">=</span> <span class="cn">TRUE</span>, zeros <span class="op">=</span> <span class="st">"signrank"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.0  2.0  4.5 -4.5 -3.0</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">ranktransform</span><span class="op">(</span><span class="va">trees</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Girth Height Volume</span>
