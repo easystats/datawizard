@@ -21,9 +21,7 @@
 #' @return A dataframe with the following columns:
 #'  - `var`: Variables selected.
 #'  - `items`: Number of items for selected variables.
-#'  - `na`: Number of missing cell values for those variables (e.g., 2 missing
-#'  values for the first participant + 2 missing values for the second participant
-#'  = total of 4 missing values).
+#'  - `na`: Number of missing values for those variables.
 #'  - `cells`: Total number of cells (i.e., number of participants multiplied by
 #'  the number of variables, `items`).
 #'  - `na_percent`: The percentage of missing values (`na` divided by `cells`).
