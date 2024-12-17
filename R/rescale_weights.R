@@ -118,9 +118,6 @@ rescale_weights <- function(data,
     data_tmp <- data
   }
 
-  # sort id
-  data_tmp$.bamboozled <- seq_len(nrow(data_tmp))
-
   switch(method,
     carle = .rescale_weights_carle(nest, probability_weights, data_tmp, data, by, weight_non_na),
     .rescale_weights_kish(probability_weights, data_tmp, data, weight_non_na)
@@ -137,8 +134,8 @@ rescale_weights <- function(data,
   # rescale weights, so their mean is 1
   z_weights <- p_weights * (1 / mean(p_weights))
   # divide weights by design effect
-  data$pweight <- NA_real_
-  data$pweight[weight_non_na] <- z_weights / deff
+  data$pweights <- NA_real_
+  data$pweights[weight_non_na] <- z_weights / deff
   # return result
   data
 }
@@ -147,6 +144,13 @@ rescale_weights <- function(data,
 # rescale weights, method Carle ----------------------------
 
 .rescale_weights_carle <- function(nest, probability_weights, data_tmp, data, by, weight_non_na) {
+  # sort id
+  data_tmp$.bamboozled <- seq_len(nrow(data_tmp))
+
+  if (is.null(by)) {
+    insight::format_error("Argument `by` must be specified. Please provide one or more variable names in `by` that indicate the grouping structure (strata) of the survey data (level-2-cluster variable).") # nolint
+  }
+
   if (nest && length(by) < 2) {
     insight::format_warning(
       sprintf(
