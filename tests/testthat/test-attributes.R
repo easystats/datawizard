@@ -16,7 +16,6 @@ test_that("data_filter, attributes preserved", {
 })
 
 
-
 # data_arrange -----------------------------------
 
 test_that("data_arrange, attributes preserved", {
@@ -25,7 +24,6 @@ test_that("data_arrange, attributes preserved", {
   x2 <- data_arrange(x, "hp")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
-
 
 
 # data_match -----------------------------------
@@ -38,7 +36,6 @@ test_that("data_match, attributes preserved", {
 })
 
 
-
 # data_select -----------------------------------
 
 test_that("data_select, attributes preserved", {
@@ -47,7 +44,6 @@ test_that("data_select, attributes preserved", {
   x2 <- data_select(x, "hp")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
-
 
 
 # data_group -----------------------------------
@@ -60,7 +56,6 @@ test_that("data_group, attributes preserved", {
 })
 
 
-
 # data_relocate -----------------------------------
 
 test_that("data_relocate, attributes preserved", {
@@ -69,7 +64,6 @@ test_that("data_relocate, attributes preserved", {
   x2 <- data_relocate(x, "am", "mpg")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
-
 
 
 # data_remove -----------------------------------
@@ -82,7 +76,6 @@ test_that("data_remove, attributes preserved", {
 })
 
 
-
 # data_reorder -----------------------------------
 
 test_that("data_reorder, attributes preserved", {
@@ -91,7 +84,6 @@ test_that("data_reorder, attributes preserved", {
   x2 <- data_reorder(x, c("hp", "vs", "wt"))
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
-
 
 
 # data_to_long -----------------------------------
@@ -104,7 +96,6 @@ test_that("data_to_long, attributes preserved", {
 })
 
 
-
 # to_numeric -----------------------------------
 
 test_that("to_numeric, attributes preserved", {
@@ -113,7 +104,6 @@ test_that("to_numeric, attributes preserved", {
   x2 <- to_numeric(x, "Species")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
-
 
 
 # convert_to_na -----------------------------------
@@ -130,16 +120,14 @@ test_that("convert_to_na, attributes preserved", {
 })
 
 
-
 # data_rename -----------------------------------
 
 test_that("data_rename, attributes preserved", {
   x <- mtcars
   attr(x, "myattri") <- "I'm here"
-  x2 <- data_rename(x, pattern = "hp", replacement = "horsepower")
+  x2 <- data_rename(x, select = "hp", replacement = "horsepower")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
-
 
 
 # rescale -----------------------------------
@@ -152,7 +140,6 @@ test_that("rescale, attributes preserved", {
 })
 
 
-
 # center -----------------------------------
 
 test_that("center, attributes preserved", {
@@ -161,7 +148,6 @@ test_that("center, attributes preserved", {
   x2 <- center(x, "Sepal.Width")
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
-
 
 
 # categorize -----------------------------------
@@ -174,7 +160,6 @@ test_that("categorize, attributes preserved", {
 })
 
 
-
 # change_code -----------------------------------
 
 test_that("recode_values, attributes preserved", {
@@ -183,7 +168,6 @@ test_that("recode_values, attributes preserved", {
   x2 <- recode_values(x, select = "am", recode = list(`5` = 0, `10` = 1))
   expect_identical(attr(x2, "myattri", exact = TRUE), "I'm here")
 })
-
 
 
 # standardize -----------------------------------

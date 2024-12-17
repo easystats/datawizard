@@ -21,7 +21,6 @@ test_that("data_read - csv", {
 })
 
 
-
 # csv -------------------------
 
 test_that("data_read, skip_empty", {
@@ -32,7 +31,6 @@ test_that("data_read, skip_empty", {
   expect_identical(ncol(d), 3L)
   expect_identical(colnames(d), c("Var1", "Var2", "Var3"))
 })
-
 
 
 # tsv -------------------------
@@ -55,7 +53,6 @@ test_that("data_read - tsv", {
     expect_identical(sum(vapply(d, is.character, FUN.VALUE = logical(1L))), 1L)
   })
 })
-
 
 
 # excel -------------------------
@@ -105,7 +102,6 @@ test_that("data_read - Stata file", {
 })
 
 
-
 # SAS file -----------------------------------
 
 
@@ -131,8 +127,6 @@ test_that("data_read - SAS file", {
 })
 
 
-
-
 # RDS file, matrix, coercible -----------------------------------
 
 test_that("data_read - RDS file, matrix, coercible", {
@@ -152,7 +146,6 @@ test_that("data_read - RDS file, matrix, coercible", {
     expect_identical(dim(d), c(2L, 5L))
   })
 })
-
 
 
 # RDS file, preserve class /types -----------------------------------
@@ -177,7 +170,6 @@ test_that("data_read - RDS file, preserve class", {
 })
 
 
-
 # RData -----------------------------------
 
 test_that("data_read - no warning for RData", {
@@ -187,7 +179,6 @@ test_that("data_read - no warning for RData", {
     expect_silent(data_read(temp_file, verbose = FALSE))
   })
 })
-
 
 
 # SPSS file -----------------------------------
@@ -223,8 +214,6 @@ test_that("data_read - SPSS file", {
     )
   })
 })
-
-
 
 
 # SPSS file 2 ---------------------------------
@@ -275,7 +264,6 @@ test_that("data_read - SPSS file 2", {
 })
 
 
-
 # zipped SPSS file -----------------------------------
 
 test_that("data_read - zipped SPSS file", {
@@ -300,7 +288,6 @@ test_that("data_read - zipped SPSS file", {
     expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 26L)
   })
 })
-
 
 
 # SPSS file, many value labels  -----------------------------------
@@ -421,8 +408,6 @@ test_that("data_read, convert many labels correctly", {
     )
   })
 })
-
-
 
 
 # invalid file type -------------------------

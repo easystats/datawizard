@@ -114,8 +114,6 @@ data_write <- function(data,
 }
 
 
-
-
 # helper -------------------------------
 
 

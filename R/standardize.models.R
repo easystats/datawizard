@@ -120,7 +120,6 @@ standardize.default <- function(x,
   }
 
 
-
   ## ---- Z the RESPONSE? ----
   # 1. Some models have special responses that should not be standardized. This
   # includes:
@@ -156,7 +155,6 @@ standardize.default <- function(x,
       offsets <- NULL
     }
   }
-
 
 
   ## ---- DO NOT Z: ----
@@ -200,7 +198,6 @@ standardize.default <- function(x,
     insight::format_warning("No variables could be standardized.")
     return(x)
   }
-
 
 
   ## ---- STANDARDIZE! ----
@@ -255,17 +252,11 @@ standardize.default <- function(x,
   }
 
 
-
-
-
   ## ---- ADD BACK VARS THAT WHERE NOT Z ----
   if (length(dont_standardize)) {
     remaining_columns <- intersect(colnames(data), dont_standardize)
     data_std <- cbind(data[, remaining_columns, drop = FALSE], data_std)
   }
-
-
-
 
 
   ## ---- UPDATE MODEL WITH Z DATA ----
@@ -445,9 +436,6 @@ standardize.wbgee <- standardize.wbm
 #' @export
 standardize.biglm <- standardize.wbm
 # biglm doesn't regit the model to new data - it ADDs MORE data to the model.
-
-
-
 
 
 # helper ----------------------------

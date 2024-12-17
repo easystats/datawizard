@@ -280,7 +280,6 @@ to_numeric.character <- function(x,
 }
 
 
-
 #' Convert to Numeric (if possible)
 #'
 #' Tries to convert vector to numeric if possible (if no warnings or errors).

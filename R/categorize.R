@@ -363,7 +363,6 @@ categorize.grouped_df <- function(x,
 }
 
 
-
 # tools --------------------
 
 .equal_range <- function(x, range, n_groups, lowest = NULL) {

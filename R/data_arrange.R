@@ -27,7 +27,6 @@ data_arrange <- function(data, select = NULL, safe = TRUE) {
 }
 
 
-
 #' @export
 data_arrange.default <- function(data, select = NULL, safe = TRUE) {
   if (is.null(select) || length(select) == 0) {
@@ -98,7 +97,6 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
 
   out
 }
-
 
 
 #' @export

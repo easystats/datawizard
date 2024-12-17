@@ -6,7 +6,7 @@
 #' @param width Positive integer giving the target column width for wrapping
 #' lines in the output. Can be "auto", in which case it will select 90\% of the
 #' default width.
-#' @inheritParams data_rename
+#' @param pattern Regex pattern to remove from `text`.
 #' @param sep Separator.
 #' @param last Last separator.
 #' @param n The number of characters to find.
@@ -100,7 +100,6 @@ text_paste <- function(text, text2 = NULL, sep = ", ", enclose = NULL, ...) {
     paste0(text, ifelse(text == "" | text2 == "", "", sep), text2) # nolint
   }
 }
-
 
 
 #' @rdname text_format

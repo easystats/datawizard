@@ -52,7 +52,6 @@ test_that("convert_na_to - numeric: returns original vector if 'replacement' not
 })
 
 
-
 # character --------------------------
 
 test_that("convert_na_to - character: works", {
@@ -109,9 +108,6 @@ test_that("convert_na_to - character: returns original vector if 'replacement' n
 })
 
 
-
-
-
 # factor --------------------------
 
 test_that("convert_na_to - factor: works when 'replacement' is numeric ", {
@@ -138,11 +134,6 @@ test_that("convert_na_to - factor: works when 'replacement' is character", {
   )
   expect_identical(levels(x), as.character(c(1:3, "d")))
 })
-
-
-
-
-
 
 
 # data frame --------------------------
@@ -415,7 +406,6 @@ test_that("convert_na_to - data frame: works when arg 'select' is a list", {
     "not found"
   )
 })
-
 
 
 # preserve attributes --------------------------
