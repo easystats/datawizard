@@ -2,63 +2,73 @@
 #' @name rescale_weights
 #'
 #' @description Most functions to fit multilevel and mixed effects models only
-#'   allow to specify frequency weights, but not design (i.e. sampling or
-#'   probability) weights, which should be used when analyzing complex samples
-#'   and survey data. `rescale_weights()` implements an algorithm proposed
-#'   by \cite{Asparouhov (2006)} and \cite{Carle (2009)} to rescale design
-#'   weights in survey data to account for the grouping structure of multilevel
-#'   models, which then can be used for multilevel modelling.
+#' allow to specify frequency weights, but not design (i.e. sampling or
+#' probability) weights, which should be used when analyzing complex samples
+#' and survey data. `rescale_weights()` implements two algorithms, one proposed
+#' by \cite{Asparouhov (2006)} and \cite{Carle (2009)} and one proposed by
+#' \cite{Kish 1965}, to rescale design weights in survey data to account for the
+#' grouping structure of multilevel models, which then can be used for
+#' multilevel modelling.
 #'
 #' @param data A data frame.
 #' @param by Variable names (as character vector, or as formula), indicating
-#'   the grouping structure (strata) of the survey data (level-2-cluster
-#'   variable). It is also possible to create weights for multiple group
-#'   variables; in such cases, each created weighting variable will be suffixed
-#'   by the name of the group variable.
+#' the grouping structure (strata) of the survey data (level-2-cluster
+#' variable). It is also possible to create weights for multiple group
+#' variables; in such cases, each created weighting variable will be suffixed
+#' by the name of the group variable.
 #' @param probability_weights Variable indicating the probability (design or
-#'   sampling) weights of the survey data (level-1-weight).
+#' sampling) weights of the survey data (level-1-weight).
 #' @param nest Logical, if `TRUE` and `by` indicates at least two
-#'   group variables, then groups are "nested", i.e. groups are now a
-#'   combination from each group level of the variables in `by`.
+#' group variables, then groups are "nested", i.e. groups are now a
+#' combination from each group level of the variables in `by`.
+#' @param method `"carle"` or `"kish"`.
 #'
 #' @return `data`, including the new weighting variables: `pweights_a`
-#'   and `pweights_b`, which represent the rescaled design weights to use
-#'   in multilevel models (use these variables for the `weights` argument).
+#' and `pweights_b`, which represent the rescaled design weights to use
+#' in multilevel models (use these variables for the `weights` argument).
 #'
 #' @details
+#' - `method = "carle"`
 #'
-#' Rescaling is based on two methods: For `pweights_a`, the sample weights
-#' `probability_weights` are adjusted by a factor that represents the proportion
-#' of group size divided by the sum of sampling weights within each group. The
-#' adjustment factor for `pweights_b` is the sum of sample weights within each
-#' group divided by the sum of squared sample weights within each group (see
-#' Carle (2009), Appendix B). In other words, `pweights_a` "scales the weights
-#' so that the new weights sum to the cluster sample size" while `pweights_b`
-#' "scales the weights so that the new weights sum to the effective cluster
-#' size".
+#'   Rescaling is based on two methods: For `pweights_a`, the sample weights
+#'   `probability_weights` are adjusted by a factor that represents the
+#'   proportion of group size divided by the sum of sampling weights within each
+#'   group. The adjustment factor for `pweights_b` is the sum of sample weights
+#'   within each group divided by the sum of squared sample weights within each
+#'   group (see Carle (2009), Appendix B). In other words, `pweights_a` "scales
+#'   the weights so that the new weights sum to the cluster sample size" while
+#'   `pweights_b` "scales the weights so that the new weights sum to the
+#'   effective cluster size".
 #'
-#' Regarding the choice between scaling methods A and B, Carle suggests that
-#' "analysts who wish to discuss point estimates should report results based on
-#' weighting method A. For analysts more interested in residual between-group
-#' variance, method B may generally provide the least biased estimates". In
-#' general, it is recommended to fit a non-weighted model and weighted models
-#' with both scaling methods and when comparing the models, see whether the
-#' "inferential decisions converge", to gain confidence in the results.
+#'   Regarding the choice between scaling methods A and B, Carle suggests that
+#'   "analysts who wish to discuss point estimates should report results based
+#'   on weighting method A. For analysts more interested in residual
+#'   between-group variance, method B may generally provide the least biased
+#'   estimates". In general, it is recommended to fit a non-weighted model and
+#'   weighted models with both scaling methods and when comparing the models,
+#'   see whether the "inferential decisions converge", to gain confidence in the
+#'   results.
 #'
-#' Though the bias of scaled weights decreases with increasing group size,
-#' method A is preferred when insufficient or low group size is a concern.
+#'   Though the bias of scaled weights decreases with increasing group size,
+#'   method A is preferred when insufficient or low group size is a concern.
 #'
-#' The group ID and probably PSU may be used as random effects (e.g. nested
-#' design, or group and PSU as varying intercepts), depending on the survey
-#' design that should be mimicked.
+#'   The group ID and probably PSU may be used as random effects (e.g. nested
+#'   design, or group and PSU as varying intercepts), depending on the survey
+#'   design that should be mimicked.
+#'
+#' - `method = "kish"`
+#'
+#'   to do...
 #'
 #' @references
+#'   - Asparouhov T. (2006). General Multi-Level Modeling with Sampling
+#'   Weights. Communications in Statistics - Theory and Methods 35: 439-460
+#'
 #'   - Carle A.C. (2009). Fitting multilevel models in complex survey data
 #'   with design weights: Recommendations. BMC Medical Research Methodology
 #'   9(49): 1-13
 #'
-#'   - Asparouhov T. (2006). General Multi-Level Modeling with Sampling
-#'   Weights. Communications in Statistics - Theory and Methods 35: 439-460
+#'   - Kish ...
 #'
 #' @examples
 #' if (require("lme4")) {
@@ -87,7 +97,7 @@
 #'   )
 #' }
 #' @export
-rescale_weights <- function(data, by, probability_weights, nest = FALSE) {
+rescale_weights <- function(data, by, probability_weights, nest = FALSE, method = "carle") {
   if (inherits(by, "formula")) {
     by <- all.vars(by)
   }
@@ -107,6 +117,32 @@ rescale_weights <- function(data, by, probability_weights, nest = FALSE) {
   # sort id
   data_tmp$.bamboozled <- seq_len(nrow(data_tmp))
 
+  switch(method,
+    carle = .rescale_weights_carle(nest, probability_weights, data_tmp, data, by, weight_non_na),
+    .rescale_weights_kish(probability_weights, data_tmp, data, weight_non_na)
+  )
+}
+
+
+# rescale weights, method Carle ----------------------------
+
+.rescale_weights_kish <- function(probability_weights, data_tmp, data, weight_non_na) {
+  weights <- mean(data_tmp[[probability_weights]])
+  # design effect according to Kish
+  deff <- mean(weights^2) / (mean(weights)^2)
+  # rescale weights, so their mean is 1
+  z_weights <- ((weights + 1) - mean(weights) ) / stats::sd(weights)
+  # divide weights by design effect
+  data$pweight <- NA_real_
+  data$pweight[weight_non_na] <- z_weights / deff
+  # return result
+  data
+}
+
+
+# rescale weights, method Carle ----------------------------
+
+.rescale_weights_carle <- function(nest, probability_weights, data_tmp, data, by, weight_non_na) {
   if (nest && length(by) < 2) {
     insight::format_warning(
       sprintf(

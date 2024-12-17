@@ -4,7 +4,7 @@
 \alias{rescale_weights}
 \title{Rescale design weights for multilevel analysis}
 \usage{
-rescale_weights(data, by, probability_weights, nest = FALSE)
+rescale_weights(data, by, probability_weights, nest = FALSE, method = "carle")
 }
 \arguments{
 \item{data}{A data frame.}
@@ -21,6 +21,8 @@ sampling) weights of the survey data (level-1-weight).}
 \item{nest}{Logical, if \code{TRUE} and \code{by} indicates at least two
 group variables, then groups are "nested", i.e. groups are now a
 combination from each group level of the variables in \code{by}.}
+
+\item{method}{\code{"carle"} or \code{"kish"}.}
 }
 \value{
 \code{data}, including the new weighting variables: \code{pweights_a}
@@ -31,29 +33,34 @@ in multilevel models (use these variables for the \code{weights} argument).
 Most functions to fit multilevel and mixed effects models only
 allow to specify frequency weights, but not design (i.e. sampling or
 probability) weights, which should be used when analyzing complex samples
-and survey data. \code{rescale_weights()} implements an algorithm proposed
-by \cite{Asparouhov (2006)} and \cite{Carle (2009)} to rescale design
-weights in survey data to account for the grouping structure of multilevel
-models, which then can be used for multilevel modelling.
+and survey data. \code{rescale_weights()} implements two algorithms, one proposed
+by \cite{Asparouhov (2006)} and \cite{Carle (2009)} and one proposed by
+\cite{Kish 1965}, to rescale design weights in survey data to account for the
+grouping structure of multilevel models, which then can be used for
+multilevel modelling.
 }
 \details{
+\itemize{
+\item \code{method = "carle"}
+
 Rescaling is based on two methods: For \code{pweights_a}, the sample weights
-\code{probability_weights} are adjusted by a factor that represents the proportion
-of group size divided by the sum of sampling weights within each group. The
-adjustment factor for \code{pweights_b} is the sum of sample weights within each
-group divided by the sum of squared sample weights within each group (see
-Carle (2009), Appendix B). In other words, \code{pweights_a} "scales the weights
-so that the new weights sum to the cluster sample size" while \code{pweights_b}
-"scales the weights so that the new weights sum to the effective cluster
-size".
+\code{probability_weights} are adjusted by a factor that represents the
+proportion of group size divided by the sum of sampling weights within each
+group. The adjustment factor for \code{pweights_b} is the sum of sample weights
+within each group divided by the sum of squared sample weights within each
+group (see Carle (2009), Appendix B). In other words, \code{pweights_a} "scales
+the weights so that the new weights sum to the cluster sample size" while
+\code{pweights_b} "scales the weights so that the new weights sum to the
+effective cluster size".
 
 Regarding the choice between scaling methods A and B, Carle suggests that
-"analysts who wish to discuss point estimates should report results based on
-weighting method A. For analysts more interested in residual between-group
-variance, method B may generally provide the least biased estimates". In
-general, it is recommended to fit a non-weighted model and weighted models
-with both scaling methods and when comparing the models, see whether the
-"inferential decisions converge", to gain confidence in the results.
+"analysts who wish to discuss point estimates should report results based
+on weighting method A. For analysts more interested in residual
+between-group variance, method B may generally provide the least biased
+estimates". In general, it is recommended to fit a non-weighted model and
+weighted models with both scaling methods and when comparing the models,
+see whether the "inferential decisions converge", to gain confidence in the
+results.
 
 Though the bias of scaled weights decreases with increasing group size,
 method A is preferred when insufficient or low group size is a concern.
@@ -61,6 +68,10 @@ method A is preferred when insufficient or low group size is a concern.
 The group ID and probably PSU may be used as random effects (e.g. nested
 design, or group and PSU as varying intercepts), depending on the survey
 design that should be mimicked.
+\item \code{method = "kish"}
+
+to do...
+}
 }
 \examples{
 if (require("lme4")) {
@@ -91,10 +102,11 @@ if (require("lme4")) {
 }
 \references{
 \itemize{
+\item Asparouhov T. (2006). General Multi-Level Modeling with Sampling
+Weights. Communications in Statistics - Theory and Methods 35: 439-460
 \item Carle A.C. (2009). Fitting multilevel models in complex survey data
 with design weights: Recommendations. BMC Medical Research Methodology
 9(49): 1-13
-\item Asparouhov T. (2006). General Multi-Level Modeling with Sampling
-Weights. Communications in Statistics - Theory and Methods 35: 439-460
+\item Kish ...
 }
 }
