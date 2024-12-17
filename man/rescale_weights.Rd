@@ -63,31 +63,31 @@ design, or group and PSU as varying intercepts), depending on the survey
 design that should be mimicked.
 }
 \examples{
-if (require("lme4")) {
-  data(nhanes_sample)
-  head(rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR"))
+\dontshow{if (insight::check_if_installed("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(nhanes_sample)
+head(rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR"))
 
-  # also works with multiple group-variables
-  head(rescale_weights(nhanes_sample, c("SDMVSTRA", "SDMVPSU"), "WTINT2YR"))
+# also works with multiple group-variables
+head(rescale_weights(nhanes_sample, c("SDMVSTRA", "SDMVPSU"), "WTINT2YR"))
 
-  # or nested structures.
-  x <- rescale_weights(
-    data = nhanes_sample,
-    by = c("SDMVSTRA", "SDMVPSU"),
-    probability_weights = "WTINT2YR",
-    nest = TRUE
-  )
-  head(x)
+# or nested structures.
+x <- rescale_weights(
+  data = nhanes_sample,
+  by = c("SDMVSTRA", "SDMVPSU"),
+  probability_weights = "WTINT2YR",
+  nest = TRUE
+)
+head(x)
 
-  nhanes_sample <- rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR")
+nhanes_sample <- rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR")
 
-  glmer(
-    total ~ factor(RIAGENDR) * (log(age) + factor(RIDRETH1)) + (1 | SDMVPSU),
-    family = poisson(),
-    data = nhanes_sample,
-    weights = pweights_a
-  )
-}
+lme4::glmer(
+  total ~ factor(RIAGENDR) * (log(age) + factor(RIDRETH1)) + (1 | SDMVPSU),
+  family = poisson(),
+  data = nhanes_sample,
+  weights = pweights_a
+)
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{

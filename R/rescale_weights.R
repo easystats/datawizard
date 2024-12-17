@@ -60,32 +60,30 @@
 #'   - Asparouhov T. (2006). General Multi-Level Modeling with Sampling
 #'   Weights. Communications in Statistics - Theory and Methods 35: 439-460
 #'
-#' @examples
-#' if (require("lme4")) {
-#'   data(nhanes_sample)
-#'   head(rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR"))
+#' @examplesIf insight::check_if_installed("lme4", quietly = TRUE)
+#' data(nhanes_sample)
+#' head(rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR"))
 #'
-#'   # also works with multiple group-variables
-#'   head(rescale_weights(nhanes_sample, c("SDMVSTRA", "SDMVPSU"), "WTINT2YR"))
+#' # also works with multiple group-variables
+#' head(rescale_weights(nhanes_sample, c("SDMVSTRA", "SDMVPSU"), "WTINT2YR"))
 #'
-#'   # or nested structures.
-#'   x <- rescale_weights(
-#'     data = nhanes_sample,
-#'     by = c("SDMVSTRA", "SDMVPSU"),
-#'     probability_weights = "WTINT2YR",
-#'     nest = TRUE
-#'   )
-#'   head(x)
+#' # or nested structures.
+#' x <- rescale_weights(
+#'   data = nhanes_sample,
+#'   by = c("SDMVSTRA", "SDMVPSU"),
+#'   probability_weights = "WTINT2YR",
+#'   nest = TRUE
+#' )
+#' head(x)
 #'
-#'   nhanes_sample <- rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR")
+#' nhanes_sample <- rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR")
 #'
-#'   glmer(
-#'     total ~ factor(RIAGENDR) * (log(age) + factor(RIDRETH1)) + (1 | SDMVPSU),
-#'     family = poisson(),
-#'     data = nhanes_sample,
-#'     weights = pweights_a
-#'   )
-#' }
+#' lme4::glmer(
+#'   total ~ factor(RIAGENDR) * (log(age) + factor(RIDRETH1)) + (1 | SDMVPSU),
+#'   family = poisson(),
+#'   data = nhanes_sample,
+#'   weights = pweights_a
+#' )
 #' @export
 rescale_weights <- function(data, by, probability_weights, nest = FALSE) {
   if (inherits(by, "formula")) {
