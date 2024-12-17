@@ -131,7 +131,7 @@ rescale_weights <- function(data, by, probability_weights, nest = FALSE, method 
   # design effect according to Kish
   deff <- mean(weights^2) / (mean(weights)^2)
   # rescale weights, so their mean is 1
-  z_weights <- ((weights + 1) - mean(weights) ) / stats::sd(weights)
+  z_weights <- weights * (1 / mean(weights))
   # divide weights by design effect
   data$pweight <- NA_real_
   data$pweight[weight_non_na] <- z_weights / deff
