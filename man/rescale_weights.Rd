@@ -4,7 +4,13 @@
 \alias{rescale_weights}
 \title{Rescale design weights for multilevel analysis}
 \usage{
-rescale_weights(data, by, probability_weights, nest = FALSE, method = "carle")
+rescale_weights(
+  data,
+  by = NULL,
+  probability_weights = NULL,
+  nest = FALSE,
+  method = "carle"
+)
 }
 \arguments{
 \item{data}{A data frame.}

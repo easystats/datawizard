@@ -97,7 +97,11 @@
 #'   )
 #' }
 #' @export
-rescale_weights <- function(data, by, probability_weights, nest = FALSE, method = "carle") {
+rescale_weights <- function(data,
+                            by = NULL,
+                            probability_weights = NULL,
+                            nest = FALSE,
+                            method = "carle") {
   if (inherits(by, "formula")) {
     by <- all.vars(by)
   }
