@@ -127,7 +127,7 @@ rescale_weights <- function(data, by, probability_weights, nest = FALSE, method 
 # rescale weights, method Carle ----------------------------
 
 .rescale_weights_kish <- function(probability_weights, data_tmp, data, weight_non_na) {
-  weights <- mean(data_tmp[[probability_weights]])
+  weights <- data_tmp[[probability_weights]]
   # design effect according to Kish
   deff <- mean(weights^2) / (mean(weights)^2)
   # rescale weights, so their mean is 1
