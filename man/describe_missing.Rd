@@ -4,41 +4,57 @@
 \alias{describe_missing}
 \title{Describe Missing Values in Data According to Guidelines}
 \usage{
-describe_missing(data, vars = NULL, scales = NULL)
+describe_missing(data, select = NULL, scales = NULL, ...)
 }
 \arguments{
 \item{data}{The data frame to be analyzed.}
 
-\item{vars}{Variable (or lists of variables) to check for missing values (NAs).}
+\item{scales}{If you rely on composite scores such as psychological scales
+or questionnaires, you can provide the shared suffix among those variables
+(as a character vector). This is useful if the variables you want to check
+the average of all start with the same name (e.g., \code{varx}), such as is
+commonly the case for Likert scales (such as \code{varx_1}, \code{varx_2}, \code{varx_3},
+etc.).}
 
-\item{scales}{The scale names to check for missing values (as a character vector).}
+\item{...}{Arguments passed down to other functions. Currently not used.}
+
+\item{vars}{Variable (or lists of variables) to check for missing values (NAs).}
 }
 \value{
 A dataframe with the following columns:
 \itemize{
-\item \code{var}: Variables selected.
-\item \code{items}: Number of items for selected variables.
-\item \code{na}: Number of missing cell values for those variables (e.g., 2 missing
-values for the first participant + 2 missing values for the second participant
-= total of 4 missing values).
-\item \code{cells}: Total number of cells (i.e., number of participants multiplied by
-the number of variables, \code{items}).
-\item \code{na_percent}: The percentage of missing values (\code{na} divided by \code{cells}).
-\item \code{na_max}: The number of missing values for the participant with the most
+\item \code{variable}: Variables selected.
+\item \code{n_columns}: Number of items for selected variables.
+\item \code{n_missing}: Number of missing values for those variables (NA stands for Not
+Available).
+\item \code{n_cells}: Total number of cells (i.e., number of participants multiplied by
+the number of columns, \code{n_columns}).
+\item \code{missing_percent}: The percentage of missing values (\code{na} divided by \code{cells}).
+\item \code{missing_max}: The number of missing values for the participant with the most
 missing values for the selected variables.
-\item \code{na_max_percent}: The amount of missing values for the participant with
+\item \code{missing_max_percent}: The amount of missing values for the participant with
 the most missing values for the selected variables, as a percentage
-(i.e., \code{na_max} divided by the number of selected variables, \code{items}).
-\item \code{all_na}: The number of participants missing 100\% of items for that scale
+(i.e., \code{missing_max} divided by the number of selected columns, \code{n_columns}).
+\item \code{all_missing}: The number of participants missing 100\% of items for that scale
 (the selected variables).
 }
 }
 \description{
 Provides a detailed description of missing values in a data frame.
 This function reports both absolute and percentage missing values of specified
-column lists or scales, following recommended guidelines. Some authors recommend
-reporting item-level missingness per scale, as well as a participant's maximum
-number of missing items by scale. For example, Parent (2013) writes:
+column lists or scales, following recommended guidelines.
+}
+\details{
+In psychology, it is common to ask participants to answer questionnaires in
+which people answer several questions about a specific topic. For example,
+people could answer 10 different questions about how extroversioned they are.
+In turn, researchers calculate the average for those 10 questions (called
+items). These questionnaires are called (e.g., Likert) "scales" (such as the
+Rosenberg Self-Esteem Scale, also known as the RSES).
+
+Some authors recommend reporting item-level missingness per scale, as well
+as a participant's maximum number of missing items by scale. For example,
+Parent (2013) writes:
 
 \emph{I recommend that authors (a) state their tolerance level for missing data by scale
 or subscale (e.g., "We calculated means for all subscales on which participants gave
@@ -50,37 +66,35 @@ missing more than a single data point").}
 }
 \examples{
 # Use the entire data frame
-describe_missing(airquality)
-
-# Use selected columns explicitly
-describe_missing(airquality,
-  vars = list(
-    c("Ozone", "Solar.R", "Wind"),
-    c("Temp", "Month", "Day")
-  )
-)
-
-# If the questionnaire items start with the same name, e.g.,
 set.seed(15)
 fun <- function() {
   c(sample(c(NA, 1:10), replace = TRUE), NA, NA, NA)
 }
 df <- data.frame(
   ID = c("idz", NA),
-  open_1 = fun(), open_2 = fun(), open_3 = fun(),
-  extrovert_1 = fun(), extrovert_2 = fun(), extrovert_3 = fun(),
-  agreeable_1 = fun(), agreeable_2 = fun(), agreeable_3 = fun()
+  openness_1 = fun(), openness_2 = fun(), openness_3 = fun(),
+  extroversion_1 = fun(), extroversion_2 = fun(), extroversion_3 = fun(),
+  agreeableness_1 = fun(), agreeableness_2 = fun(), agreeableness_3 = fun()
+)
+describe_missing(df)
+
+# If the questionnaire items start with the same name,
+# one can list the scale names directly:
+describe_missing(df, scales = c("ID", "openness", "extroversion", "agreeableness"))
+
+# Otherwise you can provide nested columns manually:
+describe_missing(df,
+  select = list(
+    c("ID"),
+    c("openness_1", "openness_2", "openness_3"),
+    c("extroversion_1", "extroversion_2", "extroversion_3"),
+    c("agreeableness_1", "agreeableness_2", "agreeableness_3")
+  )
 )
 
-# One can list the scale names directly:
-describe_missing(df, scales = c("ID", "open", "extrovert", "agreeable"))
 }
 \references{
 Parent, M. C. (2013). Handling item-level missing
 data: Simpler is just as good. \emph{The Counseling Psychologist},
 \emph{41}(4), 568-600. https://doi.org/10.1177\%2F0011000012445176
 }
-\keyword{NA}
-\keyword{guidelines}
-\keyword{missing}
-\keyword{values}
