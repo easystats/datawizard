@@ -7,7 +7,7 @@
 #' @details
 #' In psychology, it is common to ask participants to answer questionnaires in
 #' which people answer several questions about a specific topic. For example,
-#' people could answer 10 different questions about how extroversioned they are.
+#' people could answer 10 different questions about how extroverted they are.
 #' In turn, researchers calculate the average for those 10 questions (called
 #' items). These questionnaires are called (e.g., Likert) "scales" (such as the
 #' Rosenberg Self-Esteem Scale, also known as the RSES).
@@ -25,7 +25,7 @@
 #' missing more than a single data point").*
 #'
 #' @param data The data frame to be analyzed.
-#' @param vars Variable (or lists of variables) to check for missing values (NAs).
+#' @param select Variable (or lists of variables) to check for missing values (NAs).
 #' @param scales If you rely on composite scores such as psychological scales
 #' or questionnaires, you can provide the shared suffix among those variables
 #' (as a character vector). This is useful if the variables you want to check
@@ -81,7 +81,6 @@
 #'   )
 #' )
 #'
-
 describe_missing <- function(data, select = NULL, scales = NULL, ...) {
   vars <- select
   if (!is.null(vars) && missing(scales)) {
@@ -90,7 +89,7 @@ describe_missing <- function(data, select = NULL, scales = NULL, ...) {
     vars.internal <- lapply(scales, function(x) {
       grep(paste0("^", x), names(data), value = TRUE)
     })
-  } else if (is.null(vars) && missing(scales)){
+  } else if (is.null(vars) && missing(scales)) {
     vars <- as.list(names(data))
   }
   if (!is.null(vars)) {
