@@ -1,5 +1,7 @@
 test_that("rescale_weights works as expected", {
   data(nhanes_sample)
+  # convert tibble into data frame, so check-hard GHA works
+  nhanes_sample <- as.data.frame(nhanes_sample)
 
   expect_snapshot(head(rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR")))
 
@@ -17,6 +19,8 @@ test_that("rescale_weights works as expected", {
 
 test_that("rescale_weights nested works as expected", {
   data(nhanes_sample)
+  # convert tibble into data frame, so check-hard GHA works
+  nhanes_sample <- as.data.frame(nhanes_sample)
 
   expect_snapshot(
     rescale_weights(
@@ -63,11 +67,29 @@ test_that("rescale_weights errors and warnings", {
   expect_error(
     rescale_weights(
       data = head(nhanes_sample, n = 30),
+      by = "SDMVSTRA",
+      probability_weights = NULL
+    ),
+    regex = "is missing, but required"
+  )
+  expect_error(
+    rescale_weights(
+      data = head(nhanes_sample, n = 30),
       by = NULL,
       probability_weights = "WTINT2YR"
     ),
     regex = "must be specified"
   )
+  expect_warning(
+    rescale_weights(
+      data = head(nhanes_sample, n = 30),
+      by = "SDMVSTRA",
+      probability_weights = "WTINT2YR",
+      method = "kish"
+    ),
+    regex = "is not used"
+  )
+
   nhanes_sample$pweights_a <- 1
   expect_warning(
     {

@@ -15,13 +15,15 @@
 #' the grouping structure (strata) of the survey data (level-2-cluster
 #' variable). It is also possible to create weights for multiple group
 #' variables; in such cases, each created weighting variable will be suffixed
-#' by the name of the group variable.
+#' by the name of the group variable. Argument `by` only applies to the default
+#' rescaling-method (`method = "carle"`), not to `method = "kish"`.
 #' @param probability_weights Variable indicating the probability (design or
 #' sampling) weights of the survey data (level-1-weight).
 #' @param nest Logical, if `TRUE` and `by` indicates at least two
 #' group variables, then groups are "nested", i.e. groups are now a
 #' combination from each group level of the variables in `by`.
-#' @param method `"carle"` or `"kish"`.
+#' @param method String, indicating which rescale-method is used for rescaling
+#' weights. Can be either `"carle"` (default) or `"kish"`. See 'Details'.
 #'
 #' @return `data`, including the new weighting variable(s). For
 #' `method = "carle"`, new columns `pweights_a` and `pweights_b` are returned,
@@ -137,8 +139,14 @@ rescale_weights <- function(data,
   }
 
   # check for existing variable names
-  if (any(c("pweights_a", "pweights_b", "pweights") %in% colnames(data))) {
+  if ((method == "carle" && any(c("pweights_a", "pweights_b") %in% colnames(data))) ||
+    (method == "kish" && "pweights" %in% colnames(data))) {
     insight::format_warning("The variable name for the rescaled weights already exists in the data. Returned columns will be renamed into unique names.") # nolint
+  }
+
+  # need probability_weights
+  if (is.null(probability_weights)) {
+    insight::format_error("The argument `probability_weights` is missing, but required to rescale weights.")
   }
 
   # check if weight has missings. we need to remove them first,
@@ -172,6 +180,10 @@ rescale_weights <- function(data,
 # rescale weights, method Kish ----------------------------
 
 .rescale_weights_kish <- function(nest, probability_weights, data_tmp, data, by, weight_non_na) {
+  # check argument
+  if (!is.null(by)) {
+    insight::format_warning("The `by` argument is not used for `method = \"kish\" and will be ignored.")
+  }
   p_weights <- data_tmp[[probability_weights]]
   # design effect according to Kish
   deff <- mean(p_weights^2) / (mean(p_weights)^2)
