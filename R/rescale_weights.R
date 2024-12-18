@@ -142,15 +142,8 @@ rescale_weights <- function(data,
 
 .rescale_weights_kish <- function(nest, probability_weights, data_tmp, data, by, weight_non_na) {
   p_weights <- data_tmp[[probability_weights]]
-
   # design effect according to Kish
   deff <- mean(p_weights^2) / (mean(p_weights)^2)
-
-  # n_per_group <- as.vector(table(data_tmp[[by]]))
-  # b_bar <- mean(n_per_group)
-  # icc <- 0.05
-  # deff <- nrow(data_tmp) * (mean(p_weights^2) / (mean(p_weights)^2)) * (1 + (b_bar - 1) * icc)
-
   # rescale weights, so their mean is 1
   z_weights <- p_weights * (1 / mean(p_weights))
   # divide weights by design effect
