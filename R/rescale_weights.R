@@ -23,9 +23,11 @@
 #' combination from each group level of the variables in `by`.
 #' @param method `"carle"` or `"kish"`.
 #'
-#' @return `data`, including the new weighting variables: `pweights_a`
-#' and `pweights_b`, which represent the rescaled design weights to use
-#' in multilevel models (use these variables for the `weights` argument).
+#' @return `data`, including the new weighting variable(s). For
+#' `method = "carle"`, new columns `pweights_a` and `pweights_b` are returned,
+#' and for `method = "klish"`, the returned data contains a column `pweights`.
+#' These represent the rescaled design weights to use in multilevel models (use
+#' these variables for the `weights` argument).
 #'
 #' @details
 #' - `method = "carle"`
@@ -108,6 +110,11 @@ rescale_weights <- function(data,
                             method = "carle") {
   if (inherits(by, "formula")) {
     by <- all.vars(by)
+  }
+
+  # check for existing variable names
+  if (any(c("pweights_a", "pweights_b", "pweights") %in% colnames(data))) {
+    insight::format_warning("The variable name for the rescaled weights already exists in the data. Existing columns will be overwritten.")
   }
 
   # check if weight has missings. we need to remove them first,

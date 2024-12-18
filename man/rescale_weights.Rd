@@ -31,9 +31,11 @@ combination from each group level of the variables in \code{by}.}
 \item{method}{\code{"carle"} or \code{"kish"}.}
 }
 \value{
-\code{data}, including the new weighting variables: \code{pweights_a}
-and \code{pweights_b}, which represent the rescaled design weights to use
-in multilevel models (use these variables for the \code{weights} argument).
+\code{data}, including the new weighting variable(s). For
+\code{method = "carle"}, new columns \code{pweights_a} and \code{pweights_b} are returned,
+and for \code{method = "klish"}, the returned data contains a column \code{pweights}.
+These represent the rescaled design weights to use in multilevel models (use
+these variables for the \code{weights} argument).
 }
 \description{
 Most functions to fit multilevel and mixed effects models only
