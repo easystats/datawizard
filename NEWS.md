@@ -16,6 +16,10 @@ BREAKING CHANGES AND DEPRECATIONS
   - if `select` (previously `pattern`) is a named vector, then all elements
     must be named, e.g. `c(length = "Sepal.Length", "Sepal.Width")` errors.
 
+NEW FUNCTIONS
+
+* `describe_missing()`, to comprehensively report on missing values in a data frame.
+
 CHANGES
 
 * The `select` argument, which is available in different functions to select
