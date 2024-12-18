@@ -86,31 +86,57 @@ then divided by the design effect.
 }
 }
 \examples{
-if (require("lme4")) {
-  data(nhanes_sample)
-  head(rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR"))
+\dontshow{if (all(insight::check_if_installed(c("lme4", "parameters"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(nhanes_sample)
+head(rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR"))
 
-  # also works with multiple group-variables
-  head(rescale_weights(nhanes_sample, c("SDMVSTRA", "SDMVPSU"), "WTINT2YR"))
+# also works with multiple group-variables
+head(rescale_weights(nhanes_sample, c("SDMVSTRA", "SDMVPSU"), "WTINT2YR"))
 
-  # or nested structures.
-  x <- rescale_weights(
-    data = nhanes_sample,
-    by = c("SDMVSTRA", "SDMVPSU"),
-    probability_weights = "WTINT2YR",
-    nest = TRUE
-  )
-  head(x)
+# or nested structures.
+x <- rescale_weights(
+  data = nhanes_sample,
+  by = c("SDMVSTRA", "SDMVPSU"),
+  probability_weights = "WTINT2YR",
+  nest = TRUE
+)
+head(x)
 
-  nhanes_sample <- rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR")
+\donttest{
+# compare different methods, using multilevel-Poisson regression
 
-  glmer(
-    total ~ factor(RIAGENDR) * (log(age) + factor(RIDRETH1)) + (1 | SDMVPSU),
-    family = poisson(),
-    data = nhanes_sample,
-    weights = pweights_a
-  )
+d <- rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR")
+result1 <- lme4::glmer(
+  total ~ factor(RIAGENDR) + log(age) + factor(RIDRETH1) + (1 | SDMVPSU),
+  family = poisson(),
+  data = d,
+  weights = pweights_a
+)
+result2 <- lme4::glmer(
+  total ~ factor(RIAGENDR) + log(age) + factor(RIDRETH1) + (1 | SDMVPSU),
+  family = poisson(),
+  data = d,
+  weights = pweights_b
+)
+
+d <- rescale_weights(
+  nhanes_sample,
+  probability_weights = "WTINT2YR",
+  method = "kish"
+)
+result3 <- lme4::glmer(
+  total ~ factor(RIAGENDR) + log(age) + factor(RIDRETH1) + (1 | SDMVPSU),
+  family = poisson(),
+  data = d,
+  weights = pweights
+)
+parameters::compare_parameters(
+  list(result1, result2, result3),
+  exponentiate = TRUE,
+  column_names = c("Carle (A)", "Carle (B)", "Kish")
+)
 }
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{
