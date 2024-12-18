@@ -6,7 +6,7 @@
 #' probability) weights, which should be used when analyzing complex samples
 #' and survey data. `rescale_weights()` implements two algorithms, one proposed
 #' by \cite{Asparouhov (2006)} and \cite{Carle (2009)} and one proposed by
-#' \cite{Kish 1965}, to rescale design weights in survey data to account for the
+#' \cite{Kish (1965)}, to rescale design weights in survey data to account for the
 #' grouping structure of multilevel models, which then can be used for
 #' multilevel modelling.
 #'
