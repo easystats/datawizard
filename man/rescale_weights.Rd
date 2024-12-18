@@ -85,6 +85,12 @@ which means the sum of all weights equals the sample size. Next, the design
 effect (\emph{Kish 1965}) is calculated, which is the mean of the squared weights
 divided by the squared mean of the weights. The scales sample weights are
 then divided by the design effect.
+
+Some tests on real-world survey-data suggest that, in comparison to the
+Carle-method, the Kish-method comes closer to estimates from a regular
+survey-design using the \strong{survey} package. Note that these tests are not
+representative and it is recommended to check your results against a
+standard survey-design.
 }
 }
 \examples{

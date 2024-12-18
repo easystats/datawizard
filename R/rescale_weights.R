@@ -68,6 +68,12 @@
 #'   divided by the squared mean of the weights. The scales sample weights are
 #'   then divided by the design effect.
 #'
+#'   Some tests on real-world survey-data suggest that, in comparison to the
+#'   Carle-method, the Kish-method comes closer to estimates from a regular
+#'   survey-design using the **survey** package. Note that these tests are not
+#'   representative and it is recommended to check your results against a
+#'   standard survey-design.
+#'
 #' @references
 #'   - Asparouhov T. (2006). General Multi-Level Modeling with Sampling
 #'   Weights. Communications in Statistics - Theory and Methods 35: 439-460
