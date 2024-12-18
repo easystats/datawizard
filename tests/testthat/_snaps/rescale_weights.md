@@ -31,6 +31,21 @@
       5          0.3119698         0.3060151         0.2152722
       6          0.5155503         0.5858662         0.4121388
 
+---
+
+    Code
+      head(rescale_weights(nhanes_sample, probability_weights = "WTINT2YR", method = "kish"))
+    Output
+      # A tibble: 6 x 8
+        total   age RIAGENDR RIDRETH1 SDMVPSU SDMVSTRA WTINT2YR pweights
+        <dbl> <dbl>    <dbl>    <dbl>   <dbl>    <dbl>    <dbl>    <dbl>
+      1     1  2.2         1        3       2       31   97594.    1.40 
+      2     7  2.08        2        3       1       29   39599.    0.566
+      3     3  1.48        2        1       2       42   26620.    0.381
+      4     4  1.32        2        4       2       33   34999.    0.500
+      5     1  2           2        1       1       41   14746.    0.211
+      6     6  2.2         2        4       1       38   28232.    0.404
+
 # rescale_weights nested works as expected
 
     Code
