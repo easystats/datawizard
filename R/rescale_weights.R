@@ -114,7 +114,7 @@ rescale_weights <- function(data,
 
   # check for existing variable names
   if (any(c("pweights_a", "pweights_b", "pweights") %in% colnames(data))) {
-    insight::format_warning("The variable name for the rescaled weights already exists in the data. Returned columns will be renamed into unique names.")
+    insight::format_warning("The variable name for the rescaled weights already exists in the data. Returned columns will be renamed into unique names.") # nolint
   }
 
   # check if weight has missings. we need to remove them first,
