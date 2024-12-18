@@ -23,8 +23,7 @@ BREAKING CHANGES AND DEPRECATIONS
 CHANGES
 
 * `rescale_weights()` gets a `method` argument, to choose method to rescale
-  weights. Options are `"carle"` (the default) and `"kish"`, a newly added
-  method to rescale weights.
+  weights. Options are `"carle"` (the default) and `"kish"`.
 
 * The `select` argument, which is available in different functions to select
   variables, can now also be a character vector with quoted variable names,
