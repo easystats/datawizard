@@ -40,3 +40,33 @@ test_that("rescale_weights nested works as expected", {
     )
   )
 })
+
+
+test_that("rescale_weights errors and warnings", {
+  data(nhanes_sample)
+  expect_error(
+    rescale_weights(
+      data = head(nhanes_sample, n = 30),
+      by = c("a", "SDMVSTRA", "c"),
+      probability_weights = "WTINT2YR"
+    ),
+    regex = "The following"
+  )
+  expect_error(
+    rescale_weights(
+      data = head(nhanes_sample, n = 30),
+      by = NULL,
+      probability_weights = "WTINT2YR"
+    ),
+    regex = "must be specified"
+  )
+  nhanes_sample$pweights_a <- 1
+  expect_warning(
+    rescale_weights(
+      data = head(nhanes_sample, n = 30),
+      by = "SDMVSTRA",
+      probability_weights = "WTINT2YR"
+    ),
+    regex = "The variable name"
+  )
+})

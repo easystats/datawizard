@@ -171,8 +171,14 @@ rescale_weights <- function(data,
     insight::format_error("Argument `by` must be specified. Please provide one or more variable names in `by` that indicate the grouping structure (strata) of the survey data (level-2-cluster variable).") # nolint
   }
 
-  if (!by %in% colnames(data_tmp)) {
-    insight::format_error("The variable specified in `by` was not found in the data. Maybe misspelled?") # nolint
+  if (!all(by %in% colnames(data_tmp))) {
+    dont_exist <- by[which(!by %in% colnames(data_tmp))]
+    insight::format_error(paste0(
+        "The following variable(s) specified in `by` don't exist in the dataset: ",
+        text_concatenate(dont_exist), "."
+      ),
+      .misspelled_string(colnames(data_tmp), dont_exist, "Possibly misspelled?")
+    )
   }
 
   if (nest && length(by) < 2) {
