@@ -4,19 +4,27 @@ BREAKING CHANGES AND DEPRECATIONS
 
 * *datawizard* now requires R >= 4.0 (#515).
 
-* Argument `drop_na` in `data_match()` is deprecated now. Please use 
+* Argument `drop_na` in `data_match()` is deprecated now. Please use
   `remove_na` instead.
 
 * In `data_rename()` (#567):
   - argument `pattern` is deprecated. Use `select` instead.
-  - argument `safe` is deprecated. The function now errors when `select` 
+  - argument `safe` is deprecated. The function now errors when `select`
     contains unknown column names.
   - when `replacement` is `NULL`, an error is now thrown (previously, column
     indices were used as new names).
   - if `select` (previously `pattern`) is a named vector, then all elements
     must be named, e.g. `c(length = "Sepal.Length", "Sepal.Width")` errors.
 
+* The name of the rescaled weights variables in `rescale_weights()` have been
+  renamed. `pweights_a` and `pweights_b` are now named `rescaled_weights_a`
+  and `rescaled_weights_b`.
+
 CHANGES
+
+* `rescale_weights()` gets a `method` argument, to choose method to rescale
+  weights. Options are `"carle"` (the default) and `"kish"`, a newly added
+  method to rescale weights.
 
 * The `select` argument, which is available in different functions to select
   variables, can now also be a character vector with quoted variable names,

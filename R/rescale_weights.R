@@ -26,23 +26,23 @@
 #' weights. Can be either `"carle"` (default) or `"kish"`. See 'Details'.
 #'
 #' @return `data`, including the new weighting variable(s). For
-#' `method = "carle"`, new columns `pweights_a` and `pweights_b` are returned,
-#' and for `method = "klish"`, the returned data contains a column `pweights`.
-#' These represent the rescaled design weights to use in multilevel models (use
-#' these variables for the `weights` argument).
+#' `method = "carle"`, new columns `rescaled_weights_a` and `rescaled_weights_b`
+#' are returned, and for `method = "klish"`, the returned data contains a column
+#' `rescaled_weights`. These represent the rescaled design weights to use in
+#' multilevel models (use these variables for the `weights` argument).
 #'
 #' @details
 #' - `method = "carle"`
 #'
-#'   Rescaling is based on two methods: For `pweights_a`, the sample weights
-#'   `probability_weights` are adjusted by a factor that represents the
+#'   Rescaling is based on two methods: For `rescaled_weights_a`, the sample
+#'   weights `probability_weights` are adjusted by a factor that represents the
 #'   proportion of group size divided by the sum of sampling weights within each
-#'   group. The adjustment factor for `pweights_b` is the sum of sample weights
-#'   within each group divided by the sum of squared sample weights within each
-#'   group (see Carle (2009), Appendix B). In other words, `pweights_a` "scales
-#'   the weights so that the new weights sum to the cluster sample size" while
-#'   `pweights_b` "scales the weights so that the new weights sum to the
-#'   effective cluster size".
+#'   group. The adjustment factor for `rescaled_weights_b` is the sum of sample
+#'   weights within each group divided by the sum of squared sample weights
+#'   within each group (see Carle (2009), Appendix B). In other words,
+#'   `rescaled_weights_a` "scales the weights so that the new weights sum to the
+#'   cluster sample size" while `rescaled_weights_b` "scales the weights so that
+#'   the new weights sum to the effective cluster size".
 #'
 #'   Regarding the choice between scaling methods A and B, Carle suggests that
 #'   "analysts who wish to discuss point estimates should report results based
@@ -102,13 +102,13 @@
 #'   total ~ factor(RIAGENDR) + log(age) + factor(RIDRETH1) + (1 | SDMVPSU),
 #'   family = poisson(),
 #'   data = d,
-#'   weights = pweights_a
+#'   weights = rescaled_weights_a
 #' )
 #' result2 <- lme4::glmer(
 #'   total ~ factor(RIAGENDR) + log(age) + factor(RIDRETH1) + (1 | SDMVPSU),
 #'   family = poisson(),
 #'   data = d,
-#'   weights = pweights_b
+#'   weights = rescaled_weights_b
 #' )
 #'
 #' d <- rescale_weights(
@@ -120,7 +120,7 @@
 #'   total ~ factor(RIAGENDR) + log(age) + factor(RIDRETH1) + (1 | SDMVPSU),
 #'   family = poisson(),
 #'   data = d,
-#'   weights = pweights
+#'   weights = rescaled_weights
 #' )
 #' parameters::compare_parameters(
 #'   list(result1, result2, result3),
@@ -139,8 +139,8 @@ rescale_weights <- function(data,
   }
 
   # check for existing variable names
-  if ((method == "carle" && any(c("pweights_a", "pweights_b") %in% colnames(data))) ||
-    (method == "kish" && "pweights" %in% colnames(data))) {
+  if ((method == "carle" && any(c("rescaled_weights_a", "rescaled_weights_b") %in% colnames(data))) ||
+    (method == "kish" && "rescaled_weights" %in% colnames(data))) {
     insight::format_warning("The variable name for the rescaled weights already exists in the data. Returned columns will be renamed into unique names.") # nolint
   }
 
@@ -190,8 +190,8 @@ rescale_weights <- function(data,
   # rescale weights, so their mean is 1
   z_weights <- p_weights * (1 / mean(p_weights))
   # divide weights by design effect
-  data$pweights <- NA_real_
-  data$pweights[weight_non_na] <- z_weights / deff
+  data$rescaled_weights <- NA_real_
+  data$rescaled_weights[weight_non_na] <- z_weights / deff
   # return result
   data
 }
@@ -277,12 +277,12 @@ rescale_weights <- function(data,
   w_b <- x[[probability_weights]] * x$sum_weights_by_group / x$sum_squared_weights_by_group
 
   out <- data.frame(
-    pweights_a = rep(NA_real_, times = n),
-    pweights_b = rep(NA_real_, times = n)
+    rescaled_weights_a = rep(NA_real_, times = n),
+    rescaled_weights_b = rep(NA_real_, times = n)
   )
 
-  out$pweights_a[weight_non_na] <- w_a
-  out$pweights_b[weight_non_na] <- w_b
+  out$rescaled_weights_a[weight_non_na] <- w_a
+  out$rescaled_weights_b[weight_non_na] <- w_b
 
   out
 }
@@ -325,12 +325,12 @@ rescale_weights <- function(data,
   w_b <- x[[probability_weights]] * x$sum_weights_by_group / x$sum_squared_weights_by_group
 
   out <- data.frame(
-    pweights_a = rep(NA_real_, times = n),
-    pweights_b = rep(NA_real_, times = n)
+    rescaled_weights_a = rep(NA_real_, times = n),
+    rescaled_weights_b = rep(NA_real_, times = n)
   )
 
-  out$pweights_a[weight_non_na] <- w_a
-  out$pweights_b[weight_non_na] <- w_b
+  out$rescaled_weights_a[weight_non_na] <- w_a
+  out$rescaled_weights_b[weight_non_na] <- w_b
 
   out
 }

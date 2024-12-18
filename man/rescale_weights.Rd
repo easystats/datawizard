@@ -34,10 +34,10 @@ weights. Can be either \code{"carle"} (default) or \code{"kish"}. See 'Details'.
 }
 \value{
 \code{data}, including the new weighting variable(s). For
-\code{method = "carle"}, new columns \code{pweights_a} and \code{pweights_b} are returned,
-and for \code{method = "klish"}, the returned data contains a column \code{pweights}.
-These represent the rescaled design weights to use in multilevel models (use
-these variables for the \code{weights} argument).
+\code{method = "carle"}, new columns \code{rescaled_weights_a} and \code{rescaled_weights_b}
+are returned, and for \code{method = "klish"}, the returned data contains a column
+\code{rescaled_weights}. These represent the rescaled design weights to use in
+multilevel models (use these variables for the \code{weights} argument).
 }
 \description{
 Most functions to fit multilevel and mixed effects models only
@@ -53,15 +53,15 @@ multilevel modelling.
 \itemize{
 \item \code{method = "carle"}
 
-Rescaling is based on two methods: For \code{pweights_a}, the sample weights
-\code{probability_weights} are adjusted by a factor that represents the
+Rescaling is based on two methods: For \code{rescaled_weights_a}, the sample
+weights \code{probability_weights} are adjusted by a factor that represents the
 proportion of group size divided by the sum of sampling weights within each
-group. The adjustment factor for \code{pweights_b} is the sum of sample weights
-within each group divided by the sum of squared sample weights within each
-group (see Carle (2009), Appendix B). In other words, \code{pweights_a} "scales
-the weights so that the new weights sum to the cluster sample size" while
-\code{pweights_b} "scales the weights so that the new weights sum to the
-effective cluster size".
+group. The adjustment factor for \code{rescaled_weights_b} is the sum of sample
+weights within each group divided by the sum of squared sample weights
+within each group (see Carle (2009), Appendix B). In other words,
+\code{rescaled_weights_a} "scales the weights so that the new weights sum to the
+cluster sample size" while \code{rescaled_weights_b} "scales the weights so that
+the new weights sum to the effective cluster size".
 
 Regarding the choice between scaling methods A and B, Carle suggests that
 "analysts who wish to discuss point estimates should report results based
@@ -112,13 +112,13 @@ result1 <- lme4::glmer(
   total ~ factor(RIAGENDR) + log(age) + factor(RIDRETH1) + (1 | SDMVPSU),
   family = poisson(),
   data = d,
-  weights = pweights_a
+  weights = rescaled_weights_a
 )
 result2 <- lme4::glmer(
   total ~ factor(RIAGENDR) + log(age) + factor(RIDRETH1) + (1 | SDMVPSU),
   family = poisson(),
   data = d,
-  weights = pweights_b
+  weights = rescaled_weights_b
 )
 
 d <- rescale_weights(
@@ -130,7 +130,7 @@ result3 <- lme4::glmer(
   total ~ factor(RIAGENDR) + log(age) + factor(RIDRETH1) + (1 | SDMVPSU),
   family = poisson(),
   data = d,
-  weights = pweights
+  weights = rescaled_weights
 )
 parameters::compare_parameters(
   list(result1, result2, result3),

@@ -10,10 +10,10 @@ test_that("rescale_weights works as expected", {
   expect_snapshot(head(rescale_weights(nhanes_sample, probability_weights = "WTINT2YR", method = "kish")))
 
   out <- rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR")
-  expect_equal(sum(out$pweights_a), 2992, tolerance = 1e-3)
-  expect_equal(sum(out$pweights_b), 2244.71451, tolerance = 1e-3)
+  expect_equal(sum(out$rescaled_weights_a), 2992, tolerance = 1e-3)
+  expect_equal(sum(out$rescaled_weights_b), 2244.71451, tolerance = 1e-3)
   out <- rescale_weights(nhanes_sample, probability_weights = "WTINT2YR", method = "kish")
-  expect_equal(sum(out$pweights), 2162.53961, tolerance = 1e-3)
+  expect_equal(sum(out$rescaled_weights), 2162.53961, tolerance = 1e-3)
 })
 
 
@@ -90,7 +90,7 @@ test_that("rescale_weights errors and warnings", {
     regex = "is not used"
   )
 
-  nhanes_sample$pweights_a <- 1
+  nhanes_sample$rescaled_weights_a <- 1
   expect_warning(
     {
       out <- rescale_weights(
@@ -105,7 +105,7 @@ test_that("rescale_weights errors and warnings", {
     out,
     c(
       "total", "age", "RIAGENDR", "RIDRETH1", "SDMVPSU", "SDMVSTRA",
-      "WTINT2YR", "pweights_a", "pweights_a_1", "pweights_b"
+      "WTINT2YR", "rescaled_weights_a", "rescaled_weights_a_1", "rescaled_weights_b"
     )
   )
 })
