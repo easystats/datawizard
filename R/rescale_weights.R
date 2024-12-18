@@ -173,7 +173,8 @@ rescale_weights <- function(data,
 
   if (!all(by %in% colnames(data_tmp))) {
     dont_exist <- by[which(!by %in% colnames(data_tmp))]
-    insight::format_error(paste0(
+    insight::format_error(
+      paste0(
         "The following variable(s) specified in `by` don't exist in the dataset: ",
         text_concatenate(dont_exist), "."
       ),
