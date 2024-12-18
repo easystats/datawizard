@@ -4,6 +4,14 @@ test_that("rescale_weights works as expected", {
   expect_snapshot(head(rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR")))
 
   expect_snapshot(head(rescale_weights(nhanes_sample, c("SDMVSTRA", "SDMVPSU"), "WTINT2YR")))
+
+  expect_snapshot(head(rescale_weights(nhanes_sample, probability_weights = "WTINT2YR", method = "kish")))
+
+  out <- rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR")
+  expect_equal(sum(out$pweights_a), 2992, tolerance = 1e-3)
+  expect_equal(sum(out$pweights_b), 2244.71451, tolerance = 1e-3)
+  out <- rescale_weights(nhanes_sample, probability_weights = "WTINT2YR", method = "kish")
+  expect_equal(sum(out$pweights_b), 2162.53961, tolerance = 1e-3)
 })
 
 
