@@ -76,7 +76,11 @@ design, or group and PSU as varying intercepts), depending on the survey
 design that should be mimicked.
 \item \code{method = "kish"}
 
-to do...
+Rescaling is based on scaling the sample weights so the mean value is 1,
+which means the sum of all weights equals the sample size. Next, the design
+effect (\emph{Kish 1965}) is calculated, which is the mean of the squared weights
+divided by the squared mean of the weights. The scales sample weights are
+then divided by the design effect.
 }
 }
 \examples{
@@ -113,6 +117,6 @@ Weights. Communications in Statistics - Theory and Methods 35: 439-460
 \item Carle A.C. (2009). Fitting multilevel models in complex survey data
 with design weights: Recommendations. BMC Medical Research Methodology
 9(49): 1-13
-\item Kish ...
+\item Kish, L. (1965) Survey Sampling. London: Wiley.
 }
 }
