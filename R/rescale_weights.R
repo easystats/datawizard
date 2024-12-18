@@ -140,6 +140,8 @@ rescale_weights <- function(data,
                             probability_weights = NULL,
                             nest = FALSE,
                             method = "carle") {
+  method <- insight::validate_argument(method, c("carle", "kish"))
+
   if (inherits(by, "formula")) {
     by <- all.vars(by)
   }

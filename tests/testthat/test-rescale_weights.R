@@ -89,6 +89,14 @@ test_that("rescale_weights errors and warnings", {
     ),
     regex = "is not used"
   )
+  expect_warning(
+    rescale_weights(
+      data = head(nhanes_sample, n = 30),
+      probability_weights = "WTINT2YR",
+      method = "dish"
+    ),
+    regex = "Invalid option for argument"
+  )
 
   nhanes_sample$rescaled_weights_a <- 1
   expect_warning(
