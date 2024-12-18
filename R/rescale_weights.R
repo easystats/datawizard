@@ -58,7 +58,11 @@
 #'
 #' - `method = "kish"`
 #'
-#'   to do...
+#'   Rescaling is based on scaling the sample weights so the mean value is 1,
+#'   which means the sum of all weights equals the sample size. Next, the design
+#'   effect (_Kish 1965_) is calculated, which is the mean of the squared weights
+#'   divided by the squared mean of the weights. The scales sample weights are
+#'   then divided by the design effect.
 #'
 #' @references
 #'   - Asparouhov T. (2006). General Multi-Level Modeling with Sampling
@@ -68,7 +72,7 @@
 #'   with design weights: Recommendations. BMC Medical Research Methodology
 #'   9(49): 1-13
 #'
-#'   - Kish ...
+#'   - Kish, L. (1965) Survey Sampling. London: Wiley.
 #'
 #' @examples
 #' if (require("lme4")) {
@@ -118,19 +122,35 @@ rescale_weights <- function(data,
     data_tmp <- data
   }
 
+  fun_args <- list(
+    nest = nest,
+    probability_weights = probability_weights,
+    data_tmp = data_tmp,
+    data = data,
+    by = by,
+    weight_non_na = weight_non_na
+  )
+
   switch(method,
-    carle = .rescale_weights_carle(nest, probability_weights, data_tmp, data, by, weight_non_na),
-    .rescale_weights_kish(probability_weights, data_tmp, data, weight_non_na)
+    carle = do.call(.rescale_weights_carle, fun_args),
+    do.call(.rescale_weights_kish, fun_args)
   )
 }
 
 
-# rescale weights, method Carle ----------------------------
+# rescale weights, method Kish ----------------------------
 
-.rescale_weights_kish <- function(probability_weights, data_tmp, data, weight_non_na) {
+.rescale_weights_kish <- function(nest, probability_weights, data_tmp, data, by, weight_non_na) {
   p_weights <- data_tmp[[probability_weights]]
+
   # design effect according to Kish
   deff <- mean(p_weights^2) / (mean(p_weights)^2)
+
+  # n_per_group <- as.vector(table(data_tmp[[by]]))
+  # b_bar <- mean(n_per_group)
+  # icc <- 0.05
+  # deff <- nrow(data_tmp) * (mean(p_weights^2) / (mean(p_weights)^2)) * (1 + (b_bar - 1) * icc)
+
   # rescale weights, so their mean is 1
   z_weights <- p_weights * (1 / mean(p_weights))
   # divide weights by design effect
