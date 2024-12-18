@@ -62,11 +62,20 @@ test_that("rescale_weights errors and warnings", {
   )
   nhanes_sample$pweights_a <- 1
   expect_warning(
-    rescale_weights(
-      data = head(nhanes_sample, n = 30),
-      by = "SDMVSTRA",
-      probability_weights = "WTINT2YR"
-    ),
+    {
+      out <- rescale_weights(
+        data = head(nhanes_sample, n = 30),
+        by = "SDMVSTRA",
+        probability_weights = "WTINT2YR"
+      )
+    },
     regex = "The variable name"
+  )
+  expect_named(
+    out,
+    c(
+      "total", "age", "RIAGENDR", "RIDRETH1", "SDMVPSU", "SDMVSTRA",
+      "WTINT2YR", "pweights_a", "pweights_a_1", "pweights_b"
+    )
   )
 })

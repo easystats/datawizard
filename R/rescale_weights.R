@@ -114,7 +114,7 @@ rescale_weights <- function(data,
 
   # check for existing variable names
   if (any(c("pweights_a", "pweights_b", "pweights") %in% colnames(data))) {
-    insight::format_warning("The variable name for the rescaled weights already exists in the data. Existing columns will be overwritten.")
+    insight::format_warning("The variable name for the rescaled weights already exists in the data. Returned columns will be renamed into unique names.")
   }
 
   # check if weight has missings. we need to remove them first,
@@ -203,7 +203,15 @@ rescale_weights <- function(data,
     })
   }
 
-  do.call(cbind, list(data, out))
+  make_unique_names <- any(vapply(out, function(i) any(colnames(i) %in% colnames(data)), logical(1)))
+  # add weights to data frame
+  out <- do.call(cbind, list(data, out))
+  # check if we have to rename columns
+  if (make_unique_names) {
+    colnames(out) <- make.unique(colnames(out), sep = "_")
+  }
+
+  out
 }
 
 
