@@ -1,27 +1,42 @@
 test_that("describe_missing", {
-  expect_snapshot(describe_missing(airquality))
+  airquality2 <- cbind(airquality[2:6], airquality[1])
 
-  # Use selected columns explicitly
-  expect_snapshot(describe_missing(airquality,
-    vars = list(
-      c("Ozone", "Solar.R", "Wind"),
-      c("Temp", "Month", "Day")
-    )
+  expect_snapshot(describe_missing(airquality2))
+
+  expect_snapshot(describe_missing(airquality2, sort = TRUE))
+
+  expect_snapshot(describe_missing(
+    airquality2,
+    select = "Ozone:Temp"
   ))
 
-  # If the questionnaire items start with the same name, e.g.,
+  expect_snapshot(describe_missing(
+    airquality2,
+    exclude = "Ozone:Temp"
+  ))
+
+  # Testing the 'by' argument for survey scales
   set.seed(15)
   fun <- function() {
     c(sample(c(NA, 1:10), replace = TRUE), NA, NA, NA)
   }
-
-  # One can list the scale names directly:
   df <- data.frame(
     ID = c("idz", NA),
-    scale1_Q1 = fun(), scale1_Q2 = fun(), scale1_Q3 = fun(),
-    scale2_Q1 = fun(), scale2_Q2 = fun(), scale2_Q3 = fun(),
-    scale3_Q1 = fun(), scale3_Q2 = fun(), scale3_Q3 = fun(),
-    stringsAsFactors = FALSE
+    openness_1 = fun(), openness_2 = fun(), openness_3 = fun(),
+    extroversion_1 = fun(), extroversion_2 = fun(), extroversion_3 = fun(),
+    agreeableness_1 = fun(), agreeableness_2 = fun(), agreeableness_3 = fun()
   )
-  expect_snapshot(describe_missing(df, scales = c("ID", "scale1", "scale2", "scale3")))
+
+  # Pivot and group using datawizard
+  df_long <- reshape_longer(df,
+    select = -1,
+    names_sep = "_",
+    names_to = c("dimension", "item")
+  )
+
+  # Run describe_missing with 'by' argument
+  expect_snapshot(describe_missing(
+    df_long,
+    select = -c(1, 3), by = "dimension"
+  ))
 })

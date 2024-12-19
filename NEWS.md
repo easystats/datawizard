@@ -18,7 +18,7 @@ BREAKING CHANGES AND DEPRECATIONS
 
 NEW FUNCTIONS
 
-* `describe_missing()`, to comprehensively report on missing values in a data frame.
+* `describe_missing()`, to report on missing values in a data frame.
 
 CHANGES
 

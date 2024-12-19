@@ -1,63 +1,61 @@
 # describe_missing
 
     Code
-      describe_missing(airquality)
+      describe_missing(airquality2)
     Output
-        variable n_columns n_missing n_cells missing_percent complete_percent
-      1    Ozone         1        37     153           24.18            75.82
-      2  Solar.R         1         7     153            4.58            95.42
-      3     Wind         1         0     153            0.00           100.00
-      4     Temp         1         0     153            0.00           100.00
-      5    Month         1         0     153            0.00           100.00
-      6      Day         1         0     153            0.00           100.00
-      7    Total         6        44     918            4.79            95.21
-        missing_max missing_max_percent all_missing
-      1           1              100.00          37
-      2           1              100.00           7
-      3           0                0.00           0
-      4           0                0.00           0
-      5           0                0.00           0
-      6           0                0.00           0
-      7           2               33.33           0
+        variable n_missing missing_percent complete_percent
+      1  Solar.R         7            4.58            95.42
+      2     Wind         0            0.00           100.00
+      3     Temp         0            0.00           100.00
+      4    Month         0            0.00           100.00
+      5      Day         0            0.00           100.00
+      6    Ozone        37           24.18            75.82
+      7    Total        44            4.79            95.21
 
 ---
 
     Code
-      describe_missing(airquality, vars = list(c("Ozone", "Solar.R", "Wind"), c(
-        "Temp", "Month", "Day")))
+      describe_missing(airquality2, sort = TRUE)
     Output
-        variable n_columns n_missing n_cells missing_percent complete_percent
-      1    Ozone         1        37     153           24.18            75.82
-      2  Solar.R         1         7     153            4.58            95.42
-      3     Wind         1         0     153            0.00           100.00
-      4     Temp         1         0     153            0.00           100.00
-      5    Month         1         0     153            0.00           100.00
-      6      Day         1         0     153            0.00           100.00
-      7    Total         6        44     918            4.79            95.21
-        missing_max missing_max_percent all_missing
-      1           1              100.00          37
-      2           1              100.00           7
-      3           0                0.00           0
-      4           0                0.00           0
-      5           0                0.00           0
-      6           0                0.00           0
-      7           2               33.33           0
+         variable n_missing missing_percent complete_percent
+      6     Ozone        37           24.18            75.82
+      1   Solar.R         7            4.58            95.42
+      2      Wind         0            0.00           100.00
+      3      Temp         0            0.00           100.00
+      4     Month         0            0.00           100.00
+      5       Day         0            0.00           100.00
+      11    Total        44            4.79            95.21
 
 ---
 
     Code
-      describe_missing(df, scales = c("ID", "scale1", "scale2", "scale3"))
+      describe_missing(airquality2, select = "Ozone:Temp")
     Output
-                   variable n_columns n_missing n_cells missing_percent
-      1                  ID         1         7      14           50.00
-      2 scale1_Q1:scale1_Q3         3        11      42           26.19
-      3 scale2_Q1:scale2_Q3         3        17      42           40.48
-      4 scale3_Q1:scale3_Q3         3        10      42           23.81
-      5               Total        10        45     140           32.14
-        complete_percent missing_max missing_max_percent all_missing
-      1            50.00           1                 100           7
-      2            73.81           3                 100           3
-      3            59.52           3                 100           3
-      4            76.19           3                 100           3
-      5            67.86          10                 100           2
+        variable n_missing missing_percent complete_percent
+      1    Ozone        37           24.18            75.82
+      2      Day         0            0.00           100.00
+      3    Month         0            0.00           100.00
+      4     Temp         0            0.00           100.00
+      5    Total        37            6.05            93.95
+
+---
+
+    Code
+      describe_missing(airquality2, exclude = "Ozone:Temp")
+    Output
+        variable n_missing missing_percent complete_percent
+      1  Solar.R         7            4.58            95.42
+      2     Wind         0            0.00           100.00
+      3    Total         7            2.29            97.71
+
+---
+
+    Code
+      describe_missing(df_long, select = -c(1, 3), by = "dimension")
+    Output
+             variable n_missing missing_percent complete_percent
+      1 agreeableness        10           23.81            76.19
+      2  extroversion        17           40.48            59.52
+      3      openness        11           26.19            73.81
+      4         Total        38           15.08            84.92
 
