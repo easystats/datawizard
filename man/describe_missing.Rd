@@ -120,11 +120,13 @@ df_long <- reshape_longer(
   df,
   select = -1,
   names_sep = "_",
-  names_to = c("dimension", "item"))
+  names_to = c("dimension", "item")
+)
 
 describe_missing(
   df_long,
   select = -c(1, 3),
-  by = "dimension")
+  by = "dimension"
+)
 
 }

@@ -24,7 +24,8 @@ test_that("describe_missing", {
     ID = c("idz", NA),
     openness_1 = fun(), openness_2 = fun(), openness_3 = fun(),
     extroversion_1 = fun(), extroversion_2 = fun(), extroversion_3 = fun(),
-    agreeableness_1 = fun(), agreeableness_2 = fun(), agreeableness_3 = fun()
+    agreeableness_1 = fun(), agreeableness_2 = fun(), agreeableness_3 = fun(),
+    stringsAsFactors = FALSE
   )
 
   # Pivot and group using datawizard

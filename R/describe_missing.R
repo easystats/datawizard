@@ -38,12 +38,14 @@
 #'   df,
 #'   select = -1,
 #'   names_sep = "_",
-#'   names_to = c("dimension", "item"))
+#'   names_to = c("dimension", "item")
+#' )
 #'
 #' describe_missing(
 #'   df_long,
 #'   select = -c(1, 3),
-#'   by = "dimension")
+#'   by = "dimension"
+#' )
 #'
 describe_missing <- function(data,
                              select = NULL,
@@ -65,9 +67,14 @@ describe_missing <- function(data,
       ...
     )
   }
-  if (!is.null(by)) {
+  if (is.null(by)) {
+    na_list <- lapply(names(data), function(x) {
+      data_subset <- data[, x, drop = FALSE]
+      .describe_missing(data_subset)
+    })
+  } else {
     if (!by %in% names(data)) {
-      stop("The 'by' column does not exist in the data.")
+      stop("The 'by' column does not exist in the data.", call. = FALSE)
     }
     grouped_data <- split(data, data[[by]])
     na_list <- lapply(names(grouped_data), function(group_name) {
@@ -81,11 +88,6 @@ describe_missing <- function(data,
       group_na_df <- do.call(rbind, group_na_list)
       group_na_df$variable <- group_name
       group_na_df
-    })
-  } else {
-    na_list <- lapply(names(data), function(x) {
-      data_subset <- data[, x, drop = FALSE]
-      .describe_missing(data_subset)
     })
   }
   na_df <- do.call(rbind, na_list)
