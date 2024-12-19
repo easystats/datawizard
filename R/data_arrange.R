@@ -42,7 +42,7 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
   select <- gsub("^-", "", select)
 
   # check for variables that are not in data
-  dont_exist <- select[which(!select %in% names(data))]
+  dont_exist <- setdiff(select, colnames(data))
 
   if (length(dont_exist) > 0) {
     if (safe) {
