@@ -89,7 +89,7 @@ test_that("rescale_weights errors and warnings", {
     ),
     regex = "is not used"
   )
-  expect_warning(
+  expect_error(
     rescale_weights(
       data = head(nhanes_sample, n = 30),
       probability_weights = "WTINT2YR",
