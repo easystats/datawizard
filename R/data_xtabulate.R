@@ -281,12 +281,8 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
     x <- lapply(x, function(i) {
       # grouped data? if yes, add information on grouping factor
       if (!is.null(i[["Group"]])) {
-        if (identical(format, "html")) {
-          i$groups <- paste0("Grouped by ", i[["Group"]][1])
-          i$Group <- NULL
-        } else {
-          i$Group <- paste0("Grouped by ", i[["Group"]][1])
-        }
+        i$groups <- paste0("Grouped by ", i[["Group"]][1])
+        i$Group <- NULL
       }
       # if we don't have the gt-grouping variable "groups" yet, we use it now
       # for grouping. Else, we use a new column named "Variable", to avoid
@@ -315,10 +311,28 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
       out <- data_merge(x, join = "bind")[col_order]
     }
 
-    # remove duplicated names
-    for (i in c("Variable", "Group")) {
-      if (!is.null(out[[i]])) {
-        out[[i]][duplicated(out[[i]])] <- ""
+    # split tables for grouped data frames
+    if (!is.null(out$groups)) {
+      out <- split(out, out$groups)
+      out <- lapply(out, function(subtable) {
+        # for text and markdown, if we split tables, we remove the "groups"
+        # variable. we need to keep it for HTML tables.
+        if (!identical(format, "html")) {
+          attr(subtable, "table_caption") <- c(unique(subtable$groups), "blue")
+          subtable$groups <- NULL
+        }
+        # remove duplicated names
+        for (grpvars in c("Variable", "Group")) {
+          if (!is.null(subtable[[grpvars]])) {
+            subtable[[grpvars]][duplicated(subtable[[grpvars]])] <- ""
+          }
+        }
+        subtable
+      })
+      # no splitting of grouped data frames into list for HTML format,
+      # because splitting is done by the `by` argument later
+      if (identical(format, "html")) {
+        out <- do.call(rbind, out)
       }
     }
 
