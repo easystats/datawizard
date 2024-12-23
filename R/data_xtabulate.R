@@ -195,6 +195,10 @@ format.datawizard_crosstab <- function(x,
 }
 
 
+
+# print, datawizard_crosstab ---------------------
+
+
 #' @export
 print.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   # grouped data? if yes, add information on grouping factor
@@ -258,12 +262,20 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
 }
 
 
+
+# print, datawizard_crosstabs ---------------------
+
+
 #' @export
 print.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
-  for (i in seq_along(x)) {
-    print(x[[i]], big_mark = big_mark, ...)
-    cat("\n")
-  }
+  .print_text_tables(x, big_mark, format = "text", ...)
+  invisible(x)
+}
+
+
+#' @export
+print_md.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
+  .print_text_tables(x, big_mark, format = "markdown", ...)
   invisible(x)
 }
 
@@ -307,7 +319,43 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
 }
 
 
+.print_text_tables <- function(x, big_mark = NULL, format = "text", ...) {
+  if (length(x) == 1) {
+    print(x[[1]], big_mark = big_mark, ...)
+  } else {
+    x <- lapply(x, function(i) {
+      # grouped data? if yes, add information on grouping factor
+      if (!is.null(i[["Group"]])) {
+        i$Group <- paste0("Grouped by ", i[["Group"]][1])
+      }
+      # first variable differs for each data frame, so we harmonize it here
+      i$Variable <- colnames(i)[1]
+      colnames(i)[1] <- "Value"
+      # move column to first position
+      i <- data_relocate(i, select = "Variable", before = 1)
+      # format data frame
+      format(i, format = format, big_mark = big_mark, include_total_row = FALSE, ...)
+    })
+
+    # now reorder and bind
+    out <- do.call(rbind, x)
+    out$Variable[duplicated(out$Variable)] <- ""
+  }
+  # print table
+  cat(insight::export_table(
+    out,
+    cross = "+",
+    missing = ifelse(identical(format, "text"), "<NA>", "(NA)"),
+    empty_line = "-",
+    format = format,
+    by = "groups"
+  ))
+}
+
+
+
 # helper ---------------------
+
 
 .validate_by <- function(by, x) {
   if (!is.null(by)) {
