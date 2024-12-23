@@ -229,7 +229,7 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
 
   # prepare table arguments
   fun_args <- list(
-    format(x, big_mark = big_mark, ...),
+    format(x, big_mark = big_mark, format = format, ...),
     caption = caption,
     format = format
   )
@@ -277,7 +277,7 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
 
 .print_text_tables <- function(x, big_mark = NULL, format = "text", ...) {
   if (length(x) == 1) {
-    print(x[[1]], big_mark = big_mark, ...)
+    .print_text_table(x[[1]], big_mark = big_mark, format = format, ...)
   } else {
     x <- lapply(x, function(i) {
       # grouped data? if yes, add information on grouping factor
