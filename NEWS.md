@@ -4,17 +4,22 @@ BREAKING CHANGES AND DEPRECATIONS
 
 * *datawizard* now requires R >= 4.0 (#515).
 
-* Argument `drop_na` in `data_match()` is deprecated now. Please use 
+* Argument `drop_na` in `data_match()` is deprecated now. Please use
   `remove_na` instead.
 
 * In `data_rename()` (#567):
   - argument `pattern` is deprecated. Use `select` instead.
-  - argument `safe` is deprecated. The function now errors when `select` 
+  - argument `safe` is deprecated. The function now errors when `select`
     contains unknown column names.
   - when `replacement` is `NULL`, an error is now thrown (previously, column
     indices were used as new names).
   - if `select` (previously `pattern`) is a named vector, then all elements
     must be named, e.g. `c(length = "Sepal.Length", "Sepal.Width")` errors.
+
+* `print()` methods for `data_tabulate()` with multiple sub-tables (i.e. when
+  length of `by` was > 1) were revised. Now, an integrated table instead of
+  multiple tables is returned. Furthermore, `print_html()` did not work, which
+  was also fixed now.
 
 CHANGES
 
