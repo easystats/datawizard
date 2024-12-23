@@ -201,29 +201,24 @@ format.datawizard_crosstab <- function(x,
 
 #' @export
 print.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
-  # grouped data? if yes, add information on grouping factor
-  if (is.null(x[["Group"]])) {
-    caption <- NULL
-  } else {
-    caption <- paste0("Grouped by ", x[["Group"]][1])
-    x$Group <- NULL
-  }
-
-  # print table
-  cat(insight::export_table(
-    format(x, big_mark = big_mark, ...),
-    cross = "+",
-    missing = "<NA>",
-    caption = caption,
-    empty_line = "-",
-    ...
-  ))
+  .print_text_table(x, big_mark, format = "text", ...)
   invisible(x)
 }
 
 
 #' @export
 print_md.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
+  .print_text_table(x, big_mark, format = "markdown", ...)
+}
+
+
+#' @export
+print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
+  .print_text_table(x, big_mark, format = "html", ...)
+}
+
+
+.print_text_table <- function(x, big_mark = NULL, format = "text", ...) {
   # grouped data? if yes, add information on grouping factor
   if (is.null(x[["Group"]])) {
     caption <- NULL
@@ -232,35 +227,30 @@ print_md.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
     x$Group <- NULL
   }
 
-  # print table
-  insight::export_table(
-    format(x, format = "markdown", big_mark = big_mark, ...),
-    cross = "+",
-    missing = "<NA>",
+  # prepare table arguments
+  fun_args <- list(
+    format(x, big_mark = big_mark, ...),
     caption = caption,
-    empty_line = "-",
-    format = "markdown"
+    format = format
   )
-}
-
-
-#' @export
-print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
-  # grouped data? if yes, add information on grouping factor
-  if (!is.null(x[["Group"]])) {
-    x$groups <- paste0("Grouped by ", x[["Group"]][1])
-    x$Group <- NULL
+  if (format != "html") {
+    fun_args$cross <- "+"
+    fun_args$empty_line <- "-"
   }
+  if (format == "text") {
+    fun_args$missing <- "<NA>"
+  } else {
+    fun_args$missing <- "(NA)"
+  }
+  out <- do.call(insight::export_table, c(fun_args, list(...)))
 
   # print table
-  insight::export_table(
-    format(x, big_mark = big_mark, format = "html", ...),
-    missing = "(NA)",
-    format = "html",
-    by = "groups"
-  )
+  if (identical(format, "text")) {
+    cat(out)
+  } else {
+    out
+  }
 }
-
 
 
 # print, datawizard_crosstabs ---------------------
@@ -276,20 +266,28 @@ print.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
 #' @export
 print_md.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
   .print_text_tables(x, big_mark, format = "markdown", ...)
-  invisible(x)
 }
 
 
 #' @export
 print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
+  .print_text_tables(x, big_mark, format = "html", ...)
+}
+
+
+.print_text_tables <- function(x, big_mark = NULL, format = "text", ...) {
   if (length(x) == 1) {
-    print_html(x[[1]], big_mark = big_mark, ...)
+    print(x[[1]], big_mark = big_mark, ...)
   } else {
     x <- lapply(x, function(i) {
       # grouped data? if yes, add information on grouping factor
       if (!is.null(i[["Group"]])) {
-        i$groups <- paste0("Grouped by ", i[["Group"]][1])
-        i$Group <- NULL
+        if (identical(format, "html")) {
+          i$groups <- paste0("Grouped by ", i[["Group"]][1])
+          i$Group <- NULL
+        } else {
+          i$Group <- paste0("Grouped by ", i[["Group"]][1])
+        }
       }
       # if we don't have the gt-grouping variable "groups" yet, we use it now
       # for grouping. Else, we use a new column named "Variable", to avoid
@@ -305,53 +303,36 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
       # move column to first position
       i <- data_relocate(i, select = grp_variable, before = 1)
       # format data frame
-      format(i, format = "html", big_mark = big_mark, include_total_row = FALSE, ...)
-    })
-
-    # now reorder and bind
-    out <- do.call(rbind, x)
-
-    # print table
-    insight::export_table(
-      out,
-      missing = "(NA)",
-      format = "html",
-      by = "groups"
-    )
-  }
-}
-
-
-.print_text_tables <- function(x, big_mark = NULL, format = "text", ...) {
-  if (length(x) == 1) {
-    print(x[[1]], big_mark = big_mark, ...)
-  } else {
-    x <- lapply(x, function(i) {
-      # grouped data? if yes, add information on grouping factor
-      if (!is.null(i[["Group"]])) {
-        i$Group <- paste0("Grouped by ", i[["Group"]][1])
-      }
-      # first variable differs for each data frame, so we harmonize it here
-      i$Variable <- colnames(i)[1]
-      colnames(i)[1] <- "Value"
-      # move column to first position
-      i <- data_relocate(i, select = "Variable", before = 1)
-      # format data frame
       format(i, format = format, big_mark = big_mark, include_total_row = FALSE, ...)
     })
 
     # now reorder and bind
     out <- do.call(rbind, x)
     out$Variable[duplicated(out$Variable)] <- ""
-    # print table
-    cat(insight::export_table(
+
+    # prepare table arguments
+    fun_args <- list(
       out,
-      cross = "+",
-      missing = ifelse(identical(format, "text"), "<NA>", "(NA)"),
-      empty_line = "-",
       format = format,
       by = "groups"
-    ))
+    )
+    if (format != "html") {
+      fun_args$cross <- "+"
+      fun_args$empty_line <- "-"
+    }
+    if (format == "text") {
+      fun_args$missing <- "<NA>"
+    } else {
+      fun_args$missing <- "(NA)"
+    }
+    out <- do.call(insight::export_table, c(fun_args, list(...)))
+
+    # print table
+    if (identical(format, "text")) {
+      cat(out)
+    } else {
+      out
+    }
   }
 }
 
