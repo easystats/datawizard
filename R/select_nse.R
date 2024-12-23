@@ -198,12 +198,13 @@
 }
 
 # small helper, to avoid duplicated code
-.action_if_not_found <- function(
-    x,
-    columns,
-    matches,
-    verbose,
-    ifnotfound) {
+
+.action_if_not_found <- function(x,
+                                 columns,
+                                 matches,
+                                 verbose,
+                                 ifnotfound) {
+
   msg <- paste0(
     "Following variable(s) were not found: ",
     toString(x[is.na(matches)])

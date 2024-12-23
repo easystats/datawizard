@@ -339,6 +339,8 @@ test_that("data_tabulate, cross tables, grouped df", {
   efc$e16sex[sample.int(nrow(efc), 5)] <- NA
   grp <- data_group(efc, "e42dep")
   expect_snapshot(print(data_tabulate(grp, "c172code", by = "e16sex", proportions = "row")))
+  skip_if_not_installed("gt")
+  expect_s3_class(print_html(data_tabulate(grp, "c172code", by = "e16sex", proportions = "row")), "gt_tbl") # nolint
 })
 
 test_that("data_tabulate, cross tables, errors by", {
