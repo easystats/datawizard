@@ -291,12 +291,15 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
         i$groups <- paste0("Grouped by ", i[["Group"]][1])
         i$Group <- NULL
       }
-      # first variable differs for each data frame, so we harmonize it here
+      # if we don't have the gt-grouping variable "groups" yet, we use it now
+      # for grouping. Else, we use a new column named "Variable", to avoid
+      # overwriting the groups-variable from grouped data frames
       if (is.null(i$groups)) {
         grp_variable <- "groups"
       } else {
         grp_variable <- "Variable"
       }
+      # first variable differs for each data frame, so we harmonize it here
       i[[grp_variable]] <- colnames(i)[1]
       colnames(i)[1] <- "Value"
       # move column to first position
