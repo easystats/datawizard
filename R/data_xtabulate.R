@@ -340,16 +340,16 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
     # now reorder and bind
     out <- do.call(rbind, x)
     out$Variable[duplicated(out$Variable)] <- ""
+    # print table
+    cat(insight::export_table(
+      out,
+      cross = "+",
+      missing = ifelse(identical(format, "text"), "<NA>", "(NA)"),
+      empty_line = "-",
+      format = format,
+      by = "groups"
+    ))
   }
-  # print table
-  cat(insight::export_table(
-    out,
-    cross = "+",
-    missing = ifelse(identical(format, "text"), "<NA>", "(NA)"),
-    empty_line = "-",
-    format = format,
-    by = "groups"
-  ))
 }
 
 
