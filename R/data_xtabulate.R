@@ -100,8 +100,7 @@ format.datawizard_crosstab <- function(x,
   # format_table() returns scientific notation
   x <- as.data.frame(x)
 
-  # remove group variable
-  x$Group <- NULL
+  # find numeric columns, only for these we need row/column sums
   numeric_columns <- vapply(x, is.numeric, logical(1))
 
   # compute total N for rows and columns
@@ -292,7 +291,7 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
       # if we don't have the gt-grouping variable "groups" yet, we use it now
       # for grouping. Else, we use a new column named "Variable", to avoid
       # overwriting the groups-variable from grouped data frames
-      if (is.null(i$groups)) {
+      if (is.null(i$groups) && identical(format, "html")) {
         grp_variable <- "groups"
       } else {
         grp_variable <- "Variable"
@@ -305,10 +304,23 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
       # format data frame
       format(i, format = format, big_mark = big_mark, include_total_row = FALSE, ...)
     })
+    # now bind, but we need to check for equal number of columns
+    if (all(lengths(x) == max(length(x)))) {
+      out <- do.call(rbind, x)
+    } else {
+      # if not all tables have identical columns, we can use "data_merge()",
+      # which safely row-binds all data frames. However, the column order can be
+      # messed up, so we save column order here and restore it later
+      col_order <- colnames(x[[which.max(lengths(x))]])
+      out <- data_merge(x, join = "bind")[col_order]
+    }
 
-    # now reorder and bind
-    out <- do.call(rbind, x)
-    out$Variable[duplicated(out$Variable)] <- ""
+    # remove duplicated names
+    for (i in c("Variable", "Group")) {
+      if (!is.null(out[[i]])) {
+        out[[i]][duplicated(out[[i]])] <- ""
+      }
+    }
 
     # prepare table arguments
     fun_args <- list(
