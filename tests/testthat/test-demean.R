@@ -46,6 +46,12 @@ test_that("demean works", {
     )
   )
   expect_snapshot(head(x))
+
+  df$Sepal.Length_within <- df$Sepal.Length
+  expect_error(
+    demean(df, select = c("Sepal.Length", "Petal.Length"), by = "ID"),
+    regex = "One or more of"
+  )
 })
 
 test_that("demean interaction term", {
