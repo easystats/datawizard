@@ -8,13 +8,13 @@ test_that("demean works", {
   df$binary <- as.factor(rbinom(150, 1, 0.35)) # binary variable
 
   set.seed(123)
-  x <- demean(df, select = c("Sepal.Length", "Petal.Length"), by = "ID")
+  x <- demean(df, select = c("Sepal.Length", "Petal.Length"), by = "ID", append = FALSE)
   expect_snapshot(head(x))
 
   set.seed(123)
   expect_message(
     {
-      x <- demean(df, select = c("Sepal.Length", "binary", "Species"), by = "ID")
+      x <- demean(df, select = c("Sepal.Length", "binary", "Species"), by = "ID", append = FALSE)
     },
     "have been coerced to numeric"
   )
@@ -23,17 +23,29 @@ test_that("demean works", {
   set.seed(123)
   expect_message(
     {
-      y <- demean(df, select = ~ Sepal.Length + binary + Species, by = ~ID)
+      y <- demean(df, select = ~ Sepal.Length + binary + Species, by = ~ID, append = FALSE)
     },
     "have been coerced to numeric"
   )
   expect_message(
     {
-      z <- demean(df, select = c("Sepal.Length", "binary", "Species"), by = "ID")
+      z <- demean(df, select = c("Sepal.Length", "binary", "Species"), by = "ID", append = FALSE)
     },
     "have been coerced to numeric"
   )
   expect_identical(y, z)
+
+  set.seed(123)
+  x <- demean(df, select = c("Sepal.Length", "Petal.Length"), by = "ID")
+  expect_named(
+    x,
+    c(
+      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
+      "Species", "ID", "binary", "Sepal.Length_between", "Petal.Length_between",
+      "Sepal.Length_within", "Petal.Length_within"
+    )
+  )
+  expect_snapshot(head(x))
 })
 
 test_that("demean interaction term", {
@@ -45,7 +57,7 @@ test_that("demean interaction term", {
   )
 
   set.seed(123)
-  expect_snapshot(demean(dat, select = c("a", "x*y"), by = "ID"))
+  expect_snapshot(demean(dat, select = c("a", "x*y"), by = "ID", append = FALSE))
 })
 
 test_that("demean shows message if some vars don't exist", {

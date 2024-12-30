@@ -3,10 +3,10 @@
 #' @description
 #'
 #' `demean()` computes group- and de-meaned versions of a variable that can be
-#' used in regression analysis to model the between- and within-subject effect.
-#' `degroup()` is more generic in terms of the centering-operation. While
-#' `demean()` always uses mean-centering, `degroup()` can also use the mode or
-#' median for centering.
+#' used in regression analysis to model the between- and within-subject effect
+#' (person-mean centering or centering within clusters). `degroup()` is more
+#' generic in terms of the centering-operation. While `demean()` always uses
+#' mean-centering, `degroup()` can also use the mode or median for centering.
 #'
 #' @param x A data frame.
 #' @param select Character vector (or formula) with names of variables to select
@@ -39,6 +39,9 @@
 #'   names of the group-meaned and de-meaned variables of `x`. By default,
 #'   de-meaned variables will be suffixed with `"_within"` and
 #'   grouped-meaned variables with `"_between"`.
+#' @param append Logical, if `TRUE` (default), the group- and de-meaned
+#'   variables will be appended (column bind) to the original data `x`,
+#'   thus returning both the original and the de-/group-meaned variables.
 #' @param add_attributes Logical, if `TRUE`, the returned variables gain
 #'   attributes to indicate the within- and between-effects. This is only
 #'   relevant when printing `model_parameters()` - in such cases, the
@@ -283,6 +286,7 @@ demean <- function(x,
                    nested = FALSE,
                    suffix_demean = "_within",
                    suffix_groupmean = "_between",
+                   append = TRUE,
                    add_attributes = TRUE,
                    verbose = TRUE) {
   degroup(
@@ -293,6 +297,7 @@ demean <- function(x,
     center = "mean",
     suffix_demean = suffix_demean,
     suffix_groupmean = suffix_groupmean,
+    append = append,
     add_attributes = add_attributes,
     verbose = verbose
   )
@@ -308,9 +313,11 @@ degroup <- function(x,
                     center = "mean",
                     suffix_demean = "_within",
                     suffix_groupmean = "_between",
+                    append = TRUE,
                     add_attributes = TRUE,
                     verbose = TRUE) {
-  # ugly tibbles again...
+  # ugly tibbles again... but save original data frame
+  original_data <- x
   x <- .coerce_to_dataframe(x)
 
   center <- match.arg(tolower(center), choices = c("mean", "median", "mode", "min", "max"))
@@ -506,7 +513,24 @@ degroup <- function(x,
     })
   }
 
-  cbind(group_means, person_means)
+  # between and within effects
+  out <- cbind(group_means, person_means)
+
+  # append to original data?
+  if (isTRUE(append)) {
+    # check for unique column names
+    duplicated_columns <- intersect(colnames(out), colnames(original_data))
+    if (length(duplicated_columns)) {
+      insight::format_error(paste0(
+        "One or more of the centered variables already exist in the orignal data frame: ", # nolint
+        text_concatenate(duplicated_columns, enclose = "`"),
+        ". Please rename the affected variable(s) in the original data, or use the arguments `suffix_demean` and `suffix_groupmean` to rename the centered variables." # nolint
+      ))
+    }
+    out <- cbind(original_data, out)
+  }
+
+  out
 }
 
 
