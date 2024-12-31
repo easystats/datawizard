@@ -52,10 +52,37 @@
       5               -0.2750000
       6               -0.4222222
 
+---
+
+    Code
+      head(x)
+    Output
+        Sepal.Length Sepal.Width Petal.Length Petal.Width Species ID binary
+      1          5.1         3.5          1.4         0.2  setosa  3      0
+      2          4.9         3.0          1.4         0.2  setosa  3      1
+      3          4.7         3.2          1.3         0.2  setosa  3      0
+      4          4.6         3.1          1.5         0.2  setosa  2      1
+      5          5.0         3.6          1.4         0.2  setosa  3      1
+      6          5.4         3.9          1.7         0.4  setosa  2      0
+        Sepal.Length_between Petal.Length_between Sepal.Length_within
+      1             5.925000             3.527500          -0.8250000
+      2             5.925000             3.527500          -1.0250000
+      3             5.925000             3.527500          -1.2250000
+      4             5.862222             3.951111          -1.2622222
+      5             5.925000             3.527500          -0.9250000
+      6             5.862222             3.951111          -0.4622222
+        Petal.Length_within
+      1           -2.127500
+      2           -2.127500
+      3           -2.227500
+      4           -2.451111
+      5           -2.127500
+      6           -2.251111
+
 # demean interaction term
 
     Code
-      demean(dat, select = c("a", "x*y"), by = "ID")
+      demean(dat, select = c("a", "x*y"), by = "ID", append = FALSE)
     Output
         a_between x_y_between   a_within x_y_within
       1  2.666667    4.666667 -1.6666667 -0.6666667

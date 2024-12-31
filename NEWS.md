@@ -21,6 +21,12 @@ BREAKING CHANGES AND DEPRECATIONS
   multiple tables is returned. Furthermore, `print_html()` did not work, which
   was also fixed now.
 
+* `demean()` (and `degroup()`) gets an `append` argument that defaults to `TRUE`,
+  to append the centered variabled to the original data frame, instead of
+  returning the de- and group-meaned variables only. Use `append = FALSE` to
+  for the previous default behaviour (i.e. only returning the newly created
+  variables).
+
 CHANGES
 
 * The `select` argument, which is available in different functions to select
