@@ -216,7 +216,7 @@ rescale_weights <- function(data,
   }
 
   # split into groups, and calculate weights
-  out <- lapply(split(data_tmp, data_tmp$by), function(group_data) {
+  out <- lapply(split(data_tmp, data_tmp[by]), function(group_data) {
     p_weights <- group_data[[probability_weights]]
     # design effect according to Kish
     deff <- mean(p_weights^2) / (mean(p_weights)^2)
