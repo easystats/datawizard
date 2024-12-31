@@ -6,8 +6,8 @@
 \usage{
 rescale_weights(
   data,
-  by = NULL,
   probability_weights = NULL,
+  by = NULL,
   nest = FALSE,
   method = "carle"
 )
@@ -15,15 +15,15 @@ rescale_weights(
 \arguments{
 \item{data}{A data frame.}
 
+\item{probability_weights}{Variable indicating the probability (design or
+sampling) weights of the survey data (level-1-weight).}
+
 \item{by}{Variable names (as character vector, or as formula), indicating
 the grouping structure (strata) of the survey data (level-2-cluster
 variable). It is also possible to create weights for multiple group
 variables; in such cases, each created weighting variable will be suffixed
 by the name of the group variable. Argument \code{by} only applies to the default
 rescaling-method (\code{method = "carle"}), not to \code{method = "kish"}.}
-
-\item{probability_weights}{Variable indicating the probability (design or
-sampling) weights of the survey data (level-1-weight).}
 
 \item{nest}{Logical, if \code{TRUE} and \code{by} indicates at least two
 group variables, then groups are "nested", i.e. groups are now a
@@ -118,7 +118,7 @@ head(x)
 \donttest{
 # compare different methods, using multilevel-Poisson regression
 
-d <- rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR")
+d <- rescale_weights(nhanes_sample, "WTINT2YR", "SDMVSTRA")
 result1 <- lme4::glmer(
   total ~ factor(RIAGENDR) + log(age) + factor(RIDRETH1) + (1 | SDMVPSU),
   family = poisson(),
@@ -134,7 +134,7 @@ result2 <- lme4::glmer(
 
 d <- rescale_weights(
   nhanes_sample,
-  probability_weights = "WTINT2YR",
+  "WTINT2YR",
   method = "kish"
 )
 result3 <- lme4::glmer(

@@ -107,7 +107,7 @@
 #' \donttest{
 #' # compare different methods, using multilevel-Poisson regression
 #'
-#' d <- rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR")
+#' d <- rescale_weights(nhanes_sample, "WTINT2YR", "SDMVSTRA")
 #' result1 <- lme4::glmer(
 #'   total ~ factor(RIAGENDR) + log(age) + factor(RIDRETH1) + (1 | SDMVPSU),
 #'   family = poisson(),
@@ -123,7 +123,7 @@
 #'
 #' d <- rescale_weights(
 #'   nhanes_sample,
-#'   probability_weights = "WTINT2YR",
+#'   "WTINT2YR",
 #'   method = "kish"
 #' )
 #' result3 <- lme4::glmer(
@@ -140,8 +140,8 @@
 #' }
 #' @export
 rescale_weights <- function(data,
-                            by = NULL,
                             probability_weights = NULL,
+                            by = NULL,
                             nest = FALSE,
                             method = "carle") {
   method <- insight::validate_argument(method, c("carle", "kish"))
@@ -205,22 +205,34 @@ rescale_weights <- function(data,
       ),
       .misspelled_string(colnames(data_tmp), dont_exist, "Possibly misspelled?")
     )
+  } else {
+    # if `by` = NULL, we create a dummy group
+    by <- "tmp_klish_by"
+    data_tmp[[by]] <- 1
   }
-  p_weights <- data_tmp[[probability_weights]]
-  # design effect according to Kish
-  deff <- mean(p_weights^2) / (mean(p_weights)^2)
-  # rescale weights, so their mean is 1
-  z_weights <- p_weights * (1 / mean(p_weights))
-  # divide weights by design effect
-  data$rescaled_weights <- NA_real_
-  data$rescaled_weights[weight_non_na] <- z_weights / deff
 
-  # restore original order
-  x <- x[order(x$.bamboozled), ]
-  x$.bamboozled <- NULL
+  # split into groups, and calculate weights
+  out <- lapply(split(data_tmp, data_tmp$by), function(group_data) {
+    p_weights <- group_data[[probability_weights]]
+    # design effect according to Kish
+    deff <- mean(p_weights^2) / (mean(p_weights)^2)
+    # rescale weights, so their mean is 1
+    z_weights <- p_weights * (1 / mean(p_weights))
+    # divide weights by design effect
+    group_data$rescaled_weights <- z_weights / deff
+    group_data
+  })
+
+  # bind data
+  result <- do.call(rbind, out)
+
+  # restore original order, remove dummy variables
+  result <- result[order(result$.bamboozled), ]
+  result$.bamboozled <- NULL
+  result$tmp_klish_by
 
   # return result
-  data
+  result
 }
 
 

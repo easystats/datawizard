@@ -3,16 +3,16 @@ test_that("rescale_weights works as expected", {
   # convert tibble into data frame, so check-hard GHA works
   nhanes_sample <- as.data.frame(nhanes_sample)
 
-  expect_snapshot(head(rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR")))
+  expect_snapshot(head(rescale_weights(nhanes_sample, "WTINT2YR", "SDMVSTRA")))
 
-  expect_snapshot(head(rescale_weights(nhanes_sample, c("SDMVSTRA", "SDMVPSU"), "WTINT2YR")))
+  expect_snapshot(head(rescale_weights(nhanes_sample, "WTINT2YR", c("SDMVSTRA", "SDMVPSU"))))
 
   expect_snapshot(head(rescale_weights(nhanes_sample, probability_weights = "WTINT2YR", method = "kish")))
 
-  out <- rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR")
+  out <- rescale_weights(nhanes_sample, "WTINT2YR", "SDMVSTRA")
   expect_equal(sum(out$rescaled_weights_a), 2992, tolerance = 1e-3)
   expect_equal(sum(out$rescaled_weights_b), 2244.71451, tolerance = 1e-3)
-  out <- rescale_weights(nhanes_sample, probability_weights = "WTINT2YR", method = "kish")
+  out <- rescale_weights(nhanes_sample, "WTINT2YR", method = "kish")
   expect_equal(sum(out$rescaled_weights), 2162.53961, tolerance = 1e-3)
 })
 
