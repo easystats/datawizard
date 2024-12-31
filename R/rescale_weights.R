@@ -19,7 +19,8 @@
 #' by the name of the group variable. This argument is required for
 #' `method = "carle"`, but optional for `method = "kish"`.
 #' @param probability_weights Variable indicating the probability (design or
-#' sampling) weights of the survey data (level-1-weight).
+#' sampling) weights of the survey data (level-1-weight), provided as character
+#' string or formula.
 #' @param nest Logical, if `TRUE` and `by` indicates at least two
 #' group variables, then groups are "nested", i.e. groups are now a
 #' combination from each group level of the variables in `by`.

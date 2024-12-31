@@ -16,7 +16,8 @@ rescale_weights(
 \item{data}{A data frame.}
 
 \item{probability_weights}{Variable indicating the probability (design or
-sampling) weights of the survey data (level-1-weight).}
+sampling) weights of the survey data (level-1-weight), provided as character
+string or formula.}
 
 \item{by}{Variable names (as character vector, or as formula), indicating
 the grouping structure (strata) of the survey data (level-2-cluster
