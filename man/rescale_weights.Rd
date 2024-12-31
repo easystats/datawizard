@@ -26,20 +26,21 @@ variables; in such cases, each created weighting variable will be suffixed
 by the name of the group variable. This argument is required for
 \code{method = "carle"}, but optional for \code{method = "kish"}.}
 
-\item{nest}{Logical, if \code{TRUE} and \code{by} indicates at least two
-group variables, then groups are "nested", i.e. groups are now a
-combination from each group level of the variables in \code{by}.}
+\item{nest}{Logical, if \code{TRUE} and \code{by} indicates at least two group
+variables, then groups are "nested", i.e. groups are now a combination from
+each group level of the variables in \code{by}. This argument is not used when
+\code{method = "kish"}.}
 
 \item{method}{String, indicating which rescale-method is used for rescaling
 weights. Can be either \code{"carle"} (default) or \code{"kish"}. See 'Details'. If
 \code{method = "carle"}, the \code{by} argument is required.}
 }
 \value{
-\code{data}, including the new weighting variable(s). For
-\code{method = "carle"}, new columns \code{rescaled_weights_a} and \code{rescaled_weights_b}
-are returned, and for \code{method = "kish"}, the returned data contains a column
-\code{rescaled_weights}. These represent the rescaled design weights to use in
-multilevel models (use these variables for the \code{weights} argument).
+\code{data}, including the new weighting variable(s). For \code{method = "carle"}, new
+columns \code{rescaled_weights_a} and \code{rescaled_weights_b} are returned, and for
+\code{method = "kish"}, the returned data contains a column \code{rescaled_weights}.
+These represent the rescaled design weights to use in multilevel models (use
+these variables for the \code{weights} argument).
 }
 \description{
 Most functions to fit multilevel and mixed effects models only

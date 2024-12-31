@@ -21,18 +21,20 @@
 #' @param probability_weights Variable indicating the probability (design or
 #' sampling) weights of the survey data (level-1-weight), provided as character
 #' string or formula.
-#' @param nest Logical, if `TRUE` and `by` indicates at least two
-#' group variables, then groups are "nested", i.e. groups are now a
-#' combination from each group level of the variables in `by`.
+#' @param nest Logical, if `TRUE` and `by` indicates at least two group
+#' variables, then groups are "nested", i.e. groups are now a combination from
+#' each group level of the variables in `by`. This argument is not used when
+#' `method = "kish"`.
 #' @param method String, indicating which rescale-method is used for rescaling
 #' weights. Can be either `"carle"` (default) or `"kish"`. See 'Details'. If
 #' `method = "carle"`, the `by` argument is required.
 #'
-#' @return `data`, including the new weighting variable(s). For
-#' `method = "carle"`, new columns `rescaled_weights_a` and `rescaled_weights_b`
-#' are returned, and for `method = "kish"`, the returned data contains a column
-#' `rescaled_weights`. These represent the rescaled design weights to use in
-#' multilevel models (use these variables for the `weights` argument).
+#' @return
+#' `data`, including the new weighting variable(s). For `method = "carle"`, new
+#' columns `rescaled_weights_a` and `rescaled_weights_b` are returned, and for
+#' `method = "kish"`, the returned data contains a column `rescaled_weights`.
+#' These represent the rescaled design weights to use in multilevel models (use
+#' these variables for the `weights` argument).
 #'
 #' @details
 #' - `method = "carle"`
@@ -213,6 +215,11 @@ rescale_weights <- function(data,
 .rescale_weights_kish <- function(nest, probability_weights, data_tmp, data, by, weight_non_na) {
   # sort id
   data_tmp$.bamboozled <- seq_len(nrow(data_tmp))
+
+  # `nest` is currently ignored
+  if (isTRUE(nest)) {
+    insight::format_warning("Argument `nest` is ignored for `method = \"kish\"`.")
+  }
 
   # check by argument
   if (!is.null(by) && !all(by %in% colnames(data_tmp))) {

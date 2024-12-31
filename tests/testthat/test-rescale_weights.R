@@ -91,6 +91,16 @@ test_that("rescale_weights errors and warnings", {
     ),
     regex = "The following variable(s)"
   )
+  expect_warning(
+    rescale_weights(
+      data = head(nhanes_sample, n = 30),
+      by = "SDMVSTRA",
+      probability_weights = "WTINT2YR",
+      nest = TRUE,
+      method = "kish"
+    ),
+    regex = "is ignored"
+  )
   expect_error(
     rescale_weights(
       data = head(nhanes_sample, n = 30),
