@@ -2,14 +2,15 @@
 #' @name rescale_weights
 #'
 #' @description Most functions to fit multilevel and mixed effects models only
-#' allow to specify frequency weights, but not design (i.e. sampling or
-#' probability) weights, which should be used when analyzing complex samples
-#' and survey data. `rescale_weights()` implements two algorithms, one proposed
-#' by \cite{Asparouhov (2006)} and \cite{Carle (2009)} and one proposed by
-#' \cite{Kish (1965)}, to rescale design weights in survey data to account for the
-#' grouping structure of multilevel models, which then can be used for
-#' multilevel modelling.
-#'
+#' allow the user to specify frequency weights, but not design (i.e., sampling
+#' or probability) weights, which should be used when analyzing complex samples
+#' (e.g., probability samples). `rescale_weights()` implements two algorithms,
+#' one proposed by \cite{Asparouhov (2006)} and \cite{Carle (2009)} and one
+#' proposed by by \cite{Asparouhov (2006)} and \cite{Carle (2009)}, to rescale
+#' design weights in survey data to account for the grouping structure of
+#' multilevel models, and and one based on the design effect proposed by
+#' \cite{Kish (1965)}, to rescale weights by the design effect to account for
+#' additional sampling error introduced by weighting.
 #' @param data A data frame.
 #' @param by Variable names (as character vector, or as formula), indicating
 #' the grouping structure (strata) of the survey data (level-2-cluster
@@ -27,7 +28,7 @@
 #'
 #' @return `data`, including the new weighting variable(s). For
 #' `method = "carle"`, new columns `rescaled_weights_a` and `rescaled_weights_b`
-#' are returned, and for `method = "klish"`, the returned data contains a column
+#' are returned, and for `method = "kish"`, the returned data contains a column
 #' `rescaled_weights`. These represent the rescaled design weights to use in
 #' multilevel models (use these variables for the `weights` argument).
 #'
@@ -64,9 +65,12 @@
 #'
 #'   Rescaling is based on scaling the sample weights so the mean value is 1,
 #'   which means the sum of all weights equals the sample size. Next, the design
-#'   effect (_Kish 1965_) is calculated, which is the mean of the squared weights
-#'   divided by the squared mean of the weights. The scales sample weights are
-#'   then divided by the design effect.
+#'   effect (_Kish 1965_) is calculated, which is the mean of the squared
+#'   weights divided by the squared mean of the weights. The scales sample
+#'   weights are then divided by the design effect. This method is most
+#'   appropriate when weights are based on additional variables beyond the
+#'   grouping variables in the model (e.g., other demographic characteristics),
+#'   but may also be useful in other contexts.
 #'
 #'   Some tests on real-world survey-data suggest that, in comparison to the
 #'   Carle-method, the Kish-method comes closer to estimates from a regular
