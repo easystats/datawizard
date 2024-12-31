@@ -207,7 +207,7 @@ rescale_weights <- function(data,
     )
   } else {
     # if `by` = NULL, we create a dummy group
-    by <- "tmp_klish_by"
+    by <- "tmp_kish_by"
     data_tmp[[by]] <- 1
   }
 
@@ -229,7 +229,7 @@ rescale_weights <- function(data,
   # restore original order, remove dummy variables
   result <- result[order(result$.bamboozled), ]
   result$.bamboozled <- NULL
-  result$tmp_klish_by
+  result$tmp_kish_by
 
   # return result
   result
