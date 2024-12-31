@@ -16,18 +16,28 @@ BREAKING CHANGES AND DEPRECATIONS
   - if `select` (previously `pattern`) is a named vector, then all elements
     must be named, e.g. `c(length = "Sepal.Length", "Sepal.Width")` errors.
 
+* Order of arguments `by` and `probability_weights` in `rescale_weights()` has
+  changed, because for `method = "kish"`, the `by` argument is optional.
+
+* The name of the rescaled weights variables in `rescale_weights()` have been
+  renamed. `pweights_a` and `pweights_b` are now named `rescaled_weights_a`
+  and `rescaled_weights_b`.
+
 * `print()` methods for `data_tabulate()` with multiple sub-tables (i.e. when
   length of `by` was > 1) were revised. Now, an integrated table instead of
   multiple tables is returned. Furthermore, `print_html()` did not work, which
   was also fixed now.
 
 * `demean()` (and `degroup()`) gets an `append` argument that defaults to `TRUE`,
-  to append the centered variabled to the original data frame, instead of
+  to append the centered variables to the original data frame, instead of
   returning the de- and group-meaned variables only. Use `append = FALSE` to
   for the previous default behaviour (i.e. only returning the newly created
   variables).
 
 CHANGES
+
+* `rescale_weights()` gets a `method` argument, to choose method to rescale
+  weights. Options are `"carle"` (the default) and `"kish"`.
 
 * The `select` argument, which is available in different functions to select
   variables, can now also be a character vector with quoted variable names,
