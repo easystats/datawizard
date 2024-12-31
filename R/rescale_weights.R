@@ -209,7 +209,7 @@ rescale_weights <- function(data,
       ),
       .misspelled_string(colnames(data_tmp), dont_exist, "Possibly misspelled?")
     )
-  } else {
+  } else if (is.null(by)) {
     # if `by` = NULL, we create a dummy group
     by <- "tmp_kish_by"
     data_tmp[[by]] <- 1
