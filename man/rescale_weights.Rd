@@ -144,10 +144,22 @@ result3 <- lme4::glmer(
   data = d,
   weights = rescaled_weights
 )
+d <- rescale_weights(
+  nhanes_sample,
+  "WTINT2YR",
+  "SDMVSTRA",
+  method = "kish"
+)
+result4 <- lme4::glmer(
+  total ~ factor(RIAGENDR) + log(age) + factor(RIDRETH1) + (1 | SDMVPSU),
+  family = poisson(),
+  data = d,
+  weights = rescaled_weights
+)
 parameters::compare_parameters(
-  list(result1, result2, result3),
+  list(result1, result2, result3, result4),
   exponentiate = TRUE,
-  column_names = c("Carle (A)", "Carle (B)", "Kish")
+  column_names = c("Carle (A)", "Carle (B)", "Kish", "Kish (grouped)")
 )
 }
 \dontshow{\}) # examplesIf}
