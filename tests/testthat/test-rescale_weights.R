@@ -14,6 +14,8 @@ test_that("rescale_weights works as expected", {
   expect_equal(sum(out$rescaled_weights_b), 2244.71451, tolerance = 1e-3)
   out <- rescale_weights(nhanes_sample, "WTINT2YR", method = "kish")
   expect_equal(sum(out$rescaled_weights), 2162.53961, tolerance = 1e-3)
+  out <- rescale_weights(nhanes_sample, "WTINT2YR", by = "SDMVPSU", method = "kish")
+  expect_equal(sum(out$rescaled_weights), 2163.3657, tolerance = 1e-3)
 })
 
 
@@ -80,14 +82,14 @@ test_that("rescale_weights errors and warnings", {
     ),
     regex = "must be specified"
   )
-  expect_warning(
+  expect_error(
     rescale_weights(
       data = head(nhanes_sample, n = 30),
-      by = "SDMVSTRA",
+      by = "abc",
       probability_weights = "WTINT2YR",
       method = "kish"
     ),
-    regex = "is not used"
+    regex = "The following variable(s)"
   )
   expect_error(
     rescale_weights(

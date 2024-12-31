@@ -1,7 +1,7 @@
 # rescale_weights works as expected
 
     Code
-      head(rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR"))
+      head(rescale_weights(nhanes_sample, "WTINT2YR", "SDMVSTRA"))
     Output
         total  age RIAGENDR RIDRETH1 SDMVPSU SDMVSTRA WTINT2YR rescaled_weights_a
       1     1 2.20        1        3       2       31 97593.68          1.5733612
@@ -21,7 +21,7 @@
 ---
 
     Code
-      head(rescale_weights(nhanes_sample, c("SDMVSTRA", "SDMVPSU"), "WTINT2YR"))
+      head(rescale_weights(nhanes_sample, "WTINT2YR", c("SDMVSTRA", "SDMVPSU")))
     Output
         total  age RIAGENDR RIDRETH1 SDMVPSU SDMVSTRA WTINT2YR pweight_a_SDMVSTRA
       1     1 2.20        1        3       2       31 97593.68          1.5733612

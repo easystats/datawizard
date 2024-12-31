@@ -16,6 +16,8 @@ BREAKING CHANGES AND DEPRECATIONS
   - if `select` (previously `pattern`) is a named vector, then all elements
     must be named, e.g. `c(length = "Sepal.Length", "Sepal.Width")` errors.
 
+* Order of arguments `by` and `probability_weights` in `rescale_weights()` has
+  changed, because for `method = "kish"`, the `by` argument is optional.
 
 * The name of the rescaled weights variables in `rescale_weights()` have been
   renamed. `pweights_a` and `pweights_b` are now named `rescaled_weights_a`

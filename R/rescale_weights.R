@@ -16,14 +16,16 @@
 #' the grouping structure (strata) of the survey data (level-2-cluster
 #' variable). It is also possible to create weights for multiple group
 #' variables; in such cases, each created weighting variable will be suffixed
-#' by the name of the group variable.
+#' by the name of the group variable. This argument is required for
+#' `method = "carle"`, but optional for `method = "kish"`.
 #' @param probability_weights Variable indicating the probability (design or
 #' sampling) weights of the survey data (level-1-weight).
 #' @param nest Logical, if `TRUE` and `by` indicates at least two
 #' group variables, then groups are "nested", i.e. groups are now a
 #' combination from each group level of the variables in `by`.
 #' @param method String, indicating which rescale-method is used for rescaling
-#' weights. Can be either `"carle"` (default) or `"kish"`. See 'Details'.
+#' weights. Can be either `"carle"` (default) or `"kish"`. See 'Details'. If
+#' `method = "carle"`, the `by` argument is required.
 #'
 #' @return `data`, including the new weighting variable(s). For
 #' `method = "carle"`, new columns `rescaled_weights_a` and `rescaled_weights_b`
@@ -230,12 +232,14 @@ rescale_weights <- function(data,
   # bind data
   result <- do.call(rbind, out)
 
-  # restore original order, remove dummy variables
+  # restore original order
   result <- result[order(result$.bamboozled), ]
-  result$.bamboozled <- result$tmp_kish_by <- NULL
 
+  # add back rescaled weights to original data, but account for missing observations
+  data$rescaled_weights <- NA_real_
+  data$rescaled_weights[weight_non_na] <- result$rescaled_weights
   # return result
-  result
+  data
 }
 
 
