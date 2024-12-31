@@ -19,6 +19,20 @@ test_that("rescale_weights works as expected", {
 })
 
 
+test_that("rescale_weights works as expected", {
+  data(nhanes_sample)
+  # convert tibble into data frame, so check-hard GHA works
+  nhanes_sample <- as.data.frame(nhanes_sample)[1:20, ]
+
+  # add NAs
+  set.seed(123)
+  nhanes_sample$WTINT2YR[sample.int(nrow(nhanes_sample), 5)] <- NA
+
+  expect_snapshot(rescale_weights(nhanes_sample, "WTINT2YR", "SDMVSTRA"))
+  expect_snapshot(rescale_weights(nhanes_sample, "WTINT2YR", method = "kish"))
+})
+
+
 test_that("rescale_weights nested works as expected", {
   data(nhanes_sample)
   # convert tibble into data frame, so check-hard GHA works
@@ -89,7 +103,7 @@ test_that("rescale_weights errors and warnings", {
       probability_weights = "WTINT2YR",
       method = "kish"
     ),
-    regex = "The following variable(s)"
+    regex = "The following variable"
   )
   expect_warning(
     rescale_weights(
