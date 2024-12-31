@@ -232,8 +232,7 @@ rescale_weights <- function(data,
 
   # restore original order, remove dummy variables
   result <- result[order(result$.bamboozled), ]
-  result$.bamboozled <- NULL
-  result$tmp_kish_by
+  result$.bamboozled <- result$tmp_kish_by <- NULL
 
   # return result
   result
