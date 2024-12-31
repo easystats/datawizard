@@ -16,8 +16,7 @@
 #' the grouping structure (strata) of the survey data (level-2-cluster
 #' variable). It is also possible to create weights for multiple group
 #' variables; in such cases, each created weighting variable will be suffixed
-#' by the name of the group variable. Argument `by` only applies to the default
-#' rescaling-method (`method = "carle"`), not to `method = "kish"`.
+#' by the name of the group variable.
 #' @param probability_weights Variable indicating the probability (design or
 #' sampling) weights of the survey data (level-1-weight).
 #' @param nest Logical, if `TRUE` and `by` indicates at least two
@@ -146,8 +145,13 @@ rescale_weights <- function(data,
                             method = "carle") {
   method <- insight::validate_argument(method, c("carle", "kish"))
 
+  # convert formulas to strings
   if (inherits(by, "formula")) {
     by <- all.vars(by)
+  }
+
+  if (inherits(probability_weights, "formula")) {
+    probability_weights <- all.vars(probability_weights)
   }
 
   # check for existing variable names

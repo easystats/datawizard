@@ -22,8 +22,7 @@ sampling) weights of the survey data (level-1-weight).}
 the grouping structure (strata) of the survey data (level-2-cluster
 variable). It is also possible to create weights for multiple group
 variables; in such cases, each created weighting variable will be suffixed
-by the name of the group variable. Argument \code{by} only applies to the default
-rescaling-method (\code{method = "carle"}), not to \code{method = "kish"}.}
+by the name of the group variable.}
 
 \item{nest}{Logical, if \code{TRUE} and \code{by} indicates at least two
 group variables, then groups are "nested", i.e. groups are now a
