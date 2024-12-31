@@ -90,16 +90,16 @@
 #'
 #' @examplesIf all(insight::check_if_installed(c("lme4", "parameters"), quietly = TRUE))
 #' data(nhanes_sample)
-#' head(rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR"))
+#' head(rescale_weights(nhanes_sample, "WTINT2YR", "SDMVSTRA"))
 #'
 #' # also works with multiple group-variables
-#' head(rescale_weights(nhanes_sample, c("SDMVSTRA", "SDMVPSU"), "WTINT2YR"))
+#' head(rescale_weights(nhanes_sample, "WTINT2YR", c("SDMVSTRA", "SDMVPSU")))
 #'
 #' # or nested structures.
 #' x <- rescale_weights(
 #'   data = nhanes_sample,
-#'   by = c("SDMVSTRA", "SDMVPSU"),
 #'   probability_weights = "WTINT2YR",
+#'   by = c("SDMVSTRA", "SDMVPSU"),
 #'   nest = TRUE
 #' )
 #' head(x)
