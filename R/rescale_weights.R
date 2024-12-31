@@ -68,7 +68,7 @@
 #'   Rescaling is based on scaling the sample weights so the mean value is 1,
 #'   which means the sum of all weights equals the sample size. Next, the design
 #'   effect (_Kish 1965_) is calculated, which is the mean of the squared
-#'   weights divided by the squared mean of the weights. The scales sample
+#'   weights divided by the squared mean of the weights. The scaled sample
 #'   weights are then divided by the design effect. This method is most
 #'   appropriate when weights are based on additional variables beyond the
 #'   grouping variables in the model (e.g., other demographic characteristics),
