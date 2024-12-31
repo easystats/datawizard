@@ -192,9 +192,19 @@ rescale_weights <- function(data,
 # rescale weights, method Kish ----------------------------
 
 .rescale_weights_kish <- function(nest, probability_weights, data_tmp, data, by, weight_non_na) {
-  # check argument
-  if (!is.null(by)) {
-    insight::format_warning("The `by` argument is not used for `method = \"kish\" and will be ignored.")
+  # sort id
+  data_tmp$.bamboozled <- seq_len(nrow(data_tmp))
+
+  # check by argument
+  if (!is.null(by) && !all(by %in% colnames(data_tmp))) {
+    dont_exist <- setdiff(by, colnames(data_tmp))
+    insight::format_error(
+      paste0(
+        "The following variable(s) specified in `by` don't exist in the dataset: ",
+        text_concatenate(dont_exist), "."
+      ),
+      .misspelled_string(colnames(data_tmp), dont_exist, "Possibly misspelled?")
+    )
   }
   p_weights <- data_tmp[[probability_weights]]
   # design effect according to Kish
@@ -204,6 +214,11 @@ rescale_weights <- function(data,
   # divide weights by design effect
   data$rescaled_weights <- NA_real_
   data$rescaled_weights[weight_non_na] <- z_weights / deff
+
+  # restore original order
+  x <- x[order(x$.bamboozled), ]
+  x$.bamboozled <- NULL
+
   # return result
   data
 }
