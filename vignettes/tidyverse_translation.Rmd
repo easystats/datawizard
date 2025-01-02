@@ -515,7 +515,7 @@ a vector of new names for these columns that must be of the same length.
 # ---------- datawizard -----------
 starwars |>
   data_rename(
-    pattern = c("sex", "hair_color"),
+    select = c("sex", "hair_color"),
     replacement = c("Sex", "Hair Color")
   )
 ```
@@ -547,7 +547,7 @@ to_rename <- names(starwars)
 
 starwars |>
   data_rename(
-    pattern = to_rename,
+    select = to_rename,
     replacement = tools::toTitleCase(gsub("_", " ", to_rename, fixed = TRUE))
   )
 ```

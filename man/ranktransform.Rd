@@ -8,7 +8,14 @@
 \usage{
 ranktransform(x, ...)
 
-\method{ranktransform}{numeric}(x, sign = FALSE, method = "average", verbose = TRUE, ...)
+\method{ranktransform}{numeric}(
+  x,
+  sign = FALSE,
+  method = "average",
+  zeros = "na",
+  verbose = TRUE,
+  ...
+)
 
 \method{ranktransform}{data.frame}(
   x,
@@ -18,6 +25,7 @@ ranktransform(x, ...)
   method = "average",
   ignore_case = FALSE,
   regex = FALSE,
+  zeros = "na",
   verbose = TRUE,
   ...
 )
@@ -33,6 +41,10 @@ ranktransform(x, ...)
 \code{"first"}, \code{"last"}, \code{"random"}, \code{"max"} or \code{"min"}. See \code{\link[=rank]{rank()}} for
 details.}
 
+\item{zeros}{How to handle zeros. If \code{"na"} (default), they are marked as
+\code{NA}. If \code{"signrank"}, they are kept during the ranking and marked as zeros.
+This is only used when \code{sign = TRUE}.}
+
 \item{verbose}{Toggle warnings.}
 
 \item{select}{Variables that will be included when performing the required
@@ -43,6 +55,10 @@ tasks. Can be either
 vector of variable names (e.g., \code{c("col1", "col2", "col3")}), or a
 character vector of variable names including ranges specified via \code{:}
 (e.g., \code{c("col1:col3", "col5")}),
+\item for some functions, like \code{data_select()} or \code{data_rename()}, \code{select} can
+be a named character vector. In this case, the names are used to rename
+the columns in the output data frame. See 'Details' in the related
+functions to see where this option applies.
 \item a formula with variable names (e.g., \code{~column_1 + column_2}),
 \item a vector of positive integers, giving the positions counting from the left
 (e.g. \code{1} or \code{c(1, 3, 5)}),
@@ -110,8 +126,11 @@ from the input data frame.
 \examples{
 ranktransform(c(0, 1, 5, -5, -2))
 
-# Won't work
-# ranktransform(c(0, 1, 5, -5, -2), sign = TRUE)
+# By default, zeros are converted to NA
+suppressWarnings(
+  ranktransform(c(0, 1, 5, -5, -2), sign = TRUE)
+)
+ranktransform(c(0, 1, 5, -5, -2), sign = TRUE, zeros = "signrank")
 
 head(ranktransform(trees))
 }

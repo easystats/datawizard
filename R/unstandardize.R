@@ -151,7 +151,6 @@ unstandardize.character <- function(x, ...) {
 }
 
 
-
 #' @export
 unstandardize.grouped_df <- function(x,
                                      center = NULL,
@@ -259,7 +258,6 @@ unstandardize.matrix <- function(x,
 
 #' @export
 unstandardize.array <- unstandardize.matrix
-
 
 
 # Datagrid ----------------------------------------------------------------

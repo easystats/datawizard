@@ -23,7 +23,6 @@ test_that("recode numeric", {
 })
 
 
-
 # Date -----------------------
 
 set.seed(123)
@@ -32,7 +31,6 @@ x <- as.Date("2022-01-01")
 test_that("recode date", {
   expect_message(recode_values(x))
 })
-
 
 
 # factor -----------------------
@@ -92,7 +90,6 @@ test_that("recode factor", {
 })
 
 
-
 # character -----------------------
 
 set.seed(123)
@@ -106,7 +103,6 @@ test_that("recode character", {
     ignore_attr = TRUE
   )
 })
-
 
 
 # data frame -----------------------
@@ -177,7 +173,6 @@ test_that("recode data.frame", {
     ignore_attr = TRUE
   )
 })
-
 
 
 # set recode pattern back to default --------------

@@ -30,7 +30,7 @@
 #'
 #' @return A data frame comparable to `data`, with adjusted variables.
 #'
-#' @examplesIf require("bayestestR", quietly = TRUE) && require("rstanarm", quietly = TRUE) && require("gamm4", quietly = TRUE)
+#' @examplesIf all(insight::check_if_installed(c("bayestestR", "rstanarm", "gamm4"), quietly = TRUE))
 #' adjusted_all <- adjust(attitude)
 #' head(adjusted_all)
 #' adjusted_one <- adjust(attitude, effect = "complaints", select = "rating")
@@ -43,7 +43,7 @@
 #' }
 #'
 #' # Generate data
-#' data <- simulate_correlation(n = 100, r = 0.7)
+#' data <- bayestestR::simulate_correlation(n = 100, r = 0.7)
 #' data$V2 <- (5 * data$V2) + 20 # Add intercept
 #'
 #' # Adjust
@@ -75,12 +75,8 @@ adjust <- function(data,
                    ignore_case = FALSE,
                    regex = FALSE,
                    verbose = FALSE) {
-  if (!all(colnames(data) == make.names(colnames(data), unique = TRUE))) {
-    insight::format_warning(
-      "Bad column names (e.g., with spaces) have been detected which might create issues in many functions.",
-      "Please fix it (you can run `names(mydata) <- make.names(names(mydata))` for a quick fix)."
-    )
-  }
+  # make sure column names are syntactically valid
+  .check_dataframe_names(data, action = "error")
 
   # check for formula notation, convert to character vector
   if (inherits(effect, "formula")) {

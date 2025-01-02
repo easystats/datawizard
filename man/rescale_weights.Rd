@@ -4,56 +4,77 @@
 \alias{rescale_weights}
 \title{Rescale design weights for multilevel analysis}
 \usage{
-rescale_weights(data, by, probability_weights, nest = FALSE)
+rescale_weights(
+  data,
+  probability_weights = NULL,
+  by = NULL,
+  nest = FALSE,
+  method = "carle"
+)
 }
 \arguments{
 \item{data}{A data frame.}
+
+\item{probability_weights}{Variable indicating the probability (design or
+sampling) weights of the survey data (level-1-weight), provided as character
+string or formula.}
 
 \item{by}{Variable names (as character vector, or as formula), indicating
 the grouping structure (strata) of the survey data (level-2-cluster
 variable). It is also possible to create weights for multiple group
 variables; in such cases, each created weighting variable will be suffixed
-by the name of the group variable.}
+by the name of the group variable. This argument is required for
+\code{method = "carle"}, but optional for \code{method = "kish"}.}
 
-\item{probability_weights}{Variable indicating the probability (design or
-sampling) weights of the survey data (level-1-weight).}
+\item{nest}{Logical, if \code{TRUE} and \code{by} indicates at least two group
+variables, then groups are "nested", i.e. groups are now a combination from
+each group level of the variables in \code{by}. This argument is not used when
+\code{method = "kish"}.}
 
-\item{nest}{Logical, if \code{TRUE} and \code{by} indicates at least two
-group variables, then groups are "nested", i.e. groups are now a
-combination from each group level of the variables in \code{by}.}
+\item{method}{String, indicating which rescale-method is used for rescaling
+weights. Can be either \code{"carle"} (default) or \code{"kish"}. See 'Details'. If
+\code{method = "carle"}, the \code{by} argument is required.}
 }
 \value{
-\code{data}, including the new weighting variables: \code{pweights_a}
-and \code{pweights_b}, which represent the rescaled design weights to use
-in multilevel models (use these variables for the \code{weights} argument).
+\code{data}, including the new weighting variable(s). For \code{method = "carle"}, new
+columns \code{rescaled_weights_a} and \code{rescaled_weights_b} are returned, and for
+\code{method = "kish"}, the returned data contains a column \code{rescaled_weights}.
+These represent the rescaled design weights to use in multilevel models (use
+these variables for the \code{weights} argument).
 }
 \description{
 Most functions to fit multilevel and mixed effects models only
-allow to specify frequency weights, but not design (i.e. sampling or
-probability) weights, which should be used when analyzing complex samples
-and survey data. \code{rescale_weights()} implements an algorithm proposed
-by \cite{Asparouhov (2006)} and \cite{Carle (2009)} to rescale design
-weights in survey data to account for the grouping structure of multilevel
-models, which then can be used for multilevel modelling.
+allow the user to specify frequency weights, but not design (i.e., sampling
+or probability) weights, which should be used when analyzing complex samples
+(e.g., probability samples). \code{rescale_weights()} implements two algorithms,
+one proposed by \cite{Asparouhov (2006)} and \cite{Carle (2009)}, to rescale
+design weights in survey data to account for the grouping structure of
+multilevel models, and one based on the design effect proposed by
+\cite{Kish (1965)}, to rescale weights by the design effect to account for
+additional sampling error introduced by weighting.
 }
 \details{
-Rescaling is based on two methods: For \code{pweights_a}, the sample weights
-\code{probability_weights} are adjusted by a factor that represents the proportion
-of group size divided by the sum of sampling weights within each group. The
-adjustment factor for \code{pweights_b} is the sum of sample weights within each
-group divided by the sum of squared sample weights within each group (see
-Carle (2009), Appendix B). In other words, \code{pweights_a} "scales the weights
-so that the new weights sum to the cluster sample size" while \code{pweights_b}
-"scales the weights so that the new weights sum to the effective cluster
-size".
+\itemize{
+\item \code{method = "carle"}
+
+Rescaling is based on two methods: For \code{rescaled_weights_a}, the sample
+weights \code{probability_weights} are adjusted by a factor that represents the
+proportion of group size divided by the sum of sampling weights within each
+group. The adjustment factor for \code{rescaled_weights_b} is the sum of sample
+weights within each group divided by the sum of squared sample weights
+within each group (see Carle (2009), Appendix B). In other words,
+\code{rescaled_weights_a} "scales the weights so that the new weights sum to the
+cluster sample size" while \code{rescaled_weights_b} "scales the weights so that
+the new weights sum to the effective cluster size".
 
 Regarding the choice between scaling methods A and B, Carle suggests that
-"analysts who wish to discuss point estimates should report results based on
-weighting method A. For analysts more interested in residual between-group
-variance, method B may generally provide the least biased estimates". In
-general, it is recommended to fit a non-weighted model and weighted models
-with both scaling methods and when comparing the models, see whether the
-"inferential decisions converge", to gain confidence in the results.
+"analysts who wish to discuss point estimates should report results based
+on weighting method A. For analysts more interested in residual
+between-group variance, method B may generally provide the least biased
+estimates". In general, it is recommended to fit a non-weighted model and
+weighted models with both scaling methods and when comparing the models,
+see whether the "inferential decisions converge", to gain confidence in the
+results.
 
 Though the bias of scaled weights decreases with increasing group size,
 method A is preferred when insufficient or low group size is a concern.
@@ -61,40 +82,96 @@ method A is preferred when insufficient or low group size is a concern.
 The group ID and probably PSU may be used as random effects (e.g. nested
 design, or group and PSU as varying intercepts), depending on the survey
 design that should be mimicked.
+\item \code{method = "kish"}
+
+Rescaling is based on scaling the sample weights so the mean value is 1,
+which means the sum of all weights equals the sample size. Next, the design
+effect (\emph{Kish 1965}) is calculated, which is the mean of the squared
+weights divided by the squared mean of the weights. The scaled sample
+weights are then divided by the design effect. This method is most
+appropriate when weights are based on additional variables beyond the
+grouping variables in the model (e.g., other demographic characteristics),
+but may also be useful in other contexts.
+
+Some tests on real-world survey-data suggest that, in comparison to the
+Carle-method, the Kish-method comes closer to estimates from a regular
+survey-design using the \strong{survey} package. Note that these tests are not
+representative and it is recommended to check your results against a
+standard survey-design.
+}
 }
 \examples{
-if (require("lme4")) {
-  data(nhanes_sample)
-  head(rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR"))
+\dontshow{if (all(insight::check_if_installed(c("lme4", "parameters"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(nhanes_sample)
+head(rescale_weights(nhanes_sample, "WTINT2YR", "SDMVSTRA"))
 
-  # also works with multiple group-variables
-  head(rescale_weights(nhanes_sample, c("SDMVSTRA", "SDMVPSU"), "WTINT2YR"))
+# also works with multiple group-variables
+head(rescale_weights(nhanes_sample, "WTINT2YR", c("SDMVSTRA", "SDMVPSU")))
 
-  # or nested structures.
-  x <- rescale_weights(
-    data = nhanes_sample,
-    by = c("SDMVSTRA", "SDMVPSU"),
-    probability_weights = "WTINT2YR",
-    nest = TRUE
-  )
-  head(x)
+# or nested structures.
+x <- rescale_weights(
+  data = nhanes_sample,
+  probability_weights = "WTINT2YR",
+  by = c("SDMVSTRA", "SDMVPSU"),
+  nest = TRUE
+)
+head(x)
 
-  nhanes_sample <- rescale_weights(nhanes_sample, "SDMVSTRA", "WTINT2YR")
+\donttest{
+# compare different methods, using multilevel-Poisson regression
 
-  glmer(
-    total ~ factor(RIAGENDR) * (log(age) + factor(RIDRETH1)) + (1 | SDMVPSU),
-    family = poisson(),
-    data = nhanes_sample,
-    weights = pweights_a
-  )
+d <- rescale_weights(nhanes_sample, "WTINT2YR", "SDMVSTRA")
+result1 <- lme4::glmer(
+  total ~ factor(RIAGENDR) + log(age) + factor(RIDRETH1) + (1 | SDMVPSU),
+  family = poisson(),
+  data = d,
+  weights = rescaled_weights_a
+)
+result2 <- lme4::glmer(
+  total ~ factor(RIAGENDR) + log(age) + factor(RIDRETH1) + (1 | SDMVPSU),
+  family = poisson(),
+  data = d,
+  weights = rescaled_weights_b
+)
+
+d <- rescale_weights(
+  nhanes_sample,
+  "WTINT2YR",
+  method = "kish"
+)
+result3 <- lme4::glmer(
+  total ~ factor(RIAGENDR) + log(age) + factor(RIDRETH1) + (1 | SDMVPSU),
+  family = poisson(),
+  data = d,
+  weights = rescaled_weights
+)
+d <- rescale_weights(
+  nhanes_sample,
+  "WTINT2YR",
+  "SDMVSTRA",
+  method = "kish"
+)
+result4 <- lme4::glmer(
+  total ~ factor(RIAGENDR) + log(age) + factor(RIDRETH1) + (1 | SDMVPSU),
+  family = poisson(),
+  data = d,
+  weights = rescaled_weights
+)
+parameters::compare_parameters(
+  list(result1, result2, result3, result4),
+  exponentiate = TRUE,
+  column_names = c("Carle (A)", "Carle (B)", "Kish", "Kish (grouped)")
+)
 }
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{
+\item Asparouhov T. (2006). General Multi-Level Modeling with Sampling
+Weights. Communications in Statistics - Theory and Methods 35: 439-460
 \item Carle A.C. (2009). Fitting multilevel models in complex survey data
 with design weights: Recommendations. BMC Medical Research Methodology
 9(49): 1-13
-\item Asparouhov T. (2006). General Multi-Level Modeling with Sampling
-Weights. Communications in Statistics - Theory and Methods 35: 439-460
+\item Kish, L. (1965) Survey Sampling. London: Wiley.
 }
 }

@@ -127,7 +127,6 @@ data_read <- function(path,
 }
 
 
-
 # helper -----------------------
 
 .file_ext <- function(x) {
@@ -154,7 +153,6 @@ data_read <- function(path,
 
   path
 }
-
 
 
 # process imported data from SPSS, SAS or Stata -----------------------
@@ -223,7 +221,6 @@ data_read <- function(path,
   class(x) <- "data.frame"
   x
 }
-
 
 
 # read functions -----------------------

@@ -15,7 +15,7 @@ data_partition(
 )
 }
 \arguments{
-\item{data}{A data frame, or an object that can be coerced to a data frame.}
+\item{data}{A data frame.}
 
 \item{proportion}{Scalar (between 0 and 1) or numeric vector, indicating the
 proportion(s) of the training set(s). The sum of \code{proportion} must not be
@@ -68,8 +68,7 @@ lapply(out, function(i) table(i$Species))
 }
 \seealso{
 \itemize{
-\item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}},
-\code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
+\item Add a prefix or suffix to column names: \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
 \item Functions to reorder or remove columns: \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}},
 \code{\link[=data_remove]{data_remove()}}
 \item Functions to reshape, pivot or rotate data frames: \code{\link[=data_to_long]{data_to_long()}},

@@ -13,6 +13,10 @@
 #'     vector of variable names (e.g., `c("col1", "col2", "col3")`), or a
 #'     character vector of variable names including ranges specified via `:`
 #'     (e.g., `c("col1:col3", "col5")`),
+#'   - for some functions, like `data_select()` or `data_rename()`, `select` can
+#'     be a named character vector. In this case, the names are used to rename
+#'     the columns in the output data frame. See 'Details' in the related
+#'     functions to see where this option applies.
 #'   - a formula with variable names (e.g., `~column_1 + column_2`),
 #'   - a vector of positive integers, giving the positions counting from the left
 #'     (e.g. `1` or `c(1, 3, 5)`),

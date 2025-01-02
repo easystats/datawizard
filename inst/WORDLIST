@@ -8,14 +8,14 @@ CMD
 Carle
 Catran
 Crosstables
-Dhaliwal
-Disaggregating
+DEPRECATIONS
 DOI
 De
-Dom
+Dhaliwal
+Disaggregating
 EFC
-Enders
 EUROFAMCARE
+Enders
 Fairbrother
 GLMM
 Gelman
@@ -26,6 +26,7 @@ Heisig
 Herrington
 Hoffmann
 Joanes
+Kish
 Llabre
 Lumley
 MADs
@@ -54,7 +55,6 @@ Winsorizing
 al
 behaviour
 behaviours
-bmwiernik
 codebook
 codebooks
 coercible
@@ -77,7 +77,6 @@ joss
 labelled
 labelling
 leptokurtic
-lifecycle
 lm
 lme
 meaned
@@ -88,7 +87,6 @@ modelling
 nd
 panelr
 partialization
-patilindrajeets
 platykurtic
 poorman
 pre
@@ -102,7 +100,6 @@ recodes
 recoding
 recodings
 relevel
-rempsyc
 reproducibility
 rescale
 rescaled
@@ -111,7 +108,6 @@ rio
 rowid
 sd
 stackexchange
-strengejacke
 tailedness
 th
 tibble

@@ -14,7 +14,6 @@ d <- data_filter(efc, 1:5)
 d$e42dep <- droplevels(d$e42dep)
 
 
-
 # SPSS -------------------------------------
 
 test_that("data_write, SPSS", {
@@ -53,7 +52,6 @@ test_that("data_write, SPSS, mixed types of labelled vectors", {
 })
 
 
-
 # Stata -------------------------------------
 
 test_that("data_write, Stata", {
@@ -69,7 +67,6 @@ test_that("data_write, Stata", {
     )
   })
 })
-
 
 
 # csv -------------------------

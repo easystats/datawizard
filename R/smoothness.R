@@ -117,8 +117,6 @@ smoothness.default <- function(x,
 }
 
 
-
-
 # bootstrapping -----------------------------------
 
 .boot_smoothness <- function(data, indices, method, lag) {
@@ -129,8 +127,6 @@ smoothness.default <- function(x,
     iterations = NULL
   )
 }
-
-
 
 
 # methods -----------------------------------------

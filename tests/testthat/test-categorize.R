@@ -200,7 +200,6 @@ test_that("recode all NA", {
 })
 
 
-
 test_that("recode numeric", {
   expect_identical(
     categorize(mtcars$hp, split = c(100, 150)),

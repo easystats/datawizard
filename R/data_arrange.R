@@ -27,7 +27,6 @@ data_arrange <- function(data, select = NULL, safe = TRUE) {
 }
 
 
-
 #' @export
 data_arrange.default <- function(data, select = NULL, safe = TRUE) {
   if (is.null(select) || length(select) == 0) {
@@ -43,7 +42,7 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
   select <- gsub("^-", "", select)
 
   # check for variables that are not in data
-  dont_exist <- select[which(!select %in% names(data))]
+  dont_exist <- setdiff(select, colnames(data))
 
   if (length(dont_exist) > 0) {
     if (safe) {
@@ -98,7 +97,6 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
 
   out
 }
-
 
 
 #' @export

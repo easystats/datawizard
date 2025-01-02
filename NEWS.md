@@ -1,14 +1,46 @@
 # datawizard (development)
 
-BREAKING CHANGES
+BREAKING CHANGES AND DEPRECATIONS
 
-* Argument `drop_na` in `data_match()` is deprecated now. Please use `remove_na`
-  instead.
+* *datawizard* now requires R >= 4.0 (#515).
+
+* Argument `drop_na` in `data_match()` is deprecated now. Please use
+  `remove_na` instead.
+
+* In `data_rename()` (#567):
+  - argument `pattern` is deprecated. Use `select` instead.
+  - argument `safe` is deprecated. The function now errors when `select`
+    contains unknown column names.
+  - when `replacement` is `NULL`, an error is now thrown (previously, column
+    indices were used as new names).
+  - if `select` (previously `pattern`) is a named vector, then all elements
+    must be named, e.g. `c(length = "Sepal.Length", "Sepal.Width")` errors.
+
+* Order of arguments `by` and `probability_weights` in `rescale_weights()` has
+  changed, because for `method = "kish"`, the `by` argument is optional.
+
+* The name of the rescaled weights variables in `rescale_weights()` have been
+  renamed. `pweights_a` and `pweights_b` are now named `rescaled_weights_a`
+  and `rescaled_weights_b`.
+
+* `print()` methods for `data_tabulate()` with multiple sub-tables (i.e. when
+  length of `by` was > 1) were revised. Now, an integrated table instead of
+  multiple tables is returned. Furthermore, `print_html()` did not work, which
+  was also fixed now.
+
+* `demean()` (and `degroup()`) gets an `append` argument that defaults to `TRUE`,
+  to append the centered variables to the original data frame, instead of
+  returning the de- and group-meaned variables only. Use `append = FALSE` to
+  for the previous default behaviour (i.e. only returning the newly created
+  variables).
 
 * The `"diff"` method in `smoothness()` was revised and now has a reversed
   interpretation. Documentation was updated accordingly. (#374).
 
 CHANGES
+
+* `rescale_weights()` gets a `method` argument, to choose method to rescale
+  weights. Options are `"carle"` (the default) and `"kish"`.
 
 * The `select` argument, which is available in different functions to select
   variables, can now also be a character vector with quoted variable names,
@@ -30,6 +62,9 @@ CHANGES
 
 * `data_summary()` also accepts the results of `bayestestR::ci()` as summary
   function (#483).
+
+* `ranktransform()` has a new argument `zeros` to determine how zeros should be
+  handled when `sign = TRUE` (#573).
 
 BUG FIXES
 

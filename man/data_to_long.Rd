@@ -49,6 +49,10 @@ tasks. Can be either
 vector of variable names (e.g., \code{c("col1", "col2", "col3")}), or a
 character vector of variable names including ranges specified via \code{:}
 (e.g., \code{c("col1:col3", "col5")}),
+\item for some functions, like \code{data_select()} or \code{data_rename()}, \code{select} can
+be a named character vector. In this case, the names are used to rename
+the columns in the output data frame. See 'Details' in the related
+functions to see where this option applies.
 \item a formula with variable names (e.g., \code{~column_1 + column_2}),
 \item a vector of positive integers, giving the positions counting from the left
 (e.g. \code{1} or \code{c(1, 3, 5)}),
@@ -155,7 +159,7 @@ names, that identify the source of the gathered values, stored in one or more
 new columns (\code{names_to}).
 }
 \examples{
-\dontshow{if (requireNamespace("psych") && requireNamespace("tidyr")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("psych", "tidyr"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 wide_data <- setNames(
   data.frame(replicate(2, rnorm(8))),
   c("Time1", "Time2")
@@ -223,8 +227,7 @@ head(even_longer_data)
 }
 \seealso{
 \itemize{
-\item Functions to rename stuff: \code{\link[=data_rename]{data_rename()}}, \code{\link[=data_rename_rows]{data_rename_rows()}},
-\code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
+\item Add a prefix or suffix to column names: \code{\link[=data_addprefix]{data_addprefix()}}, \code{\link[=data_addsuffix]{data_addsuffix()}}
 \item Functions to reorder or remove columns: \code{\link[=data_reorder]{data_reorder()}}, \code{\link[=data_relocate]{data_relocate()}},
 \code{\link[=data_remove]{data_remove()}}
 \item Functions to reshape, pivot or rotate data frames: \code{\link[=data_to_long]{data_to_long()}},
