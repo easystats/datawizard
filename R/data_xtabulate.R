@@ -194,7 +194,6 @@ format.datawizard_crosstab <- function(x,
 }
 
 
-
 # print, datawizard_crosstab ---------------------
 
 
@@ -361,7 +360,6 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
     }
   }
 }
-
 
 
 # helper ---------------------
