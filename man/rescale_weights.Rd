@@ -47,10 +47,9 @@ Most functions to fit multilevel and mixed effects models only
 allow the user to specify frequency weights, but not design (i.e., sampling
 or probability) weights, which should be used when analyzing complex samples
 (e.g., probability samples). \code{rescale_weights()} implements two algorithms,
-one proposed by \cite{Asparouhov (2006)} and \cite{Carle (2009)} and one
-proposed by by \cite{Asparouhov (2006)} and \cite{Carle (2009)}, to rescale
+one proposed by \cite{Asparouhov (2006)} and \cite{Carle (2009)}, to rescale
 design weights in survey data to account for the grouping structure of
-multilevel models, and and one based on the design effect proposed by
+multilevel models, and one based on the design effect proposed by
 \cite{Kish (1965)}, to rescale weights by the design effect to account for
 additional sampling error introduced by weighting.
 }
