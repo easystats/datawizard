@@ -107,9 +107,9 @@ standardize.default <- function(x,
                                 update_expr,
                                 ...) {
   m_info <- .get_model_info(x, ...)
-  data <- insight::get_data(x, source = "mf", verbose = FALSE)
+  model_data <- insight::get_data(x, source = "mf", verbose = FALSE)
 
-  if (isTRUE(attr(data, "is_subset"))) {
+  if (isTRUE(attr(model_data, "is_subset"))) {
     insight::format_error("Cannot standardize a model fit with a 'subset = '.")
   }
 
@@ -164,10 +164,10 @@ standardize.default <- function(x,
   weight_variable <- insight::find_weights(x)
 
   if (!is.null(weight_variable) &&
-    !weight_variable %in% colnames(data) &&
-    "(weights)" %in% colnames(data)) {
-    data$.missing_weight <- data[["(weights)"]]
-    colnames(data)[ncol(data)] <- weight_variable
+    !weight_variable %in% colnames(model_data) &&
+    "(weights)" %in% colnames(model_data)) {
+    model_data$.missing_weight <- model_data[["(weights)"]]
+    colnames(model_data)[ncol(model_data)] <- weight_variable
     weight_variable <- c(weight_variable, "(weights)")
   }
 
@@ -178,12 +178,12 @@ standardize.default <- function(x,
   ## ---- SUMMARY: TO Z OR NOT TO Z? ----
 
   dont_standardize <- c(resp, weight_variable, random_group_factor)
-  do_standardize <- setdiff(colnames(data), dont_standardize)
+  do_standardize <- setdiff(colnames(model_data), dont_standardize)
 
   # can't std data$var variables
   doller_vars <- grepl("(.*)\\$(.*)", do_standardize)
   if (any(doller_vars)) {
-    doller_vars <- colnames(data)[doller_vars]
+    doller_vars <- colnames(model_data)[doller_vars]
     insight::format_warning(
       "Unable to standardize variables evaluated in the environment (i.e., not in `data`).",
       "The following variables will not be standardizd:",
@@ -204,7 +204,7 @@ standardize.default <- function(x,
 
   w <- insight::get_weights(x, remove_na = TRUE)
 
-  data_std <- standardize(data[do_standardize],
+  data_std <- standardize(model_data[do_standardize],
     robust = robust,
     two_sd = two_sd,
     weights = if (weights) w,
@@ -213,7 +213,7 @@ standardize.default <- function(x,
 
   # if two_sd, it must not affect the response!
   if (include_response && two_sd) {
-    data_std[resp] <- standardize(data[resp],
+    data_std[resp] <- standardize(model_data[resp],
       robust = robust,
       two_sd = FALSE,
       weights = if (weights) w,
@@ -254,8 +254,8 @@ standardize.default <- function(x,
 
   ## ---- ADD BACK VARS THAT WHERE NOT Z ----
   if (length(dont_standardize)) {
-    remaining_columns <- intersect(colnames(data), dont_standardize)
-    data_std <- cbind(data[, remaining_columns, drop = FALSE], data_std)
+    remaining_columns <- intersect(colnames(model_data), dont_standardize)
+    data_std <- cbind(model_data[, remaining_columns, drop = FALSE], data_std)
   }
 
 
