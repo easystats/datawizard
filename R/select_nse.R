@@ -204,7 +204,6 @@
                                  matches,
                                  verbose,
                                  ifnotfound) {
-
   msg <- paste0(
     "Following variable(s) were not found: ",
     toString(x[is.na(matches)])
