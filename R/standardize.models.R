@@ -401,7 +401,7 @@ standardize.mediate <- function(x,
   }
 
 
-  text <- utils::capture.output({
+  junk <- utils::capture.output({
     model_std <- stats::update(x,
       model.y = y_std, model.m = m_std,
       # control.value = control.value, treat.value = treat.value
@@ -472,7 +472,7 @@ standardize.biglm <- standardize.wbm
 
   # check if model has a response variable that should not be standardized.
   info$is_linear &&
-    !info$family == "inverse.gaussian" &&
+    info$family != "inverse.gaussian" &&
     !info$is_survival &&
     !info$is_censored
 
