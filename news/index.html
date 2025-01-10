@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,36 @@
       <small>Source: <a href="https://github.com/easystats/datawizard/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.0" id="datawizard-100">datawizard 1.0.0<a class="anchor" aria-label="anchor" href="#datawizard-100"></a></h2><p class="text-muted">CRAN release: 2025-01-10</p>
+<p>BREAKING CHANGES AND DEPRECATIONS</p>
+<ul><li><p><em>datawizard</em> now requires R &gt;= 4.0 (<a href="https://github.com/easystats/datawizard/issues/515" class="external-link">#515</a>).</p></li>
+<li><p>Argument <code>drop_na</code> in <code><a href="../reference/data_match.html">data_match()</a></code> is deprecated now. Please use <code>remove_na</code> instead (<a href="https://github.com/easystats/datawizard/issues/556" class="external-link">#556</a>).</p></li>
+<li>
+<p>In <code><a href="../reference/data_rename.html">data_rename()</a></code> (<a href="https://github.com/easystats/datawizard/issues/567" class="external-link">#567</a>):</p>
+<ul><li>argument <code>pattern</code> is deprecated. Use <code>select</code> instead.</li>
+<li>argument <code>safe</code> is deprecated. The function now errors when <code>select</code> contains unknown column names.</li>
+<li>when <code>replacement</code> is <code>NULL</code>, an error is now thrown (previously, column indices were used as new names).</li>
+<li>if <code>select</code> (previously <code>pattern</code>) is a named vector, then all elements must be named, e.g. <code>c(length = "Sepal.Length", "Sepal.Width")</code> errors.</li>
+</ul></li>
+<li><p>Order of arguments <code>by</code> and <code>probability_weights</code> in <code><a href="../reference/rescale_weights.html">rescale_weights()</a></code> has changed, because for <code>method = "kish"</code>, the <code>by</code> argument is optional (<a href="https://github.com/easystats/datawizard/issues/575" class="external-link">#575</a>).</p></li>
+<li><p>The name of the rescaled weights variables in <code><a href="../reference/rescale_weights.html">rescale_weights()</a></code> have been renamed. <code>pweights_a</code> and <code>pweights_b</code> are now named <code>rescaled_weights_a</code> and <code>rescaled_weights_b</code> (<a href="https://github.com/easystats/datawizard/issues/575" class="external-link">#575</a>).</p></li>
+<li><p><code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> methods for <code><a href="../reference/data_tabulate.html">data_tabulate()</a></code> with multiple sub-tables (i.e. when length of <code>by</code> was &gt; 1) were revised. Now, an integrated table instead of multiple tables is returned. Furthermore, <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_html()</a></code> did not work, which was also fixed now (<a href="https://github.com/easystats/datawizard/issues/577" class="external-link">#577</a>).</p></li>
+<li><p><code><a href="../reference/demean.html">demean()</a></code> (and <code><a href="../reference/demean.html">degroup()</a></code>) gets an <code>append</code> argument that defaults to <code>TRUE</code>, to append the centered variables to the original data frame, instead of returning the de- and group-meaned variables only. Use <code>append = FALSE</code> to for the previous default behaviour (i.e. only returning the newly created variables) (<a href="https://github.com/easystats/datawizard/issues/579" class="external-link">#579</a>).</p></li>
+</ul><p>CHANGES</p>
+<ul><li><p><code><a href="../reference/rescale_weights.html">rescale_weights()</a></code> gets a <code>method</code> argument, to choose method to rescale weights. Options are <code>"carle"</code> (the default) and <code>"kish"</code> (<a href="https://github.com/easystats/datawizard/issues/575" class="external-link">#575</a>).</p></li>
+<li><p>The <code>select</code> argument, which is available in different functions to select variables, can now also be a character vector with quoted variable names, including a colon to indicate a range of several variables (e.g. <code>"cyl:gear"</code>) (<a href="https://github.com/easystats/datawizard/issues/551" class="external-link">#551</a>).</p></li>
+<li><p>New function <code><a href="../reference/row_means.html">row_sums()</a></code>, to calculate row sums (optionally with minimum amount of valid values), as complement to <code><a href="../reference/row_means.html">row_means()</a></code> (<a href="https://github.com/easystats/datawizard/issues/552" class="external-link">#552</a>).</p></li>
+<li><p>New function <code><a href="../reference/row_count.html">row_count()</a></code>, to count specific values row-wise (<a href="https://github.com/easystats/datawizard/issues/553" class="external-link">#553</a>).</p></li>
+<li><p><code><a href="../reference/data_read.html">data_read()</a></code> no longer shows warning about forthcoming breaking changes in upstream packages when reading <code>.RData</code> files (<a href="https://github.com/easystats/datawizard/issues/557" class="external-link">#557</a>).</p></li>
+<li><p><code><a href="../reference/data_modify.html">data_modify()</a></code> now recognizes <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code>, for example to create an index for data groups with <code>1:n()</code> (<a href="https://github.com/easystats/datawizard/issues/535" class="external-link">#535</a>).</p></li>
+<li><p>The <code>replacement</code> argument in <code><a href="../reference/data_rename.html">data_rename()</a></code> now supports glue-styled tokens (<a href="https://github.com/easystats/datawizard/issues/563" class="external-link">#563</a>).</p></li>
+<li><p><code><a href="../reference/data_summary.html">data_summary()</a></code> also accepts the results of <code><a href="https://easystats.github.io/bayestestR/reference/ci.html" class="external-link">bayestestR::ci()</a></code> as summary function (<a href="https://github.com/easystats/datawizard/issues/483" class="external-link">#483</a>).</p></li>
+<li><p><code><a href="../reference/ranktransform.html">ranktransform()</a></code> has a new argument <code>zeros</code> to determine how zeros should be handled when <code>sign = TRUE</code> (<a href="https://github.com/easystats/datawizard/issues/573" class="external-link">#573</a>).</p></li>
+</ul><p>BUG FIXES</p>
+<ul><li><p><code><a href="../reference/describe_distribution.html">describe_distribution()</a></code> no longer errors if the sample was too sparse to compute CIs. Instead, it warns the user and returns <code>NA</code> (<a href="https://github.com/easystats/datawizard/issues/550" class="external-link">#550</a>).</p></li>
+<li><p><code><a href="../reference/data_read.html">data_read()</a></code> preserves variable types when importing files from <code>rds</code> or <code>rdata</code> format (<a href="https://github.com/easystats/datawizard/issues/558" class="external-link">#558</a>).</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.13.0" id="datawizard-0130">datawizard 0.13.0<a class="anchor" aria-label="anchor" href="#datawizard-0130"></a></h2><p class="text-muted">CRAN release: 2024-10-05</p>
 <p>BREAKING CHANGES</p>
