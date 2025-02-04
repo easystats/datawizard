@@ -346,7 +346,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # like: data_modify(iris, new_var = "a")
   # this one should be recycled instead.
   if (!is.character(symbol)) {
-    eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
+    eval_symbol <- .dynEval(symbol, ifnotfound = NULL, data = data)
     if (is.character(eval_symbol)) {
       symbol <- try(str2lang(paste0(names(dots)[i], " = ", eval_symbol)), silent = TRUE)
       # we may have the edge-case of having a function that returns a character
