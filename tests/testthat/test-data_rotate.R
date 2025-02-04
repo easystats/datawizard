@@ -28,7 +28,7 @@ test_that("rotate data works as expected", {
     )
   )
 
-  expect_equal(
+  expect_identical(
     data_rotate(df, colnames = TRUE),
     structure(
       list(
@@ -41,7 +41,7 @@ test_that("rotate data works as expected", {
     )
   )
 
-  expect_equal(
+  expect_identical(
     data_rotate(df, rownames = "property", colnames = TRUE),
     structure(
       list(

@@ -139,13 +139,13 @@ test_that("convert factor to numeric, dummy factors, with NA", {
   )
 
   # output has same number of observation as input
-  expect_identical(nrow(to_numeric(x1, dummy_factors = TRUE)), length(x1))
-  expect_identical(nrow(to_numeric(x2, dummy_factors = TRUE)), length(x2))
-  expect_identical(nrow(to_numeric(x3, dummy_factors = TRUE)), length(x3))
-  expect_identical(nrow(to_numeric(x4, dummy_factors = TRUE)), length(x4))
-  expect_identical(nrow(to_numeric(x5, dummy_factors = TRUE)), length(x5))
-  expect_identical(nrow(to_numeric(x6, dummy_factors = TRUE)), length(x6))
-  expect_identical(nrow(to_numeric(x7, dummy_factors = TRUE)), length(x7))
+  expect_length(x1, nrow(to_numeric(x1, dummy_factors = TRUE)))
+  expect_length(x2, nrow(to_numeric(x2, dummy_factors = TRUE)))
+  expect_length(x3, nrow(to_numeric(x3, dummy_factors = TRUE)))
+  expect_length(x4, nrow(to_numeric(x4, dummy_factors = TRUE)))
+  expect_length(x5, nrow(to_numeric(x5, dummy_factors = TRUE)))
+  expect_length(x6, nrow(to_numeric(x6, dummy_factors = TRUE)))
+  expect_length(x7, nrow(to_numeric(x7, dummy_factors = TRUE)))
 })
 
 test_that("to_numeric, inverse factor levels", {

@@ -339,9 +339,11 @@ test_that("data_filter, slicing works with functions", {
   expect_identical(nrow(out3), 6L)
 
   # styler: off
+  # flint-ignore-start
   expect_error(
     data_filter(iris, (Sepal.Width = 3.0) & (Species = "setosa")), # nolint
     regex = "Filtering did not work"
   )
+  # flint-ignore-end
   # styler: on
 })

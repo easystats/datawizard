@@ -1,7 +1,7 @@
 test_that(".coerce_to_dataframe works for matrices", {
   mat <- matrix(c(1, 2, 3, 11, 12, 13), nrow = 2, ncol = 3, byrow = TRUE)
 
-  expect_equal(
+  expect_identical(
     .coerce_to_dataframe(mat),
     data.frame(
       V1 = c(1, 11),
@@ -12,17 +12,17 @@ test_that(".coerce_to_dataframe works for matrices", {
 })
 
 test_that(".coerce_to_dataframe works for vectors and list", {
-  expect_equal(
+  expect_identical(
     .coerce_to_dataframe(1:3),
     data.frame(data = 1:3)
   )
 
-  expect_equal(
+  expect_identical(
     .coerce_to_dataframe(c("a", "b", "c")),
     data.frame(data = c("a", "b", "c"), stringsAsFactors = FALSE)
   )
 
-  expect_equal(
+  expect_identical(
     .coerce_to_dataframe(list(var1 = 1:3, var2 = 4:6)),
     data.frame(var1 = 1:3, var2 = 4:6)
   )

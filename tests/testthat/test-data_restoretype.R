@@ -10,7 +10,7 @@ test_that("data_restoretype works with reference", {
 
   expect_equal(typeof(fixed$Species), typeof(iris$Species))
   expect_equal(typeof(fixed$Sepal.Length), typeof(iris$Sepal.Length))
-  expect_equal(typeof(fixed$New), "character")
+  expect_type(fixed$New, "character")
 })
 
 
@@ -22,7 +22,7 @@ test_that("data_restoretype works without reference", {
     stringsAsFactors = FALSE
   )
 
-  expect_equal(
+  expect_identical(
     data_restoretype(data, reference = NULL),
     data.frame(
       Sepal.Length = c(1, 3, 2),

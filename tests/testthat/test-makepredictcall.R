@@ -9,9 +9,9 @@ test_that("makepredictcall", {
   m4 <- lm(mpg ~ standardize(hp), mtcars)
 
   p1 <- predict(m1, nd)
-  expect_equal(p1, predict(m2, nd))
-  expect_equal(p1, predict(m3, nd))
-  expect_equal(p1, predict(m4, nd))
+  expect_identical(p1, predict(m2, nd))
+  expect_identical(p1, predict(m3, nd))
+  expect_identical(p1, predict(m4, nd))
 
   X <- matrix(rnorm(100), ncol = 2)
   Y <- rnorm(50)

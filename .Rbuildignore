@@ -50,3 +50,7 @@ docs
 ^.dev$
 ^vignettes/s.
 ^vignettes/t.
+
+
+# flint files
+^flint$

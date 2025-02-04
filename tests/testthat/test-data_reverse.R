@@ -354,9 +354,9 @@ test_that("reverse_scale select helpers", {
 # with grouped data -------------------------------------------
 
 set.seed(123)
-value1 <- sample(1:10, 6, replace = TRUE)
+value1 <- sample.int(10, 6, replace = TRUE)
 set.seed(456)
-value2 <- sample(1:10, 6, replace = TRUE)
+value2 <- sample.int(10, 6, replace = TRUE)
 
 test_df <- data.frame(
   id = rep(c("A", "B"), each = 3),

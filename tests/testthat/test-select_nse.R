@@ -18,10 +18,7 @@ test_that(".select_nse needs a data frame or something coercible to a dataframe"
 })
 
 test_that(".select_nse: arg 'select' works", {
-  expect_identical(
-    foo(iris, select = NULL),
-    names(iris)
-  )
+  expect_named(iris, foo(iris, select = NULL))
   expect_identical(
     foo(iris, Petal.Length),
     "Petal.Length"
@@ -34,10 +31,7 @@ test_that(".select_nse: arg 'select' works", {
     foo(iris, c(3, 2)),
     c("Petal.Length", "Sepal.Width")
   )
-  expect_identical(
-    foo(iris, 1:5),
-    names(iris)
-  )
+  expect_named(iris, foo(iris, 1:5))
   expect_identical(
     foo(iris, is.numeric),
     c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
