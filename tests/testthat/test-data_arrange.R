@@ -130,3 +130,9 @@ test_that("data_arrange works with NA", {
     ignore_attr = TRUE
   )
 })
+
+test_that("data_arrange works one-column data frames (and does not drop dimensions)", {
+  data(mtcars)
+  expect_s3_class(data_arrange(mtcars["gear"], select = "gear"), "data.frame")
+  expect_s3_class(data_arrange(mtcars[c("gear", "cyl")], select = "gear"), "data.frame")
+})

@@ -1,5 +1,11 @@
 # datawizard (development version)
 
+BUG FIXES
+
+* Fixed issue is `data_arrange()` for data frames that only had one column.
+  Formerly, the data frame was coerced into a vector, now the data frame class
+  is preserved.
+
 # datawizard 1.0.0
 
 BREAKING CHANGES AND DEPRECATIONS

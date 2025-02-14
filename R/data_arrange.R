@@ -86,9 +86,9 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
 
   # apply ordering
   if (length(select) == 1) {
-    out <- data[order(out[[select]]), ]
+    out <- data[order(out[[select]]), , drop = FALSE]
   } else {
-    out <- data[do.call(order, out[, select]), ]
+    out <- data[do.call(order, out[, select]), , drop = FALSE]
   }
 
   if (!insight::object_has_rownames(data)) {
