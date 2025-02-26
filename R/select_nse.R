@@ -461,6 +461,10 @@
     regex = collapsed_patterns,
     insight::format_error("There is no select helper called '", helper, "'.")
   )
+  # starting in R 4.5, grep() errors if some logical args have NULL/NA
+  if (is.null(ignore_case)) {
+    ignore_case <- FALSE
+  }
   grep(rgx, colnames(data), ignore.case = ignore_case)
 }
 

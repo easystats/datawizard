@@ -6,6 +6,9 @@ BUG FIXES
   Formerly, the data frame was coerced into a vector, now the data frame class
   is preserved.
 
+* Fixed issue in R-devel (4.5.0) due to a change in how `grep()` handles logical
+  arguments with missing values (#588).
+
 # datawizard 1.0.0
 
 BREAKING CHANGES AND DEPRECATIONS
