@@ -1,3 +1,10 @@
+# datawizard (development version)
+
+BUG FIXES
+
+* Fixed failing R CMD check on ATLAS, noLD, and OpenBLAS due to small numerical
+  differences (#592).
+
 # datawizard 1.0.1
 
 BUG FIXES
