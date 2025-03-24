@@ -1,4 +1,4 @@
-# datawizard (development version)
+# datawizard 1.0.2
 
 BUG FIXES
 
