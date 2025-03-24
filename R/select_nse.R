@@ -611,17 +611,27 @@
 # error. Returns NULL if can never be evaluated.
 #
 # Custom arg "remove_n_top_env" to remove the first environments which are
-# ".select_nse()" and the other custom functions
+# ".select_nse()" and the other custom functions.
+#
+# Arg "data" is here if we want to start searching in the data instead of the
+# lowest environment.
 .dynEval <- function(x,
                      ifnotfound = stop(gettextf("%s not found", sQuote(x)), domain = NA, call. = FALSE),
                      minframe = 1L,
                      inherits = FALSE,
-                     remove_n_top_env = 0) {
+                     remove_n_top_env = 0,
+                     data = NULL) {
+  iter <- 0
   n <- sys.nframe() - remove_n_top_env
   x <- insight::safe_deparse(x)
   while (n > minframe) {
-    n <- n - 1L
-    env <- sys.frame(n)
+    if (iter == 0 && !is.null(data)) {
+      env <- data
+      iter <- iter + 1
+    } else {
+      n <- n - 1L
+      env <- sys.frame(n)
+    }
     r <- try(eval(str2lang(x), envir = env), silent = TRUE)
     if (!inherits(r, "try-error") && !is.null(r)) {
       return(r)
