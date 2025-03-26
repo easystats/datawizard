@@ -531,7 +531,8 @@ test_that("Preserve column name when names_from column only has one unique value
   d <- data.frame(
     Value = rnorm(10),
     Level = paste0("Participant_", 1:10),
-    Parameter = "Intercept"
+    Parameter = "Intercept",
+    stringsAsFactors = FALSE
   )
   out <- data_to_wide(
     d,
@@ -545,7 +546,8 @@ test_that("Preserve column name when names_from column only has one unique value
   d <- data.frame(
     Value = rnorm(10),
     Level = paste0("Participant_", 1:10),
-    Parameter = c("Intercept", "abc")
+    Parameter = c("Intercept", "abc"),
+    stringsAsFactors = FALSE
   )
   out <- data_to_wide(
     d,
