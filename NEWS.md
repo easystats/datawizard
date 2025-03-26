@@ -1,3 +1,10 @@
+# datawizard (devel)
+
+BUG FIXES
+
+* Fixed bug in `data_to_wide()`, where new column names in `names_from` were
+  ignored when that column only contained one unique value.
+
 # datawizard 1.0.2
 
 BUG FIXES
