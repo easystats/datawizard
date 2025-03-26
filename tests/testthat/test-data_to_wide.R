@@ -525,3 +525,36 @@ test_that("new names starting with digits are not corrected automatically", {
   )
   expect_identical(tidyr, datawiz)
 })
+
+
+test_that("Preserve column name when names_from column only has one unique value", {
+  d <- data.frame(
+    Value = rnorm(10),
+    Level = paste0("Participant_", 1:10),
+    Parameter = "Intercept",
+    stringsAsFactors = FALSE
+  )
+  out <- data_to_wide(
+    d,
+    values_from = "Value",
+    names_from = "Parameter",
+    names_sep = "_"
+  )
+  expect_named(out, c("Level", "Intercept"))
+  expect_identical(nrow(out), 10L)
+
+  d <- data.frame(
+    Value = rnorm(10),
+    Level = paste0("Participant_", 1:10),
+    Parameter = c("Intercept", "abc"),
+    stringsAsFactors = FALSE
+  )
+  out <- data_to_wide(
+    d,
+    values_from = "Value",
+    names_from = "Parameter",
+    names_sep = "_"
+  )
+  expect_named(out, c("Level", "Intercept", "abc"))
+  expect_identical(nrow(out), 10L)
+})
