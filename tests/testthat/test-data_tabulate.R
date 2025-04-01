@@ -372,7 +372,7 @@ test_that("data_tabulate, cross tables, errors weights", {
 
 test_that("data_tabulate, cross tables, modify structure", {
   data(efc, package = "datawizard")
-  x <- data_group(x, c("c172code", "e16sex"))
+  x <- data_group(efc, c("c172code", "e16sex"))
   out <- data_tabulate(x, "c172code")
   out[] <- lapply(out, data_select, exclude = c("Variable", "Raw %", "Cumulative %"))
   junk <- capture.output(print_md(out))
