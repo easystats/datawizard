@@ -605,8 +605,12 @@ print.datawizard_tables <- function(x, big_mark = NULL, ...) {
     x <- lapply(x, function(i) {
       i_attr <- attributes(i)
       i <- format(i, format = "text", big_mark = big_mark, ...)
-      i$Variable[i_attr$duplicate_varnames] <- ""
-      if (!is.null(i$Group)) i$Group[i_attr$duplicate_varnames] <- ""
+      if (!is.null(i$Variable)) {
+        i$Variable[i_attr$duplicate_varnames] <- ""
+      }
+      if (!is.null(i$Group)) {
+        i$Group[i_attr$duplicate_varnames] <- ""
+      }
       i[nrow(i) + 1, ] <- ""
       i
     })
@@ -641,7 +645,9 @@ print_html.datawizard_tables <- function(x, big_mark = NULL, ...) {
     x <- lapply(x, function(i) {
       i_attr <- attributes(i)
       i <- format(i, format = "html", big_mark = big_mark, ...)
-      i$Variable[i_attr$duplicate_varnames] <- ""
+      if (!is.null(i$Variable)) {
+        i$Variable[i_attr$duplicate_varnames] <- ""
+      }
       i
     })
 
@@ -670,8 +676,12 @@ print_md.datawizard_tables <- function(x, big_mark = NULL, ...) {
     x <- lapply(x, function(i) {
       i_attr <- attributes(i)
       i <- format(i, format = "markdown", big_mark = big_mark, ...)
-      i$Variable[i_attr$duplicate_varnames] <- ""
-      if (!is.null(i$Group)) i$Group[i_attr$duplicate_varnames] <- ""
+      if (!is.null(i$Variable)) {
+        i$Variable[i_attr$duplicate_varnames] <- ""
+      }
+      if (!is.null(i$Group)) {
+        i$Group[i_attr$duplicate_varnames] <- ""
+      }
       i[nrow(i) + 1, ] <- ""
       i
     })
