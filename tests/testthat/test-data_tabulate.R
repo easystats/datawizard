@@ -376,8 +376,8 @@ test_that("data_tabulate, cross tables, modify structure", {
   out <- data_tabulate(x, "c172code")
   out[] <- lapply(out, data_select, exclude = c("Variable", "Raw %", "Cumulative %"))
   junk <- capture.output(print_md(out))
-  expect_false(grepl("Variable", junk[1], fixed = TRUE))
-  expect_false(grepl("Raw %", junk[1], fixed = TRUE))
+  expect_false(grepl("Variable", junk[3], fixed = TRUE))
+  expect_false(grepl("Raw %", junk[3], fixed = TRUE))
 })
 
 
