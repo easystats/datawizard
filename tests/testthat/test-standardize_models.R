@@ -321,6 +321,7 @@ test_that("brms", {
   skip_on_os(c("windows", "mac"))
   skip_if_not_installed("brms")
   skip_if_not_installed("RcppEigen")
+  skip_if_not_installed("BH")
 
   invisible(
     capture.output({
