@@ -39,6 +39,7 @@ Imports:
 Suggests:
     bayestestR,
     boot,
+    BH,
     brms,
     curl,
     data.table,
