@@ -87,6 +87,14 @@ data_codebook <- function(data,
     select <- select[-empty]
   }
 
+  # check if any columns left, or found
+  if (!length(select) || is.null(select)) {
+    if (isTRUE(verbose)) {
+      insight::format_warning("No column names that matched the required search pattern were found.")
+    }
+    return(NULL)
+  }
+
   # needed for % NA
   rows <- nrow(data)
   max_values <- max_values + 1
