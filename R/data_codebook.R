@@ -117,20 +117,7 @@ data_codebook <- function(data,
     )
 
     # check if there are variable labels
-    varlab <- attr(x, "label", exact = TRUE)
-    if (!is.null(varlab) && length(varlab)) {
-      variable_label <- varlab
-      # if variable labels are too long, split into multiple elements
-      if (!is.null(variable_label_width) && nchar(variable_label) > variable_label_width) {
-        variable_label <- insight::trim_ws(unlist(strsplit(
-          text_wrap(variable_label, width = variable_label_width),
-          "\n",
-          fixed = TRUE
-        ), use.names = FALSE))
-      }
-    } else {
-      variable_label <- NA
-    }
+    variable_label <- .extract_variable_labels(x, variable_label_width)
 
     # we may need to remove duplicated value range elements
     flag_range <- FALSE
@@ -312,8 +299,39 @@ data_codebook <- function(data,
     d
   })
 
-  out <- do.call(rbind, out)
+  # clean-up (column order, rename, ...)
+  out <- .finalize_result(do.call(rbind, out))
 
+  # add attributes
+  .add_codebook_attributes(out, data_name, data, select)
+}
+
+
+# helper -----------------------
+
+
+#' @keyword internal
+.extract_variable_labels <- function(x, variable_label_width = NULL) {
+  varlab <- attr(x, "label", exact = TRUE)
+  if (!is.null(varlab) && length(varlab)) {
+    variable_label <- varlab
+    # if variable labels are too long, split into multiple elements
+    if (!is.null(variable_label_width) && nchar(variable_label) > variable_label_width) {
+      variable_label <- insight::trim_ws(unlist(strsplit(
+        text_wrap(variable_label, width = variable_label_width),
+        "\n",
+        fixed = TRUE
+      ), use.names = FALSE))
+    }
+  } else {
+    variable_label <- NA
+  }
+  variable_label
+}
+
+
+#' @keyword internal
+.finalize_result <- function(out) {
   # rename
   pattern <- c("variable_label", "values", "value_labels", "frq", "proportions")
   replacement <- c("Label", "Values", "Value Labels", "N", "Prop")
@@ -329,8 +347,12 @@ data_codebook <- function(data,
     "ID", "Name", "Label", "Type", "Missings", "Values",
     "Value Labels", "N", "Prop", ".row_id"
   )
-  out <- out[union(intersect(column_order, names(out)), names(out))]
+  out[union(intersect(column_order, names(out)), names(out))]
+}
 
+
+#' @keywords internal
+.add_codebook_attributes <- function(out, data_name, data, select) {
   attr(out, "data_name") <- data_name
   attr(out, "n_rows") <- nrow(data)
   attr(out, "n_cols") <- ncol(data)
