@@ -3,7 +3,7 @@
 CHANGES
 
 * `data_codebook()` gives an informative warning when no column names matched
-  the selection pattern.
+  the selection pattern (#601).
 
 BUG FIXES
 
