@@ -315,6 +315,7 @@ test_that("data_tabulate, cross tables", {
   expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", remove_na = TRUE)))
   expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", weights = "weights")))
   expect_snapshot(print(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", remove_na = TRUE, weights = "weights"))) # nolint
+  expect_snapshot(print(data_tabulate(efc, c("c172code", "e42dep"), by = "e16sex", proportions = "row"))) # nolint
 })
 
 test_that("data_tabulate, cross tables, HTML", {
@@ -339,6 +340,9 @@ test_that("data_tabulate, cross tables, grouped df", {
   efc$e16sex[sample.int(nrow(efc), 5)] <- NA
   grp <- data_group(efc, "e42dep")
   expect_snapshot(print(data_tabulate(grp, "c172code", by = "e16sex", proportions = "row")))
+  skip_if_not_installed("gt")
+  expect_s3_class(print_html(data_tabulate(grp, "c172code", by = "e16sex", proportions = "row")), "gt_tbl") # nolint
+  expect_s3_class(print_html(data_tabulate(efc, c("e16sex", "e42dep"), by = "c172code", proportions = "row")), "gt_tbl") # nolint
 })
 
 test_that("data_tabulate, cross tables, errors by", {
@@ -366,6 +370,16 @@ test_that("data_tabulate, cross tables, errors weights", {
   expect_error(data_tabulate(efc$c172code, weights = efc$wweight), regex = "not found")
 })
 
+test_that("data_tabulate, cross tables, modify structure", {
+  data(efc, package = "datawizard")
+  x <- data_group(efc, c("c172code", "e16sex"))
+  out <- data_tabulate(x, "c172code")
+  out[] <- lapply(out, data_select, exclude = c("Variable", "Raw %", "Cumulative %"))
+  junk <- capture.output(print_md(out))
+  expect_false(grepl("Variable", junk[3], fixed = TRUE))
+  expect_false(grepl("Raw %", junk[3], fixed = TRUE))
+})
+
 
 # markdown -------------------------
 
@@ -379,6 +393,8 @@ test_that("data_tabulate, cross tables, markdown", {
   expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", remove_na = TRUE)))
   expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", weights = efc$weights)))
   expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", remove_na = TRUE, weights = efc$weights))) # nolint
+  expect_snapshot(print_md(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", remove_na = TRUE, weights = "weights"))) # nolint
+  expect_snapshot(print_md(data_tabulate(efc, c("c172code", "e42dep"), by = "e16sex", proportions = "row"))) # nolint
 })
 
 

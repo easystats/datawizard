@@ -42,7 +42,7 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
   select <- gsub("^-", "", select)
 
   # check for variables that are not in data
-  dont_exist <- select[which(!select %in% names(data))]
+  dont_exist <- setdiff(select, colnames(data))
 
   if (length(dont_exist) > 0) {
     if (safe) {
@@ -86,9 +86,9 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
 
   # apply ordering
   if (length(select) == 1) {
-    out <- data[order(out[[select]]), ]
+    out <- data[order(out[[select]]), , drop = FALSE]
   } else {
-    out <- data[do.call(order, out[, select]), ]
+    out <- data[do.call(order, out[, select]), , drop = FALSE]
   }
 
   if (!insight::object_has_rownames(data)) {

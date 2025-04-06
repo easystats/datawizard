@@ -117,13 +117,14 @@ possible pipe-workflow.
 }
 \details{
 \code{select} can also be a named character vector. In this case, the names are
-used to rename the columns in the output data frame. See 'Examples'.
+used to rename the columns in the output data frame. If you have a named
+list, use \code{unlist()} to convert it to a named vector. See 'Examples'.
 }
 \examples{
 # Rename columns
 head(data_rename(iris, "Sepal.Length", "length"))
 
-# use named vector to rename
+# Use named vector to rename
 head(data_rename(iris, c(length = "Sepal.Length", width = "Sepal.Width")))
 
 # Change all

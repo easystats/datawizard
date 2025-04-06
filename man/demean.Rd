@@ -13,6 +13,7 @@ demean(
   nested = FALSE,
   suffix_demean = "_within",
   suffix_groupmean = "_between",
+  append = TRUE,
   add_attributes = TRUE,
   verbose = TRUE
 )
@@ -25,6 +26,7 @@ degroup(
   center = "mean",
   suffix_demean = "_within",
   suffix_groupmean = "_between",
+  append = TRUE,
   add_attributes = TRUE,
   verbose = TRUE
 )
@@ -37,6 +39,7 @@ detrend(
   center = "mean",
   suffix_demean = "_within",
   suffix_groupmean = "_between",
+  append = TRUE,
   add_attributes = TRUE,
   verbose = TRUE
 )
@@ -76,6 +79,10 @@ names of the group-meaned and de-meaned variables of \code{x}. By default,
 de-meaned variables will be suffixed with \code{"_within"} and
 grouped-meaned variables with \code{"_between"}.}
 
+\item{append}{Logical, if \code{TRUE} (default), the group- and de-meaned
+variables will be appended (column bind) to the original data \code{x},
+thus returning both the original and the de-/group-meaned variables.}
+
 \item{add_attributes}{Logical, if \code{TRUE}, the returned variables gain
 attributes to indicate the within- and between-effects. This is only
 relevant when printing \code{model_parameters()} - in such cases, the
@@ -98,10 +105,10 @@ grouping level, e.g. \code{predictor_L3_between} and \code{predictor_L2_between}
 }
 \description{
 \code{demean()} computes group- and de-meaned versions of a variable that can be
-used in regression analysis to model the between- and within-subject effect.
-\code{degroup()} is more generic in terms of the centering-operation. While
-\code{demean()} always uses mean-centering, \code{degroup()} can also use the mode or
-median for centering.
+used in regression analysis to model the between- and within-subject effect
+(person-mean centering or centering within clusters). \code{degroup()} is more
+generic in terms of the centering-operation. While \code{demean()} always uses
+mean-centering, \code{degroup()} can also use the mode or median for centering.
 }
 \section{Heterogeneity Bias}{
 
