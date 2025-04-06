@@ -370,6 +370,16 @@ test_that("data_tabulate, cross tables, errors weights", {
   expect_error(data_tabulate(efc$c172code, weights = efc$wweight), regex = "not found")
 })
 
+test_that("data_tabulate, cross tables, modify structure", {
+  data(efc, package = "datawizard")
+  x <- data_group(efc, c("c172code", "e16sex"))
+  out <- data_tabulate(x, "c172code")
+  out[] <- lapply(out, data_select, exclude = c("Variable", "Raw %", "Cumulative %"))
+  junk <- capture.output(print_md(out))
+  expect_false(grepl("Variable", junk[3], fixed = TRUE))
+  expect_false(grepl("Raw %", junk[3], fixed = TRUE))
+})
+
 
 # markdown -------------------------
 

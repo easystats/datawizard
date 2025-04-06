@@ -23,7 +23,7 @@
 #'
 #' @details For character vectors, empty string values (i.e. `""`) are also
 #' considered as missing value. Thus, if a character vector only contains `NA`
-#' and `""``, it is considered as empty variable and will be removed. Same
+#' and `""`, it is considered as empty variable and will be removed. Same
 #' applies to observations (rows) that only contain `NA` or `""`.
 #'
 #' @examples

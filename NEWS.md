@@ -1,3 +1,22 @@
+# datawizard (devel)
+
+CHANGES
+
+* `data_codebook()` gives an informative warning when no column names matched
+  the selection pattern (#601).
+
+BUG FIXES
+
+* Fixed bug in `data_to_wide()`, where new column names in `names_from` were
+  ignored when that column only contained one unique value.
+
+# datawizard 1.0.2
+
+BUG FIXES
+
+* Fixed failing R CMD check on ATLAS, noLD, and OpenBLAS due to small numerical
+  differences (#592).
+
 # datawizard 1.0.1
 
 BUG FIXES

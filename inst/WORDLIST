@@ -33,6 +33,7 @@ MADs
 Mattan
 Minitab
 ORCID
+OpenBLAS
 PSU
 Posteriori
 Ranktransform
@@ -84,8 +85,8 @@ meaned
 mesokurtic
 midhinge
 modelbased
-modelling
 nd
+noLD
 panelr
 partialization
 platykurtic
