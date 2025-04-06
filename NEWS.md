@@ -1,11 +1,41 @@
-# datawizard (development)
+# datawizard (devel)
+
+CHANGES
+
+* `data_codebook()` gives an informative warning when no column names matched
+  the selection pattern (#601).
+
+BUG FIXES
+
+* Fixed bug in `data_to_wide()`, where new column names in `names_from` were
+  ignored when that column only contained one unique value.
+
+# datawizard 1.0.2
+
+BUG FIXES
+
+* Fixed failing R CMD check on ATLAS, noLD, and OpenBLAS due to small numerical
+  differences (#592).
+
+# datawizard 1.0.1
+
+BUG FIXES
+
+* Fixed issue in `data_arrange()` for data frames that only had one column.
+  Formerly, the data frame was coerced into a vector, now the data frame class
+  is preserved.
+
+* Fixed issue in R-devel (4.5.0) due to a change in how `grep()` handles logical
+  arguments with missing values (#588).
+
+# datawizard 1.0.0
 
 BREAKING CHANGES AND DEPRECATIONS
 
 * *datawizard* now requires R >= 4.0 (#515).
 
 * Argument `drop_na` in `data_match()` is deprecated now. Please use
-  `remove_na` instead.
+  `remove_na` instead (#556).
 
 * In `data_rename()` (#567):
   - argument `pattern` is deprecated. Use `select` instead.
@@ -17,22 +47,22 @@ BREAKING CHANGES AND DEPRECATIONS
     must be named, e.g. `c(length = "Sepal.Length", "Sepal.Width")` errors.
 
 * Order of arguments `by` and `probability_weights` in `rescale_weights()` has
-  changed, because for `method = "kish"`, the `by` argument is optional.
+  changed, because for `method = "kish"`, the `by` argument is optional (#575).
 
 * The name of the rescaled weights variables in `rescale_weights()` have been
   renamed. `pweights_a` and `pweights_b` are now named `rescaled_weights_a`
-  and `rescaled_weights_b`.
+  and `rescaled_weights_b` (#575).
 
 * `print()` methods for `data_tabulate()` with multiple sub-tables (i.e. when
   length of `by` was > 1) were revised. Now, an integrated table instead of
   multiple tables is returned. Furthermore, `print_html()` did not work, which
-  was also fixed now.
+  was also fixed now (#577).
 
 * `demean()` (and `degroup()`) gets an `append` argument that defaults to `TRUE`,
   to append the centered variables to the original data frame, instead of
   returning the de- and group-meaned variables only. Use `append = FALSE` to
   for the previous default behaviour (i.e. only returning the newly created
-  variables).
+  variables) (#579).
 
 * The `"diff"` method in `smoothness()` was revised and now has a reversed
   interpretation. Documentation was updated accordingly. (#374).
@@ -40,19 +70,20 @@ BREAKING CHANGES AND DEPRECATIONS
 CHANGES
 
 * `rescale_weights()` gets a `method` argument, to choose method to rescale
-  weights. Options are `"carle"` (the default) and `"kish"`.
+  weights. Options are `"carle"` (the default) and `"kish"` (#575).
 
 * The `select` argument, which is available in different functions to select
   variables, can now also be a character vector with quoted variable names,
-  including a colon to indicate a range of several variables (e.g. `"cyl:gear"`).
+  including a colon to indicate a range of several variables (e.g. `"cyl:gear"`)
+  (#551).
 
 * New function `row_sums()`, to calculate row sums (optionally with minimum
-  amount of valid values), as complement to `row_means()`.
+  amount of valid values), as complement to `row_means()` (#552).
 
-* New function `row_count()`, to count specific values row-wise.
+* New function `row_count()`, to count specific values row-wise (#553).
 
 * `data_read()` no longer shows warning about forthcoming breaking changes
-  in upstream packages when reading `.RData` files.
+  in upstream packages when reading `.RData` files (#557).
 
 * `data_modify()` now recognizes `n()`, for example to create an index for data
   groups with `1:n()` (#535).

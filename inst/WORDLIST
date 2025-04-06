@@ -33,6 +33,7 @@ MADs
 Mattan
 Minitab
 ORCID
+OpenBLAS
 PSU
 Posteriori
 Ranktransform
@@ -57,6 +58,7 @@ behaviour
 behaviours
 codebook
 codebooks
+codecov
 coercible
 crosstable
 crosstables
@@ -83,8 +85,8 @@ meaned
 mesokurtic
 midhinge
 modelbased
-modelling
 nd
+noLD
 panelr
 partialization
 platykurtic

@@ -18,8 +18,8 @@ library(datawizard)
 ```
 
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.04684/status.svg)](https://doi.org/10.21105/joss.04684)
-[![downloads](http://cranlogs.r-pkg.org/badges/datawizard)](https://cran.r-project.org/package=datawizard)
-[![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/) 
+[![downloads](https://cranlogs.r-pkg.org/badges/datawizard)](https://cran.r-project.org/package=datawizard)
+[![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/)
 
 <!-- ***:sparkles: Hockety pockety wockety wack, prepare this data forth and back*** -->
 
@@ -29,13 +29,13 @@ library(datawizard)
 
 <!-- ***Hockety pockety wockety wass, datawizard saves your ass! :sparkles:*** -->
 
-`{datawizard}` is a lightweight package to easily manipulate, clean, transform, and prepare your data for analysis. It is part of the [easystats ecosystem](https://easystats.github.io/easystats/), a suite of R packages to deal with your entire statistical analysis, from cleaning the data to reporting the results. 
+`{datawizard}` is a lightweight package to easily manipulate, clean, transform, and prepare your data for analysis. It is part of the [easystats ecosystem](https://easystats.github.io/easystats/), a suite of R packages to deal with your entire statistical analysis, from cleaning the data to reporting the results.
 
-It covers two aspects of data preparation: 
+It covers two aspects of data preparation:
 
 - **Data manipulation**: `{datawizard}` offers a very similar set of functions to that of the *tidyverse* packages, such as a `{dplyr}` and `{tidyr}`, to select, filter and reshape data, with a few key differences. 1) All data manipulation functions start with the prefix `data_*` (which makes them easy to identify). 2) Although most functions can be used exactly as their *tidyverse* equivalents, they are also string-friendly (which makes them easy to program with and use inside functions). Finally, `{datawizard}` is super lightweight (no dependencies, similar to [poorman](https://github.com/nathaneastwood/poorman)), which makes it awesome for developers to use in their packages.
 
-- **Statistical transformations**: `{datawizard}` also has powerful functions to easily apply common data [transformations](https://easystats.github.io/datawizard/reference/index.html#statistical-transformations), including standardization, normalization, rescaling, rank-transformation, scale reversing, recoding, binning, etc. 
+- **Statistical transformations**: `{datawizard}` also has powerful functions to easily apply common data [transformations](https://easystats.github.io/datawizard/reference/index.html#statistical-transformations), including standardization, normalization, rescaling, rank-transformation, scale reversing, recoding, binning, etc.
 
 
 
@@ -47,7 +47,7 @@ It covers two aspects of data preparation:
 
 # Installation
 
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/datawizard)](https://cran.r-project.org/package=datawizard) [![insight status badge](https://easystats.r-universe.dev/badges/datawizard)](https://easystats.r-universe.dev) [![R-CMD-check](https://github.com/easystats/datawizard/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/easystats/datawizard/actions)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/datawizard)](https://cran.r-project.org/package=datawizard) [![datawizard status badge](https://easystats.r-universe.dev/badges/datawizard)](https://easystats.r-universe.dev) [![codecov](https://codecov.io/gh/easystats/datawizard/branch/main/graph/badge.svg)](https://app.codecov.io/gh/easystats/datawizard) [![R-CMD-check](https://github.com/easystats/datawizard/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/easystats/datawizard/actions)
 
 Type | Source | Command
 ---|---|---
@@ -72,9 +72,13 @@ citation("datawizard")
 
 # Features
 
-Most courses and tutorials about statistical modeling assume that you are working with a clean and tidy dataset. In practice, however, a major part of doing statistical modeling is preparing your data--cleaning up values, creating new columns, reshaping the dataset, or transforming some variables. `{datawizard}` provides easy to use tools to perform these common, critical, and sometimes tedious data preparation tasks. 
+[![Documentation](https://img.shields.io/badge/documentation-datawizard-orange.svg?colorB=E91E63)](https://easystats.github.io/datawizard/)
+[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
+[![Features](https://img.shields.io/badge/features-datawizard-orange.svg?colorB=2196F3)](https://easystats.github.io/datawizard/reference/index.html)
 
-## Data wrangling 
+Most courses and tutorials about statistical modeling assume that you are working with a clean and tidy dataset. In practice, however, a major part of doing statistical modeling is preparing your data--cleaning up values, creating new columns, reshaping the dataset, or transforming some variables. `{datawizard}` provides easy to use tools to perform these common, critical, and sometimes tedious data preparation tasks.
+
+## Data wrangling
 
 ### Select, filter and remove variables
 
@@ -321,12 +325,12 @@ iris |>
   data_remove(4) |>
   head()
 ```
-  
+
 # Contributing and Support
 
 In case you want to file an issue or contribute in another way to the package, please follow [this guide](https://easystats.github.io/datawizard/CONTRIBUTING.html). For questions about the functionality, you may either contact us via email or also file an issue.
 
 # Code of Conduct
 
-Please note that this project is released with a 
+Please note that this project is released with a
 [Contributor Code of Conduct](https://easystats.github.io/datawizard/CODE_OF_CONDUCT.html). By participating in this project you agree to abide by its terms.
