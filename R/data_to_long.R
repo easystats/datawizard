@@ -138,6 +138,7 @@ data_to_long <- function(data,
                          rows_to = NULL,
                          ignore_case = FALSE,
                          regex = FALSE,
+                         verbose = TRUE,
                          ...,
                          cols) { # nolint
   original_data <- data
@@ -152,23 +153,21 @@ data_to_long <- function(data,
       exclude = NULL,
       ignore_case = ignore_case,
       regex = regex,
-      verbose = FALSE
+      verbose = verbose
+    )
+  } else if (!missing(select) || !is.null(select)) {
+    cols <- .select_nse(
+      select,
+      data,
+      exclude = NULL,
+      ignore_case = ignore_case,
+      regex = regex,
+      verbose = verbose
     )
   } else {
-    if (!missing(select) || !is.null(select)) {
-      cols <- .select_nse(
-        select,
-        data,
-        exclude = NULL,
-        ignore_case = ignore_case,
-        regex = regex,
-        verbose = FALSE
-      )
-    } else {
-      insight::format_error(
-        "You need to specify columns to pivot, either with `select` or `cols`."
-      )
-    }
+    insight::format_error(
+      "You need to specify columns to pivot, either with `select` or `cols`."
+    )
   }
   # nolint end
 
