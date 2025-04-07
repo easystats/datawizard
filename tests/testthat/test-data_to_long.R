@@ -495,3 +495,30 @@ test_that("don't convert factors to integer", {
   )
   expect_snapshot(print(mtcars_long))
 })
+
+
+test_that("tell user about typos", {
+  data("mtcars")
+  expect_silent(data_to_long(
+    mtcars,
+    select = c("mpg", "hp", "disp"),
+    names_to = "time",
+    values_to = "count"
+  ))
+  expect_warning(expect_warning(
+    data_to_long(
+      mtcars,
+      select = c("mpg", "ho", "dist"),
+      names_to = "time",
+      values_to = "count"
+    ),
+    regex = "Following"
+  ))
+  expect_silent(data_to_long(
+    mtcars,
+    select = c("mpg", "ho", "dist"),
+    names_to = "time",
+    values_to = "count",
+    verbose = FALSE
+  ))
+})
