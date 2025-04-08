@@ -505,7 +505,7 @@ test_that("tell user about typos", {
     names_to = "time",
     values_to = "count"
   ))
-  expect_warning(expect_warning(
+  expect_error(
     data_to_long(
       mtcars,
       select = c("mpg", "ho", "dist"),
@@ -513,12 +513,5 @@ test_that("tell user about typos", {
       values_to = "count"
     ),
     regex = "Following"
-  ))
-  expect_silent(data_to_long(
-    mtcars,
-    select = c("mpg", "ho", "dist"),
-    names_to = "time",
-    values_to = "count",
-    verbose = FALSE
-  ))
+  )
 })

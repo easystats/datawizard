@@ -17,7 +17,6 @@ data_to_long(
   rows_to = NULL,
   ignore_case = FALSE,
   regex = FALSE,
-  verbose = TRUE,
   ...,
   cols
 )
@@ -34,7 +33,6 @@ reshape_longer(
   rows_to = NULL,
   ignore_case = FALSE,
   regex = FALSE,
-  verbose = TRUE,
   ...,
   cols
 )
@@ -119,8 +117,6 @@ of length > 1. \code{regex = TRUE} is comparable to using one of the two
 select-helpers, \code{select = contains()} or \code{select = regex()}, however,
 since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.}
-
-\item{verbose}{Toggle warnings.}
 
 \item{...}{Currently not used.}
 

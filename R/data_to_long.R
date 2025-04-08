@@ -138,7 +138,6 @@ data_to_long <- function(data,
                          rows_to = NULL,
                          ignore_case = FALSE,
                          regex = FALSE,
-                         verbose = TRUE,
                          ...,
                          cols) { # nolint
   original_data <- data
@@ -153,7 +152,7 @@ data_to_long <- function(data,
       exclude = NULL,
       ignore_case = ignore_case,
       regex = regex,
-      verbose = verbose
+      ifnotfound = "error"
     )
   } else if (!missing(select) || !is.null(select)) {
     cols <- .select_nse(
@@ -162,7 +161,7 @@ data_to_long <- function(data,
       exclude = NULL,
       ignore_case = ignore_case,
       regex = regex,
-      verbose = verbose
+      ifnotfound = "error"
     )
   } else {
     insight::format_error(
