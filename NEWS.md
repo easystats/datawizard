@@ -5,6 +5,9 @@ CHANGES
 * `data_codebook()` gives an informative warning when no column names matched
   the selection pattern (#601).
 
+* `data_to_long()` now errors when columns selected to reshape do not exist in
+  the data, to avoid nonsensical results that could be missed (#602).
+
 BUG FIXES
 
 * Fixed bug in `data_to_wide()`, where new column names in `names_from` were

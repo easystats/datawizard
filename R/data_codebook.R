@@ -310,7 +310,7 @@ data_codebook <- function(data,
 # helper -----------------------
 
 
-#' @keyword internal
+#' @keywords internal
 .extract_variable_labels <- function(x, variable_label_width = NULL) {
   varlab <- attr(x, "label", exact = TRUE)
   if (!is.null(varlab) && length(varlab)) {
@@ -330,7 +330,7 @@ data_codebook <- function(data,
 }
 
 
-#' @keyword internal
+#' @keywords internal
 .finalize_result <- function(out) {
   # rename
   pattern <- c("variable_label", "values", "value_labels", "frq", "proportions")
