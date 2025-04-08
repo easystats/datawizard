@@ -242,6 +242,19 @@ test_that("describe_distribution - grouped df", {
   expect_equal(out$Mean, c(1.462, 0.246, 4.26, 1.326, 5.552, 2.026), tolerance = 1e-3)
 })
 
+test_that("argument 'by' works", {
+  skip_if_not_installed("bayestestR")
+  expect_identical(
+    mtcars |> data_group(c("am", "vs")) |> describe_distribution(),
+    mtcars |> describe_distribution(by = c("am", "vs")),
+    ignore_attr = TRUE
+  )
+
+  expect_error(
+    mtcars |> describe_distribution(by = 2),
+    "must be a character vector"
+  )
+})
 
 # distribution_mode --------------------------
 test_that("distribution_mode works as expected", {

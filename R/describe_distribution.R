@@ -5,6 +5,8 @@
 #'
 #' @param x A numeric vector, a character vector, a data frame, or a list. See
 #' `Details`.
+#' @param by Column names indicating how to split the data in various groups
+#' before describing the distribution.
 #' @param range Return the range (min and max).
 #' @param quartiles Return the first and third quartiles (25th and 75pth
 #'   percentiles).
@@ -392,6 +394,7 @@ describe_distribution.data.frame <- function(x,
                                              ignore_case = FALSE,
                                              regex = FALSE,
                                              verbose = TRUE,
+                                             by = NULL,
                                              ...) {
   select <- .select_nse(select,
     x,
@@ -400,6 +403,33 @@ describe_distribution.data.frame <- function(x,
     regex = regex,
     verbose = verbose
   )
+
+  if (!is.null(by)) {
+    if (!is.character(by)) {
+      insight::format_error("`by` must be a character vector.")
+    }
+    x <- data_group(x, by)
+    out <- describe_distribution(
+      x,
+      select = select,
+      exclude = exclude,
+      centrality = centrality,
+      dispersion = dispersion,
+      iqr = iqr,
+      range = range,
+      quartiles = quartiles,
+      include_factors = include_factors,
+      ci = ci,
+      iterations = iterations,
+      threshold = threshold,
+      ignore_case = ignore_case,
+      regex = regex,
+      verbose = verbose
+    )
+    out <- data_ungroup(out)
+    return(out)
+  }
+
   # The function currently doesn't support descriptive summaries for character
   # or factor types.
   out <- do.call(rbind, lapply(x[select], function(i) {

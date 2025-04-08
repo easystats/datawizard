@@ -8,6 +8,8 @@ CHANGES
 * `data_to_long()` now errors when columns selected to reshape do not exist in
   the data, to avoid nonsensical results that could be missed (#602).
 
+* New argument `by` in `describe_distribution()` (#604).
+
 BUG FIXES
 
 * Fixed bug in `data_to_wide()`, where new column names in `names_from` were
