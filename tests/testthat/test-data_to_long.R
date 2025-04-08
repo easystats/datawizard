@@ -247,9 +247,12 @@ test_that("data_to_long: can't use sep or pattern if only one names_to", {
 })
 
 test_that("data_to_long: error if no columns to reshape", {
+  # since #602, we no longer have the case that .select_nse() returns no
+  # columns, because we error before when no column found, instead of returning
+  # NULL or a vector of lenght zero.
   expect_error(
     data_to_long(wide_data, cols = "foo"),
-    "No columns found"
+    "Possibly misspelled"
   )
 })
 

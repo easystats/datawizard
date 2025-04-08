@@ -170,11 +170,6 @@ data_to_long <- function(data,
   }
   # nolint end
 
-  # nothing to select?
-  if (length(cols) == 0L) {
-    insight::format_error("No columns found for reshaping data.")
-  }
-
   if (length(names_to) > 1L && is.null(names_sep) && is.null(names_pattern)) {
     insight::format_error(
       "If you supply multiple names in `names_to`, you must also supply one of `names_sep` or `names_pattern`."
