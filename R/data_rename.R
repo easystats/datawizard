@@ -40,8 +40,6 @@
 #'
 #' If `select` is a named vector, `replacement` is ignored.
 #' @param rows Vector of row names.
-#' @param safe Deprecated. Passing unknown column names now always errors.
-#' @param pattern Deprecated. Use `select` instead.
 #' @param ... Other arguments passed to or from other functions.
 #'
 #' @details
@@ -94,19 +92,6 @@ data_rename <- function(data,
   # check for valid input
   if (!is.data.frame(data)) {
     insight::format_error("Argument `data` must be a data frame.")
-  }
-  # If the user does data_rename(iris, pattern = "Sepal.Length", "length"),
-  # then "length" is matched to select by position while it's the replacement
-  # => do the switch manually
-  if (!is.null(pattern)) {
-    .is_deprecated("pattern", "select")
-    if (!is.null(select)) {
-      replacement <- select
-    }
-    select <- pattern
-  }
-  if (isFALSE(safe)) {
-    insight::format_warning("In `data_rename()`, argument `safe` is no longer used and will be removed in a future release.") # nolint
   }
 
   # change all names if no pattern specified

@@ -5,6 +5,8 @@ CHANGES
 * `data_codebook()` gives an informative warning when no column names matched
   the selection pattern (#601).
 
+* Deprecated arguments in `data_rename()` and `data_match()` have been removed.
+
 BUG FIXES
 
 * Fixed bug in `data_to_wide()`, where new column names in `names_from` were
