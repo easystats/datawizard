@@ -6,7 +6,8 @@
 #' @param x A numeric vector, a character vector, a data frame, or a list. See
 #' `Details`.
 #' @param by Column names indicating how to split the data in various groups
-#' before describing the distribution.
+#' before describing the distribution. `by` groups will be added to potentially
+#' existing groups created by `data_group()`.
 #' @param range Return the range (min and max).
 #' @param quartiles Return the first and third quartiles (25th and 75pth
 #'   percentiles).
@@ -482,7 +483,15 @@ describe_distribution.grouped_df <- function(x,
                                              ignore_case = FALSE,
                                              regex = FALSE,
                                              verbose = TRUE,
+                                             by = NULL,
                                              ...) {
+  if (!is.null(by)) {
+    if (!is.character(by)) {
+      insight::format_error("`by` must be a character vector.")
+    }
+    existing_grps <- setdiff(colnames(attributes(x)$groups), ".rows")
+    x <- data_group(x, c(existing_grps, by))
+  }
   group_vars <- setdiff(colnames(attributes(x)$groups), ".rows")
   group_data <- expand.grid(lapply(x[group_vars], function(i) unique(sort(i))))
   groups <- split(x, x[group_vars])
@@ -508,7 +517,6 @@ describe_distribution.grouped_df <- function(x,
       threshold = threshold,
       ...
     )
-
 
     d[[".group"]] <-
       paste(sprintf(

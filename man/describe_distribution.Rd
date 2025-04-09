@@ -144,7 +144,8 @@ since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.}
 
 \item{by}{Column names indicating how to split the data in various groups
-before describing the distribution.}
+before describing the distribution. \code{by} groups will be added to potentially
+existing groups created by \code{data_group()}.}
 }
 \value{
 A data frame with columns that describe the properties of the variables.

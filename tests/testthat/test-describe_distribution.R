@@ -244,10 +244,21 @@ test_that("describe_distribution - grouped df", {
 
 test_that("argument 'by' works", {
   skip_if_not_installed("bayestestR")
+
+  # basic
   grouped <- data_group(mtcars, c("am", "vs"))
   expect_identical(
     describe_distribution(grouped),
     describe_distribution(mtcars, by = c("am", "vs")),
+    ignore_attr = TRUE
+  )
+
+  # mixing data_group() and arg 'by'
+  grouped <- data_group(mtcars, c("am", "vs"))
+  half_grouped <- data_group(mtcars, "am")
+  expect_identical(
+    describe_distribution(grouped),
+    describe_distribution(half_grouped, by = "vs"),
     ignore_attr = TRUE
   )
 
