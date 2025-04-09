@@ -244,14 +244,15 @@ test_that("describe_distribution - grouped df", {
 
 test_that("argument 'by' works", {
   skip_if_not_installed("bayestestR")
+  grouped <- data_group(mtcars, c("am", "vs"))
   expect_identical(
-    mtcars |> data_group(c("am", "vs")) |> describe_distribution(),
-    mtcars |> describe_distribution(by = c("am", "vs")),
+    describe_distribution(grouped),
+    describe_distribution(mtcars, by = c("am", "vs")),
     ignore_attr = TRUE
   )
 
   expect_error(
-    mtcars |> describe_distribution(by = 2),
+    describe_distribution(mtcars, by = 2),
     "must be a character vector"
   )
 })
