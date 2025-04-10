@@ -12,6 +12,8 @@ CHANGES
   as value for a newly created variable, if that value does not refer to the
   name of an existing variable.
 
+* New argument `by` in `describe_distribution()` (#604).
+
 BUG FIXES
 
 * Fixed bug in `data_to_wide()`, where new column names in `names_from` were
