@@ -608,7 +608,7 @@ withr::with_environment(
   new.env(),
   test_that("data_modify errors on non-defined function", {
     d <- data.frame()
-    for (param in letters[c(1,2,5)]) {
+    for (param in letters[c(1, 2, 5)]) {
       out <- data.frame(x = as.numeric(as.factor(param)))
       out <- data_modify(out, Parameter = param)
       d <- rbind(out, d)

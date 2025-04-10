@@ -151,10 +151,12 @@ data_modify <- function(data, ...) {
   UseMethod("data_modify")
 }
 
+
 #' @export
 data_modify.default <- function(data, ...) {
   insight::format_error("`data` must be a data frame.")
 }
+
 
 #' @rdname data_modify
 #' @export
@@ -215,6 +217,7 @@ data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 
   data
 }
+
 
 #' @export
 data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = NULL) {
@@ -358,7 +361,9 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # However, we need to check that we don't have a character vector,
   # like: data_modify(iris, new_var = "a")
   # this one should be recycled instead.
-  if (!is.character(symbol)) {
+  if (is.character(symbol)) {
+    eval_symbol <- NULL
+  } else {
     eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
     if (is.character(eval_symbol)) {
       symbol <- try(str2lang(paste0(names(dots)[i], " = ", eval_symbol)), silent = TRUE)
@@ -373,8 +378,6 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
         ))
       }
     }
-  } else {
-    eval_symbol <- NULL
   }
 
   # finally, we can evaluate expression and get values for new variables
