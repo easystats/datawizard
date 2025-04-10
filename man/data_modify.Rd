@@ -26,7 +26,8 @@ variable will be copied. Example:
 data_modify(iris, new_sepal = a) # new_sepal = Sepal.Width
 }\if{html}{\out{</div>}}
 \item A variable that contains a string representation of the expression. This
-expression will be evaluated. Example:
+expression will be evaluated. This might be useful in case of scoping issues,
+when otherwise objects are not found by the function. Example:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{a <- "2 * Sepal.Width"
 data_modify(iris, double_sepal = a)

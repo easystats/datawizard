@@ -18,7 +18,8 @@
 #'   data_modify(iris, new_sepal = a) # new_sepal = Sepal.Width
 #'   ```
 #' - A variable that contains a string representation of the expression. This
-#'   expression will be evaluated. Example:
+#'   expression will be evaluated. This might be useful in case of scoping issues,
+#'   when otherwise objects are not found by the function. Example:
 #'   ```r
 #'   a <- "2 * Sepal.Width"
 #'   data_modify(iris, double_sepal = a)
