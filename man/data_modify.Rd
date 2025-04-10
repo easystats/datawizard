@@ -18,11 +18,23 @@ values or recoding of those new variables. These expressions can be one of:
 \item A sequence of named, literal expressions, where the left-hand side refers
 to the name of the new variable, while the right-hand side represent the
 values of the new variable. Example: \code{Sepal.Width = center(Sepal.Width)}.
-\item A sequence of string values, representing expressions.
-\item A variable that contains a string representation of the expression. Example:
+\item A sequence of string values, representing expressions (see 'Examples').
+\item A variable that contains a string of a variable name. The values from this
+variable will be copied. Example:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{a <- "Sepal.Width"
+data_modify(iris, new_sepal = a) # new_sepal = Sepal.Width
+}\if{html}{\out{</div>}}
+\item A variable that contains a string representation of the expression. This
+expression will be evaluated. Example:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{a <- "2 * Sepal.Width"
-data_modify(iris, a)
+data_modify(iris, double_sepal = a)
+}\if{html}{\out{</div>}}
+\item A variable that contains a value to be used. Example:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{a <- "abc"
+data_modify(iris, var_abc = a) # var_abc contains "abc"
 }\if{html}{\out{</div>}}
 \item A character vector of expressions. Example:
 \code{c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")}. This

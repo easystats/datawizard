@@ -10,11 +10,23 @@
 #' - A sequence of named, literal expressions, where the left-hand side refers
 #'   to the name of the new variable, while the right-hand side represent the
 #'   values of the new variable. Example: `Sepal.Width = center(Sepal.Width)`.
-#' - A sequence of string values, representing expressions.
-#' - A variable that contains a string representation of the expression. Example:
+#' - A sequence of string values, representing expressions (see 'Examples').
+#' - A variable that contains a string of a variable name. The values from this
+#'   variable will be copied. Example:
+#'   ```r
+#'   a <- "Sepal.Width"
+#'   data_modify(iris, new_sepal = a) # new_sepal = Sepal.Width
+#'   ```
+#' - A variable that contains a string representation of the expression. This
+#'   expression will be evaluated. Example:
 #'   ```r
 #'   a <- "2 * Sepal.Width"
-#'   data_modify(iris, a)
+#'   data_modify(iris, double_sepal = a)
+#'   ```
+#' - A variable that contains a value to be used. Example:
+#'   ```r
+#'   a <- "abc"
+#'   data_modify(iris, var_abc = a) # var_abc contains "abc"
 #'   ```
 #' - A character vector of expressions. Example:
 #'   `c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")`. This
