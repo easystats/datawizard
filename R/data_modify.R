@@ -431,5 +431,13 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 
 
 .is_valid_value <- function(x) {
-  !is.null(x) && (is.numeric(x) || is.factor(x) || is.character(x) || is.logical(x))
+  valid_type <- !is.null(x) && (is.numeric(x) || is.factor(x) || is.character(x) || is.logical(x))
+  valid_value <- TRUE
+  # if user wants to add values in a variable as new value, we have some
+  # restrictions - we only allow alpha-numerical values, because we also
+  # allow expressions as strings, which need to be distinguished from "values"
+  if (is.character(x)) {
+    valid_value <- grepl("^[a-zA-Z0-9]+$", x)
+  }
+  valid_type && valid_value
 }
