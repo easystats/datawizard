@@ -9,7 +9,7 @@ centrality, dispersion, range, skewness, kurtosis)."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,6 +100,7 @@ centrality, dispersion, range, skewness, kurtosis).</p>
 <span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  regex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -231,6 +232,12 @@ of length &gt; 1. <code>regex = TRUE</code> is comparable to using one of the tw
 select-helpers, <code>select = contains()</code> or <code>select = regex()</code>, however,
 since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.</p></dd>
+
+
+<dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
+<dd><p>Column names indicating how to split the data in various groups
+before describing the distribution. <code>by</code> groups will be added to potentially
+existing groups created by <code><a href="data_group.html">data_group()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
