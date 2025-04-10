@@ -450,3 +450,25 @@ test_that("data_read - RDS file, no data frame", {
     expect_s3_class(d, "lm")
   })
 })
+
+
+test_that("data_read - RDA file, model object", {
+  skip_if_not_installed("withr")
+
+  withr::with_tempfile("temp_file", fileext = ".rda", code = {
+    request <- httr::GET("https://github.com/easystats/circus/raw/refs/heads/main/data/brms_1.rda")
+    httr::stop_for_status(request)
+    writeBin(httr::content(request, type = "raw"), temp_file)
+
+    expect_warning(
+      {
+        d <- data_read(
+          temp_file,
+          verbose = TRUE
+        )
+      },
+      regex = "Imported file is a regression"
+    )
+    expect_s3_class(d, "brmsfit")
+  })
+})
