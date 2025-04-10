@@ -334,6 +334,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   data
 }
 
+
 .get_new_dots_variable <- function(dots, i, data) {
   # iterate expressions for new variables
   symbol <- dots[[i]]
@@ -360,6 +361,8 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
         ))
       }
     }
+  } else {
+    eval_symbol <- NULL
   }
 
   # finally, we can evaluate expression and get values for new variables
@@ -372,8 +375,17 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     symbol_string <- str2lang(gsub("n()", "nrow(data)", symbol_string, fixed = TRUE))
     new_variable <- try(with(data, eval(symbol_string)), silent = TRUE)
   } else {
-    # default evaluation of expression
+    # default evaluation of expression, we look for the variable name saved
+    # in "symbol" in the data
     new_variable <- try(with(data, eval(symbol)), silent = TRUE)
+    # the *value* in the expression might not be the name of a variable,
+    # but possibly a *value* that should be assigned to the new variable
+    # this should only work when `eval_symbol` is of length one, containing
+    # one value for the new variable. We don't accept other lengths, because
+    # then recycling rows to fit the number of rows in the data may fail
+    if (inherits(new_variable, "try-error") && .is_valid_value(eval_symbol)) {
+      new_variable <- eval_symbol
+    }
   }
 
   # successful, or any errors, like misspelled variable name?
@@ -403,4 +415,9 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   }
 
   new_variable
+}
+
+
+.is_valid_value <- function(x) {
+  !is.null(x) && (is.numeric(x) || is.factor(x) || is.character(x) || is.logical(x))
 }
