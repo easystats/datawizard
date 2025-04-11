@@ -447,7 +447,7 @@ test_that("data_read - RDS file, no data frame", {
       },
       regex = "no data frame"
     )
-    expect_s3_class(d, "list")
+    expect_true(is.list(d))
   })
 })
 
@@ -460,7 +460,7 @@ test_that("data_read - RDA file, model object", {
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
-    expect_warning(
+    expect_message(
       {
         d <- data_read(
           temp_file,
@@ -477,7 +477,7 @@ test_that("data_read - RDA file, model object", {
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
-    expect_warning(
+    expect_message(
       {
         d <- data_read(
           temp_file,
