@@ -10,11 +10,24 @@
 #' - A sequence of named, literal expressions, where the left-hand side refers
 #'   to the name of the new variable, while the right-hand side represent the
 #'   values of the new variable. Example: `Sepal.Width = center(Sepal.Width)`.
-#' - A sequence of string values, representing expressions.
-#' - A variable that contains a string representation of the expression. Example:
+#' - A sequence of string values, representing expressions (see 'Examples').
+#' - A variable that contains a string of a variable name. The values from this
+#'   variable will be copied. Example:
+#'   ```r
+#'   a <- "Sepal.Width"
+#'   data_modify(iris, new_sepal = a) # new_sepal = Sepal.Width
+#'   ```
+#' - A variable that contains a string representation of the expression. This
+#'   expression will be evaluated. This might be useful in case of scoping issues,
+#'   when otherwise objects are not found by the function. Example:
 #'   ```r
 #'   a <- "2 * Sepal.Width"
-#'   data_modify(iris, a)
+#'   data_modify(iris, double_sepal = a)
+#'   ```
+#' - A variable that contains a value to be used. Example:
+#'   ```r
+#'   a <- "abc"
+#'   data_modify(iris, var_abc = a) # var_abc contains "abc"
 #'   ```
 #' - A character vector of expressions. Example:
 #'   `c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")`. This
@@ -139,10 +152,12 @@ data_modify <- function(data, ...) {
   UseMethod("data_modify")
 }
 
+
 #' @export
 data_modify.default <- function(data, ...) {
   insight::format_error("`data` must be a data frame.")
 }
+
 
 #' @rdname data_modify
 #' @export
@@ -203,6 +218,7 @@ data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 
   data
 }
+
 
 #' @export
 data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = NULL) {
@@ -334,6 +350,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   data
 }
 
+
 .get_new_dots_variable <- function(dots, i, data) {
   # iterate expressions for new variables
   symbol <- dots[[i]]
@@ -345,7 +362,9 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # However, we need to check that we don't have a character vector,
   # like: data_modify(iris, new_var = "a")
   # this one should be recycled instead.
-  if (!is.character(symbol)) {
+  if (is.character(symbol)) {
+    eval_symbol <- NULL
+  } else {
     eval_symbol <- .dynEval(symbol, ifnotfound = NULL)
     if (is.character(eval_symbol)) {
       symbol <- try(str2lang(paste0(names(dots)[i], " = ", eval_symbol)), silent = TRUE)
@@ -372,8 +391,37 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     symbol_string <- str2lang(gsub("n()", "nrow(data)", symbol_string, fixed = TRUE))
     new_variable <- try(with(data, eval(symbol_string)), silent = TRUE)
   } else {
-    # default evaluation of expression
+    # default evaluation of expression, we look for the variable name saved
+    # in "symbol" in the data, or check if the expression refers to a variable
+    # that contains the value to be set.
+    #
+    # Possible scenarios:
+    #
+    # 1.) Expression is a variable in the environment that contains a value,
+    #     which refers to an existing column name in the data. Then "symbol"
+    #     would be something like "LHS = <variable>", which can be evaluated.
+    #
+    # 2.) If the RHS of the expression was a variable with a <value> that should
+    #     be set, "symbol" would now be an expression like "LHS = <value>", which
+    #     will fail in the next line, because the value no longer refers to an
+    #     existing column name in the data.
+    #
+    # 3.) If the RHS was no variable with a value, but with an expression,
+    #     however, with a typo in the variables used in that expression, the next
+    #     line will still fail (see 2.), and "eval_symbol" contains a string
+    #     representation of that expression. in ".is_valid_value()", we check
+    #     whether "eval_symbol" looks like a "value" or more like an
+    #     "expression". If the latter, we error.
+    #
     new_variable <- try(with(data, eval(symbol)), silent = TRUE)
+    # the *value* in the expression might not be the name of a variable,
+    # but possibly a *value* that should be assigned to the new variable
+    # this should only work when `eval_symbol` is of length one, containing
+    # one value for the new variable. We don't accept other lengths, because
+    # then recycling rows to fit the number of rows in the data may fail
+    if (inherits(new_variable, "try-error") && .is_valid_value(eval_symbol)) {
+      new_variable <- eval_symbol
+    }
   }
 
   # successful, or any errors, like misspelled variable name?
@@ -403,4 +451,33 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   }
 
   new_variable
+}
+
+
+.is_valid_value <- function(x) {
+  valid_type <- !is.null(x) && (is.numeric(x) || is.factor(x) || is.character(x) || is.logical(x))
+  valid_value <- TRUE
+  # if user wants to add values in a variable as new value, we have some
+  # restrictions - we only allow alpha-numerical values, because we also
+  # allow expressions as strings, which need to be distinguished from "values".
+  #
+  # In other word: if "x" is a character value, it can either refer to a column
+  # name in the data (which would have been successfully evaluated before),
+  # a value that should be used, or a string representation of an expression to
+  # be evaluated. We need to check whether it's a "value", or an "expression".
+  # We assume it is a value if it just contains alpha-numeric characters.
+  #
+  # The value might also contain whitespace, e.g. if a variable "x" contains
+  # the value "a 1". This still works, because this pattern errors before, and
+  # a correct expression is created before with this code:
+  # symbol <- str2lang(paste0(
+  #   names(dots)[i], " = c(", paste0("\"", eval_symbol, "\"", collapse = ","), ")"
+  # ))
+  # This would convert the full string from `x = "a 1"` into `x = c("a 1")`, which
+  # can be evaluated.
+  #
+  if (is.character(x)) {
+    valid_value <- grepl("^[a-zA-Z0-9]+$", x)
+  }
+  valid_type && valid_value
 }
