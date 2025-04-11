@@ -1,5 +1,11 @@
 # datawizard (devel)
 
+BREAKING CHANGES
+
+* `data_read()` now also returns Bayesian models from packages *brms* and
+  *rstanarm* as original model objects, and no longer coerces them into data
+  frames (#606).
+
 CHANGES
 
 * `data_codebook()` gives an informative warning when no column names matched
