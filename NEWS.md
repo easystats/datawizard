@@ -4,7 +4,7 @@ BREAKING CHANGES
 
 * `data_read()` now also returns Bayesian models from packages *brms* and
   *rstanarm* as original model objects, and no longer coerces them into data
-  frames.
+  frames (#606).
 
 CHANGES
 
