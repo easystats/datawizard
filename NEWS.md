@@ -1,5 +1,9 @@
 # datawizard (devel)
 
+NEW FUNCTIONS
+
+* `describe_missing()`, to report on missing values in a data frame.
+
 CHANGES
 
 * `data_codebook()` gives an informative warning when no column names matched

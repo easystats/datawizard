@@ -81,6 +81,7 @@ labelling
 leptokurtic
 lm
 lme
+macOS
 meaned
 mesokurtic
 midhinge
@@ -94,6 +95,8 @@ poorman
 pre
 pth
 px
+quartile
+quartiles
 readr
 readxl
 recode
