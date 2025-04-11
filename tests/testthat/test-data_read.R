@@ -447,7 +447,7 @@ test_that("data_read - RDS file, no data frame", {
       },
       regex = "no data frame"
     )
-    expect_true(is.list(d))
+    expect_type(d, "list")
   })
 })
 
