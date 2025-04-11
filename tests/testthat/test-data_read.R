@@ -433,8 +433,8 @@ test_that("data_read, file not exists", {
 test_that("data_read - RDS file, no data frame", {
   skip_if_not_installed("withr")
 
-  withr::with_tempfile("temp_file", fileext = ".rds", code = {
-    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/model_object.rds")
+  withr::with_tempfile("temp_file", fileext = ".rda", code = {
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/list_for_testing.rda")
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
@@ -447,7 +447,7 @@ test_that("data_read - RDS file, no data frame", {
       },
       regex = "no data frame"
     )
-    expect_s3_class(d, "lm")
+    expect_s3_class(d, "list")
   })
 })
 
@@ -455,8 +455,25 @@ test_that("data_read - RDS file, no data frame", {
 test_that("data_read - RDA file, model object", {
   skip_if_not_installed("withr")
 
+  withr::with_tempfile("temp_file", fileext = ".rds", code = {
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/model_object.rds")
+    httr::stop_for_status(request)
+    writeBin(httr::content(request, type = "raw"), temp_file)
+
+    expect_warning(
+      {
+        d <- data_read(
+          temp_file,
+          verbose = TRUE
+        )
+      },
+      regex = "Imported file is a regression"
+    )
+    expect_s3_class(d, "lm")
+  })
+
   withr::with_tempfile("temp_file", fileext = ".rda", code = {
-    request <- httr::GET("https://github.com/easystats/circus/raw/refs/heads/main/data/brms_1.rda")
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/brms_1.rda")
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
