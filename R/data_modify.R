@@ -392,7 +392,27 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     new_variable <- try(with(data, eval(symbol_string)), silent = TRUE)
   } else {
     # default evaluation of expression, we look for the variable name saved
-    # in "symbol" in the data
+    # in "symbol" in the data, or check if the expression refers to a variable
+    # that contains the value to be set.
+    #
+    # Possible scenarios:
+    #
+    # 1.) Expression is a variable in the environment that contains a value,
+    #     which refers to an existing column name in the data. Then "symbol"
+    #     would be something like "LHS = <variable>", which can be evaluated.
+    #
+    # 2.) If the RHS of the expression was a variable with a <value> that should
+    #     be set, "symbol" would now be an expression like "LHS = <value>", which
+    #     will fail in the next line, because the value no longer refers to an
+    #     existing column name in the data.
+    #
+    # 3.) If the RHS was no variable with a value, but with an expression,
+    #     however, with a typo in the variables used in that expression, the next
+    #     line will still fail (see 2.), and "eval_symbol" contains a string
+    #     representation of that expression. in ".is_valid_value()", we check
+    #     whether "eval_symbol" looks like a "value" or more like an
+    #     "expression". If the latter, we error.
+    #
     new_variable <- try(with(data, eval(symbol)), silent = TRUE)
     # the *value* in the expression might not be the name of a variable,
     # but possibly a *value* that should be assigned to the new variable
@@ -439,7 +459,23 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   valid_value <- TRUE
   # if user wants to add values in a variable as new value, we have some
   # restrictions - we only allow alpha-numerical values, because we also
-  # allow expressions as strings, which need to be distinguished from "values"
+  # allow expressions as strings, which need to be distinguished from "values".
+  #
+  # In other word: if "x" is a character value, it can either refer to a column
+  # name in the data (which would have been successfully evaluated before),
+  # a value that should be used, or a string representation of an expression to
+  # be evaluated. We need to check whether it's a "value", or an "expression".
+  # We assume it is a value if it just contains alpha-numeric characters.
+  #
+  # The value might also contain whitespace, e.g. if a variable "x" contains
+  # the value "a 1". This still works, because this pattern errors before, and
+  # a correct expression is created before with this code:
+  # symbol <- str2lang(paste0(
+  #   names(dots)[i], " = c(", paste0("\"", eval_symbol, "\"", collapse = ","), ")"
+  # ))
+  # This would convert the full string from `x = "a 1"` into `x = c("a 1")`, which
+  # can be evaluated.
+  #
   if (is.character(x)) {
     valid_value <- grepl("^[a-zA-Z0-9]+$", x)
   }
