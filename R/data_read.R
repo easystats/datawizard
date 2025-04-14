@@ -305,7 +305,7 @@ data_read <- function(path,
   out <- do.call(rio::import, c(rio_args, list(...)))
 
   # check if loaded file is a data frame, or not (e.g. model objects)
-  file_is_data <- .loaded_file_is_data(out)
+  file_is_data <- .loaded_file_is_data(out, verbose)
   if (!isFALSE(file_is_data)) {
     # if file could be coerced to a data frame, overwrite out
     out <- file_is_data
