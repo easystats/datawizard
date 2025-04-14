@@ -1,5 +1,15 @@
 # datawizard (devel)
 
+BREAKING CHANGES
+
+* `data_read()` now also returns Bayesian models from packages *brms* and
+  *rstanarm* as original model objects, and no longer coerces them into data
+  frames (#606).
+
+* The output format of `describe_distribution()` on grouped data has changed.
+  Before, it printed one table per group combination. Now, it prints a single
+  table with group columns at the start (#610).
+
 CHANGES
 
 * `data_codebook()` gives an informative warning when no column names matched
@@ -10,10 +20,15 @@ CHANGES
 * `data_to_long()` now errors when columns selected to reshape do not exist in
   the data, to avoid nonsensical results that could be missed (#602).
 
+* New argument `by` in `describe_distribution()` (#604).
+
 BUG FIXES
 
 * Fixed bug in `data_to_wide()`, where new column names in `names_from` were
   ignored when that column only contained one unique value.
+
+* Fixed bug in `describe_distribution()` when some group combinations 
+  didn't appear in the data (#609).
 
 # datawizard 1.0.2
 

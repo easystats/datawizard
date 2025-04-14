@@ -5,6 +5,9 @@
 #'
 #' @param x A numeric vector, a character vector, a data frame, or a list. See
 #' `Details`.
+#' @param by Column names indicating how to split the data in various groups
+#' before describing the distribution. `by` groups will be added to potentially
+#' existing groups created by `data_group()`.
 #' @param range Return the range (min and max).
 #' @param quartiles Return the first and third quartiles (25th and 75pth
 #'   percentiles).
@@ -392,6 +395,7 @@ describe_distribution.data.frame <- function(x,
                                              ignore_case = FALSE,
                                              regex = FALSE,
                                              verbose = TRUE,
+                                             by = NULL,
                                              ...) {
   select <- .select_nse(select,
     x,
@@ -400,6 +404,33 @@ describe_distribution.data.frame <- function(x,
     regex = regex,
     verbose = verbose
   )
+
+  if (!is.null(by)) {
+    if (!is.character(by)) {
+      insight::format_error("`by` must be a character vector.")
+    }
+    x <- data_group(x, by)
+    out <- describe_distribution(
+      x,
+      select = select,
+      exclude = exclude,
+      centrality = centrality,
+      dispersion = dispersion,
+      iqr = iqr,
+      range = range,
+      quartiles = quartiles,
+      include_factors = include_factors,
+      ci = ci,
+      iterations = iterations,
+      threshold = threshold,
+      ignore_case = ignore_case,
+      regex = regex,
+      verbose = verbose
+    )
+    out <- data_ungroup(out)
+    return(out)
+  }
+
   # The function currently doesn't support descriptive summaries for character
   # or factor types.
   out <- do.call(rbind, lapply(x[select], function(i) {
@@ -452,10 +483,19 @@ describe_distribution.grouped_df <- function(x,
                                              ignore_case = FALSE,
                                              regex = FALSE,
                                              verbose = TRUE,
+                                             by = NULL,
                                              ...) {
+  if (!is.null(by)) {
+    if (!is.character(by)) {
+      insight::format_error("`by` must be a character vector.")
+    }
+    existing_grps <- setdiff(colnames(attributes(x)$groups), ".rows")
+    x <- data_group(x, c(existing_grps, by))
+  }
   group_vars <- setdiff(colnames(attributes(x)$groups), ".rows")
   group_data <- expand.grid(lapply(x[group_vars], function(i) unique(sort(i))))
   groups <- split(x, x[group_vars])
+  groups <- Filter(function(x) nrow(x) > 0, groups)
   select <- .select_nse(select,
     x,
     exclude,
@@ -479,13 +519,10 @@ describe_distribution.grouped_df <- function(x,
       ...
     )
 
-
-    d[[".group"]] <-
-      paste(sprintf(
-        "%s=%s",
-        group_vars,
-        vapply(group_data[i, ], as.character, FUN.VALUE = character(1L))
-      ), collapse = " | ")
+    for (grp in seq_along(group_vars)) {
+      d[[group_vars[grp]]] <- group_data[i, grp]
+    }
+    d <- data_relocate(d, group_vars, before = 1)
 
     d
   }))
