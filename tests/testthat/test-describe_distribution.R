@@ -269,6 +269,7 @@ test_that("argument 'by' works", {
 })
 
 test_that("empty groups are discarded from the output, #608", {
+  skip_if_not_installed("bayestestR")
   dat <- data.frame(
     grp1 = factor("a", levels = c("a", "b")),
     grp2 = factor(c("A", "B")),
