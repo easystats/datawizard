@@ -103,8 +103,8 @@ data_read <- function(path,
     txt = ,
     csv = .read_text(path, encoding, verbose, ...),
     rda = ,
-    rdata = .read_base_rda(path, verbose, ...),
-    rds = .read_base_rds(path, verbose, ...),
+    rdata = .read_base_rda(path, file_type, verbose, ...),
+    rds = .read_base_rds(path, file_type, verbose, ...),
     xls = ,
     xlsx = .read_excel(path, encoding, verbose, ...),
     sav = ,
@@ -315,15 +315,16 @@ data_read <- function(path,
 }
 
 
-.read_base_rda <- function(path, verbose = TRUE, ...) {
+.read_base_rda <- function(path, file_type, verbose = TRUE, ...) {
   if (verbose) {
     insight::format_alert("Reading data...")
   }
 
   # check URLs
-  path <- .check_path_url(path)
-  load(file = path)
+  path <- .check_path_url(path, file_type)
 
+  # since RData and rda can keep multiple files, we load them into a
+  # new environment and return them as list object then
   env <- new.env()
   load(file = path, envir = env)
 
@@ -336,7 +337,7 @@ data_read <- function(path,
     return(as.list(env))
   }
 
-  # retrieve loaded object
+  # else, retrieve loaded object
   out <- get(ls(env)[1], env)
 
   # check if loaded file is a data frame, or not (e.g. model objects)
@@ -350,13 +351,13 @@ data_read <- function(path,
 }
 
 
-.read_base_rds <- function(path, verbose = TRUE, ...) {
+.read_base_rds <- function(path, file_type, verbose = TRUE, ...) {
   if (verbose) {
     insight::format_alert("Reading data...")
   }
 
   # check URLs
-  path <- .check_path_url(path)
+  path <- .check_path_url(path, file_type)
   out <- readRDS(file = path)
 
   # check if loaded file is a data frame, or not (e.g. model objects)
@@ -372,11 +373,18 @@ data_read <- function(path,
 
 # check input helper --------------------------------------------------------
 
-# return an URL object if path is a URL
-.check_path_url <- function(path) {
+# for URLs, we need to download the file and save it locally
+.check_path_url <- function(path, file_type) {
   url_pattern <- "^(https?|ftp)://(.*)"
+  # check if file path is an URL
   if (grepl(url_pattern, path)) {
-    path <- url(path)
+    insight::check_if_installed("curl")
+    # if yes, create temp file and save file locally
+    temp_file <- tempfile(fileext = paste0(".", file_type))
+    download <- curl::curl_fetch_memory(file)
+    writeBin(object = download$content, con = temp_file)
+    # return path to temp file
+    path <- temp_file
   }
   path
 }
