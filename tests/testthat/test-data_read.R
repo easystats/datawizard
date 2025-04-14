@@ -187,7 +187,7 @@ test_that("data_read - message for multiple objects in RData", {
     data(iris)
     save(mtcars, iris, file = temp_file)
     expect_message(
-      data_read(temp_file, verbose = FALSE),
+      data_read(temp_file, verbose = TRUE),
       regex = "File contained more than one object"
     )
   })
