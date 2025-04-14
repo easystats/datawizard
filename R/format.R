@@ -16,11 +16,11 @@ format.parameters_distribution <- function(x, digits = 2, format = NULL, ci_widt
 
   if (all(c("CI_low", "CI_high") %in% names(x))) {
     x$CI_low <- insight::format_ci(
-      x$CI_low, 
-      x$CI_high, 
-      ci = NULL, 
-      digits = digits, 
-      width = ci_width, 
+      x$CI_low,
+      x$CI_high,
+      ci = NULL,
+      digits = digits,
+      width = ci_width,
       brackets = ci_brackets
     )
     x$CI_high <- NULL
