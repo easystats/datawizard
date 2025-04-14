@@ -6,6 +6,10 @@ BREAKING CHANGES
   *rstanarm* as original model objects, and no longer coerces them into data
   frames (#606).
 
+* The output format of `describe_distribution()` on grouped data has changed.
+  Before, it printed one table per group combination. Now, it prints a single
+  table with group columns at the start (#610).
+
 CHANGES
 
 * `data_codebook()` gives an informative warning when no column names matched
