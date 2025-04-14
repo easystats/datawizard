@@ -36,7 +36,7 @@ testthat::set_state_inspector(function() {
 
   list(
     attached = search(),
-    # connections = nrow(showConnections()),
+    connections = nrow(showConnections()),
     cwd = getwd(),
     envvars = Sys.getenv(),
     libpaths = .libPaths(),
