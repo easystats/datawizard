@@ -295,10 +295,25 @@ data_read <- function(path,
   # set up arguments. for RDS, we set trust = TRUE, to avoid warnings
   rio_args <- list(file = path)
   # check if we have RDS, and if so, add trust = TRUE
-  if (file_type %in% c("rds", "rdata")) {
+  if (file_type %in% c("rds", "rdata", "rda")) {
     rio_args$trust <- TRUE
   }
   out <- do.call(rio::import, c(rio_args, list(...)))
+
+  # it is also possible to read in pre-compiled model objects with data_read()
+  # in this case, just return as is. We do this check before we check with
+  # "is.data.frame()", because some models (like brmsfit) have an `as.data.frame()`
+  # method, which coerces the model object into a data frame, which is likely to
+  # be not intentional
+  if (insight::is_model(out)) {
+    if (verbose) {
+      insight::format_alert(
+        paste0("Imported file is a regression model object of class \"", class(out)[1], "\"."),
+        "Returning file as is."
+      )
+    }
+    return(out)
+  }
 
   # for "unknown" data formats (like .RDS), which still can be imported via
   # "rio::import()", we must check whether we actually have a data frame or

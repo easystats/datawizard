@@ -152,30 +152,23 @@ data_to_long <- function(data,
       exclude = NULL,
       ignore_case = ignore_case,
       regex = regex,
-      verbose = FALSE
+      ifnotfound = "error"
+    )
+  } else if (!missing(select) || !is.null(select)) {
+    cols <- .select_nse(
+      select,
+      data,
+      exclude = NULL,
+      ignore_case = ignore_case,
+      regex = regex,
+      ifnotfound = "error"
     )
   } else {
-    if (!missing(select) || !is.null(select)) {
-      cols <- .select_nse(
-        select,
-        data,
-        exclude = NULL,
-        ignore_case = ignore_case,
-        regex = regex,
-        verbose = FALSE
-      )
-    } else {
-      insight::format_error(
-        "You need to specify columns to pivot, either with `select` or `cols`."
-      )
-    }
+    insight::format_error(
+      "You need to specify columns to pivot, either with `select` or `cols`."
+    )
   }
   # nolint end
-
-  # nothing to select?
-  if (length(cols) == 0L) {
-    insight::format_error("No columns found for reshaping data.")
-  }
 
   if (length(names_to) > 1L && is.null(names_sep) && is.null(names_pattern)) {
     insight::format_error(

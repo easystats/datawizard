@@ -15,7 +15,14 @@ format.parameters_distribution <- function(x, digits = 2, format = NULL, ci_widt
   }
 
   if (all(c("CI_low", "CI_high") %in% names(x))) {
-    x$CI_low <- insight::format_ci(x$CI_low, x$CI_high, ci = NULL, digits = digits, width = ci_width, brackets = ci_brackets)
+    x$CI_low <- insight::format_ci(
+      x$CI_low,
+      x$CI_high,
+      ci = NULL,
+      digits = digits,
+      width = ci_width,
+      brackets = ci_brackets
+    )
     x$CI_high <- NULL
     ci_lvl <- attributes(x)$ci
     centrality_ci <- attributes(x)$first_centrality
@@ -43,23 +50,5 @@ format.parameters_distribution <- function(x, digits = 2, format = NULL, ci_widt
     colnames(x)[which(colnames(x) == "Trimmed_Mean")] <- trim_name
   }
 
-  if (".group" %in% colnames(x)) {
-    final_table <- list()
-    grps <- split(x, x[[".group"]])
-    for (i in names(grps)) {
-      grps[[i]][[".group"]] <- NULL
-      table_caption <- NULL
-      if (is.null(format) || format == "text") {
-        table_caption <- c(sprintf("# %s", i), "blue")
-      } else if (format == "markdown") {
-        table_caption <- sprintf("%s", i)
-      }
-      attr(grps[[i]], "table_caption") <- table_caption
-      final_table <- c(final_table, list(grps[[i]]))
-    }
-  } else {
-    final_table <- x
-  }
-
-  final_table
+  x
 }
