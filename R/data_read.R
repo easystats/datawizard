@@ -322,6 +322,8 @@ data_read <- function(path,
 
   # check URLs
   path <- .check_path_url(path)
+  load(file = path)
+
   env <- new.env()
   load(file = path, envir = env)
 

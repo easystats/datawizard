@@ -502,3 +502,19 @@ test_that("data_read - RDA file, model object", {
     expect_s3_class(d, "brmsfit")
   })
 })
+
+
+test_that("data_read - RDS file, from URL", {
+  # works with URL
+  request <- httr::GET("https://raw.github.com/easystats/circus/main/data/model_object.rds")
+  httr::stop_for_status(request)
+  expect_message(
+    {
+      d <- data_read(
+        "https://raw.github.com/easystats/circus/main/data/model_object.rds",
+        verbose = TRUE
+      )
+    },
+    regex = "Imported file is a regression"
+  )
+})
