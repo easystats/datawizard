@@ -381,7 +381,7 @@ data_read <- function(path,
     insight::check_if_installed("curl")
     # if yes, create temp file and save file locally
     temp_file <- tempfile(fileext = paste0(".", file_type))
-    download <- curl::curl_fetch_memory(file)
+    download <- curl::curl_fetch_memory(path)
     writeBin(object = download$content, con = temp_file)
     # return path to temp file
     path <- temp_file
