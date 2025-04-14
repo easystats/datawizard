@@ -33,8 +33,9 @@
 #' @section Supported file types:
 #' - `data_read()` is a wrapper around the **haven**, **data.table**, **readr**
 #'  **readxl** and **rio** packages. Currently supported file types are `.txt`,
-#'  `.csv`, `.xls`, `.xlsx`, `.sav`, `.por`, `.dta` and `.sas` (and related
-#'  files). All other file types are passed to `rio::import()`.
+#'  `.csv`, `.xls`, `.xlsx`, `.sav`, `.por`, `.dta`, `.sas`, `.rda`, `.rdata`,
+#'  and `.rds` (and related files). All other file types are passed to
+#'  `rio::import()`.
 #' - `data_write()` is a wrapper around **haven**, **readr** and **rio**
 #'  packages, and supports writing files into all formats supported by these
 #'  packages.
@@ -101,6 +102,9 @@ data_read <- function(path,
   out <- switch(file_type,
     txt = ,
     csv = .read_text(path, encoding, verbose, ...),
+    rda = ,
+    rdata = .read_base_rda(path, verbose, ...),
+    rds = .read_base_rds(path, verbose, ...),
     xls = ,
     xlsx = .read_excel(path, encoding, verbose, ...),
     sav = ,
@@ -300,6 +304,83 @@ data_read <- function(path,
   }
   out <- do.call(rio::import, c(rio_args, list(...)))
 
+  # check if loaded file is a data frame, or not (e.g. model objects)
+  file_is_data <- .loaded_file_is_data(out)
+  if (!isFALSE(file_is_data)) {
+    # if file could be coerced to a data frame, overwrite out
+    out <- file_is_data
+  }
+
+  out
+}
+
+
+.read_base_rda <- function(path, verbose = TRUE, ...) {
+  if (verbose) {
+    insight::format_alert("Reading data...")
+  }
+
+  # check URLs
+  path <- .check_path_url(path)
+  env <- new.env()
+  load(file = path, envir = env)
+
+  # if the RData file contains more than one object, we don't check the output
+  # but just return everything
+  if (length(ls(env)) > 1) {
+    if (verbose) {
+      insight::format_alert("File contained more than one object, returning all objects.")
+    }
+    return(as.list(env))
+  }
+
+  # retrieve loaded object
+  out <- get(ls(env)[1], env)
+
+  # check if loaded file is a data frame, or not (e.g. model objects)
+  file_is_data <- .loaded_file_is_data(out, verbose)
+  if (!isFALSE(file_is_data)) {
+    # if file could be coerced to a data frame, overwrite out
+    out <- file_is_data
+  }
+
+  out
+}
+
+
+.read_base_rds <- function(path, verbose = TRUE, ...) {
+  if (verbose) {
+    insight::format_alert("Reading data...")
+  }
+
+  # check URLs
+  path <- .check_path_url(path)
+  out <- readRDS(file = path)
+
+  # check if loaded file is a data frame, or not (e.g. model objects)
+  file_is_data <- .loaded_file_is_data(out, verbose)
+  if (!isFALSE(file_is_data)) {
+    # if file could be coerced to a data frame, overwrite out
+    out <- file_is_data
+  }
+
+  out
+}
+
+
+# check input helper --------------------------------------------------------
+
+# return an URL object if path is a URL
+.check_path_url <- function(path) {
+  url_pattern <- "^(https?|ftp)://(.*)"
+  if (grepl(url_pattern, path)) {
+    path <- url(path)
+  }
+  path
+}
+
+
+.loaded_file_is_data <- function(out, verbose = TRUE) {
   # it is also possible to read in pre-compiled model objects with data_read()
   # in this case, just return as is. We do this check before we check with
   # "is.data.frame()", because some models (like brmsfit) have an `as.data.frame()`
@@ -312,7 +393,7 @@ data_read <- function(path,
         "Returning file as is."
       )
     }
-    return(out)
+    return(FALSE)
   }
 
   # for "unknown" data formats (like .RDS), which still can be imported via
@@ -327,7 +408,7 @@ data_read <- function(path,
           "Returning file as is. Please check if importing this file was intended."
         )
       }
-      return(out)
+      return(FALSE)
     }
     out <- tmp
   }
