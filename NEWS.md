@@ -8,6 +8,10 @@ BREAKING CHANGES
 
 CHANGES
 
+* `data_read()` and `data_write()` now rely on base-R functions for files of
+  type `.rds`, `.rda` or `.rdata`, thus, package *rio*  is no longer required
+  to be installed for these file types (#607).
+
 * `data_codebook()` gives an informative warning when no column names matched
   the selection pattern (#601).
 
@@ -21,7 +25,7 @@ BUG FIXES
 * Fixed bug in `data_to_wide()`, where new column names in `names_from` were
   ignored when that column only contained one unique value.
 
-* Fixed bug in `describe_distribution()` when some group combinations 
+* Fixed bug in `describe_distribution()` when some group combinations
   didn't appear in the data (#609).
 
 # datawizard 1.0.2
