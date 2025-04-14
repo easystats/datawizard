@@ -495,6 +495,7 @@ describe_distribution.grouped_df <- function(x,
   group_vars <- setdiff(colnames(attributes(x)$groups), ".rows")
   group_data <- expand.grid(lapply(x[group_vars], function(i) unique(sort(i))))
   groups <- split(x, x[group_vars])
+  groups <- Filter(function(x) nrow(x) > 0, groups)
   select <- .select_nse(select,
     x,
     exclude,
@@ -518,12 +519,10 @@ describe_distribution.grouped_df <- function(x,
       ...
     )
 
-    d[[".group"]] <-
-      paste(sprintf(
-        "%s=%s",
-        group_vars,
-        vapply(group_data[i, ], as.character, FUN.VALUE = character(1L))
-      ), collapse = " | ")
+    for (grp in seq_along(group_vars)) {
+      d[[group_vars[grp]]] <- group_data[i, grp]
+    }
+    d <- data_relocate(d, group_vars, before = 1)
 
     d
   }))

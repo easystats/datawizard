@@ -6,6 +6,10 @@ BREAKING CHANGES
   *rstanarm* as original model objects, and no longer coerces them into data
   frames (#606).
 
+* The output format of `describe_distribution()` on grouped data has changed.
+  Before, it printed one table per group combination. Now, it prints a single
+  table with group columns at the start (#610).
+
 CHANGES
 
 * `data_codebook()` gives an informative warning when no column names matched
@@ -24,6 +28,9 @@ BUG FIXES
 
 * Fixed bug in `data_to_wide()`, where new column names in `names_from` were
   ignored when that column only contained one unique value.
+
+* Fixed bug in `describe_distribution()` when some group combinations 
+  didn't appear in the data (#609).
 
 # datawizard 1.0.2
 

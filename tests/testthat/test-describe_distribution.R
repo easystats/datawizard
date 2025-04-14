@@ -229,17 +229,20 @@ test_that("describe_distribution - grouped df", {
   x <- data_group(iris, Species)
   out <- describe_distribution(x, select = starts_with("Petal"))
 
-  expect_identical(out$.group, c(
-    "Species=setosa", "Species=setosa",
-    "Species=versicolor", "Species=versicolor",
-    "Species=virginica", "Species=virginica"
-  ))
-  expect_identical(out$Variable, c(
-    "Petal.Length", "Petal.Width",
-    "Petal.Length", "Petal.Width",
-    "Petal.Length", "Petal.Width"
-  ))
+  expect_snapshot(out)
   expect_equal(out$Mean, c(1.462, 0.246, 4.26, 1.326, 5.552, 2.026), tolerance = 1e-3)
+})
+
+# Mostly to test printing
+test_that("describe_distribution - grouped df and multiple groups", {
+  skip_if_not_installed("bayestestR")
+  x <- data.frame(
+    grp1 = rep(letters[1:3], each = 20),
+    grp2 = rep(letters[1:3], 20),
+    values = 1:30
+  )
+  x <- data_group(x, c("grp1", "grp2"))
+  expect_snapshot(describe_distribution(x))
 })
 
 test_that("argument 'by' works", {
@@ -265,6 +268,19 @@ test_that("argument 'by' works", {
   expect_error(
     describe_distribution(mtcars, by = 2),
     "must be a character vector"
+  )
+})
+
+test_that("empty groups are discarded from the output, #608", {
+  skip_if_not_installed("bayestestR")
+  dat <- data.frame(
+    grp1 = factor("a", levels = c("a", "b")),
+    grp2 = factor(c("A", "B")),
+    value = 1:2
+  )
+  dat <- data_group(dat, c("grp1", "grp2"))
+  expect_no_error(
+    suppressWarnings(describe_distribution(dat, ci = 0.95))
   )
 })
 
