@@ -21,6 +21,9 @@ BUG FIXES
 * Fixed bug in `data_to_wide()`, where new column names in `names_from` were
   ignored when that column only contained one unique value.
 
+* Fixed bug in `describe_distribution()` when some group combinations 
+  didn't appear in the data (#609).
+
 # datawizard 1.0.2
 
 BUG FIXES

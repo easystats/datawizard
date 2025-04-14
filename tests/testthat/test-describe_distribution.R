@@ -268,6 +268,19 @@ test_that("argument 'by' works", {
   )
 })
 
+test_that("empty groups are discarded from the output, #608", {
+  skip_if_not_installed("bayestestR")
+  dat <- data.frame(
+    grp1 = factor("a", levels = c("a", "b")),
+    grp2 = factor(c("A", "B")),
+    value = 1:2
+  )
+  dat <- data_group(dat, c("grp1", "grp2"))
+  expect_no_error(
+    suppressWarnings(describe_distribution(dat, ci = 0.95))
+  )
+})
+
 # distribution_mode --------------------------
 test_that("distribution_mode works as expected", {
   skip_if_not_installed("bayestestR")
