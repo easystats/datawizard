@@ -181,6 +181,19 @@ test_that("data_read - no warning for RData", {
 })
 
 
+test_that("data_read - message for multiple objects in RData", {
+  withr::with_tempfile("temp_file", fileext = ".RData", code = {
+    data(mtcars)
+    data(iris)
+    save(mtcars, iris, file = temp_file)
+    expect_message(
+      data_read(temp_file, verbose = FALSE),
+      regex = "File contained more than one object"
+    )
+  })
+})
+
+
 # SPSS file -----------------------------------
 
 test_that("data_read - SPSS file", {
