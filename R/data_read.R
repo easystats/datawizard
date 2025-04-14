@@ -305,9 +305,13 @@ data_read <- function(path,
   out <- do.call(rio::import, c(rio_args, list(...)))
 
   # check if loaded file is a data frame, or not (e.g. model objects)
+  # it returns `FALSE` if file is not a data frame, or cannot be coerced to a
+  # data frame. Else, if it was a data frame or could be coerced into one,
+  # the (new) data frame is returned (and no logical). In this case, we
+  # overwrite out.
   file_is_data <- .loaded_file_is_data(out, verbose)
+  # if file could be coerced to a data frame, overwrite out
   if (!isFALSE(file_is_data)) {
-    # if file could be coerced to a data frame, overwrite out
     out <- file_is_data
   }
 
@@ -341,9 +345,13 @@ data_read <- function(path,
   out <- get(ls(env)[1], env)
 
   # check if loaded file is a data frame, or not (e.g. model objects)
+  # it returns `FALSE` if file is not a data frame, or cannot be coerced to a
+  # data frame. Else, if it was a data frame or could be coerced into one,
+  # the (new) data frame is returned (and no logical). In this case, we
+  # overwrite out.
   file_is_data <- .loaded_file_is_data(out, verbose)
+  # if file could be coerced to a data frame, overwrite out
   if (!isFALSE(file_is_data)) {
-    # if file could be coerced to a data frame, overwrite out
     out <- file_is_data
   }
 
@@ -361,9 +369,13 @@ data_read <- function(path,
   out <- readRDS(file = path)
 
   # check if loaded file is a data frame, or not (e.g. model objects)
+  # it returns `FALSE` if file is not a data frame, or cannot be coerced to a
+  # data frame. Else, if it was a data frame or could be coerced into one,
+  # the (new) data frame is returned (and no logical). In this case, we
+  # overwrite out.
   file_is_data <- .loaded_file_is_data(out, verbose)
+  # if file could be coerced to a data frame, overwrite out
   if (!isFALSE(file_is_data)) {
-    # if file could be coerced to a data frame, overwrite out
     out <- file_is_data
   }
 
