@@ -12,6 +12,8 @@ BREAKING CHANGES
 
 CHANGES
 
+* `display()` is now re-exported from package *insight*.
+
 * `data_codebook()` gives an informative warning when no column names matched
   the selection pattern (#601).
 
@@ -20,12 +22,18 @@ CHANGES
 
 * New argument `by` in `describe_distribution()` (#604).
 
+* `describe_distribution()` now gives informative errors when column names
+  in the input data frame conflict with column from the output table (#612).
+
+* `describe_distribution()` gets explicit methods for `print_html()` and
+  `print_md()`, to print nicely when printing is done via the `display()` method.
+
 BUG FIXES
 
 * Fixed bug in `data_to_wide()`, where new column names in `names_from` were
   ignored when that column only contained one unique value.
 
-* Fixed bug in `describe_distribution()` when some group combinations 
+* Fixed bug in `describe_distribution()` when some group combinations
   didn't appear in the data (#609).
 
 # datawizard 1.0.2

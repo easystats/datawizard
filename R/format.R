@@ -2,11 +2,6 @@
 
 #' @export
 format.parameters_distribution <- function(x, digits = 2, format = NULL, ci_width = "auto", ci_brackets = TRUE, ...) {
-  # remove redundant column
-  if ("Variable" %in% names(x) && insight::n_unique(x$Variable) == 1) {
-    x$Variable <- NULL
-  }
-
   if (all(c("Min", "Max") %in% names(x))) {
     x$Min <- insight::format_ci(x$Min, x$Max, ci = NULL, digits = digits, width = ci_width, brackets = ci_brackets)
     x$Max <- NULL
