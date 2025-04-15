@@ -12,6 +12,8 @@ BREAKING CHANGES
 
 CHANGES
 
+* `display()` is now re-exported from package *insight*.
+
 * `data_read()` and `data_write()` now rely on base-R functions for files of
   type `.rds`, `.rda` or `.rdata`. Thus, package *rio*  is no longer required
   to be installed for these file types (#607).
@@ -23,6 +25,9 @@ CHANGES
   the data, to avoid nonsensical results that could be missed (#602).
 
 * New argument `by` in `describe_distribution()` (#604).
+
+* `describe_distribution()` now gives informative errors when column names
+  in the input data frame conflict with column from the output table (#612).
 
 BUG FIXES
 
