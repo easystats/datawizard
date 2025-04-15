@@ -305,14 +305,14 @@ data_read <- function(path,
   out <- do.call(rio::import, c(rio_args, list(...)))
 
   # check if loaded file is a data frame, or not (e.g. model objects)
-  # it returns `FALSE` if file is not a data frame, or cannot be coerced to a
-  # data frame. Else, if it was a data frame or could be coerced into one,
-  # the (new) data frame is returned (and no logical). In this case, we
-  # overwrite out.
-  file_is_data <- .loaded_file_is_data(out, verbose)
+  # it returns `NULL` if the file is no valid data file that contains a data
+  # frame.frame, or cannot be coerced to a data frame. Else, if it was a data
+  # frame or could be coerced into one, the (new) data frame is returned. In
+  # this case, we overwrite "out", else we keep its original object.
+  valid_data_object <- .get_data_from_loaded_file(out, verbose)
   # if file could be coerced to a data frame, overwrite out
-  if (!isFALSE(file_is_data)) {
-    out <- file_is_data
+  if (!is.null(valid_data_object)) {
+    out <- valid_data_object
   }
 
   out
@@ -345,14 +345,14 @@ data_read <- function(path,
   out <- get(ls(env)[1], env)
 
   # check if loaded file is a data frame, or not (e.g. model objects)
-  # it returns `FALSE` if file is not a data frame, or cannot be coerced to a
-  # data frame. Else, if it was a data frame or could be coerced into one,
-  # the (new) data frame is returned (and no logical). In this case, we
-  # overwrite out.
-  file_is_data <- .loaded_file_is_data(out, verbose)
+  # it returns `NULL` if the file is no valid data file that contains a data
+  # frame.frame, or cannot be coerced to a data frame. Else, if it was a data
+  # frame or could be coerced into one, the (new) data frame is returned. In
+  # this case, we overwrite "out", else we keep its original object.
+  valid_data_object <- .get_data_from_loaded_file(out, verbose)
   # if file could be coerced to a data frame, overwrite out
-  if (!isFALSE(file_is_data)) {
-    out <- file_is_data
+  if (!is.null(valid_data_object)) {
+    out <- valid_data_object
   }
 
   out
@@ -369,14 +369,14 @@ data_read <- function(path,
   out <- readRDS(file = path)
 
   # check if loaded file is a data frame, or not (e.g. model objects)
-  # it returns `FALSE` if file is not a data frame, or cannot be coerced to a
-  # data frame. Else, if it was a data frame or could be coerced into one,
-  # the (new) data frame is returned (and no logical). In this case, we
-  # overwrite out.
-  file_is_data <- .loaded_file_is_data(out, verbose)
+  # it returns `NULL` if the file is no valid data file that contains a data
+  # frame.frame, or cannot be coerced to a data frame. Else, if it was a data
+  # frame or could be coerced into one, the (new) data frame is returned. In
+  # this case, we overwrite "out", else we keep its original object.
+  valid_data_object <- .get_data_from_loaded_file(out, verbose)
   # if file could be coerced to a data frame, overwrite out
-  if (!isFALSE(file_is_data)) {
-    out <- file_is_data
+  if (!is.null(valid_data_object)) {
+    out <- valid_data_object
   }
 
   out
@@ -402,7 +402,7 @@ data_read <- function(path,
 }
 
 
-.loaded_file_is_data <- function(out, verbose = TRUE) {
+.get_data_from_loaded_file <- function(out, verbose = TRUE) {
   # it is also possible to read in pre-compiled model objects with data_read()
   # in this case, just return as is. We do this check before we check with
   # "is.data.frame()", because some models (like brmsfit) have an `as.data.frame()`
@@ -415,7 +415,7 @@ data_read <- function(path,
         "Returning file as is."
       )
     }
-    return(FALSE)
+    return(NULL)
   }
 
   # for "unknown" data formats (like .RDS), which still can be imported via
@@ -430,7 +430,7 @@ data_read <- function(path,
           "Returning file as is. Please check if importing this file was intended."
         )
       }
-      return(FALSE)
+      return(NULL)
     }
     out <- tmp
   }
