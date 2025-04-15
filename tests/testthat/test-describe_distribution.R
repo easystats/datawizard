@@ -339,7 +339,7 @@ test_that("errors on invalid column names (reserved word)", {
   data(mtcars)
 
   out <- data_to_long(mtcars, cols = 1:3, names_to = "Variable", values_to = "Values")
-  out <- data_group(out, c("gear", "Variable")) |>
+  out <- data_group(out, c("gear", "Variable"))
   expect_error(
     describe_distribution(out, select = "Values"),
     regex = "Following variable names are reserved"
