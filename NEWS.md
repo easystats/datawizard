@@ -29,9 +29,6 @@ CHANGES
 * `describe_distribution()` now gives informative errors when column names
   in the input data frame conflict with column from the output table (#612).
 
-* `describe_distribution()` gets explicit methods for `print_html()` and
-  `print_md()`, to print nicely when printing is done via the `display()` method.
-
 BUG FIXES
 
 * Fixed bug in `data_to_wide()`, where new column names in `names_from` were
