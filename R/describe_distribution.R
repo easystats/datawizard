@@ -405,6 +405,22 @@ describe_distribution.data.frame <- function(x,
     verbose = verbose
   )
 
+  # check for reserved variable names
+  reserved_names <- c(
+    "Variable", "CI_low", "CI_high", "n_Missing", "Q1", "Q3", "Quartiles",
+    "Min", "Max", "Range", "Trimmed_Mean", "Trimmed", "Mean", "SD", "IQR",
+    "Skewness", "Kurtosis", "n"
+  )
+  invalid_names <- intersect(reserved_names, select)
+
+  if (length(invalid_names) > 0) {
+    insight::format_error(paste0(
+      "Following variable names are reserved and cannot be used with `describe_distribution`: ",
+      text_concatenate(invalid_names, enclose = "`"),
+      ". Please rename these variables in your data."
+    ))
+  }
+
   if (!is.null(by)) {
     if (!is.character(by)) {
       insight::format_error("`by` must be a character vector.")
