@@ -406,20 +406,7 @@ describe_distribution.data.frame <- function(x,
   )
 
   # check for reserved variable names
-  reserved_names <- c(
-    "Variable", "CI_low", "CI_high", "n_Missing", "Q1", "Q3", "Quartiles",
-    "Min", "Max", "Range", "Trimmed_Mean", "Trimmed", "Mean", "SD", "IQR",
-    "Skewness", "Kurtosis", "n"
-  )
-  invalid_names <- intersect(reserved_names, select)
-
-  if (length(invalid_names) > 0) {
-    insight::format_error(paste0(
-      "Following variable names are reserved and cannot be used with `describe_distribution`: ",
-      text_concatenate(invalid_names, enclose = "`"),
-      ". Please rename these variables in your data."
-    ))
-  }
+  .check_for_reserved_names(select)
 
   if (!is.null(by)) {
     if (!is.character(by)) {
@@ -512,6 +499,10 @@ describe_distribution.grouped_df <- function(x,
   group_data <- expand.grid(lapply(x[group_vars], function(i) unique(sort(i))))
   groups <- split(x, x[group_vars])
   groups <- Filter(function(x) nrow(x) > 0, groups)
+
+  # check for reserved variable names
+  .check_for_reserved_names(group_vars, type = "group_vars")
+
   select <- .select_nse(select,
     x,
     exclude,
@@ -582,4 +573,30 @@ print.parameters_distribution <- function(x, digits = 2, ...) {
     ci = NULL
   )
   out[[1]]
+}
+
+
+# sanity check ----------------------------------------
+
+.check_for_reserved_names <- function(x, type = "select") {
+  reserved_names <- c(
+    "Variable", "CI_low", "CI_high", "n_Missing", "Q1", "Q3", "Quartiles",
+    "Min", "Max", "Range", "Trimmed_Mean", "Trimmed", "Mean", "SD", "IQR",
+    "Skewness", "Kurtosis", "n"
+  )
+  invalid_names <- intersect(reserved_names, x)
+
+  if (length(invalid_names) > 0) {
+    # adapt message to show user whether wrong variables appear in grouping or select
+    msg <- switch(type,
+      select = "with `describe_distribution()`: ",
+      "as grouping-variables in `describe_distribution()`: "
+    )
+    insight::format_error(paste0(
+      "Following variable names are reserved and cannot be used ",
+      msg,
+      text_concatenate(invalid_names, enclose = "`"),
+      ". Please rename these variables in your data."
+    ))
+  }
 }
