@@ -560,35 +560,6 @@ print.parameters_distribution <- function(x, digits = 2, ...) {
 }
 
 
-#' @export
-print_md.parameters_distribution <- function(x, digits = 2, ...) {
-  formatted_table <- format(
-    x,
-    digits = digits,
-    format = "markdown",
-    ci_width = NULL,
-    ci_brackets = TRUE,
-    ...
-  )
-
-  insight::export_table(formatted_table, format = "markdown", digits = digits, ...)
-}
-
-
-#' @export
-print_html.parameters_distribution <- function(x, digits = 2, ...) {
-  formatted_table <- format(
-    x,
-    digits = digits,
-    format = "html",
-    ci_width = NULL,
-    ci_brackets = TRUE,
-    ...
-  )
-  insight::export_table(formatted_table, format = "html", digits = digits, ...)
-}
-
-
 # bootstrapping CIs ----------------------------------
 
 .boot_distribution <- function(data, indices, centrality) {
