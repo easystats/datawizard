@@ -391,12 +391,18 @@ data_read <- function(path,
   # check if file path is an URL
   if (grepl(url_pattern, path)) {
     insight::check_if_installed("curl")
-    # if yes, create temp file and save file locally
-    temp_file <- tempfile(fileext = paste0(".", file_type))
-    download <- curl::curl_fetch_memory(path)
-    writeBin(object = download$content, con = temp_file)
-    # return path to temp file
-    path <- temp_file
+    if (curl::has_internet()) {
+      # if yes, create temp file and save file locally
+      temp_file <- tempfile(fileext = paste0(".", file_type))
+      download <- curl::curl_fetch_memory(path)
+      writeBin(object = download$content, con = temp_file)
+      # return path to temp file
+      path <- temp_file
+    } else {
+      insight::format_error(
+        "No internet connection detected. Could not download file from URL."
+      )
+    }
   }
   path
 }
