@@ -560,6 +560,43 @@ print.parameters_distribution <- function(x, digits = 2, ...) {
 }
 
 
+#' @export
+print_md.parameters_distribution <- function(x, digits = 2, ci_brackets = c("(", ")"), ...) {
+  formatted_table <- format(
+    x = x,
+    digits = digits,
+    format = "markdown",
+    ci_width = NULL,
+    ci_brackets = ci_brackets,
+    ...
+  )
+
+  insight::export_table(formatted_table, format = "markdown", align = "firstleft", ...)
+}
+
+
+#' @export
+print_html.parameters_distribution <- function(x, digits = 2, ci_brackets = c("(", ")"), ...) {
+  formatted_table <- format(
+    x = x,
+    digits = digits,
+    format = "html",
+    ci_width = NULL,
+    ci_brackets = ci_brackets,
+    ...
+  )
+
+  insight::export_table(formatted_table, format = "html", align = "firstleft", ...)
+}
+
+
+#' @export
+plot.parameters_distribution <- function(x, ...) {
+  insight::check_if_installed("see")
+  NextMethod()
+}
+
+
 # bootstrapping CIs ----------------------------------
 
 .boot_distribution <- function(data, indices, centrality) {
