@@ -619,7 +619,7 @@ print_html.parameters_distribution <- function(x, digits = 2, ...) {
     # adapt message to show user whether wrong variables appear in grouping or select
     msg <- switch(type,
       select = "with `describe_distribution()`: ",
-      "as grouping-variables in `describe_distribution()`: "
+      "as grouping variables in `describe_distribution()`: "
     )
     insight::format_error(paste0(
       "Following variable names are reserved and cannot be used ",
