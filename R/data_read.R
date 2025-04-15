@@ -104,7 +104,7 @@ data_read <- function(path,
     csv = .read_text(path, encoding, verbose, ...),
     rda = ,
     rdata = .read_base_rda(path, file_type, verbose, ...),
-    rds = .read_base_rds(path, file_type, verbose, ...),
+    rds = .read_base_rds(path, verbose, ...),
     xls = ,
     xlsx = .read_excel(path, encoding, verbose, ...),
     sav = ,
@@ -359,13 +359,13 @@ data_read <- function(path,
 }
 
 
-.read_base_rds <- function(path, file_type, verbose = TRUE, ...) {
+.read_base_rds <- function(path, verbose = TRUE, ...) {
   if (verbose) {
     insight::format_alert("Reading data...")
   }
 
   # check URLs
-  path <- .check_path_url(path, file_type)
+  path <- .check_path_url(path, file_type = "rds")
   out <- readRDS(file = path)
 
   # check if loaded file is a data frame, or not (e.g. model objects)
