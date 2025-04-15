@@ -165,8 +165,9 @@ variable labels is named <code>"mydat_labels.csv"</code>).</p></dd>
 
 <ul><li><p><code>data_read()</code> is a wrapper around the <strong>haven</strong>, <strong>data.table</strong>, <strong>readr</strong>
 <strong>readxl</strong> and <strong>rio</strong> packages. Currently supported file types are <code>.txt</code>,
-<code>.csv</code>, <code>.xls</code>, <code>.xlsx</code>, <code>.sav</code>, <code>.por</code>, <code>.dta</code> and <code>.sas</code> (and related
-files). All other file types are passed to <code><a href="http://gesistsa.github.io/rio/reference/import.html" class="external-link">rio::import()</a></code>.</p></li>
+<code>.csv</code>, <code>.xls</code>, <code>.xlsx</code>, <code>.sav</code>, <code>.por</code>, <code>.dta</code>, <code>.sas</code>, <code>.rda</code>, <code>.rdata</code>,
+and <code>.rds</code> (and related files). All other file types are passed to
+<code><a href="http://gesistsa.github.io/rio/reference/import.html" class="external-link">rio::import()</a></code>.</p></li>
 <li><p><code>data_write()</code> is a wrapper around <strong>haven</strong>, <strong>readr</strong> and <strong>rio</strong>
 packages, and supports writing files into all formats supported by these
 packages.</p></li>
