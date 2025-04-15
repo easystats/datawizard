@@ -591,6 +591,16 @@ print_html.parameters_distribution <- function(x, digits = 2, ci_brackets = c("(
 
 
 #' @export
+display.parameters_distribution <- function(object, format = "markdown", digits = 2, ...) {
+  if (format == "markdow") {
+    print_md(x = object, digits = digits, ...)
+  } else if (format == "html") {
+    print_html(x = object, digits = digits, ...)
+  }
+}
+
+
+#' @export
 plot.parameters_distribution <- function(x, ...) {
   insight::check_if_installed("see")
   NextMethod()
