@@ -14,6 +14,10 @@ CHANGES
 
 * `display()` is now re-exported from package *insight*.
 
+* `data_read()` and `data_write()` now rely on base-R functions for files of
+  type `.rds`, `.rda` or `.rdata`. Thus, package *rio*  is no longer required
+  to be installed for these file types (#607).
+
 * `data_codebook()` gives an informative warning when no column names matched
   the selection pattern (#601).
 
