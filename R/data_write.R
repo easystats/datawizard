@@ -26,6 +26,9 @@ data_write <- function(data,
     zsav = "zspss",
     dta = "stata",
     xpt = "sas",
+    rds = "rds",
+    rda = ,
+    rdata = "rda",
     "unknown"
   )
 
@@ -39,8 +42,30 @@ data_write <- function(data,
 
   if (type %in% c("csv", "unknown")) {
     .write_csv_or_unknown(data, path, type, delimiter, convert_factors, save_labels, verbose, ...)
+  } else if (type == "rds") {
+    .write_rds(data, path, verbose, ...)
+  } else if (type == "rda") {
+    .write_rda(data, path, verbose, ...)
   } else {
     .write_haven(data, path, verbose, type, ...)
+  }
+}
+
+
+# base R formats -----
+
+.write_rds <- function(data, path, verbose = TRUE, ...) {
+  saveRDS(data, path, ...)
+}
+
+.write_rda <- function(data, path, verbose = TRUE, ...) {
+  # save single data frame
+  if (is.data.frame(data)) {
+    save(data, file = path, ...)
+  } else {
+    # save list of data frames
+    env <- as.environment(data)
+    save(list = names(data), file = path, envir = env, ...)
   }
 }
 
