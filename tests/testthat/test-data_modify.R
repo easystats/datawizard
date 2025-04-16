@@ -602,3 +602,33 @@ withr::with_environment(
 test_that("data_modify errors on non-defined function", {
   expect_error(data_modify(iris, Species = foo()))
 })
+
+
+withr::with_environment(
+  new.env(),
+  test_that("data_modify errors on non-defined function", {
+    d <- data.frame()
+    for (param in letters[c(1, 2, 5)]) {
+      out <- data.frame(x = as.numeric(as.factor(param)))
+      out <- data_modify(out, Parameter = param)
+      d <- rbind(out, d)
+    }
+    expect_named(d, c("x", "Parameter"))
+    expect_identical(d$Parameter, c("e", "b", "a"))
+
+    d <- data.frame()
+    for (param in c("a 1", "b 2")) {
+      out <- data.frame(x = as.numeric(as.factor(param)))
+      out <- data_modify(out, Parameter = param)
+      d <- rbind(out, d)
+    }
+    expect_named(d, c("x", "Parameter"))
+    expect_identical(d$Parameter, c("b 2", "a 1"))
+
+    # this still works
+    a <- "x"
+    d <- data.frame(x = 1)
+    out <- data_modify(d, y = a)
+    expect_identical(out$y, 1)
+  })
+)

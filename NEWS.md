@@ -24,6 +24,10 @@ CHANGES
 * `data_to_long()` now errors when columns selected to reshape do not exist in
   the data, to avoid nonsensical results that could be missed (#602).
 
+* `data_modify()` now treats values of variables used as expression on the RHS
+  as value for a newly created variable, if that value does not refer to the
+  name of an existing variable.
+
 * New argument `by` in `describe_distribution()` (#604).
 
 * `describe_distribution()` now gives informative errors when column names
