@@ -323,7 +323,6 @@ test_that("describe_distribution formatting", {
 })
 
 # other -----------------------------------
-
 test_that("return NA in CI if sample is too sparse", {
   skip_if_not_installed("bayestestR")
   set.seed(123456)
@@ -333,4 +332,22 @@ test_that("return NA in CI if sample is too sparse", {
   )
   expect_identical(res$CI_low, NA)
   expect_identical(res$CI_high, NA)
+})
+
+# check for reserved column names
+test_that("errors on invalid column names (reserved word)", {
+  data(mtcars)
+
+  out <- data_to_long(mtcars, cols = 1:3, names_to = "Variable", values_to = "Values")
+  out <- data_group(out, c("gear", "Variable"))
+  expect_error(
+    describe_distribution(out, select = "Values"),
+    regex = "Following variable names are reserved"
+  )
+
+  out <- data_to_long(mtcars, cols = 1:3, names_to = "Variable", values_to = "Values")
+  expect_error(
+    describe_distribution(out, select = "Variable"),
+    regex = "Following variable names are reserved"
+  )
 })
