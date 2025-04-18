@@ -22,7 +22,10 @@ test_that("slide", {
 # data frame
 test_that("slide", {
   data(iris)
-  out <- slide(iris)
+  expect_message(
+    out <- slide(iris),
+    "Shifting non-numeric variables is not possible"
+  )
   expect_equal(out$Species, iris$Species)
   expect_equal(range(out$Sepal.Length), c(0, 3.6), tolerance = 1e-2)
 })
