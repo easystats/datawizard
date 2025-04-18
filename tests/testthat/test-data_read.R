@@ -456,7 +456,7 @@ test_that("data_read - RDS file, no data frame", {
 
     expect_message(
       expect_warning(
-        d <- data_read(temp_file, verbose = TRUE),
+        d <- data_read(temp_file, verbose = TRUE), # nolint
         regex = "no data frame"
       ),
       "Reading data"
@@ -475,7 +475,7 @@ test_that("data_read - RDA file, model object", {
 
     expect_message(
       expect_message(
-        d <- data_read(temp_file, verbose = TRUE),
+        d <- data_read(temp_file, verbose = TRUE), # nolint
         regex = "Imported file is a regression"
       ),
       "Reading data"
@@ -490,7 +490,7 @@ test_that("data_read - RDA file, model object", {
 
     expect_message(
       expect_message(
-        d <- data_read(temp_file, verbose = TRUE),
+        d <- data_read(temp_file, verbose = TRUE), # nolint
         regex = "Imported file is a regression"
       ),
       "Reading data"
@@ -506,7 +506,7 @@ test_that("data_read - RDS file, from URL", {
   httr::stop_for_status(request)
   expect_message(
     expect_message(
-      d <- data_read(
+      d <- data_read( # nolint
         "https://raw.github.com/easystats/circus/main/data/model_object.rds",
         verbose = TRUE
       ),
