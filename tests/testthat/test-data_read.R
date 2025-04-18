@@ -156,7 +156,7 @@ test_that("data_read - RDS file, preserve class", {
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
-    d <- data_read(temp_file)
+    d <- data_read(temp_file, verbose = FALSE)
     expect_s3_class(d, "data.frame")
     expect_identical(
       sapply(d, class),
@@ -187,8 +187,11 @@ test_that("data_read - message for multiple objects in RData", {
     data(iris)
     save(mtcars, iris, file = temp_file)
     expect_message(
-      data_read(temp_file, verbose = TRUE),
-      regex = "File contained more than one object"
+      expect_message(
+        data_read(temp_file, verbose = TRUE),
+        regex = "File contained more than one object"
+      ),
+      "Reading data"
     )
   })
 })
@@ -451,19 +454,16 @@ test_that("data_read - RDS file, no data frame", {
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
-    expect_warning(
-      {
-        d <- data_read(
-          temp_file,
-          verbose = TRUE
-        )
-      },
-      regex = "no data frame"
+    expect_message(
+      expect_warning(
+        d <- data_read(temp_file, verbose = TRUE), # nolint
+        regex = "no data frame"
+      ),
+      "Reading data"
     )
     expect_type(d, "list")
   })
 })
-
 
 test_that("data_read - RDA file, model object", {
   skip_if_not_installed("withr")
@@ -474,13 +474,11 @@ test_that("data_read - RDA file, model object", {
     writeBin(httr::content(request, type = "raw"), temp_file)
 
     expect_message(
-      {
-        d <- data_read(
-          temp_file,
-          verbose = TRUE
-        )
-      },
-      regex = "Imported file is a regression"
+      expect_message(
+        d <- data_read(temp_file, verbose = TRUE), # nolint
+        regex = "Imported file is a regression"
+      ),
+      "Reading data"
     )
     expect_s3_class(d, "lm")
   })
@@ -491,13 +489,11 @@ test_that("data_read - RDA file, model object", {
     writeBin(httr::content(request, type = "raw"), temp_file)
 
     expect_message(
-      {
-        d <- data_read(
-          temp_file,
-          verbose = TRUE
-        )
-      },
-      regex = "Imported file is a regression"
+      expect_message(
+        d <- data_read(temp_file, verbose = TRUE), # nolint
+        regex = "Imported file is a regression"
+      ),
+      "Reading data"
     )
     expect_s3_class(d, "brmsfit")
   })
@@ -509,12 +505,13 @@ test_that("data_read - RDS file, from URL", {
   request <- httr::GET("https://raw.github.com/easystats/circus/main/data/model_object.rds")
   httr::stop_for_status(request)
   expect_message(
-    {
-      d <- data_read(
+    expect_message(
+      d <- data_read( # nolint
         "https://raw.github.com/easystats/circus/main/data/model_object.rds",
         verbose = TRUE
-      )
-    },
-    regex = "Imported file is a regression"
+      ),
+      regex = "Imported file is a regression"
+    ),
+    "Reading data"
   )
 })
