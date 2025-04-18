@@ -251,3 +251,8 @@ test_that("data_summary, bayestestR::ci", {
     regex = "Each expression"
   )
 })
+
+test_that("no warning when variable name and function in global env clash, #583", {
+  dat <- data.frame(rt = 1:10)
+  expect_silent(data_summary(dat, rt = mean(rt)))
+})

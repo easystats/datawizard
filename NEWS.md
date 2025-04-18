@@ -37,6 +37,9 @@ BUG FIXES
 * Fixed bug in `describe_distribution()` when some group combinations
   didn't appear in the data (#609).
 
+* Fixed warning in `data_summary()` when a variable had the same name as 
+  another object in the global environment (#585).
+
 # datawizard 1.0.2
 
 BUG FIXES
