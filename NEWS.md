@@ -41,7 +41,7 @@ BUG FIXES
   didn't appear in the data (#609).
 
 * Fixed bug in `describe_distribution()` when more than one value for the
-  `centrality` argument were specified.
+  `centrality` argument were specified (#617).
 
 * Fixed warning in `data_summary()` when a variable had the same name as
   another object in the global environment (#585).
