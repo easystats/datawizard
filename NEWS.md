@@ -29,7 +29,7 @@ CHANGES
 * `describe_distribution()` now gives informative errors when column names
   in the input data frame conflict with column from the output table (#612).
 
-* The methods for `parameters_distribution` objects are now defined in 
+* The methods for `parameters_distribution` objects are now defined in
   `datawizard` (they were previously in `parameters`) (#613).
 
 BUG FIXES
@@ -40,7 +40,10 @@ BUG FIXES
 * Fixed bug in `describe_distribution()` when some group combinations
   didn't appear in the data (#609).
 
-* Fixed warning in `data_summary()` when a variable had the same name as 
+* Fixed bug in `describe_distribution()` when more than one value for the
+  `centrality` argument were specified.
+
+* Fixed warning in `data_summary()` when a variable had the same name as
   another object in the global environment (#585).
 
 # datawizard 1.0.2

@@ -142,7 +142,9 @@ describe_distribution.list <- function(x,
   attr(out, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(out, "ci") <- ci
   attr(out, "threshold") <- threshold
-  if (centrality == "all") attr(out, "first_centrality") <- colnames(out)[2]
+  if (all(centrality == "all")) {
+    attr(out, "first_centrality") <- colnames(out)[2]
+  }
   out
 }
 
@@ -252,7 +254,9 @@ describe_distribution.numeric <- function(x,
   attr(out, "data") <- x
   attr(out, "ci") <- ci
   attr(out, "threshold") <- threshold
-  if (centrality == "all") attr(out, "first_centrality") <- colnames(out)[1]
+  if (all(centrality == "all")) {
+    attr(out, "first_centrality") <- colnames(out)[1]
+  }
   out
 }
 
@@ -465,7 +469,9 @@ describe_distribution.data.frame <- function(x,
   attr(out, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(out, "ci") <- ci
   attr(out, "threshold") <- threshold
-  if (centrality == "all") attr(out, "first_centrality") <- colnames(out)[2]
+  if (all(centrality == "all")) {
+    attr(out, "first_centrality") <- colnames(out)[2]
+  }
   out
 }
 
@@ -538,7 +544,9 @@ describe_distribution.grouped_df <- function(x,
   attr(out, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(out, "ci") <- ci
   attr(out, "threshold") <- threshold
-  if (centrality == "all") attr(out, "first_centrality") <- colnames(out)[2]
+  if (all(centrality == "all")) {
+    attr(out, "first_centrality") <- colnames(out)[2]
+  }
   out
 }
 

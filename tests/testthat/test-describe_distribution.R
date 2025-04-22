@@ -351,3 +351,34 @@ test_that("errors on invalid column names (reserved word)", {
     regex = "Following variable names are reserved"
   )
 })
+
+# multiple centralities
+test_that("multiple centralities work", {
+  data(iris)
+  out <- describe_distribution(
+    iris,
+    select = "Petal.Width",
+    centrality = c("median", "mean")
+  )
+  expect_identical(dim(out), c(1L, 12L))
+  expect_named(
+    out,
+    c(
+      "Variable", "Median", "MAD", "Mean", "SD", "IQR", "Min", "Max",
+      "Skewness", "Kurtosis", "n", "n_Missing"
+    )
+  )
+  out <- describe_distribution(
+    iris,
+    select = "Petal.Width",
+    centrality = list("median", "mean")
+  )
+  expect_identical(dim(out), c(1L, 12L))
+  expect_named(
+    out,
+    c(
+      "Variable", "Median", "MAD", "Mean", "SD", "IQR", "Min", "Max",
+      "Skewness", "Kurtosis", "n", "n_Missing"
+    )
+  )
+})
