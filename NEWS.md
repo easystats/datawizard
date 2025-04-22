@@ -12,6 +12,12 @@ BREAKING CHANGES
 
 CHANGES
 
+* `display()` is now re-exported from package *insight*.
+
+* `data_read()` and `data_write()` now rely on base-R functions for files of
+  type `.rds`, `.rda` or `.rdata`. Thus, package *rio*  is no longer required
+  to be installed for these file types (#607).
+
 * `data_codebook()` gives an informative warning when no column names matched
   the selection pattern (#601).
 
@@ -22,13 +28,22 @@ CHANGES
 
 * New argument `by` in `describe_distribution()` (#604).
 
+* `describe_distribution()` now gives informative errors when column names
+  in the input data frame conflict with column from the output table (#612).
+
+* The methods for `parameters_distribution` objects are now defined in 
+  `datawizard` (they were previously in `parameters`) (#613).
+
 BUG FIXES
 
 * Fixed bug in `data_to_wide()`, where new column names in `names_from` were
   ignored when that column only contained one unique value.
 
-* Fixed bug in `describe_distribution()` when some group combinations 
+* Fixed bug in `describe_distribution()` when some group combinations
   didn't appear in the data (#609).
+
+* Fixed warning in `data_summary()` when a variable had the same name as 
+  another object in the global environment (#585).
 
 # datawizard 1.0.2
 

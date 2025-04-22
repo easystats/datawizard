@@ -405,6 +405,9 @@ describe_distribution.data.frame <- function(x,
     verbose = verbose
   )
 
+  # check for reserved variable names
+  .check_for_reserved_names(select)
+
   if (!is.null(by)) {
     if (!is.character(by)) {
       insight::format_error("`by` must be a character vector.")
@@ -496,6 +499,10 @@ describe_distribution.grouped_df <- function(x,
   group_data <- expand.grid(lapply(x[group_vars], function(i) unique(sort(i))))
   groups <- split(x, x[group_vars])
   groups <- Filter(function(x) nrow(x) > 0, groups)
+
+  # check for reserved variable names
+  .check_for_reserved_names(group_vars, type = "group_vars")
+
   select <- .select_nse(select,
     x,
     exclude,
@@ -553,6 +560,53 @@ print.parameters_distribution <- function(x, digits = 2, ...) {
 }
 
 
+#' @export
+print_md.parameters_distribution <- function(x, digits = 2, ci_brackets = c("(", ")"), ...) {
+  formatted_table <- format(
+    x = x,
+    digits = digits,
+    format = "markdown",
+    ci_width = NULL,
+    ci_brackets = ci_brackets,
+    ...
+  )
+
+  insight::export_table(formatted_table, format = "markdown", align = "firstleft", ...)
+}
+
+
+#' @export
+print_html.parameters_distribution <- function(x, digits = 2, ci_brackets = c("(", ")"), ...) {
+  formatted_table <- format(
+    x = x,
+    digits = digits,
+    format = "html",
+    ci_width = NULL,
+    ci_brackets = ci_brackets,
+    ...
+  )
+
+  insight::export_table(formatted_table, format = "html", align = "firstleft", ...)
+}
+
+
+#' @export
+display.parameters_distribution <- function(object, format = "markdown", digits = 2, ...) {
+  if (format == "markdow") {
+    print_md(x = object, digits = digits, ...)
+  } else if (format == "html") {
+    print_html(x = object, digits = digits, ...)
+  }
+}
+
+
+#' @export
+plot.parameters_distribution <- function(x, ...) {
+  insight::check_if_installed("see")
+  NextMethod()
+}
+
+
 # bootstrapping CIs ----------------------------------
 
 .boot_distribution <- function(data, indices, centrality) {
@@ -566,4 +620,30 @@ print.parameters_distribution <- function(x, digits = 2, ...) {
     ci = NULL
   )
   out[[1]]
+}
+
+
+# sanity check ----------------------------------------
+
+.check_for_reserved_names <- function(x, type = "select") {
+  reserved_names <- c(
+    "Variable", "CI_low", "CI_high", "n_Missing", "Q1", "Q3", "Quartiles",
+    "Min", "Max", "Range", "Trimmed_Mean", "Trimmed", "Mean", "SD", "IQR",
+    "Skewness", "Kurtosis", "n"
+  )
+  invalid_names <- intersect(reserved_names, x)
+
+  if (length(invalid_names) > 0) {
+    # adapt message to show user whether wrong variables appear in grouping or select
+    msg <- switch(type,
+      select = "with `describe_distribution()`: ",
+      "as grouping variables in `describe_distribution()`: "
+    )
+    insight::format_error(paste0(
+      "Following variable names are reserved and cannot be used ",
+      msg,
+      text_concatenate(invalid_names, enclose = "`"),
+      ". Please rename these variables in your data."
+    ))
+  }
 }
