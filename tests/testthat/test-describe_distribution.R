@@ -396,7 +396,12 @@ test_that("multiple centralities work", {
 test_that("(multiple) centralities with CIs", {
   data(iris)
   x <- iris$Sepal.Width
-  out <- describe_distribution(x, centrality = "all", ci = 0.95, iterations = 100)
+  expect_message(
+    {
+      out <- describe_distribution(x, centrality = "all", ci = 0.95, iterations = 100)
+    },
+    regex = "For more stable intervals"
+  )
   expect_named(
     out,
     c(
@@ -406,8 +411,9 @@ test_that("(multiple) centralities with CIs", {
     )
   )
   expect_snapshot(print(out, table_width = Inf))
+  expect_silent(describe_distribution(x, centrality = "all", ci = 0.95, iterations = 100, verbose = FALSE))
 
-  out <- describe_distribution(x, centrality = "mean", ci = 0.95, iterations = 100)
+  out <- describe_distribution(x, centrality = "mean", ci = 0.95, iterations = 100, verbose = FALSE)
   expect_named(
     out,
     c(
@@ -417,7 +423,7 @@ test_that("(multiple) centralities with CIs", {
   )
   expect_snapshot(print(out, table_width = Inf))
 
-  out <- describe_distribution(x, centrality = c("MAP", "median"), ci = 0.95, iterations = 100)
+  out <- describe_distribution(x, centrality = c("MAP", "median"), ci = 0.95, iterations = 100, verbose = FALSE)
   expect_named(
     out,
     c(
@@ -427,4 +433,7 @@ test_that("(multiple) centralities with CIs", {
     )
   )
   expect_snapshot(print(out, table_width = Inf))
+
+  # only one message for data frame
+  expect_silent(expect_message(describe_distribution(iris, ci = 0.95)))
 })

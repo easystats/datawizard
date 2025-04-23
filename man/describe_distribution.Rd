@@ -73,13 +73,15 @@ confidence intervals are computed. If not \code{NULL}, confidence intervals are
 based on bootstrap replicates (see \code{iterations}).}
 
 \item{iterations}{The number of bootstrap replicates for computing confidence
-intervals. Only applies when \code{ci} is not \code{NULL}.}
+intervals. Only applies when \code{ci} is not \code{NULL}. Defaults to \code{100}. For
+more stable results, increase the number of \code{iterations}, but note that this
+can also increase the computation time significantly.}
 
 \item{threshold}{For \code{centrality = "trimmed"} (i.e. trimmed mean), indicates
 the fraction (0 to 0.5) of observations to be trimmed from each end of the
 vector before the mean is computed.}
 
-\item{verbose}{Toggle warnings and messages.}
+\item{verbose}{Show or silence warnings and messages.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -154,7 +156,7 @@ centrality, dispersion, range, skewness, kurtosis).
 }
 \details{
 If \code{x} is a data frame, only numeric variables are kept and will be
-displayed in the summary.
+displayed in the summary by default.
 
 If \code{x} is a list, the behavior is different whether \code{x} is a stored list. If
 \code{x} is stored (for example, \code{describe_distribution(mylist)} where \code{mylist}
