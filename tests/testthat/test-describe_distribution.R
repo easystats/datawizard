@@ -349,7 +349,6 @@ test_that("multiple centralities work", {
 
 
 test_that("(multiple) centralities with CIs", {
-  skip_if_not_installed("bayestestR")
   data(iris)
   x <- iris$Sepal.Width
   set.seed(123456)
