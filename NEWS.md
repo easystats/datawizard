@@ -48,7 +48,7 @@ BUG FIXES
   `centrality` argument were specified (#617).
 
 * Fixed bug in `describe_distribution()` where setting `verbose = FALSE`
-  didn't hide some warnings (#618).
+  didn't hide some warnings (#617).
 
 * Fixed warning in `data_summary()` when a variable had the same name as
   another object in the global environment (#585).
