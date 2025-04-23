@@ -467,6 +467,7 @@ test_that("data_read - RDS file, no data frame", {
 
 test_that("data_read - RDA file, model object", {
   skip_if_not_installed("withr")
+  skip_if_not_installed("brms")
 
   withr::with_tempfile("temp_file", fileext = ".rds", code = {
     request <- httr::GET("https://raw.github.com/easystats/circus/main/data/model_object.rds")
