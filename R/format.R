@@ -2,6 +2,9 @@
 
 #' @export
 format.parameters_distribution <- function(x, digits = 2, format = NULL, ci_width = "auto", ci_brackets = TRUE, ...) {
+  # save information
+  att <- attributes(x)
+
   if (all(c("Min", "Max") %in% names(x))) {
     x$Min <- insight::format_ci(x$Min, x$Max, ci = NULL, digits = digits, width = ci_width, brackets = ci_brackets)
     x$Max <- NULL
@@ -18,21 +21,44 @@ format.parameters_distribution <- function(x, digits = 2, format = NULL, ci_widt
   ci_columns <- grepl("^(CI_low|CI_high)", colnames(x))
   # make sure we have matches
   if (any(ci_columns)) {
-    x$CI_low <- insight::format_ci(
-      x$CI_low,
-      x$CI_high,
-      ci = NULL,
-      digits = digits,
-      width = ci_width,
-      brackets = ci_brackets
-    )
-    x$CI_high <- NULL
-    ci_lvl <- attributes(x)$ci
+    # iterate all centrality options
+    centrality <- .centrality_options(att$centrality)
+    for (ce in centrality) {
+      # this is the original column name
+      ci_columns <- c(paste0("CI_low_", ce), paste0("CI_high_", ce))
+      # we format CI column, merge it into one column
+      x[[ci_columns[1]]] <- insight::format_ci(
+        x[[ci_columns[1]]],
+        x[[ci_columns[2]]],
+        ci = NULL,
+        digits = digits,
+        width = ci_width,
+        brackets = ci_brackets
+      )
+      # ... and remove the no longer needed CI_high column
+      x[[ci_columns[2]]] <- NULL
+      ci_lvl <- attributes(x)$ci
 
-    if (is.null(ci_lvl)) {
-      colnames(x)[which(colnames(x) == "CI_low")] <- sprintf("CI%s", ci_suffix)
-    } else {
-      colnames(x)[which(colnames(x) == "CI_low")] <- sprintf("%i%% CI%s", round(100 * ci_lvl), ci_suffix)
+      # find position of CI column
+      ci_columm_pos <- which(colnames(x) == ci_columns[1])
+
+      # rename
+      if (is.null(ci_lvl)) {
+        colnames(x)[ci_columm_pos] <- sprintf(
+          "CI (%s)",
+          insight::format_capitalize(ce)
+        )
+      } else {
+        colnames(x)[ci_columm_pos] <- sprintf(
+          "%i%% CI (%s)",
+          round(100 * ci_lvl),
+          insight::format_capitalize(ce)
+        )
+      }
+
+      # reorder CI column, move it to related centrality index
+      centr_pos <- which(colnames(x) == insight::format_capitalize(ce))
+      x <- data_relocate(x, select = ci_columm_pos, after = centr_pos)
     }
   }
 

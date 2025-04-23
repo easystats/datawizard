@@ -186,14 +186,8 @@ describe_distribution.numeric <- function(x,
   # Confidence Intervals
   if (!is.null(ci)) {
     insight::check_if_installed("boot")
-    # we need values for all selects options, no "all" shortcut
-    if (identical(centrality, "all")) {
-      centr_options <- c("mean", "median", "MAP")
-    } else {
-      centr_options <- centrality
-    }
     # calculate CI for each centrality
-    for (cntr in centr_options) {
+    for (cntr in .centrality_options(centrality)) {
       results <- tryCatch(
         {
           boot::boot(
@@ -628,6 +622,17 @@ plot.parameters_distribution <- function(x, ...) {
     ci = NULL
   )
   out[[1]]
+}
+
+
+# check centrality options ----------------------------------------
+
+.centrality_options <- function(centrality) {
+  if (identical(centrality, "all")) {
+    c("mean", "median", "MAP")
+  } else {
+    centrality
+  }
 }
 
 
