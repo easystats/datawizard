@@ -10,6 +10,10 @@ BREAKING CHANGES
   Before, it printed one table per group combination. Now, it prints a single
   table with group columns at the start (#610).
 
+* The output format of `describe_distribution()` when confidence intervals are
+  requested has changed. Now, for each centrality measure a confidende interal
+  is calculated (#617).
+
 CHANGES
 
 * `display()` is now re-exported from package *insight*.
