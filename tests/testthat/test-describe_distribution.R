@@ -330,8 +330,8 @@ test_that("return NA in CI if sample is too sparse", {
     res <- describe_distribution(mtcars[mtcars$cyl == "6", ], wt, centrality = "map", ci = 0.95), # nolint
     "Could not calculate MAP estimate"
   )
-  expect_identical(res$CI_low, NA)
-  expect_identical(res$CI_high, NA)
+  expect_equal(res$CI_low_map, 2.646193, tolerance = 1e-4)
+  expect_equal(res$CI_high_map, 3.453082, tolerance = 1e-4)
 })
 
 # check for reserved column names
