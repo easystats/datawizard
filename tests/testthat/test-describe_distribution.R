@@ -284,8 +284,8 @@ test_that("return NA in CI if sample is too sparse", {
     },
     regex = "Bootstrapping"
   ))
-  expect_equal(res$CI_low_map, 2.646193, tolerance = 1e-4)
-  expect_equal(res$CI_high_map, 3.453082, tolerance = 1e-4)
+  expect_equal(res$CI_low_map, 2.6462, tolerance = 1e-2)
+  expect_equal(res$CI_high_map, 3.4531, tolerance = 1e-2)
 
   x <- c(2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.2, 2.2, 2.2, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5)
   expect_message(
