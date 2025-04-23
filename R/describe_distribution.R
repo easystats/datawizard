@@ -193,14 +193,14 @@ describe_distribution.numeric <- function(x,
       centr_options <- centrality
     }
     # calculate CI for each centrality
-    for (cntr in centrality) {
+    for (cntr in centr_options) {
       results <- tryCatch(
         {
           boot::boot(
             data = x,
             statistic = .boot_distribution,
             R = iterations,
-            centrality = centr_options
+            centrality = cntr
           )
         },
         error = function(e) {
