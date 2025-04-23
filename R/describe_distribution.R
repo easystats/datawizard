@@ -526,6 +526,7 @@ describe_distribution.grouped_df <- function(x,
       ci = ci,
       iterations = iterations,
       threshold = threshold,
+      verbose = verbose,
       ...
     )
 
