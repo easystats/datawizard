@@ -9,20 +9,18 @@
 #' before describing the distribution. `by` groups will be added to potentially
 #' existing groups created by `data_group()`.
 #' @param range Return the range (min and max).
-#' @param quartiles Return the first and third quartiles (25th and 75pth
+#' @param quartiles Return the first and third quartiles (25th and 75th
 #'   percentiles).
 #' @param include_factors Logical, if `TRUE`, factors are included in the
 #'   output, however, only columns for range (first and last factor levels) as
 #'   well as n and missing will contain information.
 #' @param ci Confidence Interval (CI) level. Default is `NULL`, i.e. no
-#'   confidence intervals are computed. If not `NULL`, confidence intervals
-#'   are based on bootstrap replicates (see `iterations`). If
-#'   `centrality = "all"`, the bootstrapped confidence interval refers to
-#'   the first centrality index (which is typically the median).
+#'   confidence intervals are computed. If not `NULL`, confidence intervals are
+#'   based on bootstrap replicates (see `iterations`).
 #' @param iterations The number of bootstrap replicates for computing confidence
 #'   intervals. Only applies when `ci` is not `NULL`.
-#' @param iqr Logical, if `TRUE`, the interquartile range is calculated
-#'   (based on [stats::IQR()], using `type = 6`).
+#' @param iqr Logical, if `TRUE`, the interquartile range is calculated (based
+#'   on [stats::IQR()], using `type = 6`).
 #' @param verbose Toggle warnings and messages.
 #' @inheritParams bayestestR::point_estimate
 #' @inheritParams extract_column_names
@@ -39,8 +37,7 @@
 #'
 #' @note There is also a
 #'   [`plot()`-method](https://easystats.github.io/see/articles/parameters.html)
-#'   implemented in the
-#'   \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#'   implemented in the [**see**-package](https://easystats.github.io/see/).
 #'
 #' @return A data frame with columns that describe the properties of the variables.
 #'
@@ -141,10 +138,8 @@ describe_distribution.list <- function(x,
   class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
   attr(out, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(out, "ci") <- ci
+  attr(out, "centrality") <- centrality
   attr(out, "threshold") <- threshold
-  if (all(centrality == "all")) {
-    attr(out, "first_centrality") <- colnames(out)[2]
-  }
   out
 }
 
@@ -191,27 +186,38 @@ describe_distribution.numeric <- function(x,
   # Confidence Intervals
   if (!is.null(ci)) {
     insight::check_if_installed("boot")
-    results <- tryCatch(
-      {
-        boot::boot(
-          data = x,
-          statistic = .boot_distribution,
-          R = iterations,
-          centrality = centrality
-        )
-      },
-      error = function(e) {
-        msg <- conditionMessage(e)
-        if (!is.null(msg) && msg == "sample is too sparse to find TD") {
-          insight::format_warning(
-            "When bootstrapping CIs, sample was too sparse to find TD. Returning NA for CIs."
+    # we need values for all selects options, no "all" shortcut
+    if (identical(centrality, "all")) {
+      centr_options <- c("mean", "median", "MAP")
+    } else {
+      centr_options <- centrality
+    }
+    # calculate CI for each centrality
+    for (cntr in centrality) {
+      results <- tryCatch(
+        {
+          boot::boot(
+            data = x,
+            statistic = .boot_distribution,
+            R = iterations,
+            centrality = centr_options
           )
-          list(t = c(NA_real_, NA_real_))
+        },
+        error = function(e) {
+          msg <- conditionMessage(e)
+          if (!is.null(msg) && msg == "sample is too sparse to find TD") {
+            insight::format_warning(
+              "When bootstrapping CIs, sample was too sparse to find TD. Returning NA for CIs."
+            )
+            list(t = c(NA_real_, NA_real_))
+          }
         }
-      }
-    )
-    out_ci <- bayestestR::ci(results$t, ci = ci, verbose = FALSE)
-    out <- cbind(out, data.frame(CI_low = out_ci$CI_low[1], CI_high = out_ci$CI_high[1]))
+      )
+      out_ci <- bayestestR::ci(results$t, ci = ci, verbose = FALSE)
+      ci_data <- data.frame(out_ci$CI_low[1], out_ci$CI_high[1])
+      colnames(ci_data) <- c(paste0("CI_low_", cntr), paste0("CI_high_", cntr))
+      out <- cbind(out, ci_data)
+    }
   }
 
 
@@ -253,10 +259,8 @@ describe_distribution.numeric <- function(x,
   class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
   attr(out, "data") <- x
   attr(out, "ci") <- ci
+  attr(out, "centrality") <- centrality
   attr(out, "threshold") <- threshold
-  if (all(centrality == "all")) {
-    attr(out, "first_centrality") <- colnames(out)[1]
-  }
   out
 }
 
@@ -468,10 +472,8 @@ describe_distribution.data.frame <- function(x,
   class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
   attr(out, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(out, "ci") <- ci
+  attr(out, "centrality") <- centrality
   attr(out, "threshold") <- threshold
-  if (all(centrality == "all")) {
-    attr(out, "first_centrality") <- colnames(out)[2]
-  }
   out
 }
 
@@ -543,10 +545,8 @@ describe_distribution.grouped_df <- function(x,
   class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
   attr(out, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(out, "ci") <- ci
+  attr(out, "centrality") <- centrality
   attr(out, "threshold") <- threshold
-  if (all(centrality == "all")) {
-    attr(out, "first_centrality") <- colnames(out)[2]
-  }
   out
 }
 
@@ -637,7 +637,7 @@ plot.parameters_distribution <- function(x, ...) {
   reserved_names <- c(
     "Variable", "CI_low", "CI_high", "n_Missing", "Q1", "Q3", "Quartiles",
     "Min", "Max", "Range", "Trimmed_Mean", "Trimmed", "Mean", "SD", "IQR",
-    "Skewness", "Kurtosis", "n"
+    "Skewness", "Kurtosis", "n", "Median", "MAD", "MAP", "IQR", "n_Missing"
   )
   invalid_names <- intersect(reserved_names, x)
 

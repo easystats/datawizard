@@ -14,7 +14,10 @@ format.parameters_distribution <- function(x, digits = 2, format = NULL, ci_widt
     colnames(x)[which(colnames(x) == "Q1")] <- "Quartiles"
   }
 
-  if (all(c("CI_low", "CI_high") %in% names(x))) {
+  # find CI columns. We might have multiple columns for different centralities
+  ci_columns <- grepl("^(CI_low|CI_high)", colnames(x))
+  # make sure we have matches
+  if (any(ci_columns)) {
     x$CI_low <- insight::format_ci(
       x$CI_low,
       x$CI_high,
@@ -25,13 +28,6 @@ format.parameters_distribution <- function(x, digits = 2, format = NULL, ci_widt
     )
     x$CI_high <- NULL
     ci_lvl <- attributes(x)$ci
-    centrality_ci <- attributes(x)$first_centrality
-
-    if (is.null(centrality_ci)) {
-      ci_suffix <- ""
-    } else {
-      ci_suffix <- paste0(" (", centrality_ci, ")")
-    }
 
     if (is.null(ci_lvl)) {
       colnames(x)[which(colnames(x) == "CI_low")] <- sprintf("CI%s", ci_suffix)
