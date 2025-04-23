@@ -11,7 +11,7 @@ BREAKING CHANGES
   table with group columns at the start (#610).
 
 * The output format of `describe_distribution()` when confidence intervals are
-  requested has changed. Now, for each centrality measure a confidende interal
+  requested has changed. Now, for each centrality measure a confidence interval
   is calculated (#617).
 
 CHANGES
