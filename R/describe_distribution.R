@@ -172,6 +172,7 @@ describe_distribution.numeric <- function(x,
       centrality = centrality,
       dispersion = dispersion,
       threshold = threshold,
+      verbose = verbose,
       ...
     )
   )
@@ -619,7 +620,8 @@ plot.parameters_distribution <- function(x, ...) {
     iqr = FALSE,
     range = FALSE,
     quartiles = FALSE,
-    ci = NULL
+    ci = NULL,
+    verbose = FALSE
   )
   out[[1]]
 }

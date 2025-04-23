@@ -326,12 +326,21 @@ test_that("describe_distribution formatting", {
 test_that("return NA in CI if sample is too sparse", {
   skip_if_not_installed("bayestestR")
   set.seed(123456)
-  expect_message(
-    res <- describe_distribution(mtcars[mtcars$cyl == "6", ], wt, centrality = "map", ci = 0.95), # nolint
-    "Could not calculate MAP estimate"
-  )
+  expect_silent({
+    res <- describe_distribution(mtcars[mtcars$cyl == "6", ], wt, centrality = "map", ci = 0.95)
+  })
   expect_equal(res$CI_low_map, 2.646193, tolerance = 1e-4)
   expect_equal(res$CI_high_map, 3.453082, tolerance = 1e-4)
+
+  x <- c(2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.2, 2.2, 2.2, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5)
+  expect_message(
+    {
+      out <- describe_distribution(x, centrality = "map")
+    },
+    regex = "Could not calculate"
+  )
+  expect_identical(out$MAP, NA_real_)
+  expect_silent(describe_distribution(x, centrality = "map", verbose = FALSE))
 })
 
 # check for reserved column names
