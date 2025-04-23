@@ -382,3 +382,40 @@ test_that("multiple centralities work", {
     )
   )
 })
+
+
+test_that("(multiple) centralities with CIs", {
+  data(iris)
+  x <- iris$Sepal.Width
+  out <- describe_distribution(x, centrality = "all", ci = 0.95, iterations = 100)
+  expect_named(
+    out,
+    c(
+      "Median", "MAD", "Mean", "SD", "MAP", "IQR", "CI_low_mean",
+      "CI_high_mean", "CI_low_median", "CI_high_median", "CI_low_MAP",
+      "CI_high_MAP", "Min", "Max", "Skewness", "Kurtosis", "n", "n_Missing"
+    )
+  )
+  expect_snapshot(print(out, table_width = Inf))
+
+  out <- describe_distribution(x, centrality = "mean", ci = 0.95, iterations = 100)
+  expect_named(
+    out,
+    c(
+      "Mean", "SD", "IQR", "CI_low_mean", "CI_high_mean", "Min",
+      "Max", "Skewness", "Kurtosis", "n", "n_Missing"
+    )
+  )
+  expect_snapshot(print(out, table_width = Inf))
+
+  out <- describe_distribution(x, centrality = c("MAP", "median"), ci = 0.95, iterations = 100)
+  expect_named(
+    out,
+    c(
+      "Median", "MAD", "MAP", "IQR", "CI_low_MAP", "CI_high_MAP",
+      "CI_low_median", "CI_high_median", "Min", "Max", "Skewness",
+      "Kurtosis", "n", "n_Missing"
+    )
+  )
+  expect_snapshot(print(out, table_width = Inf))
+})
