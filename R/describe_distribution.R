@@ -685,7 +685,7 @@ plot.parameters_distribution <- function(x, ...) {
   if (verbose && !is.null(ci)) {
     msg <- paste("Bootstrapping confidence intervals using", iterations, "iterations, please be patient...")
     if (iterations < 200) {
-      msg <- c(msg, "For more stable intervals, increase the number of `iterations`, but note that this can also increase the computation time significantly.")
+      msg <- c(msg, "For more stable intervals, increase the number of `iterations`, but note that this can also increase the computation time significantly.") # nolint
     }
     insight::format_alert(msg)
   }
