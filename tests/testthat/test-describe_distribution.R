@@ -278,9 +278,12 @@ test_that("describe_distribution formatting", {
 # other -----------------------------------
 test_that("return NA in CI if sample is too sparse", {
   set.seed(123456)
-  expect_silent({
-    res <- describe_distribution(mtcars[mtcars$cyl == "6", ], wt, centrality = "map", ci = 0.95)
-  })
+  expect_silent(expect_message(
+    {
+      res <- describe_distribution(mtcars[mtcars$cyl == "6", ], wt, centrality = "map", ci = 0.95)
+    },
+    regex = "Bootstrapping"
+  ))
   expect_equal(res$CI_low_map, 2.646193, tolerance = 1e-4)
   expect_equal(res$CI_high_map, 3.453082, tolerance = 1e-4)
 
@@ -348,6 +351,7 @@ test_that("multiple centralities work", {
 test_that("(multiple) centralities with CIs", {
   data(iris)
   x <- iris$Sepal.Width
+  set.seed(123456)
   expect_message(
     {
       out <- describe_distribution(x, centrality = "all", ci = 0.95, iterations = 100)
@@ -365,6 +369,7 @@ test_that("(multiple) centralities with CIs", {
   expect_snapshot(print(out, table_width = Inf))
   expect_silent(describe_distribution(x, centrality = "all", ci = 0.95, iterations = 100, verbose = FALSE))
 
+  set.seed(123456)
   out <- describe_distribution(x, centrality = "mean", ci = 0.95, iterations = 100, verbose = FALSE)
   expect_named(
     out,
@@ -375,6 +380,7 @@ test_that("(multiple) centralities with CIs", {
   )
   expect_snapshot(print(out, table_width = Inf))
 
+  set.seed(123456)
   out <- describe_distribution(x, centrality = c("MAP", "median"), ci = 0.95, iterations = 100, verbose = FALSE)
   expect_named(
     out,
