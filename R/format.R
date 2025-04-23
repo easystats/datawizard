@@ -56,9 +56,18 @@ format.parameters_distribution <- function(x, digits = 2, format = NULL, ci_widt
         )
       }
 
+      # make sure we have the correct column name of the centrality
+      centr_name <- switch(tolower(ce),
+        mean = "Mean",
+        median = "Median",
+        map = "MAP"
+      )
+
       # reorder CI column, move it to related centrality index
-      centr_pos <- which(colnames(x) == insight::format_capitalize(ce))
-      x <- data_relocate(x, select = ci_columm_pos, after = centr_pos)
+      centr_pos <- which(colnames(x) == centr_name)
+      if (length(centr_pos)) {
+        x <- data_relocate(x, select = ci_columm_pos, after = centr_pos)
+      }
     }
   }
 

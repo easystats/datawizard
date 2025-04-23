@@ -326,9 +326,9 @@ test_that("describe_distribution formatting", {
 test_that("return NA in CI if sample is too sparse", {
   skip_if_not_installed("bayestestR")
   set.seed(123456)
-  expect_warning(
+  expect_message(
     res <- describe_distribution(mtcars[mtcars$cyl == "6", ], wt, centrality = "map", ci = 0.95), # nolint
-    "When bootstrapping CIs, sample was too sparse to find TD"
+    "Could not calculate MAP estimate"
   )
   expect_identical(res$CI_low, NA)
   expect_identical(res$CI_high, NA)
