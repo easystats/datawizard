@@ -216,7 +216,7 @@ describe_distribution.numeric <- function(x,
           }
         }
       )
-      out_ci <- bayestestR::ci(results$t, ci = ci, verbose = FALSE)
+      out_ci <- bayestestR::ci(as.numeric(results$t), ci = ci, verbose = FALSE)
       ci_data <- data.frame(out_ci$CI_low[1], out_ci$CI_high[1])
       colnames(ci_data) <- c(paste0("CI_low_", cntr), paste0("CI_high_", cntr))
       out <- cbind(out, ci_data)
