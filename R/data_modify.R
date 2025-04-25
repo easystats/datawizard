@@ -412,7 +412,14 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # check if symbol is the name of an existing variable. If so, we don't
     # want to copy that variable. We only allow a variable to contain a value
     # or an expression, but not a variable name
-    if (!is.null(symbol_string) && any(symbol_string %in% colnames(data))) {
+    if (!is.null(symbol_string) &&
+        any(symbol_string %in% colnames(data)) &&
+        # in case the variable name is not provided as character, but as literal
+        # name, e.g. `new_var = mpg`, we indeed want to copy the "mpg" variable
+        # in this case, "eval_symbol" holds the value, and "symbol_string" the
+        # name of the variable, hence, we must check if both are identical - only
+        # in this case, we assume that the "symbol_string" should be used as value
+        identical(eval_symbol, symbol_string)) {
       new_variable <- symbol_string
     } else {
       new_variable <- try(with(data, eval(symbol)), silent = TRUE)
@@ -461,7 +468,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # in expressions. If one if these chars are present, we assume an expression,
   # else we assume a value
   if (is.character(x)) {
-    valid_value <- !grepl("[<>\\+\\-=/\\*]", x, perl = TRUE)
+    valid_value <- !grepl("[<>\\+\\-=/\\*\\(\\)]", x, perl = TRUE)
   }
   valid_type && valid_value
 }
