@@ -606,7 +606,7 @@ test_that("data_modify errors on non-defined function", {
 
 withr::with_environment(
   new.env(),
-  test_that("data_modify errors on non-defined function", {
+  test_that("data_modify correctly assigns values from variables", {
     d <- data.frame()
     for (param in letters[c(1, 2, 5)]) {
       out <- data.frame(x = as.numeric(as.factor(param)))
@@ -625,10 +625,10 @@ withr::with_environment(
     expect_named(d, c("x", "Parameter"))
     expect_identical(d$Parameter, c("b 2", "a 1"))
 
-    # this still works
+    # variable is not copied, values is used
     a <- "x"
     d <- data.frame(x = 1)
     out <- data_modify(d, y = a)
-    expect_identical(out$y, 1)
+    expect_identical(out$y, "x")
   })
 )

@@ -359,18 +359,26 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   if (is.character(symbol)) {
     eval_symbol <- NULL
   } else {
+    # we evaluate the content of "symbol", hence, "eval_symbol" either contains
+    # the values of the expression, or the expression itself as string
     eval_symbol <- .dynEval(symbol, ifnotfound = NULL, data = data)
     if (is.character(eval_symbol)) {
-      symbol <- try(str2lang(paste0(names(dots)[i], " = ", eval_symbol)), silent = TRUE)
-      # we may have the edge-case of having a function that returns a character
-      # vector, like "new_var = sample(letters[1:3])". In this case, "eval_symbol"
-      # is of type character, but no symbol, thus str2lang() above creates a
-      # wrong pattern. We then take "eval_symbol" as character input.
-      if (inherits(symbol, "try-error")) {
-        symbol <- str2lang(paste0(
-          names(dots)[i],
-          " = c(", paste0("\"", eval_symbol, "\"", collapse = ","), ")"
-        ))
+      if (any(eval_symbol %in% colnames(data))) {
+        # values in "eval_symbol"? Then we just use it for the new variable
+        symbol <- eval_symbol
+      } else {
+        # expression as string? Then we need to reconstruct the symbol
+        symbol <- try(str2lang(paste0(names(dots)[i], " = ", eval_symbol)), silent = TRUE)
+        # we may have the edge-case of having a function that returns a character
+        # vector, like "new_var = sample(letters[1:3])". In this case, "eval_symbol"
+        # is of type character, but no symbol, thus str2lang() above creates a
+        # wrong pattern. We then take "eval_symbol" as character input.
+        if (inherits(symbol, "try-error")) {
+          symbol <- str2lang(paste0(
+            names(dots)[i],
+            " = c(", paste0("\"", eval_symbol, "\"", collapse = ","), ")"
+          ))
+        }
       }
     }
   }
@@ -412,22 +420,11 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # check if symbol is the name of an existing variable. If so, we don't
     # want to copy that variable. We only allow a variable to contain a value
     # or an expression, but not a variable name
-    if (!is.null(symbol_string) &&
-        any(symbol_string %in% colnames(data)) &&
-        # in case the variable name is not provided as character, but as literal
-        # name, e.g. `new_var = mpg`, we indeed want to copy the "mpg" variable
-        # in this case, "eval_symbol" holds the value, and "symbol_string" the
-        # name of the variable, hence, we must check if both are identical - only
-        # in this case, we assume that the "symbol_string" should be used as value
-        identical(eval_symbol, symbol_string)) {
-      new_variable <- symbol_string
-    } else {
-      new_variable <- try(with(data, eval(symbol)), silent = TRUE)
-      # the *value* in the expression might not an expression as string, but
-      # possibly a *value* that should be assigned to the new variable.
-      if (inherits(new_variable, "try-error") && .is_valid_value(eval_symbol)) {
-        new_variable <- eval_symbol
-      }
+    new_variable <- try(with(data, eval(symbol)), silent = TRUE)
+    # the *value* in the expression might not an expression as string, but
+    # possibly a *value* that should be assigned to the new variable.
+    if (inherits(new_variable, "try-error") && .is_valid_value(eval_symbol)) {
+      new_variable <- eval_symbol
     }
   }
 
