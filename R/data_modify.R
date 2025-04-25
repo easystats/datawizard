@@ -412,7 +412,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # check if symbol is the name of an existing variable. If so, we don't
     # want to copy that variable. We only allow a variable to contain a value
     # or an expression, but not a variable name
-    if (!is.null(symbo_string) && any(symbol_string %in% colnames(data))) {
+    if (!is.null(symbol_string) && any(symbol_string %in% colnames(data))) {
       new_variable <- symbol_string
     } else {
       new_variable <- try(with(data, eval(symbol)), silent = TRUE)
