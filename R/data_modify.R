@@ -11,12 +11,6 @@
 #'   to the name of the new variable, while the right-hand side represent the
 #'   values of the new variable. Example: `Sepal.Width = center(Sepal.Width)`.
 #' - A sequence of string values, representing expressions (see 'Examples').
-#' - A variable that contains a string of a variable name. The values from this
-#'   variable will be copied. Example:
-#'   ```r
-#'   a <- "Sepal.Width"
-#'   data_modify(iris, new_sepal = a) # new_sepal = Sepal.Width
-#'   ```
 #' - A variable that contains a string representation of the expression. This
 #'   expression will be evaluated. This might be useful in case of scoping issues,
 #'   when otherwise objects are not found by the function. Example:

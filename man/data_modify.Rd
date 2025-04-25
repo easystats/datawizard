@@ -19,12 +19,6 @@ values or recoding of those new variables. These expressions can be one of:
 to the name of the new variable, while the right-hand side represent the
 values of the new variable. Example: \code{Sepal.Width = center(Sepal.Width)}.
 \item A sequence of string values, representing expressions (see 'Examples').
-\item A variable that contains a string of a variable name. The values from this
-variable will be copied. Example:
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{a <- "Sepal.Width"
-data_modify(iris, new_sepal = a) # new_sepal = Sepal.Width
-}\if{html}{\out{</div>}}
 \item A variable that contains a string representation of the expression. This
 expression will be evaluated. This might be useful in case of scoping issues,
 when otherwise objects are not found by the function. Example:
