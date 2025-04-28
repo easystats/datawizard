@@ -18,28 +18,27 @@ values or recoding of those new variables. These expressions can be one of:
 \item A sequence of named, literal expressions, where the left-hand side refers
 to the name of the new variable, while the right-hand side represent the
 values of the new variable. Example: \code{Sepal.Width = center(Sepal.Width)}.
-\item A sequence of string values, representing expressions (see 'Examples').
-\item A variable that contains a string representation of the expression. This
-expression will be evaluated. This might be useful in case of scoping issues,
-when otherwise objects are not found by the function. Example:
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{a <- "2 * Sepal.Width"
-data_modify(iris, double_sepal = a)
-}\if{html}{\out{</div>}}
+\item A vector of length 1 (which will be recycled to match the number of rows
+in the data), or of same length as the data.
 \item A variable that contains a value to be used. Example:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{a <- "abc"
 data_modify(iris, var_abc = a) # var_abc contains "abc"
 }\if{html}{\out{</div>}}
-\item A character vector of expressions. Example:
-\code{c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")}. This
-type of expression cannot be mixed with other expressions, i.e. if a
-character vector is provided, you may not add further elements to \code{...}.
+\item An expression can also be provided as string, however, it must be called
+with \code{as_expression()}. Example:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{a <- center(Sepal.Width)
+data_modify(iris, Sepal.Width = as_expression(a))
+}\if{html}{\out{</div>}}
+
+\code{{}} can be used instead of \code{as_expression()}, thus, for the above example,
+\code{Sepal.Width = {a}} would be a valid syntax.
 \item Using \code{NULL} as right-hand side removes a variable from the data frame.
 Example: \code{Petal.Width = NULL}.
-\item For data frames (including grouped ones), the function \code{n()} can be used to count the
-number of observations and thereby, for instance, create index values by
-using \code{id = 1:n()} or \code{id = 3:(n()+2)} and similar.
+\item For data frames (including grouped ones), the function \code{n()} can be used to
+count the number of observations and thereby, for instance, create index
+values by using \code{id = 1:n()} or \code{id = 3:(n()+2)} and similar.
 }
 
 Note that newly created variables can be used in subsequent expressions,
@@ -80,30 +79,13 @@ new_efc <- data_modify(
 )
 head(new_efc)
 
-# using strings instead of literal expressions
-new_efc <- data_modify(
-  efc,
-  "c12hour_c = center(c12hour)",
-  "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
-  "c12hour_z2 = standardize(c12hour)"
-)
-head(new_efc)
-
 # using character strings, provided as variable
 stand <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
 new_efc <- data_modify(
   efc,
   c12hour_c = center(c12hour),
-  c12hour_z = stand
+  c12hour_z = as_expression(stand)
 )
-head(new_efc)
-
-# providing expressions as character vector
-new_exp <- c(
-  "c12hour_c = center(c12hour)",
-  "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"
-)
-new_efc <- data_modify(efc, new_exp)
 head(new_efc)
 
 # attributes - in this case, value and variable labels - are preserved
@@ -125,13 +107,10 @@ new_efc <- data_modify(
 head(new_efc)
 
 # works from inside functions
-foo <- function(data, z) {
-  head(data_modify(data, z))
+foo <- function(data, ...) {
+  head(data_modify(data, ...))
 }
-foo(iris, "var_a = Sepal.Width / 10")
-
-new_exp <- c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")
-foo(iris, new_exp)
+foo(iris, SW_fraction = Sepal.Width / 10)
 
 # modify at specific positions or if condition is met
 d <- iris[1:5, ]
