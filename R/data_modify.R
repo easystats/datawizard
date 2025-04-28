@@ -185,11 +185,13 @@ data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = 
           symbol_string <- insight::trim_ws(unlist(strsplit(symbol_string, ",", fixed = TRUE), use.names = FALSE))
         }
         # check if we have any symbols instead of strings as expression
-        for (s in seq_along(symbol_string)) {
-          if (!grepl("\"", symbol_string[s], fixed = TRUE)) {
-            symbol_string[s] <- .dynEval(str2lang(symbol_string[s]), data = data)
+        symbol_string <- unlist(lapply(symbol_string, function(s) {
+          if (!grepl("\"", s, fixed = TRUE)) {
+            .dynEval(str2lang(s), data = data)
+          } else {
+            s
           }
-        }
+        }), use.names = FALSE)
         # remove quotes from strings
         symbol_string <- gsub("\"", "", symbol_string)
         # check whether we have exact one = sign.
