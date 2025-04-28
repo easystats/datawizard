@@ -10,28 +10,26 @@
 #' - A sequence of named, literal expressions, where the left-hand side refers
 #'   to the name of the new variable, while the right-hand side represent the
 #'   values of the new variable. Example: `Sepal.Width = center(Sepal.Width)`.
-#' - A sequence of string values, representing expressions (see 'Examples').
-#' - A variable that contains a string representation of the expression. This
-#'   expression will be evaluated. This might be useful in case of scoping issues,
-#'   when otherwise objects are not found by the function. Example:
-#'   ```r
-#'   a <- "2 * Sepal.Width"
-#'   data_modify(iris, double_sepal = a)
-#'   ```
+#' - A vector of length 1 (which will be recycled to match the number of rows
+#'   in the data), or of same length as the data.
 #' - A variable that contains a value to be used. Example:
 #'   ```r
 #'   a <- "abc"
 #'   data_modify(iris, var_abc = a) # var_abc contains "abc"
 #'   ```
-#' - A character vector of expressions. Example:
-#'   `c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")`. This
-#'   type of expression cannot be mixed with other expressions, i.e. if a
-#'   character vector is provided, you may not add further elements to `...`.
+#' - An expression can also be provided as string, however, it must be called
+#'   with `as_expression()`. Example:
+#'   ```r
+#'   a <- center(Sepal.Width)
+#'   data_modify(iris, Sepal.Width = as_expression(a))
+#'   ```
+#'   `{}` can be used instead of `as_expression()`, thus, for the above example,
+#'   `Sepal.Width = {a}` would be a valid syntax.
 #' - Using `NULL` as right-hand side removes a variable from the data frame.
 #'   Example: `Petal.Width = NULL`.
-#' - For data frames (including grouped ones), the function `n()` can be used to count the
-#'   number of observations and thereby, for instance, create index values by
-#'   using `id = 1:n()` or `id = 3:(n()+2)` and similar.
+#' - For data frames (including grouped ones), the function `n()` can be used to
+#'   count the number of observations and thereby, for instance, create index
+#'   values by using `id = 1:n()` or `id = 3:(n()+2)` and similar.
 #'
 #' Note that newly created variables can be used in subsequent expressions,
 #' including `.at` or `.if`. See also 'Examples'.
@@ -63,30 +61,13 @@
 #' )
 #' head(new_efc)
 #'
-#' # using strings instead of literal expressions
-#' new_efc <- data_modify(
-#'   efc,
-#'   "c12hour_c = center(c12hour)",
-#'   "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
-#'   "c12hour_z2 = standardize(c12hour)"
-#' )
-#' head(new_efc)
-#'
 #' # using character strings, provided as variable
 #' stand <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
 #' new_efc <- data_modify(
 #'   efc,
 #'   c12hour_c = center(c12hour),
-#'   c12hour_z = stand
+#'   c12hour_z = as_expression(stand)
 #' )
-#' head(new_efc)
-#'
-#' # providing expressions as character vector
-#' new_exp <- c(
-#'   "c12hour_c = center(c12hour)",
-#'   "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"
-#' )
-#' new_efc <- data_modify(efc, new_exp)
 #' head(new_efc)
 #'
 #' # attributes - in this case, value and variable labels - are preserved
@@ -108,13 +89,10 @@
 #' head(new_efc)
 #'
 #' # works from inside functions
-#' foo <- function(data, z) {
-#'   head(data_modify(data, z))
+#' foo <- function(data, ...) {
+#'   head(data_modify(data, ...))
 #' }
-#' foo(iris, "var_a = Sepal.Width / 10")
-#'
-#' new_exp <- c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")
-#' foo(iris, new_exp)
+#' foo(iris, SW_fraction = Sepal.Width / 10)
 #'
 #' # modify at specific positions or if condition is met
 #' d <- iris[1:5, ]
@@ -166,9 +144,56 @@ data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # check if we have dots, or only at/modify ----
 
   if (length(dots)) {
-    # we check for character vector of expressions, in which case
-    # "dots" should be unnamed
-    if (is.null(names(dots))) {
+
+    ## TODO: refactor into new subfunction, re-use for grouped_df method
+
+    # check is dots are named. Usually, all dots should be named, i.e. include
+    # the name of the new variable. There's only one exception, is a string is
+    # masked as expression, and this string includes the new name
+    if (is.null(names(dots)) || !all(nzchar(names(dots)))) {
+      # find which dots are unnamed, check for expression
+      if (is.null(names(dots))) {
+        unnamed_dots <- seq_along(dots)
+      } else {
+        unnamed_dots <- which(!nzchar(names(dots)))
+      }
+
+      for (i in unnamed_dots) {
+        d <- dots[i]
+        symbol_string <- insight::safe_deparse(d)
+        # we only allow unnamed if these are masked as expression. String values
+        # or numeric values require a named expression
+        if (!startsWith(symbol_string, "as_expression") && !startsWith(symbol_string, "{")) {
+          insight::format_error(paste0(
+            "A variable name for the expression `", symbol_string, "` is missing. ",
+            "Please use something like `new_name = ",  smybol_string, "`."
+          ))
+        }
+        # next, check if the string-expression includes a name for the new variable
+        # therefore, we remove the "as_expression()" token (or its alias "{}")
+        if (startsWith(symbol_string, "as_expression")) {
+          symbol_string <- gsub("as_expression\\((.*)\\)", "\\1", symbol_string)
+        } else if (startsWith(symbol_string, "{")) {
+          symbol_string <- gsub("\\{(.*)\\}", "\\1", symbol_string)
+        }
+        # remove c(), split at comma, if we have a vector of expressions
+        if (startsWith(symbol_string, "c(")) {
+          symbol_string <- gsub("c\\((.*)\\)", "\\1", symbol_string)
+          symbol_string <- insight::trim_ws(unlist(strsplit(symbol_string, ",", fixed = TRUE), use.names = FALSE))
+        }
+        # remove quotes from strings
+        symbol_string <- gsub("\"", "", symbol_string)
+        # check whether we have exact one = sign.
+        pattern <- "(?<!=)=(?!=)"
+        has_names <- grepl(pattern, symbol_string, perl = TRUE)
+        if (!all(has_names)) {
+          insight::format_error(paste0(
+            "A variable name for the expression `", symbol_string[!has_names[1]], "` is missing. ",
+            "Please use something like `new_name = ",  symbol_string[!has_names[1]], "`."
+          ))
+        }
+      }
+
       # if we have multiple strings, concatenate them to a character vector
       # and put it into a list...
       if (length(dots) > 1) {
