@@ -198,8 +198,9 @@ data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = 
             "Please use something like `new_name = ",  symbol_string[!has_names[1]], "`."
           ))
         }
-        # finally, extract name and parse strings into language
-        symbol_string <- str2lang(symbol_string)
+        # extract names (split at =)
+
+        symbol_string <- lapply(symbol_string, str2lang)
       }
 
       # if we have multiple strings, concatenate them to a character vector
