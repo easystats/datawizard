@@ -181,6 +181,12 @@ data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = 
           symbol_string <- gsub("c\\((.*)\\)", "\\1", symbol_string)
           symbol_string <- insight::trim_ws(unlist(strsplit(symbol_string, ",", fixed = TRUE), use.names = FALSE))
         }
+        # check if we have any symbols instead of strings as expression
+        for (s in seq_along(symbol_string)) {
+          if (!grepl("\"", symbol_string[s], fixed = TRUE)) {
+            symbol_string[s] <- .dynEval(symbol_string[s], data = data)
+          }
+        }
         # remove quotes from strings
         symbol_string <- gsub("\"", "", symbol_string)
         # check whether we have exact one = sign.
@@ -192,6 +198,8 @@ data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = 
             "Please use something like `new_name = ",  symbol_string[!has_names[1]], "`."
           ))
         }
+        # finally, extract name and parse strings into language
+        symbol_string <- str2lang(symbol_string)
       }
 
       # if we have multiple strings, concatenate them to a character vector
