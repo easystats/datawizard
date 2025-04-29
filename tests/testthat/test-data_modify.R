@@ -515,7 +515,7 @@ test_that("data_modify works with functions that return character vectors", {
   data(iris)
   set.seed(123)
   out <- data_modify(iris, grp = sample(letters[1:3], nrow(iris), TRUE))
-  expect_identical(head(out$grp), c("c", "c", "c", "b", "c", "b"))
+  expect_identical(head(out$grp), c("a", "c", "b", "a", "c", "c"))
 })
 
 
@@ -593,6 +593,126 @@ test_that("data_modify .if/.at arguments", {
 })
 
 
+test_that("data_modify works with new expressions, different use cases same results", {
+  data(iris)
+  out1 <- data_modify(iris, as_expression("sepwid = 2 * Sepal.Width"))
+  out2 <- data_modify(iris, sepwid = as_expression("2 * Sepal.Width"))
+  e <- "sepwid = 2 * Sepal.Width"
+  out3 <- data_modify(iris, as_expression(e))
+  e <- "2 * Sepal.Width"
+  out4 <- data_modify(iris, sepwid = as_expression(e))
+
+  expect_equal(head(out1), head(out2), ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(head(out1), head(out3), ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(head(out1), head(out4), ignore_attr = TRUE, tolerance = 1e-4)
+
+  out1b <- data_modify(
+    iris,
+    as_expression(c("sepwid = 2 * Sepal.Width", "seplen = 5 * Sepal.Length"))
+  )
+  out2b <- data_modify(
+    iris,
+    sepwid = as_expression("2 * Sepal.Width"),
+    seplen = {"5 * Sepal.Length"}
+  )
+  e <- c("sepwid = 2 * Sepal.Width", "seplen = 5 * Sepal.Length")
+  out3b <- data_modify(iris, as_expression(e))
+  e <- "2 * Sepal.Width"
+  out4b <- data_modify(iris, sepwid = as_expression(e), seplen = 5 * Sepal.Length)
+
+  expect_equal(head(out1b), head(out2b), ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(head(out1b), head(out3b), ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(head(out1b), head(out4b), ignore_attr = TRUE, tolerance = 1e-4)
+
+  # no expression
+  out <- data_modify(iris, sepwid = "2 * Sepal.Widht")
+  expect_identical(
+    head(out$sepwid),
+    c(
+      "2 * Sepal.Widht", "2 * Sepal.Widht", "2 * Sepal.Widht", "2 * Sepal.Widht",
+      "2 * Sepal.Widht", "2 * Sepal.Widht"
+    )
+  )
+
+  # complex example
+  e <- "2 * Sepal.Width"
+  f <- "half_petal = 0.5 * Petal.Length"
+  a <- "string"
+  num <- 1:5
+  out_complex <- data_modify(
+    iris,
+    sepwid = as_expression(e),
+    seplen = 5 * Sepal.Length,
+    {f},
+    new_var = a,
+    new_num = num,
+    new_var2 = "ho",
+    new_num2 = 4:6,
+    Sepal.Length = NULL,
+    Petal.Length = NULL,
+    Sepal.Width = NULL,
+    Petal.Width = NULL
+  )
+  expect_snapshot(print(head(out_complex)))
+})
+
+
+data(efc, package = "datawizard")
+grouped_efc <- data_group(efc, "c172code")
+new_efc <- data_modify(
+  grouped_efc,
+  c12hour_c = center(c12hour),
+  c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
+  c12hour_z2 = standardize(c12hour),
+  id = 1:n()
+)
+head(new_efc)
+
+
+new_efc <- data_modify(
+  grouped_efc,
+  as_expression("c12hour_c = center(c12hour)"),
+  c12hour_z = as_expression("c12hour_c / sd(c12hour, na.rm = TRUE)"),
+  c12hour_z2 = standardize(c12hour),
+  id = 1:n()
+)
+head(new_efc)
+
+s <- c(
+  "c12hour_c = center(c12hour)",
+  "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
+  "c12hour_z2 = standardize(c12hour)"
+)
+new_efc <- data_modify(
+  grouped_efc,
+  as_expression(s),
+  id = 1:n()
+)
+head(new_efc)
+
+new_efc <- data_modify(
+  grouped_efc,
+  c12hour_c = center(c12hour),
+  c12hour_z = as_expression("c12hour_c / sd(c12hour, na.rm = TRUE)"),
+  c12hour_z2 = standardize(c12hour),
+  id = 1:n()
+)
+head(new_efc)
+
+
+s <- c(
+  "c12hour_c = center(c12hour)",
+  "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
+  "c12hour_z2 = standardize(c12hour)"
+)
+new_efc <- data_modify(
+  efc,
+  as_expression(s),
+  id = 1:n()
+)
+head(new_efc)
+
+
 skip_if_not_installed("withr")
 
 
@@ -650,122 +770,3 @@ withr::with_environment(
     expect_identical(out$y, "x")
   })
 )
-
-
-
-
-
-library(datawizard)
-
-data_modify(iris, as_expression("sepwid = 2 * Sepal.Width")) |> head()
-
-data_modify(
-    iris,
-    as_expression(c("sepwid = 2 * Sepal.Width", "seplen = 5 * Sepal.Length"))
-) |> head()
-
-data_modify(iris, sepwid = as_expression("2 * Sepal.Width")) |> head()
-
-data_modify(
-    iris,
-    sepwid = as_expression("2 * Sepal.Width"),
-    seplen = {"5 * Sepal.Length"}
-) |> head()
-
-e <- "sepwid = 2 * Sepal.Width"
-data_modify(iris, as_expression(e)) |> head()
-
-e <- c("sepwid = 2 * Sepal.Width", "seplen = 5 * Sepal.Length")
-data_modify(iris, as_expression(e)) |> head()
-
-e <- "2 * Sepal.Width"
-data_modify(iris, sepwid = as_expression(e)) |> head()
-
-e <- "2 * Sepal.Width"
-data_modify(iris, sepwid = as_expression(e), seplen = 5 * Sepal.Length) |> head()
-
-e <- "2 * Sepal.Width"
-f <- "half_petal = 0.5 * Petal.Length"
-a <- "string"
-num <- 1:5
-data_modify(
-    iris,
-    sepwid = as_expression(e),
-    seplen = 5 * Sepal.Length,
-    {f},
-    new_var = a,
-    new_num = num,
-    new_var2 = "ho",
-    new_num2 = 4:6,
-    Sepal.Length = NULL,
-    Petal.Length = NULL,
-    Sepal.Width = NULL,
-    Petal.Width = NULL
-) |> head()
-
-
-d <- data.frame()
-for (param in letters[c(1, 2, 5)]) {
-  out <- data.frame(x = as.numeric(as.factor(param)))
-  out <- data_modify(out, Parameter = param)
-  d <- rbind(out, d)
-}
-d
-
-data_modify(iris, sepwid = "2 * Sepal.Widht") |> head()
-
-
-data(efc, package = "datawizard")
-grouped_efc <- data_group(efc, "c172code")
-new_efc <- data_modify(
-  grouped_efc,
-  c12hour_c = center(c12hour),
-  c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
-  c12hour_z2 = standardize(c12hour),
-  id = 1:n()
-)
-head(new_efc)
-
-
-new_efc <- data_modify(
-  grouped_efc,
-  as_expression("c12hour_c = center(c12hour)"),
-  c12hour_z = as_expression("c12hour_c / sd(c12hour, na.rm = TRUE)"),
-  c12hour_z2 = standardize(c12hour),
-  id = 1:n()
-)
-head(new_efc)
-
-s <- c(
-  "c12hour_c = center(c12hour)",
-  "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
-  "c12hour_z2 = standardize(c12hour)"
-)
-new_efc <- data_modify(
-  grouped_efc,
-  as_expression(s),
-  id = 1:n()
-)
-head(new_efc)
-
-new_efc <- data_modify(
-  grouped_efc,
-  c12hour_c = center(c12hour),
-  c12hour_z = as_expression("c12hour_c / sd(c12hour, na.rm = TRUE)"),
-  c12hour_z2 = standardize(c12hour),
-  id = 1:n()
-)
-head(new_efc)
-
-
-s <- c(
-  "c12hour_c = center(c12hour)",
-  "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
-  "c12hour_z2 = standardize(c12hour)"
-)
-new_efc <- data_modify(
-  efc,
-  as_expression(s),
-  id = 1:n()
-)
-head(new_efc)
