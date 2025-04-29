@@ -251,8 +251,11 @@ test_that("data_modify expression as character vector", {
 test_that("data_modify remove variables with NULL", {
   data(iris)
   out <- data_modify(iris, PL_new = 2 * Petal.Length, Petal.Length = NULL)
-  expect_identical(colnames(out), c("Sepal.Length", "Sepal.Width", "Petal.Width", "Species", "PL_new"))
+  expect_named(out, c("Sepal.Length", "Sepal.Width", "Petal.Width", "Species", "PL_new"))
   expect_identical(out$PL_new, 2 * iris$Petal.Length)
+
+  out <- data_modify(iris, as_expr("Species = NULL"))
+  expect_named(out, c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"))
 })
 
 
