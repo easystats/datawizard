@@ -2,6 +2,9 @@
 
 #' @export
 format.parameters_distribution <- function(x, digits = 2, format = NULL, ci_width = "auto", ci_brackets = TRUE, ...) {
+  # save information
+  att <- attributes(x)
+
   if (all(c("Min", "Max") %in% names(x))) {
     x$Min <- insight::format_ci(x$Min, x$Max, ci = NULL, digits = digits, width = ci_width, brackets = ci_brackets)
     x$Max <- NULL
@@ -14,22 +17,57 @@ format.parameters_distribution <- function(x, digits = 2, format = NULL, ci_widt
     colnames(x)[which(colnames(x) == "Q1")] <- "Quartiles"
   }
 
-  if (all(c("CI_low", "CI_high") %in% names(x))) {
-    x$CI_low <- insight::format_ci(x$CI_low, x$CI_high, ci = NULL, digits = digits, width = ci_width, brackets = ci_brackets)
-    x$CI_high <- NULL
-    ci_lvl <- attributes(x)$ci
-    centrality_ci <- attributes(x)$first_centrality
+  # find CI columns. We might have multiple columns for different centralities
+  ci_columns <- grepl("^(CI_low|CI_high)", colnames(x))
+  # make sure we have matches
+  if (any(ci_columns)) {
+    # iterate all centrality options
+    centrality <- .centrality_options(att$centrality)
+    for (ce in centrality) {
+      # this is the original column name
+      ci_columns <- c(paste0("CI_low_", ce), paste0("CI_high_", ce))
+      # we format CI column, merge it into one column
+      x[[ci_columns[1]]] <- insight::format_ci(
+        x[[ci_columns[1]]],
+        x[[ci_columns[2]]],
+        ci = NULL,
+        digits = digits,
+        width = ci_width,
+        brackets = ci_brackets
+      )
+      # ... and remove the no longer needed CI_high column
+      x[[ci_columns[2]]] <- NULL
+      ci_lvl <- attributes(x)$ci
 
-    if (is.null(centrality_ci)) {
-      ci_suffix <- ""
-    } else {
-      ci_suffix <- paste0(" (", centrality_ci, ")")
-    }
+      # find position of CI column
+      ci_columm_pos <- which(colnames(x) == ci_columns[1])
 
-    if (is.null(ci_lvl)) {
-      colnames(x)[which(colnames(x) == "CI_low")] <- sprintf("CI%s", ci_suffix)
-    } else {
-      colnames(x)[which(colnames(x) == "CI_low")] <- sprintf("%i%% CI%s", round(100 * ci_lvl), ci_suffix)
+      # rename
+      if (is.null(ci_lvl)) {
+        colnames(x)[ci_columm_pos] <- sprintf(
+          "CI (%s)",
+          insight::format_capitalize(ce)
+        )
+      } else {
+        colnames(x)[ci_columm_pos] <- sprintf(
+          "%i%% CI (%s)",
+          round(100 * ci_lvl),
+          insight::format_capitalize(ce)
+        )
+      }
+
+      # make sure we have the correct column name of the centrality
+      centr_name <- switch(tolower(ce),
+        mean = "Mean",
+        median = "Median",
+        map = "MAP"
+      )
+
+      # reorder CI column, move it to related centrality index
+      centr_pos <- which(colnames(x) == centr_name)
+      if (length(centr_pos)) {
+        x <- data_relocate(x, select = ci_columm_pos, after = centr_pos)
+      }
     }
   }
 
@@ -43,23 +81,5 @@ format.parameters_distribution <- function(x, digits = 2, format = NULL, ci_widt
     colnames(x)[which(colnames(x) == "Trimmed_Mean")] <- trim_name
   }
 
-  if (".group" %in% colnames(x)) {
-    final_table <- list()
-    grps <- split(x, x[[".group"]])
-    for (i in names(grps)) {
-      grps[[i]][[".group"]] <- NULL
-      table_caption <- NULL
-      if (is.null(format) || format == "text") {
-        table_caption <- c(sprintf("# %s", i), "blue")
-      } else if (format == "markdown") {
-        table_caption <- sprintf("%s", i)
-      }
-      attr(grps[[i]], "table_caption") <- table_caption
-      final_table <- c(final_table, list(grps[[i]]))
-    }
-  } else {
-    final_table <- x
-  }
-
-  final_table
+  x
 }

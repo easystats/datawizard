@@ -234,7 +234,7 @@ data_rename <- function(data,
   } else {
     long_letters <- letters[1:26]
   }
-  long_letters <- long_letters[seq_len(length(out))]
+  long_letters <- long_letters[seq_along(out)]
 
   for (i in seq_along(out)) {
     # prepare pattern

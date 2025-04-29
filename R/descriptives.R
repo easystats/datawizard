@@ -149,7 +149,7 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
     # from DescTools::CoefVar
     out <- out * (1 - 1 / (4 * (n - 1)) + 1 / n * out^2 + 1 / (2 * (n - 1)^2))
   }
-  return(out)
+  out
 }
 
 

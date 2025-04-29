@@ -398,6 +398,11 @@ insight::print_html
 insight::print_md
 
 
+#' @importFrom insight display
+#' @export
+insight::display
+
+
 #' @rdname data_tabulate
 #' @param add_total For crosstables (i.e. when `by` is not `NULL`), a row and
 #' column with the total N values are added to the data frame. `add_total` has

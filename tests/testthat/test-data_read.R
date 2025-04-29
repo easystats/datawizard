@@ -156,7 +156,7 @@ test_that("data_read - RDS file, preserve class", {
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
-    d <- data_read(temp_file)
+    d <- data_read(temp_file, verbose = FALSE)
     expect_s3_class(d, "data.frame")
     expect_identical(
       sapply(d, class),
@@ -177,6 +177,22 @@ test_that("data_read - no warning for RData", {
     data(mtcars)
     save(mtcars, file = temp_file)
     expect_silent(data_read(temp_file, verbose = FALSE))
+  })
+})
+
+
+test_that("data_read - message for multiple objects in RData", {
+  withr::with_tempfile("temp_file", fileext = ".RData", code = {
+    data(mtcars)
+    data(iris)
+    save(mtcars, iris, file = temp_file)
+    expect_message(
+      expect_message(
+        data_read(temp_file, verbose = TRUE),
+        regex = "File contained more than one object"
+      ),
+      "Reading data"
+    )
   })
 })
 
@@ -433,20 +449,70 @@ test_that("data_read, file not exists", {
 test_that("data_read - RDS file, no data frame", {
   skip_if_not_installed("withr")
 
+  withr::with_tempfile("temp_file", fileext = ".rda", code = {
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/list_for_testing.rda")
+    httr::stop_for_status(request)
+    writeBin(httr::content(request, type = "raw"), temp_file)
+
+    expect_message(
+      expect_warning(
+        d <- data_read(temp_file, verbose = TRUE), # nolint
+        regex = "no data frame"
+      ),
+      "Reading data"
+    )
+    expect_type(d, "list")
+  })
+})
+
+test_that("data_read - RDA file, model object", {
+  skip_if_not_installed("withr")
+  skip_if_not_installed("brms")
+
   withr::with_tempfile("temp_file", fileext = ".rds", code = {
     request <- httr::GET("https://raw.github.com/easystats/circus/main/data/model_object.rds")
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
-    expect_warning(
-      {
-        d <- data_read(
-          temp_file,
-          verbose = TRUE
-        )
-      },
-      regex = "no data frame"
+    expect_message(
+      expect_message(
+        d <- data_read(temp_file, verbose = TRUE), # nolint
+        regex = "Imported file is a regression"
+      ),
+      "Reading data"
     )
     expect_s3_class(d, "lm")
   })
+
+  withr::with_tempfile("temp_file", fileext = ".rda", code = {
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/brms_1.rda")
+    httr::stop_for_status(request)
+    writeBin(httr::content(request, type = "raw"), temp_file)
+
+    expect_message(
+      expect_message(
+        d <- data_read(temp_file, verbose = TRUE), # nolint
+        regex = "Imported file is a regression"
+      ),
+      "Reading data"
+    )
+    expect_s3_class(d, "brmsfit")
+  })
+})
+
+
+test_that("data_read - RDS file, from URL", {
+  # works with URL
+  request <- httr::GET("https://raw.github.com/easystats/circus/main/data/model_object.rds")
+  httr::stop_for_status(request)
+  expect_message(
+    expect_message(
+      d <- data_read( # nolint
+        "https://raw.github.com/easystats/circus/main/data/model_object.rds",
+        verbose = TRUE
+      ),
+      regex = "Imported file is a regression"
+    ),
+    "Reading data"
+  )
 })

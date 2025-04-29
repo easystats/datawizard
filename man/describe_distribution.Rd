@@ -41,6 +41,7 @@ describe_distribution(x, ...)
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
+  by = NULL,
   ...
 )
 }
@@ -59,28 +60,28 @@ describe_distribution(x, ...)
 to the estimate(s) (\code{SD} and \code{MAD} for \code{mean} and \code{median}, respectively).
 Dispersion is not available for \code{"MAP"} or \code{"mode"} centrality indices.}
 
-\item{iqr}{Logical, if \code{TRUE}, the interquartile range is calculated
-(based on \code{\link[stats:IQR]{stats::IQR()}}, using \code{type = 6}).}
+\item{iqr}{Logical, if \code{TRUE}, the interquartile range is calculated (based
+on \code{\link[stats:IQR]{stats::IQR()}}, using \code{type = 6}).}
 
 \item{range}{Return the range (min and max).}
 
-\item{quartiles}{Return the first and third quartiles (25th and 75pth
+\item{quartiles}{Return the first and third quartiles (25th and 75th
 percentiles).}
 
 \item{ci}{Confidence Interval (CI) level. Default is \code{NULL}, i.e. no
-confidence intervals are computed. If not \code{NULL}, confidence intervals
-are based on bootstrap replicates (see \code{iterations}). If
-\code{centrality = "all"}, the bootstrapped confidence interval refers to
-the first centrality index (which is typically the median).}
+confidence intervals are computed. If not \code{NULL}, confidence intervals are
+based on bootstrap replicates (see \code{iterations}).}
 
 \item{iterations}{The number of bootstrap replicates for computing confidence
-intervals. Only applies when \code{ci} is not \code{NULL}.}
+intervals. Only applies when \code{ci} is not \code{NULL}. Defaults to \code{100}. For
+more stable results, increase the number of \code{iterations}, but note that this
+can also increase the computation time significantly.}
 
 \item{threshold}{For \code{centrality = "trimmed"} (i.e. trimmed mean), indicates
 the fraction (0 to 0.5) of observations to be trimmed from each end of the
 vector before the mean is computed.}
 
-\item{verbose}{Toggle warnings and messages.}
+\item{verbose}{Show or silence warnings and messages.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -141,6 +142,10 @@ of length > 1. \code{regex = TRUE} is comparable to using one of the two
 select-helpers, \code{select = contains()} or \code{select = regex()}, however,
 since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.}
+
+\item{by}{Column names indicating how to split the data in various groups
+before describing the distribution. \code{by} groups will be added to potentially
+existing groups created by \code{data_group()}.}
 }
 \value{
 A data frame with columns that describe the properties of the variables.
@@ -151,7 +156,7 @@ centrality, dispersion, range, skewness, kurtosis).
 }
 \details{
 If \code{x} is a data frame, only numeric variables are kept and will be
-displayed in the summary.
+displayed in the summary by default.
 
 If \code{x} is a list, the behavior is different whether \code{x} is a stored list. If
 \code{x} is stored (for example, \code{describe_distribution(mylist)} where \code{mylist}
@@ -163,8 +168,7 @@ variable name.
 \note{
 There is also a
 \href{https://easystats.github.io/see/articles/parameters.html}{\code{plot()}-method}
-implemented in the
-\href{https://easystats.github.io/see/}{\pkg{see}-package}.
+implemented in the \href{https://easystats.github.io/see/}{\strong{see}-package}.
 }
 \examples{
 \dontshow{if (require("bayestestR", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
