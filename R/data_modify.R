@@ -302,7 +302,9 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       # sanity check
       if (is.null(symbol_string)) next
       # we only allow unnamed elements if these are masked as expression. String
-      # values or numeric values require a named expression
+      # values or numeric values require a named element, i.e. we can only have
+      # data_modify(iris, newvar = "a"), but we cannot have data_modify(iris, "a").
+      # For expression, missing name is possible.
       if (!startsWith(symbol_string, "as_expression") && !startsWith(symbol_string, "{")) {
         insight::format_error(paste0(
           "A variable name for the expression `", symbol_string, "` is missing. ",
@@ -326,7 +328,12 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
         # Locate commas not inside quotes
         symbol_string <- insight::trim_ws(unlist(strsplit(symbol_string, pattern, perl = TRUE), use.names = FALSE))
       }
-      # check if we have any symbols instead of strings as expression
+      # check if we have any symbols instead of strings as expression, e.g.
+      # xpr <- "sepwid = 2 * Sepal.Width"
+      # data_modify(iris, as_expression(xpr))
+      #
+      # in this case, we need to evaluate the symbol (i.e. convert symbol string
+      # into a language expression and then evaluate)
       symbol_string <- unlist(lapply(symbol_string, function(symbol_element) {
         if (!grepl("\"", symbol_element, fixed = TRUE)) {
           return_value <- .dynEval(str2lang(symbol_element))
@@ -339,9 +346,12 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
           symbol_element
         }
       }), use.names = FALSE)
-      # remove quotes from strings
+      # now we should have the expression as character string. Next, we
+      # # remove quotes from strings
       symbol_string <- gsub("\"", "", symbol_string)
-      # check whether we have exact one = sign.
+      # check whether we have exact one = sign. We need to have a name definition,
+      # i.e. something like "var = a+b" - if the string has no "=" sign, name is
+      # definitely missing
       pattern <- "(?<!=)=(?!=)"
       has_names <- grepl(pattern, symbol_string, perl = TRUE)
       if (!all(has_names)) {
@@ -350,7 +360,8 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
           "Please use something like `new_name = ", symbol_string[!has_names[1]], "`."
         ))
       }
-      # extract names (split at =)
+      # extract names (split at =), separate name from new variable from its
+      # expression. we need this to create a named list of expressions for the dots
       symbol_string <- lapply(
         strsplit(symbol_string, "=", fixed = TRUE),
         function(split_result) {
@@ -387,6 +398,11 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 
 
 .extract_named_expressions <- function(dots, data) {
+  # this is basically a shorte version of ".extract_unnamed_expressions()",
+  # because we don't need to extact the name definition of the string, which
+  # makes the handling easier. See ".extract_unnamed_expressions()" for a more
+  # comprehensive documentation of the single steps.
+
   for (i in seq_along(dots)) {
     dot_element <- dots[[i]]
     symbol_string <- insight::safe_deparse(dot_element)
