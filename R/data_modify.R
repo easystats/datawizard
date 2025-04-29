@@ -28,11 +28,16 @@
 #'   a <- "Sepal.Width = center(Sepal.Width)"
 #'   data_modify(iris, as_expr(a))
 #'   ```
+#'   Note that `as_expr()` is no real function, which cannot be used outside
+#'   of `data_modify()`, and hence it is not exported nor documented. Rather,
+#'   it is only used for internally processing expressions.
 #' - Using `NULL` as right-hand side removes a variable from the data frame.
 #'   Example: `Petal.Width = NULL`.
 #' - For data frames (including grouped ones), the function `n()` can be used to
 #'   count the number of observations and thereby, for instance, create index
-#'   values by using `id = 1:n()` or `id = 3:(n()+2)` and similar.
+#'   values by using `id = 1:n()` or `id = 3:(n()+2)` and similar. Note that,
+#'   like `as_expr()`, `n()` is also no true function and cannot be used outside
+#'   of `data_modify()`.
 #'
 #' Note that newly created variables can be used in subsequent expressions,
 #' including `.at` or `.if`. See also 'Examples'.

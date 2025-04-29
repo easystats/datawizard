@@ -36,11 +36,17 @@ data_modify(iris, Sepal.Width = as_expr(a))
 a <- "Sepal.Width = center(Sepal.Width)"
 data_modify(iris, as_expr(a))
 }\if{html}{\out{</div>}}
+
+Note that \code{as_expr()} is no real function, which cannot be used outside
+of \code{data_modify()}, and hence it is not exported nor documented. Rather,
+it is only used for internally processing expressions.
 \item Using \code{NULL} as right-hand side removes a variable from the data frame.
 Example: \code{Petal.Width = NULL}.
 \item For data frames (including grouped ones), the function \code{n()} can be used to
 count the number of observations and thereby, for instance, create index
-values by using \code{id = 1:n()} or \code{id = 3:(n()+2)} and similar.
+values by using \code{id = 1:n()} or \code{id = 3:(n()+2)} and similar. Note that,
+like \code{as_expr()}, \code{n()} is also no true function and cannot be used outside
+of \code{data_modify()}.
 }
 
 Note that newly created variables can be used in subsequent expressions,
