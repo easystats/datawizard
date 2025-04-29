@@ -28,9 +28,6 @@
 #'   a <- "Sepal.Width = center(Sepal.Width)"
 #'   data_modify(iris, as_expression(a))
 #'   ```
-#'   `{}` can be used instead of `as_expression()`, thus, for the above example,
-#'   `Sepal.Width = {a}` or simply `{a}` for the second case would be a valid
-#'   syntax.
 #' - Using `NULL` as right-hand side removes a variable from the data frame.
 #'   Example: `Petal.Width = NULL`.
 #' - For data frames (including grouped ones), the function `n()` can be used to
@@ -93,6 +90,15 @@
 #'   c12hour_z = as_expression(stand)
 #' )
 #' head(new_efc)
+#'
+#' # using `paste()` to build a string-expression
+#' to_standardize <- c("Petal.Length", "Sepal.Length")
+#' data_modify(
+#'   iris,
+#'   as_expression(
+#'     paste0(to_standardize, "_stand = standardize(", to_standardize, ")")
+#'   )
+#' )
 #'
 #' # attributes - in this case, value and variable labels - are preserved
 #' str(new_efc)
@@ -335,7 +341,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       # in this case, we need to evaluate the symbol (i.e. convert symbol string
       # into a language expression and then evaluate)
       symbol_string <- unlist(lapply(symbol_string, function(symbol_element) {
-        if (!grepl("\"", symbol_element, fixed = TRUE)) {
+        if (!startsWith(symbol_element, "\"")) {
           return_value <- .dynEval(str2lang(symbol_element))
           # dynEval might fail if we don't look in data - sanity check
           if (identical(return_value, symbol_element)) {
@@ -422,7 +428,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       # check if we have any symbols instead of strings as expression - evaluate
       # and convert result into expression
       symbol_string <- unlist(lapply(symbol_string, function(symbol_element) {
-        if (!grepl("\"", symbol_element, fixed = TRUE)) {
+        if (!startsWith(symbol_element, "\"")) {
           return_value <- .dynEval(str2lang(symbol_element))
           # dynEval might fail if we don't look in data - sanity check
           if (identical(return_value, symbol_element)) {

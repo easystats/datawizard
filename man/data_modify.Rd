@@ -25,8 +25,8 @@ in the data), or of same length as the data.
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{a <- "abc"
 data_modify(iris, var_abc = a) # var_abc contains "abc"
 }\if{html}{\out{</div>}}
-\item An expression can also be provided as string, however, it must be called
-with \code{as_expression()}. Example:
+\item An expression can also be provided as string and wrapped in
+\code{as_expression()}. Example:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{data_modify(iris, as_expression("Sepal.Width = center(Sepal.Width)"))
 # or
@@ -36,10 +36,6 @@ data_modify(iris, Sepal.Width = as_expression(a))
 a <- "Sepal.Width = center(Sepal.Width)"
 data_modify(iris, as_expression(a))
 }\if{html}{\out{</div>}}
-
-\code{{}} can be used instead of \code{as_expression()}, thus, for the above example,
-\code{Sepal.Width = {a}} or simply \code{{a}} for the second case would be a valid
-syntax.
 \item Using \code{NULL} as right-hand side removes a variable from the data frame.
 Example: \code{Petal.Width = NULL}.
 \item For data frames (including grouped ones), the function \code{n()} can be used to
@@ -111,6 +107,15 @@ new_efc <- data_modify(
   c12hour_z = as_expression(stand)
 )
 head(new_efc)
+
+# using `paste()` to build a string-expression
+to_standardize <- c("Petal.Length", "Sepal.Length")
+data_modify(
+  iris,
+  as_expression(
+    paste0(to_standardize, "_stand = standardize(", to_standardize, ")")
+  )
+)
 
 # attributes - in this case, value and variable labels - are preserved
 str(new_efc)

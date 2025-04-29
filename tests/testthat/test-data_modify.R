@@ -636,6 +636,26 @@ test_that("data_modify works with new expressions, different use cases same resu
     )
   )
 
+  # works with paste()
+  to_standardize <- c("Petal.Length", "Sepal.Length")
+  out <- data_modify(
+    iris,
+    as_expression(
+      paste0(to_standardize, "_stand = standardize(", to_standardize, ")")
+    )
+  )
+  expect_equal(
+    head(out$Petal.Length_stand),
+    c(-1.33575, -1.33575, -1.3924, -1.2791, -1.33575, -1.16581),
+    tolerance = 1e-3
+  )
+  expect_equal(
+    head(out$Petal.Length_stand),
+    c(-0.89767, -1.1392, -1.38073, -1.50149, -1.01844, -0.53538),
+    tolerance = 1e-3
+  )
+
+
   # complex example
   e <- "2 * Sepal.Width"
   f <- "half_petal = 0.5 * Petal.Length"
