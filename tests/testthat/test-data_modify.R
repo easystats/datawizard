@@ -1,3 +1,5 @@
+## styler: off
+
 test_that("data_modify works", {
   data(iris)
   out <- data_modify(
@@ -700,6 +702,56 @@ test_that("data_modify works with new expressions, grouped_df, different use cas
 })
 
 
+test_that("data_modify errors with new expressions", {
+  e <- "sepwid = 2 * Sepal.Widht"
+  expect_error(
+    data_modify(iris, as_expression(e)),
+    regex = "in the first expression"
+  )
+  expect_error(
+    data_modify(iris, as_expression(e)),
+    regex = "Sepal.Widht"
+  )
+
+  expect_error(
+    data_modify(iris, as_expression("sepwid = 2 * Sepal.Widht")),
+    regex = "in the first expression"
+  )
+  expect_error(
+    data_modify(iris, as_expression("sepwid = 2 * Sepal.Widht")),
+    regex = "Sepal.Widht"
+  )
+
+  expect_error(
+    data_modify(iris, sepwid = 2 * Sepal.Widht),
+    regex = "in the first expression"
+  )
+  expect_error(
+    data_modify(iris, sepwid = 2 * Sepal.Widht),
+    regex = "Sepal.Widht"
+  )
+
+  expect_error(
+    data_modify(iris, as_expression("2 * Sepal.Widht")),
+    regex = "variable name"
+  )
+
+  e <- "2 * Sepal.Widht"
+  expect_error(
+    data_modify(iris, as_expression(e)),
+    regex = "variable name"
+  )
+
+  data(efc, package = "datawizard")
+  a <- "center(c22hour)" # <---------------- error in variable name
+  b <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
+  expect_error(
+    data_modify(efc, c12hour_c = as_expression(a), c12hour_z = as_expression(b)),
+    regex = "c22hour"
+  )
+})
+
+
 skip_if_not_installed("withr")
 
 withr::with_environment(
@@ -756,3 +808,5 @@ withr::with_environment(
     expect_identical(out$y, "x")
   })
 )
+
+## styler: on
