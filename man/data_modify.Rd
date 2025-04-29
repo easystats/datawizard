@@ -7,7 +7,7 @@
 \usage{
 data_modify(data, ...)
 
-\method{data_modify}{data.frame}(data, ..., .if = NULL, .at = NULL, .modify = NULL, by = NULL)
+\method{data_modify}{data.frame}(data, ..., .if = NULL, .at = NULL, .modify = NULL)
 }
 \arguments{
 \item{data}{A data frame}
@@ -60,10 +60,6 @@ variables in \code{...} can also be selected, see 'Examples'.}
 This argument is used in combination with either the \code{.at} or the \code{.if} argument.
 Note that the modified variable (i.e. the result from \code{.modify}) must be either
 of length 1 or of same length as the input variable.}
-
-\item{by}{Column names indicating how to split the data in various groups
-before modifying the data frame. \code{by} groups will be added to potentially
-existing groups created by \code{data_group()}.}
 }
 \description{
 Create new variables or modify existing variables in a data frame. Unlike \code{base::transform()}, \code{data_modify()}

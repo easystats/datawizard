@@ -38,8 +38,6 @@ CHANGES
 
 * New argument `by` in `describe_distribution()` (#604).
 
-* New argument `by` in `data_modify()` (#605).
-
 * `describe_distribution()` now gives informative errors when column names
   in the input data frame conflict with column from the output table (#612).
 
