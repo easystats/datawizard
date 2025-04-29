@@ -657,64 +657,50 @@ test_that("data_modify works with new expressions, different use cases same resu
 })
 
 
-data(efc, package = "datawizard")
-grouped_efc <- data_group(efc, "c172code")
-new_efc <- data_modify(
-  grouped_efc,
-  c12hour_c = center(c12hour),
-  c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
-  c12hour_z2 = standardize(c12hour),
-  id = 1:n()
-)
-head(new_efc)
+test_that("data_modify works with new expressions, grouped_df, different use cases same results", {
+  data(efc, package = "datawizard")
+  grouped_efc <- data_group(efc, "c172code")
+  new_efc1 <- data_modify(
+    grouped_efc,
+    c12hour_c = center(c12hour),
+    c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
+    c12hour_z2 = standardize(c12hour),
+    id = 1:n()
+  )
 
+  new_efc2 <- data_modify(
+    grouped_efc,
+    as_expression("c12hour_c = center(c12hour)"),
+    c12hour_z = as_expression("c12hour_c / sd(c12hour, na.rm = TRUE)"),
+    c12hour_z2 = standardize(c12hour),
+    id = 1:n()
+  )
+  expect_equal(head(new_efc1), head(new_efc2), ignore_attr = TRUE, tolerance = 1e-4)
 
-new_efc <- data_modify(
-  grouped_efc,
-  as_expression("c12hour_c = center(c12hour)"),
-  c12hour_z = as_expression("c12hour_c / sd(c12hour, na.rm = TRUE)"),
-  c12hour_z2 = standardize(c12hour),
-  id = 1:n()
-)
-head(new_efc)
+  s <- c(
+    "c12hour_c = center(c12hour)",
+    "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
+    "c12hour_z2 = standardize(c12hour)"
+  )
+  new_efc3 <- data_modify(
+    grouped_efc,
+    as_expression(s),
+    id = 1:n()
+  )
+  expect_equal(head(new_efc1), head(new_efc3), ignore_attr = TRUE, tolerance = 1e-4)
 
-s <- c(
-  "c12hour_c = center(c12hour)",
-  "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
-  "c12hour_z2 = standardize(c12hour)"
-)
-new_efc <- data_modify(
-  grouped_efc,
-  as_expression(s),
-  id = 1:n()
-)
-head(new_efc)
-
-new_efc <- data_modify(
-  grouped_efc,
-  c12hour_c = center(c12hour),
-  c12hour_z = as_expression("c12hour_c / sd(c12hour, na.rm = TRUE)"),
-  c12hour_z2 = standardize(c12hour),
-  id = 1:n()
-)
-head(new_efc)
-
-
-s <- c(
-  "c12hour_c = center(c12hour)",
-  "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
-  "c12hour_z2 = standardize(c12hour)"
-)
-new_efc <- data_modify(
-  efc,
-  as_expression(s),
-  id = 1:n()
-)
-head(new_efc)
+  new_efc4 <- data_modify(
+    grouped_efc,
+    c12hour_c = center(c12hour),
+    c12hour_z = as_expression("c12hour_c / sd(c12hour, na.rm = TRUE)"),
+    c12hour_z2 = standardize(c12hour),
+    id = 1:n()
+  )
+  expect_equal(head(new_efc1), head(new_efc4), ignore_attr = TRUE, tolerance = 1e-4)
+})
 
 
 skip_if_not_installed("withr")
-
 
 withr::with_environment(
   new.env(),
