@@ -9,26 +9,26 @@
 #' before describing the distribution. `by` groups will be added to potentially
 #' existing groups created by `data_group()`.
 #' @param range Return the range (min and max).
-#' @param quartiles Return the first and third quartiles (25th and 75pth
+#' @param quartiles Return the first and third quartiles (25th and 75th
 #'   percentiles).
 #' @param include_factors Logical, if `TRUE`, factors are included in the
 #'   output, however, only columns for range (first and last factor levels) as
 #'   well as n and missing will contain information.
 #' @param ci Confidence Interval (CI) level. Default is `NULL`, i.e. no
-#'   confidence intervals are computed. If not `NULL`, confidence intervals
-#'   are based on bootstrap replicates (see `iterations`). If
-#'   `centrality = "all"`, the bootstrapped confidence interval refers to
-#'   the first centrality index (which is typically the median).
+#'   confidence intervals are computed. If not `NULL`, confidence intervals are
+#'   based on bootstrap replicates (see `iterations`).
 #' @param iterations The number of bootstrap replicates for computing confidence
-#'   intervals. Only applies when `ci` is not `NULL`.
-#' @param iqr Logical, if `TRUE`, the interquartile range is calculated
-#'   (based on [stats::IQR()], using `type = 6`).
-#' @param verbose Toggle warnings and messages.
+#'   intervals. Only applies when `ci` is not `NULL`. Defaults to `100`. For
+#'   more stable results, increase the number of `iterations`, but note that this
+#'   can also increase the computation time significantly.
+#' @param iqr Logical, if `TRUE`, the interquartile range is calculated (based
+#'   on [stats::IQR()], using `type = 6`).
+#' @param verbose Show or silence warnings and messages.
 #' @inheritParams bayestestR::point_estimate
 #' @inheritParams extract_column_names
 #'
 #' @details If `x` is a data frame, only numeric variables are kept and will be
-#' displayed in the summary.
+#' displayed in the summary by default.
 #'
 #' If `x` is a list, the behavior is different whether `x` is a stored list. If
 #' `x` is stored (for example, `describe_distribution(mylist)` where `mylist`
@@ -39,8 +39,7 @@
 #'
 #' @note There is also a
 #'   [`plot()`-method](https://easystats.github.io/see/articles/parameters.html)
-#'   implemented in the
-#'   \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#'   implemented in the [**see**-package](https://easystats.github.io/see/).
 #'
 #' @return A data frame with columns that describe the properties of the variables.
 #'
@@ -141,8 +140,8 @@ describe_distribution.list <- function(x,
   class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
   attr(out, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(out, "ci") <- ci
+  attr(out, "centrality") <- centrality
   attr(out, "threshold") <- threshold
-  if (centrality == "all") attr(out, "first_centrality") <- colnames(out)[2]
   out
 }
 
@@ -175,6 +174,7 @@ describe_distribution.numeric <- function(x,
       centrality = centrality,
       dispersion = dispersion,
       threshold = threshold,
+      verbose = verbose,
       ...
     )
   )
@@ -189,27 +189,38 @@ describe_distribution.numeric <- function(x,
   # Confidence Intervals
   if (!is.null(ci)) {
     insight::check_if_installed("boot")
-    results <- tryCatch(
-      {
-        boot::boot(
-          data = x,
-          statistic = .boot_distribution,
-          R = iterations,
-          centrality = centrality
-        )
-      },
-      error = function(e) {
-        msg <- conditionMessage(e)
-        if (!is.null(msg) && msg == "sample is too sparse to find TD") {
-          insight::format_warning(
-            "When bootstrapping CIs, sample was too sparse to find TD. Returning NA for CIs."
+    # tell user about bootstrapping and appropriate number of iterations.
+    # "show_iterations_msg" is an undocumented argument that is only passed
+    # internally to this function to avoid multiple repeated messages
+    if (!isFALSE(list(...)$show_iterations_msg)) {
+      .show_iterations_warning(verbose, iterations, ci)
+    }
+    # calculate CI for each centrality
+    for (cntr in .centrality_options(centrality)) {
+      results <- tryCatch(
+        {
+          boot::boot(
+            data = x,
+            statistic = .boot_distribution,
+            R = iterations,
+            centrality = cntr
           )
-          list(t = c(NA_real_, NA_real_))
+        },
+        error = function(e) {
+          msg <- conditionMessage(e)
+          if (!is.null(msg) && msg == "sample is too sparse to find TD") {
+            insight::format_warning(
+              "When bootstrapping CIs, sample was too sparse to find TD. Returning NA for CIs."
+            )
+            list(t = c(NA_real_, NA_real_))
+          }
         }
-      }
-    )
-    out_ci <- bayestestR::ci(results$t, ci = ci, verbose = FALSE)
-    out <- cbind(out, data.frame(CI_low = out_ci$CI_low[1], CI_high = out_ci$CI_high[1]))
+      )
+      out_ci <- bayestestR::ci(results$t, ci = ci, verbose = FALSE)
+      ci_data <- data.frame(out_ci$CI_low[1], out_ci$CI_high[1])
+      colnames(ci_data) <- c(paste0("CI_low_", cntr), paste0("CI_high_", cntr))
+      out <- cbind(out, ci_data)
+    }
   }
 
 
@@ -251,8 +262,8 @@ describe_distribution.numeric <- function(x,
   class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
   attr(out, "data") <- x
   attr(out, "ci") <- ci
+  attr(out, "centrality") <- centrality
   attr(out, "threshold") <- threshold
-  if (centrality == "all") attr(out, "first_centrality") <- colnames(out)[1]
   out
 }
 
@@ -408,6 +419,9 @@ describe_distribution.data.frame <- function(x,
   # check for reserved variable names
   .check_for_reserved_names(select)
 
+  # tell user about bootstrapping and appropriate number of iterations
+  .show_iterations_warning(verbose, iterations, ci)
+
   if (!is.null(by)) {
     if (!is.character(by)) {
       insight::format_error("`by` must be a character vector.")
@@ -448,7 +462,8 @@ describe_distribution.data.frame <- function(x,
         ci = ci,
         iterations = iterations,
         threshold = threshold,
-        verbose = verbose
+        verbose = verbose,
+        show_iterations_msg = FALSE
       )
     }
   }))
@@ -464,8 +479,8 @@ describe_distribution.data.frame <- function(x,
   class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
   attr(out, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(out, "ci") <- ci
+  attr(out, "centrality") <- centrality
   attr(out, "threshold") <- threshold
-  if (centrality == "all") attr(out, "first_centrality") <- colnames(out)[2]
   out
 }
 
@@ -511,6 +526,9 @@ describe_distribution.grouped_df <- function(x,
     verbose = verbose
   )
 
+  # tell user about bootstrapping and appropriate number of iterations
+  .show_iterations_warning(verbose, iterations, ci)
+
   out <- do.call(rbind, lapply(seq_along(groups), function(i) {
     d <- describe_distribution.data.frame(
       groups[[i]][select],
@@ -523,6 +541,8 @@ describe_distribution.grouped_df <- function(x,
       ci = ci,
       iterations = iterations,
       threshold = threshold,
+      verbose = verbose,
+      show_iterations_msg = FALSE,
       ...
     )
 
@@ -537,8 +557,8 @@ describe_distribution.grouped_df <- function(x,
   class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
   attr(out, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(out, "ci") <- ci
+  attr(out, "centrality") <- centrality
   attr(out, "threshold") <- threshold
-  if (centrality == "all") attr(out, "first_centrality") <- colnames(out)[2]
   out
 }
 
@@ -617,9 +637,21 @@ plot.parameters_distribution <- function(x, ...) {
     iqr = FALSE,
     range = FALSE,
     quartiles = FALSE,
-    ci = NULL
+    ci = NULL,
+    verbose = FALSE
   )
   out[[1]]
+}
+
+
+# check centrality options ----------------------------------------
+
+.centrality_options <- function(centrality) {
+  if (identical(centrality, "all")) {
+    c("mean", "median", "MAP")
+  } else {
+    centrality
+  }
 }
 
 
@@ -629,7 +661,7 @@ plot.parameters_distribution <- function(x, ...) {
   reserved_names <- c(
     "Variable", "CI_low", "CI_high", "n_Missing", "Q1", "Q3", "Quartiles",
     "Min", "Max", "Range", "Trimmed_Mean", "Trimmed", "Mean", "SD", "IQR",
-    "Skewness", "Kurtosis", "n"
+    "Skewness", "Kurtosis", "n", "Median", "MAD", "MAP", "IQR", "n_Missing"
   )
   invalid_names <- intersect(reserved_names, x)
 
@@ -645,5 +677,16 @@ plot.parameters_distribution <- function(x, ...) {
       text_concatenate(invalid_names, enclose = "`"),
       ". Please rename these variables in your data."
     ))
+  }
+}
+
+
+.show_iterations_warning <- function(verbose, iterations = 100, ci = NULL) {
+  if (verbose && !is.null(ci)) {
+    msg <- paste("Bootstrapping confidence intervals using", iterations, "iterations, please be patient...")
+    if (iterations < 200) {
+      msg <- c(msg, "For more stable intervals, increase the number of `iterations`, but note that this can also increase the computation time significantly.") # nolint
+    }
+    insight::format_alert(msg)
   }
 }

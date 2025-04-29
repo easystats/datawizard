@@ -10,6 +10,18 @@ BREAKING CHANGES
   Before, it printed one table per group combination. Now, it prints a single
   table with group columns at the start (#610).
 
+* The output format of `describe_distribution()` when confidence intervals are
+  requested has changed. Now, for each centrality measure a confidence interval
+  is calculated (#617).
+
+* `data_modify()` now always uses values of a vector for a modified or newly
+  created variable, and no longer tries to detect whether a character value
+  possibly contains an expression. To allow expression provided as string (or
+  character vectors), use the helper-function `as_expr()`. Only literal
+  expressions or strings wrapped in `as_expr()` will be evaluated as
+  expressions, everything else will be treated as vector with values for new
+  variables (#605).
+
 CHANGES
 
 * `display()` is now re-exported from package *insight*.
@@ -31,7 +43,7 @@ CHANGES
 * `describe_distribution()` now gives informative errors when column names
   in the input data frame conflict with column from the output table (#612).
 
-* The methods for `parameters_distribution` objects are now defined in 
+* The methods for `parameters_distribution` objects are now defined in
   `datawizard` (they were previously in `parameters`) (#613).
 
 BUG FIXES
@@ -42,7 +54,13 @@ BUG FIXES
 * Fixed bug in `describe_distribution()` when some group combinations
   didn't appear in the data (#609).
 
-* Fixed warning in `data_summary()` when a variable had the same name as 
+* Fixed bug in `describe_distribution()` when more than one value for the
+  `centrality` argument were specified (#617).
+
+* Fixed bug in `describe_distribution()` where setting `verbose = FALSE`
+  didn't hide some warnings (#617).
+
+* Fixed warning in `data_summary()` when a variable had the same name as
   another object in the global environment (#585).
 
 # datawizard 1.0.2
