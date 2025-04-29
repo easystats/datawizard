@@ -389,10 +389,9 @@ This makes it easy to use it in custom functions:
 
 ```{r eval=evaluate_chunk}
 miles_to_km <- function(data, var) {
-  km <- paste0("km = ", var, "* 1.609344")
   data_modify(
     data,
-    as_expr(km)
+    as_expr(paste0("km = ", var, "* 1.609344"))
   )
 }
 
