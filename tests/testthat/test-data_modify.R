@@ -250,7 +250,7 @@ test_that("data_modify expression as character vector-4", {
 
 test_that("data_modify works with function as expression", {
   data(iris)
-  out <- data_modify(iris, foo = grepl("a", Species))
+  out <- data_modify(iris, foo = grepl("a", Species)) # nolint
   expect_identical(out$foo, rep(c(TRUE, FALSE, TRUE), each = 50))
   out <- data_modify(iris, foo = as_expr("grepl(\"a\", Species)"))
   expect_identical(out$foo, rep(c(TRUE, FALSE, TRUE), each = 50))
@@ -731,7 +731,7 @@ test_that("data_modify works with new expressions, grouped_df, different use cas
     c12hour_c = center(c12hour),
     c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
     c12hour_z2 = standardize(c12hour),
-    id = 1:n()
+    id = 1:n() # nolint
   )
 
   new_efc2 <- data_modify(
@@ -739,7 +739,7 @@ test_that("data_modify works with new expressions, grouped_df, different use cas
     as_expr("c12hour_c = center(c12hour)"),
     c12hour_z = as_expr("c12hour_c / sd(c12hour, na.rm = TRUE)"),
     c12hour_z2 = standardize(c12hour),
-    id = 1:n()
+    id = 1:n() # nolint
   )
   expect_equal(head(new_efc1), head(new_efc2), ignore_attr = TRUE, tolerance = 1e-4)
 
@@ -751,7 +751,7 @@ test_that("data_modify works with new expressions, grouped_df, different use cas
   new_efc3 <- data_modify(
     grouped_efc,
     as_expr(s),
-    id = 1:n()
+    id = 1:n() # nolint
   )
   expect_equal(head(new_efc1), head(new_efc3), ignore_attr = TRUE, tolerance = 1e-4)
 
@@ -760,7 +760,7 @@ test_that("data_modify works with new expressions, grouped_df, different use cas
     c12hour_c = center(c12hour),
     c12hour_z = as_expr("c12hour_c / sd(c12hour, na.rm = TRUE)"),
     c12hour_z2 = standardize(c12hour),
-    id = 1:n()
+    id = 1:n() # nolint
   )
   expect_equal(head(new_efc1), head(new_efc4), ignore_attr = TRUE, tolerance = 1e-4)
 })
