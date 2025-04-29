@@ -284,7 +284,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       if (!startsWith(symbol_string, "as_expression") && !startsWith(symbol_string, "{")) {
         insight::format_error(paste0(
           "A variable name for the expression `", symbol_string, "` is missing. ",
-          "Please use something like `new_name = ",  symbol_string, "`."
+          "Please use something like `new_name = ", symbol_string, "`."
         ))
       }
       # next, check if the string-expression includes a name for the new variable
@@ -325,7 +325,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       if (!all(has_names)) {
         insight::format_error(paste0(
           "A variable name for the expression `", symbol_string[!has_names[1]], "` is missing. ",
-          "Please use something like `new_name = ",  symbol_string[!has_names[1]], "`."
+          "Please use something like `new_name = ", symbol_string[!has_names[1]], "`."
         ))
       }
       # extract names (split at =)
@@ -338,7 +338,8 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
           first_part <- split_result[1]
           second_part <- paste(split_result[-1], collapse = "=")
           insight::trim_ws(c(first_part, second_part))
-      })
+        }
+      )
       # extract names (LHS)
       symbol_names <- vapply(symbol_string, function(i) i[1], character(1))
       # extract expressions (RHS)
