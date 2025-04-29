@@ -108,6 +108,9 @@ new_efc <- data_modify(
 )
 head(new_efc)
 
+# attributes - in this case, value and variable labels - are preserved
+str(new_efc)
+
 # using `paste()` to build a string-expression
 to_standardize <- c("Petal.Length", "Sepal.Length")
 data_modify(
@@ -116,9 +119,6 @@ data_modify(
     paste0(to_standardize, "_stand = standardize(", to_standardize, ")")
   )
 )
-
-# attributes - in this case, value and variable labels - are preserved
-str(new_efc)
 
 # overwrite existing variable, remove old variable
 out <- data_modify(iris, Petal.Length = 1 / Sepal.Length, Sepal.Length = NULL)
