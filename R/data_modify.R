@@ -17,8 +17,8 @@
 #'   a <- "abc"
 #'   data_modify(iris, var_abc = a) # var_abc contains "abc"
 #'   ```
-#' - An expression can also be provided as string, however, it must be called
-#'   with `as_expression()`. Example:
+#' - An expression can also be provided as string and wrapped in 
+#' `as_expression()`. Example:
 #'   ```r
 #'   data_modify(iris, as_expression("Sepal.Width = center(Sepal.Width)"))
 #'   # or
