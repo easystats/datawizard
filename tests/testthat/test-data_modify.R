@@ -95,14 +95,14 @@ test_that("data_modify recycling works", {
 })
 
 
-test_that("data_modify recycling works", {
+test_that("data_modify recycling works with grouped df", {
   data(iris)
   d <- data_group(iris, "Species")
   expect_silent(data_modify(d, x = 1, test = 1:2))
 })
 
 
-test_that("data_modify expression in character vector", {
+test_that("data_modify expression in character vector-1", {
   data(iris)
   x <- "var_a = Sepal.Width"
   out <- data_modify(iris, as_expr(x))
@@ -116,7 +116,7 @@ test_that("data_modify expression in character vector", {
 })
 
 
-test_that("data_modify expression in character vector", {
+test_that("data_modify expression in character vector-2", {
   data(iris)
   foo <- function(data) {
     y <- "var_a = Sepal.Width"
@@ -147,7 +147,7 @@ test_that("data_modify expression in character vector", {
 })
 
 
-test_that("data_modify expression in character vector", {
+test_that("data_modify expression in character vector-3", {
   data(iris)
   aa <- "2 * Sepal.Width"
   out <- data_modify(iris, new_var = as_expr(aa))
@@ -186,7 +186,7 @@ test_that("data_modify expression in character vector", {
 })
 
 
-test_that("data_modify expression as character vector", {
+test_that("data_modify expression as character vector-4", {
   data(iris)
   x <- "var_a = Sepal.Width"
   y <- "Sepal_Wz_double = 2 * var_a"
@@ -245,6 +245,13 @@ test_that("data_modify expression as character vector", {
   out <- data_modify(iris, as_expr(c("var_a = Sepal.Width", "Sepal_Wz_double = 2 * var_a")))
   expect_identical(out$var_a, out$Sepal.Width)
   expect_identical(out$Sepal_Wz_double, 2 * out$Sepal.Width)
+})
+
+
+test_that("data_modify works with function as expression", {
+  data(iris)
+  out <- data_modify(iris, foo = grepl("a", Species))
+  expect_identical(out$foo, rep(c(TRUE, FALSE, TRUE), each = 50))
 })
 
 
