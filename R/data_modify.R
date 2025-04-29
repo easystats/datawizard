@@ -217,32 +217,25 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   class_attr <- class(data)
   data <- as.data.frame(data)
 
-  # we check for character vector of expressions, in which case
-  # "dots" should be unnamed
-  if (is.null(names(dots))) {
-    # if we have multiple strings, concatenate them to a character vector
-    # and put it into a list...
-    if (length(dots) > 1) {
-      if (all(vapply(dots, is.character, logical(1)))) {
-        dots <- list(unlist(dots))
-      } else {
-        insight::format_error("You cannot mix string and literal representation of expressions.")
-      }
-    }
-    # expression is given as character string, e.g.
-    # a <- "double_SepWidth = 2 * Sepal.Width"
-    # data_modify(iris, a)
-    # or as character vector, e.g.
-    # data_modify(iris, c("var_a = Sepal.Width / 10", "var_b = Sepal.Width * 10"))
-    character_symbol <- tryCatch(.dynEval(dots[[1]]), error = function(e) NULL)
-    # do we have a character vector? Then we can proceed
-    if (is.character(character_symbol)) {
-      dots <- lapply(character_symbol, function(s) {
-        # turn value from character vector into expression
-        str2lang(.dynEval(s))
-      })
-      names(dots) <- vapply(dots, function(n) insight::safe_deparse(n[[2]]), character(1))
-    }
+  if (length(dots)) {
+    # check is dots are named. Usually, all dots should be named, i.e. include
+    # the name of the new variable. There's only one exception, if a string is
+    # masked as expression, and this string includes the new name, e.g.
+    #
+    # data_modify(iris, as_expression("sepwid = 2 * Sepal.Width"))
+    # a <- "sepwid = 2 * Sepal.Width"
+    # data_modify(iris, as_expression(a))
+    #
+    dots <- .extract_unnamed_expressions(dots, data)
+
+    # next, we check for named expression-tags and convert these into regular
+    # expressions, e.g.
+    #
+    # data_modify(iris, sepwid =  = as_expression("2 * Sepal.Width"))
+    # a <- "2 * Sepal.Width"
+    # data_modify(iris, sepwid = as_expression(a))
+    #
+    dots <- .extract_named_expressions(dots, data)
   }
 
   # create new variables as dummys, do for-loop works
@@ -328,8 +321,14 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       # extract names (split at =)
       symbol_string <- lapply(
         strsplit(symbol_string, "=", fixed = TRUE),
-        insight::trim_ws
-      )
+        function(split_result) {
+          # we may have multiple "=" signs, e.g. when we have the pattern
+          # "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)". In this case
+          # paste remaining parts to one string again
+          first_part <- split_result[1]
+          second_part <- paste(split_result[-1], collapse = "=")
+          insight::trim_ws(c(first_part, second_part))
+      })
       # extract names (LHS)
       symbol_names <- vapply(symbol_string, function(i) i[1], character(1))
       # extract expressions (RHS)
