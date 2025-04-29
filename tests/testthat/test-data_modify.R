@@ -252,6 +252,10 @@ test_that("data_modify works with function as expression", {
   data(iris)
   out <- data_modify(iris, foo = grepl("a", Species))
   expect_identical(out$foo, rep(c(TRUE, FALSE, TRUE), each = 50))
+  out <- data_modify(iris, foo = as_expr("grepl(\"a\", Species)"))
+  expect_identical(out$foo, rep(c(TRUE, FALSE, TRUE), each = 50))
+  out <- data_modify(iris, as_expr("foo = grepl(\"a\", Species)"))
+  expect_identical(out$foo, rep(c(TRUE, FALSE, TRUE), each = 50))
 })
 
 

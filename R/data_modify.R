@@ -357,7 +357,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     }), use.names = FALSE)
     # now we should have the expression as character string. Next, we
     # # remove quotes from strings
-    symbol_string <- gsub("\"", "", symbol_string)
+    symbol_string <- gsub("^\"(.*)\"$", "\\1", symbol_string)
     # check whether we have exact one = sign. We need to have a name definition,
     # i.e. something like "var = a+b" - if the string has no "=" sign, name is
     # definitely missing
@@ -385,7 +385,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # extract names (LHS)
     symbol_names <- vapply(symbol_string, function(i) i[1], character(1))
     # extract expressions (RHS)
-    symbol_string <- lapply(symbol_string, function(i) str2lang(i[2]))
+    symbol_string <- lapply(symbol_string, function(i) str2lang(.fix_quotes(i[2])))
     names(symbol_string) <- symbol_names
     # copy to dots... if we have a character vector, one dot element may
     # return more than one expression elements. Thus, we have to insert /
@@ -441,7 +441,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
         }
       }), use.names = FALSE)
       # remove quotes from strings and save symbol name
-      symbol_string <- gsub("\"", "", symbol_string)
+      symbol_string <- .fix_quotes(gsub("^\"(.*)\"$", "\\1", symbol_string))
       symbol_name <- names(dots)[i]
       # convert string into language and replace in dots
       return_value <- str2lang(symbol_string)
@@ -454,6 +454,16 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 
 
 # helper -------------
+
+
+.fix_quotes <- function(symbol_string) {
+  # if user uses double-quotes insinde double-quotes, these are escaped by
+  # "\", e.g. data_modify(iris, foo = as_expr("grepl(\"a\", Species)"))
+  # In this case, we have double-backslashes, which need to be removed.
+  # Furthermore, to avoid adding back backslashes, we replace by single quotes
+  gsub("\\", "", gsub("\"", "'", symbol_string, fixed = TRUE), fixed = TRUE)
+}
+
 
 .modify_at <- function(data, .at, .if, .modify) {
   # check if ".at" or ".if" is defined, but not ".modify"
