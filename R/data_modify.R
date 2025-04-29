@@ -76,6 +76,15 @@
 #' )
 #' head(new_efc)
 #'
+#' # using a character vector, provided a variable
+#' xpr <- c(
+#'   "c12hour_c = center(c12hour)",
+#'   "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
+#'   "c12hour_z2 = standardize(c12hour)"
+#' )
+#' new_efc <- data_modify(efc, as_expression(xpr))
+#' head(new_efc)
+#'
 #' # using character strings, provided as variable
 #' stand <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
 #' new_efc <- data_modify(
@@ -104,10 +113,16 @@
 #' head(new_efc)
 #'
 #' # works from inside functions
-#' foo <- function(data, ...) {
+#' foo1 <- function(data, ...) {
 #'   head(data_modify(data, ...))
 #' }
-#' foo(iris, SW_fraction = Sepal.Width / 10)
+#' foo1(iris, SW_fraction = Sepal.Width / 10)
+#'
+#' # also with string arguments, using `as_expression()`
+#' foo2 <- function(data, xpr) {
+#'   head(data_modify(data, as_expression(xpr)))
+#' }
+#' foo2(iris, "SW_fraction = Sepal.Width / 10")
 #'
 #' # modify at specific positions or if condition is met
 #' d <- iris[1:5, ]
@@ -266,8 +281,14 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 # expression processing ----------------------------------------------------
 
 .extract_unnamed_expressions <- function(dots, data) {
+  # dots are only unnamed, when the full expression is saved in a string,
+  # e.g. data_modify(iris, as_expression("sepwid = 2 * Sepal.Width")).
+  # Thus, we know we *have to* find an expression here, and the string value
+  # *must* contain a name definition. If not, fail. If yes, convert string
+  # into a language expression...
+
   if (is.null(names(dots)) || !all(nzchar(names(dots)))) {
-    # find which dots are unnamed, check for expression
+    # find which dots are unnamed, check those for expressions
     if (is.null(names(dots))) {
       unnamed_dots <- seq_along(dots)
     } else {
@@ -275,12 +296,13 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     }
 
     for (i in rev(unnamed_dots)) {
+      # copy dot-element and convert to string for manipulation
       dot_element <- dots[[i]]
       symbol_string <- insight::safe_deparse(dot_element)
       # sanity check
       if (is.null(symbol_string)) next
-      # we only allow unnamed if these are masked as expression. String values
-      # or numeric values require a named expression
+      # we only allow unnamed elements if these are masked as expression. String
+      # values or numeric values require a named expression
       if (!startsWith(symbol_string, "as_expression") && !startsWith(symbol_string, "{")) {
         insight::format_error(paste0(
           "A variable name for the expression `", symbol_string, "` is missing. ",
@@ -345,7 +367,9 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       # extract expressions (RHS)
       symbol_string <- lapply(symbol_string, function(i) str2lang(i[2]))
       names(symbol_string) <- symbol_names
-      # copy to dots
+      # copy to dots... if we have a character vector, one dot element may
+      # return more than one expression elements. Thus, we have to insert /
+      # replace the old element by one or more new elements
       if (length(dots) == 1) {
         return_value <- symbol_string
       } else if (i == 1) {

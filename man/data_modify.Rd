@@ -94,6 +94,15 @@ new_efc <- data_modify(
 )
 head(new_efc)
 
+# using a character vector, provided a variable
+xpr <- c(
+  "c12hour_c = center(c12hour)",
+  "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
+  "c12hour_z2 = standardize(c12hour)"
+)
+new_efc <- data_modify(efc, as_expression(xpr))
+head(new_efc)
+
 # using character strings, provided as variable
 stand <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
 new_efc <- data_modify(
@@ -122,10 +131,16 @@ new_efc <- data_modify(
 head(new_efc)
 
 # works from inside functions
-foo <- function(data, ...) {
+foo1 <- function(data, ...) {
   head(data_modify(data, ...))
 }
-foo(iris, SW_fraction = Sepal.Width / 10)
+foo1(iris, SW_fraction = Sepal.Width / 10)
+
+# also with string arguments, using `as_expression()`
+foo2 <- function(data, xpr) {
+  head(data_modify(data, as_expression(xpr)))
+}
+foo2(iris, "SW_fraction = Sepal.Width / 10")
 
 # modify at specific positions or if condition is met
 d <- iris[1:5, ]
