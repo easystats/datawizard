@@ -297,12 +297,20 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       # remove c(), split at comma, if we have a vector of expressions
       if (startsWith(symbol_string, "c(")) {
         symbol_string <- gsub("c\\((.*)\\)", "\\1", symbol_string)
-        symbol_string <- insight::trim_ws(unlist(strsplit(symbol_string, ",", fixed = TRUE), use.names = FALSE))
+        # only split at first comma
+        pattern <- ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)" # suggestion by Co-pilot
+        # Locate commas not inside quotes
+        symbol_string <- insight::trim_ws(unlist(strsplit(symbol_string, pattern, perl = TRUE), use.names = FALSE))
       }
       # check if we have any symbols instead of strings as expression
       symbol_string <- unlist(lapply(symbol_string, function(s) {
         if (!grepl("\"", s, fixed = TRUE)) {
-          .dynEval(str2lang(s), data = data)
+          out <- .dynEval(str2lang(s))
+          # dynEval might fail if we don't look in data - sanity check
+          if (identical(out, s)) {
+            out <- .dynEval(str2lang(s), data = data)
+          }
+          out
         } else {
           s
         }
@@ -372,7 +380,12 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       # and convert result into expression
       symbol_string <- unlist(lapply(symbol_string, function(s) {
         if (!grepl("\"", s, fixed = TRUE)) {
-          .dynEval(str2lang(s), data = data)
+          out <- .dynEval(str2lang(s))
+          # dynEval might fail if we don't look in data - sanity check
+          if (identical(out, s)) {
+            out <- .dynEval(str2lang(s), data = data)
+          }
+          out
         } else {
           s
         }

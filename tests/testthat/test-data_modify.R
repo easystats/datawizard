@@ -24,7 +24,7 @@ test_that("data_modify works with strings", {
   data(iris)
   out <- data_modify(
     iris,
-    "Sepal_W_z = standardize(Sepal.Width)"
+    as_expression("Sepal_W_z = standardize(Sepal.Width)")
   )
   expect_equal(
     out$Sepal_W_z,
@@ -34,10 +34,10 @@ test_that("data_modify works with strings", {
   )
   out <- data_modify(
     iris,
-    c(
+    as_expression(c(
       "Sepal_W_z = standardize(Sepal.Width)",
       "Sepal_Wz_double = 2 * Sepal_W_z"
-    )
+    ))
   )
   expect_equal(
     out$Sepal_Wz_double,
@@ -65,10 +65,10 @@ test_that("data_modify preserves labels", {
   )
   out <- data_modify(
     efc,
-    c(
+    as_expression(c(
       "c12hour_c = center(c12hour)",
       "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"
-    )
+    ))
   )
   expect_identical(
     attributes(out$c12hour_c)$label,
@@ -103,7 +103,7 @@ test_that("data_modify recycling works", {
 test_that("data_modify expression in character vector", {
   data(iris)
   x <- "var_a = Sepal.Width"
-  out <- data_modify(iris, x)
+  out <- data_modify(iris, as_expression(x))
   expect_identical(
     colnames(out),
     c(
@@ -632,3 +632,122 @@ withr::with_environment(
     expect_identical(out$y, "x")
   })
 )
+
+
+
+
+
+library(datawizard)
+
+data_modify(iris, as_expression("sepwid = 2 * Sepal.Width")) |> head()
+
+data_modify(
+    iris,
+    as_expression(c("sepwid = 2 * Sepal.Width", "seplen = 5 * Sepal.Length"))
+) |> head()
+
+data_modify(iris, sepwid = as_expression("2 * Sepal.Width")) |> head()
+
+data_modify(
+    iris,
+    sepwid = as_expression("2 * Sepal.Width"),
+    seplen = {"5 * Sepal.Length"}
+) |> head()
+
+e <- "sepwid = 2 * Sepal.Width"
+data_modify(iris, as_expression(e)) |> head()
+
+e <- c("sepwid = 2 * Sepal.Width", "seplen = 5 * Sepal.Length")
+data_modify(iris, as_expression(e)) |> head()
+
+e <- "2 * Sepal.Width"
+data_modify(iris, sepwid = as_expression(e)) |> head()
+
+e <- "2 * Sepal.Width"
+data_modify(iris, sepwid = as_expression(e), seplen = 5 * Sepal.Length) |> head()
+
+e <- "2 * Sepal.Width"
+f <- "half_petal = 0.5 * Petal.Length"
+a <- "string"
+num <- 1:5
+data_modify(
+    iris,
+    sepwid = as_expression(e),
+    seplen = 5 * Sepal.Length,
+    {f},
+    new_var = a,
+    new_num = num,
+    new_var2 = "ho",
+    new_num2 = 4:6,
+    Sepal.Length = NULL,
+    Petal.Length = NULL,
+    Sepal.Width = NULL,
+    Petal.Width = NULL
+) |> head()
+
+
+d <- data.frame()
+for (param in letters[c(1, 2, 5)]) {
+  out <- data.frame(x = as.numeric(as.factor(param)))
+  out <- data_modify(out, Parameter = param)
+  d <- rbind(out, d)
+}
+d
+
+data_modify(iris, sepwid = "2 * Sepal.Widht") |> head()
+
+
+data(efc, package = "datawizard")
+grouped_efc <- data_group(efc, "c172code")
+new_efc <- data_modify(
+  grouped_efc,
+  c12hour_c = center(c12hour),
+  c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
+  c12hour_z2 = standardize(c12hour),
+  id = 1:n()
+)
+head(new_efc)
+
+
+new_efc <- data_modify(
+  grouped_efc,
+  as_expression("c12hour_c = center(c12hour)"),
+  c12hour_z = as_expression("c12hour_c / sd(c12hour, na.rm = TRUE)"),
+  c12hour_z2 = standardize(c12hour),
+  id = 1:n()
+)
+head(new_efc)
+
+s <- c(
+  "c12hour_c = center(c12hour)",
+  "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
+  "c12hour_z2 = standardize(c12hour)"
+)
+new_efc <- data_modify(
+  grouped_efc,
+  as_expression(s),
+  id = 1:n()
+)
+head(new_efc)
+
+new_efc <- data_modify(
+  grouped_efc,
+  c12hour_c = center(c12hour),
+  c12hour_z = as_expression("c12hour_c / sd(c12hour, na.rm = TRUE)"),
+  c12hour_z2 = standardize(c12hour),
+  id = 1:n()
+)
+head(new_efc)
+
+
+s <- c(
+  "c12hour_c = center(c12hour)",
+  "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
+  "c12hour_z2 = standardize(c12hour)"
+)
+new_efc <- data_modify(
+  efc,
+  as_expression(s),
+  id = 1:n()
+)
+head(new_efc)
