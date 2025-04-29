@@ -468,7 +468,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 
 
 .fix_quotes <- function(symbol_string) {
-  # if user uses double-quotes insinde double-quotes, these are escaped by
+  # if user uses double-quotes inside double-quotes, these are escaped by
   # "\", e.g. data_modify(iris, foo = as_expr("grepl(\"a\", Species)"))
   # In this case, we have double-backslashes, which need to be removed.
   # Furthermore, to avoid adding back backslashes, we replace by single quotes
