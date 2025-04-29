@@ -471,7 +471,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # evaluate symbol
     new_variable <- try(with(data, eval(symbol)), silent = TRUE)
     # if evaluation fails, we have a value - and directly use it
-    if (inherits(new_variable, "try-error")) {
+    if (inherits(new_variable, "try-error") && !is.null(eval_symbol)) {
       new_variable <- eval_symbol
     }
   }
