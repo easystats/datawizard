@@ -375,14 +375,14 @@ efc |>
 ```{r modify1, eval = evaluate_chunk, echo = FALSE}
 ```
 
-`data_modify()` supports expressions as strings via its `as_expression()` helper function.
+`data_modify()` supports expressions as strings via its `as_expr()` helper function.
 
 ```{r eval=evaluate_chunk}
 new_exp <- c(
   "c12hour_c = center(c12hour)",
   "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"
 )
-data_modify(efc, as_expression(new_exp))
+data_modify(efc, as_expr(new_exp))
 ```
 
 This makes it easy to use it in custom functions:
@@ -392,7 +392,7 @@ miles_to_km <- function(data, var) {
   km <- paste0("km = ", var, "* 1.609344")
   data_modify(
     data,
-    as_expression(km)
+    as_expr(km)
   )
 }
 
