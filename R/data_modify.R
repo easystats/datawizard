@@ -17,7 +17,7 @@
 #'   a <- "abc"
 #'   data_modify(iris, var_abc = a) # var_abc contains "abc"
 #'   ```
-#' - An expression can also be provided as string and wrapped in 
+#' - An expression can also be provided as string and wrapped in
 #' `as_expression()`. Example:
 #'   ```r
 #'   data_modify(iris, as_expression("Sepal.Width = center(Sepal.Width)"))
@@ -182,7 +182,7 @@ data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # a <- "sepwid = 2 * Sepal.Width"
     # data_modify(iris, as_expression(a))
     #
-    dots <- .extract_unnamed_expressions(dots, data)
+    dots <- .process_unnamed_expressions(dots, data)
 
     # next, we check for named expression-tags and convert these into regular
     # expressions, e.g.
@@ -191,7 +191,7 @@ data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # a <- "2 * Sepal.Width"
     # data_modify(iris, sepwid = as_expression(a))
     #
-    dots <- .extract_named_expressions(dots, data)
+    dots <- .process_named_expressions(dots, data)
 
     for (i in seq_along(dots)) {
       # create new variable
@@ -241,7 +241,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # a <- "sepwid = 2 * Sepal.Width"
     # data_modify(iris, as_expression(a))
     #
-    dots <- .extract_unnamed_expressions(dots, data)
+    dots <- .process_unnamed_expressions(dots, data)
 
     # next, we check for named expression-tags and convert these into regular
     # expressions, e.g.
@@ -250,7 +250,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # a <- "2 * Sepal.Width"
     # data_modify(iris, sepwid = as_expression(a))
     #
-    dots <- .extract_named_expressions(dots, data)
+    dots <- .process_named_expressions(dots, data)
   }
 
   # create new variables as dummys, do for-loop works
@@ -280,7 +280,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 
 # expression processing ----------------------------------------------------
 
-.extract_unnamed_expressions <- function(dots, data) {
+.process_unnamed_expressions <- function(dots, data) {
   # dots are only unnamed, when the full expression is saved in a string,
   # e.g. data_modify(iris, as_expression("sepwid = 2 * Sepal.Width")).
   # Thus, we know we *have to* find an expression here, and the string value
@@ -397,10 +397,10 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 }
 
 
-.extract_named_expressions <- function(dots, data) {
-  # this is basically a shorte version of ".extract_unnamed_expressions()",
+.process_named_expressions <- function(dots, data) {
+  # this is basically a shorte version of ".process_unnamed_expressions()",
   # because we don't need to extact the name definition of the string, which
-  # makes the handling easier. See ".extract_unnamed_expressions()" for a more
+  # makes the handling easier. See ".process_unnamed_expressions()" for a more
   # comprehensive documentation of the single steps.
 
   for (i in seq_along(dots)) {
