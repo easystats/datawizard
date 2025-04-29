@@ -275,8 +275,8 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     }
 
     for (i in rev(unnamed_dots)) {
-      d <- dots[[i]]
-      symbol_string <- insight::safe_deparse(d)
+      dot_element <- dots[[i]]
+      symbol_string <- insight::safe_deparse(dot_element)
       # sanity check
       if (is.null(symbol_string)) next
       # we only allow unnamed if these are masked as expression. String values
@@ -290,9 +290,11 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       # next, check if the string-expression includes a name for the new variable
       # therefore, we remove the "as_expression()" token (or its alias "{}")
       if (startsWith(symbol_string, "as_expression")) {
-        symbol_string <- gsub("as_expression\\((.*)\\)", "\\1", symbol_string)
+        symbol_string <- insight::trim_ws(
+          gsub("as_expression\\((.*)\\)", "\\1", symbol_string)
+        )
       } else if (startsWith(symbol_string, "{")) {
-        symbol_string <- gsub("\\{(.*)\\}", "\\1", symbol_string)
+        symbol_string <- insight::trim_ws(gsub("\\{(.*)\\}", "\\1", symbol_string))
       }
       # remove c(), split at comma, if we have a vector of expressions
       if (startsWith(symbol_string, "c(")) {
