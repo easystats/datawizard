@@ -11,7 +11,7 @@ used."><meta property="og:image" content="https://easystats.github.io/datawizard
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.14</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,19 +85,30 @@ used.</p>
 values or recoding of those new variables. These expressions can be one of:</p><ul><li><p>A sequence of named, literal expressions, where the left-hand side refers
 to the name of the new variable, while the right-hand side represent the
 values of the new variable. Example: <code>Sepal.Width = center(Sepal.Width)</code>.</p></li>
-<li><p>A sequence of string values, representing expressions.</p></li>
-<li><p>A variable that contains a string representation of the expression. Example:</p>
-<p></p><div class="sourceCode r"><pre><code><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="st">"2 * Sepal.Width"</span></span>
-<span><span class="fu"><a href="../reference/data_modify.html">data_modify</a></span><span class="op">(</span><span class="va">iris</span>, <span class="va">a</span><span class="op">)</span></span></code></pre><p></p></div></li>
-<li><p>A character vector of expressions. Example:
-<code>c("SW_double = 2 * Sepal.Width", "SW_fraction = SW_double / 10")</code>. This
-type of expression cannot be mixed with other expressions, i.e. if a
-character vector is provided, you may not add further elements to <code>...</code>.</p></li>
+<li><p>A vector of length 1 (which will be recycled to match the number of rows
+in the data), or of same length as the data.</p></li>
+<li><p>A variable that contains a value to be used. Example:</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="st">"abc"</span></span>
+<span><span class="fu"><a href="../reference/data_modify.html">data_modify</a></span><span class="op">(</span><span class="va">iris</span>, var_abc <span class="op">=</span> <span class="va">a</span><span class="op">)</span> <span class="co"># var_abc contains "abc"</span></span></code></pre><p></p></div></li>
+<li><p>An expression can also be provided as string and wrapped in
+<code>as_expr()</code>. Example:</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/data_modify.html">data_modify</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu">as_expr</span><span class="op">(</span><span class="st">"Sepal.Width = center(Sepal.Width)"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># or</span></span>
+<span><span class="va">a</span> <span class="op">&lt;-</span> <span class="st">"center(Sepal.Width)"</span></span>
+<span><span class="fu"><a href="../reference/data_modify.html">data_modify</a></span><span class="op">(</span><span class="va">iris</span>, Sepal.Width <span class="op">=</span> <span class="fu">as_expr</span><span class="op">(</span><span class="va">a</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># or</span></span>
+<span><span class="va">a</span> <span class="op">&lt;-</span> <span class="st">"Sepal.Width = center(Sepal.Width)"</span></span>
+<span><span class="fu"><a href="../reference/data_modify.html">data_modify</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu">as_expr</span><span class="op">(</span><span class="va">a</span><span class="op">)</span><span class="op">)</span></span></code></pre><p></p></div>
+<p>Note that <code>as_expr()</code> is no real function, which cannot be used outside
+of <code>data_modify()</code>, and hence it is not exported nor documented. Rather,
+it is only used for internally processing expressions.</p></li>
 <li><p>Using <code>NULL</code> as right-hand side removes a variable from the data frame.
 Example: <code>Petal.Width = NULL</code>.</p></li>
-<li><p>For data frames (including grouped ones), the function <code><a href="https://nathaneastwood.github.io/poorman/reference/context.html" class="external-link">n()</a></code> can be used to count the
-number of observations and thereby, for instance, create index values by
-using <code>id = 1:n()</code> or <code>id = 3:(n()+2)</code> and similar.</p></li>
+<li><p>For data frames (including grouped ones), the function <code><a href="https://nathaneastwood.github.io/poorman/reference/context.html" class="external-link">n()</a></code> can be used to
+count the number of observations and thereby, for instance, create index
+values by using <code>id = 1:n()</code> or <code>id = 3:(n()+2)</code> and similar. Note that,
+like <code>as_expr()</code>, <code><a href="https://nathaneastwood.github.io/poorman/reference/context.html" class="external-link">n()</a></code> is also no true function and cannot be used outside
+of <code>data_modify()</code>.</p></li>
 </ul><p>Note that newly created variables can be used in subsequent expressions,
 including <code>.at</code> or <code>.if</code>. See also 'Examples'.</p></dd>
 
@@ -151,10 +162,26 @@ characters.</p>
 <span class="r-in"><span><span class="co"># using strings instead of literal expressions</span></span></span>
 <span class="r-in"><span><span class="va">new_efc</span> <span class="op">&lt;-</span> <span class="fu">data_modify</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">efc</span>,</span></span>
+<span class="r-in"><span>  <span class="fu">as_expr</span><span class="op">(</span><span class="st">"c12hour_c = center(c12hour)"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu">as_expr</span><span class="op">(</span><span class="st">"c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu">as_expr</span><span class="op">(</span><span class="st">"c12hour_z2 = standardize(c12hour)"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">new_efc</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   c12hour e16sex e42dep c172code neg_c_7 c12hour_c  c12hour_z c12hour_z2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      16      2      3        2      12 -69.65306 -1.0466657 -1.0466657</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     148      2      3        2      20  62.34694  0.9368777  0.9368777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      70      2      3        1      11 -15.65306 -0.2352161 -0.2352161</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      NA      2   &lt;NA&gt;        2      10        NA         NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     168      2      4        2      12  82.34694  1.2374146  1.2374146</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      16      2      4        2      19 -69.65306 -1.0466657 -1.0466657</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># using a character vector, provided a variable</span></span></span>
+<span class="r-in"><span><span class="va">xpr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="st">"c12hour_c = center(c12hour)"</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"c12hour_z2 = standardize(c12hour)"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">new_efc</span> <span class="op">&lt;-</span> <span class="fu">data_modify</span><span class="op">(</span><span class="va">efc</span>, <span class="fu">as_expr</span><span class="op">(</span><span class="va">xpr</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">new_efc</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   c12hour e16sex e42dep c172code neg_c_7 c12hour_c  c12hour_z c12hour_z2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      16      2      3        2      12 -69.65306 -1.0466657 -1.0466657</span>
@@ -169,23 +196,8 @@ characters.</p>
 <span class="r-in"><span><span class="va">new_efc</span> <span class="op">&lt;-</span> <span class="fu">data_modify</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">efc</span>,</span></span>
 <span class="r-in"><span>  c12hour_c <span class="op">=</span> <span class="fu"><a href="center.html">center</a></span><span class="op">(</span><span class="va">c12hour</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  c12hour_z <span class="op">=</span> <span class="va">stand</span></span></span>
+<span class="r-in"><span>  c12hour_z <span class="op">=</span> <span class="fu">as_expr</span><span class="op">(</span><span class="va">stand</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">new_efc</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   c12hour e16sex e42dep c172code neg_c_7 c12hour_c  c12hour_z</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      16      2      3        2      12 -69.65306 -1.0466657</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     148      2      3        2      20  62.34694  0.9368777</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      70      2      3        1      11 -15.65306 -0.2352161</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      NA      2   &lt;NA&gt;        2      10        NA         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     168      2      4        2      12  82.34694  1.2374146</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      16      2      4        2      19 -69.65306 -1.0466657</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># providing expressions as character vector</span></span></span>
-<span class="r-in"><span><span class="va">new_exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="st">"c12hour_c = center(c12hour)"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">new_efc</span> <span class="op">&lt;-</span> <span class="fu">data_modify</span><span class="op">(</span><span class="va">efc</span>, <span class="va">new_exp</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">new_efc</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   c12hour e16sex e42dep c172code neg_c_7 c12hour_c  c12hour_z</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      16      2      3        2      12 -69.65306 -1.0466657</span>
@@ -225,6 +237,317 @@ characters.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "robust")= logi FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "label")= chr "average number of hours of care per week"</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># using `paste()` to build a string-expression</span></span></span>
+<span class="r-in"><span><span class="va">to_standardize</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Length"</span>, <span class="st">"Sepal.Length"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">data_modify</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">iris</span>,</span></span>
+<span class="r-in"><span>  <span class="fu">as_expr</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">to_standardize</span>, <span class="st">"_stand = standardize("</span>, <span class="va">to_standardize</span>, <span class="st">")"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Sepal.Length Sepal.Width Petal.Length Petal.Width    Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1            5.1         3.5          1.4         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2            4.9         3.0          1.4         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3            4.7         3.2          1.3         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4            4.6         3.1          1.5         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5            5.0         3.6          1.4         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6            5.4         3.9          1.7         0.4     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7            4.6         3.4          1.4         0.3     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8            5.0         3.4          1.5         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9            4.4         2.9          1.4         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10           4.9         3.1          1.5         0.1     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11           5.4         3.7          1.5         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12           4.8         3.4          1.6         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13           4.8         3.0          1.4         0.1     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14           4.3         3.0          1.1         0.1     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15           5.8         4.0          1.2         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16           5.7         4.4          1.5         0.4     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17           5.4         3.9          1.3         0.4     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18           5.1         3.5          1.4         0.3     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19           5.7         3.8          1.7         0.3     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20           5.1         3.8          1.5         0.3     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21           5.4         3.4          1.7         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22           5.1         3.7          1.5         0.4     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23           4.6         3.6          1.0         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24           5.1         3.3          1.7         0.5     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25           4.8         3.4          1.9         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26           5.0         3.0          1.6         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27           5.0         3.4          1.6         0.4     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28           5.2         3.5          1.5         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29           5.2         3.4          1.4         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30           4.7         3.2          1.6         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31           4.8         3.1          1.6         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32           5.4         3.4          1.5         0.4     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33           5.2         4.1          1.5         0.1     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34           5.5         4.2          1.4         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35           4.9         3.1          1.5         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36           5.0         3.2          1.2         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37           5.5         3.5          1.3         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38           4.9         3.6          1.4         0.1     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39           4.4         3.0          1.3         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40           5.1         3.4          1.5         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41           5.0         3.5          1.3         0.3     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42           4.5         2.3          1.3         0.3     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43           4.4         3.2          1.3         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44           5.0         3.5          1.6         0.6     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45           5.1         3.8          1.9         0.4     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46           4.8         3.0          1.4         0.3     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47           5.1         3.8          1.6         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48           4.6         3.2          1.4         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49           5.3         3.7          1.5         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50           5.0         3.3          1.4         0.2     setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51           7.0         3.2          4.7         1.4 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52           6.4         3.2          4.5         1.5 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53           6.9         3.1          4.9         1.5 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54           5.5         2.3          4.0         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55           6.5         2.8          4.6         1.5 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56           5.7         2.8          4.5         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57           6.3         3.3          4.7         1.6 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58           4.9         2.4          3.3         1.0 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59           6.6         2.9          4.6         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60           5.2         2.7          3.9         1.4 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61           5.0         2.0          3.5         1.0 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62           5.9         3.0          4.2         1.5 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63           6.0         2.2          4.0         1.0 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64           6.1         2.9          4.7         1.4 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65           5.6         2.9          3.6         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66           6.7         3.1          4.4         1.4 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67           5.6         3.0          4.5         1.5 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68           5.8         2.7          4.1         1.0 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69           6.2         2.2          4.5         1.5 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70           5.6         2.5          3.9         1.1 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71           5.9         3.2          4.8         1.8 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72           6.1         2.8          4.0         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73           6.3         2.5          4.9         1.5 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74           6.1         2.8          4.7         1.2 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75           6.4         2.9          4.3         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76           6.6         3.0          4.4         1.4 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77           6.8         2.8          4.8         1.4 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78           6.7         3.0          5.0         1.7 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79           6.0         2.9          4.5         1.5 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80           5.7         2.6          3.5         1.0 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81           5.5         2.4          3.8         1.1 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82           5.5         2.4          3.7         1.0 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83           5.8         2.7          3.9         1.2 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84           6.0         2.7          5.1         1.6 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85           5.4         3.0          4.5         1.5 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86           6.0         3.4          4.5         1.6 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87           6.7         3.1          4.7         1.5 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88           6.3         2.3          4.4         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89           5.6         3.0          4.1         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90           5.5         2.5          4.0         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91           5.5         2.6          4.4         1.2 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92           6.1         3.0          4.6         1.4 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93           5.8         2.6          4.0         1.2 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94           5.0         2.3          3.3         1.0 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95           5.6         2.7          4.2         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96           5.7         3.0          4.2         1.2 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97           5.7         2.9          4.2         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98           6.2         2.9          4.3         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99           5.1         2.5          3.0         1.1 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100          5.7         2.8          4.1         1.3 versicolor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101          6.3         3.3          6.0         2.5  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 102          5.8         2.7          5.1         1.9  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103          7.1         3.0          5.9         2.1  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104          6.3         2.9          5.6         1.8  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 105          6.5         3.0          5.8         2.2  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 106          7.6         3.0          6.6         2.1  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 107          4.9         2.5          4.5         1.7  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 108          7.3         2.9          6.3         1.8  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 109          6.7         2.5          5.8         1.8  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110          7.2         3.6          6.1         2.5  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 111          6.5         3.2          5.1         2.0  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 112          6.4         2.7          5.3         1.9  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 113          6.8         3.0          5.5         2.1  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 114          5.7         2.5          5.0         2.0  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 115          5.8         2.8          5.1         2.4  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 116          6.4         3.2          5.3         2.3  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 117          6.5         3.0          5.5         1.8  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 118          7.7         3.8          6.7         2.2  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 119          7.7         2.6          6.9         2.3  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 120          6.0         2.2          5.0         1.5  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 121          6.9         3.2          5.7         2.3  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 122          5.6         2.8          4.9         2.0  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 123          7.7         2.8          6.7         2.0  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 124          6.3         2.7          4.9         1.8  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 125          6.7         3.3          5.7         2.1  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 126          7.2         3.2          6.0         1.8  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 127          6.2         2.8          4.8         1.8  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 128          6.1         3.0          4.9         1.8  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 129          6.4         2.8          5.6         2.1  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 130          7.2         3.0          5.8         1.6  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 131          7.4         2.8          6.1         1.9  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 132          7.9         3.8          6.4         2.0  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 133          6.4         2.8          5.6         2.2  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 134          6.3         2.8          5.1         1.5  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 135          6.1         2.6          5.6         1.4  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 136          7.7         3.0          6.1         2.3  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 137          6.3         3.4          5.6         2.4  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 138          6.4         3.1          5.5         1.8  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 139          6.0         3.0          4.8         1.8  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 140          6.9         3.1          5.4         2.1  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 141          6.7         3.1          5.6         2.4  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 142          6.9         3.1          5.1         2.3  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 143          5.8         2.7          5.1         1.9  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 144          6.8         3.2          5.9         2.3  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 145          6.7         3.3          5.7         2.5  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146          6.7         3.0          5.2         2.3  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147          6.3         2.5          5.0         1.9  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148          6.5         3.0          5.2         2.0  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149          6.2         3.4          5.4         2.3  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150          5.9         3.0          5.1         1.8  virginica</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Petal.Length_stand Sepal.Length_stand</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          -1.33575163        -0.89767388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          -1.33575163        -1.13920048</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          -1.39239929        -1.38072709</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          -1.27910398        -1.50149039</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          -1.33575163        -1.01843718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          -1.16580868        -0.53538397</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          -1.33575163        -1.50149039</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          -1.27910398        -1.01843718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9          -1.33575163        -1.74301699</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10         -1.27910398        -1.13920048</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11         -1.27910398        -0.53538397</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12         -1.22245633        -1.25996379</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13         -1.33575163        -1.25996379</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14         -1.50569459        -1.86378030</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15         -1.44904694        -0.05233076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16         -1.27910398        -0.17309407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17         -1.39239929        -0.53538397</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18         -1.33575163        -0.89767388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19         -1.16580868        -0.17309407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20         -1.27910398        -0.89767388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21         -1.16580868        -0.53538397</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22         -1.27910398        -0.89767388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23         -1.56234224        -1.50149039</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24         -1.16580868        -0.89767388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25         -1.05251337        -1.25996379</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26         -1.22245633        -1.01843718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27         -1.22245633        -1.01843718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28         -1.27910398        -0.77691058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29         -1.33575163        -0.77691058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30         -1.22245633        -1.38072709</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31         -1.22245633        -1.25996379</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32         -1.27910398        -0.53538397</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33         -1.27910398        -0.77691058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34         -1.33575163        -0.41462067</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35         -1.27910398        -1.13920048</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36         -1.44904694        -1.01843718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37         -1.39239929        -0.41462067</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38         -1.33575163        -1.13920048</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39         -1.39239929        -1.74301699</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40         -1.27910398        -0.89767388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41         -1.39239929        -1.01843718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42         -1.39239929        -1.62225369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43         -1.39239929        -1.74301699</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44         -1.22245633        -1.01843718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45         -1.05251337        -0.89767388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46         -1.33575163        -1.25996379</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47         -1.22245633        -0.89767388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48         -1.33575163        -1.50149039</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49         -1.27910398        -0.65614727</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50         -1.33575163        -1.01843718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51          0.53362088         1.39682886</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52          0.42032558         0.67224905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53          0.64691619         1.27606556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54          0.13708732        -0.41462067</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55          0.47697323         0.79301235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56          0.42032558        -0.17309407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57          0.53362088         0.55148575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58         -0.25944625        -1.13920048</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59          0.47697323         0.91377565</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60          0.08043967        -0.77691058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61         -0.14615094        -1.01843718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62          0.25038262         0.06843254</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63          0.13708732         0.18919584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64          0.53362088         0.30995914</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65         -0.08950329        -0.29385737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66          0.36367793         1.03453895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67          0.42032558        -0.29385737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68          0.19373497        -0.05233076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69          0.42032558         0.43072244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70          0.08043967        -0.29385737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71          0.59026853         0.06843254</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72          0.13708732         0.30995914</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73          0.64691619         0.55148575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74          0.53362088         0.30995914</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75          0.30703027         0.67224905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76          0.36367793         0.91377565</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77          0.59026853         1.15530226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78          0.70356384         1.03453895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79          0.42032558         0.18919584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80         -0.14615094        -0.17309407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81          0.02379201        -0.41462067</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82         -0.03285564        -0.41462067</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83          0.08043967        -0.05233076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84          0.76021149         0.18919584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85          0.42032558        -0.53538397</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86          0.42032558         0.18919584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87          0.53362088         1.03453895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88          0.36367793         0.55148575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89          0.19373497        -0.29385737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90          0.13708732        -0.41462067</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91          0.36367793        -0.41462067</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92          0.47697323         0.30995914</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93          0.13708732        -0.05233076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94         -0.25944625        -1.01843718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95          0.25038262        -0.29385737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96          0.25038262        -0.17309407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97          0.25038262        -0.17309407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98          0.30703027         0.43072244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99         -0.42938920        -0.89767388</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100         0.19373497        -0.17309407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101         1.27004036         0.55148575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 102         0.76021149        -0.05233076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103         1.21339271         1.51759216</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104         1.04344975         0.55148575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 105         1.15674505         0.79301235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 106         1.60992627         2.12140867</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 107         0.42032558        -1.13920048</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 108         1.43998331         1.75911877</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 109         1.15674505         1.03453895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110         1.32668801         1.63835547</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 111         0.76021149         0.79301235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 112         0.87350679         0.67224905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 113         0.98680210         1.15530226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 114         0.70356384        -0.17309407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 115         0.76021149        -0.05233076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 116         0.87350679         0.67224905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 117         0.98680210         0.79301235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 118         1.66657392         2.24217198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 119         1.77986923         2.24217198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 120         0.70356384         0.18919584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 121         1.10009740         1.27606556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 122         0.64691619        -0.29385737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 123         1.66657392         2.24217198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 124         0.64691619         0.55148575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 125         1.10009740         1.03453895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 126         1.27004036         1.63835547</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 127         0.59026853         0.43072244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 128         0.64691619         0.30995914</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 129         1.04344975         0.67224905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 130         1.15674505         1.63835547</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 131         1.32668801         1.87988207</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 132         1.49663097         2.48369858</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 133         1.04344975         0.67224905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 134         0.76021149         0.55148575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 135         1.04344975         0.30995914</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 136         1.32668801         2.24217198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 137         1.04344975         0.55148575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 138         0.98680210         0.67224905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 139         0.59026853         0.18919584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 140         0.93015445         1.27606556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 141         1.04344975         1.03453895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 142         0.76021149         1.27606556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 143         0.76021149        -0.05233076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 144         1.21339271         1.15530226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 145         1.10009740         1.03453895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146         0.81685914         1.03453895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147         0.70356384         0.55148575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148         0.81685914         0.79301235</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149         0.93015445         0.43072244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150         0.76021149         0.06843254</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># overwrite existing variable, remove old variable</span></span></span>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">data_modify</span><span class="op">(</span><span class="va">iris</span>, Petal.Length <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="va">Sepal.Length</span>, Sepal.Length <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span></span>
@@ -258,34 +581,39 @@ characters.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>      16      2 4             2      19     -<span style="color: #BB0000;">78.0</span>    -<span style="color: #BB0000;">1.16</span>      -<span style="color: #BB0000;">1.16</span>      5</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># works from inside functions</span></span></span>
-<span class="r-in"><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">z</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">data_modify</span><span class="op">(</span><span class="va">data</span>, <span class="va">z</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">foo1</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">data_modify</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span><span class="fu">foo</span><span class="op">(</span><span class="va">iris</span>, <span class="st">"var_a = Sepal.Width / 10"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species var_a</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          5.1         3.5          1.4         0.2  setosa  0.35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          4.9         3.0          1.4         0.2  setosa  0.30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          4.7         3.2          1.3         0.2  setosa  0.32</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          4.6         3.1          1.5         0.2  setosa  0.31</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          5.0         3.6          1.4         0.2  setosa  0.36</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          5.4         3.9          1.7         0.4  setosa  0.39</span>
+<span class="r-in"><span><span class="fu">foo1</span><span class="op">(</span><span class="va">iris</span>, SW_fraction <span class="op">=</span> <span class="va">Sepal.Width</span> <span class="op">/</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species SW_fraction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          5.1         3.5          1.4         0.2  setosa        0.35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          4.9         3.0          1.4         0.2  setosa        0.30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          4.7         3.2          1.3         0.2  setosa        0.32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          4.6         3.1          1.5         0.2  setosa        0.31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          5.0         3.6          1.4         0.2  setosa        0.36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          5.4         3.9          1.7         0.4  setosa        0.39</span>
+<span class="r-in"><span><span class="co"># or</span></span></span>
+<span class="r-in"><span><span class="fu">foo1</span><span class="op">(</span><span class="va">iris</span>, <span class="fu">as_expr</span><span class="op">(</span><span class="st">"SW_fraction = Sepal.Width / 10"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species SW_fraction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          5.1         3.5          1.4         0.2  setosa        0.35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          4.9         3.0          1.4         0.2  setosa        0.30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          4.7         3.2          1.3         0.2  setosa        0.32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          4.6         3.1          1.5         0.2  setosa        0.31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          5.0         3.6          1.4         0.2  setosa        0.36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          5.4         3.9          1.7         0.4  setosa        0.39</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">new_exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SW_double = 2 * Sepal.Width"</span>, <span class="st">"SW_fraction = SW_double / 10"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">foo</span><span class="op">(</span><span class="va">iris</span>, <span class="va">new_exp</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species SW_double</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          5.1         3.5          1.4         0.2  setosa       7.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          4.9         3.0          1.4         0.2  setosa       6.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          4.7         3.2          1.3         0.2  setosa       6.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          4.6         3.1          1.5         0.2  setosa       6.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          5.0         3.6          1.4         0.2  setosa       7.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          5.4         3.9          1.7         0.4  setosa       7.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   SW_fraction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        0.70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        0.60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        0.64</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        0.62</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        0.72</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        0.78</span>
+<span class="r-in"><span><span class="co"># also with string arguments, using `as_expr()`</span></span></span>
+<span class="r-in"><span><span class="va">foo2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">modification</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">data_modify</span><span class="op">(</span><span class="va">data</span>, <span class="fu">as_expr</span><span class="op">(</span><span class="va">modification</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="fu">foo2</span><span class="op">(</span><span class="va">iris</span>, <span class="st">"SW_fraction = Sepal.Width / 10"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species SW_fraction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          5.1         3.5          1.4         0.2  setosa        0.35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          4.9         3.0          1.4         0.2  setosa        0.30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          4.7         3.2          1.3         0.2  setosa        0.32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          4.6         3.1          1.5         0.2  setosa        0.31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          5.0         3.6          1.4         0.2  setosa        0.36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          5.4         3.9          1.7         0.4  setosa        0.39</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># modify at specific positions or if condition is met</span></span></span>
 <span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span></span></span>
@@ -353,7 +681,7 @@ characters.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.9000.</p>
 </div>
 
     </footer></div>

@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.14</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -547,13 +547,14 @@ program with it</li>
 <span><span class="co">## 4      NA      2   &lt;NA&gt;        2      10        NA         NA         NA</span></span>
 <span><span class="co">## 5     168      2      4        2      12      84.4  1.1762224  1.1762224</span></span>
 <span><span class="co">## 6      16      2      4        2      19     -67.6 -0.9420928 -0.9420928</span></span></code></pre>
-<p><code><a href="../reference/data_modify.html">data_modify()</a></code> accepts expressions as strings:</p>
+<p><code><a href="../reference/data_modify.html">data_modify()</a></code> supports expressions as strings via its
+<code>as_expr()</code> helper function.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">new_exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"c12hour_c = center(c12hour)"</span>,</span>
 <span>  <span class="st">"c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/data_modify.html">data_modify</a></span><span class="op">(</span><span class="va">efc</span>, <span class="va">new_exp</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/data_modify.html">data_modify</a></span><span class="op">(</span><span class="va">efc</span>, <span class="fu">as_expr</span><span class="op">(</span><span class="va">new_exp</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   c12hour e16sex e42dep c172code neg_c_7 c12hour_c  c12hour_z</span></span>
 <span><span class="co">## 1      16      2      3        2      12     -67.6 -0.9420928</span></span>
 <span><span class="co">## 2     148      2      3        2      20      64.4  0.8974967</span></span>
@@ -566,7 +567,7 @@ program with it</li>
 <code class="sourceCode R"><span><span class="va">miles_to_km</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">var</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/data_modify.html">data_modify</a></span><span class="op">(</span></span>
 <span>    <span class="va">data</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"km = "</span>, <span class="va">var</span>, <span class="st">"* 1.609344"</span><span class="op">)</span></span>
+<span>    <span class="fu">as_expr</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"km = "</span>, <span class="va">var</span>, <span class="st">"* 1.609344"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
@@ -1488,7 +1489,7 @@ column names, and vice versa. This can be done with
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.9000.</p>
 </div>
 
     </footer>

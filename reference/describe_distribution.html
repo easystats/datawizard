@@ -9,7 +9,7 @@ centrality, dispersion, range, skewness, kurtosis)."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.14</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -132,8 +132,8 @@ Dispersion is not available for <code>"MAP"</code> or <code>"mode"</code> centra
 
 
 <dt id="arg-iqr">iqr<a class="anchor" aria-label="anchor" href="#arg-iqr"></a></dt>
-<dd><p>Logical, if <code>TRUE</code>, the interquartile range is calculated
-(based on <code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">stats::IQR()</a></code>, using <code>type = 6</code>).</p></dd>
+<dd><p>Logical, if <code>TRUE</code>, the interquartile range is calculated (based
+on <code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">stats::IQR()</a></code>, using <code>type = 6</code>).</p></dd>
 
 
 <dt id="arg-range">range<a class="anchor" aria-label="anchor" href="#arg-range"></a></dt>
@@ -141,21 +141,21 @@ Dispersion is not available for <code>"MAP"</code> or <code>"mode"</code> centra
 
 
 <dt id="arg-quartiles">quartiles<a class="anchor" aria-label="anchor" href="#arg-quartiles"></a></dt>
-<dd><p>Return the first and third quartiles (25th and 75pth
+<dd><p>Return the first and third quartiles (25th and 75th
 percentiles).</p></dd>
 
 
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
 <dd><p>Confidence Interval (CI) level. Default is <code>NULL</code>, i.e. no
-confidence intervals are computed. If not <code>NULL</code>, confidence intervals
-are based on bootstrap replicates (see <code>iterations</code>). If
-<code>centrality = "all"</code>, the bootstrapped confidence interval refers to
-the first centrality index (which is typically the median).</p></dd>
+confidence intervals are computed. If not <code>NULL</code>, confidence intervals are
+based on bootstrap replicates (see <code>iterations</code>).</p></dd>
 
 
 <dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
 <dd><p>The number of bootstrap replicates for computing confidence
-intervals. Only applies when <code>ci</code> is not <code>NULL</code>.</p></dd>
+intervals. Only applies when <code>ci</code> is not <code>NULL</code>. Defaults to <code>100</code>. For
+more stable results, increase the number of <code>iterations</code>, but note that this
+can also increase the computation time significantly.</p></dd>
 
 
 <dt id="arg-threshold">threshold<a class="anchor" aria-label="anchor" href="#arg-threshold"></a></dt>
@@ -165,7 +165,7 @@ vector before the mean is computed.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Toggle warnings and messages.</p></dd>
+<dd><p>Show or silence warnings and messages.</p></dd>
 
 
 <dt id="arg-select">select<a class="anchor" aria-label="anchor" href="#arg-select"></a></dt>
@@ -247,7 +247,7 @@ existing groups created by <code><a href="data_group.html">data_group()</a></cod
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>If <code>x</code> is a data frame, only numeric variables are kept and will be
-displayed in the summary.</p>
+displayed in the summary by default.</p>
 <p>If <code>x</code> is a list, the behavior is different whether <code>x</code> is a stored list. If
 <code>x</code> is stored (for example, <code>describe_distribution(mylist)</code> where <code>mylist</code>
 was created before), artificial variable names are used in the summary
@@ -259,8 +259,7 @@ variable name.</p>
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>There is also a
 <a href="https://easystats.github.io/see/articles/parameters.html" class="external-link"><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method</a>
-implemented in the
-<a href="https://easystats.github.io/see/" class="external-link"><span class="pkg">see</span>-package</a>.</p>
+implemented in the <a href="https://easystats.github.io/see/" class="external-link"><strong>see</strong>-package</a>.</p>
     </div>
 
     <div class="section level2">
@@ -310,7 +309,7 @@ implemented in the
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.9000.</p>
 </div>
 
     </footer></div>
