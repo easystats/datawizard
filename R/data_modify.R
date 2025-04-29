@@ -18,15 +18,15 @@
 #'   data_modify(iris, var_abc = a) # var_abc contains "abc"
 #'   ```
 #' - An expression can also be provided as string and wrapped in
-#' `as_expression()`. Example:
+#' `as_expr()`. Example:
 #'   ```r
-#'   data_modify(iris, as_expression("Sepal.Width = center(Sepal.Width)"))
+#'   data_modify(iris, as_expr("Sepal.Width = center(Sepal.Width)"))
 #'   # or
 #'   a <- "center(Sepal.Width)"
-#'   data_modify(iris, Sepal.Width = as_expression(a))
+#'   data_modify(iris, Sepal.Width = as_expr(a))
 #'   # or
 #'   a <- "Sepal.Width = center(Sepal.Width)"
-#'   data_modify(iris, as_expression(a))
+#'   data_modify(iris, as_expr(a))
 #'   ```
 #' - Using `NULL` as right-hand side removes a variable from the data frame.
 #'   Example: `Petal.Width = NULL`.
@@ -67,9 +67,9 @@
 #' # using strings instead of literal expressions
 #' new_efc <- data_modify(
 #'   efc,
-#'   as_expression("c12hour_c = center(c12hour)"),
-#'   as_expression("c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"),
-#'   as_expression("c12hour_z2 = standardize(c12hour)")
+#'   as_expr("c12hour_c = center(c12hour)"),
+#'   as_expr("c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"),
+#'   as_expr("c12hour_z2 = standardize(c12hour)")
 #' )
 #' head(new_efc)
 #'
@@ -79,7 +79,7 @@
 #'   "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
 #'   "c12hour_z2 = standardize(c12hour)"
 #' )
-#' new_efc <- data_modify(efc, as_expression(xpr))
+#' new_efc <- data_modify(efc, as_expr(xpr))
 #' head(new_efc)
 #'
 #' # using character strings, provided as variable
@@ -87,7 +87,7 @@
 #' new_efc <- data_modify(
 #'   efc,
 #'   c12hour_c = center(c12hour),
-#'   c12hour_z = as_expression(stand)
+#'   c12hour_z = as_expr(stand)
 #' )
 #' head(new_efc)
 #'
@@ -95,7 +95,7 @@
 #' to_standardize <- c("Petal.Length", "Sepal.Length")
 #' data_modify(
 #'   iris,
-#'   as_expression(
+#'   as_expr(
 #'     paste0(to_standardize, "_stand = standardize(", to_standardize, ")")
 #'   )
 #' )
@@ -124,9 +124,9 @@
 #' }
 #' foo1(iris, SW_fraction = Sepal.Width / 10)
 #'
-#' # also with string arguments, using `as_expression()`
+#' # also with string arguments, using `as_expr()`
 #' foo2 <- function(data, modification) {
-#'   head(data_modify(data, as_expression(modification)))
+#'   head(data_modify(data, as_expr(modification)))
 #' }
 #' foo2(iris, "SW_fraction = Sepal.Width / 10")
 #'
@@ -184,18 +184,18 @@ data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # the name of the new variable. There's only one exception, if a string is
     # masked as expression, and this string includes the new name, e.g.
     #
-    # data_modify(iris, as_expression("sepwid = 2 * Sepal.Width"))
+    # data_modify(iris, as_expr("sepwid = 2 * Sepal.Width"))
     # a <- "sepwid = 2 * Sepal.Width"
-    # data_modify(iris, as_expression(a))
+    # data_modify(iris, as_expr(a))
     #
     dots <- .process_unnamed_expressions(dots, data)
 
     # next, we check for named expression-tags and convert these into regular
     # expressions, e.g.
     #
-    # data_modify(iris, sepwid =  = as_expression("2 * Sepal.Width"))
+    # data_modify(iris, sepwid =  = as_expr("2 * Sepal.Width"))
     # a <- "2 * Sepal.Width"
-    # data_modify(iris, sepwid = as_expression(a))
+    # data_modify(iris, sepwid = as_expr(a))
     #
     dots <- .process_named_expressions(dots, data)
 
@@ -243,18 +243,18 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # the name of the new variable. There's only one exception, if a string is
     # masked as expression, and this string includes the new name, e.g.
     #
-    # data_modify(iris, as_expression("sepwid = 2 * Sepal.Width"))
+    # data_modify(iris, as_expr("sepwid = 2 * Sepal.Width"))
     # a <- "sepwid = 2 * Sepal.Width"
-    # data_modify(iris, as_expression(a))
+    # data_modify(iris, as_expr(a))
     #
     dots <- .process_unnamed_expressions(dots, data)
 
     # next, we check for named expression-tags and convert these into regular
     # expressions, e.g.
     #
-    # data_modify(iris, sepwid =  = as_expression("2 * Sepal.Width"))
+    # data_modify(iris, sepwid =  = as_expr("2 * Sepal.Width"))
     # a <- "2 * Sepal.Width"
-    # data_modify(iris, sepwid = as_expression(a))
+    # data_modify(iris, sepwid = as_expr(a))
     #
     dots <- .process_named_expressions(dots, data)
   }
@@ -288,7 +288,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 
 .process_unnamed_expressions <- function(dots, data) {
   # dots are only unnamed, when the full expression is saved in a string,
-  # e.g. data_modify(iris, as_expression("sepwid = 2 * Sepal.Width")).
+  # e.g. data_modify(iris, as_expr("sepwid = 2 * Sepal.Width")).
   # Thus, we know we *have to* find an expression here, and the string value
   # *must* contain a name definition. If not, fail. If yes, convert string
   # into a language expression...
@@ -315,17 +315,17 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # values or numeric values require a named element, i.e. we can only have
     # data_modify(iris, newvar = "a"), but we cannot have data_modify(iris, "a").
     # For expression, missing name is possible.
-    if (!startsWith(symbol_string, "as_expression")) {
+    if (!startsWith(symbol_string, "as_expr")) {
       insight::format_error(paste0(
         "A variable name for the expression `", symbol_string, "` is missing. ",
         "Please use something like `new_name = ", symbol_string, "`."
       ))
     }
     # next, check if the string-expression includes a name for the new variable
-    # therefore, we remove the "as_expression()" token
-    if (startsWith(symbol_string, "as_expression")) {
+    # therefore, we remove the "as_expr()" token
+    if (startsWith(symbol_string, "as_expr")) {
       symbol_string <- insight::trim_ws(
-        gsub("as_expression\\((.*)\\)", "\\1", symbol_string)
+        gsub("as_expr\\((.*)\\)", "\\1", symbol_string)
       )
     }
     # remove c(), split at comma, if we have a vector of expressions
@@ -338,7 +338,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     }
     # check if we have any symbols instead of strings as expression, e.g.
     # xpr <- "sepwid = 2 * Sepal.Width"
-    # data_modify(iris, as_expression(xpr))
+    # data_modify(iris, as_expr(xpr))
     #
     # in this case, we need to evaluate the symbol (i.e. convert symbol string
     # into a language expression and then evaluate)
@@ -416,8 +416,8 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # sanity check
     if (is.null(symbol_string)) next
     # extract string-expression, if we have any
-    if (startsWith(symbol_string, "as_expression")) {
-      symbol_string <- gsub("as_expression\\((.*)\\)", "\\1", symbol_string)
+    if (startsWith(symbol_string, "as_expr")) {
+      symbol_string <- gsub("as_expr\\((.*)\\)", "\\1", symbol_string)
     } else {
       # no expression token found
       symbol_string <- NULL

@@ -17,8 +17,8 @@ BREAKING CHANGES
 * `data_modify()` now always uses values of a vector for a modified or newly
   created variable, and no longer tries to detect whether a character value
   possibly contains an expression. To allow expression provided as string (or
-  character vectors), use the helper-function `as_expression()`. Only literal
-  expressions or strings wrapped in `as_expression()` will be evaluated as
+  character vectors), use the helper-function `as_expr()`. Only literal
+  expressions or strings wrapped in `as_expr()` will be evaluated as
   expressions, everything else will be treated as vector with values for new
   variables (#605)
 

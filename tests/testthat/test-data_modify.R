@@ -26,7 +26,7 @@ test_that("data_modify works with strings", {
   data(iris)
   out <- data_modify(
     iris,
-    as_expression("Sepal_W_z = standardize(Sepal.Width)")
+    as_expr("Sepal_W_z = standardize(Sepal.Width)")
   )
   expect_equal(
     out$Sepal_W_z,
@@ -36,7 +36,7 @@ test_that("data_modify works with strings", {
   )
   out <- data_modify(
     iris,
-    as_expression(c(
+    as_expr(c(
       "Sepal_W_z = standardize(Sepal.Width)",
       "Sepal_Wz_double = 2 * Sepal_W_z"
     ))
@@ -67,7 +67,7 @@ test_that("data_modify preserves labels", {
   )
   out <- data_modify(
     efc,
-    as_expression(c(
+    as_expr(c(
       "c12hour_c = center(c12hour)",
       "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"
     ))
@@ -105,7 +105,7 @@ test_that("data_modify recycling works", {
 test_that("data_modify expression in character vector", {
   data(iris)
   x <- "var_a = Sepal.Width"
-  out <- data_modify(iris, as_expression(x))
+  out <- data_modify(iris, as_expr(x))
   expect_named(
     out,
     c(
@@ -120,7 +120,7 @@ test_that("data_modify expression in character vector", {
   data(iris)
   foo <- function(data) {
     y <- "var_a = Sepal.Width"
-    head(data_modify(data, as_expression(y)))
+    head(data_modify(data, as_expr(y)))
   }
   out <- foo(iris)
   expect_named(
@@ -133,7 +133,7 @@ test_that("data_modify expression in character vector", {
   expect_identical(out$var_a, out$Sepal.Width)
 
   foo2 <- function(data, z) {
-    head(data_modify(data, as_expression(z)))
+    head(data_modify(data, as_expr(z)))
   }
   out <- foo2(iris, "var_a = Sepal.Width")
   expect_named(
@@ -150,7 +150,7 @@ test_that("data_modify expression in character vector", {
 test_that("data_modify expression in character vector", {
   data(iris)
   aa <- "2 * Sepal.Width"
-  out <- data_modify(iris, new_var = as_expression(aa))
+  out <- data_modify(iris, new_var = as_expr(aa))
   expect_named(
     out,
     c(
@@ -161,7 +161,7 @@ test_that("data_modify expression in character vector", {
   expect_identical(out$new_var, 2 * out$Sepal.Width)
 
   aa <- "2 * Sepal.Width"
-  out <- data_modify(iris, new_var = as_expression(aa))
+  out <- data_modify(iris, new_var = as_expr(aa))
   expect_named(
     out,
     c(
@@ -172,7 +172,7 @@ test_that("data_modify expression in character vector", {
   expect_identical(out$new_var, 2 * out$Sepal.Width)
 
   foo_nv <- function(data, z) {
-    head(data_modify(data, new_var = as_expression(z)))
+    head(data_modify(data, new_var = as_expr(z)))
   }
   out <- foo_nv(iris, "2 * Sepal.Width")
   expect_identical(
@@ -190,7 +190,7 @@ test_that("data_modify expression as character vector", {
   data(iris)
   x <- "var_a = Sepal.Width"
   y <- "Sepal_Wz_double = 2 * var_a"
-  out <- data_modify(iris, as_expression(c(x, y)))
+  out <- data_modify(iris, as_expr(c(x, y)))
   expect_named(
     out,
     c(
@@ -205,7 +205,7 @@ test_that("data_modify expression as character vector", {
     x1 <- "var_a = Sepal.Width"
     y1 <- "Sepal_Wz_double = 2 * var_a"
     combined <- c(x1, y1)
-    data_modify(iris, as_expression(combined))
+    data_modify(iris, as_expr(combined))
   }
   out <- foo1(iris)
   expect_named(
@@ -219,7 +219,7 @@ test_that("data_modify expression as character vector", {
   expect_identical(out$Sepal_Wz_double, 2 * out$Sepal.Width)
 
   foo2 <- function(data, z3) {
-    data_modify(data, as_expression(z3))
+    data_modify(data, as_expr(z3))
   }
   out <- foo2(iris, c("var_a = Sepal.Width", "Sepal_Wz_double = 2 * var_a"))
   expect_named(
@@ -236,13 +236,13 @@ test_that("data_modify expression as character vector", {
   data(iris)
   out <- data_modify(
     iris,
-    as_expression("var_a = Sepal.Width"),
-    as_expression("Sepal_Wz_double = 2 * var_a")
+    as_expr("var_a = Sepal.Width"),
+    as_expr("Sepal_Wz_double = 2 * var_a")
   )
   expect_identical(out$var_a, out$Sepal.Width)
   expect_identical(out$Sepal_Wz_double, 2 * out$Sepal.Width)
 
-  out <- data_modify(iris, as_expression(c("var_a = Sepal.Width", "Sepal_Wz_double = 2 * var_a")))
+  out <- data_modify(iris, as_expr(c("var_a = Sepal.Width", "Sepal_Wz_double = 2 * var_a")))
   expect_identical(out$var_a, out$Sepal.Width)
   expect_identical(out$Sepal_Wz_double, 2 * out$Sepal.Width)
 })
@@ -280,7 +280,7 @@ test_that("data_modify works on grouped data, with character vectors", {
   grouped_efc <- data_group(efc, "c172code")
   out <- data_modify(
     grouped_efc,
-    as_expression(c(
+    as_expr(c(
       "c12hour_c = center(c12hour)",
       "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
       "c12hour_z2 = standardize(c12hour)"
@@ -321,7 +321,7 @@ test_that("data_modify works on grouped data, inside functions", {
   foo4 <- function(data) {
     data_modify(
       data,
-      as_expression(c(
+      as_expr(c(
         "c12hour_c = center(c12hour)",
         "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
         "c12hour_z2 = standardize(c12hour)"
@@ -344,7 +344,7 @@ test_that("data_modify works on grouped data, inside functions", {
   )
 
   foo5 <- function(data, rec) {
-    data_modify(data, as_expression(rec))
+    data_modify(data, as_expr(rec))
   }
   out <- foo5(
     data_group(efc, "c172code"),
@@ -390,19 +390,19 @@ test_that("data_modify errors for typos", {
   a <- "center(c22hour)" # <---------------- error in variable name
   b <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
   expect_error(
-    data_modify(efc, c12hour_c = as_expression(a), c12hour_z = as_expression(b)),
+    data_modify(efc, c12hour_c = as_expr(a), c12hour_z = as_expr(b)),
     regex = "c22hour"
   )
 
   a <- "center(c12hour)"
   b <- "c12hour_c / sd(c21hour, na.rm = TRUE)" # <------ error in variable name
   expect_error(
-    data_modify(efc, c12hour_c = as_expression(a), c12hour_z = as_expression(b)),
+    data_modify(efc, c12hour_c = as_expr(a), c12hour_z = as_expr(b)),
     regex = "c12hour_c"
   )
 
   expect_error(
-    data_modify(efc, c12hour_c = as_expression(a), c12hour_z = as_expression(b)),
+    data_modify(efc, c12hour_c = as_expr(a), c12hour_z = as_expr(b)),
     regex = "second expression"
   )
 })
@@ -430,9 +430,9 @@ test_that("data_modify works with character variables, and inside functions", {
   d <- "standardize(c12hour)"
   out <- data_modify(
     efc,
-    c12hour_c = as_expression(a),
-    c12hour_z = as_expression(b),
-    c12hour_z2 = as_expression(d)
+    c12hour_c = as_expr(a),
+    c12hour_z = as_expr(b),
+    c12hour_z2 = as_expr(d)
   )
   expect_equal(
     out$c12hour_z2,
@@ -454,9 +454,9 @@ test_that("data_modify works with character variables, and inside functions", {
   foo <- function(data, x1, x2, x3) {
     data_modify(
       efc,
-      c12hour_c = as_expression(x1),
-      c12hour_z = as_expression(x2),
-      c12hour_z2 = as_expression(x3)
+      c12hour_c = as_expr(x1),
+      c12hour_z = as_expr(x2),
+      c12hour_z2 = as_expr(x3)
     )
   }
   out <- foo(efc, a1, b1, d1)
@@ -481,9 +481,9 @@ test_that("data_modify works with character variables, and inside functions", {
 
     data_modify(
       efc,
-      c12hour_c = as_expression(a2),
-      c12hour_z = as_expression(b2),
-      c12hour_z2 = as_expression(d2)
+      c12hour_c = as_expr(a2),
+      c12hour_z = as_expr(b2),
+      c12hour_z2 = as_expr(d2)
     )
   }
   out <- foo2(efc)
@@ -601,12 +601,12 @@ test_that("data_modify .if/.at arguments", {
 
 test_that("data_modify works with new expressions, different use cases same results", {
   data(iris)
-  out1 <- data_modify(iris, as_expression("sepwid = 2 * Sepal.Width"))
-  out2 <- data_modify(iris, sepwid = as_expression("2 * Sepal.Width"))
+  out1 <- data_modify(iris, as_expr("sepwid = 2 * Sepal.Width"))
+  out2 <- data_modify(iris, sepwid = as_expr("2 * Sepal.Width"))
   e <- "sepwid = 2 * Sepal.Width"
-  out3 <- data_modify(iris, as_expression(e))
+  out3 <- data_modify(iris, as_expr(e))
   e <- "2 * Sepal.Width"
-  out4 <- data_modify(iris, sepwid = as_expression(e))
+  out4 <- data_modify(iris, sepwid = as_expr(e))
 
   expect_equal(head(out1), head(out2), ignore_attr = TRUE, tolerance = 1e-4)
   expect_equal(head(out1), head(out3), ignore_attr = TRUE, tolerance = 1e-4)
@@ -614,17 +614,17 @@ test_that("data_modify works with new expressions, different use cases same resu
 
   out1b <- data_modify(
     iris,
-    as_expression(c("sepwid = 2 * Sepal.Width", "seplen = 5 * Sepal.Length"))
+    as_expr(c("sepwid = 2 * Sepal.Width", "seplen = 5 * Sepal.Length"))
   )
   out2b <- data_modify(
     iris,
-    sepwid = as_expression("2 * Sepal.Width"),
-    seplen = as_expression("5 * Sepal.Length")
+    sepwid = as_expr("2 * Sepal.Width"),
+    seplen = as_expr("5 * Sepal.Length")
   )
   e <- c("sepwid = 2 * Sepal.Width", "seplen = 5 * Sepal.Length")
-  out3b <- data_modify(iris, as_expression(e))
+  out3b <- data_modify(iris, as_expr(e))
   e <- "2 * Sepal.Width"
-  out4b <- data_modify(iris, sepwid = as_expression(e), seplen = 5 * Sepal.Length)
+  out4b <- data_modify(iris, sepwid = as_expr(e), seplen = 5 * Sepal.Length)
 
   expect_equal(head(out1b), head(out2b), ignore_attr = TRUE, tolerance = 1e-4)
   expect_equal(head(out1b), head(out3b), ignore_attr = TRUE, tolerance = 1e-4)
@@ -644,7 +644,7 @@ test_that("data_modify works with new expressions, different use cases same resu
   to_standardize <- c("Petal.Length", "Sepal.Length")
   out <- data_modify(
     iris,
-    as_expression(
+    as_expr(
       paste0(to_standardize, "_stand = standardize(", to_standardize, ")")
     )
   )
@@ -667,9 +667,9 @@ test_that("data_modify works with new expressions, different use cases same resu
   num <- 1:5
   out_complex <- data_modify(
     iris,
-    sepwid = as_expression(e),
+    sepwid = as_expr(e),
     seplen = 5 * Sepal.Length,
-    as_expression(f),
+    as_expr(f),
     new_var = a,
     new_num = num,
     new_var2 = "ho",
@@ -696,8 +696,8 @@ test_that("data_modify works with new expressions, grouped_df, different use cas
 
   new_efc2 <- data_modify(
     grouped_efc,
-    as_expression("c12hour_c = center(c12hour)"),
-    c12hour_z = as_expression("c12hour_c / sd(c12hour, na.rm = TRUE)"),
+    as_expr("c12hour_c = center(c12hour)"),
+    c12hour_z = as_expr("c12hour_c / sd(c12hour, na.rm = TRUE)"),
     c12hour_z2 = standardize(c12hour),
     id = 1:n()
   )
@@ -710,7 +710,7 @@ test_that("data_modify works with new expressions, grouped_df, different use cas
   )
   new_efc3 <- data_modify(
     grouped_efc,
-    as_expression(s),
+    as_expr(s),
     id = 1:n()
   )
   expect_equal(head(new_efc1), head(new_efc3), ignore_attr = TRUE, tolerance = 1e-4)
@@ -718,7 +718,7 @@ test_that("data_modify works with new expressions, grouped_df, different use cas
   new_efc4 <- data_modify(
     grouped_efc,
     c12hour_c = center(c12hour),
-    c12hour_z = as_expression("c12hour_c / sd(c12hour, na.rm = TRUE)"),
+    c12hour_z = as_expr("c12hour_c / sd(c12hour, na.rm = TRUE)"),
     c12hour_z2 = standardize(c12hour),
     id = 1:n()
   )
@@ -729,20 +729,20 @@ test_that("data_modify works with new expressions, grouped_df, different use cas
 test_that("data_modify errors with new expressions", {
   e <- "sepwid = 2 * Sepal.Widht"
   expect_error(
-    data_modify(iris, as_expression(e)),
+    data_modify(iris, as_expr(e)),
     regex = "in the first expression"
   )
   expect_error(
-    data_modify(iris, as_expression(e)),
+    data_modify(iris, as_expr(e)),
     regex = "Sepal.Widht"
   )
 
   expect_error(
-    data_modify(iris, as_expression("sepwid = 2 * Sepal.Widht")),
+    data_modify(iris, as_expr("sepwid = 2 * Sepal.Widht")),
     regex = "in the first expression"
   )
   expect_error(
-    data_modify(iris, as_expression("sepwid = 2 * Sepal.Widht")),
+    data_modify(iris, as_expr("sepwid = 2 * Sepal.Widht")),
     regex = "Sepal.Widht"
   )
 
@@ -756,13 +756,13 @@ test_that("data_modify errors with new expressions", {
   )
 
   expect_error(
-    data_modify(iris, as_expression("2 * Sepal.Widht")),
+    data_modify(iris, as_expr("2 * Sepal.Widht")),
     regex = "variable name"
   )
 
   e <- "2 * Sepal.Widht"
   expect_error(
-    data_modify(iris, as_expression(e)),
+    data_modify(iris, as_expr(e)),
     regex = "variable name"
   )
 
@@ -770,7 +770,7 @@ test_that("data_modify errors with new expressions", {
   a <- "center(c22hour)" # <---------------- error in variable name
   b <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
   expect_error(
-    data_modify(efc, c12hour_c = as_expression(a), c12hour_z = as_expression(b)),
+    data_modify(efc, c12hour_c = as_expr(a), c12hour_z = as_expr(b)),
     regex = "c22hour"
   )
 })

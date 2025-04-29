@@ -26,15 +26,15 @@ in the data), or of same length as the data.
 data_modify(iris, var_abc = a) # var_abc contains "abc"
 }\if{html}{\out{</div>}}
 \item An expression can also be provided as string and wrapped in
-\code{as_expression()}. Example:
+\code{as_expr()}. Example:
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_modify(iris, as_expression("Sepal.Width = center(Sepal.Width)"))
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_modify(iris, as_expr("Sepal.Width = center(Sepal.Width)"))
 # or
 a <- "center(Sepal.Width)"
-data_modify(iris, Sepal.Width = as_expression(a))
+data_modify(iris, Sepal.Width = as_expr(a))
 # or
 a <- "Sepal.Width = center(Sepal.Width)"
-data_modify(iris, as_expression(a))
+data_modify(iris, as_expr(a))
 }\if{html}{\out{</div>}}
 \item Using \code{NULL} as right-hand side removes a variable from the data frame.
 Example: \code{Petal.Width = NULL}.
@@ -84,9 +84,9 @@ head(new_efc)
 # using strings instead of literal expressions
 new_efc <- data_modify(
   efc,
-  as_expression("c12hour_c = center(c12hour)"),
-  as_expression("c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"),
-  as_expression("c12hour_z2 = standardize(c12hour)")
+  as_expr("c12hour_c = center(c12hour)"),
+  as_expr("c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"),
+  as_expr("c12hour_z2 = standardize(c12hour)")
 )
 head(new_efc)
 
@@ -96,7 +96,7 @@ xpr <- c(
   "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
   "c12hour_z2 = standardize(c12hour)"
 )
-new_efc <- data_modify(efc, as_expression(xpr))
+new_efc <- data_modify(efc, as_expr(xpr))
 head(new_efc)
 
 # using character strings, provided as variable
@@ -104,7 +104,7 @@ stand <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
 new_efc <- data_modify(
   efc,
   c12hour_c = center(c12hour),
-  c12hour_z = as_expression(stand)
+  c12hour_z = as_expr(stand)
 )
 head(new_efc)
 
@@ -112,7 +112,7 @@ head(new_efc)
 to_standardize <- c("Petal.Length", "Sepal.Length")
 data_modify(
   iris,
-  as_expression(
+  as_expr(
     paste0(to_standardize, "_stand = standardize(", to_standardize, ")")
   )
 )
@@ -141,9 +141,9 @@ foo1 <- function(data, ...) {
 }
 foo1(iris, SW_fraction = Sepal.Width / 10)
 
-# also with string arguments, using `as_expression()`
+# also with string arguments, using `as_expr()`
 foo2 <- function(data, modification) {
-  head(data_modify(data, as_expression(modification)))
+  head(data_modify(data, as_expr(modification)))
 }
 foo2(iris, "SW_fraction = Sepal.Width / 10")
 
