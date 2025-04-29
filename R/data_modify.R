@@ -284,6 +284,8 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     for (i in rev(unnamed_dots)) {
       d <- dots[[i]]
       symbol_string <- insight::safe_deparse(d)
+      # sanity check
+      if (is.null(symbol_string)) next
       # we only allow unnamed if these are masked as expression. String values
       # or numeric values require a named expression
       if (!startsWith(symbol_string, "as_expression") && !startsWith(symbol_string, "{")) {
@@ -354,6 +356,8 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   for (i in seq_along(dots)) {
     d <- dots[[i]]
     symbol_string <- insight::safe_deparse(d)
+    # sanity check
+    if (is.null(symbol_string)) next
     # extract string-expression, if we have any
     if (startsWith(symbol_string, "as_expression")) {
       symbol_string <- gsub("as_expression\\((.*)\\)", "\\1", symbol_string)
