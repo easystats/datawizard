@@ -109,9 +109,6 @@ test_that("transformations", {
 })
 
 
-
-
-
 # W/ weights --------------------------------------------------------------
 test_that("weights", {
   expect_warning(standardize(mtcars, weights = "xx"))
@@ -169,7 +166,6 @@ test_that("weights + NA", {
     weights = "weight_me",
     remove_na = "selected"
   )
-
 
 
   m1 <- lm(Sepal.Length ~ Species + Petal.Width, data = iris, weights = weight_me)
@@ -338,6 +334,7 @@ test_that("brms", {
   skip_on_os(c("windows", "mac"))
   skip_if_not_installed("brms")
   skip_if_not_installed("RcppEigen")
+  skip_if_not_installed("BH")
 
   invisible(
     capture.output({

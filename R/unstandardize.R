@@ -72,10 +72,10 @@ unstandardize.data.frame <- function(x,
 
   dots <- match.call(expand.dots = FALSE)[["..."]]
 
-  if (!is.null(dots$grp_attr_dw)) {
-    grp_attr_dw <- eval(dots$grp_attr_dw, envir = parent.frame(1L))
-  } else {
+  if (is.null(dots$grp_attr_dw)) {
     grp_attr_dw <- NULL
+  } else {
+    grp_attr_dw <- eval(dots$grp_attr_dw, envir = parent.frame(1L))
   }
 
   if (!is.null(grp_attr_dw)) {
@@ -149,7 +149,6 @@ unstandardize.factor <- function(x, ...) {
 unstandardize.character <- function(x, ...) {
   x
 }
-
 
 
 #' @export
@@ -259,7 +258,6 @@ unstandardize.matrix <- function(x,
 
 #' @export
 unstandardize.array <- unstandardize.matrix
-
 
 
 # Datagrid ----------------------------------------------------------------

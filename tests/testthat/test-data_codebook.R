@@ -207,3 +207,12 @@ test_that("data_codebook, negative label values #334", {
   )
   expect_snapshot(data_codebook(data.frame(x1, x2)))
 })
+
+
+test_that("data_codebook, informative warning if no match", {
+  data(iris)
+  expect_warning(
+    data_codebook(iris, select = starts_with("abc")),
+    regex = "No column names that matched"
+  )
+})

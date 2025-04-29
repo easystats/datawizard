@@ -8,7 +8,14 @@
 \usage{
 ranktransform(x, ...)
 
-\method{ranktransform}{numeric}(x, sign = FALSE, method = "average", verbose = TRUE, ...)
+\method{ranktransform}{numeric}(
+  x,
+  sign = FALSE,
+  method = "average",
+  zeros = "na",
+  verbose = TRUE,
+  ...
+)
 
 \method{ranktransform}{data.frame}(
   x,
@@ -18,6 +25,7 @@ ranktransform(x, ...)
   method = "average",
   ignore_case = FALSE,
   regex = FALSE,
+  zeros = "na",
   verbose = TRUE,
   ...
 )
@@ -33,6 +41,10 @@ ranktransform(x, ...)
 \code{"first"}, \code{"last"}, \code{"random"}, \code{"max"} or \code{"min"}. See \code{\link[=rank]{rank()}} for
 details.}
 
+\item{zeros}{How to handle zeros. If \code{"na"} (default), they are marked as
+\code{NA}. If \code{"signrank"}, they are kept during the ranking and marked as zeros.
+This is only used when \code{sign = TRUE}.}
+
 \item{verbose}{Toggle warnings.}
 
 \item{select}{Variables that will be included when performing the required
@@ -43,21 +55,26 @@ tasks. Can be either
 vector of variable names (e.g., \code{c("col1", "col2", "col3")}), or a
 character vector of variable names including ranges specified via \code{:}
 (e.g., \code{c("col1:col3", "col5")}),
+\item for some functions, like \code{data_select()} or \code{data_rename()}, \code{select} can
+be a named character vector. In this case, the names are used to rename
+the columns in the output data frame. See 'Details' in the related
+functions to see where this option applies.
 \item a formula with variable names (e.g., \code{~column_1 + column_2}),
 \item a vector of positive integers, giving the positions counting from the left
 (e.g. \code{1} or \code{c(1, 3, 5)}),
 \item a vector of negative integers, giving the positions counting from the
 right (e.g., \code{-1} or \code{-1:-3}),
 \item one of the following select-helpers: \code{starts_with()}, \code{ends_with()},
-\code{contains()}, a range using \code{:} or \code{regex("")}. \code{starts_with()},
+\code{contains()}, a range using \code{:}, or \code{regex()}. \code{starts_with()},
 \code{ends_with()}, and  \code{contains()} accept several patterns, e.g
-\code{starts_with("Sep", "Petal")}.
-\item or a function testing for logical conditions, e.g. \code{is.numeric()} (or
+\code{starts_with("Sep", "Petal")}. \code{regex()} can be used to define regular
+expression patterns.
+\item a function testing for logical conditions, e.g. \code{is.numeric()} (or
 \code{is.numeric}), or any user-defined function that selects the variables
 for which the function returns \code{TRUE} (like: \code{foo <- function(x) mean(x) > 3}),
 \item ranges specified via literal variable names, select-helpers (except
 \code{regex()}) and (user-defined) functions can be negated, i.e. return
-non-matching elements, when prefixed with a \code{-}, e.g. \code{-ends_with("")},
+non-matching elements, when prefixed with a \code{-}, e.g. \code{-ends_with()},
 \code{-is.numeric} or \code{-(Sepal.Width:Petal.Length)}. \strong{Note:} Negation means
 that matches are \emph{excluded}, and thus, the \code{exclude} argument can be
 used alternatively. For instance, \code{select=-ends_with("Length")} (with
@@ -82,7 +99,7 @@ treated as regular expression. When \code{regex = TRUE}, select \emph{must} be a
 character string (or a variable containing a character string) and is not
 allowed to be one of the supported select-helpers or a character vector
 of length > 1. \code{regex = TRUE} is comparable to using one of the two
-select-helpers, \code{select = contains("")} or \code{select = regex("")}, however,
+select-helpers, \code{select = contains()} or \code{select = regex()}, however,
 since the select-helpers may not work when called from inside other
 functions (see 'Details'), this argument may be used as workaround.}
 }
@@ -109,8 +126,11 @@ from the input data frame.
 \examples{
 ranktransform(c(0, 1, 5, -5, -2))
 
-# Won't work
-# ranktransform(c(0, 1, 5, -5, -2), sign = TRUE)
+# By default, zeros are converted to NA
+suppressWarnings(
+  ranktransform(c(0, 1, 5, -5, -2), sign = TRUE)
+)
+ranktransform(c(0, 1, 5, -5, -2), sign = TRUE, zeros = "signrank")
 
 head(ranktransform(trees))
 }

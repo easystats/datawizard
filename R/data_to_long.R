@@ -1,5 +1,7 @@
-#' Reshape (pivot) data from wide to long
+#' @title Reshape (pivot) data from wide to long
+#' @name data_to_long
 #'
+#' @description
 #' This function "lengthens" data, increasing the number of rows and decreasing
 #' the number of columns. This is a dependency-free base-R equivalent of
 #' `tidyr::pivot_longer()`.
@@ -31,6 +33,8 @@
 #' with `tidyr::pivot_longer()`. If both `select` and `cols` are provided, `cols`
 #' is used.
 #'
+#' @inherit data_rename seealso
+#'
 #' @details
 #' Reshaping data into long format usually means that the input data frame is
 #' in _wide_ format, where multiple measurements taken on the same subject are
@@ -58,7 +62,7 @@
 #' @return If a tibble was provided as input, `reshape_longer()` also returns a
 #' tibble. Otherwise, it returns a data frame.
 #'
-#' @examplesIf requireNamespace("psych") && requireNamespace("tidyr")
+#' @examplesIf all(insight::check_if_installed(c("psych", "tidyr"), quietly = TRUE))
 #' wide_data <- setNames(
 #'   data.frame(replicate(2, rnorm(8))),
 #'   c("Time1", "Time2")
@@ -122,7 +126,6 @@
 #'   values_to = "count"
 #' )
 #' head(even_longer_data)
-#' @inherit data_rename
 #' @export
 data_to_long <- function(data,
                          select = "all",
@@ -149,30 +152,23 @@ data_to_long <- function(data,
       exclude = NULL,
       ignore_case = ignore_case,
       regex = regex,
-      verbose = FALSE
+      ifnotfound = "error"
+    )
+  } else if (!missing(select) || !is.null(select)) {
+    cols <- .select_nse(
+      select,
+      data,
+      exclude = NULL,
+      ignore_case = ignore_case,
+      regex = regex,
+      ifnotfound = "error"
     )
   } else {
-    if (!missing(select) || !is.null(select)) {
-      cols <- .select_nse(
-        select,
-        data,
-        exclude = NULL,
-        ignore_case = ignore_case,
-        regex = regex,
-        verbose = FALSE
-      )
-    } else {
-      insight::format_error(
-        "You need to specify columns to pivot, either with `select` or `cols`."
-      )
-    }
+    insight::format_error(
+      "You need to specify columns to pivot, either with `select` or `cols`."
+    )
   }
   # nolint end
-
-  # nothing to select?
-  if (length(cols) == 0L) {
-    insight::format_error("No columns found for reshaping data.")
-  }
 
   if (length(names_to) > 1L && is.null(names_sep) && is.null(names_pattern)) {
     insight::format_error(

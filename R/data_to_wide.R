@@ -327,7 +327,7 @@ data_to_wide <- function(data,
   }
 
   # reorder columns
-  out <- out[, unstacked$col_order]
+  out <- out[, unstacked$col_order, drop = FALSE]
 
   # need to add the wide data to the original data
   if (!insight::is_empty_object(not_unstacked)) {

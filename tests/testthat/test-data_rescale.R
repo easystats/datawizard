@@ -44,7 +44,6 @@ test_that("rescale works as expected", {
 })
 
 
-
 test_that("rescale works with select helpers", {
   out <- rescale(iris, to = c(0, 1), select = c("Sepal.Width", "Sepal.Length"))
   expect_equal(head(out$Sepal.Width), c(0.625, 0.41667, 0.5, 0.45833, 0.66667, 0.79167), tolerance = 1e-3)

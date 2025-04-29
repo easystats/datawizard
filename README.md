@@ -2,12 +2,15 @@
 # `datawizard`: Easy Data Wrangling and Statistical Transformations <img src='man/figures/logo.png' align="right" height="139" />
 
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.04684/status.svg)](https://doi.org/10.21105/joss.04684)
-[![downloads](http://cranlogs.r-pkg.org/badges/datawizard)](https://cran.r-project.org/package=datawizard)
+[![downloads](https://cranlogs.r-pkg.org/badges/datawizard)](https://cran.r-project.org/package=datawizard)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/)
 
 <!-- ***:sparkles: Hockety pockety wockety wack, prepare this data forth and back*** -->
+
 <!-- ***Hockety pockety wockety wock, messy data is in shock*** -->
+
 <!-- ***Hockety pockety wockety woss, you can cite i-it from JOSS*** <sup>(soon)</sup> -->
+
 <!-- ***Hockety pockety wockety wass, datawizard saves your ass! :sparkles:*** -->
 
 `{datawizard}` is a lightweight package to easily manipulate, clean,
@@ -45,15 +48,16 @@ It covers two aspects of data preparation:
 # Installation
 
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/datawizard)](https://cran.r-project.org/package=datawizard)
-[![insight status
+[![datawizard status
 badge](https://easystats.r-universe.dev/badges/datawizard)](https://easystats.r-universe.dev)
+[![codecov](https://codecov.io/gh/easystats/datawizard/branch/main/graph/badge.svg)](https://app.codecov.io/gh/easystats/datawizard)
 [![R-CMD-check](https://github.com/easystats/datawizard/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/easystats/datawizard/actions)
 
-| Type        | Source     | Command                                                                      |
-|-------------|------------|------------------------------------------------------------------------------|
-| Release     | CRAN       | `install.packages("datawizard")`                                             |
+| Type | Source | Command |
+|----|----|----|
+| Release | CRAN | `install.packages("datawizard")` |
 | Development | r-universe | `install.packages("datawizard", repos = "https://easystats.r-universe.dev")` |
-| Development | GitHub     | `remotes::install_github("easystats/datawizard")`                            |
+| Development | GitHub | `remotes::install_github("easystats/datawizard")` |
 
 > **Tip**
 >
@@ -70,10 +74,9 @@ To cite the package, run the following command:
 citation("datawizard")
 To cite package 'datawizard' in publications use:
 
-  Patil et al., (2022). datawizard: An R Package for Easy
-  Data Preparation and Statistical Transformations. Journal
-  of Open Source Software, 7(78), 4684,
-  https://doi.org/10.21105/joss.04684
+  Patil et al., (2022). datawizard: An R Package for Easy Data
+  Preparation and Statistical Transformations. Journal of Open Source
+  Software, 7(78), 4684, https://doi.org/10.21105/joss.04684
 
 A BibTeX entry for LaTeX users is
 
@@ -90,6 +93,10 @@ A BibTeX entry for LaTeX users is
 ```
 
 # Features
+
+[![Documentation](https://img.shields.io/badge/documentation-datawizard-orange.svg?colorB=E91E63)](https://easystats.github.io/datawizard/)
+[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
+[![Features](https://img.shields.io/badge/features-datawizard-orange.svg?colorB=2196F3)](https://easystats.github.io/datawizard/reference/index.html)
 
 Most courses and tutorials about statistical modeling assume that you
 are working with a clean and tidy dataset. In practice, however, a major
@@ -153,8 +160,7 @@ It is also possible to extract one or more variables:
 ``` r
 # single variable
 data_extract(mtcars, "gear")
-#>  [1] 4 4 4 3 3 3 3 4 4 4 4 3 3 3 3 3 3 4 4 4 3 3 3 3 3 4 5 5 5 5 5
-#> [32] 4
+#>  [1] 4 4 4 3 3 3 3 4 4 4 4 3 3 3 3 3 3 4 4 4 3 3 3 3 3 4 5 5 5 5 5 4
 
 # more variables
 head(data_extract(iris, ends_with("Width")))
@@ -293,28 +299,17 @@ data_to_wide(long_data,
   values_from = "value",
   id_cols = "Row_ID"
 )
-#>    Row_ID          X1          X2          X3         X4
-#> 1       1 -0.08281164 -1.12490028 -0.70632036 -0.7027895
-#> 2       2  1.93468099 -0.87430362  0.96687656  0.2998642
-#> 3       3 -2.05128979  0.04386162 -0.71016648  1.1494697
-#> 4       4  0.27773897 -0.58397514 -0.05917365 -0.3016415
-#> 5       5 -1.52596060 -0.82329858 -0.23094342 -0.5473394
-#> 6       6 -0.26916362  0.11059280  0.69200045 -0.3854041
-#> 7       7  1.23305388  0.36472778  1.35682290  0.2763720
-#> 8       8  0.63360774  0.05370100  1.78872284  0.1518608
-#> 9       9  0.35271746  1.36867235  0.41071582 -0.4313808
-#> 10     10 -0.56048248 -0.38045724 -2.18785470 -1.8705001
-#>             X5
-#> 1   0.07633326
-#> 2  -0.23035595
-#> 3   0.31746484
-#> 4  -1.59268440
-#> 5  -0.18194062
-#> 6   1.75614174
-#> 7   0.11394932
-#> 8  -0.29216508
-#> 9   1.75409316
-#> 10  1.80958455
+#>    Row_ID          X1          X2          X3         X4          X5
+#> 1       1 -0.08281164 -1.12490028 -0.70632036 -0.7027895  0.07633326
+#> 2       2  1.93468099 -0.87430362  0.96687656  0.2998642 -0.23035595
+#> 3       3 -2.05128979  0.04386162 -0.71016648  1.1494697  0.31746484
+#> 4       4  0.27773897 -0.58397514 -0.05917365 -0.3016415 -1.59268440
+#> 5       5 -1.52596060 -0.82329858 -0.23094342 -0.5473394 -0.18194062
+#> 6       6 -0.26916362  0.11059280  0.69200045 -0.3854041  1.75614174
+#> 7       7  1.23305388  0.36472778  1.35682290  0.2763720  0.11394932
+#> 8       8  0.63360774  0.05370100  1.78872284  0.1518608 -0.29216508
+#> 9       9  0.35271746  1.36867235  0.41071582 -0.4313808  1.75409316
+#> 10     10 -0.56048248 -0.38045724 -2.18785470 -1.8705001  1.80958455
 ```
 
 ### Empty rows and columns
@@ -412,20 +407,20 @@ summary(swiss)
 
 # after
 summary(standardize(swiss))
-#>    Fertility         Agriculture       Examination      
-#>  Min.   :-2.81327   Min.   :-2.1778   Min.   :-1.69084  
-#>  1st Qu.:-0.43569   1st Qu.:-0.6499   1st Qu.:-0.56273  
-#>  Median : 0.02061   Median : 0.1515   Median :-0.06134  
-#>  Mean   : 0.00000   Mean   : 0.0000   Mean   : 0.00000  
-#>  3rd Qu.: 0.66504   3rd Qu.: 0.7481   3rd Qu.: 0.69074  
-#>  Max.   : 1.78978   Max.   : 1.7190   Max.   : 2.57094  
-#>    Education          Catholic       Infant.Mortality  
-#>  Min.   :-1.0378   Min.   :-0.9350   Min.   :-3.13886  
-#>  1st Qu.:-0.5178   1st Qu.:-0.8620   1st Qu.:-0.61543  
-#>  Median :-0.3098   Median :-0.6235   Median : 0.01972  
-#>  Mean   : 0.0000   Mean   : 0.0000   Mean   : 0.00000  
-#>  3rd Qu.: 0.1062   3rd Qu.: 1.2464   3rd Qu.: 0.60337  
-#>  Max.   : 4.3702   Max.   : 1.4113   Max.   : 2.28566
+#>    Fertility         Agriculture       Examination         Education      
+#>  Min.   :-2.81327   Min.   :-2.1778   Min.   :-1.69084   Min.   :-1.0378  
+#>  1st Qu.:-0.43569   1st Qu.:-0.6499   1st Qu.:-0.56273   1st Qu.:-0.5178  
+#>  Median : 0.02061   Median : 0.1515   Median :-0.06134   Median :-0.3098  
+#>  Mean   : 0.00000   Mean   : 0.0000   Mean   : 0.00000   Mean   : 0.0000  
+#>  3rd Qu.: 0.66504   3rd Qu.: 0.7481   3rd Qu.: 0.69074   3rd Qu.: 0.1062  
+#>  Max.   : 1.78978   Max.   : 1.7190   Max.   : 2.57094   Max.   : 4.3702  
+#>     Catholic       Infant.Mortality  
+#>  Min.   :-0.9350   Min.   :-3.13886  
+#>  1st Qu.:-0.8620   1st Qu.:-0.61543  
+#>  Median :-0.6235   Median : 0.01972  
+#>  Mean   : 0.0000   Mean   : 0.00000  
+#>  3rd Qu.: 1.2464   3rd Qu.: 0.60337  
+#>  Max.   : 1.4113   Max.   : 2.28566
 ```
 
 ### Winsorize

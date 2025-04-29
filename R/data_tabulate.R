@@ -398,6 +398,11 @@ insight::print_html
 insight::print_md
 
 
+#' @importFrom insight display
+#' @export
+insight::display
+
+
 #' @rdname data_tabulate
 #' @param add_total For crosstables (i.e. when `by` is not `NULL`), a row and
 #' column with the total N values are added to the data frame. `add_total` has
@@ -605,8 +610,12 @@ print.datawizard_tables <- function(x, big_mark = NULL, ...) {
     x <- lapply(x, function(i) {
       i_attr <- attributes(i)
       i <- format(i, format = "text", big_mark = big_mark, ...)
-      i$Variable[i_attr$duplicate_varnames] <- ""
-      if (!is.null(i$Group)) i$Group[i_attr$duplicate_varnames] <- ""
+      if (!is.null(i$Variable)) {
+        i$Variable[i_attr$duplicate_varnames] <- ""
+      }
+      if (!is.null(i$Group)) {
+        i$Group[i_attr$duplicate_varnames] <- ""
+      }
       i[nrow(i) + 1, ] <- ""
       i
     })
@@ -641,7 +650,9 @@ print_html.datawizard_tables <- function(x, big_mark = NULL, ...) {
     x <- lapply(x, function(i) {
       i_attr <- attributes(i)
       i <- format(i, format = "html", big_mark = big_mark, ...)
-      i$Variable[i_attr$duplicate_varnames] <- ""
+      if (!is.null(i$Variable)) {
+        i$Variable[i_attr$duplicate_varnames] <- ""
+      }
       i
     })
 
@@ -670,8 +681,12 @@ print_md.datawizard_tables <- function(x, big_mark = NULL, ...) {
     x <- lapply(x, function(i) {
       i_attr <- attributes(i)
       i <- format(i, format = "markdown", big_mark = big_mark, ...)
-      i$Variable[i_attr$duplicate_varnames] <- ""
-      if (!is.null(i$Group)) i$Group[i_attr$duplicate_varnames] <- ""
+      if (!is.null(i$Variable)) {
+        i$Variable[i_attr$duplicate_varnames] <- ""
+      }
+      if (!is.null(i$Group)) {
+        i$Group[i_attr$duplicate_varnames] <- ""
+      }
       i[nrow(i) + 1, ] <- ""
       i
     })
@@ -688,8 +703,6 @@ print_md.datawizard_tables <- function(x, big_mark = NULL, ...) {
     )
   }
 }
-
-
 
 
 # tools --------------------

@@ -124,8 +124,6 @@ test_that("data_to_long works - complex dataset", {
 })
 
 
-
-
 test_that("data_to_long: arg 'cols' overrides 'select'", {
   skip_if_not_installed("psych")
   data <- psych::bfi
@@ -249,15 +247,14 @@ test_that("data_to_long: can't use sep or pattern if only one names_to", {
 })
 
 test_that("data_to_long: error if no columns to reshape", {
+  # since #602, we no longer have the case that .select_nse() returns no
+  # columns, because we error before when no column found, instead of returning
+  # NULL or a vector of lenght zero.
   expect_error(
     data_to_long(wide_data, cols = "foo"),
-    "No columns found"
+    "Possibly misspelled"
   )
 })
-
-
-
-
 
 
 # EQUIVALENCE WITH TIDYR - PIVOT_LONGER -------------------------------------------
@@ -393,7 +390,6 @@ test_that("data_to_long equivalent to pivot_longer: ex 6", {
 })
 
 
-
 # tests coming from tidyr's repo
 # https://github.com/tidyverse/tidyr/blob/main/tests/testthat/test-pivot-long.R
 
@@ -501,4 +497,24 @@ test_that("don't convert factors to integer", {
     select = c("mpg", "qsec", "disp"), names_to = "g"
   )
   expect_snapshot(print(mtcars_long))
+})
+
+
+test_that("tell user about typos", {
+  data("mtcars")
+  expect_silent(data_to_long(
+    mtcars,
+    select = c("mpg", "hp", "disp"),
+    names_to = "time",
+    values_to = "count"
+  ))
+  expect_error(
+    data_to_long(
+      mtcars,
+      select = c("mpg", "ho", "dist"),
+      names_to = "time",
+      values_to = "count"
+    ),
+    regex = "Following"
+  )
 })

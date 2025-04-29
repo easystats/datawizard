@@ -39,7 +39,8 @@ from the data frame.
 \details{
 For character vectors, empty string values (i.e. \code{""}) are also
 considered as missing value. Thus, if a character vector only contains \code{NA}
-and \verb{""``, it is considered as empty variable and will be removed. Same applies to observations (rows) that only contain }NA\code{or}""`.
+and \code{""}, it is considered as empty variable and will be removed. Same
+applies to observations (rows) that only contain \code{NA} or \code{""}.
 }
 \examples{
 tmp <- data.frame(

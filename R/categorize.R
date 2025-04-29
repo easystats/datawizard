@@ -149,7 +149,7 @@ categorize.default <- function(x, verbose = TRUE, ...) {
       paste0("Variables of class `", class(x)[1], "` can't be recoded and remain unchanged.")
     )
   }
-  return(x)
+  x
 }
 
 
@@ -361,7 +361,6 @@ categorize.grouped_df <- function(x,
   x <- .replace_attrs(x, attr_data)
   x
 }
-
 
 
 # tools --------------------

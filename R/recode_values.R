@@ -187,7 +187,7 @@ recode_values.default <- function(x, verbose = TRUE, ...) {
       paste0("Variables of class `", class(x)[1], "` can't be recoded and remain unchanged.")
     )
   }
-  return(x)
+  x
 }
 
 

@@ -115,7 +115,6 @@ reverse.numeric <- function(x,
 }
 
 
-
 #' @export
 reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
   # Warning if all NaNs
@@ -186,14 +185,13 @@ reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
 
   int_x <- as.integer(x)
   rev_x <- reverse(int_x, range = c(1, length(old_levels)))
-  x <- factor(rev_x, levels = seq_len(length(old_levels)), labels = old_levels)
+  x <- factor(rev_x, levels = seq_along(old_levels), labels = old_levels)
 
   # labelled data?
   x <- .set_back_labels(x, original_x, reverse_values = TRUE)
 
   x
 }
-
 
 
 #' @export
@@ -252,7 +250,6 @@ reverse.grouped_df <- function(x,
   attributes(x) <- utils::modifyList(info, attributes(x))
   x
 }
-
 
 
 #' @rdname reverse

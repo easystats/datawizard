@@ -10,6 +10,9 @@
 #' @param method Treatment of ties. Can be one of `"average"` (default),
 #'   `"first"`, `"last"`, `"random"`, `"max"` or `"min"`. See [rank()] for
 #'   details.
+#' @param zeros How to handle zeros. If `"na"` (default), they are marked as
+#' `NA`. If `"signrank"`, they are kept during the ranking and marked as zeros.
+#' This is only used when `sign = TRUE`.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams extract_column_names
 #' @inheritParams standardize.data.frame
@@ -19,8 +22,11 @@
 #' @examples
 #' ranktransform(c(0, 1, 5, -5, -2))
 #'
-#' # Won't work
-#' # ranktransform(c(0, 1, 5, -5, -2), sign = TRUE)
+#' # By default, zeros are converted to NA
+#' suppressWarnings(
+#'   ranktransform(c(0, 1, 5, -5, -2), sign = TRUE)
+#' )
+#' ranktransform(c(0, 1, 5, -5, -2), sign = TRUE, zeros = "signrank")
 #'
 #' head(ranktransform(trees))
 #' @return A rank-transformed object.
@@ -33,18 +39,24 @@ ranktransform <- function(x, ...) {
 }
 
 
-
 #' @rdname ranktransform
 #' @export
 ranktransform.numeric <- function(x,
                                   sign = FALSE,
                                   method = "average",
+                                  zeros = "na",
                                   verbose = TRUE,
                                   ...) {
   # no change if all values are `NA`s
   if (all(is.na(x))) {
     return(x)
   }
+
+  zeros <- match.arg(zeros, c("na", "signrank"))
+  method <- match.arg(
+    method,
+    c("average", "first", "last", "random", "max", "min")
+  )
 
   # Warning if only one value and return early
   if (insight::has_single_value(x)) {
@@ -55,7 +67,13 @@ ranktransform.numeric <- function(x,
     }
 
     if (verbose) {
-      insight::format_warning(paste0("Variable `", name, "` contains only one unique value and will not be normalized."))
+      insight::format_warning(
+        paste0(
+          "Variable `",
+          name,
+          "` contains only one unique value and will not be normalized."
+        )
+      )
     }
 
     return(x)
@@ -71,16 +89,31 @@ ranktransform.numeric <- function(x,
     }
 
     if (verbose) {
-      insight::format_warning(paste0("Variable `", name, "` contains only two different values. Consider converting it to a factor."))
+      # nolint
+      insight::format_warning(
+        paste0(
+          "Variable `",
+          name,
+          "` contains only two different values. Consider converting it to a factor."
+        )
+      )
     }
   }
 
-
   if (sign) {
-    ZEROES <- x == 0
-    if (any(ZEROES) && verbose) insight::format_warning("Zeros detected. These cannot be sign-rank transformed.")
-    out <- rep(NA, length(x))
-    out[!ZEROES] <- sign(x[!ZEROES]) * rank(abs(x[!ZEROES]), ties.method = method, na.last = "keep")
+    if (zeros == "na") {
+      out <- rep(NA, length(x))
+      ZEROES <- x == 0
+      if (any(ZEROES) && verbose) {
+        insight::format_warning("Zeros detected. These cannot be sign-rank transformed.") # nolint
+      }
+      out[!ZEROES] <- sign(x[!ZEROES]) * rank(abs(x[!ZEROES]),
+        ties.method = method,
+        na.last = "keep"
+      )
+    } else if (zeros == "signrank") {
+      out <- sign(x) * rank(abs(x), ties.method = method, na.last = "keep")
+    }
   } else {
     out <- rank(x, ties.method = method, na.last = "keep")
   }
@@ -89,14 +122,10 @@ ranktransform.numeric <- function(x,
 }
 
 
-
-
 #' @export
 ranktransform.factor <- function(x, ...) {
   x
 }
-
-
 
 
 #' @export
@@ -107,6 +136,7 @@ ranktransform.grouped_df <- function(x,
                                      method = "average",
                                      ignore_case = FALSE,
                                      regex = FALSE,
+                                     zeros = "na",
                                      verbose = TRUE,
                                      ...) {
   info <- attributes(x)
@@ -148,6 +178,7 @@ ranktransform.data.frame <- function(x,
                                      method = "average",
                                      ignore_case = FALSE,
                                      regex = FALSE,
+                                     zeros = "na",
                                      verbose = TRUE,
                                      ...) {
   # evaluate arguments

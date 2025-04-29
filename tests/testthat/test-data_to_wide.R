@@ -40,7 +40,6 @@ test_that("data_to_wide works", {
 })
 
 
-
 test_that("data_to_wide, names_prefix works", {
   skip_if_not_installed("tidyr")
 
@@ -186,7 +185,6 @@ test_that("data_to_wide, values_fill errors when length > 1", {
     regexp = "must be of length 1"
   )
 })
-
 
 
 # EQUIVALENCE WITH TIDYR - PIVOT_WIDER -----------------------------------------------
@@ -466,7 +464,6 @@ test_that("data_to_wide, names_glue works", {
 })
 
 
-
 test_that("preserve date format", {
   skip_if_not_installed("tidyr")
 
@@ -527,4 +524,37 @@ test_that("new names starting with digits are not corrected automatically", {
     values_from = "percentage"
   )
   expect_identical(tidyr, datawiz)
+})
+
+
+test_that("Preserve column name when names_from column only has one unique value", {
+  d <- data.frame(
+    Value = rnorm(10),
+    Level = paste0("Participant_", 1:10),
+    Parameter = "Intercept",
+    stringsAsFactors = FALSE
+  )
+  out <- data_to_wide(
+    d,
+    values_from = "Value",
+    names_from = "Parameter",
+    names_sep = "_"
+  )
+  expect_named(out, c("Level", "Intercept"))
+  expect_identical(nrow(out), 10L)
+
+  d <- data.frame(
+    Value = rnorm(10),
+    Level = paste0("Participant_", 1:10),
+    Parameter = c("Intercept", "abc"),
+    stringsAsFactors = FALSE
+  )
+  out <- data_to_wide(
+    d,
+    values_from = "Value",
+    names_from = "Parameter",
+    names_sep = "_"
+  )
+  expect_named(out, c("Level", "Intercept", "abc"))
+  expect_identical(nrow(out), 10L)
 })

@@ -56,7 +56,6 @@ normalize <- function(x, ...) {
 }
 
 
-
 #' @rdname normalize
 #' @export
 normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {

@@ -1,26 +1,149 @@
-# datawizard (development)
+# datawizard (devel)
 
 BREAKING CHANGES
 
-* Argument `drop_na` in `data_match()` is deprecated now. Please use `remove_na`
-  instead.
+* `data_read()` now also returns Bayesian models from packages *brms* and
+  *rstanarm* as original model objects, and no longer coerces them into data
+  frames (#606).
+
+* The output format of `describe_distribution()` on grouped data has changed.
+  Before, it printed one table per group combination. Now, it prints a single
+  table with group columns at the start (#610).
+
+* The output format of `describe_distribution()` when confidence intervals are
+  requested has changed. Now, for each centrality measure a confidence interval
+  is calculated (#617).
+
+* `data_modify()` now always uses values of a vector for a modified or newly
+  created variable, and no longer tries to detect whether a character value
+  possibly contains an expression. To allow expression provided as string (or
+  character vectors), use the helper-function `as_expr()`. Only literal
+  expressions or strings wrapped in `as_expr()` will be evaluated as
+  expressions, everything else will be treated as vector with values for new
+  variables (#605).
 
 CHANGES
 
+* `display()` is now re-exported from package *insight*.
+
+* `data_read()` and `data_write()` now rely on base-R functions for files of
+  type `.rds`, `.rda` or `.rdata`. Thus, package *rio*  is no longer required
+  to be installed for these file types (#607).
+
+* `data_codebook()` gives an informative warning when no column names matched
+  the selection pattern (#601).
+
+* `data_to_long()` now errors when columns selected to reshape do not exist in
+  the data, to avoid nonsensical results that could be missed (#602).
+
+* New argument `by` in `describe_distribution()` (#604).
+
+* `describe_distribution()` now gives informative errors when column names
+  in the input data frame conflict with column from the output table (#612).
+
+* The methods for `parameters_distribution` objects are now defined in
+  `datawizard` (they were previously in `parameters`) (#613).
+
+BUG FIXES
+
+* Fixed bug in `data_to_wide()`, where new column names in `names_from` were
+  ignored when that column only contained one unique value.
+
+* Fixed bug in `describe_distribution()` when some group combinations
+  didn't appear in the data (#609).
+
+* Fixed bug in `describe_distribution()` when more than one value for the
+  `centrality` argument were specified (#617).
+
+* Fixed bug in `describe_distribution()` where setting `verbose = FALSE`
+  didn't hide some warnings (#617).
+
+* Fixed warning in `data_summary()` when a variable had the same name as
+  another object in the global environment (#585).
+
+# datawizard 1.0.2
+
+BUG FIXES
+
+* Fixed failing R CMD check on ATLAS, noLD, and OpenBLAS due to small numerical
+  differences (#592).
+
+# datawizard 1.0.1
+
+BUG FIXES
+
+* Fixed issue in `data_arrange()` for data frames that only had one column.
+  Formerly, the data frame was coerced into a vector, now the data frame class
+  is preserved.
+
+* Fixed issue in R-devel (4.5.0) due to a change in how `grep()` handles logical
+  arguments with missing values (#588).
+
+# datawizard 1.0.0
+
+BREAKING CHANGES AND DEPRECATIONS
+
+* *datawizard* now requires R >= 4.0 (#515).
+
+* Argument `drop_na` in `data_match()` is deprecated now. Please use
+  `remove_na` instead (#556).
+
+* In `data_rename()` (#567):
+  - argument `pattern` is deprecated. Use `select` instead.
+  - argument `safe` is deprecated. The function now errors when `select`
+    contains unknown column names.
+  - when `replacement` is `NULL`, an error is now thrown (previously, column
+    indices were used as new names).
+  - if `select` (previously `pattern`) is a named vector, then all elements
+    must be named, e.g. `c(length = "Sepal.Length", "Sepal.Width")` errors.
+
+* Order of arguments `by` and `probability_weights` in `rescale_weights()` has
+  changed, because for `method = "kish"`, the `by` argument is optional (#575).
+
+* The name of the rescaled weights variables in `rescale_weights()` have been
+  renamed. `pweights_a` and `pweights_b` are now named `rescaled_weights_a`
+  and `rescaled_weights_b` (#575).
+
+* `print()` methods for `data_tabulate()` with multiple sub-tables (i.e. when
+  length of `by` was > 1) were revised. Now, an integrated table instead of
+  multiple tables is returned. Furthermore, `print_html()` did not work, which
+  was also fixed now (#577).
+
+* `demean()` (and `degroup()`) gets an `append` argument that defaults to `TRUE`,
+  to append the centered variables to the original data frame, instead of
+  returning the de- and group-meaned variables only. Use `append = FALSE` to
+  for the previous default behaviour (i.e. only returning the newly created
+  variables) (#579).
+
+CHANGES
+
+* `rescale_weights()` gets a `method` argument, to choose method to rescale
+  weights. Options are `"carle"` (the default) and `"kish"` (#575).
+
 * The `select` argument, which is available in different functions to select
   variables, can now also be a character vector with quoted variable names,
-  including a colon to indicate a range of several variables (e.g. `"cyl:gear"`).
+  including a colon to indicate a range of several variables (e.g. `"cyl:gear"`)
+  (#551).
 
 * New function `row_sums()`, to calculate row sums (optionally with minimum
-  amount of valid values), as complement to `row_means()`.
+  amount of valid values), as complement to `row_means()` (#552).
 
-* New function `row_count()`, to count specific values row-wise.
+* New function `row_count()`, to count specific values row-wise (#553).
 
 * `data_read()` no longer shows warning about forthcoming breaking changes
-  in upstream packages when reading `.RData` files.
+  in upstream packages when reading `.RData` files (#557).
 
-* `data_modify()` now recognizes `n()`, for example to create an index for data groups
-  with `1:n()` (#535).
+* `data_modify()` now recognizes `n()`, for example to create an index for data
+  groups with `1:n()` (#535).
+
+* The `replacement` argument in `data_rename()` now supports glue-styled
+  tokens  (#563).
+
+* `data_summary()` also accepts the results of `bayestestR::ci()` as summary
+  function (#483).
+
+* `ranktransform()` has a new argument `zeros` to determine how zeros should be
+  handled when `sign = TRUE` (#573).
 
 BUG FIXES
 

@@ -79,7 +79,6 @@ test_that("to_factor regex", {
 })
 
 
-
 # SPSS file, many value labels  -----------------------------------
 
 skip_if_not_installed("httr")

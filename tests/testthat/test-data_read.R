@@ -21,7 +21,6 @@ test_that("data_read - csv", {
 })
 
 
-
 # csv -------------------------
 
 test_that("data_read, skip_empty", {
@@ -32,7 +31,6 @@ test_that("data_read, skip_empty", {
   expect_identical(ncol(d), 3L)
   expect_identical(colnames(d), c("Var1", "Var2", "Var3"))
 })
-
 
 
 # tsv -------------------------
@@ -55,7 +53,6 @@ test_that("data_read - tsv", {
     expect_identical(sum(vapply(d, is.character, FUN.VALUE = logical(1L))), 1L)
   })
 })
-
 
 
 # excel -------------------------
@@ -105,7 +102,6 @@ test_that("data_read - Stata file", {
 })
 
 
-
 # SAS file -----------------------------------
 
 
@@ -131,8 +127,6 @@ test_that("data_read - SAS file", {
 })
 
 
-
-
 # RDS file, matrix, coercible -----------------------------------
 
 test_that("data_read - RDS file, matrix, coercible", {
@@ -154,7 +148,6 @@ test_that("data_read - RDS file, matrix, coercible", {
 })
 
 
-
 # RDS file, preserve class /types -----------------------------------
 
 test_that("data_read - RDS file, preserve class", {
@@ -163,7 +156,7 @@ test_that("data_read - RDS file, preserve class", {
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
-    d <- data_read(temp_file)
+    d <- data_read(temp_file, verbose = FALSE)
     expect_s3_class(d, "data.frame")
     expect_identical(
       sapply(d, class),
@@ -177,7 +170,6 @@ test_that("data_read - RDS file, preserve class", {
 })
 
 
-
 # RData -----------------------------------
 
 test_that("data_read - no warning for RData", {
@@ -188,6 +180,21 @@ test_that("data_read - no warning for RData", {
   })
 })
 
+
+test_that("data_read - message for multiple objects in RData", {
+  withr::with_tempfile("temp_file", fileext = ".RData", code = {
+    data(mtcars)
+    data(iris)
+    save(mtcars, iris, file = temp_file)
+    expect_message(
+      expect_message(
+        data_read(temp_file, verbose = TRUE),
+        regex = "File contained more than one object"
+      ),
+      "Reading data"
+    )
+  })
+})
 
 
 # SPSS file -----------------------------------
@@ -223,8 +230,6 @@ test_that("data_read - SPSS file", {
     )
   })
 })
-
-
 
 
 # SPSS file 2 ---------------------------------
@@ -275,7 +280,6 @@ test_that("data_read - SPSS file 2", {
 })
 
 
-
 # zipped SPSS file -----------------------------------
 
 test_that("data_read - zipped SPSS file", {
@@ -300,7 +304,6 @@ test_that("data_read - zipped SPSS file", {
     expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 26L)
   })
 })
-
 
 
 # SPSS file, many value labels  -----------------------------------
@@ -423,8 +426,6 @@ test_that("data_read, convert many labels correctly", {
 })
 
 
-
-
 # invalid file type -------------------------
 
 test_that("data_read, no file extension", {
@@ -448,20 +449,70 @@ test_that("data_read, file not exists", {
 test_that("data_read - RDS file, no data frame", {
   skip_if_not_installed("withr")
 
+  withr::with_tempfile("temp_file", fileext = ".rda", code = {
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/list_for_testing.rda")
+    httr::stop_for_status(request)
+    writeBin(httr::content(request, type = "raw"), temp_file)
+
+    expect_message(
+      expect_warning(
+        d <- data_read(temp_file, verbose = TRUE), # nolint
+        regex = "no data frame"
+      ),
+      "Reading data"
+    )
+    expect_type(d, "list")
+  })
+})
+
+test_that("data_read - RDA file, model object", {
+  skip_if_not_installed("withr")
+  skip_if_not_installed("brms")
+
   withr::with_tempfile("temp_file", fileext = ".rds", code = {
     request <- httr::GET("https://raw.github.com/easystats/circus/main/data/model_object.rds")
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
-    expect_warning(
-      {
-        d <- data_read(
-          temp_file,
-          verbose = TRUE
-        )
-      },
-      regex = "no data frame"
+    expect_message(
+      expect_message(
+        d <- data_read(temp_file, verbose = TRUE), # nolint
+        regex = "Imported file is a regression"
+      ),
+      "Reading data"
     )
     expect_s3_class(d, "lm")
   })
+
+  withr::with_tempfile("temp_file", fileext = ".rda", code = {
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/brms_1.rda")
+    httr::stop_for_status(request)
+    writeBin(httr::content(request, type = "raw"), temp_file)
+
+    expect_message(
+      expect_message(
+        d <- data_read(temp_file, verbose = TRUE), # nolint
+        regex = "Imported file is a regression"
+      ),
+      "Reading data"
+    )
+    expect_s3_class(d, "brmsfit")
+  })
+})
+
+
+test_that("data_read - RDS file, from URL", {
+  # works with URL
+  request <- httr::GET("https://raw.github.com/easystats/circus/main/data/model_object.rds")
+  httr::stop_for_status(request)
+  expect_message(
+    expect_message(
+      d <- data_read( # nolint
+        "https://raw.github.com/easystats/circus/main/data/model_object.rds",
+        verbose = TRUE
+      ),
+      regex = "Imported file is a regression"
+    ),
+    "Reading data"
+  )
 })

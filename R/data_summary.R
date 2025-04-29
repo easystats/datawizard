@@ -5,9 +5,9 @@
 #' data frame or a matrix.
 #'
 #' @param x A (grouped) data frame.
-#' @param by Optional character string, indicating the name of a variable in `x`.
-#' If supplied, the data will be split by this variable and summary statistics
-#' will be computed for each group.
+#' @param by Optional character string, indicating the names of one or more
+#' variables in the data frame. If supplied, the data will be split by these
+#' variables and summary statistics will be computed for each group.
 #' @param remove_na Logical. If `TRUE`, missing values are omitted from the
 #' grouping variable. If `FALSE` (default), missing values are included as a
 #' level in the grouping variable.
@@ -122,7 +122,7 @@ data_summary.data.frame <- function(x, ..., by = NULL, remove_na = FALSE) {
       # bind grouping-variables and values
       summarised_data <- cbind(s[1, by], summarised_data)
       # make sure we have proper column names
-      colnames(summarised_data) <- c(by, vapply(summarise, names, character(1)))
+      colnames(summarised_data) <- c(by, unlist(lapply(summarise, names)))
       summarised_data
     })
     out <- do.call(rbind, out)
@@ -187,18 +187,24 @@ data_summary.grouped_df <- function(x, ..., by = NULL, remove_na = FALSE) {
 
     out <- lapply(seq_along(dots), function(i) {
       new_variable <- .get_new_dots_variable(dots, i, data)
-      stats::setNames(new_variable, names(dots)[i])
+      if (inherits(new_variable, c("bayestestR_ci", "bayestestR_eti"))) {
+        stats::setNames(new_variable, c("CI", "CI_low", "CI_high"))
+      } else {
+        stats::setNames(new_variable, names(dots)[i])
+      }
     })
   }
 
   # check for correct length of output - must be a single value!
-  if (any(lengths(out) != 1)) {
+  # Exception: bayestestR::ci()
+  wrong_length <- !sapply(out, inherits, what = c("bayestestR_ci", "bayestestR_eti")) & lengths(out) != 1 # nolint
+  if (any(wrong_length)) {
     insight::format_error(
       paste0(
         "Each expression must return a single value. Following expression",
-        ifelse(sum(lengths(out) != 1) > 1, "s", " "),
+        ifelse(sum(wrong_length) > 1, "s", " "),
         " returned more than one value: ",
-        text_concatenate(vapply(dots[lengths(out) != 1], insight::safe_deparse, character(1)), enclose = "\"")
+        text_concatenate(vapply(dots[wrong_length], insight::safe_deparse, character(1)), enclose = "\"")
       )
     )
   }
@@ -214,6 +220,11 @@ print.dw_data_summary <- function(x, ...) {
   if (nrow(x) == 0) {
     cat("No matches found.\n")
   } else {
+    if (all(c("CI", "CI_low", "CI_high") %in% colnames(x))) {
+      ci <- insight::format_table(x[c("CI", "CI_low", "CI_high")], ...)
+      x$CI <- x$CI_low <- x$CI_high <- NULL
+      x <- cbind(x, ci)
+    }
     cat(insight::export_table(x, missing = "<NA>", ...))
   }
 }

@@ -39,15 +39,13 @@ smoothness.numeric <- function(x,
   }
 
   if (method == "cor") {
-    smooth <- stats::cor(utils::head(x, length(x) - lag), utils::tail(x, length(x) - lag))
+    smooth_data <- stats::cor(utils::head(x, length(x) - lag), utils::tail(x, length(x) - lag))
   } else {
-    smooth <- stats::sd(diff(x, lag = lag)) / abs(mean(diff(x, lag = lag)))
+    smooth_data <- stats::sd(diff(x, lag = lag)) / abs(mean(diff(x, lag = lag)))
   }
 
   if (!is.null(iterations)) {
-    if (!requireNamespace("boot", quietly = TRUE)) {
-      insight::format_warning("Package 'boot' needed for bootstrapping SEs.")
-    } else {
+    if (requireNamespace("boot", quietly = TRUE)) {
       results <- boot::boot(
         data = x,
         statistic = .boot_smoothness,
@@ -56,12 +54,14 @@ smoothness.numeric <- function(x,
         lag = lag
       )
       out_se <- stats::sd(results$t, na.rm = TRUE)
-      smooth <- data.frame(Smoothness = smooth, SE = out_se)
+      smooth_data <- data.frame(Smoothness = smooth_data, SE = out_se)
+    } else {
+      insight::format_warning("Package 'boot' needed for bootstrapping SEs.")
     }
   }
 
-  class(smooth) <- unique(c("parameters_smoothness", class(smooth)))
-  smooth
+  class(smooth_data) <- unique(c("parameters_smoothness", class(smooth_data)))
+  smooth_data
 }
 
 
@@ -100,8 +100,6 @@ smoothness.default <- function(x,
 }
 
 
-
-
 # bootstrapping -----------------------------------
 
 .boot_smoothness <- function(data, indices, method, lag) {
@@ -112,8 +110,6 @@ smoothness.default <- function(x,
     iterations = NULL
   )
 }
-
-
 
 
 # methods -----------------------------------------
