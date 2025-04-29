@@ -293,109 +293,112 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # *must* contain a name definition. If not, fail. If yes, convert string
   # into a language expression...
 
-  if (is.null(names(dots)) || !all(nzchar(names(dots)))) {
-    # find which dots are unnamed, check those for expressions
-    if (is.null(names(dots))) {
-      unnamed_dots <- seq_along(dots)
-    } else {
-      unnamed_dots <- which(!nzchar(names(dots)))
-    }
+  if (!is.null(names(dots)) || all(nzchar(names(dots)))) {
+    # if all elements are named, return early
+    return(dots)
+  }
 
-    for (i in rev(unnamed_dots)) {
-      # copy dot-element and convert to string for manipulation
-      dot_element <- dots[[i]]
-      symbol_string <- insight::safe_deparse(dot_element)
-      # sanity check
-      if (is.null(symbol_string)) next
-      # we only allow unnamed elements if these are masked as expression. String
-      # values or numeric values require a named element, i.e. we can only have
-      # data_modify(iris, newvar = "a"), but we cannot have data_modify(iris, "a").
-      # For expression, missing name is possible.
-      if (!startsWith(symbol_string, "as_expression")) {
-        insight::format_error(paste0(
-          "A variable name for the expression `", symbol_string, "` is missing. ",
-          "Please use something like `new_name = ", symbol_string, "`."
-        ))
-      }
-      # next, check if the string-expression includes a name for the new variable
-      # therefore, we remove the "as_expression()" token
-      if (startsWith(symbol_string, "as_expression")) {
-        symbol_string <- insight::trim_ws(
-          gsub("as_expression\\((.*)\\)", "\\1", symbol_string)
-        )
-      }
-      # remove c(), split at comma, if we have a vector of expressions
-      if (startsWith(symbol_string, "c(")) {
-        symbol_string <- gsub("c\\((.*)\\)", "\\1", symbol_string)
-        # only split at first comma
-        pattern <- ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)" # suggestion by Co-pilot
-        # Locate commas not inside quotes
-        symbol_string <- insight::trim_ws(unlist(strsplit(symbol_string, pattern, perl = TRUE), use.names = FALSE))
-      }
-      # check if we have any symbols instead of strings as expression, e.g.
-      # xpr <- "sepwid = 2 * Sepal.Width"
-      # data_modify(iris, as_expression(xpr))
-      #
-      # in this case, we need to evaluate the symbol (i.e. convert symbol string
-      # into a language expression and then evaluate)
-      symbol_string <- unlist(lapply(symbol_string, function(symbol_element) {
-        if (!startsWith(symbol_element, "\"")) {
-          return_value <- .dynEval(str2lang(symbol_element))
-          # dynEval might fail if we don't look in data - sanity check
-          if (identical(return_value, symbol_element)) {
-            return_value <- .dynEval(str2lang(symbol_element), data = data)
-          }
-          return_value
-        } else {
-          symbol_element
-        }
-      }), use.names = FALSE)
-      # now we should have the expression as character string. Next, we
-      # # remove quotes from strings
-      symbol_string <- gsub("\"", "", symbol_string)
-      # check whether we have exact one = sign. We need to have a name definition,
-      # i.e. something like "var = a+b" - if the string has no "=" sign, name is
-      # definitely missing
-      pattern <- "(?<!=)=(?!=)"
-      has_names <- grepl(pattern, symbol_string, perl = TRUE)
-      if (!all(has_names)) {
-        insight::format_error(paste0(
-          "A variable name for the expression `", symbol_string[!has_names[1]], "` is missing. ",
-          "Please use something like `new_name = ", symbol_string[!has_names[1]], "`."
-        ))
-      }
-      # extract names (split at =), separate name from new variable from its
-      # expression. we need this to create a named list of expressions for the dots
-      symbol_string <- lapply(
-        strsplit(symbol_string, "=", fixed = TRUE),
-        function(split_result) {
-          # we may have multiple "=" signs, e.g. when we have the pattern
-          # "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)". In this case
-          # paste remaining parts to one string again
-          first_part <- split_result[1]
-          second_part <- paste(split_result[-1], collapse = "=")
-          insight::trim_ws(c(first_part, second_part))
-        }
-      )
-      # extract names (LHS)
-      symbol_names <- vapply(symbol_string, function(i) i[1], character(1))
-      # extract expressions (RHS)
-      symbol_string <- lapply(symbol_string, function(i) str2lang(i[2]))
-      names(symbol_string) <- symbol_names
-      # copy to dots... if we have a character vector, one dot element may
-      # return more than one expression elements. Thus, we have to insert /
-      # replace the old element by one or more new elements
-      if (length(dots) == 1) {
-        return_value <- symbol_string
-      } else if (i == 1) {
-        return_value <- c(symbol_string, dots[(i + 1):length(dots)])
-      } else if (i == length(dots)) {
-        return_value <- c(dots[1:(i - 1)], symbol_string)
-      } else {
-        return_value <- c(dots[1:(i - 1)], symbol_string, dots[(i + 1):length(dots)])
-      }
-      dots <- return_value
+  # find which dots are unnamed, check those for expressions
+  if (is.null(names(dots))) {
+    unnamed_dots <- seq_along(dots)
+  } else {
+    unnamed_dots <- which(!nzchar(names(dots)))
+  }
+
+  for (i in rev(unnamed_dots)) {
+    # copy dot-element and convert to string for manipulation
+    dot_element <- dots[[i]]
+    symbol_string <- insight::safe_deparse(dot_element)
+    # sanity check
+    if (is.null(symbol_string)) next
+    # we only allow unnamed elements if these are masked as expression. String
+    # values or numeric values require a named element, i.e. we can only have
+    # data_modify(iris, newvar = "a"), but we cannot have data_modify(iris, "a").
+    # For expression, missing name is possible.
+    if (!startsWith(symbol_string, "as_expression")) {
+      insight::format_error(paste0(
+        "A variable name for the expression `", symbol_string, "` is missing. ",
+        "Please use something like `new_name = ", symbol_string, "`."
+      ))
     }
+    # next, check if the string-expression includes a name for the new variable
+    # therefore, we remove the "as_expression()" token
+    if (startsWith(symbol_string, "as_expression")) {
+      symbol_string <- insight::trim_ws(
+        gsub("as_expression\\((.*)\\)", "\\1", symbol_string)
+      )
+    }
+    # remove c(), split at comma, if we have a vector of expressions
+    if (startsWith(symbol_string, "c(")) {
+      symbol_string <- gsub("c\\((.*)\\)", "\\1", symbol_string)
+      # only split at first comma
+      pattern <- ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)" # suggestion by Co-pilot
+      # Locate commas not inside quotes
+      symbol_string <- insight::trim_ws(unlist(strsplit(symbol_string, pattern, perl = TRUE), use.names = FALSE))
+    }
+    # check if we have any symbols instead of strings as expression, e.g.
+    # xpr <- "sepwid = 2 * Sepal.Width"
+    # data_modify(iris, as_expression(xpr))
+    #
+    # in this case, we need to evaluate the symbol (i.e. convert symbol string
+    # into a language expression and then evaluate)
+    symbol_string <- unlist(lapply(symbol_string, function(symbol_element) {
+      if (!startsWith(symbol_element, "\"")) {
+        return_value <- .dynEval(str2lang(symbol_element))
+        # dynEval might fail if we don't look in data - sanity check
+        if (identical(return_value, symbol_element)) {
+          return_value <- .dynEval(str2lang(symbol_element), data = data)
+        }
+        return_value
+      } else {
+        symbol_element
+      }
+    }), use.names = FALSE)
+    # now we should have the expression as character string. Next, we
+    # # remove quotes from strings
+    symbol_string <- gsub("\"", "", symbol_string)
+    # check whether we have exact one = sign. We need to have a name definition,
+    # i.e. something like "var = a+b" - if the string has no "=" sign, name is
+    # definitely missing
+    pattern <- "(?<!=)=(?!=)"
+    has_names <- grepl(pattern, symbol_string, perl = TRUE)
+    if (!all(has_names)) {
+      insight::format_error(paste0(
+        "A variable name for the expression `", symbol_string[!has_names[1]], "` is missing. ",
+        "Please use something like `new_name = ", symbol_string[!has_names[1]], "`."
+      ))
+    }
+    # extract names (split at =), separate name from new variable from its
+    # expression. we need this to create a named list of expressions for the dots
+    symbol_string <- lapply(
+      strsplit(symbol_string, "=", fixed = TRUE),
+      function(split_result) {
+        # we may have multiple "=" signs, e.g. when we have the pattern
+        # "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)". In this case
+        # paste remaining parts to one string again
+        first_part <- split_result[1]
+        second_part <- paste(split_result[-1], collapse = "=")
+        insight::trim_ws(c(first_part, second_part))
+      }
+    )
+    # extract names (LHS)
+    symbol_names <- vapply(symbol_string, function(i) i[1], character(1))
+    # extract expressions (RHS)
+    symbol_string <- lapply(symbol_string, function(i) str2lang(i[2]))
+    names(symbol_string) <- symbol_names
+    # copy to dots... if we have a character vector, one dot element may
+    # return more than one expression elements. Thus, we have to insert /
+    # replace the old element by one or more new elements
+    if (length(dots) == 1) {
+      return_value <- symbol_string
+    } else if (i == 1) {
+      return_value <- c(symbol_string, dots[(i + 1):length(dots)])
+    } else if (i == length(dots)) {
+      return_value <- c(dots[1:(i - 1)], symbol_string)
+    } else {
+      return_value <- c(dots[1:(i - 1)], symbol_string, dots[(i + 1):length(dots)])
+    }
+    dots <- return_value
   }
   dots
 }
