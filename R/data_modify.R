@@ -123,6 +123,8 @@
 #'   head(data_modify(data, ...))
 #' }
 #' foo1(iris, SW_fraction = Sepal.Width / 10)
+#' # or
+#' foo1(iris, as_expr("SW_fraction = Sepal.Width / 10"))
 #'
 #' # also with string arguments, using `as_expr()`
 #' foo2 <- function(data, modification) {
