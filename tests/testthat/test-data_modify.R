@@ -852,4 +852,16 @@ withr::with_environment(
   })
 )
 
+withr::with_environment(
+  new.env(),
+  test_that("data_modify passes expression syntax to function", {
+    foo1 <- function(data, ...) {
+      head(data_modify(data, ...))
+    }
+    out1 <- foo1(iris, SW_fraction = Sepal.Width / 10)
+    out2 <- foo1(iris, as_expr("SW_fraction = Sepal.Width / 10"))
+    expect_identical(out1, out2)
+  })
+)
+
 ## styler: on
