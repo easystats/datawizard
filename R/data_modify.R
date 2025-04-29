@@ -454,79 +454,9 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # iterate expressions for new variables
   symbol <- dots[[i]]
 
-  # expression is given as character string in a variable, but named, e.g.
-  # a <- "2 * Sepal.Width"
-  # data_modify(iris, double_SepWidth = a)
-  # we reconstruct the symbol as if it were provided as literal expression.
-  # However, we need to check that we don't have a character vector,
-  # like: data_modify(iris, new_var = "a")
-  # this one should be recycled instead.
-  if (is.character(symbol)) {
-    eval_symbol <- NULL
-  } else {
-    # we evaluate the content of "symbol", hence, "eval_symbol" either contains
-    # the values of the expression, or the expression itself as string
-    eval_symbol <- .dynEval(symbol, ifnotfound = NULL, data = data)
-    if (is.character(eval_symbol)) {
-      # if "eval_symbol" is a character, it can be two things: a variable name
-      # of a column in the data - since we don't want to copy variables, but only
-      # use "strings" as values, we check if "eval_symbol" is a column name in
-      # the data.
-      if (any(eval_symbol %in% colnames(data))) {
-        # If yes, and since we don't copy columns, we treat this string as new
-        # value for the variable
-        symbol <- eval_symbol
-      } else {
-        # expression as string? Then we need to reconstruct the symbol
-        symbol <- try(str2lang(paste0(names(dots)[i], " = ", eval_symbol)), silent = TRUE)
-        # we may have the edge-case of having a function that returns a character
-        # vector, like "new_var = sample(letters[1:3])". In this case, "eval_symbol"
-        # is of type character, but no symbol, thus str2lang() above creates a
-        # wrong pattern. We then take "eval_symbol" as character input.
-        if (inherits(symbol, "try-error")) {
-          symbol <- str2lang(paste0(
-            names(dots)[i],
-            " = c(", paste0("\"", eval_symbol, "\"", collapse = ","), ")"
-          ))
-        }
-      }
-    }
-  }
-
-  # ==========================================================================
-  # some scenarios we may have at this point:
-  #
-  # Code:
-  # a <- "2 * Sepal.Width"
-  # data_modify(iris, double_SepWidth = a)
-  #
-  # eval_symbol: "2 * Sepal.Width"
-  # symbol:      double_SepWidth = 2 * Sepal.Width
-  #
-  #
-  # Code:
-  # data_modify(iris, new_var = "a")
-  #
-  # eval_symbol: NULL
-  # symbol     : "a"
-  #
-  # Code:
-  # a <- "abc"
-  # data_modify(iris, firstletters = a)
-  #
-  # eval_symbol: "abc"
-  # symbol:      firstletters = abc      <- fails to evaluate, value of
-  #                                         eval_symbol will be used
-  #
-  # Code:
-  # data(efc)
-  # a <- "center(c22hour)"
-  # b <- "c12hour_c / sd(c12hour, na.rm = TRUE)"
-  # data_modify(efc, c12hour_c = a, c12hour_z = b)
-  #
-  # eval_symbol: "center(c22hour)"
-  # symbol:      c12hour_c = center(c22hour) <- fails, error in variable name
-  # ==========================================================================
+  # we evaluate the content of "symbol", hence, "eval_symbol" either contains
+  # the values of the expression, or the expression itself as string
+  eval_symbol <- .dynEval(symbol, ifnotfound = NULL, data = data)
 
   # finally, we can evaluate expression and get values for new variables
   symbol_string <- insight::safe_deparse(symbol)
@@ -540,17 +470,8 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   } else {
     # evaluate symbol
     new_variable <- try(with(data, eval(symbol)), silent = TRUE)
-    # at this point, there are two options for "eval_symbol":
-    # 1. the *value* in the expression might not an expression as string, but
-    #    possibly a *value* that should be assigned to the new variable. In this
-    #    case, evaluation fails, and we just copy "eval_symbol" to "new_variable".
-    # 2. "eval_symbol" is an expression as string, but one of the variable names
-    #    was possibly misspelled. Thus, evaluation fails, but we don't want to
-    #    treat "eval_symbol" as value - thus, we check in `.is_valid_value()`
-    #    whether there are special characters that usually appear in an expression
-    #    this is not perfectly safe, because it might treat values as misspelled
-    #    expression. These are hopefully rare cases.
-    if (inherits(new_variable, "try-error") && .is_valid_value(eval_symbol)) {
+    # if evaluation fails, we have a value - and directly use it
+    if (inherits(new_variable, "try-error")) {
       new_variable <- eval_symbol
     }
   }
@@ -582,17 +503,4 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   }
 
   new_variable
-}
-
-
-.is_valid_value <- function(x) {
-  valid_type <- !is.null(x) && (is.numeric(x) || is.factor(x) || is.character(x) || is.logical(x))
-  valid_value <- TRUE
-  # check if symbol contains any non-syntactical characters, which usually appear
-  # in expressions. If one if these chars are present, we assume an expression,
-  # else we assume a value
-  if (is.character(x)) {
-    valid_value <- !grepl("[<>\\+\\-=/\\*\\(\\)]", x, perl = TRUE)
-  }
-  valid_type && valid_value
 }
