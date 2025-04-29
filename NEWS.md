@@ -20,7 +20,7 @@ BREAKING CHANGES
   character vectors), use the helper-function `as_expr()`. Only literal
   expressions or strings wrapped in `as_expr()` will be evaluated as
   expressions, everything else will be treated as vector with values for new
-  variables (#605)
+  variables (#605).
 
 CHANGES
 
