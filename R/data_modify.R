@@ -309,7 +309,8 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # copy dot-element and convert to string for manipulation
     dot_element <- dots[[i]]
     symbol_string <- insight::safe_deparse(dot_element)
-    # sanity check
+    # sanity check - this may happen when user wants to remove a variable,
+    # e.g. data_modify(iris, as_expr("Species = NULL"))
     if (is.null(symbol_string)) next
     # we only allow unnamed elements if these are masked as expression. String
     # values or numeric values require a named element, i.e. we can only have
@@ -413,7 +414,8 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   for (i in seq_along(dots)) {
     dot_element <- dots[[i]]
     symbol_string <- insight::safe_deparse(dot_element)
-    # sanity check
+    # sanity check, this may happen when user wants to remove a variable
+    # e.g. data_modify(iris, Species = NULL)
     if (is.null(symbol_string)) next
     # extract string-expression, if we have any
     if (startsWith(symbol_string, "as_expr")) {
