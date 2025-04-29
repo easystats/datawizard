@@ -309,8 +309,6 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # copy dot-element and convert to string for manipulation
     dot_element <- dots[[i]]
     symbol_string <- insight::safe_deparse(dot_element)
-    # sanity check
-    if (is.null(symbol_string)) next
     # we only allow unnamed elements if these are masked as expression. String
     # values or numeric values require a named element, i.e. we can only have
     # data_modify(iris, newvar = "a"), but we cannot have data_modify(iris, "a").
@@ -405,16 +403,14 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 
 
 .process_named_expressions <- function(dots, data) {
-  # this is basically a shorte version of ".process_unnamed_expressions()",
-  # because we don't need to extact the name definition of the string, which
+  # this is basically a shorter version of ".process_unnamed_expressions()",
+  # because we don't need to extract the name definition of the string, which
   # makes the handling easier. See ".process_unnamed_expressions()" for a more
   # comprehensive documentation of the single steps.
 
   for (i in seq_along(dots)) {
     dot_element <- dots[[i]]
     symbol_string <- insight::safe_deparse(dot_element)
-    # sanity check
-    if (is.null(symbol_string)) next
     # extract string-expression, if we have any
     if (startsWith(symbol_string, "as_expr")) {
       symbol_string <- gsub("as_expr\\((.*)\\)", "\\1", symbol_string)
