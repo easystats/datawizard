@@ -573,12 +573,26 @@ test_that("data_modify .if/.at arguments", {
   expect_identical(out$Species, c(1, 1, 1, 1, 1))
   out <- data_modify(d, .if = is.factor, .modify = as.numeric)
   expect_identical(out$Species, c(1, 1, 1, 1, 1))
-  out <- data_modify(d, new_length = Petal.Length * 2, .at = "Species", .modify = as.numeric)
+  out <- data_modify(
+    d,
+    new_length = Petal.Length * 2,
+    .at = "Species",
+    .modify = as.numeric
+  )
   expect_identical(out$Species, c(1, 1, 1, 1, 1))
   expect_named(out, c(
     "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
     "Species", "new_length"
   ))
+  # using other functions with `.at`
+  out <- data_modify(
+    d,
+    .at = extract_column_names(d, select = starts_with("Sepal")),
+    .modify = as.factor
+  )
+  expect_true(is.factor(out$Sepal.Length))
+  expect_true(is.factor(out$Sepal.Width))
+
   # .at and .if cannot be used at same timne
   expect_error(
     data_modify(d, .at = "Species", .if = is.factor, .modify = as.numeric),
