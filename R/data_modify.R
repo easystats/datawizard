@@ -343,21 +343,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     #
     # in this case, we need to evaluate the symbol (i.e. convert symbol string
     # into a language expression and then evaluate)
-    symbol_string <- unlist(lapply(symbol_string, function(symbol_element) {
-      if (!startsWith(symbol_element, "\"")) {
-        return_value <- .dynEval(str2lang(symbol_element))
-        # dynEval might fail if we don't look in data - sanity check
-        if (identical(return_value, symbol_element)) {
-          return_value <- .dynEval(str2lang(symbol_element), data = data)
-        }
-        return_value
-      } else {
-        symbol_element
-      }
-    }), use.names = FALSE)
-    # now we should have the expression as character string. Next, we
-    # # remove quotes from strings
-    symbol_string <- gsub("^\"(.*)\"$", "\\1", symbol_string)
+    symbol_string <- .evaluate_expression_in_string(symbol_string, data)
     # check whether we have exact one = sign. We need to have a name definition,
     # i.e. something like "var = a+b" - if the string has no "=" sign, name is
     # definitely missing
@@ -426,22 +412,10 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     }
     # here we found an expression token - convert string into a regular expression
     if (!is.null(symbol_string)) {
-      # check if we have any symbols instead of strings as expression - evaluate
-      # and convert result into expression
-      symbol_string <- unlist(lapply(symbol_string, function(symbol_element) {
-        if (!startsWith(symbol_element, "\"")) {
-          return_value <- .dynEval(str2lang(symbol_element))
-          # dynEval might fail if we don't look in data - sanity check
-          if (identical(return_value, symbol_element)) {
-            return_value <- .dynEval(str2lang(symbol_element), data = data)
-          }
-          return_value
-        } else {
-          symbol_element
-        }
-      }), use.names = FALSE)
+      # check if we have any symbols instead of strings as expression
+      symbol_string <- .evaluate_expression_in_string(symbol_string, data)
       # remove quotes from strings and save symbol name
-      symbol_string <- .fix_quotes(gsub("^\"(.*)\"$", "\\1", symbol_string))
+      symbol_string <- .fix_quotes(symbol_string)
       symbol_name <- names(dots)[i]
       # convert string into language and replace in dots
       return_value <- try(str2lang(symbol_string), silent = TRUE)
@@ -464,6 +438,31 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 
 
 # helper -------------
+
+
+.evaluate_expression_in_string <- function(symbol_string, data) {
+  # check if we have any symbols instead of strings as expression, e.g.
+  # xpr <- "sepwid = 2 * Sepal.Width"
+  # data_modify(iris, as_expr(xpr))
+  #
+  # in this case, we need to evaluate the symbol (i.e. convert symbol string
+  # into a language expression and then evaluate)
+  symbol_string <- unlist(lapply(symbol_string, function(symbol_element) {
+    if (!startsWith(symbol_element, "\"")) {
+      return_value <- .dynEval(str2lang(symbol_element))
+      # dynEval might fail if we don't look in data - sanity check
+      if (identical(return_value, symbol_element)) {
+        return_value <- .dynEval(str2lang(symbol_element), data = data)
+      }
+      return_value
+    } else {
+      symbol_element
+    }
+  }), use.names = FALSE)
+  # now we should have the expression as character string. Next, we
+  # # remove quotes from strings
+  gsub("^\"(.*)\"$", "\\1", symbol_string)
+}
 
 
 .fix_quotes <- function(symbol_string) {
