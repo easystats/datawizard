@@ -120,7 +120,7 @@ test_that("data_modify expression in character vector", {
   data(iris)
   foo <- function(data) {
     y <- "var_a = Sepal.Width"
-    head(data_modify(data, {y}))
+    head(data_modify(data, as_expression(y)))
   }
   out <- foo(iris)
   expect_named(
@@ -133,7 +133,7 @@ test_that("data_modify expression in character vector", {
   expect_identical(out$var_a, out$Sepal.Width)
 
   foo2 <- function(data, z) {
-    head(data_modify(data, {z}))
+    head(data_modify(data, as_expression(z)))
   }
   out <- foo2(iris, "var_a = Sepal.Width")
   expect_named(
@@ -161,7 +161,7 @@ test_that("data_modify expression in character vector", {
   expect_identical(out$new_var, 2 * out$Sepal.Width)
 
   aa <- "2 * Sepal.Width"
-  out <- data_modify(iris, new_var = {aa})
+  out <- data_modify(iris, new_var = as_expression(aa))
   expect_named(
     out,
     c(
@@ -172,7 +172,7 @@ test_that("data_modify expression in character vector", {
   expect_identical(out$new_var, 2 * out$Sepal.Width)
 
   foo_nv <- function(data, z) {
-    head(data_modify(data, new_var = {z}))
+    head(data_modify(data, new_var = as_expression(z)))
   }
   out <- foo_nv(iris, "2 * Sepal.Width")
   expect_identical(
@@ -190,7 +190,7 @@ test_that("data_modify expression as character vector", {
   data(iris)
   x <- "var_a = Sepal.Width"
   y <- "Sepal_Wz_double = 2 * var_a"
-  out <- data_modify(iris, {c(x, y)})
+  out <- data_modify(iris, as_expression(c(x, y)))
   expect_named(
     out,
     c(
@@ -234,7 +234,11 @@ test_that("data_modify expression as character vector", {
 
   # works with separated strings
   data(iris)
-  out <- data_modify(iris, {"var_a = Sepal.Width"}, {"Sepal_Wz_double = 2 * var_a"})
+  out <- data_modify(
+    iris,
+    as_expression("var_a = Sepal.Width"),
+    as_expression("Sepal_Wz_double = 2 * var_a")
+  )
   expect_identical(out$var_a, out$Sepal.Width)
   expect_identical(out$Sepal_Wz_double, 2 * out$Sepal.Width)
 
@@ -340,7 +344,7 @@ test_that("data_modify works on grouped data, inside functions", {
   )
 
   foo5 <- function(data, rec) {
-    data_modify(data, {rec})
+    data_modify(data, as_expression(rec))
   }
   out <- foo5(
     data_group(efc, "c172code"),
@@ -477,9 +481,9 @@ test_that("data_modify works with character variables, and inside functions", {
 
     data_modify(
       efc,
-      c12hour_c = {a2},
-      c12hour_z = {b2},
-      c12hour_z2 = {d2}
+      c12hour_c = as_expression(a2),
+      c12hour_z = as_expression(b2),
+      c12hour_z2 = as_expression(d2)
     )
   }
   out <- foo2(efc)
@@ -615,7 +619,7 @@ test_that("data_modify works with new expressions, different use cases same resu
   out2b <- data_modify(
     iris,
     sepwid = as_expression("2 * Sepal.Width"),
-    seplen = {"5 * Sepal.Length"}
+    seplen = as_expression("5 * Sepal.Length")
   )
   e <- c("sepwid = 2 * Sepal.Width", "seplen = 5 * Sepal.Length")
   out3b <- data_modify(iris, as_expression(e))
@@ -650,7 +654,7 @@ test_that("data_modify works with new expressions, different use cases same resu
     tolerance = 1e-3
   )
   expect_equal(
-    head(out$Petal.Length_stand),
+    head(out$Sepal.Length_stand),
     c(-0.89767, -1.1392, -1.38073, -1.50149, -1.01844, -0.53538),
     tolerance = 1e-3
   )
@@ -665,7 +669,7 @@ test_that("data_modify works with new expressions, different use cases same resu
     iris,
     sepwid = as_expression(e),
     seplen = 5 * Sepal.Length,
-    {f},
+    as_expression(f),
     new_var = a,
     new_num = num,
     new_var2 = "ho",

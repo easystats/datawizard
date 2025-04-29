@@ -311,20 +311,18 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       # values or numeric values require a named element, i.e. we can only have
       # data_modify(iris, newvar = "a"), but we cannot have data_modify(iris, "a").
       # For expression, missing name is possible.
-      if (!startsWith(symbol_string, "as_expression") && !startsWith(symbol_string, "{")) {
+      if (!startsWith(symbol_string, "as_expression")) {
         insight::format_error(paste0(
           "A variable name for the expression `", symbol_string, "` is missing. ",
           "Please use something like `new_name = ", symbol_string, "`."
         ))
       }
       # next, check if the string-expression includes a name for the new variable
-      # therefore, we remove the "as_expression()" token (or its alias "{}")
+      # therefore, we remove the "as_expression()" token
       if (startsWith(symbol_string, "as_expression")) {
         symbol_string <- insight::trim_ws(
           gsub("as_expression\\((.*)\\)", "\\1", symbol_string)
         )
-      } else if (startsWith(symbol_string, "{")) {
-        symbol_string <- insight::trim_ws(gsub("\\{(.*)\\}", "\\1", symbol_string))
       }
       # remove c(), split at comma, if we have a vector of expressions
       if (startsWith(symbol_string, "c(")) {
@@ -417,8 +415,6 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # extract string-expression, if we have any
     if (startsWith(symbol_string, "as_expression")) {
       symbol_string <- gsub("as_expression\\((.*)\\)", "\\1", symbol_string)
-    } else if (startsWith(symbol_string, "{")) {
-      symbol_string <- gsub("\\{(.*)\\}", "\\1", symbol_string)
     } else {
       # no expression token found
       symbol_string <- NULL
