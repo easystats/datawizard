@@ -332,7 +332,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # remove c(), split at comma, if we have a vector of expressions
     if (startsWith(symbol_string, "c(")) {
       symbol_string <- gsub("c\\((.*)\\)", "\\1", symbol_string)
-      # only split at first comma
+      # only split at highest-level comma
       pattern <- ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)" # suggestion by Co-pilot
       # Locate commas not inside quotes
       symbol_string <- insight::trim_ws(unlist(strsplit(symbol_string, pattern, perl = TRUE), use.names = FALSE))
