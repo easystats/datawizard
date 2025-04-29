@@ -174,7 +174,7 @@ data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # check if we have dots, or only at/modify ----
 
   if (length(dots)) {
-    # check is dots are named. Usually, all dots should be named, i.e. include
+    # Check if dots are named. Usually, all dots should be named, i.e. include
     # the name of the new variable. There's only one exception, if a string is
     # masked as expression, and this string includes the new name, e.g.
     #
