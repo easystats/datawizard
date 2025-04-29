@@ -260,9 +260,9 @@ test_that("data_modify works with function as expression", {
   expect_identical(out$foo, rep(c(TRUE, FALSE, TRUE), each = 50))
   out <- data_modify(iris, as_expr("foo = grepl('a', Species)"))
   expect_identical(out$foo, rep(c(TRUE, FALSE, TRUE), each = 50))
-  out <- data_modify(iris, foo = as_expr('grepl(\'a\', Species)'))
+  out <- data_modify(iris, foo = as_expr('grepl(\'a\', Species)')) # nolint
   expect_identical(out$foo, rep(c(TRUE, FALSE, TRUE), each = 50))
-  out <- data_modify(iris, as_expr('foo = grepl(\'a\', Species)'))
+  out <- data_modify(iris, as_expr('foo = grepl(\'a\', Species)')) # nolint
   expect_identical(out$foo, rep(c(TRUE, FALSE, TRUE), each = 50))
   out <- data_modify(iris, foo = as_expr('grepl(\"a\", Species)'))
   expect_identical(out$foo, rep(c(TRUE, FALSE, TRUE), each = 50))
@@ -590,8 +590,8 @@ test_that("data_modify .if/.at arguments", {
     .at = extract_column_names(d, select = starts_with("Sepal")),
     .modify = as.factor
   )
-  expect_true(is.factor(out$Sepal.Length))
-  expect_true(is.factor(out$Sepal.Width))
+  expect_s3_class(out$Sepal.Length, "factor")
+  expect_s3_class(out$Sepal.Width, "factor")
 
   # .at and .if cannot be used at same timne
   expect_error(
