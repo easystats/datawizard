@@ -198,8 +198,7 @@ data_modify.data.frame <- function(data,
       ...,
       .if = .if,
       .at = .at,
-      .modify = .modify,
-      by = NULL
+      .modify = .modify
     )
     out <- data_ungroup(out)
     return(out)
