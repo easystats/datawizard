@@ -293,7 +293,7 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # *must* contain a name definition. If not, fail. If yes, convert string
   # into a language expression...
 
-  if (!is.null(names(dots)) || all(nzchar(names(dots)))) {
+  if (!is.null(names(dots)) && all(nzchar(names(dots)))) {
     # if all elements are named, return early
     return(dots)
   }
