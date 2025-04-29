@@ -28,12 +28,18 @@ data_modify(iris, var_abc = a) # var_abc contains "abc"
 \item An expression can also be provided as string, however, it must be called
 with \code{as_expression()}. Example:
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{a <- center(Sepal.Width)
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{data_modify(iris, as_expression("Sepal.Width = center(Sepal.Width)"))
+# or
+a <- "center(Sepal.Width)"
 data_modify(iris, Sepal.Width = as_expression(a))
+# or
+a <- "Sepal.Width = center(Sepal.Width)"
+data_modify(iris, as_expression(a))
 }\if{html}{\out{</div>}}
 
 \code{{}} can be used instead of \code{as_expression()}, thus, for the above example,
-\code{Sepal.Width = {a}} would be a valid syntax.
+\code{Sepal.Width = {a}} or simply \code{{a}} for the second case would be a valid
+syntax.
 \item Using \code{NULL} as right-hand side removes a variable from the data frame.
 Example: \code{Petal.Width = NULL}.
 \item For data frames (including grouped ones), the function \code{n()} can be used to

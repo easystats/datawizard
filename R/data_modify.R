@@ -20,11 +20,17 @@
 #' - An expression can also be provided as string, however, it must be called
 #'   with `as_expression()`. Example:
 #'   ```r
-#'   a <- center(Sepal.Width)
+#'   data_modify(iris, as_expression("Sepal.Width = center(Sepal.Width)"))
+#'   # or
+#'   a <- "center(Sepal.Width)"
 #'   data_modify(iris, Sepal.Width = as_expression(a))
+#'   # or
+#'   a <- "Sepal.Width = center(Sepal.Width)"
+#'   data_modify(iris, as_expression(a))
 #'   ```
 #'   `{}` can be used instead of `as_expression()`, thus, for the above example,
-#'   `Sepal.Width = {a}` would be a valid syntax.
+#'   `Sepal.Width = {a}` or simply `{a}` for the second case would be a valid
+#'   syntax.
 #' - Using `NULL` as right-hand side removes a variable from the data frame.
 #'   Example: `Petal.Width = NULL`.
 #' - For data frames (including grouped ones), the function `n()` can be used to
