@@ -444,7 +444,17 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       symbol_string <- .fix_quotes(gsub("^\"(.*)\"$", "\\1", symbol_string))
       symbol_name <- names(dots)[i]
       # convert string into language and replace in dots
-      return_value <- str2lang(symbol_string)
+      return_value <- try(str2lang(symbol_string), silent = TRUE)
+      # sanity check - for invalid expressions, like
+      # data_modify(iris, a = as_expr(c("1 + 1", "2 + 2")))
+      # we get an error here
+      if (inherits(return_value, "try-error")) {
+        insight::format_error(paste0(
+          "Could not evaluate expression `", symbol_string[1], "`. ",
+          "Please check if it's correctly specified. If you think there's a bug ",
+          "in `data_modify()`, please file an issue at {.url https://github.com/easystats/datawizard/issues}"
+        ))
+      }
       dots[[i]] <- return_value
       names(dots)[i] <- symbol_name
     }

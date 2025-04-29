@@ -787,6 +787,11 @@ test_that("data_modify errors with new expressions", {
     data_modify(efc, c12hour_c = as_expr(a), c12hour_z = as_expr(b)),
     regex = "c22hour"
   )
+
+  expect_error(
+    data_modify(iris, a = as_expr(c("1 + 1", "2 + 2"))),
+    regex = "Could not evaluate expression"
+  )
 })
 
 
