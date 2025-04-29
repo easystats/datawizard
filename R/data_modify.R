@@ -472,6 +472,10 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # "\", e.g. data_modify(iris, foo = as_expr("grepl(\"a\", Species)"))
   # In this case, we have double-backslashes, which need to be removed.
   # Furthermore, to avoid adding back backslashes, we replace by single quotes
+  # Using single quotes inside a string, even if escaped with backslash, is no
+  # problem here. Main issue is that if a string is parsed, double-quotes are
+  # *always* escaped, so we just need to make sure we only have single quotes
+  # and then remove all backslashes
   gsub("\\", "", gsub("\"", "'", symbol_string, fixed = TRUE), fixed = TRUE)
 }
 
