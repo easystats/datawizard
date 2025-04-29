@@ -749,6 +749,23 @@ test_that("data_modify works with new expressions, grouped_df, different use cas
     id = 1:n()
   )
   expect_equal(head(new_efc1), head(new_efc4), ignore_attr = TRUE, tolerance = 1e-4)
+
+  # using `by`
+  new_efc5 <- data_modify(
+    efc,
+    c12hour_c = center(c12hour),
+    c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE),
+    c12hour_z2 = standardize(c12hour),
+    id = 1:n(),
+    by = "c172code"
+  )
+  expect_equal(head(new_efc1), head(new_efc5), ignore_attr = TRUE, tolerance = 1e-4)
+
+  # error
+  expect_error(
+    data_modify(efc, c12hour_c = center(c12hour), by = 4),
+    regex = "must be a character"
+  )
 })
 
 

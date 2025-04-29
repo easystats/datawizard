@@ -49,6 +49,9 @@
 #' This argument is used in combination with either the `.at` or the `.if` argument.
 #' Note that the modified variable (i.e. the result from `.modify`) must be either
 #' of length 1 or of same length as the input variable.
+#' @param by Column names indicating how to split the data in various groups
+#' before modifying the data frame. `by` groups will be added to potentially
+#' existing groups created by `data_group()`.
 #'
 #' @note `data_modify()` can also be used inside functions. However, it is
 #' recommended to pass the recode-expression as character vector or list of
@@ -171,12 +174,34 @@ data_modify.default <- function(data, ...) {
 
 #' @rdname data_modify
 #' @export
-data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = NULL) {
+data_modify.data.frame <- function(data,
+                                   ...,
+                                   .if = NULL,
+                                   .at = NULL,
+                                   .modify = NULL,
+                                   by = NULL) {
   dots <- eval(substitute(alist(...)))
 
   # error for data frames with no rows...
   if (nrow(data) == 0) {
     insight::format_error("`data` is an empty data frame. `data_modify()` only works for data frames with at least one row.") # nolint
+  }
+
+  # return grouped data modification
+  if (!is.null(by)) {
+    if (!is.character(by)) {
+      insight::format_error("`by` must be a character vector.")
+    }
+    data <- data_group(data, by)
+    out <- data_modify(
+      data,
+      ...,
+      .if = .if,
+      .at = .at,
+      .modify = .modify
+    )
+    out <- data_ungroup(out)
+    return(out)
   }
 
   # check if we have dots, or only at/modify ----
