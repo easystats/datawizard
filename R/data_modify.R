@@ -455,15 +455,15 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # in this case, we need to evaluate the symbol (i.e. convert symbol string
   # into a language expression and then evaluate)
   symbol_string <- unlist(lapply(symbol_string, function(symbol_element) {
-    if (!startsWith(symbol_element, "\"")) {
+    if (startsWith(symbol_element, "\"")) {
+      symbol_element
+    } else {
       return_value <- .dynEval(str2lang(symbol_element))
       # dynEval might fail if we don't look in data - sanity check
       if (identical(return_value, symbol_element)) {
         return_value <- .dynEval(str2lang(symbol_element), data = data)
       }
       return_value
-    } else {
-      symbol_element
     }
   }), use.names = FALSE)
   # now we should have the expression as character string. Next, we
