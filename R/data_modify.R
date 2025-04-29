@@ -303,16 +303,16 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
         symbol_string <- insight::trim_ws(unlist(strsplit(symbol_string, pattern, perl = TRUE), use.names = FALSE))
       }
       # check if we have any symbols instead of strings as expression
-      symbol_string <- unlist(lapply(symbol_string, function(s) {
-        if (!grepl("\"", s, fixed = TRUE)) {
-          out <- .dynEval(str2lang(s))
+      symbol_string <- unlist(lapply(symbol_string, function(symbol_element) {
+        if (!grepl("\"", symbol_element, fixed = TRUE)) {
+          return_value <- .dynEval(str2lang(symbol_element))
           # dynEval might fail if we don't look in data - sanity check
-          if (identical(out, s)) {
-            out <- .dynEval(str2lang(s), data = data)
+          if (identical(return_value, symbol_element)) {
+            return_value <- .dynEval(str2lang(symbol_element), data = data)
           }
-          out
+          return_value
         } else {
-          s
+          symbol_element
         }
       }), use.names = FALSE)
       # remove quotes from strings
@@ -344,15 +344,15 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       names(symbol_string) <- symbol_names
       # copy to dots
       if (length(dots) == 1) {
-        out <- symbol_string
+        return_value <- symbol_string
       } else if (i == 1) {
-        out <- c(symbol_string, dots[(i + 1):length(dots)])
+        return_value <- c(symbol_string, dots[(i + 1):length(dots)])
       } else if (i == length(dots)) {
-        out <- c(dots[1:(i - 1)], symbol_string)
+        return_value <- c(dots[1:(i - 1)], symbol_string)
       } else {
-        out <- c(dots[1:(i - 1)], symbol_string, dots[(i + 1):length(dots)])
+        return_value <- c(dots[1:(i - 1)], symbol_string, dots[(i + 1):length(dots)])
       }
-      dots <- out
+      dots <- return_value
     }
   }
   dots
@@ -361,8 +361,8 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 
 .extract_named_expressions <- function(dots, data) {
   for (i in seq_along(dots)) {
-    d <- dots[[i]]
-    symbol_string <- insight::safe_deparse(d)
+    dot_element <- dots[[i]]
+    symbol_string <- insight::safe_deparse(dot_element)
     # sanity check
     if (is.null(symbol_string)) next
     # extract string-expression, if we have any
@@ -378,24 +378,24 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     if (!is.null(symbol_string)) {
       # check if we have any symbols instead of strings as expression - evaluate
       # and convert result into expression
-      symbol_string <- unlist(lapply(symbol_string, function(s) {
-        if (!grepl("\"", s, fixed = TRUE)) {
-          out <- .dynEval(str2lang(s))
+      symbol_string <- unlist(lapply(symbol_string, function(symbol_element) {
+        if (!grepl("\"", symbol_element, fixed = TRUE)) {
+          return_value <- .dynEval(str2lang(symbol_element))
           # dynEval might fail if we don't look in data - sanity check
-          if (identical(out, s)) {
-            out <- .dynEval(str2lang(s), data = data)
+          if (identical(return_value, symbol_element)) {
+            return_value <- .dynEval(str2lang(symbol_element), data = data)
           }
-          out
+          return_value
         } else {
-          s
+          symbol_element
         }
       }), use.names = FALSE)
       # remove quotes from strings and save symbol name
       symbol_string <- gsub("\"", "", symbol_string)
       symbol_name <- names(dots)[i]
       # convert string into language and replace in dots
-      out <- str2lang(symbol_string)
-      dots[[i]] <- out
+      return_value <- str2lang(symbol_string)
+      dots[[i]] <- return_value
       names(dots)[i] <- symbol_name
     }
   }
