@@ -137,8 +137,8 @@ foo1 <- function(data, ...) {
 foo1(iris, SW_fraction = Sepal.Width / 10)
 
 # also with string arguments, using `as_expression()`
-foo2 <- function(data, xpr) {
-  head(data_modify(data, as_expression(xpr)))
+foo2 <- function(data, modification) {
+  head(data_modify(data, as_expression(modification)))
 }
 foo2(iris, "SW_fraction = Sepal.Width / 10")
 
