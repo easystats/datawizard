@@ -395,3 +395,10 @@ test_that("(multiple) centralities with CIs", {
   # only one message for data frame
   expect_silent(expect_message(describe_distribution(iris, ci = 0.95)))
 })
+
+
+test_that("display() method exports to markdown", {
+  data(iris)
+  out <- describe_distribution(iris)
+  expect_snapshot(display(out))
+})
