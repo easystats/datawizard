@@ -400,5 +400,6 @@ test_that("(multiple) centralities with CIs", {
 test_that("display() method exports to markdown", {
   data(iris)
   out <- describe_distribution(iris)
+  expect_error(display(out, format = "invalid"), regex = "Invalid option")
   expect_snapshot(display(out))
 })
