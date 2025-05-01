@@ -612,11 +612,11 @@ print_html.parameters_distribution <- function(x, digits = 2, ci_brackets = c("(
 
 #' @export
 display.parameters_distribution <- function(object, format = "markdown", digits = 2, ...) {
-  format <- insight::validate_argument(format, c("markdown", "html"))
-  if (format == "markdown") {
-    print_md(x = object, digits = digits, ...)
-  } else if (format == "html") {
+  format <- insight::validate_argument(format, c("md", "markdown", "html"))
+  if (format == "html") {
     print_html(x = object, digits = digits, ...)
+  } else {
+    print_md(x = object, digits = digits, ...)
   }
 }
 
