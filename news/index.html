@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.16</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,28 @@
       <small>Source: <a href="https://github.com/easystats/datawizard/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.0" id="datawizard-110">datawizard 1.1.0<a class="anchor" aria-label="anchor" href="#datawizard-110"></a></h2><p class="text-muted">CRAN release: 2025-05-09</p>
+<p>BREAKING CHANGES</p>
+<ul><li><p><code><a href="../reference/data_read.html">data_read()</a></code> now also returns Bayesian models from packages <em>brms</em> and <em>rstanarm</em> as original model objects, and no longer coerces them into data frames (<a href="https://github.com/easystats/datawizard/issues/606" class="external-link">#606</a>).</p></li>
+<li><p>The output format of <code><a href="../reference/describe_distribution.html">describe_distribution()</a></code> on grouped data has changed. Before, it printed one table per group combination. Now, it prints a single table with group columns at the start (<a href="https://github.com/easystats/datawizard/issues/610" class="external-link">#610</a>).</p></li>
+<li><p>The output format of <code><a href="../reference/describe_distribution.html">describe_distribution()</a></code> when confidence intervals are requested has changed. Now, for each centrality measure a confidence interval is calculated (<a href="https://github.com/easystats/datawizard/issues/617" class="external-link">#617</a>).</p></li>
+<li><p><code><a href="../reference/data_modify.html">data_modify()</a></code> now always uses values of a vector for a modified or newly created variable, and no longer tries to detect whether a character value possibly contains an expression. To allow expression provided as string (or character vectors), use the helper-function <code>as_expr()</code>. Only literal expressions or strings wrapped in <code>as_expr()</code> will be evaluated as expressions, everything else will be treated as vector with values for new variables (<a href="https://github.com/easystats/datawizard/issues/605" class="external-link">#605</a>).</p></li>
+</ul><p>CHANGES</p>
+<ul><li><p><code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display()</a></code> is now re-exported from package <em>insight</em>.</p></li>
+<li><p><code><a href="../reference/data_read.html">data_read()</a></code> and <code><a href="../reference/data_read.html">data_write()</a></code> now rely on base-R functions for files of type <code>.rds</code>, <code>.rda</code> or <code>.rdata</code>. Thus, package <em>rio</em> is no longer required to be installed for these file types (<a href="https://github.com/easystats/datawizard/issues/607" class="external-link">#607</a>).</p></li>
+<li><p><code><a href="../reference/data_codebook.html">data_codebook()</a></code> gives an informative warning when no column names matched the selection pattern (<a href="https://github.com/easystats/datawizard/issues/601" class="external-link">#601</a>).</p></li>
+<li><p><code><a href="../reference/data_to_long.html">data_to_long()</a></code> now errors when columns selected to reshape do not exist in the data, to avoid nonsensical results that could be missed (<a href="https://github.com/easystats/datawizard/issues/602" class="external-link">#602</a>).</p></li>
+<li><p>New argument <code>by</code> in <code><a href="../reference/describe_distribution.html">describe_distribution()</a></code> (<a href="https://github.com/easystats/datawizard/issues/604" class="external-link">#604</a>).</p></li>
+<li><p><code><a href="../reference/describe_distribution.html">describe_distribution()</a></code> now gives informative errors when column names in the input data frame conflict with column from the output table (<a href="https://github.com/easystats/datawizard/issues/612" class="external-link">#612</a>).</p></li>
+<li><p>The methods for <code>parameters_distribution</code> objects are now defined in <code>datawizard</code> (they were previously in <code>parameters</code>) (<a href="https://github.com/easystats/datawizard/issues/613" class="external-link">#613</a>).</p></li>
+</ul><p>BUG FIXES</p>
+<ul><li><p>Fixed bug in <code><a href="../reference/data_to_wide.html">data_to_wide()</a></code>, where new column names in <code>names_from</code> were ignored when that column only contained one unique value.</p></li>
+<li><p>Fixed bug in <code><a href="../reference/describe_distribution.html">describe_distribution()</a></code> when some group combinations didn’t appear in the data (<a href="https://github.com/easystats/datawizard/issues/609" class="external-link">#609</a>).</p></li>
+<li><p>Fixed bug in <code><a href="../reference/describe_distribution.html">describe_distribution()</a></code> when more than one value for the <code>centrality</code> argument were specified (<a href="https://github.com/easystats/datawizard/issues/617" class="external-link">#617</a>).</p></li>
+<li><p>Fixed bug in <code><a href="../reference/describe_distribution.html">describe_distribution()</a></code> where setting <code>verbose = FALSE</code> didn’t hide some warnings (<a href="https://github.com/easystats/datawizard/issues/617" class="external-link">#617</a>).</p></li>
+<li><p>Fixed warning in <code><a href="../reference/data_summary.html">data_summary()</a></code> when a variable had the same name as another object in the global environment (<a href="https://github.com/easystats/datawizard/issues/585" class="external-link">#585</a>).</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.2" id="datawizard-102">datawizard 1.0.2<a class="anchor" aria-label="anchor" href="#datawizard-102"></a></h2><p class="text-muted">CRAN release: 2025-03-24</p>
 <p>BUG FIXES</p>
