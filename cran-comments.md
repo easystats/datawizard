@@ -1,3 +1,3 @@
-This is a patch release to address failures in tests occurring on ATLAS, noLD, 
-and OpenBLAS due to small numerical differences.
+This releases addresses the failures in CRAN checks reported on 2025-04-29.
 
+Reverse dependency failures are expected in "statsExpressions" and "ggstatsplot". The development version of those packages already contain necessary fixes.

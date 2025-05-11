@@ -101,12 +101,13 @@
 #'
 #' # using `paste()` to build a string-expression
 #' to_standardize <- c("Petal.Length", "Sepal.Length")
-#' data_modify(
+#' out <- data_modify(
 #'   iris,
 #'   as_expr(
 #'     paste0(to_standardize, "_stand = standardize(", to_standardize, ")")
 #'   )
 #' )
+#' head(out)
 #'
 #' # overwrite existing variable, remove old variable
 #' out <- data_modify(iris, Petal.Length = 1 / Sepal.Length, Sepal.Length = NULL)
