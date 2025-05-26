@@ -57,7 +57,7 @@
 #' grouping level, e.g. `predictor_L3_between` and `predictor_L2_between`.
 #'
 #' @seealso If grand-mean centering (instead of centering within-clusters)
-#'   is required, see [`center()`]. See [`performance::check_heterogeneity_bias()`]
+#'   is required, see [`center()`]. See [`performance::check_group_variation()`]
 #'   to check for heterogeneity bias.
 #'
 #' @section Heterogeneity Bias:
