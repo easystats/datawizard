@@ -33,7 +33,7 @@ BugReports: https://github.com/easystats/datawizard/issues
 Depends:
     R (>= 4.0)
 Imports:
-    insight (>= 1.2.0),
+    insight (>= 1.3.0),
     stats,
     utils
 Suggests:
@@ -56,6 +56,7 @@ Suggests:
     mediation,
     modelbased,
     parameters (>= 0.21.7),
+    performance (>= 0.14.0),
     poorman (>= 0.2.7),
     psych,
     readxl,

@@ -1,3 +1,10 @@
+# datawizard (devel)
+
+BUG FIXES
+
+* Fixed issue when printing cross tables using `data_tabulate(by = ...)`, which
+  was caused by the recent changes in `insight::export_table()`.
+
 # datawizard 1.1.0
 
 BREAKING CHANGES
