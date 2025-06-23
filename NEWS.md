@@ -3,7 +3,7 @@
 CHANGES
 
 * `data_read()` and `data_write()` now support the `.parquet` file format, via
-  the *nanoparquet* package.
+  the *nanoparquet* package (#625).
 
 BUG FIXES
 
