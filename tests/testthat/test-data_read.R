@@ -522,7 +522,7 @@ test_that("data_read - nanoparquet", {
   skip_if_not_installed("withr")
   skip_if_not_installed("nanoparquet")
 
-  withr::with_tempfile("temp_file", fileext = ".rda", code = {
+  withr::with_tempfile("temp_file", fileext = ".parquet", code = {
     request <- httr::GET("https://raw.github.com/easystats/circus/main/data/penguins.parquet")
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
