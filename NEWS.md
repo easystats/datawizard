@@ -1,5 +1,10 @@
 # datawizard (devel)
 
+CHANGES
+
+* `data_read()` and `data_write()` now support the `.parquet` file format, via
+  the *nanoparquet* package.
+
 BUG FIXES
 
 * Fixed issue when printing cross tables using `data_tabulate(by = ...)`, which
