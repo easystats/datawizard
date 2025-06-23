@@ -278,8 +278,7 @@ data_read <- function(path,
       encoding <- "unknown"
     }
     out <- data.table::fread(input = path, encoding = encoding, ...)
-    class(out) <- "data.frame"
-    return(out)
+    return(as.data.frame(out))
   }
 
   insight::check_if_installed("readr", reason = paste0("to read files of type '", .file_ext(path), "'"))
@@ -287,8 +286,7 @@ data_read <- function(path,
     insight::format_alert("Reading data...")
   }
   out <- readr::read_delim(path, ...)
-  class(out) <- "data.frame"
-  out
+  as.data.frame(out)
 }
 
 
@@ -396,8 +394,7 @@ data_read <- function(path,
   path <- .check_path_url(path, file_type = "parquet")
   out <- nanoparquet::read_parquet(file = path, ...)
 
-  class(out) <- "data.frame"
-  out
+  as.data.frame(out)
 }
 
 
