@@ -11,7 +11,7 @@ tidyr::pivot_longer().'><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -262,42 +262,42 @@ new columns (<code>names_to</code>).</p>
 <span class="r-in"><span><span class="va">wide_data</span><span class="op">$</span><span class="va">ID</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">8</span></span></span>
 <span class="r-in"><span><span class="va">wide_data</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Time1       Time2 ID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.6895557  0.50381245  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1.2394959  2.52833655  2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.1089660  0.54909674  3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.1172420  0.23821292  4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.1830826 -1.04889314  5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1.2805549  1.29476325  6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7 -1.7272706  0.82553984  7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1.6901844 -0.05568601  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1.2394959  2.52833655  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.1089660  0.54909674  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.1172420  0.23821292  3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.1830826 -1.04889314  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.2805549  1.29476325  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 -1.7272706  0.82553984  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  1.6901844 -0.05568601  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  0.5038124 -0.78438222  8</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Default behaviour (equivalent to tidyr::pivot_longer(wide_data, cols = 1:3))</span></span></span>
 <span class="r-in"><span><span class="co"># probably doesn't make much sense to mix "time" and "id"</span></span></span>
 <span class="r-in"><span><span class="fu">data_to_long</span><span class="op">(</span><span class="va">wide_data</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     name       value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  Time1 -1.68955566</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Time2  0.50381245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  Time1  1.23949589</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Time2  2.52833655</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3     ID  1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  Time1  1.23949589</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  Time2  2.52833655</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  Time1 -0.10896597</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  Time2  0.54909674</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6     ID  2.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  Time1 -0.10896597</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  Time2  0.54909674</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  Time1 -0.11724196</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  Time2  0.23821292</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9     ID  3.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 Time1 -0.11724196</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 Time2  0.23821292</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 Time1  0.18308261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 Time2 -1.04889314</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12    ID  4.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 Time1  0.18308261</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 Time2 -1.04889314</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 Time1  1.28055488</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 Time2  1.29476325</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15    ID  5.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 Time1  1.28055488</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 Time2  1.29476325</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 Time1 -1.72727063</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 Time2  0.82553984</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 18    ID  6.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 Time1 -1.72727063</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 Time2  0.82553984</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 Time1  1.69018435</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 Time2 -0.05568601</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21    ID  7.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22 Time1  1.69018435</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23 Time2 -0.05568601</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22 Time1  0.50381245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23 Time2 -0.78438222</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 24    ID  8.00000000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Customizing the names</span></span></span>
@@ -308,22 +308,22 @@ new columns (<code>names_to</code>).</p>
 <span class="r-in"><span>  values_to <span class="op">=</span> <span class="st">"Score"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    ID Timepoint       Score</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1     Time1 -1.68955566</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   1     Time2  0.50381245</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   2     Time1  1.23949589</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   2     Time2  2.52833655</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   3     Time1 -0.10896597</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   3     Time2  0.54909674</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   4     Time1 -0.11724196</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   4     Time2  0.23821292</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   5     Time1  0.18308261</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  5     Time2 -1.04889314</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11  6     Time1  1.28055488</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  6     Time2  1.29476325</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13  7     Time1 -1.72727063</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  7     Time2  0.82553984</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15  8     Time1  1.69018435</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  8     Time2 -0.05568601</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1     Time1  1.23949589</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   1     Time2  2.52833655</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   2     Time1 -0.10896597</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   2     Time2  0.54909674</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   3     Time1 -0.11724196</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   3     Time2  0.23821292</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   4     Time1  0.18308261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   4     Time2 -1.04889314</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   5     Time1  1.28055488</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  5     Time2  1.29476325</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  6     Time1 -1.72727063</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  6     Time2  0.82553984</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  7     Time1  1.69018435</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  7     Time2 -0.05568601</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  8     Time1  0.50381245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  8     Time2 -0.78438222</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Reshape multiple columns into long format.</span></span></span>
 <span class="r-in"><span><span class="va">mydat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
