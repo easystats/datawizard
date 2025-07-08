@@ -624,31 +624,7 @@ display.datawizard_tables <- function(object, big_mark = NULL, format = "markdow
 
 #' @export
 print_html.datawizard_table <- function(x, big_mark = NULL, ...) {
-  a <- attributes(x)
-
-  # "table" header with variable label/name, and type
-  caption <- .table_header(x, "html")
-
-  # summary of total and valid N (we may add mean/sd as well?)
-  footer <- sprintf(
-    "total N=%i valid N=%i%s",
-    a$total_n,
-    a$valid_n,
-    ifelse(is.null(a$weights), "", " (weighted)")
-  )
-
-  # remove information that goes into the header/footer
-  x$Variable <- NULL
-  x$Group <- NULL
-
-  # print table
-  insight::export_table(
-    format(x, format = "html", big_mark = big_mark, ...),
-    title = caption,
-    footer = footer,
-    missing = "(NA)",
-    format = "html"
-  )
+  .print_dw_table(x, format = "html", big_mark = big_mark, ...)
 }
 
 
@@ -687,31 +663,7 @@ print_html.datawizard_tables <- function(x, big_mark = NULL, ...) {
 
 #' @export
 print_md.datawizard_table <- function(x, big_mark = NULL, ...) {
-  a <- attributes(x)
-
-  # "table" header with variable label/name, and type
-  caption <- .table_header(x, "markdown")
-
-  # summary of total and valid N (we may add mean/sd as well?)
-  footer <- sprintf(
-    "total N=%i valid N=%i%s\n\n",
-    a$total_n,
-    a$valid_n,
-    ifelse(is.null(a$weights), "", " (weighted)")
-  )
-
-  # remove information that goes into the header/footer
-  x$Variable <- NULL
-  x$Group <- NULL
-
-  # print table
-  insight::export_table(
-    format(x, format = "markdown", big_mark = big_mark, ...),
-    title = caption,
-    footer = footer,
-    missing = "(NA)",
-    format = "markdown"
-  )
+  .print_dw_table(x, format = "markdown", big_mark = big_mark, ...)
 }
 
 
@@ -751,6 +703,37 @@ print_md.datawizard_tables <- function(x, big_mark = NULL, ...) {
 
 
 # tools --------------------
+
+
+.print_dw_table <- function(x, format = "markdown", big_mark = NULL, ...) {
+  a <- attributes(x)
+
+  # "table" header with variable label/name, and type
+  caption <- .table_header(x, format)
+
+  # summary of total and valid N (we may add mean/sd as well?)
+  footer <- sprintf(
+    "total N=%i valid N=%i%s%s",
+    a$total_n,
+    a$valid_n,
+    ifelse(is.null(a$weights), "", " (weighted)"),
+    ifelse(format == "markdown", "\n\n", "")
+  )
+
+  # remove information that goes into the header/footer
+  x$Variable <- NULL
+  x$Group <- NULL
+
+  # print table
+  insight::export_table(
+    format(x, format = format, big_mark = big_mark, ...),
+    title = caption,
+    footer = footer,
+    missing = "(NA)",
+    format = format
+  )
+}
+
 
 .table_header <- function(x, format = "text") {
   a <- attributes(x)
