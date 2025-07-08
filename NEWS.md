@@ -5,10 +5,10 @@ CHANGES
 * `data_read()` and `data_write()` now support the `.parquet` file format, via
   the *nanoparquet* package (#625).
 
-* `data_tabulate()` gets a `display()` method.
+* `data_tabulate()` gets a `display()` method (#627).
 
 * The `print()` method for `data_tabulate()` now appears in the documentation,
-  making the `big_mark` visible.
+  making the `big_mark` visible (#627).
 
 BUG FIXES
 

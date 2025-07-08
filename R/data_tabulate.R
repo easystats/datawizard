@@ -493,11 +493,9 @@ format.datawizard_table <- function(x, format = "text", big_mark = NULL, ...) {
   if (is.null(big_mark) && any(nchar(x) > 5)) {
     big_mark <- ","
   }
-  # if big_mark is "", we return the original vector
   if (identical(big_mark, "")) {
     return(x)
   }
-  # insert big marks
   if (!is.null(big_mark)) {
     x <- prettyNum(x, big.mark = big_mark)
   }

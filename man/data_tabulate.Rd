@@ -156,7 +156,7 @@ column with the total N values are added to the data frame. \code{add_total} has
 no effect in \code{as.data.frame()} for simple frequency tables.}
 
 \item{big_mark}{Optional character string, indicating the big mark that is
-used for large numbers. If \code{NULL}, a big mark is added automatically for
+used for large numbers. If \code{NULL} (default), a big mark is added automatically for
 large numbers (i.e. numbers with more than 5 digits). If you want to remove
 the big mark, set \code{big_mark = ""}.}
 }
