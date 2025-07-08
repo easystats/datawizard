@@ -599,25 +599,25 @@ print.datawizard_tables <- function(x, big_mark = NULL, ...) {
 # display --------------------
 
 #' @export
-display.datawizard_table <- function(x, big_mark = NULL, format = "markdown", ...) {
+display.datawizard_table <- function(object, big_mark = NULL, format = "markdown", ...) {
   format <- insight::validate_argument(format, c("markdown", "html", "md"))
   # print table in HTML or markdown format
   if (format == "html") {
-    print_html(x, big_mark = big_mark, ...)
-  } else if (format %in% c("markdown", "md")) {
-    print_md(x, big_mark = big_mark, ...)
+    print_html(object, big_mark = big_mark, ...)
+  } else {
+    print_md(object, big_mark = big_mark, ...)
   }
 }
 
 
 #' @export
-display.datawizard_tables <- function(x, big_mark = NULL, format = "markdown", ...) {
+display.datawizard_tables <- function(object, big_mark = NULL, format = "markdown", ...) {
   format <- insight::validate_argument(format, c("markdown", "html", "md"))
   # print table in HTML or markdown format
   if (format == "html") {
-    print_html(x, big_mark = big_mark, ...)
-  } else if (format %in% c("markdown", "md")) {
-    print_md(x, big_mark = big_mark, ...)
+    print_html(object, big_mark = big_mark, ...)
+  } else {
+    print_md(object, big_mark = big_mark, ...)
   }
 }
 
