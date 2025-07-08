@@ -37,6 +37,7 @@ test_that("data_tabulate, HTML", {
   data(efc, package = "datawizard")
   expect_s3_class(print_html(data_tabulate(efc$c172code)), "gt_tbl")
   expect_s3_class(print_html(data_tabulate(efc, "c172code")), "gt_tbl")
+  expect_s3_class(display(data_tabulate(efc, "c172code"), format = "html"), "gt_tbl")
 })
 
 
@@ -335,6 +336,7 @@ test_that("data_tabulate, cross tables, HTML", {
   expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", remove_na = TRUE, weights = efc$weights)), "gt_tbl") # nolint
   expect_s3_class(print_html(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row")), "gt_tbl")
   expect_s3_class(print_html(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", remove_na = TRUE, weights = efc$weights)), "gt_tbl") # nolint
+  expect_s3_class(display(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", remove_na = TRUE, weights = efc$weights), format = "html"), "gt_tbl") # nolint
 })
 
 test_that("data_tabulate, cross tables, grouped df", {
