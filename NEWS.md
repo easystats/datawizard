@@ -7,6 +7,9 @@ CHANGES
 
 * `data_tabulate()` gets a `display()` method.
 
+* The `print()` method for `data_tabulate()` now appears in the documentation,
+  making the `big_mark` visible.
+
 BUG FIXES
 
 * Fixed issue when printing cross tables using `data_tabulate(by = ...)`, which
