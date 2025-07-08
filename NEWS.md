@@ -5,6 +5,8 @@ CHANGES
 * `data_read()` and `data_write()` now support the `.parquet` file format, via
   the *nanoparquet* package (#625).
 
+* `data_tabulate()` gets a `display()` method.
+
 BUG FIXES
 
 * Fixed issue when printing cross tables using `data_tabulate(by = ...)`, which

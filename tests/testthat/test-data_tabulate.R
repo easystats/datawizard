@@ -41,6 +41,7 @@ test_that("data_tabulate, HTML", {
 
 
 test_that("data_tabulate, weights", {
+  skip_if_not_installed("knitr")
   data(efc, package = "datawizard")
   set.seed(123)
   efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
@@ -63,9 +64,11 @@ test_that("data_tabulate, weights", {
   # correct table footer
   expect_snapshot(print(data_tabulate(efc$e42dep, weights = efc$weights)))
   expect_snapshot(print_md(data_tabulate(efc$e42dep, weights = efc$weights)))
+  expect_snapshot(display(data_tabulate(efc$e42dep, weights = efc$weights)))
   # correct table caption
   expect_snapshot(print(data_tabulate(efc, c("e42dep", "e16sex"), collapse = TRUE, weights = efc$weights)))
   expect_snapshot(print_md(data_tabulate(efc, c("e42dep", "e16sex"), weights = efc$weights)))
+  expect_snapshot(display(data_tabulate(efc, c("e42dep", "e16sex"), weights = efc$weights)))
 })
 
 
@@ -169,6 +172,7 @@ test_that("data_tabulate big numbers", {
   x <- sample.int(5, size = 1e7, TRUE)
   expect_snapshot(data_tabulate(x))
   expect_snapshot(print(data_tabulate(x), big_mark = "-"))
+  expect_snapshot(print(data_tabulate(x), big_mark = ""))
 })
 
 
@@ -371,11 +375,16 @@ test_that("data_tabulate, cross tables, errors weights", {
 })
 
 test_that("data_tabulate, cross tables, modify structure", {
+  skip_if_not_installed("knitr")
   data(efc, package = "datawizard")
   x <- data_group(efc, c("c172code", "e16sex"))
   out <- data_tabulate(x, "c172code")
   out[] <- lapply(out, data_select, exclude = c("Variable", "Raw %", "Cumulative %"))
   junk <- capture.output(print_md(out))
+  expect_false(grepl("Variable", junk[3], fixed = TRUE))
+  expect_false(grepl("Raw %", junk[3], fixed = TRUE))
+  # display() default to markdown
+  junk <- capture.output(display(out))
   expect_false(grepl("Variable", junk[3], fixed = TRUE))
   expect_false(grepl("Raw %", junk[3], fixed = TRUE))
 })
@@ -384,6 +393,7 @@ test_that("data_tabulate, cross tables, modify structure", {
 # markdown -------------------------
 
 test_that("data_tabulate, cross tables, markdown", {
+  skip_if_not_installed("knitr")
   data(efc, package = "datawizard")
   set.seed(123)
   efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
@@ -395,6 +405,8 @@ test_that("data_tabulate, cross tables, markdown", {
   expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", remove_na = TRUE, weights = efc$weights))) # nolint
   expect_snapshot(print_md(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", remove_na = TRUE, weights = "weights"))) # nolint
   expect_snapshot(print_md(data_tabulate(efc, c("c172code", "e42dep"), by = "e16sex", proportions = "row"))) # nolint
+  expect_snapshot(display(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", remove_na = TRUE, weights = "weights"))) # nolint
+  expect_snapshot(display(data_tabulate(efc, c("c172code", "e42dep"), by = "e16sex", proportions = "row"))) # nolint
 })
 
 

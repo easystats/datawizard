@@ -25,6 +25,10 @@
 #' percentages to be calculated. Only applies to crosstables, i.e. when `by` is
 #' not `NULL`. Can be `"row"` (row percentages), `"column"` (column percentages)
 #' or `"full"` (to calculate relative frequencies for the full table).
+#' @param big_mark Optional character string, indicating the big mark that is
+#' used for large numbers. If `NULL`, a big mark is added automatically for
+#' large numbers (i.e. numbers with more than 5 digits). If you want to remove
+#' the big mark, set `big_mark = ""`.
 #' @param ... not used.
 #' @inheritParams extract_column_names
 #'
@@ -403,6 +407,8 @@ insight::print_md
 insight::display
 
 
+# as.data.frame --------------------
+
 #' @rdname data_tabulate
 #' @param add_total For crosstables (i.e. when `by` is not `NULL`), a row and
 #' column with the total N values are added to the data frame. `add_total` has
@@ -459,6 +465,8 @@ as.data.frame.datawizard_tables <- function(x,
 as.data.frame.datawizard_crosstabs <- as.data.frame.datawizard_tables
 
 
+# format --------------------
+
 #' @export
 format.datawizard_table <- function(x, format = "text", big_mark = NULL, ...) {
   # convert to character manually, else, for large numbers,
@@ -481,9 +489,15 @@ format.datawizard_table <- function(x, format = "text", big_mark = NULL, ...) {
 }
 
 .add_commas_in_numbers <- function(x, big_mark = NULL) {
+  # automatically add a big mark for large numbers
   if (is.null(big_mark) && any(nchar(x) > 5)) {
     big_mark <- ","
   }
+  # if big_mark is "", we return the original vector
+  if (identical(big_mark, "")) {
+    return(x)
+  }
+  # insert big marks
   if (!is.null(big_mark)) {
     x <- prettyNum(x, big.mark = big_mark)
   }
@@ -492,6 +506,9 @@ format.datawizard_table <- function(x, format = "text", big_mark = NULL, ...) {
 }
 
 
+# print --------------------
+
+#' @rdname data_tabulate
 #' @export
 print.datawizard_table <- function(x, big_mark = NULL, ...) {
   a <- attributes(x)
@@ -532,66 +549,6 @@ print.datawizard_table <- function(x, big_mark = NULL, ...) {
     ...
   ))
   invisible(x)
-}
-
-
-#' @export
-print_html.datawizard_table <- function(x, big_mark = NULL, ...) {
-  a <- attributes(x)
-
-  # "table" header with variable label/name, and type
-  caption <- .table_header(x, "html")
-
-  # summary of total and valid N (we may add mean/sd as well?)
-  footer <- sprintf(
-    "total N=%i valid N=%i%s",
-    a$total_n,
-    a$valid_n,
-    ifelse(is.null(a$weights), "", " (weighted)")
-  )
-
-  # remove information that goes into the header/footer
-  x$Variable <- NULL
-  x$Group <- NULL
-
-  # print table
-  insight::export_table(
-    format(x, format = "html", big_mark = big_mark, ...),
-    title = caption,
-    footer = footer,
-    missing = "(NA)",
-    format = "html"
-  )
-}
-
-
-#' @export
-print_md.datawizard_table <- function(x, big_mark = NULL, ...) {
-  a <- attributes(x)
-
-  # "table" header with variable label/name, and type
-  caption <- .table_header(x, "markdown")
-
-  # summary of total and valid N (we may add mean/sd as well?)
-  footer <- sprintf(
-    "total N=%i valid N=%i%s\n\n",
-    a$total_n,
-    a$valid_n,
-    ifelse(is.null(a$weights), "", " (weighted)")
-  )
-
-  # remove information that goes into the header/footer
-  x$Variable <- NULL
-  x$Group <- NULL
-
-  # print table
-  insight::export_table(
-    format(x, format = "markdown", big_mark = big_mark, ...),
-    title = caption,
-    footer = footer,
-    missing = "(NA)",
-    format = "markdown"
-  )
 }
 
 
@@ -639,6 +596,64 @@ print.datawizard_tables <- function(x, big_mark = NULL, ...) {
 }
 
 
+# display --------------------
+
+#' @export
+display.datawizard_table <- function(x, big_mark = NULL, format = "markdown", ...) {
+  format <- insight::validate_argument(format, c("markdown", "html", "md"))
+  # print table in HTML or markdown format
+  if (format == "html") {
+    print_html(x, big_mark = big_mark, ...)
+  } else if (format %in% c("markdown", "md")) {
+    print_md(x, big_mark = big_mark, ...)
+  }
+}
+
+
+#' @export
+display.datawizard_tables <- function(x, big_mark = NULL, format = "markdown", ...) {
+  format <- insight::validate_argument(format, c("markdown", "html", "md"))
+  # print table in HTML or markdown format
+  if (format == "html") {
+    print_html(x, big_mark = big_mark, ...)
+  } else if (format %in% c("markdown", "md")) {
+    print_md(x, big_mark = big_mark, ...)
+  }
+}
+
+
+# print_html --------------------
+
+#' @export
+print_html.datawizard_table <- function(x, big_mark = NULL, ...) {
+  a <- attributes(x)
+
+  # "table" header with variable label/name, and type
+  caption <- .table_header(x, "html")
+
+  # summary of total and valid N (we may add mean/sd as well?)
+  footer <- sprintf(
+    "total N=%i valid N=%i%s",
+    a$total_n,
+    a$valid_n,
+    ifelse(is.null(a$weights), "", " (weighted)")
+  )
+
+  # remove information that goes into the header/footer
+  x$Variable <- NULL
+  x$Group <- NULL
+
+  # print table
+  insight::export_table(
+    format(x, format = "html", big_mark = big_mark, ...),
+    title = caption,
+    footer = footer,
+    missing = "(NA)",
+    format = "html"
+  )
+}
+
+
 #' @export
 print_html.datawizard_tables <- function(x, big_mark = NULL, ...) {
   # check if we have weights
@@ -667,6 +682,38 @@ print_html.datawizard_tables <- function(x, big_mark = NULL, ...) {
       group_by = "Group"
     )
   }
+}
+
+
+# print_md --------------------
+
+#' @export
+print_md.datawizard_table <- function(x, big_mark = NULL, ...) {
+  a <- attributes(x)
+
+  # "table" header with variable label/name, and type
+  caption <- .table_header(x, "markdown")
+
+  # summary of total and valid N (we may add mean/sd as well?)
+  footer <- sprintf(
+    "total N=%i valid N=%i%s\n\n",
+    a$total_n,
+    a$valid_n,
+    ifelse(is.null(a$weights), "", " (weighted)")
+  )
+
+  # remove information that goes into the header/footer
+  x$Variable <- NULL
+  x$Group <- NULL
+
+  # print table
+  insight::export_table(
+    format(x, format = "markdown", big_mark = big_mark, ...),
+    title = caption,
+    footer = footer,
+    missing = "(NA)",
+    format = "markdown"
+  )
 }
 
 

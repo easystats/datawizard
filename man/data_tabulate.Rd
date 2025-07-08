@@ -5,6 +5,7 @@
 \alias{data_tabulate.default}
 \alias{data_tabulate.data.frame}
 \alias{as.data.frame.datawizard_tables}
+\alias{print.datawizard_table}
 \title{Create frequency and crosstables of variables}
 \usage{
 data_tabulate(x, ...)
@@ -45,6 +46,8 @@ data_tabulate(x, ...)
   stringsAsFactors = FALSE,
   add_total = FALSE
 )
+
+\method{print}{datawizard_table}(x, big_mark = NULL, ...)
 }
 \arguments{
 \item{x}{A (grouped) data frame, a vector or factor.}
@@ -151,6 +154,11 @@ table for printing. This affects only printing, not the returned object.}
 \item{add_total}{For crosstables (i.e. when \code{by} is not \code{NULL}), a row and
 column with the total N values are added to the data frame. \code{add_total} has
 no effect in \code{as.data.frame()} for simple frequency tables.}
+
+\item{big_mark}{Optional character string, indicating the big mark that is
+used for large numbers. If \code{NULL}, a big mark is added automatically for
+large numbers (i.e. numbers with more than 5 digits). If you want to remove
+the big mark, set \code{big_mark = ""}.}
 }
 \value{
 A data frame, or a list of data frames, with one frequency table
