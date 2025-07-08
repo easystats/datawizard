@@ -26,7 +26,7 @@
 #' not `NULL`. Can be `"row"` (row percentages), `"column"` (column percentages)
 #' or `"full"` (to calculate relative frequencies for the full table).
 #' @param big_mark Optional character string, indicating the big mark that is
-#' used for large numbers. If `NULL`, a big mark is added automatically for
+#' used for large numbers. If `NULL` (default), a big mark is added automatically for
 #' large numbers (i.e. numbers with more than 5 digits). If you want to remove
 #' the big mark, set `big_mark = ""`.
 #' @param ... not used.
