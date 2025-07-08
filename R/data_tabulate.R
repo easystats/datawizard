@@ -607,17 +607,14 @@ display.datawizard_table <- function(object, big_mark = NULL, format = "markdown
   }
 }
 
+#' @export
+display.datawizard_tables <- display.datawizard_table
 
 #' @export
-display.datawizard_tables <- function(object, big_mark = NULL, format = "markdown", ...) {
-  format <- insight::validate_argument(format, c("markdown", "html", "md"))
-  # print table in HTML or markdown format
-  if (format == "html") {
-    print_html(object, big_mark = big_mark, ...)
-  } else {
-    print_md(object, big_mark = big_mark, ...)
-  }
-}
+display.datawizard_crosstab <- display.datawizard_table
+
+#' @export
+display.datawizard_crosstabs <- display.datawizard_table
 
 
 # print_html --------------------

@@ -198,18 +198,6 @@ format.datawizard_crosstab <- function(x,
 
 
 #' @export
-display.datawizard_crosstab <- function(object, big_mark = NULL, format = "markdown", ...) {
-  format <- insight::validate_argument(format, c("markdown", "html", "md", "tt"))
-  # print table in HTML or markdown format
-  if (format == "html") {
-    print_html(object, big_mark = big_mark, ...)
-  } else {
-    print_md(object, big_mark = big_mark, ...)
-  }
-}
-
-
-#' @export
 print.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   .print_text_table(x, big_mark, format = "text", ...)
   invisible(x)
@@ -264,18 +252,6 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
 
 
 # print, datawizard_crosstabs ---------------------
-
-
-#' @export
-display.datawizard_crosstabs <- function(object, big_mark = NULL, format = "markdown", ...) {
-  format <- insight::validate_argument(format, c("markdown", "html", "md", "tt"))
-  # print table in HTML or markdown format
-  if (format == "html") {
-    print_html(object, big_mark = big_mark, ...)
-  } else {
-    print_md(object, big_mark = big_mark, ...)
-  }
-}
 
 
 #' @export
