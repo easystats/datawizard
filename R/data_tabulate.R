@@ -465,6 +465,19 @@ as.data.frame.datawizard_tables <- function(x,
 as.data.frame.datawizard_crosstabs <- as.data.frame.datawizard_tables
 
 
+# as.table --------------------
+
+#' @export
+as.table.datawizard_table <- function(x, ...) {
+  as.table(stats::setNames(x[["N"]], x$Value))
+}
+
+#' @export
+as.table.datawizard_tables <- function(x, ...) {
+  lapply(x, as.table.datawizard_table, ...)
+}
+
+
 # format --------------------
 
 #' @export
