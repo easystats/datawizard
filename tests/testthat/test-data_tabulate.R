@@ -351,6 +351,12 @@ test_that("data_tabulate, cross tables, grouped df", {
   expect_s3_class(print_html(data_tabulate(efc, c("e16sex", "e42dep"), by = "c172code", proportions = "row")), "gt_tbl") # nolint
 })
 
+test_that("data_tabulate, cross tables, print/format works", {
+  data(mtcars)
+  x <- data_tabulate(mtcars, c("cyl", "am"), by = "gear")
+  expect_snapshot(print(x))
+})
+
 test_that("data_tabulate, cross tables, errors by", {
   data(efc, package = "datawizard")
   set.seed(123)
