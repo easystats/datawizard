@@ -13,7 +13,7 @@ percentages can be calculated."><meta property="og:image" content="https://easys
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -109,7 +109,10 @@ percentages can be calculated.</p>
 <span>  <span class="va">...</span>,</span>
 <span>  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  add_total <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'datawizard_table'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, big_mark <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -251,6 +254,13 @@ table for printing. This affects only printing, not the returned object.</p></dd
 <dd><p>For crosstables (i.e. when <code>by</code> is not <code>NULL</code>), a row and
 column with the total N values are added to the data frame. <code>add_total</code> has
 no effect in <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> for simple frequency tables.</p></dd>
+
+
+<dt id="arg-big-mark">big_mark<a class="anchor" aria-label="anchor" href="#arg-big-mark"></a></dt>
+<dd><p>Optional character string, indicating the big mark that is
+used for large numbers. If <code>NULL</code> (default), a big mark is added automatically for
+large numbers (i.e. numbers with more than 5 digits). If you want to remove
+the big mark, set <code>big_mark = ""</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
