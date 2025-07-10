@@ -12,11 +12,11 @@ CHANGES
   further statistical analysis, e.g. in combination with `chisq.test()` (#629).
 
 * The `print()` method for `data_tabulate()` now appears in the documentation,
-  making the `big_mark` visible (#627).
+  making the `big_mark` argument visible (#627).
 
 BUG FIXES
 
-* Fixed one issue when printing cross tables using `data_tabulate(by = ...)`,
+* Fixed an issue when printing cross tables using `data_tabulate(by = ...)`,
   which was caused by the recent changes in `insight::export_table()`.
 
 * Fixed another issue when printing cross tables using `data_tabulate(by = ...)`,
