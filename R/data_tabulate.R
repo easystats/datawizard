@@ -151,7 +151,7 @@
 #' out <- data_tabulate(efc, c("c172code", "e16sex"))
 #' suppressWarnings(lapply(as.table(out), chisq.test))
 #'
-#' # handle grouped data frames
+#' # can also handle grouped data frames
 #' d <- data_group(mtcars, "am")
 #' x <- data_tabulate(d, "cyl", by = "gear")
 #' as.table(x)
