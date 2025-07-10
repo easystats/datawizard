@@ -518,31 +518,39 @@ test_that("data_tabulate, table methods", {
   x <- data_tabulate(mtcars$cyl)
   expect_s3_class(as.table(x), "table")
   expect_identical(dim(as.table(x)), 3L)
+  expect_snapshot(as.table(x))
   # datawizard_tables
   x <- data_tabulate(mtcars, "cyl")
   expect_s3_class(as.table(x), "table")
   expect_identical(dim(as.table(x)), 3L)
+  expect_snapshot(as.table(x))
   # test remove_na
   x <- data_tabulate(mtcars, "cyl", remove_na = TRUE)
   expect_identical(x[[1]]$N, as.vector(as.table(x)))
   x <- data_tabulate(mtcars, "cyl")
   expect_identical(x[[1]]$N, as.vector(as.table(x, remove_na = FALSE)))
+  expect_snapshot(as.table(x, remove_na = FALSE))
   # datawizard_tables, multiple
   x <- data_tabulate(mtcars, c("cyl", "gear"))
   expect_identical(unlist(lapply(as.table(x), class)), rep("table", 2L))
+  expect_snapshot(as.table(x))
   # datawizard_crosstab
   x <- data_tabulate(mtcars$cyl, mtcars$gear)
   expect_s3_class(as.table(x), "table")
+  expect_snapshot(as.table(x))
   # datawizard_crosstabs
   x <- data_tabulate(mtcars, "cyl", by = "gear")
   expect_s3_class(as.table(x), "table")
+  expect_snapshot(as.table(x))
   # datawizard_crosstabs, multiple
   x <- data_tabulate(mtcars, c("am", "cyl"), by = "gear")
   expect_identical(unlist(lapply(as.table(x), class)), rep("table", 2L))
   expect_identical(x[[1]]$`3`[1:2], as.vector(as.table(x)[[1]][, 1, drop = TRUE]))
   expect_identical(x[[2]]$`4`[1:3], as.vector(as.table(x)[[2]][, 2, drop = TRUE]))
+  expect_snapshot(as.table(x))
   # grouped data frames
   d <- data_group(mtcars, "am")
   x <- data_tabulate(d, "cyl", by = "gear")
   expect_named(as.table(x), c("am (0)", "am (1)"))
+  expect_snapshot(as.table(x))
 })

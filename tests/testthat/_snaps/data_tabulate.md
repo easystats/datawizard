@@ -695,3 +695,96 @@
       ---------+------------+------------+--------+------
       Total    |         46 |         54 |      0 |   100
 
+# data_tabulate, table methods
+
+    Code
+      as.table(x)
+    Output
+       4  6  8 
+      11  7 14 
+
+---
+
+    Code
+      as.table(x)
+    Output
+       4  6  8 
+      11  7 14 
+
+---
+
+    Code
+      as.table(x, remove_na = FALSE)
+    Output
+         4    6    8 <NA> 
+        11    7   14    0 
+
+---
+
+    Code
+      as.table(x)
+    Output
+      [[1]]
+       4  6  8 
+      11  7 14 
+      
+      [[2]]
+       3  4  5 
+      15 12  5 
+      
+
+---
+
+    Code
+      as.table(x)
+    Output
+         3  4  5
+      4  1  8  2
+      6  2  4  1
+      8 12  0  2
+
+---
+
+    Code
+      as.table(x)
+    Output
+         3  4  5
+      4  1  8  2
+      6  2  4  1
+      8 12  0  2
+
+---
+
+    Code
+      as.table(x)
+    Output
+      [[1]]
+         3  4  5
+      0 15  4  0
+      1  0  8  5
+      
+      [[2]]
+         3  4  5
+      4  1  8  2
+      6  2  4  1
+      8 12  0  2
+      
+
+---
+
+    Code
+      as.table(x)
+    Output
+      $`am (0)`
+         3  4
+      4  1  2
+      6  2  2
+      8 12  0
+      
+      $`am (1)`
+        4 5
+      4 6 2
+      6 2 1
+      8 0 2
+      
+
