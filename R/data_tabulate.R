@@ -489,6 +489,12 @@ format.datawizard_table <- function(x, format = "text", big_mark = NULL, ...) {
 }
 
 .add_commas_in_numbers <- function(x, big_mark = NULL) {
+  # sanity checks - for crosstables with `remove_na = FALSE`, nchar(x) fails,
+  # and pretty() warns about non-numeric input. Thus, we skip if any NA value
+  # is in `x`.
+  if (anyNA(x)) {
+    return(x)
+  }
   # automatically add a big mark for large numbers
   if (is.null(big_mark) && any(nchar(x) > 5)) {
     big_mark <- ","
