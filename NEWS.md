@@ -16,8 +16,11 @@ CHANGES
 
 BUG FIXES
 
-* Fixed issue when printing cross tables using `data_tabulate(by = ...)`, which
-  was caused by the recent changes in `insight::export_table()`.
+* Fixed one issue when printing cross tables using `data_tabulate(by = ...)`,
+  which was caused by the recent changes in `insight::export_table()`.
+
+* Fixed another issue when printing cross tables using `data_tabulate(by = ...)`,
+  when more than one variable was selected for `select` (#630).
 
 # datawizard 1.1.0
 
