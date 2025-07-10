@@ -492,7 +492,7 @@ format.datawizard_table <- function(x, format = "text", big_mark = NULL, ...) {
   # sanity checks - for crosstables with `remove_na = FALSE`, nchar(x) fails,
   # and pretty() warns about non-numeric input. Thus, we skip if any NA value
   # is in `x`.
-  if (any(is.na(x))) {
+  if (anyNA(x)) {
     return(x)
   }
   # automatically add a big mark for large numbers
