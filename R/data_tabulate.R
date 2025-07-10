@@ -32,6 +32,7 @@
 #' used for large numbers. If `NULL` (default), a big mark is added automatically for
 #' large numbers (i.e. numbers with more than 5 digits). If you want to remove
 #' the big mark, set `big_mark = ""`.
+#' @param verbose Toggle warnings and messages.
 #' @param ... not used.
 #' @inheritParams extract_column_names
 #'
@@ -487,13 +488,16 @@ as.data.frame.datawizard_crosstabs <- as.data.frame.datawizard_tables
 
 #' @rdname data_tabulate
 #' @export
-as.table.datawizard_table <- function(x, remove_na = TRUE, ...) {
+as.table.datawizard_table <- function(x, remove_na = TRUE, verbose = TRUE, ...) {
   # sanity check - the `.data.frame` method (data_tabulate(mtcars, "cyl"))
   # returns a list, but not the default method (data_tabulate(mtcars$cyl))
   if (!is.data.frame(x)) {
     x <- x[[1]]
   }
   if (remove_na) {
+    if (verbose) {
+      insight::format_alert("Removing NA values from frequency table.")
+    }
     # remove NA values from the table
     x <- x[!is.na(x$Value), ]
   }
@@ -501,8 +505,13 @@ as.table.datawizard_table <- function(x, remove_na = TRUE, ...) {
 }
 
 #' @export
-as.table.datawizard_tables <- function(x, remove_na = TRUE, ...) {
-  out <- lapply(x, as.table.datawizard_table, remove_na = remove_na, ...)
+as.table.datawizard_tables <- function(x, remove_na = TRUE, verbose = TRUE, ...) {
+  # only show message once we set `verbose = FALSE` in the lapply()
+  if (remove_na && verbose) {
+    insight::format_alert("Removing NA values from frequency table.")
+  }
+
+  out <- lapply(x, as.table.datawizard_table, remove_na = remove_na, verbose = FALSE, ...)
   # if only one table is returned, "unlist"
   if (length(out) == 1) {
     out <- out[[1]]
@@ -511,7 +520,7 @@ as.table.datawizard_tables <- function(x, remove_na = TRUE, ...) {
 }
 
 #' @export
-as.table.datawizard_crosstab <- function(x, remove_na = TRUE, ...) {
+as.table.datawizard_crosstab <- function(x, remove_na = TRUE, verbose = TRUE, ...) {
   # sanity check - the `.data.frame` method  returns a list, but not the
   # default method
   if (!is.data.frame(x)) {
@@ -529,6 +538,9 @@ as.table.datawizard_crosstab <- function(x, remove_na = TRUE, ...) {
   rownames(x) <- row_names
 
   if (remove_na) {
+    if (verbose) {
+      insight::format_alert("Removing NA values from frequency table.")
+    }
     if (!is.null(x[["NA"]])) {
       x[["NA"]] <- NULL
     }
@@ -540,8 +552,19 @@ as.table.datawizard_crosstab <- function(x, remove_na = TRUE, ...) {
 }
 
 #' @export
-as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, ...) {
-  out <- lapply(x, as.table.datawizard_crosstab, remove_na = remove_na, ...)
+as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, verbose = TRUE, ...) {
+  # only show message once we set `verbose = FALSE` in the lapply()
+  if (remove_na && verbose) {
+    insight::format_alert("Removing NA values from frequency table.")
+  }
+
+  out <- lapply(
+    x,
+    as.table.datawizard_crosstab,
+    remove_na = remove_na,
+    verbose = FALSE,
+    ...
+  )
   # if only one table is returned, "unlist"
   if (length(out) == 1) {
     out <- out[[1]]

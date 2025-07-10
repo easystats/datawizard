@@ -48,7 +48,7 @@ data_tabulate(x, ...)
   add_total = FALSE
 )
 
-\method{as.table}{datawizard_table}(x, remove_na = TRUE, ...)
+\method{as.table}{datawizard_table}(x, remove_na = TRUE, verbose = TRUE, ...)
 
 \method{print}{datawizard_table}(x, big_mark = NULL, ...)
 }
@@ -82,7 +82,7 @@ or \code{"full"} (to calculate relative frequencies for the full table).}
 \item{name}{Optional character string, which includes the name that is used
 for printing.}
 
-\item{verbose}{Toggle warnings.}
+\item{verbose}{Toggle warnings and messages.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
