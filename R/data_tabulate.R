@@ -497,7 +497,12 @@ as.table.datawizard_table <- function(x, remove_na = TRUE, ...) {
 
 #' @export
 as.table.datawizard_tables <- function(x, remove_na = TRUE, ...) {
-  lapply(x, as.table.datawizard_table, remove_na = remove_na, ...)
+  out <- lapply(x, as.table.datawizard_table, remove_na = remove_na, ...)
+  # if only one table is returned, "unlist"
+  if (length(out) == 1) {
+    out <- out[[1]]
+  }
+  out
 }
 
 #' @export
@@ -528,7 +533,12 @@ as.table.datawizard_crosstab <- function(x, remove_na = TRUE, ...) {
 
 #' @export
 as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, ...) {
-  lapply(x, as.table.datawizard_crosstab, remove_na = remove_na, ...)
+  out <- lapply(x, as.table.datawizard_crosstab, remove_na = remove_na, ...)
+  # if only one table is returned, "unlist"
+  if (length(out) == 1) {
+    out <- out[[1]]
+  }
+  out
 }
 
 
