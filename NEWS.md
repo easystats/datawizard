@@ -7,8 +7,8 @@ CHANGES
 
 * `data_tabulate()` gets a `display()` method (#627).
 
-* `data_tabulate()` gets a `as.table()` method to coerce the frequency or
-  contingency table into (list of) `table()` object(s). This can be useful for
+* `data_tabulate()` gets an `as.table()` method to coerce the frequency or
+  contingency table into a (list of) `table()` object(s). This can be useful for
   further statistical analysis, e.g. in combination with `chisq.test()` (#629).
 
 * The `print()` method for `data_tabulate()` now appears in the documentation,
