@@ -5,6 +5,7 @@
 \alias{data_tabulate.default}
 \alias{data_tabulate.data.frame}
 \alias{as.data.frame.datawizard_tables}
+\alias{as.table.datawizard_table}
 \alias{print.datawizard_table}
 \title{Create frequency and crosstables of variables}
 \usage{
@@ -47,6 +48,8 @@ data_tabulate(x, ...)
   add_total = FALSE
 )
 
+\method{as.table}{datawizard_table}(x, remove_na = TRUE, ...)
+
 \method{print}{datawizard_table}(x, big_mark = NULL, ...)
 }
 \arguments{
@@ -66,7 +69,10 @@ factor levels are dropped from the frequency table.}
 as \code{x}. If \code{weights} is supplied, weighted frequencies are calculated.}
 
 \item{remove_na}{Logical, if \code{FALSE}, missing values are included in the
-frequency or crosstable, else missing values are omitted.}
+frequency or crosstable, else missing values are omitted. Note that the
+default for the \code{as.table()} method is \code{remove_na = TRUE}, so that missing
+values are not included in the returned table, which makes more sense for
+post-processing of the table, e.g. using \code{chisq.test()}.}
 
 \item{proportions}{Optional character string, indicating the type of
 percentages to be calculated. Only applies to crosstables, i.e. when \code{by} is
@@ -167,7 +173,7 @@ as data frame per variable.
 \description{
 This function creates frequency or crosstables of variables,
 including the number of levels/values as well as the distribution of raw,
-valid and cumulative percentages. For crosstables, row, column  and cell
+valid and cumulative percentages. For crosstables, row, column and cell
 percentages can be calculated.
 }
 \details{
@@ -176,6 +182,10 @@ data frame. The structure of the returned object is a nested data frame,
 where the first column contains name of the variable for which frequencies
 were calculated, and the second column is a list column that contains the
 frequency tables as data frame. See 'Examples'.
+
+There is also an \code{as.table()} method, which returns a table object with the
+frequencies of the variable. This is useful for further statistical analysis,
+e.g. for using \code{chisq.test()} on the frequency table. See 'Examples'.
 }
 \note{
 There are \code{print_html()} and \code{print_md()} methods available for printing
@@ -264,5 +274,11 @@ result <- data_tabulate(efc, "c172code", by = "e16sex")
 as.data.frame(result)
 as.data.frame(result)$table
 as.data.frame(result, add_total = TRUE)$table
+
+# post-processing ------
+# ----------------------
+
+out <- data_tabulate(efc, "c172code", by = "e16sex")
+chisq.test(as.table(out))
 \dontshow{\}) # examplesIf}
 }

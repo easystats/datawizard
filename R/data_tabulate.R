@@ -3,7 +3,7 @@
 #'
 #' @description This function creates frequency or crosstables of variables,
 #' including the number of levels/values as well as the distribution of raw,
-#' valid and cumulative percentages. For crosstables, row, column  and cell
+#' valid and cumulative percentages. For crosstables, row, column and cell
 #' percentages can be calculated.
 #'
 #' @param x A (grouped) data frame, a vector or factor.
@@ -16,7 +16,10 @@
 #' @param name Optional character string, which includes the name that is used
 #' for printing.
 #' @param remove_na Logical, if `FALSE`, missing values are included in the
-#' frequency or crosstable, else missing values are omitted.
+#' frequency or crosstable, else missing values are omitted. Note that the
+#' default for the `as.table()` method is `remove_na = TRUE`, so that missing
+#' values are not included in the returned table, which makes more sense for
+#' post-processing of the table, e.g. using `chisq.test()`.
 #' @param collapse Logical, if `TRUE` collapses multiple tables into one larger
 #' table for printing. This affects only printing, not the returned object.
 #' @param weights Optional numeric vector of weights. Must be of the same length
@@ -38,6 +41,10 @@
 #' where the first column contains name of the variable for which frequencies
 #' were calculated, and the second column is a list column that contains the
 #' frequency tables as data frame. See 'Examples'.
+#'
+#' There is also an `as.table()` method, which returns a table object with the
+#' frequencies of the variable. This is useful for further statistical analysis,
+#' e.g. for using `chisq.test()` on the frequency table. See 'Examples'.
 #'
 #' @section Crosstables:
 #' If `by` is supplied, a crosstable is created. The crosstable includes `<NA>`
@@ -126,6 +133,13 @@
 #' as.data.frame(result)
 #' as.data.frame(result)$table
 #' as.data.frame(result, add_total = TRUE)$table
+#'
+#' # post-processing ------
+#' # ----------------------
+#'
+#' out <- data_tabulate(efc, "c172code", by = "e16sex")
+#' chisq.test(as.table(out))
+#'
 #' @export
 data_tabulate <- function(x, ...) {
   UseMethod("data_tabulate")
@@ -467,14 +481,54 @@ as.data.frame.datawizard_crosstabs <- as.data.frame.datawizard_tables
 
 # as.table --------------------
 
+#' @rdname data_tabulate
 #' @export
-as.table.datawizard_table <- function(x, ...) {
+as.table.datawizard_table <- function(x, remove_na = TRUE, ...) {
+  # sanity check - the data frame method returns a list
+  if (!is.data.frame(x)) {
+    x <- x[[1]]
+  }
+  if (remove_na) {
+    # remove NA values from the table
+    x <- x[!is.na(x$Value), ]
+  }
   as.table(stats::setNames(x[["N"]], x$Value))
 }
 
 #' @export
-as.table.datawizard_tables <- function(x, ...) {
-  lapply(x, as.table.datawizard_table, ...)
+as.table.datawizard_tables <- function(x, remove_na = TRUE, ...) {
+  lapply(x, as.table.datawizard_table, remove_na = remove_na, ...)
+}
+
+#' @export
+as.table.datawizard_crosstab <- function(x, remove_na = TRUE, ...) {
+  # data frame is in a list, so we extract the first element
+  if (is.data.frame(x)) {
+    out <- x
+  } else {
+    out <- x[[1]]
+  }
+  # first column contains the row names
+  row_names <- as.character(out[[1]])
+  row_names[is.na(row_names)] <- "NA"
+  # remove first column, set rownames
+  out[[1]] <- NULL
+  rownames(out) <- row_names
+
+  if (remove_na) {
+    if (!is.null(out[["NA"]])) {
+      out[["NA"]] <- NULL
+    }
+    if ("NA" %in% row_names) {
+      out <- out[row_names != "NA", ]
+    }
+  }
+  as.table(as.matrix(out))
+}
+
+#' @export
+as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, ...) {
+  lapply(x, as.table.datawizard_crosstab, remove_na = remove_na, ...)
 }
 
 
