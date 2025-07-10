@@ -144,7 +144,12 @@
 #' # ----------------------
 #'
 #' out <- data_tabulate(efc, "c172code", by = "e16sex")
-#' suppressWarnings(chisq.test(as.table(out)))
+#' # we need to simplify the output, else we get a list of tables
+#' suppressWarnings(chisq.test(as.table(out, simplify = TRUE)))
+#'
+#' # apply chisq.test to each table
+#' out <- data_tabulate(efc, c("c172code", "e16sex"))
+#' suppressWarnings(lapply(as.table(out), chisq.test))
 #'
 #' # handle grouped data frames
 #' d <- data_group(mtcars, "am")
