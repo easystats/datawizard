@@ -488,7 +488,8 @@ as.data.frame.datawizard_crosstabs <- as.data.frame.datawizard_tables
 #' @rdname data_tabulate
 #' @export
 as.table.datawizard_table <- function(x, remove_na = TRUE, ...) {
-  # sanity check - the data frame method returns a list
+  # sanity check - the `.data.frame` method (data_tabulate(mtcars, "cyl"))
+  # returns a list, but not the default method (data_tabulate(mtcars$cyl))
   if (!is.data.frame(x)) {
     x <- x[[1]]
   }
@@ -511,32 +512,31 @@ as.table.datawizard_tables <- function(x, remove_na = TRUE, ...) {
 
 #' @export
 as.table.datawizard_crosstab <- function(x, remove_na = TRUE, ...) {
-  # data frame is in a list, so we extract the first element
-  if (is.data.frame(x)) {
-    out <- x
-  } else {
-    out <- x[[1]]
+  # sanity check - the `.data.frame` method  returns a list, but not the
+  # default method
+  if (!is.data.frame(x)) {
+    x <- x[[1]]
   }
   # check for grouped df - we need to remove the "Group" column
   if (.is_grouped_df_xtab(x)) {
-    out$Group <- NULL
+    x$Group <- NULL
   }
   # first column contains the row names
-  row_names <- as.character(out[[1]])
+  row_names <- as.character(x[[1]])
   row_names[is.na(row_names)] <- "NA"
   # remove first column, set rownames
-  out[[1]] <- NULL
-  rownames(out) <- row_names
+  x[[1]] <- NULL
+  rownames(x) <- row_names
 
   if (remove_na) {
-    if (!is.null(out[["NA"]])) {
-      out[["NA"]] <- NULL
+    if (!is.null(x[["NA"]])) {
+      x[["NA"]] <- NULL
     }
     if ("NA" %in% row_names) {
-      out <- out[row_names != "NA", ]
+      x <- x[row_names != "NA", ]
     }
   }
-  as.table(as.matrix(out))
+  as.table(as.matrix(x))
 }
 
 #' @export
