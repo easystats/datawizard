@@ -32,6 +32,11 @@
 #' used for large numbers. If `NULL` (default), a big mark is added automatically for
 #' large numbers (i.e. numbers with more than 5 digits). If you want to remove
 #' the big mark, set `big_mark = ""`.
+#' @param simplify Logical, if `TRUE`, the returned table is simplified to a
+#' single table object if there is only one frequency or contingency table
+#' input. Else, always for multiple table inputs or when `simplify = FALSE`, a
+#' list of tables is returned. This is only relevant for the `as.table()`
+#' methods. To ensure consistent output, the default is `FALSE`.
 #' @param verbose Toggle warnings and messages.
 #' @param ... not used.
 #' @inheritParams extract_column_names
@@ -488,7 +493,7 @@ as.data.frame.datawizard_crosstabs <- as.data.frame.datawizard_tables
 
 #' @rdname data_tabulate
 #' @export
-as.table.datawizard_table <- function(x, remove_na = TRUE, verbose = TRUE, ...) {
+as.table.datawizard_table <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
   # sanity check - the `.data.frame` method (data_tabulate(mtcars, "cyl"))
   # returns a list, but not the default method (data_tabulate(mtcars$cyl))
   if (!is.data.frame(x)) {
@@ -501,26 +506,40 @@ as.table.datawizard_table <- function(x, remove_na = TRUE, verbose = TRUE, ...) 
     # remove NA values from the table
     x <- x[!is.na(x$Value), ]
   }
-  as.table(stats::setNames(x[["N"]], x$Value))
+  # coerce to table
+  result <- as.table(stats::setNames(x[["N"]], x$Value))
+  # if we don't want to simplify the table, we wrap it into a list
+  if (!simplify) {
+    result <- list(result)
+  }
+
+  result
 }
 
 #' @export
-as.table.datawizard_tables <- function(x, remove_na = TRUE, verbose = TRUE, ...) {
+as.table.datawizard_tables <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
   # only show message once we set `verbose = FALSE` in the lapply()
   if (remove_na && verbose) {
     insight::format_alert("Removing NA values from frequency table.")
   }
 
-  out <- lapply(x, as.table.datawizard_table, remove_na = remove_na, verbose = FALSE, ...)
+  out <- lapply(
+    x,
+    as.table.datawizard_table,
+    remove_na = remove_na,
+    simplify = TRUE,
+    verbose = FALSE,
+    ...
+  )
   # if only one table is returned, "unlist"
-  if (length(out) == 1) {
+  if (length(out) == 1 && simplify) {
     out <- out[[1]]
   }
   out
 }
 
 #' @export
-as.table.datawizard_crosstab <- function(x, remove_na = TRUE, verbose = TRUE, ...) {
+as.table.datawizard_crosstab <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
   # sanity check - the `.data.frame` method  returns a list, but not the
   # default method
   if (!is.data.frame(x)) {
@@ -548,11 +567,18 @@ as.table.datawizard_crosstab <- function(x, remove_na = TRUE, verbose = TRUE, ..
       x <- x[row_names != "NA", ]
     }
   }
-  as.table(as.matrix(x))
+  # coerce to table
+  result <- as.table(as.matrix(x))
+  # if we don't want to simplify the table, we wrap it into a list
+  if (!simplify) {
+    result <- list(result)
+  }
+
+  result
 }
 
 #' @export
-as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, verbose = TRUE, ...) {
+as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
   # only show message once we set `verbose = FALSE` in the lapply()
   if (remove_na && verbose) {
     insight::format_alert("Removing NA values from frequency table.")
@@ -562,11 +588,12 @@ as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, verbose = TRUE, .
     x,
     as.table.datawizard_crosstab,
     remove_na = remove_na,
+    simplify = TRUE,
     verbose = FALSE,
     ...
   )
   # if only one table is returned, "unlist"
-  if (length(out) == 1) {
+  if (length(out) == 1 && simplify) {
     out <- out[[1]]
   }
   # if we have a grouped data frame, we save the grouping values as

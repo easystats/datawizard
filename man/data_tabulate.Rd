@@ -48,7 +48,7 @@ data_tabulate(x, ...)
   add_total = FALSE
 )
 
-\method{as.table}{datawizard_table}(x, remove_na = TRUE, verbose = TRUE, ...)
+\method{as.table}{datawizard_table}(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...)
 
 \method{print}{datawizard_table}(x, big_mark = NULL, ...)
 }
@@ -160,6 +160,12 @@ table for printing. This affects only printing, not the returned object.}
 \item{add_total}{For crosstables (i.e. when \code{by} is not \code{NULL}), a row and
 column with the total N values are added to the data frame. \code{add_total} has
 no effect in \code{as.data.frame()} for simple frequency tables.}
+
+\item{simplify}{Logical, if \code{TRUE}, the returned table is simplified to a
+single table object if there is only one frequency or contingency table
+input. Else, always for multiple table inputs or when \code{simplify = FALSE}, a
+list of tables is returned. This is only relevant for the \code{as.table()}
+methods. To ensure consistent output, the default is \code{FALSE}.}
 
 \item{big_mark}{Optional character string, indicating the big mark that is
 used for large numbers. If \code{NULL} (default), a big mark is added automatically for

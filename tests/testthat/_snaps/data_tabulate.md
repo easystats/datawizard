@@ -702,8 +702,10 @@
     Message
       Removing NA values from frequency table.
     Output
+      [[1]]
        4  6  8 
       11  7 14 
+      
 
 ---
 
@@ -712,16 +714,20 @@
     Message
       Removing NA values from frequency table.
     Output
+      [[1]]
        4  6  8 
       11  7 14 
+      
 
 ---
 
     Code
       as.table(x, remove_na = FALSE)
     Output
+      [[1]]
          4    6    8 <NA> 
         11    7   14    0 
+      
 
 ---
 
@@ -746,6 +752,20 @@
     Message
       Removing NA values from frequency table.
     Output
+      [[1]]
+         3  4  5
+      4  1  8  2
+      6  2  4  1
+      8 12  0  2
+      
+
+---
+
+    Code
+      as.table(x, simplify = TRUE)
+    Message
+      Removing NA values from frequency table.
+    Output
          3  4  5
       4  1  8  2
       6  2  4  1
@@ -755,6 +775,20 @@
 
     Code
       as.table(x)
+    Message
+      Removing NA values from frequency table.
+    Output
+      [[1]]
+         3  4  5
+      4  1  8  2
+      6  2  4  1
+      8 12  0  2
+      
+
+---
+
+    Code
+      as.table(x, simplify = TRUE)
     Message
       Removing NA values from frequency table.
     Output
