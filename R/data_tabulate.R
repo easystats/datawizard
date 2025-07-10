@@ -527,7 +527,9 @@ as.table.datawizard_tables <- function(x, remove_na = TRUE, simplify = FALSE, ve
     x,
     as.table.datawizard_table,
     remove_na = remove_na,
+    # no nested lists
     simplify = TRUE,
+    # no multiple messages
     verbose = FALSE,
     ...
   )
