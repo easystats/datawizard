@@ -140,6 +140,10 @@
 #' out <- data_tabulate(efc, "c172code", by = "e16sex")
 #' chisq.test(as.table(out))
 #'
+#' # handle grouped data frames
+#' d <- data_group(mtcars, "am")
+#' x <- data_tabulate(d, "cyl", by = "gear")
+#' as.table(x)
 #' @export
 data_tabulate <- function(x, ...) {
   UseMethod("data_tabulate")
@@ -513,6 +517,10 @@ as.table.datawizard_crosstab <- function(x, remove_na = TRUE, ...) {
   } else {
     out <- x[[1]]
   }
+  # check for grouped df - we need to remove the "Group" column
+  if (.is_grouped_df_xtab(x)) {
+    out$Group <- NULL
+  }
   # first column contains the row names
   row_names <- as.character(out[[1]])
   row_names[is.na(row_names)] <- "NA"
@@ -538,7 +546,21 @@ as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, ...) {
   if (length(out) == 1) {
     out <- out[[1]]
   }
+  # if we have a grouped data frame, we save the grouping values as
+  # names for the list
+  if (.is_grouped_df_xtab(x)) {
+    names(out) <- unlist(lapply(x, function(i) {
+      i$Group[1]
+    }), use.names = FALSE)
+  }
   out
+}
+
+.is_grouped_df_xtab <- function(x) {
+  if (!is.data.frame(x)) {
+    x <- x[[1]]
+  }
+  isTRUE(attributes(x)$grouped_df)
 }
 
 

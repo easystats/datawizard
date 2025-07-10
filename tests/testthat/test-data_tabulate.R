@@ -541,4 +541,8 @@ test_that("data_tabulate, table methods", {
   expect_identical(unlist(lapply(as.table(x), class)), rep("table", 2L))
   expect_identical(x[[1]]$`3`[1:2], as.vector(as.table(x)[[1]][, 1, drop = TRUE]))
   expect_identical(x[[2]]$`4`[1:3], as.vector(as.table(x)[[2]][, 2, drop = TRUE]))
+  # grouped data frames
+  d <- data_group(mtcars, "am")
+  x <- data_tabulate(d, "cyl", by = "gear")
+  expect_named(as.table(x), c("am (0)", "am (1)"))
 })

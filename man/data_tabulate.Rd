@@ -280,5 +280,10 @@ as.data.frame(result, add_total = TRUE)$table
 
 out <- data_tabulate(efc, "c172code", by = "e16sex")
 chisq.test(as.table(out))
+
+# handle grouped data frames
+d <- data_group(mtcars, "am")
+x <- data_tabulate(d, "cyl", by = "gear")
+as.table(x)
 \dontshow{\}) # examplesIf}
 }

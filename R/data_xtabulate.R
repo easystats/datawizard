@@ -79,6 +79,7 @@
   attr(out, "weights") <- weights
   attr(out, "proportions") <- proportions
   attr(out, "varname") <- obj_name
+  attr(out, "grouped_df") <- !is.null(group_variable)
 
   class(out) <- c("datawizard_crosstab", "data.frame")
 
