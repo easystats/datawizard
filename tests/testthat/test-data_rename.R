@@ -90,19 +90,6 @@ test_that("data_rename errors when select = NULL", {
 
 # other --------------
 
-test_that("data_rename: argument 'safe' is deprecated", {
-  expect_error(
-    data_rename(iris, "FakeCol", "length", verbose = FALSE),
-    "were not found"
-  )
-  expect_error(
-    expect_warning(
-      data_rename(iris, "FakeCol", "length", safe = FALSE, verbose = FALSE),
-      "used"
-    )
-  )
-})
-
 test_that("data_rename deals correctly with duplicated replacement", {
   x <- data_rename(test,
     select = names(test)[1:4],
@@ -213,14 +200,6 @@ withr::with_environment(
     )
   })
 )
-
-test_that("Argument `pattern` is deprecated", {
-  expect_warning(
-    head(data_rename(iris, pattern = "Sepal.Length", "length")),
-    "Argument `pattern` is deprecated. Please use `select` instead.",
-    fixed = TRUE
-  )
-})
 
 test_that("works with lists", {
   result <- list(x = 1, y = 2)
