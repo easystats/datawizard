@@ -5,10 +5,24 @@ CHANGES
 * `data_read()` and `data_write()` now support the `.parquet` file format, via
   the *nanoparquet* package (#625).
 
+* `data_tabulate()` gets a `display()` method (#627).
+
+* `data_tabulate()` gets an `as.table()` method to coerce the frequency or
+  contingency table into a (list of) `table()` object(s). This can be useful for
+  further statistical analysis, e.g. in combination with `chisq.test()` (#629).
+
+* The `print()` method for `data_tabulate()` now appears in the documentation,
+  making the `big_mark` argument visible (#627).
+
 BUG FIXES
 
-* Fixed issue when printing cross tables using `data_tabulate(by = ...)`, which
-  was caused by the recent changes in `insight::export_table()`.
+* Fixed an issue when printing cross tables using `data_tabulate(by = ...)`,
+  which was caused by the recent changes in `insight::export_table()`.
+
+* Fixed another issue when printing cross tables using `data_tabulate(by = ...)`,
+  when more than one variable was selected for `select` (#630).
+
+* Fixed typo in the documentation of `data_match()`.
 
 # datawizard 1.1.0
 

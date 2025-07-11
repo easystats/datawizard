@@ -12,7 +12,7 @@
 #' @param match String, indicating with which logical operation matching
 #'   conditions should be combined. Can be `"and"` (or `"&"`), `"or"` (or `"|"`)
 #'   or `"not"` (or `"!"`).
-#' @param return_indices Logical, if `FALSE`, return the vector of rows that
+#' @param return_indices Logical, if `TRUE`, return the vector of rows that
 #'   can be used to filter the original data frame. If `FALSE` (default),
 #'   returns directly the filtered data frame instead of the row indices.
 #' @param remove_na Logical, if `TRUE`, missing values (`NA`s) are removed before
