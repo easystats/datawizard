@@ -28,7 +28,7 @@ changed. See 'Details'.}
 conditions should be combined. Can be \code{"and"} (or \code{"&"}), \code{"or"} (or \code{"|"})
 or \code{"not"} (or \code{"!"}).}
 
-\item{return_indices}{Logical, if \code{FALSE}, return the vector of rows that
+\item{return_indices}{Logical, if \code{TRUE}, return the vector of rows that
 can be used to filter the original data frame. If \code{FALSE} (default),
 returns directly the filtered data frame instead of the row indices.}
 

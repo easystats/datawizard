@@ -22,6 +22,8 @@ BUG FIXES
 * Fixed another issue when printing cross tables using `data_tabulate(by = ...)`,
   when more than one variable was selected for `select` (#630).
 
+* Fixed typo in the documentation of `data_match()`.
+
 # datawizard 1.1.0
 
 BREAKING CHANGES
