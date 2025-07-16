@@ -640,7 +640,7 @@ as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE,
       has_na <- any(i[["NA"]] > 0)
     }
     if ("NA" %in% row_names) {
-      has_na <- has_na | any(i[row_names != "NA", -1] > 0)
+      has_na <- has_na | any(i[row_names == "NA", -1] > 0)
     }
     has_na
   }, logical(1)))
