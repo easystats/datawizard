@@ -1,5 +1,11 @@
 # datawizard (devel)
 
+BREAKING CHANGES
+
+* The following deprecated arguments have been removed (#603):
+  - `drop_na` in `data_match()`
+  - `safe`, `pattern`, and `verbose` in `data_rename()`
+
 CHANGES
 
 * `data_read()` and `data_write()` now support the `.parquet` file format, via
@@ -58,9 +64,7 @@ CHANGES
 
 * `data_codebook()` gives an informative warning when no column names matched
   the selection pattern (#601).
-
-* Deprecated arguments in `data_rename()` and `data_match()` have been removed.
-
+  
 * `data_to_long()` now errors when columns selected to reshape do not exist in
   the data, to avoid nonsensical results that could be missed (#602).
 
