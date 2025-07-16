@@ -577,3 +577,21 @@ test_that("data_tabulate, table methods", {
   expect_message(as.table(data_tabulate(mtcars, "cyl")), regex = "Removing NA values")
   expect_silent(as.table(data_tabulate(mtcars, "cyl"), verbose = FALSE))
 })
+
+
+test_that("data_tabulate, table methods, only warn if necessary", {
+  # missings
+  data(efc)
+  expect_message(
+    as.table(data_tabulate(efc, "c172code", by = "e42dep")),
+    regex = "Removing NA values"
+  )
+  expect_silent(as.table(data_tabulate(efc, "c172code", by = "e42dep", remove_na = TRUE)))
+  expect_silent(as.table(data_tabulate(efc, "c172code", by = "e42dep"), verbose = FALSE))
+
+  # no missings
+  data(mtcars)
+  expect_silent(as.table(data_tabulate(mtcars, "gear", by = "cyl")))
+  expect_silent(as.table(data_tabulate(mtcars, "gear", by = "cyl", remove_na = TRUE)))
+  expect_silent(as.table(data_tabulate(mtcars, "gear", by = "cyl"), verbose = FALSE))
+})

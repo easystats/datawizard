@@ -504,7 +504,7 @@ as.table.datawizard_table <- function(x, remove_na = TRUE, simplify = FALSE, ver
   if (!is.data.frame(x)) {
     x <- x[[1]]
   }
-  if (remove_na) {
+  if (remove_na && anyNA(x$Value)) {
     if (verbose) {
       insight::format_alert("Removing NA values from frequency table.")
     }
@@ -524,7 +524,7 @@ as.table.datawizard_table <- function(x, remove_na = TRUE, simplify = FALSE, ver
 #' @export
 as.table.datawizard_tables <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
   # only show message once we set `verbose = FALSE` in the lapply()
-  if (remove_na && verbose) {
+  if (remove_na && verbose && .check_table_na(x)) {
     insight::format_alert("Removing NA values from frequency table.")
   }
 
@@ -564,14 +564,18 @@ as.table.datawizard_crosstab <- function(x, remove_na = TRUE, simplify = FALSE, 
   rownames(x) <- row_names
 
   if (remove_na) {
-    if (verbose) {
-      insight::format_alert("Removing NA values from frequency table.")
-    }
+    # tag for NA values - we only warn when we actually remove NA values
+    has_na <- FALSE
     if (!is.null(x[["NA"]])) {
+      has_na <- any(x[["NA"]] > 0)
       x[["NA"]] <- NULL
     }
     if ("NA" %in% row_names) {
+      has_na <- has_na | any(x[row_names != "NA", -1] > 0)
       x <- x[row_names != "NA", ]
+    }
+    if (verbose && has_na) {
+      insight::format_alert("Removing NA values from frequency table.")
     }
   }
   # coerce to table
@@ -587,7 +591,7 @@ as.table.datawizard_crosstab <- function(x, remove_na = TRUE, simplify = FALSE, 
 #' @export
 as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
   # only show message once we set `verbose = FALSE` in the lapply()
-  if (remove_na && verbose) {
+  if (remove_na && verbose && .check_xtable_na(x)) {
     insight::format_alert("Removing NA values from frequency table.")
   }
 
@@ -618,6 +622,28 @@ as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE,
     x <- x[[1]]
   }
   isTRUE(attributes(x)$grouped_df)
+}
+
+.check_table_na <- function(x) {
+  # check if any table has NA values
+  any(vapply(x, function(i) .safe(anyNA(i$Value), FALSE), logical(1)))
+}
+
+.check_xtable_na <- function(x) {
+  any(vapply(x, function(i) {
+    # need to extract rownames, to check if we have a "NA" row
+    row_names <- as.character(x[[1]])
+    row_names[is.na(row_names)] <- "NA"
+    has_na <- FALSE
+    # check for NA columns and rows
+    if (!is.null(i[["NA"]])) {
+      has_na <- any(i[["NA"]] > 0)
+    }
+    if ("NA" %in% row_names) {
+      has_na <- has_na | any(i[row_names != "NA", -1] > 0)
+    }
+    has_na
+  }, logical(1)))
 }
 
 
