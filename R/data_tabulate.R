@@ -635,6 +635,7 @@ as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE,
 
 .check_xtable_na <- function(x) {
   any(vapply(x, function(i) {
+    browser()
     # need to extract rownames, to check if we have a "NA" row
     row_names <- as.character(i[[1]])
     row_names[is.na(row_names)] <- "NA"
@@ -645,6 +646,9 @@ as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE,
     }
     if ("NA" %in% row_names) {
       # we need "as.data.frame()" for grouped df
+      if (isTRUE(attributes(i)$grouped_df)) {
+        i$Group <- NULL
+      }
       has_na <- has_na | any(as.vector(as.data.frame(i[row_names == "NA", -1])) > 0)
     }
     has_na
