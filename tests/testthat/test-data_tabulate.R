@@ -608,4 +608,8 @@ test_that("data_tabulate, table methods, only warn if necessary", {
   expect_silent(as.table(data_tabulate(mtcars, "gear", by = "cyl")))
   expect_silent(as.table(data_tabulate(mtcars, "gear", by = "cyl", remove_na = TRUE)))
   expect_silent(as.table(data_tabulate(mtcars, "gear", by = "cyl"), verbose = FALSE))
+
+  # group DF throws no warning
+  d <- data_group(mtcars, "am")
+  expect_silent(as.table(data_tabulate(d, "cyl", by = "gear")))
 })
