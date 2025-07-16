@@ -626,7 +626,7 @@ as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE,
 
 .check_table_na <- function(x) {
   # check if any table has NA values
-  any(vapply(x, function(i) .safe(anyNA(i$Value), FALSE), logical(1)))
+  any(vapply(x, function(i) anyNA(i$Value), FALSE), logical(1))
 }
 
 .check_xtable_na <- function(x) {
@@ -640,7 +640,7 @@ as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE,
       has_na <- any(i[["NA"]] > 0)
     }
     if ("NA" %in% row_names) {
-      has_na <- has_na | any(i[row_names == "NA", -1] > 0)
+      has_na <- has_na | any(as.vector(i[row_names == "NA", -1]) > 0)
     }
     has_na
   }, logical(1)))
