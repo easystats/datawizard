@@ -506,8 +506,8 @@ as.table.datawizard_table <- function(x, remove_na = TRUE, simplify = FALSE, ver
   }
   # check if any table has NA values - the column "Value" contains the value
   # "NA", and the column "N" contains the frequency of this value.
-  if (remove_na && any(x$N[is.na(x$Value)] > 0)) {
-    if (verbose) {
+  if (remove_na) {
+    if (verbose && .check_table_na(list(x))) {
       insight::format_alert("Removing NA values from frequency table.")
     }
     # remove NA values from the table
@@ -566,19 +566,14 @@ as.table.datawizard_crosstab <- function(x, remove_na = TRUE, simplify = FALSE, 
   rownames(x) <- row_names
 
   if (remove_na) {
-    # tag for NA values - we only warn when we actually remove NA values
-    has_na <- FALSE
+    if (verbose && .check_xtable_na(list(x))) {
+      insight::format_alert("Removing NA values from frequency table.")
+    }
     if (!is.null(x[["NA"]])) {
-      has_na <- any(x[["NA"]] > 0)
       x[["NA"]] <- NULL
     }
     if ("NA" %in% row_names) {
-      # we need "as.data.frame()" for grouped df
-      has_na <- has_na | any(as.vector(as.data.frame(x[row_names == "NA", -1])) > 0)
       x <- x[row_names != "NA", ]
-    }
-    if (verbose && has_na) {
-      insight::format_alert("Removing NA values from frequency table.")
     }
   }
   # coerce to table
@@ -635,7 +630,6 @@ as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE,
 
 .check_xtable_na <- function(x) {
   any(vapply(x, function(i) {
-    browser()
     # need to extract rownames, to check if we have a "NA" row
     row_names <- as.character(i[[1]])
     row_names[is.na(row_names)] <- "NA"
