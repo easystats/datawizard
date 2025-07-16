@@ -601,8 +601,8 @@ test_that("data_tabulate, table methods, only warn if necessary", {
 
   # single variable
   expect_silent(as.table(data_tabulate(mtcars$gear)))
-  expect_silent(as.table(data_tabulate(efc$c172code, remove_na = TRUE)))
-  expect_silent(as.table(data_tabulate(efc$c172code), verbose = FALSE))
+  expect_silent(as.table(data_tabulate(mtcars$gear, remove_na = TRUE)))
+  expect_silent(as.table(data_tabulate(mtcars$gear), verbose = FALSE))
 
   # cross table
   expect_silent(as.table(data_tabulate(mtcars, "gear", by = "cyl")))

@@ -629,13 +629,13 @@ as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE,
 .check_table_na <- function(x) {
   # check if any table has NA values - the column "Value" contains the value
   # "NA", and the column "N" contains the frequency of this value.
-  any(vapply(x, function(i) any(i$N[is.na(i$Value)] > 0), FALSE), logical(1))
+  any(vapply(x, function(i) any(i$N[is.na(i$Value)] > 0), logical(1)))
 }
 
 .check_xtable_na <- function(x) {
   any(vapply(x, function(i) {
     # need to extract rownames, to check if we have a "NA" row
-    row_names <- as.character(x[[1]])
+    row_names <- as.character(i[[1]])
     row_names[is.na(row_names)] <- "NA"
     has_na <- FALSE
     # check for NA columns and rows
