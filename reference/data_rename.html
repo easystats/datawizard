@@ -75,15 +75,7 @@ possible pipe-workflow.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">data_rename</span><span class="op">(</span></span>
-<span>  <span class="va">data</span>,</span>
-<span>  select <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  replacement <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  safe <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">data_rename</span><span class="op">(</span><span class="va">data</span>, select <span class="op">=</span> <span class="cn">NULL</span>, replacement <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">data_rename_rows</span><span class="op">(</span><span class="va">data</span>, rows <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -157,18 +149,6 @@ be one of the pre-defined tokens, <code>"col"</code>, <code>"n"</code> and <code
 <p>... which would return new column names <code>new_name_from_am</code> and
 <code>new_name_from_vs</code>. See 'Examples'.</p></li>
 </ul><p>If <code>select</code> is a named vector, <code>replacement</code> is ignored.</p></dd>
-
-
-<dt id="arg-safe">safe<a class="anchor" aria-label="anchor" href="#arg-safe"></a></dt>
-<dd><p>Deprecated. Passing unknown column names now always errors.</p></dd>
-
-
-<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Toggle warnings.</p></dd>
-
-
-<dt id="arg-pattern">pattern<a class="anchor" aria-label="anchor" href="#arg-pattern"></a></dt>
-<dd><p>Deprecated. Use <code>select</code> instead.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
