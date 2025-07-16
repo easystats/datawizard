@@ -582,6 +582,13 @@ test_that("data_tabulate, table methods", {
 test_that("data_tabulate, table methods, only warn if necessary", {
   # missings
   data(efc)
+
+  # single variable
+  expect_message(as.table(data_tabulate(efc$c172code)))
+  expect_silent(as.table(data_tabulate(efc$c172code, remove_na = TRUE)))
+  expect_silent(as.table(data_tabulate(efc$c172code), verbose = FALSE))
+
+  # cross table
   expect_message(
     as.table(data_tabulate(efc, "c172code", by = "e42dep")),
     regex = "Removing NA values"
@@ -591,6 +598,13 @@ test_that("data_tabulate, table methods, only warn if necessary", {
 
   # no missings
   data(mtcars)
+
+  # single variable
+  expect_silent(as.table(data_tabulate(mtcars$gear)))
+  expect_silent(as.table(data_tabulate(efc$c172code, remove_na = TRUE)))
+  expect_silent(as.table(data_tabulate(efc$c172code), verbose = FALSE))
+
+  # cross table
   expect_silent(as.table(data_tabulate(mtcars, "gear", by = "cyl")))
   expect_silent(as.table(data_tabulate(mtcars, "gear", by = "cyl", remove_na = TRUE)))
   expect_silent(as.table(data_tabulate(mtcars, "gear", by = "cyl"), verbose = FALSE))

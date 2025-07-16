@@ -504,7 +504,7 @@ as.table.datawizard_table <- function(x, remove_na = TRUE, simplify = FALSE, ver
   if (!is.data.frame(x)) {
     x <- x[[1]]
   }
-  if (remove_na && anyNA(x$Value)) {
+  if (remove_na && any(x$N[is.na(x$Value)] > 0)) {
     if (verbose) {
       insight::format_alert("Removing NA values from frequency table.")
     }
@@ -626,7 +626,7 @@ as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE,
 
 .check_table_na <- function(x) {
   # check if any table has NA values
-  any(vapply(x, function(i) anyNA(i$Value), FALSE), logical(1))
+  any(vapply(x, function(i) any(i$N[is.na(i$Value)] > 0), FALSE), logical(1))
 }
 
 .check_xtable_na <- function(x) {
