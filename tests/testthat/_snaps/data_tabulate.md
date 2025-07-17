@@ -699,8 +699,6 @@
 
     Code
       as.table(x)
-    Message
-      Removing NA values from frequency table.
     Output
       [[1]]
        4  6  8 
@@ -711,8 +709,6 @@
 
     Code
       as.table(x)
-    Message
-      Removing NA values from frequency table.
     Output
       [[1]]
        4  6  8 
@@ -733,8 +729,6 @@
 
     Code
       as.table(x)
-    Message
-      Removing NA values from frequency table.
     Output
       [[1]]
        4  6  8 
@@ -749,8 +743,6 @@
 
     Code
       as.table(x)
-    Message
-      Removing NA values from frequency table.
     Output
       [[1]]
          3  4  5
@@ -763,8 +755,6 @@
 
     Code
       as.table(x, simplify = TRUE)
-    Message
-      Removing NA values from frequency table.
     Output
          3  4  5
       4  1  8  2
@@ -775,8 +765,6 @@
 
     Code
       as.table(x)
-    Message
-      Removing NA values from frequency table.
     Output
       [[1]]
          3  4  5
@@ -789,8 +777,6 @@
 
     Code
       as.table(x, simplify = TRUE)
-    Message
-      Removing NA values from frequency table.
     Output
          3  4  5
       4  1  8  2
@@ -801,8 +787,6 @@
 
     Code
       as.table(x)
-    Message
-      Removing NA values from frequency table.
     Output
       [[1]]
          3  4  5
@@ -820,8 +804,6 @@
 
     Code
       as.table(x)
-    Message
-      Removing NA values from frequency table.
     Output
       $`am (0)`
          3  4

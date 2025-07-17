@@ -573,7 +573,45 @@ test_that("data_tabulate, table methods", {
   expect_named(as.table(x), c("am (0)", "am (1)"))
   expect_snapshot(as.table(x))
 
-  # messages
-  expect_message(as.table(data_tabulate(mtcars, "cyl")), regex = "Removing NA values")
+  # messages - no missings to remove
+  expect_silent(as.table(data_tabulate(mtcars, "cyl")))
   expect_silent(as.table(data_tabulate(mtcars, "cyl"), verbose = FALSE))
+})
+
+
+test_that("data_tabulate, table methods, only warn if necessary", {
+  # missings
+  data(efc)
+
+  # single variable
+  expect_message(as.table(data_tabulate(efc$c172code)))
+  expect_silent(as.table(data_tabulate(efc$c172code, remove_na = TRUE)))
+  expect_silent(as.table(data_tabulate(efc$c172code), remove_na = FALSE))
+  expect_silent(as.table(data_tabulate(efc$c172code), verbose = FALSE))
+
+  # cross table
+  expect_message(
+    as.table(data_tabulate(efc, "c172code", by = "e42dep")),
+    regex = "Removing NA values"
+  )
+  expect_silent(as.table(data_tabulate(efc, "c172code", by = "e42dep", remove_na = TRUE)))
+  expect_silent(as.table(data_tabulate(efc, "c172code", by = "e42dep"), remove_na = FALSE))
+  expect_silent(as.table(data_tabulate(efc, "c172code", by = "e42dep"), verbose = FALSE))
+
+  # no missings
+  data(mtcars)
+
+  # single variable
+  expect_silent(as.table(data_tabulate(mtcars$gear)))
+  expect_silent(as.table(data_tabulate(mtcars$gear, remove_na = TRUE)))
+  expect_silent(as.table(data_tabulate(mtcars$gear), verbose = FALSE))
+
+  # cross table
+  expect_silent(as.table(data_tabulate(mtcars, "gear", by = "cyl")))
+  expect_silent(as.table(data_tabulate(mtcars, "gear", by = "cyl", remove_na = TRUE)))
+  expect_silent(as.table(data_tabulate(mtcars, "gear", by = "cyl"), verbose = FALSE))
+
+  # group DF throws no warning
+  d <- data_group(mtcars, "am")
+  expect_silent(as.table(data_tabulate(d, "cyl", by = "gear")))
 })

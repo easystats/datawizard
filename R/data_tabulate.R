@@ -504,8 +504,12 @@ as.table.datawizard_table <- function(x, remove_na = TRUE, simplify = FALSE, ver
   if (!is.data.frame(x)) {
     x <- x[[1]]
   }
+  # check if any table has NA values - the column "Value" contains the value
+  # "NA", and the column "N" contains the frequency of this value.
   if (remove_na) {
-    if (verbose) {
+    # .check_table_na() works on lists of data frames, so we wrap the data frame
+    # into a list here
+    if (verbose && .check_table_na(list(x))) {
       insight::format_alert("Removing NA values from frequency table.")
     }
     # remove NA values from the table
@@ -524,7 +528,7 @@ as.table.datawizard_table <- function(x, remove_na = TRUE, simplify = FALSE, ver
 #' @export
 as.table.datawizard_tables <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
   # only show message once we set `verbose = FALSE` in the lapply()
-  if (remove_na && verbose) {
+  if (remove_na && verbose && .check_table_na(x)) {
     insight::format_alert("Removing NA values from frequency table.")
   }
 
@@ -564,7 +568,7 @@ as.table.datawizard_crosstab <- function(x, remove_na = TRUE, simplify = FALSE, 
   rownames(x) <- row_names
 
   if (remove_na) {
-    if (verbose) {
+    if (verbose && .check_xtable_na(list(x))) {
       insight::format_alert("Removing NA values from frequency table.")
     }
     if (!is.null(x[["NA"]])) {
@@ -587,7 +591,7 @@ as.table.datawizard_crosstab <- function(x, remove_na = TRUE, simplify = FALSE, 
 #' @export
 as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
   # only show message once we set `verbose = FALSE` in the lapply()
-  if (remove_na && verbose) {
+  if (remove_na && verbose && .check_xtable_na(x)) {
     insight::format_alert("Removing NA values from frequency table.")
   }
 
@@ -613,11 +617,43 @@ as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE,
   out
 }
 
+
 .is_grouped_df_xtab <- function(x) {
   if (!is.data.frame(x)) {
     x <- x[[1]]
   }
   isTRUE(attributes(x)$grouped_df)
+}
+
+
+.check_table_na <- function(x) {
+  # check if any table has NA values - the column "Value" contains the value
+  # "NA", and the column "N" contains the frequency of this value.
+  any(vapply(x, function(i) any(i$N[is.na(i$Value)] > 0), logical(1)))
+}
+
+
+.check_xtable_na <- function(x) {
+  any(vapply(x, function(i) {
+    # need to extract rownames, to check if we have a "NA" row
+    row_names <- as.character(i[[1]])
+    row_names[is.na(row_names)] <- "NA"
+    has_na <- FALSE
+    # check for NA columns and rows
+    if (!is.null(i[["NA"]])) {
+      has_na <- any(i[["NA"]] > 0)
+    }
+    if ("NA" %in% row_names) {
+      # for grouped data frames, we need to remove the "Group" column, else
+      # the indexing -1 below won't work
+      if (.is_grouped_df_xtab(i)) {
+        i$Group <- NULL
+      }
+      # we need "as.data.frame()" for grouped df, else `as.vector()` fails
+      has_na <- has_na | any(as.vector(as.data.frame(i[row_names == "NA", -1])) > 0)
+    }
+    has_na
+  }, logical(1)))
 }
 
 
