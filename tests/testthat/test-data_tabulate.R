@@ -573,8 +573,8 @@ test_that("data_tabulate, table methods", {
   expect_named(as.table(x), c("am (0)", "am (1)"))
   expect_snapshot(as.table(x))
 
-  # messages
-  expect_message(as.table(data_tabulate(mtcars, "cyl")), regex = "Removing NA values")
+  # messages - no missings to remove
+  expect_silent(as.table(data_tabulate(mtcars, "cyl")))
   expect_silent(as.table(data_tabulate(mtcars, "cyl"), verbose = FALSE))
 })
 
