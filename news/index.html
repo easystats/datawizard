@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,27 @@
       <small>Source: <a href="https://github.com/easystats/datawizard/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.0" id="datawizard-120">datawizard 1.2.0<a class="anchor" aria-label="anchor" href="#datawizard-120"></a></h2>
+<p>BREAKING CHANGES</p>
+<ul><li>The following deprecated arguments have been removed (<a href="https://github.com/easystats/datawizard/issues/603" class="external-link">#603</a>):
+<ul><li>
+<code>drop_na</code> in <code><a href="../reference/data_match.html">data_match()</a></code>
+</li>
+<li>
+<code>safe</code>, <code>pattern</code>, and <code>verbose</code> in <code><a href="../reference/data_rename.html">data_rename()</a></code>
+</li>
+</ul></li>
+</ul><p>CHANGES</p>
+<ul><li><p><code><a href="../reference/data_read.html">data_read()</a></code> and <code><a href="../reference/data_read.html">data_write()</a></code> now support the <code>.parquet</code> file format, via the <em>nanoparquet</em> package (<a href="https://github.com/easystats/datawizard/issues/625" class="external-link">#625</a>).</p></li>
+<li><p><code><a href="../reference/data_tabulate.html">data_tabulate()</a></code> gets a <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display()</a></code> method (<a href="https://github.com/easystats/datawizard/issues/627" class="external-link">#627</a>).</p></li>
+<li><p><code><a href="../reference/data_tabulate.html">data_tabulate()</a></code> gets an <code><a href="https://rdrr.io/r/base/table.html" class="external-link">as.table()</a></code> method to coerce the frequency or contingency table into a (list of) <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code> object(s). This can be useful for further statistical analysis, e.g. in combination with <code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test()</a></code> (<a href="https://github.com/easystats/datawizard/issues/629" class="external-link">#629</a>).</p></li>
+<li><p>The <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method for <code><a href="../reference/data_tabulate.html">data_tabulate()</a></code> now appears in the documentation, making the <code>big_mark</code> argument visible (<a href="https://github.com/easystats/datawizard/issues/627" class="external-link">#627</a>).</p></li>
+</ul><p>BUG FIXES</p>
+<ul><li><p>Fixed an issue when printing cross tables using <code>data_tabulate(by = ...)</code>, which was caused by the recent changes in <code><a href="https://easystats.github.io/insight/reference/export_table.html" class="external-link">insight::export_table()</a></code>.</p></li>
+<li><p>Fixed another issue when printing cross tables using <code>data_tabulate(by = ...)</code>, when more than one variable was selected for <code>select</code> (<a href="https://github.com/easystats/datawizard/issues/630" class="external-link">#630</a>).</p></li>
+<li><p>Fixed typo in the documentation of <code><a href="../reference/data_match.html">data_match()</a></code>.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.0" id="datawizard-110">datawizard 1.1.0<a class="anchor" aria-label="anchor" href="#datawizard-110"></a></h2><p class="text-muted">CRAN release: 2025-05-09</p>
 <p>BREAKING CHANGES</p>
