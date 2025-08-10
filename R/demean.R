@@ -481,11 +481,13 @@ degroup <- function(x,
       names(out) <- paste0(select, "_", j)
       out
     })
+    group_means_list <- unlist(group_means_list, recursive = FALSE)
+
     # de-meaned variables for cross-classified design is simply subtracting
     # all group means from each individual value
-    person_means_list <- lapply(seq_along(select), function(i) {
-      sum_group_means <- do.call(`+`, lapply(group_means_list, function(j) j[[i]]))
-      dat[[select[i]]] - sum_group_means
+    person_means_list <- lapply(select, function(i) {
+      sum_group_means <- Reduce("+", group_means_list[paste0(i, "_", by)])
+      dat[[i]] - sum_group_means
     })
   }
 
