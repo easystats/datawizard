@@ -461,7 +461,7 @@ degroup <- function(x,
       for (j in 2:length(by)) {
         out[[j]] <- out[[j]] - out[[j - 1]]
       }
-      names(out) <- paste0(select, "_", by)
+      names(out) <- paste0(i, "_", by)
       out
     })
     # create de-meaned variables by subtracting the group mean from each individual value
