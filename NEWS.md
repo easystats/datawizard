@@ -1,3 +1,9 @@
+# datawizard (development)
+
+BUG FIXES
+
+* Fixed an issue when `demean()`ing nested structures (#635).
+
 # datawizard 1.2.0
 
 BREAKING CHANGES
