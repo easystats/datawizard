@@ -175,6 +175,30 @@ test_that("demean for cross-classified designs (by > 1)", {
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
+
+
+  # More than 2 groupings
+  mu <- 100
+  ul <- setNames(c(-1, -3, 0, 4), nm = letters[1:4])
+  uL <- setNames(c(10, 30, 0, -40), nm = LETTERS[1:4])
+  um <- setNames(c(100, 150, -250), nm = month.abb[1:3])
+
+  dat <- expand.grid(l = letters[1:4], L = LETTERS[1:4], m = month.abb[1:3])
+
+  set.seed(111)
+  e <- rnorm(nrow(dat) - 1) |> round(2)
+  e <- append(e, -sum(e))
+
+  dat$y <- mu + ul[dat$l] + uL[dat$L] + um[dat$m] + e
+  dat$z <- mu + ul[dat$l] + uL[dat$L] + um[dat$m] + 10 * e
+
+  dat_dem <- datawizard::demean(dat, by = c("l", "L", "m"), select = c("y", "z"))
+
+  expect_equal(dat_dem$y_l_between, ave(dat$y, dat$l), ignore_attr = TRUE)
+  expect_equal(dat_dem$y_L_between, ave(dat$y, dat$L), ignore_attr = TRUE)
+  expect_equal(dat_dem$y_m_between, ave(dat$y, dat$m), ignore_attr = TRUE)
+  expect_equal(rowSums(dat_dem[grepl("^y_", colnames(dat_dem))]), dat$y)
+  expect_equal(rowSums(dat_dem[grepl("^z_", colnames(dat_dem))]), dat$z)
 })
 
 
