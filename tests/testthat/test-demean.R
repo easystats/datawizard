@@ -245,4 +245,22 @@ test_that("demean for nested designs (by > 1), nested = TRUE", {
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
+
+  # Following #635
+  testdf <- data.frame(
+    roman = c("I", "I", "I", "I", "II", "II", "II", "II"),
+    alphabet = c("a", "a", "b", "b", "a", "b", "a", "b"),
+    val1 = c(1, 2, 3, 4, 5, 6, 7, 8),
+    val2 = c(1, 2, 3, 4, 5, 6, 7, 8),
+    val3 = c(1, 2, 3, 4, 5, 6, 7, 8)
+  )
+
+  out <- datawizard::demean(testdf,
+                            select = c("val1", "val2", "val3"),
+                            by = "roman/alphabet", append = FALSE)
+
+  expect_in(names(out), c("val1_roman_between", "val1_alphabet_between", "val2_roman_between",
+                                 "val2_alphabet_between", "val3_roman_between", "val3_alphabet_between",
+                                 "val1_within", "val2_within", "val3_within"))
+
 })
