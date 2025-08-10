@@ -3,7 +3,7 @@
 BUG FIXES
 
 * Fixed an issue when `demean()`ing nested structures with more than 2 grouping variables (#635).
-* Fixed an issue when `demean()`ing crossed structures with more than 2 grouping variables.
+* Fixed an issue when `demean()`ing crossed structures with more than 2 grouping variables (#638).
 
 # datawizard 1.2.0
 
