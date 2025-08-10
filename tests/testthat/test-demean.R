@@ -260,9 +260,26 @@ test_that("demean for nested designs (by > 1), nested = TRUE", {
     by = "roman/alphabet", append = FALSE
   )
 
-  expect_in(names(out), c(
+  expect_named(out, c(
     "val1_roman_between", "val1_alphabet_between", "val2_roman_between",
     "val2_alphabet_between", "val3_roman_between", "val3_alphabet_between",
     "val1_within", "val2_within", "val3_within"
   ))
+
+  expect_equal(as.vector(out$val1_within),
+               c(-0.5, 0.5, -0.5, 0.5, -1, -1, 1, 1))
+  expect_equal(out$val1_within, out$val2_within)
+  expect_equal(out$val1_within, out$val3_within)
+
+  expect_equal(as.vector(out$val1_roman_between),
+               c(2.5, 2.5, 2.5, 2.5, 6.5, 6.5, 6.5, 6.5))
+  expect_equal(out$val1_roman_between, out$val2_roman_between)
+  expect_equal(out$val1_roman_between, out$val3_roman_between)
+
+  expect_equal(as.vector(out$val1_alphabet_between),
+               c(-1, -1, 1, 1, -0.5, 0.5, -0.5, 0.5))
+  expect_equal(out$val1_alphabet_between, out$val2_alphabet_between)
+  expect_equal(out$val1_alphabet_between, out$val3_alphabet_between)
+
+  expect_equal(rowSums(out[,grepl("^val1", names(out))]), testdf$val1)
 })
