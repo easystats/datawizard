@@ -256,11 +256,13 @@ test_that("demean for nested designs (by > 1), nested = TRUE", {
   )
 
   out <- datawizard::demean(testdf,
-                            select = c("val1", "val2", "val3"),
-                            by = "roman/alphabet", append = FALSE)
+    select = c("val1", "val2", "val3"),
+    by = "roman/alphabet", append = FALSE
+  )
 
-  expect_in(names(out), c("val1_roman_between", "val1_alphabet_between", "val2_roman_between",
-                                 "val2_alphabet_between", "val3_roman_between", "val3_alphabet_between",
-                                 "val1_within", "val2_within", "val3_within"))
-
+  expect_in(names(out), c(
+    "val1_roman_between", "val1_alphabet_between", "val2_roman_between",
+    "val2_alphabet_between", "val3_roman_between", "val3_alphabet_between",
+    "val1_within", "val2_within", "val3_within"
+  ))
 })
