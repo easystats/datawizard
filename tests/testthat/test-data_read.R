@@ -516,3 +516,25 @@ test_that("data_read - RDS file, from URL", {
     "Reading data"
   )
 })
+
+
+test_that("data_read - nanoparquet", {
+  skip_if_not_installed("withr")
+  skip_if_not_installed("nanoparquet")
+
+  withr::with_tempfile("temp_file", fileext = ".parquet", code = {
+    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/penguins.parquet")
+    httr::stop_for_status(request)
+    writeBin(httr::content(request, type = "raw"), temp_file)
+
+    d <- data_read(temp_file)
+    expect_named(
+      d,
+      c(
+        "species", "island", "bill_len", "bill_dep", "flipper_len",
+        "body_mass", "sex", "year"
+      )
+    )
+    expect_identical(dim(d), c(344L, 8L))
+  })
+})

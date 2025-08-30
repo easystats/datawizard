@@ -346,6 +346,6 @@ fluctuation and change. New York: Routledge
 }
 \seealso{
 If grand-mean centering (instead of centering within-clusters)
-is required, see \code{\link[=center]{center()}}. See \code{\link[performance:check_heterogeneity_bias]{performance::check_heterogeneity_bias()}}
+is required, see \code{\link[=center]{center()}}. See \code{\link[performance:check_group_variation]{performance::check_group_variation()}}
 to check for heterogeneity bias.
 }

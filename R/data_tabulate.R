@@ -3,7 +3,7 @@
 #'
 #' @description This function creates frequency or crosstables of variables,
 #' including the number of levels/values as well as the distribution of raw,
-#' valid and cumulative percentages. For crosstables, row, column  and cell
+#' valid and cumulative percentages. For crosstables, row, column and cell
 #' percentages can be calculated.
 #'
 #' @param x A (grouped) data frame, a vector or factor.
@@ -16,7 +16,10 @@
 #' @param name Optional character string, which includes the name that is used
 #' for printing.
 #' @param remove_na Logical, if `FALSE`, missing values are included in the
-#' frequency or crosstable, else missing values are omitted.
+#' frequency or crosstable, else missing values are omitted. Note that the
+#' default for the `as.table()` method is `remove_na = TRUE`, so that missing
+#' values are not included in the returned table, which makes more sense for
+#' post-processing of the table, e.g. using `chisq.test()`.
 #' @param collapse Logical, if `TRUE` collapses multiple tables into one larger
 #' table for printing. This affects only printing, not the returned object.
 #' @param weights Optional numeric vector of weights. Must be of the same length
@@ -25,6 +28,16 @@
 #' percentages to be calculated. Only applies to crosstables, i.e. when `by` is
 #' not `NULL`. Can be `"row"` (row percentages), `"column"` (column percentages)
 #' or `"full"` (to calculate relative frequencies for the full table).
+#' @param big_mark Optional character string, indicating the big mark that is
+#' used for large numbers. If `NULL` (default), a big mark is added automatically for
+#' large numbers (i.e. numbers with more than 5 digits). If you want to remove
+#' the big mark, set `big_mark = ""`.
+#' @param simplify Logical, if `TRUE`, the returned table is simplified to a
+#' single table object if there is only one frequency or contingency table
+#' input. Else, always for multiple table inputs or when `simplify = FALSE`, a
+#' list of tables is returned. This is only relevant for the `as.table()`
+#' methods. To ensure consistent output, the default is `FALSE`.
+#' @param verbose Toggle warnings and messages.
 #' @param ... not used.
 #' @inheritParams extract_column_names
 #'
@@ -34,6 +47,10 @@
 #' where the first column contains name of the variable for which frequencies
 #' were calculated, and the second column is a list column that contains the
 #' frequency tables as data frame. See 'Examples'.
+#'
+#' There is also an `as.table()` method, which returns a table object with the
+#' frequencies of the variable. This is useful for further statistical analysis,
+#' e.g. for using `chisq.test()` on the frequency table. See 'Examples'.
 #'
 #' @section Crosstables:
 #' If `by` is supplied, a crosstable is created. The crosstable includes `<NA>`
@@ -122,6 +139,22 @@
 #' as.data.frame(result)
 #' as.data.frame(result)$table
 #' as.data.frame(result, add_total = TRUE)$table
+#'
+#' # post-processing ------
+#' # ----------------------
+#'
+#' out <- data_tabulate(efc, "c172code", by = "e16sex")
+#' # we need to simplify the output, else we get a list of tables
+#' suppressWarnings(chisq.test(as.table(out, simplify = TRUE)))
+#'
+#' # apply chisq.test to each table
+#' out <- data_tabulate(efc, c("c172code", "e16sex"))
+#' suppressWarnings(lapply(as.table(out), chisq.test))
+#'
+#' # can also handle grouped data frames
+#' d <- data_group(mtcars, "am")
+#' x <- data_tabulate(d, "cyl", by = "gear")
+#' as.table(x)
 #' @export
 data_tabulate <- function(x, ...) {
   UseMethod("data_tabulate")
@@ -403,6 +436,8 @@ insight::print_md
 insight::display
 
 
+# as.data.frame --------------------
+
 #' @rdname data_tabulate
 #' @param add_total For crosstables (i.e. when `by` is not `NULL`), a row and
 #' column with the total N values are added to the data frame. `add_total` has
@@ -459,6 +494,171 @@ as.data.frame.datawizard_tables <- function(x,
 as.data.frame.datawizard_crosstabs <- as.data.frame.datawizard_tables
 
 
+# as.table --------------------
+
+#' @rdname data_tabulate
+#' @export
+as.table.datawizard_table <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
+  # sanity check - the `.data.frame` method (data_tabulate(mtcars, "cyl"))
+  # returns a list, but not the default method (data_tabulate(mtcars$cyl))
+  if (!is.data.frame(x)) {
+    x <- x[[1]]
+  }
+  # check if any table has NA values - the column "Value" contains the value
+  # "NA", and the column "N" contains the frequency of this value.
+  if (remove_na) {
+    # .check_table_na() works on lists of data frames, so we wrap the data frame
+    # into a list here
+    if (verbose && .check_table_na(list(x))) {
+      insight::format_alert("Removing NA values from frequency table.")
+    }
+    # remove NA values from the table
+    x <- x[!is.na(x$Value), ]
+  }
+  # coerce to table
+  result <- as.table(stats::setNames(x[["N"]], x$Value))
+  # if we don't want to simplify the table, we wrap it into a list
+  if (!simplify) {
+    result <- list(result)
+  }
+
+  result
+}
+
+#' @export
+as.table.datawizard_tables <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
+  # only show message once we set `verbose = FALSE` in the lapply()
+  if (remove_na && verbose && .check_table_na(x)) {
+    insight::format_alert("Removing NA values from frequency table.")
+  }
+
+  out <- lapply(
+    x,
+    as.table.datawizard_table,
+    remove_na = remove_na,
+    # no nested lists
+    simplify = TRUE,
+    # no multiple messages
+    verbose = FALSE,
+    ...
+  )
+  # if only one table is returned, "unlist"
+  if (length(out) == 1 && simplify) {
+    out <- out[[1]]
+  }
+  out
+}
+
+#' @export
+as.table.datawizard_crosstab <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
+  # sanity check - the `.data.frame` method  returns a list, but not the
+  # default method
+  if (!is.data.frame(x)) {
+    x <- x[[1]]
+  }
+  # check for grouped df - we need to remove the "Group" column
+  if (.is_grouped_df_xtab(x)) {
+    x$Group <- NULL
+  }
+  # first column contains the row names
+  row_names <- as.character(x[[1]])
+  row_names[is.na(row_names)] <- "NA"
+  # remove first column, set rownames
+  x[[1]] <- NULL
+  rownames(x) <- row_names
+
+  if (remove_na) {
+    if (verbose && .check_xtable_na(list(x))) {
+      insight::format_alert("Removing NA values from frequency table.")
+    }
+    if (!is.null(x[["NA"]])) {
+      x[["NA"]] <- NULL
+    }
+    if ("NA" %in% row_names) {
+      x <- x[row_names != "NA", ]
+    }
+  }
+  # coerce to table
+  result <- as.table(as.matrix(x))
+  # if we don't want to simplify the table, we wrap it into a list
+  if (!simplify) {
+    result <- list(result)
+  }
+
+  result
+}
+
+#' @export
+as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
+  # only show message once we set `verbose = FALSE` in the lapply()
+  if (remove_na && verbose && .check_xtable_na(x)) {
+    insight::format_alert("Removing NA values from frequency table.")
+  }
+
+  out <- lapply(
+    x,
+    as.table.datawizard_crosstab,
+    remove_na = remove_na,
+    simplify = TRUE,
+    verbose = FALSE,
+    ...
+  )
+  # if only one table is returned, "unlist"
+  if (length(out) == 1 && simplify) {
+    out <- out[[1]]
+  }
+  # if we have a grouped data frame, we save the grouping values as
+  # names for the list
+  if (.is_grouped_df_xtab(x)) {
+    names(out) <- unlist(lapply(x, function(i) {
+      i$Group[1]
+    }), use.names = FALSE)
+  }
+  out
+}
+
+
+.is_grouped_df_xtab <- function(x) {
+  if (!is.data.frame(x)) {
+    x <- x[[1]]
+  }
+  isTRUE(attributes(x)$grouped_df)
+}
+
+
+.check_table_na <- function(x) {
+  # check if any table has NA values - the column "Value" contains the value
+  # "NA", and the column "N" contains the frequency of this value.
+  any(vapply(x, function(i) any(i$N[is.na(i$Value)] > 0), logical(1)))
+}
+
+
+.check_xtable_na <- function(x) {
+  any(vapply(x, function(i) {
+    # need to extract rownames, to check if we have a "NA" row
+    row_names <- as.character(i[[1]])
+    row_names[is.na(row_names)] <- "NA"
+    has_na <- FALSE
+    # check for NA columns and rows
+    if (!is.null(i[["NA"]])) {
+      has_na <- any(i[["NA"]] > 0)
+    }
+    if ("NA" %in% row_names) {
+      # for grouped data frames, we need to remove the "Group" column, else
+      # the indexing -1 below won't work
+      if (.is_grouped_df_xtab(i)) {
+        i$Group <- NULL
+      }
+      # we need "as.data.frame()" for grouped df, else `as.vector()` fails
+      has_na <- has_na | any(as.vector(as.data.frame(i[row_names == "NA", -1])) > 0)
+    }
+    has_na
+  }, logical(1)))
+}
+
+
+# format --------------------
+
 #' @export
 format.datawizard_table <- function(x, format = "text", big_mark = NULL, ...) {
   # convert to character manually, else, for large numbers,
@@ -481,8 +681,18 @@ format.datawizard_table <- function(x, format = "text", big_mark = NULL, ...) {
 }
 
 .add_commas_in_numbers <- function(x, big_mark = NULL) {
+  # sanity checks - for crosstables with `remove_na = FALSE`, nchar(x) fails,
+  # and pretty() warns about non-numeric input. Thus, we skip if any NA value
+  # is in `x`.
+  if (anyNA(x)) {
+    return(x)
+  }
+  # automatically add a big mark for large numbers
   if (is.null(big_mark) && any(nchar(x) > 5)) {
     big_mark <- ","
+  }
+  if (identical(big_mark, "")) {
+    return(x)
   }
   if (!is.null(big_mark)) {
     x <- prettyNum(x, big.mark = big_mark)
@@ -492,6 +702,9 @@ format.datawizard_table <- function(x, format = "text", big_mark = NULL, ...) {
 }
 
 
+# print --------------------
+
+#' @rdname data_tabulate
 #' @export
 print.datawizard_table <- function(x, big_mark = NULL, ...) {
   a <- attributes(x)
@@ -532,66 +745,6 @@ print.datawizard_table <- function(x, big_mark = NULL, ...) {
     ...
   ))
   invisible(x)
-}
-
-
-#' @export
-print_html.datawizard_table <- function(x, big_mark = NULL, ...) {
-  a <- attributes(x)
-
-  # "table" header with variable label/name, and type
-  caption <- .table_header(x, "html")
-
-  # summary of total and valid N (we may add mean/sd as well?)
-  footer <- sprintf(
-    "total N=%i valid N=%i%s",
-    a$total_n,
-    a$valid_n,
-    ifelse(is.null(a$weights), "", " (weighted)")
-  )
-
-  # remove information that goes into the header/footer
-  x$Variable <- NULL
-  x$Group <- NULL
-
-  # print table
-  insight::export_table(
-    format(x, format = "html", big_mark = big_mark, ...),
-    title = caption,
-    footer = footer,
-    missing = "(NA)",
-    format = "html"
-  )
-}
-
-
-#' @export
-print_md.datawizard_table <- function(x, big_mark = NULL, ...) {
-  a <- attributes(x)
-
-  # "table" header with variable label/name, and type
-  caption <- .table_header(x, "markdown")
-
-  # summary of total and valid N (we may add mean/sd as well?)
-  footer <- sprintf(
-    "total N=%i valid N=%i%s\n\n",
-    a$total_n,
-    a$valid_n,
-    ifelse(is.null(a$weights), "", " (weighted)")
-  )
-
-  # remove information that goes into the header/footer
-  x$Variable <- NULL
-  x$Group <- NULL
-
-  # print table
-  insight::export_table(
-    format(x, format = "markdown", big_mark = big_mark, ...),
-    title = caption,
-    footer = footer,
-    missing = "(NA)",
-    format = "markdown"
-  )
 }
 
 
@@ -639,6 +792,37 @@ print.datawizard_tables <- function(x, big_mark = NULL, ...) {
 }
 
 
+# display --------------------
+
+#' @export
+display.datawizard_table <- function(object, big_mark = NULL, format = "markdown", ...) {
+  format <- insight::validate_argument(format, c("markdown", "html", "md"))
+  # print table in HTML or markdown format
+  if (format == "html") {
+    print_html(object, big_mark = big_mark, ...)
+  } else {
+    print_md(object, big_mark = big_mark, ...)
+  }
+}
+
+#' @export
+display.datawizard_tables <- display.datawizard_table
+
+#' @export
+display.datawizard_crosstab <- display.datawizard_table
+
+#' @export
+display.datawizard_crosstabs <- display.datawizard_table
+
+
+# print_html --------------------
+
+#' @export
+print_html.datawizard_table <- function(x, big_mark = NULL, ...) {
+  .print_dw_table(x, format = "html", big_mark = big_mark, ...)
+}
+
+
 #' @export
 print_html.datawizard_tables <- function(x, big_mark = NULL, ...) {
   # check if we have weights
@@ -667,6 +851,14 @@ print_html.datawizard_tables <- function(x, big_mark = NULL, ...) {
       group_by = "Group"
     )
   }
+}
+
+
+# print_md --------------------
+
+#' @export
+print_md.datawizard_table <- function(x, big_mark = NULL, ...) {
+  .print_dw_table(x, format = "markdown", big_mark = big_mark, ...)
 }
 
 
@@ -706,6 +898,37 @@ print_md.datawizard_tables <- function(x, big_mark = NULL, ...) {
 
 
 # tools --------------------
+
+
+.print_dw_table <- function(x, format = "markdown", big_mark = NULL, ...) {
+  a <- attributes(x)
+
+  # "table" header with variable label/name, and type
+  caption <- .table_header(x, format)
+
+  # summary of total and valid N (we may add mean/sd as well?)
+  footer <- sprintf(
+    "total N=%i valid N=%i%s%s",
+    a$total_n,
+    a$valid_n,
+    ifelse(is.null(a$weights), "", " (weighted)"),
+    ifelse(format == "markdown", "\n\n", "")
+  )
+
+  # remove information that goes into the header/footer
+  x$Variable <- NULL
+  x$Group <- NULL
+
+  # print table
+  insight::export_table(
+    format(x, format = format, big_mark = big_mark, ...),
+    title = caption,
+    footer = footer,
+    missing = "(NA)",
+    format = format
+  )
+}
+
 
 .table_header <- function(x, format = "text") {
   a <- attributes(x)

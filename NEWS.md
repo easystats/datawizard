@@ -1,4 +1,43 @@
-# datawizard (devel)
+# datawizard (development)
+
+BUG FIXES
+
+* Fixed an issue when `demean()`ing nested structures with more than 2 grouping variables (#635).
+* Fixed an issue when `demean()`ing crossed structures with more than 2 grouping variables (#638).
+
+# datawizard 1.2.0
+
+BREAKING CHANGES
+
+* The following deprecated arguments have been removed (#603):
+  - `drop_na` in `data_match()`
+  - `safe`, `pattern`, and `verbose` in `data_rename()`
+
+CHANGES
+
+* `data_read()` and `data_write()` now support the `.parquet` file format, via
+  the *nanoparquet* package (#625).
+
+* `data_tabulate()` gets a `display()` method (#627).
+
+* `data_tabulate()` gets an `as.table()` method to coerce the frequency or
+  contingency table into a (list of) `table()` object(s). This can be useful for
+  further statistical analysis, e.g. in combination with `chisq.test()` (#629).
+
+* The `print()` method for `data_tabulate()` now appears in the documentation,
+  making the `big_mark` argument visible (#627).
+
+BUG FIXES
+
+* Fixed an issue when printing cross tables using `data_tabulate(by = ...)`,
+  which was caused by the recent changes in `insight::export_table()`.
+
+* Fixed another issue when printing cross tables using `data_tabulate(by = ...)`,
+  when more than one variable was selected for `select` (#630).
+
+* Fixed typo in the documentation of `data_match()`.
+
+# datawizard 1.1.0
 
 BREAKING CHANGES
 
@@ -32,7 +71,7 @@ CHANGES
 
 * `data_codebook()` gives an informative warning when no column names matched
   the selection pattern (#601).
-
+  
 * `data_to_long()` now errors when columns selected to reshape do not exist in
   the data, to avoid nonsensical results that could be missed (#602).
 

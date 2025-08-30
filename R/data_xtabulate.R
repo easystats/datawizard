@@ -79,6 +79,7 @@
   attr(out, "weights") <- weights
   attr(out, "proportions") <- proportions
   attr(out, "varname") <- obj_name
+  attr(out, "grouped_df") <- !is.null(group_variable)
 
   class(out) <- c("datawizard_crosstab", "data.frame")
 
@@ -338,12 +339,13 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
     # prepare table arguments
     fun_args <- list(
       out,
-      format = format,
-      by = "groups"
+      format = format
     )
     if (format != "html") {
       fun_args$cross <- "+"
       fun_args$empty_line <- "-"
+    } else {
+      fun_args$by <- "groups"
     }
     if (format == "text") {
       fun_args$missing <- "<NA>"

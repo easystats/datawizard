@@ -9,7 +9,6 @@ Carle
 Catran
 Crosstables
 DEPRECATIONS
-DOI
 De
 Dhaliwal
 Disaggregating
@@ -35,12 +34,7 @@ Minitab
 ORCID
 OpenBLAS
 PSU
-Posteriori
 Ranktransform
-Recode
-Recoding
-Rescale
-Rescaling
 Routledge
 SDs
 Schaeffer
@@ -60,7 +54,6 @@ brms
 codebook
 codebooks
 codecov
-coercible
 crosstable
 crosstables
 csv
@@ -73,8 +66,8 @@ et
 geoms
 ggplot's
 https
+ing
 interpretability
-interpretable
 inversed
 joss
 labelled
@@ -86,6 +79,7 @@ meaned
 mesokurtic
 midhinge
 modelbased
+nanoparquet
 nd
 noLD
 panelr
@@ -93,20 +87,10 @@ partialization
 platykurtic
 poorman
 pre
-pth
 px
 readr
 readxl
-recode
-recoded
-recodes
-recoding
-recodings
 relevel
-reproducibility
-rescale
-rescaled
-rescaling
 rio
 rowid
 rstanarm
@@ -119,7 +103,6 @@ tibbles
 tidyverse
 unitless
 unstored
-untransformed
 visualisation
 wikipedia
 winsorization

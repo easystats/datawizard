@@ -5,6 +5,8 @@
 \alias{data_tabulate.default}
 \alias{data_tabulate.data.frame}
 \alias{as.data.frame.datawizard_tables}
+\alias{as.table.datawizard_table}
+\alias{print.datawizard_table}
 \title{Create frequency and crosstables of variables}
 \usage{
 data_tabulate(x, ...)
@@ -45,6 +47,10 @@ data_tabulate(x, ...)
   stringsAsFactors = FALSE,
   add_total = FALSE
 )
+
+\method{as.table}{datawizard_table}(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...)
+
+\method{print}{datawizard_table}(x, big_mark = NULL, ...)
 }
 \arguments{
 \item{x}{A (grouped) data frame, a vector or factor.}
@@ -63,7 +69,10 @@ factor levels are dropped from the frequency table.}
 as \code{x}. If \code{weights} is supplied, weighted frequencies are calculated.}
 
 \item{remove_na}{Logical, if \code{FALSE}, missing values are included in the
-frequency or crosstable, else missing values are omitted.}
+frequency or crosstable, else missing values are omitted. Note that the
+default for the \code{as.table()} method is \code{remove_na = TRUE}, so that missing
+values are not included in the returned table, which makes more sense for
+post-processing of the table, e.g. using \code{chisq.test()}.}
 
 \item{proportions}{Optional character string, indicating the type of
 percentages to be calculated. Only applies to crosstables, i.e. when \code{by} is
@@ -73,7 +82,7 @@ or \code{"full"} (to calculate relative frequencies for the full table).}
 \item{name}{Optional character string, which includes the name that is used
 for printing.}
 
-\item{verbose}{Toggle warnings.}
+\item{verbose}{Toggle warnings and messages.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -151,6 +160,17 @@ table for printing. This affects only printing, not the returned object.}
 \item{add_total}{For crosstables (i.e. when \code{by} is not \code{NULL}), a row and
 column with the total N values are added to the data frame. \code{add_total} has
 no effect in \code{as.data.frame()} for simple frequency tables.}
+
+\item{simplify}{Logical, if \code{TRUE}, the returned table is simplified to a
+single table object if there is only one frequency or contingency table
+input. Else, always for multiple table inputs or when \code{simplify = FALSE}, a
+list of tables is returned. This is only relevant for the \code{as.table()}
+methods. To ensure consistent output, the default is \code{FALSE}.}
+
+\item{big_mark}{Optional character string, indicating the big mark that is
+used for large numbers. If \code{NULL} (default), a big mark is added automatically for
+large numbers (i.e. numbers with more than 5 digits). If you want to remove
+the big mark, set \code{big_mark = ""}.}
 }
 \value{
 A data frame, or a list of data frames, with one frequency table
@@ -159,7 +179,7 @@ as data frame per variable.
 \description{
 This function creates frequency or crosstables of variables,
 including the number of levels/values as well as the distribution of raw,
-valid and cumulative percentages. For crosstables, row, column  and cell
+valid and cumulative percentages. For crosstables, row, column and cell
 percentages can be calculated.
 }
 \details{
@@ -168,6 +188,10 @@ data frame. The structure of the returned object is a nested data frame,
 where the first column contains name of the variable for which frequencies
 were calculated, and the second column is a list column that contains the
 frequency tables as data frame. See 'Examples'.
+
+There is also an \code{as.table()} method, which returns a table object with the
+frequencies of the variable. This is useful for further statistical analysis,
+e.g. for using \code{chisq.test()} on the frequency table. See 'Examples'.
 }
 \note{
 There are \code{print_html()} and \code{print_md()} methods available for printing
@@ -256,5 +280,21 @@ result <- data_tabulate(efc, "c172code", by = "e16sex")
 as.data.frame(result)
 as.data.frame(result)$table
 as.data.frame(result, add_total = TRUE)$table
+
+# post-processing ------
+# ----------------------
+
+out <- data_tabulate(efc, "c172code", by = "e16sex")
+# we need to simplify the output, else we get a list of tables
+suppressWarnings(chisq.test(as.table(out, simplify = TRUE)))
+
+# apply chisq.test to each table
+out <- data_tabulate(efc, c("c172code", "e16sex"))
+suppressWarnings(lapply(as.table(out), chisq.test))
+
+# can also handle grouped data frames
+d <- data_group(mtcars, "am")
+x <- data_tabulate(d, "cyl", by = "gear")
+as.table(x)
 \dontshow{\}) # examplesIf}
 }

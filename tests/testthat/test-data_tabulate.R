@@ -37,10 +37,12 @@ test_that("data_tabulate, HTML", {
   data(efc, package = "datawizard")
   expect_s3_class(print_html(data_tabulate(efc$c172code)), "gt_tbl")
   expect_s3_class(print_html(data_tabulate(efc, "c172code")), "gt_tbl")
+  expect_s3_class(display(data_tabulate(efc, "c172code"), format = "html"), "gt_tbl")
 })
 
 
 test_that("data_tabulate, weights", {
+  skip_if_not_installed("knitr")
   data(efc, package = "datawizard")
   set.seed(123)
   efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
@@ -63,9 +65,11 @@ test_that("data_tabulate, weights", {
   # correct table footer
   expect_snapshot(print(data_tabulate(efc$e42dep, weights = efc$weights)))
   expect_snapshot(print_md(data_tabulate(efc$e42dep, weights = efc$weights)))
+  expect_snapshot(display(data_tabulate(efc$e42dep, weights = efc$weights)))
   # correct table caption
   expect_snapshot(print(data_tabulate(efc, c("e42dep", "e16sex"), collapse = TRUE, weights = efc$weights)))
   expect_snapshot(print_md(data_tabulate(efc, c("e42dep", "e16sex"), weights = efc$weights)))
+  expect_snapshot(display(data_tabulate(efc, c("e42dep", "e16sex"), weights = efc$weights)))
 })
 
 
@@ -169,6 +173,7 @@ test_that("data_tabulate big numbers", {
   x <- sample.int(5, size = 1e7, TRUE)
   expect_snapshot(data_tabulate(x))
   expect_snapshot(print(data_tabulate(x), big_mark = "-"))
+  expect_snapshot(print(data_tabulate(x), big_mark = ""))
 })
 
 
@@ -331,6 +336,7 @@ test_that("data_tabulate, cross tables, HTML", {
   expect_s3_class(print_html(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", remove_na = TRUE, weights = efc$weights)), "gt_tbl") # nolint
   expect_s3_class(print_html(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row")), "gt_tbl")
   expect_s3_class(print_html(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", remove_na = TRUE, weights = efc$weights)), "gt_tbl") # nolint
+  expect_s3_class(display(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", remove_na = TRUE, weights = efc$weights), format = "html"), "gt_tbl") # nolint
 })
 
 test_that("data_tabulate, cross tables, grouped df", {
@@ -343,6 +349,12 @@ test_that("data_tabulate, cross tables, grouped df", {
   skip_if_not_installed("gt")
   expect_s3_class(print_html(data_tabulate(grp, "c172code", by = "e16sex", proportions = "row")), "gt_tbl") # nolint
   expect_s3_class(print_html(data_tabulate(efc, c("e16sex", "e42dep"), by = "c172code", proportions = "row")), "gt_tbl") # nolint
+})
+
+test_that("data_tabulate, cross tables, print/format works", {
+  data(mtcars)
+  x <- data_tabulate(mtcars, c("cyl", "am"), by = "gear")
+  expect_snapshot(print(x))
 })
 
 test_that("data_tabulate, cross tables, errors by", {
@@ -371,11 +383,16 @@ test_that("data_tabulate, cross tables, errors weights", {
 })
 
 test_that("data_tabulate, cross tables, modify structure", {
+  skip_if_not_installed("knitr")
   data(efc, package = "datawizard")
   x <- data_group(efc, c("c172code", "e16sex"))
   out <- data_tabulate(x, "c172code")
   out[] <- lapply(out, data_select, exclude = c("Variable", "Raw %", "Cumulative %"))
   junk <- capture.output(print_md(out))
+  expect_false(grepl("Variable", junk[3], fixed = TRUE))
+  expect_false(grepl("Raw %", junk[3], fixed = TRUE))
+  # display() default to markdown
+  junk <- capture.output(display(out))
   expect_false(grepl("Variable", junk[3], fixed = TRUE))
   expect_false(grepl("Raw %", junk[3], fixed = TRUE))
 })
@@ -384,6 +401,7 @@ test_that("data_tabulate, cross tables, modify structure", {
 # markdown -------------------------
 
 test_that("data_tabulate, cross tables, markdown", {
+  skip_if_not_installed("knitr")
   data(efc, package = "datawizard")
   set.seed(123)
   efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
@@ -395,6 +413,8 @@ test_that("data_tabulate, cross tables, markdown", {
   expect_snapshot(print_md(data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full", remove_na = TRUE, weights = efc$weights))) # nolint
   expect_snapshot(print_md(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", remove_na = TRUE, weights = "weights"))) # nolint
   expect_snapshot(print_md(data_tabulate(efc, c("c172code", "e42dep"), by = "e16sex", proportions = "row"))) # nolint
+  expect_snapshot(display(data_tabulate(efc, "c172code", by = "e16sex", proportions = "column", remove_na = TRUE, weights = "weights"))) # nolint
+  expect_snapshot(display(data_tabulate(efc, c("c172code", "e42dep"), by = "e16sex", proportions = "row"))) # nolint
 })
 
 
@@ -487,4 +507,111 @@ test_that("data_tabulate, as.data.frame, cross tables with total N", {
   expect_named(out$table[[1]], c("cyl", "0", "1", "<NA>", "Total"))
   expect_identical(nrow(out$table[[1]]), 5L)
   expect_identical(out$table[[1]]$cyl, c("4", "6", "8", NA, "Total"))
+})
+
+
+# table methods -----------------------------
+
+test_that("data_tabulate, table methods", {
+  data(mtcars)
+
+  # datawizard_table
+  x <- data_tabulate(mtcars$cyl)
+  expect_type(as.table(x), "list")
+  expect_s3_class(as.table(x, simplify = TRUE), "table")
+  expect_snapshot(as.table(x))
+
+  # datawizard_tables
+  x <- data_tabulate(mtcars, "cyl")
+  expect_type(as.table(x), "list")
+  expect_s3_class(as.table(x, simplify = TRUE), "table")
+  expect_snapshot(as.table(x))
+
+  # test remove_na
+  x <- data_tabulate(mtcars, "cyl", remove_na = TRUE)
+  expect_identical(x[[1]]$N, as.vector(as.table(x, simplify = TRUE)))
+  x <- data_tabulate(mtcars, "cyl")
+  expect_identical(
+    x[[1]]$N,
+    as.vector(as.table(x, simplify = TRUE, remove_na = FALSE))
+  )
+  expect_snapshot(as.table(x, remove_na = FALSE))
+
+  # datawizard_tables, multiple
+  x <- data_tabulate(mtcars, c("cyl", "gear"))
+  expect_identical(unlist(lapply(as.table(x), class)), rep("table", 2L))
+  expect_type(as.table(x, simplify = TRUE), "list") # no simplification
+  expect_type(as.table(x, simplify = FALSE), "list")
+  expect_snapshot(as.table(x))
+
+  # datawizard_crosstab
+  x <- data_tabulate(mtcars$cyl, mtcars$gear)
+  expect_type(as.table(x), "list")
+  expect_s3_class(as.table(x, simplify = TRUE), "table")
+  expect_snapshot(as.table(x))
+  expect_snapshot(as.table(x, simplify = TRUE))
+
+  # datawizard_crosstabs
+  x <- data_tabulate(mtcars, "cyl", by = "gear")
+  expect_type(as.table(x), "list")
+  expect_s3_class(as.table(x, simplify = TRUE), "table")
+  expect_snapshot(as.table(x))
+  expect_snapshot(as.table(x, simplify = TRUE))
+
+  # datawizard_crosstabs, multiple
+  x <- data_tabulate(mtcars, c("am", "cyl"), by = "gear")
+  expect_identical(unlist(lapply(as.table(x), class)), rep("table", 2L))
+  expect_identical(x[[1]]$`3`[1:2], as.vector(as.table(x)[[1]][, 1, drop = TRUE]))
+  expect_identical(x[[2]]$`4`[1:3], as.vector(as.table(x)[[2]][, 2, drop = TRUE]))
+  expect_type(as.table(x), "list")
+  expect_type(as.table(x, simplify = TRUE), "list") # no simplification
+  expect_snapshot(as.table(x))
+
+  # grouped data frames
+  d <- data_group(mtcars, "am")
+  x <- data_tabulate(d, "cyl", by = "gear")
+  expect_named(as.table(x), c("am (0)", "am (1)"))
+  expect_snapshot(as.table(x))
+
+  # messages - no missings to remove
+  expect_silent(as.table(data_tabulate(mtcars, "cyl")))
+  expect_silent(as.table(data_tabulate(mtcars, "cyl"), verbose = FALSE))
+})
+
+
+test_that("data_tabulate, table methods, only warn if necessary", {
+  # missings
+  data(efc)
+
+  # single variable
+  expect_message(as.table(data_tabulate(efc$c172code)))
+  expect_silent(as.table(data_tabulate(efc$c172code, remove_na = TRUE)))
+  expect_silent(as.table(data_tabulate(efc$c172code), remove_na = FALSE))
+  expect_silent(as.table(data_tabulate(efc$c172code), verbose = FALSE))
+
+  # cross table
+  expect_message(
+    as.table(data_tabulate(efc, "c172code", by = "e42dep")),
+    regex = "Removing NA values"
+  )
+  expect_silent(as.table(data_tabulate(efc, "c172code", by = "e42dep", remove_na = TRUE)))
+  expect_silent(as.table(data_tabulate(efc, "c172code", by = "e42dep"), remove_na = FALSE))
+  expect_silent(as.table(data_tabulate(efc, "c172code", by = "e42dep"), verbose = FALSE))
+
+  # no missings
+  data(mtcars)
+
+  # single variable
+  expect_silent(as.table(data_tabulate(mtcars$gear)))
+  expect_silent(as.table(data_tabulate(mtcars$gear, remove_na = TRUE)))
+  expect_silent(as.table(data_tabulate(mtcars$gear), verbose = FALSE))
+
+  # cross table
+  expect_silent(as.table(data_tabulate(mtcars, "gear", by = "cyl")))
+  expect_silent(as.table(data_tabulate(mtcars, "gear", by = "cyl", remove_na = TRUE)))
+  expect_silent(as.table(data_tabulate(mtcars, "gear", by = "cyl"), verbose = FALSE))
+
+  # group DF throws no warning
+  d <- data_group(mtcars, "am")
+  expect_silent(as.table(data_tabulate(d, "cyl", by = "gear")))
 })

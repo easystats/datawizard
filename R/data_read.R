@@ -32,13 +32,13 @@
 #'
 #' @section Supported file types:
 #' - `data_read()` is a wrapper around the **haven**, **data.table**, **readr**
-#'  **readxl** and **rio** packages. Currently supported file types are `.txt`,
-#'  `.csv`, `.xls`, `.xlsx`, `.sav`, `.por`, `.dta`, `.sas`, `.rda`, `.rdata`,
-#'  and `.rds` (and related files). All other file types are passed to
-#'  `rio::import()`.
-#' - `data_write()` is a wrapper around **haven**, **readr** and **rio**
-#'  packages, and supports writing files into all formats supported by these
-#'  packages.
+#'   **readxl**, **nanoparquet** and **rio** packages. Currently supported file
+#'   types are `.txt`, `.csv`, `.xls`, `.xlsx`, `.sav`, `.por`, `.dta`, `.sas`,
+#'   `.rda`, `.parquet`, `.rdata`, and `.rds` (and related files). All other file
+#'   types are passed to `rio::import()`.
+#' - `data_write()` is a wrapper around **haven**, **readr**, **nanoparquet**,
+#'   and **rio** packages, and supports writing files into all formats supported
+#'   by these packages.
 #'
 #' @section Compressed files (zip) and URLs:
 #' `data_read()` can also read the above mentioned files from URLs or from
@@ -111,6 +111,7 @@ data_read <- function(path,
     por = .read_spss(path, encoding, convert_factors, verbose, ...),
     dta = .read_stata(path, encoding, convert_factors, verbose, ...),
     sas7bdat = .read_sas(path, path_catalog, encoding, convert_factors, verbose, ...),
+    parquet = .read_parquet(path, verbose, ...),
     .read_unknown(path, file_type, verbose, ...)
   )
 
@@ -277,8 +278,7 @@ data_read <- function(path,
       encoding <- "unknown"
     }
     out <- data.table::fread(input = path, encoding = encoding, ...)
-    class(out) <- "data.frame"
-    return(out)
+    return(as.data.frame(out))
   }
 
   insight::check_if_installed("readr", reason = paste0("to read files of type '", .file_ext(path), "'"))
@@ -286,8 +286,7 @@ data_read <- function(path,
     insight::format_alert("Reading data...")
   }
   out <- readr::read_delim(path, ...)
-  class(out) <- "data.frame"
-  out
+  as.data.frame(out)
 }
 
 
@@ -380,6 +379,22 @@ data_read <- function(path,
   }
 
   out
+}
+
+
+.read_parquet <- function(path, verbose = TRUE, ...) {
+  # requires nanoparquet package
+  insight::check_if_installed("nanoparquet")
+
+  if (verbose) {
+    insight::format_alert("Reading data...")
+  }
+
+  # check URLs
+  path <- .check_path_url(path, file_type = "parquet")
+  out <- nanoparquet::read_parquet(file = path, ...)
+
+  as.data.frame(out)
 }
 
 
