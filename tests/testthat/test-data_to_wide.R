@@ -560,9 +560,9 @@ test_that("Preserve column name when names_from column only has one unique value
 })
 
 
-test_that("data_to_wide with multiple values_from and NA", {
+test_that("data_to_wide with multiple values_from and non-symmetric IDs", {
   long_df <- data.frame(
-    subject_id = rep(1:4, each = 2),
+    subject_id = c(1, 1, 2, 2, 3, 5, 4, 4),
     time = rep(c(1, 2), 4),
     score = c(10, NA, 15, 12, 18, 11, NA, 14),
     anxiety = c(5, 7, 6, NA, 8, 4, 5, NA)
