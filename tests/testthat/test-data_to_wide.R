@@ -573,8 +573,8 @@ test_that("data_to_wide with multiple values_from and non-symmetric IDs", {
   tidyr <- tidyr::pivot_wider(
     long_df,
     id_cols = "subject_id",
-    names_from = "time",
-    values_from = c("score", "anxiety")
+    names_from = time,
+    values_from = c(score, anxiety)
   )
   datawiz <- data_to_wide(
     long_df,
