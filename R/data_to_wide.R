@@ -308,10 +308,8 @@ data_to_wide <- function(data,
 
   if (length(values_from) > 1L) {
     unstacked$col_order <- unique(data[, names_from])
-    unstacked$col_order <- sort(
-      as.vector(
-        outer(values_from, unstacked$col_order, paste, sep = names_sep)
-      )
+    unstacked$col_order <- as.vector(
+      t(outer(values_from, unstacked$col_order, paste, sep = names_sep))
     )
   }
 
