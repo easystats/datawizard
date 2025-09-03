@@ -14,7 +14,8 @@ BUG FIXES
   variables (#638).
 
 * Fixed issue in `data_to_wide()` with multiple variables assigned in
-  `values_from` when IDs were not balanced (equally spread across observations).
+  `values_from` when IDs were not balanced (equally spread across observations)
+  (#644).
 
 # datawizard 1.2.0
 
