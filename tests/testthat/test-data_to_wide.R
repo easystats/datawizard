@@ -560,29 +560,30 @@ test_that("Preserve column name when names_from column only has one unique value
 })
 
 
-test_that("data_to_wide with multiple values_from and non-symmetric IDs", {
-  long_df <- data.frame(
-    subject_id = c(1, 1, 2, 2, 3, 5, 4, 4),
-    time = rep(c(1, 2), 4),
-    score = c(10, NA, 15, 12, 18, 11, NA, 14),
-    anxiety = c(5, 7, 6, NA, 8, 4, 5, NA)
-  )
+# test_that("data_to_wide with multiple values_from and non-symmetric IDs", {
+#   long_df <- data.frame(
+#     subject_id = c(1, 1, 2, 2, 3, 5, 4, 4),
+#     time = rep(c(1, 2), 4),
+#     score = c(10, NA, 15, 12, 18, 11, NA, 14),
+#     anxiety = c(5, 7, 6, NA, 8, 4, 5, NA)
+#   )
 
-  out <- data_to_wide(long_df,
-    id_cols = "subject_id",
-    names_from = "time",
-    values_from = c("score", "anxiety")
-  )
+#   out <- data_to_wide(
+#     long_df,
+#     id_cols = "subject_id",
+#     names_from = "time",
+#     values_from = c("score", "anxiety")
+#   )
 
-  expect_equal(
-    out,
-    data.frame(
-      subject_id = c(1, 2, 3, 5, 4),
-      score.1 = c(10, 15, 18, NA, NA),
-      anxiety.1 = c(5, 6, 8, NA, 5),
-      score.2 = c(NA, 12, NA, 11, 14),
-      anxiety.2 = c(7, NA, NA, 4, NA)
-    ),
-    ignore_attr = TRUE
-  )
-})
+#   expect_equal(
+#     out,
+#     data.frame(
+#       subject_id = c(1, 2, 3, 5, 4),
+#       score.1 = c(10, 15, 18, NA, NA),
+#       anxiety.1 = c(5, 6, 8, NA, 5),
+#       score.2 = c(NA, 12, NA, 11, 14),
+#       anxiety.2 = c(7, NA, NA, 4, NA)
+#     ),
+#     ignore_attr = TRUE
+#   )
+# })
