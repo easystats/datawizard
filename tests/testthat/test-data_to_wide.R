@@ -577,11 +577,11 @@ test_that("data_to_wide with multiple values_from and non-symmetric IDs", {
   expect_equal(
     out,
     data.frame(
-      subject_id = 1:4,
-      anxiety_1 = c(5, 6, 8, 5),
-      anxiety_2 = c(7, NA, 4, NA),
-      score_1 = c(10, 15, 18, NA),
-      score_2 = c(NA, 12, 11, 14)
+      subject_id = c(1, 2, 3, 5, 4),
+      score.1 = c(10, 15, 18, NA, NA),
+      anxiety.1 = c(5, 6, 8, NA, 5),
+      score.2 = c(NA, 12, NA, 11, 14),
+      anxiety.2 = c(7, NA, NA, 4, NA)
     ),
     ignore_attr = TRUE
   )
