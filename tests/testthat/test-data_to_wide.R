@@ -560,7 +560,7 @@ test_that("Preserve column name when names_from column only has one unique value
 })
 
 
-test_that("data_to_wide with multiple values_from and non-symmetric IDs", {
+test_that("data_to_wide with multiple values_from and unbalanced panel", {
   skip_if_not_installed("tidyr")
   
   long_df <- tidyr::tibble(
