@@ -558,3 +558,29 @@ test_that("Preserve column name when names_from column only has one unique value
   expect_named(out, c("Level", "Intercept", "abc"))
   expect_identical(nrow(out), 10L)
 })
+
+
+test_that("data_to_wide with multiple values_from and unbalanced panel", {
+  skip_if_not_installed("tidyr")
+
+  long_df <- tidyr::tibble(
+    subject_id = c(1, 1, 2, 2, 3, 5, 4, 4),
+    time = rep(c(1, 2), 4),
+    score = c(10, NA, 15, 12, 18, 11, NA, 14),
+    anxiety = c(5, 7, 6, NA, 8, 4, 5, NA)
+  )
+
+  tidyr <- tidyr::pivot_wider(
+    long_df,
+    id_cols = "subject_id",
+    names_from = time,
+    values_from = c(score, anxiety)
+  )
+  datawiz <- data_to_wide(
+    long_df,
+    id_cols = "subject_id",
+    names_from = "time",
+    values_from = c("score", "anxiety")
+  )
+  expect_identical(tidyr, datawiz)
+})
