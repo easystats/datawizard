@@ -9,8 +9,12 @@ BUG FIXES
 
 * Fixed an issue when `demean()`ing nested structures with more than 2 grouping
   variables (#635).
+
 * Fixed an issue when `demean()`ing crossed structures with more than 2 grouping
   variables (#638).
+
+* Fixed issue in `data_to_wide()` with multiple variables assigned in
+  `values_from` when missing values were present.
 
 # datawizard 1.2.0
 
@@ -78,7 +82,7 @@ CHANGES
 
 * `data_codebook()` gives an informative warning when no column names matched
   the selection pattern (#601).
-  
+
 * `data_to_long()` now errors when columns selected to reshape do not exist in
   the data, to avoid nonsensical results that could be missed (#602).
 

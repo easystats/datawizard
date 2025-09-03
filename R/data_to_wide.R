@@ -227,6 +227,25 @@ data_to_wide <- function(data,
   # create missing combinations
 
   if (not_all_cols_are_selected && incomplete_groups) {
+
+    # for multiple variables that should be reshaped into wide format, we
+    # need to rely on `stats::reshape()` - thus, we stop early here
+    if (!is.null(values_from) && length(values_from) > 1) {
+      return(.reshape_multiple_variables_to_wide(
+        x = data,
+        id_cols = id_cols,
+        names_from = names_from,
+        values_from = values_from,
+        names_sep = names_sep,
+        names_prefix = names_prefix,
+        names_glue = names_glue,
+        values_fill = values_fill,
+        custom_attr = custom_attr,
+        verbose = verbose,
+        ...
+      ))
+    }
+
     expanded <- expand.grid(unique(new_data[["temporary_id"]]), unique(new_data[[names_from]]))
     names(expanded) <- c("temporary_id", names_from)
     new_data <- data_merge(new_data, expanded,
@@ -369,16 +388,7 @@ data_to_wide <- function(data,
 
 .unstack <- function(x, names_from, values_from, names_sep, names_prefix, names_glue = NULL) {
   # get values from names_from (future colnames)
-
-  if (is.null(names_glue)) {
-    x$future_colnames <- do.call(paste, c(x[, names_from, drop = FALSE], sep = names_sep))
-  } else {
-    vars <- regmatches(names_glue, gregexpr("\\{\\K[^{}]+(?=\\})", names_glue, perl = TRUE))[[1]]
-    tmp_data <- x[, vars]
-    x$future_colnames <- .gluestick(names_glue, src = tmp_data)
-  }
-
-  x$future_colnames <- paste0(names_prefix, x$future_colnames)
+  x <- .modify_reshaped_colnames(x, names_from, names_sep, names_prefix, names_glue)
 
   # expand the values for each variable in "values_from"
   res <- list()
@@ -414,6 +424,52 @@ data_to_wide <- function(data,
 }
 
 
+.modify_reshaped_colnames <- function(x, names_from, names_sep, names_prefix, names_glue) {
+  # get values from names_from (future colnames)
+  if (is.null(names_glue)) {
+    x$future_colnames <- do.call(paste, c(x[, names_from, drop = FALSE], sep = names_sep))
+  } else {
+    vars <- regmatches(names_glue, gregexpr("\\{\\K[^{}]+(?=\\})", names_glue, perl = TRUE))[[1]]
+    tmp_data <- x[, vars]
+    x$future_colnames <- .gluestick(names_glue, src = tmp_data)
+  }
+
+  x$future_colnames <- paste0(names_prefix, x$future_colnames)
+  x
+}
+
+
 #' @rdname data_to_wide
 #' @export
 reshape_wider <- data_to_wide
+
+
+.reshape_multiple_variables_to_wide <- function(
+  x,
+  id_cols = NULL,
+  values_from = "Value",
+  names_from = "Name",
+  names_sep = "_",
+  names_prefix = "",
+  names_glue = NULL,
+  values_fill = NULL,
+  custom_attr = NULL,
+  verbose = TRUE,
+  ...
+) {
+  # get values from names_from (future colnames)
+  x <- .modify_reshaped_colnames(x, names_from, names_sep, names_prefix, names_glue)
+  x[[names_from]] <- NULL
+
+  out <- stats::reshape(
+    data = x,
+    idvar = id_cols,
+    timevar = "future_colnames",
+    v.names = values_from,
+    direction = "wide"
+  )
+
+  # add back attributes
+  out <- .replace_attrs(out, custom_attr)
+  out
+}

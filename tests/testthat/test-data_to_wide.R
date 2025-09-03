@@ -558,3 +558,31 @@ test_that("Preserve column name when names_from column only has one unique value
   expect_named(out, c("Level", "Intercept", "abc"))
   expect_identical(nrow(out), 10L)
 })
+
+
+test_that("data_to_wide with multiple values_from and NA", {
+  long_df <- data.frame(
+    subject_id = rep(1:4, each = 2),
+    time = rep(c(1, 2), 4),
+    score = c(10, NA, 15, 12, 18, 11, NA, 14),
+    anxiety = c(5, 7, 6, NA, 8, 4, 5, NA)
+  )
+
+  out <- data_to_wide(long_df,
+    id_cols = "subject_id",
+    names_from = "time",
+    values_from = c("score", "anxiety")
+  )
+
+  expect_equal(
+    out,
+    data.frame(
+      subject_id = 1:4,
+      anxiety_1 = c(5, 6, 8, 5),
+      anxiety_2 = c(7, NA, 4, NA),
+      score_1 = c(10, 15, 18, NA),
+      score_2 = c(NA, 12, 11, 14)
+    ),
+    ignore_attr = TRUE
+  )
+})
