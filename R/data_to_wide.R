@@ -33,11 +33,11 @@
 #' @param values_from The name of the columns in the original data that contains
 #' the values used to fill the new columns created in the widened data.
 #' @param values_fill Optionally, a (scalar) value that will be used to replace
-#' missing values in the new columns created. Note that if `values_from` has
-#' more than one variable, `values_fill` will be applied to all of them. Hence,
-#' all variables in `values_from` should be of the same type (e.g. all numeric).
-#' For more complex replacement rules, consider using [`convert_na_to()`] prior
-#' to widening the data.
+#' missing values in the new columns created (i.e. after widening the data).
+#' Note that if `values_from` has more than one variable, `values_fill` will be
+#' applied to all of them. Hence, all variables in `values_from` should be of
+#' the same type (e.g. all numeric). For more complex replacement rules,
+#' consider using [`convert_na_to()`] prior to widening the data.
 #' @param verbose Toggle warnings.
 #' @param ... Not used for now.
 #'
