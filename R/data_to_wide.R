@@ -32,11 +32,12 @@
 #' delimiters supported by `names_glue` are curly brackets, `{` and `}`.
 #' @param values_from The name of the columns in the original data that contains
 #' the values used to fill the new columns created in the widened data.
-#' @param values_fill Optionally, a (scalar) value that will be used to replace
-#' missing values in the new columns created (i.e. after widening the data).
-#' Note that if `values_from` has more than one variable, `values_fill` will be
-#' applied to all of them. Hence, all variables in `values_from` should be of
-#' the same type (e.g. all numeric). For more complex replacement rules,
+#' @param values_fill Optionally, a (scalar) value, or a list of (scalar)
+#' values, that will be used to replace missing values in the new columns
+#' created (i.e. after widening the data). Note that missing values in the new
+#' columns will only be filled for matching types in `values_fill`, i.e.
+#' `values_fill = list(99, "99")` will replace missing values in numeric and
+#' character variables, but not for factors. For more complex replacement rules,
 #' consider using [`convert_na_to()`] prior to widening the data.
 #' @param verbose Toggle warnings.
 #' @param ... Not used for now.
@@ -407,33 +408,33 @@ data_to_wide <- function(data,
 #' @noRd
 
 .fill_missings <- function(x, values_from, values_fill, verbose = TRUE) {
-  if (!is.null(values_fill)) {
-    if (length(values_fill) == 1L) {
-      if (all(vapply(values_from, function(i) is.numeric(x[[i]]), logical(1)))) {
-        if (is.numeric(values_fill)) {
-          x <- convert_na_to(x, replace_num = values_fill)
-        } else {
-          insight::format_error(paste0("`values_fill` must be of type numeric."))
-        }
-      } else if (all(vapply(values_from, function(i) is.character(x[[i]]), logical(1)))) {
-        if (is.character(values_fill)) {
-          x <- convert_na_to(x, replace_char = values_fill)
-        } else {
-          insight::format_error(paste0("`values_fill` must be of type character."))
-        }
-      } else if (all(vapply(values_from, function(i) is.factor(x[[i]]), logical(1)))) {
-        if (is.factor(values_fill)) {
-          x <- convert_na_to(x, replace_fac = values_fill)
-        } else {
-          insight::format_error(paste0("`values_fill` must be of type factor."))
-        }
-      } else if (verbose) {
-        insight::format_error(
-          "No missing values were filled, because either `values_from` contains variables of different types, or the type of `values_fill` is not supported."
-        )
-      }
-    } else if (verbose) {
-      insight::format_error("`values_fill` must be of length 1.")
+  # do nothing if values_fill is NULL
+  if (is.null(values_fill)) {
+    return(x)
+  }
+
+  # convert single value / vector into a list
+  if (!is.list(values_fill)) {
+    values_fill <- as.list(values_fill)
+  }
+
+  for (i in seq_along(values_fill)) {
+    fill <- values_fill[[i]]
+
+    # check that values_fill is of length 1
+    if (length(fill) != 1L) {
+      insight::format_error("Elements in `values_fill` must be of length 1.")
+    }
+
+    # replace if type exists
+    if (is.numeric(fill) && any(vapply(values_from, function(vf) is.numeric(x[[vf]]), logical(1)))) {
+      x <- convert_na_to(x, replace_num = values_fill)
+    } else if (is.character(fill) && any(vapply(values_from, function(vf) is.character(x[[vf]]), logical(1)))) {
+      x <- convert_na_to(x, replace_char = values_fill)
+    } else if (is.factor(fill) && any(vapply(values_from, function(vf) is.factor(x[[vf]]), logical(1)))) {
+        x <- convert_na_to(x, replace_fac = values_fill)
+    } else {
+      insight::format_error("`values_fill` contains a value of unsupported type.")
     }
   }
 

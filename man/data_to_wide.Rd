@@ -65,11 +65,12 @@ syntactic variable names.}
 \code{names_from} columns to create custom column names. Note that the only
 delimiters supported by \code{names_glue} are curly brackets, \verb{\{} and \verb{\}}.}
 
-\item{values_fill}{Optionally, a (scalar) value that will be used to replace
-missing values in the new columns created (i.e. after widening the data).
-Note that if \code{values_from} has more than one variable, \code{values_fill} will be
-applied to all of them. Hence, all variables in \code{values_from} should be of
-the same type (e.g. all numeric). For more complex replacement rules,
+\item{values_fill}{Optionally, a (scalar) value, or a list of (scalar)
+values, that will be used to replace missing values in the new columns
+created (i.e. after widening the data). Note that missing values in the new
+columns will only be filled for matching types in \code{values_fill}, i.e.
+\code{values_fill = list(99, "99")} will replace missing values in numeric and
+character variables, but not for factors. For more complex replacement rules,
 consider using \code{\link[=convert_na_to]{convert_na_to()}} prior to widening the data.}
 
 \item{verbose}{Toggle warnings.}
