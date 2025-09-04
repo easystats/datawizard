@@ -415,7 +415,7 @@ data_to_wide <- function(data,
         } else {
           insight::format_error(paste0("`values_fill` must be of type numeric."))
         }
-      } else if (all(vapply(values_from, function(i) is.character(new_data[[i]]), logical(1)))) {
+      } else if (all(vapply(values_from, function(i) is.character(x[[i]]), logical(1)))) {
         if (is.character(values_fill)) {
           x <- convert_na_to(x, replace_char = values_fill)
         } else {
@@ -427,6 +427,10 @@ data_to_wide <- function(data,
         } else {
           insight::format_error(paste0("`values_fill` must be of type factor."))
         }
+      } else if (verbose) {
+        insight::format_warning(
+          "No missing values were filled, because either `values_from` contains variables of different types, or the type of `values_fill` is not supported."
+        )
       }
     } else if (verbose) {
       insight::format_error("`values_fill` must be of length 1.")
