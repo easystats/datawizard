@@ -2,7 +2,9 @@
 #'
 #' This function "widens" data, increasing the number of columns and decreasing
 #' the number of rows. This is a dependency-free base-R equivalent of
-#' `tidyr::pivot_wider()`.
+#' `tidyr::pivot_wider()`. A notable difference to `privot_wider()` is that
+#' empty columns (i.e., columns that contain only `NA` values after widening the
+#' data) are removed.
 #'
 #' @param data A data frame to convert to wide format, so that it has more
 #' columns and fewer rows post-widening than pre-widening.
@@ -31,7 +33,11 @@
 #' @param values_from The name of the columns in the original data that contains
 #' the values used to fill the new columns created in the widened data.
 #' @param values_fill Optionally, a (scalar) value that will be used to replace
-#' missing values in the new columns created.
+#' missing values in the new columns created. Note that if `values_from` has
+#' more than one variable, `values_fill` will be applied to all of them. Hence,
+#' all variables in `values_from` should be of the same type (e.g. all numeric).
+#' For more complex replacement rules, consider using [`convert_na_to()`] prior
+#' to widening the data.
 #' @param verbose Toggle warnings.
 #' @param ... Not used for now.
 #'
@@ -57,6 +63,12 @@
 #' In other words: repeated measurements, as indicated by `id_cols`, that are
 #' saved into the column `values_from` will be spread into new columns, which
 #' will be named after the values in `names_from`. See also 'Examples'.
+#'
+#' **Handling of empty columns**
+#'
+#' Empty columns (i.e., columns that contain only `NA` values after widening the
+#' data) are removed. This is a different behavior than in `tidyr::pivot_wider()`,
+#' which keeps empty columns.
 #'
 #' @examplesIf requireNamespace("lme4", quietly = TRUE)
 #' data_long <- read.table(header = TRUE, text = "
@@ -270,32 +282,9 @@ data_to_wide <- function(data,
   new_data$temporary_id <- NULL
   new_data$temporary_id_2 <- NULL
 
+
   # Fill missing values (before converting to wide)
-  if (!is.null(values_fill)) {
-    if (length(values_fill) == 1L) {
-      if (is.numeric(new_data[[values_from]])) {
-        if (is.numeric(values_fill)) {
-          new_data <- convert_na_to(new_data, replace_num = values_fill)
-        } else {
-          insight::format_error(paste0("`values_fill` must be of type numeric."))
-        }
-      } else if (is.character(new_data[[values_from]])) {
-        if (is.character(values_fill)) {
-          new_data <- convert_na_to(new_data, replace_char = values_fill)
-        } else {
-          insight::format_error(paste0("`values_fill` must be of type character."))
-        }
-      } else if (is.factor(new_data[[values_from]])) {
-        if (is.factor(values_fill)) {
-          new_data <- convert_na_to(new_data, replace_fac = values_fill)
-        } else {
-          insight::format_error(paste0("`values_fill` must be of type factor."))
-        }
-      }
-    } else if (verbose) {
-      insight::format_error("`values_fill` must be of length 1.")
-    }
-  }
+  new_data <- .fill_missings(new_data, values_from, values_fill)
 
   # convert to wide format (returns the data and the order in which columns
   # should be ordered)
@@ -409,6 +398,42 @@ data_to_wide <- function(data,
     out = data.frame(res, stringsAsFactors = FALSE, check.names = FALSE),
     col_order = unique(x$future_colnames)
   )
+}
+
+
+#' Fills missing values in the widened newley crated columns in `values_from`
+#' with `values_fill`
+#'
+#' @noRd
+
+.fill_missings <- function(x, values_from, values_fill) {
+  if (!is.null(values_fill)) {
+    if (length(values_fill) == 1L) {
+      if (all(vapply(values_from, function(i) is.numeric(x[[i]]), logical(1)))) {
+        if (is.numeric(values_fill)) {
+          x <- convert_na_to(x, replace_num = values_fill)
+        } else {
+          insight::format_error(paste0("`values_fill` must be of type numeric."))
+        }
+      } else if (all(vapply(values_from, function(i) is.character(new_data[[i]]), logical(1)))) {
+        if (is.character(values_fill)) {
+          x <- convert_na_to(x, replace_char = values_fill)
+        } else {
+          insight::format_error(paste0("`values_fill` must be of type character."))
+        }
+      } else if (all(vapply(values_from, function(i) is.factor(x[[i]]), logical(1)))) {
+        if (is.factor(values_fill)) {
+          x <- convert_na_to(x, replace_fac = values_fill)
+        } else {
+          insight::format_error(paste0("`values_fill` must be of type factor."))
+        }
+      }
+    } else if (verbose) {
+      insight::format_error("`values_fill` must be of length 1.")
+    }
+  }
+
+  x
 }
 
 

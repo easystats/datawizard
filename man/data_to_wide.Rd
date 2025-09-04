@@ -66,7 +66,11 @@ syntactic variable names.}
 delimiters supported by \code{names_glue} are curly brackets, \verb{\{} and \verb{\}}.}
 
 \item{values_fill}{Optionally, a (scalar) value that will be used to replace
-missing values in the new columns created.}
+missing values in the new columns created. Note that if \code{values_from} has
+more than one variable, \code{values_fill} will be applied to all of them. Hence,
+all variables in \code{values_from} should be of the same type (e.g. all numeric).
+For more complex replacement rules, consider using \code{\link[=convert_na_to]{convert_na_to()}} prior
+to widening the data.}
 
 \item{verbose}{Toggle warnings.}
 
@@ -79,7 +83,9 @@ tibble. Otherwise, it returns a data frame.
 \description{
 This function "widens" data, increasing the number of columns and decreasing
 the number of rows. This is a dependency-free base-R equivalent of
-\code{tidyr::pivot_wider()}.
+\code{tidyr::pivot_wider()}. A notable difference to \code{privot_wider()} is that
+empty columns (i.e., columns that contain only \code{NA} values after widening the
+data) are removed.
 }
 \details{
 Reshaping data into wide format usually means that the input data frame is
@@ -101,6 +107,12 @@ new columns that are created by \code{names_from}.
 In other words: repeated measurements, as indicated by \code{id_cols}, that are
 saved into the column \code{values_from} will be spread into new columns, which
 will be named after the values in \code{names_from}. See also 'Examples'.
+
+\strong{Handling of empty columns}
+
+Empty columns (i.e., columns that contain only \code{NA} values after widening the
+data) are removed. This is a different behavior than in \code{tidyr::pivot_wider()},
+which keeps empty columns.
 }
 \examples{
 \dontshow{if (requireNamespace("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

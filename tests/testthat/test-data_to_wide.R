@@ -584,3 +584,55 @@ test_that("data_to_wide with multiple values_from and unbalanced panel", {
   )
   expect_identical(tidyr, datawiz)
 })
+
+
+test_that("data_to_wide with multiple values_from and values_fill works", {
+  long_df <- data.frame(
+    subject_id = c(1, 1, 2, 2, 3, 5, 4, 4),
+    time = rep(c(1, 2), 4),
+    score = c(10, NA, 15, 12, 18, 11, NA, 14),
+    anxiety = c(5, 7, 6, NA, 8, 4, 5, NA),
+    test = rep(NA_real_, 8)
+  )
+
+  out <- data_to_wide(
+    long_df,
+    id_cols = "subject_id",
+    names_from = "time",
+    values_fill = 99,
+    values_from = c("score", "anxiety", "test")
+  )
+
+  expect_equal(
+    out,
+    data.frame(
+      subject_id = c(1, 2, 3, 5, 4),
+      score_1 = c(10, 15, 18, 99, 99),
+      score_2 = c(99, 12, 99, 11, 14),
+      anxiety_1 = c(5, 6, 8, 99, 5),
+      anxiety_2 = c(7, 99, 99, 4, 99),
+      test_1 = c(99, 99, 99, 99, 99),
+      test_2 = c(99, 99, 99, 99, 99)
+    ),
+    ignore_attr = TRUE
+  )
+
+  out <- data_to_wide(
+    long_df,
+    id_cols = "subject_id",
+    names_from = "time",
+    values_from = c("score", "anxiety", "test")
+  )
+
+  expect_equal(
+    out,
+    data.frame(
+      subject_id = c(1, 2, 3, 5, 4),
+      score_1 = c(10, 15, 18, NA, NA),
+      score_2 = c(NA, 12, NA, 11, 14),
+      anxiety_1 = c(5, 6, 8, NA, 5),
+      anxiety_2 = c(7, NA, NA, 4, NA)
+    ),
+    ignore_attr = TRUE
+  )
+})

@@ -17,6 +17,9 @@ BUG FIXES
   `values_from` when IDs were not balanced (equally spread across observations)
   (#644).
 
+* Fixed an issue in `data_to_wide()` when `values_fill` was specified and
+  multiple variables were assigned in `values_from`.
+
 # datawizard 1.2.0
 
 BREAKING CHANGES
