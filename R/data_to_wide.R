@@ -428,11 +428,11 @@ data_to_wide <- function(data,
 
     # replace if type exists
     if (is.numeric(fill) && any(vapply(values_from, function(vf) is.numeric(x[[vf]]), logical(1)))) {
-      x <- convert_na_to(x, replace_num = values_fill)
+      x <- convert_na_to(x, replace_num = values_fill, verbose = FALSE)
     } else if (is.character(fill) && any(vapply(values_from, function(vf) is.character(x[[vf]]), logical(1)))) {
-      x <- convert_na_to(x, replace_char = values_fill)
+      x <- convert_na_to(x, replace_char = values_fill, verbose = FALSE)
     } else if (is.factor(fill) && any(vapply(values_from, function(vf) is.factor(x[[vf]]), logical(1)))) {
-        x <- convert_na_to(x, replace_fac = values_fill)
+        x <- convert_na_to(x, replace_fac = values_fill, verbose = FALSE)
     } else {
       insight::format_error("`values_fill` contains a value of unsupported type.")
     }
