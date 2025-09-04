@@ -18,7 +18,7 @@ BUG FIXES
   (#644).
 
 * Fixed an issue in `data_to_wide()` when `values_fill` was specified and
-  multiple variables were assigned in `values_from`.
+  multiple variables were assigned in `values_from` (#645).
 
 # datawizard 1.2.0
 
