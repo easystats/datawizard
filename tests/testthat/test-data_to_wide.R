@@ -655,6 +655,20 @@ test_that("data_to_wide with values_from and values_fill length > 1", {
     values_fill = 99,
     values_from = c("score", "anxiety", "test")
   )
+  expect_equal(
+    out,
+    data.frame(
+      subject_id = c(1, 2, 3, 5, 4),
+      score_1 = c(10, 15, 18, 99, 99),
+      score_2 = c(99, 12, 99, 11, 14),
+      anxiety_1 = c("5", "6", "8", NA, "5"),
+      anxiety_2 = c("7", NA, NA, "4", NA),
+      test_1 = c(99, 99, 99, 99, 99),
+      test_2 = c(99, 99, 99, 99, 99),
+      stringsAsFactors = FALSE
+    ),
+    ignore_attr = TRUE
+  )
 
   out <- data_to_wide(
     long_df,
@@ -663,5 +677,18 @@ test_that("data_to_wide with values_from and values_fill length > 1", {
     values_fill = list(99, "ninety-nine"),
     values_from = c("score", "anxiety", "test")
   )
-
+  expect_equal(
+    out,
+    data.frame(
+      subject_id = c(1, 2, 3, 5, 4),
+      score_1 = c(10, 15, 18, 99, 99),
+      score_2 = c(99, 12, 99, 11, 14),
+      anxiety_1 = c("5", "6", "8", "ninety-nine", "5"),
+      anxiety_2 = c("7", "ninety-nine", "ninety-nine", "4", "ninety-nine"),
+      test_1 = c(99, 99, 99, 99, 99),
+      test_2 = c(99, 99, 99, 99, 99),
+      stringsAsFactors = FALSE
+    ),
+    ignore_attr = TRUE
+  )
 })
