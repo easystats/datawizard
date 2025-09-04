@@ -644,7 +644,7 @@ test_that("data_to_wide with multiple values_from and values_fill works", {
     test = rep(NA_real_, 8)
   )
 
-  expect_warning(
+  expect_error(
     data_to_wide(
       long_df,
       id_cols = "subject_id",

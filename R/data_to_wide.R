@@ -428,7 +428,7 @@ data_to_wide <- function(data,
           insight::format_error(paste0("`values_fill` must be of type factor."))
         }
       } else if (verbose) {
-        insight::format_warning(
+        insight::format_error(
           "No missing values were filled, because either `values_from` contains variables of different types, or the type of `values_fill` is not supported."
         )
       }
