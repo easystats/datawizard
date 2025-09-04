@@ -284,7 +284,7 @@ data_to_wide <- function(data,
 
 
   # Fill missing values (before converting to wide)
-  new_data <- .fill_missings(new_data, values_from, values_fill)
+  new_data <- .fill_missings(new_data, values_from, values_fill, verbose)
 
   # convert to wide format (returns the data and the order in which columns
   # should be ordered)
@@ -406,7 +406,7 @@ data_to_wide <- function(data,
 #'
 #' @noRd
 
-.fill_missings <- function(x, values_from, values_fill) {
+.fill_missings <- function(x, values_from, values_fill, verbose = TRUE) {
   if (!is.null(values_fill)) {
     if (length(values_fill) == 1L) {
       if (all(vapply(values_from, function(i) is.numeric(x[[i]]), logical(1)))) {
