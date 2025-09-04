@@ -96,7 +96,7 @@ test_that("data_to_wide, values_fill works", {
       values_from = "seen",
       values_fill = "a"
     ),
-    regexp = "value of unsupported type"
+    regexp = "character-variables"
   )
   expect_error(
     data_to_wide(
@@ -105,7 +105,7 @@ test_that("data_to_wide, values_fill works", {
       values_from = "seen",
       values_fill = factor("a")
     ),
-    regexp = "value of unsupported type"
+    regexp = "factor-variables"
   )
 
   ### Should be character
@@ -138,7 +138,7 @@ test_that("data_to_wide, values_fill works", {
       values_from = "value",
       values_fill = 1
     ),
-    regexp = "value of unsupported type"
+    regexp = "numeric-variables"
   )
   expect_error(
     data_to_wide(
@@ -159,7 +159,7 @@ test_that("data_to_wide, values_fill works", {
       values_from = "value",
       values_fill = "a"
     ),
-    regexp = "value of unsupported type"
+    regexp = "character-variables"
   )
   expect_error(
     data_to_wide(
