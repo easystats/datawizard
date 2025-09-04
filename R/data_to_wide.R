@@ -434,7 +434,9 @@ data_to_wide <- function(data,
     } else if (is.factor(fill) && any(vapply(values_from, function(vf) is.factor(x[[vf]]), logical(1)))) {
       x <- convert_na_to(x, replace_fac = fill, verbose = FALSE)
     } else {
-      insight::format_error("`values_fill` contains a value of unsupported type.")
+      insight::format_error(
+        "`values_fill` contains a value of unsupported type, or the type is not present in the variables from `values_from`."
+      )
     }
   }
 

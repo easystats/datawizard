@@ -96,7 +96,7 @@ test_that("data_to_wide, values_fill works", {
       values_from = "seen",
       values_fill = "a"
     ),
-    regexp = "must be of type numeric"
+    regexp = "value of unsupported type"
   )
   expect_error(
     data_to_wide(
@@ -105,7 +105,7 @@ test_that("data_to_wide, values_fill works", {
       values_from = "seen",
       values_fill = factor("a")
     ),
-    regexp = "must be of type numeric"
+    regexp = "value of unsupported type"
   )
 
   ### Should be character
@@ -138,7 +138,7 @@ test_that("data_to_wide, values_fill works", {
       values_from = "value",
       values_fill = 1
     ),
-    regexp = "must be of type character"
+    regexp = "value of unsupported type"
   )
   expect_error(
     data_to_wide(
@@ -147,7 +147,7 @@ test_that("data_to_wide, values_fill works", {
       values_from = "value",
       values_fill = factor("a")
     ),
-    regexp = "must be of type character"
+    regexp = "value of unsupported type"
   )
 
   ### Should be factor
@@ -159,7 +159,7 @@ test_that("data_to_wide, values_fill works", {
       values_from = "value",
       values_fill = "a"
     ),
-    regexp = "must be of type factor"
+    regexp = "value of unsupported type"
   )
   expect_error(
     data_to_wide(
@@ -168,7 +168,7 @@ test_that("data_to_wide, values_fill works", {
       values_from = "value",
       values_fill = 1
     ),
-    regexp = "must be of type factor"
+    regexp = "value of unsupported type"
   )
 })
 
@@ -180,7 +180,7 @@ test_that("data_to_wide, values_fill errors when length > 1", {
       tidyr::fish_encounters,
       names_from = "station",
       values_from = "seen",
-      values_fill = c(1, 2)
+      values_fill = list(c(1, 2))
     ),
     regexp = "must be of length 1"
   )
@@ -635,33 +635,33 @@ test_that("data_to_wide with multiple values_from and values_fill works", {
     ),
     ignore_attr = TRUE
   )
+})
 
+
+test_that("data_to_wide with values_from and values_fill length > 1", {
   long_df <- data.frame(
     subject_id = c(1, 1, 2, 2, 3, 5, 4, 4),
     time = rep(c(1, 2), 4),
-    score = as.character(c(10, NA, 15, 12, 18, 11, NA, 14)),
-    anxiety = c(5, 7, 6, NA, 8, 4, 5, NA),
-    test = rep(NA_real_, 8)
+    score = c(10, NA, 15, 12, 18, 11, NA, 14),
+    anxiety = as.character(c(5, 7, 6, NA, 8, 4, 5, NA)),
+    test = rep(NA_real_, 8),
+    stringsAsFactors = FALSE
   )
 
-  expect_error(
-    data_to_wide(
-      long_df,
-      id_cols = "subject_id",
-      names_from = "time",
-      values_fill = 99,
-      values_from = c("score", "anxiety", "test")
-    ),
-    regex = "No missing values were filled"
+  out <- data_to_wide(
+    long_df,
+    id_cols = "subject_id",
+    names_from = "time",
+    values_fill = 99,
+    values_from = c("score", "anxiety", "test")
   )
-  expect_silent(
-    data_to_wide(
-      long_df,
-      id_cols = "subject_id",
-      names_from = "time",
-      values_fill = 99,
-      values_from = c("score", "anxiety", "test"),
-      verbose = FALSE
-    )
+
+  out <- data_to_wide(
+    long_df,
+    id_cols = "subject_id",
+    names_from = "time",
+    values_fill = list(99, "ninety-nine"),
+    values_from = c("score", "anxiety", "test")
   )
+
 })
