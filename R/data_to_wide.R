@@ -161,7 +161,7 @@ data_to_wide <- function(data,
                          regex = FALSE,
                          verbose = TRUE,
                          ...) {
-# validate arguments
+  # validate arguments
 
   if (is.null(names_from) || !all(names_from %in% colnames(data))) {
     insight::format_error(
