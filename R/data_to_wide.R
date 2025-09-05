@@ -245,7 +245,7 @@ data_to_wide <- function(data,
     # must be rearranged as "B" "B" "A" "A" and not "A" "A" "B" "B"
     lookup <- data.frame(
       temporary_id = unique(
-        new_data[!is.na(new_data[[values_from]]), "temporary_id"]
+        new_data[!is.na(new_data[values_from]), "temporary_id"]
       )
     )
     lookup$temporary_id_2 <- seq_len(nrow(lookup))
@@ -308,10 +308,8 @@ data_to_wide <- function(data,
 
   if (length(values_from) > 1L) {
     unstacked$col_order <- unique(data[, names_from])
-    unstacked$col_order <- sort(
-      as.vector(
-        outer(values_from, unstacked$col_order, paste, sep = names_sep)
-      )
+    unstacked$col_order <- as.vector(
+      t(outer(values_from, unstacked$col_order, paste, sep = names_sep))
     )
   }
 
