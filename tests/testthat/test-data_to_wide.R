@@ -519,7 +519,7 @@ test_that("data_to_wide, check for valid columns", {
       names_from = "time",
       values_from = c("score", "anxiety", "test")
     ),
-    regex = "`id_cols` must be the name of",
+    regexp = "`id_cols` must be the name of",
     fixed = TRUE
   )
 
@@ -530,7 +530,7 @@ test_that("data_to_wide, check for valid columns", {
       names_from = "times",
       values_from = c("score", "anxiety", "test")
     ),
-    regex = "`names_from` must be the name of",
+    regexp = "`names_from` must be the name of",
     fixed = TRUE
   )
 
@@ -541,7 +541,7 @@ test_that("data_to_wide, check for valid columns", {
       names_from = "time",
       values_from = c("scores", "anxiety", "test")
     ),
-    regex = "Following variable(s) were not found",
+    regexp = "Following variable(s) were not found",
     fixed = TRUE
   )
 
@@ -554,7 +554,7 @@ test_that("data_to_wide, check for valid columns", {
         values_from = c("a", "b", "c")
       )
     ))),
-    regex = "No variable defined",
+    regexp = "No variable defined",
     fixed = TRUE
   )
 })
