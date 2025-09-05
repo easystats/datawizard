@@ -544,4 +544,17 @@ test_that("data_to_wide, check for valid columns", {
     regex = "Following variable(s) were not found",
     fixed = TRUE
   )
+
+  expect_error(
+    expect_warning(expect_warning(expect_warning(
+      data_to_wide(
+        long_df,
+        id_cols = "subject_id",
+        names_from = "time",
+        values_from = c("a", "b", "c")
+      )
+    ))),
+    regex = "No variable defined",
+    fixed = TRUE
+  )
 })

@@ -199,6 +199,12 @@ data_to_wide <- function(
     verbose = verbose
   )
 
+  if (is.null(values_from) || !length(values_from)) {
+    insight::format_error(
+      "No variable defined in `values_from` was found in the `data`."
+    )
+  }
+
   # save custom attributes
   custom_attr <- attributes(data)
 
