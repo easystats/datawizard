@@ -380,6 +380,8 @@ data_to_wide <- function(data,
       new_columns = id_cols,
       separator = "#dwid#"
     )
+    # restore types
+    df1 <- data_restoretype(df1, x)
   } else {
     colnames(df1)[colnames(df1) == ".datawizard_id"] <- id_cols
   }
