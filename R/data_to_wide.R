@@ -2,9 +2,7 @@
 #'
 #' This function "widens" data, increasing the number of columns and decreasing
 #' the number of rows. This is a dependency-free base-R equivalent of
-#' `tidyr::pivot_wider()`. A notable difference to `privot_wider()` is that
-#' empty columns (i.e., columns that contain only `NA` values after widening the
-#' data) are removed.
+#' `tidyr::pivot_wider()`.
 #'
 #' @param data A data frame to convert to wide format, so that it has more
 #' columns and fewer rows post-widening than pre-widening.
@@ -64,12 +62,6 @@
 #' In other words: repeated measurements, as indicated by `id_cols`, that are
 #' saved into the column `values_from` will be spread into new columns, which
 #' will be named after the values in `names_from`. See also 'Examples'.
-#'
-#' **Handling of empty columns**
-#'
-#' Empty columns (i.e., columns that contain only `NA` values after widening the
-#' data) are removed. This is a different behavior than in `tidyr::pivot_wider()`,
-#' which keeps empty columns.
 #'
 #' @examplesIf requireNamespace("lme4", quietly = TRUE)
 #' data_long <- read.table(header = TRUE, text = "
