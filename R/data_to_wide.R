@@ -195,6 +195,8 @@ data_to_wide <- function(data,
 
   variable_attr <- lapply(data, attributes)
 
+  # make sure we have all combinations of id_cols and names_from, so we can
+  # properly widen (unstack) the data.
   data <- .fill_missings(
     x = data,
     id_cols = id_cols,
@@ -204,90 +206,12 @@ data_to_wide <- function(data,
     verbose = verbose
   )
 
-  not_unstacked <- data[, id_cols, drop = FALSE]
-  not_unstacked <- unique(not_unstacked)
-
-  # unstack doesn't create NAs for combinations that don't exist (contrary to
-  # reshape), so we need to complete the dataset before unstacking.
-
-  new_data <- data
-
-  # create an id with all variables that are not in names_from or values_from
-  # so that we can create missing combinations between this id and names_from
-  if (length(id_cols) > 1L) {
-    new_data$temporary_id <- do.call(paste, c(new_data[, id_cols, drop = FALSE], sep = "_"))
-  } else if (length(id_cols) == 1L) {
-    new_data$temporary_id <- new_data[[id_cols]]
-  } else {
-    new_data$temporary_id <- seq_len(nrow(new_data))
-  }
-
-  # check that all_groups have all possible values for names_from
-  # If not, need to complete the dataset with NA for values_from where names_from
-  # didn't exist
-  n_rows_per_group <- table(new_data$temporary_id)
-  n_values_per_group <- insight::n_unique(n_rows_per_group)
-
-  not_all_cols_are_selected <- length(id_cols) > 0L
-
-  incomplete_groups <-
-    (n_values_per_group > 1L &&
-      !all(unique(n_rows_per_group) %in% insight::n_unique(new_data[, names_from]))
-    ) ||
-      (n_values_per_group == 1L &&
-        unique(n_rows_per_group) < length(unique(new_data[, names_from]))
-      )
-
-  # create missing combinations
-
-  if (not_all_cols_are_selected && incomplete_groups) {
-    expanded <- expand.grid(unique(new_data[["temporary_id"]]), unique(new_data[[names_from]]))
-    names(expanded) <- c("temporary_id", names_from)
-    new_data <- data_merge(new_data, expanded,
-      join = "full", by = c("temporary_id", names_from),
-      sort = FALSE
-    )
-
-    # need to make a second temporary id to keep arrange values *without*
-    # rearranging the whole dataset
-    # Ex:
-    # "B"   1
-    # "A"   3
-    # "A"   NA
-    # "B"   NA
-    #
-    # must be rearranged as "B" "B" "A" "A" and not "A" "A" "B" "B"
-    lookup <- data.frame(
-      temporary_id = unique(
-        new_data[!is.na(new_data[values_from]), "temporary_id"]
-      )
-    )
-    lookup$temporary_id_2 <- seq_len(nrow(lookup))
-    new_data <- data_merge(
-      new_data, lookup,
-      by = "temporary_id", join = "left"
-    )
-
-    # creation of missing combinations was done with a temporary id, so need
-    # to fill columns that are not selected in names_from or values_from
-    new_data[, id_cols] <- lapply(id_cols, function(x) {
-      data <- data_arrange(new_data, c("temporary_id_2", x))
-      ind <- which(!is.na(data[[x]]))
-      rep_times <- diff(c(ind, length(data[[x]]) + 1))
-      rep(data[[x]][ind], times = rep_times)
-    })
-
-    new_data <- data_arrange(new_data, "temporary_id_2")
-  }
-
-  # don't need temporary ids anymore
-  new_data$temporary_id <- NULL
-  new_data$temporary_id_2 <- NULL
+  not_unstacked <- unique(data[, id_cols, drop = FALSE])
 
   # convert to wide format (returns the data and the order in which columns
   # should be ordered)
   unstacked <- .unstack(
-    new_data, names_from, values_from,
+    data, names_from, values_from,
     names_sep, names_prefix, names_glue
   )
 
@@ -399,7 +323,18 @@ data_to_wide <- function(data,
 
 # this function finds all combinations of the key columns (i.e. id_cols and
 # names_from) that are missing in the data frame that we want to widen
-.find_missing_rows <- function(x, key_cols) {
+.find_missing_rows <- function(x, id_cols, names_from) {
+  # if id_cols contains multiple columns, we need to create a single column
+  # with all combinations of unique values. if we leave id_cols as is, we
+  # get too many combinations, which would return a wrong result
+  if (length(id_cols) > 1L) {
+    x[[".datawizard_id"]] <- apply(x[id_cols], 1, paste, collapse = "_")
+  } else {
+    x[[".datawizard_id"]] <- x[[id_cols]]
+  }
+
+  key_cols <- c(".datawizard_id", names_from)
+
   # create all theoretically possible combinations of the key columns
   df1 <- unique(expand.grid(x[key_cols]))
 
@@ -412,6 +347,10 @@ data_to_wide <- function(data,
 
   # Find the rows where the key from df1 is NOT in the keys from df2.
   missing_indices <- !df1_keys %in% df2_keys
+
+  # clean up
+  df1[[".datawizard_id"]] <- NULL
+  df1 <- cbind(x[id_cols], df1)
 
   # Subset df1 to get the missing rows.
   df1[missing_indices, ]
@@ -426,12 +365,8 @@ data_to_wide <- function(data,
   values_fill,
   verbose = TRUE
 ) {
-  if (is.null(values_fill)) {
-    return(x)
-  }
-
   # find missing rows, based on id_cols and names_from
-  missing_rows <- .find_missing_rows(x, c(id_cols, names_from))
+  missing_rows <- .find_missing_rows(x, id_cols, names_from)
 
   # if all combinations exist, nothing to do
   if (nrow(missing_rows) < 1) {
@@ -454,31 +389,34 @@ data_to_wide <- function(data,
     )
   }
 
-  if (is.list(values_fill)) {
-    # we need names for a list
-    fill_names <- names(values_fill)
-    # values_fill must be a named list, with names corresponding to the
-    # columns to be filled
-    if (is.null(fill_names) || !all(nzchar(fill_names)) || !all(fill_names %in% remaining_columns)) {
-      insight::format_error(
-        "`values_fill` must be a named list, with names corresponding to the columns to be filled."
-      )
+  # we either fill with concrete values, or leave it as NA
+  if (!is.null(values_fill)) {
+    if (is.list(values_fill)) {
+      # we need names for a list
+      fill_names <- names(values_fill)
+      # values_fill must be a named list, with names corresponding to the
+      # columns to be filled
+      if (is.null(fill_names) || !all(nzchar(fill_names)) || !all(fill_names %in% remaining_columns)) {
+        insight::format_error(
+          "`values_fill` must be a named list, with names corresponding to the columns to be filled."
+        )
+      }
+      for (i in fill_names) {
+        missing_rows[[i]] <- values_fill[[i]]
+      }
+    } else if (is.numeric(values_fill) && all(vapply(x[remaining_columns], is.numeric, logical(1)))) {
+      missing_rows <- convert_na_to(missing_rows, replace_num = values_fill, verbose = FALSE)
+    } else if (is.character(values_fill) && all(vapply(x[remaining_columns], is.character, logical(1)))) {
+      missing_rows <- convert_na_to(missing_rows, replace_char = values_fill, verbose = FALSE)
+    } else if (is.factor(values_fill) && all(vapply(x[remaining_columns], is.factor, logical(1)))) {
+      missing_rows <- convert_na_to(missing_rows, replace_fac = fill, values_fill = FALSE)
+    } else {
+      insight::format_error(paste0(
+        "`values_fill` contains a value of unsupported type, or not all columns that need to be filled are of type ",
+        class(fill)[1],
+        "."
+      ))
     }
-    for (i in fill_names) {
-      missing_rows[[i]] <- values_fill[[i]]
-    }
-  } else if (is.numeric(values_fill) && all(vapply(x[remaining_columns], is.numeric, logical(1)))) {
-    missing_rows <- convert_na_to(missing_rows, replace_num = values_fill, verbose = FALSE)
-  } else if (is.character(values_fill) && all(vapply(x[remaining_columns], is.character, logical(1)))) {
-    missing_rows <- convert_na_to(missing_rows, replace_char = values_fill, verbose = FALSE)
-  } else if (is.factor(values_fill) && all(vapply(x[remaining_columns], is.factor, logical(1)))) {
-    missing_rows <- convert_na_to(missing_rows, replace_fac = fill, values_fill = FALSE)
-  } else {
-    insight::format_error(paste0(
-      "`values_fill` contains a value of unsupported type, or not all columns that need to be filled are of type ",
-      class(fill)[1],
-      "."
-    ))
   }
 
   out <- try(rbind(x, missing_rows), silent = TRUE)
@@ -489,7 +427,7 @@ data_to_wide <- function(data,
     )
   }
 
-  out
+  data_arrange(out, c(id_cols, names_from))
 }
 
 
