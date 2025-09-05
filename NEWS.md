@@ -1,5 +1,10 @@
 # datawizard (development)
 
+BREAKING CHANGES
+
+* Argument `values_fill` in `data_to_wide()` is now defunct, because it did not
+  work as intended (#645).
+
 CHANGES
 
 * Due to changes in the package `insight`, `data_tabulate()` no longer prints

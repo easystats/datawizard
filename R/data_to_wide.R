@@ -30,7 +30,9 @@
 #' delimiters supported by `names_glue` are curly brackets, `{` and `}`.
 #' @param values_from The name of the columns in the original data that contains
 #' the values used to fill the new columns created in the widened data. Can also
-#' be one of the selection helpers (see argument `select` in [`data_select()`]).#'
+#' be one of the selection helpers (see argument `select` in [`data_select()`]).
+#' @param values_fill Defunct argument, which has no function anymore. Will be
+#' removed in future versions.
 #' @param verbose Toggle warnings.
 #' @param ... Not used for now.
 #'
@@ -157,11 +159,17 @@ data_to_wide <- function(data,
                          names_sep = "_",
                          names_prefix = "",
                          names_glue = NULL,
+                         values_fill = NULL,
                          ignore_case = FALSE,
                          regex = FALSE,
                          verbose = TRUE,
                          ...) {
   # validate arguments
+  if (!is.null(values_fill)) {
+    insight::format_warning(
+      "`values_fill` is defunct and has no function anymore. It will be removed in future versions."
+    )
+  }
 
   if (is.null(names_from) || !all(names_from %in% colnames(data))) {
     insight::format_error(
@@ -178,7 +186,7 @@ data_to_wide <- function(data,
   }
 
   values_from <- .select_nse(
-    values_from,
+    select = values_from,
     data,
     exclude = NULL,
     ignore_case,

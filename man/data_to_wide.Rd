@@ -13,6 +13,7 @@ data_to_wide(
   names_sep = "_",
   names_prefix = "",
   names_glue = NULL,
+  values_fill = NULL,
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
@@ -27,6 +28,7 @@ reshape_wider(
   names_sep = "_",
   names_prefix = "",
   names_glue = NULL,
+  values_fill = NULL,
   ignore_case = FALSE,
   regex = FALSE,
   verbose = TRUE,
@@ -47,7 +49,7 @@ also 'Details' and 'Examples'.}
 
 \item{values_from}{The name of the columns in the original data that contains
 the values used to fill the new columns created in the widened data. Can also
-be one of the selection helpers (see argument \code{select} in \code{\link[=data_select]{data_select()}}).#'}
+be one of the selection helpers (see argument \code{select} in \code{\link[=data_select]{data_select()}}).}
 
 \item{names_from}{The name of the column in the original data whose values
 will be used for naming the new columns created in the widened data. Each
@@ -67,6 +69,9 @@ syntactic variable names.}
 \href{https://glue.tidyverse.org/index.html}{glue specification} that uses the
 \code{names_from} columns to create custom column names. Note that the only
 delimiters supported by \code{names_glue} are curly brackets, \verb{\{} and \verb{\}}.}
+
+\item{values_fill}{Defunct argument, which has no function anymore. Will be
+removed in future versions.}
 
 \item{verbose}{Toggle warnings.}
 
