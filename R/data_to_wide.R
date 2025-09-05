@@ -30,13 +30,13 @@
 #' delimiters supported by `names_glue` are curly brackets, `{` and `}`.
 #' @param values_from The name of the columns in the original data that contains
 #' the values used to fill the new columns created in the widened data.
-#' @param values_fill Optionally, a (scalar) value, or a list of (scalar)
-#' values, that will be used to replace missing values in the new columns
-#' created (i.e. after widening the data). Note that missing values in the new
-#' columns will only be filled for matching types in `values_fill`, i.e.
-#' `values_fill = list(99, "99")` will replace missing values in numeric and
-#' character variables, but not for factors. For more complex replacement rules,
-#' consider using [`convert_na_to()`] prior to widening the data.
+#' @param values_fill Optionally, a (scalar) value, or a named list of (scalar)
+#' values, that will be used to create additional rows for missing combinations
+#' of `id_cols` and `names_from`, and then fills in the new columns with values
+#' from `values_from`. If a named list is provided, the names must correspond to
+#' the columns to be filled. Note that `values_fill` only applies to missing
+#' combinations of `id_cols` and `names_from`, i.e. if a combination exists but
+#' the value in `values_from` is `NA`, this will remain `NA`.
 #' @param verbose Toggle warnings.
 #' @param ... Not used for now.
 #'
@@ -195,6 +195,15 @@ data_to_wide <- function(data,
 
   variable_attr <- lapply(data, attributes)
 
+  data <- .fill_missings(
+    x = data,
+    id_cols = id_cols,
+    names_from = names_from,
+    values_from = values_from,
+    values_fill = values_fill,
+    verbose = verbose
+  )
+
   not_unstacked <- data[, id_cols, drop = FALSE]
   not_unstacked <- unique(not_unstacked)
 
@@ -274,10 +283,6 @@ data_to_wide <- function(data,
   # don't need temporary ids anymore
   new_data$temporary_id <- NULL
   new_data$temporary_id_2 <- NULL
-
-
-  # Fill missing values (before converting to wide)
-  new_data <- .fill_missings(new_data, values_from, values_fill, verbose)
 
   # convert to wide format (returns the data and the order in which columns
   # should be ordered)
@@ -392,47 +397,99 @@ data_to_wide <- function(data,
 }
 
 
-#' Fills missing values in the widened newley crated columns in `values_from`
-#' with `values_fill`
-#'
-#' @noRd
+# this function finds all combinations of the key columns (i.e. id_cols and
+# names_from) that are missing in the data frame that we want to widen
+.find_missing_rows <- function(x, key_cols) {
+  # create all theoretically possible combinations of the key columns
+  df1 <- unique(expand.grid(x[key_cols]))
 
-.fill_missings <- function(x, values_from, values_fill, verbose = TRUE) {
-  # do nothing if values_fill is NULL
+  # extract all existing combinations of the key columns
+  df2 <- x[key_cols]
+
+  # Create a unique identifier for each row by pasting the key columns together.
+  df1_keys <- apply(df1, 1, paste, collapse = "_")
+  df2_keys <- apply(df2, 1, paste, collapse = "_")
+
+  # Find the rows where the key from df1 is NOT in the keys from df2.
+  missing_indices <- !df1_keys %in% df2_keys
+
+  # Subset df1 to get the missing rows.
+  df1[missing_indices, ]
+}
+
+
+.fill_missings <- function(
+  x,
+  id_cols,
+  names_from,
+  values_from,
+  values_fill,
+  verbose = TRUE
+) {
   if (is.null(values_fill)) {
     return(x)
   }
 
-  # convert single value / vector into a list
-  if (!is.list(values_fill)) {
-    values_fill <- as.list(values_fill)
+  # find missing rows, based on id_cols and names_from
+  missing_rows <- .find_missing_rows(x, c(id_cols, names_from))
+
+  # if all combinations exist, nothing to do
+  if (nrow(missing_rows) < 1) {
+    return(x)
   }
 
-  for (i in seq_along(values_fill)) {
-    fill <- values_fill[[i]]
+  # we want to add the columns from our original data frame to the data frame
+  # that contains the missing rows, so that we can rbind them together
+  remaining_columns <- setdiff(colnames(x), colnames(missing_rows))
 
-    # check that values_fill is of length 1
-    if (length(fill) != 1L) {
-      insight::format_error("Elements in `values_fill` must be of length 1.")
-    }
-
-    # replace if type exists
-    if (is.numeric(fill) && any(vapply(values_from, function(vf) is.numeric(x[[vf]]), logical(1)))) {
-      x <- convert_na_to(x, replace_num = fill, verbose = FALSE)
-    } else if (is.character(fill) && any(vapply(values_from, function(vf) is.character(x[[vf]]), logical(1)))) {
-      x <- convert_na_to(x, replace_char = fill, verbose = FALSE)
-    } else if (is.factor(fill) && any(vapply(values_from, function(vf) is.factor(x[[vf]]), logical(1)))) {
-      x <- convert_na_to(x, replace_fac = fill, verbose = FALSE)
-    } else {
-      insight::format_error(paste0(
-        "`values_fill` contains a value of unsupported type, or there are no ",
-        class(fill)[1],
-        "-variables in `values_from`."
-      ))
-    }
+  # create columns with NA values for the remaining columns, but take correct
+  # type into account
+  for (i in remaining_columns) {
+    missing_rows[[i]] <- switch(
+      class(x[[i]])[1],
+      factor = factor(NA, levels = levels(x[[i]])),
+      character = NA_character_,
+      numeric = NA_real_,
+      NA
+    )
   }
 
-  x
+  if (is.list(values_fill)) {
+    # we need names for a list
+    fill_names <- names(values_fill)
+    # values_fill must be a named list, with names corresponding to the
+    # columns to be filled
+    if (is.null(fill_names) || !all(nzchar(fill_names)) || !all(fill_names %in% remaining_columns)) {
+      insight::format_error(
+        "`values_fill` must be a named list, with names corresponding to the columns to be filled."
+      )
+    }
+    for (i in fill_names) {
+      missing_rows[[i]] <- values_fill[[i]]
+    }
+  } else if (is.numeric(values_fill) && all(vapply(x[remaining_columns], is.numeric, logical(1)))) {
+    missing_rows <- convert_na_to(missing_rows, replace_num = values_fill, verbose = FALSE)
+  } else if (is.character(values_fill) && all(vapply(x[remaining_columns], is.character, logical(1)))) {
+    missing_rows <- convert_na_to(missing_rows, replace_char = values_fill, verbose = FALSE)
+  } else if (is.factor(values_fill) && all(vapply(x[remaining_columns], is.factor, logical(1)))) {
+    missing_rows <- convert_na_to(missing_rows, replace_fac = fill, values_fill = FALSE)
+  } else {
+    insight::format_error(paste0(
+      "`values_fill` contains a value of unsupported type, or not all columns that need to be filled are of type ",
+      class(fill)[1],
+      "."
+    ))
+  }
+
+  out <- try(rbind(x, missing_rows), silent = TRUE)
+
+  if (inherits(out, "try-error")) {
+    insight::format_error(
+      "Could not fill missing values. Please ensure that the values in `values_fill` match the types of the columns to be filled."
+    )
+  }
+
+  out
 }
 
 
