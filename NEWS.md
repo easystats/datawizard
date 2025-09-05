@@ -10,6 +10,9 @@ CHANGES
 * Due to changes in the package `insight`, `data_tabulate()` no longer prints
   decimals when all values in a column are integers (#641).
 
+* Argument `values_from` in `data_to_wide()` now supports select-helpers like
+  the `select` argument in other `{datawizard}` functions (#645).
+
 BUG FIXES
 
 * Fixed an issue when `demean()`ing nested structures with more than 2 grouping
