@@ -323,8 +323,6 @@ data_to_wide <- function(data,
   }
   row.names(out) <- NULL
 
-  out <- remove_empty_columns(out)
-
   # add back attributes where possible
   for (i in colnames(out)) {
     attributes(out[[i]]) <- variable_attr[[i]]
