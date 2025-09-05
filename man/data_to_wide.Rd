@@ -14,6 +14,8 @@ data_to_wide(
   names_prefix = "",
   names_glue = NULL,
   values_fill = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
   verbose = TRUE,
   ...
 )
@@ -27,6 +29,8 @@ reshape_wider(
   names_prefix = "",
   names_glue = NULL,
   values_fill = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
   verbose = TRUE,
   ...
 )
@@ -44,7 +48,8 @@ also be a character vector with more than one name of identifier columns. See
 also 'Details' and 'Examples'.}
 
 \item{values_from}{The name of the columns in the original data that contains
-the values used to fill the new columns created in the widened data.}
+the values used to fill the new columns created in the widened data. Can also
+be one of the selection helpers (see \code{\link[=data_select]{data_select()}}).}
 
 \item{names_from}{The name of the column in the original data whose values
 will be used for naming the new columns created in the widened data. Each

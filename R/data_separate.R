@@ -155,11 +155,20 @@ data_separate <- function(data,
   }
   # in case user did not provide names of new columns, we can try
   # to guess number of columns per variable
-  guess_columns <- match.arg(guess_columns, choices = c("min", "max", "mode"))
+  guess_columns <- insight::validate_argument(
+    guess_columns,
+    c("min", "max", "mode")
+  )
 
   # make sure we have valid options for fill and extra
-  fill <- match.arg(fill, choices = c("left", "right", "value_left", "value_right"))
-  extra <- match.arg(extra, choices = c("drop_left", "drop_right", "merge_left", "merge_right"))
+  fill <- insight::validate_argument(
+    fill,
+    c("left", "right", "value_left", "value_right")
+  )
+  extra <- insight::validate_argument(
+    extra,
+    c("drop_left", "drop_right", "merge_left", "merge_right")
+  )
 
   # evaluate select/exclude, may be select-helpers
   select <- .select_nse(select,

@@ -29,7 +29,8 @@
 #' `names_from` columns to create custom column names. Note that the only
 #' delimiters supported by `names_glue` are curly brackets, `{` and `}`.
 #' @param values_from The name of the columns in the original data that contains
-#' the values used to fill the new columns created in the widened data.
+#' the values used to fill the new columns created in the widened data. Can also
+#' be one of the selection helpers (see argument `select` in [`data_select()`]).
 #' @param values_fill Optionally, a (scalar) value, or a named list of (scalar)
 #' values, that will be used to create additional rows for missing combinations
 #' of `id_cols` and `names_from`, and then fills in the new columns with values
@@ -174,11 +175,34 @@ data_to_wide <- function(data,
                          names_prefix = "",
                          names_glue = NULL,
                          values_fill = NULL,
+                         ignore_case = FALSE,
+                         regex = FALSE,
                          verbose = TRUE,
                          ...) {
-  if (is.null(id_cols)) {
-    id_cols <- setdiff(names(data), c(names_from, values_from))
+  # validate arguments
+
+  if (is.null(names_from) || !all(names_from %in% colnames(data))) {
+    insight::format_error(
+      "`names_from` must be the name of an existing column in `data`."
+    )
   }
+
+  if (is.null(id_cols)) {
+    id_cols <- setdiff(colnames(data), c(names_from, values_from))
+  } else if (!all(id_cols %in% colnames(data))) {
+    insight::format_error(
+      "`id_cols` must be the name of an existing column in `data`."
+    )
+  }
+
+  values_from <- .select_nse(
+    values_from,
+    data,
+    exclude = NULL,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # save custom attributes
   custom_attr <- attributes(data)
@@ -328,7 +352,7 @@ data_to_wide <- function(data,
   # with all combinations of unique values. if we leave id_cols as is, we
   # get too many combinations, which would return a wrong result
   if (length(id_cols) > 1L) {
-    x[[".datawizard_id"]] <- apply(x[id_cols], 1, paste, collapse = "_")
+    x[[".datawizard_id"]] <- apply(x[id_cols], 1, paste, collapse = "#dwid#")
   } else {
     x[[".datawizard_id"]] <- x[[id_cols]]
   }
@@ -348,9 +372,17 @@ data_to_wide <- function(data,
   # Find the rows where the key from df1 is NOT in the keys from df2.
   missing_indices <- !df1_keys %in% df2_keys
 
-  # clean up
-  df1[[".datawizard_id"]] <- NULL
-  df1 <- cbind(x[id_cols], df1)
+  # restore original id_cols
+  if (length(id_cols) > 1) {
+    df1 <- data_separate(
+      df1,
+      ".datawizard_id",
+      new_columns = id_cols,
+      separator = "#dwid#"
+    )
+  } else {
+    colnames(df1)[colnames(df1) == ".datawizard_id"] <- id_cols
+  }
 
   # Subset df1 to get the missing rows.
   df1[missing_indices, ]
