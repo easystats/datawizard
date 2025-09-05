@@ -29,9 +29,8 @@
 #' `names_from` columns to create custom column names. Note that the only
 #' delimiters supported by `names_glue` are curly brackets, `{` and `}`.
 #' @param values_from The name of the columns in the original data that contains
-#' the values used to fill the new columns created in the widened data.
-#' @param values_fill Optionally, a (scalar) value that will be used to replace
-#' missing values in the new columns created.
+#' the values used to fill the new columns created in the widened data. Can also
+#' be one of the selection helpers (see argument `select` in [`data_select()`]).#'
 #' @param verbose Toggle warnings.
 #' @param ... Not used for now.
 #'
@@ -149,16 +148,6 @@
 #'   values_from = "Reaction",
 #'   names_prefix = "Reaction_Day_"
 #' )
-#'
-#' # filling missing values with 0
-#' data_to_wide(
-#'   d,
-#'   id_cols = "Subject",
-#'   names_from = "Days",
-#'   values_from = "Reaction",
-#'   names_prefix = "Reaction_Day_",
-#'   values_fill = 0
-#' )
 #' @inherit data_rename seealso
 #' @export
 data_to_wide <- function(data,
@@ -168,12 +157,34 @@ data_to_wide <- function(data,
                          names_sep = "_",
                          names_prefix = "",
                          names_glue = NULL,
-                         values_fill = NULL,
+                         ignore_case = FALSE,
+                         regex = FALSE,
                          verbose = TRUE,
                          ...) {
-  if (is.null(id_cols)) {
-    id_cols <- setdiff(names(data), c(names_from, values_from))
+# validate arguments
+
+  if (is.null(names_from) || !all(names_from %in% colnames(data))) {
+    insight::format_error(
+      "`names_from` must be the name of an existing column in `data`."
+    )
   }
+
+  if (is.null(id_cols)) {
+    id_cols <- setdiff(colnames(data), c(names_from, values_from))
+  } else if (!all(id_cols %in% colnames(data))) {
+    insight::format_error(
+      "`id_cols` must be the name of an existing column in `data`."
+    )
+  }
+
+  values_from <- .select_nse(
+    values_from,
+    data,
+    exclude = NULL,
+    ignore_case,
+    regex = regex,
+    verbose = verbose
+  )
 
   # save custom attributes
   custom_attr <- attributes(data)
@@ -270,33 +281,6 @@ data_to_wide <- function(data,
   new_data$temporary_id <- NULL
   new_data$temporary_id_2 <- NULL
 
-  # Fill missing values (before converting to wide)
-  if (!is.null(values_fill)) {
-    if (length(values_fill) == 1L) {
-      if (is.numeric(new_data[[values_from]])) {
-        if (is.numeric(values_fill)) {
-          new_data <- convert_na_to(new_data, replace_num = values_fill)
-        } else {
-          insight::format_error(paste0("`values_fill` must be of type numeric."))
-        }
-      } else if (is.character(new_data[[values_from]])) {
-        if (is.character(values_fill)) {
-          new_data <- convert_na_to(new_data, replace_char = values_fill)
-        } else {
-          insight::format_error(paste0("`values_fill` must be of type character."))
-        }
-      } else if (is.factor(new_data[[values_from]])) {
-        if (is.factor(values_fill)) {
-          new_data <- convert_na_to(new_data, replace_fac = values_fill)
-        } else {
-          insight::format_error(paste0("`values_fill` must be of type factor."))
-        }
-      }
-    } else if (verbose) {
-      insight::format_error("`values_fill` must be of length 1.")
-    }
-  }
-
   # convert to wide format (returns the data and the order in which columns
   # should be ordered)
   unstacked <- .unstack(
@@ -332,8 +316,6 @@ data_to_wide <- function(data,
     out <- cbind(not_unstacked, out)
   }
   row.names(out) <- NULL
-
-  out <- remove_empty_columns(out)
 
   # add back attributes where possible
   for (i in colnames(out)) {
