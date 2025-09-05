@@ -170,7 +170,8 @@ data_to_wide <- function(
   # validate arguments
   if (!is.null(values_fill)) {
     insight::format_warning(
-      "`values_fill` is defunct and has no function anymore. It will be removed in future versions."
+      "`values_fill` is defunct and has no function anymore. It will be removed in future versions.",
+      "To handle missing values after widening, use `convert_na_to()` instead."
     )
   }
 
