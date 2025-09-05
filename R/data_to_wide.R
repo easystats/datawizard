@@ -167,7 +167,7 @@ data_to_wide <- function(
   verbose = TRUE,
   ...
 ) {
-  # validate arguments
+  ## TODO: remove in a future update (#645)
   if (!is.null(values_fill)) {
     insight::format_warning(
       "`values_fill` is defunct and has no function anymore. It will be removed in future versions.",
