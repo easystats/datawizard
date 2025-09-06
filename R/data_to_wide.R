@@ -179,14 +179,6 @@ data_to_wide <- function(data,
     )
   }
 
-  if (is.null(id_cols)) {
-    id_cols <- setdiff(colnames(data), c(names_from, values_from))
-  } else if (!all(id_cols %in% colnames(data))) {
-    insight::format_error(
-      "`id_cols` must be the name of an existing column in `data`."
-    )
-  }
-
   select <- substitute(values_from)
   values_from <- .select_nse(
     select,
@@ -200,6 +192,14 @@ data_to_wide <- function(data,
   if (is.null(values_from) || !length(values_from)) {
     insight::format_error(
       "No variable defined in `values_from` was found in the `data`."
+    )
+  }
+
+  if (is.null(id_cols)) {
+    id_cols <- setdiff(colnames(data), c(names_from, values_from))
+  } else if (!all(id_cols %in% colnames(data))) {
+    insight::format_error(
+      "`id_cols` must be the name of an existing column in `data`."
     )
   }
 
