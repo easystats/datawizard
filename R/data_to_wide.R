@@ -110,6 +110,25 @@
 #'   names_glue = "prod_{product}_{country}"
 #' )
 #'
+#' # reshaping multiple long columns into wide format
+#' data_long <- read.table(header = TRUE, text = "
+#' subject_id time score anxiety test
+#'          1    1    10       5   NA
+#'          1    2    NA       7   NA
+#'          2    1    15       6   NA
+#'          2    2    12      NA   NA
+#'          3    1    18       8   NA
+#'          5    2    11       4   NA
+#'          4    1    NA       5   NA
+#'          4    2    14      NA   NA")
+#'
+#' data_to_wide(
+#'   data_long,
+#'   id_cols = "subject_id",
+#'   names_from = "time",
+#'   values_from = c("score", "anxiety", "test")
+#' )
+#'
 #' # using the "sleepstudy" dataset
 #' data(sleepstudy, package = "lme4")
 #'
