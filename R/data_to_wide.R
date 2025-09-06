@@ -218,7 +218,7 @@ data_to_wide <- function(data,
     id_cols <- setdiff(colnames(data), c(names_from, values_from))
   } else if (!all(id_cols %in% colnames(data))) {
     insight::format_error(
-      "`id_cols` must be the name of an existing column in `data`."
+      "`id_cols` must be the names of existing columns in `data`."
     )
   }
 

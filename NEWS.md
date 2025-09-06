@@ -6,7 +6,7 @@ BREAKING CHANGES
   work as intended (#645).
 
 * `data_to_wide()` no longer removes empty columns that were created after
-  widening data frames, to behave similar to `tidyr::pivot_wider()` (#645).
+  widening data frames, to behave similarly to `tidyr::pivot_wider()` (#645).
 
 CHANGES
 
