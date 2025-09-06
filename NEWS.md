@@ -1,9 +1,20 @@
 # datawizard (development)
 
+BREAKING CHANGES
+
+* Argument `values_fill` in `data_to_wide()` is now defunct, because it did not
+  work as intended (#645).
+
+* `data_to_wide()` no longer removes empty columns that were created after
+  widening data frames, to behave similarly to `tidyr::pivot_wider()` (#645).
+
 CHANGES
 
 * Due to changes in the package `insight`, `data_tabulate()` no longer prints
   decimals when all values in a column are integers (#641).
+
+* Argument `values_from` in `data_to_wide()` now supports select-helpers like
+  the `select` argument in other `{datawizard}` functions (#645).
 
 BUG FIXES
 
