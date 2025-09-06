@@ -55,7 +55,10 @@ be one of the selection helpers (see argument \code{select} in \code{\link[=data
 will be used for naming the new columns created in the widened data. Each
 unique value in this column will become the name of one of these new columns.
 In case \code{names_prefix} is provided, column names will be concatenated with
-the string given in \code{names_prefix}.}
+the string given in \code{names_prefix}. If \code{values_from} specifies more than one
+variable that should be widened, the new column names are a combination of
+the old column names in \code{values_from} and the \emph{values} from \code{names_from}, to
+avoid duplicate column names.}
 
 \item{names_sep}{If \code{names_from} or \code{values_from} contains multiple variables,
 this will be used to join their values together into a single string to use
@@ -112,7 +115,7 @@ necessary information for \code{data_to_wide()} is:
 (\code{names_from}). Since these values may not necessarily reflect appropriate
 column names, you can use \code{names_prefix} to add a prefix to each newly
 created column name.
-\item The name of the column that contains the values (\code{values_from}) for the
+\item The name of the column(s) that contain the values (\code{values_from}) for the
 new columns that are created by \code{names_from}.
 }
 
@@ -171,7 +174,9 @@ data_to_wide(
   names_glue = "prod_{product}_{country}"
 )
 
-# reshaping multiple long columns into wide format
+# reshaping multiple long columns into wide format. to avoid duplicate
+# column names, new names are a combination of the old column names in
+# `values_from` and the values from `names_from`
 data_long <- read.table(header = TRUE, text = "
 subject_id time score anxiety test
          1    1    10       5   NA

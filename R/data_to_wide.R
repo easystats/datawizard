@@ -17,7 +17,10 @@
 #' will be used for naming the new columns created in the widened data. Each
 #' unique value in this column will become the name of one of these new columns.
 #' In case `names_prefix` is provided, column names will be concatenated with
-#' the string given in `names_prefix`.
+#' the string given in `names_prefix`. If `values_from` specifies more than one
+#' variable that should be widened, the new column names are a combination of
+#' the old column names in `values_from` and the *values* from `names_from`, to
+#' avoid duplicate column names.
 #' @param names_prefix String added to the start of every variable name. This is
 #'  particularly useful if `names_from` is a numeric vector and you want to create
 #'  syntactic variable names.
@@ -53,7 +56,7 @@
 #'   (`names_from`). Since these values may not necessarily reflect appropriate
 #'   column names, you can use `names_prefix` to add a prefix to each newly
 #'   created column name.
-#' - The name of the column that contains the values (`values_from`) for the
+#' - The name of the column(s) that contain the values (`values_from`) for the
 #'   new columns that are created by `names_from`.
 #'
 #' In other words: repeated measurements, as indicated by `id_cols`, that are
@@ -110,7 +113,9 @@
 #'   names_glue = "prod_{product}_{country}"
 #' )
 #'
-#' # reshaping multiple long columns into wide format
+#' # reshaping multiple long columns into wide format. to avoid duplicate
+#' # column names, new names are a combination of the old column names in
+#' # `values_from` and the values from `names_from`
 #' data_long <- read.table(header = TRUE, text = "
 #' subject_id time score anxiety test
 #'          1    1    10       5   NA
