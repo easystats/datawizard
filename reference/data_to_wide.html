@@ -11,7 +11,7 @@ tidyr::pivot_wider().'><meta property="og:image" content="https://easystats.gith
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,6 +75,8 @@ the number of rows. This is a dependency-free base-R equivalent of
 <span>  names_prefix <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  names_glue <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  values_fill <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  regex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
@@ -88,6 +90,8 @@ the number of rows. This is a dependency-free base-R equivalent of
 <span>  names_prefix <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  names_glue <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  values_fill <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ignore_case <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  regex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -114,7 +118,8 @@ also 'Details' and 'Examples'.</p></dd>
 
 <dt id="arg-values-from">values_from<a class="anchor" aria-label="anchor" href="#arg-values-from"></a></dt>
 <dd><p>The name of the columns in the original data that contains
-the values used to fill the new columns created in the widened data.</p></dd>
+the values used to fill the new columns created in the widened data. Can also
+be one of the selection helpers (see argument <code>select</code> in <code><a href="extract_column_names.html">data_select()</a></code>).</p></dd>
 
 
 <dt id="arg-names-from">names_from<a class="anchor" aria-label="anchor" href="#arg-names-from"></a></dt>
@@ -122,7 +127,10 @@ the values used to fill the new columns created in the widened data.</p></dd>
 will be used for naming the new columns created in the widened data. Each
 unique value in this column will become the name of one of these new columns.
 In case <code>names_prefix</code> is provided, column names will be concatenated with
-the string given in <code>names_prefix</code>.</p></dd>
+the string given in <code>names_prefix</code>. If <code>values_from</code> specifies more than one
+variable that should be widened, the new column names are a combination of
+the old column names in <code>values_from</code> and the <em>values</em> from <code>names_from</code>, to
+avoid duplicate column names.</p></dd>
 
 
 <dt id="arg-names-sep">names_sep<a class="anchor" aria-label="anchor" href="#arg-names-sep"></a></dt>
@@ -145,8 +153,25 @@ delimiters supported by <code>names_glue</code> are curly brackets, <code>{</cod
 
 
 <dt id="arg-values-fill">values_fill<a class="anchor" aria-label="anchor" href="#arg-values-fill"></a></dt>
-<dd><p>Optionally, a (scalar) value that will be used to replace
-missing values in the new columns created.</p></dd>
+<dd><p>Defunct argument, which has no function anymore. Will be
+removed in future versions.</p></dd>
+
+
+<dt id="arg-ignore-case">ignore_case<a class="anchor" aria-label="anchor" href="#arg-ignore-case"></a></dt>
+<dd><p>Logical, if <code>TRUE</code> and when one of the select-helpers or
+a regular expression is used in <code>select</code>, ignores lower/upper case in the
+search pattern when matching against variable names.</p></dd>
+
+
+<dt id="arg-regex">regex<a class="anchor" aria-label="anchor" href="#arg-regex"></a></dt>
+<dd><p>Logical, if <code>TRUE</code>, the search pattern from <code>select</code> will be
+treated as regular expression. When <code>regex = TRUE</code>, select <em>must</em> be a
+character string (or a variable containing a character string) and is not
+allowed to be one of the supported select-helpers or a character vector
+of length &gt; 1. <code>regex = TRUE</code> is comparable to using one of the two
+select-helpers, <code>select = contains()</code> or <code>select = regex()</code>, however,
+since the select-helpers may not work when called from inside other
+functions (see 'Details'), this argument may be used as workaround.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -174,7 +199,7 @@ necessary information for <code>data_to_wide()</code> is:</p><ul><li><p>The name
 (<code>names_from</code>). Since these values may not necessarily reflect appropriate
 column names, you can use <code>names_prefix</code> to add a prefix to each newly
 created column name.</p></li>
-<li><p>The name of the column that contains the values (<code>values_from</code>) for the
+<li><p>The name of the column(s) that contain the values (<code>values_from</code>) for the
 new columns that are created by <code>names_from</code>.</p></li>
 </ul><p>In other words: repeated measurements, as indicated by <code>id_cols</code>, that are
 saved into the column <code>values_from</code> will be spread into new columns, which
@@ -274,6 +299,33 @@ will be named after the values in <code>names_from</code>. See also 'Examples'.<
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13 2012  1.62320252 -1.0700682  1.68588724</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14 2013 -0.24168977 -0.4682005 -0.77297823</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15 2014  2.14991934 -1.3343536  0.49587048</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># reshaping multiple long columns into wide format. to avoid duplicate</span></span></span>
+<span class="r-in"><span><span class="co"># column names, new names are a combination of the old column names in</span></span></span>
+<span class="r-in"><span><span class="co"># `values_from` and the values from `names_from`</span></span></span>
+<span class="r-in"><span><span class="va">data_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span>header <span class="op">=</span> <span class="cn">TRUE</span>, text <span class="op">=</span> <span class="st">"</span></span></span>
+<span class="r-in"><span><span class="st">subject_id time score anxiety test</span></span></span>
+<span class="r-in"><span><span class="st">         1    1    10       5   NA</span></span></span>
+<span class="r-in"><span><span class="st">         1    2    NA       7   NA</span></span></span>
+<span class="r-in"><span><span class="st">         2    1    15       6   NA</span></span></span>
+<span class="r-in"><span><span class="st">         2    2    12      NA   NA</span></span></span>
+<span class="r-in"><span><span class="st">         3    1    18       8   NA</span></span></span>
+<span class="r-in"><span><span class="st">         5    2    11       4   NA</span></span></span>
+<span class="r-in"><span><span class="st">         4    1    NA       5   NA</span></span></span>
+<span class="r-in"><span><span class="st">         4    2    14      NA   NA"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">data_to_wide</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">data_long</span>,</span></span>
+<span class="r-in"><span>  id_cols <span class="op">=</span> <span class="st">"subject_id"</span>,</span></span>
+<span class="r-in"><span>  names_from <span class="op">=</span> <span class="st">"time"</span>,</span></span>
+<span class="r-in"><span>  values_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"score"</span>, <span class="st">"anxiety"</span>, <span class="st">"test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   subject_id score_1 score_2 anxiety_1 anxiety_2 test_1 test_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          1      10      NA         5         7     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          2      15      12         6        NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          3      18      NA         8        NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          5      NA      11        NA         4     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          4      NA      14         5        NA     NA     NA</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># using the "sleepstudy" dataset</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sleepstudy</span>, package <span class="op">=</span> <span class="st">"lme4"</span><span class="op">)</span></span></span>
@@ -446,28 +498,6 @@ will be named after the values in <code>names_from</code>. See also 'Examples'.<
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3             NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4             NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5             NA</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># filling missing values with 0</span></span></span>
-<span class="r-in"><span><span class="fu">data_to_wide</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">d</span>,</span></span>
-<span class="r-in"><span>  id_cols <span class="op">=</span> <span class="st">"Subject"</span>,</span></span>
-<span class="r-in"><span>  names_from <span class="op">=</span> <span class="st">"Days"</span>,</span></span>
-<span class="r-in"><span>  values_from <span class="op">=</span> <span class="st">"Reaction"</span>,</span></span>
-<span class="r-in"><span>  names_prefix <span class="op">=</span> <span class="st">"Reaction_Day_"</span>,</span></span>
-<span class="r-in"><span>  values_fill <span class="op">=</span> <span class="fl">0</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Subject Reaction_Day_0 Reaction_Day_1 Reaction_Day_2 Reaction_Day_3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     308       249.5600       258.7047       250.8006       321.4398</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     309       222.7339       205.2658       202.9778       204.7070</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     310       199.0539       194.3322       234.3200         0.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     330       321.5426       300.4002         0.0000         0.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     331       287.6079         0.0000         0.0000         0.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Reaction_Day_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       356.8519</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2         0.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         0.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4         0.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5         0.0000</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
