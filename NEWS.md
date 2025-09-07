@@ -19,7 +19,7 @@ CHANGES
 * Added a `display()` method for `data_codebook()` (#646).
 
 * `display()` methods now support the `{tinytable}` package. Use `format = "tt"`
-  to excport tables as `tinytable` objects (#646).
+  to export tables as `tinytable` objects (#646).
 
 BUG FIXES
 
