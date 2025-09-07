@@ -230,7 +230,7 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   fun_args <- list(
     format(x, big_mark = big_mark, format = format, ...),
     caption = caption,
-    format = format
+    format = ifelse(format == "markdown", "markdown", .check_format_backend(...))
   )
   if (format != "html") {
     fun_args$cross <- "+"
