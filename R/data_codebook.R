@@ -476,8 +476,7 @@ display.data_codebook <- function(object,
     x = object,
     font_size = font_size,
     line_padding = line_padding,
-    row_color = row_color,
-    ...
+    row_color = row_color
   )
 
   # print table in HTML or markdown format
