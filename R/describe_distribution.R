@@ -606,7 +606,12 @@ print_html.parameters_distribution <- function(x, digits = 2, ci_brackets = c("(
     ...
   )
 
-  insight::export_table(formatted_table, format = "html", align = "firstleft", ...)
+  insight::export_table(
+    formatted_table,
+    format = .check_format_backend(...),
+    align = "firstleft",
+    ...
+  )
 }
 
 
