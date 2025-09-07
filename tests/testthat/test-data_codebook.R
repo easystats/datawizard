@@ -27,6 +27,26 @@ test_that("data_codebook NaN and Inf", {
 })
 
 
+test_that("data_codebook, tinytable", {
+  skip_if_not_installed("tinytable")
+  d <- data.frame(
+    x = c(1, 4, NA, Inf, 4, NaN, 2, 1, 1)
+  )
+  expect_snapshot(display(data_codebook(d), format = "tt"))
+
+  set.seed(123)
+  d <- data.frame(
+    x = c(sample.int(15, 100, TRUE), Inf, Inf)
+  )
+  expect_snapshot(display(data_codebook(d), format = "tt"))
+  expect_snapshot(display(data_codebook(d, range_at = 100), format = "tt"))
+  expect_snapshot(display(data_codebook(d, range_at = 100, max_values = 4), format = "tt"))
+
+  data(iris)
+  expect_snapshot(display(data_codebook(iris[c(1, 2, 5, 3, 4)]), format = "tt"))
+})
+
+
 test_that("data_codebook iris, select", {
   expect_snapshot(data_codebook(iris, select = starts_with("Sepal")))
 })
