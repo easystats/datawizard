@@ -3,6 +3,7 @@
 \name{data_codebook}
 \alias{data_codebook}
 \alias{print_html.data_codebook}
+\alias{display.data_codebook}
 \title{Generate a codebook of a data frame.}
 \usage{
 data_codebook(
@@ -21,6 +22,15 @@ data_codebook(
 
 \method{print_html}{data_codebook}(
   x,
+  font_size = "100\%",
+  line_padding = 3,
+  row_color = "#eeeeee",
+  ...
+)
+
+\method{display}{data_codebook}(
+  object,
+  format = "markdown",
   font_size = "100\%",
   line_padding = 3,
   row_color = "#eeeeee",

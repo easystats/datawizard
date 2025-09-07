@@ -414,7 +414,6 @@ print_html.data_codebook <- function(x,
                                      line_padding = 3,
                                      row_color = "#eeeeee",
                                      ...) {
-  insight::check_if_installed("gt")
   caption <- .get_codebook_caption(x)
   attr(x, "table_caption") <- caption
   # since we have each value at its own row, the HTML table contains
@@ -427,12 +426,20 @@ print_html.data_codebook <- function(x,
   odd_rows <- (x$.row_id %% 2 == 1)
   x$.row_id <- NULL
   # create basic table
+  backend <- .check_format_backend(...)
   out <- insight::export_table(
     format(x, format = "html"),
     title = caption,
-    format = "html",
+    format = backend,
     align = .get_codebook_align(x)
   )
+
+  # for tiny table output, we don't need to do any further formatting
+  if (identical(backend, "tt")) {
+    return(out)
+  }
+
+  insight::check_if_installed("gt")
   # no border for rows which are not separator lines
   out <- gt::tab_style(
     out,
@@ -452,6 +459,34 @@ print_html.data_codebook <- function(x,
     table.font.size = font_size,
     data_row.padding = gt::px(line_padding)
   )
+}
+
+
+#' @rdname data_codebook
+#' @export
+display.data_codebook <- function(object,
+                                  format = "markdown",
+                                  font_size = "100%",
+                                  line_padding = 3,
+                                  row_color = "#eeeeee",
+                                  ...) {
+  format <- .display_default_format(format)
+
+  fun_args <- list(
+    x = object,
+    font_size = font_size,
+    line_padding = line_padding,
+    row_color = row_color,
+    ...
+  )
+
+  # print table in HTML or markdown format
+  if (format %in% c("html", "tt")) {
+    fun_args$backend <- format
+    do.call(print_html, c(fun_args, list(...)))
+  } else {
+    do.call(print_md, c(fun_args, list(...)))
+  }
 }
 
 

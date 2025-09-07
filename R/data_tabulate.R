@@ -37,6 +37,11 @@
 #' input. Else, always for multiple table inputs or when `simplify = FALSE`, a
 #' list of tables is returned. This is only relevant for the `as.table()`
 #' methods. To ensure consistent output, the default is `FALSE`.
+#' @param format String, indicating the output format. Can be `"markdown"`
+#' `"html"`, or `"tt"`. `format = "html"` create a HTML table using the *gt*
+#' package. `format = "tt"` creates a `tinytable` object, which is either
+#' printed as markdown or HTML table, depending on the environment. See
+#' [`insight::export_table()`] for details.
 #' @param verbose Toggle warnings and messages.
 #' @param ... not used.
 #' @inheritParams extract_column_names
@@ -794,14 +799,22 @@ print.datawizard_tables <- function(x, big_mark = NULL, ...) {
 
 # display --------------------
 
+#' @rdname data_tabulate
 #' @export
 display.datawizard_table <- function(object, big_mark = NULL, format = "markdown", ...) {
-  format <- insight::validate_argument(format, c("markdown", "html", "md"))
+  format <- .display_default_format(format)
+
+  fun_args <- list(
+    x = object,
+    big_mark = big_mark
+  )
+
   # print table in HTML or markdown format
-  if (format == "html") {
-    print_html(object, big_mark = big_mark, ...)
+  if (format %in% c("html", "tt")) {
+    fun_args$backend <- format
+    do.call(print_html, c(fun_args, list(...)))
   } else {
-    print_md(object, big_mark = big_mark, ...)
+    do.call(print_md, c(fun_args, list(...)))
   }
 }
 
@@ -813,6 +826,11 @@ display.datawizard_crosstab <- display.datawizard_table
 
 #' @export
 display.datawizard_crosstabs <- display.datawizard_table
+
+.display_default_format <- function(format) {
+  format <- getOption("easystats_display_format", format)
+  insight::validate_argument(format, c("markdown", "html", "md", "tt"))
+}
 
 
 # print_html --------------------
@@ -925,8 +943,19 @@ print_md.datawizard_tables <- function(x, big_mark = NULL, ...) {
     title = caption,
     footer = footer,
     missing = "(NA)",
-    format = format
+    format = .check_format_backend(...)
   )
+}
+
+
+# we allow exporting HTML format based on "gt" or "tinytable"
+.check_format_backend <- function(...) {
+  dots <- list(...)
+  if (identical(dots$backend, "tt")) {
+    "tt"
+  } else {
+    "html"
+  }
 }
 
 
