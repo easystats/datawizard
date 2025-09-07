@@ -921,6 +921,10 @@ print_md.datawizard_tables <- function(x, big_mark = NULL, ...) {
 .print_dw_table <- function(x, format = "markdown", big_mark = NULL, ...) {
   a <- attributes(x)
 
+  if (identical(format, "html")) {
+    format <- .check_format_backend(...)
+  }
+
   # "table" header with variable label/name, and type
   caption <- .table_header(x, format)
 
@@ -943,7 +947,7 @@ print_md.datawizard_tables <- function(x, big_mark = NULL, ...) {
     title = caption,
     footer = footer,
     missing = "(NA)",
-    format = .check_format_backend(...)
+    format = format
   )
 }
 
