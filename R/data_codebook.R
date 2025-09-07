@@ -23,6 +23,7 @@
 #' @param row_color For HTML tables, the fill color for odd rows.
 #' @inheritParams standardize.data.frame
 #' @inheritParams extract_column_names
+#' @inheritParams data_tabulate
 #'
 #' @return A formatted data frame, summarizing the content of the data frame.
 #' Returned columns include the column index of the variables in the original

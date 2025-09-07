@@ -37,6 +37,7 @@
 #' input. Else, always for multiple table inputs or when `simplify = FALSE`, a
 #' list of tables is returned. This is only relevant for the `as.table()`
 #' methods. To ensure consistent output, the default is `FALSE`.
+#' @param object An object returned by `data_tabulate()`.
 #' @param format String, indicating the output format. Can be `"markdown"`
 #' `"html"`, or `"tt"`. `format = "html"` create a HTML table using the *gt*
 #' package. `format = "tt"` creates a `tinytable` object, which is either

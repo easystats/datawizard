@@ -175,6 +175,8 @@ used for large numbers. If \code{NULL} (default), a big mark is added automatica
 large numbers (i.e. numbers with more than 5 digits). If you want to remove
 the big mark, set \code{big_mark = ""}.}
 
+\item{object}{An object returned by \code{data_tabulate()}.}
+
 \item{format}{String, indicating the output format. Can be \code{"markdown"}
 \code{"html"}, or \code{"tt"}. \code{format = "html"} create a HTML table using the \emph{gt}
 package. \code{format = "tt"} creates a \code{tinytable} object, which is either
