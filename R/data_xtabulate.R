@@ -227,12 +227,18 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   }
 
   # prepare table arguments
+  backend <- switch(
+    format,
+    html = ,
+    tt = .check_format_backend(...),
+    format
+  )
   fun_args <- list(
     format(x, big_mark = big_mark, format = format, ...),
     caption = caption,
-    format = ifelse(format == "markdown", "markdown", .check_format_backend(...))
+    format = backend
   )
-  if (format != "html") {
+  if (!format %in% c("html", "tt")) {
     fun_args$cross <- "+"
     fun_args$empty_line <- "-"
   }

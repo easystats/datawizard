@@ -937,13 +937,19 @@ print_md.datawizard_tables <- function(x, big_mark = NULL, ...) {
   x$Variable <- NULL
   x$Group <- NULL
 
+  backend <- switch(
+    format,
+    html = ,
+    tt = .check_format_backend(...),
+    format
+  )
   # print table
   insight::export_table(
     format(x, format = format, big_mark = big_mark, ...),
     title = caption,
     footer = footer,
     missing = "(NA)",
-    format = ifelse(format == "markdown", "markdown", .check_format_backend(...))
+    format = backend
   )
 }
 
