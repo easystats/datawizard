@@ -807,15 +807,16 @@ display.datawizard_table <- function(object, big_mark = NULL, format = "markdown
 
   fun_args <- list(
     x = object,
-    big_mark = big_mark
+    big_mark = big_mark,
+    ...
   )
 
   # print table in HTML or markdown format
   if (format %in% c("html", "tt")) {
     fun_args$backend <- format
-    do.call(print_html, c(fun_args, list(...)))
+    do.call(print_html, fun_args)
   } else {
-    do.call(print_md, c(fun_args, list(...)))
+    do.call(print_md, fun_args)
   }
 }
 
@@ -941,8 +942,7 @@ print_md.datawizard_tables <- function(x, big_mark = NULL, ...) {
   # this function is used by all four supported format, markdown, text, html
   # and tt (tinytable). For tt, we sometimes have format "html" and backend = "tt",
   # so we need to check for this special case
-  backend <- switch(
-    format,
+  backend <- switch(format,
     html = ,
     tt = .check_format_backend(...),
     format

@@ -612,7 +612,8 @@ print_html.parameters_distribution <- function(x, digits = 2, ci_brackets = c("(
   # pass arguments to export_table
   fun_args <- list(
     formatted_table,
-    format = .check_format_backend(...)
+    format = backend,
+    ...
   )
 
   # no "align" for format "tt" - this currently gives an error. Not sure
@@ -621,7 +622,7 @@ print_html.parameters_distribution <- function(x, digits = 2, ci_brackets = c("(
     fun_args$align <- "firstleft"
   }
 
-  do.call(insight::export_table, c(fun_args, list(...)))
+  do.call(insight::export_table, fun_args)
 }
 
 
@@ -631,15 +632,16 @@ display.parameters_distribution <- function(object, format = "markdown", digits 
 
   fun_args <- list(
     x = object,
-    digits = digits
+    digits = digits,
+    ...
   )
 
   # print table in HTML or markdown format
   if (format %in% c("html", "tt")) {
     fun_args$backend <- format
-    do.call(print_html, c(fun_args, list(...)))
+    do.call(print_html, fun_args)
   } else {
-    do.call(print_md, c(fun_args, list(...)))
+    do.call(print_md, fun_args)
   }
 }
 

@@ -477,15 +477,16 @@ display.data_codebook <- function(object,
     x = object,
     font_size = font_size,
     line_padding = line_padding,
-    row_color = row_color
+    row_color = row_color,
+    ...
   )
 
   # print table in HTML or markdown format
   if (format %in% c("html", "tt")) {
     fun_args$backend <- format
-    do.call(print_html, c(fun_args, list(...)))
+    do.call(print_html, fun_args)
   } else {
-    do.call(print_md, c(fun_args, list(...)))
+    do.call(print_md, fun_args)
   }
 }
 

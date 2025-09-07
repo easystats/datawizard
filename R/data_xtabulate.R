@@ -229,8 +229,7 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   # this function is used by all four supported format, markdown, text, html
   # and tt (tinytable). For tt, we sometimes have format "html" and backend = "tt",
   # so we need to check for this special case
-  backend <- switch(
-    format,
+  backend <- switch(format,
     html = ,
     tt = .check_format_backend(...),
     format
