@@ -937,6 +937,9 @@ print_md.datawizard_tables <- function(x, big_mark = NULL, ...) {
   x$Variable <- NULL
   x$Group <- NULL
 
+  # this function is used by all four supportes format, markdown, text, html
+  # and tt (tinytable). For tt, we sometimes have format "html" and backend = "tt",
+  # so we need to check for this special case
   backend <- switch(
     format,
     html = ,

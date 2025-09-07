@@ -226,13 +226,16 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
     x$Group <- NULL
   }
 
-  # prepare table arguments
+  # this function is used by all four supportes format, markdown, text, html
+  # and tt (tinytable). For tt, we sometimes have format "html" and backend = "tt",
+  # so we need to check for this special case
   backend <- switch(
     format,
     html = ,
     tt = .check_format_backend(...),
     format
   )
+  # prepare table arguments
   fun_args <- list(
     format(x, big_mark = big_mark, format = format, ...),
     caption = caption,
