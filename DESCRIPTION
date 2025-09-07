@@ -69,6 +69,7 @@ Suggests:
     testthat (>= 3.2.1),
     tibble,
     tidyr,
+    tinytable (>= 0.13.0),
     withr
 VignetteBuilder:
     knitr
