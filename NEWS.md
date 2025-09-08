@@ -16,6 +16,11 @@ CHANGES
 * Argument `values_from` in `data_to_wide()` now supports select-helpers like
   the `select` argument in other `{datawizard}` functions (#645).
 
+* Added a `display()` method for `data_codebook()` (#646).
+
+* `display()` methods now support the `{tinytable}` package. Use `format = "tt"`
+  to export tables as `tinytable` objects (#646).
+
 BUG FIXES
 
 * Fixed an issue when `demean()`ing nested structures with more than 2 grouping

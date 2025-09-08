@@ -41,6 +41,14 @@ test_that("data_tabulate, HTML", {
 })
 
 
+test_that("data_tabulate, tinytable", {
+  skip_if_not_installed("tinytable")
+  data(efc, package = "datawizard")
+  expect_snapshot(display(data_tabulate(efc$c172code), format = "tt"))
+  expect_snapshot(display(data_tabulate(efc, "c172code"), format = "tt"))
+})
+
+
 test_that("data_tabulate, weights", {
   skip_if_not_installed("knitr")
   data(efc, package = "datawizard")
@@ -337,6 +345,62 @@ test_that("data_tabulate, cross tables, HTML", {
   expect_s3_class(print_html(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row")), "gt_tbl")
   expect_s3_class(print_html(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", remove_na = TRUE, weights = efc$weights)), "gt_tbl") # nolint
   expect_s3_class(display(data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row", remove_na = TRUE, weights = efc$weights), format = "html"), "gt_tbl") # nolint
+})
+
+test_that("data_tabulate, cross tables, tinytable", {
+  skip_if_not_installed("tinytable")
+  data(efc, package = "datawizard")
+  set.seed(123)
+  efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+  efc$e16sex[sample.int(nrow(efc), 5)] <- NA
+
+  expect_snapshot(display(
+    data_tabulate(efc$c172code, by = efc$e16sex, proportions = "full"),
+    format = "tt"
+  ))
+  expect_snapshot(display(
+    data_tabulate(
+      efc$c172code,
+      by = efc$e16sex,
+      proportions = "full",
+      remove_na = TRUE
+    ),
+    format = "tt"
+  ))
+  expect_snapshot(display(
+    data_tabulate(
+      efc$c172code,
+      by = efc$e16sex,
+      proportions = "full",
+      weights = efc$weights
+    ),
+    format = "tt"
+  ))
+  expect_snapshot(display(
+    data_tabulate(
+      efc$c172code,
+      by = efc$e16sex,
+      proportions = "full",
+      remove_na = TRUE,
+      weights = efc$weights
+    ),
+    format = "tt"
+  ))
+  expect_snapshot(display(
+    data_tabulate(efc, "c172code", by = efc$e16sex, proportions = "row"),
+    format = "tt"
+  ))
+  expect_snapshot(display(
+    data_tabulate(
+      efc,
+      "c172code",
+      by = efc$e16sex,
+      proportions = "row",
+      remove_na = TRUE,
+      weights = efc$weights
+    ),
+    format = "tt"
+  ))
 })
 
 test_that("data_tabulate, cross tables, grouped df", {

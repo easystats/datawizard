@@ -7,6 +7,7 @@
 \alias{as.data.frame.datawizard_tables}
 \alias{as.table.datawizard_table}
 \alias{print.datawizard_table}
+\alias{display.datawizard_table}
 \title{Create frequency and crosstables of variables}
 \usage{
 data_tabulate(x, ...)
@@ -51,6 +52,8 @@ data_tabulate(x, ...)
 \method{as.table}{datawizard_table}(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...)
 
 \method{print}{datawizard_table}(x, big_mark = NULL, ...)
+
+\method{display}{datawizard_table}(object, big_mark = NULL, format = "markdown", ...)
 }
 \arguments{
 \item{x}{A (grouped) data frame, a vector or factor.}
@@ -171,6 +174,14 @@ methods. To ensure consistent output, the default is \code{FALSE}.}
 used for large numbers. If \code{NULL} (default), a big mark is added automatically for
 large numbers (i.e. numbers with more than 5 digits). If you want to remove
 the big mark, set \code{big_mark = ""}.}
+
+\item{object}{An object returned by \code{data_tabulate()}.}
+
+\item{format}{String, indicating the output format. Can be \code{"markdown"}
+\code{"html"}, or \code{"tt"}. \code{format = "html"} create an HTML table using the \emph{gt}
+package. \code{format = "tt"} creates a \code{tinytable} object, which is either
+printed as markdown or HTML table, depending on the environment. See
+\code{\link[insight:export_table]{insight::export_table()}} for details.}
 }
 \value{
 A data frame, or a list of data frames, with one frequency table
