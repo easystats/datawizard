@@ -185,7 +185,7 @@ data_filter.data.frame <- function(x, ...) {
   out <- x
 
   # convert tibble to data.frame
-  if (inherits(data, "tbl_df")) {
+  if (inherits(x, "tbl_df")) {
     out <- as.data.frame(out, stringsAsFactors = FALSE)
     tbl_input <- TRUE
   } else {
@@ -301,7 +301,7 @@ data_filter.grouped_df <- function(x, ...) {
   grps <- grps[[".rows"]]
 
   # Remove tidyverse attributes, will add them back at the end
-  if (inherits(data, "tbl_df")) {
+  if (inherits(x, "tbl_df")) {
     tbl_input <- TRUE
     x <- as.data.frame(x, stringsAsFactors = FALSE)
   } else {
