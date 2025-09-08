@@ -80,7 +80,7 @@ data_unique.data.frame <- function(data,
   ), ]
 
   good.dups <- data_select(good.dups, og.names)
-  out <- data[!duplicated(data$temporary_id2), drop = FALSE]
+  out <- data[!duplicated(data$temporary_id2), , drop = FALSE]
 
 
   if (keep != "first") {
