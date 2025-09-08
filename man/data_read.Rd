@@ -76,13 +76,13 @@ or text files (like '.csv' files). All other file types are passed to
 
 \itemize{
 \item \code{data_read()} is a wrapper around the \strong{haven}, \strong{data.table}, \strong{readr}
-\strong{readxl} and \strong{rio} packages. Currently supported file types are \code{.txt},
-\code{.csv}, \code{.xls}, \code{.xlsx}, \code{.sav}, \code{.por}, \code{.dta}, \code{.sas}, \code{.rda}, \code{.rdata},
-and \code{.rds} (and related files). All other file types are passed to
-\code{rio::import()}.
-\item \code{data_write()} is a wrapper around \strong{haven}, \strong{readr} and \strong{rio}
-packages, and supports writing files into all formats supported by these
-packages.
+\strong{readxl}, \strong{nanoparquet} and \strong{rio} packages. Currently supported file
+types are \code{.txt}, \code{.csv}, \code{.xls}, \code{.xlsx}, \code{.sav}, \code{.por}, \code{.dta}, \code{.sas},
+\code{.rda}, \code{.parquet}, \code{.rdata}, and \code{.rds} (and related files). All other file
+types are passed to \code{rio::import()}.
+\item \code{data_write()} is a wrapper around \strong{haven}, \strong{readr}, \strong{nanoparquet},
+and \strong{rio} packages, and supports writing files into all formats supported
+by these packages.
 }
 }
 

@@ -29,6 +29,7 @@ data_write <- function(data,
     rds = "rds",
     rda = ,
     rdata = "rda",
+    parquet = "parquet",
     "unknown"
   )
 
@@ -46,6 +47,8 @@ data_write <- function(data,
     .write_rds(data, path, verbose, ...)
   } else if (type == "rda") {
     .write_rda(data, path, verbose, ...)
+  } else if (type == "parquet") {
+    .write_parquet(data, path, verbose, ...)
   } else {
     .write_haven(data, path, verbose, type, ...)
   }
@@ -67,6 +70,17 @@ data_write <- function(data,
     env <- as.environment(data)
     save(list = names(data), file = path, envir = env, ...)
   }
+}
+
+
+# nanoparquet -----
+
+.write_parquet <- function(data, path, verbose = TRUE, ...) {
+  # requires nanoparquet package
+  insight::check_if_installed("nanoparquet")
+
+  # save single data frame
+  nanoparquet::write_parquet(x = data, file = path, ...)
 }
 
 

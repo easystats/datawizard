@@ -40,8 +40,6 @@
 #'
 #' If `select` is a named vector, `replacement` is ignored.
 #' @param rows Vector of row names.
-#' @param safe Deprecated. Passing unknown column names now always errors.
-#' @param pattern Deprecated. Use `select` instead.
 #' @param ... Other arguments passed to or from other functions.
 #'
 #' @details
@@ -87,26 +85,10 @@
 data_rename <- function(data,
                         select = NULL,
                         replacement = NULL,
-                        safe = TRUE,
-                        verbose = TRUE,
-                        pattern = NULL,
                         ...) {
   # check for valid input
   if (!is.data.frame(data)) {
     insight::format_error("Argument `data` must be a data frame.")
-  }
-  # If the user does data_rename(iris, pattern = "Sepal.Length", "length"),
-  # then "length" is matched to select by position while it's the replacement
-  # => do the switch manually
-  if (!is.null(pattern)) {
-    .is_deprecated("pattern", "select")
-    if (!is.null(select)) {
-      replacement <- select
-    }
-    select <- pattern
-  }
-  if (isFALSE(safe)) {
-    insight::format_warning("In `data_rename()`, argument `safe` is no longer used and will be removed in a future release.") # nolint
   }
 
   # change all names if no pattern specified
@@ -117,7 +99,6 @@ data_rename <- function(data,
     ignore_case = NULL,
     regex = NULL,
     allow_rename = TRUE,
-    verbose = verbose,
     ifnotfound = "error"
   )
 
@@ -189,7 +170,7 @@ data_rename <- function(data,
 
   for (i in seq_along(select)) {
     if (!is.na(replacement[i])) {
-      data <- .data_rename(data, select[i], replacement[i], safe, verbose)
+      data <- .data_rename(data, select[i], replacement[i])
     }
   }
 
@@ -197,17 +178,9 @@ data_rename <- function(data,
 }
 
 #' @keywords internal
-.data_rename <- function(data, pattern, replacement, safe = TRUE, verbose = TRUE) {
+.data_rename <- function(data, pattern, replacement) {
   if (!pattern %in% names(data)) {
-    if (isTRUE(safe)) {
-      # only give message when verbose is TRUE
-      if (verbose) {
-        insight::format_alert(paste0("Variable `", pattern, "` is not in your data frame :/"))
-      }
-      # if not safe, always error, no matter what verbose is
-    } else {
-      insight::format_error(paste0("Variable `", pattern, "` is not in your data frame :/"))
-    }
+    insight::format_error(paste0("Variable `", pattern, "` is not in your data frame :/"))
   }
 
   names(data) <- replace(names(data), names(data) == pattern, replacement)

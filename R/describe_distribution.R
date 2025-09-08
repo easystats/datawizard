@@ -606,16 +606,42 @@ print_html.parameters_distribution <- function(x, digits = 2, ci_brackets = c("(
     ...
   )
 
-  insight::export_table(formatted_table, format = "html", align = "firstleft", ...)
+  # determine backend
+  backend <- .check_format_backend(...)
+
+  # pass arguments to export_table
+  fun_args <- list(
+    formatted_table,
+    format = backend,
+    ...
+  )
+
+  # no "align" for format "tt" - this currently gives an error. Not sure
+  # if related to insight::export_table or tinytable
+  if (identical(backend, "html")) {
+    fun_args$align <- "firstleft"
+  }
+
+  do.call(insight::export_table, fun_args)
 }
 
 
 #' @export
 display.parameters_distribution <- function(object, format = "markdown", digits = 2, ...) {
-  if (format == "markdow") {
-    print_md(x = object, digits = digits, ...)
-  } else if (format == "html") {
-    print_html(x = object, digits = digits, ...)
+  format <- .display_default_format(format)
+
+  fun_args <- list(
+    x = object,
+    digits = digits,
+    ...
+  )
+
+  # print table in HTML or markdown format
+  if (format %in% c("html", "tt")) {
+    fun_args$backend <- format
+    do.call(print_html, fun_args)
+  } else {
+    do.call(print_md, fun_args)
   }
 }
 

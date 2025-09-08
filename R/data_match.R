@@ -12,7 +12,7 @@
 #' @param match String, indicating with which logical operation matching
 #'   conditions should be combined. Can be `"and"` (or `"&"`), `"or"` (or `"|"`)
 #'   or `"not"` (or `"!"`).
-#' @param return_indices Logical, if `FALSE`, return the vector of rows that
+#' @param return_indices Logical, if `TRUE`, return the vector of rows that
 #'   can be used to filter the original data frame. If `FALSE` (default),
 #'   returns directly the filtered data frame instead of the row indices.
 #' @param remove_na Logical, if `TRUE`, missing values (`NA`s) are removed before
@@ -26,7 +26,6 @@
 #'   character vector (e.g. `c("x > 4", "y == 2")`) or a variable that contains
 #'   the string representation of a logical expression. These might be useful
 #'   when used in packages to avoid defining undefined global variables.
-#' @param drop_na Deprecated, please use `remove_na` instead.
 #'
 #' @return A filtered data frame, or the row indices that match the specified
 #' configuration.
@@ -106,18 +105,11 @@ data_match <- function(x,
                        match = "and",
                        return_indices = FALSE,
                        remove_na = TRUE,
-                       drop_na,
                        ...) {
   if (!is.data.frame(to)) {
     to <- as.data.frame(to)
   }
   original_x <- x
-
-  ## TODO: remove deprecated argument later
-  if (!missing(drop_na)) {
-    insight::format_warning("Argument `drop_na` is deprecated. Please use `remove_na` instead.")
-    remove_na <- drop_na
-  }
 
   # evaluate
   match <- match.arg(tolower(match), c("and", "&", "&&", "or", "|", "||", "!", "not"))

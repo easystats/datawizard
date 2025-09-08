@@ -1,4 +1,71 @@
-# datawizard (devel)
+# datawizard (development)
+
+BREAKING CHANGES
+
+* Argument `values_fill` in `data_to_wide()` is now defunct, because it did not
+  work as intended (#645).
+
+* `data_to_wide()` no longer removes empty columns that were created after
+  widening data frames, to behave similarly to `tidyr::pivot_wider()` (#645).
+
+CHANGES
+
+* Due to changes in the package `insight`, `data_tabulate()` no longer prints
+  decimals when all values in a column are integers (#641).
+
+* Argument `values_from` in `data_to_wide()` now supports select-helpers like
+  the `select` argument in other `{datawizard}` functions (#645).
+
+* Added a `display()` method for `data_codebook()` (#646).
+
+* `display()` methods now support the `{tinytable}` package. Use `format = "tt"`
+  to export tables as `tinytable` objects (#646).
+
+BUG FIXES
+
+* Fixed an issue when `demean()`ing nested structures with more than 2 grouping
+  variables (#635).
+
+* Fixed an issue when `demean()`ing crossed structures with more than 2 grouping
+  variables (#638).
+
+* Fixed issue in `data_to_wide()` with multiple variables assigned in
+  `values_from` when IDs were not balanced (equally spread across observations)
+  (#644).
+
+# datawizard 1.2.0
+
+BREAKING CHANGES
+
+* The following deprecated arguments have been removed (#603):
+  - `drop_na` in `data_match()`
+  - `safe`, `pattern`, and `verbose` in `data_rename()`
+
+CHANGES
+
+* `data_read()` and `data_write()` now support the `.parquet` file format, via
+  the *nanoparquet* package (#625).
+
+* `data_tabulate()` gets a `display()` method (#627).
+
+* `data_tabulate()` gets an `as.table()` method to coerce the frequency or
+  contingency table into a (list of) `table()` object(s). This can be useful for
+  further statistical analysis, e.g. in combination with `chisq.test()` (#629).
+
+* The `print()` method for `data_tabulate()` now appears in the documentation,
+  making the `big_mark` argument visible (#627).
+
+BUG FIXES
+
+* Fixed an issue when printing cross tables using `data_tabulate(by = ...)`,
+  which was caused by the recent changes in `insight::export_table()`.
+
+* Fixed another issue when printing cross tables using `data_tabulate(by = ...)`,
+  when more than one variable was selected for `select` (#630).
+
+* Fixed typo in the documentation of `data_match()`.
+
+# datawizard 1.1.0
 
 BREAKING CHANGES
 
