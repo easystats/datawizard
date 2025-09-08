@@ -52,3 +52,18 @@ test_that("data_replicate: errors", {
   d$carb[3] <- Inf
   expect_error(data_replicate(d, "carb"), regex = "infinite values")
 })
+
+
+test_that("data_replicate: don't simplify if only one column left", {
+  a <- c(1, 2, 3, 4)
+  b <- c(4, 3, 2, 1)
+  nrtimes <- c(1, 2, 0, 1)
+
+  d <- data.frame(a, b, nrtimes)
+  out <- data_replicate(d, expand = "nrtimes")
+  expect_identical(dim(out), c(4L, 2L))
+
+  d <- data.frame(a, nrtimes)
+  out <- data_replicate(d, expand = "nrtimes")
+  expect_identical(dim(out), c(4L, 1L))
+})
