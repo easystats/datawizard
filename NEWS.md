@@ -65,6 +65,9 @@ BUG FIXES
 
 * Fixed typo in the documentation of `data_match()`.
 
+* Fixed issue in `data_replicate()` when data frame had only one column to
+  replicate (#653).
+
 # datawizard 1.1.0
 
 BREAKING CHANGES
