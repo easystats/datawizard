@@ -338,7 +338,9 @@ test_that("recode_values, labels preserved", {
 
 test_that("slide, labels preserved", {
   data(efc)
-  x <- slide(efc)
+  suppressMessages({
+    x <- slide(efc)
+  })
   expect_equal(
     attr(x$c172code, "label", exact = TRUE),
     attr(efc$c172code, "label", exact = TRUE),

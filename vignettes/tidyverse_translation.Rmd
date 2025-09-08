@@ -80,8 +80,8 @@ This vignette is largely inspired from `{dplyr}`'s [Getting started vignette](ht
 
 <div class="custom_note">
   <p>
-    Note: In this vignette, we use the native pipe-operator, `|>`, which was 
-    introduced in R 4.1. Users of R version 3.6 or 4.0 should replace the native 
+    Note: In this vignette, we use the native pipe-operator, `|>`, which was
+    introduced in R 4.1. Users of R version 3.6 or 4.0 should replace the native
     pipe by magrittr's one (`%>%`) so that examples work.
   </p>
 </div>
@@ -375,14 +375,14 @@ efc |>
 ```{r modify1, eval = evaluate_chunk, echo = FALSE}
 ```
 
-`data_modify()` accepts expressions as strings:
+`data_modify()` supports expressions as strings via its `as_expr()` helper function.
 
 ```{r eval=evaluate_chunk}
 new_exp <- c(
   "c12hour_c = center(c12hour)",
   "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)"
 )
-data_modify(efc, new_exp)
+data_modify(efc, as_expr(new_exp))
 ```
 
 This makes it easy to use it in custom functions:
@@ -391,7 +391,7 @@ This makes it easy to use it in custom functions:
 miles_to_km <- function(data, var) {
   data_modify(
     data,
-    paste0("km = ", var, "* 1.609344")
+    as_expr(paste0("km = ", var, "* 1.609344"))
   )
 }
 
@@ -738,8 +738,7 @@ fish_encounters
 fish_encounters |>
   data_to_wide(
     names_from = "station",
-    values_from = "seen",
-    values_fill = 0
+    values_from = "seen"
   )
 ```
 :::
@@ -751,8 +750,7 @@ fish_encounters |>
 fish_encounters |>
   pivot_wider(
     names_from = station,
-    values_from = seen,
-    values_fill = 0
+    values_from = seen
   )
 ```
 :::

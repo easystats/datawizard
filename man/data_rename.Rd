@@ -5,15 +5,7 @@
 \alias{data_rename_rows}
 \title{Rename columns and variable names}
 \usage{
-data_rename(
-  data,
-  select = NULL,
-  replacement = NULL,
-  safe = TRUE,
-  verbose = TRUE,
-  pattern = NULL,
-  ...
-)
+data_rename(data, select = NULL, replacement = NULL, ...)
 
 data_rename_rows(data, rows = NULL)
 }
@@ -93,12 +85,6 @@ An example for the use of tokens is...
 }
 
 If \code{select} is a named vector, \code{replacement} is ignored.}
-
-\item{safe}{Deprecated. Passing unknown column names now always errors.}
-
-\item{verbose}{Toggle warnings.}
-
-\item{pattern}{Deprecated. Use \code{select} instead.}
 
 \item{...}{Other arguments passed to or from other functions.}
 

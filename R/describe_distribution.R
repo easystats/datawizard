@@ -5,27 +5,30 @@
 #'
 #' @param x A numeric vector, a character vector, a data frame, or a list. See
 #' `Details`.
+#' @param by Column names indicating how to split the data in various groups
+#' before describing the distribution. `by` groups will be added to potentially
+#' existing groups created by `data_group()`.
 #' @param range Return the range (min and max).
-#' @param quartiles Return the first and third quartiles (25th and 75pth
+#' @param quartiles Return the first and third quartiles (25th and 75th
 #'   percentiles).
 #' @param include_factors Logical, if `TRUE`, factors are included in the
 #'   output, however, only columns for range (first and last factor levels) as
 #'   well as n and missing will contain information.
 #' @param ci Confidence Interval (CI) level. Default is `NULL`, i.e. no
-#'   confidence intervals are computed. If not `NULL`, confidence intervals
-#'   are based on bootstrap replicates (see `iterations`). If
-#'   `centrality = "all"`, the bootstrapped confidence interval refers to
-#'   the first centrality index (which is typically the median).
+#'   confidence intervals are computed. If not `NULL`, confidence intervals are
+#'   based on bootstrap replicates (see `iterations`).
 #' @param iterations The number of bootstrap replicates for computing confidence
-#'   intervals. Only applies when `ci` is not `NULL`.
-#' @param iqr Logical, if `TRUE`, the interquartile range is calculated
-#'   (based on [stats::IQR()], using `type = 6`).
-#' @param verbose Toggle warnings and messages.
+#'   intervals. Only applies when `ci` is not `NULL`. Defaults to `100`. For
+#'   more stable results, increase the number of `iterations`, but note that this
+#'   can also increase the computation time significantly.
+#' @param iqr Logical, if `TRUE`, the interquartile range is calculated (based
+#'   on [stats::IQR()], using `type = 6`).
+#' @param verbose Show or silence warnings and messages.
 #' @inheritParams bayestestR::point_estimate
 #' @inheritParams extract_column_names
 #'
 #' @details If `x` is a data frame, only numeric variables are kept and will be
-#' displayed in the summary.
+#' displayed in the summary by default.
 #'
 #' If `x` is a list, the behavior is different whether `x` is a stored list. If
 #' `x` is stored (for example, `describe_distribution(mylist)` where `mylist`
@@ -36,8 +39,7 @@
 #'
 #' @note There is also a
 #'   [`plot()`-method](https://easystats.github.io/see/articles/parameters.html)
-#'   implemented in the
-#'   \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#'   implemented in the [**see**-package](https://easystats.github.io/see/).
 #'
 #' @return A data frame with columns that describe the properties of the variables.
 #'
@@ -138,8 +140,8 @@ describe_distribution.list <- function(x,
   class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
   attr(out, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(out, "ci") <- ci
+  attr(out, "centrality") <- centrality
   attr(out, "threshold") <- threshold
-  if (centrality == "all") attr(out, "first_centrality") <- colnames(out)[2]
   out
 }
 
@@ -172,6 +174,7 @@ describe_distribution.numeric <- function(x,
       centrality = centrality,
       dispersion = dispersion,
       threshold = threshold,
+      verbose = verbose,
       ...
     )
   )
@@ -186,27 +189,38 @@ describe_distribution.numeric <- function(x,
   # Confidence Intervals
   if (!is.null(ci)) {
     insight::check_if_installed("boot")
-    results <- tryCatch(
-      {
-        boot::boot(
-          data = x,
-          statistic = .boot_distribution,
-          R = iterations,
-          centrality = centrality
-        )
-      },
-      error = function(e) {
-        msg <- conditionMessage(e)
-        if (!is.null(msg) && msg == "sample is too sparse to find TD") {
-          insight::format_warning(
-            "When bootstrapping CIs, sample was too sparse to find TD. Returning NA for CIs."
+    # tell user about bootstrapping and appropriate number of iterations.
+    # "show_iterations_msg" is an undocumented argument that is only passed
+    # internally to this function to avoid multiple repeated messages
+    if (!isFALSE(list(...)$show_iterations_msg)) {
+      .show_iterations_warning(verbose, iterations, ci)
+    }
+    # calculate CI for each centrality
+    for (cntr in .centrality_options(centrality)) {
+      results <- tryCatch(
+        {
+          boot::boot(
+            data = x,
+            statistic = .boot_distribution,
+            R = iterations,
+            centrality = cntr
           )
-          list(t = c(NA_real_, NA_real_))
+        },
+        error = function(e) {
+          msg <- conditionMessage(e)
+          if (!is.null(msg) && msg == "sample is too sparse to find TD") {
+            insight::format_warning(
+              "When bootstrapping CIs, sample was too sparse to find TD. Returning NA for CIs."
+            )
+            list(t = c(NA_real_, NA_real_))
+          }
         }
-      }
-    )
-    out_ci <- bayestestR::ci(results$t, ci = ci, verbose = FALSE)
-    out <- cbind(out, data.frame(CI_low = out_ci$CI_low[1], CI_high = out_ci$CI_high[1]))
+      )
+      out_ci <- bayestestR::ci(results$t, ci = ci, verbose = FALSE)
+      ci_data <- data.frame(out_ci$CI_low[1], out_ci$CI_high[1])
+      colnames(ci_data) <- c(paste0("CI_low_", cntr), paste0("CI_high_", cntr))
+      out <- cbind(out, ci_data)
+    }
   }
 
 
@@ -248,8 +262,8 @@ describe_distribution.numeric <- function(x,
   class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
   attr(out, "data") <- x
   attr(out, "ci") <- ci
+  attr(out, "centrality") <- centrality
   attr(out, "threshold") <- threshold
-  if (centrality == "all") attr(out, "first_centrality") <- colnames(out)[1]
   out
 }
 
@@ -392,6 +406,7 @@ describe_distribution.data.frame <- function(x,
                                              ignore_case = FALSE,
                                              regex = FALSE,
                                              verbose = TRUE,
+                                             by = NULL,
                                              ...) {
   select <- .select_nse(select,
     x,
@@ -400,6 +415,39 @@ describe_distribution.data.frame <- function(x,
     regex = regex,
     verbose = verbose
   )
+
+  # check for reserved variable names
+  .check_for_reserved_names(select)
+
+  # tell user about bootstrapping and appropriate number of iterations
+  .show_iterations_warning(verbose, iterations, ci)
+
+  if (!is.null(by)) {
+    if (!is.character(by)) {
+      insight::format_error("`by` must be a character vector.")
+    }
+    x <- data_group(x, by)
+    out <- describe_distribution(
+      x,
+      select = select,
+      exclude = exclude,
+      centrality = centrality,
+      dispersion = dispersion,
+      iqr = iqr,
+      range = range,
+      quartiles = quartiles,
+      include_factors = include_factors,
+      ci = ci,
+      iterations = iterations,
+      threshold = threshold,
+      ignore_case = ignore_case,
+      regex = regex,
+      verbose = verbose
+    )
+    out <- data_ungroup(out)
+    return(out)
+  }
+
   # The function currently doesn't support descriptive summaries for character
   # or factor types.
   out <- do.call(rbind, lapply(x[select], function(i) {
@@ -414,7 +462,8 @@ describe_distribution.data.frame <- function(x,
         ci = ci,
         iterations = iterations,
         threshold = threshold,
-        verbose = verbose
+        verbose = verbose,
+        show_iterations_msg = FALSE
       )
     }
   }))
@@ -430,8 +479,8 @@ describe_distribution.data.frame <- function(x,
   class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
   attr(out, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(out, "ci") <- ci
+  attr(out, "centrality") <- centrality
   attr(out, "threshold") <- threshold
-  if (centrality == "all") attr(out, "first_centrality") <- colnames(out)[2]
   out
 }
 
@@ -452,10 +501,23 @@ describe_distribution.grouped_df <- function(x,
                                              ignore_case = FALSE,
                                              regex = FALSE,
                                              verbose = TRUE,
+                                             by = NULL,
                                              ...) {
+  if (!is.null(by)) {
+    if (!is.character(by)) {
+      insight::format_error("`by` must be a character vector.")
+    }
+    existing_grps <- setdiff(colnames(attributes(x)$groups), ".rows")
+    x <- data_group(x, c(existing_grps, by))
+  }
   group_vars <- setdiff(colnames(attributes(x)$groups), ".rows")
   group_data <- expand.grid(lapply(x[group_vars], function(i) unique(sort(i))))
   groups <- split(x, x[group_vars])
+  groups <- Filter(function(x) nrow(x) > 0, groups)
+
+  # check for reserved variable names
+  .check_for_reserved_names(group_vars, type = "group_vars")
+
   select <- .select_nse(select,
     x,
     exclude,
@@ -463,6 +525,9 @@ describe_distribution.grouped_df <- function(x,
     regex = regex,
     verbose = verbose
   )
+
+  # tell user about bootstrapping and appropriate number of iterations
+  .show_iterations_warning(verbose, iterations, ci)
 
   out <- do.call(rbind, lapply(seq_along(groups), function(i) {
     d <- describe_distribution.data.frame(
@@ -476,16 +541,15 @@ describe_distribution.grouped_df <- function(x,
       ci = ci,
       iterations = iterations,
       threshold = threshold,
+      verbose = verbose,
+      show_iterations_msg = FALSE,
       ...
     )
 
-
-    d[[".group"]] <-
-      paste(sprintf(
-        "%s=%s",
-        group_vars,
-        vapply(group_data[i, ], as.character, FUN.VALUE = character(1L))
-      ), collapse = " | ")
+    for (grp in seq_along(group_vars)) {
+      d[[group_vars[grp]]] <- group_data[i, grp]
+    }
+    d <- data_relocate(d, group_vars, before = 1)
 
     d
   }))
@@ -493,8 +557,8 @@ describe_distribution.grouped_df <- function(x,
   class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
   attr(out, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(out, "ci") <- ci
+  attr(out, "centrality") <- centrality
   attr(out, "threshold") <- threshold
-  if (centrality == "all") attr(out, "first_centrality") <- colnames(out)[2]
   out
 }
 
@@ -516,6 +580,79 @@ print.parameters_distribution <- function(x, digits = 2, ...) {
 }
 
 
+#' @export
+print_md.parameters_distribution <- function(x, digits = 2, ci_brackets = c("(", ")"), ...) {
+  formatted_table <- format(
+    x = x,
+    digits = digits,
+    format = "markdown",
+    ci_width = NULL,
+    ci_brackets = ci_brackets,
+    ...
+  )
+
+  insight::export_table(formatted_table, format = "markdown", align = "firstleft", ...)
+}
+
+
+#' @export
+print_html.parameters_distribution <- function(x, digits = 2, ci_brackets = c("(", ")"), ...) {
+  formatted_table <- format(
+    x = x,
+    digits = digits,
+    format = "html",
+    ci_width = NULL,
+    ci_brackets = ci_brackets,
+    ...
+  )
+
+  # determine backend
+  backend <- .check_format_backend(...)
+
+  # pass arguments to export_table
+  fun_args <- list(
+    formatted_table,
+    format = backend,
+    ...
+  )
+
+  # no "align" for format "tt" - this currently gives an error. Not sure
+  # if related to insight::export_table or tinytable
+  if (identical(backend, "html")) {
+    fun_args$align <- "firstleft"
+  }
+
+  do.call(insight::export_table, fun_args)
+}
+
+
+#' @export
+display.parameters_distribution <- function(object, format = "markdown", digits = 2, ...) {
+  format <- .display_default_format(format)
+
+  fun_args <- list(
+    x = object,
+    digits = digits,
+    ...
+  )
+
+  # print table in HTML or markdown format
+  if (format %in% c("html", "tt")) {
+    fun_args$backend <- format
+    do.call(print_html, fun_args)
+  } else {
+    do.call(print_md, fun_args)
+  }
+}
+
+
+#' @export
+plot.parameters_distribution <- function(x, ...) {
+  insight::check_if_installed("see")
+  NextMethod()
+}
+
+
 # bootstrapping CIs ----------------------------------
 
 .boot_distribution <- function(data, indices, centrality) {
@@ -526,7 +663,56 @@ print.parameters_distribution <- function(x, digits = 2, ...) {
     iqr = FALSE,
     range = FALSE,
     quartiles = FALSE,
-    ci = NULL
+    ci = NULL,
+    verbose = FALSE
   )
   out[[1]]
+}
+
+
+# check centrality options ----------------------------------------
+
+.centrality_options <- function(centrality) {
+  if (identical(centrality, "all")) {
+    c("mean", "median", "MAP")
+  } else {
+    centrality
+  }
+}
+
+
+# sanity check ----------------------------------------
+
+.check_for_reserved_names <- function(x, type = "select") {
+  reserved_names <- c(
+    "Variable", "CI_low", "CI_high", "n_Missing", "Q1", "Q3", "Quartiles",
+    "Min", "Max", "Range", "Trimmed_Mean", "Trimmed", "Mean", "SD", "IQR",
+    "Skewness", "Kurtosis", "n", "Median", "MAD", "MAP", "IQR", "n_Missing"
+  )
+  invalid_names <- intersect(reserved_names, x)
+
+  if (length(invalid_names) > 0) {
+    # adapt message to show user whether wrong variables appear in grouping or select
+    msg <- switch(type,
+      select = "with `describe_distribution()`: ",
+      "as grouping variables in `describe_distribution()`: "
+    )
+    insight::format_error(paste0(
+      "Following variable names are reserved and cannot be used ",
+      msg,
+      text_concatenate(invalid_names, enclose = "`"),
+      ". Please rename these variables in your data."
+    ))
+  }
+}
+
+
+.show_iterations_warning <- function(verbose, iterations = 100, ci = NULL) {
+  if (verbose && !is.null(ci)) {
+    msg <- paste("Bootstrapping confidence intervals using", iterations, "iterations, please be patient...")
+    if (iterations < 200) {
+      msg <- c(msg, "For more stable intervals, increase the number of `iterations`, but note that this can also increase the computation time significantly.") # nolint
+    }
+    insight::format_alert(msg)
+  }
 }

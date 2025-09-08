@@ -3,6 +3,7 @@
 \name{data_codebook}
 \alias{data_codebook}
 \alias{print_html.data_codebook}
+\alias{display.data_codebook}
 \title{Generate a codebook of a data frame.}
 \usage{
 data_codebook(
@@ -21,6 +22,15 @@ data_codebook(
 
 \method{print_html}{data_codebook}(
   x,
+  font_size = "100\%",
+  line_padding = 3,
+  row_color = "#eeeeee",
+  ...
+)
+
+\method{display}{data_codebook}(
+  object,
+  format = "markdown",
   font_size = "100\%",
   line_padding = 3,
   row_color = "#eeeeee",
@@ -115,6 +125,14 @@ functions (see 'Details'), this argument may be used as workaround.}
 \item{line_padding}{For HTML tables, the distance (in pixel) between lines.}
 
 \item{row_color}{For HTML tables, the fill color for odd rows.}
+
+\item{object}{An object returned by \code{data_tabulate()}.}
+
+\item{format}{String, indicating the output format. Can be \code{"markdown"}
+\code{"html"}, or \code{"tt"}. \code{format = "html"} create an HTML table using the \emph{gt}
+package. \code{format = "tt"} creates a \code{tinytable} object, which is either
+printed as markdown or HTML table, depending on the environment. See
+\code{\link[insight:export_table]{insight::export_table()}} for details.}
 }
 \value{
 A formatted data frame, summarizing the content of the data frame.

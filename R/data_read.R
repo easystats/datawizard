@@ -32,12 +32,13 @@
 #'
 #' @section Supported file types:
 #' - `data_read()` is a wrapper around the **haven**, **data.table**, **readr**
-#'  **readxl** and **rio** packages. Currently supported file types are `.txt`,
-#'  `.csv`, `.xls`, `.xlsx`, `.sav`, `.por`, `.dta` and `.sas` (and related
-#'  files). All other file types are passed to `rio::import()`.
-#' - `data_write()` is a wrapper around **haven**, **readr** and **rio**
-#'  packages, and supports writing files into all formats supported by these
-#'  packages.
+#'   **readxl**, **nanoparquet** and **rio** packages. Currently supported file
+#'   types are `.txt`, `.csv`, `.xls`, `.xlsx`, `.sav`, `.por`, `.dta`, `.sas`,
+#'   `.rda`, `.parquet`, `.rdata`, and `.rds` (and related files). All other file
+#'   types are passed to `rio::import()`.
+#' - `data_write()` is a wrapper around **haven**, **readr**, **nanoparquet**,
+#'   and **rio** packages, and supports writing files into all formats supported
+#'   by these packages.
 #'
 #' @section Compressed files (zip) and URLs:
 #' `data_read()` can also read the above mentioned files from URLs or from
@@ -101,12 +102,16 @@ data_read <- function(path,
   out <- switch(file_type,
     txt = ,
     csv = .read_text(path, encoding, verbose, ...),
+    rda = ,
+    rdata = .read_base_rda(path, file_type, verbose, ...),
+    rds = .read_base_rds(path, verbose, ...),
     xls = ,
     xlsx = .read_excel(path, encoding, verbose, ...),
     sav = ,
     por = .read_spss(path, encoding, convert_factors, verbose, ...),
     dta = .read_stata(path, encoding, convert_factors, verbose, ...),
     sas7bdat = .read_sas(path, path_catalog, encoding, convert_factors, verbose, ...),
+    parquet = .read_parquet(path, verbose, ...),
     .read_unknown(path, file_type, verbose, ...)
   )
 
@@ -273,8 +278,7 @@ data_read <- function(path,
       encoding <- "unknown"
     }
     out <- data.table::fread(input = path, encoding = encoding, ...)
-    class(out) <- "data.frame"
-    return(out)
+    return(as.data.frame(out))
   }
 
   insight::check_if_installed("readr", reason = paste0("to read files of type '", .file_ext(path), "'"))
@@ -282,8 +286,7 @@ data_read <- function(path,
     insight::format_alert("Reading data...")
   }
   out <- readr::read_delim(path, ...)
-  class(out) <- "data.frame"
-  out
+  as.data.frame(out)
 }
 
 
@@ -295,10 +298,146 @@ data_read <- function(path,
   # set up arguments. for RDS, we set trust = TRUE, to avoid warnings
   rio_args <- list(file = path)
   # check if we have RDS, and if so, add trust = TRUE
-  if (file_type %in% c("rds", "rdata")) {
+  if (file_type %in% c("rds", "rdata", "rda")) {
     rio_args$trust <- TRUE
   }
   out <- do.call(rio::import, c(rio_args, list(...)))
+
+  # check if loaded file is a data frame, or not (e.g. model objects)
+  # it returns `NULL` if the file is no valid data file that contains a data
+  # frame.frame, or cannot be coerced to a data frame. Else, if it was a data
+  # frame or could be coerced into one, the (new) data frame is returned. In
+  # this case, we overwrite "out", else we keep its original object.
+  valid_data_object <- .get_data_from_loaded_file(out, verbose)
+  # if file could be coerced to a data frame, overwrite out
+  if (!is.null(valid_data_object)) {
+    out <- valid_data_object
+  }
+
+  out
+}
+
+
+.read_base_rda <- function(path, file_type, verbose = TRUE, ...) {
+  if (verbose) {
+    insight::format_alert("Reading data...")
+  }
+
+  # check URLs
+  path <- .check_path_url(path, file_type)
+
+  # since RData and rda can keep multiple files, we load them into a
+  # new environment and return them as list object then
+  env <- new.env()
+  load(file = path, envir = env)
+
+  # if the RData file contains more than one object, we don't check the output
+  # but just return everything
+  if (length(ls(env)) > 1) {
+    if (verbose) {
+      insight::format_alert("File contained more than one object, returning all objects.")
+    }
+    return(as.list(env))
+  }
+
+  # else, retrieve loaded object
+  out <- get(ls(env)[1], env)
+
+  # check if loaded file is a data frame, or not (e.g. model objects)
+  # it returns `NULL` if the file is no valid data file that contains a data
+  # frame.frame, or cannot be coerced to a data frame. Else, if it was a data
+  # frame or could be coerced into one, the (new) data frame is returned. In
+  # this case, we overwrite "out", else we keep its original object.
+  valid_data_object <- .get_data_from_loaded_file(out, verbose)
+  # if file could be coerced to a data frame, overwrite out
+  if (!is.null(valid_data_object)) {
+    out <- valid_data_object
+  }
+
+  out
+}
+
+
+.read_base_rds <- function(path, verbose = TRUE, ...) {
+  if (verbose) {
+    insight::format_alert("Reading data...")
+  }
+
+  # check URLs
+  path <- .check_path_url(path, file_type = "rds")
+  out <- readRDS(file = path)
+
+  # check if loaded file is a data frame, or not (e.g. model objects)
+  # it returns `NULL` if the file is no valid data file that contains a data
+  # frame.frame, or cannot be coerced to a data frame. Else, if it was a data
+  # frame or could be coerced into one, the (new) data frame is returned. In
+  # this case, we overwrite "out", else we keep its original object.
+  valid_data_object <- .get_data_from_loaded_file(out, verbose)
+  # if file could be coerced to a data frame, overwrite out
+  if (!is.null(valid_data_object)) {
+    out <- valid_data_object
+  }
+
+  out
+}
+
+
+.read_parquet <- function(path, verbose = TRUE, ...) {
+  # requires nanoparquet package
+  insight::check_if_installed("nanoparquet")
+
+  if (verbose) {
+    insight::format_alert("Reading data...")
+  }
+
+  # check URLs
+  path <- .check_path_url(path, file_type = "parquet")
+  out <- nanoparquet::read_parquet(file = path, ...)
+
+  as.data.frame(out)
+}
+
+
+# check input helper --------------------------------------------------------
+
+# for URLs, we need to download the file and save it locally
+.check_path_url <- function(path, file_type) {
+  url_pattern <- "^(https?|ftp)://(.*)"
+  # check if file path is an URL
+  if (grepl(url_pattern, path)) {
+    insight::check_if_installed("curl")
+    if (curl::has_internet()) {
+      # if yes, create temp file and save file locally
+      temp_file <- tempfile(fileext = paste0(".", file_type))
+      download <- curl::curl_fetch_memory(path)
+      writeBin(object = download$content, con = temp_file)
+      # return path to temp file
+      path <- temp_file
+    } else {
+      insight::format_error(
+        "No internet connection detected. Could not download file from URL."
+      )
+    }
+  }
+  path
+}
+
+
+.get_data_from_loaded_file <- function(out, verbose = TRUE) {
+  # it is also possible to read in pre-compiled model objects with data_read()
+  # in this case, just return as is. We do this check before we check with
+  # "is.data.frame()", because some models (like brmsfit) have an `as.data.frame()`
+  # method, which coerces the model object into a data frame, which is likely to
+  # be not intentional
+  if (insight::is_model(out)) {
+    if (verbose) {
+      insight::format_alert(
+        paste0("Imported file is a regression model object of class \"", class(out)[1], "\"."),
+        "Returning file as is."
+      )
+    }
+    return(NULL)
+  }
 
   # for "unknown" data formats (like .RDS), which still can be imported via
   # "rio::import()", we must check whether we actually have a data frame or
@@ -312,7 +451,7 @@ data_read <- function(path,
           "Returning file as is. Please check if importing this file was intended."
         )
       }
-      return(out)
+      return(NULL)
     }
     out <- tmp
   }

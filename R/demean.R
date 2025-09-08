@@ -57,7 +57,7 @@
 #' grouping level, e.g. `predictor_L3_between` and `predictor_L2_between`.
 #'
 #' @seealso If grand-mean centering (instead of centering within-clusters)
-#'   is required, see [`center()`]. See [`performance::check_heterogeneity_bias()`]
+#'   is required, see [`center()`]. See [`performance::check_group_variation()`]
 #'   to check for heterogeneity bias.
 #'
 #' @section Heterogeneity Bias:
@@ -454,14 +454,13 @@ degroup <- function(x,
     # xbar(jk) <- ave(x_ijk, L3, L2, FUN = mean), the group mean of the variable at second level
     group_means_list <- lapply(select, function(i) {
       out <- lapply(seq_along(by), function(k) {
-        dat$higher_levels <- do.call(paste, c(dat[by[1:k]], list(sep = "_")))
-        stats::ave(dat[[i]], dat$higher_levels, FUN = gm_fun)
+        stats::ave(dat[[i]], dat[, by[1:k], drop = FALSE], FUN = gm_fun)
       })
       # subtract mean of higher level from lower level
       for (j in 2:length(by)) {
         out[[j]] <- out[[j]] - out[[j - 1]]
       }
-      names(out) <- paste0(select, "_", by)
+      names(out) <- paste0(i, "_", by)
       out
     })
     # create de-meaned variables by subtracting the group mean from each individual value
@@ -470,8 +469,7 @@ degroup <- function(x,
       # function(i) dat[[select[i]]] - group_means_list[[i]][[length(by)]]
       select,
       function(i) {
-        dat$higher_levels <- do.call(paste, c(dat[by], list(sep = "_")))
-        dat[[i]] - stats::ave(dat[[i]], dat$higher_levels, FUN = gm_fun)
+        dat[[i]] - stats::ave(dat[[i]], dat[, by, drop = FALSE], FUN = gm_fun)
       }
     )
   } else {
@@ -483,11 +481,13 @@ degroup <- function(x,
       names(out) <- paste0(select, "_", j)
       out
     })
+    group_means_list <- unlist(group_means_list, recursive = FALSE)
+
     # de-meaned variables for cross-classified design is simply subtracting
     # all group means from each individual value
-    person_means_list <- lapply(seq_along(select), function(i) {
-      sum_group_means <- do.call(`+`, lapply(group_means_list, function(j) j[[i]]))
-      dat[[select[i]]] - sum_group_means
+    person_means_list <- lapply(select, function(i) {
+      sum_group_means <- Reduce("+", group_means_list[paste0(i, "_", by)])
+      dat[[i]] - sum_group_means
     })
   }
 

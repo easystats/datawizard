@@ -89,3 +89,16 @@
       5          5.0         0.2          5.0         0.2  setosa
       6          5.4         0.4          5.4         0.4  setosa
 
+# data_modify works with new expressions, different use cases same results
+
+    Code
+      print(head(out_complex))
+    Output
+        Species sepwid seplen half_petal new_var new_num new_var2 new_num2
+      1  setosa    7.0   25.5       0.70  string       1       ho        4
+      2  setosa    6.0   24.5       0.70  string       2       ho        5
+      3  setosa    6.4   23.5       0.65  string       3       ho        6
+      4  setosa    6.2   23.0       0.75  string       4       ho        4
+      5  setosa    7.2   25.0       0.70  string       5       ho        5
+      6  setosa    7.8   27.0       0.85  string       1       ho        6
+
