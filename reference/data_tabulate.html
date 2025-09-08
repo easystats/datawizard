@@ -13,7 +13,7 @@ percentages can be calculated."><meta property="og:image" content="https://easys
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -115,7 +115,10 @@ percentages can be calculated.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">as.table</a></span><span class="op">(</span><span class="va">x</span>, remove_na <span class="op">=</span> <span class="cn">TRUE</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'datawizard_table'</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, big_mark <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, big_mark <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'datawizard_table'</span></span>
+<span><span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span><span class="va">object</span>, big_mark <span class="op">=</span> <span class="cn">NULL</span>, format <span class="op">=</span> <span class="st">"markdown"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -275,6 +278,18 @@ methods. To ensure consistent output, the default is <code>FALSE</code>.</p></dd
 used for large numbers. If <code>NULL</code> (default), a big mark is added automatically for
 large numbers (i.e. numbers with more than 5 digits). If you want to remove
 the big mark, set <code>big_mark = ""</code>.</p></dd>
+
+
+<dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
+<dd><p>An object returned by <code>data_tabulate()</code>.</p></dd>
+
+
+<dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
+<dd><p>String, indicating the output format. Can be <code>"markdown"</code>
+<code>"html"</code>, or <code>"tt"</code>. <code>format = "html"</code> create an HTML table using the <em>gt</em>
+package. <code>format = "tt"</code> creates a <code>tinytable</code> object, which is either
+printed as markdown or HTML table, depending on the environment. See
+<code><a href="https://easystats.github.io/insight/reference/export_table.html" class="external-link">insight::export_table()</a></code> for details.</p></dd>
 
 </dl></div>
     <div class="section level2">

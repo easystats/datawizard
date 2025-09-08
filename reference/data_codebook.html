@@ -11,7 +11,7 @@ labels, values or value range, frequencies, amount of missing values)."><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,6 +83,16 @@ labels, values or value range, frequencies, amount of missing values).</p>
 <span><span class="co"># S3 method for class 'data_codebook'</span></span>
 <span><span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_html</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
+<span>  font_size <span class="op">=</span> <span class="st">"100%"</span>,</span>
+<span>  line_padding <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  row_color <span class="op">=</span> <span class="st">"#eeeeee"</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'data_codebook'</span></span>
+<span><span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  format <span class="op">=</span> <span class="st">"markdown"</span>,</span>
 <span>  font_size <span class="op">=</span> <span class="st">"100%"</span>,</span>
 <span>  line_padding <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  row_color <span class="op">=</span> <span class="st">"#eeeeee"</span>,</span>
@@ -206,6 +216,18 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
 
 <dt id="arg-row-color">row_color<a class="anchor" aria-label="anchor" href="#arg-row-color"></a></dt>
 <dd><p>For HTML tables, the fill color for odd rows.</p></dd>
+
+
+<dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
+<dd><p>An object returned by <code><a href="data_tabulate.html">data_tabulate()</a></code>.</p></dd>
+
+
+<dt id="arg-format">format<a class="anchor" aria-label="anchor" href="#arg-format"></a></dt>
+<dd><p>String, indicating the output format. Can be <code>"markdown"</code>
+<code>"html"</code>, or <code>"tt"</code>. <code>format = "html"</code> create an HTML table using the <em>gt</em>
+package. <code>format = "tt"</code> creates a <code>tinytable</code> object, which is either
+printed as markdown or HTML table, depending on the environment. See
+<code><a href="https://easystats.github.io/insight/reference/export_table.html" class="external-link">insight::export_table()</a></code> for details.</p></dd>
 
 </dl></div>
     <div class="section level2">
