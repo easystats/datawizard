@@ -738,8 +738,7 @@ fish_encounters
 fish_encounters |>
   data_to_wide(
     names_from = "station",
-    values_from = "seen",
-    values_fill = 0
+    values_from = "seen"
   )
 ```
 :::
@@ -751,8 +750,7 @@ fish_encounters |>
 fish_encounters |>
   pivot_wider(
     names_from = station,
-    values_from = seen,
-    values_fill = 0
+    values_from = seen
   )
 ```
 :::

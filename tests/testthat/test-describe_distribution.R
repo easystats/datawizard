@@ -404,3 +404,11 @@ test_that("display() method exports to markdown", {
   expect_error(display(out, format = "invalid"), regex = "Invalid option")
   expect_snapshot(display(out))
 })
+
+
+test_that("display() method exports to tinytable", {
+  skip_if_not_installed("tinytable")
+  data(iris)
+  out <- describe_distribution(iris)
+  expect_snapshot(display(out, format = "tt"))
+})

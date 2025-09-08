@@ -14,6 +14,8 @@ data_to_wide(
   names_prefix = "",
   names_glue = NULL,
   values_fill = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
   verbose = TRUE,
   ...
 )
@@ -27,6 +29,8 @@ reshape_wider(
   names_prefix = "",
   names_glue = NULL,
   values_fill = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
   verbose = TRUE,
   ...
 )
@@ -44,13 +48,17 @@ also be a character vector with more than one name of identifier columns. See
 also 'Details' and 'Examples'.}
 
 \item{values_from}{The name of the columns in the original data that contains
-the values used to fill the new columns created in the widened data.}
+the values used to fill the new columns created in the widened data. Can also
+be one of the selection helpers (see argument \code{select} in \code{\link[=data_select]{data_select()}}).}
 
 \item{names_from}{The name of the column in the original data whose values
 will be used for naming the new columns created in the widened data. Each
 unique value in this column will become the name of one of these new columns.
 In case \code{names_prefix} is provided, column names will be concatenated with
-the string given in \code{names_prefix}.}
+the string given in \code{names_prefix}. If \code{values_from} specifies more than one
+variable that should be widened, the new column names are a combination of
+the old column names in \code{values_from} and the \emph{values} from \code{names_from}, to
+avoid duplicate column names.}
 
 \item{names_sep}{If \code{names_from} or \code{values_from} contains multiple variables,
 this will be used to join their values together into a single string to use
@@ -65,8 +73,21 @@ syntactic variable names.}
 \code{names_from} columns to create custom column names. Note that the only
 delimiters supported by \code{names_glue} are curly brackets, \verb{\{} and \verb{\}}.}
 
-\item{values_fill}{Optionally, a (scalar) value that will be used to replace
-missing values in the new columns created.}
+\item{values_fill}{Defunct argument, which has no function anymore. Will be
+removed in future versions.}
+
+\item{ignore_case}{Logical, if \code{TRUE} and when one of the select-helpers or
+a regular expression is used in \code{select}, ignores lower/upper case in the
+search pattern when matching against variable names.}
+
+\item{regex}{Logical, if \code{TRUE}, the search pattern from \code{select} will be
+treated as regular expression. When \code{regex = TRUE}, select \emph{must} be a
+character string (or a variable containing a character string) and is not
+allowed to be one of the supported select-helpers or a character vector
+of length > 1. \code{regex = TRUE} is comparable to using one of the two
+select-helpers, \code{select = contains()} or \code{select = regex()}, however,
+since the select-helpers may not work when called from inside other
+functions (see 'Details'), this argument may be used as workaround.}
 
 \item{verbose}{Toggle warnings.}
 
@@ -94,7 +115,7 @@ necessary information for \code{data_to_wide()} is:
 (\code{names_from}). Since these values may not necessarily reflect appropriate
 column names, you can use \code{names_prefix} to add a prefix to each newly
 created column name.
-\item The name of the column that contains the values (\code{values_from}) for the
+\item The name of the column(s) that contain the values (\code{values_from}) for the
 new columns that are created by \code{names_from}.
 }
 
@@ -153,6 +174,27 @@ data_to_wide(
   names_glue = "prod_{product}_{country}"
 )
 
+# reshaping multiple long columns into wide format. to avoid duplicate
+# column names, new names are a combination of the old column names in
+# `values_from` and the values from `names_from`
+data_long <- read.table(header = TRUE, text = "
+subject_id time score anxiety test
+         1    1    10       5   NA
+         1    2    NA       7   NA
+         2    1    15       6   NA
+         2    2    12      NA   NA
+         3    1    18       8   NA
+         5    2    11       4   NA
+         4    1    NA       5   NA
+         4    2    14      NA   NA")
+
+data_to_wide(
+  data_long,
+  id_cols = "subject_id",
+  names_from = "time",
+  values_from = c("score", "anxiety", "test")
+)
+
 # using the "sleepstudy" dataset
 data(sleepstudy, package = "lme4")
 
@@ -193,16 +235,6 @@ data_to_wide(
   names_from = "Days",
   values_from = "Reaction",
   names_prefix = "Reaction_Day_"
-)
-
-# filling missing values with 0
-data_to_wide(
-  d,
-  id_cols = "Subject",
-  names_from = "Days",
-  values_from = "Reaction",
-  names_prefix = "Reaction_Day_",
-  values_fill = 0
 )
 \dontshow{\}) # examplesIf}
 }
