@@ -519,7 +519,7 @@ as.table.datawizard_table <- function(x, remove_na = TRUE, simplify = FALSE, ver
       insight::format_alert("Removing NA values from frequency table.")
     }
     # remove NA values from the table
-    x <- x[!is.na(x$Value), ]
+    x <- x[!is.na(x$Value), , drop = FALSE]
   }
   # coerce to table
   result <- as.table(stats::setNames(x[["N"]], x$Value))

@@ -36,6 +36,9 @@ BUG FIXES
   `values_from` when IDs were not balanced (equally spread across observations)
   (#644).
 
+* Fixed issue in `data_replicate()` when data frame had only one column to
+  replicate (#654).
+
 # datawizard 1.2.0
 
 BREAKING CHANGES
