@@ -21,7 +21,8 @@ CHANGES
 * `display()` methods now support the `{tinytable}` package. Use `format = "tt"`
   to export tables as `tinytable` objects (#646).
 
-* Improved performance of `data_filter()` for grouped tibbles (#651).
+* Improved performance for several functions that process grouped data frames,
+  when the input was a grouped `tibble` (#651).
 
 BUG FIXES
 
