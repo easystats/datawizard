@@ -21,6 +21,9 @@ CHANGES
 * `display()` methods now support the `{tinytable}` package. Use `format = "tt"`
   to export tables as `tinytable` objects (#646).
 
+* Improved performance for several functions that process grouped data frames
+  when the input is a grouped `tibble` (#651).
+
 BUG FIXES
 
 * Fixed an issue when `demean()`ing nested structures with more than 2 grouping

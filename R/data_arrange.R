@@ -33,8 +33,18 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
     return(data)
   }
 
+  original_x <- data
+
   # Input validation check
   data <- .coerce_to_dataframe(data)
+
+  # Remove tidyverse attributes, will add them back at the end
+  if (inherits(original_x, "tbl_df")) {
+    tbl_input <- TRUE
+    data <- as.data.frame(data, stringsAsFactors = FALSE)
+  } else {
+    tbl_input <- FALSE
+  }
 
   # find which vars should be decreasing
   desc <- select[startsWith(select, "-")]
@@ -95,14 +105,26 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
     rownames(out) <- NULL
   }
 
+  # add back custom attributes
+  out <- .replace_attrs(out, attributes(original_x))
+
   out
 }
 
 
 #' @export
 data_arrange.grouped_df <- function(data, select = NULL, safe = TRUE) {
+  original_x <- data
   grps <- attr(data, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
+
+  # Remove tidyverse attributes, will add them back at the end
+  if (inherits(data, "tbl_df")) {
+    tbl_input <- TRUE
+    data <- as.data.frame(data, stringsAsFactors = FALSE)
+  } else {
+    tbl_input <- FALSE
+  }
 
   out <- lapply(grps, function(x) {
     data_arrange.default(data[x, ], select = select, safe = safe)
@@ -113,6 +135,14 @@ data_arrange.grouped_df <- function(data, select = NULL, safe = TRUE) {
   if (!insight::object_has_rownames(data)) {
     rownames(out) <- NULL
   }
+
+  # add back tidyverse attributes
+  if (isTRUE(tbl_input)) {
+    class(out) <- c("tbl_df", "tbl", "data.frame")
+  }
+
+  # add back custom attributes
+  out <- .replace_attrs(out, attributes(original_x))
 
   out
 }
