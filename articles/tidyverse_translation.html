@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -347,7 +347,7 @@ either use <code>&amp;</code> (as in <code><a href="https://rdrr.io/r/base/subse
 </div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 7 × 14</span></span></span>
 <span><span class="co">##   name      height  mass hair_color skin_color eye_color birth_year sex   gender</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> Leia Org…    150    49 brown      light      brown             19 fema… femin…</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> Biggs Da…    183    84 black      light      brown             24 male  mascu…</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> Padmé Am…    185    45 brown      light      brown             46 fema… femin…</span></span>
@@ -359,7 +359,7 @@ either use <code>&amp;</code> (as in <code><a href="https://rdrr.io/r/base/subse
 <span><span class="co">## <span style="color: #949494;">#   vehicles &lt;list&gt;, starships &lt;list&gt;</span></span></span></code></pre>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 7 × 14</span></span></span>
 <span><span class="co">##   name      height  mass hair_color skin_color eye_color birth_year sex   gender</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> Leia Org…    150    49 brown      light      brown             19 fema… femin…</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> Biggs Da…    183    84 black      light      brown             24 male  mascu…</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> Padmé Am…    185    45 brown      light      brown             46 fema… femin…</span></span>
@@ -611,17 +611,34 @@ use select helpers such as <code><a href="https://tidyselect.r-lib.org/reference
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">hair_color</span>, <span class="va">height</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 14</span></span></span>
-<span><span class="co">##   name      height  mass hair_color skin_color eye_color birth_year sex   gender</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> Luke Sky…    172    77 blond      fair       blue            19   male  mascu…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> Leia Org…    150    49 brown      light      brown           19   fema… femin…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> Owen Lars    178   120 brown, gr… light      blue            52   male  mascu…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> Darth Va…    202   136 none       white      yellow          41.9 male  mascu…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span> R2-D2         96    32 <span style="color: #BB0000;">NA</span>         white, bl… red             33   none  mascu…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span> C-3PO        167    75 <span style="color: #BB0000;">NA</span>         gold       yellow         112   none  mascu…</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   vehicles &lt;list&gt;, starships &lt;list&gt;</span></span></span></code></pre>
+<pre><code><span><span class="co">##             name height mass  hair_color  skin_color eye_color birth_year</span></span>
+<span><span class="co">## 1 Luke Skywalker    172   77       blond        fair      blue       19.0</span></span>
+<span><span class="co">## 2    Leia Organa    150   49       brown       light     brown       19.0</span></span>
+<span><span class="co">## 3      Owen Lars    178  120 brown, grey       light      blue       52.0</span></span>
+<span><span class="co">## 4    Darth Vader    202  136        none       white    yellow       41.9</span></span>
+<span><span class="co">## 5          R2-D2     96   32        &lt;NA&gt; white, blue       red       33.0</span></span>
+<span><span class="co">## 6          C-3PO    167   75        &lt;NA&gt;        gold    yellow      112.0</span></span>
+<span><span class="co">##      sex    gender homeworld species</span></span>
+<span><span class="co">## 1   male masculine  Tatooine   Human</span></span>
+<span><span class="co">## 2 female  feminine  Alderaan   Human</span></span>
+<span><span class="co">## 3   male masculine  Tatooine   Human</span></span>
+<span><span class="co">## 4   male masculine  Tatooine   Human</span></span>
+<span><span class="co">## 5   none masculine     Naboo   Droid</span></span>
+<span><span class="co">## 6   none masculine  Tatooine   Droid</span></span>
+<span><span class="co">##                                                                                                                                       films</span></span>
+<span><span class="co">## 1                                           A New Hope, The Empire Strikes Back, Return of the Jedi, Revenge of the Sith, The Force Awakens</span></span>
+<span><span class="co">## 2                                           A New Hope, The Empire Strikes Back, Return of the Jedi, Revenge of the Sith, The Force Awakens</span></span>
+<span><span class="co">## 3                                                                                     A New Hope, Attack of the Clones, Revenge of the Sith</span></span>
+<span><span class="co">## 4                                                              A New Hope, The Empire Strikes Back, Return of the Jedi, Revenge of the Sith</span></span>
+<span><span class="co">## 5 A New Hope, The Empire Strikes Back, Return of the Jedi, The Phantom Menace, Attack of the Clones, Revenge of the Sith, The Force Awakens</span></span>
+<span><span class="co">## 6                    A New Hope, The Empire Strikes Back, Return of the Jedi, The Phantom Menace, Attack of the Clones, Revenge of the Sith</span></span>
+<span><span class="co">##                             vehicles                starships</span></span>
+<span><span class="co">## 1 Snowspeeder, Imperial Speeder Bike X-wing, Imperial shuttle</span></span>
+<span><span class="co">## 2              Imperial Speeder Bike                         </span></span>
+<span><span class="co">## 3                                                            </span></span>
+<span><span class="co">## 4                                             TIE Advanced x1</span></span>
+<span><span class="co">## 5                                                            </span></span>
+<span><span class="co">## 6</span></span></code></pre>
 <p>You can also sort variables in descending order by putting a
 <code>"-"</code> in front of their name, like below:</p>
 <div style="display: grid; grid-template-columns: 50% 50%; grid-column-gap: 10px;">
@@ -638,17 +655,34 @@ use select helpers such as <code><a href="https://tidyselect.r-lib.org/reference
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">hair_color</span><span class="op">)</span>, <span class="op">-</span><span class="va">height</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 14</span></span></span>
-<span><span class="co">##   name      height  mass hair_color skin_color eye_color birth_year sex   gender</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> Darth Va…    202   136 none       white      yellow          41.9 male  mascu…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> Owen Lars    178   120 brown, gr… light      blue            52   male  mascu…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> Leia Org…    150    49 brown      light      brown           19   fema… femin…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> Luke Sky…    172    77 blond      fair       blue            19   male  mascu…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span> C-3PO        167    75 <span style="color: #BB0000;">NA</span>         gold       yellow         112   none  mascu…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span> R2-D2         96    32 <span style="color: #BB0000;">NA</span>         white, bl… red             33   none  mascu…</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   vehicles &lt;list&gt;, starships &lt;list&gt;</span></span></span></code></pre>
+<pre><code><span><span class="co">##             name height mass  hair_color  skin_color eye_color birth_year</span></span>
+<span><span class="co">## 1    Darth Vader    202  136        none       white    yellow       41.9</span></span>
+<span><span class="co">## 2      Owen Lars    178  120 brown, grey       light      blue       52.0</span></span>
+<span><span class="co">## 3    Leia Organa    150   49       brown       light     brown       19.0</span></span>
+<span><span class="co">## 4 Luke Skywalker    172   77       blond        fair      blue       19.0</span></span>
+<span><span class="co">## 5          C-3PO    167   75        &lt;NA&gt;        gold    yellow      112.0</span></span>
+<span><span class="co">## 6          R2-D2     96   32        &lt;NA&gt; white, blue       red       33.0</span></span>
+<span><span class="co">##      sex    gender homeworld species</span></span>
+<span><span class="co">## 1   male masculine  Tatooine   Human</span></span>
+<span><span class="co">## 2   male masculine  Tatooine   Human</span></span>
+<span><span class="co">## 3 female  feminine  Alderaan   Human</span></span>
+<span><span class="co">## 4   male masculine  Tatooine   Human</span></span>
+<span><span class="co">## 5   none masculine  Tatooine   Droid</span></span>
+<span><span class="co">## 6   none masculine     Naboo   Droid</span></span>
+<span><span class="co">##                                                                                                                                       films</span></span>
+<span><span class="co">## 1                                                              A New Hope, The Empire Strikes Back, Return of the Jedi, Revenge of the Sith</span></span>
+<span><span class="co">## 2                                                                                     A New Hope, Attack of the Clones, Revenge of the Sith</span></span>
+<span><span class="co">## 3                                           A New Hope, The Empire Strikes Back, Return of the Jedi, Revenge of the Sith, The Force Awakens</span></span>
+<span><span class="co">## 4                                           A New Hope, The Empire Strikes Back, Return of the Jedi, Revenge of the Sith, The Force Awakens</span></span>
+<span><span class="co">## 5                    A New Hope, The Empire Strikes Back, Return of the Jedi, The Phantom Menace, Attack of the Clones, Revenge of the Sith</span></span>
+<span><span class="co">## 6 A New Hope, The Empire Strikes Back, Return of the Jedi, The Phantom Menace, Attack of the Clones, Revenge of the Sith, The Force Awakens</span></span>
+<span><span class="co">##                             vehicles                starships</span></span>
+<span><span class="co">## 1                                             TIE Advanced x1</span></span>
+<span><span class="co">## 2                                                            </span></span>
+<span><span class="co">## 3              Imperial Speeder Bike                         </span></span>
+<span><span class="co">## 4 Snowspeeder, Imperial Speeder Bike X-wing, Imperial shuttle</span></span>
+<span><span class="co">## 5                                                            </span></span>
+<span><span class="co">## 6</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="extracting">Extracting<a class="anchor" aria-label="anchor" href="#extracting"></a>
