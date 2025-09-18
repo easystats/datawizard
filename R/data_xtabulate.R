@@ -80,9 +80,40 @@
   attr(out, "proportions") <- proportions
   attr(out, "varname") <- obj_name
   attr(out, "grouped_df") <- !is.null(group_variable)
+  attr(out, "prop_table") <- .prop_table(out)
 
   class(out) <- c("datawizard_crosstab", "data.frame")
 
+  out
+}
+
+
+.prop_table <- function(x) {
+  proportions <- attributes(x)$proportions
+  out <- NULL
+  if (!is.null(proportions)) {
+    # find numeric columns, only for these we need row/column sums
+    numeric_columns <- vapply(x, is.numeric, logical(1))
+    total_n <- attributes(x)$total_n
+
+    out <- switch(
+      proportions,
+      row = lapply(seq_len(nrow(x)), function(i) {
+        row_sum <- sum(x[i, numeric_columns], na.rm = TRUE)
+        x[i, numeric_columns] / row_sum
+      }),
+      column = lapply(seq_len(ncol(x))[numeric_columns], function(i) {
+        col_sum <- sum(x[, i], na.rm = TRUE)
+        x[, i] / col_sum
+      }),
+      full = lapply(seq_len(ncol(x))[numeric_columns], function(i) {
+        x[, i] / total_n
+      }),
+    )
+  }
+  out <- as.data.frame(do.call(rbind, out))
+  colnames(out) <- colnames(x)[numeric_columns]
+  rownames(out) <- x[[1]]
   out
 }
 
