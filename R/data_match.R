@@ -354,7 +354,7 @@ data_filter.grouped_df <- function(x, ...) {
   # can identify a function call, and only continue checking for wrong syntax
   # when we have not identified a function.
 
-  if (!is.function(try(get(gsub("^(.*?)\\((.*)", "\\1", tmp)), silent = TRUE))) {
+  if (!is.function(tryCatch(get(gsub("^(.*?)\\((.*)", "\\1", tmp)), error = function(e) NULL))) {
     # Give more informative message to users
     # about possible misspelled comparisons / logical conditions
     # check if "=" instead of "==" was used?

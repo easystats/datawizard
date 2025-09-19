@@ -426,11 +426,11 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       symbol_string <- .fix_quotes(symbol_string)
       symbol_name <- names(dots)[i]
       # convert string into language and replace in dots
-      return_value <- try(str2lang(symbol_string), silent = TRUE)
+      return_value <- tryCatch(str2lang(symbol_string), error = function(e) NULL)
       # sanity check - for invalid expressions, like
       # data_modify(iris, a = as_expr(c("1 + 1", "2 + 2")))
       # we get an error here
-      if (inherits(return_value, "try-error")) {
+      if (is.null(return_value)) {
         insight::format_error(paste0(
           "Could not evaluate expression `", symbol_string[1], "`. ",
           "Please check if it's correctly specified. If you think there's a bug ",
@@ -559,12 +559,12 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   } else if (!is.null(symbol_string) && length(symbol_string) == 1 && grepl("\\bn\\(\\)", symbol_string)) {
     # "special" functions, like "1:n()" or similar - but not "1:fun()"
     symbol_string <- str2lang(gsub("n()", "nrow(data)", symbol_string, fixed = TRUE))
-    new_variable <- try(with(data, eval(symbol_string)), silent = TRUE)
+    new_variable <- tryCatch(with(data, eval(symbol_string)), error = function(e) NULL)
   } else {
     # evaluate symbol
-    new_variable <- try(with(data, eval(symbol)), silent = TRUE)
+    new_variable <- tryCatch(with(data, eval(symbol)), error = function(e) NULL)
     # if evaluation fails, we have a value - and directly use it
-    if (inherits(new_variable, "try-error") && !is.null(eval_symbol)) {
+    if (is.null(new_variable) && !is.null(eval_symbol)) {
       new_variable <- eval_symbol
     }
   }

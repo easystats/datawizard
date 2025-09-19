@@ -236,7 +236,7 @@
 # it is a select helper that we grab from the error message.
 
 .select_symbol <- function(data, x, ignore_case, regex, verbose, ifnotfound) {
-  try_eval <- try(eval(x), silent = TRUE)
+  try_eval <- tryCatch(eval(x), error = function(e) NULL)
   x_dep <- insight::safe_deparse(x)
   is_select_helper <- FALSE
   out <- NULL
@@ -632,8 +632,8 @@
       n <- n - 1L
       env <- sys.frame(n)
     }
-    r <- try(eval(str2lang(x), envir = env), silent = TRUE)
-    if (!inherits(r, "try-error") && !is.null(r)) {
+    r <- tryCatch(eval(str2lang(x), envir = env), error = function(e) NULL)
+    if (!is.null(r)) {
       return(r)
     }
   }
