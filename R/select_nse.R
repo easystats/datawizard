@@ -236,6 +236,10 @@
 # it is a select helper that we grab from the error message.
 
 .select_symbol <- function(data, x, ignore_case, regex, verbose, ifnotfound) {
+  # We use `tryCatch()` instead of `try()` here, because for grouped data frame
+  # methods, `.dynEval()` can be called many times. Since `tryCatch()` is minimal
+  # faster than `try()`, we get a performance "boost" of some seconds for large
+  # data frames with many groups (see https://github.com/easystats/datawizard/pull/657/)
   try_eval <- tryCatch(eval(x), error = function(e) NULL)
   x_dep <- insight::safe_deparse(x)
   is_select_helper <- FALSE
@@ -632,6 +636,10 @@
       n <- n - 1L
       env <- sys.frame(n)
     }
+    # We use `tryCatch()` instead of `try()` here, because for grouped data frame
+    # methods, `.dynEval()` can be called many times. Since `tryCatch()` is minimal
+    # faster than `try()`, we get a performance "boost" of some seconds for large
+    # data frames with many groups (see https://github.com/easystats/datawizard/pull/657/)
     r <- tryCatch(eval(str2lang(x), envir = env), error = function(e) NULL)
     if (!is.null(r)) {
       return(r)
