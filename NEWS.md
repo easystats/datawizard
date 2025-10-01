@@ -188,6 +188,9 @@ BREAKING CHANGES AND DEPRECATIONS
   for the previous default behaviour (i.e. only returning the newly created
   variables) (#579).
 
+* The `"diff"` method in `smoothness()` was revised and now has a reversed
+  interpretation. Documentation was updated accordingly. (#374).
+
 CHANGES
 
 * `rescale_weights()` gets a `method` argument, to choose method to rescale
