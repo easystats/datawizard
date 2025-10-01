@@ -111,9 +111,13 @@
       }),
     )
   }
-  out <- as.data.frame(do.call(rbind, out))
-  colnames(out) <- colnames(x)[numeric_columns]
-  rownames(out) <- rownames(x)
+  if (!is.null(out)) {
+    out <- as.data.frame(do.call(rbind, out))
+    colnames(out) <- colnames(x)[numeric_columns]
+    if (nrow(out) == nrow(x)) {
+      rownames(out) <- rownames(x)
+    }
+  }
   out
 }
 
@@ -133,7 +137,12 @@ format.datawizard_crosstab <- function(x,
   x <- as.data.frame(x)
 
   # find numeric columns, only for these we need row/column sums
-  numeric_columns <- which(vapply(x, is.numeric, logical(1)))
+  numeric_columns <- vapply(x, is.numeric, logical(1))
+
+  # compute total N for rows and columns
+  total_n <- attributes(x)$total_n
+  total_column <- rowSums(x[numeric_columns], na.rm = TRUE)
+  total_row <- c(colSums(x[numeric_columns], na.rm = TRUE), total_n)
 
   # proportions?
   props <- attributes(x)$proportions
