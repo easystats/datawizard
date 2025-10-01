@@ -112,7 +112,7 @@
     )
   }
   if (!is.null(out)) {
-    out <- as.data.frame(do.call(rbind, out))
+    out <- as.data.frame(t(do.call(rbind, out)))
     colnames(out) <- colnames(x)[numeric_columns]
     if (nrow(out) == nrow(x)) {
       rownames(out) <- rownames(x)
@@ -137,7 +137,7 @@ format.datawizard_crosstab <- function(x,
   x <- as.data.frame(x)
 
   # find numeric columns, only for these we need row/column sums
-  numeric_columns <- vapply(x, is.numeric, logical(1))
+  numeric_columns <- which(vapply(x, is.numeric, logical(1)))
 
   # compute total N for rows and columns
   total_n <- attributes(x)$total_n
