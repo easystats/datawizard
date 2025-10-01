@@ -113,7 +113,7 @@
   }
   out <- as.data.frame(do.call(rbind, out))
   colnames(out) <- colnames(x)[numeric_columns]
-  rownames(out) <- x[[1]]
+  rownames(out) <- rownames(x)
   out
 }
 
@@ -133,51 +133,19 @@ format.datawizard_crosstab <- function(x,
   x <- as.data.frame(x)
 
   # find numeric columns, only for these we need row/column sums
-  numeric_columns <- vapply(x, is.numeric, logical(1))
-
-  # compute total N for rows and columns
-  total_n <- attributes(x)$total_n
-  total_column <- rowSums(x[numeric_columns], na.rm = TRUE)
-  total_row <- c(colSums(x[numeric_columns], na.rm = TRUE), total_n)
+  numeric_columns <- which(vapply(x, is.numeric, logical(1)))
 
   # proportions?
   props <- attributes(x)$proportions
+  prop_table <- attributes(x)$prop_table
 
-  if (!is.null(props)) {
-    # we copy x to tmp, because when we create strings with "sprintf()", the
-    # variable is coerced to character, and in subsequent iterations of the loop,
-    # mathemathical operations are not possible anymore
-    tmp <- x
-    if (identical(props, "row")) {
-      for (i in seq_len(nrow(x))) {
-        row_sum <- sum(x[i, numeric_columns], na.rm = TRUE)
-        if (row_sum == 0) {
-          row_sum_string <- "(0%)"
-        } else {
-          row_sum_string <- sprintf("(%.*f%%)", digits, 100 * x[i, numeric_columns] / row_sum)
-        }
-        tmp[i, numeric_columns] <- paste(format(x[i, numeric_columns]), format(row_sum_string, justify = "right"))
-      }
-    } else if (identical(props, "column")) {
-      for (i in seq_len(ncol(x))[numeric_columns]) {
-        col_sum <- sum(x[, i], na.rm = TRUE)
-        if (col_sum == 0) {
-          col_sum_string <- "(0%)"
-        } else {
-          col_sum_string <- sprintf("(%.*f%%)", digits, 100 * x[, i] / col_sum)
-        }
-        tmp[, i] <- paste(format(x[, i]), format(col_sum_string, justify = "right"))
-      }
-    } else if (identical(props, "full")) {
-      for (i in seq_len(ncol(x))[numeric_columns]) {
-        tmp[, i] <- paste(
-          format(x[, i]),
-          format(sprintf("(%.*f%%)", digits, 100 * x[, i] / total_n), justify = "right")
-        )
-      }
+  if (!is.null(props) && !is.null(prop_table)) {
+    for (i in seq_len(ncol(prop_table))) {
+      x[, numeric_columns[i]] <- paste(
+        format(x[, numeric_columns[i]]),
+        format(sprintf("(%.*f%%)", digits, 100 * prop_table[, i]), justify = "right")
+      )
     }
-    # copy back final result
-    x <- tmp
   }
 
   x[] <- lapply(x, as.character)
