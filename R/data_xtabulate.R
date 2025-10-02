@@ -89,15 +89,15 @@
 
 
 .prop_table <- function(x) {
-  proportions <- attributes(x)$proportions
+  props <- attributes(x)$props
   out <- NULL
-  if (!is.null(proportions)) {
+  if (!is.null(props)) {
     # find numeric columns, only for these we need row/column sums
     numeric_columns <- vapply(x, is.numeric, logical(1))
     total_n <- attributes(x)$total_n
 
     out <- switch(
-      proportions,
+      props,
       row = lapply(seq_len(nrow(x)), function(i) {
         row_sum <- sum(x[i, numeric_columns], na.rm = TRUE)
         x[i, numeric_columns] / row_sum
