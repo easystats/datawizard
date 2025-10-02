@@ -146,7 +146,6 @@
 
 # methods ---------------------
 
-
 #' @export
 format.datawizard_crosstab <- function(x,
                                        format = "text",
@@ -174,7 +173,14 @@ format.datawizard_crosstab <- function(x,
     for (i in seq_len(ncol(prop_table))) {
       x[, numeric_columns[i]] <- paste(
         format(x[, numeric_columns[i]]),
-        format(sprintf("(%.*f%%)", digits, 100 * prop_table[, i]), justify = "right")
+        ifelse(
+          prop_table[, i] == 0,
+          "(0 %)",
+          format(
+            sprintf("(%.*f%%)", digits, 100 * prop_table[, i]),
+            justify = "right"
+          )
+        )
       )
     }
   }
@@ -219,7 +225,11 @@ format.datawizard_crosstab <- function(x,
   ftab[nrow(ftab), ] <- .add_commas_in_numbers(ftab[nrow(ftab), ], big_mark)
 
   # also format NA column name
-  colnames(ftab)[colnames(ftab) == "NA"] <- ifelse(identical(format, "text"), "<NA>", "(NA)")
+  colnames(ftab)[colnames(ftab) == "NA"] <- ifelse(
+    identical(format, "text"),
+    "<NA>",
+    "(NA)"
+  )
 
   ftab
 }
