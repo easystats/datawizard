@@ -655,7 +655,7 @@ as.prop.table.datawizard_crosstab <- function(x, remove_na = TRUE, simplify = FA
       prop_table[["NA"]] <- NULL
     }
     if ("NA" %in% rownames(prop_table)) {
-      prop_table <- prop_table[row_names != "NA", ]
+      prop_table <- prop_table[rownames(prop_table) != "NA", ]
     }
   }
   # coerce to table
