@@ -101,7 +101,9 @@
       row = lapply(seq_len(nrow(x)), function(i) {
         row_sum <- sum(x[i, numeric_columns], na.rm = TRUE)
         if (row_sum == 0) {
-          rep(0, sum(numeric_columns))
+          tmp <- as.data.frame(as.list(rep(0, sum(numeric_columns))))
+          colnames(tmp) <- colnames(x)[numeric_columns]
+          tmp
         } else {
           x[i, numeric_columns] / row_sum
         }
@@ -124,7 +126,12 @@
     )
   }
   if (!is.null(out)) {
-    out <- as.data.frame(do.call(cbind, out))
+    # for rows, we need to rbind, for columns, we need to cbind
+    out <- switch(
+      props,
+      row = as.data.frame(do.call(rbind, out)),
+      as.data.frame(do.call(cbind, out))
+    )
     colnames(out) <- colnames(x)[numeric_columns]
     if (nrow(out) == nrow(x)) {
       # if we have variable labels for the first column, we use them as row names
