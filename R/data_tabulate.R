@@ -678,14 +678,20 @@ as.prop.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = F
     }
   }
 
-  out <- lapply(
+  out <- insight::compact_list(lapply(
     x,
     as.prop.table.datawizard_crosstab,
     remove_na = remove_na,
     simplify = TRUE,
     verbose = FALSE,
     ...
-  )
+  ))
+
+  # if no proportions found, return NULL
+  if (!length(out)) {
+    return(NULL)
+  }
+
   # if only one table is returned, "unlist"
   if (length(out) == 1 && simplify) {
     out <- out[[1]]
