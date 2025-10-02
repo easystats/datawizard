@@ -100,19 +100,31 @@
       props,
       row = lapply(seq_len(nrow(x)), function(i) {
         row_sum <- sum(x[i, numeric_columns], na.rm = TRUE)
-        x[i, numeric_columns] / row_sum
+        if (row_sum == 0) {
+          rep(0, sum(numeric_columns))
+        } else {
+          x[i, numeric_columns] / row_sum
+        }
       }),
       column = lapply(seq_len(ncol(x))[numeric_columns], function(i) {
         col_sum <- sum(x[, i], na.rm = TRUE)
-        x[, i] / col_sum
+        if (col_sum == 0) {
+          rep(0, nrow(x))
+        } else {
+          x[, i] / col_sum
+        }
       }),
       full = lapply(seq_len(ncol(x))[numeric_columns], function(i) {
-        x[, i] / total_n
+        if (total_n == 0) {
+          rep(0, nrow(x))
+        } else {
+          x[, i] / total_n
+        }
       }),
     )
   }
   if (!is.null(out)) {
-    out <- as.data.frame(t(do.call(rbind, out)))
+    out <- as.data.frame(do.call(cbind, out))
     colnames(out) <- colnames(x)[numeric_columns]
     if (nrow(out) == nrow(x)) {
       rownames(out) <- rownames(x)
