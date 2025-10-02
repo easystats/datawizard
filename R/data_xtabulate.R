@@ -127,7 +127,17 @@
     out <- as.data.frame(do.call(cbind, out))
     colnames(out) <- colnames(x)[numeric_columns]
     if (nrow(out) == nrow(x)) {
-      rownames(out) <- rownames(x)
+      # if we have variable labels for the first column, we use them as row names
+      # this helps the user identify NA rows when the "prop_table" attribute is
+      # extracted
+      if (isFALSE(numeric_columns[1])) {
+        r_names <- x[[1]]
+        r_names <- as.character(r_names)
+        r_names[is.na(r_names)] <- "<NA>"
+        rownames(out) <- r_names
+      } else {
+        rownames(out) <- rownames(x)
+      }
     }
   }
   out
