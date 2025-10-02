@@ -89,7 +89,7 @@
 
 
 .prop_table <- function(x) {
-  props <- attributes(x)$props
+  props <- attributes(x)$proportions
   out <- NULL
   if (!is.null(props)) {
     # find numeric columns, only for these we need row/column sums
