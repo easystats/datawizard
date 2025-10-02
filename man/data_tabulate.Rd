@@ -212,6 +212,9 @@ frequency tables as data frame. See 'Examples'.
 There is also an \code{as.table()} method, which returns a table object with the
 frequencies of the variable. This is useful for further statistical analysis,
 e.g. for using \code{chisq.test()} on the frequency table. See 'Examples'.
+
+Finally, the \code{as.prop.table()} method returns the proportions of the
+crosstable as a table object, if \code{by} was supplied to \code{data_tabulate()}.
 }
 \note{
 There are \code{print_html()} and \code{print_md()} methods available for printing

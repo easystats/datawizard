@@ -224,7 +224,7 @@
 }
 
 
-#' Taken from https://github.com/coolbutuseless/gluestick [licence: MIT]
+#' Taken from https://github.com/coolbutuseless/gluestick (licence: MIT)
 #' Same functionality as `{glue}`
 #'
 #' @noRd
