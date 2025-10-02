@@ -11,7 +11,7 @@ BREAKING CHANGES
 CHANGES
 
 * `data_tabulate()` now saves the table of proportions for crosstables as
-  attribute, accessible via the new `as.prop.table()` method.
+  attribute, accessible via the new `as.prop.table()` method (#656).
 
 * Due to changes in the package `insight`, `data_tabulate()` no longer prints
   decimals when all values in a column are integers (#641).
