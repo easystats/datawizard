@@ -628,6 +628,12 @@ as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE,
 
 #' @rdname data_tabulate
 #' @export
+as.prop.table <- function(x, ...) {
+  UseMethod("as.prop.table")
+}
+
+#' @rdname data_tabulate
+#' @export
 as.prop.table.datawizard_crosstab <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
   # sanity check - the `.data.frame` method  returns a list, but not the
   # default method
