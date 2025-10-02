@@ -58,6 +58,9 @@
 #' frequencies of the variable. This is useful for further statistical analysis,
 #' e.g. for using `chisq.test()` on the frequency table. See 'Examples'.
 #'
+#' Finally, the `as.prop.table()` method returns the proportions of the
+#' crosstable as a table object, if `by` was supplied to `data_tabulate()`.
+#'
 #' @section Crosstables:
 #' If `by` is supplied, a crosstable is created. The crosstable includes `<NA>`
 #' (missing) values by default. The first column indicates values of `x`, the
@@ -619,6 +622,64 @@ as.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE,
     names(out) <- unlist(lapply(x, function(i) {
       i$Group[1]
     }), use.names = FALSE)
+  }
+  out
+}
+
+#' @rdname data_tabulate
+#' @export
+as.prop.table.datawizard_crosstab <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
+  # sanity check - the `.data.frame` method  returns a list, but not the
+  # default method
+  if (!is.data.frame(x)) {
+    x <- x[[1]]
+  }
+  prop_table <- attributes(x)$prop_table
+
+  if (is.null(prop_table)) {
+    insight::format_warning("No proportions available.")
+    return(NULL)
+  }
+
+  if (remove_na) {
+    if (verbose && ("NA" %in% colnames(prop_table) || "NA" %in% rownames(prop_table))) {
+      insight::format_alert("Removing NA values from frequency table.")
+    }
+    if (!is.null(prop_table[["NA"]])) {
+      prop_table[["NA"]] <- NULL
+    }
+    if ("NA" %in% rownames(prop_table)) {
+      prop_table <- prop_table[row_names != "NA", ]
+    }
+  }
+  # coerce to table
+  result <- as.table(as.matrix(prop_table))
+  # if we don't want to simplify the table, we wrap it into a list
+  if (!simplify) {
+    result <- list(result)
+  }
+
+  result
+}
+
+#' @export
+as.prop.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
+  # only show message once we set `verbose = FALSE` in the lapply()
+  if (remove_na && verbose) {
+    insight::format_alert("Removing NA values from frequency table.")
+  }
+
+  out <- lapply(
+    x,
+    as.prop.table.datawizard_crosstab,
+    remove_na = remove_na,
+    simplify = TRUE,
+    verbose = FALSE,
+    ...
+  )
+  # if only one table is returned, "unlist"
+  if (length(out) == 1 && simplify) {
+    out <- out[[1]]
   }
   out
 }

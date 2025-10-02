@@ -133,7 +133,7 @@
       if (isFALSE(numeric_columns[1])) {
         r_names <- x[[1]]
         r_names <- as.character(r_names)
-        r_names[is.na(r_names)] <- "<NA>"
+        r_names[is.na(r_names)] <- "NA"
         rownames(out) <- r_names
       } else {
         rownames(out) <- rownames(x)

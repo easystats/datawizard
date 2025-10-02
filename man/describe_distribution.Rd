@@ -171,7 +171,7 @@ There is also a
 implemented in the \href{https://easystats.github.io/see/}{\strong{see}-package}.
 }
 \examples{
-\dontshow{if (require("bayestestR", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("bayestestR", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 describe_distribution(rnorm(100))
 
 data(iris)

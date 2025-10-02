@@ -6,6 +6,7 @@
 \alias{data_tabulate.data.frame}
 \alias{as.data.frame.datawizard_tables}
 \alias{as.table.datawizard_table}
+\alias{as.prop.table.datawizard_crosstab}
 \alias{print.datawizard_table}
 \alias{display.datawizard_table}
 \title{Create frequency and crosstables of variables}
@@ -50,6 +51,14 @@ data_tabulate(x, ...)
 )
 
 \method{as.table}{datawizard_table}(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...)
+
+as.prop.table.datawizard_crosstab(
+  x,
+  remove_na = TRUE,
+  simplify = FALSE,
+  verbose = TRUE,
+  ...
+)
 
 \method{print}{datawizard_table}(x, big_mark = NULL, ...)
 
@@ -223,7 +232,7 @@ for the full table.
 }
 
 \examples{
-\dontshow{if (requireNamespace("poorman")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("poorman")) withAutoprint(\{ # examplesIf}
 # frequency tables -------
 # ------------------------
 data(efc)
