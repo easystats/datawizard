@@ -672,7 +672,10 @@ as.prop.table.datawizard_crosstab <- function(x, remove_na = TRUE, simplify = FA
 as.prop.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
   # only show message once we set `verbose = FALSE` in the lapply()
   if (remove_na && verbose) {
-    insight::format_alert("Removing NA values from frequency table.")
+    prop_table <- attributes(x[[1]])$prop_table
+    if ("NA" %in% colnames(prop_table) || "NA" %in% rownames(prop_table)) {
+      insight::format_alert("Removing NA values from frequency table.")
+    }
   }
 
   out <- lapply(
