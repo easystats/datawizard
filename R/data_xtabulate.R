@@ -206,7 +206,7 @@ format.datawizard_crosstab <- function(x,
         format(x[, numeric_columns[i]]),
         ifelse(
           prop_table[, i] == 0,
-          "(0 %)",
+          "(0%)",
           format(
             sprintf("(%.*f%%)", digits, 100 * prop_table[, i]),
             justify = "right"
