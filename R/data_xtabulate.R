@@ -204,14 +204,7 @@ format.datawizard_crosstab <- function(x,
     for (i in seq_len(ncol(prop_table))) {
       x[, numeric_columns[i]] <- paste(
         format(x[, numeric_columns[i]]),
-        format(
-          ifelse(
-            prop_table[, i] == 0,
-            "(0.0%)",
-            sprintf("(%.*f%%)", digits, 100 * prop_table[, i])
-          ),
-          justify = "right"
-        )
+        format(sprintf("(%.*f%%)", digits, 100 * prop_table[, i]), justify = "right")
       )
     }
   }
