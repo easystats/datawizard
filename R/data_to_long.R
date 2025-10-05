@@ -315,7 +315,7 @@ data_to_long <- function(data,
   }
 
   if (values_drop_na) {
-    out <- out[!is.na(out[, values_to]), ]
+    out <- out[!is.na(out[, values_to]), , drop = FALSE]
   }
 
   # add back attributes

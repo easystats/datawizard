@@ -98,7 +98,7 @@ data_replicate <- function(data,
   }
 
   # remove rows where "expand" is NA
-  data <- data[!is.na(replicates), ]
+  data <- data[!is.na(replicates), , drop = FALSE]
   replicates <- replicates[!is.na(replicates)]
 
   # fin

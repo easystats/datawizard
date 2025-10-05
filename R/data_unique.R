@@ -80,7 +80,7 @@ data_unique.data.frame <- function(data,
   ), ]
 
   good.dups <- data_select(good.dups, og.names)
-  out <- data[!duplicated(data$temporary_id2), ]
+  out <- data[!duplicated(data$temporary_id2), , drop = FALSE]
 
 
   if (keep != "first") {
@@ -122,7 +122,7 @@ data_unique.grouped_df <- function(data,
   grps <- attr(data, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 
-  data2 <- data_ungroup(data)
+  data2 <- as.data.frame(data_ungroup(data))
 
   out <- lapply(grps, function(x) {
     data_unique.data.frame(data2[x, ], select = select, keep = keep, verbose = verbose)

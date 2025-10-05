@@ -183,6 +183,15 @@ data_filter <- function(x, ...) {
 #' @export
 data_filter.data.frame <- function(x, ...) {
   out <- x
+
+  # convert tibble to data.frame
+  if (inherits(x, "tbl_df")) {
+    out <- as.data.frame(out, stringsAsFactors = FALSE)
+    tbl_input <- TRUE
+  } else {
+    tbl_input <- FALSE
+  }
+
   dots <- match.call(expand.dots = FALSE)[["..."]]
 
   if (any(nzchar(names(dots), keepNA = TRUE))) {
@@ -275,14 +284,29 @@ data_filter.data.frame <- function(x, ...) {
 
   # add back custom attributes
   out <- .replace_attrs(out, attributes(x))
+
+  # add back tidyverse attributes
+  if (isTRUE(tbl_input)) {
+    class(out) <- c("tbl_df", "tbl", "data.frame")
+  }
+
   out
 }
 
 
 #' @export
 data_filter.grouped_df <- function(x, ...) {
+  original_x <- x
   grps <- attr(x, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
+
+  # Remove tidyverse attributes, will add them back at the end
+  if (inherits(x, "tbl_df")) {
+    tbl_input <- TRUE
+    x <- as.data.frame(x, stringsAsFactors = FALSE)
+  } else {
+    tbl_input <- FALSE
+  }
 
   dots <- match.call(expand.dots = FALSE)[["..."]]
   out <- lapply(grps, function(grp) {
@@ -296,6 +320,14 @@ data_filter.grouped_df <- function(x, ...) {
   if (!insight::object_has_rownames(x)) {
     rownames(out) <- NULL
   }
+
+  # add back tidyverse attributes
+  if (isTRUE(tbl_input)) {
+    class(out) <- c("tbl_df", "tbl", "data.frame")
+  }
+
+  # add back custom attributes
+  out <- .replace_attrs(out, attributes(original_x))
 
   out
 }
@@ -322,7 +354,7 @@ data_filter.grouped_df <- function(x, ...) {
   # can identify a function call, and only continue checking for wrong syntax
   # when we have not identified a function.
 
-  if (!is.function(try(get(gsub("^(.*?)\\((.*)", "\\1", tmp)), silent = TRUE))) {
+  if (!is.function(tryCatch(get(gsub("^(.*?)\\((.*)", "\\1", tmp)), error = function(e) NULL))) {
     # Give more informative message to users
     # about possible misspelled comparisons / logical conditions
     # check if "=" instead of "==" was used?

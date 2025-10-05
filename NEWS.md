@@ -25,6 +25,9 @@ CHANGES
 * `display()` methods now support the `{tinytable}` package. Use `format = "tt"`
   to export tables as `tinytable` objects (#646).
 
+* Improved performance for several functions that process grouped data frames
+  when the input is a grouped `tibble` (#651).
+
 BUG FIXES
 
 * Fixed an issue when `demean()`ing nested structures with more than 2 grouping
@@ -36,6 +39,9 @@ BUG FIXES
 * Fixed issue in `data_to_wide()` with multiple variables assigned in
   `values_from` when IDs were not balanced (equally spread across observations)
   (#644).
+
+* Fixed issue in `data_replicate()` when data frame had only one column to
+  replicate (#654).
 
 # datawizard 1.2.0
 

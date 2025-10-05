@@ -345,3 +345,22 @@ test_that("data_filter, slicing works with functions", {
   )
   # styler: on
 })
+
+
+test_that("data_filter works with tibbles", {
+  skip_if_not_installed("tibble")
+  skip_if_not_installed("dplyr")
+  data(mtcars)
+
+  # preserve class
+  d <- tibble::as_tibble(mtcars)
+  out <- data_filter(d, mpg > 15)
+  expect_s3_class(out, "tbl_df")
+
+  # preserve attributes
+  d <- tibble::as_tibble(mtcars)
+  d <- dplyr::group_by(d, cyl)
+  out <- data_filter(d, mpg > 15)
+  expect_s3_class(out, "tbl_df")
+  expect_named(attr(out, "groups"), c("cyl", ".rows"))
+})

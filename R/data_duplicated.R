@@ -86,6 +86,8 @@ data_duplicated.grouped_df <- function(data,
   grps <- attr(data, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 
+  data <- as.data.frame(data)
+
   out <- lapply(grps, function(x) {
     data_duplicated.data.frame(data[x, ], select = select)
   })
