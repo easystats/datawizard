@@ -36,13 +36,15 @@ replace_nan_inf.default <- function(x, ...) {
 
 #' @inheritParams extract_column_names
 #' @export
-replace_nan_inf.data.frame <- function(x,
-                                       select = NULL,
-                                       exclude = NULL,
-                                       ignore_case = FALSE,
-                                       regex = FALSE,
-                                       verbose = TRUE,
-                                       ...) {
+replace_nan_inf.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # Select and deselect
   cols <- .select_nse(
     select,

@@ -60,13 +60,15 @@
 #'
 #' @export
 #' @aliases standardize_models
-standardize.default <- function(x,
-                                robust = FALSE,
-                                two_sd = FALSE,
-                                weights = TRUE,
-                                verbose = TRUE,
-                                include_response = TRUE,
-                                ...) {
+standardize.default <- function(
+  x,
+  robust = FALSE,
+  two_sd = FALSE,
+  weights = TRUE,
+  verbose = TRUE,
+  include_response = TRUE,
+  ...
+) {
   if (!insight::is_model(x)) {
     insight::format_warning(
       paste0(
@@ -87,8 +89,10 @@ standardize.default <- function(x,
   )
 
   data_std <- NULL # needed to avoid note
-  .standardize_models(x,
-    robust = robust, two_sd = two_sd,
+  .standardize_models(
+    x,
+    robust = robust,
+    two_sd = two_sd,
     weights = weights,
     verbose = verbose,
     include_response = include_response,
@@ -98,14 +102,16 @@ standardize.default <- function(x,
 }
 
 
-.standardize_models <- function(x,
-                                robust = FALSE,
-                                two_sd = FALSE,
-                                weights = TRUE,
-                                verbose = TRUE,
-                                include_response = TRUE,
-                                update_expr,
-                                ...) {
+.standardize_models <- function(
+  x,
+  robust = FALSE,
+  two_sd = FALSE,
+  weights = TRUE,
+  verbose = TRUE,
+  include_response = TRUE,
+  update_expr,
+  ...
+) {
   m_info <- .get_model_info(x, ...)
   model_data <- insight::get_data(x, source = "mf", verbose = FALSE)
 
@@ -119,7 +125,6 @@ standardize.default <- function(x,
     )
   }
 
-
   ## ---- Z the RESPONSE? ----
   # 1. Some models have special responses that should not be standardized. This
   # includes:
@@ -132,7 +137,10 @@ standardize.default <- function(x,
 
   resp <- NULL
   if (!include_response || (include_response && two_sd)) {
-    resp <- c(insight::find_response(x), insight::find_response(x, combine = FALSE))
+    resp <- c(
+      insight::find_response(x),
+      insight::find_response(x, combine = FALSE)
+    )
     resp <- insight::clean_names(resp)
     resp <- unique(resp)
   }
@@ -156,24 +164,28 @@ standardize.default <- function(x,
     }
   }
 
-
   ## ---- DO NOT Z: ----
 
   # 1. WEIGHTS:
   # because negative weights will cause errors in "update()"
   weight_variable <- insight::find_weights(x)
 
-  if (!is.null(weight_variable) &&
-    !weight_variable %in% colnames(model_data) &&
-    "(weights)" %in% colnames(model_data)) {
+  if (
+    !is.null(weight_variable) &&
+      !weight_variable %in% colnames(model_data) &&
+      "(weights)" %in% colnames(model_data)
+  ) {
     model_data$.missing_weight <- model_data[["(weights)"]]
     colnames(model_data)[ncol(model_data)] <- weight_variable
     weight_variable <- c(weight_variable, "(weights)")
   }
 
   # 2. RANDOM-GROUPS:
-  random_group_factor <- insight::find_random(x, flatten = TRUE, split_nested = TRUE)
-
+  random_group_factor <- insight::find_random(
+    x,
+    flatten = TRUE,
+    split_nested = TRUE
+  )
 
   ## ---- SUMMARY: TO Z OR NOT TO Z? ----
 
@@ -193,18 +205,17 @@ standardize.default <- function(x,
     dont_standardize <- c(dont_standardize, doller_vars)
   }
 
-
   if (!length(do_standardize)) {
     insight::format_warning("No variables could be standardized.")
     return(x)
   }
 
-
   ## ---- STANDARDIZE! ----
 
   w <- insight::get_weights(x, remove_na = TRUE)
 
-  data_std <- standardize(model_data[do_standardize],
+  data_std <- standardize(
+    model_data[do_standardize],
     robust = robust,
     two_sd = two_sd,
     weights = if (weights) w,
@@ -213,7 +224,8 @@ standardize.default <- function(x,
 
   # if two_sd, it must not affect the response!
   if (include_response && two_sd) {
-    data_std[resp] <- standardize(model_data[resp],
+    data_std[resp] <- standardize(
+      model_data[resp],
       robust = robust,
       two_sd = FALSE,
       weights = if (weights) w,
@@ -251,13 +263,11 @@ standardize.default <- function(x,
     )
   }
 
-
   ## ---- ADD BACK VARS THAT WHERE NOT Z ----
   if (length(dont_standardize)) {
     remaining_columns <- intersect(colnames(model_data), dont_standardize)
     data_std <- cbind(model_data[, remaining_columns, drop = FALSE], data_std)
   }
-
 
   ## ---- UPDATE MODEL WITH Z DATA ----
   on.exit(.update_failed())
@@ -278,15 +288,16 @@ standardize.default <- function(x,
 
 # Special methods ---------------------------------------------------------
 
-
 #' @export
-standardize.brmsfit <- function(x,
-                                robust = FALSE,
-                                two_sd = FALSE,
-                                weights = TRUE,
-                                verbose = TRUE,
-                                include_response = TRUE,
-                                ...) {
+standardize.brmsfit <- function(
+  x,
+  robust = FALSE,
+  two_sd = FALSE,
+  weights = TRUE,
+  verbose = TRUE,
+  include_response = TRUE,
+  ...
+) {
   data_std <- NULL # needed to avoid note
   if (insight::is_multivariate(x)) {
     insight::format_error(
@@ -295,8 +306,10 @@ standardize.brmsfit <- function(x,
     )
   }
 
-  .standardize_models(x,
-    robust = robust, two_sd = two_sd,
+  .standardize_models(
+    x,
+    robust = robust,
+    two_sd = two_sd,
     weights = weights,
     verbose = verbose,
     include_response = include_response,
@@ -307,21 +320,27 @@ standardize.brmsfit <- function(x,
 
 
 #' @export
-standardize.mixor <- function(x,
-                              robust = FALSE,
-                              two_sd = FALSE,
-                              weights = TRUE,
-                              verbose = TRUE,
-                              include_response = TRUE,
-                              ...) {
+standardize.mixor <- function(
+  x,
+  robust = FALSE,
+  two_sd = FALSE,
+  weights = TRUE,
+  verbose = TRUE,
+  include_response = TRUE,
+  ...
+) {
   data_std <- random_group_factor <- NULL # needed to avoid note
-  .standardize_models(x,
-    robust = robust, two_sd = two_sd,
+  .standardize_models(
+    x,
+    robust = robust,
+    two_sd = two_sd,
     weights = weights,
     verbose = verbose,
     include_response = include_response,
     update_expr = {
-      data_std <- data_std[order(data_std[, random_group_factor, drop = FALSE]), ]
+      data_std <- data_std[
+        order(data_std[, random_group_factor, drop = FALSE]),
+      ]
       stats::update(x, data = data_std)
     },
     ...
@@ -330,13 +349,15 @@ standardize.mixor <- function(x,
 
 
 #' @export
-standardize.mediate <- function(x,
-                                robust = FALSE,
-                                two_sd = FALSE,
-                                weights = TRUE,
-                                verbose = TRUE,
-                                include_response = TRUE,
-                                ...) {
+standardize.mediate <- function(
+  x,
+  robust = FALSE,
+  two_sd = FALSE,
+  weights = TRUE,
+  verbose = TRUE,
+  include_response = TRUE,
+  ...
+) {
   # models and data
   y <- x$model.y
   m <- x$model.m
@@ -344,15 +365,23 @@ standardize.mediate <- function(x,
   m_data <- insight::get_data(m, source = "mf", verbose = FALSE)
 
   # std models and data
-  y_std <- standardize(y,
-    robust = robust, two_sd = two_sd,
-    weights = weights, verbose = verbose,
-    include_response = include_response, ...
+  y_std <- standardize(
+    y,
+    robust = robust,
+    two_sd = two_sd,
+    weights = weights,
+    verbose = verbose,
+    include_response = include_response,
+    ...
   )
-  m_std <- standardize(m,
-    robust = robust, two_sd = two_sd,
-    weights = weights, verbose = verbose,
-    include_response = TRUE, ...
+  m_std <- standardize(
+    m,
+    robust = robust,
+    two_sd = two_sd,
+    weights = weights,
+    verbose = verbose,
+    include_response = TRUE,
+    ...
   )
   y_data_std <- insight::get_data(y_std, source = "mf", verbose = FALSE)
   m_data_std <- insight::get_data(m_std, source = "mf", verbose = FALSE)
@@ -362,13 +391,17 @@ standardize.mediate <- function(x,
   control.value <- x$control.value
   treat.value <- x$treat.value
 
-
   if (!is.null(covs)) {
-    covs <- mapply(.rescale_fixed_values, covs, names(covs),
+    covs <- mapply(
+      .rescale_fixed_values,
+      covs,
+      names(covs),
       SIMPLIFY = FALSE,
       MoreArgs = list(
-        y_data = y_data, m_data = m_data,
-        y_data_std = y_data_std, m_data_std = m_data_std
+        y_data = y_data,
+        m_data = m_data,
+        y_data_std = y_data_std,
+        m_data_std = m_data_std
       )
     )
     if (verbose) {
@@ -400,10 +433,11 @@ standardize.mediate <- function(x,
     )
   }
 
-
   junk <- utils::capture.output({
-    model_std <- stats::update(x,
-      model.y = y_std, model.m = m_std,
+    model_std <- stats::update(
+      x,
+      model.y = y_std,
+      model.m = m_std,
       # control.value = control.value, treat.value = treat.value
       covariates = covs
     )
@@ -414,7 +448,6 @@ standardize.mediate <- function(x,
 
 
 # Cannot ------------------------------------------------------------------
-
 
 #' @export
 standardize.wbm <- function(x, ...) {
@@ -437,7 +470,6 @@ standardize.wbgee <- standardize.wbm
 standardize.biglm <- standardize.wbm
 # biglm doesn't regit the model to new data - it ADDs MORE data to the model.
 
-
 # helper ----------------------------
 
 # Find log-terms inside model formula, and return "clean" term names
@@ -445,7 +477,11 @@ standardize.biglm <- standardize.wbm
   x <- insight::find_terms(model, flatten = TRUE)
   # log_pattern <- "^log\\((.*)\\)"
   log_pattern <- "(log\\(log|log|log1|log10|log1p|log2)\\(([^,\\+)]*).*"
-  out <- insight::trim_ws(gsub(log_pattern, "\\2", grep(log_pattern, x, value = TRUE)))
+  out <- insight::trim_ws(gsub(
+    log_pattern,
+    "\\2",
+    grep(log_pattern, x, value = TRUE)
+  ))
   intersect(colnames(data), out)
 }
 
@@ -489,12 +525,14 @@ standardize.biglm <- standardize.wbm
 }
 
 #' @keywords internal
-.rescale_fixed_values <- function(val,
-                                  cov_nm,
-                                  y_data,
-                                  m_data,
-                                  y_data_std,
-                                  m_data_std) {
+.rescale_fixed_values <- function(
+  val,
+  cov_nm,
+  y_data,
+  m_data,
+  y_data_std,
+  m_data_std
+) {
   if (cov_nm %in% colnames(y_data)) {
     temp_data <- y_data
     temp_data_std <- y_data_std
@@ -503,7 +541,8 @@ standardize.biglm <- standardize.wbm
     temp_data_std <- m_data_std
   }
 
-  rescale(val,
+  rescale(
+    val,
     to = range(temp_data_std[[cov_nm]]),
     range = range(temp_data[[cov_nm]])
   )
@@ -515,7 +554,10 @@ standardize.biglm <- standardize.wbm
   if (is.null(class)) {
     msg1 <- "Unable to refit the model with standardized data."
   } else {
-    msg1 <- sprintf("Standardization of parameters not possible for models of class '%s'.", class)
+    msg1 <- sprintf(
+      "Standardization of parameters not possible for models of class '%s'.",
+      class
+    )
   }
 
   insight::format_error(

@@ -31,22 +31,26 @@
 #' df2 <- df1[-c(1, 5), ]
 #' df2
 #'
-data_duplicated <- function(data,
-                            select = NULL,
-                            exclude = NULL,
-                            ignore_case = FALSE,
-                            regex = FALSE,
-                            verbose = TRUE) {
+data_duplicated <- function(
+  data,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE
+) {
   UseMethod("data_duplicated")
 }
 
 #' @export
-data_duplicated.data.frame <- function(data,
-                                       select = NULL,
-                                       exclude = NULL,
-                                       ignore_case = FALSE,
-                                       regex = FALSE,
-                                       verbose = TRUE) {
+data_duplicated.data.frame <- function(
+  data,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE
+) {
   select <- .select_nse(
     select,
     data,
@@ -59,7 +63,8 @@ data_duplicated.data.frame <- function(data,
   data$temporary_id <- do.call(paste, c(data_select(data, select), sep = "_"))
 
   data <- cbind(Row = seq_len(nrow(data)), data)
-  dups.index <- data$temporary_id %in% data$temporary_id[duplicated(data$temporary_id)]
+  dups.index <- data$temporary_id %in%
+    data$temporary_id[duplicated(data$temporary_id)]
   dups <- data[dups.index, ]
   dups$count_na <- rowSums(is.na(dups))
   dups <- data_arrange(dups, select)
@@ -68,20 +73,22 @@ data_duplicated.data.frame <- function(data,
 }
 
 #' @export
-data_duplicated.grouped_df <- function(data,
-                                       select = NULL,
-                                       exclude = NULL,
-                                       ignore_case = FALSE,
-                                       regex = FALSE,
-                                       verbose = TRUE) {
-  select <- .select_nse(select,
+data_duplicated.grouped_df <- function(
+  data,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE
+) {
+  select <- .select_nse(
+    select,
     data,
     exclude = exclude,
     ignore_case = ignore_case,
     regex = regex,
     verbose = verbose
   )
-
 
   grps <- attr(data, "groups", exact = TRUE)
   grps <- grps[[".rows"]]

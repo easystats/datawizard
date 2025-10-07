@@ -68,24 +68,30 @@ describe_distribution.default <- function(x, verbose = TRUE, ...) {
 
 
 #' @export
-describe_distribution.list <- function(x,
-                                       centrality = "mean",
-                                       dispersion = TRUE,
-                                       iqr = TRUE,
-                                       range = TRUE,
-                                       quartiles = FALSE,
-                                       ci = NULL,
-                                       include_factors = FALSE,
-                                       iterations = 100,
-                                       threshold = 0.1,
-                                       verbose = TRUE,
-                                       ...) {
+describe_distribution.list <- function(
+  x,
+  centrality = "mean",
+  dispersion = TRUE,
+  iqr = TRUE,
+  range = TRUE,
+  quartiles = FALSE,
+  ci = NULL,
+  include_factors = FALSE,
+  iterations = 100,
+  threshold = 0.1,
+  verbose = TRUE,
+  ...
+) {
   factor_el <- which(vapply(x, is.factor, FUN.VALUE = logical(1L)))
   num_el <- which(vapply(x, is.numeric, FUN.VALUE = logical(1L)))
 
   # get elements names as is
   # ex: `list(mtcars$mpg, mtcars$cyl) -> c("mtcars$mpg", "mtcars$cyl")`
-  nm <- vapply(sys.call()[[2]], insight::safe_deparse, FUN.VALUE = character(1L))[-1]
+  nm <- vapply(
+    sys.call()[[2]],
+    insight::safe_deparse,
+    FUN.VALUE = character(1L)
+  )[-1]
 
   if (isTRUE(include_factors)) {
     x <- x[c(num_el, factor_el)]
@@ -107,23 +113,27 @@ describe_distribution.list <- function(x,
 
   # The function currently doesn't support descriptive summaries for character
   # or factor types.
-  out <- do.call(rbind, lapply(x, function(i) {
-    if ((include_factors && is.factor(i)) || (!is.character(i) && !is.factor(i))) {
-      describe_distribution(
-        i,
-        centrality = centrality,
-        dispersion = dispersion,
-        iqr = iqr,
-        range = range,
-        quartiles = quartiles,
-        ci = ci,
-        iterations = iterations,
-        threshold = threshold,
-        verbose = verbose
-      )
-    }
-  }))
-
+  out <- do.call(
+    rbind,
+    lapply(x, function(i) {
+      if (
+        (include_factors && is.factor(i)) || (!is.character(i) && !is.factor(i))
+      ) {
+        describe_distribution(
+          i,
+          centrality = centrality,
+          dispersion = dispersion,
+          iqr = iqr,
+          range = range,
+          quartiles = quartiles,
+          ci = ci,
+          iterations = iterations,
+          threshold = threshold,
+          verbose = verbose
+        )
+      }
+    })
+  )
 
   if (is.null(names(x))) {
     new_names <- nm
@@ -137,7 +147,11 @@ describe_distribution.list <- function(x,
   row.names(out) <- NULL
   out <- out[c("Variable", setdiff(colnames(out), "Variable"))]
 
-  class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
+  class(out) <- unique(c(
+    "parameters_distribution",
+    "see_parameters_distribution",
+    class(out)
+  ))
   attr(out, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(out, "ci") <- ci
   attr(out, "centrality") <- centrality
@@ -148,17 +162,19 @@ describe_distribution.list <- function(x,
 
 #' @rdname describe_distribution
 #' @export
-describe_distribution.numeric <- function(x,
-                                          centrality = "mean",
-                                          dispersion = TRUE,
-                                          iqr = TRUE,
-                                          range = TRUE,
-                                          quartiles = FALSE,
-                                          ci = NULL,
-                                          iterations = 100,
-                                          threshold = 0.1,
-                                          verbose = TRUE,
-                                          ...) {
+describe_distribution.numeric <- function(
+  x,
+  centrality = "mean",
+  dispersion = TRUE,
+  iqr = TRUE,
+  range = TRUE,
+  quartiles = FALSE,
+  ci = NULL,
+  iterations = 100,
+  threshold = 0.1,
+  verbose = TRUE,
+  ...
+) {
   insight::check_if_installed("bayestestR")
   out <- data.frame(.temp = 0)
 
@@ -179,12 +195,10 @@ describe_distribution.numeric <- function(x,
     )
   )
 
-
   # interquartile range, type same as minitab and SPSS
   if (iqr) {
     out$IQR <- stats::IQR(x, na.rm = TRUE, type = 6)
   }
-
 
   # Confidence Intervals
   if (!is.null(ci)) {
@@ -223,7 +237,6 @@ describe_distribution.numeric <- function(x,
     }
   }
 
-
   # Range
   if (range) {
     out <- cbind(
@@ -259,7 +272,11 @@ describe_distribution.numeric <- function(x,
   out$n_Missing <- n_missing
   out$.temp <- NULL
 
-  class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
+  class(out) <- unique(c(
+    "parameters_distribution",
+    "see_parameters_distribution",
+    class(out)
+  ))
   attr(out, "data") <- x
   attr(out, "ci") <- ci
   attr(out, "centrality") <- centrality
@@ -270,11 +287,13 @@ describe_distribution.numeric <- function(x,
 
 #' @rdname describe_distribution
 #' @export
-describe_distribution.factor <- function(x,
-                                         dispersion = TRUE,
-                                         range = TRUE,
-                                         verbose = TRUE,
-                                         ...) {
+describe_distribution.factor <- function(
+  x,
+  dispersion = TRUE,
+  range = TRUE,
+  verbose = TRUE,
+  ...
+) {
   # Missing
   n_missing <- sum(is.na(x))
   x <- stats::na.omit(x)
@@ -296,11 +315,9 @@ describe_distribution.factor <- function(x,
     stringsAsFactors = FALSE
   )
 
-
   if (!dispersion) {
     out$SD <- NULL
   }
-
 
   dot_args <- list(...)
 
@@ -323,18 +340,24 @@ describe_distribution.factor <- function(x,
     out$Max <- NULL
   }
 
-  class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
+  class(out) <- unique(c(
+    "parameters_distribution",
+    "see_parameters_distribution",
+    class(out)
+  ))
   attr(out, "data") <- x
   out
 }
 
 
 #' @export
-describe_distribution.character <- function(x,
-                                            dispersion = TRUE,
-                                            range = TRUE,
-                                            verbose = TRUE,
-                                            ...) {
+describe_distribution.character <- function(
+  x,
+  dispersion = TRUE,
+  range = TRUE,
+  verbose = TRUE,
+  ...
+) {
   # Missing
   n_missing <- sum(is.na(x))
   x <- stats::na.omit(x)
@@ -357,11 +380,9 @@ describe_distribution.character <- function(x,
     stringsAsFactors = FALSE
   )
 
-
   if (!dispersion) {
     out$SD <- NULL
   }
-
 
   dot_args <- list(...)
   if (is.null(dot_args[["ci"]])) {
@@ -383,7 +404,11 @@ describe_distribution.character <- function(x,
     out$Max <- NULL
   }
 
-  class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
+  class(out) <- unique(c(
+    "parameters_distribution",
+    "see_parameters_distribution",
+    class(out)
+  ))
   attr(out, "data") <- x
   out
 }
@@ -391,24 +416,27 @@ describe_distribution.character <- function(x,
 
 #' @rdname describe_distribution
 #' @export
-describe_distribution.data.frame <- function(x,
-                                             select = NULL,
-                                             exclude = NULL,
-                                             centrality = "mean",
-                                             dispersion = TRUE,
-                                             iqr = TRUE,
-                                             range = TRUE,
-                                             quartiles = FALSE,
-                                             include_factors = FALSE,
-                                             ci = NULL,
-                                             iterations = 100,
-                                             threshold = 0.1,
-                                             ignore_case = FALSE,
-                                             regex = FALSE,
-                                             verbose = TRUE,
-                                             by = NULL,
-                                             ...) {
-  select <- .select_nse(select,
+describe_distribution.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  centrality = "mean",
+  dispersion = TRUE,
+  iqr = TRUE,
+  range = TRUE,
+  quartiles = FALSE,
+  include_factors = FALSE,
+  ci = NULL,
+  iterations = 100,
+  threshold = 0.1,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  by = NULL,
+  ...
+) {
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -450,23 +478,28 @@ describe_distribution.data.frame <- function(x,
 
   # The function currently doesn't support descriptive summaries for character
   # or factor types.
-  out <- do.call(rbind, lapply(x[select], function(i) {
-    if ((include_factors && is.factor(i)) || (!is.character(i) && !is.factor(i))) {
-      describe_distribution(
-        i,
-        centrality = centrality,
-        dispersion = dispersion,
-        iqr = iqr,
-        range = range,
-        quartiles = quartiles,
-        ci = ci,
-        iterations = iterations,
-        threshold = threshold,
-        verbose = verbose,
-        show_iterations_msg = FALSE
-      )
-    }
-  }))
+  out <- do.call(
+    rbind,
+    lapply(x[select], function(i) {
+      if (
+        (include_factors && is.factor(i)) || (!is.character(i) && !is.factor(i))
+      ) {
+        describe_distribution(
+          i,
+          centrality = centrality,
+          dispersion = dispersion,
+          iqr = iqr,
+          range = range,
+          quartiles = quartiles,
+          ci = ci,
+          iterations = iterations,
+          threshold = threshold,
+          verbose = verbose,
+          show_iterations_msg = FALSE
+        )
+      }
+    })
+  )
 
   if (is.null(out)) {
     return(NULL)
@@ -476,7 +509,11 @@ describe_distribution.data.frame <- function(x,
   row.names(out) <- NULL
   out <- out[c("Variable", setdiff(colnames(out), "Variable"))]
 
-  class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
+  class(out) <- unique(c(
+    "parameters_distribution",
+    "see_parameters_distribution",
+    class(out)
+  ))
   attr(out, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(out, "ci") <- ci
   attr(out, "centrality") <- centrality
@@ -486,23 +523,25 @@ describe_distribution.data.frame <- function(x,
 
 
 #' @export
-describe_distribution.grouped_df <- function(x,
-                                             select = NULL,
-                                             exclude = NULL,
-                                             centrality = "mean",
-                                             dispersion = TRUE,
-                                             iqr = TRUE,
-                                             range = TRUE,
-                                             quartiles = FALSE,
-                                             include_factors = FALSE,
-                                             ci = NULL,
-                                             iterations = 100,
-                                             threshold = 0.1,
-                                             ignore_case = FALSE,
-                                             regex = FALSE,
-                                             verbose = TRUE,
-                                             by = NULL,
-                                             ...) {
+describe_distribution.grouped_df <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  centrality = "mean",
+  dispersion = TRUE,
+  iqr = TRUE,
+  range = TRUE,
+  quartiles = FALSE,
+  include_factors = FALSE,
+  ci = NULL,
+  iterations = 100,
+  threshold = 0.1,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  by = NULL,
+  ...
+) {
   if (!is.null(by)) {
     if (!is.character(by)) {
       insight::format_error("`by` must be a character vector.")
@@ -518,7 +557,8 @@ describe_distribution.grouped_df <- function(x,
   # check for reserved variable names
   .check_for_reserved_names(group_vars, type = "group_vars")
 
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -529,32 +569,39 @@ describe_distribution.grouped_df <- function(x,
   # tell user about bootstrapping and appropriate number of iterations
   .show_iterations_warning(verbose, iterations, ci)
 
-  out <- do.call(rbind, lapply(seq_along(groups), function(i) {
-    d <- describe_distribution.data.frame(
-      groups[[i]][select],
-      centrality = centrality,
-      dispersion = dispersion,
-      iqr = iqr,
-      range = range,
-      quartiles = quartiles,
-      include_factors = include_factors,
-      ci = ci,
-      iterations = iterations,
-      threshold = threshold,
-      verbose = verbose,
-      show_iterations_msg = FALSE,
-      ...
-    )
+  out <- do.call(
+    rbind,
+    lapply(seq_along(groups), function(i) {
+      d <- describe_distribution.data.frame(
+        groups[[i]][select],
+        centrality = centrality,
+        dispersion = dispersion,
+        iqr = iqr,
+        range = range,
+        quartiles = quartiles,
+        include_factors = include_factors,
+        ci = ci,
+        iterations = iterations,
+        threshold = threshold,
+        verbose = verbose,
+        show_iterations_msg = FALSE,
+        ...
+      )
 
-    for (grp in seq_along(group_vars)) {
-      d[[group_vars[grp]]] <- group_data[i, grp]
-    }
-    d <- data_relocate(d, group_vars, before = 1)
+      for (grp in seq_along(group_vars)) {
+        d[[group_vars[grp]]] <- group_data[i, grp]
+      }
+      d <- data_relocate(d, group_vars, before = 1)
 
-    d
-  }))
+      d
+    })
+  )
 
-  class(out) <- unique(c("parameters_distribution", "see_parameters_distribution", class(out)))
+  class(out) <- unique(c(
+    "parameters_distribution",
+    "see_parameters_distribution",
+    class(out)
+  ))
   attr(out, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(out, "ci") <- ci
   attr(out, "centrality") <- centrality
@@ -575,13 +622,23 @@ print.parameters_distribution <- function(x, digits = 2, ...) {
     ci_brackets = TRUE,
     ...
   )
-  cat(insight::export_table(formatted_table, format = "text", digits = digits, ...))
+  cat(insight::export_table(
+    formatted_table,
+    format = "text",
+    digits = digits,
+    ...
+  ))
   invisible(x)
 }
 
 
 #' @export
-print_md.parameters_distribution <- function(x, digits = 2, ci_brackets = c("(", ")"), ...) {
+print_md.parameters_distribution <- function(
+  x,
+  digits = 2,
+  ci_brackets = c("(", ")"),
+  ...
+) {
   formatted_table <- format(
     x = x,
     digits = digits,
@@ -591,12 +648,22 @@ print_md.parameters_distribution <- function(x, digits = 2, ci_brackets = c("(",
     ...
   )
 
-  insight::export_table(formatted_table, format = "markdown", align = "firstleft", ...)
+  insight::export_table(
+    formatted_table,
+    format = "markdown",
+    align = "firstleft",
+    ...
+  )
 }
 
 
 #' @export
-print_html.parameters_distribution <- function(x, digits = 2, ci_brackets = c("(", ")"), ...) {
+print_html.parameters_distribution <- function(
+  x,
+  digits = 2,
+  ci_brackets = c("(", ")"),
+  ...
+) {
   formatted_table <- format(
     x = x,
     digits = digits,
@@ -627,7 +694,12 @@ print_html.parameters_distribution <- function(x, digits = 2, ci_brackets = c("(
 
 
 #' @export
-display.parameters_distribution <- function(object, format = "markdown", digits = 2, ...) {
+display.parameters_distribution <- function(
+  object,
+  format = "markdown",
+  digits = 2,
+  ...
+) {
   format <- .display_default_format(format)
 
   fun_args <- list(
@@ -685,15 +757,36 @@ plot.parameters_distribution <- function(x, ...) {
 
 .check_for_reserved_names <- function(x, type = "select") {
   reserved_names <- c(
-    "Variable", "CI_low", "CI_high", "n_Missing", "Q1", "Q3", "Quartiles",
-    "Min", "Max", "Range", "Trimmed_Mean", "Trimmed", "Mean", "SD", "IQR",
-    "Skewness", "Kurtosis", "n", "Median", "MAD", "MAP", "IQR", "n_Missing"
+    "Variable",
+    "CI_low",
+    "CI_high",
+    "n_Missing",
+    "Q1",
+    "Q3",
+    "Quartiles",
+    "Min",
+    "Max",
+    "Range",
+    "Trimmed_Mean",
+    "Trimmed",
+    "Mean",
+    "SD",
+    "IQR",
+    "Skewness",
+    "Kurtosis",
+    "n",
+    "Median",
+    "MAD",
+    "MAP",
+    "IQR",
+    "n_Missing"
   )
   invalid_names <- intersect(reserved_names, x)
 
   if (length(invalid_names) > 0) {
     # adapt message to show user whether wrong variables appear in grouping or select
-    msg <- switch(type,
+    msg <- switch(
+      type,
       select = "with `describe_distribution()`: ",
       "as grouping variables in `describe_distribution()`: "
     )
@@ -709,9 +802,16 @@ plot.parameters_distribution <- function(x, ...) {
 
 .show_iterations_warning <- function(verbose, iterations = 100, ci = NULL) {
   if (verbose && !is.null(ci)) {
-    msg <- paste("Bootstrapping confidence intervals using", iterations, "iterations, please be patient...")
+    msg <- paste(
+      "Bootstrapping confidence intervals using",
+      iterations,
+      "iterations, please be patient..."
+    )
     if (iterations < 200) {
-      msg <- c(msg, "For more stable intervals, increase the number of `iterations`, but note that this can also increase the computation time significantly.") # nolint
+      msg <- c(
+        msg,
+        "For more stable intervals, increase the number of `iterations`, but note that this can also increase the computation time significantly."
+      ) # nolint
     }
     insight::format_alert(msg)
   }

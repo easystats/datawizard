@@ -137,18 +137,19 @@ standardise <- standardize
 #   x
 # }
 
-
 #' @rdname standardize
 #' @export
-standardize.numeric <- function(x,
-                                robust = FALSE,
-                                two_sd = FALSE,
-                                weights = NULL,
-                                reference = NULL,
-                                center = NULL,
-                                scale = NULL,
-                                verbose = TRUE,
-                                ...) {
+standardize.numeric <- function(
+  x,
+  robust = FALSE,
+  two_sd = FALSE,
+  weights = NULL,
+  reference = NULL,
+  center = NULL,
+  scale = NULL,
+  verbose = TRUE,
+  ...
+) {
   # set default - need to fix this, else we don't know whether this
   # comes from "center()" or "standardize()". Furthermore, data.frame
   # methods cannot return a vector of NULLs for each variable - instead
@@ -160,7 +161,15 @@ standardize.numeric <- function(x,
     center <- TRUE
   }
 
-  my_args <- .process_std_center(x, weights, robust, verbose, reference, center, scale)
+  my_args <- .process_std_center(
+    x,
+    weights,
+    robust,
+    verbose,
+    reference,
+    center,
+    scale
+  )
   dot_args <- list(...)
 
   # Perform standardization
@@ -205,7 +214,9 @@ standardize.matrix <- function(x, ...) {
 
   attr(x_out, "center") <- vapply(xz, attr, "center", FUN.VALUE = numeric(1L))
   attr(x_out, "scale") <- vapply(xz, attr, "scale", FUN.VALUE = numeric(1L))
-  attr(x_out, "robust") <- vapply(xz, attr, "robust", FUN.VALUE = logical(1L))[1]
+  attr(x_out, "robust") <- vapply(xz, attr, "robust", FUN.VALUE = logical(1L))[
+    1
+  ]
   class(x_out) <- c("dw_transformer", class(x_out))
 
   x_out
@@ -214,19 +225,26 @@ standardize.matrix <- function(x, ...) {
 
 #' @rdname standardize
 #' @export
-standardize.factor <- function(x,
-                               robust = FALSE,
-                               two_sd = FALSE,
-                               weights = NULL,
-                               force = FALSE,
-                               verbose = TRUE,
-                               ...) {
+standardize.factor <- function(
+  x,
+  robust = FALSE,
+  two_sd = FALSE,
+  weights = NULL,
+  force = FALSE,
+  verbose = TRUE,
+  ...
+) {
   if (!force) {
     return(x)
   }
 
-  standardize(.factor_to_numeric(x),
-    robust = robust, two_sd = two_sd, weights = weights, verbose = verbose, ...
+  standardize(
+    .factor_to_numeric(x),
+    robust = robust,
+    two_sd = two_sd,
+    weights = weights,
+    verbose = verbose,
+    ...
   )
 }
 
@@ -246,27 +264,29 @@ standardize.AsIs <- standardize.numeric
 
 # Data frames -------------------------------------------------------------
 
-
 #' @rdname standardize
 #' @export
-standardize.data.frame <- function(x,
-                                   select = NULL,
-                                   exclude = NULL,
-                                   robust = FALSE,
-                                   two_sd = FALSE,
-                                   weights = NULL,
-                                   reference = NULL,
-                                   center = NULL,
-                                   scale = NULL,
-                                   remove_na = c("none", "selected", "all"),
-                                   force = FALSE,
-                                   append = FALSE,
-                                   ignore_case = FALSE,
-                                   regex = FALSE,
-                                   verbose = TRUE,
-                                   ...) {
+standardize.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  robust = FALSE,
+  two_sd = FALSE,
+  weights = NULL,
+  reference = NULL,
+  center = NULL,
+  scale = NULL,
+  remove_na = c("none", "selected", "all"),
+  force = FALSE,
+  append = FALSE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # evaluate select/exclude, may be select-helpers
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -275,9 +295,18 @@ standardize.data.frame <- function(x,
   )
 
   # process arguments
-  my_args <- .process_std_args(x, select, exclude, weights, append,
-    append_suffix = "_z", keep_factors = force, remove_na, reference,
-    .center = center, .scale = scale
+  my_args <- .process_std_args(
+    x,
+    select,
+    exclude,
+    weights,
+    append,
+    append_suffix = "_z",
+    keep_factors = force,
+    remove_na,
+    reference,
+    .center = center,
+    .scale = scale
   )
 
   # set new values
@@ -285,7 +314,8 @@ standardize.data.frame <- function(x,
 
   # Loop through variables and standardize it
   for (var in my_args$select) {
-    x[[var]] <- standardize(x[[var]],
+    x[[var]] <- standardize(
+      x[[var]],
       robust = robust,
       two_sd = two_sd,
       weights = my_args$weights,
@@ -310,24 +340,27 @@ standardize.data.frame <- function(x,
 
 
 #' @export
-standardize.grouped_df <- function(x,
-                                   select = NULL,
-                                   exclude = NULL,
-                                   robust = FALSE,
-                                   two_sd = FALSE,
-                                   weights = NULL,
-                                   reference = NULL,
-                                   center = NULL,
-                                   scale = NULL,
-                                   remove_na = c("none", "selected", "all"),
-                                   force = FALSE,
-                                   append = FALSE,
-                                   ignore_case = FALSE,
-                                   regex = FALSE,
-                                   verbose = TRUE,
-                                   ...) {
+standardize.grouped_df <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  robust = FALSE,
+  two_sd = FALSE,
+  weights = NULL,
+  reference = NULL,
+  center = NULL,
+  scale = NULL,
+  remove_na = c("none", "selected", "all"),
+  force = FALSE,
+  append = FALSE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # evaluate select/exclude, may be select-helpers
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -336,9 +369,14 @@ standardize.grouped_df <- function(x,
   )
 
   my_args <- .process_grouped_df(
-    x, select, exclude, append,
+    x,
+    select,
+    exclude,
+    append,
     append_suffix = "_z",
-    reference, weights, keep_factors = force
+    reference,
+    weights,
+    keep_factors = force
   )
 
   # create column(s) to store dw_transformer attributes
@@ -366,7 +404,9 @@ standardize.grouped_df <- function(x,
 
     # store dw_transformer_attributes
     for (i in select) {
-      my_args$info$groups[rows, paste0("attr_", i)][[1]] <- list(unlist(attributes(tmp[[i]])))
+      my_args$info$groups[rows, paste0("attr_", i)][[
+        1
+      ]] <- list(unlist(attributes(tmp[[i]])))
     }
 
     my_args$x[my_args$grps[[rows]], ] <- tmp
@@ -385,7 +425,11 @@ standardize.grouped_df <- function(x,
 
 #' @export
 standardize.datagrid <- function(x, ...) {
-  x[names(x)] <- standardize(as.data.frame(x), reference = attributes(x)$data, ...)
+  x[names(x)] <- standardize(
+    as.data.frame(x),
+    reference = attributes(x)$data,
+    ...
+  )
   x
 }
 

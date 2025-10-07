@@ -86,7 +86,11 @@ change_scale <- function(x, ...) {
 rescale.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     insight::format_alert(
-      paste0("Variables of class `", class(x)[1], "` can't be rescaled and remain unchanged.")
+      paste0(
+        "Variables of class `",
+        class(x)[1],
+        "` can't be rescaled and remain unchanged."
+      )
     )
   }
   x
@@ -95,13 +99,15 @@ rescale.default <- function(x, verbose = TRUE, ...) {
 
 #' @rdname rescale
 #' @export
-rescale.numeric <- function(x,
-                            to = c(0, 100),
-                            multiply = NULL,
-                            add = NULL,
-                            range = NULL,
-                            verbose = TRUE,
-                            ...) {
+rescale.numeric <- function(
+  x,
+  to = c(0, 100),
+  multiply = NULL,
+  add = NULL,
+  range = NULL,
+  verbose = TRUE,
+  ...
+) {
   if (is.null(to)) {
     return(x)
   }
@@ -149,7 +155,9 @@ rescale.numeric <- function(x,
     return(x)
   }
 
-  out <- as.vector((new_max - new_min) / (max_value - min_value) * (x - min_value) + new_min)
+  out <- as.vector(
+    (new_max - new_min) / (max_value - min_value) * (x - min_value) + new_min
+  )
 
   attr(out, "min_value") <- min_value
   attr(out, "max_value") <- max_value
@@ -167,25 +175,27 @@ rescale.numeric <- function(x,
 
 
 #' @export
-rescale.grouped_df <- function(x,
-                               select = NULL,
-                               exclude = NULL,
-                               to = c(0, 100),
-                               multiply = NULL,
-                               add = NULL,
-                               range = NULL,
-                               append = FALSE,
-                               ignore_case = FALSE,
-                               regex = FALSE,
-                               verbose = FALSE,
-                               ...) {
+rescale.grouped_df <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  to = c(0, 100),
+  multiply = NULL,
+  add = NULL,
+  range = NULL,
+  append = FALSE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = FALSE,
+  ...
+) {
   info <- attributes(x)
-
 
   grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -233,20 +243,23 @@ rescale.grouped_df <- function(x,
 
 #' @rdname rescale
 #' @export
-rescale.data.frame <- function(x,
-                               select = NULL,
-                               exclude = NULL,
-                               to = c(0, 100),
-                               multiply = NULL,
-                               add = NULL,
-                               range = NULL,
-                               append = FALSE,
-                               ignore_case = FALSE,
-                               regex = FALSE,
-                               verbose = FALSE,
-                               ...) {
+rescale.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  to = c(0, 100),
+  multiply = NULL,
+  add = NULL,
+  range = NULL,
+  append = FALSE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = FALSE,
+  ...
+) {
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -290,9 +303,18 @@ rescale.data.frame <- function(x,
     .update_to(x[[i]], to[[i]], multiply[[i]], add[[i]])
   })
 
-  x[select] <- as.data.frame(sapply(select, function(n) {
-    rescale(x[[n]], to = to[[n]], range = range[[n]], add_transform_class = FALSE)
-  }, simplify = FALSE))
+  x[select] <- as.data.frame(sapply(
+    select,
+    function(n) {
+      rescale(
+        x[[n]],
+        to = to[[n]],
+        range = range[[n]],
+        add_transform_class = FALSE
+      )
+    },
+    simplify = FALSE
+  ))
   x
 }
 

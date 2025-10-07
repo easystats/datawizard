@@ -10,13 +10,15 @@ unstandardise <- unstandardize
 
 #' @rdname standardize
 #' @export
-unstandardize.numeric <- function(x,
-                                  center = NULL,
-                                  scale = NULL,
-                                  reference = NULL,
-                                  robust = FALSE,
-                                  two_sd = FALSE,
-                                  ...) {
+unstandardize.numeric <- function(
+  x,
+  center = NULL,
+  scale = NULL,
+  reference = NULL,
+  robust = FALSE,
+  two_sd = FALSE,
+  ...
+) {
   if (!is.null(reference)) {
     if (robust) {
       center <- stats::median(reference, na.rm = TRUE)
@@ -30,12 +32,16 @@ unstandardize.numeric <- function(x,
       center <- attr(x, "center", exact = TRUE)
       scale <- attr(x, "scale", exact = TRUE)
       attr(x, "scale") <- attr(x, "center") <- NULL
-    } else if (all(c("scaled:center", "scaled:scale") %in% names(attributes(x)))) {
+    } else if (
+      all(c("scaled:center", "scaled:scale") %in% names(attributes(x)))
+    ) {
       center <- attr(x, "scaled:center", exact = TRUE)
       scale <- attr(x, "scaled:scale", exact = TRUE)
       attr(x, "scaled:scale") <- attr(x, "scaled:center") <- NULL
     } else {
-      insight::format_error("You must provide the arguments `center`, `scale` or `reference`.")
+      insight::format_error(
+        "You must provide the arguments `center`, `scale` or `reference`."
+      )
     }
   }
 
@@ -48,18 +54,20 @@ unstandardize.numeric <- function(x,
 
 #' @rdname standardize
 #' @export
-unstandardize.data.frame <- function(x,
-                                     center = NULL,
-                                     scale = NULL,
-                                     reference = NULL,
-                                     robust = FALSE,
-                                     two_sd = FALSE,
-                                     select = NULL,
-                                     exclude = NULL,
-                                     ignore_case = FALSE,
-                                     regex = FALSE,
-                                     verbose = TRUE,
-                                     ...) {
+unstandardize.data.frame <- function(
+  x,
+  center = NULL,
+  scale = NULL,
+  reference = NULL,
+  robust = FALSE,
+  two_sd = FALSE,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # Select and deselect
   cols <- .select_nse(
     select,
@@ -79,34 +87,76 @@ unstandardize.data.frame <- function(x,
   }
 
   if (!is.null(grp_attr_dw)) {
-    center <- vapply(cols, function(x) {
-      grp_attr_dw[grep(paste0("^attr\\_", x, "\\.center"), names(grp_attr_dw))]
-    }, FUN.VALUE = numeric(1L))
-    scale <- vapply(cols, function(x) {
-      grp_attr_dw[grep(paste0("^attr\\_", x, "\\.scale"), names(grp_attr_dw))]
-    }, FUN.VALUE = numeric(1L))
+    center <- vapply(
+      cols,
+      function(x) {
+        grp_attr_dw[grep(
+          paste0("^attr\\_", x, "\\.center"),
+          names(grp_attr_dw)
+        )]
+      },
+      FUN.VALUE = numeric(1L)
+    )
+    scale <- vapply(
+      cols,
+      function(x) {
+        grp_attr_dw[grep(paste0("^attr\\_", x, "\\.scale"), names(grp_attr_dw))]
+      },
+      FUN.VALUE = numeric(1L)
+    )
     i <- vapply(x[, cols, drop = FALSE], is.numeric, FUN.VALUE = logical(1L))
   } else if (!is.null(reference)) {
     i <- vapply(x[, cols, drop = FALSE], is.numeric, FUN.VALUE = logical(1L))
     i <- i[i]
     reference <- reference[names(i)]
     if (robust) {
-      center <- vapply(reference, FUN.VALUE = numeric(1L), stats::median, na.rm = TRUE)
-      scale <- vapply(reference, FUN.VALUE = numeric(1L), stats::mad, na.rm = TRUE)
+      center <- vapply(
+        reference,
+        FUN.VALUE = numeric(1L),
+        stats::median,
+        na.rm = TRUE
+      )
+      scale <- vapply(
+        reference,
+        FUN.VALUE = numeric(1L),
+        stats::mad,
+        na.rm = TRUE
+      )
     } else {
       center <- vapply(reference, FUN.VALUE = numeric(1L), mean, na.rm = TRUE)
-      scale <- vapply(reference, FUN.VALUE = numeric(1L), stats::sd, na.rm = TRUE)
+      scale <- vapply(
+        reference,
+        FUN.VALUE = numeric(1L),
+        stats::sd,
+        na.rm = TRUE
+      )
     }
   } else if (is.null(center) || is.null(scale)) {
-    i <- vapply(x[, cols, drop = FALSE], function(k) {
-      a <- attributes(k)
-      is.numeric(k) && !is.null(a) && all(c("scale", "center") %in% names(a))
-    }, FUN.VALUE = logical(1L))
+    i <- vapply(
+      x[, cols, drop = FALSE],
+      function(k) {
+        a <- attributes(k)
+        is.numeric(k) && !is.null(a) && all(c("scale", "center") %in% names(a))
+      },
+      FUN.VALUE = logical(1L)
+    )
 
     if (any(i)) {
       i <- i[i]
-      center <- vapply(x[names(i)], FUN.VALUE = numeric(1L), attr, "center", exact = TRUE)
-      scale <- vapply(x[names(i)], FUN.VALUE = numeric(1L), attr, "scale", exact = TRUE)
+      center <- vapply(
+        x[names(i)],
+        FUN.VALUE = numeric(1L),
+        attr,
+        "center",
+        exact = TRUE
+      )
+      scale <- vapply(
+        x[names(i)],
+        FUN.VALUE = numeric(1L),
+        attr,
+        "scale",
+        exact = TRUE
+      )
     } else if (all(c("center", "scale") %in% names(attributes(x)))) {
       center <- attr(x, "center", exact = TRUE)
       scale <- attr(x, "scale", exact = TRUE)
@@ -114,7 +164,9 @@ unstandardize.data.frame <- function(x,
       i <- names(x) %in% names(scale)
       i <- i[i]
     } else {
-      insight::format_error("You must provide the arguments `center`, `scale` or `reference`.")
+      insight::format_error(
+        "You must provide the arguments `center`, `scale` or `reference`."
+      )
     }
   } else {
     if (is.null(names(center))) {
@@ -135,7 +187,11 @@ unstandardize.data.frame <- function(x,
 
   # Apply unstandardization to cols
   for (col in cols) {
-    x[col] <- unstandardize(x[[col]], center = center[[col]], scale = scale[[col]])
+    x[col] <- unstandardize(
+      x[[col]],
+      center = center[[col]],
+      scale = scale[[col]]
+    )
   }
   x
 }
@@ -152,20 +208,23 @@ unstandardize.character <- function(x, ...) {
 
 
 #' @export
-unstandardize.grouped_df <- function(x,
-                                     center = NULL,
-                                     scale = NULL,
-                                     reference = NULL,
-                                     robust = FALSE,
-                                     two_sd = FALSE,
-                                     select = NULL,
-                                     exclude = NULL,
-                                     ignore_case = FALSE,
-                                     regex = FALSE,
-                                     verbose = TRUE,
-                                     ...) {
+unstandardize.grouped_df <- function(
+  x,
+  center = NULL,
+  scale = NULL,
+  reference = NULL,
+  robust = FALSE,
+  two_sd = FALSE,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # evaluate select/exclude, may be select-helpers
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -175,7 +234,6 @@ unstandardize.grouped_df <- function(x,
   )
 
   info <- attributes(x)
-
 
   grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
@@ -194,7 +252,10 @@ unstandardize.grouped_df <- function(x,
 
   for (rows in seq_along(grps)) {
     # get the dw_transformer attributes for this group
-    raw_attrs <- unlist(info$groups[rows, startsWith(names(info$groups), "attr")])
+    raw_attrs <- unlist(info$groups[
+      rows,
+      startsWith(names(info$groups), "attr")
+    ])
     if (length(select) == 1L) {
       names(raw_attrs) <- paste0("attr_", select, ".", names(raw_attrs))
     }
@@ -222,20 +283,26 @@ unstandardize.grouped_df <- function(x,
 }
 
 #' @export
-unstandardize.matrix <- function(x,
-                                 center = NULL,
-                                 scale = NULL,
-                                 reference = NULL,
-                                 robust = FALSE,
-                                 two_sd = FALSE,
-                                 ...) {
+unstandardize.matrix <- function(
+  x,
+  center = NULL,
+  scale = NULL,
+  reference = NULL,
+  robust = FALSE,
+  two_sd = FALSE,
+  ...
+) {
   if (all(c("scaled:center", "scaled:scale") %in% names(attributes(x)))) {
     center <- attr(x, "scaled:center", exact = TRUE)
     scale <- attr(x, "scaled:scale", exact = TRUE)
     attr(x, "scaled:center") <- attr(x, "scaled:scale") <- NULL
 
     for (col in seq_len(ncol(x))) {
-      x[, col] <- unstandardize.numeric(x[, col], center = center[col], scale = scale[col])
+      x[, col] <- unstandardize.numeric(
+        x[, col],
+        center = center[col],
+        scale = scale[col]
+      )
     }
   } else {
     scales <- attr(x, "scale")
@@ -264,7 +331,11 @@ unstandardize.array <- unstandardize.matrix
 
 #' @export
 unstandardize.datagrid <- function(x, ...) {
-  x[names(x)] <- unstandardize(as.data.frame(x), reference = attributes(x)$data, ...)
+  x[names(x)] <- unstandardize(
+    as.data.frame(x),
+    reference = attributes(x)$data,
+    ...
+  )
   x
 }
 

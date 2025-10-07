@@ -1,18 +1,39 @@
 # distribution ---------------------------------
 
 #' @export
-format.parameters_distribution <- function(x, digits = 2, format = NULL, ci_width = "auto", ci_brackets = TRUE, ...) {
+format.parameters_distribution <- function(
+  x,
+  digits = 2,
+  format = NULL,
+  ci_width = "auto",
+  ci_brackets = TRUE,
+  ...
+) {
   # save information
   att <- attributes(x)
 
   if (all(c("Min", "Max") %in% names(x))) {
-    x$Min <- insight::format_ci(x$Min, x$Max, ci = NULL, digits = digits, width = ci_width, brackets = ci_brackets)
+    x$Min <- insight::format_ci(
+      x$Min,
+      x$Max,
+      ci = NULL,
+      digits = digits,
+      width = ci_width,
+      brackets = ci_brackets
+    )
     x$Max <- NULL
     colnames(x)[which(colnames(x) == "Min")] <- "Range"
   }
 
   if (all(c("Q1", "Q3") %in% names(x))) {
-    x$Q1 <- insight::format_ci(x$Q1, x$Q3, ci = NULL, digits = digits, width = ci_width, brackets = FALSE)
+    x$Q1 <- insight::format_ci(
+      x$Q1,
+      x$Q3,
+      ci = NULL,
+      digits = digits,
+      width = ci_width,
+      brackets = FALSE
+    )
     x$Q3 <- NULL
     colnames(x)[which(colnames(x) == "Q1")] <- "Quartiles"
   }
@@ -57,7 +78,8 @@ format.parameters_distribution <- function(x, digits = 2, format = NULL, ci_widt
       }
 
       # make sure we have the correct column name of the centrality
-      centr_name <- switch(tolower(ce),
+      centr_name <- switch(
+        tolower(ce),
         mean = "Mean",
         median = "Median",
         map = "MAP"

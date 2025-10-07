@@ -146,7 +146,11 @@ categorize <- function(x, ...) {
 categorize.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     insight::format_alert(
-      paste0("Variables of class `", class(x)[1], "` can't be recoded and remain unchanged.")
+      paste0(
+        "Variables of class `",
+        class(x)[1],
+        "` can't be recoded and remain unchanged."
+      )
     )
   }
   x
@@ -155,21 +159,27 @@ categorize.default <- function(x, verbose = TRUE, ...) {
 
 #' @rdname categorize
 #' @export
-categorize.numeric <- function(x,
-                               split = "median",
-                               n_groups = NULL,
-                               range = NULL,
-                               lowest = 1,
-                               breaks = "exclusive",
-                               labels = NULL,
-                               verbose = TRUE,
-                               ...) {
+categorize.numeric <- function(
+  x,
+  split = "median",
+  n_groups = NULL,
+  range = NULL,
+  lowest = 1,
+  breaks = "exclusive",
+  labels = NULL,
+  verbose = TRUE,
+  ...
+) {
   # sanity check
   split <- .sanitize_split_arg(split, n_groups, range)
 
   # handle aliases
-  if (identical(split, "equal_length")) split <- "length"
-  if (identical(split, "equal_range")) split <- "range"
+  if (identical(split, "equal_length")) {
+    split <- "length"
+  }
+  if (identical(split, "equal_range")) {
+    split <- "range"
+  }
 
   # check for valid values
   breaks <- match.arg(breaks, c("exclusive", "inclusive"))
@@ -193,7 +203,8 @@ categorize.numeric <- function(x,
   if (is.numeric(split)) {
     category_splits <- split
   } else {
-    category_splits <- switch(split,
+    category_splits <- switch(
+      split,
       median = stats::median(x),
       mean = mean(x),
       length = n_groups,
@@ -241,22 +252,25 @@ categorize.factor <- function(x, ...) {
 
 #' @rdname categorize
 #' @export
-categorize.data.frame <- function(x,
-                                  select = NULL,
-                                  exclude = NULL,
-                                  split = "median",
-                                  n_groups = NULL,
-                                  range = NULL,
-                                  lowest = 1,
-                                  breaks = "exclusive",
-                                  labels = NULL,
-                                  append = FALSE,
-                                  ignore_case = FALSE,
-                                  regex = FALSE,
-                                  verbose = TRUE,
-                                  ...) {
+categorize.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  split = "median",
+  n_groups = NULL,
+  range = NULL,
+  lowest = 1,
+  breaks = "exclusive",
+  labels = NULL,
+  append = FALSE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -296,26 +310,29 @@ categorize.data.frame <- function(x,
 
 
 #' @export
-categorize.grouped_df <- function(x,
-                                  select = NULL,
-                                  exclude = NULL,
-                                  split = "median",
-                                  n_groups = NULL,
-                                  range = NULL,
-                                  lowest = 1,
-                                  breaks = "exclusive",
-                                  labels = NULL,
-                                  append = FALSE,
-                                  ignore_case = FALSE,
-                                  regex = FALSE,
-                                  verbose = TRUE,
-                                  ...) {
+categorize.grouped_df <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  split = "median",
+  n_groups = NULL,
+  range = NULL,
+  lowest = 1,
+  breaks = "exclusive",
+  labels = NULL,
+  append = FALSE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
   attr_data <- attributes(x)
 
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -366,7 +383,9 @@ categorize.grouped_df <- function(x,
 # tools --------------------
 
 .equal_range <- function(x, range, n_groups, lowest = NULL) {
-  if (is.null(lowest)) lowest <- 1
+  if (is.null(lowest)) {
+    lowest <- 1
+  }
   if (is.null(range)) {
     size <- ceiling((max(x) - min(x)) / n_groups)
     range <- as.numeric(size)
@@ -381,19 +400,35 @@ categorize.grouped_df <- function(x,
     split <- match.arg(
       split,
       choices = c(
-        "median", "mean", "quantile", "equal_length", "equal_range",
-        "equal", "equal_distance", "range", "distance"
+        "median",
+        "mean",
+        "quantile",
+        "equal_length",
+        "equal_range",
+        "equal",
+        "equal_distance",
+        "range",
+        "distance"
       )
     )
   }
 
-  if (is.character(split) && split %in% c("quantile", "equal_length") && is.null(n_groups)) {
+  if (
+    is.character(split) &&
+      split %in% c("quantile", "equal_length") &&
+      is.null(n_groups)
+  ) {
     insight::format_error(
       "Recoding based on quantiles or equal-sized groups requires the `n_groups` argument to be specified."
     )
   }
 
-  if (is.character(split) && split == "equal_range" && is.null(n_groups) && is.null(range)) {
+  if (
+    is.character(split) &&
+      split == "equal_range" &&
+      is.null(n_groups) &&
+      is.null(range)
+  ) {
     insight::format_error(
       "Recoding into groups with equal range requires either the `range` or `n_groups` argument to be specified."
     )
@@ -403,23 +438,47 @@ categorize.grouped_df <- function(x,
 }
 
 
-.original_x_to_factor <- function(original_x, x, cut_result, labels, out, verbose, ...) {
+.original_x_to_factor <- function(
+  original_x,
+  x,
+  cut_result,
+  labels,
+  out,
+  verbose,
+  ...
+) {
   if (!is.null(labels)) {
     if (length(labels) == length(unique(out))) {
       original_x <- as.factor(original_x)
       levels(original_x) <- labels
-    } else if (length(labels) == 1 && labels %in% c("mean", "median", "range", "observed")) {
+    } else if (
+      length(labels) == 1 &&
+        labels %in% c("mean", "median", "range", "observed")
+    ) {
       original_x <- as.factor(original_x)
       no_na_x <- original_x[!is.na(original_x)]
-      out <- switch(labels,
+      out <- switch(
+        labels,
         mean = stats::aggregate(x, list(no_na_x), FUN = mean, na.rm = TRUE)$x,
-        median = stats::aggregate(x, list(no_na_x), FUN = stats::median, na.rm = TRUE)$x,
+        median = stats::aggregate(
+          x,
+          list(no_na_x),
+          FUN = stats::median,
+          na.rm = TRUE
+        )$x,
         # labels basically like what "cut()" returns
         range = levels(cut_result),
         # range based on the values that are actually present in the data
         {
-          temp <- stats::aggregate(x, list(no_na_x), FUN = range, na.rm = TRUE)$x
-          apply(temp, 1, function(i) paste0("(", paste(as.vector(i), collapse = "-"), ")"))
+          temp <- stats::aggregate(
+            x,
+            list(no_na_x),
+            FUN = range,
+            na.rm = TRUE
+          )$x
+          apply(temp, 1, function(i) {
+            paste0("(", paste(as.vector(i), collapse = "-"), ")")
+          })
         }
       )
       levels(original_x) <- insight::format_value(out, ...)

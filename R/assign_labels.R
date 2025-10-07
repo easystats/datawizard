@@ -64,7 +64,10 @@ assign_labels <- function(x, ...) {
 assign_labels.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     insight::format_alert(
-      sprintf("Adding labels currently not possible for variables of class `%s`.", class(x)[1])
+      sprintf(
+        "Adding labels currently not possible for variables of class `%s`.",
+        class(x)[1]
+      )
     )
   }
   x
@@ -98,7 +101,11 @@ assign_labels.numeric <- function(x, variable = NULL, values = NULL, ...) {
       } else {
         insight::format_error(
           "Cannot add labels. Number of unique values and number of value labels are not equal.",
-          sprintf("There are %i unique values and %i provided labels.", length(unique_values), length(values))
+          sprintf(
+            "There are %i unique values and %i provided labels.",
+            length(unique_values),
+            length(values)
+          )
         )
       }
     } else {
@@ -107,14 +114,25 @@ assign_labels.numeric <- function(x, variable = NULL, values = NULL, ...) {
       if (!all(matching_labels)) {
         insight::format_error(
           "Following labels were associated with values that don't exist:",
-          text_concatenate(paste0(values[!matching_labels], " (", names(values)[!matching_labels], ")"), enclose = "`")
+          text_concatenate(
+            paste0(
+              values[!matching_labels],
+              " (",
+              names(values)[!matching_labels],
+              ")"
+            ),
+            enclose = "`"
+          )
         )
       }
       values <- values[names(values) %in% unique_values]
 
       if (length(values)) {
         # we need to switch names and values
-        value_labels <- stats::setNames(coerce_to_numeric(names(values)), values)
+        value_labels <- stats::setNames(
+          coerce_to_numeric(names(values)),
+          values
+        )
       }
     }
 
@@ -132,16 +150,19 @@ assign_labels.character <- assign_labels.numeric
 
 #' @rdname assign_labels
 #' @export
-assign_labels.data.frame <- function(x,
-                                     select = NULL,
-                                     exclude = NULL,
-                                     values = NULL,
-                                     ignore_case = FALSE,
-                                     regex = FALSE,
-                                     verbose = TRUE,
-                                     ...) {
+assign_labels.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  values = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -149,6 +170,12 @@ assign_labels.data.frame <- function(x,
     verbose = verbose
   )
 
-  x[select] <- lapply(x[select], assign_labels, values = values, verbose = verbose, ...)
+  x[select] <- lapply(
+    x[select],
+    assign_labels,
+    values = values,
+    verbose = verbose,
+    ...
+  )
   x
 }

@@ -76,12 +76,13 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   infinite_vals <- x[infinite_idx]
   x[infinite_idx] <- NA
 
-
   # called from "makepredictcal()"? Then we have additional arguments
   dot_args <- list(...)
   flag_predict <- FALSE
   required_dot_args <- c(
-    "range_difference", "min_value", "vector_length",
+    "range_difference",
+    "min_value",
+    "vector_length",
     "flag_bounds"
   )
 
@@ -101,7 +102,6 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
     flag_bounds <- NULL
   }
 
-
   # Warning if only one value
   if (!flag_predict && insight::has_single_value(x)) {
     if (verbose) {
@@ -115,7 +115,6 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
     }
     return(x)
   }
-
 
   # Warning if logical vector
   if (insight::n_unique(x) == 2 && verbose) {
@@ -140,7 +139,9 @@ normalize.numeric <- function(x, include_bounds = TRUE, verbose = TRUE, ...) {
   if (!isTRUE(include_bounds) && flag_bounds) {
     if (isFALSE(include_bounds)) {
       out <- (out * (vector_length - 1) + 0.5) / vector_length
-    } else if (is.numeric(include_bounds) && include_bounds > 0 && include_bounds < 1) {
+    } else if (
+      is.numeric(include_bounds) && include_bounds > 0 && include_bounds < 1
+    ) {
       out <- rescale(out, to = c(0 + include_bounds, 1 - include_bounds))
     } else if (verbose) {
       insight::format_warning(
@@ -174,17 +175,20 @@ normalize.factor <- function(x, ...) {
 
 
 #' @export
-normalize.grouped_df <- function(x,
-                                 select = NULL,
-                                 exclude = NULL,
-                                 include_bounds = TRUE,
-                                 append = FALSE,
-                                 ignore_case = FALSE,
-                                 regex = FALSE,
-                                 verbose = TRUE,
-                                 ...) {
+normalize.grouped_df <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  include_bounds = TRUE,
+  append = FALSE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # evaluate select/exclude, may be select-helpers
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -233,7 +237,9 @@ normalize.grouped_df <- function(x,
 
     # store dw_transformer_attributes
     for (i in select) {
-      info$groups[rows, paste0("attr_", i)][[1]] <- list(unlist(attributes(tmp[[i]])))
+      info$groups[rows, paste0("attr_", i)][[1]] <- list(unlist(attributes(tmp[[
+        i
+      ]])))
     }
 
     x[grps[[rows]], ] <- tmp
@@ -251,17 +257,20 @@ normalize.grouped_df <- function(x,
 
 #' @rdname normalize
 #' @export
-normalize.data.frame <- function(x,
-                                 select = NULL,
-                                 exclude = NULL,
-                                 include_bounds = TRUE,
-                                 append = FALSE,
-                                 ignore_case = FALSE,
-                                 regex = FALSE,
-                                 verbose = TRUE,
-                                 ...) {
+normalize.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  include_bounds = TRUE,
+  append = FALSE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # evaluate select/exclude, may be select-helpers
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,

@@ -145,13 +145,15 @@
 #' # rename returned columns for "data_select()"
 #' head(data_select(mtcars, c(`Miles per Gallon` = "mpg", Cylinders = "cyl")))
 #' @export
-extract_column_names <- function(data,
-                                 select = NULL,
-                                 exclude = NULL,
-                                 ignore_case = FALSE,
-                                 regex = FALSE,
-                                 verbose = TRUE,
-                                 ...) {
+extract_column_names <- function(
+  data,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   columns <- .select_nse(
     select,
     data,
