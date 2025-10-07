@@ -16,7 +16,12 @@ test_that("data_summary, single row summary, string expression", {
 
 test_that("data_summary, summary for groups", {
   data(iris)
-  out <- data_summary(iris, MW = mean(Sepal.Width), SD = sd(Sepal.Width), by = "Species")
+  out <- data_summary(
+    iris,
+    MW = mean(Sepal.Width),
+    SD = sd(Sepal.Width),
+    by = "Species"
+  )
   expect_equal(
     out$MW,
     aggregate(iris["Sepal.Width"], list(iris$Species), mean)$Sepal.Width,
@@ -78,7 +83,12 @@ test_that("data_summary, grouped data frames", {
 
 test_that("data_summary, summary for multiple groups", {
   data(mtcars)
-  out <- data_summary(mtcars, MW = mean(mpg), SD = sd(mpg), by = c("am", "gear"))
+  out <- data_summary(
+    mtcars,
+    MW = mean(mpg),
+    SD = sd(mpg),
+    by = c("am", "gear")
+  )
   expect_equal(
     out$MW,
     aggregate(mtcars["mpg"], list(mtcars$am, mtcars$gear), mean)$mpg,
@@ -114,7 +124,12 @@ test_that("data_summary, errors", {
   )
   # "by" must be in data
   expect_error(
-    data_summary(iris, MW = mean(Sepal.Width), SD = sd(Sepal.Width), by = "Speceis"),
+    data_summary(
+      iris,
+      MW = mean(Sepal.Width),
+      SD = sd(Sepal.Width),
+      by = "Speceis"
+    ),
     regex = "Variable \"Speceis\" not"
   )
   # by for multiple variables
@@ -128,7 +143,11 @@ test_that("data_summary, errors", {
   )
   # not a data frame
   expect_error(
-    data_summary(iris$Sepal.Width, MW = mean(Sepal.Width), SD = sd(Sepal.Width)),
+    data_summary(
+      iris$Sepal.Width,
+      MW = mean(Sepal.Width),
+      SD = sd(Sepal.Width)
+    ),
     regex = "only works for"
   )
   # no expressions
@@ -148,7 +167,12 @@ test_that("data_summary, errors", {
   )
   # expression returns more than one value
   expect_error(
-    data_summary(mtcars, n = unique(mpg), j = c(min(am), max(am)), by = c("am", "gear")),
+    data_summary(
+      mtcars,
+      n = unique(mpg),
+      j = c(min(am), max(am)),
+      by = c("am", "gear")
+    ),
     regex = "Each expression must return"
   )
 })
@@ -156,7 +180,12 @@ test_that("data_summary, errors", {
 
 test_that("data_summary, values_at", {
   data(mtcars)
-  out <- data_summary(mtcars, pos1 = mpg[1], pos_end = mpg[length(mpg)], by = c("am", "gear"))
+  out <- data_summary(
+    mtcars,
+    pos1 = mpg[1],
+    pos_end = mpg[length(mpg)],
+    by = c("am", "gear")
+  )
   # same as:
   # dplyr::summarise(mtcars, pos1 = dplyr::first(mpg), pos_end = dplyr::last(mpg), .by = c("am", "gear"))
   expect_equal(out$pos1, c(21.4, 24.4, 21, 26), tolerance = 1e-3)
@@ -166,7 +195,12 @@ test_that("data_summary, values_at", {
 
 test_that("data_summary, print", {
   data(mtcars)
-  out <- data_summary(mtcars, MW = mean(mpg), SD = sd(mpg), by = c("am", "gear"))
+  out <- data_summary(
+    mtcars,
+    MW = mean(mpg),
+    SD = sd(mpg),
+    by = c("am", "gear")
+  )
   expect_snapshot(print(out))
 })
 
@@ -175,10 +209,19 @@ test_that("data_summary, with NA", {
   data(efc, package = "datawizard")
   out <- data_summary(efc, MW = mean(c12hour, na.rm = TRUE), by = "c172code")
   expect_snapshot(print(out))
-  out <- data_summary(efc, MW = mean(c12hour, na.rm = TRUE), by = "c172code", remove_na = TRUE)
+  out <- data_summary(
+    efc,
+    MW = mean(c12hour, na.rm = TRUE),
+    by = "c172code",
+    remove_na = TRUE
+  )
   expect_snapshot(print(out))
   # sorting for multiple groups
-  out <- data_summary(efc, MW = mean(c12hour, na.rm = TRUE), by = c("e42dep", "c172code"))
+  out <- data_summary(
+    efc,
+    MW = mean(c12hour, na.rm = TRUE),
+    by = c("e42dep", "c172code")
+  )
   expect_snapshot(print(out))
 })
 
@@ -211,14 +254,22 @@ test_that("data_summary, expression as variable", {
   b <- "SD = sd(mpg)"
   out <- data_summary(mtcars, a, by = c("am", "gear"))
   expect_named(out, c("am", "gear", "MW"))
-  expect_equal(out$MW, aggregate(mtcars["mpg"], list(mtcars$am, mtcars$gear), mean)$mpg, tolerance = 1e-4)
+  expect_equal(
+    out$MW,
+    aggregate(mtcars["mpg"], list(mtcars$am, mtcars$gear), mean)$mpg,
+    tolerance = 1e-4
+  )
   expect_error(
     data_summary(mtcars, a, b, by = c("am", "gear")),
     regex = "You cannot mix"
   )
   out <- data_summary(mtcars, c(a, b), by = c("am", "gear"))
   expect_named(out, c("am", "gear", "MW", "SD"))
-  expect_equal(out$SD, aggregate(mtcars["mpg"], list(mtcars$am, mtcars$gear), sd)$mpg, tolerance = 1e-4)
+  expect_equal(
+    out$SD,
+    aggregate(mtcars["mpg"], list(mtcars$am, mtcars$gear), sd)$mpg,
+    tolerance = 1e-4
+  )
 })
 
 

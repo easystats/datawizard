@@ -10,15 +10,44 @@ x <- sample(c(1:4, NA), 15, TRUE)
 
 test_that("recode numeric", {
   out <- recode_values(x, list(`1` = 0, `2:3` = 1, `4` = 2))
-  expect_equal(out, c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2), ignore_attr = TRUE)
-  out <- recode_values(x, list(`1` = 0, `2:3` = 1, `4` = 2, `NA` = 9), preserve_na = FALSE)
-  expect_equal(out, c(1, 1, 1, 1, 1, 9, 2, 0, 1, 1, 9, 1, 1, 0, 2), ignore_attr = TRUE)
+  expect_equal(
+    out,
+    c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
+    ignore_attr = TRUE
+  )
+  out <- recode_values(
+    x,
+    list(`1` = 0, `2:3` = 1, `4` = 2, `NA` = 9),
+    preserve_na = FALSE
+  )
+  expect_equal(
+    out,
+    c(1, 1, 1, 1, 1, 9, 2, 0, 1, 1, 9, 1, 1, 0, 2),
+    ignore_attr = TRUE
+  )
   out <- recode_values(x, list(`1` = 0, `2:3` = 1, `4` = 2, `NA` = 9))
-  expect_equal(out, c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2), ignore_attr = TRUE)
-  out <- recode_values(x, list(`1` = 0, `2` = 1), default = 99, preserve_na = FALSE)
-  expect_equal(out, c(99, 99, 1, 1, 99, 99, 99, 0, 1, 99, 99, 99, 99, 0, 99), ignore_attr = TRUE)
+  expect_equal(
+    out,
+    c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
+    ignore_attr = TRUE
+  )
+  out <- recode_values(
+    x,
+    list(`1` = 0, `2` = 1),
+    default = 99,
+    preserve_na = FALSE
+  )
+  expect_equal(
+    out,
+    c(99, 99, 1, 1, 99, 99, 99, 0, 1, 99, 99, 99, 99, 0, 99),
+    ignore_attr = TRUE
+  )
   out <- recode_values(x, list(`1` = 0, `2` = 1), default = 99)
-  expect_equal(out, c(99, 99, 1, 1, 99, NA, 99, 0, 1, 99, NA, 99, 99, 0, 99), ignore_attr = TRUE)
+  expect_equal(
+    out,
+    c(99, 99, 1, 1, 99, NA, 99, 0, 1, 99, NA, 99, 99, 0, 99),
+    ignore_attr = TRUE
+  )
 })
 
 
@@ -41,19 +70,53 @@ test_that("recode factor", {
   out <- recode_values(x, list(a = "x", `b, c` = "y"))
   expect_equal(
     out,
-    structure(c(
-      2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 1L,
-      2L, 2L
-    ), .Label = c("x", "y"), class = "factor"),
+    structure(
+      c(
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        1L,
+        2L,
+        2L,
+        1L,
+        2L,
+        2L
+      ),
+      .Label = c("x", "y"),
+      class = "factor"
+    ),
     ignore_attr = TRUE
   )
   out <- recode_values(x, list(a = "x", `b, c` = "y"))
   expect_equal(
     out,
-    structure(c(
-      2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 1L,
-      2L, 2L
-    ), .Label = c("x", "y"), class = "factor"),
+    structure(
+      c(
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        1L,
+        2L,
+        2L,
+        1L,
+        2L,
+        2L
+      ),
+      .Label = c("x", "y"),
+      class = "factor"
+    ),
     ignore_attr = TRUE
   )
 })
@@ -77,13 +140,50 @@ test_that("recode factor", {
   out <- recode_values(x, list(a = "x", b = "y"), default = "zz")
   expect_equal(
     as.character(out),
-    c("zz", "zz", "zz", "y", "zz", "y", "y", "y", "zz", "x", NA, "y", "y", "x", "y"),
+    c(
+      "zz",
+      "zz",
+      "zz",
+      "y",
+      "zz",
+      "y",
+      "y",
+      "y",
+      "zz",
+      "x",
+      NA,
+      "y",
+      "y",
+      "x",
+      "y"
+    ),
     ignore_attr = TRUE
   )
-  out <- recode_values(x, list(a = "x", b = "y"), default = "zz", preserve_na = FALSE)
+  out <- recode_values(
+    x,
+    list(a = "x", b = "y"),
+    default = "zz",
+    preserve_na = FALSE
+  )
   expect_equal(
     as.character(out),
-    c("zz", "zz", "zz", "y", "zz", "y", "y", "y", "zz", "x", "zz", "y", "y", "x", "y"),
+    c(
+      "zz",
+      "zz",
+      "zz",
+      "y",
+      "zz",
+      "y",
+      "y",
+      "y",
+      "zz",
+      "x",
+      "zz",
+      "y",
+      "y",
+      "x",
+      "y"
+    ),
     ignore_attr = TRUE
   )
 })
@@ -98,7 +198,23 @@ test_that("recode character", {
   out <- recode_values(x, list(a = "x", `b, c` = "y"))
   expect_equal(
     out,
-    c("y", "y", "y", "y", "y", "y", "y", "y", "y", "x", "y", "y", "x", "y", "y"),
+    c(
+      "y",
+      "y",
+      "y",
+      "y",
+      "y",
+      "y",
+      "y",
+      "y",
+      "y",
+      "x",
+      "y",
+      "y",
+      "x",
+      "y",
+      "y"
+    ),
     ignore_attr = TRUE
   )
 })
@@ -123,12 +239,14 @@ test_that("recode data.frame", {
     structure(
       list(
         x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
-        y = structure(c(1L, 1L, 1L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L),
+        y = structure(
+          c(1L, 1L, 1L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L),
           .Label = c("x", "y"),
           class = "factor"
         )
       ),
-      row.names = c(NA, 15L), class = "data.frame"
+      row.names = c(NA, 15L),
+      class = "data.frame"
     ),
     ignore_attr = TRUE
   )
@@ -142,12 +260,14 @@ test_that("recode data.frame", {
     structure(
       list(
         x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
-        y = structure(c(1L, 1L, 1L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L),
+        y = structure(
+          c(1L, 1L, 1L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L),
           .Label = c("x", "y"),
           class = "factor"
         )
       ),
-      row.names = c(NA, 15L), class = "data.frame"
+      row.names = c(NA, 15L),
+      class = "data.frame"
     ),
     ignore_attr = TRUE
   )
@@ -162,12 +282,14 @@ test_that("recode data.frame", {
     structure(
       list(
         x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
-        y = structure(c(1L, 1L, 1L, 3L, 2L, 3L, 2L, 1L, 2L, 3L, 2L, 1L, 3L, 3L, 1L),
+        y = structure(
+          c(1L, 1L, 1L, 3L, 2L, 3L, 2L, 1L, 2L, 3L, 2L, 1L, 3L, 3L, 1L),
           .Label = c("a", "b", "c"),
           class = "factor"
         )
       ),
-      row.names = c(NA, 15L), class = "data.frame"
+      row.names = c(NA, 15L),
+      class = "data.frame"
     ),
     ignore_attr = TRUE
   )
@@ -183,15 +305,38 @@ x <- sample(c(1:4, NA), 15, TRUE)
 
 test_that("recode numeric", {
   out <- recode_values(x, list(`0` = 1, `1` = 2:3, `2` = 4))
-  expect_equal(out, c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2), ignore_attr = TRUE)
-  out <- recode_values(x, list(`0` = 1, `1` = 2:3, `2` = 4, `9` = NA), preserve_na = FALSE)
-  expect_equal(out, c(1, 1, 1, 1, 1, 9, 2, 0, 1, 1, 9, 1, 1, 0, 2), ignore_attr = TRUE)
-  out <- recode_values(x, list(`0` = 1, `1` = 2:3, `2` = 4, `9` = NA), preserve_na = TRUE)
-  expect_equal(out, c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2), ignore_attr = TRUE)
+  expect_equal(
+    out,
+    c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
+    ignore_attr = TRUE
+  )
+  out <- recode_values(
+    x,
+    list(`0` = 1, `1` = 2:3, `2` = 4, `9` = NA),
+    preserve_na = FALSE
+  )
+  expect_equal(
+    out,
+    c(1, 1, 1, 1, 1, 9, 2, 0, 1, 1, 9, 1, 1, 0, 2),
+    ignore_attr = TRUE
+  )
+  out <- recode_values(
+    x,
+    list(`0` = 1, `1` = 2:3, `2` = 4, `9` = NA),
+    preserve_na = TRUE
+  )
+  expect_equal(
+    out,
+    c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
+    ignore_attr = TRUE
+  )
 })
 
 test_that("recode, recode-arg is named list", {
-  expect_warning(expect_identical(recode_values(x, recode = c(`0` = 1, `1` = 2:3, `2` = 4)), x))
+  expect_warning(expect_identical(
+    recode_values(x, recode = c(`0` = 1, `1` = 2:3, `2` = 4)),
+    x
+  ))
 })
 
 
@@ -202,25 +347,62 @@ test_that("recode factor", {
   out <- recode_values(x, list(x = "a", y = "b, c"))
   expect_equal(
     out,
-    structure(c(
-      2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 1L,
-      2L, 2L
-    ), .Label = c("x", "y"), class = "factor"),
+    structure(
+      c(
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        1L,
+        2L,
+        2L,
+        1L,
+        2L,
+        2L
+      ),
+      .Label = c("x", "y"),
+      class = "factor"
+    ),
     ignore_attr = TRUE
   )
   out <- recode_values(x, list(x = "a", y = c("b", "c")))
   expect_equal(
     out,
-    structure(c(
-      2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 1L,
-      2L, 2L
-    ), .Label = c("x", "y"), class = "factor"),
+    structure(
+      c(
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        2L,
+        1L,
+        2L,
+        2L,
+        1L,
+        2L,
+        2L
+      ),
+      .Label = c("x", "y"),
+      class = "factor"
+    ),
     ignore_attr = TRUE
   )
 })
 
 test_that("recode, recode-arg is named list", {
-  expect_warning(expect_identical(recode_values(x, recode = c(x = "a", y = "b, c")), x))
+  expect_warning(expect_identical(
+    recode_values(x, recode = c(x = "a", y = "b, c")),
+    x
+  ))
 })
 
 
@@ -241,12 +423,14 @@ test_that("recode data.frame", {
     structure(
       list(
         x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
-        y = structure(c(1L, 1L, 1L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L),
+        y = structure(
+          c(1L, 1L, 1L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L),
           .Label = c("x", "y"),
           class = "factor"
         )
       ),
-      row.names = c(NA, 15L), class = "data.frame"
+      row.names = c(NA, 15L),
+      class = "data.frame"
     ),
     ignore_attr = TRUE
   )
@@ -260,12 +444,14 @@ test_that("recode data.frame", {
     structure(
       list(
         x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
-        y = structure(c(1L, 1L, 1L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L),
+        y = structure(
+          c(1L, 1L, 1L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L),
           .Label = c("x", "y"),
           class = "factor"
         )
       ),
-      row.names = c(NA, 15L), class = "data.frame"
+      row.names = c(NA, 15L),
+      class = "data.frame"
     ),
     ignore_attr = TRUE
   )
@@ -280,12 +466,14 @@ test_that("recode data.frame", {
     structure(
       list(
         x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
-        y = structure(c(1L, 1L, 1L, 3L, 2L, 3L, 2L, 1L, 2L, 3L, 2L, 1L, 3L, 3L, 1L),
+        y = structure(
+          c(1L, 1L, 1L, 3L, 2L, 3L, 2L, 1L, 2L, 3L, 2L, 1L, 3L, 3L, 1L),
           .Label = c("a", "b", "c"),
           class = "factor"
         )
       ),
-      row.names = c(NA, 15L), class = "data.frame"
+      row.names = c(NA, 15L),
+      class = "data.frame"
     ),
     ignore_attr = TRUE
   )
@@ -294,11 +482,24 @@ test_that("recode data.frame", {
 # select helpers ------------------------------
 test_that("recode_values regex", {
   expect_identical(
-    recode_values(iris, select = "ies", regex = TRUE, recode = list(
-      Group1 = "setosa", Group2 = "versicolor", Group3 = "virginica"
-    )),
-    recode_values(iris, select = "Species", recode = list(
-      Group1 = "setosa", Group2 = "versicolor", Group3 = "virginica"
-    ))
+    recode_values(
+      iris,
+      select = "ies",
+      regex = TRUE,
+      recode = list(
+        Group1 = "setosa",
+        Group2 = "versicolor",
+        Group3 = "virginica"
+      )
+    ),
+    recode_values(
+      iris,
+      select = "Species",
+      recode = list(
+        Group1 = "setosa",
+        Group2 = "versicolor",
+        Group3 = "virginica"
+      )
+    )
   )
 })

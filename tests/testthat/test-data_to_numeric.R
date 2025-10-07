@@ -8,9 +8,18 @@ test_that("convert character to numeric", {
 })
 
 test_that("convert character to numeric Date", {
-  expect_warning(expect_identical(to_numeric(as.Date("2022-01-01")), as.numeric(as.Date("2022-01-01"))))
-  expect_warning(expect_identical(to_numeric(as.POSIXct("2022-01-01")), as.numeric(as.POSIXct("2022-01-01"))))
-  expect_warning(expect_identical(to_numeric(as.POSIXlt("2022-01-01")), as.numeric(as.POSIXlt("2022-01-01"))))
+  expect_warning(expect_identical(
+    to_numeric(as.Date("2022-01-01")),
+    as.numeric(as.Date("2022-01-01"))
+  ))
+  expect_warning(expect_identical(
+    to_numeric(as.POSIXct("2022-01-01")),
+    as.numeric(as.POSIXct("2022-01-01"))
+  ))
+  expect_warning(expect_identical(
+    to_numeric(as.POSIXlt("2022-01-01")),
+    as.numeric(as.POSIXlt("2022-01-01"))
+  ))
 })
 
 test_that("convert character to numeric preserve levels", {
@@ -68,14 +77,31 @@ test_that("convert factor to numeric, append", {
   data(efc)
   expect_identical(
     colnames(to_numeric(efc, dummy_factors = TRUE)),
-    c("c12hour", "e16sex", "e42dep.1", "e42dep.2", "e42dep.3", "e42dep.4", "c172code", "neg_c_7"),
+    c(
+      "c12hour",
+      "e16sex",
+      "e42dep.1",
+      "e42dep.2",
+      "e42dep.3",
+      "e42dep.4",
+      "c172code",
+      "neg_c_7"
+    ),
     ignore_attr = TRUE
   )
   expect_identical(
     colnames(to_numeric(efc, dummy_factors = TRUE, append = TRUE)),
     c(
-      "c12hour", "e16sex", "e42dep", "c172code", "neg_c_7", "e42dep_n",
-      "e42dep_n.1", "e42dep_n.2", "e42dep_n.3", "e42dep_n.4"
+      "c12hour",
+      "e16sex",
+      "e42dep",
+      "c172code",
+      "neg_c_7",
+      "e42dep_n",
+      "e42dep_n.1",
+      "e42dep_n.2",
+      "e42dep_n.3",
+      "e42dep_n.4"
     ),
     ignore_attr = TRUE
   )
@@ -104,8 +130,22 @@ test_that("convert factor to numeric, dummy factors, with NA", {
   x5 <- factor(c(NA_character_, "b", "a", "b", "a", NA_character_))
   x6 <- factor(c(NA_character_, "b", NA_character_, "b", "a", NA_character_))
   x7 <- factor(c(
-    NA_character_, "b", "a", "b", "a", "b", NA_character_, "b",
-    "a", NA_character_, "a", "b", "a", "b", "a", NA_character_
+    NA_character_,
+    "b",
+    "a",
+    "b",
+    "a",
+    "b",
+    NA_character_,
+    "b",
+    "a",
+    NA_character_,
+    "a",
+    "b",
+    "a",
+    "b",
+    "a",
+    NA_character_
   ))
 
   # same observations are missing
@@ -180,7 +220,9 @@ test_that("to_numeric works with haven_labelled, convert many labels correctly",
   skip_if_offline()
 
   withr::with_tempfile("temp_file", fileext = ".sav", code = {
-    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/EFC.sav")
+    request <- httr::GET(
+      "https://raw.github.com/easystats/circus/main/data/EFC.sav"
+    )
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 

@@ -50,7 +50,11 @@ test_that("text formatting helpers work as expected", {
   )
 
   expect_identical(
-    text_concatenate(c("First", "Second", "Last"), last = " or ", enclose = "`"),
+    text_concatenate(
+      c("First", "Second", "Last"),
+      last = " or ",
+      enclose = "`"
+    ),
     "`First`, `Second` or `Last`"
   )
 

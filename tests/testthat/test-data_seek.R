@@ -72,8 +72,14 @@ test_that("data_seek - multiple pattern", {
 })
 
 test_that("data_seek - valid input", {
-  expect_error(data_seek(rnorm(10), "Length"), regex = "`data` must be a data frame.")
-  expect_error(data_seek(iris, "Length", seek = "somewhere"), regex = "`seek` must be")
+  expect_error(
+    data_seek(rnorm(10), "Length"),
+    regex = "`data` must be a data frame."
+  )
+  expect_error(
+    data_seek(iris, "Length", seek = "somewhere"),
+    regex = "`seek` must be"
+  )
 })
 
 test_that("data_seek - print", {

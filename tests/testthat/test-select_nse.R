@@ -1,9 +1,18 @@
 foo <- function(data, select = NULL, exclude = NULL, regex = FALSE) {
-  .select_nse(select, data, exclude = exclude, regex = regex, ignore_case = FALSE)
+  .select_nse(
+    select,
+    data,
+    exclude = exclude,
+    regex = regex,
+    ignore_case = FALSE
+  )
 }
 
 test_that(".select_nse needs data", {
-  expect_error(foo(select = "Sepal.Length", data = NULL), regexp = "must be provided")
+  expect_error(
+    foo(select = "Sepal.Length", data = NULL),
+    regexp = "must be provided"
+  )
 })
 
 test_that(".select_nse needs a data frame or something coercible to a dataframe", {
@@ -125,7 +134,10 @@ test_that(".select_nse: misc", {
 
 test_that(".select_nse: works with function and namespace", {
   model <- lm(Petal.Length ~ Petal.Width, data = iris)
-  out <- data_select(iris, insight::find_predictors(model, effects = "fixed", flatten = TRUE))
+  out <- data_select(
+    iris,
+    insight::find_predictors(model, effects = "fixed", flatten = TRUE)
+  )
   expect_identical(out, iris["Petal.Width"])
 
   fun <- function(x) {

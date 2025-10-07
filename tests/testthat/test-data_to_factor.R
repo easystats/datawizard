@@ -11,7 +11,8 @@ test_that("to_factor", {
   expect_identical(
     levels(x),
     c(
-      "low level of education", "intermediate level of education",
+      "low level of education",
+      "intermediate level of education",
       "high level of education"
     )
   )
@@ -47,10 +48,41 @@ test_that("to_factor", {
   expect_identical(
     levels(out$Sepal.Length),
     c(
-      "4.3", "4.4", "4.5", "4.6", "4.7", "4.8", "4.9", "5", "5.1",
-      "5.2", "5.3", "5.4", "5.5", "5.6", "5.7", "5.8", "5.9", "6",
-      "6.1", "6.2", "6.3", "6.4", "6.5", "6.6", "6.7", "6.8", "6.9",
-      "7", "7.1", "7.2", "7.3", "7.4", "7.6", "7.7", "7.9"
+      "4.3",
+      "4.4",
+      "4.5",
+      "4.6",
+      "4.7",
+      "4.8",
+      "4.9",
+      "5",
+      "5.1",
+      "5.2",
+      "5.3",
+      "5.4",
+      "5.5",
+      "5.6",
+      "5.7",
+      "5.8",
+      "5.9",
+      "6",
+      "6.1",
+      "6.2",
+      "6.3",
+      "6.4",
+      "6.5",
+      "6.6",
+      "6.7",
+      "6.8",
+      "6.9",
+      "7",
+      "7.1",
+      "7.2",
+      "7.3",
+      "7.4",
+      "7.6",
+      "7.7",
+      "7.9"
     )
   )
 
@@ -58,8 +90,13 @@ test_that("to_factor", {
   expect_identical(
     colnames(out),
     c(
-      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
-      "Species", "Sepal.Length_f", "Sepal.Width_f"
+      "Sepal.Length",
+      "Sepal.Width",
+      "Petal.Length",
+      "Petal.Width",
+      "Species",
+      "Sepal.Length_f",
+      "Sepal.Width_f"
     )
   )
   expect_identical(sum(vapply(out, is.factor, TRUE)), 3L)
@@ -93,7 +130,9 @@ skip_if_offline()
 
 test_that("data_read, convert many labels correctly", {
   temp_file <- tempfile(fileext = ".sav")
-  request <- httr::GET("https://raw.github.com/easystats/circus/master/data/spss_many_labels.sav")
+  request <- httr::GET(
+    "https://raw.github.com/easystats/circus/master/data/spss_many_labels.sav"
+  )
   httr::stop_for_status(request)
   writeBin(httr::content(request, type = "raw"), temp_file)
 
@@ -128,13 +167,27 @@ test_that("data_read, convert many labels correctly", {
   expect_identical(levels(to_factor(d$c12)), c("ja", "nein", "keine Angabe"))
   expect_snapshot(data_tabulate(to_factor(d$c12)))
 
-  expect_identical(levels(to_factor(d$c12a)), c("Filter", "ja", "nein", "keine Angabe"))
+  expect_identical(
+    levels(to_factor(d$c12a)),
+    c("Filter", "ja", "nein", "keine Angabe")
+  )
   expect_snapshot(data_tabulate(to_factor(d$c12a)))
   expect_identical(
     levels(to_factor(d$c12c)),
     c(
-      "Filter", "0 = keine", "1", "2", "3", "4", "5", "6", "7", "8",
-      "9", "10 = sehr starke", "weiß nicht / keine Angabe"
+      "Filter",
+      "0 = keine",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10 = sehr starke",
+      "weiß nicht / keine Angabe"
     )
   )
   expect_snapshot(data_tabulate(to_factor(d$c12c)))
@@ -145,7 +198,9 @@ test_that("data_read, convert many labels correctly", {
 test_that("to_factor works with haven_labelled, convert many labels correctly", {
   skip_if_not_installed("withr")
   withr::with_tempfile("temp_file", fileext = ".sav", code = {
-    request <- httr::GET("https://raw.github.com/easystats/circus/main/data/EFC.sav")
+    request <- httr::GET(
+      "https://raw.github.com/easystats/circus/main/data/EFC.sav"
+    )
     httr::stop_for_status(request)
     writeBin(httr::content(request, type = "raw"), temp_file)
 
