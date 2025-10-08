@@ -1,7 +1,7 @@
 #' Describe a distribution
 #'
 #' This function describes a distribution by a set of indices (e.g., measures of
-#' centrality, dispersion, range, skewness, kurtosis).
+#' centrality, dispersion, range, skewness, (excess) kurtosis).
 #'
 #' @param x A numeric vector, a character vector, a data frame, or a list. See
 #' `Details`.
@@ -40,6 +40,8 @@
 #' @note There is also a
 #'   [`plot()`-method](https://easystats.github.io/see/articles/parameters.html)
 #'   implemented in the [**see**-package](https://easystats.github.io/see/).
+#'
+#' @seealso [kurtosis()] to compute kurtosis (recognized as excess kurtosis).
 #'
 #' @return A data frame with columns that describe the properties of the variables.
 #'
