@@ -1085,8 +1085,10 @@ test_that("data_tabulate, cross tables, extract proportions", {
     proportions = "col",
     remove_na = TRUE
   )
-  tab <- as.table(t(t(table(efc$c172code, efc$e16sex)) /
-    colSums(table(efc$c172code, efc$e16sex))))
+  tab <- as.table(t(
+    t(table(efc$c172code, efc$e16sex)) /
+      colSums(table(efc$c172code, efc$e16sex))
+  ))
   dimnames(tab) <- list(c("1", "2", "3"), c("male", "female"))
   expect_equal(
     as.prop.table(out, verbose = FALSE),

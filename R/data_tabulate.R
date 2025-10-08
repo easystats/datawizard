@@ -686,7 +686,13 @@ as.prop.table <- function(x, ...) {
 
 #' @rdname data_tabulate
 #' @export
-as.prop.table.datawizard_crosstab <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
+as.prop.table.datawizard_crosstab <- function(
+  x,
+  remove_na = TRUE,
+  simplify = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # sanity check - the `.data.frame` method  returns a list, but not the
   # default method
   if (!is.data.frame(x)) {
@@ -700,7 +706,10 @@ as.prop.table.datawizard_crosstab <- function(x, remove_na = TRUE, simplify = FA
   }
 
   if (remove_na) {
-    if (verbose && ("NA" %in% colnames(prop_table) || "NA" %in% rownames(prop_table))) {
+    if (
+      verbose &&
+        ("NA" %in% colnames(prop_table) || "NA" %in% rownames(prop_table))
+    ) {
       insight::format_alert("Removing NA values from frequency table.")
     }
     if (!is.null(prop_table[["NA"]])) {
@@ -721,7 +730,13 @@ as.prop.table.datawizard_crosstab <- function(x, remove_na = TRUE, simplify = FA
 }
 
 #' @export
-as.prop.table.datawizard_crosstabs <- function(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...) {
+as.prop.table.datawizard_crosstabs <- function(
+  x,
+  remove_na = TRUE,
+  simplify = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # only show message once we set `verbose = FALSE` in the lapply()
   if (remove_na && verbose) {
     prop_table <- attributes(x[[1]])$prop_table
