@@ -124,7 +124,7 @@ saved into the column \code{values_from} will be spread into new columns, which
 will be named after the values in \code{names_from}. See also 'Examples'.
 }
 \examples{
-\dontshow{if (requireNamespace("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("lme4", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data_long <- read.table(header = TRUE, text = "
  subject sex condition measurement
        1   M   control         7.9
