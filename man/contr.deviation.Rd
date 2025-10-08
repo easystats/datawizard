@@ -49,7 +49,7 @@ the differences the
 \strong{A} and \strong{B} group means from the overall mean, respectively.
 }
 \examples{
-\dontshow{if (!identical(Sys.getenv("IN_PKGDOWN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (!identical(Sys.getenv("IN_PKGDOWN"), "true")) withAutoprint(\{ # examplesIf}
 \donttest{
 data("mtcars")
 
