@@ -40,7 +40,10 @@ test_that("data_codebook, tinytable", {
   )
   expect_snapshot(display(data_codebook(d), format = "tt"))
   expect_snapshot(display(data_codebook(d, range_at = 100), format = "tt"))
-  expect_snapshot(display(data_codebook(d, range_at = 100, max_values = 4), format = "tt"))
+  expect_snapshot(display(
+    data_codebook(d, range_at = 100, max_values = 4),
+    format = "tt"
+  ))
 
   data(iris)
   expect_snapshot(display(data_codebook(iris[c(1, 2, 5, 3, 4)]), format = "tt"))
@@ -59,8 +62,16 @@ test_that("data_codebook iris, select, ID", {
 
 test_that("data_codebook efc", {
   expect_snapshot(print(data_codebook(efc), table_width = Inf))
-  expect_snapshot(print(data_codebook(efc), table_width = "auto", remove_duplicates = FALSE))
-  expect_snapshot(print(data_codebook(efc), table_width = "auto", remove_duplicates = TRUE))
+  expect_snapshot(print(
+    data_codebook(efc),
+    table_width = "auto",
+    remove_duplicates = FALSE
+  ))
+  expect_snapshot(print(
+    data_codebook(efc),
+    table_width = "auto",
+    remove_duplicates = TRUE
+  ))
 })
 
 
@@ -181,10 +192,14 @@ test_that("data_codebook, tagged NA", {
   skip_if_not_installed("haven")
   x <- haven::labelled(
     x = c(
-      1:3, haven::tagged_na("a", "c", "z"),
-      4:1, haven::tagged_na("a", "a", "c"),
-      1:3, haven::tagged_na("z", "c", "c"),
-      1:4, haven::tagged_na("a", "c", "z")
+      1:3,
+      haven::tagged_na("a", "c", "z"),
+      4:1,
+      haven::tagged_na("a", "a", "c"),
+      1:3,
+      haven::tagged_na("z", "c", "c"),
+      1:4,
+      haven::tagged_na("a", "c", "z")
     ),
     labels = c(
       Agreement = 1,
@@ -198,10 +213,14 @@ test_that("data_codebook, tagged NA", {
 
   x <- haven::labelled(
     x = c(
-      1:3, haven::tagged_na("a", "c"),
-      4:1, haven::tagged_na("a", "a", "c"),
-      1:3, haven::tagged_na("c", "c"),
-      1:4, haven::tagged_na("a", "c")
+      1:3,
+      haven::tagged_na("a", "c"),
+      4:1,
+      haven::tagged_na("a", "a", "c"),
+      1:3,
+      haven::tagged_na("c", "c"),
+      1:4,
+      haven::tagged_na("a", "c")
     ),
     labels = c(
       Agreement = 1,

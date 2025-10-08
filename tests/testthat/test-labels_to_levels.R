@@ -31,7 +31,10 @@ test_that("labels_to_levels, factor, error on no labels", {
 test_that("labels_to_levels, data frame, append", {
   data(efc)
   out <- labels_to_levels(efc, append = "_ll")
-  expect_named(out, c("c12hour", "e16sex", "e42dep", "c172code", "neg_c_7", "e42dep_ll"))
+  expect_named(
+    out,
+    c("c12hour", "e16sex", "e42dep", "c172code", "neg_c_7", "e42dep_ll")
+  )
 })
 
 test_that("labels_to_levels, data frame, append", {
@@ -46,7 +49,9 @@ test_that("labels_to_levels, factor, data frame", {
   expect_identical(
     levels(out$e42dep),
     c(
-      "independent", "slightly dependent", "moderately dependent",
+      "independent",
+      "slightly dependent",
+      "moderately dependent",
       "severely dependent"
     )
   )
@@ -57,7 +62,10 @@ test_that("labels_to_levels, factor, with random value numbers (no sequential or
   x <- c(5, 5, 1, 3, 1, 7)
   attr(x, "labels") <- c(no = 7, yes = 1, maybe = 3, `don't know` = 5)
   out <- to_factor(x, labels_to_levels = TRUE)
-  expect_identical(as.character(out), c("don't know", "don't know", "yes", "maybe", "yes", "no"))
+  expect_identical(
+    as.character(out),
+    c("don't know", "don't know", "yes", "maybe", "yes", "no")
+  )
   expect_identical(levels(out), c("yes", "maybe", "don't know", "no"))
 
   x <- c(4, 4, 1, 2, 1, 3)

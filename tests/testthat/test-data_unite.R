@@ -28,14 +28,20 @@ test_that("data_unite: simple use case", {
   )
   # select
   out <- data_unite(d_unite, new_column = "xyz", select = c("x", "n"))
-  expect_identical(colnames(out), c(setdiff(colnames(d_unite), c("x", "n")), "xyz"))
+  expect_identical(
+    colnames(out),
+    c(setdiff(colnames(d_unite), c("x", "n")), "xyz")
+  )
   expect_identical(
     out$xyz,
     c("NA_NATION", "1_COUNTRY", "2_NATION", "3_NA")
   )
   # select, use existing column name
   out <- data_unite(d_unite, new_column = "x", select = c("x", "n"))
-  expect_identical(colnames(out), c(setdiff(colnames(d_unite), c("x", "n")), "x"))
+  expect_identical(
+    colnames(out),
+    c(setdiff(colnames(d_unite), c("x", "n")), "x")
+  )
   expect_identical(
     out$x,
     c("NA_NATION", "1_COUNTRY", "2_NATION", "3_NA")
@@ -59,15 +65,31 @@ test_that("data_unite: remove_na", {
     c("a_6_X_NATION", "1_b_7_COUNTRY", "2_c_8_Y_NATION", "3_9_Z")
   )
   # select
-  out <- data_unite(d_unite, new_column = "xyz", remove_na = TRUE, select = c("x", "n"))
-  expect_identical(colnames(out), c(setdiff(colnames(d_unite), c("x", "n")), "xyz"))
+  out <- data_unite(
+    d_unite,
+    new_column = "xyz",
+    remove_na = TRUE,
+    select = c("x", "n")
+  )
+  expect_identical(
+    colnames(out),
+    c(setdiff(colnames(d_unite), c("x", "n")), "xyz")
+  )
   expect_identical(
     out$xyz,
     c("NATION", "1_COUNTRY", "2_NATION", "3")
   )
   # select, use existing column name
-  out <- data_unite(d_unite, new_column = "x", remove_na = TRUE, select = c("x", "n"))
-  expect_identical(colnames(out), c(setdiff(colnames(d_unite), c("x", "n")), "x"))
+  out <- data_unite(
+    d_unite,
+    new_column = "x",
+    remove_na = TRUE,
+    select = c("x", "n")
+  )
+  expect_identical(
+    colnames(out),
+    c(setdiff(colnames(d_unite), c("x", "n")), "x")
+  )
   expect_identical(
     out$x,
     c("NATION", "1_COUNTRY", "2_NATION", "3")
@@ -84,7 +106,12 @@ test_that("data_unite: append", {
     c("NA_a_6_X_NATION", "1_b_7_NA_COUNTRY", "2_c_8_Y_NATION", "3_NA_9_Z_NA")
   )
   # remove NA
-  out <- data_unite(d_unite, new_column = "xyz", remove_na = TRUE, append = TRUE)
+  out <- data_unite(
+    d_unite,
+    new_column = "xyz",
+    remove_na = TRUE,
+    append = TRUE
+  )
   expect_identical(colnames(out), c("x", "y", "z", "m", "n", "xyz"))
   expect_identical(
     out$xyz,
@@ -101,7 +128,12 @@ test_that("data_unite: append", {
   )
   # append, using existing column name, and remove NA
   expect_message({
-    out <- data_unite(d_unite, new_column = "x", remove_na = TRUE, append = TRUE)
+    out <- data_unite(
+      d_unite,
+      new_column = "x",
+      remove_na = TRUE,
+      append = TRUE
+    )
   })
   expect_identical(colnames(out), c("x", "y", "z", "m", "n"))
   expect_identical(
@@ -113,14 +145,25 @@ test_that("data_unite: append", {
 
 test_that("data_unite: combine select and append", {
   # basic
-  out <- data_unite(d_unite, new_column = "xyz", append = TRUE, select = c("x", "n"))
+  out <- data_unite(
+    d_unite,
+    new_column = "xyz",
+    append = TRUE,
+    select = c("x", "n")
+  )
   expect_identical(colnames(out), c("x", "y", "z", "m", "n", "xyz"))
   expect_identical(
     out$xyz,
     c("NA_NATION", "1_COUNTRY", "2_NATION", "3_NA")
   )
   # remove NA
-  out <- data_unite(d_unite, new_column = "xyz", remove_na = TRUE, append = TRUE, select = c("x", "n"))
+  out <- data_unite(
+    d_unite,
+    new_column = "xyz",
+    remove_na = TRUE,
+    append = TRUE,
+    select = c("x", "n")
+  )
   expect_identical(colnames(out), c("x", "y", "z", "m", "n", "xyz"))
   expect_identical(
     out$xyz,
@@ -128,7 +171,12 @@ test_that("data_unite: combine select and append", {
   )
   # append, using existing column name
   expect_message({
-    out <- data_unite(d_unite, new_column = "x", append = TRUE, select = c("x", "n"))
+    out <- data_unite(
+      d_unite,
+      new_column = "x",
+      append = TRUE,
+      select = c("x", "n")
+    )
   })
   expect_identical(colnames(out), c("x", "y", "z", "m", "n"))
   expect_identical(
@@ -137,7 +185,13 @@ test_that("data_unite: combine select and append", {
   )
   # append, using existing column name, and remove NA
   expect_message({
-    out <- data_unite(d_unite, new_column = "x", remove_na = TRUE, append = TRUE, select = c("x", "n"))
+    out <- data_unite(
+      d_unite,
+      new_column = "x",
+      remove_na = TRUE,
+      append = TRUE,
+      select = c("x", "n")
+    )
   })
   expect_identical(colnames(out), c("x", "y", "z", "m", "n"))
   expect_identical(
@@ -149,6 +203,12 @@ test_that("data_unite: combine select and append", {
 
 test_that("data_unite: errors", {
   expect_error(data_unite(d_unite), regex = "No name")
-  expect_error(data_unite(d_unite, new_column = c("a", "b")), regex = "a single string")
-  expect_error(expect_warning(data_unite(d_unite, new_column = "a", select = "huhu")), regex = "At least")
+  expect_error(
+    data_unite(d_unite, new_column = c("a", "b")),
+    regex = "a single string"
+  )
+  expect_error(
+    expect_warning(data_unite(d_unite, new_column = "a", select = "huhu")),
+    regex = "At least"
+  )
 })

@@ -280,15 +280,17 @@
 #' demean(dat, select = ~ a + x * y, by = ~ID)
 #'
 #' @export
-demean <- function(x,
-                   select,
-                   by,
-                   nested = FALSE,
-                   suffix_demean = "_within",
-                   suffix_groupmean = "_between",
-                   append = TRUE,
-                   add_attributes = TRUE,
-                   verbose = TRUE) {
+demean <- function(
+  x,
+  select,
+  by,
+  nested = FALSE,
+  suffix_demean = "_within",
+  suffix_groupmean = "_between",
+  append = TRUE,
+  add_attributes = TRUE,
+  verbose = TRUE
+) {
   degroup(
     x = x,
     select = select,
@@ -306,27 +308,36 @@ demean <- function(x,
 
 #' @rdname demean
 #' @export
-degroup <- function(x,
-                    select,
-                    by,
-                    nested = FALSE,
-                    center = "mean",
-                    suffix_demean = "_within",
-                    suffix_groupmean = "_between",
-                    append = TRUE,
-                    add_attributes = TRUE,
-                    verbose = TRUE) {
+degroup <- function(
+  x,
+  select,
+  by,
+  nested = FALSE,
+  center = "mean",
+  suffix_demean = "_within",
+  suffix_groupmean = "_between",
+  append = TRUE,
+  add_attributes = TRUE,
+  verbose = TRUE
+) {
   # ugly tibbles again... but save original data frame
   original_data <- x
   x <- .coerce_to_dataframe(x)
 
-  center <- match.arg(tolower(center), choices = c("mean", "median", "mode", "min", "max"))
+  center <- match.arg(
+    tolower(center),
+    choices = c("mean", "median", "mode", "min", "max")
+  )
 
   if (inherits(select, "formula")) {
     # formula to character, remove "~", split at "+". We don't use `all.vars()`
     # here because we want to keep the interaction terms as they are
     select <- trimws(unlist(
-      strsplit(gsub("~", "", insight::safe_deparse(select), fixed = TRUE), "+", fixed = TRUE),
+      strsplit(
+        gsub("~", "", insight::safe_deparse(select), fixed = TRUE),
+        "+",
+        fixed = TRUE
+      ),
       use.names = FALSE
     ))
   }
@@ -338,7 +349,10 @@ degroup <- function(x,
 
   # we also allow lme4-syntax here: if by = "L4/L3/L2", we assume a nested design
   if (length(by) == 1 && grepl("/", by, fixed = TRUE)) {
-    by <- insight::trim_ws(unlist(strsplit(by, "/", fixed = TRUE), use.names = FALSE))
+    by <- insight::trim_ws(unlist(
+      strsplit(by, "/", fixed = TRUE),
+      use.names = FALSE
+    ))
     nested <- TRUE
   }
 
@@ -349,9 +363,15 @@ degroup <- function(x,
   # if we have interaction terms that should be de-meaned, calculate the product
   # of the terms first, then demean the product
   if (length(interactions_yes)) {
-    interaction_terms <- lapply(strsplit(interactions_yes, "*", fixed = TRUE), trimws)
+    interaction_terms <- lapply(
+      strsplit(interactions_yes, "*", fixed = TRUE),
+      trimws
+    )
     product <- lapply(interaction_terms, function(i) do.call(`*`, x[, i]))
-    new_dat <- as.data.frame(stats::setNames(product, gsub("\\s", "", gsub("*", "_", interactions_yes, fixed = TRUE))))
+    new_dat <- as.data.frame(stats::setNames(
+      product,
+      gsub("\\s", "", gsub("*", "_", interactions_yes, fixed = TRUE))
+    ))
     x <- cbind(x, new_dat)
     select <- c(interactions_no, colnames(new_dat))
   }
@@ -368,16 +388,23 @@ degroup <- function(x,
         ifelse(length(not_found) > 1, " were", " was"),
         " not found in the dataset."
       ),
-      .misspelled_string(colnames(x), not_found, "Possibly misspelled or not yet defined?")
+      .misspelled_string(
+        colnames(x),
+        not_found,
+        "Possibly misspelled or not yet defined?"
+      )
     )
   }
 
   # get data to demean...
   dat <- x[, c(select, by)]
 
-
   # find categorical predictors that are coded as factors
-  categorical_predictors <- vapply(dat[select], is.factor, FUN.VALUE = logical(1L))
+  categorical_predictors <- vapply(
+    dat[select],
+    is.factor,
+    FUN.VALUE = logical(1L)
+  )
 
   # convert binary predictors to numeric
   if (any(categorical_predictors)) {
@@ -416,12 +443,12 @@ degroup <- function(x,
     }
   }
 
-
   # group variables, then calculate the mean-value
   # for variables within each group (the group means). assign
   # mean values to a vector of same length as the data
 
-  gm_fun <- switch(center,
+  gm_fun <- switch(
+    center,
     mode = function(.gm) distribution_mode(stats::na.omit(.gm)),
     median = function(.gm) stats::median(.gm, na.rm = TRUE),
     min = function(.gm) min(.gm, na.rm = TRUE),
@@ -441,7 +468,9 @@ degroup <- function(x,
     })
     names(group_means_list) <- select
     # create de-meaned variables by subtracting the group mean from each individual value
-    person_means_list <- lapply(select, function(i) dat[[i]] - group_means_list[[i]])
+    person_means_list <- lapply(select, function(i) {
+      dat[[i]] - group_means_list[[i]]
+    })
   } else if (nested) {
     # nested design: by > 1, nested is explicitly set to TRUE
     # We want:
@@ -499,8 +528,16 @@ degroup <- function(x,
   group_means <- as.data.frame(group_means_list)
   person_means <- as.data.frame(person_means_list)
 
-  colnames(person_means) <- sprintf("%s%s", colnames(person_means), suffix_demean)
-  colnames(group_means) <- sprintf("%s%s", colnames(group_means), suffix_groupmean)
+  colnames(person_means) <- sprintf(
+    "%s%s",
+    colnames(person_means),
+    suffix_demean
+  )
+  colnames(group_means) <- sprintf(
+    "%s%s",
+    colnames(group_means),
+    suffix_groupmean
+  )
 
   if (isTRUE(add_attributes)) {
     person_means[] <- lapply(person_means, function(i) {

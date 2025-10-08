@@ -68,14 +68,21 @@ test_that("data_arrange errors if not coercable to data frame", {
   expect_error(data_arrange(list(a = 1:5, b = letters[1:3]), select = "b"))
   expect_equal(
     data_arrange(list(a = 1:5, b = letters[5:1]), select = "b"),
-    structure(list(a = 5:1, b = c("a", "b", "c", "d", "e")), row.names = 5:1, class = "data.frame"),
+    structure(
+      list(a = 5:1, b = c("a", "b", "c", "d", "e")),
+      row.names = 5:1,
+      class = "data.frame"
+    ),
     ignore_attr = TRUE
   )
 })
 
 test_that("data_arrange works with grouped df", {
   set.seed(123)
-  x <- mtcars[sample(seq_len(nrow(mtcars)), 10, replace = TRUE), c("cyl", "mpg")]
+  x <- mtcars[
+    sample(seq_len(nrow(mtcars)), 10, replace = TRUE),
+    c("cyl", "mpg")
+  ]
   g <- data_group(x, cyl)
 
   expected <- data.frame(
@@ -84,8 +91,15 @@ test_that("data_arrange works with grouped df", {
   )
   class(expected) <- c("grouped_df", "data.frame")
   rownames(expected) <- c(
-    "Datsun 710", "Honda Civic", "Fiat 128", "Merc 280C", "Merc 280",
-    "Cadillac Fleetwood", "Maserati Bora", "Merc 450SLC", "Dodge Challenger",
+    "Datsun 710",
+    "Honda Civic",
+    "Fiat 128",
+    "Merc 280C",
+    "Merc 280",
+    "Cadillac Fleetwood",
+    "Maserati Bora",
+    "Merc 450SLC",
+    "Dodge Challenger",
     "Hornet Sportabout"
   )
   attributes(expected)$groups <- attributes(g)$groups
@@ -134,5 +148,8 @@ test_that("data_arrange works with NA", {
 test_that("data_arrange works one-column data frames (and does not drop dimensions)", {
   data(mtcars)
   expect_s3_class(data_arrange(mtcars["gear"], select = "gear"), "data.frame")
-  expect_s3_class(data_arrange(mtcars[c("gear", "cyl")], select = "gear"), "data.frame")
+  expect_s3_class(
+    data_arrange(mtcars[c("gear", "cyl")], select = "gear"),
+    "data.frame"
+  )
 })

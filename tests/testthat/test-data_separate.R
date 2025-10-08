@@ -17,7 +17,12 @@ test_that("data_separate: simple use case", {
   expect_identical(out$x_2, c("a", "b", "c"))
 
   # manual separator char
-  out2 <- data_separate(d_sep, separator = "\\.", guess_columns = "mode", verbose = FALSE)
+  out2 <- data_separate(
+    d_sep,
+    separator = "\\.",
+    guess_columns = "mode",
+    verbose = FALSE
+  )
   expect_identical(out, out2)
 
   # non-existing separator char
@@ -27,7 +32,11 @@ test_that("data_separate: simple use case", {
   )
 
   # column names
-  out <- data_separate(d_sep, new_columns = c("A1", "B2", "C3"), verbose = FALSE)
+  out <- data_separate(
+    d_sep,
+    new_columns = c("A1", "B2", "C3"),
+    verbose = FALSE
+  )
   expect_identical(colnames(out), c("A1", "B2", "C3"))
   expect_identical(out$A1, c("1", "2", "3"))
   expect_identical(out$B2, c("a", "b", "c"))
@@ -58,7 +67,11 @@ test_that("data_separate: convert between data_unite and data_separate", {
   )
 
   out1 <- data_unite(d_unite, new_column = "test")
-  d_sep <- data_separate(out1, new_columns = c("x", "y", "z", "m", "n"), separator = "_")
+  d_sep <- data_separate(
+    out1,
+    new_columns = c("x", "y", "z", "m", "n"),
+    separator = "_"
+  )
 
   expect_identical(d_unite, d_sep)
 })
@@ -89,14 +102,24 @@ test_that("data_separate: different number of values", {
   expect_identical(out$x_3, c("6", "7", "8", NA))
 
   # fill missings left
-  out <- data_separate(d_sep, guess_columns = "mode", fill = "left", verbose = FALSE)
+  out <- data_separate(
+    d_sep,
+    guess_columns = "mode",
+    fill = "left",
+    verbose = FALSE
+  )
   expect_identical(colnames(out), c("x_1", "x_2", "x_3"))
   expect_identical(out$x_1, c("1", "2", "3", NA))
   expect_identical(out$x_2, c("a", "b", "c", "5"))
   expect_identical(out$x_3, c("6", "7", "8", "j"))
 
   # merge extra right
-  out <- data_separate(d_sep, guess_columns = "mode", extra = "merge_right", verbose = FALSE)
+  out <- data_separate(
+    d_sep,
+    guess_columns = "mode",
+    extra = "merge_right",
+    verbose = FALSE
+  )
   expect_identical(colnames(out), c("x_1", "x_2", "x_3"))
   expect_identical(out$x_1, c("1", "2", "3", "5"))
   expect_identical(out$x_2, c("a", "b", "c", "j"))
@@ -128,7 +151,12 @@ test_that("data_separate: different number of values", {
     ignore_attr = TRUE
   )
 
-  out <- data_separate(d_sep, guess_columns = "min", extra = "merge_left", verbose = FALSE)
+  out <- data_separate(
+    d_sep,
+    guess_columns = "min",
+    extra = "merge_left",
+    verbose = FALSE
+  )
   expect_equal(
     out,
     data.frame(
@@ -139,7 +167,12 @@ test_that("data_separate: different number of values", {
     ignore_attr = TRUE
   )
 
-  out <- data_separate(d_sep, guess_columns = "max", fill = "left", verbose = FALSE)
+  out <- data_separate(
+    d_sep,
+    guess_columns = "max",
+    fill = "left",
+    verbose = FALSE
+  )
   expect_equal(
     out,
     data.frame(
@@ -162,7 +195,12 @@ test_that("data_separate: multiple columns", {
   )
 
   # select works
-  out <- data_separate(d_sep, select = "x", guess_columns = "mode", verbose = FALSE)
+  out <- data_separate(
+    d_sep,
+    select = "x",
+    guess_columns = "mode",
+    verbose = FALSE
+  )
   expect_identical(colnames(out), c("y", "x_1", "x_2", "x_3"))
   expect_identical(out$x_1, c("1", "2", "3", "5"))
   expect_identical(out$x_2, c("a", "b", "c", "j"))
@@ -171,16 +209,37 @@ test_that("data_separate: multiple columns", {
   out <- data_separate(d_sep, guess_columns = "mode", verbose = FALSE)
   expect_snapshot(out)
 
-  out <- data_separate(d_sep, guess_columns = "mode", extra = "merge_right", verbose = FALSE)
+  out <- data_separate(
+    d_sep,
+    guess_columns = "mode",
+    extra = "merge_right",
+    verbose = FALSE
+  )
   expect_snapshot(out)
 
-  out <- data_separate(d_sep, new_columns = c("A", "B", "C"), extra = "merge_right", verbose = FALSE)
+  out <- data_separate(
+    d_sep,
+    new_columns = c("A", "B", "C"),
+    extra = "merge_right",
+    verbose = FALSE
+  )
   expect_snapshot(out)
 
-  out <- data_separate(d_sep, new_columns = c("A", "B", "C"), extra = "merge_right", append = TRUE, verbose = FALSE)
+  out <- data_separate(
+    d_sep,
+    new_columns = c("A", "B", "C"),
+    extra = "merge_right",
+    append = TRUE,
+    verbose = FALSE
+  )
   expect_snapshot(out)
 
-  out <- data_separate(d_sep, guess_columns = "mode", extra = "drop_left", verbose = FALSE)
+  out <- data_separate(
+    d_sep,
+    guess_columns = "mode",
+    extra = "drop_left",
+    verbose = FALSE
+  )
   expect_snapshot(out)
 
   out <- data_separate(
@@ -213,7 +272,12 @@ test_that("data_separate: multiple columns", {
   )
   expect_snapshot(out)
 
-  out <- data_separate(d_sep, guess_columns = "mode", fill = "value_left", verbose = FALSE)
+  out <- data_separate(
+    d_sep,
+    guess_columns = "mode",
+    fill = "value_left",
+    verbose = FALSE
+  )
   expect_snapshot(out)
 })
 
@@ -253,7 +317,12 @@ test_that("data_separate: numeric separator", {
   )
 
   expect_silent({
-    out <- data_separate(d_sep, guess_columns = "mode", separator = c(5, 7, 8, 12), verbose = TRUE)
+    out <- data_separate(
+      d_sep,
+      guess_columns = "mode",
+      separator = c(5, 7, 8, 12),
+      verbose = TRUE
+    )
   })
   expect_equal(
     out,
@@ -274,7 +343,11 @@ test_that("data_separate: numeric separator", {
     stringsAsFactors = FALSE
   )
   expect_silent({
-    out <- data_separate(d_sep, separator = c(5, 7, 8, 12), new_columns = LETTERS[1:5])
+    out <- data_separate(
+      d_sep,
+      separator = c(5, 7, 8, 12),
+      new_columns = LETTERS[1:5]
+    )
   })
   expect_equal(
     out,
@@ -295,7 +368,11 @@ test_that("data_separate: numeric separator", {
   )
 
   expect_error(
-    data_separate(d_sep, separator = c(5, 7, 8, 12), new_columns = LETTERS[1:6]),
+    data_separate(
+      d_sep,
+      separator = c(5, 7, 8, 12),
+      new_columns = LETTERS[1:6]
+    ),
     regex = "went wrong"
   )
 })
@@ -328,7 +405,15 @@ test_that("data_separate: numeric column", {
     y = c("m.n.99", "77.f.g", "44.9", NA),
     stringsAsFactors = FALSE
   )
-  expect_message(data_separate(d_sep, guess_columns = "mode", select = "x"), regex = "Separator probably")
-  out <- data_separate(d_sep, guess_columns = "mode", select = "x", separator = c(3, 6, 9))
+  expect_message(
+    data_separate(d_sep, guess_columns = "mode", select = "x"),
+    regex = "Separator probably"
+  )
+  out <- data_separate(
+    d_sep,
+    guess_columns = "mode",
+    select = "x",
+    separator = c(3, 6, 9)
+  )
   expect_snapshot(out)
 })

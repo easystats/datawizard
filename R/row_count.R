@@ -60,16 +60,19 @@
 #' row_count(dat, count = factor("2"), allow_coercion = FALSE)
 #'
 #' @export
-row_count <- function(data,
-                      select = NULL,
-                      exclude = NULL,
-                      count = NULL,
-                      allow_coercion = TRUE,
-                      ignore_case = FALSE,
-                      regex = FALSE,
-                      verbose = TRUE) {
+row_count <- function(
+  data,
+  select = NULL,
+  exclude = NULL,
+  count = NULL,
+  allow_coercion = TRUE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE
+) {
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     data,
     exclude,
     ignore_case = ignore_case,
@@ -78,7 +81,9 @@ row_count <- function(data,
   )
 
   if (is.null(count)) {
-    insight::format_error("`count` must be a valid value (including `NA` or `Inf`), but not `NULL`.")
+    insight::format_error(
+      "`count` must be a valid value (including `NA` or `Inf`), but not `NULL`."
+    )
   }
 
   if (is.null(select) || length(select) == 0) {
@@ -94,7 +99,9 @@ row_count <- function(data,
 
   # check if we have a data framme with at least two columns
   if (ncol(data) < 2) {
-    insight::format_error("`data` must be a data frame with at least two numeric columns.")
+    insight::format_error(
+      "`data` must be a data frame with at least two numeric columns."
+    )
   }
   # special case: count missing
   if (is.na(count)) {
@@ -111,7 +118,9 @@ row_count <- function(data,
       valid_columns <- vapply(data, inherits, TRUE, what = count_type)
       # check if any columns left?
       if (!any(valid_columns)) {
-        insight::format_error("No column has same type as the value provided in `count`. Set `allow_coercion = TRUE` or specify a valid value for `count`.") # nolint
+        insight::format_error(
+          "No column has same type as the value provided in `count`. Set `allow_coercion = TRUE` or specify a valid value for `count`."
+        ) # nolint
       }
       data <- data[valid_columns]
     }

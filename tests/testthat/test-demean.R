@@ -8,13 +8,23 @@ test_that("demean works", {
   df$binary <- as.factor(rbinom(150, 1, 0.35)) # binary variable
 
   set.seed(123)
-  x <- demean(df, select = c("Sepal.Length", "Petal.Length"), by = "ID", append = FALSE)
+  x <- demean(
+    df,
+    select = c("Sepal.Length", "Petal.Length"),
+    by = "ID",
+    append = FALSE
+  )
   expect_snapshot(head(x))
 
   set.seed(123)
   expect_message(
     {
-      x <- demean(df, select = c("Sepal.Length", "binary", "Species"), by = "ID", append = FALSE)
+      x <- demean(
+        df,
+        select = c("Sepal.Length", "binary", "Species"),
+        by = "ID",
+        append = FALSE
+      )
     },
     "have been coerced to numeric"
   )
@@ -23,13 +33,23 @@ test_that("demean works", {
   set.seed(123)
   expect_message(
     {
-      y <- demean(df, select = ~ Sepal.Length + binary + Species, by = ~ID, append = FALSE)
+      y <- demean(
+        df,
+        select = ~ Sepal.Length + binary + Species,
+        by = ~ID,
+        append = FALSE
+      )
     },
     "have been coerced to numeric"
   )
   expect_message(
     {
-      z <- demean(df, select = c("Sepal.Length", "binary", "Species"), by = "ID", append = FALSE)
+      z <- demean(
+        df,
+        select = c("Sepal.Length", "binary", "Species"),
+        by = "ID",
+        append = FALSE
+      )
     },
     "have been coerced to numeric"
   )
@@ -40,9 +60,17 @@ test_that("demean works", {
   expect_named(
     x,
     c(
-      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
-      "Species", "ID", "binary", "Sepal.Length_between", "Petal.Length_between",
-      "Sepal.Length_within", "Petal.Length_within"
+      "Sepal.Length",
+      "Sepal.Width",
+      "Petal.Length",
+      "Petal.Width",
+      "Species",
+      "ID",
+      "binary",
+      "Sepal.Length_between",
+      "Petal.Length_between",
+      "Sepal.Length_within",
+      "Petal.Length_within"
     )
   )
   expect_snapshot(head(x))
@@ -63,7 +91,12 @@ test_that("demean interaction term", {
   )
 
   set.seed(123)
-  expect_snapshot(demean(dat, select = c("a", "x*y"), by = "ID", append = FALSE))
+  expect_snapshot(demean(
+    dat,
+    select = c("a", "x*y"),
+    by = "ID",
+    append = FALSE
+  ))
 })
 
 test_that("demean shows message if some vars don't exist", {
@@ -176,7 +209,6 @@ test_that("demean for cross-classified designs (by > 1)", {
     ignore_attr = TRUE
   )
 
-
   # More than 2 groupings
   mu <- 100
   ul <- setNames(c(-1, -3, 0, 4), nm = letters[1:4])
@@ -192,7 +224,11 @@ test_that("demean for cross-classified designs (by > 1)", {
   dat$y <- mu + ul[dat$l] + uL[dat$L] + um[dat$m] + e
   dat$z <- mu + ul[dat$l] + uL[dat$L] + um[dat$m] + 10 * e
 
-  dat_dem <- datawizard::demean(dat, by = c("l", "L", "m"), select = c("y", "z"))
+  dat_dem <- datawizard::demean(
+    dat,
+    by = c("l", "L", "m"),
+    select = c("y", "z")
+  )
 
   expect_equal(dat_dem$y_l_between, ave(dat$y, dat$l), ignore_attr = TRUE)
   expect_equal(dat_dem$y_L_between, ave(dat$y, dat$L), ignore_attr = TRUE)
@@ -279,16 +315,27 @@ test_that("demean for nested designs (by > 1), nested = TRUE", {
     val3 = c(1, 2, 3, 4, 5, 6, 7, 8)
   )
 
-  out <- datawizard::demean(testdf,
+  out <- datawizard::demean(
+    testdf,
     select = c("val1", "val2", "val3"),
-    by = "roman/alphabet", append = FALSE
+    by = "roman/alphabet",
+    append = FALSE
   )
 
-  expect_named(out, c(
-    "val1_roman_between", "val1_alphabet_between", "val2_roman_between",
-    "val2_alphabet_between", "val3_roman_between", "val3_alphabet_between",
-    "val1_within", "val2_within", "val3_within"
-  ))
+  expect_named(
+    out,
+    c(
+      "val1_roman_between",
+      "val1_alphabet_between",
+      "val2_roman_between",
+      "val2_alphabet_between",
+      "val3_roman_between",
+      "val3_alphabet_between",
+      "val1_within",
+      "val2_within",
+      "val3_within"
+    )
+  )
 
   expect_equal(
     as.vector(out$val1_within),

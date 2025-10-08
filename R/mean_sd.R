@@ -21,34 +21,58 @@
 #'
 #' @export
 mean_sd <- function(x, times = 1L, remove_na = TRUE, named = TRUE, ...) {
-  .centrality_dispersion(x, type = "mean", times = times, remove_na = remove_na, named = named)
+  .centrality_dispersion(
+    x,
+    type = "mean",
+    times = times,
+    remove_na = remove_na,
+    named = named
+  )
 }
 
 #' @export
 #' @rdname mean_sd
-median_mad <- function(x, times = 1L, remove_na = TRUE, constant = 1.4826, named = TRUE, ...) {
-  .centrality_dispersion(x, type = "median", times = times, remove_na = remove_na, constant = constant, named = named)
+median_mad <- function(
+  x,
+  times = 1L,
+  remove_na = TRUE,
+  constant = 1.4826,
+  named = TRUE,
+  ...
+) {
+  .centrality_dispersion(
+    x,
+    type = "median",
+    times = times,
+    remove_na = remove_na,
+    constant = constant,
+    named = named
+  )
 }
 
 #' @keywords Internal
-.centrality_dispersion <- function(x,
-                                   type = "mean",
-                                   remove_na = TRUE,
-                                   times = 1L,
-                                   constant = 1.4826,
-                                   named = TRUE,
-                                   ...) {
+.centrality_dispersion <- function(
+  x,
+  type = "mean",
+  remove_na = TRUE,
+  times = 1L,
+  constant = 1.4826,
+  named = TRUE,
+  ...
+) {
   x <- as.numeric(x)
   times <- as.integer(times)
   type <- match.arg(type, choices = c("mean", "median"))
 
   # centrality
-  M <- switch(type,
+  M <- switch(
+    type,
     median = stats::median(x, na.rm = remove_na),
     mean(x, na.rm = remove_na)
   )
 
-  S <- switch(type,
+  S <- switch(
+    type,
     median = stats::mad(x, na.rm = remove_na, constant = constant),
     stats::sd(x, na.rm = remove_na)
   )
@@ -56,10 +80,7 @@ median_mad <- function(x, times = 1L, remove_na = TRUE, constant = 1.4826, named
   v <- M + c(-rev(seq_len(times)), 0, seq_len(times)) * S
 
   if (isTRUE(named)) {
-    string_cs <- switch(type,
-      median = c("Median", "MAD"),
-      c("Mean", "SD")
-    )
+    string_cs <- switch(type, median = c("Median", "MAD"), c("Mean", "SD"))
     if (times == 1L) {
       times <- ""
     } else {

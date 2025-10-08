@@ -9,16 +9,19 @@
 #'   variable labels is named `"mydat_labels.csv"`).
 #' @rdname data_read
 #' @export
-data_write <- function(data,
-                       path,
-                       delimiter = ",",
-                       convert_factors = FALSE,
-                       save_labels = FALSE,
-                       verbose = TRUE,
-                       ...) {
+data_write <- function(
+  data,
+  path,
+  delimiter = ",",
+  convert_factors = FALSE,
+  save_labels = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # check file type, so we know the target dta format
   file_type <- .file_ext(path)
-  type <- switch(file_type,
+  type <- switch(
+    file_type,
     txt = ,
     csv = "csv",
     sav = ,
@@ -42,7 +45,16 @@ data_write <- function(data,
   }
 
   if (type %in% c("csv", "unknown")) {
-    .write_csv_or_unknown(data, path, type, delimiter, convert_factors, save_labels, verbose, ...)
+    .write_csv_or_unknown(
+      data,
+      path,
+      type,
+      delimiter,
+      convert_factors,
+      save_labels,
+      verbose,
+      ...
+    )
   } else if (type == "rds") {
     .write_rds(data, path, verbose, ...)
   } else if (type == "rda") {
@@ -86,14 +98,16 @@ data_write <- function(data,
 
 # saving into CSV or unknown format -----
 
-.write_csv_or_unknown <- function(data,
-                                  path,
-                                  type = "csv",
-                                  delimiter = ",",
-                                  convert_factors = FALSE,
-                                  save_labels = FALSE,
-                                  verbose = TRUE,
-                                  ...) {
+.write_csv_or_unknown <- function(
+  data,
+  path,
+  type = "csv",
+  delimiter = ",",
+  convert_factors = FALSE,
+  save_labels = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # save labels
   if (save_labels && type == "csv") {
     data <- .save_labels_to_file(data, path, delimiter, verbose)
@@ -155,7 +169,6 @@ data_write <- function(data,
 
 # helper -------------------------------
 
-
 # make sure we have the "labelled" class for labelled data
 .set_haven_class_attributes <- function(x, verbose = TRUE) {
   insight::check_if_installed("haven")
@@ -181,7 +194,10 @@ data_write <- function(data,
       if (is.character(i)) {
         # only prepare value labels when these are not NULL
         if (!is.null(value_labels)) {
-          value_labels <- stats::setNames(as.character(value_labels), names(value_labels))
+          value_labels <- stats::setNames(
+            as.character(value_labels),
+            names(value_labels)
+          )
         }
         haven::labelled(
           x = i,
@@ -208,7 +224,9 @@ data_write <- function(data,
   dot_ends <- vapply(colnames(x), endsWith, FUN.VALUE = TRUE, suffix = ".")
   if (any(dot_ends)) {
     if (verbose) {
-      insight::format_alert("Found and fixed invalid column names so they can be read by other software packages.")
+      insight::format_alert(
+        "Found and fixed invalid column names so they can be read by other software packages."
+      )
     }
     colnames(x)[dot_ends] <- paste0(colnames(x)[dot_ends], "fix")
   }
@@ -232,23 +250,31 @@ data_write <- function(data,
   }
 
   # extract labels
-  var_labs <- vapply(x, function(i) {
-    l <- attr(i, "label", exact = TRUE)
-    if (is.null(l)) {
-      l <- ""
-    }
-    l
-  }, character(1))
+  var_labs <- vapply(
+    x,
+    function(i) {
+      l <- attr(i, "label", exact = TRUE)
+      if (is.null(l)) {
+        l <- ""
+      }
+      l
+    },
+    character(1)
+  )
 
   # extract value labels
-  value_labs <- vapply(x, function(i) {
-    l <- attr(i, "labels", exact = TRUE)
-    if (is.null(l)) {
-      ""
-    } else {
-      paste0(l, "=", names(l), collapse = "; ")
-    }
-  }, character(1))
+  value_labs <- vapply(
+    x,
+    function(i) {
+      l <- attr(i, "labels", exact = TRUE)
+      if (is.null(l)) {
+        ""
+      } else {
+        paste0(l, "=", names(l), collapse = "; ")
+      }
+    },
+    character(1)
+  )
 
   out <- data.frame(
     variable = colnames(x),
@@ -284,7 +310,9 @@ data_write <- function(data,
         if (is.character(i)) {
           # we need this to drop haven-specific class attributes
           i <- as.character(i)
-        } else if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
+        } else if (
+          !is.null(value_labels) && length(value_labels) == insight::n_unique(i)
+        ) {
           # if all values are labelled, we assume factor. Use labels as levels
           if (is.numeric(i)) {
             i <- factor(i, labels = names(value_labels))

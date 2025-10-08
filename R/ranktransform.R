@@ -41,12 +41,14 @@ ranktransform <- function(x, ...) {
 
 #' @rdname ranktransform
 #' @export
-ranktransform.numeric <- function(x,
-                                  sign = FALSE,
-                                  method = "average",
-                                  zeros = "na",
-                                  verbose = TRUE,
-                                  ...) {
+ranktransform.numeric <- function(
+  x,
+  sign = FALSE,
+  method = "average",
+  zeros = "na",
+  verbose = TRUE,
+  ...
+) {
   # no change if all values are `NA`s
   if (all(is.na(x))) {
     return(x)
@@ -79,7 +81,6 @@ ranktransform.numeric <- function(x,
     return(x)
   }
 
-
   # Warning if only two values present but don't return early
   if (length(unique(x)) == 2L) {
     if (is.null(names(x))) {
@@ -105,12 +106,12 @@ ranktransform.numeric <- function(x,
       out <- rep(NA, length(x))
       ZEROES <- x == 0
       if (any(ZEROES) && verbose) {
-        insight::format_warning("Zeros detected. These cannot be sign-rank transformed.") # nolint
+        insight::format_warning(
+          "Zeros detected. These cannot be sign-rank transformed."
+        ) # nolint
       }
-      out[!ZEROES] <- sign(x[!ZEROES]) * rank(abs(x[!ZEROES]),
-        ties.method = method,
-        na.last = "keep"
-      )
+      out[!ZEROES] <- sign(x[!ZEROES]) *
+        rank(abs(x[!ZEROES]), ties.method = method, na.last = "keep")
     } else if (zeros == "signrank") {
       out <- sign(x) * rank(abs(x), ties.method = method, na.last = "keep")
     }
@@ -129,22 +130,25 @@ ranktransform.factor <- function(x, ...) {
 
 
 #' @export
-ranktransform.grouped_df <- function(x,
-                                     select = NULL,
-                                     exclude = NULL,
-                                     sign = FALSE,
-                                     method = "average",
-                                     ignore_case = FALSE,
-                                     regex = FALSE,
-                                     zeros = "na",
-                                     verbose = TRUE,
-                                     ...) {
+ranktransform.grouped_df <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  sign = FALSE,
+  method = "average",
+  ignore_case = FALSE,
+  regex = FALSE,
+  zeros = "na",
+  verbose = TRUE,
+  ...
+) {
   info <- attributes(x)
 
   grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -171,18 +175,21 @@ ranktransform.grouped_df <- function(x,
 
 #' @rdname ranktransform
 #' @export
-ranktransform.data.frame <- function(x,
-                                     select = NULL,
-                                     exclude = NULL,
-                                     sign = FALSE,
-                                     method = "average",
-                                     ignore_case = FALSE,
-                                     regex = FALSE,
-                                     zeros = "na",
-                                     verbose = TRUE,
-                                     ...) {
+ranktransform.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  sign = FALSE,
+  method = "average",
+  ignore_case = FALSE,
+  regex = FALSE,
+  zeros = "na",
+  verbose = TRUE,
+  ...
+) {
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,

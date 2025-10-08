@@ -1,12 +1,20 @@
 data(efc, package = "datawizard")
 
 test_that("data_match works as expected", {
-  matching_rows <- data_match(mtcars, data.frame(vs = 0, am = 1), return_indices = TRUE)
+  matching_rows <- data_match(
+    mtcars,
+    data.frame(vs = 0, am = 1),
+    return_indices = TRUE
+  )
   df1 <- mtcars[matching_rows, ]
   expect_identical(unique(df1$vs), 0)
   expect_identical(unique(df1$am), 1)
 
-  matching_rows <- data_match(mtcars, data.frame(vs = 0, am = c(0, 1)), return_indices = TRUE)
+  matching_rows <- data_match(
+    mtcars,
+    data.frame(vs = 0, am = c(0, 1)),
+    return_indices = TRUE
+  )
   df2 <- mtcars[matching_rows, ]
   expect_identical(unique(df2$vs), 0)
   expect_identical(unique(df2$am), c(1, 0))
@@ -148,11 +156,11 @@ test_that("data_filter gives informative message on errors", {
   ## TODO: need to check why this fails on R 4.1
   skip_if(getRversion() < "4.2.0")
   expect_error(
-    data_filter(mtcars, mpg > 10 ? cyl == 4),
+    data_filter(mtcars, mpg > 10?cyl == 4),
     "syntax"
   )
   expect_error(
-    data_filter(mtcars, mgp > 10 ? cyl == 4),
+    data_filter(mtcars, mgp > 10?cyl == 4),
     "Variable \"mgp\""
   )
 })

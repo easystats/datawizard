@@ -94,7 +94,10 @@ centre <- center
 center.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     insight::format_alert(
-      sprintf("Centering currently not possible for variables of class `%s`.", class(x)[1]),
+      sprintf(
+        "Centering currently not possible for variables of class `%s`.",
+        class(x)[1]
+      ),
       "You may open an issue at https://github.com/easystats/datawizard/issues."
     )
   }
@@ -104,13 +107,15 @@ center.default <- function(x, verbose = TRUE, ...) {
 
 #' @rdname center
 #' @export
-center.numeric <- function(x,
-                           robust = FALSE,
-                           weights = NULL,
-                           reference = NULL,
-                           center = NULL,
-                           verbose = TRUE,
-                           ...) {
+center.numeric <- function(
+  x,
+  robust = FALSE,
+  weights = NULL,
+  reference = NULL,
+  center = NULL,
+  verbose = TRUE,
+  ...
+) {
   # set default. Furthermore, data.frame methods cannot return a vector
   # of NULLs for each variable - instead they return NA. Thus, we have to
   # treat NA like NULL
@@ -118,7 +123,15 @@ center.numeric <- function(x,
     center <- TRUE
   }
 
-  my_args <- .process_std_center(x, weights, robust, verbose, reference, center, scale = NULL)
+  my_args <- .process_std_center(
+    x,
+    weights,
+    robust,
+    verbose,
+    reference,
+    center,
+    scale = NULL
+  )
   dot_args <- list(...)
 
   if (is.null(my_args)) {
@@ -146,16 +159,24 @@ center.numeric <- function(x,
 
 
 #' @export
-center.factor <- function(x,
-                          robust = FALSE,
-                          weights = NULL,
-                          force = FALSE,
-                          verbose = TRUE,
-                          ...) {
+center.factor <- function(
+  x,
+  robust = FALSE,
+  weights = NULL,
+  force = FALSE,
+  verbose = TRUE,
+  ...
+) {
   if (!force) {
     return(x)
   }
-  center(.factor_to_numeric(x), weights = weights, robust = robust, verbose = verbose, ...)
+  center(
+    .factor_to_numeric(x),
+    weights = weights,
+    robust = robust,
+    verbose = verbose,
+    ...
+  )
 }
 
 #' @export
@@ -173,22 +194,25 @@ center.AsIs <- center.numeric
 #' @rdname center
 #' @inheritParams standardize.data.frame
 #' @export
-center.data.frame <- function(x,
-                              select = NULL,
-                              exclude = NULL,
-                              robust = FALSE,
-                              weights = NULL,
-                              reference = NULL,
-                              center = NULL,
-                              force = FALSE,
-                              remove_na = c("none", "selected", "all"),
-                              append = FALSE,
-                              ignore_case = FALSE,
-                              verbose = TRUE,
-                              regex = FALSE,
-                              ...) {
+center.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  robust = FALSE,
+  weights = NULL,
+  reference = NULL,
+  center = NULL,
+  force = FALSE,
+  remove_na = c("none", "selected", "all"),
+  append = FALSE,
+  ignore_case = FALSE,
+  verbose = TRUE,
+  regex = FALSE,
+  ...
+) {
   # evaluate select/exclude, may be select-helpers
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -197,9 +221,18 @@ center.data.frame <- function(x,
   )
 
   # process arguments
-  my_args <- .process_std_args(x, select, exclude, weights, append,
-    append_suffix = "_c", keep_factors = force, remove_na, reference,
-    .center = center, .scale = NULL
+  my_args <- .process_std_args(
+    x,
+    select,
+    exclude,
+    weights,
+    append,
+    append_suffix = "_c",
+    keep_factors = force,
+    remove_na,
+    reference,
+    .center = center,
+    .scale = NULL
   )
 
   # set new values
@@ -218,30 +251,41 @@ center.data.frame <- function(x,
     )
   }
 
-  attr(x, "center") <- vapply(x[my_args$select], function(z) attributes(z)$center, numeric(1))
-  attr(x, "scale") <- vapply(x[my_args$select], function(z) attributes(z)$scale, numeric(1))
+  attr(x, "center") <- vapply(
+    x[my_args$select],
+    function(z) attributes(z)$center,
+    numeric(1)
+  )
+  attr(x, "scale") <- vapply(
+    x[my_args$select],
+    function(z) attributes(z)$scale,
+    numeric(1)
+  )
   attr(x, "robust") <- robust
   x
 }
 
 
 #' @export
-center.grouped_df <- function(x,
-                              select = NULL,
-                              exclude = NULL,
-                              robust = FALSE,
-                              weights = NULL,
-                              reference = NULL,
-                              center = NULL,
-                              force = FALSE,
-                              remove_na = c("none", "selected", "all"),
-                              append = FALSE,
-                              ignore_case = FALSE,
-                              verbose = TRUE,
-                              regex = FALSE,
-                              ...) {
+center.grouped_df <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  robust = FALSE,
+  weights = NULL,
+  reference = NULL,
+  center = NULL,
+  force = FALSE,
+  remove_na = c("none", "selected", "all"),
+  append = FALSE,
+  ignore_case = FALSE,
+  verbose = TRUE,
+  regex = FALSE,
+  ...
+) {
   # evaluate select/exclude, may be select-helpers
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -250,9 +294,14 @@ center.grouped_df <- function(x,
   )
 
   my_args <- .process_grouped_df(
-    x, select, exclude, append,
+    x,
+    select,
+    exclude,
+    append,
     append_suffix = "_c",
-    reference, weights, keep_factors = force
+    reference,
+    weights,
+    keep_factors = force
   )
 
   for (rows in my_args$grps) {

@@ -72,17 +72,20 @@
 #' row_means(dat, min_valid = 0.75) # 2 valid return values
 #'
 #' @export
-row_means <- function(data,
-                      select = NULL,
-                      exclude = NULL,
-                      min_valid = NULL,
-                      digits = NULL,
-                      ignore_case = FALSE,
-                      regex = FALSE,
-                      remove_na = FALSE,
-                      verbose = TRUE) {
+row_means <- function(
+  data,
+  select = NULL,
+  exclude = NULL,
+  min_valid = NULL,
+  digits = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  remove_na = FALSE,
+  verbose = TRUE
+) {
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     data,
     exclude,
     ignore_case = ignore_case,
@@ -100,17 +103,20 @@ row_means <- function(data,
 
 #' @rdname row_means
 #' @export
-row_sums <- function(data,
-                     select = NULL,
-                     exclude = NULL,
-                     min_valid = NULL,
-                     digits = NULL,
-                     ignore_case = FALSE,
-                     regex = FALSE,
-                     remove_na = FALSE,
-                     verbose = TRUE) {
+row_sums <- function(
+  data,
+  select = NULL,
+  exclude = NULL,
+  min_valid = NULL,
+  digits = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  remove_na = FALSE,
+  verbose = TRUE
+) {
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     data,
     exclude,
     ignore_case = ignore_case,
@@ -132,7 +138,8 @@ row_sums <- function(data,
 .row_sums_or_means <- function(data, min_valid, digits, remove_na, fun) {
   if (is.null(min_valid)) {
     # calculate row means or sums for complete data
-    out <- switch(fun,
+    out <- switch(
+      fun,
       mean = rowMeans(data, na.rm = remove_na),
       rowSums(data, na.rm = remove_na)
     )
@@ -145,12 +152,15 @@ row_sums <- function(data,
 
     # min_valid may not be larger as df's amount of columns
     if (ncol(data) < min_valid) {
-      insight::format_error("`min_valid` must be smaller or equal to number of columns in data frame.")
+      insight::format_error(
+        "`min_valid` must be smaller or equal to number of columns in data frame."
+      )
     }
 
     # row means or sums
     to_na <- rowSums(is.na(data)) > ncol(data) - min_valid
-    out <- switch(fun,
+    out <- switch(
+      fun,
       mean = rowMeans(data, na.rm = TRUE),
       rowSums(data, na.rm = TRUE)
     )
@@ -175,7 +185,10 @@ row_sums <- function(data,
   data <- .coerce_to_dataframe(data[select])
 
   # n must be a numeric, non-missing value
-  if (!is.null(min_valid) && (all(is.na(min_valid)) || !is.numeric(min_valid) || length(min_valid) > 1)) {
+  if (
+    !is.null(min_valid) &&
+      (all(is.na(min_valid)) || !is.numeric(min_valid) || length(min_valid) > 1)
+  ) {
     insight::format_error("`min_valid` must be a numeric value of length 1.")
   }
 
@@ -183,14 +196,18 @@ row_sums <- function(data,
   numeric_columns <- vapply(data, is.numeric, TRUE)
   if (!all(numeric_columns)) {
     if (verbose) {
-      insight::format_alert("Only numeric columns are considered for calculation.")
+      insight::format_alert(
+        "Only numeric columns are considered for calculation."
+      )
     }
     data <- data[numeric_columns]
   }
 
   # check if we have a data framme with at least two columns
   if (ncol(data) < 2) {
-    insight::format_error("`data` must be a data frame with at least two numeric columns.")
+    insight::format_error(
+      "`data` must be a data frame with at least two numeric columns."
+    )
   }
 
   data

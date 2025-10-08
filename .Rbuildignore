@@ -50,3 +50,5 @@ docs
 ^.dev$
 ^vignettes/s.
 ^vignettes/t.
+^[\.]?air\.toml$
+^\.vscode$

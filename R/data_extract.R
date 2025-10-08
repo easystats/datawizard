@@ -73,19 +73,25 @@ data_extract <- function(data, select, ...) {
 
 #' @rdname data_extract
 #' @export
-data_extract.data.frame <- function(data,
-                                    select,
-                                    name = NULL,
-                                    extract = "all",
-                                    as_data_frame = FALSE,
-                                    ignore_case = FALSE,
-                                    regex = FALSE,
-                                    verbose = TRUE,
-                                    ...) {
-  extract <- match.arg(tolower(extract), choices = c("all", "first", "last", "odd", "even"))
+data_extract.data.frame <- function(
+  data,
+  select,
+  name = NULL,
+  extract = "all",
+  as_data_frame = FALSE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
+  extract <- match.arg(
+    tolower(extract),
+    choices = c("all", "first", "last", "odd", "even")
+  )
 
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     data,
     exclude = NULL,
     ignore_case,
@@ -113,7 +119,8 @@ data_extract.data.frame <- function(data,
   }
 
   # chose which matched variables to extract
-  select <- switch(extract,
+  select <- switch(
+    extract,
     first = select[1L],
     last = select[length(select)],
     odd = select[seq(1L, length(select), 2L)],
@@ -127,7 +134,9 @@ data_extract.data.frame <- function(data,
     length(select) > 1L ||
     # if we have only one variable, but number of observations not equal to
     # length of names, we have no proper match, so no naming, too.
-    (length(select) == 1L && length(name) > 1L && length(data[[select]]) != length(name))
+    (length(select) == 1L &&
+      length(name) > 1L &&
+      length(data[[select]]) != length(name))
 
   if (needs_no_names) {
     name <- NULL

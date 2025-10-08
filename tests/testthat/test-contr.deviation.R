@@ -22,8 +22,12 @@ test_that("contr.deviation | snapshot", {
 
   mm <- unique(model.matrix(~ cyl * am, data = mtcars))
   rownames(mm) <- c(
-    "cyl4.am0", "cyl4.am1", "cyl6.am0",
-    "cyl6.am1", "cyl8.am0", "cyl8.am1"
+    "cyl4.am0",
+    "cyl4.am1",
+    "cyl6.am0",
+    "cyl6.am1",
+    "cyl8.am0",
+    "cyl8.am1"
   )
 
   expect_snapshot(solve(mm))

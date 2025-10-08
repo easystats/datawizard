@@ -1,6 +1,10 @@
 test_that("adjust multilevel", {
   skip_if_not_installed("lme4")
-  adj <- adjust(iris[c("Sepal.Length", "Species")], multilevel = TRUE, bayesian = FALSE)
+  adj <- adjust(
+    iris[c("Sepal.Length", "Species")],
+    multilevel = TRUE,
+    bayesian = FALSE
+  )
   # High tolerance to avoid issues on some R CMD check specification, see #592
   expect_equal(
     head(adj$Sepal.Length),
@@ -10,7 +14,11 @@ test_that("adjust multilevel", {
 })
 
 test_that("adjust", {
-  adj <- adjust(iris[c("Sepal.Length", "Species")], multilevel = FALSE, bayesian = FALSE)
+  adj <- adjust(
+    iris[c("Sepal.Length", "Species")],
+    multilevel = FALSE,
+    bayesian = FALSE
+  )
   expect_equal(
     head(adj$Sepal.Length),
     c(0.094, -0.106, -0.306, -0.406, -0.006, 0.394),

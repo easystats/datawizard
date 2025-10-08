@@ -1,12 +1,14 @@
 # helper to compute crosstables --------------
 
-.crosstable <- function(x,
-                        by,
-                        weights = NULL,
-                        remove_na = FALSE,
-                        proportions = NULL,
-                        obj_name = NULL,
-                        group_variable = NULL) {
+.crosstable <- function(
+  x,
+  by,
+  weights = NULL,
+  remove_na = FALSE,
+  proportions = NULL,
+  obj_name = NULL,
+  group_variable = NULL
+) {
   if (!is.null(proportions)) {
     proportions <- match.arg(proportions, c("row", "column", "full"))
   }
@@ -46,7 +48,11 @@
   }
 
   if (is.null(x_table)) {
-    insight::format_warning(paste0("Can't compute cross tables for objects of class `", class(x)[1], "`."))
+    insight::format_warning(paste0(
+      "Can't compute cross tables for objects of class `",
+      class(x)[1],
+      "`."
+    ))
     return(NULL)
   }
 
@@ -72,7 +78,11 @@
     var_info <- toString(lapply(colnames(group_variable), function(i) {
       sprintf("%s (%s)", i, group_variable[[i]])
     }))
-    out <- cbind(out[1], data.frame(Group = var_info, stringsAsFactors = FALSE), out[-1])
+    out <- cbind(
+      out[1],
+      data.frame(Group = var_info, stringsAsFactors = FALSE),
+      out[-1]
+    )
   }
 
   attr(out, "total_n") <- total_n
@@ -178,12 +188,14 @@
 # methods ---------------------
 
 #' @export
-format.datawizard_crosstab <- function(x,
-                                       format = "text",
-                                       digits = 1,
-                                       big_mark = NULL,
-                                       include_total_row = TRUE,
-                                       ...) {
+format.datawizard_crosstab <- function(
+  x,
+  format = "text",
+  digits = 1,
+  big_mark = NULL,
+  include_total_row = TRUE,
+  ...
+) {
   # convert to character manually, else, for large numbers,
   # format_table() returns scientific notation
   x <- as.data.frame(x)
@@ -261,7 +273,6 @@ format.datawizard_crosstab <- function(x,
 
 # print, datawizard_crosstab ---------------------
 
-
 #' @export
 print.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   .print_text_table(x, big_mark, format = "text", ...)
@@ -293,11 +304,7 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   # this function is used by all four supported format, markdown, text, html
   # and tt (tinytable). For tt, we sometimes have format "html" and backend = "tt",
   # so we need to check for this special case
-  backend <- switch(format,
-    html = ,
-    tt = .check_format_backend(...),
-    format
-  )
+  backend <- switch(format, html = , tt = .check_format_backend(...), format)
   # prepare table arguments
   fun_args <- list(
     format(x, big_mark = big_mark, format = format, ...),
@@ -325,7 +332,6 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
 
 
 # print, datawizard_crosstabs ---------------------
-
 
 #' @export
 print.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
@@ -370,7 +376,13 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
       # move column to first position
       i <- data_relocate(i, select = grp_variable, before = 1)
       # format data frame
-      format(i, format = format, big_mark = big_mark, include_total_row = FALSE, ...)
+      format(
+        i,
+        format = format,
+        big_mark = big_mark,
+        include_total_row = FALSE,
+        ...
+      )
     })
     # now bind, but we need to check for equal number of columns
     if (all(lengths(x) == max(length(x)))) {
@@ -438,7 +450,6 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
 
 # helper ---------------------
 
-
 .validate_by <- function(by, x) {
   if (!is.null(by)) {
     if (is.character(by)) {
@@ -451,7 +462,9 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
       }
       # if "by" is a character, "x" must be a data frame
       if (!is.data.frame(x)) {
-        insight::format_error("If `by` is a string indicating a variable name, `x` must be a data frame.")
+        insight::format_error(
+          "If `by` is a string indicating a variable name, `x` must be a data frame."
+        )
       }
       # is "by" a column in "x"?
       if (!by %in% colnames(x)) {
@@ -464,7 +477,9 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
     }
     # is "by" of same length as "x"?
     if (is.data.frame(x) && length(by) != nrow(x)) {
-      insight::format_error("Length of `by` must be equal to number of rows in `x`.") # nolint
+      insight::format_error(
+        "Length of `by` must be equal to number of rows in `x`."
+      ) # nolint
     }
     if (!is.data.frame(x) && length(by) != length(x)) {
       insight::format_error("Length of `by` must be equal to length of `x`.") # nolint
@@ -489,24 +504,28 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
     # -------------------------------------------------------------------------
 
     # do we have any value for weights_expression?
-    if (!is.null(weights_expression) &&
-      # due to deparse() and substitute, NULL becomes "NULL" - we need to check for this
-      !identical(weights_expression, "NULL") &&
-      # we should only run into this problem, when a variable from a data frame
-      # is used in the data_tabulate() method for vectors - thus, we need to check
-      # whether the weights_expression contains a "$" - `iris$not_found` is "NULL"
-      # we need this check, because the default-method of data_tabulate() is called
-      # from the data.frame method, where `weights = weights`, and then,
-      # deparse(substitute(weights)) is "weights" (not "NULL" or "iris$not_found"),
-      # leading to an error when actually all is OK (if "weights" is NULL)
-      # Example:
-      #> efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
-      # Here, efc$wweight is NULL
-      #> data_tabulate(efc$c172code, weights = efc$wweight)
-      # Here, wweight errors anyway, because object "wweight" is not found
-      #> data_tabulate(efc$c172code, weights = wweight)
-      grepl("$", weights_expression, fixed = TRUE)) {
-      insight::format_error("The variable specified in `weights` was not found. Possibly misspelled?")
+    if (
+      !is.null(weights_expression) &&
+        # due to deparse() and substitute, NULL becomes "NULL" - we need to check for this
+        !identical(weights_expression, "NULL") &&
+        # we should only run into this problem, when a variable from a data frame
+        # is used in the data_tabulate() method for vectors - thus, we need to check
+        # whether the weights_expression contains a "$" - `iris$not_found` is "NULL"
+        # we need this check, because the default-method of data_tabulate() is called
+        # from the data.frame method, where `weights = weights`, and then,
+        # deparse(substitute(weights)) is "weights" (not "NULL" or "iris$not_found"),
+        # leading to an error when actually all is OK (if "weights" is NULL)
+        # Example:
+        #> efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+        # Here, efc$wweight is NULL
+        #> data_tabulate(efc$c172code, weights = efc$wweight)
+        # Here, wweight errors anyway, because object "wweight" is not found
+        #> data_tabulate(efc$c172code, weights = wweight)
+        grepl("$", weights_expression, fixed = TRUE)
+    ) {
+      insight::format_error(
+        "The variable specified in `weights` was not found. Possibly misspelled?"
+      )
     }
   } else {
     # possibly misspecified weights-variables for data.frame-method -----------
@@ -521,7 +540,9 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
       }
       # if "weights" is a character, "x" must be a data frame
       if (!is.data.frame(x)) {
-        insight::format_error("If `weights` is a string indicating a variable name, `x` must be a data frame.") # nolint
+        insight::format_error(
+          "If `weights` is a string indicating a variable name, `x` must be a data frame."
+        ) # nolint
       }
       # is "by" a column in "x"?
       if (!weights %in% colnames(x)) {
@@ -534,10 +555,14 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
     }
     # is "by" of same length as "x"?
     if (is.data.frame(x) && length(weights) != nrow(x)) {
-      insight::format_error("Length of `weights` must be equal to number of rows in `x`.") # nolint
+      insight::format_error(
+        "Length of `weights` must be equal to number of rows in `x`."
+      ) # nolint
     }
     if (!is.data.frame(x) && length(weights) != length(x)) {
-      insight::format_error("Length of `weights` must be equal to length of `x`.") # nolint
+      insight::format_error(
+        "Length of `weights` must be equal to length of `x`."
+      ) # nolint
     }
   }
 

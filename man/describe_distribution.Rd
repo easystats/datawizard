@@ -152,7 +152,7 @@ A data frame with columns that describe the properties of the variables.
 }
 \description{
 This function describes a distribution by a set of indices (e.g., measures of
-centrality, dispersion, range, skewness, kurtosis).
+centrality, dispersion, range, skewness, (excess) kurtosis).
 }
 \details{
 If \code{x} is a data frame, only numeric variables are kept and will be
@@ -179,4 +179,7 @@ describe_distribution(iris)
 describe_distribution(iris, include_factors = TRUE, quartiles = TRUE)
 describe_distribution(list(mtcars$mpg, mtcars$cyl))
 \dontshow{\}) # examplesIf}
+}
+\seealso{
+\code{\link[=kurtosis]{kurtosis()}} to compute kurtosis (recognized as excess kurtosis).
 }

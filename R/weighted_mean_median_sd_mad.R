@@ -21,7 +21,13 @@
 #' weighted_mad(x, wt)
 #'
 #' @export
-weighted_mean <- function(x, weights = NULL, remove_na = TRUE, verbose = TRUE, ...) {
+weighted_mean <- function(
+  x,
+  weights = NULL,
+  remove_na = TRUE,
+  verbose = TRUE,
+  ...
+) {
   if (!.are_weights(weights) || !.validate_weights(weights, verbose)) {
     return(mean(x, na.rm = remove_na))
   }
@@ -34,7 +40,13 @@ weighted_mean <- function(x, weights = NULL, remove_na = TRUE, verbose = TRUE, .
 
 #' @export
 #' @rdname weighted_mean
-weighted_median <- function(x, weights = NULL, remove_na = TRUE, verbose = TRUE, ...) {
+weighted_median <- function(
+  x,
+  weights = NULL,
+  remove_na = TRUE,
+  verbose = TRUE,
+  ...
+) {
   if (!.are_weights(weights) || !.validate_weights(weights, verbose)) {
     return(stats::median(x, na.rm = remove_na))
   }
@@ -68,7 +80,13 @@ weighted_median <- function(x, weights = NULL, remove_na = TRUE, verbose = TRUE,
 
 #' @export
 #' @rdname weighted_mean
-weighted_sd <- function(x, weights = NULL, remove_na = TRUE, verbose = TRUE, ...) {
+weighted_sd <- function(
+  x,
+  weights = NULL,
+  remove_na = TRUE,
+  verbose = TRUE,
+  ...
+) {
   # from cov.wt
   if (!.are_weights(weights) || !.validate_weights(weights, verbose)) {
     return(stats::sd(x, na.rm = remove_na))
@@ -86,7 +104,14 @@ weighted_sd <- function(x, weights = NULL, remove_na = TRUE, verbose = TRUE, ...
 
 #' @export
 #' @rdname weighted_mean
-weighted_mad <- function(x, weights = NULL, constant = 1.4826, remove_na = TRUE, verbose = TRUE, ...) {
+weighted_mad <- function(
+  x,
+  weights = NULL,
+  constant = 1.4826,
+  remove_na = TRUE,
+  verbose = TRUE,
+  ...
+) {
   # From matrixStats
   if (!.are_weights(weights) || !.validate_weights(weights, verbose)) {
     return(stats::mad(x, na.rm = remove_na))
@@ -104,7 +129,9 @@ weighted_mad <- function(x, weights = NULL, constant = 1.4826, remove_na = TRUE,
   pos <- all(weights > 0, na.rm = TRUE)
 
   if (isTRUE(!pos) && isTRUE(verbose)) {
-    insight::format_warning("Some `weights` were negative. Weighting not carried out.")
+    insight::format_warning(
+      "Some `weights` were negative. Weighting not carried out."
+    )
   }
 
   pos

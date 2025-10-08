@@ -109,8 +109,12 @@ test_that("data_modify expression in character vector-1", {
   expect_named(
     out,
     c(
-      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
-      "Species", "var_a"
+      "Sepal.Length",
+      "Sepal.Width",
+      "Petal.Length",
+      "Petal.Width",
+      "Species",
+      "var_a"
     )
   )
 })
@@ -126,8 +130,12 @@ test_that("data_modify expression in character vector-2", {
   expect_named(
     out,
     c(
-      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
-      "Species", "var_a"
+      "Sepal.Length",
+      "Sepal.Width",
+      "Petal.Length",
+      "Petal.Width",
+      "Species",
+      "var_a"
     )
   )
   expect_identical(out$var_a, out$Sepal.Width)
@@ -139,8 +147,12 @@ test_that("data_modify expression in character vector-2", {
   expect_named(
     out,
     c(
-      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
-      "Species", "var_a"
+      "Sepal.Length",
+      "Sepal.Width",
+      "Petal.Length",
+      "Petal.Width",
+      "Species",
+      "var_a"
     )
   )
   expect_identical(out$var_a, out$Sepal.Width)
@@ -154,8 +166,12 @@ test_that("data_modify expression in character vector-3", {
   expect_named(
     out,
     c(
-      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
-      "Species", "new_var"
+      "Sepal.Length",
+      "Sepal.Width",
+      "Petal.Length",
+      "Petal.Width",
+      "Species",
+      "new_var"
     )
   )
   expect_identical(out$new_var, 2 * out$Sepal.Width)
@@ -165,8 +181,12 @@ test_that("data_modify expression in character vector-3", {
   expect_named(
     out,
     c(
-      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
-      "Species", "new_var"
+      "Sepal.Length",
+      "Sepal.Width",
+      "Petal.Length",
+      "Petal.Width",
+      "Species",
+      "new_var"
     )
   )
   expect_identical(out$new_var, 2 * out$Sepal.Width)
@@ -178,8 +198,12 @@ test_that("data_modify expression in character vector-3", {
   expect_identical(
     colnames(out),
     c(
-      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
-      "Species", "new_var"
+      "Sepal.Length",
+      "Sepal.Width",
+      "Petal.Length",
+      "Petal.Width",
+      "Species",
+      "new_var"
     )
   )
   expect_identical(out$new_var, 2 * out$Sepal.Width)
@@ -194,8 +218,13 @@ test_that("data_modify expression as character vector-4", {
   expect_named(
     out,
     c(
-      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
-      "Species", "var_a", "Sepal_Wz_double"
+      "Sepal.Length",
+      "Sepal.Width",
+      "Petal.Length",
+      "Petal.Width",
+      "Species",
+      "var_a",
+      "Sepal_Wz_double"
     )
   )
   expect_identical(out$var_a, out$Sepal.Width)
@@ -211,8 +240,13 @@ test_that("data_modify expression as character vector-4", {
   expect_named(
     out,
     c(
-      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
-      "Species", "var_a", "Sepal_Wz_double"
+      "Sepal.Length",
+      "Sepal.Width",
+      "Petal.Length",
+      "Petal.Width",
+      "Species",
+      "var_a",
+      "Sepal_Wz_double"
     )
   )
   expect_identical(out$var_a, out$Sepal.Width)
@@ -225,8 +259,13 @@ test_that("data_modify expression as character vector-4", {
   expect_named(
     out,
     c(
-      "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
-      "Species", "var_a", "Sepal_Wz_double"
+      "Sepal.Length",
+      "Sepal.Width",
+      "Petal.Length",
+      "Petal.Width",
+      "Species",
+      "var_a",
+      "Sepal_Wz_double"
     )
   )
   expect_identical(out$var_a, out$Sepal.Width)
@@ -242,7 +281,10 @@ test_that("data_modify expression as character vector-4", {
   expect_identical(out$var_a, out$Sepal.Width)
   expect_identical(out$Sepal_Wz_double, 2 * out$Sepal.Width)
 
-  out <- data_modify(iris, as_expr(c("var_a = Sepal.Width", "Sepal_Wz_double = 2 * var_a")))
+  out <- data_modify(
+    iris,
+    as_expr(c("var_a = Sepal.Width", "Sepal_Wz_double = 2 * var_a"))
+  )
   expect_identical(out$var_a, out$Sepal.Width)
   expect_identical(out$Sepal_Wz_double, 2 * out$Sepal.Width)
 })
@@ -274,11 +316,17 @@ test_that("data_modify works with function as expression", {
 test_that("data_modify remove variables with NULL", {
   data(iris)
   out <- data_modify(iris, PL_new = 2 * Petal.Length, Petal.Length = NULL)
-  expect_named(out, c("Sepal.Length", "Sepal.Width", "Petal.Width", "Species", "PL_new"))
+  expect_named(
+    out,
+    c("Sepal.Length", "Sepal.Width", "Petal.Width", "Species", "PL_new")
+  )
   expect_identical(out$PL_new, 2 * iris$Petal.Length)
 
   out <- data_modify(iris, as_expr("Species = NULL"))
-  expect_named(out, c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"))
+  expect_named(
+    out,
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+  )
 })
 
 
@@ -351,8 +399,8 @@ test_that("data_modify works on grouped data, inside functions", {
         "c12hour_c = center(c12hour)",
         "c12hour_z = c12hour_c / sd(c12hour, na.rm = TRUE)",
         "c12hour_z2 = standardize(c12hour)"
-      )
-    ))
+      ))
+    )
   }
   out <- foo4(data_group(efc, "c172code"))
   out2 <- lapply(by(efc["c12hour"], efc$c172code, scale), as.vector)
@@ -397,7 +445,10 @@ test_that("data_modify works on grouped data, inside functions", {
 
 
 test_that("data_modify errors for non df", {
-  expect_error(data_modify(iris$Sepal.Length, Sepal_W_z = standardize(Sepal.Width)))
+  expect_error(data_modify(
+    iris$Sepal.Length,
+    Sepal_W_z = standardize(Sepal.Width)
+  ))
 })
 
 
@@ -445,7 +496,11 @@ test_that("data_modify message about recycling values", {
 
 test_that("data_modify message about modified variables", {
   expect_snapshot(head(data_modify(iris, Sepal.Width = 2 * Sepal.Width)))
-  expect_snapshot(head(data_modify(iris, Petal.Length = Sepal.Length, Sepal.Width = Petal.Width)))
+  expect_snapshot(head(data_modify(
+    iris,
+    Petal.Length = Sepal.Length,
+    Sepal.Width = Petal.Width
+  )))
 })
 
 
@@ -532,14 +587,22 @@ test_that("data_modify works with grouped df when overwriting existing variables
   data(iris)
   iris_grp <- data_group(iris, "Species")
   out <- data_modify(iris_grp, Sepal.Length = normalize(Sepal.Length))
-  expect_equal(head(out$Sepal.Length), c(0.53333, 0.4, 0.26667, 0.2, 0.46667, 0.73333), tolerance = 1e-3)
+  expect_equal(
+    head(out$Sepal.Length),
+    c(0.53333, 0.4, 0.26667, 0.2, 0.46667, 0.73333),
+    tolerance = 1e-3
+  )
 
   out <- data_modify(
     iris_grp,
     Sepal.Length = normalize(Sepal.Length),
     Sepal.Length2 = 2 * Sepal.Length
   )
-  expect_equal(head(out$Sepal.Length2), 2 * c(0.53333, 0.4, 0.26667, 0.2, 0.46667, 0.73333), tolerance = 1e-3)
+  expect_equal(
+    head(out$Sepal.Length2),
+    2 * c(0.53333, 0.4, 0.26667, 0.2, 0.46667, 0.73333),
+    tolerance = 1e-3
+  )
 })
 
 
@@ -580,10 +643,17 @@ test_that("data_modify .if/.at arguments", {
     .modify = as.numeric
   )
   expect_identical(out$Species, c(1, 1, 1, 1, 1))
-  expect_named(out, c(
-    "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width",
-    "Species", "new_length"
-  ))
+  expect_named(
+    out,
+    c(
+      "Sepal.Length",
+      "Sepal.Width",
+      "Petal.Length",
+      "Petal.Width",
+      "Species",
+      "new_length"
+    )
+  )
   # using other functions with `.at`
   out <- data_modify(
     d,
@@ -634,7 +704,12 @@ test_that("data_modify .if/.at arguments", {
     regex = "You need to specify"
   )
   # newly created variables are processed by if/at
-  out <- data_modify(d, new_length = Petal.Length * 2, .if = is.numeric, .modify = round)
+  out <- data_modify(
+    d,
+    new_length = Petal.Length * 2,
+    .if = is.numeric,
+    .modify = round
+  )
   expect_equal(out$new_length, c(3, 3, 3, 3, 3), ignore_attr = TRUE)
 })
 
@@ -675,8 +750,12 @@ test_that("data_modify works with new expressions, different use cases same resu
   expect_identical(
     head(out$sepwid),
     c(
-      "2 * Sepal.Widht", "2 * Sepal.Widht", "2 * Sepal.Widht", "2 * Sepal.Widht",
-      "2 * Sepal.Widht", "2 * Sepal.Widht"
+      "2 * Sepal.Widht",
+      "2 * Sepal.Widht",
+      "2 * Sepal.Widht",
+      "2 * Sepal.Widht",
+      "2 * Sepal.Widht",
+      "2 * Sepal.Widht"
     )
   )
 
@@ -698,7 +777,6 @@ test_that("data_modify works with new expressions, different use cases same resu
     c(-0.89767, -1.1392, -1.38073, -1.50149, -1.01844, -0.53538),
     tolerance = 1e-3
   )
-
 
   # complex example
   e <- "2 * Sepal.Width"
@@ -741,7 +819,12 @@ test_that("data_modify works with new expressions, grouped_df, different use cas
     c12hour_z2 = standardize(c12hour),
     id = 1:n() # nolint
   )
-  expect_equal(head(new_efc1), head(new_efc2), ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(
+    head(new_efc1),
+    head(new_efc2),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
 
   s <- c(
     "c12hour_c = center(c12hour)",
@@ -753,7 +836,12 @@ test_that("data_modify works with new expressions, grouped_df, different use cas
     as_expr(s),
     id = 1:n() # nolint
   )
-  expect_equal(head(new_efc1), head(new_efc3), ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(
+    head(new_efc1),
+    head(new_efc3),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
 
   new_efc4 <- data_modify(
     grouped_efc,
@@ -762,7 +850,12 @@ test_that("data_modify works with new expressions, grouped_df, different use cas
     c12hour_z2 = standardize(c12hour),
     id = 1:n() # nolint
   )
-  expect_equal(head(new_efc1), head(new_efc4), ignore_attr = TRUE, tolerance = 1e-4)
+  expect_equal(
+    head(new_efc1),
+    head(new_efc4),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
 })
 
 
@@ -836,9 +929,38 @@ withr::with_environment(
     expect_identical(
       foo(x),
       c(
-        1L, 2L, 3L, 1L, 2L, 3L, 4L, 4L, 5L, 6L, 7L, 5L, 6L, 7L, 8L,
-        9L, 10L, 8L, 9L, 10L, 11L, 12L, 13L, 14L, 15L, 11L, 1L, 2L, 3L,
-        4L, 5L, 12L
+        1L,
+        2L,
+        3L,
+        1L,
+        2L,
+        3L,
+        4L,
+        4L,
+        5L,
+        6L,
+        7L,
+        5L,
+        6L,
+        7L,
+        8L,
+        9L,
+        10L,
+        8L,
+        9L,
+        10L,
+        11L,
+        12L,
+        13L,
+        14L,
+        15L,
+        11L,
+        1L,
+        2L,
+        3L,
+        4L,
+        5L,
+        12L
       )
     )
   })

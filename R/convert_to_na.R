@@ -63,7 +63,10 @@ convert_to_na.default <- function(x, verbose = TRUE, ...) {
 convert_to_na.numeric <- function(x, na = NULL, verbose = TRUE, ...) {
   # if we have a list, use first valid element
   if (is.list(na)) {
-    na <- unlist(na[vapply(na, is.numeric, FUN.VALUE = TRUE)], use.names = FALSE)
+    na <- unlist(
+      na[vapply(na, is.numeric, FUN.VALUE = TRUE)],
+      use.names = FALSE
+    )
   }
 
   if (insight::is_empty_object(na) || !is.numeric(na)) {
@@ -86,10 +89,19 @@ convert_to_na.numeric <- function(x, na = NULL, verbose = TRUE, ...) {
 
 #' @rdname convert_to_na
 #' @export
-convert_to_na.factor <- function(x, na = NULL, drop_levels = FALSE, verbose = TRUE, ...) {
+convert_to_na.factor <- function(
+  x,
+  na = NULL,
+  drop_levels = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # if we have a list, use first valid element
   if (is.list(na)) {
-    na <- unlist(na[vapply(na, is.character, FUN.VALUE = TRUE)], use.names = FALSE)
+    na <- unlist(
+      na[vapply(na, is.character, FUN.VALUE = TRUE)],
+      use.names = FALSE
+    )
   }
 
   if (insight::is_empty_object(na) || (!is.factor(na) && !is.character(na))) {
@@ -150,7 +162,10 @@ convert_to_na.Date <- function(x, na = NULL, verbose = TRUE, ...) {
 convert_to_na.logical <- function(x, na = NULL, verbose = TRUE, ...) {
   # if we have a list, use first valid element
   if (is.list(na)) {
-    na <- unlist(na[vapply(na, is.logical, FUN.VALUE = TRUE)], use.names = FALSE)
+    na <- unlist(
+      na[vapply(na, is.logical, FUN.VALUE = TRUE)],
+      use.names = FALSE
+    )
   }
 
   if (insight::is_empty_object(na) || !is.logical(na)) {
@@ -170,17 +185,20 @@ convert_to_na.logical <- function(x, na = NULL, verbose = TRUE, ...) {
 
 #' @rdname convert_to_na
 #' @export
-convert_to_na.data.frame <- function(x,
-                                     select = NULL,
-                                     exclude = NULL,
-                                     na = NULL,
-                                     drop_levels = FALSE,
-                                     ignore_case = FALSE,
-                                     regex = FALSE,
-                                     verbose = TRUE,
-                                     ...) {
+convert_to_na.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  na = NULL,
+  drop_levels = FALSE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
