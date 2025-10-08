@@ -177,7 +177,11 @@ test_that("extract_column_names works correctly with minus sign", {
   )
 
   expect_identical(
-    extract_column_names(iris, -c("Sepal.Length", "Petal.Width"), exclude = "Species"),
+    extract_column_names(
+      iris,
+      -c("Sepal.Length", "Petal.Width"),
+      exclude = "Species"
+    ),
     c("Sepal.Width", "Petal.Length")
   )
 })

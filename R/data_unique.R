@@ -26,25 +26,29 @@
 #'
 #' data_unique(df1, select = "id")
 #' @export
-data_unique <- function(data,
-                        select = NULL,
-                        keep = "best",
-                        exclude = NULL,
-                        ignore_case = FALSE,
-                        regex = FALSE,
-                        verbose = TRUE) {
+data_unique <- function(
+  data,
+  select = NULL,
+  keep = "best",
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE
+) {
   UseMethod("data_unique")
 }
 
 
 #' @export
-data_unique.data.frame <- function(data,
-                                   select = NULL,
-                                   keep = "best",
-                                   exclude = NULL,
-                                   ignore_case = FALSE,
-                                   regex = FALSE,
-                                   verbose = TRUE) {
+data_unique.data.frame <- function(
+  data,
+  select = NULL,
+  keep = "best",
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE
+) {
   select <- .select_nse(
     select,
     data,
@@ -75,13 +79,12 @@ data_unique.data.frame <- function(data,
     good.dups <- data_filter(good.dups, "count_na == min(count_na)")
   }
 
-  good.dups <- good.dups[!duplicated(good.dups$temporary_id2,
-    fromLast = keep == "last"
-  ), ]
+  good.dups <- good.dups[
+    !duplicated(good.dups$temporary_id2, fromLast = keep == "last"),
+  ]
 
   good.dups <- data_select(good.dups, og.names)
   out <- data[!duplicated(data$temporary_id2), , drop = FALSE]
-
 
   if (keep != "first") {
     match.index <- out$temporary_id2 %in% good.dups$temporary_id2
@@ -92,7 +95,11 @@ data_unique.data.frame <- function(data,
   out <- data_remove(out, "temporary_id2")
 
   if (verbose) {
-    dup.msg <- sprintf("(%s duplicates removed, with method '%s')", dups.n, keep)
+    dup.msg <- sprintf(
+      "(%s duplicates removed, with method '%s')",
+      dups.n,
+      keep
+    )
     dup.msg <- paste0(dup.msg, ifelse(dups.n != 69, "", " 69... nice"))
     insight::format_alert(dup.msg)
   }
@@ -102,13 +109,15 @@ data_unique.data.frame <- function(data,
 
 
 #' @export
-data_unique.grouped_df <- function(data,
-                                   select = NULL,
-                                   keep = "best",
-                                   exclude = NULL,
-                                   ignore_case = FALSE,
-                                   regex = FALSE,
-                                   verbose = TRUE) {
+data_unique.grouped_df <- function(
+  data,
+  select = NULL,
+  keep = "best",
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE
+) {
   select <- .select_nse(
     select,
     data,
@@ -118,14 +127,18 @@ data_unique.grouped_df <- function(data,
     verbose = verbose
   )
 
-
   grps <- attr(data, "groups", exact = TRUE)
   grps <- grps[[".rows"]]
 
   data2 <- as.data.frame(data_ungroup(data))
 
   out <- lapply(grps, function(x) {
-    data_unique.data.frame(data2[x, ], select = select, keep = keep, verbose = verbose)
+    data_unique.data.frame(
+      data2[x, ],
+      select = select,
+      keep = keep,
+      verbose = verbose
+    )
   })
 
   out <- do.call(rbind, out)

@@ -43,28 +43,33 @@ labels_to_levels.default <- function(x, verbose = TRUE, ...) {
 #' @export
 labels_to_levels.factor <- function(x, verbose = TRUE, ...) {
   if (is.null(attr(x, "labels", exact = TRUE))) {
-    insight::format_error("Could not change factor levels. Variable had no value labels.")
+    insight::format_error(
+      "Could not change factor levels. Variable had no value labels."
+    )
   }
   .value_labels_to_levels(x, verbose = verbose)
 }
 
 #' @rdname labels_to_levels
 #' @export
-labels_to_levels.data.frame <- function(x,
-                                        select = NULL,
-                                        exclude = NULL,
-                                        ignore_case = FALSE,
-                                        append = FALSE,
-                                        regex = FALSE,
-                                        verbose = TRUE,
-                                        ...) {
+labels_to_levels.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  append = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # validation check, return as is for complete factor
   if (all(vapply(x, is.factor, TRUE))) {
     return(x)
   }
 
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,

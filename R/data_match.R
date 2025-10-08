@@ -100,20 +100,26 @@
 #' data_filter(mtcars, fl)
 #' @inherit data_rename seealso
 #' @export
-data_match <- function(x,
-                       to,
-                       match = "and",
-                       return_indices = FALSE,
-                       remove_na = TRUE,
-                       ...) {
+data_match <- function(
+  x,
+  to,
+  match = "and",
+  return_indices = FALSE,
+  remove_na = TRUE,
+  ...
+) {
   if (!is.data.frame(to)) {
     to <- as.data.frame(to)
   }
   original_x <- x
 
   # evaluate
-  match <- match.arg(tolower(match), c("and", "&", "&&", "or", "|", "||", "!", "not"))
-  match <- switch(match,
+  match <- match.arg(
+    tolower(match),
+    c("and", "&", "&&", "or", "|", "||", "!", "not")
+  )
+  match <- switch(
+    match,
     `&` = ,
     `&&` = ,
     and = "and",
@@ -228,11 +234,17 @@ data_filter.data.frame <- function(x, ...) {
       if (!is.null(eval_symbol)) {
         # when possible to evaluate, do we have a numeric vector provided
         # as string? (e.g. `"5:10"`) - then try to coerce to numeric
-        eval_symbol_numeric <- tryCatch(eval(parse(text = eval_symbol)), error = function(e) NULL)
+        eval_symbol_numeric <- tryCatch(
+          eval(parse(text = eval_symbol)),
+          error = function(e) NULL
+        )
       }
 
       # here we go when we have a filter expression, and no numeric vector to slice
-      if (is.null(eval_symbol) || (!is.numeric(eval_symbol) && !is.numeric(eval_symbol_numeric))) {
+      if (
+        is.null(eval_symbol) ||
+          (!is.numeric(eval_symbol) && !is.numeric(eval_symbol_numeric))
+      ) {
         # could be evaluated? Then filter expression is a string and we need
         # to convert into symbol
         if (is.character(eval_symbol)) {
@@ -246,10 +258,15 @@ data_filter.data.frame <- function(x, ...) {
         )
       } else if (is.numeric(eval_symbol)) {
         # if symbol could be evaluated and is numeric, slice
-        out <- tryCatch(out[eval_symbol, , drop = FALSE], error = function(e) NULL)
+        out <- tryCatch(out[eval_symbol, , drop = FALSE], error = function(e) {
+          NULL
+        })
       } else if (is.numeric(eval_symbol_numeric)) {
         # if symbol could be evaluated, was string and could be converted to numeric, slice
-        out <- tryCatch(out[eval_symbol_numeric, , drop = FALSE], error = function(e) NULL)
+        out <- tryCatch(
+          out[eval_symbol_numeric, , drop = FALSE],
+          error = function(e) NULL
+        )
       }
 
       if (inherits(out, "simpleError")) {
@@ -260,7 +277,11 @@ data_filter.data.frame <- function(x, ...) {
           # some syntax errors do not relate to misspelled variables...
           if (!error_var %in% colnames(x)) {
             insight::format_error(
-              paste0("Variable \"", error_var, "\" was not found in the dataset."),
+              paste0(
+                "Variable \"",
+                error_var,
+                "\" was not found in the dataset."
+              ),
               .misspelled_string(colnames(x), error_var, "Possibly misspelled?")
             )
           }
@@ -354,7 +375,12 @@ data_filter.grouped_df <- function(x, ...) {
   # can identify a function call, and only continue checking for wrong syntax
   # when we have not identified a function.
 
-  if (!is.function(tryCatch(get(gsub("^(.*?)\\((.*)", "\\1", tmp)), error = function(e) NULL))) {
+  if (
+    !is.function(tryCatch(
+      get(gsub("^(.*?)\\((.*)", "\\1", tmp)),
+      error = function(e) NULL
+    ))
+  ) {
     # Give more informative message to users
     # about possible misspelled comparisons / logical conditions
     # check if "=" instead of "==" was used?
@@ -376,7 +402,9 @@ data_filter.grouped_df <- function(x, ...) {
         paste0(
           "Filtering did not work. Please check if you need `",
           substr(logical_operator, 0, 1),
-          "` (instead of `", logical_operator, "`) as logical operator."
+          "` (instead of `",
+          logical_operator,
+          "`) as logical operator."
         )
       )
     }

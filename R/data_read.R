@@ -78,12 +78,14 @@
 #' variables to factors.
 #'
 #' @export
-data_read <- function(path,
-                      path_catalog = NULL,
-                      encoding = NULL,
-                      convert_factors = TRUE,
-                      verbose = TRUE,
-                      ...) {
+data_read <- function(
+  path,
+  path_catalog = NULL,
+  encoding = NULL,
+  convert_factors = TRUE,
+  verbose = TRUE,
+  ...
+) {
   # extract first valid file from zip-file
   if (identical(.file_ext(path), "zip")) {
     path <- .extract_zip(path)
@@ -99,7 +101,8 @@ data_read <- function(path,
   }
 
   # read data
-  out <- switch(file_type,
+  out <- switch(
+    file_type,
     txt = ,
     csv = .read_text(path, encoding, verbose, ...),
     rda = ,
@@ -110,7 +113,14 @@ data_read <- function(path,
     sav = ,
     por = .read_spss(path, encoding, convert_factors, verbose, ...),
     dta = .read_stata(path, encoding, convert_factors, verbose, ...),
-    sas7bdat = .read_sas(path, path_catalog, encoding, convert_factors, verbose, ...),
+    sas7bdat = .read_sas(
+      path,
+      path_catalog,
+      encoding,
+      convert_factors,
+      verbose,
+      ...
+    ),
     parquet = .read_parquet(path, verbose, ...),
     .read_unknown(path, file_type, verbose, ...)
   )
@@ -153,7 +163,9 @@ data_read <- function(path,
     utils::unzip(path, exdir = d)
     path <- file.path(d, dest[1])
   } else {
-    insight::format_error("The zip-file does not contain any supported file types.")
+    insight::format_error(
+      "The zip-file does not contain any supported file types."
+    )
   }
 
   path
@@ -183,7 +195,9 @@ data_read <- function(path,
         if (is.character(i)) {
           # we need this to drop haven-specific class attributes
           i <- as.character(i)
-        } else if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
+        } else if (
+          !is.null(value_labels) && length(value_labels) == insight::n_unique(i)
+        ) {
           # if all values are labelled, we assume factor. Use labels as levels
           if (is.numeric(i)) {
             i <- factor(i, labels = names(value_labels))
@@ -210,8 +224,16 @@ data_read <- function(path,
     })
     # tell user how many variables were converted
     if (verbose) {
-      cnt <- sum(vapply(x, function(i) isTRUE(attributes(i)$converted_to_factor), TRUE))
-      msg <- sprintf("%i out of %i variables were fully labelled and converted into factors.", cnt, ncol(x))
+      cnt <- sum(vapply(
+        x,
+        function(i) isTRUE(attributes(i)$converted_to_factor),
+        TRUE
+      ))
+      msg <- sprintf(
+        "%i out of %i variables were fully labelled and converted into factors.",
+        cnt,
+        ncol(x)
+      )
       insight::format_alert(msg)
     }
   } else {
@@ -231,7 +253,10 @@ data_read <- function(path,
 # read functions -----------------------
 
 .read_spss <- function(path, encoding, convert_factors, verbose, ...) {
-  insight::check_if_installed("haven", reason = paste0("to read files of type '", .file_ext(path), "'"))
+  insight::check_if_installed(
+    "haven",
+    reason = paste0("to read files of type '", .file_ext(path), "'")
+  )
   if (verbose) {
     insight::format_alert("Reading data...")
   }
@@ -241,7 +266,10 @@ data_read <- function(path,
 
 
 .read_stata <- function(path, encoding, convert_factors, verbose, ...) {
-  insight::check_if_installed("haven", reason = paste0("to read files of type '", .file_ext(path), "'"))
+  insight::check_if_installed(
+    "haven",
+    reason = paste0("to read files of type '", .file_ext(path), "'")
+  )
   if (verbose) {
     insight::format_alert("Reading data...")
   }
@@ -250,18 +278,36 @@ data_read <- function(path,
 }
 
 
-.read_sas <- function(path, path_catalog, encoding, convert_factors, verbose, ...) {
-  insight::check_if_installed("haven", reason = paste0("to read files of type '", .file_ext(path), "'"))
+.read_sas <- function(
+  path,
+  path_catalog,
+  encoding,
+  convert_factors,
+  verbose,
+  ...
+) {
+  insight::check_if_installed(
+    "haven",
+    reason = paste0("to read files of type '", .file_ext(path), "'")
+  )
   if (verbose) {
     insight::format_alert("Reading data...")
   }
-  out <- haven::read_sas(data_file = path, catalog_file = path_catalog, encoding = encoding, ...)
+  out <- haven::read_sas(
+    data_file = path,
+    catalog_file = path_catalog,
+    encoding = encoding,
+    ...
+  )
   .post_process_imported_data(out, convert_factors, verbose)
 }
 
 
 .read_excel <- function(path, encoding, verbose, ...) {
-  insight::check_if_installed("readxl", reason = paste0("to read files of type '", .file_ext(path), "'"))
+  insight::check_if_installed(
+    "readxl",
+    reason = paste0("to read files of type '", .file_ext(path), "'")
+  )
   if (verbose) {
     insight::format_alert("Reading data...")
   }
@@ -281,7 +327,10 @@ data_read <- function(path,
     return(as.data.frame(out))
   }
 
-  insight::check_if_installed("readr", reason = paste0("to read files of type '", .file_ext(path), "'"))
+  insight::check_if_installed(
+    "readr",
+    reason = paste0("to read files of type '", .file_ext(path), "'")
+  )
   if (verbose) {
     insight::format_alert("Reading data...")
   }
@@ -291,7 +340,10 @@ data_read <- function(path,
 
 
 .read_unknown <- function(path, file_type, verbose, ...) {
-  insight::check_if_installed("rio", reason = paste0("to read files of type '", file_type, "'"))
+  insight::check_if_installed(
+    "rio",
+    reason = paste0("to read files of type '", file_type, "'")
+  )
   if (verbose) {
     insight::format_alert("Reading data...")
   }
@@ -335,7 +387,9 @@ data_read <- function(path,
   # but just return everything
   if (length(ls(env)) > 1) {
     if (verbose) {
-      insight::format_alert("File contained more than one object, returning all objects.")
+      insight::format_alert(
+        "File contained more than one object, returning all objects."
+      )
     }
     return(as.list(env))
   }
@@ -432,7 +486,11 @@ data_read <- function(path,
   if (insight::is_model(out)) {
     if (verbose) {
       insight::format_alert(
-        paste0("Imported file is a regression model object of class \"", class(out)[1], "\"."),
+        paste0(
+          "Imported file is a regression model object of class \"",
+          class(out)[1],
+          "\"."
+        ),
         "Returning file as is."
       )
     }
@@ -443,11 +501,18 @@ data_read <- function(path,
   # "rio::import()", we must check whether we actually have a data frame or
   # not. Else, tell user.
   if (!is.data.frame(out)) {
-    tmp <- tryCatch(as.data.frame(out, stringsAsFactors = FALSE), error = function(e) NULL)
+    tmp <- tryCatch(
+      as.data.frame(out, stringsAsFactors = FALSE),
+      error = function(e) NULL
+    )
     if (is.null(tmp)) {
       if (verbose) {
         insight::format_warning(
-          paste0("Imported file is no data frame, but of class \"", class(out)[1], "\"."),
+          paste0(
+            "Imported file is no data frame, but of class \"",
+            class(out)[1],
+            "\"."
+          ),
           "Returning file as is. Please check if importing this file was intended."
         )
       }

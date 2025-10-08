@@ -83,11 +83,9 @@
 #' }
 #'
 #' @export
-contr.deviation <- function(n,
-                            base = 1,
-                            contrasts = TRUE,
-                            sparse = FALSE) {
-  cont <- stats::contr.treatment(n,
+contr.deviation <- function(n, base = 1, contrasts = TRUE, sparse = FALSE) {
+  cont <- stats::contr.treatment(
+    n,
     base = base,
     contrasts = contrasts,
     sparse = sparse

@@ -67,11 +67,15 @@ reshape_ci <- function(x, ci_type = "CI") {
     }
 
     # Replace at the right place
-    ci_colname <- names(x)[grepl(paste0(ci_low, "_*"), names(x)) | grepl(paste0(ci_high, "_*"), names(x))]
-    colnames_1 <- names(x)[0:(ci_position - 1)][!names(x)[0:(ci_position - 1)] %in% ci_colname]
+    ci_colname <- names(x)[
+      grepl(paste0(ci_low, "_*"), names(x)) |
+        grepl(paste0(ci_high, "_*"), names(x))
+    ]
+    colnames_1 <- names(x)[0:(ci_position - 1)][
+      !names(x)[0:(ci_position - 1)] %in% ci_colname
+    ]
     colnames_2 <- names(x)[!names(x) %in% c(ci_colname, colnames_1)]
     x <- x[c(colnames_1, ci_colname, colnames_2)]
-
 
     # Wide to long --------------
   } else {
@@ -85,7 +89,10 @@ reshape_ci <- function(x, ci_type = "CI") {
     lows <- grepl(paste0(ci_low, "_*"), names(x))
     highs <- grepl(paste0(ci_high, "_*"), names(x))
     ci <- as.numeric(gsub(paste0(ci_low, "_"), "", names(x)[lows]))
-    if (paste(ci, collapse = "-") != paste(gsub(paste0(ci_high, "_"), "", names(x)[highs]), collapse = "-")) {
+    if (
+      paste(ci, collapse = "-") !=
+        paste(gsub(paste0(ci_high, "_"), "", names(x)[highs]), collapse = "-")
+    ) {
       insight::format_error("Something went wrong in the CIs reshaping.")
       return(x)
     }
@@ -118,7 +125,9 @@ reshape_ci <- function(x, ci_type = "CI") {
     # Replace at the right place
     ci_position <- which(lows)[1]
     ci_colname <- c("CI", ci_low, ci_high)
-    colnames_1 <- names(x)[0:(ci_position - 1)][!names(x)[0:(ci_position - 1)] %in% ci_colname]
+    colnames_1 <- names(x)[0:(ci_position - 1)][
+      !names(x)[0:(ci_position - 1)] %in% ci_colname
+    ]
     colnames_2 <- names(x)[!names(x) %in% c(ci_colname, colnames_1)]
     x <- x[c(colnames_1, ci_colname, colnames_2)]
   }

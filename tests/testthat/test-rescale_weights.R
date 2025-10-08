@@ -5,16 +5,29 @@ test_that("rescale_weights works as expected", {
 
   expect_snapshot(head(rescale_weights(nhanes_sample, "WTINT2YR", "SDMVSTRA")))
 
-  expect_snapshot(head(rescale_weights(nhanes_sample, "WTINT2YR", c("SDMVSTRA", "SDMVPSU"))))
+  expect_snapshot(head(rescale_weights(
+    nhanes_sample,
+    "WTINT2YR",
+    c("SDMVSTRA", "SDMVPSU")
+  )))
 
-  expect_snapshot(head(rescale_weights(nhanes_sample, probability_weights = "WTINT2YR", method = "kish")))
+  expect_snapshot(head(rescale_weights(
+    nhanes_sample,
+    probability_weights = "WTINT2YR",
+    method = "kish"
+  )))
 
   out <- rescale_weights(nhanes_sample, "WTINT2YR", "SDMVSTRA")
   expect_equal(sum(out$rescaled_weights_a), 2992, tolerance = 1e-3)
   expect_equal(sum(out$rescaled_weights_b), 2244.71451, tolerance = 1e-3)
   out <- rescale_weights(nhanes_sample, "WTINT2YR", method = "kish")
   expect_equal(sum(out$rescaled_weights), 2162.53961, tolerance = 1e-3)
-  out <- rescale_weights(nhanes_sample, "WTINT2YR", by = "SDMVPSU", method = "kish")
+  out <- rescale_weights(
+    nhanes_sample,
+    "WTINT2YR",
+    by = "SDMVPSU",
+    method = "kish"
+  )
   expect_equal(sum(out$rescaled_weights), 2163.3657, tolerance = 1e-3)
 })
 
@@ -138,8 +151,16 @@ test_that("rescale_weights errors and warnings", {
   expect_named(
     out,
     c(
-      "total", "age", "RIAGENDR", "RIDRETH1", "SDMVPSU", "SDMVSTRA",
-      "WTINT2YR", "rescaled_weights_a", "rescaled_weights_a_1", "rescaled_weights_b"
+      "total",
+      "age",
+      "RIAGENDR",
+      "RIDRETH1",
+      "SDMVPSU",
+      "SDMVSTRA",
+      "WTINT2YR",
+      "rescaled_weights_a",
+      "rescaled_weights_a_1",
+      "rescaled_weights_b"
     )
   )
 })

@@ -7,7 +7,10 @@ test_that("assign_labels, unnamed values", {
     values = c("one", "two", "three")
   )
   expect_identical(attributes(out)$label, "My x")
-  expect_identical(attributes(out)$labels, structure(1:3, names = c("one", "two", "three")))
+  expect_identical(
+    attributes(out)$labels,
+    structure(1:3, names = c("one", "two", "three"))
+  )
 })
 
 test_that("assign_labels, named values", {
@@ -37,17 +40,28 @@ test_that("assign_labels, partially named values", {
 test_that("assign_labels, errors", {
   x <- 1:5
   expect_error(assign_labels(x, values = c(`1` = "lowest", `6` = "highest")))
-  expect_error(assign_labels(x, variable = 1, values = c(`1` = "lowest", `6` = "highest")))
+  expect_error(assign_labels(
+    x,
+    variable = 1,
+    values = c(`1` = "lowest", `6` = "highest")
+  ))
   expect_error(assign_labels(x, values = c("a", "b", "c")))
 })
 
 test_that("assign_labels, data frame", {
   data(iris)
   out <- assign_labels(iris, "Species", values = c("a", "b", "c"))
-  expect_identical(attributes(out$Species)$labels, c(a = "setosa", b = "versicolor", c = "virginica"))
+  expect_identical(
+    attributes(out$Species)$labels,
+    c(a = "setosa", b = "versicolor", c = "virginica")
+  )
 
   data(mtcars)
-  out <- assign_labels(mtcars, select = c("am", "vs"), values = c("low", "high"))
+  out <- assign_labels(
+    mtcars,
+    select = c("am", "vs"),
+    values = c("low", "high")
+  )
   expect_identical(attributes(out$am)$labels, c(low = 0, high = 1))
   expect_identical(attributes(out$vs)$labels, c(low = 0, high = 1))
   expect_null(attributes(out$gear)$labels)

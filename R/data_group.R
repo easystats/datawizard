@@ -24,13 +24,15 @@
 #'   data_group(c172code) %>%
 #'   summarize(mean_hours = mean(c12hour, na.rm = TRUE))
 #' @export
-data_group <- function(data,
-                       select = NULL,
-                       exclude = NULL,
-                       ignore_case = FALSE,
-                       regex = FALSE,
-                       verbose = TRUE,
-                       ...) {
+data_group <- function(
+  data,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # variables for grouping
   select <- .select_nse(
     select,
@@ -69,9 +71,7 @@ data_group <- function(data,
 
 #' @rdname data_group
 #' @export
-data_ungroup <- function(data,
-                         verbose = TRUE,
-                         ...) {
+data_ungroup <- function(data, verbose = TRUE, ...) {
   attr(data, "groups") <- NULL
   class(data) <- unique(setdiff(class(data), "grouped_df"))
 

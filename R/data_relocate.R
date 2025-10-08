@@ -39,14 +39,16 @@
 #' head(data_reorder(iris, c("Species", "Sepal.Length")))
 #'
 #' @export
-data_relocate <- function(data,
-                          select,
-                          before = NULL,
-                          after = NULL,
-                          ignore_case = FALSE,
-                          regex = FALSE,
-                          verbose = TRUE,
-                          ...) {
+data_relocate <- function(
+  data,
+  select,
+  before = NULL,
+  after = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # Sanitize
   if (!is.null(before) && !is.null(after)) {
     insight::format_error("You must supply only one of `before` or `after`.")
@@ -74,7 +76,8 @@ data_relocate <- function(data,
     }
   }
 
-  cols <- .select_nse(select,
+  cols <- .select_nse(
+    select,
     data,
     exclude = NULL,
     ignore_case = ignore_case,
@@ -104,7 +107,11 @@ data_relocate <- function(data,
       # guess the misspelled column
       insight::format_error(
         "The column passed to `before` wasn't found.",
-        .misspelled_string(data_cols, original_before[1], default_message = "Possibly misspelled?")
+        .misspelled_string(
+          data_cols,
+          original_before[1],
+          default_message = "Possibly misspelled?"
+        )
       )
     }
     where <- min(match(before, data_cols))
@@ -115,7 +122,11 @@ data_relocate <- function(data,
       # guess the misspelled column
       insight::format_error(
         "The column passed to `after` wasn't found.",
-        .misspelled_string(data_cols, original_after[1], default_message = "Possibly misspelled?")
+        .misspelled_string(
+          data_cols,
+          original_after[1],
+          default_message = "Possibly misspelled?"
+        )
       )
     }
     where <- max(match(after, data_cols))
@@ -141,14 +152,17 @@ data_relocate <- function(data,
 
 #' @rdname data_relocate
 #' @export
-data_reorder <- function(data,
-                         select,
-                         exclude = NULL,
-                         ignore_case = FALSE,
-                         regex = FALSE,
-                         verbose = TRUE,
-                         ...) {
-  cols <- .select_nse(select,
+data_reorder <- function(
+  data,
+  select,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
+  cols <- .select_nse(
+    select,
     data,
     exclude = NULL,
     ignore_case = ignore_case,

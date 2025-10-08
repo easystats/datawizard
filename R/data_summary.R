@@ -64,7 +64,9 @@ data_summary.matrix <- function(x, ..., by = NULL, remove_na = FALSE) {
 
 #' @export
 data_summary.default <- function(x, ...) {
-  insight::format_error("`data_summary()` only works for (grouped) data frames and matrices.")
+  insight::format_error(
+    "`data_summary()` only works for (grouped) data frames and matrices."
+  )
 }
 
 
@@ -75,7 +77,9 @@ data_summary.data.frame <- function(x, ..., by = NULL, remove_na = FALSE) {
 
   # do we have any expression at all?
   if (length(dots) == 0) {
-    insight::format_error("No expressions for calculating summary statistics provided.")
+    insight::format_error(
+      "No expressions for calculating summary statistics provided."
+    )
   }
 
   if (is.null(by)) {
@@ -86,7 +90,9 @@ data_summary.data.frame <- function(x, ..., by = NULL, remove_na = FALSE) {
   } else {
     # sanity check - is "by" a character string?
     if (!is.character(by)) {
-      insight::format_error("Argument `by` must be a character string indicating the name of variables in the data.")
+      insight::format_error(
+        "Argument `by` must be a character string indicating the name of variables in the data."
+      )
     }
     # is "by" in the data?
     if (!all(by %in% colnames(x))) {
@@ -166,7 +172,9 @@ data_summary.grouped_df <- function(x, ..., by = NULL, remove_na = FALSE) {
         if (all(vapply(dots, is.character, logical(1)))) {
           dots <- list(unlist(dots))
         } else {
-          insight::format_error("You cannot mix string and literal representation of expressions.")
+          insight::format_error(
+            "You cannot mix string and literal representation of expressions."
+          )
         }
       }
       # expression is given as character string, e.g.
@@ -174,14 +182,20 @@ data_summary.grouped_df <- function(x, ..., by = NULL, remove_na = FALSE) {
       # data_summary(iris, a, by = "Species")
       # or as character vector, e.g.
       # data_summary(iris, c("var_a = mean(Sepal.Width)", "var_b = sd(Sepal.Width)"))
-      character_symbol <- tryCatch(.dynEval(dots[[1]]), error = function(e) NULL)
+      character_symbol <- tryCatch(.dynEval(dots[[1]]), error = function(e) {
+        NULL
+      })
       # do we have a character vector? Then we can proceed
       if (is.character(character_symbol)) {
         dots <- lapply(character_symbol, function(s) {
           # turn value from character vector into expression
           str2lang(.dynEval(s))
         })
-        names(dots) <- vapply(dots, function(n) insight::safe_deparse(n[[2]]), character(1))
+        names(dots) <- vapply(
+          dots,
+          function(n) insight::safe_deparse(n[[2]]),
+          character(1)
+        )
       }
     }
 
@@ -197,14 +211,22 @@ data_summary.grouped_df <- function(x, ..., by = NULL, remove_na = FALSE) {
 
   # check for correct length of output - must be a single value!
   # Exception: bayestestR::ci()
-  wrong_length <- !sapply(out, inherits, what = c("bayestestR_ci", "bayestestR_eti")) & lengths(out) != 1 # nolint
+  wrong_length <- !sapply(
+    out,
+    inherits,
+    what = c("bayestestR_ci", "bayestestR_eti")
+  ) &
+    lengths(out) != 1 # nolint
   if (any(wrong_length)) {
     insight::format_error(
       paste0(
         "Each expression must return a single value. Following expression",
         ifelse(sum(wrong_length) > 1, "s", " "),
         " returned more than one value: ",
-        text_concatenate(vapply(dots[wrong_length], insight::safe_deparse, character(1)), enclose = "\"")
+        text_concatenate(
+          vapply(dots[wrong_length], insight::safe_deparse, character(1)),
+          enclose = "\""
+        )
       )
     )
   }

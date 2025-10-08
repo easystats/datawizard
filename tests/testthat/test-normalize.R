@@ -25,7 +25,11 @@ test_that("normalize work as expected", {
     tolerance = 1e-4
   )
 
-  expect_warning(normalize(c(0, 1, 5, -5, -2), include_bounds = "a", verbose = TRUE))
+  expect_warning(normalize(
+    c(0, 1, 5, -5, -2),
+    include_bounds = "a",
+    verbose = TRUE
+  ))
 
   expect_snapshot(head(normalize(trees)))
 })
@@ -101,7 +105,11 @@ test_that("normalize: only two values", {
   expect_equal(y, c(0, 1), ignore_attr = TRUE)
 
   expect_silent(normalize(x = c(1, 2), verbose = FALSE))
-  expect_equal(normalize(x = c(1, 2), verbose = FALSE), c(0, 1), ignore_attr = TRUE)
+  expect_equal(
+    normalize(x = c(1, 2), verbose = FALSE),
+    c(0, 1),
+    ignore_attr = TRUE
+  )
 })
 
 test_that("normalize: factor", {
@@ -148,7 +156,8 @@ test_that("normalize: exclude", {
 
 test_that("normalize, with append", {
   out_n <- normalize(iris, "Sepal.Width", append = TRUE)
-  manual <- (iris$Sepal.Width - min(iris$Sepal.Width)) / diff(range(iris$Sepal.Width))
+  manual <- (iris$Sepal.Width - min(iris$Sepal.Width)) /
+    diff(range(iris$Sepal.Width))
   expect_equal(out_n$Sepal.Width_n, manual, ignore_attr = TRUE)
 })
 
@@ -166,7 +175,9 @@ test_that("normalize (grouped data)", {
 
   manual <- iris %>%
     poorman::group_by(Species) %>%
-    poorman::mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width)) / diff(range(Sepal.Width))) %>%
+    poorman::mutate(
+      Sepal.Width = (Sepal.Width - min(Sepal.Width)) / diff(range(Sepal.Width))
+    ) %>%
     poorman::ungroup() %>%
     poorman::pull(Sepal.Width)
 
@@ -184,7 +195,9 @@ test_that("normalize (grouped data), with append", {
 
   manual_n <- iris %>%
     poorman::group_by(Species) %>%
-    poorman::mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width)) / diff(range(Sepal.Width))) %>%
+    poorman::mutate(
+      Sepal.Width = (Sepal.Width - min(Sepal.Width)) / diff(range(Sepal.Width))
+    ) %>%
     poorman::ungroup() %>%
     poorman::pull(Sepal.Width)
 
@@ -202,7 +215,9 @@ test_that("normalize, include bounds (grouped data)", {
 
   manual <- iris %>%
     poorman::group_by(Species) %>%
-    poorman::mutate(Sepal.Width = (Sepal.Width - min(Sepal.Width)) / diff(range(Sepal.Width))) %>%
+    poorman::mutate(
+      Sepal.Width = (Sepal.Width - min(Sepal.Width)) / diff(range(Sepal.Width))
+    ) %>%
     poorman::ungroup() %>%
     poorman::pull(Sepal.Width)
 

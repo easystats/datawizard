@@ -1,12 +1,14 @@
 #' @rdname extract_column_names
 #' @export
-data_select <- function(data,
-                        select = NULL,
-                        exclude = NULL,
-                        ignore_case = FALSE,
-                        regex = FALSE,
-                        verbose = TRUE,
-                        ...) {
+data_select <- function(
+  data,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   columns <- .select_nse(
     select,
     data,
@@ -22,7 +24,9 @@ data_select <- function(data,
 
   if (!length(columns) || is.null(columns)) {
     if (isTRUE(verbose)) {
-      insight::format_warning("No column names that matched the required search pattern were found.")
+      insight::format_warning(
+        "No column names that matched the required search pattern were found."
+      )
     }
     return(NULL)
   }

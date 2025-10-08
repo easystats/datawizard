@@ -8,7 +8,9 @@ unnormalize <- function(x, ...) {
 #' @export
 unnormalize.default <- function(x, ...) {
   insight::format_error(
-    "Variables of class '", class(x)[1], "' can't be unnormalized."
+    "Variables of class '",
+    class(x)[1],
+    "' can't be unnormalized."
   )
 }
 
@@ -42,7 +44,9 @@ unnormalize.numeric <- function(x, verbose = TRUE, ...) {
 
   if (is.null(min_value) || is.null(range_difference)) {
     if (verbose) {
-      insight::format_error("Can't unnormalize variable. Information about range and/or minimum value is missing.")
+      insight::format_error(
+        "Can't unnormalize variable. Information about range and/or minimum value is missing."
+      )
     }
     return(x)
   }
@@ -57,15 +61,18 @@ unnormalize.numeric <- function(x, verbose = TRUE, ...) {
 
 #' @rdname normalize
 #' @export
-unnormalize.data.frame <- function(x,
-                                   select = NULL,
-                                   exclude = NULL,
-                                   ignore_case = FALSE,
-                                   regex = FALSE,
-                                   verbose = TRUE,
-                                   ...) {
+unnormalize.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # evaluate select/exclude, may be select-helpers
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -95,15 +102,18 @@ unnormalize.data.frame <- function(x,
 
 #' @rdname normalize
 #' @export
-unnormalize.grouped_df <- function(x,
-                                   select = NULL,
-                                   exclude = NULL,
-                                   ignore_case = FALSE,
-                                   regex = FALSE,
-                                   verbose = TRUE,
-                                   ...) {
+unnormalize.grouped_df <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # evaluate select/exclude, may be select-helpers
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -130,7 +140,10 @@ unnormalize.grouped_df <- function(x,
   }
   for (rows in seq_along(grps)) {
     # get the dw_transformer attributes for this group
-    raw_attrs <- unlist(info$groups[rows, startsWith(names(info$groups), "attr")])
+    raw_attrs <- unlist(info$groups[
+      rows,
+      startsWith(names(info$groups), "attr")
+    ])
     if (length(select) == 1L) {
       names(raw_attrs) <- paste0("attr_", select, ".", names(raw_attrs))
     }

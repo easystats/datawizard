@@ -43,13 +43,15 @@
 #'
 #' @inherit data_rename seealso
 #' @export
-data_partition <- function(data,
-                           proportion = 0.7,
-                           by = NULL,
-                           seed = NULL,
-                           row_id = ".row_id",
-                           verbose = TRUE,
-                           ...) {
+data_partition <- function(
+  data,
+  proportion = 0.7,
+  by = NULL,
+  seed = NULL,
+  row_id = ".row_id",
+  verbose = TRUE,
+  ...
+) {
   # validation checks
   data <- .coerce_to_dataframe(data)
 
@@ -146,7 +148,12 @@ data_partition <- function(data,
   names(training_sets) <- sprintf("p_%g", proportion)
 
   # remove all training set id's from data, add remaining data (= test set)
-  all_ids <- lapply(training_sets, data_extract, select = row_id, as_data_frame = FALSE)
+  all_ids <- lapply(
+    training_sets,
+    data_extract,
+    select = row_id,
+    as_data_frame = FALSE
+  )
   out <- c(
     training_sets,
     list(test = data[-unlist(all_ids, use.names = FALSE), ])

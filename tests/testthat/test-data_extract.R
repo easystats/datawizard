@@ -2,7 +2,10 @@ data(efc)
 
 test_that("data_extract works with select-length > 1", {
   # works with multiple selects
-  expect_s3_class(data_extract(efc, select = c("e42dep", "c172code")), "data.frame")
+  expect_s3_class(
+    data_extract(efc, select = c("e42dep", "c172code")),
+    "data.frame"
+  )
 
   # colnames properly set
   expect_named(
@@ -83,7 +86,12 @@ test_that("data_extract extract, pull", {
   )
 
   expect_identical(
-    data_extract(iris, starts_with("Sepal"), extract = "last", as_data_frame = TRUE),
+    data_extract(
+      iris,
+      starts_with("Sepal"),
+      extract = "last",
+      as_data_frame = TRUE
+    ),
     iris["Sepal.Width"]
   )
 

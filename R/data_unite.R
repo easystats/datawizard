@@ -32,17 +32,19 @@
 #' data_unite(d, new_column = "xyz", select = c("x", "z"))
 #' data_unite(d, new_column = "xyz", select = c("x", "z"), append = TRUE)
 #' @export
-data_unite <- function(data,
-                       new_column = NULL,
-                       select = NULL,
-                       exclude = NULL,
-                       separator = "_",
-                       append = FALSE,
-                       remove_na = FALSE,
-                       ignore_case = FALSE,
-                       verbose = TRUE,
-                       regex = FALSE,
-                       ...) {
+data_unite <- function(
+  data,
+  new_column = NULL,
+  select = NULL,
+  exclude = NULL,
+  separator = "_",
+  append = FALSE,
+  remove_na = FALSE,
+  ignore_case = FALSE,
+  verbose = TRUE,
+  regex = FALSE,
+  ...
+) {
   # we need a name for the new column
   if (is.null(new_column)) {
     insight::format_error(
@@ -59,7 +61,8 @@ data_unite <- function(data,
   }
 
   # evaluate select/exclude, may be select-helpers
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     data,
     exclude,
     ignore_case,
@@ -87,7 +90,12 @@ data_unite <- function(data,
     out[[new_column]] <- gsub(paste0(separator, "NA$"), "", out[[new_column]])
     # remove _NA_ inside string, add separator back. This ensure we match
     # whole-word NA and do not break strings like "COUNTRY_NATION"
-    out[[new_column]] <- gsub(paste0(separator, "NA", separator), separator, out[[new_column]], fixed = TRUE)
+    out[[new_column]] <- gsub(
+      paste0(separator, "NA", separator),
+      separator,
+      out[[new_column]],
+      fixed = TRUE
+    )
   }
 
   # remove old columns
