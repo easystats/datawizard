@@ -76,7 +76,7 @@
 #'
 #' @return A data frame, or a list of data frames, with one frequency table
 #' as data frame per variable.
-#' 
+#'
 #' @seealso [as.prop.table]
 #'
 #' @examplesIf requireNamespace("poorman")
@@ -678,25 +678,25 @@ as.table.datawizard_crosstabs <- function(
 }
 
 #' Convert a crosstable to a propensity table
-#' 
-#' @description 
+#'
+#' @description
 #' This is an S3 generic. It can be used on objects of class
 #' `datawizard_crosstab` created by `data_tabulate()` when it was run with the
 #' argument `by`.
-#' 
+#'
 #' @param x An object of class `datawizard_crosstab`.
 #' @inheritParams data_tabulate
-#' 
+#'
 #' @export
 #' @seealso [data_tabulate]
-#' 
+#'
 #' @examples
 #' data(efc)
 #'
 #' # Some cross tabulation
 #' cross <- data_tabulate(efc, select = "e42dep", by = "c172code", proportions = "row")
 #' cross
-#' 
+#'
 #' # We convert it to a propensity table
 #' as.prop.table(cross)
 as.prop.table <- function(x, ...) {
