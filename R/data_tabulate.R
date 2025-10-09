@@ -58,9 +58,6 @@
 #' frequencies of the variable. This is useful for further statistical analysis,
 #' e.g. for using `chisq.test()` on the frequency table. See 'Examples'.
 #'
-#' Finally, the `as.prop.table()` method returns the proportions of the
-#' crosstable as a table object, if `by` was supplied to `data_tabulate()`.
-#'
 #' @section Crosstables:
 #' If `by` is supplied, a crosstable is created. The crosstable includes `<NA>`
 #' (missing) values by default. The first column indicates values of `x`, the
@@ -79,6 +76,8 @@
 #'
 #' @return A data frame, or a list of data frames, with one frequency table
 #' as data frame per variable.
+#' 
+#' @seealso [as.prop.table]
 #'
 #' @examplesIf requireNamespace("poorman")
 #' # frequency tables -------
@@ -678,13 +677,33 @@ as.table.datawizard_crosstabs <- function(
   out
 }
 
-#' @rdname data_tabulate
+#' Convert a crosstable to a propensity table
+#' 
+#' @description 
+#' This is an S3 generic. It can be used on objects of class
+#' `datawizard_crosstab` created by `data_tabulate()` when it was run with the
+#' argument `by`.
+#' 
+#' @param x An object of class `datawizard_crosstab`.
+#' @inheritParams data_tabulate
+#' 
 #' @export
+#' @seealso [data_tabulate]
+#' 
+#' @examples
+#' data(efc)
+#'
+#' # Some cross tabulation
+#' cross <- data_tabulate(efc, select = "e42dep", by = "c172code", proportions = "row")
+#' cross
+#' 
+#' # We convert it to a propensity table
+#' as.prop.table(cross)
 as.prop.table <- function(x, ...) {
   UseMethod("as.prop.table")
 }
 
-#' @rdname data_tabulate
+#' @rdname as.prop.table
 #' @export
 as.prop.table.datawizard_crosstab <- function(
   x,

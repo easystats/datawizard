@@ -6,8 +6,6 @@
 \alias{data_tabulate.data.frame}
 \alias{as.data.frame.datawizard_tables}
 \alias{as.table.datawizard_table}
-\alias{as.prop.table}
-\alias{as.prop.table.datawizard_crosstab}
 \alias{print.datawizard_table}
 \alias{display.datawizard_table}
 \title{Create frequency and crosstables of variables}
@@ -52,10 +50,6 @@ data_tabulate(x, ...)
 )
 
 \method{as.table}{datawizard_table}(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...)
-
-as.prop.table(x, ...)
-
-\method{as.prop.table}{datawizard_crosstab}(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...)
 
 \method{print}{datawizard_table}(x, big_mark = NULL, ...)
 
@@ -209,9 +203,6 @@ frequency tables as data frame. See 'Examples'.
 There is also an \code{as.table()} method, which returns a table object with the
 frequencies of the variable. This is useful for further statistical analysis,
 e.g. for using \code{chisq.test()} on the frequency table. See 'Examples'.
-
-Finally, the \code{as.prop.table()} method returns the proportions of the
-crosstable as a table object, if \code{by} was supplied to \code{data_tabulate()}.
 }
 \note{
 There are \code{print_html()} and \code{print_md()} methods available for printing
@@ -317,4 +308,7 @@ d <- data_group(mtcars, "am")
 x <- data_tabulate(d, "cyl", by = "gear")
 as.table(x)
 \dontshow{\}) # examplesIf}
+}
+\seealso{
+\link{as.prop.table}
 }
