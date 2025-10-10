@@ -32,11 +32,6 @@
 #' used for large numbers. If `NULL` (default), a big mark is added automatically for
 #' large numbers (i.e. numbers with more than 5 digits). If you want to remove
 #' the big mark, set `big_mark = ""`.
-#' @param simplify Logical, if `TRUE`, the returned table is simplified to a
-#' single table object if there is only one frequency or contingency table
-#' input. Else, always for multiple table inputs or when `simplify = FALSE`, a
-#' list of tables is returned. This is only relevant for the `as.table()`
-#' methods. To ensure consistent output, the default is `FALSE`.
 #' @param object An object returned by `data_tabulate()`.
 #' @param format String, indicating the output format. Can be `"markdown"`
 #' `"html"`, or `"tt"`. `format = "html"` create an HTML table using the *gt*
@@ -454,6 +449,11 @@ insight::display
 #'
 #' @param x An object created by `data_tabulate()`. It must be of class
 #' `datawizard_crosstab` for `as.prop.table()`.
+#' @param simplify Logical, if `TRUE`, the returned table is simplified to a
+#' single table object if there is only one frequency or contingency table
+#' input. Else, always for multiple table inputs or when `simplify = FALSE`, a
+#' list of tables is returned. This is only relevant for the `as.table()`
+#' methods. To ensure consistent output, the default is `FALSE`.
 #' @inheritParams data_tabulate
 #'
 #' @export

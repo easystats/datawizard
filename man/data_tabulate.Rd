@@ -145,12 +145,6 @@ the big mark, set \code{big_mark = ""}.}
 package. \code{format = "tt"} creates a \code{tinytable} object, which is either
 printed as markdown or HTML table, depending on the environment. See
 \code{\link[insight:export_table]{insight::export_table()}} for details.}
-
-\item{simplify}{Logical, if \code{TRUE}, the returned table is simplified to a
-single table object if there is only one frequency or contingency table
-input. Else, always for multiple table inputs or when \code{simplify = FALSE}, a
-list of tables is returned. This is only relevant for the \code{as.table()}
-methods. To ensure consistent output, the default is \code{FALSE}.}
 }
 \value{
 A data frame, or a list of data frames, with one frequency table
