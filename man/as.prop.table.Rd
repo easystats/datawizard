@@ -3,14 +3,28 @@
 \name{as.prop.table}
 \alias{as.prop.table}
 \alias{as.prop.table.datawizard_crosstab}
-\title{Convert a crosstable to a propensity table}
+\alias{as.data.frame.datawizard_tables}
+\alias{as.table.datawizard_table}
+\title{Convert a crosstable to a frequency or a propensity table}
 \usage{
 as.prop.table(x, ...)
 
 \method{as.prop.table}{datawizard_crosstab}(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...)
+
+\method{as.data.frame}{datawizard_tables}(
+  x,
+  row.names = NULL,
+  optional = FALSE,
+  ...,
+  stringsAsFactors = FALSE,
+  add_total = FALSE
+)
+
+\method{as.table}{datawizard_table}(x, remove_na = TRUE, simplify = FALSE, verbose = TRUE, ...)
 }
 \arguments{
-\item{x}{An object of class \code{datawizard_crosstab}.}
+\item{x}{An object created by \code{data_tabulate()}. It must be of class
+\code{datawizard_crosstab} for \code{as.prop.table()}.}
 
 \item{...}{not used.}
 
@@ -27,11 +41,29 @@ list of tables is returned. This is only relevant for the \code{as.table()}
 methods. To ensure consistent output, the default is \code{FALSE}.}
 
 \item{verbose}{Toggle warnings and messages.}
+
+\item{row.names}{\code{NULL} or a character vector giving the row
+    names for the data frame.  Missing values are not allowed.}
+
+\item{optional}{logical. If \code{TRUE}, setting row names and
+    converting column names (to syntactic names: see
+    \code{\link[base]{make.names}}) is optional.  Note that all of \R's
+    \pkg{base} package \code{as.data.frame()} methods use
+    \code{optional} only for column names treatment, basically with the
+    meaning of \code{\link[base]{data.frame}(*, check.names = !optional)}.
+    See also the \code{make.names} argument of the \code{matrix} method.}
+
+\item{stringsAsFactors}{logical: should the character vector be converted
+    to a factor?}
+
+\item{add_total}{For crosstables (i.e. when \code{by} is not \code{NULL}), a row and
+column with the total N values are added to the data frame. \code{add_total} has
+no effect in \code{as.data.frame()} for simple frequency tables.}
 }
 \description{
-This is an S3 generic. It can be used on objects of class
+\code{as.prop.table()} is an S3 generic. It can be used on objects of class
 \code{datawizard_crosstab} created by \code{data_tabulate()} when it was run with the
-argument \code{by}.
+arguments \code{by} and \code{proportions}.
 }
 \examples{
 data(efc)
@@ -40,8 +72,31 @@ data(efc)
 cross <- data_tabulate(efc, select = "e42dep", by = "c172code", proportions = "row")
 cross
 
-# We convert it to a propensity table
+# Convert to a propensity table
 as.prop.table(cross)
+
+# Convert to data.frame
+result <- data_tabulate(efc, "c172code", by = "e16sex")
+as.data.frame(result)
+as.data.frame(result)$table
+as.data.frame(result, add_total = TRUE)$table
+
+# Convert to a table that can be passed to chisq.test()
+
+out <- data_tabulate(efc, "c172code", by = "e16sex")
+# we need to simplify the output, else we get a list of tables
+tbl <- as.table(out, simplify = TRUE)
+tbl
+suppressWarnings(chisq.test(tbl))
+
+# apply chisq.test to each table
+out <- data_tabulate(efc, c("c172code", "e16sex"))
+suppressWarnings(lapply(as.table(out), chisq.test))
+
+# can also handle grouped data frames
+d <- data_group(mtcars, "am")
+x <- data_tabulate(d, "cyl", by = "gear")
+as.table(x)
 }
 \seealso{
 \link{data_tabulate}
