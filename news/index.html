@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,24 @@
       <small>Source: <a href="https://github.com/easystats/datawizard/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.0" id="datawizard-130">datawizard 1.3.0<a class="anchor" aria-label="anchor" href="#datawizard-130"></a></h2><p class="text-muted">CRAN release: 2025-10-11</p>
+<p>BREAKING CHANGES</p>
+<ul><li><p>Argument <code>values_fill</code> in <code><a href="../reference/data_to_wide.html">data_to_wide()</a></code> is now defunct, because it did not work as intended (<a href="https://github.com/easystats/datawizard/issues/645" class="external-link">#645</a>).</p></li>
+<li><p><code><a href="../reference/data_to_wide.html">data_to_wide()</a></code> no longer removes empty columns that were created after widening data frames, to behave similarly to <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">tidyr::pivot_wider()</a></code> (<a href="https://github.com/easystats/datawizard/issues/645" class="external-link">#645</a>).</p></li>
+</ul><p>CHANGES</p>
+<ul><li><p><code><a href="../reference/data_tabulate.html">data_tabulate()</a></code> now saves the table of proportions for crosstables as attribute, accessible via the new <code><a href="../reference/as.prop.table.html">as.prop.table()</a></code> method (<a href="https://github.com/easystats/datawizard/issues/656" class="external-link">#656</a>).</p></li>
+<li><p>Due to changes in the package <code>insight</code>, <code><a href="../reference/data_tabulate.html">data_tabulate()</a></code> no longer prints decimals when all values in a column are integers (<a href="https://github.com/easystats/datawizard/issues/641" class="external-link">#641</a>).</p></li>
+<li><p>Argument <code>values_from</code> in <code><a href="../reference/data_to_wide.html">data_to_wide()</a></code> now supports select-helpers like the <code>select</code> argument in other <a href="https://easystats.github.io/datawizard/">datawizard</a> functions (<a href="https://github.com/easystats/datawizard/issues/645" class="external-link">#645</a>).</p></li>
+<li><p>Added a <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display()</a></code> method for <code><a href="../reference/data_codebook.html">data_codebook()</a></code> (<a href="https://github.com/easystats/datawizard/issues/646" class="external-link">#646</a>).</p></li>
+<li><p><code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display()</a></code> methods now support the <a href="https://vincentarelbundock.github.io/tinytable/" class="external-link">tinytable</a> package. Use <code>format = "tt"</code> to export tables as <code>tinytable</code> objects (<a href="https://github.com/easystats/datawizard/issues/646" class="external-link">#646</a>).</p></li>
+<li><p>Improved performance for several functions that process grouped data frames when the input is a grouped <code>tibble</code> (<a href="https://github.com/easystats/datawizard/issues/651" class="external-link">#651</a>).</p></li>
+</ul><p>BUG FIXES</p>
+<ul><li><p>Fixed an issue when <code><a href="../reference/demean.html">demean()</a></code>ing nested structures with more than 2 grouping variables (<a href="https://github.com/easystats/datawizard/issues/635" class="external-link">#635</a>).</p></li>
+<li><p>Fixed an issue when <code><a href="../reference/demean.html">demean()</a></code>ing crossed structures with more than 2 grouping variables (<a href="https://github.com/easystats/datawizard/issues/638" class="external-link">#638</a>).</p></li>
+<li><p>Fixed issue in <code><a href="../reference/data_to_wide.html">data_to_wide()</a></code> with multiple variables assigned in <code>values_from</code> when IDs were not balanced (equally spread across observations) (<a href="https://github.com/easystats/datawizard/issues/644" class="external-link">#644</a>).</p></li>
+<li><p>Fixed issue in <code><a href="../reference/data_replicate.html">data_replicate()</a></code> when data frame had only one column to replicate (<a href="https://github.com/easystats/datawizard/issues/654" class="external-link">#654</a>).</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.0" id="datawizard-120">datawizard 1.2.0<a class="anchor" aria-label="anchor" href="#datawizard-120"></a></h2><p class="text-muted">CRAN release: 2025-07-17</p>
 <p>BREAKING CHANGES</p>
