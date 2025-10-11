@@ -13,7 +13,7 @@ percentages can be calculated."><meta property="og:image" content="https://easys
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,19 +100,6 @@ percentages can be calculated.</p>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'datawizard_tables'</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  row.names <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  optional <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  <span class="va">...</span>,</span>
-<span>  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  add_total <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'datawizard_table'</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">as.table</a></span><span class="op">(</span><span class="va">x</span>, remove_na <span class="op">=</span> <span class="cn">TRUE</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'datawizard_table'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, big_mark <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -239,40 +226,6 @@ functions (see 'Details'), this argument may be used as workaround.</p></dd>
 table for printing. This affects only printing, not the returned object.</p></dd>
 
 
-<dt id="arg-row-names">row.names<a class="anchor" aria-label="anchor" href="#arg-row-names"></a></dt>
-<dd><p><code>NULL</code> or a character vector giving the row
-    names for the data frame.  Missing values are not allowed.</p></dd>
-
-
-<dt id="arg-optional">optional<a class="anchor" aria-label="anchor" href="#arg-optional"></a></dt>
-<dd><p>logical. If <code>TRUE</code>, setting row names and
-    converting column names (to syntactic names: see
-    <code><a href="https://rdrr.io/r/base/make.names.html" class="external-link">make.names</a></code>) is optional.  Note that all of <span style="R">R</span>'s
-    <span class="pkg">base</span> package <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> methods use
-    <code>optional</code> only for column names treatment, basically with the
-    meaning of <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a>(*, check.names = !optional)</code>.
-    See also the <code>make.names</code> argument of the <code>matrix</code> method.</p></dd>
-
-
-<dt id="arg-stringsasfactors">stringsAsFactors<a class="anchor" aria-label="anchor" href="#arg-stringsasfactors"></a></dt>
-<dd><p>logical: should the character vector be converted
-    to a factor?</p></dd>
-
-
-<dt id="arg-add-total">add_total<a class="anchor" aria-label="anchor" href="#arg-add-total"></a></dt>
-<dd><p>For crosstables (i.e. when <code>by</code> is not <code>NULL</code>), a row and
-column with the total N values are added to the data frame. <code>add_total</code> has
-no effect in <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> for simple frequency tables.</p></dd>
-
-
-<dt id="arg-simplify">simplify<a class="anchor" aria-label="anchor" href="#arg-simplify"></a></dt>
-<dd><p>Logical, if <code>TRUE</code>, the returned table is simplified to a
-single table object if there is only one frequency or contingency table
-input. Else, always for multiple table inputs or when <code>simplify = FALSE</code>, a
-list of tables is returned. This is only relevant for the <code><a href="https://rdrr.io/r/base/table.html" class="external-link">as.table()</a></code>
-methods. To ensure consistent output, the default is <code>FALSE</code>.</p></dd>
-
-
 <dt id="arg-big-mark">big_mark<a class="anchor" aria-label="anchor" href="#arg-big-mark"></a></dt>
 <dd><p>Optional character string, indicating the big mark that is
 used for large numbers. If <code>NULL</code> (default), a big mark is added automatically for
@@ -303,10 +256,11 @@ as data frame per variable.</p>
 data frame. The structure of the returned object is a nested data frame,
 where the first column contains name of the variable for which frequencies
 were calculated, and the second column is a list column that contains the
-frequency tables as data frame. See 'Examples'.</p>
+frequency tables as data frame. See <a href="as.prop.table.html">as.table.datawizard_table</a>.</p>
 <p>There is also an <code><a href="https://rdrr.io/r/base/table.html" class="external-link">as.table()</a></code> method, which returns a table object with the
 frequencies of the variable. This is useful for further statistical analysis,
-e.g. for using <code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test()</a></code> on the frequency table. See 'Examples'.</p>
+e.g. for using <code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test()</a></code> on the frequency table. See
+<a href="as.prop.table.html">as.table.datawizard_table</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -327,6 +281,10 @@ Setting <code>remove_na = FALSE</code> will omit missing values from the crossta
 Setting <code>proportions</code> to <code>"row"</code> or <code>"column"</code> will add row or column
 percentages. Setting <code>proportions</code> to <code>"full"</code> will add relative frequencies
 for the full table.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><a href="as.prop.table.html">as.prop.table</a></p></div>
     </div>
 
     <div class="section level2">
@@ -555,81 +513,6 @@ for the full table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;NA&gt;     |  5 (11%) |  5 (10%) | 0  (0%) |    10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---------+----------+----------+---------+------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total    |       44 |       51 |       5 |   100</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># coerce to data frames</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">data_tabulate</span><span class="op">(</span><span class="va">efc</span>, <span class="st">"c172code"</span>, by <span class="op">=</span> <span class="st">"e16sex"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        var        table</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 c172code c(1, 2, ....</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span><span class="op">$</span><span class="va">table</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   c172code male female NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        1    5      2  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        2   30     34  2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        3    4     10  2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     &lt;NA&gt;    5      5  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">result</span>, add_total <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">table</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   c172code male female &lt;NA&gt; Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        1    5      2    1     8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        2   30     34    2    66</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        3    4     10    2    16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     &lt;NA&gt;    5      5    0    10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    Total   44     51    5   100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># post-processing ------</span></span></span>
-<span class="r-in"><span><span class="co"># ----------------------</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">data_tabulate</span><span class="op">(</span><span class="va">efc</span>, <span class="st">"c172code"</span>, by <span class="op">=</span> <span class="st">"e16sex"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># we need to simplify the output, else we get a list of tables</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">as.table</a></span><span class="op">(</span><span class="va">out</span>, simplify <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Removing NA values from frequency table.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's Chi-squared test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data:  as.table(out, simplify = TRUE)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X-squared = 3.5548, df = 2, p-value = 0.1691</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># apply chisq.test to each table</span></span></span>
-<span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">data_tabulate</span><span class="op">(</span><span class="va">efc</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c172code"</span>, <span class="st">"e16sex"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">as.table</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>, <span class="va">chisq.test</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Removing NA values from frequency table.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	Chi-squared test for given probabilities</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data:  X[[i]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X-squared = 65.867, df = 2, p-value = 4.98e-15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	Chi-squared test for given probabilities</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data:  X[[i]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X-squared = 0.51579, df = 1, p-value = 0.4726</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># can also handle grouped data frames</span></span></span>
-<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="data_group.html">data_group</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"am"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">data_tabulate</span><span class="op">(</span><span class="va">d</span>, <span class="st">"cyl"</span>, by <span class="op">=</span> <span class="st">"gear"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">as.table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`am (0)`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    3  4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1  2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2  2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 12  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`am (1)`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 6 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 0 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
