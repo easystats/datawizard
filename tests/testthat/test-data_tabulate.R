@@ -818,7 +818,7 @@ test_that("data_tabulate, correct 0% for proportions", {
   out <- data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")
   expect_identical(
     format(out[[1]])[[4]],
-    c("0 (0%)", "0 (0%)", "0 (0%)", "0 (0%)", "", "0")
+    c("0 (0.0%)", "0 (0.0%)", "0 (0.0%)", "0 (0.0%)", "", "0")
   )
   expect_snapshot(print(out[[1]]))
 })
@@ -1051,4 +1051,55 @@ test_that("data_tabulate, table methods, only warn if necessary", {
   # group DF throws no warning
   d <- data_group(mtcars, "am")
   expect_silent(as.table(data_tabulate(d, "cyl", by = "gear")))
+})
+
+
+test_that("data_tabulate, cross tables, extract proportions", {
+  data(efc, package = "datawizard")
+  out <- data_tabulate(
+    efc,
+    "c172code",
+    by = "e16sex",
+    proportions = "row",
+    remove_na = TRUE
+  )
+  tab <- table(efc$c172code, efc$e16sex) /
+    rowSums(table(efc$c172code, efc$e16sex))
+  dimnames(tab) <- list(c("1", "2", "3"), c("male", "female"))
+  expect_equal(
+    as.prop.table(out, verbose = FALSE),
+    list(tab),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+  expect_equal(
+    as.prop.table(out, verbose = FALSE, simplify = TRUE),
+    tab,
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+  out <- data_tabulate(
+    efc,
+    "c172code",
+    by = "e16sex",
+    proportions = "col",
+    remove_na = TRUE
+  )
+  tab <- as.table(t(
+    t(table(efc$c172code, efc$e16sex)) /
+      colSums(table(efc$c172code, efc$e16sex))
+  ))
+  dimnames(tab) <- list(c("1", "2", "3"), c("male", "female"))
+  expect_equal(
+    as.prop.table(out, verbose = FALSE),
+    list(tab),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+  expect_equal(
+    as.prop.table(out, verbose = FALSE, simplify = TRUE),
+    tab,
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
 })

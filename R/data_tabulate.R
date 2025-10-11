@@ -32,11 +32,6 @@
 #' used for large numbers. If `NULL` (default), a big mark is added automatically for
 #' large numbers (i.e. numbers with more than 5 digits). If you want to remove
 #' the big mark, set `big_mark = ""`.
-#' @param simplify Logical, if `TRUE`, the returned table is simplified to a
-#' single table object if there is only one frequency or contingency table
-#' input. Else, always for multiple table inputs or when `simplify = FALSE`, a
-#' list of tables is returned. This is only relevant for the `as.table()`
-#' methods. To ensure consistent output, the default is `FALSE`.
 #' @param object An object returned by `data_tabulate()`.
 #' @param format String, indicating the output format. Can be `"markdown"`
 #' `"html"`, or `"tt"`. `format = "html"` create an HTML table using the *gt*
@@ -52,11 +47,12 @@
 #' data frame. The structure of the returned object is a nested data frame,
 #' where the first column contains name of the variable for which frequencies
 #' were calculated, and the second column is a list column that contains the
-#' frequency tables as data frame. See 'Examples'.
+#' frequency tables as data frame. See [as.table.datawizard_table].
 #'
 #' There is also an `as.table()` method, which returns a table object with the
 #' frequencies of the variable. This is useful for further statistical analysis,
-#' e.g. for using `chisq.test()` on the frequency table. See 'Examples'.
+#' e.g. for using `chisq.test()` on the frequency table. See
+#' [as.table.datawizard_table].
 #'
 #' @section Crosstables:
 #' If `by` is supplied, a crosstable is created. The crosstable includes `<NA>`
@@ -76,6 +72,8 @@
 #'
 #' @return A data frame, or a list of data frames, with one frequency table
 #' as data frame per variable.
+#'
+#' @seealso [as.prop.table]
 #'
 #' @examplesIf requireNamespace("poorman")
 #' # frequency tables -------
@@ -139,28 +137,6 @@
 #' # round percentages
 #' out <- data_tabulate(efc, "c172code", by = "e16sex", proportions = "column")
 #' print(out, digits = 0)
-#'
-#' # coerce to data frames
-#' result <- data_tabulate(efc, "c172code", by = "e16sex")
-#' as.data.frame(result)
-#' as.data.frame(result)$table
-#' as.data.frame(result, add_total = TRUE)$table
-#'
-#' # post-processing ------
-#' # ----------------------
-#'
-#' out <- data_tabulate(efc, "c172code", by = "e16sex")
-#' # we need to simplify the output, else we get a list of tables
-#' suppressWarnings(chisq.test(as.table(out, simplify = TRUE)))
-#'
-#' # apply chisq.test to each table
-#' out <- data_tabulate(efc, c("c172code", "e16sex"))
-#' suppressWarnings(lapply(as.table(out), chisq.test))
-#'
-#' # can also handle grouped data frames
-#' d <- data_group(mtcars, "am")
-#' x <- data_tabulate(d, "cyl", by = "gear")
-#' as.table(x)
 #' @export
 data_tabulate <- function(x, ...) {
   UseMethod("data_tabulate")
@@ -464,10 +440,147 @@ insight::print_md
 #' @export
 insight::display
 
+#' Convert a crosstable to a frequency or a propensity table
+#'
+#' @description
+#' `as.prop.table()` is an S3 generic. It can be used on objects of class
+#' `datawizard_crosstab` created by `data_tabulate()` when it was run with the
+#' arguments `by` and `proportions`.
+#'
+#' @param x An object created by `data_tabulate()`. It must be of class
+#' `datawizard_crosstab` for `as.prop.table()`.
+#' @param simplify Logical, if `TRUE`, the returned table is simplified to a
+#' single table object if there is only one frequency or contingency table
+#' input. Else, always for multiple table inputs or when `simplify = FALSE`, a
+#' list of tables is returned. This is only relevant for the `as.table()`
+#' methods. To ensure consistent output, the default is `FALSE`.
+#' @inheritParams data_tabulate
+#'
+#' @export
+#' @seealso [data_tabulate]
+#'
+#' @examples
+#' data(efc)
+#'
+#' # Some cross tabulation
+#' cross <- data_tabulate(efc, select = "e42dep", by = "c172code", proportions = "row")
+#' cross
+#'
+#' # Convert to a propensity table
+#' as.prop.table(cross)
+#'
+#' # Convert to data.frame
+#' result <- data_tabulate(efc, "c172code", by = "e16sex")
+#' as.data.frame(result)
+#' as.data.frame(result)$table
+#' as.data.frame(result, add_total = TRUE)$table
+#'
+#' # Convert to a table that can be passed to chisq.test()
+#'
+#' out <- data_tabulate(efc, "c172code", by = "e16sex")
+#' # we need to simplify the output, else we get a list of tables
+#' tbl <- as.table(out, simplify = TRUE)
+#' tbl
+#' suppressWarnings(chisq.test(tbl))
+#'
+#' # apply chisq.test to each table
+#' out <- data_tabulate(efc, c("c172code", "e16sex"))
+#' suppressWarnings(lapply(as.table(out), chisq.test))
+#'
+#' # can also handle grouped data frames
+#' d <- data_group(mtcars, "am")
+#' x <- data_tabulate(d, "cyl", by = "gear")
+#' as.table(x)
+as.prop.table <- function(x, ...) {
+  UseMethod("as.prop.table")
+}
+
+#' @rdname as.prop.table
+#' @export
+as.prop.table.datawizard_crosstab <- function(
+  x,
+  remove_na = TRUE,
+  simplify = FALSE,
+  verbose = TRUE,
+  ...
+) {
+  # sanity check - the `.data.frame` method  returns a list, but not the
+  # default method
+  if (!is.data.frame(x)) {
+    x <- x[[1]]
+  }
+  prop_table <- attributes(x)$prop_table
+
+  if (is.null(prop_table)) {
+    insight::format_warning("No proportions available.")
+    return(NULL)
+  }
+
+  if (remove_na) {
+    if (
+      verbose &&
+        ("NA" %in% colnames(prop_table) || "NA" %in% rownames(prop_table))
+    ) {
+      insight::format_alert("Removing NA values from frequency table.")
+    }
+    if (!is.null(prop_table[["NA"]])) {
+      prop_table[["NA"]] <- NULL
+    }
+    if ("NA" %in% rownames(prop_table)) {
+      prop_table <- prop_table[rownames(prop_table) != "NA", ]
+    }
+  }
+  # coerce to table
+  result <- as.table(as.matrix(prop_table))
+  # if we don't want to simplify the table, we wrap it into a list
+  if (!simplify) {
+    result <- list(result)
+  }
+
+  result
+}
+
+#' @export
+as.prop.table.datawizard_crosstabs <- function(
+  x,
+  remove_na = TRUE,
+  simplify = FALSE,
+  verbose = TRUE,
+  ...
+) {
+  # only show message once we set `verbose = FALSE` in the lapply()
+  if (remove_na && verbose) {
+    prop_table <- attributes(x[[1]])$prop_table
+    if ("NA" %in% colnames(prop_table) || "NA" %in% rownames(prop_table)) {
+      insight::format_alert("Removing NA values from frequency table.")
+    }
+  }
+
+  out <- insight::compact_list(lapply(
+    x,
+    as.prop.table.datawizard_crosstab,
+    remove_na = remove_na,
+    simplify = TRUE,
+    verbose = FALSE,
+    ...
+  ))
+
+  # if no proportions found, return NULL
+  if (!length(out)) {
+    return(NULL)
+  }
+
+  # if only one table is returned, "unlist"
+  if (length(out) == 1 && simplify) {
+    out <- out[[1]]
+  }
+  out
+}
+
 
 # as.data.frame --------------------
 
-#' @rdname data_tabulate
+#' @rdname as.prop.table
 #' @param add_total For crosstables (i.e. when `by` is not `NULL`), a row and
 #' column with the total N values are added to the data frame. `add_total` has
 #' no effect in `as.data.frame()` for simple frequency tables.
@@ -527,7 +640,7 @@ as.data.frame.datawizard_crosstabs <- as.data.frame.datawizard_tables
 
 # as.table --------------------
 
-#' @rdname data_tabulate
+#' @rdname as.prop.table
 #' @export
 as.table.datawizard_table <- function(
   x,

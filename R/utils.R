@@ -163,7 +163,7 @@
   for (nm in setdiff(names(custom_attr), names(attributes(data.frame())))) {
     attr(data, which = nm) <- custom_attr[[nm]]
   }
-  return(data)
+  data
 }
 
 
@@ -241,7 +241,7 @@
 }
 
 
-#' Taken from https://github.com/coolbutuseless/gluestick [licence: MIT]
+#' Taken from https://github.com/coolbutuseless/gluestick (licence: MIT)
 #' Same functionality as `{glue}`
 #'
 #' @noRd
@@ -292,15 +292,15 @@
 
   # Evaluate
   if (eval) {
-    args <- lapply(exprs, function(expr) {
+    fun_args <- lapply(exprs, function(expr) {
       eval(parse(text = expr), envir = src)
     })
   } else {
-    args <- unname(mget(exprs, envir = as.environment(src)))
+    fun_args <- unname(mget(exprs, envir = as.environment(src)))
   }
 
   # Create the string(s)
-  do.call(sprintf, c(list(fmt_sprintf), args))
+  do.call(sprintf, c(list(fmt_sprintf), fun_args))
 }
 
 
