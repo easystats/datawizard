@@ -1,0 +1,940 @@
+# `datawizard`: Easy Data Wrangling and Statistical Transformations
+
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.04684/status.svg)](https://doi.org/10.21105/joss.04684)
+[![downloads](https://cranlogs.r-pkg.org/badges/datawizard)](https://cran.r-project.org/package=datawizard)
+[![total](https://cranlogs.r-pkg.org/badges/grand-total/datawizard)](https://cranlogs.r-pkg.org/)
+
+[datawizard](https://easystats.github.io/datawizard/) is a lightweight
+package to easily manipulate, clean, transform, and prepare your data
+for analysis. It is part of the [easystats
+ecosystem](https://easystats.github.io/easystats/), a suite of R
+packages to deal with your entire statistical analysis, from cleaning
+the data to reporting the results.
+
+It covers two aspects of data preparation:
+
+- **Data manipulation**:
+  [datawizard](https://easystats.github.io/datawizard/) offers a very
+  similar set of functions to that of the *tidyverse* packages, such as
+  a [dplyr](https://dplyr.tidyverse.org) and
+  [tidyr](https://tidyr.tidyverse.org), to select, filter and reshape
+  data, with a few key differences. 1) All data manipulation functions
+  start with the prefix `data_*` (which makes them easy to identify). 2)
+  Although most functions can be used exactly as their *tidyverse*
+  equivalents, they are also string-friendly (which makes them easy to
+  program with and use inside functions). Finally,
+  [datawizard](https://easystats.github.io/datawizard/) is super
+  lightweight (no dependencies, similar to
+  [poorman](https://github.com/nathaneastwood/poorman)), which makes it
+  awesome for developers to use in their packages.
+
+- **Statistical transformations**:
+  [datawizard](https://easystats.github.io/datawizard/) also has
+  powerful functions to easily apply common data
+  [transformations](https://easystats.github.io/datawizard/reference/index.html#statistical-transformations),
+  including standardization, normalization, rescaling,
+  rank-transformation, scale reversing, recoding, binning, etc.
+
+![](https://media.giphy.com/media/VcizxCUIgaKpa/giphy.gif)
+
+# Installation
+
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/datawizard)](https://cran.r-project.org/package=datawizard)
+[![datawizard status
+badge](https://easystats.r-universe.dev/badges/datawizard)](https://easystats.r-universe.dev)
+[![codecov](https://codecov.io/gh/easystats/datawizard/branch/main/graph/badge.svg)](https://app.codecov.io/gh/easystats/datawizard)
+[![R-CMD-check](https://github.com/easystats/datawizard/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/easystats/datawizard/actions)
+
+| Type | Source | Command |
+|----|----|----|
+| Release | CRAN | `install.packages("datawizard")` |
+| Development | r-universe | `install.packages("datawizard", repos = "https://easystats.r-universe.dev")` |
+| Development | GitHub | `remotes::install_github("easystats/datawizard")` |
+
+> **Tip**
+>
+> **Instead of
+> [`library(datawizard)`](https://easystats.github.io/datawizard/), use
+> [`library(easystats)`](https://easystats.github.io/easystats/).**
+> **This will make all features of the easystats-ecosystem available.**
+>
+> **To stay updated, use `easystats::install_latest()`.**
+
+# Citation
+
+To cite the package, run the following command:
+
+``` r
+citation("datawizard")
+To cite package 'datawizard' in publications use:
+
+  Patil et al., (2022). datawizard: An R Package for Easy Data
+  Preparation and Statistical Transformations. Journal of Open Source
+  Software, 7(78), 4684, https://doi.org/10.21105/joss.04684
+
+A BibTeX entry for LaTeX users is
+
+  @Article{,
+    title = {{datawizard}: An {R} Package for Easy Data Preparation and Statistical Transformations},
+    author = {Indrajeet Patil and Dominique Makowski and Mattan S. Ben-Shachar and Brenton M. Wiernik and Etienne Bacher and Daniel Lüdecke},
+    journal = {Journal of Open Source Software},
+    year = {2022},
+    volume = {7},
+    number = {78},
+    pages = {4684},
+    doi = {10.21105/joss.04684},
+  }
+```
+
+# Features
+
+[![Documentation](https://img.shields.io/badge/documentation-datawizard-orange.svg?colorB=E91E63)](https://easystats.github.io/datawizard/)
+[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
+[![Features](https://img.shields.io/badge/features-datawizard-orange.svg?colorB=2196F3)](https://easystats.github.io/datawizard/reference/index.html)
+
+Most courses and tutorials about statistical modeling assume that you
+are working with a clean and tidy dataset. In practice, however, a major
+part of doing statistical modeling is preparing your data–cleaning up
+values, creating new columns, reshaping the dataset, or transforming
+some variables. [datawizard](https://easystats.github.io/datawizard/)
+provides easy to use tools to perform these common, critical, and
+sometimes tedious data preparation tasks.
+
+## Data wrangling
+
+### Select, filter and remove variables
+
+The package provides helpers to filter rows meeting certain conditions…
+
+``` r
+
+data_match(mtcars, data.frame(vs = 0, am = 1))
+#>                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+#> Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+#> Mazda RX4 Wag  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+#> Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+#> Ford Pantera L 15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+#> Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+#> Maserati Bora  15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+```
+
+… or logical expressions:
+
+``` r
+
+data_filter(mtcars, vs == 0 & am == 1)
+#>                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+#> Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+#> Mazda RX4 Wag  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+#> Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+#> Ford Pantera L 15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+#> Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+#> Maserati Bora  15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+```
+
+Finding columns in a data frame, or retrieving the data of selected
+columns, can be achieved using
+[`extract_column_names()`](https://easystats.github.io/datawizard/reference/extract_column_names.md)
+or
+[`data_select()`](https://easystats.github.io/datawizard/reference/extract_column_names.md):
+
+``` r
+
+# find column names matching a pattern
+extract_column_names(iris, starts_with("Sepal"))
+#> [1] "Sepal.Length" "Sepal.Width"
+
+# return data columns matching a pattern
+data_select(iris, starts_with("Sepal")) |> head()
+#>   Sepal.Length Sepal.Width
+#> 1          5.1         3.5
+#> 2          4.9         3.0
+#> 3          4.7         3.2
+#> 4          4.6         3.1
+#> 5          5.0         3.6
+#> 6          5.4         3.9
+```
+
+It is also possible to extract one or more variables:
+
+``` r
+
+# single variable
+data_extract(mtcars, "gear")
+#>  [1] 4 4 4 3 3 3 3 4 4 4 4 3 3 3 3 3 3 4 4 4 3 3 3 3 3 4 5 5 5 5 5 4
+
+# more variables
+head(data_extract(iris, ends_with("Width")))
+#>   Sepal.Width Petal.Width
+#> 1         3.5         0.2
+#> 2         3.0         0.2
+#> 3         3.2         0.2
+#> 4         3.1         0.2
+#> 5         3.6         0.2
+#> 6         3.9         0.4
+```
+
+Due to the consistent API, removing variables is just as simple:
+
+``` r
+
+head(data_remove(iris, starts_with("Sepal")))
+#>   Petal.Length Petal.Width Species
+#> 1          1.4         0.2  setosa
+#> 2          1.4         0.2  setosa
+#> 3          1.3         0.2  setosa
+#> 4          1.5         0.2  setosa
+#> 5          1.4         0.2  setosa
+#> 6          1.7         0.4  setosa
+```
+
+### Reorder or rename
+
+``` r
+
+head(data_relocate(iris, select = "Species", before = "Sepal.Length"))
+#>   Species Sepal.Length Sepal.Width Petal.Length Petal.Width
+#> 1  setosa          5.1         3.5          1.4         0.2
+#> 2  setosa          4.9         3.0          1.4         0.2
+#> 3  setosa          4.7         3.2          1.3         0.2
+#> 4  setosa          4.6         3.1          1.5         0.2
+#> 5  setosa          5.0         3.6          1.4         0.2
+#> 6  setosa          5.4         3.9          1.7         0.4
+```
+
+``` r
+
+head(data_rename(iris, c("Sepal.Length", "Sepal.Width"), c("length", "width")))
+#>   length width Petal.Length Petal.Width Species
+#> 1    5.1   3.5          1.4         0.2  setosa
+#> 2    4.9   3.0          1.4         0.2  setosa
+#> 3    4.7   3.2          1.3         0.2  setosa
+#> 4    4.6   3.1          1.5         0.2  setosa
+#> 5    5.0   3.6          1.4         0.2  setosa
+#> 6    5.4   3.9          1.7         0.4  setosa
+```
+
+### Merge
+
+``` r
+
+x <- data.frame(a = 1:3, b = c("a", "b", "c"), c = 5:7, id = 1:3)
+y <- data.frame(c = 6:8, d = c("f", "g", "h"), e = 100:102, id = 2:4)
+
+x
+#>   a b c id
+#> 1 1 a 5  1
+#> 2 2 b 6  2
+#> 3 3 c 7  3
+y
+#>   c d   e id
+#> 1 6 f 100  2
+#> 2 7 g 101  3
+#> 3 8 h 102  4
+
+data_merge(x, y, join = "full")
+#>    a    b c id    d   e
+#> 3  1    a 5  1 <NA>  NA
+#> 1  2    b 6  2    f 100
+#> 2  3    c 7  3    g 101
+#> 4 NA <NA> 8  4    h 102
+
+data_merge(x, y, join = "left")
+#>   a b c id    d   e
+#> 3 1 a 5  1 <NA>  NA
+#> 1 2 b 6  2    f 100
+#> 2 3 c 7  3    g 101
+
+data_merge(x, y, join = "right")
+#>    a    b c id d   e
+#> 1  2    b 6  2 f 100
+#> 2  3    c 7  3 g 101
+#> 3 NA <NA> 8  4 h 102
+
+data_merge(x, y, join = "semi", by = "c")
+#>   a b c id
+#> 2 2 b 6  2
+#> 3 3 c 7  3
+
+data_merge(x, y, join = "anti", by = "c")
+#>   a b c id
+#> 1 1 a 5  1
+
+data_merge(x, y, join = "inner")
+#>   a b c id d   e
+#> 1 2 b 6  2 f 100
+#> 2 3 c 7  3 g 101
+
+data_merge(x, y, join = "bind")
+#>    a    b c id    d   e
+#> 1  1    a 5  1 <NA>  NA
+#> 2  2    b 6  2 <NA>  NA
+#> 3  3    c 7  3 <NA>  NA
+#> 4 NA <NA> 6  2    f 100
+#> 5 NA <NA> 7  3    g 101
+#> 6 NA <NA> 8  4    h 102
+```
+
+### Reshape
+
+A common data wrangling task is to reshape data.
+
+Either to go from wide/Cartesian to long/tidy format
+
+``` r
+
+wide_data <- data.frame(replicate(5, rnorm(10)))
+
+head(data_to_long(wide_data))
+#>   name       value
+#> 1   X1 -0.08281164
+#> 2   X2 -1.12490028
+#> 3   X3 -0.70632036
+#> 4   X4 -0.70278946
+#> 5   X5  0.07633326
+#> 6   X1  1.93468099
+```
+
+or the other way
+
+``` r
+
+long_data <- data_to_long(wide_data, rows_to = "Row_ID") # Save row number
+
+data_to_wide(long_data,
+  names_from = "name",
+  values_from = "value",
+  id_cols = "Row_ID"
+)
+#>    Row_ID          X1          X2          X3         X4          X5
+#> 1       1 -0.08281164 -1.12490028 -0.70632036 -0.7027895  0.07633326
+#> 2       2  1.93468099 -0.87430362  0.96687656  0.2998642 -0.23035595
+#> 3       3 -2.05128979  0.04386162 -0.71016648  1.1494697  0.31746484
+#> 4       4  0.27773897 -0.58397514 -0.05917365 -0.3016415 -1.59268440
+#> 5       5 -1.52596060 -0.82329858 -0.23094342 -0.5473394 -0.18194062
+#> 6       6 -0.26916362  0.11059280  0.69200045 -0.3854041  1.75614174
+#> 7       7  1.23305388  0.36472778  1.35682290  0.2763720  0.11394932
+#> 8       8  0.63360774  0.05370100  1.78872284  0.1518608 -0.29216508
+#> 9       9  0.35271746  1.36867235  0.41071582 -0.4313808  1.75409316
+#> 10     10 -0.56048248 -0.38045724 -2.18785470 -1.8705001  1.80958455
+```
+
+### Empty rows and columns
+
+``` r
+
+tmp <- data.frame(
+  a = c(1, 2, 3, NA, 5),
+  b = c(1, NA, 3, NA, 5),
+  c = c(NA, NA, NA, NA, NA),
+  d = c(1, NA, 3, NA, 5)
+)
+
+tmp
+#>    a  b  c  d
+#> 1  1  1 NA  1
+#> 2  2 NA NA NA
+#> 3  3  3 NA  3
+#> 4 NA NA NA NA
+#> 5  5  5 NA  5
+
+# indices of empty columns or rows
+empty_columns(tmp)
+#> c 
+#> 3
+empty_rows(tmp)
+#> [1] 4
+
+# remove empty columns or rows
+remove_empty_columns(tmp)
+#>    a  b  d
+#> 1  1  1  1
+#> 2  2 NA NA
+#> 3  3  3  3
+#> 4 NA NA NA
+#> 5  5  5  5
+remove_empty_rows(tmp)
+#>   a  b  c  d
+#> 1 1  1 NA  1
+#> 2 2 NA NA NA
+#> 3 3  3 NA  3
+#> 5 5  5 NA  5
+
+# remove empty columns and rows
+remove_empty(tmp)
+#>   a  b  d
+#> 1 1  1  1
+#> 2 2 NA NA
+#> 3 3  3  3
+#> 5 5  5  5
+```
+
+### Recode or cut dataframe
+
+``` r
+
+set.seed(123)
+x <- sample(1:10, size = 50, replace = TRUE)
+
+table(x)
+#> x
+#>  1  2  3  4  5  6  7  8  9 10 
+#>  2  3  5  3  7  5  5  2 11  7
+
+# cut into 3 groups, based on distribution (quantiles)
+table(categorize(x, split = "quantile", n_groups = 3))
+#> 
+#>  1  2  3 
+#> 13 19 18
+```
+
+## Data Transformations
+
+The packages also contains multiple functions to help transform data.
+
+### Standardize
+
+For example, to standardize (*z*-score) data:
+
+``` r
+
+# before
+summary(swiss)
+#>    Fertility      Agriculture     Examination      Education    
+#>  Min.   :35.00   Min.   : 1.20   Min.   : 3.00   Min.   : 1.00  
+#>  1st Qu.:64.70   1st Qu.:35.90   1st Qu.:12.00   1st Qu.: 6.00  
+#>  Median :70.40   Median :54.10   Median :16.00   Median : 8.00  
+#>  Mean   :70.14   Mean   :50.66   Mean   :16.49   Mean   :10.98  
+#>  3rd Qu.:78.45   3rd Qu.:67.65   3rd Qu.:22.00   3rd Qu.:12.00  
+#>  Max.   :92.50   Max.   :89.70   Max.   :37.00   Max.   :53.00  
+#>     Catholic       Infant.Mortality
+#>  Min.   :  2.150   Min.   :10.80   
+#>  1st Qu.:  5.195   1st Qu.:18.15   
+#>  Median : 15.140   Median :20.00   
+#>  Mean   : 41.144   Mean   :19.94   
+#>  3rd Qu.: 93.125   3rd Qu.:21.70   
+#>  Max.   :100.000   Max.   :26.60
+
+# after
+summary(standardize(swiss))
+#>    Fertility         Agriculture       Examination         Education      
+#>  Min.   :-2.81327   Min.   :-2.1778   Min.   :-1.69084   Min.   :-1.0378  
+#>  1st Qu.:-0.43569   1st Qu.:-0.6499   1st Qu.:-0.56273   1st Qu.:-0.5178  
+#>  Median : 0.02061   Median : 0.1515   Median :-0.06134   Median :-0.3098  
+#>  Mean   : 0.00000   Mean   : 0.0000   Mean   : 0.00000   Mean   : 0.0000  
+#>  3rd Qu.: 0.66504   3rd Qu.: 0.7481   3rd Qu.: 0.69074   3rd Qu.: 0.1062  
+#>  Max.   : 1.78978   Max.   : 1.7190   Max.   : 2.57094   Max.   : 4.3702  
+#>     Catholic       Infant.Mortality  
+#>  Min.   :-0.9350   Min.   :-3.13886  
+#>  1st Qu.:-0.8620   1st Qu.:-0.61543  
+#>  Median :-0.6235   Median : 0.01972  
+#>  Mean   : 0.0000   Mean   : 0.00000  
+#>  3rd Qu.: 1.2464   3rd Qu.: 0.60337  
+#>  Max.   : 1.4113   Max.   : 2.28566
+```
+
+### Winsorize
+
+To winsorize data:
+
+``` r
+
+# before
+anscombe
+#>    x1 x2 x3 x4    y1   y2    y3    y4
+#> 1  10 10 10  8  8.04 9.14  7.46  6.58
+#> 2   8  8  8  8  6.95 8.14  6.77  5.76
+#> 3  13 13 13  8  7.58 8.74 12.74  7.71
+#> 4   9  9  9  8  8.81 8.77  7.11  8.84
+#> 5  11 11 11  8  8.33 9.26  7.81  8.47
+#> 6  14 14 14  8  9.96 8.10  8.84  7.04
+#> 7   6  6  6  8  7.24 6.13  6.08  5.25
+#> 8   4  4  4 19  4.26 3.10  5.39 12.50
+#> 9  12 12 12  8 10.84 9.13  8.15  5.56
+#> 10  7  7  7  8  4.82 7.26  6.42  7.91
+#> 11  5  5  5  8  5.68 4.74  5.73  6.89
+
+# after
+winsorize(anscombe)
+#>    x1 x2 x3 x4   y1   y2   y3   y4
+#> 1  10 10 10  8 8.04 9.13 7.46 6.58
+#> 2   8  8  8  8 6.95 8.14 6.77 5.76
+#> 3  12 12 12  8 7.58 8.74 8.15 7.71
+#> 4   9  9  9  8 8.81 8.77 7.11 8.47
+#> 5  11 11 11  8 8.33 9.13 7.81 8.47
+#> 6  12 12 12  8 8.81 8.10 8.15 7.04
+#> 7   6  6  6  8 7.24 6.13 6.08 5.76
+#> 8   6  6  6  8 5.68 6.13 6.08 8.47
+#> 9  12 12 12  8 8.81 9.13 8.15 5.76
+#> 10  7  7  7  8 5.68 7.26 6.42 7.91
+#> 11  6  6  6  8 5.68 6.13 6.08 6.89
+```
+
+### Center
+
+To grand-mean center data
+
+``` r
+
+center(anscombe)
+#>    x1 x2 x3 x4          y1         y2    y3         y4
+#> 1   1  1  1 -1  0.53909091  1.6390909 -0.04 -0.9209091
+#> 2  -1 -1 -1 -1 -0.55090909  0.6390909 -0.73 -1.7409091
+#> 3   4  4  4 -1  0.07909091  1.2390909  5.24  0.2090909
+#> 4   0  0  0 -1  1.30909091  1.2690909 -0.39  1.3390909
+#> 5   2  2  2 -1  0.82909091  1.7590909  0.31  0.9690909
+#> 6   5  5  5 -1  2.45909091  0.5990909  1.34 -0.4609091
+#> 7  -3 -3 -3 -1 -0.26090909 -1.3709091 -1.42 -2.2509091
+#> 8  -5 -5 -5 10 -3.24090909 -4.4009091 -2.11  4.9990909
+#> 9   3  3  3 -1  3.33909091  1.6290909  0.65 -1.9409091
+#> 10 -2 -2 -2 -1 -2.68090909 -0.2409091 -1.08  0.4090909
+#> 11 -4 -4 -4 -1 -1.82090909 -2.7609091 -1.77 -0.6109091
+```
+
+### Ranktransform
+
+To rank-transform data:
+
+``` r
+
+# before
+head(trees)
+#>   Girth Height Volume
+#> 1   8.3     70   10.3
+#> 2   8.6     65   10.3
+#> 3   8.8     63   10.2
+#> 4  10.5     72   16.4
+#> 5  10.7     81   18.8
+#> 6  10.8     83   19.7
+
+# after
+head(ranktransform(trees))
+#>   Girth Height Volume
+#> 1     1    6.0    2.5
+#> 2     2    3.0    2.5
+#> 3     3    1.0    1.0
+#> 4     4    8.5    5.0
+#> 5     5   25.5    7.0
+#> 6     6   28.0    9.0
+```
+
+### Rescale
+
+To rescale a numeric variable to a new range:
+
+``` r
+
+change_scale(c(0, 1, 5, -5, -2))
+#> [1]  50  60 100   0  30
+#> (original range = -5 to 5)
+```
+
+### Rotate or transpose
+
+``` r
+
+x <- mtcars[1:3, 1:4]
+
+x
+#>                mpg cyl disp  hp
+#> Mazda RX4     21.0   6  160 110
+#> Mazda RX4 Wag 21.0   6  160 110
+#> Datsun 710    22.8   4  108  93
+
+data_rotate(x)
+#>      Mazda RX4 Mazda RX4 Wag Datsun 710
+#> mpg         21            21       22.8
+#> cyl          6             6        4.0
+#> disp       160           160      108.0
+#> hp         110           110       93.0
+```
+
+## Data properties
+
+`datawizard` provides a way to provide comprehensive descriptive summary
+for all variables in a dataframe:
+
+``` r
+
+data(iris)
+describe_distribution(iris)
+#> Variable     | Mean |   SD |  IQR |        Range | Skewness | Kurtosis |   n | n_Missing
+#> ----------------------------------------------------------------------------------------
+#> Sepal.Length | 5.84 | 0.83 | 1.30 | [4.30, 7.90] |     0.31 |    -0.55 | 150 |         0
+#> Sepal.Width  | 3.06 | 0.44 | 0.52 | [2.00, 4.40] |     0.32 |     0.23 | 150 |         0
+#> Petal.Length | 3.76 | 1.77 | 3.52 | [1.00, 6.90] |    -0.27 |    -1.40 | 150 |         0
+#> Petal.Width  | 1.20 | 0.76 | 1.50 | [0.10, 2.50] |    -0.10 |    -1.34 | 150 |         0
+```
+
+Or even just a variable
+
+``` r
+
+describe_distribution(mtcars$wt)
+#> Mean |   SD |  IQR |        Range | Skewness | Kurtosis |  n | n_Missing
+#> ------------------------------------------------------------------------
+#> 3.22 | 0.98 | 1.19 | [1.51, 5.42] |     0.47 |     0.42 | 32 |         0
+```
+
+There are also some additional data properties that can be computed
+using this package.
+
+``` r
+
+x <- (-10:10)^3 + rnorm(21, 0, 100)
+smoothness(x, method = "diff")
+#> [1] 1.791243
+#> attr(,"class")
+#> [1] "parameters_smoothness" "numeric"
+```
+
+## Function design and pipe-workflow
+
+The design of the [datawizard](https://easystats.github.io/datawizard/)
+functions follows a design principle that makes it easy for user to
+understand and remember how functions work:
+
+1.  the first argument is the data
+2.  for methods that work on data frames, two arguments are following to
+    `select` and `exclude` variables
+3.  the following arguments are arguments related to the specific tasks
+    of the functions
+
+Most important, functions that accept data frames usually have this as
+their first argument, and also return a (modified) data frame again.
+Thus, [datawizard](https://easystats.github.io/datawizard/) integrates
+smoothly into a “pipe-workflow”.
+
+``` r
+
+iris |>
+  # all rows where Species is "versicolor" or "virginica"
+  data_filter(Species %in% c("versicolor", "virginica")) |>
+  # select only columns with "." in names (i.e. drop Species)
+  data_select(contains("\\.")) |>
+  # move columns that ends with "Length" to start of data frame
+  data_relocate(ends_with("Length")) |>
+  # remove fourth column
+  data_remove(4) |>
+  head()
+#>    Sepal.Length Petal.Length Sepal.Width
+#> 51          7.0          4.7         3.2
+#> 52          6.4          4.5         3.2
+#> 53          6.9          4.9         3.1
+#> 54          5.5          4.0         2.3
+#> 55          6.5          4.6         2.8
+#> 56          5.7          4.5         2.8
+```
+
+# Contributing and Support
+
+In case you want to file an issue or contribute in another way to the
+package, please follow [this
+guide](https://easystats.github.io/datawizard/CONTRIBUTING.html). For
+questions about the functionality, you may either contact us via email
+or also file an issue.
+
+# Code of Conduct
+
+Please note that this project is released with a [Contributor Code of
+Conduct](https://easystats.github.io/datawizard/CODE_OF_CONDUCT.html).
+By participating in this project you agree to abide by its terms.
+
+# Package index
+
+## Data Preparation
+
+Main functions for cleaning and preparing data
+
+- [`data_to_long()`](https://easystats.github.io/datawizard/reference/data_to_long.md)
+  [`reshape_longer()`](https://easystats.github.io/datawizard/reference/data_to_long.md)
+  : Reshape (pivot) data from wide to long
+- [`data_to_wide()`](https://easystats.github.io/datawizard/reference/data_to_wide.md)
+  [`reshape_wider()`](https://easystats.github.io/datawizard/reference/data_to_wide.md)
+  : Reshape (pivot) data from long to wide
+- [`data_extract()`](https://easystats.github.io/datawizard/reference/data_extract.md)
+  : Extract one or more columns or elements from an object
+- [`data_match()`](https://easystats.github.io/datawizard/reference/data_match.md)
+  [`data_filter()`](https://easystats.github.io/datawizard/reference/data_match.md)
+  : Return filtered or sliced data frame, or row indices
+- [`data_select()`](https://easystats.github.io/datawizard/reference/extract_column_names.md)
+  [`extract_column_names()`](https://easystats.github.io/datawizard/reference/extract_column_names.md)
+  [`find_columns()`](https://easystats.github.io/datawizard/reference/extract_column_names.md)
+  : Find or get columns in a data frame based on search patterns
+- [`data_relocate()`](https://easystats.github.io/datawizard/reference/data_relocate.md)
+  [`data_reorder()`](https://easystats.github.io/datawizard/reference/data_relocate.md)
+  [`data_remove()`](https://easystats.github.io/datawizard/reference/data_relocate.md)
+  : Relocate (reorder) columns of a data frame
+- [`data_arrange()`](https://easystats.github.io/datawizard/reference/data_arrange.md)
+  : Arrange rows by column values
+- [`data_merge()`](https://easystats.github.io/datawizard/reference/data_merge.md)
+  [`data_join()`](https://easystats.github.io/datawizard/reference/data_merge.md)
+  : Merge (join) two data frames, or a list of data frames
+- [`data_partition()`](https://easystats.github.io/datawizard/reference/data_partition.md)
+  : Partition data
+- [`data_rotate()`](https://easystats.github.io/datawizard/reference/data_rotate.md)
+  [`data_transpose()`](https://easystats.github.io/datawizard/reference/data_rotate.md)
+  : Rotate a data frame
+- [`data_group()`](https://easystats.github.io/datawizard/reference/data_group.md)
+  [`data_ungroup()`](https://easystats.github.io/datawizard/reference/data_group.md)
+  : Create a grouped data frame
+- [`data_replicate()`](https://easystats.github.io/datawizard/reference/data_replicate.md)
+  : Expand (i.e. replicate rows) a data frame
+- [`data_duplicated()`](https://easystats.github.io/datawizard/reference/data_duplicated.md)
+  : Extract all duplicates
+- [`data_unique()`](https://easystats.github.io/datawizard/reference/data_unique.md)
+  : Keep only one row from all with duplicated IDs
+
+## Data and Variable Transformations
+
+### Statistical Transformations
+
+Functions for transforming variables
+
+- [`data_modify()`](https://easystats.github.io/datawizard/reference/data_modify.md)
+  : Create new variables in a data frame
+- [`data_separate()`](https://easystats.github.io/datawizard/reference/data_separate.md)
+  : Separate single variable into multiple variables
+- [`data_unite()`](https://easystats.github.io/datawizard/reference/data_unite.md)
+  : Unite ("merge") multiple variables
+- [`categorize()`](https://easystats.github.io/datawizard/reference/categorize.md)
+  : Recode (or "cut" / "bin") data into groups of values.
+- [`recode_into()`](https://easystats.github.io/datawizard/reference/recode_into.md)
+  : Recode values from one or more variables into a new variable
+- [`recode_values()`](https://easystats.github.io/datawizard/reference/recode_values.md)
+  : Recode old values of variables into new values
+- [`adjust()`](https://easystats.github.io/datawizard/reference/adjust.md)
+  [`data_adjust()`](https://easystats.github.io/datawizard/reference/adjust.md)
+  : Adjust data for the effect of other variable(s)
+- [`demean()`](https://easystats.github.io/datawizard/reference/demean.md)
+  [`degroup()`](https://easystats.github.io/datawizard/reference/demean.md)
+  [`detrend()`](https://easystats.github.io/datawizard/reference/demean.md)
+  : Compute group-meaned and de-meaned variables
+- [`ranktransform()`](https://easystats.github.io/datawizard/reference/ranktransform.md)
+  : (Signed) rank transformation
+- [`rescale_weights()`](https://easystats.github.io/datawizard/reference/rescale_weights.md)
+  : Rescale design weights for multilevel analysis
+- [`winsorize()`](https://easystats.github.io/datawizard/reference/winsorize.md)
+  : Winsorize data
+
+### Linear Transformers
+
+Convenient functions for common linear transformations
+
+- [`center()`](https://easystats.github.io/datawizard/reference/center.md)
+  [`centre()`](https://easystats.github.io/datawizard/reference/center.md)
+  : Centering (Grand-Mean Centering)
+
+- [`slide()`](https://easystats.github.io/datawizard/reference/slide.md)
+  : Shift numeric value range
+
+- [`standardize()`](https://easystats.github.io/datawizard/reference/standardize.md)
+  [`standardise()`](https://easystats.github.io/datawizard/reference/standardize.md)
+  [`unstandardize()`](https://easystats.github.io/datawizard/reference/standardize.md)
+  [`unstandardise()`](https://easystats.github.io/datawizard/reference/standardize.md)
+  : Standardization (Z-scoring)
+
+- [`standardize(`*`<default>`*`)`](https://easystats.github.io/datawizard/reference/standardize.default.md)
+  : Re-fit a model with standardized data
+
+- [`reverse()`](https://easystats.github.io/datawizard/reference/reverse.md)
+  [`reverse_scale()`](https://easystats.github.io/datawizard/reference/reverse.md)
+  : Reverse-Score Variables
+
+- [`rescale()`](https://easystats.github.io/datawizard/reference/rescale.md)
+  [`change_scale()`](https://easystats.github.io/datawizard/reference/rescale.md)
+  : Rescale Variables to a New Range
+
+- [`normalize()`](https://easystats.github.io/datawizard/reference/normalize.md)
+  [`unnormalize()`](https://easystats.github.io/datawizard/reference/normalize.md)
+  : Normalize numeric variable to 0-1 range
+
+- [`makepredictcall(`*`<dw_transformer>`*`)`](https://easystats.github.io/datawizard/reference/makepredictcall.dw_transformer.md)
+  :
+
+  Utility Function for Safe Prediction with `datawizard` transformers
+
+### Others
+
+- [`contr.deviation()`](https://easystats.github.io/datawizard/reference/contr.deviation.md)
+  : Deviation Contrast Matrix
+
+## Data Properties
+
+Functions to compute statistical summaries of data properties and
+distributions
+
+- [`as.prop.table()`](https://easystats.github.io/datawizard/reference/as.prop.table.md)
+  [`as.data.frame(`*`<datawizard_tables>`*`)`](https://easystats.github.io/datawizard/reference/as.prop.table.md)
+  [`as.table(`*`<datawizard_table>`*`)`](https://easystats.github.io/datawizard/reference/as.prop.table.md)
+  : Convert a crosstable to a frequency or a propensity table
+- [`data_codebook()`](https://easystats.github.io/datawizard/reference/data_codebook.md)
+  [`print_html(`*`<data_codebook>`*`)`](https://easystats.github.io/datawizard/reference/data_codebook.md)
+  [`display(`*`<data_codebook>`*`)`](https://easystats.github.io/datawizard/reference/data_codebook.md)
+  : Generate a codebook of a data frame.
+- [`data_summary()`](https://easystats.github.io/datawizard/reference/data_summary.md)
+  : Summarize data
+- [`data_tabulate()`](https://easystats.github.io/datawizard/reference/data_tabulate.md)
+  [`print(`*`<datawizard_table>`*`)`](https://easystats.github.io/datawizard/reference/data_tabulate.md)
+  [`display(`*`<datawizard_table>`*`)`](https://easystats.github.io/datawizard/reference/data_tabulate.md)
+  : Create frequency and crosstables of variables
+- [`data_peek()`](https://easystats.github.io/datawizard/reference/data_peek.md)
+  : Peek at values and type of variables in a data frame
+- [`data_seek()`](https://easystats.github.io/datawizard/reference/data_seek.md)
+  : Find variables by their names, variable or value labels
+- [`means_by_group()`](https://easystats.github.io/datawizard/reference/means_by_group.md)
+  : Summary of mean values by group
+- [`coef_var()`](https://easystats.github.io/datawizard/reference/coef_var.md)
+  [`distribution_coef_var()`](https://easystats.github.io/datawizard/reference/coef_var.md)
+  : Compute the coefficient of variation
+- [`describe_distribution()`](https://easystats.github.io/datawizard/reference/describe_distribution.md)
+  : Describe a distribution
+- [`distribution_mode()`](https://easystats.github.io/datawizard/reference/distribution_mode.md)
+  : Compute mode for a statistical distribution
+- [`skewness()`](https://easystats.github.io/datawizard/reference/skewness.md)
+  [`kurtosis()`](https://easystats.github.io/datawizard/reference/skewness.md)
+  [`print(`*`<parameters_kurtosis>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
+  [`print(`*`<parameters_skewness>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
+  [`summary(`*`<parameters_skewness>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
+  [`summary(`*`<parameters_kurtosis>`*`)`](https://easystats.github.io/datawizard/reference/skewness.md)
+  : Compute Skewness and (Excess) Kurtosis
+- [`smoothness()`](https://easystats.github.io/datawizard/reference/smoothness.md)
+  : Quantify the smoothness of a vector
+- [`row_count()`](https://easystats.github.io/datawizard/reference/row_count.md)
+  : Count specific values row-wise
+- [`row_means()`](https://easystats.github.io/datawizard/reference/row_means.md)
+  [`row_sums()`](https://easystats.github.io/datawizard/reference/row_means.md)
+  : Row means or sums (optionally with minimum amount of valid values)
+- [`weighted_mean()`](https://easystats.github.io/datawizard/reference/weighted_mean.md)
+  [`weighted_median()`](https://easystats.github.io/datawizard/reference/weighted_mean.md)
+  [`weighted_sd()`](https://easystats.github.io/datawizard/reference/weighted_mean.md)
+  [`weighted_mad()`](https://easystats.github.io/datawizard/reference/weighted_mean.md)
+  : Weighted Mean, Median, SD, and MAD
+- [`mean_sd()`](https://easystats.github.io/datawizard/reference/mean_sd.md)
+  [`median_mad()`](https://easystats.github.io/datawizard/reference/mean_sd.md)
+  : Summary Helpers
+
+## Convert and Replace Data
+
+Helpers for data replacements
+
+- [`assign_labels()`](https://easystats.github.io/datawizard/reference/assign_labels.md)
+  : Assign variable and value labels
+
+- [`labels_to_levels()`](https://easystats.github.io/datawizard/reference/labels_to_levels.md)
+  : Convert value labels into factor levels
+
+- [`coerce_to_numeric()`](https://easystats.github.io/datawizard/reference/coerce_to_numeric.md)
+  : Convert to Numeric (if possible)
+
+- [`to_numeric()`](https://easystats.github.io/datawizard/reference/to_numeric.md)
+  : Convert data to numeric
+
+- [`to_factor()`](https://easystats.github.io/datawizard/reference/to_factor.md)
+  : Convert data to factors
+
+- [`replace_nan_inf()`](https://easystats.github.io/datawizard/reference/replace_nan_inf.md)
+  :
+
+  Convert infinite or `NaN` values into `NA`
+
+- [`convert_na_to()`](https://easystats.github.io/datawizard/reference/convert_na_to.md)
+  : Replace missing values in a variable or a data frame.
+
+- [`convert_to_na()`](https://easystats.github.io/datawizard/reference/convert_to_na.md)
+  : Convert non-missing values in a variable into missing values.
+
+## Import data
+
+Helpers for importing data
+
+- [`data_read()`](https://easystats.github.io/datawizard/reference/data_read.md)
+  [`data_write()`](https://easystats.github.io/datawizard/reference/data_read.md)
+  : Read (import) data files from various sources
+
+## Helpers for Data Preparation
+
+Primarily useful in the context of other ‘easystats’ packages
+
+- [`reshape_ci()`](https://easystats.github.io/datawizard/reference/reshape_ci.md)
+  : Reshape CI between wide/long formats
+- [`data_rename()`](https://easystats.github.io/datawizard/reference/data_rename.md)
+  [`data_rename_rows()`](https://easystats.github.io/datawizard/reference/data_rename.md)
+  : Rename columns and variable names
+- [`data_addprefix()`](https://easystats.github.io/datawizard/reference/data_prefix_suffix.md)
+  [`data_addsuffix()`](https://easystats.github.io/datawizard/reference/data_prefix_suffix.md)
+  : Add a prefix or suffix to column names
+- [`empty_columns()`](https://easystats.github.io/datawizard/reference/remove_empty.md)
+  [`empty_rows()`](https://easystats.github.io/datawizard/reference/remove_empty.md)
+  [`remove_empty_columns()`](https://easystats.github.io/datawizard/reference/remove_empty.md)
+  [`remove_empty_rows()`](https://easystats.github.io/datawizard/reference/remove_empty.md)
+  [`remove_empty()`](https://easystats.github.io/datawizard/reference/remove_empty.md)
+  : Return or remove variables or observations that are completely
+  missing
+- [`rownames_as_column()`](https://easystats.github.io/datawizard/reference/rownames.md)
+  [`column_as_rownames()`](https://easystats.github.io/datawizard/reference/rownames.md)
+  [`rowid_as_column()`](https://easystats.github.io/datawizard/reference/rownames.md)
+  : Tools for working with row names or row ids
+- [`row_to_colnames()`](https://easystats.github.io/datawizard/reference/colnames.md)
+  [`colnames_to_row()`](https://easystats.github.io/datawizard/reference/colnames.md)
+  : Tools for working with column names
+- [`data_select()`](https://easystats.github.io/datawizard/reference/extract_column_names.md)
+  [`extract_column_names()`](https://easystats.github.io/datawizard/reference/extract_column_names.md)
+  [`find_columns()`](https://easystats.github.io/datawizard/reference/extract_column_names.md)
+  : Find or get columns in a data frame based on search patterns
+- [`data_restoretype()`](https://easystats.github.io/datawizard/reference/data_restoretype.md)
+  : Restore the type of columns according to a reference data frame
+
+## Helpers for Text Formatting
+
+Primarily useful for ‘report’ package
+
+- [`text_format()`](https://easystats.github.io/datawizard/reference/text_format.md)
+  [`text_fullstop()`](https://easystats.github.io/datawizard/reference/text_format.md)
+  [`text_lastchar()`](https://easystats.github.io/datawizard/reference/text_format.md)
+  [`text_concatenate()`](https://easystats.github.io/datawizard/reference/text_format.md)
+  [`text_paste()`](https://easystats.github.io/datawizard/reference/text_format.md)
+  [`text_remove()`](https://easystats.github.io/datawizard/reference/text_format.md)
+  [`text_wrap()`](https://easystats.github.io/datawizard/reference/text_format.md)
+  : Convenient text formatting functionalities
+
+## Visualization helpers
+
+Primarily useful in the context of other ‘easystats’ packages
+
+- [`visualisation_recipe()`](https://easystats.github.io/datawizard/reference/visualisation_recipe.md)
+  : Prepare objects for visualisation
+
+## Data
+
+Datasets useful for examples and tests
+
+- [`efc`](https://easystats.github.io/datawizard/reference/efc.md) :
+  Sample dataset from the EFC Survey
+- [`nhanes_sample`](https://easystats.github.io/datawizard/reference/nhanes_sample.md)
+  : Sample dataset from the National Health and Nutrition Examination
+  Survey
+
+# Articles
+
+### Overview of vignettes
+
+- [Overview of
+  Vignettes](https://easystats.github.io/datawizard/articles/overview_of_vignettes.md):
+
+### Data Preparation
+
+Articles explaining utility of ‘datawizard’ for data wrangling
+
+- [Coming from
+  'tidyverse'](https://easystats.github.io/datawizard/articles/tidyverse_translation.md):
+- [A quick summary of selection syntax in
+  \`{datawizard}\`](https://easystats.github.io/datawizard/articles/selection_syntax.md):
+
+### Statistical Transformations
+
+Articles describing use of ‘datawizard’ functions for tranforming data
+to use in regression models
+
+- [Data
+  Standardization](https://easystats.github.io/datawizard/articles/standardize_data.md):
