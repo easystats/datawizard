@@ -470,6 +470,10 @@ standardize.wbgee <- standardize.wbm
 standardize.biglm <- standardize.wbm
 # biglm doesn't regit the model to new data - it ADDs MORE data to the model.
 
+#' @export
+standardize.fixest <- standardize.wbm
+# fixest handles its own environment - so we can't update
+
 # helper ----------------------------
 
 # Find log-terms inside model formula, and return "clean" term names
