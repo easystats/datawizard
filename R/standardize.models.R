@@ -477,6 +477,8 @@ standardize.biglm <- standardize.wbm
 # biglm doesn't regit the model to new data - it ADDs MORE data to the model.
 
 #' @export
+# Almost the same as `standardize.default()` but we pass `use_calling_env` in
+# update().
 standardize.fixest <- function(
   x,
   robust = FALSE,
