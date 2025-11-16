@@ -401,3 +401,30 @@ test_that("brms", {
     regexp = "without adjusting priors may lead to bogus"
   )
 })
+
+# fixest --------------------------------------------------------------------
+
+test_that("fixest", {
+  skip_if_not_installed("fixest")
+
+  mtcars_stand <- standardize(mtcars)
+  orig <- fixest::feols(
+    drat ~ mpg + hp^2 | cyl + am,
+    data = mtcars,
+    se = "hetero"
+  )
+  auto_stand <- standardize(orig)
+  manual_stand <- fixest::feols(
+    drat ~ mpg + hp^2 | cyl + am,
+    data = mtcars_stand,
+    se = "hetero"
+  )
+
+  # Need to unname because I(hp^2) in the manual one becomes I(I(hp ^2)) in the
+  # automated one.
+  expect_equal(
+    unname(auto_stand$coefficients),
+    unname(manual_stand$coefficients)
+  )
+  expect_equal(unname(auto_stand$se), unname(manual_stand$se))
+})

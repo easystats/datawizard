@@ -273,7 +273,13 @@ standardize.default <- function(
   on.exit(.update_failed())
 
   if (isTRUE(verbose)) {
-    model_std <- eval(substitute(update_expr))
+    # Remove this suppressWarnings() and therefore this ifelse when
+    # https://github.com/lrberge/fixest/issues/618 is fixed.
+    if (inherits(x, "fixest")) {
+      model_std <- suppressWarnings(eval(substitute(update_expr)))
+    } else {
+      model_std <- eval(substitute(update_expr))
+    }
   } else {
     utils::capture.output({
       model_std <- eval(substitute(update_expr))
@@ -471,8 +477,46 @@ standardize.biglm <- standardize.wbm
 # biglm doesn't regit the model to new data - it ADDs MORE data to the model.
 
 #' @export
-standardize.fixest <- standardize.wbm
-# fixest handles its own environment - so we can't update
+standardize.fixest <- function(
+  x,
+  robust = FALSE,
+  two_sd = FALSE,
+  weights = TRUE,
+  verbose = TRUE,
+  include_response = TRUE,
+  ...
+) {
+  if (!insight::is_model(x)) {
+    insight::format_warning(
+      paste0(
+        "Objects or variables of class '",
+        class(x)[1],
+        "' cannot be standardized."
+      )
+    )
+    return(x)
+  }
+
+  # check model formula. Some notations don't work when standardizing data
+  insight::formula_ok(
+    x,
+    action = "error",
+    prefix_msg = "Model cannot be standardized.",
+    verbose = verbose
+  )
+
+  data_std <- NULL # needed to avoid note
+  .standardize_models(
+    x,
+    robust = robust,
+    two_sd = two_sd,
+    weights = weights,
+    verbose = verbose,
+    include_response = include_response,
+    update_expr = stats::update(x, data = data_std, use_calling_env = FALSE),
+    ...
+  )
+}
 
 # helper ----------------------------
 
