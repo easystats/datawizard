@@ -422,9 +422,9 @@ test_that("fixest", {
 
   # Need to unname because I(hp^2) in the manual one becomes I(I(hp ^2)) in the
   # automated one.
-  expect_equal(
+  expect_identical(
     unname(auto_stand$coefficients),
     unname(manual_stand$coefficients)
   )
-  expect_equal(unname(auto_stand$se), unname(manual_stand$se))
+  expect_identical(unname(auto_stand$se), unname(manual_stand$se))
 })

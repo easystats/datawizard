@@ -429,7 +429,8 @@ standardize.mediate <- function(
   #
   #   control.value <- temp_vals[1]
   #   treat.value <- temp_vals[2]
-  #   if (verbose) insight::format_alert("control and treatment values have been rescaled to their standardized scales.")
+  #   if (verbose) insight::format_alert("control and treatment values have been
+  #   rescaled to their standardized scales.")
   # }
 
   if (verbose && !all(c(control.value, treat.value) %in% c(0, 1))) {
