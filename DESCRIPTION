@@ -46,6 +46,7 @@ Suggests:
     dplyr (>= 1.1),
     effectsize,
     emmeans,
+    fixest,
     gamm4,
     ggplot2 (>= 3.5.0),
     gt,
