@@ -80,14 +80,6 @@ standardize.default <- function(
     return(x)
   }
 
-  # check model formula. Some notations don't work when standardizing data
-  insight::formula_ok(
-    x,
-    action = "error",
-    prefix_msg = "Model cannot be standardized.",
-    verbose = verbose
-  )
-
   data_std <- NULL # needed to avoid note
   .standardize_models(
     x,
@@ -112,6 +104,14 @@ standardize.default <- function(
   update_expr,
   ...
 ) {
+  # check model formula. Some notations don't work when standardizing data
+  insight::formula_ok(
+    x,
+    action = "error",
+    prefix_msg = "Model cannot be standardized.",
+    verbose = verbose
+  )
+
   m_info <- .get_model_info(x, ...)
   model_data <- insight::get_data(x, source = "mf", verbose = FALSE)
 
@@ -483,14 +483,6 @@ standardize.fixest <- function(
   include_response = TRUE,
   ...
 ) {
-  # check model formula. Some notations don't work when standardizing data
-  insight::formula_ok(
-    x,
-    action = "error",
-    prefix_msg = "Model cannot be standardized.",
-    verbose = verbose
-  )
-
   data_std <- NULL # needed to avoid note
   .standardize_models(
     x,
