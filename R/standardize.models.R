@@ -483,17 +483,6 @@ standardize.fixest <- function(
   include_response = TRUE,
   ...
 ) {
-  if (!insight::is_model(x)) {
-    insight::format_warning(
-      paste0(
-        "Objects or variables of class '",
-        class(x)[1],
-        "' cannot be standardized."
-      )
-    )
-    return(x)
-  }
-
   # check model formula. Some notations don't work when standardizing data
   insight::formula_ok(
     x,
