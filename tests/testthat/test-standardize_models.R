@@ -413,7 +413,12 @@ test_that("fixest", {
     data = mtcars,
     se = "hetero"
   )
-  auto_stand <- standardize(orig)
+  # TODO: Remove this suppressWarnings() when a new version of `fixest` that
+  # contains the fix for https://github.com/lrberge/fixest/issues/618 is on CRAN
+  # (CRAN version is 0.13.2 at the time of writing).
+  suppressWarnings({
+    auto_stand <- standardize(orig)
+  })
   manual_stand <- fixest::feols(
     drat ~ mpg + hp^2 | cyl + am,
     data = mtcars_stand,

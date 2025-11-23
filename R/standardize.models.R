@@ -273,13 +273,7 @@ standardize.default <- function(
   on.exit(.update_failed())
 
   if (isTRUE(verbose)) {
-    # Remove this suppressWarnings() and therefore this ifelse when
-    # https://github.com/lrberge/fixest/issues/618 is fixed.
-    if (inherits(x, "fixest")) {
-      model_std <- suppressWarnings(eval(substitute(update_expr)))
-    } else {
-      model_std <- eval(substitute(update_expr))
-    }
+    model_std <- eval(substitute(update_expr))
   } else {
     utils::capture.output({
       model_std <- eval(substitute(update_expr))
