@@ -432,4 +432,28 @@ test_that("fixest", {
     unname(manual_stand$coefficients)
   )
   expect_identical(unname(auto_stand$se), unname(manual_stand$se))
+
+  ### Inform the user if some terms are log() or sqrt()
+  orig <- fixest::feols(
+    drat ~ log(mpg) | cyl + am,
+    data = mtcars
+  )
+  # TODO: same as above
+  expect_message(
+    suppressWarnings({
+      auto_stand <- standardize(orig)
+    }),
+    "Formula contains log- or sqrt-terms"
+  )
+  orig <- fixest::feols(
+    drat ~ sqrt(mpg) | cyl + am,
+    data = mtcars
+  )
+  # TODO: same as above
+  expect_message(
+    suppressWarnings({
+      auto_stand <- standardize(orig)
+    }),
+    "Formula contains log- or sqrt-terms"
+  )
 })
