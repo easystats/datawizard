@@ -440,9 +440,7 @@ test_that("fixest", {
   )
   # TODO: same as above
   expect_message(
-    suppressWarnings({
-      auto_stand <- standardize(orig)
-    }),
+    suppressWarnings(standardize(orig)),
     "Formula contains log- or sqrt-terms"
   )
   orig <- fixest::feols(
@@ -451,9 +449,7 @@ test_that("fixest", {
   )
   # TODO: same as above
   expect_message(
-    suppressWarnings({
-      auto_stand <- standardize(orig)
-    }),
+    suppressWarnings(standardize(orig)),
     "Formula contains log- or sqrt-terms"
   )
 })
