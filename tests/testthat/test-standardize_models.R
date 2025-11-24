@@ -401,3 +401,55 @@ test_that("brms", {
     regexp = "without adjusting priors may lead to bogus"
   )
 })
+
+# fixest --------------------------------------------------------------------
+
+test_that("fixest", {
+  skip_if_not_installed("fixest")
+
+  mtcars_stand <- standardize(mtcars)
+  orig <- fixest::feols(
+    drat ~ mpg + hp^2 | cyl + am,
+    data = mtcars,
+    se = "hetero"
+  )
+  # TODO: Remove this suppressWarnings() when a new version of `fixest` that
+  # contains the fix for https://github.com/lrberge/fixest/issues/618 is on CRAN
+  # (CRAN version is 0.13.2 at the time of writing).
+  suppressWarnings({
+    auto_stand <- standardize(orig)
+  })
+  manual_stand <- fixest::feols(
+    drat ~ mpg + hp^2 | cyl + am,
+    data = mtcars_stand,
+    se = "hetero"
+  )
+
+  # Need to unname because I(hp^2) in the manual one becomes I(I(hp ^2)) in the
+  # automated one.
+  expect_identical(
+    unname(auto_stand$coefficients),
+    unname(manual_stand$coefficients)
+  )
+  expect_identical(unname(auto_stand$se), unname(manual_stand$se))
+
+  ### Inform the user if some terms are log() or sqrt()
+  orig <- fixest::feols(
+    drat ~ log(mpg) | cyl + am,
+    data = mtcars
+  )
+  # TODO: same as above
+  expect_message(
+    suppressWarnings(standardize(orig)),
+    "Formula contains log- or sqrt-terms"
+  )
+  orig <- fixest::feols(
+    drat ~ sqrt(mpg) | cyl + am,
+    data = mtcars
+  )
+  # TODO: same as above
+  expect_message(
+    suppressWarnings(standardize(orig)),
+    "Formula contains log- or sqrt-terms"
+  )
+})

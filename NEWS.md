@@ -1,3 +1,9 @@
+# datawizard (development)
+
+CHANGES
+
+* `standardize()` now works on `fixest` estimations (#665).
+
 # datawizard 1.3.0
 
 BREAKING CHANGES

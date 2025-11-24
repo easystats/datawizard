@@ -80,14 +80,6 @@ standardize.default <- function(
     return(x)
   }
 
-  # check model formula. Some notations don't work when standardizing data
-  insight::formula_ok(
-    x,
-    action = "error",
-    prefix_msg = "Model cannot be standardized.",
-    verbose = verbose
-  )
-
   data_std <- NULL # needed to avoid note
   .standardize_models(
     x,
@@ -112,6 +104,14 @@ standardize.default <- function(
   update_expr,
   ...
 ) {
+  # check model formula. Some notations don't work when standardizing data
+  insight::formula_ok(
+    x,
+    action = "error",
+    prefix_msg = "Model cannot be standardized.",
+    verbose = verbose
+  )
+
   m_info <- .get_model_info(x, ...)
   model_data <- insight::get_data(x, source = "mf", verbose = FALSE)
 
@@ -423,7 +423,8 @@ standardize.mediate <- function(
   #
   #   control.value <- temp_vals[1]
   #   treat.value <- temp_vals[2]
-  #   if (verbose) insight::format_alert("control and treatment values have been rescaled to their standardized scales.")
+  #   if (verbose) insight::format_alert("control and treatment values have been
+  #   rescaled to their standardized scales.")
   # }
 
   if (verbose && !all(c(control.value, treat.value) %in% c(0, 1))) {
@@ -471,8 +472,29 @@ standardize.biglm <- standardize.wbm
 # biglm doesn't regit the model to new data - it ADDs MORE data to the model.
 
 #' @export
-standardize.fixest <- standardize.wbm
-# fixest handles its own environment - so we can't update
+# Almost the same as `standardize.default()` but we pass `use_calling_env` in
+# update().
+standardize.fixest <- function(
+  x,
+  robust = FALSE,
+  two_sd = FALSE,
+  weights = TRUE,
+  verbose = TRUE,
+  include_response = TRUE,
+  ...
+) {
+  data_std <- NULL # needed to avoid note
+  .standardize_models(
+    x,
+    robust = robust,
+    two_sd = two_sd,
+    weights = weights,
+    verbose = verbose,
+    include_response = include_response,
+    update_expr = stats::update(x, data = data_std, use_calling_env = FALSE),
+    ...
+  )
+}
 
 # helper ----------------------------
 
