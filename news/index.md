@@ -649,7 +649,7 @@ CHANGES
 
 - [`data_read()`](https://easystats.github.io/datawizard/reference/data_read.md)
   now passes the `encoding` argument to
-  [`data.table::fread()`](https://rdatatable.gitlab.io/data.table/reference/fread.html).
+  [`data.table::fread()`](https://rdrr.io/pkg/data.table/man/fread.html).
   This allows to read files with non-ASCII characters.
 
 - `datawizard` moves from the GPL-3 license to the MIT license.

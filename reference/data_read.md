@@ -7,7 +7,7 @@ wrapper around
 [`haven::read_sas()`](https://haven.tidyverse.org/reference/read_sas.html),
 [`readxl::read_excel()`](https://readxl.tidyverse.org/reference/read_excel.html)
 and
-[`data.table::fread()`](https://rdatatable.gitlab.io/data.table/reference/fread.html)
+[`data.table::fread()`](https://rdrr.io/pkg/data.table/man/fread.html)
 resp.
 [`readr::read_delim()`](https://readr.tidyverse.org/reference/read_delim.html)
 (the latter if package **data.table** is not installed). Thus, supported
