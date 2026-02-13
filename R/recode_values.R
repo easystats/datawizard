@@ -13,10 +13,11 @@
 #'   element names have to be surrounded in backticks. For example,
 #'   ``recode=list(`0`=1)`` would recode all `1` into `0` in a numeric
 #'   vector. See also 'Examples' and 'Details'.
-#' @param default Defines the default value for all values that have
-#'   no match in the recode-pairs. Note that, if `preserve_na=FALSE`, missing
-#'   values (`NA`) are also captured by the `default` argument, and thus will
-#'   also be recoded into the specified value. See 'Examples' and 'Details'.
+#' @param default Defines the default value for all values that have no match in
+#'   the recode-pairs. If `NULL`, original values will be preserved when there
+#'   is no match. Note that, if `preserve_na=FALSE`, missing values (`NA`) are
+#'   also captured by the `default` argument, and thus will also be recoded into
+#'   the specified value. See 'Examples' and 'Details'.
 #' @param preserve_na Logical, if `TRUE`, `NA` (missing values) are preserved.
 #'   This overrides any other arguments, including `default`. Hence, if
 #'   `preserve_na=TRUE`, `default` will no longer convert `NA` into the specified
