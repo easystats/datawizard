@@ -2,8 +2,8 @@
 
 Performs a standardization of data (z-scoring) using
 [`standardize()`](https://easystats.github.io/datawizard/reference/standardize.md)
-and then re-fits the model to the standardized data.  
-  
+and then re-fits the model to the standardized data.\
+\
 Standardization is done by completely refitting the model on the
 standardized data. Hence, this approach is equal to standardizing the
 variables *before* fitting the model and will return a new model object.

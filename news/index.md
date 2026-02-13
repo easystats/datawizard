@@ -848,7 +848,7 @@ NEW FUNCTIONS
 
 - [`recode_into()`](https://easystats.github.io/datawizard/reference/recode_into.md),
   similar to
-  [`dplyr::case_when()`](https://dplyr.tidyverse.org/reference/case_when.html),
+  [`dplyr::case_when()`](https://dplyr.tidyverse.org/reference/case-and-replace-when.html),
   to recode values from one or more variables into a new variable.
 
 - [`mean_sd()`](https://easystats.github.io/datawizard/reference/mean_sd.md)

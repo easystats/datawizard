@@ -4,7 +4,7 @@ This functions recodes values from one or more variables into a new
 variable. It is a convenient function to avoid nested
 [`ifelse()`](https://rdrr.io/r/base/ifelse.html) statements, which is
 similar to
-[`dplyr::case_when()`](https://dplyr.tidyverse.org/reference/case_when.html).
+[`dplyr::case_when()`](https://dplyr.tidyverse.org/reference/case-and-replace-when.html).
 
 ## Usage
 

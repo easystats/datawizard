@@ -8,8 +8,8 @@ dataset, standardizes it, and refits the model with this standardized
 version of the dataset. The
 [`normalize()`](https://easystats.github.io/datawizard/reference/normalize.md)
 function can also be used to scale all numeric variables within the 0 -
-1 range.  
-  
+1 range.\
+\
 For model standardization, see
 [`standardize.default()`](https://easystats.github.io/datawizard/reference/standardize.default.md).
 
@@ -142,7 +142,7 @@ unstandardize(
 
 - center, scale:
 
-  - For `standardize()`:  
+  - For `standardize()`:\
     Numeric values, which can be used as alternative to `reference` to
     define a reference centrality and deviation. If `scale` and `center`
     are of length 1, they will be recycled to match the length of
@@ -152,7 +152,7 @@ unstandardize(
     provided order, unless a named vector is given. In this case, names
     are matched against the names of the selected variables.
 
-  - For `unstandardize()`:  
+  - For `unstandardize()`:\
     `center` and `scale` correspond to the center (the mean / median)
     and the scale (SD / MAD) of the original non-standardized data (for
     data frames, should be named, or have column order correspond to the

@@ -114,10 +114,11 @@ vector. See also 'Examples' and 'Details'.</p></dd>
 
 
 <dt id="arg-default">default<a class="anchor" aria-label="anchor" href="#arg-default"></a></dt>
-<dd><p>Defines the default value for all values that have
-no match in the recode-pairs. Note that, if <code>preserve_na=FALSE</code>, missing
-values (<code>NA</code>) are also captured by the <code>default</code> argument, and thus will
-also be recoded into the specified value. See 'Examples' and 'Details'.</p></dd>
+<dd><p>Defines the default value for all values that have no match in
+the recode-pairs. If <code>NULL</code>, original values will be preserved when there
+is no match. Note that, if <code>preserve_na=FALSE</code>, missing values (<code>NA</code>) are
+also captured by the <code>default</code> argument, and thus will also be recoded into
+the specified value. See 'Examples' and 'Details'.</p></dd>
 
 
 <dt id="arg-preserve-na">preserve_na<a class="anchor" aria-label="anchor" href="#arg-preserve-na"></a></dt>

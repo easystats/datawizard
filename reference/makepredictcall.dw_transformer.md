@@ -1,8 +1,8 @@
 # Utility Function for Safe Prediction with `datawizard` transformers
 
 This function allows for the use of (some of) `datawizard`'s
-transformers inside a model formula. See examples below.  
-  
+transformers inside a model formula. See examples below.\
+\
 Currently,
 [`center()`](https://easystats.github.io/datawizard/reference/center.md),
 [`standardize()`](https://easystats.github.io/datawizard/reference/standardize.md),

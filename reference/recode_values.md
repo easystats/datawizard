@@ -57,7 +57,8 @@ recode_values(
 - default:
 
   Defines the default value for all values that have no match in the
-  recode-pairs. Note that, if `preserve_na=FALSE`, missing values (`NA`)
+  recode-pairs. If `NULL`, original values will be preserved when there
+  is no match. Note that, if `preserve_na=FALSE`, missing values (`NA`)
   are also captured by the `default` argument, and thus will also be
   recoded into the specified value. See 'Examples' and 'Details'.
 

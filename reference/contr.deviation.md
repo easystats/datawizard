@@ -38,8 +38,8 @@ intercept that represents the (unweighted) average of the group means.
 In ANOVA settings, this also guarantees that lower order effects
 represent *main* effects (and not *simple* or *conditional* effects, as
 is the case when using R's default
-[`stats::contr.treatment()`](https://rdrr.io/r/stats/contrast.html)).  
-  
+[`stats::contr.treatment()`](https://rdrr.io/r/stats/contrast.html)).\
+\
 Deviation coding (`contr.deviation`) is a type of effects coding. With
 deviation coding, the coefficients for factor variables are interpreted
 as the difference of each factor level from the base level (this is the
@@ -48,8 +48,8 @@ factor `group` with levels "A", "B", and "C", with `contr.devation`, the
 intercept represents the overall mean (average of the group means for
 the 3 groups), and the coefficients `groupB` and `groupC` represent the
 differences between the A group mean and the B and C group means,
-respectively.  
-  
+respectively.\
+\
 Sum coding
 ([`stats::contr.sum()`](https://rdrr.io/r/stats/contrast.html)) is
 another type of effects coding. With sum coding, the coefficients for
