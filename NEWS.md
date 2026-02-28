@@ -14,6 +14,10 @@ BREAKING CHANGES
 * `data_to_wide()` no longer removes empty columns that were created after
   widening data frames, to behave similarly to `tidyr::pivot_wider()` (#645).
 
+NEW FUNCTIONS
+
+* `describe_missing()`, to report on missing values in a data frame.
+
 CHANGES
 
 * `data_tabulate()` now saves the table of proportions for crosstables as
