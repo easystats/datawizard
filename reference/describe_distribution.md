@@ -64,7 +64,7 @@ describe_distribution(
   The point-estimates (centrality indices) to compute. Character
   (vector) or list with one or more of these options: `"median"`,
   `"mean"`, `"MAP"` (see
-  [`map_estimate()`](https://easystats.github.io/bayestestR/reference/map_estimate.html)),
+  [`map_estimate()`](https://rdrr.io/pkg/bayestestR/man/map_estimate.html)),
   `"trimmed"` (which is just `mean(x, trim = threshold)`), `"mode"` or
   `"all"`.
 
@@ -229,7 +229,7 @@ is used as variable name.
 ## Note
 
 There is also a
-[[`plot()`](https://rdrr.io/r/graphics/plot.default.html)-method](https://easystats.github.io/see/articles/parameters.html)
+[`plot()`-method](https://easystats.github.io/see/articles/parameters.html)
 implemented in the [**see**-package](https://easystats.github.io/see/).
 
 ## See also

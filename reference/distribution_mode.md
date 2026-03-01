@@ -24,7 +24,7 @@ returned data structure will be the same as the entered one.
 For continuous variables, the **Highest Maximum a Posteriori probability
 estimate (MAP)** may be a more useful way to estimate the most
 commonly-observed value than the mode. See
-[`bayestestR::map_estimate()`](https://easystats.github.io/bayestestR/reference/map_estimate.html).
+[`bayestestR::map_estimate()`](https://rdrr.io/pkg/bayestestR/man/map_estimate.html).
 
 ## Examples
 

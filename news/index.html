@@ -54,7 +54,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.3.0" id="datawizard-130">datawizard 1.3.0<a class="anchor" aria-label="anchor" href="#datawizard-130"></a></h2><p class="text-muted">CRAN release: 2025-10-11</p>
+<h2 class="pkg-version" data-toc-text="1.3.0" id="datawizard-130">datawizard 1.3.0<a class="anchor" aria-label="anchor" href="#datawizard-130"></a></h2>
 <p>BREAKING CHANGES</p>
 <ul><li><p>Argument <code>values_fill</code> in <code><a href="../reference/data_to_wide.html">data_to_wide()</a></code> is now defunct, because it did not work as intended (<a href="https://github.com/easystats/datawizard/issues/645" class="external-link">#645</a>).</p></li>
 <li><p><code><a href="../reference/data_to_wide.html">data_to_wide()</a></code> no longer removes empty columns that were created after widening data frames, to behave similarly to <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">tidyr::pivot_wider()</a></code> (<a href="https://github.com/easystats/datawizard/issues/645" class="external-link">#645</a>).</p></li>
@@ -72,7 +72,7 @@
 <li><p>Fixed issue in <code><a href="../reference/data_replicate.html">data_replicate()</a></code> when data frame had only one column to replicate (<a href="https://github.com/easystats/datawizard/issues/654" class="external-link">#654</a>).</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.2.0" id="datawizard-120">datawizard 1.2.0<a class="anchor" aria-label="anchor" href="#datawizard-120"></a></h2><p class="text-muted">CRAN release: 2025-07-17</p>
+<h2 class="pkg-version" data-toc-text="1.2.0" id="datawizard-120">datawizard 1.2.0<a class="anchor" aria-label="anchor" href="#datawizard-120"></a></h2>
 <p>BREAKING CHANGES</p>
 <ul><li>The following deprecated arguments have been removed (<a href="https://github.com/easystats/datawizard/issues/603" class="external-link">#603</a>):
 <ul><li>
@@ -93,7 +93,7 @@
 <li><p>Fixed typo in the documentation of <code><a href="../reference/data_match.html">data_match()</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.0" id="datawizard-110">datawizard 1.1.0<a class="anchor" aria-label="anchor" href="#datawizard-110"></a></h2><p class="text-muted">CRAN release: 2025-05-09</p>
+<h2 class="pkg-version" data-toc-text="1.1.0" id="datawizard-110">datawizard 1.1.0<a class="anchor" aria-label="anchor" href="#datawizard-110"></a></h2>
 <p>BREAKING CHANGES</p>
 <ul><li><p><code><a href="../reference/data_read.html">data_read()</a></code> now also returns Bayesian models from packages <em>brms</em> and <em>rstanarm</em> as original model objects, and no longer coerces them into data frames (<a href="https://github.com/easystats/datawizard/issues/606" class="external-link">#606</a>).</p></li>
 <li><p>The output format of <code><a href="../reference/describe_distribution.html">describe_distribution()</a></code> on grouped data has changed. Before, it printed one table per group combination. Now, it prints a single table with group columns at the start (<a href="https://github.com/easystats/datawizard/issues/610" class="external-link">#610</a>).</p></li>
@@ -115,18 +115,18 @@
 <li><p>Fixed warning in <code><a href="../reference/data_summary.html">data_summary()</a></code> when a variable had the same name as another object in the global environment (<a href="https://github.com/easystats/datawizard/issues/585" class="external-link">#585</a>).</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.0.2" id="datawizard-102">datawizard 1.0.2<a class="anchor" aria-label="anchor" href="#datawizard-102"></a></h2><p class="text-muted">CRAN release: 2025-03-24</p>
+<h2 class="pkg-version" data-toc-text="1.0.2" id="datawizard-102">datawizard 1.0.2<a class="anchor" aria-label="anchor" href="#datawizard-102"></a></h2>
 <p>BUG FIXES</p>
 <ul><li>Fixed failing R CMD check on ATLAS, noLD, and OpenBLAS due to small numerical differences (<a href="https://github.com/easystats/datawizard/issues/592" class="external-link">#592</a>).</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.0.1" id="datawizard-101">datawizard 1.0.1<a class="anchor" aria-label="anchor" href="#datawizard-101"></a></h2><p class="text-muted">CRAN release: 2025-03-07</p>
+<h2 class="pkg-version" data-toc-text="1.0.1" id="datawizard-101">datawizard 1.0.1<a class="anchor" aria-label="anchor" href="#datawizard-101"></a></h2>
 <p>BUG FIXES</p>
 <ul><li><p>Fixed issue in <code><a href="../reference/data_arrange.html">data_arrange()</a></code> for data frames that only had one column. Formerly, the data frame was coerced into a vector, now the data frame class is preserved.</p></li>
 <li><p>Fixed issue in R-devel (4.5.0) due to a change in how <code><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep()</a></code> handles logical arguments with missing values (<a href="https://github.com/easystats/datawizard/issues/588" class="external-link">#588</a>).</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.0.0" id="datawizard-100">datawizard 1.0.0<a class="anchor" aria-label="anchor" href="#datawizard-100"></a></h2><p class="text-muted">CRAN release: 2025-01-10</p>
+<h2 class="pkg-version" data-toc-text="1.0.0" id="datawizard-100">datawizard 1.0.0<a class="anchor" aria-label="anchor" href="#datawizard-100"></a></h2>
 <p>BREAKING CHANGES AND DEPRECATIONS</p>
 <ul><li><p><em>datawizard</em> now requires R &gt;= 4.0 (<a href="https://github.com/easystats/datawizard/issues/515" class="external-link">#515</a>).</p></li>
 <li><p>Argument <code>drop_na</code> in <code><a href="../reference/data_match.html">data_match()</a></code> is deprecated now. Please use <code>remove_na</code> instead (<a href="https://github.com/easystats/datawizard/issues/556" class="external-link">#556</a>).</p></li>
@@ -149,14 +149,14 @@
 <li><p><code><a href="../reference/data_read.html">data_read()</a></code> no longer shows warning about forthcoming breaking changes in upstream packages when reading <code>.RData</code> files (<a href="https://github.com/easystats/datawizard/issues/557" class="external-link">#557</a>).</p></li>
 <li><p><code><a href="../reference/data_modify.html">data_modify()</a></code> now recognizes <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code>, for example to create an index for data groups with <code>1:n()</code> (<a href="https://github.com/easystats/datawizard/issues/535" class="external-link">#535</a>).</p></li>
 <li><p>The <code>replacement</code> argument in <code><a href="../reference/data_rename.html">data_rename()</a></code> now supports glue-styled tokens (<a href="https://github.com/easystats/datawizard/issues/563" class="external-link">#563</a>).</p></li>
-<li><p><code><a href="../reference/data_summary.html">data_summary()</a></code> also accepts the results of <code><a href="https://easystats.github.io/bayestestR/reference/ci.html" class="external-link">bayestestR::ci()</a></code> as summary function (<a href="https://github.com/easystats/datawizard/issues/483" class="external-link">#483</a>).</p></li>
+<li><p><code><a href="../reference/data_summary.html">data_summary()</a></code> also accepts the results of <code><a href="https://rdrr.io/pkg/bayestestR/man/ci.html" class="external-link">bayestestR::ci()</a></code> as summary function (<a href="https://github.com/easystats/datawizard/issues/483" class="external-link">#483</a>).</p></li>
 <li><p><code><a href="../reference/ranktransform.html">ranktransform()</a></code> has a new argument <code>zeros</code> to determine how zeros should be handled when <code>sign = TRUE</code> (<a href="https://github.com/easystats/datawizard/issues/573" class="external-link">#573</a>).</p></li>
 </ul><p>BUG FIXES</p>
 <ul><li><p><code><a href="../reference/describe_distribution.html">describe_distribution()</a></code> no longer errors if the sample was too sparse to compute CIs. Instead, it warns the user and returns <code>NA</code> (<a href="https://github.com/easystats/datawizard/issues/550" class="external-link">#550</a>).</p></li>
 <li><p><code><a href="../reference/data_read.html">data_read()</a></code> preserves variable types when importing files from <code>rds</code> or <code>rdata</code> format (<a href="https://github.com/easystats/datawizard/issues/558" class="external-link">#558</a>).</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.13.0" id="datawizard-0130">datawizard 0.13.0<a class="anchor" aria-label="anchor" href="#datawizard-0130"></a></h2><p class="text-muted">CRAN release: 2024-10-05</p>
+<h2 class="pkg-version" data-toc-text="0.13.0" id="datawizard-0130">datawizard 0.13.0<a class="anchor" aria-label="anchor" href="#datawizard-0130"></a></h2>
 <p>BREAKING CHANGES</p>
 <ul><li><p><code><a href="../reference/data_rename.html">data_rename()</a></code> now errors when the <code>replacement</code> argument contains <code>NA</code> values or empty strings (<a href="https://github.com/easystats/datawizard/issues/539" class="external-link">#539</a>).</p></li>
 <li><p>Removed deprecated functions <code>get_columns()</code>, <code>data_find()</code>, <code>format_text()</code> (<a href="https://github.com/easystats/datawizard/issues/546" class="external-link">#546</a>).</p></li>
@@ -169,21 +169,21 @@
 <li><p>Minor additions to <code><a href="../reference/reshape_ci.html">reshape_ci()</a></code> to work with forthcoming changes in the <a href="https://easystats.github.io/bayestestR/" class="external-link">bayestestR</a> package.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.12.3" id="datawizard-0123">datawizard 0.12.3<a class="anchor" aria-label="anchor" href="#datawizard-0123"></a></h2><p class="text-muted">CRAN release: 2024-09-02</p>
+<h2 class="pkg-version" data-toc-text="0.12.3" id="datawizard-0123">datawizard 0.12.3<a class="anchor" aria-label="anchor" href="#datawizard-0123"></a></h2>
 <p>CHANGES</p>
 <ul><li><p><code><a href="../reference/demean.html">demean()</a></code> (and <code><a href="../reference/demean.html">degroup()</a></code>) now also work for nested designs, if argument <code>nested = TRUE</code> and <code>by</code> specifies more than one variable (<a href="https://github.com/easystats/datawizard/issues/533" class="external-link">#533</a>).</p></li>
 <li><p>Vignettes are no longer provided in the package, they are now only available on the website. There is only one “Overview” vignette available in the package, it contains links to the other vignettes on the website. This is because there are CRAN errors occurring when building vignettes on macOS and we couldn’t determine the cause after multiple patch releases (<a href="https://github.com/easystats/datawizard/issues/534" class="external-link">#534</a>).</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.12.2" id="datawizard-0122">datawizard 0.12.2<a class="anchor" aria-label="anchor" href="#datawizard-0122"></a></h2><p class="text-muted">CRAN release: 2024-07-21</p>
+<h2 class="pkg-version" data-toc-text="0.12.2" id="datawizard-0122">datawizard 0.12.2<a class="anchor" aria-label="anchor" href="#datawizard-0122"></a></h2>
 <ul><li>Remove <code>htmltools</code> from <code>Suggests</code> in an attempt of fixing an error in CRAN checks due to failures to build a vignette (<a href="https://github.com/easystats/datawizard/issues/528" class="external-link">#528</a>).</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.12.1" id="datawizard-0121">datawizard 0.12.1<a class="anchor" aria-label="anchor" href="#datawizard-0121"></a></h2><p class="text-muted">CRAN release: 2024-07-15</p>
+<h2 class="pkg-version" data-toc-text="0.12.1" id="datawizard-0121">datawizard 0.12.1<a class="anchor" aria-label="anchor" href="#datawizard-0121"></a></h2>
 <p>This is a patch release to fix one error on CRAN checks occurring because of a missing package namespace in one of the vignettes.</p>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.12.0" id="datawizard-0120">datawizard 0.12.0<a class="anchor" aria-label="anchor" href="#datawizard-0120"></a></h2><p class="text-muted">CRAN release: 2024-07-11</p>
+<h2 class="pkg-version" data-toc-text="0.12.0" id="datawizard-0120">datawizard 0.12.0<a class="anchor" aria-label="anchor" href="#datawizard-0120"></a></h2>
 <p>BREAKING CHANGES</p>
 <ul><li><p>The argument <code>include_na</code> in <code><a href="../reference/data_tabulate.html">data_tabulate()</a></code> and <code><a href="../reference/data_summary.html">data_summary()</a></code> has been renamed into <code>remove_na</code>. Consequently, to mimic former behaviour, <code>FALSE</code> and <code>TRUE</code> need to be switched (i.e. <code>remove_na = TRUE</code> is equivalent to the former <code>include_na = FALSE</code>).</p></li>
 <li><p>Class names for objects returned by <code><a href="../reference/data_tabulate.html">data_tabulate()</a></code> have been changed to <code>datawizard_table</code> and <code>datawizard_crosstable</code> (resp. the plural forms, <code>*_tables</code>), to provide a clearer and more consistent naming scheme.</p></li>
@@ -193,7 +193,7 @@
 <li><p><code><a href="../reference/demean.html">demean()</a></code> (and <code><a href="../reference/demean.html">degroup()</a></code>) now also work for cross-classified designs, or more generally, for data with multiple grouping or cluster variables (i.e. <code>by</code> can now specify more than one variable).</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.11.0" id="datawizard-0110">datawizard 0.11.0<a class="anchor" aria-label="anchor" href="#datawizard-0110"></a></h2><p class="text-muted">CRAN release: 2024-06-05</p>
+<h2 class="pkg-version" data-toc-text="0.11.0" id="datawizard-0110">datawizard 0.11.0<a class="anchor" aria-label="anchor" href="#datawizard-0110"></a></h2>
 <p>BREAKING CHANGES</p>
 <ul><li>
 <p>Arguments named <code>group</code> or <code>group_by</code> are deprecated and will be removed in a future release. Please use <code>by</code> instead. This affects the following functions in <em>datawizard</em> (<a href="https://github.com/easystats/datawizard/issues/502" class="external-link">#502</a>).</p>
@@ -221,7 +221,7 @@
 <code><a href="../reference/data_to_long.html">data_to_long()</a></code> did not work for data frame where columns had attributes (like labelled data).</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.10.0" id="datawizard-0100">datawizard 0.10.0<a class="anchor" aria-label="anchor" href="#datawizard-0100"></a></h2><p class="text-muted">CRAN release: 2024-03-26</p>
+<h2 class="pkg-version" data-toc-text="0.10.0" id="datawizard-0100">datawizard 0.10.0<a class="anchor" aria-label="anchor" href="#datawizard-0100"></a></h2>
 <p>BREAKING CHANGES</p>
 <ul><li>
 <p>The following arguments were deprecated in 0.5.0 and are now removed:</p>
@@ -240,7 +240,7 @@
 <li><p><code><a href="../reference/data_tabulate.html">data_tabulate()</a></code> was revised and gets several new arguments: a <code>weights</code> argument, to compute weighted frequency tables. <code>include_na</code> allows to include or omit missing values from the table. Furthermore, a <code>by</code> argument was added, to compute crosstables (<a href="https://github.com/easystats/datawizard/issues/479" class="external-link">#479</a>, <a href="https://github.com/easystats/datawizard/issues/481" class="external-link">#481</a>).</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.9.1" id="datawizard-091">datawizard 0.9.1<a class="anchor" aria-label="anchor" href="#datawizard-091"></a></h2><p class="text-muted">CRAN release: 2023-12-21</p>
+<h2 class="pkg-version" data-toc-text="0.9.1" id="datawizard-091">datawizard 0.9.1<a class="anchor" aria-label="anchor" href="#datawizard-091"></a></h2>
 <p>CHANGES</p>
 <ul><li><p><code><a href="../reference/rescale.html">rescale()</a></code> gains <code>multiply</code> and <code>add</code> arguments, to expand ranges by a given factor or value.</p></li>
 <li><p><code><a href="../reference/to_factor.html">to_factor()</a></code> and <code><a href="../reference/to_numeric.html">to_numeric()</a></code> now support class <code>haven_labelled</code>.</p></li>
@@ -250,7 +250,7 @@
 <li><p><code><a href="../reference/convert_to_na.html">convert_to_na()</a></code> now preserves attributes for factors when <code>drop_levels = TRUE</code>.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.9.0" id="datawizard-090">datawizard 0.9.0<a class="anchor" aria-label="anchor" href="#datawizard-090"></a></h2><p class="text-muted">CRAN release: 2023-09-15</p>
+<h2 class="pkg-version" data-toc-text="0.9.0" id="datawizard-090">datawizard 0.9.0<a class="anchor" aria-label="anchor" href="#datawizard-090"></a></h2>
 <p>NEW FUNCTIONS</p>
 <ul><li><p><code><a href="../reference/row_means.html">row_means()</a></code>, to compute row means, optionally only for the rows with at least <code>min_valid</code> non-missing values.</p></li>
 <li><p><code><a href="../reference/contr.deviation.html">contr.deviation()</a></code> for sum-deviation contrast coding of factors.</p></li>
@@ -273,7 +273,7 @@
 <li><p>Fixed issue in <code>empty_column()</code> for strings with invalid multibyte strings. For such data frames or files, <code>empty_column()</code> or <code><a href="../reference/data_read.html">data_read()</a></code> no longer fails.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.8.0" id="datawizard-080">datawizard 0.8.0<a class="anchor" aria-label="anchor" href="#datawizard-080"></a></h2><p class="text-muted">CRAN release: 2023-06-16</p>
+<h2 class="pkg-version" data-toc-text="0.8.0" id="datawizard-080">datawizard 0.8.0<a class="anchor" aria-label="anchor" href="#datawizard-080"></a></h2>
 <p>BREAKING CHANGES</p>
 <ul><li><p>The following re-exported functions from <a href="https://easystats.github.io/insight/" class="external-link">insight</a> have now been removed: <code>object_has_names()</code>, <code>object_has_rownames()</code>, <code>is_empty_object()</code>, <code>compact_list()</code>, <code>compact_character()</code>.</p></li>
 <li><p>Argument <code>na.rm</code> was renamed to <code>remove_na</code> throughout <a href="https://easystats.github.io/datawizard/">datawizard</a> functions. <code>na.rm</code> is kept for backward compatibility, but will be deprecated and later removed in future updates.</p></li>
@@ -296,7 +296,7 @@
 <li><p>The <code>data.frame</code> method of <code><a href="../reference/describe_distribution.html">describe_distribution()</a></code> returns <code>NULL</code> instead of an error if no valid variable were passed (for example a factor variable with <code>include_factors = FALSE</code>) (<a href="https://github.com/easystats/datawizard/issues/421" class="external-link">#421</a>).</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.7.1" id="datawizard-071">datawizard 0.7.1<a class="anchor" aria-label="anchor" href="#datawizard-071"></a></h2><p class="text-muted">CRAN release: 2023-04-03</p>
+<h2 class="pkg-version" data-toc-text="0.7.1" id="datawizard-071">datawizard 0.7.1<a class="anchor" aria-label="anchor" href="#datawizard-071"></a></h2>
 <p>BREAKING CHANGES</p>
 <ul><li>
 <code>add_labs()</code> was renamed into <code><a href="../reference/assign_labels.html">assign_labels()</a></code>. Since <code>add_labs()</code> existed only for a few days, there will be no alias for backwards compatibility.</li>
@@ -310,7 +310,7 @@
 <ul><li>Fix test for CRAN check on Mac OS arm64</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.7.0" id="datawizard-070">datawizard 0.7.0<a class="anchor" aria-label="anchor" href="#datawizard-070"></a></h2><p class="text-muted">CRAN release: 2023-03-22</p>
+<h2 class="pkg-version" data-toc-text="0.7.0" id="datawizard-070">datawizard 0.7.0<a class="anchor" aria-label="anchor" href="#datawizard-070"></a></h2>
 <p>BREAKING CHANGES</p>
 <ul><li>
 <p>In selection patterns, expressions like <code>-var1:var3</code> to exclude all variables between <code>var1</code> and <code>var3</code> are no longer accepted. The correct expression is <code>-(var1:var3)</code>. This is for 2 reasons:</p>
@@ -342,7 +342,7 @@
 <li>Fixed issue with correct labelling of numeric variables with more than nine unique values and associated value labels.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.5" id="datawizard-065">datawizard 0.6.5<a class="anchor" aria-label="anchor" href="#datawizard-065"></a></h2><p class="text-muted">CRAN release: 2022-12-14</p>
+<h2 class="pkg-version" data-toc-text="0.6.5" id="datawizard-065">datawizard 0.6.5<a class="anchor" aria-label="anchor" href="#datawizard-065"></a></h2>
 <p>MAJOR CHANGES</p>
 <ul><li>Etienne Bacher is the new maintainer.</li>
 </ul><p>MINOR CHANGES</p>
@@ -353,7 +353,7 @@
 <li><p>Fixed issue in <code><a href="../reference/data_codebook.html">data_codebook()</a></code>, which failed for labelled vectors when values of labels were not in sorted order.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.4" id="datawizard-064">datawizard 0.6.4<a class="anchor" aria-label="anchor" href="#datawizard-064"></a></h2><p class="text-muted">CRAN release: 2022-11-19</p>
+<h2 class="pkg-version" data-toc-text="0.6.4" id="datawizard-064">datawizard 0.6.4<a class="anchor" aria-label="anchor" href="#datawizard-064"></a></h2>
 <p>NEW FUNCTIONS</p>
 <ul><li><p><code><a href="../reference/data_codebook.html">data_codebook()</a></code>: to generate codebooks of data frames.</p></li>
 <li><p>New functions to deal with duplicates: <code><a href="../reference/data_duplicated.html">data_duplicated()</a></code> (keep all duplicates, including the first occurrence) and <code><a href="../reference/data_unique.html">data_unique()</a></code> (returns the data, excluding all duplicates except one instance of each, based on the selected method).</p></li>
@@ -366,7 +366,7 @@
 <li><p><code><a href="../reference/data_to_wide.html">data_to_wide()</a></code> now drops columns that are not in <code>id_cols</code> (if specified), <code>names_from</code>, or <code>values_from</code>. This is the behaviour observed in <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">tidyr::pivot_wider()</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.3" id="datawizard-063">datawizard 0.6.3<a class="anchor" aria-label="anchor" href="#datawizard-063"></a></h2><p class="text-muted">CRAN release: 2022-10-22</p>
+<h2 class="pkg-version" data-toc-text="0.6.3" id="datawizard-063">datawizard 0.6.3<a class="anchor" aria-label="anchor" href="#datawizard-063"></a></h2>
 <p>MAJOR CHANGES</p>
 <ul><li><p>There is a new publication about the <a href="https://easystats.github.io/datawizard/">datawizard</a> package: <a href="https://joss.theoj.org/papers/10.21105/joss.04684" class="external-link uri">https://joss.theoj.org/papers/10.21105/joss.04684</a></p></li>
 <li><p>Fixes failing tests due to changes in <code>R-devel</code>.</p></li>
@@ -380,7 +380,7 @@
 <code><a href="../reference/data_to_long.html">data_to_long()</a></code> and <code><a href="../reference/data_to_wide.html">data_to_wide()</a></code> now correctly keep the <code>date</code> format.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.2" id="datawizard-062">datawizard 0.6.2<a class="anchor" aria-label="anchor" href="#datawizard-062"></a></h2><p class="text-muted">CRAN release: 2022-10-04</p>
+<h2 class="pkg-version" data-toc-text="0.6.2" id="datawizard-062">datawizard 0.6.2<a class="anchor" aria-label="anchor" href="#datawizard-062"></a></h2>
 <p>BREAKING CHANGES</p>
 <ul><li><p>Methods for grouped data frames (<code>.grouped_df</code>) no longer support <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">dplyr::group_by()</a></code> for <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> before version <code>0.8.0</code>.</p></li>
 <li><p><code><a href="../reference/remove_empty.html">empty_columns()</a></code> and <code><a href="../reference/remove_empty.html">remove_empty_columns()</a></code> now also remove columns that contain only empty characters. Likewise, <code><a href="../reference/remove_empty.html">empty_rows()</a></code> and <code><a href="../reference/remove_empty.html">remove_empty_rows()</a></code> remove observations that completely have missing or empty character values.</p></li>
@@ -392,11 +392,11 @@
 <code><a href="../reference/data_arrange.html">data_arrange()</a></code> now works with data frames that were grouped using <code><a href="../reference/data_group.html">data_group()</a></code> (<a href="https://github.com/easystats/datawizard/issues/274" class="external-link">#274</a>).</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.1" id="datawizard-061">datawizard 0.6.1<a class="anchor" aria-label="anchor" href="#datawizard-061"></a></h2><p class="text-muted">CRAN release: 2022-09-25</p>
+<h2 class="pkg-version" data-toc-text="0.6.1" id="datawizard-061">datawizard 0.6.1<a class="anchor" aria-label="anchor" href="#datawizard-061"></a></h2>
 <ul><li>Updates tests for upcoming changes in the <a href="https://tidyselect.r-lib.org" class="external-link">tidyselect</a> package (<a href="https://github.com/easystats/datawizard/issues/267" class="external-link">#267</a>).</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.0" id="datawizard-060">datawizard 0.6.0<a class="anchor" aria-label="anchor" href="#datawizard-060"></a></h2><p class="text-muted">CRAN release: 2022-09-15</p>
+<h2 class="pkg-version" data-toc-text="0.6.0" id="datawizard-060">datawizard 0.6.0<a class="anchor" aria-label="anchor" href="#datawizard-060"></a></h2>
 <p>BREAKING CHANGES</p>
 <ul><li><p>The minimum needed R version has been bumped to <code>3.6</code>.</p></li>
 <li><p>Following deprecated functions have been removed:</p></li>
@@ -429,11 +429,11 @@
 <ul><li>There is now a vignette summarizing the various ways to select or exclude variables in most <a href="https://easystats.github.io/datawizard/">datawizard</a> functions.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.1" id="datawizard-051">datawizard 0.5.1<a class="anchor" aria-label="anchor" href="#datawizard-051"></a></h2><p class="text-muted">CRAN release: 2022-08-17</p>
+<h2 class="pkg-version" data-toc-text="0.5.1" id="datawizard-051">datawizard 0.5.1<a class="anchor" aria-label="anchor" href="#datawizard-051"></a></h2>
 <ul><li>Fixes failing tests due to <a href="https://nathaneastwood.github.io/poorman/" class="external-link">poorman</a> update.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.0" id="datawizard-050">datawizard 0.5.0<a class="anchor" aria-label="anchor" href="#datawizard-050"></a></h2><p class="text-muted">CRAN release: 2022-08-07</p>
+<h2 class="pkg-version" data-toc-text="0.5.0" id="datawizard-050">datawizard 0.5.0<a class="anchor" aria-label="anchor" href="#datawizard-050"></a></h2>
 <p>MAJOR CHANGES</p>
 <ul><li>
 <p>Following statistical transformation functions have been renamed to not have <code>data_*()</code> prefix, since they do not work exclusively with data frames, but are typically first of all used with vectors, and therefore had misleading names:</p>
@@ -468,7 +468,7 @@
 <ul><li>Fixed wrong column names in <code><a href="../reference/data_to_wide.html">data_to_wide()</a></code> (<a href="https://github.com/easystats/datawizard/issues/173" class="external-link">#173</a>).</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.4.1" id="datawizard-041">datawizard 0.4.1<a class="anchor" aria-label="anchor" href="#datawizard-041"></a></h2><p class="text-muted">CRAN release: 2022-05-16</p>
+<h2 class="pkg-version" data-toc-text="0.4.1" id="datawizard-041">datawizard 0.4.1<a class="anchor" aria-label="anchor" href="#datawizard-041"></a></h2>
 <p>BREAKING</p>
 <ul><li>Added the <code><a href="../reference/standardize.default.html">standardize.default()</a></code> method (moved from package <strong>effectsize</strong>), to be consistent in that the default-method now is in the same package as the generic. <code><a href="../reference/standardize.default.html">standardize.default()</a></code> behaves exactly like in <strong>effectsize</strong> and particularly works for regression model objects. <strong>effectsize</strong> now re-exports <code><a href="../reference/standardize.html">standardize()</a></code> from <strong>datawizard</strong>.</li>
 </ul><p>NEW FUNCTIONS</p>
@@ -492,7 +492,7 @@
 <ul><li>When logicals were passed to <code><a href="../reference/center.html">center()</a></code> or <code><a href="../reference/standardize.html">standardize()</a></code> and <code>force = TRUE</code>, these were not properly converted to numeric variables.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.4.0" id="datawizard-040">datawizard 0.4.0<a class="anchor" aria-label="anchor" href="#datawizard-040"></a></h2><p class="text-muted">CRAN release: 2022-03-30</p>
+<h2 class="pkg-version" data-toc-text="0.4.0" id="datawizard-040">datawizard 0.4.0<a class="anchor" aria-label="anchor" href="#datawizard-040"></a></h2>
 <p>MAJOR CHANGES</p>
 <ul><li><p><code><a href="../reference/data_match.html">data_match()</a></code> now returns filtered data by default. Old behavior (returning rows indices) can be set by setting <code>return_indices = TRUE</code>.</p></li>
 <li><p>The following functions are now re-exported from <a href="https://easystats.github.io/insight/" class="external-link">insight</a> package: <code>object_has_names()</code>, <code>object_has_rownames()</code>, <code>is_empty_object()</code>, <code>compact_list()</code>, <code>compact_character()</code></p></li>
@@ -519,7 +519,7 @@
 <li><p>Fixed CRAN check issues in <code><a href="../reference/data_extract.html">data_extract()</a></code> when more than one variable was extracted from a data frame.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.3.0" id="datawizard-030">datawizard 0.3.0<a class="anchor" aria-label="anchor" href="#datawizard-030"></a></h2><p class="text-muted">CRAN release: 2022-03-02</p>
+<h2 class="pkg-version" data-toc-text="0.3.0" id="datawizard-030">datawizard 0.3.0<a class="anchor" aria-label="anchor" href="#datawizard-030"></a></h2>
 <p>NEW FUNCTIONS</p>
 <ul><li><p>To find or remove empty rows and columns in a data frame: <code><a href="../reference/remove_empty.html">empty_rows()</a></code>, <code><a href="../reference/remove_empty.html">empty_columns()</a></code>, <code><a href="../reference/remove_empty.html">remove_empty_rows()</a></code>, <code><a href="../reference/remove_empty.html">remove_empty_columns()</a></code>, and <code>remove_empty</code>.</p></li>
 <li><p>To check for names: <code>object_has_names()</code> and <code>object_has_rownames()</code>.</p></li>
@@ -532,7 +532,7 @@
 <li><p>Arguments <code>cols</code>, <code>before</code> and <code>after</code> in <code><a href="../reference/data_relocate.html">data_relocate()</a></code> can now also be numeric values, indicating the position of the destination column.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.3" id="datawizard-023">datawizard 0.2.3<a class="anchor" aria-label="anchor" href="#datawizard-023"></a></h2><p class="text-muted">CRAN release: 2022-01-26</p>
+<h2 class="pkg-version" data-toc-text="0.2.3" id="datawizard-023">datawizard 0.2.3<a class="anchor" aria-label="anchor" href="#datawizard-023"></a></h2>
 <ul><li>
 <p>New functions:</p>
 <ul><li><p>to work with lists: <code>is_empty_object()</code> and <code>compact_list()</code></p></li>
@@ -540,7 +540,7 @@
 </ul></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.2" id="datawizard-022">datawizard 0.2.2<a class="anchor" aria-label="anchor" href="#datawizard-022"></a></h2><p class="text-muted">CRAN release: 2022-01-04</p>
+<h2 class="pkg-version" data-toc-text="0.2.2" id="datawizard-022">datawizard 0.2.2<a class="anchor" aria-label="anchor" href="#datawizard-022"></a></h2>
 <ul><li><p>New function <code><a href="../reference/data_extract.html">data_extract()</a></code> (or its alias <code><a href="https://tidyr.tidyverse.org/reference/extract.html" class="external-link">extract()</a></code>) to pull single variables from a data frame, possibly naming each value by the row names of that data frame.</p></li>
 <li><p><code><a href="../reference/reshape_ci.html">reshape_ci()</a></code> gains a <code>ci_type</code> argument, to reshape data frames where CI-columns have prefixes other than <code>"CI"</code>.</p></li>
 <li><p><code><a href="../reference/standardize.html">standardize()</a></code> and <code><a href="../reference/center.html">center()</a></code> gain arguments <code>center</code> and <code>scale</code>, to define references for centrality and deviation that are used when centering or standardizing variables.</p></li>
@@ -550,22 +550,22 @@
 <li><p>Fixed issue in <code>data_findcols()</code>.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.1" id="datawizard-021">datawizard 0.2.1<a class="anchor" aria-label="anchor" href="#datawizard-021"></a></h2><p class="text-muted">CRAN release: 2021-10-04</p>
+<h2 class="pkg-version" data-toc-text="0.2.1" id="datawizard-021">datawizard 0.2.1<a class="anchor" aria-label="anchor" href="#datawizard-021"></a></h2>
 <ul><li><p>Exports <code>plot</code> method for <code><a href="../reference/visualisation_recipe.html">visualisation_recipe()</a></code> objects from <a href="https://easystats.github.io/see/" class="external-link">see</a> package.</p></li>
 <li><p><code><a href="../reference/center.html">centre()</a></code>, <code><a href="../reference/standardize.html">standardise()</a></code>, <code><a href="../reference/standardize.html">unstandardise()</a></code> are exported as aliases for <code><a href="../reference/center.html">center()</a></code>, <code><a href="../reference/standardize.html">standardize()</a></code>, <code><a href="../reference/standardize.html">unstandardize()</a></code>, respectively.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.0.1" id="datawizard-0201">datawizard 0.2.0.1<a class="anchor" aria-label="anchor" href="#datawizard-0201"></a></h2><p class="text-muted">CRAN release: 2021-09-02</p>
+<h2 class="pkg-version" data-toc-text="0.2.0.1" id="datawizard-0201">datawizard 0.2.0.1<a class="anchor" aria-label="anchor" href="#datawizard-0201"></a></h2>
 <ul><li>This is mainly a maintenance release that addresses some issues with conflicting namespaces.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.0" id="datawizard-020">datawizard 0.2.0<a class="anchor" aria-label="anchor" href="#datawizard-020"></a></h2><p class="text-muted">CRAN release: 2021-08-17</p>
+<h2 class="pkg-version" data-toc-text="0.2.0" id="datawizard-020">datawizard 0.2.0<a class="anchor" aria-label="anchor" href="#datawizard-020"></a></h2>
 <ul><li><p>New function: <code><a href="../reference/visualisation_recipe.html">visualisation_recipe()</a></code>.</p></li>
 <li><p>The following function has now moved to <em>performance</em> package: <code>check_multimodal()</code>.</p></li>
 <li><p>Minor updates to documentation, including a new vignette about <code><a href="../reference/demean.html">demean()</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0" id="datawizard-010">datawizard 0.1.0<a class="anchor" aria-label="anchor" href="#datawizard-010"></a></h2><p class="text-muted">CRAN release: 2021-06-18</p>
+<h2 class="pkg-version" data-toc-text="0.1.0" id="datawizard-010">datawizard 0.1.0<a class="anchor" aria-label="anchor" href="#datawizard-010"></a></h2>
 <ul><li>First release.</li>
 </ul></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
