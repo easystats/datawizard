@@ -143,11 +143,11 @@ convert_to_na(
 ``` r
 x <- sample(1:6, size = 30, replace = TRUE)
 x
-#>  [1] 6 4 1 6 6 3 6 5 3 6 2 5 5 3 2 2 2 4 2 2 6 4 4 6 1 6 6 6 3 6
+#>  [1] 5 5 6 3 1 4 6 1 6 1 3 6 4 1 6 6 3 6 5 3 6 2 5 5 3 2 2 2 4 2
 # values 4 and 5 to NA
 convert_to_na(x, na = 4:5)
-#>  [1]  6 NA  1  6  6  3  6 NA  3  6  2 NA NA  3  2  2  2 NA  2  2  6 NA NA  6  1
-#> [26]  6  6  6  3  6
+#>  [1] NA NA  6  3  1 NA  6  1  6  1  3  6 NA  1  6  6  3  6 NA  3  6  2 NA NA  3
+#> [26]  2  2  2 NA  2
 
 # data frames
 set.seed(123)

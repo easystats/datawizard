@@ -2,6 +2,8 @@
 
 ## datawizard 1.3.0
 
+CRAN release: 2025-10-11
+
 BREAKING CHANGES
 
 - Argument `values_fill` in
@@ -75,6 +77,8 @@ BUG FIXES
 
 ## datawizard 1.2.0
 
+CRAN release: 2025-07-17
+
 BREAKING CHANGES
 
 - The following deprecated arguments have been removed
@@ -125,6 +129,8 @@ BUG FIXES
   [`data_match()`](https://easystats.github.io/datawizard/reference/data_match.md).
 
 ## datawizard 1.1.0
+
+CRAN release: 2025-05-09
 
 BREAKING CHANGES
 
@@ -221,6 +227,8 @@ BUG FIXES
 
 ## datawizard 1.0.2
 
+CRAN release: 2025-03-24
+
 BUG FIXES
 
 - Fixed failing R CMD check on ATLAS, noLD, and OpenBLAS due to small
@@ -228,6 +236,8 @@ BUG FIXES
   ([\#592](https://github.com/easystats/datawizard/issues/592)).
 
 ## datawizard 1.0.1
+
+CRAN release: 2025-03-07
 
 BUG FIXES
 
@@ -242,6 +252,8 @@ BUG FIXES
   ([\#588](https://github.com/easystats/datawizard/issues/588)).
 
 ## datawizard 1.0.0
+
+CRAN release: 2025-01-10
 
 BREAKING CHANGES AND DEPRECATIONS
 
@@ -340,8 +352,8 @@ CHANGES
 
 - [`data_summary()`](https://easystats.github.io/datawizard/reference/data_summary.md)
   also accepts the results of
-  [`bayestestR::ci()`](https://rdrr.io/pkg/bayestestR/man/ci.html) as
-  summary function
+  [`bayestestR::ci()`](https://easystats.github.io/bayestestR/reference/ci.html)
+  as summary function
   ([\#483](https://github.com/easystats/datawizard/issues/483)).
 
 - [`ranktransform()`](https://easystats.github.io/datawizard/reference/ranktransform.md)
@@ -361,6 +373,8 @@ BUG FIXES
   format ([\#558](https://github.com/easystats/datawizard/issues/558)).
 
 ## datawizard 0.13.0
+
+CRAN release: 2024-10-05
 
 BREAKING CHANGES
 
@@ -408,6 +422,8 @@ CHANGES
 
 ## datawizard 0.12.3
 
+CRAN release: 2024-09-02
+
 CHANGES
 
 - [`demean()`](https://easystats.github.io/datawizard/reference/demean.md)
@@ -427,16 +443,22 @@ CHANGES
 
 ## datawizard 0.12.2
 
+CRAN release: 2024-07-21
+
 - Remove `htmltools` from `Suggests` in an attempt of fixing an error in
   CRAN checks due to failures to build a vignette
   ([\#528](https://github.com/easystats/datawizard/issues/528)).
 
 ## datawizard 0.12.1
 
+CRAN release: 2024-07-15
+
 This is a patch release to fix one error on CRAN checks occurring
 because of a missing package namespace in one of the vignettes.
 
 ## datawizard 0.12.0
+
+CRAN release: 2024-07-11
 
 BREAKING CHANGES
 
@@ -478,6 +500,8 @@ CHANGES
   specify more than one variable).
 
 ## datawizard 0.11.0
+
+CRAN release: 2024-06-05
 
 BREAKING CHANGES
 
@@ -525,6 +549,8 @@ BUG FIXES
 
 ## datawizard 0.10.0
 
+CRAN release: 2024-03-26
+
 BREAKING CHANGES
 
 - The following arguments were deprecated in 0.5.0 and are now removed:
@@ -564,6 +590,8 @@ CHANGES
 
 ## datawizard 0.9.1
 
+CRAN release: 2023-12-21
+
 CHANGES
 
 - [`rescale()`](https://easystats.github.io/datawizard/reference/rescale.md)
@@ -588,6 +616,8 @@ BUG FIXES
   now preserves attributes for factors when `drop_levels = TRUE`.
 
 ## datawizard 0.9.0
+
+CRAN release: 2023-09-15
 
 NEW FUNCTIONS
 
@@ -673,6 +703,8 @@ BUG FIXES
   no longer fails.
 
 ## datawizard 0.8.0
+
+CRAN release: 2023-06-16
 
 BREAKING CHANGES
 
@@ -770,6 +802,8 @@ BUG FIXES
 
 ## datawizard 0.7.1
 
+CRAN release: 2023-04-03
+
 BREAKING CHANGES
 
 - `add_labs()` was renamed into
@@ -794,6 +828,8 @@ BUG FIXES
 - Fix test for CRAN check on Mac OS arm64
 
 ## datawizard 0.7.0
+
+CRAN release: 2023-03-22
 
 BREAKING CHANGES
 
@@ -884,6 +920,8 @@ BUG FIXES
 
 ## datawizard 0.6.5
 
+CRAN release: 2022-12-14
+
 MAJOR CHANGES
 
 - Etienne Bacher is the new maintainer.
@@ -915,6 +953,8 @@ BUG FIXES
   sorted order.
 
 ## datawizard 0.6.4
+
+CRAN release: 2022-11-19
 
 NEW FUNCTIONS
 
@@ -953,6 +993,8 @@ BUG FIXES
 
 ## datawizard 0.6.3
 
+CRAN release: 2022-10-22
+
 MAJOR CHANGES
 
 - There is a new publication about the
@@ -988,6 +1030,8 @@ BUG FIXES
 
 ## datawizard 0.6.2
 
+CRAN release: 2022-10-04
+
 BREAKING CHANGES
 
 - Methods for grouped data frames (`.grouped_df`) no longer support
@@ -1019,11 +1063,15 @@ BUG FIXES
 
 ## datawizard 0.6.1
 
+CRAN release: 2022-09-25
+
 - Updates tests for upcoming changes in the
   [tidyselect](https://tidyselect.r-lib.org) package
   ([\#267](https://github.com/easystats/datawizard/issues/267)).
 
 ## datawizard 0.6.0
+
+CRAN release: 2022-09-15
 
 BREAKING CHANGES
 
@@ -1107,10 +1155,14 @@ for (i in c("Sepal", "Sp")) {
 
 ## datawizard 0.5.1
 
+CRAN release: 2022-08-17
+
 - Fixes failing tests due to
   [poorman](https://nathaneastwood.github.io/poorman/) update.
 
 ## datawizard 0.5.0
+
+CRAN release: 2022-08-07
 
 MAJOR CHANGES
 
@@ -1243,6 +1295,8 @@ BUG FIXES
 
 ## datawizard 0.4.1
 
+CRAN release: 2022-05-16
+
 BREAKING
 
 - Added the
@@ -1329,6 +1383,8 @@ BUG FIXES
   variables.
 
 ## datawizard 0.4.0
+
+CRAN release: 2022-03-30
 
 MAJOR CHANGES
 
@@ -1437,6 +1493,8 @@ BUG FIXES
 
 ## datawizard 0.3.0
 
+CRAN release: 2022-03-02
+
 NEW FUNCTIONS
 
 - To find or remove empty rows and columns in a data frame:
@@ -1473,6 +1531,8 @@ NEW FUNCTIONS
 
 ## datawizard 0.2.3
 
+CRAN release: 2022-01-26
+
 - New functions:
 
   - to work with lists: `is_empty_object()` and `compact_list()`
@@ -1480,6 +1540,8 @@ NEW FUNCTIONS
   - to work with strings: `compact_character()`
 
 ## datawizard 0.2.2
+
+CRAN release: 2022-01-04
 
 - New function
   [`data_extract()`](https://easystats.github.io/datawizard/reference/data_extract.md)
@@ -1517,6 +1579,8 @@ NEW FUNCTIONS
 
 ## datawizard 0.2.1
 
+CRAN release: 2021-10-04
+
 - Exports `plot` method for
   [`visualisation_recipe()`](https://easystats.github.io/datawizard/reference/visualisation_recipe.md)
   objects from [see](https://easystats.github.io/see/) package.
@@ -1532,10 +1596,14 @@ NEW FUNCTIONS
 
 ## datawizard 0.2.0.1
 
+CRAN release: 2021-09-02
+
 - This is mainly a maintenance release that addresses some issues with
   conflicting namespaces.
 
 ## datawizard 0.2.0
+
+CRAN release: 2021-08-17
 
 - New function:
   [`visualisation_recipe()`](https://easystats.github.io/datawizard/reference/visualisation_recipe.md).
@@ -1547,5 +1615,7 @@ NEW FUNCTIONS
   [`demean()`](https://easystats.github.io/datawizard/reference/demean.md).
 
 ## datawizard 0.1.0
+
+CRAN release: 2021-06-18
 
 - First release.

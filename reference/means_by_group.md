@@ -201,13 +201,13 @@ efc$weight <- abs(rnorm(n = nrow(efc), mean = 1, sd = .5))
 means_by_group(efc, "c12hour", "e42dep", weights = "weight")
 #> # Mean of average number of hours of care per week by elder's dependency
 #> 
-#> Category             |   Mean |  N |    SD |           95% CI |      p
-#> ----------------------------------------------------------------------
-#> independent          |  17.86 |  3 | 11.31 | [-50.28,  86.00] | 0.417 
-#> slightly dependent   |  34.93 |  5 | 30.14 | [-17.67,  87.53] | 0.591 
-#> moderately dependent |  49.00 | 28 | 47.17 | [ 27.08,  70.93] | 0.841 
-#> severely dependent   | 105.33 | 58 | 66.80 | [ 90.13, 120.54] | < .001
-#> Total                |  82.20 | 97 | 65.86 |                  |       
+#> Category             |   Mean |  N |    SD |           95% CI |     p
+#> ---------------------------------------------------------------------
+#> independent          |  15.39 |  2 | 11.31 | [-68.18,  98.95] | 0.430
+#> slightly dependent   |  19.17 |  3 | 14.04 | [-46.71,  85.05] | 0.430
+#> moderately dependent |  54.34 | 32 | 52.64 | [ 33.46,  75.22] | 0.688
+#> severely dependent   | 103.18 | 57 | 66.41 | [ 87.44, 118.91] | 0.001
+#> Total                |  81.71 | 97 | 65.84 |                  |      
 #> 
-#> Anova: R2=0.211; adj.R2=0.186; F=8.288; p<.001
+#> Anova: R2=0.178; adj.R2=0.152; F=6.717; p<.001
 ```

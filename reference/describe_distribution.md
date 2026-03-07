@@ -64,7 +64,7 @@ describe_distribution(
   The point-estimates (centrality indices) to compute. Character
   (vector) or list with one or more of these options: `"median"`,
   `"mean"`, `"MAP"` (see
-  [`map_estimate()`](https://rdrr.io/pkg/bayestestR/man/map_estimate.html)),
+  [`map_estimate()`](https://easystats.github.io/bayestestR/reference/map_estimate.html)),
   `"trimmed"` (which is just `mean(x, trim = threshold)`), `"mode"` or
   `"all"`.
 
@@ -243,7 +243,7 @@ to compute kurtosis (recognized as excess kurtosis).
 describe_distribution(rnorm(100))
 #>  Mean |   SD |  IQR |         Range | Skewness | Kurtosis |   n | n_Missing
 #> ---------------------------------------------------------------------------
-#> -0.05 | 1.07 | 1.69 | [-3.31, 2.46] |    -0.31 |    -0.07 | 100 |         0
+#> -0.03 | 1.09 | 1.69 | [-3.31, 2.71] |    -0.19 |     0.11 | 100 |         0
 
 data(iris)
 describe_distribution(iris)

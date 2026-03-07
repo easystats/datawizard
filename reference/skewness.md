@@ -172,9 +172,9 @@ It is recommended to compute empirical (bootstrapped) standard errors
 skewness(rnorm(1000))
 #> Skewness |    SE
 #> ----------------
-#>    0.093 | 0.077
+#>    0.063 | 0.077
 kurtosis(rnorm(1000))
 #> Kurtosis |    SE
 #> ----------------
-#>   -0.112 | 0.154
+#>   -0.071 | 0.154
 ```

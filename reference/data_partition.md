@@ -108,21 +108,21 @@ data(iris)
 out <- data_partition(iris, proportion = 0.9)
 out$test
 #>    Sepal.Length Sepal.Width Petal.Length Petal.Width    Species .row_id
-#> 1           4.7         3.2          1.3         0.2     setosa       3
-#> 2           4.6         3.1          1.5         0.2     setosa       4
-#> 3           4.8         3.4          1.6         0.2     setosa      12
-#> 4           5.8         4.0          1.2         0.2     setosa      15
-#> 5           5.2         3.4          1.4         0.2     setosa      29
-#> 6           5.5         4.2          1.4         0.2     setosa      34
-#> 7           5.1         3.8          1.6         0.2     setosa      47
-#> 8           4.9         2.4          3.3         1.0 versicolor      58
-#> 9           6.7         3.0          5.0         1.7 versicolor      78
-#> 10          5.5         2.4          3.7         1.0 versicolor      82
-#> 11          7.1         3.0          5.9         2.1  virginica     103
-#> 12          6.7         3.3          5.7         2.1  virginica     125
-#> 13          6.1         3.0          4.9         1.8  virginica     128
-#> 14          7.2         3.0          5.8         1.6  virginica     130
-#> 15          6.0         3.0          4.8         1.8  virginica     139
+#> 1           4.8         3.4          1.6         0.2     setosa      12
+#> 2           5.8         4.0          1.2         0.2     setosa      15
+#> 3           4.8         3.1          1.6         0.2     setosa      31
+#> 4           5.0         3.5          1.3         0.3     setosa      41
+#> 5           6.0         2.2          4.0         1.0 versicolor      63
+#> 6           5.6         2.9          3.6         1.3 versicolor      65
+#> 7           6.7         3.1          4.4         1.4 versicolor      66
+#> 8           6.3         2.5          4.9         1.5 versicolor      73
+#> 9           5.5         2.4          3.8         1.1 versicolor      81
+#> 10          5.7         2.9          4.2         1.3 versicolor      97
+#> 11          6.3         3.3          6.0         2.5  virginica     101
+#> 12          6.3         2.9          5.6         1.8  virginica     104
+#> 13          6.5         3.0          5.8         2.2  virginica     105
+#> 14          5.7         2.5          5.0         2.0  virginica     114
+#> 15          6.9         3.1          5.1         2.3  virginica     142
 nrow(out$p_0.9)
 #> [1] 135
 
@@ -130,21 +130,21 @@ nrow(out$p_0.9)
 out <- data_partition(iris, proportion = 0.9, by = "Species")
 out$test
 #>    Sepal.Length Sepal.Width Petal.Length Petal.Width    Species .row_id
-#> 1           5.4         3.7          1.5         0.2     setosa      11
+#> 1           5.8         4.0          1.2         0.2     setosa      15
 #> 2           5.7         4.4          1.5         0.4     setosa      16
-#> 3           5.2         4.1          1.5         0.1     setosa      33
-#> 4           5.5         3.5          1.3         0.2     setosa      37
-#> 5           5.1         3.4          1.5         0.2     setosa      40
-#> 6           4.9         2.4          3.3         1.0 versicolor      58
-#> 7           5.2         2.7          3.9         1.4 versicolor      60
-#> 8           6.7         3.0          5.0         1.7 versicolor      78
-#> 9           6.0         3.4          4.5         1.6 versicolor      86
-#> 10          6.2         2.9          4.3         1.3 versicolor      98
-#> 11          6.9         3.2          5.7         2.3  virginica     121
-#> 12          7.7         2.8          6.7         2.0  virginica     123
+#> 3           5.7         3.8          1.7         0.3     setosa      19
+#> 4           5.1         3.7          1.5         0.4     setosa      22
+#> 5           4.4         3.0          1.3         0.2     setosa      39
+#> 6           7.0         3.2          4.7         1.4 versicolor      51
+#> 7           6.6         2.9          4.6         1.3 versicolor      59
+#> 8           5.6         2.9          3.6         1.3 versicolor      65
+#> 9           6.2         2.2          4.5         1.5 versicolor      69
+#> 10          6.6         3.0          4.4         1.4 versicolor      76
+#> 11          6.3         3.3          6.0         2.5  virginica     101
+#> 12          6.5         3.0          5.8         2.2  virginica     105
 #> 13          6.3         2.7          4.9         1.8  virginica     124
-#> 14          6.1         3.0          4.9         1.8  virginica     128
-#> 15          6.0         3.0          4.8         1.8  virginica     139
+#> 14          7.2         3.2          6.0         1.8  virginica     126
+#> 15          6.7         3.0          5.2         2.3  virginica     146
 
 # Create multiple partitions
 out <- data_partition(iris, proportion = c(0.3, 0.3))
@@ -152,29 +152,29 @@ lapply(out, head)
 #> $p_0.3
 #>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species .row_id
 #> 1          4.7         3.2          1.3         0.2  setosa       3
-#> 2          5.0         3.6          1.4         0.2  setosa       5
-#> 3          5.4         3.9          1.7         0.4  setosa       6
-#> 4          5.0         3.4          1.5         0.2  setosa       8
-#> 5          4.9         3.1          1.5         0.1  setosa      10
-#> 6          5.4         3.7          1.5         0.2  setosa      11
+#> 2          5.0         3.4          1.5         0.2  setosa       8
+#> 3          4.4         2.9          1.4         0.2  setosa       9
+#> 4          4.9         3.1          1.5         0.1  setosa      10
+#> 5          5.4         3.7          1.5         0.2  setosa      11
+#> 6          4.8         3.4          1.6         0.2  setosa      12
 #> 
 #> $p_0.3
 #>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species .row_id
-#> 1          4.6         3.4          1.4         0.3  setosa       7
-#> 2          4.8         3.0          1.4         0.1  setosa      13
-#> 3          5.7         4.4          1.5         0.4  setosa      16
-#> 4          5.4         3.9          1.3         0.4  setosa      17
-#> 5          5.1         3.5          1.4         0.3  setosa      18
-#> 6          4.6         3.6          1.0         0.2  setosa      23
+#> 1          5.0         3.6          1.4         0.2  setosa       5
+#> 2          5.4         3.9          1.7         0.4  setosa       6
+#> 3          4.6         3.4          1.4         0.3  setosa       7
+#> 4          4.3         3.0          1.1         0.1  setosa      14
+#> 5          5.4         3.9          1.3         0.4  setosa      17
+#> 6          5.7         3.8          1.7         0.3  setosa      19
 #> 
 #> $test
 #>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species .row_id
 #> 1          5.1         3.5          1.4         0.2  setosa       1
 #> 2          4.9         3.0          1.4         0.2  setosa       2
 #> 3          4.6         3.1          1.5         0.2  setosa       4
-#> 4          4.4         2.9          1.4         0.2  setosa       9
-#> 5          4.3         3.0          1.1         0.1  setosa      14
-#> 6          5.8         4.0          1.2         0.2  setosa      15
+#> 4          4.8         3.0          1.4         0.1  setosa      13
+#> 5          5.8         4.0          1.2         0.2  setosa      15
+#> 6          5.1         3.8          1.5         0.3  setosa      20
 #> 
 
 # Create multiple partitions, stratified by group - 30% equally sampled
