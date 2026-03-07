@@ -7,26 +7,6 @@
   model_info
 }
 
-
-#' Print a message saying that an argument is deprecated and that the user
-#' should use its replacement instead.
-#'
-#' @param arg Argument that is deprecated
-#' @param replacement Argument that replaces the deprecated argument
-#' @keywords internal
-.is_deprecated <- function(arg, replacement) {
-  insight::format_warning(
-    paste0(
-      "Argument `",
-      arg,
-      "` is deprecated. Please use `",
-      replacement,
-      "` instead."
-    )
-  )
-}
-
-
 #' `NULL` coalescing operator
 #'
 #' @keywords internal
@@ -208,38 +188,6 @@
 
 
 # For standardize_parameters ----------------------------------------------
-
-#' @keywords internal
-.get_object <- function(x, attribute_name = "object_name") {
-  obj_name <- attr(x, attribute_name, exact = TRUE)
-  model <- NULL
-  if (!is.null(obj_name)) {
-    model <- tryCatch(
-      {
-        get(obj_name, envir = parent.frame())
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-    if (
-      is.null(model) ||
-        # prevent self reference
-        inherits(model, "parameters_model")
-    ) {
-      model <- tryCatch(
-        {
-          get(obj_name, envir = globalenv())
-        },
-        error = function(e) {
-          NULL
-        }
-      )
-    }
-  }
-  model
-}
-
 
 #' Taken from https://github.com/coolbutuseless/gluestick (licence: MIT)
 #' Same functionality as `{glue}`
