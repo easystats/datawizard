@@ -249,9 +249,10 @@ data_summary.grouped_df <- function(x, ..., by = NULL, remove_na = FALSE) {
   # check for correct length of output - must be a single value!
   if (isTRUE(strict)) {
     # Exception: bayestestR::ci()
-    wrong_length <- !inherits(out, "bayestestR_ci") && 
+    wrong_length <- !inherits(out, "bayestestR_ci") &&
       !inherits(out, "bayestestR_eti") &&
       lengths(out) != 1
+
     if (any(wrong_length)) {
       insight::format_error(
         paste0(
