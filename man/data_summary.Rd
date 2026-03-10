@@ -68,4 +68,28 @@ data_summary(
   last = mpg[length(mpg)],
   by = c("am", "gear")
 )
+
+# allow more than one-row-summaries for expressions with strict=FALSE
+d <- data.frame(
+  x = rnorm(100, 1, 1),
+  y = rnorm(100, 2, 2),
+  groups = rep(1:4, each = 25)
+)
+
+data_summary(
+  d,
+  quant_x = quantile(x, c(0.25, 0.75)),
+  quant_y = quantile(y, c(0.25, 0.75)),
+  strict = FALSE
+)
+
+# also works with grouped data
+data_summary(
+  d,
+  quant_x = quantile(x, c(0.25, 0.75)),
+  quant_y = quantile(y, c(0.25, 0.75)),
+  by = "groups",
+  strict = FALSE
+)
+
 }
