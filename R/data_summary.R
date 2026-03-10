@@ -96,7 +96,7 @@ data_summary.data.frame <- function(
     summarise <- .process_datasummary_dots(dots, x, strict)
     # coerce to data frame - suppress warnings because we have warnings
     # for row names checks when strict = FALSE
-    out <- suppressWarnings(data.frame(summarise))
+    out <- as.data.frame(summarise, row.names = NULL)
     colnames(out) <- vapply(summarise, function(i) names(i)[1], character(1))
   } else {
     # sanity check - is "by" a character string?
@@ -135,7 +135,7 @@ data_summary.data.frame <- function(
       # summarize data
       summarise <- .process_datasummary_dots(dots, s, strict)
       # coerce to data frame
-      summarised_data <- suppressWarnings(data.frame(summarise))
+      summarised_data <- as.data.frame(summarise, row.names = NULL)
       # bind grouping-variables and values
       summarised_data <- cbind(s[1, by], summarised_data)
       # make sure we have proper column names
