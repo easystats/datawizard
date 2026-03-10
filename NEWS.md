@@ -14,7 +14,7 @@ BREAKING CHANGES
 * Argument `values_fill` in `data_to_wide()` is now defunct, because it did not
   work as intended (#645).
 
-* `data_to_wide()` no longer removes empty columns that were creatafter
+* `data_to_wide()` no longer removes empty columns that were created after
   widening data frames, to behave similarly to `tidyr::pivot_wider()` (#645).
 
 CHANGES
