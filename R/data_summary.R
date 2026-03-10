@@ -256,9 +256,7 @@ data_summary.grouped_df <- function(x, ..., by = NULL, remove_na = FALSE) {
     if (any(wrong_length)) {
       insight::format_error(
         paste0(
-          "Each expression must return a single value. Following expression",
-          ifelse(sum(wrong_length) > 1, "s", " "),
-          " returned more than one value: ",
+          "Each expression must return a single value. Following expression(s) returned more than one value: ",
           text_concatenate(
             vapply(dots[wrong_length], insight::safe_deparse, character(1)),
             enclose = "\""
