@@ -274,7 +274,7 @@ data_summary.grouped_df <- function(
     # check if we have enough suffixes for the number of expressions
     if (is.list(suffix) && length(suffix) != length(dots)) {
       insight::format_error(
-        "If `suffix` is a list of suffixes, it should have the same length as the number of expressions."
+        "If `suffix` is a list of character vectors, it should have the same length as the number of expressions."
       )
     }
 
@@ -294,14 +294,24 @@ data_summary.grouped_df <- function(
         # returns multiple columns, we get NA column names - we warn the user
         if (is.null(current_suffix) && length(new_variable) > 1) {
           insight::format_error(
-            "Each expression must return a single value, or you must provide a character vector of suffixes for the new variable names using `suffix`."
+            "Each expression must either return a single value, or you must provide a list of character vectors of suffixes for the new variable names using `suffix`."
           )
         } else if (
           !is.null(current_suffix) &&
             length(current_suffix) != length(new_variable)
         ) {
           insight::format_error(
-            "All expressions must return the same number of values and argument `suffix` must have the same length as the result of the summary expression(s)."
+            paste0(
+              "Argument `suffix` must have the same length as the result of the regarding summary expression. `suffix` has ",
+              length(current_suffix),
+              " elements (",
+              text_concatenate(current_suffix, enclose = "`"),
+              ") for the expression `",
+              dots[i],
+              "`, which returned ",
+              length(new_variable),
+              " values."
+            )
           )
         }
         stats::setNames(new_variable, paste0(names(dots)[i], current_suffix))

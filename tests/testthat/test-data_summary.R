@@ -362,6 +362,46 @@ test_that("allow multiple columns for expressions", {
     tolerance = 1e-3
   )
 
+  out <- data_summary(
+    d,
+    quant_x = quantile(x, c(0.25, 0.75)),
+    quant_y = quantile(y, c(0.25, 0.5, 0.75)),
+    suffix = list(c("Q1", "Q3"), c("_Q1", "_Q2", "_Q3"))
+  )
+  expect_equal(
+    out,
+    data.frame(
+      quant_xQ1 = 0.506145762180273,
+      quant_xQ3 = 1.69181916596599,
+      quant_y_Q1 = 0.397791122797595,
+      quant_y_Q2 = 1.54833992341721,
+      quant_y_Q3 = 2.93568710177563
+    ),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+
+  out <- data_summary(
+    d,
+    quant_x = quantile(x, c(0.25, 0.75)),
+    quant_y = quantile(y, c(0.25, 0.5, 0.75)),
+    suffix = list(c("Q1", "Q3"), c("_Q1", "_Q2", "_Q3")),
+    by = "groups"
+  )
+  expect_equal(
+    out,
+    data.frame(
+      groups = c(1, 2, 3, 4),
+      quant_xQ1 = c(0.375, 0.5971, 0.4977, 0.7152),
+      quant_xQ3 = c(1.4609, 1.8216, 1.4482, 1.9935),
+      quant_y_Q1 = c(0.4302, -0.8878, 1.2508, 0.269),
+      quant_y_Q2 = c(1.3049, 1.4756, 2.1306, 1.5274),
+      quant_y_Q3 = c(2.2353, 3.3758, 3.2731, 2.621)
+    ),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+
   # errors ------------------------------------------------------------------
 
   # suffix required for multiple columns, to avoid NA column names
@@ -372,7 +412,7 @@ test_that("allow multiple columns for expressions", {
       quant_y = quantile(y, c(0.1, 0.9)),
       suffix = NULL
     ),
-    regex = "Each expression must return a single value",
+    regex = "Each expression must either return a single value",
     fixed = TRUE
   )
 
@@ -384,7 +424,7 @@ test_that("allow multiple columns for expressions", {
       quant_y = quantile(y, c(0.1, 0.9)),
       suffix = c("a", "b", "c")
     ),
-    regex = "All expressions must return the same number",
+    regex = "Argument `suffix` must have the same length",
     fixed = TRUE
   )
 
@@ -397,7 +437,7 @@ test_that("allow multiple columns for expressions", {
       quant_y = quantile(y, c(0.1, 0.9)),
       suffix = list(c("a", "b"), c("c", "d"), c("e", "f"))
     ),
-    regex = "is a list of suffixes",
+    regex = "If `suffix` is a list of character vectors",
     fixed = TRUE
   )
 })
