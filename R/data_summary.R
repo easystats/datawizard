@@ -94,8 +94,8 @@ data_summary.data.frame <- function(
   if (is.null(by)) {
     # when we have no grouping, just compute a one-row summary
     summarise <- .process_datasummary_dots(dots, x, strict)
-    # coerce to data frame - suppress warnings because we have warnings
-    # for row names checks when strict = FALSE
+    # coerce to data frame - suppress row name checks, because these can
+    # be missing when strict = FALSE
     out <- as.data.frame(summarise, row.names = NULL)
     colnames(out) <- vapply(summarise, function(cn) names(cn)[1], character(1))
   } else {
