@@ -2,8 +2,9 @@
 
 CHANGES
 
-* `data_summary()` gets a `allow_multiple ` argument, to allow summary
-  expressions that return more than one value (e.g. `quantile()`).
+* `data_summary()` now allows expressions to return more than one summary
+  value. For each value, a new column is created. Additionally, the new `suffix ` argument is required for multiple column summaries, to create proper column
+  names.
 
 * `standardize()` now works on `fixest` estimations (#665).
 

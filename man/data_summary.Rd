@@ -7,7 +7,7 @@
 \usage{
 data_summary(x, ...)
 
-\method{data_summary}{data.frame}(x, ..., by = NULL, remove_na = FALSE, allow_multiple = FALSE)
+\method{data_summary}{data.frame}(x, ..., by = NULL, remove_na = FALSE, suffix = NULL)
 }
 \arguments{
 \item{x}{A (grouped) data frame.}
@@ -26,9 +26,10 @@ variables and summary statistics will be computed for each group.}
 grouping variable. If \code{FALSE} (default), missing values are included as a
 level in the grouping variable.}
 
-\item{allow_multiple}{Logical, if \code{FALSE} (default), each expression must
-return a single value. If \code{TRUE}, expressions can return more than one
-value, which will result in a data frame with more rows.}
+\item{suffix}{Character vector or a list of character vectors, indicating the
+suffixes to be added to the new variable names. This is useful when the
+summary function returns more than one value (e.g., \code{quantile()}). If a list,
+it should have the same length as the number of expressions in \code{...}.}
 }
 \value{
 A data frame with the requested summary statistics.
@@ -69,7 +70,7 @@ data_summary(
   by = c("am", "gear")
 )
 
-# allow more than one-row-summaries for expressions with allow_multiple=FALSE
+# allow more than one-column-summaries for expressions
 d <- data.frame(
   x = rnorm(100, 1, 1),
   y = rnorm(100, 2, 2),
@@ -80,16 +81,16 @@ data_summary(
   d,
   quant_x = quantile(x, c(0.25, 0.75)),
   quant_y = quantile(y, c(0.25, 0.75)),
-  allow_multiple = TRUE
+  suffix = c("Q1", "Q3")
 )
 
-# also works with grouped data
+# also works with grouped data, and multiple suffixes
 data_summary(
   d,
   quant_x = quantile(x, c(0.25, 0.75)),
-  quant_y = quantile(y, c(0.25, 0.75)),
+  quant_y = quantile(y, c(0.1, 0.9)),
   by = "groups",
-  allow_multiple = TRUE
+  suffix = list(c("Q1", "Q3"), c("10perc", "90perc"))
 )
 
 }

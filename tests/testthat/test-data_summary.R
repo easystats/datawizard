@@ -282,7 +282,7 @@ test_that("data_summary, extra functions", {
 
 
 test_that("data_summary, bayestestR::ci", {
-  skip_if_not_installed("bayestesR")
+  skip_if_not_installed("bayestestR")
   data(mtcars)
   out <- data_summary(
     mtcars,
@@ -310,65 +310,94 @@ test_that("no warning when variable name and function in global env clash, #583"
 })
 
 
-test_that("allow multiple rows for expressions with allow_multiple=TRUE", {
-  strict_data <- data.frame(
-    school = 1:5,
-    funding = c(10, 20, 30, 40, 50),
-    n_students = c(2, 5, 8, 12, 13)
-  )
-  out <- data_summary(
-    strict_data,
-    school = rep(school, n_students),
-    funding = rep(funding, n_students),
-    allow_multiple = TRUE
-  )
-  expect_identical(nrow(out), 40L)
-  expect_named(out, c("school", "funding"))
-
-  # error when allow_multiple is FALSE
-  expect_error(
-    data_summary(
-      strict_data,
-      school = rep(school, n_students),
-      funding = rep(funding, n_students)
-    ),
-    regex = "allow_multiple = TRUE",
-    fixed = TRUE
-  )
-
-  # NA rownames don't error
+test_that("allow multiple columns for expressions", {
   set.seed(123)
-  strict_data <- data.frame(
+  d <- data.frame(
     x = rnorm(100, 1, 1),
     y = rnorm(100, 2, 2),
     groups = rep(1:4, each = 25)
   )
+
   out <- data_summary(
-    strict_data,
+    d,
     quant_x = quantile(x, c(0.25, 0.75)),
     quant_y = quantile(y, c(0.25, 0.75)),
-    allow_multiple = TRUE
+    suffix = c("Q1", "Q3")
   )
   expect_equal(
-    out$quant_x,
-    c(0.50615, 1.69182),
+    out$quant_xQ1,
+    0.50615,
     tolerance = 1e-3,
     ignore_attr = TRUE
   )
-  expect_named(out, c("quant_x", "quant_y"))
+  expect_named(out, c("quant_xQ1", "quant_xQ3", "quant_yQ1", "quant_yQ3"))
+
+  # multiple column suffixes
+  out <- data_summary(
+    d,
+    quant_x = quantile(x, c(0.25, 0.75)),
+    quant_y = quantile(y, c(0.1, 0.9)),
+    suffix = list(c("Q1", "Q3"), c("10perc", "90perc"))
+  )
+  expect_named(
+    out,
+    c("quant_xQ1", "quant_xQ3", "quant_y10perc", "quant_y90perc")
+  )
 
   # test with grouped data
   out <- data_summary(
-    strict_data,
+    d,
     quant_x = quantile(x, c(0.25, 0.75)),
-    quant_y = quantile(y, c(0.25, 0.75)),
-    by = "groups",
-    allow_multiple = TRUE
+    quant_y = quantile(y, c(0.1, 0.9)),
+    suffix = list(c("Q1", "Q3"), c("10perc", "90perc")),
+    by = "groups"
   )
-  expect_named(out, c("groups", "quant_x", "quant_y"))
+  expect_named(
+    out,
+    c("groups", "quant_xQ1", "quant_xQ3", "quant_y10perc", "quant_y90perc")
+  )
   expect_equal(
-    out$quant_x,
-    c(0.37496, 1.46092, 0.59712, 1.82158, 0.49768, 1.44821, 0.71523, 1.9935),
+    out$quant_xQ1,
+    c(0.37496, 0.59712, 0.49768, 0.71523),
     tolerance = 1e-3
+  )
+
+  # errors ------------------------------------------------------------------
+
+  # suffix required for multiple columns, to avoid NA column names
+  expect_error(
+    data_summary(
+      d,
+      quant_x = quantile(x, c(0.25, 0.75)),
+      quant_y = quantile(y, c(0.1, 0.9)),
+      suffix = NULL
+    ),
+    regex = "Each expression must return a single value",
+    fixed = TRUE
+  )
+
+  # number of elements in suffix must match number of new columns
+  expect_error(
+    data_summary(
+      d,
+      quant_x = quantile(x, c(0.25, 0.75)),
+      quant_y = quantile(y, c(0.1, 0.9)),
+      suffix = c("a", "b", "c")
+    ),
+    regex = "All expressions must return the same number",
+    fixed = TRUE
+  )
+
+  # if suffix is a list, number of elements in suffix must match number of
+  # expressions
+  expect_error(
+    data_summary(
+      d,
+      quant_x = quantile(x, c(0.25, 0.75)),
+      quant_y = quantile(y, c(0.1, 0.9)),
+      suffix = list(c("a", "b"), c("c", "d"), c("e", "f"))
+    ),
+    regex = "is a list of suffixes",
+    fixed = TRUE
   )
 })
