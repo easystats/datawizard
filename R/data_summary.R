@@ -118,9 +118,8 @@ data_summary.data.frame <- function(
   if (is.null(by)) {
     # when we have no grouping, just compute a one-row summary
     summarise <- .process_datasummary_dots(dots, x, strict)
-    # coerce to data frame - suppress row name checks, because these can
-    # be missing when strict = FALSE
-    out <- as.data.frame(summarise, row.names = NULL)
+    # coerce to data frame
+    out <- list2DF(summarise)
     colnames(out) <- vapply(summarise, function(cn) names(cn)[1], character(1))
   } else {
     # sanity check - is "by" a character string?
@@ -248,7 +247,7 @@ data_summary.grouped_df <- function(x, ..., by = NULL, remove_na = FALSE) {
   }
 
   # check for correct length of output - must be a single value!
-  if (strict) {
+  if (isTRUE(strict)) {
     # Exception: bayestestR::ci()
     wrong_length <- !sapply(
       out,

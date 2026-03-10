@@ -340,7 +340,8 @@ test_that("allow multiple rows for expressions with strict=FALSE", {
   set.seed(123)
   strict_data <- data.frame(
     x = rnorm(100, 1, 1),
-    y = rnorm(100, 2, 2)
+    y = rnorm(100, 2, 2),
+    groups = rep(1:4, each = 25)
   )
   out <- data_summary(
     strict_data,
@@ -348,15 +349,15 @@ test_that("allow multiple rows for expressions with strict=FALSE", {
     quant_y = quantile(y, c(0.25, 0.75)),
     strict = FALSE
   )
-  expect_equal(out$quant_x, c(0.50615, 1.69182), tolerance = 1e-3)
+  expect_equal(
+    out$quant_x,
+    c(0.50615, 1.69182),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
   expect_named(out, c("quant_x", "quant_y"))
 
-  set.seed(123)
-  strict_data <- data.frame(
-    x = rnorm(100, 1, 1),
-    y = rnorm(100, 2, 2),
-    groups = rep(1:4, each = 25)
-  )
+  # test with grouped data
   out <- data_summary(
     strict_data,
     quant_x = quantile(x, c(0.25, 0.75)),
