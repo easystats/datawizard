@@ -171,7 +171,7 @@ data_summary.data.frame <- function(
       # summarize data
       summarise <- .process_datasummary_dots(dots, s, suffix)
       # coerce to data frame
-      summarised_data <- as.data.frame(t(unlist(summarise)))
+      summarised_data <- as.data.frame(t(summarise))
       # bind grouping-variables and values
       summarised_data <- cbind(s[1, by], summarised_data)
       # make sure we have proper column names
