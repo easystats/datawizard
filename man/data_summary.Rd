@@ -7,7 +7,7 @@
 \usage{
 data_summary(x, ...)
 
-\method{data_summary}{data.frame}(x, ..., by = NULL, remove_na = FALSE, strict = TRUE)
+\method{data_summary}{data.frame}(x, ..., by = NULL, remove_na = FALSE, allow_multiple = FALSE)
 }
 \arguments{
 \item{x}{A (grouped) data frame.}
@@ -26,9 +26,9 @@ variables and summary statistics will be computed for each group.}
 grouping variable. If \code{FALSE} (default), missing values are included as a
 level in the grouping variable.}
 
-\item{strict}{Logical, if \code{TRUE} (default), each expression must return a
-single value. If \code{FALSE}, expressions can return more than one value, which
-will result in a data frame with more rows.}
+\item{allow_multiple}{Logical, if \code{FALSE} (default), each expression must
+return a single value. If \code{TRUE}, expressions can return more than one
+value, which will result in a data frame with more rows.}
 }
 \value{
 A data frame with the requested summary statistics.
@@ -69,7 +69,7 @@ data_summary(
   by = c("am", "gear")
 )
 
-# allow more than one-row-summaries for expressions with strict=FALSE
+# allow more than one-row-summaries for expressions with allow_multiple=FALSE
 d <- data.frame(
   x = rnorm(100, 1, 1),
   y = rnorm(100, 2, 2),
@@ -80,7 +80,7 @@ data_summary(
   d,
   quant_x = quantile(x, c(0.25, 0.75)),
   quant_y = quantile(y, c(0.25, 0.75)),
-  strict = FALSE
+  allow_multiple = TRUE
 )
 
 # also works with grouped data
@@ -89,7 +89,7 @@ data_summary(
   quant_x = quantile(x, c(0.25, 0.75)),
   quant_y = quantile(y, c(0.25, 0.75)),
   by = "groups",
-  strict = FALSE
+  allow_multiple = TRUE
 )
 
 }

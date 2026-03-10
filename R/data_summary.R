@@ -11,9 +11,9 @@
 #' @param remove_na Logical. If `TRUE`, missing values are omitted from the
 #' grouping variable. If `FALSE` (default), missing values are included as a
 #' level in the grouping variable.
-#' @param strict Logical, if `TRUE` (default), each expression must return a
-#' single value. If `FALSE`, expressions can return more than one value, which
-#' will result in a data frame with more rows.
+#' @param allow_multiple Logical, if `FALSE` (default), each expression must
+#' return a single value. If `TRUE`, expressions can return more than one
+#' value, which will result in a data frame with more rows.
 #' @param ... One or more named expressions that define the new variable name
 #' and the function to compute the summary statistic. Example:
 #' `mean_sepal_width = mean(Sepal.Width)`. The expression can also be provided
@@ -54,7 +54,7 @@
 #'   by = c("am", "gear")
 #' )
 #'
-#' # allow more than one-row-summaries for expressions with strict=FALSE
+#' # allow more than one-row-summaries for expressions with allow_multiple=FALSE
 #' d <- data.frame(
 #'   x = rnorm(100, 1, 1),
 #'   y = rnorm(100, 2, 2),
@@ -65,7 +65,7 @@
 #'   d,
 #'   quant_x = quantile(x, c(0.25, 0.75)),
 #'   quant_y = quantile(y, c(0.25, 0.75)),
-#'   strict = FALSE
+#'   allow_multiple = TRUE
 #' )
 #'
 #' # also works with grouped data
@@ -74,7 +74,7 @@
 #'   quant_x = quantile(x, c(0.25, 0.75)),
 #'   quant_y = quantile(y, c(0.25, 0.75)),
 #'   by = "groups",
-#'   strict = FALSE
+#'   allow_multiple = TRUE
 #' )
 #'
 #' @export
@@ -104,7 +104,7 @@ data_summary.data.frame <- function(
   ...,
   by = NULL,
   remove_na = FALSE,
-  strict = TRUE
+  allow_multiple = FALSE
 ) {
   dots <- eval(substitute(alist(...)))
 
@@ -117,7 +117,7 @@ data_summary.data.frame <- function(
 
   if (is.null(by)) {
     # when we have no grouping, just compute a one-row summary
-    summarise <- .process_datasummary_dots(dots, x, strict)
+    summarise <- .process_datasummary_dots(dots, x, allow_multiple)
     # coerce to data frame
     out <- list2DF(summarise)
     colnames(out) <- vapply(summarise, function(cn) names(cn)[1], character(1))
@@ -156,7 +156,7 @@ data_summary.data.frame <- function(
         return(NULL)
       }
       # summarize data
-      summarise <- .process_datasummary_dots(dots, s, strict)
+      summarise <- .process_datasummary_dots(dots, s, allow_multiple)
       # coerce to data frame
       summarised_data <- as.data.frame(summarise, row.names = NULL)
       # bind grouping-variables and values
@@ -197,7 +197,7 @@ data_summary.grouped_df <- function(x, ..., by = NULL, remove_na = FALSE) {
 
 # helper -----------------------------------------------------------------------
 
-.process_datasummary_dots <- function(dots, data, strict = TRUE) {
+.process_datasummary_dots <- function(dots, data, allow_multiple = FALSE) {
   out <- NULL
   if (length(dots)) {
     # we check for character vector of expressions, in which case
@@ -247,7 +247,7 @@ data_summary.grouped_df <- function(x, ..., by = NULL, remove_na = FALSE) {
   }
 
   # check for correct length of output - must be a single value!
-  if (isTRUE(strict)) {
+  if (!isTRUE(allow_multiple)) {
     # Exception: bayestestR::ci()
     wrong_length <- !inherits(out, "bayestestR_ci") &&
       !inherits(out, "bayestestR_eti") &&
@@ -265,7 +265,7 @@ data_summary.grouped_df <- function(x, ..., by = NULL, remove_na = FALSE) {
         ),
         paste0(
           "\nUse ",
-          sQuote("strict = FALSE"),
+          sQuote("allow_multiple = TRUE"),
           " to allow expressions to return more than one value."
         )
       )

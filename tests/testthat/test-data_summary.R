@@ -310,7 +310,7 @@ test_that("no warning when variable name and function in global env clash, #583"
 })
 
 
-test_that("allow multiple rows for expressions with strict=FALSE", {
+test_that("allow multiple rows for expressions with allow_multiple=TRUE", {
   strict_data <- data.frame(
     school = 1:5,
     funding = c(10, 20, 30, 40, 50),
@@ -320,19 +320,19 @@ test_that("allow multiple rows for expressions with strict=FALSE", {
     strict_data,
     school = rep(school, n_students),
     funding = rep(funding, n_students),
-    strict = FALSE
+    allow_multiple = TRUE
   )
   expect_identical(nrow(out), 40L)
   expect_named(out, c("school", "funding"))
 
-  # error when strict is TRUE
+  # error when allow_multiple is FALSE
   expect_error(
     data_summary(
       strict_data,
       school = rep(school, n_students),
       funding = rep(funding, n_students)
     ),
-    regex = "strict = FALSE",
+    regex = "allow_multiple = TRUE",
     fixed = TRUE
   )
 
@@ -347,7 +347,7 @@ test_that("allow multiple rows for expressions with strict=FALSE", {
     strict_data,
     quant_x = quantile(x, c(0.25, 0.75)),
     quant_y = quantile(y, c(0.25, 0.75)),
-    strict = FALSE
+    allow_multiple = TRUE
   )
   expect_equal(
     out$quant_x,
@@ -363,7 +363,7 @@ test_that("allow multiple rows for expressions with strict=FALSE", {
     quant_x = quantile(x, c(0.25, 0.75)),
     quant_y = quantile(y, c(0.25, 0.75)),
     by = "groups",
-    strict = FALSE
+    allow_multiple = TRUE
   )
   expect_named(out, c("groups", "quant_x", "quant_y"))
   expect_equal(

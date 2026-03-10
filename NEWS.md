@@ -2,8 +2,8 @@
 
 CHANGES
 
-* `data_summary()` gets a `strict` argument, to allow summary expressions that
-  return more than one value (e.g. `quantile()`).
+* `data_summary()` gets a `allow_multiple ` argument, to allow summary
+  expressions that return more than one value (e.g. `quantile()`).
 
 * `standardize()` now works on `fixest` estimations (#665).
 
