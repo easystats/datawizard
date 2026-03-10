@@ -290,6 +290,7 @@ test_that("data_summary, bayestestR::ci", {
     ci = bayestestR::ci(mpg),
     by = c("am", "gear")
   )
+  expect_named(out, c("am", "gear", "mean_value", "CI", "CI_low", "CI_high"))
   expect_snapshot(out)
   expect_error(
     data_summary(
@@ -322,6 +323,7 @@ test_that("allow multiple rows for expressions with strict=FALSE", {
     strict = FALSE
   )
   expect_identical(nrow(out), 40L)
+  expect_named(out, c("school", "funding"))
 
   # error when strict is TRUE
   expect_error(
@@ -347,6 +349,7 @@ test_that("allow multiple rows for expressions with strict=FALSE", {
     strict = FALSE
   )
   expect_equal(out$quant_x, c(0.50615, 1.69182), tolerance = 1e-3)
+  expect_named(out, c("quant_x", "quant_y"))
 
   set.seed(123)
   strict_data <- data.frame(
@@ -361,6 +364,7 @@ test_that("allow multiple rows for expressions with strict=FALSE", {
     by = "groups",
     strict = FALSE
   )
+  expect_named(out, c("groups", "quant_x", "quant_y"))
   expect_equal(
     out$quant_x,
     c(0.37496, 1.46092, 0.59712, 1.82158, 0.49768, 1.44821, 0.71523, 1.9935),

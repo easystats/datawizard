@@ -165,7 +165,7 @@ data_summary.data.frame <- function(
       # make sure we have proper column names
       colnames(summarised_data) <- c(
         by,
-        unlist(lapply(summarise, function(cn) names(cn)[1]))
+        stats::na.omit(unlist(lapply(summarise, names)))
       )
       summarised_data
     })
