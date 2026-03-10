@@ -263,11 +263,7 @@ data_summary.grouped_df <- function(x, ..., by = NULL, remove_na = FALSE) {
           ),
           "."
         ),
-        paste0(
-          "\nUse ",
-          sQuote("allow_multiple = TRUE"),
-          " to allow expressions to return more than one value."
-        )
+        "\nUse `allow_multiple = TRUE` to allow expressions to return more than one value."
       )
     }
   }
