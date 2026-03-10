@@ -307,3 +307,28 @@ test_that("no warning when variable name and function in global env clash, #583"
   dat <- data.frame(rt = 1:10)
   expect_silent(data_summary(dat, rt = mean(rt)))
 })
+
+
+test_that("allow multiple rows for expressions with strict=FALSE", {
+  strict_data <- data.frame(
+    school = 1:5,
+    funding = c(10, 20, 30, 40, 50),
+    n_students = c(2, 5, 8, 12, 13)
+  )
+  out <- data_summary(
+    strict_data,
+    school = rep(school, n_students),
+    funding = rep(funding, n_students),
+    strict = FALSE
+  )
+  expect_identical(nrow(out), 40L)
+  expect_error(
+    data_summary(
+      strict_data,
+      school = rep(school, n_students),
+      funding = rep(funding, n_students)
+    ),
+    regex = "strict = FALSE",
+    fixed = TRUE
+  )
+})

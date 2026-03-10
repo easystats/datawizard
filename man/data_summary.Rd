@@ -7,7 +7,7 @@
 \usage{
 data_summary(x, ...)
 
-\method{data_summary}{data.frame}(x, ..., by = NULL, remove_na = FALSE)
+\method{data_summary}{data.frame}(x, ..., by = NULL, remove_na = FALSE, strict = TRUE)
 }
 \arguments{
 \item{x}{A (grouped) data frame.}
@@ -25,6 +25,10 @@ variables and summary statistics will be computed for each group.}
 \item{remove_na}{Logical. If \code{TRUE}, missing values are omitted from the
 grouping variable. If \code{FALSE} (default), missing values are included as a
 level in the grouping variable.}
+
+\item{strict}{Logical, if \code{TRUE} (default), each expression must return a
+single value. If \code{FALSE}, expressions can return more than one value, which
+will result in a data frame with more rows.}
 }
 \value{
 A data frame with the requested summary statistics.

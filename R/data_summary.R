@@ -11,6 +11,9 @@
 #' @param remove_na Logical. If `TRUE`, missing values are omitted from the
 #' grouping variable. If `FALSE` (default), missing values are included as a
 #' level in the grouping variable.
+#' @param strict Logical, if `TRUE` (default), each expression must return a
+#' single value. If `FALSE`, expressions can return more than one value, which
+#' will result in a data frame with more rows.
 #' @param ... One or more named expressions that define the new variable name
 #' and the function to compute the summary statistic. Example:
 #' `mean_sepal_width = mean(Sepal.Width)`. The expression can also be provided
@@ -72,7 +75,13 @@ data_summary.default <- function(x, ...) {
 
 #' @rdname data_summary
 #' @export
-data_summary.data.frame <- function(x, ..., by = NULL, remove_na = FALSE) {
+data_summary.data.frame <- function(
+  x,
+  ...,
+  by = NULL,
+  remove_na = FALSE,
+  strict = TRUE
+) {
   dots <- eval(substitute(alist(...)))
 
   # do we have any expression at all?
@@ -84,9 +93,11 @@ data_summary.data.frame <- function(x, ..., by = NULL, remove_na = FALSE) {
 
   if (is.null(by)) {
     # when we have no grouping, just compute a one-row summary
-    summarise <- .process_datasummary_dots(dots, x)
-    out <- data.frame(summarise)
-    colnames(out) <- vapply(summarise, names, character(1))
+    summarise <- .process_datasummary_dots(dots, x, strict)
+    # coerce to data frame - suppress warnings because we have warnings
+    # for row names checks when strict = FALSE
+    out <- suppressWarnings(data.frame(summarise))
+    colnames(out) <- vapply(summarise, function(i) names(i)[1], character(1))
   } else {
     # sanity check - is "by" a character string?
     if (!is.character(by)) {
@@ -122,9 +133,9 @@ data_summary.data.frame <- function(x, ..., by = NULL, remove_na = FALSE) {
         return(NULL)
       }
       # summarize data
-      summarise <- .process_datasummary_dots(dots, s)
+      summarise <- .process_datasummary_dots(dots, s, strict)
       # coerce to data frame
-      summarised_data <- data.frame(summarise)
+      summarised_data <- suppressWarnings(data.frame(summarise))
       # bind grouping-variables and values
       summarised_data <- cbind(s[1, by], summarised_data)
       # make sure we have proper column names
@@ -160,7 +171,7 @@ data_summary.grouped_df <- function(x, ..., by = NULL, remove_na = FALSE) {
 
 # helper -----------------------------------------------------------------------
 
-.process_datasummary_dots <- function(dots, data) {
+.process_datasummary_dots <- function(dots, data, strict = TRUE) {
   out <- NULL
   if (length(dots)) {
     # we check for character vector of expressions, in which case
@@ -210,25 +221,33 @@ data_summary.grouped_df <- function(x, ..., by = NULL, remove_na = FALSE) {
   }
 
   # check for correct length of output - must be a single value!
-  # Exception: bayestestR::ci()
-  wrong_length <- !sapply(
-    out,
-    inherits,
-    what = c("bayestestR_ci", "bayestestR_eti")
-  ) &
-    lengths(out) != 1 # nolint
-  if (any(wrong_length)) {
-    insight::format_error(
-      paste0(
-        "Each expression must return a single value. Following expression",
-        ifelse(sum(wrong_length) > 1, "s", " "),
-        " returned more than one value: ",
-        text_concatenate(
-          vapply(dots[wrong_length], insight::safe_deparse, character(1)),
-          enclose = "\""
+  if (strict) {
+    # Exception: bayestestR::ci()
+    wrong_length <- !sapply(
+      out,
+      inherits,
+      what = c("bayestestR_ci", "bayestestR_eti")
+    ) &
+      lengths(out) != 1
+    if (any(wrong_length)) {
+      insight::format_error(
+        paste0(
+          "Each expression must return a single value. Following expression",
+          ifelse(sum(wrong_length) > 1, "s", " "),
+          " returned more than one value: ",
+          text_concatenate(
+            vapply(dots[wrong_length], insight::safe_deparse, character(1)),
+            enclose = "\""
+          ),
+          "."
+        ),
+        paste0(
+          "\nUse ",
+          sQuote("strict = FALSE"),
+          " to allow expressions to return more than one value."
         )
       )
-    )
+    }
   }
 
   out
