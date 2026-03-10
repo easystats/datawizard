@@ -347,4 +347,23 @@ test_that("allow multiple rows for expressions with strict=FALSE", {
     strict = FALSE
   )
   expect_equal(out$quant_x, c(0.50615, 1.69182), tolerance = 1e-3)
+
+  set.seed(123)
+  strict_data <- data.frame(
+    x = rnorm(100, 1, 1),
+    y = rnorm(100, 2, 2),
+    groups = rep(1:4, each = 25)
+  )
+  out <- data_summary(
+    strict_data,
+    quant_x = quantile(x, c(0.25, 0.75)),
+    quant_y = quantile(y, c(0.25, 0.75)),
+    by = "groups",
+    strict = FALSE
+  )
+  expect_equal(
+    out$quant_x,
+    c(0.37496, 1.46092, 0.59712, 1.82158, 0.49768, 1.44821, 0.71523, 1.9935),
+    tolerance = 1e-3
+  )
 })

@@ -97,7 +97,7 @@ data_summary.data.frame <- function(
     # coerce to data frame - suppress warnings because we have warnings
     # for row names checks when strict = FALSE
     out <- as.data.frame(summarise, row.names = NULL)
-    colnames(out) <- vapply(summarise, function(i) names(i)[1], character(1))
+    colnames(out) <- vapply(summarise, function(cn) names(cn)[1], character(1))
   } else {
     # sanity check - is "by" a character string?
     if (!is.character(by)) {
@@ -139,7 +139,10 @@ data_summary.data.frame <- function(
       # bind grouping-variables and values
       summarised_data <- cbind(s[1, by], summarised_data)
       # make sure we have proper column names
-      colnames(summarised_data) <- c(by, unlist(lapply(summarise, names)))
+      colnames(summarised_data) <- c(
+        by,
+        unlist(lapply(summarise, function(cn) names(cn)[1]))
+      )
       summarised_data
     })
     out <- do.call(rbind, out)
