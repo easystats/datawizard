@@ -11,12 +11,12 @@
 #' @param remove_na Logical. If `TRUE`, missing values are omitted from the
 #' grouping variable. If `FALSE` (default), missing values are included as a
 #' level in the grouping variable.
-#' @param suffix Character vector or a list of character vectors, indicating the
-#' suffixes to be added to the new variable names. This is useful when the
-#' summary function returns more than one value (e.g., `quantile()`). If a list,
-#' it should have the same length as the number of expressions in `...`. The new
-#' column names are a combination of the left-hand side (i.e., the name) of the
-#' expression and the related suffixes. See 'Examples'.
+#' @param suffix Optional character vector or a list of character vectors,
+#' indicating the suffixes to be added to the new variable names. This is useful
+#' when the summary function returns more than one value (e.g., `quantile()`).
+#' If a list, it should have the same length as the number of expressions in
+#' `...`. The new column names are a combination of the left-hand side (i.e.,
+#' the name) of the expression and the related suffixes. See 'Examples'.
 #' @param ... One or more named expressions that define the new variable name
 #' and the function to compute the summary statistic. Example:
 #' `mean_sepal_width = mean(Sepal.Width)`. The expression can also be provided
@@ -197,6 +197,14 @@ data_summary.data.frame <- function(
       colnames(summarised_data) <- c(by, names(summarise))
       summarised_data
     })
+    # check for correct number of columns. If one expression returns different
+    # number of values (which now means, we have different number of columns
+    # to bind) for each group, tell user
+    if (!all(lengths(out) == lengths(out)[1])) {
+      insight::format_error(
+        "Each expression must return the same number of values for each group. Some of the expressions seem to return varying numbers of values."
+      )
+    }
     out <- do.call(rbind, out)
   }
   # sort data
@@ -291,11 +299,10 @@ data_summary.grouped_df <- function(
           current_suffix <- suffix
         }
         # if we don't have suffixes for multiple columns, but expression
-        # returns multiple columns, we get NA column names - we warn the user
+        # returns multiple columns, we get NA column names - we use numbered
+        # suffixes in this case
         if (is.null(current_suffix) && length(new_variable) > 1) {
-          insight::format_error(
-            "Each expression must either return a single value, or you must provide a list of character vectors of suffixes for the new variable names using `suffix`."
-          )
+          current_suffix <- paste0("_", seq_along(new_variable))
         } else if (
           !is.null(current_suffix) &&
             length(current_suffix) != length(new_variable)

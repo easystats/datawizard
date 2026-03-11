@@ -292,15 +292,16 @@ test_that("data_summary, bayestestR::ci", {
   )
   expect_named(out, c("am", "gear", "mean_value", "CI", "CI_low", "CI_high"))
   expect_snapshot(out)
-  expect_error(
-    data_summary(
-      mtcars,
-      mw = mean(mpg),
-      test = bayestestR::ci(mpg),
-      yolo = c(mean(mpg), sd(mpg)),
-      by = c("am", "gear")
-    ),
-    regex = "Each expression"
+  out <- data_summary(
+    mtcars,
+    mw = mean(mpg),
+    test = bayestestR::ci(mpg),
+    yolo = c(mean(mpg), sd(mpg)),
+    by = c("am", "gear")
+  )
+  expect_named(
+    out,
+    c("am", "gear", "mw", "CI", "CI_low", "CI_high", "yolo_1", "yolo_2")
   )
 })
 
@@ -402,19 +403,16 @@ test_that("allow multiple columns for expressions", {
     tolerance = 1e-3
   )
 
-  # errors ------------------------------------------------------------------
-
-  # suffix required for multiple columns, to avoid NA column names
-  expect_error(
-    data_summary(
-      d,
-      quant_x = quantile(x, c(0.25, 0.75)),
-      quant_y = quantile(y, c(0.1, 0.9)),
-      suffix = NULL
-    ),
-    regex = "Each expression must either return a single value",
-    fixed = TRUE
+  # automatic suffixes
+  out <- data_summary(
+    d,
+    quant_x = quantile(x, c(0.25, 0.75)),
+    quant_y = quantile(y, c(0.1, 0.9)),
+    suffix = NULL
   )
+  expect_named(out, c("quant_x_1", "quant_x_2", "quant_y_1", "quant_y_2"))
+
+  # errors ------------------------------------------------------------------
 
   # number of elements in suffix must match number of new columns
   expect_error(

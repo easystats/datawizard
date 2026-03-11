@@ -26,12 +26,12 @@ variables and summary statistics will be computed for each group.}
 grouping variable. If \code{FALSE} (default), missing values are included as a
 level in the grouping variable.}
 
-\item{suffix}{Character vector or a list of character vectors, indicating the
-suffixes to be added to the new variable names. This is useful when the
-summary function returns more than one value (e.g., \code{quantile()}). If a list,
-it should have the same length as the number of expressions in \code{...}. The new
-column names are a combination of the left-hand side (i.e., the name) of the
-expression and the related suffixes. See 'Examples'.}
+\item{suffix}{Optional character vector or a list of character vectors,
+indicating the suffixes to be added to the new variable names. This is useful
+when the summary function returns more than one value (e.g., \code{quantile()}).
+If a list, it should have the same length as the number of expressions in
+\code{...}. The new column names are a combination of the left-hand side (i.e.,
+the name) of the expression and the related suffixes. See 'Examples'.}
 }
 \value{
 A data frame with the requested summary statistics.
