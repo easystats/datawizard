@@ -320,12 +320,12 @@ data_summary.grouped_df <- function(
           # by the expression, tell user
           insight::format_error(
             paste0(
-              "Argument `suffix` must have the same length as the result of the regarding summary expression. `suffix` has ",
+              "Argument `suffix` must have the same length as the result of the corresponding summary expression. `suffix` has ",
               length(current_suffix),
               " elements (",
               text_concatenate(current_suffix, enclose = "`"),
               ") for the expression `",
-              dots[i],
+              insight::safe_deparse(dots[[i]]),
               "`, which returned ",
               length(new_variable),
               " values."
