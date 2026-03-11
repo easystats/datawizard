@@ -288,6 +288,8 @@ data_summary.grouped_df <- function(
 
     out <- lapply(seq_along(dots), function(i) {
       new_variable <- .get_new_dots_variable(dots, i, data)
+      # check special case here - we want bayestestR::ci to work with
+      # data summary, to easily create CIs for, say, posterior draws
       if (inherits(new_variable, c("bayestestR_ci", "bayestestR_eti"))) {
         stats::setNames(new_variable, c("CI", "CI_low", "CI_high"))
       } else {
@@ -298,15 +300,18 @@ data_summary.grouped_df <- function(
         } else {
           current_suffix <- suffix
         }
-        # if we don't have suffixes for multiple columns, but expression
-        # returns multiple columns, we get NA column names - we use numbered
-        # suffixes in this case
+
         if (is.null(current_suffix) && length(new_variable) > 1) {
+          # if we don't have suffixes for multiple columns, but expression
+          # returns multiple columns, we get NA column names - we use
+          # automatically numbered suffixes in this case
           current_suffix <- paste0("_", seq_along(new_variable))
         } else if (
           !is.null(current_suffix) &&
             length(current_suffix) != length(new_variable)
         ) {
+          # if number of suffixes does not match the number of returned values
+          # by the expression, tell user
           insight::format_error(
             paste0(
               "Argument `suffix` must have the same length as the result of the regarding summary expression. `suffix` has ",
