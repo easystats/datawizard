@@ -31,7 +31,9 @@ indicating the suffixes to be added to the new variable names. This is useful
 when the summary function returns more than one value (e.g., \code{quantile()}).
 If a list, it should have the same length as the number of expressions in
 \code{...}. The new column names are a combination of the left-hand side (i.e.,
-the name) of the expression and the related suffixes. See 'Examples'.}
+the name) of the expression and the related suffixes. If \code{suffix = NULL}
+(the default), and a summary expression returns multiple values, numbered
+suffixes such as \verb{_1}, \verb{_2}, etc. are automatically added. See 'Examples'.}
 }
 \value{
 A data frame with the requested summary statistics.
