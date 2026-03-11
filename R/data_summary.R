@@ -282,7 +282,13 @@ data_summary.grouped_df <- function(
     # check if we have enough suffixes for the number of expressions
     if (is.list(suffix) && length(suffix) != length(dots)) {
       insight::format_error(
-        "If `suffix` is a list of character vectors, it should have the same length as the number of expressions."
+        paste0(
+          "If `suffix` is a list of character vectors, it should have the same length as the number of expressions. `suffix` has ",
+          length(suffix),
+          " elements, but there are ",
+          length(dots),
+          " expressions."
+        )
       )
     }
 
