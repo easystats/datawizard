@@ -16,7 +16,9 @@
 #' when the summary function returns more than one value (e.g., `quantile()`).
 #' If a list, it should have the same length as the number of expressions in
 #' `...`. The new column names are a combination of the left-hand side (i.e.,
-#' the name) of the expression and the related suffixes. See 'Examples'.
+#' the name) of the expression and the related suffixes. If `suffix = NULL`
+#' (the default), and a summary expression returns multiple values, numbered
+#' suffixes such as `_1`, `_2`, etc. are automatically added. See 'Examples'.
 #' @param ... One or more named expressions that define the new variable name
 #' and the function to compute the summary statistic. Example:
 #' `mean_sepal_width = mean(Sepal.Width)`. The expression can also be provided
