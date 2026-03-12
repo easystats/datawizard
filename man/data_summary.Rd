@@ -26,14 +26,18 @@ variables and summary statistics will be computed for each group.}
 grouping variable. If \code{FALSE} (default), missing values are included as a
 level in the grouping variable.}
 
-\item{suffix}{Optional, a character vector or a list of named character
-vectors, indicating the suffixes to be added to the new variable names. This
-is useful when the summary function returns more than one value (e.g.,
-\code{quantile()}). If \code{suffix} is a list, the names of elements in \code{suffix} must
+\item{suffix}{Optional, suffixes to be added to the new variable names,
+especially useful when a function returns several values (e.g. \code{quantile()}).
+Can be:
+\itemize{
+\item a character vector: all expressions in \code{...} must return the same number
+of values as elements in \code{suffix}.
+\item a list of named character vectors: the names of elements in \code{suffix} must
 match the names of the expressions. It is also allowed to specify suffixes
-for selected expressions only. If \code{suffix} is a character vector, all
-expressions in \code{...} must return the same number of values as elements in
-\code{suffix}. The new column names are a combination of the left-hand side (i.e.,
+for selected expressions only.
+}
+
+The new column names are a combination of the left-hand side (i.e.,
 the name) of the expression and the related suffixes. If \code{suffix = NULL} (the
 default), and a summary expression returns multiple values, either the names
 of the returned values (if any) or automatically numbered suffixes such as
