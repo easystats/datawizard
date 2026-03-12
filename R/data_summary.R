@@ -14,11 +14,14 @@
 #' @param suffix Optional character vector or a list of character vectors,
 #' indicating the suffixes to be added to the new variable names. This is useful
 #' when the summary function returns more than one value (e.g., `quantile()`).
-#' If a list, it should have the same length as the number of expressions in
-#' `...`. The new column names are a combination of the left-hand side (i.e.,
-#' the name) of the expression and the related suffixes. If `suffix = NULL`
-#' (the default), and a summary expression returns multiple values, numbered
-#' suffixes such as `_1`, `_2`, etc. are automatically added. See 'Examples'.
+#' If a list, it should either have the same length as the number of expressions
+#' in `...`, or it should be a *named* list, where the names match the names of
+#' the expressions. The latter allows to specify suffixes for selected
+#' expressions only. The new column names are a combination of the left-hand
+#' side (i.e., the name) of the expression and the related suffixes. If
+#' `suffix = NULL` (the default), and a summary expression returns multiple
+#' values, numbered suffixes such as `_1`, `_2`, etc. are automatically added.
+#' See 'Examples'.
 #' @param ... One or more named expressions that define the new variable name
 #' and the function to compute the summary statistic. Example:
 #' `mean_sepal_width = mean(Sepal.Width)`. The expression can also be provided
@@ -91,11 +94,14 @@
 #'   suffix = list(c("Q1", "Q3"), c("10perc", "90perc"))
 #' )
 #'
+#' # use own suffix only for one expression - other expressions are
+#' # suffixed with `_1`, `_2`, etc.
 #' data_summary(
 #'   d,
 #'   quant_x = quantile(x, c(0.25, 0.75)),
 #'   quant_y = quantile(y, c(0.25, 0.5, 0.75)),
-#'   suffix = list(c("Q1", "Q3"), c("_Q1", "_Q2", "_Q3")),
+#'   mean_x = mean(x),
+#'   suffix = list(quant_y = c("_Q1", "_Q2", "_Q3")),
 #'   by = "groups"
 #' )
 #'
@@ -282,14 +288,20 @@ data_summary.grouped_df <- function(
     }
 
     # check if we have enough suffixes for the number of expressions
-    if (is.list(suffix) && length(suffix) != length(dots)) {
+    # if not, suffix needs to be a named list, so we can match elements
+    # in suffix against the names of the expressions
+    if (
+      is.list(suffix) &&
+        is.null(names(suffix)) &&
+        length(suffix) != length(dots)
+    ) {
       insight::format_error(
         paste0(
           "If `suffix` is a list of character vectors, it should have the same length as the number of expressions. `suffix` has ",
           length(suffix),
           " elements, but there are ",
           length(dots),
-          " expressions."
+          " expressions. Else, it should be a named list, where the names match the names of the expressions."
         )
       )
     }
@@ -304,7 +316,22 @@ data_summary.grouped_df <- function(
         # if we have a list of suffixes, we just want the current one that
         # is related to the current expression
         if (is.list(suffix)) {
-          current_suffix <- suffix[[i]]
+          matching_names <- current_suffix <- NULL
+          # however, if the list is named, we can match suffixes with names
+          # of expressions. this allows, e.g., to specify suffixes only for
+          # selected expressions and you don't need to provide suffixes for
+          # all expressions
+          if (is.null(names(suffix))) {
+            # when suffix is not a named list, we assume that each element
+            # in suffix corresponds to one expression, in the same order
+            current_suffix <- suffix[[i]]
+          } else {
+            # find matches and set use suffix if found
+            matching_names <- which(names(suffix) == names(dots)[i])
+            if (length(matching_names) > 0) {
+              current_suffix <- suffix[[matching_names]]
+            }
+          }
         } else {
           current_suffix <- suffix
         }

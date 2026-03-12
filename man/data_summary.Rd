@@ -29,11 +29,14 @@ level in the grouping variable.}
 \item{suffix}{Optional character vector or a list of character vectors,
 indicating the suffixes to be added to the new variable names. This is useful
 when the summary function returns more than one value (e.g., \code{quantile()}).
-If a list, it should have the same length as the number of expressions in
-\code{...}. The new column names are a combination of the left-hand side (i.e.,
-the name) of the expression and the related suffixes. If \code{suffix = NULL}
-(the default), and a summary expression returns multiple values, numbered
-suffixes such as \verb{_1}, \verb{_2}, etc. are automatically added. See 'Examples'.}
+If a list, it should either have the same length as the number of expressions
+in \code{...}, or it should be a \emph{named} list, where the names match the names of
+the expressions. The latter allows to specify suffixes for selected
+expressions only. The new column names are a combination of the left-hand
+side (i.e., the name) of the expression and the related suffixes. If
+\code{suffix = NULL} (the default), and a summary expression returns multiple
+values, numbered suffixes such as \verb{_1}, \verb{_2}, etc. are automatically added.
+See 'Examples'.}
 }
 \value{
 A data frame with the requested summary statistics.
@@ -106,11 +109,14 @@ data_summary(
   suffix = list(c("Q1", "Q3"), c("10perc", "90perc"))
 )
 
+# use own suffix only for one expression - other expressions are
+# suffixed with `_1`, `_2`, etc.
 data_summary(
   d,
   quant_x = quantile(x, c(0.25, 0.75)),
   quant_y = quantile(y, c(0.25, 0.5, 0.75)),
-  suffix = list(c("Q1", "Q3"), c("_Q1", "_Q2", "_Q3")),
+  mean_x = mean(x),
+  suffix = list(quant_y = c("_Q1", "_Q2", "_Q3")),
   by = "groups"
 )
 

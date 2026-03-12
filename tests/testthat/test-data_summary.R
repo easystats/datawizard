@@ -412,6 +412,29 @@ test_that("allow multiple columns for expressions", {
   )
   expect_named(out, c("quant_x_1", "quant_x_2", "quant_y_1", "quant_y_2"))
 
+  # use own suffix only for one expression - other expressions are
+  # suffixed with `_1`, `_2`, etc.
+  out <- data_summary(
+    d,
+    quant_x = quantile(x, c(0.25, 0.75)),
+    quant_y = quantile(y, c(0.25, 0.5, 0.75)),
+    mean_x = mean(x),
+    suffix = list(quant_y = c("_Q1", "_Q2", "_Q3")),
+    by = "groups"
+  )
+  expect_named(
+    out,
+    c(
+      "groups",
+      "quant_x_1",
+      "quant_x_2",
+      "quant_y_Q1",
+      "quant_y_Q2",
+      "quant_y_Q3",
+      "mean_x"
+    )
+  )
+
   # errors ------------------------------------------------------------------
 
   # number of elements in suffix must match number of new columns
