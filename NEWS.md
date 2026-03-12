@@ -2,6 +2,11 @@
 
 CHANGES
 
+* `data_summary()` now allows expressions to return more than one summary
+  value. For each value, a new column is created. Additionally, the optional
+  `suffix` argument controls the naming of these columns; if `suffix = NULL`,
+  column names are auto-generated (e.g., with numeric suffixes).
+
 * `standardize()` now works on `fixest` estimations (#665).
 
 # datawizard 1.3.0
