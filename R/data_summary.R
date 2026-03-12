@@ -299,7 +299,7 @@ data_summary.grouped_df <- function(
         paste0(
           "If `suffix` is a list of character vectors, it should have the same length as the number of expressions. `suffix` has ",
           length(suffix),
-          " elements, but there are ",
+          " element(s), but there are ",
           length(dots),
           " expressions. Else, if you want to provide names only for some of the expressions, `suffix` should be a named list, where the names match the names of the expressions, e.g.:"
         ),
