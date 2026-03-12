@@ -11,10 +11,10 @@
 #' @param remove_na Logical. If `TRUE`, missing values are omitted from the
 #' grouping variable. If `FALSE` (default), missing values are included as a
 #' level in the grouping variable.
-#' @param suffix Optional, suffixes to be added to the new variable names, 
-#' especially useful when a function returns several values (e.g. `quantile()`). 
+#' @param suffix Optional, suffixes to be added to the new variable names,
+#' especially useful when a function returns several values (e.g. `quantile()`).
 #' Can be:
-#' * a character vector: all expressions in `...` must return the same number 
+#' * a character vector: all expressions in `...` must return the same number
 #'    of values as elements in `suffix`.
 #' * a list of named character vectors: the names of elements in `suffix` must
 #'    match the names of the expressions. It is also allowed to specify suffixes
