@@ -11,17 +11,18 @@
 #' @param remove_na Logical. If `TRUE`, missing values are omitted from the
 #' grouping variable. If `FALSE` (default), missing values are included as a
 #' level in the grouping variable.
-#' @param suffix Optional character vector or a list of character vectors,
-#' indicating the suffixes to be added to the new variable names. This is useful
-#' when the summary function returns more than one value (e.g., `quantile()`).
-#' If a list, it should either have the same length as the number of expressions
-#' in `...`, or it should be a *named* list, where the names match the names of
-#' the expressions. The latter allows to specify suffixes for selected
-#' expressions only. The new column names are a combination of the left-hand
-#' side (i.e., the name) of the expression and the related suffixes. If
-#' `suffix = NULL` (the default), and a summary expression returns multiple
-#' values, numbered suffixes such as `_1`, `_2`, etc. are automatically added.
-#' See 'Examples'.
+#' @param suffix Optional, a character vector or a list of named character
+#' vectors, indicating the suffixes to be added to the new variable names. This
+#' is useful when the summary function returns more than one value (e.g.,
+#' `quantile()`). If `suffix` is a list, the names of elements in `suffix` must
+#' match the names of the expressions. It is also allowed to specify suffixes
+#' for selected expressions only. If `suffix` is a character vector, all
+#' expressions in `...` must return the same number of values as elements in
+#' `suffix`. The new column names are a combination of the left-hand side (i.e.,
+#' the name) of the expression and the related suffixes. If `suffix = NULL` (the
+#' default), and a summary expression returns multiple values, either the names
+#' of the returned values (if any) or automatically numbered suffixes such as
+#' `_1`, `_2`, etc. are used. See 'Examples'.
 #' @param ... One or more named expressions that define the new variable name
 #' and the function to compute the summary statistic. Example:
 #' `mean_sepal_width = mean(Sepal.Width)`. The expression can also be provided
@@ -69,39 +70,40 @@
 #'   groups = rep(1:4, each = 25)
 #' )
 #'
-#' # same suffix for each new column created by the expression
+#' # since we have multiple columns for one expression, the names of the
+#' # returned summary results are used as suffix by default
 #' data_summary(
 #'   d,
 #'   quant_x = quantile(x, c(0.25, 0.75)),
-#'   quant_y = quantile(y, c(0.25, 0.75)),
-#'   suffix = c("Q1", "Q3")
-#' )
-#'
-#' # different summary lengths, requires a list of suffixes
-#' data_summary(
-#'   d,
-#'   quant_x = quantile(x, c(0.25, 0.75)),
-#'   quant_y = quantile(y, c(0.25, 0.5, 0.75)),
-#'   suffix = list(c("Q1", "Q3"), c("_Q1", "_Q2", "_Q3"))
-#' )
-#'
-#' # also works with grouped data, and multiple suffixes
-#' data_summary(
-#'   d,
-#'   quant_x = quantile(x, c(0.25, 0.75)),
-#'   quant_y = quantile(y, c(0.1, 0.9)),
-#'   by = "groups",
-#'   suffix = list(c("Q1", "Q3"), c("10perc", "90perc"))
-#' )
-#'
-#' # use own suffix only for one expression - other expressions are
-#' # suffixed with `_1`, `_2`, etc.
-#' data_summary(
-#'   d,
-#'   quant_x = quantile(x, c(0.25, 0.75)),
-#'   quant_y = quantile(y, c(0.25, 0.5, 0.75)),
 #'   mean_x = mean(x),
-#'   suffix = list(quant_y = c("_Q1", "_Q2", "_Q3")),
+#'   quant_y = quantile(y, c(0.25, 0.5, 0.75))
+#' )
+#'
+#' # if a summary function, like `fivenum()`, returns no named vector, suffixes
+#' # are automatically numbered
+#' data_summary(
+#'   d,
+#'   quant_x = quantile(x, c(0.25, 0.75)),
+#'   mean_x = mean(x),
+#'   fivenum_y = fivenum(y)
+#' )
+#'
+#' # specify column suffix for expressions, matching by names
+#' data_summary(
+#'   d,
+#'   quant_x = quantile(x, c(0.25, 0.75)),
+#'   mean_x = mean(x),
+#'   quant_y = quantile(y, c(0.25, 0.5, 0.75)),
+#'   suffix = list(quant_y = c("_Q1", "_Q2", "_Q3"))
+#' )
+#'
+#' # name multiple expression suffixes, grouped by variable
+#' data_summary(
+#'   d,
+#'   quant_x = quantile(x, c(0.25, 0.75)),
+#'   mean_x = mean(x),
+#'   quant_y = quantile(y, c(0.25, 0.5, 0.75)),
+#'   suffix = list(quant_x = c("Q1", "Q3"), quant_y = c("_Q1", "_Q2", "_Q3")),
 #'   by = "groups"
 #' )
 #'
@@ -287,28 +289,56 @@ data_summary.grouped_df <- function(
       }
     }
 
-    # check if we have enough suffixes for the number of expressions
-    # if not, suffix needs to be a named list, so we can match elements
-    # in suffix against the names of the expressions
-    if (
-      is.list(suffix) &&
-        is.null(names(suffix)) &&
-        length(suffix) != length(dots)
-    ) {
-      insight::format_error(
-        paste0(
-          "If `suffix` is a list of character vectors, it should have the same length as the number of expressions. `suffix` has ",
-          length(suffix),
-          " element(s), but there are ",
-          length(dots),
-          " expressions. Else, if you want to provide names only for some of the expressions, `suffix` should be a named list, where the names match the names of the expressions, e.g.:"
-        ),
-        paste0(
-          "`suffix = list(",
-          names(dots)[1],
-          " = c(\"_suffix1\", \"_suffix2\")`."
+    # sanity check: check the input for the `suffix` argument
+    # `suffix` can be NULL, or must be a (named) list
+    if (!is.null(suffix)) {
+      # if `suffix` is a character vector, we transform it into a list,
+      # matching the names of the expressions
+      if (is.character(suffix)) {
+        suffix <- rep(list(suffix), length(dots))
+        names(suffix) <- names(dots)
+      }
+      # no list? error
+      if (!is.list(suffix)) {
+        insight::format_error(
+          "Argument `suffix` must be a list of (named) character vectors, where the names match the names of the expressions, e.g.:",
+          paste0(
+            "`suffix = list(",
+            names(dots)[1],
+            " = c(\"_suffix1\", \"_suffix2\")`."
+          )
         )
+      }
+      # not all elements named? error
+      if (!length(which(nzchar(names(suffix), keepNA = TRUE)))) {
+        insight::format_error("All elements of `suffix` must have names.")
+      }
+      # names of suffix do not match names of expressions? error
+      if (!all(names(suffix) %in% names(dots))) {
+        wrong_name <- which(!names(suffix) %in% names(dots))[1]
+        insight::format_error(
+          paste0(
+            "Names of `suffix` must match the names of the expressions. Suffix `",
+            names(suffix)[wrong_name],
+            "` has no corresponding expression."
+          )
+        )
+      }
+      # identical suffixes for one expression? error
+      identical_suffix <- vapply(
+        suffix,
+        function(i) insight::n_unique(i) != length(i),
+        logical(1)
       )
+      if (any(identical_suffix)) {
+        insight::format_error(
+          paste0(
+            "All suffixes for a single expression must be unique. Suffix for element `",
+            names(identical_suffix)[which(identical_suffix)][1],
+            "` has duplicate values."
+          )
+        )
+      }
     }
 
     out <- lapply(seq_along(dots), function(i) {
@@ -318,40 +348,34 @@ data_summary.grouped_df <- function(
       if (inherits(new_variable, c("bayestestR_ci", "bayestestR_eti"))) {
         stats::setNames(new_variable, c("CI", "CI_low", "CI_high"))
       } else {
-        # if we have a list of suffixes, we just want the current one that
-        # is related to the current expression
-        if (is.list(suffix)) {
-          matching_names <- current_suffix <- NULL
-          # however, if the list is named, we can match suffixes with names
-          # of expressions. this allows, e.g., to specify suffixes only for
-          # selected expressions and you don't need to provide suffixes for
-          # all expressions
-          if (is.null(names(suffix))) {
-            # when suffix is not a named list, we assume that each element
-            # in suffix corresponds to one expression, in the same order
-            current_suffix <- suffix[[i]]
-          } else {
-            # find matches and set use suffix if found
-            matching_names <- which(names(suffix) == names(dots)[i])
-            if (length(matching_names) > 0) {
-              current_suffix <- suffix[[matching_names]]
-            }
-          }
-        } else {
-          current_suffix <- suffix
+        # init
+        current_suffix <- NULL
+        # find matches and set use suffix if found
+        matching_names <- which(names(suffix) == names(dots)[i])
+        # either use suffixes based on matching names, or try to extract
+        # names from the returned summary expression (saved in "new_variable"),
+        # if the summary function returned a named vector
+        if (length(matching_names) > 0) {
+          current_suffix <- suffix[[matching_names]]
+        } else if (
+          length(new_variable) > 1 &&
+            all(nzchar(names(new_variable), keepNA = TRUE))
+        ) {
+          current_suffix <- names(new_variable)
+        }
+        # if we don't have suffixes for multiple columns, but expression
+        # returns multiple columns, we get NA column names - we use
+        # automatically numbered suffixes in this case
+        if (is.null(current_suffix) && length(new_variable) > 1) {
+          current_suffix <- paste0("_", seq_along(new_variable))
         }
 
-        if (is.null(current_suffix) && length(new_variable) > 1) {
-          # if we don't have suffixes for multiple columns, but expression
-          # returns multiple columns, we get NA column names - we use
-          # automatically numbered suffixes in this case
-          current_suffix <- paste0("_", seq_along(new_variable))
-        } else if (
+        # if number of suffixes does not match the number of returned values
+        # by the expression, error
+        if (
           !is.null(current_suffix) &&
             length(current_suffix) != length(new_variable)
         ) {
-          # if number of suffixes does not match the number of returned values
-          # by the expression, tell user
           insight::format_error(
             paste0(
               "Argument `suffix` must have the same length as the result of the corresponding summary expression. `suffix` has ",

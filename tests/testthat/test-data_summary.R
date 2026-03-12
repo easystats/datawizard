@@ -333,76 +333,6 @@ test_that("allow multiple columns for expressions", {
   )
   expect_named(out, c("quant_xQ1", "quant_xQ3", "quant_yQ1", "quant_yQ3"))
 
-  # multiple column suffixes
-  out <- data_summary(
-    d,
-    quant_x = quantile(x, c(0.25, 0.75)),
-    quant_y = quantile(y, c(0.1, 0.9)),
-    suffix = list(c("Q1", "Q3"), c("10perc", "90perc"))
-  )
-  expect_named(
-    out,
-    c("quant_xQ1", "quant_xQ3", "quant_y10perc", "quant_y90perc")
-  )
-
-  # test with grouped data
-  out <- data_summary(
-    d,
-    quant_x = quantile(x, c(0.25, 0.75)),
-    quant_y = quantile(y, c(0.1, 0.9)),
-    suffix = list(c("Q1", "Q3"), c("10perc", "90perc")),
-    by = "groups"
-  )
-  expect_named(
-    out,
-    c("groups", "quant_xQ1", "quant_xQ3", "quant_y10perc", "quant_y90perc")
-  )
-  expect_equal(
-    out$quant_xQ1,
-    c(0.37496, 0.59712, 0.49768, 0.71523),
-    tolerance = 1e-3
-  )
-
-  out <- data_summary(
-    d,
-    quant_x = quantile(x, c(0.25, 0.75)),
-    quant_y = quantile(y, c(0.25, 0.5, 0.75)),
-    suffix = list(c("Q1", "Q3"), c("_Q1", "_Q2", "_Q3"))
-  )
-  expect_equal(
-    out,
-    data.frame(
-      quant_xQ1 = 0.506145762180273,
-      quant_xQ3 = 1.69181916596599,
-      quant_y_Q1 = 0.397791122797595,
-      quant_y_Q2 = 1.54833992341721,
-      quant_y_Q3 = 2.93568710177563
-    ),
-    ignore_attr = TRUE,
-    tolerance = 1e-4
-  )
-
-  out <- data_summary(
-    d,
-    quant_x = quantile(x, c(0.25, 0.75)),
-    quant_y = quantile(y, c(0.25, 0.5, 0.75)),
-    suffix = list(c("Q1", "Q3"), c("_Q1", "_Q2", "_Q3")),
-    by = "groups"
-  )
-  expect_equal(
-    out,
-    data.frame(
-      groups = c(1, 2, 3, 4),
-      quant_xQ1 = c(0.375, 0.5971, 0.4977, 0.7152),
-      quant_xQ3 = c(1.4609, 1.8216, 1.4482, 1.9935),
-      quant_y_Q1 = c(0.4302, -0.8878, 1.2508, 0.269),
-      quant_y_Q2 = c(1.3049, 1.4756, 2.1306, 1.5274),
-      quant_y_Q3 = c(2.2353, 3.3758, 3.2731, 2.621)
-    ),
-    ignore_attr = TRUE,
-    tolerance = 1e-3
-  )
-
   # automatic suffixes
   out <- data_summary(
     d,
@@ -410,7 +340,7 @@ test_that("allow multiple columns for expressions", {
     quant_y = quantile(y, c(0.1, 0.9)),
     suffix = NULL
   )
-  expect_named(out, c("quant_x_1", "quant_x_2", "quant_y_1", "quant_y_2"))
+  expect_named(out, c("quant_x25%", "quant_x75%", "quant_y10%", "quant_y90%"))
 
   # use own suffix only for one expression - other expressions are
   # suffixed with `_1`, `_2`, etc.
@@ -426,8 +356,8 @@ test_that("allow multiple columns for expressions", {
     out,
     c(
       "groups",
-      "quant_x_1",
-      "quant_x_2",
+      "quant_x25%",
+      "quant_x75%",
       "quant_y_Q1",
       "quant_y_Q2",
       "quant_y_Q3",
@@ -435,30 +365,195 @@ test_that("allow multiple columns for expressions", {
     )
   )
 
+  set.seed(123)
+  d <- data.frame(
+    x = rnorm(100, 1, 1),
+    y = rnorm(100, 2, 2),
+    w = rnorm(100, 3, 0.5),
+    z = rnorm(100, 4, 3),
+    groups = rep(1:4, each = 25)
+  )
+
+  out <- data_summary(
+    d,
+    quant_x = quantile(x, c(0.25, 0.75)),
+    mean_x = mean(x),
+    quant_y = quantile(y, c(0.25, 0.5, 0.75))
+  )
+  expect_equal(
+    out,
+    data.frame(
+      `quant_x25%` = 0.50615,
+      `quant_x75%` = 1.69182,
+      mean_x = 1.09041,
+      `quant_y25%` = 0.39779,
+      `quant_y50%` = 1.54834,
+      `quant_y75%` = 2.93569
+    ),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  out <- data_summary(
+    d,
+    quant_x = quantile(x, c(0.25, 0.75)),
+    mean_x = mean(x),
+    fivenum = fivenum(y)
+  )
+  expect_equal(
+    out,
+    data.frame(
+      `quant_x25%` = 0.50615,
+      `quant_x75%` = 1.69182,
+      mean_x = 1.09041,
+      fivenum_1 = -2.10649,
+      fivenum_2 = 0.36539,
+      fivenum_3 = 1.54834,
+      fivenum_4 = 2.96837,
+      fivenum_5 = 8.48208
+    ),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  out <- data_summary(
+    d,
+    quant_x = quantile(x, c(0.25, 0.75)),
+    mean_x = mean(x),
+    quant_y = quantile(y, c(0.25, 0.5, 0.75)),
+    suffix = list(quant_y = c("_Q1", "_Q2", "_Q3"))
+  )
+  expect_equal(
+    out,
+    data.frame(
+      `quant_x25%` = 0.50615,
+      `quant_x75%` = 1.69182,
+      mean_x = 1.09041,
+      quant_y_Q1 = 0.39779,
+      quant_y_Q2 = 1.54834,
+      quant_y_Q3 = 2.93569
+    ),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  out <- data_summary(
+    d,
+    quant_x = quantile(x, c(0.25, 0.75)),
+    mean_x = mean(x),
+    quant_y = quantile(y, c(0.25, 0.5, 0.75)),
+    suffix = list(quant_x = c("Q1", "Q3"), quant_y = c("_Q1", "_Q2", "_Q3"))
+  )
+  expect_equal(
+    out,
+    data.frame(
+      quant_xQ1 = 0.50615,
+      quant_xQ3 = 1.69182,
+      mean_x = 1.09041,
+      quant_y_Q1 = 0.39779,
+      quant_y_Q2 = 1.54834,
+      quant_y_Q3 = 2.93569
+    ),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
+  out <- data_summary(
+    d,
+    quant_x = quantile(x, c(0.25, 0.5)),
+    quant_w = quantile(w, c(0.25, 0.5)),
+    quant_y = quantile(y, c(0.25, 0.5)),
+    quant_z = quantile(z, c(0.25, 0.5)),
+    suffix = c("_Q1", "_Q2")
+  )
+  expect_equal(
+    out,
+    data.frame(
+      quant_x_Q1 = 0.50615,
+      quant_x_Q2 = 1.06176,
+      quant_w_Q1 = 2.73435,
+      quant_w_Q2 = 3.01796,
+      quant_y_Q1 = 0.39779,
+      quant_y_Q2 = 1.54834,
+      quant_z_Q1 = 1.81187,
+      quant_z_Q2 = 3.98947
+    ),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+
   # errors ------------------------------------------------------------------
 
-  # number of elements in suffix must match number of new columns
   expect_error(
     data_summary(
       d,
       quant_x = quantile(x, c(0.25, 0.75)),
-      quant_y = quantile(y, c(0.1, 0.9)),
-      suffix = c("a", "b", "c")
+      mean_x = mean(x),
+      quant_y = quantile(y, c(0.25, 0.5, 0.75)),
+      suffix = list(quant_xy = c("_Q1", "_Q2", "_Q3"))
+    ),
+    regex = "Names of `suffix` must match the names",
+    fixed = TRUE
+  )
+
+  expect_error(
+    data_summary(
+      d,
+      quant_x = quantile(x, c(0.25, 0.75)),
+      mean_x = mean(x),
+      quant_y = quantile(y, c(0.25, 0.5, 0.75)),
+      suffix = list(c("Q1", "Q3"), "mean", c("_Q1", "_Q2", "_Q3"))
+    ),
+    regex = "All elements of `suffix` must have names.",
+    fixed = TRUE
+  )
+
+  expect_error(
+    data_summary(
+      d,
+      quant_x = quantile(x, c(0.25, 0.75)),
+      mean_x = mean(x),
+      quant_y = quantile(y, c(0.25, 0.5, 0.75)),
+      suffix = c("_Q1", "_Q2", "_Q3")
     ),
     regex = "Argument `suffix` must have the same length",
     fixed = TRUE
   )
 
-  # if suffix is a list, number of elements in suffix must match number of
-  # expressions
   expect_error(
     data_summary(
       d,
       quant_x = quantile(x, c(0.25, 0.75)),
-      quant_y = quantile(y, c(0.1, 0.9)),
-      suffix = list(c("a", "b"), c("c", "d"), c("e", "f"))
+      mean_x = mean(x),
+      quant_y = quantile(y, c(0.25, 0.5, 0.75)),
+      suffix = list(quant_x = c("_Q1", "_Q2", "_Q3"))
     ),
-    regex = "If `suffix` is a list of character vectors",
+    regex = "Argument `suffix` must have the same length",
+    fixed = TRUE
+  )
+
+  expect_error(
+    data_summary(
+      d,
+      quant_x = quantile(x, c(0.25, 0.75)),
+      mean_x = mean(x),
+      quant_y = quantile(y, c(0.25, 0.5, 0.75)),
+      suffix = list(quant_x = c("Q1", "Q3"), quant_y = c("_Q1", "_Q2", "_Q2"))
+    ),
+    regex = "All suffixes for a single expression must be unique",
+    fixed = TRUE
+  )
+
+  expect_error(
+    data_summary(
+      d,
+      quant_x = quantile(x, c(0.25, 0.5)),
+      quant_w = quantile(w, c(0.25, 0.5)),
+      quant_y = quantile(y, c(0.25, 0.5)),
+      quant_z = quantile(z, c(0.25, 0.5)),
+      suffix = c("_Q1", "_Q2", "_Q3")
+    ),
+    regex = "Argument `suffix` must have the same length",
     fixed = TRUE
   )
 })

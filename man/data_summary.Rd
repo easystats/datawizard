@@ -26,17 +26,18 @@ variables and summary statistics will be computed for each group.}
 grouping variable. If \code{FALSE} (default), missing values are included as a
 level in the grouping variable.}
 
-\item{suffix}{Optional character vector or a list of character vectors,
-indicating the suffixes to be added to the new variable names. This is useful
-when the summary function returns more than one value (e.g., \code{quantile()}).
-If a list, it should either have the same length as the number of expressions
-in \code{...}, or it should be a \emph{named} list, where the names match the names of
-the expressions. The latter allows to specify suffixes for selected
-expressions only. The new column names are a combination of the left-hand
-side (i.e., the name) of the expression and the related suffixes. If
-\code{suffix = NULL} (the default), and a summary expression returns multiple
-values, numbered suffixes such as \verb{_1}, \verb{_2}, etc. are automatically added.
-See 'Examples'.}
+\item{suffix}{Optional, a character vector or a list of named character
+vectors, indicating the suffixes to be added to the new variable names. This
+is useful when the summary function returns more than one value (e.g.,
+\code{quantile()}). If \code{suffix} is a list, the names of elements in \code{suffix} must
+match the names of the expressions. It is also allowed to specify suffixes
+for selected expressions only. If \code{suffix} is a character vector, all
+expressions in \code{...} must return the same number of values as elements in
+\code{suffix}. The new column names are a combination of the left-hand side (i.e.,
+the name) of the expression and the related suffixes. If \code{suffix = NULL} (the
+default), and a summary expression returns multiple values, either the names
+of the returned values (if any) or automatically numbered suffixes such as
+\verb{_1}, \verb{_2}, etc. are used. See 'Examples'.}
 }
 \value{
 A data frame with the requested summary statistics.
@@ -84,39 +85,40 @@ d <- data.frame(
   groups = rep(1:4, each = 25)
 )
 
-# same suffix for each new column created by the expression
+# since we have multiple columns for one expression, the names of the
+# returned summary results are used as suffix by default
 data_summary(
   d,
   quant_x = quantile(x, c(0.25, 0.75)),
-  quant_y = quantile(y, c(0.25, 0.75)),
-  suffix = c("Q1", "Q3")
-)
-
-# different summary lengths, requires a list of suffixes
-data_summary(
-  d,
-  quant_x = quantile(x, c(0.25, 0.75)),
-  quant_y = quantile(y, c(0.25, 0.5, 0.75)),
-  suffix = list(c("Q1", "Q3"), c("_Q1", "_Q2", "_Q3"))
-)
-
-# also works with grouped data, and multiple suffixes
-data_summary(
-  d,
-  quant_x = quantile(x, c(0.25, 0.75)),
-  quant_y = quantile(y, c(0.1, 0.9)),
-  by = "groups",
-  suffix = list(c("Q1", "Q3"), c("10perc", "90perc"))
-)
-
-# use own suffix only for one expression - other expressions are
-# suffixed with `_1`, `_2`, etc.
-data_summary(
-  d,
-  quant_x = quantile(x, c(0.25, 0.75)),
-  quant_y = quantile(y, c(0.25, 0.5, 0.75)),
   mean_x = mean(x),
-  suffix = list(quant_y = c("_Q1", "_Q2", "_Q3")),
+  quant_y = quantile(y, c(0.25, 0.5, 0.75))
+)
+
+# if a summary function, like `fivenum()`, returns no named vector, suffixes
+# are automatically numbered
+data_summary(
+  d,
+  quant_x = quantile(x, c(0.25, 0.75)),
+  mean_x = mean(x),
+  fivenum_y = fivenum(y)
+)
+
+# specify column suffix for expressions, matching by names
+data_summary(
+  d,
+  quant_x = quantile(x, c(0.25, 0.75)),
+  mean_x = mean(x),
+  quant_y = quantile(y, c(0.25, 0.5, 0.75)),
+  suffix = list(quant_y = c("_Q1", "_Q2", "_Q3"))
+)
+
+# name multiple expression suffixes, grouped by variable
+data_summary(
+  d,
+  quant_x = quantile(x, c(0.25, 0.75)),
+  mean_x = mean(x),
+  quant_y = quantile(y, c(0.25, 0.5, 0.75)),
+  suffix = list(quant_x = c("Q1", "Q3"), quant_y = c("_Q1", "_Q2", "_Q3")),
   by = "groups"
 )
 
