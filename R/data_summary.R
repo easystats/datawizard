@@ -301,7 +301,12 @@ data_summary.grouped_df <- function(
           length(suffix),
           " elements, but there are ",
           length(dots),
-          " expressions. Else, it should be a named list, where the names match the names of the expressions."
+          " expressions. Else, if you want to provide names only for some of the expressions, `suffix` should be a named list, where the names match the names of the expressions, e.g.:"
+        ),
+        paste0(
+          "`suffix = list(",
+          names(dots)[1],
+          " = c(\"_suffix1\", \"_suffix2\")`."
         )
       )
     }
