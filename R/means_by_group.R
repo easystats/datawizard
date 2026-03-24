@@ -38,7 +38,7 @@
 #' means_by_group(iris, "Sepal.Width", "Species")
 #'
 #' # weighting
-#' efc$weight <- abs(rnorm(n = nrow(efc), mean = 1, sd = .5))
+#' efc$weight <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
 #' means_by_group(efc, "c12hour", "e42dep", weights = "weight")
 #' @export
 means_by_group <- function(x, ...) {
