@@ -197,7 +197,7 @@ means_by_group(iris, "Sepal.Width", "Species")
 #> Anova: R2=0.401; adj.R2=0.393; F=49.160; p<.001
 
 # weighting
-efc$weight <- abs(rnorm(n = nrow(efc), mean = 1, sd = .5))
+efc$weight <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
 means_by_group(efc, "c12hour", "e42dep", weights = "weight")
 #> # Mean of average number of hours of care per week by elder's dependency
 #> 

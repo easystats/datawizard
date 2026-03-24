@@ -232,7 +232,7 @@ normalize(c(0, 1, 5, -5, -2), include_bounds = FALSE)
 #> (original range = -5 to 5)
 #> 
 # use a value defining the bounds
-normalize(c(0, 1, 5, -5, -2), include_bounds = .001)
+normalize(c(0, 1, 5, -5, -2), include_bounds = 0.001)
 #> [1] 0.5000 0.5998 0.9990 0.0010 0.3004
 #> (original range = -5 to 5)
 #> 
