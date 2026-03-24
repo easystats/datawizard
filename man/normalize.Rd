@@ -164,7 +164,7 @@ from the input data frame.
 normalize(c(0, 1, 5, -5, -2))
 normalize(c(0, 1, 5, -5, -2), include_bounds = FALSE)
 # use a value defining the bounds
-normalize(c(0, 1, 5, -5, -2), include_bounds = .001)
+normalize(c(0, 1, 5, -5, -2), include_bounds = 0.001)
 
 head(normalize(trees))
 
