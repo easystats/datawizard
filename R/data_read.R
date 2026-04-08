@@ -26,8 +26,9 @@
 #' converted into factors and exported as character columns - else, value labels
 #' would be lost and only numeric values are written to the file.
 #' @param password Password for data encryption. If not `NULL`, the data will be
-#'   encrypted (for `data_write()`) or decrypted (for `data_read()`) using the
-#'   provided password.
+#' encrypted (for `data_write()`) or decrypted (for `data_read()`) using the
+#' provided password. Encryption is not yet supported for SPSS, SAS or Stata
+#' files.
 #' @param verbose Toggle warnings and messages.
 #' @param ... Arguments passed to the related `read_*()` or `write_*()` functions.
 #'
@@ -115,14 +116,13 @@ data_read <- function(
     xls = ,
     xlsx = .read_excel(path, encoding, password, verbose, ...),
     sav = ,
-    por = .read_spss(path, encoding, convert_factors, password, verbose, ...),
-    dta = .read_stata(path, encoding, convert_factors, password, verbose, ...),
+    por = .read_spss(path, encoding, convert_factors, verbose, ...),
+    dta = .read_stata(path, encoding, convert_factors, verbose, ...),
     sas7bdat = .read_sas(
       path,
       path_catalog,
       encoding,
       convert_factors,
-      password,
       verbose,
       ...
     ),
@@ -261,7 +261,6 @@ data_read <- function(
   path,
   encoding,
   convert_factors,
-  password,
   verbose,
   ...
 ) {
@@ -274,9 +273,6 @@ data_read <- function(
   }
   out <- haven::read_sav(file = path, encoding = encoding, user_na = FALSE, ...)
 
-  # data decryption
-  out <- .data_decryption(out, password)
-
   .post_process_imported_data(out, convert_factors, verbose)
 }
 
@@ -285,7 +281,6 @@ data_read <- function(
   path,
   encoding,
   convert_factors,
-  password,
   verbose,
   ...
 ) {
@@ -298,9 +293,6 @@ data_read <- function(
   }
   out <- haven::read_dta(file = path, encoding = encoding, ...)
 
-  # data decryption
-  out <- .data_decryption(out, password)
-
   .post_process_imported_data(out, convert_factors, verbose)
 }
 
@@ -310,7 +302,6 @@ data_read <- function(
   path_catalog,
   encoding,
   convert_factors,
-  password,
   verbose,
   ...
 ) {
@@ -327,9 +318,6 @@ data_read <- function(
     encoding = encoding,
     ...
   )
-
-  # data decryption
-  out <- .data_decryption(out, password)
 
   .post_process_imported_data(out, convert_factors, verbose)
 }
