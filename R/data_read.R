@@ -127,7 +127,7 @@ data_read <- function(
       ...
     ),
     parquet = .read_parquet(path, verbose, ...),
-    .read_unknown(path, file_type, password, verbose, ...)
+    .read_unknown(path, file_type, verbose, ...)
   )
 
   # tell user about empty columns
@@ -344,7 +344,7 @@ data_read <- function(
 }
 
 
-.read_unknown <- function(path, file_type, password, verbose, ...) {
+.read_unknown <- function(path, file_type, verbose, ...) {
   insight::check_if_installed(
     "rio",
     reason = paste0("to read files of type '", file_type, "'")
@@ -359,9 +359,6 @@ data_read <- function(
     rio_args$trust <- TRUE
   }
   out <- do.call(rio::import, c(rio_args, list(...)))
-
-  # data decryption
-  out <- .data_decryption(out, password)
 
   # check if loaded file is a data frame, or not (e.g. model objects)
   # it returns `NULL` if the file is no valid data file that contains a data
