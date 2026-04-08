@@ -317,7 +317,6 @@ data_read <- function(
     insight::format_alert("Reading data...")
   }
   out <- readxl::read_excel(path, ...)
-
   class(out) <- "data.frame"
   out
 }
