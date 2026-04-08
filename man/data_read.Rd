@@ -48,8 +48,8 @@ would be lost and only numeric values are written to the file.}
 
 \item{password}{Password for data encryption. If not \code{NULL}, the data will be
 encrypted (for \code{data_write()}) or decrypted (for \code{data_read()}) using the
-provided password. Encryption is not yet supported for SPSS, SAS or Stata
-files.}
+provided password. Encryption is currently only supported for R file formats
+(\code{.rds}, \code{.rda} and \code{.rdata}).}
 
 \item{verbose}{Toggle warnings and messages.}
 

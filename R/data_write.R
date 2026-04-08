@@ -94,11 +94,16 @@ data_write <- function(
 # nanoparquet -----
 
 .write_parquet <- function(data, path, password, verbose = TRUE, ...) {
+  # saving raw columns in data frames in not yet supported by haven, thus,
+  # we cannot save encrypted data right now.
+  if (!is.null(password)) {
+    insight::format_error(
+      "Data encryption is not supported for parquet-files."
+    )
+  }
+
   # requires nanoparquet package
   insight::check_if_installed("nanoparquet")
-
-  # encrypt data
-  data <- .data_encryption(data, password)
 
   # save single data frame
   nanoparquet::write_parquet(x = data, file = path, ...)
@@ -118,6 +123,14 @@ data_write <- function(
   verbose = TRUE,
   ...
 ) {
+  # data encryption requires a data frame *with attributes* to be saved, which
+  # is not possible for text or raw formats - thus, no encryption here
+  if (!is.null(password)) {
+    insight::format_error(
+      "Data encryption is not supported for CSV or text files."
+    )
+  }
+
   # save labels
   if (save_labels && type == "csv") {
     data <- .save_labels_to_file(data, path, delimiter, verbose)
@@ -127,9 +140,6 @@ data_write <- function(
   if (convert_factors) {
     data <- .pre_process_exported_data(data, convert_factors)
   }
-
-  # encrypt data
-  data <- .data_encryption(data, password)
 
   if (type == "csv") {
     insight::check_if_installed("readr")
@@ -387,7 +397,7 @@ data_write <- function(
     data <- .encrypt_data(data, password)
     # tell user to remember the password
     insight::format_warning(
-      "Remeber your `password`, else you will not be able to decrypt the data again!"
+      "Remember your `password`, else you will not be able to decrypt the data again!"
     )
   }
   data

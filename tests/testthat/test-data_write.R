@@ -14,6 +14,57 @@ d <- data_filter(efc, 1:5)
 d$e42dep <- droplevels(d$e42dep)
 
 
+# data encryption with rds ------------------
+
+test_that("data_write, encrypting rds files", {
+  skip_if_not_installed("withr")
+  skip_if_not_installed("openssl")
+  withr::with_tempfile("tmp", fileext = ".rds", code = {
+    expect_warning(data_write(d, tmp, password = "test"), "Remember")
+
+    # no password, returns encrypted data frame
+    d2 <- data_read(tmp, verbose = FALSE)
+    expect_named(d2, "encrypted")
+
+    # password, returns decrypted data frame
+    d2 <- data_read(tmp, password = "test")
+    expect_identical(d, d2)
+  })
+})
+
+
+# data encryption with rdata ------------------
+
+test_that("data_write, encrypting rdata files", {
+  skip_if_not_installed("withr")
+  skip_if_not_installed("openssl")
+  withr::with_tempfile("tmp", fileext = ".rdata", code = {
+    expect_warning(data_write(d, tmp, password = "test"), "Remember")
+
+    # no password, returns encrypted data frame
+    d2 <- data_read(tmp, verbose = FALSE)
+    expect_named(d2, "encrypted")
+
+    # password, returns decrypted data frame
+    d2 <- data_read(tmp, password = "test")
+    expect_identical(d, d2)
+  })
+})
+
+
+# data encryption with parquet ------------------
+
+test_that("data_write, encrypting parquet files", {
+  skip_if_not_installed("withr")
+  withr::with_tempfile("tmp", fileext = ".parquet", code = {
+    expect_error(
+      data_write(d, tmp, password = "test"),
+      "Data encryption is not supported"
+    )
+  })
+})
+
+
 # SPSS -------------------------------------
 
 test_that("data_write, SPSS", {
@@ -100,6 +151,12 @@ test_that("data_write, CSV, keep numeric", {
       to_numeric(d, dummy_factors = FALSE, preserve_levels = TRUE),
       d2,
       ignore_attr = TRUE
+    )
+
+    # data encryption not available for SPSS etc.
+    expect_error(
+      data_write(d, tmp, password = "test"),
+      "Data encryption is not supported"
     )
   })
 })

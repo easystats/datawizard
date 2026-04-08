@@ -27,8 +27,8 @@
 #' would be lost and only numeric values are written to the file.
 #' @param password Password for data encryption. If not `NULL`, the data will be
 #' encrypted (for `data_write()`) or decrypted (for `data_read()`) using the
-#' provided password. Encryption is not yet supported for SPSS, SAS or Stata
-#' files.
+#' provided password. Encryption is currently only supported for R file formats
+#' (`.rds`, `.rda` and `.rdata`).
 #' @param verbose Toggle warnings and messages.
 #' @param ... Arguments passed to the related `read_*()` or `write_*()` functions.
 #'
@@ -109,12 +109,12 @@ data_read <- function(
   out <- switch(
     file_type,
     txt = ,
-    csv = .read_text(path, encoding, password, verbose, ...),
+    csv = .read_text(path, encoding, verbose, ...),
     rda = ,
     rdata = .read_base_rda(path, file_type, password, verbose, ...),
     rds = .read_base_rds(path, password, verbose, ...),
     xls = ,
-    xlsx = .read_excel(path, encoding, password, verbose, ...),
+    xlsx = .read_excel(path, encoding, verbose, ...),
     sav = ,
     por = .read_spss(path, encoding, convert_factors, verbose, ...),
     dta = .read_stata(path, encoding, convert_factors, verbose, ...),
@@ -323,7 +323,7 @@ data_read <- function(
 }
 
 
-.read_excel <- function(path, encoding, password, verbose, ...) {
+.read_excel <- function(path, encoding, verbose, ...) {
   insight::check_if_installed(
     "readxl",
     reason = paste0("to read files of type '", .file_ext(path), "'")
@@ -333,15 +333,12 @@ data_read <- function(
   }
   out <- readxl::read_excel(path, ...)
 
-  # data decryption
-  out <- .data_decryption(out, password)
-
   class(out) <- "data.frame"
   out
 }
 
 
-.read_text <- function(path, encoding, password, verbose, ...) {
+.read_text <- function(path, encoding, verbose, ...) {
   if (insight::check_if_installed("data.table", quietly = TRUE)) {
     # set proper default encoding-value for fread
     if (is.null(encoding)) {
@@ -359,10 +356,6 @@ data_read <- function(
     insight::format_alert("Reading data...")
   }
   out <- readr::read_delim(path, ...)
-
-  # data decryption
-  out <- .data_decryption(out, password)
-
   as.data.frame(out)
 }
 
@@ -487,7 +480,6 @@ data_read <- function(
 
   # data decryption
   out <- .data_decryption(out, password)
-
   as.data.frame(out)
 }
 

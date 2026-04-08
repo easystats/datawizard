@@ -9,6 +9,10 @@ CHANGES
 
 * `standardize()` now works on `fixest` estimations (#665).
 
+* `data_read()` and `data_write()` gain a `password` argument, to encrypt and
+  decrypt data files. This currently only works for R file formats (`.rda`,
+  `.rds`, and `.rdata`).
+
 # datawizard 1.3.0
 
 BREAKING CHANGES
