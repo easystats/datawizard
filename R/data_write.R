@@ -53,28 +53,33 @@ data_write <- function(
       delimiter,
       convert_factors,
       save_labels,
+      password,
       verbose,
       ...
     )
   } else if (type == "rds") {
-    .write_rds(data, path, verbose, ...)
+    .write_rds(data, path, password, verbose, ...)
   } else if (type == "rda") {
-    .write_rda(data, path, verbose, ...)
+    .write_rda(data, path, password, verbose, ...)
   } else if (type == "parquet") {
-    .write_parquet(data, path, verbose, ...)
+    .write_parquet(data, path, password, verbose, ...)
   } else {
-    .write_haven(data, path, verbose, type, ...)
+    .write_haven(data, path, password, verbose, type, ...)
   }
 }
 
 
 # base R formats -----
 
-.write_rds <- function(data, path, verbose = TRUE, ...) {
+.write_rds <- function(data, path, password, verbose = TRUE, ...) {
+  # encrypt data
+  data <- .data_encryption(data, password)
   saveRDS(data, path, ...)
 }
 
-.write_rda <- function(data, path, verbose = TRUE, ...) {
+.write_rda <- function(data, path, password, verbose = TRUE, ...) {
+  # encrypt data
+  data <- .data_encryption(data, password)
   # save single data frame
   if (is.data.frame(data)) {
     save(data, file = path, ...)
@@ -88,9 +93,12 @@ data_write <- function(
 
 # nanoparquet -----
 
-.write_parquet <- function(data, path, verbose = TRUE, ...) {
+.write_parquet <- function(data, path, password, verbose = TRUE, ...) {
   # requires nanoparquet package
   insight::check_if_installed("nanoparquet")
+
+  # encrypt data
+  data <- .data_encryption(data, password)
 
   # save single data frame
   nanoparquet::write_parquet(x = data, file = path, ...)
@@ -106,6 +114,7 @@ data_write <- function(
   delimiter = ",",
   convert_factors = FALSE,
   save_labels = FALSE,
+  password,
   verbose = TRUE,
   ...
 ) {
@@ -118,6 +127,9 @@ data_write <- function(
   if (convert_factors) {
     data <- .pre_process_exported_data(data, convert_factors)
   }
+
+  # encrypt data
+  data <- .data_encryption(data, password)
 
   if (type == "csv") {
     insight::check_if_installed("readr")
@@ -135,7 +147,14 @@ data_write <- function(
 
 # saving into haven format -----
 
-.write_haven <- function(data, path, verbose = TRUE, type = "spss", ...) {
+.write_haven <- function(
+  data,
+  path,
+  password,
+  verbose = TRUE,
+  type = "spss",
+  ...
+) {
   insight::check_if_installed("haven")
 
   # check if user provided "compress" argument for SPSS files,
@@ -154,6 +173,9 @@ data_write <- function(
 
   # fix invalid column names
   data <- .fix_column_names(data, verbose)
+
+  # encrypt data
+  data <- .data_encryption(data, password)
 
   if (type %in% c("spss", "zspss")) {
     # write to SPSS
@@ -345,7 +367,7 @@ data_write <- function(
 
 # data encryption ---------------------------------
 
-.data_encryption <- function(data, password) {
+.data_encryption <- function(data, password = NULL) {
   # check if data should be encrypted
   if (!is.null(password)) {
     # password needs to be a character string

@@ -254,7 +254,14 @@ data_read <- function(
 
 # read functions -----------------------
 
-.read_spss <- function(path, encoding, convert_factors, verbose, ...) {
+.read_spss <- function(
+  path,
+  encoding,
+  convert_factors,
+  password,
+  verbose,
+  ...
+) {
   insight::check_if_installed(
     "haven",
     reason = paste0("to read files of type '", .file_ext(path), "'")
@@ -319,7 +326,7 @@ data_read <- function(
 }
 
 
-.read_text <- function(path, encoding, verbose, ...) {
+.read_text <- function(path, encoding, password, verbose, ...) {
   if (insight::check_if_installed("data.table", quietly = TRUE)) {
     # set proper default encoding-value for fread
     if (is.null(encoding)) {
@@ -337,7 +344,7 @@ data_read <- function(
     insight::format_alert("Reading data...")
   }
   out <- readr::read_delim(path, ...)
-  as.data.frame(out)
+  .data_decryption(as.data.frame(out), password)
 }
 
 
@@ -527,7 +534,7 @@ data_read <- function(
 
 # decrypt data ---------------------------------
 
-.data_decryption <- function(data, password) {
+.data_decryption <- function(data, password = NULL) {
   # check if data should be decrypted
   if (!is.null(password)) {
     # password needs to be a character string
