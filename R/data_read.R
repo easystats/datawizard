@@ -304,7 +304,6 @@ data_read <- function(
     encoding = encoding,
     ...
   )
-
   .post_process_imported_data(out, convert_factors, verbose)
 }
 
