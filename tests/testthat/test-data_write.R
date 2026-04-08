@@ -26,6 +26,11 @@ test_that("data_write, SPSS", {
       d2,
       ignore_attr = TRUE
     )
+    # data encryption not available for SPSS etc.
+    expect_error(
+      data_write(d, tmp, password = "test"),
+      "Data encryption is not supported"
+    )
   })
 })
 
@@ -72,6 +77,12 @@ test_that("data_write, Stata", {
       to_factor(d, select = c("e16sex", "c172code")),
       d2,
       ignore_attr = TRUE
+    )
+
+    # data encryption not available for SPSS etc.
+    expect_error(
+      data_write(d, tmp, password = "test"),
+      "Data encryption is not supported"
     )
   })
 })

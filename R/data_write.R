@@ -155,6 +155,14 @@ data_write <- function(
   type = "spss",
   ...
 ) {
+  # encryption not possible for haven - haven requires a data frame, but
+  # after encryption, data is not a valid data frame anymore
+  if (!is.null(password)) {
+    insight::format_error(
+      "Data encryption is not supported for SPSS, SAS, or Stata files."
+    )
+  }
+
   insight::check_if_installed("haven")
 
   # check if user provided "compress" argument for SPSS files,
@@ -173,9 +181,6 @@ data_write <- function(
 
   # fix invalid column names
   data <- .fix_column_names(data, verbose)
-
-  # encrypt data
-  data <- .data_encryption(data, password)
 
   if (type %in% c("spss", "zspss")) {
     # write to SPSS

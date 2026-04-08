@@ -115,14 +115,13 @@ data_read <- function(
     xls = ,
     xlsx = .read_excel(path, encoding, password, verbose, ...),
     sav = ,
-    por = .read_spss(path, encoding, convert_factors, password, verbose, ...),
-    dta = .read_stata(path, encoding, convert_factors, password, verbose, ...),
+    por = .read_spss(path, encoding, convert_factors, verbose, ...),
+    dta = .read_stata(path, encoding, convert_factors, verbose, ...),
     sas7bdat = .read_sas(
       path,
       path_catalog,
       encoding,
       convert_factors,
-      password,
       verbose,
       ...
     ),
@@ -261,7 +260,6 @@ data_read <- function(
   path,
   encoding,
   convert_factors,
-  password,
   verbose,
   ...
 ) {
@@ -274,9 +272,6 @@ data_read <- function(
   }
   out <- haven::read_sav(file = path, encoding = encoding, user_na = FALSE, ...)
 
-  # data decryption
-  out <- .data_decryption(out, password)
-
   .post_process_imported_data(out, convert_factors, verbose)
 }
 
@@ -285,7 +280,6 @@ data_read <- function(
   path,
   encoding,
   convert_factors,
-  password,
   verbose,
   ...
 ) {
@@ -298,9 +292,6 @@ data_read <- function(
   }
   out <- haven::read_dta(file = path, encoding = encoding, ...)
 
-  # data decryption
-  out <- .data_decryption(out, password)
-
   .post_process_imported_data(out, convert_factors, verbose)
 }
 
@@ -310,7 +301,6 @@ data_read <- function(
   path_catalog,
   encoding,
   convert_factors,
-  password,
   verbose,
   ...
 ) {
@@ -327,9 +317,6 @@ data_read <- function(
     encoding = encoding,
     ...
   )
-
-  # data decryption
-  out <- .data_decryption(out, password)
 
   .post_process_imported_data(out, convert_factors, verbose)
 }
