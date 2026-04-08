@@ -106,25 +106,26 @@ data_read <- function(
   out <- switch(
     file_type,
     txt = ,
-    csv = .read_text(path, encoding, verbose, ...),
+    csv = .read_text(path, encoding, password, verbose, ...),
     rda = ,
-    rdata = .read_base_rda(path, file_type, verbose, ...),
-    rds = .read_base_rds(path, verbose, ...),
+    rdata = .read_base_rda(path, file_type, password, verbose, ...),
+    rds = .read_base_rds(path, password, verbose, ...),
     xls = ,
-    xlsx = .read_excel(path, encoding, verbose, ...),
+    xlsx = .read_excel(path, encoding, password, verbose, ...),
     sav = ,
-    por = .read_spss(path, encoding, convert_factors, verbose, ...),
-    dta = .read_stata(path, encoding, convert_factors, verbose, ...),
+    por = .read_spss(path, encoding, convert_factors, password, verbose, ...),
+    dta = .read_stata(path, encoding, convert_factors, password, verbose, ...),
     sas7bdat = .read_sas(
       path,
       path_catalog,
       encoding,
       convert_factors,
+      password,
       verbose,
       ...
     ),
-    parquet = .read_parquet(path, verbose, ...),
-    .read_unknown(path, file_type, verbose, ...)
+    parquet = .read_parquet(path, password, verbose, ...),
+    .read_unknown(path, file_type, password, verbose, ...)
   )
 
   # tell user about empty columns
@@ -270,11 +271,22 @@ data_read <- function(
     insight::format_alert("Reading data...")
   }
   out <- haven::read_sav(file = path, encoding = encoding, user_na = FALSE, ...)
+
+  # data decryption
+  out <- .data_decryption(out, password)
+
   .post_process_imported_data(out, convert_factors, verbose)
 }
 
 
-.read_stata <- function(path, encoding, convert_factors, verbose, ...) {
+.read_stata <- function(
+  path,
+  encoding,
+  convert_factors,
+  password,
+  verbose,
+  ...
+) {
   insight::check_if_installed(
     "haven",
     reason = paste0("to read files of type '", .file_ext(path), "'")
@@ -283,6 +295,10 @@ data_read <- function(
     insight::format_alert("Reading data...")
   }
   out <- haven::read_dta(file = path, encoding = encoding, ...)
+
+  # data decryption
+  out <- .data_decryption(out, password)
+
   .post_process_imported_data(out, convert_factors, verbose)
 }
 
@@ -292,6 +308,7 @@ data_read <- function(
   path_catalog,
   encoding,
   convert_factors,
+  password,
   verbose,
   ...
 ) {
@@ -308,11 +325,15 @@ data_read <- function(
     encoding = encoding,
     ...
   )
+
+  # data decryption
+  out <- .data_decryption(out, password)
+
   .post_process_imported_data(out, convert_factors, verbose)
 }
 
 
-.read_excel <- function(path, encoding, verbose, ...) {
+.read_excel <- function(path, encoding, password, verbose, ...) {
   insight::check_if_installed(
     "readxl",
     reason = paste0("to read files of type '", .file_ext(path), "'")
@@ -321,6 +342,10 @@ data_read <- function(
     insight::format_alert("Reading data...")
   }
   out <- readxl::read_excel(path, ...)
+
+  # data decryption
+  out <- .data_decryption(out, password)
+
   class(out) <- "data.frame"
   out
 }
@@ -344,11 +369,15 @@ data_read <- function(
     insight::format_alert("Reading data...")
   }
   out <- readr::read_delim(path, ...)
-  .data_decryption(as.data.frame(out), password)
+
+  # data decryption
+  out <- .data_decryption(out, password)
+
+  as.data.frame(out)
 }
 
 
-.read_unknown <- function(path, file_type, verbose, ...) {
+.read_unknown <- function(path, file_type, password, verbose, ...) {
   insight::check_if_installed(
     "rio",
     reason = paste0("to read files of type '", file_type, "'")
@@ -363,6 +392,9 @@ data_read <- function(
     rio_args$trust <- TRUE
   }
   out <- do.call(rio::import, c(rio_args, list(...)))
+
+  # data decryption
+  out <- .data_decryption(out, password)
 
   # check if loaded file is a data frame, or not (e.g. model objects)
   # it returns `NULL` if the file is no valid data file that contains a data
@@ -379,7 +411,7 @@ data_read <- function(
 }
 
 
-.read_base_rda <- function(path, file_type, verbose = TRUE, ...) {
+.read_base_rda <- function(path, file_type, password, verbose = TRUE, ...) {
   if (verbose) {
     insight::format_alert("Reading data...")
   }
@@ -406,6 +438,9 @@ data_read <- function(
   # else, retrieve loaded object
   out <- get(ls(env)[1], env)
 
+  # data decryption
+  out <- .data_decryption(out, password)
+
   # check if loaded file is a data frame, or not (e.g. model objects)
   # it returns `NULL` if the file is no valid data file that contains a data
   # frame.frame, or cannot be coerced to a data frame. Else, if it was a data
@@ -421,7 +456,7 @@ data_read <- function(
 }
 
 
-.read_base_rds <- function(path, verbose = TRUE, ...) {
+.read_base_rds <- function(path, password, verbose = TRUE, ...) {
   if (verbose) {
     insight::format_alert("Reading data...")
   }
@@ -430,6 +465,9 @@ data_read <- function(
   path <- .check_path_url(path, file_type = "rds")
   out <- readRDS(file = path)
 
+  # data decryption
+  out <- .data_decryption(out, password)
+
   # check if loaded file is a data frame, or not (e.g. model objects)
   # it returns `NULL` if the file is no valid data file that contains a data
   # frame.frame, or cannot be coerced to a data frame. Else, if it was a data
@@ -445,7 +483,7 @@ data_read <- function(
 }
 
 
-.read_parquet <- function(path, verbose = TRUE, ...) {
+.read_parquet <- function(path, password, verbose = TRUE, ...) {
   # requires nanoparquet package
   insight::check_if_installed("nanoparquet")
 
@@ -456,6 +494,9 @@ data_read <- function(
   # check URLs
   path <- .check_path_url(path, file_type = "parquet")
   out <- nanoparquet::read_parquet(file = path, ...)
+
+  # data decryption
+  out <- .data_decryption(out, password)
 
   as.data.frame(out)
 }
