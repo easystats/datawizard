@@ -126,7 +126,7 @@ data_read <- function(
       verbose,
       ...
     ),
-    parquet = .read_parquet(path, password, verbose, ...),
+    parquet = .read_parquet(path, verbose, ...),
     .read_unknown(path, file_type, password, verbose, ...)
   )
 
@@ -257,13 +257,7 @@ data_read <- function(
 
 # read functions -----------------------
 
-.read_spss <- function(
-  path,
-  encoding,
-  convert_factors,
-  verbose,
-  ...
-) {
+.read_spss <- function(path, encoding, convert_factors, verbose, ...) {
   insight::check_if_installed(
     "haven",
     reason = paste0("to read files of type '", .file_ext(path), "'")
@@ -272,18 +266,11 @@ data_read <- function(
     insight::format_alert("Reading data...")
   }
   out <- haven::read_sav(file = path, encoding = encoding, user_na = FALSE, ...)
-
   .post_process_imported_data(out, convert_factors, verbose)
 }
 
 
-.read_stata <- function(
-  path,
-  encoding,
-  convert_factors,
-  verbose,
-  ...
-) {
+.read_stata <- function(path, encoding, convert_factors, verbose, ...) {
   insight::check_if_installed(
     "haven",
     reason = paste0("to read files of type '", .file_ext(path), "'")
@@ -292,7 +279,6 @@ data_read <- function(
     insight::format_alert("Reading data...")
   }
   out <- haven::read_dta(file = path, encoding = encoding, ...)
-
   .post_process_imported_data(out, convert_factors, verbose)
 }
 
@@ -466,7 +452,7 @@ data_read <- function(
 }
 
 
-.read_parquet <- function(path, password, verbose = TRUE, ...) {
+.read_parquet <- function(path, verbose = TRUE, ...) {
   # requires nanoparquet package
   insight::check_if_installed("nanoparquet")
 
@@ -477,9 +463,6 @@ data_read <- function(
   # check URLs
   path <- .check_path_url(path, file_type = "parquet")
   out <- nanoparquet::read_parquet(file = path, ...)
-
-  # data decryption
-  out <- .data_decryption(out, password)
   as.data.frame(out)
 }
 
