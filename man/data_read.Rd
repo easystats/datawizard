@@ -10,6 +10,7 @@ data_read(
   path_catalog = NULL,
   encoding = NULL,
   convert_factors = TRUE,
+  password = NULL,
   verbose = TRUE,
   ...
 )
@@ -20,6 +21,7 @@ data_write(
   delimiter = ",",
   convert_factors = FALSE,
   save_labels = FALSE,
+  password = NULL,
   verbose = TRUE,
   ...
 )
@@ -43,6 +45,8 @@ SPSS, SAS or Stata. See also section 'Differences to other packages'. For
 might be useful for these formats because labelled numeric variables are then
 converted into factors and exported as character columns - else, value labels
 would be lost and only numeric values are written to the file.}
+
+\item{password}{todo.}
 
 \item{verbose}{Toggle warnings and messages.}
 

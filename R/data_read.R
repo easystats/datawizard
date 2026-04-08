@@ -25,6 +25,7 @@
 #' might be useful for these formats because labelled numeric variables are then
 #' converted into factors and exported as character columns - else, value labels
 #' would be lost and only numeric values are written to the file.
+#' @param password todo.
 #' @param verbose Toggle warnings and messages.
 #' @param ... Arguments passed to the related `read_*()` or `write_*()` functions.
 #'
@@ -83,6 +84,7 @@ data_read <- function(
   path_catalog = NULL,
   encoding = NULL,
   convert_factors = TRUE,
+  password = NULL,
   verbose = TRUE,
   ...
 ) {
@@ -124,6 +126,17 @@ data_read <- function(
     parquet = .read_parquet(path, verbose, ...),
     .read_unknown(path, file_type, verbose, ...)
   )
+
+  # check if data should be decrypted
+  if (!is.null(password)) {
+    # password needs to be a character string
+    if (!is.character(password)) {
+      insight::format_error(
+        "The `password` argument must be a character string."
+      )
+    }
+    data <- .decrypt_data(data, password)
+  }
 
   # tell user about empty columns
   if (verbose) {
@@ -521,4 +534,15 @@ data_read <- function(
     out <- tmp
   }
   out
+}
+
+# decrypt data ---------------------------------
+
+.decrypt_data <- function(data, password = NULL) {
+  insight::check_if_installed("openssl", "for data decryption")
+  # it is important to remember the phrase! else, you cannot decrypt the data
+  passphrase <- charToRaw(password)
+  key <- openssl::sha256(passphrase)
+  # decrypt the data
+  unserialize(openssl::aes_cbc_decrypt(data, key = key))
 }

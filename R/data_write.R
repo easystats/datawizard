@@ -15,6 +15,7 @@ data_write <- function(
   delimiter = ",",
   convert_factors = FALSE,
   save_labels = FALSE,
+  password = NULL,
   verbose = TRUE,
   ...
 ) {
@@ -41,6 +42,21 @@ data_write <- function(
     insight::format_error(
       "Could not detect file type. The `path` argument has no file extension.",
       "Please provide a file path including extension, like \"myfile.csv\" or \"c:/Users/Default/myfile.sav\"."
+    )
+  }
+
+  # check if data should be encrypted
+  if (!is.null(password)) {
+    # password needs to be a character string
+    if (!is.character(password)) {
+      insight::format_error(
+        "The `password` argument must be a character string."
+      )
+    }
+    data <- .encrypt_data(data, password)
+    # tell user to remember the password
+    insight::format_warning(
+      "Remeber your `password`, else you will not be able to decrypt the data again!"
     )
   }
 
@@ -340,4 +356,16 @@ data_write <- function(
 
   class(x) <- "data.frame"
   x
+}
+
+# data encryption ---------------------------------
+
+.encrypt_data <- function(data, password = NULL) {
+  insight::check_if_installed("openssl", "for data encryption")
+  x <- serialize(data, NULL)
+  # it is important to remember the phrase! else, you cannot decrypt the data
+  passphrase <- charToRaw(password)
+  key <- openssl::sha256(passphrase)
+  # encrypt the data
+  openssl::aes_cbc_encrypt(data, key = key)
 }
