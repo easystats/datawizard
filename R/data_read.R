@@ -127,17 +127,6 @@ data_read <- function(
     .read_unknown(path, file_type, verbose, ...)
   )
 
-  # check if data should be decrypted
-  if (!is.null(password)) {
-    # password needs to be a character string
-    if (!is.character(password)) {
-      insight::format_error(
-        "The `password` argument must be a character string."
-      )
-    }
-    data <- .decrypt_data(data, password)
-  }
-
   # tell user about empty columns
   if (verbose) {
     empty_cols <- empty_columns(out)
@@ -537,6 +526,20 @@ data_read <- function(
 }
 
 # decrypt data ---------------------------------
+
+.data_decryption <- function(data, password) {
+  # check if data should be decrypted
+  if (!is.null(password)) {
+    # password needs to be a character string
+    if (!is.character(password)) {
+      insight::format_error(
+        "The `password` argument must be a character string."
+      )
+    }
+    data <- .decrypt_data(data, password)
+  }
+  data
+}
 
 .decrypt_data <- function(data, password = NULL) {
   insight::check_if_installed("openssl", "for data decryption")

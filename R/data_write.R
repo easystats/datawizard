@@ -45,21 +45,6 @@ data_write <- function(
     )
   }
 
-  # check if data should be encrypted
-  if (!is.null(password)) {
-    # password needs to be a character string
-    if (!is.character(password)) {
-      insight::format_error(
-        "The `password` argument must be a character string."
-      )
-    }
-    data <- .encrypt_data(data, password)
-    # tell user to remember the password
-    insight::format_warning(
-      "Remeber your `password`, else you will not be able to decrypt the data again!"
-    )
-  }
-
   if (type %in% c("csv", "unknown")) {
     .write_csv_or_unknown(
       data,
@@ -359,6 +344,24 @@ data_write <- function(
 }
 
 # data encryption ---------------------------------
+
+.data_encryption <- function(data, password) {
+  # check if data should be encrypted
+  if (!is.null(password)) {
+    # password needs to be a character string
+    if (!is.character(password)) {
+      insight::format_error(
+        "The `password` argument must be a character string."
+      )
+    }
+    data <- .encrypt_data(data, password)
+    # tell user to remember the password
+    insight::format_warning(
+      "Remeber your `password`, else you will not be able to decrypt the data again!"
+    )
+  }
+  data
+}
 
 .encrypt_data <- function(data, password = NULL) {
   insight::check_if_installed("openssl", "for data encryption")
