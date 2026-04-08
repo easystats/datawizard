@@ -46,7 +46,9 @@ might be useful for these formats because labelled numeric variables are then
 converted into factors and exported as character columns - else, value labels
 would be lost and only numeric values are written to the file.}
 
-\item{password}{todo.}
+\item{password}{Password for data encryption. If not \code{NULL}, the data will be
+encrypted (for \code{data_write()}) or decrypted (for \code{data_read()}) using the
+provided password.}
 
 \item{verbose}{Toggle warnings and messages.}
 

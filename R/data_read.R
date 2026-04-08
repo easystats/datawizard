@@ -25,7 +25,9 @@
 #' might be useful for these formats because labelled numeric variables are then
 #' converted into factors and exported as character columns - else, value labels
 #' would be lost and only numeric values are written to the file.
-#' @param password todo.
+#' @param password Password for data encryption. If not `NULL`, the data will be
+#'   encrypted (for `data_write()`) or decrypted (for `data_read()`) using the
+#'   provided password.
 #' @param verbose Toggle warnings and messages.
 #' @param ... Arguments passed to the related `read_*()` or `write_*()` functions.
 #'
