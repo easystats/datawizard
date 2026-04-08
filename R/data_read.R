@@ -115,13 +115,14 @@ data_read <- function(
     xls = ,
     xlsx = .read_excel(path, encoding, password, verbose, ...),
     sav = ,
-    por = .read_spss(path, encoding, convert_factors, verbose, ...),
-    dta = .read_stata(path, encoding, convert_factors, verbose, ...),
+    por = .read_spss(path, encoding, convert_factors, password, verbose, ...),
+    dta = .read_stata(path, encoding, convert_factors, password, verbose, ...),
     sas7bdat = .read_sas(
       path,
       path_catalog,
       encoding,
       convert_factors,
+      password,
       verbose,
       ...
     ),
@@ -260,6 +261,7 @@ data_read <- function(
   path,
   encoding,
   convert_factors,
+  password,
   verbose,
   ...
 ) {
@@ -272,6 +274,9 @@ data_read <- function(
   }
   out <- haven::read_sav(file = path, encoding = encoding, user_na = FALSE, ...)
 
+  # data decryption
+  out <- .data_decryption(out, password)
+
   .post_process_imported_data(out, convert_factors, verbose)
 }
 
@@ -280,6 +285,7 @@ data_read <- function(
   path,
   encoding,
   convert_factors,
+  password,
   verbose,
   ...
 ) {
@@ -292,6 +298,9 @@ data_read <- function(
   }
   out <- haven::read_dta(file = path, encoding = encoding, ...)
 
+  # data decryption
+  out <- .data_decryption(out, password)
+
   .post_process_imported_data(out, convert_factors, verbose)
 }
 
@@ -301,6 +310,7 @@ data_read <- function(
   path_catalog,
   encoding,
   convert_factors,
+  password,
   verbose,
   ...
 ) {
@@ -317,6 +327,9 @@ data_read <- function(
     encoding = encoding,
     ...
   )
+
+  # data decryption
+  out <- .data_decryption(out, password)
 
   .post_process_imported_data(out, convert_factors, verbose)
 }
@@ -583,6 +596,7 @@ data_read <- function(
   # it is important to remember the phrase! else, you cannot decrypt the data
   passphrase <- charToRaw(password)
   key <- openssl::sha256(passphrase)
-  # decrypt the data
-  unserialize(openssl::aes_cbc_decrypt(data, key = key))
+  # decrypt the data - we have a one-column data frame (see `.encrypt_data()`)
+  # because encryption returns a raw vector, while some packages need a data frame
+  unserialize(openssl::aes_cbc_decrypt(data[[1]], key = key))
 }
