@@ -367,5 +367,5 @@ data_write <- function(
   passphrase <- charToRaw(password)
   key <- openssl::sha256(passphrase)
   # encrypt the data
-  openssl::aes_cbc_encrypt(data, key = key)
+  openssl::aes_cbc_encrypt(x, key = key)
 }
