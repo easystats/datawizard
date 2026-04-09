@@ -192,9 +192,6 @@ data_write <- function(
   # fix invalid column names
   data <- .fix_column_names(data, verbose)
 
-  # encrypt data, if requested
-  data <- .data_encryption(data, password)
-
   if (type %in% c("spss", "zspss")) {
     # write to SPSS
     haven::write_sav(data = data, path = path, compress = compress)
