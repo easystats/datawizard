@@ -386,9 +386,11 @@ data_write <- function(
   # check if data should be encrypted
   if (!is.null(password)) {
     # password needs to be a character string
-    if (!is.character(password)) {
+    if (
+      !is.character(password) || length(password) != 1L || !nzchar(password)
+    ) {
       insight::format_error(
-        "The `password` argument must be a character string."
+        "The password must be a signle non-empty character string."
       )
     }
     data <- .encrypt_data(data, password)
