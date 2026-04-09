@@ -556,5 +556,15 @@ data_read <- function(
   key <- openssl::sha256(passphrase)
   # decrypt the data - we have a one-column data frame (see `.encrypt_data()`)
   # because encryption returns a raw vector, while some packages need a data frame
-  unserialize(openssl::aes_cbc_decrypt(data[[1]], key = key))
+  out <- tryCatch(
+    openssl::aes_cbc_decrypt(data[[1]], key = key),
+    error = function(e) NULL
+  )
+  # check if we had encrypted data at all?
+  if (is.null(out)) {
+    insight::format_error(
+      "File does not appear to be encrypted with {datawizard}, or you provided the wrong password."
+    )
+  }
+  unserialize(out)
 }

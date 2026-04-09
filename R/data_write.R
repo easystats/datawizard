@@ -94,7 +94,7 @@ data_write <- function(
 # nanoparquet -----
 
 .write_parquet <- function(data, path, password, verbose = TRUE, ...) {
-  # saving raw columns in data frames in not yet supported by haven, thus,
+  # saving raw columns in data frames is not yet supported by parquet, thus,
   # we cannot save encrypted data right now.
   if (!is.null(password)) {
     insight::format_error(

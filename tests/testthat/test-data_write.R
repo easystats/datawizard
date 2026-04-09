@@ -29,6 +29,13 @@ test_that("data_write, encrypting rds files", {
     # password, returns decrypted data frame
     d2 <- data_read(tmp, password = "test")
     expect_identical(d, d2)
+
+    # wrong password
+    expect_error(data_read(tmp, password = "text"), "File does not appear")
+
+    # not encrypzed
+    data_write(d, tmp)
+    expect_error(data_read(tmp, password = "test"), "File does not appear")
   })
 })
 
