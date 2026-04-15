@@ -138,3 +138,14 @@ preserved as \code{"labels"} attribute. Character vectors are preserved. Use
 variables to factors.
 }
 
+\section{Data encryption}{
+
+\code{data_read()} and \code{data_write()} support data encryption for R file formats
+(\code{.rds}, \code{.rda} and \code{.rdata}). To encrypt a file, provide a password to the
+\code{password} argument in \code{data_write()}. To decrypt the file, provide the same
+password to \code{data_read()}. The encryption is based on the \strong{openssl} package
+and uses the AES-GCM algorithm (see \code{?openssl::aes_gcm_encrypt}) with a
+256-bit key (see \code{?openssl::sha256}). \strong{Warning:} Do not lose your
+\code{password}, else you will not be able to decrypt the data again!
+}
+

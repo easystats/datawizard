@@ -81,6 +81,15 @@
 #' `convert_factors = FALSE` to remove the automatic conversion of numeric
 #' variables to factors.
 #'
+#' @section Data encryption:
+#' `data_read()` and `data_write()` support data encryption for R file formats
+#' (`.rds`, `.rda` and `.rdata`). To encrypt a file, provide a password to the
+#' `password` argument in `data_write()`. To decrypt the file, provide the same
+#' password to `data_read()`. The encryption is based on the **openssl** package
+#' and uses the AES-GCM algorithm (see `?openssl::aes_gcm_encrypt`) with a
+#' 256-bit key (see `?openssl::sha256`). **Warning:** Do not lose your
+#' `password`, else you will not be able to decrypt the data again!
+#'
 #' @export
 data_read <- function(
   path,
