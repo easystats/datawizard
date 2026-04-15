@@ -553,11 +553,11 @@ data_read <- function(
   insight::check_if_installed("openssl", "for data decryption")
   # it is important to remember the phrase! else, you cannot decrypt the data
   passphrase <- charToRaw(password)
-  key <- openssl::sha256(passphrase)
+  key <- openssl::sha512(passphrase)
   # decrypt the data - we have a one-column data frame (see `.encrypt_data()`)
   # because encryption returns a raw vector, while some packages need a data frame
   out <- tryCatch(
-    openssl::aes_cbc_decrypt(data[[1]], key = key),
+    openssl::aes_gcm_decrypt(data[[1]], key = key),
     error = function(e) NULL
   )
   # check if we had encrypted data at all?

@@ -407,10 +407,10 @@ data_write <- function(
   x <- serialize(data, NULL)
   # it is important to remember the phrase! else, you cannot decrypt the data
   passphrase <- charToRaw(password)
-  key <- openssl::sha256(passphrase)
+  key <- openssl::sha512(passphrase)
   # encrypt the data - make sure it is a data frame. We need this for some
   # internal functions
-  out <- as.data.frame(openssl::aes_cbc_encrypt(x, key = key))
+  out <- as.data.frame(openssl::aes_gcm_encrypt(x, key = key))
   # readable column name
   colnames(out) <- "encrypted"
   out
