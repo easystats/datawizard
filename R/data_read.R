@@ -28,7 +28,8 @@
 #' @param password Password for data encryption. If not `NULL`, the data will be
 #' encrypted (for `data_write()`) or decrypted (for `data_read()`) using the
 #' provided password. Encryption is currently only supported for R file formats
-#' (`.rds`, `.rda` and `.rdata`).
+#' (`.rds`, `.rda` and `.rdata`). See the section "Data encryption" below for more
+#' information on the encryption method used.
 #' @param verbose Toggle warnings and messages.
 #' @param ... Arguments passed to the related `read_*()` or `write_*()` functions.
 #'
