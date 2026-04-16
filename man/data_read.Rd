@@ -146,7 +146,16 @@ variables to factors.
 \code{password} argument in \code{data_write()}. To decrypt the file, provide the same
 password to \code{data_read()}. The encryption is based on the \strong{openssl} package
 and uses the AES-GCM algorithm (see \code{?openssl::aes_gcm_encrypt}) with a
-256-bit key (see \code{?openssl::sha256}). \strong{Warning:} Do not lose your
-\code{password}, else you will not be able to decrypt the data again!
+256-bit key (see \code{?openssl::sha256}). Thus, data can also be decrypted without
+relying on the \strong{datawizard} package, e.g. using following code:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{encrypted_data <- readRDS(datafile)
+key <- openssl::sha256(charToRaw("<password>"))
+out <- openssl::aes_gcm_decrypt(encrypted_data, key = key)
+decrypted_data <- unserialize(out)
+}\if{html}{\out{</div>}}
+
+\strong{Warning:} Do not lose your \code{password}, else you will not be able to
+decrypt the data again!
 }
 
