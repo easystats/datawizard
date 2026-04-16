@@ -385,14 +385,7 @@ data_write <- function(
 .data_encryption <- function(data, password = NULL) {
   # check if data should be encrypted
   if (!is.null(password)) {
-    # password needs to be a character string
-    if (
-      !is.character(password) || length(password) != 1L || !nzchar(password)
-    ) {
-      insight::format_error(
-        "The password must be a single non-empty character string."
-      )
-    }
+    .validate_password(password)
     data <- .encrypt_data(data, password)
     # tell user to remember the password
     insight::format_warning(
@@ -414,4 +407,13 @@ data_write <- function(
   # readable column name
   colnames(out) <- "encrypted"
   out
+}
+
+.validate_password <- function(password) {
+  # password needs to be a character string
+  if (!is.character(password) || length(password) != 1L || !nzchar(password)) {
+    insight::format_error(
+      "The password must be a single non-empty character string."
+    )
+  }
 }

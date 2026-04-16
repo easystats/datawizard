@@ -548,12 +548,7 @@ data_read <- function(
 .data_decryption <- function(data, password = NULL) {
   # check if data should be decrypted
   if (!is.null(password)) {
-    # password needs to be a character string
-    if (!is.character(password)) {
-      insight::format_error(
-        "The `password` argument must be a character string."
-      )
-    }
+    .validate_password(password)
     data <- .decrypt_data(data, password)
   }
   data
