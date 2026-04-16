@@ -81,7 +81,7 @@ data_write <- function(
   # encrypt data
   data <- .data_encryption(data, password)
   # save single data frame
-  if (is.data.frame(data)) {
+  if (is.data.frame(data) || is.raw(data)) {
     save(data, file = path, ...)
   } else {
     # save list of data frames
@@ -401,12 +401,10 @@ data_write <- function(
   # it is important to remember the phrase! else, you cannot decrypt the data
   passphrase <- charToRaw(password)
   key <- openssl::sha256(passphrase)
-  # encrypt the data - make sure it is a data frame. We need this for some
-  # internal functions
-  out <- as.data.frame(openssl::aes_gcm_encrypt(x, key = key))
-  # readable column name
-  colnames(out) <- "encrypted"
-  out
+  # encrypt the data. we return the raw data here, which can be handled by
+  # rds/rda/rdata, and users can then also decrypt using openssl directly
+  # datawizard is not necessarily needed for decryption
+  openssl::aes_gcm_encrypt(x, key = key)
 }
 
 .validate_password <- function(password) {

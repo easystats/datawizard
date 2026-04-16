@@ -24,7 +24,7 @@ test_that("data_write, encrypting rds files", {
 
     # no password, returns encrypted data frame
     d2 <- data_read(tmp, verbose = FALSE)
-    expect_named(d2, "encrypted")
+    expect_named(d2, "out")
 
     # password, returns decrypted data frame
     d2 <- data_read(tmp, password = "test")
@@ -50,7 +50,7 @@ test_that("data_write, encrypting rdata files", {
 
     # no password, returns encrypted data frame
     d2 <- data_read(tmp, verbose = FALSE)
-    expect_named(d2, "encrypted")
+    expect_named(d2, "out")
 
     # password, returns decrypted data frame
     d2 <- data_read(tmp, password = "test")

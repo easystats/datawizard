@@ -559,10 +559,9 @@ data_read <- function(
   # it is important to remember the phrase! else, you cannot decrypt the data
   passphrase <- charToRaw(password)
   key <- openssl::sha256(passphrase)
-  # decrypt the data - we have a one-column data frame (see `.encrypt_data()`)
-  # because encryption returns a raw vector, while some packages need a data frame
+  # decrypt the data. in case of wrong password, `unserialize()` errors
   out <- tryCatch(
-    openssl::aes_gcm_decrypt(data[[1]], key = key),
+    unserialize(openssl::aes_gcm_decrypt(data, key = key)),
     error = function(e) NULL
   )
   # check if we had encrypted data at all?
@@ -571,5 +570,5 @@ data_read <- function(
       "File does not appear to be encrypted with {datawizard}, or you provided the wrong password."
     )
   }
-  unserialize(out)
+  out
 }
