@@ -44,11 +44,19 @@ test_that("data_write, encrypting rds files", {
       regex = "The password must be a single"
     )
     expect_error(
+      data_read(tmp, password = ""),
+      regex = "The password must be a single"
+    )
+    expect_error(
       data_write(d, tmp, password = c("test", "test2")),
       regex = "The password must be a single"
     )
     expect_error(
       data_write(d, tmp, password = 123),
+      regex = "The password must be a single"
+    )
+    expect_error(
+      data_write(d, tmp, password = ""),
       regex = "The password must be a single"
     )
 
