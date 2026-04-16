@@ -14,6 +14,103 @@ d <- data_filter(efc, 1:5)
 d$e42dep <- droplevels(d$e42dep)
 
 
+# data encryption with rds ------------------
+
+test_that("data_write, encrypting rds files", {
+  skip_if_not_installed("withr")
+  skip_if_not_installed("openssl")
+  withr::with_tempfile("tmp", fileext = ".rds", code = {
+    expect_warning(data_write(d, tmp, password = "test"), "Remember")
+
+    # no password, returns encrypted data frame
+    d2 <- data_read(tmp, verbose = FALSE)
+    expect_named(d2, "out")
+    expect_false(identical(d, d2))
+
+    # password, returns decrypted data frame
+    d2 <- data_read(tmp, password = "test")
+    expect_identical(d, d2)
+
+    # wrong password
+    expect_error(data_read(tmp, password = "text"), "File does not appear")
+
+    # invalid password arguments
+    expect_error(
+      data_read(tmp, password = c("test", "test2")),
+      regex = "The password must be a single"
+    )
+    expect_error(
+      data_read(tmp, password = 123),
+      regex = "The password must be a single"
+    )
+    expect_error(
+      data_read(tmp, password = ""),
+      regex = "The password must be a single"
+    )
+    expect_error(
+      data_write(d, tmp, password = c("test", "test2")),
+      regex = "The password must be a single"
+    )
+    expect_error(
+      data_write(d, tmp, password = 123),
+      regex = "The password must be a single"
+    )
+    expect_error(
+      data_write(d, tmp, password = ""),
+      regex = "The password must be a single"
+    )
+
+    # not encrypted
+    data_write(d, tmp)
+    expect_error(data_read(tmp, password = "test"), "File does not appear")
+
+    # check other decryption functions, should fail when encrypted with datawizard
+    expect_warning(data_write(d, tmp, password = "test"))
+    out <- readRDS(tmp)
+    key <- openssl::sha256(charToRaw("test"))
+    expect_error(openssl::aes_cbc_decrypt(out, key = key))
+
+    # check other encryption functions, should fail imported with datawizard
+    x <- serialize(d, NULL)
+    key <- openssl::sha256(charToRaw("test"))
+    saveRDS(openssl::aes_cbc_encrypt(x, key = key), tmp)
+    expect_error(data_read(tmp, password = "test"), "File does not appear")
+  })
+})
+
+
+# data encryption with rdata ------------------
+
+test_that("data_write, encrypting rdata files", {
+  skip_if_not_installed("withr")
+  skip_if_not_installed("openssl")
+  withr::with_tempfile("tmp", fileext = ".rdata", code = {
+    expect_warning(data_write(d, tmp, password = "test"), "Remember")
+
+    # no password, returns encrypted data frame
+    d2 <- data_read(tmp, verbose = FALSE)
+    expect_named(d2, "out")
+
+    # password, returns decrypted data frame
+    d2 <- data_read(tmp, password = "test")
+    expect_identical(d, d2)
+  })
+})
+
+
+# data encryption with parquet ------------------
+
+test_that("data_write, encrypting parquet files", {
+  skip_if_not_installed("withr")
+  withr::with_tempfile("tmp", fileext = ".parquet", code = {
+    expect_error(
+      data_write(d, tmp, password = "test"),
+      "Data encryption is not supported"
+    )
+  })
+})
+
+
 # SPSS -------------------------------------
 
 test_that("data_write, SPSS", {
@@ -25,6 +122,11 @@ test_that("data_write, SPSS", {
       to_factor(d, select = c("e16sex", "c172code")),
       d2,
       ignore_attr = TRUE
+    )
+    # data encryption not available for SPSS etc.
+    expect_error(
+      data_write(d, tmp, password = "test"),
+      "Data encryption is not supported"
     )
   })
 })
@@ -73,6 +175,12 @@ test_that("data_write, Stata", {
       d2,
       ignore_attr = TRUE
     )
+
+    # data encryption not available for SPSS etc.
+    expect_error(
+      data_write(d, tmp, password = "test"),
+      "Data encryption is not supported"
+    )
   })
 })
 
@@ -89,6 +197,12 @@ test_that("data_write, CSV, keep numeric", {
       to_numeric(d, dummy_factors = FALSE, preserve_levels = TRUE),
       d2,
       ignore_attr = TRUE
+    )
+
+    # data encryption not available for SPSS etc.
+    expect_error(
+      data_write(d, tmp, password = "test"),
+      "Data encryption is not supported"
     )
   })
 })

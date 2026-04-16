@@ -25,6 +25,11 @@
 #' might be useful for these formats because labelled numeric variables are then
 #' converted into factors and exported as character columns - else, value labels
 #' would be lost and only numeric values are written to the file.
+#' @param password Password for data encryption. If not `NULL`, the data will be
+#' encrypted (for `data_write()`) or decrypted (for `data_read()`) using the
+#' provided password. Encryption is currently only supported for R file formats
+#' (`.rds`, `.rda` and `.rdata`). See the section "Data encryption" below for more
+#' information on the encryption method used.
 #' @param verbose Toggle warnings and messages.
 #' @param ... Arguments passed to the related `read_*()` or `write_*()` functions.
 #'
@@ -77,12 +82,32 @@
 #' `convert_factors = FALSE` to remove the automatic conversion of numeric
 #' variables to factors.
 #'
+#' @section Data encryption:
+#' `data_read()` and `data_write()` support data encryption for R file formats
+#' (`.rds`, `.rda` and `.rdata`). To encrypt a file, provide a password to the
+#' `password` argument in `data_write()`. To decrypt the file, provide the same
+#' password to `data_read()`. The encryption is based on the **openssl** package
+#' and uses the AES-GCM algorithm (see `?openssl::aes_gcm_encrypt`) with a
+#' 256-bit key (see `?openssl::sha256`). Thus, data can also be decrypted without
+#' relying on the **datawizard** package, e.g. using following code:
+#'
+#' ```
+#' encrypted_data <- readRDS(datafile)
+#' key <- openssl::sha256(charToRaw("<password>"))
+#' out <- openssl::aes_gcm_decrypt(encrypted_data, key = key)
+#' decrypted_data <- unserialize(out)
+#' ```
+#'
+#' **Warning:** Do not lose your `password`, else you will not be able to
+#' decrypt the data again!
+#'
 #' @export
 data_read <- function(
   path,
   path_catalog = NULL,
   encoding = NULL,
   convert_factors = TRUE,
+  password = NULL,
   verbose = TRUE,
   ...
 ) {
@@ -106,8 +131,8 @@ data_read <- function(
     txt = ,
     csv = .read_text(path, encoding, verbose, ...),
     rda = ,
-    rdata = .read_base_rda(path, file_type, verbose, ...),
-    rds = .read_base_rds(path, verbose, ...),
+    rdata = .read_base_rda(path, file_type, password, verbose, ...),
+    rds = .read_base_rds(path, password, verbose, ...),
     xls = ,
     xlsx = .read_excel(path, encoding, verbose, ...),
     sav = ,
@@ -370,7 +395,7 @@ data_read <- function(
 }
 
 
-.read_base_rda <- function(path, file_type, verbose = TRUE, ...) {
+.read_base_rda <- function(path, file_type, password, verbose = TRUE, ...) {
   if (verbose) {
     insight::format_alert("Reading data...")
   }
@@ -397,6 +422,9 @@ data_read <- function(
   # else, retrieve loaded object
   out <- get(ls(env)[1], env)
 
+  # data decryption
+  out <- .data_decryption(out, password)
+
   # check if loaded file is a data frame, or not (e.g. model objects)
   # it returns `NULL` if the file is no valid data file that contains a data
   # frame.frame, or cannot be coerced to a data frame. Else, if it was a data
@@ -412,7 +440,7 @@ data_read <- function(
 }
 
 
-.read_base_rds <- function(path, verbose = TRUE, ...) {
+.read_base_rds <- function(path, password, verbose = TRUE, ...) {
   if (verbose) {
     insight::format_alert("Reading data...")
   }
@@ -420,6 +448,9 @@ data_read <- function(
   # check URLs
   path <- .check_path_url(path, file_type = "rds")
   out <- readRDS(file = path)
+
+  # data decryption
+  out <- .data_decryption(out, password)
 
   # check if loaded file is a data frame, or not (e.g. model objects)
   # it returns `NULL` if the file is no valid data file that contains a data
@@ -447,7 +478,6 @@ data_read <- function(
   # check URLs
   path <- .check_path_url(path, file_type = "parquet")
   out <- nanoparquet::read_parquet(file = path, ...)
-
   as.data.frame(out)
 }
 
@@ -519,6 +549,36 @@ data_read <- function(
       return(NULL)
     }
     out <- tmp
+  }
+  out
+}
+
+# decrypt data ---------------------------------
+
+.data_decryption <- function(data, password = NULL) {
+  # check if data should be decrypted
+  if (!is.null(password)) {
+    .validate_password(password)
+    data <- .decrypt_data(data, password)
+  }
+  data
+}
+
+.decrypt_data <- function(data, password = NULL) {
+  insight::check_if_installed("openssl", "for data decryption")
+  # it is important to remember the phrase! else, you cannot decrypt the data
+  passphrase <- charToRaw(password)
+  key <- openssl::sha256(passphrase)
+  # decrypt the data. in case of wrong password, `unserialize()` errors
+  out <- tryCatch(
+    unserialize(openssl::aes_gcm_decrypt(data, key = key)),
+    error = function(e) NULL
+  )
+  # check if we had encrypted data at all?
+  if (is.null(out)) {
+    insight::format_error(
+      "File does not appear to be encrypted with {datawizard}, or you provided the wrong password."
+    )
   }
   out
 }
