@@ -390,7 +390,7 @@ data_write <- function(
       !is.character(password) || length(password) != 1L || !nzchar(password)
     ) {
       insight::format_error(
-        "The password must be a signle non-empty character string."
+        "The password must be a single non-empty character string."
       )
     }
     data <- .encrypt_data(data, password)
