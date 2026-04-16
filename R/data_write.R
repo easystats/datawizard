@@ -119,7 +119,7 @@ data_write <- function(
   delimiter = ",",
   convert_factors = FALSE,
   save_labels = FALSE,
-  password,
+  password = NULL,
   verbose = TRUE,
   ...
 ) {
