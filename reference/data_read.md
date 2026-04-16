@@ -25,6 +25,7 @@ data_read(
   path_catalog = NULL,
   encoding = NULL,
   convert_factors = TRUE,
+  password = NULL,
   verbose = TRUE,
   ...
 )
@@ -35,6 +36,7 @@ data_write(
   delimiter = ",",
   convert_factors = FALSE,
   save_labels = FALSE,
+  password = NULL,
   verbose = TRUE,
   ...
 )
@@ -69,6 +71,14 @@ data_write(
   labelled numeric variables are then converted into factors and
   exported as character columns - else, value labels would be lost and
   only numeric values are written to the file.
+
+- password:
+
+  Password for data encryption. If not `NULL`, the data will be
+  encrypted (for `data_write()`) or decrypted (for `data_read()`) using
+  the provided password. Encryption is currently only supported for R
+  file formats (`.rds`, `.rda` and `.rdata`). See the section "Data
+  encryption" below for more information on the encryption method used.
 
 - verbose:
 
@@ -158,3 +168,24 @@ value labels than values, it is not converted to factor. In this case,
 value labels are preserved as `"labels"` attribute. Character vectors
 are preserved. Use `convert_factors = FALSE` to remove the automatic
 conversion of numeric variables to factors.
+
+## Data encryption
+
+`data_read()` and `data_write()` support data encryption for R file
+formats (`.rds`, `.rda` and `.rdata`). To encrypt a file, provide a
+password to the `password` argument in `data_write()`. To decrypt the
+file, provide the same password to `data_read()`. The encryption is
+based on the **openssl** package and uses the AES-GCM algorithm (see
+[`?openssl::aes_gcm_encrypt`](https://jeroen.r-universe.dev/openssl/reference/aes_cbc.html))
+with a 256-bit key (see
+[`?openssl::sha256`](https://jeroen.r-universe.dev/openssl/reference/hash.html)).
+Thus, data can also be decrypted without relying on the **datawizard**
+package, e.g. using following code:
+
+    encrypted_data <- readRDS(datafile)
+    key <- openssl::sha256(charToRaw("<password>"))
+    out <- openssl::aes_gcm_decrypt(encrypted_data, key = key)
+    decrypted_data <- unserialize(out)
+
+**Warning:** Do not lose your `password`, else you will not be able to
+decrypt the data again!

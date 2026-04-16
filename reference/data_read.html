@@ -19,7 +19,7 @@ rio::import(). data_write() works in a similar way."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,6 +83,7 @@ or text files (like '.csv' files). All other file types are passed to
 <span>  path_catalog <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  encoding <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  convert_factors <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  password <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
@@ -93,6 +94,7 @@ or text files (like '.csv' files). All other file types are passed to
 <span>  delimiter <span class="op">=</span> <span class="st">","</span>,</span>
 <span>  convert_factors <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  save_labels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  password <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -127,6 +129,14 @@ SPSS, SAS or Stata. See also section 'Differences to other packages'. For
 might be useful for these formats because labelled numeric variables are then
 converted into factors and exported as character columns - else, value labels
 would be lost and only numeric values are written to the file.</p></dd>
+
+
+<dt id="arg-password">password<a class="anchor" aria-label="anchor" href="#arg-password"></a></dt>
+<dd><p>Password for data encryption. If not <code>NULL</code>, the data will be
+encrypted (for <code>data_write()</code>) or decrypted (for <code>data_read()</code>) using the
+provided password. Encryption is currently only supported for R file formats
+(<code>.rds</code>, <code>.rda</code> and <code>.rdata</code>). See the section "Data encryption" below for more
+information on the encryption method used.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -221,13 +231,31 @@ preserved as <code>"labels"</code> attribute. Character vectors are preserved. U
 <code>convert_factors = FALSE</code> to remove the automatic conversion of numeric
 variables to factors.</p>
     </div>
+    <div class="section level2">
+    <h2 id="data-encryption">Data encryption<a class="anchor" aria-label="anchor" href="#data-encryption"></a></h2>
+
+
+<p><code>data_read()</code> and <code>data_write()</code> support data encryption for R file formats
+(<code>.rds</code>, <code>.rda</code> and <code>.rdata</code>). To encrypt a file, provide a password to the
+<code>password</code> argument in <code>data_write()</code>. To decrypt the file, provide the same
+password to <code>data_read()</code>. The encryption is based on the <strong>openssl</strong> package
+and uses the AES-GCM algorithm (see <code><a href="https://jeroen.r-universe.dev/openssl/reference/aes_cbc.html" class="external-link">?openssl::aes_gcm_encrypt</a></code>) with a
+256-bit key (see <code><a href="https://jeroen.r-universe.dev/openssl/reference/hash.html" class="external-link">?openssl::sha256</a></code>). Thus, data can also be decrypted without
+relying on the <strong>datawizard</strong> package, e.g. using following code:</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>encrypted_data <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(datafile)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>key <span class="ot">&lt;-</span> openssl<span class="sc">::</span><span class="fu">sha256</span>(<span class="fu">charToRaw</span>(<span class="st">"&lt;password&gt;"</span>))</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>out <span class="ot">&lt;-</span> openssl<span class="sc">::</span><span class="fu">aes_gcm_decrypt</span>(encrypted_data, <span class="at">key =</span> key)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>decrypted_data <span class="ot">&lt;-</span> <span class="fu">unserialize</span>(out)</span></code></pre><p></p></div>
+<p><strong>Warning:</strong> Do not lose your <code>password</code>, else you will not be able to
+decrypt the data again!</p>
+    </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
+  <p>Developed by <a href="https://www.indrapatil.com/" class="external-link">Indrajeet Patil</a>, <a href="https://www.etiennebacher.com/" class="external-link">Etienne Bacher</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
