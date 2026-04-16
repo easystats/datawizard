@@ -33,8 +33,20 @@ test_that("data_write, encrypting rds files", {
     # wrong password
     expect_error(data_read(tmp, password = "text"), "File does not appear")
 
-    # not encrypzed
+    # not encrypted
     data_write(d, tmp)
+    expect_error(data_read(tmp, password = "test"), "File does not appear")
+
+    # check other decryption functions, should fail when encrypted with datawizard
+    expect_warning(data_write(d, tmp, password = "test"))
+    out <- readRDS(tmp)
+    key <- openssl::sha256(charToRaw("test"))
+    expect_error(openssl::aes_cbc_decrypt(out, key = key))
+
+    # check other encryption functions, should fail imported with datawizard
+    x <- serialize(d, NULL)
+    key <- openssl::sha256(charToRaw("test"))
+    saveRDS(openssl::aes_cbc_encrypt(x, key = key), tmp)
     expect_error(data_read(tmp, password = "test"), "File does not appear")
   })
 })
