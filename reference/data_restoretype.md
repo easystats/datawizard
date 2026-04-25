@@ -41,11 +41,11 @@ data <- data.frame(
 
 fixed <- data_restoretype(data, reference = iris)
 summary(fixed)
-#>   Sepal.Length       Species      New           
-#>  Min.   :1.0   setosa    :2   Length:3          
-#>  1st Qu.:1.5   versicolor:1   Class :character  
-#>  Median :2.0   virginica :0   Mode  :character  
-#>  Mean   :2.0                                    
-#>  3rd Qu.:2.5                                    
-#>  Max.   :3.0                                    
+#>   Sepal.Length       Species         New   
+#>  Min.   :1.0   setosa    :2   Length   :3  
+#>  1st Qu.:1.5   versicolor:1   N.unique :3  
+#>  Median :2.0   virginica :0   N.blank  :0  
+#>  Mean   :2.0                  Min.nchar:1  
+#>  3rd Qu.:2.5                  Max.nchar:1  
+#>  Max.   :3.0                               
 ```
