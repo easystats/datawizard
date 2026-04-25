@@ -269,7 +269,7 @@ data_filter.data.frame <- function(x, ...) {
         )
       }
 
-      if (inherits(out, "simpleError")) {
+      if (inherits(out, c("simpleError", "objectNotFoundError"))) {
         error_msg <- out$message[1]
         # try to find out which variable was the cause for the error
         if (grepl("object '(.*)' not found", error_msg)) {
