@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">datawizard</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,15 @@
       <small>Source: <a href="https://github.com/easystats/datawizard/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.1" id="datawizard-131">datawizard 1.3.1<a class="anchor" aria-label="anchor" href="#datawizard-131"></a></h2>
+<p>CHANGES</p>
+<ul><li><p><code><a href="../reference/data_summary.html">data_summary()</a></code> now allows expressions to return more than one summary value. For each value, a new column is created. Additionally, the optional <code>suffix</code> argument controls the naming of these columns; if <code>suffix = NULL</code>, column names are auto-generated (e.g., with numeric suffixes).</p></li>
+<li><p><code><a href="../reference/standardize.html">standardize()</a></code> now works on <code>fixest</code> estimations (<a href="https://github.com/easystats/datawizard/issues/665" class="external-link">#665</a>).</p></li>
+<li><p><code><a href="../reference/data_read.html">data_read()</a></code> and <code><a href="../reference/data_read.html">data_write()</a></code> gain a <code>password</code> argument, to encrypt and decrypt data files. This currently only works for R file formats (<code>.rda</code>, <code>.rds</code>, and <code>.rdata</code>). Data encryption is based on the AES-GCM algorithm using the <code><a href="https://jeroen.r-universe.dev/openssl/reference/aes_cbc.html" class="external-link">openssl::aes_gcm_encrypt()</a></code> function (<a href="https://github.com/easystats/datawizard/issues/675" class="external-link">#675</a>).</p></li>
+</ul><p>FIXES</p>
+<ul><li>Fix a test due to R-devel change (<a href="https://github.com/easystats/datawizard/issues/677" class="external-link">#677</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.3.0" id="datawizard-130">datawizard 1.3.0<a class="anchor" aria-label="anchor" href="#datawizard-130"></a></h2><p class="text-muted">CRAN release: 2025-10-11</p>
 <p>BREAKING CHANGES</p>

@@ -1,5 +1,34 @@
 # Changelog
 
+## datawizard 1.3.1
+
+CHANGES
+
+- [`data_summary()`](https://easystats.github.io/datawizard/reference/data_summary.md)
+  now allows expressions to return more than one summary value. For each
+  value, a new column is created. Additionally, the optional `suffix`
+  argument controls the naming of these columns; if `suffix = NULL`,
+  column names are auto-generated (e.g., with numeric suffixes).
+
+- [`standardize()`](https://easystats.github.io/datawizard/reference/standardize.md)
+  now works on `fixest` estimations
+  ([\#665](https://github.com/easystats/datawizard/issues/665)).
+
+- [`data_read()`](https://easystats.github.io/datawizard/reference/data_read.md)
+  and
+  [`data_write()`](https://easystats.github.io/datawizard/reference/data_read.md)
+  gain a `password` argument, to encrypt and decrypt data files. This
+  currently only works for R file formats (`.rda`, `.rds`, and
+  `.rdata`). Data encryption is based on the AES-GCM algorithm using the
+  [`openssl::aes_gcm_encrypt()`](https://jeroen.r-universe.dev/openssl/reference/aes_cbc.html)
+  function
+  ([\#675](https://github.com/easystats/datawizard/issues/675)).
+
+FIXES
+
+- Fix a test due to R-devel change
+  ([\#677](https://github.com/easystats/datawizard/issues/677)).
+
 ## datawizard 1.3.0
 
 CRAN release: 2025-10-11
