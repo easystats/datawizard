@@ -2,6 +2,8 @@
 
 ## datawizard 1.3.1
 
+CRAN release: 2026-04-26
+
 CHANGES
 
 - [`data_summary()`](https://easystats.github.io/datawizard/reference/data_summary.md)

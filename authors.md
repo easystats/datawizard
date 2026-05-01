@@ -30,7 +30,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/easystats/datawizard/blob/v1.3.1/inst/CITATION)
+[`inst/CITATION`](https://github.com/easystats/datawizard/blob/main/inst/CITATION)
 
 Patil et al., (2022). datawizard: An R Package for Easy Data Preparation
 and Statistical Transformations. Journal of Open Source Software, 7(78),
