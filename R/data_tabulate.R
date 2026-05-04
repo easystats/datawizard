@@ -239,6 +239,13 @@ data_tabulate.default <- function(
     return(NULL)
   }
 
+  # from R > 4.6, no missing row names are allowed
+  # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2026/05/01#n2026-05-01
+  # When we use `addNA`, the names of the table will contain NA-values, resulting
+  # in an error. Therefore, we replace all NA names with string representations
+  # here (see also #680)
+  names(freq_table)[is.na(names(freq_table))] <- "<NA>"
+
   # create data frame with freq table and cumulative percentages etc.
   out <- data_rename(
     data.frame(freq_table, stringsAsFactors = FALSE),

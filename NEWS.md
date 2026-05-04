@@ -1,3 +1,9 @@
+# datawizard (devel)
+
+FIXES
+
+* Fix a test due to R-devel change (#680).
+
 # datawizard 1.3.1
 
 CHANGES
