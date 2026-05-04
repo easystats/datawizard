@@ -366,6 +366,9 @@ test_that("data_tabulate exclude/include missing values", {
   expect_identical(out$N, c(10, 67, 15, 13))
   out <- data_tabulate(efc$c172code, remove_na = TRUE, weights = efc$weights)
   expect_identical(out$N, c(10, 67, 15))
+  # check that NA in row names does not error on R > 4.6 (#680)
+  expect_no_error(data_tabulate(efc, c("c172code", "e16sex")))
+  expect_no_error(data_tabulate(efc, "c172code", by = "e16sex"))
 })
 
 
@@ -400,7 +403,7 @@ test_that("data_tabulate, cross tables", {
     proportions = "full",
     remove_na = TRUE,
     weights = efc$weights
-  ))) # nolint
+  )))
   expect_snapshot(print(data_tabulate(
     efc,
     "c172code",
@@ -428,7 +431,7 @@ test_that("data_tabulate, cross tables", {
     proportions = "row",
     remove_na = TRUE,
     weights = efc$weights
-  ))) # nolint
+  )))
   expect_snapshot(print(data_tabulate(
     efc,
     "c172code",
@@ -456,13 +459,13 @@ test_that("data_tabulate, cross tables", {
     proportions = "column",
     remove_na = TRUE,
     weights = "weights"
-  ))) # nolint
+  )))
   expect_snapshot(print(data_tabulate(
     efc,
     c("c172code", "e42dep"),
     by = "e16sex",
     proportions = "row"
-  ))) # nolint
+  )))
 })
 
 test_that("data_tabulate, cross tables, HTML", {
@@ -488,7 +491,7 @@ test_that("data_tabulate, cross tables, HTML", {
       remove_na = TRUE
     )),
     "gt_tbl"
-  ) # nolint
+  )
   expect_s3_class(
     print_html(data_tabulate(
       efc$c172code,
@@ -497,7 +500,7 @@ test_that("data_tabulate, cross tables, HTML", {
       weights = efc$weights
     )),
     "gt_tbl"
-  ) # nolint
+  )
   expect_s3_class(
     print_html(data_tabulate(
       efc$c172code,
@@ -507,7 +510,7 @@ test_that("data_tabulate, cross tables, HTML", {
       weights = efc$weights
     )),
     "gt_tbl"
-  ) # nolint
+  )
   expect_s3_class(
     print_html(data_tabulate(
       efc,
@@ -527,7 +530,7 @@ test_that("data_tabulate, cross tables, HTML", {
       weights = efc$weights
     )),
     "gt_tbl"
-  ) # nolint
+  )
   expect_s3_class(
     display(
       data_tabulate(
@@ -541,7 +544,7 @@ test_that("data_tabulate, cross tables, HTML", {
       format = "html"
     ),
     "gt_tbl"
-  ) # nolint
+  )
 })
 
 test_that("data_tabulate, cross tables, tinytable", {
@@ -621,7 +624,7 @@ test_that("data_tabulate, cross tables, grouped df", {
       proportions = "row"
     )),
     "gt_tbl"
-  ) # nolint
+  )
   expect_s3_class(
     print_html(data_tabulate(
       efc,
@@ -630,7 +633,7 @@ test_that("data_tabulate, cross tables, grouped df", {
       proportions = "row"
     )),
     "gt_tbl"
-  ) # nolint
+  )
 })
 
 test_that("data_tabulate, cross tables, print/format works", {
@@ -749,7 +752,7 @@ test_that("data_tabulate, cross tables, markdown", {
     proportions = "full",
     remove_na = TRUE,
     weights = efc$weights
-  ))) # nolint
+  )))
   expect_snapshot(print_md(data_tabulate(
     efc,
     "c172code",
@@ -757,13 +760,13 @@ test_that("data_tabulate, cross tables, markdown", {
     proportions = "column",
     remove_na = TRUE,
     weights = "weights"
-  ))) # nolint
+  )))
   expect_snapshot(print_md(data_tabulate(
     efc,
     c("c172code", "e42dep"),
     by = "e16sex",
     proportions = "row"
-  ))) # nolint
+  )))
   expect_snapshot(display(data_tabulate(
     efc,
     "c172code",
@@ -771,13 +774,13 @@ test_that("data_tabulate, cross tables, markdown", {
     proportions = "column",
     remove_na = TRUE,
     weights = "weights"
-  ))) # nolint
+  )))
   expect_snapshot(display(data_tabulate(
     efc,
     c("c172code", "e42dep"),
     by = "e16sex",
     proportions = "row"
-  ))) # nolint
+  )))
 })
 
 
