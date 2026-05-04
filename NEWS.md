@@ -2,7 +2,8 @@
 
 FIXES
 
-* Fix a test due to R-devel change (#680).
+* Fixed an issue in `data_tabulate()` when variables contained missing values.
+  This results in an error due to R-devel change (#680).
 
 # datawizard 1.3.1
 
