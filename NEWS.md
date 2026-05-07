@@ -1,3 +1,9 @@
+# datawizard (devel)
+
+CHANGES
+
+* `data_read()` now also reads zip-files from URLs.
+
 # datawizard 1.3.1
 
 CHANGES

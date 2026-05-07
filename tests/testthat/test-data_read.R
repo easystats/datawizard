@@ -335,6 +335,14 @@ test_that("data_read - zipped SPSS file", {
     )
     expect_identical(sum(vapply(d, is.factor, FUN.VALUE = logical(1L))), 0L)
     expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 26L)
+
+    # directly dowload from zip
+    d <- data_read(
+      "https://raw.github.com/easystats/circus/main/data/EFC.zip",
+      verbose = FALSE
+    )
+    expect_identical(sum(vapply(d, is.factor, FUN.VALUE = logical(1L))), 15L)
+    expect_identical(sum(vapply(d, is.numeric, FUN.VALUE = logical(1L))), 11L)
   })
 })
 
