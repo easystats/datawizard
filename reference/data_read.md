@@ -46,7 +46,8 @@ data_write(
 
 - path:
 
-  Character string, the file path to the data file.
+  A character string specifying the path to the data file. This can also
+  be a URL.
 
 - path_catalog:
 
@@ -129,7 +130,8 @@ A data frame.
 inside zip-compressed files. Thus, `path` can also be a URL to a file
 like `"http://www.url.com/file.csv"`. When `path` points to a
 zip-compressed file, and there are multiple files inside the
-zip-archive, then the first supported file is extracted and loaded.
+zip-archive, then the first supported file is extracted and loaded. It
+is also possible to read a zip-compressed file from URLs.
 
 ## General behaviour
 
