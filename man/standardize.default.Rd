@@ -94,7 +94,7 @@ coef(standardize(model))
 
 }
 \seealso{
-Other standardize: 
-\code{\link{standardize}()}
+Other standardize:
+\code{\link[=standardize]{standardize()}}
 }
 \concept{standardize}

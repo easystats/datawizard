@@ -279,14 +279,14 @@ standardize(d, center = 1, scale = 3)
 See \code{\link[=center]{center()}} for grand-mean centering of variables, and
 \code{\link[=makepredictcall.dw_transformer]{makepredictcall.dw_transformer()}} for use in model formulas.
 
-Other transform utilities: 
-\code{\link{normalize}()},
-\code{\link{ranktransform}()},
-\code{\link{rescale}()},
-\code{\link{reverse}()}
+Other transform utilities:
+\code{\link[=normalize]{normalize()}},
+\code{\link[=ranktransform]{ranktransform()}},
+\code{\link[=rescale]{rescale()}},
+\code{\link[=reverse]{reverse()}}
 
-Other standardize: 
-\code{\link{standardize.default}()}
+Other standardize:
+\code{\link[=standardize.default]{standardize.default()}}
 }
 \concept{standardize}
 \concept{transform utilities}
