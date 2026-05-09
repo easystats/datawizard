@@ -10,7 +10,8 @@
 #' or text files (like '.csv' files). All other file types are passed to
 #' `rio::import()`. `data_write()` works in a similar way.
 #'
-#' @param path Character string, the file path to the data file.
+#' @param path A character string specifying the path to the data file. This can
+#' also be a URL.
 #' @param path_catalog Character string, path to the catalog file. Only relevant
 #' for SAS data files.
 #' @param encoding The character encoding used for the file. Usually not needed.
@@ -50,7 +51,8 @@
 #' inside zip-compressed files. Thus, `path` can also be a URL to a file like
 #' `"http://www.url.com/file.csv"`. When `path` points to a zip-compressed file,
 #' and there are multiple files inside the zip-archive, then the first supported
-#' file is extracted and loaded.
+#' file is extracted and loaded. It is also possible to read a zip-compressed
+#' file  from URLs.
 #'
 #' @section General behaviour:
 #' `data_read()` detects the appropriate `read_*()` function based on the
@@ -176,6 +178,10 @@ data_read <- function(
 
 
 .extract_zip <- function(path) {
+  # download from URL?
+  path <- .check_path_url(path, file_type = "zip")
+
+  # extract
   files <- utils::unzip(path, list = TRUE)
   files_ext <- vapply(files$Name, .file_ext, FUN.VALUE = character(1L))
 

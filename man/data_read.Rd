@@ -27,7 +27,8 @@ data_write(
 )
 }
 \arguments{
-\item{path}{Character string, the file path to the data file.}
+\item{path}{A character string specifying the path to the data file. This can
+also be a URL.}
 
 \item{path_catalog}{Character string, path to the catalog file. Only relevant
 for SAS data files.}
@@ -100,7 +101,8 @@ by these packages.
 inside zip-compressed files. Thus, \code{path} can also be a URL to a file like
 \code{"http://www.url.com/file.csv"}. When \code{path} points to a zip-compressed file,
 and there are multiple files inside the zip-archive, then the first supported
-file is extracted and loaded.
+file is extracted and loaded. It is also possible to read a zip-compressed
+file  from URLs.
 }
 
 \section{General behaviour}{
