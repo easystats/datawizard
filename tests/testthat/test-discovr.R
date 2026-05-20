@@ -1,7 +1,6 @@
 skip_on_cran()
 skip_if_not_installed("discovr")
 
-
 test_that("discovr-book-examples, chap 8.8", {
   data(album_sales, package = "discovr")
   set.seed(123)
