@@ -1,4 +1,3 @@
-skip_on_cran()
 skip_if_not_installed("discovr")
 
 test_that("discovr-book-examples, chap 8.8", {
