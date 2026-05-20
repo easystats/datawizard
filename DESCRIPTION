@@ -43,6 +43,7 @@ Suggests:
     brms,
     curl,
     data.table,
+    discovr,
     dplyr (>= 1.1),
     effectsize,
     emmeans,
