@@ -7,6 +7,7 @@
   remove_na = FALSE,
   proportions = NULL,
   obj_name = NULL,
+  by_name = NULL,
   group_variable = NULL
 ) {
   if (!is.null(proportions)) {
@@ -89,6 +90,8 @@
   attr(out, "weights") <- weights
   attr(out, "proportions") <- proportions
   attr(out, "varname") <- obj_name
+  attr(out, "by") <- by_name
+
   attr(out, "grouped_df") <- !is.null(group_variable)
   attr(out, "prop_table") <- .prop_table(out)
 

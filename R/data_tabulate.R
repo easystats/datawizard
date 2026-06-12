@@ -188,6 +188,10 @@ data_tabulate.default <- function(
 
   # we go into another function for crosstables here...
   if (!is.null(by)) {
+    by_name <- tryCatch(
+      insight::safe_deparse(substitute(by)),
+      error = function(e) NULL
+    )
     by <- .validate_by(by, x)
     return(.crosstable(
       x,
@@ -196,6 +200,7 @@ data_tabulate.default <- function(
       remove_na = remove_na,
       proportions = proportions,
       obj_name = obj_name,
+      by_name = by_name,
       group_variable = group_variable
     ))
   }
@@ -335,6 +340,10 @@ data_tabulate.data.frame <- function(
     verbose = verbose
   )
 
+  by_name <- tryCatch(
+    insight::safe_deparse(substitute(by)),
+    error = function(e) NULL
+  )
   # validate "by"
   by <- .validate_by(by, x)
   # validate "weights"
@@ -358,6 +367,7 @@ data_tabulate.data.frame <- function(
     class(out) <- c("datawizard_tables", "list")
   } else {
     class(out) <- c("datawizard_crosstabs", "list")
+    attr(out, "by") <- gsub('\\"', "", by_name)
   }
   attr(out, "collapse") <- isTRUE(collapse)
   attr(out, "is_weighted") <- !is.null(weights)
@@ -396,6 +406,11 @@ data_tabulate.grouped_df <- function(
     verbose = verbose
   )
 
+  by_name <- tryCatch(
+    insight::safe_deparse(substitute(by)),
+    error = function(e) NULL
+  )
+
   x <- as.data.frame(x)
 
   out <- list()
@@ -429,6 +444,7 @@ data_tabulate.grouped_df <- function(
     class(out) <- c("datawizard_tables", "list")
   } else {
     class(out) <- c("datawizard_crosstabs", "list")
+    attr(out, "by") <- gsub('\\"', "", by_name)
   }
   attr(out, "collapse") <- isTRUE(collapse)
   attr(out, "is_weighted") <- !is.null(weights)
