@@ -240,9 +240,9 @@ test_that("data_tabulate data.frame with measures", {
   expect_identical(table1$N, as.vector(table(addNA(efc$e16sex))))
   expect_identical(
     table1$`Raw %`,
-    as.vector(c(
+    as.vector(
       100 * table(efc$e16sex, useNA = "always") / length(efc$e16sex)
-    )),
+    ),
     ignore_attr = TRUE,
     tolerance = 1e-3
   )
