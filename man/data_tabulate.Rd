@@ -19,7 +19,6 @@ data_tabulate(x, ...)
   proportions = NULL,
   name = NULL,
   verbose = TRUE,
-  measures = c("raw", "valid", "cumulative"),
   ...
 )
 
@@ -74,11 +73,6 @@ or \code{"full"} (to calculate relative frequencies for the full table).}
 for printing.}
 
 \item{verbose}{Toggle warnings and messages.}
-
-\item{measures}{Optional character vector, indicating the types of
-percents to be included. Only applies to frequencies, i.e. when \code{by} is
-\code{NULL}. Can be \code{"raw"} (includes \code{NA} values), \code{"valid"} (excludes \code{NA} values)
-or \code{"cumulative"} (excludes \code{NA} vlues).}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
