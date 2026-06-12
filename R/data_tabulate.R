@@ -255,9 +255,7 @@ data_tabulate.default <- function(
     out$N <- round(out$N)
   }
 
-
   out$`Raw %` <- 100 * out$N / sum(out$N)
-
   # if we have missing values, we add a row with NA
   if (remove_na) {
     out$`Valid %` <- 100 * out$N / sum(out$N)
@@ -267,7 +265,8 @@ data_tabulate.default <- function(
     valid_n <- sum(out$N[-length(out$N)], na.rm = TRUE)
   }
   out$`Cumulative %` <- cumsum(out$`Valid %`)
-  # add information about variable/group names
+
+    # add information about variable/group names
   if (!is.null(obj_name)) {
     if (is.null(group_variable)) {
       var_info <- data.frame(Variable = obj_name, stringsAsFactors = FALSE)
