@@ -42,7 +42,7 @@
 #' @param measures Optional character vector, indicating the types of
 #' percents to be included. Only applies to frequencies, i.e. when `by` is
 #' `NULL`. Can be `"raw"` (includes `NA` values), `"valid"` (excludes `NA` values)
-#' or `"cumulative"` (excludes `NA` vlues).
+#' or `"cumulative"` (excludes `NA` values).
 #' @param ... not used.
 #' @inheritParams extract_column_names
 #'
@@ -88,6 +88,9 @@
 #' data_tabulate(efc$c172code)
 #'
 #' # drop missing values
+#' data_tabulate(efc$c172code, remove_na = TRUE)
+#'
+#' # exclude the cumulative percent column
 #' data_tabulate(efc$c172code, remove_na = TRUE)
 #'
 #' # data frame
@@ -255,7 +258,7 @@ data_tabulate.default <- function(
     out$N <- round(out$N)
   }
 
-  if ("raw" %in% measures){
+  if ("raw" %in% measures) {
     out$`Raw %` <- 100 * out$N / sum(out$N)
   }
   # if we have missing values, we add a row with NA
@@ -334,7 +337,6 @@ data_tabulate.data.frame <- function(
     regex = regex,
     verbose = verbose
   )
-
   # validate "by"
   by <- .validate_by(by, x)
   # validate "weights"

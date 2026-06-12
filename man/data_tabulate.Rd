@@ -78,7 +78,7 @@ for printing.}
 \item{measures}{Optional character vector, indicating the types of
 percents to be included. Only applies to frequencies, i.e. when \code{by} is
 \code{NULL}. Can be \code{"raw"} (includes \code{NA} values), \code{"valid"} (excludes \code{NA} values)
-or \code{"cumulative"} (excludes \code{NA} vlues).}
+or \code{"cumulative"} (excludes \code{NA} values).}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -202,6 +202,9 @@ data(efc)
 data_tabulate(efc$c172code)
 
 # drop missing values
+data_tabulate(efc$c172code, remove_na = TRUE)
+
+# exclude the cumulative percent column
 data_tabulate(efc$c172code, remove_na = TRUE)
 
 # data frame
