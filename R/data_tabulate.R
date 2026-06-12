@@ -266,9 +266,7 @@ data_tabulate.default <- function(
     out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
     valid_n <- sum(out$N[-length(out$N)], na.rm = TRUE)
   }
-
   out$`Cumulative %` <- cumsum(out$`Valid %`)
-
   # add information about variable/group names
   if (!is.null(obj_name)) {
     if (is.null(group_variable)) {
