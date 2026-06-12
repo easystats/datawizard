@@ -258,6 +258,12 @@ data_tabulate.default <- function(
     out$N <- round(out$N)
   }
 
+  # validate "measures"
+  if (!is.null(measures)) {
+    measures <- match.arg(measures,
+                        choices = c("raw", "valid", "cumulative"),
+                        several.ok = TRUE)
+  }
   if ("raw" %in% measures) {
     out$`Raw %` <- 100 * out$N / sum(out$N)
   }
