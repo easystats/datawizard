@@ -39,6 +39,10 @@
 #' printed as markdown or HTML table, depending on the environment. See
 #' [`insight::export_table()`] for details.
 #' @param verbose Toggle warnings and messages.
+#' @param measures Optional character vector, indicating the types of
+#' percents to be included. Only applies to frequencies, i.e. when `by` is
+#' `NULL`. Can be `"raw"` (includes `NA` values), `"valid"` (excludes `NA` values)
+#' or `"cumulative"` (excludes `NA` vlues).
 #' @param ... not used.
 #' @inheritParams extract_column_names
 #'
@@ -154,6 +158,7 @@ data_tabulate.default <- function(
   proportions = NULL,
   name = NULL,
   verbose = TRUE,
+  measures = c("raw", "valid", "cumulative"),
   ...
 ) {
   # save label attribute, before it gets lost...
@@ -250,7 +255,9 @@ data_tabulate.default <- function(
     out$N <- round(out$N)
   }
 
-  out$`Raw %` <- 100 * out$N / sum(out$N)
+  if ("raw" %in% measures){
+    out$`Raw %` <- 100 * out$N / sum(out$N)
+  }
   # if we have missing values, we add a row with NA
   if (remove_na) {
     out$`Valid %` <- 100 * out$N / sum(out$N)
@@ -259,8 +266,14 @@ data_tabulate.default <- function(
     out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
     valid_n <- sum(out$N[-length(out$N)], na.rm = TRUE)
   }
-  out$`Cumulative %` <- cumsum(out$`Valid %`)
 
+  if ("cumulative" %in% measures) {
+    out$`Cumulative %` <- cumsum(out$`Valid %`)
+  }
+
+  if (!"valid" %in% measures) {
+     out$`Valid %` <- NULL
+  }
   # add information about variable/group names
   if (!is.null(obj_name)) {
     if (is.null(group_variable)) {
