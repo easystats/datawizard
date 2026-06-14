@@ -266,7 +266,7 @@ data_tabulate.default <- function(
   }
   out$`Cumulative %` <- cumsum(out$`Valid %`)
 
-    # add information about variable/group names
+  # add information about variable/group names
   if (!is.null(obj_name)) {
     if (is.null(group_variable)) {
       var_info <- data.frame(Variable = obj_name, stringsAsFactors = FALSE)
@@ -354,7 +354,7 @@ data_tabulate.data.frame <- function(
     class(out) <- c("datawizard_tables", "list")
   } else {
     class(out) <- c("datawizard_crosstabs", "list")
-    attr(out, "by") <- gsub('\\"', "", by_name)
+    attr(out, "by") <- gsub('\\"', "", by_name, fixed = TRUE)
   }
   attr(out, "collapse") <- isTRUE(collapse)
   attr(out, "is_weighted") <- !is.null(weights)
@@ -431,7 +431,7 @@ data_tabulate.grouped_df <- function(
     class(out) <- c("datawizard_tables", "list")
   } else {
     class(out) <- c("datawizard_crosstabs", "list")
-    attr(out, "by") <- gsub('\\"', "", by_name)
+    attr(out, "by") <- gsub('\\"', "", by_name, fixed = TRUE)
   }
   attr(out, "collapse") <- isTRUE(collapse)
   attr(out, "is_weighted") <- !is.null(weights)
