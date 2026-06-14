@@ -261,8 +261,8 @@ data_tabulate.default <- function(
   # validate "measures"
   if (!is.null(measures)) {
     measures <- match.arg(measures,
-                        choices = c("raw", "valid", "cumulative"),
-                        several.ok = TRUE)
+                          choices = c("raw", "valid", "cumulative"),
+                          several.ok = TRUE)
   }
   if ("raw" %in% measures) {
     out$`Raw %` <- 100 * out$N / sum(out$N)
@@ -281,7 +281,7 @@ data_tabulate.default <- function(
   }
 
   if (!"valid" %in% measures) {
-     out$`Valid %` <- NULL
+    out$`Valid %` <- NULL
   }
   # add information about variable/group names
   if (!is.null(obj_name)) {
