@@ -181,7 +181,78 @@ test_that("data_tabulate data.frame", {
   )
 })
 
+test_that("data_tabulate data.frame by", {
+  data(efc, package = "datawizard")
+  x <- data_tabulate.data.frame(efc, "c172code", by = "e16sex")
+  expect_s3_class(x, c("datawizard_crosstab", "list"))
+  expect_length(x, 1L)
+  expect_identical(
+    attributes(x[[1]]),
+    list(
+      names = c(
+        "c172code",
+        "male",
+        "female",
+        "NA"
+      ),
+      row.names = 1:4,
+      class = c("datawizard_crosstab", "data.frame"),
+      total_n = 100L,
+      varname = "c172code",
+      by = "e16sex",
+      grouped_df = FALSE
+    )
+  )
+})
 
+test_that("data_tabulate default by", {
+  data(efc, package = "datawizard")
+  x <- data_tabulate(efc$c172code, by = efc$e16sex)
+  expect_s3_class(x, c("datawizard_crosstab", "data.frame"))
+  expect_length(x, 4L)
+  expect_identical(
+    attributes(x),
+    list(
+      names = c(
+        "efc$c172code",
+        "male",
+        "female",
+        "NA"
+      ),
+      row.names = 1:4,
+      class = c("datawizard_crosstab", "data.frame"),
+      total_n = 100L,
+      varname = "efc$c172code",
+      by = "efc$e16sex",
+      grouped_df = FALSE
+    )
+  )
+})
+test_that("data_tabulate grouped data.frame by", {
+  skip_if_not_installed("poorman")
+  data(efc, package = "datawizard")
+  x <- data_tabulate(poorman::group_by(efc, e16sex), "c172code", by = "e42dep")
+  expect_identical(
+    attributes(x[[1]]),
+    list(
+      names = c(
+        "c172code",
+        "Group",
+        "1",
+        "2",
+        "3",
+        "4",
+        "NA"
+      ),
+      class = c("datawizard_crosstab", "data.frame"),
+      row.names = 1:4,
+      total_n = 46L,
+      varname = "c172code",
+      by = "e42dep",
+      grouped_df = TRUE
+    )
+  )
+})
 test_that("data_tabulate unsupported class", {
   data(mtcars)
   expect_warning(
