@@ -21,7 +21,7 @@ CHANGES
   the `openssl::aes_gcm_encrypt()` function (#675).
 
 * `data_tabulate()` gain a `measures` argument to allow selection of columns to
-  display ("raw", "valid", and "cumulative") (#689 @elinw).
+  display ("raw", "valid", and "cumulative") (#689, @elinw).
 
 FIXES
 
