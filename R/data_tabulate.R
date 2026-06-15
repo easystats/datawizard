@@ -42,7 +42,8 @@
 #' @param measures Optional character vector, indicating the types of
 #' percents to be included. Only applies to frequencies, i.e. when `by` is
 #' `NULL`. Can be `"raw"` (includes `NA` values), `"valid"` (excludes `NA` values)
-#' or `"cumulative"` (excludes `NA` values).
+#' or `"cumulative"` (excludes `NA` values). Using `c()` will return
+#' a table with only the frequency counts.
 #' @param ... not used.
 #' @inheritParams extract_column_names
 #'
@@ -91,8 +92,10 @@
 #' data_tabulate(efc$c172code, remove_na = TRUE)
 #'
 #' # exclude the cumulative percent column
-#' data_tabulate(efc$c172code, remove_na = TRUE)
+#' data_tabulate(efc$c172code, remove_na = TRUE, measures = c("raw", "valid"))
 #'
+#' # return frequencies only
+#' data_tabulate(efc$c172code, remove_na = TRUE, measures = c())
 #' # data frame
 #' data_tabulate(efc, c("e42dep", "c172code"))
 #'
