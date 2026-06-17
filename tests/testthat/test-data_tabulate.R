@@ -183,7 +183,7 @@ test_that("data_tabulate data.frame", {
 
 test_that("data_tabulate data.frame by", {
   data(efc, package = "datawizard")
-  x <- data_tabulate.data.frame(efc, "c172code", by = "e16sex")
+  x <- data_tabulate(efc, "c172code", by = "e16sex")
   expect_s3_class(x, c("datawizard_crosstab", "list"))
   expect_length(x, 1L)
   expect_identical(

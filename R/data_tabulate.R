@@ -333,7 +333,7 @@ data_tabulate.data.frame <- function(
       insight::safe_deparse(substitute(by)),
       error = function(e) NULL
     )
-    by_name <- gsub('\\"', "", by_name)
+    by_name <- gsub('\"', "", by_name, fixed = TRUE)
   }
   # evaluate arguments
   select <- .select_nse(
@@ -406,7 +406,7 @@ data_tabulate.grouped_df <- function(
       insight::safe_deparse(substitute(by)),
       error = function(e) NULL
     )
-    by_name <- gsub('\\"', "", by_name)
+    by_name <- gsub('\"', "", by_name, fixed = TRUE)
   }
   # evaluate arguments
   select <- .select_nse(
