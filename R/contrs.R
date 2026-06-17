@@ -2,7 +2,13 @@
 #'
 #' Build a deviation contrast matrix, a type of _effects contrast_ matrix.
 #'
-#' @inheritParams stats::contr.sum
+#' @param n a vector of levels for a factor, or the number of levels.
+#' @param base an integer specifying which group is considered the
+#'  baseline group. Ignored if `contrasts` is `FALSE`.
+#' @param contrasts description
+#' @param sparse logical indicating if the result should be sparse
+#' (of class \code{\link[Matrix]{dgCMatrix-class}}), using
+#' package \code{\link{Matrix}}
 #'
 #' @details
 #' In effects coding, unlike treatment/dummy coding
