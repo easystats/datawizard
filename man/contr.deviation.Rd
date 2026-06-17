@@ -15,8 +15,8 @@ baseline group. Ignored if \code{contrasts} is \code{FALSE}.}
 \item{contrasts}{description}
 
 \item{sparse}{logical indicating if the result should be sparse
-(of class \href{linkS4class(dgCMatrix)}{\code{Matrix}}, using
-package CRANpkg(Matrix).}
+(of class \code{\link[Matrix]{dgCMatrix-class}}), using
+package \code{\link{Matrix}}.}
 }
 \description{
 Build a deviation contrast matrix, a type of \emph{effects contrast} matrix.

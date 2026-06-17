@@ -7,8 +7,8 @@
 #'  baseline group. Ignored if `contrasts` is `FALSE`.
 #' @param contrasts description
 #' @param sparse logical indicating if the result should be sparse
-#' (of class [`Matrix`](linkS4class(dgCMatrix)), using
-#' package CRANpkg(Matrix).
+#' (of class \code{\link[Matrix]{dgCMatrix-class}}), using
+#' package \code{\link{Matrix}}.
 #'
 #' @details
 #' In effects coding, unlike treatment/dummy coding
