@@ -299,10 +299,10 @@ data_tabulate.default <- function(
 
   attr(out, "total_n") <- sum(out$N, na.rm = TRUE)
   attr(out, "valid_n") <- valid_n
-  if (!is.null(by)) {
-    attr(out, "by") <- by_name
-  } else {
+  if (is.null(by)) {
     attr(out, "by") <- NULL
+  } else {
+    attr(out, "by") <- by_name
   }
 
   class(out) <- c("datawizard_table", "data.frame")
