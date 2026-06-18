@@ -203,8 +203,7 @@ data_tabulate.default <- function(
       proportions = proportions,
       obj_name = obj_name,
       group_variable = group_variable
-    )
-    )
+    ))
   }
   # frequency table
   if (is.null(weights)) {

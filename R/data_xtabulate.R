@@ -9,7 +9,6 @@
   obj_name = NULL,
   group_variable = NULL
 ) {
-
   if (!is.null(proportions)) {
     proportions <- match.arg(proportions, c("row", "column", "full"))
   }
