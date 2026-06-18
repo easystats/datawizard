@@ -193,11 +193,10 @@ test_that("data_tabulate data.frame with metrics", {
       names = c(
         "Variable",
         "Value",
-        "N",
         "Raw %"
       ),
-      class = c("datawizard_table", "data.frame"),
       row.names = 1:3,
+      class = c("datawizard_table", "data.frame"),
       type = "numeric",
       varname = "e16sex",
       label = "elder's gender",
@@ -213,11 +212,10 @@ test_that("data_tabulate data.frame with metrics", {
       names = c(
         "Variable",
         "Value",
-        "N",
         "Raw %"
       ),
-      class = c("datawizard_table", "data.frame"),
       row.names = 1:4,
+      class = c("datawizard_table", "data.frame"),
       type = "numeric",
       varname = "c172code",
       label = "carer's level of education",
@@ -237,7 +235,7 @@ test_that("data_tabulate data.frame with metrics", {
       NA
     ))
   )
-  expect_identical(table1$N, as.vector(table(addNA(efc$e16sex))))
+  expect_null(table1$N)
   expect_identical(
     table1$`Raw %`,
     as.vector(
@@ -259,11 +257,10 @@ test_that("data_tabulate data.frame with metrics = NULL", {
     list(
       names = c(
         "Variable",
-        "Value",
-        "N"
+        "Value"
       ),
-      class = c("datawizard_table", "data.frame"),
       row.names = 1:3,
+      class = c("datawizard_table", "data.frame"),
       type = "numeric",
       varname = "e16sex",
       label = "elder's gender",
@@ -278,11 +275,10 @@ test_that("data_tabulate data.frame with metrics = NULL", {
     list(
       names = c(
         "Variable",
-        "Value",
-        "N"
+        "Value"
       ),
-      class = c("datawizard_table", "data.frame"),
       row.names = 1:4,
+      class = c("datawizard_table", "data.frame"),
       type = "numeric",
       varname = "c172code",
       label = "carer's level of education",
@@ -302,18 +298,16 @@ test_that("data_tabulate data.frame with metrics = NULL", {
       NA
     ))
   )
-  expect_identical(table1$N, as.vector(table(addNA(efc$e16sex))))
-  expect_identical(
-    table1$`Raw %`,
-    NULL,
-    ignore_attr = TRUE,
-    tolerance = 1e-3
+  expect_null(table1$N)
+  expect_null(
+    table1$`Raw %`
   )
 })
 
 test_that("data_tabulate data.frame with metrics = c()", {
   data(efc, package = "datawizard")
-  x <- data_tabulate(efc, c("e16sex"),
+  x <- data_tabulate(efc,
+                     c("e16sex"),
                      metrics = c())
   expect_s3_class(x, "list")
   expect_length(x, 1L)
@@ -322,11 +316,10 @@ test_that("data_tabulate data.frame with metrics = c()", {
     list(
       names = c(
         "Variable",
-        "Value",
-        "N"
+        "Value"
       ),
-      class = c("datawizard_table", "data.frame"),
       row.names = 1:3,
+      class = c("datawizard_table", "data.frame"),
       type = "numeric",
       varname = "e16sex",
       label = "elder's gender",
@@ -346,12 +339,9 @@ test_that("data_tabulate data.frame with metrics = c()", {
       NA
     ))
   )
-  expect_identical(table1$N, as.vector(table(addNA(efc$e16sex))))
-  expect_identical(
-    table1$`Raw %`,
-    NULL,
-    ignore_attr = TRUE,
-    tolerance = 1e-3
+  expect_null(table1$N)
+  expect_null(
+    table1$`Raw %`
   )
 })
 
@@ -366,11 +356,10 @@ test_that("data_tabulate data.frame with metrics = 'foo'", {
     list(
       names = c(
         "Variable",
-        "Value",
-        "N"
+        "Value"
       ),
-      class = c("datawizard_table", "data.frame"),
       row.names = 1:3,
+      class = c("datawizard_table", "data.frame"),
       type = "numeric",
       varname = "e16sex",
       label = "elder's gender",
@@ -385,11 +374,10 @@ test_that("data_tabulate data.frame with metrics = 'foo'", {
     list(
       names = c(
         "Variable",
-        "Value",
-        "N"
+        "Value"
       ),
-      class = c("datawizard_table", "data.frame"),
       row.names = 1:4,
+      class = c("datawizard_table", "data.frame"),
       type = "numeric",
       varname = "c172code",
       label = "carer's level of education",
@@ -409,13 +397,8 @@ test_that("data_tabulate data.frame with metrics = 'foo'", {
       NA
     ))
   )
-  expect_identical(table1$N, as.vector(table(addNA(efc$e16sex))))
-  expect_identical(
-    table1$`Raw %`,
-    NULL,
-    ignore_attr = TRUE,
-    tolerance = 1e-3
-  )
+  expect_null(table1$N)
+  expect_null(table1$`Raw %`)
 })
 
 
