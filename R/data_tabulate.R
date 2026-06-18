@@ -39,12 +39,12 @@
 #' printed as markdown or HTML table, depending on the environment. See
 #' [`insight::export_table()`] for details.
 #' @param verbose Toggle warnings and messages.
-#' @param measures Optional character vector, indicating the types of
+#' @param metrics Optional character vector, indicating the types of
 #' percents to be included. Only applies to frequencies, i.e. when `by` is
 #' `NULL`. Can include any combination of `"raw"` (includes `NA` values),
 #' `"valid"` (excludes `NA` values) or `"cumulative"` (excludes `NA` values).
 #' Using `c()` will return a table with only the frequency counts. Invalid
-#' values (`measures = "foo"`) are silently ignored.
+#' values (`metrics = "foo"`) are silently ignored.
 #' @param ... not used.
 #' @inheritParams extract_column_names
 #'
@@ -93,10 +93,10 @@
 #' data_tabulate(efc$c172code, remove_na = TRUE)
 #'
 #' # exclude the cumulative percent column
-#' data_tabulate(efc$c172code, measures = c("raw", "valid"))
+#' data_tabulate(efc$c172code, metrics = c("raw", "valid"))
 #'
 #' # return frequencies only
-#' data_tabulate(efc$c172code, remove_na = TRUE, measures = c())
+#' data_tabulate(efc$c172code, remove_na = TRUE, metrics = c())
 #'
 #' # data frame
 #' data_tabulate(efc, c("e42dep", "c172code"))
@@ -166,7 +166,7 @@ data_tabulate.default <- function(
   proportions = NULL,
   name = NULL,
   verbose = TRUE,
-  measures = c("raw", "valid", "cumulative"),
+  metrics = c("raw", "valid", "cumulative"),
   ...
 ) {
   # save label attribute, before it gets lost...
@@ -263,13 +263,13 @@ data_tabulate.default <- function(
     out$N <- round(out$N)
   }
 
-  # validate "measures"
-  if (!is.null(measures)) {
-    measures <- match.arg(measures,
+  # validate "metrics"
+  if (!is.null(metrics)) {
+    metrics <- match.arg(metrics,
                           choices = c("raw", "valid", "cumulative"),
                           several.ok = TRUE)
   }
-  if ("raw" %in% measures) {
+  if ("raw" %in% metrics) {
     out$`Raw %` <- 100 * out$N / sum(out$N)
   }
   # if we have missing values, we add a row with NA
@@ -281,11 +281,11 @@ data_tabulate.default <- function(
     valid_n <- sum(out$N[-length(out$N)], na.rm = TRUE)
   }
 
-  if ("cumulative" %in% measures) {
+  if ("cumulative" %in% metrics) {
     out$`Cumulative %` <- cumsum(out$`Valid %`)
   }
 
-  if (!"valid" %in% measures) {
+  if (!"valid" %in% metrics) {
     out$`Valid %` <- NULL
   }
   # add information about variable/group names

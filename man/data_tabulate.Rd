@@ -19,7 +19,7 @@ data_tabulate(x, ...)
   proportions = NULL,
   name = NULL,
   verbose = TRUE,
-  measures = c("raw", "valid", "cumulative"),
+  metrics = c("raw", "valid", "cumulative"),
   ...
 )
 
@@ -75,11 +75,12 @@ for printing.}
 
 \item{verbose}{Toggle warnings and messages.}
 
-\item{measures}{Optional character vector, indicating the types of
+\item{metrics}{Optional character vector, indicating the types of
 percents to be included. Only applies to frequencies, i.e. when \code{by} is
 \code{NULL}. Can include any combination of \code{"raw"} (includes \code{NA} values),
 \code{"valid"} (excludes \code{NA} values) or \code{"cumulative"} (excludes \code{NA} values).
-Using \code{c()} will return a table with only the frequency counts.}
+Using \code{c()} will return a table with only the frequency counts. Invalid
+values (\code{metrics = "foo"}) are silently ignored.}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -206,10 +207,11 @@ data_tabulate(efc$c172code)
 data_tabulate(efc$c172code, remove_na = TRUE)
 
 # exclude the cumulative percent column
-data_tabulate(efc$c172code, remove_na = TRUE, measures = c("raw", "valid"))
+data_tabulate(efc$c172code, metrics = c("raw", "valid"))
 
 # return frequencies only
-data_tabulate(efc$c172code, remove_na = TRUE, measures = c())
+data_tabulate(efc$c172code, remove_na = TRUE, metrics = c())
+
 # data frame
 data_tabulate(efc, c("e42dep", "c172code"))
 

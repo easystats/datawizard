@@ -181,10 +181,10 @@ test_that("data_tabulate data.frame", {
   )
 })
 
-test_that("data_tabulate data.frame with measures", {
+test_that("data_tabulate data.frame with metrics", {
   data(efc, package = "datawizard")
   x <- data_tabulate(efc, c("e16sex", "c172code"),
-                     measures = "raw")
+                     metrics = "raw")
   expect_s3_class(x, "list")
   expect_length(x, 2L)
   expect_identical(
@@ -248,10 +248,10 @@ test_that("data_tabulate data.frame with measures", {
   )
 })
 
-test_that("data_tabulate data.frame with measures = NULL", {
+test_that("data_tabulate data.frame with metrics = NULL", {
   data(efc, package = "datawizard")
   x <- data_tabulate(efc, c("e16sex", "c172code"),
-                     measures = NULL)
+                     metrics = NULL)
   expect_s3_class(x, "list")
   expect_length(x, 2L)
   expect_identical(
@@ -311,10 +311,10 @@ test_that("data_tabulate data.frame with measures = NULL", {
   )
 })
 
-test_that("data_tabulate data.frame with measures = c()", {
+test_that("data_tabulate data.frame with metrics = c()", {
   data(efc, package = "datawizard")
   x <- data_tabulate(efc, c("e16sex"),
-                     measures = c())
+                     metrics = c())
   expect_s3_class(x, "list")
   expect_length(x, 1L)
   expect_identical(
@@ -355,10 +355,10 @@ test_that("data_tabulate data.frame with measures = c()", {
   )
 })
 
-test_that("data_tabulate data.frame with measures = 'foo'", {
+test_that("data_tabulate data.frame with metrics = 'foo'", {
   data(efc, package = "datawizard")
   x <- data_tabulate(efc, c("e16sex", "c172code"),
-                     measures = NULL)
+                     metrics = NULL)
   expect_s3_class(x, "list")
   expect_length(x, 2L)
   expect_identical(
