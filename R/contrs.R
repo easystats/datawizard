@@ -7,7 +7,7 @@
 #'  baseline group. Ignored if `contrasts` is `FALSE`.
 #' @param contrasts A logical indicating whether contrasts should be computed.
 #' @param sparse Logical indicating if the result should be sparse
-#' (of class \code{\link{Matrix}{dgCMatrix-class}}), using
+#' (of class \code{\link{dgCMatrix-class}}), using
 #' package \code{\link{Matrix}}
 #'
 #' @details
