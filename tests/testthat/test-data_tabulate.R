@@ -183,8 +183,7 @@ test_that("data_tabulate data.frame", {
 
 test_that("data_tabulate data.frame with metrics", {
   data(efc, package = "datawizard")
-  x <- data_tabulate(efc, c("e16sex", "c172code"),
-                     metrics = "raw")
+  x <- data_tabulate(efc, c("e16sex", "c172code"), metrics = "raw")
   expect_s3_class(x, "list")
   expect_length(x, 2L)
   expect_identical(
@@ -247,9 +246,9 @@ test_that("data_tabulate data.frame with metrics", {
 })
 
 test_that("data_tabulate data.frame with metrics = NULL", {
+  # this is equivalent to metrics = c()
   data(efc, package = "datawizard")
-  x <- data_tabulate(efc, c("e16sex", "c172code"),
-                     metrics = NULL)
+  x <- data_tabulate(efc, c("e16sex", "c172code"), metrics = NULL)
   expect_s3_class(x, "list")
   expect_length(x, 2L)
   expect_identical(
@@ -304,51 +303,9 @@ test_that("data_tabulate data.frame with metrics = NULL", {
   )
 })
 
-test_that("data_tabulate data.frame with metrics = c()", {
-  data(efc, package = "datawizard")
-  x <- data_tabulate(efc,
-                     c("e16sex"),
-                     metrics = c())
-  expect_s3_class(x, "list")
-  expect_length(x, 1L)
-  expect_identical(
-    attributes(x[[1]]),
-    list(
-      names = c(
-        "Variable",
-        "Value"
-      ),
-      row.names = 1:3,
-      class = c("datawizard_table", "data.frame"),
-      type = "numeric",
-      varname = "e16sex",
-      label = "elder's gender",
-      object = "e16sex",
-      duplicate_varnames = c(FALSE, TRUE, TRUE),
-      total_n = 100L,
-      valid_n = 100L
-    )
-  )
-  table1 <- x[[1]]
-  expect_identical(
-    as.vector(table1$Value),
-    as.character(c(
-      sort(
-        unique(efc$e16sex)
-      ),
-      NA
-    ))
-  )
-  expect_null(table1$N)
-  expect_null(
-    table1$`Raw %`
-  )
-})
-
 test_that("data_tabulate data.frame with metrics = 'foo'", {
   data(efc, package = "datawizard")
-  x <- data_tabulate(efc, c("e16sex", "c172code"),
-                     metrics = NULL)
+  x <- data_tabulate(efc, c("e16sex", "c172code"), metrics = NULL)
   expect_s3_class(x, "list")
   expect_length(x, 2L)
   expect_identical(
