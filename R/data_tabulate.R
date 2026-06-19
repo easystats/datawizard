@@ -265,9 +265,11 @@ data_tabulate.default <- function(
 
   # validate "metrics"
   if (!is.null(metrics)) {
-    metrics <- match.arg(metrics,
-                          choices = c("N", "raw", "valid", "cumulative"),
-                          several.ok = TRUE)
+    metrics <- match.arg(
+      metrics,
+      choices = c("N", "raw", "valid", "cumulative"),
+      several.ok = TRUE
+    )
   }
   if ("raw" %in% metrics) {
     out$`Raw %` <- 100 * out$N / sum(out$N)
@@ -302,7 +304,7 @@ data_tabulate.default <- function(
     }
     out <- cbind(var_info, out)
   }
-  total_n = sum(out$N, na.rm = TRUE)
+  total_n <- sum(out$N, na.rm = TRUE)
   if (!"N" %in% metrics) {
     out <- data_select(out, exclude = "N")
   }
@@ -869,7 +871,7 @@ format.datawizard_table <- function(x, format = "text", big_mark = NULL, ...) {
   # convert to character manually, else, for large numbers,
   # format_table() returns scientific notation
   x <- as.data.frame(x)
-  if (!is.null(x$N)){
+  if (!is.null(x$N)) {
     x$N <- as.character(x$N)
   }
   # format data frame
@@ -878,8 +880,8 @@ format.datawizard_table <- function(x, format = "text", big_mark = NULL, ...) {
     i[i == ""] <- ifelse(identical(format, "text"), "<NA>", "(NA)") # nolint
     i
   })
-  if (!is.null(ftab$N)){
-  ftab$N <- gsub("\\.00$", "", ftab$N)
+  if (!is.null(ftab$N)) {
+    ftab$N <- gsub("\\.00$", "", ftab$N)
 
     # insert big marks?
     ftab$N <- .add_commas_in_numbers(ftab$N, big_mark)
