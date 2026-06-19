@@ -7,14 +7,14 @@
 contr.deviation(n, base = 1, contrasts = TRUE, sparse = FALSE)
 }
 \arguments{
-\item{n}{a vector of levels for a factor, or the number of levels.}
+\item{n}{A vector of levels for a factor, or the number of levels.}
 
-\item{base}{an integer specifying which group is considered the
+\item{base}{An integer specifying which group is considered the
 baseline group. Ignored if \code{contrasts} is \code{FALSE}.}
 
-\item{contrasts}{description}
+\item{contrasts}{A logical indicating whether contrasts should be computed.}
 
-\item{sparse}{logical indicating if the result should be sparse
+\item{sparse}{Logical indicating if the result should be sparse
 (of class \code{\link[Matrix]{dgCMatrix-class}}), using
 package \code{\link{Matrix}}}
 }

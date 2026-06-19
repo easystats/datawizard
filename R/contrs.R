@@ -2,11 +2,11 @@
 #'
 #' Build a deviation contrast matrix, a type of _effects contrast_ matrix.
 #'
-#' @param n a vector of levels for a factor, or the number of levels.
-#' @param base an integer specifying which group is considered the
+#' @param n A vector of levels for a factor, or the number of levels.
+#' @param base An integer specifying which group is considered the
 #'  baseline group. Ignored if `contrasts` is `FALSE`.
-#' @param contrasts description
-#' @param sparse logical indicating if the result should be sparse
+#' @param contrasts A logical indicating whether contrasts should be computed.
+#' @param sparse Logical indicating if the result should be sparse
 #' (of class \code{\link[Matrix]{dgCMatrix-class}}), using
 #' package \code{\link{Matrix}}
 #'
