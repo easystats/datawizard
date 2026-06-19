@@ -159,6 +159,14 @@ data_tabulate.default <- function(
   # save label attribute, before it gets lost...
   var_label <- attr(x, "label", exact = TRUE)
 
+  # save by attribute
+  if (!is.null(by)) {
+    by_name <- tryCatch(
+      insight::safe_deparse(substitute(by)),
+      error = function(e) NULL
+    )
+  }
+
   # save and fix variable name, check for grouping variable
   obj_name <- tryCatch(
     insight::safe_deparse(substitute(x)),
@@ -183,7 +191,10 @@ data_tabulate.default <- function(
 
   # we go into another function for crosstables here...
   if (!is.null(by)) {
+    # don't lose that name of the by variable
+    attr(x, "by") <- by_name
     by <- .validate_by(by, x)
+
     return(.crosstable(
       x,
       by = by,
@@ -194,7 +205,6 @@ data_tabulate.default <- function(
       group_variable = group_variable
     ))
   }
-
   # frequency table
   if (is.null(weights)) {
     if (remove_na) {
@@ -288,6 +298,11 @@ data_tabulate.default <- function(
 
   attr(out, "total_n") <- sum(out$N, na.rm = TRUE)
   attr(out, "valid_n") <- valid_n
+  if (is.null(by)) {
+    attr(out, "by") <- NULL
+  } else {
+    attr(out, "by") <- by_name
+  }
 
   class(out) <- c("datawizard_table", "data.frame")
 
@@ -312,6 +327,13 @@ data_tabulate.data.frame <- function(
   verbose = TRUE,
   ...
 ) {
+  if (!is.null(by)) {
+    by_name <- tryCatch(
+      insight::safe_deparse(substitute(by)),
+      error = function(e) NULL
+    )
+    by_name <- gsub('\"', "", by_name, fixed = TRUE)
+  }
   # evaluate arguments
   select <- .select_nse(
     select,
@@ -321,6 +343,10 @@ data_tabulate.data.frame <- function(
     regex = regex,
     verbose = verbose
   )
+
+  if (!is.null(by)) {
+    attr(x, "by") <- by_name
+  }
 
   # validate "by"
   by <- .validate_by(by, x)
@@ -340,12 +366,13 @@ data_tabulate.data.frame <- function(
       ...
     )
   })
-
   if (is.null(by)) {
     class(out) <- c("datawizard_tables", "list")
   } else {
+    out <- lapply(out, structure, by = by_name)
     class(out) <- c("datawizard_crosstabs", "list")
   }
+
   attr(out, "collapse") <- isTRUE(collapse)
   attr(out, "is_weighted") <- !is.null(weights)
 
@@ -372,7 +399,14 @@ data_tabulate.grouped_df <- function(
   grps <- attr(x, "groups", exact = TRUE)
   group_variables <- data_remove(grps, ".rows")
   grps <- grps[[".rows"]]
-
+  # save the by variable name
+  if (!is.null(by)) {
+    by_name <- tryCatch(
+      insight::safe_deparse(substitute(by)),
+      error = function(e) NULL
+    )
+    by_name <- gsub('\"', "", by_name, fixed = TRUE)
+  }
   # evaluate arguments
   select <- .select_nse(
     select,
@@ -415,6 +449,7 @@ data_tabulate.grouped_df <- function(
   if (is.null(by)) {
     class(out) <- c("datawizard_tables", "list")
   } else {
+    out <- lapply(out, structure, by = by_name)
     class(out) <- c("datawizard_crosstabs", "list")
   }
   attr(out, "collapse") <- isTRUE(collapse)
