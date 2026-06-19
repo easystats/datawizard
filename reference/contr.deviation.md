@@ -12,22 +12,21 @@ contr.deviation(n, base = 1, contrasts = TRUE, sparse = FALSE)
 
 - n:
 
-  a vector of levels for a factor, or the number of levels.
+  A vector of levels for a factor, or the number of levels.
 
 - base:
 
-  an integer specifying which group is considered the baseline group.
+  An integer specifying which group is considered the baseline group.
   Ignored if `contrasts` is `FALSE`.
 
 - contrasts:
 
-  a logical indicating whether contrasts should be computed.
+  A logical indicating whether contrasts should be computed.
 
 - sparse:
 
-  logical indicating if the result should be sparse (of class
-  `dgCMatrix`), using package
-  [Matrix](https://CRAN.R-project.org/package=Matrix).
+  Logical indicating if the result should be sparse (of class
+  `dgCMatrix-class`), using package `Matrix`
 
 ## Details
 
