@@ -15,7 +15,7 @@ baseline group. Ignored if \code{contrasts} is \code{FALSE}.}
 \item{contrasts}{A logical indicating whether contrasts should be computed.}
 
 \item{sparse}{Logical indicating if the result should be sparse
-(of class \code{\link[Matrix]{dgCMatrix-class}}), using
+(of class \code{\link{Matrix}{dgCMatrix-class}}), using
 package \code{\link{Matrix}}}
 }
 \description{
