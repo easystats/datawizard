@@ -12,6 +12,10 @@
   if (!is.null(proportions)) {
     proportions <- match.arg(proportions, c("row", "column", "full"))
   }
+  if (!is.null(attr(x, "by"))) {
+    by_name <- attr(x, "by")
+  }
+
   # frequency table
   if (is.null(weights)) {
     # we have a `.default` and a `.data.frame` method for `data_tabulate()`.
@@ -89,6 +93,11 @@
   attr(out, "weights") <- weights
   attr(out, "proportions") <- proportions
   attr(out, "varname") <- obj_name
+
+  if (!is.null(by_name)) {
+    attr(out, "by") <- by_name
+  }
+
   attr(out, "grouped_df") <- !is.null(group_variable)
   attr(out, "prop_table") <- .prop_table(out)
 

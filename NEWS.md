@@ -4,6 +4,9 @@ CHANGES
 
 * `data_read()` now also reads zip-files from URLs (#682).
 
+* `data_tabulate()` now returns an attribute "by" with the
+  `by` variable name when the `by` parameter is used (#690 @elinw).
+
 # datawizard 1.3.1
 
 CHANGES
