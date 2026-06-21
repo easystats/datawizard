@@ -359,7 +359,6 @@ test_that("data_tabulate data.frame with metrics = 'foo'", {
   expect_null(table1$`Raw %`)
 })
 
-
 test_that("data_tabulate data.frame by", {
   data(efc, package = "datawizard")
   x <- data_tabulate(efc, "c172code", by = "e16sex")
