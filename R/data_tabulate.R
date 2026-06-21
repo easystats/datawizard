@@ -375,6 +375,7 @@ data_tabulate.data.frame <- function(
     regex = regex,
     verbose = verbose
   )
+
   # validate "by"
   by <- .validate_by(by, x)
   # validate "weights"

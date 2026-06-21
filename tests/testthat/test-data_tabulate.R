@@ -181,6 +181,7 @@ test_that("data_tabulate data.frame", {
   )
 })
 
+
 test_that("data_tabulate data.frame with metrics", {
   data(efc, package = "datawizard")
   x <- data_tabulate(efc, c("e16sex", "c172code"), metrics = "raw")
@@ -358,6 +359,30 @@ test_that("data_tabulate data.frame with metrics = 'foo'", {
   expect_null(table1$`Raw %`)
 })
 
+
+
+  test_that("data_tabulate data.frame by", {
+    data(efc, package = "datawizard")
+    x <- data_tabulate(efc, "c172code", by = "e16sex")
+    expect_s3_class(x, c("datawizard_crosstab", "list"))
+    expect_length(x, 1L)
+    attributes(x),
+    list(
+      names = c(
+        "c172code",
+        "male",
+        "female",
+        "NA"
+      ),
+      row.names = 1:4,
+      class = c("datawizard_crosstab", "data.frame"),
+      total_n = 100L,
+      varname = "c172code",
+      by = "e16sex",
+      grouped_df = FALSE
+    )
+  )
+})
 
 test_that("data_tabulate default by", {
   data(efc, package = "datawizard")
