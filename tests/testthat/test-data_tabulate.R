@@ -360,13 +360,13 @@ test_that("data_tabulate data.frame with metrics = 'foo'", {
 })
 
 
-
-  test_that("data_tabulate data.frame by", {
-    data(efc, package = "datawizard")
-    x <- data_tabulate(efc, "c172code", by = "e16sex")
-    expect_s3_class(x, c("datawizard_crosstab", "list"))
-    expect_length(x, 1L)
-    attributes(x),
+test_that("data_tabulate data.frame by", {
+  data(efc, package = "datawizard")
+  x <- data_tabulate(efc, "c172code", by = "e16sex")
+  expect_s3_class(x, c("datawizard_crosstab", "list"))
+  expect_length(x, 1L)
+  expect_identical(
+    attributes(x[[1]]),
     list(
       names = c(
         "c172code",
@@ -407,6 +407,7 @@ test_that("data_tabulate default by", {
     )
   )
 })
+
 test_that("data_tabulate grouped data.frame by", {
   skip_if_not_installed("poorman")
   data(efc, package = "datawizard")
