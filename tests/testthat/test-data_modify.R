@@ -1,5 +1,3 @@
-## styler: off
-
 test_that("data_modify works", {
   data(iris)
   out <- data_modify(
@@ -1011,5 +1009,3 @@ withr::with_environment(
     expect_identical(out1, out2)
   })
 )
-
-## styler: on
