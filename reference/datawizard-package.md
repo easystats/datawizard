@@ -32,6 +32,9 @@ Useful links:
 
 Authors:
 
+- Etienne Bacher <etienne.bacher@protonmail.com>
+  ([ORCID](https://orcid.org/0000-0002-9271-5075))
+
 - Indrajeet Patil <patilindrajeet.science@gmail.com>
   ([ORCID](https://orcid.org/0000-0003-1995-6531))
 
