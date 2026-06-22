@@ -135,10 +135,10 @@ ranktransform(c(0, 1, 5, -5, -2), sign = TRUE, zeros = "signrank")
 head(ranktransform(trees))
 }
 \seealso{
-Other transform utilities: 
-\code{\link{normalize}()},
-\code{\link{rescale}()},
-\code{\link{reverse}()},
-\code{\link{standardize}()}
+Other transform utilities:
+\code{\link[=normalize]{normalize()}},
+\code{\link[=rescale]{rescale()}},
+\code{\link[=reverse]{reverse()}},
+\code{\link[=standardize]{standardize()}}
 }
 \concept{transform utilities}
