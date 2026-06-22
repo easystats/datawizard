@@ -7,17 +7,16 @@
 contr.deviation(n, base = 1, contrasts = TRUE, sparse = FALSE)
 }
 \arguments{
-\item{n}{a vector of levels for a factor, or the number of levels.}
+\item{n}{A vector of levels for a factor, or the number of levels.}
 
-\item{base}{an integer specifying which group is considered the
-    baseline group. Ignored if \code{contrasts} is \code{FALSE}.}
+\item{base}{An integer specifying which group is considered the
+baseline group. Ignored if \code{contrasts} is \code{FALSE}.}
 
-\item{contrasts}{a logical indicating whether contrasts should be
-    computed.}
+\item{contrasts}{A logical indicating whether contrasts should be computed.}
 
-\item{sparse}{logical indicating if the result should be sparse
-    (of class \code{\linkS4class[Matrix]{dgCMatrix}}), using
-    package \href{https://CRAN.R-project.org/package=Matrix}{\pkg{Matrix}}.}
+\item{sparse}{Logical indicating if the result should be sparse
+(of class \code{\link{dgCMatrix-class}}), using
+package \code{\link{Matrix}}}
 }
 \description{
 Build a deviation contrast matrix, a type of \emph{effects contrast} matrix.

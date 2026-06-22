@@ -33,7 +33,7 @@ BugReports: https://github.com/easystats/datawizard/issues
 Depends:
     R (>= 4.0)
 Imports:
-    insight (>= 1.5.0),
+    insight (>= 1.5.1),
     stats,
     utils
 Suggests:
@@ -43,6 +43,7 @@ Suggests:
     brms,
     curl,
     data.table,
+    discovr,
     dplyr (>= 1.1),
     effectsize,
     emmeans,
