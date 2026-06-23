@@ -95,9 +95,6 @@
 #' # exclude the cumulative percent column
 #' data_tabulate(efc$c172code, metrics = c("raw", "valid"))
 #'
-#' # return frequencies only
-#' data_tabulate(efc$c172code, remove_na = TRUE, metrics = c())
-#'
 #' # data frame
 #' data_tabulate(efc, c("e42dep", "c172code"))
 #'
