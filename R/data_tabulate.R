@@ -271,11 +271,15 @@ data_tabulate.default <- function(
 
   # validate "metrics"
   if (!is.null(metrics)) {
-    metrics <- match.arg(
-      metrics,
-      choices = c("N", "raw", "valid", "cumulative"),
-      several.ok = "all"
-    )
+    # match.arg(all.ok = "all") is only valid for R > 4.6, and
+    # match.arg(all.ok = TRUE) doesn't error if some values are wrong.
+    invalid <- setdiff(metrics, c("N", "raw", "valid", "cumulative"))
+    if (length(invalid) > 0) {
+      insight::format_error(
+        "Invalid values in `metrics`: ",
+        text_concatenate(invalid, enclose = '"')
+      )
+    }
   }
   if ("raw" %in% metrics) {
     out$`Raw %` <- 100 * out$N / sum(out$N)

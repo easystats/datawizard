@@ -166,16 +166,18 @@
     Code
       data_tabulate(efc, c("e16sex", "c172code"), metrics = "foo")
     Condition
-      Error in `match.arg()`:
-      ! 'arg' should be one of "N", "raw", "valid", "cumulative"
+      Error:
+      ! Invalid values in `metrics`: 
+        "foo"
 
 ---
 
     Code
       data_tabulate(efc, c("e16sex", "c172code"), metrics = c("N", "foo"))
     Condition
-      Error in `match.arg()`:
-      ! 'arg' should be one of "N", "raw", "valid", "cumulative"
+      Error:
+      ! Invalid values in `metrics`: 
+        "foo"
 
 # data_tabulate print
 
