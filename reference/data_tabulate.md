@@ -20,6 +20,7 @@ data_tabulate(
   proportions = NULL,
   name = NULL,
   verbose = TRUE,
+  metrics = c("N", "raw", "valid", "cumulative"),
   ...
 )
 
@@ -99,6 +100,14 @@ display(object, big_mark = NULL, format = "markdown", ...)
 - verbose:
 
   Toggle warnings and messages.
+
+- metrics:
+
+  Character vector, indicating the types of metrics to be included. Only
+  applies to frequencies, i.e. when `by` is `NULL`. Can include any
+  combination of `N` (frequencies including `NA`), `"raw"` (percentage
+  including `NA` values), `"valid"` (percentage excluding `NA` values)
+  and `"cumulative"` (percentage excluding `NA` values).
 
 - select:
 
@@ -290,6 +299,18 @@ data_tabulate(efc$c172code, remove_na = TRUE)
 #> 1     |  8 |  8.89 |    8.89 |         8.89
 #> 2     | 66 | 73.33 |   73.33 |        82.22
 #> 3     | 16 | 17.78 |   17.78 |       100.00
+
+# exclude the cumulative percent column
+data_tabulate(efc$c172code, metrics = c("raw", "valid"))
+#> carer's level of education (efc$c172code) <numeric>
+#> # total N=100 valid N=90
+#> 
+#> Value | Raw % | Valid %
+#> ------+-------+--------
+#> 1     |     8 |    8.89
+#> 2     |    66 |   73.33
+#> 3     |    16 |   17.78
+#> <NA>  |    10 |    <NA>
 
 # data frame
 data_tabulate(efc, c("e42dep", "c172code"))

@@ -81,6 +81,7 @@ percentages can be calculated.</p>
 <span>  proportions <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"N"</span>, <span class="st">"raw"</span>, <span class="st">"valid"</span>, <span class="st">"cumulative"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -159,6 +160,14 @@ for printing.</p></dd>
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings and messages.</p></dd>
+
+
+<dt id="arg-metrics">metrics<a class="anchor" aria-label="anchor" href="#arg-metrics"></a></dt>
+<dd><p>Character vector, indicating the types of metrics to be
+included. Only applies to frequencies, i.e. when <code>by</code> is <code>NULL</code>. Can include
+any combination of <code>N</code> (frequencies including <code>NA</code>), <code>"raw"</code> (percentage
+including <code>NA</code> values), <code>"valid"</code> (percentage excluding <code>NA</code> values) and
+<code>"cumulative"</code> (percentage excluding <code>NA</code> values).</p></dd>
 
 
 <dt id="arg-select">select<a class="anchor" aria-label="anchor" href="#arg-select"></a></dt>
@@ -315,6 +324,18 @@ for the full table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     |  8 |  8.89 |    8.89 |         8.89</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2     | 66 | 73.33 |   73.33 |        82.22</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3     | 16 | 17.78 |   17.78 |       100.00</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># exclude the cumulative percent column</span></span></span>
+<span class="r-in"><span><span class="fu">data_tabulate</span><span class="op">(</span><span class="va">efc</span><span class="op">$</span><span class="va">c172code</span>, metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"raw"</span>, <span class="st">"valid"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">carer's level of education (efc$c172code)</span> <span style="color: #0000BB;">&lt;numeric&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># total N=100 valid N=90</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Value | Raw % | Valid %</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------+-------+--------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     |     8 |    8.89</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     |    66 |   73.33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     |    16 |   17.78</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;NA&gt;  |    10 |    &lt;NA&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># data frame</span></span></span>
 <span class="r-in"><span><span class="fu">data_tabulate</span><span class="op">(</span><span class="va">efc</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"e42dep"</span>, <span class="st">"c172code"</span><span class="op">)</span><span class="op">)</span></span></span>
