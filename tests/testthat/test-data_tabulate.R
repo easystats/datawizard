@@ -181,6 +181,141 @@ test_that("data_tabulate data.frame", {
   )
 })
 
+
+test_that("data_tabulate data.frame with metrics", {
+  data(efc, package = "datawizard")
+  x <- data_tabulate(efc, c("e16sex", "c172code"), metrics = "raw")
+  expect_s3_class(x, "list")
+  expect_length(x, 2L)
+  expect_identical(
+    attributes(x[[1]]),
+    list(
+      names = c(
+        "Variable",
+        "Value",
+        "Raw %"
+      ),
+      row.names = 1:3,
+      class = c("datawizard_table", "data.frame"),
+      type = "numeric",
+      varname = "e16sex",
+      label = "elder's gender",
+      object = "e16sex",
+      duplicate_varnames = c(FALSE, TRUE, TRUE),
+      total_n = 100L,
+      valid_n = 100L
+    )
+  )
+  expect_identical(
+    attributes(x[[2]]),
+    list(
+      names = c(
+        "Variable",
+        "Value",
+        "Raw %"
+      ),
+      row.names = 1:4,
+      class = c("datawizard_table", "data.frame"),
+      type = "numeric",
+      varname = "c172code",
+      label = "carer's level of education",
+      object = "c172code",
+      duplicate_varnames = c(FALSE, TRUE, TRUE, TRUE),
+      total_n = 100L,
+      valid_n = 90L
+    )
+  )
+  table1 <- x[[1]]
+  expect_identical(
+    as.vector(table1$Value),
+    as.character(c(
+      sort(
+        unique(efc$e16sex)
+      ),
+      NA
+    ))
+  )
+  expect_null(table1$N)
+  expect_identical(
+    table1$`Raw %`,
+    as.vector(
+      100 * table(efc$e16sex, useNA = "always") / length(efc$e16sex)
+    ),
+    ignore_attr = TRUE,
+    tolerance = 1e-3
+  )
+})
+
+test_that("data_tabulate data.frame with metrics = NULL", {
+  # this is equivalent to metrics = c()
+  data(efc, package = "datawizard")
+  x <- data_tabulate(efc, c("e16sex", "c172code"), metrics = NULL)
+  expect_s3_class(x, "list")
+  expect_length(x, 2L)
+  expect_identical(
+    attributes(x[[1]]),
+    list(
+      names = c(
+        "Variable",
+        "Value"
+      ),
+      row.names = 1:3,
+      class = c("datawizard_table", "data.frame"),
+      type = "numeric",
+      varname = "e16sex",
+      label = "elder's gender",
+      object = "e16sex",
+      duplicate_varnames = c(FALSE, TRUE, TRUE),
+      total_n = 100L,
+      valid_n = 100L
+    )
+  )
+  expect_identical(
+    attributes(x[[2]]),
+    list(
+      names = c(
+        "Variable",
+        "Value"
+      ),
+      row.names = 1:4,
+      class = c("datawizard_table", "data.frame"),
+      type = "numeric",
+      varname = "c172code",
+      label = "carer's level of education",
+      object = "c172code",
+      duplicate_varnames = c(FALSE, TRUE, TRUE, TRUE),
+      total_n = 100L,
+      valid_n = 90L
+    )
+  )
+  table1 <- x[[1]]
+  expect_identical(
+    as.vector(table1$Value),
+    as.character(c(
+      sort(
+        unique(efc$e16sex)
+      ),
+      NA
+    ))
+  )
+  expect_null(table1$N)
+  expect_null(
+    table1$`Raw %`
+  )
+})
+
+test_that("data_tabulate data.frame with wrong value for 'metrics'", {
+  data(efc, package = "datawizard")
+  expect_snapshot(
+    data_tabulate(efc, c("e16sex", "c172code"), metrics = "foo"),
+    error = TRUE
+  )
+  expect_snapshot(
+    data_tabulate(efc, c("e16sex", "c172code"), metrics = c("N", "foo")),
+    error = TRUE
+  )
+})
+
 test_that("data_tabulate data.frame by", {
   data(efc, package = "datawizard")
   x <- data_tabulate(efc, "c172code", by = "e16sex")
@@ -228,6 +363,7 @@ test_that("data_tabulate default by", {
     )
   )
 })
+
 test_that("data_tabulate grouped data.frame by", {
   skip_if_not_installed("poorman")
   data(efc, package = "datawizard")

@@ -39,6 +39,11 @@
 #' printed as markdown or HTML table, depending on the environment. See
 #' [`insight::export_table()`] for details.
 #' @param verbose Toggle warnings and messages.
+#' @param metrics Character vector, indicating the types of metrics to be
+#' included. Only applies to frequencies, i.e. when `by` is `NULL`. Can include
+#' any combination of `N` (frequencies including `NA`), `"raw"` (percentage
+#' including `NA` values), `"valid"` (percentage excluding `NA` values) and
+#' `"cumulative"` (percentage excluding `NA` values).
 #' @param ... not used.
 #' @inheritParams extract_column_names
 #'
@@ -85,6 +90,9 @@
 #'
 #' # drop missing values
 #' data_tabulate(efc$c172code, remove_na = TRUE)
+#'
+#' # exclude the cumulative percent column
+#' data_tabulate(efc$c172code, metrics = c("raw", "valid"))
 #'
 #' # data frame
 #' data_tabulate(efc, c("e42dep", "c172code"))
@@ -154,6 +162,7 @@ data_tabulate.default <- function(
   proportions = NULL,
   name = NULL,
   verbose = TRUE,
+  metrics = c("N", "raw", "valid", "cumulative"),
   ...
 ) {
   # save label attribute, before it gets lost...
@@ -260,7 +269,21 @@ data_tabulate.default <- function(
     out$N <- round(out$N)
   }
 
-  out$`Raw %` <- 100 * out$N / sum(out$N)
+  # validate "metrics"
+  if (!is.null(metrics)) {
+    # match.arg(all.ok = "all") is only valid for R > 4.6, and
+    # match.arg(all.ok = TRUE) doesn't error if some values are wrong.
+    invalid <- setdiff(metrics, c("N", "raw", "valid", "cumulative"))
+    if (length(invalid) > 0) {
+      insight::format_error(
+        "Invalid values in `metrics`: ",
+        text_concatenate(invalid, enclose = '"')
+      )
+    }
+  }
+  if ("raw" %in% metrics) {
+    out$`Raw %` <- 100 * out$N / sum(out$N)
+  }
   # if we have missing values, we add a row with NA
   if (remove_na) {
     out$`Valid %` <- 100 * out$N / sum(out$N)
@@ -269,8 +292,13 @@ data_tabulate.default <- function(
     out$`Valid %` <- c(100 * out$N[-nrow(out)] / sum(out$N[-nrow(out)]), NA)
     valid_n <- sum(out$N[-length(out$N)], na.rm = TRUE)
   }
-  out$`Cumulative %` <- cumsum(out$`Valid %`)
 
+  if ("cumulative" %in% metrics) {
+    out$`Cumulative %` <- cumsum(out$`Valid %`)
+  }
+  if (!"valid" %in% metrics) {
+    out$`Valid %` <- NULL
+  }
   # add information about variable/group names
   if (!is.null(obj_name)) {
     if (is.null(group_variable)) {
@@ -286,6 +314,10 @@ data_tabulate.default <- function(
     }
     out <- cbind(var_info, out)
   }
+  total_n <- sum(out$N, na.rm = TRUE)
+  if (!"N" %in% metrics) {
+    out <- data_select(out, exclude = "N")
+  }
 
   # save information
   attr(out, "type") <- .variable_type(x)
@@ -296,7 +328,7 @@ data_tabulate.default <- function(
   attr(out, "duplicate_varnames") <- duplicated(out$Variable)
   attr(out, "weights") <- weights
 
-  attr(out, "total_n") <- sum(out$N, na.rm = TRUE)
+  attr(out, "total_n") <- total_n
   attr(out, "valid_n") <- valid_n
   if (is.null(by)) {
     attr(out, "by") <- NULL
@@ -343,10 +375,6 @@ data_tabulate.data.frame <- function(
     regex = regex,
     verbose = verbose
   )
-
-  if (!is.null(by)) {
-    attr(x, "by") <- by_name
-  }
 
   # validate "by"
   by <- .validate_by(by, x)
@@ -875,19 +903,21 @@ format.datawizard_table <- function(x, format = "text", big_mark = NULL, ...) {
   # convert to character manually, else, for large numbers,
   # format_table() returns scientific notation
   x <- as.data.frame(x)
-  x$N <- as.character(x$N)
-
+  if (!is.null(x$N)) {
+    x$N <- as.character(x$N)
+  }
   # format data frame
   ftab <- insight::format_table(x, ...)
   ftab[] <- lapply(ftab, function(i) {
     i[i == ""] <- ifelse(identical(format, "text"), "<NA>", "(NA)") # nolint
     i
   })
-  ftab$N <- gsub("\\.00$", "", ftab$N)
+  if (!is.null(ftab$N)) {
+    ftab$N <- gsub("\\.00$", "", ftab$N)
 
-  # insert big marks?
-  ftab$N <- .add_commas_in_numbers(ftab$N, big_mark)
-
+    # insert big marks?
+    ftab$N <- .add_commas_in_numbers(ftab$N, big_mark)
+  }
   ftab
 }
 
