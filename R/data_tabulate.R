@@ -39,12 +39,11 @@
 #' printed as markdown or HTML table, depending on the environment. See
 #' [`insight::export_table()`] for details.
 #' @param verbose Toggle warnings and messages.
-#' @param metrics Optional character vector, indicating the types of
-#' percents to be included. Only applies to frequencies, i.e. when `by` is
-#' `NULL`. Can include any combination of `N` (frequencies including NA), `"raw"` (includes `NA` values),
-#' `"valid"` (excludes `NA` values) or `"cumulative"` (excludes `NA` values).
-#' Using `c()` will return a table with only the value labels. Invalid
-#' values (`metrics = "foo"`) are silently ignored.
+#' @param metrics Character vector, indicating the types of metrics to be
+#' included. Only applies to frequencies, i.e. when `by` is `NULL`. Can include
+#' any combination of `N` (frequencies including `NA`), `"raw"` (percentage
+#' including `NA` values), `"valid"` (percentage excluding `NA` values) and
+#' `"cumulative"` (percentage excluding `NA` values).
 #' @param ... not used.
 #' @inheritParams extract_column_names
 #'
@@ -275,7 +274,7 @@ data_tabulate.default <- function(
     metrics <- match.arg(
       metrics,
       choices = c("N", "raw", "valid", "cumulative"),
-      several.ok = TRUE
+      several.ok = "all"
     )
   }
   if ("raw" %in% metrics) {

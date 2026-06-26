@@ -304,59 +304,16 @@ test_that("data_tabulate data.frame with metrics = NULL", {
   )
 })
 
-test_that("data_tabulate data.frame with metrics = 'foo'", {
+test_that("data_tabulate data.frame with wrong value for 'metrics'", {
   data(efc, package = "datawizard")
-  x <- data_tabulate(efc, c("e16sex", "c172code"), metrics = NULL)
-  expect_s3_class(x, "list")
-  expect_length(x, 2L)
-  expect_identical(
-    attributes(x[[1]]),
-    list(
-      names = c(
-        "Variable",
-        "Value"
-      ),
-      row.names = 1:3,
-      class = c("datawizard_table", "data.frame"),
-      type = "numeric",
-      varname = "e16sex",
-      label = "elder's gender",
-      object = "e16sex",
-      duplicate_varnames = c(FALSE, TRUE, TRUE),
-      total_n = 100L,
-      valid_n = 100L
-    )
+  expect_snapshot(
+    data_tabulate(efc, c("e16sex", "c172code"), metrics = "foo"),
+    error = TRUE
   )
-  expect_identical(
-    attributes(x[[2]]),
-    list(
-      names = c(
-        "Variable",
-        "Value"
-      ),
-      row.names = 1:4,
-      class = c("datawizard_table", "data.frame"),
-      type = "numeric",
-      varname = "c172code",
-      label = "carer's level of education",
-      object = "c172code",
-      duplicate_varnames = c(FALSE, TRUE, TRUE, TRUE),
-      total_n = 100L,
-      valid_n = 90L
-    )
+  expect_snapshot(
+    data_tabulate(efc, c("e16sex", "c172code"), metrics = c("N", "foo")),
+    error = TRUE
   )
-  table1 <- x[[1]]
-  expect_identical(
-    as.vector(table1$Value),
-    as.character(c(
-      sort(
-        unique(efc$e16sex)
-      ),
-      NA
-    ))
-  )
-  expect_null(table1$N)
-  expect_null(table1$`Raw %`)
 })
 
 test_that("data_tabulate data.frame by", {

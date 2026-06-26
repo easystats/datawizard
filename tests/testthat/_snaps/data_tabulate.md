@@ -161,6 +161,22 @@
       |         |  (NA)|  0|  0.00|    (NA)|         (NA)|
       |         |      |   |      |        |             |
 
+# data_tabulate data.frame with wrong value for 'metrics'
+
+    Code
+      data_tabulate(efc, c("e16sex", "c172code"), metrics = "foo")
+    Condition
+      Error in `match.arg()`:
+      ! 'arg' should be one of "N", "raw", "valid", "cumulative"
+
+---
+
+    Code
+      data_tabulate(efc, c("e16sex", "c172code"), metrics = c("N", "foo"))
+    Condition
+      Error in `match.arg()`:
+      ! 'arg' should be one of "N", "raw", "valid", "cumulative"
+
 # data_tabulate print
 
     Code
