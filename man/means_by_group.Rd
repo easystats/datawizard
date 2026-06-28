@@ -119,6 +119,10 @@ using \code{x} as dependent and \code{by} as independent variable. \code{\link[e
 is used to get p-values for each sub-group. P-values indicate whether each
 group-mean is significantly different from the total mean.
 }
+\note{
+There is also a \code{plot()}-method implemented in the
+\href{https://easystats.github.io/see/}{\strong{see}-package}.
+}
 \examples{
 data(efc)
 means_by_group(efc, "c12hour", "e42dep")
