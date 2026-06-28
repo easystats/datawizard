@@ -7,6 +7,12 @@ CHANGES
 * `data_tabulate()` now returns an attribute "by" with the
   `by` variable name when the `by` parameter is used (#690 @elinw).
 
+* `data_tabulate()` gain a `metrics` argument to allow selection of columns to
+  display ("N", "raw", "valid", and "cumulative") (#689, @elinw).
+
+* `means_by_group()` gains a `plot()` method (requires latest
+  version from the see-package) (#697)
+
 # datawizard 1.3.1
 
 CHANGES
@@ -22,9 +28,6 @@ CHANGES
   decrypt data files. This currently only works for R file formats (`.rda`,
   `.rds`, and `.rdata`). Data encryption is based on the AES-GCM algorithm using
   the `openssl::aes_gcm_encrypt()` function (#675).
-
-* `data_tabulate()` gain a `metrics` argument to allow selection of columns to
-  display ("N", "raw", "valid", and "cumulative") (#689, @elinw).
 
 FIXES
 
