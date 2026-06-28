@@ -26,12 +26,6 @@ CHANGES
   function
   ([\#675](https://github.com/easystats/datawizard/issues/675)).
 
-- [`data_tabulate()`](https://easystats.github.io/datawizard/reference/data_tabulate.md)
-  gain a `metrics` argument to allow selection of columns to display
-  (“N”, “raw”, “valid”, and “cumulative”)
-  ([\#689](https://github.com/easystats/datawizard/issues/689),
-  [@elinw](https://github.com/elinw)).
-
 FIXES
 
 - Fix a test due to R-devel change
