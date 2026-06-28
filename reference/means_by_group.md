@@ -166,6 +166,12 @@ One-Way-ANOVA using `x` as dependent and `by` as independent variable.
 is used to get p-values for each sub-group. P-values indicate whether
 each group-mean is significantly different from the total mean.
 
+## Note
+
+There is also a
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html)-method
+implemented in the [**see**-package](https://easystats.github.io/see/).
+
 ## Examples
 
 ``` r
