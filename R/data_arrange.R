@@ -59,7 +59,8 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
       insight::format_warning(
         paste0(
           "The following column(s) don't exist in the dataset: ",
-          text_concatenate(dont_exist), "."
+          text_concatenate(dont_exist),
+          "."
         ),
         .misspelled_string(names(data), dont_exist, "Possibly misspelled?")
       )
@@ -67,7 +68,8 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
       insight::format_error(
         paste0(
           "The following column(s) don't exist in the dataset: ",
-          text_concatenate(dont_exist), "."
+          text_concatenate(dont_exist),
+          "."
         ),
         .misspelled_string(names(data), dont_exist, "Possibly misspelled?")
       )
@@ -79,7 +81,11 @@ data_arrange.default <- function(data, select = NULL, safe = TRUE) {
     return(data)
   }
 
-  already_sorted <- all(vapply(data[, select, drop = FALSE], .is_sorted, logical(1L)))
+  already_sorted <- all(vapply(
+    data[, select, drop = FALSE],
+    .is_sorted,
+    logical(1L)
+  ))
 
   if (isTRUE(already_sorted)) {
     return(data)

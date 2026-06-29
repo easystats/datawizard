@@ -90,7 +90,7 @@ following the \strong{datawizard} function design. \code{data_ungroup()} removes
 grouping information from a grouped data frame.
 }
 \examples{
-\dontshow{if (requireNamespace("poorman")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("poorman")) withAutoprint(\{ # examplesIf}
 data(efc)
 suppressPackageStartupMessages(library(poorman, quietly = TRUE))
 

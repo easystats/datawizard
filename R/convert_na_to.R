@@ -124,8 +124,16 @@ convert_na_to.factor <- function(x, replacement = NULL, verbose = TRUE, ...) {
 
 #' @rdname convert_na_to
 #' @export
-convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE, ...) {
-  if (insight::is_empty_object(replacement) || !is.character(replacement) && !is.numeric(replacement)) {
+convert_na_to.character <- function(
+  x,
+  replacement = NULL,
+  verbose = TRUE,
+  ...
+) {
+  if (
+    insight::is_empty_object(replacement) ||
+      !is.character(replacement) && !is.numeric(replacement)
+  ) {
     if (isTRUE(verbose)) {
       insight::format_warning(
         "`replacement` needs to be a character or numeric vector."
@@ -149,17 +157,19 @@ convert_na_to.character <- function(x, replacement = NULL, verbose = TRUE, ...) 
 #'
 #' @rdname convert_na_to
 #' @export
-convert_na_to.data.frame <- function(x,
-                                     select = NULL,
-                                     exclude = NULL,
-                                     replacement = NULL,
-                                     replace_num = replacement,
-                                     replace_char = replacement,
-                                     replace_fac = replacement,
-                                     ignore_case = FALSE,
-                                     regex = FALSE,
-                                     verbose = TRUE,
-                                     ...) {
+convert_na_to.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  replacement = NULL,
+  replace_num = replacement,
+  replace_char = replacement,
+  replace_fac = replacement,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   my_data <- x
   select_nse <- .select_nse(
     select,
@@ -196,7 +206,11 @@ convert_na_to.data.frame <- function(x,
   lookup <- Filter(Negate(is.null), lookup)
 
   for (i in names(lookup)) {
-    x[[i]] <- convert_na_to(x[[i]], replacement = lookup[[i]], verbose = verbose)
+    x[[i]] <- convert_na_to(
+      x[[i]],
+      replacement = lookup[[i]],
+      verbose = verbose
+    )
   }
 
   x

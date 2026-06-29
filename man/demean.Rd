@@ -291,7 +291,7 @@ into R using \code{lmer()} from \strong{lme4} can be found in
 
 data(iris)
 iris$ID <- sample(1:4, nrow(iris), replace = TRUE) # fake-ID
-iris$binary <- as.factor(rbinom(150, 1, .35)) # binary variable
+iris$binary <- as.factor(rbinom(150, 1, 0.35)) # binary variable
 
 x <- demean(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")
 head(x)

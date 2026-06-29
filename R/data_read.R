@@ -10,7 +10,8 @@
 #' or text files (like '.csv' files). All other file types are passed to
 #' `rio::import()`. `data_write()` works in a similar way.
 #'
-#' @param path Character string, the file path to the data file.
+#' @param path A character string specifying the path to the data file. This can
+#' also be a URL.
 #' @param path_catalog Character string, path to the catalog file. Only relevant
 #' for SAS data files.
 #' @param encoding The character encoding used for the file. Usually not needed.
@@ -25,6 +26,11 @@
 #' might be useful for these formats because labelled numeric variables are then
 #' converted into factors and exported as character columns - else, value labels
 #' would be lost and only numeric values are written to the file.
+#' @param password Password for data encryption. If not `NULL`, the data will be
+#' encrypted (for `data_write()`) or decrypted (for `data_read()`) using the
+#' provided password. Encryption is currently only supported for R file formats
+#' (`.rds`, `.rda` and `.rdata`). See the section "Data encryption" below for more
+#' information on the encryption method used.
 #' @param verbose Toggle warnings and messages.
 #' @param ... Arguments passed to the related `read_*()` or `write_*()` functions.
 #'
@@ -45,7 +51,8 @@
 #' inside zip-compressed files. Thus, `path` can also be a URL to a file like
 #' `"http://www.url.com/file.csv"`. When `path` points to a zip-compressed file,
 #' and there are multiple files inside the zip-archive, then the first supported
-#' file is extracted and loaded.
+#' file is extracted and loaded. It is also possible to read a zip-compressed
+#' file  from URLs.
 #'
 #' @section General behaviour:
 #' `data_read()` detects the appropriate `read_*()` function based on the
@@ -77,13 +84,35 @@
 #' `convert_factors = FALSE` to remove the automatic conversion of numeric
 #' variables to factors.
 #'
+#' @section Data encryption:
+#' `data_read()` and `data_write()` support data encryption for R file formats
+#' (`.rds`, `.rda` and `.rdata`). To encrypt a file, provide a password to the
+#' `password` argument in `data_write()`. To decrypt the file, provide the same
+#' password to `data_read()`. The encryption is based on the **openssl** package
+#' and uses the AES-GCM algorithm (see `?openssl::aes_gcm_encrypt`) with a
+#' 256-bit key (see `?openssl::sha256`). Thus, data can also be decrypted without
+#' relying on the **datawizard** package, e.g. using following code:
+#'
+#' ```
+#' encrypted_data <- readRDS(datafile)
+#' key <- openssl::sha256(charToRaw("<password>"))
+#' out <- openssl::aes_gcm_decrypt(encrypted_data, key = key)
+#' decrypted_data <- unserialize(out)
+#' ```
+#'
+#' **Warning:** Do not lose your `password`, else you will not be able to
+#' decrypt the data again!
+#'
 #' @export
-data_read <- function(path,
-                      path_catalog = NULL,
-                      encoding = NULL,
-                      convert_factors = TRUE,
-                      verbose = TRUE,
-                      ...) {
+data_read <- function(
+  path,
+  path_catalog = NULL,
+  encoding = NULL,
+  convert_factors = TRUE,
+  password = NULL,
+  verbose = TRUE,
+  ...
+) {
   # extract first valid file from zip-file
   if (identical(.file_ext(path), "zip")) {
     path <- .extract_zip(path)
@@ -99,18 +128,26 @@ data_read <- function(path,
   }
 
   # read data
-  out <- switch(file_type,
+  out <- switch(
+    file_type,
     txt = ,
     csv = .read_text(path, encoding, verbose, ...),
     rda = ,
-    rdata = .read_base_rda(path, file_type, verbose, ...),
-    rds = .read_base_rds(path, verbose, ...),
+    rdata = .read_base_rda(path, file_type, password, verbose, ...),
+    rds = .read_base_rds(path, password, verbose, ...),
     xls = ,
     xlsx = .read_excel(path, encoding, verbose, ...),
     sav = ,
     por = .read_spss(path, encoding, convert_factors, verbose, ...),
     dta = .read_stata(path, encoding, convert_factors, verbose, ...),
-    sas7bdat = .read_sas(path, path_catalog, encoding, convert_factors, verbose, ...),
+    sas7bdat = .read_sas(
+      path,
+      path_catalog,
+      encoding,
+      convert_factors,
+      verbose,
+      ...
+    ),
     parquet = .read_parquet(path, verbose, ...),
     .read_unknown(path, file_type, verbose, ...)
   )
@@ -141,6 +178,10 @@ data_read <- function(path,
 
 
 .extract_zip <- function(path) {
+  # download from URL?
+  path <- .check_path_url(path, file_type = "zip")
+
+  # extract
   files <- utils::unzip(path, list = TRUE)
   files_ext <- vapply(files$Name, .file_ext, FUN.VALUE = character(1L))
 
@@ -153,7 +194,9 @@ data_read <- function(path,
     utils::unzip(path, exdir = d)
     path <- file.path(d, dest[1])
   } else {
-    insight::format_error("The zip-file does not contain any supported file types.")
+    insight::format_error(
+      "The zip-file does not contain any supported file types."
+    )
   }
 
   path
@@ -183,7 +226,9 @@ data_read <- function(path,
         if (is.character(i)) {
           # we need this to drop haven-specific class attributes
           i <- as.character(i)
-        } else if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
+        } else if (
+          !is.null(value_labels) && length(value_labels) == insight::n_unique(i)
+        ) {
           # if all values are labelled, we assume factor. Use labels as levels
           if (is.numeric(i)) {
             i <- factor(i, labels = names(value_labels))
@@ -210,8 +255,16 @@ data_read <- function(path,
     })
     # tell user how many variables were converted
     if (verbose) {
-      cnt <- sum(vapply(x, function(i) isTRUE(attributes(i)$converted_to_factor), TRUE))
-      msg <- sprintf("%i out of %i variables were fully labelled and converted into factors.", cnt, ncol(x))
+      cnt <- sum(vapply(
+        x,
+        function(i) isTRUE(attributes(i)$converted_to_factor),
+        TRUE
+      ))
+      msg <- sprintf(
+        "%i out of %i variables were fully labelled and converted into factors.",
+        cnt,
+        ncol(x)
+      )
       insight::format_alert(msg)
     }
   } else {
@@ -231,7 +284,10 @@ data_read <- function(path,
 # read functions -----------------------
 
 .read_spss <- function(path, encoding, convert_factors, verbose, ...) {
-  insight::check_if_installed("haven", reason = paste0("to read files of type '", .file_ext(path), "'"))
+  insight::check_if_installed(
+    "haven",
+    reason = paste0("to read files of type '", .file_ext(path), "'")
+  )
   if (verbose) {
     insight::format_alert("Reading data...")
   }
@@ -241,7 +297,10 @@ data_read <- function(path,
 
 
 .read_stata <- function(path, encoding, convert_factors, verbose, ...) {
-  insight::check_if_installed("haven", reason = paste0("to read files of type '", .file_ext(path), "'"))
+  insight::check_if_installed(
+    "haven",
+    reason = paste0("to read files of type '", .file_ext(path), "'")
+  )
   if (verbose) {
     insight::format_alert("Reading data...")
   }
@@ -250,18 +309,36 @@ data_read <- function(path,
 }
 
 
-.read_sas <- function(path, path_catalog, encoding, convert_factors, verbose, ...) {
-  insight::check_if_installed("haven", reason = paste0("to read files of type '", .file_ext(path), "'"))
+.read_sas <- function(
+  path,
+  path_catalog,
+  encoding,
+  convert_factors,
+  verbose,
+  ...
+) {
+  insight::check_if_installed(
+    "haven",
+    reason = paste0("to read files of type '", .file_ext(path), "'")
+  )
   if (verbose) {
     insight::format_alert("Reading data...")
   }
-  out <- haven::read_sas(data_file = path, catalog_file = path_catalog, encoding = encoding, ...)
+  out <- haven::read_sas(
+    data_file = path,
+    catalog_file = path_catalog,
+    encoding = encoding,
+    ...
+  )
   .post_process_imported_data(out, convert_factors, verbose)
 }
 
 
 .read_excel <- function(path, encoding, verbose, ...) {
-  insight::check_if_installed("readxl", reason = paste0("to read files of type '", .file_ext(path), "'"))
+  insight::check_if_installed(
+    "readxl",
+    reason = paste0("to read files of type '", .file_ext(path), "'")
+  )
   if (verbose) {
     insight::format_alert("Reading data...")
   }
@@ -281,7 +358,10 @@ data_read <- function(path,
     return(as.data.frame(out))
   }
 
-  insight::check_if_installed("readr", reason = paste0("to read files of type '", .file_ext(path), "'"))
+  insight::check_if_installed(
+    "readr",
+    reason = paste0("to read files of type '", .file_ext(path), "'")
+  )
   if (verbose) {
     insight::format_alert("Reading data...")
   }
@@ -291,7 +371,10 @@ data_read <- function(path,
 
 
 .read_unknown <- function(path, file_type, verbose, ...) {
-  insight::check_if_installed("rio", reason = paste0("to read files of type '", file_type, "'"))
+  insight::check_if_installed(
+    "rio",
+    reason = paste0("to read files of type '", file_type, "'")
+  )
   if (verbose) {
     insight::format_alert("Reading data...")
   }
@@ -318,7 +401,7 @@ data_read <- function(path,
 }
 
 
-.read_base_rda <- function(path, file_type, verbose = TRUE, ...) {
+.read_base_rda <- function(path, file_type, password, verbose = TRUE, ...) {
   if (verbose) {
     insight::format_alert("Reading data...")
   }
@@ -335,13 +418,18 @@ data_read <- function(path,
   # but just return everything
   if (length(ls(env)) > 1) {
     if (verbose) {
-      insight::format_alert("File contained more than one object, returning all objects.")
+      insight::format_alert(
+        "File contained more than one object, returning all objects."
+      )
     }
     return(as.list(env))
   }
 
   # else, retrieve loaded object
   out <- get(ls(env)[1], env)
+
+  # data decryption
+  out <- .data_decryption(out, password)
 
   # check if loaded file is a data frame, or not (e.g. model objects)
   # it returns `NULL` if the file is no valid data file that contains a data
@@ -358,7 +446,7 @@ data_read <- function(path,
 }
 
 
-.read_base_rds <- function(path, verbose = TRUE, ...) {
+.read_base_rds <- function(path, password, verbose = TRUE, ...) {
   if (verbose) {
     insight::format_alert("Reading data...")
   }
@@ -366,6 +454,9 @@ data_read <- function(path,
   # check URLs
   path <- .check_path_url(path, file_type = "rds")
   out <- readRDS(file = path)
+
+  # data decryption
+  out <- .data_decryption(out, password)
 
   # check if loaded file is a data frame, or not (e.g. model objects)
   # it returns `NULL` if the file is no valid data file that contains a data
@@ -393,7 +484,6 @@ data_read <- function(path,
   # check URLs
   path <- .check_path_url(path, file_type = "parquet")
   out <- nanoparquet::read_parquet(file = path, ...)
-
   as.data.frame(out)
 }
 
@@ -432,7 +522,11 @@ data_read <- function(path,
   if (insight::is_model(out)) {
     if (verbose) {
       insight::format_alert(
-        paste0("Imported file is a regression model object of class \"", class(out)[1], "\"."),
+        paste0(
+          "Imported file is a regression model object of class \"",
+          class(out)[1],
+          "\"."
+        ),
         "Returning file as is."
       )
     }
@@ -443,17 +537,54 @@ data_read <- function(path,
   # "rio::import()", we must check whether we actually have a data frame or
   # not. Else, tell user.
   if (!is.data.frame(out)) {
-    tmp <- tryCatch(as.data.frame(out, stringsAsFactors = FALSE), error = function(e) NULL)
+    tmp <- tryCatch(
+      as.data.frame(out, stringsAsFactors = FALSE),
+      error = function(e) NULL
+    )
     if (is.null(tmp)) {
       if (verbose) {
         insight::format_warning(
-          paste0("Imported file is no data frame, but of class \"", class(out)[1], "\"."),
+          paste0(
+            "Imported file is no data frame, but of class \"",
+            class(out)[1],
+            "\"."
+          ),
           "Returning file as is. Please check if importing this file was intended."
         )
       }
       return(NULL)
     }
     out <- tmp
+  }
+  out
+}
+
+# decrypt data ---------------------------------
+
+.data_decryption <- function(data, password = NULL) {
+  # check if data should be decrypted
+  if (!is.null(password)) {
+    .validate_password(password)
+    data <- .decrypt_data(data, password)
+  }
+  data
+}
+
+.decrypt_data <- function(data, password = NULL) {
+  insight::check_if_installed("openssl", "for data decryption")
+  # it is important to remember the phrase! else, you cannot decrypt the data
+  passphrase <- charToRaw(password)
+  key <- openssl::sha256(passphrase)
+  # decrypt the data. in case of wrong password, `unserialize()` errors
+  out <- tryCatch(
+    unserialize(openssl::aes_gcm_decrypt(data, key = key)),
+    error = function(e) NULL
+  )
+  # check if we had encrypted data at all?
+  if (is.null(out)) {
+    insight::format_error(
+      "File does not appear to be encrypted with {datawizard}, or you provided the wrong password."
+    )
   }
   out
 }

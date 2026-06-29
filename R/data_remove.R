@@ -5,13 +5,15 @@
 #' head(data_remove(iris, "Sepal.Length"))
 #' head(data_remove(iris, starts_with("Sepal")))
 #' @export
-data_remove <- function(data,
-                        select = NULL,
-                        exclude = NULL,
-                        ignore_case = FALSE,
-                        regex = FALSE,
-                        verbose = FALSE,
-                        ...) {
+data_remove <- function(
+  data,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = FALSE,
+  ...
+) {
   ## TODO set verbose = TRUE by default in a later update?
 
   # evaluate arguments

@@ -10,8 +10,16 @@ test_that("smoothness works with iterations", {
 
   set.seed(123)
   x <- (-10:10)^3 + rnorm(21, 0, 100)
-  expect_equal(smoothness(x, iterations = 100)[[1]], 0.9030014, tolerance = 0.001)
-  expect_equal(smoothness(x, method = "auto", iterations = 100)[[1]], 1.750452, tolerance = 0.001)
+  expect_equal(
+    smoothness(x, iterations = 100)[[1]],
+    0.9030014,
+    tolerance = 0.001
+  )
+  expect_equal(
+    smoothness(x, method = "auto", iterations = 100)[[1]],
+    1.750452,
+    tolerance = 0.001
+  )
 })
 
 

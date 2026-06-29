@@ -66,10 +66,7 @@ reverse.default <- function(x, verbose = TRUE, ...) {
 
 #' @rdname reverse
 #' @export
-reverse.numeric <- function(x,
-                            range = NULL,
-                            verbose = TRUE,
-                            ...) {
+reverse.numeric <- function(x, range = NULL, verbose = TRUE, ...) {
   # Warning if all NaNs
   if (all(is.na(x))) {
     return(x)
@@ -78,7 +75,9 @@ reverse.numeric <- function(x,
   # Warning if only one value
   if (insight::has_single_value(x) && is.null(range)) {
     if (verbose) {
-      insight::format_warning("A `range` must be provided for data with only one unique value.")
+      insight::format_warning(
+        "A `range` must be provided for data with only one unique value."
+      )
     }
     return(x)
   }
@@ -100,14 +99,20 @@ reverse.numeric <- function(x,
   if (length(range) > 2) {
     insight::format_error(
       "`range` must be a numeric vector of length two, indicating lowest and highest value of the required range.",
-      sprintf("Did you want to provide `range = c(%g, %g)`?", min_value, max_value)
+      sprintf(
+        "Did you want to provide `range = c(%g, %g)`?",
+        min_value,
+        max_value
+      )
     )
   }
 
   new_min <- max_value
   new_max <- min_value
 
-  out <- as.vector((new_max - new_min) / (max_value - min_value) * (x - min_value) + new_min)
+  out <- as.vector(
+    (new_max - new_min) / (max_value - min_value) * (x - min_value) + new_min
+  )
 
   # labelled data?
   out <- .set_back_labels(out, x, reverse_values = TRUE)
@@ -125,7 +130,9 @@ reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
   # Warning if only one value
   if (insight::has_single_value(x) && is.null(range)) {
     if (verbose) {
-      insight::format_warning("A `range` must be provided for data with only one unique value.")
+      insight::format_warning(
+        "A `range` must be provided for data with only one unique value."
+      )
     }
     return(x)
   }
@@ -195,22 +202,24 @@ reverse.factor <- function(x, range = NULL, verbose = TRUE, ...) {
 
 
 #' @export
-reverse.grouped_df <- function(x,
-                               select = NULL,
-                               exclude = NULL,
-                               range = NULL,
-                               append = FALSE,
-                               ignore_case = FALSE,
-                               regex = FALSE,
-                               verbose = FALSE,
-                               ...) {
+reverse.grouped_df <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  range = NULL,
+  append = FALSE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = FALSE,
+  ...
+) {
   info <- attributes(x)
-
 
   grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
 
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -254,17 +263,20 @@ reverse.grouped_df <- function(x,
 
 #' @rdname reverse
 #' @export
-reverse.data.frame <- function(x,
-                               select = NULL,
-                               exclude = NULL,
-                               range = NULL,
-                               append = FALSE,
-                               ignore_case = FALSE,
-                               regex = FALSE,
-                               verbose = FALSE,
-                               ...) {
+reverse.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  range = NULL,
+  append = FALSE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = FALSE,
+  ...
+) {
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,

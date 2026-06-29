@@ -133,36 +133,47 @@
 #'   verbose = FALSE
 #' )
 #' @export
-data_separate <- function(data,
-                          select = NULL,
-                          new_columns = NULL,
-                          separator = "[^[:alnum:]]+",
-                          guess_columns = NULL,
-                          merge_multiple = FALSE,
-                          merge_separator = "",
-                          fill = "right",
-                          extra = "drop_right",
-                          convert_na = TRUE,
-                          exclude = NULL,
-                          append = FALSE,
-                          ignore_case = FALSE,
-                          verbose = TRUE,
-                          regex = FALSE,
-                          ...) {
+data_separate <- function(
+  data,
+  select = NULL,
+  new_columns = NULL,
+  separator = "[^[:alnum:]]+",
+  guess_columns = NULL,
+  merge_multiple = FALSE,
+  merge_separator = "",
+  fill = "right",
+  extra = "drop_right",
+  convert_na = TRUE,
+  exclude = NULL,
+  append = FALSE,
+  ignore_case = FALSE,
+  verbose = TRUE,
+  regex = FALSE,
+  ...
+) {
   # we need at least one explicit choice for either `new_columns` or `guess_columns`
   if (is.null(new_columns) && is.null(guess_columns)) {
-    insight::format_error("Cannot separate values. Either `new_columns` or `guess_columns` must be provided.")
+    insight::format_error(
+      "Cannot separate values. Either `new_columns` or `guess_columns` must be provided."
+    )
   }
   # in case user did not provide names of new columns, we can try
   # to guess number of columns per variable
   guess_columns <- match.arg(guess_columns, choices = c("min", "max", "mode"))
 
   # make sure we have valid options for fill and extra
-  fill <- match.arg(fill, choices = c("left", "right", "value_left", "value_right"))
-  extra <- match.arg(extra, choices = c("drop_left", "drop_right", "merge_left", "merge_right"))
+  fill <- match.arg(
+    fill,
+    choices = c("left", "right", "value_left", "value_right")
+  )
+  extra <- match.arg(
+    extra,
+    choices = c("drop_left", "drop_right", "merge_left", "merge_right")
+  )
 
   # evaluate select/exclude, may be select-helpers
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     data,
     exclude,
     ignore_case,
@@ -228,7 +239,8 @@ data_separate <- function(data,
       # but without NA values
       l <- l[!vapply(l, function(i) all(is.na(i)), TRUE)]
       # define number of new columns, based on user-choice
-      n_cols <- switch(guess_columns,
+      n_cols <- switch(
+        guess_columns,
         min = min(l, na.rm = TRUE),
         max = max(l, na.rm = TRUE),
         mode = distribution_mode(l),
@@ -236,8 +248,13 @@ data_separate <- function(data,
       # tell user
       if (verbose && insight::n_unique(l) != 1 && !is.numeric(separator)) {
         insight::format_alert(paste0(
-          "Column `", sep_column, "` had different number of values after splitting. Variable was split into ",
-          n_cols, " column", ifelse(n_cols > 1, "s", ""), "."
+          "Column `",
+          sep_column,
+          "` had different number of values after splitting. Variable was split into ",
+          n_cols,
+          " column",
+          ifelse(n_cols > 1, "s", ""),
+          "."
         ))
       }
     } else {
@@ -247,7 +264,14 @@ data_separate <- function(data,
 
     # main task here - fill or drop values for all columns
     separated_columns <- tryCatch(
-      .fix_separated_columns(separated_columns, fill, extra, n_cols, sep_column, verbose),
+      .fix_separated_columns(
+        separated_columns,
+        fill,
+        extra,
+        n_cols,
+        sep_column,
+        verbose
+      ),
       error = function(e) NULL
     )
 
@@ -279,7 +303,9 @@ data_separate <- function(data,
   # any split performed?
   if (all(lengths(split_data) == 1)) {
     if (verbose) {
-      insight::format_alert("Separator probably not found. No values were split. Returning original data.")
+      insight::format_alert(
+        "Separator probably not found. No values were split. Returning original data."
+      )
     }
     return(data)
   }
@@ -290,7 +316,9 @@ data_separate <- function(data,
     # of data frames, together into one data frame
     for (i in 2:length(split_data)) {
       for (j in seq_along(split_data[[1]])) {
-        split_data[[1]][[j]] <- gsub(" ", "",
+        split_data[[1]][[j]] <- gsub(
+          " ",
+          "",
           paste(
             split_data[[1]][[j]],
             split_data[[i]][[j]],
@@ -325,7 +353,14 @@ data_separate <- function(data,
 
 
 #' @keywords internal
-.fix_separated_columns <- function(separated_columns, fill, extra, n_cols, sep_column, verbose = TRUE) {
+.fix_separated_columns <- function(
+  separated_columns,
+  fill,
+  extra,
+  n_cols,
+  sep_column,
+  verbose = TRUE
+) {
   warn_extra <- warn_fill <- FALSE
   for (sc in seq_along(separated_columns)) {
     i <- separated_columns[[sc]]
@@ -336,7 +371,8 @@ data_separate <- function(data,
       out <- rep(NA_character_, times = n_cols)
     } else if (n_values > n_cols) {
       # we have more values than required - drop extra columns
-      out <- switch(extra,
+      out <- switch(
+        extra,
         drop_left = i[(n_values - n_cols + 1):n_values],
         drop_right = i[1:n_cols],
         merge_left = {
@@ -351,7 +387,8 @@ data_separate <- function(data,
       warn_extra <- TRUE
     } else if (n_values < n_cols) {
       # we have fewer values than required - fill columns
-      out <- switch(fill,
+      out <- switch(
+        fill,
         left = c(rep(NA_character_, times = n_cols - n_values), i),
         right = c(i, rep(NA_character_, times = n_cols - n_values)),
         value_left = c(rep(i[1], times = n_cols - n_values), i),
@@ -367,9 +404,12 @@ data_separate <- function(data,
   if (verbose) {
     if (warn_extra) {
       insight::format_alert(paste0(
-        "`", sep_column, "`",
+        "`",
+        sep_column,
+        "`",
         " returned more columns than expected after splitting. ",
-        switch(extra,
+        switch(
+          extra,
           drop_left = "Left-most columns have been dropped.",
           drop_right = "Right-most columns have been dropped.",
           merge_left = "Left-most columns have been merged together.",
@@ -379,9 +419,12 @@ data_separate <- function(data,
     }
     if (warn_fill) {
       insight::format_alert(paste0(
-        "`", sep_column, "`",
+        "`",
+        sep_column,
+        "`",
         "returned fewer columns than expected after splitting. ",
-        switch(fill,
+        switch(
+          fill,
           left = "Left-most columns were filled with `NA`.",
           right = "Right-most columns were filled with `NA`.",
           value_left = "Left-most columns were filled with first value.",

@@ -30,8 +30,11 @@ test_that("center, select", {
   expect_identical(
     vapply(z, class, character(1)),
     c(
-      Sepal.Length = "numeric", Sepal.Width = "numeric", Petal.Length = "numeric",
-      Petal.Width = "numeric", Species = "factor"
+      Sepal.Length = "numeric",
+      Sepal.Width = "numeric",
+      Petal.Length = "numeric",
+      Petal.Width = "numeric",
+      Species = "factor"
     )
   )
 })
@@ -44,7 +47,8 @@ test_that("center, factors", {
 test_that("center, force factors", {
   z <- center(iris, select = "Species", force = TRUE)
   v <- as.numeric(iris$Species)
-  expect_equal(as.vector(z$Species),
+  expect_equal(
+    as.vector(z$Species),
     v - median(v),
     tolerance = 1e-4,
     ignore_attr = TRUE

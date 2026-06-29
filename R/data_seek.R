@@ -54,16 +54,26 @@
 #' # typo, fuzzy match
 #' data_seek(iris, "Lenght", fuzzy = TRUE)
 #' @export
-data_seek <- function(data, pattern, seek = c("names", "labels"), fuzzy = FALSE) {
+data_seek <- function(
+  data,
+  pattern,
+  seek = c("names", "labels"),
+  fuzzy = FALSE
+) {
   # check valid args
   if (!is.data.frame(data)) {
     insight::format_error("`data` must be a data frame.")
   }
 
   # check valid args
-  seek <- intersect(seek, c("names", "labels", "values", "levels", "column_names", "columns", "all"))
+  seek <- intersect(
+    seek,
+    c("names", "labels", "values", "levels", "column_names", "columns", "all")
+  )
   if (is.null(seek) || !length(seek)) {
-    insight::format_error("`seek` must be one of \"names\", \"labels\", \"values\", a combination of these options, or \"all\".") # nolint
+    insight::format_error(
+      "`seek` must be one of \"names\", \"labels\", \"values\", a combination of these options, or \"all\"."
+    ) # nolint
   }
 
   pos1 <- pos2 <- pos3 <- NULL
@@ -74,13 +84,21 @@ data_seek <- function(data, pattern, seek = c("names", "labels"), fuzzy = FALSE)
       pos1 <- grep(search_pattern, colnames(data))
       # find in near distance?
       if (fuzzy) {
-        pos1 <- c(pos1, .fuzzy_grep(x = colnames(data), pattern = search_pattern))
+        pos1 <- c(
+          pos1,
+          .fuzzy_grep(x = colnames(data), pattern = search_pattern)
+        )
       }
     }
 
     # search in variable labels?
     if (any(seek %in% c("labels", "all"))) {
-      var_labels <- insight::compact_character(unlist(lapply(data, attr, which = "label", exact = TRUE)))
+      var_labels <- insight::compact_character(unlist(lapply(
+        data,
+        attr,
+        which = "label",
+        exact = TRUE
+      )))
       if (!is.null(var_labels) && length(var_labels)) {
         found <- grepl(search_pattern, var_labels)
         pos2 <- match(names(var_labels)[found], colnames(data))
@@ -105,7 +123,11 @@ data_seek <- function(data, pattern, seek = c("names", "labels"), fuzzy = FALSE)
         }
       }))
       if (!is.null(values) && length(values)) {
-        found <- vapply(values, function(i) any(grepl(search_pattern, i)), logical(1))
+        found <- vapply(
+          values,
+          function(i) any(grepl(search_pattern, i)),
+          logical(1)
+        )
         pos3 <- match(names(found)[found], colnames(data))
         # find in near distance
         if (fuzzy) {

@@ -44,8 +44,11 @@ row_to_colnames <- function(x, row = 1, na_prefix = "x", verbose = TRUE) {
   if (nrow(x) < row) {
     insight::format_error(
       paste0(
-        "You used row = ", row,
-        " but the dataset only has ", nrow(x), " rows."
+        "You used row = ",
+        row,
+        " but the dataset only has ",
+        nrow(x),
+        " rows."
       )
     )
   }
@@ -62,9 +65,11 @@ row_to_colnames <- function(x, row = 1, na_prefix = "x", verbose = TRUE) {
     if (verbose) {
       insight::format_warning(
         paste0(
-          "Some values of row ", row,
+          "Some values of row ",
+          row,
           " were NAs. The corresponding column names are prefixed with `",
-          na_prefix, "`."
+          na_prefix,
+          "`."
         )
       )
     }

@@ -159,7 +159,7 @@ names, that identify the source of the gathered values, stored in one or more
 new columns (\code{names_to}).
 }
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("psych", "tidyr"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("psych", "tidyr"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 wide_data <- setNames(
   data.frame(replicate(2, rnorm(8))),
   c("Time1", "Time2")

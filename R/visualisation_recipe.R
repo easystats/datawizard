@@ -29,7 +29,10 @@ print.visualisation_recipe <- function(x, ...) {
   for (i in seq_along(x)) {
     l <- x[[paste0("l", i)]]
     insight::print_color(paste0("Layer ", i, "\n--------\n"), "blue")
-    insight::print_color(paste0("Geom type: ", ifelse(is.null(l$geom), "[NULL]", l$geom), "\n"), "yellow")
+    insight::print_color(
+      paste0("Geom type: ", ifelse(is.null(l$geom), "[NULL]", l$geom), "\n"),
+      "yellow"
+    )
 
     elements <- names(l)[!vapply(l, is.null, FUN.VALUE = logical(1L))]
 
@@ -57,7 +60,11 @@ print.visualisation_recipe <- function(x, ...) {
         }
         cat(")")
       } else {
-        if (is.character(l[[element]]) || is.numeric(l[[element]]) || is.factor(l[[element]])) {
+        if (
+          is.character(l[[element]]) ||
+            is.numeric(l[[element]]) ||
+            is.factor(l[[element]])
+        ) {
           if (is.character(l[[element]])) {
             cat(paste0("'", l[[element]], "'"))
           } else {

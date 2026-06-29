@@ -82,10 +82,7 @@
 #' - Functions to filter rows: [data_match()], [data_filter()]
 #'
 #' @export
-data_rename <- function(data,
-                        select = NULL,
-                        replacement = NULL,
-                        ...) {
+data_rename <- function(data, select = NULL, replacement = NULL, ...) {
   # check for valid input
   if (!is.data.frame(data)) {
     insight::format_error("Argument `data` must be a data frame.")
@@ -106,7 +103,9 @@ data_rename <- function(data,
   # Ex: if select = c("foo" = "Species", "Sepal.Length") then the 2nd name and
   # 2nd value are "Sepal.Length"
   if (!is.null(names(select)) && any(names(select) == select)) {
-    insight::format_error("When `select` is a named vector, all elements must be named.")
+    insight::format_error(
+      "When `select` is a named vector, all elements must be named."
+    )
   }
 
   # check if `select` has names, and if so, use as "replacement"
@@ -155,12 +154,17 @@ data_rename <- function(data,
   }
 
   # check if we have "glue" styled replacement-string
-  glue_style <- length(replacement) == 1 && grepl("{", replacement, fixed = TRUE)
+  glue_style <- length(replacement) == 1 &&
+    grepl("{", replacement, fixed = TRUE)
 
   if (length(replacement) > length(select)) {
-    insight::format_error("There are more names in `replacement` than in `select`.")
+    insight::format_error(
+      "There are more names in `replacement` than in `select`."
+    )
   } else if (length(replacement) < length(select) && !glue_style) {
-    insight::format_error("There are more names in `select` than in `replacement`")
+    insight::format_error(
+      "There are more names in `select` than in `replacement`"
+    )
   }
 
   # if we have glue-styled replacement-string, create replacement select now
@@ -180,7 +184,11 @@ data_rename <- function(data,
 #' @keywords internal
 .data_rename <- function(data, pattern, replacement) {
   if (!pattern %in% names(data)) {
-    insight::format_error(paste0("Variable `", pattern, "` is not in your data frame :/"))
+    insight::format_error(paste0(
+      "Variable `",
+      pattern,
+      "` is not in your data frame :/"
+    ))
   }
 
   names(data) <- replace(names(data), names(data) == pattern, replacement)
@@ -245,15 +253,21 @@ data_rename <- function(data,
         values <- .dynEval(
           str2lang(gsub("\\{(.*)\\}", "\\1", token)),
           ifnotfound = insight::format_error(paste0(
-            "The object `", token, "` was not found. Please check if it really exists."
+            "The object `",
+            token,
+            "` was not found. Please check if it really exists."
           ))
         )
         # check for correct length
         if (length(values) != length(pattern)) {
           insight::format_error(paste0(
-            "The number of values provided in `", token, "` (", length(values),
+            "The number of values provided in `",
+            token,
+            "` (",
+            length(values),
             " values) do not match the number of columns to rename (",
-            length(pattern), " columns)."
+            length(pattern),
+            " columns)."
           ))
         }
         # replace token with values from the object

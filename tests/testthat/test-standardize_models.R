@@ -25,7 +25,9 @@ test_that("standardize | errors", {
 
   m <- my_lm_external_formula(mtcars, "mpg", "am")
   ers <- capture_error(standardize(m))
-  expect_match(as.character(ers), "Try instead to standardize the data",
+  expect_match(
+    as.character(ers),
+    "Try instead to standardize the data",
     fixed = TRUE
   )
 })
@@ -80,21 +82,27 @@ test_that("transformations", {
     ignore_attr = TRUE
   )
 
+  # fmt: skip
   d <- data.frame(
-    time = as.factor(c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5)),
-    group = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
-    sum = c(0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50, 0, 5, 10, 15, 20, 0, 20, 25, 45, 50) # nolint
+    time = factor(rep(c("1", "2", "3", "4", "5"), 6)),
+    group = rep(rep(c(1, 2), 3), each = 5L),
+    sum = rep(c(0, 5, 10, 15, 20, 0, 20, 25, 45, 50), 3)
   )
   m <- lm(log(sum + 1) ~ as.numeric(time) * group, data = d)
-
 
   expect_message({
     out <- standardize(m)
   })
-  expect_identical(coef(m), c(
-    `(Intercept)` = -0.4575, `as.numeric(time)` = 0.5492, group = 0.3379,
-    `as.numeric(time):group` = 0.15779
-  ), tolerance = 0.01)
+  expect_identical(
+    coef(m),
+    c(
+      `(Intercept)` = -0.4575,
+      `as.numeric(time)` = 0.5492,
+      group = 0.3379,
+      `as.numeric(time):group` = 0.15779
+    ),
+    tolerance = 0.01
+  )
 })
 
 
@@ -106,8 +114,15 @@ test_that("weights", {
 
   sm <- standardize(m, weights = TRUE)
   sm_data <- insight::get_data(sm, source = "frame")
-  sm_data2 <- standardize(mtcars, select = c("mpg", "wt", "hp"), weights = "cyl")
-  expect_identical(sm_data[, c("mpg", "wt", "hp")], sm_data2[, c("mpg", "wt", "hp")])
+  sm_data2 <- standardize(
+    mtcars,
+    select = c("mpg", "wt", "hp"),
+    weights = "cyl"
+  )
+  expect_identical(
+    sm_data[, c("mpg", "wt", "hp")],
+    sm_data2[, c("mpg", "wt", "hp")]
+  )
 
   expect_error(standardize(m, weights = TRUE, robust = TRUE), NA)
 
@@ -144,27 +159,39 @@ test_that("weights + NA", {
   iris$weight_me[sample(nrow(iris), size = 10)] <- NA
 
   # standardize 2nd data set
-  iris2 <- standardize(iris,
+  iris2 <- standardize(
+    iris,
     select = c("Sepal.Length", "Petal.Width"),
     remove_na = "all"
   )
-  iris3 <- standardize(iris,
+  iris3 <- standardize(
+    iris,
     select = c("Sepal.Length", "Petal.Width"),
     weights = "weight_me",
     remove_na = "selected"
   )
 
-
-  m1 <- lm(Sepal.Length ~ Species + Petal.Width, data = iris, weights = weight_me)
-
+  m1 <- lm(
+    Sepal.Length ~ Species + Petal.Width,
+    data = iris,
+    weights = weight_me
+  )
 
   # weights, missing data, but data isn't weight-stdized
-  m2 <- lm(Sepal.Length ~ Species + Petal.Width, data = iris2, weights = weight_me)
+  m2 <- lm(
+    Sepal.Length ~ Species + Petal.Width,
+    data = iris2,
+    weights = weight_me
+  )
   sm2 <- standardize(m1, weights = FALSE)
   expect_identical(coef(m2), coef(sm2))
 
   # weights, missing data, and data is weight-stdized
-  m3 <- lm(Sepal.Length ~ Species + Petal.Width, data = iris3, weights = weight_me)
+  m3 <- lm(
+    Sepal.Length ~ Species + Petal.Width,
+    data = iris3,
+    weights = weight_me
+  )
   sm3 <- standardize(m1, weights = TRUE)
   expect_identical(coef(m3), coef(sm3))
 })
@@ -182,11 +209,21 @@ test_that("weights + NA + na.exclude", {
   iris$weight_me[sample(nrow(iris), size = 15)] <- NA
   d <- iris
 
-  m1 <- lm(Sepal.Length ~ Species + Petal.Width, data = d, weights = weight_me, na.action = na.exclude)
+  m1 <- lm(
+    Sepal.Length ~ Species + Petal.Width,
+    data = d,
+    weights = weight_me,
+    na.action = na.exclude
+  )
   m2 <- lm(Sepal.Length ~ Species + Petal.Width, data = d, weights = weight_me)
 
-  expect_identical(coef(standardize(m2)), coef(standardize(m1)), tolerance = 1e-3)
-  expect_identical(effectsize::standardize_parameters(m1, method = "basic")[[2]],
+  expect_identical(
+    coef(standardize(m2)),
+    coef(standardize(m1)),
+    tolerance = 1e-3
+  )
+  expect_identical(
+    effectsize::standardize_parameters(m1, method = "basic")[[2]],
     effectsize::standardize_parameters(m2, method = "basic")[[2]],
     tolerance = 1e-3
   )
@@ -196,10 +233,7 @@ test_that("weights + NA + na.exclude", {
 test_that("fail with subset", {
   data("mtcars")
 
-  mod1 <- lm(mpg ~ hp,
-    data = mtcars,
-    subset = cyl > 4
-  )
+  mod1 <- lm(mpg ~ hp, data = mtcars, subset = cyl > 4)
 
   expect_error(standardise(mod1), regexp = "subset")
 })
@@ -213,12 +247,28 @@ test_that("standardize non-Gaussian response", {
   data(sleepstudy, package = "lme4")
 
   m1 <- glm(Reaction ~ Days, family = Gamma(), data = sleepstudy)
-  m2 <- glm(Reaction ~ Days, family = Gamma(link = "identity"), data = sleepstudy)
+  m2 <- glm(
+    Reaction ~ Days,
+    family = Gamma(link = "identity"),
+    data = sleepstudy
+  )
   m3 <- glm(Reaction ~ Days, family = inverse.gaussian(), data = sleepstudy)
 
-  expect_identical(coef(standardize(m1)), c(`(Intercept)` = 0.00338, Days = -0.00034), tolerance = 1e-2)
-  expect_identical(coef(standardize(m2)), c(`(Intercept)` = 298.48571, Days = 29.70754), tolerance = 1e-3)
-  expect_identical(coef(standardize(m3)), c(`(Intercept)` = 1e-05, Days = 0), tolerance = 1e-3)
+  expect_identical(
+    coef(standardize(m1)),
+    c(`(Intercept)` = 0.00338, Days = -0.00034),
+    tolerance = 1e-2
+  )
+  expect_identical(
+    coef(standardize(m2)),
+    c(`(Intercept)` = 298.48571, Days = 29.70754),
+    tolerance = 1e-3
+  )
+  expect_identical(
+    coef(standardize(m3)),
+    c(`(Intercept)` = 1e-05, Days = 0),
+    tolerance = 1e-3
+  )
 })
 
 
@@ -246,9 +296,19 @@ test_that("standardize mediation", {
   b.int <- lm(job_seek ~ treat * age + econ_hard + sex, data = jobs)
   d.int <- lm(depress2 ~ treat * job_seek * age + econ_hard + sex, data = jobs)
 
-  med1 <- mediation::mediate(b.int, d.int, sims = 200, treat = "treat", mediator = "job_seek")
-  med2 <- mediation::mediate(b.int, d.int,
-    sims = 200, treat = "treat", mediator = "job_seek",
+  med1 <- mediation::mediate(
+    b.int,
+    d.int,
+    sims = 200,
+    treat = "treat",
+    mediator = "job_seek"
+  )
+  med2 <- mediation::mediate(
+    b.int,
+    d.int,
+    sims = 200,
+    treat = "treat",
+    mediator = "job_seek",
     covariates = list(age = mean(jobs$age))
   )
 
@@ -256,7 +316,8 @@ test_that("standardize mediation", {
   expect_message({
     out2 <- summary(standardize(med2))
   })
-  expect_identical(unlist(out1[c("d0", "d1", "z0", "z1", "n0", "n1", "tau.coef")]),
+  expect_identical(
+    unlist(out1[c("d0", "d1", "z0", "z1", "n0", "n1", "tau.coef")]),
     unlist(out2[c("d0", "d1", "z0", "z1", "n0", "n1", "tau.coef")]),
     tolerance = 0.1
   )
@@ -277,7 +338,8 @@ test_that("standardize mediation", {
     mediator = "job_seek"
   ))
   outz <- summary(medz)
-  expect_identical(unlist(out0[c("d0", "d1", "z0", "z1", "n0", "n1", "tau.coef")]),
+  expect_identical(
+    unlist(out0[c("d0", "d1", "z0", "z1", "n0", "n1", "tau.coef")]),
     unlist(outz[c("d0", "d1", "z0", "z1", "n0", "n1", "tau.coef")]),
     tolerance = 0.1
   )
@@ -298,7 +360,6 @@ test_that("offsets", {
     mz2 <- standardize(m, two_sd = TRUE)
   })
   expect_identical(c(1, 2) * coef(mz1), coef(mz2))
-
 
   m <- glm(cyl ~ hp + offset(wt), family = poisson(), data = mtcars)
   expect_warning(
@@ -325,9 +386,12 @@ test_that("brms", {
 
   invisible(
     capture.output({
-      mod <- brms::brm(mpg ~ hp,
+      mod <- brms::brm(
+        mpg ~ hp,
         data = mtcars,
-        refresh = 0, chains = 1, silent = 2
+        refresh = 0,
+        chains = 1,
+        silent = 2
       )
     })
   )
@@ -335,5 +399,57 @@ test_that("brms", {
   expect_warning(
     standardize(mod),
     regexp = "without adjusting priors may lead to bogus"
+  )
+})
+
+# fixest --------------------------------------------------------------------
+
+test_that("fixest", {
+  skip_if_not_installed("fixest")
+
+  mtcars_stand <- standardize(mtcars)
+  orig <- fixest::feols(
+    drat ~ mpg + hp^2 | cyl + am,
+    data = mtcars,
+    se = "hetero"
+  )
+  # TODO: Remove this suppressWarnings() when a new version of `fixest` that
+  # contains the fix for https://github.com/lrberge/fixest/issues/618 is on CRAN
+  # (CRAN version is 0.13.2 at the time of writing).
+  suppressWarnings({
+    auto_stand <- standardize(orig)
+  })
+  manual_stand <- fixest::feols(
+    drat ~ mpg + hp^2 | cyl + am,
+    data = mtcars_stand,
+    se = "hetero"
+  )
+
+  # Need to unname because I(hp^2) in the manual one becomes I(I(hp ^2)) in the
+  # automated one.
+  expect_identical(
+    unname(auto_stand$coefficients),
+    unname(manual_stand$coefficients)
+  )
+  expect_identical(unname(auto_stand$se), unname(manual_stand$se))
+
+  ### Inform the user if some terms are log() or sqrt()
+  orig <- fixest::feols(
+    drat ~ log(mpg) | cyl + am,
+    data = mtcars
+  )
+  # TODO: same as above
+  expect_message(
+    suppressWarnings(standardize(orig)),
+    "Formula contains log- or sqrt-terms"
+  )
+  orig <- fixest::feols(
+    drat ~ sqrt(mpg) | cyl + am,
+    data = mtcars
+  )
+  # TODO: same as above
+  expect_message(
+    suppressWarnings(standardize(orig)),
+    "Formula contains log- or sqrt-terms"
   )
 })

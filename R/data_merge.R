@@ -169,19 +169,31 @@ data_join <- data_merge
 
 #' @rdname data_merge
 #' @export
-data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, verbose = TRUE, ...) {
+data_merge.data.frame <- function(
+  x,
+  y,
+  join = "left",
+  by = NULL,
+  id = NULL,
+  verbose = TRUE,
+  ...
+) {
   class_x <- class(x)
 
   # save variable attributes
   attr_x_vars <- lapply(x, attributes)
   attr_y_vars <- lapply(y, attributes)
-  attr_vars <- c(attr_x_vars, attr_y_vars[names(attr_y_vars)[!names(attr_y_vars) %in% names(attr_x_vars)]])
-
+  attr_vars <- c(
+    attr_x_vars,
+    attr_y_vars[names(attr_y_vars)[!names(attr_y_vars) %in% names(attr_x_vars)]]
+  )
 
   # check join-argument ----------------------
 
-  join <- match.arg(join, choices = c("full", "left", "right", "inner", "semi", "anti", "bind"))
-
+  join <- match.arg(
+    join,
+    choices = c("full", "left", "right", "inner", "semi", "anti", "bind")
+  )
 
   # check id-argument ----------------------
 
@@ -193,7 +205,10 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
     # and also tell user...
     if (isTRUE(verbose)) {
       insight::format_warning(
-        sprintf("Value of `id` already exists as column name. ID column was renamed to `%s`.", id)
+        sprintf(
+          "Value of `id` already exists as column name. ID column was renamed to `%s`.",
+          id
+        )
       )
     }
   }
@@ -202,7 +217,6 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
     x[[id]] <- 1
     y[[id]] <- 2
   }
-
 
   # check merge columns ("by"-argument) ----------------------
 
@@ -220,10 +234,16 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
       stop_message <- c(
         "Not all columns specified in `by` were found in the data frames.",
         if (length(missing_in_x) > 0L) {
-          paste0("Following columns are in `by` but absent in `x`: ", text_concatenate(missing_in_x))
+          paste0(
+            "Following columns are in `by` but absent in `x`: ",
+            text_concatenate(missing_in_x)
+          )
         },
         if (length(missing_in_y) > 0L) {
-          paste0("Following columns are in `by` but absent in `y`: ", text_concatenate(missing_in_y))
+          paste0(
+            "Following columns are in `by` but absent in `y`: ",
+            text_concatenate(missing_in_y)
+          )
         }
       )
       if (isTRUE(verbose)) {
@@ -245,7 +265,6 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
     }
   }
 
-
   # check valid combination of "join" and "by" -----------------------
 
   if (join %in% c("anti", "semi") && (is.null(by) || length(by) != 1)) {
@@ -256,7 +275,6 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
       )
     )
   }
-
 
   # merge --------------------
 
@@ -271,7 +289,8 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   }
   all_columns <- union(colnames(x), colnames(y))
 
-  out <- switch(join,
+  out <- switch(
+    join,
     full = merge(x, y, all = TRUE, sort = FALSE, by = by),
     left = merge(x, y, all.x = TRUE, sort = FALSE, by = by),
     right = merge(x, y, all.y = TRUE, sort = FALSE, by = by),
@@ -281,14 +300,15 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
     bind = .bind_data_frames(x, y)
   )
 
-
   # sort rows, add attributes, and return results -------------------------
 
   if (".data_merge_id_x" %in% colnames(out)) {
     # for full joins, we have no complete sorting id, but NAs for each
     # data frame. we now "merge" the two sorting IDs from each data frame.
     if (anyNA(out$.data_merge_id_x) && ".data_merge_id_y" %in% colnames(out)) {
-      out$.data_merge_id_x[is.na(out$.data_merge_id_x)] <- out$.data_merge_id_y[is.na(out$.data_merge_id_x)]
+      out$.data_merge_id_x[is.na(
+        out$.data_merge_id_x
+      )] <- out$.data_merge_id_y[is.na(out$.data_merge_id_x)]
     }
     out <- out[order(out$.data_merge_id_x), ]
     out$.data_merge_id_x <- NULL
@@ -313,7 +333,10 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
   for (i in colnames(out)) {
     if (is.list(attr_vars[[i]])) {
       if (is.list(attributes(out[[i]]))) {
-        attributes(out[[i]]) <- utils::modifyList(attr_vars[[i]], attributes(out[[i]]))
+        attributes(out[[i]]) <- utils::modifyList(
+          attr_vars[[i]],
+          attributes(out[[i]])
+        )
       } else {
         attributes(out[[i]]) <- attr_vars[[i]]
       }
@@ -327,12 +350,27 @@ data_merge.data.frame <- function(x, y, join = "left", by = NULL, id = NULL, ver
 
 #' @rdname data_merge
 #' @export
-data_merge.list <- function(x, join = "left", by = NULL, id = NULL, verbose = TRUE, ...) {
+data_merge.list <- function(
+  x,
+  join = "left",
+  by = NULL,
+  id = NULL,
+  verbose = TRUE,
+  ...
+) {
   out <- x[[1]]
   df_id <- rep(1, times = nrow(out))
 
   for (i in 2:length(x)) {
-    out <- data_merge(out, x[[i]], join = join, by = by, id = NULL, verbose = verbose, ...)
+    out <- data_merge(
+      out,
+      x[[i]],
+      join = join,
+      by = by,
+      id = NULL,
+      verbose = verbose,
+      ...
+    )
     df_id <- c(df_id, rep(i, times = nrow(x[[i]])))
   }
 
@@ -340,11 +378,16 @@ data_merge.list <- function(x, join = "left", by = NULL, id = NULL, verbose = TR
   if (!is.null(id) && join == "bind") {
     if (id %in% colnames(out)) {
       # ensure unique ID
-      id <- make.unique(c(colnames(out), id), sep = "_")[length(colnames(out)) + 1]
+      id <- make.unique(c(colnames(out), id), sep = "_")[
+        length(colnames(out)) + 1
+      ]
       # and also tell user...
       if (isTRUE(verbose)) {
         insight::format_warning(
-          sprintf("Value of `id` already exists as column name. ID column was renamed to `%s`.", id)
+          sprintf(
+            "Value of `id` already exists as column name. ID column was renamed to `%s`.",
+            id
+          )
         )
       }
     }

@@ -61,6 +61,7 @@ reference:
     desc: |
       Functions to compute statistical summaries of data properties and distributions
     contents:
+      - as.prop.table
       - data_codebook
       - data_summary
       - data_tabulate

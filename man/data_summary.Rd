@@ -7,7 +7,7 @@
 \usage{
 data_summary(x, ...)
 
-\method{data_summary}{data.frame}(x, ..., by = NULL, remove_na = FALSE)
+\method{data_summary}{data.frame}(x, ..., by = NULL, remove_na = FALSE, suffix = NULL)
 }
 \arguments{
 \item{x}{A (grouped) data frame.}
@@ -25,6 +25,23 @@ variables and summary statistics will be computed for each group.}
 \item{remove_na}{Logical. If \code{TRUE}, missing values are omitted from the
 grouping variable. If \code{FALSE} (default), missing values are included as a
 level in the grouping variable.}
+
+\item{suffix}{Optional, suffixes to be added to the new variable names,
+especially useful when a function returns several values (e.g. \code{quantile()}).
+Can be:
+\itemize{
+\item a character vector: all expressions in \code{...} must return the same number
+of values as elements in \code{suffix}.
+\item a list of named character vectors: the names of elements in \code{suffix} must
+match the names of the expressions. It is also allowed to specify suffixes
+for selected expressions only.
+}
+
+The new column names are a combination of the left-hand side (i.e.,
+the name) of the expression and the related suffixes. If \code{suffix = NULL} (the
+default), and a summary expression returns multiple values, either the names
+of the returned values (if any) or automatically numbered suffixes such as
+\verb{_1}, \verb{_2}, etc. are used. See 'Examples'.}
 }
 \value{
 A data frame with the requested summary statistics.
@@ -64,4 +81,49 @@ data_summary(
   last = mpg[length(mpg)],
   by = c("am", "gear")
 )
+
+# allow more than one-column-summaries for expressions
+d <- data.frame(
+  x = rnorm(100, 1, 1),
+  y = rnorm(100, 2, 2),
+  groups = rep(1:4, each = 25)
+)
+
+# since we have multiple columns for one expression, the names of the
+# returned summary results are used as suffix by default
+data_summary(
+  d,
+  quant_x = quantile(x, c(0.25, 0.75)),
+  mean_x = mean(x),
+  quant_y = quantile(y, c(0.25, 0.5, 0.75))
+)
+
+# if a summary function, like `fivenum()`, returns no named vector, suffixes
+# are automatically numbered
+data_summary(
+  d,
+  quant_x = quantile(x, c(0.25, 0.75)),
+  mean_x = mean(x),
+  fivenum_y = fivenum(y)
+)
+
+# specify column suffix for expressions, matching by names
+data_summary(
+  d,
+  quant_x = quantile(x, c(0.25, 0.75)),
+  mean_x = mean(x),
+  quant_y = quantile(y, c(0.25, 0.5, 0.75)),
+  suffix = list(quant_y = c("_Q1", "_Q2", "_Q3"))
+)
+
+# name multiple expression suffixes, grouped by variable
+data_summary(
+  d,
+  quant_x = quantile(x, c(0.25, 0.75)),
+  mean_x = mean(x),
+  quant_y = quantile(y, c(0.25, 0.5, 0.75)),
+  suffix = list(quant_x = c("Q1", "Q3"), quant_y = c("_Q1", "_Q2", "_Q3")),
+  by = "groups"
+)
+
 }

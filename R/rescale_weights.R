@@ -154,11 +154,13 @@
 #' )
 #' }
 #' @export
-rescale_weights <- function(data,
-                            probability_weights = NULL,
-                            by = NULL,
-                            nest = FALSE,
-                            method = "carle") {
+rescale_weights <- function(
+  data,
+  probability_weights = NULL,
+  by = NULL,
+  nest = FALSE,
+  method = "carle"
+) {
   method <- insight::validate_argument(method, c("carle", "kish"))
 
   # convert formulas to strings
@@ -171,14 +173,21 @@ rescale_weights <- function(data,
   }
 
   # check for existing variable names
-  if ((method == "carle" && any(c("rescaled_weights_a", "rescaled_weights_b") %in% colnames(data))) ||
-    (method == "kish" && "rescaled_weights" %in% colnames(data))) {
-    insight::format_warning("The variable name for the rescaled weights already exists in the data. Returned columns will be renamed into unique names.") # nolint
+  if (
+    (method == "carle" &&
+      any(c("rescaled_weights_a", "rescaled_weights_b") %in% colnames(data))) ||
+      (method == "kish" && "rescaled_weights" %in% colnames(data))
+  ) {
+    insight::format_warning(
+      "The variable name for the rescaled weights already exists in the data. Returned columns will be renamed into unique names."
+    ) # nolint
   }
 
   # need probability_weights
   if (is.null(probability_weights)) {
-    insight::format_error("The argument `probability_weights` is missing, but required to rescale weights.")
+    insight::format_error(
+      "The argument `probability_weights` is missing, but required to rescale weights."
+    )
   }
 
   # check if weight has missings. we need to remove them first,
@@ -202,7 +211,8 @@ rescale_weights <- function(data,
     weight_non_na = weight_non_na
   )
 
-  switch(method,
+  switch(
+    method,
     carle = do.call(.rescale_weights_carle, fun_args),
     do.call(.rescale_weights_kish, fun_args)
   )
@@ -211,13 +221,22 @@ rescale_weights <- function(data,
 
 # rescale weights, method Kish ----------------------------
 
-.rescale_weights_kish <- function(nest, probability_weights, data_tmp, data, by, weight_non_na) {
+.rescale_weights_kish <- function(
+  nest,
+  probability_weights,
+  data_tmp,
+  data,
+  by,
+  weight_non_na
+) {
   # sort id
   data_tmp$.bamboozled <- seq_len(nrow(data_tmp))
 
   # `nest` is currently ignored
   if (isTRUE(nest)) {
-    insight::format_warning("Argument `nest` is ignored for `method = \"kish\"`.")
+    insight::format_warning(
+      "Argument `nest` is ignored for `method = \"kish\"`."
+    )
   }
 
   # check by argument
@@ -226,7 +245,8 @@ rescale_weights <- function(data,
     insight::format_error(
       paste0(
         "The following variable(s) specified in `by` don't exist in the dataset: ",
-        text_concatenate(dont_exist), "."
+        text_concatenate(dont_exist),
+        "."
       ),
       .misspelled_string(colnames(data_tmp), dont_exist, "Possibly misspelled?")
     )
@@ -264,12 +284,21 @@ rescale_weights <- function(data,
 
 # rescale weights, method Carle ----------------------------
 
-.rescale_weights_carle <- function(nest, probability_weights, data_tmp, data, by, weight_non_na) {
+.rescale_weights_carle <- function(
+  nest,
+  probability_weights,
+  data_tmp,
+  data,
+  by,
+  weight_non_na
+) {
   # sort id
   data_tmp$.bamboozled <- seq_len(nrow(data_tmp))
 
   if (is.null(by)) {
-    insight::format_error("Argument `by` must be specified. Please provide one or more variable names in `by` that indicate the grouping structure (strata) of the survey data (level-2-cluster variable).") # nolint
+    insight::format_error(
+      "Argument `by` must be specified. Please provide one or more variable names in `by` that indicate the grouping structure (strata) of the survey data (level-2-cluster variable)."
+    ) # nolint
   }
 
   if (!all(by %in% colnames(data_tmp))) {
@@ -277,7 +306,8 @@ rescale_weights <- function(data,
     insight::format_error(
       paste0(
         "The following variable(s) specified in `by` don't exist in the dataset: ",
-        text_concatenate(dont_exist), "."
+        text_concatenate(dont_exist),
+        "."
       ),
       .misspelled_string(colnames(data_tmp), dont_exist, "Possibly misspelled?")
     )
@@ -294,10 +324,22 @@ rescale_weights <- function(data,
   }
 
   if (nest) {
-    out <- .rescale_weights_nested(data_tmp, group = by, probability_weights, nrow(data), weight_non_na)
+    out <- .rescale_weights_nested(
+      data_tmp,
+      group = by,
+      probability_weights,
+      nrow(data),
+      weight_non_na
+    )
   } else {
     out <- lapply(by, function(i) {
-      x <- .rescale_weights(data_tmp, i, probability_weights, nrow(data), weight_non_na)
+      x <- .rescale_weights(
+        data_tmp,
+        i,
+        probability_weights,
+        nrow(data),
+        weight_non_na
+      )
       if (length(by) > 1) {
         colnames(x) <- sprintf(c("pweight_a_%s", "pweight_b_%s"), i)
       }
@@ -305,7 +347,11 @@ rescale_weights <- function(data,
     })
   }
 
-  make_unique_names <- any(vapply(out, function(i) any(colnames(i) %in% colnames(data)), logical(1)))
+  make_unique_names <- any(vapply(
+    out,
+    function(i) any(colnames(i) %in% colnames(data)),
+    logical(1)
+  ))
   # add weights to data frame
   out <- do.call(cbind, list(data, out))
   # check if we have to rename columns
@@ -323,8 +369,16 @@ rescale_weights <- function(data,
   # compute sum of weights per group
   design_weights <- .data_frame(
     group = sort(unique(x[[group]])),
-    sum_weights_by_group = tapply(x[[probability_weights]], as.factor(x[[group]]), sum),
-    sum_squared_weights_by_group = tapply(x[[probability_weights]]^2, as.factor(x[[group]]), sum),
+    sum_weights_by_group = tapply(
+      x[[probability_weights]],
+      as.factor(x[[group]]),
+      sum
+    ),
+    sum_squared_weights_by_group = tapply(
+      x[[probability_weights]]^2,
+      as.factor(x[[group]]),
+      sum
+    ),
     n_per_group = as.vector(table(x[[group]]))
   )
 
@@ -339,7 +393,9 @@ rescale_weights <- function(data,
   # sampling unit total population based on Carle 2009
 
   w_a <- x[[probability_weights]] * x$n_per_group / x$sum_weights_by_group
-  w_b <- x[[probability_weights]] * x$sum_weights_by_group / x$sum_squared_weights_by_group
+  w_b <- x[[probability_weights]] *
+    x$sum_weights_by_group /
+    x$sum_squared_weights_by_group
 
   out <- data.frame(
     rescaled_weights_a = rep(NA_real_, times = n),
@@ -355,7 +411,13 @@ rescale_weights <- function(data,
 
 # rescale weights, for nested groups ----------------------------
 
-.rescale_weights_nested <- function(x, group, probability_weights, n, weight_non_na) {
+.rescale_weights_nested <- function(
+  x,
+  group,
+  probability_weights,
+  n,
+  weight_non_na
+) {
   groups <- expand.grid(lapply(group, function(i) sort(unique(x[[i]]))))
   colnames(groups) <- group
 
@@ -363,16 +425,26 @@ rescale_weights <- function(data,
   design_weights <- cbind(
     groups,
     .data_frame(
-      sum_weights_by_group = unlist(as.list(tapply(
-        x[[probability_weights]], lapply(group, function(i) {
-          as.factor(x[[i]])
-        }), sum
-      )), use.names = FALSE),
-      sum_squared_weights_by_group = unlist(as.list(tapply(
-        x[[probability_weights]]^2, lapply(group, function(i) {
-          as.factor(x[[i]])
-        }), sum
-      )), use.names = FALSE),
+      sum_weights_by_group = unlist(
+        as.list(tapply(
+          x[[probability_weights]],
+          lapply(group, function(i) {
+            as.factor(x[[i]])
+          }),
+          sum
+        )),
+        use.names = FALSE
+      ),
+      sum_squared_weights_by_group = unlist(
+        as.list(tapply(
+          x[[probability_weights]]^2,
+          lapply(group, function(i) {
+            as.factor(x[[i]])
+          }),
+          sum
+        )),
+        use.names = FALSE
+      ),
       n_per_group = unlist(as.list(table(x[, group])), use.names = FALSE)
     )
   )
@@ -387,7 +459,9 @@ rescale_weights <- function(data,
   # sampling unit total population based on Carle 2009
 
   w_a <- x[[probability_weights]] * x$n_per_group / x$sum_weights_by_group
-  w_b <- x[[probability_weights]] * x$sum_weights_by_group / x$sum_squared_weights_by_group
+  w_b <- x[[probability_weights]] *
+    x$sum_weights_by_group /
+    x$sum_squared_weights_by_group
 
   out <- data.frame(
     rescaled_weights_a = rep(NA_real_, times = n),

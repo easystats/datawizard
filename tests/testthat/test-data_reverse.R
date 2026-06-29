@@ -331,14 +331,19 @@ test_that("reverse_scale warns if single value to reverse", {
 
 test_that("reverse_scale select helpers", {
   data(iris)
-  out <- rescale(iris, to = list(
-    Sepal.Length = c(0, 1),
-    Petal.Length = c(-1, 0)
-  ), select = ends_with("length"))
+  out <- rescale(
+    iris,
+    to = list(
+      Sepal.Length = c(0, 1),
+      Petal.Length = c(-1, 0)
+    ),
+    select = ends_with("length")
+  )
 
   expect_identical(out$Sepal.Length, iris$Sepal.Length, tolerance = 1e-3)
 
-  out <- rescale(iris,
+  out <- rescale(
+    iris,
     to = list(
       Sepal.Length = c(0, 1),
       Petal.Length = c(-1, 0)
@@ -347,7 +352,11 @@ test_that("reverse_scale select helpers", {
     ignore_case = TRUE
   )
 
-  expect_identical(head(out$Sepal.Length), c(0.22222, 0.16667, 0.11111, 0.08333, 0.19444, 0.30556), tolerance = 1e-3)
+  expect_identical(
+    head(out$Sepal.Length),
+    c(0.22222, 0.16667, 0.11111, 0.08333, 0.19444, 0.30556),
+    tolerance = 1e-3
+  )
 })
 
 
@@ -456,11 +465,19 @@ test_that("reverse, larger range", {
   )
   expect_identical(
     reverse(factor(c(1, 3, 4)), range = 0:4),
-    structure(c(4L, 2L, 1L), levels = c("0", "1", "2", "3", "4"), class = "factor")
+    structure(
+      c(4L, 2L, 1L),
+      levels = c("0", "1", "2", "3", "4"),
+      class = "factor"
+    )
   )
   expect_identical(
     reverse(factor(c(1, 3, 4)), range = c(0, 4)),
-    structure(c(4L, 2L, 1L), levels = c("0", "1", "2", "3", "4"), class = "factor")
+    structure(
+      c(4L, 2L, 1L),
+      levels = c("0", "1", "2", "3", "4"),
+      class = "factor"
+    )
   )
 
   # errors on invalid input
@@ -468,7 +485,10 @@ test_that("reverse, larger range", {
   expect_error(reverse(factor(c(1, 3, 4, 5)), range = c(0, 2, 4)))
   # errors on invalid input (NA in range)
   expect_error(reverse(c(1, 3, 4), range = c(1, NA)), regex = "missing")
-  expect_error(reverse(factor(letters[1:3]), range = c(1, NA)), regex = "missing")
+  expect_error(
+    reverse(factor(letters[1:3]), range = c(1, NA)),
+    regex = "missing"
+  )
 
   # warns
   expect_warning(
@@ -485,9 +505,21 @@ test_that("reverse, larger range", {
   )
 
   # silent
-  expect_silent(reverse(factor(c("a", "b", "c")), range = c(1, 3, 5, 7), verbose = FALSE))
-  expect_silent(reverse(factor(c(9, 10, 11)), range = c(1, 3, 5, 7), verbose = FALSE))
-  expect_silent(reverse(factor(c(1, 3, 11)), range = c(1, 3, 5, 7), verbose = FALSE))
+  expect_silent(reverse(
+    factor(c("a", "b", "c")),
+    range = c(1, 3, 5, 7),
+    verbose = FALSE
+  ))
+  expect_silent(reverse(
+    factor(c(9, 10, 11)),
+    range = c(1, 3, 5, 7),
+    verbose = FALSE
+  ))
+  expect_silent(reverse(
+    factor(c(1, 3, 11)),
+    range = c(1, 3, 5, 7),
+    verbose = FALSE
+  ))
 
   # works as intended
   expect_identical(

@@ -66,17 +66,19 @@ to_numeric.default <- function(x, verbose = TRUE, ...) {
 
 #' @rdname to_numeric
 #' @export
-to_numeric.data.frame <- function(x,
-                                  select = NULL,
-                                  exclude = NULL,
-                                  dummy_factors = FALSE,
-                                  preserve_levels = FALSE,
-                                  lowest = NULL,
-                                  append = FALSE,
-                                  ignore_case = FALSE,
-                                  regex = FALSE,
-                                  verbose = TRUE,
-                                  ...) {
+to_numeric.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  dummy_factors = FALSE,
+  preserve_levels = FALSE,
+  lowest = NULL,
+  append = FALSE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # validation check, return as is for complete numeric
   if (all(vapply(x, is.numeric, FUN.VALUE = logical(1L)))) {
     return(x)
@@ -85,7 +87,8 @@ to_numeric.data.frame <- function(x,
   df_attr <- attributes(x)
 
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -97,7 +100,9 @@ to_numeric.data.frame <- function(x,
   # create the new variables and updates "select", so new variables are processed
   if (!isFALSE(append)) {
     # drop numerics, when append is not FALSE
-    select <- colnames(x[select])[!vapply(x[select], is.numeric, FUN.VALUE = logical(1L))]
+    select <- colnames(x[select])[
+      !vapply(x[select], is.numeric, FUN.VALUE = logical(1L))
+    ]
     # process arguments
     fun_args <- .process_append(
       x,
@@ -129,7 +134,10 @@ to_numeric.data.frame <- function(x,
   for (i in colnames(out)) {
     if (is.list(attr_vars[[i]])) {
       if (is.list(attributes(out[[i]]))) {
-        attributes(out[[i]]) <- utils::modifyList(attr_vars[[i]], attributes(out[[i]]))
+        attributes(out[[i]]) <- utils::modifyList(
+          attr_vars[[i]],
+          attributes(out[[i]])
+        )
       } else {
         attributes(out[[i]]) <- attr_vars[[i]]
       }
@@ -172,7 +180,11 @@ to_numeric.haven_labelled <- to_numeric.numeric
 to_numeric.Date <- function(x, verbose = TRUE, ...) {
   if (verbose) {
     insight::format_warning(
-      paste0("Converting a date-time variable of class `", class(x)[1], "` into numeric."),
+      paste0(
+        "Converting a date-time variable of class `",
+        class(x)[1],
+        "` into numeric."
+      ),
       "Please note that this conversion probably does not return meaningful results."
     )
   }
@@ -190,19 +202,27 @@ to_numeric.POSIXlt <- to_numeric.Date
 
 
 #' @export
-to_numeric.factor <- function(x,
-                              dummy_factors = FALSE,
-                              preserve_levels = FALSE,
-                              lowest = NULL,
-                              verbose = TRUE,
-                              ...) {
+to_numeric.factor <- function(
+  x,
+  dummy_factors = FALSE,
+  preserve_levels = FALSE,
+  lowest = NULL,
+  verbose = TRUE,
+  ...
+) {
   # preserving levels only works when factor levels are numeric
-  if (isTRUE(preserve_levels) && anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
+  if (
+    isTRUE(preserve_levels) &&
+      anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))
+  ) {
     preserve_levels <- FALSE
   }
 
   if (dummy_factors) {
-    out <- as.data.frame(stats::model.matrix(~x, contrasts.arg = list(x = "contr.treatment")))
+    out <- as.data.frame(stats::model.matrix(
+      ~x,
+      contrasts.arg = list(x = "contr.treatment")
+    ))
     out[1] <- as.numeric(rowSums(out[2:ncol(out)]) == 0)
 
     # insert back NA rows. if "x" had missing values, model.matrix() creates an
@@ -225,7 +245,11 @@ to_numeric.factor <- function(x,
         } else {
           # else, pick rows from beginning to current NA value, add NA,
           # and rbind the remaining rows
-          out <- rbind(out[1:(na_values[i] - 1), ], NA, out[na_values[i]:nrow(out), ])
+          out <- rbind(
+            out[1:(na_values[i] - 1), ],
+            NA,
+            out[na_values[i]:nrow(out), ]
+          )
         }
       }
       rownames(out) <- NULL
@@ -235,11 +259,17 @@ to_numeric.factor <- function(x,
     if (is.unsorted(levels(x))) {
       x_inverse <- rep(NA_real_, length(x))
       for (i in 1:nlevels(x)) {
-        x_inverse[x == levels(x)[i]] <- as.numeric(levels(x)[nlevels(x) - i + 1])
+        x_inverse[x == levels(x)[i]] <- as.numeric(levels(x)[
+          nlevels(x) - i + 1
+        ])
       }
       x <- factor(x_inverse)
     }
-    out <- .set_back_labels(as.numeric(as.character(x)), x, reverse_values = FALSE)
+    out <- .set_back_labels(
+      as.numeric(as.character(x)),
+      x,
+      reverse_values = FALSE
+    )
   } else {
     out <- .set_back_labels(as.numeric(x), x, reverse_values = FALSE)
   }
@@ -255,15 +285,21 @@ to_numeric.factor <- function(x,
 
 
 #' @export
-to_numeric.character <- function(x,
-                                 dummy_factors = FALSE,
-                                 lowest = NULL,
-                                 verbose = TRUE,
-                                 ...) {
-  numbers <- vapply(x, function(i) {
-    element <- tryCatch(str2lang(i), error = function(e) NULL)
-    !is.null(element) && is.numeric(element)
-  }, FUN.VALUE = logical(1L))
+to_numeric.character <- function(
+  x,
+  dummy_factors = FALSE,
+  lowest = NULL,
+  verbose = TRUE,
+  ...
+) {
+  numbers <- vapply(
+    x,
+    function(i) {
+      element <- tryCatch(str2lang(i), error = function(e) NULL)
+      !is.null(element) && is.numeric(element)
+    },
+    FUN.VALUE = logical(1L)
+  )
   if (all(numbers)) {
     out <- as.numeric(vapply(x, str2lang, FUN.VALUE = numeric(1L)))
   } else {
@@ -293,7 +329,8 @@ to_numeric.character <- function(x,
 #' @return Numeric vector (if possible)
 #' @export
 coerce_to_numeric <- function(x) {
-  tryCatch(as.numeric(as.character(x)),
+  tryCatch(
+    as.numeric(as.character(x)),
     error = function(e) x,
     warning = function(w) x
   )

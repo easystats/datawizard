@@ -10,6 +10,7 @@ data_read(
   path_catalog = NULL,
   encoding = NULL,
   convert_factors = TRUE,
+  password = NULL,
   verbose = TRUE,
   ...
 )
@@ -20,12 +21,14 @@ data_write(
   delimiter = ",",
   convert_factors = FALSE,
   save_labels = FALSE,
+  password = NULL,
   verbose = TRUE,
   ...
 )
 }
 \arguments{
-\item{path}{Character string, the file path to the data file.}
+\item{path}{A character string specifying the path to the data file. This can
+also be a URL.}
 
 \item{path_catalog}{Character string, path to the catalog file. Only relevant
 for SAS data files.}
@@ -43,6 +46,12 @@ SPSS, SAS or Stata. See also section 'Differences to other packages'. For
 might be useful for these formats because labelled numeric variables are then
 converted into factors and exported as character columns - else, value labels
 would be lost and only numeric values are written to the file.}
+
+\item{password}{Password for data encryption. If not \code{NULL}, the data will be
+encrypted (for \code{data_write()}) or decrypted (for \code{data_read()}) using the
+provided password. Encryption is currently only supported for R file formats
+(\code{.rds}, \code{.rda} and \code{.rdata}). See the section "Data encryption" below for more
+information on the encryption method used.}
 
 \item{verbose}{Toggle warnings and messages.}
 
@@ -92,7 +101,8 @@ by these packages.
 inside zip-compressed files. Thus, \code{path} can also be a URL to a file like
 \code{"http://www.url.com/file.csv"}. When \code{path} points to a zip-compressed file,
 and there are multiple files inside the zip-archive, then the first supported
-file is extracted and loaded.
+file is extracted and loaded. It is also possible to read a zip-compressed
+file  from URLs.
 }
 
 \section{General behaviour}{
@@ -129,5 +139,25 @@ values, it is not converted to factor. In this case, value labels are
 preserved as \code{"labels"} attribute. Character vectors are preserved. Use
 \code{convert_factors = FALSE} to remove the automatic conversion of numeric
 variables to factors.
+}
+
+\section{Data encryption}{
+
+\code{data_read()} and \code{data_write()} support data encryption for R file formats
+(\code{.rds}, \code{.rda} and \code{.rdata}). To encrypt a file, provide a password to the
+\code{password} argument in \code{data_write()}. To decrypt the file, provide the same
+password to \code{data_read()}. The encryption is based on the \strong{openssl} package
+and uses the AES-GCM algorithm (see \code{?openssl::aes_gcm_encrypt}) with a
+256-bit key (see \code{?openssl::sha256}). Thus, data can also be decrypted without
+relying on the \strong{datawizard} package, e.g. using following code:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{encrypted_data <- readRDS(datafile)
+key <- openssl::sha256(charToRaw("<password>"))
+out <- openssl::aes_gcm_decrypt(encrypted_data, key = key)
+decrypted_data <- unserialize(out)
+}\if{html}{\out{</div>}}
+
+\strong{Warning:} Do not lose your \code{password}, else you will not be able to
+decrypt the data again!
 }
 

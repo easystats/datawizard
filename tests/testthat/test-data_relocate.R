@@ -29,7 +29,11 @@ test_that("data_relocate works as expected", {
   )
 
   expect_named(
-    data_relocate(iris, select = c("Species", "Petal.Length"), after = "Sepal.Width"),
+    data_relocate(
+      iris,
+      select = c("Species", "Petal.Length"),
+      after = "Sepal.Width"
+    ),
     names(data_relocate(iris, select = c("Species", "Petal.Length"), after = 2))
   )
 })
@@ -61,7 +65,12 @@ test_that("data_relocate select-helpers", {
     colnames(iris)
   )
   expect_identical(
-    colnames(data_relocate(iris, select = starts_with("sepal"), after = 5, ignore_case = TRUE)),
+    colnames(data_relocate(
+      iris,
+      select = starts_with("sepal"),
+      after = 5,
+      ignore_case = TRUE
+    )),
     colnames(iris[c(3:5, 1:2)])
   )
 })
@@ -88,7 +97,9 @@ test_that("data_relocate preserves attributes", {
 # select helpers ------------------------------
 test_that("data_relocate regex", {
   expect_identical(
-    names(data_relocate(mtcars, select = "pg", regex = TRUE, after = "carb"))[11],
+    names(data_relocate(mtcars, select = "pg", regex = TRUE, after = "carb"))[
+      11
+    ],
     "mpg"
   )
 })

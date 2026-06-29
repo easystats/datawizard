@@ -1,4 +1,39 @@
-# datawizard (development)
+# datawizard (devel)
+
+CHANGES
+
+* `data_read()` now also reads zip-files from URLs (#682).
+
+* `data_tabulate()` now returns an attribute "by" with the
+  `by` variable name when the `by` parameter is used (#690 @elinw).
+
+* `data_tabulate()` gain a `metrics` argument to allow selection of columns to
+  display ("N", "raw", "valid", and "cumulative") (#689, @elinw).
+
+* `means_by_group()` gains a `plot()` method (requires latest
+  version from the see-package) (#697)
+
+# datawizard 1.3.1
+
+CHANGES
+
+* `data_summary()` now allows expressions to return more than one summary
+  value. For each value, a new column is created. Additionally, the optional
+  `suffix` argument controls the naming of these columns; if `suffix = NULL`,
+  column names are auto-generated (e.g., with numeric suffixes).
+
+* `standardize()` now works on `fixest` estimations (#665).
+
+* `data_read()` and `data_write()` gain a `password` argument, to encrypt and
+  decrypt data files. This currently only works for R file formats (`.rda`,
+  `.rds`, and `.rdata`). Data encryption is based on the AES-GCM algorithm using
+  the `openssl::aes_gcm_encrypt()` function (#675).
+
+FIXES
+
+* Fix a test due to R-devel change (#677).
+
+# datawizard 1.3.0
 
 BREAKING CHANGES
 
@@ -13,6 +48,9 @@ NEW FUNCTIONS
 * `describe_missing()`, to report on missing values in a data frame.
 
 CHANGES
+
+* `data_tabulate()` now saves the table of proportions for crosstables as
+  attribute, accessible via the new `as.prop.table()` method (#656).
 
 * Due to changes in the package `insight`, `data_tabulate()` no longer prints
   decimals when all values in a column are integers (#641).

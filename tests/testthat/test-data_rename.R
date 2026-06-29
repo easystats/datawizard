@@ -9,7 +9,8 @@ test_that("data_rename works with one or several replacements", {
   )
   expect_named(
     data_rename(
-      test, c("Sepal.Length", "Sepal.Width"),
+      test,
+      c("Sepal.Length", "Sepal.Width"),
       c("length", "width")
     ),
     c("length", "width", "Petal.Length", "Petal.Width", "Species")
@@ -91,7 +92,8 @@ test_that("data_rename errors when select = NULL", {
 # other --------------
 
 test_that("data_rename deals correctly with duplicated replacement", {
-  x <- data_rename(test,
+  x <- data_rename(
+    test,
     select = names(test)[1:4],
     replacement = c("foo", "bar", "foo", "bar")
   )
@@ -122,7 +124,11 @@ test_that("data_rename glue-style", {
   data(mtcars)
   out <- data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "formerly_{col}")
   expect_named(out, c("formerly_mpg", "formerly_cyl", "formerly_disp"))
-  out <- data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "{col}_is_column_{n}")
+  out <- data_rename(
+    mtcars[1:3],
+    c("mpg", "cyl", "disp"),
+    "{col}_is_column_{n}"
+  )
   expect_named(out, c("mpg_is_column_1", "cyl_is_column_2", "disp_is_column_3"))
   out <- data_rename(mtcars[1:3], c("mpg", "cyl", "disp"), "new_{letter}")
   expect_named(out, c("new_a", "new_b", "new_c"))
@@ -137,22 +143,55 @@ test_that("data_rename enough letters", {
   data(USArrests)
   data(airquality)
   x <- cbind(
-    mtcars[1:5, ], iris[1:5, ], efc[1:5, ], ChickWeight[1:5, ], ToothGrowth[1:5, ],
-    USArrests[1:5, ], airquality[1:5, ]
+    mtcars[1:5, ],
+    iris[1:5, ],
+    efc[1:5, ],
+    ChickWeight[1:5, ],
+    ToothGrowth[1:5, ],
+    USArrests[1:5, ],
+    airquality[1:5, ]
   )
   expect_named(
     data_rename(x, replacement = "long_letter_{letter}"),
     c(
-      "long_letter_a1", "long_letter_b1", "long_letter_c1", "long_letter_d1",
-      "long_letter_e1", "long_letter_f1", "long_letter_g1", "long_letter_h1",
-      "long_letter_i1", "long_letter_j1", "long_letter_k1", "long_letter_l1",
-      "long_letter_m1", "long_letter_n1", "long_letter_o1", "long_letter_p1",
-      "long_letter_q1", "long_letter_r1", "long_letter_s1", "long_letter_t1",
-      "long_letter_u1", "long_letter_v1", "long_letter_w1", "long_letter_x1",
-      "long_letter_y1", "long_letter_z1", "long_letter_a2", "long_letter_b2",
-      "long_letter_c2", "long_letter_d2", "long_letter_e2", "long_letter_f2",
-      "long_letter_g2", "long_letter_h2", "long_letter_i2", "long_letter_j2",
-      "long_letter_k2", "long_letter_l2"
+      "long_letter_a1",
+      "long_letter_b1",
+      "long_letter_c1",
+      "long_letter_d1",
+      "long_letter_e1",
+      "long_letter_f1",
+      "long_letter_g1",
+      "long_letter_h1",
+      "long_letter_i1",
+      "long_letter_j1",
+      "long_letter_k1",
+      "long_letter_l1",
+      "long_letter_m1",
+      "long_letter_n1",
+      "long_letter_o1",
+      "long_letter_p1",
+      "long_letter_q1",
+      "long_letter_r1",
+      "long_letter_s1",
+      "long_letter_t1",
+      "long_letter_u1",
+      "long_letter_v1",
+      "long_letter_w1",
+      "long_letter_x1",
+      "long_letter_y1",
+      "long_letter_z1",
+      "long_letter_a2",
+      "long_letter_b2",
+      "long_letter_c2",
+      "long_letter_d2",
+      "long_letter_e2",
+      "long_letter_f2",
+      "long_letter_g2",
+      "long_letter_h2",
+      "long_letter_i2",
+      "long_letter_j2",
+      "long_letter_k2",
+      "long_letter_l2"
     )
   )
 })

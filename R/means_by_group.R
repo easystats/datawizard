@@ -30,6 +30,9 @@
 #' is used to get p-values for each sub-group. P-values indicate whether each
 #' group-mean is significantly different from the total mean.
 #'
+#' @note There is also a `plot()`-method implemented in the
+#' [**see**-package](https://easystats.github.io/see/).
+#'
 #' @examples
 #' data(efc)
 #' means_by_group(efc, "c12hour", "e42dep")
@@ -38,7 +41,7 @@
 #' means_by_group(iris, "Sepal.Width", "Species")
 #'
 #' # weighting
-#' efc$weight <- abs(rnorm(n = nrow(efc), mean = 1, sd = .5))
+#' efc$weight <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
 #' means_by_group(efc, "c12hour", "e42dep", weights = "weight")
 #' @export
 means_by_group <- function(x, ...) {
@@ -48,18 +51,24 @@ means_by_group <- function(x, ...) {
 
 #' @export
 means_by_group.default <- function(x, ...) {
-  insight::format_error("`means_by_group()` does not work for objects of class `", class(x)[1], "`.")
+  insight::format_error(
+    "`means_by_group()` does not work for objects of class `",
+    class(x)[1],
+    "`."
+  )
 }
 
 
 #' @rdname means_by_group
 #' @export
-means_by_group.numeric <- function(x,
-                                   by = NULL,
-                                   ci = 0.95,
-                                   weights = NULL,
-                                   digits = NULL,
-                                   ...) {
+means_by_group.numeric <- function(
+  x,
+  by = NULL,
+  ci = 0.95,
+  weights = NULL,
+  digits = NULL,
+  ...
+) {
   # validation check for arguments
 
   # "by" must be provided
@@ -78,7 +87,9 @@ means_by_group.numeric <- function(x,
   }
 
   # if weights are NULL, set weights to 1
-  if (is.null(weights)) weights <- rep(1, length(x))
+  if (is.null(weights)) {
+    weights <- rep(1, length(x))
+  }
 
   # retrieve labels
   var_mean_label <- attr(x, "label", exact = TRUE)
@@ -94,7 +105,9 @@ means_by_group.numeric <- function(x,
 
   # coerce group to factor if numeric, or convert labels to levels, if factor
   if (is.factor(by)) {
-    by <- tryCatch(labels_to_levels(by, verbose = FALSE), error = function(e) by)
+    by <- tryCatch(labels_to_levels(by, verbose = FALSE), error = function(e) {
+      by
+    })
   } else {
     by <- to_factor(by)
   }
@@ -114,26 +127,29 @@ means_by_group.numeric <- function(x,
   attr(out, "var_grp_label") <- var_grp_label
   attr(out, "digits") <- digits
 
-  class(out) <- c("dw_groupmeans", "data.frame")
+  class(out) <- c("dw_groupmeans", "see_dw_groupmeans", "data.frame")
   out
 }
 
 
 #' @rdname means_by_group
 #' @export
-means_by_group.data.frame <- function(x,
-                                      select = NULL,
-                                      by = NULL,
-                                      ci = 0.95,
-                                      weights = NULL,
-                                      digits = NULL,
-                                      exclude = NULL,
-                                      ignore_case = FALSE,
-                                      regex = FALSE,
-                                      verbose = TRUE,
-                                      ...) {
+means_by_group.data.frame <- function(
+  x,
+  select = NULL,
+  by = NULL,
+  ci = 0.95,
+  weights = NULL,
+  digits = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # evaluate select/exclude, may be select-helpers
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -158,10 +174,17 @@ means_by_group.data.frame <- function(x,
       attr(x[[by]], "label") <- by
     }
     # compute means table
-    means_by_group(x[[i]], by = x[[by]], ci = ci, weights = w, digits = digits, ...)
+    means_by_group(
+      x[[i]],
+      by = x[[by]],
+      ci = ci,
+      weights = w,
+      digits = digits,
+      ...
+    )
   })
 
-  class(out) <- c("dw_groupmeans_list", "list")
+  class(out) <- c("dw_groupmeans_list", "see_dw_groupmeans_list", "list")
   out
 }
 
@@ -178,14 +201,21 @@ means_by_group.data.frame <- function(x,
   # summary table data
   groups <- split(data$x, data$group)
   group_weights <- split(data$weights, data$group)
-  out <- do.call(rbind, Map(function(x, w) {
-    data.frame(
-      Mean = weighted_mean(x, weights = w),
-      SD = weighted_sd(x, weights = w),
-      N = round(sum(w)),
-      stringsAsFactors = FALSE
+  out <- do.call(
+    rbind,
+    Map(
+      function(x, w) {
+        data.frame(
+          Mean = weighted_mean(x, weights = w),
+          SD = weighted_sd(x, weights = w),
+          N = round(sum(w)),
+          stringsAsFactors = FALSE
+        )
+      },
+      groups,
+      group_weights
     )
-  }, groups, group_weights))
+  )
 
   # add group names
   out$Category <- levels(data$group)
@@ -275,10 +305,14 @@ print.dw_groupmeans <- function(x, digits = NULL, ...) {
 
   # footer
   footer <- paste0(
-    "\nAnova: R2=", insight::format_value(attributes(x)$r2, digits = 3),
-    "; adj.R2=", insight::format_value(attributes(x)$adj.r2, digits = 3),
-    "; F=", insight::format_value(attributes(x)$fstat, digits = 3),
-    "; ", insight::format_p(attributes(x)$p.value, whitespace = FALSE),
+    "\nAnova: R2=",
+    insight::format_value(attributes(x)$r2, digits = 3),
+    "; adj.R2=",
+    insight::format_value(attributes(x)$adj.r2, digits = 3),
+    "; F=",
+    insight::format_value(attributes(x)$fstat, digits = 3),
+    "; ",
+    insight::format_p(attributes(x)$p.value, whitespace = FALSE),
     "\n"
   )
 
@@ -288,7 +322,21 @@ print.dw_groupmeans <- function(x, digits = NULL, ...) {
 #' @export
 print.dw_groupmeans_list <- function(x, digits = NULL, ...) {
   for (i in seq_along(x)) {
-    if (i > 1) cat("\n")
+    if (i > 1) {
+      cat("\n")
+    }
     print(x[[i]], digits = digits, ...)
   }
+}
+
+#' @export
+plot.dw_groupmeans <- function(x, ...) {
+  insight::check_if_installed("see")
+  NextMethod()
+}
+
+#' @export
+plot.dw_groupmeans_list <- function(x, ...) {
+  insight::check_if_installed("see")
+  NextMethod()
 }

@@ -30,25 +30,31 @@ data_peek <- function(x, ...) {
 
 #' @rdname data_peek
 #' @export
-data_peek.data.frame <- function(x,
-                                 select = NULL,
-                                 exclude = NULL,
-                                 ignore_case = FALSE,
-                                 regex = FALSE,
-                                 width = NULL,
-                                 verbose = TRUE,
-                                 ...) {
+data_peek.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  width = NULL,
+  verbose = TRUE,
+  ...
+) {
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
     regex = regex,
     verbose = verbose
   )
-  out <- do.call(rbind, lapply(select, function(i) {
-    .data_peek(x, i, width, verbose = verbose, ...)
-  }))
+  out <- do.call(
+    rbind,
+    lapply(select, function(i) {
+      .data_peek(x, i, width, verbose = verbose, ...)
+    })
+  )
 
   class(out) <- c("dw_data_peek", class(out))
   attr(out, "n_cols") <- ncol(x)
@@ -80,7 +86,13 @@ print_md.dw_data_peek <- function(x, ...) {
     attributes(x)$n_rows,
     attributes(x)$n_cols
   )
-  insight::export_table(x, align = "lll", format = "markdown", caption = caption, ...)
+  insight::export_table(
+    x,
+    align = "lll",
+    format = "markdown",
+    caption = caption,
+    ...
+  )
 }
 
 #' @export
@@ -91,7 +103,13 @@ print_html.dw_data_peek <- function(x, ...) {
     attributes(x)$n_rows,
     attributes(x)$n_cols
   )
-  insight::export_table(x, align = "lll", format = "html", caption = caption, ...)
+  insight::export_table(
+    x,
+    align = "lll",
+    format = "html",
+    caption = caption,
+    ...
+  )
 }
 
 #' @export
@@ -125,5 +143,10 @@ format.dw_data_peek <- function(x, ...) {
   max_width <- ifelse(is.null(width), 0.9 * options()$width, width)
   v_values <- toString(x[[variable]][1:max_width])
 
-  data.frame(Variable = v_name, Type = v_type, Values = v_values, stringsAsFactors = FALSE)
+  data.frame(
+    Variable = v_name,
+    Type = v_type,
+    Values = v_values,
+    stringsAsFactors = FALSE
+  )
 }

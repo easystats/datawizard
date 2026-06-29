@@ -1,23 +1,11 @@
 #' @keywords internal
 .get_model_info <- function(model, model_info = NULL, ...) {
-  if (is.null(model_info)) model_info <- insight::model_info(model)
+  if (is.null(model_info)) {
+    model_info <- insight::model_info(model)
+  }
 
   model_info
 }
-
-
-#' Print a message saying that an argument is deprecated and that the user
-#' should use its replacement instead.
-#'
-#' @param arg Argument that is deprecated
-#' @param replacement Argument that replaces the deprecated argument
-#' @keywords internal
-.is_deprecated <- function(arg, replacement) {
-  insight::format_warning(
-    paste0("Argument `", arg, "` is deprecated. Please use `", replacement, "` instead.")
-  )
-}
-
 
 #' `NULL` coalescing operator
 #'
@@ -103,9 +91,12 @@
   # init default
   msg <- ""
   # guess the misspelled string
-  possible_strings <- unlist(lapply(searchterm, function(s) {
-    source[.fuzzy_grep(source, s)] # nolint
-  }), use.names = FALSE)
+  possible_strings <- unlist(
+    lapply(searchterm, function(s) {
+      source[.fuzzy_grep(source, s)] # nolint
+    }),
+    use.names = FALSE
+  )
   if (length(possible_strings)) {
     msg <- "Did you mean "
     if (length(possible_strings) > 1) {
@@ -117,7 +108,11 @@
         )
         possible_strings <- possible_strings[1:5]
       }
-      msg <- paste0(msg, "one of ", text_concatenate(possible_strings, enclose = "\"", last = " or "))
+      msg <- paste0(
+        msg,
+        "one of ",
+        text_concatenate(possible_strings, enclose = "\"", last = " or ")
+      )
     } else {
       msg <- paste0(msg, "\"", possible_strings, "\"")
     }
@@ -148,7 +143,7 @@
   for (nm in setdiff(names(custom_attr), names(attributes(data.frame())))) {
     attr(data, which = nm) <- custom_attr[[nm]]
   }
-  return(data)
+  data
 }
 
 
@@ -194,42 +189,18 @@
 
 # For standardize_parameters ----------------------------------------------
 
-#' @keywords internal
-.get_object <- function(x, attribute_name = "object_name") {
-  obj_name <- attr(x, attribute_name, exact = TRUE)
-  model <- NULL
-  if (!is.null(obj_name)) {
-    model <- tryCatch(
-      {
-        get(obj_name, envir = parent.frame())
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-    if (is.null(model) ||
-      # prevent self reference
-      inherits(model, "parameters_model")) {
-      model <- tryCatch(
-        {
-          get(obj_name, envir = globalenv())
-        },
-        error = function(e) {
-          NULL
-        }
-      )
-    }
-  }
-  model
-}
-
-
-#' Taken from https://github.com/coolbutuseless/gluestick [licence: MIT]
+#' Taken from https://github.com/coolbutuseless/gluestick (licence: MIT)
 #' Same functionality as `{glue}`
 #'
 #' @noRd
 #' @keywords internal
-.gluestick <- function(fmt, src = parent.frame(), open = "{", close = "}", eval = TRUE) {
+.gluestick <- function(
+  fmt,
+  src = parent.frame(),
+  open = "{",
+  close = "}",
+  eval = TRUE
+) {
   nchar_open <- nchar(open)
   nchar_close <- nchar(close)
 
@@ -269,15 +240,15 @@
 
   # Evaluate
   if (eval) {
-    args <- lapply(exprs, function(expr) {
+    fun_args <- lapply(exprs, function(expr) {
       eval(parse(text = expr), envir = src)
     })
   } else {
-    args <- unname(mget(exprs, envir = as.environment(src)))
+    fun_args <- unname(mget(exprs, envir = as.environment(src)))
   }
 
   # Create the string(s)
-  do.call(sprintf, c(list(fmt_sprintf), args))
+  do.call(sprintf, c(list(fmt_sprintf), fun_args))
 }
 
 

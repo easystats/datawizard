@@ -18,12 +18,18 @@ test_that("left-join", {
   expect_identical(out, suppressMessages(poorman::left_join(x, y)))
 
   out <- data_merge(x, y, join = "left", by = "id")
-  expect_identical(colnames(out), c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y"))
+  expect_identical(
+    colnames(out),
+    c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y")
+  )
   expect_identical(out$disp, poorman::left_join(x, y, by = "id")$disp)
   expect_identical(dim(out), c(3L, 7L))
 
   out <- data_merge(x, y, join = "left", by = "mpg")
-  expect_identical(colnames(out), c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y"))
+  expect_identical(
+    colnames(out),
+    c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y")
+  )
   expect_identical(out$disp, poorman::left_join(x, y, by = "mpg")$disp)
   expect_identical(out$mpg, poorman::left_join(x, y, by = "mpg")$mpg)
   expect_identical(dim(out), c(3L, 7L))
@@ -54,7 +60,10 @@ test_that("right-join", {
   expect_identical(out, poor_out)
 
   out <- data_merge(x, y, join = "right", by = "id")
-  expect_identical(colnames(out), c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y"))
+  expect_identical(
+    colnames(out),
+    c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y")
+  )
   # in data_merge(), we keep sorting from x, so do some preparation here
   poor_out <- suppressMessages(poorman::right_join(x, y, by = "id"))
   poor_out <- poor_out[order(poor_out$id), ]
@@ -62,7 +71,10 @@ test_that("right-join", {
   expect_identical(dim(out), c(3L, 7L))
 
   out <- data_merge(x, y, join = "right", by = "mpg")
-  expect_identical(colnames(out), c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y"))
+  expect_identical(
+    colnames(out),
+    c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y")
+  )
   # in data_merge(), we keep sorting from x, so do some preparation here
   poor_out <- suppressMessages(poorman::right_join(x, y, by = "mpg"))
   poor_out <- poor_out[order(poor_out$id.y, decreasing = TRUE), ]
@@ -83,12 +95,18 @@ test_that("inner-join", {
   expect_identical(dim(out), c(0L, 6L))
 
   out <- data_merge(x, y, join = "inner", by = "id")
-  expect_identical(colnames(out), c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y"))
+  expect_identical(
+    colnames(out),
+    c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y")
+  )
   expect_identical(out$disp, poorman::inner_join(x, y, by = "id")$disp)
   expect_identical(dim(out), c(2L, 7L))
 
   out <- data_merge(x, y, join = "inner", by = "mpg")
-  expect_identical(colnames(out), c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y"))
+  expect_identical(
+    colnames(out),
+    c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y")
+  )
   expect_identical(out$disp, poorman::inner_join(x, y, by = "mpg")$disp)
   expect_identical(dim(out), c(1L, 7L))
 })
@@ -100,17 +118,27 @@ test_that("full-join", {
   out <- data_merge(x, y, join = "full")
   expect_identical(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
   expect_identical(dim(out), c(6L, 6L))
-  expect_identical(out$mpg, c(22.8, 21.4, 18.7, 19.7, 15, 21.4), tolerance = 1e-2)
+  expect_identical(
+    out$mpg,
+    c(22.8, 21.4, 18.7, 19.7, 15, 21.4),
+    tolerance = 1e-2
+  )
   expect_identical(out$id, c(1, 2, 3, 2, 3, 4), tolerance = 1e-2)
 
   out <- data_merge(x, y, join = "full", by = "id")
-  expect_identical(colnames(out), c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y"))
+  expect_identical(
+    colnames(out),
+    c("cyl", "disp", "id", "hp", "drat", "mpg.x", "mpg.y")
+  )
   expect_identical(dim(out), c(4L, 7L))
   expect_identical(out$mpg.x, c(22.8, 21.4, 18.7, NA), tolerance = 1e-2)
   expect_identical(out$id, 1:4, tolerance = 1e-2)
 
   out <- data_merge(x, y, join = "full", by = "mpg")
-  expect_identical(colnames(out), c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y"))
+  expect_identical(
+    colnames(out),
+    c("mpg", "cyl", "disp", "hp", "drat", "id.x", "id.y")
+  )
   expect_identical(dim(out), c(5L, 7L))
   expect_identical(out$mpg, c(22.8, 21.4, 18.7, 19.7, 15), tolerance = 1e-2)
   expect_identical(out$id.x, c(1, 2, 3, NA, NA), tolerance = 1e-2)
@@ -118,7 +146,11 @@ test_that("full-join", {
   out <- data_merge(x, y, join = "full", by = c("id", "mpg"))
   expect_identical(colnames(out), c("mpg", "cyl", "disp", "id", "hp", "drat"))
   expect_identical(dim(out), c(6L, 6L))
-  expect_identical(out$mpg, c(22.8, 21.4, 18.7, 19.7, 15, 21.4), tolerance = 1e-2)
+  expect_identical(
+    out$mpg,
+    c(22.8, 21.4, 18.7, 19.7, 15, 21.4),
+    tolerance = 1e-2
+  )
   expect_identical(out$id, c(1, 2, 3, 2, 3, 4), tolerance = 1e-2)
 })
 

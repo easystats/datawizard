@@ -102,16 +102,19 @@ skewness <- function(x, ...) {
 
 # skewness -----------------------------------------
 
-
 #' @rdname skewness
 #' @export
-skewness.numeric <- function(x,
-                             remove_na = TRUE,
-                             type = "2",
-                             iterations = NULL,
-                             verbose = TRUE,
-                             ...) {
-  if (remove_na) x <- x[!is.na(x)]
+skewness.numeric <- function(
+  x,
+  remove_na = TRUE,
+  type = "2",
+  iterations = NULL,
+  verbose = TRUE,
+  ...
+) {
+  if (remove_na) {
+    x <- x[!is.na(x)]
+  }
   n <- length(x)
   out <- (sum((x - mean(x))^3) / n) / (sum((x - mean(x))^2) / n)^1.5
 
@@ -126,7 +129,8 @@ skewness.numeric <- function(x,
     type <- "1"
   }
 
-  .skewness <- switch(type,
+  .skewness <- switch(
+    type,
     "1" = out,
     "2" = out * sqrt(n * (n - 1)) / (n - 2),
     "3" = out * ((1 - 1 / n))^1.5
@@ -134,7 +138,8 @@ skewness.numeric <- function(x,
 
   out_se <- sqrt((6 * (n - 2)) / ((n + 1) * (n + 3)))
 
-  .skewness_se <- switch(type,
+  .skewness_se <- switch(
+    type,
     "1" = out_se,
     "2" = out_se * ((sqrt(n * (n - 1))) / (n - 2)),
     "3" = out_se * (((n - 1) / n)^1.5),
@@ -165,11 +170,13 @@ skewness.numeric <- function(x,
 
 
 #' @export
-skewness.matrix <- function(x,
-                            remove_na = TRUE,
-                            type = "2",
-                            iterations = NULL,
-                            ...) {
+skewness.matrix <- function(
+  x,
+  remove_na = TRUE,
+  type = "2",
+  iterations = NULL,
+  ...
+) {
   .skewness <- apply(
     x,
     2,
@@ -193,12 +200,15 @@ skewness.matrix <- function(x,
 
 
 #' @export
-skewness.data.frame <- function(x,
-                                remove_na = TRUE,
-                                type = "2",
-                                iterations = NULL,
-                                ...) {
-  .skewness <- lapply(x,
+skewness.data.frame <- function(
+  x,
+  remove_na = TRUE,
+  type = "2",
+  iterations = NULL,
+  ...
+) {
+  .skewness <- lapply(
+    x,
     skewness,
     remove_na = remove_na,
     type = type,
@@ -213,11 +223,13 @@ skewness.data.frame <- function(x,
 
 
 #' @export
-skewness.default <- function(x,
-                             remove_na = TRUE,
-                             type = "2",
-                             iterations = NULL,
-                             ...) {
+skewness.default <- function(
+  x,
+  remove_na = TRUE,
+  type = "2",
+  iterations = NULL,
+  ...
+) {
   skewness(
     .factor_to_numeric(x),
     remove_na = remove_na,
@@ -229,7 +241,6 @@ skewness.default <- function(x,
 
 # Kurtosis -----------------------------------
 
-
 #' @rdname skewness
 #' @export
 kurtosis <- function(x, ...) {
@@ -239,13 +250,17 @@ kurtosis <- function(x, ...) {
 
 #' @rdname skewness
 #' @export
-kurtosis.numeric <- function(x,
-                             remove_na = TRUE,
-                             type = "2",
-                             iterations = NULL,
-                             verbose = TRUE,
-                             ...) {
-  if (remove_na) x <- x[!is.na(x)]
+kurtosis.numeric <- function(
+  x,
+  remove_na = TRUE,
+  type = "2",
+  iterations = NULL,
+  verbose = TRUE,
+  ...
+) {
+  if (remove_na) {
+    x <- x[!is.na(x)]
+  }
   n <- length(x)
   out <- n * sum((x - mean(x))^4) / (sum((x - mean(x))^2)^2)
 
@@ -260,15 +275,19 @@ kurtosis.numeric <- function(x,
     type <- "1"
   }
 
-  .kurtosis <- switch(type,
+  .kurtosis <- switch(
+    type,
     "1" = out - 3,
     "2" = ((n + 1) * (out - 3) + 6) * (n - 1) / ((n - 2) * (n - 3)),
     "3" = out * (1 - 1 / n)^2 - 3
   )
 
-  out_se <- sqrt((24 * n * (n - 2) * (n - 3)) / (((n + 1)^2) * (n + 3) * (n + 5)))
+  out_se <- sqrt(
+    (24 * n * (n - 2) * (n - 3)) / (((n + 1)^2) * (n + 3) * (n + 5))
+  )
 
-  .kurtosis_se <- switch(type,
+  .kurtosis_se <- switch(
+    type,
     "1" = out_se,
     "2" = out_se * (((n - 1) * (n + 1)) / ((n - 2) * (n - 3))),
     "3" = out_se * ((n - 1) / n)^2
@@ -297,11 +316,13 @@ kurtosis.numeric <- function(x,
 
 
 #' @export
-kurtosis.matrix <- function(x,
-                            remove_na = TRUE,
-                            type = "2",
-                            iterations = NULL,
-                            ...) {
+kurtosis.matrix <- function(
+  x,
+  remove_na = TRUE,
+  type = "2",
+  iterations = NULL,
+  ...
+) {
   .kurtosis <- apply(
     x,
     2,
@@ -321,12 +342,15 @@ kurtosis.matrix <- function(x,
 
 
 #' @export
-kurtosis.data.frame <- function(x,
-                                remove_na = TRUE,
-                                type = "2",
-                                iterations = NULL,
-                                ...) {
-  .kurtosis <- lapply(x,
+kurtosis.data.frame <- function(
+  x,
+  remove_na = TRUE,
+  type = "2",
+  iterations = NULL,
+  ...
+) {
+  .kurtosis <- lapply(
+    x,
     kurtosis,
     remove_na = remove_na,
     type = type,
@@ -339,11 +363,13 @@ kurtosis.data.frame <- function(x,
 
 
 #' @export
-kurtosis.default <- function(x,
-                             remove_na = TRUE,
-                             type = "2",
-                             iterations = NULL,
-                             ...) {
+kurtosis.default <- function(
+  x,
+  remove_na = TRUE,
+  type = "2",
+  iterations = NULL,
+  ...
+) {
   kurtosis(
     .factor_to_numeric(x),
     remove_na = remove_na,
@@ -407,16 +433,34 @@ summary.parameters_kurtosis <- function(object, test = FALSE, ...) {
 
 .check_skewness_type <- function(type) {
   # convenience
-  if (is.numeric(type)) type <- as.character(type)
-  skewness_types <- c("1", "2", "3", "I", "II", "III", "classic", "SPSS", "SAS", "Minitab")
-  is_skewness_type_invalid <- is.null(type) || is.na(type) || !(type %in% skewness_types)
+  if (is.numeric(type)) {
+    type <- as.character(type)
+  }
+  skewness_types <- c(
+    "1",
+    "2",
+    "3",
+    "I",
+    "II",
+    "III",
+    "classic",
+    "SPSS",
+    "SAS",
+    "Minitab"
+  )
+  is_skewness_type_invalid <- is.null(type) ||
+    is.na(type) ||
+    !(type %in% skewness_types)
 
   if (is_skewness_type_invalid) {
-    insight::format_warning("'type' must be a character value from \"1\" to \"3\". Using 'type=\"2\"' now.")
+    insight::format_warning(
+      "'type' must be a character value from \"1\" to \"3\". Using 'type=\"2\"' now."
+    )
     type <- "2"
   }
 
-  switch(type,
+  switch(
+    type,
     `1` = ,
     I = ,
     classic = "1",
@@ -434,7 +478,8 @@ summary.parameters_kurtosis <- function(object, test = FALSE, ...) {
 # bootstrapping -----------------------------------
 
 .boot_skewness <- function(data, indices, remove_na, type) {
-  datawizard::skewness(data[indices],
+  datawizard::skewness(
+    data[indices],
     remove_na = remove_na,
     type = type,
     iterations = NULL
@@ -443,7 +488,8 @@ summary.parameters_kurtosis <- function(object, test = FALSE, ...) {
 
 
 .boot_kurtosis <- function(data, indices, remove_na, type) {
-  datawizard::kurtosis(data[indices],
+  datawizard::kurtosis(
+    data[indices],
     remove_na = remove_na,
     type = type,
     iterations = NULL

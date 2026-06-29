@@ -38,14 +38,27 @@
 #' # Paste with optional separator
 #' text_paste(c("A", "", "B"), c("42", "42", "42"))
 #' @export
-text_format <- function(text, sep = ", ", last = " and ", width = NULL, enclose = NULL, ...) {
-  text_wrap(text_concatenate(text, sep = sep, last = last, enclose = enclose), width = width)
+text_format <- function(
+  text,
+  sep = ", ",
+  last = " and ",
+  width = NULL,
+  enclose = NULL,
+  ...
+) {
+  text_wrap(
+    text_concatenate(text, sep = sep, last = last, enclose = enclose),
+    width = width
+  )
 }
 
 #' @rdname text_format
 #' @export
 text_fullstop <- function(text) {
-  text[!text_lastchar(text) %in% c(".", ":", ",", ";", "!", "?")] <- paste0(text[text_lastchar(text) != "."], ".")
+  text[!text_lastchar(text) %in% c(".", ":", ",", ";", "!", "?")] <- paste0(
+    text[text_lastchar(text) != "."],
+    "."
+  )
   text
 }
 
@@ -53,9 +66,13 @@ text_fullstop <- function(text) {
 #' @rdname text_format
 #' @export
 text_lastchar <- function(text, n = 1) {
-  vapply(text, function(xx) {
-    substr(xx, (nchar(xx) - n + 1), nchar(xx))
-  }, FUN.VALUE = character(1L))
+  vapply(
+    text,
+    function(xx) {
+      substr(xx, (nchar(xx) - n + 1), nchar(xx))
+    },
+    FUN.VALUE = character(1L)
+  )
 }
 
 
@@ -66,7 +83,12 @@ text_concatenate <- function(text, sep = ", ", last = " and ", enclose = NULL) {
     return(text)
   }
   text <- text[text != ""] # nolint
-  if (length(text) && !is.null(enclose) && length(enclose) == 1 && nzchar(enclose, keepNA = TRUE)) {
+  if (
+    length(text) &&
+      !is.null(enclose) &&
+      length(enclose) == 1 &&
+      nzchar(enclose, keepNA = TRUE)
+  ) {
     text <- paste0(enclose, text, enclose)
   }
   if (length(text) == 1) {
@@ -83,19 +105,31 @@ text_concatenate <- function(text, sep = ", ", last = " and ", enclose = NULL) {
 #' @export
 text_paste <- function(text, text2 = NULL, sep = ", ", enclose = NULL, ...) {
   if (!is.null(text2)) {
-    if (!is.null(enclose) && length(enclose) == 1 && nzchar(enclose, keepNA = TRUE)) {
-      text <- vapply(text, function(i) {
-        if (i != "") {
-          i <- paste0(enclose, i, enclose)
-        }
-        i
-      }, character(1L))
-      text2 <- vapply(text2, function(i) {
-        if (i != "") {
-          i <- paste0(enclose, i, enclose)
-        }
-        i
-      }, character(1L))
+    if (
+      !is.null(enclose) &&
+        length(enclose) == 1 &&
+        nzchar(enclose, keepNA = TRUE)
+    ) {
+      text <- vapply(
+        text,
+        function(i) {
+          if (i != "") {
+            i <- paste0(enclose, i, enclose)
+          }
+          i
+        },
+        character(1L)
+      )
+      text2 <- vapply(
+        text2,
+        function(i) {
+          if (i != "") {
+            i <- paste0(enclose, i, enclose)
+          }
+          i
+        },
+        character(1L)
+      )
     }
     paste0(text, ifelse(text == "" | text2 == "", "", sep), text2) # nolint
   }

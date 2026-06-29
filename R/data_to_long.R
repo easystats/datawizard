@@ -127,19 +127,22 @@
 #' )
 #' head(even_longer_data)
 #' @export
-data_to_long <- function(data,
-                         select = "all",
-                         names_to = "name",
-                         names_prefix = NULL,
-                         names_sep = NULL,
-                         names_pattern = NULL,
-                         values_to = "value",
-                         values_drop_na = FALSE,
-                         rows_to = NULL,
-                         ignore_case = FALSE,
-                         regex = FALSE,
-                         ...,
-                         cols) { # nolint
+data_to_long <- function(
+  data,
+  select = "all",
+  names_to = "name",
+  names_prefix = NULL,
+  names_sep = NULL,
+  names_pattern = NULL,
+  values_to = "value",
+  values_drop_na = FALSE,
+  rows_to = NULL,
+  ignore_case = FALSE,
+  regex = FALSE,
+  ...,
+  cols
+) {
+  # nolint
   original_data <- data
 
   # Prefer "cols" over "select" for compat with tidyr::pivot_longer
@@ -205,7 +208,9 @@ data_to_long <- function(data,
       "Some values of the columns specified in `names_to` are already present as column names.",
       paste0(
         "Either use another value in `names_to` or rename the following columns: ",
-        text_concatenate(names_to[which(names_to %in% setdiff(names(data), cols))])
+        text_concatenate(names_to[which(
+          names_to %in% setdiff(names(data), cols)
+        )])
       )
     )
   }
@@ -268,7 +273,10 @@ data_to_long <- function(data,
       # cbind + match is faster than merge
       # cbind doesn't remove identical columns so we need to manually remove "ind"
       # which is in both datasets
-      stacked_data <- cbind(stacked_data, tmp[match(stacked_data[["ind"]], tmp[["ind"]]), -1])
+      stacked_data <- cbind(
+        stacked_data,
+        tmp[match(stacked_data[["ind"]], tmp[["ind"]]), -1]
+      )
       stacked_data$ind <- NULL
     }
   }
@@ -288,10 +296,10 @@ data_to_long <- function(data,
 
   # reunite unselected data with stacked data
   out <- cbind(
-    not_stacked, stats::setNames(stacked_data, c(names_to, values_to)),
+    not_stacked,
+    stats::setNames(stacked_data, c(names_to, values_to)),
     row.names = NULL
   )
-
 
   if (!is.null(names_prefix)) {
     if (length(names_to) > 1L) {
@@ -334,7 +342,11 @@ data_to_long <- function(data,
   # set back labels
   shared_columns <- intersect(colnames(out), colnames(original_data))
   for (i in shared_columns) {
-    out[[i]] <- .set_back_labels(out[[i]], original_data[[i]], include_values = TRUE)
+    out[[i]] <- .set_back_labels(
+      out[[i]],
+      original_data[[i]],
+      include_values = TRUE
+    )
   }
 
   out
@@ -357,7 +369,11 @@ data_to_long <- function(data,
   if (values_are_dates) {
     data.frame(values = do.call("c", unname(x)), ind, stringsAsFactors = FALSE)
   } else {
-    data.frame(values = unlist(x, use.names = FALSE), ind, stringsAsFactors = FALSE)
+    data.frame(
+      values = unlist(x, use.names = FALSE),
+      ind,
+      stringsAsFactors = FALSE
+    )
   }
 }
 

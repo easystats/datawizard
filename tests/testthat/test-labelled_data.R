@@ -41,7 +41,12 @@ test_that("reverse, labels preserved", {
 # data_merge -----------------------------------
 
 test_that("data_merge, labels preserved", {
-  labels <- sapply(data_merge(efc[1:2], efc[3:4], verbose = FALSE), attr, which = "label", exact = TRUE)
+  labels <- sapply(
+    data_merge(efc[1:2], efc[3:4], verbose = FALSE),
+    attr,
+    which = "label",
+    exact = TRUE
+  )
   expect_identical(
     labels,
     c(
@@ -70,7 +75,12 @@ test_that("data_extract, labels preserved", {
     ignore_attr = TRUE
   )
   # data frame
-  labels <- sapply(data_extract(efc, select = c("e42dep", "c172code")), attr, which = "label", exact = TRUE)
+  labels <- sapply(
+    data_extract(efc, select = c("e42dep", "c172code")),
+    attr,
+    which = "label",
+    exact = TRUE
+  )
   expect_identical(
     labels,
     c(e42dep = "elder's dependency", c172code = "carer's level of education")
@@ -136,10 +146,19 @@ test_that("data_rename, labels preserved", {
     ignore_attr = TRUE
   )
   # data frame
-  labels <- sapply(data_remove(efc, starts_with("c1")), attr, which = "label", exact = TRUE)
+  labels <- sapply(
+    data_remove(efc, starts_with("c1")),
+    attr,
+    which = "label",
+    exact = TRUE
+  )
   expect_identical(
     labels,
-    c(e16sex = "elder's gender", e42dep = "elder's dependency", neg_c_7 = "Negative impact with 7 items")
+    c(
+      e16sex = "elder's gender",
+      e42dep = "elder's dependency",
+      neg_c_7 = "Negative impact with 7 items"
+    )
   )
 })
 

@@ -13,10 +13,11 @@
 #'   element names have to be surrounded in backticks. For example,
 #'   ``recode=list(`0`=1)`` would recode all `1` into `0` in a numeric
 #'   vector. See also 'Examples' and 'Details'.
-#' @param default Defines the default value for all values that have
-#'   no match in the recode-pairs. Note that, if `preserve_na=FALSE`, missing
-#'   values (`NA`) are also captured by the `default` argument, and thus will
-#'   also be recoded into the specified value. See 'Examples' and 'Details'.
+#' @param default Defines the default value for all values that have no match in
+#'   the recode-pairs. If `NULL`, original values will be preserved when there
+#'   is no match. Note that, if `preserve_na=FALSE`, missing values (`NA`) are
+#'   also captured by the `default` argument, and thus will also be recoded into
+#'   the specified value. See 'Examples' and 'Details'.
 #' @param preserve_na Logical, if `TRUE`, `NA` (missing values) are preserved.
 #'   This overrides any other arguments, including `default`. Hence, if
 #'   `preserve_na=TRUE`, `default` will no longer convert `NA` into the specified
@@ -184,7 +185,11 @@ recode_values <- function(x, ...) {
 recode_values.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     insight::format_alert(
-      paste0("Variables of class `", class(x)[1], "` can't be recoded and remain unchanged.")
+      paste0(
+        "Variables of class `",
+        class(x)[1],
+        "` can't be recoded and remain unchanged."
+      )
     )
   }
   x
@@ -193,12 +198,14 @@ recode_values.default <- function(x, verbose = TRUE, ...) {
 
 #' @rdname recode_values
 #' @export
-recode_values.numeric <- function(x,
-                                  recode = NULL,
-                                  default = NULL,
-                                  preserve_na = TRUE,
-                                  verbose = TRUE,
-                                  ...) {
+recode_values.numeric <- function(
+  x,
+  recode = NULL,
+  default = NULL,
+  preserve_na = TRUE,
+  verbose = TRUE,
+  ...
+) {
   # save
   original_x <- x
 
@@ -251,7 +258,10 @@ recode_values.numeric <- function(x,
       # contain values, like "1:10" or "1, 2, 3, 4". These should now be in the
       # format "c(1, 2, 3, 4)" or "c(1:10)", and it should be possible to parse
       # and evaluate these strings into a numeric vector
-      old_values <- tryCatch(eval(parse(text = old_values)), error = function(e) NULL)
+      old_values <- tryCatch(
+        eval(parse(text = old_values)),
+        error = function(e) NULL
+      )
     }
 
     if (!is.null(old_values) && (is.numeric(old_values) || is.na(old_values))) {
@@ -274,12 +284,14 @@ recode_values.numeric <- function(x,
 
 
 #' @export
-recode_values.factor <- function(x,
-                                 recode = NULL,
-                                 default = NULL,
-                                 preserve_na = TRUE,
-                                 verbose = TRUE,
-                                 ...) {
+recode_values.factor <- function(
+  x,
+  recode = NULL,
+  default = NULL,
+  preserve_na = TRUE,
+  verbose = TRUE,
+  ...
+) {
   # save
   original_x <- x
 
@@ -316,7 +328,10 @@ recode_values.factor <- function(x,
       # name of list element is old value
 
       old_values <- paste(
-        deparse(insight::trim_ws(unlist(strsplit(i, ",", fixed = TRUE), use.names = FALSE))),
+        deparse(insight::trim_ws(unlist(
+          strsplit(i, ",", fixed = TRUE),
+          use.names = FALSE
+        ))),
         collapse = ","
       )
 
@@ -324,7 +339,10 @@ recode_values.factor <- function(x,
       # contain values, like "a" or "a, b, c". These should now be in the
       # format "c("a", "b", "c")" and it should be possible to parse
       # and evaluate these strings into a numeric vector
-      old_values <- tryCatch(eval(parse(text = old_values)), error = function(e) NULL)
+      old_values <- tryCatch(
+        eval(parse(text = old_values)),
+        error = function(e) NULL
+      )
 
       # recode
       x[which(original_x %in% old_values)] <- recode[[i]]
@@ -336,7 +354,10 @@ recode_values.factor <- function(x,
       # check input style: "a, b, c"
       if (length(old_values) == 1 && grepl(",", old_values, fixed = TRUE)) {
         # split and make character vector
-        old_values <- insight::trim_ws(unlist(strsplit(old_values, ",", fixed = TRUE), use.names = FALSE))
+        old_values <- insight::trim_ws(unlist(
+          strsplit(old_values, ",", fixed = TRUE),
+          use.names = FALSE
+        ))
       }
       # recode
       if (identical(i, "NA")) {
@@ -365,12 +386,14 @@ recode_values.factor <- function(x,
 
 
 #' @export
-recode_values.character <- function(x,
-                                    recode = NULL,
-                                    default = NULL,
-                                    preserve_na = TRUE,
-                                    verbose = TRUE,
-                                    ...) {
+recode_values.character <- function(
+  x,
+  recode = NULL,
+  default = NULL,
+  preserve_na = TRUE,
+  verbose = TRUE,
+  ...
+) {
   # save
   original_x <- x
 
@@ -405,7 +428,10 @@ recode_values.character <- function(x,
 
       # name of list element is old value
       value_string <- paste(
-        deparse(insight::trim_ws(unlist(strsplit(i, ",", fixed = TRUE), use.names = FALSE))),
+        deparse(insight::trim_ws(unlist(
+          strsplit(i, ",", fixed = TRUE),
+          use.names = FALSE
+        ))),
         collapse = ","
       )
 
@@ -413,7 +439,10 @@ recode_values.character <- function(x,
       # contain values, like "a" or "a, b, c". These should now be in the
       # format "c("a", "b", "c")" and it should be possible to parse
       # and evaluate these strings into a numeric vector
-      old_values <- tryCatch(eval(parse(text = value_string)), error = function(e) NULL)
+      old_values <- tryCatch(
+        eval(parse(text = value_string)),
+        error = function(e) NULL
+      )
 
       # recode
       x[which(original_x %in% old_values)] <- recode[[i]]
@@ -425,7 +454,10 @@ recode_values.character <- function(x,
       # check input style: "a, b, c"
       if (length(old_values) == 1 && grepl(",", old_values, fixed = TRUE)) {
         # split and make character vector
-        old_values <- insight::trim_ws(unlist(strsplit(old_values, ",", fixed = TRUE), use.names = FALSE))
+        old_values <- insight::trim_ws(unlist(
+          strsplit(old_values, ",", fixed = TRUE),
+          use.names = FALSE
+        ))
       }
       # recode
       if (identical(i, "NA")) {
@@ -452,19 +484,22 @@ recode_values.character <- function(x,
 
 #' @rdname recode_values
 #' @export
-recode_values.data.frame <- function(x,
-                                     select = NULL,
-                                     exclude = NULL,
-                                     recode = NULL,
-                                     default = NULL,
-                                     preserve_na = TRUE,
-                                     append = FALSE,
-                                     ignore_case = FALSE,
-                                     regex = FALSE,
-                                     verbose = TRUE,
-                                     ...) {
+recode_values.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  recode = NULL,
+  default = NULL,
+  preserve_na = TRUE,
+  append = FALSE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -512,7 +547,9 @@ recode_values.data.frame <- function(x,
   # skip if all NA
   if (!length(valid)) {
     if (isTRUE(verbose)) {
-      insight::format_warning("Variable contains only missing values. No recoding carried out.")
+      insight::format_warning(
+        "Variable contains only missing values. No recoding carried out."
+      )
     }
     ok <- FALSE
   }
@@ -520,7 +557,9 @@ recode_values.data.frame <- function(x,
   # warn if not a list
   if (!is.list(recode) || is.null(names(recode))) {
     if (isTRUE(verbose)) {
-      insight::format_warning("`recode` needs to be a (named) list. No recoding carried out.")
+      insight::format_warning(
+        "`recode` needs to be a (named) list. No recoding carried out."
+      )
     }
     ok <- FALSE
   }

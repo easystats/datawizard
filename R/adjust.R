@@ -64,17 +64,19 @@
 #' abline(lm(V2 ~ V1, data = adjusted_icpt), col = "red")
 #'
 #' @export
-adjust <- function(data,
-                   effect = NULL,
-                   select = is.numeric,
-                   exclude = NULL,
-                   multilevel = FALSE,
-                   additive = FALSE,
-                   bayesian = FALSE,
-                   keep_intercept = FALSE,
-                   ignore_case = FALSE,
-                   regex = FALSE,
-                   verbose = FALSE) {
+adjust <- function(
+  data,
+  effect = NULL,
+  select = is.numeric,
+  exclude = NULL,
+  multilevel = FALSE,
+  additive = FALSE,
+  bayesian = FALSE,
+  keep_intercept = FALSE,
+  ignore_case = FALSE,
+  regex = FALSE,
+  verbose = FALSE
+) {
   # make sure column names are syntactically valid
   .check_dataframe_names(data, action = "error")
 
@@ -92,7 +94,8 @@ adjust <- function(data,
     select <- is.numeric
   }
 
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     data,
     exclude,
     ignore_case,
@@ -105,9 +108,15 @@ adjust <- function(data,
   facs <- names(data[effect][!vapply(data[effect], is.numeric, logical(1L))])
   if (length(facs) >= 1 && multilevel) {
     if (additive) {
-      formula_random <- stats::as.formula(paste("~", paste(paste0("(1|", facs, ")"), collapse = " + ")))
+      formula_random <- stats::as.formula(paste(
+        "~",
+        paste(paste0("(1|", facs, ")"), collapse = " + ")
+      ))
     } else {
-      formula_random <- paste("+", paste(paste0("(1|", facs, ")"), collapse = " + "))
+      formula_random <- paste(
+        "+",
+        paste(paste0("(1|", facs, ")"), collapse = " + ")
+      )
     }
     effect <- effect[!effect %in% facs]
   }
@@ -117,8 +126,16 @@ adjust <- function(data,
   for (var in select) {
     predictors <- effect[effect != var]
     if (additive) {
-      predictors_num <- names(data[predictors][vapply(data[predictors], is.numeric, logical(1L))])
-      predictors[predictors == predictors_num] <- paste0("s(", predictors_num, ")")
+      predictors_num <- names(data[predictors][vapply(
+        data[predictors],
+        is.numeric,
+        logical(1L)
+      )])
+      predictors[predictors == predictors_num] <- paste0(
+        "s(",
+        predictors_num,
+        ")"
+      )
     }
     formula_predictors <- paste(c("1", predictors), collapse = " + ")
     model_formula <- paste(var, "~", formula_predictors)
@@ -134,7 +151,9 @@ adjust <- function(data,
     )
     out[var] <- x
   }
-  out[names(data)[!names(data) %in% names(out)]] <- data[names(data)[!names(data) %in% names(out)]]
+  out[names(data)[!names(data) %in% names(out)]] <- data[names(data)[
+    !names(data) %in% names(out)
+  ]]
   out[names(data)]
 }
 
@@ -144,23 +163,34 @@ data_adjust <- adjust
 
 
 #' @keywords internal
-.model_adjust_for <- function(data,
-                              model_formula,
-                              multilevel = FALSE,
-                              additive = FALSE,
-                              bayesian = FALSE,
-                              formula_random = NULL,
-                              keep_intercept = FALSE) {
+.model_adjust_for <- function(
+  data,
+  model_formula,
+  multilevel = FALSE,
+  additive = FALSE,
+  bayesian = FALSE,
+  formula_random = NULL,
+  keep_intercept = FALSE
+) {
   # Additive -----------------------
   if (additive) {
     # Bayesian
     if (bayesian) {
       insight::check_if_installed("rstanarm")
-      model <- rstanarm::stan_gamm4(stats::as.formula(model_formula), random = formula_random, data = data, refresh = 0)
+      model <- rstanarm::stan_gamm4(
+        stats::as.formula(model_formula),
+        random = formula_random,
+        data = data,
+        refresh = 0
+      )
       # Frequentist
     } else {
       insight::check_if_installed("gamm4")
-      model <- gamm4::gamm4(stats::as.formula(model_formula), random = formula_random, data = data)
+      model <- gamm4::gamm4(
+        stats::as.formula(model_formula),
+        random = formula_random,
+        data = data
+      )
     }
 
     # Linear -------------------------
@@ -168,7 +198,11 @@ data_adjust <- adjust
     # Bayesian
     insight::check_if_installed("rstanarm")
     if (multilevel) {
-      model <- rstanarm::stan_lmer(paste(model_formula, formula_random), data = data, refresh = 0)
+      model <- rstanarm::stan_lmer(
+        paste(model_formula, formula_random),
+        data = data,
+        refresh = 0
+      )
     } else {
       model <- rstanarm::stan_glm(model_formula, data = data, refresh = 0)
     }
@@ -185,8 +219,12 @@ data_adjust <- adjust
   # Re-add intercept if need be
   if (keep_intercept) {
     intercept <- insight::get_intercept(model)
-    if (length(intercept) > 1) intercept <- stats::median(intercept) # For bayesian model
-    if (is.na(intercept)) intercept <- 0
+    if (length(intercept) > 1) {
+      intercept <- stats::median(intercept)
+    } # For bayesian model
+    if (is.na(intercept)) {
+      intercept <- 0
+    }
     adjusted <- adjusted + intercept
   }
 

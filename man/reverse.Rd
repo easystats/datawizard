@@ -141,10 +141,10 @@ head(reverse(iris, select = "Sepal.Length"))
 
 }
 \seealso{
-Other transform utilities: 
-\code{\link{normalize}()},
-\code{\link{ranktransform}()},
-\code{\link{rescale}()},
-\code{\link{standardize}()}
+Other transform utilities:
+\code{\link[=normalize]{normalize()}},
+\code{\link[=ranktransform]{ranktransform()}},
+\code{\link[=rescale]{rescale()}},
+\code{\link[=standardize]{standardize()}}
 }
 \concept{transform utilities}

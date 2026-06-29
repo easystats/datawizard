@@ -38,7 +38,10 @@ to_factor <- function(x, ...) {
 to_factor.default <- function(x, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
     insight::format_alert(
-      sprintf("Converting into factors values currently not possible for variables of class `%s`.", class(x)[1])
+      sprintf(
+        "Converting into factors values currently not possible for variables of class `%s`.",
+        class(x)[1]
+      )
     )
   }
   x
@@ -87,21 +90,24 @@ to_factor.double <- to_factor.numeric
 
 #' @rdname to_factor
 #' @export
-to_factor.data.frame <- function(x,
-                                 select = NULL,
-                                 exclude = NULL,
-                                 ignore_case = FALSE,
-                                 append = FALSE,
-                                 regex = FALSE,
-                                 verbose = TRUE,
-                                 ...) {
+to_factor.data.frame <- function(
+  x,
+  select = NULL,
+  exclude = NULL,
+  ignore_case = FALSE,
+  append = FALSE,
+  regex = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # validation check, return as is for complete factor
   if (all(vapply(x, is.factor, FUN.VALUE = logical(1L)))) {
     return(x)
   }
 
   # evaluate arguments
-  select <- .select_nse(select,
+  select <- .select_nse(
+    select,
     x,
     exclude,
     ignore_case,
@@ -113,7 +119,9 @@ to_factor.data.frame <- function(x,
   # create the new variables and updates "select", so new variables are processed
   if (!isFALSE(append)) {
     # drop factors, when append is not FALSE
-    select <- colnames(x[select])[!vapply(x[select], is.factor, FUN.VALUE = logical(1L))]
+    select <- colnames(x[select])[
+      !vapply(x[select], is.factor, FUN.VALUE = logical(1L))
+    ]
     # process arguments
     my_args <- .process_append(
       x,

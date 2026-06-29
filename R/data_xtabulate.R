@@ -1,15 +1,21 @@
 # helper to compute crosstables --------------
 
-.crosstable <- function(x,
-                        by,
-                        weights = NULL,
-                        remove_na = FALSE,
-                        proportions = NULL,
-                        obj_name = NULL,
-                        group_variable = NULL) {
+.crosstable <- function(
+  x,
+  by,
+  weights = NULL,
+  remove_na = FALSE,
+  proportions = NULL,
+  obj_name = NULL,
+  group_variable = NULL
+) {
   if (!is.null(proportions)) {
     proportions <- match.arg(proportions, c("row", "column", "full"))
   }
+  if (!is.null(attr(x, "by"))) {
+    by_name <- attr(x, "by")
+  }
+
   # frequency table
   if (is.null(weights)) {
     # we have a `.default` and a `.data.frame` method for `data_tabulate()`.
@@ -46,7 +52,11 @@
   }
 
   if (is.null(x_table)) {
-    insight::format_warning(paste0("Can't compute cross tables for objects of class `", class(x)[1], "`."))
+    insight::format_warning(paste0(
+      "Can't compute cross tables for objects of class `",
+      class(x)[1],
+      "`."
+    ))
     return(NULL)
   }
 
@@ -72,16 +82,113 @@
     var_info <- toString(lapply(colnames(group_variable), function(i) {
       sprintf("%s (%s)", i, group_variable[[i]])
     }))
-    out <- cbind(out[1], data.frame(Group = var_info, stringsAsFactors = FALSE), out[-1])
+    out <- cbind(
+      out[1],
+      data.frame(Group = var_info, stringsAsFactors = FALSE),
+      out[-1]
+    )
   }
 
   attr(out, "total_n") <- total_n
   attr(out, "weights") <- weights
   attr(out, "proportions") <- proportions
   attr(out, "varname") <- obj_name
+
+  if (!is.null(by_name)) {
+    attr(out, "by") <- by_name
+  }
+
   attr(out, "grouped_df") <- !is.null(group_variable)
+  attr(out, "prop_table") <- .prop_table(out)
 
   class(out) <- c("datawizard_crosstab", "data.frame")
+
+  out
+}
+
+# Helper function to calculate a table of proportions from a frequency table
+.prop_table <- function(x) {
+  # Extract the "proportions" attribute, which determines the type of calculation (row, column, or full)
+  props <- attributes(x)$proportions
+  out <- NULL
+
+  # Proceed only if the "proportions" attribute is set
+  if (!is.null(props)) {
+    # Identify numeric columns, as proportions are only calculated for these
+    numeric_columns <- vapply(x, is.numeric, logical(1))
+    # Get the total count from the attributes, used for "full" proportions
+    total_n <- attributes(x)$total_n
+
+    # Use a switch to perform the calculation based on the "props" value
+    out <- switch(
+      props,
+      # Calculate row-wise proportions
+      row = lapply(seq_len(nrow(x)), function(i) {
+        # Sum of the current row's numeric values
+        row_sum <- sum(x[i, numeric_columns], na.rm = TRUE)
+        # Avoid division by zero; if row sum is 0, return a row of zeros
+        if (row_sum == 0) {
+          tmp <- as.data.frame(as.list(rep(0, sum(numeric_columns))))
+          # for later rbind, we need identical column names
+          colnames(tmp) <- colnames(x)[numeric_columns]
+          tmp
+        } else {
+          x[i, numeric_columns] / row_sum
+        }
+      }),
+      # Calculate column-wise proportions
+      column = lapply(seq_len(ncol(x))[numeric_columns], function(i) {
+        # Sum of the current column's values
+        col_sum <- sum(x[, i], na.rm = TRUE)
+        # Avoid division by zero; if column sum is 0, return a vector of zeros
+        if (col_sum == 0) {
+          rep(0, nrow(x))
+        } else {
+          x[, i] / col_sum
+        }
+      }),
+      # Calculate proportions relative to the total count of the entire table
+      full = lapply(seq_len(ncol(x))[numeric_columns], function(i) {
+        # Avoid division by zero; if total is 0, return a vector of zeros
+        if (total_n == 0) {
+          rep(0, nrow(x))
+        } else {
+          x[, i] / total_n
+        }
+      })
+    )
+  }
+
+  # If a proportion table was calculated, format it into a data frame
+  if (!is.null(out)) {
+    # The output of the switch is a list. We need to bind it into a data frame.
+    # For row proportions, we bind rows. For column/full, we bind columns.
+    out <- switch(
+      props,
+      row = as.data.frame(do.call(rbind, out)),
+      as.data.frame(do.call(cbind, out))
+    )
+    # Set the column names of the new proportion table
+    colnames(out) <- colnames(x)[numeric_columns]
+
+    # Check if the dimensions are consistent before setting row names
+    if (nrow(out) == nrow(x)) {
+      # If the first column of the original data is not numeric, it's likely a
+      # label column. Use these labels as row names in the output for better
+      # readability. This is useful for identifying rows, especially when NAs
+      # are present.
+      if (isFALSE(numeric_columns[1])) {
+        r_names <- x[[1]]
+        r_names <- as.character(r_names)
+        # Replace NA in labels with the string "NA", else we cannot set rownames
+        r_names[is.na(r_names)] <- "NA"
+        rownames(out) <- r_names
+      } else {
+        # Otherwise, just use the original row names
+        rownames(out) <- rownames(x)
+      }
+    }
+  }
 
   out
 }
@@ -89,20 +196,21 @@
 
 # methods ---------------------
 
-
 #' @export
-format.datawizard_crosstab <- function(x,
-                                       format = "text",
-                                       digits = 1,
-                                       big_mark = NULL,
-                                       include_total_row = TRUE,
-                                       ...) {
+format.datawizard_crosstab <- function(
+  x,
+  format = "text",
+  digits = 1,
+  big_mark = NULL,
+  include_total_row = TRUE,
+  ...
+) {
   # convert to character manually, else, for large numbers,
   # format_table() returns scientific notation
   x <- as.data.frame(x)
 
   # find numeric columns, only for these we need row/column sums
-  numeric_columns <- vapply(x, is.numeric, logical(1))
+  numeric_columns <- which(vapply(x, is.numeric, logical(1)))
 
   # compute total N for rows and columns
   total_n <- attributes(x)$total_n
@@ -111,42 +219,18 @@ format.datawizard_crosstab <- function(x,
 
   # proportions?
   props <- attributes(x)$proportions
+  prop_table <- attributes(x)$prop_table
 
-  if (!is.null(props)) {
-    # we copy x to tmp, because when we create strings with "sprintf()", the
-    # variable is coerced to character, and in subsequent iterations of the loop,
-    # mathemathical operations are not possible anymore
-    tmp <- x
-    if (identical(props, "row")) {
-      for (i in seq_len(nrow(x))) {
-        row_sum <- sum(x[i, numeric_columns], na.rm = TRUE)
-        if (row_sum == 0) {
-          row_sum_string <- "(0%)"
-        } else {
-          row_sum_string <- sprintf("(%.*f%%)", digits, 100 * x[i, numeric_columns] / row_sum)
-        }
-        tmp[i, numeric_columns] <- paste(format(x[i, numeric_columns]), format(row_sum_string, justify = "right"))
-      }
-    } else if (identical(props, "column")) {
-      for (i in seq_len(ncol(x))[numeric_columns]) {
-        col_sum <- sum(x[, i], na.rm = TRUE)
-        if (col_sum == 0) {
-          col_sum_string <- "(0%)"
-        } else {
-          col_sum_string <- sprintf("(%.*f%%)", digits, 100 * x[, i] / col_sum)
-        }
-        tmp[, i] <- paste(format(x[, i]), format(col_sum_string, justify = "right"))
-      }
-    } else if (identical(props, "full")) {
-      for (i in seq_len(ncol(x))[numeric_columns]) {
-        tmp[, i] <- paste(
-          format(x[, i]),
-          format(sprintf("(%.*f%%)", digits, 100 * x[, i] / total_n), justify = "right")
+  if (!is.null(props) && !is.null(prop_table)) {
+    for (i in seq_len(ncol(prop_table))) {
+      x[, numeric_columns[i]] <- paste(
+        format(x[, numeric_columns[i]]),
+        format(
+          sprintf("(%.*f%%)", digits, 100 * prop_table[, i]),
+          justify = "right"
         )
-      }
+      )
     }
-    # copy back final result
-    x <- tmp
   }
 
   x[] <- lapply(x, as.character)
@@ -189,14 +273,17 @@ format.datawizard_crosstab <- function(x,
   ftab[nrow(ftab), ] <- .add_commas_in_numbers(ftab[nrow(ftab), ], big_mark)
 
   # also format NA column name
-  colnames(ftab)[colnames(ftab) == "NA"] <- ifelse(identical(format, "text"), "<NA>", "(NA)")
+  colnames(ftab)[colnames(ftab) == "NA"] <- ifelse(
+    identical(format, "text"),
+    "<NA>",
+    "(NA)"
+  )
 
   ftab
 }
 
 
 # print, datawizard_crosstab ---------------------
-
 
 #' @export
 print.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
@@ -229,11 +316,7 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
   # this function is used by all four supported format, markdown, text, html
   # and tt (tinytable). For tt, we sometimes have format "html" and backend = "tt",
   # so we need to check for this special case
-  backend <- switch(format,
-    html = ,
-    tt = .check_format_backend(...),
-    format
-  )
+  backend <- switch(format, html = , tt = .check_format_backend(...), format)
   # prepare table arguments
   fun_args <- list(
     format(x, big_mark = big_mark, format = format, ...),
@@ -261,7 +344,6 @@ print_html.datawizard_crosstab <- function(x, big_mark = NULL, ...) {
 
 
 # print, datawizard_crosstabs ---------------------
-
 
 #' @export
 print.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
@@ -306,7 +388,13 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
       # move column to first position
       i <- data_relocate(i, select = grp_variable, before = 1)
       # format data frame
-      format(i, format = format, big_mark = big_mark, include_total_row = FALSE, ...)
+      format(
+        i,
+        format = format,
+        big_mark = big_mark,
+        include_total_row = FALSE,
+        ...
+      )
     })
     # now bind, but we need to check for equal number of columns
     if (all(lengths(x) == max(length(x)))) {
@@ -374,7 +462,6 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
 
 # helper ---------------------
 
-
 .validate_by <- function(by, x) {
   if (!is.null(by)) {
     if (is.character(by)) {
@@ -387,7 +474,9 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
       }
       # if "by" is a character, "x" must be a data frame
       if (!is.data.frame(x)) {
-        insight::format_error("If `by` is a string indicating a variable name, `x` must be a data frame.")
+        insight::format_error(
+          "If `by` is a string indicating a variable name, `x` must be a data frame."
+        )
       }
       # is "by" a column in "x"?
       if (!by %in% colnames(x)) {
@@ -400,7 +489,9 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
     }
     # is "by" of same length as "x"?
     if (is.data.frame(x) && length(by) != nrow(x)) {
-      insight::format_error("Length of `by` must be equal to number of rows in `x`.") # nolint
+      insight::format_error(
+        "Length of `by` must be equal to number of rows in `x`."
+      ) # nolint
     }
     if (!is.data.frame(x) && length(by) != length(x)) {
       insight::format_error("Length of `by` must be equal to length of `x`.") # nolint
@@ -425,24 +516,28 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
     # -------------------------------------------------------------------------
 
     # do we have any value for weights_expression?
-    if (!is.null(weights_expression) &&
-      # due to deparse() and substitute, NULL becomes "NULL" - we need to check for this
-      !identical(weights_expression, "NULL") &&
-      # we should only run into this problem, when a variable from a data frame
-      # is used in the data_tabulate() method for vectors - thus, we need to check
-      # whether the weights_expression contains a "$" - `iris$not_found` is "NULL"
-      # we need this check, because the default-method of data_tabulate() is called
-      # from the data.frame method, where `weights = weights`, and then,
-      # deparse(substitute(weights)) is "weights" (not "NULL" or "iris$not_found"),
-      # leading to an error when actually all is OK (if "weights" is NULL)
-      # Example:
-      #> efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
-      # Here, efc$wweight is NULL
-      #> data_tabulate(efc$c172code, weights = efc$wweight)
-      # Here, wweight errors anyway, because object "wweight" is not found
-      #> data_tabulate(efc$c172code, weights = wweight)
-      grepl("$", weights_expression, fixed = TRUE)) {
-      insight::format_error("The variable specified in `weights` was not found. Possibly misspelled?")
+    if (
+      !is.null(weights_expression) &&
+        # due to deparse() and substitute, NULL becomes "NULL" - we need to check for this
+        !identical(weights_expression, "NULL") &&
+        # we should only run into this problem, when a variable from a data frame
+        # is used in the data_tabulate() method for vectors - thus, we need to check
+        # whether the weights_expression contains a "$" - `iris$not_found` is "NULL"
+        # we need this check, because the default-method of data_tabulate() is called
+        # from the data.frame method, where `weights = weights`, and then,
+        # deparse(substitute(weights)) is "weights" (not "NULL" or "iris$not_found"),
+        # leading to an error when actually all is OK (if "weights" is NULL)
+        # Example:
+        #> efc$weights <- abs(rnorm(n = nrow(efc), mean = 1, sd = 0.5))
+        # Here, efc$wweight is NULL
+        #> data_tabulate(efc$c172code, weights = efc$wweight)
+        # Here, wweight errors anyway, because object "wweight" is not found
+        #> data_tabulate(efc$c172code, weights = wweight)
+        grepl("$", weights_expression, fixed = TRUE)
+    ) {
+      insight::format_error(
+        "The variable specified in `weights` was not found. Possibly misspelled?"
+      )
     }
   } else {
     # possibly misspecified weights-variables for data.frame-method -----------
@@ -457,7 +552,9 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
       }
       # if "weights" is a character, "x" must be a data frame
       if (!is.data.frame(x)) {
-        insight::format_error("If `weights` is a string indicating a variable name, `x` must be a data frame.") # nolint
+        insight::format_error(
+          "If `weights` is a string indicating a variable name, `x` must be a data frame."
+        ) # nolint
       }
       # is "by" a column in "x"?
       if (!weights %in% colnames(x)) {
@@ -470,10 +567,14 @@ print_html.datawizard_crosstabs <- function(x, big_mark = NULL, ...) {
     }
     # is "by" of same length as "x"?
     if (is.data.frame(x) && length(weights) != nrow(x)) {
-      insight::format_error("Length of `weights` must be equal to number of rows in `x`.") # nolint
+      insight::format_error(
+        "Length of `weights` must be equal to number of rows in `x`."
+      ) # nolint
     }
     if (!is.data.frame(x) && length(weights) != length(x)) {
-      insight::format_error("Length of `weights` must be equal to length of `x`.") # nolint
+      insight::format_error(
+        "Length of `weights` must be equal to length of `x`."
+      ) # nolint
     }
   }
 

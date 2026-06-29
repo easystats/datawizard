@@ -9,16 +9,20 @@
 #'   variable labels is named `"mydat_labels.csv"`).
 #' @rdname data_read
 #' @export
-data_write <- function(data,
-                       path,
-                       delimiter = ",",
-                       convert_factors = FALSE,
-                       save_labels = FALSE,
-                       verbose = TRUE,
-                       ...) {
+data_write <- function(
+  data,
+  path,
+  delimiter = ",",
+  convert_factors = FALSE,
+  save_labels = FALSE,
+  password = NULL,
+  verbose = TRUE,
+  ...
+) {
   # check file type, so we know the target dta format
   file_type <- .file_ext(path)
-  type <- switch(file_type,
+  type <- switch(
+    file_type,
     txt = ,
     csv = "csv",
     sav = ,
@@ -42,28 +46,42 @@ data_write <- function(data,
   }
 
   if (type %in% c("csv", "unknown")) {
-    .write_csv_or_unknown(data, path, type, delimiter, convert_factors, save_labels, verbose, ...)
+    .write_csv_or_unknown(
+      data,
+      path,
+      type,
+      delimiter,
+      convert_factors,
+      save_labels,
+      password,
+      verbose,
+      ...
+    )
   } else if (type == "rds") {
-    .write_rds(data, path, verbose, ...)
+    .write_rds(data, path, password, verbose, ...)
   } else if (type == "rda") {
-    .write_rda(data, path, verbose, ...)
+    .write_rda(data, path, password, verbose, ...)
   } else if (type == "parquet") {
-    .write_parquet(data, path, verbose, ...)
+    .write_parquet(data, path, password, verbose, ...)
   } else {
-    .write_haven(data, path, verbose, type, ...)
+    .write_haven(data, path, password, verbose, type, ...)
   }
 }
 
 
 # base R formats -----
 
-.write_rds <- function(data, path, verbose = TRUE, ...) {
+.write_rds <- function(data, path, password, verbose = TRUE, ...) {
+  # encrypt data
+  data <- .data_encryption(data, password)
   saveRDS(data, path, ...)
 }
 
-.write_rda <- function(data, path, verbose = TRUE, ...) {
+.write_rda <- function(data, path, password, verbose = TRUE, ...) {
+  # encrypt data
+  data <- .data_encryption(data, password)
   # save single data frame
-  if (is.data.frame(data)) {
+  if (is.data.frame(data) || is.raw(data)) {
     save(data, file = path, ...)
   } else {
     # save list of data frames
@@ -75,7 +93,15 @@ data_write <- function(data,
 
 # nanoparquet -----
 
-.write_parquet <- function(data, path, verbose = TRUE, ...) {
+.write_parquet <- function(data, path, password, verbose = TRUE, ...) {
+  # saving raw columns in data frames is not yet supported by parquet, thus,
+  # we cannot save encrypted data right now.
+  if (!is.null(password)) {
+    insight::format_error(
+      "Data encryption is not supported for parquet-files."
+    )
+  }
+
   # requires nanoparquet package
   insight::check_if_installed("nanoparquet")
 
@@ -86,14 +112,25 @@ data_write <- function(data,
 
 # saving into CSV or unknown format -----
 
-.write_csv_or_unknown <- function(data,
-                                  path,
-                                  type = "csv",
-                                  delimiter = ",",
-                                  convert_factors = FALSE,
-                                  save_labels = FALSE,
-                                  verbose = TRUE,
-                                  ...) {
+.write_csv_or_unknown <- function(
+  data,
+  path,
+  type = "csv",
+  delimiter = ",",
+  convert_factors = FALSE,
+  save_labels = FALSE,
+  password = NULL,
+  verbose = TRUE,
+  ...
+) {
+  # data encryption requires a data frame *with attributes* to be saved, which
+  # is not possible for text or raw formats - thus, no encryption here
+  if (!is.null(password)) {
+    insight::format_error(
+      "Data encryption is not supported for CSV or text files."
+    )
+  }
+
   # save labels
   if (save_labels && type == "csv") {
     data <- .save_labels_to_file(data, path, delimiter, verbose)
@@ -120,7 +157,22 @@ data_write <- function(data,
 
 # saving into haven format -----
 
-.write_haven <- function(data, path, verbose = TRUE, type = "spss", ...) {
+.write_haven <- function(
+  data,
+  path,
+  password,
+  verbose = TRUE,
+  type = "spss",
+  ...
+) {
+  # saving raw columns in data frames in not yet supported by haven, thus,
+  # we cannot save encrypted data right now.
+  if (!is.null(password)) {
+    insight::format_error(
+      "Data encryption is not supported for SPSS, SAS or Stata files."
+    )
+  }
+
   insight::check_if_installed("haven")
 
   # check if user provided "compress" argument for SPSS files,
@@ -155,7 +207,6 @@ data_write <- function(data,
 
 # helper -------------------------------
 
-
 # make sure we have the "labelled" class for labelled data
 .set_haven_class_attributes <- function(x, verbose = TRUE) {
   insight::check_if_installed("haven")
@@ -181,7 +232,10 @@ data_write <- function(data,
       if (is.character(i)) {
         # only prepare value labels when these are not NULL
         if (!is.null(value_labels)) {
-          value_labels <- stats::setNames(as.character(value_labels), names(value_labels))
+          value_labels <- stats::setNames(
+            as.character(value_labels),
+            names(value_labels)
+          )
         }
         haven::labelled(
           x = i,
@@ -208,7 +262,9 @@ data_write <- function(data,
   dot_ends <- vapply(colnames(x), endsWith, FUN.VALUE = TRUE, suffix = ".")
   if (any(dot_ends)) {
     if (verbose) {
-      insight::format_alert("Found and fixed invalid column names so they can be read by other software packages.")
+      insight::format_alert(
+        "Found and fixed invalid column names so they can be read by other software packages."
+      )
     }
     colnames(x)[dot_ends] <- paste0(colnames(x)[dot_ends], "fix")
   }
@@ -232,23 +288,31 @@ data_write <- function(data,
   }
 
   # extract labels
-  var_labs <- vapply(x, function(i) {
-    l <- attr(i, "label", exact = TRUE)
-    if (is.null(l)) {
-      l <- ""
-    }
-    l
-  }, character(1))
+  var_labs <- vapply(
+    x,
+    function(i) {
+      l <- attr(i, "label", exact = TRUE)
+      if (is.null(l)) {
+        l <- ""
+      }
+      l
+    },
+    character(1)
+  )
 
   # extract value labels
-  value_labs <- vapply(x, function(i) {
-    l <- attr(i, "labels", exact = TRUE)
-    if (is.null(l)) {
-      ""
-    } else {
-      paste0(l, "=", names(l), collapse = "; ")
-    }
-  }, character(1))
+  value_labs <- vapply(
+    x,
+    function(i) {
+      l <- attr(i, "labels", exact = TRUE)
+      if (is.null(l)) {
+        ""
+      } else {
+        paste0(l, "=", names(l), collapse = "; ")
+      }
+    },
+    character(1)
+  )
 
   out <- data.frame(
     variable = colnames(x),
@@ -284,7 +348,9 @@ data_write <- function(data,
         if (is.character(i)) {
           # we need this to drop haven-specific class attributes
           i <- as.character(i)
-        } else if (!is.null(value_labels) && length(value_labels) == insight::n_unique(i)) {
+        } else if (
+          !is.null(value_labels) && length(value_labels) == insight::n_unique(i)
+        ) {
           # if all values are labelled, we assume factor. Use labels as levels
           if (is.numeric(i)) {
             i <- factor(i, labels = names(value_labels))
@@ -312,4 +378,40 @@ data_write <- function(data,
 
   class(x) <- "data.frame"
   x
+}
+
+# data encryption ---------------------------------
+
+.data_encryption <- function(data, password = NULL) {
+  # check if data should be encrypted
+  if (!is.null(password)) {
+    .validate_password(password)
+    data <- .encrypt_data(data, password)
+    # tell user to remember the password
+    insight::format_warning(
+      "Remember your `password`, else you will not be able to decrypt the data again!"
+    )
+  }
+  data
+}
+
+.encrypt_data <- function(data, password = NULL) {
+  insight::check_if_installed("openssl", "for data encryption")
+  x <- serialize(data, NULL)
+  # it is important to remember the phrase! else, you cannot decrypt the data
+  passphrase <- charToRaw(password)
+  key <- openssl::sha256(passphrase)
+  # encrypt the data. we return the raw data here, which can be handled by
+  # rds/rda/rdata, and users can then also decrypt using openssl directly
+  # datawizard is not necessarily needed for decryption
+  openssl::aes_gcm_encrypt(x, key = key)
+}
+
+.validate_password <- function(password) {
+  # password needs to be a character string
+  if (!is.character(password) || length(password) != 1L || !nzchar(password)) {
+    insight::format_error(
+      "The password must be a single non-empty character string."
+    )
+  }
 }

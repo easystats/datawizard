@@ -101,7 +101,7 @@ standard survey-design.
 }
 }
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("lme4", "parameters"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("lme4", "parameters"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 data(nhanes_sample)
 head(rescale_weights(nhanes_sample, "WTINT2YR", "SDMVSTRA"))
 

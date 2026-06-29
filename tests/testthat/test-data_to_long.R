@@ -62,7 +62,8 @@ test_that("data_to_long works - complex dataset", {
   skip_if_not_installed("psych")
   data <- psych::bfi
 
-  long <- data_to_long(data,
+  long <- data_to_long(
+    data,
     select = regex("\\d"),
     names_to = "Item",
     values_to = "Score",
@@ -75,7 +76,8 @@ test_that("data_to_long works - complex dataset", {
   long$Item <- gsub("[A-Z]", "", long$Item)
   long$Item <- paste0("I", long$Item)
 
-  long1 <- data_to_long(data,
+  long1 <- data_to_long(
+    data,
     select = starts_with("A"),
     names_to = "Item",
     values_to = "Score",
@@ -87,8 +89,8 @@ test_that("data_to_long works - complex dataset", {
   expect_identical(ncol(long1), 26L)
   expect_identical(nrow(long1), 14000L)
 
-
-  long1 <- data_to_long(data,
+  long1 <- data_to_long(
+    data,
     select = starts_with("a"),
     names_to = "Item",
     values_to = "Score",
@@ -98,7 +100,8 @@ test_that("data_to_long works - complex dataset", {
   expect_identical(ncol(long1), 30L)
   expect_identical(nrow(long1), nrow(data))
 
-  long1 <- data_to_long(data,
+  long1 <- data_to_long(
+    data,
     select = starts_with("a"),
     names_to = "Item",
     values_to = "Score",
@@ -110,7 +113,8 @@ test_that("data_to_long works - complex dataset", {
   expect_identical(ncol(long1), 25L)
   expect_identical(nrow(long1), 16800L)
 
-  long1 <- data_to_long(data,
+  long1 <- data_to_long(
+    data,
     select = c(1:5, 28),
     names_to = "Item",
     values_to = "Score",
@@ -202,7 +206,12 @@ test_that("data_to_long works as expected - simple dataset", {
     c(d$score_t1, d$score_t2)[c(1, 4, 2, 5, 3, 6)]
   )
 
-  out <- data_to_long(d, contains("t2"), names_to = "NewCol", values_to = "Time")
+  out <- data_to_long(
+    d,
+    contains("t2"),
+    names_to = "NewCol",
+    values_to = "Time"
+  )
   expect_identical(
     out$NewCol,
     c("score_t2", "speed_t2", "score_t2", "speed_t2", "score_t2", "speed_t2")
@@ -493,8 +502,10 @@ test_that("don't convert factors to integer", {
   mtcars$cyl_f <- factor(mtcars$cyl)
 
   mtcars$id <- factor(seq_len(nrow(mtcars)))
-  mtcars_long <- data_to_long(mtcars,
-    select = c("mpg", "qsec", "disp"), names_to = "g"
+  mtcars_long <- data_to_long(
+    mtcars,
+    select = c("mpg", "qsec", "disp"),
+    names_to = "g"
   )
   expect_snapshot(print(mtcars_long))
 })

@@ -186,10 +186,10 @@ rescale(d, multiply = list(x = 1.1, y = 0.5))
 \seealso{
 See \code{\link[=makepredictcall.dw_transformer]{makepredictcall.dw_transformer()}} for use in model formulas.
 
-Other transform utilities: 
-\code{\link{normalize}()},
-\code{\link{ranktransform}()},
-\code{\link{reverse}()},
-\code{\link{standardize}()}
+Other transform utilities:
+\code{\link[=normalize]{normalize()}},
+\code{\link[=ranktransform]{ranktransform()}},
+\code{\link[=reverse]{reverse()}},
+\code{\link[=standardize]{standardize()}}
 }
 \concept{transform utilities}

@@ -278,7 +278,6 @@ test_that("data_select from other functions", {
     iris[c("Petal.Length", "Petal.Width", "Species")]
   )
 
-
   test_fun2 <- function(data) {
     data_select(data, select = starts_with("Sep"))
   }

@@ -105,12 +105,14 @@
 #'   preserve_na = FALSE
 #' )
 #' @export
-recode_into <- function(...,
-                        data = NULL,
-                        default = NA,
-                        overwrite = TRUE,
-                        preserve_na = FALSE,
-                        verbose = TRUE) {
+recode_into <- function(
+  ...,
+  data = NULL,
+  default = NA,
+  overwrite = TRUE,
+  preserve_na = FALSE,
+  verbose = TRUE
+) {
   dots <- list(...)
 
   # get length of vector, so we know the length of the output vector
@@ -127,7 +129,9 @@ recode_into <- function(...,
   if (is.null(default)) {
     default <- NA
     if (verbose) {
-      insight::format_warning("Default value can't be `NULL`, setting to `NA` now.")
+      insight::format_warning(
+        "Default value can't be `NULL`, setting to `NA` now."
+      )
     }
   }
 
@@ -179,7 +183,9 @@ recode_into <- function(...,
     )
   }
   # all inputs of correct length?
-  if (!is.null(all_same_length) && !all(all_same_length == all_same_length[1])) {
+  if (
+    !is.null(all_same_length) && !all(all_same_length == all_same_length[1])
+  ) {
     wrong_length <- which(all_same_length != all_same_length[1])
     insight::format_error(
       "The matching conditions return vectors of different length.",
@@ -227,13 +233,21 @@ recode_into <- function(...,
         msg <- paste(
           "Several recode patterns apply to the same cases.",
           "Some of the already recoded cases will be overwritten with new values again",
-          sprintf("(e.g. pattern %i overwrites the former recode of case %i).", i, overwritten_cases[1])
+          sprintf(
+            "(e.g. pattern %i overwrites the former recode of case %i).",
+            i,
+            overwritten_cases[1]
+          )
         )
       } else {
         msg <- paste(
           "Several recode patterns apply to the same cases.",
           "Some of the already recoded cases will not be altered by later recode patterns.",
-          sprintf("(e.g. pattern %i also matches the former recode of case %i).", i, overwritten_cases[1])
+          sprintf(
+            "(e.g. pattern %i also matches the former recode of case %i).",
+            i,
+            overwritten_cases[1]
+          )
         )
       }
       insight::format_warning(msg, "Please check if this is intentional!")

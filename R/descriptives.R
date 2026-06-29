@@ -54,7 +54,11 @@ distribution_coef_var <- coef_var
 coef_var.default <- function(x, verbose = TRUE, ...) {
   if (verbose) {
     insight::format_warning(
-      paste0("Can't compute the coefficient of variation objects of class `", class(x)[1], "`.")
+      paste0(
+        "Can't compute the coefficient of variation objects of class `",
+        class(x)[1],
+        "`."
+      )
     )
   }
   NULL
@@ -108,14 +112,26 @@ coef_var.default <- function(x, verbose = TRUE, ...) {
 #' @rdname coef_var
 #'
 #' @export
-coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
-                             method = c("standard", "unbiased", "median_mad", "qcd"),
-                             trim = 0, remove_na = FALSE, n = NULL, ...) {
+coef_var.numeric <- function(
+  x,
+  mu = NULL,
+  sigma = NULL,
+  method = c("standard", "unbiased", "median_mad", "qcd"),
+  trim = 0,
+  remove_na = FALSE,
+  n = NULL,
+  ...
+) {
   # TODO: Support weights
   if (!missing(x) && all(c(-1, 1) %in% sign(x))) {
-    insight::format_error("Coefficient of variation only applicable for ratio scale variables.")
+    insight::format_error(
+      "Coefficient of variation only applicable for ratio scale variables."
+    )
   }
-  method <- match.arg(method, choices = c("standard", "unbiased", "median_mad", "qcd"))
+  method <- match.arg(
+    method,
+    choices = c("standard", "unbiased", "median_mad", "qcd")
+  )
   if (is.null(mu) || is.null(sigma)) {
     if (isTRUE(remove_na)) {
       x <- .drop_na(x)
@@ -124,7 +140,8 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
     x <- .trim_values(x, trim = trim, n = n)
   }
   if (is.null(mu)) {
-    mu <- switch(method,
+    mu <- switch(
+      method,
       standard = ,
       unbiased = mean(x, ...),
       median_mad = stats::median(x, ...),
@@ -132,7 +149,8 @@ coef_var.numeric <- function(x, mu = NULL, sigma = NULL,
     )
   }
   if (is.null(sigma)) {
-    sigma <- switch(method,
+    sigma <- switch(
+      method,
       standard = ,
       unbiased = stats::sd(x, ...),
       median_mad = stats::mad(x, center = mu, ...),

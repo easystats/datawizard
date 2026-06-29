@@ -74,7 +74,11 @@ test_that("describe_distribution - data frame: works with range", {
 # factor ---------------------------------------
 
 test_that("describe_distribution - factor", {
-  expect_snapshot(describe_distribution(factor(substring("statistics", 1:10, 1:10))))
+  expect_snapshot(describe_distribution(factor(substring(
+    "statistics",
+    1:10,
+    1:10
+  ))))
 })
 
 
@@ -109,13 +113,15 @@ test_that("describe_distribution - list: works with include_factors", {
   y <- describe_distribution(list(mtcars$mpg))
   expect_identical(x1, y)
 
-  x2 <- describe_distribution(list(mtcars$mpg, factor(mtcars$cyl)),
+  x2 <- describe_distribution(
+    list(mtcars$mpg, factor(mtcars$cyl)),
     include_factors = TRUE
   )
   expect_identical(dim(x2), c(2L, 10L))
   expect_identical(x2$Variable, c("mtcars$mpg", "factor(mtcars$cyl)"))
 
-  x3 <- describe_distribution(list(mtcars$mpg, foo = factor(mtcars$cyl)),
+  x3 <- describe_distribution(
+    list(mtcars$mpg, foo = factor(mtcars$cyl)),
     include_factors = TRUE
   )
   expect_identical(dim(x3), c(2L, 10L))
@@ -192,7 +198,11 @@ test_that("describe_distribution - grouped df", {
   out <- describe_distribution(x, select = starts_with("Petal"))
 
   expect_snapshot(out)
-  expect_equal(out$Mean, c(1.462, 0.246, 4.26, 1.326, 5.552, 2.026), tolerance = 1e-3)
+  expect_equal(
+    out$Mean,
+    c(1.462, 0.246, 4.26, 1.326, 5.552, 2.026),
+    tolerance = 1e-3
+  )
 })
 
 # Mostly to test printing
@@ -280,14 +290,35 @@ test_that("return NA in CI if sample is too sparse", {
   set.seed(123456)
   expect_silent(expect_message(
     {
-      res <- describe_distribution(mtcars[mtcars$cyl == "6", ], wt, centrality = "map", ci = 0.95)
+      res <- describe_distribution(
+        mtcars[mtcars$cyl == "6", ],
+        wt,
+        centrality = "map",
+        ci = 0.95
+      )
     },
     regex = "Bootstrapping"
   ))
   expect_equal(res$CI_low_map, 2.6462, tolerance = 1e-2)
   expect_equal(res$CI_high_map, 3.4531, tolerance = 1e-2)
 
-  x <- c(2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.2, 2.2, 2.2, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5)
+  x <- c(
+    2.5,
+    2.5,
+    2.5,
+    2.5,
+    2.5,
+    2.5,
+    2.2,
+    2.2,
+    2.2,
+    2.5,
+    2.5,
+    2.5,
+    2.5,
+    2.5,
+    2.5
+  )
   expect_message(
     {
       out <- describe_distribution(x, centrality = "map")
@@ -302,14 +333,24 @@ test_that("return NA in CI if sample is too sparse", {
 test_that("errors on invalid column names (reserved word)", {
   data(mtcars)
 
-  out <- data_to_long(mtcars, cols = 1:3, names_to = "Variable", values_to = "Values")
+  out <- data_to_long(
+    mtcars,
+    cols = 1:3,
+    names_to = "Variable",
+    values_to = "Values"
+  )
   out <- data_group(out, c("gear", "Variable"))
   expect_error(
     describe_distribution(out, select = "Values"),
     regex = "Following variable names are reserved"
   )
 
-  out <- data_to_long(mtcars, cols = 1:3, names_to = "Variable", values_to = "Values")
+  out <- data_to_long(
+    mtcars,
+    cols = 1:3,
+    names_to = "Variable",
+    values_to = "Values"
+  )
   expect_error(
     describe_distribution(out, select = "Variable"),
     regex = "Following variable names are reserved"
@@ -328,8 +369,18 @@ test_that("multiple centralities work", {
   expect_named(
     out,
     c(
-      "Variable", "Median", "MAD", "Mean", "SD", "IQR", "Min", "Max",
-      "Skewness", "Kurtosis", "n", "n_Missing"
+      "Variable",
+      "Median",
+      "MAD",
+      "Mean",
+      "SD",
+      "IQR",
+      "Min",
+      "Max",
+      "Skewness",
+      "Kurtosis",
+      "n",
+      "n_Missing"
     )
   )
   out <- describe_distribution(
@@ -341,8 +392,18 @@ test_that("multiple centralities work", {
   expect_named(
     out,
     c(
-      "Variable", "Median", "MAD", "Mean", "SD", "IQR", "Min", "Max",
-      "Skewness", "Kurtosis", "n", "n_Missing"
+      "Variable",
+      "Median",
+      "MAD",
+      "Mean",
+      "SD",
+      "IQR",
+      "Min",
+      "Max",
+      "Skewness",
+      "Kurtosis",
+      "n",
+      "n_Missing"
     )
   )
 })
@@ -354,40 +415,98 @@ test_that("(multiple) centralities with CIs", {
   set.seed(123456)
   expect_message(
     {
-      out <- describe_distribution(x, centrality = "all", ci = 0.95, iterations = 100)
+      out <- describe_distribution(
+        x,
+        centrality = "all",
+        ci = 0.95,
+        iterations = 100
+      )
     },
     regex = "For more stable intervals"
   )
   expect_named(
     out,
     c(
-      "Median", "MAD", "Mean", "SD", "MAP", "IQR", "CI_low_mean",
-      "CI_high_mean", "CI_low_median", "CI_high_median", "CI_low_MAP",
-      "CI_high_MAP", "Min", "Max", "Skewness", "Kurtosis", "n", "n_Missing"
+      "Median",
+      "MAD",
+      "Mean",
+      "SD",
+      "MAP",
+      "IQR",
+      "CI_low_mean",
+      "CI_high_mean",
+      "CI_low_median",
+      "CI_high_median",
+      "CI_low_MAP",
+      "CI_high_MAP",
+      "Min",
+      "Max",
+      "Skewness",
+      "Kurtosis",
+      "n",
+      "n_Missing"
     )
   )
   expect_snapshot(print(out, table_width = Inf))
-  expect_silent(describe_distribution(x, centrality = "all", ci = 0.95, iterations = 100, verbose = FALSE))
+  expect_silent(describe_distribution(
+    x,
+    centrality = "all",
+    ci = 0.95,
+    iterations = 100,
+    verbose = FALSE
+  ))
 
   set.seed(123456)
-  out <- describe_distribution(x, centrality = "mean", ci = 0.95, iterations = 100, verbose = FALSE)
+  out <- describe_distribution(
+    x,
+    centrality = "mean",
+    ci = 0.95,
+    iterations = 100,
+    verbose = FALSE
+  )
   expect_named(
     out,
     c(
-      "Mean", "SD", "IQR", "CI_low_mean", "CI_high_mean", "Min",
-      "Max", "Skewness", "Kurtosis", "n", "n_Missing"
+      "Mean",
+      "SD",
+      "IQR",
+      "CI_low_mean",
+      "CI_high_mean",
+      "Min",
+      "Max",
+      "Skewness",
+      "Kurtosis",
+      "n",
+      "n_Missing"
     )
   )
   expect_snapshot(print(out, table_width = Inf))
 
   set.seed(123456)
-  out <- describe_distribution(x, centrality = c("MAP", "median"), ci = 0.95, iterations = 100, verbose = FALSE)
+  out <- describe_distribution(
+    x,
+    centrality = c("MAP", "median"),
+    ci = 0.95,
+    iterations = 100,
+    verbose = FALSE
+  )
   expect_named(
     out,
     c(
-      "Median", "MAD", "MAP", "IQR", "CI_low_MAP", "CI_high_MAP",
-      "CI_low_median", "CI_high_median", "Min", "Max", "Skewness",
-      "Kurtosis", "n", "n_Missing"
+      "Median",
+      "MAD",
+      "MAP",
+      "IQR",
+      "CI_low_MAP",
+      "CI_high_MAP",
+      "CI_low_median",
+      "CI_high_median",
+      "Min",
+      "Max",
+      "Skewness",
+      "Kurtosis",
+      "n",
+      "n_Missing"
     )
   )
   expect_snapshot(print(out, table_width = Inf))

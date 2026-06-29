@@ -29,16 +29,50 @@ test_that("data_partition works as expected", {
   expect_identical(
     out$p_0.8$.row_id,
     c(
-      1L, 3L, 4L, 5L, 7L, 8L, 9L, 10L, 11L, 14L, 15L, 17L, 18L, 19L,
-      20L, 21L, 22L, 23L, 24L, 26L, 27L, 28L, 29L, 30L, 31L, 32L
+      1L,
+      3L,
+      4L,
+      5L,
+      7L,
+      8L,
+      9L,
+      10L,
+      11L,
+      14L,
+      15L,
+      17L,
+      18L,
+      19L,
+      20L,
+      21L,
+      22L,
+      23L,
+      24L,
+      26L,
+      27L,
+      28L,
+      29L,
+      30L,
+      31L,
+      32L
     )
   )
 
   expect_identical(
     colnames(out$p_0.8),
     c(
-      "mpg", "cyl", "disp", "hp", "drat", "wt", "qsec", "vs", "am",
-      "gear", "carb", ".row_id"
+      "mpg",
+      "cyl",
+      "disp",
+      "hp",
+      "drat",
+      "wt",
+      "qsec",
+      "vs",
+      "am",
+      "gear",
+      "carb",
+      ".row_id"
     )
   )
 
@@ -47,14 +81,27 @@ test_that("data_partition works as expected", {
     list(p_0.8 = 26L, test = 6L)
   )
 
-
   # data frames
 
   data(iris)
   expect_snapshot(str(data_partition(iris, proportion = 0.7, seed = 123)))
-  expect_snapshot(str(data_partition(iris, proportion = c(0.2, 0.5), seed = 123)))
-  expect_snapshot(str(data_partition(iris, proportion = 0.7, by = "Species", seed = 123)))
-  expect_snapshot(str(data_partition(iris, proportion = c(0.2, 0.5), by = "Species", seed = 123)))
+  expect_snapshot(str(data_partition(
+    iris,
+    proportion = c(0.2, 0.5),
+    seed = 123
+  )))
+  expect_snapshot(str(data_partition(
+    iris,
+    proportion = 0.7,
+    by = "Species",
+    seed = 123
+  )))
+  expect_snapshot(str(data_partition(
+    iris,
+    proportion = c(0.2, 0.5),
+    by = "Species",
+    seed = 123
+  )))
 })
 
 test_that("data_partition warns if no testing set", {

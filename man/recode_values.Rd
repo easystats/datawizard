@@ -44,10 +44,11 @@ element names have to be surrounded in backticks. For example,
 \code{recode=list(`0`=1)} would recode all \code{1} into \code{0} in a numeric
 vector. See also 'Examples' and 'Details'.}
 
-\item{default}{Defines the default value for all values that have
-no match in the recode-pairs. Note that, if \code{preserve_na=FALSE}, missing
-values (\code{NA}) are also captured by the \code{default} argument, and thus will
-also be recoded into the specified value. See 'Examples' and 'Details'.}
+\item{default}{Defines the default value for all values that have no match in
+the recode-pairs. If \code{NULL}, original values will be preserved when there
+is no match. Note that, if \code{preserve_na=FALSE}, missing values (\code{NA}) are
+also captured by the \code{default} argument, and thus will also be recoded into
+the specified value. See 'Examples' and 'Details'.}
 
 \item{preserve_na}{Logical, if \code{TRUE}, \code{NA} (missing values) are preserved.
 This overrides any other arguments, including \code{default}. Hence, if

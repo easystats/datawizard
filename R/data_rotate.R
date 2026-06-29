@@ -39,7 +39,12 @@
 #' data_rotate(x, colnames = "c")
 #'
 #' @export
-data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE) {
+data_rotate <- function(
+  data,
+  rownames = NULL,
+  colnames = FALSE,
+  verbose = TRUE
+) {
   # copy attributes
   attr_data <- attributes(data)
 
@@ -47,7 +52,9 @@ data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE)
   if (isTRUE(colnames)) {
     colnames <- data[[1]]
     data <- data[-1]
-  } else if (!is.null(colnames) && is.character(colnames) && colnames %in% colnames(data)) {
+  } else if (
+    !is.null(colnames) && is.character(colnames) && colnames %in% colnames(data)
+  ) {
     cn_col <- which(colnames(data) == colnames)
     colnames <- data[[colnames]]
     data <- data[-cn_col]
@@ -56,8 +63,13 @@ data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE)
   }
 
   # warning after possible removal of columns
-  if (verbose && insight::n_unique(vapply(data, typeof, FUN.VALUE = character(1L))) > 1L) {
-    insight::format_warning("Your data frame contains mixed types of data. After transposition, all variables will be transformed into characters.") # nolint
+  if (
+    verbose &&
+      insight::n_unique(vapply(data, typeof, FUN.VALUE = character(1L))) > 1L
+  ) {
+    insight::format_warning(
+      "Your data frame contains mixed types of data. After transposition, all variables will be transformed into characters."
+    ) # nolint
   }
 
   # rotate data frame by 90 degrees
@@ -76,7 +88,9 @@ data_rotate <- function(data, rownames = NULL, colnames = FALSE, verbose = TRUE)
   }
 
   # add rownames as a new column, if requested
-  if (!is.null(rownames)) out <- rownames_as_column(out, var = rownames)
+  if (!is.null(rownames)) {
+    out <- rownames_as_column(out, var = rownames)
+  }
 
   out <- .replace_attrs(out, attr_data)
 

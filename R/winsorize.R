@@ -73,12 +73,14 @@ winsorize.character <- winsorize.factor
 winsorize.logical <- winsorize.factor
 
 #' @export
-winsorize.data.frame <- function(data,
-                                 threshold = 0.2,
-                                 method = "percentile",
-                                 robust = FALSE,
-                                 verbose = TRUE,
-                                 ...) {
+winsorize.data.frame <- function(
+  data,
+  threshold = 0.2,
+  method = "percentile",
+  robust = FALSE,
+  verbose = TRUE,
+  ...
+) {
   data[] <- lapply(
     data,
     winsorize,
@@ -92,12 +94,14 @@ winsorize.data.frame <- function(data,
 
 #' @rdname winsorize
 #' @export
-winsorize.numeric <- function(data,
-                              threshold = 0.2,
-                              method = "percentile",
-                              robust = FALSE,
-                              verbose = TRUE,
-                              ...) {
+winsorize.numeric <- function(
+  data,
+  threshold = 0.2,
+  method = "percentile",
+  robust = FALSE,
+  verbose = TRUE,
+  ...
+) {
   method <- match.arg(method, choices = c("percentile", "zscore", "raw"))
 
   if (method == "raw" && length(threshold) != 2L) {
@@ -138,7 +142,6 @@ winsorize.numeric <- function(data,
 
     threshold <- centeral + c(-1, 1) * deviation * threshold
   }
-
 
   data[data < threshold[1]] <- threshold[1]
   data[data > threshold[2]] <- threshold[2]

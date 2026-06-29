@@ -177,12 +177,20 @@ data_modify.default <- function(data, ...) {
 
 #' @rdname data_modify
 #' @export
-data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = NULL) {
+data_modify.data.frame <- function(
+  data,
+  ...,
+  .if = NULL,
+  .at = NULL,
+  .modify = NULL
+) {
   dots <- eval(substitute(alist(...)))
 
   # error for data frames with no rows...
   if (nrow(data) == 0) {
-    insight::format_error("`data` is an empty data frame. `data_modify()` only works for data frames with at least one row.") # nolint
+    insight::format_error(
+      "`data` is an empty data frame. `data_modify()` only works for data frames with at least one row."
+    ) # nolint
   }
 
   # check if we have dots, or only at/modify ----
@@ -211,7 +219,11 @@ data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       # create new variable
       new_variable <- .get_new_dots_variable(dots, i, data)
       # give informative error when new variable doesn't match number of rows
-      if (!is.null(new_variable) && length(new_variable) != nrow(data) && (nrow(data) %% length(new_variable)) != 0) {
+      if (
+        !is.null(new_variable) &&
+          length(new_variable) != nrow(data) &&
+          (nrow(data) %% length(new_variable)) != 0
+      ) {
         insight::format_error(
           "New variable has not the same length as the other variables in the data frame and cannot be recycled."
         )
@@ -228,14 +240,22 @@ data_modify.data.frame <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 
 
 #' @export
-data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = NULL) {
+data_modify.grouped_df <- function(
+  data,
+  ...,
+  .if = NULL,
+  .at = NULL,
+  .modify = NULL
+) {
   # we need to evaluate dots here, and pass them with "do.call" to
   # the data.frame method later...
   dots <- match.call(expand.dots = FALSE)[["..."]]
 
   # error for data frames with no rows...
   if (nrow(data) == 0) {
-    insight::format_error("`data` is an empty data frame. `data_modify()` only works for data frames with at least one row.") # nolint
+    insight::format_error(
+      "`data` is an empty data frame. `data_modify()` only works for data frames with at least one row."
+    ) # nolint
   }
 
   grps <- attr(data, "groups", exact = TRUE)
@@ -319,15 +339,21 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     symbol_string <- insight::safe_deparse(dot_element)
     # sanity check - this may happen when user wants to remove a variable,
     # e.g. data_modify(iris, as_expr("Species = NULL"))
-    if (is.null(symbol_string)) next
+    if (is.null(symbol_string)) {
+      next
+    }
     # we only allow unnamed elements if these are masked as expression. String
     # values or numeric values require a named element, i.e. we can only have
     # data_modify(iris, newvar = "a"), but we cannot have data_modify(iris, "a").
     # For expression, missing name is possible.
     if (!startsWith(symbol_string, "as_expr")) {
       insight::format_error(paste0(
-        "A variable name for the expression `", symbol_string, "` is missing. ",
-        "Please use something like `new_name = ", symbol_string, "`."
+        "A variable name for the expression `",
+        symbol_string,
+        "` is missing. ",
+        "Please use something like `new_name = ",
+        symbol_string,
+        "`."
       ))
     }
     # next, check if the string-expression includes a name for the new variable
@@ -343,7 +369,10 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       # only split at highest-level comma
       pattern <- ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)" # suggestion by Co-pilot
       # Locate commas not inside quotes
-      symbol_string <- insight::trim_ws(unlist(strsplit(symbol_string, pattern, perl = TRUE), use.names = FALSE))
+      symbol_string <- insight::trim_ws(unlist(
+        strsplit(symbol_string, pattern, perl = TRUE),
+        use.names = FALSE
+      ))
     }
     # check if we have any symbols instead of strings as expression, e.g.
     # xpr <- "sepwid = 2 * Sepal.Width"
@@ -359,8 +388,12 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     has_names <- grepl(pattern, symbol_string, perl = TRUE)
     if (!all(has_names)) {
       insight::format_error(paste0(
-        "A variable name for the expression `", symbol_string[!has_names[1]], "` is missing. ",
-        "Please use something like `new_name = ", symbol_string[!has_names[1]], "`."
+        "A variable name for the expression `",
+        symbol_string[!has_names[1]],
+        "` is missing. ",
+        "Please use something like `new_name = ",
+        symbol_string[!has_names[1]],
+        "`."
       ))
     }
     # extract names (split at =), separate name from new variable from its
@@ -379,7 +412,9 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     # extract names (LHS)
     symbol_names <- vapply(symbol_string, function(i) i[1], character(1))
     # extract expressions (RHS)
-    symbol_string <- lapply(symbol_string, function(i) str2lang(.fix_quotes(i[2])))
+    symbol_string <- lapply(symbol_string, function(i) {
+      str2lang(.fix_quotes(i[2]))
+    })
     names(symbol_string) <- symbol_names
     # copy to dots... if we have a character vector, one dot element may
     # return more than one expression elements. Thus, we have to insert /
@@ -391,7 +426,11 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     } else if (i == length(dots)) {
       return_value <- c(dots[1:(i - 1)], symbol_string)
     } else {
-      return_value <- c(dots[1:(i - 1)], symbol_string, dots[(i + 1):length(dots)])
+      return_value <- c(
+        dots[1:(i - 1)],
+        symbol_string,
+        dots[(i + 1):length(dots)]
+      )
     }
     dots <- return_value
   }
@@ -410,7 +449,9 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     symbol_string <- insight::safe_deparse(dot_element)
     # sanity check, this may happen when user wants to remove a variable
     # e.g. data_modify(iris, Species = NULL)
-    if (is.null(symbol_string)) next
+    if (is.null(symbol_string)) {
+      next
+    }
     # extract string-expression, if we have any
     if (startsWith(symbol_string, "as_expr")) {
       symbol_string <- gsub("as_expr\\((.*)\\)", "\\1", symbol_string)
@@ -432,7 +473,9 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
       # we get an error here
       if (inherits(return_value, "try-error")) {
         insight::format_error(paste0(
-          "Could not evaluate expression `", symbol_string[1], "`. ",
+          "Could not evaluate expression `",
+          symbol_string[1],
+          "`. ",
           "Please check if it's correctly specified. If you think there's a bug ",
           "in `data_modify()`, please file an issue at {.url https://github.com/easystats/datawizard/issues}"
         ))
@@ -447,7 +490,6 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
 
 # helper -------------
 
-
 .evaluate_expression_in_string <- function(symbol_string, data) {
   # check if we have any symbols instead of strings as expression, e.g.
   # xpr <- "sepwid = 2 * Sepal.Width"
@@ -455,18 +497,21 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   #
   # in this case, we need to evaluate the symbol (i.e. convert symbol string
   # into a language expression and then evaluate)
-  symbol_string <- unlist(lapply(symbol_string, function(symbol_element) {
-    if (startsWith(symbol_element, "\"")) {
-      symbol_element
-    } else {
-      return_value <- .dynEval(str2lang(symbol_element))
-      # dynEval might fail if we don't look in data - sanity check
-      if (identical(return_value, symbol_element)) {
-        return_value <- .dynEval(str2lang(symbol_element), data = data)
+  symbol_string <- unlist(
+    lapply(symbol_string, function(symbol_element) {
+      if (startsWith(symbol_element, "\"")) {
+        symbol_element
+      } else {
+        return_value <- .dynEval(str2lang(symbol_element))
+        # dynEval might fail if we don't look in data - sanity check
+        if (identical(return_value, symbol_element)) {
+          return_value <- .dynEval(str2lang(symbol_element), data = data)
+        }
+        return_value
       }
-      return_value
-    }
-  }), use.names = FALSE)
+    }),
+    use.names = FALSE
+  )
   # now we should have the expression as character string. Next, we
   # # remove quotes from strings
   gsub("^\"(.*)\"$", "\\1", symbol_string)
@@ -490,7 +535,9 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # check if ".at" or ".if" is defined, but not ".modify"
   if (is.null(.modify)) {
     if (!is.null(.at) || !is.null(.if)) {
-      insight::format_error("You need to specify `.modify` when using `.at` or `.if`.")
+      insight::format_error(
+        "You need to specify `.modify` when using `.at` or `.if`."
+      )
     }
     return(data)
   }
@@ -500,7 +547,9 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   }
   # make sure either .at or .if is defined, not both
   if (!is.null(.at) && !is.null(.if)) {
-    insight::format_error("You cannot use both `.at` and `.if` at the same time.")
+    insight::format_error(
+      "You cannot use both `.at` and `.if` at the same time."
+    )
   }
   # make sure at least one of .at or .if is defined
   if (is.null(.at) && is.null(.if)) {
@@ -524,11 +573,19 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
         ifelse(length(not_found) > 1, " were", " was"),
         " not found in the dataset."
       ),
-      .misspelled_string(column_names, not_found, "Possibly misspelled or not yet defined?")
+      .misspelled_string(
+        column_names,
+        not_found,
+        "Possibly misspelled or not yet defined?"
+      )
     )
   }
   for (i in .at) {
-    result <- tryCatch(.modify(data[[i]]), warning = function(e) e, error = function(e) e)
+    result <- tryCatch(
+      .modify(data[[i]]),
+      warning = function(e) e,
+      error = function(e) e
+    )
     if (inherits(result, c("error", "warning"))) {
       insight::format_error(
         paste0("Error in modifying variable \"", i, "\": ", result$message),
@@ -556,9 +613,18 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   if (!is.null(symbol_string) && all(symbol_string == "n()")) {
     # "special" functions - using "n()" just returns number of rows
     new_variable <- nrow(data)
-  } else if (!is.null(symbol_string) && length(symbol_string) == 1 && grepl("\\bn\\(\\)", symbol_string)) {
+  } else if (
+    !is.null(symbol_string) &&
+      length(symbol_string) == 1 &&
+      grepl("\\bn\\(\\)", symbol_string)
+  ) {
     # "special" functions, like "1:n()" or similar - but not "1:fun()"
-    symbol_string <- str2lang(gsub("n()", "nrow(data)", symbol_string, fixed = TRUE))
+    symbol_string <- str2lang(gsub(
+      "n()",
+      "nrow(data)",
+      symbol_string,
+      fixed = TRUE
+    ))
     new_variable <- try(with(data, eval(symbol_string)), silent = TRUE)
   } else {
     # evaluate symbol
@@ -572,7 +638,8 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
   # successful, or any errors, like misspelled variable name?
   if (inherits(new_variable, "try-error")) {
     # in which step did error happen?
-    step_number <- switch(as.character(i),
+    step_number <- switch(
+      as.character(i),
       "1" = "the first expression",
       "2" = "the second expression",
       "3" = "the third expression",
@@ -584,12 +651,23 @@ data_modify.grouped_df <- function(data, ..., .if = NULL, .at = NULL, .modify = 
     if (grepl("object '(.*)' not found", error_msg)) {
       error_var <- gsub("object '(.*)' not found", "\\1", error_msg)
       insight::format_error(
-        paste0(step_msg, " Variable \"", error_var, "\" was not found in the dataset or in the environment."),
-        .misspelled_string(colnames(data), error_var, "Possibly misspelled or not yet defined?")
+        paste0(
+          step_msg,
+          " Variable \"",
+          error_var,
+          "\" was not found in the dataset or in the environment."
+        ),
+        .misspelled_string(
+          colnames(data),
+          error_var,
+          "Possibly misspelled or not yet defined?"
+        )
       )
     } else {
       insight::format_error(paste0(
-        step_msg, " ", insight::format_capitalize(error_msg),
+        step_msg,
+        " ",
+        insight::format_capitalize(error_msg),
         ". Possibly misspelled or not yet defined?"
       ))
     }

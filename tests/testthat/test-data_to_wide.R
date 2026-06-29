@@ -2,8 +2,21 @@ test_that("data_to_wide works", {
   long_data <- data.frame(
     Row_ID = c(1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5),
     name = c(
-      "X1", "X1", "X1", "X1", "X1", "X2", "X2", "X2", "X2", "X2",
-      "X3", "X3", "X3", "X3", "X3"
+      "X1",
+      "X1",
+      "X1",
+      "X1",
+      "X1",
+      "X2",
+      "X2",
+      "X2",
+      "X2",
+      "X2",
+      "X3",
+      "X3",
+      "X3",
+      "X3",
+      "X3"
     ),
     value = c(3L, 2L, 5L, 4L, 1L, 3L, 1L, 2L, 5L, 4L, 2L, 3L, 1L, 4L, 5L),
     stringsAsFactors = FALSE
@@ -53,8 +66,18 @@ test_that("data_to_wide, names_prefix works", {
   expect_named(
     out,
     c(
-      "fish", "foo_Release", "foo_I80_1", "foo_Lisbon", "foo_Rstr", "foo_Base_TD",
-      "foo_BCE", "foo_BCW", "foo_BCE2", "foo_BCW2", "foo_MAE", "foo_MAW"
+      "fish",
+      "foo_Release",
+      "foo_I80_1",
+      "foo_Lisbon",
+      "foo_Rstr",
+      "foo_Base_TD",
+      "foo_BCE",
+      "foo_BCW",
+      "foo_BCE2",
+      "foo_BCW2",
+      "foo_MAE",
+      "foo_MAW"
     )
   )
 })
@@ -77,7 +100,6 @@ test_that("data_to_wide, values_fill deprecated", {
 
 
 # EQUIVALENCE WITH TIDYR - PIVOT_WIDER -----------------------------------------------
-
 
 # Examples coming from: https://tidyr.tidyverse.org/articles/pivot.html#wider
 # and from https://github.com/tidyverse/tidyr/blob/main/tests/testthat/test-pivot-wide.R
@@ -322,9 +344,27 @@ test_that("data_to_wide, names_glue works", {
   skip_if_not_installed("tidyr")
 
   df <- data.frame(
-    food = c("banana", "banana", "banana", "banana", "cheese", "cheese", "cheese", "cheese"),
+    food = c(
+      "banana",
+      "banana",
+      "banana",
+      "banana",
+      "cheese",
+      "cheese",
+      "cheese",
+      "cheese"
+    ),
     binary = rep(c("yes", "no"), 4),
-    car = c("toyota", "subaru", "mazda", "skoda", "toyota", "subaru", "mazda", "skoda"),
+    car = c(
+      "toyota",
+      "subaru",
+      "mazda",
+      "skoda",
+      "toyota",
+      "subaru",
+      "mazda",
+      "skoda"
+    ),
     fun = c(2, 4, 3, 6, 2, 4, 2, 3),
     stringsAsFactors = FALSE
   )
@@ -355,17 +395,28 @@ test_that("preserve date format", {
   family <- tidyr::tibble(
     family = c(1L, 1L, 2L, 2L, 3L, 3L),
     child = c(
-      "dob_child1", "dob_child2", "dob_child1", "dob_child2", "dob_child1",
+      "dob_child1",
+      "dob_child2",
+      "dob_child1",
+      "dob_child2",
+      "dob_child1",
       "dob_child2"
     ),
     value = as.Date(c(
-      "1998-11-26", "2000-01-29", "2004-10-10", NA, "2000-12-05",
+      "1998-11-26",
+      "2000-01-29",
+      "2004-10-10",
+      NA,
+      "2000-12-05",
       "2004-04-05"
     ))
   )
 
-
-  tidyr <- tidyr::pivot_wider(family, names_from = "child", values_from = "value")
+  tidyr <- tidyr::pivot_wider(
+    family,
+    names_from = "child",
+    values_from = "value"
+  )
   datawiz <- data_to_wide(family, names_from = "child", values_from = "value")
 
   expect_identical(tidyr, datawiz)
