@@ -88,7 +88,7 @@ standardize.default <- function(
     weights = weights,
     verbose = verbose,
     include_response = include_response,
-    update_expr = stats::update(x, data = data_std),
+    update_expr = str2lang("stats::update(x, data = data_std)"),
     ...
   )
 }
@@ -273,10 +273,10 @@ standardize.default <- function(
   on.exit(.update_failed())
 
   if (isTRUE(verbose)) {
-    model_std <- eval(substitute(update_expr))
+    model_std <- eval(update_expr)
   } else {
     utils::capture.output({
-      model_std <- eval(substitute(update_expr))
+      model_std <- eval(update_expr)
     })
   }
 
