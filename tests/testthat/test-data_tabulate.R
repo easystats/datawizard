@@ -1167,10 +1167,7 @@ test_that("data_tabulate, table methods", {
   x <- data_tabulate(mtcars$cyl, mtcars$gear)
   expect_type(as.table(x), "list")
   expect_s3_class(as.table(x, simplify = TRUE), "table")
-  expect_identical(
-    names(dimnames(as.table(x)[[1]])),
-    c("mtcars$cyl", "mtcars$gear")
-  )
+  expect_named(dimnames(as.table(x)[[1]]), c("mtcars$cyl", "mtcars$gear"))
   expect_snapshot(as.table(x))
   expect_snapshot(as.table(x, simplify = TRUE))
 
