@@ -19,6 +19,7 @@ data_tabulate(x, ...)
   proportions = NULL,
   name = NULL,
   verbose = TRUE,
+  metrics = c("N", "raw", "valid", "cumulative"),
   ...
 )
 
@@ -73,6 +74,12 @@ or \code{"full"} (to calculate relative frequencies for the full table).}
 for printing.}
 
 \item{verbose}{Toggle warnings and messages.}
+
+\item{metrics}{Character vector, indicating the types of metrics to be
+included. Only applies to frequencies, i.e. when \code{by} is \code{NULL}. Can include
+any combination of \code{N} (frequencies including \code{NA}), \code{"raw"} (percentage
+including \code{NA} values), \code{"valid"} (percentage excluding \code{NA} values) and
+\code{"cumulative"} (percentage excluding \code{NA} values).}
 
 \item{select}{Variables that will be included when performing the required
 tasks. Can be either
@@ -197,6 +204,9 @@ data_tabulate(efc$c172code)
 
 # drop missing values
 data_tabulate(efc$c172code, remove_na = TRUE)
+
+# exclude the cumulative percent column
+data_tabulate(efc$c172code, metrics = c("raw", "valid"))
 
 # data frame
 data_tabulate(efc, c("e42dep", "c172code"))

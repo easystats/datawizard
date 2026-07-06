@@ -30,6 +30,9 @@
 #' is used to get p-values for each sub-group. P-values indicate whether each
 #' group-mean is significantly different from the total mean.
 #'
+#' @note There is also a `plot()`-method implemented in the
+#' [**see**-package](https://easystats.github.io/see/).
+#'
 #' @examples
 #' data(efc)
 #' means_by_group(efc, "c12hour", "e42dep")
@@ -124,7 +127,7 @@ means_by_group.numeric <- function(
   attr(out, "var_grp_label") <- var_grp_label
   attr(out, "digits") <- digits
 
-  class(out) <- c("dw_groupmeans", "data.frame")
+  class(out) <- c("dw_groupmeans", "see_dw_groupmeans", "data.frame")
   out
 }
 
@@ -181,7 +184,7 @@ means_by_group.data.frame <- function(
     )
   })
 
-  class(out) <- c("dw_groupmeans_list", "list")
+  class(out) <- c("dw_groupmeans_list", "see_dw_groupmeans_list", "list")
   out
 }
 
@@ -324,4 +327,16 @@ print.dw_groupmeans_list <- function(x, digits = NULL, ...) {
     }
     print(x[[i]], digits = digits, ...)
   }
+}
+
+#' @export
+plot.dw_groupmeans <- function(x, ...) {
+  insight::check_if_installed("see")
+  NextMethod()
+}
+
+#' @export
+plot.dw_groupmeans_list <- function(x, ...) {
+  insight::check_if_installed("see")
+  NextMethod()
 }

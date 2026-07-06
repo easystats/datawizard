@@ -161,6 +161,24 @@
       |         |  (NA)|  0|  0.00|    (NA)|         (NA)|
       |         |      |   |      |        |             |
 
+# data_tabulate data.frame with wrong value for 'metrics'
+
+    Code
+      data_tabulate(efc, c("e16sex", "c172code"), metrics = "foo")
+    Condition
+      Error:
+      ! Invalid values in `metrics`: 
+        "foo"
+
+---
+
+    Code
+      data_tabulate(efc, c("e16sex", "c172code"), metrics = c("N", "foo"))
+    Condition
+      Error:
+      ! Invalid values in `metrics`: 
+        "foo"
+
 # data_tabulate print
 
     Code
