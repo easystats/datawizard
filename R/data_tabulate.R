@@ -785,6 +785,7 @@ as.table.datawizard_crosstab <- function(
   if (.is_grouped_df_xtab(x)) {
     x$Group <- NULL
   }
+
   # first column contains the row names
   row_names <- as.character(x[[1]])
   row_names[is.na(row_names)] <- "NA"
@@ -805,6 +806,10 @@ as.table.datawizard_crosstab <- function(
   }
   # coerce to table
   result <- as.table(as.matrix(x))
+
+  dimnames_names <- c(attr(x, "varname"), attr(x, "by"))
+  names(attributes(result)$dimnames) <- dimnames_names
+
   # if we don't want to simplify the table, we wrap it into a list
   if (!simplify) {
     result <- list(result)

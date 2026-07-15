@@ -13,6 +13,9 @@ CHANGES
 * `means_by_group()` gains a `plot()` method (requires latest
   version from the see-package) (#697)
 
+* The object returned by `as.table.datawizard.crosstab()` now includes 
+ dimnames. (#699 @elinw)
+
 # datawizard 1.3.1
 
 CHANGES
