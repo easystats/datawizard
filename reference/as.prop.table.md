@@ -169,10 +169,11 @@ out <- data_tabulate(efc, "c172code", by = "e16sex")
 tbl <- as.table(out, simplify = TRUE)
 #> Removing NA values from frequency table.
 tbl
-#>   male female
-#> 1    5      3
-#> 2   32     34
-#> 3    4     12
+#>         e16sex
+#> c172code male female
+#>        1    5      3
+#>        2   32     34
+#>        3    4     12
 suppressWarnings(chisq.test(tbl))
 #> 
 #>  Pearson's Chi-squared test
@@ -207,15 +208,17 @@ d <- data_group(mtcars, "am")
 x <- data_tabulate(d, "cyl", by = "gear")
 as.table(x)
 #> $`am (0)`
-#>    3  4
-#> 4  1  2
-#> 6  2  2
-#> 8 12  0
+#>    gear
+#> cyl  3  4
+#>   4  1  2
+#>   6  2  2
+#>   8 12  0
 #> 
 #> $`am (1)`
-#>   4 5
-#> 4 6 2
-#> 6 2 1
-#> 8 0 2
+#>    gear
+#> cyl 4 5
+#>   4 6 2
+#>   6 2 1
+#>   8 0 2
 #> 
 ```
