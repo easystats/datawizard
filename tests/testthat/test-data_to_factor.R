@@ -3,7 +3,7 @@ test_that("to_factor", {
   x <- c(10, 11, 12)
   expect_identical(
     to_factor(x),
-    structure(1:3, .Label = c("10", "11", "12"), class = "factor")
+    structure(1:3, levels = c("10", "11", "12"), class = "factor")
   )
 
   data(efc)
