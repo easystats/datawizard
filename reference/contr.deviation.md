@@ -26,7 +26,7 @@ contr.deviation(n, base = 1, contrasts = TRUE, sparse = FALSE)
 - sparse:
 
   Logical indicating if the result should be sparse (of class
-  `dgCMatrix-class`), using package `Matrix`
+  [Matrix::dgCMatrix](https://rdrr.io/pkg/Matrix/man/dgCMatrix-class.html)).
 
 ## Details
 
