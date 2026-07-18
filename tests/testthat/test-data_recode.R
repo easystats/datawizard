@@ -88,7 +88,7 @@ test_that("recode factor", {
         2L,
         2L
       ),
-      .Label = c("x", "y"),
+      levels = c("x", "y"),
       class = "factor"
     ),
     ignore_attr = TRUE
@@ -114,7 +114,7 @@ test_that("recode factor", {
         2L,
         2L
       ),
-      .Label = c("x", "y"),
+      levels = c("x", "y"),
       class = "factor"
     ),
     ignore_attr = TRUE
@@ -241,7 +241,7 @@ test_that("recode data.frame", {
         x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
         y = structure(
           c(1L, 1L, 1L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L),
-          .Label = c("x", "y"),
+          levels = c("x", "y"),
           class = "factor"
         )
       ),
@@ -262,7 +262,7 @@ test_that("recode data.frame", {
         x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
         y = structure(
           c(1L, 1L, 1L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L),
-          .Label = c("x", "y"),
+          levels = c("x", "y"),
           class = "factor"
         )
       ),
@@ -284,7 +284,7 @@ test_that("recode data.frame", {
         x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
         y = structure(
           c(1L, 1L, 1L, 3L, 2L, 3L, 2L, 1L, 2L, 3L, 2L, 1L, 3L, 3L, 1L),
-          .Label = c("a", "b", "c"),
+          levels = c("a", "b", "c"),
           class = "factor"
         )
       ),
@@ -365,7 +365,7 @@ test_that("recode factor", {
         2L,
         2L
       ),
-      .Label = c("x", "y"),
+      levels = c("x", "y"),
       class = "factor"
     ),
     ignore_attr = TRUE
@@ -391,7 +391,7 @@ test_that("recode factor", {
         2L,
         2L
       ),
-      .Label = c("x", "y"),
+      levels = c("x", "y"),
       class = "factor"
     ),
     ignore_attr = TRUE
@@ -425,7 +425,7 @@ test_that("recode data.frame", {
         x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
         y = structure(
           c(1L, 1L, 1L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L),
-          .Label = c("x", "y"),
+          levels = c("x", "y"),
           class = "factor"
         )
       ),
@@ -446,7 +446,7 @@ test_that("recode data.frame", {
         x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
         y = structure(
           c(1L, 1L, 1L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 2L, 1L, 2L, 2L, 1L),
-          .Label = c("x", "y"),
+          levels = c("x", "y"),
           class = "factor"
         )
       ),
@@ -468,7 +468,7 @@ test_that("recode data.frame", {
         x = c(1, 1, 1, 1, 1, NA, 2, 0, 1, 1, NA, 1, 1, 0, 2),
         y = structure(
           c(1L, 1L, 1L, 3L, 2L, 3L, 2L, 1L, 2L, 3L, 2L, 1L, 3L, 3L, 1L),
-          .Label = c("a", "b", "c"),
+          levels = c("a", "b", "c"),
           class = "factor"
         )
       ),
